@@ -65,3 +65,4 @@ cache
 /admin/view/theme/default/template/dev/sync.tpl
 /system/library/dev.php
 /system/mods
+/system/timeoffset

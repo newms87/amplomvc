@@ -6,7 +6,7 @@
 
 		<h1><?= $head_title; ?></h1>
 		<?= $text_description; ?>
-		<div class="login-content">
+		<div class="login_content">
 			<div class="left">
 				<h2><?= $text_new_affiliate; ?></h2>
 

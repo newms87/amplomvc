@@ -1,7 +1,7 @@
 <?php
 final class Registry
 {
-	private $data = array();
+	public $data = array();
 
 	public function get($key)
 	{
@@ -65,7 +65,7 @@ final class Registry
 			return true;
 		}
 
-		trigger_error(_l("Unable to resolve class $class. Failed to load class file.") . get_caller(0, 4));
+		trigger_error("Unable to resolve class $class. Failed to load class file." . get_caller(0, 4));
 
 		return false;
 	}

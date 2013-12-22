@@ -9,7 +9,7 @@ class Captcha extends Library
 	{
 		$this->code = substr(sha1(mt_rand()), 17, 6);
 
-		$this->session->data['captcha'] = $this->code;
+		$this->session->set('captcha', $this->code);
 
 		$this->getImage();
 	}
@@ -49,6 +49,6 @@ class Captcha extends Library
 
 	public function validate($code)
 	{
-		return !empty($this->session->data['captcha']) && ($this->session->data['captcha'] === $code);
+		return !empty($this->session->data['captcha']) && ($this->session->set('captcha', == $code));
 	}
 }

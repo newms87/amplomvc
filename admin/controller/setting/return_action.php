@@ -22,7 +22,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 
 			$this->config->save('product_return', 'return_actions', $return_actions, 0, false);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('setting/setting');
 			}

@@ -26,7 +26,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			unset($this->session->data['vouchers']);
 
 			// Settings
-			$settings = $this->System_Model_Setting->getSetting('config', $_POST['store_id']);
+			$settings = $this->config->loadGroup('config', $_POST['store_id']);
 
 			foreach ($settings as $key => $value) {
 				$this->config->set($key, $value);
@@ -34,9 +34,10 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 			// Customer
 			if ($_POST['customer_id']) {
-				$customer_info = $this->System_Model_Customer->getCustomer($_POST['customer_id']);
+				$customer_info = $this->customer->getCustomer($_POST['customer_id']);
 
 				if ($customer_info) {
+					//TODO: Override disabled, find new approach
 					$this->customer->login($customer_info['email'], '', true);
 				} else {
 					$json['error']['customer'] = $this->_('error_customer');
@@ -168,7 +169,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			}
 
 			// Voucher
-			$this->session->data['vouchers'] = array();
+			$this->session->set('vouchers', array());
 
 			if (isset($_POST['order_voucher'])) {
 				foreach ($_POST['order_voucher'] as $voucher) {
@@ -359,7 +360,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 							if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($json['shipping_method'][$shipping[0]]['quote'][$shipping[1]])) {
 								$json['error']['shipping_method'] = $this->_('error_shipping');
 							} else {
-								$this->session->data['shipping_method'] = $json['shipping_method'][$shipping[0]]['quote'][$shipping[1]];
+								$this->session->set('shipping_method', $json['shipping_method'][$shipping[0]]['quote'][$shipping[1]]);
 							}
 						}
 					}
@@ -382,7 +383,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				$voucher_info = $this->Model_Cart_Voucher->getVoucher($_POST['voucher']);
 
 				if ($voucher_info) {
-					$this->session->data['voucher'] = $_POST['voucher'];
+					$this->session->set('voucher', $_POST['voucher']);
 				} else {
 					$json['error']['voucher'] = $this->_('error_voucher');
 				}
@@ -410,7 +411,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					}
 
 					if (!isset($json['error']['reward'])) {
-						$this->session->data['reward'] = $_POST['reward'];
+						$this->session->set('reward', $_POST['reward']);
 					}
 				}
 			}

@@ -84,7 +84,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 
 		//Ajax Urls
-		$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
+		$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 
 		//Additional Data
 		$this->data['image_url']     = $server . $this->config->get('config_logo');
@@ -110,6 +110,10 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 
 	public function subscribe()
 	{
+		//TODO: implement this!
+		echo "This is not implemented yet!";
+		exit;
+
 		$this->language->load('payment/pp_standard');
 
 		$this->config->loadGroup('pp_standard');
@@ -129,7 +133,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 			$this->data['business'] = $this->settings['email'];
 		}
 
-		$subscription = $this->subscription->get();
+		$subscription = $this->subscription->getCartSubscription();
 
 		if ($subscription) {
 			$this->template->load('payment/pp_standard_subscribe');
@@ -194,7 +198,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 
 			//Ajax Urls
-			$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
+			$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
 
 			//Additional Data
 			$this->data['image_url']     = $server . $this->config->get('config_logo');

@@ -21,7 +21,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				$this->Model_Sale_Voucher->editVoucher($_GET['voucher_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('sale/voucher');
@@ -38,7 +38,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		if (isset($_GET['voucher_id']) && $this->validateDelete()) {
 			$this->Model_Sale_Voucher->deleteVoucher($_GET['voucher_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('sale/voucher');
@@ -76,7 +76,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('sale/voucher', $this->url->getQueryExclude('action'));
@@ -286,7 +286,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->data['voucher_id'] = $voucher_id;
 
 		//Ajax Urls
-		$this->data['url_history'] = $this->url->ajax('sale/voucher/history', 'voucher_id=' . $voucher_id);
+		$this->data['url_history'] = $this->url->link('sale/voucher/history', 'voucher_id=' . $voucher_id);
 
 		//Action Buttons
 		$this->data['send']   = $this->url->link('sale/voucher/send', 'voucher_id=' . $voucher_id);

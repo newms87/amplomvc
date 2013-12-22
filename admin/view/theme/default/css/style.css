@@ -1910,7 +1910,7 @@ td.mail_info label {
 	margin-left: 10px;
 }
 
-.login-header {
+.login_header {
 	background: #F0F0F0;
 	border-radius: 8px;
 }
@@ -2664,8 +2664,8 @@ td.log_remove .message_box {
 #subscription_view .status.active,
 #history_list .active > td{
 	background-color: #EAF7D9;
-	color: #3E5025;
-	border-color: #3E5025;
+	color: #709D34;
+	border-color: #709D34;
 }
 #subscription_view .status.on_hold,
 #history_list .on_hold > td{

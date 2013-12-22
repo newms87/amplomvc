@@ -22,7 +22,7 @@ class Admin_Controller_Design_Navigation extends Controller
 				$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('design/navigation');
@@ -39,7 +39,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
 			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('design/navigation');
@@ -85,7 +85,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			}
 
 			if (!$this->error) {
-				if (!$this->message->error_set()) {
+				if (!$this->message->hasError()) {
 					$this->message->add('success', $this->_('text_success'));
 
 					$this->url->redirect('design/navigation');

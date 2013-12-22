@@ -21,7 +21,7 @@ class Admin_Controller_Catalog_Category extends Controller
 				$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/category');
@@ -38,7 +38,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		if (!empty($_GET['category_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/category');
@@ -74,7 +74,7 @@ class Admin_Controller_Catalog_Category extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/category', $this->url->getQueryExclude('action'));
@@ -293,7 +293,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->data['data_layouts']    = array('' => '') + $this->Model_Design_Layout->getLayouts();
 
 		//Ajax Urls
-		$this->data['url_generate_url'] = $this->url->ajax('catalog/category/generate_url');
+		$this->data['url_generate_url'] = $this->url->link('catalog/category/generate_url');
 
 		//Action Buttons
 		$this->data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);

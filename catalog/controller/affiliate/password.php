@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 		$this->template->load('affiliate/password');
 
 		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/password');
+			$this->session->set('redirect', $this->url->link('affiliate/password'));
 
 			$this->url->redirect('affiliate/login');
 		}

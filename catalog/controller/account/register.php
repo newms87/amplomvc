@@ -3,8 +3,6 @@ class Catalog_Controller_Account_Register extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/register');
-
 		if ($this->customer->isLogged()) {
 			$this->url->redirect('account/account');
 		}
@@ -18,6 +16,11 @@ class Catalog_Controller_Account_Register extends Controller
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 
+			//Redirect to requested page
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			}
+
 			$this->url->redirect('account/success');
 		}
 
@@ -28,6 +31,12 @@ class Catalog_Controller_Account_Register extends Controller
 		$this->breadcrumb->add($this->_('text_register'), $this->url->link('account/register'));
 
 		$this->data['action'] = $this->url->link('account/register');
+
+		$registration_data = array();
+
+		if ($this->request->isPost()) {
+			$registration_data = $_POST;
+		}
 
 		$defaults = array(
 			'firstname'  => '',
@@ -46,14 +55,13 @@ class Catalog_Controller_Account_Register extends Controller
 			'agree'      => false
 		);
 
-		foreach ($defaults as $key => $default) {
-			$this->data[$key] = isset($_POST[$key]) ? $_POST[$key] : $default;
-		}
+		$this->data += $registration_data + $defaults;
 
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		$this->data['text_agree'] = '';
 
+		//TODO: update this to a page!
 		if ($this->config->get('config_account_terms_info_id')) {
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
@@ -62,6 +70,10 @@ class Catalog_Controller_Account_Register extends Controller
 			}
 		}
 
+		//The Template
+		$this->template->load('account/register');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -71,54 +83,37 @@ class Catalog_Controller_Account_Register extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	public function validate()
 	{
-		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}
 
-		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
 			$this->error['lastname'] = $this->_('error_lastname');
 		}
 
-		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+		if (!$this->validation->email($_POST['email'])) {
+			$this->error['email'] = $this->validation->getError();
 		}
 
 		if ($this->customer->emailRegistered($_POST['email'])) {
 			$this->error['email'] = $this->_('error_exists');
 		}
 
-		if ((strlen($_POST['address_1']) < 3) || (strlen($_POST['address_1']) > 128)) {
-			$this->error['address_1'] = $this->_('error_address_1');
+		if (!$this->address->validate($_POST)) {
+			$this->error = $this->address->getError();
 		}
 
-		if ((strlen($_POST['city']) < 2) || (strlen($_POST['city']) > 128)) {
-			$this->error['city'] = $this->_('error_city');
+		if (!$this->validation->password($_POST['password'])) {
+			$this->error['password'] = $this->validation->getError();
 		}
 
-		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
-
-		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
-			$this->error['postcode'] = $this->_('error_postcode');
-		}
-
-		if ($_POST['country_id'] == '') {
-			$this->error['country_id'] = $this->_('error_country');
-		}
-
-		if ($_POST['zone_id'] == '') {
-			$this->error['zone_id'] = $this->_('error_zone');
-		}
-
-		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-			$this->error['password'] = $this->_('error_password');
-		}
-
-		if ($_POST['confirm'] != $_POST['password']) {
+		if ($_POST['confirm'] !== $_POST['password']) {
 			$this->error['confirm'] = $this->_('error_confirm');
 		}
 

@@ -5,7 +5,7 @@ class Catalog_Controller_Account_Management extends Controller
 	{
 		//Login Verification
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/management');
+			$this->session->set('redirect', $this->url->link('account/management'));
 
 			$this->url->redirect('account/login');
 		}
@@ -23,7 +23,7 @@ class Catalog_Controller_Account_Management extends Controller
 		$this->data['shipping_address'] = $shipping_address;
 
 		//Customer Information
-		$customer = $this->customer->info() + $this->customer->getMetaData();
+		$customer = $this->customer->info() + $this->customer->getMeta();
 
 		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
 
@@ -39,7 +39,7 @@ class Catalog_Controller_Account_Management extends Controller
 			)
 		);
 
-		$subscriptions = $this->subscription->getCustomerSubscriptions(null, $filter);
+		$subscriptions = $this->subscription->getCustomerSubscriptionsForCustomer($filter);
 
 		if ($this->subscription->hasError()) {
 			$this->message->add('warning', $this->subscription->getError());
@@ -57,12 +57,15 @@ class Catalog_Controller_Account_Management extends Controller
 				case Subscription::ON_HOLD:
 					$subscription['edit'] = $this->url->link('account/subscription', 'subscription_id=' . $subscription['customer_subscription_id']);
 					$subscription['resume'] = $this->url->link('account/subscription/resume', 'subscription_id=' . $subscription['customer_subscription_id']);
+					$subscription['resume_date'] = $this->date->format($this->subscription->getMeta($subscription['customer_subscription_id'], 'resume_date'), 'medium');
 					break;
 
 				default:
 					unset($subscriptions[$key]);
 					break;
 			}
+
+			$subscription['status_class'] = $this->tool->getSlug($subscription['status']);
 
 			$subscription['thumb'] = $this->image->resize($subscription['product']['image'], $thumb_width, $thumb_height);
 		}

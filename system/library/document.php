@@ -14,7 +14,7 @@ class Document extends Library
 	{
 		parent::__construct($registry);
 
-		$this->links = $this->Model_Design_Navigation->getNavigationLinks();
+		$this->links = $this->getNavigationLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
@@ -284,6 +284,62 @@ class Document extends Library
 
 		return $html;
 	}
+
+	public function getNavigationLinks()
+	{
+		$store_id   = $this->config->get("config_store_id");
+
+		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
+
+		if (is_null($nav_groups) || true) {
+			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
+						" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
+						" WHERE ng.status='1' AND ns.store_id='$store_id'";
+
+			$result = $this->queryRows($query);
+
+			$nav_groups = array();
+
+			foreach ($result as &$group) {
+				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
+
+				$parent_ref = array();
+
+				foreach ($nav_group_links as $key => &$link) {
+					$link['children']                   = array();
+					$parent_ref[$link['navigation_id']] = & $link;
+
+					if ($link['parent_id']) {
+						$parent_ref[$link['parent_id']]['children'][] = & $link;
+						unset($nav_group_links[$key]);
+					}
+				}
+
+				$nav_groups[$group['name']] = $nav_group_links;
+			}
+
+			$this->cache->set("navigation_groups.store.$store_id", $nav_groups);
+		}
+
+		//Filter Conditional Links
+		//TODO: This leaves null values in group links. Consider changing approach.
+		foreach ($nav_groups as &$group) {
+			array_walk_children($group, 'children', function(&$l, $ctrl) {
+				if (!empty($l['condition']) && !$ctrl->condition->is($l['condition'])) {
+					$l = null;
+				}
+			}, $this);
+		}
+		unset($group);
+
+		return $nav_groups;
+	}
+
+	public function getNavigationGroupLinks($navigation_group_id)
+	{
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
+	}
+
 
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{

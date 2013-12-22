@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Password extends Controller
 		$this->template->load('account/password');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/password');
+			$this->session->set('redirect', $this->url->link('account/password'));
 
 			$this->url->redirect('account/login');
 		}
@@ -20,7 +20,7 @@ class Catalog_Controller_Account_Password extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->editPassword($this->customer->getId(), $_POST['password']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('account/account');
 			}

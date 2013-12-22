@@ -33,7 +33,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		if (!$this->initAPI()) {
 			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id'));
 			$this->message->add('warning', _l("There was a problem while processing your transaction. Please choose a different Payment Method, or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
-			$this->error_log->write(__METHOD__ . _l(": Failed to load Braintree API."));
+			$this->error_log->write(__METHOD__ . ": Failed to load Braintree API.");
 			$this->url->redirect('checkout/checkout');
 		}
 
@@ -42,7 +42,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		if (empty($order)) {
 			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id'));
 			$this->message->add('warning', _l("We were unable to process your order. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
-			$this->error_log->write(__METHOD__ . _l(": Failed to lookup order ID: $_GET[order_id]. Unable to confirm checkout payment."));
+			$this->error_log->write(__METHOD__ . ": Failed to lookup order ID: $_GET[order_id]. Unable to confirm checkout payment.");
 			$this->url->redirect('checkout/checkout');
 		}
 
@@ -108,7 +108,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		} else {
 			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
 			$this->message->add('warning', _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
-			$this->error_log->write(__METHOD__ . _l(": Braintree_Transaction:sale() failed for order ID $_GET[order_id]. Unable to confirm checkout payment."));
+			$this->error_log->write(__METHOD__ . ": Braintree_Transaction:sale() failed for order ID $_GET[order_id]. Unable to confirm checkout payment.");
 			$this->url->redirect('checkout/checkout');
 		}
 	}
@@ -269,16 +269,16 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		$this->url->redirect('account/update');
 	}
 
-	public function charge($card_id, $amount, $info = array())
+	public function charge($transaction)
 	{
 		if (!$this->initAPI()) {
 			return;
 		}
 
 		$data = array(
-			'amount'             => $amount,
-			'paymentMethodToken' => $card_id,
-			'recurring'          => !empty($info['recurring']),
+			'amount'             => $transaction['total'],
+			'paymentMethodToken' => $transaction['payment_key'],
+			'recurring'          => $transaction['type'] === 'subscription',
 		);
 
 		try {
@@ -294,11 +294,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		}
 
 		return false;
-	}
-
-	public function chargeSubscription($customer_subscription)
-	{
-		return $this->charge($customer_subscription['payment_key'], $customer_subscription['total'], array('recurring' => true));
 	}
 
 	public function cardSelect($select_id = '', $remove = false)
@@ -396,130 +391,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		}
 	}
 
-	/*
-	public function addSubscription($subscription)
-	{
-		if (!$this->initAPI()) return;
-
-		$this->language->system('extension/payment/braintree');
-
-		$braintree_subscription_id = $this->subscription->getMeta($subscription['customer_subscription_id'], 'braintree_subscription_id');
-
-		//Check if this subscription already is associated with a BrainTree Subscription
-		if ($braintree_subscription_id) {
-			$bt_subscription = $this->getSubscription($braintree_subscription_id);
-
-			$failed_statuses = array(
-				Braintree_Subscription::CANCELED,
-				Braintree_Subscription::EXPIRED,
-			);
-
-			if ($bt_subscription && !in_array($bt_subscription->status, $failed_statuses)
-			) {
-				$this->message->add('warning', $this->_('error_subscription_active'));
-				return false;
-			}
-		}
-
-		$card = $this->getCard($subscription['payment_key']);
-
-		$data = array(
-			'paymentMethodToken' => $card['id'],
-			'planId'             => $this->settings['plan_id'],
-			'price'              => $subscription['total'],
-		);
-
-		if ($this->date->isInFuture($subscription['subscription']['start_date'])) {
-			$data['firstBillingDate'] = new DateTime($subscription['subscription']['start_date']);
-		} elseif (!empty($subscription['day_of_month'])) {
-			$data['billingDayOfMonth'] = $subscription['subscription']['day_of_month'];
-		} else {
-			$data['options'] = array('startImmediately' => true);
-		}
-
-		$result = Braintree_Subscription::create($data);
-
-		if ($result->success) {
-			$this->subscription->setMeta($subscription['customer_subscription_id'], 'braintree_subscription_id', $result->subscription->_attributes['id']);
-
-			return true;
-		}
-
-		$this->resultError($result, true);
-
-		$this->error_log->write('System_Extension_Payment_Braintree::addSubscription(): ' . implode('; ', $this->error));
-
-		return false;
-	}
-
-	public function updateSubscription($customer_subscription_id, $data)
-	{
-		if (!$this->initAPI()) return;
-
-		$this->language->system('extension/payment/braintree');
-
-		$id = $this->subscription->getMeta($customer_subscription_id, 'braintree_subscription_id');
-
-		if ($id) {
-			$braintree_data = array(
-				'price'              => $data['total'],
-				'paymentMethodToken' => $data['payment_key'],
-				'options'            => array(
-					'prorateCharges'                       => $data['prorate'],
-					'revertSubscriptionOnProrationFailure' => true,
-				),
-			);
-
-			try {
-				$result = Braintree_Subscription::update($id, $braintree_data);
-
-				if ($result->success) {
-					$bt_subscription = $this->getSubscription($id);
-
-					if ($bt_subscription->_attributes['price'] != $braintree_data['price']) {
-						echo 'here'; exit;
-						$result = Braintree_Subscription::update($id, $braintree_data);
-					}
-
-					if ($result->success) {
-						return true;
-					}
-				}
-
-				$this->resultError($result);
-			}
-			catch (Braintree_Exception $e) {
-				$this->error[] = $e->getMessage();
-			}
-		}
-
-		$this->error_log->write('System_Extension_Payment_Braintree::updateSubscription(): ' . implode('; ', $this->error));
-
-		return false;
-	}
-
-	public function cancelSubscription($customer_subscription_id)
-	{
-		if (!$this->initAPI()) return;
-
-		$id = $this->subscription->getMeta($customer_subscription_id, 'braintree_subscription_id');
-
-		if ($id) {
-			$result = Braintree_Subscription::cancel($id);
-
-			if ($result->success) {
-				return true;
-			}
-
-
-			$this->resultError($result);
-		}
-
-		return false;
-	}
-
-	*/
-
 	public function validateCard($card)
 	{
 		if (empty($card['number'])) {
@@ -536,19 +407,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 
 		if (empty($card['year'])) {
 			$this->error['year'] = _l("You must provide the 4 digit credit card Expiration Year");
-		}
-
-		return $this->error ? false : true;
-	}
-
-	public function validateSubscription(&$subscription_data)
-	{
-		$this->language->system('extension/payment/braintree');
-
-		if (empty($_POST['payment_key']) || !$this->hasCard($_POST['payment_key'])) {
-			$this->error['payment_key'] = $this->_('error_payment_key');
-		} else {
-			$subscription_data['payment_key'] = $_POST['payment_key'];
 		}
 
 		return $this->error ? false : true;
@@ -594,14 +452,14 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		}
 
 		if (!$this->bt_customer) {
+			//Load BrainTree API
+			if (!$this->initAPI()) {
+				return;
+			}
+
 			$braintree_id = $this->customer->getMeta('braintree_id');
 
 			if ($braintree_id) {
-				//Load BrainTree API
-				if (!$this->initAPI()) {
-					return;
-				}
-
 				try {
 					$this->bt_customer = Braintree_Customer::find($braintree_id);
 				} catch (Braintree_Exception_NotFound $e) {
@@ -616,7 +474,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 				$data = array(
 					'firstName' => $customer['firstname'],
 					'lastName'  => $customer['lastname'],
-					'company'   => $customer['company'],
 					'email'     => $customer['email'],
 					'phone'     => $customer['telephone'],
 					'fax'       => $customer['fax'],

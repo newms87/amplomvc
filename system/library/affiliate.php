@@ -37,7 +37,7 @@ class Affiliate extends Library
 		$affiliate_query = $this->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->escape($email) . "' AND password = '" . $this->escape(md5($password)) . "' AND status = '1' AND approved = '1'");
 
 		if ($affiliate_query->num_rows) {
-			$this->session->data['affiliate_id'] = $affiliate_query->row['affiliate_id'];
+			$this->session->set('affiliate_id', $affiliate_query->row['affiliate_id']);
 
 			$this->affiliate_id = $affiliate_query->row['affiliate_id'];
 			$this->firstname    = $affiliate_query->row['firstname'];

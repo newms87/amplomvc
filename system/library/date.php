@@ -1,6 +1,34 @@
 <?php
 class Date extends Library
 {
+	private $timezone;
+
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+		$this->timezone = new DateTimeZone(DEFAULT_TIMEZONE);
+	}
+
+	public function datetime(&$date = null)
+	{
+		if (!$date) {
+			$date = new DateTime("@" . _time());
+		}
+		elseif (is_string($date)) {
+			try {
+				$date = new DateTime($date);
+			} catch (Exception $e) {
+				trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
+				$date = new Datetime("@" . _time());
+			}
+		}
+		elseif (is_int($date)) {
+			$date = new DateTime("@" . $date);
+		}
+
+		return $date->setTimezone($this->timezone);
+	}
+
 	/**
 	 * Returns the current date and time
 	 *
@@ -13,13 +41,9 @@ class Date extends Library
 	 * @return Mixed - string, DateTime object or Unix timestamp as specified in $return_type. Default is String
 	 */
 
-	public function now($return_type = AC_DATE_STRING, $format = '')
+	public function now($format = '', $return_type = AC_DATE_STRING)
 	{
-		$date = new DateTime();
-
-		if (!$format) {
-			$format = $this->language->getInfo('datetime_format');
-		}
+		$date = $this->datetime();
 
 		switch ($return_type) {
 			case AC_DATE_OBJECT:
@@ -28,7 +52,7 @@ class Date extends Library
 				return $date->getTimestamp();
 			case AC_DATE_STRING:
 			default:
-				return $date->format($format);
+				return $this->format($date, $format);
 		}
 	}
 
@@ -38,9 +62,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->loadObject($date);
+		$this->datetime($date);
 
-		$diff = $date->diff(new DateTime());
+		$diff = $date->diff($this->datetime());
 
 		return $diff->invert === 0;
 	}
@@ -51,9 +75,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->loadObject($date);
+		$this->datetime($date);
 
-		$diff = $date->diff(new DateTime());
+		$diff = $date->diff($this->datetime());
 
 		return $diff->invert === 1;
 	}
@@ -76,7 +100,7 @@ class Date extends Library
 	 */
 	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
 	{
-		$this->loadObject($date);
+		$this->datetime($date);
 
 		if (!empty($interval) && is_string($interval)) {
 			$interval = date_interval_create_from_date_string($interval);
@@ -99,7 +123,7 @@ class Date extends Library
 
 	public function getCronUnits($date = null)
 	{
-		$this->loadObject($date);
+		$this->datetime($date);
 
 		return array(
 			'i' => (int)$this->format($date, 'i'),
@@ -114,17 +138,17 @@ class Date extends Library
 
 	public function getDayOfWeek($date = null)
 	{
-		return $this->loadObject($date)->format('w');
+		return $this->datetime($date)->format('w');
 	}
 
 	public function getDayOfMonth($date = null)
 	{
-		return $this->loadObject($date)->format('d');
+		return $this->datetime($date)->format('d');
 	}
 
 	public function getDayOfYear($date = null)
 	{
-		return $this->loadObject($date)->format('z');
+		return $this->datetime($date)->format('z');
 	}
 
 	public function isEqual($d1, $d2)
@@ -136,19 +160,22 @@ class Date extends Library
 
 	public function isSameDay($d1, $d2)
 	{
-		return $this->diff($d1, $d2)->days === 0;
+		$this->datetime($d1);
+		$this->datetime($d2);
+		$diff = $d1->diff($d2);
+
+		return $diff->days === 0 && $d1->format('z') === $d2->format('z');
 	}
 
 	public function isToday($date)
 	{
-		$diff = $this->diff($date);
-		return $diff->days === 0;
+		return $this->isSameDay($date, null);
 	}
 
 	public function diff($d1, $d2 = null)
 	{
-		$this->loadObject($d1);
-		$this->loadObject($d2);
+		$this->datetime($d1);
+		$this->datetime($d2);
 
 		return $d1->diff($d2);
 	}
@@ -165,7 +192,7 @@ class Date extends Library
 
 	public function format($date = null, $format = '')
 	{
-		$this->loadObject($date);
+		$this->datetime($date);
 
 		if (!$format) {
 			$format = $this->language->getInfo('datetime_format');
@@ -187,6 +214,10 @@ class Date extends Library
 				case'time':
 					$format = $this->language->getInfo('time_format');
 					break;
+				case 'datetime_format_medium':
+				case 'datetime_medium':
+					$format = $this->language->getInfo('datetime_format_medium');
+					break;
 				case 'datetime_format_long':
 				case 'datetime_long':
 					$format = $this->language->getInfo('datetime_format_long');
@@ -204,25 +235,5 @@ class Date extends Library
 		}
 
 		return $date->format($format);
-	}
-
-	public function loadObject(&$date)
-	{
-		if (!$date) {
-			$date = new DateTime();
-		} elseif (is_string($date)) {
-			try {
-				$date = new DateTime($date);
-			} catch (Exception $e) {
-				return $date;
-			}
-
-		} elseif (is_int($date)) {
-			$ts   = $date;
-			$date = new DateTime();
-			$date->setTimestamp($ts);
-		}
-
-		return $date;
 	}
 }

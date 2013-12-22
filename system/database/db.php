@@ -2,7 +2,9 @@
 class DB
 {
 	private $driver;
+	private $profile = array();
 
+	//In case a plugin wants to wrap this Class
 	protected $error = array();
 
 	public function __construct($driver, $hostname, $username, $password, $database)
@@ -57,6 +59,11 @@ class DB
 		$this->error = array();
 	}
 
+	public function getProfile()
+	{
+		return $this->profile;
+	}
+
 	/**
 	 * Returns an array with 3 elements, 'row', 'rows', and 'num_rows'.
 	 * 'row' is the first row of the query
@@ -69,7 +76,23 @@ class DB
 	 */
 	public function query($sql)
 	{
-		$resource = $this->driver->query($sql);
+		if (DB_PROFILE) {
+			$start = microtime(true);
+
+			if (DB_PROFILE && !DB_PROFILE_CACHE) {
+				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
+			}
+
+			$resource = $this->driver->query($sql);
+
+			$this->profile[] = array(
+				'query' => $sql,
+				'time' => microtime(true) - $start,
+			);
+		}
+		else {
+			$resource = $this->driver->query($sql);
+		}
 
 		if (!$resource) {
 			$this->queryError($sql);
@@ -90,13 +113,7 @@ class DB
 	 */
 	public function queryRows($sql, $key_column = null)
 	{
-		$resource = $this->driver->query($sql);
-
-		if (!$resource) {
-			$this->queryError($sql);
-
-			return false;
-		}
+		$resource = $this->query($sql);
 
 		if (!is_object($resource)) {
 			return array();
@@ -125,13 +142,7 @@ class DB
 	 */
 	public function queryRow($sql)
 	{
-		$resource = $this->driver->query($sql);
-
-		if (!$resource) {
-			$this->queryError($sql);
-
-			return false;
-		}
+		$resource = $this->query($sql);
 
 		if (!is_object($resource)) {
 			return array();
@@ -149,13 +160,7 @@ class DB
 	 */
 	public function queryColumn($sql)
 	{
-		$resource = $this->driver->query($sql);
-
-		if (!$resource) {
-			$this->queryError($sql);
-
-			return false;
-		}
+		$resource = $this->query($sql);
 
 		if (!is_object($resource)) {
 			return array();
@@ -173,13 +178,7 @@ class DB
 	 */
 	public function queryVar($sql)
 	{
-		$resource = $this->driver->query($sql);
-
-		if (!$resource) {
-			$this->queryError($sql);
-
-			return null;
-		}
+		$resource = $this->query($sql);
 
 		if (!is_object($resource)) {
 			return null;
@@ -476,13 +475,6 @@ class DB
 	public function escapeHtml($value)
 	{
 		return $this->driver->escapeHtml($value);
-	}
-
-	public function escapeAll($values)
-	{
-		array_walk_recursive($values, function (&$value, $key, $db) { $value = $db->escape($value); }, $this);
-
-		return $values;
 	}
 
 	public function countAffected()

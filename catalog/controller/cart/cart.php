@@ -82,13 +82,13 @@ class Catalog_Controller_Cart_Cart extends Controller
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
 
-			$this->url->setRedirect('product/product', 'product_id=' . $product_id);
+			$this->request->setRedirect($this->url->link('product/product', 'product_id=' . $product_id));
 
 			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
 			$url_cart    = $this->url->link('cart/cart');
 			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
 		} else {
-			$this->message->add('error', $this->cart->get_errors('add'));
+			$this->message->add('error', $this->cart->getError('add'));
 		}
 
 		$this->url->redirect('checkout/checkout');
@@ -108,7 +108,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
 
-			$this->url->setRedirect('product/product', 'product_id=' . $product_id);
+			$this->request->setRedirect($this->url->link('product/product', 'product_id=' . $product_id));
 
 			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
 			$url_cart    = $this->url->link('cart/cart');
@@ -120,9 +120,22 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 			$this->message->add('key', $key);
 		} else {
-			$this->message->add('error', $this->cart->get_errors('add'));
+			$this->message->add('error', $this->cart->getError('add'));
 		}
 
 		$this->response->setOutput($this->message->toJSON());
+	}
+
+	public function remove()
+	{
+		$cart_product = $this->cart->getProduct($_GET['cart_key'], true);
+
+		$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', $this->url->link('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
+
+		$this->cart->removeProduct($_GET['cart_key']);
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('cart/cart');
+		}
 	}
 }

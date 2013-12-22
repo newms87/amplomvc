@@ -37,8 +37,7 @@
 									<td class="image">
 										<? if ($cart_product['thumb']) { ?>
 											<a href="<?= $cart_product['href']; ?>">
-												<img src="<?= $cart_product['thumb']; ?>" alt="<?= $product['name']; ?>"
-													title="<?= $product['name']; ?>"/>
+												<img src="<?= $cart_product['thumb']; ?>" alt="<?= $product['name']; ?>" title="<?= $product['name']; ?>"/>
 											</a>
 										<? } ?>
 									</td>
@@ -82,7 +81,9 @@
 										<td class="total"><?= $cart_product['total_display']; ?></td>
 									<? } ?>
 
-									<td class="center"><input type="image" src="" class="button remove" name="cart_remove" value="<?= $cart_product['key']; ?>" onclick="return cart_update($(this));" /></td>
+									<td class="center">
+										<a href="<?= $cart_product['remove']; ?>" class="button remove"></a>
+									</td>
 								</tr>
 							<? } ?>
 						<? } ?>

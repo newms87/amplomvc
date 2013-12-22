@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->template->load('account/return_list');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/return');
+			$this->session->set('redirect', $this->url->link('account/return'));
 
 			$this->url->redirect('account/login');
 		}
@@ -302,7 +302,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['action'] = $this->url->link('account/return/insert');
 
 		//Ajax Urls
-		$this->data['url_captcha_image'] = $this->url->ajax('account/return/captcha');
+		$this->data['url_captcha_image'] = $this->url->link('account/return/captcha');
 
 		//Dependencies
 		$this->children = array(

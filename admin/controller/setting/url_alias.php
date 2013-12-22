@@ -21,7 +21,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('setting/url_alias');
@@ -38,7 +38,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('setting/url_alias');
@@ -73,7 +73,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 		}

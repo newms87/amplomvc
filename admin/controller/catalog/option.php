@@ -21,7 +21,7 @@ class Admin_Controller_Catalog_Option extends Controller
 				$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/option');
@@ -40,7 +40,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		if (isset($_GET['option_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Option->deleteOption($_GET['option_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/option');
@@ -69,7 +69,7 @@ class Admin_Controller_Catalog_Option extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/option', $this->url->getQueryExclude('action'));

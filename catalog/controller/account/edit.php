@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Edit extends Controller
 		$this->template->load('account/edit');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/edit');
+			$this->session->set('redirect', $this->url->link('account/edit'));
 
 			$this->url->redirect('account/login');
 		}

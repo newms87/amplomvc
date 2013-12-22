@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->template->load('account/wishlist');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/wishlist');
+			$this->session->set('redirect', $this->url->link('account/wishlist'));
 
 			$this->url->redirect('account/login');
 		}
@@ -14,7 +14,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->language->load('account/wishlist');
 
 		if (!isset($this->session->data['wishlist'])) {
-			$this->session->data['wishlist'] = array();
+			$this->session->set('wishlist', array());
 		}
 
 		if (isset($_GET['remove'])) {
@@ -112,7 +112,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$json = array();
 
 		if (!isset($this->session->data['wishlist'])) {
-			$this->session->data['wishlist'] = array();
+			$this->session->set('wishlist', array());
 		}
 
 		if (isset($_POST['product_id'])) {

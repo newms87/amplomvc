@@ -5,6 +5,8 @@ class User extends Library
 	private $user;
 	private $permissions = array();
 
+	private $temp_user;
+
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
@@ -21,10 +23,28 @@ class User extends Library
 		}
 	}
 
+	public function loginSystemUser()
+	{
+		//Change User permissions and user ID to the system user
+		$this->temp_user = array(
+			'group_type' => $this->user['group_type'],
+		   'user_id' => $this->user_id,
+		);
+
+		$this->user_id = -1;
+		$this->user['group_type'] = "Top Administrator";
+	}
+
+	public function logoutSystemUser()
+	{
+		$this->user_id = $this->temp_user['user_id'];
+		$this->user['group_type'] = $this->temp_user['group_type'];
+	}
+
 	private function loadUser($user)
 	{
 		$this->user_id = $user['user_id'];
-		$this->session->data['user_id'] = $user['user_id'];
+		$this->session->set('user_id', $user['user_id']);
 
 		$user_group = $this->queryRow("SELECT name as group_type, permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user['user_group_id'] . "'");
 
@@ -99,6 +119,7 @@ class User extends Library
 		$this->Model_User_User->editPassword($user_id, $password);
 	}
 
+	//TODO: Make this current
 	public function canPreview($type)
 	{
 		switch ($type) {

@@ -10,7 +10,7 @@ class Admin_Controller_Block_Add extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Block_Block->addBlock($_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success', $_POST['name']));
 
 				$this->url->redirect('block/block', 'name=' . $_POST['route']);

@@ -12,9 +12,10 @@
 
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-					<h2><?= $text_your_details; ?></h2>
 
-					<div class="section">
+					<div class="customer section left">
+						<h2><?= $text_your_details; ?></h2>
+
 						<table class="form">
 							<tr>
 								<td class="required"> <?= $entry_firstname; ?></td>
@@ -29,10 +30,33 @@
 								<td><input type="text" name="email" value="<?= $email; ?>"/></td>
 							</tr>
 						</table>
-					</div>
-					<h2><?= $text_your_address; ?> </h2>
 
-					<div class="section">
+						<h2><?= $text_your_password; ?></h2>
+
+						<table class="form">
+							<tr>
+								<td class="required"> <?= $entry_password; ?></td>
+								<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/></td>
+							</tr>
+							<tr>
+								<td class="required"> <?= $entry_confirm; ?></td>
+								<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/></td>
+							</tr>
+						</table>
+
+						<h2><?= $text_newsletter; ?></h2>
+
+						<table class="form">
+							<tr>
+								<td><?= $entry_newsletter; ?></td>
+								<td><?= $this->builder->build('radio', $data_yes_no, 'newsletter', $newsletter); ?></td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="address section right">
+						<h2><?= $text_your_address; ?> </h2>
+
 						<table class="form">
 							<tr>
 								<td><?= $entry_company; ?></td>
@@ -67,58 +91,16 @@
 							</tr>
 						</table>
 					</div>
-					<h2><?= $text_your_password; ?></h2>
 
-					<div class="section">
-						<table class="form">
-							<tr>
-								<td class="required"> <?= $entry_password; ?></td>
-								<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/></td>
-							</tr>
-							<tr>
-								<td class="required"> <?= $entry_confirm; ?></td>
-								<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/></td>
-							</tr>
-						</table>
-					</div>
-					<h2><?= $text_newsletter; ?></h2>
+					<div class="clear buttons">
+						<div class="right">
+							<? if ($text_agree) { ?>
+								<?= $this->builder->build('checkbox', array(1 => $text_agree), 'agree', $agree); ?>
+							<? } ?>
 
-					<div class="section">
-						<table class="form">
-							<tr>
-								<td><?= $entry_newsletter; ?></td>
-								<td><? if ($newsletter == 1) { ?>
-										<input type="radio" name="newsletter" value="1" checked="checked"/>
-										<?= $text_yes; ?>
-										<input type="radio" name="newsletter" value="0"/>
-										<?= $text_no; ?>
-									<? } else { ?>
-										<input type="radio" name="newsletter" value="1"/>
-										<?= $text_yes; ?>
-										<input type="radio" name="newsletter" value="0" checked="checked"/>
-										<?= $text_no; ?>
-									<? } ?></td>
-							</tr>
-						</table>
+							<input type="submit" value="<?= $button_continue; ?>" class="button"/>
+						</div>
 					</div>
-					<? if ($text_agree) { ?>
-						<div class="buttons">
-							<div class="right"><?= $text_agree; ?>
-								<? if ($agree) { ?>
-									<input type="checkbox" name="agree" value="1" checked="checked"/>
-								<? } else { ?>
-									<input type="checkbox" name="agree" value="1"/>
-								<? } ?>
-								<input type="submit" value="<?= $button_continue; ?>" class="button"/>
-							</div>
-						</div>
-					<? } else { ?>
-						<div class="buttons">
-							<div class="right">
-								<input type="submit" value="<?= $button_continue; ?>" class="button"/>
-							</div>
-						</div>
-					<? } ?>
 				</form>
 			</div>
 

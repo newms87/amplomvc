@@ -15,7 +15,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->addInformation($_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/information');
@@ -32,7 +32,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/information');
@@ -49,7 +49,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if (isset($_GET['information_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Information->copyInformation($_GET['information_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
@@ -66,7 +66,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if (isset($_GET['information_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Information->deleteInformation($_GET['information_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
@@ -104,7 +104,7 @@ class Admin_Controller_Catalog_Information extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('action'));

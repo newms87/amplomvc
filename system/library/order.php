@@ -77,13 +77,15 @@ class Order Extends Library
 		$data['currency_value'] = $this->currency->getValue();
 
 		//Payment info
-		$payment_address = $this->cart->getPaymentAddress();
+		$transaction = array(
+			'description' => _l('Order payment'),
+		   'amount' => $data['total'],
+		   'payment_method' => $this->cart->getPaymentMethodId(),
+		   'payment_key' => $this->cart->getPaymentKey(),
+		   'address_id' => $this->cart->getPaymentAddressId(),
+		);
 
-		foreach ($payment_address as $key => $value) {
-			$data['payment_' . $key] = $value;
-		}
-
-		$data['payment_method_id'] = $this->cart->getPaymentMethodId();
+		$this->transaction->add('order', $transaction);
 
 		//Shipping info
 		if ($this->cart->hasShipping()) {
@@ -153,7 +155,7 @@ class Order Extends Library
 
 		$order_id = $this->System_Model_Order->addOrder($data);
 
-		$this->session->data['order_id'] = $order_id;
+		$this->session->set('order_id', $order_id);
 
 		return $order_id;
 	}

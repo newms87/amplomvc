@@ -12,7 +12,7 @@ class Admin_Controller_Mail_Messages extends Controller
 
 		if ($this->request->isPost() && $this->validate()) {
 
-			$this->System_Model_Setting->editSetting('mail_messages', $_POST);
+			$this->config->saveGroup('mail_messages', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 		}

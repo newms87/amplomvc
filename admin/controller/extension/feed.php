@@ -86,7 +86,7 @@ class Admin_Controller_Extension_Feed extends Controller
 	public function install()
 	{
 		if (!$this->user->can('modify', 'extension/feed')) {
-			$this->session->data['error'] = $this->_('error_permission');
+			$this->session->set('error', $this->_('error_permission'));
 
 			$this->url->redirect('extension/feed');
 		} else {
@@ -111,13 +111,13 @@ class Admin_Controller_Extension_Feed extends Controller
 	public function uninstall()
 	{
 		if (!$this->user->can('modify', 'extension/feed')) {
-			$this->session->data['error'] = $this->_('error_permission');
+			$this->session->set('error', $this->_('error_permission'));
 
 			$this->url->redirect('extension/feed');
 		} else {
 			$this->Model_Setting_Extension->uninstall('feed', $_GET['extension']);
 
-			$this->System_Model_Setting->deleteSetting($_GET['extension']);
+			$this->config->deleteGroup($_GET['extension']);
 
 			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php'));
 

@@ -1,3 +1,16 @@
+//Ensures all ajax requests are submitted as an ajax URL
+String.prototype.ajaxurl = function () {
+	return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
+}
+
+$._ajax = $.ajax;
+
+$.ajax = function (params, p2) {
+	params.url = (params.url ? params.url : document.URL).ajaxurl();
+	return $._ajax(params, p2);
+}
+
+//Load synchronously
 function syncload(s) {
 	if (!s.match(/^https?:\/\//)) {
 		s = $.ac_vars.site_url + s;
@@ -32,33 +45,32 @@ $.fn.codemirror = function (params) {
 		$.fn.codemirror.once = true;
 	}
 
-	params = $.extend({},{
+	params = $.extend({}, {
 		tabSize: 3,
 		indentWithTabs: true,
 		lineNumbers: false,
 		indentUnit: 3
 	}, params);
 
-
 	var depends = {};
-	var addons = {'edit': {'matchbrackets':1}, 'search': {'searchcursor':1}};
+	var addons = {'edit': {'matchbrackets': 1}, 'search': {'searchcursor': 1}};
 	params.matchBrackets = true;
 
-	switch(params.mode) {
+	switch (params.mode) {
 		case 'html':
 		case 'htmlmixed':
 		case 'php':
 			params.mode = 'php';
-			depends = {'php':1, 'htmlmixed':1, 'css':1, 'clike':1, 'javascript':1,'xml':1};
+			depends = {'php': 1, 'htmlmixed': 1, 'css': 1, 'clike': 1, 'javascript': 1, 'xml': 1};
 			break;
 
 		case 'javascript':
 		case 'js':
 			params.mode = 'javascript';
-			depends = {'javascript':1};
+			depends = {'javascript': 1};
 
 		case 'css':
-			depends = {'css':1};
+			depends = {'css': 1};
 			break;
 	}
 
@@ -72,7 +84,7 @@ $.fn.codemirror = function (params) {
 		}
 	}
 
-	return this.each(function(i,e) {
+	return this.each(function (i, e) {
 		e.cm_editor = new CodeMirrorUI(e, uiOptions, params);
 	});
 }
@@ -144,10 +156,10 @@ $.fn.ac_radio = function (params) {
 		}
 	})
 
-	.click(function () {
-		params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
-		$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
-	});
+		.click(function () {
+			params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
+			$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
+		});
 
 	return this;
 }
@@ -169,10 +181,10 @@ $.fn.ac_checklist = function (params) {
 		.click(function () {
 			if ($(this).hasClass('checked')) {
 				$(this).removeClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked',false).change();
+				$(this).find('input[type=checkbox]').prop('checked', false).change();
 			} else {
 				$(this).addClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked',true).change();
+				$(this).find('input[type=checkbox]').prop('checked', true).change();
 			}
 
 			if (typeof params.change === 'function') {
@@ -183,9 +195,9 @@ $.fn.ac_checklist = function (params) {
 	return this;
 }
 
-$.fn.ac_slidelist = function(params) {
+$.fn.ac_slidelist = function (params) {
 	var allowed = 'div, a, span';
-	this.each(function(i,e){
+	this.each(function (i, e) {
 		var box = $('<div class="slidelistbox" />');
 		var slider = $('<div class="slidelist" />').width($(e).width()).append($(e).children(allowed));
 
@@ -215,8 +227,8 @@ $.fn.ac_slidelist = function(params) {
 			params.add_slide.y = params.item_height * .4;
 		}
 
-		var rows = Math.min(items.length-1, params.max_rows);
-		var cols = Math.floor((items.length-1) / rows);
+		var rows = Math.min(items.length - 1, params.max_rows);
+		var cols = Math.floor((items.length - 1) / rows);
 		var item_height = params.item_height;
 		var item_width = params.item_width;
 		var max_height = (params.pad_y + item_height) * rows;
@@ -230,18 +242,18 @@ $.fn.ac_slidelist = function(params) {
 
 		box.width(params.item_width);
 
-		var sort = function() {
+		var sort = function () {
 			slider.children('.slideitem:first').css({
 				top: -item_height,
-				bottom:'auto',
+				bottom: 'auto',
 				left: params.x_dir >= 0 ? 0 : 'auto',
 				right: params.x_dir < 0 ? 0 : 'auto',
 				'z-index': items.length
 			});
 
-			slider.children('.slideitem').not(':first').each(function(i,e){
-				y_perc = (rows - (i%rows) - 1) / rows * 100;
-				x_perc = Math.floor(i/rows) / cols * 100;
+			slider.children('.slideitem').not(':first').each(function (i, e) {
+				y_perc = (rows - (i % rows) - 1) / rows * 100;
+				x_perc = Math.floor(i / rows) / cols * 100;
 
 				left = params.x_dir >= 0 ? x_perc + '%' : 'auto';
 				right = params.x_dir < 0 ? x_perc + '%' : 'auto';
@@ -251,12 +263,12 @@ $.fn.ac_slidelist = function(params) {
 					bottom: y_perc + '%',
 					left: left,
 					right: right,
-					'z-index': items.length - i -1
+					'z-index': items.length - i - 1
 				});
 			})
 		}
 
-		function hoverIn(){
+		function hoverIn() {
 			slider.css({
 				height: max_height,
 				width: max_width
@@ -267,7 +279,7 @@ $.fn.ac_slidelist = function(params) {
 			});
 		};
 
-		function hoverOut(){
+		function hoverOut() {
 			slider.css({
 				height: min_height,
 				width: min_width
@@ -276,11 +288,16 @@ $.fn.ac_slidelist = function(params) {
 			add_slide.css({
 				bottom: ((params.add_slide.yout + min_height) / min_height) + '%'
 			});
-		};hoverOut();//call this for initial position
+		};
+		hoverOut();//call this for initial position
 
-		slider.parent().hover(function(){ setTimeout(hoverIn, params.hover_in_delay); }, function() { setTimeout(hoverOut, params.hover_out_delay); });
+		slider.parent().hover(function () {
+			setTimeout(hoverIn, params.hover_in_delay);
+		}, function () {
+			setTimeout(hoverOut, params.hover_out_delay);
+		});
 
-		slider.click(function(){
+		slider.click(function () {
 			slider.prepend(slider.children('.checked'));
 			sort();
 		}).click();
@@ -310,12 +327,14 @@ $.fn.ac_msgbox = function (type, msg, prepend, replace) {
 		$('.message_box, .warning, .success, .notify').remove();
 	}
 
-	return this.each(function(i,e){
+	return this.each(function (i, e) {
 		var box = $(e).find('.message_box.' + type);
 
 		if (!box.length) {
 			box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
-			box.fadeIn('slow').find('.close').click(function () { $(this).parent().remove(); });
+			box.fadeIn('slow').find('.close').click(function () {
+				$(this).parent().remove();
+			});
 			if (prepend) {
 				$(e).prepend(box);
 			} else {
@@ -394,7 +413,7 @@ $.fn.tabs = function (callback) {
 		var tab_name = obj.find('.tab_name');
 
 		if (tab_name.length) {
-			$(obj.attr('href')).find('.tab_name').keyup(function(){
+			$(obj.attr('href')).find('.tab_name').keyup(function () {
 				tab_name.html($(this).val());
 			});
 		}
@@ -409,7 +428,7 @@ function colorbox(context, data) {
 	context = context || $(this);
 
 	if (context.attr('href')) {
-		href = ajaxurl(context.attr('href'));
+		href = context.attr('href');
 		html = null;
 	} else {
 		href = null
@@ -436,14 +455,6 @@ function colorbox(context, data) {
 	return false;
 }
 
-function ajaxurl(url){
-	if (url.match(/\?.*ajax=/)) {
-		return url;
-	}
-
-	return url.match(/\?/) ? url + '&ajax=1' : url + '?ajax=1';
-}
-
 function show_errors(errors, context) {
 	context = context || $('body');
 
@@ -454,7 +465,8 @@ function show_errors(errors, context) {
 		if (!ele.length)
 			ele = $(e);
 		ele.after("<span class=\"error\">" + errors[e] + "</span");
-	};
+	}
+	;
 }
 
 $.fn.display_error = function (msg, id) {
@@ -525,7 +537,7 @@ $.fn.loading = function (params) {
 }
 
 $.fn.postForm = function (callback, datatype, params) {
-	$.post(ajaxurl(this.attr('action')), this.serialize(), callback, datatype);
+	$.post(this.attr('action'), this.serialize(), callback, datatype);
 }
 
 String.prototype.repeat = function (times) {
@@ -641,7 +653,7 @@ $(document).ready(function () {
 
 	//AC Checkbox (No IE8)
 	if ($('body.IE8').length === 0) {
-		$('.ac_checkbox').each(function(i,e){
+		$('.ac_checkbox').each(function (i, e) {
 			var div = $('<div class="ac_checkbox"></div>');
 			var cb = $(e);
 
@@ -650,7 +662,7 @@ $(document).ready(function () {
 			cb.after(div).removeClass('ac_checkbox');
 			$(e).appendTo(div);
 
-			div.click(function(){
+			div.click(function () {
 				cb.prop('checked', !cb.prop('checked'));
 				div.toggleClass("checked", cb.prop('checked'));
 			});

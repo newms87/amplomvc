@@ -29,7 +29,7 @@ class Admin_Controller_Block_Block extends Controller
 		if (!empty($_GET['name']) && $this->validateDelete()) {
 			$this->Model_Block_Block->deleteBlock($_GET['name']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success_delete'));
 			}
 

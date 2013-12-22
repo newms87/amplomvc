@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		$this->template->load('affiliate/edit');
 
 		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/edit');
+			$this->session->set('redirect', $this->url->link('affiliate/edit'));
 
 			$this->url->redirect('affiliate/login');
 		}

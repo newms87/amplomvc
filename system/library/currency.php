@@ -37,7 +37,7 @@ class Currency extends Library
 		$this->code = $currency;
 
 		if (!isset($this->session->data['currency']) || ($this->session->data['currency'] != $currency)) {
-			$this->session->data['currency'] = $currency;
+			$this->session->set('currency', $currency);
 		}
 
 		if (!isset($_COOKIE['currency']) || ($_COOKIE['currency'] != $currency)) {

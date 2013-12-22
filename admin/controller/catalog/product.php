@@ -21,7 +21,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/product');
@@ -38,7 +38,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->can('modify', 'catalog/product')) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success_class'));
 			}
 		}
@@ -55,7 +55,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Product->deleteProduct($_GET['product_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/product');
@@ -74,7 +74,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Product->copyProduct($_GET['product_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/product');
@@ -139,7 +139,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				}
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 		}
@@ -675,11 +675,11 @@ class Admin_Controller_Catalog_Product extends Controller
 
 
 		//Ajax Urls
-		$this->data['url_generate_url']           = $this->url->ajax('catalog/product/generate_url');
-		$this->data['url_generate_model']         = $this->url->ajax('catalog/product/generate_model');
-		$this->data['url_autocomplete']           = $this->url->ajax('catalog/product/autocomplete');
-		$this->data['url_attribute_autocomplete'] = $this->url->ajax('catalog/attribute_group/autocomplete');
-		$this->data['url_option_autocomplete']    = $this->url->ajax('catalog/option/autocomplete');
+		$this->data['url_generate_url']           = $this->url->link('catalog/product/generate_url');
+		$this->data['url_generate_model']         = $this->url->link('catalog/product/generate_model');
+		$this->data['url_autocomplete']           = $this->url->link('catalog/product/autocomplete');
+		$this->data['url_attribute_autocomplete'] = $this->url->link('catalog/attribute_group/autocomplete');
+		$this->data['url_option_autocomplete']    = $this->url->link('catalog/option/autocomplete');
 
 		//Action Buttons
 		$this->data['save']         = $this->url->link('catalog/product/update', 'product_id=' . $product_id);

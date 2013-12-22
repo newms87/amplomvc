@@ -17,13 +17,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					$this->message->add('success', _l("Your cart has been updated!"));
 				}
 			}
-			elseif (isset($_POST['cart_remove'])) {
-				$cart_product = $this->cart->getProduct($_POST['cart_remove'], true);
-
-				$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', $this->url->link('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
-
-				$this->cart->removeProduct($_POST['cart_remove']);
-			}
 			elseif (isset($_POST['cart_remove_voucher'])) {
 				$this->cart->removeVoucher($_POST['remove_voucher']);
 				$this->message->add('success', _l('The voucher was removed from your cart.'));
@@ -84,6 +77,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 				}
 
 				$cart_product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
+				$cart_product['remove'] = $this->url->link("cart/cart/remove", 'cart_key=' . $cart_product['key']);
 			}
 			unset($product);
 
@@ -109,7 +103,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		$this->data['url_cart'] = $this->url->link('cart/cart');
 
 		//Ajax
-		$this->data['ajax_block_cart'] = $this->url->ajax("block/cart/cart");
+		$this->data['ajax_block_cart'] = $this->url->link("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
@@ -122,10 +116,9 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		//Ajax Messages
 		if ($this->request->isAjax()) {
 			$this->data['messages'] = $this->message->fetch();
-			var_dump($this->data['messages']);
 
 			if ($this->data['cart_empty']) {
-				$this->url->redirectBrowser('cart/cart');
+				$this->request->redirectBrowser($this->url->link('cart/cart'));
 			}
 		}
 

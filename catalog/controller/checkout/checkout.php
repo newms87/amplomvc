@@ -23,7 +23,16 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->breadcrumb->add($this->_('text_cart'), $this->url->link('cart/cart'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('checkout/checkout'));
 
-		$this->data['logged']            = $this->customer->isLogged();
+		$this->data['logged']         = $this->customer->isLogged();
+		$this->data['guest_checkout'] = $this->session->get('guest_checkout');
+
+		if (!$this->customer->IsLogged() && !$this->data['guest_checkout']) {
+			$this->data['login_form'] = $this->getblock('account/login', array('template' => 'block/account/login'));
+		}
+		elseif ($this->data['guest_checkout']) {
+			$this->data['cancel_guest_checkout'] = $this->url->link('checkout/checkout/cancel_guest_checkout');
+		}
+
 		$this->data['shipping_required'] = $this->cart->hasShipping();
 
 		$this->_('error_page_load', $this->config->get('config_email'));
@@ -43,5 +52,23 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function guest_checkout()
+	{
+		$this->session->set('guest_checkout', true);
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('checkout/checkout');
+		}
+	}
+
+	public function cancel_guest_checkout()
+	{
+		$this->session->set('guest_checkout', false);
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('checkout/checkout');
+		}
 	}
 }

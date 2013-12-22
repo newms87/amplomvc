@@ -11,7 +11,7 @@ $_['text_share']                = 'Share';
 $_['text_view_policies']        = "Please see our <a onclick=\"return colorbox(\$(this))\" href=\"%s\">Shipping & Return Policy</a> for more information.";
 $_['text_keep_shopping']        = 'or <a href="%s">Return to Catalog</a>';
 $_['text_view_more']            = '<a href="%s">view all from %s</a>';
-$_['text_model']                = 'Style Number:';
+$_['text_model']                = 'Model:';
 $_['text_reward']               = 'Reward Points:';
 $_['text_stock']                = 'Availability:';
 $_['text_more_stock']           = "More than %d available";

@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Account extends Controller
 		$this->template->load('account/account');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/account');
+			$this->request->setRedirect('account/account');
 
 			$this->url->redirect('account/login');
 		}

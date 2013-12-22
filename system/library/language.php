@@ -1,4 +1,5 @@
 <?php
+
 class Language extends Library
 {
 	private $language_id;
@@ -27,13 +28,14 @@ class Language extends Library
 		}
 
 		$defaults = array(
-			'date_format_short'    => 'm/d/Y',
-			'date_format_medium'   => 'M d, Y',
-			'date_format_long'     => 'l dS F Y',
-			'time_format'          => 'h:i:s A',
-			'datetime_format'      => 'Y-m-d H:i:s',
-			'datetime_format_long' => 'M d, Y H:i A',
-			'datetime_format_full' => 'D, d M, Y H:i:s',
+			'date_format_short'      => 'm/d/Y',
+			'date_format_medium'     => 'M d, Y',
+			'date_format_long'       => 'l dS F Y',
+			'time_format'            => 'h:i:s A',
+			'datetime_format'        => 'Y-m-d H:i:s',
+			'datetime_format_medium' => 'M d, Y H:i A',
+			'datetime_format_long'   => 'M d, Y H:i:s A A',
+			'datetime_format_full'   => 'D, d M, Y H:i:s',
 		);
 
 		foreach ($defaults as $key => $default) {
@@ -48,7 +50,7 @@ class Language extends Library
 		$this->directory   = $language['directory'];
 
 		if ($set_active_language) {
-			$this->session->data['language_code'] = $this->code;
+			$this->session->set('language_code', $this->code);
 
 			//Set as default language for this user for 30 days
 			$this->session->setCookie('language_code', $this->code, 60 * 60 * 24 * 30);

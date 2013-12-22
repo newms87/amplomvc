@@ -53,7 +53,7 @@ class Admin_Controller_Setting_Cron extends Controller
 		);
 
 		//Template Data
-		$this->data['cron_status'] = $this->config->load('cron', 'cron_status');
+		$this->data['cron_status'] = $this->config->get('config_cron_status');
 
 		$cron_files = $this->tool->get_files_r(DIR_CRON);
 
@@ -101,7 +101,7 @@ class Admin_Controller_Setting_Cron extends Controller
 	public function activate()
 	{
 		if (isset($_POST['cron_status'])) {
-			$this->config->save('cron', 'cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
+			$this->config->save('config', 'config_cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
 		}
 
 		$this->url->redirect('setting/cron');

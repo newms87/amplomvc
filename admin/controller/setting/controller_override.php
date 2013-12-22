@@ -22,7 +22,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 
 			$this->config->save('controller_override', 'controller_override', $controller_overrides, 0, true);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('setting/setting');
 			}

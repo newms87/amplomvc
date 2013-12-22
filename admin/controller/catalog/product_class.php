@@ -21,7 +21,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 				$this->Model_Catalog_ProductClass->editProductClass($_GET['product_class_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/product_class');
@@ -38,7 +38,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		if (!empty($_GET['product_class_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_ProductClass->deleteProductClass($_GET['product_class_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/product_class');
@@ -64,7 +64,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 				}
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 		}

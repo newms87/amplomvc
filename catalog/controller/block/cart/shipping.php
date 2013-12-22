@@ -1,8 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Shipping extends Controller
 {
-
-	public function index($settings = null)
+	public function index()
 	{
 		$this->template->load('block/cart/shipping');
 		$this->language->load('block/cart/shipping');
@@ -38,10 +37,10 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		$this->data['shipping_method'] = !empty($this->data['shipping_method']) ? $this->data['shipping_method'] : false;
 
 		//Ajax Urls
-		$this->data['url_quote'] = $this->url->ajax('block/cart/shipping/quote');
+		$this->data['url_quote'] = $this->url->link('block/cart/shipping/quote');
 
 		//Action Buttons
-		$this->data['apply'] = $this->url->ajax('block/cart/shipping/apply');
+		$this->data['apply'] = $this->url->link('block/cart/shipping/apply');
 
 		$this->data['redirect'] = $this->url->here();
 

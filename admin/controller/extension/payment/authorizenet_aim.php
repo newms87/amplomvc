@@ -12,7 +12,7 @@ class Admin_Controller_Payment_AuthorizenetAim extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->System_Model_Setting->editSetting('authorizenet_aim', $_POST);
+			$this->config->saveGroup('authorizenet_aim', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 

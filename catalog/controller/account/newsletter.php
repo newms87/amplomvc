@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Newsletter extends Controller
 		$this->template->load('account/newsletter');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/newsletter');
+			$this->session->set('redirect', $this->url->link('account/newsletter'));
 
 			$this->url->redirect('account/login');
 		}
@@ -22,7 +22,7 @@ class Catalog_Controller_Account_Newsletter extends Controller
 
 			$this->customer->edit($data);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('account/account');
 			}

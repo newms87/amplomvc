@@ -6,7 +6,7 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 		$this->template->load('affiliate/tracking');
 
 		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/tracking');
+			$this->session->set('redirect', $this->url->link('affiliate/tracking'));
 
 			$this->url->redirect('affiliate/login');
 		}

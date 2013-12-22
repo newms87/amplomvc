@@ -4,12 +4,10 @@ class Catalog_Controller_Account_Address extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/address');
+			$this->session->set('redirect', $this->url->link('account/address'));
 
 			$this->url->redirect('account/login');
 		}
-
-		$this->language->load('account/address');
 
 		$this->getList();
 	}
@@ -17,45 +15,58 @@ class Catalog_Controller_Account_Address extends Controller
 	public function update()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/address');
+			$this->session->set('redirect', $this->url->link('account/address'));
 
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/address');
-
-		if ($this->request->isPost() && $this->validateForm()) {
+		if ($this->request->isPost()) {
 			//Insert
 			if (empty($_GET['address_id'])) {
-				$address_id = $this->address->add($_POST);
+				$address_id = $this->customer->addAddress($_POST);
 
-				if (!empty($_POST['default'])) {
-					$this->customer->setMeta('default_shipping_address_id', $address_id);
+				if ($address_id) {
+					if (!empty($_POST['default'])) {
+						$this->customer->setDefaultShippingAddress($address_id);
+					}
+
+					$this->message->add('success', _l("You have successfully added an address to your account!"));
 				}
-			} //Update
+				else {
+					$this->message->add('error', $this->address->getError());
+				}
+			}
+			//Update
 			else {
-				$this->address->edit($_GET['address_id'], $_POST);
+				if ($this->customer->editAddress($_GET['address_id'], $_POST)) {
 
-				if (!empty($_POST['default'])) {
-					$this->customer->setMeta('default_shipping_address_id', $_GET['address_id']);
+					if (!empty($_POST['default'])) {
+						$this->customer->setDefaultShippingAddress($_GET['address_id']);
+					}
+
+					//If the shipping address in the cart has been updated, invalidate the shipping method
+					if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
+						$this->cart->setShippingMethod();
+					}
+
+					//If the payment address in the cart has been updated, invalidate the payment method
+					if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
+						$this->cart->setPaymentMethod();
+					}
+
+					$this->message->add('success', _l("You have successfully updated your address."));
 				}
-
-				if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-					$this->cart->setShippingMethod();
-				}
-
-				if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-					$this->cart->setPaymentMethod();
+				else {
+					$this->message->add('error', $this->address->getError());
 				}
 			}
 
-			if (!$this->message->error_set()) {
-				if ($this->request->isAjax()) {
-					return; //output nothing for an ajax request
-				} else {
-					$this->message->add('success', !empty($_GET['address_id']) ? $this->_('text_update') : $this->_('text_insert'));
-					$this->url->redirect('account/address');
-				}
+			if ($this->request->isAjax()) {
+				$this->response->setOutput($this->message->toJSON());
+				return;
+			}
+			elseif (!$this->message->hasError()) {
+				$this->url->redirect('account/address');
 			}
 		}
 
@@ -65,16 +76,17 @@ class Catalog_Controller_Account_Address extends Controller
 	public function delete()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/address');
+			$this->session->set('redirect', $this->url->link('account/address'));
 
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/address');
-
 		$this->document->setTitle($this->_('head_title'));
 
-		if (isset($_GET['address_id']) && $this->validateDelete()) {
+		if (!empty($_GET['address_id'])) {
+			if (!$this->customer->removeAddress($_POST['address_id'])) {
+				$this->error += $this->address->getError();
+			}
 			$this->address->remove($_GET['address_id']);
 
 			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
@@ -97,6 +109,8 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function getList()
 	{
+		$this->language->load('account/address');
+
 		//Page Head
 		$this->document->setTitle($this->_('head_title'));
 
@@ -140,6 +154,8 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function getForm()
 	{
+		$this->language->load('account/address');
+
 		//Page Head
 		$this->document->setTitle($this->_('head_title'));
 
@@ -158,16 +174,9 @@ class Catalog_Controller_Account_Address extends Controller
 		$address_id = !empty($_GET['address_id']) ? (int)$_GET['address_id'] : 0;
 
 		//Load Information
-		if ($address_id && !$this->request->isPost()) {
-			$address_info = $this->customer->getAddress($_GET['address_id']);
-
-			$address_info['default'] = (int)$this->customer->getMeta('default_shipping_address_id') === $address_id;
-		}
-
-		//Load Data or Defaults
 		$defaults = array(
-			'firstname'  => '',
-			'lastname'   => '',
+			'firstname'  => $this->customer->info('firstname'),
+			'lastname'   => $this->customer->info('lastname'),
 			'company'    => '',
 			'address_1'  => '',
 			'address_2'  => '',
@@ -178,22 +187,25 @@ class Catalog_Controller_Account_Address extends Controller
 			'default'    => false,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($address_info[$key])) {
-				$this->data[$key] = $address_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
+		$address_info = array();
+
+		if ($this->request->isPost()) {
+			$address_info = $_POST;
 		}
+		elseif ($address_id) {
+			$address_info = $this->customer->getAddress($_GET['address_id']);
+
+			$address_info['default'] = (int)$this->customer->getDefaultShippingAddressId() === $address_id;
+		}
+
+		$this->data = $address_info + $defaults;
 
 		//Additional Information
 		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//Action Buttons
 		if ($this->request->isAjax()) {
-			$this->data['save'] = $this->url->ajax('account/address/update', 'address_id=' . $address_id);
+			$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
 		} else {
 			$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
 			$this->data['back'] = $this->url->link('account/address');
@@ -211,49 +223,5 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
-	}
-
-	private function validateForm()
-	{
-		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
-		}
-
-		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
-		}
-
-		if (!$this->validation->text($_POST['address_1'], 1, 128)) {
-			$this->error['address_1'] = $this->_('error_address_1');
-		}
-
-		if (!$this->validation->text($_POST['city'], 2, 128)) {
-			$this->error['city'] = $this->_('error_city');
-		}
-
-		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
-
-		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
-			$this->error['postcode'] = $this->_('error_postcode');
-		}
-
-		if ($_POST['country_id'] == '') {
-			$this->error['country'] = $this->_('error_country');
-		}
-
-		if (!isset($_POST['zone_id']) || $_POST['zone_id'] === '') {
-			$this->error['zone'] = $this->_('error_zone');
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->address->canRemove($_POST['address_id'])) {
-			$this->error += $this->address->getError();
-		}
-
-		return $this->error ? false : true;
 	}
 }

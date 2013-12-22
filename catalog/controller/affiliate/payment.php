@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 		$this->template->load('affiliate/payment');
 
 		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/payment');
+			$this->session->set('redirect', $this->url->link('affiliate/payment'));
 
 			$this->url->redirect('affiliate/login');
 		}

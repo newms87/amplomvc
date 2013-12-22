@@ -57,7 +57,7 @@
 
 		form = $('#braintree-payment-form');
 		e.preventDefault();
-		$.post(ajaxurl(form.attr('action')), form.serialize(), function (json) {
+		$.post(form.attr('action'), form.serialize(), function (json) {
 			loadingToggle(false);
 
 			if (typeof json === 'string') {

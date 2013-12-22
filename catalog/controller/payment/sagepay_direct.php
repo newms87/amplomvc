@@ -329,7 +329,7 @@ class Catalog_Controller_Payment_SagepayDirect extends Controller
 
 				$this->url->redirect('checkout/success');
 			} else {
-				$this->session->data['error'] = $data['StatusDetail'];
+				$this->session->set('error', $data['StatusDetail']);
 
 				$this->url->redirect('checkout/checkout');
 			}

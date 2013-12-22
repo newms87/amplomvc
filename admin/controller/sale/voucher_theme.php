@@ -23,7 +23,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 				$this->Model_Sale_VoucherTheme->editVoucherTheme($_GET['voucher_theme_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('sale/voucher_theme');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		if (isset($_GET['voucher_theme_id']) && $this->validateDelete()) {
 			$this->Model_Sale_VoucherTheme->deleteVoucherTheme($_GET['voucher_theme_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('sale/voucher_theme');
 			}

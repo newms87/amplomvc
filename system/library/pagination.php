@@ -1,8 +1,9 @@
 <?php
 class Pagination extends Library
 {
+	private $template;
 	private $default_template = 'block/widget/pagination';
-	private $template_file;
+	private $file;
 
 	public $total;
 	public $page;
@@ -16,17 +17,19 @@ class Pagination extends Library
 		parent::__construct($registry);
 
 		$this->init();
+
+		$this->template = new Template($registry);
 	}
 
 	public function init()
 	{
-		$this->template_file = $this->default_template;
-		$this->total         = 0;
-		$this->page          = 0;
-		$this->limit         = 0;
-		$this->num_links     = 10;
-		$this->page_url      = '';
-		$this->attrs         = array(
+		$this->file      = $this->default_template;
+		$this->total     = 0;
+		$this->page      = 0;
+		$this->limit     = 0;
+		$this->num_links = 10;
+		$this->page_url  = '';
+		$this->attrs     = array(
 			'class' => 'links'
 		);
 	}
@@ -37,7 +40,7 @@ class Pagination extends Library
 			return '';
 		}
 
-		$this->template->load($this->template_file);
+		$this->template->load($this->file);
 
 		$language = $this->language->fetch('block/widget/pagination');
 
@@ -76,15 +79,15 @@ class Pagination extends Library
 			$num_before = floor(($this->num_links - 1) / 2);
 			$num_after  = floor($this->num_links / 2);
 
-			if ($page + $num_after >= $num_pages) {
+			if ($this->page + $num_after >= $num_pages) {
 				$start = $num_pages - $this->num_links;
 				$end   = $num_pages;
-			} elseif ($page - $num_before <= 1) {
+			} elseif ($this->page - $num_before <= 1) {
 				$start = 1;
 				$end   = $this->num_links;
 			} else {
-				$start = $page - $num_before;
-				$end   = $page + $num_after;
+				$start = $this->page - $num_before;
+				$end   = $this->page + $num_after;
 			}
 		} else {
 			$start = 1;

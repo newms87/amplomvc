@@ -22,7 +22,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 			$this->config->save('policies', 'shipping_policies', $shipping_policies, 0, false);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('setting/setting');
 			}

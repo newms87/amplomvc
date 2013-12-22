@@ -1,27 +1,35 @@
 <?php
 class Cron extends Library
 {
+	private $settings;
+
 	public function check()
 	{
-		$last_run = $this->config->get('cron_last_run');
+		$this->settings = $this->config->loadGroup('cron', 0);
 
-		$diff = $this->date->diff($last_run);
-
-		//Run Cron every minute (will check task times first)
-		if (($diff->days + $diff->h + $diff->i) > 0 || true) {
+		if (empty($this->settings['cron_last_run'])) {
 			$this->run();
+		}
+		else {
+			$diff = $this->date->diff($this->settings['cron_last_run']);
+
+			//Run Cron every minute (will check task times before executing them)
+			if (($diff->days + $diff->h + $diff->i) > 0) {
+				$this->run();
+			}
 		}
 	}
 
 	public function run()
 	{
-		$tasks = $this->config->load('cron', 'cron_tasks', 0);
+		//System User enables full permissions
+		$this->user->loginSystemUser();
 
 		$msg = _l("------ Cron START %s ------\r\n\r\n", $this->date->now());
 
-		if (!empty($tasks['tasks'])) {
-			foreach ($tasks['tasks'] as &$task) {
-				if ($task['status'] != '1') {
+		if (!empty($this->settings['cron_tasks'])) {
+			foreach ($this->settings['cron_tasks']['tasks'] as &$task) {
+				if (empty($task['status'])) {
 					continue;
 				}
 
@@ -62,18 +70,21 @@ class Cron extends Library
 				$msg .= "\r\n\r\n";
 			}
 			unset($task);
-
-			$this->config->save('cron', 'cron_tasks', $tasks, 0, false);
 		}
 		else {
 			$msg .= _l("There are no tasks to run.\r\n");
 		}
 
-		$this->config->save('cron', 'cron_last_run', $this->date->now());
+		$this->settings['cron_last_run'] = $this->date->now();
+
+		$this->config->saveGroup('cron', $this->settings, 0, false);
 
 		$msg .= _l("Cron ran successfully!");
 
 		$this->log->write($msg);
+
+		//Always logout system user when done!
+		$this->user->logoutSystemUser();
 
 		return $msg;
 	}
@@ -82,7 +93,7 @@ class Cron extends Library
 	{
 		$times = $this->parse($tab);
 
-		$date = new DateTime();
+		$date = $this->date->datetime();
 
 		while (true) {
 			$current = $this->date->getCronUnits($date);
@@ -138,7 +149,7 @@ class Cron extends Library
 	{
 		$times = $this->parse($tab);
 
-		$date = new DateTime();
+		$date = $this->date->datetime();
 
 		while (true) {
 			$current = $this->date->getCronUnits($date);

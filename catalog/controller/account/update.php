@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 		//Login Verification
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/update');
+			$this->session->set('redirect', $this->url->link('account/update'));
 
 			$this->url->redirect('account/login');
 		}
@@ -40,7 +40,7 @@ class Catalog_Controller_Account_Update extends Controller
 		//Handle POST
 		if (!$this->request->isPost()) {
 			$customer_info             = $this->customer->info();
-			$customer_info['metadata'] = $this->customer->getMetaData();
+			$customer_info['metadata'] = $this->customer->getMeta();
 		}
 		else {
 			$customer_info = $_POST;
@@ -101,22 +101,14 @@ class Catalog_Controller_Account_Update extends Controller
 	public function remove_address()
 	{
 		if (!empty($_GET['address_id'])) {
-			if ($this->address->canRemove($_GET['address_id'])) {
-				$this->address->remove($_GET['address_id']);
+			if (!$this->customer->removeAddress($_GET['address_id'])) {
+				$this->message->add('error', $this->customer->getError());
 			}
-
-			$error = $this->address->getError();
 		}
 
 		if ($this->request->isAjax()) {
-			if ($error) {
-				$this->response->setOutput(json_encode(array('error' => $error)));
-			}
+			$this->response->setOutput($this->message->toJSON());
 		} else {
-			if ($error) {
-				$this->message->add('warning', $error);
-			}
-
 			$this->url->redirect('account/update');
 		}
 	}
@@ -143,9 +135,10 @@ class Catalog_Controller_Account_Update extends Controller
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
 
-		if (!empty($_POST['password']) && !$this->validation->password($_POST['password'])) {
-			$this->error['password'] = $this->_('error_password');
-		} elseif ($_POST['password'] !== $_POST['confirm']) {
+		if (!$this->validation->password($_POST['password'])) {
+			$this->error['password'] = $this->validation->getError();
+		}
+		elseif ($_POST['password'] !== $_POST['confirm']) {
 			$this->error['confirm'] = $this->_('error_confirm');
 		}
 

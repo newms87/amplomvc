@@ -106,7 +106,7 @@ final class Router
 
 		//Tracking
 		if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
-			setcookie('tracking', $_GET['tracking'], time() + 3600 * 24 * 1000, '/');
+			setcookie('tracking', $_GET['tracking'], _time() + 3600 * 24 * 1000, '/');
 		}
 
 		//Resolve Layout ID

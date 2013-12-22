@@ -1,43 +1,15 @@
 <?php
 class Cache
 {
-	private $expire;
+	private $expired;
 	private $ignore_list = array();
 	private $loaded = array();
 
 	public function __construct()
 	{
-		$this->expire = CACHE_FILE_EXPIRATION;
+		$this->expired = _time() - CACHE_FILE_EXPIRATION;
 
 		_is_writable(DIR_CACHE);
-
-		$files = glob(DIR_CACHE . '*.cache');
-
-		if ($files) {
-			foreach ($files as $file) {
-				$time = strstr(basename($file), '.', true);
-
-				if ($time < time()) {
-					clearstatcache();
-
-					if (file_exists($file)) {
-						@unlink($file);
-					}
-				}
-			}
-		}
-	}
-
-	public function get_cache_time($key)
-	{
-		if (!isset($this->loaded[$key])) {
-			$this->get($key);
-		}
-
-		return (int)preg_replace(array(
-		                              '/\..*$/',
-		                              '/.*\//'
-		                         ), '', $this->loaded[$key]['file']) - $this->expire;
 	}
 
 	public function get($key)
@@ -46,17 +18,23 @@ class Cache
 			return $this->loaded[$key]['data'];
 		}
 
-		foreach ($this->ignore_list as $ignore) {
-			if (preg_match("/^$ignore/", $key) > 0) {
+		$file = DIR_CACHE . $key . '.cache';
+
+		if (is_file($file)) {
+			if (_filemtime($file) < $this->expired) {
+				//Suppress warnings as this will fail under race conditions
+				@unlink($file);
 				return;
 			}
-		}
 
-		$files = glob(DIR_CACHE . '*.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.cache');
+			foreach ($this->ignore_list as $ignore) {
+				if (strpos($key, $ignore) === 0) {
+					return;
+				}
+			}
 
-		if ($files) {
-			$this->loaded[$key]['data'] = unserialize(@file_get_contents($files[0]));
-			$this->loaded[$key]['file'] = $files[0];
+			$this->loaded[$key]['data'] = unserialize(@file_get_contents($file));
+			$this->loaded[$key]['file'] = $file;
 
 			return $this->loaded[$key]['data'];
 		}
@@ -64,33 +42,25 @@ class Cache
 
 	public function set($key, $value)
 	{
-		foreach ($this->ignore_list as $ignore) {
-			if (preg_match("/^$ignore/", $key) > 0) {
-				return;
-			}
-		}
-
-		$this->delete($key);
-
-		$file = DIR_CACHE . (time() + $this->expire) . '.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.cache';
+		$file = DIR_CACHE . $key . '.cache';
 
 		file_put_contents($file, serialize($value));
 	}
 
 	public function delete($key)
 	{
-		$files = glob(DIR_CACHE . '*.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '*.cache');
+		$files = glob(DIR_CACHE . $key . '*.cache');
+
 		if ($files) {
 			clearstatcache();
 
 			foreach ($files as $file) {
-				if (is_file($file) && is_readable($file)) {
-					@unlink($file);
-				}
+				//Suppress warnings as this will fail under race conditions
+				@unlink($file);
 			}
 		}
 
-		$this->loaded = array();
+		unset($this->loaded[$key]);
 	}
 
 	public function ignore($ignore)

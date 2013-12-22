@@ -41,8 +41,12 @@
 						<span class="keep_shopping"><?= $text_keep_shopping; ?></span>
 					</div>
 				<? } ?>
+
 				<? if ($display_model) { ?>
-					<div class="description_model"><span><?= $text_model; ?></span><span><?= $model; ?></span></div>
+					<div class="description_model">
+						<span><?= $text_model; ?></span>
+						<span><?= $model; ?></span>
+					</div>
 				<? } ?>
 
 				<? if ($price && $is_purchasable) { ?>
@@ -52,21 +56,29 @@
 						<? if (empty($special)) { ?>
 							<span class="regular"><?= $price; ?></span>
 						<? } else { ?>
-							<span class="special"><?= $special; ?></span><span class="retail"><?= $price; ?> retail</span>
+							<span class="special"><?= $special; ?></span>
+							<span class="retail"><?= _l("%s retail", $price); ?></span>
 						<? } ?>
 
 						<? if (!empty($is_final_explanation)) { ?>
-							<div class="extra_info_block"><span class="final_sale"></span><span class="help_icon"><span
-										class="help_icon_popup"><?= $is_final_explanation; ?></span></span></div>
+							<div class="extra_info_block">
+								<span class="final_sale"></span>
+								<span class="help_icon">
+									<span class="help_icon_popup"><?= $is_final_explanation; ?></span>
+								</span>
+							</div>
 						<? } ?>
 
 						<? if (!empty($is_default_shipping)) { ?>
-							<div class="extra_info_block"><span class="not_default_shipping"></span><span
-									class="help_icon"><span
-										class="help_icon_popup"><?= $shipping_policy['description']; ?></span></span></div>
+							<div class="extra_info_block">
+								<span class="not_default_shipping"></span>
+								<span class="help_icon">
+									<span class="help_icon_popup"><?= $shipping_policy['description']; ?></span>
+								</span>
+							</div>
 						<? } ?>
 
-						<br style="clear:both"/>
+						<br class="clear" />
 						<? if (!empty($tax)) { ?>
 							<span class="price-tax"><?= $text_tax; ?> <?= $tax; ?></span><br/>
 						<? } ?>

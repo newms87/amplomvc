@@ -26,7 +26,7 @@ class Admin_Controller_Page_Page extends Controller
 				$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success_update'));
 
 				if (!$this->request->isAjax()) {
@@ -50,7 +50,7 @@ class Admin_Controller_Page_Page extends Controller
 		if (isset($_GET['page_id']) && $this->validateDelete()) {
 			$this->Model_Page_Page->deletePage($_GET['page_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('notify', $this->_('text_success_delete'));
 			}
 		}
@@ -80,7 +80,7 @@ class Admin_Controller_Page_Page extends Controller
 				}
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->language->load('page/page');
 				$this->message->add('success', $this->_('text_success'));
 			}

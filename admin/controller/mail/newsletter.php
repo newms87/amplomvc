@@ -19,7 +19,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$newsletter_id = $this->Model_Mail_Newsletter->addNewsletter($_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 
@@ -38,7 +38,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Mail_Newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 		}
@@ -282,7 +282,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		}
 
 		//Ajax Urls
-		$this->data['url_product_select'] = $this->url->ajax('catalog/product/select');
+		$this->data['url_product_select'] = $this->url->link('catalog/product/select');
 
 		$this->children = array(
 			'common/header',

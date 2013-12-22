@@ -8,7 +8,7 @@ class Catalog_Controller_Product_Compare extends Controller
 		$this->language->load('product/compare');
 
 		if (!isset($this->session->data['compare'])) {
-			$this->session->data['compare'] = array();
+			$this->session->set('compare', array());
 		}
 
 		if (isset($_GET['remove'])) {
@@ -134,7 +134,7 @@ class Catalog_Controller_Product_Compare extends Controller
 		$json = array();
 
 		if (!isset($this->session->data['compare'])) {
-			$this->session->data['compare'] = array();
+			$this->session->set('compare', array());
 		}
 
 		if (isset($_POST['product_id'])) {

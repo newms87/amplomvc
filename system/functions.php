@@ -1,19 +1,17 @@
 <?php
 //custom var dump
-global $html_dump_count;
-$html_dump_count = 0;
 function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = true)
 {
-	global $html_dump_count;
+	static $first = true;
 
-	$id = 'html_dump-' . $html_dump_count;
+	$id = uniqid('html_dump-');
 
 	if (!$print) {
 		ob_start();
 	}
 	?>
 
-	<? if (!$html_dump_count) { ?>
+	<? if ($first) { ?>
 	<style>
 		.html_dump {
 			display: inline-block;
@@ -65,7 +63,7 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 		</div>
 	</a>
 
-	<? if ($html_dump_count == 0) { ?>
+	<? if ($first) { ?>
 	<script type='text/javascript'>//<!--
 		function open_html_dump(id) {
 			var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
@@ -77,7 +75,7 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 <? } ?>
 
 	<?
-	$html_dump_count++;
+	$first = false;
 
 	if (!$print) {
 		return ob_get_clean();

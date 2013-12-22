@@ -85,7 +85,7 @@ class Admin_Controller_Extension_Module extends Controller
 	public function install()
 	{
 		if (!$this->user->can('modify', 'extension/module')) {
-			$this->session->data['error'] = $this->_('error_permission');
+			$this->session->set('error', $this->_('error_permission'));
 
 			$this->url->redirect('extension/module');
 		} else {
@@ -112,13 +112,13 @@ class Admin_Controller_Extension_Module extends Controller
 		$this->language->load('extension/module');
 
 		if (!$this->user->can('modify', 'extension/module')) {
-			$this->session->data['error'] = $this->_('error_permission');
+			$this->session->set('error', $this->_('error_permission'));
 
 			$this->url->redirect('extension/module');
 		} else {
 			$this->Model_Setting_Extension->uninstall('module', $_GET['extension']);
 
-			$this->System_Model_Setting->deleteSetting($_GET['extension']);
+			$this->config->deleteGroup($_GET['extension']);
 
 			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/module/' . $_GET['extension'] . '.php'));
 

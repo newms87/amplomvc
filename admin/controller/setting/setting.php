@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
@@ -32,8 +33,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		//Load Information
 		if (!$this->request->isPost()) {
 			$config_data = $this->config->loadGroup('config', 0);
-		}
-		else {
+		} else {
 			$config_data = $_POST;
 		}
 
@@ -50,6 +50,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_default_store'                    => '',
 			'config_meta_description'                 => '',
 			'config_debug'                            => 0,
+			'config_cron_status'                      => 1,
 			'config_allow_close_message_box'          => 1,
 			'config_default_layout_id'                => '',
 			'config_theme'                            => 'default',
@@ -110,6 +111,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_upload_images_allowed'            => '',
 			'config_upload_images_mime_types_allowed' => '',
 			'config_cart_weight'                      => 1,
+			'config_admin_bar'                        => 1,
 			'config_admin_logo'                       => '',
 			'config_icon'                             => '',
 			'config_image_admin_thumb_width'          => 120,

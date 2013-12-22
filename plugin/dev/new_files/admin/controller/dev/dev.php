@@ -24,7 +24,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->document->setTitle($this->_('text_sync'));
 
-		$dev_sites = $this->System_Model_Setting->getSetting('dev_sites');
+		$dev_sites = $this->config->loadGroup('dev_sites');
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
@@ -77,7 +77,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->document->setTitle($this->_('text_site_management'));
 
-		$dev_sites = $this->System_Model_Setting->getSetting('dev_sites');
+		$dev_sites = $this->config->loadGroup('dev_sites');
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['add_site'])) {
@@ -93,7 +93,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 			unset($_POST);
 
-			$this->System_Model_Setting->editSetting('dev_sites', $dev_sites, null, false);
+			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
 		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
@@ -151,7 +151,7 @@ class Admin_Controller_Dev_Dev extends Controller
 				$this->dev->site_restore($_POST['backup_file']);
 			}
 			elseif (isset($_POST['sync_file'])) {
-				$sync_file = DIR_DOWNLOAD . 'sync_file-' . $this->date->now(AC_DATE_STRING, 'm-d-y') . '.sql';
+				$sync_file = DIR_DOWNLOAD . 'sync_file-' . $this->date->now('m-d-y') . '.sql';
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 
 				$this->dev->site_backup($sync_file, $tables, '__AC_PREFIX__');

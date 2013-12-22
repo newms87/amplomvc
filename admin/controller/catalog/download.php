@@ -214,20 +214,6 @@ class Admin_Controller_Catalog_Download extends Controller
 			);
 		}
 
-		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
-
-		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
-
-			unset($this->session->data['success']);
-		} else {
-			$this->data['success'] = '';
-		}
-
 		$url = '';
 
 		if ($order == 'ASC') {

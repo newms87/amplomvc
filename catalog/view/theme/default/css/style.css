@@ -571,32 +571,32 @@ ul.link_list > li {
 
 /** Login Header **/
 
-.login-header {
+.login_header {
 	background: none;
 	margin-top: 6px;
 }
 
-.login-header form {
+.login_header form {
 	overflow: hidden;
 	display: block;
 }
 
-.login-header div {
+.login_header div {
 	display: inline-block;
 	width: 46%;
 }
 
-.login-header .email input {
+.login_header .email input {
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
 
-.login-header .password input {
+.login_header .password input {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
 
-.login-header input {
+.login_header input {
 	border: 1px solid rgba(100, 100, 100, .4);
 	background: rgba(150, 150, 150, .1);
 	width: 93%;
@@ -604,12 +604,12 @@ ul.link_list > li {
 	outline: none; /* this removes the Chrome stying of :focus input elements */
 }
 
-.login-header input:active, .login-header input:focus {
+.login_header input:active, .login_header input:focus {
 	border: 1px solid rgba(100, 100, 100, .8);
 	background: rgba(150, 150, 150, .2);
 }
 
-.login-header input.empty_val {
+.login_header input.empty_val {
 	text-align: center;
 	color: #AAAAAA;
 }
@@ -2148,22 +2148,22 @@ a.button:active, input.button:active {
 	cursor: pointer;
 }
 
-.login-content {
+.login_content {
 	margin-bottom: 20px;
 	float: left;
 }
 
-.login-content .left {
+.login_content .left {
 	float: left;
 	width: 48%;
 }
 
-.login-content .right {
+.login_content .right {
 	float: right;
 	width: 48%
 }
 
-.login-content .left .section, .login-content .right .section {
+.login_content .left .section, .login_content .right .section {
 	min-height: 190px;
 }
 

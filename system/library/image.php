@@ -1,4 +1,5 @@
 <?php
+
 class Image extends Library
 {
 	private $file;
@@ -22,13 +23,26 @@ class Image extends Library
 
 	public function get($filename)
 	{
-		$filename = str_replace('\\','/', $filename);
+		$filename = str_replace('\\', '/', $filename);
 
-		if (!is_file(DIR_IMAGE . $filename)) {
-			return is_file($filename) ? $filename : '';
+		if (is_file(DIR_IMAGE . $filename)) {
+			return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
+		}
+		elseif (is_file($filename)) {
+			$url = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+			return str_replace(SITE_DIR, $url, $filename);
 		}
 
-		return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
+		return $filename;
+	}
+
+	public function getInfo($key = null)
+	{
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : null;
+		}
+
+		return $this->info;
 	}
 
 	public function set_image($image)
@@ -95,14 +109,7 @@ class Image extends Library
 
 	public function save($file, $quality = 90)
 	{
-		//make the image cache directory if it does not exist
-		$file_dir = dirname($file);
-
-		if (!is_dir($file_dir)) {
-			$mode = octdec($this->dir_mode);
-			@mkdir($file_dir, $mode, true);
-			chmod($file_dir, $mode);
-		}
+		_is_writable(dirname($file));
 
 		$info = pathinfo($file);
 
@@ -111,19 +118,27 @@ class Image extends Library
 		$success = false;
 
 		if (is_resource($this->image)) {
-			if ($extension == 'jpeg' || $extension == 'jpg') {
-				$success = imagejpeg($this->image, $file, $quality);
-			} elseif ($extension == 'png') {
-				$success = imagepng($this->image, $file, 0);
-			} elseif ($extension == 'gif') {
-				$success = imagegif($this->image, $file);
+			switch ($extension) {
+				case 'jpeg':
+				case 'jpg':
+					$success = imagejpeg($this->image, $file, $quality);
+					break;
+
+				case 'gif':
+					$success = imagegif($this->image, $file);
+					break;
+
+				case 'png':
+				default:
+					$success = imagepng($this->image, $file, 0);
+					break;
 			}
 
 			$this->unset_image();
 		}
 
 		if (!$success) {
-			trigger_error("Image::save(): Failed to save image file $file!");
+			$this->error_log->write(__METHOD__ . "(): Failed to save image file %s as %s!", $file, $extension);
 		}
 	}
 
@@ -132,7 +147,7 @@ class Image extends Library
 		if (!is_file(DIR_IMAGE . $filename)) {
 			//If the file exists but not in the image directory, move it to the image directory and continue
 			if (is_string($filename) && is_file($filename)) {
-				$copy_file = 'data/' . str_replace(SITE_DIR, '', $filename);
+				$copy_file = 'import/' . str_replace(SITE_DIR, '', $filename);
 
 				if (!is_file(DIR_IMAGE . $copy_file)) {
 					_is_writable(DIR_IMAGE . dirname($copy_file));
@@ -146,39 +161,34 @@ class Image extends Library
 			}
 		}
 
-		$info = pathinfo($filename);
-
-		//if the background is transparent and the mime type is not png or gif, change to png
-		if (!$background_color && !in_array(strtolower($info['extension']), array(
-		                                                                         'png',
-		                                                                         'gif',
-		                                                                         'jpg'
-		                                                                    ))
-		) {
-			$extension = 'png';
-		} else {
-			$extension = $info['extension'];
-		}
-
-		$old_image      = DIR_IMAGE . $filename;
-		$new_image_path = 'cache/' . substr($filename, 0, strrpos($filename, '.')) . '-' . $width . 'x' . $height . '.' . $extension;
-		$new_image      = DIR_IMAGE . $new_image_path;
-
-		//if image is already in cache, return cached version
-		if (is_file($new_image) && (filemtime($old_image) < filemtime($new_image))) {
-			return $this->get($new_image_path);
-		}
+		$old_image = DIR_IMAGE . $filename;
 
 		//this sets the image file as the active image to modify
 		$this->set_image($old_image);
 
-		//if the image height is not set do not return an image
-		if (!$this->info['width'] || !$this->info['height'] || !$width || !$height) {
+		//if the image is 0 width or 0 height, do not return an image
+		if (!$this->info['width'] || !$this->info['height']) {
 			return '';
 		}
 
-		$scale_x = $width / $this->info['width'];
-		$scale_y = $height / $this->info['height'];
+		//If width and height are 0, we do not scale the image
+		if ($width <= 0 && $height <= 0) {
+			return $this->get($filename);
+		}
+
+		//Constrain Width
+		if ($width <= 0) {
+			$scale_y = $height / $this->info['height'];
+			$scale_x = $scale_y;
+		} //Constrain Height
+		elseif ($height <= 0) {
+			$scale_x = $width / $this->info['width'];
+			$scale_y = $scale_x;
+		} //Resize
+		else {
+			$scale_x = $width / $this->info['width'];
+			$scale_y = $height / $this->info['height'];
+		}
 
 		//if the image is the correct size we do not need to do anything
 		if ($scale_x === 1 && $scale_y === 1) {
@@ -187,35 +197,53 @@ class Image extends Library
 
 		$new_width  = (int)($this->info['width'] * $scale_x);
 		$new_height = (int)($this->info['height'] * $scale_y);
-		$xpos       = (int)(($width - $new_width) / 2);
-		$ypos       = (int)(($height - $new_height) / 2);
 
-		$image_old = $this->image;
+		//Resolve image type and new image name
+		$info = pathinfo($filename);
 
-		$this->image = imagecreatetruecolor((int)$width, (int)$height);
+		//if the background is transparent and the mime type is not png or gif, change to png
+		$allowed_exts = array(
+			'png',
+			'gif',
+			'jpg'
+		);
 
-		if (!$background_color || (isset($this->info['mime']) && $this->info['mime'] == 'image/png')) {
-			imagealphablending($this->image, false);
-			imagesavealpha($this->image, true);
-			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
-			imagecolortransparent($this->image, $background);
+		if (!$background_color && !in_array(strtolower($info['extension']), $allowed_exts)) {
+			$extension = 'png';
 		} else {
-			if ($background_color) {
-				$background = $this->heximagecolorallocate($background_color);
-			} else {
-				$background = imagecolorallocate($this->image, 255, 255, 255);
-			}
+			$extension = $info['extension'];
 		}
 
-		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
+		$new_image_path = 'cache/' . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
+		$new_image_file = DIR_IMAGE . $new_image_path;
 
-		imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
-		imagedestroy($image_old);
+		//if image is already in cache, return cached version
+		if (!is_file($new_image_file) || (filemtime($old_image) > filemtime($new_image_file))) {
+			//Render new image
+			$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
 
-		$this->info['width']  = $width;
-		$this->info['height'] = $height;
+			if (!$background_color || (isset($this->info['mime']) && $this->info['mime'] == 'image/png')) {
+				imagealphablending($new_image, false);
+				imagesavealpha($new_image, true);
+				$background = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+				imagecolortransparent($new_image, $background);
+			} else {
+				if ($background_color) {
+					$background = $this->heximagecolorallocate($background_color);
+				} else {
+					$background = imagecolorallocate($new_image, 255, 255, 255);
+				}
+			}
 
-		$this->save($new_image);
+			imagefilledrectangle($new_image, 0, 0, $new_width, $new_height, $background);
+
+			imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
+			imagedestroy($this->image);
+
+			$this->image = $new_image;
+
+			$this->save($new_image_file);
+		}
 
 		return $this->get($new_image_path);
 	}
@@ -545,15 +573,19 @@ class Image extends Library
 	public function getPixelColor($image, $x, $y, $format = 'hex')
 	{
 		$rgb = imagecolorat($image, $x, $y);
-		$r = ($rgb >> 16) & 0xFF;
-		$g = ($rgb >> 8) & 0xFF;
-		$b = $rgb & 0xFF;
+		$r   = ($rgb >> 16) & 0xFF;
+		$g   = ($rgb >> 8) & 0xFF;
+		$b   = $rgb & 0xFF;
 
 		if ($format === 'hex') {
 			return '#' . dechex($r) . dechex($g) . dechex($b);
 		}
 
-		return array('r' => $r, 'g' => $g, 'b' => $b);
+		return array(
+			'r' => $r,
+			'g' => $g,
+			'b' => $b
+		);
 	}
 
 	public function getBoxColor($image, $start_x, $start_y, $width, $height, $format = 'hex')
@@ -579,34 +611,41 @@ class Image extends Library
 		$b /= $total;
 
 		if ($format === 'hex') {
-			return '#' . str_pad(dechex($r),2,'0', STR_PAD_LEFT) . str_pad(dechex($g),2,'0', STR_PAD_LEFT) . str_pad(dechex($b),2,'0', STR_PAD_LEFT);
+			return '#' . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
 		}
 
-		return array('r' => $r, 'g' => $g, 'b' => $b);
+		return array(
+			'r' => $r,
+			'g' => $g,
+			'b' => $b
+		);
 	}
 
-	public function hex6to3($hex){
+	public function hex6to3($hex)
+	{
 		preg_match("|#([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})|", $hex, $match);
 
 		array_shift($match);
 
 		//Not a 6-digit hex number
-		if (count($match) !== 3) return $hex;
+		if (count($match) !== 3) {
+			return $hex;
+		}
 
-		foreach($match as &$m) {
+		foreach ($match as &$m) {
 			$n = hexdec($m);
-			$m = dechex( intval($n/17) + ( ($n%17 < 8) ? 0 : 1) );
+			$m = dechex(intval($n / 17) + (($n % 17 < 8) ? 0 : 1));
 		}
 		unset($m);
 
-		return "#". implode("", $match);
+		return "#" . implode("", $match);
 	}
 
 	public function mosaic($image, $rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
 	{
 		$this->set_image($image);
 
-		$width = $this->info['width'];
+		$width  = $this->info['width'];
 		$height = $this->info['height'];
 
 		$y_offset = floor($height / $rows);

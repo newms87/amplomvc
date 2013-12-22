@@ -15,7 +15,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 
@@ -34,7 +34,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('catalog/manufacturer');
 			}
@@ -50,7 +50,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		if (isset($_GET['manufacturer_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
 			}
@@ -87,7 +87,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('action'));
@@ -315,8 +315,8 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 
 		//Ajax Urls
-		$this->data['url_generate_url'] = $this->url->ajax('catalog/manufacturer/generate_url');
-		$this->data['url_autocomplete'] = $this->url->ajax('catalog/manufacturer/autocomplete');
+		$this->data['url_generate_url'] = $this->url->link('catalog/manufacturer/generate_url');
+		$this->data['url_autocomplete'] = $this->url->link('catalog/manufacturer/autocomplete');
 
 		$translate_fields = array(
 			'name',

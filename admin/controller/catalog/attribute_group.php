@@ -21,7 +21,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/attribute_group');
@@ -38,7 +38,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		if (!empty($_GET['attribute_group_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_AttributeGroup->deleteAttributeGroup($_GET['attribute_group_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/attribute_group');
@@ -67,7 +67,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('catalog/attribute_group');

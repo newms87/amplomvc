@@ -6,7 +6,7 @@ class Catalog_Controller_Affiliate_Account extends Controller
 		$this->template->load('affiliate/account');
 
 		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/account');
+			$this->session->set('redirect', $this->url->link('affiliate/account'));
 
 			$this->url->redirect('affiliate/login');
 		}

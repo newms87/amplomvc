@@ -809,7 +809,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		}
 
 		//Ajax Urls
-		$this->data['url_transaction'] = $this->url->ajax('sale/affiliate/transaction', 'affiliate_id=' . $affiliate_id);
+		$this->data['url_transaction'] = $this->url->link('sale/affiliate/transaction', 'affiliate_id=' . $affiliate_id);
 
 		$this->children = array(
 			'common/header',

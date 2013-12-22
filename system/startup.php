@@ -11,7 +11,7 @@ if (version_compare(phpversion(), '5.3.0', '<') == true) {
 }
 
 //Date Constants
-define('DATETIME_ZERO','0000-00-00 00:00:00');
+define('DATETIME_ZERO', '0000-00-00 00:00:00');
 define("AC_DATE_STRING", 1);
 define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
@@ -33,17 +33,18 @@ if (ini_get('register_globals')) {
 	session_set_cookie_params(0, '/');
 	session_start();
 
-	$globals = array($_REQUEST, $_SESSION, $_SERVER, $_FILES);
+	$globals = array(
+		$_REQUEST,
+		$_SESSION,
+		$_SERVER,
+		$_FILES
+	);
 
 	foreach ($globals as $global) {
 		foreach (array_keys($global) as $key) {
 			unset(${$key});
 		}
 	}
-}
-
-if (!ini_get('date.timezone')) {
-	date_default_timezone_set(DEFAULT_TIMEZONE);
 }
 
 //Database Escaping Entries

@@ -1,9 +1,39 @@
 <?php
+//TODO: Move to Dev plugin
+//Virtual time (for simulating time progression)
+$ac_time_offset = (int)@file_get_contents(DIR_SYSTEM . 'timeoffset');
+
+function _time()
+{
+	global $ac_time_offset;
+	return time() + $ac_time_offset;
+}
+
+function _filemtime($file)
+{
+	global $ac_time_offset;
+	return filemtime($file) + ($ac_time_offset * 1000);
+}
+
+//Sim time
+if (!empty($_GET['sim_time'])) {
+	global $ac_time_offset;
+
+	$time_file = DIR_SYSTEM . 'timeoffset';
+	if ($_GET['sim_time'] === 'reset') {
+		$ac_time_offset = 0;
+	} else {
+		$ac_time_offset = (int)@file_get_contents($time_file) + (int)$_GET['sim_time'];
+	}
+
+	file_put_contents($time_file, $ac_time_offset);
+}
+
 // Registry
 $registry = new Registry();
 
 //TODO: Maybe make this our main handler for loading (move out of registry)??
-spl_autoload_register(function($class) use($registry){
+spl_autoload_register(function ($class) use ($registry) {
 	$registry->loadClass($class, false);
 });
 
@@ -40,7 +70,7 @@ function _l($message)
  *
  * @param $group - The language group to change to.
  * @param $message - The Message
- * @param $var1, $var2, etc.. The variables to pass to vsprintf() with the message.
+ * @param $var1 , $var2, etc.. The variables to pass to vsprintf() with the message.
  *
  * @return null | String with the translated message
  */
@@ -56,7 +86,7 @@ function _lg($group, $message = null)
 	}
 
 	//Temporarily Change Group
-	$temp = $language_group;
+	$temp           = $language_group;
 	$language_group = $group;
 
 	$params = func_get_args();
@@ -69,8 +99,8 @@ function _lg($group, $message = null)
 	return $return;
 }
 
-// Request
-$registry->set('request', new Request());
+// Request (cleans globals)
+$registry->set('request', new Request($registry));
 
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
@@ -88,6 +118,11 @@ $config = new Config($registry);
 
 //Setup Cache ignore list
 $cache->ignore($config->get('config_cache_ignore'));
+
+if (!defined("DB_PROFILE")) {
+	define("DB_PROFILE", $config->get('config_db_profile'));
+	define("DB_PROFILE_CACHE", $config->get('config_db_profile_cache'));
+}
 
 //Database Structure Validation
 $row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
@@ -107,7 +142,7 @@ $registry->set('log', $log);
 //Error Callbacks allow customization of error display / messages
 $error_callbacks = array();
 
-$error_handler = function($errno, $errstr, $errfile, $errline, $errcontext) use($error_log, $config){
+$error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use ($error_log, $config) {
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
@@ -136,8 +171,8 @@ $error_handler = function($errno, $errstr, $errfile, $errline, $errcontext) use(
 
 	if ($error) {
 		if ($config->get('config_error_display')) {
-			echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
-			flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
+			echo '<b>' . $error . '</b>: ' . _l($errstr) . ' in <b>' . $errfile . '</b> ' . _l('on line') . ' <b>' . $errline . '</b><br /><br />';
+			flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 		}
 
 		if ($config->get('config_error_log')) {
@@ -169,7 +204,7 @@ $registry->set('theme', new Theme($registry));
 $registry->set('url', new Url($registry));
 
 // Response
-$response = new Response();
+$response = new Response($registry);
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
 $registry->set('response', $response);
@@ -181,8 +216,7 @@ $plugin = new Plugin($registry);
 if (isset($_GET['run_cron'])) {
 	echo nl2br($registry->get('cron')->run());
 	exit;
-}
-elseif ($config->get('cron_status')) {
+} elseif ($config->get('config_cron_status')) {
 	$registry->get('cron')->check();
 }
 
@@ -199,24 +233,3 @@ $router->dispatch();
 
 // Output
 $response->output();
-
-//TODO: try to move this so it is valid HTML
-//Performance Logging
-if ($config->get('config_performance_log')) {
-	global $__start;
-	$stats = array(
-		'peak_memory' => $registry->get('tool')->bytes2str(memory_get_peak_usage(true)),
-		'count_included_files' => count(get_included_files()),
-		'execution_time' => microtime(true) - $__start,
-	);
-
-	$html = "<div class=\"title\">" . _l("System Performance:") . "</div>";
-
-	foreach ($stats as $key => $s) {
-		$html .= "<div>$key = $s</div>";
-	}
-
-	$html = "<div class=\"performance\">$html</div>";
-
-	echo "<script>show_msg('success', '$html')</script>";
-}

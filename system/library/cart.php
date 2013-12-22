@@ -14,11 +14,11 @@ class Cart extends Library
 		$this->language->system('cart');
 
 		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
-			$this->session->data['cart'] = array();
+			$this->session->set('cart', array());
 		}
 
 		if (!isset($this->session->data['wishlist']) || !is_array($this->session->data['wishlist'])) {
-			$this->session->data['wishlist'] = array();
+			$this->session->set('wishlist', array());
 		}
 	}
 
@@ -134,6 +134,11 @@ class Cart extends Library
 		return $this->hasProducts();
 	}
 
+	public function guestCheckoutAllowed()
+	{
+		return $this->config->get('config_guest_checkout') && !$this->config->get('config_customer_hide_price') && !$this->cart->hasDownload();
+	}
+
 	/**
 	 * Add an item to the Cart.
 	 *
@@ -163,6 +168,8 @@ class Cart extends Library
 		//Invalidate Rendered Data
 		$this->totals = null;
 
+		$this->saveCart();
+
 		return $key;
 	}
 
@@ -173,12 +180,14 @@ class Cart extends Library
 		}
 
 		if ((int)$quantity > 0) {
-			$this->session->data['cart'][$type][$key]['quantity'] = (int)$quantity;
+			$_SESSION['cart'][$type][$key]['quantity'] = (int)$quantity;
 		} else {
-			$this->remove($type, $key);
+			$this->removeItem($type, $key);
 		}
 
 		$this->totals = null;
+
+		$this->saveCart();
 	}
 
 	public function removeItem($type, $key)
@@ -186,6 +195,8 @@ class Cart extends Library
 		if (isset($this->session->data['cart'][$type][$key])) {
 			unset($this->session->data['cart'][$type][$key]);
 			$this->totals = null;
+
+			$this->saveCart();
 		}
 	}
 
@@ -199,6 +210,10 @@ class Cart extends Library
 			return false;
 		}
 
+
+		//TODO: Cannot load every time, need to resolve how to load from session and DB!!
+
+
 		foreach ($cart as $type => $items) {
 			foreach ($items as $key => $data) {
 				if (!empty($this->session->data['cart'][$type][$key])) {
@@ -211,6 +226,8 @@ class Cart extends Library
 
 		$this->totals = null;
 
+		$this->saveCart();
+
 		return true;
 	}
 
@@ -218,8 +235,8 @@ class Cart extends Library
 	{
 		$this->totals = null;
 
-		$this->session->data['cart']     = array();
-		$this->session->data['wishlist'] = array();
+		$this->session->set('cart', array());
+		$this->session->set('wishlist', array());
 
 		unset($this->session->data['shipping_address_id']);
 		unset($this->session->data['payment_address_id']);
@@ -231,6 +248,8 @@ class Cart extends Library
 		unset($this->session->data['vouchers']);
 
 		$this->order->clear();
+
+		$this->saveCart();
 	}
 
 	public function getWeight()
@@ -360,13 +379,33 @@ class Cart extends Library
 		}
 	}
 
+
+
+
+	//TODO: Clicking on remove will cause cache to invalidate improperly??? Maybe from Database customer cart field???
+
+
+
+
 	public function updateProduct($key, $quantity)
 	{
+		//Invalidate cart product cache
+		list($product_id, $cart_key) = explode(':', $key);
+		$customer_id = $this->customer->getId();
+
+		$this->cache->delete("product.$product_id.$customer_id.$cart_key");
+
 		$this->updateItem(self::PRODUCTS, $key, $quantity);
 	}
 
 	public function removeProduct($key)
 	{
+		//Invalidate cart product cache
+		list($product_id, $cart_key) = explode(':', $key);
+		$customer_id = $this->customer->getId();
+
+		$this->cache->delete("product.$product_id.$customer_id.$cart_key");
+
 		$this->removeItem(self::PRODUCTS, $key);
 	}
 
@@ -377,7 +416,19 @@ class Cart extends Library
 
 	public function getProduct($key)
 	{
-		return $this->getItem(self::PRODUCTS, $key);
+		$product = $this->getItem(self::PRODUCTS, $key);
+
+		if (!$product || !$this->fillCartProduct($key, $product)) {
+			if (!empty($product['name'])) {
+				$this->message->add('warning', _l("%s is no longer available and has been removed from your cart. We apologize for the inconvenience.", $product['product']['name']));
+			}
+
+			$this->remove(self::PRODUCTS, $key);
+
+			return null;
+		}
+
+		return $product;
 	}
 
 	public function getProductIds()
@@ -392,13 +443,38 @@ class Cart extends Library
 		$cart_products = $this->get(self::PRODUCTS);
 
 		foreach ($cart_products as $key => &$product) {
-			if (!$this->Catalog_Model_Catalog_Product->fillProductDetails($product, $product['id'], $product['quantity'], $product['options'])) {
-				$this->message->add('warning', _l("%s is no longer available and has been removed from your cart. We apologize for the inconvenience.", $product['product']['name']));
+			if (!$this->fillCartProduct($key, $product)) {
+				if (!empty($product['name'])) {
+					$this->message->add('warning', _l("%s is no longer available and has been removed from your cart. We apologize for the inconvenience.", $product['product']['name']));
+				}
 
 				unset($cart_products[$key]);
 				$this->remove(self::PRODUCTS, $key);
 
 				continue;
+			}
+		}
+		unset($product);
+
+		return $cart_products;
+	}
+
+	private function fillCartProduct($key, &$product)
+	{
+		list($product_id, $cart_key) = explode(':', $key);
+		$customer_id = $this->customer->getId();
+
+		$data = $this->cache->get("product.$product_id.$customer_id.$cart_key");
+
+		if ($data) {
+			$product = $data;
+		}
+		else {
+			//fillProductDetails will cache results, so we need to save the quantity
+			$qty = $product['quantity'];
+
+			if (!$this->Catalog_Model_Catalog_Product->fillProductDetails($product, $product['id'], $product['quantity'], $product['options'])) {
+				return false;
 			}
 
 			//Allow Extensions to modify product total / details
@@ -409,10 +485,14 @@ class Cart extends Library
 					$extension->calculateProductTotal($product);
 				}
 			}
-		}
-		unset($product);
 
-		return $cart_products;
+			//Restore quantity (for caching reasons)
+			$product['quantity'] = $qty;
+
+			$this->cache->set("product.$product_id.$customer_id.$cart_key", $product);
+		}
+
+		return true;
 	}
 
 	public function countProducts()
@@ -590,7 +670,7 @@ class Cart extends Library
 		}
 
 		if (!isset($this->session->data['wishlist'])) {
-			$this->session->data['wishlist'] = array();
+			$this->session->set('wishlist', array());
 		}
 
 		foreach ($wishlist as $product_id) {
@@ -653,23 +733,28 @@ class Cart extends Library
 
 	public function setPaymentAddress($address = null)
 	{
+		//Unset Payment Address
 		if (empty($address)) {
 			unset($this->session->data['payment_address_id']);
 			$this->setPaymentMethod();
 			return true;
-		} elseif (is_array($address)) {
+		}
+		//Set New Address
+		elseif (is_array($address)) {
 			$address_id = $this->address->add($address);
 
 			if (!$address_id) {
-				$this->_e('PA-10', 'payment_address', 'error_payment_address_details');
+				$this->error['payment_address'] = $this->address->getError();
 				return false;
 			}
-		} else {
+		}
+		//Set Existing Address
+		else {
 			$address_id = (int)$address;
 		}
 
 		if (!empty($address_id)) {
-			$this->session->data['payment_address_id'] = $address_id;
+			$this->session->set('payment_address_id', $address_id);
 		}
 
 		if (!$this->validatePaymentAddress()) {
@@ -716,23 +801,28 @@ class Cart extends Library
 
 	public function setShippingAddress($address = null)
 	{
+		//Unset Shipping Address
 		if (empty($address)) {
 			unset($this->session->data['shipping_address_id']);
 			$this->setShippingMethod();
 			return true;
-		} elseif (is_array($address)) {
+		}
+		//Set New Address
+		elseif (is_array($address)) {
 			$address_id = $this->address->add($address);
 
 			if (!$address_id) {
-				$this->_e('SA-10', 'shipping_address', 'error_shipping_address_details');
+				$this->error['shipping_address'] = $this->address->getError();
 				return false;
 			}
-		} else {
+		}
+		//Set Existing Address
+		else {
 			$address_id = (int)$address;
 		}
 
 		if (!empty($address_id)) {
-			$this->session->data['shipping_address_id'] = $address_id;
+			$this->session->set('shipping_address_id', $address_id);
 		}
 
 		if (!$this->validateShippingAddress()) {
@@ -858,7 +948,7 @@ class Cart extends Library
 				$payment_method_id = $method['code'];
 			}
 
-			$this->session->data['payment_method_id'] = $payment_method_id;
+			$this->session->set('payment_method_id', $payment_method_id);
 		}
 
 		return true;
@@ -1013,7 +1103,7 @@ class Cart extends Library
 				}
 			}
 
-			$this->session->data['shipping_method_id'] = $shipping_method_id;
+			$this->session->set('shipping_method_id', $shipping_method_id);
 		}
 
 		return true;
@@ -1186,7 +1276,7 @@ class Cart extends Library
 		if (!isset($this->session->data['vouchers'])) {
 			$this->session->data['vouchers'][] = $voucher_id;
 		} else {
-			$this->session->data['vouchers'] = array($voucher_id);
+			$this->session->set('vouchers', array($voucher_id));
 		}
 	}
 
@@ -1206,7 +1296,7 @@ class Cart extends Library
 
 	public function saveGuestInfo($info)
 	{
-		$this->session->data['guest_info'] = $info;
+		$this->session->set('guest_info', $info);
 	}
 
 	public function loadGuestInfo()
@@ -1225,7 +1315,7 @@ class Cart extends Library
 
 	public function setComment($comment)
 	{
-		$this->session->data['comment'] = strip_tags($comment);
+		$this->session->set('comment', strip_tags($comment));
 	}
 
 	/** Policies **/
@@ -1294,5 +1384,22 @@ class Cart extends Library
 	public function isCheckout()
 	{
 		return $this->url->is('block/checkout') || $this->url->is('checkout/checkout');
+	}
+
+	public function saveCart()
+	{
+		echo get_caller(0,10);
+		html_dump($this->session->data, 'dtaa');
+		exit;
+		if (!$this->session->data['customer_id']) {
+			return;
+		}
+
+		$customer_update = array(
+			'cart'     => serialize($this->session->data['cart']),
+			'wishlist' => serialize($this->session->data['wishlist']),
+		);
+
+		$this->update('customer', $customer_update, (int)$this->session->data['customer_id']);
 	}
 }

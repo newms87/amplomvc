@@ -21,7 +21,7 @@ class Admin_Controller_Design_Layout extends Controller
 				$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('design/layout');
@@ -38,7 +38,7 @@ class Admin_Controller_Design_Layout extends Controller
 		if (isset($_GET['layout_id']) && $this->validateDelete()) {
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('design/layout');
@@ -75,7 +75,7 @@ class Admin_Controller_Design_Layout extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->error && !$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('design/layout', $this->url->getQueryExclude('action'));

@@ -22,7 +22,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 			$this->config->save('order', 'order_statuses', $order_statuses, 0, false);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('setting/setting');
 			}

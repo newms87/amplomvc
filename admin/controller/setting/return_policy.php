@@ -22,7 +22,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 			$this->config->save('policies', 'return_policies', $return_policies, 0, false);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect('setting/setting');
 			}

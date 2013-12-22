@@ -8,7 +8,7 @@ class Catalog_Model_Shipping_Flat extends Model
 	{
 		parent::__construct($registry);
 
-		$this->flat_info = $this->System_Model_Setting->getSetting('shipping_flat');
+		$this->flat_info = $this->config->loadGroup('shipping_flat');
 
 		$this->rates = array();
 

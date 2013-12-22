@@ -3,13 +3,11 @@ class Address extends Library
 {
 	public function add($address)
 	{
-		$existing = $this->exists($address);
-
-		if ($existing) {
-			return $existing;
+		if ($this->validate($address)) {
+			return $this->insert('address', $address);
 		}
 
-		return $this->insert('address', $address);
+		return false;
 	}
 
 	/**
@@ -24,26 +22,30 @@ class Address extends Library
 	 */
 	public function edit($address_id, $address)
 	{
-		//Address cannot be edited, therefore, archive the address and create a new one (associating a new address ID to this address)
-		if ($this->isLocked($address_id)) {
-			$new_address_id = $this->add($address);
+		//Load full address (in case of missing components) to validate the updated entry
+		$address += $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = " . (int)$address_id);
 
-			$this->archive($address_id, $new_address_id);
+		if ($this->validate($address)) {
+			//Address cannot be edited, therefore, archive the address and create a new one (associating a new address ID to this address)
+			if ($this->isLocked($address_id)) {
+				$new_address_id = $this->add($address);
 
-			return $new_address_id;
+				$this->archive($address_id, $new_address_id);
+
+				return $new_address_id;
+			}
+
+			$this->update('address', $address, $address_id);
+
+			return true;
 		}
 
-		$this->update('address', $address, $address_id);
+		return false;
 	}
 
 	public function getAddress($address_id)
 	{
 		$address = $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "'");
-
-		if (!$this->validate($address)) {
-			$this->remove($address_id);
-			return null;
-		}
 
 		$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
 		$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
@@ -102,20 +104,12 @@ class Address extends Library
 			return $result->row['total'];
 		}
 
-		$addresses = array();
-
-		foreach ($result->rows as $address) {
-			if ($this->validate($address)) {
-				$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
-				$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
-
-				$addresses[] = $address;
-			} else {
-				$this->delete('address', array('address_id' => $address['address_id']));
-			}
+		foreach ($result->rows as &$address) {
+			$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+			$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
 		}
 
-		return $addresses;
+		return $result->rows;
 	}
 
 	public function getTotalAddresses($data = array())
@@ -130,21 +124,8 @@ class Address extends Library
 		}
 
 		$this->delete('address', $address_id);
-	}
 
-	public function canRemove($address_id)
-	{
-		$this->language->system('address');
-
-		if ($this->getTotalAddresses() == 1) {
-			$this->error['warning'] = $this->_('error_delete');
-		}
-
-		if ((int)$this->customer->getMeta('default_shipping_address_id') === (int)$address_id) {
-			$this->error['warning'] = $this->_('error_default');
-		}
-
-		return $this->error ? false : true;
+		return true;
 	}
 
 	public function lock($address_id)
@@ -168,10 +149,14 @@ class Address extends Library
 		return $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
 	}
 
+	/**
+	 * Essentially just sets status to 0 for use with orders and subscriptions, and nothing else.
+	 **/
 	private function archive($address_id, $new_address_id = null)
 	{
 		$this->update('address', array('status' => 0), $address_id);
 
+		//TODO: This should be handled by customer library. Find new approach.
 		if ($new_address_id) {
 			$this->queryRows("UPDATE TABLE " . DB_PREFIX . "customer_address SET address_id = " . (int)$new_address_id . " WHERE address_id = " . (int)$address_id);
 		} else {
@@ -260,22 +245,48 @@ class Address extends Library
 
 	public function validate($address)
 	{
-		if (empty($address['firstname']) || empty($address['lastname']) || !trim($address['firstname'] . $address['lastname'])) {
-			return false;
-		}
-		if (empty($address['address_1']) || !trim($address['address_1'])) {
-			return false;
-		}
-		if (empty($address['city']) || !trim($address['city'])) {
-			return false;
-		}
-		if (empty($address['zone_id'])) {
-			return false;
-		}
-		if (empty($address['country_id'])) {
-			return false;
+		$this->error = array();
+
+		if (isset($address['firstname']) && !$this->validation->text($address['firstname'], 3, 45)) {
+			$this->error['firstname'] = _l("First Name must be between 3 and 45 characters");
 		}
 
-		return true;
+		if (isset($address['lastname']) && !$this->validation->text($address['lastname'], 3, 45)) {
+			$this->error['lastname'] = _l("Last Name must be between 3 and 45 characters");
+		}
+
+		if (empty($address['address_1'])) {
+			$this->error['address_1'] = _l("Please provide the Street Address.");
+		}
+		elseif (!$this->validation->text($address['address_1'], 3, 128)) {
+			$this->error['address_1'] = _l("Address must be between 3 and 128 characters!");
+		}
+
+		if (empty($address['city'])) {
+			$this->error['city'] = _l("Please provide the city.");
+		}
+		elseif (!$this->validation->text($address['city'], 2, 128)) {
+			$this->error['city'] = _l("City must be between 2 and 128 characters!");
+		}
+
+		if (empty($address['country_id'])) {
+			$this->error['country_id'] = _l("Please select a country.");
+		} else {
+			$country_info = $this->Model_Localisation_Country->getCountry($address['country_id']);
+
+			if (!$country_info) {
+				$this->error['country_id'] = _l("Invalid Country!");
+			}
+			elseif ($country_info['postcode_required'] && !$this->validation->text($address['postcode'], 2, 10)) {
+				$this->error['postcode'] = _l("Postcode must be between 2 and 10 characters");
+			}
+		}
+
+		// Note: Error messages can be changed from Admin Panel based on localization
+		if (empty($address['zone_id'])) {
+			$this->error['zone_id'] = _l("Please select a state.");
+		}
+
+		return $this->error ? false : true;
 	}
 }

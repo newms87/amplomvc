@@ -6,7 +6,7 @@ class Message extends Library
 		parent::__construct($registry);
 
 		if (!isset($this->session->data['messages'])) {
-			$this->session->data['messages'] = array();
+			$this->session->set('messages', array());
 		}
 	}
 
@@ -39,8 +39,12 @@ class Message extends Library
 		}
 	}
 
-	public function error_set()
+	public function hasError($type = null)
 	{
+		if ($type) {
+			return isset($this->session->data['messages']['error'][$type]) || isset($this->session->data['messages']['warning'][$type]);
+		}
+
 		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);
 	}
 

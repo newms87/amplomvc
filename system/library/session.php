@@ -39,7 +39,6 @@ class Session extends Library
 			unset($this->data['token']);
 			$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
 			$this->url->redirect('common/home');
-			exit();
 		} elseif (!isset($this->data['session_token_saved'])) {
 			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 
@@ -48,6 +47,16 @@ class Session extends Library
 				$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
 			}
 		}
+	}
+
+	public function get($key)
+	{
+		return isset($this->data[$key]) ? $this->data[$key] : null;
+	}
+
+	public function set($key, $value)
+	{
+		$_SESSION[$key] = $value;
 	}
 
 	public function loadTokenSession($token)
@@ -98,9 +107,13 @@ class Session extends Library
 		}
 	}
 
+	public function getCookie($name)
+	{
+		return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+	}
+
 	public function setCookie($name, $value, $expire = 3600)
 	{
-		//TODO: ADD EXPIRATION TIME BACK IN! Remove because Chrome was not working
 		setcookie($name, $value, time() + $expire, '/', COOKIE_DOMAIN);
 	}
 

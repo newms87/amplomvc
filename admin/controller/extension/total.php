@@ -28,7 +28,7 @@ class Admin_Controller_Extension_Total extends Controller
 		if (!empty($_GET['code']) && $this->validateDelete()) {
 			$this->System_Extension_Total->deleteExtension($_GET['code']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success_delete'));
 			}
 

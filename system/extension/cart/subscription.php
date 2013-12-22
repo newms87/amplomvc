@@ -53,7 +53,7 @@ class System_Extension_Cart_Subscription extends CartExtension
 			//If we are now empty, reload the page, in case cart empty, or other cart updates necessary
 			if (empty($subscriptions)) {
 				if ($this->request->isAjax()) {
-					$this->url->redirectBrowser('cart/cart');
+					$this->request->redirectBrowser($this->url->link('cart/cart'));
 				}
 
 				$this->url->redirect('cart/cart');

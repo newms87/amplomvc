@@ -1,28 +1,20 @@
 <?php
-class Request
+class Request extends Library
 {
-	public function __construct()
+	public function __construct($registry)
 	{
-		array_walk_recursive($_GET, array(
-		                                 $this,
-		                                 'clean'
-		                            ));
-		array_walk_recursive($_POST, array(
-		                                  $this,
-		                                  'clean'
-		                             ));
-		array_walk_recursive($_REQUEST, array(
-		                                     $this,
-		                                     'clean'
-		                                ));
-		array_walk_recursive($_COOKIE, array(
-		                                    $this,
-		                                    'clean'
-		                               ));
-		array_walk_recursive($_SERVER, array(
-		                                    $this,
-		                                    'clean'
-		                               ));
+		parent::__construct($registry);
+
+		$action = array(
+			$this,
+			'clean',
+		);
+
+		array_walk_recursive($_GET, $action);
+		array_walk_recursive($_POST, $action);
+		array_walk_recursive($_REQUEST, $action);
+		array_walk_recursive($_COOKIE, $action);
+		array_walk_recursive($_SERVER, $action);
 	}
 
 	public function isPost()
@@ -47,5 +39,47 @@ class Request
 		if (get_magic_quotes_gpc()) {
 			$value = stripslashes($value);
 		}
+	}
+
+	public function hasRedirect()
+	{
+		return !empty($this->session->data['redirect']);
+	}
+
+	public function doRedirect()
+	{
+		$redirect = $this->getRedirect();
+
+		$this->clearRedirect();
+
+		$this->url->redirect($redirect);
+	}
+
+	public function setRedirect($url, $query)
+	{
+		$this->session->set('redirect', $this->url->link($url, $query));
+	}
+
+	public function clearRedirect()
+	{
+		unset($this->session->data['redirect']);
+	}
+
+	public function getRedirect()
+	{
+		return !empty($this->session->data['redirect']) ? $this->session->data['redirect'] : '';
+	}
+
+	/**
+	 * Redirect the browser by sending a javascript redirect call.
+	 * Warning: This will only work if the users browser has JS enabled! Make sure this is the case.
+	 *
+	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
+	 * @param mixed $query - a string URI or associative array to be converted into a string URI
+	 */
+	public function redirectBrowser($url)
+	{
+		echo "<script type=\"text/javascript\">location=\"$url\"</script>";
+		exit;
 	}
 }

@@ -44,7 +44,7 @@ class Admin_Controller_Common_Home extends Controller
 
 			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 
-			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			$customer = $this->customer->getCustomer($order['customer_id']);
 
 			if (!$customer) {
 				$customer['firstname'] = 'Guest';
@@ -96,8 +96,10 @@ class Admin_Controller_Common_Home extends Controller
 
 		switch ($range) {
 			case 'day':
+				$now = $this->date->now();
+
 				for ($i = 0; $i < 24; $i++) {
-					$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0' AND (DATE(date_added) = DATE(NOW()) AND HOUR(date_added) = '" . (int)$i . "') GROUP BY HOUR(date_added) ORDER BY date_added ASC");
+					$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0' AND (DATE(date_added) = DATE('$now') AND HOUR(date_added) = '" . (int)$i . "') GROUP BY HOUR(date_added) ORDER BY date_added ASC");
 
 					if ($query->num_rows) {
 						$data['order']['data'][] = array(
@@ -111,7 +113,7 @@ class Admin_Controller_Common_Home extends Controller
 						);
 					}
 
-					$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE DATE(date_added) = DATE(NOW()) AND HOUR(date_added) = '" . (int)$i . "' GROUP BY HOUR(date_added) ORDER BY date_added ASC");
+					$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE DATE(date_added) = DATE('$now') AND HOUR(date_added) = '" . (int)$i . "' GROUP BY HOUR(date_added) ORDER BY date_added ASC");
 
 					if ($query->num_rows) {
 						$data['customer']['data'][] = array(

@@ -73,7 +73,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		$this->language->load('payment/nochex');
 
 		if (isset($_GET['method']) && $_GET['method'] == 'decline') {
-			$this->session->data['error'] = $this->_('error_declined');
+			$this->session->set('error', $this->_('error_declined'));
 
 			$this->url->redirect('cart/cart');
 		}
@@ -87,7 +87,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		$order_info = $this->order->get($order_id);
 
 		if (!$order_info) {
-			$this->session->data['error'] = $this->_('error_no_order');
+			$this->session->set('error', $this->_('error_no_order'));
 
 			$this->url->redirect('cart/cart');
 		}

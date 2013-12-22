@@ -201,8 +201,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 			'shipping'          => '',
 			'shipping_geozone'  => 0,
 			'total'             => '',
-			'date_start'        => date('Y-m-d', time()),
-			'date_end'          => date('Y-m-d', time()),
+			'date_start'        => $this->date->now(),
+			'date_end'          => $this->date->now(),
 			'uses_total'        => '',
 			'uses_customer'     => '',
 			'coupon_products'   => array(),
@@ -261,8 +261,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 
 		//Ajax Urls
-		$this->data['url_product_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
-		$this->data['url_coupon_history']       = $this->url->ajax('sale/coupon/history');
+		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
+		$this->data['url_coupon_history']       = $this->url->link('sale/coupon/history');
 
 		$this->children = array(
 			'common/header',

@@ -71,7 +71,7 @@ class System_Model_Coupon extends Model
 
 		if ($query->num_rows) {
 			if (!isset($this->session->data['coupons'])) {
-				$this->session->data['coupons'] = array();
+				$this->session->set('coupons', array());
 			}
 
 			foreach ($query->rows as $cc) {

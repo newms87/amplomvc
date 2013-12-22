@@ -12,20 +12,22 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if (!isset($this->session->data['vouchers'])) {
-			$this->session->data['vouchers'] = array();
+			$this->session->set('vouchers', array());
 		}
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->session->data['vouchers'][rand()] = array(
-				'description'      => sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
-				'to_name'          => $_POST['to_name'],
-				'to_email'         => $_POST['to_email'],
-				'from_name'        => $_POST['from_name'],
-				'from_email'       => $_POST['from_email'],
-				'voucher_theme_id' => $_POST['voucher_theme_id'],
-				'message'          => $_POST['message'],
-				'amount'           => $this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))
-			);
+			$this->session->set('vouchers', array(
+				rand() => array(
+					'description'      => sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
+					'to_name'          => $_POST['to_name'],
+					'to_email'         => $_POST['to_email'],
+					'from_name'        => $_POST['from_name'],
+					'from_email'       => $_POST['from_email'],
+					'voucher_theme_id' => $_POST['voucher_theme_id'],
+					'message'          => $_POST['message'],
+					'amount'           => $this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))
+				)
+			));
 
 			$this->url->redirect('account/voucher/success');
 		}

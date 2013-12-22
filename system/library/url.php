@@ -97,9 +97,9 @@ class Url extends Library
 		return http_build_query($query);
 	}
 
-	public function here()
+	public function here($append_query = '')
 	{
-		return $this->link($this->path, $this->getQuery());
+		return $this->link($this->path, $this->getQuery() . '&' . $append_query);
 	}
 
 	public function reload_page()
@@ -146,7 +146,7 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function admin($path, $query = '')
+	public function admin($path = 'common/home', $query = '')
 	{
 		$link = $this->find_alias($path, $query, -1);
 
@@ -165,15 +165,6 @@ class Url extends Library
 	public function link($path, $query = '')
 	{
 		return $this->find_alias($path, $query);
-	}
-
-	public function ajax($path, $query = '', $store_id = false)
-	{
-		if (!$store_id && $store_id !== 0) {
-			$store_id = $this->config->get('config_store_id');
-		}
-
-		return $this->store_base($store_id) . $path . '?' . rtrim('ajax=1&' . $query, '&');
 	}
 
 	public function store_base($store_id, $ssl = false)
@@ -259,39 +250,6 @@ class Url extends Library
 		exit();
 	}
 
-	/**
-	 * Redirect the browser by sending a javascript redirect call.
-	 * Warning: This will only work if the users browser has JS enabled! Make sure this is the case.
-	 *
-	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
-	 * @param mixed $query - a string URI or associative array to be converted into a string URI
-	 */
-	public function redirectBrowser($url, $query = '')
-	{
-		//Check if this is a controller path
-		if (!preg_match("/https?:\\/\\//", $url)) {
-			$url = $this->link($url, $query);
-		}
-
-		echo "<script type=\"text/javascript\">location=\"$url\"</script>";
-		exit;
-	}
-
-	public function setRedirect($url, $query = '')
-	{
-		//Check if this is a controller path
-		if (!preg_match("/https?:\\/\\//", $url)) {
-			$url = $this->link($url, $query);
-		}
-
-		$this->session->data['redirect'] = $url;
-	}
-
-	public function getRedirect()
-	{
-		return !empty($this->session->data['redirect']) ? $this->session->data['redirect'] : '';
-	}
-
 	private function loadSeoUrl()
 	{
 		// Decode URL
@@ -359,6 +317,10 @@ class Url extends Library
 			$query = http_build_query($query);
 		} else {
 			$query = urldecode($query);
+		}
+
+		if (strpos($path, 'http') === 0) {
+			return $path . ($query ? '?' . $query : '');
 		}
 
 		if (!$store_id && $store_id !== 0) {

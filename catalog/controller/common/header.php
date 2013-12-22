@@ -1,10 +1,12 @@
 <?php
+
 class Catalog_Controller_Common_Header extends Controller
 {
 	public function index()
 	{
 		$this->template->load('common/header');
 
+		//TODO: Probably dont need this anymore...
 		if ($this->config->get('config_debug') && isset($_SESSION['debug'])) {
 			html_dump($_SESSION['debug'], 'debug');
 			unset($_SESSION['debug']);
@@ -33,7 +35,7 @@ class Catalog_Controller_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_thumb_height'));
-		$this->document->localizeVar('url_add_to_cart', $this->url->ajax('cart/cart/add'));
+		$this->document->localizeVar('url_add_to_cart', $this->url->link('cart/cart/add'));
 
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
@@ -58,15 +60,28 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['messages'] = $this->message->fetch();
 		$this->data['icon']     = $this->image->get($this->config->get('config_icon'));
 		$this->data['name']     = $this->config->get('config_name');
-		$this->data['logo']     = $this->image->get($this->config->get('config_logo'));
 
-		$this->data['page_header'] = $this->Model_Design_PageHeaders->getPageHeader();
+		$logo_width  = $this->config->get('config_logo_width');
+		$logo_height = $this->config->get('config_logo_height');
+
+		$this->data['logo']        = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
+
+		//Admin Bar
+		if ($this->user->isLogged()) {
+			$this->data['admin_bar'] = $this->config->get('config_admin_bar');
+			$this->data['admin_link'] = $this->url->admin();
+			$this->data['clock_time'] = $this->date->now('datetime_long');
+			$time_inc = 3600 * 24;
+			$this->data['sim_forward'] = $this->url->here('sim_time=' . $time_inc);
+			$this->data['sim_back'] = $this->url->here('sim_time=-' . $time_inc);
+			$this->data['sim_reset'] = $this->url->here('sim_time=reset');
+		}
 
 		//Navigation
 		$this->data['links_primary']   = $this->document->getLinks('primary');
 		$this->data['links_secondary'] = $this->document->getLinks('secondary');
 		$this->data['links_account']   = $this->document->getLinks('account');
-		$this->data['links_cart'] = $this->document->getLinks('cart');
+		$this->data['links_cart']      = $this->document->getLinks('cart');
 
 		//Login Check & The Welcome Message
 		$this->data['is_logged'] = $this->customer->isLogged();

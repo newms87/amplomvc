@@ -2,10 +2,27 @@
 abstract class Model
 {
 	protected $registry;
+	protected $error;
+
+	private $synctime = false;
 
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
+
+		global $ac_time_offset;
+
+		if ($ac_time_offset) {
+			$this->synctime = true;
+		}
+
+		//Self Assign to registry (for recursive usage
+		//eg:( cart depends on customer, but customer depends on cart upon initialization which calls a cart method which requires a customer method)
+		$key = strtolower(get_class($this));
+
+		if (!$this->registry->has($key)) {
+			$this->registry->set($key, $this);
+		}
 	}
 
 	public function __get($key)
@@ -24,6 +41,29 @@ abstract class Model
 		return $this->language->get($key);
 	}
 
+	public function hasError($type = null)
+	{
+		if ($type) {
+			return !empty($this->error[$type]);
+		}
+
+		return !empty($this->error);
+	}
+
+	public function getError($type = null)
+	{
+		if ($type) {
+			return isset($this->error[$type]) ? $this->error[$type] : null;
+		}
+
+		return $this->error;
+	}
+
+	public function clearErrors()
+	{
+		$this->error = array();
+	}
+
 	protected function countAffected()
 	{
 		return $this->db->countAffected();
@@ -31,7 +71,12 @@ abstract class Model
 
 	protected function query($sql)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		$resource = $this->db->query($sql);
+
 		if (!$resource) {
 			if ($this->config->get('config_error_display')) {
 				$this->message->add("warning", _l("The Database Query Failed!"));
@@ -47,33 +92,49 @@ abstract class Model
 
 	protected function queryRows($sql, $key_column = null)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		return $this->db->queryRows($sql, $key_column);
 	}
 
 	protected function queryRow($sql)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		return $this->db->queryRow($sql);
 	}
 
 	protected function queryColumn($sql)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		return $this->db->queryColumn($sql);
 	}
 
 	protected function queryVar($sql)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		return $this->db->queryVar($sql);
+	}
+
+	private function synctime($sql)
+	{
+		$now = new DateTime("@" . _time(), new DateTimeZone(DEFAULT_TIMEZONE));
+		return str_replace("NOW()", "'" . $now->format("Y-m-d H:i:s") . "'", $sql);
 	}
 
 	protected function escape($value)
 	{
 		return $this->db->escape($value);
-	}
-
-	//TODO: This method is deprectated. Use escape().
-	protected function escapeAll($values)
-	{
-		return $this->db->escapeAll($values);
 	}
 
 	protected function insert($table, $data)
@@ -82,10 +143,10 @@ abstract class Model
 
 		$values = $this->getInsertString($table, $data, false);
 
-		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
+		$success = $this->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
 		if (!$success) {
-			trigger_error(_l("There was a problem inserting entry for %s! %s was not modified.", $table, $table) . get_caller(0,4));
+			trigger_error("There was a problem inserting entry for $table and was not modified." . get_caller(0,4));
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -134,10 +195,10 @@ abstract class Model
 			}
 		}
 
-		$success = $this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
+		$success = $this->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
 
 		if (!$success) {
-			trigger_error(_l("There was a problem updating entry for %s! %s was not modified.", $table, $table) . get_caller(0, 4));
+			trigger_error("There was a problem updating entry for $table and was not modified." . get_caller(0, 4));
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -175,16 +236,16 @@ abstract class Model
 			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 
 			if (!$truncate_allowed) {
-				trigger_error(_l("Attempt to TRUNCATE %s not allowed for this table! Please specify this in the Database Rules if you want this functionality. ", $table) . get_caller(0, 4));
+				trigger_error("Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller(0, 4));
 
 				return;
 			}
 		}
 
-		$success = $this->db->query("DELETE FROM " . DB_PREFIX . "$table $where");
+		$success = $this->query("DELETE FROM " . DB_PREFIX . "$table $where");
 
 		if (!$success) {
-			trigger_error(_l("There was a problem deleting entry for %s! %s was not modified.", $table, $table));
+			trigger_error("There was a problem deleting entry for $table and was not modified." . get_caller(0,4));
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -320,11 +381,13 @@ abstract class Model
 
 		if (!$table_model) {
 			$table = $this->db->escape($table);
+
 			$query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "$table`");
 
 			$rules_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table'");
 
 			$rules = array();
+
 			foreach ($rules_q->rows as $rule) {
 				$rules[$rule['column']] = $rule['escape_type'];
 			}
@@ -335,7 +398,7 @@ abstract class Model
 				if (in_array($row['Field'], array_keys($rules))) {
 					$table_model[$row['Field']] = $rules[$row['Field']];
 				} else {
-					$type = strtolower(trim(preg_replace("/\(.*$/",'',$row['Type'])));
+					$type = strtolower(trim(preg_replace("/\\(.*$/",'',$row['Type'])));
 
 					//we only care about ints and floats because only these we will do something besides escape
 					$ints = array('bigint','mediumint','smallint','tinyint','int');

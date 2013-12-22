@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Reward extends Controller
 		$this->template->load('account/reward');
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/reward');
+			$this->session->set('redirect', $this->url->link('account/reward'));
 
 			$this->url->redirect('account/login');
 		}

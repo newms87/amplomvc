@@ -4,13 +4,14 @@ class Admin_Model_Dev_Dev extends Model
 
 	public function getBackupFiles()
 	{
-		$file_list = $this->tool->get_files_r(DIR_DATABASE_BACKUP, array(
-		                                                                'txt',
-		                                                                'sql'
-		                                                           ), FILELIST_STRING);
+		$exts = array(
+			'txt',
+			'sql'
+		);
+
+		$file_list = $this->tool->get_files_r(DIR_DATABASE_BACKUP, $exts, FILELIST_STRING);
 
 		$files = array();
-		$sort_order = array();
 
 		foreach ($file_list as $file) {
 			$files[] = array(
@@ -19,11 +20,9 @@ class Admin_Model_Dev_Dev extends Model
 				'path' => str_replace('\\', '/', $file),
 				'size' => (int)filesize($file),
 			);
-
-			$sort_order[] = filemtime($file);
 		}
 
-		array_multisort($sort_order, SORT_DESC, $files);
+		usort($files, function($a, $b) {return $a['date'] > $b['date'];});
 
 		return $files;
 	}

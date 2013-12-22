@@ -8,7 +8,7 @@ class Catalog_Controller_Block_Cart_Reward
 
 
 		if (isset($_POST['reward']) && $this->validateReward()) {
-			$this->session->data['reward'] = $_POST['reward'];
+			$this->session->set('reward', $_POST['reward']);
 
 			$this->message->add('success', $this->_('text_reward'));
 		}

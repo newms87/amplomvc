@@ -34,7 +34,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 					}
 
 					if (!$this->cart->hasShippingAddress()) {
-						$this->cart->setShippingAddress($this->customer->getMeta('default_shipping_address_id'));
+						$this->cart->setShippingAddress($this->customer->getDefaultShippingAddressId());
 					}
 				}
 
@@ -68,10 +68,11 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			$json['error']['payment_method'] = $this->_('error_payment_method');
 		}
 
+		//TODO: Need to add default_payment_method_id and default_shipping_method_id into customer Library API
 		//Save Customer Payment Preferences (for future reference)
 		if (!$json && $this->customer->isLogged()) {
 			$this->customer->setMeta('default_payment_method_id', $this->cart->getPaymentMethodId());
-			$this->customer->setMeta('default_payment_address_id', $this->cart->getPaymentAddressId());
+			$this->customer->setDefaultPaymentAddress($this->cart->getPaymentAddressId());
 		}
 
 		//Handle Shipping
@@ -87,7 +88,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			//Save Customer Shipping Preferences (for future reference)
 			if (!$json && $this->customer->isLogged()) {
 				$this->customer->setMeta('default_shipping_method_id', $this->cart->getShippingMethodId());
-				$this->customer->setMeta('default_shipping_address_id', $this->cart->getShippingAddressId());
+				$this->customer->setDefaultShippingAddress($this->cart->getShippingAddressId());
 			}
 		}
 

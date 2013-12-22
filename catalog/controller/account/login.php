@@ -3,52 +3,54 @@ class Catalog_Controller_Account_Login extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/login');
-
-		//Resolve Redirect
-		$redirect = !empty($_REQUEST['redirect']) ? str_replace('&amp;', '&', $_REQUEST['redirect']) : $this->url->link('account/account');
-
-		// Login override for admin users
-		if (!empty($_COOKIE['customer_token'])) {
-			$this->customer->logout();
-
-			$customer_info = $this->System_Model_Customer->getCustomerByToken($_COOKIE['customer_token']);
-
-			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
-				$this->url->redirect($redirect);
+		//Redirect customer if logged in
+		if ($this->customer->isLogged()) {
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			} else {
+				$this->url->redirect('common/home');
 			}
 		}
 
-		if ($this->customer->isLogged()) {
-			$this->url->redirect($redirect);
-		}
-
-		$this->language->load('account/login');
-
-		$this->document->setTitle($this->_('head_title'));
-
-		if ($this->request->isPost() && $this->validate()) {
-			$this->url->redirect($redirect);
-		}
+		//Page Head
+		$this->document->setTitle(_l("Account Login"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_login'), $this->url->link('account/login'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Login"), $this->url->link('account/login'));
+
+		//Input Data
+		$user_info = array();
+
+		if ($this->request->isPost()) {
+			$user_info = $_POST;
+		}
+
+		$defaults = array(
+			'username' => '',
+		);
+
+		$this->data += $user_info + $defaults;
+
+		//Template Data
+		$this->data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
+		$this->data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		//Action Buttons
-		$this->data['login']    = $this->url->link('account/login');
+		$this->data['login']     = $this->url->link('account/login/login');
 		$this->data['register']  = $this->url->link('account/register');
 		$this->data['forgotten'] = $this->url->link('account/forgotten');
 
-		if (!empty($_POST['redirect'])) {
-			$this->data['redirect'] = $_POST['redirect'];
-		} elseif (isset($_GET['redirect'])) {
-			$this->data['redirect'] = $_GET['redirect'];
-		} elseif (isset($this->session->data['redirect'])) {
-			$this->data['redirect'] = $this->session->data['redirect'];
-			unset($this->session->data['redirect']);
+		//Resolve Redirect
+		if (!empty($_REQUEST['redirect'])) {
+			$this->request->setRedirect($_REQUEST['redirect']);
+		} elseif (!$this->request->hasRedirect()) {
+			$this->request->setRedirect('common/home');
 		}
+
+		//The Template
+		$this->template->load('account/login');
 
 		//Dependencies
 		$this->children = array(
@@ -64,18 +66,23 @@ class Catalog_Controller_Account_Login extends Controller
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate()
+	public function login()
 	{
-		if (!$this->customer->login($_POST['email'], $_POST['password'])) {
-			$this->error['warning'] = $this->_('error_login');
+		if ($this->request->isPost()) {
+			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
+				$this->message->add('warning', _l("Login failed. Invalid user name and / or password."));
+			}
 		}
 
-		//Verify redirect stays on our site for security purposes
-		if (isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0) {
-			$this->error['warning'] = $this->_('error_redirect_domain');
-			unset($_POST['redirect']);
+		//Resolve Redirect
+		if ($this->customer->isLogged()) {
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			} else {
+				$this->url->redirect('account/account');
+			}
 		}
 
-		return $this->error ? false : true;
+		$this->url->redirect('account/login');
 	}
 }

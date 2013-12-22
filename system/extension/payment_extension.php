@@ -42,6 +42,7 @@ abstract class PaymentExtension extends System_Extension_Extension
 	}
 }
 
+//TODO: Consider changing Card to paymentKey. This is more generic, and allows for future deployment like bitcoins etc...
 abstract class PaymentCardExtension extends PaymentExtension
 {
 	public function hasCard($id)
@@ -80,7 +81,7 @@ abstract class PaymentCardExtension extends PaymentExtension
 		exit;
 	}
 
-	public function charge($card_id, $amount, $info = array())
+	public function charge($transaction)
 	{
 		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
@@ -91,21 +92,12 @@ abstract class PaymentCardExtension extends PaymentExtension
 	public function register_card() { }
 }
 
+//TODO: Do we really need these? Maybe need hooks somehow for these actions.
 abstract class PaymentSubscriptionExtension extends PaymentCardExtension
 {
-	public function getSubscription($id) { return true; }
-
 	public function addSubscription($subscription) { return true; }
 
 	public function updateSubscription($customer_subscription_id, $data) { return true; }
 
-	public function cancelSubscription($customer_subscription_id) { return true; }
-
-	public function chargeSubscription($customer_subscription)
-	{
-		echo "Please implement " . __METHOD__ . "(\$customer_subscription) to extend PaymentSubscription!";
-		exit;
-	}
-
-	public function validateSubscription(&$subscription_data) { return true; }
+	public function updateSubscriptionStatus($customer_subscription_id, $status) { return true; }
 }

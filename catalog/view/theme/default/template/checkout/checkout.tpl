@@ -5,17 +5,28 @@
 	<h1><?= $head_title; ?></h1>
 	<? $step = 1; ?>
 	<div id="checkout_process" class="checkout">
-		<div id="login" class="checkout_item" route="block/checkout/login">
+		<div id="login" class="clearfix">
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_option; ?></div>
-			<div class="checkout-content"></div>
+
+			<? if (!empty($login_form)) { ?>
+				<div class="section">
+					<?= $login_form; ?>
+				</div>
+			<? } elseif ($guest_checkout) { ?>
+				<div class="section">
+					<h2><?= _l("Proceed with Guest Checkout"); ?></h2>
+					<h3><a href="<?= $cancel_guest_checkout; ?>"><?= _l("Cancel Guest Checkout"); ?></a></h3>
+				</div>
+			<? } ?>
+
 		</div>
 		<div id="customer_information" class="checkout_item" route="block/checkout/customer_information">
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_information; ?></div>
-			<div class="checkout-content"></div>
+			<div class="checkout-content clearfix"></div>
 		</div>
 		<div id="confirm" class="checkout_item" route="block/checkout/confirm">
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_confirm; ?></div>
-			<div class="checkout-content"></div>
+			<div class="checkout-content clearfix"></div>
 		</div>
 	</div>
 	<?= $content_bottom; ?>
@@ -24,7 +35,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
-		<? if($logged){ ?>
+		<? if($logged || $guest_checkout){ ?>
 		load_checkout_item('customer_information');
 		<? } else{?>
 		load_checkout_item('login');

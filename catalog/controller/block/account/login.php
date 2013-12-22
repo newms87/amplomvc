@@ -1,33 +1,50 @@
 <?php
+
 class Catalog_Controller_Block_Account_Login extends Controller
 {
-
 	public function index($settings)
 	{
-		$this->language->load('block/account/login');
-
-		$type = !empty($settings['type']) ? $settings['type'] : 'header';
-
-		switch ($type) {
-			case 'header':
-				$this->template->load('block/account/login_header');
-				break;
-			case 'standard':
-				$this->template->load('block/account/login_standard');
-				break;
-			default:
-				trigger_error("Error in ControllerAccountBlockLogin::index(): Invalid template type requested $type");
-				return '';
+		//If Customer is Logged In, display nothing
+		if ($this->customer->isLogged()) {
+			return;
 		}
 
-		$this->data['action']    = $this->url->link('account/login');
+		if (!empty($settings['redirect'])) {
+			$this->request->setRedirect($settings['redirect']);
+		}
+
+		//Input Data
+		$login_info = array();
+
+		if ($this->request->isPost()) {
+			$login_info = $_POST;
+		}
+
+		$defaults = array(
+			'username' => ''
+		);
+
+		$this->data += $login_info + $defaults;
+
+		//Template Data
+		$this->data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
+		$this->data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
+
+		//For Guest Checkout (on checkout page)
+		if ($this->cart->guestCheckoutAllowed()) {
+			$this->data['guest_checkout'] = $this->url->link('checkout/checkout/guest_checkout');
+		}
+
+		//Action Buttons
+		$this->data['login']     = $this->url->link('account/login/login');
 		$this->data['register']  = $this->url->link('account/register');
 		$this->data['forgotten'] = $this->url->link('account/forgotten');
 
-		$this->data['email'] = !empty($_POST['email']) ? $_POST['email'] : '';
+		//The Template
+		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';
+		$this->template->load($template);
 
-		$this->data['redirect'] = $this->url->here();
-
+		//Render
 		$this->render();
 	}
 }

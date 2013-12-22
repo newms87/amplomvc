@@ -8,10 +8,30 @@ class Curl extends Library
 		return $this->response;
 	}
 
+	public function get($url, $data = '', $options = array())
+	{
+		$url = $this->url->link($url, $data);
+
+		$opts = $options + array(
+				CURLOPT_RETURNTRANSFER => true,		// return web page
+				CURLOPT_HEADER         => false,		// don't return headers
+				CURLOPT_FOLLOWLOCATION => true,		// follow redirects
+				CURLOPT_ENCODING       => "",		   // handle all encodings
+				CURLOPT_USERAGENT      => "AmploCart " . AC_VERSION . " - Curl post request",
+				CURLOPT_AUTOREFERER    => true,		// set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 120,		// timeout on connect
+				CURLOPT_TIMEOUT        => 120,		// timeout on response
+				CURLOPT_MAXREDIRS      => 10,		   // stop after 10 redirects
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_VERBOSE        => 1,
+				CURLOPT_FORBID_REUSE   => 1,
+			);
+
+		return $this->call($url, $opts);
+	}
+
 	public function post($url, $data, $options = array())
 	{
-		$this->language->system('curl');
-
 		$opts = $options + array(
 			CURLOPT_RETURNTRANSFER => true,		// return web page
 			CURLOPT_HEADER         => false,		// don't return headers
@@ -29,6 +49,13 @@ class Curl extends Library
 			CURLOPT_FORBID_REUSE   => 1,
 		);
 
+		return $this->call($url, $opts);
+	}
+
+	public function call($url, $options)
+	{
+		$this->language->system('curl');
+
 		//Init Curl
 		$ch = curl_init($url);
 
@@ -36,7 +63,7 @@ class Curl extends Library
 			$this->error = $this->_('error_curl_init');
 		}
 		//Set Options
-		else if (!curl_setopt_array($ch, $opts)) {
+		else if (!curl_setopt_array($ch, $options)) {
 			$this->error = $this->_('error_curl_setopt');
 		} else {
 			$content = curl_exec($ch);

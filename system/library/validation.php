@@ -15,72 +15,20 @@ class Validation extends Library
 		$this->encoding = $encoding;
 	}
 
-	public function fetch_error()
-	{
-		return array_pop($this->error);
-	}
-
-	public function not_empty($value, $allow_zero = true, $allow_false = true)
-	{
-		if ($value === '' || is_null($value) || (is_array($value) && empty($value))) {
-			$this->error['empty'] = true;
-			return false;
-		} elseif (!$allow_zero && (is_integer($value) || is_string($value) && !$value)) {
-			$this->error['empty'] = true;
-			return false;
-		} elseif (!$allow_false && is_bool($value) && !$value) {
-			$this->error['empty'] = true;
-			return false;
-		}
-
-		return true;
-	}
-
-	public function not_empty_zero($value)
-	{
-		if ($value === '' || is_null($value) || (is_array($value) && empty($value)) || $value === '0' || $value === 0) {
-			$this->error['empty'] = true;
-			return false;
-		}
-
-		return true;
-	}
-
 	public function phone($phone)
 	{
-		$allowed = "()-+. \d";
+		$this->error = array();
+
+		$allowed = "()-+. \\d";
 		if (preg_match("/[^$allowed]/", $phone) > 0) {
-			$this->error['phone']['invalid_characters'] = true;
+			$this->error = _l("Invalid Phone Number");
 			return false;
 		}
 
-		$p = preg_replace("/[^\d]/", '', $phone);
+		$p = preg_replace("/[^\\d]/", '', $phone);
 
-		if (strlen($p) < 7) {
-			$this->error['phone']['minimum'] = true;
-			return false;
-		}
-
-		if (strlen($p) > 32) {
-			$this->error['phone']['maximum'] = true;
-			return false;
-		}
-
-		return true;
-	}
-
-	public function postcode($postcode)
-	{
-		$p = preg_replace("/[^\dA-Z]/i", '', $postcode);
-
-		if (strlen($p) < 3) {
-			$this->error['postcode']['minimum'] = true;
-			return false;
-		}
-
-		if (strlen($p) > 10) {
-			$this->error['postcode']['maximum'] = true;
-			return false;
+		if (!$this->text($p, 7, 32)) {
+			$this->error = _l("Phone Number is Invalid");
 		}
 
 		return true;
@@ -88,8 +36,10 @@ class Validation extends Library
 
 	public function email($email)
 	{
-		if (preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i", $email) == 0) {
-			$this->error['email']['format'] = true;
+		$this->error = array();
+
+		if (preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i", $email) == 0) {
+			$this->error = _l("Email address is invalid!");
 			return false;
 		}
 
@@ -98,9 +48,10 @@ class Validation extends Library
 
 	public function url($url, $protocol_required = false)
 	{
+		$this->error = array();
 
 		if (!filter_var($url, FILTER_VALIDATE_URL)) {
-			$this->error['url']['format'] = true;
+			$this->error = _l("Url is invalid!");
 			return false;
 		}
 
@@ -110,12 +61,10 @@ class Validation extends Library
 	public function text($text, $min = 1, $max = -1)
 	{
 		if ($min >= 0 && strlen($text) < $min) {
-			$this->error['text']['minimum'][] = $text . " : " . strlen($text) . ' / ' . $min;
 			return false;
 		}
 
 		if ($max >= 0 && strlen($text) > $max) {
-			$this->error['text']['maximum'][] = $text . " : " . strlen($text) . ' / ' . $max;
 			return false;
 		}
 
@@ -124,16 +73,34 @@ class Validation extends Library
 
 	public function password($password)
 	{
+		$this->error = array();
+
 		if (strlen($password) < 8) {
-			$this->error['password'] = true;
+			$this->error = _l("Password must be at least 8 characters long.");
+
 			return false;
 		}
 
 		return true;
 	}
 
+	public function postcode($postcode)
+	{
+		return $this->text($postcode, 5,12);
+	}
+
+	/*
+	 TODO: this is used in Form/address.php validation. Consider removing that functionality and this method...
+	 */
+	public function not_empty_zero($value)
+	{
+		return !empty($value);
+	}
+
 	public function datetime($date, $format = null)
 	{
+		$this->error = array();
+
 		if (!$format) {
 			$format = $this->language->getInfo('datetime_format');
 		}
@@ -141,7 +108,7 @@ class Validation extends Library
 		$date_info = date_parse_from_format($format, $date);
 
 		if ($date_info['errors'] || !checkdate($date_info['month'], $date_info['day'], $date_info['year'])) {
-			$this->error['datetime'] = "invalid datetime format";
+			$this->error = _l("invalid datetime format");
 			return false;
 		}
 

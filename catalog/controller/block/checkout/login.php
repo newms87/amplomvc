@@ -10,9 +10,21 @@ class Catalog_Controller_Block_Checkout_Login extends Controller
 			$this->validate();
 		}
 
-		$this->data['guest_checkout'] = ($this->config->get('config_guest_checkout') && !$this->config->get('config_customer_hide_price') && !$this->cart->hasDownload());
+		$defaults = array(
+			'username' => '',
+		);
 
-		//TODO: do we want to have an isBlock check? Or move this to janrain plugin
+		$login_info = array();
+
+		if ($this->request->isPost()) {
+			$login_info = $_POST;
+		}
+
+		$this->data += $login_info + $defaults;
+
+		$this->data['guest_checkout'] = $this->cart->guestCheckoutAllowed();
+
+		//TODO: Move this to janrain plugin
 		$janrain_args = array(
 			'login_redirect' => $this->url->link('checkout/checkout'),
 			'display_type'   => 'popup',
@@ -21,21 +33,19 @@ class Catalog_Controller_Block_Checkout_Login extends Controller
 
 		$this->data['rpx_login'] = $this->getBlock('widget/janrain', $janrain_args);
 
-		$defaults = array(
-			'username' => '',
-		);
+		//Google Login
+		$this->data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		//Facebook Login
+		$this->data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		$this->data['validate_login'] = $this->url->link('block/checkout/login/validate');
 
-		$this->data['url_forgotten'] = $this->url->link('account/forgotten');
+		//Action Buttons
+		$this->request->setRedirect($this->url->link('checkout/checkout'));
+
+		$this->data['register'] = $this->url->link("account/register");
+		$this->data['forgotten'] = $this->url->link('account/forgotten');
 
 		$this->response->setOutput($this->render());
 	}

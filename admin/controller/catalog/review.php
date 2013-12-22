@@ -351,7 +351,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		}
 
 		//Ajax Urls
-		$this->data['url_product_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
+		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
 
 		//Dependencies
 		$this->children = array(

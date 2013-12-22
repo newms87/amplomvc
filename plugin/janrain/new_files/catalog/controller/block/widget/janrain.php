@@ -333,6 +333,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 
 		$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND password = '" . $this->db->escape($password) . "' AND status = '1' $approved");
 
+		//TODO: This no longer works for logging in a customer. Need to find a new method. Override is unsafe!
 		if ($customer_query->num_rows) {
 			$this->customer->login($email, '', true);
 

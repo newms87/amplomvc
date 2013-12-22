@@ -12,7 +12,7 @@ class Admin_Controller_Payment_Worldpay extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->System_Model_Setting->editSetting('worldpay', $_POST);
+			$this->config->saveGroup('worldpay', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 

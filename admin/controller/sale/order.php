@@ -21,7 +21,7 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->System_Model_Order->editOrder($_GET['order_id'], $_POST);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('sale/order');
@@ -40,7 +40,7 @@ class Admin_Controller_Sale_Order extends Controller
 		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
 			$this->System_Model_Order->deleteOrder($_GET['order_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('sale/order');
@@ -141,7 +141,7 @@ class Admin_Controller_Sale_Order extends Controller
 				);
 			}
 
-			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			$customer = $this->customer->getCustomer($order['customer_id']);
 
 			if ($customer) {
 				$order['customer'] = $customer['firstname'] . ' ' . $customer['lastname'];
@@ -870,7 +870,7 @@ class Admin_Controller_Sale_Order extends Controller
 			$order_info = $this->Model_Sale_Order->getOrder($order_id);
 
 			if ($order_info) {
-				$store_info = $this->System_Model_Setting->getSetting('config', $order_info['store_id']);
+				$store_info = $this->config->loadGroup('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address   = $store_info['config_address'];

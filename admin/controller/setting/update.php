@@ -22,7 +22,7 @@ class Admin_Controller_Setting_Update extends Controller
 				}
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->url->redirect('setting/update');
 			}
 		}
@@ -34,7 +34,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->data['cancel'] = $this->url->link('common/home');
 
 		if (!$this->request->isPost()) {
-			$update_info = $this->System_Model_Setting->getSetting('system');
+			$update_info = $this->config->loadGroup('system');
 		}
 
 		$defaults = array(

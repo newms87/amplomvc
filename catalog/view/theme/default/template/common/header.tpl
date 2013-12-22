@@ -92,10 +92,6 @@
 						</div>
 					<? } ?>
 
-					<? if (!empty($page_header)) { ?>
-						<div id="the_page_header"><?= $page_header; ?></div>
-					<? } ?>
-
 					<? if (!empty($languages)) { ?>
 						<?= $languages; ?>
 					<? } ?>

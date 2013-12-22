@@ -18,14 +18,14 @@ class Admin_Controller_Setting_Store extends Controller
 			//Insert
 			if (empty($_GET['store_id'])) {
 				$store_id = $this->Model_Setting_Store->addStore($_POST);
-				$this->System_Model_Setting->editSetting('config', $_POST, $store_id);
+				$this->config->saveGroup('config', $_POST, $store_id);
 			} //Update
 			else {
 				$this->Model_Setting_Store->editStore($_GET['store_id'], $_POST);
-				$this->System_Model_Setting->editSetting('config', $_POST, $_GET['store_id']);
+				$this->config->saveGroup('config', $_POST, $_GET['store_id']);
 			}
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 
 				$this->url->redirect('setting/store');
@@ -42,9 +42,9 @@ class Admin_Controller_Setting_Store extends Controller
 		//TODO: Change Permissions to include a query parameter (eg: store_id=$store_id). (by default this can be *, so no code breaking necessary)
 		if (!empty($_GET['store_id']) && $this->user->can('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);
-			$this->System_Model_Setting->deleteSetting('config', $_GET['store_id']);
+			$this->config->deleteGroup('config', $_GET['store_id']);
 
-			if (!$this->message->error_set()) {
+			if (!$this->message->hasError()) {
 				$this->message->add('success', $this->_('text_success'));
 			}
 		}
@@ -192,10 +192,10 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->url->redirect('setting/store');
 			}
 
-			$store_config = $this->System_Model_Setting->getSetting('config', $store_id);
+			$store_config = $this->config->loadGroup('config', $store_id);
 
 			if (empty($store_config)) {
-				$store_config = $this->System_Model_Setting->getSetting('config', 0);
+				$store_config = $this->config->loadGroup('config', 0);
 			}
 
 			$store_info = $store + $store_config;
@@ -238,7 +238,10 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_cart_weight'              => '',
 			'config_logo'                     => '',
 			'config_icon'                     => '',
-			'config_image_category_height'    => 80,
+			'config_logo_width'               => 0,
+			'config_logo_height'              => 0,
+			'config_email_logo_width'         => 300,
+			'config_email_logo_height'        => 0,
 			'config_image_thumb_width'        => 228,
 			'config_image_thumb_height'       => 228,
 			'config_image_popup_width'        => 500,
@@ -246,6 +249,7 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_image_product_width'      => 80,
 			'config_image_product_height'     => 80,
 			'config_image_category_width'     => 80,
+			'config_image_category_height'    => 80,
 			'config_image_additional_width'   => 74,
 			'config_image_additional_height'  => 74,
 			'config_image_related_width'      => 80,
@@ -282,7 +286,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//Ajax Urls
-		$this->data['load_theme_img'] = $this->url->ajax('setting/setting/theme');
+		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 
 		//Dependencies
 		$this->children = array(

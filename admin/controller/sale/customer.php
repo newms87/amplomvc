@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Sale_Customer extends Controller
 {
-
-
 	public function index()
 	{
 		$this->language->load('sale/customer');
@@ -806,10 +804,10 @@ class Admin_Controller_Sale_Customer extends Controller
 		}
 
 		//Ajax Urls
-		$this->data['url_transaction']      = $this->url->ajax('sale/customer/transaction', 'customer_id=' . (int)$customer_id);
-		$this->data['url_reward']           = $this->url->ajax('sale/customer/reward', 'customer_id=' . (int)$customer_id);
-		$this->data['url_blacklist']        = $this->url->ajax('sale/customer/addblacklist');
-		$this->data['url_remove_blacklist'] = $this->url->ajax('sale/customer/removeblacklist');
+		$this->data['url_transaction']      = $this->url->link('sale/customer/transaction', 'customer_id=' . (int)$customer_id);
+		$this->data['url_reward']           = $this->url->link('sale/customer/reward', 'customer_id=' . (int)$customer_id);
+		$this->data['url_blacklist']        = $this->url->link('sale/customer/addblacklist');
+		$this->data['url_remove_blacklist'] = $this->url->link('sale/customer/removeblacklist');
 
 		$this->children = array(
 			'common/header',

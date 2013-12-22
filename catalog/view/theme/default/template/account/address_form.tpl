@@ -16,7 +16,7 @@
 		<div class="section">
 			<form id="new_address_form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 
-				<div class="section">
+				<div class="section left">
 					<table class="form">
 						<tr>
 							<td class="required"> <?= $entry_firstname; ?></td>
@@ -84,7 +84,6 @@
 $('#new_address_form').submit(function(){
 	$.post($(this).attr('action'), $(this).serialize(), function(html){
 		if (html) {
-			console.log(html);
 			$('#address_update').parent().html(html);
 		} else {
 			location.reload()

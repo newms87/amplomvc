@@ -4,7 +4,7 @@ class Catalog_Controller_Account_Download extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/download');
+			$this->session->set('redirect', $this->url->link('account/download'));
 
 			$this->url->redirect('account/login');
 		}
@@ -105,7 +105,7 @@ class Catalog_Controller_Account_Download extends Controller
 	public function download()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/download');
+			$this->session->set('redirect', $this->url->link('account/download'));
 
 			$this->url->redirect('account/login');
 		}
