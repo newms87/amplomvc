@@ -8,7 +8,7 @@ class Shipping extends Library
 
 	public function add($type, $shipping = array())
 	{
-		if (!isset($data['address_id'])) {
+		if (!isset($shipping['address_id'])) {
 			trigger_error(__METHOD__ . "(): address not specified");
 			return;
 		}
@@ -24,6 +24,11 @@ class Shipping extends Library
 		$shipping['date_modified'] = $shipping['date_added'];
 
 		$shipping_id = $this->insert('shipping', $shipping);
+
+		//Permanently save shipping address
+		if (!empty($shipping['address_id'])) {
+			$this->address->lock($shipping['address_id']);
+		}
 
 		$history_data = array(
 			'type'    => 'add',
@@ -79,11 +84,6 @@ class Shipping extends Library
 		}
 
 		$this->update('shipping', array('status' => $status), $shipping_id);
-
-		//Permanently save shipping address
-		if (!empty($shipping['address_id'])) {
-			$this->address->lock($shipping['address_id']);
-		}
 
 		$history_data = array(
 			'type'    => 'update',

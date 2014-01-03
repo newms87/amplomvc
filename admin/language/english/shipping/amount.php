@@ -2,25 +2,6 @@
 // Heading
 $_['head_title'] = 'Total Price';
 
-//Data
-$_['priceset_types']  = array(
-	'percent' => "Percent",
-	'fixed'   => "Fixed Amount"
-);
-$_['priceset_ranges'] = array(
-	'lt'    => "<",
-	'lte'   => '<=',
-	'gt'    => ">",
-	'gte'   => '>=',
-	'eq'    => '=',
-	'range' => 'range'
-);
-$_['rule_mods']       = array(
-	'add'      => "+",
-	'subtract' => '-',
-	'fixed'    => "="
-);
-
 // Text
 $_['text_shipping'] = 'Shipping';
 $_['text_success']  = 'Success: You have modified total price shipping!';

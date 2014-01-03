@@ -17,6 +17,9 @@ class Catalog_Model_Block_Login_Google extends Model
 
 	public function getConnectUrl()
 	{
+		//Redirect after login
+		$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
+
 		$query = array(
 			'scope'         => "https://www.googleapis.com/auth/plus.profile.emails.read",
 			'state'         => $this->getStateToken(),
@@ -81,21 +84,18 @@ class Catalog_Model_Block_Login_Google extends Model
 			return false;
 		}
 
-		$customer = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data->id) . "' LIMIT 1");
+		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data->id) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer
-		if (!$customer) {
+		if (!$customer_id) {
 			$no_meta = true;
+			$email = !empty($data->emails[0]) ? $data->emails[0]->value : '';
 
-			if (!empty($data->emails[0])) {
-				$email = $data->emails[0]->value;
-
+			if ($email) {
 				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
-			} else {
-				$email = '';
 			}
 
-			if (!$customer) {
+			if (empty($customer)) {
 				if (!$data->name->givenName && !$data->name->familyName && $data->displayName) {
 					$names = explode(' ', $data->displayName, 2);
 					$data->name->givenName = $names[0];
@@ -105,22 +105,24 @@ class Catalog_Model_Block_Login_Google extends Model
 					}
 				}
 
-				$customer_data = array(
+				$customer = array(
 					'firstname' => $data->name->givenName,
 					'lastname'  => $data->name->familyName,
 					'email'     => $email,
 				);
 
-				$customer = $this->customer->add($customer_data);
+				$this->customer->add($customer);
 			}
 		} else {
+			$customer = $this->customer->getCustomer($customer_id);
 			$no_meta = false;
 		}
 
 		//Login Customer
-		$this->user->loginSystemUser();
-		$this->customer->setCustomerOverride($customer, false);
-		$this->user->logoutSystemUser();
+		if (!$this->customer->login($customer['email'], AC_CUSTOMER_OVERRIDE)) {
+			$this->error['login'] = _l("Customer login failed. Please try again");
+			return false;
+		}
 
 		//Set Meta for future login
 		if ($no_meta) {

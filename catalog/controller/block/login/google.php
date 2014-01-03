@@ -26,7 +26,11 @@ class Catalog_Controller_Block_Login_Google extends Controller
 			$this->message->add('warning', _l("There was a problem while signing you in with Google+. Please try again, or try a different login method."));
 		}
 
-		$this->url->redirect('common/home');
+		if ($this->request->hasRedirect('gp_redirect')) {
+			$this->request->doRedirect('gp_redirect');
+		} else {
+			$this->url->redirect('common/home');
+		}
 	}
 
 	public function disconnect()

@@ -49,6 +49,11 @@ class Session extends Library
 		}
 	}
 
+	public function has($key)
+	{
+		return isset($this->data[$key]);
+	}
+
 	public function get($key)
 	{
 		return isset($this->data[$key]) ? $this->data[$key] : null;

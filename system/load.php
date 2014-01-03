@@ -191,6 +191,11 @@ _is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
 _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
 _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
+//Customer Override (alternative logins)
+if (!defined("AC_CUSTOMER_OVERRIDE")) {
+	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));
+}
+
 // Session
 $registry->set('session', new Session($registry));
 

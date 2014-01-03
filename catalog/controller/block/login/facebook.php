@@ -22,7 +22,11 @@ class Catalog_Controller_Block_Login_Facebook extends Controller
 			$this->message->add('warning', _l("There was a problem while signing you in with Facebook. Please try again, or try a different login method."));
 		}
 
-		$this->url->redirect('common/home');
+		if ($this->request->hasRedirect('fb_redirect')) {
+			$this->request->doRedirect('fb_redirect');
+		} else {
+			$this->url->redirect('common/home');
+		}
 	}
 
 	public function disconnect()

@@ -25,7 +25,6 @@ class Customer extends Library
 		return $this->customer_id ? true : false;
 	}
 
-	//TODO: Should get rid of override for users. This is a security flaw
 	public function login($email, $password)
 	{
 		$where = "LOWER(email) = '" . $this->escape(strtolower($email)) . "' AND status = '1'";
@@ -37,8 +36,11 @@ class Customer extends Library
 		$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 
 		if ($customer) {
-			if (!password_verify($password, $customer['password'])) {
-				return false;
+			//AC_CUSTOMER_OVERRIDE allows for alternative login methods to function
+			if ($password !== AC_CUSTOMER_OVERRIDE) {
+				if (!password_verify($password, $customer['password'])) {
+					return false;
+				}
 			}
 
 			$this->setCustomer($customer);

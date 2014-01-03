@@ -41,33 +41,37 @@ class Request extends Library
 		}
 	}
 
-	public function hasRedirect()
+	public function hasRedirect($context = '')
 	{
-		return !empty($this->session->data['redirect']);
+		$key = $context ? 'redirect_' . $context : 'redirect';
+		return !empty($this->session->data[$key]);
 	}
 
-	public function doRedirect()
+	public function doRedirect($context = '')
 	{
-		$redirect = $this->getRedirect();
+		$redirect = $this->getRedirect($context);
 
-		$this->clearRedirect();
+		$this->clearRedirect($context);
 
 		$this->url->redirect($redirect);
 	}
 
-	public function setRedirect($url, $query)
+	public function setRedirect($url, $query = '', $context = '')
 	{
-		$this->session->set('redirect', $this->url->link($url, $query));
+		$key = $context ? 'redirect_' . $context : 'redirect';
+		$this->session->set($key, $this->url->link($url, $query));
 	}
 
-	public function clearRedirect()
+	public function clearRedirect($context = '')
 	{
-		unset($this->session->data['redirect']);
+		$key = $context ? 'redirect_' . $context : 'redirect';
+		unset($this->session->data[$key]);
 	}
 
-	public function getRedirect()
+	public function getRedirect($context = '')
 	{
-		return !empty($this->session->data['redirect']) ? $this->session->data['redirect'] : '';
+		$key = $context ? 'redirect_' . $context : 'redirect';
+		return !empty($this->session->data[$key]) ? $this->session->data[$key] : null;
 	}
 
 	/**

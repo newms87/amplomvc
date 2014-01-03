@@ -3,38 +3,38 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'category.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'category.png'; ?>" alt=""/> <?= _l("Category"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<div id="tabs" class="htabs">
-					<a href="#tab-general"><?= $tab_general; ?></a>
-					<a href="#tab-data"><?= $tab_data; ?></a>
-					<a href="#tab-design"><?= $tab_design; ?></a>
+					<a href="#tab-general"><?= _l("General"); ?></a>
+					<a href="#tab-data"><?= _l("Data"); ?></a>
+					<a href="#tab-design"><?= _l("Design"); ?></a>
 				</div>
 
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<div id="tab-general">
 						<table class="form">
 							<tr>
-								<td class="required"> <?= $entry_name; ?></td>
+								<td class="required"> <?= _l("Category Name:"); ?></td>
 								<td><input type="text" name="name" size="60" value="<?= $name; ?>"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_meta_keyword; ?></td>
+								<td><?= _l("Meta Tag Keywords:"); ?></td>
 								<td><textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea></td>
 							</tr>
 							<tr>
-								<td><?= $entry_meta_description; ?></td>
+								<td><?= _l("Meta Tag Description:"); ?></td>
 								<td><textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea>
 								</td>
 							</tr>
 							<tr>
-								<td><?= $entry_description; ?></td>
+								<td><?= _l("Description:"); ?></td>
 								<td><textarea class="ckedit" name="description"><?= $description; ?></textarea></td>
 							</tr>
 						</table>
@@ -42,35 +42,35 @@
 					<div id="tab-data">
 						<table class="form">
 							<tr>
-								<td><?= $entry_parent; ?></td>
+								<td><?= _l("Parent Category:"); ?></td>
 								<? $this->builder->setConfig('category_id', 'pathname'); ?>
 								<td><?= $this->builder->build('select', $data_categories, 'parent_id', (int)$parent_id); ?></td>
 							</tr>
 							<tr>
-								<td><?= $entry_store; ?></td>
+								<td><?= _l("Stores:"); ?></td>
 								<? $this->builder->setConfig('store_id', 'name'); ?>
 								<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $stores); ?></td>
 							</tr>
 							<tr>
-								<td><?= $entry_alias; ?></td>
+								<td><?= _l("SEO Url:<span class=\"help\">The Search Engine Optimized alias for this category.</span>"); ?></td>
 								<td>
-									<input type="text" onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
-									<a class="gen_url" onclick="generate_url($(this))"><?= $button_generate_url; ?></a>
+									<input type="text" onfocus="$(this).next().display_error('<?= _l("Warning! This may cause system instability! Please use the \\\'Generate URL\\\' button"); ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
+									<a class="gen_url" onclick="generate_url($(this))"><?= _l("[Generate URL]"); ?></a>
 								</td>
 							</tr>
 							<tr>
-								<td><?= $entry_image; ?></td>
+								<td><?= _l("Image:"); ?></td>
 								<td>
 									<?= $this->builder->setBuilderTemplate('click_image'); ?>
 									<?= $this->builder->imageInput("image", $image); ?>
 								</td>
 							</tr>
 							<tr>
-								<td><?= $entry_sort_order; ?></td>
+								<td><?= _l("Sort Order:"); ?></td>
 								<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_status; ?></td>
+								<td><?= _l("Status:"); ?></td>
 								<td><?= $this->builder->build('select', $statuses, 'status', (int)$status); ?></td>
 							</tr>
 						</table>
@@ -79,8 +79,8 @@
 						<table class="list">
 							<thead>
 							<tr>
-								<td class="left"><?= $entry_store; ?></td>
-								<td class="left"><?= $entry_layout; ?></td>
+								<td class="left"><?= _l("Stores:"); ?></td>
+								<td class="left"><?= _l("Layout Override:"); ?></td>
 							</tr>
 							</thead>
 							<tbody>

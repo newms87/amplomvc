@@ -42,8 +42,6 @@ class Pagination extends Library
 
 		$this->template->load($this->file);
 
-		$language = $this->language->fetch('block/widget/pagination');
-
 		if (!$this->page_url) {
 			$this->page_url = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('page'));
 		}
@@ -135,9 +133,10 @@ class Pagination extends Library
 			'pages' => $num_pages,
 		);
 
-		$language['text_pager'] = $this->tool->insertables($insertables, $language['text_pager']);
+		//TODO: Allow Admin panel access to change how this is displayed (separate entries for admin / each store)
+		$data['text_pager'] = $this->tool->insertables($insertables, _l("Showing %start% to %end% of %total% (%pages% Pages)"));
 
-		$this->template->setData($data + $language);
+		$this->template->setData($data);
 
 		return $this->template->render();
 	}

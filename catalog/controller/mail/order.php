@@ -12,8 +12,13 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order['date_added'] = $this->date->format($order['date_added'], 'short');
 
 		//Shipping / Payment addresses
-		$order['payment_address']  = $this->address->format($this->order->extractPaymentAddress($order));
-		$order['shipping_address'] = $this->address->format($this->order->extractShippingAddress($order));
+		$order['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
+		$order['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
+
+
+
+		//TODO: This needs to be updated to match System_Extension_Payment, System_Extension_Shipping
+
 
 		//Shipping / Payment Methods
 		$order['payment_method']  = $this->cart->getPaymentMethod($order['payment_method_id'])->info();

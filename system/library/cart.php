@@ -379,14 +379,6 @@ class Cart extends Library
 		}
 	}
 
-
-
-
-	//TODO: Clicking on remove will cause cache to invalidate improperly??? Maybe from Database customer cart field???
-
-
-
-
 	public function updateProduct($key, $quantity)
 	{
 		//Invalidate cart product cache
@@ -841,16 +833,12 @@ class Cart extends Library
 
 	public function hasPaymentMethod()
 	{
-		return !empty($this->session->data['payment_method_id']);
+		return $this->session->has('payment_method_id');
 	}
 
 	public function getPaymentMethodId()
 	{
-		if (isset($this->session->data['payment_method_id'])) {
-			return $this->session->data['payment_method_id'];
-		}
-
-		return false;
+		return $this->session->get('payment_method_id');
 	}
 
 	public function getPaymentMethod($payment_method_id = null, $payment_address = null)
@@ -952,6 +940,16 @@ class Cart extends Library
 		}
 
 		return true;
+	}
+
+	public function getPaymentKey()
+	{
+		return $this->session->get('payment_key');
+	}
+
+	public function setPaymentKey($key)
+	{
+		$this->session->set('payment_key', $key);
 	}
 
 	//TODO: Move this to System_Extension_Shipping controller...
@@ -1388,10 +1386,7 @@ class Cart extends Library
 
 	public function saveCart()
 	{
-		echo get_caller(0,10);
-		html_dump($this->session->data, 'dtaa');
-		exit;
-		if (!$this->session->data['customer_id']) {
+		if (empty($this->session->data['customer_id'])) {
 			return;
 		}
 

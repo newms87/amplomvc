@@ -65,11 +65,8 @@ class System_Extension_Payment extends System_Extension_Model
 
 	public function install($code)
 	{
-		//Language
-		$this->language->system('extension/payment');
-
 		if (!$this->user->can('modify', 'extension/payment')) {
-			$this->message->add('warning', 'error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify the Payment extensions.");
 			return false;
 		}
 

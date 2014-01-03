@@ -327,6 +327,9 @@ class Admin_Controller_Extension_Total extends Controller
 
 			$this->message->add('success', $this->_('text_install_success', $_GET['code']));
 		}
+		elseif ($this->System_Extension_Total->hasError()) {
+			$this->message->add('warning', $this->System_Extension_Total->getError());
+		}
 
 		$this->url->redirect('extension/total');
 	}

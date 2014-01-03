@@ -1,5 +1,4 @@
 <?php
-$_['text_pager']             = "Showing %start% to %end% of %total% (%pages% Pages)";
 $_['text_pager_first']       = "|&lt;";
 $_['text_pager_prev']        = "&lt;";
 $_['text_pager_next']        = "&gt;";

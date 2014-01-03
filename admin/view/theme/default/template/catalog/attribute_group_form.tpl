@@ -3,32 +3,32 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Attribute Groups"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Attribute Group Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_sort_order; ?></td>
+							<td><?= _l("Sort Order:"); ?></td>
 							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_attributes; ?></td>
+							<td><?= _l("Attributes:"); ?></td>
 							<td>
 								<table class="list">
 									<thead>
 									<tr>
-										<td class="center"><?= $entry_attribute_name; ?></td>
-										<td class="center"><?= $entry_attribute_sort_order; ?></td>
+										<td class="center"><?= _l("Attribute Name"); ?></td>
+										<td class="center"><?= _l("Sort Order"); ?></td>
 										<td></td>
 									</tr>
 									</thead>
@@ -51,7 +51,7 @@
 												<? if (!empty($attribute['product_count'])) { ?>
 													<span class="product_count"><?= $attribute['product_count']; ?></span>
 												<? } else { ?>
-													<a class="button" onclick="$(this).closest('.attribute').remove()"><?= $button_remove; ?></a>
+													<a class="button" onclick="$(this).closest('.attribute').remove()"><?= _l("Remove"); ?></a>
 												<? } ?>
 											</td>
 										</tr>
@@ -60,7 +60,7 @@
 									</tbody>
 									<tfoot>
 									<tr>
-										<td><a id="add_attribute" class="button"><?= $button_add_attribute; ?></a></td>
+										<td><a id="add_attribute" class="button"><?= _l("Add Attribute"); ?></a></td>
 									</tr>
 									</tfoot>
 								</table>

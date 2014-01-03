@@ -46,7 +46,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 				}
 			} elseif (!$this->order->add()) {
 				if ($this->order->hasError()) {
-					$this->message->add('warning', $this->order->getErrors());
+					$this->message->add('warning', $this->order->getError());
 					$this->data['redirect'] = $this->url->link('cart/cart');
 				} else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');

@@ -1,67 +1,115 @@
 <?php
 class PrettyLanguage
 {
-	/**
-	 * *.tpl
-	 *
-	 * Template output spacing conventions
-	 * search: <\?=\s*([^\?]*);\s*\?>
-	 * replace: <\?= $1; ?>
-	 * search: <\?=\s*([^\?]*\?[^\?]*);\s*\?>
-	 * repalce: <\?= $1; ?>
-	 *
-	 *
-	 * *.php
-	 *
-	 * Fixes class spacing convention
-	 * search: class[ \t]+([^\s\{)*\s*\{
-	 * replace: class $1 \R{
-	 *
-	 * Fixes function spacing conventions
-	 * search: ([ \t]*)([a-zA-Z0-9_]*[ \t]*)function\s*([a-zA-Z0-9_]*)\s*\(([^)]*)\)\s*\{
-	 * replace: $1$2function $3($4)\R$1\{
-	 *
-	 * Fixes if / elseif / foreach / while spacing convention
-	 * search: (foreach|if|while)\s*\(([^\{\r\n]*)\)[ \t]*\{
-	 * replace: $1 ($2) {
-	 *
-	 * Fixes else and elseif spacing convention
-	 * search: else(\s*)\{
-	 * replace: else {
-	 * search: \}[ \t]*else
-	 * replace: } else
-	 */
 	function __construct()
 	{
 		$ignore_list = array(DIR_CACHE);
 		$ext         = array('php');
 
 
-		$files = $this->get_all_files_r(SITE_DIR . 'admin/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
 
-		$this->render_breadcrumbs($files);
+		$this->lang_replace($files);
 
-		//$this->smodel_call_update($files);
+	}
 
-		//$this->class_name_convention($files);
+	public function lang_replace($files)
+	{
+		$find    = array(
+			'/language/english/',
+			'.php'
+		);
+		$replace = array(
+			'/view/theme/default/template/',
+			'.tpl'
+		);
 
 
-		//$files = array(SITE_DIR . 'catalog/controller/checkout/checkout.php');
+		$prefixes = array(
+			'text',
+			'entry',
+			'data',
+			'error',
+			'button',
+			'column',
+		);
 
-		// $this->update_message_format($files);
+		$missed_regx = "/\\\$(" . implode('|', $prefixes) . ')_/';
 
-		//$this->remove_language_gets($files);
+		$_ = array();
+		require(SITE_DIR . 'admin/language/english/english.php');
+		$default_lang = $_;
 
-		//$this->update_url_links($files);
+		unset($default_lang['data_statuses']);
+		unset($default_lang['data_yes_no']);
+		unset($default_lang['data_no_yes']);
+		unset($default_lang['data_statuses_blank']);
+		unset($default_lang['data_yes_no_blank']);
+		unset($default_lang['data_no_yes_blank']);
 
-		//$this->update_breadcrumb_format($files);
+		foreach ($files as $file) {
+			$_ = array();
+			require($file);
 
-		//$this->format_langauge_files($files);
+			$_ += $default_lang;
 
-		//$this->clean_php_line_endings($files);
+			$tpl   = str_replace($find, $replace, $file);
 
-		//$this->update_template_format($files);
+			if (!is_file($tpl)) {
+				$tpl = str_replace('.tpl', '_form.tpl', $tpl);
+				if (!is_file($tpl)) {
+					echo "skipping $tpl... not found<BR>";
+					continue;
+				}
+			}
 
+			$lines = explode("\n", file_get_contents($tpl));
+
+			$orig_lines = $lines;
+
+			$count = 0;
+
+			$new_lines = array();
+
+			$missed = array();
+			$ignored = array();
+
+			$regx = "/\\\$(" . implode('|', array_keys($_)) . ')([^a-zA-Z0-9_])/';
+
+			foreach ($lines as $num => $line) {
+				$matches = null;
+				if (preg_match_all($regx, $line, $matches)) {
+
+					foreach ($matches[1] as $key => $match) {
+						if (!is_string($_[$match]) || strpos($_[$match], '%s') !== false || strpos($_[$match], '%d') !== false) {
+							$missed[$num+1] = $line;
+						} else {
+							$line = str_replace('$'.$match, '_l("' . addslashes($_[$match]) . '")', $line);
+						}
+					}
+					$count++;
+				}
+				elseif (preg_match($missed_regx, $line)) {
+					$ignored[$num+1] = $line;
+				}
+
+				$new_lines[] = $line;
+			}
+
+			if ($count > 0) {
+				echo "modified $count lines in $tpl<br>";
+				$this->print_lines($orig_lines, $new_lines, false, true);
+				file_put_contents($tpl, implode("\n", $new_lines));
+			}
+
+			if (!empty($missed)) {
+				echo "<BR><BR>MISSED " . count($missed) . " lines!<BR><BR>";
+				foreach ($missed as $l => $miss) {
+					$this->pl($l, $miss);
+				}
+				exit;
+			}
+		}
 	}
 
 	public function render_breadcrumbs($files)
@@ -158,11 +206,11 @@ class PrettyLanguage
 			if ($dir_components[0] == 'plugin') {
 				array_shift($dir_components);
 				while (!in_array(current($dir_components), array(
-				                                                "",
-				                                                "catalog",
-				                                                "admin",
-				                                                "system"
-				                                           ))) {
+					"",
+					"catalog",
+					"admin",
+					"system"
+				))) {
 					array_shift($dir_components);
 				}
 			}
@@ -273,10 +321,10 @@ class PrettyLanguage
 						exit;
 					}
 					$template = trim(preg_replace(array(
-					                                   '/\.tpl/',
-					                                   '/;/',
-					                                   '/[^=]*=/'
-					                              ), '', $line));
+						'/\.tpl/',
+						'/;/',
+						'/[^=]*=/'
+					), '', $line));
 
 					if ($dir_temp == 3) {
 						if (!preg_match('/default\/template\//', $template)) {
@@ -713,19 +761,19 @@ class PrettyLanguage
 		}
 	}
 
-	public function pl($num, $line, $color, $special_chars)
+	public function pl($num, $line, $color = '#CBCBCB', $special_chars = true)
 	{
 		if ($special_chars) {
 			$line = htmlspecialchars($line);
 		}
 
 		$line = preg_replace(array(
-		                          '/ /',
-		                          '/\t/'
-		                     ), array(
-		                             '&nbsp;',
-		                             '&nbsp;&nbsp;&nbsp;'
-		                        ), $line);
+			'/ /',
+			'/\t/'
+		), array(
+			'&nbsp;',
+			'&nbsp;&nbsp;&nbsp;'
+		), $line);
 
 		echo "<div style='background: $color'>$num. $line</div>";
 	}

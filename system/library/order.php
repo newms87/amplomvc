@@ -1,31 +1,6 @@
 <?php
 class Order Extends Library
 {
-	public function __construct($registry)
-	{
-		parent::__construct($registry);
-
-		$this->language->system('order');
-	}
-
-	public function _e($code, $key)
-	{
-		$this->error[$code] = $this->language->get($key);
-	}
-
-	public function getErrors($pop = false, $name_format = false)
-	{
-		if ($pop) {
-			$this->error = array();
-		}
-
-		if ($name_format) {
-			return $this->tool->name_format($name_format, $this->error);
-		}
-
-		return $this->error;
-	}
-
 	public function add()
 	{
 		if (!$this->cart->validate()) {
@@ -37,23 +12,23 @@ class Order Extends Library
 		//Validate Shipping Address & Method
 		if ($this->cart->hasShipping()) {
 			if (!$this->cart->hasShippingAddress()) {
-				$this->_e('O-1', 'error_shipping_address');
+				$this->error['shipping_address'] = _l('You must specify a Delivery Address!');
 				return false;
 			}
 
 			if (!$this->cart->hasShippingMethod()) {
-				$this->_e('O-2', 'error_shipping_method');
+				$this->error['shipping_method'] = _l('There was no Delivery Method specified!');
 			}
 		}
 
 		//Validate Payment Address & Method
 		if (!$this->cart->hasPaymentAddress()) {
-			$this->_e('O-3', 'error_payment_address');
+			$this->error['payment_address'] = _l('You must specify a Billing Address!');
 			return false;
 		}
 
 		if (!$this->cart->hasPaymentMethod()) {
-			$this->_e('O-4', 'error_payment_method');
+			$this->error['payment_method'] = _l('There was no Payment Method specified!');
 			return false;
 		}
 
@@ -64,9 +39,10 @@ class Order Extends Library
 			$data['customer_id']       = 0;
 			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
 			$data += $this->cart->loadGuestInfo();
-		} //Guest checkout not allowed and customer not logged in
+		}
 		else {
-			$this->_e('O-5', 'error_checkout_guest');
+			//Guest checkout not allowed and customer not logged in
+			$this->error['guest_checkout'] = "You must be logged in to complete the checkout process!";
 			return false;
 		}
 
@@ -78,30 +54,29 @@ class Order Extends Library
 
 		//Payment info
 		$transaction = array(
-			'description' => _l('Order payment'),
-		   'amount' => $data['total'],
-		   'payment_method' => $this->cart->getPaymentMethodId(),
-		   'payment_key' => $this->cart->getPaymentKey(),
-		   'address_id' => $this->cart->getPaymentAddressId(),
+			'description'    => _l('Order payment'),
+			'amount'         => $this->cart->getTotal(),
+			'payment_method' => $this->cart->getPaymentMethodId(),
+			'payment_key'    => $this->cart->getPaymentKey(),
+			'address_id'     => $this->cart->getPaymentAddressId(),
 		);
 
-		$this->transaction->add('order', $transaction);
+		$data['transaction_id'] = $this->transaction->add('order', $transaction);
 
 		//Shipping info
 		if ($this->cart->hasShipping()) {
-			$shipping_address = $this->cart->getShippingAddress();
 
-			foreach ($shipping_address as $key => $value) {
-				$data['shipping_' . $key] = $value;
-			}
+			$shipping         = array(
+				'shipping_methd' => $this->cart->getShippingMethodId(),
+				'tracking'       => '',
+				'address_id'     => $this->cart->getShippingAddressId(),
+			);
 
-			$data['shipping_method_id'] = $this->cart->getShippingMethodId();
+			$data['shipping_id'] = $this->shipping->add('order', $shipping);
 		}
 
 		//Totals
-		$total = $this->cart->getTotal();
-
-		$data['total']  = $total;
+		$data['total']  = $this->cart->getTotal();
 		$data['totals'] = $this->cart->getTotals();
 
 		//Products
@@ -132,7 +107,7 @@ class Order Extends Library
 
 			if ($affiliate_info) {
 				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission']   = ($total / 100) * $affiliate_info['commission'];
+				$data['commission']   = ($data['total'] / 100) * $affiliate_info['commission'];
 			}
 		}
 
@@ -195,10 +170,12 @@ class Order Extends Library
 			return;
 		}
 
-		$this->query(
-			"UPDATE " . DB_PREFIX . "order SET customer_id = '" . (int)$customer['customer_id'] . "'" .
-			" WHERE customer_id = 0 AND email = '" . $this->escape($customer['email']) . "'"
+		$where = array(
+			'customer_id' => 0,
+		   'email ' => $customer['email'],
 		);
+
+		$this->update('order', array('customer_id' => $customer['customer_id']), $where);
 	}
 
 	public function countOrdersWithStatus($order_status_id)
@@ -207,9 +184,7 @@ class Order Extends Library
 			'order_status_ids' => array($order_status_id),
 		);
 
-		$order_total = $this->System_Model_Order->getTotalOrders($filter);
-
-		return $order_total;
+		return $this->System_Model_Order->getTotalOrders($filter);
 	}
 
 	public function orderStatusInUse($order_status_id)
@@ -294,42 +269,24 @@ class Order Extends Library
 		return $this->config->load('product_return', 'return_actions', 0);
 	}
 
-	public function extractPaymentAddress($order)
+	public function getPaymentAddress($order_id)
 	{
-		$payment_address = array();
+		$query = "SELECT * FROM " . DB_PREFIX . "address a" .
+			" JOIN " . DB_PREFIX . "transaction t ON (t.address_id = a.address_id)" .
+			" JOIN " . DB_PREFIX . "order o ON (o.transaction_id = t.transaction_id)" .
+			" WHERE o.order_id = " . (int)$order_id . " LIMIT 1";
 
-		foreach ($order as $key => $value) {
-			if ($key === 'payment_method_id') {
-				continue;
-			}
-
-			if (strpos($key, 'payment_') === 0) {
-				$payment_address[substr($key, 8)] = $value;
-			}
-		}
-
-		return $payment_address;
+		return $this->queryRow($query);
 	}
 
-	public function extractShippingAddress($order)
+	public function getShippingAddress($order_id)
 	{
-		$shipping_address = array();
+		$query = "SELECT * FROM " . DB_PREFIX . "address a" .
+			" JOIN " . DB_PREFIX . "shipping s ON (s.address_id = a.address_id)" .
+			" JOIN " . DB_PREFIX . "order o ON (o.shipping_id = s.shipping_id)" .
+			" WHERE o.order_id = " . (int)$order_id . " LIMIT 1";
 
-		if (empty($order['shipping_method_id'])) {
-			return array();
-		}
-
-		foreach ($order as $key => $value) {
-			if ($key === 'shipping_method_id') {
-				continue;
-			}
-
-			if (strpos($key, 'shipping_') === 0) {
-				$shipping_address[substr($key, 9)] = $value;
-			}
-		}
-
-		return $shipping_address;
+		return $this->queryRow($query);
 	}
 
 	/**
@@ -440,6 +397,12 @@ class Order Extends Library
 		}
 
 		$order['order_totals'] = $order_totals;
+
+		//Confirm Transaction
+		$this->transaction->confirm($order['transaction_id']);
+
+		//Confirm Shipping
+		$this->shipping->confirm($order['shipping_id']);
 
 		//Order Status
 		$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);

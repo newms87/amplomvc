@@ -121,12 +121,13 @@
 	<?= $cart_extend; ?>
 
 	<? //Handle Ajax messages
-	if (!empty($messages)) { ?>
+	if (!empty($messages)) {
+		?>
 		<script type="text/javascript">
 			<? foreach ($messages as $type => $msgs) { ?>
-				<? foreach ($msgs as $message) { ?>
-					show_msg("<?= addslashes($type); ?>", "<?= addslashes($message); ?>");
-				<? } ?>
+			<? foreach ($msgs as $message) { ?>
+			show_msg("<?= addslashes($type); ?>", "<?= addslashes($message); ?>");
+			<? } ?>
 			<? } ?>
 		</script>
 	<? } ?>

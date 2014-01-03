@@ -346,6 +346,9 @@ class Admin_Controller_Extension_Payment extends Controller
 
 			$this->message->add('success', $this->_('text_install_success', $_GET['code']));
 		}
+		elseif ($this->System_Extension_Payment->hasError()) {
+			$this->message->add('error', $this->System_Extension_Payment->getError());
+		}
 
 		$this->url->redirect('extension/payment');
 	}

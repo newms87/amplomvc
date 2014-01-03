@@ -11,7 +11,7 @@ class Transaction extends Library
 
 	public function add($type, $transaction = array())
 	{
-		if (!isset($data['amount'])) {
+		if (!isset($transaction['amount'])) {
 			trigger_error(__METHOD__ . "(): amount not specified");
 			return;
 		}
@@ -31,6 +31,11 @@ class Transaction extends Library
 		$transaction['date_modified'] = $transaction['date_added'];
 
 		$transaction_id = $this->insert('transaction', $transaction);
+
+		//Permanently save transaction address
+		if (!empty($transaction['address_id'])) {
+			$this->address->lock($transaction['address_id']);
+		}
 
 		$history_data = array(
 			'type'    => 'add',
@@ -118,11 +123,6 @@ class Transaction extends Library
 		}
 
 		$this->update('transaction', array('status' => $status), $transaction_id);
-
-		//Permanently save transaction address
-		if (!empty($transaction['address_id'])) {
-			$this->address->lock($transaction['address_id']);
-		}
 
 		$history_data = array(
 			'type'    => 'update',

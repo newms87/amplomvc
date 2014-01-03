@@ -256,10 +256,13 @@ class Url extends Library
 		$path  = $this->escape($this->path);
 		$query = $this->escape($this->getQuery());
 
+		//Default Store
+		$default = $this->config->isAdmin() ? -1 : 0;
+
 		$sql =
 			"SELECT * FROM " . DB_PREFIX . "url_alias" .
 			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
-			" AND status = '1' AND store_id IN (0, " . (int)$this->config->get('config_store_id') . ") LIMIT 1";
+			" AND status = '1' AND store_id IN ($default, " . (int)$this->config->get('config_store_id') . ") LIMIT 1";
 
 		$url_alias = $this->queryRow($sql);
 

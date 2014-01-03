@@ -25,6 +25,7 @@ final class Router
 			$this->routeFront();
 		}
 	}
+
 	public function routeAdmin()
 	{
 		//Initialize site configurations
@@ -82,8 +83,19 @@ final class Router
 	{
 		//Do not show maintenance page if user is an admin
 		// or if the path is a a request by a payment provider (IPN from Paypal, etc.)
-		if ($this->config->get('config_maintenance') && !$this->user->isAdmin() && strpos($this->path, 'payment') !== 0 ) {
-			$this->path = 'common/maintenance';
+		if ($this->config->get('config_maintenance')) {
+			if ($this->user->isAdmin()) {
+				if (isset($_GET['hide_maintenance_msg'])) {
+					$_SESSION['hide_maintenance_msg'] = 1;
+				} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
+					$hide = $this->url->here('hide_maintenance_msg=1');
+					$this->message->add('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
+				}
+			}
+			//Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
+			else if (strpos($this->path, 'payment') !== 0) {
+				$this->path = 'common/maintenance';
+			}
 		}
 
 		//Product Class Routing
@@ -97,7 +109,7 @@ final class Router
 		if ($controller_overrides) {
 			foreach ($controller_overrides as $override) {
 				if (('catalog/controller/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
+					if (empty($override['condition']) || preg_match("/" . $override['condition'] . "/", urldecode($this->url->getQuery()))) {
 						$this->path = str_replace('catalog/controller/','',$override['alternate']);
 					}
 				}

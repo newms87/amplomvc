@@ -28,6 +28,33 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		$this->render();
 	}
 
+	public function charge($transaction)
+	{
+		if (!$this->initAPI()) {
+			return;
+		}
+
+		$data = array(
+			'amount'             => $transaction['amount'],
+			'paymentMethodToken' => $transaction['payment_key'],
+			'recurring'          => $transaction['type'] === 'subscription',
+		);
+
+		try {
+			$result = Braintree_Transaction::sale($data);
+
+			if ($result->success) {
+				return true;
+			}
+
+			$this->resultError($result);
+		} catch (Braintree_Exception $e) {
+			$this->error[] = $e->getMessage();
+		}
+
+		return false;
+	}
+
 	public function confirm()
 	{
 		if (!$this->initAPI()) {
@@ -62,7 +89,8 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			);
 
 			$this->customer->setMeta('default_payment_key', $_POST['payment_key']);
-		} //New Credit Card
+		}
+		//New Credit Card
 		else {
 
 			if (!$this->validateCard($_POST)) {
@@ -269,33 +297,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		$this->url->redirect('account/update');
 	}
 
-	public function charge($transaction)
-	{
-		if (!$this->initAPI()) {
-			return;
-		}
-
-		$data = array(
-			'amount'             => $transaction['total'],
-			'paymentMethodToken' => $transaction['payment_key'],
-			'recurring'          => $transaction['type'] === 'subscription',
-		);
-
-		try {
-			$result = Braintree_Transaction::sale($data);
-
-			if ($result->success) {
-				return true;
-			}
-
-			$this->resultError($result);
-		} catch (Braintree_Exception $e) {
-			$this->error[] = $e->getMessage();
-		}
-
-		return false;
-	}
-
 	public function cardSelect($select_id = '', $remove = false)
 	{
 		//Language
@@ -379,15 +380,21 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			return;
 		}
 
-		$results = Braintree_Plan::all();
+		try {
+			$results = Braintree_Plan::all();
 
-		if ($results) {
-			$plans = array();
-			foreach ($results as $plan) {
-				$plans[$plan->_attributes['id']] = $plan->_attributes;
+			if ($results) {
+				$plans = array();
+				foreach ($results as $plan) {
+					$plans[$plan->_attributes['id']] = $plan->_attributes;
+				}
+
+				return $plans;
 			}
-
-			return $plans;
+		} catch(Exception $e) {
+			$error_log = $this->url->admin('tool/logs', 'log=error');
+			$this->message->add('warning', _l("There was a problem while communicating with Braintree. See more details in the <a target=\"_blank\" href=\"$error_log\">Error Log.</a>"));
+			$this->error_log->write($e);
 		}
 	}
 

@@ -1,6 +1,11 @@
 <?php
 class System_Extension_Payment_Cod extends PaymentExtension
 {
+	public function charge()
+	{
+		return true;
+	}
+
 	public function confirm()
 	{
 		if (isset($_GET['order_id'])) {

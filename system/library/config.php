@@ -349,7 +349,7 @@ class Config extends Library
 			$this->language->system('config');
 			$this->message->add('notify', $this->_('notify_update', $version, AC_VERSION));
 
-			$this->System_Update->update(AC_VERSION);
+			$this->System_Update->updateSystem(AC_VERSION);
 		}
 	}
 }

@@ -700,7 +700,7 @@ a.button:visited {
 }
 
 .extension_file_name {
-	color: red;
+	color: #767323;
 }
 
 #extension_editor div.CodeMirror span.CodeMirror-matchingbracket {

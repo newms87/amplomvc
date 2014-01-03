@@ -115,8 +115,16 @@ class Catalog_Controller_Account_Order extends Controller
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
 
 		//Shipping / Payment Addresses
-		$this->data['payment_address']  = $this->address->format($this->order->extractPaymentAddress($order));
-		$this->data['shipping_address'] = $this->address->format($this->order->extractShippingAddress($order));
+		$this->data['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
+		$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
+
+
+
+
+		//TODO: Update to make use of new extension system
+
+
+
 
 		//Shipping / Payment Methods
 		$this->data['payment_method']  = $this->cart->getPaymentMethodData($order['payment_method_id']);

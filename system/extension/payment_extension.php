@@ -1,9 +1,14 @@
 <?php
 abstract class PaymentExtension extends System_Extension_Extension
 {
-	public function getErrors()
+	//TODO: This is a hack to easily allow generating the template here. Consider moving this to a controller.
+	protected $template;
+
+	public function __construct($registry)
 	{
-		return $this->error;
+		parent::__construct($registry);
+
+		$this->template = new Template($registry);
 	}
 
 	public function renderTemplate()
@@ -15,7 +20,7 @@ abstract class PaymentExtension extends System_Extension_Extension
 		$this->template->load('payment/payment');
 
 		//Render
-		$this->render();
+		$this->template->render();
 	}
 
 	protected function confirmUrl()

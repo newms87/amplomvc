@@ -1,0 +1,90 @@
+<?php
+class Catalog_Model_Shipping_Parcelforce4848 extends Model
+{
+	function getQuote($address)
+	{
+		$this->language->load('shipping/parcelforce_48');
+
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('parcelforce_48_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+
+		if (!$this->config->get('parcelforce_48_geo_zone_id')) {
+			$status = true;
+		} elseif ($query->num_rows) {
+			$status = true;
+		} else {
+			$status = false;
+		}
+
+		$method_data = array();
+
+		if ($status) {
+			$cost      = 0;
+			$weight    = $this->cart->getWeight();
+			$sub_total = $this->cart->getSubTotal();
+
+			$rates = explode(',', $this->config->get('parcelforce_48_rate'));
+
+			foreach ($rates as $rate) {
+				$data = explode(':', $rate);
+
+				if ($data[0] >= $weight) {
+					if (isset($data[1])) {
+						$cost = $data[1];
+					}
+
+					break;
+				}
+			}
+
+			$rates = explode(',', $this->config->get('parcelforce_48_insurance'));
+
+			foreach ($rates as $rate) {
+				$data = explode(':', $rate);
+
+				if ($data[0] >= $sub_total) {
+					if (isset($data[1])) {
+						$insurance = $data[1];
+					}
+
+					break;
+				}
+			}
+
+			$quote_data = array();
+
+			if ((float)$cost) {
+				$text = $this->_('text_description');
+
+				if ($this->config->get('parcelforce_48_display_weight')) {
+					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
+				}
+
+				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) {
+					$text .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
+				}
+
+				if ($this->config->get('parcelforce_48_display_time')) {
+					$text .= ' (' . $this->_('text_time') . ')';
+				}
+
+				$quote_data['parcelforce_48'] = array(
+					'code'         => 'parcelforce_48.parcelforce_48',
+					'title'        => $text,
+					'cost'         => $cost,
+					'tax_class_id' => $this->config->get('parcelforce_48_tax_class_id'),
+					'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('parcelforce_48_tax_class_id')))
+				);
+
+				$method_data = array(
+					'code'       => 'parcelforce_48',
+					'title'      => $this->_('text_title'),
+					'quote'      => $quote_data,
+					'sort_order' => $this->config->get('parcelforce_48_sort_order'),
+					'error'      => false
+				);
+			}
+		}
+
+		return $method_data;
+	}
+}

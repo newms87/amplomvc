@@ -189,16 +189,7 @@ class DB
 
 	private function queryError($sql = '')
 	{
-		if (function_exists('debug_stack') && function_exists('html_dump')) {
-			$stack                           = debug_stack();
-			$_SESSION['debug']['call stack'] = $stack;
-			html_dump($stack, 'call stack');
-			echo '<br /><br />' . $sql;
-		}
-
-		if (function_exists('get_caller')) {
-			trigger_error($this->driver->getError() . get_caller(1, 5));
-		}
+		trigger_error($this->driver->getError() . get_caller(0, 5));
 	}
 
 	public function multiquery($string)

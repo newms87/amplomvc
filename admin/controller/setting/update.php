@@ -10,7 +10,7 @@ class Admin_Controller_Setting_Update extends Controller
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['version'])) {
-				$this->System_Update->update($_POST['version']);
+				$this->System_Update->updateSystem($_POST['version']);
 				$this->message->add('success', $this->_('text_success', $_POST['version']));
 			} elseif (isset($_POST['auto_update'])) {
 				$this->config->save('system', 'auto_update', $_POST['auto_update']);

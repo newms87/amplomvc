@@ -16,6 +16,9 @@ class Catalog_Model_Block_Login_Facebook extends Model
 
 	public function getConnectUrl()
 	{
+		//Redirect after login
+		$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
+
 		$query = array(
 			'app_id'        => $this->app_id,
 			'state'         => $this->getStateToken(),
@@ -81,33 +84,32 @@ class Catalog_Model_Block_Login_Facebook extends Model
 			return false;
 		}
 
-		$customer = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'facebook_id' AND `value` = '" . $this->escape($user_info->id) . "' LIMIT 1");
+		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'facebook_id' AND `value` = '" . $this->escape($user_info->id) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer
-		if (!$customer) {
+		if (!$customer_id) {
 			$no_meta = true;
 
 			if (!empty($user_info->email)) {
 				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($user_info->email) . "'");
 			}
 
-			if (!$customer) {
-				$customer_data = array(
+			if (empty($customer)) {
+				$customer = array(
 					'firstname' => $user_info->first_name,
 					'lastname'  => $user_info->last_name,
 					'email'     => $user_info->email,
 				);
 
-				$customer = $this->customer->add($customer_data);
+				$this->customer->add($customer);
 			}
 		} else {
+			$customer = $this->customer->getCustomer($customer_id);
 			$no_meta = false;
 		}
 
 		//Login Customer
-		$this->user->loginSystemUser();
-		$this->customer->setCustomerOverride($customer, false);
-		$this->user->logoutSystemUser();
+		$this->customer->login($customer['email'], AC_CUSTOMER_OVERRIDE);
 
 		//Set Meta for future login
 		if ($no_meta) {

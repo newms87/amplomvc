@@ -3,18 +3,18 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Blocks"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').trigger('saving').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').trigger('saving').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-settings"><?= $tab_settings; ?></a>
-				<a href="#tab-profile-settings"><?= $tab_profile_settings; ?></a>
-				<a href="#tab-profile"><?= $tab_profile; ?></a>
+				<a href="#tab-settings"><?= _l("Settings"); ?></a>
+				<a href="#tab-profile-settings"><?= _l("Profile Settings"); ?></a>
+				<a href="#tab-profile"><?= _l("Profiles"); ?></a>
 			</div>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 
@@ -26,7 +26,7 @@
 							</tr>
 						<? } ?>
 						<tr>
-							<td><?= $entry_block_status; ?></td>
+							<td><?= _l("Block Status"); ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, "status", $status); ?></td>
 						</tr>
 					</table>
@@ -35,7 +35,7 @@
 				<div id="tab-profile-settings">
 					<div id="profile_settings_tab_list" class="vtabs">
 						<span id="add_profile_setting">
-							<span><?= $button_add_profile_setting; ?></span>
+							<span><?= _l("New Profile Setting"); ?></span>
 							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt=""/>
 						</span>
 
@@ -52,11 +52,11 @@
 							<div id="tab-profile-setting-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile_setting">
 								<table class="form">
 									<tr>
-										<td><?= $entry_profile_setting_name; ?></td>
+										<td><?= _l("Profile Setting Name"); ?></td>
 										<td><input type="text" class="tab_name profile_setting_name" name="profile_settings[<?= $row; ?>][name]" value="<?= $profile_setting['name']; ?>"/></td>
 									</tr>
 									<tr>
-										<td><?= $entry_show_block_title; ?></td>
+										<td><?= _l("Show Block Title?"); ?></td>
 										<td><?= $this->builder->build('radio', $data_yes_no, "profile_settings[$row][show_block_title]", $profile_setting['show_block_title']); ?></td>
 									</tr>
 								</table>
@@ -74,7 +74,7 @@
 				<div id="tab-profile">
 					<div id="profile_tab_list" class="vtabs">
 						<span id="add_profile">
-							<span><?= $button_add_profile; ?></span>
+							<span><?= _l("New Profile"); ?></span>
 							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>"/>
 						</span>
 
@@ -91,38 +91,38 @@
 							<div id="tab-profile-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile">
 								<table class="form">
 									<tr>
-										<td><?= $entry_profile_name; ?></td>
+										<td><?= _l("Profile Name"); ?></td>
 										<td><input type="text" class="tab_name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>"/></td>
 									</tr>
 									<tr>
-										<td><?= $entry_profile_setting_id; ?></td>
+										<td><?= _l("Profile Setting"); ?></td>
 										<td>
 											<? $this->builder->setConfig(false, "name"); ?>
 											<?= $this->builder->build('select', $data_profile_settings, "profiles[$row][profile_setting_id]", $profile['profile_setting_id']); ?>
 										</td>
 									</tr>
 									<tr>
-										<td><?= $entry_store; ?></td>
+										<td><?= _l("Stores"); ?></td>
 										<td>
 											<? $this->builder->setConfig("store_id", "name"); ?>
 											<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", !empty($profile['store_ids']) ? $profile['store_ids'] : null); ?>
 										</td>
 									</tr>
 									<tr>
-										<td><?= $entry_layout; ?></td>
+										<td><?= _l("Layouts"); ?></td>
 										<td>
 											<? $this->builder->setConfig("layout_id", "name"); ?>
 											<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", !empty($profile['layout_ids']) ? $profile['layout_ids'] : null); ?>
 										</td>
 									</tr>
 									<tr>
-										<td><?= $entry_position; ?></td>
+										<td><?= _l("Positions"); ?></td>
 										<td>
 											<?= $this->builder->build('select', $data_positions, "profiles[$row][position]", $profile['position']); ?>
 										</td>
 									</tr>
 									<tr>
-										<td><?= $entry_profile_status; ?></td>
+										<td><?= _l("Profile Status"); ?></td>
 										<td>
 											<?= $this->builder->build('select', $data_statuses, "profiles[$row][status]", $profile['status']); ?>
 										</td>

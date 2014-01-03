@@ -443,11 +443,11 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data += $order_info;
 
 		$this->data['payment_method']  = $this->cart->getPaymentMethodData($order_info['payment_method_id']);
-		$this->data['payment_address'] = $this->address->format($this->order->extractPaymentAddress($order_info));
+		$this->data['payment_address'] = $this->address->format($this->order->getPaymentAddress($order_id));
 
 		if ($order_info['shipping_method_id']) {
 			$this->data['shipping_method']  = $this->cart->getShippingMethodData($order_info['shipping_method_id']);
-			$this->data['shipping_address'] = $this->address->format($this->order->extractShippingAddress($order_info));
+			$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 		}
 
 		if ($order_info['customer_id']) {
