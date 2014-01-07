@@ -1,8 +1,8 @@
 <?php
 class Bitstamp extends Library
 {
-	private $api_key = "PtLGxUpwdrhVXV138epiBVhUfgTZDIHs";
-	private $secret = "wF40czisKwuYDIjcNZ6LFhxQYaHFB4cn";
+	private $api_key = "zAeVsqQOETToatMjjYIvwVyW4OH7CPNt";
+	private $secret = "cJ3YY9VfY6HBju18agdqhTBIZDEpklbW";
 	private $client_id = "373282";
 
 	public function getDepositAddress()
