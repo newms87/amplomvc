@@ -105,7 +105,6 @@ $registry->set('request', new Request($registry));
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
-$db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 
 // Cache
 $cache = new Cache($registry);
@@ -121,8 +120,13 @@ $cache->ignore($config->get('config_cache_ignore'));
 
 if (!defined("DB_PROFILE")) {
 	define("DB_PROFILE", $config->get('config_db_profile'));
+}
+
+if (!defined("DB_PROFILE_CACHE")) {
 	define("DB_PROFILE_CACHE", $config->get('config_db_profile_cache'));
 }
+
+$db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 
 //Database Structure Validation
 $row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
