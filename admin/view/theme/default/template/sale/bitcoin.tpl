@@ -59,7 +59,7 @@
 
 				var grand_total = total + tip;
 
-				var string = "bitcoin:<?= $bitcoin_address; ?>?amount=" + total.toFixed(8);
+				var string = "bitcoin:<?= $bitcoin_address; ?>?amount=" + grand_total.toFixed(8);
 				$('#qr_code').html('').qrcode(string);
 				$('#string_code').html(string);
 
