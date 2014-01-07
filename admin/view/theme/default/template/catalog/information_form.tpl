@@ -3,39 +3,42 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'information.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'information.png'; ?>" alt=""/> <?= _l("Information"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= $tab_general; ?></a>
-				<a href="#tab-design"><?= $tab_design; ?></a>
+				<a href="#tab-general"><?= _l("General"); ?></a>
+				<a href="#tab-design"><?= _l("Design"); ?></a>
 			</div>
 			<form action="<?= $action; ?>" method="post" id="form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"><?= $entry_title; ?></td>
+							<td class="required"><?= _l("Information Title:"); ?></td>
 							<td><input type="text" name="title" value="<?= $title; ?>" size="100"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_alias; ?></td>
+							<td>
+								<div><?= _l("SEO Url:"); ?></div>
+								<span class="help"><?= _l("The Search Engine Optimized URL for this page."); ?></span>
+							</td>
 							<td><input type="text" name="alias" value="<?= $alias; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_description; ?></td>
+							<td class="required"> <?= _l("Description:"); ?></td>
 							<td><textarea class="ckedit" name="description"><?= $description; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_sort_order; ?></td>
+							<td><?= _l("Sort Order:"); ?></td>
 							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, "status", $status); ?></td>
 						</tr>
 					</table>
@@ -43,7 +46,7 @@
 				<div id="tab-design">
 					<table class="form">
 						<tr>
-							<td><?= $entry_store; ?></td>
+							<td><?= _l("Stores:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('store_id', 'name'); ?>
 								<?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?>
@@ -53,8 +56,8 @@
 					<table class="list">
 						<thead>
 							<tr>
-								<td class="left"><?= $entry_store; ?></td>
-								<td class="left"><?= $entry_layout; ?></td>
+								<td class="left"><?= _l("Stores:"); ?></td>
+								<td class="left"><?= _l("Layout Override:"); ?></td>
 							</tr>
 						</thead>
 						<tbody>

@@ -5,7 +5,6 @@ $_['head_title'] = 'Error Log';
 //Text
 $_['text_limit']   = "Limit";
 $_['text_remove']  = "Remove";
-$_['button_clear'] = "Clear All %s Entries";
 
 //Entries
 $_['entry_remove']    = "Remove<span class='help'>(eg: 1,2-4,34,58,60-89)</span>";

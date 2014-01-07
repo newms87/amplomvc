@@ -28,8 +28,12 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		$filters = array('filter_store' => '');
 
 		foreach ($filters as $key => $default) {
-			$this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+			$this->data[$key] = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
+
+		$filter_store = $this->data['filter_store'];
+		$start = $this->data['start'];
+		$limit = $this->data['limit'];
 
 		if ($filter_store !== '') {
 			if ($filter_store == 'a') {
@@ -86,8 +90,6 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		$this->data['limit'] = $limit;
 		$this->data['log']   = $log;
 
-		$url_query = $this->url->getQuery('limit', 'start');
-
 		$this->data['filter_url'] = $this->url->link('tool/error_log');
 
 		$this->data['loading'] = $this->image->get('data/ajax-loader.gif');
@@ -117,9 +119,9 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 				}
 			}
 
-			$this->_('button_clear', $name);
+			$this->data['button_clear'] = _l("Clear All %s Entries", $name);
 		} else {
-			$this->_('button_clear', 'Log');
+			$this->data['button_clear'] = _l("Clear All %s Entries", _l("Log"));
 		}
 
 

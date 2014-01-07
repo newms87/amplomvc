@@ -9,15 +9,15 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= _l("Backup / Restore"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#restore').submit();" class="button"><?= $button_restore; ?></a><a onclick="$('#backup').submit();" class="button"><?= $button_backup; ?></a></div>
+				<div class="buttons"><a onclick="$('#restore').submit();" class="button"><?= _l("Restore"); ?></a><a onclick="$('#backup').submit();" class="button"><?= _l("Backup"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $restore; ?>" method="post" enctype="multipart/form-data" id="restore">
 					<table class="form">
 						<tr>
-							<td><?= $entry_restore; ?></td>
+							<td><?= _l("Restore Backup:"); ?></td>
 							<td><input type="file" name="import"/></td>
 						</tr>
 					</table>
@@ -25,7 +25,7 @@
 				<form action="<?= $backup; ?>" method="post" enctype="multipart/form-data" id="backup">
 					<table class="form">
 						<tr>
-							<td><?= $entry_backup; ?></td>
+							<td><?= _l("Backup:"); ?></td>
 							<td>
 								<div class="scrollbox" style="margin-bottom: 5px;">
 									<? $class = 'odd'; ?>
@@ -36,8 +36,8 @@
 											<?= $table; ?></div>
 									<? } ?>
 								</div>
-								<a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a>
-								/ <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a>
+								<a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= _l("Select All"); ?></a>
+								/ <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= _l("Unselect All"); ?></a>
 							</td>
 						</tr>
 					</table>

@@ -241,7 +241,12 @@ class Admin_Controller_Catalog_Category extends Controller
 		}
 
 		//Load Information
-		if ($category_id && !$this->request->isPost()) {
+		$category_info = array();
+
+		if ($this->request->isPost()) {
+			$category_info = $_POST;
+		}
+		elseif ($category_id) {
 			$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 
 			$category_info['stores']  = $this->Model_Catalog_Category->getCategoryStores($category_id);
@@ -263,15 +268,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'stores'           => array(0),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($category_info[$key])) {
-				$this->data[$key] = $category_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $category_info + $defaults;
 
 		//All other categories to select parent
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();

@@ -1,21 +1,5 @@
 <?php
 
-$_['phone_types']   = array(
-	'cell'    => "Cell Phone",
-	'primary' => "Primary",
-	"fax"     => "Fax"
-);
-$_['contact_types'] = array(
-	'primary'          => "Primary",
-	"customer_service" => "Customer Service",
-	"finance"          => "Finance",
-	"shipping"         => "Shipping",
-	"returns"          => "Returns",
-	"vendor"           => "Vendor",
-	"legal"            => "Legal"
-);
-
-
 //Contact
 $_['entry_contact_first_name'] = 'First Name:';
 $_['entry_contact_last_name']  = 'Last Name:';

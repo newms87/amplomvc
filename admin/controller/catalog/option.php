@@ -204,7 +204,12 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/option');
 
 		//Load Information
-		if ($option_id && !$this->request->isPost()) {
+		$option_info = array();
+
+		if ($this->request->isPost()) {
+			$option_info = $_POST;
+		}
+		elseif ($option_id) {
 			$option_info = $this->Model_Catalog_Option->getOption($option_id);
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
@@ -226,15 +231,23 @@ class Admin_Controller_Catalog_Option extends Controller
 			'option_values' => array()
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($option_info[$key])) {
-				$this->data[$key] = $option_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $option_info + $defaults;
+
+		//Template Data
+		$_['data_option_types'] = array(
+			'#optgroup1' => 'Choose',
+			'select'     => 'Select',
+			'radio'      => 'Radio',
+			'checkbox'   => 'Checkbox',
+			'image'      => 'Image',
+			'#optgroup2' => 'Input',
+			'text'       => 'Text',
+			'textarea'   => 'Textarea',
+			'#optgroup4' => 'Date',
+			'date'       => 'Date',
+			'datetime'   => 'Date &amp; Time',
+			'time'       => 'Time'
+		);
 
 		//Product Options Template Defaults
 		$this->data['option_values']['__ac_template__'] = array(

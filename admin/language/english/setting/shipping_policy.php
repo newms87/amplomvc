@@ -8,11 +8,7 @@ $_['text_settings']   = "Settings";
 $_['text_store_list'] = "Stores";
 
 //Data
-$_['data_days'] = array(
-	'final' => "Final Sale",
-	0       => "Shipping Anytime",
-	1       => "Days:",
-);
+
 
 //Entry
 $_['entry_title']       = "Shipping Policy Title";

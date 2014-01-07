@@ -1,6 +1,6 @@
 <table class="form">
 	<tr>
-		<td valign="top"><a id="add_faq_group" class="button"><?= $button_add_faq_group; ?></a></td>
+		<td valign="top"><a id="add_faq_group" class="button"><?= _l("Add FAQ Group"); ?></a></td>
 		<td>
 			<ul id="faq_list" class="easy_list">
 
@@ -35,7 +35,7 @@
 							<li><a id="add_faq_item" onclick="add_faq_item($(this));" class="button add">+</a></li>
 						</ul>
 
-						<a class="button delete text" onclick="$(this).closest('.faq_group').remove()"><?= $button_delete; ?></a>
+						<a class="button delete text" onclick="$(this).closest('.faq_group').remove()"><?= _l("Delete"); ?></a>
 					</li>
 				<? } ?>
 
@@ -58,7 +58,7 @@
 	$('#add_faq_group').click(function () {
 		template = group_template
 			.replace(/%group_row%/g, group_row++)
-			.replace(/%group_title%/g, '<?= $entry_group_title; ?>');
+			.replace(/%group_title%/g, '<?= _l("FAQ Group Title"); ?>');
 
 		$('#faq_list').append(template);
 	});
@@ -69,8 +69,8 @@
 		template = faq_template
 			.replace(/%faq_row%/g, faq_row++)
 			.replace(/%group_row%/g, context.closest('.faq_group').attr('group_row'))
-			.replace(/%question%/g, '<?= $entry_question; ?>')
-			.replace(/%answer%/g, '<?= $entry_answer; ?>');
+			.replace(/%question%/g, '<?= _l("What is my frequently asked question?"); ?>')
+			.replace(/%answer%/g, '<?= _l("My answer to my frequently asked question."); ?>');
 
 		context.closest('li').before(template);
 	}

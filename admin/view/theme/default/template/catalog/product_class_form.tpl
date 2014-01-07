@@ -3,28 +3,28 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= _l("Product Classes"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Product Class Name:"); ?></td>
 							<td><input type="text" name="name" size="60" value="<?= $name; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_front_template; ?></td>
+							<td><?= _l("Front End Template: <span class=\"help\">This is the template used when customers view the product page</span>"); ?></td>
 							<td>
 								<table class="list">
 									<thead>
 									<tr>
-										<td><?= $entry_theme_name; ?></td>
-										<td><?= $entry_theme_template; ?></td>
+										<td><?= _l("Theme Name:"); ?></td>
+										<td><?= _l("Theme Template:"); ?></td>
 										<td><?= _l("Controller:"); ?></td>
 									</tr>
 									</thead>
@@ -41,13 +41,13 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_admin_template; ?></td>
+							<td><?= _l("Admin Template: <span class=\"help\">This is the template for the product input form in the Admin Panel</span>"); ?></td>
 							<td>
 								<table class="list">
 									<thead>
 									<tr>
-										<td><?= $entry_theme_name; ?></td>
-										<td><?= $entry_theme_template; ?></td>
+										<td><?= _l("Theme Name:"); ?></td>
+										<td><?= _l("Theme Template:"); ?></td>
 										<td><?= _l("Controller:"); ?></td>
 									</tr>
 									</thead>

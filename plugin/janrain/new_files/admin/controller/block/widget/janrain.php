@@ -32,6 +32,33 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			''            => 21
 		);
 
+		//Data
+		$_['data_display_icons'] = array(
+			'facebook'    => _l("Facebook"),
+			'twitter'     => _l("Twitter"),
+			'linkedin'    => _l("Linked In"),
+			'google'      => _l("Google"),
+			'yahoo'       => _l("Yahoo!"),
+			'aol'         => _l("AOL"),
+			'myspace'     => _l("My Space"),
+			'windowslive' => _l("Windows Live"),
+			'bing'        => _l("Bing"),
+			'flickr'      => _l("Flickr"),
+			'paypal'      => _l("PayPal"),
+			'wordpress'   => _l("WordPress"),
+		);
+
+		$_['data_display_types'] = array(
+			'popup'  => _l("Popup"),
+			'iframe' => _l("iFrame"),
+		);
+
+		$_['data_icon_sizes'] = array(
+			'tiny'  => _l("Tiny"),
+			'small' => _l("Small"),
+			'large' => _l("Large"),
+		);
+
 		$this->data['social_icon_sprite'] = $this->image->get('janrain/rpx-icons16.png');
 
 		$defaults = array(
@@ -49,8 +76,8 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			}
 		}
 
-		$this->_('entry_login_redirect_description', SITE_URL);
-		$this->_('entry_logout_redirect_description', SITE_URL);
+		$this->data['entry_login_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
+		$this->data['entry_logout_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
 
 		$this->render();
 	}

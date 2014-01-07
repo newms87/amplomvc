@@ -23,7 +23,7 @@
 	<div id="header">
 		<div class="div1">
 			<div class="div2"><a href="<?= $home; ?>" style="display:block"><img src="<?= $admin_logo; ?>"
-			                                                                     title="<?= $head_title; ?>"/></a></div>
+			                                                                     title="<?= _l("Administration"); ?>"/></a></div>
 			<? if ($logged) { ?>
 				<div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt=""
 				                       id="header_secure_lock"/><?= $logged; ?></div>

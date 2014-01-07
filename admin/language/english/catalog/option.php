@@ -3,20 +3,6 @@
 $_['head_title'] = 'Options';
 
 //Data
-$_['data_option_types'] = array(
-	'#optgroup1' => 'Choose',
-	'select'     => 'Select',
-	'radio'      => 'Radio',
-	'checkbox'   => 'Checkbox',
-	'image'      => 'Image',
-	'#optgroup2' => 'Input',
-	'text'       => 'Text',
-	'textarea'   => 'Textarea',
-	'#optgroup4' => 'Date',
-	'date'       => 'Date',
-	'datetime'   => 'Date &amp; Time',
-	'time'       => 'Time'
-);
 
 // Text
 $_['text_success']                 = 'Success: You have modified options!';

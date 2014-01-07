@@ -1,8 +1,9 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_social_networks; ?>
-			<div id="add_network" onclick="add_network()"><?= $button_add_network; ?></div>
+			<?= _l("Your Social Networks:"); ?>
+			<span class="help"><?= _l("Include the http:// or https://"); ?></span>
+			<div id="add_network" onclick="add_network()"><?= _l("Add Network"); ?></div>
 		</td>
 		<td>
 			<ul id="social_network_list">

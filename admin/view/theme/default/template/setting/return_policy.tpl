@@ -3,18 +3,18 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Return Policies"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td valign="top"><a id="add_policy" class="button"><?= $button_add; ?></a></td>
+							<td valign="top"><a id="add_policy" class="button"><?= _l("Add Return Policy"); ?></a></td>
 							<td>
 								<ul id="return_policy_list" class="easy_list">
 									<? foreach ($return_policies as $row => $policy) { ?>
@@ -28,7 +28,7 @@
 											</div>
 
 											<? if (empty($policy['no_delete'])) { ?>
-												<a class="button delete text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="button delete text" onclick="$(this).closest('li').remove()"><?= _l("Delete"); ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

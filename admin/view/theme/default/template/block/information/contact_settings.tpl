@@ -1,10 +1,10 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_contact_info; ?>
+			<?= _l("The Contact Page:"); ?>
 		</td>
 		<td>
-			<span class="help"><?= $entry_contact_info_help; ?></span><br/>
+			<span class="help"><?= _l("Write any HTML code / text for the Contact Page. Use %contact_form% to insert the contact form"); ?></span><br/>
 			<textarea name="settings[contact_info]" class="ckedit"><?= $settings['contact_info']; ?></textarea>
 		</td>
 	</tr>

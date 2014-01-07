@@ -6,39 +6,39 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= _l("Reviews"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_author; ?></td>
+							<td class="required"> <?= _l("Author:"); ?></td>
 							<td><input type="text" name="author" value="<?= $author; ?>"/>
-								<? if ($error_author) { ?>
-									<span class="error"><?= $error_author; ?></span>
+								<? if (_l("Author must be between 3 and 64 characters!")) { ?>
+									<span class="error"><?= _l("Author must be between 3 and 64 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_product; ?></td>
+							<td><?= _l("Product:<br/><span class=\"help\">(Autocomplete)</span>"); ?></td>
 							<td><input type="text" name="product" value="<?= $subscription; ?>"/>
 								<input type="hidden" name="product_id" value="<?= $product_id; ?>"/>
-								<? if ($error_product) { ?>
-									<span class="error"><?= $error_product; ?></span>
+								<? if (_l("Product required!")) { ?>
+									<span class="error"><?= _l("Product required!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_text; ?></td>
+							<td class="required"> <?= _l("Text:"); ?></td>
 							<td><textarea name="text" cols="60" rows="8"><?= $text; ?></textarea>
-								<? if ($error_text) { ?>
-									<span class="error"><?= $error_text; ?></span>
+								<? if (_l("Review Text must be at least 1 character!")) { ?>
+									<span class="error"><?= _l("Review Text must be at least 1 character!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_rating; ?></td>
-							<td><b class="rating"><?= $entry_bad; ?></b>&nbsp;
+							<td><?= _l("Rating:"); ?></td>
+							<td><b class="rating"><?= _l("Bad"); ?></b>&nbsp;
 								<? if ($rating == 1) { ?>
 									<input type="radio" name="rating" value="1" checked/>
 								<? } else { ?>
@@ -68,20 +68,20 @@
 								<? } else { ?>
 									<input type="radio" name="rating" value="5"/>
 								<? } ?>
-								&nbsp; <b class="rating"><?= $entry_good; ?></b>
-								<? if ($error_rating) { ?>
-									<span class="error"><?= $error_rating; ?></span>
+								&nbsp; <b class="rating"><?= _l("Good"); ?></b>
+								<? if (_l("Review rating required!")) { ?>
+									<span class="error"><?= _l("Review rating required!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><select name="status">
 									<? if ($status) { ?>
-										<option value="1" selected="selected"><?= $text_enabled; ?></option>
-										<option value="0"><?= $text_disabled; ?></option>
+										<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
+										<option value="0"><?= _l("Disabled"); ?></option>
 									<? } else { ?>
-										<option value="1"><?= $text_enabled; ?></option>
-										<option value="0" selected="selected"><?= $text_disabled; ?></option>
+										<option value="1"><?= _l("Enabled"); ?></option>
+										<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>

@@ -2,8 +2,6 @@
 // Heading
 $_['head_title'] = 'Administration';
 
-$_['support'] = '<a href="mailto:%s?subject=Support%%20Request" target="_blank">Support</a>';
-
 // Text
 $_['text_stores']         = "Stores";
 $_['text_store_settings'] = "Stores";

@@ -3,18 +3,18 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Shipping Policies"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td valign="top"><a id="add_policy" class="button"><?= $button_add; ?></a></td>
+							<td valign="top"><a id="add_policy" class="button"><?= _l("Add Shipping Policy"); ?></a></td>
 							<td>
 								<ul id="shipping_policy_list" class="easy_list">
 									<? foreach ($shipping_policies as $row => $policy) { ?>
@@ -22,7 +22,7 @@
 											<input class="title" size="50" type="text" name="shipping_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>"/><br/>
 											<textarea class="description ckedit" name="shipping_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
 											<? if (empty($policy['no_delete'])) { ?>
-												<a class="delete button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="delete button text" onclick="$(this).closest('li').remove()"><?= _l("Delete"); ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

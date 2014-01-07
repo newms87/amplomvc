@@ -3,18 +3,7 @@
 $_['head_title'] = 'General Settings';
 
 //Data
-$_['data_stock_display_types'] = array(
-	'hide'   => "Do not display stock",
-	'status' => "Only show stock status",
-	-1       => "Display stock quantity available",
-	10       => "Display quantity up to 10"
-);
 
-$_['data_show_product_related'] = array(
-	0 => 'Never',
-	1 => 'Only When Unavailable',
-	2 => 'Always',
-);
 
 
 //Text
@@ -28,8 +17,6 @@ $_['text_mail']                = 'Mail';
 $_['text_smtp']                = 'SMTP';
 $_['text_mode_explanation']    = "The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.";
 $_['text_settings']            = 'Settings';
-$_['text_add_return_policy']   = "Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>";
-$_['text_add_shipping_policy'] = "Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
 
 //Entry
 $_['entry_name']                             = 'Store Name:';
@@ -73,7 +60,7 @@ $_['entry_tax']                              = 'Display Prices With Tax:';
 $_['entry_tax_default_id']                   = 'Default Tax Class:';
 $_['entry_tax_default']                      = 'Use Store Tax Address:<br /><span class="help">Use the store address to calculate taxes if no one is logged in. You can choose to use the store address for the customers shipping or payment address.</span>';
 $_['entry_tax_customer']                     = 'Use Customer Tax Address:<br /><span class="help">Use the customers default address when they login to calculate taxes. You can choose to use the default address for the customers shipping or payment address.</span>';
-$_['entry_invoice_prefix']                   = 'Invoice Prefix:<br /><span class="help">Set the invoice prefix (e.g. INV-2011-01 or INV-%Y-m%). Invoice ID\'s will start at 1 for each unique prefix. Use a date format (eg: %Y-m-d%) anywhere - Invoice IDs will reset automatically to 1 for each unique date.</span>';
+$_['entry_invoice_prefix']                   = '';
 $_['entry_order_edit']                       = 'Order Editing:<br /><span class="help">Number of days allowed to edit an order. This is required because prices and discounts may change over time corrupting the order if its edited.</span>';
 $_['entry_customer_group']                   = 'Customer Group:<br /><span class="help">Default customer group.</span>';
 $_['entry_customer_price']                   = 'Login Display Prices:<br /><span class="help">Only show prices when a customer is logged in.</span>';
@@ -131,7 +118,7 @@ $_['entry_smtp_timeout']                     = 'SMTP Timeout:';
 $_['entry_account_mail']                     = 'New Account Alert Mail:<br /><span class="help">Send a email to the store owner when a new account is registered.</span>';
 $_['entry_alert_mail']                       = 'New Order Alert Mail:<br /><span class="help">Send a email to the store owner when a new order is created.</span>';
 $_['entry_alert_emails']                     = 'Additional Alert E-Mails:<br /><span class="help">Any additional emails you want to receive the alert email, in addition to the main store email. (comma separated)</span>';
-$_['entry_fraud_detection']                  = 'Use MaxMind Fraud Detection System:<br /><span class="help">MaxMind is a fraud detections service. If you don\'t have a license key you can <a onclick="window.open(\'http://www.maxmind.com/?rId=opencart\');"><u>sign up here</u></a>. Once you have obtained a key copy and paste it into the field below.</span>';
+$_['entry_fraud_detection']                  = 'Use MaxMind Fraud Detection System:<br /><span class="help">MaxMind is a fraud detections service. If you don\'t have a license key you can <a target="_blank" href="http://www.maxmind.com/?rId=opencart">sign up here</a>. Once you have obtained a key copy and paste it into the field below.</span>';
 $_['entry_fraud_key']                        = 'MaxMind License Key:</span>';
 $_['entry_fraud_score']                      = 'MaxMind Risk Score:<br /><span class="help">The higher the score the more likly the order is fraudulent. Set a score between 0 - 100.</span>';
 $_['entry_use_ssl']                          = 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>';
@@ -146,10 +133,10 @@ $_['entry_log_filename']                     = 'Log Filename:';
 $_['entry_error_filename']                   = 'Error Log Filename:';
 $_['entry_error_display']                    = 'Display Errors:';
 $_['entry_error_log']                        = 'Log Errors:';
-$_['entry_statcounter']                      = 'Stat Counter Code:<span class="help">Sign up at <a onclick="window.open(\'http://www.statcounter.com/sign-up/\');"><u>Stat Counter</u></a> and copy and past the code in this field.</span>';
+$_['entry_statcounter']                      = 'Stat Counter Code:<span class="help">Sign up at <a target="_blank" href="http://www.statcounter.com/sign-up/">Stat Counter</a> and copy and past the code in this field.</span>';
 $_['entry_statcounter_project']              = 'Project ID';
 $_['entry_statcounter_security']             = 'Security Code';
-$_['entry_google_analytics']                 = 'Google Analytics Code:<br /><span class="help">Login to your <a onclick="window.open(\'http://www.google.com/analytics/\');"><u>Google Analytics</u></a> account and after creating your web site profile copy and paste the analytics code into this field.</span>';
+$_['entry_google_analytics']                 = 'Google Analytics Code:<br /><span class="help">Login to your <a target="_blank" href="http://www.google.com/analytics/">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field.</span>';
 $_['entry_mail_registration']                = 'Customer Registration Email:';
 $_['entry_mail_mailto']                      = "Send To:<span class='help'>(comma separated list)</span>";
 $_['entry_mail_cc']                          = "Copy To:<span class='help'>(comma separated list)</span>";

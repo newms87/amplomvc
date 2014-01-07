@@ -17,10 +17,8 @@ $_['text_percent']             = 'Percentage';
 $_['text_amount']              = 'Fixed Amount';
 $_['text_shipping_policy']     = "Shipping Policy";
 $_['text_return_policy']       = "Return Policy";
-$_['text_option_help']         = '<br>To add an option category:<br><br>1.type the category into the input field above (eg: "Size", "Color", etc.).<br><br>2. As you type the available options will be displayed, click on the name when it appears.<br><br>3. Click on "Add Option Value" button<br><br>4. Choose the option Value from the dropdown box<br><br>5. Specify the Quantity of this product option that is available.<br><br>6. If you have a limited number of this Option Value leave Subtract Stock as "yes", if you do not want to limit the availability set to "no" (this will use the default quantity set in the Data tab)<br><br>7. repeat steps 3 through 6 for each Option Value this product has.<br><br> If you cannot find the appropriate Option Category or Option Value for your product, please contact your Manufacturer Rep or email <a class="normal" href="mailto:%s?subject=New Product Option Request">Our Support Team</a>';
+$_['text_option_help']         = '';
 $_['text_no_expiration']       = "No Expiration";
-$_['text_add_shipping_policy'] = "Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
-$_['text_add_return_policy']   = "Add <a href=\"%s\" target=\"_blank\">Return Policy</a>";
 $_['text_unlimited']           = "Unlimited";
 
 // Column

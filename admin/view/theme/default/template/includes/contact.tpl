@@ -1,14 +1,14 @@
 <table class="list">
 	<thead>
 	<tr>
-		<td><?= $entry_contact_first_name; ?></td>
-		<td><?= $entry_contact_last_name; ?></td>
-		<td><?= $entry_contact_company; ?></td>
-		<td><?= $entry_contact_email; ?></td>
-		<td><?= $entry_contact_website; ?></td>
-		<td><?= $entry_contact_phone; ?></td>
-		<td><?= $entry_contact_address; ?></td>
-		<td><?= $entry_contact_type; ?></td>
+		<td><?= _l("First Name:"); ?></td>
+		<td><?= _l("Last Name:"); ?></td>
+		<td><?= _l("Company:"); ?></td>
+		<td><?= _l("Email"); ?></td>
+		<td><?= _l("Website"); ?></td>
+		<td><?= _l("Phone"); ?></td>
+		<td><?= _l("Address:"); ?></td>
+		<td><?= _l("Contact Type: "); ?></td>
 		<td></td>
 	</tr>
 	</thead>
@@ -40,26 +40,26 @@
 				<a onclick="add_contact_phone(this);"><?= $button_add_phone; ?></a>
 			</td>
 			<td class="contact_address left">
-				<div class="contact_street_1"><label for="street_1_<?= $row; ?>"><?= $entry_street_1; ?></label><input
+				<div class="contact_street_1"><label for="street_1_<?= $row; ?>"><?= _l("Street Address: "); ?></label><input
 						id="street_1_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_1]" value="<?= $contact['street_1']; ?>"/></div>
-				<div class="contact_street_2"><label for="street_2_<?= $row; ?>"><?= $entry_street_2; ?></label><input
+				<div class="contact_street_2"><label for="street_2_<?= $row; ?>"><?= _l("Street Address 2: "); ?></label><input
 						id="street_2_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_2]" value="<?= $contact['street_2']; ?>"/></div>
-				<div class="contact_city"><label for="city_<?= $row; ?>"><?= $entry_city; ?></label><input
+				<div class="contact_city"><label for="city_<?= $row; ?>"><?= _l("City: "); ?></label><input
 						id="city_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][city]" value="<?= $contact['city']; ?>"/></div>
 				<div class="contact_country">
-					<label> <?= $entry_country; ?></label>
+					<label> <?= _l("Country: "); ?></label>
 					<?= $this->builder->build('select', $countries, "contact[$row][country_id]", $contact['country_id']); ?>
 				</div>
 				<div class="contact_zone">
-					<label>   <?= $entry_zone; ?></label>
+					<label>   <?= _l("Zone: "); ?></label>
 					<select id="zone_id-<?= $row; ?>" zone_id="<?= $contact['zone_id']; ?>" name="contact[<?= $row; ?>][zone_id]"></select>
 				</div>
-				<div class="contact_postcode"><label for="postcode_<?= $row; ?>"><?= $entry_postcode; ?></label><input
+				<div class="contact_postcode"><label for="postcode_<?= $row; ?>"><?= _l("Postal Code: "); ?></label><input
 						id="postcode_<?= $row; ?>" type="text" maxlength="10" name="contact[<?= $row; ?>][postcode]" value="<?= $contact['postcode']; ?>"/></div>
 			</td>
 			<td
 				class="left"><?= $this->builder->build('select', $contact_types, "contact[$row][contact_type]", $contact['contact_type']); ?></td>
-			<td class="left"><a onclick="$('#contact-<?= $row; ?>').remove();" class="button"><?= $button_remove; ?></a>
+			<td class="left"><a onclick="$('#contact-<?= $row; ?>').remove();" class="button"><?= _l("Remove"); ?></a>
 			</td>
 		</tr>
 		</tbody>
@@ -103,21 +103,21 @@
 		html += '			<td class="left"><input type="text" name="contact[%row%][website]" /></td>';
 		html += '			<td class="left"><ul class="phone_list" row="%row%">' + build_phone_item(contact_row, 0) + '</ul><a onclick="add_contact_phone(this);"><?= $button_add_phone; ?></a></td>';
 		html += '			<td class="contact_address left">';
-		html += '				<div class="contact_street_1"><label for="street_1_%row%"><?= $entry_street_1; ?></label><input id="street_1_%row%" type="text" name="contact[%row%][street_1]" /></div>';
-		html += '				<div class="contact_street_2"><label for="street_2_%row%"><?= $entry_street_2; ?></label><input id="street_2_%row%" type="text" name="contact[%row%][street_2]" /></div>';
-		html += '				<div class="contact_city"><label for="city_%row%"><?= $entry_city; ?></label><input id="city_%row%" type="text" name="contact[%row%][city]" /></div>';
+		html += '				<div class="contact_street_1"><label for="street_1_%row%"><?= _l("Street Address: "); ?></label><input id="street_1_%row%" type="text" name="contact[%row%][street_1]" /></div>';
+		html += '				<div class="contact_street_2"><label for="street_2_%row%"><?= _l("Street Address 2: "); ?></label><input id="street_2_%row%" type="text" name="contact[%row%][street_2]" /></div>';
+		html += '				<div class="contact_city"><label for="city_%row%"><?= _l("City: "); ?></label><input id="city_%row%" type="text" name="contact[%row%][city]" /></div>';
 		html += '				<div class="contact_country">';
-		html += '						<label> <?= $entry_country; ?></label>';
+		html += '						<label> <?= _l("Country: "); ?></label>';
 		html += "<?= $this->builder->build('select',$countries, "contact[%row%][country_id]", $default_country, array(),true); ?>";
 		html += '				</div>';
 		html += '				<div class="contact_zone">';
-		html += '						<label>	<?= $entry_zone; ?></label>';
+		html += '						<label>	<?= _l("Zone: "); ?></label>';
 		html += '						<select id="zone_id-%row%" name="contact[%row%][zone_id]"></select>';
 		html += '				</div>';
-		html += '				<div class="contact_postcode"><label for="postcode_%row%"><?= $entry_postcode; ?></label><input id="postcode_%row%" type="text" maxlength="10" name="contact[%row%][postcode]" /></div>';
+		html += '				<div class="contact_postcode"><label for="postcode_%row%"><?= _l("Postal Code: "); ?></label><input id="postcode_%row%" type="text" maxlength="10" name="contact[%row%][postcode]" /></div>';
 		html += '			</td>';
 		html += '			<td class="left">' + "<?= $this->builder->build('select',$contact_types,"contact[%row%][contact_type]"); ?>" + '</td>';
-		html += '			<td class="left"><a onclick="$(\'#contact-%row%\').remove();" class="button"><?= $button_remove; ?></a></td>';
+		html += '			<td class="left"><a onclick="$(\'#contact-%row%\').remove();" class="button"><?= _l("Remove"); ?></a></td>';
 		html += '	</tr>';
 		html += '</tbody>';
 		$(context).closest('tbody').before(html.replace(/%row%/g, contact_row));

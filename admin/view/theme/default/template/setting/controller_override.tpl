@@ -3,18 +3,18 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Controller Override"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td valign="top"><a id="add_override" class="button"><?= $button_add; ?></a></td>
+							<td valign="top"><a id="add_override" class="button"><?= _l("Add Controller Override"); ?></a></td>
 							<td>
 								<ul id="controller_override_list" class="easy_list">
 									<? foreach ($controller_overrides as $row => $override) { ?>
@@ -22,7 +22,7 @@
 											<input class="original" size="50" type="text" name="controller_overrides[<?= $row; ?>][original]" value="<?= $override['original']; ?>"/>
 											<input class="alternate" size="50" type="text" name="controller_overrides[<?= $row; ?>][alternate]" value="<?= $override['alternate']; ?>"/>
 											<input class="condition" size="50" type="text" name="controller_overrides[<?= $row; ?>][condition]" value="<?= $override['condition']; ?>"/>
-											<a class="delete button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+											<a class="delete button text" onclick="$(this).closest('li').remove()"><?= _l("Delete"); ?></a>
 										</li>
 									<? } ?>
 								</ul>

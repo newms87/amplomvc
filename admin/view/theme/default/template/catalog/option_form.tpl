@@ -5,11 +5,11 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'information.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'information.png'; ?>" alt=""/> <?= _l("Options"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 
@@ -17,19 +17,19 @@
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= $entry_name; ?></td>
+						<td class="required"> <?= _l("Option Name:"); ?></td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= $entry_display_name; ?></td>
+						<td class="required"> <?= _l("Option Display Name:"); ?></td>
 						<td><input type="text" name="display_name" value="<?= $display_name; ?>"/></td>
 					</tr>
 					<tr>
-						<td><?= $entry_type; ?></td>
+						<td><?= _l("Type:"); ?></td>
 						<td><?= $this->builder->build('select', $data_option_types, "type", $type); ?></td>
 					</tr>
 					<tr>
-						<td><?= $entry_sort_order; ?></td>
+						<td><?= _l("Sort Order:"); ?></td>
 						<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
 					</tr>
 				</table>
@@ -37,10 +37,10 @@
 				<table class="list">
 					<thead>
 					<tr>
-						<td class="center required"><?= $entry_value; ?></td>
-						<td class="center"><?= $entry_display_value; ?></td>
-						<td class="center"><?= $entry_image; ?></td>
-						<td class="center"><?= $entry_sort_order; ?></td>
+						<td class="center required"><?= _l("Option Value:"); ?></td>
+						<td class="center"><?= _l("Option Value Display:<span class=\"help\">The value to show to customers.<br/>Leave blank to use Option Value. HTML enabled.</span>"); ?></td>
+						<td class="center"><?= _l("Image:"); ?></td>
+						<td class="center"><?= _l("Sort Order:"); ?></td>
 						<td></td>
 					</tr>
 					</thead>
@@ -62,7 +62,7 @@
 								<input class="sort_order" type="text" name="option_value[<?= $row; ?>][sort_order]" value="<?= $option_value['sort_order']; ?>" size="1"/>
 							</td>
 
-							<td class="center"><a onclick="$(this).closest('tr').remove();" class="button"><?= $button_remove; ?></a></td>
+							<td class="center"><a onclick="$(this).closest('tr').remove();" class="button"><?= _l("Remove"); ?></a></td>
 						</tr>
 					<? } ?>
 					</tbody>
@@ -70,7 +70,7 @@
 					<tr>
 						<td colspan="3"></td>
 						<td class="left">
-							<a onclick="add_option_value();" class="button"><?= $button_add_option_value; ?></a>
+							<a onclick="add_option_value();" class="button"><?= _l("Add Option Value"); ?></a>
 						</td>
 					</tr>
 					</tfoot>

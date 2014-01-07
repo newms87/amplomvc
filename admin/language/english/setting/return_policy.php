@@ -8,11 +8,7 @@ $_['text_settings']   = "Settings";
 $_['text_store_list'] = "Stores";
 
 //Data
-$_['data_days'] = array(
-	'final' => "Final Sale",
-	0       => "Return Anytime",
-	1       => "Days:",
-);
+
 
 //Entry
 $_['entry_title']       = "Return Policy Title";

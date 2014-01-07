@@ -215,10 +215,23 @@ class Admin_Controller_Setting_Setting extends Controller
 			'mail' => _l("PHP Mail"),
 		);
 
+		$_['data_stock_display_types'] = array(
+			'hide'   => _l("Do not display stock"),
+			'status' => _l("Only show stock status"),
+			-1       => _l("Display stock quantity available"),
+			10       => _l("Display quantity up to 10"),
+		);
+
+		$_['data_show_product_related'] = array(
+			0 => _l('Never'),
+			1 => _l('Only When Unavailable'),
+			2 => _l('Always'),
+		);
+
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 
-		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
-		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
+		$this->data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
+		$this->data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/setting');

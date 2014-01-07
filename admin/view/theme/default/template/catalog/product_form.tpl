@@ -3,33 +3,33 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 	<div class="heading">
-		<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+		<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= _l("Products"); ?></h1>
 
 		<div class="buttons">
 			<? if (count($data_product_classes) > 1) { ?>
 				<form id="product_class_form" action="<?= $change_class; ?>" method="post">
 					<? $this->builder->setConfig('product_class_id', 'name'); ?>
 					<?= $this->builder->build('select', $data_product_classes, 'product_class_id', $product_class_id); ?>
-					<input type="submit" class="button" value="<?= $button_change_class; ?>"/>
+					<input type="submit" class="button" value="<?= _l("Change Class"); ?>"/>
 				</form>
 			<? } ?>
-			<a onclick="$('#product_form').submit();" class="button"><?= $button_save; ?></a>
-			<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			<a onclick="$('#product_form').submit();" class="button"><?= _l("Save"); ?></a>
+			<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 		</div>
 	</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= $tab_general; ?></a>
-				<a href="#tab-data"><?= $tab_data; ?></a>
-				<a href="#tab-shipping-return"><?= $tab_shipping_return; ?></a>
-				<a href="#tab-links"><?= $tab_links; ?></a>
-				<a href="#tab-attribute"><?= $tab_attribute; ?></a>
-				<a href="#tab-option"><?= $tab_option; ?></a>
-				<a href="#tab-discount"><?= $tab_discount; ?></a>
-				<a href="#tab-special"><?= $tab_special; ?></a>
-				<a href="#tab-image"><?= $tab_image; ?></a>
-				<a href="#tab-reward"><?= $tab_reward; ?></a>
-				<a href="#tab-design"><?= $tab_design; ?></a>
+				<a href="#tab-general"><?= _l("General"); ?></a>
+				<a href="#tab-data"><?= _l("Data"); ?></a>
+				<a href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
+				<a href="#tab-links"><?= _l("Links"); ?></a>
+				<a href="#tab-attribute"><?= _l("Attribute"); ?></a>
+				<a href="#tab-option"><?= _l("Option"); ?></a>
+				<a href="#tab-discount"><?= _l("Discount"); ?></a>
+				<a href="#tab-special"><?= _l("Special"); ?></a>
+				<a href="#tab-image"><?= _l("Additional Images"); ?></a>
+				<a href="#tab-reward"><?= _l("Reward Points"); ?></a>
+				<a href="#tab-design"><?= _l("Design"); ?></a>
 			</div>
 
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="product_form">
@@ -38,31 +38,31 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Product Name:"); ?></td>
 							<td><input type="text" name="name" size="100" value="<?= $name; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_meta_description; ?></td>
+							<td><?= _l("Meta Tag Description:"); ?></td>
 							<td><textarea name="meta_description" cols="40" rows="5"><?= $meta_description; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_meta_keywords; ?></td>
+							<td><?= _l("Meta Tag Keywords:"); ?></td>
 							<td><textarea name="meta_keywords" cols="40" rows="5"><?= $meta_keywords; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_teaser; ?></td>
+							<td><?= _l("Teaser: <span class=\"help\">A short teaser to be displayed for product previews.</span>"); ?></td>
 							<td><textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_description; ?></td>
+							<td><?= _l("Description: <span class=\"help\">This will show up at the top of the Product page. You may use full HTML</span>"); ?></td>
 							<td><textarea name="description" class="ckedit"><?= $description; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_information; ?></td>
+							<td><?= _l("Information: <span class=\"help\">Additional information about the product. Information tables, charts, etc. You may use full HTML</span>"); ?></td>
 							<td><textarea name="information" class="ckedit"><?= $information; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_tag; ?></td>
+							<td><?= _l("Product Tags:<br /><span class=\"help\">comma separated</span>"); ?></td>
 							<td><input type="text" name="product_tags" value="<?= implode(',', $product_tags); ?>" size="80"/></td>
 						</tr>
 					</table>
@@ -71,86 +71,89 @@
 				<div id="tab-data">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_model; ?></td>
+							<td class="required"> <?= _l("Model ID:"); ?></td>
 							<td>
 								<input type="text" name="model" value="<?= $model; ?>"/>
-								<a class="gen_url" onclick="generate_model(this)"><?= $button_generate_model; ?></a>
+								<a class="gen_url" onclick="generate_model(this)"><?= _l("[Generate Model ID]"); ?></a>
 							</td>
 						</tr>
 						<tr>
-							<td class="required"><?= $entry_alias; ?></td>
+							<td class="required">
+								<div><?= _l("SEO Url:"); ?></div>
+								<span class="help"><?= _l("The Search Engine Optimized URL for the product page."); ?></span>
+							</td>
 							<td>
-								<input type="text" onfocus="$(this).display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
-								<a class="gen_url" onclick="generate_url(this)"><?= $button_generate_url; ?></a>
+								<input type="text" onfocus="$(this).display_error('<?= _l("<br>Warning! This may cause system instability! Please use the \\\'Generate URL\\\' button"); ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
+								<a class="gen_url" onclick="generate_url(this)"><?= _l("[Generate URL]"); ?></a>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_upc; ?></td>
+							<td><?= _l("UPC:"); ?></td>
 							<td><input type="text" name="upc" value="<?= $upc; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_location; ?></td>
+							<td><?= _l("Location:"); ?></td>
 							<td><input type="text" name="location" value="<?= $location; ?>" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_price; ?></td>
+							<td><?= _l("Price:"); ?></td>
 							<td><input type="text" name="price" value="<?= $price; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_cost; ?></td>
+							<td><?= _l("Cost:"); ?></td>
 							<td><input type="text" name="cost" value="<?= $cost; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_tax_class; ?></td>
+							<td><?= _l("Tax Class:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_tax_classes, 'tax_class_id', $tax_class_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_quantity; ?></td>
+							<td><?= _l("Quantity:"); ?></td>
 							<td><input type="text" name="quantity" value="<?= $quantity; ?>" size="2"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_minimum; ?></td>
+							<td><?= _l("Minimum Quantity:<br/><span class=\"help\">Force a minimum ordered amount</span>"); ?></td>
 							<td><input type="text" name="minimum" value="<?= $minimum; ?>" size="2"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_subtract; ?></td>
+							<td><?= _l("Subtract Stock?"); ?></td>
 							<td>
 								<?= $this->builder->build('select', $data_yes_no, "subtract", (int)$subtract); ?>
 								<input type="hidden" name="stock_status_id" value="<?= $stock_status_id; ?>"/>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_image; ?></td>
+							<td><?= _l("Image:"); ?></td>
 							<td>
 								<?= $this->builder->setBuilderTemplate('click_image'); ?>
 								<?= $this->builder->imageInput("image", $image); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_date_available; ?></td>
+							<td><?= _l("Date Available:"); ?></td>
 							<td>
 								<input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetimepicker"/>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_date_expires; ?></td>
+							<td><?= _l("Date Expires:"); ?></td>
 							<td>
 								<input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetimepicker"/>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
-							<td><?= $this->builder->build('select', $statuses, "status", $status); ?></td>
+							<td><?= _l("Status:"); ?></td>
+							<td><?= $this->builder->build('select', $data_statuses, "status", $status); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_editable; ?></td>
+							<td><?= _l("Editable:"); ?></td>
 							<td><?= $this->builder->build('select', $data_yes_no, 'editable', $editable); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_sort_order; ?></td>
+							<td><?= _l("Sort Order:"); ?></td>
 							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="2"/></td>
 						</tr>
 					</table>
@@ -159,7 +162,7 @@
 				<div id="tab-shipping-return">
 					<table class="form">
 						<tr>
-							<td><?= $entry_return_policy; ?></td>
+							<td><?= _l("Return Policy:"); ?></td>
 							<td>
 								<? if (!empty($data_return_policies)) { ?>
 									<? $this->builder->setConfig(false, 'title'); ?>
@@ -169,13 +172,13 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_shipping; ?></td>
+							<td><?= _l("Requires Shipping:"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, "shipping", (int)$shipping); ?></td>
 						</tr>
 					</table>
 					<table class="form" id="shipping_details">
 						<tr>
-							<td><?= $entry_shipping_policy; ?></td>
+							<td><?= _l("Shipping Policy:"); ?></td>
 							<td>
 								<? if (!empty($data_shipping_policies)) { ?>
 									<? $this->builder->setConfig(false, 'title'); ?>
@@ -185,7 +188,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_dimension; ?></td>
+							<td><?= _l("Dimensions (L x W x H):"); ?></td>
 							<td>
 								<input type="text" name="length" value="<?= $length; ?>" size="4"/>
 								<input type="text" name="width" value="<?= $width; ?>" size="4"/>
@@ -193,18 +196,18 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_length; ?></td>
+							<td><?= _l("Length Class:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('length_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_length_classes, 'length_class_id', $length_class_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_weight; ?></td>
+							<td><?= _l("Weight:"); ?></td>
 							<td><input type="text" name="weight" value="<?= $weight; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_weight_class; ?></td>
+							<td><?= _l("Weight Class:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('weight_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_weight_classes, 'weight_class_id', $weight_class_id); ?>
@@ -216,33 +219,33 @@
 				<div id="tab-links">
 					<table class="form">
 						<tr>
-							<td><?= $entry_manufacturer; ?></td>
+							<td><?= _l("Manufacturer / Designer:"); ?></td>
 							<? $this->builder->setConfig('manufacturer_id', 'name'); ?>
 							<td><?= $this->builder->build('select', $data_manufacturers, 'manufacturer_id', (int)$manufacturer_id); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_category; ?></td>
+							<td><?= _l("Categories:"); ?></td>
 							<? $this->builder->setConfig('category_id', 'pathname'); ?>
 							<td><?= $this->builder->build('multiselect', $data_categories, "product_categories", $product_categories); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_store; ?></td>
+							<td><?= _l("Stores:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('store_id', 'name'); ?>
 								<?= $this->builder->build('multiselect', $data_stores, "product_stores", $product_stores); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_download; ?></td>
+							<td><?= _l("Downloads:"); ?></td>
 							<? $this->builder->setConfig('download_id', 'name'); ?>
 							<td><?= $this->builder->build('multiselect', $data_downloads, "product_downloads", $product_downloads); ?></td>
 						</tr>
 						<tr>
 							<td>
-								<?= $entry_related; ?>
+								<?= _l("Related Products:"); ?>
 								<div class="left">
 									<input type="text" id="related_autocomplete" value=""/>
-									<div class="help center">(<?= $text_autocomplete; ?>)</div>
+									<div class="help center">(<?= _l("autocomplete"); ?>)</div>
 								</div>
 							</td>
 							<td>
@@ -273,9 +276,21 @@
 
 						<div id="option-add">
 							<input id="product_option_autocomplete" value=""/>
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= $button_add_option; ?>" title="<?= $button_add_option; ?>"/>
+							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= _l("Add Option"); ?>" title="<?= _l("Add Option"); ?>"/>
 						</div>
-						<div class="help"><?= $text_option_help; ?></div>
+						<div class="help">
+							<div><?= _l("To add an option category:"); ?></div>
+							<div>
+								<?= _l("1.type the category into the input field above (eg: 'Size', 'Color', etc.)."); ?><br><br>
+								<?= _l("2. As you type the available options will be displayed, click on the name when it appears."); ?><br><br>
+								<?= _l("3. Click on 'Add Option Value' button"); ?><br><br>
+								<?= _l("4. Choose the option Value from the dropdown box"); ?><br><br>
+								<?= _l("5. Specify the Quantity of this product option that is available."); ?><br><br>
+								<?= _l("6. If you have a limited number of this Option Value leave Subtract Stock as 'yes', if you do not want to limit the availability set to 'no' (this will use the default quantity set in the Data tab)"); ?><br><br>
+								<?= _l("7. repeat steps 3 through 6 for each Option Value this product has."); ?><br><br>
+								<?= _l("If you cannot find the appropriate Option Category or Option Value for your product, please contact your Manufacturer Rep or email"); ?>
+								<a class="normal" href="<?= $help_email; ?>"><?= _l("Our Support Team"); ?></a>
+						</div>
 					</div>
 
 					<div id="product_option_list">
@@ -291,15 +306,15 @@
 								<div class="product_option_name"><?= $product_option['display_name']; ?></div>
 								<table class="form">
 									<tr>
-										<td><?= $entry_required; ?></td>
+										<td><?= _l("Required:"); ?></td>
 										<td><?= $this->builder->build('select', $data_yes_no, "product_options[$row][required]", (int)$product_option['required']); ?></td>
 									</tr>
 									<tr>
-										<td><?= $entry_sort_order; ?></td>
+										<td><?= _l("Sort Order:"); ?></td>
 										<td><input type="text" name="product_options[<?= $row; ?>][sort_order]" value="<?= $product_option['sort_order']; ?>"/></td>
 									</tr>
 									<tr>
-										<td><?= $entry_option_value_list; ?></td>
+										<td><?= _l("Add Option Values"); ?></td>
 										<td>
 											<div class="scrollbox unused_option_value_list clickable">
 												<? foreach ($product_option['unused_option_values'] as $uov_row => $option_value) { ?>
@@ -318,15 +333,15 @@
 								<table class="list">
 									<thead>
 										<tr>
-											<td class="center"><?= $entry_option_value; ?></td>
-											<td class="center"><?= $entry_default; ?></td>
-											<td class="center"><?= $entry_image; ?></td>
-											<td class="center"><?= $entry_display_value; ?></td>
-											<td class="center"><?= $entry_quantity; ?></td>
-											<td class="center"><?= $entry_pricing; ?></td>
-											<td class="center"><?= $entry_weight; ?></td>
-											<td class="center"><?= $entry_sort_order; ?></td>
-											<td class="center"><?= $entry_option_value_restriction; ?></td>
+											<td class="center"><?= _l("Value:"); ?></td>
+											<td class="center"><?= _l("Default"); ?></td>
+											<td class="center"><?= _l("Image:"); ?></td>
+											<td class="center"><?= _l("Option Value Display:"); ?></td>
+											<td class="center"><?= _l("Quantity:"); ?></td>
+											<td class="center"><?= _l("Pricing:"); ?></td>
+											<td class="center"><?= _l("Weight:"); ?></td>
+											<td class="center"><?= _l("Sort Order:"); ?></td>
+											<td class="center"><?= _l("Restrictions"); ?></td>
 											<td></td>
 										</tr>
 									</thead>
@@ -356,14 +371,14 @@
 														<input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3"/><br />
 														<? $checked = $product_option_value['subtract'] ? 'checked="checked"' : ''; ?>
 														<input id="subtractstock<?= "$row-$pov_row"; ?>" type="checkbox" <?= $checked; ?> name="<?= $product_option_value_row . "[subtract]"; ?>" value="1" />
-														<label for="subtractstock<?= "$row-$pov_row"; ?>" class="subtract_stock"><?= $entry_subtract; ?></label>
+														<label for="subtractstock<?= "$row-$pov_row"; ?>" class="subtract_stock"><?= _l("Subtract Stock?"); ?></label>
 													</td>
 													<td class="center">
-														<label for="cost<?= "$row-$pov_row"; ?>"><?= $entry_cost; ?></label>
+														<label for="cost<?= "$row-$pov_row"; ?>"><?= _l("Cost:"); ?></label>
 														<input id="cost<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5"/><br/>
-														<label for="price<?= "$row-$pov_row"; ?>"><?= $entry_price; ?></label>
+														<label for="price<?= "$row-$pov_row"; ?>"><?= _l("Price:"); ?></label>
 														<input id="price<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5"/><br/>
-														<label for="points<?= "$row-$pov_row"; ?>"><?= $entry_option_points; ?></label>
+														<label for="points<?= "$row-$pov_row"; ?>"><?= _l("Points:"); ?></label>
 														<input id="points<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5"/>
 													</td>
 													<td class="center">
@@ -377,8 +392,8 @@
 														<!--<table class="list">
 															<thead>
 															<tr>
-																<td class="center"><?= $entry_restriction_option_value; ?></td>
-																<td class="center"><?= $entry_restriction_quantity; ?></td>
+																<td class="center"><?= _l("Option Value"); ?></td>
+																<td class="center"><?= _l("Quantity"); ?></td>
 																<td></td>
 															</tr>
 															</thead>
@@ -408,7 +423,7 @@
 														*/ ?>
 													</td>
 													<td class="left">
-														<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
+														<span onclick="remove_option_value($(this))" class="button"><?= _l("Remove"); ?></span>
 														<script type="text/javascript">
 															$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
 														</script>
@@ -428,21 +443,21 @@
 
 				<div id="tab-attribute">
 					<div class="add_attribute">
-						<span class="entry"><?= $entry_add_attribute; ?></span>
+						<span class="entry"><?= _l("Add Attribute"); ?></span>
 
 						<div>
 							<input type="text" id="product_attribute_autocomplete" value=""/>
-							<span class="help">(<?= $text_autocomplete; ?>)</span>
+							<span class="help">(<?= _l("autocomplete"); ?>)</span>
 						</div>
 					</div>
 
 					<table class="list">
 						<thead>
 							<tr>
-								<td class="left"><?= $entry_attribute; ?></td>
-								<td class="left"><?= $entry_image; ?></td>
-								<td class="left"><?= $entry_text; ?></td>
-								<td class="left"><?= $entry_sort_order; ?></td>
+								<td class="left"><?= _l("Attribute:"); ?></td>
+								<td class="left"><?= _l("Image:"); ?></td>
+								<td class="left"><?= _l("Text:"); ?></td>
+								<td class="left"><?= _l("Sort Order:"); ?></td>
 								<td></td>
 							</tr>
 						</thead>
@@ -465,7 +480,7 @@
 									<td>
 										<input type="text" size="1" class="sort_order" name="product_attributes[<?= $row; ?>][sort_order]" value="<?= $product_attribute['sort_order']; ?>" />
 									</td>
-									<td class="left"><a onclick="$(this).closest('.attribute').remove()" class="button"><?= $button_remove; ?></a></td>
+									<td class="left"><a onclick="$(this).closest('.attribute').remove()" class="button"><?= _l("Remove"); ?></a></td>
 								</tr>
 							<? } ?>
 						</tbody>
@@ -476,12 +491,12 @@
 					<table id="discount" class="list">
 						<thead>
 						<tr>
-							<td class="left"><?= $entry_customer_group; ?></td>
-							<td class="right"><?= $entry_quantity; ?></td>
-							<td class="right"><?= $entry_priority; ?></td>
-							<td class="right"><?= $entry_price; ?></td>
-							<td class="left"><?= $entry_date_start; ?></td>
-							<td class="left"><?= $entry_date_end; ?></td>
+							<td class="left"><?= _l("Customer Group:"); ?></td>
+							<td class="right"><?= _l("Quantity:"); ?></td>
+							<td class="right"><?= _l("Priority:"); ?></td>
+							<td class="right"><?= _l("Price:"); ?></td>
+							<td class="left"><?= _l("Date Start:"); ?></td>
+							<td class="left"><?= _l("Date End:"); ?></td>
 							<td></td>
 						</tr>
 						</thead>
@@ -498,14 +513,14 @@
 								<td class="left"><input type="text" name="product_discounts[<?= $row; ?>][date_start]" value="<?= $product_discount['date_start']; ?>" class="datetimepicker"/></td>
 								<td class="left"><input type="text" name="product_discounts[<?= $row; ?>][date_end]" value="<?= $product_discount['date_end']; ?>" class="datetimepicker"/></td>
 								<td class="left"><a onclick="$(this).closest('.product_discount').remove();"
-								                    class="button"><?= $button_remove; ?></a></td>
+								                    class="button"><?= _l("Remove"); ?></a></td>
 							</tr>
 						<? } ?>
 						</tbody>
 						<tfoot>
 						<tr>
 							<td colspan="6"></td>
-							<td class="left"><a id="add_product_discount" class="button"><?= $button_add_discount; ?></a></td>
+							<td class="left"><a id="add_product_discount" class="button"><?= _l("Add Discount"); ?></a></td>
 						</tr>
 						</tfoot>
 					</table>
@@ -515,11 +530,11 @@
 					<table id="special" class="list">
 						<thead>
 							<tr>
-								<td class="left"><?= $entry_customer_group; ?></td>
-								<td class="right"><?= $entry_priority; ?></td>
-								<td class="right"><?= $entry_price; ?></td>
-								<td class="left"><?= $entry_date_start; ?></td>
-								<td class="left"><?= $entry_date_end; ?></td>
+								<td class="left"><?= _l("Customer Group:"); ?></td>
+								<td class="right"><?= _l("Priority:"); ?></td>
+								<td class="right"><?= _l("Price:"); ?></td>
+								<td class="left"><?= _l("Date Start:"); ?></td>
+								<td class="left"><?= _l("Date End:"); ?></td>
 								<td></td>
 							</tr>
 						</thead>
@@ -534,14 +549,14 @@
 									<td class="right"><input type="text" name="product_specials[<?= $row; ?>][price]" value="<?= $product_special['price']; ?>"/></td>
 									<td class="left"><input type="text" name="product_specials[<?= $row; ?>][date_start]" value="<?= $product_special['date_start']; ?>" class="datetimepicker"/></td>
 									<td class="left"><input type="text" name="product_specials[<?= $row; ?>][date_end]" value="<?= $product_special['date_end']; ?>" class="datetimepicker"/></td>
-									<td class="left"><a onclick="$(this).closest('.product_special').remove();" class="button"><?= $button_remove; ?></a></td>
+									<td class="left"><a onclick="$(this).closest('.product_special').remove();" class="button"><?= _l("Remove"); ?></a></td>
 								</tr>
 							<? } ?>
 						</tbody>
 						<tfoot>
 							<tr>
 								<td colspan="5"></td>
-								<td class="left"><a id="add_product_special" class="button"><?= $button_add_special; ?></a></td>
+								<td class="left"><a id="add_product_special" class="button"><?= _l("Add Special"); ?></a></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -551,8 +566,8 @@
 					<table id="images" class="list">
 						<thead>
 							<tr>
-								<td class="center"><?= $entry_image; ?></td>
-								<td class="center"><?= $entry_sort_order; ?></td>
+								<td class="center"><?= _l("Image:"); ?></td>
+								<td class="center"><?= _l("Sort Order:"); ?></td>
 								<td></td>
 							</tr>
 						</thead>
@@ -564,14 +579,14 @@
 									</td>
 									<td class="center"><input class="sort_order" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2"/></td>
 									<td class="left"><a onclick="$(this).closest('.product_image').remove();"
-											class="button"><?= $button_remove; ?></a></td>
+											class="button"><?= _l("Remove"); ?></a></td>
 								</tr>
 							<? } ?>
 						</tbody>
 						<tfoot>
 							<tr>
 								<td colspan="2"></td>
-								<td><a class="button" onclick="add_product_image()"><?= $button_add_image; ?></a></td>
+								<td><a class="button" onclick="add_product_image()"><?= _l("Add Image"); ?></a></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -580,15 +595,15 @@
 				<div id="tab-reward">
 					<table class="form">
 						<tr>
-							<td><?= $entry_points; ?></td>
+							<td><?= _l("Points:<br/><span class=\"help\">Number of points needed to buy this item. If you don\'t want this product to be purchased with points leave as 0.</span>"); ?></td>
 							<td><input type="text" name="points" value="<?= $points; ?>"/></td>
 						</tr>
 					</table>
 					<table class="list">
 						<thead>
 							<tr>
-								<td class="left"><?= $entry_customer_group; ?></td>
-								<td class="right"><?= $entry_reward; ?></td>
+								<td class="left"><?= _l("Customer Group:"); ?></td>
+								<td class="right"><?= _l("Reward Points:"); ?></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -607,9 +622,9 @@
 				<table class="list">
 					<thead>
 					<tr>
-						<td class="left"><?= $entry_store; ?></td>
-						<td class="left"><?= $entry_layout; ?></td>
-						<td class="left"><?= $entry_template; ?></td>
+						<td class="left"><?= _l("Stores:"); ?></td>
+						<td class="left"><?= _l("Layout Override:"); ?></td>
+						<td class="left"><?= _l("Template Override:"); ?></td>
 					</tr>
 					</thead>
 					<tbody>

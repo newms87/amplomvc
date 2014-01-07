@@ -4,74 +4,74 @@
 
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
 			</div>
 			<div class="section">
 				<div class="overview">
-					<div class="dashboard-heading"><?= $text_overview; ?></div>
+					<div class="dashboard-heading"><?= _l("Overview"); ?></div>
 					<div class="dashboard-content">
 						<table>
 							<tr>
-								<td><?= $text_total_sale; ?></td>
+								<td><?= _l("Total Sales:"); ?></td>
 								<td><?= $total_sale; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_sale_year; ?></td>
+								<td><?= _l("Total Sales This Year:"); ?></td>
 								<td><?= $total_sale_year; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_order; ?></td>
+								<td><?= _l("Total Orders:"); ?></td>
 								<td><?= $total_order; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_customer; ?></td>
+								<td><?= _l("No. of Customers:"); ?></td>
 								<td><?= $total_customer; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_customer_approval; ?></td>
+								<td><?= _l("Customers Awaiting Approval:"); ?></td>
 								<td><?= $total_customer_approval; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_review_approval; ?></td>
+								<td><?= _l("Reviews Awaiting Approval:"); ?></td>
 								<td><?= $total_review_approval; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_affiliate; ?></td>
+								<td><?= _l("No. of Affiliates:"); ?></td>
 								<td><?= $total_affiliate; ?></td>
 							</tr>
 							<tr>
-								<td><?= $text_total_affiliate_approval; ?></td>
+								<td><?= _l("Affiliates Awaiting Approval:"); ?></td>
 								<td><?= $total_affiliate_approval; ?></td>
 							</tr>
 						</table>
 					</div>
 				</div>
 				<div class="statistic">
-					<div class="range"><?= $entry_range; ?>
+					<div class="range"><?= _l("Select Range:"); ?>
 						<select id="range" onchange="getSalesChart(this.value)">
-							<option value="day"><?= $text_day; ?></option>
-							<option value="week"><?= $text_week; ?></option>
-							<option value="month"><?= $text_month; ?></option>
-							<option value="year"><?= $text_year; ?></option>
+							<option value="day"><?= _l("Today"); ?></option>
+							<option value="week"><?= _l("This Week"); ?></option>
+							<option value="month"><?= _l("This Month"); ?></option>
+							<option value="year"><?= _l("This Year"); ?></option>
 						</select>
 					</div>
-					<div class="dashboard-heading"><?= $text_statistics; ?></div>
+					<div class="dashboard-heading"><?= _l("Statistics"); ?></div>
 					<div class="dashboard-content">
 						<div id="report" style="width: 390px; height: 170px; margin: auto;"></div>
 					</div>
 				</div>
 				<div class="latest">
-					<div class="dashboard-heading"><?= $text_latest_10_orders; ?></div>
+					<div class="dashboard-heading"><?= _l("Latest 10 Orders"); ?></div>
 					<div class="dashboard-content">
 						<table class="list">
 							<thead>
 							<tr>
-								<td class="right"><?= $column_order; ?></td>
-								<td class="left"><?= $column_customer; ?></td>
-								<td class="left"><?= $column_status; ?></td>
-								<td class="left"><?= $column_date_added; ?></td>
-								<td class="right"><?= $column_total; ?></td>
-								<td class="right"><?= $column_action; ?></td>
+								<td class="right"><?= _l("Order ID"); ?></td>
+								<td class="left"><?= _l("Customer"); ?></td>
+								<td class="left"><?= _l("Status"); ?></td>
+								<td class="left"><?= _l("Date Added"); ?></td>
+								<td class="right"><?= _l("Total"); ?></td>
+								<td class="right"><?= _l("Action"); ?></td>
 							</tr>
 							</thead>
 							<tbody>
@@ -91,7 +91,7 @@
 								<? } ?>
 							<? } else { ?>
 								<tr>
-									<td class="center" colspan="6"><?= $text_no_results; ?></td>
+									<td class="center" colspan="6"><?= _l("No results!"); ?></td>
 								</tr>
 							<? } ?>
 							</tbody>

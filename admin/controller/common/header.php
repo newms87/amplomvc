@@ -58,9 +58,7 @@ class Admin_Controller_Common_Header extends Controller
 
 			$this->data['logged'] = $this->_('text_logged', $this->user->info('username'));
 
-			$menu_items = array();
-
-			$this->_('support', $this->config->get('config_email_support'));
+			$this->data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
 
 			$this->data['store'] = SITE_URL;
 

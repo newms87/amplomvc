@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Plugins"); ?></h1>
 		</div>
 		<div class="section">
 			<div class="limits">
@@ -22,7 +22,7 @@
 $('.action-uninstall').click(function(){
 	keep_data = 0;
 
-	if(confirm("<?= $text_keep_data; ?>")){
+	if(confirm("<?= _l("Do you want to keep the data associated with this plugin?"); ?>")){
 		keep_data = 1;
 	}
 

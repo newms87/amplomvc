@@ -6,28 +6,28 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'feed.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'feed.png'; ?>" alt=""/> <?= _l("Google Sitemap"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><select name="google_sitemap_status">
 									<? if ($google_sitemap_status) { ?>
-										<option value="1" selected="selected"><?= $text_enabled; ?></option>
-										<option value="0"><?= $text_disabled; ?></option>
+										<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
+										<option value="0"><?= _l("Disabled"); ?></option>
 									<? } else { ?>
-										<option value="1"><?= $text_enabled; ?></option>
-										<option value="0" selected="selected"><?= $text_disabled; ?></option>
+										<option value="1"><?= _l("Enabled"); ?></option>
+										<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_data_feed; ?></td>
+							<td><?= _l("Data Feed Url:"); ?></td>
 							<td><textarea cols="40" rows="5"><?= $data_feed; ?></textarea></td>
 						</tr>
 					</table>

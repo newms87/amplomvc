@@ -71,7 +71,7 @@
 							</tr>
 							<tr>
 								<td><?= _l("Status:"); ?></td>
-								<td><?= $this->builder->build('select', $statuses, 'status', (int)$status); ?></td>
+								<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 							</tr>
 						</table>
 					</div>

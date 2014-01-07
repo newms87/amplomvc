@@ -18,6 +18,23 @@ class Admin_Controller_Includes_Contact extends Controller
 			$this->data['contact_info'] = array();
 		}
 
+
+		$_['phone_types']   = array(
+			'cell'    => "Cell Phone",
+			'primary' => "Primary",
+			"fax"     => "Fax"
+		);
+		$_['contact_types'] = array(
+			'primary'          => "Primary",
+			"customer_service" => "Customer Service",
+			"finance"          => "Finance",
+			"shipping"         => "Shipping",
+			"returns"          => "Returns",
+			"vendor"           => "Vendor",
+			"legal"            => "Legal"
+		);
+
+
 		//set default to USA
 		$this->data['default_country'] = 223;
 		$this->data['countries']       = array();

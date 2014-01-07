@@ -71,6 +71,13 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 		$this->data['return_policies'] = $return_policies;
 
+		//Additional Data
+		$_['data_days'] = array(
+			'final' => _l("Final Sale"),
+			0       => _l("Return Anytime"),
+			1       => _l("Days:"),
+		);
+
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/return_policy');
 		$this->data['cancel'] = $this->url->link('setting/store');

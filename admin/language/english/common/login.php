@@ -6,7 +6,6 @@ $_['head_title'] = 'Administration';
 $_['text_heading']   = 'Administration';
 $_['text_login']     = 'Please enter your login details.';
 $_['text_forgotten'] = 'Forgotten Password';
-$_['text_lost']      = 'Not sure how you got here? Please <a href="%s">return to the shop!</a>';
 
 // Entry
 $_['entry_username'] = 'Username:';

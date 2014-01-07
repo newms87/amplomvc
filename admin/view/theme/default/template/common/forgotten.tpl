@@ -5,20 +5,20 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Forgot Your Password?"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#forgotten').submit();" class="button"><?= $button_reset; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#forgotten').submit();" class="button"><?= _l("Reset"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="forgotten">
-				<p><?= $text_email; ?></p>
+				<p><?= _l("Enter the e-mail address associated with your account. Click submit to have a password reset link e-mailed to you."); ?></p>
 				<table class="form">
 					<tr>
-						<td><?= $entry_email; ?></td>
+						<td><?= _l("E-Mail Address:"); ?></td>
 						<td><input type="text" name="email" value="<?= $email; ?>"/></td>
 					</tr>
 				</table>

@@ -445,7 +445,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 
 		//Load Information
-		if ($product_id && !$this->request->isPost()) {
+		$product_info = array();
+
+		if ($this->request->isPost()) {
+			$product_info = $_POST;
+		} elseif ($product_id) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 			$product_info['product_stores']     = $this->Model_Catalog_Product->getProductStores($product_id);
@@ -520,15 +524,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_templates'  => array(),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($product_info[$key])) {
-				$this->data[$key] = $product_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $product_info + $defaults;
 
 		//TODO: Make tags into a list of tag inputs (with js)
 		if (is_string($this->data['product_tags'])) {
@@ -562,10 +558,10 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
 
-		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
-		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
-		$this->_('text_option_help', $this->config->get('config_email'));
-		$this->_('text_not_editable', $this->data['name'], $this->config->get('config_email'));
+		$this->data['text_add_shipping_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
+		$this->data['text_add_return_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
+
+		$this->data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
 
 		//TODO: do we really need ths here?
 		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));

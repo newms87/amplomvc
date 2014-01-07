@@ -9,14 +9,14 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Modules"); ?></h1>
 			</div>
 			<div class="section">
 				<table class="list">
 					<thead>
 					<tr>
-						<td class="left"><?= $column_name; ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="left"><?= _l("Module Name"); ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -31,7 +31,7 @@
 						<? } ?>
 					<? } else { ?>
 						<tr>
-							<td class="center" colspan="8"><?= $text_no_results; ?></td>
+							<td class="center" colspan="8"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
 					</tbody>

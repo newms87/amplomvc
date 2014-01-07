@@ -70,6 +70,13 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		$this->data['shipping_policies'] = $shipping_policies;
 
+		//Additional data
+		$_['data_days'] = array(
+			'final' => _l("Final Sale"),
+			0       => _l("Shipping Anytime"),
+			1       => _l("Days:"),
+		);
+
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/shipping_policy');
 		$this->data['cancel'] = $this->url->link('setting/store');

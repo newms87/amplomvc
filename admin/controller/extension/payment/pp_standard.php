@@ -38,6 +38,11 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 		//Additional Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 
+		$_['data_auth_sale'] = array(
+			0 => _l("Authorization"),
+			1 => _l("Sale"),
+		);
+
 		//Template
 		$this->template->load('extension/payment/pp_standard');
 

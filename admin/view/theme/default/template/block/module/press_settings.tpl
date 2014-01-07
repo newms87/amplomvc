@@ -1,8 +1,8 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_press_items; ?>
-			<a class="add_press_item"><?= $button_add_press_item; ?></a>
+			<?= _l("Articles:"); ?>
+			<a class="add_press_item"><?= _l("New Article"); ?></a>
 		</td>
 		<td>
 			<ul id="press_list" count="<?= count($press_items); ?>">
@@ -20,17 +20,17 @@
 					<? $row = ($key === 'template_row') ? '%press_id%' : $press_id++; ?>
 					<li class="press_item <?= $key; ?>" press_id="<?= $row; ?>">
 						<div class="press_info">
-							<label class="description"><?= $entry_press_description; ?></label>
+							<label class="description"><?= _l("Title:"); ?></label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][description]" value="<?= $press['description']; ?>"/><br/>
-							<label class="author"><?= $entry_press_author; ?></label>
+							<label class="author"><?= _l("Author:"); ?></label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][author]" value="<?= $press['author']; ?>"/><br/>
-							<label class="date"><?= $entry_press_date; ?></label>
+							<label class="date"><?= _l("Date:"); ?></label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][date]" value="<?= $press['date']; ?>"/><br/>
-							<label class="href"><?= $entry_press_href; ?></label>
+							<label class="href"><?= _l("Article URL:"); ?></label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][href]" value="<?= $press['href']; ?>"/>
 						</div>
 						<div class="press_images">
-							<a class="add_image_item"><?= $button_add_image; ?></a>
+							<a class="add_image_item"><?= _l("Add Image"); ?></a>
 
 							<div class="press_image_list"
 							     count="<?= !empty($press['images']) ? count($press['images']) : 0; ?>">
@@ -48,7 +48,7 @@
 											<?= $this->builder->imageInput("settings[press_items][$row][images][$image_row]", $image); ?>
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
-											   class="delete"><?= $button_remove; ?></a>
+											   class="delete"><?= _l("Remove"); ?></a>
 										</div>
 									<? } ?>
 								<? } ?>
@@ -63,7 +63,7 @@
 					</li>
 				<? } ?>
 			</ul>
-			<a class="button add_press_item"><?= $button_add_press_item; ?></a>
+			<a class="button add_press_item"><?= _l("New Article"); ?></a>
 		</td>
 	</tr>
 </table>

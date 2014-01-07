@@ -24,6 +24,11 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_braintree_plans'] = $this->System_Extension_Payment->get('braintree')->getPlans();
 
+		$_['data_modes'] = array(
+			'sandbox' => _l("Test Mode"),
+			'live'    => _l("Live Mode"),
+		);
+
 		//Template
 		$this->template->load('extension/payment/braintree');
 

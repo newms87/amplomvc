@@ -3,23 +3,23 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Flashsales Viewed Report"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= $button_reset; ?></a>
+				<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= _l("Reset"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<table class="list">
 					<thead>
 					<tr>
-						<td class="left"><?= $column_name; ?></td>
-						<td class="left"><?= $column_date_start; ?></td>
-						<td class="left"><?= $column_date_end; ?></td>
-						<td class="right"><?= $column_viewed; ?></td>
-						<td class="right"><?= $column_ip_views; ?></td>
-						<td class="right"><?= $column_user_views; ?></td>
-						<td class="right"><?= $column_ip_user_views; ?></td>
-						<td class="right"><?= $column_percent; ?></td>
+						<td class="left"><?= _l("Flashsale Title"); ?></td>
+						<td class="left"><?= _l("Flashsale Start Date"); ?></td>
+						<td class="left"><?= _l("Flashsale End Date"); ?></td>
+						<td class="right"><?= _l("Viewed"); ?></td>
+						<td class="right"><?= _l("Unique Users (By IP Address)"); ?></td>
+						<td class="right"><?= _l("Unique Users (By session and ID)"); ?></td>
+						<td class="right"><?= _l("Unique Users (By session, ID, and IP)"); ?></td>
+						<td class="right"><?= _l("Percent"); ?></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -38,7 +38,7 @@
 						<? } ?>
 					<? } else { ?>
 						<tr>
-							<td class="center" colspan="4"><?= $text_no_results; ?></td>
+							<td class="center" colspan="4"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
 					</tbody>

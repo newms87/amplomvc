@@ -47,7 +47,16 @@ class PrettyLanguage
 		unset($default_lang['data_yes_no_blank']);
 		unset($default_lang['data_no_yes_blank']);
 
+		$ignored_files = array(
+			'C:/xampp/htdocs/realmeal/admin/language/english/help/documentation.php',
+		);
+
 		foreach ($files as $file) {
+
+			if (in_array(str_replace('\\','/',$file), $ignored_files)) {
+				continue;
+			}
+
 			$_ = array();
 			require($file);
 
@@ -81,7 +90,7 @@ class PrettyLanguage
 				if (preg_match_all($regx, $line, $matches)) {
 
 					foreach ($matches[1] as $key => $match) {
-						if (!is_string($_[$match]) || strpos($_[$match], '%s') !== false || strpos($_[$match], '%d') !== false) {
+						if (!is_string($_[$match]) || strpos($_[$match], '%') !== false) {
 							$missed[$num+1] = $line;
 						} else {
 							$line = str_replace('$'.$match, '_l("' . addslashes($_[$match]) . '")', $line);
@@ -103,11 +112,19 @@ class PrettyLanguage
 			}
 
 			if (!empty($missed)) {
-				echo "<BR><BR>MISSED " . count($missed) . " lines!<BR><BR>";
+				html_dump($_,'langdata');
+				echo "<BR><BR>MISSED " . count($missed) . " lines! $tpl<BR><BR>";
 				foreach ($missed as $l => $miss) {
 					$this->pl($l, $miss);
 				}
 				exit;
+			}
+
+			if (!empty($ignored)) {
+				echo "<div style=\"color:red\">ignored " . count($ignored) . ' lines in ' . $tpl . "</div>";
+			}
+			else {
+				echo "<div style=\"color:grey\">nothing to do $tpl</div>";
 			}
 		}
 	}

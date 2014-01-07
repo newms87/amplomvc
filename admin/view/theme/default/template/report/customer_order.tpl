@@ -3,20 +3,20 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Orders Report"); ?></h1>
 			</div>
 			<div class="section">
 				<table class="form">
 					<tr>
-						<td><?= $entry_date_start; ?>
+						<td><?= _l("Date Start:"); ?>
 							<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" id="date-start"
 							       size="12"/></td>
-						<td><?= $entry_date_end; ?>
+						<td><?= _l("Date End:"); ?>
 							<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" id="date-end"
 							       size="12"/></td>
-						<td><?= $entry_status; ?>
+						<td><?= _l("Order Status:"); ?>
 							<select name="filter_order_status_id">
-								<option value="0"><?= $text_all_status; ?></option>
+								<option value="0"><?= _l("All Statuses"); ?></option>
 								<? foreach ($order_statuses as $order_status) { ?>
 									<? if ($order_status['order_status_id'] == $filter_order_status_id) { ?>
 										<option value="<?= $order_status['order_status_id']; ?>"
@@ -26,20 +26,20 @@
 									<? } ?>
 								<? } ?>
 							</select></td>
-						<td style="text-align: right;"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
+						<td style="text-align: right;"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
 					</tr>
 				</table>
 				<table class="list">
 					<thead>
 					<tr>
-						<td class="left"><?= $column_customer; ?></td>
-						<td class="left"><?= $column_email; ?></td>
-						<td class="left"><?= $column_customer_group; ?></td>
-						<td class="left"><?= $column_status; ?></td>
-						<td class="right"><?= $column_orders; ?></td>
-						<td class="right"><?= $column_products; ?></td>
-						<td class="right"><?= $column_total; ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="left"><?= _l("Customer Name"); ?></td>
+						<td class="left"><?= _l("E-Mail"); ?></td>
+						<td class="left"><?= _l("Customer Group"); ?></td>
+						<td class="left"><?= _l("Status"); ?></td>
+						<td class="right"><?= _l("No. Orders"); ?></td>
+						<td class="right"><?= _l("No. Products"); ?></td>
+						<td class="right"><?= _l("Total"); ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -60,7 +60,7 @@
 						<? } ?>
 					<? } else { ?>
 						<tr>
-							<td class="center" colspan="8"><?= $text_no_results; ?></td>
+							<td class="center" colspan="8"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
 					</tbody>
