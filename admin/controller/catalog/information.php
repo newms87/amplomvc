@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			$this->Model_Catalog_Information->addInformation($_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information');
 			}
@@ -33,7 +33,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information');
 			}
@@ -50,7 +50,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			$this->Model_Catalog_Information->copyInformation($_GET['information_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
@@ -67,7 +67,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			$this->Model_Catalog_Information->deleteInformation($_GET['information_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
@@ -105,7 +105,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('action'));
 			}
@@ -117,28 +117,28 @@ class Admin_Controller_Catalog_Information extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Information"));
 
 		//The Template
 		$this->template->load('catalog/information_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/information'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Information"), $this->url->link('catalog/information'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_title'),
+			'display_name' => _l("Information Title"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Stores"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -205,10 +205,10 @@ class Admin_Controller_Catalog_Information extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -244,16 +244,16 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	private function getForm()
 	{
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Information"));
 
 		$this->template->load('catalog/information_form');
 
 		$information_id = !empty($_GET['information_id']) ? $_GET['information_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_information_list'), $this->url->link('catalog/information'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/information', 'information_id=' . $information_id));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Information Pages"), $this->url->link('catalog/information'));
+		$this->breadcrumb->add(_l("Information"), $this->url->link('catalog/information', 'information_id=' . $information_id));
 
 		//Saved Data
 		if ($information_id && !$this->request->isPost()) {
@@ -285,7 +285,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		//Data Lists
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts'] = array('' => $this->_('text_none')) + $this->Model_Design_Layout->getLayouts();
+		$this->data['data_layouts'] = array('' => _l(" --- None --- ")) + $this->Model_Design_Layout->getLayouts();
 
 		$this->data['data_statuses'] = array(
 			0 => _l("Disabled"),
@@ -321,15 +321,15 @@ class Admin_Controller_Catalog_Information extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/information')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify information!");
 		}
 
 		if (!$this->validation->text($_POST['title'], 3, 128)) {
-			$this->error['title'] = $this->_('error_title');
+			$this->error['title'] = _l("Information Title must be between 3 and 128 characters!");
 		}
 
 		if (!$this->validation->text($_POST['description'], 3)) {
-			$this->error['description'] = $this->_('error_description');
+			$this->error['description'] = _l("Description must be more than 3 characters!");
 		}
 
 		if (!empty($_POST['translations'])) {
@@ -340,11 +340,11 @@ class Admin_Controller_Catalog_Information extends Controller
 					} //blank translations will revert to Default language
 
 					if ($field === 'title' && !$this->validation->text($text, 3, 128)) {
-						$this->error["translations[$field][$language_id]"] = $this->_('error_title_language', $this->language->getInfo('name', $language_id));
+						$this->error["translations[$field][$language_id]"] = _l("Information Title must be between 3 and 128 characters for the language %s!", $this->language->getInfo('name', $language_id));
 					}
 
 					if ($field === 'description' && !$this->validation->text($text, 3)) {
-						$this->error["translations[$field][$language_id]"] = $this->_('error_description_language', $this->language->getInfo('name', $language_id));
+						$this->error["translations[$field][$language_id]"] = _l("Description must be more than 3 characters for the language %s!", $this->language->getInfo('name', $language_id));
 					}
 				}
 			}
@@ -356,7 +356,7 @@ class Admin_Controller_Catalog_Information extends Controller
 	private function validateCopy()
 	{
 		if (!$this->user->can('modify', 'catalog/information')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify information!");
 		}
 
 		return $this->error ? false : true;
@@ -365,7 +365,7 @@ class Admin_Controller_Catalog_Information extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/information')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify information!");
 		}
 
 		$informations_ids = array();
@@ -378,21 +378,21 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		foreach ($information_ids as $information_id) {
 			if ($this->config->get('config_account_terms_info_id') == $information_id) {
-				$this->error['warning' . $information_id] = $this->_('error_account');
+				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store account terms!");
 			}
 
 			if ($this->config->get('config_checkout_terms_info_id') == $information_id) {
-				$this->error['warning' . $information_id] = $this->_('error_checkout');
+				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store checkout terms!");
 			}
 
 			if ($this->config->get('config_affiliate_terms_info_id') == $information_id) {
-				$this->error['warning' . $information_id] = $this->_('error_affiliate');
+				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store affiliate terms!");
 			}
 
 			$store_total = $this->Model_Setting_Store->getTotalStoresByInformationId($information_id);
 
 			if ($store_total) {
-				$this->error['warning' . $information_id] = sprintf($this->_('error_store'), $store_total);
+				$this->error['warning' . $information_id] = sprintf(_l("Warning: This information page cannot be deleted as its currently used by %s stores!"), $store_total);
 			}
 		}
 

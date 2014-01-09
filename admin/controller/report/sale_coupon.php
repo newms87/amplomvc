@@ -7,7 +7,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 
 		$this->language->load('report/sale_coupon');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Coupon Report"));
 
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -41,8 +41,8 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_coupon', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Coupon Report"), $this->url->link('report/sale_coupon', $url));
 
 		$this->data['coupons'] = array();
 

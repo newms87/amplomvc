@@ -9,9 +9,9 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Zones"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -22,21 +22,21 @@
 							</td>
 							<td class="left"><? if ($sort == 'c.name') { ?>
 									<a href="<?= $sort_country; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_country; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Country"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_country; ?>"><?= $column_country; ?></a>
+									<a href="<?= $sort_country; ?>"><?= _l("Country"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'z.name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Zone Name"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>"><?= _l("Zone Name"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'z.code') { ?>
-									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= $column_code; ?></a>
+									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= _l("Zone Code"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_code; ?>"><?= $column_code; ?></a>
+									<a href="<?= $sort_code; ?>"><?= _l("Zone Code"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

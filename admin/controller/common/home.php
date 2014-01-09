@@ -6,9 +6,9 @@ class Admin_Controller_Common_Home extends Controller
 		$this->template->load('common/home');
 		$this->language->load('common/home');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Dashboard"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 
 		$this->data['total_sale']      = $this->currency->format($this->System_Model_Order->getGrossSales(), $this->config->get('config_currency'));
 		$this->data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), $this->config->get('config_currency'));
@@ -85,8 +85,8 @@ class Admin_Controller_Common_Home extends Controller
 		$data['customer'] = array();
 		$data['xaxis']    = array();
 
-		$data['order']['label']    = $this->_('text_order');
-		$data['customer']['label'] = $this->_('text_customer');
+		$data['order']['label']    = _l("Total Orders");
+		$data['customer']['label'] = _l("Total Customers");
 
 		if (isset($_GET['range'])) {
 			$range = $_GET['range'];

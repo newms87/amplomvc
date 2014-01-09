@@ -10,7 +10,7 @@ class Admin_Controller_Tool_Backup extends Controller
 
 		$this->language->load('tool/backup');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Backup / Restore"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (is_uploaded_file($_FILES['import']['tmp_name'])) {
@@ -22,11 +22,11 @@ class Admin_Controller_Tool_Backup extends Controller
 			if ($content) {
 				$this->Model_Tool_Backup->restore($content);
 
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have successfully imported your database!"));
 
 				$this->url->redirect('tool/backup');
 			} else {
-				$this->error['warning'] = $this->_('error_empty');
+				$this->error['warning'] = _l("Warning: The file you uploaded was empty!");
 			}
 		}
 
@@ -44,8 +44,8 @@ class Admin_Controller_Tool_Backup extends Controller
 			$this->data['success'] = '';
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/backup'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Backup / Restore"), $this->url->link('tool/backup'));
 
 		$this->data['restore'] = $this->url->link('tool/backup');
 
@@ -83,7 +83,7 @@ class Admin_Controller_Tool_Backup extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'tool/backup')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify backups!");
 		}
 
 		return $this->error ? false : true;

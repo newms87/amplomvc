@@ -7,10 +7,10 @@ class Admin_Controller_Extension_Feed extends Controller
 
 		$this->language->load('extension/feed');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Feeds"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/feed'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Feeds"), $this->url->link('extension/feed'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
@@ -52,7 +52,7 @@ class Admin_Controller_Extension_Feed extends Controller
 
 				if (!in_array($extension, $extensions)) {
 					$action[] = array(
-						'text' => $this->_('text_install'),
+						'text' => _l("Install"),
 						'href' => $this->url->link('extension/feed/install', 'extension=' . $extension)
 					);
 				} else {
@@ -62,14 +62,14 @@ class Admin_Controller_Extension_Feed extends Controller
 					);
 
 					$action[] = array(
-						'text' => $this->_('text_uninstall'),
+						'text' => _l("Uninstall"),
 						'href' => $this->url->link('extension/feed/uninstall', 'extension=' . $extension)
 					);
 				}
 
 				$this->data['extensions'][] = array(
-					'name'   => $this->_('head_title'),
-					'status' => $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
+					'name'   => _l("Product Feeds"),
+					'status' => $this->config->get($extension . '_status') ? _l("Enabled") : _l("Disabled"),
 					'action' => $action
 				);
 			}
@@ -86,7 +86,7 @@ class Admin_Controller_Extension_Feed extends Controller
 	public function install()
 	{
 		if (!$this->user->can('modify', 'extension/feed')) {
-			$this->session->set('error', $this->_('error_permission'));
+			$this->session->set('error', _l("Warning: You do not have permission to modify feeds!"));
 
 			$this->url->redirect('extension/feed');
 		} else {
@@ -111,7 +111,7 @@ class Admin_Controller_Extension_Feed extends Controller
 	public function uninstall()
 	{
 		if (!$this->user->can('modify', 'extension/feed')) {
-			$this->session->set('error', $this->_('error_permission'));
+			$this->session->set('error', _l("Warning: You do not have permission to modify feeds!"));
 
 			$this->url->redirect('extension/feed');
 		} else {

@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Reviews"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Reviews"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->addReview($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified reviews!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Reviews"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified reviews!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Reviews"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $review_id) {
 				$this->Model_Catalog_Review->deleteReview($review_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified reviews!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/review', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Reviews"), $this->url->link('catalog/review', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/review/insert', $url);
 		$this->data['delete'] = $this->url->link('catalog/review/delete', $url);
@@ -175,7 +175,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				'name'       => $result['name'],
 				'author'     => $result['author'],
 				'rating'     => $result['rating'],
-				'status'     => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'status'     => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'selected'   => isset($_GET['selected']) && in_array($result['review_id'], $_GET['selected']),
 				'action'     => $action
@@ -287,8 +287,8 @@ class Admin_Controller_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/review', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Reviews"), $this->url->link('catalog/review', $url));
 
 		if (!isset($_GET['review_id'])) {
 			$this->data['action'] = $this->url->link('catalog/review/insert', $url);
@@ -365,23 +365,23 @@ class Admin_Controller_Catalog_Review extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/review')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify reviews!");
 		}
 
 		if (!$_POST['product_id']) {
-			$this->error['product'] = $this->_('error_product');
+			$this->error['product'] = _l("Product required!");
 		}
 
 		if ((strlen($_POST['author']) < 3) || (strlen($_POST['author']) > 64)) {
-			$this->error['author'] = $this->_('error_author');
+			$this->error['author'] = _l("Author must be between 3 and 64 characters!");
 		}
 
 		if (strlen($_POST['text']) < 1) {
-			$this->error['text'] = $this->_('error_text');
+			$this->error['text'] = _l("Review Text must be at least 1 character!");
 		}
 
 		if (!isset($_POST['rating'])) {
-			$this->error['rating'] = $this->_('error_rating');
+			$this->error['rating'] = _l("Review rating required!");
 		}
 
 		return $this->error ? false : true;
@@ -390,7 +390,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/review')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify reviews!");
 		}
 
 		return $this->error ? false : true;

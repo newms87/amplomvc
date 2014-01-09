@@ -9,9 +9,9 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= _l("Currency"); ?></h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,27 +21,27 @@
 						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
 						<td class="left"><? if ($sort == 'title') { ?>
-								<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= $column_title; ?></a>
+								<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= _l("Currency Title"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_title; ?>"><?= $column_title; ?></a>
+								<a href="<?= $sort_title; ?>"><?= _l("Currency Title"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'code') { ?>
-								<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= $column_code; ?></a>
+								<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= _l("Code"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_code; ?>"><?= $column_code; ?></a>
+								<a href="<?= $sort_code; ?>"><?= _l("Code"); ?></a>
 							<? } ?></td>
 						<td class="right"><? if ($sort == 'value') { ?>
-								<a href="<?= $sort_value; ?>" class="<?= strtolower($order); ?>"><?= $column_value; ?></a>
+								<a href="<?= $sort_value; ?>" class="<?= strtolower($order); ?>"><?= _l("Value"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_value; ?>"><?= $column_value; ?></a>
+								<a href="<?= $sort_value; ?>"><?= _l("Value"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'date_modified') { ?>
 								<a href="<?= $sort_date_modified; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_date_modified; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Last Updated"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_date_modified; ?>"><?= $column_date_modified; ?></a>
+								<a href="<?= $sort_date_modified; ?>"><?= _l("Last Updated"); ?></a>
 							<? } ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>

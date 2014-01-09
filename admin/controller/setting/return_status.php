@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		$this->language->load('setting/return_status');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Return Statuses"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/return_status'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Return Statuses"), $this->url->link('setting/return_status'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -23,7 +23,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 			$this->config->save('product_return', 'return_statuses', $return_statuses, 0, false);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Return Statuses"));
 				$this->url->redirect('setting/setting');
 			}
 		}
@@ -59,7 +59,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 
 		//Add in the template row
 		$return_statuses['__ac_template__'] = array(
-			'title' => $this->_('entry_title'),
+			'title' => _l("Status Title"),
 		);
 
 		//Get the Field Translations
@@ -96,7 +96,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 
 		foreach ($_POST['return_statuses'] as $key => $return_status) {
 			if (!$this->validation->text($return_status['title'], 3, 64)) {
-				$this->error["return_statuses[$key][title]"] = $this->_('error_return_status_title');
+				$this->error["return_statuses[$key][title]"] = _l("The Title must be between 3 and 64 characters!");
 			}
 		}
 
@@ -117,7 +117,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 				}
 
 				if ($return_total) {
-					$this->error["return_statuses[$return_status_id][title]"] = $this->_('error_return_status', $return_status['title']);
+					$this->error["return_statuses[$return_status_id][title]"] = _l("You cannot delete the Return Status %s because it is associated to a return!", $return_status['title']);
 
 					//Add the Return status back into the list
 					$_POST['return_statuses'][$return_status_id] = $return_statuses[$return_status_id];

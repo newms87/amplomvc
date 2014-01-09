@@ -9,9 +9,9 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Geo Zones"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,17 +21,17 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Geo Zone Name"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>"><?= _l("Geo Zone Name"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'description') { ?>
 									<a href="<?= $sort_description; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_description; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Description"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_description; ?>"><?= $column_description; ?></a>
+									<a href="<?= $sort_description; ?>"><?= _l("Description"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

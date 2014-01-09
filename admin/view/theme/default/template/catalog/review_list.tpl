@@ -3,9 +3,9 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= _l("Reviews"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -16,32 +16,32 @@
 							</td>
 							<td class="left"><? if ($sort == 'pd.name') { ?>
 									<a href="<?= $sort_product; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_product; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Product"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_product; ?>"><?= $column_product; ?></a>
+									<a href="<?= $sort_product; ?>"><?= _l("Product"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'r.author') { ?>
-									<a href="<?= $sort_author; ?>" class="<?= strtolower($order); ?>"><?= $column_author; ?></a>
+									<a href="<?= $sort_author; ?>" class="<?= strtolower($order); ?>"><?= _l("Author"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_author; ?>"><?= $column_author; ?></a>
+									<a href="<?= $sort_author; ?>"><?= _l("Author"); ?></a>
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'r.rating') { ?>
-									<a href="<?= $sort_rating; ?>" class="<?= strtolower($order); ?>"><?= $column_rating; ?></a>
+									<a href="<?= $sort_rating; ?>" class="<?= strtolower($order); ?>"><?= _l("Rating"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_rating; ?>"><?= $column_rating; ?></a>
+									<a href="<?= $sort_rating; ?>"><?= _l("Rating"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'r.status') { ?>
-									<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= $column_status; ?></a>
+									<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= _l("Status"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_status; ?>"><?= $column_status; ?></a>
+									<a href="<?= $sort_status; ?>"><?= _l("Status"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'r.date_added') { ?>
 									<a href="<?= $sort_date_added; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_date_added; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Date Added"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_date_added; ?>"><?= $column_date_added; ?></a>
+									<a href="<?= $sort_date_added; ?>"><?= _l("Date Added"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

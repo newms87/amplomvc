@@ -22,7 +22,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
 				$this->url->redirect('setting/url_alias');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
 				$this->url->redirect('setting/url_alias');
 			}
@@ -74,7 +74,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 			}
 		}
 
@@ -84,42 +84,42 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("URL Aliases"));
 
 		//Template
 		$this->template->load('setting/url_alias_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['alias'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_alias'),
+			'display_name' => _l("URL Alias:"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['path'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_path'),
+			'display_name' => _l("Path:"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['query'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_query'),
+			'display_name' => _l("Query:"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['store_id'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Store:"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -131,7 +131,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status:"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -180,10 +180,10 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'delete'  => array(
 				'label' => $this->_('text_delete'),
@@ -218,7 +218,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	public function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("URL Aliases"));
 
 		//Template
 		$this->template->load('setting/url_alias_form');
@@ -227,8 +227,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
 
 		if (!$url_alias_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('setting/url_alias/udpate'));
@@ -264,7 +264,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		//Additional Data
 		$this->data['data_stores'] = array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores());
 
-		$_['data_non_stores'] = array(
+		$this->data['data_non_stores'] = array(
 			array(
 				'store_id' => '-1',
 				'name'     => _l("Admin Panel"),
@@ -297,7 +297,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'setting/url_alias')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 
 		if (empty($_POST['alias'])) {
@@ -310,7 +310,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'setting/url_alias')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 
 		return $this->error ? false : true;

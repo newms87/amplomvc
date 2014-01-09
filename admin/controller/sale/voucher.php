@@ -22,7 +22,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$this->Model_Sale_Voucher->deleteVoucher($_GET['voucher_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher');
 			}
@@ -77,7 +77,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher', $this->url->getQueryExclude('action'));
 			}
@@ -89,63 +89,63 @@ class Admin_Controller_Sale_Voucher extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Gift Voucher"));
 
 		//The Template
 		$this->template->load('sale/voucher_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_voucher_list'), $this->url->link('sale/voucher'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Voucher List"), $this->url->link('sale/voucher'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['code'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_code'),
+			'display_name' => _l("Code"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['to_name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_to'),
+			'display_name' => _l("To"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['from_name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_from'),
+			'display_name' => _l("From"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['theme'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_theme'),
+			'display_name' => _l("Theme"),
 			'filter'       => false,
 			'sortable'     => true,
 		);
 
 		$columns['amount'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_amount'),
+			'display_name' => _l("Amount"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['date_added'] = array(
 			'type'         => 'date',
-			'display_name' => $this->_('column_date_added'),
+			'display_name' => _l("Date Added"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -197,10 +197,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable'),
+				'label' => _l("Enable"),
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -237,7 +237,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Gift Voucher"));
 
 		//The Template
 		$this->template->load('sale/voucher_form');
@@ -246,8 +246,8 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('sale/voucher'));
 
 		if ($voucher_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id));
@@ -314,11 +314,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/voucher')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify vouchers!");
 		}
 
 		if (!$this->validation->text($_POST['code'], 3, 32)) {
-			$this->error['code'] = $this->_('error_code');
+			$this->error['code'] = _l("Code must be between 3 and 32 characters!");
 		}
 
 		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
@@ -326,27 +326,27 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$voucher_exists = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_id != $voucher_id AND code = '" . $this->db->escape($_POST['code']) . "'");
 
 		if ($voucher_exists) {
-			$this->error['code'] = $this->_('error_exists');
+			$this->error['code'] = _l("Warning: Voucher code is already in use!");
 		}
 
 		if (!$this->validation->text($_POST['to_name'], 1, 64)) {
-			$this->error['to_name'] = $this->_('error_to_name');
+			$this->error['to_name'] = _l("Recipient's Name must be between 1 and 64 characters!");
 		}
 
 		if (!$this->validation->email($_POST['to_email'])) {
-			$this->error['to_email'] = $this->_('error_email');
+			$this->error['to_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->text($_POST['from_name'], 1, 64)) {
-			$this->error['from_name'] = $this->_('error_from_name');
+			$this->error['from_name'] = _l("Your Name must be between 1 and 64 characters!");
 		}
 
 		if (!$this->validation->email($_POST['from_email'])) {
-			$this->error['from_email'] = $this->_('error_email');
+			$this->error['from_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if ((int)$_POST['amount'] < 1) {
-			$this->error['amount'] = $this->_('error_amount');
+			$this->error['amount'] = _l("Amount must be greater than or equal to 1!");
 		}
 
 		return $this->error ? false : true;
@@ -355,7 +355,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/voucher')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify vouchers!");
 		}
 
 		if (!empty($_GET['selected'])) {
@@ -372,7 +372,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$order_id = $this->db->queryVar("SELECT order_id FROM " . DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$voucher_id);
 
 			if ($order_id) {
-				$this->error['warning'] = $this->_('error_order', $this->url->link('sale/order/info', 'order_id=' . (int)$order_id));
+				$this->error['warning'] = _l("Warning: This voucher cannot be deleted as it is part of an <a href=\"%s\">order</a>!", $this->url->link('sale/order/info', 'order_id=' . (int)$order_id));
 				break;
 			}
 		}
@@ -421,7 +421,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/voucher')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify vouchers!");
 		} else {
 			$voucher_id = isset($_GET['voucher_id']) ? $_GET['voucher_id'] : false;
 
@@ -435,7 +435,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		if (!$json) {
 			$this->mail->callController('voucher', $voucher);
 
-			$json['success'] = $this->_('text_sent');
+			$json['success'] = _l("Success: Gift Voucher e-mail has been sent!");
 		}
 
 		$this->response->setOutput(json_encode($json));

@@ -7,7 +7,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 
 		$this->language->load('report/customer_order');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer Orders Report"));
 
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -51,8 +51,8 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/customer_order', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer Orders Report"), $this->url->link('report/customer_order', $url));
 
 		$this->data['customers'] = array();
 
@@ -80,7 +80,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 				'customer'       => $result['customer'],
 				'email'          => $result['email'],
 				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'status'         => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'orders'         => $result['orders'],
 				'products'       => $result['products'],
 				'total'          => $this->currency->format($result['total'], $this->config->get('config_currency')),

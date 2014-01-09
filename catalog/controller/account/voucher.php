@@ -3,12 +3,16 @@ class Catalog_Controller_Account_Voucher extends Controller
 {
 	public function index()
 	{
+		//Page Title
 		$this->document->setTitle(_l("Purchase a Gift Certificate"));
 
+
+		//TODO: Move this to cart Library
 		if (!isset($this->session->data['vouchers'])) {
 			$this->session->set('vouchers', array());
 		}
 
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
 			$this->session->set('vouchers', array(
 				rand() => array(
@@ -26,12 +30,16 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->url->redirect('account/voucher/success');
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
 		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('account/voucher'));
 
-		$this->_('entry_amount', $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1));
+		//Template Data
+		$this->data['min_value'] = $this->currency->format(1, false, 1);
+		$this->data['max_value'] = $this->currency->format(1000, false, 1);
 
+		//Action Buttons
 		$this->data['action'] = $this->url->link('account/voucher');
 
 		$voucher_info = array();
@@ -80,17 +88,20 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 	public function success()
 	{
-		$this->template->load('common/success');
-
-		$this->language->load('account/voucher');
-
+		//Page Title
 		$this->document->setTitle(_l("Purchase a Gift Certificate"));
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Purchase a Gift Certificate"), $this->url->link('account/voucher'));
 
+		//Action Buttons
 		$this->data['continue'] = $this->url->link('cart/cart');
 
+		//The Template
+		$this->template->load('common/success');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -100,6 +111,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

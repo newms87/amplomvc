@@ -109,7 +109,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			} else {
 				$actions = array(
 					'install' => array(
-						'text' => $this->_('text_install'),
+						'text' => _l("Install"),
 						'href' => $this->url->link('extension/shipping/install', 'code=' . $extension['code'])
 					),
 				);
@@ -179,7 +179,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 		//Page Head
 		$this->document->setTitle($title);
-		$this->data['head_title'] = $title;
+		$this->data['page_title'] = $title;
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -277,7 +277,8 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$this->data['contents'] = file_get_contents($file);
 
 		//Additional Data
-		$this->data['head_title'] = _l("Editing %s: %s", $extension['title'], $file);
+		$this->data['page_title'] = $extension['title'];
+		$this->data['edit_file']  = $file;
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/shipping/edit', 'code=' . $code);
@@ -310,7 +311,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'extension/shipping')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify shipping!");
 		}
 
 		if (method_exists($this->extension_controller, 'validate')) {

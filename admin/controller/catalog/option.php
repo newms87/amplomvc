@@ -22,7 +22,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option');
 			}
@@ -35,13 +35,13 @@ class Admin_Controller_Catalog_Option extends Controller
 	{
 		$this->language->load('catalog/option');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Options"));
 
 		if (isset($_GET['option_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Option->deleteOption($_GET['option_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option');
 			}
@@ -70,7 +70,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option', $this->url->getQueryExclude('action'));
 			}
@@ -83,28 +83,28 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Options"));
 
 		//The Template
 		$this->template->load('catalog/option_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/option'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Options"), $this->url->link('catalog/option'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Option Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['sort_order'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_sort_order'),
+			'display_name' => _l("Sort Order"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -181,7 +181,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Options"));
 
 		//The Template
 		$this->template->load('catalog/option_form');
@@ -190,8 +190,8 @@ class Admin_Controller_Catalog_Option extends Controller
 		$option_id = isset($_GET['option_id']) ? (int)$_GET['option_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/option'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Options"), $this->url->link('catalog/option'));
 
 		if (!$option_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/option/update'));
@@ -234,19 +234,19 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->data += $option_info + $defaults;
 
 		//Template Data
-		$_['data_option_types'] = array(
-			'#optgroup1' => 'Choose',
-			'select'     => 'Select',
-			'radio'      => 'Radio',
-			'checkbox'   => 'Checkbox',
-			'image'      => 'Image',
-			'#optgroup2' => 'Input',
-			'text'       => 'Text',
-			'textarea'   => 'Textarea',
-			'#optgroup4' => 'Date',
-			'date'       => 'Date',
-			'datetime'   => 'Date &amp; Time',
-			'time'       => 'Time'
+		$this->data['data_option_types'] = array(
+			'#optgroup1' => _l('Choose'),
+			'select'     => _l('Select'),
+			'radio'      => _l('Radio'),
+			'checkbox'   => _l('Checkbox'),
+			'image'      => _l('Image'),
+			'#optgroup2' => _l('Input'),
+			'text'       => _l('Text'),
+			'textarea'   => _l('Textarea'),
+			'#optgroup4' => _l('Date'),
+			'date'       => _l('Date'),
+			'datetime'   => _l('Date &amp; Time'),
+			'time'       => _l('Time'),
 		);
 
 		//Product Options Template Defaults
@@ -272,15 +272,15 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/option')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify options!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 45)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Option Name must be between 3 and 45 characters!");
 		}
 
 		if (!$this->validation->text($_POST['display_name'], 1, 128)) {
-			$this->error['display_name'] = $this->_('error_display_name');
+			$this->error['display_name'] = _l("Option Display Name must be between 1 and 128 characters!");
 		}
 
 		$multi_types = array('checkbox');
@@ -288,11 +288,11 @@ class Admin_Controller_Catalog_Option extends Controller
 		$_POST['group_type'] = in_array($_POST['type'], $multi_types) ? 'multi' : 'single';
 
 		if (!isset($_POST['option_value'])) {
-			$this->error['warning'] = $this->_('error_type');
+			$this->error['warning'] = _l("Warning: Option Values required!");
 		} else {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
 				if (!$this->validation->text($option_value['value'], 1, 128)) {
-					$this->error["option_value[$option_value_id][value]"] = $this->_('error_option_value');
+					$this->error["option_value[$option_value_id][value]"] = _l("Option Value must be between 1 and 128 characters!");
 				}
 			}
 		}
@@ -303,7 +303,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/option')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify options!");
 		}
 
 		return $this->error ? false : true;
@@ -348,7 +348,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		unset($option);
 
 		$options[] = array(
-			'label' => $this->_("text_add_option_autocomplete"),
+			'label' => _l(" + Add Option"),
 			'value' => false,
 			'href'  => $this->url->link('catalog/option'),
 		);

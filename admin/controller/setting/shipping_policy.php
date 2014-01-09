@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 		$this->language->load('setting/shipping_policy');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Shipping Policies"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/shipping_policy'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Shipping Policies"), $this->url->link('setting/shipping_policy'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -23,7 +23,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 			$this->config->save('policies', 'shipping_policies', $shipping_policies, 0, false);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated Shipping Policies"));
 				$this->url->redirect('setting/setting');
 			}
 		}
@@ -53,8 +53,8 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		//Add in the template row
 		$shipping_policies['__ac_template__'] = array(
-			'title'       => $this->_('entry_title'),
-			'description' => $this->_('entry_description'),
+			'title'       => _l("Shipping Policy Title"),
+			'description' => _l("Shipping Policy Description"),
 		);
 
 		//Get the Field Translations
@@ -71,7 +71,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 		$this->data['shipping_policies'] = $shipping_policies;
 
 		//Additional data
-		$_['data_days'] = array(
+		$this->data['data_days'] = array(
 			'final' => _l("Final Sale"),
 			0       => _l("Shipping Anytime"),
 			1       => _l("Days:"),
@@ -99,7 +99,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		foreach ($_POST['shipping_policies'] as $key => $shipping_policy) {
 			if (!$this->validation->text($shipping_policy['title'], 3, 64)) {
-				$this->error["shipping_policies[$key][title]"] = $this->_('error_shipping_policy_title');
+				$this->error["shipping_policies[$key][title]"] = _l("The Title must be between 3 and 64 characters!");
 			}
 		}
 
@@ -115,7 +115,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 				);
 
 				if ($this->Model_Catalog_Product->getProducts($filter)) {
-					$this->error["shipping_policies[$shipping_policy_id][title]"] = $this->_('error_shipping_policy', $shipping_policy['title']);
+					$this->error["shipping_policies[$shipping_policy_id][title]"] = _l("You cannot delete the Shipping Policy %s because it is associated to a product!", $shipping_policy['title']);
 
 					//Add the Shipping policy back into the list
 					$_POST['shipping_policies'][$shipping_policy_id] = $shipping_policies[$shipping_policy_id];

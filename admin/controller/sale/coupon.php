@@ -6,7 +6,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Coupon"));
 
 		$this->getList();
 	}
@@ -15,12 +15,12 @@ class Admin_Controller_Sale_Coupon extends Controller
 	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Coupon"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Coupon->addCoupon($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified coupons!"));
 
 			$url = $this->get_url();
 
@@ -34,12 +34,12 @@ class Admin_Controller_Sale_Coupon extends Controller
 	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Coupon"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Coupon->editCoupon($_GET['coupon_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified coupons!"));
 
 			$url = $this->get_url();
 
@@ -53,14 +53,14 @@ class Admin_Controller_Sale_Coupon extends Controller
 	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Coupon"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $coupon_id) {
 				$this->Model_Sale_Coupon->deleteCoupon($coupon_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified coupons!"));
 
 			$url = $this->get_url();
 
@@ -85,8 +85,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
 
 		$this->data['insert'] = $this->url->link('sale/coupon/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/coupon/delete', $url);
@@ -119,7 +119,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'discount'   => $result['discount'],
 				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
 				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
-				'status'     => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'status'     => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'selected'   => isset($_GET['selected']) && in_array($result['coupon_id'], $_GET['selected']),
 				'action'     => $action
 			);
@@ -177,8 +177,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
 
 		if (!$coupon_id) {
 			$this->data['action'] = $this->url->link('sale/coupon/insert', $url);
@@ -265,7 +265,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 			1 => _l("Enabled"),
 		);
 
-		$_['data_types'] = array(
+		$this->data['data_types'] = array(
 			'P' => _l("Percent"),
 			'F' => _l("Fixed Amount"),
 		);
@@ -290,24 +290,24 @@ class Admin_Controller_Sale_Coupon extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/coupon')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify coupons!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 128)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Coupon Name must be between 3 and 128 characters!");
 		}
 
 		if ((strlen($_POST['code']) < 3) || (strlen($_POST['code']) > 10)) {
-			$this->error['code'] = $this->_('error_code');
+			$this->error['code'] = _l("Code must be between 3 and 10 characters!");
 		}
 
 		$coupon_info = $this->Model_Sale_Coupon->getCouponByCode($_POST['code']);
 
 		if ($coupon_info) {
 			if (!isset($_GET['coupon_id'])) {
-				$this->error['warning'] = $this->_('error_exists');
+				$this->error['warning'] = _l("Warning: Coupon code is already in use!");
 			} elseif ($coupon_info['coupon_id'] != $_GET['coupon_id']) {
-				$this->error['warning'] = $this->_('error_exists');
+				$this->error['warning'] = _l("Warning: Coupon code is already in use!");
 			}
 		}
 
@@ -317,7 +317,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/coupon')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify coupons!");
 		}
 
 		return $this->error ? false : true;

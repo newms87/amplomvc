@@ -7,10 +7,10 @@ class Admin_Controller_Error_NotFound extends Controller
 
 		$this->language->load('error/not_found');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Page Not Found!"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Page Not Found!"), $this->url->link('error/not_found'));
 
 		$this->children = array(
 			'common/header',

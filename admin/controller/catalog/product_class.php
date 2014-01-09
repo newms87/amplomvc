@@ -22,7 +22,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
 				$this->url->redirect('catalog/product_class');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			$this->Model_Catalog_ProductClass->deleteProductClass($_GET['product_class_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
 				$this->url->redirect('catalog/product_class');
 			}
@@ -65,7 +65,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 			}
 		}
 
@@ -75,33 +75,33 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Classes"));
 
 		//The Template
 		$this->template->load('catalog/product_class_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product_class'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Name:"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['front_template'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_front_template'),
+			'display_name' => _l("Front End Template:"),
 		);
 
 		$columns['admin_template'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_admin_template'),
+			'display_name' => _l("Admin Template:"),
 		);
 
 
@@ -130,7 +130,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 			if (!empty($product_class['front_template'])) {
 				foreach ($product_class['front_template'] as $theme => $template) {
-					$front_list .= $this->_('text_front_template_list', $theme, ($template ? $template : $this->_('text_default_template'))) . '<br />';
+					$front_list .= _l("Template (<strong>%s</strong>): <strong>%s</strong>", $theme, ($template ? $template : _l("Default Template"))) . '<br />';
 				}
 			}
 
@@ -140,7 +140,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 			if (!empty($product_class['front_template'])) {
 				foreach ($product_class['admin_template'] as $theme => $template) {
-					$admin_list .= $this->_('text_admin_template_list', $theme, ($template ? $template : $this->_('text_default_template'))) . '<br />';
+					$admin_list .= _l("Template (<strong>%s</strong>): <strong>%s</strong>", $theme, ($template ? $template : _l("Default Template"))) . '<br />';
 				}
 			}
 
@@ -196,7 +196,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Classes"));
 
 		//The template
 		$this->template->load('catalog/product_class_form');
@@ -205,8 +205,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$product_class_id = isset($_GET['product_class_id']) ? (int)$_GET['product_class_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product_class'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
 
 		if ($product_class_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
@@ -258,7 +258,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 45)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("The name for the Product Class must be between 3 and 45 characters!");
 		}
 
 		return $this->error ? false : true;

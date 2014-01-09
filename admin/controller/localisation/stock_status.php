@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	{
 		$this->language->load('localisation/stock_status');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Stock Status"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	{
 		$this->language->load('localisation/stock_status');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Stock Status"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_StockStatus->addStockStatus($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified stock statuses!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	{
 		$this->language->load('localisation/stock_status');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Stock Status"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_StockStatus->editStockStatus($_GET['stock_status_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified stock statuses!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	{
 		$this->language->load('localisation/stock_status');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Stock Status"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $stock_status_id) {
 				$this->Model_Localisation_StockStatus->deleteStockStatus($stock_status_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified stock statuses!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/stock_status', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stock Status"), $this->url->link('localisation/stock_status', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/stock_status/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/stock_status/delete', $url);
@@ -261,8 +261,8 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/stock_status', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stock Status"), $this->url->link('localisation/stock_status', $url));
 
 		if (!isset($_GET['stock_status_id'])) {
 			$this->data['action'] = $this->url->link('localisation/stock_status/insert', $url);
@@ -293,12 +293,12 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/stock_status')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify stock statuses!");
 		}
 
 		foreach ($_POST['stock_status'] as $language_id => $value) {
 			if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
-				$this->error['name'][$language_id] = $this->_('error_name');
+				$this->error['name'][$language_id] = _l("Stock Status Name must be between 3 and 32 characters!");
 			}
 		}
 
@@ -308,7 +308,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/stock_status')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify stock statuses!");
 		}
 
 		foreach ($_GET['selected'] as $stock_status_id) {
@@ -323,7 +323,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+				$this->error['warning'] = sprintf(_l("Warning: This stock status cannot be deleted as it is currently assigned to %s products!"), $product_total);
 			}
 		}
 

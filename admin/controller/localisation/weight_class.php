@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	{
 		$this->language->load('localisation/weight_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Weight Class"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	{
 		$this->language->load('localisation/weight_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Weight Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Weightclass->addWeightClass($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified weight classes!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	{
 		$this->language->load('localisation/weight_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Weight Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Weightclass->editWeightClass($_GET['weight_class_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified weight classes!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	{
 		$this->language->load('localisation/weight_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Weight Class"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $weight_class_id) {
 				$this->Model_Localisation_Weightclass->deleteWeightClass($weight_class_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified weight classes!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/weight_class', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Weight Class"), $this->url->link('localisation/weight_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/weight_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/weight_class/delete', $url);
@@ -271,8 +271,8 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/weight_class', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Weight Class"), $this->url->link('localisation/weight_class', $url));
 
 		if (!isset($_GET['weight_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/weight_class/insert', $url);
@@ -315,16 +315,16 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/weight_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify weight classes!");
 		}
 
 		foreach ($_POST['weight_class_description'] as $language_id => $value) {
 			if ((strlen($value['title']) < 3) || (strlen($value['title']) > 32)) {
-				$this->error['title'][$language_id] = $this->_('error_title');
+				$this->error['title'][$language_id] = _l("Weight Title must be between 3 and 32 characters!");
 			}
 
 			if (!$value['unit'] || (strlen($value['unit']) > 4)) {
-				$this->error['unit'][$language_id] = $this->_('error_unit');
+				$this->error['unit'][$language_id] = _l("Weight Unit must be between 1 and 4 characters!");
 			}
 		}
 
@@ -334,12 +334,12 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/weight_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify weight classes!");
 		}
 
 		foreach ($_GET['selected'] as $weight_class_id) {
 			if ($this->config->get('config_weight_class_id') == $weight_class_id) {
-				$this->error['warning'] = $this->_('error_default');
+				$this->error['warning'] = _l("Warning: This weight class cannot be deleted as it is currently assigned as the default store weight class!");
 			}
 
 			$data = array(
@@ -349,7 +349,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+				$this->error['warning'] = sprintf(_l("Warning: This weight class cannot be deleted as it is currently assigned to %s products!"), $product_total);
 			}
 		}
 

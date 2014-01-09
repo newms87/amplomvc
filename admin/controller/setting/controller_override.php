@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		$this->language->load('setting/controller_override');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Controller Override"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/controller_override'));
+		$this->breadcrumb->add(_l("Controller Override"), $this->url->link('setting/controller_override'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -23,7 +23,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 			$this->config->save('controller_override', 'controller_override', $controller_overrides, 0, true);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Controller Overrides"));
 				$this->url->redirect('setting/setting');
 			}
 		}
@@ -41,9 +41,9 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 
 		//Add in the template row
 		$controller_overrides['__ac_template__'] = array(
-			'original'  => $this->_('entry_original_controller'),
-			'alternate' => $this->_('entry_alternate_controller'),
-			'condition' => $this->_('entry_condition'),
+			'original'  => _l("original/controller/path"),
+			'alternate' => _l("alternate/controller/path"),
+			'condition' => _l("Query Condition Regular Expression (eg: 'product_id=*')"),
 		);
 
 		$this->data['controller_overrides'] = $controller_overrides;
@@ -71,11 +71,11 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		if (!empty($_POST['controller_overrides'])) {
 			foreach ($_POST['controller_overrides'] as $key => $override) {
 				if (!is_file(SITE_DIR . $override['original'] . '.php')) {
-					$this->error["controller_overrides[$key][original]"] = $this->_('error_original_controller', $override['original']);
+					$this->error["controller_overrides[$key][original]"] = _l("The Original Controller at %s did not exist!", $override['original']);
 				}
 
 				if (!is_file(SITE_DIR . $override['alternate'] . '.php')) {
-					$this->error["controller_overrides[$key][alternate]"] = $this->_('error_alternate_controller', $override['alternate']);
+					$this->error["controller_overrides[$key][alternate]"] = _l("The Alternate Controller at %s did not exist!", $override['alternate']);
 				}
 			}
 		}

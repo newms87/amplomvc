@@ -7,7 +7,7 @@ class Admin_Controller_Block_Information_Contact extends Controller
 		$this->template->load('block/information/contact_settings');
 
 		$defaults = array(
-			'contact_info' => $this->_('text_contact_info_default'),
+			'contact_info' => _l("Please feel free to contact us with any questions!"),
 		);
 
 		foreach ($defaults as $key => $default) {

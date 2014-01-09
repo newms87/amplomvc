@@ -11,7 +11,7 @@ class Admin_Controller_Block_Module_Sidebar extends Controller
 		$this->data['settings'] = $settings;
 
 		//Additional Data
-		$this->data['data_attribute_groups'] = array('' => $this->_('text_none')) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
+		$this->data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 
 		//Render
 		$this->render();

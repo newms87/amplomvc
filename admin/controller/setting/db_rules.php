@@ -1,13 +1,11 @@
 <?php
 class Admin_Controller_Setting_DbRules extends Controller
 {
-
-
 	public function index()
 	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("DB Rules"));
 
 		$this->getList();
 	}
@@ -16,12 +14,12 @@ class Admin_Controller_Setting_DbRules extends Controller
 	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("DB Rules"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$store_id = $this->Model_Setting_DbRules->addDbRule($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified db rules!"));
 
 			$this->url->redirect('setting/db_rules');
 		}
@@ -33,12 +31,12 @@ class Admin_Controller_Setting_DbRules extends Controller
 	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("DB Rules"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_DbRules->editDbRule($_GET['db_rule_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified db rules!"));
 
 			$this->url->redirect('setting/db_rules', 'store_id=' . $_GET['store_id']);
 		}
@@ -50,14 +48,14 @@ class Admin_Controller_Setting_DbRules extends Controller
 	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("DB Rules"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $db_rule_id) {
 				$this->Model_Setting_DbRules->deleteDbRule($db_rule_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified db rules!"));
 
 			$this->url->redirect('setting/db_rules');
 		}
@@ -69,8 +67,8 @@ class Admin_Controller_Setting_DbRules extends Controller
 	{
 		$this->template->load('setting/db_rules_list');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("DB Rules"), $this->url->link('setting/db_rules'));
 
 		$this->data['insert'] = $this->url->link('setting/db_rules/insert');
 		$this->data['delete'] = $this->url->link('setting/db_rules/delete');
@@ -110,8 +108,8 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id'] : null;
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("DB Rules"), $this->url->link('setting/db_rules'));
 
 		if (!$db_rule_id) {
 			$this->data['action'] = $this->url->link('setting/db_rules/insert');
@@ -140,7 +138,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 			}
 		}
 
-		$_['data_escape_types'] = array(
+		$this->data['data_escape_types'] = array(
 			0 => _l('Normal Escape'),
 			1 => _l('No Escape'),
 			2 => _l("Image"),
@@ -165,17 +163,15 @@ class Admin_Controller_Setting_DbRules extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'setting/db_rules')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify db rules!");
 		}
 
-		$required = array(
-			'table',
-			'column',
-		);
-		foreach ($required as $r) {
-			if (!$_POST[$r]) {
-				$this->error[$r] = $this->_('error_' . $r);
-			}
+		if (empty($_POST['table'])) {
+			$this->error['table'] = _l("Table is required");
+		}
+
+		if (empty($_POST['column'])) {
+			$this->error['column'] = _l("Column is required");
 		}
 
 		return empty($this->error);
@@ -184,7 +180,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'setting/db_rules')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify db rules!");
 		}
 
 		return empty($this->error);

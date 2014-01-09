@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 	{
 		$this->language->load('localisation/zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Zones"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_Zone extends Controller
 	{
 		$this->language->load('localisation/zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->addZone($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified zones!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_Zone extends Controller
 	{
 		$this->language->load('localisation/zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->editZone($_GET['zone_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified zones!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 	{
 		$this->language->load('localisation/zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Zones"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $zone_id) {
 				$this->Model_Localisation_Zone->deleteZone($zone_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified zones!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/zone/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/zone/delete', $url);
@@ -265,8 +265,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {
 			$this->data['action'] = $this->url->link('localisation/zone/insert', $url);
@@ -325,11 +325,11 @@ class Admin_Controller_Localisation_Zone extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/zone')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify zones!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Zone Name must be between 3 and 128 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -338,36 +338,36 @@ class Admin_Controller_Localisation_Zone extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/zone')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify zones!");
 		}
 
 		foreach ($_GET['selected'] as $zone_id) {
 			if ($this->config->get('config_zone_id') == $zone_id) {
-				$this->error['warning'] = $this->_('error_default');
+				$this->error['warning'] = _l("Warning: This zone cannot be deleted as it is currently assigned as the default store zone!");
 			}
 
 			$store_total = $this->Model_Setting_Store->getTotalStoresByZoneId($zone_id);
 
 			if ($store_total) {
-				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
+				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
 			$address_total = $this->Model_Sale_Customer->getTotalAddressesByZoneId($zone_id);
 
 			if ($address_total) {
-				$this->error['warning'] = sprintf($this->_('error_address'), $address_total);
+				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
 			}
 
 			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByZoneId($zone_id);
 
 			if ($affiliate_total) {
-				$this->error['warning'] = sprintf($this->_('error_affiliate'), $affiliate_total);
+				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s affiliates!"), $affiliate_total);
 			}
 
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);
 
 			if ($zone_to_geo_zone_total) {
-				$this->error['warning'] = sprintf($this->_('error_zone_to_geo_zone'), $zone_to_geo_zone_total);
+				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s zones to geo zones!"), $zone_to_geo_zone_total);
 			}
 		}
 

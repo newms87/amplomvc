@@ -5,7 +5,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer"));
 
 		$this->getList();
 	}
@@ -14,12 +14,12 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Customer->addCustomer($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customers!"));
 
 			$url = '';
 
@@ -73,12 +73,12 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Customer->editCustomer($_GET['customer_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customers!"));
 
 			$url = '';
 
@@ -132,14 +132,14 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $customer_id) {
 				$this->Model_Sale_Customer->deleteCustomer($customer_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customers!"));
 
 			$url = '';
 
@@ -193,10 +193,10 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer"));
 
 		if (!$this->user->can('modify', 'sale/customer')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customers!");
 		} elseif (isset($_GET['selected'])) {
 			$approved = 0;
 
@@ -210,7 +210,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				}
 			}
 
-			$this->message->add('success', sprintf($this->_('text_approved'), $approved));
+			$this->message->add('success', sprintf(_l("You have approved %s accounts!"), $approved));
 
 			$url = '';
 
@@ -366,8 +366,8 @@ class Admin_Controller_Sale_Customer extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer"), $this->url->link('sale/customer', $url));
 
 		$this->data['approve'] = $this->url->link('sale/customer/approve', $url);
 		$this->data['insert']  = $this->url->link('sale/customer/insert', $url);
@@ -406,8 +406,8 @@ class Admin_Controller_Sale_Customer extends Controller
 				'name'           => $result['name'],
 				'email'          => $result['email'],
 				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'approved'       => ($result['approved'] ? $this->_('text_yes') : $this->_('text_no')),
+				'status'         => ($result['status'] ? _l("Enabled") : _l("Disabled")),
+				'approved'       => ($result['approved'] ? _l("Yes") : _l("No")),
 				'ip'             => $result['ip'],
 				'date_added'     => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'selected'       => isset($_GET['selected']) && in_array($result['customer_id'], $_GET['selected']),
@@ -529,7 +529,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 
-		$this->data['data_stores'] = array('' => $this->_('text_select')) + $this->Model_Setting_Store->getStores();
+		$this->data['data_stores'] = array('' => _l(" --- Please Select --- ")) + $this->Model_Setting_Store->getStores();
 
 		$this->data['sort']  = $sort;
 		$this->data['order'] = $order;
@@ -674,8 +674,8 @@ class Admin_Controller_Sale_Customer extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer"), $this->url->link('sale/customer', $url));
 
 		if (!isset($_GET['customer_id'])) {
 			$this->data['action'] = $this->url->link('sale/customer/insert', $url);
@@ -820,83 +820,83 @@ class Admin_Controller_Sale_Customer extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/customer')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customers!");
 		}
 
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		$customer_info = $this->Model_Sale_Customer->getCustomerByEmail($_POST['email']);
 
 		if (!isset($_GET['customer_id'])) {
 			if ($customer_info) {
-				$this->error['warning'] = $this->_('error_exists');
+				$this->error['warning'] = _l("Warning: E-Mail Address is already registered!");
 			}
 		} else {
 			if ($customer_info && ($_GET['customer_id'] != $customer_info['customer_id'])) {
-				$this->error['warning'] = $this->_('error_exists');
+				$this->error['warning'] = _l("Warning: E-Mail Address is already registered!");
 			}
 		}
 
 		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		if ($_POST['password'] || (!isset($_GET['customer_id']))) {
 			if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-				$this->error['password'] = $this->_('error_password');
+				$this->error['password'] = _l("Password must be between 4 and 20 characters!");
 			}
 
 			if ($_POST['password'] != $_POST['confirm']) {
-				$this->error['confirm'] = $this->_('error_confirm');
+				$this->error['confirm'] = _l("Password and password confirmation do not match!");
 			}
 		}
 
 		if (isset($_POST['address'])) {
 			foreach ($_POST['address'] as $key => $value) {
 				if ((strlen($value['firstname']) < 1) || (strlen($value['firstname']) > 32)) {
-					$this->error['address_firstname'][$key] = $this->_('error_firstname');
+					$this->error['address_firstname'][$key] = _l("First Name must be between 1 and 32 characters!");
 				}
 
 				if ((strlen($value['lastname']) < 1) || (strlen($value['lastname']) > 32)) {
-					$this->error['address_lastname'][$key] = $this->_('error_lastname');
+					$this->error['address_lastname'][$key] = _l("Last Name must be between 1 and 32 characters!");
 				}
 
 				if ((strlen($value['address_1']) < 3) || (strlen($value['address_1']) > 128)) {
-					$this->error['address_address_1'][$key] = $this->_('error_address_1');
+					$this->error['address_address_1'][$key] = _l("Address 1 must be between 3 and 128 characters!");
 				}
 
 				if ((strlen($value['city']) < 2) || (strlen($value['city']) > 128)) {
-					$this->error['address_city'][$key] = $this->_('error_city');
+					$this->error['address_city'][$key] = _l("City must be between 2 and 128 characters!");
 				}
 
 				$country_info = $this->Model_Localisation_Country->getCountry($value['country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (strlen($value['postcode']) < 2) || (strlen($value['postcode']) > 10)) {
-					$this->error['address_postcode'][$key] = $this->_('error_postcode');
+					$this->error['address_postcode'][$key] = _l("Postcode must be between 2 and 10 characters for this country!");
 				}
 
 				if ($value['country_id'] == '') {
-					$this->error['address_country'][$key] = $this->_('error_country');
+					$this->error['address_country'][$key] = _l("Please select a country!");
 				}
 
 				if ($value['zone_id'] == '') {
-					$this->error['address_zone'][$key] = $this->_('error_zone');
+					$this->error['address_zone'][$key] = _l("Please select a region / state!");
 				}
 			}
 		}
 
 		if ($this->error && !isset($this->error['warning'])) {
-			$this->error['warning'] = $this->_('error_warning');
+			$this->error['warning'] = _l("Warning: Please check the form carefully for errors!");
 		}
 
 		return $this->error ? false : true;
@@ -905,7 +905,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/customer')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customers!");
 		}
 
 		return $this->error ? false : true;
@@ -946,10 +946,10 @@ class Admin_Controller_Sale_Customer extends Controller
 
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('head_title'));
+			$this->document->setTitle(_l("Customer"));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+			$this->breadcrumb->add(_l("Customer"), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',
@@ -969,13 +969,13 @@ class Admin_Controller_Sale_Customer extends Controller
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 
-			$this->language->set('success', $this->_('text_success'));
+			$this->language->set('success', _l("Success: You have modified customers!"));
 		} else {
 			$this->data['success'] = '';
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
-			$this->language->set('error_warning', $this->_('error_permission'));
+			$this->language->set('error_warning', _l("Warning: You do not have permission to modify customers!"));
 		} else {
 			$this->data['error_warning'] = '';
 		}
@@ -1019,13 +1019,13 @@ class Admin_Controller_Sale_Customer extends Controller
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 
-			$this->language->set('success', $this->_('text_success'));
+			$this->language->set('success', _l("Success: You have modified customers!"));
 		} else {
 			$this->data['success'] = '';
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
-			$this->language->set('error_warning', $this->_('error_permission'));
+			$this->language->set('error_warning', _l("Warning: You do not have permission to modify customers!"));
 		} else {
 			$this->data['error_warning'] = '';
 		}
@@ -1068,11 +1068,11 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		if (isset($_POST['ip'])) {
 			if (!$this->user->can('modify', 'sale/customer')) {
-				$json['error'] = $this->_('error_permission');
+				$json['error'] = _l("Warning: You do not have permission to modify customers!");
 			} else {
 				$this->Model_Sale_Customer->addBlacklist($_POST['ip']);
 
-				$json['success'] = $this->_('text_success');
+				$json['success'] = _l("Success: You have modified customers!");
 			}
 		}
 
@@ -1087,11 +1087,11 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		if (isset($_POST['ip'])) {
 			if (!$this->user->can('modify', 'sale/customer')) {
-				$json['error'] = $this->_('error_permission');
+				$json['error'] = _l("Warning: You do not have permission to modify customers!");
 			} else {
 				$this->Model_Sale_Customer->deleteBlacklist($_POST['ip']);
 
-				$json['success'] = $this->_('text_success');
+				$json['success'] = _l("Success: You have modified customers!");
 			}
 		}
 

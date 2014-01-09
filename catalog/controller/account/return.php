@@ -60,7 +60,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 	public function info()
 	{
-		$this->language->load('account/return');
+		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
 
 		if (!$this->customer->isLogged()) {
 			$query = array(
@@ -70,8 +70,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->url->redirect('account/login', $query);
 		}
 
-		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
-
+		//Page Title
 		$this->document->setTitle(_l("Return Information"));
 
 		$url_query = $this->url->getQuery('page');
@@ -86,7 +85,6 @@ class Catalog_Controller_Account_Return extends Controller
 
 		if ($return_info) {
 			$this->template->load('account/return_info');
-			$this->language->set('head_title', _l("Return Information"));
 
 			$return_info['comment']       = nl2br($return_info['comment']);
 			$return_info['opened']        = $return_info['opened'] ? _l("Yes") : _l("No");
@@ -123,7 +121,7 @@ class Catalog_Controller_Account_Return extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->set('head_title', _l("Return Information"));
+			$this->data['page_title'] = _l("Return Information");
 
 			$this->data['continue'] = $this->url->link('account/return');
 

@@ -1,5 +1,4 @@
 <?php
-
 class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
@@ -9,7 +8,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->language->load('setting/setting');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("General Settings"));
 
 		//Handle Post
 		if ($this->request->isPost() && $this->validate()) {
@@ -20,15 +19,15 @@ class Admin_Controller_Setting_Setting extends Controller
 				$this->Model_Localisation_Currency->updateCurrencies();
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified settings!"));
 
 			$this->url->redirect('setting/store');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("General Settings"), $this->url->link('setting/setting'));
 
 		//Load Information
 		if (!$this->request->isPost()) {
@@ -203,7 +202,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->data['weight_classes']         = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$this->data['tax_classes']            = $this->Model_Localisation_TaxClass->getTaxClasses();
 		$this->data['customer_groups']        = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$this->data['data_informations']      = array('' => $this->_('text_none')) + $this->Model_Catalog_Information->getInformations();
+		$this->data['data_informations']      = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Information->getInformations();
 		$this->data['data_stock_statuses']    = $this->Model_Localisation_StockStatus->getStockStatuses();
 		$this->data['data_order_statuses']    = $this->order->getOrderStatuses();
 		$this->data['data_return_statuses']   = $this->order->getReturnStatuses();
@@ -215,14 +214,14 @@ class Admin_Controller_Setting_Setting extends Controller
 			'mail' => _l("PHP Mail"),
 		);
 
-		$_['data_stock_display_types'] = array(
+		$this->data['data_stock_display_types'] = array(
 			'hide'   => _l("Do not display stock"),
 			'status' => _l("Only show stock status"),
 			-1       => _l("Display stock quantity available"),
 			10       => _l("Display quantity up to 10"),
 		);
 
-		$_['data_show_product_related'] = array(
+		$this->data['data_show_product_related'] = array(
 			0 => _l('Never'),
 			1 => _l('Only When Unavailable'),
 			2 => _l('Always'),
@@ -283,87 +282,87 @@ class Admin_Controller_Setting_Setting extends Controller
 	public function validate()
 	{
 		if (!$this->user->can('modify', 'setting/setting')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("Warning: You do not have permission to modify settings!");
 		}
 
 		if (!$_POST['config_name']) {
-			$this->error['config_name'] = $this->_('error_name');
+			$this->error['config_name'] = _l("Store Name must be between 3 and 32 characters!");
 		}
 
 		if ((strlen($_POST['config_owner']) < 3) || (strlen($_POST['config_owner']) > 64)) {
-			$this->error['config_owner'] = $this->_('error_owner');
+			$this->error['config_owner'] = _l("Store Owner must be between 3 and 64 characters!");
 		}
 
 		if ((strlen($_POST['config_address']) < 3) || (strlen($_POST['config_address']) > 256)) {
-			$this->error['config_address'] = $this->_('error_address');
+			$this->error['config_address'] = _l("Store Address must be between 10 and 256 characters!");
 		}
 
 		if (!$this->validation->email($_POST['config_email'])) {
-			$this->error['config_email'] = $this->_('error_email');
+			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->email($_POST['config_email_error'])) {
-			$this->error['config_email_error'] = $this->_('error_email');
+			$this->error['config_email_error'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->email($_POST['config_email_support'])) {
-			$this->error['config_email_support'] = $this->_('error_email');
+			$this->error['config_email_support'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if ((strlen($_POST['config_telephone']) < 3) || (strlen($_POST['config_telephone']) > 32)) {
-			$this->error['config_telephone'] = $this->_('error_telephone');
+			$this->error['config_telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		if (!$_POST['config_title']) {
-			$this->error['config_title'] = $this->_('error_title');
+			$this->error['config_title'] = _l("Title must be between 3 and 32 characters!");
 		}
 
 		if (!$_POST['config_image_admin_thumb_width'] || !$_POST['config_image_admin_thumb_height']) {
-			$this->error['image_admin_thumb'] = $this->_('error_image_admin_thumb');
+			$this->error['image_admin_thumb'] = _l("Product Image Admin Thumb Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_admin_list_width'] || !$_POST['config_image_admin_list_height']) {
-			$this->error['image_admin_list'] = $this->_('error_image_admin_list');
+			$this->error['image_admin_list'] = _l("Product Image Admin List Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_category_width'] || !$_POST['config_image_category_height']) {
-			$this->error['image_category'] = $this->_('error_image_category');
+			$this->error['image_category'] = _l("Category List Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_manufacturer_width'] || !$_POST['config_image_manufacturer_height']) {
-			$this->error['image_manufacturer'] = $this->_('error_image_manufacturer');
+			$this->error['image_manufacturer'] = _l("Designer List Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_thumb_width'] || !$_POST['config_image_thumb_height']) {
-			$this->error['image_thumb'] = $this->_('error_image_thumb');
+			$this->error['image_thumb'] = _l("Product Image Thumb Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_popup_width'] || !$_POST['config_image_popup_height']) {
-			$this->error['image_popup'] = $this->_('error_image_popup');
+			$this->error['image_popup'] = _l("Product Image Popup Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_product_width'] || !$_POST['config_image_product_height']) {
-			$this->error['image_product'] = $this->_('error_image_product');
+			$this->error['image_product'] = _l("Product List Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_additional_width'] || !$_POST['config_image_additional_height']) {
-			$this->error['image_additional'] = $this->_('error_image_additional');
+			$this->error['image_additional'] = _l("Additional Product Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_related_width'] || !$_POST['config_image_related_height']) {
-			$this->error['image_related'] = $this->_('error_image_related');
+			$this->error['image_related'] = _l("Related Product Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_compare_width'] || !$_POST['config_image_compare_height']) {
-			$this->error['image_compare'] = $this->_('error_image_compare');
+			$this->error['image_compare'] = _l("Compare Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_wishlist_width'] || !$_POST['config_image_wishlist_height']) {
-			$this->error['image_wishlist'] = $this->_('error_image_wishlist');
+			$this->error['image_wishlist'] = _l("Wish List Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_image_cart_width'] || !$_POST['config_image_cart_height']) {
-			$this->error['image_cart'] = $this->_('error_image_cart');
+			$this->error['image_cart'] = _l("Cart Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_log_filename']) {
@@ -371,15 +370,15 @@ class Admin_Controller_Setting_Setting extends Controller
 		}
 
 		if (!$_POST['config_error_filename']) {
-			$this->error['config_error_filename'] = $this->_('error_error_filename');
+			$this->error['config_error_filename'] = _l("Error Log Filename required!");
 		}
 
 		if (!$_POST['config_admin_limit']) {
-			$this->error['config_admin_limit'] = $this->_('error_limit');
+			$this->error['config_admin_limit'] = _l("Limit required!");
 		}
 
 		if (!$_POST['config_catalog_limit']) {
-			$this->error['config_catalog_limit'] = $this->_('error_limit');
+			$this->error['config_catalog_limit'] = _l("Limit required!");
 		}
 
 		$octals = array(

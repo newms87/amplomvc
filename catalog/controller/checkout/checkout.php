@@ -35,8 +35,6 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 
 		$this->data['shipping_required'] = $this->cart->hasShipping();
 
-		$this->_('error_page_load', $this->config->get('config_email'));
-
 		//The Template
 		$this->template->load('checkout/checkout');
 

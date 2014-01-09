@@ -8,14 +8,6 @@ if (!defined("AMPLOCART_INSTALL")) {
 define("SITE_DIR", str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/')));
 define("DIR_DATABASE", SITE_DIR . 'system/database/');
 
-$language = (!empty($_GET['language']) && is_file($_GET['language'] . '.php')) ? $_GET['language'] : 'english';
-
-$_ = array();
-
-require_once($language . '.php');
-
-extract($_);
-
 $template    = !empty($_GET['page']) ? $_GET['page'] : 'db';
 $error_msg   = '';
 $success_msg = '';
@@ -23,10 +15,10 @@ $success_msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'db_setup':
-			$result = setup_db($_);
+			$result = setup_db();
 
 			if ($result === true) {
-				$success_msg = $_['success_db'];
+				$success_msg = _l("You have successfully installed the database!");
 				$template    = 'user';
 			} else {
 				$error_msg = $result;
@@ -35,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
 		case 'user_setup':
 			$template = 'user';
-			$result   = setup_user($_);
+			$result   = setup_user();
 
 			if ($result === true) {
-				$success_msg = $_['success_user'];
+				$success_msg = _l("Admin User account setup successfully!");
 			} else {
 				$error_msg = $result;
 			}
@@ -96,7 +88,7 @@ $db_types = array(
 require_once("system/install/install_{$template}.tpl");
 
 
-function setup_db($_)
+function setup_db()
 {
 	define("DB_PREFIX", $_POST['db_prefix']);
 
@@ -177,12 +169,12 @@ function setup_db($_)
 	return true;
 }
 
-function setup_user($_)
+function setup_user()
 {
 	if ($_POST['password'] !== $_POST['confirm']) {
 		$_POST['password'] = $_POST['confirm'] = '';
 
-		return $_['error_password_confirm'];
+		return _l("The password and confirmation do not match!");
 	}
 
 	require_once("ac_config.php");
@@ -221,7 +213,7 @@ function setup_user($_)
 	session_start();
 
 	$_SESSION['messages'] = array(
-		'success' => array($_['success_user']),
+		'success' => array(_l("Admin User account setup successfully!")),
 	);
 
 	header("Location: " . SITE_URL . 'admin');

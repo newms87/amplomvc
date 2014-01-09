@@ -3,9 +3,9 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("User"); ?></h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -15,27 +15,27 @@
 						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
 						<td class="left"><? if ($sort == 'username') { ?>
-								<a href="<?= $sort_username; ?>" class="<?= strtolower($order); ?>"><?= $column_username; ?></a>
+								<a href="<?= $sort_username; ?>" class="<?= strtolower($order); ?>"><?= _l("Username"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_username; ?>"><?= $column_username; ?></a>
+								<a href="<?= $sort_username; ?>"><?= _l("Username"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'email') { ?>
-								<a href="<?= $sort_email; ?>" class="<?= strtolower($order); ?>"><?= $column_email; ?></a>
+								<a href="<?= $sort_email; ?>" class="<?= strtolower($order); ?>"><?= _l("Email"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_email; ?>"><?= $column_email; ?></a>
+								<a href="<?= $sort_email; ?>"><?= _l("Email"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'status') { ?>
-								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= _l("Status"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_status; ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>"><?= _l("Status"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'date_added') { ?>
 								<a href="<?= $sort_date_added; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_date_added; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Date Added"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_date_added; ?>"><?= $column_date_added; ?></a>
+								<a href="<?= $sort_date_added; ?>"><?= _l("Date Added"); ?></a>
 							<? } ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>

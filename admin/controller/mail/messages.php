@@ -8,17 +8,17 @@ class Admin_Controller_Mail_Messages extends Controller
 
 		$this->template->load('mail/messages');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Mail Messages"));
 
 		if ($this->request->isPost() && $this->validate()) {
 
 			$this->config->saveGroup('mail_messages', $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified mail messages!"));
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/messages'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Mail Messages"), $this->url->link('mail/messages'));
 
 		$this->data['action'] = $this->url->link('mail/messages');
 
@@ -50,7 +50,7 @@ class Admin_Controller_Mail_Messages extends Controller
 	public function validate()
 	{
 		if (!$this->user->can('modify', 'mail/messages')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
 		}
 
 		return $this->error ? false : true;

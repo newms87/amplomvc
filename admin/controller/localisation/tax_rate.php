@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Rates"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Rates"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_TaxRate->addTaxRate($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Rates"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_TaxRate->editTaxRate($_GET['tax_rate_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Rates"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $tax_rate_id) {
 				$this->Model_Localisation_TaxRate->deleteTaxRate($tax_rate_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_rate', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Tax Rates"), $this->url->link('localisation/tax_rate', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_rate/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);
@@ -174,7 +174,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				'tax_rate_id'   => $result['tax_rate_id'],
 				'name'          => $result['name'],
 				'rate'          => $result['rate'],
-				'type'          => ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),
+				'type'          => ($result['type'] == 'F' ? _l("Fixed Amount") : _l("Percentage")),
 				'geo_zone'      => $result['geo_zone'],
 				'date_added'    => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
@@ -277,8 +277,8 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_rate', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Tax Rates"), $this->url->link('localisation/tax_rate', $url));
 
 		if (!isset($_GET['tax_rate_id'])) {
 			$this->data['action'] = $this->url->link('localisation/tax_rate/insert', $url);
@@ -347,15 +347,15 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/tax_rate')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify tax classes!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 32)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Tax Name must be between 3 and 32 characters!");
 		}
 
 		if (!$_POST['rate']) {
-			$this->error['rate'] = $this->_('error_rate');
+			$this->error['rate'] = _l("Tax Rate required!");
 		}
 
 		return $this->error ? false : true;
@@ -364,14 +364,14 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/tax_rate')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify tax classes!");
 		}
 
 		foreach ($_GET['selected'] as $tax_rate_id) {
 			$tax_rule_total = $this->Model_Localisation_Taxclass->getTotalTaxRulesByTaxRateId($tax_rate_id);
 
 			if ($tax_rule_total) {
-				$this->error['warning'] = sprintf($this->_('error_tax_rule'), $tax_rule_total);
+				$this->error['warning'] = sprintf(_l("Warning: This tax rate cannot be deleted as it is currently assigned to %s tax classes!"), $tax_rule_total);
 			}
 		}
 

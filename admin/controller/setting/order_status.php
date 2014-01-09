@@ -8,13 +8,13 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		$this->language->load('setting/order_status');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Order Statuses"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/order_status'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Order Statuses"), $this->url->link('setting/order_status'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -23,7 +23,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 			$this->config->save('order', 'order_statuses', $order_statuses, 0, false);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Order Statuses"));
 				$this->url->redirect('setting/setting');
 			}
 		}
@@ -52,7 +52,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		$defaults = array();
 
 		$order_statuses['__ac_template__'] = array(
-			'title' => $this->_('entry_title'),
+			'title' => _l("Status Title"),
 		);
 
 		//Get the Field Translations
@@ -89,7 +89,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 		foreach ($_POST['order_statuses'] as $key => $order_status) {
 			if (!$this->validation->text($order_status['title'], 3, 64)) {
-				$this->error["order_statuses[$key][title]"] = $this->_('error_order_status_title');
+				$this->error["order_statuses[$key][title]"] = _l("The Title must be between 3 and 64 characters!");
 			}
 		}
 
@@ -101,7 +101,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 			foreach ($deleted as $order_status_id => $order_status) {
 				if ($this->order->orderStatusInUse($order_status_id)) {
-					$this->error["order_statuses[$order_status_id][title]"] = $this->_('error_order_status', $order_status['title']);
+					$this->error["order_statuses[$order_status_id][title]"] = _l("You cannot delete the Order Status %s because it is associated to an order!", $order_status['title']);
 
 					//Add the Order status back into the list
 					$_POST['order_statuses'][$order_status_id] = $order_statuses[$order_status_id];

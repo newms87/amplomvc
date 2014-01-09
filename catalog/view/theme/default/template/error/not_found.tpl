@@ -4,7 +4,7 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= _l("The page you requested cannot be found!"); ?></h1>
+		<h1><?= !empty($page_title) ? $page_title : _l("Page Not Found"); ?></h1>
 
 		<div class="section"><?= _l("The page you requested cannot be found."); ?></div>
 		<div class="buttons">

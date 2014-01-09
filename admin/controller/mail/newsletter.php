@@ -6,7 +6,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Newsletter"));
 
 		$this->getList();
 	}
@@ -14,13 +14,13 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	public function insert()
 	{
 		$this->language->load('mail/newsletter');
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Newsletter"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$newsletter_id = $this->Model_Mail_Newsletter->addNewsletter($_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified updated Newsletter!"));
 			}
 
 			$this->url->redirect('mail/newsletter/update', 'newsletter_id=' . $newsletter_id);
@@ -33,13 +33,13 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Newsletter"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Mail_Newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified updated Newsletter!"));
 			}
 		}
 
@@ -50,7 +50,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Newsletter"));
 
 		if (isset($_GET['selected']) && isset($_GET['action']) && $this->validateModify()) {
 			foreach ($_GET['selected'] as $newsletter_id) {
@@ -75,7 +75,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 				}
 			}
 			if (!$this->error) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified updated Newsletter!"));
 
 				$this->url->redirect('mail/newsletter', $this->url->getQuery());
 			}
@@ -89,21 +89,21 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->template->load('mail/newsletter_list');
 		$this->language->load('mail/newsletter');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/newsletter'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Newsletter"), $this->url->link('mail/newsletter'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Newsletter Title"),
 			'type'         => 'text',
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['send_date'] = array(
-			'display_name' => $this->_('column_send_date'),
+			'display_name' => _l("Send Date"),
 			'type'         => 'datetime',
 			'filter'       => true,
 			'sortable'     => false,
@@ -203,8 +203,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/newsletter'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Newsletter"), $this->url->link('mail/newsletter'));
 
 
 		//Action buttons
@@ -278,8 +278,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->data['data_designers'] = $this->Model_Catalog_Manufacturer->getManufacturers($m_data, 'manufacturer_id, name, image');
 
 		if (empty($featured_designer['designer_id'])) {
-			array_unshift($this->data['data_designers'], $this->_('text_select'));
-			$this->data['data_designer_products'] = array('' => $this->_('text_select'));
+			array_unshift($this->data['data_designers'], _l(" --- Please Select --- "));
+			$this->data['data_designer_products'] = array('' => _l(" --- Please Select --- "));
 		} else {
 			$this->data['data_designer_products'] = array($featured_product['product_id'] => $featured_product['name']);
 		}
@@ -304,7 +304,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		if ($this->request->isPost()) {
 			if ($this->validateForm()) {
 			} else {
-				$this->message->add('warning', $this->_('error_newsletter_preview'));
+				$this->message->add('warning', _l("The Newsletter was not found! Cannot view preview."));
 				$this->message->add('warning', $this->error);
 				$this->url->redirect('error/not_found');
 			}
@@ -314,7 +314,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			$newsletter_id = isset($_GET['newsletter_id']) ? $_GET['newsletter_id'] : 0;
 
 			if (!$newsletter_id) {
-				$this->message->add('warning', $this->_('error_newsletter_preview'));
+				$this->message->add('warning', _l("The Newsletter was not found! Cannot view preview."));
 				$this->url->redirect('error/not_found');
 				return;
 			}
@@ -478,15 +478,15 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'mail/newsletter')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("Warning: You do not have permission to modify module Newsletter!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 1, 32)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Newsletter Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->datetime($_POST['send_date'])) {
-			$this->error['send_date'] = $this->_('error_send_date');
+			$this->error['send_date'] = _l("The Send Date is invalid!");
 		}
 
 		return $this->error ? false : true;
@@ -495,7 +495,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	private function validateModify()
 	{
 		if (!$this->user->can('modify', 'mail/newsletter')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify module Newsletter!");
 		}
 
 		return $this->error ? false : true;

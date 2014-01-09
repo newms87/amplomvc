@@ -4,28 +4,29 @@
 	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 
-	<h1><?= $head_title; ?></h1>
+	<h1><?= _l("Order Information"); ?></h1>
+	
 	<table class="list">
 		<thead>
 			<tr>
-				<td class="left" colspan="2"><?= $text_order_detail; ?></td>
+				<td class="left" colspan="2"><?= _l("Order Details"); ?></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td class="left half">
 					<? if (!empty($invoice_id)) { ?>
-						<b><?= $text_invoice_id; ?></b> <?= $invoice_id; ?><br/>
+						<b><?= _l("Invoice #:"); ?></b> <?= $invoice_id; ?><br/>
 					<? } ?>
-					<b><?= $text_order_id; ?></b> #<?= $order_id; ?><br/>
-					<b><?= $text_date_added; ?></b> <?= $date_added; ?>
+					<b><?= _l("Order ID:"); ?></b> #<?= $order_id; ?><br/>
+					<b><?= _l("Date:"); ?></b> <?= $date_added; ?>
 				</td>
 				<td class="left half">
 					<? if (!empty($payment_method)) { ?>
-						<b><?= $text_payment_method; ?></b> <?= $payment_method['title']; ?><br/>
+						<b><?= _l("Payment Method"); ?></b> <?= $payment_method['title']; ?><br/>
 					<? } ?>
 					<? if (!empty($shipping_method)) { ?>
-						<b><?= $text_shipping_method; ?></b> <?= $shipping_method['title']; ?>
+						<b><?= _l("Shipping Method"); ?></b> <?= $shipping_method['title']; ?>
 					<? } ?>
 				</td>
 			</tr>
@@ -34,9 +35,9 @@
 	<table class="list">
 		<thead>
 			<tr>
-				<td class="left"><?= $text_payment_address; ?></td>
+				<td class="left"><?= _l("Billing Address"); ?></td>
 				<? if (!empty($shipping_address)) { ?>
-					<td class="left"><?= $text_shipping_address; ?></td>
+					<td class="left"><?= _l("Delivery Address"); ?></td>
 				<? } ?>
 			</tr>
 		</thead>
@@ -53,10 +54,10 @@
 		<thead>
 			<tr>
 				<td class="left"><?= _l("Product"); ?></td>
-				<td class="left"><?= $column_model; ?></td>
-				<td class="right"><?= $column_quantity; ?></td>
-				<td class="right"><?= $column_price; ?></td>
-				<td class="right"><?= $column_total; ?></td>
+				<td class="left"><?= _l("Model"); ?></td>
+				<td class="right"><?= _l("Quantity"); ?></td>
+				<td class="right"><?= _l("Price"); ?></td>
+				<td class="right"><?= _l("Total"); ?></td>
 				<? if (!empty($products)) { ?>
 					<td></td>
 				<? } ?>
@@ -84,8 +85,7 @@
 							<div class="final_sale_small"><span class="final_sale"></span></div>
 						<? } else { ?>
 							<a href="<?= $product['return']; ?>">
-								<img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= $button_return; ?>"
-									title="<?= $button_return; ?>"/>
+								<img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= _l("Return Products"); ?>" title="<?= _l("Return Products"); ?>"/>
 							</a>
 						<? } ?>
 					</td>
@@ -121,7 +121,7 @@
 		<table class="list">
 			<thead>
 				<tr>
-					<td class="left"><?= $text_comment; ?></td>
+					<td class="left"><?= _l("Order Comments"); ?></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -132,13 +132,13 @@
 		</table>
 	<? } ?>
 	<? if ($histories) { ?>
-		<h2><?= $text_history; ?></h2>
+		<h2><?= _l("Order History"); ?></h2>
 		<table class="list">
 			<thead>
 				<tr>
-					<td class="left"><?= $column_date_added; ?></td>
-					<td class="left"><?= $column_status; ?></td>
-					<td class="left"><?= $column_comment; ?></td>
+					<td class="left"><?= _l("Date"); ?></td>
+					<td class="left"><?= _l("Status"); ?></td>
+					<td class="left"><?= _l("Comments"); ?></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -160,7 +160,7 @@
 		<?= _l("for details."); ?>
 	</div>
 	<div class="buttons">
-		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
 	<?= $content_bottom; ?>

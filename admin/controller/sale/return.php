@@ -7,7 +7,7 @@ class Admin_Controller_Sale_Return extends Controller
 	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Sale_Return extends Controller
 	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Return->addReturn($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified returns!"));
 
 			$url = '';
 
@@ -79,12 +79,12 @@ class Admin_Controller_Sale_Return extends Controller
 	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Return->editReturn($_GET['return_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified returns!"));
 
 			$url = '';
 
@@ -142,14 +142,14 @@ class Admin_Controller_Sale_Return extends Controller
 	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $return_id) {
 				$this->Model_Sale_Return->deleteReturn($return_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified returns!"));
 
 			$url = '';
 
@@ -319,8 +319,8 @@ class Admin_Controller_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
 		$this->data['insert'] = $this->url->link('sale/return/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/return/delete', $url);
@@ -610,8 +610,8 @@ class Admin_Controller_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
 		if (!isset($_GET['return_id'])) {
 			$this->data['action'] = $this->url->link('sale/return/insert', $url);
@@ -789,7 +789,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->template->load('sale/return_info');
 			$this->language->load('sale/return');
 
-			$this->document->setTitle($this->_('head_title'));
+			$this->document->setTitle(_l("Product Returns"));
 
 			$url = '';
 
@@ -837,8 +837,8 @@ class Admin_Controller_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
+			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+			$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
 			$this->data['cancel'] = $this->url->link('sale/return', $url);
 
@@ -867,7 +867,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['date_added']    = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
 			$this->data['date_modified'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_modified']));
 
-			$this->data['opened'] = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
+			$this->data['opened'] = $return_info['opened'] ? _l("Yes") : _l("No");
 
 			$this->data['comment'] = nl2br($return_info['comment']);
 
@@ -881,10 +881,10 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->template->load('error/not_found');
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('head_title'));
+			$this->document->setTitle(_l("Product Returns"));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+			$this->breadcrumb->add(_l("Product Returns"), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',
@@ -898,31 +898,31 @@ class Admin_Controller_Sale_Return extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/return')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify returns!");
 		}
 
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		if ((strlen($_POST['product']) < 1) || (strlen($_POST['product']) > 255)) {
-			$this->error['product'] = $this->_('error_product');
+			$this->error['product'] = _l("Product Name must be greater than 3 and less than 255 characters!");
 		}
 
 		if ((strlen($_POST['model']) < 1) || (strlen($_POST['model']) > 64)) {
-			$this->error['model'] = $this->_('error_model');
+			$this->error['model'] = _l("Product Model must be greater than 3 and less than 64 characters!");
 		}
 
 		if (empty($_POST['return_reason_id'])) {
@@ -930,7 +930,7 @@ class Admin_Controller_Sale_Return extends Controller
 		}
 
 		if ($this->error && !isset($this->error['warning'])) {
-			$this->error['warning'] = $this->_('error_warning');
+			$this->error['warning'] = _l("Warning: Please check the form carefully for errors!");
 		}
 
 		return $this->error ? false : true;
@@ -939,7 +939,7 @@ class Admin_Controller_Sale_Return extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/return')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify returns!");
 		}
 
 		return $this->error ? false : true;
@@ -954,12 +954,12 @@ class Admin_Controller_Sale_Return extends Controller
 		if ($this->request->isPost()) {
 
 			if (!$this->user->can('modify', 'sale/return')) {
-				$json['error'] = $this->_('error_permission');
+				$json['error'] = _l("Warning: You do not have permission to modify returns!");
 			}
 
 			if (!$json) {
 
-				$json['success'] = $this->_('text_success');
+				$json['success'] = _l("Success: You have modified returns!");
 
 				$this->Model_Sale_Return->editReturnAction($_GET['return_id'], $_POST['return_action_id']);
 			}
@@ -977,13 +977,13 @@ class Admin_Controller_Sale_Return extends Controller
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 
-			$this->language->set('success', $this->_('text_success'));
+			$this->language->set('success', _l("Success: You have modified returns!"));
 		} else {
 			$this->data['success'] = '';
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/return')) {
-			$this->language->set('error_warning', $this->_('error_permission'));
+			$this->language->set('error_warning', _l("Warning: You do not have permission to modify returns!"));
 		} else {
 			$this->data['error_warning'] = '';
 		}
@@ -1000,7 +1000,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		foreach ($results as $result) {
 			$this->data['histories'][] = array(
-				'notify'     => $result['notify'] ? $this->_('text_yes') : $this->_('text_no'),
+				'notify'     => $result['notify'] ? _l("Yes") : _l("No"),
 				'status'     => $result['status'],
 				'comment'    => nl2br($result['comment']),
 				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),

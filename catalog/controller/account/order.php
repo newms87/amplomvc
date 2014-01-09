@@ -108,8 +108,6 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$this->language->set('head_title', _l("Order Information"));
-
 		$this->data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');

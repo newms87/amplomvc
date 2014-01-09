@@ -7,7 +7,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$this->language->load('report/product_viewed');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products Viewed Report"));
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -17,8 +17,8 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/product_viewed'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Products Viewed Report"), $this->url->link('report/product_viewed'));
 
 		$data = array(
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
@@ -107,7 +107,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$this->Model_Report_Product->reset();
 
-		$this->message->add('success', $this->_('text_success'));
+		$this->message->add('success', _l("Success: You have reset the product viewed report!"));
 
 		$this->url->redirect('report/product_viewed');
 	}

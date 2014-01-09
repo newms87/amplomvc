@@ -22,7 +22,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$this->Model_Catalog_AttributeGroup->deleteAttributeGroup($_GET['attribute_group_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
 			}
@@ -68,7 +68,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
 			}
@@ -80,35 +80,35 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Attribute Groups"));
 
 		//The Template
 		$this->template->load('catalog/attribute_group_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/attribute_group'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Attribute Groups"), $this->url->link('catalog/attribute_group'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Attribute Group Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['attribute_count'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_attribute_count'),
+			'display_name' => _l("# of Attributes"),
 			'filter'       => false,
 			'sortable'     => true,
 		);
 
 		$columns['sort_order'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_sort_order'),
+			'display_name' => _l("Sort Order"),
 			'filter'       => false,
 			'sortable'     => true,
 		);
@@ -189,7 +189,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Attribute Groups"));
 
 		//The Template
 		$this->template->load('catalog/attribute_group_form');
@@ -198,8 +198,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$attribute_group_id = !empty($_GET['attribute_group_id']) ? $_GET['attribute_group_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/attribute_group'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Attribute Groups"), $this->url->link('catalog/attribute_group'));
 
 		if (!$attribute_group_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update'));
@@ -217,7 +217,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				$count = $this->Model_Catalog_AttributeGroup->getAttributeProductCount($attribute['attribute_id']);
 
 				if ($count) {
-					$attribute['product_count'] = $this->_('text_product_count', $count);
+					$attribute['product_count'] = _l("Associated to %d Product(s)", $count);
 				}
 			}
 
@@ -284,11 +284,11 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/attribute_group')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify attribute groups!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Attribute Group Name must be between 3 and 64 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -297,7 +297,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/attribute_group')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify attribute groups!");
 		}
 
 		$attribute_group_ids = array();
@@ -314,7 +314,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			if ($attribute_total = $this->Model_Catalog_AttributeGroup->hasProductAssociation($attribute_group_id)) {
 				$attribute_group = $this->Model_Catalog_AttributeGroup->getAttributeGroup($attribute_group_id);
 
-				$this->error['warning_' . $attribute_group_id] = $this->_('error_attribute', $attribute_group['name'], $attribute_total);
+				$this->error['warning_' . $attribute_group_id] = _l("Th attribute group %s cannot be deleted as it is currently assigned to %s products!", $attribute_group['name'], $attribute_total);
 			}
 		}
 
@@ -348,7 +348,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		unset($attribute);
 
 		$attributes[] = array(
-			'label' => $this->_("text_add_attribute_autocomplete"),
+			'label' => _l(" + Add Attribute"),
 			'value' => false,
 			'href'  => $this->url->link('catalog/attribute_group'),
 		);

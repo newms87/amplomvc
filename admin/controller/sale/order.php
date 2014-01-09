@@ -22,7 +22,7 @@ class Admin_Controller_Sale_Order extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified orders!"));
 
 				$this->url->redirect('sale/order');
 			}
@@ -35,13 +35,13 @@ class Admin_Controller_Sale_Order extends Controller
 	{
 		$this->language->load('sale/order');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Orders"));
 
 		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
 			$this->System_Model_Order->deleteOrder($_GET['order_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified orders!"));
 
 				$this->url->redirect('sale/order');
 			}
@@ -56,32 +56,32 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('sale/order_list');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Orders"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['customer'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_customer'),
+			'display_name' => _l("Customer"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['total'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_total'),
+			'display_name' => _l("Total"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['store_id'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Store"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -93,7 +93,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$columns['order_status_id'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_config' => array(
 				false,
@@ -105,14 +105,14 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$columns['date_added'] = array(
 			'type'         => 'date',
-			'display_name' => $this->_('column_date_added'),
+			'display_name' => _l("Date Added"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['date_modified'] = array(
 			'type'         => 'date',
-			'display_name' => $this->_('column_date_modified'),
+			'display_name' => _l("Date Modified"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -200,14 +200,14 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('sale/order_form');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Orders"));
 
 		//Insert or Update
 		$order_id = !empty($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 
 		if ($order_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/order/update', 'order_id=' . $order_id));
@@ -300,52 +300,52 @@ class Admin_Controller_Sale_Order extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/order')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify orders!");
 		}
 
 		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->phone($_POST['telephone'])) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		//Validate Payment Information
 		if (!$this->validation->text($_POST['payment_firstname'], 1, 32)) {
-			$this->error['payment_firstname'] = $this->_('error_firstname');
+			$this->error['payment_firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['payment_lastname'], 1, 32)) {
-			$this->error['payment_lastname'] = $this->_('error_lastname');
+			$this->error['payment_lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['payment_address_1'], 3, 128)) {
-			$this->error['payment_address_1'] = $this->_('error_address_1');
+			$this->error['payment_address_1'] = _l("Address 1 must be between 3 and 128 characters!");
 		}
 
 		if (!$this->validation->text($_POST['payment_city'], 3, 128)) {
-			$this->error['payment_city'] = $this->_('error_city');
+			$this->error['payment_city'] = _l("City must be between 3 and 128 characters!");
 		}
 
 		$country_info = $this->Model_Localisation_Country->getCountry($_POST['payment_country_id']);
 
 		if (!$country_info) {
-			$this->error['payment_country'] = $this->_('error_country');
+			$this->error['payment_country'] = _l("Please select a country!");
 		} elseif ($country_info['postcode_required'] && (!$this->validation->text($_POST['payment_postcode'], 2, 10))) {
-			$this->error['payment_postcode'] = $this->_('error_postcode');
+			$this->error['payment_postcode'] = _l("Postcode must be between 2 and 10 characters for this country!");
 		}
 
 		if (empty($_POST['payment_zone_id'])) {
-			$this->error['payment_zone'] = $this->_('error_zone');
+			$this->error['payment_zone'] = _l("Please select a region / state!");
 		}
 
 		// Check if any products require shipping
@@ -363,38 +363,38 @@ class Admin_Controller_Sale_Order extends Controller
 
 		if ($shipping) {
 			if ((strlen($_POST['shipping_firstname']) < 1) || (strlen($_POST['shipping_firstname']) > 32)) {
-				$this->error['shipping_firstname'] = $this->_('error_firstname');
+				$this->error['shipping_firstname'] = _l("First Name must be between 1 and 32 characters!");
 			}
 
 			if ((strlen($_POST['shipping_lastname']) < 1) || (strlen($_POST['shipping_lastname']) > 32)) {
-				$this->error['shipping_lastname'] = $this->_('error_lastname');
+				$this->error['shipping_lastname'] = _l("Last Name must be between 1 and 32 characters!");
 			}
 
 			if ((strlen($_POST['shipping_address_1']) < 3) || (strlen($_POST['shipping_address_1']) > 128)) {
-				$this->error['shipping_address_1'] = $this->_('error_address_1');
+				$this->error['shipping_address_1'] = _l("Address 1 must be between 3 and 128 characters!");
 			}
 
 			if ((strlen($_POST['shipping_city']) < 3) || (strlen($_POST['shipping_city']) > 128)) {
-				$this->error['shipping_city'] = $this->_('error_city');
+				$this->error['shipping_city'] = _l("City must be between 3 and 128 characters!");
 			}
 
 			$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 
 			if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
-				$this->error['shipping_postcode'] = $this->_('error_postcode');
+				$this->error['shipping_postcode'] = _l("Postcode must be between 2 and 10 characters for this country!");
 			}
 
 			if ($_POST['shipping_country_id'] == '') {
-				$this->error['shipping_country'] = $this->_('error_country');
+				$this->error['shipping_country'] = _l("Please select a country!");
 			}
 
 			if ($_POST['shipping_zone_id'] == '') {
-				$this->error['shipping_zone'] = $this->_('error_zone');
+				$this->error['shipping_zone'] = _l("Please select a region / state!");
 			}
 		}
 
 		if ($this->error && !isset($this->error['warning'])) {
-			$this->error['warning'] = $this->_('error_warning');
+			$this->error['warning'] = _l("Warning: Please check the form carefully for errors!");
 		}
 
 		return $this->error ? false : true;
@@ -403,7 +403,7 @@ class Admin_Controller_Sale_Order extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/order')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify orders!");
 		}
 
 		return $this->error ? false : true;
@@ -420,7 +420,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		//Order Not Found
 		if (!$order_info) {
-			$this->message->add("warning", $this->_('error_order_info_not_found'));
+			$this->message->add("warning", _l("The Order was not found in the system"));
 			$this->url->redirect('sale/order');
 		}
 
@@ -428,11 +428,11 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('sale/order_info');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Orders"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 		$this->breadcrumb->add($order_info['invoice_id'], $this->url->link('sale/order/info', 'order_id=' . $order_id));
 
 		//Action Buttons
@@ -546,14 +546,14 @@ class Admin_Controller_Sale_Order extends Controller
 			$json = array();
 
 			if (!$this->user->can('modify', 'sale/order')) {
-				$json['error'] = $this->_('error_permission');
+				$json['error'] = _l("Warning: You do not have permission to modify orders!");
 			} else {
 				$invoice_no = $this->System_Model_Order->generateInvoiceId($order_id);
 
 				if ($invoice_no) {
 					$json['invoice_no'] = $invoice_no;
 				} else {
-					$json['error'] = $this->_('error_action');
+					$json['error'] = _l("Warning: Could not complete this action!");
 				}
 			}
 
@@ -568,7 +568,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
@@ -576,11 +576,11 @@ class Admin_Controller_Sale_Order extends Controller
 				$credit_total = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($_GET['order_id']);
 
 				if (!$credit_total) {
-					$this->Model_Sale_Customer->addTransaction($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['total'], $_GET['order_id']);
+					$this->Model_Sale_Customer->addTransaction($order_info['customer_id'], _l("Order ID:") . ' #' . $_GET['order_id'], $order_info['total'], $_GET['order_id']);
 
-					$json['success'] = $this->_('text_credit_added');
+					$json['success'] = _l("Success: Account credit added!");
 				} else {
-					$json['error'] = $this->_('error_action');
+					$json['error'] = _l("Warning: Could not complete this action!");
 				}
 			}
 		}
@@ -595,16 +595,16 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
 			if ($order_info && $order_info['customer_id']) {
 				$this->Model_Sale_Customer->deleteTransaction($_GET['order_id']);
 
-				$json['success'] = $this->_('text_credit_removed');
+				$json['success'] = _l("Success: Account credit removed!");
 			} else {
-				$json['error'] = $this->_('error_action');
+				$json['error'] = _l("Warning: Could not complete this action!");
 			}
 		}
 
@@ -618,7 +618,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
@@ -626,14 +626,14 @@ class Admin_Controller_Sale_Order extends Controller
 				$reward_total = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($_GET['order_id']);
 
 				if (!$reward_total) {
-					$this->Model_Sale_Customer->addReward($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['reward'], $_GET['order_id']);
+					$this->Model_Sale_Customer->addReward($order_info['customer_id'], _l("Order ID:") . ' #' . $_GET['order_id'], $order_info['reward'], $_GET['order_id']);
 
-					$json['success'] = $this->_('text_reward_added');
+					$json['success'] = _l("Success: Reward points added!");
 				} else {
-					$json['error'] = $this->_('error_action');
+					$json['error'] = _l("Warning: Could not complete this action!");
 				}
 			} else {
-				$json['error'] = $this->_('error_action');
+				$json['error'] = _l("Warning: Could not complete this action!");
 			}
 		}
 
@@ -647,16 +647,16 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
 			if ($order_info && $order_info['customer_id']) {
 				$this->Model_Sale_Customer->deleteReward($_GET['order_id']);
 
-				$json['success'] = $this->_('text_reward_removed');
+				$json['success'] = _l("Success: Reward points removed!");
 			} else {
-				$json['error'] = $this->_('error_action');
+				$json['error'] = _l("Warning: Could not complete this action!");
 			}
 		}
 
@@ -670,7 +670,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
@@ -678,14 +678,14 @@ class Admin_Controller_Sale_Order extends Controller
 				$affiliate_total = $this->Model_Sale_Affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
 
 				if (!$affiliate_total) {
-					$this->Model_Sale_Affiliate->addTransaction($order_info['affiliate_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['commission'], $_GET['order_id']);
+					$this->Model_Sale_Affiliate->addTransaction($order_info['affiliate_id'], _l("Order ID:") . ' #' . $_GET['order_id'], $order_info['commission'], $_GET['order_id']);
 
-					$json['success'] = $this->_('text_commission_added');
+					$json['success'] = _l("Success: Commission added!");
 				} else {
-					$json['error'] = $this->_('error_action');
+					$json['error'] = _l("Warning: Could not complete this action!");
 				}
 			} else {
-				$json['error'] = $this->_('error_action');
+				$json['error'] = _l("Warning: Could not complete this action!");
 			}
 		}
 
@@ -699,16 +699,16 @@ class Admin_Controller_Sale_Order extends Controller
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: You do not have permission to modify orders!");
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 
 			if ($order_info && $order_info['affiliate_id']) {
 				$this->Model_Sale_Affiliate->deleteTransaction($_GET['order_id']);
 
-				$json['success'] = $this->_('text_commission_removed');
+				$json['success'] = _l("Success: Commission removed!");
 			} else {
-				$json['error'] = $this->_('error_action');
+				$json['error'] = _l("Warning: Could not complete this action!");
 			}
 		}
 
@@ -725,11 +725,11 @@ class Admin_Controller_Sale_Order extends Controller
 
 		if ($this->request->isPost()) {
 			if (!$this->user->can('modify', 'sale/order')) {
-				$this->message->add('warning', $this->_('error_permission'));
+				$this->message->add('warning', _l("Warning: You do not have permission to modify orders!"));
 			} else {
 				$this->order->addHistory($order_id, $_POST);
 
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified orders!"));
 			}
 		}
 
@@ -740,7 +740,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$histories = $this->System_Model_Order->getOrderHistories($filter);
 
 		foreach ($histories as &$history) {
-			$history['notify']     = $history['notify'] ? $this->_('text_yes') : $this->_('text_no');
+			$history['notify']     = $history['notify'] ? _l("Yes") : _l("No");
 			$history['comment']    = nl2br($history['comment']);
 			$history['date_added'] = $this->date->format($history['date_added'], 'datetime_long');
 			$status                = $this->order->getOrderStatus($history['order_status_id']);
@@ -780,10 +780,10 @@ class Admin_Controller_Sale_Order extends Controller
 
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('head_title'));
+			$this->document->setTitle(_l("Orders"));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+			$this->breadcrumb->add(_l("Orders"), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',
@@ -805,7 +805,7 @@ class Admin_Controller_Sale_Order extends Controller
 				$filename = html_entity_decode($_FILES['file']['name'], ENT_QUOTES, 'UTF-8');
 
 				if ((strlen($filename) < 3) || (strlen($filename) > 128)) {
-					$json['error'] = $this->_('error_filename');
+					$json['error'] = _l("Filename must be between 3 and 128 characters!");
 				}
 
 				$allowed = array();
@@ -817,7 +817,7 @@ class Admin_Controller_Sale_Order extends Controller
 				}
 
 				if (!in_array(substr(strrchr($filename, '.'), 1), $allowed)) {
-					$json['error'] = $this->_('error_filetype');
+					$json['error'] = _l("Invalid file type!");
 				}
 
 				if ($_FILES['file']['error'] != UPLOAD_ERR_OK) {
@@ -836,7 +836,7 @@ class Admin_Controller_Sale_Order extends Controller
 					move_uploaded_file($_FILES['file']['tmp_name'], DIR_DOWNLOAD . $file);
 				}
 
-				$json['success'] = $this->_('text_upload');
+				$json['success'] = _l("Your file was successfully uploaded!");
 			}
 		}
 
@@ -849,7 +849,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->language->load('sale/order');
 
-		$this->language->set('title', $this->_('head_title'));
+		$this->language->set('title', _l("Orders"));
 
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 

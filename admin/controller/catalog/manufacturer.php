@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 			}
 
 			$this->url->redirect('catalog/manufacturer');
@@ -35,7 +35,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 				$this->url->redirect('catalog/manufacturer');
 			}
 		}
@@ -51,7 +51,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
 			}
 		}
@@ -88,7 +88,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('action'));
 			}
@@ -100,21 +100,21 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Manufacturer"));
 
 		//The Template
 		$this->template->load('catalog/manufacturer_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Manufacturer"), $this->url->link('catalog/manufacturer'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['thumb'] = array(
 			'type'         => 'image',
-			'display_name' => $this->_('column_image'),
+			'display_name' => _l("Image"),
 			'filter'       => false,
 			'sortable'     => true,
 			'sort_value'   => '__image_sort__image',
@@ -122,14 +122,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Manufacturer Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['vendor_id'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_vendor_id'),
+			'display_name' => _l("Vendor ID"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -137,21 +137,21 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 		$columns['date_active'] = array(
 			'type'         => 'datetime',
-			'display_name' => $this->_('column_date_active'),
+			'display_name' => _l("Active On"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['date_expires'] = array(
 			'type'         => 'datetime',
-			'display_name' => $this->_('column_date_expires'),
+			'display_name' => _l("Expires On"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Stores"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -163,7 +163,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -194,13 +194,13 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			);
 
 			if ($manufacturer['date_active'] === DATETIME_ZERO) {
-				$manufacturer['date_active'] = $this->_('text_no_date_active');
+				$manufacturer['date_active'] = _l("No Activation Date");
 			} else {
 				$manufacturer['date_active'] = $this->date->format($manufacturer['date_active'], 'datetime_format_long');
 			}
 
 			if ($manufacturer['date_expires'] === DATETIME_ZERO) {
-				$manufacturer['date_expires'] = $this->_('text_no_date_expires');
+				$manufacturer['date_expires'] = _l("No Expiration Date");
 			} else {
 				$manufacturer['date_expires'] = $this->date->format($manufacturer['date_active'], 'datetime_format_long');
 			}
@@ -228,10 +228,10 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -267,14 +267,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	private function getForm()
 	{
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Manufacturer"));
 
 		$this->template->load('catalog/manufacturer_form');
 
 		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Manufacturer"), $this->url->link('catalog/manufacturer'));
 
 		if (!$manufacturer_id) {
 			$this->data['action'] = $this->url->link('catalog/manufacturer/insert');
@@ -346,11 +346,11 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/manufacturer')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify manufacturers!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 128)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Manufacturer Name must be between 3 and 64 characters!");
 		}
 
 		if (empty($_POST['alias'])) {
@@ -363,7 +363,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/manufacturer')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify manufacturers!");
 		}
 
 		$manufacturer_ids = array();
@@ -384,7 +384,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$product_count = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_count) {
-				$this->error['manufacturer' . $manufacturer_id] = $this->_('error_product', $product_count);
+				$this->error['manufacturer' . $manufacturer_id] = _l("Warning: This manufacturer cannot be deleted as it is currently assigned to %s products!", $product_count);
 			}
 		}
 

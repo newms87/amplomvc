@@ -7,10 +7,10 @@ class Admin_Controller_Extension_Module extends Controller
 
 		$this->language->load('extension/module');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Modules"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/module'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Modules"), $this->url->link('extension/module'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
@@ -52,7 +52,7 @@ class Admin_Controller_Extension_Module extends Controller
 
 				if (!in_array($extension, $extensions)) {
 					$action[] = array(
-						'text' => $this->_('text_install'),
+						'text' => _l("Install"),
 						'href' => $this->url->link('extension/module/install', 'extension=' . $extension)
 					);
 				} else {
@@ -62,13 +62,13 @@ class Admin_Controller_Extension_Module extends Controller
 					);
 
 					$action[] = array(
-						'text' => $this->_('text_uninstall'),
+						'text' => _l("Uninstall"),
 						'href' => $this->url->link('extension/module/uninstall', 'extension=' . $extension)
 					);
 				}
 
 				$this->data['extensions'][] = array(
-					'name'   => $this->_('head_title'),
+					'name'   => _l("Modules"),
 					'action' => $action
 				);
 			}
@@ -85,7 +85,7 @@ class Admin_Controller_Extension_Module extends Controller
 	public function install()
 	{
 		if (!$this->user->can('modify', 'extension/module')) {
-			$this->session->set('error', $this->_('error_permission'));
+			$this->session->set('error', _l("Warning: You do not have permission to modify modules!"));
 
 			$this->url->redirect('extension/module');
 		} else {
@@ -112,7 +112,7 @@ class Admin_Controller_Extension_Module extends Controller
 		$this->language->load('extension/module');
 
 		if (!$this->user->can('modify', 'extension/module')) {
-			$this->session->set('error', $this->_('error_permission'));
+			$this->session->set('error', _l("Warning: You do not have permission to modify modules!"));
 
 			$this->url->redirect('extension/module');
 		} else {
@@ -129,7 +129,7 @@ class Admin_Controller_Extension_Module extends Controller
 				$class->uninstall();
 			}
 
-			$this->message->add('success', $this->_('text_uninstalled_module'));
+			$this->message->add('success', _l("Successfully uninstalled the module!"));
 
 			$this->url->redirect('extension/module');
 		}

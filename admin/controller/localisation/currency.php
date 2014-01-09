@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Currency"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Currency"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Currency->addCurrency($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified currencies!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Currency"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Currency->editCurrency($_GET['currency_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified currencies!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Currency"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $currency_id) {
 				$this->Model_Localisation_Currency->deleteCurrency($currency_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified currencies!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/currency', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Currency"), $this->url->link('localisation/currency', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/currency/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/currency/delete', $url);
@@ -273,8 +273,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/currency', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Currency"), $this->url->link('localisation/currency', $url));
 
 		if (!isset($_GET['currency_id'])) {
 			$this->data['action'] = $this->url->link('localisation/currency/insert', $url);
@@ -355,15 +355,15 @@ class Admin_Controller_Localisation_Currency extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/currency')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify currencies!");
 		}
 
 		if ((strlen($_POST['title']) < 3) || (strlen($_POST['title']) > 32)) {
-			$this->error['title'] = $this->_('error_title');
+			$this->error['title'] = _l("Currency Title must be between 3 and 32 characters!");
 		}
 
 		if (strlen($_POST['code']) != 3) {
-			$this->error['code'] = $this->_('error_code');
+			$this->error['code'] = _l("Currency Code must contain 3 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -372,7 +372,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/currency')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify currencies!");
 		}
 
 		foreach ($_GET['selected'] as $currency_id) {
@@ -380,13 +380,13 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 			if ($currency_info) {
 				if ($this->config->get('config_currency') == $currency_info['code']) {
-					$this->error['warning'] = $this->_('error_default');
+					$this->error['warning'] = _l("Warning: This currency cannot be deleted as it is currently assigned as the default store currency!");
 				}
 
 				$store_total = $this->Model_Setting_Store->getTotalStoresByCurrency($currency_info['code']);
 
 				if ($store_total) {
-					$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
+					$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
 
@@ -397,7 +397,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$order_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($order_total) {
-				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);
+				$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s orders!"), $order_total);
 			}
 		}
 

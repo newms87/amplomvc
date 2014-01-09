@@ -7,11 +7,11 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		$this->language->load('block/block');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Blocks"));
 
 		if (!empty($_GET['name'])) {
 			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
-				$this->message->add('warning', $this->_('error_unknown_block'));
+				$this->message->add('warning', _l("Attempted to access unknown block!"));
 
 				$this->url->redirect('block/block');
 			}
@@ -30,7 +30,7 @@ class Admin_Controller_Block_Block extends Controller
 			$this->Model_Block_Block->deleteBlock($_GET['name']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success_delete'));
+				$this->message->add('success', _l("The Block was removed successfully!"));
 			}
 
 			$this->url->redirect('block/block', $this->url->getQueryExclude('name'));
@@ -43,22 +43,22 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		$this->template->load('block/list');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/block'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['display_name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_display_name'),
+			'display_name' => _l("Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Path"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -146,16 +146,16 @@ class Admin_Controller_Block_Block extends Controller
 
 			$this->Model_Block_Block->updateBlock($name, $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("The Block was saved successfully!"));
 
 			$this->url->redirect('block/block');
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_block_list'), $this->url->link('block/block'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
 
 		$this->language->load('block/' . $name);
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/block', 'name=' . $name));
+		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block', 'name=' . $name));
 
 		$this->data['action'] = $this->url->link('block/block', 'name=' . $name);
 		$this->data['cancel'] = $this->url->link('block/block');
@@ -165,12 +165,12 @@ class Admin_Controller_Block_Block extends Controller
 		}
 
 		$default_profile_settings = array(
-			'name'             => $this->_('var_default_profile_setting_name'),
+			'name'             => _l("Default"),
 			'show_block_title' => 1,
 		);
 
 		$default_profile = array(
-			'name'               => $this->_('var_default_profile_name'),
+			'name'               => _l("New Profile"),
 			'profile_setting_id' => 0,
 			'store_ids'          => array($this->config->get('config_default_store')),
 			'layout_ids'         => array(),
@@ -233,14 +233,14 @@ class Admin_Controller_Block_Block extends Controller
 
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 
-		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
+		$this->data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->get_setting('data_positions');
 
 		$this->data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$_['data_yes_no'] = array(
+		$this->data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);

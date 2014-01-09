@@ -6,19 +6,19 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->template->load('setting/update');
 		$this->language->load('setting/update');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("System Update"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['version'])) {
 				$this->System_Update->updateSystem($_POST['version']);
-				$this->message->add('success', $this->_('text_success', $_POST['version']));
+				$this->message->add('success', _l("You have successfully updated to version %s", $_POST['version']));
 			} elseif (isset($_POST['auto_update'])) {
 				$this->config->save('system', 'auto_update', $_POST['auto_update']);
 
 				if ($_POST['auto_update']) {
-					$this->message->add('success', $this->_('text_auto_update_active'));
+					$this->message->add('success', _l("Automatic system updates has been activated!"));
 				} else {
-					$this->message->add('notify', $this->_('text_auto_update_inactive'));
+					$this->message->add('notify', _l("You have deactivated automatic system updates!"));
 				}
 			}
 
@@ -27,8 +27,8 @@ class Admin_Controller_Setting_Update extends Controller
 			}
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/update'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("System Update"), $this->url->link('setting/update'));
 
 		$this->data['action'] = $this->url->link('setting/update');
 		$this->data['cancel'] = $this->url->link('common/home');
@@ -57,7 +57,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$versions = array();
 
 		foreach ($version_list as $version => $file) {
-			$versions[$version] = $this->_('text_version', $version);
+			$versions[$version] = _l("AmploCart Version %s", $version);
 		}
 
 		$this->data['data_versions'] = $versions;

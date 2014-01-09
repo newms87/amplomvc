@@ -6,7 +6,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->template->load('dev/dev');
 		$this->language->load('dev/dev');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Development Console"));
 
 		$this->data['url_sync']            = $this->url->link("dev/dev/sync");
 		$this->data['url_site_management'] = $this->url->link("dev/dev/site_management");
@@ -22,7 +22,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->language->load('dev/dev');
 
-		$this->document->setTitle($this->_('text_sync'));
+		$this->document->setTitle(_l("Synchronize Sites"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -45,7 +45,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add($this->_('text_sync'), $this->url->link('dev/dev/sync'));
+		$this->breadcrumb->add(_l("Synchronize Sites"), $this->url->link('dev/dev/sync'));
 
 		$this->data['request_sync_table'] = $this->url->link('dev/dev/request_sync_table');
 
@@ -75,7 +75,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->language->load('dev/dev');
 
-		$this->document->setTitle($this->_('text_site_management'));
+		$this->document->setTitle(_l("Site Management"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -96,7 +96,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
-		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
+		$this->breadcrumb->add(_l("Site Management"), $this->url->link('dev/dev/site_management'));
 
 		$defaults = array(
 			'domain'   => '',
@@ -112,7 +112,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
-		$_['data_site_status'] = array(
+		$this->data['data_site_status'] = array(
 			'live'     => _l("Live Site"),
 			'dev'      => _l("Development Site"),
 			'inactive' => _l("Inactive Site"),
@@ -130,7 +130,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->language->load('dev/dev');
 
 		//Page Head
-		$this->document->setTitle($this->_('text_backup_restore'));
+		$this->document->setTitle(_l("Backup & Restore"));
 
 		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
@@ -138,7 +138,7 @@ class Admin_Controller_Dev_Dev extends Controller
 				if (!empty($_POST['backup_file'])) {
 					$this->export->downloadFile($_POST['backup_file']);
 				} else {
-					$this->message->add('warning', $this->_('error_download_backup_file'));
+					$this->message->add('warning', _l("Please select a backup file to download."));
 				}
 			}
 			elseif (isset($_POST['default_installation'])) {
@@ -187,7 +187,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add($this->_('text_backup_restore'), $this->url->link('dev/dev/backup_restore'));
+		$this->breadcrumb->add(_l("Backup & Restore"), $this->url->link('dev/dev/backup_restore'));
 
 		$defaults = array(
 			'tables' => '',
@@ -219,8 +219,8 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('dev/dev'), '', 1);
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
+		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);
 
 		$this->data['return'] = $this->url->link('common/home');
 
@@ -246,7 +246,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 			unlink($file);
 		} else {
-			echo $this->_('error_sync_table');
+			echo _l("There was a problem while synchronizing from the server.");
 		}
 
 		exit;
@@ -255,7 +255,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'dev/dev')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to use the development console!");
 		}
 
 		return $this->error ? false : true;

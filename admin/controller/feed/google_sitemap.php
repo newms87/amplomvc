@@ -9,12 +9,12 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 		$this->language->load('feed/google_sitemap');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Google Sitemap"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->config->saveGroup('google_sitemap', $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified Google Sitemap feed!"));
 
 			$this->url->redirect('extension/feed');
 		}
@@ -25,9 +25,9 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 			$this->data['error_warning'] = '';
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_feed'), $this->url->link('extension/feed'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('feed/google_sitemap'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Feeds"), $this->url->link('extension/feed'));
+		$this->breadcrumb->add(_l("Google Sitemap"), $this->url->link('feed/google_sitemap'));
 
 		$this->data['action'] = $this->url->link('feed/google_sitemap');
 
@@ -52,7 +52,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'feed/google_sitemap')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify Google Sitemap feed!");
 		}
 
 		return $this->error ? false : true;

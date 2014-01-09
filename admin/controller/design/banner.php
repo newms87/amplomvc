@@ -7,7 +7,7 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Banners"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Banners"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 
@@ -35,12 +35,12 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Banners"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 
@@ -54,14 +54,14 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Banners"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $banner_id) {
 				$this->Model_Design_Banner->deleteBanner($banner_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 
@@ -86,8 +86,8 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/banner'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
 
 		$this->data['insert'] = $this->url->link('design/banner/insert', $url);
 		$this->data['delete'] = $this->url->link('design/banner/delete', $url);
@@ -116,7 +116,7 @@ class Admin_Controller_Design_Banner extends Controller
 			$this->data['banners'][] = array(
 				'banner_id' => $result['banner_id'],
 				'name'      => $result['name'],
-				'status'    => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'status'    => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'selected'  => isset($_GET['selected']) && in_array($result['banner_id'], $_GET['selected']),
 				'action'    => $action
 			);
@@ -165,8 +165,8 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/banner'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
 
 		if (!$banner_id) {
 			$this->data['action'] = $this->url->link('design/banner/insert', $url);
@@ -241,18 +241,18 @@ class Admin_Controller_Design_Banner extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'design/banner')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify banners!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Banner Name must be between 3 and 64 characters!");
 		}
 
 		if (isset($_POST['banner_image'])) {
 			foreach ($_POST['banner_image'] as $banner_image_id => $banner_image) {
 				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
 					if ((strlen($banner_image_description['title']) < 2) || (strlen($banner_image_description['title']) > 64)) {
-						$this->error["banner_image[$banner_image_id][image]"] = $this->_('error_title');
+						$this->error["banner_image[$banner_image_id][image]"] = _l("Banner Title must be between 2 and 64 characters!");
 					}
 				}
 			}
@@ -264,7 +264,7 @@ class Admin_Controller_Design_Banner extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'design/banner')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify banners!");
 		}
 
 		return $this->error ? false : true;

@@ -7,10 +7,10 @@ class Admin_Controller_Tool_Tool extends Controller
 
 		$this->language->load('tool/tool');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("System Tools"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/tool'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("System Tools"), $this->url->link('tool/tool'));
 
 		$this->data['clear_cache'] = $this->url->link('tool/tool/clear_cache');
 
@@ -45,9 +45,9 @@ class Admin_Controller_Tool_Tool extends Controller
 
 			$this->cache->delete($_POST['cache_tables']);
 
-			$this->message->add('success', $this->_('success_clear_cache'));
+			$this->message->add('success', _l("The cache table was successfully cleared!"));
 		} else {
-			$this->message->add('warning', $this->_('error_clear_cache'));
+			$this->message->add('warning', _l("Unable to clear the cache table!"));
 		}
 
 		$this->index();
@@ -56,7 +56,7 @@ class Admin_Controller_Tool_Tool extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'tool/tool')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify tools!");
 		}
 
 		return $this->error ? false : true;

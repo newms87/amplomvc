@@ -155,27 +155,27 @@ class Admin_Controller_Common_Filemanager extends Controller
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');
 
 				if (!is_dir($directory)) {
-					$json['error'] = $this->_('error_directory');
+					$json['error'] = _l("Warning: Please select a directory!");
 				}
 
 				if (file_exists($directory . '/' . str_replace('../', '', $_POST['name']))) {
-					$json['error'] = $this->_('error_exists');
+					$json['error'] = _l("Warning: A file or directory with the same name already exists!");
 				}
 			} else {
-				$json['error'] = $this->_('error_name');
+				$json['error'] = _l("Warning: Please enter a new name!");
 			}
 		} else {
-			$json['error'] = $this->_('error_directory');
+			$json['error'] = _l("Warning: Please select a directory!");
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
 			mkdir($directory . '/' . str_replace('../', '', $_POST['name']), 0777);
 
-			$json['success'] = $this->_('text_create');
+			$json['success'] = _l("Success: Directory created!");
 		}
 
 		$this->response->setOutput(json_encode($json));
@@ -191,18 +191,18 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$path = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['path'], ENT_QUOTES, 'UTF-8')), '/');
 
 			if (!file_exists($path)) {
-				$json['error'] = $this->_('error_select');
+				$json['error'] = _l("Warning: Please select a directory or file!");
 			}
 
 			if ($path == rtrim(DIR_IMAGE . 'data/', '/')) {
-				$json['error'] = $this->_('error_delete');
+				$json['error'] = _l("Warning: You can not delete this directory!");
 			}
 		} else {
-			$json['error'] = $this->_('error_select');
+			$json['error'] = _l("Warning: Please select a directory or file!");
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
@@ -212,7 +212,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 				$this->recursiveDelete($path);
 			}
 
-			$json['success'] = $this->_('text_delete');
+			$json['success'] = _l("Success: Your file or directory has been deleted!");
 		}
 
 		$this->response->setOutput(json_encode($json));
@@ -255,34 +255,34 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$from = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['from'], ENT_QUOTES, 'UTF-8')), '/');
 
 			if (!file_exists($from)) {
-				$json['error'] = $this->_('error_missing');
+				$json['error'] = _l("Warning: File or directory does not exist!");
 			}
 
 			if ($from == DIR_IMAGE . 'data') {
-				$json['error'] = $this->_('error_default');
+				$json['error'] = _l("Warning: Can not alter your default directory!");
 			}
 
 			$to = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['to'], ENT_QUOTES, 'UTF-8')), '/');
 
 			if (!file_exists($to)) {
-				$json['error'] = $this->_('error_move');
+				$json['error'] = _l("Warning: Move to directory does not exists!");
 			}
 
 			if (file_exists($to . '/' . basename($from))) {
-				$json['error'] = $this->_('error_exists');
+				$json['error'] = _l("Warning: A file or directory with the same name already exists!");
 			}
 		} else {
-			$json['error'] = $this->_('error_directory');
+			$json['error'] = _l("Warning: Please select a directory!");
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
 			rename($from, $to . '/' . basename($from));
 
-			$json['success'] = $this->_('text_move');
+			$json['success'] = _l("Success: Your file or directory has been moved!");
 		}
 
 		$this->response->setOutput(json_encode($json));
@@ -296,13 +296,13 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 		if (isset($_POST['path']) && isset($_POST['name'])) {
 			if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 255)) {
-				$json['error'] = $this->_('error_filename');
+				$json['error'] = _l("Warning: Filename must be a between 3 and 255!");
 			}
 
 			$old_name = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['path'], ENT_QUOTES, 'UTF-8')), '/');
 
 			if (!file_exists($old_name) || $old_name == DIR_IMAGE . 'data') {
-				$json['error'] = $this->_('error_copy');
+				$json['error'] = _l("Warning: Can not copy this file or directory!");
 			}
 
 			if (is_file($old_name)) {
@@ -314,14 +314,14 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$new_name = dirname($old_name) . '/' . str_replace('../', '', html_entity_decode($_POST['name'], ENT_QUOTES, 'UTF-8') . $ext);
 
 			if (file_exists($new_name)) {
-				$json['error'] = $this->_('error_exists');
+				$json['error'] = _l("Warning: A file or directory with the same name already exists!");
 			}
 		} else {
-			$json['error'] = $this->_('error_select');
+			$json['error'] = _l("Warning: Please select a directory or file!");
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
@@ -331,7 +331,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 				$this->recursiveCopy($old_name, $new_name);
 			}
 
-			$json['success'] = $this->_('text_copy');
+			$json['success'] = _l("Success: Your file or directory has been copied!");
 		}
 
 		$this->response->setOutput(json_encode($json));
@@ -384,13 +384,13 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 		if (isset($_POST['path']) && isset($_POST['name'])) {
 			if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 255)) {
-				$json['error'] = $this->_('error_filename');
+				$json['error'] = _l("Warning: Filename must be a between 3 and 255!");
 			}
 
 			$old_name = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['path'], ENT_QUOTES, 'UTF-8')), '/');
 
 			if (!file_exists($old_name) || $old_name == DIR_IMAGE . 'data') {
-				$json['error'] = $this->_('error_rename');
+				$json['error'] = _l("Warning: Can not rename this directory!");
 			}
 
 			if (is_file($old_name)) {
@@ -402,18 +402,18 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$new_name = dirname($old_name) . '/' . str_replace('../', '', html_entity_decode($_POST['name'], ENT_QUOTES, 'UTF-8') . $ext);
 
 			if (file_exists($new_name)) {
-				$json['error'] = $this->_('error_exists');
+				$json['error'] = _l("Warning: A file or directory with the same name already exists!");
 			}
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
 			rename($old_name, $new_name);
 
-			$json['success'] = $this->_('text_rename');
+			$json['success'] = _l("Success: Your file or directory has been renamed!");
 		}
 
 		$this->response->setOutput(json_encode($json));
@@ -430,17 +430,17 @@ class Admin_Controller_Common_Filemanager extends Controller
 				$filename = basename(html_entity_decode($_FILES['image']['name'], ENT_QUOTES, 'UTF-8'));
 
 				if ((strlen($filename) < 3) || (strlen($filename) > 255)) {
-					$json['error'] = $this->_('error_filename');
+					$json['error'] = _l("Warning: Filename must be a between 3 and 255!");
 				}
 
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');
 
 				if (!is_dir($directory)) {
-					$json['error'] = $this->_('error_directory');
+					$json['error'] = _l("Warning: Please select a directory!");
 				}
 
 				if ($_FILES['image']['size'] > 30000000) {
-					$json['error'] = $this->_('error_file_size');
+					$json['error'] = _l("Warning: File too big please keep below 30mb!");
 				}
 
 				$allowed = explode(',', $this->config->get('config_upload_images_mime_types_allowed'));
@@ -448,7 +448,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 					$a = trim($a);
 				}
 				if (!in_array($_FILES['image']['type'], $allowed)) {
-					$json['error'] = $this->_('error_file_type');
+					$json['error'] = _l("Warning: Incorrect file type!");
 				}
 
 				$allowed = explode(',', $this->config->get('config_upload_images_allowed'));
@@ -457,28 +457,28 @@ class Admin_Controller_Common_Filemanager extends Controller
 				}
 
 				if (!in_array(strtolower(substr(strrchr($filename, '.'), 1)), $allowed)) {
-					$json['error'] = $this->_('error_file_type');
+					$json['error'] = _l("Warning: Incorrect file type!");
 				}
 
 				if ($_FILES['image']['error'] != UPLOAD_ERR_OK) {
 					$json['error'] = 'error_upload_' . $_FILES['image']['error'];
 				}
 			} else {
-				$json['error'] = $this->_('error_file');
+				$json['error'] = _l("Warning: Please select a file!");
 			}
 		} else {
-			$json['error'] = $this->_('error_directory');
+			$json['error'] = _l("Warning: Please select a directory!");
 		}
 
 		if (!$this->user->can('modify', 'common/filemanager')) {
-			$json['error'] = $this->_('error_permission');
+			$json['error'] = _l("Warning: Permission Denied!");
 		}
 
 		if (!isset($json['error'])) {
 			if (@move_uploaded_file($_FILES['image']['tmp_name'], $directory . '/' . $filename)) {
-				$json['success'] = $this->_('text_uploaded');
+				$json['success'] = _l("Success: Your file has been uploaded!");
 			} else {
-				$json['error'] = $this->_('error_uploaded');
+				$json['error'] = _l("Warning: File could not be uploaded for an unknown reason!");
 			}
 		}
 

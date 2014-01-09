@@ -3,10 +3,10 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
 
 				<div class="batch_actions">
-					<a href="<?= $download_email_list; ?>" class="button email_list"><?= $button_email_list; ?></a>
+					<a href="<?= $download_email_list; ?>" class="button email_list"><?= _l("Download Email List"); ?></a>
 					<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
 				</div>
 				<div class="buttons">

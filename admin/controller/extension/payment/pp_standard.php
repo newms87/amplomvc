@@ -38,7 +38,7 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 		//Additional Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 
-		$_['data_auth_sale'] = array(
+		$this->data['data_auth_sale'] = array(
 			0 => _l("Authorization"),
 			1 => _l("Sale"),
 		);
@@ -60,15 +60,15 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 		$settings = $_POST['settings'];
 
 		if (!$this->validation->email($settings['email'])) {
-			$this->error['settings[email]'] = $this->_('error_email');
+			$this->error['settings[email]'] = _l("A Valid E-Mail is required!");
 		}
 
 		if (!empty($settings['test_email']) && !$this->validation->email($settings['test_email'])) {
-			$this->error['settings[test_email]'] = $this->_('error_test_email');
+			$this->error['settings[test_email]'] = _l("Please enter a valid Test Email address or leave blank to use your main account email for testing.");
 		}
 
 		if ($settings['pdt_enabled'] && !$settings['pdt_token']) {
-			$this->error['settings[pdt_token]'] = $this->_('error_pdt_token');
+			$this->error['settings[pdt_token]'] = _l("PDT Token is required to enable Payment Data Transfer!");
 		}
 
 		return $this->error ? false : true;

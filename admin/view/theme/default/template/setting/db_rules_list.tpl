@@ -3,11 +3,11 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("DB Rules"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a>
-				<a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a>
+				<a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a>
 			</div>
 		</div>
 		<div class="section">
@@ -17,11 +17,11 @@
 					<tr>
 						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
-						<td class="left"><?= $column_table; ?></a></td>
-						<td class="left"><?= $column_column; ?></td>
-						<td class="left"><?= $column_escape_type; ?></td>
-						<td class="left"><?= $column_truncate; ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="left"><?= _l("Table:"); ?></a></td>
+						<td class="left"><?= _l("Field Name (Column):"); ?></td>
+						<td class="left"><?= _l("Escape Method:"); ?></td>
+						<td class="left"><?= _l("Can Truncate?"); ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>

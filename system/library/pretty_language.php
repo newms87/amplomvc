@@ -7,7 +7,7 @@ class PrettyLanguage
 		$ext         = array('php');
 
 
-		$files = $this->get_all_files_r(SITE_DIR . 'catalog/language/english/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
 
 		$this->lang_replace_contr($files);
 
@@ -158,13 +158,6 @@ class PrettyLanguage
 		require(SITE_DIR . 'catalog/language/english/english.php');
 		$default_lang = $_;
 
-		unset($default_lang['data_statuses']);
-		unset($default_lang['data_yes_no']);
-		unset($default_lang['data_no_yes']);
-		unset($default_lang['data_statuses_blank']);
-		unset($default_lang['data_yes_no_blank']);
-		unset($default_lang['data_no_yes_blank']);
-
 		$ignored_files = array(
 			'C:/xampp/htdocs/realmeal/admin/language/english/help/documentation.php',
 		);
@@ -182,12 +175,10 @@ class PrettyLanguage
 
 			$tpl   = str_replace($find, $replace, $file);
 
+			$tpl = str_replace('.tpl', '_info.tpl', $tpl);
 			if (!is_file($tpl)) {
-				$tpl = str_replace('.tpl', '_form.tpl', $tpl);
-				if (!is_file($tpl)) {
-					echo "skipping $tpl... not found<BR>";
-					continue;
-				}
+				echo "skipping $tpl... not found<BR>";
+				continue;
 			}
 
 			$lines = explode("\n", file_get_contents($tpl));
@@ -235,7 +226,6 @@ class PrettyLanguage
 				foreach ($missed as $l => $miss) {
 					$this->pl($l, $miss);
 				}
-				exit;
 			}
 
 			if (!empty($ignored)) {

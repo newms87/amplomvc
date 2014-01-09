@@ -12,7 +12,7 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		$this->language->load('setting/store');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Settings"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
@@ -26,7 +26,7 @@ class Admin_Controller_Setting_Store extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified settings!"));
 
 				$this->url->redirect('setting/store');
 			}
@@ -45,7 +45,7 @@ class Admin_Controller_Setting_Store extends Controller
 			$this->config->deleteGroup('config', $_GET['store_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified settings!"));
 			}
 		}
 
@@ -55,7 +55,7 @@ class Admin_Controller_Setting_Store extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Settings"));
 
 		//The Template
 		$this->template->load('setting/store_list');
@@ -63,27 +63,27 @@ class Admin_Controller_Setting_Store extends Controller
 		$url = $this->url->getQuery('page');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['thumb'] = array(
 			'type'         => 'image',
-			'display_name' => $this->_('column_image'),
+			'display_name' => _l("Store Preview"),
 		);
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Store Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['url'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_url'),
+			'display_name' => _l("Store URL"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -175,7 +175,7 @@ class Admin_Controller_Setting_Store extends Controller
 	public function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Settings"));
 
 		//The Template
 		$this->template->load('setting/store_form');
@@ -184,14 +184,14 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
 
 		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
 			if (!$store) {
-				$this->message->add('warning', $this->_('error_store_invalid'));
+				$this->message->add('warning', _l("You attempted to access a store that does not exist!"));
 				$this->url->redirect('setting/store');
 			}
 
@@ -282,9 +282,9 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		$this->data['informations']         = $this->Model_Catalog_Information->getInformations();
 		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
-		$this->data['data_pages']           = array('' => $this->_('text_select')) + $this->Model_Page_Page->getPages();
+		$this->data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
 
-		$_['data_stock_display_types'] = array(
+		$this->data['data_stock_display_types'] = array(
 			'hide'   => _l("Do not display stock"),
 			'status' => _l("Only show stock status"),
 			-1       => _l("Display stock quantity available"),
@@ -316,64 +316,64 @@ class Admin_Controller_Setting_Store extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'setting/store')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify stores!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 1, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Store Name must be between 1 and 64 characters!");
 		}
 
 		if (!$this->validation->url($_POST['url'])) {
-			$this->error['url'] = $this->_('error_url');
+			$this->error['url'] = _l("Store URL invalid! Please provide a properly formatted URL (eg: http://yourstore.com)");
 		}
 
 		if (!$this->validation->url($_POST['ssl'])) {
-			$this->error['ssl'] = $this->_('error_ssl');
+			$this->error['ssl'] = _l("Store SSL invalid!  Please provide a properly formatted URL (eg: http://yourstore.com). NOTE: you may set this to the same value as URL, does not have to be HTTPS protocol.");
 		}
 
 		if ((strlen($_POST['config_owner']) < 3) || (strlen($_POST['config_owner']) > 64)) {
-			$this->error['config_owner'] = $this->_('error_owner');
+			$this->error['config_owner'] = _l("Store Owner must be between 3 and 64 characters!");
 		}
 
 		if ((strlen($_POST['config_address']) < 3) || (strlen($_POST['config_address']) > 256)) {
-			$this->error['config_address'] = $this->_('error_address');
+			$this->error['config_address'] = _l("Store Address must be between 10 and 256 characters!");
 		}
 
 		if ((strlen($_POST['config_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['config_email'])) {
-			$this->error['config_email'] = $this->_('error_email');
+			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if ((strlen($_POST['config_telephone']) < 3) || (strlen($_POST['config_telephone']) > 32)) {
-			$this->error['config_telephone'] = $this->_('error_telephone');
+			$this->error['config_telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		if (!$_POST['config_title']) {
-			$this->error['config_title'] = $this->_('error_title');
+			$this->error['config_title'] = _l("Title must be between 3 and 32 characters!");
 		}
 
 		$image_sizes = array(
-			'image_category',
-			'image_thumb',
-			'image_popup',
-			'image_product',
-			'image_additional',
-			'image_related',
-			'image_compare',
-			'image_wishlist',
-			'image_cart',
+			'image_category'   => "Category List",
+			'image_thumb'      => "Product Thumb",
+			'image_popup'      => "Product Popup",
+			'image_product'    => "Product List",
+			'image_additional' => "Product Additional",
+			'image_related'    => "Product Related",
+			'image_compare'    => "Product Compare",
+			'image_wishlist'   => "Product Wishlist",
+			'image_cart'       => "Cart",
 		);
 
-		foreach ($image_sizes as $image_size) {
-			$image_width  = 'config_' . $image_size . '_width';
-			$image_height = 'config_' . $image_size . '_height';
+		foreach ($image_sizes as $image_key => $image_size) {
+			$image_width  = 'config_' . $image_key . '_width';
+			$image_height = 'config_' . $image_key . '_height';
 
 			if ((int)$_POST[$image_width] <= 0 || (int)$_POST[$image_height] <= 0) {
-				$this->error[$image_height] = $this->_('error_' . $image_size);
+				$this->error[$image_height] = _l("%s image dimensions are required.", $image_size);
 			}
 		}
 
 		if ((int)$_POST['config_catalog_limit'] <= 0) {
-			$this->error['config_catalog_limit'] = $this->_('error_limit');
+			$this->error['config_catalog_limit'] = _l("Limit required!");
 		}
 
 		return $this->error ? false : true;
@@ -382,7 +382,7 @@ class Admin_Controller_Setting_Store extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'setting/store')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify stores!");
 		}
 
 		foreach ($_GET['selected'] as $store_id) {
@@ -395,7 +395,7 @@ class Admin_Controller_Setting_Store extends Controller
 	private function canDelete($store_id, $silent = false)
 	{
 		if ((int)$store_id < 1) {
-			$error[$store_id]['warning'] = $this->_('error_default');
+			$error[$store_id]['warning'] = _l("Warning: You can not delete your default store!");
 		} else {
 			$filter = array(
 				'store_ids' => array($store_id),
@@ -404,7 +404,7 @@ class Admin_Controller_Setting_Store extends Controller
 			$store_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($store_total) {
-				$error[$store_id]['warning'] = $this->_('error_store', $store_total);
+				$error[$store_id]['warning'] = _l("Warning: This Store cannot be deleted as it is currently assigned to %s orders!", $store_total);
 			}
 		}
 

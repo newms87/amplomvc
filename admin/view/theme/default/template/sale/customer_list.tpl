@@ -1,20 +1,20 @@
 <?= $header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
-	<? if ($error_warning) { ?>
-		<div class="message_box warning"><?= $error_warning; ?></div>
+	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
+		<div class="message_box warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 	<? } ?>
 	<? if ($success) { ?>
 		<div class="message_box success"><?= $success; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer"); ?></h1>
 
 			<div class="buttons"><a onclick="$('form').attr('action', '<?= $approve; ?>'); $('form').submit();"
 			                        class="button"><?= $button_approve; ?></a><a onclick="location = '<?= $insert; ?>'"
 			                                                                     class="button"><?= $button_insert; ?></a><a onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();"
-					class="button"><?= $button_delete; ?></a></div>
+					class="button"><?= _l("Delete"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="" method="post" enctype="multipart/form-data" id="form">
@@ -24,44 +24,44 @@
 						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
 						<td class="left"><? if ($sort == 'name') { ?>
-								<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+								<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Customer Name"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+								<a href="<?= $sort_name; ?>"><?= _l("Customer Name"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'c.email') { ?>
-								<a href="<?= $sort_email; ?>" class="<?= strtolower($order); ?>"><?= $column_email; ?></a>
+								<a href="<?= $sort_email; ?>" class="<?= strtolower($order); ?>"><?= _l("E-Mail"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_email; ?>"><?= $column_email; ?></a>
+								<a href="<?= $sort_email; ?>"><?= _l("E-Mail"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'customer_group') { ?>
 								<a href="<?= $sort_customer_group; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_customer_group; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Customer Group"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_customer_group; ?>"><?= $column_customer_group; ?></a>
+								<a href="<?= $sort_customer_group; ?>"><?= _l("Customer Group"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'c.status') { ?>
-								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= _l("Status"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_status; ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>"><?= _l("Status"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'c.approved') { ?>
-								<a href="<?= $sort_approved; ?>" class="<?= strtolower($order); ?>"><?= $column_approved; ?></a>
+								<a href="<?= $sort_approved; ?>" class="<?= strtolower($order); ?>"><?= _l("Approved"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_approved; ?>"><?= $column_approved; ?></a>
+								<a href="<?= $sort_approved; ?>"><?= _l("Approved"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'c.ip') { ?>
-								<a href="<?= $sort_ip; ?>" class="<?= strtolower($order); ?>"><?= $column_ip; ?></a>
+								<a href="<?= $sort_ip; ?>" class="<?= strtolower($order); ?>"><?= _l("IP"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_ip; ?>"><?= $column_ip; ?></a>
+								<a href="<?= $sort_ip; ?>"><?= _l("IP"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'c.date_added') { ?>
 								<a href="<?= $sort_date_added; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_date_added; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Date Added"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_date_added; ?>"><?= $column_date_added; ?></a>
+								<a href="<?= $sort_date_added; ?>"><?= _l("Date Added"); ?></a>
 							<? } ?></td>
-						<td class="left"><?= $column_login; ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="left"><?= _l("Login into Store"); ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -83,27 +83,27 @@
 						<td><select name="filter_status">
 								<option value="*"></option>
 								<? if ($filter_status) { ?>
-									<option value="1" selected="selected"><?= $text_enabled; ?></option>
+									<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
 								<? } else { ?>
-									<option value="1"><?= $text_enabled; ?></option>
+									<option value="1"><?= _l("Enabled"); ?></option>
 								<? } ?>
 								<? if (!is_null($filter_status) && !$filter_status) { ?>
-									<option value="0" selected="selected"><?= $text_disabled; ?></option>
+									<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 								<? } else { ?>
-									<option value="0"><?= $text_disabled; ?></option>
+									<option value="0"><?= _l("Disabled"); ?></option>
 								<? } ?>
 							</select></td>
 						<td><select name="filter_approved">
 								<option value="*"></option>
 								<? if ($filter_approved) { ?>
-									<option value="1" selected="selected"><?= $text_yes; ?></option>
+									<option value="1" selected="selected"><?= _l("Yes"); ?></option>
 								<? } else { ?>
-									<option value="1"><?= $text_yes; ?></option>
+									<option value="1"><?= _l("Yes"); ?></option>
 								<? } ?>
 								<? if (!is_null($filter_approved) && !$filter_approved) { ?>
-									<option value="0" selected="selected"><?= $text_no; ?></option>
+									<option value="0" selected="selected"><?= _l("No"); ?></option>
 								<? } else { ?>
-									<option value="0"><?= $text_no; ?></option>
+									<option value="0"><?= _l("No"); ?></option>
 								<? } ?>
 							</select></td>
 						<td><input type="text" name="filter_ip" value="<?= $filter_ip; ?>"/></td>

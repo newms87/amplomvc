@@ -56,7 +56,7 @@ class Admin_Controller_Common_Header extends Controller
 		} else {
 			$this->data['home'] = $this->url->link('common/home');
 
-			$this->data['logged'] = $this->_('text_logged', $this->user->info('username'));
+			$this->data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
 
 			$this->data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
 
@@ -67,7 +67,7 @@ class Admin_Controller_Common_Header extends Controller
 
 			$link_stores = array(
 				'name'         => 'system_settings_stores',
-				'display_name' => $this->_('text_store_settings'),
+				'display_name' => _l("Stores"),
 				'parent'       => 'system_settings',
 				'sort_order'   => 1,
 			);
@@ -89,7 +89,7 @@ class Admin_Controller_Common_Header extends Controller
 			//Add the Image Manager to the Main Menu if user has permissions
 			if ($this->user->can('access', 'common/filemanager')) {
 				$link_image_manager = array(
-					'name'       => $this->_('text_image_manager'),
+					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
 					'attrs'      => array('onclick' => 'image_manager();'),
 				);
@@ -102,7 +102,7 @@ class Admin_Controller_Common_Header extends Controller
 			//Store Fronts and Settings
 			$link_stores = array(
 				'name'         => 'stores',
-				'display_name' => $this->_('text_stores'),
+				'display_name' => _l("Stores"),
 				'sort_order'   => 0,
 			);
 
@@ -124,7 +124,7 @@ class Admin_Controller_Common_Header extends Controller
 			//Logout link
 			$link_logout = array(
 				'name'         => 'logout',
-				'display_name' => $this->_('text_logout'),
+				'display_name' => _l("Logout"),
 				'href'         => $this->url->link('common/logout'),
 				'sort_order'   => 10,
 			);

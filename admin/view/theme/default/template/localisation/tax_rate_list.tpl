@@ -9,9 +9,9 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= _l("Tax Rates"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,39 +21,39 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'tr.name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Tax Name"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>"><?= _l("Tax Name"); ?></a>
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'tr.rate') { ?>
-									<a href="<?= $sort_rate; ?>" class="<?= strtolower($order); ?>"><?= $column_rate; ?></a>
+									<a href="<?= $sort_rate; ?>" class="<?= strtolower($order); ?>"><?= _l("Tax Rate"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_rate; ?>"><?= $column_rate; ?></a>
+									<a href="<?= $sort_rate; ?>"><?= _l("Tax Rate"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'tr.type') { ?>
-									<a href="<?= $sort_type; ?>" class="<?= strtolower($order); ?>"><?= $column_type; ?></a>
+									<a href="<?= $sort_type; ?>" class="<?= strtolower($order); ?>"><?= _l("Type"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_type; ?>"><?= $column_type; ?></a>
+									<a href="<?= $sort_type; ?>"><?= _l("Type"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'gz.name') { ?>
 									<a href="<?= $sort_geo_zone; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_geo_zone; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Geo Zone"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_geo_zone; ?>"><?= $column_geo_zone; ?></a>
+									<a href="<?= $sort_geo_zone; ?>"><?= _l("Geo Zone"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'tr.date_added') { ?>
 									<a href="<?= $sort_date_added; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_date_added; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Date Added"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_date_added; ?>"><?= $column_date_added; ?></a>
+									<a href="<?= $sort_date_added; ?>"><?= _l("Date Added"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'tr.date_modified') { ?>
 									<a href="<?= $sort_date_modified; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_date_modified; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Date Modified"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_date_modified; ?>"><?= $column_date_modified; ?></a>
+									<a href="<?= $sort_date_modified; ?>"><?= _l("Date Modified"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

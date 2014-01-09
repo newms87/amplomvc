@@ -8,18 +8,18 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 		$this->template->load('mail/send_email');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Send Email"));
 
 		if ($this->request->isPost()) {
 			if (!$this->send()) {
 				$this->message->add('warning', $this->_('error_send_email'));
 			} else {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: Your message has been sent!"));
 			}
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/send_email'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Send Email"), $this->url->link('mail/send_email'));
 
 		$this->data['action'] = $this->url->link('mail/send_email');
 
@@ -91,23 +91,23 @@ class Admin_Controller_Mail_SendEmail extends Controller
 	public function validate()
 	{
 		if (!$this->user->can('modify', 'mail/send_email')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
 		}
 
 		if (!$_POST['from']) {
-			$this->error['from'] = $this->_('error_from');
+			$this->error['from'] = _l("You must specify an email to send from!");
 		} elseif (!$this->validation->email($_POST['from'])) {
-			$this->error['from'] = $this->_('error_from_email');
+			$this->error['from'] = _l("The From email address is invalid!");
 		}
 
 		if (!$_POST['to']) {
-			$this->error['to'] = $this->_('error_to');
+			$this->error['to'] = _l("You must specify an email to send to!");
 		} else {
 			$emails = explode(',', $_POST['to']);
 
 			foreach ($emails as $e) {
 				if (!$this->validation->email(trim($e))) {
-					$this->error['to'] = $this->_('error_to_email');
+					$this->error['to'] = _l("The To email address is invalid!");
 				}
 			}
 		}
@@ -117,7 +117,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 			foreach ($emails as $e) {
 				if (!$this->validation->email(trim($e))) {
-					$this->error['cc'] = $this->_('error_cc');
+					$this->error['cc'] = _l("The Copy To email address is invalid!");
 				}
 			}
 		}
@@ -127,17 +127,17 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 			foreach ($emails as $e) {
 				if (!$this->validation->email(trim($e))) {
-					$this->error['bcc'] = $this->_('error_bcc');
+					$this->error['bcc'] = _l("The Blind Copy To email address is invalid!");
 				}
 			}
 		}
 
 		if (!$_POST['subject']) {
-			$this->error['subject'] = $this->_('error_subject');
+			$this->error['subject'] = _l("You must provide a Subject!");
 		}
 
 		if (!$_POST['message']) {
-			$this->error['message'] = $this->_('error_message');
+			$this->error['message'] = _l("You must provide a Message!");
 		}
 
 		return $this->error ? false : true;

@@ -3,9 +3,9 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Coupon"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="document.getElementById('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="document.getElementById('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -15,39 +15,39 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'cd.name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Coupon Name"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>"><?= _l("Coupon Name"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.code') { ?>
-									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= $column_code; ?></a>
+									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= _l("Code"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_code; ?>"><?= $column_code; ?></a>
+									<a href="<?= $sort_code; ?>"><?= _l("Code"); ?></a>
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'c.discount') { ?>
 									<a href="<?= $sort_discount; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_discount; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Discount"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_discount; ?>"><?= $column_discount; ?></a>
+									<a href="<?= $sort_discount; ?>"><?= _l("Discount"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.date_start') { ?>
 									<a href="<?= $sort_date_start; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_date_start; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Date Start"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_date_start; ?>"><?= $column_date_start; ?></a>
+									<a href="<?= $sort_date_start; ?>"><?= _l("Date Start"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.date_end') { ?>
 									<a href="<?= $sort_date_end; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_date_end; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("Date End"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_date_end; ?>"><?= $column_date_end; ?></a>
+									<a href="<?= $sort_date_end; ?>"><?= _l("Date End"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.status') { ?>
-									<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= $column_status; ?></a>
+									<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= _l("Status"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_status; ?>"><?= $column_status; ?></a>
+									<a href="<?= $sort_status; ?>"><?= _l("Status"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

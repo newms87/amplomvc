@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Downloads"));
 
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Downloads"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
@@ -34,7 +34,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 			$this->Model_Catalog_Download->addDownload(array_merge($_POST, $data));
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified downloads!"));
 
 			$url = '';
 
@@ -60,7 +60,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Downloads"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
@@ -78,7 +78,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 			$this->Model_Catalog_Download->editDownload($_GET['download_id'], array_merge($_POST, $data));
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified downloads!"));
 
 			$url = '';
 
@@ -104,7 +104,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Downloads"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $download_id) {
@@ -120,7 +120,7 @@ class Admin_Controller_Catalog_Download extends Controller
 				$this->Model_Catalog_Download->deleteDownload($download_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified downloads!"));
 
 			$url = '';
 
@@ -178,8 +178,8 @@ class Admin_Controller_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/download', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Downloads"), $this->url->link('catalog/download', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/download/insert', $url);
 		$this->data['delete'] = $this->url->link('catalog/download/delete', $url);
@@ -290,8 +290,8 @@ class Admin_Controller_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/download', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Downloads"), $this->url->link('catalog/download', $url));
 
 		if (!isset($_GET['download_id'])) {
 			$this->data['action'] = $this->url->link('catalog/download/insert', $url);
@@ -352,22 +352,22 @@ class Admin_Controller_Catalog_Download extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/download')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify downloads!");
 		}
 
 		foreach ($_POST['download_description'] as $language_id => $value) {
 			if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
-				$this->error['name'][$language_id] = $this->_('error_name');
+				$this->error['name'][$language_id] = _l("Name must be between 3 and 64 characters!");
 			}
 		}
 
 		if ($_FILES['download']['name']) {
 			if ((strlen($_FILES['download']['name']) < 3) || (strlen($_FILES['download']['name']) > 128)) {
-				$this->error['download'] = $this->_('error_filename');
+				$this->error['download'] = _l("Filename must be between 3 and 128 characters!");
 			}
 
 			if (substr(strrchr($_FILES['download']['name'], '.'), 1) == 'php') {
-				$this->error['download'] = $this->_('error_filetype');
+				$this->error['download'] = _l("Invalid file type!");
 			}
 
 			if ($_FILES['download']['error'] != UPLOAD_ERR_OK) {
@@ -381,7 +381,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/download')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify downloads!");
 		}
 
 		foreach ($_GET['selected'] as $download_id) {
@@ -392,7 +392,7 @@ class Admin_Controller_Catalog_Download extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+				$this->error['warning'] = sprintf(_l("Warning: This download cannot be deleted as it is currently assigned to %s products!"), $product_total);
 			}
 		}
 

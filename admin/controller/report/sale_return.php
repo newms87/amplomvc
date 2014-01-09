@@ -7,7 +7,7 @@ class Admin_Controller_Report_SaleReturn extends Controller
 
 		$this->language->load('report/sale_return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Returns Report"));
 
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -61,8 +61,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_return', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Returns Report"), $this->url->link('report/sale_return', $url));
 
 		$this->data['returns'] = array();
 
@@ -92,22 +92,22 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		$this->data['groups'] = array();
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_year'),
+			'text'  => _l("Years"),
 			'value' => 'year',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_month'),
+			'text'  => _l("Months"),
 			'value' => 'month',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_week'),
+			'text'  => _l("Weeks"),
 			'value' => 'week',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_day'),
+			'text'  => _l("Days"),
 			'value' => 'day',
 		);
 

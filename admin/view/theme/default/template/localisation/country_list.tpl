@@ -9,9 +9,9 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Country"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,23 +21,23 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Country Name"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= $column_name; ?></a>
+									<a href="<?= $sort_name; ?>"><?= _l("Country Name"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'iso_code_2') { ?>
 									<a href="<?= $sort_iso_code_2; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_iso_code_2; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("ISO Code (2)"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_iso_code_2; ?>"><?= $column_iso_code_2; ?></a>
+									<a href="<?= $sort_iso_code_2; ?>"><?= _l("ISO Code (2)"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'iso_code_3') { ?>
 									<a href="<?= $sort_iso_code_3; ?>"
-									   class="<?= strtolower($order); ?>"><?= $column_iso_code_3; ?></a>
+									   class="<?= strtolower($order); ?>"><?= _l("ISO Code (3)"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_iso_code_3; ?>"><?= $column_iso_code_3; ?></a>
+									<a href="<?= $sort_iso_code_3; ?>"><?= _l("ISO Code (3)"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

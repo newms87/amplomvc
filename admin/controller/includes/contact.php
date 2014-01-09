@@ -19,12 +19,12 @@ class Admin_Controller_Includes_Contact extends Controller
 		}
 
 
-		$_['phone_types']   = array(
+		$this->data['phone_types']   = array(
 			'cell'    => "Cell Phone",
 			'primary' => "Primary",
 			"fax"     => "Fax"
 		);
-		$_['contact_types'] = array(
+		$this->data['contact_types'] = array(
 			'primary'          => "Primary",
 			"customer_service" => "Customer Service",
 			"finance"          => "Finance",

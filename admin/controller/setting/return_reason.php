@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		$this->language->load('setting/return_reason');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Return Reasons"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/return_reason'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Return Reasons"), $this->url->link('setting/return_reason'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -23,7 +23,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 			$this->config->save('product_return', 'return_reasons', $return_reasons, 0, false);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("You have successfully updated the Return Reasons"));
 				$this->url->redirect('setting/setting');
 			}
 		}
@@ -55,7 +55,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 
 		//Add in the template row
 		$return_reasonse['__ac_template__'] = array(
-			'title' => $this->_('entry_title'),
+			'title' => _l("Return Reason Title"),
 		);
 
 		//Get the Field Translations
@@ -92,7 +92,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 
 		foreach ($_POST['return_reasons'] as $key => $return_reason) {
 			if (!$this->validation->text($return_reason['title'], 3, 64)) {
-				$this->error["return_reasons[$key][title]"] = $this->_('error_return_reason_title');
+				$this->error["return_reasons[$key][title]"] = _l("The Title must be between 3 and 64 characters!");
 			}
 		}
 
@@ -109,7 +109,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 				$return_total = $this->Model_Sale_Return->getTotalReturns($filter);
 
 				if ($return_total) {
-					$this->error["return_reasons[$return_reason_id][title]"] = $this->_('error_return_reason', $return_reason['title']);
+					$this->error["return_reasons[$return_reason_id][title]"] = _l("You cannot delete the Return Reason %s because it is associated to a return!", $return_reason['title']);
 
 					//Add the Return Reason back into the list
 					$_POST['return_reasons'][$return_reason_id] = $return_reasons[$return_reason_id];

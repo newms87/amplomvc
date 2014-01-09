@@ -85,7 +85,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		//Login Check & The Welcome Message
 		$this->data['is_logged'] = $this->customer->isLogged();
-		$this->_('text_logged', $this->customer->info('firstname'));
+		$this->data['customer'] = $this->customer->info();
 
 		if (!$this->data['is_logged']) {
 			$this->data['block_login'] = $this->getBlock('account/login');

@@ -73,7 +73,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 		$this->data['compare_status'] = $this->config->get('config_compare_status');
 
 		if ($this->data['compare_status']) {
-			$this->_('text_compare', $this->cart->get_compare_count());
+			$this->data['compare_count'] = $this->cart->get_compare_count();
 			$this->data['compare'] = $this->url->link('product/compare');
 		}
 

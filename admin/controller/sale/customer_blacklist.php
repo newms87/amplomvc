@@ -7,7 +7,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	{
 		$this->language->load('sale/customer_blacklist');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	{
 		$this->language->load('sale/customer_blacklist');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerBlacklist->addCustomerBlacklist($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer IP blacklist!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	{
 		$this->language->load('sale/customer_blacklist');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerBlacklist->editCustomerBlacklist($_GET['customer_ip_blacklist_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer IP blacklist!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	{
 		$this->language->load('sale/customer_blacklist');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $customer_ip_blacklist_id) {
 				$this->Model_Sale_CustomerBlacklist->deleteCustomerBlacklist($customer_ip_blacklist_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer IP blacklist!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_blacklist', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer IP Blacklist"), $this->url->link('sale/customer_blacklist', $url));
 
 		$this->data['insert'] = $this->url->link('sale/customer_blacklist/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/customer_blacklist/delete', $url);
@@ -263,8 +263,8 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_blacklist', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer IP Blacklist"), $this->url->link('sale/customer_blacklist', $url));
 
 		if (!isset($_GET['customer_ip_blacklist_id'])) {
 			$this->data['action'] = $this->url->link('sale/customer_blacklist/insert', $url);
@@ -297,11 +297,11 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/customer_blacklist')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customer IP blacklist!");
 		}
 
 		if ((strlen($_POST['ip']) < 1) || (strlen($_POST['ip']) > 15)) {
-			$this->error['ip'] = $this->_('error_ip');
+			$this->error['ip'] = _l("IP must be between 1 and 15 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -310,7 +310,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/customer_blacklist')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customer IP blacklist!");
 		}
 
 		return $this->error ? false : true;

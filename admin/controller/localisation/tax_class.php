@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Class"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->addTaxClass($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->editTaxClass($_GET['tax_class_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Tax Class"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $tax_class_id) {
 				$this->Model_Localisation_Taxclass->deleteTaxClass($tax_class_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified tax classes!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Tax Class"), $this->url->link('localisation/tax_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
@@ -267,8 +267,8 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Tax Class"), $this->url->link('localisation/tax_class', $url));
 
 		if (!isset($_GET['tax_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/tax_class/insert', $url);
@@ -319,15 +319,15 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/tax_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify tax classes!");
 		}
 
 		if ((strlen($_POST['title']) < 3) || (strlen($_POST['title']) > 32)) {
-			$this->error['title'] = $this->_('error_title');
+			$this->error['title'] = _l("Tax Class Title must be between 3 and 32 characters!");
 		}
 
 		if ((strlen($_POST['description']) < 3) || (strlen($_POST['description']) > 255)) {
-			$this->error['description'] = $this->_('error_description');
+			$this->error['description'] = _l("Description must be between 3 and 255 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -336,7 +336,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/tax_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify tax classes!");
 		}
 
 		foreach ($_GET['selected'] as $tax_class_id) {
@@ -347,7 +347,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+				$this->error['warning'] = sprintf(_l("Warning: This tax class cannot be deleted as it is currently assigned to %s products!"), $product_total);
 			}
 		}
 

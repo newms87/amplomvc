@@ -12,7 +12,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	{
 		$this->language->load('sale/voucher_theme');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Voucher Themes"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
@@ -24,7 +24,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified voucher themes!"));
 				$this->url->redirect('sale/voucher_theme');
 			}
 		}
@@ -40,7 +40,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$this->Model_Sale_VoucherTheme->deleteVoucherTheme($_GET['voucher_theme_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified voucher themes!"));
 				$this->url->redirect('sale/voucher_theme');
 			}
 		}
@@ -51,21 +51,21 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Voucher Themes"));
 
 		//The Template
 		$this->template->load('sale/voucher_theme_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Voucher Themes"), $this->url->link('sale/voucher_theme'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['thumb'] = array(
 			'type'         => 'image',
-			'display_name' => $this->_('column_image'),
+			'display_name' => _l("Theme Image"),
 			'filter'       => false,
 			'sortable'     => true,
 			'sort_value'   => '__image_sort__image',
@@ -73,7 +73,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Theme Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -122,10 +122,10 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable'),
+				'label' => _l("Enable"),
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -162,7 +162,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Voucher Themes"));
 
 		//The Template
 		$this->template->load('sale/voucher_theme_form');
@@ -171,8 +171,8 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$voucher_theme_id = isset($_GET['voucher_theme_id']) ? (int)$_GET['voucher_theme_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Voucher Themes"), $this->url->link('sale/voucher_theme'));
 
 		if ($voucher_theme_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id));
@@ -221,15 +221,15 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/voucher_theme')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify voucher themes!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 32)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Voucher Theme Name must be between 3 and 32 characters!");
 		}
 
 		if (empty($_POST['image'])) {
-			$this->error['image'] = $this->_('error_image');
+			$this->error['image'] = _l("Image required!");
 		}
 
 		return $this->error ? false : true;
@@ -238,7 +238,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/voucher_theme')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify voucher themes!");
 		}
 
 		if (!empty($_GET['selected'])) {
@@ -255,7 +255,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$in_use = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = " . (int)$voucher_theme_id);
 
 			if ($in_use) {
-				$this->error['warning'] = $this->_('error_voucher', $in_use);
+				$this->error['warning'] = _l("Warning: This voucher theme cannot be deleted as it is currently assigned to %s vouchers!", $in_use);
 				break;
 			}
 		}

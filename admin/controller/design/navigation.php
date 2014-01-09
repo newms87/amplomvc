@@ -23,7 +23,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified navigation!"));
 
 				$this->url->redirect('design/navigation');
 			}
@@ -40,7 +40,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified navigation!"));
 
 				$this->url->redirect('design/navigation');
 			}
@@ -62,7 +62,7 @@ class Admin_Controller_Design_Navigation extends Controller
 	{
 		$this->language->load('design/navigation');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Navigation"));
 
 		if (isset($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
@@ -86,7 +86,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 			if (!$this->error) {
 				if (!$this->message->hasError()) {
-					$this->message->add('success', $this->_('text_success'));
+					$this->message->add('success', _l("Success: You have modified navigation!"));
 
 					$this->url->redirect('design/navigation');
 				}
@@ -99,14 +99,14 @@ class Admin_Controller_Design_Navigation extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Navigation"));
 
 		//The Template
 		$this->template->load('design/navigation_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
 
 		//Column Build Data
 		$stores = array(
@@ -123,7 +123,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Navigation Group"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'name',
@@ -131,7 +131,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_stores'),
+			'display_name' => _l("Stores"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -143,7 +143,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -176,7 +176,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 			if ($nav_group['name'] == 'admin') {
 				$nav_group['actions']['reset'] = array(
-					'text'   => $this->_('button_admin_nav_reset'),
+					'text'   => _l("Reset Admin Navigation"),
 					'href'   => $this->url->link('design/navigation/reset_admin_navigation' . '&' . $url_query),
 					'#class' => 'reset',
 				);
@@ -200,11 +200,11 @@ class Admin_Controller_Design_Navigation extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable'),
+				'label' => _l("Enable"),
 			),
 
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 
 			'delete'  => array(
@@ -236,7 +236,7 @@ class Admin_Controller_Design_Navigation extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Navigation"));
 
 		//The Template
 		$this->template->load('design/navigation_form');
@@ -245,8 +245,8 @@ class Admin_Controller_Design_Navigation extends Controller
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
 
 		if ($navigation_group_id) {
 			$this->breadcrumb->add(_l("Edit"), $this->url->link('design/navigation', 'navigation_group_id=' . $navigation_group_id));
@@ -319,7 +319,7 @@ class Admin_Controller_Design_Navigation extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'design/navigation')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify navigation!");
 		}
 
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : 0;
@@ -329,14 +329,14 @@ class Admin_Controller_Design_Navigation extends Controller
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
 		}
 
 		if (!empty($_POST['links'])) {
 			foreach ($_POST['links'] as $key => $link) {
 				if (!$this->validation->text($link['display_name'], 1, 255)) {
 					$link_name                                = !empty($link['name']) ? $link['name'] : (!empty($link['display_name']) ? $link['display_name'] : $key);
-					$this->error["links[$key][display_name]"] = $this->_('error_display_name', $link_name);
+					$this->error["links[$key][display_name]"] = _l("The Display Name for the link %s must be between 1 and 255 characters!", $link_name);
 				}
 
 				//If name already exists in database, append _n to the name
@@ -365,7 +365,7 @@ class Admin_Controller_Design_Navigation extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'design/navigation')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify navigation!");
 		}
 
 		return $this->error ? false : true;

@@ -60,7 +60,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 		if ($manufacturer) {
 			$this->document->setTitle($manufacturer['name']);
-			$this->language->set('head_title', $manufacturer['name']);
+			$this->data['page_title'] = $manufacturer['name'];
 
 			$this->breadcrumb->add($manufacturer['name'], $this->url->here());
 

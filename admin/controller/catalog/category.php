@@ -22,7 +22,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category');
 			}
@@ -75,7 +75,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category', $this->url->getQueryExclude('action'));
 			}
@@ -87,21 +87,21 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Category"));
 
 		//The Template
 		$this->template->load('catalog/category_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['thumb'] = array(
 			'type'         => 'image',
-			'display_name' => $this->_('column_image'),
+			'display_name' => _l("Image"),
 			'filter'       => false,
 			'sortable'     => true,
 			'sort_value'   => '__image_sort__image',
@@ -109,14 +109,14 @@ class Admin_Controller_Catalog_Category extends Controller
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Category Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Stores"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -185,10 +185,10 @@ class Admin_Controller_Catalog_Category extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -225,7 +225,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Category"));
 
 		//The template
 		$this->template->load('catalog/category_form');
@@ -234,8 +234,8 @@ class Admin_Controller_Catalog_Category extends Controller
 		$category_id = $this->data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
 
 		if ($category_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/category/update', 'category_id=' . $category_id));
@@ -287,7 +287,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->data['translations'] = $this->Model_Catalog_Category->getCategoryTranslations($category_id);
 
 		//Additional Data
-		$this->data['data_categories'] = array_merge(array(0 => $this->_('text_none')), $categories);
+		$this->data['data_categories'] = array_merge(array(0 => _l(" --- None --- ")), $categories);
 		$this->data['data_stores']     = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts']    = array('' => '') + $this->Model_Design_Layout->getLayouts();
 
@@ -329,11 +329,11 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/category')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify categories!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 2, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Category Name must be between 2 and 64 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -342,7 +342,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/category')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify categories!");
 		}
 
 		return $this->error ? false : true;

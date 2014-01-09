@@ -7,7 +7,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 
 		$this->language->load('report/product_purchased');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products Purchased Report"));
 
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -51,8 +51,8 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/product_purchased', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Products Purchased Report"), $this->url->link('report/product_purchased', $url));
 
 		$this->data['products'] = array();
 

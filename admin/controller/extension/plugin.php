@@ -6,7 +6,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	{
 		$this->language->load('extension/plugin');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Plugins"));
 
 		$this->getList();
 	}
@@ -17,61 +17,61 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->template->load('extension/plugin');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/plugin'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Plugins"), $this->url->link('extension/plugin'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Plugin Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['version'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_version'),
+			'display_name' => _l("Version"),
 		);
 
 		$columns['date'] = array(
 			'type'         => 'date',
-			'display_name' => $this->_('column_date'),
+			'display_name' => _l("Date"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_title'),
+			'display_name' => _l("Title"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['author'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_author'),
+			'display_name' => _l("Author"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['description'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_description'),
+			'display_name' => _l("Description"),
 			'filter'       => true,
 		);
 
 		$columns['link'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_link'),
+			'display_name' => _l("Link"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['dependencies'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_dependencies'),
+			'display_name' => _l("Dependencies"),
 		);
 
 		$columns['status'] = array(
@@ -112,13 +112,13 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 				if ($this->Model_Setting_Plugin->canUninstall($plugin['name'])) {
 					$plugin['actions']['uninstall'] = array(
-						'text' => $this->_('text_uninstall'),
+						'text' => _l("Uninstall"),
 						'href' => $this->url->link('extension/plugin/uninstall', 'name=' . $plugin['name']),
 					);
 				}
 				else {
 					$plugin['actions']['error'] = array(
-						'text' => $this->_('error_uninstall_dependent', implode(',', $this->Model_Setting_Plugin->getDependentsList($plugin['name']))),
+						'text' => _l("<b>Uninstall Dependencies:</b><br />%s", implode(',', $this->Model_Setting_Plugin->getDependentsList($plugin['name']))),
 					);
 				}
 
@@ -126,14 +126,14 @@ class Admin_Controller_Extension_Plugin extends Controller
 				if ($this->Model_Setting_Plugin->canInstall($plugin['name'])) {
 					$plugin['actions'] = array(
 						'install' => array(
-							'text' => $this->_('text_install'),
+							'text' => _l("Install"),
 							'href' => $this->url->link('extension/plugin/install', 'name=' . $plugin['name']),
 						)
 					);
 				} else {
 					$plugin['actions'] = array(
 						'error' => array(
-							'text' => $this->_('error_install_dependent', implode(', ', array_keys($plugin['dependencies'], false))),
+							'text' => _l("<b>Install Dependencies:</b><br />%s", implode(', ', array_keys($plugin['dependencies'], false))),
 						),
 					);
 				}
@@ -188,15 +188,15 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->template->load('extension/plugin_form');
 
 		if (!isset($_GET['name'])) {
-			$this->message->add('warning', $this->_('error_no_plugin'));
+			$this->message->add('warning', _l("Warning: There was no plugin found."));
 			$this->url->redirect('extension/plugin');
 		}
 		$plugin_name = $_GET['name'];
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Plugins"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/plugin'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Plugins"), $this->url->link('extension/plugin'));
 
 		if (isset($_POST['plugin_data'])) {
 			$this->data['plugin_data'] = $_POST['plugin_data'];
@@ -224,16 +224,16 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->language->load('extension/plugin');
 
 		if (!isset($_GET['name'])) {
-			$this->message->add('warning', $this->_('error_no_plugin'));
+			$this->message->add('warning', _l("Warning: There was no plugin found."));
 			$this->url->redirect('extension/plugin');
 		}
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Plugins"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("You have successfully updated the plugins!"));
 
 			$this->url->redirect('extension/plugin');
 		}
@@ -273,7 +273,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'extension/plugin')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify plugins!");
 		}
 
 		$plugs = $_POST['plugin_data'];

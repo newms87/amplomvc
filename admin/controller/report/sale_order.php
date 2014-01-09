@@ -7,7 +7,7 @@ class Admin_Controller_Report_SaleOrder extends Controller
 
 		$this->language->load('report/sale_order');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Sales Report"));
 
 		$query_defaults = array(
 			'filter_date_start'      => '',
@@ -22,8 +22,8 @@ class Admin_Controller_Report_SaleOrder extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_order'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Sales Report"), $this->url->link('report/sale_order'));
 
 		$this->data['orders'] = array();
 
@@ -57,22 +57,22 @@ class Admin_Controller_Report_SaleOrder extends Controller
 		$this->data['groups'] = array();
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_year'),
+			'text'  => _l("Years"),
 			'value' => 'year',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_month'),
+			'text'  => _l("Months"),
 			'value' => 'month',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_week'),
+			'text'  => _l("Weeks"),
 			'value' => 'week',
 		);
 
 		$this->data['groups'][] = array(
-			'text'  => $this->_('text_day'),
+			'text'  => _l("Days"),
 			'value' => 'day',
 		);
 

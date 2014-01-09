@@ -5,21 +5,21 @@ class Admin_Controller_Block_Add extends Controller
 	{
 		$this->language->load('block/add');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("New Block"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Block_Block->addBlock($_POST);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success', $_POST['name']));
+				$this->message->add('success', _l("The Block %s was created successfully!", $_POST['name']));
 
 				$this->url->redirect('block/block', 'name=' . $_POST['route']);
 			}
 
-			$this->message->add('warning', $this->_('error_add_block'));
+			$this->message->add('warning', _l("Unable to create the new Block. Try again, or build the block manually."));
 		}
 
-		$this->message->add('notify', $this->_('notify_add_block'));
+		$this->message->add('notify', _l("Adding a Block will simply setup the files in the system on the front end and back end. If you are not a developer this is worthless!"));
 
 		$this->getForm();
 	}
@@ -28,9 +28,9 @@ class Admin_Controller_Block_Add extends Controller
 	{
 		$this->template->load('block/add');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_block_list'), $this->url->link('block/block'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/add'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
+		$this->breadcrumb->add(_l("New Block"), $this->url->link('block/add'));
 
 		$this->data['action'] = $this->url->link('block/add');
 		$this->data['cancel'] = $this->url->link('block/block');
@@ -72,11 +72,11 @@ class Admin_Controller_Block_Add extends Controller
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 128)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Block name must be between 1 and 128 characters!");
 		}
 
 		if (empty($_POST['route']) || !preg_match("/^[a-z0-9_]+\/[a-z0-9_]+\$/i", $_POST['route'])) {
-			$this->error['route'] = $this->_('error_route');
+			$this->error['route'] = _l("Route must be in the form mynew/blockroute containing characters a-z, 0-9, or _");
 		}
 
 		return $this->error ? false : true;

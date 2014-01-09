@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Country"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Country"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified countries!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Country"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified countries!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Country"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $country_id) {
 				$this->Model_Localisation_Country->deleteCountry($country_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified countries!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Country"), $this->url->link('localisation/country', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/country/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/country/delete', $url);
@@ -265,8 +265,8 @@ class Admin_Controller_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Country"), $this->url->link('localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
 			$this->data['action'] = $this->url->link('localisation/country/insert', $url);
@@ -339,11 +339,11 @@ class Admin_Controller_Localisation_Country extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/country')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify countries!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 128)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Country Name must be between 3 and 128 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -352,42 +352,42 @@ class Admin_Controller_Localisation_Country extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/country')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify countries!");
 		}
 
 		foreach ($_GET['selected'] as $country_id) {
 			if ($this->config->get('config_country_id') == $country_id) {
-				$this->error['warning'] = $this->_('error_default');
+				$this->error['warning'] = _l("Warning: This country cannot be deleted as it is currently assigned as the default store country!");
 			}
 
 			$store_total = $this->Model_Setting_Store->getTotalStoresByCountryId($country_id);
 
 			if ($store_total) {
-				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
+				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
 			$address_total = $this->Model_Sale_Customer->getTotalAddressesByCountryId($country_id);
 
 			if ($address_total) {
-				$this->error['warning'] = sprintf($this->_('error_address'), $address_total);
+				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
 			}
 
 			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByCountryId($country_id);
 
 			if ($affiliate_total) {
-				$this->error['warning'] = sprintf($this->_('error_affiliate'), $affiliate_total);
+				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s affiliates!"), $affiliate_total);
 			}
 
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);
 
 			if ($zone_total) {
-				$this->error['warning'] = sprintf($this->_('error_zone'), $zone_total);
+				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s zones!"), $zone_total);
 			}
 
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByCountryId($country_id);
 
 			if ($zone_to_geo_zone_total) {
-				$this->error['warning'] = sprintf($this->_('error_zone_to_geo_zone'), $zone_to_geo_zone_total);
+				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s zones to geo zones!"), $zone_to_geo_zone_total);
 			}
 		}
 

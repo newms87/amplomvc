@@ -22,7 +22,7 @@ class Admin_Controller_Design_Layout extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Design_Layout extends Controller
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout');
 			}
@@ -76,7 +76,7 @@ class Admin_Controller_Design_Layout extends Controller
 			}
 
 			if (!$this->error && !$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout', $this->url->getQueryExclude('action'));
 			}
@@ -88,28 +88,28 @@ class Admin_Controller_Design_Layout extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Layouts"));
 
 		//The Template
 		$this->template->load('design/layout_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/layout'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Layouts"), $this->url->link('design/layout'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Layout Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['routes'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_routes'),
+			'display_name' => _l("Routes"),
 			'filter'       => false,
 			'sortable'     => false,
 		);
@@ -157,10 +157,10 @@ class Admin_Controller_Design_Layout extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'copy'    => array(
 				'label' => $this->_('text_copy'),
@@ -196,14 +196,14 @@ class Admin_Controller_Design_Layout extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Layouts"));
 
 		//The Template
 		$this->template->load('design/layout_form');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/layout'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Layouts"), $this->url->link('design/layout'));
 
 		//Insert or Update
 		$layout_id = isset($_GET['layout_id']) ? (int)$_GET['layout_id'] : 0;
@@ -257,11 +257,11 @@ class Admin_Controller_Design_Layout extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'design/layout')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Layout Name must be between 3 and 64 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -270,11 +270,11 @@ class Admin_Controller_Design_Layout extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'design/layout')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
 		if ($this->config->get('config_default_layout_id') == $_GET['layout_id']) {
-			$this->error['warning'] = $this->_('error_default');
+			$this->error['warning'] = _l("Warning: This layout cannot be deleted as it is currently assigned as the default store layout!");
 		}
 
 		$this->canDelete($_GET['layout_id']);
@@ -289,15 +289,15 @@ class Admin_Controller_Design_Layout extends Controller
 		);
 
 		if ($this->Model_Catalog_Product->getTotalProducts($filter)) {
-			$this->error[$layout_id]['warning_product'] = $this->_('error_product', $product_total);
+			$this->error[$layout_id]['warning_product'] = _l("Warning: This layout cannot be deleted as it is currently assigned to %s products!", $product_total);
 		}
 
 		if ($this->Model_Catalog_Category->getTotalCategories($filter)) {
-			$this->error[$layout_id]['warning_category'] = $this->_('error_category', $category_total);
+			$this->error[$layout_id]['warning_category'] = _l("Warning: This layout cannot be deleted as it is currently assigned to %s categories!", $category_total);
 		}
 
 		if ($this->Model_Catalog_Information->getTotalInformations($filter)) {
-			$this->error[$layout_id]['warning_information'] = $this->_('error_information', $information_total);
+			$this->error[$layout_id]['warning_information'] = _l("Warning: This layout cannot be deleted as it is currently assigned to %s information pages!", $information_total);
 		}
 
 		return !isset($this->error[$layout_id]);

@@ -5,29 +5,29 @@
 		<?= $content_top; ?>
 		<?= $this->breadcrumb->render(); ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Return Information"); ?></h1>
 		<table class="list">
 			<thead>
 			<tr>
-				<td class="left" colspan="2"><?= $text_return_detail; ?></td>
+				<td class="left" colspan="2"><?= _l("Return Details"); ?></td>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<td class="left" style="width: 50%;"><b><?= $text_rma_number; ?></b> #<?= $rma; ?><br/>
-					<b><?= $text_date_added; ?></b> <?= $date_added; ?></td>
-				<td class="left" style="width: 50%;"><b><?= $text_order_id; ?></b> #<?= $order_id; ?><br/>
-					<b><?= $text_date_ordered; ?></b> <?= $date_ordered; ?></td>
+				<td class="left" style="width: 50%;"><b><?= _l("RMA #:"); ?></b> #<?= $rma; ?><br/>
+					<b><?= _l("Date Added:"); ?></b> <?= $date_added; ?></td>
+				<td class="left" style="width: 50%;"><b><?= _l("Order ID:"); ?></b> #<?= $order_id; ?><br/>
+					<b><?= _l("Order Date:"); ?></b> <?= $date_ordered; ?></td>
 			</tr>
 			</tbody>
 		</table>
-		<h2><?= $text_product; ?></h2>
+		<h2><?= _l("Product Information &amp; Reason for Return"); ?></h2>
 		<table class="list">
 			<thead>
 			<tr>
-				<td class="left"><?= $column_product; ?></td>
-				<td class="left"><?= $column_model; ?></td>
-				<td class="right"><?= $column_quantity; ?></td>
+				<td class="left"><?= _l("Product Name"); ?></td>
+				<td class="left"><?= _l("Model"); ?></td>
+				<td class="right"><?= _l("Quantity"); ?></td>
 			</tr>
 			</thead>
 			<tbody>
@@ -41,10 +41,10 @@
 		<table class="list">
 			<thead>
 			<tr>
-				<td class="left"><?= $column_reason; ?></td>
-				<td class="left"><?= $column_opened; ?></td>
-				<td class="left"><?= $column_action; ?></td>
-				<td class="left"><?= $column_status; ?></td>
+				<td class="left"><?= _l("Reason"); ?></td>
+				<td class="left"><?= _l("Opened"); ?></td>
+				<td class="left"><?= _l("Action"); ?></td>
+				<td class="left"><?= _l("Status"); ?></td>
 			</tr>
 			</thead>
 			<tbody>
@@ -60,7 +60,7 @@
 			<? if ($comment) { ?>
 			<thead>
 			<tr>
-				<td class="left"><?= $text_comment; ?></td>
+				<td class="left"><?= _l("Return Comments"); ?></td>
 			</tr>
 			</thead>
 			<tbody>
@@ -71,13 +71,13 @@
 		</table>
 	<? } ?>
 		<? if ($histories) { ?>
-			<h2><?= $text_history; ?></h2>
+			<h2><?= _l("Return History"); ?></h2>
 			<table class="list">
 				<thead>
 				<tr>
-					<td class="left" style="width: 33.3%;"><?= $column_date_added; ?></td>
-					<td class="left" style="width: 33.3%;"><?= $column_status; ?></td>
-					<td class="left" style="width: 33.3%;"><?= $column_comment; ?></td>
+					<td class="left" style="width: 33.3%;"><?= _l("Date Added"); ?></td>
+					<td class="left" style="width: 33.3%;"><?= _l("Status"); ?></td>
+					<td class="left" style="width: 33.3%;"><?= _l("Comment"); ?></td>
 				</tr>
 				</thead>
 				<tbody>
@@ -92,7 +92,7 @@
 			</table>
 		<? } ?>
 		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
 		<?= $content_bottom; ?>

@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Language"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Language"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified languages!"));
 
 			$this->getList();
 		} else {
@@ -33,12 +33,12 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Language"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified languages!"));
 
 			$this->getList();
 		} else {
@@ -50,14 +50,14 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Language"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $language_id) {
 				$this->Model_Localisation_Language->deleteLanguage($language_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified languages!"));
 		}
 
 		$this->getList();
@@ -87,8 +87,8 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/language'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
 
 		$this->data['insert'] = $this->url->link('localisation/language/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/language/delete', $url);
@@ -179,8 +179,8 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/language'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
 
 		if (!$language_id) {
 			$this->data['action'] = $this->url->link('localisation/language/insert', $url);
@@ -224,11 +224,11 @@ class Admin_Controller_Localisation_Language extends Controller
 
 
 		//Additional Data
-		$_['data_direction'] = array(
+		$this->data['data_direction'] = array(
 			'ltr' => _l("Left to Right"),
 			'rtl' => _l("Right to Left"),
 		);
-		$_['data_statuses']  = array(
+		$this->data['data_statuses']  = array(
 			-1 => _l('Disabled'),
 			0  => _l('Inactive'),
 			1  => _l('Active'),
@@ -246,31 +246,31 @@ class Admin_Controller_Localisation_Language extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/language')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify languages!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 32)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Language Name must be between 3 and 32 characters!");
 		}
 
 		if (strlen($_POST['code']) < 2) {
-			$this->error['code'] = $this->_('error_code');
+			$this->error['code'] = _l("Language Code must at least 2 characters!");
 		}
 
 		if (!$_POST['locale']) {
-			$this->error['locale'] = $this->_('error_locale');
+			$this->error['locale'] = _l("Locale required!");
 		}
 
 		if (!$_POST['directory']) {
-			$this->error['directory'] = $this->_('error_directory');
+			$this->error['directory'] = _l("Directory required!");
 		}
 
 		if (!$_POST['filename']) {
-			$this->error['filename'] = $this->_('error_filename');
+			$this->error['filename'] = _l("Filename must be between 3 and 64 characters!");
 		}
 
 		if ((strlen($_POST['image']) < 3) || (strlen($_POST['image']) > 32)) {
-			$this->error['image'] = $this->_('error_image');
+			$this->error['image'] = _l("Image Filename must be between 3 and 64 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -279,7 +279,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/language')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify languages!");
 		}
 
 		foreach ($_GET['selected'] as $language_id) {
@@ -287,17 +287,17 @@ class Admin_Controller_Localisation_Language extends Controller
 
 			if ($language_info) {
 				if ($this->config->get('config_language') == $language_info['code']) {
-					$this->error['warning'] = $this->_('error_default');
+					$this->error['warning'] = _l("Warning: This language cannot be deleted as it is currently assigned as the default store language!");
 				}
 
 				if ($this->config->get('config_admin_language') == $language_info['code']) {
-					$this->error['warning'] = $this->_('error_admin');
+					$this->error['warning'] = _l("Warning: This Language cannot be deleted as it is currently assigned as the administration language!");
 				}
 
 				$store_total = $this->Model_Setting_Store->getTotalStoresByLanguage($language_info['code']);
 
 				if ($store_total) {
-					$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
+					$this->error['warning'] = sprintf(_l("Warning: This language cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
 
@@ -308,7 +308,7 @@ class Admin_Controller_Localisation_Language extends Controller
 			$order_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($order_total) {
-				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);
+				$this->error['warning'] = sprintf(_l("Warning: This language cannot be deleted as it is currently assigned to %s orders!"), $order_total);
 			}
 		}
 

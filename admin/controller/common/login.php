@@ -7,7 +7,7 @@ class Admin_Controller_Common_Login extends Controller
 
 		$this->language->load('common/login');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Administration"));
 
 		//IF user is logged in, redirect to the homepage
 		if (isset($_POST['username']) && isset($_POST['password'])) {
@@ -28,7 +28,7 @@ class Admin_Controller_Common_Login extends Controller
 		$this->data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
 
 		if (isset($this->session->data['token']) && !isset($_COOKIE['token'])) {
-			$this->error['warning'] = $this->_('error_token');
+			$this->error['warning'] = _l("Invalid token session. Please login again.");
 		}
 
 		$this->data['messages'] = $this->message->fetch();
@@ -84,7 +84,7 @@ class Admin_Controller_Common_Login extends Controller
 				exit;
 			}
 
-			$this->message->add('warning', $this->_('error_login'));
+			$this->message->add('warning', _l("No match for Username and/or Password."));
 
 			return false;
 		}

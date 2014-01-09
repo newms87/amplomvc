@@ -7,10 +7,10 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 
 		$this->language->load('tool/error_log');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Error Log"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/error_log'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Error Log"), $this->url->link('tool/error_log'));
 
 		$url_query = $this->url->getQuery('filter_store');
 
@@ -99,7 +99,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		$default_stores = array(
 			array(
 				'store_id' => '',
-				'name'     => $this->_('text_select')
+				'name'     => _l(" --- Please Select --- ")
 			),
 			array(
 				'store_id' => 'a',
@@ -174,7 +174,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 			}
 
 			file_put_contents($file, implode("\n", $file_lines));
-			$msg = $this->_('text_success_remove');
+			$msg = _l("Success: You have successfully removed entries from your error log!");
 			if ($get_page) {
 				$this->message->add('success', $msg);
 			} else {
@@ -226,7 +226,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 			fclose($handle);
 		}
 
-		$this->message->add('success', $this->_('text_success'));
+		$this->message->add('success', _l("Success: You have successfully cleared your error log!"));
 
 		$this->index();
 	}

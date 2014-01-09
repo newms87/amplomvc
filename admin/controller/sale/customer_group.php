@@ -7,7 +7,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer Group"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer Group"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->addCustomerGroup($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer groups!"));
 
 			$url = '';
 
@@ -47,12 +47,12 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer Group"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->editCustomerGroup($_GET['customer_group_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer groups!"));
 
 			$url = '';
 
@@ -78,14 +78,14 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Customer Group"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $customer_group_id) {
 				$this->Model_Sale_CustomerGroup->deleteCustomerGroup($customer_group_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified customer groups!"));
 
 			$url = '';
 
@@ -143,8 +143,8 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_group', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer Group"), $this->url->link('sale/customer_group', $url));
 
 		$this->data['insert'] = $this->url->link('sale/customer_group/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/customer_group/delete', $url);
@@ -261,8 +261,8 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_group', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Customer Group"), $this->url->link('sale/customer_group', $url));
 
 		if (!isset($_GET['customer_group_id'])) {
 			$this->data['action'] = $this->url->link('sale/customer_group/insert', $url);
@@ -295,11 +295,11 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'sale/customer_group')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customer groups!");
 		}
 
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Customer Group Name must be between 3 and 64 characters!");
 		}
 
 		return $this->error ? false : true;
@@ -308,24 +308,24 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'sale/customer_group')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify customer groups!");
 		}
 
 		foreach ($_GET['selected'] as $customer_group_id) {
 			if ($this->config->get('config_customer_group_id') == $customer_group_id) {
-				$this->error['warning'] = $this->_('error_default');
+				$this->error['warning'] = _l("Warning: This customer group cannot be deleted as it is currently assigned as the default store customer group!");
 			}
 
 			$store_total = $this->Model_Setting_Store->getTotalStoresByCustomerGroupId($customer_group_id);
 
 			if ($store_total) {
-				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
+				$this->error['warning'] = sprintf(_l("Warning: This customer group cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
 			$customer_total = $this->Model_Sale_Customer->getTotalCustomersByCustomerGroupId($customer_group_id);
 
 			if ($customer_total) {
-				$this->error['warning'] = sprintf($this->_('error_customer'), $customer_total);
+				$this->error['warning'] = sprintf(_l("Warning: This customer group cannot be deleted as it is currently assigned to %s customers!"), $customer_total);
 			}
 		}
 

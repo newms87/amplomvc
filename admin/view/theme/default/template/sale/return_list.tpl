@@ -1,17 +1,17 @@
 <?= $header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
-	<? if ($error_warning) { ?>
-		<div class="message_box warning"><?= $error_warning; ?></div>
+	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
+		<div class="message_box warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 	<? } ?>
 	<? if ($success) { ?>
 		<div class="message_box success"><?= $success; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -22,48 +22,48 @@
 						</td>
 						<td class="right"><? if ($sort == 'r.return_id') { ?>
 								<a href="<?= $sort_return_id; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_return_id; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Return ID"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_return_id; ?>"><?= $column_return_id; ?></a>
+								<a href="<?= $sort_return_id; ?>"><?= _l("Return ID"); ?></a>
 							<? } ?></td>
 						<td class="right"><? if ($sort == 'r.order_id') { ?>
-								<a href="<?= $sort_order_id; ?>" class="<?= strtolower($order); ?>"><?= $column_order_id; ?></a>
+								<a href="<?= $sort_order_id; ?>" class="<?= strtolower($order); ?>"><?= _l("Order ID"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_order_id; ?>"><?= $column_order_id; ?></a>
+								<a href="<?= $sort_order_id; ?>"><?= _l("Order ID"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'customer') { ?>
-								<a href="<?= $sort_customer; ?>" class="<?= strtolower($order); ?>"><?= $column_customer; ?></a>
+								<a href="<?= $sort_customer; ?>" class="<?= strtolower($order); ?>"><?= _l("Customer"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_customer; ?>"><?= $column_customer; ?></a>
+								<a href="<?= $sort_customer; ?>"><?= _l("Customer"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'r.product') { ?>
-								<a href="<?= $sort_product; ?>" class="<?= strtolower($order); ?>"><?= $column_product; ?></a>
+								<a href="<?= $sort_product; ?>" class="<?= strtolower($order); ?>"><?= _l("Product"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_product; ?>"><?= $column_product; ?></a>
+								<a href="<?= $sort_product; ?>"><?= _l("Product"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'r.model') { ?>
-								<a href="<?= $sort_model; ?>" class="<?= strtolower($order); ?>"><?= $column_model; ?></a>
+								<a href="<?= $sort_model; ?>" class="<?= strtolower($order); ?>"><?= _l("Model"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_model; ?>"><?= $column_model; ?></a>
+								<a href="<?= $sort_model; ?>"><?= _l("Model"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'status') { ?>
-								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>" class="<?= strtolower($order); ?>"><?= _l("Status"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_status; ?>"><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>"><?= _l("Status"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'r.date_added') { ?>
 								<a href="<?= $sort_date_added; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_date_added; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Date Added"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_date_added; ?>"><?= $column_date_added; ?></a>
+								<a href="<?= $sort_date_added; ?>"><?= _l("Date Added"); ?></a>
 							<? } ?></td>
 						<td class="left"><? if ($sort == 'r.date_modified') { ?>
 								<a href="<?= $sort_date_modified; ?>"
-								   class="<?= strtolower($order); ?>"><?= $column_date_modified; ?></a>
+								   class="<?= strtolower($order); ?>"><?= _l("Date Modified"); ?></a>
 							<? } else { ?>
-								<a href="<?= $sort_date_modified; ?>"><?= $column_date_modified; ?></a>
+								<a href="<?= $sort_date_modified; ?>"><?= _l("Date Modified"); ?></a>
 							<? } ?></td>
-						<td class="right"><?= $column_action; ?></td>
+						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<tbody>

@@ -9,9 +9,9 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt=""/> <?= _l("Weight Class"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,21 +21,21 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'title') { ?>
-									<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= $column_title; ?></a>
+									<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= _l("Weight Title"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_title; ?>"><?= $column_title; ?></a>
+									<a href="<?= $sort_title; ?>"><?= _l("Weight Title"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'unit') { ?>
-									<a href="<?= $sort_unit; ?>" class="<?= strtolower($order); ?>"><?= $column_unit; ?></a>
+									<a href="<?= $sort_unit; ?>" class="<?= strtolower($order); ?>"><?= _l("Weight Unit"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_unit; ?>"><?= $column_unit; ?></a>
+									<a href="<?= $sort_unit; ?>"><?= _l("Weight Unit"); ?></a>
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'value') { ?>
-									<a href="<?= $sort_value; ?>" class="<?= strtolower($order); ?>"><?= $column_value; ?></a>
+									<a href="<?= $sort_value; ?>" class="<?= strtolower($order); ?>"><?= _l("Value"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_value; ?>"><?= $column_value; ?></a>
+									<a href="<?= $sort_value; ?>"><?= _l("Value"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 						</thead>
 						<tbody>

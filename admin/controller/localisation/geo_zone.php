@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Geo Zones"));
 
 		$this->getList();
 	}
@@ -16,12 +16,12 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Geo Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified geo zones!"));
 
 			$this->url->redirect('localisation/geo_zone');
 		}
@@ -33,12 +33,12 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Geo Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified geo zones!"));
 
 			$this->url->redirect('localisation/geo_zone');
 		}
@@ -50,14 +50,14 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Geo Zones"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $geo_zone_id) {
 				$this->Model_Localisation_GeoZone->deleteGeoZone($geo_zone_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: You have modified geo zones!"));
 		}
 
 		$this->getList();
@@ -99,8 +99,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/geo_zone', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Geo Zones"), $this->url->link('localisation/geo_zone', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/geo_zone/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/geo_zone/delete', $url);
@@ -197,8 +197,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/geo_zone', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Geo Zones"), $this->url->link('localisation/geo_zone', $url));
 
 		if (!$geo_zone_id) {
 			$this->data['action'] = $this->url->link('localisation/geo_zone/insert', $url);
@@ -246,15 +246,15 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'localisation/geo_zone')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 32)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Geo Zone Name must be between 3 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['description'], 3, 255)) {
-			$this->error['description'] = $this->_('error_description');
+			$this->error['description'] = _l("Description Name must be between 3 and 255 characters!");
 		}
 
 		if (empty($_POST['exclude'])) {
@@ -267,14 +267,14 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'localisation/geo_zone')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
 		}
 
 		foreach ($_GET['selected'] as $geo_zone_id) {
 			$tax_rate_total = $this->Model_Localisation_TaxRate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
 
 			if ($tax_rate_total) {
-				$this->error['warning'] = sprintf($this->_('error_tax_rate'), $tax_rate_total);
+				$this->error['warning'] = sprintf(_l("Warning: This geo zone cannot be deleted as it is currently assigned to one or more tax rates!"), $tax_rate_total);
 			}
 		}
 

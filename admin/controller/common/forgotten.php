@@ -11,7 +11,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 		$this->language->load('common/forgotten');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->language->load('mail/forgotten');
@@ -37,13 +37,13 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 			$this->mail->send();
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("An email with a confirmation link has been sent your admin email address."));
 
 			$this->url->redirect('common/login');
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_forgotten'), $this->url->link('common/forgotten'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Forgotten Password"), $this->url->link('common/forgotten'));
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -72,9 +72,9 @@ class Admin_Controller_Common_Forgotten extends Controller
 	private function validate()
 	{
 		if (empty($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 		} elseif (!$this->Model_User_User->getTotalUsersByEmail($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 		}
 
 		return $this->error ? false : true;

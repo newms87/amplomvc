@@ -4,7 +4,11 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1>
+					<img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/>
+					<?= $page_title . _l("Extension File:"); ?>
+					<span class="extension_file_name"><?= $edit_file; ?></span>
+				</h1>
 
 				<div class="buttons">
 					<a onclick="$('#extension_editor').submit()" class="button"><?= $button_save; ?></a>

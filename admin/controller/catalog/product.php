@@ -22,7 +22,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
 			}
@@ -39,7 +39,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success_class'));
+				$this->message->add('success', _l("The Product's Class has been changed!"));
 			}
 		}
 
@@ -50,13 +50,13 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products"));
 
 		if (!empty($_GET['product_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Product->deleteProduct($_GET['product_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
 			}
@@ -69,13 +69,13 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products"));
 
 		if (!empty($_GET['product_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Product->copyProduct($_GET['product_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
 			}
@@ -93,7 +93,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				($_GET['action'] === 'delete' && !$this->validateDelete())
 			) {
 				//Action not allowed
-				$this->message->add("warning", $this->_('error_batch_action'));
+				$this->message->add("warning", _l("The requested action failed."));
 			} else {
 				foreach ($_GET['selected'] as $product_id) {
 					$data = array();
@@ -129,7 +129,7 @@ class Admin_Controller_Catalog_Product extends Controller
 							$this->Model_Catalog_Product->deleteProduct($product_id);
 							break;
 						default:
-							$this->message->add('warning', $this->_('error_batch_action'));
+							$this->message->add('warning', _l("The requested action failed."));
 							break 2; //break the for loop
 					}
 
@@ -140,7 +140,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified products!"));
 			}
 		}
 
@@ -150,14 +150,14 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products"));
 
 		//The Template
 		$this->template->load('catalog/product_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
 
 		//The Table Columns
 		$categories      = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -167,7 +167,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['thumb'] = array(
 			'type'         => 'image',
-			'display_name' => $this->_('column_image'),
+			'display_name' => _l("Image"),
 			'filter'       => false,
 			'sortable'     => true,
 			'sort_value'   => '__image_sort__image',
@@ -175,7 +175,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['product_class_id'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_class'),
+			'display_name' => _l("Class"),
 			'filter'       => true,
 			'build_config' => array(
 				'product_class_id',
@@ -188,7 +188,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => _l("Name"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'p.name',
@@ -196,7 +196,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['model'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_model'),
+			'display_name' => _l("Model ID"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'p.model',
@@ -204,7 +204,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['price'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_price'),
+			'display_name' => _l("Price"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'p.price',
@@ -212,7 +212,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['cost'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_cost'),
+			'display_name' => _l("Cost"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'p.cost',
@@ -220,7 +220,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['categories'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_category'),
+			'display_name' => _l("Categories"),
 			'filter'       => true,
 			'build_config' => array(
 				'category_id',
@@ -232,7 +232,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['quantity'] = array(
 			'type'         => 'int',
-			'display_name' => $this->_('column_quantity'),
+			'display_name' => _l("Qty"),
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'p.quantity',
@@ -240,7 +240,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -294,11 +294,11 @@ class Admin_Controller_Catalog_Product extends Controller
 
 			//The # in front of the key signifies we want to output the raw string for the value when rendering the table
 			if ($product['date_expires'] === DATETIME_ZERO) {
-				$product['#date_expires'] = $this->_('text_no_expiration');
+				$product['#date_expires'] = _l("No Expiration");
 			}
 
 			if (!(int)$product['subtract']) {
-				$product['quantity'] = $this->_('text_unlimited');
+				$product['quantity'] = _l("Unlimited");
 			}
 		}
 		unset($product);
@@ -330,11 +330,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Batch actions
 		$this->data['batch_actions'] = array(
 			'enable'             => array(
-				'label' => $this->_('text_enable'),
+				'label' => _l("Enable"),
 			),
 
 			'disable'            => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 
 			'product_class_id'   => array(
@@ -355,7 +355,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 
 			'shipping_policy_id' => array(
-				'label'        => $this->_('text_shipping_policy'),
+				'label'        => _l("Shipping Policy"),
 				'type'         => 'select',
 				'build_data'   => $this->cart->getShippingPolicies(),
 				'build_config' => array(
@@ -366,7 +366,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 
 			'return_policy_id'   => array(
-				'label'        => $this->_('text_return_policy'),
+				'label'        => _l("Return Policy"),
 				'type'         => 'select',
 				'build_data'   => $this->cart->getReturnPolicies(),
 				'build_config' => array(
@@ -432,14 +432,14 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Products"));
 
 		//Insert or Update
 		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
 
 		if (!$product_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product/update'));
@@ -548,8 +548,8 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Additional Data
 		$this->data['data_product_classes']   = $product_classes;
-		$this->data['data_manufacturers']     = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
-		$this->data['data_tax_classes']       = array('' => $this->_('text_none')) + $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['data_manufacturers']     = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
+		$this->data['data_tax_classes']       = array('' => _l(" --- None --- ")) + $this->Model_Localisation_TaxClass->getTaxClasses();
 		$this->data['data_weight_classes']    = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$this->data['data_length_classes']    = $this->Model_Localisation_LengthClass->getLengthClasses();
 		$this->data['data_customer_groups']   = $this->Model_Sale_CustomerGroup->getCustomerGroups();
@@ -706,7 +706,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		if (!$this->template->find_file($template)) {
 			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
-			$this->message->add('warning', $this->_('error_class_template', $product_class['name'], $template));
+			$this->message->add('warning', _l("The %s Class template file %s could not be found!", $product_class['name'], $template));
 
 			$template = 'catalog/product_form';
 		}
@@ -720,11 +720,11 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/product')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify products!");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 254)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Product Name must be greater than 3 and less than 255 characters!");
 		}
 
 		//We do not allow changing the Model ID for products that have been ordered
@@ -733,7 +733,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$model = $this->db->queryVar("SELECT model FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$_GET['product_id']);
 
 			if ($model !== $_POST['model']) {
-				$this->error['model'] = $this->_('error_model_confirmed_order_product');
+				$this->error['model'] = _l("Product Model ID cannot be changed after a product is associated with a confirmed order! You may create a copy of the product and deactivate this product if you wish to change the model #.");
 				$_POST['model']       = $model;
 			}
 		} else {
@@ -742,7 +742,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 
 			if (!$this->validation->text($_POST['model'], 1, 64)) {
-				$this->error['model'] = $this->_('error_model');
+				$this->error['model'] = _l("Product Model ID must be greater than 3 and less than 64 characters!");
 			}
 
 			$product_id = isset($_GET['product_id']) ? "AND product_id != '" . (int)$_GET['product_id'] . "'" : '';
@@ -750,7 +750,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$exists = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
 
 			if ($exists) {
-				$this->error['model'] = $this->_('error_dup_model');
+				$this->error['model'] = _l("Your Product Model ID is already in our system. Please make the Model ID unique or use the \"Generate Model ID\" button next to the Model ID field.");
 			}
 		}
 
@@ -770,7 +770,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_POST['product_options'])) {
 			foreach ($_POST['product_options'] as $option_id => &$product_option) {
 				if (empty($product_option['product_option_values'])) {
-					$this->error["option_value$option_id"] = $this->_('error_no_option_value', $product_option['name']);
+					$this->error["option_value$option_id"] = _l("You must specify at least 1 Option Value for %s!", $product_option['name']);
 					continue;
 				}
 
@@ -783,19 +783,19 @@ class Admin_Controller_Catalog_Product extends Controller
 					if (!empty($product_option_value['restrictions'])) {
 						foreach ($product_option_value['restrictions'] as $r_key => $restriction) {
 							if ($restriction['restrict_option_value_id'] == $product_option_value_id) {
-								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_pov_restrict_same');
+								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = _l("You cannot restrict a Product Option Value with itself!");
 							}
 
 							foreach ($product_option_value['restrictions'] as $r_key2 => $restriction2) {
 								if ($r_key != $r_key2) {
 									if ($restriction['restrict_option_value_id'] == $restriction2['restrict_option_value_id']) {
-										$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_dup_restrict');
+										$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = _l("You have duplicate restriction values on 1 Product Option Value!");
 									}
 								}
 							}
 
 							if (isset($product_option['product_option_values'][$restriction['restrict_option_value_id']])) {
-								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = sprintf($this->_('error_restrict_same_option_id'), ucfirst($product_option['type']));
+								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = sprintf(_l("You cannot restrict a Product Option Value with another Product Option value of the same Option Category For Type '%s'!"), ucfirst($product_option['type']));
 							}
 						}
 					}
@@ -811,7 +811,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/product')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify products!");
 		}
 
 		$product_ids = array();
@@ -826,7 +826,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		foreach ($product_ids as $product_id) {
 			if ($this->order->productInConfirmedOrder($product_id)) {
-				$this->error['product' . $product_id] = $this->_('error_confirmed_order_product', $this->Model_Catalog_Product->getProductField($product_id, 'name'));
+				$this->error['product' . $product_id] = _l("The product %s cannot be deleted after it is associated with a confirmed order! Please deactivate this product instead of deleting it.", $this->Model_Catalog_Product->getProductField($product_id, 'name'));
 			}
 		}
 
@@ -836,7 +836,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function validateCopy()
 	{
 		if (!$this->user->can('modify', 'catalog/product')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify products!");
 		}
 
 		return $this->error ? false : true;

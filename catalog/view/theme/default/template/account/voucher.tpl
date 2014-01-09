@@ -59,7 +59,7 @@
 				<tr>
 					<td class="required">
 						<?= _l("Amount:"); ?>
-						<span class="help"><?= _l("(Value must be between %s and %s)", $amount_min, $amount_max); ?></span>
+						<span class="help"><?= _l("(Value must be between %s and %s)", $max_value, $min_value); ?></span>
 					</td>
 					<td><input type="text" name="amount" value="<?= $amount; ?>" size="5"/></td>
 				</tr>

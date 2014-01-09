@@ -27,7 +27,7 @@ class Admin_Controller_Page_Page extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success_update'));
+				$this->message->add('success', _l("Page was updated successfully!"));
 
 				if (!$this->request->isAjax()) {
 					$this->url->redirect('page/page');
@@ -51,7 +51,7 @@ class Admin_Controller_Page_Page extends Controller
 			$this->Model_Page_Page->deletePage($_GET['page_id']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('notify', $this->_('text_success_delete'));
+				$this->message->add('notify', _l("Page was deleted!"));
 			}
 		}
 
@@ -82,7 +82,7 @@ class Admin_Controller_Page_Page extends Controller
 
 			if (!$this->message->hasError()) {
 				$this->language->load('page/page');
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: You have modified Pages!"));
 			}
 		}
 
@@ -92,28 +92,28 @@ class Admin_Controller_Page_Page extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Page"));
 
 		//The Template
 		$this->template->load('page/page_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('page/page'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Page"), $this->url->link('page/page'));
 
 		//The Table Columns
 		$columns = array();
 
 		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_title'),
+			'display_name' => _l("Page Title"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
-			'display_name' => $this->_('column_store'),
+			'display_name' => _l("Stores"),
 			'filter'       => true,
 			'build_config' => array(
 				'store_id',
@@ -125,7 +125,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -176,10 +176,10 @@ class Admin_Controller_Page_Page extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'  => array(
-				'label' => $this->_('text_enable')
+				'label' => _l("Enable")
 			),
 			'disable' => array(
-				'label' => $this->_('text_disable'),
+				'label' => _l("Disable"),
 			),
 			'delete'  => array(
 				'label' => $this->_('text_delete'),
@@ -213,7 +213,7 @@ class Admin_Controller_Page_Page extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Page"));
 
 		//The Template
 		$this->template->load('page/page_form');
@@ -222,8 +222,8 @@ class Admin_Controller_Page_Page extends Controller
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('page/page'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Page"), $this->url->link('page/page'));
 
 		if ($page_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('page/page/update', 'page_id=' . $page_id));
@@ -358,11 +358,11 @@ class Admin_Controller_Page_Page extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'page/page')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify Pages!");
 		}
 
 		if (!$this->validation->text($_POST['title'], 3, 64)) {
-			$this->error['title'] = $this->_('error_title');
+			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
 		}
 
 		if (empty($_POST['display_title'])) {
@@ -375,7 +375,7 @@ class Admin_Controller_Page_Page extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'page/page')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("Warning: You do not have permission to modify Pages!");
 		}
 
 		return $this->error ? false : true;

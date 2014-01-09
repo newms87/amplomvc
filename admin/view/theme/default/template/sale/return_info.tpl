@@ -3,7 +3,7 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
 				<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 			</div>
@@ -14,55 +14,55 @@
 				<div id="tab-return" class="vtabs-content">
 					<table class="form">
 						<tr>
-							<td><?= $text_return_id; ?></td>
+							<td><?= _l("Return ID:"); ?></td>
 							<td><?= $return_id; ?></td>
 						</tr>
 						<? if ($order) { ?>
 							<tr>
-								<td><?= $text_order_id; ?></td>
+								<td><?= _l("Order ID:"); ?></td>
 								<td><a href="<?= $order; ?>"><?= $order_id; ?></a></td>
 							</tr>
 						<? } else { ?>
 							<tr>
-								<td><?= $text_order_id; ?></td>
+								<td><?= _l("Order ID:"); ?></td>
 								<td><?= $order_id; ?></td>
 							</tr>
 						<? } ?>
 						<tr>
-							<td><?= $text_date_ordered; ?></td>
+							<td><?= _l("Order Date:"); ?></td>
 							<td><?= $date_ordered; ?></td>
 						</tr>
 						<? if ($customer) { ?>
 							<tr>
-								<td><?= $text_customer; ?></td>
+								<td><?= _l("Customer:"); ?></td>
 								<td><a href="<?= $customer; ?>"><?= $firstname; ?> <?= $lastname; ?></a></td>
 							</tr>
 						<? } else { ?>
 							<tr>
-								<td><?= $text_customer; ?></td>
+								<td><?= _l("Customer:"); ?></td>
 								<td><?= $firstname; ?> <?= $lastname; ?></td>
 							</tr>
 						<? } ?>
 						<tr>
-							<td><?= $text_email; ?></td>
+							<td><?= _l("E-Mail:"); ?></td>
 							<td><?= $email; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_telephone; ?></td>
+							<td><?= _l("Telephone:"); ?></td>
 							<td><?= $telephone; ?></td>
 						</tr>
 						<? if ($return_status) { ?>
 							<tr>
-								<td><?= $text_return_status; ?></td>
+								<td><?= _l("Return Status:"); ?></td>
 								<td id="return-status"><?= $return_status; ?></td>
 							</tr>
 						<? } ?>
 						<tr>
-							<td><?= $text_date_added; ?></td>
+							<td><?= _l("Date Added:"); ?></td>
 							<td><?= $date_added; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_date_modified; ?></td>
+							<td><?= _l("Date Modified:"); ?></td>
 							<td><?= $date_modified; ?></td>
 						</tr>
 					</table>
@@ -70,27 +70,27 @@
 				<div id="tab-product" class="vtabs-content">
 					<table class="form">
 						<tr>
-							<td><?= $text_product; ?></td>
+							<td><?= _l("Product:"); ?></td>
 							<td><?= $subscription; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_model; ?></td>
+							<td><?= _l("Model:"); ?></td>
 							<td><?= $model; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_quantity; ?></td>
+							<td><?= _l("Quantity:"); ?></td>
 							<td><?= $quantity; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_return_reason; ?></td>
+							<td><?= _l("Return Reason:"); ?></td>
 							<td><?= $return_reason; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_opened; ?></td>
+							<td><?= _l("Opened"); ?></td>
 							<td><?= $opened; ?></td>
 						</tr>
 						<tr>
-							<td><?= $text_return_action; ?></td>
+							<td><?= _l("Return Action:"); ?></td>
 							<td><select name="return_action_id">
 									<option value="0"></option>
 									<? foreach ($return_actions as $return_action) { ?>
@@ -105,7 +105,7 @@
 						</tr>
 						<? if ($comment) { ?>
 							<tr>
-								<td><?= $text_comment; ?></td>
+								<td><?= _l("Comment:"); ?></td>
 								<td><?= $comment; ?></td>
 							</tr>
 						<? } ?>
@@ -115,16 +115,16 @@
 					<div id="history"></div>
 					<table class="form">
 						<tr>
-							<td><?= $entry_return_status; ?></td>
+							<td><?= _l("Return Status:"); ?></td>
 							<td>
 							<td><?= $this->builder->build('select', $data_return_statuses, 'return_status_id', $return_status_id); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_notify; ?></td>
+							<td><?= _l("Notify Customer:"); ?></td>
 							<td><input type="checkbox" name="notify" value="1"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_comment; ?></td>
+							<td><?= _l("Comment:"); ?></td>
 							<td><textarea name="comment" cols="40" rows="8" style="width: 99%"></textarea>
 
 								<div style="margin-top: 10px; text-align: right;"><a onclick="history();" id="button-history"
@@ -147,7 +147,7 @@
 				beforeSend: function () {
 					$(".success, .warning, .attention').remove();
 
-					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
+					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 				},
 				success: function (json) {
 					$('.success, .warning, .attention').remove();
@@ -187,7 +187,7 @@
 				beforeSend: function () {
 					$('.success, .warning').remove();
 					$('#button-history').attr('disabled', true);
-					$('#history').prepend('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
+					$('#history').prepend('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 				},
 				complete: function () {
 					$('#button-history').attr('disabled', false);
