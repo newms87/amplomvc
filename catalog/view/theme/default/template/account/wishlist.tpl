@@ -4,18 +4,18 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("My Wish List"); ?></h1>
 		<? if ($products) { ?>
 			<div class="wishlist-info">
 				<table>
 					<thead>
 					<tr>
-						<td class="image"><?= $column_image; ?></td>
-						<td class="name"><?= $column_name; ?></td>
-						<td class="model"><?= $column_model; ?></td>
-						<td class="stock"><?= $column_stock; ?></td>
-						<td class="price"><?= $column_price; ?></td>
-						<td class="action"><?= $column_action; ?></td>
+						<td class="image"><?= _l("Image"); ?></td>
+						<td class="name"><?= _l("Product Name"); ?></td>
+						<td class="model"><?= _l("Model"); ?></td>
+						<td class="stock"><?= _l("Stock"); ?></td>
+						<td class="price"><?= _l("Unit Price"); ?></td>
+						<td class="action"><?= _l("Action"); ?></td>
 					</tr>
 					</thead>
 					<? foreach ($products as $product) { ?>
@@ -38,23 +38,23 @@
 										<? } ?>
 									</div>
 								<? } ?></td>
-							<td class="action"><img src="<?= HTTP_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= $button_cart; ?>"
-							                        title="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
+							<td class="action"><img src="<?= HTTP_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= _l("Add to Cart"); ?>"
+							                        title="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
 									href="<?= $product['remove']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>"
-							                                             alt="<?= $button_remove; ?>"
-							                                             title="<?= $button_remove; ?>"/></a></td>
+							                                             alt="<?= _l("Remove"); ?>"
+							                                             title="<?= _l("Remove"); ?>"/></a></td>
 						</tr>
 						</tbody>
 					<? } ?>
 				</table>
 			</div>
 			<div class="buttons">
-				<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+				<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 			</div>
 		<? } else { ?>
-			<div class="section"><?= $text_empty; ?></div>
+			<div class="section"><?= _l("Your wish list is empty."); ?></div>
 			<div class="buttons">
-				<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+				<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 			</div>
 		<? } ?>
 

@@ -24,16 +24,16 @@ class Catalog_Controller_Account_Wishlist extends Controller
 				unset($this->session->data['wishlist'][$key]);
 			}
 
-			$this->message->add('success', $this->_('text_remove'));
+			$this->message->add('success', _l("Success: You have modified your wishlist!"));
 
 			$this->url->redirect('account/wishlist');
 		}
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("My Wish List"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/wishlist'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("My Wish List"), $this->url->link('account/wishlist'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
@@ -60,7 +60,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 				} elseif ($this->config->get('config_stock_display')) {
 					$stock = $product_info['quantity'];
 				} else {
-					$stock = $this->_('text_instock');
+					$stock = _l("In Stock");
 				}
 
 				if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
@@ -129,12 +129,12 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			}
 
 			if ($this->customer->isLogged()) {
-				$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
+				$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			} else {
-				$json['success'] = sprintf($this->_('text_login'), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
+				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			}
 
-			$json['total'] = sprintf($this->_('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+			$json['total'] = sprintf(_l("Wish List (%s)"), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
 		}
 
 		$this->response->setOutput(json_encode($json));

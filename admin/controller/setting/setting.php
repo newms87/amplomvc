@@ -233,6 +233,16 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
 		$this->data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
 
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/setting');
 		$this->data['cancel'] = $this->url->link('setting/store');

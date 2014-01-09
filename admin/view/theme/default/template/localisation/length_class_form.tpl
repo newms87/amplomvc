@@ -6,38 +6,38 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'length.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'length.png'; ?>" alt=""/> <?= _l("Length Class"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_title; ?></td>
+							<td class="required"> <?= _l("Length Title:"); ?></td>
 							<td><? foreach ($languages as $language) { ?>
 									<input type="text" name="length_class_description[<?= $language['language_id']; ?>][title]" value="<?= isset($length_class_description[$language['language_id']]) ? $length_class_description[$language['language_id']]['title'] : ''; ?>"/>
 									<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
 									     title="<?= $language['name']; ?>"/><br/>
-									<? if (isset($error_title[$language['language_id']])) { ?>
-										<span class="error"><?= $error_title[$language['language_id']]; ?></span><br/>
+									<? if (isset(_l("Length Title must be between 3 and 32 characters!")[$language['language_id']])) { ?>
+										<span class="error"><?= _l("Length Title must be between 3 and 32 characters!")[$language['language_id']]; ?></span><br/>
 									<? } ?>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_unit; ?></td>
+							<td class="required"> <?= _l("Length Unit:"); ?></td>
 							<td><? foreach ($languages as $language) { ?>
 									<input type="text" name="length_class_description[<?= $language['language_id']; ?>][unit]" value="<?= isset($length_class_description[$language['language_id']]) ? $length_class_description[$language['language_id']]['unit'] : ''; ?>"/>
 									<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
 									     title="<?= $language['name']; ?>"/><br/>
-									<? if (isset($error_unit[$language['language_id']])) { ?>
-										<span class="error"><?= $error_unit[$language['language_id']]; ?></span><br/>
+									<? if (isset(_l("Length Unit must be between 1 and 4 characters!")[$language['language_id']])) { ?>
+										<span class="error"><?= _l("Length Unit must be between 1 and 4 characters!")[$language['language_id']]; ?></span><br/>
 									<? } ?>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_value; ?></td>
+							<td><?= _l("Value:<br /><span class=\"help\">Set to 1.00000 if this is your default length.</span>"); ?></td>
 							<td><input type="text" name="value" value="<?= $value; ?>"/></td>
 						</tr>
 					</table>

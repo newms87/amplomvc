@@ -1,5 +1,5 @@
 <div id="widgetyoutube" class="box">
-	<div class="box_heading"><?= $head_title; ?></div>
+	<div class="box_heading"><?= _l("YouTube"); ?></div>
 	<div class="box_content">
 		<? if (!empty($videos)) { ?>
 			<? foreach ($videos as $video) { ?>

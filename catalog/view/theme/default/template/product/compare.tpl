@@ -4,17 +4,17 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Product Comparison"); ?></h1>
 		<? if ($products) { ?>
 			<table class="compare-info">
 				<thead>
 				<tr>
-					<td class="compare-product" colspan="<?= count($products) + 1; ?>"><?= $text_product; ?></td>
+					<td class="compare-product" colspan="<?= count($products) + 1; ?>"><?= _l("Product Details"); ?></td>
 				</tr>
 				</thead>
 				<tbody>
 				<tr>
-					<td><?= $text_name; ?></td>
+					<td><?= _l("Product"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td class="name"><a
 								href="<?= $products[$product['product_id']]['href']; ?>"><?= $products[$product['product_id']]['name']; ?></a>
@@ -22,7 +22,7 @@
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_image; ?></td>
+					<td><?= _l("Image"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><? if ($products[$product['product_id']]['thumb']) { ?>
 								<img src="<?= $products[$product['product_id']]['thumb']; ?>"
@@ -31,7 +31,7 @@
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_price; ?></td>
+					<td><?= _l("Price"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><? if ($products[$product['product_id']]['price']) { ?>
 								<? if (!$products[$product['product_id']]['special']) { ?>
@@ -44,25 +44,25 @@
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_model; ?></td>
+					<td><?= _l("Model"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><?= $products[$product['product_id']]['model']; ?></td>
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_manufacturer; ?></td>
+					<td><?= _l("Brand"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><?= $products[$product['product_id']]['manufacturer']; ?></td>
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_availability; ?></td>
+					<td><?= _l("Availability"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><?= $products[$product['product_id']]['availability']; ?></td>
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_rating; ?></td>
+					<td><?= _l("Rating"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><img
 								src="<?= HTTP_THEME_IMAGE . "stars-" . $products[$product['product_id']]['rating'] . ".png"; ?>"
@@ -71,19 +71,19 @@
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_summary; ?></td>
+					<td><?= _l("Summary"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td class="description"><?= $products[$product['product_id']]['description']; ?></td>
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_weight; ?></td>
+					<td><?= _l("Weight"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><?= $products[$product['product_id']]['weight']; ?></td>
 					<? } ?>
 				</tr>
 				<tr>
-					<td><?= $text_dimension; ?></td>
+					<td><?= _l("Dimensions (L x W x H)"); ?></td>
 					<? foreach ($products as $product) { ?>
 						<td><?= $products[$product['product_id']]['length']; ?>
 							x <?= $products[$product['product_id']]['width']; ?>
@@ -116,23 +116,23 @@
 				<tr>
 					<td></td>
 					<? foreach ($products as $product) { ?>
-						<td><input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></td>
+						<td><input type="button" value="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></td>
 					<? } ?>
 				</tr>
 				<tr>
 					<td></td>
 					<? foreach ($products as $product) { ?>
-						<td class="remove"><a href="<?= $product['remove']; ?>" class="button"><?= $button_remove; ?></a></td>
+						<td class="remove"><a href="<?= $product['remove']; ?>" class="button"><?= _l("Remove"); ?></a></td>
 					<? } ?>
 				</tr>
 			</table>
 			<div class="buttons">
-				<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+				<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 			</div>
 		<? } else { ?>
-			<div class="section"><?= $text_empty; ?></div>
+			<div class="section"><?= _l("You have not chosen any products to compare."); ?></div>
 			<div class="buttons">
-				<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+				<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 			</div>
 		<? } ?>
 

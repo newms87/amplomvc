@@ -9,7 +9,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {

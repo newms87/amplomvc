@@ -1,5 +1,5 @@
 <div id="widgetfaq" class="box">
-	<div class="box_heading"><?= $head_title; ?></div>
+	<div class="box_heading"><?= _l("Frequently Asked Questions"); ?></div>
 	<div class="box_content">
 		<? if (!empty($faqs)) { ?>
 			<? foreach ($faqs as $faq_group) { ?>

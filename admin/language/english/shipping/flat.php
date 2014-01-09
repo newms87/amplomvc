@@ -2,11 +2,6 @@
 // Heading
 $_['head_title'] = 'Flat Rate';
 
-//Data
-$_['data_rule_types'] = array(
-	'item_qty' => "Product Quantity",
-	'weight'   => "Weight of Cart",
-);
 // Text
 $_['text_shipping'] = 'Shipping';
 $_['text_success']  = 'Success: You have modified flat rate shipping!';

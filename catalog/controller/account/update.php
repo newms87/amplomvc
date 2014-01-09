@@ -21,7 +21,7 @@ class Catalog_Controller_Account_Update extends Controller
 				$this->System_Extension_Payment->get($_POST['payment_method_id'])->update_card($_POST['payment_key'], array('default' => true));
 			}
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Your account information has been updated successfully!"));
 
 			$this->url->redirect('account/account');
 		}
@@ -30,12 +30,12 @@ class Catalog_Controller_Account_Update extends Controller
 		$this->template->load('account/update');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("My Account Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('account/update'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Edit Information"), $this->url->link('account/update'));
 
 		//Handle POST
 		if (!$this->request->isPost()) {
@@ -116,15 +116,15 @@ class Catalog_Controller_Account_Update extends Controller
 	private function validate()
 	{
 		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("The email address you provided is invalid.");
 		}
 
 		if (($this->customer->info('email') !== $_POST['email']) && $this->customer->emailRegistered($_POST['email'])) {
@@ -132,14 +132,14 @@ class Catalog_Controller_Account_Update extends Controller
 		}
 
 		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("The phone number you provided is invalid.");
 		}
 
 		if (!$this->validation->password($_POST['password'])) {
 			$this->error['password'] = $this->validation->getError();
 		}
 		elseif ($_POST['password'] !== $_POST['confirm']) {
-			$this->error['confirm'] = $this->_('error_confirm');
+			$this->error['confirm'] = _l("Your password and confirmation do not match!");
 		}
 
 		$_POST['newsletter'] = !empty($_POST['newsletter']) ? 1 : 0;

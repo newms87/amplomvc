@@ -1,27 +1,27 @@
 <form id="cart_shipping" action="<?= $action; ?>" class="section">
-	<p><?= $text_shipping_detail; ?></p>
+	<p><?= _l("Enter your destination to get a shipping estimate."); ?></p>
 	<table>
 		<tr>
-			<td class="required"> <?= $entry_country; ?></td>
+			<td class="required"> <?= _l("Country:"); ?></td>
 			<td>
 				<? $this->builder->setConfig('country_id', 'name'); ?>
 				<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class' => 'country_select')); ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="required"> <?= $entry_zone; ?></td>
+			<td class="required"> <?= _l("Region / State:"); ?></td>
 			<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
 		</tr>
 		<tr>
-			<td class="required"> <?= $entry_postcode; ?></td>
+			<td class="required"> <?= _l("Post Code:"); ?></td>
 			<td><input type="text" name="postcode" value="<?= $postcode; ?>"/></td>
 		</tr>
 	</table>
-	<input type="button" value="<?= $button_quote; ?>" id="button-quote" class="button"/>
+	<input type="button" value="<?= _l("Get Quotes"); ?>" id="button-quote" class="button"/>
 </form>
 
 <div id="shipping_quote_template" class="shipping_quote" style="display:none">
-	<h2><?= $text_shipping_method; ?></h2>
+	<h2><?= _l("Please select the preferred shipping method to use on this order."); ?></h2>
 
 	<form action="<?= $apply; ?>" method="post" enctype="multipart/form-data">
 		<table class="quote_method radio">
@@ -49,7 +49,7 @@
 			<div class="quote_address"></div>
 		</div>
 		<input type="hidden" name="redirect" value="<?= $redirect; ?>"/>
-		<input type="submit" onclick="return apply_shipping_quote($(this));" value="<?= $button_shipping; ?>"
+		<input type="submit" onclick="return apply_shipping_quote($(this));" value="<?= _l("Apply Shipping"); ?>"
 		       class="button"/>
 	</form>
 </div>
@@ -171,7 +171,7 @@
 				if (json['request_address']) {
 					form.find('[name=add_address]').val(1);
 					form.find('#quote_full_address').slideDown();
-					show_msg('notify', '<?= $text_request_address; ?>');
+					show_msg('notify', '<?= _l("Please provide additional shipping information."); ?>');
 					return;
 				}
 

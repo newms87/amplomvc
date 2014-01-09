@@ -2,15 +2,6 @@
 // Heading
 $_['head_title'] = 'DB Rules';
 
-//Data
-$_['data_escape_types'] = array(
-	0 => 'Normal Escape',
-	1 => 'No Escape',
-	2 => "Image",
-	3 => "Integer",
-	4 => "Float",
-	5 => "Datetime"
-);
 // Text
 $_['text_success']  = 'Success: You have modified db rules!';
 $_['column_action'] = 'Action';

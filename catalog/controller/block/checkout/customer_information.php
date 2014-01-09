@@ -61,11 +61,11 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 		$this->language->load('block/checkout/customer_information');
 
 		if (!$this->cart->hasPaymentAddress()) {
-			$json['error']['payment_address'] = $this->_('error_payment_address');
+			$json['error']['payment_address'] = _l("Please provide a Payment Address.");
 		}
 
 		if (!$this->cart->hasPaymentMethod()) {
-			$json['error']['payment_method'] = $this->_('error_payment_method');
+			$json['error']['payment_method'] = _l("Please specify a Payment Method");
 		}
 
 		//TODO: Need to add default_payment_method_id and default_shipping_method_id into customer Library API
@@ -78,11 +78,11 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 		//Handle Shipping
 		if ($this->cart->hasShipping()) {
 			if (!$this->cart->hasShippingAddress()) {
-				$json['error']['shipping_address'] = $this->_('error_shipping_address');
+				$json['error']['shipping_address'] = _l("Please provide a Shipping Address.");
 			}
 
 			if (!$this->cart->hasShippingMethod()) {
-				$json['error']['shipping_method'] = $this->_('error_shipping_method');
+				$json['error']['shipping_method'] = _l("Please specify a Shipping Method");
 			}
 
 			//Save Customer Shipping Preferences (for future reference)

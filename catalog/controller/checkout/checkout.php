@@ -16,12 +16,12 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->language->load('checkout/checkout');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Checkout"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_cart'), $this->url->link('cart/cart'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('checkout/checkout'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
+		$this->breadcrumb->add(_l("Checkout"), $this->url->link('checkout/checkout'));
 
 		$this->data['logged']         = $this->customer->isLogged();
 		$this->data['guest_checkout'] = $this->session->get('guest_checkout');

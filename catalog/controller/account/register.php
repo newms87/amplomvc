@@ -9,7 +9,7 @@ class Catalog_Controller_Account_Register extends Controller
 
 		$this->language->load('account/register');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Register Account"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->add($_POST);
@@ -24,11 +24,9 @@ class Catalog_Controller_Account_Register extends Controller
 			$this->url->redirect('account/success');
 		}
 
-		$this->_('text_account_already', $this->url->link('account/login'));
-
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_register'), $this->url->link('account/register'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Register"), $this->url->link('account/register'));
 
 		$this->data['action'] = $this->url->link('account/register');
 
@@ -57,18 +55,26 @@ class Catalog_Controller_Account_Register extends Controller
 
 		$this->data += $registration_data + $defaults;
 
-		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
-
-		$this->data['text_agree'] = '';
+		//Template Data
+		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//TODO: update this to a page!
 		if ($this->config->get('config_account_terms_info_id')) {
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id')), $information_info['title'], $information_info['title']);
+				$this->data['agree_to'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
+				$this->data['agree_title'] = $information_info['title'];
 			}
 		}
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
+		//Action Buttons
+		$this->data['login'] = $this->url->link('account/login');
 
 		//The Template
 		$this->template->load('account/register');
@@ -90,11 +96,11 @@ class Catalog_Controller_Account_Register extends Controller
 	public function validate()
 	{
 		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
@@ -102,7 +108,7 @@ class Catalog_Controller_Account_Register extends Controller
 		}
 
 		if ($this->customer->emailRegistered($_POST['email'])) {
-			$this->error['email'] = $this->_('error_exists');
+			$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
 		}
 
 		if (!$this->address->validate($_POST)) {
@@ -114,14 +120,14 @@ class Catalog_Controller_Account_Register extends Controller
 		}
 
 		if ($_POST['confirm'] !== $_POST['password']) {
-			$this->error['confirm'] = $this->_('error_confirm');
+			$this->error['confirm'] = _l("Password confirmation does not match password!");
 		}
 
 		if ($this->config->get('config_account_terms_info_id')) {
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
 			if ($information_info && !isset($_POST['agree'])) {
-				$this->error['warning'] = sprintf($this->_('error_agree'), $information_info['title']);
+				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $information_info['title']);
 			}
 		}
 

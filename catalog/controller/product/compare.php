@@ -18,15 +18,15 @@ class Catalog_Controller_Product_Compare extends Controller
 				unset($this->session->data['compare'][$key]);
 			}
 
-			$this->message->add('success', $this->_('text_remove'));
+			$this->message->add('success', _l("Success: You have modified your product comparison!"));
 
 			$this->url->redirect('product/compare');
 		}
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Comparison"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('product/compare'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Product Comparison"), $this->url->link('product/compare'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
@@ -67,7 +67,7 @@ class Catalog_Controller_Product_Compare extends Controller
 				} elseif ($this->config->get('config_stock_display')) {
 					$availability = $product_info['quantity'];
 				} else {
-					$availability = $this->_('text_instock');
+					$availability = _l("In Stock");
 				}
 
 				$attribute_data = array();
@@ -91,7 +91,7 @@ class Catalog_Controller_Product_Compare extends Controller
 					'manufacturer' => $product_info['manufacturer'],
 					'availability' => $availability,
 					'rating'       => (int)$product_info['rating'],
-					'reviews'      => sprintf($this->_('text_reviews'), (int)$product_info['reviews']),
+					'reviews'      => sprintf(_l("Based on %s reviews."), (int)$product_info['reviews']),
 					'weight'       => $this->weight->format($product_info['weight'], $product_info['weight_class_id']),
 					'length'       => $this->length->format($product_info['length'], $product_info['length_class_id']),
 					'width'        => $this->length->format($product_info['width'], $product_info['length_class_id']),
@@ -154,9 +154,9 @@ class Catalog_Controller_Product_Compare extends Controller
 				$this->session->data['compare'][] = $_POST['product_id'];
 			}
 
-			$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('product/compare'));
+			$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">product comparison</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('product/compare'));
 
-			$json['total'] = sprintf($this->_('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+			$json['total'] = sprintf(_l("Product Compare (%s)"), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		}
 
 		$this->response->setOutput(json_encode($json));

@@ -11,11 +11,11 @@ class Catalog_Controller_Account_Download extends Controller
 
 		$this->language->load('account/download');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Account Downloads"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_downloads'), $this->url->link('account/download'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Downloads"), $this->url->link('account/download'));
 
 		$download_total = $this->Model_Account_Download->getTotalDownloads();
 
@@ -85,7 +85,7 @@ class Catalog_Controller_Account_Download extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->set('text_error', $this->_('text_empty'));
+			$this->language->set('text_error', _l("You have not made any previous downloadable orders!"));
 
 			$this->data['continue'] = $this->url->link('account/account');
 

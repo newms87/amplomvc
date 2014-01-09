@@ -3,21 +3,21 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= _l("Banners"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Banner Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>" size="100"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
-							<td><?= $this->builder->build('select', $statuses, 'status', (int)$status); ?></td>
+							<td><?= _l("Status:"); ?></td>
+							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
 					<div style="padding:6px 0;">
@@ -28,10 +28,10 @@
 					<table id="images" class="list">
 						<thead>
 						<tr>
-							<td class="left"><?= $entry_title; ?></td>
-							<td class="left"><?= $entry_link; ?></td>
-							<td class="left"><?= $entry_image; ?></td>
-							<td class="right"><?= $entry_sort_order; ?></td>
+							<td class="left"><?= _l("Title:"); ?></td>
+							<td class="left"><?= _l("Link:"); ?></td>
+							<td class="left"><?= _l("Image:"); ?></td>
+							<td class="right"><?= _l("Sort Order:"); ?></td>
 							<td></td>
 						</tr>
 						</thead>
@@ -53,7 +53,7 @@
 								</td>
 								<td class="right"><input class="sortOrder" type="text" name="banner_image[<?= $image_row; ?>][sort_order]" value="<?= $banner_image['sort_order']; ?>" size="2"/></td>
 								<td class="left"><a onclick="$('#image-row<?= $image_row; ?>').remove();"
-								                    class="button"><?= $button_remove; ?></a></td>
+								                    class="button"><?= _l("Remove"); ?></a></td>
 							</tr>
 							<? $image_row++; ?>
 						<? } ?>

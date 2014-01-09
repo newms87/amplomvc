@@ -27,8 +27,6 @@ $_['text_discount']             = '%s or more %s';
 $_['text_qty']                  = 'Qty:';
 $_['text_minimum']              = 'This product has a minimum quantity of %s';
 $_['text_or']                   = '- OR -';
-$_['text_read_more']            = "... <a onclick=\"$('[href=#tab-shipping]').click(); scroll_to(\$('#tab-shipping'));return false;\">read more</a>";
-$_['error_add_to_cart']         = 'There was a problem adding your item to the cart. Please contact <a href="mailto:%s">Customer Service</a> to notify them of the problem, and complete your order.';
 $_['text_inactive']             = "This product is currently unavailable.";
 $_['text_zoombox_load']         = 'Grabbing off the rack...';
 $_['text_view_full_size_image'] = 'View Full Sized Image';
@@ -37,7 +35,6 @@ $_['text_view_full_size_image'] = 'View Full Sized Image';
 $_['button_view_cart'] = "View Cart";
 
 // Tabs
-$_['tab_review']          = 'Reviews (%s)';
 $_['tab_information']     = 'More Info';
 $_['tab_shipping_return'] = 'Shipping / Returns';
 $_['tab_attribute']       = 'Additional Information';

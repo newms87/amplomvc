@@ -1,14 +1,14 @@
 <div id="guest_checkout">
 	<form action="<?= $validate_guest_checkout; ?>" method="post">
 		<div class="left general_form">
-			<h2><?= $text_your_details; ?></h2>
+			<h2><?= _l("Your Personal Details"); ?></h2>
 
 			<div class="checkout_form">
 				<?= $form_guest_info; ?>
 			</div>
 		</div>
 		<div class="right payment_address">
-			<h2><?= $text_payment_address; ?></h2>
+			<h2><?= _l("Your Billing Address"); ?></h2>
 
 			<div class="checkout_form">
 				<?= $form_payment_address; ?>
@@ -18,10 +18,10 @@
 			<div style="clear:both">
 				<input type="checkbox" name="same_shipping_address" value="1"
 				       id="shipping" <?= $same_shipping_address ? 'checked="checked"' : ''; ?> />
-				<label for="shipping"><?= $entry_shipping; ?></label>
+				<label for="shipping"><?= _l("My delivery and billing addresses are the same."); ?></label>
 			</div>
 			<div id="guest_shipping_address" class="left shipping_address">
-				<h2><?= $text_shipping_address; ?></h2>
+				<h2><?= _l("Your Delivery Address"); ?></h2>
 
 				<div class="checkout_form">
 					<?= $form_shipping_address; ?>
@@ -29,7 +29,7 @@
 			</div>
 		<? } ?>
 		<div id="guest_checkout_submit" class="checkout_form_submit">
-			<input type="submit" name="submit_guest_checkout" class="button" value="<?= $button_guest_checkout; ?>"/>
+			<input type="submit" name="submit_guest_checkout" class="button" value="<?= _l("Continue Guest Checkout"); ?>"/>
 		</div>
 	</form>
 </div>

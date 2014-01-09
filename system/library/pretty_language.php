@@ -7,10 +7,130 @@ class PrettyLanguage
 		$ext         = array('php');
 
 
-		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'catalog/language/english/', $ext);
 
-		$this->lang_replace($files);
+		$this->lang_replace_contr($files);
 
+	}
+
+	public function lang_replace_contr($files)
+	{
+		$find    = array(
+			'/language/english/',
+		);
+		$replace = array(
+			'/controller/',
+		);
+
+		$prefixes = array(
+			'text_',
+			'entry_',
+			'error_',
+			'button_',
+			'column_',
+		);
+
+		$missed_regx = "/['\"](" . implode('|', $prefixes) . ")['\"]/";
+
+		$_ = array();
+		require(SITE_DIR . 'catalog/language/english/english.php');
+		$default_lang = $_;
+
+		$ignored_files = array(
+			'C:/xampp/htdocs/realmeal/admin/language/english/help/documentation.php',
+		);
+
+		foreach ($files as $file) {
+
+			if (in_array(str_replace('\\','/',$file), $ignored_files)) {
+				continue;
+			}
+
+			$_ = array();
+			require($file);
+
+			$_ += $default_lang;
+
+			$ctrl   = str_replace($find, $replace, $file);
+
+			if (!is_file($ctrl)) {
+				echo "skipping $ctrl... not found<BR>";
+				continue;
+			}
+
+			$lines = explode("\n", file_get_contents($ctrl));
+
+			$orig_lines = $lines;
+
+			$count = 0;
+
+			$new_lines = array();
+
+			$missed = array();
+			$ignored = array();
+
+			$regx = "/(['\"])(" . implode('|', array_keys($_)) . ")['\"]/";
+
+			foreach ($lines as $num => $line) {
+				$matches = null;
+				if (preg_match_all($regx, $line, $matches)) {
+
+					foreach ($matches[2] as $key => $match) {
+						$quote = $matches[1][0];
+
+						$line = str_replace("\$this->_($quote$match$quote)", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\")", $line);
+						$line = preg_replace("/\\\$this->message->add\\(['\"](warning|notify|success|error)['\"],\\s*$quote$match$quote\\)/", "\\\$this->message->add('$1', _l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\"))", $line);
+
+						$pos = strpos(trim($line), "\$this->_($quote$match$quote,");
+
+						if ($pos === 0) {
+							echo "Place in Template<br>";
+							$this->pl($num, trim(str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line)));
+						} elseif ($pos !== false) {
+							$line = str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line);
+						}
+					}
+
+					if ($line === $orig_lines[$num]) {
+						echo "Unresolved<br>";
+						$this->pl($num, $line);
+					}
+					else {
+						$count++;
+					}
+				}
+				elseif (preg_match($missed_regx, $line)) {
+					$ignored[$num+1] = $line;
+				}
+
+				$new_lines[] = $line;
+			}
+
+			if ($count > 0) {
+				echo "modified $count lines in $ctrl<br>";
+				$this->print_lines($orig_lines, $new_lines, false, true);
+				file_put_contents($ctrl, implode("\n", $new_lines));
+			}
+
+			if (!empty($missed)) {
+				html_dump($_,'langdata');
+				echo "<BR><BR>MISSED " . count($missed) . " lines! $ctrl<BR><BR>";
+				foreach ($missed as $l => $miss) {
+					$this->pl($l, $miss);
+				}
+				exit;
+			}
+
+			if (!empty($ignored)) {
+				echo "<div style=\"color:red\">ignored " . count($ignored) . ' lines in ' . $ctrl . "</div>";
+				foreach ($ignored as $l => $miss) {
+					$this->pl($l, $miss);
+				}
+			}
+			elseif ($count < 1) {
+				echo "<div style=\"color:grey\">nothing to do $ctrl</div>";
+			}
+		}
 	}
 
 	public function lang_replace($files)
@@ -24,11 +144,9 @@ class PrettyLanguage
 			'.tpl'
 		);
 
-
 		$prefixes = array(
 			'text',
 			'entry',
-			'data',
 			'error',
 			'button',
 			'column',
@@ -37,7 +155,7 @@ class PrettyLanguage
 		$missed_regx = "/\\\$(" . implode('|', $prefixes) . ')_/';
 
 		$_ = array();
-		require(SITE_DIR . 'admin/language/english/english.php');
+		require(SITE_DIR . 'catalog/language/english/english.php');
 		$default_lang = $_;
 
 		unset($default_lang['data_statuses']);
@@ -91,7 +209,7 @@ class PrettyLanguage
 
 					foreach ($matches[1] as $key => $match) {
 						if (!is_string($_[$match]) || strpos($_[$match], '%') !== false) {
-							$missed[$num+1] = $line;
+							$missed[$num+1] = $line . ' <---- ' . $match;
 						} else {
 							$line = str_replace('$'.$match, '_l("' . addslashes($_[$match]) . '")', $line);
 						}
@@ -122,6 +240,9 @@ class PrettyLanguage
 
 			if (!empty($ignored)) {
 				echo "<div style=\"color:red\">ignored " . count($ignored) . ' lines in ' . $tpl . "</div>";
+				foreach ($ignored as $l => $miss) {
+					$this->pl($l, $miss);
+				}
 			}
 			else {
 				echo "<div style=\"color:grey\">nothing to do $tpl</div>";

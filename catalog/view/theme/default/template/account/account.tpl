@@ -4,34 +4,34 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("My Account"); ?></h1>
 
 		<div class="content_account content">
-			<h2><?= $text_my_account; ?></h2>
+			<h2><?= _l("My Account"); ?></h2>
 			<ul>
-				<li><a href="<?= $update; ?>"><?= $text_update; ?></a></li>
-				<li><a href="<?= $password; ?>"><?= $text_password; ?></a></li>
-				<li><a href="<?= $address; ?>"><?= $text_address; ?></a></li>
-				<li><a href="<?= $wishlist; ?>"><?= $text_wishlist; ?></a></li>
+				<li><a href="<?= $update; ?>"><?= _l("Update your account information"); ?></a></li>
+				<li><a href="<?= $password; ?>"><?= _l("Change your password"); ?></a></li>
+				<li><a href="<?= $address; ?>"><?= _l("Modify your address book entries"); ?></a></li>
+				<li><a href="<?= $wishlist; ?>"><?= _l("Modify your wish list"); ?></a></li>
 			</ul>
 		</div>
 		<div class="content_account content">
-			<h2><?= $text_my_orders; ?></h2>
+			<h2><?= _l("My Orders"); ?></h2>
 			<ul>
-				<li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
-				<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
+				<li><a href="<?= $order; ?>"><?= _l("View your order history"); ?></a></li>
+				<li><a href="<?= $download; ?>"><?= _l("Downloads"); ?></a></li>
 				<? if (!empty($reward)) { ?>
-					<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
+					<li><a href="<?= $reward; ?>"><?= _l("Your Reward Points"); ?></a></li>
 				<? } ?>
-				<li><a href="<?= $return_view; ?>"><?= $text_return_view; ?></a></li>
-				<li><a href="<?= $return_request; ?>"><?= $text_return_request; ?></a></li>
-				<li><a href="<?= $transaction; ?>"><?= $text_transaction; ?></a></li>
+				<li><a href="<?= $return_view; ?>"><?= _l("View your return requests"); ?></a></li>
+				<li><a href="<?= $return_request; ?>"><?= _l("Return a product"); ?></a></li>
+				<li><a href="<?= $transaction; ?>"><?= _l("Your Transactions"); ?></a></li>
 			</ul>
 		</div>
 		<div class="content_account content">
-			<h2><?= $text_my_newsletter; ?></h2>
+			<h2><?= _l("Newsletter"); ?></h2>
 			<ul>
-				<li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
+				<li><a href="<?= $newsletter; ?>"><?= _l("Subscribe / unsubscribe to newsletter"); ?></a></li>
 			</ul>
 		</div>
 

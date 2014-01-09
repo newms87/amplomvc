@@ -222,6 +222,19 @@ class Admin_Controller_Localisation_Language extends Controller
 			}
 		}
 
+
+		//Additional Data
+		$_['data_direction'] = array(
+			'ltr' => _l("Left to Right"),
+			'rtl' => _l("Right to Left"),
+		);
+		$_['data_statuses']  = array(
+			-1 => _l('Disabled'),
+			0  => _l('Inactive'),
+			1  => _l('Active'),
+		);
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'

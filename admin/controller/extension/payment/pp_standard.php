@@ -43,6 +43,11 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 			1 => _l("Sale"),
 		);
 
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
 		//Template
 		$this->template->load('extension/payment/pp_standard');
 

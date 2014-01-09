@@ -4,26 +4,26 @@
 
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Geo Zones"); ?></h1>
 
 				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Geo Zone Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_description; ?></td>
+							<td class="required"> <?= _l("Description:"); ?></td>
 							<td><input type="text" name="description" value="<?= $description; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_exclude; ?></td>
+							<td><?= _l("Exclude Zones:"); ?></td>
 							<td><input type="checkbox" name="exclude" value="1" <?= $exclude ? 'checked="checked"' : ''; ?> />
 							</td>
 						</tr>
@@ -32,8 +32,8 @@
 					<table id="zone-to-geo-zone" class="list">
 						<thead>
 						<tr>
-							<td class="left"><?= $entry_country; ?></td>
-							<td class="left"><?= $entry_zone; ?></td>
+							<td class="left"><?= _l("Country:"); ?></td>
+							<td class="left"><?= _l("Zone:"); ?></td>
 							<td></td>
 						</tr>
 						</thead>
@@ -53,14 +53,14 @@
 									<? $this->builder->setConfig('country_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class' => 'country_selector')); ?>
 									<a onclick="add_all_zones($(this))"
-									   style="text-decoration:none; display:block"><?= $button_add_all_zones; ?></a>
+									   style="text-decoration:none; display:block"><?= _l("[ Add All Zones ]"); ?></a>
 								</td>
 								<td class="left">
 									<select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id']; ?>"
 									        class="zone_selector"></select>
 								</td>
 								<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"
-								                    class="button"><?= $button_remove; ?></a></td>
+								                    class="button"><?= _l("Remove"); ?></a></td>
 							</tr>
 						<? } ?>
 						</tbody>
@@ -68,7 +68,7 @@
 						<tfoot>
 						<tr>
 							<td colspan="2"></td>
-							<td class="left"><a onclick="addZoneRow();" class="button"><?= $button_add_geo_zone; ?></a></td>
+							<td class="left"><a onclick="addZoneRow();" class="button"><?= _l("Add Geo Zone"); ?></a></td>
 						</tr>
 						</tfoot>
 					</table>

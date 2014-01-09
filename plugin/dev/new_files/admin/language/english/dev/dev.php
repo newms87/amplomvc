@@ -2,13 +2,6 @@
 // Heading
 $_['head_title'] = 'Development Console';
 
-//Data
-$_['data_site_status'] = array(
-	'live'     => "Live Site",
-	'dev'      => "Development Site",
-	'inactive' => "Inactive Site",
-);
-
 // Text
 $_['text_sync_site']       = 'Sync Sites';
 $_['text_sync_tables']     = 'Sync Tables';

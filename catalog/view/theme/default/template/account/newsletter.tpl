@@ -4,30 +4,30 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Newsletter Subscription"); ?></h1>
 
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 			<div class="section">
 				<table class="form">
 					<tr>
-						<td><?= $entry_newsletter; ?></td>
+						<td><?= _l("Subscribe:"); ?></td>
 						<td><? if ($newsletter) { ?>
 								<input type="radio" name="newsletter" value="1" checked="checked"/>
-								<?= $text_yes; ?>&nbsp;
+								<?= _l("Yes"); ?>&nbsp;
 								<input type="radio" name="newsletter" value="0"/>
-								<?= $text_no; ?>
+								<?= _l("No"); ?>
 							<? } else { ?>
 								<input type="radio" name="newsletter" value="1"/>
-								<?= $text_yes; ?>&nbsp;
+								<?= _l("Yes"); ?>&nbsp;
 								<input type="radio" name="newsletter" value="0" checked="checked"/>
-								<?= $text_no; ?>
+								<?= _l("No"); ?>
 							<? } ?></td>
 					</tr>
 				</table>
 			</div>
 			<div class="buttons">
-				<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
-				<div class="right"><input type="submit" value="<?= $button_continue; ?>" class="button"/></div>
+				<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
+				<div class="right"><input type="submit" value="<?= _l("Continue"); ?>" class="button"/></div>
 			</div>
 		</form>
 

@@ -6,11 +6,11 @@
 				<? if ($product['thumb']) { ?>
 					<div class="image">
 						<img class="primary" src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>"
-						     alt="<?= $product['name']; ?>"/>
+							alt="<?= $product['name']; ?>"/>
 
 						<? if (!empty($product['backup_thumb'])) { ?>
 							<img class="backup" src="<?= $product['backup_thumb']; ?>" title="<?= $product['name']; ?>"
-							     alt="<?= $product['name']; ?>"/>
+								alt="<?= $product['name']; ?>"/>
 						<? } ?>
 					</div>
 				<? } ?>
@@ -24,13 +24,13 @@
 						<? if (empty($product['special'])) { ?>
 							<?= $product['price']; ?>
 						<? } else { ?>
-							<span class="retail"><?= $product['price']; ?></span> <span
-								class="special"><?= $product['special']; ?></span>
+							<span class="retail"><?= $product['price']; ?></span>
+							<span class="special"><?= $product['special']; ?></span>
 						<? } ?>
 
 						<? if ($show_price_tax) { ?>
 							<br/>
-							<span class="price-tax"><?= $text_tax; ?> <?= $product['tax']; ?></span>
+							<span class="price-tax"><?= _l("Tax"); ?> <?= $product['tax']; ?></span>
 						<? } ?>
 					</div>
 				<? } ?>

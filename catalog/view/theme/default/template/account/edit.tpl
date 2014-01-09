@@ -4,40 +4,40 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("My Account Information"); ?></h1>
 
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-			<h2><?= $text_your_details; ?></h2>
+			<h2><?= _l("Your Personal Details"); ?></h2>
 
 			<div class="section">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= $entry_firstname; ?></td>
+						<td class="required"> <?= _l("First Name:"); ?></td>
 						<td><input type="text" name="firstname" value="<?= $firstname; ?>"/>
-							<? if ($error_firstname) { ?>
-								<span class="error"><?= $error_firstname; ?></span>
+							<? if (_l("First Name must be between 1 and 32 characters!")) { ?>
+								<span class="error"><?= _l("First Name must be between 1 and 32 characters!"); ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= $entry_lastname; ?></td>
+						<td class="required"> <?= _l("Last Name:"); ?></td>
 						<td><input type="text" name="lastname" value="<?= $lastname; ?>"/>
-							<? if ($error_lastname) { ?>
-								<span class="error"><?= $error_lastname; ?></span>
+							<? if (_l("Last Name must be between 1 and 32 characters!")) { ?>
+								<span class="error"><?= _l("Last Name must be between 1 and 32 characters!"); ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= $entry_email; ?></td>
+						<td class="required"> <?= _l("E-Mail:"); ?></td>
 						<td><input type="text" name="email" value="<?= $email; ?>"/>
-							<? if ($error_email) { ?>
-								<span class="error"><?= $error_email; ?></span>
+							<? if (_l("E-Mail Address does not appear to be valid!")) { ?>
+								<span class="error"><?= _l("E-Mail Address does not appear to be valid!"); ?></span>
 							<? } ?></td>
 					</tr>
 				</table>
 			</div>
 			<div class="buttons">
-				<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+				<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
 				<div class="right">
-					<input type="submit" value="<?= $button_continue; ?>" class="button"/>
+					<input type="submit" value="<?= _l("Continue"); ?>" class="button"/>
 				</div>
 			</div>
 		</form>

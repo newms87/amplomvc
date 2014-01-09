@@ -6,10 +6,10 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		$this->template->load('product/manufacturer');
 		$this->language->load('product/manufacturer');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Find Your Favorite Brand"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_brand'), $this->url->link('product/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Brand"), $this->url->link('product/manufacturer'));
 
 		$this->data['categories'] = array();
 
@@ -51,8 +51,8 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		$this->language->load('product/manufacturer');
 		$this->template->load('product/category');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_manufacturer_list'), $this->url->link('product/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Manufacturers"), $this->url->link('product/manufacturer'));
 
 		$manufacturer_id = isset($_GET['manufacturer_id']) ? $_GET['manufacturer_id'] : 0;
 
@@ -90,18 +90,18 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 			//Sorting
 			$sorts = array(
-				'sort=p.sort_order&order=ASC' => $this->_('text_default'),
-				'sort=p.name&order=ASC'       => $this->_('text_name_asc'),
-				'sort=p.name&order=DESC'      => $this->_('text_name_desc'),
-				'sort=p.price&order=ASC'      => $this->_('text_price_asc'),
-				'sort=p.price&order=DESC'     => $this->_('text_price_desc'),
-				'sort=p.model&order=ASC'      => $this->_('text_model_asc'),
-				'sort=p.model&order=DESC'     => $this->_('text_model_desc'),
+				'sort=p.sort_order&order=ASC' => _l("Default"),
+				'sort=p.name&order=ASC'       => _l("Name (A - Z)"),
+				'sort=p.name&order=DESC'      => _l("Name (Z - A)"),
+				'sort=p.price&order=ASC'      => _l("Price (Low &gt; High)"),
+				'sort=p.price&order=DESC'     => _l("Price (High &gt; Low)"),
+				'sort=p.model&order=ASC'      => _l("Model (A - Z)"),
+				'sort=p.model&order=DESC'     => _l("Model (Z - A)"),
 			);
 
 			if ($this->config->get('config_review_status')) {
-				$sorts['sort=rating&order=ASC']  = $this->_('text_rating_asc');
-				$sorts['sort=rating&order=DESC'] = $this->_('text_rating_desc');
+				$sorts['sort=rating&order=ASC']  = _l("Rating (Lowest)");
+				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}
 
 			$this->data['sorts'] = $this->sort->render_sort($sorts);

@@ -6,27 +6,27 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= _l("Tax Class"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_title; ?></td>
+							<td class="required"> <?= _l("Tax Class Title:"); ?></td>
 							<td><input type="text" name="title" value="<?= $title; ?>"/>
-								<? if ($error_title) { ?>
-									<span class="error"><?= $error_title; ?></span>
+								<? if (_l("Tax Class Title must be between 3 and 32 characters!")) { ?>
+									<span class="error"><?= _l("Tax Class Title must be between 3 and 32 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_description; ?></td>
+							<td class="required"> <?= _l("Description:"); ?></td>
 							<td><input type="text" name="description" value="<?= $description; ?>"/>
-								<? if ($error_description) { ?>
+								<? if (_l("Description must be between 3 and 255 characters!")) { ?>
 									<br/>
-									<span class="error"><?= $error_description; ?></span>
+									<span class="error"><?= _l("Description must be between 3 and 255 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 					</table>
@@ -34,9 +34,9 @@
 					<table id="tax-rule" class="list">
 						<thead>
 						<tr>
-							<td class="left"><?= $entry_rate; ?></td>
-							<td class="left"><?= $entry_based; ?></td>
-							<td class="left"><?= $entry_priority; ?></td>
+							<td class="left"><?= _l("Tax Rate:"); ?></td>
+							<td class="left"><?= _l("Based On:"); ?></td>
+							<td class="left"><?= _l("Priority:"); ?></td>
 							<td></td>
 						</tr>
 						</thead>
@@ -56,24 +56,24 @@
 									</select></td>
 								<td class="left"><select name="tax_rule[<?= $tax_rule_row; ?>][based]">
 										<? if ($tax_rule['based'] == 'shipping') { ?>
-											<option value="shipping" selected="selected"><?= $text_shipping; ?></option>
+											<option value="shipping" selected="selected"><?= _l("Shipping Address"); ?></option>
 										<? } else { ?>
-											<option value="shipping"><?= $text_shipping; ?></option>
+											<option value="shipping"><?= _l("Shipping Address"); ?></option>
 										<? } ?>
 										<? if ($tax_rule['based'] == 'payment') { ?>
-											<option value="payment" selected="selected"><?= $text_payment; ?></option>
+											<option value="payment" selected="selected"><?= _l("Payment Address"); ?></option>
 										<? } else { ?>
-											<option value="payment"><?= $text_payment; ?></option>
+											<option value="payment"><?= _l("Payment Address"); ?></option>
 										<? } ?>
 										<? if ($tax_rule['based'] == 'store') { ?>
-											<option value="store" selected="selected"><?= $text_store; ?></option>
+											<option value="store" selected="selected"><?= _l("Store Address"); ?></option>
 										<? } else { ?>
-											<option value="store"><?= $text_store; ?></option>
+											<option value="store"><?= _l("Store Address"); ?></option>
 										<? } ?>
 									</select></td>
 								<td class="left"><input type="text" name="tax_rule[<?= $tax_rule_row; ?>][priority]" value="<?= $tax_rule['priority']; ?>" size="1"/></td>
 								<td class="left"><a onclick="$('#tax-rule-row<?= $tax_rule_row; ?>').remove();"
-								                    class="button"><?= $button_remove; ?></a></td>
+								                    class="button"><?= _l("Remove"); ?></a></td>
 							</tr>
 							</tbody>
 							<? $tax_rule_row++; ?>
@@ -81,7 +81,7 @@
 						<tfoot>
 						<tr>
 							<td colspan="3"></td>
-							<td class="left"><a onclick="addRule();" class="button"><?= $button_add_rule; ?></a></td>
+							<td class="left"><a onclick="addRule();" class="button"><?= _l("Add Rule"); ?></a></td>
 						</tr>
 						</tfoot>
 					</table>
@@ -101,12 +101,12 @@
 			<? } ?>
 			html += '		</select></td>';
 			html += '		<td class="left"><select name="tax_rule[' + tax_rule_row + '][based]">';
-			html += '			<option value="shipping"><?= $text_shipping; ?></option>';
-			html += '			<option value="payment"><?= $text_payment; ?></option>';
-			html += '			<option value="store"><?= $text_store; ?></option>';
+			html += '			<option value="shipping"><?= _l("Shipping Address"); ?></option>';
+			html += '			<option value="payment"><?= _l("Payment Address"); ?></option>';
+			html += '			<option value="store"><?= _l("Store Address"); ?></option>';
 			html += '		</select></td>';
 			html += '		<td class="left"><input type="text" name="tax_rule[' + tax_rule_row + '][priority]" value="" size="1" /></td>';
-			html += '		<td class="left"><a onclick="$(\'#tax-rule-row' + tax_rule_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
+			html += '		<td class="left"><a onclick="$(\'#tax-rule-row' + tax_rule_row + '\').remove();" class="button"><?= _l("Remove"); ?></a></td>';
 			html += '	</tr>';
 			html += '</tbody>';
 

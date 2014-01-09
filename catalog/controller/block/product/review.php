@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 {
 	public function single()
 	{
-		$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
+		$this->data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
 
 		$this->data['rating'] = (int)$product_info['rating'];
 	}
@@ -29,7 +29,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 				'author'     => $result['author'],
 				'text'       => $result['text'],
 				'rating'     => (int)$result['rating'],
-				'reviews'    => sprintf($this->_('text_reviews'), (int)$review_total),
+				'reviews'    => sprintf(_l("%s reviews"), (int)$review_total),
 				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 		}
@@ -41,7 +41,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 		if ($review_status) {
 			$this->_('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
 
-			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
+			$this->data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
 
 			$this->data['rating'] = (int)$product_info['rating'];
 		}
@@ -62,25 +62,25 @@ class Catalog_Controller_Block_Product_Review extends Controller
 
 		if ($this->request->isPost()) {
 			if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 25)) {
-				$json['error'] = $this->_('error_name');
+				$json['error'] = _l("Warning: Review Name must be between 3 and 25 characters!");
 			}
 
 			if ((strlen($_POST['text']) < 25) || (strlen($_POST['text']) > 1000)) {
-				$json['error'] = $this->_('error_text');
+				$json['error'] = _l("Warning: Review Text must be between 25 and 1000 characters!");
 			}
 
 			if (!$_POST['rating']) {
-				$json['error'] = $this->_('error_rating');
+				$json['error'] = _l("Warning: Please select a review rating!");
 			}
 
 			if (!$this->captcha->validate($_POST['captcha'])) {
-				$json['error'] = $this->_('error_captcha');
+				$json['error'] = _l("Warning: Verification code does not match the image!");
 			}
 
 			if (!isset($json['error'])) {
 				$this->Model_Catalog_Review->addReview($_GET['product_id'], $_POST);
 
-				$json['success'] = $this->_('text_success');
+				$json['success'] = _l("Thank you for your review. It has been submitted to the webmaster for approval.");
 			}
 		}
 

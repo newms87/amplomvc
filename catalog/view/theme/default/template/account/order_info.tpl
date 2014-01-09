@@ -153,7 +153,11 @@
 		</table>
 	<? } ?>
 	<div class="footer_text">
-		* <?= $final_sale_explanation; ?>
+		<?= _l("* A Product Marked as"); ?>
+		<span class="final_sale"></span>
+		<?= _l("cannot be returned. Read our"); ?>
+		<a href="<?= $policies; ?>" onclick="return colorbox($(this));"><?= _l("Return Policy"); ?></a>
+		<?= _l("for details."); ?>
 	</div>
 	<div class="buttons">
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>

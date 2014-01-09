@@ -77,7 +77,10 @@ class Admin_Controller_Extension_Total extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -202,6 +205,11 @@ class Admin_Controller_Extension_Total extends Controller
 			$this->extension_controller->settings($this->data['settings']);
 			$this->data['extend_settings'] = $this->extension_controller->output;
 		}
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/total', 'code=' . $code);

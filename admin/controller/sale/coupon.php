@@ -260,6 +260,21 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$_['data_types'] = array(
+			'P' => _l("Percent"),
+			'F' => _l("Fixed Amount"),
+		);
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
 		//Ajax Urls
 		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
 		$this->data['url_coupon_history']       = $this->url->link('sale/coupon/history');

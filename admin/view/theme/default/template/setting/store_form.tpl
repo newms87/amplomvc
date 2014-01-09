@@ -5,47 +5,47 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $name; ?></h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
 		<div class="section">
-			<div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a
-					href="#tab-store"><?= $tab_store; ?></a><a href="#tab-local"><?= $tab_local; ?></a><a
-					href="#tab-option"><?= $tab_option; ?></a><a href="#tab-image"><?= $tab_image; ?></a><a
-					href="#tab-server"><?= $tab_server; ?></a></div>
+			<div id="tabs" class="htabs"><a href="#tab-general"><?= _l("General"); ?></a><a
+					href="#tab-store"><?= _l("Store"); ?></a><a href="#tab-local"><?= _l("Local"); ?></a><a
+					href="#tab-option"><?= _l("Option"); ?></a><a href="#tab-image"><?= _l("Image"); ?></a><a
+					href="#tab-server"><?= _l("Server"); ?></a></div>
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Store Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_url; ?></td>
+							<td class="required"> <?= _l("Store URL:<br /><span class=\"help\">Include the full URL to your store. Make sure to add \'/\' at the end. Example: http://www.yourdomain.com/path/<br /><br />Don\'t use directories to create a new store. You should always point another domain or sub domain to your hosting.</span>"); ?></td>
 							<td><input type="text" name="url" value="<?= $url; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_ssl; ?></td>
+							<td><?= _l("SSL URL:<br /><span class=\"help\">SSL URL to your store. Make sure to add \'/\' at the end. Example: http://www.yourdomain.com/path/<br /><br />Don\'t use directories to create a new store. You should always point another domain or sub domain to your hosting.</span>"); ?></td>
 							<td><input type="text" name="ssl" value="<?= $ssl; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_owner; ?></td>
+							<td class="required"> <?= _l("Store Owner:"); ?></td>
 							<td><input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_address; ?></td>
+							<td class="required"> <?= _l("Address:"); ?></td>
 							<td><textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_email; ?></td>
+							<td class="required"> <?= _l("E-Mail:"); ?></td>
 							<td><input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_telephone; ?></td>
+							<td class="required"> <?= _l("Telephone:"); ?></td>
 							<td><input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_fax; ?></td>
+							<td><?= _l("Fax:"); ?></td>
 							<td><input type="text" name="config_fax" value="<?= $config_fax; ?>"/></td>
 						</tr>
 					</table>
@@ -53,16 +53,16 @@
 				<div id="tab-store">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_title; ?></td>
+							<td class="required"> <?= _l("Title:"); ?></td>
 							<td><input type="text" name="config_title" value="<?= $config_title; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_meta_description; ?></td>
+							<td><?= _l("Meta Tag Description:"); ?></td>
 							<td><textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_theme; ?></td>
+							<td><?= _l("Theme:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('name', 'name'); ?>
 								<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
@@ -73,7 +73,7 @@
 							<td id="theme"></td>
 						</tr>
 						<tr>
-							<td><?= $entry_layout; ?></td>
+							<td><?= _l("Default Layout:"); ?></td>
 							<td><select name="config_default_layout_id">
 									<? foreach ($layouts as $layout) { ?>
 										<? if ($layout['layout_id'] == $config_default_layout_id) { ?>
@@ -90,18 +90,18 @@
 				<div id="tab-local">
 					<table class="form">
 						<tr>
-							<td><?= $entry_country; ?></td>
+							<td><?= _l("Country:"); ?></td>
 							<td>
 								<?= $this->builder->setConfig('country_id', 'name'); ?>
 								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_zone; ?></td>
+							<td><?= _l("Region / State:"); ?></td>
 							<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id; ?>"></select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_language; ?></td>
+							<td><?= _l("Language:"); ?></td>
 							<td><select name="config_language">
 									<? foreach ($languages as $language) { ?>
 										<? if ($language['code'] == $config_language) { ?>
@@ -113,7 +113,7 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_currency; ?></td>
+							<td><?= _l("Currency:"); ?></td>
 							<td><select name="config_currency">
 									<? foreach ($currencies as $currency) { ?>
 										<? if ($currency['code'] == $config_currency) { ?>
@@ -130,96 +130,96 @@
 				<div id="tab-option">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_catalog_limit; ?></td>
+							<td class="required"> <?= _l("Default Items Per Page (Catalog):<br /><span class=\"help\">Determines how many catalog items are shown per page (products, categories, etc)</span>"); ?></td>
 							<td><input type="text" name="config_catalog_limit" value="<?= $config_catalog_limit; ?>" size="3"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_allowed_shipping_zone; ?></td>
+							<td><?= _l("Allowed Shipping Geo Zone:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 								<?= $this->builder->build('select', $geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_tax; ?></td>
+							<td><?= _l("Display Prices With Tax:"); ?></td>
 							<td><? if ($config_show_price_with_tax) { ?>
 									<input type="radio" name="config_show_price_with_tax" value="1" checked="checked"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_show_price_with_tax" value="0"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } else { ?>
 									<input type="radio" name="config_show_price_with_tax" value="1"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_show_price_with_tax" value="0" checked="checked"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_tax_default; ?></td>
+							<td><?= _l("Use Store Tax Address:<br /><span class=\"help\">Use the store address to calculate taxes if no one is logged in. You can choose to use the store address for the customers shipping or payment address.</span>"); ?></td>
 							<td><select name="config_tax_default">
-									<option value=""><?= $text_none; ?></option>
+									<option value=""><?= _l(" --- None --- "); ?></option>
 									<? if ($config_tax_default == 'shipping') { ?>
-										<option value="shipping" selected="selected"><?= $text_shipping; ?></option>
+										<option value="shipping" selected="selected"><?= _l("Shipping Address"); ?></option>
 									<? } else { ?>
-										<option value="shipping"><?= $text_shipping; ?></option>
+										<option value="shipping"><?= _l("Shipping Address"); ?></option>
 									<? } ?>
 									<? if ($config_tax_default == 'payment') { ?>
-										<option value="payment" selected="selected"><?= $text_payment; ?></option>
+										<option value="payment" selected="selected"><?= _l("Payment Address"); ?></option>
 									<? } else { ?>
-										<option value="payment"><?= $text_payment; ?></option>
+										<option value="payment"><?= _l("Payment Address"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_show_product_model; ?></td>
+							<td><?= _l("Display Model # on product page:"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_product_model', $config_show_product_model); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_tax_customer; ?></td>
+							<td><?= _l("Use Customer Tax Address:<br /><span class=\"help\">Use the customers default address when they login to calculate taxes. You can choose to use the default address for the customers shipping or payment address.</span>"); ?></td>
 							<td><select name="config_tax_customer">
-									<option value=""><?= $text_none; ?></option>
+									<option value=""><?= _l(" --- None --- "); ?></option>
 									<? if ($config_tax_customer == 'shipping') { ?>
-										<option value="shipping" selected="selected"><?= $text_shipping; ?></option>
+										<option value="shipping" selected="selected"><?= _l("Shipping Address"); ?></option>
 									<? } else { ?>
-										<option value="shipping"><?= $text_shipping; ?></option>
+										<option value="shipping"><?= _l("Shipping Address"); ?></option>
 									<? } ?>
 									<? if ($config_tax_customer == 'payment') { ?>
-										<option value="payment" selected="selected"><?= $text_payment; ?></option>
+										<option value="payment" selected="selected"><?= _l("Payment Address"); ?></option>
 									<? } else { ?>
-										<option value="payment"><?= $text_payment; ?></option>
+										<option value="payment"><?= _l("Payment Address"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_customer_group; ?></td>
+							<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
 							<td>
 								<? $this->builder->setConfig('customer_group_id', 'name'); ?>
 								<?= $this->builder->build('select', $data_customer_groups, 'config_customer_gorup_id', $config_customer_group_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_customer_price; ?></td>
+							<td><?= _l("Login Display Prices:<br /><span class=\"help\">Only show prices when a customer is logged in.</span>"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_hide_price', $config_customer_hide_price); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_customer_approval; ?></td>
+							<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_guest_checkout; ?></td>
+							<td><?= _l("Guest Checkout:<br /><span class=\"help\">Allow customers to checkout without creating an account. This will not be available when a downloadable product is in the shopping cart.</span>"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, 'config_guest_checkout', $config_guest_checkout); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_contact_page; ?></td>
+							<td><?= _l("The Contact Page"); ?></td>
 							<td>
 								<? $this->builder->setConfig('page_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_pages, 'config_contact_page_id', $config_contact_page_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_account; ?></td>
+							<td><?= _l("Account Terms:<br /><span class=\"help\">Forces people to agree to terms before an account can be created.</span>"); ?></td>
 							<td><select name="config_account_id">
-									<option value="0"><?= $text_none; ?></option>
+									<option value="0"><?= _l(" --- None --- "); ?></option>
 									<? foreach ($informations as $information) { ?>
 										<? if ($information['information_id'] == $config_account_id) { ?>
 											<option value="<?= $information['information_id']; ?>"
@@ -231,9 +231,9 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_checkout; ?></td>
+							<td><?= _l("Checkout Terms:<br /><span class=\"help\">Forces people to agree to terms before an a customer can checkout.</span>"); ?></td>
 							<td><select name="config_checkout_id">
-									<option value="0"><?= $text_none; ?></option>
+									<option value="0"><?= _l(" --- None --- "); ?></option>
 									<? foreach ($informations as $information) { ?>
 										<? if ($information['information_id'] == $config_checkout_id) { ?>
 											<option value="<?= $information['information_id']; ?>"
@@ -245,44 +245,44 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_stock_display; ?></td>
+							<td><?= _l("Display Stock:<br /><span class=\"help\">Display stock quantity on the product page.</span>"); ?></td>
 							<td>
 								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class' => 'display_stock_radio')); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_stock_checkout; ?></td>
+							<td><?= _l("Stock Checkout:<br /><span class=\"help\">Allow customers to still checkout if the products they are ordering are not in stock.</span>"); ?></td>
 							<td><? if ($config_stock_checkout) { ?>
 									<input type="radio" name="config_stock_checkout" value="1" checked="checked"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_stock_checkout" value="0"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } else { ?>
 									<input type="radio" name="config_stock_checkout" value="1"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_stock_checkout" value="0" checked="checked"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_order_complete_status; ?></td>
+							<td><?= _l("Order Status:<br /><span class=\"help\">Set the default order status when an order is processed.</span>"); ?></td>
 							<td>
 								<?= $this->builder->setConfig(false, 'title'); ?>
 								<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_cart_weight; ?></td>
+							<td><?= _l("Display Weight on Cart Page:"); ?></td>
 							<td><? if ($config_cart_weight) { ?>
 									<input type="radio" name="config_cart_weight" value="1" checked="checked"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_cart_weight" value="0"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } else { ?>
 									<input type="radio" name="config_cart_weight" value="1"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_cart_weight" value="0" checked="checked"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } ?></td>
 						</tr>
 					</table>
@@ -290,14 +290,14 @@
 				<div id="tab-image">
 					<table class="form">
 						<tr>
-							<td><?= $entry_logo; ?></td>
+							<td><?= _l("Store Logo:"); ?></td>
 							<td>
 								<?= $this->builder->setBuilderTemplate('click_image'); ?>
 								<?= $this->builder->imageInput("config_logo", $config_logo); ?>
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_icon; ?></td>
+							<td><?= _l("Icon:<br /><span class=\"help\">The icon should be a PNG that is 16px x 16px.</span>"); ?></td>
 							<td>
 								<?= $this->builder->setBuilderTemplate('click_image'); ?>
 								<?= $this->builder->imageInput("config_icon", $config_icon); ?>
@@ -328,7 +328,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_category; ?></td>
+							<td class="required"> <?= _l("Category Image Size:"); ?></td>
 							<td>
 								<input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>" size="3"/>
 								x
@@ -336,21 +336,21 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_thumb; ?></td>
+							<td class="required"> <?= _l("Product Image Thumb Size:"); ?></td>
 							<td><input type="text" name="config_image_thumb_width" value="<?= $config_image_thumb_width; ?>" size="3"/>
 								x
 								<input type="text" name="config_image_thumb_height" value="<?= $config_image_thumb_height; ?>" size="3"/>
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_popup; ?></td>
+							<td class="required"> <?= _l("Product Image Popup Size:"); ?></td>
 							<td><input type="text" name="config_image_popup_width" value="<?= $config_image_popup_width; ?>" size="3"/>
 								x
 								<input type="text" name="config_image_popup_height" value="<?= $config_image_popup_height; ?>" size="3"/>
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_product; ?></td>
+							<td class="required"> <?= _l("Product Image List Size:"); ?></td>
 							<td><input type="text" name="config_image_product_width" value="<?= $config_image_product_width; ?>"
 									size="3"/>
 								x
@@ -358,7 +358,7 @@
 									size="3"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_additional; ?></td>
+							<td class="required"> <?= _l("Additional Product Image Size:"); ?></td>
 							<td><input type="text" name="config_image_additional_width" value="<?= $config_image_additional_width; ?>"
 									size="3"/>
 								x
@@ -366,7 +366,7 @@
 									size="3"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_related; ?></td>
+							<td class="required"> <?= _l("Related Product Image Size:"); ?></td>
 							<td><input type="text" name="config_image_related_width" value="<?= $config_image_related_width; ?>"
 									size="3"/>
 								x
@@ -374,7 +374,7 @@
 									size="3"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_compare; ?></td>
+							<td class="required"> <?= _l("Compare Image Size:"); ?></td>
 							<td><input type="text" name="config_image_compare_width" value="<?= $config_image_compare_width; ?>"
 									size="3"/>
 								x
@@ -382,7 +382,7 @@
 									size="3"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_wishlist; ?></td>
+							<td class="required"> <?= _l("Wish List Image Size:"); ?></td>
 							<td><input type="text" name="config_image_wishlist_width" value="<?= $config_image_wishlist_width; ?>"
 									size="3"/>
 								x
@@ -390,7 +390,7 @@
 									size="3"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_image_cart; ?></td>
+							<td class="required"> <?= _l("Cart Image Size:"); ?></td>
 							<td><input type="text" name="config_image_cart_width" value="<?= $config_image_cart_width; ?>" size="3"/>
 								x
 								<input type="text" name="config_image_cart_height" value="<?= $config_image_cart_height; ?>" size="3"/>
@@ -401,17 +401,17 @@
 				<div id="tab-server">
 					<table class="form">
 						<tr>
-							<td><?= $entry_use_ssl; ?></td>
+							<td><?= _l("Use SSL:<br /><span class=\"help\">To use SSL check with your host if a SSL certificate is installed.</span>"); ?></td>
 							<td><? if ($config_use_ssl) { ?>
 									<input type="radio" name="config_use_ssl" value="1" checked="checked"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_use_ssl" value="0"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } else { ?>
 									<input type="radio" name="config_use_ssl" value="1"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="config_use_ssl" value="0" checked="checked"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } ?></td>
 						</tr>
 					</table>

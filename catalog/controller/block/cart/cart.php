@@ -68,9 +68,9 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					$policy = $this->cart->getReturnPolicy($product['return_policy_id']);
 
 					if ($policy['days'] > 0) {
-						$product['return_policy'] = $this->_('text_return_days', $policy['days']);
+						$product['return_policy'] = _l("%s Days", $policy['days']);
 					} elseif ((int)$policy['days'] === 0) {
-						$product['return_policy'] = $this->_('text_return_anytime');
+						$product['return_policy'] = _l("You may return at anytime");
 					} else {
 						$product['return_policy'] = $this->builder->finalSale();
 					}

@@ -28,9 +28,9 @@
 
 			<div class="pagination"><?= $pagination; ?></div>
 		<? } else { ?>
-			<div class="section"><?= $text_empty; ?></div>
+			<div class="section"><?= _l("There are no products under %s right now, but you can find more products under one of our other categories!", $category_name); ?></div>
 			<div class="buttons">
-				<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+				<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 			</div>
 		<? } ?>
 

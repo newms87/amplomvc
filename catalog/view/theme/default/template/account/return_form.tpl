@@ -4,32 +4,32 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Product Returns"); ?></h1>
 
-		<div class="description"><?= $text_description; ?></div>
+		<div class="description"><?= _l("<p>Please complete the form below to request an RMA number.</p>"); ?></div>
 		<form id="order_lookup" method="post" action="<?= $order_lookup_action; ?>">
 			<div class="section">
-				<h2><?= $text_order_lookup; ?></h2>
+				<h2><?= _l("Lookup Order Information"); ?></h2>
 
 				<div class="form_item ol_order_id">
-					<label for="ol_order_id"><?= $entry_order_id; ?></label>
+					<label for="ol_order_id"><?= _l("Order ID:"); ?></label>
 					<input type="text" size="2" name="ol_order_id" value=""/>
 				</div>
 				<div class="form_item ol_email">
-					<label for="ol_email"><?= $entry_email; ?></label>
+					<label for="ol_email"><?= _l("E-Mail:"); ?></label>
 					<input type="text" size="25" name="ol_email" value=""/>
 				</div>
-				<input type="submit" name="order_lookup" class="button" value="<?= $button_order_lookup; ?>"/>
+				<input type="submit" name="order_lookup" class="button" value="<?= _l("Find Order"); ?>"/>
 			</div>
 		</form>
 
 		<? if (!empty($return_products)) { ?>
 			<form id="return_form" action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 				<div class="section">
-					<h2><?= $text_order; ?></h2>
+					<h2><?= _l("Order Information"); ?></h2>
 
 					<div class="order_info order_id">
-						<label><?= $entry_order_id; ?></label>
+						<label><?= _l("Order ID:"); ?></label>
 						<? if (count($customer_orders) > 1) { ?>
 							<? $this->builder->setConfig('order_id', 'display'); ?>
 							<?= $this->builder->build('select', $customer_orders, 'order_id', $order_id); ?>
@@ -41,40 +41,40 @@
 					</div>
 
 					<div class="order_info date_ordered">
-						<label><?= $entry_date_ordered; ?></label>
+						<label><?= _l("Order Date:"); ?></label>
 						<span class="value"><?= $date_ordered_display; ?></span>
 						<input type="hidden" name="date_ordered" value="<?= $date_ordered; ?>"/>
 					</div>
 					<div class="form_item">
-						<label for="firstname" class="required"><?= $entry_firstname; ?></label>
+						<label for="firstname" class="required"><?= _l("First Name:"); ?></label>
 						<input id="firstname" type="text" name="firstname" value="<?= $firstname; ?>"/>
 					</div>
 					<div class="form_item">
-						<label for="lastname" class="required"><?= $entry_lastname; ?></label>
+						<label for="lastname" class="required"><?= _l("Last Name:"); ?></label>
 						<input id="lastname" type="text" name="lastname" value="<?= $lastname; ?>"/>
 					</div>
 					<div class="form_item">
-						<label for="email" class="required"><?= $entry_email; ?></label>
+						<label for="email" class="required"><?= _l("E-Mail:"); ?></label>
 						<input id="email" type="text" name="email" value="<?= $email; ?>"/>
 					</div>
 					<div class="form_item">
-						<label for="telephone" class="required"><?= $entry_telephone; ?></label>
+						<label for="telephone" class="required"><?= _l("Telephone:"); ?></label>
 						<input id="telephone" type="text" name="telephone" value="<?= $telephone; ?>"/>
 					</div>
 				</div>
 
 				<div class="section">
-					<h2><?= $text_product; ?></h2>
+					<h2><?= _l("Product Information &amp; Reason for Return"); ?></h2>
 					<table class="list return_product">
 						<thead>
 						<tr>
-							<td><?= $column_return_product; ?></td>
-							<td><?= $column_return_model; ?></td>
-							<td><?= $column_return_price; ?></td>
-							<td><?= $column_return_quantity; ?></td>
-							<td><?= $column_return_reason; ?></td>
-							<td><?= $column_return_comment; ?></td>
-							<td><?= $column_return_opened; ?></td>
+							<td><?= _l("Product Name"); ?></td>
+							<td><?= _l("Model #"); ?></td>
+							<td><?= _l("Price"); ?></td>
+							<td><?= _l("Return Quantity"); ?></td>
+							<td><?= _l("Reason for Return"); ?></td>
+							<td><?= _l("Details About Return"); ?></td>
+							<td><?= _l("Product is Opened?"); ?></td>
 						</tr>
 						</thead>
 						<tbody>
@@ -115,14 +115,14 @@
 
 				<? if (!$order_lookup) { ?>
 					<div class="return_captcha">
-						<label><?= $entry_captcha; ?></label>
+						<label><?= _l("Enter the code in the box below:"); ?></label>
 						<img src="<?= $url_captcha_image; ?>" alt=""/>
 						<input type="text" name="captcha" value="<?= $captcha; ?>"/>
 					</div>
 					<div class="buttons clear">
-						<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+						<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
 						<div class="right">
-							<input type="submit" value="<?= $button_continue; ?>" class="button"/>
+							<input type="submit" value="<?= _l("Continue"); ?>" class="button"/>
 						</div>
 					</div>
 				<? } ?>

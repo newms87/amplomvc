@@ -33,23 +33,6 @@ $_['text_autocomplete']  = 'autocomplete';
 $_['text_modify_filter'] = '+ Filter';
 $_['text_id']            = '';
 
-//Data
-$_['data_statuses']       = $_['statuses'] = array(
-	0 => $_['text_disabled'],
-	1 => $_['text_enabled']
-);
-$_['data_statuses_blank'] = array('' => '') + $_['data_statuses'];
-$_['data_yes_no']         = array(
-	1 => $_['text_yes'],
-	0 => $_['text_no']
-);
-$_['data_no_yes']         = array(
-	0 => $_['text_no'],
-	1 => $_['text_yes']
-);
-$_['data_yes_no_blank']   = array('' => '') + $_['data_yes_no'];
-$_['data_no_yes_blank']   = array('' => '') + $_['data_no_yes'];
-
 //Entry
 $_['entry_date_from'] = "";
 $_['entry_date_to']   = " - ";

@@ -35,7 +35,7 @@
 				</form>
 			</div>
 			<div class="section" style="min-height:80px">
-				<div class="help"><?= $text_lost; ?></a></div>
+				<div class="help"><?= _l("Not sure how you got here? Please"); ?> <a href="<?= $to_front; ?>"><?= _l("return to the shop!"); ?></a></div>
 			</div>
 		</div>
 	</div>

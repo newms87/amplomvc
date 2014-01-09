@@ -7,9 +7,9 @@ class Catalog_Controller_Common_Maintenance extends Controller
 
 		$this->language->load('common/maintenance');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Maintenance"));
 
-		$this->language->set('message', $this->_('text_message'));
+		$this->language->set('message', _l("<h1 style=\"text-align:center;\">We are currently performing some scheduled maintenance. <br/>We will be back as soon as possible. Please check back soon.</h1>"));
 
 		$this->children = array(
 			'common/footer',

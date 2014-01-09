@@ -5,10 +5,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 	{
 		$this->language->load('cart/cart');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Shopping Cart"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('cart/cart'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
 
 		$this->data['block_cart'] = $this->getBlock('cart/cart');
 

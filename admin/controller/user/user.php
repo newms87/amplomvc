@@ -223,10 +223,12 @@ class Admin_Controller_User_User extends Controller
 
 		$this->data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
 
-		$this->data['contact_template'] = $this->getChild('includes/contact', array(
-		                                                                           'type' => 'user',
-		                                                                           'id'   => $user_id
-		                                                                      ));
+		$contact = array(
+			'type' => 'user',
+			'id'   => $user_id
+		);
+
+		$this->data['contact_template'] = $this->getChild('includes/contact', $contact);
 
 
 		if (!$user_id) {
@@ -234,6 +236,11 @@ class Admin_Controller_User_User extends Controller
 		} else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		$this->children = array(
 			'common/header',

@@ -133,7 +133,10 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -260,6 +263,22 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		//Additional Data
 		$this->data['data_stores'] = array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores());
+
+		$_['data_non_stores'] = array(
+			array(
+				'store_id' => '-1',
+				'name'     => _l("Admin Panel"),
+			),
+			array(
+				'store_id' => 0,
+				'name'     => _l("All Stores"),
+			),
+		);
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);

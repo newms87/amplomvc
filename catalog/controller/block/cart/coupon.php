@@ -30,11 +30,11 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
 
 		if (!$coupon_info) {
-			$this->message->add('warning', $this->_('error_coupon'));
+			$this->message->add('warning', _l("Warning: Coupon is either invalid, expired or reached it's usage limit!"));
 		} else {
 			$this->session->data['coupons'][$_POST['coupon_code']] = $coupon_info;
 
-			$this->message->add('success', $this->_('text_coupon'));
+			$this->message->add('success', _l("Success: Your coupon discount has been applied!"));
 		}
 	}
 
@@ -46,11 +46,11 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
 
 		if (!$coupon_info) {
-			$json['error'] = $this->_('error_coupon');
+			$json['error'] = _l("Warning: Coupon is either invalid, expired or reached it's usage limit!");
 		} else {
 			$this->session->data['coupons'][$_POST['coupon_code']] = $coupon_info;
 
-			$json['success'] = $this->_('text_coupon');
+			$json['success'] = _l("Success: Your coupon discount has been applied!");
 		}
 
 		$this->response->setOutput(json_encode($json));

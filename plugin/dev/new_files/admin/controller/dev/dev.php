@@ -112,6 +112,12 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
+		$_['data_site_status'] = array(
+			'live'     => _l("Live Site"),
+			'dev'      => _l("Development Site"),
+			'inactive' => _l("Inactive Site"),
+		);
+
 		$this->data['dev_sites'] = $dev_sites;
 
 		$this->content();

@@ -5,7 +5,7 @@ class Catalog_Controller_Information_Information extends Controller
 	{
 		$this->language->load('information/information');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 
 		$information_id = isset($_GET['information_id']) ? $_GET['information_id'] : 0;
 
@@ -44,11 +44,11 @@ class Catalog_Controller_Information_Information extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->breadcrumb->add($this->_('text_error'), $this->url->link('information/information', 'information_id=' . $information_id));
+			$this->breadcrumb->add(_l("Information Page Not Found!"), $this->url->link('information/information', 'information_id=' . $information_id));
 
-			$this->document->setTitle($this->_('text_error'));
+			$this->document->setTitle(_l("Information Page Not Found!"));
 
-			$this->language->set('head_title', $this->_('text_error'));
+			$this->language->set('head_title', _l("Information Page Not Found!"));
 
 			$this->data['continue'] = $this->url->link('common/home');
 

@@ -3,39 +3,39 @@
 <?= $this->breadcrumb->render(); ?>
 	<div class="box">
 	<div class="heading">
-		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
 
 		<div class="buttons">
 			<a onclick="prepare_preview();$.post('<?= $preview; ?>', $('#form').serialize(), handle_preview, 'html');"
-			   class="button"><?= $button_preview; ?></a>
-			<a onclick="$('#form').submit();" class="button save_form"><?= $button_save; ?></a>
-			<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			   class="button"><?= _l("Preview"); ?></a>
+			<a onclick="$('#form').submit();" class="button save_form"><?= _l("Save"); ?></a>
+			<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 		</div>
 	</div>
 	<div class="section">
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form">
 				<tr>
-					<td><?= $entry_url; ?></td>
+					<td><?= _l("Newsletter URL:"); ?></td>
 					<td>
 						<? if (!empty($url_active)) { ?>
 							<a target="_blank" href="<?= $url_active; ?>"><?= $url_active; ?></a>
 						<? } else { ?>
-							<a onclick="$('.buttons .save_form').click()"><?= $text_no_url_active; ?></a>
+							<a onclick="$('.buttons .save_form').click()"><?= _l("Please Save this form to view the URL for this newsletter!"); ?></a>
 						<? } ?>
 					</td>
 				</tr>
 				<tr>
-					<td><?= $entry_name; ?></td>
+					<td><?= _l("Newsletter Title:"); ?></td>
 					<td><input type="text" name="name" value="<?= $name; ?>" size="60"/></td>
 				</tr>
 				<tr>
-					<td><?= $entry_send_date; ?></td>
+					<td><?= _l("Send Date:"); ?></td>
 					<td><input type="text" name="send_date" class="datetimepicker" value="<?= $send_date; ?>"/></td>
 				</tr>
 				<tr>
 					<td>
-						<div><?= $entry_featured; ?></div>
+						<div><?= _l("Featured Designer / Product:"); ?></div>
 						<div>
 							<?= $this->builder->setConfig('manufacturer_id', 'name'); ?>
 							<?= $this->builder->build('select', $data_designers, "newsletter[featured][designer][designer_id]", !empty($newsletter) ? $newsletter['featured']['designer']['designer_id'] : '', array('id' => 'designer_select')); ?>
@@ -59,7 +59,7 @@
 									x
 									<input type="text" size="3" name="newsletter[featured][product][height]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['height'] : ''; ?>"/>
 								</div>
-								<div style="margin-top:10px"><?= $entry_featured_product_image; ?></div>
+								<div style="margin-top:10px"><?= _l("Product Main Image"); ?></div>
 							</div>
 							<div class="designer_image">
 								<div>
@@ -73,20 +73,20 @@
 									x
 									<input type="text" size="3" name="newsletter[featured][designer][height]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['height'] : ''; ?>"/>
 								</div>
-								<div style="margin-top:10px"><?= $entry_featured_designer_image; ?></div>
+								<div style="margin-top:10px"><?= _l("Designer Main Image"); ?></div>
 							</div>
 							<div class="featured_info">
 								<div>
-									<label for="designer_title"><?= $entry_designer_title; ?></label>
+									<label for="designer_title"><?= _l("Title:"); ?></label>
 									<input type="text" name="newsletter[featured][designer][title]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['title'] : ''; ?>"/>
 								</div>
 								<div>
-									<label for="designer_description"><?= $entry_designer_description; ?></label>
+									<label for="designer_description"><?= _l("Description:"); ?></label>
 									<textarea name="newsletter[featured][designer][description]"
 									          class="ckedit"><?= !empty($newsletter) ? $newsletter['featured']['designer']['description'] : ''; ?></textarea>
 								</div>
 								<div>
-									<label for="designer_article"><?= $entry_designer_article; ?></label>
+									<label for="designer_article"><?= _l("Article URL:"); ?></label>
 									<input type="text" name="newsletter[featured][designer][article]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['article'] : ''; ?>"/>
 								</div>
 							</div>
@@ -95,9 +95,9 @@
 				</tr>
 				<tr>
 					<td>
-						<div><?= $entry_product_list; ?></div>
+						<div><?= _l("Product List:<span class=\"help\">Drag and Drop the products to reorder them</span><br />"); ?></div>
 						<div><input type="text" id="product_list_autocomplete"/></div>
-						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
+						<div><span class="help">(<?= _l("autocomplete"); ?>)</span></div>
 					</td>
 					<td>
 						<ol id="product_list" class="scrollbox editable_list">
@@ -117,9 +117,9 @@
 				</tr>
 				<tr>
 					<td>
-						<div><?= $entry_designer_list; ?></div>
+						<div><?= _l("Designer List:<span class=\"help\">Drag and Drop the designers to reorder them</span><br />"); ?></div>
 						<div><input type="text" id="designer_list_autocomplete"/></div>
-						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
+						<div><span class="help">(<?= _l("autocomplete"); ?>)</span></div>
 					</td>
 					<td>
 						<ol id="designer_list" class="scrollbox editable_list">
@@ -139,21 +139,21 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= $entry_article_list; ?></td>
+					<td><?= _l("B\'s Hot List:"); ?></td>
 					<td>
 						<div>
-							<div><?= $entry_article_list_image; ?></div>
+							<div><?= _l("Hot List Image:"); ?></div>
 							<?= $this->builder->imageInput("newsletter[articles_image]", !empty($newsletter['articles_image']) ? $newsletter['articles_image'] : ''); ?>
-							<span><?= $entry_article_list_url; ?></span>
+							<span><?= _l("Article URL:"); ?></span>
 							<input type="text" name="newsletter[articles_url]" value="<?= !empty($newsletter['articles_url']) ? $newsletter['articles_url'] : ''; ?>"
 							       size="50"/>
 						</div>
-						<div style="margin-top:10px;"><?= $entry_article_list_articles; ?></div>
+						<div style="margin-top:10px;"><?= _l("Top 10 Articles:"); ?></div>
 						<div id="add_article_form">
-							<label for="add_article_title"><?= $entry_article_title; ?></label><input type="text"
+							<label for="add_article_title"><?= _l("Title:"); ?></label><input type="text"
 							                                                                          id="add_article_title"
 							                                                                          size="30"/>
-							<label for="add_article_href"><?= $entry_article_href; ?></label><input type="text"
+							<label for="add_article_href"><?= _l("Article URL:"); ?></label><input type="text"
 							                                                                        id="add_article_href"
 							                                                                        size="80"/>
 							<input type="button" value="Add Article" class="button" id="add_article_button"/>
@@ -179,17 +179,17 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= $entry_featured_article_list; ?></td>
+					<td><?= _l("On BettyConfidential Today:"); ?></td>
 					<td>
 						<div id="add_featured_article_form">
 							<?= $this->builder->imageInput("", ''); ?>
-							<label for="add_featured_article_title"><?= $entry_article_title; ?></label><input type="text"
+							<label for="add_featured_article_title"><?= _l("Title:"); ?></label><input type="text"
 							                                                                                   id="add_featured_article_title"
 							                                                                                   size="30"/>
-							<label for="add_featured_article_teaser"><?= $entry_article_teaser; ?></label><input type="text"
+							<label for="add_featured_article_teaser"><?= _l("Teaser:"); ?></label><input type="text"
 							                                                                                     id="add_featured_article_teaser"
 							                                                                                     size="30"/>
-							<label for="add_featured_article_href"><?= $entry_article_href; ?></label><input type="text"
+							<label for="add_featured_article_href"><?= _l("Article URL:"); ?></label><input type="text"
 							                                                                                 id="add_featured_article_href"
 							                                                                                 size="80"/>
 							<input type="button" value="Add Featured Article" class="button" id="add_featured_article_button"/>

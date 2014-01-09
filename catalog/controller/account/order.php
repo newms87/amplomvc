@@ -15,12 +15,12 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Order History"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/order'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
 
 		//Get Sorted / Filtered Data
 		$sort = $this->sort->getQueryDefaults('order_id', 'DESC', 10);
@@ -94,23 +94,23 @@ class Catalog_Controller_Account_Order extends Controller
 		$order = $this->order->get($order_id);
 
 		if (!$order) {
-			$this->message->add('warning', 'error_order_info');
+			$this->message->add('warning', _l("Unable to find requested order. Please choose an order to view from the list."));
 
 			$this->url->redirect('account/order');
 		}
 
 		//Page Head
-		$this->document->setTitle($this->_('text_order'));
+		$this->document->setTitle(_l("Order Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/order'));
-		$this->breadcrumb->add($this->_('text_order'), $this->url->here());
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
+		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$this->language->set('head_title', $this->_('text_order'));
+		$this->language->set('head_title', _l("Order Information"));
 
-		$this->_('final_sale_explanation', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id')));
+		$this->data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
 
@@ -241,7 +241,7 @@ class Catalog_Controller_Account_Order extends Controller
 						$options[$order_option['product_option_id']][$order_option['product_option_value_id']] = $order_option;
 					}
 
-					$this->message->add('success', $this->_('text_success', $order_id));
+					$this->message->add('success', _l("You have successfully added the products from order ID #%s to your cart!", $order_id));
 
 					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $options);
 				}

@@ -81,7 +81,7 @@ class Catalog_Controller_Account_Address extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Address Book"));
 
 		if (!empty($_GET['address_id'])) {
 			if (!$this->customer->removeAddress($_POST['address_id'])) {
@@ -99,7 +99,7 @@ class Catalog_Controller_Account_Address extends Controller
 				$this->cart->setPaymentMethod();
 			}
 
-			$this->message->add('success', $this->_('text_delete'));
+			$this->message->add('success', _l("Your address has been successfully deleted"));
 
 			$this->url->redirect('account/address');
 		}
@@ -112,15 +112,15 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->language->load('account/address');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Address Book"));
 
 		//The Template
 		$this->template->load('account/address_list');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/address'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account/address'));
 
 		//Load Addresses
 		$addresses = $this->customer->getAddresses();
@@ -157,18 +157,18 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->language->load('account/address');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Address Book"));
 
 		//The Template
 		$this->template->load('account/address_form');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('account/address'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('account/address'));
 
 		$crumb_url = isset($_GET['address_id']) ? $this->url->link('account/address/update') : $this->url->link('account/address/update');
-		$this->breadcrumb->add($this->_('head_title'), $crumb_url);
+		$this->breadcrumb->add(_l("Address Book"), $crumb_url);
 
 		//Insert or Update
 		$address_id = !empty($_GET['address_id']) ? (int)$_GET['address_id'] : 0;
@@ -200,8 +200,13 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->data = $address_info + $defaults;
 
-		//Additional Information
+		//Template Data
 		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
 
 		//Action Buttons
 		if ($this->request->isAjax()) {

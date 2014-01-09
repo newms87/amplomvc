@@ -1,65 +1,65 @@
 <?= $header; ?>
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
-		<? if ($error_warning) { ?>
-			<div class="message_box warning"><?= $error_warning; ?></div>
+		<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
+			<div class="message_box warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
-				<div class="htabs"><a href="#tab-return"><?= $tab_return; ?></a><a
-						href="#tab-product"><?= $tab_product; ?></a></div>
+				<div class="htabs"><a href="#tab-return"><?= _l("Return Details"); ?></a><a
+						href="#tab-product"><?= _l("Products"); ?></a></div>
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<div id="tab-return">
 						<table class="form">
 							<tr>
-								<td class="required"> <?= $entry_order_id; ?></td>
+								<td class="required"> <?= _l("Order ID:"); ?></td>
 								<td><input type="text" name="order_id" value="<?= $order_id; ?>"/>
-									<? if ($error_order_id) { ?>
-										<span class="error"><?= $error_order_id; ?></span>
+									<? if (_l("Order ID required!")) { ?>
+										<span class="error"><?= _l("Order ID required!"); ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><?= $entry_date_ordered; ?></td>
+								<td><?= _l("Order Date:"); ?></td>
 								<td><input type="text" name="date_ordered" value="<?= $date_ordered; ?>" class="datepicker"/>
 								</td>
 							</tr>
 							<tr>
-								<td><?= $entry_customer; ?></td>
+								<td><?= _l("Customer:"); ?></td>
 								<td><input type="text" name="customer" value="<?= $customer; ?>"/>
 									<input type="hidden" name="customer_id" value="<?= $customer_id; ?>"/></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_firstname; ?></td>
+								<td class="required"> <?= _l("First Name:"); ?></td>
 								<td><input type="text" name="firstname" value="<?= $firstname; ?>"/>
-									<? if ($error_firstname) { ?>
-										<span class="error"><?= $error_firstname; ?></span>
+									<? if (_l("First Name must be between 1 and 32 characters!")) { ?>
+										<span class="error"><?= _l("First Name must be between 1 and 32 characters!"); ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_lastname; ?></td>
+								<td class="required"> <?= _l("Last Name:"); ?></td>
 								<td><input type="text" name="lastname" value="<?= $lastname; ?>"/>
-									<? if ($error_lastname) { ?>
-										<span class="error"><?= $error_lastname; ?></span>
+									<? if (_l("Last Name must be between 1 and 32 characters!")) { ?>
+										<span class="error"><?= _l("Last Name must be between 1 and 32 characters!"); ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_email; ?></td>
+								<td class="required"> <?= _l("E-Mail:"); ?></td>
 								<td><input type="text" name="email" value="<?= $email; ?>"/>
-									<? if ($error_email) { ?>
-										<span class="error"><?= $error_email; ?></span>
+									<? if (_l("E-Mail Address does not appear to be valid!")) { ?>
+										<span class="error"><?= _l("E-Mail Address does not appear to be valid!"); ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_telephone; ?></td>
+								<td class="required"> <?= _l("Telephone:"); ?></td>
 								<td><input type="text" name="telephone" value="<?= $telephone; ?>"/>
-									<? if ($error_telephone) { ?>
-										<span class="error"><?= $error_telephone; ?></span>
+									<? if (_l("Telephone must be between 3 and 32 characters!")) { ?>
+										<span class="error"><?= _l("Telephone must be between 3 and 32 characters!"); ?></span>
 									<? } ?></td>
 							</tr>
 						</table>
@@ -67,23 +67,23 @@
 					<div id="tab-product">
 						<table class="form">
 							<tr>
-								<td class="required"> <?= $entry_product; ?></td>
+								<td class="required"> <?= _l("Product:<br /><span class=\"help\">(Autocomplete)</span>"); ?></td>
 								<td><input type="text" name="product" value="<?= $subscription; ?>"/>
 									<input type="hidden" name="product_id" value="<?= $product_id; ?>"/>
-									<? if ($error_product) { ?>
-										<span class="error"><?= $error_product; ?></span>
+									<? if (_l("Product Name must be greater than 3 and less than 255 characters!")) { ?>
+										<span class="error"><?= _l("Product Name must be greater than 3 and less than 255 characters!"); ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><?= $entry_model; ?></td>
+								<td><?= _l("Model:"); ?></td>
 								<td><input type="text" name="model" value="<?= $model; ?>"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_quantity; ?></td>
+								<td><?= _l("Quantity:"); ?></td>
 								<td><input type="text" name="quantity" value="<?= $quantity; ?>" size="3"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_reason; ?></td>
+								<td><?= _l("Return Reason:"); ?></td>
 								<td><select name="return_reason_id">
 										<? foreach ($return_reasons as $return_reason) { ?>
 											<? if ($return_reason['return_reason_id'] == $return_reason_id) { ?>
@@ -96,23 +96,23 @@
 									</select></td>
 							</tr>
 							<tr>
-								<td><?= $entry_opened; ?></td>
+								<td><?= _l("Opened:"); ?></td>
 								<td><select name="opened">
 										<? if ($opened) { ?>
-											<option value="1" selected="selected"><?= $text_opened; ?></option>
-											<option value="0"><?= $text_unopened; ?></option>
+											<option value="1" selected="selected"><?= _l("Opened"); ?></option>
+											<option value="0"><?= _l("Unopened"); ?></option>
 										<? } else { ?>
-											<option value="1"><?= $text_opened; ?></option>
-											<option value="0" selected="selected"><?= $text_unopened; ?></option>
+											<option value="1"><?= _l("Opened"); ?></option>
+											<option value="0" selected="selected"><?= _l("Unopened"); ?></option>
 										<? } ?>
 									</select></td>
 							</tr>
 							<tr>
-								<td><?= $entry_comment; ?></td>
+								<td><?= _l("Comment:"); ?></td>
 								<td><textarea name="comment" cols="40" rows="5"><?= $comment; ?></textarea></td>
 							</tr>
 							<tr>
-								<td><?= $entry_action; ?></td>
+								<td><?= _l("Return Action:"); ?></td>
 								<td><select name="return_action_id">
 										<option value="0"></option>
 										<? foreach ($return_actions as $return_action) { ?>
@@ -126,7 +126,7 @@
 									</select></td>
 							</tr>
 							<tr>
-								<td><?= $entry_return_status; ?></td>
+								<td><?= _l("Return Status:"); ?></td>
 								<td><?= $this->builder->build('select', $data_return_statuses, 'return_status_id', $return_status_id); ?></td>
 							</tr>
 						</table>

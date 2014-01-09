@@ -3,41 +3,41 @@
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("URL Aliases"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 					<div id="tab-general">
 						<table class="form">
 							<tr>
-								<td class="required"> <?= $entry_alias; ?></td>
+								<td class="required"> <?= _l("URL Alias:"); ?></td>
 								<td><input type="text" name="alias" value="<?= $alias; ?>" size="40"/></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_path; ?></td>
+								<td class="required"> <?= _l("Path:"); ?></td>
 								<td><input type="text" name="path" value="<?= $path; ?>" size="40"/></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_query; ?></td>
+								<td class="required"> <?= _l("Query:"); ?></td>
 								<td><input type="text" name="query" value="<?= $query; ?>" size="40"/></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_redirect; ?></td>
+								<td class="required"> <?= _l("Redirect:"); ?></td>
 								<td><input type="text" name="redirect" value="<?= $redirect; ?>" size="40"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_store; ?></td>
+								<td><?= _l("Store:"); ?></td>
 								<td>
 									<? $this->builder->setConfig('store_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_stores, 'store_id', $store_id); ?>
 								</td>
 							</tr>
 							<tr>
-								<td><?= $entry_status; ?></td>
-								<td><?= $this->builder->build('select', $statuses, 'status', $status); ?></td>
+								<td><?= _l("Status:"); ?></td>
+								<td><?= $this->builder->build('select', $data_statuses, 'status', $status); ?></td>
 							</tr>
 						</table>
 					</div>

@@ -3,11 +3,11 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Page"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit()" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').submit()" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section clearfix">
@@ -15,7 +15,7 @@
 			<div id="tabs" class="htabs">
 				<a href="#tab-content"><?= _l("Content"); ?></a>
 				<a href="#tab-data"><?= _l("Data"); ?></a>
-				<a href="#tab-design"><?= $tab_design; ?></a>
+				<a href="#tab-design"><?= _l("Design"); ?></a>
 			</div>
 
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -53,19 +53,19 @@
 				<div id="tab-data">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_alias; ?></td>
+							<td class="required"> <?= _l("SEO URL:<br /><span class=\"help\">The Search Engine Optimized URL.</span>"); ?></td>
 							<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_meta_keywords; ?></td>
+							<td><?= _l("Meta Keywords:"); ?></td>
 							<td><textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_meta_description; ?></td>
+							<td><?= _l("Meta Description:"); ?></td>
 							<td><textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
@@ -74,28 +74,28 @@
 				<div id="tab-design">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_layout; ?></td>
+							<td class="required"> <?= _l("Layout:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('layout_id', 'name'); ?>
 								<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
-								<a id="create_layout" class="link_button"><?= $button_create_layout; ?></a>
-								<span id="create_layout_load" style="display:none"><?= $text_creating_layout; ?></span>
+								<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
+								<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_store; ?></td>
+							<td class="required"> <?= _l("Stores:"); ?></td>
 							<? $this->builder->setConfig('store_id', 'name'); ?>
 							<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_blocks; ?></td>
+							<td><?= _l("Blocks Associated with this Page"); ?></td>
 							<td>
 								<table id="assigned_block_list" class="list">
 									<thead>
 									<tr>
-										<td><?= $column_block_name; ?></td>
-										<td><?= $column_block_store; ?></td>
-										<td><?= $column_block_position; ?></td>
+										<td><?= _l("Block Name"); ?></td>
+										<td><?= _l("Store Name"); ?></td>
+										<td><?= _l("Position"); ?></td>
 									</tr>
 									</thead>
 									<tbody>
@@ -108,7 +108,7 @@
 									<tfoot>
 									<tr>
 										<td colspan="3">
-											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= $button_add_blocks; ?></a>
+											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
 										</td>
 									</tr>
 									</tfoot>

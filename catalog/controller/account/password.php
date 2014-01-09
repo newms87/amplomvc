@@ -15,20 +15,20 @@ class Catalog_Controller_Account_Password extends Controller
 
 		$this->language->load('account/password');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Change Password"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->editPassword($this->customer->getId(), $_POST['password']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success'));
+				$this->message->add('success', _l("Success: Your password has been successfully updated."));
 				$this->url->redirect('account/account');
 			}
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/password'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Change Password"), $this->url->link('account/password'));
 
 		if (isset($this->error['password'])) {
 			$this->data['error_password'] = $this->error['password'];
@@ -73,11 +73,11 @@ class Catalog_Controller_Account_Password extends Controller
 	private function validate()
 	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-			$this->error['password'] = $this->_('error_password');
+			$this->error['password'] = _l("Password must be between 4 and 20 characters!");
 		}
 
 		if ($_POST['confirm'] != $_POST['password']) {
-			$this->error['confirm'] = $this->_('error_confirm');
+			$this->error['confirm'] = _l("Password confirmation does not match password!");
 		}
 
 		return $this->error ? false : true;

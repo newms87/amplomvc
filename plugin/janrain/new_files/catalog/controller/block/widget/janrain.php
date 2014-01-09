@@ -119,10 +119,10 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			// process the auth_info response
 			if ($auth_info['stat'] == 'ok') {
 				$this->parseJanrainInfo($auth_info, $raw_json);
-				$this->message->add("success", $this->_('success_janrain_auth'));
+				$this->message->add("success", _l("You were successfully logged into your account!"));
 			} else {
 				$this->error_log->write("Janrain Error ({$auth_info['err']['code']}): {$auth_info['err']['msg']}");
-				$this->message->add("warning", $this->_('error_janrain_auth', $this->config->get('config_email'), $this->config->get('config_email')));
+				$this->message->add("warning", _l("There was a problem with the authorization while connecting your account. Please try again. If you continue to see this error message, please contact us at <a href='mailto:%s'>%s</a>", $this->config->get('config_email'), $this->config->get('config_email')));
 				$this->url->redirect('account/login');
 			}
 		}
@@ -192,22 +192,22 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 				$this->Model_Widget_Janrain->janrainCreateUser($user_id, $customer_email, $auth_provider, $auth_identifier);
 
 				// send email to admin to notify about new customer
-				$subject = sprintf($this->_('text_subject'), SITE_SSL);
+				$subject = sprintf(_l("New customer via Janrain Engage SignIn Module"), SITE_SSL);
 
-				$message = $this->_('text_hello') . "\n\n";
+				$message = _l("Hello Admin,") . "\n\n";
 
 				$customer_name = $customer_info['firstname'];
 				if ($customer_info['lastname']) {
 					$customer_name .= ' ' . $customer_info['lastname'];
 				}
 
-				$message .= sprintf($this->_('text_message'), SITE_SSL) . "\n\n";
-				$message .= $this->_('text_customer_detail') . "\n";
-				$message .= $this->_('text_dash_line') . "\n";
-				$message .= sprintf($this->_('text_customer_id'), $customer_info['customer_id']) . "\n";
-				$message .= sprintf($this->_('text_customer_name'), $customer_name) . "\n";
-				$message .= sprintf($this->_('text_customer_email'), $customer_info['email']) . "\n";
-				$message .= sprintf($this->_('text_provider'), ucfirst($auth_provider)) . "\n\n";
+				$message .= sprintf(_l("New customer registered via Janrain Engage SignIn Module at your site: %s"), SITE_SSL) . "\n\n";
+				$message .= _l("Costomer Detail:-") . "\n";
+				$message .= _l("-------------------------") . "\n";
+				$message .= sprintf(_l("Costomer ID : %s"), $customer_info['customer_id']) . "\n";
+				$message .= sprintf(_l("Costomer Name : %s"), $customer_name) . "\n";
+				$message .= sprintf(_l("Costomer Email : %s"), $customer_info['email']) . "\n";
+				$message .= sprintf(_l("Provider : %s"), ucfirst($auth_provider)) . "\n\n";
 
 				$this->mail->init();
 

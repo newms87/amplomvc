@@ -13,10 +13,10 @@ class Catalog_Controller_Account_Account extends Controller
 
 		$this->language->load('account/account');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("My Account"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("My Account"), $this->url->link('account/account'));
 
 		$this->data['update']         = $this->url->link('account/update');
 		$this->data['password']       = $this->url->link('account/password');

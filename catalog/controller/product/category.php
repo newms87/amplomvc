@@ -6,8 +6,8 @@ class Catalog_Controller_Product_Category extends Controller
 		$this->language->load('product/category');
 		$this->template->load('product/category');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_all_categories'), $this->url->link('product/category'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("All Categories"), $this->url->link('product/category'));
 
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 		$attributes  = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
@@ -44,15 +44,15 @@ class Catalog_Controller_Product_Category extends Controller
 
 			$this->breadcrumb->add($category_info['name'], $this->url->link('product/category', 'category_id=' . $category_id));
 		} else {
-			$this->document->setTitle($this->_('text_all_categories'));
-			$this->document->setDescription($this->_('text_all_meta_description'));
-			$this->document->setKeywords($this->_('text_all_meta_keywords'));
+			$this->document->setTitle(_l("All Categories"));
+			$this->document->setDescription(_l("All the categories on this site"));
+			$this->document->setKeywords(_l("all categories, categories, see list, view all, search, find"));
 
-			$this->language->set('head_title', $this->_('text_all_categories'));
+			$this->language->set('head_title', _l("All Categories"));
 
 			$this->data['thumb'] = '';
 
-			$this->data['description'] = $this->_('text_all_description');
+			$this->data['description'] = '';
 		}
 
 		//TODO: How do we handle sub categories....?
@@ -93,18 +93,18 @@ class Catalog_Controller_Product_Category extends Controller
 
 			//Sorting
 			$sorts = array(
-				'sort=p.sort_order&order=ASC' => $this->_('text_default'),
-				'sort=p.name&order=ASC'       => $this->_('text_name_asc'),
-				'sort=p.name&order=DESC'      => $this->_('text_name_desc'),
-				'sort=p.price&order=ASC'      => $this->_('text_price_asc'),
-				'sort=p.price&order=DESC'     => $this->_('text_price_desc'),
-				'sort=p.model&order=ASC'      => $this->_('text_model_asc'),
-				'sort=p.model&order=DESC'     => $this->_('text_model_desc'),
+				'sort=p.sort_order&order=ASC' => _l("Default"),
+				'sort=p.name&order=ASC'       => _l("Name (A - Z)"),
+				'sort=p.name&order=DESC'      => _l("Name (Z - A)"),
+				'sort=p.price&order=ASC'      => _l("Price (Low &gt; High)"),
+				'sort=p.price&order=DESC'     => _l("Price (High &gt; Low)"),
+				'sort=p.model&order=ASC'      => _l("Model (A - Z)"),
+				'sort=p.model&order=DESC'     => _l("Model (Z - A)"),
 			);
 
 			if ($this->config->get('config_review_status')) {
-				$sorts['sort=rating&order=ASC']  = $this->_('text_rating_asc');
-				$sorts['sort=rating&order=DESC'] = $this->_('text_rating_desc');
+				$sorts['sort=rating&order=ASC']  = _l("Rating (Lowest)");
+				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}
 
 			$this->data['sorts'] = $this->sort->render_sort($sorts);
@@ -116,7 +116,7 @@ class Catalog_Controller_Product_Category extends Controller
 
 			$this->data['pagination'] = $this->pagination->render();
 		} else {
-			$this->_('text_empty', $category_info['name']);
+			$this->data['category_name'] = $category_info['name'];
 		}
 
 		$this->data['continue'] = $this->url->link('common/home');

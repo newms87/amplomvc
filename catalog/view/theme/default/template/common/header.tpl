@@ -87,7 +87,7 @@
 							<a href="<?= $home; ?>">
 								<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
-								<div id="slogan"><?= $text_slogan; ?></div>
+								<div id="slogan"><?= _l(""); ?></div>
 							</a>
 						</div>
 					<? } ?>
@@ -106,7 +106,7 @@
 								<? if (!empty($block_login)) { ?>
 									<span><?= $block_login; ?></span>
 								<? } else { ?>
-									<span><?= $text_login_link; ?></span>
+									<span><a href="<?= $login; ?>"><?= _l("Sign In"); ?></a></span>
 								<? } ?>
 								<?= $this->document->renderLinks($links_account); ?>
 							<? } else { ?>

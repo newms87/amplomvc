@@ -77,7 +77,10 @@ class Admin_Controller_Extension_Payment extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -217,6 +220,11 @@ class Admin_Controller_Extension_Payment extends Controller
 		//Additional Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_geo_zones']      = array(0 => $this->_('text_all_zones')) + $this->Model_Localisation_GeoZone->getGeoZones();
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/payment', 'code=' . $code);

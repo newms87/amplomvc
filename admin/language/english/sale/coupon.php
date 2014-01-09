@@ -2,12 +2,6 @@
 // Heading
 $_['head_title'] = 'Coupon';
 
-//Data
-$_['data_types'] = array(
-	'P' => "Percent",
-	'F' => "Fixed Amount"
-);
-
 // Text
 $_['text_success'] = 'Success: You have modified coupons!';
 $_['text_percent'] = 'Percentage';

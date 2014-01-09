@@ -7,7 +7,7 @@
 		<h1><?= $head_title; ?></h1>
 		<?= $description; ?>
 		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
 		<?= $content_bottom; ?>

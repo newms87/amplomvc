@@ -89,6 +89,8 @@ class Catalog_Controller_Common_Header extends Controller
 
 		if (!$this->data['is_logged']) {
 			$this->data['block_login'] = $this->getBlock('account/login');
+
+			$this->data['login'] = $this->url->link('account/login');
 		}
 
 		$this->data['home'] = $this->url->link('common/home');

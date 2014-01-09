@@ -11,18 +11,18 @@
 				<table>
 					<thead>
 						<tr>
-							<td class="image"><?= $column_image; ?></td>
-							<td class="name"><?= $column_name; ?></td>
-							<td class="model"><?= $column_model; ?></td>
-							<td class="quantity"><?= $column_quantity; ?></td>
+							<td class="image"><?= _l("Image"); ?></td>
+							<td class="name"><?= _l("Product Name"); ?></td>
+							<td class="model"><?= _l("Model"); ?></td>
+							<td class="quantity"><?= _l("Quantity"); ?></td>
 
 							<? if (!empty($show_return_policy)) { ?>
-								<td class="return_policy"><?= $column_return_policy; ?></td>
+								<td class="return_policy"><?= _l("Return Period"); ?></td>
 							<? } ?>
 
 							<? if (empty($no_price_display)) { ?>
-								<td class="price"><?= $column_price; ?></td>
-								<td class="total"><?= $column_total; ?></td>
+								<td class="price"><?= _l("Unit Price"); ?></td>
+								<td class="total"><?= _l("Total"); ?></td>
 							<? } ?>
 
 							<td class="center remove"><?= _l("Remove"); ?></td>
@@ -67,7 +67,7 @@
 									<td class="quantity">
 										<input type="text" name="quantity[<?= $cart_product['key']; ?>]" value="<?= $cart_product['quantity']; ?>" size="1"/>
 										<input class="update" type="image" name="cart_update" value="1" onclick="return cart_update($(this));" src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
-										<label><?= $text_update_cart; ?></label>
+										<label><?= _l("Update"); ?></label>
 									</td>
 
 									<? if (!empty($show_return_policy)) { ?>

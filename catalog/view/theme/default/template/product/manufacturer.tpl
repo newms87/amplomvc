@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= $head_title; ?></h1>
+	<h1><?= _l("Find Your Favorite Brand"); ?></h1>
 
 	<? if (!empty($manufacturers)) { ?>
 		<div class="manufacturers">
@@ -13,10 +13,10 @@
 		</div>
 
 	<? } else { ?>
-		<div class="section"><?= $text_empty; ?></div>
+		<div class="section"><?= _l("There are no manufacturers to list."); ?></div>
 
 		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 	<? } ?>
 

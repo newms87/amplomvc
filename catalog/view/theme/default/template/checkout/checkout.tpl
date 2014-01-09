@@ -2,11 +2,11 @@
 <?= $column_left; ?><?= $column_right; ?>
 <div class="content"><?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<h1><?= $head_title; ?></h1>
+	<h1><?= _l("Checkout"); ?></h1>
 	<? $step = 1; ?>
 	<div id="checkout_process" class="checkout">
 		<div id="login" class="clearfix">
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_option; ?></div>
+			<div class="checkout-heading"><?= _l("Step") . ' ' . $step++; ?>. <?= _l("Login or Register a New Account"); ?></div>
 
 			<? if (!empty($login_form)) { ?>
 				<div class="section">
@@ -21,11 +21,11 @@
 
 		</div>
 		<div id="customer_information" class="checkout_item" route="block/checkout/customer_information">
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_information; ?></div>
+			<div class="checkout-heading"><?= _l("Step") . ' ' . $step++; ?>. <?= _l("Shipping and Payment Information"); ?></div>
 			<div class="checkout-content clearfix"></div>
 		</div>
 		<div id="confirm" class="checkout_item" route="block/checkout/confirm">
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_confirm; ?></div>
+			<div class="checkout-heading"><?= _l("Step") . ' ' . $step++; ?>. <?= _l("Confirm Order"); ?></div>
 			<div class="checkout-content clearfix"></div>
 		</div>
 	</div>
@@ -79,7 +79,7 @@
 				headings = <?= $logged ? 'c_item.prevUntil("#login")' : 'c_item.prevAll()'; ?>;
 
 				headings.each(function (i, e) {
-					$(e).find('.checkout-heading').append("<a class=\"modify\" onclick=\"load_checkout_item($(this).closest('.checkout_item'))\"><?= $text_modify; ?></a>");
+					$(e).find('.checkout-heading').append("<a class=\"modify\" onclick=\"load_checkout_item($(this).closest('.checkout_item'))\"><?= _l("Modify &raquo;"); ?></a>");
 				});
 			},
 			error: handle_ajax_error

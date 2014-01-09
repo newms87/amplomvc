@@ -91,6 +91,11 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		$this->data['db_rules'] = $db_rules;
 
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -134,6 +139,20 @@ class Admin_Controller_Setting_DbRules extends Controller
 				$this->data[$d] = $value;
 			}
 		}
+
+		$_['data_escape_types'] = array(
+			0 => _l('Normal Escape'),
+			1 => _l('No Escape'),
+			2 => _l("Image"),
+			3 => _l("Integer"),
+			4 => _l("Float"),
+			5 => _l("Datetime"),
+		);
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
 
 		$this->children = array(
 			'common/header',

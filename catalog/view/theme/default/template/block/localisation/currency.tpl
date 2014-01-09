@@ -1,6 +1,6 @@
 <? if (count($currencies) > 1) { ?>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-		<div id="currency"><?= $text_currency; ?><br/>
+		<div id="currency"><?= _l("Currency"); ?><br/>
 			<? foreach ($currencies as $currency) { ?>
 				<? if ($currency['code'] == $currency_code) { ?>
 					<? if ($currency['symbol_left']) { ?>

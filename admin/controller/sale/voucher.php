@@ -147,7 +147,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -284,6 +287,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		$this->data['voucher_id'] = $voucher_id;
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		//Ajax Urls
 		$this->data['url_history'] = $this->url->link('sale/voucher/history', 'voucher_id=' . $voucher_id);

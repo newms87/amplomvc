@@ -5,8 +5,19 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 	{
 		$this->template->load('block/widget/janrain_settings');
 
-		$this->data = $settings;
+		//Entry Data
+		$defaults = array(
+			'application_domain' => '',
+			'api_key'            => '',
+			'display_icons'      => array(),
+			'login_redirect'     => '',
+			'logout_redirect'    => '',
+			'integrate_header'   => 0,
+		);
 
+		$this->data = $settings + $defaults;
+
+		//Template Data
 		$this->data['image_offset'] = array(
 			'facebook'    => 0,
 			'google'      => 1,
@@ -33,7 +44,7 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 		);
 
 		//Data
-		$_['data_display_icons'] = array(
+		$this->data['data_display_icons'] = array(
 			'facebook'    => _l("Facebook"),
 			'twitter'     => _l("Twitter"),
 			'linkedin'    => _l("Linked In"),
@@ -48,12 +59,12 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			'wordpress'   => _l("WordPress"),
 		);
 
-		$_['data_display_types'] = array(
+		$this->data['data_display_types'] = array(
 			'popup'  => _l("Popup"),
 			'iframe' => _l("iFrame"),
 		);
 
-		$_['data_icon_sizes'] = array(
+		$this->data['data_icon_sizes'] = array(
 			'tiny'  => _l("Tiny"),
 			'small' => _l("Small"),
 			'large' => _l("Large"),
@@ -61,20 +72,10 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 
 		$this->data['social_icon_sprite'] = $this->image->get('janrain/rpx-icons16.png');
 
-		$defaults = array(
-			'application_domain' => '',
-			'api_key'            => '',
-			'display_icons'      => array(),
-			'login_redirect'     => '',
-			'logout_redirect'    => '',
-			'integrate_header'   => 0,
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
 		);
-
-		foreach ($defaults as $key => $default) {
-			if (!isset($this->data[$key])) {
-				$this->data[$key] = $default;
-			}
-		}
 
 		$this->data['entry_login_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
 		$this->data['entry_logout_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);

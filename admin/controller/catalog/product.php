@@ -242,7 +242,10 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 			'sort_value'   => 'p.status',
 		);
@@ -557,6 +560,16 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_templates']         = $this->template->getTemplatesFrom('product', false, '');
 		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
 
 		$this->data['text_add_shipping_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
 		$this->data['text_add_return_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));

@@ -38,9 +38,8 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->data['store_name'] = $store['name'];
 		$this->data['store_url']  = $store['url'];
 
-		$this->data['text_subject'] = $this->_('text_subject', $voucher['from_name']);
-		$this->data['text_from']    = $this->_('text_from', $voucher['from_name']);
-		$this->data['text_redeem']  = $this->_('text_redeem', $this->url->store($store['store_id'], 'common/home'), $store['name']);
+		$this->data['from_name'] = $voucher['from_name'];
+		$this->data['redeem_url'] = $this->url->store($store['store_id'], 'common/home');
 
 		$this->data['image'] = $this->image->get($voucher['image']);
 
@@ -55,7 +54,7 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->mail->setBcc($this->config->get('config_email'));
 		$this->mail->setFrom($voucher['from_email']);
 		$this->mail->setSender($store['name']);
-		$this->mail->setSubject(html_entity_decode($this->_('text_subject', $voucher['from_name']), ENT_QUOTES, 'UTF-8'));
+		$this->mail->setSubject(_l("You have been sent a gift voucher from %s", $voucher['from_name']));
 
 		$this->mail->setHtml($this->render());
 

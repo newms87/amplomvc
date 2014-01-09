@@ -28,6 +28,8 @@ abstract class Controller
 
 	public function _($key)
 	{
+		return 'SHOULD NOT SEE THIS!!!!';
+
 		if (func_num_args() > 1) {
 			$args = func_get_args();
 
@@ -107,7 +109,7 @@ abstract class Controller
 		}
 
 		//Build language
-		$this->data += $this->language->data;
+		//$this->data += $this->language->data;
 
 		//Empty Dependencies and Breadcrumbs if an ajax request
 		if ($this->request->isAjax()) {

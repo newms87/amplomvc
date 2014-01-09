@@ -268,14 +268,13 @@ class Admin_Controller_Sale_Order extends Controller
 			}
 		}
 
-		//Additional Information Processing for Template
+		//Template Data
 		foreach ($this->data['order_products'] as &$order_product) {
 			$order_product['options']   = $this->System_Model_Order->getOrderOptions($order_id, $order_product['order_product_id']);
 			$order_product['downloads'] = $this->System_Model_Order->getOrderDownloads($order_id, $order_product['order_product_id']);
 		}
 		unset($order_product);
 
-		//Additional Template Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_stores']         = $this->Model_Setting_Store->getStores();
 		$this->data['data_countries']      = $this->Model_Localisation_Country->getCountries();

@@ -152,7 +152,10 @@ class Admin_Controller_Catalog_Information extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -283,6 +286,11 @@ class Admin_Controller_Catalog_Information extends Controller
 		//Data Lists
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = array('' => $this->_('text_none')) + $this->Model_Design_Layout->getLayouts();
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
 
 		//Action Buttons
 		if ($information_id) {

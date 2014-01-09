@@ -4,15 +4,15 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Your Transactions"); ?></h1>
 
-		<p><?= $text_total; ?><b> <?= $total; ?></b>.</p>
+		<p><?= _l("Your current balance is:"); ?><b> <?= $total; ?></b>.</p>
 		<table class="list">
 			<thead>
 			<tr>
-				<td class="left"><?= $column_date_added; ?></td>
-				<td class="left"><?= $column_description; ?></td>
-				<td class="right"><?= $column_amount; ?></td>
+				<td class="left"><?= _l("Date Added"); ?></td>
+				<td class="left"><?= _l("Description"); ?></td>
+				<td class="right"><?= _l("Amount (%s)", $amount); ?></td>
 			</tr>
 			</thead>
 			<tbody>
@@ -26,14 +26,14 @@
 				<? } ?>
 			<? } else { ?>
 				<tr>
-					<td class="center" colspan="5"><?= $text_empty; ?></td>
+					<td class="center" colspan="5"><?= _l("You do not have any transactions!"); ?></td>
 				</tr>
 			<? } ?>
 			</tbody>
 		</table>
 		<div class="pagination"><?= $pagination; ?></div>
 		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
 		<?= $content_bottom; ?>

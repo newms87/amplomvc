@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->set('voucher', $_POST['voucher']);
 
-			$this->message->add('success', $this->_('text_voucher'));
+			$this->message->add('success', _l("Success: Your gift voucher discount has been applied!"));
 		}
 
 		$defaults = array(
@@ -36,7 +36,7 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 		$voucher_info = $this->System_Model_Voucher->getVoucherByCode($_POST['voucher']);
 
 		if (!$voucher_info) {
-			$this->error['warning'] = $this->_('error_voucher');
+			$this->error['warning'] = _l("Warning: Gift Voucher is either invalid or the balance has been used up!");
 		}
 
 		return $this->error ? false : true;

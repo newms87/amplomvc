@@ -14,11 +14,11 @@ class Catalog_Controller_Account_Logout extends Controller
 
 		$this->language->load('account/logout');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Account Logout"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_logout'), $this->url->link('account/logout'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Logout"), $this->url->link('account/logout'));
 
 		$this->data['continue'] = $this->url->link('common/home');
 

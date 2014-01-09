@@ -13,13 +13,13 @@ class Catalog_Controller_Account_Transaction extends Controller
 
 		$this->language->load('account/transaction');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Your Transactions"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_transaction'), $this->url->link('account/transaction'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Your Transactions"), $this->url->link('account/transaction'));
 
-		$this->_('column_amount', $this->config->get('config_currency'));
+		$this->data['amount'] = $this->config->get('config_currency');
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];

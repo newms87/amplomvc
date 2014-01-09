@@ -1,48 +1,39 @@
 <?= $header; ?>
-<? if ($error_warning) { ?>
-	<div class="message_box warning"><?= $error_warning; ?></div>
-<? } ?>
 <?= $column_left; ?><?= $column_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Purchase a Gift Certificate"); ?></h1>
 
-		<p><?= $text_description; ?></p>
+		<p><?= _l("This gift certificate will be emailed to the recipient after your order has been paid for."); ?></p>
 
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 			<table class="form">
 				<tr>
-					<td class="required"> <?= $entry_to_name; ?></td>
+					<td class="required"> <?= _l("Recipient's Name:"); ?></td>
 					<td><input type="text" name="to_name" value="<?= $to_name; ?>"/>
-						<? if ($error_to_name) { ?>
-							<span class="error"><?= $error_to_name; ?></span>
+						<? if (_l("Recipient's Name must be between 1 and 64 characters!")) { ?>
+							<span class="error"><?= _l("Recipient's Name must be between 1 and 64 characters!"); ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
-					<td class="required"> <?= $entry_to_email; ?></td>
-					<td><input type="text" name="to_email" value="<?= $to_email; ?>"/>
-						<? if ($error_to_email) { ?>
-							<span class="error"><?= $error_to_email; ?></span>
-						<? } ?></td>
+					<td class="required"> <?= _l("Recipient's Email:"); ?></td>
+					<td><input type="text" name="to_email" value="<?= $to_email; ?>"/></td>
 				</tr>
 				<tr>
-					<td class="required"> <?= $entry_from_name; ?></td>
+					<td class="required"> <?= _l("Your Name:"); ?></td>
 					<td><input type="text" name="from_name" value="<?= $from_name; ?>"/>
-						<? if ($error_from_name) { ?>
-							<span class="error"><?= $error_from_name; ?></span>
+						<? if (_l("Your Name must be between 1 and 64 characters!")) { ?>
+							<span class="error"><?= _l("Your Name must be between 1 and 64 characters!"); ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
-					<td class="required"> <?= $entry_from_email; ?></td>
-					<td><input type="text" name="from_email" value="<?= $from_email; ?>"/>
-						<? if ($error_from_email) { ?>
-							<span class="error"><?= $error_from_email; ?></span>
-						<? } ?></td>
+					<td class="required"> <?= _l("Your Email:"); ?></td>
+					<td><input type="text" name="from_email" value="<?= $from_email; ?>"/></td>
 				</tr>
 				<tr>
-					<td class="required"> <?= $entry_theme; ?></td>
+					<td class="required"> <?= _l("Gift Certificate Theme:"); ?></td>
 					<td><? foreach ($voucher_themes as $voucher_theme) { ?>
 							<? if ($voucher_theme['voucher_theme_id'] == $voucher_theme_id) { ?>
 								<input type="radio" name="voucher_theme_id" value="<?= $voucher_theme['voucher_theme_id']; ?>"
@@ -57,35 +48,37 @@
 							<? } ?>
 							<br/>
 						<? } ?>
-						<? if ($error_theme) { ?>
-							<span class="error"><?= $error_theme; ?></span>
+						<? if (_l("You must select a theme!")) { ?>
+							<span class="error"><?= _l("You must select a theme!"); ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
-					<td><?= $entry_message; ?></td>
+					<td><?= _l("Message:<br /><span class=\"help\">(Optional)</span>"); ?></td>
 					<td><textarea name="message" cols="40" rows="5"><?= $message; ?></textarea></td>
 				</tr>
 				<tr>
-					<td class="required"> <?= $entry_amount; ?></td>
-					<td><input type="text" name="amount" value="<?= $amount; ?>" size="5"/>
-						<? if ($error_amount) { ?>
-							<span class="error"><?= $error_amount; ?></span>
-						<? } ?></td>
+					<td class="required">
+						<?= _l("Amount:"); ?>
+						<span class="help"><?= _l("(Value must be between %s and %s)", $amount_min, $amount_max); ?></span>
+					</td>
+					<td><input type="text" name="amount" value="<?= $amount; ?>" size="5"/></td>
 				</tr>
 			</table>
 			<div class="buttons">
-				<div class="right"><?= $text_agree; ?>
+				<div class="right"><?= _l("I understand that gift certificates are non-refundable."); ?>
 					<? if ($agree) { ?>
 						<input type="checkbox" name="agree" value="1" checked="checked"/>
 					<? } else { ?>
 						<input type="checkbox" name="agree" value="1"/>
 					<? } ?>
-					<input type="submit" value="<?= $button_continue; ?>" class="button"/>
+					<input type="submit" value="<?= _l("Continue"); ?>" class="button"/>
 				</div>
 			</div>
 		</form>
 
 		<?= $content_bottom; ?>
 	</div>
+
+<?= $this->builder->js('errors', $errors); ?>
 
 <?= $footer; ?>

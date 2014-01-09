@@ -6,45 +6,45 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= _l("Tax Rates"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Tax Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>"/>
-								<? if ($error_name) { ?>
-									<span class="error"><?= $error_name; ?></span>
+								<? if (_l("Tax Name must be between 3 and 32 characters!")) { ?>
+									<span class="error"><?= _l("Tax Name must be between 3 and 32 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_rate; ?></td>
+							<td class="required"> <?= _l("Tax Rate:"); ?></td>
 							<td><input type="text" name="rate" value="<?= $rate; ?>"/>
-								<? if ($error_rate) { ?>
-									<span class="error"><?= $error_rate; ?></span>
+								<? if (_l("Tax Rate required!")) { ?>
+									<span class="error"><?= _l("Tax Rate required!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_type; ?></td>
+							<td><?= _l("Type:"); ?></td>
 							<td><select name="type">
 									<? if ($type == 'P') { ?>
-										<option value="P" selected="selected"><?= $text_percent; ?></option>
+										<option value="P" selected="selected"><?= _l("Percentage"); ?></option>
 									<? } else { ?>
-										<option value="P"><?= $text_percent; ?></option>
+										<option value="P"><?= _l("Percentage"); ?></option>
 									<? } ?>
 									<? if ($type == 'F') { ?>
-										<option value="F" selected="selected"><?= $text_amount; ?></option>
+										<option value="F" selected="selected"><?= _l("Fixed Amount"); ?></option>
 									<? } else { ?>
-										<option value="F"><?= $text_amount; ?></option>
+										<option value="F"><?= _l("Fixed Amount"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_customer_group; ?></td>
+							<td><?= _l("Customer Group:"); ?></td>
 							<td>
 								<div class="scrollbox">
 									<? $class = 'even'; ?>
@@ -64,7 +64,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_geo_zone; ?></td>
+							<td><?= _l("Geo Zone:"); ?></td>
 							<td><select name="geo_zone_id">
 									<? foreach ($geo_zones as $geo_zone) { ?>
 										<? if ($geo_zone['geo_zone_id'] == $geo_zone_id) { ?>

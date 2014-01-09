@@ -220,6 +220,11 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_geo_zones']      = array(0 => _l("All Zones")) + $this->Model_Localisation_GeoZone->getGeoZones();
 
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/shipping', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/shipping');

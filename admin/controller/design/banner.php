@@ -223,6 +223,11 @@ class Admin_Controller_Design_Banner extends Controller
 			);
 		}
 
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 
 		$this->children = array(

@@ -43,7 +43,7 @@
 
 	<div id="loading_details" style="display:none">
 		<div class="loader"></div>
-		<span class="loading_message"><?= $text_loading_details; ?></span>
+		<span class="loading_message"><?= _l("Please wait while we update your order totals."); ?></span>
 	</div>
 
 	<script type="text/javascript">

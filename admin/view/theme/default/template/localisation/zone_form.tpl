@@ -6,27 +6,27 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Zones"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Zone Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>"/>
-								<? if ($error_name) { ?>
-									<span class="error"><?= $error_name; ?></span>
+								<? if (_l("Zone Name must be between 3 and 128 characters!")) { ?>
+									<span class="error"><?= _l("Zone Name must be between 3 and 128 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_code; ?></td>
+							<td><?= _l("Zone Code:"); ?></td>
 							<td><input type="text" name="code" value="<?= $code; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_country; ?></td>
+							<td><?= _l("Country:"); ?></td>
 							<td><select name="country_id">
 									<? foreach ($countries as $country) { ?>
 										<? if ($country['country_id'] == $country_id) { ?>
@@ -39,14 +39,14 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Zone Status:"); ?></td>
 							<td><select name="status">
 									<? if ($status) { ?>
-										<option value="1" selected="selected"><?= $text_enabled; ?></option>
-										<option value="0"><?= $text_disabled; ?></option>
+										<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
+										<option value="0"><?= _l("Disabled"); ?></option>
 									<? } else { ?>
-										<option value="1"><?= $text_enabled; ?></option>
-										<option value="0" selected="selected"><?= $text_disabled; ?></option>
+										<option value="1"><?= _l("Enabled"); ?></option>
+										<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>

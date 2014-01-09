@@ -25,10 +25,10 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 
 			//Sort
 			$sorts = array(
-				'sort=p.name&order=ASC'  => $this->_('text_name_asc'),
-				'sort=p.name&order=DESC' => $this->_('text_name_desc'),
-				'sort=price&order=ASC'   => $this->_('text_price_asc'),
-				'sort=price&order=DESC'  => $this->_('text_price_desc'),
+				'sort=p.name&order=ASC'  => _l("Name (A - Z)"),
+				'sort=p.name&order=DESC' => _l("Name (Z - A)"),
+				'sort=price&order=ASC'   => _l("Price (Low &gt; High)"),
+				'sort=price&order=DESC'  => _l("Price (High &gt; Low)"),
 			);
 
 			$this->data['sorts'] = $this->sort->render_sort($sorts);

@@ -40,7 +40,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					//TODO: Override disabled, find new approach
 					$this->customer->login($customer_info['email'], '', true);
 				} else {
-					$json['error']['customer'] = $this->_('error_customer');
+					$json['error']['customer'] = _l("Warning: Can not find selected customer!");
 				}
 			}
 
@@ -89,7 +89,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 					foreach ($product_options as $product_option) {
 						if ($product_option['required'] && empty($option[$product_option['product_option_id']])) {
-							$json['error']['product']['option'][$product_option['product_option_id']] = sprintf($this->_('error_required'), $product_option['name']);
+							$json['error']['product']['option'][$product_option['product_option_id']] = sprintf(_l("Please select a %s."), $product_option['name']);
 						}
 					}
 
@@ -100,7 +100,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			}
 
 			if (!$this->cart->hasStock() && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
-				$json['error']['product']['stock'] = $this->_('error_stock');
+				$json['error']['product']['stock'] = _l("Products marked with *** are not available in the desired quantity or not in stock!");
 			}
 
 			// Tax
@@ -128,7 +128,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				}
 
 				if ($product['minimum'] > $product_total) {
-					$json['error']['product']['minimum'][] = sprintf($this->_('error_minimum'), $product['name'], $product['minimum']);
+					$json['error']['product']['minimum'][] = sprintf(_l("Minimum order amount for %s is %s!"), $product['name'], $product['minimum']);
 				}
 
 				$option_data = array();
@@ -191,23 +191,23 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			// Add a new voucher if set
 			if (isset($_POST['from_name']) && isset($_POST['from_email']) && isset($_POST['to_name']) && isset($_POST['to_email']) && isset($_POST['amount'])) {
 				if ((strlen($_POST['from_name']) < 1) || (strlen($_POST['from_name']) > 64)) {
-					$json['error']['vouchers']['from_name'] = $this->_('error_from_name');
+					$json['error']['vouchers']['from_name'] = _l("Your Name must be between 1 and 64 characters!");
 				}
 
 				if ((strlen($_POST['from_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['from_email'])) {
-					$json['error']['vouchers']['from_email'] = $this->_('error_email');
+					$json['error']['vouchers']['from_email'] = _l("E-Mail Address does not appear to be valid!");
 				}
 
 				if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
-					$json['error']['vouchers']['to_name'] = $this->_('error_to_name');
+					$json['error']['vouchers']['to_name'] = _l("Recipient's Name must be between 1 and 64 characters!");
 				}
 
 				if ((strlen($_POST['to_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['to_email'])) {
-					$json['error']['vouchers']['to_email'] = $this->_('error_email');
+					$json['error']['vouchers']['to_email'] = _l("E-Mail Address does not appear to be valid!");
 				}
 
 				if (($_POST['amount'] < 1) || ($_POST['amount'] > 1000)) {
-					$json['error']['vouchers']['amount'] = sprintf($this->_('error_amount'), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->config->get('config_currency'));
+					$json['error']['vouchers']['amount'] = sprintf(_l("Amount must be between %s and %s!"), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->config->get('config_currency'));
 				}
 
 				if (!isset($json['error']['vouchers'])) {
@@ -228,7 +228,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 					$this->session->data['vouchers'][] = array(
 						'voucher_id'       => $voucher_id,
-						'description'      => sprintf($this->_('text_for'), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
+						'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
 						'code'             => substr(md5(rand()), 0, 7),
 						'from_name'        => $_POST['from_name'],
 						'from_email'       => $_POST['from_email'],
@@ -265,21 +265,21 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
-					$json['error']['shipping']['postcode'] = $this->_('error_postcode');
+					$json['error']['shipping']['postcode'] = _l("Postcode must be between 2 and 10 characters!");
 				}
 
 				if ($_POST['shipping_country_id'] == '') {
-					$json['error']['shipping']['country'] = $this->_('error_country');
+					$json['error']['shipping']['country'] = _l("Please select a country!");
 				}
 
 				if ($_POST['shipping_zone_id'] == '') {
-					$json['error']['shipping']['zone'] = $this->_('error_zone');
+					$json['error']['shipping']['zone'] = _l("Please select a region / state!");
 				}
 
 				$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
-					$json['error']['shipping']['postcode'] = $this->_('error_postcode');
+					$json['error']['shipping']['postcode'] = _l("Postcode must be between 2 and 10 characters!");
 				}
 
 				if (!isset($json['error']['shipping'])) {
@@ -350,15 +350,15 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					array_multisort($sort_order, SORT_ASC, $json['shipping_method']);
 
 					if (!$json['shipping_method']) {
-						$json['error']['shipping_method'] = $this->_('error_no_shipping');
+						$json['error']['shipping_method'] = _l("Warning: No Shipping options are available!");
 					} else {
 						if (!$_POST['shipping_code']) {
-							$json['error']['shipping_method'] = $this->_('error_shipping');
+							$json['error']['shipping_method'] = _l("Warning: Shipping method required!");
 						} else {
 							$shipping = explode('.', $_POST['shipping_code']);
 
 							if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($json['shipping_method'][$shipping[0]]['quote'][$shipping[1]])) {
-								$json['error']['shipping_method'] = $this->_('error_shipping');
+								$json['error']['shipping_method'] = _l("Warning: Shipping method required!");
 							} else {
 								$this->session->set('shipping_method', $json['shipping_method'][$shipping[0]]['quote'][$shipping[1]]);
 							}
@@ -374,7 +374,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				if ($coupon_info) {
 					$this->session->data['coupons'][$_POST['coupon']] = $coupon_info;
 				} else {
-					$json['error']['coupon'] = $this->_('error_coupon');
+					$json['error']['coupon'] = _l("Warning: Coupon is either invalid, expired or reached it's usage limit!");
 				}
 			}
 
@@ -385,7 +385,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				if ($voucher_info) {
 					$this->session->set('voucher', $_POST['voucher']);
 				} else {
-					$json['error']['voucher'] = $this->_('error_voucher');
+					$json['error']['voucher'] = _l("Warning: Gift Voucher is either invalid or the balance has been used up!");
 				}
 			}
 
@@ -394,7 +394,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				$points = $this->customer->getRewardPoints();
 
 				if ($_POST['reward'] > $points) {
-					$json['error']['reward'] = sprintf($this->_('error_points'), $_POST['reward']);
+					$json['error']['reward'] = sprintf(_l("Warning: You don't have %s reward points!"), $_POST['reward']);
 				}
 
 				if (!isset($json['error']['reward'])) {
@@ -407,7 +407,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					}
 
 					if ($_POST['reward'] > $points_total) {
-						$json['error']['reward'] = sprintf($this->_('error_maximum'), $points_total);
+						$json['error']['reward'] = sprintf(_l("Warning: The maximum number of points that can be applied is %s!"), $points_total);
 					}
 
 					if (!isset($json['error']['reward'])) {
@@ -448,11 +448,11 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 			// Payment
 			if ($_POST['payment_country_id'] == '') {
-				$json['error']['payment']['country'] = $this->_('error_country');
+				$json['error']['payment']['country'] = _l("Please select a country!");
 			}
 
 			if ($_POST['payment_zone_id'] == '') {
-				$json['error']['payment']['zone'] = $this->_('error_zone');
+				$json['error']['payment']['zone'] = _l("Please select a region / state!");
 			}
 
 			if (!isset($json['error']['payment'])) {
@@ -524,22 +524,22 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				array_multisort($sort_order, SORT_ASC, $json['payment_method']);
 
 				if (!$json['payment_method']) {
-					$json['error']['payment_method'] = $this->_('error_no_payment');
+					$json['error']['payment_method'] = _l("Warning: No Payment options are available!");
 				} else {
 					if (!$_POST['payment_code']) {
-						$json['error']['payment_method'] = $this->_('error_payment');
+						$json['error']['payment_method'] = _l("Warning: Payment method required!");
 					} else {
 						if (!isset($json['payment_method'][$_POST['payment_code']])) {
-							$json['error']['payment_method'] = $this->_('error_payment');
+							$json['error']['payment_method'] = _l("Warning: Payment method required!");
 						}
 					}
 				}
 			}
 
 			if (!isset($json['error'])) {
-				$json['success'] = $this->_('text_success');
+				$json['success'] = _l("Order totals has been successfully re-calculated!");
 			} else {
-				$json['error']['warning'] = $this->_('error_warning');
+				$json['error']['warning'] = _l("Warning: Please check the form carefully for errors!");
 			}
 
 			// Reset everything
@@ -555,7 +555,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			unset($this->session->data['voucher']);
 			unset($this->session->data['vouchers']);
 		} else {
-			$json['error']['warning'] = $this->_('error_permission');
+			$json['error']['warning'] = _l("You do not have permission to access this page, please refer to your system administrator.");
 		}
 
 		$this->response->setOutput(json_encode($json));

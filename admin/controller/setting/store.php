@@ -92,7 +92,10 @@ class Admin_Controller_Setting_Store extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -280,6 +283,18 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['informations']         = $this->Model_Catalog_Information->getInformations();
 		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
 		$this->data['data_pages']           = array('' => $this->_('text_select')) + $this->Model_Page_Page->getPages();
+
+		$_['data_stock_display_types'] = array(
+			'hide'   => _l("Do not display stock"),
+			'status' => _l("Only show stock status"),
+			-1       => _l("Display stock quantity available"),
+			10       => _l("Display quantity up to 10"),
+		);
+
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/store/update', 'store_id=' . $store_id);

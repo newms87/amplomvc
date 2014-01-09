@@ -30,7 +30,7 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->data['product_id'] = $product_id;
 
 		//Build Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 
 		$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
 
@@ -71,19 +71,30 @@ class Catalog_Controller_Product_Product extends Controller
 		//Stock
 		$stock_type = $this->config->get('config_stock_display');
 
-		if ($stock_type == 'hide') {
+		if ($stock_type === 'hide') {
 			$this->data['stock_type'] = "";
-		} elseif (!$this->data['is_purchasable']) {
-			$this->data['stock'] = $this->_('text_stock_inactive');
-		} elseif ($product_info['quantity'] <= 0) {
+			$this->data['stock_class'] = 'hidden';
+		}
+		elseif (!$this->data['is_purchasable']) {
+			$this->data['stock'] = _l("currently not available");
+			$this->data['stock_class'] = 'unavailable';
+		}
+		elseif ($product_info['quantity'] <= 0) {
 			$this->data['stock'] = $product_info['stock_status'];
-		} else {
-			if ($stock_type == 'status') {
-				$this->data['stock'] = $this->_('text_instock');
-			} elseif ((int)$product_info['quantity'] > (int)$stock_type) {
-				$this->data['stock'] = $this->_('text_more_stock', (int)$stock_type);
-			} elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
-				$this->data['stock'] = $this->_('text_less_stock', (int)$product_info['quantity']);
+			$this->data['stock_class'] = 'stock_empty';
+		}
+		else {
+			if ($stock_type === 'status') {
+				$this->data['stock'] = _l("In Stock");
+				$this->data['stock_class'] = 'available';
+			}
+			elseif ((int)$product_info['quantity'] > (int)$stock_type) {
+				$this->data['stock'] = _l("More than %d available", (int)$stock_type);
+				$this->data['stock_class'] = 'surplus';
+			}
+			elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
+				$this->data['stock'] = _l("Only %d left!", (int)$product_info['quantity']);
+				$this->data['stock_class'] = 'limited_qty';
 			}
 		}
 
@@ -115,7 +126,6 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//customers must order at least 1 of this product
 		$this->data['minimum'] = max((int)$product_info['minimum'], 1);
-		$this->_('text_minimum', $product_info['minimum']);
 
 		//Product Review
 		if ($this->config->get('config_review_status')) {
@@ -135,18 +145,18 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->data['is_default_return_policy']   = $product_info['return_policy_id'] == $this->config->get('config_default_return_policy');
 
 		if ($this->data['return_policy']['days'] < 0) {
-			$this->data['is_final_explanation'] = $this->_('final_sale_explanation', $this->url->link('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
+			$this->data['is_final_explanation'] = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", $this->url->link('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
 		}
 
 		//Links
-		$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
-		$this->_('text_keep_shopping', $this->url->link('product/category'));
+		$product_info['category']['url'] = $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']);
+		$this->data['category'] = $product_info['category'];
+
+		$this->data['keep_shopping'] = $this->url->link('product/category');
 
 		$this->data['view_cart_link']         = $this->url->link('cart/cart');
 		$this->data['checkout_link']          = $this->url->link('checkout/checkout');
 		$this->data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
-
-		$this->_('error_add_to_cart', $this->config->get('config_email'));
 
 		//Product Images
 		$image_width             = $this->config->get('config_image_thumb_width');
@@ -186,11 +196,9 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$this->data['images'] = $images;
 
-		//Additional Information
+		//Template Data
 		if ($this->config->get('config_shipping_return_info_id')) {
-			$this->_('text_view_policies', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id')));
-		} else {
-			$this->data['text_view_policies'] = '';
+			$this->data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 		}
 
 		if ($this->config->get('config_show_product_attributes')) {
@@ -222,8 +230,6 @@ class Catalog_Controller_Product_Product extends Controller
 
 			$tag['href'] = $this->url->link('product/search', $url_query);
 		}
-
-		$this->_('text_on_store', $this->config->get('config_name'));
 
 		$this->data['tags'] = $tags;
 

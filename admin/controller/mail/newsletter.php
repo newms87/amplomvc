@@ -113,7 +113,10 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			'display_name' => $this->_('column_status'),
 			'type'         => 'select',
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 

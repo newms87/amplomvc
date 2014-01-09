@@ -12,7 +12,7 @@
 						title="<?= $head_title; ?>" class="zoombox" rel="gal1">
 						<img src="<?= $thumb; ?>" title="<?= $head_title; ?>" alt="<?= $head_title; ?>" id="image"/>
 					</a>
-					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= $text_view_full_size_image; ?></a>
+					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= _l("View Full Sized Image"); ?></a>
 				</div>
 			<? } ?>
 
@@ -37,21 +37,21 @@
 			<div class="description">
 				<? if ($manufacturer) { ?>
 					<div class="description_manufacturer">
-						<span class="view_more"><?= $text_view_more; ?></span>
-						<span class="keep_shopping"><?= $text_keep_shopping; ?></span>
+						<span class="view_more"><a href="<?= $category['url']; ?>"><?= _l("view all from %s", $category['name']); ?></a></span>
+						<span class="keep_shopping"><?= _l("or"); ?> <a href="<?= $keep_shopping; ?>"><?= _l("Return to Catalog"); ?></a></span>
 					</div>
 				<? } ?>
 
 				<? if ($display_model) { ?>
 					<div class="description_model">
-						<span><?= $text_model; ?></span>
+						<span><?= _l("Model:"); ?></span>
 						<span><?= $model; ?></span>
 					</div>
 				<? } ?>
 
 				<? if ($price && $is_purchasable) { ?>
 					<div class="price">
-						<?= $text_price; ?>
+						<?= _l(""); ?>
 
 						<? if (empty($special)) { ?>
 							<span class="regular"><?= $price; ?></span>
@@ -78,18 +78,18 @@
 							</div>
 						<? } ?>
 
-						<br class="clear" />
+						<br class="clear"/>
 						<? if (!empty($tax)) { ?>
-							<span class="price-tax"><?= $text_tax; ?> <?= $tax; ?></span><br/>
+							<span class="price-tax"><?= _l("Ex Tax:"); ?> <?= $tax; ?></span><br/>
 						<? } ?>
 						<? if ($points) { ?>
-							<span class="reward"><small><?= $text_points; ?> <?= $points; ?></small></span><br/>
+							<span class="reward"><small><?= _l("Price in reward points:"); ?> <?= $points; ?></small></span><br/>
 						<? } ?>
 						<? if ($discounts) { ?>
 							<br/>
 							<div class="discount">
 								<? foreach ($discounts as $discount) { ?>
-									<?= sprintf($text_discount, $discount['quantity'], $discount['price']); ?><br/>
+									<?= _l("%s or more %s", $discount['quantity'], $discount['price']); ?><br/>
 								<? } ?>
 							</div>
 						<? } ?>
@@ -97,11 +97,16 @@
 				<? } ?>
 
 				<? if ($reward) { ?>
-					<div class="description_reward"><span><?= $text_reward; ?></span><span><?= $reward; ?></span></div>
+					<div class="description_reward"><span><?= _l("Reward Points:"); ?></span><span><?= $reward; ?></span></div>
 				<? } ?>
+
 				<? if (!empty($stock)) { ?>
-					<div class="description_stock"><span><?= $text_stock; ?></span><span><?= $stock; ?></span></div>
+					<div class="description_stock <?= $stock_class; ?>">
+						<span class="text"><?= _l("Availability:"); ?></span>
+						<span class="stock"><?= $stock; ?></span>
+					</div>
 				<? } ?>
+
 				<? if ($description) { ?>
 					<div class="product_description">
 						<div class="scroll_wrapper">
@@ -128,23 +133,23 @@
 									<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button_buy_now" class="button"/>
 									<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button_add_to_cart" class="button"/>
 								</div>
-								<div id="processing_product" class="hidden"><?= $text_processing; ?></div>
+								<div id="processing_product" class="hidden"><?= _l("Processing... please wait."); ?></div>
 							</div>
 						</div>
 
 						<div id="cart_additional_buttons">
 							<a href="<?= $view_cart_link; ?>"><?= _l("View Cart"); ?></a>
 							<a href="<?= $checkout_link; ?>"><?= _l("Checkout"); ?></a>
-							<a href="<?= $continue_shopping_link; ?>"><?= $button_shopping; ?></a>
+							<a href="<?= $continue_shopping_link; ?>"><?= _l("Continue Shopping"); ?></a>
 						</div>
 						<? if ($minimum > 1) { ?>
-							<div class="minimum"><?= $text_minimum; ?></div>
+							<div class="minimum"><?= _l("This product has a minimum quantity of %s", $minimum); ?></div>
 						<? } ?>
 					</div>
 				</form>
 
 			<? } else { ?>
-				<div id="product_inactive"><?= $text_inactive; ?></div>
+				<div id="product_inactive"><?= _l("This product is currently unavailable."); ?></div>
 			<? } ?>
 
 			<? if (!empty($block_review)) { ?>
@@ -160,13 +165,13 @@
 	<div id="additional_information">
 		<div id="product_additional_tabs" class="htabs">
 			<? if ($information) { ?>
-				<a href="#tab-information"><?= $tab_information; ?></a>
+				<a href="#tab-information"><?= _l("More Info"); ?></a>
 			<? } ?>
 
-			<a href="#tab-shipping-return"><?= $tab_shipping_return; ?></a>
+			<a href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
 
 			<? if (!empty($attribute_groups)) { ?>
-				<a href="#tab-attribute"><?= $tab_attribute; ?></a>
+				<a href="#tab-attribute"><?= _l("Additional Information"); ?></a>
 			<? } ?>
 		</div>
 
@@ -193,7 +198,13 @@
 				<p class="final_sale_explain"><?= $is_final_explanation; ?></p>
 			<? } ?>
 
-			<?= $text_view_policies; ?>
+			<? if (!empty($policies)) { ?>
+				<p>
+					<?= _l("Please see our"); ?>
+					<a onclick="return colorbox($(this))" href="<?= $policies; ?>"><?= _l("Shipping & Return Policy"); ?></a>
+					<?= _l("for more information."); ?>
+				</p>
+			<? } ?>
 		</div>
 
 		<? if (!empty($attribute_groups)) { ?>
@@ -220,7 +231,7 @@
 	</div>
 
 	<? if (!empty($tags)) { ?>
-		<div class="tags"><b><?= $text_tags; ?></b>
+		<div class="tags"><b><?= _l("Tags:"); ?></b>
 			<? foreach ($tags as $i => $tag) { ?>
 				<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
 			<? } ?>
@@ -274,7 +285,7 @@
 			position: 'right',
 			xOffset: 25,
 			yOffset: 0,
-			preloadText: '<?= $text_zoombox_load; ?>'
+			preloadText: '<?= _l("Grabbing off the rack..."); ?>'
 		});
 	});
 

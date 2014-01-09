@@ -2,14 +2,6 @@
 // Heading
 $_['head_title'] = 'Settings';
 
-//Data
-$_['data_stock_display_types'] = array(
-	'hide'   => "Do not display stock",
-	'status' => "Only show stock status",
-	-1       => "Display stock quantity available",
-	10       => "Display quantity up to 10",
-);
-
 // Text
 $_['text_success']       = 'Success: You have modified settings!';
 $_['text_image_manager'] = 'Image Manager';

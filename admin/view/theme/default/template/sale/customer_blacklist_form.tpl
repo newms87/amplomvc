@@ -6,19 +6,19 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer IP Blacklist"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_ip; ?></td>
+							<td class="required"> <?= _l("IP:"); ?></td>
 							<td><input type="text" name="ip" value="<?= $ip; ?>"/>
-								<? if ($error_ip) { ?>
-									<span class="error"><?= $error_ip; ?></span>
+								<? if (_l("IP must be between 1 and 15 characters!")) { ?>
+									<span class="error"><?= _l("IP must be between 1 and 15 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 					</table>

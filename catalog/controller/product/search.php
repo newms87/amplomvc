@@ -64,12 +64,12 @@ class Catalog_Controller_Product_Search extends Controller
 		}
 
 		if (isset($_GET['keyword'])) {
-			$this->document->setTitle($this->_('head_title') . ' - ' . $_GET['keyword']);
+			$this->document->setTitle(_l("Search") . ' - ' . $_GET['keyword']);
 		} else {
-			$this->document->setTitle($this->_('head_title'));
+			$this->document->setTitle(_l("Search"));
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 
 		$url = '';
 
@@ -109,7 +109,7 @@ class Catalog_Controller_Product_Search extends Controller
 			$url .= '&limit=' . $_GET['limit'];
 		}
 
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('product/search', $url));
+		$this->breadcrumb->add(_l("Search"), $this->url->link('product/search', $url));
 
 		$this->_('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['compare'] = $this->url->link('product/compare');
@@ -209,7 +209,7 @@ class Catalog_Controller_Product_Search extends Controller
 					'special'     => $special,
 					'tax'         => $tax,
 					'rating'      => $result['rating'],
-					'reviews'     => sprintf($this->_('text_reviews'), (int)$result['reviews']),
+					'reviews'     => sprintf(_l("Based on %s reviews."), (int)$result['reviews']),
 					'href'        => $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
 				);
 			}
@@ -243,57 +243,57 @@ class Catalog_Controller_Product_Search extends Controller
 			$this->data['sorts'] = array();
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_default'),
+				'text'  => _l("Default"),
 				'value' => 'p.sort_order-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url)
 			);
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_name_asc'),
+				'text'  => _l("Name (A - Z)"),
 				'value' => 'p.name-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.name&order=ASC' . $url)
 			);
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_name_desc'),
+				'text'  => _l("Name (Z - A)"),
 				'value' => 'p.name-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.name&order=DESC' . $url)
 			);
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_price_asc'),
+				'text'  => _l("Price (Low &gt; High)"),
 				'value' => 'p.price-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.price&order=ASC' . $url)
 			);
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_price_desc'),
+				'text'  => _l("Price (High &gt; Low)"),
 				'value' => 'p.price-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.price&order=DESC' . $url)
 			);
 
 			if ($this->config->get('config_review_status')) {
 				$this->data['sorts'][] = array(
-					'text'  => $this->_('text_rating_desc'),
+					'text'  => _l("Rating (Highest)"),
 					'value' => 'rating-DESC',
 					'href'  => $this->url->link('product/search', 'sort=rating&order=DESC' . $url)
 				);
 
 				$this->data['sorts'][] = array(
-					'text'  => $this->_('text_rating_asc'),
+					'text'  => _l("Rating (Lowest)"),
 					'value' => 'rating-ASC',
 					'href'  => $this->url->link('product/search', 'sort=rating&order=ASC' . $url)
 				);
 			}
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_model_asc'),
+				'text'  => _l("Model (A - Z)"),
 				'value' => 'p.model-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.model&order=ASC' . $url)
 			);
 
 			$this->data['sorts'][] = array(
-				'text'  => $this->_('text_model_desc'),
+				'text'  => _l("Model (Z - A)"),
 				'value' => 'p.model-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.model&order=DESC' . $url)
 			);

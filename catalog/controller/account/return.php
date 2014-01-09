@@ -13,11 +13,11 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$this->language->load('account/return');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return'));
 
 		$sort_filter = $this->sort->getQueryDefaults('date_added', 'ASC');
 
@@ -32,6 +32,13 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$this->data['returns'] = $returns;
 
+		//Template Data
+		$this->data['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $return_total;
 
@@ -65,24 +72,24 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
 
-		$this->document->setTitle($this->_('text_return'));
+		$this->document->setTitle(_l("Return Information"));
 
 		$url_query = $this->url->getQuery('page');
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return', $url_query));
-		$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return', $url_query));
+		$this->breadcrumb->add(_l("Return Information"), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
 
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 
 		if ($return_info) {
 			$this->template->load('account/return_info');
-			$this->language->set('head_title', $this->_('text_return'));
+			$this->language->set('head_title', _l("Return Information"));
 
 			$return_info['comment']       = nl2br($return_info['comment']);
-			$return_info['opened']        = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
+			$return_info['opened']        = $return_info['opened'] ? _l("Yes") : _l("No");
 			$return_info['return_status'] = $this->order->getReturnStatus($return_info['return_status_id']);
 
 			$this->data = $return_info;
@@ -116,7 +123,7 @@ class Catalog_Controller_Account_Return extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->set('head_title', $this->_('text_return'));
+			$this->language->set('head_title', _l("Return Information"));
 
 			$this->data['continue'] = $this->url->link('account/return');
 
@@ -164,13 +171,13 @@ class Catalog_Controller_Account_Return extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Product Returns"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return/insert'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Returns"), $this->url->link('account/return'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return/insert'));
 
 		//The Data
 		if ($this->request->isPost()) {
@@ -190,7 +197,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 					//If the lookup email does not match the order email, customer may not view this order
 					if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
-						$this->message->add('warning', $this->_('error_invalid_order_id', $order_id));
+						$this->message->add('warning', _l("This order ID %s is associated with another account! Please login to that account to request a return.", $order_id));
 						$this->url->redirect('account/return/insert');
 					}
 				} //This order belongs to this customer, so they may request an exchange
@@ -227,12 +234,12 @@ class Catalog_Controller_Account_Return extends Controller
 					$return_policy = $this->cart->getReturnPolicy($product_info['return_policy_id']);
 
 					if ($return_policy['days'] < 0) {
-						$product['no_return'] = $this->_('text_is_final');
+						$product['no_return'] = _l("Final Sale");
 					} else {
 						$return_date = $this->date->add($order_info['date_added'], $return_policy['days'] . ' days');
 
 						if ($this->date->isInPast($return_date)) {
-							$product['no_return'] = $this->_('text_past_return_date', $this->date->format($return_date, 'short'));
+							$product['no_return'] = _l("Past Policy Return Date (%s)", $this->date->format($return_date, 'short'));
 						}
 					}
 
@@ -278,7 +285,7 @@ class Catalog_Controller_Account_Return extends Controller
 			foreach ($customer_orders as &$order) {
 				$product_count = $this->System_Model_Order->getTotalOrderProducts($order['order_id']);
 
-				$order['display'] = $this->_('text_order_display', $order['order_id'], $product_count);
+				$order['display'] = _l("%s - (%s products)", $order['order_id'], $product_count);
 			}
 			unset($order);
 		}
@@ -295,7 +302,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['order_lookup_action'] = $this->url->link('account/return/find');
 
 		if (!$this->customer->isLogged()) {
-			$this->message->add('warning', $this->_('error_customer_logged'));
+			$this->message->add('warning', _l("You must be logged in to request a return. Your orders will automatically be associated to your account via your email address"));
 		}
 
 		//Action Buttons
@@ -338,15 +345,15 @@ class Catalog_Controller_Account_Return extends Controller
 					$url_query = http_build_query($query);
 
 
-					$this->message->add('notify', $this->_('notify_order_lookup_guest', $order['email']));
+					$this->message->add('notify', _l("The order was found! To request a return, you must first login or register a new account with the email %s.", $order['email']));
 				} else {
-					$this->message->add('warning', $this->_('error_order_lookup_email'));
+					$this->message->add('warning', _l("That order is associated with another email account!"));
 				}
 			} else {
-				$this->message->add("warning", $this->_('error_order_lookup'));
+				$this->message->add("warning", _l("We were unable to find the order requested!"));
 			}
 		} else {
-			$this->message->add("warning", $this->_('error_order_lookup'));
+			$this->message->add("warning", _l("We were unable to find the order requested!"));
 		}
 
 		$this->url->redirect('account/return/insert', $url_query);
@@ -357,12 +364,12 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->template->load('account/return_success');
 		$this->language->load('account/return');
 
-		$this->document->setTitle($this->_('return_success_title'));
+		$this->document->setTitle(_l("Return Success"));
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return/insert'));
-		$this->breadcrumb->add($this->_('return_success_title'), $this->url->link('account/return/success'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Returns"), $this->url->link('account/return'));
+		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return/insert'));
+		$this->breadcrumb->add(_l("Return Success"), $this->url->link('account/return/success'));
 
 		$returns = array();
 
@@ -391,23 +398,23 @@ class Catalog_Controller_Account_Return extends Controller
 	private function validate()
 	{
 		if (empty($_POST['order_id'])) {
-			$this->error['order_id'] = $this->_('error_order_id');
+			$this->error['order_id'] = _l("Order ID required!");
 		}
 
 		if (!$this->validation->text($_POST['firstname'], 1, 64)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 64 characters!");
 		}
 
 		if (!$this->validation->text($_POST['lastname'], 1, 64)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 64 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->phone($_POST['telephone'])) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		$has_product = false;
@@ -418,18 +425,18 @@ class Catalog_Controller_Account_Return extends Controller
 					$has_product = true;
 
 					if (empty($product['return_reason_id']) && $product['return_reason_id'] !== '0') {
-						$this->error["return_products[$product[product_id]][return_reason_id"] = $this->_('error_reason');
+						$this->error["return_products[$product[product_id]][return_reason_id"] = _l("You must select a Reason For Return!");
 					}
 				}
 			}
 		}
 
 		if (!$has_product) {
-			$this->error['return_products'] = $this->_('error_return_products');
+			$this->error['return_products'] = _l("You must select at least 1 product to return!");
 		}
 
 		if (!$this->captcha->validate($_POST['captcha'])) {
-			$this->error['captcha'] = $this->_('error_captcha');
+			$this->error['captcha'] = _l("Verification code does not match the image!");
 		}
 
 		return $this->error ? false : true;

@@ -10,9 +10,9 @@
 		<div class="pagination"><?= $pagination; ?></div>
 
 	<? } else { ?>
-		<div class="section"><?= $text_empty; ?></div>
+		<div class="section"><?= _l("There are no specials at this time."); ?></div>
 		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 	<? } ?>
 </div>

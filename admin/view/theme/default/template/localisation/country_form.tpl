@@ -6,56 +6,67 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= _l("Country"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Country Name:"); ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>"/>
-								<? if ($error_name) { ?>
-									<span class="error"><?= $error_name; ?></span>
+								<? if (_l("Country Name must be between 3 and 128 characters!")) { ?>
+									<span class="error"><?= _l("Country Name must be between 3 and 128 characters!"); ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_iso_code_2; ?></td>
+							<td><?= _l("ISO Code (2):"); ?></td>
 							<td><input type="text" name="iso_code_2" value="<?= $iso_code_2; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_iso_code_3; ?></td>
+							<td><?= _l("ISO Code (3):"); ?></td>
 							<td><input type="text" name="iso_code_3" value="<?= $iso_code_3; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_address_format; ?></td>
+							<td><?= _l("Address Format:<br /><span class =\"help\">
+First Name =
+{firstname}<br />
+Last Name = {lastname}<br />
+Company = {company}<br />
+Address 1 = {address_1}<br />
+Address 2 = {address_2}<br />
+City = {city}<br />
+Postcode = {postcode}<br />
+Zone = {zone}<br />
+Zone Code = {zone_code}<br />
+Country = {country}</span>"); ?></td>
 							<td><textarea name="address_format" cols="40" rows="5"><?= $address_format; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_postcode_required; ?></td>
+							<td><?= _l("Postcode Required:"); ?></td>
 							<td><? if ($postcode_required) { ?>
 									<input type="radio" name="postcode_required" value="1" checked="checked"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="postcode_required" value="0"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } else { ?>
 									<input type="radio" name="postcode_required" value="1"/>
-									<?= $text_yes; ?>
+									<?= _l("Yes"); ?>
 									<input type="radio" name="postcode_required" value="0" checked="checked"/>
-									<?= $text_no; ?>
+									<?= _l("No"); ?>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><select name="status">
 									<? if ($status) { ?>
-										<option value="1" selected="selected"><?= $text_enabled; ?></option>
-										<option value="0"><?= $text_disabled; ?></option>
+										<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
+										<option value="0"><?= _l("Disabled"); ?></option>
 									<? } else { ?>
-										<option value="1"><?= $text_enabled; ?></option>
-										<option value="0" selected="selected"><?= $text_disabled; ?></option>
+										<option value="1"><?= _l("Enabled"); ?></option>
+										<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>

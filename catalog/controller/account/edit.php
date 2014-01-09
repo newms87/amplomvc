@@ -13,19 +13,19 @@ class Catalog_Controller_Account_Edit extends Controller
 
 		$this->language->load('account/edit');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("My Account Information"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("Success: Your account has been successfully updated."));
 
 			$this->url->redirect('account/account');
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('account/edit'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Edit Information"), $this->url->link('account/edit'));
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -120,23 +120,23 @@ class Catalog_Controller_Account_Edit extends Controller
 	private function validate()
 	{
 		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
-			$this->error['firstname'] = $this->_('error_firstname');
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
-			$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (($this->customer->info('email') !== $_POST['email']) && $this->customer->emailRegistered($_POST['email'])) {
-			$this->error['warning'] = $this->_('error_exists');
+			$this->error['warning'] = _l("Warning: E-Mail address is already registered!");
 		}
 
 		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {
-			$this->error['telephone'] = $this->_('error_telephone');
+			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
 		return $this->error ? false : true;

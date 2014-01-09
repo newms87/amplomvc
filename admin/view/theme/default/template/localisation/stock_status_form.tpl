@@ -6,22 +6,22 @@
 		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'stock-status.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'stock-status.png'; ?>" alt=""/> <?= _l("Stock Status"); ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
+							<td class="required"> <?= _l("Stock Status Name:"); ?></td>
 							<td><? foreach ($languages as $language) { ?>
 									<input type="text" name="stock_status[<?= $language['language_id']; ?>][name]" value="<?= isset($stock_status[$language['language_id']]) ? $stock_status[$language['language_id']]['name'] : ''; ?>"/>
 									<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
 									     title="<?= $language['name']; ?>"/><br/>
-									<? if (isset($error_name[$language['language_id']])) { ?>
-										<span class="error"><?= $error_name[$language['language_id']]; ?></span><br/>
+									<? if (isset(_l("Stock Status Name must be between 3 and 32 characters!")[$language['language_id']])) { ?>
+										<span class="error"><?= _l("Stock Status Name must be between 3 and 32 characters!")[$language['language_id']]; ?></span><br/>
 									<? } ?>
 								<? } ?></td>
 						</tr>

@@ -8,11 +8,11 @@ class Catalog_Controller_Error_NotFound extends Controller
 		$this->language->load('error/not_found');
 
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("The page you requested cannot be found!"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_error'), $this->url->here());
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("The page you requested cannot be found."), $this->url->here());
 
 		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 

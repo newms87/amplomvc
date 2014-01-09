@@ -4,7 +4,7 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= _l("Site Map"); ?></h1>
 
 		<div class="sitemap-info">
 			<div class="left">
@@ -32,25 +32,25 @@
 			</div>
 			<div class="right">
 				<ul>
-					<li><a href="<?= $special; ?>"><?= $text_special; ?></a></li>
-					<li><a href="<?= $account; ?>"><?= $text_account; ?></a>
+					<li><a href="<?= $special; ?>"><?= _l("Special Offers"); ?></a></li>
+					<li><a href="<?= $account; ?>"><?= _l("My Account"); ?></a>
 						<ul>
-							<li><a href="<?= $edit; ?>"><?= $text_edit; ?></a></li>
-							<li><a href="<?= $password; ?>"><?= $text_password; ?></a></li>
-							<li><a href="<?= $address; ?>"><?= $text_address; ?></a></li>
-							<li><a href="<?= $history; ?>"><?= $text_history; ?></a></li>
-							<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
+							<li><a href="<?= $edit; ?>"><?= _l("Account Information"); ?></a></li>
+							<li><a href="<?= $password; ?>"><?= _l("Password"); ?></a></li>
+							<li><a href="<?= $address; ?>"><?= _l("Address Book"); ?></a></li>
+							<li><a href="<?= $history; ?>"><?= _l("Order History"); ?></a></li>
+							<li><a href="<?= $download; ?>"><?= _l("Downloads"); ?></a></li>
 						</ul>
 					</li>
-					<li><a href="<?= $cart; ?>"><?= $text_cart; ?></a></li>
-					<li><a href="<?= $checkout; ?>"><?= $text_checkout; ?></a></li>
-					<li><a href="<?= $search; ?>"><?= $text_search; ?></a></li>
-					<li><?= $text_information; ?>
+					<li><a href="<?= $cart; ?>"><?= _l("Shopping Cart"); ?></a></li>
+					<li><a href="<?= $checkout; ?>"><?= _l("Checkout"); ?></a></li>
+					<li><a href="<?= $search; ?>"><?= _l("Search"); ?></a></li>
+					<li><?= _l("Information"); ?>
 						<ul>
 							<? foreach ($informations as $information) { ?>
 								<li><a href="<?= $information['href']; ?>"><?= $information['title']; ?></a></li>
 							<? } ?>
-							<li><a href="<?= $contact; ?>"><?= $text_contact; ?></a></li>
+							<li><a href="<?= $contact; ?>"><?= _l("Contact Us"); ?></a></li>
 						</ul>
 					</li>
 				</ul>

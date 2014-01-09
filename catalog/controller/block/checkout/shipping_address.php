@@ -19,7 +19,13 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 		$this->form->set_template('form/address');
 		$this->form->set_action($this->url->link('block/checkout/shipping_address/validate_form'));
 		$this->form->set_field_options('country_id', $this->Model_Localisation_Country->getCountries(), array('country_id' => 'name'));
-		$this->form->set_field_options('default', $this->_('data_yes_no'));
+
+		$yes_no = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
+		$this->form->set_field_options('default', $yes_no);
 
 		$this->data['form_shipping_address'] = $this->form->build();
 

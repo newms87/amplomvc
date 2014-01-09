@@ -3,22 +3,22 @@
 <?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= _l("Gift Voucher"); ?></h1>
 
 			<div class="buttons">
 				<? if ($voucher_id) { ?>
-					<a onclick="send_voucher()" class="button"><?= $button_send; ?></a>
+					<a onclick="send_voucher()" class="button"><?= _l("Send"); ?></a>
 				<? } ?>
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= $tab_general; ?></a>
+				<a href="#tab-general"><?= _l("General"); ?></a>
 				<? if ($voucher_id) { ?>
-					<a href="#tab-history"><?= $tab_voucher_history; ?></a>
+					<a href="#tab-history"><?= _l("Voucher History"); ?></a>
 				<? } ?>
 			</div>
 
@@ -26,42 +26,42 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_code; ?></td>
+							<td class="required"> <?= _l("Code:<br /><span class=\"help\">The code the customer enters to activate the voucher.</span>"); ?></td>
 							<td><input type="text" name="code" value="<?= $code; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_from_name; ?></td>
+							<td class="required"> <?= _l("From Name:"); ?></td>
 							<td><input type="text" name="from_name" value="<?= $from_name; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_from_email; ?></td>
+							<td class="required"> <?= _l("From E-Mail:"); ?></td>
 							<td><input type="text" name="from_email" value="<?= $from_email; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_to_name; ?></td>
+							<td class="required"> <?= _l("To Name:"); ?></td>
 							<td><input type="text" name="to_name" value="<?= $to_name; ?>"/></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_to_email; ?></td>
+							<td class="required"> <?= _l("To E-Mail:"); ?></td>
 							<td><input type="text" name="to_email" value="<?= $to_email; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_theme; ?></td>
+							<td><?= _l("Theme:"); ?></td>
 							<td>
 								<? $this->builder->setConfig('voucher_theme_id', 'name'); ?>
 								<?= $this->builder->build('select', $data_voucher_themes, 'voucher_theme_id', $voucher_theme_id); ?>
 							</td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_message; ?></td>
+							<td class="required"> <?= _l("Message:"); ?></td>
 							<td><textarea name="message" cols="40" rows="5"><?= $message; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_amount; ?></td>
+							<td><?= _l("Amount:"); ?></td>
 							<td><input type="text" name="amount" value="<?= $amount; ?>"/></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status:"); ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, 'status', $status); ?></td>
 						</tr>
 					</table>

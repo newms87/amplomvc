@@ -47,6 +47,11 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 
 		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
+		$_['data_rule_types'] = array(
+			'item_qty' => _l("Product Quantity"),
+			'weight'   => _l("Weight of Cart"),
+		);
+
 		$this->children = array(
 			'common/header',
 			'common/footer'

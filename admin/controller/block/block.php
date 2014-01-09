@@ -68,7 +68,10 @@ class Admin_Controller_Block_Block extends Controller
 			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
 			'filter'       => true,
-			'build_data'   => $this->_('data_statuses'),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
 			'sortable'     => true,
 		);
 
@@ -162,24 +165,24 @@ class Admin_Controller_Block_Block extends Controller
 		}
 
 		$default_profile_settings = array(
-			'name' => $this->_('var_default_profile_setting_name'),
+			'name'             => $this->_('var_default_profile_setting_name'),
 			'show_block_title' => 1,
 		);
 
 		$default_profile = array(
-			'name' => $this->_('var_default_profile_name'),
+			'name'               => $this->_('var_default_profile_name'),
 			'profile_setting_id' => 0,
-			'store_ids' => array($this->config->get('config_default_store')),
-			'layout_ids' => array(),
-			'position' => '',
-			'status' => 1,
+			'store_ids'          => array($this->config->get('config_default_store')),
+			'layout_ids'         => array(),
+			'position'           => '',
+			'status'             => 1,
 		);
 
 		$defaults = array(
-			'settings' => array(),
+			'settings'         => array(),
 			'profile_settings' => array(),
-			'profiles' => array(),
-			'status'   => 1,
+			'profiles'         => array(),
+			'status'           => 1,
 		);
 
 		foreach ($defaults as $key => $default) {
@@ -198,10 +201,10 @@ class Admin_Controller_Block_Block extends Controller
 		}
 
 		//AC Templates
-		$this->data['profile_settings']['__ac_template__'] = $default_profile_settings;
+		$this->data['profile_settings']['__ac_template__']         = $default_profile_settings;
 		$this->data['profile_settings']['__ac_template__']['name'] = 'Profile __ac_template__';
 
-		$this->data['profiles']['__ac_template__'] = $default_profile;
+		$this->data['profiles']['__ac_template__']         = $default_profile;
 		$this->data['profiles']['__ac_template__']['name'] = 'Profile __ac_template__';
 
 		foreach ($this->data['profiles'] as &$profile) {
@@ -231,6 +234,16 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
+
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$_['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
 
 		$this->children = array(
 			'common/header',

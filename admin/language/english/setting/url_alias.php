@@ -2,18 +2,6 @@
 // Heading
 $_['head_title'] = 'URL Aliases';
 
-//Data
-$_['data_non_stores'] = array(
-	array(
-		'store_id' => '-1',
-		'name'     => "Admin Panel"
-	),
-	array(
-		'store_id' => 0,
-		'name'     => "All Stores"
-	),
-);
-
 // Text
 $_['text_success']  = 'Success: You have modified the url alias table!';
 $_['column_action'] = 'Action';

@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Block_Cart_Reward
 {
-
 	public function index($settings = null)
 	{
 		$this->template->load('block/cart/reward');
@@ -10,28 +9,26 @@ class Catalog_Controller_Block_Cart_Reward
 		if (isset($_POST['reward']) && $this->validateReward()) {
 			$this->session->set('reward', $_POST['reward']);
 
-			$this->message->add('success', $this->_('text_reward'));
+			$this->message->add('success', _l("Success: Your reward points discount has been applied!"));
+		}
+
+		$reward_info = array();
+
+		if ($this->request->isPost()) {
+			$reward_info = $_POST;
+		}
+		else {
+			$reward_info['reward'] = $this->session->get('reward');
 		}
 
 		$defaults = array(
 			'reward' => '',
 		);
 
-		if (isset($_POST[$key])) {
-			$this->data[$key] = $_POST[$key];
-		} elseif (isset($this->session->data[$key])) {
-			$this->data[$key] = $this->session->data[$key];
-		} else {
-			$this->data[$key] = $default;
-		}
+		$this->data += $reward_info + $defaults;
 
-		$points = $this->customer->getRewardPoints();
-
-		$points_total = $this->cart->getTotalPoints();
-
-		$this->_('text_use_reward', $points);
-		$this->_('entry_reward', $points_total);
-
+		$this->data['reward_points'] = $this->customer->getRewardPoints();
+		$this->data['total_points'] = $this->cart->getTotalPoints();
 
 		$this->response->setOutput($this->render());
 	}
@@ -49,15 +46,15 @@ class Catalog_Controller_Block_Cart_Reward
 		}
 
 		if (empty($_POST['reward'])) {
-			$this->error['warning'] = $this->_('error_reward');
+			$this->error['warning'] = _l("Warning: Please enter the amount of reward points to use!");
 		}
 
 		if ($_POST['reward'] > $points) {
-			$this->error['warning'] = sprintf($this->_('error_points'), $_POST['reward']);
+			$this->error['warning'] = sprintf(_l("Warning: You don't have %s reward points!"), $_POST['reward']);
 		}
 
 		if ($_POST['reward'] > $points_total) {
-			$this->error['warning'] = sprintf($this->_('error_maximum'), $points_total);
+			$this->error['warning'] = sprintf(_l("Warning: The maximum number of points that can be applied is %s!"), $points_total);
 		}
 
 		return $this->error ? false : true;

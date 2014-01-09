@@ -79,6 +79,11 @@ class Admin_Controller_Setting_Cron extends Controller
 		$this->data['data_files']   = $cron_files;
 		$this->data['data_methods'] = $cron_methods;
 
+		$this->data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
 		//Action Buttons
 		$this->data['save']     = $this->url->link('setting/cron');
 		$this->data['cancel']   = $this->url->link('setting/store');

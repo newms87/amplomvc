@@ -1,5 +1,5 @@
 <div id="product_options" class="options">
-	<h2><?= $text_option; ?></h2>
+	<h2><?= _l("Available Options"); ?></h2>
 	<br/>
 	<?= $this->builder->setConfig('product_option_value_id', 'value'); ?>
 

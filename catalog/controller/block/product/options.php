@@ -48,9 +48,9 @@ class Catalog_Controller_Block_Product_Options extends Controller
 
 						//Show the price with the Product Option Name
 						if ($product_option_value['price'] > 0) {
-							$product_option_value['display_price'] = $this->_('text_option_price_add', $this->currency->format($product_option_value['price']));
+							$product_option_value['display_price'] = _l(" <span class=\"option_price\">+%s</span>", $this->currency->format($product_option_value['price']));
 						} elseif ($product_option_value['price'] < 0) {
-							$product_option_value['display_price'] = $this->_('text_option_price_subtract', $this->currency->format($product_option_value['price']));
+							$product_option_value['display_price'] = _l(" <span class=\"option_price\">-%s</span>", $this->currency->format($product_option_value['price']));
 						} else {
 							$product_option_value['display_price'] = '';
 						}
@@ -83,7 +83,7 @@ class Catalog_Controller_Block_Product_Options extends Controller
 					$blank_option[''] = array(
 						'option_value_id'         => '',
 						'product_option_value_id' => '',
-						'value'                   => $this->_('text_select_option')
+						'value'                   => _l("( Please Select )")
 					);
 					break;
 
@@ -99,7 +99,7 @@ class Catalog_Controller_Block_Product_Options extends Controller
 							'product_option_value_id' => '',
 							'rel'                     => '',
 							'thumb'                   => $image,
-							'value'                   => $this->_('text_select_option')
+							'value'                   => _l("( Please Select )")
 						);
 					}
 					break;

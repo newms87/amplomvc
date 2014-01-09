@@ -9,7 +9,7 @@ class Catalog_Controller_Product_SearchResults extends Controller
 
 		$post = $_POST;
 		if (!isset($post['action']) || $post['action'] != 'betty_search') {
-			echo $this->_('no_search');
+			echo _l("No search request was made");
 			exit;
 		}
 

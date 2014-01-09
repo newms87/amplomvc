@@ -7,7 +7,7 @@
 	<? } else { ?>
 		<? if (!empty($block_shipping_address)) { ?>
 			<div id="shipping_address" class="info_item" route="block/checkout/shipping_address">
-				<h2 class="info_heading"><?= $text_shipping_information; ?></h2>
+				<h2 class="info_heading"><?= _l("Delivery Information"); ?></h2>
 
 				<div class="info_content"><?= $block_shipping_address; ?></div>
 				<div class="validation_status"></div>
@@ -15,7 +15,7 @@
 		<? } ?>
 
 		<div id="payment_address" class="info_item" route="block/checkout/payment_address">
-			<h2 class="info_heading"><?= $text_payment_address; ?></h2>
+			<h2 class="info_heading"><?= _l("Billing Address"); ?></h2>
 
 			<div class="info_content"><?= $block_payment_address; ?></div>
 			<div class="validation_status"></div>
@@ -24,7 +24,7 @@
 
 	<? if (!empty($block_shipping_method)) { ?>
 		<div id="shipping_method" class="info_item" route="block/checkout/shipping_method">
-			<h2 class="info_heading"><?= !empty($guest_checkout) ? $text_shipping_method : ''; ?></h2>
+			<h2 class="info_heading"><?= !empty($guest_checkout) ? _l("Delivery Method") : ''; ?></h2>
 
 			<div class="info_content"><?= $block_shipping_method; ?></div>
 			<div class="validation_status"></div>
@@ -32,14 +32,14 @@
 	<? } ?>
 
 	<div id="payment_method" class="info_item" route="block/checkout/payment_method">
-		<h2 class="info_heading"><?= $text_payment_method; ?></h2>
+		<h2 class="info_heading"><?= _l("Payment Method"); ?></h2>
 
 		<div class="info_content"><?= $block_payment_method; ?></div>
 		<div class="validation_status"></div>
 	</div>
 
 	<div id="customer_checkout_submit" class="buttons">
-		<div class="right"><input type="button" value="<?= $button_continue; ?>" onclick="validate_submit($(this))" class="button"/></div>
+		<div class="right"><input type="button" value="<?= _l("Continue"); ?>" onclick="validate_submit($(this))" class="button"/></div>
 	</div>
 </div>
 
@@ -64,7 +64,7 @@
 	}
 
 	function info_page_loading(info_item) {
-		set_validation_status(info_item, 'validating', "<?= $text_info_validating; ?> <img src=\"<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
+		set_validation_status(info_item, 'validating', "<?= _l("Validating..."); ?> <img src=\"<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
 	}
 
 	function load_info_item(info_item, route, callback) {
@@ -73,7 +73,7 @@
 
 		route = route || info_item.attr('route');
 
-		set_validation_status(info_item, 'loading', '<?= $text_info_loading; ?>');
+		set_validation_status(info_item, 'loading', '<?= _l("Loading... please wait."); ?>');
 
 		info_item.find('.info_content').load("<?= HTTP_ROOT; ?>" + route, {},
 			function () {
@@ -96,7 +96,7 @@
 			info_item = form.closest('.info_item');
 
 			if (!json || json['error']) {
-				set_validation_status(info_item, 'invalid', '<?= $text_info_error; ?>');
+				set_validation_status(info_item, 'invalid', '<?= _l(""); ?>');
 
 			} else {
 				set_validation_status(info_item, 'valid', '');

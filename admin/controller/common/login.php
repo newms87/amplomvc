@@ -25,7 +25,7 @@ class Admin_Controller_Common_Login extends Controller
 			}
 		}
 
-		$this->data['text_lost'] = _l("Not sure how you got here? Please <a href=\"%s\">return to the shop!</a>", $this->url->store($this->config->get('config_default_store'), 'common/home'));
+		$this->data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
 
 		if (isset($this->session->data['token']) && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = $this->_('error_token');

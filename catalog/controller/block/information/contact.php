@@ -76,19 +76,19 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 	private function validate()
 	{
 		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = $this->_('error_name');
+			$this->error['name'] = _l("Name must be between 3 and 32 characters!");
 		}
 
 		if (!$this->validation->email($_POST['email'])) {
-			$this->error['email'] = $this->_('error_email');
+			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
 		if (!$this->validation->text($_POST['enquiry'], 10, 3000)) {
-			$this->error['enquiry'] = $this->_('error_enquiry');
+			$this->error['enquiry'] = _l("Enquiry must be between 10 and 3000 characters!");
 		}
 
 		if (!$this->captcha->validate($_POST['captcha'])) {
-			$this->error['captcha'] = $this->_('error_captcha');
+			$this->error['captcha'] = _l("Verification code does not match the image!");
 		}
 
 		return $this->error ? false : true;

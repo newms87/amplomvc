@@ -51,7 +51,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 
 				if ($this->data['review_status']) {
 					$item['rating']  = (int)$item['rating'];
-					$item['reviews'] = $this->_('text_reviews', (int)$item['reviews']);
+					$item['reviews'] = _l("Based on %s reviews.", (int)$item['reviews']);
 				}
 
 				if (!empty($item['teaser'])) {

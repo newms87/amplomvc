@@ -60,7 +60,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		}
 
 		if (!$this->cart->hasShipping()) {
-			$json['error']['warning'] = sprintf($this->_('error_no_shipping'), $this->url->link('information/contact'));
+			$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), $this->url->link('information/contact'));
 		}
 
 		if (!$json) {
@@ -80,7 +80,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 			if ($shipping_methods) {
 				$json['shipping_method'] = $shipping_methods;
 			} else {
-				$json['error']['warning'] = sprintf($this->_('error_no_shipping'), $this->url->link('information/contact'));
+				$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), $this->url->link('information/contact'));
 			}
 		}
 
@@ -95,10 +95,10 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 		if (empty($_POST['shipping_method'])) {
 			if (!empty($_POST['redirect'])) {
-				$this->message->add('warning', $this->_('error_shipping_method'));
+				$this->message->add('warning', _l("Please choose a shipping method!"));
 				$this->url->redirect(urldecode($_POST['redirect']));
 			} else {
-				$json['error'] = $this->_('error_shipping_method');
+				$json['error'] = _l("Please choose a shipping method!");
 				$this->response->setOutput(json_encode($json));
 				return;
 			}
@@ -129,7 +129,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 				if (!empty($_POST['redirect'])) {
 					if ($result) {
-						$this->message->add('success', $this->_('text_shipping'));
+						$this->message->add('success', _l("Success: Your shipping estimate has been applied!"));
 					} else {
 						$this->message->add('warning', $this->cart->get_errors('shipping_method'));
 					}
@@ -138,7 +138,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 				}
 
 				if ($result) {
-					$json['success'] = $this->_('text_shipping');
+					$json['success'] = _l("Success: Your shipping estimate has been applied!");
 				} else {
 					$json['error'] = $this->cart->get_errors('shipping_method');
 				}
