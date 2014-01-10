@@ -165,7 +165,7 @@ class Admin_Model_Catalog_ProductClass extends Model
 	{
 		$this->language->load('catalog/product_class');
 
-		$front_templates = $this->template->getTemplatesFrom('product', false, $this->_('text_default_template'));
+		$front_templates = $this->template->getTemplatesFrom('product', false, _l("Default Template"));
 
 		foreach ($front_templates as $theme => &$templates) {
 			if ($theme !== 'default') {
@@ -181,7 +181,7 @@ class Admin_Model_Catalog_ProductClass extends Model
 	{
 		$this->language->load('catalog/product_class');
 
-		$admin_templates = $this->template->getTemplatesFrom('catalog/product_class', true, $this->_('text_default_template'));
+		$admin_templates = $this->template->getTemplatesFrom('catalog/product_class', true, _l("Default Template"));
 
 		foreach ($admin_templates as $theme => &$templates) {
 			if ($theme !== 'default') {

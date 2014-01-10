@@ -166,7 +166,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/tax_rate/update', 'tax_rate_id=' . $result['tax_rate_id'] . $url)
 			);
 

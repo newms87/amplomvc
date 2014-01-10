@@ -166,13 +166,13 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/currency/update', 'currency_id=' . $result['currency_id'] . $url)
 			);
 
 			$this->data['currencies'][] = array(
 				'currency_id'   => $result['currency_id'],
-				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? $this->_('text_default') : null),
+				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? _l(" <b>(Default)</b>") : null),
 				'code'          => $result['code'],
 				'value'         => $result['value'],
 				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),

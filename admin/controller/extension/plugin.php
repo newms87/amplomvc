@@ -76,7 +76,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -98,14 +98,14 @@ class Admin_Controller_Extension_Plugin extends Controller
 			if ($plugin['installed']) {
 				$plugin['actions'] = array(
 					/*'edit' => array(
-						'text' => $this->_('text_edit'),
+						'text' => _l("Edit"),
 						'href' => $this->url->link('extension/plugin/update', 'name=' . $plugin['name']),
 					),*/
 				);
 
 				if ($this->plugin->hasChanges($plugin['name'])) {
 					$plugin['actions']['add_changes'] = array(
-						'text' => $this->_('text_add_changes'),
+						'text' => _l("Add Changes"),
 						'href' => $this->url->link('extension/plugin/add_changes', 'name=' . $plugin['name']),
 					);
 				}

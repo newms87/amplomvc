@@ -47,11 +47,6 @@ class Admin_Model_User_User extends Model
 		$this->update('user', $data, $user_id);
 	}
 
-	public function editCode($email, $code)
-	{
-		$this->update('user', array('code' => $code), array('email' => $email));
-	}
-
 	public function deleteUser($user_id)
 	{
 		$this->delete('user', $user_id);
@@ -67,11 +62,6 @@ class Admin_Model_User_User extends Model
 	public function getUserByUsername($username)
 	{
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
-	}
-
-	public function getUserByCode($code)
-	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->escape($code) . "' AND code != ''");
 	}
 
 	public function getUsers($data = array(), $select = '*', $total = false)

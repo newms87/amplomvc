@@ -166,7 +166,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $result['tax_class_id'] . $url)
 			);
 

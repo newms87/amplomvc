@@ -122,7 +122,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/geo_zone/update', 'geo_zone_id=' . $result['geo_zone_id'] . $url)
 			);
 

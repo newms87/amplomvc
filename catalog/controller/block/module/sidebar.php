@@ -17,7 +17,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		$main_menu = $categories;
 
 		$this->data['main_menu'] = array(
-			'label' => $this->_('text_main_menu'),
+			'label' => _l("Main Menu"),
 			'menu'  => $main_menu,
 		);
 

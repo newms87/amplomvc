@@ -16,7 +16,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		$order = $this->order->get();
 
 		if (!$order) {
-			$this->output = $this->_('error_payment_order');
+			$this->output = _l("There was a problem processing your order. Please verify you order and try checking out again.");
 			return;
 		}
 
@@ -86,7 +86,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		//Ajax Urls
 		$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 
-		//Additional Data
+		//Template Data
 		$this->data['image_url']     = $server . $this->config->get('config_logo');
 		$this->data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
 		$this->data['custom']        = $this->encryption->encrypt($order['order_id']);
@@ -162,7 +162,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 
 			if ($total > 0) {
 				$this->data['products'][] = array(
-					'name'     => $this->_('text_total'),
+					'name'     => _l("Shipping, Handling, Discounts & Taxes"),
 					'model'    => '',
 					'price'    => $total,
 					'quantity' => 1,
@@ -200,7 +200,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 			//Ajax Urls
 			$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
 
-			//Additional Data
+			//Template Data
 			$this->data['image_url']     = $server . $this->config->get('config_logo');
 			$this->data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
 			$this->data['custom']        = $this->encryption->encrypt($subscription['order_id']);
@@ -392,7 +392,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		}
 
 		if (empty($response) || strpos($response, "FAIL") === 0) {
-			$this->message->add('warning', $this->_('error_checkout_callback', $this->config->get('config_email')));
+			$this->message->add('warning', _l("There was an error while verifying your payment from Paypal. Please contact <a href=\"%s\">Customer Support</a> to resolve the payment.", $this->config->get('config_email')));
 
 			if (!$order) {
 				if (!empty($_POST['first_name'])) {
@@ -413,8 +413,12 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 
 			$customer_id = !empty($order['customer_id']) ? $order['customer_id'] : $this->customer->getId();
 
-			$subject = $this->_('error_checkout_callback_email_subject');
-			$message = $this->_('error_checkout_callback_email', $name, $order_id, $amount, $customer_id, $email);
+
+			//TODO: Move this to mail Controller
+			$subject = _l("ATTENTION: There was a critical error while resolving an order payment!");
+			$message = _l("There was an error while verifying the payment for %s from Paypal.", $name) .
+						  _l("The transaction completed, but payment status their order information could not be resolved.") .
+						  _l("<br />Order ID: %s<br />Paid Amount: %s<br />Customer ID: %s<br />Customer Email: %s<br />", $order_id, $amount, $customer_id, $email);
 
 			$this->mail->init();
 

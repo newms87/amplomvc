@@ -3,77 +3,116 @@ class Admin_Controller_Common_Forgotten extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/forgotten');
-
+		//Verify User is not already logged in
 		if ($this->user->isLogged()) {
 			$this->url->redirect('common/home');
 		}
 
-		$this->language->load('common/forgotten');
-
+		//Page Title
 		$this->document->setTitle(_l("Forgot Your Password?"));
 
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
-			$this->language->load('mail/forgotten');
+			$code = $this->user->generateCode();
 
-			$code = md5(rand());
+			$this->user->setCode($_POST['email'], $code);
 
-			$this->Model_User_User->editCode($_POST['email'], $code);
+			$email_data = array(
+				'reset' => $this->url->link('common/forgotten/reset', 'code=' . $code),
+			   'email' => $_POST['email'],
+			);
 
-			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
+			$this->mail->sendTemplate('forgotten_admin', $email_data);
 
-			$message = sprintf($this->_('text_greeting'), $this->config->get('config_name')) . "\n\n";
-			$message .= sprintf($this->_('text_change'), $this->config->get('config_name')) . "\n\n";
-			$message .= $this->url->link('common/reset', 'code=' . $code) . "\n\n";
-			$message .= sprintf($this->_('text_ip'), $_SERVER['REMOTE_ADDR']) . "\n\n";
-
-			$this->mail->init();
-
-			$this->mail->setTo($_POST['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($this->config->get('config_name'));
-			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
-
-			$this->mail->send();
-
-			$this->message->add('success', _l("An email with a confirmation link has been sent your admin email address."));
+			$this->message->add('success', _l("Please follow the link that was sent to your email to reset your password."));
 
 			$this->url->redirect('common/login');
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Forgotten Password"), $this->url->link('common/forgotten'));
 
-		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
+		//Entry Data
+		$this->data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
 
+		//Action Buttons
 		$this->data['action'] = $this->url->link('common/forgotten');
-
 		$this->data['cancel'] = $this->url->link('common/login');
 
-		if (isset($_POST['email'])) {
-			$this->data['email'] = $_POST['email'];
-		} else {
-			$this->data['email'] = '';
-		}
-
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//The Template
+		$this->template->load('common/forgotten');
+
+		//Render
+		$this->response->setOutput($this->render());
+	}
+
+	public function reset()
+	{
+		if ($this->user->isLogged() || empty($_GET['code'])) {
+			$this->url->redirect('common/home');
+		}
+
+		$code = $_GET['code'];
+
+		$user = $this->user->lookupCode($code);
+
+		//User not found
+		if (!$user) {
+			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
+			$this->url->redirect('common/login');
+		}
+
+		//Handle POST
+		if ($this->request->isPost()) {
+			//Validate Password
+			if (!$this->validation->password($_POST['password'])) {
+				if ($this->validation->isCode(Validation::PASSWORD_CONFIRM)) {
+					$this->error['confirm'] = $this->validation->getError();
+				} else {
+					$this->error['password'] = $this->validation->getError();
+				}
+			}
+			else {
+				$this->user->updatePassword($user['user_id'], $_POST['password']);
+				$this->user->clearCode($user['user_id']);
+
+				$this->message->add('success', _l('You have successfully updated your password!'));
+			}
+
+			$this->url->redirect('common/login');
+		}
+
+		//Breadcrumbs
+		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('common/forgotten/reset', 'code=' . $code));
+
+		//Action Buttons
+		$this->data['save'] = $this->url->link('common/forgotten/reset', 'code=' . $code);
+		$this->data['cancel'] = $this->url->link('common/login');
+
+		//The Template
+		$this->template->load('common/reset');
+
+		//Dependencies
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function validate()
 	{
-		if (empty($_POST['email'])) {
-			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
-		} elseif (!$this->Model_User_User->getTotalUsersByEmail($_POST['email'])) {
+		if (empty($_POST['email']) || !$this->Model_User_User->getTotalUsersByEmail($_POST['email'])) {
 			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 		}
 

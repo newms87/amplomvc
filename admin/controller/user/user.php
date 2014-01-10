@@ -118,7 +118,7 @@ class Admin_Controller_User_User extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('user/user/update', 'user_id=' . $result['user_id'] . $url)
 			);
 

@@ -43,7 +43,7 @@ class System_Extension_Total_Reward extends TotalExtension
 
 				$total_data['reward'] = array(
 					'method_id' => $this->session->data['reward'],
-					'title'     => $this->_('text_reward', $this->session->data['reward']),
+					'title'     => _l("Reward (%s)", $this->session->data['reward']),
 					'value'     => -$discount_total,
 				);
 
@@ -60,7 +60,7 @@ class System_Extension_Total_Reward extends TotalExtension
 		if ($order_total['method_id']) {
 			$customer_reward = array(
 				'customer_id' => $order_info['customer_id'],
-				'description' => $this->_('text_order_id', $order_info['order_id']),
+				'description' => _l("Order %s", $order_info['order_id']),
 				'points'      => -$order_total['method_id'],
 				'date_added'  => $this->date->now(),
 			);

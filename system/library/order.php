@@ -97,20 +97,6 @@ class Order Extends Library
 		//Comments
 		$data['comment'] = $this->cart->getComment();
 
-		//TODO: We should track affiliates via the session, not Cookies!
-		// (Eg: $this->affiliate->isTracking(); )
-		$data['affiliate_id'] = 0;
-		$data['commission']   = 0;
-
-		if (isset($_COOKIE['tracking'])) {
-			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliateByCode($_COOKIE['tracking']);
-
-			if ($affiliate_info) {
-				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission']   = ($data['total'] / 100) * $affiliate_info['commission'];
-			}
-		}
-
 		//Client Location / Browser Info
 		$data['ip'] = $_SERVER['REMOTE_ADDR'];
 
@@ -325,7 +311,7 @@ class Order Extends Library
 		}
 
 		if ($notify) {
-			$this->mail->callController('order_update_notify', $comment, $order_status_id, $order);
+			$this->mail->sendTemplate('order_update_notify', $comment, $order_status_id, $order);
 		}
 	}
 
@@ -408,7 +394,7 @@ class Order Extends Library
 		$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 
 		//Send Order Emails
-		$this->mail->callController('order', $order);
+		$this->mail->sendTemplate('order', $order);
 	}
 
 	public function addHistory($order_id, $data)

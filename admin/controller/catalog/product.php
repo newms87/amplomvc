@@ -262,18 +262,18 @@ class Admin_Controller_Catalog_Product extends Controller
 		foreach ($products as &$product) {
 			$product['actions'] = array(
 				'edit' => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
 				),
 				'copy' => array(
-					'text' => $this->_('text_copy'),
+					'text' => _l("Copy"),
 					'href' => $this->url->link('catalog/product/copy', 'product_id=' . $product['product_id'])
 				)
 			);
 
 			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
 				$product['actions']['delete'] = array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
 				);
 			}
@@ -317,7 +317,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$this->data['list_view'] = $this->table->render();
 
-		//Additional Data
+		//Template Data
 		if (count($product_classes) > 1) {
 			foreach ($product_classes as &$product_class) {
 				$product_class['insert'] = $this->url->link('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
@@ -397,11 +397,11 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 
 			'copy'               => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 
 			'delete'             => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -442,9 +442,9 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
 
 		if (!$product_id) {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/product/update'));
 		} else {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product/update', 'product_id=' . $product_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/product/update', 'product_id=' . $product_id));
 		}
 
 		//Load Information
@@ -546,7 +546,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 		unset($related);
 
-		//Additional Data
+		//Template Data
 		$this->data['data_product_classes']   = $product_classes;
 		$this->data['data_manufacturers']     = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
 		$this->data['data_tax_classes']       = array('' => _l(" --- None --- ")) + $this->Model_Localisation_TaxClass->getTaxClasses();

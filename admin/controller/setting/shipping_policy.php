@@ -70,7 +70,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		$this->data['shipping_policies'] = $shipping_policies;
 
-		//Additional data
+		//Template Data
 		$this->data['data_days'] = array(
 			'final' => _l("Final Sale"),
 			0       => _l("Shipping Anytime"),
@@ -94,7 +94,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'setting/shipping_policy')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify Shipping Policies");
 		}
 
 		foreach ($_POST['shipping_policies'] as $key => $shipping_policy) {

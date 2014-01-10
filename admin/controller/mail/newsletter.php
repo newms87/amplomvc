@@ -110,7 +110,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		);
 
 		$columns['status'] = array(
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'type'         => 'select',
 			'filter'       => true,
 			'build_data'   => array(
@@ -147,7 +147,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 		foreach ($results as $result) {
 			$action = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('mail/newsletter/update', 'newsletter_id=' . $result['newsletter_id'])
 			);
 

@@ -8,11 +8,9 @@
 			<? foreach ($payment_methods as $payment_method) { ?>
 				<tr class="payment_method checkout_method highlight">
 					<td class="method_id">
-						<input type="radio" name="payment_method" value="<?= $payment_method['code']; ?>"
-						       id="<?= $payment_method['code']; ?>" <?= $payment_method['code'] == $code ? 'checked="checked"' : ''; ?> />
+						<input type="radio" name="payment_method" value="<?= $payment_method['code']; ?>" id="<?= $payment_method['code']; ?>" <?= $payment_method['code'] == $code ? 'checked="checked"' : ''; ?> />
 					</td>
-					<td class="method_title"><label
-							for="<?= $payment_method['code']; ?>"><?= $payment_method['title']; ?></label></td>
+					<td class="method_title"><label for="<?= $payment_method['code']; ?>"><?= $payment_method['title']; ?></label></td>
 				</tr>
 			<? } ?>
 		</table>
@@ -23,10 +21,13 @@
 			<textarea name="comment" rows="8"><?= $comment; ?></textarea>
 		</div>
 
-		<? if (!empty($agree_to_payment)) { ?>
+		<? if (!empty($checkout_terms)) { ?>
 			<div class="buttons">
 				<div class="right">
-					<span><?= $text_agree; ?></span>
+					<span>
+						<?= _l("I have read and agree to the"); ?>
+						<a class="colorbox" onclick="return colorbox($(this))" href="<?= $checkout_terms; ?>" target="_blank" alt="<?= $checkout_terms_title; ?>"><b><?= $checkout_terms_title; ?></b></a>
+					</span>
 					<input type="checkbox" name="agree" value="1" <?= $agree ? 'checked="checked"' : ''; ?> />
 				</div>
 			</div>

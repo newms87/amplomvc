@@ -350,12 +350,12 @@ class Admin_Controller_Sale_Return extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_view'),
+				'text' => _l("View"),
 				'href' => $this->url->link('sale/return/info', 'return_id=' . $result['return_id'] . $url)
 			);
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('sale/return/update', 'return_id=' . $result['return_id'] . $url)
 			);
 
@@ -901,32 +901,32 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify returns!");
 		}
 
-		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
 			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
-		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
 			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
-		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
+		if (!$this->validation->email($_POST['email'])) {
+			$this->error['email'] = $this->validation->getError();
 		}
 
-		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
+		if ($this->validation->phone($_POST['telephone'])) {
+			$this->error['telephone'] = $this->validation->getError();
 		}
 
-		if ((strlen($_POST['product']) < 1) || (strlen($_POST['product']) > 255)) {
+		if (!$this->validation->text($_POST['product'], 3, 255)) {
 			$this->error['product'] = _l("Product Name must be greater than 3 and less than 255 characters!");
 		}
 
-		if ((strlen($_POST['model']) < 1) || (strlen($_POST['model']) > 64)) {
+		if (!$this->validation->text($_POST['model'], 3, 64)) {
 			$this->error['model'] = _l("Product Model must be greater than 3 and less than 64 characters!");
 		}
 
 		if (empty($_POST['return_reason_id'])) {
-			$this->error['reason'] = $this->_('error_reason');
+			$this->error['reason'] = _l("You must specify a return reason!");
 		}
 
 		if ($this->error && !isset($this->error['warning'])) {

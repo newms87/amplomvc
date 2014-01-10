@@ -73,7 +73,7 @@ class Admin_Controller_Setting_Update extends Controller
 	public function validate()
 	{
 		if (!$this->user->can('modify', 'setting/update')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to run the System Update");
 		}
 
 		return $this->error ? false : true;

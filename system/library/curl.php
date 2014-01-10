@@ -60,11 +60,11 @@ class Curl extends Library
 		$ch = curl_init($url);
 
 		if (!$ch) {
-			$this->error = $this->_('error_curl_init');
+			$this->error = _l("There was an error initializing cURL!");
 		}
 		//Set Options
 		else if (!curl_setopt_array($ch, $options)) {
-			$this->error = $this->_('error_curl_setopt');
+			$this->error = _l("There was an error setting the cURL options!");
 		} else {
 			$content = curl_exec($ch);
 

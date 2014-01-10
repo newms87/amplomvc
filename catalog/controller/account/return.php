@@ -159,7 +159,7 @@ class Catalog_Controller_Account_Return extends Controller
 			}
 			unset($product);
 
-			$this->mail->callController('return', $return_data);
+			$this->mail->sendTemplate('return', $return_data);
 
 			$url_query = array(
 				'return_ids' => array_column($_POST['return_products'], 'return_id'),

@@ -20,9 +20,6 @@ class Admin_Controller_Common_Home extends Controller
 		$this->data['total_review']          = $this->Model_Catalog_Review->getTotalReviews();
 		$this->data['total_review_approval'] = $this->Model_Catalog_Review->getTotalReviewsAwaitingApproval();
 
-		$this->data['total_affiliate']          = $this->Model_Sale_Affiliate->getTotalAffiliates();
-		$this->data['total_affiliate_approval'] = $this->Model_Sale_Affiliate->getTotalAffiliatesAwaitingApproval();
-
 		//Last 10 orders
 		$data = array(
 			'sort'              => 'o.date_added',
@@ -37,7 +34,7 @@ class Admin_Controller_Common_Home extends Controller
 		foreach ($orders as &$order) {
 			$order['action'] = array(
 				'view' => array(
-					'text' => $this->_('text_view'),
+					'text' => _l("View"),
 					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'])
 				),
 			);

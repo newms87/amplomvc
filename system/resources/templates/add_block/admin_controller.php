@@ -9,7 +9,7 @@ __settings_start__
 
 		//This is an example (feel free to remove this if you dont need it!)
 		$defaults = array(
-			'my_variable' => $this->_('text_my_variable_default'),
+			'my_variable' => _l("My Variable"),
 		);
 
 		foreach ($defaults as $key => $default) {

@@ -184,11 +184,11 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		foreach ($manufacturers as &$manufacturer) {
 			$manufacturer['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . $url_query)
 				)
 			);
@@ -234,10 +234,10 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				'label' => _l("Disable"),
 			),
 			'copy'    => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 

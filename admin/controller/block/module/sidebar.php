@@ -10,7 +10,7 @@ class Admin_Controller_Block_Module_Sidebar extends Controller
 		//The Data
 		$this->data['settings'] = $settings;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 
 		//Render

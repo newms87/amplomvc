@@ -109,7 +109,7 @@ class Admin_Controller_Design_Banner extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('design/banner/update', 'banner_id=' . $result['banner_id'] . $url)
 			);
 

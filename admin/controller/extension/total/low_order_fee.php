@@ -17,7 +17,7 @@ class Admin_Controller_Extension_Total_LowOrderFee extends Controller
 
 		$this->data['settings'] = $settings;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		//The Template

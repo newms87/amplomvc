@@ -128,7 +128,7 @@ class Admin_Controller_Catalog_Category extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -151,11 +151,11 @@ class Admin_Controller_Catalog_Category extends Controller
 		foreach ($categories as &$category) {
 			$category['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/category/update', 'category_id=' . $category['category_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
 				)
 			);
@@ -191,10 +191,10 @@ class Admin_Controller_Catalog_Category extends Controller
 				'label' => _l("Disable"),
 			),
 			'copy'    => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -238,9 +238,9 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
 
 		if ($category_id) {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/category/update', 'category_id=' . $category_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/category/update', 'category_id=' . $category_id));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/category/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/category/update'));
 		}
 
 		//Load Information
@@ -286,7 +286,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Category->getCategoryTranslations($category_id);
 
-		//Additional Data
+		//Template Data
 		$this->data['data_categories'] = array_merge(array(0 => _l(" --- None --- ")), $categories);
 		$this->data['data_stores']     = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts']    = array('' => '') + $this->Model_Design_Layout->getLayouts();

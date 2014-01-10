@@ -13,14 +13,11 @@ class Message extends Library
 	public function add($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['messages'][$type][] = $this->language->get($message);
+			$this->session->data['messages'][$type][] = $$message;
 		} elseif (is_array($message)) {
-			array_walk_recursive($message, function ($value, $key, $data) {
-				$_SESSION['messages'][$data[1]][] = $data[0]->language->get($value);
-			}, array(
-			        $this,
-			        $type
-			   ));
+			array_walk_recursive($message, function ($value, $key) use($type) {
+				$_SESSION['messages'][$type][] = $value;
+			});
 		}
 	}
 

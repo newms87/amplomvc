@@ -26,7 +26,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 				$this->System_Extension_Shipping->deleteExtension($_GET['code']);
 
 				if (!$this->message->hasError()) {
-					$this->message->add('success', $this->_('text_success_delete'));
+					$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
 				}
 
 				$this->url->redirect('extension/shipping', $this->url->getQueryExclude('name'));
@@ -216,7 +216,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			$this->data['extend_settings'] = $this->extension_controller->output;
 		}
 
-		//Additional Data
+		//Template Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_geo_zones']      = array(0 => _l("All Zones")) + $this->Model_Localisation_GeoZone->getGeoZones();
 
@@ -250,7 +250,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$file = DIR_SYSTEM . "extension/shipping/" . $code . '.php';
 
 		if (!is_file($file)) {
-			$this->message->add('warning', $this->_('error_extension_file', $file));
+			$this->message->add('warning', _l("Unable to locate %s for editing!", $file));
 			$this->url->redirect('extension/shipping');
 		}
 
@@ -276,7 +276,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
-		//Additional Data
+		//Template Data
 		$this->data['page_title'] = $extension['title'];
 		$this->data['edit_file']  = $file;
 

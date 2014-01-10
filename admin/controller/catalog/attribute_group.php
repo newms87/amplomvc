@@ -130,11 +130,11 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		foreach ($attribute_groups as &$attribute_group) {
 			$attribute_group['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/attribute_group/delete', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
 				)
 			);
@@ -158,7 +158,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'delete' => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -202,9 +202,9 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->breadcrumb->add(_l("Attribute Groups"), $this->url->link('catalog/attribute_group'));
 
 		if (!$attribute_group_id) {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/attribute_group/update'));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id));
 		}
 
 		//Handle Post

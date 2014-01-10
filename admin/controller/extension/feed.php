@@ -57,7 +57,7 @@ class Admin_Controller_Extension_Feed extends Controller
 					);
 				} else {
 					$action[] = array(
-						'text' => $this->_('text_edit'),
+						'text' => _l("Edit"),
 						'href' => $this->url->link('feed/' . $extension . '')
 					);
 

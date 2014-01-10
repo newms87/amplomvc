@@ -12,7 +12,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 		if ($this->request->isPost()) {
 			if (!$this->send()) {
-				$this->message->add('warning', $this->_('error_send_email'));
+				$this->message->add('warning', _l("Error sending email! Message was not sent!"));
 			} else {
 				$this->message->add('success', _l("Success: Your message has been sent!"));
 			}

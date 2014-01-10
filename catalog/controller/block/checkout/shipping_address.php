@@ -42,7 +42,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 
 		if (!$json) {
 			if (empty($_POST['address_id'])) {
-				$json['error']['warning'] = $this->_('error_address');
+				$json['error']['warning'] = _l("Invalid Delivery Address");
 			} else {
 				if (!$this->cart->setShippingAddress($_POST['address_id'])) {
 					$json['error']['address'] = $this->cart->get_errors('shipping_address');
@@ -80,7 +80,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 				if ($json) {
 					$this->message->add('warning', $json['error']);
 				} else {
-					$this->message->add('success', $this->_('text_address_success'));
+					$this->message->add('success', _l("Delivery address is valid!"));
 				}
 
 				//We redirect because we are only a block, not a full page!
@@ -103,7 +103,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 			$this->message->add($this->cart->get_errors());
 		} elseif (!$this->cart->hasShipping()) {
 			$json['redirect'] = $this->url->link('checkout/checkout');
-			$this->message->add('warning', $this->_('error_no_shipping_required'));
+			$this->message->add('warning', _l("Shipping is not required for this order"));
 		}
 
 		return $json;

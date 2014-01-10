@@ -348,7 +348,7 @@ class Form extends Library
 
 			//Check if this field is set and if it is required
 			if (!empty($field['required']) && (!isset($data[$field_name]) || is_null($data[$field_name]) || $data[$field_name] === '')) {
-				$this->error[$field_name] = $this->language->get('error_required_' . $field_name, $this->_('error_required', $field_display_name));
+				$this->error[$field_name] = _l("%s is required!", $field_display_name);
 				continue;
 			}
 

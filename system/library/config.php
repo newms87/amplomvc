@@ -347,7 +347,7 @@ class Config extends Library
 
 		if ($version !== AC_VERSION) {
 			$this->language->system('config');
-			$this->message->add('notify', $this->_('notify_update', $version, AC_VERSION));
+			$this->message->add('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AC_VERSION));
 
 			$this->System_Update->updateSystem(AC_VERSION);
 		}

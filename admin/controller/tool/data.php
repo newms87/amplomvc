@@ -12,10 +12,10 @@ class Admin_Controller_Tool_Data extends Controller
 		}
 
 		if (isset($_GET['allow_all'])) {
-			$choose = $this->_('text_all_zones');
+			$choose = _l("All Zones");
 			$value  = '0';
 		} elseif (!isset($_GET['force_select'])) {
-			$choose = $this->_('text_select');
+			$choose = _l(" --- Please Select --- ");
 			$value  = '';
 		} else {
 			$choose = null;
@@ -41,7 +41,7 @@ class Admin_Controller_Tool_Data extends Controller
 		}
 
 		if (!$results) {
-			$output .= '<option value="0">' . $this->_('text_none') . '</option>';
+			$output .= '<option value="0">' . _l(" --- None --- ") . '</option>';
 		}
 
 		$this->response->setOutput($output);

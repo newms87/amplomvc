@@ -84,7 +84,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'setting/order_status')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify Order Statuses");
 		}
 
 		foreach ($_POST['order_statuses'] as $key => $order_status) {

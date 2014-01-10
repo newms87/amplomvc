@@ -87,7 +87,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'localisation/return_action')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Return Actions");
 		}
 
 		foreach ($_POST['return_actions'] as $key => $return_action) {

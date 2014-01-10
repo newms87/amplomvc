@@ -117,6 +117,17 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			'sortable'     => true,
 		);
 
+		$non_stores = array(
+			array(
+				'store_id' => '-1',
+				'name'     => _l("Admin Panel"),
+			),
+			array(
+				'store_id' => 0,
+				'name'     => _l("All Stores"),
+			),
+		);
+
 		$columns['store_id'] = array(
 			'type'         => 'select',
 			'display_name' => _l("Store:"),
@@ -125,7 +136,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				'store_id',
 				'name'
 			),
-			'build_data'   => array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores()),
+			'build_data'   => array_merge($non_stores, $this->Model_Setting_Store->getStores()),
 			'sortable'     => false,
 		);
 
@@ -152,11 +163,11 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		foreach ($url_aliases as &$url_alias) {
 			$url_alias['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
 				)
 			);
@@ -186,7 +197,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				'label' => _l("Disable"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -231,9 +242,9 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
 
 		if (!$url_alias_id) {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('setting/url_alias/udpate'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('setting/url_alias/udpate'));
 		} else {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
 
 		//Load Information
@@ -261,8 +272,19 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 		}
 
-		//Additional Data
-		$this->data['data_stores'] = array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores());
+		//Template Data
+		$non_stores = array(
+			array(
+				'store_id' => '-1',
+				'name'     => _l("Admin Panel"),
+			),
+			array(
+				'store_id' => 0,
+				'name'     => _l("All Stores"),
+			),
+		);
+
+		$this->data['data_stores'] = array_merge($non_stores, $this->Model_Setting_Store->getStores());
 
 		$this->data['data_non_stores'] = array(
 			array(

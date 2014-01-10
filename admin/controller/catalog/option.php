@@ -121,11 +121,11 @@ class Admin_Controller_Catalog_Option extends Controller
 		foreach ($options as &$option) {
 			$option['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/option/update', 'option_id=' . $option['option_id']),
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query),
 				),
 			);
@@ -150,7 +150,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'delete' => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -194,9 +194,9 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->breadcrumb->add(_l("Options"), $this->url->link('catalog/option'));
 
 		if (!$option_id) {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/option/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/option/update'));
 		} else {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/option/update', 'option_id=' . $option_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/option/update', 'option_id=' . $option_id));
 		}
 
 		//Action Buttons

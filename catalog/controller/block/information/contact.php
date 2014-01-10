@@ -6,7 +6,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 		$this->language->load('block/information/contact');
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->mail->callController('contact', $_POST);
+			$this->mail->sendTemplate('contact', $_POST);
 
 			$this->success();
 

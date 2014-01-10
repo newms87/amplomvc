@@ -39,7 +39,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 		$this->data['review_status'] = $review_status;
 
 		if ($review_status) {
-			$this->_('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
+			$this->data['review_count'] = $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']);
 
 			$this->data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
 

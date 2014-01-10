@@ -129,14 +129,14 @@ class Admin_Controller_Sale_Order extends Controller
 		foreach ($orders as &$order) {
 			$order['actions'] = array(
 				'view' => array(
-					'text' => $this->_('text_view'),
+					'text' => _l("View"),
 					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'] . '&' . $url_query)
 				),
 			);
 
 			if ($this->order->isEditable($order)) {
 				$action['edit'] = array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('sale/order/update', 'order_id=' . $order['order_id'] . '&' . $url_query)
 				);
 			}
@@ -210,9 +210,9 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 
 		if ($order_id) {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/order/update', 'order_id=' . $order_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('sale/order/update', 'order_id=' . $order_id));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('sale/order/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('sale/order/update'));
 		}
 
 		//Load Information
@@ -221,7 +221,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 			if ($order_info) {
 				$order_info['customer']  = $this->Model_Sale_Customer->getCustomer($order_info['customer_id']);
-				$order_info['affiliate'] = $this->Model_Sale_Affiliate->getAffiliate($order_info['affiliate_id']);
 				//TODO: Keep this? Need further implementation...
 				$order_info['customer_addresses'] = $this->Model_Sale_Customer->getAddresses($order_info['customer_id']);
 				$order_info['order_products']     = $this->System_Model_Order->getOrderProducts($order_id);
@@ -241,8 +240,6 @@ class Admin_Controller_Sale_Order extends Controller
 			'email'              => '',
 			'telephone'          => '',
 			'fax'                => '',
-			'affiliate'          => array(),
-			'affiliate_id'       => '',
 			'order_status_id'    => '',
 			'comment'            => '',
 			'customer_addresses' => array(),
@@ -466,13 +463,6 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($order_id);
 		$this->data['reward_total'] = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($order_id);
 
-		if ($order_info['affiliate_id']) {
-			$this->data['url_affiliate'] = $this->url->link('sale/affiliate/update', 'affiliate_id=' . $order_info['affiliate_id']);
-		}
-
-		$this->data['commission']       = $this->currency->format($order_info['commission'], $order_info['currency_code'], $order_info['currency_value']);
-		$this->data['commission_total'] = $this->Model_Sale_Affiliate->getTotalTransactionsByOrderId($order_id);
-
 		$this->data['order_status'] = $this->order->getOrderStatus($order_info['order_status_id']);
 
 		$this->data['date_added']    = $this->date->format($order_info['date_added'], 'datetime_long');
@@ -663,58 +653,6 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->response->setOutput(json_encode($json));
 	}
 
-	public function addCommission()
-	{
-		$this->language->load('sale/order');
-
-		$json = array();
-
-		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = _l("Warning: You do not have permission to modify orders!");
-		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
-
-			if ($order_info && $order_info['affiliate_id']) {
-				$affiliate_total = $this->Model_Sale_Affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
-
-				if (!$affiliate_total) {
-					$this->Model_Sale_Affiliate->addTransaction($order_info['affiliate_id'], _l("Order ID:") . ' #' . $_GET['order_id'], $order_info['commission'], $_GET['order_id']);
-
-					$json['success'] = _l("Success: Commission added!");
-				} else {
-					$json['error'] = _l("Warning: Could not complete this action!");
-				}
-			} else {
-				$json['error'] = _l("Warning: Could not complete this action!");
-			}
-		}
-
-		$this->response->setOutput(json_encode($json));
-	}
-
-	public function removeCommission()
-	{
-		$this->language->load('sale/order');
-
-		$json = array();
-
-		if (!$this->user->can('modify', 'sale/order')) {
-			$json['error'] = _l("Warning: You do not have permission to modify orders!");
-		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
-
-			if ($order_info && $order_info['affiliate_id']) {
-				$this->Model_Sale_Affiliate->deleteTransaction($_GET['order_id']);
-
-				$json['success'] = _l("Success: Commission removed!");
-			} else {
-				$json['error'] = _l("Warning: Could not complete this action!");
-			}
-		}
-
-		$this->response->setOutput(json_encode($json));
-	}
-
 	public function history()
 	{
 		if (empty($_GET['order_id'])) {
@@ -820,11 +758,12 @@ class Admin_Controller_Sale_Order extends Controller
 					$json['error'] = _l("Invalid file type!");
 				}
 
-				if ($_FILES['file']['error'] != UPLOAD_ERR_OK) {
-					$json['error'] = $this->_('error_upload_' . $_FILES['file']['error']);
+				if (!$this->validation->fileUpload($_FILES['file'])) {
+					$json['error'] = $this->validation->getError();
 				}
+
 			} else {
-				$json['error'] = $this->_('error_upload');
+				$json['error'] = _l("Error uploading file to server!");
 			}
 
 			if (!isset($json['error'])) {

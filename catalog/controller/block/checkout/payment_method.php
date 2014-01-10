@@ -28,9 +28,8 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id')), $information_info['title'], $information_info['title']);
-
-				$this->data['agree_to_payment'] = true;
+				$this->data['checkout_terms'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
+				$this->data['checkout_terms_title'] = $information_info['title'];
 			}
 		}
 
@@ -62,7 +61,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		if ($this->cart->hasPaymentAddress()) {
 			$payment_address = $this->cart->getPaymentAddress();
 		} else {
-			$json['error']['payment_address'] = $this->_('error_payment_address');
+			$json['error']['payment_address'] = _l("Invalid Billing Address");
 		}
 
 		if (!$this->cart->validate()) {
@@ -75,12 +74,13 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 
 				if ($information_info && empty($_POST['agree'])) {
-					$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
+					$json['error']['agree'] = _l("You must agree to the %", $information_info['title']);
 				}
 			}
 
 			if (!isset($_POST['payment_method'])) {
-				$json['error']['_payment_method'] = $this->_('error_payment_method'); //We use _payment_method to avoid builder->js('errors') adding error under radio input
+				//_payment_method to avoid $this->builder->js('errors', ...) adding message on form
+				$json['error']['_payment_method'] = _l("Invalid Payment Method");
 			} elseif (!$this->cart->setPaymentMethod($_POST['payment_method'])) {
 				$json['error'] = $this->cart->get_errors('payment_method');
 			}

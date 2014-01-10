@@ -1,21 +1,20 @@
 <?php
 class Admin_Controller_Help_Documentation extends Controller
 {
-
 	public function index()
 	{
 		$this->template->load('help/documentation');
 
 		$this->language->load('help/documentation');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Documentation"));
 
 		$s = $this->_('sections');
 		$this->replace_tokens($s);
 		$this->data['sections'] = $s;
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('help/documentation'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Documentation"), $this->url->link('help/documentation'));
 
 		$this->children = array(
 			'common/header',

@@ -68,14 +68,14 @@ class Admin_Controller_Block_Add extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'block/add')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Blocks");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 128)) {
 			$this->error['name'] = _l("Block name must be between 1 and 128 characters!");
 		}
 
-		if (empty($_POST['route']) || !preg_match("/^[a-z0-9_]+\/[a-z0-9_]+\$/i", $_POST['route'])) {
+		if (empty($_POST['route']) || !preg_match("/^[a-z0-9_]+\\/[a-z0-9_]+\$/i", $_POST['route'])) {
 			$this->error['route'] = _l("Route must be in the form mynew/blockroute containing characters a-z, 0-9, or _");
 		}
 

@@ -31,7 +31,7 @@ class Plugin extends Library
 			$setup_file = DIR_PLUGIN . $name . '/setup.php';
 
 			if (!is_file($setup_file)) {
-				$this->message->add("warning", $this->_('error_setup_file', $setup_file, $name));
+				$this->message->add("warning", _l("The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!", $setup_file, $name));
 
 				return false;
 			}
@@ -69,7 +69,7 @@ class Plugin extends Library
 
 		//New Files
 		if (!$this->integrateNewFiles($name)) {
-			$this->message->add("warning", $this->_("error_integrate_new_files", $name));
+			$this->message->add("warning", _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name));
 			$this->uninstall($name);
 			return false;
 		}
@@ -78,7 +78,7 @@ class Plugin extends Library
 		$file_mods = $this->getFileMods($name);
 
 		if ($file_mods === false) {
-			$this->message->add("warning", $this->_('error_file_mod', $name));
+			$this->message->add("warning", _l("There was a problem while appying file modifications for %s. The plugin has been uninstalled!", $name));
 			$this->uninstall($name);
 			return false;
 		}
@@ -87,19 +87,19 @@ class Plugin extends Library
 
 		if (!$this->mod->apply(true)) {
 			$this->message->add('warning', $this->mod->fetchErrors());
-			$this->message->add('warning', $this->_('error_install', $name));
+			$this->message->add('warning', _l("The installation of the plugin %s has failed and has been uninstalled!", $name));
 			$this->uninstall($name);
 			return false;
 		}
 
 		if (!$this->mod->write()) {
 			$this->message->add('warning', $this->mod->fetchErrors());
-			$this->message->add('warning', $this->_('error_install', $name));
+			$this->message->add('warning', _l("The installation of the plugin %s has failed and has been uninstalled!", $name));
 			$this->uninstall($name);
 			return false;
 		}
 
-		$this->message->add('success', $this->_("success_install", $name));
+		$this->message->add('success', _l("%s was successfully installed!", $name));
 
 		return true;
 	}
@@ -125,7 +125,7 @@ class Plugin extends Library
 		if ($this->mod->apply(true)) {
 			$this->mod->write();
 
-			$this->message->add('notify', $this->_('success_uninstall', $name));
+			$this->message->add('notify', _l("%s has been uninstalled.", $name));
 		} else {
 			$this->message->add('warning', $this->mod->fetchErrors());
 		}
@@ -200,13 +200,13 @@ class Plugin extends Library
 		$changes = $this->getChanges($name);
 
 		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
-			$this->message->add('notify', 'text_no_changes');
+			$this->message->add('notify', _l("No Changes Were Made"));
 			return false;
 		}
 
 		foreach ($changes['new_files'] as $file) {
 			$this->activatePluginFile($name, $file);
-			$this->message->add('success', $this->_('text_add_new_file', $file));
+			$this->message->add('success', _l("Add New File: %s", $file));
 		}
 
 		$this->mod->addFiles(null, $changes['mod_files']);
@@ -214,18 +214,18 @@ class Plugin extends Library
 		if (!empty($changes['mod_files'])) {
 			if ($this->mod->apply()) {
 				foreach ($changes['mod_files'] as $file) {
-					$this->message->add('notify', $this->_('text_add_mod_file', $file));
+					$this->message->add('notify', _l("Integrate Mod File: %s", $file));
 				}
 
 				$this->mod->write();
 			} else {
 				$this->message->add('warning', $this->mod->fetchErrors());
-				$this->message->add('warning', 'error_add_mod_failed');
+				$this->message->add('warning', _l("Failed while integrating the mod file changes!"));
 				return false;
 			}
 		}
 
-		$this->message->add('success', $this->_('success_add_changes', $name));
+		$this->message->add('success', _l("Successfully Integrated the Changes for %s!", $name));
 
 		return true;
 	}

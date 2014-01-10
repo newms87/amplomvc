@@ -87,7 +87,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'setting/return_reason')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify Return Reasons");
 		}
 
 		foreach ($_POST['return_reasons'] as $key => $return_reason) {

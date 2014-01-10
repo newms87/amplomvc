@@ -166,13 +166,13 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/weight_class/update', 'weight_class_id=' . $result['weight_class_id'] . $url)
 			);
 
 			$this->data['weight_classes'][] = array(
 				'weight_class_id' => $result['weight_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? $this->_('text_default') : null),
+				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? _l(" <b>(Default)</b>") : null),
 				'unit'            => $result['unit'],
 				'value'           => $result['value'],
 				'selected'        => isset($_GET['selected']) && in_array($result['weight_class_id'], $_GET['selected']),

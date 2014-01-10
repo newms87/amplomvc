@@ -61,7 +61,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
 			);
 

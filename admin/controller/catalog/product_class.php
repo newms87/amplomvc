@@ -117,11 +117,11 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		foreach ($product_classes as &$product_class) {
 			$product_class['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class['product_class_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/product_class/delete', 'product_class_id=' . $product_class['product_class_id'] . '&' . $url_query)
 				)
 			);
@@ -165,7 +165,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'delete' => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -209,9 +209,9 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
 
 		if ($product_class_id) {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product_class/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/product_class/update'));
 		}
 
 		//Load Information
@@ -233,7 +233,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 		$this->data += $product_class_info + $defaults;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_front_templates'] = $this->Model_Catalog_ProductClass->getFrontTemplates();
 		$this->data['data_admin_templates'] = $this->Model_Catalog_ProductClass->getAdminTemplates();
 
@@ -254,7 +254,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'catalog/product_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Product Classes");
 		}
 
 		if (!$this->validation->text($_POST['name'], 3, 45)) {
@@ -267,7 +267,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'catalog/product_class')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Product Classes");
 		}
 
 		return $this->error ? false : true;

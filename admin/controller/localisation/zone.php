@@ -166,14 +166,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
 			);
 
 			$this->data['zones'][] = array(
 				'zone_id'  => $result['zone_id'],
 				'country'  => $result['country'],
-				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
+				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? _l(" <b>(Default)</b>") : null),
 				'code'     => $result['code'],
 				'selected' => isset($_GET['selected']) && in_array($result['zone_id'], $_GET['selected']),
 				'action'   => $action
@@ -356,12 +356,6 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 			if ($address_total) {
 				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
-			}
-
-			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByZoneId($zone_id);
-
-			if ($affiliate_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s affiliates!"), $affiliate_total);
 			}
 
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);

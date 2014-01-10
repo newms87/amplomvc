@@ -21,7 +21,7 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 
 		$this->data['settings'] = $settings;
 
-		//Additional Data
+		//Template Data
 		$this->data['priceset_types'] = array(
 			'percent' => _l("Percent"),
 			'fixed'   => _l("Fixed Amount")

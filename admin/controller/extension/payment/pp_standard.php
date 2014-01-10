@@ -35,7 +35,7 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 
 		$this->data['settings'] = $settings;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 
 		$this->data['data_auth_sale'] = array(

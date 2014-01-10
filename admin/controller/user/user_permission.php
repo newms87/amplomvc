@@ -1,13 +1,11 @@
 <?php
 class Admin_Controller_User_UserPermission extends Controller
 {
-
-
 	public function index()
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("User Permissions"));
 
 		$this->getList();
 	}
@@ -16,12 +14,12 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("User Permissions"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_UserGroup->addUserGroup($_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("You have successfully modified user permissions"));
 
 			$url = '';
 
@@ -47,12 +45,12 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Update User Permissions"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_UserGroup->editUserGroup($_GET['user_group_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("You have successfully modified user permissions"));
 
 			$url = '';
 
@@ -76,35 +74,15 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function delete()
 	{
-		$this->language->load('user/user_group');
-
-		$this->document->setTitle($this->_('head_title'));
-
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $user_group_id) {
 				$this->Model_User_UserGroup->deleteUserGroup($user_group_id);
 			}
 
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-
-			$this->url->redirect('user/user_permission', $url);
+			$this->message->add('success', _l("You have successfully removed the user group"));
 		}
 
-		$this->getList();
+		$this->url->redirect('user/user_permission');
 	}
 
 	private function getList()
@@ -143,8 +121,8 @@ class Admin_Controller_User_UserPermission extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user_permission', $url));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("User Permissions"), $this->url->link('user/user_permission', $url));
 
 		$this->data['insert'] = $this->url->link('user/user_permission/insert', $url);
 		$this->data['delete'] = $this->url->link('user/user_permission/delete', $url);
@@ -166,7 +144,7 @@ class Admin_Controller_User_UserPermission extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('user/user_permission/update', 'user_group_id=' . $result['user_group_id'] . $url)
 			);
 
@@ -237,8 +215,8 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user_permission'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("User Permissions"), $this->url->link('user/user_permission'));
 
 		$url_query = $this->url->getQuery('sort', 'order', 'page');
 
@@ -291,11 +269,11 @@ class Admin_Controller_User_UserPermission extends Controller
 	private function validateForm()
 	{
 		if (!$this->user->can('modify', 'user/user_permission')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify User Permissions");
 		}
 
-		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
-			$this->error['name'] = $this->_('error_name');
+		if (!$this->validation->text($_POST['name'], 3, 64)) {
+			$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 		}
 
 		return $this->error ? false : true;
@@ -304,14 +282,14 @@ class Admin_Controller_User_UserPermission extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'user/user_permission')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify User Permissions");
 		}
 
 		foreach ($_GET['selected'] as $user_group_id) {
 			$user_total = $this->Model_User_User->getTotalUsersByGroupId($user_group_id);
 
 			if ($user_total) {
-				$this->error['warning'] = sprintf($this->_('error_user'), $user_total);
+				$this->error['warning'] = _l("This user group is associated to %s users.", $user_total);
 			}
 		}
 

@@ -17,7 +17,7 @@ class System_Extension_Total_Credit extends TotalExtension
 
 				if ($credit > 0) {
 					$total_data['credit'] = array(
-						'title' => $this->_('text_credit'),
+						'title' => _l("Credit"),
 						'value' => -$credit,
 					);
 
@@ -36,7 +36,7 @@ class System_Extension_Total_Credit extends TotalExtension
 				'customer_id' => $order_info['customer_id'],
 				'order_id'    => $order_info['order_id'],
 				'amount'      => $order_total['value'],
-				'description' => $this->_('text_order_id', (int)$order_info['order_id']),
+				'description' => _l("Order %s", (int)$order_info['order_id']),
 				'date_added'  => $this->date->now(),
 			);
 

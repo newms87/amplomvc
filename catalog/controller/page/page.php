@@ -17,7 +17,7 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->document->setTitle($page['title']);
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
@@ -54,7 +54,7 @@ class Catalog_Controller_Page_Page extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Add Styles

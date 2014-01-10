@@ -71,7 +71,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 		$this->data['return_policies'] = $return_policies;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_days'] = array(
 			'final' => _l("Final Sale"),
 			0       => _l("Return Anytime"),
@@ -95,7 +95,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'setting/return_policy')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify Return Policies");
 		}
 
 		foreach ($_POST['return_policies'] as $key => $return_policy) {

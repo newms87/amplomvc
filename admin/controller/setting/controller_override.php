@@ -13,7 +13,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
 		$this->breadcrumb->add(_l("Controller Override"), $this->url->link('setting/controller_override'));
 
 		//Load Information
@@ -65,7 +65,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'localisation/controller_override')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Controller Overrides");
 		}
 
 		if (!empty($_POST['controller_overrides'])) {

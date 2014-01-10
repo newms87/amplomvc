@@ -166,11 +166,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 		foreach ($vouchers as &$voucher) {
 			$voucher['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('sale/voucher/delete', 'voucher_id=' . $voucher['voucher_id'] . '&' . $url_query)
 				)
 			);
@@ -203,10 +203,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 				'label' => _l("Disable"),
 			),
 			'copy'    => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -250,9 +250,9 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('sale/voucher'));
 
 		if ($voucher_id) {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('sale/voucher/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('sale/voucher/update'));
 		}
 
 		//Load Information
@@ -283,7 +283,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			}
 		}
 
-		//Additional Data
+		//Template Data
 		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		$this->data['voucher_id'] = $voucher_id;
@@ -428,12 +428,12 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if ($voucher_id) {
 				$voucher = $this->System_Model_Voucher->getVoucher($voucher_id);
 			} else {
-				$json['error'] = $this->_('error_voucher_id');
+				$json['error'] = _l("You did not provide the voucher ID");
 			}
 		}
 
 		if (!$json) {
-			$this->mail->callController('voucher', $voucher);
+			$this->mail->sendTemplate('voucher', $voucher);
 
 			$json['success'] = _l("Success: Gift Voucher e-mail has been sent!");
 		}

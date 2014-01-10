@@ -134,7 +134,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 				if ($json['error']) {
 					$this->message->add('warning', $json['error']);
 				} else {
-					$this->message->add('success', $this->_('text_address_success'));
+					$this->message->add('success', _l("You have successfully added an address"));
 				}
 
 				//We redirect because we are only a block, not a full page!

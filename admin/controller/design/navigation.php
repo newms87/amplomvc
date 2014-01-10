@@ -165,11 +165,11 @@ class Admin_Controller_Design_Navigation extends Controller
 		foreach ($navigation_groups as &$nav_group) {
 			$nav_group['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
 				)
 			);
@@ -208,7 +208,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			),
 
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -286,7 +286,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'status'        => 1,
 		);
 
-		//Additional Data
+		//Template Data
 		$admin_store = array(
 			'admin' => array(
 				'store_id' => -1,

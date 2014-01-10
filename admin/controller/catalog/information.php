@@ -150,7 +150,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -171,15 +171,15 @@ class Admin_Controller_Catalog_Information extends Controller
 		foreach ($informations as &$information) {
 			$information['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('catalog/information/update', 'information_id=' . $information['information_id'])
 				),
 				'copy'   => array(
-					'text' => $this->_('text_copy'),
+					'text' => _l("Copy"),
 					'href' => $this->url->link('catalog/information/copy', 'information_id=' . $information['information_id'] . '&' . $url_query)
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('catalog/information/delete', 'information_id=' . $information['information_id'] . '&' . $url_query)
 				),
 			);
@@ -211,10 +211,10 @@ class Admin_Controller_Catalog_Information extends Controller
 				'label' => _l("Disable"),
 			),
 			'copy'    => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -383,10 +383,6 @@ class Admin_Controller_Catalog_Information extends Controller
 
 			if ($this->config->get('config_checkout_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store checkout terms!");
-			}
-
-			if ($this->config->get('config_affiliate_terms_info_id') == $information_id) {
-				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store affiliate terms!");
 			}
 
 			$store_total = $this->Model_Setting_Store->getTotalStoresByInformationId($information_id);

@@ -79,11 +79,6 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 	}
 }
 
-// Check install directory exists
-if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
-	$this->error['error_install'] = $this->_('error_install');
-}
-
 //Core
 require_once(_ac_mod_file(DIR_DATABASE . 'db.php'));
 

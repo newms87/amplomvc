@@ -66,7 +66,7 @@ class Admin_Controller_Block_Block extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -86,11 +86,11 @@ class Admin_Controller_Block_Block extends Controller
 		foreach ($blocks as &$block) {
 			$actions = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('block/block', 'name=' . $block['name'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('block/block/delete', 'name=' . $block['name']),
 				),
 			);
@@ -302,7 +302,7 @@ class Admin_Controller_Block_Block extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'block/block')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Blocks");
 		}
 
 		$this->validate_block_data();
@@ -313,7 +313,7 @@ class Admin_Controller_Block_Block extends Controller
 	private function validateDelete()
 	{
 		if (!$this->user->can('modify', 'block/block')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Blocks");
 		}
 
 		return $this->error ? false : true;

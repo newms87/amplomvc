@@ -146,11 +146,11 @@ class Admin_Controller_Page_Page extends Controller
 		foreach ($pages as &$page) {
 			$page['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('page/page/update', 'page_id=' . $page['page_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('page/page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
 				)
 			);
@@ -182,7 +182,7 @@ class Admin_Controller_Page_Page extends Controller
 				'label' => _l("Disable"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -226,9 +226,9 @@ class Admin_Controller_Page_Page extends Controller
 		$this->breadcrumb->add(_l("Page"), $this->url->link('page/page'));
 
 		if ($page_id) {
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('page/page/update', 'page_id=' . $page_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('page/page/update', 'page_id=' . $page_id));
 		} else {
-			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('page/page/update'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('page/page/update'));
 		}
 
 		//Load Information from POST or DB
@@ -261,7 +261,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->data += $page_info + $defaults;
 
-		//Additional Data
+		//Template Data
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 

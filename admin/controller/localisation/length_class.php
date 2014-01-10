@@ -166,13 +166,13 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/length_class/update', 'length_class_id=' . $result['length_class_id'] . $url)
 			);
 
 			$this->data['length_classes'][] = array(
 				'length_class_id' => $result['length_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? $this->_('text_default') : null),
+				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? _l(" <b>(Default)</b>") : null),
 				'unit'            => $result['unit'],
 				'value'           => $result['value'],
 				'selected'        => isset($_GET['selected']) && in_array($result['length_class_id'], $_GET['selected']),

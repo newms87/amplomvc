@@ -23,20 +23,9 @@ abstract class Controller
 
 	public function __set($key, $value)
 	{
-		$this->registry->set($key, $value);
-	}
-
-	public function _($key)
-	{
-		return 'SHOULD NOT SEE THIS!!!!';
-
-		if (func_num_args() > 1) {
-			$args = func_get_args();
-
-			return call_user_func_array(array($this->language, 'format'), $args);
-		}
-
-		return $this->language->get($key);
+		//TODO __set() has been deprecated for AmploCart. DO NOT USE THIS FEATURE.
+		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled." . get_caller(0,5));
+		exit;
 	}
 
 	public function getError()
@@ -107,9 +96,6 @@ abstract class Controller
 
 			$this->error = array();
 		}
-
-		//Build language
-		//$this->data += $this->language->data;
 
 		//Empty Dependencies and Breadcrumbs if an ajax request
 		if ($this->request->isAjax()) {

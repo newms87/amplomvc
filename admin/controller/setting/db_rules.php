@@ -79,7 +79,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		foreach ($db_rules as &$db_rule) {
 			$action = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule['db_rule_id'])
 			);
 

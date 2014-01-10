@@ -1,611 +1,590 @@
 <?= $header; ?>
-	<div class="section">
+<div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
-	<div class="heading">
-		<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
-		<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-				href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
-	</div>
-	<div class="section">
-	<div id="vtabs" class="vtabs"><a href="#tab-customer"><?= _l("Customer Details"); ?></a><a
-			href="#tab-payment"><?= _l("Payment Details"); ?></a><a href="#tab-shipping"><?= _l("Shipping Details"); ?></a><a
-			href="#tab-product"><?= _l("Products"); ?></a><a href="#tab-voucher"><?= _l("Vouchers"); ?></a><a
-			href="#tab-total"><?= _l("Totals"); ?></a></div>
-	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
-	<div id="tab-customer" class="vtabs-content">
-		<table class="form">
-			<tr>
-				<td class="left"><?= _l("Store:"); ?></td>
-				<td class="left">
-					<? $this->builder->setConfig('store_id', 'name'); ?>
-					<?= $this->builder->build('select', $data_stores, "store_id", $store_id); ?>
-				</td>
-			</tr>
-			<tr>
-				<td><?= _l("Customer:"); ?></td>
-				<td><input type="text" name="customer" value="<?= $customer; ?>"/>
-					<input type="hidden" name="customer_id" value="<?= $customer_id; ?>"/>
-					<input type="hidden" name="customer_group_id" value="<?= $customer_group_id; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("First Name:"); ?></td>
-				<td><input type="text" name="firstname" value="<?= $firstname; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Last Name:"); ?></td>
-				<td><input type="text" name="lastname" value="<?= $lastname; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("E-Mail:"); ?></td>
-				<td><input type="text" name="email" value="<?= $email; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Telephone:"); ?></td>
-				<td><input type="text" name="telephone" value="<?= $telephone; ?>"/></td>
-			</tr>
-			<tr>
-				<td><?= _l("Fax:"); ?></td>
-				<td><input type="text" name="fax" value="<?= $fax; ?>"/></td>
-			</tr>
-		</table>
-	</div>
-	<div id="tab-payment" class="vtabs-content">
-		<table class="form">
-			<tr>
-				<td><?= _l("Choose Address:"); ?></td>
-				<td><select name="payment_address">
-						<option value="0" selected="selected"><?= _l(" --- None --- "); ?></option>
-						<? foreach ($addresses as $address) { ?>
-							<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
-						<? } ?>
-					</select></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("First Name:"); ?></td>
-				<td><input type="text" name="payment_firstname" value="<?= $payment_firstname; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Last Name:"); ?></td>
-				<td><input type="text" name="payment_lastname" value="<?= $payment_lastname; ?>"/></td>
-			</tr>
-			<tr>
-				<td><?= _l("Company:"); ?></td>
-				<td><input type="text" name="payment_company" value="<?= $payment_company; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Address 1:"); ?></td>
-				<td><input type="text" name="payment_address_1" value="<?= $payment_address_1; ?>"/></td>
-			</tr>
-			<tr>
-				<td><?= _l("Address 2:"); ?></td>
-				<td><input type="text" name="payment_address_2" value="<?= $payment_address_2; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("City:"); ?></td>
-				<td><input type="text" name="payment_city" value="<?= $payment_city; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Postcode:"); ?></td>
-				<td><input type="text" name="payment_postcode" value="<?= $payment_postcode; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Country:"); ?></td>
-				<td>
-					<?= $this->builder->setConfig('country_id', 'name'); ?>
-					<?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class' => "country_select")); ?>
-				</td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Region / State:"); ?></td>
-				<td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id; ?>"></select></td>
-			</tr>
-		</table>
-	</div>
-	<div id="tab-shipping" class="vtabs-content">
-		<table class="form">
-			<tr>
-				<td><?= _l("Choose Address:"); ?></td>
-				<td><select name="shipping_address">
-						<option value="0" selected="selected"><?= _l(" --- None --- "); ?></option>
-						<? foreach ($addresses as $address) { ?>
-							<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
-						<? } ?>
-					</select></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("First Name:"); ?></td>
-				<td><input type="text" name="shipping_firstname" value="<?= $shipping_firstname; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Last Name:"); ?></td>
-				<td><input type="text" name="shipping_lastname" value="<?= $shipping_lastname; ?>"/></td>
-			</tr>
-			<tr>
-				<td><?= _l("Company:"); ?></td>
-				<td><input type="text" name="shipping_company" value="<?= $shipping_company; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Address 1:"); ?></td>
-				<td><input type="text" name="shipping_address_1" value="<?= $shipping_address_1; ?>"/></td>
-			</tr>
-			<tr>
-				<td><?= _l("Address 2:"); ?></td>
-				<td><input type="text" name="shipping_address_2" value="<?= $shipping_address_2; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("City:"); ?></td>
-				<td><input type="text" name="shipping_city" value="<?= $shipping_city; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Postcode:"); ?></td>
-				<td><input type="text" name="shipping_postcode" value="<?= $shipping_postcode; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Country:"); ?></td>
-				<td>
-					<?= $this->builder->setConfig('country_id', 'name'); ?>
-					<?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class' => "country_select")); ?>
-				</td>
-			</tr>
-			<tr>
-				<td class="required"> <?= _l("Region / State:"); ?></td>
-				<td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
-			</tr>
-		</table>
-	</div>
-	<div id="tab-product" class="vtabs-content">
-		<table class="list">
-			<thead>
-			<tr>
-				<td></td>
-				<td class="left"><?= _l("Product"); ?></td>
-				<td class="left"><?= _l("Model"); ?></td>
-				<td class="right"><?= _l("Quantity"); ?></td>
-				<td class="right"><?= _l("Unit Price"); ?></td>
-				<td class="right"><?= _l("Total"); ?></td>
-			</tr>
-			</thead>
-			<? $product_row = 0; ?>
-			<? $option_row = 0; ?>
-			<? $download_row = 0; ?>
-			<tbody id="product">
-			<? if ($order_products) { ?>
-				<? foreach ($order_products as $order_product) { ?>
-					<tr id="product-row<?= $product_row; ?>">
-						<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-						                                            title="<?= _l("Remove"); ?>"
-						                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
-						</td>
-						<td class="left"><?= $order_product['name']; ?><br/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]" value="<?= $order_product['order_product_id']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]" value="<?= $order_product['product_id']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][name]" value="<?= $order_product['name']; ?>"/>
-							<? foreach ($order_product['option'] as $option) { ?>
-								-
-								<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]" value="<?= $option['order_option_id']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]" value="<?= $option['product_option_id']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]" value="<?= $option['product_option_value_id']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]" value="<?= $option['name']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]" value="<?= $option['value']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]" value="<?= $option['type']; ?>"/>
-								<? $option_row++; ?>
-							<? } ?>
-							<? foreach ($order_product['download'] as $download) { ?>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]" value="<?= $download['order_download_id']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]" value="<?= $download['name']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]" value="<?= $download['filename']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]" value="<?= $download['mask']; ?>"/>
-								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]" value="<?= $download['remaining']; ?>"/>
-								<? $download_row++; ?>
-							<? } ?></td>
-						<td class="left"><?= $order_product['model']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][model]" value="<?= $order_product['model']; ?>"/></td>
-						<td class="right"><?= $order_product['quantity']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]" value="<?= $order_product['quantity']; ?>"/></td>
-						<td class="right"><?= $order_product['price']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][price]" value="<?= $order_product['price']; ?>"/></td>
-						<td class="right"><?= $order_product['total']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][total]" value="<?= $order_product['total']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][tax]" value="<?= $order_product['tax']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][reward]" value="<?= $order_product['reward']; ?>"/></td>
-					</tr>
-					<? $product_row++; ?>
-				<? } ?>
-			<? } else { ?>
-				<tr>
-					<td class="center" colspan="6"><?= _l("No results!"); ?></td>
-				</tr>
-			<? } ?>
-			</tbody>
-		</table>
-		<table class="list">
-			<thead>
-			<tr>
-				<td colspan="2" class="left"><?= _l("Add Product(s)"); ?></td>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td class="left"><?= _l("Choose Product:"); ?></td>
-				<td class="left"><input type="text" name="product" value=""/>
-					<input type="hidden" name="product_id" value=""/></td>
-			</tr>
-			<tr id="option"></tr>
-			<tr>
-				<td class="left"><?= _l("Quantity:"); ?></td>
-				<td class="left"><input type="text" name="quantity" value="1"/></td>
-			</tr>
-			</tbody>
-			<tfoot>
-			<tr>
-				<td class="left">&nbsp;</td>
-				<td class="left"><a id="button-product" class="button"><?= _l("Add Product"); ?></a></td>
-			</tr>
-			</tfoot>
-		</table>
-	</div>
-	<div id="tab-voucher" class="vtabs-content">
-		<table class="list">
-			<thead>
-			<tr>
-				<td></td>
-				<td class="left"><?= _l("Product"); ?></td>
-				<td class="left"><?= _l("Model"); ?></td>
-				<td class="right"><?= _l("Quantity"); ?></td>
-				<td class="right"><?= _l("Unit Price"); ?></td>
-				<td class="right"><?= _l("Total"); ?></td>
-			</tr>
-			</thead>
-			<tbody id="voucher">
-			<? $voucher_row = 0; ?>
-			<? if ($order_vouchers) { ?>
-				<? foreach ($order_vouchers as $order_voucher) { ?>
-					<tr id="voucher-row<?= $voucher_row; ?>">
-						<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-						                                            title="<?= _l("Remove"); ?>"
-						                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
-						</td>
-						<td class="left"><?= $order_voucher['description']; ?>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]" value="<?= $order_voucher['order_voucher_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]" value="<?= $order_voucher['voucher_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]" value="<?= $order_voucher['description']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]" value="<?= $order_voucher['code']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]" value="<?= $order_voucher['from_name']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]" value="<?= $order_voucher['from_email']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]" value="<?= $order_voucher['to_name']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]" value="<?= $order_voucher['to_email']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]" value="<?= $order_voucher['voucher_theme_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]" value="<?= $order_voucher['message']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]" value="<?= $order_voucher['amount']; ?>"/></td>
-						<td class="left"></td>
-						<td class="right">1</td>
-						<td class="right"><?= $order_voucher['amount']; ?></td>
-						<td class="right"><?= $order_voucher['amount']; ?></td>
-					</tr>
-					<? $voucher_row++; ?>
-				<? } ?>
-			<? } else { ?>
-				<tr>
-					<td class="center" colspan="6"><?= _l("No results!"); ?></td>
-				</tr>
-			<? } ?>
-			</tbody>
-		</table>
-		<table class="list">
-			<thead>
-			<tr>
-				<td colspan="2" class="left"><?= _l("Add Voucher(s)"); ?></td>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Recipient\'s Name:"); ?></td>
-				<td class="left"><input type="text" name="to_name" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Recipient\'s Email:"); ?></td>
-				<td class="left"><input type="text" name="to_email" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Senders Name:"); ?></td>
-				<td class="left"><input type="text" name="from_name" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Senders Email:"); ?></td>
-				<td class="left"><input type="text" name="from_email" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Gift Certificate Theme:"); ?></td>
-				<td class="left"><select name="voucher_theme_id">
-						<? foreach ($voucher_themes as $voucher_theme) { ?>
-							<option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
-						<? } ?>
-					</select></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Message:"); ?></td>
-				<td class="left"><textarea name="message" cols="40" rows="5"></textarea></td>
-			</tr>
-			<tr>
-				<td class="left"><span class="required"></span> <?= _l("Amount:"); ?></td>
-				<td class="left"><input type="text" name="amount" value="25.00" size="5"/></td>
-			</tr>
-			</tbody>
-			<tfoot>
-			<tr>
-				<td class="left">&nbsp;</td>
-				<td class="left"><a id="button-voucher" class="button"><?= _l("Add Voucher"); ?></a></td>
-			</tr>
-			</tfoot>
-		</table>
-	</div>
-	<div id="tab-total" class="vtabs-content">
-		<table class="list">
-			<thead>
-			<tr>
-				<td class="left"><?= _l("Product"); ?></td>
-				<td class="left"><?= _l("Model"); ?></td>
-				<td class="right"><?= _l("Quantity"); ?></td>
-				<td class="right"><?= _l("Unit Price"); ?></td>
-				<td class="right"><?= _l("Total"); ?></td>
-			</tr>
-			</thead>
-			<tbody id="total">
-			<? $total_row = 0; ?>
-			<? if ($order_products || $order_vouchers || $order_totals) { ?>
-				<? foreach ($order_products as $order_product) { ?>
-					<tr>
-						<td class="left"><?= $order_product['name']; ?><br/>
-							<? foreach ($order_product['option'] as $option) { ?>
-								-
-								<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
-							<? } ?></td>
-						<td class="left"><?= $order_product['model']; ?></td>
-						<td class="right"><?= $order_product['quantity']; ?></td>
-						<td class="right"><?= $order_product['price']; ?></td>
-						<td class="right"><?= $order_product['total']; ?></td>
-					</tr>
-				<? } ?>
-				<? foreach ($order_vouchers as $order_voucher) { ?>
-					<tr>
-						<td class="left"><?= $order_voucher['description']; ?></td>
-						<td class="left"></td>
-						<td class="right">1</td>
-						<td class="right"><?= $order_voucher['amount']; ?></td>
-						<td class="right"><?= $order_voucher['amount']; ?></td>
-					</tr>
-				<? } ?>
-				<? foreach ($order_totals as $order_total) { ?>
-					<tr id="total-row<?= $total_row; ?>">
-						<td class="right" colspan="4"><?= $order_total['title']; ?>:
-							<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]" value="<?= $order_total['order_total_id']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][code]" value="<?= $order_total['code']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][title]" value="<?= $order_total['title']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][text]" value="<?= $order_total['text']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][value]" value="<?= $order_total['value']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]" value="<?= $order_total['sort_order']; ?>"/></td>
-						<td class="right"><?= $order_total['value']; ?></td>
-					</tr>
-					<? $total_row++; ?>
-				<? } ?>
-			<? } else { ?>
-				<tr>
-					<td class="center" colspan="5"><?= _l("No results!"); ?></td>
-				</tr>
-			<? } ?>
-			</tbody>
-		</table>
-		<table class="list">
-			<thead>
-			<tr>
-				<td class="left" colspan="2"><?= _l("Order Details"); ?></td>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td class="left"><?= _l("Shipping Method:"); ?></td>
-				<td class="left"><select name="shipping">
-						<option value=""><?= _l(" --- Please Select --- "); ?></option>
-						<? if ($shipping_code) { ?>
-							<option value="<?= $shipping_code; ?>" selected="selected"><?= $shipping_method; ?></option>
-						<? } ?>
-					</select>
-					<input type="hidden" name="shipping_method" value="<?= $shipping_method; ?>"/>
-					<input type="hidden" name="shipping_code" value="<?= $shipping_code; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Payment Method:"); ?></td>
-				<td class="left"><select name="payment">
-						<option value=""><?= _l(" --- Please Select --- "); ?></option>
-						<? if ($payment_code) { ?>
-							<option value="<?= $payment_code; ?>" selected="selected"><?= $payment_method; ?></option>
-						<? } ?>
-					</select>
-					<input type="hidden" name="payment_method" value="<?= $payment_method; ?>"/>
-					<input type="hidden" name="payment_code" value="<?= $payment_code; ?>"/></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Coupon:"); ?></td>
-				<td class="left"><input type="text" name="coupon" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Voucher:"); ?></td>
-				<td class="left"><input type="text" name="voucher" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Reward:"); ?></td>
-				<td class="left"><input type="text" name="reward" value=""/></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Order Status:"); ?></td>
-				<td class="left"><select name="order_status_id">
-						<? foreach ($order_statuses as $order_status) { ?>
-							<? if ($order_status['order_status_id'] == $order_status_id) { ?>
-								<option value="<?= $order_status['order_status_id']; ?>"
-								        selected="selected"><?= $order_status['name']; ?></option>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
+		</div>
+		<div class="section">
+			<div id="vtabs" class="vtabs"><a href="#tab-customer"><?= _l("Customer Details"); ?></a><a
+					href="#tab-payment"><?= _l("Payment Details"); ?></a><a href="#tab-shipping"><?= _l("Shipping Details"); ?></a><a
+					href="#tab-product"><?= _l("Products"); ?></a><a href="#tab-voucher"><?= _l("Vouchers"); ?></a><a
+					href="#tab-total"><?= _l("Totals"); ?></a></div>
+			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+				<div id="tab-customer" class="vtabs-content">
+					<table class="form">
+						<tr>
+							<td class="left"><?= _l("Store:"); ?></td>
+							<td class="left">
+								<? $this->builder->setConfig('store_id', 'name'); ?>
+								<?= $this->builder->build('select', $data_stores, "store_id", $store_id); ?>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Customer:"); ?></td>
+							<td><input type="text" name="customer" value="<?= $customer; ?>"/>
+								<input type="hidden" name="customer_id" value="<?= $customer_id; ?>"/>
+								<input type="hidden" name="customer_group_id" value="<?= $customer_group_id; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("First Name:"); ?></td>
+							<td><input type="text" name="firstname" value="<?= $firstname; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Last Name:"); ?></td>
+							<td><input type="text" name="lastname" value="<?= $lastname; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("E-Mail:"); ?></td>
+							<td><input type="text" name="email" value="<?= $email; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Telephone:"); ?></td>
+							<td><input type="text" name="telephone" value="<?= $telephone; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= _l("Fax:"); ?></td>
+							<td><input type="text" name="fax" value="<?= $fax; ?>"/></td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab-payment" class="vtabs-content">
+					<table class="form">
+						<tr>
+							<td><?= _l("Choose Address:"); ?></td>
+							<td><select name="payment_address">
+									<option value="0" selected="selected"><?= _l(" --- None --- "); ?></option>
+									<? foreach ($addresses as $address) { ?>
+										<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+									<? } ?>
+								</select></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("First Name:"); ?></td>
+							<td><input type="text" name="payment_firstname" value="<?= $payment_firstname; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Last Name:"); ?></td>
+							<td><input type="text" name="payment_lastname" value="<?= $payment_lastname; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= _l("Company:"); ?></td>
+							<td><input type="text" name="payment_company" value="<?= $payment_company; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Address 1:"); ?></td>
+							<td><input type="text" name="payment_address_1" value="<?= $payment_address_1; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= _l("Address 2:"); ?></td>
+							<td><input type="text" name="payment_address_2" value="<?= $payment_address_2; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("City:"); ?></td>
+							<td><input type="text" name="payment_city" value="<?= $payment_city; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Postcode:"); ?></td>
+							<td><input type="text" name="payment_postcode" value="<?= $payment_postcode; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Country:"); ?></td>
+							<td>
+								<?= $this->builder->setConfig('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class' => "country_select")); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Region / State:"); ?></td>
+							<td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id; ?>"></select></td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab-shipping" class="vtabs-content">
+					<table class="form">
+						<tr>
+							<td><?= _l("Choose Address:"); ?></td>
+							<td><select name="shipping_address">
+									<option value="0" selected="selected"><?= _l(" --- None --- "); ?></option>
+									<? foreach ($addresses as $address) { ?>
+										<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+									<? } ?>
+								</select></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("First Name:"); ?></td>
+							<td><input type="text" name="shipping_firstname" value="<?= $shipping_firstname; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Last Name:"); ?></td>
+							<td><input type="text" name="shipping_lastname" value="<?= $shipping_lastname; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= _l("Company:"); ?></td>
+							<td><input type="text" name="shipping_company" value="<?= $shipping_company; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Address 1:"); ?></td>
+							<td><input type="text" name="shipping_address_1" value="<?= $shipping_address_1; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= _l("Address 2:"); ?></td>
+							<td><input type="text" name="shipping_address_2" value="<?= $shipping_address_2; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("City:"); ?></td>
+							<td><input type="text" name="shipping_city" value="<?= $shipping_city; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Postcode:"); ?></td>
+							<td><input type="text" name="shipping_postcode" value="<?= $shipping_postcode; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Country:"); ?></td>
+							<td>
+								<?= $this->builder->setConfig('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class' => "country_select")); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Region / State:"); ?></td>
+							<td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab-product" class="vtabs-content">
+					<table class="list">
+						<thead>
+							<tr>
+								<td></td>
+								<td class="left"><?= _l("Product"); ?></td>
+								<td class="left"><?= _l("Model"); ?></td>
+								<td class="right"><?= _l("Quantity"); ?></td>
+								<td class="right"><?= _l("Unit Price"); ?></td>
+								<td class="right"><?= _l("Total"); ?></td>
+							</tr>
+						</thead>
+						<? $product_row = 0; ?>
+						<? $option_row = 0; ?>
+						<? $download_row = 0; ?>
+						<tbody id="product">
+							<? if ($order_products) { ?>
+								<? foreach ($order_products as $order_product) { ?>
+									<tr id="product-row<?= $product_row; ?>">
+										<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+												title="<?= _l("Remove"); ?>"
+												alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
+										</td>
+										<td class="left"><?= $order_product['name']; ?><br/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]" value="<?= $order_product['order_product_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]" value="<?= $order_product['product_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][name]" value="<?= $order_product['name']; ?>"/>
+											<? foreach ($order_product['option'] as $option) { ?>
+												-
+												<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]" value="<?= $option['order_option_id']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]" value="<?= $option['product_option_id']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]" value="<?= $option['product_option_value_id']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]" value="<?= $option['name']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]" value="<?= $option['value']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]" value="<?= $option['type']; ?>"/>
+												<? $option_row++; ?>
+											<? } ?>
+											<? foreach ($order_product['download'] as $download) { ?>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]" value="<?= $download['order_download_id']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]" value="<?= $download['name']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]" value="<?= $download['filename']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]" value="<?= $download['mask']; ?>"/>
+												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]" value="<?= $download['remaining']; ?>"/>
+												<? $download_row++; ?>
+											<? } ?></td>
+										<td class="left"><?= $order_product['model']; ?>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][model]" value="<?= $order_product['model']; ?>"/></td>
+										<td class="right"><?= $order_product['quantity']; ?>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]" value="<?= $order_product['quantity']; ?>"/></td>
+										<td class="right"><?= $order_product['price']; ?>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][price]" value="<?= $order_product['price']; ?>"/></td>
+										<td class="right"><?= $order_product['total']; ?>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][total]" value="<?= $order_product['total']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][tax]" value="<?= $order_product['tax']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][reward]" value="<?= $order_product['reward']; ?>"/></td>
+									</tr>
+									<? $product_row++; ?>
+								<? } ?>
 							<? } else { ?>
-								<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
+								<tr>
+									<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+								</tr>
 							<? } ?>
-						<? } ?>
-					</select></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Comment:"); ?></td>
-				<td class="left"><textarea name="comment" cols="40" rows="5"><?= $comment; ?></textarea></td>
-			</tr>
-			<tr>
-				<td class="left"><?= _l("Affiliate:"); ?></td>
-				<td class="left"><input type="text" name="affiliate" value="<?= $affiliate; ?>"/>
-					<input type="hidden" name="affiliate_id" value="<?= $affiliate_id; ?>"/></td>
-			</tr>
-			</tbody>
-			<tfoot>
-			<tr>
-				<td class="left">&nbsp;</td>
-				<td class="left"><a id="button-update" class="button"><?= _l("Update Totals"); ?></a></td>
-			</tr>
-			</tfoot>
-		</table>
+						</tbody>
+					</table>
+					<table class="list">
+						<thead>
+							<tr>
+								<td colspan="2" class="left"><?= _l("Add Product(s)"); ?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="left"><?= _l("Choose Product:"); ?></td>
+								<td class="left"><input type="text" name="product" value=""/>
+									<input type="hidden" name="product_id" value=""/></td>
+							</tr>
+							<tr id="option"></tr>
+							<tr>
+								<td class="left"><?= _l("Quantity:"); ?></td>
+								<td class="left"><input type="text" name="quantity" value="1"/></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td class="left">&nbsp;</td>
+								<td class="left"><a id="button-product" class="button"><?= _l("Add Product"); ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+				<div id="tab-voucher" class="vtabs-content">
+					<table class="list">
+						<thead>
+							<tr>
+								<td></td>
+								<td class="left"><?= _l("Product"); ?></td>
+								<td class="left"><?= _l("Model"); ?></td>
+								<td class="right"><?= _l("Quantity"); ?></td>
+								<td class="right"><?= _l("Unit Price"); ?></td>
+								<td class="right"><?= _l("Total"); ?></td>
+							</tr>
+						</thead>
+						<tbody id="voucher">
+							<? $voucher_row = 0; ?>
+							<? if ($order_vouchers) { ?>
+								<? foreach ($order_vouchers as $order_voucher) { ?>
+									<tr id="voucher-row<?= $voucher_row; ?>">
+										<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+												title="<?= _l("Remove"); ?>"
+												alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
+										</td>
+										<td class="left"><?= $order_voucher['description']; ?>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]" value="<?= $order_voucher['order_voucher_id']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]" value="<?= $order_voucher['voucher_id']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]" value="<?= $order_voucher['description']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]" value="<?= $order_voucher['code']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]" value="<?= $order_voucher['from_name']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]" value="<?= $order_voucher['from_email']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]" value="<?= $order_voucher['to_name']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]" value="<?= $order_voucher['to_email']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]" value="<?= $order_voucher['voucher_theme_id']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]" value="<?= $order_voucher['message']; ?>"/>
+											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]" value="<?= $order_voucher['amount']; ?>"/></td>
+										<td class="left"></td>
+										<td class="right">1</td>
+										<td class="right"><?= $order_voucher['amount']; ?></td>
+										<td class="right"><?= $order_voucher['amount']; ?></td>
+									</tr>
+									<? $voucher_row++; ?>
+								<? } ?>
+							<? } else { ?>
+								<tr>
+									<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+								</tr>
+							<? } ?>
+						</tbody>
+					</table>
+					<table class="list">
+						<thead>
+							<tr>
+								<td colspan="2" class="left"><?= _l("Add Voucher(s)"); ?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Recipient\'s Name:"); ?></td>
+								<td class="left"><input type="text" name="to_name" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Recipient\'s Email:"); ?></td>
+								<td class="left"><input type="text" name="to_email" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Senders Name:"); ?></td>
+								<td class="left"><input type="text" name="from_name" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Senders Email:"); ?></td>
+								<td class="left"><input type="text" name="from_email" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Gift Certificate Theme:"); ?></td>
+								<td class="left"><select name="voucher_theme_id">
+										<? foreach ($voucher_themes as $voucher_theme) { ?>
+											<option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
+										<? } ?>
+									</select></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Message:"); ?></td>
+								<td class="left"><textarea name="message" cols="40" rows="5"></textarea></td>
+							</tr>
+							<tr>
+								<td class="left"><span class="required"></span> <?= _l("Amount:"); ?></td>
+								<td class="left"><input type="text" name="amount" value="25.00" size="5"/></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td class="left">&nbsp;</td>
+								<td class="left"><a id="button-voucher" class="button"><?= _l("Add Voucher"); ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+				<div id="tab-total" class="vtabs-content">
+					<table class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= _l("Product"); ?></td>
+								<td class="left"><?= _l("Model"); ?></td>
+								<td class="right"><?= _l("Quantity"); ?></td>
+								<td class="right"><?= _l("Unit Price"); ?></td>
+								<td class="right"><?= _l("Total"); ?></td>
+							</tr>
+						</thead>
+						<tbody id="total">
+							<? $total_row = 0; ?>
+							<? if ($order_products || $order_vouchers || $order_totals) { ?>
+								<? foreach ($order_products as $order_product) { ?>
+									<tr>
+										<td class="left"><?= $order_product['name']; ?><br/>
+											<? foreach ($order_product['option'] as $option) { ?>
+												-
+												<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
+											<? } ?></td>
+										<td class="left"><?= $order_product['model']; ?></td>
+										<td class="right"><?= $order_product['quantity']; ?></td>
+										<td class="right"><?= $order_product['price']; ?></td>
+										<td class="right"><?= $order_product['total']; ?></td>
+									</tr>
+								<? } ?>
+								<? foreach ($order_vouchers as $order_voucher) { ?>
+									<tr>
+										<td class="left"><?= $order_voucher['description']; ?></td>
+										<td class="left"></td>
+										<td class="right">1</td>
+										<td class="right"><?= $order_voucher['amount']; ?></td>
+										<td class="right"><?= $order_voucher['amount']; ?></td>
+									</tr>
+								<? } ?>
+								<? foreach ($order_totals as $order_total) { ?>
+									<tr id="total-row<?= $total_row; ?>">
+										<td class="right" colspan="4"><?= $order_total['title']; ?>:
+											<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]" value="<?= $order_total['order_total_id']; ?>"/>
+											<input type="hidden" name="order_total[<?= $total_row; ?>][code]" value="<?= $order_total['code']; ?>"/>
+											<input type="hidden" name="order_total[<?= $total_row; ?>][title]" value="<?= $order_total['title']; ?>"/>
+											<input type="hidden" name="order_total[<?= $total_row; ?>][text]" value="<?= $order_total['text']; ?>"/>
+											<input type="hidden" name="order_total[<?= $total_row; ?>][value]" value="<?= $order_total['value']; ?>"/>
+											<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]" value="<?= $order_total['sort_order']; ?>"/></td>
+										<td class="right"><?= $order_total['value']; ?></td>
+									</tr>
+									<? $total_row++; ?>
+								<? } ?>
+							<? } else { ?>
+								<tr>
+									<td class="center" colspan="5"><?= _l("No results!"); ?></td>
+								</tr>
+							<? } ?>
+						</tbody>
+					</table>
+					<table class="list">
+						<thead>
+							<tr>
+								<td class="left" colspan="2"><?= _l("Order Details"); ?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="left"><?= _l("Shipping Method:"); ?></td>
+								<td class="left"><select name="shipping">
+										<option value=""><?= _l(" --- Please Select --- "); ?></option>
+										<? if ($shipping_code) { ?>
+											<option value="<?= $shipping_code; ?>" selected="selected"><?= $shipping_method; ?></option>
+										<? } ?>
+									</select>
+									<input type="hidden" name="shipping_method" value="<?= $shipping_method; ?>"/>
+									<input type="hidden" name="shipping_code" value="<?= $shipping_code; ?>"/></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Payment Method:"); ?></td>
+								<td class="left"><select name="payment">
+										<option value=""><?= _l(" --- Please Select --- "); ?></option>
+										<? if ($payment_code) { ?>
+											<option value="<?= $payment_code; ?>" selected="selected"><?= $payment_method; ?></option>
+										<? } ?>
+									</select>
+									<input type="hidden" name="payment_method" value="<?= $payment_method; ?>"/>
+									<input type="hidden" name="payment_code" value="<?= $payment_code; ?>"/></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Coupon:"); ?></td>
+								<td class="left"><input type="text" name="coupon" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Voucher:"); ?></td>
+								<td class="left"><input type="text" name="voucher" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Reward:"); ?></td>
+								<td class="left"><input type="text" name="reward" value=""/></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Order Status:"); ?></td>
+								<td class="left"><select name="order_status_id">
+										<? foreach ($order_statuses as $order_status) { ?>
+											<? if ($order_status['order_status_id'] == $order_status_id) { ?>
+												<option value="<?= $order_status['order_status_id']; ?>"
+													selected="selected"><?= $order_status['name']; ?></option>
+											<? } else { ?>
+												<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
+											<? } ?>
+										<? } ?>
+									</select></td>
+							</tr>
+							<tr>
+								<td class="left"><?= _l("Comment:"); ?></td>
+								<td class="left"><textarea name="comment" cols="40" rows="5"><?= $comment; ?></textarea></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td class="left">&nbsp;</td>
+								<td class="left"><a id="button-update" class="button"><?= _l("Update Totals"); ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</form>
+		</div>
 	</div>
-	</form>
-	</div>
-	</div>
-	</div>
-	<script type="text/javascript"><!--
-		$.widget('custom.catcomplete', $.ui.autocomplete, {
-			_renderMenu: function (ul, items) {
-				var self = this, currentCategory = '';
+</div>
+<script type="text/javascript">
+	$.widget('custom.catcomplete', $.ui.autocomplete, {
+		_renderMenu: function (ul, items) {
+			var self = this, currentCategory = '';
 
-				$.each(items, function (index, item) {
-					if (item['category'] != currentCategory) {
-						ul.append('<li class="ui-autocomplete-category">' + item['category'] + '</li>');
+			$.each(items, function (index, item) {
+				if (item['category'] != currentCategory) {
+					ul.append('<li class="ui-autocomplete-category">' + item['category'] + '</li>');
 
-						currentCategory = item['category'];
-					}
-
-					self._renderItem(ul, item);
-				});
-			}
-		});
-
-		$('input[name=\'customer\']').catcomplete({
-			delay: 0,
-			source: function (request, response) {
-				$.ajax({
-					url: "<?= //TODO: standardize .. $url_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
-					dataType: "json',
-					success: function (json) {
-						response($.map(json, function (item) {
-							return {
-								category: item['customer_group'],
-								label: item['name'],
-								value: item['customer_id'],
-								customer_group_id: item['customer_group_id'],
-								firstname: item['firstname'],
-								lastname: item['lastname'],
-								email: item['email'],
-								telephone: item['telephone'],
-								fax: item['fax'],
-								address: item['address']
-							}
-						}));
-					}
-				});
-			},
-			select: function (event, ui) {
-				$('input[name=\'customer\']').attr('value', ui.item['label']);
-				$('input[name=\'customer_id\']').attr('value', ui.item['value']);
-				$('input[name=\'customer_group_id\']').attr('value', ui.item['customer_group_id']);
-				$('input[name=\'firstname\']').attr('value', ui.item['firstname']);
-				$('input[name=\'lastname\']').attr('value', ui.item['lastname']);
-				$('input[name=\'email\']').attr('value', ui.item['email']);
-				$('input[name=\'telephone\']').attr('value', ui.item['telephone']);
-				$('input[name=\'fax\']').attr('value', ui.item['fax']);
-
-				html = '<option value="0"><?= _l(" --- None --- "); ?></option>';
-
-				for (i = 0; i < ui.item['address'].length; i++) {
-					html += '<option value="' + ui.item['address'][i]['address_id'] + '">' + ui.item['address'][i]['firstname'] + ' ' + ui.item['address'][i]['lastname'] + ', ' + ui.item['address'][i]['address_1'] + ', ' + ui.item['address'][i]['city'] + ', ' + ui.item['address'][i]['country'] + '</option>';
+					currentCategory = item['category'];
 				}
 
-				$('select[name=\'shipping_address\']').html(html);
-				$('select[name=\'payment_address\']').html(html);
+				self._renderItem(ul, item);
+			});
+		}
+	});
 
-				return false;
-			}
-		});
-
-		$('input[name=\'affiliate\']').autocomplete({
-			delay: 0,
-			source: function (request, response) {
-				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=sale/affiliate/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
-					dataType: "json',
-					success: function (json) {
-						response($.map(json, function (item) {
-							return {
-								label: item['name'],
-								value: item['affiliate_id'],
-							}
-						}));
-					}
-				});
-			},
-			select: function (event, ui) {
-				$('input[name=\'affiliate\']').attr('value', ui.item['label']);
-				$('input[name=\'affiliate_id\']').attr('value', ui.item['value']);
-
-				return false;
-			}
-		});
-
-		$('select[name=\'payment_address\']').bind('change', function () {
+	$('input[name=\'customer\']').catcomplete({
+		delay: 0,
+		source: function (request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+				url: "<?= $url_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
 				dataType: "json',
 				success: function (json) {
-					if (json != '') {
-						$('input[name=\'payment_firstname\']').attr('value', json['firstname']);
-						$('input[name=\'payment_lastname\']').attr('value', json['lastname']);
-						$('input[name=\'payment_company\']').attr('value', json['company']);
-						$('input[name=\'payment_address_1\']').attr('value', json['address_1']);
-						$('input[name=\'payment_address_2\']').attr('value', json['address_2']);
-						$('input[name=\'payment_city\']').attr('value', json['city']);
-						$('input[name=\'payment_postcode\']').attr('value', json['postcode']);
-						$('select[name=\'payment_country_id\']').attr('value', json['country_id']);
-						$('select[name=\'payment_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'] + '&zone_id=" + json["zone_id']);
-					}
+					response($.map(json, function (item) {
+						return {
+							category: item['customer_group'],
+							label: item['name'],
+							value: item['customer_id'],
+							customer_group_id: item['customer_group_id'],
+							firstname: item['firstname'],
+							lastname: item['lastname'],
+							email: item['email'],
+							telephone: item['telephone'],
+							fax: item['fax'],
+							address: item['address']
+						}
+					}));
 				}
 			});
-		});
+		},
+		select: function (event, ui) {
+			$('input[name=\'customer\']').attr('value', ui.item['label']);
+			$('input[name=\'customer_id\']').attr('value', ui.item['value']);
+			$('input[name=\'customer_group_id\']').attr('value', ui.item['customer_group_id']);
+			$('input[name=\'firstname\']').attr('value', ui.item['firstname']);
+			$('input[name=\'lastname\']').attr('value', ui.item['lastname']);
+			$('input[name=\'email\']').attr('value', ui.item['email']);
+			$('input[name=\'telephone\']').attr('value', ui.item['telephone']);
+			$('input[name=\'fax\']').attr('value', ui.item['fax']);
 
-		$('select[name=\'shipping_address\']').bind('change', function () {
-			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
-				dataType: "json',
-				success: function (json) {
-					if (json != '') {
-						$('input[name=\'shipping_firstname\']').attr('value', json['firstname']);
-						$('input[name=\'shipping_lastname\']').attr('value', json['lastname']);
-						$('input[name=\'shipping_company\']').attr('value', json['company']);
-						$('input[name=\'shipping_address_1\']').attr('value', json['address_1']);
-						$('input[name=\'shipping_address_2\']').attr('value', json['address_2']);
-						$('input[name=\'shipping_city\']').attr('value', json['city']);
-						$('input[name=\'shipping_postcode\']').attr('value', json['postcode']);
-						$('select[name=\'shipping_country_id\']').attr('value', json['country_id']);
-						$('select[name=\'shipping_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'] + '&zone_id=" + json["zone_id']);
-					}
+			html = '<option value="0"><?= _l(" --- None --- "); ?></option>';
+
+			for (i = 0; i < ui.item['address'].length; i++) {
+				html += '<option value="' + ui.item['address'][i]['address_id'] + '">' + ui.item['address'][i]['firstname'] + ' ' + ui.item['address'][i]['lastname'] + ', ' + ui.item['address'][i]['address_1'] + ', ' + ui.item['address'][i]['city'] + ', ' + ui.item['address'][i]['country'] + '</option>';
+			}
+
+			$('select[name=\'shipping_address\']').html(html);
+			$('select[name=\'payment_address\']').html(html);
+
+			return false;
+		}
+	});
+
+	$('select[name=\'payment_address\']').bind('change', function () {
+		$.ajax({
+			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			dataType: "json',
+			success: function (json) {
+				if (json != '') {
+					$('input[name=\'payment_firstname\']').attr('value', json['firstname']);
+					$('input[name=\'payment_lastname\']').attr('value', json['lastname']);
+					$('input[name=\'payment_company\']').attr('value', json['company']);
+					$('input[name=\'payment_address_1\']').attr('value', json['address_1']);
+					$('input[name=\'payment_address_2\']').attr('value', json['address_2']);
+					$('input[name=\'payment_city\']').attr('value', json['city']);
+					$('input[name=\'payment_postcode\']').attr('value', json['postcode']);
+					$('select[name=\'payment_country_id\']').attr('value', json['country_id']);
+					$('select[name=\'payment_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
+				]
+					+'&zone_id=" + json["zone_id'
+				])
+					;
 				}
-			});
+			}
 		});
+	});
+
+	$('select[name=\'shipping_address\']').bind('change', function () {
+		$.ajax({
+			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			dataType: "json',
+			success: function (json) {
+				if (json != '') {
+					$('input[name=\'shipping_firstname\']').attr('value', json['firstname']);
+					$('input[name=\'shipping_lastname\']').attr('value', json['lastname']);
+					$('input[name=\'shipping_company\']').attr('value', json['company']);
+					$('input[name=\'shipping_address_1\']').attr('value', json['address_1']);
+					$('input[name=\'shipping_address_2\']').attr('value', json['address_2']);
+					$('input[name=\'shipping_city\']').attr('value', json['city']);
+					$('input[name=\'shipping_postcode\']').attr('value', json['postcode']);
+					$('select[name=\'shipping_country_id\']').attr('value', json['country_id']);
+					$('select[name=\'shipping_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
+				]
+					+'&zone_id=" + json["zone_id'
+				])
+					;
+				}
+			}
+		});
+	});
 </script>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
-	<script type="text/javascript"><!--
+<script type="text/javascript">
 	$('input[name=\'product\']').autocomplete({
 		delay: 0,
 		source: function (request, response) {
@@ -875,28 +854,28 @@
 		}
 	});
 </script>
-	<script type="text/javascript"><!--
-		$('select[name=\'payment\']').bind('change', function () {
-			if (this.value) {
-				$('input[name=\'payment_method\']').attr('value', $('select[name=\'payment\'] option:selected').text());
-			} else {
-				$('input[name=\'payment_method\']').attr('value', '');
-			}
+<script type="text/javascript">
+	$('select[name=\'payment\']').bind('change', function () {
+		if (this.value) {
+			$('input[name=\'payment_method\']').attr('value', $('select[name=\'payment\'] option:selected').text());
+		} else {
+			$('input[name=\'payment_method\']').attr('value', '');
+		}
 
-			$('input[name=\'payment_code\']').attr('value', this.value);
-		});
+		$('input[name=\'payment_code\']').attr('value', this.value);
+	});
 
-		$('select[name=\'shipping\']').bind('change', function () {
-			if (this.value) {
-				$('input[name=\'shipping_method\']').attr('value', $('select[name=\'shipping\'] option:selected').text());
-			} else {
-				$('input[name=\'shipping_method\']').attr('value', '');
-			}
+	$('select[name=\'shipping\']').bind('change', function () {
+		if (this.value) {
+			$('input[name=\'shipping_method\']').attr('value', $('select[name=\'shipping\'] option:selected').text());
+		} else {
+			$('input[name=\'shipping_method\']').attr('value', '');
+		}
 
-			$('input[name=\'shipping_code\']').attr('value', this.value);
-		});
+		$('input[name=\'shipping_code\']').attr('value', this.value);
+	});
 </script>
-	<script type="text/javascript"><!--
+<script type="text/javascript">
 	$('#button-product, #button-voucher, #button-update').live('click', function () {
 		data = '#tab-customer input[type=\'text\'], #tab-customer input[type=\'hidden\'], #tab-customer input[type=\'radio\']:checked, #tab-customer input[type=\'checkbox\']:checked, #tab-customer select, #tab-customer textarea, ';
 		data += '#tab-payment input[type=\'text\'], #tab-payment input[type=\'hidden\'], #tab-payment input[type=\'radio\']:checked, #tab-payment input[type=\'checkbox\']:checked, #tab-payment select, #tab-payment textarea, ';
@@ -1349,7 +1328,7 @@
 </script>
 
 <?= $this->builder->js('datepicker'); ?>
-	<script type="text/javascript"><!--
-		$('.vtabs a').tabs();
+<script type="text/javascript">
+	$('.vtabs a').tabs();
 </script>
 <?= $footer; ?>

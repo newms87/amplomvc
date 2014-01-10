@@ -155,22 +155,24 @@ class Mail extends Library
 		}
 	}
 
-	public function callController($controller)
+	public function sendTemplate($controller)
 	{
 		$args = func_get_args();
 		array_shift($args);
 
 		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
 
-		//Set the language and Template to the Front End
-		$this->language->setRoot(SITE_DIR . 'catalog/language/');
+		//Set the Template to the Front End
 		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
 
 		if (!$action->execute()) {
-			$this->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
-		}
+			if ($controller === 'error') {
+				trigger_error(_l("There was a problem while sending an email and the Error email template is missing!"));
+				exit;
+			}
 
-		$this->language->setRoot(DIR_LANGUAGE);
+			$this->sendTemplate('error', _l("Failed to call Mail Controller: %s!", $action->getClass()) . get_caller(0, 2));
+		}
 	}
 
 	public function setData($data)

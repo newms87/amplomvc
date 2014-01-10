@@ -362,10 +362,6 @@ class Admin_Model_Design_Navigation extends Model
 			'sales'      => array(
 				'display_name' => 'Sales',
 				'children'     => array(
-					'sales_affiliates'    => array(
-						'display_name' => 'Affiliates',
-						'href'         => 'sale/affiliate',
-					),
 					'sales_coupons'       => array(
 						'display_name' => 'Coupons',
 						'href'         => 'sale/coupon',
@@ -455,15 +451,6 @@ class Admin_Model_Design_Navigation extends Model
 			'reports'    => array(
 				'display_name' => 'Reports',
 				'children'     => array(
-					'reports_affiliates' => array(
-						'display_name' => 'Affiliates',
-						'children'     => array(
-							'reports_affiliates_commission' => array(
-								'display_name' => 'Commission',
-								'href'         => 'report/affiliate_commission',
-							),
-						),
-					),
 					'reports_customers'  => array(
 						'display_name' => 'Customers',
 						'children'     => array(

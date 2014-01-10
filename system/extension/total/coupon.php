@@ -105,7 +105,7 @@ class System_Extension_Total_Coupon extends TotalExtension
 
 				$data = array(
 					'method_id' => $coupon_info['code'],
-					'title'		=> $this->_('text_coupon_title', $coupon_info['code']),
+					'title'		=> _l("Coupon (%s)", $coupon_info['code']),
 					'value'		=> -$discount_total,
 				);
 

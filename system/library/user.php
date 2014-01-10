@@ -168,4 +168,31 @@ class User extends Library
 	{
 		return password_hash($password, PASSWORD_DEFAULT, array('cost' => PASSWORD_COST));
 	}
+
+	public function generatePassword()
+	{
+		return substr(str_shuffle(md5(microtime())), 0, (int)rand(10, 13));
+	}
+
+	public function setCode($email, $code)
+	{
+		$this->update('user', array('code' => $code), array('email' => $email));
+	}
+
+	public function lookupCode($code)
+	{
+		if ($code) {
+			return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->escape($code) . "'");
+		}
+	}
+
+	public function generateCode()
+	{
+		return str_shuffle(md5(microtime(true)*rand()));
+	}
+
+	public function clearCode($user_id)
+	{
+		$this->update('user', array('code' => ''), array('user_id' => $user_id));
+	}
 }

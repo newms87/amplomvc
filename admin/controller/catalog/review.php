@@ -166,7 +166,7 @@ class Admin_Controller_Catalog_Review extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('catalog/review/update', 'review_id=' . $result['review_id'] . $url)
 			);
 

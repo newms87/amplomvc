@@ -29,7 +29,7 @@ class Admin_Controller_Extension_Total extends Controller
 			$this->System_Extension_Total->deleteExtension($_GET['code']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success_delete'));
+				$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
 			}
 
 			$this->url->redirect('extension/total', $this->url->getQueryExclude('name'));
@@ -96,7 +96,7 @@ class Admin_Controller_Extension_Total extends Controller
 			if ($extension['installed']) {
 				$actions = array(
 					'edit'      => array(
-						'text' => $this->_('text_edit'),
+						'text' => _l("Edit"),
 						'href' => $this->url->link('extension/total/edit', 'code=' . $extension['code'])
 					),
 					'settings'  => array(
@@ -263,7 +263,7 @@ class Admin_Controller_Extension_Total extends Controller
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
-		//Additional Data
+		//Template Data
 		$this->data['page_title'] = $extension['title'];
 		$this->data['edit_file']  = $file;
 

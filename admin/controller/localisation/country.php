@@ -166,13 +166,13 @@ class Admin_Controller_Localisation_Country extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/country/update', 'country_id=' . $result['country_id'] . $url)
 			);
 
 			$this->data['countries'][] = array(
 				'country_id' => $result['country_id'],
-				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
+				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? _l(" <b>(Default)</b>") : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
 				'selected'   => isset($_GET['selected']) && in_array($result['country_id'], $_GET['selected']),
@@ -370,12 +370,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 			if ($address_total) {
 				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
-			}
-
-			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByCountryId($country_id);
-
-			if ($affiliate_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s affiliates!"), $affiliate_total);
 			}
 
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);

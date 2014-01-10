@@ -108,7 +108,7 @@ class Customer extends Library
 
 		$customer['customer_id'] = $customer_id;
 
-		$this->mail->callController('new_customer', $customer);
+		$this->mail->sendTemplate('new_customer', $customer);
 
 		return $customer_id;
 	}
@@ -683,6 +683,47 @@ class Customer extends Library
 	public function emailRegistered($email)
 	{
 		return (int)$this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
+	}
+
+	public function setCode($email, $code)
+	{
+		if (!$this->customer_id) {
+			$customer_id = $this->emailRegistered($email);
+
+			if ($customer_id) {
+				$this->customer_id = $customer_id;
+
+				$this->setMeta('password_reset_code', $code);
+
+				$this->customer_id = null;
+			}
+		}
+	}
+
+	public function lookupCode($code)
+	{
+		if ($code) {
+			$query = "SELECT c.* FROM " . DB_PREFIX . "customer c" .
+				" JOIN " . DB_PREFIX . "customer_meta cm ON (cm.customer_id=c.customer_id)" .
+				" WHERE `key` = 'password_reset_code' AND 'value' = '" . $this->escape($code) . "' LIMIT 1";
+
+			return $this->queryRow($query);
+		}
+	}
+
+	public function generateCode()
+	{
+		return str_shuffle(md5(microtime(true)*rand()));
+	}
+
+	public function clearCode($customer_id)
+	{
+		$where = array(
+			'customer_id' => $customer_id,
+			'key'         => "password_reset_code",
+		);
+
+		$this->delete('customer_meta', $where);
 	}
 
 	public function isBlacklisted($customer_id = null, $ips = array())

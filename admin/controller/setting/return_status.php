@@ -91,7 +91,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'setting/return_status')) {
-			$this->error['permission'] = $this->_('error_permission');
+			$this->error['permission'] = _l("You do not have permission to modify Return Statuses");
 		}
 
 		foreach ($_POST['return_statuses'] as $key => $return_status) {

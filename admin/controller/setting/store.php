@@ -90,7 +90,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => $this->_('column_status'),
+			'display_name' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -112,14 +112,14 @@ class Admin_Controller_Setting_Store extends Controller
 		foreach ($stores as &$store) {
 			$store['actions'] = array(
 				'edit' => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id']),
 				),
 			);
 
 			if ($this->canDelete($store['store_id'], true)) {
 				$store['actions']['delete'] = array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('setting/store/delete', 'store_id=' . $store['store_id']),
 				);
 			}

@@ -7,14 +7,80 @@ class PrettyLanguage
 		$ext         = array('php');
 
 
-		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
 
-		$this->lang_replace_contr($files);
+
+		$this->lang_replace_global();
 
 	}
 
-	public function lang_replace_contr($files)
+	public function lang_replace_global()
 	{
+		$ext         = array('php');
+		$files = $this->get_all_files_r(SITE_DIR . 'catalog/controller/', $ext);
+
+		$_ = array();
+		require(SITE_DIR . 'catalog/language/english/english.php');
+
+		foreach ($files as $file) {
+
+			$lines = explode("\n", file_get_contents($file));
+
+			$orig_lines = $lines;
+
+			$count = 0;
+
+			$new_lines = array();
+
+			$regx = "/(['\"])(" . implode('|', array_keys($_)) . ")['\"]/";
+
+			foreach ($lines as $num => $line) {
+				$matches = null;
+				if (preg_match_all($regx, $line, $matches)) {
+
+					foreach ($matches[2] as $key => $match) {
+						$quote = $matches[1][0];
+
+						$line = str_replace("\$this->_($quote$match$quote)", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\")", $line);
+						$line = preg_replace("/\\\$this->message->add\\(['\"](warning|notify|success|error)['\"],\\s*$quote$match$quote\\)/", "\\\$this->message->add('$1', _l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\"))", $line);
+
+						$pos = strpos(trim($line), "\$this->_($quote$match$quote,");
+
+						if ($pos === 0) {
+							echo "Place in Template<br>";
+							$this->pl($num, trim(str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line)));
+						} elseif ($pos !== false) {
+							$line = str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line);
+						}
+					}
+
+					if ($line === $orig_lines[$num]) {
+						echo "Unresolved<br>";
+						$this->pl($num, $line);
+					}
+					else {
+						$count++;
+					}
+				}
+
+				$new_lines[] = $line;
+			}
+
+			if ($count > 0) {
+				echo "modified $count lines in $file<br>";
+				$this->print_lines($orig_lines, $new_lines, false, true);
+				file_put_contents($file, implode("\n", $new_lines));
+			}
+			else {
+				echo "<div style=\"color:grey\">nothing to do $file</div>";
+			}
+		}
+	}
+
+	public function lang_replace_contr()
+	{
+		$ext         = array('php');
+		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
+
 		$find    = array(
 			'/language/english/',
 		);
@@ -33,7 +99,7 @@ class PrettyLanguage
 		$missed_regx = "/['\"](" . implode('|', $prefixes) . ")['\"]/";
 
 		$_ = array();
-		require(SITE_DIR . 'catalog/language/english/english.php');
+		require(SITE_DIR . 'admin/language/english/english.php');
 		$default_lang = $_;
 
 		$ignored_files = array(

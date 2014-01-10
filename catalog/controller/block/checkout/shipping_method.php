@@ -50,13 +50,13 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 			$this->message->add('warning', $this->cart->get_errors());
 			$json['redirect'] = $this->url->link('cart/cart');
 		} elseif (!$this->cart->hasShipping()) {
-			$this->message->add('warning', $this->_('error_no_shipping_required'));
+			$this->message->add('warning', _l("Shipping is not required for this order."));
 			$json['redirect'] = $this->url->link('checkout/checkout');
 		}
 
 		if (!$json) {
 			if (!isset($_POST['shipping_method'])) {
-				$json['error']['warning'] = $this->_('error_shipping_method');
+				$json['error']['warning'] = _l("Invalid Delivery Method");
 			} else {
 				if (!$this->cart->setShippingMethod($_POST['shipping_method'])) {
 					$json['error']['shipping_method'] = $this->cart->get_errors('shipping_method');

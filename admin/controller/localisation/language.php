@@ -116,13 +116,13 @@ class Admin_Controller_Localisation_Language extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/language/update', 'language_id=' . $result['language_id'] . $url)
 			);
 
 			$this->data['languages'][] = array(
 				'language_id' => $result['language_id'],
-				'name'        => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? $this->_('text_default') : null),
+				'name'        => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? _l(" <b>(Default)</b>") : null),
 				'code'        => $result['code'],
 				'sort_order'  => $result['sort_order'],
 				'selected'    => isset($_GET['selected']) && in_array($result['language_id'], $_GET['selected']),
@@ -223,7 +223,7 @@ class Admin_Controller_Localisation_Language extends Controller
 		}
 
 
-		//Additional Data
+		//Template Data
 		$this->data['data_direction'] = array(
 			'ltr' => _l("Left to Right"),
 			'rtl' => _l("Right to Left"),

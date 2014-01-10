@@ -126,11 +126,11 @@ class Admin_Controller_Design_Layout extends Controller
 		foreach ($layouts as &$layout) {
 			$layout['actions'] = array(
 				'edit'   => array(
-					'text' => $this->_('text_edit'),
+					'text' => _l("Edit"),
 					'href' => $this->url->link('design/layout/update', 'layout_id=' . $layout['layout_id'])
 				),
 				'delete' => array(
-					'text' => $this->_('text_delete'),
+					'text' => _l("Delete"),
 					'href' => $this->url->link('design/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
 				)
 			);
@@ -163,10 +163,10 @@ class Admin_Controller_Design_Layout extends Controller
 				'label' => _l("Disable"),
 			),
 			'copy'    => array(
-				'label' => $this->_('text_copy'),
+				'label' => _l("Copy"),
 			),
 			'delete'  => array(
-				'label' => $this->_('text_delete'),
+				'label' => _l("Delete"),
 			),
 		);
 
@@ -237,7 +237,7 @@ class Admin_Controller_Design_Layout extends Controller
 			'route'    => '',
 		);
 
-		//Additional Data
+		//Template Data
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 
 		//Action Buttons

@@ -84,8 +84,6 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_guest_checkout'                   => '',
 			'config_account_terms_info_id'            => 0,
 			'config_checkout_terms_info_id'           => 0,
-			'config_affiliate_terms_info_id'          => 0,
-			'config_commission'                       => '5.00',
 			'config_breadcrumb_display'               => 1,
 			'config_breadcrumb_separator'             => '/',
 			'config_breadcrumb_separator_admin'       => '/',
@@ -191,7 +189,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->data[$oct] = intval($this->data[$oct]);
 		}
 
-		//Additional Data
+		//Template Data
 		$this->data['data_layouts']           = $this->Model_Design_Layout->getLayouts();
 		$this->data['themes']                 = $this->theme->getThemes();
 		$this->data['stores']                 = $this->Model_Setting_Store->getStores();
@@ -366,7 +364,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		}
 
 		if (!$_POST['config_log_filename']) {
-			$this->error['config_log_filename'] = $this->_('error_log_filename');
+			$this->error['config_log_filename'] = _l("Log Filename Required!");
 		}
 
 		if (!$_POST['config_error_filename']) {

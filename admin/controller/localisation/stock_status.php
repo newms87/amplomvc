@@ -166,13 +166,13 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('localisation/stock_status/update', 'stock_status_id=' . $result['stock_status_id'] . $url)
 			);
 
 			$this->data['stock_statuses'][] = array(
 				'stock_status_id' => $result['stock_status_id'],
-				'name'            => $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? $this->_('text_default') : null),
+				'name'            => $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? _l(" <b>(Default)</b>") : null),
 				'selected'        => isset($_GET['selected']) && in_array($result['stock_status_id'], $_GET['selected']),
 				'action'          => $action
 			);
@@ -313,7 +313,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 		foreach ($_GET['selected'] as $stock_status_id) {
 			if ($this->config->get('config_stock_status_id') == $stock_status_id) {
-				$this->error['warning'] = $this->_('error_default');
+				$this->error['warning'] = _l("You cannot delete the default Stock Status");
 			}
 
 			$data = array(

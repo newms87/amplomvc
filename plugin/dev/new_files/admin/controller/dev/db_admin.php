@@ -6,13 +6,13 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		$this->template->load('dev/db_admin');
 		$this->language->load('dev/dev');
 
-		$this->document->setTitle($this->_('text_db_admin'));
+		$this->document->setTitle(_l("Database Administration"));
 
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('dev/dev'), '', 1);
-		$this->breadcrumb->add($this->_('text_db_admin'), $this->url->link('dev/db_admin'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
+		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);
+		$this->breadcrumb->add(_l("Database Administration"), $this->url->link('dev/db_admin'));
 
 		$this->data['return'] = $this->url->link('common/home');
 
@@ -50,7 +50,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 	public function validate()
 	{
 		if (!$this->user->can('modify', 'dev/dev')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission use the Database Administration Console");
 		}
 
 		return $this->error ? false : true;

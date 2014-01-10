@@ -29,7 +29,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			$this->System_Extension_Payment->deleteExtension($_GET['code']);
 
 			if (!$this->message->hasError()) {
-				$this->message->add('success', $this->_('text_success_delete'));
+				$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
 			}
 
 			$this->url->redirect('extension/payment', $this->url->getQueryExclude('name'));
@@ -96,7 +96,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			if ($extension['installed']) {
 				$actions = array(
 					'edit'      => array(
-						'text' => $this->_('text_edit'),
+						'text' => _l("Edit"),
 						'href' => $this->url->link('extension/payment/edit', 'code=' . $extension['code'])
 					),
 					'settings'  => array(
@@ -104,14 +104,14 @@ class Admin_Controller_Extension_Payment extends Controller
 						'href' => $this->url->link('extension/payment', 'code=' . $extension['code'])
 					),
 					'uninstall' => array(
-						'text' => $this->_('text_uninstall'),
+						'text' => _l("Uninstall"),
 						'href' => $this->url->link('extension/payment/uninstall', 'code=' . $extension['code']),
 					),
 				);
 			} else {
 				$actions = array(
 					'install' => array(
-						'text' => $this->_('text_install'),
+						'text' => _l("Install"),
 						'href' => $this->url->link('extension/payment/install', 'code=' . $extension['code'])
 					),
 				);
@@ -217,7 +217,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			$this->data['extend_settings'] = $this->extension_controller->output;
 		}
 
-		//Additional Data
+		//Template Data
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		$this->data['data_geo_zones']      = array(0 => _l("All Zones")) + $this->Model_Localisation_GeoZone->getGeoZones();
 
@@ -277,7 +277,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
-		//Additional Data
+		//Template Data
 		$this->data['page_title'] = $extension['title'];
 		$this->data['edit_file']  = $file;
 

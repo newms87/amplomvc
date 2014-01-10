@@ -56,7 +56,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		$json = array();
 
 		if (!$this->cart->hasProducts()) {
-			$json['error']['warning'] = $this->_('error_product');
+			$json['error']['warning'] = _l("Your cart is empty!");
 		}
 
 		if (!$this->cart->hasShipping()) {

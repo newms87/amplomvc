@@ -1,14 +1,12 @@
 <?php
 class Catalog_Controller_Newsletter_Newsletter extends Controller
 {
-
 	public function index()
 	{
-
 		$newsletter_id = isset($_GET['newsletter_id']) ? $_GET['newsletter_id'] : 0;
 
 		if (!$newsletter_id) {
-			$this->message->add('warning', $this->_('error_newsletter_preview'));
+			$this->message->add('warning', _l("Unable to find requested newsletter"));
 			$this->url->redirect('error/not_found');
 			return;
 		}

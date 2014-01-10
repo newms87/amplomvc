@@ -34,7 +34,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
+			$this->data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('account/login'), $this->url->link('account/register'));
 		}
 
 		if (!$this->cart->validate()) {
@@ -61,7 +61,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 				$cart_product['total_display'] = $this->currency->format($this->tax->calculate($cart_product['total'], $product['tax_class_id']));
 
 				if ($product['reward']) {
-					$product['reward'] = $this->_('text_points', $product['reward']);
+					$product['reward'] = _l("Total Points: %s", $product['reward']);
 				}
 
 				if ($show_return_policy) {
@@ -96,7 +96,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			$this->data['cart_vouchers'] = $vouchers;
 		}
 
-		//Additional Data
+		//Template Data
 		$this->data['show_return_policy'] = $show_return_policy;
 
 		//Url

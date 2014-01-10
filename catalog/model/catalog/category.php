@@ -127,18 +127,12 @@ class Catalog_Model_Catalog_Category extends Model
 		if (!$category_tree || true) {
 			$categories = $this->getCategories();
 
-			//TODO: Make Root Categories in Admin Panel to customize root category data
-			//XXX: To allow overriding this verbiage
-			if ($this->_("text_all_categories") === 'text_all_categories') {
-				$this->language->load('product/category');
-			}
-
 			$category_tree = array(
 				'category_id'      => 0,
-				'name'             => $this->_('text_all_categories'),
-				'description'      => $this->_('text_all_description'),
-				'meta_description' => $this->_('text_all_meta_description'),
-				'meta_keywords'    => $this->_('text_all_meta_keywords'),
+				'name'             => _l("All Categories"),
+				'description'      => '',
+				'meta_description' => '',
+				'meta_keywords'    => '',
 				'image'            => '',
 				'children'         => array(),
 				'parent_path'      => '0',

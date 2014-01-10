@@ -394,20 +394,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td><?= _l("Affiliate Terms:<br /><span class=\"help\">Forces people to agree to terms before an affiliate account can be created.</span>"); ?></td>
-			<td>
-				<? $this->builder->setConfig('information_id', 'title'); ?>
-				<?= $this->builder->build('select', $data_informations, 'config_affiliate_terms_info_id', $config_affiliate_terms_info_id); ?>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div><?= _l("Affiliate Commission (%):"); ?></div>
-				<span class="help"><?= _l("The default affiliate commission percentage."); ?></span>
-			</td>
-			<td><input type="text" name="config_commission" value="<?= $config_commission; ?>" size="3"/></td>
-		</tr>
-		<tr>
 			<td><?= _l("Display Stock:<br /><span class=\"help\">Display stock quantity on the product page.</span>"); ?></td>
 			<td><?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class' => 'display_stock_radio')); ?></td>
 		</tr>

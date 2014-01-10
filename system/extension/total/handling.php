@@ -7,7 +7,7 @@ class System_Extension_Total_Handling extends TotalExtension
 			$this->language->system('extension/total/handling');
 
 			$total_data['handling'] = array(
-				'title' => $this->_('text_handling'),
+				'title' => _l("Shipping & Handling"),
 				'value' => $this->config->get('handling_fee'),
 			);
 

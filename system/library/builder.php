@@ -92,10 +92,10 @@ class Builder extends Library
 		return $template->render();
 	}
 
-	//TODO: Probably get rid of this...
+	//TODO: This is a hack... Handle this better
 	public function finalSale()
 	{
-		$final_sale_explanation = $this->_('final_sale_explanation', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id')));
+		$final_sale_explanation = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id')));
 
 		return "<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'>$final_sale_explanation</span></span></div>";
 	}

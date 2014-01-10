@@ -7,19 +7,19 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 
 		$this->language->load('shipping/flat');
 
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_l("Flat Rate Shipping"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->config->saveGroup('shipping_flat', $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l("You have successfully updated Flat Rate Shipping settings"));
 
 			$this->url->redirect('extension/shipping');
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/flat'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Shipping Extensions"), $this->url->link('extension/shipping'));
+		$this->breadcrumb->add(_l("Flat Rate Shipping"), $this->url->link('shipping/flat'));
 
 		$this->data['action'] = $this->url->link('shipping/flat');
 		$this->data['cancel'] = $this->url->link('extension/shipping');
@@ -63,15 +63,15 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 	private function validate()
 	{
 		if (!$this->user->can('modify', 'shipping/flat')) {
-			$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = _l("You do not have permission to modify Flat Rate Shipping");
 		}
 
 		if (empty($_POST['flat_rates'])) {
-			$this->error['flat_rates'] = $this->_('error_flat_rates');
+			$this->error['flat_rates'] = _l("You must specify at least 1 flat rate rule");
 		} else {
 			foreach ($_POST['flat_rates'] as $key => $rate) {
 				if (empty($rate['title'])) {
-					$this->error["flat_rates[$key][title]"] = $this->_('error_title');
+					$this->error["flat_rates[$key][title]"] = _l("Title is required");
 				} else {
 					$_POST['flat_rates'][$key]['method'] = $this->tool->getSlug($rate['title']);
 
@@ -85,7 +85,7 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 				switch ($rate['rule']['type']) {
 					case 'item_qty':
 						if (!preg_match("/^[0-9]+,?[0-9]*$/", $rate['rule']['value'])) {
-							$this->error["flat_rates[$key][rule][value]"] = $this->_('error_rule_value');
+							$this->error["flat_rates[$key][rule][value]"] = _l("You must specify the rule");
 						} else {
 							if (preg_match("/^[0-9]+$/", $rate['rule']['value'])) {
 								$_POST['flat_rates'][$key]['rule']['value'] .= ",0";

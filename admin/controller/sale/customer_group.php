@@ -166,13 +166,13 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('sale/customer_group/update', 'customer_group_id=' . $result['customer_group_id'] . $url)
 			);
 
 			$this->data['customer_groups'][] = array(
 				'customer_group_id' => $result['customer_group_id'],
-				'name'              => $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? $this->_('text_default') : null),
+				'name'              => $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? _l(" <b>(Default)</b>") : null),
 				'selected'          => isset($_GET['selected']) && in_array($result['customer_group_id'], $_GET['selected']),
 				'action'            => $action
 			);

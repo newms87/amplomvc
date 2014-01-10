@@ -43,7 +43,7 @@ class Catalog_Controller_Block_Product_Related extends Controller
 				$product['rating'] = false;
 			}
 
-			$product['reviews'] = sprintf($this->_('text_reviews'), (int)$product['reviews']);
+			$product['reviews'] = _l("There are %d review for this product.", (int)$product['reviews']);
 
 			$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 		}

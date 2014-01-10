@@ -59,7 +59,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 		$this->data += $customer_info + $defaults;
 
-		//Additional Data
+		//Template Data
 		$default_shipping_address_id = isset($this->data['metadata']['default_shipping_address_id']) ? $this->data['metadata']['default_shipping_address_id'] : null;
 
 		$addresses = $this->customer->getShippingAddresses();
@@ -128,7 +128,7 @@ class Catalog_Controller_Account_Update extends Controller
 		}
 
 		if (($this->customer->info('email') !== $_POST['email']) && $this->customer->emailRegistered($_POST['email'])) {
-			$this->error['warning'] = $this->_('error_exists');
+			$this->error['warning'] = _l("This email address is already registered under a different account.");
 		}
 
 		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {

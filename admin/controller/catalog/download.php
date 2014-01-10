@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Catalog_Download extends Controller
 {
-
-
 	public function index()
 	{
 		$this->language->load('catalog/download');
@@ -201,7 +199,7 @@ class Admin_Controller_Catalog_Download extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('catalog/download/update', 'download_id=' . $result['download_id'] . $url)
 			);
 
@@ -370,8 +368,8 @@ class Admin_Controller_Catalog_Download extends Controller
 				$this->error['download'] = _l("Invalid file type!");
 			}
 
-			if ($_FILES['download']['error'] != UPLOAD_ERR_OK) {
-				$this->error['warning'] = $this->_('error_upload_' . $_FILES['download']['error']);
+			if (!$this->validation->fileUpload($_FILES['download'])) {
+				$this->error['warning'] = $this->validation->getError();
 			}
 		}
 

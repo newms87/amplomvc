@@ -42,7 +42,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		if (!$json) {
 			if (empty($_POST['address_id'])) {
-				$json['error']['warning'] = $this->_('error_address');
+				$json['error']['warning'] = _l("Invalid Billing Address!");
 			} else {
 				if (!$this->cart->setPaymentAddress($_POST['address_id'])) {
 					$json['error']['address'] = $this->cart->get_errors('payment_address');
@@ -81,7 +81,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 				if ($json['error']) {
 					$this->message->add('warning', $json['error']);
 				} else {
-					$this->message->add('success', $this->_('text_address_success'));
+					$this->message->add('success', _l("Your payment address has been verified!"));
 				}
 
 				//We redirect because we are only a block, not a full page!

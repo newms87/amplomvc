@@ -397,7 +397,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$action = array();
 
 			$action[] = array(
-				'text' => $this->_('text_edit'),
+				'text' => _l("Edit"),
 				'href' => $this->url->link('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
 			);
 

@@ -8,7 +8,7 @@ class Catalog_Controller_Tool_Data extends Controller
 			return;
 		}
 
-		$choose = isset($_GET['allow_all']) ? $this->_('text_all_zones') : $this->_('text_select');
+		$choose = isset($_GET['allow_all']) ? _l("All Zones") : _l(" --- Please Select --- ");
 
 		$output = '<option value="">' . $choose . '</option>';
 
@@ -25,7 +25,7 @@ class Catalog_Controller_Tool_Data extends Controller
 		}
 
 		if (!$results) {
-			$output .= '<option value="0">' . $this->_('text_none') . '</option>';
+			$output .= '<option value="0">' . _l(" --- None --- ") . '</option>';
 		}
 
 		$this->response->setOutput($output);
