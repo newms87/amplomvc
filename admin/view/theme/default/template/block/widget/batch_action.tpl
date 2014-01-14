@@ -1,4 +1,4 @@
-<span class="batch_action_title"><?= $text_batch_action; ?></span>
+<span class="batch_action_title"><?= _l("Batch Action"); ?></span>
 
 <? $this->builder->setConfig('key', 'label'); ?>
 <?= $this->builder->build('select', $actions, 'batch_action'); ?>
@@ -42,7 +42,7 @@
 	</div>
 <? } ?>
 
-<a class="button" onclick="do_batch_action()"><?= $button_batch_update; ?></a>
+<a class="button" onclick="do_batch_action()"><?= _l("Do"); ?></a>
 
 <? if ($ckeditor) {
 	echo $this->builder->js('ckeditor');
@@ -60,7 +60,7 @@
 		selected = $('<?= $selector; ?>:checked');
 
 		if (!selected.length) {
-			alert("<?= $error_batch_action_selection; ?>");
+			alert("<?= _l("Please select an option to perform for Batch Action"); ?>");
 			return false;
 		}
 
