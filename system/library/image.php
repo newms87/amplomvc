@@ -27,8 +27,7 @@ class Image extends Library
 
 		if (is_file(DIR_IMAGE . $filename)) {
 			return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
-		}
-		elseif (is_file($filename)) {
+		} elseif (is_file($filename)) {
 			$url = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 			return str_replace(SITE_DIR, $url, $filename);
 		}

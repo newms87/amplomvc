@@ -37,7 +37,6 @@ spl_autoload_register(function ($class) use ($registry) {
 	$registry->loadClass($class, false);
 });
 
-//Language
 global $language_group;
 $language_group = "Load";
 

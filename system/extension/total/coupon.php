@@ -3,14 +3,12 @@ class System_Extension_Total_Coupon extends TotalExtension
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		$this->language->system('extension/total/coupon');
-
 		$this->System_Model_Coupon->loadAutoCoupons();
 
 		$coupon_list = array();
 
 		if (isset($this->session->data['coupons'])) {
-			foreach ($this->session->data['coupons'] as $code=>$coupon) {
+			foreach ($this->session->data['coupons'] as $code => $coupon) {
 				$coupon_info = $this->System_Model_Coupon->getCoupon($code);
 				if ($coupon_info) {
 					$coupon_list[$code] = $coupon_info;
@@ -90,10 +88,9 @@ class System_Extension_Total_Coupon extends TotalExtension
 
 					if ($this->cart->hasShippingAddress()) {
 						$address = $this->cart->getShippingAddress();
-					}
-					else {
+					} else {
 						$address = array(
-							'zone_id'	=> 0,
+							'zone_id'    => 0,
 							'country_id' => 0,
 						);
 					}
@@ -105,8 +102,8 @@ class System_Extension_Total_Coupon extends TotalExtension
 
 				$data = array(
 					'method_id' => $coupon_info['code'],
-					'title'		=> _l("Coupon (%s)", $coupon_info['code']),
-					'value'		=> -$discount_total,
+					'title'     => _l("Coupon (%s)", $coupon_info['code']),
+					'value'     => -$discount_total,
 				);
 
 				$total_data['code__' . $coupon_info['code']] = $data + $this->info();

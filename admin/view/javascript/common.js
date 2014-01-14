@@ -34,21 +34,23 @@ $(document).ready(function () {
 	});
 
 	$('.link_list li').hover(hoverin,
-		function(){
+		function () {
 			var c = $(this).removeClass('hover');
 			if (c.hasClass('has_children') && !c.closest('.top_menu').is(':hover')) {
 				c.addClass('inactive');
-				setTimeout(function(){c.removeClass('inactive')},500);
+				setTimeout(function () {
+					c.removeClass('inactive')
+				}, 500);
 			}
 		});
 });
 
 /* For < IE 9 compatibility */
-function hoverin(){
+function hoverin() {
 	$(this).addClass('hover');
 }
 
-function hoverout(){
+function hoverout() {
 	$(this).removeClass('hover');
 }
 
@@ -81,7 +83,9 @@ function show_msg(type, html, showFor) {
 	}
 
 	if (showFor) {
-		box.delay(showFor).fadeOut(300, function(){$(this).remove()});
+		box.delay(showFor).fadeOut(300, function () {
+			$(this).remove()
+		});
 	}
 }
 
@@ -104,6 +108,8 @@ function show_msgs(data) {
 
 if (!console) {
 	console = {};
-	console.log = function (msg) {};
-	console.dir = function (obj) {};
+	console.log = function (msg) {
+	};
+	console.dir = function (obj) {
+	};
 }

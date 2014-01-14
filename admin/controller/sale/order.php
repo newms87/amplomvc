@@ -3,15 +3,11 @@ class Admin_Controller_Sale_Order extends Controller
 {
 	public function index()
 	{
-		$this->language->load('sale/order');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('sale/order');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (!isset($_GET['order_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/order');
-
 		$this->document->setTitle(_l("Orders"));
 
 		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
@@ -220,7 +214,7 @@ class Admin_Controller_Sale_Order extends Controller
 			$order_info = $this->order->get($order_id);
 
 			if ($order_info) {
-				$order_info['customer']  = $this->Model_Sale_Customer->getCustomer($order_info['customer_id']);
+				$order_info['customer'] = $this->Model_Sale_Customer->getCustomer($order_info['customer_id']);
 				//TODO: Keep this? Need further implementation...
 				$order_info['customer_addresses'] = $this->Model_Sale_Customer->getAddresses($order_info['customer_id']);
 				$order_info['order_products']     = $this->System_Model_Order->getOrderProducts($order_id);
@@ -412,9 +406,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$order_info = $this->System_Model_Order->getOrder($order_id);
 
-		//Language
-		$this->language->load('sale/order');
-
 		//Order Not Found
 		if (!$order_info) {
 			$this->message->add("warning", _l("The Order was not found in the system"));
@@ -531,8 +522,6 @@ class Admin_Controller_Sale_Order extends Controller
 		$order_id = !empty($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 
 		if (!$order_id) {
-			$this->language->load('sale/order');
-
 			$json = array();
 
 			if (!$this->user->can('modify', 'sale/order')) {
@@ -553,8 +542,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function addCredit()
 	{
-		$this->language->load('sale/order');
-
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
@@ -580,8 +567,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function removeCredit()
 	{
-		$this->language->load('sale/order');
-
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
@@ -603,8 +588,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function addReward()
 	{
-		$this->language->load('sale/order');
-
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
@@ -632,8 +615,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function removeReward()
 	{
-		$this->language->load('sale/order');
-
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/order')) {
@@ -716,8 +697,6 @@ class Admin_Controller_Sale_Order extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->load('error/not_found');
-
 			$this->document->setTitle(_l("Orders"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -734,8 +713,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function upload()
 	{
-		$this->language->load('sale/order');
-
 		$json = array();
 
 		if ($this->request->isPost()) {
@@ -786,13 +763,11 @@ class Admin_Controller_Sale_Order extends Controller
 	{
 		$this->template->load('sale/order_invoice');
 
-		$this->language->load('sale/order');
-
-		$this->language->set('title', _l("Orders"));
+		$this->data['title'] = _l("Orders");
 
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 
-		$this->language->set('language', $this->language->getInfo('code'));
+		$this->data['language'] = $this->language->info('code');
 
 		$this->data['orders'] = array();
 
@@ -861,14 +836,14 @@ class Admin_Controller_Sale_Order extends Controller
 				);
 
 				$shipping_address = str_replace(array(
-				                                     "\r\n",
-				                                     "\r",
-				                                     "\n"
-				                                ), '<br />', preg_replace(array(
-				                                                               "/\s\s+/",
-				                                                               "/\r\r+/",
-				                                                               "/\n\n+/"
-				                                                          ), '<br />', trim(str_replace($find, $replace, $format))));
+					"\r\n",
+					"\r",
+					"\n"
+				), '<br />', preg_replace(array(
+					"/\s\s+/",
+					"/\r\r+/",
+					"/\n\n+/"
+				), '<br />', trim(str_replace($find, $replace, $format))));
 
 				if ($order_info['payment_address_format']) {
 					$format = $order_info['payment_address_format'];
@@ -903,14 +878,14 @@ class Admin_Controller_Sale_Order extends Controller
 				);
 
 				$payment_address = str_replace(array(
-				                                    "\r\n",
-				                                    "\r",
-				                                    "\n"
-				                               ), '<br />', preg_replace(array(
-				                                                              "/\s\s+/",
-				                                                              "/\r\r+/",
-				                                                              "/\n\n+/"
-				                                                         ), '<br />', trim(str_replace($find, $replace, $format))));
+					"\r\n",
+					"\r",
+					"\n"
+				), '<br />', preg_replace(array(
+					"/\s\s+/",
+					"/\r\r+/",
+					"/\n\n+/"
+				), '<br />', trim(str_replace($find, $replace, $format))));
 
 				$product_data = array();
 
@@ -960,7 +935,7 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->data['orders'][] = array(
 					'order_id'         => $order_id,
 					'invoice_no'       => $invoice_no,
-					'date_added'       => date($this->language->getInfo('date_format_short'), strtotime($order_info['date_added'])),
+					'date_added'       => date('short', strtotime($order_info['date_added'])),
 					'store_name'       => $order_info['store_name'],
 					'store_url'        => rtrim($order_info['store_url'], '/'),
 					'store_address'    => nl2br($store_address),

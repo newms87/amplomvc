@@ -82,7 +82,7 @@ switch ($js) {
 			return '';
 		}
 
-		$errors = json_encode($args[0]);
+		$errors    = json_encode($args[0]);
 		$script_id = "script" . uniqid(); ?>
 
 		<script id="<?= $script_id; ?>" type="text/javascript">//<!--
@@ -151,7 +151,7 @@ switch ($js) {
 			<div class="language_menu">
 				<? foreach ($languages as $language) { ?>
 					<div class="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>"
-					     title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
+						title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
 						<img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>"/>
 					</div>
 				<? } ?>

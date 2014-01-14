@@ -33,12 +33,12 @@
 			<form action="<?= $login; ?>" method="post" enctype="multipart/form-data">
 				<div class="section">
 					<label for="login_email"><?= _l("Username or Email"); ?></label>
-					<br />
+					<br/>
 					<input id="login_email" type="text" name="username" value="<?= $username; ?>"/>
 					<br/>
 					<br/>
 					<label for="login_password"><?= _l("Password"); ?></label>
-					<br />
+					<br/>
 					<input id="login_password" type="password" autocomplete="off" name="password" value=""/>
 					<br/>
 					<a href="<?= $forgotten; ?>"><?= _l("Forgotten Password"); ?></a>

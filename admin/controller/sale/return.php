@@ -5,8 +5,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function index()
 	{
-		$this->language->load('sale/return');
-
 		$this->document->setTitle(_l("Product Returns"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function insert()
 	{
-		$this->language->load('sale/return');
-
 		$this->document->setTitle(_l("Product Returns"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -77,8 +73,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function update()
 	{
-		$this->language->load('sale/return');
-
 		$this->document->setTitle(_l("Product Returns"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -140,8 +134,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/return');
-
 		$this->document->setTitle(_l("Product Returns"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -366,8 +358,8 @@ class Admin_Controller_Sale_Return extends Controller
 				'product'       => $result['product'],
 				'model'         => $result['model'],
 				'status'        => $result['status'],
-				'date_added'    => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-				'date_modified' => date($this->language->getInfo('date_format_short'), strtotime($result['date_modified'])),
+				'date_added'    => $this->date->format($result['date_added'], 'short'),
+				'date_modified' => date('short', strtotime($result['date_modified'])),
 				'selected'      => isset($_GET['selected']) && in_array($result['return_id'], $_GET['selected']),
 				'action'        => $action
 			);
@@ -787,8 +779,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 		if ($return_info) {
 			$this->template->load('sale/return_info');
-			$this->language->load('sale/return');
-
 			$this->document->setTitle(_l("Product Returns"));
 
 			$url = '';
@@ -852,7 +842,7 @@ class Admin_Controller_Sale_Return extends Controller
 				$this->data['order'] = '';
 			}
 
-			$this->data['date_ordered'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_ordered']));
+			$this->data['date_ordered'] = date('short', strtotime($return_info['date_ordered']));
 
 			if ($return_info['customer_id']) {
 				$this->data['customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $return_info['customer_id']);
@@ -864,8 +854,8 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['data_return_reasons']  = $this->order->getReturnReasons();
 			$this->data['data_return_actions']  = $this->order->getReturnActions();
 
-			$this->data['date_added']    = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
-			$this->data['date_modified'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_modified']));
+			$this->data['date_added']    = date('short', strtotime($return_info['date_added']));
+			$this->data['date_modified'] = date('short', strtotime($return_info['date_modified']));
 
 			$this->data['opened'] = $return_info['opened'] ? _l("Yes") : _l("No");
 
@@ -879,8 +869,6 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->response->setOutput($this->render());
 		} else {
 			$this->template->load('error/not_found');
-			$this->language->load('error/not_found');
-
 			$this->document->setTitle(_l("Product Returns"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -947,8 +935,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function action()
 	{
-		$this->language->load('sale/return');
-
 		$json = array();
 
 		if ($this->request->isPost()) {
@@ -972,20 +958,14 @@ class Admin_Controller_Sale_Return extends Controller
 	{
 		$this->template->load('sale/return_history');
 
-		$this->language->load('sale/return');
-
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 
-			$this->language->set('success', _l("Success: You have modified returns!"));
-		} else {
-			$this->data['success'] = '';
+			$this->message->add('success', _l("Success: You have modified returns!"));
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/return')) {
-			$this->language->set('error_warning', _l("Warning: You do not have permission to modify returns!"));
-		} else {
-			$this->data['error_warning'] = '';
+			$this->message->add('warning', _l("Warning: You do not have permission to modify returns!"));
 		}
 
 		if (isset($_GET['page'])) {
@@ -1003,7 +983,7 @@ class Admin_Controller_Sale_Return extends Controller
 				'notify'     => $result['notify'] ? _l("Yes") : _l("No"),
 				'status'     => $result['status'],
 				'comment'    => nl2br($result['comment']),
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 

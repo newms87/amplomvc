@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/return');
-
 		$this->document->setTitle(_l("Product Returns"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -141,8 +139,6 @@ class Catalog_Controller_Account_Return extends Controller
 	public function insert()
 	{
 		$this->template->load('account/return_form');
-		$this->language->load('account/return');
-
 		$order_id   = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 
@@ -180,8 +176,7 @@ class Catalog_Controller_Account_Return extends Controller
 		//The Data
 		if ($this->request->isPost()) {
 			$order_info = $_POST;
-		}
-		else {
+		} else {
 			$order_info = array();
 		}
 
@@ -290,7 +285,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$this->data['customer_orders'] = $customer_orders;
 
-		$this->data['date_ordered_display'] = $this->date->format($this->data['date_ordered'], $this->language->getInfo('date_format_short'));
+		$this->data['date_ordered_display'] = $this->date->format($this->data['date_ordered'], 'short');
 		$this->data['data_return_reasons']  = $this->order->getReturnReasons();
 
 		$this->data['back']               = $this->url->link('account/account');
@@ -325,8 +320,6 @@ class Catalog_Controller_Account_Return extends Controller
 
 	public function find()
 	{
-		$this->language->load('account/return');
-
 		$url_query = '';
 
 		if ($this->request->isPost() && !empty($_POST['ol_order_id']) && !empty($_POST['ol_email'])) {
@@ -360,8 +353,6 @@ class Catalog_Controller_Account_Return extends Controller
 	public function success()
 	{
 		$this->template->load('account/return_success');
-		$this->language->load('account/return');
-
 		$this->document->setTitle(_l("Return Success"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

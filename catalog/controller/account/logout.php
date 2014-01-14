@@ -12,8 +12,6 @@ class Catalog_Controller_Account_Logout extends Controller
 			$this->cart->clear();
 		}
 
-		$this->language->load('account/logout');
-
 		$this->document->setTitle(_l("Account Logout"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

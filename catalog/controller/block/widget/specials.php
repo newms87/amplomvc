@@ -4,8 +4,6 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 	public function index($settings)
 	{
 		$this->template->load('block/widget/specials');
-		$this->language->load('block/widget/specials');
-
 		$sort_filter = array(
 			'has_special' => true,
 		);

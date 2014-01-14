@@ -10,19 +10,19 @@ class Catalog_Model_Block_Block extends Model
 		$this->loadBlocks();
 	}
 
-	public function getBlockSettings($name)
+	public function getBlockSettings($path)
 	{
-		return isset($this->blocks[$name]) ? $this->blocks[$name]['settings'] : null;
+		return isset($this->blocks[$path]) ? $this->blocks[$path]['settings'] : null;
 	}
 
-	public function getBlockProfileSettings($name, $profile_setting_id)
+	public function getBlockProfileSettings($path, $profile_setting_id)
 	{
-		return isset($this->blocks[$name]['profile_settings'][$profile_setting_id]) ? $this->blocks[$name]['profile_settings'][$profile_setting_id] : null;
+		return isset($this->blocks[$path]['profile_settings'][$profile_setting_id]) ? $this->blocks[$path]['profile_settings'][$profile_setting_id] : null;
 	}
 
-	public function getBlockProfiles($name, $profile_setting_id)
+	public function getBlockProfiles($path, $profile_setting_id)
 	{
-		return isset($this->blocks[$name]) ? $this->blocks[$name]['profiles'] : null;
+		return isset($this->blocks[$path]) ? $this->blocks[$path]['profiles'] : null;
 	}
 
 	private function loadBlocks()
@@ -34,29 +34,29 @@ class Catalog_Model_Block_Block extends Model
 
 		//TODO: We can optimize this to grab cached blocks, then process the data. Should minimize cache file size, and we can use only 1 cache file.
 		if (is_null($blocks)) {
-			$results = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
+			$block_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
 
 			$blocks = array('position' => array());
 
-			foreach ($results as $row) {
-				$row['settings']         = $row['settings'] ? unserialize($row['settings']) : array();
-				$row['profile_settings'] = $row['profile_settings'] ? unserialize($row['profile_settings']) : array();
-				$row['profiles']         = $row['profiles'] ? unserialize($row['profiles']) : array();
+			foreach ($block_list as $block) {
+				$block['settings']         = $block['settings'] ? unserialize($block['settings']) : array();
+				$block['profile_settings'] = $block['profile_settings'] ? unserialize($block['profile_settings']) : array();
+				$block['profiles']         = $block['profiles'] ? unserialize($block['profiles']) : array();
 
-				if (!empty($row['profiles'])) {
-					foreach ($row['profiles'] as $profile) {
+				if (!empty($block['profiles'])) {
+					foreach ($block['profiles'] as $profile) {
 						if (in_array($store_id, $profile['store_ids'])) {
 							//Load this profiles settings
-							if (isset($profile['profile_setting_id']) && isset($row['profile_settings'][$profile['profile_setting_id']])) {
-								$profile += $row['profile_settings'][$profile['profile_setting_id']];
+							if (isset($profile['profile_setting_id']) && isset($block['profile_settings'][$profile['profile_setting_id']])) {
+								$profile += $block['profile_settings'][$profile['profile_setting_id']];
 							}
 
-							$blocks[$row['name']] = $row;
-							$blocks[$row['name']]['profile'] = $profile;
+							$blocks[$block['path']]            = $block;
+							$blocks[$block['path']]['profile'] = $profile;
 
 							//Automatically loaded blocks for this layout
 							if (in_array($layout_id, $profile['layout_ids'])) {
-								$blocks['position'][$profile['position']][$row['name']] = & $blocks[$row['name']];
+								$blocks['position'][$profile['position']][$block['path']] = & $blocks[$block['path']];
 							}
 						}
 					}

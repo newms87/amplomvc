@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/wishlist');
-
 		if (!isset($this->session->data['wishlist'])) {
 			$this->session->set('wishlist', array());
 		}
@@ -107,8 +105,6 @@ class Catalog_Controller_Account_Wishlist extends Controller
 
 	public function add()
 	{
-		$this->language->load('account/wishlist');
-
 		$json = array();
 
 		if (!isset($this->session->data['wishlist'])) {

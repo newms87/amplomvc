@@ -7,10 +7,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 
 	public function renderTemplate()
 	{
-		//Language
-		$this->language->system('extension/payment/braintree');
-
-		//Data
+		//Entry Data
 		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
 		$this->data['cards']          = $this->customer->getMeta('braintree_cards');
 
@@ -89,8 +86,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			);
 
 			$this->customer->setMeta('default_payment_key', $_POST['payment_key']);
-		}
-		//New Credit Card
+		} //New Credit Card
 		else {
 
 			if (!$this->validateCard($_POST)) {
@@ -199,8 +195,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		if (!$this->initAPI()) {
 			return;
 		}
-
-		$this->language->system('extension/payment/braintree');
 
 		//Handle POST
 		if (empty($card) && $this->request->isPost()) {
@@ -379,7 +373,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 
 				return $plans;
 			}
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			$this->error_log->write($e);
 			$error_log = $this->url->admin('tool/logs', 'log=error');
 			$this->message->add('warning', _l("There was a problem while communicating with Braintree. See more details in the <a target=\"_blank\" href=\"%s\">Error Log.</a>", $error_log));
@@ -458,7 +452,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 				try {
 					$this->bt_customer = Braintree_Customer::find($braintree_id);
 				} catch (Braintree_Exception_NotFound $e) {
-					$this->language->system('extension/payment/braintree');
 					$this->message->add('warning', _l("Your Customer information was not found. Please try <a href=\"%s\">registering a credit card</a>", $this->callbackUrl('register_card')));
 					$this->error_log->write(__METHOD__ . _l("(): The customer with ID %s was not found!", $braintree_id));
 					$this->url->redirect($this->callbackUrl('register_card'));

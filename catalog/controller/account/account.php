@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Account extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/account');
-
 		$this->document->setTitle(_l("My Account"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

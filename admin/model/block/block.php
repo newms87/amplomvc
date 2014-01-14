@@ -9,7 +9,7 @@ class Admin_Model_Block_Block extends Model
 
 		$eol = "\r\n";
 
-		$language_dir = $this->language->getInfo('directory');
+		$language_dir = $this->language->info('directory');
 
 		$parts      = explode('/', $data['route']);
 		$class_name = "Block_" . $this->tool->formatClassname($parts[0]) . '_' . $this->tool->formatClassname($parts[1]);
@@ -49,7 +49,6 @@ class Admin_Model_Block_Block extends Model
 
 		file_put_contents($controller_file, $content);
 
-		//Language file
 		$language_template = $dir_templates . 'admin_language.php';
 		$language_file     = SITE_DIR . 'admin/language/' . $language_dir . '/block/' . $data['route'] . '.php';
 
@@ -143,9 +142,9 @@ class Admin_Model_Block_Block extends Model
 		$this->cache->delete('block');
 	}
 
-	public function updateBlock($name, $data)
+	public function updateBlock($path, $data)
 	{
-		$this->delete('block', array('name' => $name));
+		$this->delete('block', array('path' => $path));
 
 		if (isset($data['settings'])) {
 			$data['settings'] = serialize($data['settings']);
@@ -159,33 +158,33 @@ class Admin_Model_Block_Block extends Model
 			$data['profiles'] = serialize($data['profiles']);
 		}
 
-		$data['name'] = $name;
+		$data['path'] = $path;
 
 		$this->insert('block', $data);
 
 		$this->cache->delete('block');
 	}
 
-	public function deleteBlock($name)
+	public function deleteBlock($path)
 	{
 		$files = array(
-			SITE_DIR . 'catalog/controller/block/' . $name . '.php',
-			DIR_THEME . 'default/template/block/' . $name . '_settings.tpl',
-			DIR_THEME . 'default/template/block/' . $name . '_profile.tpl',
-			SITE_DIR . 'admin/controller/block/' . $name . '.php',
+			SITE_DIR . 'catalog/controller/block/' . $path . '.php',
+			DIR_THEME . 'default/template/block/' . $path . '_settings.tpl',
+			DIR_THEME . 'default/template/block/' . $path . '_profile.tpl',
+			SITE_DIR . 'admin/controller/block/' . $path . '.php',
 		);
 
 		$languages = $this->language->getLanguages();
 
 		foreach ($languages as $language) {
-			$files[] = SITE_DIR . 'admin/language/' . $language['directory'] . '/block/' . $name . '.php';
-			$files[] = SITE_DIR . 'catalog/language/' . $language['directory'] . '/block/' . $name . '.php';
+			$files[] = SITE_DIR . 'admin/language/' . $language['directory'] . '/block/' . $path . '.php';
+			$files[] = SITE_DIR . 'catalog/language/' . $language['directory'] . '/block/' . $path . '.php';
 		}
 
 		$themes = $this->theme->getThemes();
 
 		foreach ($themes as $theme) {
-			$files[] = SITE_DIR . 'catalog/view/theme/' . $theme['name'] . '/template/block/' . $name . '.tpl';
+			$files[] = SITE_DIR . 'catalog/view/theme/' . $theme['name'] . '/template/block/' . $path . '.tpl';
 		}
 
 		foreach ($files as $file) {
@@ -200,9 +199,9 @@ class Admin_Model_Block_Block extends Model
 
 				if (!empty($dir_files)) {
 					$dir_files = array_diff($dir_files, array(
-					                                         '..',
-					                                         '.'
-					                                    ));
+						'..',
+						'.'
+					));
 				}
 
 				if (empty($dir_files)) {
@@ -214,14 +213,23 @@ class Admin_Model_Block_Block extends Model
 		$this->cache->delete('block');
 	}
 
-	public function isBlock($name)
+	public function getBlockName($path)
 	{
-		return is_file(SITE_DIR . 'admin/controller/block/' . $name . '.php');
+		$directives = $this->tool->getFileCommentDirectives(SITE_DIR . 'admin/controller/block/' . $path . '.php');
+
+		return !empty($directives['name']) ? $directives['name'] : $path;
 	}
 
-	public function getBlock($name)
+	public function isBlock($path)
 	{
-		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->escape($name) . "'");
+		return is_file(SITE_DIR . 'admin/controller/block/' . $path . '.php');
+	}
+
+
+	//TODO: Change $name to $path
+	public function getBlock($path)
+	{
+		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
 
 		if ($block) {
 			if (!empty($block['settings'])) {
@@ -243,18 +251,18 @@ class Admin_Model_Block_Block extends Model
 			}
 		} else {
 			$block = array(
-				'name'     => $name,
-				'settings' => array(),
+				'path'             => $path,
+				'settings'         => array(),
 				'profile_settings' => array(),
-				'profiles' => array(),
-				'status'   => 0,
+				'profiles'         => array(),
+				'status'           => 0,
 			);
 		}
 
 		return $block;
 	}
 
-	public function getBlocks($data = array(), $total = false)
+	public function getBlocks($filter = array(), $total = false)
 	{
 		$block_files = glob(SITE_DIR . 'admin/controller/block/*/*.php');
 
@@ -264,44 +272,39 @@ class Admin_Model_Block_Block extends Model
 			return count($block_files);
 		}
 
-		$blocks     = array();
-		$sort_order = array();
+		$blocks = array();
 
 		foreach ($block_files as &$file) {
-			$name  = preg_replace("/.*[\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
-			$block = $this->getBlock($name);
-
-			$block_language = $this->language->fetch('block/' . $block['name']);
-
-			$block['display_name'] = $block_language['head_title'];
+			$path  = preg_replace("/.*[\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
+			$block = $this->getBlock($path);
 
 			//filter name
-			if (!empty($data['name'])) {
-				if (!preg_match("/.*$data[name].*/i", $block['name'])) {
+			if (!empty($filter['path'])) {
+				if (!preg_match("/.*$filter[path].*/i", $block['path'])) {
 					continue;
 				}
 			}
 
 			//filter display_name
-			if (!empty($data['display_name'])) {
-				if (!preg_match("/.*$data[display_name].*/i", $block['display_name'])) {
+			if (!empty($filter['name'])) {
+				if (!preg_match("/.*$filter[name].*/i", $block['name'])) {
 					continue;
 				}
 			}
 
 			//filter status
-			if (isset($data['status'])) {
-				if ((bool)$data['status'] != (bool)$block['status']) {
+			if (isset($filter['status'])) {
+				if ((bool)$filter['status'] != (bool)$block['status']) {
 					continue;
 				}
 			}
 
 			//Filter Layout
-			if (isset($data['layouts'])) {
+			if (isset($filter['layouts'])) {
 				$found = false;
 				foreach ($block['profiles'] as $profile) {
 					foreach ($profile['layout_ids'] as $layout_id) {
-						if (in_array($layout_id, $data['layouts'])) {
+						if (in_array($layout_id, $filter['layouts'])) {
 							$found = true;
 							break;
 						}
@@ -314,12 +317,12 @@ class Admin_Model_Block_Block extends Model
 			}
 
 			//Filter Stores
-			if (isset($data['stores'])) {
+			if (isset($filter['stores'])) {
 				$found = false;
 
 				foreach ($block['profiles'] as $profile) {
 					foreach ($profile['store_ids'] as $store_id) {
-						if (in_array($store_id, $data['stores'])) {
+						if (in_array($store_id, $filter['stores'])) {
 							$found = true;
 							break;
 						}
@@ -333,51 +336,51 @@ class Admin_Model_Block_Block extends Model
 
 			if (!$block) {
 				$block = array(
-					'name'         => $name,
-					'display_name' => $name,
-					'settings'     => array(),
+					'path'             => $path,
+					'name'             => $this->getBlockName($path),
+					'settings'         => array(),
 					'profile_settings' => array(),
-					'profiles'     => array(),
-					'status'       => 1,
+					'profiles'         => array(),
+					'status'           => 1,
 				);
 			}
 
 			$blocks[] = $block;
 		}
 
-		if (isset($data['sort'])) {
-			uasort($blocks, function ($a, $b) use ($data) {
-				if (!empty($data['order']) && $data['order'] === 'DESC') {
-					return $a[$data['sort']] < $b[$data['sort']];
+		if (isset($filter['sort'])) {
+			uasort($blocks, function ($a, $b) use ($filter) {
+				if (!empty($filter['order']) && $filter['order'] === 'DESC') {
+					return $a[$filter['sort']] < $b[$filter['sort']];
 				} else {
-					return $a[$data['sort']] > $b[$data['sort']];
+					return $a[$filter['sort']] > $b[$filter['sort']];
 				}
 			});
 		}
 
 		//Limits
-		$start = isset($data['start']) ? (int)$data['start'] : 0;
-		$limit = isset($data['limit']) ? $start + (int)$data['limit'] : null;
+		$start = isset($filter['start']) ? (int)$filter['start'] : 0;
+		$limit = isset($filter['limit']) ? $start + (int)$filter['limit'] : null;
 
 		$blocks = array_slice($blocks, $start, $limit);
 
 		return $blocks;
 	}
 
-	public function getTotalBlocks($data = array())
+	public function getTotalBlocks($filter = array())
 	{
-		return $this->getBlocks($data, true);
+		return $this->getBlocks($filter, true);
 	}
 
 	public function cleanDb($valid_files)
 	{
-		$names = array();
+		$paths = array();
 
-		foreach ($valid_files as &$file) {
-			$names[] = preg_replace("/.*[\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
+		foreach ($valid_files as $file) {
+			$paths[] = preg_replace("/.*[\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
 		}
 
-		$query = $this->query("DELETE FROM " . DB_PREFIX . "block WHERE name NOT IN('" . implode("','", $names) . "')");
+		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $paths) . "')");
 
 		if ($this->countAffected()) {
 			$this->cache->delete('block');

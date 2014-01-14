@@ -5,8 +5,6 @@ class Admin_Controller_Report_SaleReturn extends Controller
 	{
 		$this->template->load('report/sale_return');
 
-		$this->language->load('report/sale_return');
-
 		$this->document->setTitle(_l("Returns Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -81,8 +79,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
-				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], 'short'),
+				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'returns'    => $result['returns']
 			);
 		}

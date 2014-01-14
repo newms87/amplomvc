@@ -5,8 +5,6 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 	{
 		//Template and Language
 		$this->template->load('setting/return_action');
-		$this->language->load('setting/return_action');
-
 		//Page Head
 		$this->document->setTitle(_l("Return Actions"));
 

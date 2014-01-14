@@ -3,15 +3,11 @@ class Admin_Controller_Design_Layout extends Controller
 {
 	public function index()
 	{
-		$this->language->load('design/layout');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('design/layout');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['layout_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Design_Layout extends Controller
 
 	public function delete()
 	{
-		$this->language->load('design/layout');
-
 		if (isset($_GET['layout_id']) && $this->validateDelete()) {
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Design_Layout extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('design/layout');
-
 		if (!empty($_GET['selected']) && isset($_GET['action']) && $this->user->can('modify', 'design/layout')) {
 			foreach ($_GET['selected'] as $layout_id) {
 				switch ($_GET['action']) {

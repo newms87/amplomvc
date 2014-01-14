@@ -5,8 +5,6 @@ class Admin_Controller_Report_CustomerReward extends Controller
 	{
 		$this->template->load('report/customer_reward');
 
-		$this->language->load('report/customer_reward');
-
 		$this->document->setTitle(_l("Customer Reward Points Report"));
 
 		if (isset($_GET['filter_date_start'])) {

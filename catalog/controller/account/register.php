@@ -7,8 +7,6 @@ class Catalog_Controller_Account_Register extends Controller
 			$this->url->redirect('account/account');
 		}
 
-		$this->language->load('account/register');
-
 		$this->document->setTitle(_l("Register Account"));
 
 		if ($this->request->isPost() && $this->validate()) {
@@ -63,7 +61,7 @@ class Catalog_Controller_Account_Register extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
 			if ($information_info) {
-				$this->data['agree_to'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
+				$this->data['agree_to']    = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
 				$this->data['agree_title'] = $information_info['title'];
 			}
 		}

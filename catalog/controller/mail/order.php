@@ -16,7 +16,6 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 
 
-
 		//TODO: This needs to be updated to match System_Extension_Payment, System_Extension_Shipping
 
 
@@ -55,12 +54,12 @@ class Catalog_Controller_Mail_Order extends Controller
 
 		$this->data += $order;
 
-		$store = $this->config->getStore($order['store_id']);
+		$store               = $this->config->getStore($order['store_id']);
 		$this->data['store'] = $store;
 
 		$this->mail->init();
 
-		$subject =_l('%s - Order %s', $store['name'], $order_id);
+		$subject = _l('%s - Order %s', $store['name'], $order_id);
 
 		if (empty($order['email'])) {
 			$order['email'] = $this->config->get('config_email_error');

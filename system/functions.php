@@ -254,10 +254,10 @@ if (!function_exists('array_walk_children')) {
 
 			if (!empty($node[$children])) {
 				call_user_func_array('array_walk_children', array_merge(array(
-				                                                             &$node[$children],
-				                                                             $children,
-				                                                             $callback
-				                                                        ), $args));
+					&$node[$children],
+					$children,
+					$callback
+				), $args));
 			}
 		}
 	}

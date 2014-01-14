@@ -1,16 +1,16 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Products Viewed Report"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Products Viewed Report"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= _l("Reset"); ?></a>
-				</div>
+			<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= _l("Reset"); ?></a>
 			</div>
-			<div class="section">
-				<table class="list">
-					<thead>
+		</div>
+		<div class="section">
+			<table class="list">
+				<thead>
 					<tr>
 						<td class="left"><?= _l("Product Name"); ?></td>
 						<td class="left"><?= _l("Model"); ?></td>
@@ -20,8 +20,8 @@
 						<td class="right"><?= _l("Unique Users (By session, ID, and IP)"); ?></td>
 						<td class="right"><?= _l("Percent"); ?></td>
 					</tr>
-					</thead>
-					<tbody>
+				</thead>
+				<tbody>
 					<? if ($products) { ?>
 						<? foreach ($products as $product) { ?>
 							<tr>
@@ -39,10 +39,10 @@
 							<td class="center" colspan="4"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
-					</tbody>
-				</table>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+				</tbody>
+			</table>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
+</div>
 <?= $footer; ?>

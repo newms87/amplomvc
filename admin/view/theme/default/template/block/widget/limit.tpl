@@ -1,4 +1,4 @@
-<span class="limit_text"><?= $text_limit; ?></span>
+<span class="limit_text"><?= _l("Limit"); ?></span>
 <? foreach ($limits as $value => $text) { ?>
 	<? if ((int)$value === (int)$limit) { ?>
 		<a class="limit_item selected"><?= $text; ?></a>

@@ -26,29 +26,32 @@
 							<div class="title"><?= _l("Page Title"); ?></div>
 							<input type="text" name="title" size="60" value="<?= $title; ?>"/>
 							<span class="display_title">
-								<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1" />
+								<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1"/>
 								<label for="display_title"><?= _l("Display Title?"); ?></label>
 							</span>
 						</div>
 
 						<div class="html_title"><?= _l("HTML"); ?></div>
 						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
+
 						<div class="css_title"><?= _l("CSS"); ?></div>
 						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
 					</div>
 
 					<div id="code_preview">
 						<div id="zoom_preview">
-							<input type="text" id="zoom_value" value="80%" />
+							<input type="text" id="zoom_value" value="80%"/>
+
 							<div class="zoom_change">
-								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>" />
-								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>" />
+								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>"/>
+								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>"/>
 							</div>
 						</div>
 						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
 					</div>
 
-				</div><!-- /tab-content -->
+				</div>
+				<!-- /tab-content -->
 
 				<div id="tab-data">
 					<table class="form">
@@ -69,7 +72,8 @@
 							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
-				</div><!-- /tab-data -->
+				</div>
+				<!-- /tab-data -->
 
 				<div id="tab-design">
 					<table class="form">
@@ -92,31 +96,32 @@
 							<td>
 								<table id="assigned_block_list" class="list">
 									<thead>
-									<tr>
-										<td><?= _l("Block Name"); ?></td>
-										<td><?= _l("Store Name"); ?></td>
-										<td><?= _l("Position"); ?></td>
-									</tr>
+										<tr>
+											<td><?= _l("Block Name"); ?></td>
+											<td><?= _l("Store Name"); ?></td>
+											<td><?= _l("Position"); ?></td>
+										</tr>
 									</thead>
 									<tbody>
-									<tr id="block_template">
-										<td>%name%</td>
-										<td>%store%</td>
-										<td>%position%</td>
-									</tr>
+										<tr id="block_template">
+											<td>%name%</td>
+											<td>%store%</td>
+											<td>%position%</td>
+										</tr>
 									</tbody>
 									<tfoot>
-									<tr>
-										<td colspan="3">
-											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
-										</td>
-									</tr>
+										<tr>
+											<td colspan="3">
+												<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
+											</td>
+										</tr>
 									</tfoot>
 								</table>
 							</td>
 						</tr>
 					</table>
-				</div><!-- /tab-design -->
+				</div>
+				<!-- /tab-design -->
 
 			</form>
 		</div>
@@ -185,46 +190,46 @@
 	function update_zoom() {
 		var z = get_zoom_value();
 		var new_css = {
-			'-webkit-transform': 'scale3d('+z+','+z+',1)',
-			'transform': 'scale3d('+z+','+z+',1)'
+			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
+			'transform': 'scale3d(' + z + ',' + z + ',1)'
 		};
 		$('#preview_frame').contents().find('#container').css(new_css);
 	}
 
 	$('#zoom_value').keyup(update_zoom);
 
-	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function(){
+	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function () {
 		var z = get_zoom_value();
-		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1,.1) : Math.min(z + .1, 3);
-		$('#zoom_value').val(parseInt(zoom*100)+'%');
+		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1, .1) : Math.min(z + .1, 3);
+		$('#zoom_value').val(parseInt(zoom * 100) + '%');
 		update_zoom();
 	});
 
 	$('#html_editor').codemirror({mode: 'html'});
 	$('#css_editor').codemirror({mode: 'css'});
 
-	$('#html_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
+	$('#html_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
 		$('#preview_frame').contents().find('#content_holder .page_content').html(instance.getValue());
 	});
 
-	$('#css_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
+	$('#css_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
 		$('#preview_frame').contents().find('#page_css').html(instance.getValue());
 	});
 
-	$('[name=title]').keyup(function(){
+	$('[name=title]').keyup(function () {
 		$('#preview_frame').contents().find('#page_title').html($(this).val());
 	});
 
-	$('[name=display_title]').change(function(){
+	$('[name=display_title]').change(function () {
 		$('#preview_frame').contents().find('#page_title').stop().toggle($(this).val());
 	});
 
-	$(document).bind('keydown', function(e) {
-		if(e.ctrlKey && (e.which == 83)) {
+	$(document).bind('keydown', function (e) {
+		if (e.ctrlKey && (e.which == 83)) {
 			$('#html_editor')[0].cm_editor.mirror.save();
 			$('#css_editor')[0].cm_editor.mirror.save();
 
-			$('#form').postForm(function(response){
+			$('#form').postForm(function (response) {
 				handle_response(response);
 			}, 'json');
 
@@ -235,8 +240,8 @@
 
 	$('#tabs a').tabs();
 
-	$(document).ready(function(){
-		$('#preview_frame').attr('src',"<?= $page_preview; ?>");
+	$(document).ready(function () {
+		$('#preview_frame').attr('src', "<?= $page_preview; ?>");
 	});
 </script>
 

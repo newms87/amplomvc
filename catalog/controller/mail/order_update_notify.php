@@ -3,7 +3,7 @@ class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 {
 	public function index($comment, $order_status_id, $order)
 	{
-		//TODO: Need to implement changing language / locale $this->language->setLanguage($order['language_id']);
+		//TODO: Need to implement changing language / locale
 
 		$store = $this->config->getStore($order['store_id']);
 
@@ -13,7 +13,7 @@ class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 		$message .= _l("Date Added: ") . $this->date->format($order['date_added'], 'short') . "\n\n";
 
 		$order_status_from = $this->order->getOrderStatus($order['order_status_id']);
-		$order_status_to = $this->order->getOrderStatus($order_status_id);
+		$order_status_to   = $this->order->getOrderStatus($order_status_id);
 
 		if ($order_status_to) {
 			$message .= _l("Your Order Status has been updated from %s to %s. ", $order_status_from['title'], $order_status_to['title']) . "\n\n";

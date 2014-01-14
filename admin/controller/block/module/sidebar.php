@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Sidebar
+ */
 class Admin_Controller_Block_Module_Sidebar extends Controller
 {
 

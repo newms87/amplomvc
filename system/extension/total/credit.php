@@ -4,8 +4,6 @@ class System_Extension_Total_Credit extends TotalExtension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if ($this->config->get('credit_status')) {
-			$this->language->system('extension/total/credit');
-
 			$balance = $this->customer->getBalance();
 
 			if ((float)$balance) {
@@ -29,8 +27,6 @@ class System_Extension_Total_Credit extends TotalExtension
 
 	public function confirm($order_info, $order_total)
 	{
-		$this->language->system('extension/total/credit');
-
 		if ($order_info['customer_id']) {
 			$customer_transaction = array(
 				'customer_id' => $order_info['customer_id'],

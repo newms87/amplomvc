@@ -287,14 +287,14 @@ class Document extends Library
 
 	public function getNavigationLinks()
 	{
-		$store_id   = $this->config->get("config_store_id");
+		$store_id = $this->config->get("config_store_id");
 
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 
 		if (is_null($nav_groups) || true) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
-						" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
-						" WHERE ng.status='1' AND ns.store_id='$store_id'";
+				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
+				" WHERE ng.status='1' AND ns.store_id='$store_id'";
 
 			$result = $this->queryRows($query);
 
@@ -324,7 +324,7 @@ class Document extends Library
 		//Filter Conditional Links
 		//TODO: This leaves null values in group links. Consider changing approach.
 		foreach ($nav_groups as &$group) {
-			array_walk_children($group, 'children', function(&$l, $ctrl) {
+			array_walk_children($group, 'children', function (&$l, $ctrl) {
 				if (!empty($l['condition']) && !$ctrl->condition->is($l['condition'])) {
 					$l = null;
 				}

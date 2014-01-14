@@ -60,7 +60,7 @@ class Catalog_Model_Block_Login_Google extends Model
 
 		try {
 			$client->authenticate();
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			$this->error_log->write($e);
 			$this->error['exception'] = _l("There was a problem authenticating your credentials.");
 			return false;
@@ -89,7 +89,7 @@ class Catalog_Model_Block_Login_Google extends Model
 		//Lookup Customer or Register new customer
 		if (!$customer_id) {
 			$no_meta = true;
-			$email = !empty($data->emails[0]) ? $data->emails[0]->value : '';
+			$email   = !empty($data->emails[0]) ? $data->emails[0]->value : '';
 
 			if ($email) {
 				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
@@ -97,7 +97,7 @@ class Catalog_Model_Block_Login_Google extends Model
 
 			if (empty($customer)) {
 				if (!$data->name->givenName && !$data->name->familyName && $data->displayName) {
-					$names = explode(' ', $data->displayName, 2);
+					$names                 = explode(' ', $data->displayName, 2);
 					$data->name->givenName = $names[0];
 
 					if (!empty($names[1])) {
@@ -115,7 +115,7 @@ class Catalog_Model_Block_Login_Google extends Model
 			}
 		} else {
 			$customer = $this->customer->getCustomer($customer_id);
-			$no_meta = false;
+			$no_meta  = false;
 		}
 
 		//Login Customer

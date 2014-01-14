@@ -5,8 +5,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function index()
 	{
-		$this->language->load('sale/customer_group');
-
 		$this->document->setTitle(_l("Customer Group"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function insert()
 	{
-		$this->language->load('sale/customer_group');
-
 		$this->document->setTitle(_l("Customer Group"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function update()
 	{
-		$this->language->load('sale/customer_group');
-
 		$this->document->setTitle(_l("Customer Group"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/customer_group');
-
 		$this->document->setTitle(_l("Customer Group"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

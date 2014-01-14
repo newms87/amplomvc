@@ -5,8 +5,6 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 	{
 		$this->template->load('report/sale_coupon');
 
-		$this->language->load('report/sale_coupon');
-
 		$this->document->setTitle(_l("Coupon Report"));
 
 		if (isset($_GET['filter_date_start'])) {

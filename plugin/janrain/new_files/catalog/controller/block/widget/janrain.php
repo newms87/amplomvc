@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 {
 	public function index($settings)
 	{
-		$this->language->load('block/widget/janrain');
 		$this->template->load('block/widget/janrain');
 
 		$icon_size          = !empty($settings['icon_size']) ? $settings['icon_size'] : 'small';
@@ -113,8 +112,6 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 
 			// parse the json response into an associative array
 			$auth_info = json_decode($raw_json, true);
-
-			$this->language->load('block/widget/janrain');
 
 			// process the auth_info response
 			if ($auth_info['stat'] == 'ok') {

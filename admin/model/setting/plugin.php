@@ -33,11 +33,19 @@ class Admin_Model_Setting_Plugin extends Model
 					$setup_file = DIR_PLUGIN . $plugin['name'] . '/setup.php';
 					$plugin += $this->tool->getFileCommentDirectives($setup_file);
 
-					$plugin += array_fill_keys(array('title','description','date','author', 'version', 'dependencies', 'link'), '');
+					$plugin += array_fill_keys(array(
+						'title',
+						'description',
+						'date',
+						'author',
+						'version',
+						'dependencies',
+						'link'
+					), '');
 
 					if (!empty($plugin['dependencies'])) {
 						$plugin['dependencies'] = explode(',', $plugin['dependencies']);
-						array_walk($plugin['dependencies'], function(&$value){ $value = trim($value);});
+						array_walk($plugin['dependencies'], function (&$value) { $value = trim($value); });
 					}
 
 					//Add Plugin to list
@@ -57,7 +65,8 @@ class Admin_Model_Setting_Plugin extends Model
 
 					$plugin['dependencies'] = $dependencies;
 				}
-			} unset($plugin);
+			}
+			unset($plugin);
 		}
 
 		$plugins = array();
@@ -103,7 +112,7 @@ class Admin_Model_Setting_Plugin extends Model
 		}
 
 		if (!empty($data['sort'])) {
-			usort($plugins, function($a,$b) use($data){
+			usort($plugins, function ($a, $b) use ($data) {
 				if ($data['order'] === 'DESC') {
 					return $a[$data['sort']] < $b[$data['sort']];
 				} else {
@@ -113,7 +122,7 @@ class Admin_Model_Setting_Plugin extends Model
 		}
 
 		if (!empty($data['limit'])) {
-			$plugins = array_slice($plugins, (int)$data['limit'] * ((int)$data['page']-1), (int)$data['limit']);
+			$plugins = array_slice($plugins, (int)$data['limit'] * ((int)$data['page'] - 1), (int)$data['limit']);
 		}
 
 		return $plugins;
@@ -121,7 +130,9 @@ class Admin_Model_Setting_Plugin extends Model
 
 	public function canInstall($name)
 	{
-		if (!isset($this->plugins[$name])) return false;
+		if (!isset($this->plugins[$name])) {
+			return false;
+		}
 
 		$plugin = $this->plugins[$name];
 

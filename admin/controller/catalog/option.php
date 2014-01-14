@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_Option extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/option');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('catalog/option');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['option_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/option');
-
 		$this->document->setTitle(_l("Options"));
 
 		if (isset($_GET['option_id']) && $this->validateDelete()) {
@@ -52,8 +46,6 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/option');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_GET['selected'] as $option_id) {
@@ -208,8 +200,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		if ($this->request->isPost()) {
 			$option_info = $_POST;
-		}
-		elseif ($option_id) {
+		} elseif ($option_id) {
 			$option_info = $this->Model_Catalog_Option->getOption($option_id);
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
@@ -318,9 +309,6 @@ class Admin_Controller_Catalog_Option extends Controller
 		//Label and Value
 		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
 		$value = !empty($_GET['value']) ? $_GET['value'] : 'option_id';
-
-		//Language
-		$this->language->load('catalog/option');
 
 		//Load Sorted / Filtered Data
 		$options = $this->Model_Catalog_Option->getOptions($filter);

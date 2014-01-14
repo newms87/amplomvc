@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 {
 	public function index($settings)
 	{
-		$this->language->load('block/cart/coupon');
 		$this->template->load('block/cart/coupon');
 
 		$ajax = isset($settings['ajax']) ? $settings['ajax'] : false;
@@ -24,8 +23,6 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 	//TODO: Handel SESSION coupons (probably from cart?) sitewide...
 	public function apply_coupon()
 	{
-		$this->language->load('cart/cart');
-
 		//TODO: This should be moved to $this->cart->getCoupon()
 		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
 
@@ -40,8 +37,6 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 
 	public function ajax_apply_coupon()
 	{
-		$this->language->load('block/cart/coupon');
-
 		//TODO: This should be moved to $this->cart->getCoupon()
 		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
 

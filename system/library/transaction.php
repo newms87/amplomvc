@@ -84,8 +84,7 @@ class Transaction extends Library
 		if ($transaction['status'] === self::FAILED && $transaction['retries'] > 0) {
 			//Retry Confirming Transaction.
 			$transaction['retries']--;
-		}
-		elseif ($transaction['status'] !== self::PENDING) {
+		} elseif ($transaction['status'] !== self::PENDING) {
 			$this->error['status'] = _l("Transaction status is %s and cannot be confirmed!", $transaction['status']);
 			return false;
 		}

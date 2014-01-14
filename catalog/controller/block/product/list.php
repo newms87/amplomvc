@@ -8,8 +8,6 @@ class Catalog_Controller_Block_Product_List extends Controller
 		$process_data = isset($settings['process_data']) ? $settings['process_data'] : true;
 
 		$this->template->load($template);
-		$this->language->load('block/product/list');
-
 		//TODO: need to implement these options in admin panel!
 		$this->data['list_show_add_to_cart'] = $this->config->get('config_list_show_add_to_cart');
 		$this->data['show_price_tax']        = $this->config->get('config_show_price_with_tax');
@@ -74,7 +72,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 
 		if ($this->data['compare_status']) {
 			$this->data['compare_count'] = $this->cart->get_compare_count();
-			$this->data['compare'] = $this->url->link('product/compare');
+			$this->data['compare']       = $this->url->link('product/compare');
 		}
 
 		$this->data['sort_url'] = $this->sort->get_sort_url();

@@ -11,8 +11,6 @@ class Plugin extends Library
 
 		$this->registry->set('plugin', $this);
 
-		$this->language->system('plugin');
-
 		$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
 
 		if ($this->config->isAdmin()) {
@@ -195,8 +193,6 @@ class Plugin extends Library
 
 	public function integrateChanges($name)
 	{
-		$this->language->system('plugin');
-
 		$changes = $this->getChanges($name);
 
 		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
@@ -253,8 +249,7 @@ class Plugin extends Library
 						$this->message->add('warning', _l("There is a conflict with the <strong>%s</strong> plugin for the file %s. Please uninstall <strong>%s</strong> or resolve the conflict.", $conflicting_plugin['name'], $live_file, $conflicting_plugin['name']));
 						return false;
 					}
-				}
-				else {
+				} else {
 					$overwrite_file_url = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
 					$force_install_url  = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
 

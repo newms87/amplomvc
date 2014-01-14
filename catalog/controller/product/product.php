@@ -3,9 +3,6 @@ class Catalog_Controller_Product_Product extends Controller
 {
 	public function index()
 	{
-		//Language
-		$this->language->load('product/product');
-
 		//Get Product Information
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
 
@@ -47,7 +44,8 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->document->setDescription($product_info['meta_description']);
 		$this->document->setKeywords($product_info['meta_keywords']);
 
-		$this->language->set('head_title', $product_info['name']);
+		//Page Title
+		$this->data['page_title'] = $product_info['name'];
 
 		if ($product_info['template']) {
 			$this->template->load('product/' . $product_info['template']);
@@ -72,28 +70,23 @@ class Catalog_Controller_Product_Product extends Controller
 		$stock_type = $this->config->get('config_stock_display');
 
 		if ($stock_type === 'hide') {
-			$this->data['stock_type'] = "";
+			$this->data['stock_type']  = "";
 			$this->data['stock_class'] = 'hidden';
-		}
-		elseif (!$this->data['is_purchasable']) {
-			$this->data['stock'] = _l("currently not available");
+		} elseif (!$this->data['is_purchasable']) {
+			$this->data['stock']       = _l("currently not available");
 			$this->data['stock_class'] = 'unavailable';
-		}
-		elseif ($product_info['quantity'] <= 0) {
-			$this->data['stock'] = $product_info['stock_status'];
+		} elseif ($product_info['quantity'] <= 0) {
+			$this->data['stock']       = $product_info['stock_status'];
 			$this->data['stock_class'] = 'stock_empty';
-		}
-		else {
+		} else {
 			if ($stock_type === 'status') {
-				$this->data['stock'] = _l("In Stock");
+				$this->data['stock']       = _l("In Stock");
 				$this->data['stock_class'] = 'available';
-			}
-			elseif ((int)$product_info['quantity'] > (int)$stock_type) {
-				$this->data['stock'] = _l("More than %d available", (int)$stock_type);
+			} elseif ((int)$product_info['quantity'] > (int)$stock_type) {
+				$this->data['stock']       = _l("More than %d available", (int)$stock_type);
 				$this->data['stock_class'] = 'surplus';
-			}
-			elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
-				$this->data['stock'] = _l("Only %d left!", (int)$product_info['quantity']);
+			} elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
+				$this->data['stock']       = _l("Only %d left!", (int)$product_info['quantity']);
 				$this->data['stock_class'] = 'limited_qty';
 			}
 		}
@@ -150,7 +143,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Links
 		$product_info['category']['url'] = $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']);
-		$this->data['category'] = $product_info['category'];
+		$this->data['category']          = $product_info['category'];
 
 		$this->data['keep_shopping'] = $this->url->link('product/category');
 

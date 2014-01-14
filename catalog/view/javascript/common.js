@@ -94,7 +94,9 @@ function show_msg(type, html, append) {
 	if (!box.length) {
 		box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
 		notify.append(box.fadeIn('slow'));
-		box.find('.close').click(function () { $(this).parent().remove(); });
+		box.find('.close').click(function () {
+			$(this).parent().remove();
+		});
 	}
 
 	box.prepend($('<div />').html(html));

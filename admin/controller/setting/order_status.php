@@ -5,8 +5,6 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 	{
 		//Template and Language
 		$this->template->load('setting/order_status');
-		$this->language->load('setting/order_status');
-
 		//Page Head
 		$this->document->setTitle(_l("Order Statuses"));
 

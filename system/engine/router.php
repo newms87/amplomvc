@@ -41,8 +41,7 @@ final class Router
 			if (!$this->pathIsIn($allowed)) {
 				$this->path = 'common/login';
 			}
-		}
-		else {
+		} else {
 			$ignore = array(
 				'common/home',
 				'common/login',
@@ -58,8 +57,7 @@ final class Router
 
 				if (!isset($parts[0]) || !isset($parts[1])) {
 					$this->path = 'common/home';
-				}
-				elseif (!$this->user->can('access', $parts[0] . '/' . $parts[1])) {
+				} elseif (!$this->user->can('access', $parts[0] . '/' . $parts[1])) {
 					$this->path = 'error/permission';
 				}
 			}
@@ -72,7 +70,7 @@ final class Router
 			foreach ($controller_overrides as $override) {
 				if (('admin/controller/' . $this->path) === $override['original']) {
 					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
-						$this->path = str_replace('admin/controller/','',$override['alternate']);
+						$this->path = str_replace('admin/controller/', '', $override['alternate']);
 					}
 				}
 			}
@@ -91,8 +89,7 @@ final class Router
 					$hide = $this->url->here('hide_maintenance_msg=1');
 					$this->message->add('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
 				}
-			}
-			//Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
+			} //Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
 			else if (strpos($this->path, 'payment') !== 0) {
 				$this->path = 'common/maintenance';
 			}
@@ -110,7 +107,7 @@ final class Router
 			foreach ($controller_overrides as $override) {
 				if (('catalog/controller/' . $this->path) === $override['original']) {
 					if (empty($override['condition']) || preg_match("/" . $override['condition'] . "/", urldecode($this->url->getQuery()))) {
-						$this->path = str_replace('catalog/controller/','',$override['alternate']);
+						$this->path = str_replace('catalog/controller/', '', $override['alternate']);
 					}
 				}
 			}
@@ -122,15 +119,15 @@ final class Router
 		}
 
 		//Resolve Layout ID
-		$layout = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . $this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . $this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 		$layout_id = $layout ? $layout['layout_id'] : $this->config->get('config_default_layout_id');
 		$this->config->set('config_layout_id', $layout_id);
 	}
 
 	public function pathIsIn($paths)
 	{
-		foreach($paths as $path) {
-			if(strpos($this->path, $path) === 0){
+		foreach ($paths as $path) {
+			if (strpos($this->path, $path) === 0) {
 				return true;
 			}
 		}
@@ -138,16 +135,16 @@ final class Router
 		return false;
 	}
 
-  	public function dispatch()
-  	{
-  		//Page Views tracking
-  		$path = $this->db->escape($this->path);
-		$query = $this->url->getQueryExclude('_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
+	public function dispatch()
+	{
+		//Page Views tracking
+		$path     = $this->db->escape($this->path);
+		$query    = $this->url->getQueryExclude('_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
 		$store_id = (int)$this->config->get('config_store_id');
 
-  		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 
-  		$action = new Action($this->registry, $this->path);
+		$action = new Action($this->registry, $this->path);
 
 		if (!$action->isValid() || !$action->execute()) {
 			$action = new Action($this->registry, $this->error_path);
@@ -156,5 +153,5 @@ final class Router
 				trigger_error("Front::dispatch(): There is a problem with the system. Unable to execute any actions!");
 			}
 		}
-  	}
+	}
 }

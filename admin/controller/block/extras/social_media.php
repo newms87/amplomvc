@@ -1,11 +1,11 @@
 <?php
+/**
+ * Name: Social Media
+ */
 class Admin_Controller_Block_Extras_SocialMedia extends Controller
 {
-
 	public function settings(&$settings)
 	{
-		$this->language->load('block/extras/social_media');
-
 		$this->template->load('block/extras/social_media_settings');
 
 		$thumb_width  = 40;
@@ -29,23 +29,8 @@ class Admin_Controller_Block_Extras_SocialMedia extends Controller
 		$this->render();
 	}
 
-	/*
-	public function profile(&$profiles)
-	{
-		$this->language->load('block/extras/social_media');
-
-		$this->template->load('block/extras/social_media_profile');
-
-		$this->data += $profiles;
-
-		$this->render();
-	}
-	*/
-
 	public function validate()
 	{
-		$this->language->load('block/extras/social_media');
-
 		if (!empty($_POST['settings']['networks'])) {
 			foreach ($_POST['settings']['networks'] as $network) {
 				if (!$this->validation->url($network['href'])) {

@@ -13,8 +13,6 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 			$this->url->redirect('cart/cart');
 		}
 
-		$this->language->load('checkout/checkout');
-
 		//Page Head
 		$this->document->setTitle(_l("Checkout"));
 
@@ -28,8 +26,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 
 		if (!$this->customer->IsLogged() && !$this->data['guest_checkout']) {
 			$this->data['login_form'] = $this->getblock('account/login', array('template' => 'block/account/login'));
-		}
-		elseif ($this->data['guest_checkout']) {
+		} elseif ($this->data['guest_checkout']) {
 			$this->data['cancel_guest_checkout'] = $this->url->link('checkout/checkout/cancel_guest_checkout');
 		}
 

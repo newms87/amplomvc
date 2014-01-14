@@ -33,7 +33,7 @@
 							<a class="add_image_item"><?= _l("Add Image"); ?></a>
 
 							<div class="press_image_list"
-							     count="<?= !empty($press['images']) ? count($press['images']) : 0; ?>">
+								count="<?= !empty($press['images']) ? count($press['images']) : 0; ?>">
 
 								<? if ($key === 'template_row') {
 									$press['images']['template_row'] = '%image%';
@@ -48,7 +48,7 @@
 											<?= $this->builder->imageInput("settings[press_items][$row][images][$image_row]", $image); ?>
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
-											   class="delete"><?= _l("Remove"); ?></a>
+												class="delete"><?= _l("Remove"); ?></a>
 										</div>
 									<? } ?>
 								<? } ?>

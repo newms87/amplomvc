@@ -5,8 +5,6 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 	{
 		//Template and Languge
 		$this->template->load('setting/return_reason');
-		$this->language->load('setting/return_reason');
-
 		//Page Head
 		$this->document->setTitle(_l("Return Reasons"));
 

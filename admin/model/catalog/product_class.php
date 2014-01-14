@@ -163,8 +163,6 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function getFrontTemplates()
 	{
-		$this->language->load('catalog/product_class');
-
 		$front_templates = $this->template->getTemplatesFrom('product', false, _l("Default Template"));
 
 		foreach ($front_templates as $theme => &$templates) {
@@ -179,8 +177,6 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function getAdminTemplates()
 	{
-		$this->language->load('catalog/product_class');
-
 		$admin_templates = $this->template->getTemplatesFrom('catalog/product_class', true, _l("Default Template"));
 
 		foreach ($admin_templates as $theme => &$templates) {

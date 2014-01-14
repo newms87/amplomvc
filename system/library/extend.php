@@ -39,8 +39,7 @@ class Extend extends Library
 
 		if ($navigation_group_id) {
 			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
-		}
-		else {
+		} else {
 			$this->message->add('warning', __METHOD__ . "(): " . _l("The Navigation Group $group does not exist!"));
 			return false;
 		}
@@ -191,13 +190,13 @@ class Extend extends Library
 		$hook_id = '__image_sort__' . $table . '_' . $column;
 
 		$this->add_db_hook($hook_id, 'insert', $table, array('Extend' => 'update_hsv_value'), array(
-		                                                                                           $table,
-		                                                                                           $column
-		                                                                                      ));
+			$table,
+			$column
+		));
 		$this->add_db_hook($hook_id, 'update', $table, array('Extend' => 'update_hsv_value'), array(
-		                                                                                           $table,
-		                                                                                           $column
-		                                                                                      ));
+			$table,
+			$column
+		));
 
 		$sort_column = '__image_sort__' . $column;
 

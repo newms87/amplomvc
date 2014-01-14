@@ -4,8 +4,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function index()
 	{
-		$this->language->load('sale/coupon');
-
 		$this->document->setTitle(_l("Coupon"));
 
 		$this->getList();
@@ -13,8 +11,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function insert()
 	{
-		$this->language->load('sale/coupon');
-
 		$this->document->setTitle(_l("Coupon"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -32,8 +28,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function update()
 	{
-		$this->language->load('sale/coupon');
-
 		$this->document->setTitle(_l("Coupon"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -51,8 +45,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/coupon');
-
 		$this->document->setTitle(_l("Coupon"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -117,8 +109,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'name'       => $result['name'],
 				'code'       => $result['code'],
 				'discount'   => $result['discount'],
-				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], 'short'),
+				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'status'     => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'selected'   => isset($_GET['selected']) && in_array($result['coupon_id'], $_GET['selected']),
 				'action'     => $action
@@ -150,9 +142,9 @@ class Admin_Controller_Sale_Coupon extends Controller
 		}
 
 		$url = $this->get_url(array(
-		                           'sort',
-		                           'order'
-		                      ));
+			'sort',
+			'order'
+		));
 
 		$this->pagination->init();
 		$this->pagination->total  = $coupon_total;
@@ -328,8 +320,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->template->load('sale/coupon_history');
 		$coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
 
-		$this->language->load('sale/coupon');
-
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -345,7 +335,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'order_id'   => $result['order_id'],
 				'customer'   => $result['customer'],
 				'amount'     => $result['amount'],
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 

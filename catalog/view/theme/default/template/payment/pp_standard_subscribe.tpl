@@ -24,8 +24,8 @@
 	<!-- Display the payment button. -->
 	<div class="submit_pp_button">
 		<input type="image" name="submit" border="0"
-		       src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
-		       alt="PayPal - The safer, easier way to pay online">
+			src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
+			alt="PayPal - The safer, easier way to pay online">
 		<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
 	</div>
 </form>

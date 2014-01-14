@@ -98,7 +98,8 @@
 <div id="tab-local">
 	<table class="form">
 		<tr>
-			<td><?= _l("Default Address Format: <span class=\"help\">Insertables:<br/>
+			<td><?=
+				_l("Default Address Format: <span class=\"help\">Insertables:<br/>
 {firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>"); ?></td>
 			<td><textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format; ?></textarea></td>
 		</tr>

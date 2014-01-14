@@ -713,7 +713,7 @@ class Customer extends Library
 
 	public function generateCode()
 	{
-		return str_shuffle(md5(microtime(true)*rand()));
+		return str_shuffle(md5(microtime(true) * rand()));
 	}
 
 	public function clearCode($customer_id)

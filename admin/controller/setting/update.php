@@ -4,8 +4,6 @@ class Admin_Controller_Setting_Update extends Controller
 	public function index()
 	{
 		$this->template->load('setting/update');
-		$this->language->load('setting/update');
-
 		$this->document->setTitle(_l("System Update"));
 
 		if ($this->request->isPost() && $this->validate()) {

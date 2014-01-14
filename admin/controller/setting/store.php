@@ -3,15 +3,11 @@ class Admin_Controller_Setting_Store extends Controller
 {
 	public function index()
 	{
-		$this->language->load('setting/store');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('setting/store');
-
 		$this->document->setTitle(_l("Settings"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -37,8 +33,6 @@ class Admin_Controller_Setting_Store extends Controller
 
 	public function delete()
 	{
-		$this->language->load('setting/store');
-
 		//TODO: Change Permissions to include a query parameter (eg: store_id=$store_id). (by default this can be *, so no code breaking necessary)
 		if (!empty($_GET['store_id']) && $this->user->can('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);

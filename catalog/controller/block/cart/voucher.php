@@ -5,8 +5,6 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 	{
 		$this->template->load('block/cart/voucher');
 
-		$this->language->load('block/cart/shipping');
-
 		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->set('voucher', $_POST['voucher']);
 

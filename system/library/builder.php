@@ -81,8 +81,6 @@ class Builder extends Library
 			'url'      => $this->url->link($path, 'action=_action_&action_value=_action_value_&' . $this->url->getQueryExclude('action', 'action_value', 'selected')),
 		);
 
-		$data += $this->language->data;
-
 		//Load Batch Action template
 		$template = new Template($this->registry);
 
@@ -115,9 +113,6 @@ class Builder extends Library
 
 	public function imageInput($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false)
 	{
-		$text_clear  = $this->language->get('text_clear');
-		$text_browse = $this->language->get('text_browse');
-
 		if (!$width) {
 			if ($thumb) {
 				if (is_array($thumb)) {
@@ -159,8 +154,8 @@ class Builder extends Library
 				$html .= "<div class =\"image browse_clear\">";
 				$html .= "<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" /><br />";
 				$html .= "<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
-				$html .= "<a onclick=\"upload_image($(this).closest('.image'));\">$text_browse</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
-				$html .= "<a onclick=\"clear_image($(this).closest('.image'));\">$text_clear</a>";
+				$html .= "<a onclick=\"upload_image($(this).closest('.image'));\">" . _l("Browse") . "</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
+				$html .= "<a onclick=\"clear_image($(this).closest('.image'));\">" . _l("Clear") . "</a>";
 				$html .= "</div>";
 				break;
 

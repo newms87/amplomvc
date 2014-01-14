@@ -5,8 +5,6 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 	{
 		$this->template->load('report/customer_order');
 
-		$this->language->load('report/customer_order');
-
 		$this->document->setTitle(_l("Customer Orders Report"));
 
 		if (isset($_GET['filter_date_start'])) {

@@ -5,8 +5,6 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function index()
 	{
-		$this->language->load('design/banner');
-
 		$this->document->setTitle(_l("Banners"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function insert()
 	{
-		$this->language->load('design/banner');
-
 		$this->document->setTitle(_l("Banners"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -33,8 +29,6 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function update()
 	{
-		$this->language->load('design/banner');
-
 		$this->document->setTitle(_l("Banners"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -52,8 +46,6 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function delete()
 	{
-		$this->language->load('design/banner');
-
 		$this->document->setTitle(_l("Banners"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -138,9 +130,9 @@ class Admin_Controller_Design_Banner extends Controller
 		$this->data['sort_status'] = $this->url->link('design/banner', 'sort=status' . $url);
 
 		$url = $this->get_url(array(
-		                           'sort',
-		                           'order'
-		                      ));
+			'sort',
+			'order'
+		));
 
 		$this->pagination->init();
 		$this->pagination->total  = $banner_total;

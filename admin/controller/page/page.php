@@ -3,15 +3,11 @@ class Admin_Controller_Page_Page extends Controller
 {
 	public function index()
 	{
-		$this->language->load('page/page');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('page/page');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['page_id'])) {
@@ -45,8 +41,6 @@ class Admin_Controller_Page_Page extends Controller
 
 	public function delete()
 	{
-		$this->language->load('page/page');
-
 		if (isset($_GET['page_id']) && $this->validateDelete()) {
 			$this->Model_Page_Page->deletePage($_GET['page_id']);
 
@@ -81,7 +75,6 @@ class Admin_Controller_Page_Page extends Controller
 			}
 
 			if (!$this->message->hasError()) {
-				$this->language->load('page/page');
 				$this->message->add('success', _l("Success: You have modified Pages!"));
 			}
 		}
@@ -238,8 +231,7 @@ class Admin_Controller_Page_Page extends Controller
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
-		}
-		else {
+		} else {
 			$page_info = array();
 		}
 
@@ -269,7 +261,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
 
-		$store_front = current($this->data['stores']);
+		$store_front                = current($this->data['stores']);
 		$this->data['page_preview'] = $this->url->store($store_front['store_id'], 'page/page/preview', 'page_id=' . $page_id);
 
 		$this->data['data_statuses'] = array(
@@ -335,7 +327,7 @@ class Admin_Controller_Page_Page extends Controller
 
 			$blocks = array();
 
-			$data_positions = $this->theme->get_setting('data_positions');
+			$data_positions = $this->theme->getSetting('data_positions');
 
 			foreach ($block_list as $block) {
 				foreach ($block['profiles'] as $profile) {

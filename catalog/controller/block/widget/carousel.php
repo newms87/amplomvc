@@ -5,8 +5,6 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 	{
 		//Template and Language
 		$this->template->load('block/widget/carousel');
-		$this->language->load('block/widget/carousel');
-
 		if (!is_null($carousel_id)) {
 			$settings = $this->Model_Block_Block->getBlockProfileSettings('widget/carousel', $carousel_id) + $settings;
 		}

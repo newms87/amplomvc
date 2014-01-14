@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_Information extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/information');
-
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->language->load('catalog/information');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->addInformation($_POST);
 
@@ -27,8 +23,6 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	public function update()
 	{
-		$this->language->load('catalog/information');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 
@@ -44,8 +38,6 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	public function copy()
 	{
-		$this->language->load('catalog/information');
-
 		if (isset($_GET['information_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Information->copyInformation($_GET['information_id']);
 
@@ -61,8 +53,6 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/information');
-
 		if (isset($_GET['information_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Information->deleteInformation($_GET['information_id']);
 
@@ -78,8 +68,6 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/information');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_GET['selected'] as $information_id) {
@@ -340,11 +328,11 @@ class Admin_Controller_Catalog_Information extends Controller
 					} //blank translations will revert to Default language
 
 					if ($field === 'title' && !$this->validation->text($text, 3, 128)) {
-						$this->error["translations[$field][$language_id]"] = _l("Information Title must be between 3 and 128 characters for the language %s!", $this->language->getInfo('name', $language_id));
+						$this->error["translations[$field][$language_id]"] = _l("Information Title must be between 3 and 128 characters for the language %s!", $this->language->info('name', $language_id));
 					}
 
 					if ($field === 'description' && !$this->validation->text($text, 3)) {
-						$this->error["translations[$field][$language_id]"] = _l("Description must be more than 3 characters for the language %s!", $this->language->getInfo('name', $language_id));
+						$this->error["translations[$field][$language_id]"] = _l("Description must be more than 3 characters for the language %s!", $this->language->info('name', $language_id));
 					}
 				}
 			}

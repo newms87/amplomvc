@@ -17,7 +17,7 @@
 		<? if (!empty($form_shipping_address)) { ?>
 			<div style="clear:both">
 				<input type="checkbox" name="same_shipping_address" value="1"
-				       id="shipping" <?= $same_shipping_address ? 'checked="checked"' : ''; ?> />
+					id="shipping" <?= $same_shipping_address ? 'checked="checked"' : ''; ?> />
 				<label for="shipping"><?= _l("My delivery and billing addresses are the same."); ?></label>
 			</div>
 			<div id="guest_shipping_address" class="left shipping_address">

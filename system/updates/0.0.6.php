@@ -2,7 +2,6 @@
 //Settings
 $this->db->addColumn('setting', 'translate', "TINYINT(1) UNSIGNED NOT NULL AFTER `serialized`");
 
-//Language
 $this->db->addColumn('language', 'datetime_format_long', "VARCHAR(45) NOT NULL DEFAULT 'M d, Y H:i A'  AFTER `datetime_format`");
 
 //Order

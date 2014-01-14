@@ -4,8 +4,6 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 	public function index($settings)
 	{
 		$this->template->load('block/module/sidebar');
-		$this->language->load('block/module/sidebar');
-
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
 		$categories = $this->Model_Catalog_Category->getCategoryTree();

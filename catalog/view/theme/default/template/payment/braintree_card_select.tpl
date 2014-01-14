@@ -4,9 +4,9 @@
 		<a class="register_card button subscribe" href="<?= $register_card; ?>"><?= $button_add_card; ?></a>
 	<? } else { ?>
 		<div id="braintree_card_list" class="card_list noselect">
-			<input type="hidden" name="payment_method_id" value="braintree" />
+			<input type="hidden" name="payment_method_id" value="braintree"/>
 			<? foreach ($cards as $card) { ?>
-				<div class="card <?= !empty($card['default']) ? 'checked' :''; ?>">
+				<div class="card <?= !empty($card['default']) ? 'checked' : ''; ?>">
 					<div class="card_type">
 						<? if (!empty($card['image'])) { ?>
 							<img class="image" src="<?= $card['image']; ?>" alt="<?= $card['type']; ?>"/>
@@ -16,7 +16,7 @@
 					</div>
 					<div class="name"><?= $card['name']; ?></div>
 					<div class="number"><?= $card['masked']; ?></div>
-					<input type="radio" name="payment_key" value="<?= $card['id']; ?>" <?= !empty($card['default']) ? 'checked="checked"' :''; ?> />
+					<input type="radio" name="payment_key" value="<?= $card['id']; ?>" <?= !empty($card['default']) ? 'checked="checked"' : ''; ?> />
 					<? if (!empty($card['remove'])) { ?>
 						<a href="<?= $card['remove']; ?>" class="remove"></a>
 					<? } ?>
@@ -28,9 +28,9 @@
 </div>
 
 <script type="text/javascript">
-	$('#braintree_card_list').ac_radio().ac_slidelist({max_rows: 3, x_dir:-1, pad_y: -18});
+	$('#braintree_card_list').ac_radio().ac_slidelist({max_rows: 3, x_dir: -1, pad_y: -18});
 
-	$('.new_card, .register_card').click(function(){
+	$('.new_card, .register_card').click(function () {
 		return colorbox($(this));
 	});
 </script>

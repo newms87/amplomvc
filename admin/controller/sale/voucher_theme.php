@@ -3,15 +3,11 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 {
 	public function index()
 	{
-		$this->language->load('sale/voucher_theme');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('sale/voucher_theme');
-
 		$this->document->setTitle(_l("Voucher Themes"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -34,8 +30,6 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/voucher_theme');
-
 		if (isset($_GET['voucher_theme_id']) && $this->validateDelete()) {
 			$this->Model_Sale_VoucherTheme->deleteVoucherTheme($_GET['voucher_theme_id']);
 

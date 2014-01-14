@@ -62,8 +62,7 @@ class Table extends Library
 		$this->prepare();
 
 		extract($this->template_data);
-		extract($this->language->data);
-
+		
 		$columns = $this->columns;
 		$rows    = $this->rows;
 
@@ -129,9 +128,9 @@ class Table extends Library
 			//This sets a blank option in a dropdown by default
 			if ($column['filter']) {
 				if (in_array($column['type'], array(
-				                                   'select',
-				                                   'multiselect'
-				                              )) && !isset($column['filter_blank'])
+						'select',
+						'multiselect'
+					)) && !isset($column['filter_blank'])
 				) {
 					$column['filter_blank'] = true;
 				}

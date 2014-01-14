@@ -10,7 +10,7 @@ file_put_contents($htaccess, str_replace('_route_', '_path_', file_get_contents(
 
 //Product Class
 $this->db->addColumn('product', 'product_class_id', "INT UNSIGNED NOT NULL AFTER `product_id`");
-		
+
 $this->db->createTable('product_class', <<<SQL
   `product_class_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -23,10 +23,10 @@ SQL
 
 $link = array(
 	'display_name' => "Product Classes",
-	'name' => 'catalog_products_product_classes',
-	'href' => 'catalog/product_class',
-	'sort_order' => 10,
-	'parent' => 'catalog_products',
+	'name'         => 'catalog_products_product_classes',
+	'href'         => 'catalog/product_class',
+	'sort_order'   => 10,
+	'parent'       => 'catalog_products',
 );
 
 $this->extend->addNavigationLink('admin', $link);

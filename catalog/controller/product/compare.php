@@ -5,8 +5,6 @@ class Catalog_Controller_Product_Compare extends Controller
 	{
 		$this->template->load('product/compare');
 
-		$this->language->load('product/compare');
-
 		if (!isset($this->session->data['compare'])) {
 			$this->session->set('compare', array());
 		}
@@ -129,8 +127,6 @@ class Catalog_Controller_Product_Compare extends Controller
 
 	public function add()
 	{
-		$this->language->load('product/compare');
-
 		$json = array();
 
 		if (!isset($this->session->data['compare'])) {

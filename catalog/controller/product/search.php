@@ -5,8 +5,6 @@ class Catalog_Controller_Product_Search extends Controller
 	{
 		$this->template->load('product/search');
 
-		$this->language->load('product/search');
-
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
 		} else {

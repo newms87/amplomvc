@@ -32,27 +32,27 @@
 									<? $key_list = array_keys(current($results)); ?>
 									<table class="list query">
 										<thead>
-										<tr>
-											<? foreach ($key_list as $key) { ?>
-												<th><?= $key; ?></th>
-											<? } ?>
-										</tr>
-										</thead>
-										<tbody>
-										<? foreach ($results as $row) { ?>
 											<tr>
-												<? foreach ($row as $key => $value) { ?>
-													<td><?= $value; ?></td>
+												<? foreach ($key_list as $key) { ?>
+													<th><?= $key; ?></th>
 												<? } ?>
 											</tr>
-										<? } ?>
+										</thead>
+										<tbody>
+											<? foreach ($results as $row) { ?>
+												<tr>
+													<? foreach ($row as $key => $value) { ?>
+														<td><?= $value; ?></td>
+													<? } ?>
+												</tr>
+											<? } ?>
 										</tbody>
 										<tfoot>
-										<tr>
-											<? foreach ($key_list as $key) { ?>
-												<td><?= $key; ?></td>
-											<? } ?>
-										</tr>
+											<tr>
+												<? foreach ($key_list as $key) { ?>
+													<td><?= $key; ?></td>
+												<? } ?>
+											</tr>
 										</tfoot>
 									</table>
 								</td>

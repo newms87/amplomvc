@@ -3,7 +3,7 @@ class Translation extends Library
 {
 	public function translate($table, $object_id, &$data)
 	{
-		if ($this->language->code() == $this->config->get('config_language')) {
+		if ($this->language->info('code') == $this->config->get('config_language')) {
 			return;
 		}
 

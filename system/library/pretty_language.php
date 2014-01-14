@@ -7,15 +7,13 @@ class PrettyLanguage
 		$ext         = array('php');
 
 
-
-
 		$this->lang_replace_global();
 
 	}
 
 	public function lang_replace_global()
 	{
-		$ext         = array('php');
+		$ext   = array('php');
 		$files = $this->get_all_files_r(SITE_DIR . 'catalog/controller/', $ext);
 
 		$_ = array();
@@ -56,8 +54,7 @@ class PrettyLanguage
 					if ($line === $orig_lines[$num]) {
 						echo "Unresolved<br>";
 						$this->pl($num, $line);
-					}
-					else {
+					} else {
 						$count++;
 					}
 				}
@@ -69,8 +66,7 @@ class PrettyLanguage
 				echo "modified $count lines in $file<br>";
 				$this->print_lines($orig_lines, $new_lines, false, true);
 				file_put_contents($file, implode("\n", $new_lines));
-			}
-			else {
+			} else {
 				echo "<div style=\"color:grey\">nothing to do $file</div>";
 			}
 		}
@@ -78,7 +74,7 @@ class PrettyLanguage
 
 	public function lang_replace_contr()
 	{
-		$ext         = array('php');
+		$ext   = array('php');
 		$files = $this->get_all_files_r(SITE_DIR . 'admin/language/english/', $ext);
 
 		$find    = array(
@@ -108,7 +104,7 @@ class PrettyLanguage
 
 		foreach ($files as $file) {
 
-			if (in_array(str_replace('\\','/',$file), $ignored_files)) {
+			if (in_array(str_replace('\\', '/', $file), $ignored_files)) {
 				continue;
 			}
 
@@ -117,7 +113,7 @@ class PrettyLanguage
 
 			$_ += $default_lang;
 
-			$ctrl   = str_replace($find, $replace, $file);
+			$ctrl = str_replace($find, $replace, $file);
 
 			if (!is_file($ctrl)) {
 				echo "skipping $ctrl... not found<BR>";
@@ -132,7 +128,7 @@ class PrettyLanguage
 
 			$new_lines = array();
 
-			$missed = array();
+			$missed  = array();
 			$ignored = array();
 
 			$regx = "/(['\"])(" . implode('|', array_keys($_)) . ")['\"]/";
@@ -160,13 +156,11 @@ class PrettyLanguage
 					if ($line === $orig_lines[$num]) {
 						echo "Unresolved<br>";
 						$this->pl($num, $line);
-					}
-					else {
+					} else {
 						$count++;
 					}
-				}
-				elseif (preg_match($missed_regx, $line)) {
-					$ignored[$num+1] = $line;
+				} elseif (preg_match($missed_regx, $line)) {
+					$ignored[$num + 1] = $line;
 				}
 
 				$new_lines[] = $line;
@@ -179,7 +173,7 @@ class PrettyLanguage
 			}
 
 			if (!empty($missed)) {
-				html_dump($_,'langdata');
+				html_dump($_, 'langdata');
 				echo "<BR><BR>MISSED " . count($missed) . " lines! $ctrl<BR><BR>";
 				foreach ($missed as $l => $miss) {
 					$this->pl($l, $miss);
@@ -192,8 +186,7 @@ class PrettyLanguage
 				foreach ($ignored as $l => $miss) {
 					$this->pl($l, $miss);
 				}
-			}
-			elseif ($count < 1) {
+			} elseif ($count < 1) {
 				echo "<div style=\"color:grey\">nothing to do $ctrl</div>";
 			}
 		}
@@ -230,7 +223,7 @@ class PrettyLanguage
 
 		foreach ($files as $file) {
 
-			if (in_array(str_replace('\\','/',$file), $ignored_files)) {
+			if (in_array(str_replace('\\', '/', $file), $ignored_files)) {
 				continue;
 			}
 
@@ -239,7 +232,7 @@ class PrettyLanguage
 
 			$_ += $default_lang;
 
-			$tpl   = str_replace($find, $replace, $file);
+			$tpl = str_replace($find, $replace, $file);
 
 			$tpl = str_replace('.tpl', '_info.tpl', $tpl);
 			if (!is_file($tpl)) {
@@ -255,7 +248,7 @@ class PrettyLanguage
 
 			$new_lines = array();
 
-			$missed = array();
+			$missed  = array();
 			$ignored = array();
 
 			$regx = "/\\\$(" . implode('|', array_keys($_)) . ')([^a-zA-Z0-9_])/';
@@ -266,15 +259,14 @@ class PrettyLanguage
 
 					foreach ($matches[1] as $key => $match) {
 						if (!is_string($_[$match]) || strpos($_[$match], '%') !== false) {
-							$missed[$num+1] = $line . ' <---- ' . $match;
+							$missed[$num + 1] = $line . ' <---- ' . $match;
 						} else {
-							$line = str_replace('$'.$match, '_l("' . addslashes($_[$match]) . '")', $line);
+							$line = str_replace('$' . $match, '_l("' . addslashes($_[$match]) . '")', $line);
 						}
 					}
 					$count++;
-				}
-				elseif (preg_match($missed_regx, $line)) {
-					$ignored[$num+1] = $line;
+				} elseif (preg_match($missed_regx, $line)) {
+					$ignored[$num + 1] = $line;
 				}
 
 				$new_lines[] = $line;
@@ -287,7 +279,7 @@ class PrettyLanguage
 			}
 
 			if (!empty($missed)) {
-				html_dump($_,'langdata');
+				html_dump($_, 'langdata');
 				echo "<BR><BR>MISSED " . count($missed) . " lines! $tpl<BR><BR>";
 				foreach ($missed as $l => $miss) {
 					$this->pl($l, $miss);
@@ -299,8 +291,7 @@ class PrettyLanguage
 				foreach ($ignored as $l => $miss) {
 					$this->pl($l, $miss);
 				}
-			}
-			else {
+			} else {
 				echo "<div style=\"color:grey\">nothing to do $tpl</div>";
 			}
 		}

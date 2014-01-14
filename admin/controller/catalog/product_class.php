@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/product_class');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('catalog/product_class');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['product_class_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/product_class');
-
 		if (!empty($_GET['product_class_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_ProductClass->deleteProductClass($_GET['product_class_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/product_class');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $product_class_id) {
 				switch ($_GET['action']) {
@@ -217,8 +209,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		//Load Information
 		if ($product_class_id && !$this->request->isPost()) {
 			$product_class_info = $this->Model_Catalog_ProductClass->getProductClass($product_class_id);
-		}
-		else {
+		} else {
 			$product_class_info = $_POST;
 		}
 

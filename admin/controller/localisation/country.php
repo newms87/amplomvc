@@ -5,8 +5,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	public function index()
 	{
-		$this->language->load('localisation/country');
-
 		$this->document->setTitle(_l("Country"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	public function insert()
 	{
-		$this->language->load('localisation/country');
-
 		$this->document->setTitle(_l("Country"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	public function update()
 	{
-		$this->language->load('localisation/country');
-
 		$this->document->setTitle(_l("Country"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	public function delete()
 	{
-		$this->language->load('localisation/country');
-
 		$this->document->setTitle(_l("Country"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

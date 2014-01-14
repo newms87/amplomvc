@@ -1,24 +1,24 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Coupon Report"); ?></h1>
-			</div>
-			<div class="section">
-				<table class="form">
-					<tr>
-						<td><?= _l("Date Start:"); ?>
-							<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" id="date-start"
-							       size="12"/></td>
-						<td><?= _l("Date End:"); ?>
-							<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" id="date-end"
-							       size="12"/></td>
-						<td style="text-align: right;"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
-					</tr>
-				</table>
-				<table class="list">
-					<thead>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Coupon Report"); ?></h1>
+		</div>
+		<div class="section">
+			<table class="form">
+				<tr>
+					<td><?= _l("Date Start:"); ?>
+						<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" id="date-start"
+							size="12"/></td>
+					<td><?= _l("Date End:"); ?>
+						<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" id="date-end"
+							size="12"/></td>
+					<td style="text-align: right;"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
+				</tr>
+			</table>
+			<table class="list">
+				<thead>
 					<tr>
 						<td class="left"><?= _l("Coupon Name"); ?></td>
 						<td class="left"><?= _l("Code"); ?></td>
@@ -26,8 +26,8 @@
 						<td class="right"><?= _l("Total"); ?></td>
 						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
-					</thead>
-					<tbody>
+				</thead>
+				<tbody>
 					<? if ($coupons) { ?>
 						<? foreach ($coupons as $coupon) { ?>
 							<tr>
@@ -45,13 +45,14 @@
 							<td class="center" colspan="6"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
-					</tbody>
-				</table>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+				</tbody>
+			</table>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
-	<script type="text/javascript"><!--
+</div>
+<script type="text/javascript"><
+	!--
 		function filter() {
 			url = "<?= HTTP_ADMIN . "index.php?route=report/sale_order"; ?>";
 
@@ -70,7 +71,8 @@
 			location = url;
 		}
 </script>
-	<script type="text/javascript"><!--
+<script type="text/javascript"><
+	!--
 		$(document).ready(function () {
 			$('#date-start').datepicker({dateFormat: 'yy-mm-dd'});
 

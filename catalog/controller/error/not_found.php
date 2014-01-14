@@ -5,8 +5,6 @@ class Catalog_Controller_Error_NotFound extends Controller
 	{
 		//Template and Language
 		$this->template->load('error/not_found');
-		$this->language->load('error/not_found');
-
 		//Page Head
 		$this->document->setTitle(_l("The page you requested cannot be found!"));
 

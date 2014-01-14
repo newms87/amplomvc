@@ -10,7 +10,7 @@ class System_Update extends Model
 		$versions = array();
 
 		foreach ($version_list as $version) {
-			$v = str_replace('.php','',basename($version));
+			$v            = str_replace('.php', '', basename($version));
 			$versions[$v] = $version;
 		}
 

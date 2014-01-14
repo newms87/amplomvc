@@ -8,7 +8,7 @@ class Admin_Controller_Sale_Bitcoin extends Controller
 		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
 		$this->document->addScript(HTTP_JS . 'jquery/qrcode.js', 51);
 
-		$this->data['styles'] = $this->document->renderStyles();
+		$this->data['styles']  = $this->document->renderStyles();
 		$this->data['scripts'] = $this->document->renderScripts();
 
 		$this->data['bitcoin_address'] = $this->bitstamp->getDepositAddress();

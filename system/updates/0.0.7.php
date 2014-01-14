@@ -12,7 +12,7 @@ $this->db->addColumn('option', 'display_name', "VARCHAR(128) NOT NULL AFTER `nam
 if ($this->db->hasTable('option_description')) {
 	$this->db->query("UPDATE " . DB_PREFIX . "option o SET name = (SELECT name FROM " . DB_PREFIX . "option_description od WHERE od.option_id=o.option_id AND od.language_id = " . $this->language->id() . ")");
 	$this->db->query("UPDATE " . DB_PREFIX . "option o SET display_name = (SELECT display_name FROM " . DB_PREFIX . "option_description od WHERE od.option_id=o.option_id AND od.language_id = " . $this->language->id() . ")");
-	
+
 	$this->db->dropTable('option_description');
 }
 
@@ -20,7 +20,7 @@ $this->db->addColumn('option_value', 'name', "VARCHAR(128) NOT NULL AFTER `optio
 
 if ($this->db->hasTable('option_value_description')) {
 	$this->db->query("UPDATE " . DB_PREFIX . "option_value ov SET name = (SELECT name FROM " . DB_PREFIX . "option_value_description ovd WHERE ovd.option_value_id=ov.option_value_id AND ovd.language_id = " . $this->language->id() . ")");
-	
+
 	$this->db->dropTable('option_value_description');
 }
 

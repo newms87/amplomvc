@@ -5,8 +5,6 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 	{
 		$this->template->load('shipping/flat');
 
-		$this->language->load('shipping/flat');
-
 		$this->document->setTitle(_l("Flat Rate Shipping"));
 
 		if ($this->request->isPost() && $this->validate()) {

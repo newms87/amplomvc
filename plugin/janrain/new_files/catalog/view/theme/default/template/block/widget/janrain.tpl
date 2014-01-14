@@ -2,7 +2,7 @@
 	<a class="janrainEngage janiainengage_a janrain_tiny" href="#" onclick="return false;">
 		<? foreach ($display_icons as $icon) { ?>
 			<div class="janrain_icon_<?= $icon_size; ?>"
-			     style="background: url(<?= HTTPS_IMAGE . "janrain/rpx-icons$image_size.png"; ?>) no-repeat 0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
+				style="background: url(<?= HTTPS_IMAGE . "janrain/rpx-icons$image_size.png"; ?>) no-repeat 0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
 		<? } ?>
 	</a>
 
@@ -17,7 +17,7 @@
 					<a class="janrainEngage janiainengage_a janrain_icon_list" href="#" onclick="return false;">
 						<? foreach ($display_icons as $icon) { ?>
 							<div class="janrain_icon_<?= $icon_size; ?>"
-							     style="background: url(<?= HTTPS_IMAGE . "janrain/rpx-icons$image_size.png"; ?>) no-repeat 0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
+								style="background: url(<?= HTTPS_IMAGE . "janrain/rpx-icons$image_size.png"; ?>) no-repeat 0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
 						<? } ?>
 					</a>
 				<? } ?>

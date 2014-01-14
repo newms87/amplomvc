@@ -5,8 +5,6 @@ class Admin_Controller_Report_SaleOrder extends Controller
 	{
 		$this->template->load('report/sale_order');
 
-		$this->language->load('report/sale_order');
-
 		$this->document->setTitle(_l("Sales Report"));
 
 		$query_defaults = array(
@@ -42,8 +40,8 @@ class Admin_Controller_Report_SaleOrder extends Controller
 
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
-				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], 'short'),
+				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'orders'     => $result['orders'],
 				'products'   => $result['products'],
 				'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
@@ -77,11 +75,11 @@ class Admin_Controller_Report_SaleOrder extends Controller
 		);
 
 		$url = $this->get_url(array(
-		                           'filter_date_start',
-		                           'filter_date_end',
-		                           'filter_group',
-		                           'filter_order_status_id'
-		                      ));
+			'filter_date_start',
+			'filter_date_end',
+			'filter_group',
+			'filter_order_status_id'
+		));
 
 		$this->pagination->init();
 		$this->pagination->total  = $order_total;

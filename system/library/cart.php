@@ -4,11 +4,11 @@ class Cart extends Library
 	const PRODUCTS = 'products';
 	const VOUCHERS = 'vouchers';
 
-	const ERROR_PRODUCT_ID                  = 101;
-	const ERROR_PRODUCT_QUANTITY            = 102;
-	const ERROR_PRODUCT_MINIMUM             = 103;
-	const ERROR_PRODUCT_OPTION_EMPTY        = 104;
-	const ERROR_PRODUCT_OPTION_MULTI        = 105;
+	const ERROR_PRODUCT_ID           = 101;
+	const ERROR_PRODUCT_QUANTITY     = 102;
+	const ERROR_PRODUCT_MINIMUM      = 103;
+	const ERROR_PRODUCT_OPTION_EMPTY = 104;
+	const ERROR_PRODUCT_OPTION_MULTI = 105;
 
 	const ERROR_SHIPPING_ADDRESS            = 201;
 	const ERROR_SHIPPING_METHOD             = 202;
@@ -21,11 +21,11 @@ class Cart extends Library
 	const ERROR_PAYMENT_ADDRESS_COUNTRY     = 209;
 	const ERROR_PAYMENT_ADDRESS_ZONE        = 210;
 
-	const ERROR_CART_EMPTY                  = 301;
-	const ERROR_CART_STOCK                  = 302;
-	const ERROR_CHECKOUT_VALIDATE           = 303;
-	const ERROR_CHECKOUT_PAYMENT            = 304;
-	const ERROR_CHECKOUT_SHIPPING           = 305;
+	const ERROR_CART_EMPTY        = 301;
+	const ERROR_CART_STOCK        = 302;
+	const ERROR_CHECKOUT_VALIDATE = 303;
+	const ERROR_CHECKOUT_PAYMENT  = 304;
+	const ERROR_CHECKOUT_SHIPPING = 305;
 
 	private $totals = null;
 	private $error_code = null;
@@ -33,8 +33,6 @@ class Cart extends Library
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
-
-		$this->language->system('cart');
 
 		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
 			$this->session->set('cart', array());

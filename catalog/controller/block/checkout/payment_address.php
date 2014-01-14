@@ -4,8 +4,6 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 	public function index()
 	{
 		$this->template->load('block/checkout/payment_address');
-		$this->language->load('checkout/checkout');
-
 		$this->data['data_addresses'] = $this->customer->getPaymentAddresses();
 
 		if ($this->cart->validatePaymentAddress()) {
@@ -36,8 +34,6 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 	public function validate_selection()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = $this->validate();
 
 		if (!$json) {
@@ -55,8 +51,6 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 	public function validate_form()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = $this->validate();
 
 		if (!$json) {

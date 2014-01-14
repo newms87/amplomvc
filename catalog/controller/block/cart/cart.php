@@ -3,9 +3,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 {
 	public function index($settings = array())
 	{
-		//Language
-		$this->language->load('block/cart/cart');
-
 		if ($this->request->isPost()) {
 			//Update Product
 			if (isset($_POST['cart_update'])) {
@@ -16,8 +13,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 
 					$this->message->add('success', _l("Your cart has been updated!"));
 				}
-			}
-			elseif (isset($_POST['cart_remove_voucher'])) {
+			} elseif (isset($_POST['cart_remove_voucher'])) {
 				$this->cart->removeVoucher($_POST['remove_voucher']);
 				$this->message->add('success', _l('The voucher was removed from your cart.'));
 			}
@@ -76,7 +72,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					}
 				}
 
-				$cart_product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
+				$cart_product['href']   = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 				$cart_product['remove'] = $this->url->link("cart/cart/remove", 'cart_key=' . $cart_product['key']);
 			}
 			unset($product);

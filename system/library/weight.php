@@ -19,7 +19,7 @@ class Weight extends Library
 
 	public function get($value, $weight_class_id)
 	{
-		if ($weight_class_id !== $this->weight_class_id){
+		if ($weight_class_id !== $this->weight_class_id) {
 			$value = $this->convert($value, $weight_class_id, $this->weight_class_id);
 		}
 
@@ -49,11 +49,11 @@ class Weight extends Library
 		}
 
 		if (!$decimal_point) {
-			$decimal_point = $this->language->getInfo('decimal_point');
+			$decimal_point = $this->language->info('decimal_point');
 		}
 
 		if (!$thousand_point) {
-			$thousand_point = $this->language->getInfo('thousand_point');
+			$thousand_point = $this->language->info('thousand_point');
 		}
 
 		if (isset($this->weights[$weight_class_id])) {

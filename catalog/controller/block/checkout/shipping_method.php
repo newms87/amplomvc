@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 {
 	public function index()
 	{
-		$this->language->load('checkout/checkout');
 		$this->template->load('block/checkout/shipping_method');
 
 		if (isset($_POST['shipping_method'])) {
@@ -41,8 +40,6 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 
 	public function validate()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = array();
 
 		// Validate cart contents

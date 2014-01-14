@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Transaction extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/transaction');
-
 		$this->document->setTitle(_l("Your Transactions"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -44,7 +42,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 			$this->data['transactions'][] = array(
 				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
-				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 

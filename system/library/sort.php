@@ -1,9 +1,7 @@
 <?php
 class Sort extends Library
 {
-	private $language_data;
 	private $sorts;
-	private $limits;
 	private $limit;
 	private $sort;
 	private $order;
@@ -12,26 +10,14 @@ class Sort extends Library
 	private $sort_template;
 	private $limit_template;
 
-	public function __construct($registry)
-	{
-		parent::__construct($registry);
-
-		//TODO: Move this to the admin panel
-		$this->limits = array(
-			10  => '10',
-			20  => '20',
-			50  => '50',
-			100 => '100',
-			0   => 'all'
-		);
-
-		$this->language_data = $this->language->system_fetch('sort');
-	}
-
-	public function set_language($key, $value)
-	{
-		$this->language_data[$key] = $value;
-	}
+	//TODO: Move this to the admin panel
+	static $limits = array(
+		10  => '10',
+		20  => '20',
+		50  => '50',
+		100 => '100',
+		0   => 'all'
+	);
 
 	public function getSortData()
 	{
@@ -67,7 +53,7 @@ class Sort extends Library
 			$template = 'block/widget/sort';
 		}
 
-		$template_file = $this->template->find_file($template);
+		$template_file = $this->template->findFile($template);
 
 		if (!$template_file) {
 			trigger_error("Sort::render_sort(): Sort template $template was found! " . get_caller());
@@ -78,8 +64,6 @@ class Sort extends Library
 
 		$sort_select = 'sort=' . $this->sort . '&order=' . $this->order;
 
-		extract($this->language_data);
-
 		ob_start();
 
 		include($template_file);
@@ -89,7 +73,7 @@ class Sort extends Library
 
 	public function get_limits()
 	{
-		return $this->limits;
+		return Sort::$limits;
 	}
 
 	public function set_limits($limits)
@@ -108,7 +92,7 @@ class Sort extends Library
 			$template = 'block/widget/limit';
 		}
 
-		$template_file = $this->template->find_file($template);
+		$template_file = $this->template->findFile($template);
 
 		if (!$template_file) {
 			trigger_error("Sort::render_sort(): Limit template $template was found! " . get_caller());
@@ -120,15 +104,13 @@ class Sort extends Library
 		$limit = $this->limit;
 
 		if (empty($limits)) {
-			$limits = $this->limits;
+			$limits = Sort::$limits;
 		}
 
 		//Set limit for pagination compatibility
 		if (empty($_GET['limit']) || $_GET['limit'] !== $limit) {
 			$_GET['limit'] = $limit;
 		}
-
-		extract($this->language_data);
 
 		ob_start();
 

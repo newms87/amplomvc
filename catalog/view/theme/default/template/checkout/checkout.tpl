@@ -15,6 +15,7 @@
 			<? } elseif ($guest_checkout) { ?>
 				<div class="section">
 					<h2><?= _l("Proceed with Guest Checkout"); ?></h2>
+
 					<h3><a href="<?= $cancel_guest_checkout; ?>"><?= _l("Cancel Guest Checkout"); ?></a></h3>
 				</div>
 			<? } ?>

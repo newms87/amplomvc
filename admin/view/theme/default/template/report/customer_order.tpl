@@ -1,36 +1,36 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Orders Report"); ?></h1>
-			</div>
-			<div class="section">
-				<table class="form">
-					<tr>
-						<td><?= _l("Date Start:"); ?>
-							<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" id="date-start"
-							       size="12"/></td>
-						<td><?= _l("Date End:"); ?>
-							<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" id="date-end"
-							       size="12"/></td>
-						<td><?= _l("Order Status:"); ?>
-							<select name="filter_order_status_id">
-								<option value="0"><?= _l("All Statuses"); ?></option>
-								<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $filter_order_status_id) { ?>
-										<option value="<?= $order_status['order_status_id']; ?>"
-										        selected="selected"><?= $order_status['name']; ?></option>
-									<? } else { ?>
-										<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-									<? } ?>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Orders Report"); ?></h1>
+		</div>
+		<div class="section">
+			<table class="form">
+				<tr>
+					<td><?= _l("Date Start:"); ?>
+						<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" id="date-start"
+							size="12"/></td>
+					<td><?= _l("Date End:"); ?>
+						<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" id="date-end"
+							size="12"/></td>
+					<td><?= _l("Order Status:"); ?>
+						<select name="filter_order_status_id">
+							<option value="0"><?= _l("All Statuses"); ?></option>
+							<? foreach ($order_statuses as $order_status) { ?>
+								<? if ($order_status['order_status_id'] == $filter_order_status_id) { ?>
+									<option value="<?= $order_status['order_status_id']; ?>"
+										selected="selected"><?= $order_status['name']; ?></option>
+								<? } else { ?>
+									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
 								<? } ?>
-							</select></td>
-						<td style="text-align: right;"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
-					</tr>
-				</table>
-				<table class="list">
-					<thead>
+							<? } ?>
+						</select></td>
+					<td style="text-align: right;"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
+				</tr>
+			</table>
+			<table class="list">
+				<thead>
 					<tr>
 						<td class="left"><?= _l("Customer Name"); ?></td>
 						<td class="left"><?= _l("E-Mail"); ?></td>
@@ -41,8 +41,8 @@
 						<td class="right"><?= _l("Total"); ?></td>
 						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
-					</thead>
-					<tbody>
+				</thead>
+				<tbody>
 					<? if ($customers) { ?>
 						<? foreach ($customers as $customer) { ?>
 							<tr>
@@ -63,13 +63,14 @@
 							<td class="center" colspan="8"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
-					</tbody>
-				</table>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+				</tbody>
+			</table>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
-	<script type="text/javascript"><!--
+</div>
+<script type="text/javascript"><
+	!--
 		function filter() {
 			url = "<?= HTTP_ADMIN . "index.php?route=report/customer_order"; ?>";
 
@@ -94,7 +95,8 @@
 			location = url;
 		}
 </script>
-	<script type="text/javascript"><!--
+<script type="text/javascript"><
+	!--
 		$(document).ready(function () {
 			$('#date-start').datepicker({dateFormat: 'yy-mm-dd'});
 

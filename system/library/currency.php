@@ -48,8 +48,8 @@ class Currency extends Library
 			'symbol_left'   => $this->currencies[$currency]['symbol_left'],
 			'symbol_right'  => $this->currencies[$currency]['symbol_right'],
 			'decimals'      => (int)$this->currencies[$currency]['decimal_place'],
-			'decimal_point' => $this->language->getInfo('decimal_point'),
-			'thousand_sep'  => $this->language->getInfo('thousand_point'),
+			'decimal_point' => $this->language->info('decimal_point'),
+			'thousand_sep'  => $this->language->info('thousand_point'),
 		);
 
 		$this->document->localizeVar('currency', $vars);
@@ -64,8 +64,8 @@ class Currency extends Library
 		if ($format) {
 			$symbol_left    = $this->currencies[$currency]['symbol_left'];
 			$symbol_right   = $this->currencies[$currency]['symbol_right'];
-			$decimal_point  = $this->language->getInfo('decimal_point');
-			$thousand_point = $this->language->getInfo('thousand_point');
+			$decimal_point  = $this->language->info('decimal_point');
+			$thousand_point = $this->language->info('thousand_point');
 		} else {
 			$symbol_left    = '';
 			$symbol_right   = '';

@@ -1,13 +1,13 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Credit Report"); ?></h1>
-			</div>
-			<div class="section">
-				<table class="list">
-					<thead>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Credit Report"); ?></h1>
+		</div>
+		<div class="section">
+			<table class="list">
+				<thead>
 					<tr>
 						<td class="left"><?= _l("Customer Name"); ?></td>
 						<td class="left"><?= _l("E-Mail"); ?></td>
@@ -16,8 +16,8 @@
 						<td class="right"><?= _l("Total"); ?></td>
 						<td class="right"><?= _l("Action"); ?></td>
 					</tr>
-					</thead>
-					<tbody>
+				</thead>
+				<tbody>
 					<? if ($customers) { ?>
 						<? foreach ($customers as $customer) { ?>
 							<tr>
@@ -36,10 +36,10 @@
 							<td class="center" colspan="6"><?= _l("No results!"); ?></td>
 						</tr>
 					<? } ?>
-					</tbody>
-				</table>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+				</tbody>
+			</table>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
+</div>
 <?= $footer; ?>

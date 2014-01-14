@@ -10,7 +10,6 @@
  * Link: http://www.amplocart.com/plugins/mail
  *
  */
-
 class Mail_Setup extends PluginSetup
 {
 

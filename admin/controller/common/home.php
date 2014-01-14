@@ -4,8 +4,6 @@ class Admin_Controller_Common_Home extends Controller
 	public function index()
 	{
 		$this->template->load('common/home');
-		$this->language->load('common/home');
-
 		$this->document->setTitle(_l("Dashboard"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -74,8 +72,6 @@ class Admin_Controller_Common_Home extends Controller
 
 	public function chart()
 	{
-		$this->language->load('common/home');
-
 		$data = array();
 
 		$data['order']    = array();

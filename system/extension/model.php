@@ -178,7 +178,7 @@ abstract class System_Extension_Model extends Model
 
 		$ext_file = DIR_SYSTEM . 'extension/' . $type . '/' . $code . '.php';
 
-		if (!is_file ($ext_file)) {
+		if (!is_file($ext_file)) {
 			$this->message->add('warning', _l("Unable to load %s because %s was not found.", $code, $ext_file));
 			return null;
 		}

@@ -3,8 +3,6 @@ class Catalog_Controller_Cart_Cart extends Controller
 {
 	public function index()
 	{
-		$this->language->load('cart/cart');
-
 		$this->document->setTitle(_l("Shopping Cart"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -39,7 +37,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$this->data['block_total'] = $this->getBlock('cart/total');
 
-		$this->data['cart_empty'] = $this->cart->isEmpty();
+		$this->data['cart_empty']   = $this->cart->isEmpty();
 		$this->data['can_checkout'] = $this->cart->canCheckout();
 
 		//Set Continue to the redirect unless we are redirecting to the cart page

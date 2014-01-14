@@ -39,7 +39,9 @@ class Mod extends Library
 		foreach ($this->mod_registry as $source => $mods) {
 			foreach ($mods as $destination => $mod_files) {
 				foreach ($mod_files as $mod_file => $value) {
-					if ($mod_file === $file) return true;
+					if ($mod_file === $file) {
+						return true;
+					}
 				}
 			}
 		}
@@ -141,12 +143,13 @@ class Mod extends Library
 	{
 		$directives = $this->tool->getFileCommentDirectives($mod_file);
 
-		if (isset($directives['skip'])) return true;
+		if (isset($directives['skip'])) {
+			return true;
+		}
 
 		if (!empty($directives['originalsource'])) {
 			$source = SITE_DIR . trim($directives['source']);
-		}
-		elseif (!empty($directives['source'])) {
+		} elseif (!empty($directives['source'])) {
 			$source = SITE_DIR . trim($directives['source']);
 
 			if (!is_file($source)) {
@@ -165,8 +168,8 @@ class Mod extends Library
 			return false;
 		}
 
-		$set_file_root = function(&$file) { $file = SITE_DIR . trim($file); };
-		$file_filter = function($file) { return trim($file); };
+		$set_file_root = function (&$file) { $file = SITE_DIR . trim($file); };
+		$file_filter   = function ($file) { return trim($file); };
 
 		if (!empty($directives['require'])) {
 			$directives['require'] = array_filter(explode("\n", $directives['require']), $file_filter);
@@ -208,7 +211,9 @@ class Mod extends Library
 				}
 
 				if ($invalidated_only) {
-					if (!isset($this->invalid[$destination])) continue; //skip if no changes made
+					if (!isset($this->invalid[$destination])) {
+						continue;
+					} //skip if no changes made
 
 					$this->message->add('notify', _l("Mod File $destination was updated"));
 				}
@@ -287,15 +292,13 @@ class Mod extends Library
 
 		if (!empty($directives['algorithm'])) {
 			$algorithm = trim($directives['algorithm']);
-		}
-		//Intelligent Guess
+		} //Intelligent Guess
 		else {
 			$contents = file_get_contents($mod_file);
 
 			if (strpos($contents, '=====')) {
 				$algorithm = 'fileMerge';
-			}
-			else {
+			} else {
 				$algorithm = 'Replace';
 			}
 		}
@@ -374,13 +377,16 @@ class Mod extends Library
 		$modifications = explode("\n", str_replace("\n\n", "\n", str_replace("\r", "\n", file_get_contents($mod_file))));
 
 		//this makes the filepaths safe for displaying
-		$roots     = array(
+		$roots  = array(
 			SITE_DIR,
 			DIR_MOD_FILES
 		);
-		$source = str_replace($roots, array('','merged'), $source);
+		$source = str_replace($roots, array(
+			'',
+			'merged'
+		), $source);
 
-		$mod_file  = str_replace($roots, '', $mod_file);
+		$mod_file = str_replace($roots, '', $mod_file);
 
 		$orig_length = count($original);
 

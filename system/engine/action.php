@@ -13,16 +13,16 @@ final class Action
 
 	public function __construct($registry, $path, $parameters = array(), $classpath = '')
 	{
-		$this->registry = $registry;
-		$this->file = null;
-		$this->path = $path;
+		$this->registry   = $registry;
+		$this->file       = null;
+		$this->path       = $path;
 		$this->parameters = $parameters;
-		$this->method = 'index';
+		$this->method     = 'index';
 
 		if (!$classpath) {
 			$this->classpath = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		} else {
-			$this->classpath = rtrim($classpath,'/') . '/';
+			$this->classpath = rtrim($classpath, '/') . '/';
 		}
 
 		$parts = explode('/', str_replace('../', '', $this->classpath . $this->path));
@@ -37,28 +37,26 @@ final class Action
 			$filepath .= $part;
 
 			$is_file = is_file(SITE_DIR . $filepath . '.php');
-			$is_dir = is_dir(SITE_DIR . $filepath);
+			$is_dir  = is_dir(SITE_DIR . $filepath);
 
-			$next = ($i < ($count-1)) ? SITE_DIR . $filepath . '/' . $parts[$i+1] : '';
+			$next = ($i < ($count - 1)) ? SITE_DIR . $filepath . '/' . $parts[$i + 1] : '';
 
 			//Scan directories until we find file requested
 			//If part is a directory AND either not a file, or a file and the next part is a file or directory, assume the part is a directory
-			if ( $is_dir &&
-					( !$is_file || ($is_file && $is_dir && ($i < ($count-1)) && (is_file($next . '.php') || is_dir($next))) ) ) {
+			if ($is_dir &&
+				(!$is_file || ($is_file && $is_dir && ($i < ($count - 1)) && (is_file($next . '.php') || is_dir($next))))
+			) {
 				$filepath .= '/';
 				$this->class .= $this->tool->formatClassname($part) . '_';
-			}
-			elseif ($is_file) {
+			} elseif ($is_file) {
 				$this->file = SITE_DIR . $filepath . '.php';
 
 				$this->class .= $this->tool->formatClassname($part);
-			}
-			elseif ($this->file) {
-				$this->method = $part;
-				$this->classpath = str_replace('/'.$part, '', $this->classpath);
+			} elseif ($this->file) {
+				$this->method    = $part;
+				$this->classpath = str_replace('/' . $part, '', $this->classpath);
 				break;
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
@@ -126,11 +124,18 @@ final class Action
 
 		$controller = $this->getController();
 
-		if (is_callable(array($controller, $this->method))) {
+		if (is_callable(array(
+			$controller,
+			$this->method
+		))
+		) {
 			//Set our language group for translations
 			$language_group = $this->class;
 
-			call_user_func_array(array($controller, $this->method), $this->parameters);
+			call_user_func_array(array(
+				$controller,
+				$this->method
+			), $this->parameters);
 
 			$this->output = $controller->output;
 

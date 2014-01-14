@@ -5,8 +5,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	public function index()
 	{
-		$this->language->load('sale/customer_blacklist');
-
 		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	public function insert()
 	{
-		$this->language->load('sale/customer_blacklist');
-
 		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	public function update()
 	{
-		$this->language->load('sale/customer_blacklist');
-
 		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/customer_blacklist');
-
 		$this->document->setTitle(_l("Customer IP Blacklist"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

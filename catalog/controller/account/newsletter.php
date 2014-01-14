@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Newsletter extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/newsletter');
-
 		$this->document->setTitle(_l("Newsletter Subscription"));
 
 		if ($this->request->isPost()) {

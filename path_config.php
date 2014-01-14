@@ -4,7 +4,7 @@ define('HTTP_ROOT', SITE_URL);
 define('HTTP_CONTENT', SITE_URL . 'catalog/');
 define('HTTP_ADMIN', SITE_URL . 'admin/');
 define('HTTP_CATALOG', SITE_URL . 'catalog/');
-define('HTTP_IMAGE', SITE_URL .'image/');
+define('HTTP_IMAGE', SITE_URL . 'image/');
 define('HTTP_JS', SITE_URL . 'system/javascript/');
 define('HTTP_THEME_JS', HTTP_CATALOG . 'view/javascript/');
 define('HTTP_AJAX', SITE_URL . 'ajax/');

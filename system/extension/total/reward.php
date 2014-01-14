@@ -4,8 +4,6 @@ class System_Extension_Total_Reward extends TotalExtension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if (isset($this->session->data['reward'])) {
-			$this->language->system('extension/total/reward');
-
 			$points = $this->customer->getRewardPoints();
 
 			if ($this->session->data['reward'] <= $points) {
@@ -55,8 +53,6 @@ class System_Extension_Total_Reward extends TotalExtension
 	//TODO - The reward should be the method_id (not grabbed from title..)
 	public function confirm($order_info, $order_total)
 	{
-		$this->language->system('extension/total/reward');
-
 		if ($order_total['method_id']) {
 			$customer_reward = array(
 				'customer_id' => $order_info['customer_id'],

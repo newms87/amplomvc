@@ -5,10 +5,10 @@ class System_Model_Plugin extends Model
 	{
 		$this->cache->delete('plugin');
 
-		$this->delete('plugin', array('name'=>$name));
+		$this->delete('plugin', array('name' => $name));
 
 		$plugin = array(
-			'name' => $name,
+			'name'   => $name,
 			'status' => 1,
 		);
 
@@ -35,6 +35,6 @@ class System_Model_Plugin extends Model
 
 		$this->delete('plugin_registry', array('name' => $name));
 
-		$this->delete('plugin', array('name'=>$name));
+		$this->delete('plugin', array('name' => $name));
 	}
 }

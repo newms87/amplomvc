@@ -4,8 +4,6 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 	public function index()
 	{
-		$this->language->load('extension/plugin');
-
 		$this->document->setTitle(_l("Plugins"));
 
 		$this->getList();
@@ -90,14 +88,13 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		$plugin_total = $this->Model_Setting_Plugin->getTotalPlugins($filter);
-		$plugins = $this->Model_Setting_Plugin->getPlugins($sort + $filter);
+		$plugins      = $this->Model_Setting_Plugin->getPlugins($sort + $filter);
 
 		$all_plugins = $this->Model_Setting_Plugin->getPlugins();
 
 		foreach ($plugins as &$plugin) {
 			if ($plugin['installed']) {
-				$plugin['actions'] = array(
-					/*'edit' => array(
+				$plugin['actions'] = array( /*'edit' => array(
 						'text' => _l("Edit"),
 						'href' => $this->url->link('extension/plugin/update', 'name=' . $plugin['name']),
 					),*/
@@ -115,8 +112,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 						'text' => _l("Uninstall"),
 						'href' => $this->url->link('extension/plugin/uninstall', 'name=' . $plugin['name']),
 					);
-				}
-				else {
+				} else {
 					$plugin['actions']['error'] = array(
 						'text' => _l("<b>Uninstall Dependencies:</b><br />%s", implode(',', $this->Model_Setting_Plugin->getDependentsList($plugin['name']))),
 					);
@@ -146,14 +142,16 @@ class Admin_Controller_Extension_Plugin extends Controller
 					} else {
 						$installed = "<span class=\"dependency_inactive\">$depend</span>";
 					}
-				} unset($installed);
+				}
+				unset($installed);
 
 				$plugin['dependencies'] = implode('<br />', $plugin['dependencies']);
 			}
 
 			$plugin['link'] = "<a target=\"_blank\" href=\"$plugin[link]\">$plugin[link]</a>";
 
-		} unset($plugin);
+		}
+		unset($plugin);
 
 		//Build The Table
 		$this->table->init();
@@ -220,8 +218,6 @@ class Admin_Controller_Extension_Plugin extends Controller
 	public function update()
 	{
 		$this->cache->delete('model');
-
-		$this->language->load('extension/plugin');
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', _l("Warning: There was no plugin found."));

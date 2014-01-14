@@ -23,10 +23,10 @@
 						<? } ?>
 
 						<? if (!in_array($field['type'], array(
-						                                      'image',
-						                                      'button',
-						                                      'submit'
-						                                 ))
+							'image',
+							'button',
+							'submit'
+						))
 						) {
 							?>
 							<div class="field_title">

@@ -3,17 +3,14 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 {
 	public function settings(&$settings)
 	{
-		//Language
-		$this->language->load('extension/payment/braintree');
-
 		//Default Settings
 		$defaults = array(
-			'merchant_id' => '',
-			'public_key' => '',
-			'private_key' => '',
+			'merchant_id'                => '',
+			'public_key'                 => '',
+			'private_key'                => '',
 			'client_side_encryption_key' => '',
-			'mode' => 'sandbox',
-			'plan_id' => '',
+			'mode'                       => 'sandbox',
+			'plan_id'                    => '',
 		);
 
 		$settings += $defaults;
@@ -21,7 +18,7 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 		$this->data['settings'] = $settings;
 
 		//Template Data
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
 		$this->data['data_braintree_plans'] = $this->System_Extension_Payment->get('braintree')->getPlans();
 
 		$this->data['data_modes'] = array(

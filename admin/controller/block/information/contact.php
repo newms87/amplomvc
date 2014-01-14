@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Contact
+ */
 class Admin_Controller_Block_Information_Contact extends Controller
 {
 	public function settings(&$settings)

@@ -24,8 +24,6 @@ class Catalog_Controller_Mail_Voucher extends Controller
 			$store          = $this->config->getDefaultStore();
 		}
 
-		$this->language->loadTemporary('mail/voucher', $language_id);
-
 		$voucher['message'] = nl2br($voucher['message']);
 		$voucher['amount']  = $this->currency->format($voucher['amount']);
 
@@ -38,7 +36,7 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->data['store_name'] = $store['name'];
 		$this->data['store_url']  = $store['url'];
 
-		$this->data['from_name'] = $voucher['from_name'];
+		$this->data['from_name']  = $voucher['from_name'];
 		$this->data['redeem_url'] = $this->url->store($store['store_id'], 'common/home');
 
 		$this->data['image'] = $this->image->get($voucher['image']);
@@ -59,7 +57,5 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();
-
-		$this->language->unloadTemporary();
 	}
 }

@@ -41,7 +41,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
 
 		//Page Head
-		$this->data['direction']      = $this->language->getInfo('direction');
+		$this->data['direction']      = $this->language->info('direction');
 		$this->data['description']    = $this->document->getDescription();
 		$this->data['keywords']       = $this->document->getKeywords();
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
@@ -50,12 +50,10 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['styles']  = $this->document->renderStyles();
 		$this->data['scripts'] = $this->document->renderScripts();
 
-		$this->language->set('lang', $this->language->getInfo('code'));
+		$this->data['lang'] = $this->language->info('code');
 
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 		$this->data['statcounter']      = $this->config->get('config_statcounter');
-
-		$this->language->load('common/header');
 
 		$this->data['messages'] = $this->message->fetch();
 		$this->data['icon']     = $this->image->get($this->config->get('config_icon'));
@@ -64,17 +62,19 @@ class Catalog_Controller_Common_Header extends Controller
 		$logo_width  = $this->config->get('config_logo_width');
 		$logo_height = $this->config->get('config_logo_height');
 
-		$this->data['logo']        = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
+		$this->data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
+
+		$this->data['slogan'] = $this->config->get('config_slogan');
 
 		//Admin Bar
 		if ($this->user->isLogged()) {
-			$this->data['admin_bar'] = $this->config->get('config_admin_bar');
-			$this->data['admin_link'] = $this->url->admin();
-			$this->data['clock_time'] = $this->date->now('datetime_long');
-			$time_inc = 3600 * 24;
+			$this->data['admin_bar']   = $this->config->get('config_admin_bar');
+			$this->data['admin_link']  = $this->url->admin();
+			$this->data['clock_time']  = $this->date->now('datetime_long');
+			$time_inc                  = 3600 * 24;
 			$this->data['sim_forward'] = $this->url->here('sim_time=' . $time_inc);
-			$this->data['sim_back'] = $this->url->here('sim_time=-' . $time_inc);
-			$this->data['sim_reset'] = $this->url->here('sim_time=reset');
+			$this->data['sim_back']    = $this->url->here('sim_time=-' . $time_inc);
+			$this->data['sim_reset']   = $this->url->here('sim_time=reset');
 		}
 
 		//Navigation
@@ -85,7 +85,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		//Login Check & The Welcome Message
 		$this->data['is_logged'] = $this->customer->isLogged();
-		$this->data['customer'] = $this->customer->info();
+		$this->data['customer']  = $this->customer->info();
 
 		if (!$this->data['is_logged']) {
 			$this->data['block_login'] = $this->getBlock('account/login');

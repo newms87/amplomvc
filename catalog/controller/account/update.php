@@ -4,8 +4,6 @@ class Catalog_Controller_Account_Update extends Controller
 	public function index()
 	{
 		//Load Language
-		$this->language->load('account/update');
-
 		//Login Verification
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/update'));
@@ -41,8 +39,7 @@ class Catalog_Controller_Account_Update extends Controller
 		if (!$this->request->isPost()) {
 			$customer_info             = $this->customer->info();
 			$customer_info['metadata'] = $this->customer->getMeta();
-		}
-		else {
+		} else {
 			$customer_info = $_POST;
 		}
 
@@ -71,7 +68,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 		foreach ($addresses as &$address) {
 			$address['display'] = $this->address->format($address);
-			$address['remove'] = $this->url->link('account/update/remove_address', 'address_id=' . $address['address_id']);
+			$address['remove']  = $this->url->link('account/update/remove_address', 'address_id=' . $address['address_id']);
 		}
 		unset($address);
 
@@ -137,8 +134,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 		if (!$this->validation->password($_POST['password'])) {
 			$this->error['password'] = $this->validation->getError();
-		}
-		elseif ($_POST['password'] !== $_POST['confirm']) {
+		} elseif ($_POST['password'] !== $_POST['confirm']) {
 			$this->error['confirm'] = _l("Your password and confirmation do not match!");
 		}
 

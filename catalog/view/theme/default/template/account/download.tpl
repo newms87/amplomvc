@@ -16,8 +16,8 @@
 					<div class="download-info">
 						<? if ($download['remaining'] > 0) { ?>
 							<a href="<?= $download['href']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>"
-							                                         alt="<?= _l("Download"); ?>"
-							                                         title="<?= _l("Download"); ?>"/></a>
+									alt="<?= _l("Download"); ?>"
+									title="<?= _l("Download"); ?>"/></a>
 						<? } ?>
 					</div>
 				</div>

@@ -135,7 +135,7 @@ abstract class Model
 		$success = $this->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
 		if (!$success) {
-			trigger_error("There was a problem inserting entry for $table and was not modified." . get_caller(0,4));
+			trigger_error("There was a problem inserting entry for $table and was not modified." . get_caller(0, 4));
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -165,8 +165,7 @@ abstract class Model
 			$update_id = (int)$data[$primary_key];
 
 			$where = "WHERE `$primary_key` = $update_id";
-		}
-		elseif (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
+		} elseif (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			if (!$primary_key) {
 				trigger_error("UPDATE $table " . _l("does not have an integer primary key!") . get_caller(0, 4));
 				return null;
@@ -175,8 +174,7 @@ abstract class Model
 			$update_id = (int)$where;
 
 			$where = "WHERE `$primary_key` = $update_id";
-		}
-		elseif (is_array($where)) {
+		} elseif (is_array($where)) {
 			$where = "WHERE " . $this->getWhere($table, $where);
 
 			if (isset($where[$primary_key])) {
@@ -206,13 +204,12 @@ abstract class Model
 		if (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			$primary_key = $this->get_primary_key($table);
 			if (!$primary_key) {
-				trigger_error("DELETE " . _l("%s does not have an integer primary key!") . get_caller(0,4));
+				trigger_error("DELETE " . _l("%s does not have an integer primary key!") . get_caller(0, 4));
 				return null;
 			}
 
 			$where = "`$primary_key` = '$where'";
-		}
-		elseif (is_array($where)) {
+		} elseif (is_array($where)) {
 			$where = $this->getWhere($table, $where, null, null, true);
 		}
 
@@ -220,8 +217,7 @@ abstract class Model
 
 		if ($where !== '1') {
 			$where = "WHERE $where";
-		}
-		else {
+		} else {
 			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 
 			if (!$truncate_allowed) {
@@ -234,7 +230,7 @@ abstract class Model
 		$success = $this->query("DELETE FROM " . DB_PREFIX . "$table $where");
 
 		if (!$success) {
-			trigger_error("There was a problem deleting entry for $table and was not modified." . get_caller(0,4));
+			trigger_error("There was a problem deleting entry for $table and was not modified." . get_caller(0, 4));
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -257,7 +253,7 @@ abstract class Model
 		$values = '';
 
 		foreach ($data as $key => $value) {
-			$values .= ($values ? ' '.$glue.' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
+			$values .= ($values ? ' ' . $glue . ' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
 		}
 
 		return $values ? $values : '1';
@@ -285,17 +281,16 @@ abstract class Model
 		foreach ($data as $key => &$value) {
 
 			if (is_resource($value) || is_array($value) || is_object($value)) {
-				trigger_error(__METHOD__ . "(): " . _l("The field %s was given a value that was not a valid type! Value: %s.", $key, gettype($value)) . get_caller(0,4));
+				trigger_error(__METHOD__ . "(): " . _l("The field %s was given a value that was not a valid type! Value: %s.", $key, gettype($value)) . get_caller(0, 4));
 				exit;
 			}
 
-			switch((int)$table_model[$key]){
+			switch ((int)$table_model[$key]) {
 				case DB_AUTO_INCREMENT_PK:
 				case DB_AUTO_INCREMENT:
 					if ($auto_inc) {
 						$value = $this->db->escape($value);
-					}
-					else {
+					} else {
 						unset($data[$key]);
 					}
 					break;
@@ -324,7 +319,8 @@ abstract class Model
 					$value = $this->db->escape($value);
 					break;
 			}
-		}unset($value);
+		}
+		unset($value);
 
 		return $data;
 	}
@@ -366,7 +362,7 @@ abstract class Model
 
 	private function get_table_model($table)
 	{
-		$table_model = $this->cache->get('model.'.$table);
+		$table_model = $this->cache->get('model.' . $table);
 
 		if (!$table_model) {
 			$table = $this->db->escape($table);
@@ -387,36 +383,39 @@ abstract class Model
 				if (in_array($row['Field'], array_keys($rules))) {
 					$table_model[$row['Field']] = $rules[$row['Field']];
 				} else {
-					$type = strtolower(trim(preg_replace("/\\(.*$/",'',$row['Type'])));
+					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $row['Type'])));
 
 					//we only care about ints and floats because only these we will do something besides escape
-					$ints = array('bigint','mediumint','smallint','tinyint','int');
-					$floats = array('decimal','float','double');
+					$ints = array(
+						'bigint',
+						'mediumint',
+						'smallint',
+						'tinyint',
+						'int'
+					);
+					$floats = array(
+						'decimal',
+						'float',
+						'double'
+					);
 
 					if ($row['Key'] == 'PRI' && in_array($type, $ints)) {
 						if ($row['Extra'] == 'auto_increment') {
 							$escape_type = DB_AUTO_INCREMENT_PK;
-						}
-						else {
+						} else {
 							$escape_type = DB_PRIMARY_KEY_INTEGER;
 						}
-					}
-					elseif ($row['Extra'] == 'auto_increment') {
+					} elseif ($row['Extra'] == 'auto_increment') {
 						$escape_type = DB_AUTO_INCREMENT;
-					}
-					elseif (in_array($type,$ints)) {
+					} elseif (in_array($type, $ints)) {
 						$escape_type = DB_INTEGER;
-					}
-					elseif (in_array($type,$floats)) {
+					} elseif (in_array($type, $floats)) {
 						$escape_type = DB_FLOAT;
-					}
-					elseif ($type == 'datetime') {
+					} elseif ($type == 'datetime') {
 						$escape_type = DB_DATETIME;
-					}
-					elseif (strtolower($row['Field']) == 'image') {
+					} elseif (strtolower($row['Field']) == 'image') {
 						$escape_type = DB_IMAGE;
-					}
-					else {
+					} else {
 						$escape_type = DB_ESCAPE;
 					}
 
@@ -424,7 +423,7 @@ abstract class Model
 				}
 			}
 
-			$this->cache->set('model.'.$table,$table_model);
+			$this->cache->set('model.' . $table, $table_model);
 		}
 
 		return $table_model;
@@ -435,7 +434,7 @@ abstract class Model
 		$table_model = $this->get_table_model($table);
 
 		$primary_key = null;
-		foreach ($table_model as $key=>$type) {
+		foreach ($table_model as $key => $type) {
 			if ($type == DB_PRIMARY_KEY_INTEGER || $type == DB_AUTO_INCREMENT_PK) {
 				if ($primary_key) {
 					return null;
@@ -455,7 +454,7 @@ abstract class Model
 			foreach ($hooks as $hook) {
 				if (is_array($hook['callback'])) {
 					$classname = key($hook['callback']);
-					$method = current($hook['callback']);
+					$method    = current($hook['callback']);
 
 					$class = $this->$classname;
 
@@ -466,17 +465,17 @@ abstract class Model
 
 						$params = array('__data__' => &$data) + $hook['param'];
 
-						call_user_func_array(array($class, $method), $params);
-					}
-					else {
+						call_user_func_array(array(
+							$class,
+							$method
+						), $params);
+					} else {
 						trigger_error("Model::action_filter(): The following method does not exist: $class::$method().");
 					}
-				}
-				else {
+				} else {
 					if (function_exists($hook['callback'])) {
 						$hook['callback']($hook['param']);
-					}
-					else {
+					} else {
 						trigger_error("Model::action_filter(): The following function does not exist: $hook[callback]().");
 					}
 				}

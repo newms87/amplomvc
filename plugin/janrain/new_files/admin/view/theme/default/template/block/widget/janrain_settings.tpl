@@ -22,7 +22,7 @@
 						<input id="icon-<?= $key; ?>" type="checkbox" name="settings[display_icons][]" value="<?= $key; ?>" <?= in_array($key, $display_icons) ? 'checked="checked"' : ''; ?> />
 						<label for="icon-<?= $key; ?>" style="display: block">
 							<div class="janrain-icon-small"
-							     style="background: url(<?= $social_icon_sprite; ?>) no-repeat 0 <?= $image_offset[$key] * -16; ?>px;"></div>
+								style="background: url(<?= $social_icon_sprite; ?>) no-repeat 0 <?= $image_offset[$key] * -16; ?>px;"></div>
 							<?= $icon; ?>
 						</label>
 					</div>

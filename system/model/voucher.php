@@ -3,7 +3,7 @@ class System_Model_Voucher extends Model
 {
 	public function addVoucher($order_id, $data)
 	{
-		$data['order_id'] = $order_id;
+		$data['order_id']   = $order_id;
 		$data['date_added'] = $this->date->now();
 
 		$voucher_id = $this->insert('voucher', $data);
@@ -64,11 +64,11 @@ class System_Model_Voucher extends Model
 	public function redeem($voucher_id, $order_id, $amount, $description = '')
 	{
 		$voucher_history = array(
-			'voucher_id' => $voucher_id,
-			'order_id' => $order_id,
-			'amount' => $amount,
+			'voucher_id'  => $voucher_id,
+			'order_id'    => $order_id,
+			'amount'      => $amount,
 			'description' => $description,
-			'date_added' => $this->date->now(),
+			'date_added'  => $this->date->now(),
 		);
 
 		return $this->insert('voucher_history', $voucher_history);

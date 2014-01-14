@@ -3,15 +3,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 {
 	public function index()
 	{
-		$this->language->load('sale/voucher');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('sale/voucher');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['voucher_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/voucher');
-
 		if (isset($_GET['voucher_id']) && $this->validateDelete()) {
 			$this->Model_Sale_Voucher->deleteVoucher($_GET['voucher_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('sale/voucher');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_GET['selected'] as $voucher_id) {
@@ -383,8 +375,6 @@ class Admin_Controller_Sale_Voucher extends Controller
 	public function history()
 	{
 		$this->template->load('sale/voucher_history');
-		$this->language->load('sale/voucher');
-
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -400,7 +390,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				'order_id'   => $result['order_id'],
 				'customer'   => $result['customer'],
 				'amount'     => $this->currency->format($result['amount'], $this->config->get('config_currency')),
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 
@@ -416,8 +406,6 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	public function send()
 	{
-		$this->language->load('sale/voucher');
-
 		$json = array();
 
 		if (!$this->user->can('modify', 'sale/voucher')) {

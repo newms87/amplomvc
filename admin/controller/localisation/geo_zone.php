@@ -5,8 +5,6 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	public function index()
 	{
-		$this->language->load('localisation/geo_zone');
-
 		$this->document->setTitle(_l("Geo Zones"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	public function insert()
 	{
-		$this->language->load('localisation/geo_zone');
-
 		$this->document->setTitle(_l("Geo Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -31,8 +27,6 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	public function update()
 	{
-		$this->language->load('localisation/geo_zone');
-
 		$this->document->setTitle(_l("Geo Zones"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -48,8 +42,6 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	public function delete()
 	{
-		$this->language->load('localisation/geo_zone');
-
 		$this->document->setTitle(_l("Geo Zones"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

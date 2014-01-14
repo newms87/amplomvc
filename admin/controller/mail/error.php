@@ -3,7 +3,6 @@ class Admin_Controller_Mail_Error extends Controller
 {
 	public function index()
 	{
-		$this->language->load('mail/error');
 		$this->template->load('mail/error');
 
 		$this->document->setTitle(_l("Failed Email Messages"));

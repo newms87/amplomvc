@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="section">
-<?= $this->breadcrumb->render(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= _l("Gift Voucher"); ?></h1>
@@ -77,32 +77,32 @@
 		</div>
 	</div>
 
-<? if ($voucher_id) { ?>
-	<script type="text/javascript">
-		$('#history .pagination a').live('click', function () {
-			$('#history').load(this.href);
+	<? if ($voucher_id) { ?>
+		<script type="text/javascript">
+			$('#history .pagination a').live('click', function () {
+				$('#history').load(this.href);
 
-			return false;
-		});
-
-		$('#history').load("<?= $url_history; ?>");
-
-		function send_voucher() {
-			$.get('<?= $send; ?>', {}, function (json) {
-				if (typeof json == 'string') {
-					show_msg('warning', json);
-				} else {
-					show_msgs(json);
-				}
+				return false;
 			});
-		}
-</script>
-<? } ?>
+
+			$('#history').load("<?= $url_history; ?>");
+
+			function send_voucher() {
+				$.get('<?= $send; ?>', {}, function (json) {
+					if (typeof json == 'string') {
+						show_msg('warning', json);
+					} else {
+						show_msgs(json);
+					}
+				});
+			}
+		</script>
+	<? } ?>
 
 	<script type="text/javascript">
 		$('#tabs a').tabs();
-</script>
+	</script>
 
-<?= $this->builder->js('errors', $errors); ?>
+	<?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+	<?= $footer; ?>

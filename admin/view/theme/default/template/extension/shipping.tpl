@@ -17,7 +17,7 @@
 					<table class="form">
 						<tr>
 							<td><?= _l("Title"); ?></td>
-							<td><input type="text" name="title" value="<?= $title; ?>" /></td>
+							<td><input type="text" name="title" value="<?= $title; ?>"/></td>
 						</tr>
 						<? if (!empty($extend_settings)) { ?>
 							<tr>
@@ -26,7 +26,7 @@
 						<? } ?>
 						<tr>
 							<td><?= _l("Minimum Order Total"); ?></td>
-							<td><input type="text" name="settings[min_total]" value="<?= $settings['min_total']; ?>" /></td>
+							<td><input type="text" name="settings[min_total]" value="<?= $settings['min_total']; ?>"/></td>
 						</tr>
 						<tr>
 							<td><?= _l("Shipping Zone"); ?></td>
@@ -35,7 +35,7 @@
 						</tr>
 						<tr>
 							<td><?= _l("Sort Order"); ?></td>
-							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" /></td>
+							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>"/></td>
 						</tr>
 						<tr>
 							<td><?= _l("Status"); ?></td>

@@ -3,8 +3,6 @@ class Admin_Controller_Sale_Customer extends Controller
 {
 	public function index()
 	{
-		$this->language->load('sale/customer');
-
 		$this->document->setTitle(_l("Customer"));
 
 		$this->getList();
@@ -12,8 +10,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function insert()
 	{
-		$this->language->load('sale/customer');
-
 		$this->document->setTitle(_l("Customer"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -71,8 +67,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function update()
 	{
-		$this->language->load('sale/customer');
-
 		$this->document->setTitle(_l("Customer"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -130,8 +124,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function delete()
 	{
-		$this->language->load('sale/customer');
-
 		$this->document->setTitle(_l("Customer"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -191,8 +183,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function approve()
 	{
-		$this->language->load('sale/customer');
-
 		$this->document->setTitle(_l("Customer"));
 
 		if (!$this->user->can('modify', 'sale/customer')) {
@@ -409,7 +399,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				'status'         => ($result['status'] ? _l("Enabled") : _l("Disabled")),
 				'approved'       => ($result['approved'] ? _l("Yes") : _l("No")),
 				'ip'             => $result['ip'],
-				'date_added'     => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'     => $this->date->format($result['date_added'], 'short'),
 				'selected'       => isset($_GET['selected']) && in_array($result['customer_id'], $_GET['selected']),
 				'action'         => $action
 			);
@@ -944,8 +934,6 @@ class Admin_Controller_Sale_Customer extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->load('error/not_found');
-
 			$this->document->setTitle(_l("Customer"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -964,20 +952,14 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->template->load('sale/customer_transaction');
 
-		$this->language->load('sale/customer');
-
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 
-			$this->language->set('success', _l("Success: You have modified customers!"));
-		} else {
-			$this->data['success'] = '';
+			$this->message->add('success', _l("Success: You have modified customers!"));
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
-			$this->language->set('error_warning', _l("Warning: You do not have permission to modify customers!"));
-		} else {
-			$this->data['error_warning'] = '';
+			$this->message->add('warning', _l("Warning: You do not have permission to modify customers!"));
 		}
 
 		if (isset($_GET['page'])) {
@@ -994,7 +976,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['transactions'][] = array(
 				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
-				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 
@@ -1014,20 +996,14 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->template->load('sale/customer_reward');
 
-		$this->language->load('sale/customer');
-
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 
-			$this->language->set('success', _l("Success: You have modified customers!"));
-		} else {
-			$this->data['success'] = '';
+			$this->message->add('success', _l("Success: You have modified customers!"));
 		}
 
 		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
-			$this->language->set('error_warning', _l("Warning: You do not have permission to modify customers!"));
-		} else {
-			$this->data['error_warning'] = '';
+			$this->message->add('warning', _l("Warning: You do not have permission to modify customers!"));
 		}
 
 		if (isset($_GET['page'])) {
@@ -1044,7 +1020,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['rewards'][] = array(
 				'points'      => $result['points'],
 				'description' => $result['description'],
-				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 
@@ -1062,8 +1038,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function addblacklist()
 	{
-		$this->language->load('sale/customer');
-
 		$json = array();
 
 		if (isset($_POST['ip'])) {
@@ -1081,8 +1055,6 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function removeblacklist()
 	{
-		$this->language->load('sale/customer');
-
 		$json = array();
 
 		if (isset($_POST['ip'])) {

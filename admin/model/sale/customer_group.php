@@ -44,7 +44,7 @@ class Admin_Model_Sale_CustomerGroup extends Model
 		//Order By and Limit
 		if (!$total) {
 			if (empty($data['sort'])) {
-				$data['sort'] = 'name';
+				$data['sort']  = 'name';
 				$data['order'] = 'ASC';
 			}
 

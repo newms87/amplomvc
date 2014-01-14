@@ -5,8 +5,6 @@ class Catalog_Controller_Product_SearchResults extends Controller
 	{
 		$this->template->load('product/search_results');
 
-		$this->language->load('product/search_results');
-
 		$post = $_POST;
 		if (!isset($post['action']) || $post['action'] != 'betty_search') {
 			echo _l("No search request was made");

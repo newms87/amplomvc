@@ -22,7 +22,7 @@ class Admin_Model_Dev_Dev extends Model
 			);
 		}
 
-		usort($files, function($a, $b) {return $a['date'] > $b['date'];});
+		usort($files, function ($a, $b) { return $a['date'] > $b['date']; });
 
 		return $files;
 	}

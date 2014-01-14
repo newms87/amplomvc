@@ -13,9 +13,10 @@ class Admin_Model_Catalog_Manufacturer extends Model
 
 		$manufacturer_id = $this->insert('manufacturer', $data);
 
-		$vendor_id = $this->generate_vendor_id(array('id'  => $manufacturer_id,
-		                                            'name' => $data['name']
-		                                       ));
+		$vendor_id = $this->generate_vendor_id(array(
+			'id'   => $manufacturer_id,
+			'name' => $data['name']
+		));
 		$this->update('manufacturer', array('vendor_id' => $vendor_id), array('manufacturer_id' => $manufacturer_id));
 
 		if (isset($data['stores'])) {

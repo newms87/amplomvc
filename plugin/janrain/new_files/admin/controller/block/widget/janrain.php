@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Janrain Signin
+ */
 class Admin_Controller_Block_Widget_Janrain extends Controller
 {
 	public function settings(&$settings)
@@ -77,7 +80,7 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			0 => _l("No"),
 		);
 
-		$this->data['entry_login_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
+		$this->data['entry_login_redirect_description']  = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
 		$this->data['entry_logout_redirect_description'] = _l("For Ex: <font color=\"#0066CC\">%s</font>", SITE_URL);
 
 		$this->render();
@@ -87,18 +90,18 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 	{
 		$file_modifications = array(
 			'catalog/view/theme/default/template/block/account/login_header.tpl' => DIR_PLUGIN . 'janrain/includes/catalog/view/theme/default/template/block/account/login_header.tpl',
-			'catalog/controller/block/account/login.php' => DIR_PLUGIN . 'janrain/includes/catalog/controller/block/account/login.php',
+			'catalog/controller/block/account/login.php'                         => DIR_PLUGIN . 'janrain/includes/catalog/controller/block/account/login.php',
 		);
 
 		if (!empty($settings['integrate_header'])) {
-			foreach($file_modifications as $source => $file_mod) {
+			foreach ($file_modifications as $source => $file_mod) {
 				$this->mod->addFile($source, $file_mod);
 			}
 
 			$this->mod->apply();
 			$this->mod->write();
 		} else {
-			foreach($file_modifications as $source => $file_mod) {
+			foreach ($file_modifications as $source => $file_mod) {
 				$this->mod->removeFile($source, $file_mod);
 			}
 

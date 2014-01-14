@@ -13,16 +13,14 @@ class Date extends Library
 	{
 		if (!$date) {
 			$date = new DateTime("@" . _time());
-		}
-		elseif (is_string($date)) {
+		} elseif (is_string($date)) {
 			try {
 				$date = new DateTime($date);
 			} catch (Exception $e) {
 				trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
 				$date = new Datetime("@" . _time());
 			}
-		}
-		elseif (is_int($date)) {
+		} elseif (is_int($date)) {
 			$date = new DateTime("@" . $date);
 		}
 
@@ -182,12 +180,12 @@ class Date extends Library
 
 	public function isBefore($d1, $d2)
 	{
-		return $this->diff($d1,$d2)->invert === 0;
+		return $this->diff($d1, $d2)->invert === 0;
 	}
 
 	public function isAfter($d1, $d2)
 	{
-		return $this->diff($d1,$d2)->invert === 1;
+		return $this->diff($d1, $d2)->invert === 1;
 	}
 
 	public function format($date = null, $format = '')
@@ -195,41 +193,41 @@ class Date extends Library
 		$this->datetime($date);
 
 		if (!$format) {
-			$format = $this->language->getInfo('datetime_format');
+			$format = $this->language->info('datetime_format');
 		} else {
 			switch ($format) {
 				case 'date_format_short':
 				case 'short':
-					$format = $this->language->getInfo('date_format_short');
+					$format = $this->language->info('date_format_short');
 					break;
 				case 'date_format_medium':
 				case 'medium':
-					$format = $this->language->getInfo('date_format_medium');
+					$format = $this->language->info('date_format_medium');
 					break;
 				case 'date_format_long':
 				case 'long':
-					$format = $this->language->getInfo('date_format_long');
+					$format = $this->language->info('date_format_long');
 					break;
 				case 'time_format';
 				case'time':
-					$format = $this->language->getInfo('time_format');
+					$format = $this->language->info('time_format');
 					break;
 				case 'datetime_format_medium':
 				case 'datetime_medium':
-					$format = $this->language->getInfo('datetime_format_medium');
+					$format = $this->language->info('datetime_format_medium');
 					break;
 				case 'datetime_format_long':
 				case 'datetime_long':
-					$format = $this->language->getInfo('datetime_format_long');
+					$format = $this->language->info('datetime_format_long');
 					break;
 				case 'datetime_format':
 				case 'default':
 				case 'datetime':
-					$format = $this->language->getInfo('datetime_format');
+					$format = $this->language->info('datetime_format');
 					break;
 				case 'datetime_format_full':
 				case 'full':
-					$format = $this->language->getInfo('datetime_format_full');
+					$format = $this->language->info('datetime_format_full');
 					break;
 			}
 		}

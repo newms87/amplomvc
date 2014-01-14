@@ -168,8 +168,6 @@ class Admin_Model_Sale_Customer extends Model
 		if ($customer_info) {
 			$this->query("UPDATE " . DB_PREFIX . "customer SET approved = '1' WHERE customer_id = '" . (int)$customer_id . "'");
 
-			$this->language->load('mail/customer');
-
 			$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 
 			if ($store_info) {
@@ -363,8 +361,6 @@ class Admin_Model_Sale_Customer extends Model
 		if ($customer_info) {
 			$this->query("INSERT INTO " . DB_PREFIX . "customer_transaction SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', description = '" . $this->escape($description) . "', amount = '" . (float)$amount . "', date_added = NOW()");
 
-			$this->language->load('mail/customer');
-
 			if ($customer_info['store_id']) {
 				$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 
@@ -430,8 +426,6 @@ class Admin_Model_Sale_Customer extends Model
 
 		if ($customer_info) {
 			$this->query("INSERT INTO " . DB_PREFIX . "customer_reward SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', points = '" . (int)$points . "', description = '" . $this->escape($description) . "', date_added = NOW()");
-
-			$this->language->load('mail/customer');
 
 			if ($order_id) {
 				$order_info = $this->order->get($order_id);

@@ -13,8 +13,6 @@ class Catalog_Controller_Account_Password extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/password');
-
 		$this->document->setTitle(_l("Change Password"));
 
 		if ($this->request->isPost() && $this->validate()) {

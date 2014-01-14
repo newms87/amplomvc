@@ -5,7 +5,7 @@
 	<?= $this->breadcrumb->render(); ?>
 
 	<h1><?= _l("Order Information"); ?></h1>
-	
+
 	<table class="list">
 		<thead>
 			<tr>

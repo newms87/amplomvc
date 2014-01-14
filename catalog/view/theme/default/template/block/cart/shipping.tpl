@@ -50,7 +50,7 @@
 		</div>
 		<input type="hidden" name="redirect" value="<?= $redirect; ?>"/>
 		<input type="submit" onclick="return apply_shipping_quote($(this));" value="<?= _l("Apply Shipping"); ?>"
-		       class="button"/>
+			class="button"/>
 	</form>
 </div>
 

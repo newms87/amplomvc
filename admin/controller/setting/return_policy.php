@@ -5,8 +5,6 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 	{
 		//Template and Language
 		$this->template->load('setting/return_policy');
-		$this->language->load('setting/return_policy');
-
 		//Page Head
 		$this->document->setTitle(_l("Return Policies"));
 

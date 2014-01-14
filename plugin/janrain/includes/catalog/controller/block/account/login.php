@@ -1,4 +1,5 @@
 #<?php
+
 //=====
 class Catalog_Controller_Block_Account_Login extends Controller
 {
@@ -7,7 +8,6 @@ class Catalog_Controller_Block_Account_Login extends Controller
 	{
 //-----
 //>>>>> {php} {before}
-		$this->language->plugin('janrain', 'account_login');
 		$janrain_settings = array(
 			'display_type' => 'popup',
 			'icon_size'    => 'tiny'

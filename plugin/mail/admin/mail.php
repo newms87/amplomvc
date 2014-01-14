@@ -4,9 +4,6 @@ class Admin_Mail extends Controller
 
 	public function mail_settings()
 	{
-
-		$this->language->plugin('mail', 'admin/mail');
-
 		$configs = array(
 			'mail_are_you_a_designer_emails',
 			'mail_are_you_a_designer_subject',

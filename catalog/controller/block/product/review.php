@@ -11,8 +11,6 @@ class Catalog_Controller_Block_Product_Review extends Controller
 	public function review()
 	{
 		$this->template->load('product/review');
-		$this->language->load('product/review');
-
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -30,7 +28,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 				'text'       => $result['text'],
 				'rating'     => (int)$result['rating'],
 				'reviews'    => sprintf(_l("%s reviews"), (int)$review_total),
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 
@@ -56,8 +54,6 @@ class Catalog_Controller_Block_Product_Review extends Controller
 
 	public function write()
 	{
-		$this->language->load('product/product');
-
 		$json = array();
 
 		if ($this->request->isPost()) {

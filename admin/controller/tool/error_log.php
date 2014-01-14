@@ -5,8 +5,6 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 	{
 		$this->template->load('tool/error_log');
 
-		$this->language->load('tool/error_log');
-
 		$this->document->setTitle(_l("Error Log"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -32,8 +30,8 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		}
 
 		$filter_store = $this->data['filter_store'];
-		$start = $this->data['start'];
-		$limit = $this->data['limit'];
+		$start        = $this->data['start'];
+		$limit        = $this->data['limit'];
 
 		if ($filter_store !== '') {
 			if ($filter_store == 'a') {
@@ -156,8 +154,6 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 				}
 			}
 
-			$this->language->load('tool/error_log');
-
 			$file = DIR_LOGS . $this->config->get('config_error_filename');
 
 			$file_lines = explode("\n", file_get_contents($file));
@@ -188,8 +184,6 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 
 	public function clear()
 	{
-		$this->language->load('tool/error_log');
-
 		$file = DIR_LOGS . $this->config->get('config_error_filename');
 
 

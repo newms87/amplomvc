@@ -22,7 +22,7 @@ class Catalog_Controller_Mail_NewCustomer extends Controller
 
 		$this->data['store'] = $this->config->getStore();
 
-		$logo_width = $this->config->get('config_email_logo_width');
+		$logo_width  = $this->config->get('config_email_logo_width');
 		$logo_height = $this->config->get('config_email_logo_height');
 
 		$this->data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
@@ -38,8 +38,7 @@ class Catalog_Controller_Mail_NewCustomer extends Controller
 		//If the customer did not generate their own password
 		if (!empty($customer['no_password_set'])) {
 			$this->data['reset_password'] = $this->url->link('account/forgotten');
-		}
-		else {
+		} else {
 			$this->data['login'] = $this->url->link('account/login');
 		}
 

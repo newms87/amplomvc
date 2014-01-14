@@ -3,7 +3,6 @@ class Catalog_Controller_Product_Category extends Controller
 {
 	public function index()
 	{
-		$this->language->load('product/category');
 		$this->template->load('product/category');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -26,7 +25,8 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->document->setDescription($category_info['meta_description']);
 			$this->document->setKeywords($category_info['meta_keywords']);
 
-			$this->language->set('head_title', $category_info['name']);
+			//Page Title
+			$this->data['page_title'] = $category_info['name'];
 
 			if ($this->config->get('config_show_category_image')) {
 				$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
@@ -44,11 +44,13 @@ class Catalog_Controller_Product_Category extends Controller
 
 			$this->breadcrumb->add($category_info['name'], $this->url->link('product/category', 'category_id=' . $category_id));
 		} else {
+			//Page Head
 			$this->document->setTitle(_l("All Categories"));
 			$this->document->setDescription(_l("All the categories on this site"));
 			$this->document->setKeywords(_l("all categories, categories, see list, view all, search, find"));
 
-			$this->language->set('head_title', _l("All Categories"));
+			//Page Title
+			$this->data['page_title'] = _l("All Categories");
 
 			$this->data['thumb'] = '';
 

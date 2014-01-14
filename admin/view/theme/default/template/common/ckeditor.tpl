@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery.js"; ?>"></script>
 	<script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui.js"; ?>"></script>
 	<link rel="stylesheet" type="text/css"
-	      href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>"/>
+		href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>"/>
 	<script type="text/javascript" src="<?= HTTP_JS . "jquery/ajaxupload.js"; ?>"></script>
 	<script type="text/javascript" src="<?= HTTP_JS . "common.js"; ?>"></script>
 	<script type="text/javascript" src="<?= HTTP_THEME_JS . "common.js"; ?>"></script>
@@ -111,19 +111,19 @@
 <div id="container">
 	<div id="menu">
 		<a id="create" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/folder.png"; ?>');"><?= $button_folder; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/folder.png"; ?>');"><?= $button_folder; ?></a>
 		<a id="delete" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');"><?= $button_delete; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');"><?= $button_delete; ?></a>
 		<a id="move" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= $button_move; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= $button_move; ?></a>
 		<a id="copy" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= $button_copy; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= $button_copy; ?></a>
 		<a id="rename" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= $button_rename; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= $button_rename; ?></a>
 		<a id="upload" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= $button_upload; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= $button_upload; ?></a>
 		<a id="refresh" class="button"
-		   style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= $button_refresh; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= $button_refresh; ?></a>
 	</div>
 	<div id="column-left"></div>
 	<div id="column-right"></div>
@@ -182,423 +182,286 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/files"; ?>",
 					type: 'post',
-					data: 'directory=" + encodeURIComponent($(NODE).attr("directory')),
-					dataType: 'json',
-					success: function (json) {
-						html = '<div>';
+					data: 'directory=" + encodeURIComponent($(NODE).attr("directory')
+				),
+				dataType: 'json',
+					success
+				:
+				function (json) {
+					html = '<div>';
 
-						if (json) {
-							for (i = 0; i < json.length; i++) {
-								name = '';
+					if (json) {
+						for (i = 0; i < json.length; i++) {
+							name = '';
 
-								filename = json[i]['filename'];
+							filename = json[i]['filename'];
 
-								for (j = 0; j < filename.length; j = j + 15) {
-									name += filename.substr(j, 15) + '<br />';
-								}
-
-								name += json[i]['size'];
-
-								html += '<a>' + name + '<input type="hidden" name="image" value="' + json[i]['file'] + '" /></a>';
+							for (j = 0; j < filename.length; j = j + 15) {
+								name += filename.substr(j, 15) + '<br />';
 							}
+
+							name += json[i]['size'];
+
+							html += '<a>' + name + '<input type="hidden" name="image" value="' + json[i]['file'] + '" /></a>';
 						}
-
-						html += '</div>';
-
-						$('#column-right').html(html);
-
-						$('#column-right a').each(function (index, element) {
-							$.ajax({
-								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=" + encodeURIComponent("data/' + $(element).find('input[name=\'image\']').attr('value')),
-								dataType: 'html',
-								success: function (html) {
-									$(element).prepend('<img src="' + html + '" title="" style="display: none;" /><br />');
-
-									$(element).find('img').fadeIn();
-								}
-							});
-						});
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 					}
-				});
+
+					html += '</div>';
+
+					$('#column-right').html(html);
+
+					$('#column-right a').each(function (index, element) {
+						$.ajax({
+							url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=" + encodeURIComponent("data/' + $(element).find('input[name=\'image\']').attr('value')),
+							dataType
+						:
+						'html',
+							success
+						:
+						function (html) {
+							$(element).prepend('<img src="' + html + '" title="" style="display: none;" /><br />');
+
+							$(element).find('img').fadeIn();
+						}
+					});
+				}
+
+				)
+				;
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
-		}
-	});
+		});
+}
+}
+})
+;
 
-	$('#column-right a').live('click', function () {
-		if ($(this).attr('class') == 'selected') {
-			$(this).removeAttr('class');
-		} else {
-			$('#column-right a').removeAttr('class');
+$('#column-right a').live('click', function () {
+	if ($(this).attr('class') == 'selected') {
+		$(this).removeAttr('class');
+	} else {
+		$('#column-right a').removeAttr('class');
 
-			$(this).attr('class', 'selected');
-		}
-	});
+		$(this).attr('class', 'selected');
+	}
+});
 
-	$('#column-right a').live('dblclick', function () {
-		<? if ($CKEditorFuncNum) { ?>
-		window.opener.CKEDITOR.tools.callFunction(<?= $CKEditorFuncNum; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
+$('#column-right a').live('dblclick', function () {
+	<? if ($CKEditorFuncNum) { ?>
+	window.opener.CKEDITOR.tools.callFunction(<?= $CKEditorFuncNum; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
 
-		self.close();
-		<? } else { ?>
-		parent.$('#<?= $field; ?>').attr('value', 'data/' + $(this).find('input[name=\'image\']').attr('value'));
-		parent.$('#dialog').dialog('close');
+	self.close();
+	<? } else { ?>
+	parent.$('#<?= $field; ?>').attr('value', 'data/' + $(this).find('input[name=\'image\']').attr('value'));
+	parent.$('#dialog').dialog('close');
 
-		parent.$('#dialog').remove();
-		<? } ?>
-	});
+	parent.$('#dialog').remove();
+	<? } ?>
+});
 
-	$('#create').bind('click', function () {
+$('#create').bind('click', function () {
+	var tree = $.tree.focused();
+
+	if (tree.selected) {
+		$('#dialog').remove();
+
+		html = '<div id="dialog">';
+		html += '<?= $entry_folder; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+		html += '</div>';
+
+		$('#column-right').prepend(html);
+
+		$('#dialog').dialog({
+			title: '<?= $button_folder; ?>',
+			resizable: false
+		});
+
+		$('#dialog input[type=\'button\']').bind('click', function () {
+			$.ajax({
+				url: "<?= HTTP_AJAX . "common/filemanager/create"; ?>",
+				type: 'post',
+				data: 'directory=" + encodeURIComponent($(tree.selected).attr("directory')
+			)
+			+'&name=" + encodeURIComponent($("#dialog input[name=\'name\']'
+			).
+			val()
+			),
+			dataType: 'json',
+				success
+			:
+			function (json) {
+				if (json.success) {
+					$('#dialog').remove();
+
+					tree.refresh(tree.selected);
+
+					alert(json.success);
+				} else {
+					alert(json.error);
+				}
+			}
+
+			,
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+	)
+	;
+}
+else
+{
+	alert('<?= $error_directory; ?>');
+}
+})
+;
+
+$('#delete').bind('click', function () {
+	path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
+
+	if (path) {
+		$.ajax({
+			url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
+			type: 'post',
+			data: 'path=" + encodeURIComponent(path),
+			dataType: "json',
+			success: function (json) {
+				if (json.success) {
+					var tree = $.tree.focused();
+
+					tree.select_branch(tree.selected);
+
+					alert(json.success);
+				}
+
+				if (json.error) {
+					alert(json.error);
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	} else {
 		var tree = $.tree.focused();
 
 		if (tree.selected) {
-			$('#dialog').remove();
+			$.ajax({
+				url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
+				type: 'post',
+				data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
+		),
+			dataType: 'json',
+				success
+		:
+			function (json) {
+				if (json.success) {
+					tree.select_branch(tree.parent(tree.selected));
 
-			html = '<div id="dialog">';
-			html += '<?= $entry_folder; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
-			html += '</div>';
+					tree.refresh(tree.selected);
 
-			$('#column-right').prepend(html);
+					alert(json.success);
+				}
 
-			$('#dialog').dialog({
-				title: '<?= $button_folder; ?>',
-				resizable: false
-			});
+				if (json.error) {
+					alert(json.error);
+				}
+			}
 
-			$('#dialog input[type=\'button\']').bind('click', function () {
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/create"; ?>",
-					type: 'post',
-					data: 'directory=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							tree.refresh(tree.selected);
-
-							alert(json.success);
-						} else {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			});
-		} else {
-			alert('<?= $error_directory; ?>');
+		,
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
 		}
+	)
+		;
+	}
+	else
+	{
+		alert('<?= $error_select; ?>');
+	}
+}
+})
+;
+
+$('#move').bind('click', function () {
+	$('#dialog').remove();
+
+	html = '<div id="dialog">';
+	html += '<?= $entry_move; ?> <select name="to"></select> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '</div>';
+
+	$('#column-right').prepend(html);
+
+	$('#dialog').dialog({
+		title: '<?= $button_move; ?>',
+		resizable: false
 	});
 
-	$('#delete').bind('click', function () {
+	$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
+
+	$('#dialog input[type=\'button\']').bind('click', function () {
 		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
 
 		if (path) {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
+				url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
 				type: 'post',
-				data: 'path=" + encodeURIComponent(path),
-				dataType: "json',
-				success: function (json) {
-					if (json.success) {
-						var tree = $.tree.focused();
+				data: 'from=" + encodeURIComponent(path) + "&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()
+		),
+			dataType: 'json',
+				success
+		:
+			function (json) {
+				if (json.success) {
+					$('#dialog').remove();
 
-						tree.select_branch(tree.selected);
+					var tree = $.tree.focused();
 
-						alert(json.success);
-					}
+					tree.select_branch(tree.selected);
 
-					if (json.error) {
-						alert(json.error);
-					}
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					alert(json.success);
 				}
-			});
-		} else {
-			var tree = $.tree.focused();
 
-			if (tree.selected) {
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
-					type: 'post',
-					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							tree.select_branch(tree.parent(tree.selected));
+				if (json.error) {
+					alert(json.error);
+				}
+			}
 
-							tree.refresh(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			} else {
-				alert('<?= $error_select; ?>');
+		,
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		}
-	});
+		)
+		;
+	}
+	else
+	{
+		var tree = $.tree.focused();
 
-	$('#move').bind('click', function () {
-		$('#dialog').remove();
-
-		html = '<div id="dialog">';
-		html += '<?= $entry_move; ?> <select name="to"></select> <input type="button" value="<?= $button_submit; ?>" />';
-		html += '</div>';
-
-		$('#column-right').prepend(html);
-
-		$('#dialog').dialog({
-			title: '<?= $button_move; ?>',
-			resizable: false
-		});
-
-		$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
-
-		$('#dialog input[type=\'button\']').bind('click', function () {
-			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-
-			if (path) {
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
-					type: 'post',
-					data: 'from=" + encodeURIComponent(path) + "&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							var tree = $.tree.focused();
-
-							tree.select_branch(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			} else {
-				var tree = $.tree.focused();
-
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
-					type: 'post',
-					data: 'from=" + encodeURIComponent($(tree.selected).attr("directory')) + '&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							tree.select_branch('#top');
-
-							tree.refresh(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			}
-		});
-	});
-
-	$('#copy').bind('click', function () {
-		$('#dialog').remove();
-
-		html = '<div id="dialog">';
-		html += '<?= $entry_copy; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
-		html += '</div>';
-
-		$('#column-right').prepend(html);
-
-		$('#dialog').dialog({
-			title: '<?= $button_copy; ?>',
-			resizable: false
-		});
-
-		$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
-
-		$('#dialog input[type=\'button\']').bind('click', function () {
-			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-
-			if (path) {
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
-					type: 'post',
-					data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							var tree = $.tree.focused();
-
-							tree.select_branch(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			} else {
-				var tree = $.tree.focused();
-
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
-					type: 'post',
-					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							tree.select_branch(tree.parent(tree.selected));
-
-							tree.refresh(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			}
-		});
-	});
-
-	$('#rename').bind('click', function () {
-		$('#dialog').remove();
-
-		html = '<div id="dialog">';
-		html += '<?= $entry_rename; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
-		html += '</div>';
-
-		$('#column-right').prepend(html);
-
-		$('#dialog').dialog({
-			title: '<?= $button_rename; ?>',
-			resizable: false
-		});
-
-		$('#dialog input[type=\'button\']').bind('click', function () {
-			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-
-			if (path) {
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
-					type: 'post',
-					data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							var tree = $.tree.focused();
-
-							tree.select_branch(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			} else {
-				var tree = $.tree.focused();
-
-				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
-					type: 'post',
-					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
-					dataType: 'json',
-					success: function (json) {
-						if (json.success) {
-							$('#dialog').remove();
-
-							tree.select_branch(tree.parent(tree.selected));
-
-							tree.refresh(tree.selected);
-
-							alert(json.success);
-						}
-
-						if (json.error) {
-							alert(json.error);
-						}
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			}
-		});
-	});
-
-	new AjaxUpload('#upload', {
-		action: "<?= HTTP_AJAX . "common/filemanager/upload"; ?>",
-		name: 'image',
-		autoSubmit: false,
-		responseType: 'json',
-		onChange: function (file, extension) {
-			var tree = $.tree.focused();
-
-			if (tree.selected) {
-				this.setData({'directory': $(tree.selected).attr('directory')});
-			} else {
-				this.setData({'directory': ''});
-			}
-
-			this.submit();
-		},
-		onSubmit: function (file, extension) {
-			$('#upload').append('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-		},
-		onComplete: function (file, json) {
+		$.ajax({
+			url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
+			type: 'post',
+			data: 'from=" + encodeURIComponent($(tree.selected).attr("directory')
+	)
+		+'&to=" + encodeURIComponent($("#dialog select[name=\'to\']'
+	).
+		val()
+	),
+		dataType: 'json',
+			success
+	:
+		function (json) {
 			if (json.success) {
-				var tree = $.tree.focused();
+				$('#dialog').remove();
 
-				tree.select_branch(tree.selected);
+				tree.select_branch('#top');
+
+				tree.refresh(tree.selected);
 
 				alert(json.success);
 			}
@@ -606,17 +469,256 @@ $(document).ready(function () {
 			if (json.error) {
 				alert(json.error);
 			}
-
-			$('.loading').remove();
 		}
+
+	,
+		error: function (xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	}
+	)
+	;
+}
+})
+;
+})
+;
+
+$('#copy').bind('click', function () {
+	$('#dialog').remove();
+
+	html = '<div id="dialog">';
+	html += '<?= $entry_copy; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '</div>';
+
+	$('#column-right').prepend(html);
+
+	$('#dialog').dialog({
+		title: '<?= $button_copy; ?>',
+		resizable: false
 	});
 
-	$('#refresh').bind('click', function () {
+	$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
+
+	$('#dialog input[type=\'button\']').bind('click', function () {
+		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
+
+		if (path) {
+			$.ajax({
+				url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
+				type: 'post',
+				data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()
+		),
+			dataType: 'json',
+				success
+		:
+			function (json) {
+				if (json.success) {
+					$('#dialog').remove();
+
+					var tree = $.tree.focused();
+
+					tree.select_branch(tree.selected);
+
+					alert(json.success);
+				}
+
+				if (json.error) {
+					alert(json.error);
+				}
+			}
+
+		,
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		}
+		)
+		;
+	}
+	else
+	{
 		var tree = $.tree.focused();
 
-		tree.refresh(tree.selected);
+		$.ajax({
+			url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
+			type: 'post',
+			data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
+	)
+		+'&name=" + encodeURIComponent($("#dialog input[name=\'name\']'
+	).
+		val()
+	),
+		dataType: 'json',
+			success
+	:
+		function (json) {
+			if (json.success) {
+				$('#dialog').remove();
+
+				tree.select_branch(tree.parent(tree.selected));
+
+				tree.refresh(tree.selected);
+
+				alert(json.success);
+			}
+
+			if (json.error) {
+				alert(json.error);
+			}
+		}
+
+	,
+		error: function (xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	}
+	)
+	;
+}
+})
+;
+})
+;
+
+$('#rename').bind('click', function () {
+	$('#dialog').remove();
+
+	html = '<div id="dialog">';
+	html += '<?= $entry_rename; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '</div>';
+
+	$('#column-right').prepend(html);
+
+	$('#dialog').dialog({
+		title: '<?= $button_rename; ?>',
+		resizable: false
 	});
+
+	$('#dialog input[type=\'button\']').bind('click', function () {
+		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
+
+		if (path) {
+			$.ajax({
+				url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
+				type: 'post',
+				data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()
+		),
+			dataType: 'json',
+				success
+		:
+			function (json) {
+				if (json.success) {
+					$('#dialog').remove();
+
+					var tree = $.tree.focused();
+
+					tree.select_branch(tree.selected);
+
+					alert(json.success);
+				}
+
+				if (json.error) {
+					alert(json.error);
+				}
+			}
+
+		,
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		}
+		)
+		;
+	}
+	else
+	{
+		var tree = $.tree.focused();
+
+		$.ajax({
+			url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
+			type: 'post',
+			data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
+	)
+		+'&name=" + encodeURIComponent($("#dialog input[name=\'name\']'
+	).
+		val()
+	),
+		dataType: 'json',
+			success
+	:
+		function (json) {
+			if (json.success) {
+				$('#dialog').remove();
+
+				tree.select_branch(tree.parent(tree.selected));
+
+				tree.refresh(tree.selected);
+
+				alert(json.success);
+			}
+
+			if (json.error) {
+				alert(json.error);
+			}
+		}
+
+	,
+		error: function (xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	}
+	)
+	;
+}
+})
+;
+})
+;
+
+new AjaxUpload('#upload', {
+	action: "<?= HTTP_AJAX . "common/filemanager/upload"; ?>",
+	name: 'image',
+	autoSubmit: false,
+	responseType: 'json',
+	onChange: function (file, extension) {
+		var tree = $.tree.focused();
+
+		if (tree.selected) {
+			this.setData({'directory': $(tree.selected).attr('directory')});
+		} else {
+			this.setData({'directory': ''});
+		}
+
+		this.submit();
+	},
+	onSubmit: function (file, extension) {
+		$('#upload').append('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
+	},
+	onComplete: function (file, json) {
+		if (json.success) {
+			var tree = $.tree.focused();
+
+			tree.select_branch(tree.selected);
+
+			alert(json.success);
+		}
+
+		if (json.error) {
+			alert(json.error);
+		}
+
+		$('.loading').remove();
+	}
 });
+
+$('#refresh').bind('click', function () {
+	var tree = $.tree.focused();
+
+	tree.refresh(tree.selected);
+});
+})
+;
 </script>
 </body>
 </html>

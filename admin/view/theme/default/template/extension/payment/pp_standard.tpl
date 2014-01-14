@@ -6,8 +6,8 @@
 				<span class="help"><?= _l("The Paypal Button Graphic image to replace the Paypal title during checkout. Leave blank to use default title."); ?></span>
 			</td>
 			<td>
-				<input type="text" size="80" name="settings[button_graphic]" value="<?= $settings['button_graphic']; ?>" />
-				<img id="button_graphic_img" src="<?= $settings['button_graphic']; ?>" />
+				<input type="text" size="80" name="settings[button_graphic]" value="<?= $settings['button_graphic']; ?>"/>
+				<img id="button_graphic_img" src="<?= $settings['button_graphic']; ?>"/>
 			</td>
 		</tr>
 		<tr>
@@ -36,8 +36,8 @@
 			</td>
 			<td>
 				<?= $this->builder->build('select', $data_statuses, "settings[pdt_enabled]", $settings['pdt_enabled']); ?>
-				<span class="help"><?= _l("To enabled PDT on your account you must"); ?> <a target="_blank" href="http://www.paypal.com/"><?= _l("login to your paypal account"); ?></a>.<br />
-					<?= _l("Go to Profile > Website payments preferences."); ?><br />
+				<span class="help"><?= _l("To enabled PDT on your account you must"); ?> <a target="_blank" href="http://www.paypal.com/"><?= _l("login to your paypal account"); ?></a>.<br/>
+					<?= _l("Go to Profile > Website payments preferences."); ?><br/>
 					<?= _l("From here enable PDT and Auto Return."); ?>
 				</span>
 			</td>
@@ -108,7 +108,7 @@
 </div>
 
 <script type="text/javascript">
-	$('[name="settings[button_graphic]"]').change(function(){
+	$('[name="settings[button_graphic]"]').change(function () {
 		$('#button_graphic_img').attr('src', $(this).val());
 	});
 

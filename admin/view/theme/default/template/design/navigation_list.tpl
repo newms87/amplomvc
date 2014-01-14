@@ -1,30 +1,30 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
 
-				<div class="batch_actions">
-					<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
-				</div>
-				<div class="buttons">
-					<a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a>
-					<a onclick="do_batch_action('copy')" class="button"><?= $button_copy; ?></a>
-				</div>
+			<div class="batch_actions">
+				<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
 			</div>
-			<div class="section">
-				<div id="listing">
-					<?= $list_view; ?>
-				</div>
-				<div class="pagination"><?= $pagination; ?></div>
+			<div class="buttons">
+				<a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a>
+				<a onclick="do_batch_action('copy')" class="button"><?= $button_copy; ?></a>
 			</div>
 		</div>
+		<div class="section">
+			<div id="listing">
+				<?= $list_view; ?>
+			</div>
+			<div class="pagination"><?= $pagination; ?></div>
+		</div>
 	</div>
+</div>
 
-	<script type="text/javascript">
-		$('.actions a.reset').click(function () {
-			return confirm("<?= _l("This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?"); ?>");
-		});
+<script type="text/javascript">
+	$('.actions a.reset').click(function () {
+		return confirm("<?= _l("This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?"); ?>");
+	});
 </script>
 <?= $footer; ?>

@@ -1,16 +1,16 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Coupon"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Coupon"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="document.getElementById('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
-			</div>
-			<div class="section">
-				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
-					<table class="list">
-						<thead>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="document.getElementById('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+		</div>
+		<div class="section">
+			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
+				<table class="list">
+					<thead>
 						<tr>
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
@@ -26,19 +26,19 @@
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'c.discount') { ?>
 									<a href="<?= $sort_discount; ?>"
-									   class="<?= strtolower($order); ?>"><?= _l("Discount"); ?></a>
+										class="<?= strtolower($order); ?>"><?= _l("Discount"); ?></a>
 								<? } else { ?>
 									<a href="<?= $sort_discount; ?>"><?= _l("Discount"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.date_start') { ?>
 									<a href="<?= $sort_date_start; ?>"
-									   class="<?= strtolower($order); ?>"><?= _l("Date Start"); ?></a>
+										class="<?= strtolower($order); ?>"><?= _l("Date Start"); ?></a>
 								<? } else { ?>
 									<a href="<?= $sort_date_start; ?>"><?= _l("Date Start"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'c.date_end') { ?>
 									<a href="<?= $sort_date_end; ?>"
-									   class="<?= strtolower($order); ?>"><?= _l("Date End"); ?></a>
+										class="<?= strtolower($order); ?>"><?= _l("Date End"); ?></a>
 								<? } else { ?>
 									<a href="<?= $sort_date_end; ?>"><?= _l("Date End"); ?></a>
 								<? } ?></td>
@@ -49,14 +49,14 @@
 								<? } ?></td>
 							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
-						</thead>
-						<tbody>
+					</thead>
+					<tbody>
 						<? if ($coupons) { ?>
 							<? foreach ($coupons as $coupon) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($coupon['selected']) { ?>
 											<input type="checkbox" name="selected[]" value="<?= $coupon['coupon_id']; ?>"
-											       checked="checked"/>
+												checked="checked"/>
 										<? } else { ?>
 											<input type="checkbox" name="selected[]" value="<?= $coupon['coupon_id']; ?>"/>
 										<? } ?></td>
@@ -76,11 +76,11 @@
 								<td class="center" colspan="8"><?= $text_no_results; ?></td>
 							</tr>
 						<? } ?>
-						</tbody>
-					</table>
-				</form>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+					</tbody>
+				</table>
+			</form>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
+</div>
 <?= $footer; ?>

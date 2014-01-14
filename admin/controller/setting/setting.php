@@ -5,8 +5,6 @@ class Admin_Controller_Setting_Setting extends Controller
 	{
 		//The Template and Language
 		$this->template->load('setting/setting');
-		$this->language->load('setting/setting');
-
 		//Page Head
 		$this->document->setTitle(_l("General Settings"));
 

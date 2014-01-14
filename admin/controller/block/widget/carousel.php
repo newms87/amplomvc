@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Carousel
+ */
 class Admin_Controller_Block_Widget_Carousel extends Controller
 {
 	public function profile_settings(&$profile_settings)
@@ -24,8 +27,8 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 
 		//AC Template for slides
 		$profile_settings['__ac_template__']['slides']['__ac_template__'] = array(
-			'title' => 'New Slide __ac_template__',
-			'image' => '',
+			'title'      => 'New Slide __ac_template__',
+			'image'      => '',
 			'sort_order' => 0,
 		);
 

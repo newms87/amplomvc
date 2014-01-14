@@ -4,8 +4,6 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 	public function index()
 	{
 		$this->template->load('block/cart/shipping');
-		$this->language->load('block/cart/shipping');
-
 		$this->data['action'] = '';
 
 		$defaults = array(
@@ -51,8 +49,6 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 	public function quote()
 	{
-		$this->language->load('block/cart/shipping');
-
 		$json = array();
 
 		if (!$this->cart->hasProducts()) {
@@ -89,8 +85,6 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 	public function apply()
 	{
-		$this->language->load('block/cart/shipping');
-
 		$json = array();
 
 		if (empty($_POST['shipping_method'])) {

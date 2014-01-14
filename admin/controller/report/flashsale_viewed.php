@@ -5,8 +5,6 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 	{
 		$this->template->load('report/flashsale_viewed');
 
-		$this->language->load('report/flashsale_viewed');
-
 		$this->document->setTitle(_l("Flashsales Viewed Report"));
 
 		if (isset($_GET['page'])) {
@@ -104,8 +102,6 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 
 	public function reset()
 	{
-		$this->language->load('report/flashsale_viewed');
-
 		$this->Model_Report_Flashsale->reset();
 
 		$this->message->add('success', _l("Success: You have reset the flashsales viewed report!"));

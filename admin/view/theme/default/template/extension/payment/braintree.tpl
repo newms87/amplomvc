@@ -1,15 +1,15 @@
 <table class="form">
 	<tr>
 		<td><?= _l("Merchant ID:"); ?></td>
-		<td><input type="text" name="settings[merchant_id]" value="<?= $settings['merchant_id']; ?>" /></td>
+		<td><input type="text" name="settings[merchant_id]" value="<?= $settings['merchant_id']; ?>"/></td>
 	</tr>
 	<tr>
 		<td><?= _l("Public Key:"); ?></td>
-		<td><input type="text" name="settings[public_key]" value="<?= $settings['public_key']; ?>" /></td>
+		<td><input type="text" name="settings[public_key]" value="<?= $settings['public_key']; ?>"/></td>
 	</tr>
 	<tr>
 		<td><?= _l("Private Key:"); ?></td>
-		<td><input type="text" name="settings[private_key]" value="<?= $settings['private_key']; ?>" /></td>
+		<td><input type="text" name="settings[private_key]" value="<?= $settings['private_key']; ?>"/></td>
 	</tr>
 	<tr>
 		<td><?= _l("Client-Side Encryption Key"); ?></td>

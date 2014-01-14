@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 {
 	public function index($settings)
 	{
-		$this->language->load('block/information/contact');
-
 		if ($this->request->isPost() && $this->validate()) {
 			$this->mail->sendTemplate('contact', $_POST);
 
@@ -66,8 +64,6 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 	public function success()
 	{
 		$this->template->load('block/information/contact_success');
-		$this->language->load('block/information/contact');
-
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->render();

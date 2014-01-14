@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="section">
-<?= $this->breadcrumb->render(); ?>
-<?= $this->builder->displayMessages($messages); ?>
+	<?= $this->breadcrumb->render(); ?>
+	<?= $this->builder->displayMessages($messages); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Betty 2.0 Documentation"); ?></h1>
@@ -15,7 +15,7 @@
 					'a'
 				);
 				$t          = $list_types[$level % 3];
-				echo "<ol type="$t" class="level-$level">";
+				echo "<ol type="$t" class="level - $level">";
 				foreach ($sub as $item) {
 					if (!is_array($item)) {
 						echo "<li>$item</li>";
@@ -77,5 +77,5 @@
 			window.event.cancelBubble = true;
 			return false;
 		}
-</script>
-<?= $footer; ?>
+	</script>
+	<?= $footer; ?>

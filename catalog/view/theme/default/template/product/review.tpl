@@ -66,30 +66,46 @@
 			url: "<?= HTTP_CATALOG . "index.php?route=product/product/write"; ?>" + '&product_id=<?= $product_id; ?>',
 			type: 'post',
 			dataType: 'json',
-			data: 'name=" + encodeURIComponent($("input[name=\'name\']').val()) + '&text=" + encodeURIComponent($("textarea[name=\'text\']').val()) + '&rating=" + encodeURIComponent($("input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=" + encodeURIComponent($("input[name=\'captcha\']').val()),
-			beforeSend: function () {
-				$('.success, .warning').remove();
-				$('#button-review').attr('disabled', true);
-				$('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
-			},
-			complete: function () {
-				$('#button-review').attr('disabled', false);
-				$('.attention').remove();
-			},
-			success: function (data) {
-				if (data.error) {
-					$('#review-title').after('<div class="message_box warning">' + data.error + '</div>');
-				}
-
-				if (data.success) {
-					$('#review-title').after('<div class="message_box success">' + data.success + '</div>');
-
-					$('input[name=\'name\']').val('');
-					$('textarea[name=\'text\']').val('');
-					$('input[name=\'rating\']:checked').attr('checked', '');
-					$('input[name=\'captcha\']').val('');
-				}
+			data: 'name=" + encodeURIComponent($("input[name=\'name\']').val()
+		)
+		+'&text=" + encodeURIComponent($("textarea[name=\'text\']'
+		).
+		val()
+		)
+		+'&rating=" + encodeURIComponent($("input[name=\'rating\']:checked'
+		).
+		val() ? $('input[name=\'rating\']:checked').val() : ''
+		)
+		+'&captcha=" + encodeURIComponent($("input[name=\'captcha\']'
+		).
+		val()
+		),
+		beforeSend: function () {
+			$('.success, .warning').remove();
+			$('#button-review').attr('disabled', true);
+			$('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
+		}
+		,
+		complete: function () {
+			$('#button-review').attr('disabled', false);
+			$('.attention').remove();
+		}
+		,
+		success: function (data) {
+			if (data.error) {
+				$('#review-title').after('<div class="message_box warning">' + data.error + '</div>');
 			}
-		});
+
+			if (data.success) {
+				$('#review-title').after('<div class="message_box success">' + data.success + '</div>');
+
+				$('input[name=\'name\']').val('');
+				$('textarea[name=\'text\']').val('');
+				$('input[name=\'rating\']:checked').attr('checked', '');
+				$('input[name=\'captcha\']').val('');
+			}
+		}
 	});
+	})
+	;
 </script>

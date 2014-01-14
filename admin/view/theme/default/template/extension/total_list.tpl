@@ -6,7 +6,7 @@
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Order Totals"); ?></h1>
 
 				<div class="buttons">
-					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
+					<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>
 				</div>
 			</div>
 			<div class="section">

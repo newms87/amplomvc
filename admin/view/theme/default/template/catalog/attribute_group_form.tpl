@@ -1,38 +1,38 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Attribute Groups"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Attribute Groups"); ?></h1>
 
-				<div class="buttons">
-					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
-					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
-				</div>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
-			<div class="section">
-				<form action="<?= $save; ?>" method="post" id="form">
-					<table class="form">
-						<tr>
-							<td class="required"> <?= _l("Attribute Group Name:"); ?></td>
-							<td><input type="text" name="name" value="<?= $name; ?>"/></td>
-						</tr>
-						<tr>
-							<td><?= _l("Sort Order:"); ?></td>
-							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
-						</tr>
-						<tr>
-							<td><?= _l("Attributes:"); ?></td>
-							<td>
-								<table class="list">
-									<thead>
+		</div>
+		<div class="section">
+			<form action="<?= $save; ?>" method="post" id="form">
+				<table class="form">
+					<tr>
+						<td class="required"> <?= _l("Attribute Group Name:"); ?></td>
+						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
+					</tr>
+					<tr>
+						<td><?= _l("Sort Order:"); ?></td>
+						<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
+					</tr>
+					<tr>
+						<td><?= _l("Attributes:"); ?></td>
+						<td>
+							<table class="list">
+								<thead>
 									<tr>
 										<td class="center"><?= _l("Attribute Name"); ?></td>
 										<td class="center"><?= _l("Sort Order"); ?></td>
 										<td></td>
 									</tr>
-									</thead>
-									<tbody id="attribute_list">
+								</thead>
+								<tbody id="attribute_list">
 									<? foreach ($attributes as $row => $attribute) { ?>
 										<tr class="attribute" data-row="<?= $row; ?>">
 											<td class="center">
@@ -57,35 +57,35 @@
 										</tr>
 									<? } ?>
 
-									</tbody>
-									<tfoot>
+								</tbody>
+								<tfoot>
 									<tr>
 										<td><a id="add_attribute" class="button"><?= _l("Add Attribute"); ?></a></td>
 									</tr>
-									</tfoot>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
+								</tfoot>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
 	</div>
+</div>
 
 <?= $this->builder->js('translations', $translations); ?>
 
 <script type="text/javascript">
-var a_list = $('#attribute_list');
-a_list.ac_template('a_list');
+	var a_list = $('#attribute_list');
+	a_list.ac_template('a_list');
 
-$('#add_attribute').click(function () {
-	$.ac_template('a_list', 'add');
-	a_list.update_index('.sort_order');
-});
+	$('#add_attribute').click(function () {
+		$.ac_template('a_list', 'add');
+		a_list.update_index('.sort_order');
+	});
 
-a_list.sortable({cursor: 'move', stop: function () {
-	$(this).update_index('.sort_order');
-}});
+	a_list.sortable({cursor: 'move', stop: function () {
+		$(this).update_index('.sort_order');
+	}});
 </script>
 
 <?= $this->builder->js('errors', $errors); ?>

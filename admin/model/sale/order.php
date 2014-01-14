@@ -230,7 +230,6 @@ class Admin_Model_Sale_Order extends Model
 	}
 
 
-
 	public function getTotalSales()
 	{
 		$query = $this->query("SELECT SUM(total) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0'");

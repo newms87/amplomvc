@@ -3,8 +3,6 @@ class Admin_Controller_User_User extends Controller
 {
 	public function index()
 	{
-		$this->language->load('user/user');
-
 		$this->document->setTitle(_l("User"));
 
 		$this->getList();
@@ -12,8 +10,6 @@ class Admin_Controller_User_User extends Controller
 
 	public function insert()
 	{
-		$this->language->load('user/user');
-
 		$this->document->setTitle(_l("User"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -39,8 +35,6 @@ class Admin_Controller_User_User extends Controller
 
 	public function update()
 	{
-		$this->language->load('user/user');
-
 		$this->document->setTitle(_l("User"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -57,8 +51,6 @@ class Admin_Controller_User_User extends Controller
 
 	public function delete()
 	{
-		$this->language->load('user/user');
-
 		$this->document->setTitle(_l("User"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -123,7 +115,7 @@ class Admin_Controller_User_User extends Controller
 			);
 
 			$result['status']     = $result['status'] ? _l("Enabled") : _l("Disabled");
-			$result['date_added'] = $this->date->format($result['date_added'], $this->language->getInfo('date_format_short'));
+			$result['date_added'] = $this->date->format($result['date_added'], 'short');
 			$result['selected']   = isset($_GET['selected']) && in_array($result['user_id'], $_GET['selected']);
 			$result['action']     = $action;
 		}
@@ -146,9 +138,9 @@ class Admin_Controller_User_User extends Controller
 		}
 
 		$url = $this->get_url(array(
-		                           'sort',
-		                           'order'
-		                      ));
+			'sort',
+			'order'
+		));
 
 		$this->pagination->init();
 		$this->pagination->total  = $user_total;

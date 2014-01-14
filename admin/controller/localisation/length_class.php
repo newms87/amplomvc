@@ -5,8 +5,6 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function index()
 	{
-		$this->language->load('localisation/length_class');
-
 		$this->document->setTitle(_l("Length Class"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function insert()
 	{
-		$this->language->load('localisation/length_class');
-
 		$this->document->setTitle(_l("Length Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function update()
 	{
-		$this->language->load('localisation/length_class');
-
 		$this->document->setTitle(_l("Length Class"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function delete()
 	{
-		$this->language->load('localisation/length_class');
-
 		$this->document->setTitle(_l("Length Class"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

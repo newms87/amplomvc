@@ -5,8 +5,6 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 	{
 		$this->template->load('report/customer_credit');
 
-		$this->language->load('report/customer_credit');
-
 		$this->document->setTitle(_l("Customer Credit Report"));
 
 		if (isset($_GET['filter_date_start'])) {

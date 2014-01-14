@@ -5,8 +5,6 @@ class Admin_Controller_Extension_Total extends Controller
 
 	public function index()
 	{
-		$this->language->load('extension/total');
-
 		if (!empty($_GET['code'])) {
 			if (!$this->System_Extension_Total->has($_GET['code'])) {
 				$this->message->add('warning', _l("The extension %s does not exist!", $_GET['code']));
@@ -23,8 +21,6 @@ class Admin_Controller_Extension_Total extends Controller
 	//TODO: Implement the Add / Delete functionality for Extensions
 	public function delete()
 	{
-		$this->language->load('extension/total');
-
 		if (!empty($_GET['code']) && $this->validateDelete()) {
 			$this->System_Extension_Total->deleteExtension($_GET['code']);
 
@@ -185,8 +181,6 @@ class Admin_Controller_Extension_Total extends Controller
 
 		//Template and Language
 		$this->template->load('extension/total');
-		$this->language->load('extension/total');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Order Totals Extensions"), $this->url->link('extension/total'));
@@ -228,9 +222,6 @@ class Admin_Controller_Extension_Total extends Controller
 
 	public function edit()
 	{
-		//Language
-		$this->language->load('extension/total');
-
 		$code = !empty($_GET['code']) ? $_GET['code'] : '';
 
 		//Verify File
@@ -321,8 +312,6 @@ class Admin_Controller_Extension_Total extends Controller
 
 	public function install()
 	{
-		$this->language->load('extension/total');
-
 		if ($this->System_Extension_Total->install($_GET['code'])) {
 			$this->loadExtensionController($_GET['code']);
 
@@ -345,8 +334,6 @@ class Admin_Controller_Extension_Total extends Controller
 
 	public function uninstall()
 	{
-		$this->language->load('extension/total');
-
 		if ($this->System_Extension_Total->uninstall($_GET['code'])) {
 			$this->message->add('notify', _l("Uninstalled the %s extension for Order Totals.", $_GET['code']));
 		}

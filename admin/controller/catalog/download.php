@@ -3,8 +3,6 @@ class Admin_Controller_Catalog_Download extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/download');
-
 		$this->document->setTitle(_l("Downloads"));
 
 		$this->getList();
@@ -12,8 +10,6 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	public function insert()
 	{
-		$this->language->load('catalog/download');
-
 		$this->document->setTitle(_l("Downloads"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -56,8 +52,6 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	public function update()
 	{
-		$this->language->load('catalog/download');
-
 		$this->document->setTitle(_l("Downloads"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -100,8 +94,6 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/download');
-
 		$this->document->setTitle(_l("Downloads"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

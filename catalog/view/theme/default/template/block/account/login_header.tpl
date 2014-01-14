@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 	//If browser does not support placeholder attribute emulate one!
-	if ( ! ('placeholder' in document.createElement('input')) ) {
+	if (!('placeholder' in document.createElement('input'))) {
 		$('.login-form div input').focus(function () {
 			if ($(this).hasClass('empty_val')) {
 				$(this).removeClass('empty_val').val('');

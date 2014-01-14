@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Reward extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/reward');
-
 		$this->document->setTitle(_l("Your Reward Points"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -43,7 +41,7 @@ class Catalog_Controller_Account_Reward extends Controller
 				'order_id'    => $result['order_id'],
 				'points'      => $result['points'],
 				'description' => $result['description'],
-				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], 'short'),
 				'href'        => $this->url->link('account/order/info', 'order_id=' . $result['order_id'])
 			);
 		}

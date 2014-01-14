@@ -5,8 +5,6 @@ class Catalog_Controller_Checkout_Success extends Controller
 	{
 		//Template and Language
 		$this->template->load('common/success');
-		$this->language->load('checkout/success');
-
 		//Page Head
 		$this->document->setTitle(_l("Your Order Has Been Processed!"));
 

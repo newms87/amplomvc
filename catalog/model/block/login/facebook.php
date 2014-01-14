@@ -61,7 +61,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 		$tokens = array();
 
 		foreach ($values as $value) {
-			list($key,$value) = explode('=', $value);
+			list($key, $value) = explode('=', $value);
 			$tokens[$key] = $value;
 		}
 
@@ -105,7 +105,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 			}
 		} else {
 			$customer = $this->customer->getCustomer($customer_id);
-			$no_meta = false;
+			$no_meta  = false;
 		}
 
 		//Login Customer

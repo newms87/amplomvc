@@ -5,13 +5,12 @@
  * Version: 0.7
  * Title: Social Login / Registration by JanRain (RPX now)
  * Description: Allows customers to login and register in a couple clicks! No form filling required.
-                Uses the Janrain API to access the Social Authentication by many different Social networks like Google, Facebook, Twitter, etc.
+ * Uses the Janrain API to access the Social Authentication by many different Social networks like Google, Facebook, Twitter, etc.
  * Author: Daniel Newman
  * Date: 3/15/2013
  * Link: http://www.amplocart.com/plugins/janrain
  *
  */
-
 class Janrain_Setup extends PluginSetup
 {
 	public function install()

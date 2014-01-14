@@ -8,8 +8,6 @@ class Admin_Controller_Tool_Backup extends Controller
 	{
 		$this->template->load('tool/backup');
 
-		$this->language->load('tool/backup');
-
 		$this->document->setTitle(_l("Backup / Restore"));
 
 		if ($this->request->isPost() && $this->validate()) {

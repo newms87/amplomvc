@@ -5,8 +5,6 @@ class Admin_Controller_Common_Login extends Controller
 	{
 		$this->template->load('common/login');
 
-		$this->language->load('common/login');
-
 		$this->document->setTitle(_l("Administration"));
 
 		//IF user is logged in, redirect to the homepage

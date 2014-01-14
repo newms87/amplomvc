@@ -139,8 +139,6 @@ class Admin_Model_Sale_Return extends Model
 			$return_query = $this->query("SELECT *, rs.name AS status FROM `" . DB_PREFIX . "return` r LEFT JOIN " . DB_PREFIX . "return_status rs ON (r.return_status_id = rs.return_status_id) WHERE r.return_id = '" . (int)$return_id . "' AND rs.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 			if ($return_query->num_rows) {
-				$this->language->load('mail/return');
-
 				$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'), $return_id);
 
 				$message = $this->_('text_return_id') . ' ' . $return_id . "\n";

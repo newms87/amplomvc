@@ -26,7 +26,7 @@
 				<tr class="shipping_method checkout_method highlight">
 					<td class="method_id">
 						<input type="radio" name="shipping_method" value="<?= $id; ?>"
-						       id="<?= $id; ?>" <?= $id == $shipping_method_id ? 'checked="checked"' : ''; ?> />
+							id="<?= $id; ?>" <?= $id == $shipping_method_id ? 'checked="checked"' : ''; ?> />
 					</td>
 					<td class="method_title"><label for="<?= $id; ?>"><?= $shipping_method['title']; ?></label></td>
 					<td class="method_content"><label for="<?= $id; ?>"><?= $shipping_method['text']; ?></label></td>

@@ -5,8 +5,6 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 	{
 		$this->template->load('report/product_purchased');
 
-		$this->language->load('report/product_purchased');
-
 		$this->document->setTitle(_l("Products Purchased Report"));
 
 		if (isset($_GET['filter_date_start'])) {

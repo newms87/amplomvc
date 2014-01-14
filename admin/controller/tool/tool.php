@@ -5,8 +5,6 @@ class Admin_Controller_Tool_Tool extends Controller
 	{
 		$this->template->load('tool/tool');
 
-		$this->language->load('tool/tool');
-
 		$this->document->setTitle(_l("System Tools"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -39,8 +37,6 @@ class Admin_Controller_Tool_Tool extends Controller
 
 	public function clear_cache()
 	{
-		$this->language->load('tool/tool');
-
 		if ($this->request->isPost() && isset($_POST['cache_tables']) && $this->validate()) {
 
 			$this->cache->delete($_POST['cache_tables']);

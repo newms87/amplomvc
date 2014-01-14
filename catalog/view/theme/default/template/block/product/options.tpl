@@ -36,7 +36,7 @@
 								<div class="option_image_box">
 									<? if ($product_option_value['thumb']) { ?>
 										<a title="<?= $product_option_value['value']; ?>"
-										   rel="<?= $product_option_value['rel']; ?>">
+											rel="<?= $product_option_value['rel']; ?>">
 											<img src="<?= $product_option_value['thumb']; ?>"/>
 										</a>
 									<? } else { ?>

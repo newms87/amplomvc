@@ -3,9 +3,6 @@ class Catalog_Controller_Mail_Order extends Controller
 {
 	public function index($return_data)
 	{
-		//Load Language Temporarily
-		$this->language->loadTemporary('mail/return');
-
 		//Send Customer Confirmation Email
 		$this->mail->init();
 
@@ -26,8 +23,5 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setSubject(_l("A product return request has been received!"));
 		$this->mail->setHtml(_l("Please review the return request and notify the customer if there product is eligible for a return.", $return_data['rma']));
 		$this->mail->send();
-
-		//Unload Temporary Language Data
-		$this->language->unloadTemporary();
 	}
 }

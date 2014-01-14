@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_Product extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/product');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('catalog/product');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['product_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	public function change_class()
 	{
-		$this->language->load('catalog/product');
-
 		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->can('modify', 'catalog/product')) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 
@@ -48,8 +42,6 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/product');
-
 		$this->document->setTitle(_l("Products"));
 
 		if (!empty($_GET['product_id']) && $this->validateDelete()) {
@@ -67,8 +59,6 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	public function copy()
 	{
-		$this->language->load('catalog/product');
-
 		$this->document->setTitle(_l("Products"));
 
 		if (!empty($_GET['product_id']) && $this->validateCopy()) {
@@ -86,8 +76,6 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/product');
-
 		if (!empty($_GET['selected']) && !empty($_GET['action'])) {
 			if (($_GET['action'] === 'copy' && !$this->validateCopy()) ||
 				($_GET['action'] === 'delete' && !$this->validateDelete())
@@ -572,7 +560,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		$this->data['text_add_shipping_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
-		$this->data['text_add_return_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
+		$this->data['text_add_return_policy']   = _l("Add <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
 
 		$this->data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
 
@@ -679,7 +667,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Product Related Template Defaults
 		$this->data['product_related']['__ac_template__'] = array(
 			'product_id' => '',
-			'name' => '',
+			'name'       => '',
 		);
 
 
@@ -704,7 +692,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		//The Template
 		$template = $this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']);
 
-		if (!$this->template->find_file($template)) {
+		if (!$this->template->findFile($template)) {
 			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
 			$this->message->add('warning', _l("The %s Class template file %s could not be found!", $product_class['name'], $template));
 

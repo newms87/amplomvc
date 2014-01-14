@@ -4,8 +4,6 @@ class Admin_Controller_Common_Header extends Controller
 	public function index()
 	{
 		$this->template->load('common/header');
-		$this->language->load('common/header');
-
 		if ($this->config->get('config_debug') && !empty($_SESSION['debug'])) {
 			$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
 			unset($_SESSION['debug']);
@@ -39,13 +37,13 @@ class Admin_Controller_Common_Header extends Controller
 
 		$this->data['messages'] = $this->message->fetch();
 
-		$this->data['direction']      = $this->language->getInfo('direction');
+		$this->data['direction']      = $this->language->info('direction');
 		$this->data['description']    = $this->document->getDescription();
 		$this->data['keywords']       = $this->document->getKeywords();
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
 		$this->data['body_class']     = $this->tool->getSlug($this->url->getPath());
 
-		$this->language->set('lang', $this->language->getInfo('code'));
+		$this->data['lang'] = $this->language->info('code');
 
 		$this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
 

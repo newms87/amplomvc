@@ -11,8 +11,6 @@ class Catalog_Controller_Account_Edit extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/edit');
-
 		$this->document->setTitle(_l("My Account Information"));
 
 		if ($this->request->isPost() && $this->validate()) {

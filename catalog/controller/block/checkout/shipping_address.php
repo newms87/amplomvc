@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 {
 	public function index()
 	{
-		$this->language->load('checkout/checkout');
 		$this->template->load('block/checkout/shipping_address');
 
 		if ($this->cart->validateShippingAddress()) {
@@ -36,8 +35,6 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 
 	public function validate_selection()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = $this->validate();
 
 		if (!$json) {
@@ -55,8 +52,6 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 
 	public function validate_form()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = $this->validate();
 
 		if (!$json) {

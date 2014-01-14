@@ -34,38 +34,38 @@
 							<a class="button" onclick="$(this).closest('form').submit();"><?= _l("Remove"); ?></a>
 						</form>
 						<a href="<?= $clear; ?>" class="button"
-						   style="float:left;margin-left:20px"><?= _l("Clear Log Entries"); ?></a>
+							style="float:left;margin-left:20px"><?= _l("Clear Log Entries"); ?></a>
 					</td>
 				</tr>
 			</table>
 			<table class="list" width="100%">
 				<thead>
-				<tr>
-					<td width="2%"><?= _l("Remove"); ?></td>
-					<td width="2%"><?= _l("Line"); ?></td>
-					<td width="6%"><?= _l("Date"); ?></td>
-					<td width="3%"><?= _l("IP"); ?></td>
-					<td width="65%"><?= _l("Message"); ?></td>
-					<td width="8%"><?= _l("URL"); ?></td>
-					<td width="8%"><?= _l("Query"); ?></td>
-					<td width="8%"><?= _l("Store"); ?></td>
-					<td width="8%"><?= _l("User Agent"); ?></td>
-				</tr>
+					<tr>
+						<td width="2%"><?= _l("Remove"); ?></td>
+						<td width="2%"><?= _l("Line"); ?></td>
+						<td width="6%"><?= _l("Date"); ?></td>
+						<td width="3%"><?= _l("IP"); ?></td>
+						<td width="65%"><?= _l("Message"); ?></td>
+						<td width="8%"><?= _l("URL"); ?></td>
+						<td width="8%"><?= _l("Query"); ?></td>
+						<td width="8%"><?= _l("Store"); ?></td>
+						<td width="8%"><?= _l("User Agent"); ?></td>
+					</tr>
 				</thead>
 				<tbody>
-				<? foreach ($entries as $e) { ?>
-					<tr data-line="<?= $e['line']; ?>">
-						<td><a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a></td>
-						<td><?= $e['line']; ?></td>
-						<td><?= $e['date']; ?></td>
-						<td><?= $e['ip']; ?></td>
-						<td width="65%"><?= $e['message']; ?></td>
-						<td><?= $e['uri']; ?></td>
-						<td><?= $e['query']; ?></td>
-						<td><?= $e['store']; ?></td>
-						<td><?= $e['agent']; ?></td>
-					</tr>
-				<? } ?>
+					<? foreach ($entries as $e) { ?>
+						<tr data-line="<?= $e['line']; ?>">
+							<td><a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a></td>
+							<td><?= $e['line']; ?></td>
+							<td><?= $e['date']; ?></td>
+							<td><?= $e['ip']; ?></td>
+							<td width="65%"><?= $e['message']; ?></td>
+							<td><?= $e['uri']; ?></td>
+							<td><?= $e['query']; ?></td>
+							<td><?= $e['store']; ?></td>
+							<td><?= $e['agent']; ?></td>
+						</tr>
+					<? } ?>
 				</tbody>
 			</table>
 		</div>

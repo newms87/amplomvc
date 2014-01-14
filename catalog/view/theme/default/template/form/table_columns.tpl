@@ -31,10 +31,10 @@
 						?>
 						<td>
 							<? if (!empty($field) && !in_array($field['type'], array(
-							                                                        'image',
-							                                                        'button',
-							                                                        'submit'
-							                                                   ))
+									'image',
+									'button',
+									'submit'
+								))
 							) {
 								?>
 								<? if ($field['required']) {

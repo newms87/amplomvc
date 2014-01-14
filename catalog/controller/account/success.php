@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->data['approved'] = !$this->config->get('config_customer_approval');
 
 		//Action Buttons
-		$this->data['contact'] = $this->url->link('information/contact');
+		$this->data['contact']  = $this->url->link('information/contact');
 		$this->data['continue'] = $this->url->link('account/account');
 
 		//The Template

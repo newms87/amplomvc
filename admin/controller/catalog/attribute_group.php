@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/attribute_group');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('catalog/attribute_group');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['attribute_group_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/attribute_group');
-
 		if (!empty($_GET['attribute_group_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_AttributeGroup->deleteAttributeGroup($_GET['attribute_group_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/attribute_group');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $attribute_group_id) {
 				switch ($_GET['action']) {
@@ -323,9 +315,6 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	public function autocomplete()
 	{
-		//Language
-		$this->language->load('catalog/attribute_group');
-
 		//Sort / Filter
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -337,7 +326,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		//Load Sorted / Filtered Data
 		$attributes = $this->Model_Catalog_AttributeGroup->getAttributesFilter($sort + $filter);
 
-		$image_width = $this->config->get('config_image_admin_thumb_width');
+		$image_width  = $this->config->get('config_image_admin_thumb_width');
 		$image_height = $this->config->get('config_image_admin_thumb_height');
 
 		foreach ($attributes as &$attribute) {

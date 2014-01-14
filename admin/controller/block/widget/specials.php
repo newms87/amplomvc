@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Specials
+ */
 class Admin_Controller_Block_Widget_Specials extends Controller
 {
 

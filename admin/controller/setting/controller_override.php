@@ -5,8 +5,6 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 	{
 		//Template and Language
 		$this->template->load('setting/controller_override');
-		$this->language->load('setting/controller_override');
-
 		//Page Head
 		$this->document->setTitle(_l("Controller Override"));
 

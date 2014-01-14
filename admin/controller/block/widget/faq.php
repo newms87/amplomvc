@@ -1,4 +1,7 @@
 <?php
+/**
+ * Name: Frequently Asked Questions
+ */
 class Admin_Controller_Block_Widget_Faq extends Controller
 {
 

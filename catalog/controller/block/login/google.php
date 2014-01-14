@@ -17,8 +17,7 @@ class Catalog_Controller_Block_Login_Google extends Controller
 	{
 		if ($this->Catalog_Model_Block_Login_Google->authenticate()) {
 			$this->message->add('success', _l("You have been successfully logged in using Google+!"));
-		}
-		else {
+		} else {
 			if ($this->Catalog_Model_Block_Login_Google->hasError()) {
 				$this->message->add('error', $this->Catalog_Model_Block_Login_Google->getError());
 			}

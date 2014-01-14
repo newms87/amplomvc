@@ -5,8 +5,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function index()
 	{
-		$this->language->load('localisation/tax_rate');
-
 		$this->document->setTitle(_l("Tax Rates"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function insert()
 	{
-		$this->language->load('localisation/tax_rate');
-
 		$this->document->setTitle(_l("Tax Rates"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function update()
 	{
-		$this->language->load('localisation/tax_rate');
-
 		$this->document->setTitle(_l("Tax Rates"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function delete()
 	{
-		$this->language->load('localisation/tax_rate');
-
 		$this->document->setTitle(_l("Tax Rates"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -176,8 +168,8 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				'rate'          => $result['rate'],
 				'type'          => ($result['type'] == 'F' ? _l("Fixed Amount") : _l("Percentage")),
 				'geo_zone'      => $result['geo_zone'],
-				'date_added'    => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
+				'date_added'    => $this->date->format($result['date_added'], 'short'),
+				'date_modified' => $this->date->format($result['date_modified'], 'short'),
 				'selected'      => isset($_GET['selected']) && in_array($result['tax_rate_id'], $_GET['selected']),
 				'action'        => $action
 			);

@@ -1,14 +1,14 @@
 <? if ($use_form_tag) { ?>
-	<form action="<?= $action; ?>" method="<?= $method; ?>" <?= $form_tag_attrs; ?>>
-<? } ?>
+<form action="<?= $action; ?>" method="<?= $method; ?>" <?= $form_tag_attrs; ?>>
+	<? } ?>
 	<table class="form">
 		<? foreach ($fields as $name => $field) {
 
 			if (!in_array($field['type'], array(
-			                                   'image',
-			                                   'button',
-			                                   'submit'
-			                              ))
+				'image',
+				'button',
+				'submit'
+			))
 			) {
 				?>
 				<tr>
@@ -68,6 +68,6 @@
 			</tr>
 		<? } ?>
 	</table>
-<? if ($use_form_tag) { ?>
-	</form>
+	<? if ($use_form_tag) { ?>
+</form>
 <? } ?>

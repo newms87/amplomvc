@@ -10,11 +10,11 @@
 			<? if ($product['thumb']) { ?>
 				<div class="image">
 					<img class="primary" src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>"
-					     alt="<?= $product['name']; ?>"/>
+						alt="<?= $product['name']; ?>"/>
 
 					<? if (!empty($product['backup_thumb'])) { ?>
 						<img class="backup" src="<?= $product['backup_thumb']; ?>" title="<?= $product['name']; ?>"
-						     alt="<?= $product['name']; ?>"/>
+							alt="<?= $product['name']; ?>"/>
 					<? } ?>
 				</div>
 			<? } ?>
@@ -44,13 +44,13 @@
 
 			<? if ($review_status) { ?>
 				<div class="rating"><img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>"
-				                         alt="<?= $product['reviews']; ?>"/></div>
+						alt="<?= $product['reviews']; ?>"/></div>
 			<? } ?>
 
 			<? if ($list_show_add_to_cart) { ?>
 				<div class="cart">
 					<input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');"
-					       class="button"/>
+						class="button"/>
 				</div>
 			<? } ?>
 

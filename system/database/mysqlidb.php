@@ -20,22 +20,21 @@ final class mysqlidb implements Database
 
 		if ($this->mysqli->connect_error) {
 			$this->err_msg = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
-		}
-		else {
+		} else {
 			$this->query("SET NAMES 'utf8'");
 			$this->query("SET CHARACTER SET utf8");
 			$this->query("SET CHARACTER_SET_CONNECTION=utf8");
 			$this->query("SET SQL_MODE = ''");
 		}
-  	}
+	}
 
 	public function getError()
 	{
 		return $this->err_msg;
 	}
 
-  	public function query($sql)
-  	{
+	public function query($sql)
+	{
 		$result = $this->mysqli->query($sql);
 
 		if ($result) {
@@ -48,9 +47,9 @@ final class mysqlidb implements Database
 
 				$result->free();
 
-				$query = new stdclass();
-				$query->row = isset($data[0]) ? $data[0] : array();
-				$query->rows = $data;
+				$query           = new stdclass();
+				$query->row      = isset($data[0]) ? $data[0] : array();
+				$query->rows     = $data;
 				$query->num_rows = count($data);
 
 				return $query;
@@ -62,10 +61,10 @@ final class mysqlidb implements Database
 
 			return false;
 		}
-  	}
+	}
 
-  	public function multi_query($sql)
-  	{
+	public function multi_query($sql)
+	{
 		$this->mysqli->multi_query($sql);
 
 		while ($this->mysqli->more_results() && $this->mysqli->next_result()) {
@@ -78,7 +77,7 @@ final class mysqlidb implements Database
 		}
 
 		return true;
-  	}
+	}
 
 	public function setAutoincrement($table, $value)
 	{
@@ -95,15 +94,15 @@ final class mysqlidb implements Database
 		return $this->mysqli->real_escape_string(htmlspecialchars_decode($value));
 	}
 
-  	public function countAffected()
-  	{
+	public function countAffected()
+	{
 		return $this->mysqli->affected_rows;
-  	}
+	}
 
-  	public function getLastId()
-  	{
+	public function getLastId()
+	{
 		return $this->mysqli->insert_id;
-  	}
+	}
 
 	public function __destruct()
 	{

@@ -5,12 +5,8 @@ class Admin_Controller_Block_Block extends Controller
 
 	public function index()
 	{
-		$this->language->load('block/block');
-
-		$this->document->setTitle(_l("Blocks"));
-
-		if (!empty($_GET['name'])) {
-			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
+		if (!empty($_GET['path'])) {
+			if (!$this->Model_Block_Block->isBlock($_GET['path'])) {
 				$this->message->add('warning', _l("Attempted to access unknown block!"));
 
 				$this->url->redirect('block/block');
@@ -24,16 +20,14 @@ class Admin_Controller_Block_Block extends Controller
 
 	public function delete()
 	{
-		$this->language->load('block/block');
-
-		if (!empty($_GET['name']) && $this->validateDelete()) {
-			$this->Model_Block_Block->deleteBlock($_GET['name']);
+		if (!empty($_GET['path']) && $this->validateDelete()) {
+			$this->Model_Block_Block->deleteBlock($_GET['path']);
 
 			if (!$this->message->hasError()) {
 				$this->message->add('success', _l("The Block was removed successfully!"));
 			}
 
-			$this->url->redirect('block/block', $this->url->getQueryExclude('name'));
+			$this->url->redirect('block/block', $this->url->getQueryExclude('path'));
 		}
 
 		$this->index();
@@ -41,22 +35,27 @@ class Admin_Controller_Block_Block extends Controller
 
 	private function getList()
 	{
-		$this->template->load('block/list');
+		//Page Head
+		$this->document->setTitle(_l("Blocks"));
 
+		//Page Title
+		$this->data['page_title'] = _l("Blocks");
+
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
 
 		//The Table Columns
 		$columns = array();
 
-		$columns['display_name'] = array(
+		$columns['name'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Name"),
 			'filter'       => true,
 			'sortable'     => true,
 		);
 
-		$columns['name'] = array(
+		$columns['path'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Path"),
 			'filter'       => true,
@@ -76,7 +75,7 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
+		$sort   = $this->sort->getQueryDefaults('path', 'ASC');
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
@@ -87,20 +86,22 @@ class Admin_Controller_Block_Block extends Controller
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('block/block', 'name=' . $block['name'])
+					'href' => $this->url->link('block/block', 'path=' . $block['path'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('block/block/delete', 'name=' . $block['name']),
+					'href' => $this->url->link('block/block/delete', 'path=' . $block['path']),
 				),
 			);
 
 			$block['actions'] = $actions;
+
+			$block['name'] = $this->Model_Block_Block->getBlockName($block['path']);
 		}
 
 		//Build The Table
 		$tt_data = array(
-			'row_id' => 'name',
+			'row_id' => 'path',
 		);
 
 		$this->table->init();
@@ -124,6 +125,9 @@ class Admin_Controller_Block_Block extends Controller
 
 		$this->data['pagination'] = $this->pagination->render();
 
+		//The Template
+		$this->template->load('block/list');
+
 		//Dependencies
 		$this->children = array(
 			'common/header',
@@ -136,32 +140,32 @@ class Admin_Controller_Block_Block extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('block/block');
+		$path = $_GET['path'];
 
-		$name = $_GET['name'];
-
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
-			//If plugins have additional
+			//If plugins have additional Data
 			$this->saveBlockData();
 
-			$this->Model_Block_Block->updateBlock($name, $_POST);
+			$this->Model_Block_Block->updateBlock($path, $_POST);
 
 			$this->message->add('success', _l("The Block was saved successfully!"));
 
 			$this->url->redirect('block/block');
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
+		$this->breadcrumb->add($path, $this->url->link('block/block', 'path=' . $path));
 
-		$this->language->load('block/' . $name);
-		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block', 'name=' . $name));
+		//Entry Data
+		$block = array();
 
-		$this->data['action'] = $this->url->link('block/block', 'name=' . $name);
-		$this->data['cancel'] = $this->url->link('block/block');
-
-		if (!$this->request->isPost()) {
-			$block = $this->Model_Block_Block->getBlock($name);
+		if ($this->request->isPost()) {
+			$block = $_POST;
+		} elseif ($path) {
+			$block = $this->Model_Block_Block->getBlock($path);
 		}
 
 		$default_profile_settings = array(
@@ -185,15 +189,7 @@ class Admin_Controller_Block_Block extends Controller
 			'status'           => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($block[$key])) {
-				$this->data[$key] = $block[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $block + $defaults;
 
 		//Load Defaults for Settings, Profile Settings and Profiles
 		if (empty($this->data['profile_settings'])) {
@@ -233,7 +229,7 @@ class Admin_Controller_Block_Block extends Controller
 
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 
-		$this->data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->get_setting('data_positions');
+		$this->data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
 
 		$this->data['data_statuses'] = array(
 			0 => _l("Disabled"),
@@ -245,23 +241,30 @@ class Admin_Controller_Block_Block extends Controller
 			0 => _l("No"),
 		);
 
+		//Action Buttons
+		$this->data['action'] = $this->url->link('block/block', 'path=' . $path);
+		$this->data['cancel'] = $this->url->link('block/block');
+
+		//The Template
+		$this->template->load('block/block');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function loadBlockController()
 	{
-		if ($this->block_controller || empty($_GET['name'])) {
+		if ($this->block_controller || empty($_GET['path'])) {
 			return;
 		}
 
-		$path = $_GET['name'];
-
-		$action = new Action($this->registry, 'block/' . $path);
+		$action = new Action($this->registry, 'block/' . $_GET['path']);
 
 		$this->block_controller = $action->getController();
 	}

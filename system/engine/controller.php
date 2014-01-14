@@ -24,7 +24,7 @@ abstract class Controller
 	public function __set($key, $value)
 	{
 		//TODO __set() has been deprecated for AmploCart. DO NOT USE THIS FEATURE.
-		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled." . get_caller(0,5));
+		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled." . get_caller(0, 5));
 		exit;
 	}
 
@@ -37,7 +37,7 @@ abstract class Controller
 	{
 		$msg = '';
 
-		array_walk_recursive($this->error, function($value, $id, &$msg) use($delimiter) { $msg .= ($msg ? $delimiter : '') . $value; } );
+		array_walk_recursive($this->error, function ($value, $id, &$msg) use ($delimiter) { $msg .= ($msg ? $delimiter : '') . $value; });
 
 		return $msg;
 	}
@@ -71,7 +71,8 @@ abstract class Controller
 		}
 	}
 
-	protected function getChild($child, $parameters = array()) {
+	protected function getChild($child, $parameters = array())
+	{
 		$action = new Action($this->registry, $child, $parameters);
 
 		if ($action->execute()) {

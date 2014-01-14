@@ -1,12 +1,12 @@
 /* God I hate Microsoft! */
 #header #cart {
-    width: 400px;
+	width: 400px;
 }
 
 #header #cart .heading {
-    position: relative;
-    right: 172px;
-    margin-right: 0px;
+	position: relative;
+	right: 172px;
+	margin-right: 0px;
 }
 
 #header #cart .content {
@@ -14,51 +14,51 @@
 }
 
 #header #search {
-    position: inherit;
-    float: right;
+	position: inherit;
+	float: right;
 }
 
 #header .button-search {
-    top: 1px;
+	top: 1px;
 }
 
 #header #search input {
-    padding: 3px 1px 1px 33px;
-    height: 19px;
+	padding: 3px 1px 1px 33px;
+	height: 19px;
 }
 
 /* menu */
 #menu ul li {
-    position: relative;
+	position: relative;
 }
 
 #menu ul li div {
-    z-index: 5;
+	z-index: 5;
 }
 
 #menu ul li.active div {
-    display: block;
+	display: block;
 }
 
 .success, .warning, .attention, .information {
-    position: relative;
+	position: relative;
 }
 
 .success .close, .warning .close, .attention .close, .information .close {
-    position: absolute;
-    right: 10px;
+	position: absolute;
+	right: 10px;
 }
 
 .box-product > div {
-    display: inline;
+	display: inline;
 }
 
 .product-grid > div {
-    display: inline;
+	display: inline;
 }
 
 /* button */
 .prduct-info a.button span {
-    line-height: 12px;
-    display: block;
+	line-height: 12px;
+	display: block;
 }

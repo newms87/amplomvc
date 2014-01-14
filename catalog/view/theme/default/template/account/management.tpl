@@ -8,29 +8,35 @@
 
 	<div class="section left">
 		<h2><?= _l("Customer Information"); ?></h2>
+
 		<div class="name"><?= $customer['display_name']; ?></div>
 		<div class="phone"><?= $customer['telephone']; ?></div>
 		<div class="email"><?= $customer['email']; ?></div>
-		<br />
+		<br/>
+
 		<h2><?= _l("Default Shipping Address"); ?></h2>
+
 		<div class="shipping_address"><?= $shipping_address['display']; ?></div>
-		<br />
+		<br/>
+
 		<h2><?= _l("Newsletter"); ?></h2>
+
 		<div class="newsletter"><?= $newsletter_display; ?></div>
-		<br />
+		<br/>
 		<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _l("Edit Information"); ?></a>
 	</div>
 
 	<? if (!empty($data_subscriptions)) { ?>
 		<div class="section right">
 			<h2><?= $section_subscription; ?></h2>
+
 			<div id="subscription_list">
 				<? foreach ($data_subscriptions as $subscription) { ?>
 					<? if ($subscription['status']) { ?>
 						<div class="subscription">
 							<div class="info">
 								<div class="image left">
-									<img src="<?= $subscription['product']['thumb']; ?>" />
+									<img src="<?= $subscription['product']['thumb']; ?>"/>
 								</div>
 								<div class="info_text left">
 									<div class="name"><?= $subscription['product']['name']; ?></div>
@@ -44,7 +50,7 @@
 						<div class="subscription cancelled">
 							<div class="info">
 								<div class="image left">
-									<img src="<?= $subscription['product']['thumb']; ?>" />
+									<img src="<?= $subscription['product']['thumb']; ?>"/>
 								</div>
 								<div class="info_text left">
 									<div class="name"><?= $subscription['product']['name']; ?></div>
@@ -76,9 +82,9 @@
 </div>
 
 <script type="text/javascript">
-$('.cancelled .button.delete').click(function(){
-	return confirm("<?= $text_confirm_remove; ?>");
-});
+	$('.cancelled .button.delete').click(function () {
+		return confirm("<?= $text_confirm_remove; ?>");
+	});
 </script>
 
 <?= $footer; ?>

@@ -15,7 +15,7 @@
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
-							<td><?= $entry_status; ?></td>
+							<td><?= _l("Status"); ?></td>
 							<td><select name="reward_status">
 									<? if ($reward_status) { ?>
 										<option value="1" selected="selected"><?= $text_enabled; ?></option>
@@ -27,7 +27,7 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_sort_order; ?></td>
+							<td><?= _l("Sort Order"); ?></td>
 							<td><input type="text" name="reward_sort_order" value="<?= $reward_sort_order; ?>" size="1"/></td>
 						</tr>
 					</table>

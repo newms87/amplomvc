@@ -9,8 +9,6 @@ class Catalog_Controller_Account_Download extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		$this->language->load('account/download');
-
 		$this->document->setTitle(_l("Account Downloads"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -57,7 +55,7 @@ class Catalog_Controller_Account_Download extends Controller
 
 					$this->data['downloads'][] = array(
 						'order_id'   => $result['order_id'],
-						'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+						'date_added' => $this->date->format($result['date_added'], 'short'),
 						'name'       => $result['name'],
 						'remaining'  => $result['remaining'],
 						'size'       => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
@@ -85,7 +83,7 @@ class Catalog_Controller_Account_Download extends Controller
 		} else {
 			$this->template->load('error/not_found');
 
-			$this->language->set('text_error', _l("You have not made any previous downloadable orders!"));
+			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
 
 			$this->data['continue'] = $this->url->link('account/account');
 

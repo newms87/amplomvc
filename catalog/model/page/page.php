@@ -13,7 +13,7 @@ class Catalog_Model_Page_Page extends Model
 		$page = $this->queryRow($query);
 
 		$page['content'] = html_entity_decode($page['content']);
-		$page['css'] = html_entity_decode($page['css']);
+		$page['css']     = html_entity_decode($page['css']);
 
 		$this->translation->translate('page', $page_id, $page);
 
@@ -25,7 +25,7 @@ class Catalog_Model_Page_Page extends Model
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
 		$page['content'] = html_entity_decode($page['content']);
-		$page['css'] = html_entity_decode($page['css']);
+		$page['css']     = html_entity_decode($page['css']);
 
 		$this->translation->translate('page', $page_id, $page);
 

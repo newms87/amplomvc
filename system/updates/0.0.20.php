@@ -10,7 +10,6 @@ $this->db->changeColumn('order_option', 'order_product_id', null, "INT(11) UNSIG
 $this->db->changeColumn('order_option', 'product_option_id', null, "INT(11) UNSIGNED NOT NULL");
 $this->db->changeColumn('order_option', 'product_option_value_id', null, "INT(11) UNSIGNED NOT NULL");
 
-//Language
 $this->db->addColumn('language', 'datetime_format_full', "VARCHAR(45) NOT NULL  AFTER `datetime_format_long`");
 $this->db->addColumn('language', 'date_format_medium', "VARCHAR(45) NOT NULL  AFTER `date_format_short`");
 
@@ -156,8 +155,7 @@ foreach ($orders as $order) {
 		if ($order['confirmed']) {
 			$this->shipping->confirm($shipping_id);
 		}
-	}
-	else {
+	} else {
 		$shipping_id = '';
 	}
 

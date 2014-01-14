@@ -5,8 +5,6 @@ class Admin_Controller_Extension_Feed extends Controller
 	{
 		$this->template->load('extension/feed');
 
-		$this->language->load('extension/feed');
-
 		$this->document->setTitle(_l("Product Feeds"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -46,9 +44,7 @@ class Admin_Controller_Extension_Feed extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 
-				$this->language->load('feed/' . $extension);
-
-				$action = array();
+				//Template Data$action = array();
 
 				if (!in_array($extension, $extensions)) {
 					$action[] = array(

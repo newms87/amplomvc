@@ -5,8 +5,6 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function index()
 	{
-		$this->language->load('catalog/review');
-
 		$this->document->setTitle(_l("Reviews"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function insert()
 	{
-		$this->language->load('catalog/review');
-
 		$this->document->setTitle(_l("Reviews"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function update()
 	{
-		$this->language->load('catalog/review');
-
 		$this->document->setTitle(_l("Reviews"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/review');
-
 		$this->document->setTitle(_l("Reviews"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -176,7 +168,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				'author'     => $result['author'],
 				'rating'     => $result['rating'],
 				'status'     => ($result['status'] ? _l("Enabled") : _l("Disabled")),
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], 'short'),
 				'selected'   => isset($_GET['selected']) && in_array($result['review_id'], $_GET['selected']),
 				'action'     => $action
 			);

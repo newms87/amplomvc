@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/manufacturer');
-
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->language->load('catalog/manufacturer');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 
@@ -27,8 +23,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	public function update()
 	{
-		$this->language->load('catalog/manufacturer');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id']) ? $_GET['manufacturer_id'] : 0;
 
@@ -45,8 +39,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/manufacturer');
-
 		if (isset($_GET['manufacturer_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
 
@@ -61,8 +53,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/manufacturer');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_GET['selected'] as $manufacturer_id) {

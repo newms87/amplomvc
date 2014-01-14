@@ -3,15 +3,11 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 {
 	public function index()
 	{
-		$this->language->load('setting/url_alias');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('setting/url_alias');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['url_alias_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	public function delete()
 	{
-		$this->language->load('setting/url_alias');
-
 		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('setting/url_alias');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $url_alias_id) {
 				$data = array();

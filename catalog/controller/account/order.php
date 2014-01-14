@@ -5,8 +5,6 @@ class Catalog_Controller_Account_Order extends Controller
 	{
 		//Template and Language
 		$this->template->load('account/order_list');
-		$this->language->load('account/order');
-
 		//Login Validation
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/order'));
@@ -79,8 +77,6 @@ class Catalog_Controller_Account_Order extends Controller
 	{
 		//Template and Language
 		$this->template->load('account/order_info');
-		$this->language->load('account/order');
-
 		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
 
 		//Login Validation
@@ -117,11 +113,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 
 
-
-
 		//TODO: Update to make use of new extension system
-
-
 
 
 		//Shipping / Payment Methods
@@ -153,8 +145,8 @@ class Catalog_Controller_Account_Order extends Controller
 			unset($option);
 
 			$product['options'] = $options;
-			$product['price']  = $this->currency->format($product['price'], $order['currency_code'], $order['currency_value']);
-			$product['total']  = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
+			$product['price']   = $this->currency->format($product['price'], $order['currency_code'], $order['currency_value']);
+			$product['total']   = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 
 			$product['return_policy']   = $this->cart->getReturnPolicy($product['return_policy_id']);
 			$product['shipping_policy'] = $this->cart->getShippingPolicy($product['shipping_policy_id']);

@@ -4,15 +4,11 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	public function index()
 	{
-		$this->language->load('design/navigation');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('design/navigation');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['navigation_group_id'])) {
@@ -34,8 +30,6 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	public function delete()
 	{
-		$this->language->load('design/navigation');
-
 		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
 			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
@@ -60,8 +54,6 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('design/navigation');
-
 		$this->document->setTitle(_l("Navigation"));
 
 		if (isset($_GET['selected']) && isset($_GET['action'])) {
@@ -259,8 +251,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		if ($this->request->isPost()) {
 			$navigation_group_info = $_POST;
-		}
-		elseif ($navigation_group_id) {
+		} elseif ($navigation_group_id) {
 			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
 		}
 

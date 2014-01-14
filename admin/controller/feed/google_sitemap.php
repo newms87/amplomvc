@@ -7,8 +7,6 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 	{
 		$this->template->load('feed/google_sitemap');
 
-		$this->language->load('feed/google_sitemap');
-
 		$this->document->setTitle(_l("Google Sitemap"));
 
 		if ($this->request->isPost() && $this->validate()) {

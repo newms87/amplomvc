@@ -5,8 +5,6 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function index()
 	{
-		$this->language->load('extension/payment');
-
 		if (!empty($_GET['code'])) {
 			if (!$this->System_Extension_Payment->has($_GET['code'])) {
 				$this->message->add('warning', _l("The extension %s does not exist!", $_GET['code']));
@@ -23,8 +21,6 @@ class Admin_Controller_Extension_Payment extends Controller
 	//TODO: Implement the Add / Delete functionality for Extensions
 	public function delete()
 	{
-		$this->language->load('extension/payment');
-
 		if (!empty($_GET['code']) && $this->validateDelete()) {
 			$this->System_Extension_Payment->deleteExtension($_GET['code']);
 
@@ -180,8 +176,6 @@ class Admin_Controller_Extension_Payment extends Controller
 
 		//Template and Language
 		$this->template->load('extension/payment');
-		$this->language->load('extension/payment');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Payment Extensions"), $this->url->link('extension/payment'));
@@ -242,9 +236,6 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function edit()
 	{
-		//Language
-		$this->language->load('extension/payment');
-
 		$code = !empty($_GET['code']) ? $_GET['code'] : '';
 
 		//Verify File
@@ -335,8 +326,6 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function install()
 	{
-		$this->language->load('extension/payment');
-
 		if ($this->System_Extension_Payment->install($_GET['code'])) {
 			$this->loadExtensionController($_GET['code']);
 
@@ -363,8 +352,6 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function uninstall()
 	{
-		$this->language->load('extension/payment');
-
 		if ($this->System_Extension_Payment->uninstall($_GET['code'])) {
 			$this->message->add('notify', _l("Uninstalled the %s extension for Payments", $_GET['code']));
 		}

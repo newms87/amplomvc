@@ -5,8 +5,6 @@ class Catalog_Controller_Information_Sitemap extends Controller
 	{
 		$this->template->load('information/sitemap');
 
-		$this->language->load('information/sitemap');
-
 		$this->document->setTitle(_l("Site Map"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

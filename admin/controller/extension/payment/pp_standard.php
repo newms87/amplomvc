@@ -3,9 +3,6 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 {
 	public function settings(&$settings)
 	{
-		//Language
-		$this->language->load('extension/payment/pp_standard');
-
 		//Default Settings
 		$defaults = array(
 			'button_graphic'              => 'https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif',

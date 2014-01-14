@@ -5,8 +5,6 @@ class Admin_Controller_Error_NotFound extends Controller
 	{
 		$this->template->load('error/not_found');
 
-		$this->language->load('error/not_found');
-
 		$this->document->setTitle(_l("Page Not Found!"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

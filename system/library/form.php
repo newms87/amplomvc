@@ -203,7 +203,7 @@ class Form extends Library
 
 	public function set_template($file)
 	{
-		$this->template_file = $this->template->find_file($file);
+		$this->template_file = $this->template->findFile($file);
 
 		if (!$this->template_file) {
 			$this->error = "Could not load form template $file!" . get_caller();
@@ -258,14 +258,8 @@ class Form extends Library
 				$field['required'] = false;
 			}
 
-			if (!isset($field['display_name'])) {
-				$display_name = $this->language->get('entry_' . $name);
-
-				if (($display_name == 'entry_' . $name) && isset($field['label'])) {
-					$field['display_name'] = $field['label'];
-				} else {
-					$field['display_name'] = $display_name;
-				}
+			if (!isset($field['display_name']) && isset($field['label'])) {
+				$field['display_name'] = $field['label'];
 			}
 
 			if (!isset($field['attrs'])) {
@@ -340,11 +334,9 @@ class Form extends Library
 
 	public function validate($data)
 	{
-		$this->language->system('form');
-
 		//For Each Field Validate the data, set $this->error if invalid
 		foreach ($this->fields as $field_name => $field) {
-			$field_display_name = $this->language->get('entry_' . $field_name, isset($field['label']) ? $field['label'] : $field_name);
+			$field_display_name = isset($field['label']) ? $field['label'] : $field_name;
 
 			//Check if this field is set and if it is required
 			if (!empty($field['required']) && (!isset($data[$field_name]) || is_null($data[$field_name]) || $data[$field_name] === '')) {
@@ -380,11 +372,11 @@ class Form extends Library
 			}
 
 			if (!call_user_func_array(array(
-			                               $this->validation,
-			                               $method
-			                          ), $args)
+				$this->validation,
+				$method
+			), $args)
 			) {
-				$this->error[$field_name] = $this->language->get('error_' . $field_name, $this->_('error_invalid_field', $field_display_name));
+				$this->error[$field_name] = _l("%s is invalid", $field_display_name);
 			}
 		}
 

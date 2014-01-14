@@ -11,9 +11,6 @@ class Admin_Controller_Extension_Total_Shipping extends Controller
 	 */
 	public function settings(&$settings)
 	{
-		//Language
-		$this->language->load('extension/total/shipping');
-
 		$defaults = array(
 			'estimator' => '',
 		);

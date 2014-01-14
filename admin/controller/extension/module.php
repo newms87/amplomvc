@@ -5,8 +5,6 @@ class Admin_Controller_Extension_Module extends Controller
 	{
 		$this->template->load('extension/module');
 
-		$this->language->load('extension/module');
-
 		$this->document->setTitle(_l("Modules"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -46,9 +44,7 @@ class Admin_Controller_Extension_Module extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 
-				$this->language->load('module/' . $extension);
-
-				$action = array();
+				//Template Data$action = array();
 
 				if (!in_array($extension, $extensions)) {
 					$action[] = array(
@@ -109,8 +105,6 @@ class Admin_Controller_Extension_Module extends Controller
 
 	public function uninstall()
 	{
-		$this->language->load('extension/module');
-
 		if (!$this->user->can('modify', 'extension/module')) {
 			$this->session->set('error', _l("Warning: You do not have permission to modify modules!"));
 

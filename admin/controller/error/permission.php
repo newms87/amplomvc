@@ -5,8 +5,6 @@ class Admin_Controller_Error_Permission extends Controller
 	{
 		$this->template->load('error/permission');
 
-		$this->language->load('error/permission');
-
 		$this->document->setTitle(_l("Permission Denied!"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

@@ -4,8 +4,6 @@ class Admin_Controller_Dev_Dev extends Controller
 	public function index()
 	{
 		$this->template->load('dev/dev');
-		$this->language->load('dev/dev');
-
 		$this->document->setTitle(_l("Development Console"));
 
 		$this->data['url_sync']            = $this->url->link("dev/dev/sync");
@@ -19,8 +17,6 @@ class Admin_Controller_Dev_Dev extends Controller
 	public function sync()
 	{
 		$this->template->load('dev/sync');
-
-		$this->language->load('dev/dev');
 
 		$this->document->setTitle(_l("Synchronize Sites"));
 
@@ -72,8 +68,6 @@ class Admin_Controller_Dev_Dev extends Controller
 	public function site_management()
 	{
 		$this->template->load('dev/site_management');
-
-		$this->language->load('dev/dev');
 
 		$this->document->setTitle(_l("Site Management"));
 
@@ -127,8 +121,6 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		//Template and Language
 		$this->template->load('dev/backup_restore');
-		$this->language->load('dev/dev');
-
 		//Page Head
 		$this->document->setTitle(_l("Backup & Restore"));
 
@@ -140,11 +132,9 @@ class Admin_Controller_Dev_Dev extends Controller
 				} else {
 					$this->message->add('warning', _l("Please select a backup file to download."));
 				}
-			}
-			elseif (isset($_POST['default_installation'])) {
+			} elseif (isset($_POST['default_installation'])) {
 				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '%__TABLE_PREFIX__%');
-			}
-			elseif (isset($_POST['site_backup'])) {
+			} elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 
 				if (count($tables) == $this->db->countTables()) {
@@ -152,19 +142,16 @@ class Admin_Controller_Dev_Dev extends Controller
 				}
 
 				$this->dev->site_backup(null, $tables);
-			}
-			elseif (isset($_POST['site_restore'])) {
+			} elseif (isset($_POST['site_restore'])) {
 				$this->dev->site_restore($_POST['backup_file']);
-			}
-			elseif (isset($_POST['sync_file'])) {
+			} elseif (isset($_POST['sync_file'])) {
 				$sync_file = DIR_DOWNLOAD . 'sync_file-' . $this->date->now('m-d-y') . '.sql';
-				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
+				$tables    = isset($_POST['tables']) ? $_POST['tables'] : null;
 
 				$this->dev->site_backup($sync_file, $tables, '__AC_PREFIX__');
 
 				$this->export->downloadFile($sync_file);
-			}
-			elseif (isset($_POST['execute_sync_file'])) {
+			} elseif (isset($_POST['execute_sync_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					if ($this->dev->site_restore($_FILES['filename']['tmp_name'], true)) {
 						$this->message->add('success', "Successfully synchronized your site!");
@@ -173,8 +160,7 @@ class Admin_Controller_Dev_Dev extends Controller
 						$this->message->add('warning', $this->db->getError());
 					}
 				}
-			}
-			elseif (isset($_POST['execute_file'])) {
+			} elseif (isset($_POST['execute_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
 					if ($this->db->executeFile($_FILES['filename']['tmp_name'])) {
@@ -235,8 +221,6 @@ class Admin_Controller_Dev_Dev extends Controller
 
 	public function request_table_data()
 	{
-		$this->language->load('dev/dev');
-
 		if ($this->request->isPost() && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 

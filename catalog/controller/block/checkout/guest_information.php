@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 {
 	public function index()
 	{
-		$this->language->load('checkout/checkout');
-		$this->language->load('block/checkout/guest_information');
 		$this->template->load('block/checkout/guest_information');
 
 		//Extra Information saved about the guest (name, email, etc..)
@@ -52,7 +50,6 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 
 	public function validate()
 	{
-		$this->language->load('checkout/checkout');
 		$this->template->load('block/checkout/guest_information');
 
 		$json = array();

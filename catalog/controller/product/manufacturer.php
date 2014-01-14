@@ -4,8 +4,6 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 	public function index()
 	{
 		$this->template->load('product/manufacturer');
-		$this->language->load('product/manufacturer');
-
 		$this->document->setTitle(_l("Find Your Favorite Brand"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -48,7 +46,6 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 	public function product()
 	{
-		$this->language->load('product/manufacturer');
 		$this->template->load('product/category');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

@@ -3,13 +3,17 @@ class Catalog_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/home');
-
+		//Page Head
 		$this->document->setTitle($this->config->get('config_title'));
 		$this->document->setDescription($this->config->get('config_meta_description'));
 
-		$this->language->set('head_title', $this->config->get('config_title'));
+		//Page Title
+		$this->data['page_title'] = $this->config->get('config_title');
 
+		//The Template
+		$this->template->load('common/home');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -19,6 +23,7 @@ class Catalog_Controller_Common_Home extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 }

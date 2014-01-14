@@ -1,22 +1,22 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<? if ($error_warning) { ?>
-			<div class="message_box warning"><?= $error_warning; ?></div>
-		<? } ?>
-		<? if ($success) { ?>
-			<div class="message_box success"><?= $success; ?></div>
-		<? } ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>" alt=""/> <?= _l("Downloads"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<? if ($error_warning) { ?>
+		<div class="message_box warning"><?= $error_warning; ?></div>
+	<? } ?>
+	<? if ($success) { ?>
+		<div class="message_box success"><?= $success; ?></div>
+	<? } ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>" alt=""/> <?= _l("Downloads"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
-			</div>
-			<div class="section">
-				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
-					<table class="list">
-						<thead>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+		</div>
+		<div class="section">
+			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
+				<table class="list">
+					<thead>
 						<tr>
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
@@ -27,20 +27,20 @@
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'd.remaining') { ?>
 									<a href="<?= $sort_remaining; ?>"
-									   class="<?= strtolower($order); ?>"><?= _l("Total Downloads Allowed"); ?></a>
+										class="<?= strtolower($order); ?>"><?= _l("Total Downloads Allowed"); ?></a>
 								<? } else { ?>
 									<a href="<?= $sort_remaining; ?>"><?= _l("Total Downloads Allowed"); ?></a>
 								<? } ?></td>
 							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
-						</thead>
-						<tbody>
+					</thead>
+					<tbody>
 						<? if ($downloads) { ?>
 							<? foreach ($downloads as $download) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($download['selected']) { ?>
 											<input type="checkbox" name="selected[]" value="<?= $download['download_id']; ?>"
-											       checked="checked"/>
+												checked="checked"/>
 										<? } else { ?>
 											<input type="checkbox" name="selected[]" value="<?= $download['download_id']; ?>"/>
 										<? } ?></td>
@@ -56,11 +56,11 @@
 								<td class="center" colspan="6"><?= $text_no_results; ?></td>
 							</tr>
 						<? } ?>
-						</tbody>
-					</table>
-				</form>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+					</tbody>
+				</table>
+			</form>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
+</div>
 <?= $footer; ?>

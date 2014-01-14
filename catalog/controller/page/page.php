@@ -75,8 +75,8 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
 
 		//Page Head
-		$this->data['direction'] = $this->language->getInfo('direction');
-		$this->language->set('lang', $this->language->getInfo('code'));
+		$this->data['direction'] = $this->language->info('direction');
+		$this->data['lang']      = $this->language->info('code');
 
 		$this->data['styles']  = $this->document->renderStyles();
 		$this->data['scripts'] = $this->document->renderScripts();

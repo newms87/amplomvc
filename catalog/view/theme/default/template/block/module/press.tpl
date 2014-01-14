@@ -12,7 +12,7 @@
 								<img src="<?= $press['thumb']; ?>" onclick="$('.<?= $colorbox_group; ?>:first').click()"/>
 
 								<? foreach ($press['images'] as $image) { ?>
-									<a href="<?= $image; ?>" class="<?= $colorbox_group; ?>" title="<?= $press['description']; ?>" ></a>
+									<a href="<?= $image; ?>" class="<?= $colorbox_group; ?>" title="<?= $press['description']; ?>"></a>
 								<? } ?>
 							</div>
 						<? } ?>
@@ -25,12 +25,12 @@
 </div>
 
 <script type="text/javascript">
-<? foreach ($press_list as $row => $press) { ?>
+	<? foreach ($press_list as $row => $press) { ?>
 	<? $colorbox_group = 'press-item-' . $row; ?>
 	$('.<?= $colorbox_group; ?>').colorbox({
 		rel: '<?= $colorbox_group; ?>',
-		width:'80%',
+		width: '80%',
 		height: '80%'
 	});
-<? } ?>
+	<? } ?>
 </script>

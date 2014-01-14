@@ -1,16 +1,16 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'language.png'; ?>" alt=""/> <?= _l("Language"); ?></h1>
+<div class="section">
+	<?= $this->breadcrumb->render(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'language.png'; ?>" alt=""/> <?= _l("Language"); ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
-			</div>
-			<div class="section">
-				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
-					<table class="list">
-						<thead>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+		</div>
+		<div class="section">
+			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
+				<table class="list">
+					<thead>
 						<tr>
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
@@ -26,20 +26,20 @@
 								<? } ?></td>
 							<td class="right"><? if ($sort == 'sort_order') { ?>
 									<a href="<?= $sort_sort_order; ?>"
-									   class="<?= strtolower($order); ?>"><?= _l("Sort Order"); ?></a>
+										class="<?= strtolower($order); ?>"><?= _l("Sort Order"); ?></a>
 								<? } else { ?>
 									<a href="<?= $sort_sort_order; ?>"><?= _l("Sort Order"); ?></a>
 								<? } ?></td>
 							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
-						</thead>
-						<tbody>
+					</thead>
+					<tbody>
 						<? if ($languages) { ?>
 							<? foreach ($languages as $language) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($language['selected']) { ?>
 											<input type="checkbox" name="selected[]" value="<?= $language['language_id']; ?>"
-											       checked="checked"/>
+												checked="checked"/>
 										<? } else { ?>
 											<input type="checkbox" name="selected[]" value="<?= $language['language_id']; ?>"/>
 										<? } ?></td>
@@ -56,11 +56,11 @@
 								<td class="center" colspan="5"><?= $text_no_results; ?></td>
 							</tr>
 						<? } ?>
-						</tbody>
-					</table>
-				</form>
-				<div class="pagination"><?= $pagination; ?></div>
-			</div>
+					</tbody>
+				</table>
+			</form>
+			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
+</div>
 <?= $footer; ?>

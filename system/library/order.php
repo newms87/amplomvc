@@ -39,8 +39,7 @@ class Order Extends Library
 			$data['customer_id']       = 0;
 			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
 			$data += $this->cart->loadGuestInfo();
-		}
-		else {
+		} else {
 			//Guest checkout not allowed and customer not logged in
 			$this->error['guest_checkout'] = "You must be logged in to complete the checkout process!";
 			return false;
@@ -66,7 +65,7 @@ class Order Extends Library
 		//Shipping info
 		if ($this->cart->hasShipping()) {
 
-			$shipping         = array(
+			$shipping = array(
 				'shipping_methd' => $this->cart->getShippingMethodId(),
 				'tracking'       => '',
 				'address_id'     => $this->cart->getShippingAddressId(),
@@ -158,7 +157,7 @@ class Order Extends Library
 
 		$where = array(
 			'customer_id' => 0,
-		   'email ' => $customer['email'],
+			'email '      => $customer['email'],
 		);
 
 		$this->update('order', array('customer_id' => $customer['customer_id']), $where);
@@ -413,8 +412,7 @@ class Order Extends Library
 
 			$order_info = $this->getOrder($order_id);
 
-			$_l = $this->language->newInstance($order_info['language_id']);
-			$_l->load('mail/order');
+			$this->language->setLanguage($order_info['language_id']);
 
 			$subject = sprintf($language->get('text_subject'), $order_info['store_name'], $order_id);
 

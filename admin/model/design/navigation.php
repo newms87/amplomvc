@@ -118,9 +118,8 @@ class Admin_Model_Design_Navigation extends Model
 					$links[$pid]['children'] = array();
 				}
 
-				$links[$pid]['children'][$nav_id] = &$link;
-			}
-			else {
+				$links[$pid]['children'][$nav_id] = & $link;
+			} else {
 				$link['parent_id'] = 0;
 			}
 		}
@@ -451,7 +450,7 @@ class Admin_Model_Design_Navigation extends Model
 			'reports'    => array(
 				'display_name' => 'Reports',
 				'children'     => array(
-					'reports_customers'  => array(
+					'reports_customers' => array(
 						'display_name' => 'Customers',
 						'children'     => array(
 							'reports_customers_credit'        => array(
@@ -468,7 +467,7 @@ class Admin_Model_Design_Navigation extends Model
 							),
 						),
 					),
-					'reports_products'   => array(
+					'reports_products'  => array(
 						'display_name' => 'Products',
 						'children'     => array(
 							'reports_products_purchased' => array(
@@ -481,7 +480,7 @@ class Admin_Model_Design_Navigation extends Model
 							),
 						),
 					),
-					'reports_sales'      => array(
+					'reports_sales'     => array(
 						'display_name' => 'Sales',
 						'children'     => array(
 							'reports_sales_orders'   => array(
@@ -622,7 +621,7 @@ class Admin_Model_Design_Navigation extends Model
 						'display_name' => 'System Tools',
 						'href'         => 'tool/tool',
 					),
-					'system_logs'      => array(
+					'system_logs'            => array(
 						'display_name' => 'Logs',
 						'href'         => 'tool/logs',
 					),

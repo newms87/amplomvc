@@ -4,8 +4,6 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 	public function index()
 	{
 		$this->template->load('block/checkout/customer_information');
-		$this->language->load('block/checkout/customer_information');
-
 		if (!$this->customer->isLogged()) {
 			$this->data['guest_checkout'] = true;
 
@@ -57,8 +55,6 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 	public function validate()
 	{
 		$json = array();
-
-		$this->language->load('block/checkout/customer_information');
 
 		if (!$this->cart->hasPaymentAddress()) {
 			$json['error']['payment_address'] = _l("Please provide a Payment Address.");

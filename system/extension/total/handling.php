@@ -4,8 +4,6 @@ class System_Extension_Total_Handling extends TotalExtension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if (($this->cart->getSubTotal() < $this->config->get('handling_total')) && ($this->cart->getSubTotal() > 0)) {
-			$this->language->system('extension/total/handling');
-
 			$total_data['handling'] = array(
 				'title' => _l("Shipping & Handling"),
 				'value' => $this->config->get('handling_fee'),

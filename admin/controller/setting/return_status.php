@@ -5,8 +5,6 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 	{
 		//Template and Language
 		$this->template->load('setting/return_status');
-		$this->language->load('setting/return_status');
-
 		//Page Head
 		$this->document->setTitle(_l("Return Statuses"));
 

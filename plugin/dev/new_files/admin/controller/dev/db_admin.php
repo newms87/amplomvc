@@ -4,8 +4,6 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 	public function index()
 	{
 		$this->template->load('dev/db_admin');
-		$this->language->load('dev/dev');
-
 		$this->document->setTitle(_l("Database Administration"));
 
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');

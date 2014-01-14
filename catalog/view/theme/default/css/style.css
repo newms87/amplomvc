@@ -7,7 +7,7 @@ html {
 }
 
 body {
-	background-color: #ffffff;
+	background-color: #FFFFFF;
 	color: #000000;
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0px;
@@ -125,9 +125,9 @@ ul {
 	float: right;
 }
 
-.center{
-	text-align:center;
-	margin:auto;
+.center {
+	text-align: center;
+	margin: auto;
 }
 
 .error {
@@ -141,7 +141,7 @@ ul {
 
 .noselect,
 .ac_checkbox,
-.button{
+.button {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -155,10 +155,10 @@ ul {
  This will work in pure CSS (albeit it is against the W3C specs)
  Hence, we add the :before pseudo element to the input field
  */
-.ac_checkbox:before{
-	position:relative;
+.ac_checkbox:before {
+	position: relative;
 	left: -100%;
-	top:0;
+	top: 0;
 	width: 1px;
 	height: 1px;
 	padding: 13px 11px 7px 12px;
@@ -167,32 +167,35 @@ ul {
 	cursor: pointer;
 
 	content: url(../image/remove.png);
-	background:#F7AAAA;
+	background: #F7AAAA;
 	background: #EB9191; /* Old browsers */
 	background: -webkit-linear-gradient(top, #F7AAAA 0%, #EB9191 100%); /* Mobile, Safari5.1+ */
 	background: linear-gradient(to bottom, #F7AAAA 0%, #EB9191 100%); /* W3C */
 	border-color: #EB9191;
 }
+
 .ac_checkbox:checked:before,
-.ac_checkbox.checked:before{
+.ac_checkbox.checked:before {
 	content: url(../image/checkmark-small.png);
 	background: #C7FFDA;
 	background: -webkit-linear-gradient(top, #C7FFDA 0%, #5EC380 100%); /* Mobile, Safari5.1+ */
 	background: linear-gradient(to bottom, #C7FFDA 0%, #5EC380 100%); /* W3C */
 }
 
-div.ac_checkbox{
-	display:inline;
+div.ac_checkbox {
+	display: inline;
 	width: 1px;
-	height:1px;
+	height: 1px;
 	cursor: pointer;
 }
-div.ac_checkbox:before{
-	top:0!important;
-	left:0;
+
+div.ac_checkbox:before {
+	top: 0 !important;
+	left: 0;
 }
-div.ac_checkbox > [type=checkbox]{
-	display:none;
+
+div.ac_checkbox > [type=checkbox] {
+	display: none;
 }
 
 /* float fix */
@@ -957,7 +960,7 @@ a.button:active, input.button:active {
 	overflow: auto;
 	padding: 6px;
 	margin-bottom: 20px;
-	clear:both;
+	clear: both;
 }
 
 .buttons .left {
@@ -1719,7 +1722,7 @@ a.button:active, input.button:active {
 .product_info .title {
 	font-size: 20px;
 	font-weight: bold;
-	color : black;
+	color: black;
 	margin-bottom: 10px;
 }
 
@@ -1734,8 +1737,8 @@ a.button:active, input.button:active {
 .product_info .view_full_size {
 	display: block;
 	padding-top: 5px;
-	width:100%;
-	text-align:center;
+	width: 100%;
+	text-align: center;
 }
 
 .product_info .image-additional {
@@ -2716,7 +2719,7 @@ table.form_single_column select {
 /* Press / Editorial */
 
 #press_list > li {
-	float:left;
+	float: left;
 	margin: 10px 5px;
 	color: #333;
 	height: 240px;
@@ -2745,10 +2748,11 @@ table.form_single_column select {
 	cursor: pointer;
 }
 
-#press_list .press_link{
-	display:block;
-	text-align:center;
+#press_list .press_link {
+	display: block;
+	text-align: center;
 }
+
 /* footer */
 #footer {
 	padding: 10px 0;
@@ -3340,7 +3344,6 @@ table.form_single_column select {
 	display: block;
 }
 
-
 /*
  * jQuery Nivo Slider v3.2
  * http://nivo.dev7studios.com
@@ -3352,17 +3355,19 @@ table.form_single_column select {
 
 /* The Nivo Slider styles */
 .nivoSlider {
-	position:relative;
-	width:100%;
-	height:auto;
+	position: relative;
+	width: 100%;
+	height: auto;
 	overflow: hidden;
 }
+
 .nivoSlider img {
-	position:absolute;
-	top:0px;
-	left:0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	max-width: none;
 }
+
 .nivo-main-image {
 	display: block !important;
 	position: relative !important;
@@ -3371,90 +3376,103 @@ table.form_single_column select {
 
 /* If an image is wrapped in a link */
 .nivoSlider a.nivo-imageLink {
-	position:absolute;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:100%;
-	border:0;
-	padding:0;
-	margin:0;
-	z-index:6;
-	display:none;
-	background:white;
-	filter:alpha(opacity=0);
-	opacity:0;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	z-index: 6;
+	display: none;
+	background: white;
+	filter: alpha(opacity=0);
+	opacity: 0;
 }
+
 /* The slices and boxes in the Slider */
 .nivo-slice {
-	display:block;
-	position:absolute;
-	z-index:5;
-	height:100%;
-	top:0;
+	display: block;
+	position: absolute;
+	z-index: 5;
+	height: 100%;
+	top: 0;
 }
+
 .nivo-box {
-	display:block;
-	position:absolute;
-	z-index:5;
-	overflow:hidden;
+	display: block;
+	position: absolute;
+	z-index: 5;
+	overflow: hidden;
 }
-.nivo-box img { display:block; }
+
+.nivo-box img {
+	display: block;
+}
 
 /* Caption styles */
 .nivo-caption {
-	position:absolute;
-	left:0px;
-	bottom:0px;
-	background:#000;
-	color:#fff;
-	width:100%;
-	z-index:8;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	background: #000;
+	color: #FFF;
+	width: 100%;
+	z-index: 8;
 	padding: 5px 10px;
 	opacity: 0.8;
 	overflow: hidden;
 	display: none;
 	-moz-opacity: 0.8;
-	filter:alpha(opacity=8);
+	filter: alpha(opacity=8);
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box;         /* Opera/IE 8+ */
-}
-.nivo-caption p {
-	padding:5px;
-	margin:0;
-}
-.nivo-caption a {
-	display:inline !important;
-}
-.nivo-html-caption {
-	display:none;
-}
-/* Direction nav styles (e.g. Next & Prev) */
-.nivo-directionNav a {
-	position:absolute;
-	top:45%;
-	z-index:9;
-	cursor:pointer;
-}
-.nivo-prevNav {
-	left:0px;
-}
-.nivo-nextNav {
-	right:0px;
-}
-/* Control nav styles (e.g. 1,2,3...) */
-.nivo-controlNav {
-	text-align:center;
-	padding: 15px 0;
-}
-.nivo-controlNav a {
-	cursor:pointer;
-}
-.nivo-controlNav a.active {
-	font-weight:bold;
+	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	box-sizing: border-box; /* Opera/IE 8+ */
 }
 
+.nivo-caption p {
+	padding: 5px;
+	margin: 0;
+}
+
+.nivo-caption a {
+	display: inline !important;
+}
+
+.nivo-html-caption {
+	display: none;
+}
+
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a {
+	position: absolute;
+	top: 45%;
+	z-index: 9;
+	cursor: pointer;
+}
+
+.nivo-prevNav {
+	left: 0px;
+}
+
+.nivo-nextNav {
+	right: 0px;
+}
+
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav {
+	text-align: center;
+	padding: 15px 0;
+}
+
+.nivo-controlNav a {
+	cursor: pointer;
+}
+
+.nivo-controlNav a.active {
+	font-weight: bold;
+}
 
 /** Address Form **/
 
@@ -3715,9 +3733,10 @@ form .set_default_address input[type="radio"] {
 }
 
 /* Account Page */
-#address_list{
-	position:relative;
+#address_list {
+	position: relative;
 }
+
 #address_list .address {
 	position: relative;
 	background: #FFFF7F;

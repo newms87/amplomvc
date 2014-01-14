@@ -19,7 +19,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 			$email_data = array(
 				'reset' => $this->url->link('common/forgotten/reset', 'code=' . $code),
-			   'email' => $_POST['email'],
+				'email' => $_POST['email'],
 			);
 
 			$this->mail->sendTemplate('forgotten_admin', $email_data);
@@ -78,8 +78,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 				} else {
 					$this->error['password'] = $this->validation->getError();
 				}
-			}
-			else {
+			} else {
 				$this->user->updatePassword($user['user_id'], $_POST['password']);
 				$this->user->clearCode($user['user_id']);
 
@@ -94,7 +93,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('common/forgotten/reset', 'code=' . $code);
+		$this->data['save']   = $this->url->link('common/forgotten/reset', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('common/login');
 
 		//The Template

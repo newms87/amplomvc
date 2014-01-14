@@ -14,30 +14,32 @@
 			<div class="content">
 				<div class="form">
 					<label for="send_amount">Total Bill:</label>
-					<input type="text" name="amount" value=".0004" />
+					<input type="text" name="amount" value=".0004"/>
 
 					<div id="tip_amount">
-						<input id="tip_10" type="radio" class="tip" name="tip" value="10"><label for="tip_10">10%</label><br />
-						<input id="tip_15" type="radio" class="tip" name="tip" value="15"><label for="tip_15">15%</label><br />
-						<input id="tip_20" type="radio" class="tip" name="tip" checked="checked" value="20"><label for="tip_20">20%</label><br />
-						<input id="other" type="radio" class="tip" name="tip" value="other">BTC: <input type="text" id="tip_other" value="" />
+						<input id="tip_10" type="radio" class="tip" name="tip" value="10"><label for="tip_10">10%</label><br/>
+						<input id="tip_15" type="radio" class="tip" name="tip" value="15"><label for="tip_15">15%</label><br/>
+						<input id="tip_20" type="radio" class="tip" name="tip" checked="checked" value="20"><label for="tip_20">20%</label><br/>
+						<input id="other" type="radio" class="tip" name="tip" value="other">BTC: <input type="text" id="tip_other" value=""/>
 					</div>
 
 					<a class="button" onclick="generate_qr();">Generate QR Code</a>
 				</div>
 
 
-				<br />
-				<br />
-				<br />
+				<br/>
+				<br/>
+				<br/>
+
 				<div id="total_due">
 					<div>Total: <span id="total_bill"></span></div>
 					<div>Tip: <span id="total_tip"></span></div>
 					<div>Grand Total: <span id="grand_total"></span></div>
 				</div>
-				<br />
-				<br />
-				<br />
+				<br/>
+				<br/>
+				<br/>
+
 				<div id="qr_code"></div>
 				<div id="string_code"></div>
 			</div>

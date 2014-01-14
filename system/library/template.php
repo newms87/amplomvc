@@ -33,7 +33,7 @@ class Template extends Library
 
 	public function set_file($file_name)
 	{
-		$file = $this->theme->find_file($file_name . '.tpl', $this->theme_override, $this->root_dir);
+		$file = $this->theme->findFile($file_name . '.tpl', $this->theme_override, $this->root_dir);
 
 		if ($file) {
 			$this->file = $file;
@@ -126,12 +126,12 @@ class Template extends Library
 		}
 	}
 
-	public function find_file($file)
+	public function findFile($file)
 	{
 		if (!preg_match("/\\.tpl\$/", $file)) {
 			$file .= '.tpl';
 		}
 
-		return $this->theme->find_file($file, $this->theme_override, $this->root_dir);
+		return $this->theme->findFile($file, $this->theme_override, $this->root_dir);
 	}
 }

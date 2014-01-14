@@ -3,8 +3,6 @@ class Admin_Controller_Block_Add extends Controller
 {
 	public function index()
 	{
-		$this->language->load('block/add');
-
 		$this->document->setTitle(_l("New Block"));
 
 		if ($this->request->isPost() && $this->validate()) {

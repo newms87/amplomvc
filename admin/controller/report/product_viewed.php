@@ -5,8 +5,6 @@ class Admin_Controller_Report_ProductViewed extends Controller
 	{
 		$this->template->load('report/product_viewed');
 
-		$this->language->load('report/product_viewed');
-
 		$this->document->setTitle(_l("Products Viewed Report"));
 
 		if (isset($_GET['page'])) {
@@ -103,8 +101,6 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 	public function reset()
 	{
-		$this->language->load('report/product_viewed');
-
 		$this->Model_Report_Product->reset();
 
 		$this->message->add('success', _l("Success: You have reset the product viewed report!"));

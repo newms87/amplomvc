@@ -9,8 +9,7 @@ class Cron extends Library
 
 		if (empty($this->settings['cron_last_run'])) {
 			$this->run();
-		}
-		else {
+		} else {
 			$diff = $this->date->diff($this->settings['cron_last_run']);
 
 			//Run Cron every minute (will check task times before executing them)
@@ -47,14 +46,13 @@ class Cron extends Library
 
 				if ($diff->days + $diff->h + $diff->i <= 0) {
 					$msg .= _l("Already ran.");
-				}
-				elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
+				} elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
 					$task['last_run'] = $this->date->now();
 
 					$msg .= _l("Executing %s\r\n", $task['name']);
 
 					$classname = "System_Cron_" . $this->tool->formatClassname($task['file']);
-					$method = $task['method'];
+					$method    = $task['method'];
 
 					if (method_exists($classname, $method)) {
 						$this->$classname->$method();
@@ -70,8 +68,7 @@ class Cron extends Library
 				$msg .= "\r\n\r\n";
 			}
 			unset($task);
-		}
-		else {
+		} else {
 			$msg .= _l("There are no tasks to run.\r\n");
 		}
 
@@ -159,7 +156,7 @@ class Cron extends Library
 				$d_m = $this->diff($_m, $current['m'], 12);
 				$date->setDate($current['y'], $current['m'] - $d_m, 1);
 				$temp = $this->date->getCronUnits($date);
-				$date->setDate($temp['y'],$temp['m'], $temp['t']);
+				$date->setDate($temp['y'], $temp['m'], $temp['t']);
 				$date->setTime(23, 59, 0);
 				continue;
 			}

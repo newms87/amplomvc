@@ -16,8 +16,7 @@ class Catalog_Controller_Block_Cart_Reward
 
 		if ($this->request->isPost()) {
 			$reward_info = $_POST;
-		}
-		else {
+		} else {
 			$reward_info['reward'] = $this->session->get('reward');
 		}
 
@@ -28,7 +27,7 @@ class Catalog_Controller_Block_Cart_Reward
 		$this->data += $reward_info + $defaults;
 
 		$this->data['reward_points'] = $this->customer->getRewardPoints();
-		$this->data['total_points'] = $this->cart->getTotalPoints();
+		$this->data['total_points']  = $this->cart->getTotalPoints();
 
 		$this->response->setOutput($this->render());
 	}

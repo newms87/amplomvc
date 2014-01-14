@@ -13,9 +13,9 @@ class Message extends Library
 	public function add($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['messages'][$type][] = $$message;
+			$this->session->data['messages'][$type][] = $message;
 		} elseif (is_array($message)) {
-			array_walk_recursive($message, function ($value, $key) use($type) {
+			array_walk_recursive($message, function ($value, $key) use ($type) {
 				$_SESSION['messages'][$type][] = $value;
 			});
 		}
@@ -25,14 +25,14 @@ class Message extends Library
 	public function system($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['system_messages'][$type][] = $this->language->get($message);
+			$this->session->data['system_messages'][$type][] = $message;
 		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key, $data) {
 				$_SESSION['system_messages'][$data[1]][] = $data[0]->language->get($value);
 			}, array(
-			        $this,
-			        $type
-			   ));
+				$this,
+				$type
+			));
 		}
 	}
 

@@ -5,8 +5,6 @@ class Catalog_Controller_Block_Cart_Total extends Controller
 	{
 		$this->template->load('block/cart/total');
 
-		$this->language->load('block/cart/total');
-
 		$totals = $this->cart->getTotals();
 
 		foreach ($totals as &$total) {

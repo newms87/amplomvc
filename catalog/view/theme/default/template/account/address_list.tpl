@@ -13,7 +13,7 @@
 					<tr>
 						<td><?= $result['address']; ?></td>
 						<td style="text-align: right;"><a href="<?= $result['update']; ?>"
-						                                  class="button"><?= _l("Edit"); ?></a> &nbsp; <a
+								class="button"><?= _l("Edit"); ?></a> &nbsp; <a
 								href="<?= $result['delete']; ?>" class="button"><?= _l("Delete"); ?></a></td>
 					</tr>
 				</table>

@@ -94,7 +94,7 @@
 	$('#toggle_block_shipping').hide();
 	<? }?>
 
-	$('#the_cart').on('cart_loaded', function() {
+	$('#the_cart').on('cart_loaded', function () {
 		load_block($('#cart_block_total'), 'block/cart/total');
 	});
 </script>

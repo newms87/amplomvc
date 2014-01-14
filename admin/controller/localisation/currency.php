@@ -5,8 +5,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	public function index()
 	{
-		$this->language->load('localisation/currency');
-
 		$this->document->setTitle(_l("Currency"));
 
 		$this->getList();
@@ -14,8 +12,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	public function insert()
 	{
-		$this->language->load('localisation/currency');
-
 		$this->document->setTitle(_l("Currency"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -45,8 +41,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	public function update()
 	{
-		$this->language->load('localisation/currency');
-
 		$this->document->setTitle(_l("Currency"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -76,8 +70,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	public function delete()
 	{
-		$this->language->load('localisation/currency');
-
 		$this->document->setTitle(_l("Currency"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
@@ -175,7 +167,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? _l(" <b>(Default)</b>") : null),
 				'code'          => $result['code'],
 				'value'         => $result['value'],
-				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
+				'date_modified' => $this->date->format($result['date_modified'], 'short'),
 				'selected'      => isset($_GET['selected']) && in_array($result['currency_id'], $_GET['selected']),
 				'action'        => $action
 			);

@@ -28,16 +28,16 @@ class User extends Library
 		//Change User permissions and user ID to the system user
 		$this->temp_user = array(
 			'group_type' => $this->user['group_type'],
-		   'user_id' => $this->user_id,
+			'user_id'    => $this->user_id,
 		);
 
-		$this->user_id = -1;
+		$this->user_id            = -1;
 		$this->user['group_type'] = "Top Administrator";
 	}
 
 	public function logoutSystemUser()
 	{
-		$this->user_id = $this->temp_user['user_id'];
+		$this->user_id            = $this->temp_user['user_id'];
 		$this->user['group_type'] = $this->temp_user['group_type'];
 	}
 
@@ -95,7 +95,7 @@ class User extends Library
 
 	public function logout()
 	{
-		$this->user = null;
+		$this->user    = null;
 		$this->user_id = null;
 
 		$this->session->endTokenSession();
@@ -188,7 +188,7 @@ class User extends Library
 
 	public function generateCode()
 	{
-		return str_shuffle(md5(microtime(true)*rand()));
+		return str_shuffle(md5(microtime(true) * rand()));
 	}
 
 	public function clearCode($user_id)

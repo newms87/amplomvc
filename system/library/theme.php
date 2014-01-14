@@ -22,14 +22,11 @@ class Theme extends Library
 		define('DIR_THEME_IMAGE', DIR_APPLICATION . 'view/theme/' . $this->theme . '/image/');
 
 		if ($this->config->isAdmin()) {
-			$this->settings = $this->load_admin_theme_settings();
-			$this->load_theme_language();
+			$this->settings = $this->loadAdminThemeSettings();
 		} else {
-			$theme_settings_file = $this->find_file('settings.php', $this->theme);
+			$theme_settings_file = $this->findFile('settings.php', $this->theme);
 
-			$this->settings = $this->get_theme_settings($theme_settings_file);
-
-			$this->load_theme_language();
+			$this->getThemeSettings($theme_settings_file);
 		}
 	}
 
@@ -38,7 +35,7 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function get_setting($key)
+	public function getSetting($key)
 	{
 		if (isset($this->settings[$key])) {
 			return $this->settings[$key];
@@ -47,7 +44,7 @@ class Theme extends Library
 		return null;
 	}
 
-	private function get_theme_settings($theme_settings_file, $theme = false)
+	private function getThemeSettings($theme_settings_file, $theme = false)
 	{
 		if (!$theme) {
 			$theme = $this->theme;
@@ -56,7 +53,7 @@ class Theme extends Library
 		if (is_file($theme_settings_file)) {
 			$theme_settings = $this->cache->get('theme_settings.' . $theme);
 
-			if (!$theme_settings || $theme_settings['mod_time'] != filemtime($theme_settings_file)) {
+			if ($theme_settings || $theme_settings['mod_time'] != filemtime($theme_settings_file)) {
 
 				$_ = array();
 
@@ -69,13 +66,13 @@ class Theme extends Library
 				$this->cache->set('theme_settings.' . $theme, $theme_settings);
 			}
 
-			return $theme_settings;
+			$this->settings = $theme_settings;
 		}
 
 		return null;
 	}
 
-	private function load_admin_theme_settings()
+	private function loadAdminThemeSettings()
 	{
 		//We get the Themes here to validate the file modified times for caching
 		$themes = $this->getThemes();
@@ -139,7 +136,7 @@ class Theme extends Library
 
 				$themes[$name] = array(
 					'name'     => $name,
-					'settings' => $this->get_theme_settings($theme_settings_file, $name),
+					'settings' => $this->getThemeSettings($theme_settings_file, $name),
 				);
 			}
 
@@ -149,21 +146,7 @@ class Theme extends Library
 		return $themes;
 	}
 
-	private function load_theme_language()
-	{
-		//Load Positions' Language
-		if (!empty($this->settings['data_positions'])) {
-			foreach ($this->settings['data_positions'] as $key => &$position) {
-				$text = $this->language->get('position_' . $key);
-
-				if ($text != 'position_' . $key) {
-					$position = $text;
-				}
-			}
-		}
-	}
-
-	public function find_file($file, $theme = false, $root_dir = null)
+	public function findFile($file, $theme = false, $root_dir = null)
 	{
 		if ($root_dir && is_dir($root_dir)) {
 			$dir = $root_dir;

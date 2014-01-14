@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 {
 	public function index()
 	{
-		$this->language->load('checkout/checkout');
 		$this->template->load('block/checkout/payment_method');
 
 		if ($this->cart->hasPaymentAddress()) {
@@ -28,7 +27,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 
 			if ($information_info) {
-				$this->data['checkout_terms'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
+				$this->data['checkout_terms']       = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
 				$this->data['checkout_terms_title'] = $information_info['title'];
 			}
 		}
@@ -53,8 +52,6 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 
 	public function validate()
 	{
-		$this->language->load('checkout/checkout');
-
 		$json = array();
 
 		// Validate if payment address has been set.

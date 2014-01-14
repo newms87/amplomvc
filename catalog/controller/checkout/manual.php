@@ -7,8 +7,6 @@ class Catalog_Controller_Checkout_Manual extends Controller
 	public function index()
 	{
 
-		$this->language->load('checkout/manual');
-
 		$json = array();
 
 		if ($this->user->isLogged() && $this->user->can('modify', 'sale/order')) {

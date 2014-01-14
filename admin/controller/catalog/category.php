@@ -3,15 +3,11 @@ class Admin_Controller_Catalog_Category extends Controller
 {
 	public function index()
 	{
-		$this->language->load('catalog/category');
-
 		$this->getList();
 	}
 
 	public function update()
 	{
-		$this->language->load('catalog/category');
-
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['category_id'])) {
@@ -33,8 +29,6 @@ class Admin_Controller_Catalog_Category extends Controller
 
 	public function delete()
 	{
-		$this->language->load('catalog/category');
-
 		if (!empty($_GET['category_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
 
@@ -50,8 +44,6 @@ class Admin_Controller_Catalog_Category extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('catalog/category');
-
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $category_id) {
 				switch ($_GET['action']) {

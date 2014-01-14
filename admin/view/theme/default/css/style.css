@@ -227,12 +227,12 @@ li.inactive > ul.sub_menu {
 	transition: all 0s linear .5s;
 }
 
-ul.child_menu{
-	position:absolute;
-	top:0;
+ul.child_menu {
+	position: absolute;
+	top: 0;
 	left: -9999px;
-	padding:0;
-	margin:0;
+	padding: 0;
+	margin: 0;
 	min-width: 190px;
 	-webkit-transform: scale3d(0, 1, 1);
 	transform: scale3d(0, 1, 1);
@@ -242,7 +242,7 @@ ul.child_menu{
 
 li.hover > ul.child_menu,
 li:hover > ul.child_menu {
-	left:100%;
+	left: 100%;
 	-webkit-transform: scale3d(1, 1, 1) !important;
 	transform: scale3d(1, 1, 1) !important;
 	-webkit-transition: -webkit-transform .2s linear;
@@ -2615,30 +2615,32 @@ td.log_remove .message_box {
 }
 
 /* Subscription View */
-#subscription_view .info{
+#subscription_view .info {
 	margin-left: 20px;
 }
-#subscription_view .product_name{
+
+#subscription_view .product_name {
 	font-size: 20px;
-	font-weight:bold;
+	font-weight: bold;
 }
 
-#subscription_view .description{
+#subscription_view .description {
 	font-size: 16px;
 }
 
-#subscription_view .options{
+#subscription_view .options {
 	padding: 20px 0 0 10px;
 	font-size: 16px;
 }
 
-#subscription_view .option{
+#subscription_view .option {
 	margin-bottom: 5px;
 }
-#subscription_view .option .name{
-	font-weight:bold;
+
+#subscription_view .option .name {
+	font-weight: bold;
 	width: 300px;
-	display:inline-block;
+	display: inline-block;
 }
 
 #subscription_view .total {
@@ -2647,13 +2649,13 @@ td.log_remove .message_box {
 
 #subscription_view .total .price {
 	color: #709D34;
-	font-weight:bold;
+	font-weight: bold;
 	font-size: 30px;
 }
 
-#subscription_view .status{
+#subscription_view .status {
 	font-size: 30px;
-	font-weight:bold;
+	font-weight: bold;
 	border: 2px solid black;
 	border-radius: 10px;
 	padding: 10px 20px;
@@ -2662,31 +2664,33 @@ td.log_remove .message_box {
 }
 
 #subscription_view .status.active,
-#history_list .active > td{
+#history_list .active > td {
 	background-color: #EAF7D9;
 	color: #709D34;
 	border-color: #709D34;
 }
+
 #subscription_view .status.on_hold,
-#history_list .on_hold > td{
+#history_list .on_hold > td {
 	background-color: #FFF5CC;
 	color: #CFAF2E;
 	border-color: #CFAF2E;
 }
+
 #subscription_view .status.cancelled,
-#history_list .cancelled > td{
+#history_list .cancelled > td {
 	background-color: #FFD1D1;
 	color: #7A0A0A;
 	border-color: #7A0A0A;
 }
 
-#history_list .pending > td{
+#history_list .pending > td {
 	border-color: black;
 	color: black;
 	background: lightgrey;
 }
 
-#history_list tr td{
-	border:none;
+#history_list tr td {
+	border: none;
 	padding: 10px;
 }

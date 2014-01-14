@@ -10,7 +10,6 @@
  * Link: http://www.amplocart.com/plugins/dev
  *
  */
-
 class Dev_Setup extends PluginSetup
 {
 	public function install()

@@ -3,8 +3,6 @@ class Admin_Controller_Setting_DbRules extends Controller
 {
 	public function index()
 	{
-		$this->language->load('setting/db_rules');
-
 		$this->document->setTitle(_l("DB Rules"));
 
 		$this->getList();
@@ -12,8 +10,6 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	public function insert()
 	{
-		$this->language->load('setting/db_rules');
-
 		$this->document->setTitle(_l("DB Rules"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -29,8 +25,6 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	public function update()
 	{
-		$this->language->load('setting/db_rules');
-
 		$this->document->setTitle(_l("DB Rules"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -46,8 +40,6 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	public function delete()
 	{
-		$this->language->load('setting/db_rules');
-
 		$this->document->setTitle(_l("DB Rules"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {

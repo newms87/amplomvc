@@ -87,10 +87,9 @@ class DB
 
 			$this->profile[] = array(
 				'query' => $sql,
-				'time' => microtime(true) - $start,
+				'time'  => microtime(true) - $start,
 			);
-		}
-		else {
+		} else {
 			$resource = $this->driver->query($sql);
 		}
 
@@ -195,18 +194,21 @@ class DB
 	public function multiquery($string)
 	{
 		$file_length = strlen($string);
-		$quote_char_list = array("'", "`", '"');
+		$quote_char_list = array(
+			"'",
+			"`",
+			'"'
+		);
 		$in_quote = false;
 		$sql = '';
 		$pos = 0;
 
-		while($pos < $file_length) {
+		while ($pos < $file_length) {
 			$char = $string[$pos];
 			if ($char === '\\') {
 				$pos++;
 				$sql .= $char . $string[$pos];
-			}
-			elseif (in_array($char, $quote_char_list)) {
+			} elseif (in_array($char, $quote_char_list)) {
 				if ($in_quote) {
 					if ($in_quote === $char) {
 						$in_quote = false;
@@ -216,15 +218,12 @@ class DB
 				}
 
 				$sql .= $char;
-			}
-			elseif ($in_quote) {
+			} elseif ($in_quote) {
 				$sql .= $char;
-			}
-			elseif ($char !== ';') {
+			} elseif ($char !== ';') {
 
 				$sql .= $string[$pos];
-			}
-			else {
+			} else {
 				$this->query($sql);
 
 				if ($this->getError()) {
@@ -453,10 +452,9 @@ class DB
 		if (is_resource($value) || is_object($value)) {
 			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller(0, 3));
 			exit;
-		}
-		elseif (is_array($value)) {
+		} elseif (is_array($value)) {
 			$driver = $this->driver;
-			array_walk_recursive($value, function(&$v)use($driver) { $v = $driver->escape($v); });
+			array_walk_recursive($value, function (&$v) use ($driver) { $v = $driver->escape($v); });
 			return $value;
 		}
 

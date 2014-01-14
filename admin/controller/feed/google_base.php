@@ -7,8 +7,6 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 	{
 		$this->template->load('feed/google_base');
 
-		$this->language->load('feed/google_base');
-
 		$this->document->setTitle(_l("Google Base"));
 
 		if ($this->request->isPost() && $this->validate()) {

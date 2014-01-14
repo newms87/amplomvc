@@ -3,8 +3,6 @@ class Admin_Controller_User_UserPermission extends Controller
 {
 	public function index()
 	{
-		$this->language->load('user/user_group');
-
 		$this->document->setTitle(_l("User Permissions"));
 
 		$this->getList();
@@ -12,8 +10,6 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function insert()
 	{
-		$this->language->load('user/user_group');
-
 		$this->document->setTitle(_l("User Permissions"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -43,8 +39,6 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function update()
 	{
-		$this->language->load('user/user_group');
-
 		$this->document->setTitle(_l("Update User Permissions"));
 
 		if ($this->request->isPost() && $this->validateForm()) {

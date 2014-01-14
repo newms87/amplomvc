@@ -1,55 +1,42 @@
 <?php
-
 class Language extends Library
 {
 	private $language_id;
 	private $code;
-	private $default = 'english';
-	private $directory;
-	private $orig_data = array();
 	private $info;
-	private $latest_modified_file = 0;
-	private $last_loaded = '';
-	private $saved_data = null;
-	private $root = DIR_LANGUAGE;
+	private $loaded = array();
 
-	private $loaded_languages = array();
+	public $defaults = array(
+		'id'                     => 0,
+		'code'                   => 'en',
+		'name'                   => 'English',
+		'locale'                 => "en,en-US,en_US.UTF-8,en_US,en-gb,english",
+		'image'                  => 'gb.png',
+		'direction'              => 'ltr',
+		'date_format_short'      => 'm/d/Y',
+		'date_format_medium'     => 'M d, Y',
+		'date_format_long'       => 'l dS F Y',
+		'time_format'            => 'h:i:s A',
+		'datetime_format'        => 'Y-m-d H:i:s',
+		'datetime_format_medium' => 'M d, Y H:i A',
+		'datetime_format_long'   => 'M d, Y H:i:s A A',
+		'datetime_format_full'   => 'D, d M, Y H:i:s',
+		'decimal_point'          => '.',
+		'thousand_point'         => ',',
+		'status'                 => 1,
+	);
 
-	public $data = array();
-
-	public function __construct($registry, $language_id = null, $set_active_language = true, $load_default = true)
+	public function __construct($registry, $language_id = null, $set_session = true)
 	{
 		parent::__construct($registry);
 
 		if (empty($language_id)) {
-			$language = $this->resolve();
+			$this->resolve();
 		} else {
-			$language = $this->getInfo($language_id);
+			$this->setLanguage($language_id);
 		}
 
-		$defaults = array(
-			'date_format_short'      => 'm/d/Y',
-			'date_format_medium'     => 'M d, Y',
-			'date_format_long'       => 'l dS F Y',
-			'time_format'            => 'h:i:s A',
-			'datetime_format'        => 'Y-m-d H:i:s',
-			'datetime_format_medium' => 'M d, Y H:i A',
-			'datetime_format_long'   => 'M d, Y H:i:s A A',
-			'datetime_format_full'   => 'D, d M, Y H:i:s',
-		);
-
-		foreach ($defaults as $key => $default) {
-			if (empty($language[$key])) {
-				$language[$key] = $default;
-			}
-		}
-
-		$this->language_id = $language['language_id'];
-		$this->code        = $language['code'];
-		$this->info        = $language;
-		$this->directory   = $language['directory'];
-
-		if ($set_active_language) {
+		if ($set_session) {
 			$this->session->set('language_code', $this->code);
 
 			//Set as default language for this user for 30 days
@@ -57,15 +44,6 @@ class Language extends Library
 
 			$this->config->set('config_language_id', $this->language_id);
 		}
-
-		if ($load_default) {
-			$this->load($language['filename']);
-		}
-	}
-
-	public function setRoot($root)
-	{
-		$this->root = $root;
 	}
 
 	public function id()
@@ -73,14 +51,15 @@ class Language extends Library
 		return $this->language_id;
 	}
 
-	public function code()
+	public function getLanguage($language_id)
 	{
-		return $this->code;
-	}
+		if (!isset($this->loaded[$language_id])) {
+			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = " . (int)$language_id);
 
-	public function get($key, $return_value = null)
-	{
-		return (isset($this->data[$key]) ? $this->data[$key] : ($return_value === null ? $key : $return_value));
+			$this->loaded[$language_id] = $language + $this->defaults;
+		}
+
+		return $this->loaded[$language_id];
 	}
 
 	public function getLanguages()
@@ -88,254 +67,38 @@ class Language extends Library
 		static $all_loaded = false;
 
 		if (!$all_loaded) {
-			$languages = $this->System_Model_Language->getLanguages();
+			$this->loaded = $this->queryRows("SELECT * FROM " . DB_PREFIX . "language", 'language_id');
 
-			foreach ($languages as $language) {
-				$this->loaded_languages[$language['language_id']] = $language;
+			foreach ($this->loaded as &$loaded) {
+				$loaded += $this->defaults;
 			}
 
 			$all_loaded = true;
 		}
 
-		return $this->loaded_languages;
+		return $this->loaded;
 	}
 
-	public function set($key, $value)
+	public function setLanguage($language)
 	{
-		$this->data[$key] = $value;
-	}
-
-	public function get_latest_modified_file()
-	{
-		return $this->latest_modified_file;
-	}
-
-	public function set_latest_modified_file($time)
-	{
-		if ($time > $this->latest_modified_file) {
-			$this->latest_modified_file = $time;
+		if (!is_array($language)) {
+			$language = $this->getLanguage((int)$language);
 		}
+
+		$this->language_id = $language['language_id'];
+		$this->code        = $language['code'];
+		$this->info        = $language;
 	}
 
-	public function getInfo($key = null, $language_id = null)
+	public function info($key = null, $language_id = null)
 	{
-		if (!empty($language_id)) {
-			if (!isset($loaded_languages[$language_id])) {
-				$loaded_languages[$language_id] = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
-			}
-
-			if (is_null($key)) {
-				return $loaded_languages[$language_id];
-			} else {
-				return isset($loaded_languages[$language_id][$key]) ? $loaded_languages[$language_id][$key] : null;
-			}
-		}
+		$language = !empty($language_id) ? $this->getLanguage($language_id) : $this->info;
 
 		if (is_null($key)) {
-			return $this->info;
+			return $language;
 		} else {
-			return isset($this->info[$key]) ? $this->info[$key] : null;
+			return isset($language[$key]) ? $language[$key] : null;
 		}
-	}
-
-	public function load($filename)
-	{
-		if ($this->last_loaded == $filename) {
-			return;
-		}
-
-		$file = $this->root . $this->directory . '/' . $filename . '.php';
-
-		if (!file_exists($file)) {
-			$file = $this->root . $this->default . '/' . $filename . '.php';
-
-			if (!file_exists($file)) {
-				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller(0, 2));
-				exit();
-			}
-		}
-
-		$this->set_latest_modified_file(filemtime($file));
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		$this->data = $_ + $this->data;
-
-		$this->last_loaded = $filename;
-
-		return $this->data;
-	}
-
-	public function loadFrom($location, $filename)
-	{
-		$temp_root = $this->root;
-
-		if ($location === 'admin') {
-			$this->root = SITE_DIR . "admin/language/";
-		} elseif ($location === 'catalog') {
-			$this->root = SITE_DIR . "catalog/language/";
-		}
-
-		$this->load($filename);
-
-		$this->root = $temp_root;
-	}
-
-	public function loadTemporary($filename, $language_id = null)
-	{
-		if ($language_id && $language_id !== $this->language_id) {
-			$directory = $this->getInfo('directory', $language_id);
-		} else {
-			$directory = $this->directory;
-		}
-
-		$file = $this->root . $directory . '/' . $filename . '.php';
-
-		if (!file_exists($file)) {
-			$file = $this->root . $this->default . '/' . $filename . '.php';
-
-			if (!file_exists($file)) {
-				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller(0, 2));
-				exit();
-			}
-		}
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		$this->saved_data = $this->data;
-
-		$this->data = $_ + $this->data;
-
-		return $this->data;
-	}
-
-	public function unloadTemporary()
-	{
-		$this->data = $this->saved_data;
-	}
-
-	public function fetch($filename, $directory = '')
-	{
-		$directory = !empty($directory) ? $directory : $this->directory;
-
-		$file = $this->root . $directory . '/' . $filename . '.php';
-
-		if (!file_exists($file)) {
-			$file = $this->root . $this->default . '/' . $filename . '.php';
-
-			if (!file_exists($file)) {
-				trigger_error("Could not fetch language $filename in $directory! " . get_caller(0, 2));
-				exit();
-			}
-		}
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		return $_;
-	}
-
-	public function set_orig($key, $value)
-	{
-		$this->orig_data[$key] = $value;
-	}
-
-	public function get_orig($key)
-	{
-		return $this->orig_data[$key];
-	}
-
-	public function format($key)
-	{
-		if (!isset($this->data[$key])) {
-			return $key;
-		}
-
-		if (!isset($this->orig_data[$key])) {
-			$this->orig_data[$key] = $this->data[$key];
-		}
-
-		$values = func_get_args();
-
-		array_shift($values);
-
-		if (!$values) {
-			trigger_error("Language::format requires at least 2 arguments! " . get_caller());
-			return;
-		}
-
-		return $this->data[$key] = vsprintf($this->orig_data[$key], $values);
-	}
-
-	public function system($filename)
-	{
-		$file = DIR_SYSTEM . 'language/' . $this->directory . '/' . $filename . '.php';
-
-		if (!is_file($file)) {
-			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
-
-			if (!is_file($file)) {
-				trigger_error('Could not load system language file ' . $filename . '!' . get_caller(0, 2));
-
-				return null;
-			}
-		}
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		$this->data = $_ + $this->data;
-
-		return $this->data;
-	}
-
-	public function system_fetch($filename, $directory = null)
-	{
-		$directory = !empty($directory) ? $directory : $this->directory;
-
-		$file = DIR_SYSTEM . 'language/' . $directory . '/' . $filename . '.php';
-
-		if (!file_exists($file)) {
-			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
-
-			if (!file_exists($file)) {
-				trigger_error("The langauge file was not found for $filename in $directory! " . get_caller(0, 2));
-				exit();
-			}
-		}
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		return $_;
-	}
-
-	public function plugin($name, $filename)
-	{
-		$file = DIR_PLUGIN . $name . '/language/' . $this->directory . '/' . $filename . '.php';
-
-		if (!file_exists($file)) {
-			$file = DIR_PLUGIN . $name . '/language/' . $this->default . '/' . $filename . '.php';
-
-			if (!file_exists($file)) {
-				trigger_error("The plugin language file $file was not found for the plugin $name: $filename requested!" . get_caller(0, 2));
-			}
-		}
-
-		$_ = array();
-
-		require(_ac_mod_file($file));
-
-		$this->data = $_ + $this->data;
-
-		return $this->data;
 	}
 
 	private function resolve()
@@ -353,24 +116,31 @@ class Language extends Library
 
 		if ($code) {
 			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
-
-			if ($language) {
-				return $language;
-			}
 		}
 
 		//Language requested was invalid, attempt to detect language or revert to default
-		if ($language = $this->detect()) {
-			return $language;
-		} else {
-			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->config->get('config_language') . "' LIMIT 1");
+		if (!$language) {
+			$language = $this->detect();
 
 			//Last Resort Load English or any language
 			if (!$language) {
-				$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language ORDER BY CASE WHEN `code` = 'en' then 1 ELSE 0 END DESC LIMIT 1");
-			}
+				$query = "SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'" .
+					" ORDER BY CASE" .
+					" WHEN `code` = '" . $this->escape($this->config->get('config_language')) . "' THEN 2" .
+					" WHEN `code` = 'en' THEN 1" .
+					" ELSE 0" .
+					" END DESC LIMIT 1";
 
-			return $language;
+				$language = $this->queryRow($query);
+			}
+		}
+
+		if (!$language) {
+			$this->setLanguage($this->defaults);
+		} else {
+			$this->setLanguage($language);
+
+			$this->loaded[$language['language_id']] = $language + $this->defaults;
 		}
 	}
 
@@ -383,11 +153,15 @@ class Language extends Library
 			$languages = $this->cache->get('language.locales');
 
 			if (!$languages) {
-				$language_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'");
+				$language_list = $this->getLanguages();
 
 				$languages = array();
 
 				foreach ($language_list as $language) {
+					if (!$language['status']) {
+						continue;
+					}
+
 					if ($use_macro) {
 						$language['locales'] = explode(',', $language['locale']);
 					}
@@ -399,7 +173,7 @@ class Language extends Library
 			}
 
 			foreach ($languages as $language) {
-				$this->loaded_languages[$language['language_id']] = $language;
+				$this->loaded[$language['language_id']] = $language;
 			}
 
 			$browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);

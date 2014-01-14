@@ -10,7 +10,7 @@ class System_Extension_Cart_Subscription extends CartExtension
 
 		if ($this->cart->isCheckout()) {
 			$this->data['is_checkout'] = true;
-			$this->data['url_cart'] = $this->url->link('cart/cart');
+			$this->data['url_cart']    = $this->url->link('cart/cart');
 		} else {
 			if ($this->request->isPost()) {
 				if (!empty($_POST['subscription_remove'])) {
@@ -18,7 +18,7 @@ class System_Extension_Cart_Subscription extends CartExtension
 
 					$this->subscription->removeFromCart($_POST['subscription_remove']);
 
-					$url_subscription = $this->url->link('product/product','product_id=' . $subscription['id']);
+					$url_subscription = $this->url->link('product/product', 'product_id=' . $subscription['id']);
 					$this->message->add('success', _l("<a href=\"%s\">%s</a> has been removed from your cart.", $url_subscription, $subscription['product']['name']));
 				}
 			}

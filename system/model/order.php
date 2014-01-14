@@ -13,7 +13,7 @@ class System_Model_Order extends Model
 			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
 		}
 
-		$data['date_added'] = $this->date->now();
+		$data['date_added']    = $this->date->now();
 		$data['date_modified'] = $this->date->now();
 
 		$data['invoice_id'] = $this->System_Model_Order->generateInvoiceId($data);
@@ -21,14 +21,14 @@ class System_Model_Order extends Model
 		$order_id = $this->insert('order', $data);
 
 		foreach ($data['products'] as $cart_product) {
-			$order_product = $cart_product + $cart_product['product'];
+			$order_product             = $cart_product + $cart_product['product'];
 			$order_product['order_id'] = $order_id;
 
 			$order_product_id = $this->insert('order_product', $order_product);
 
 			foreach ($order_product['options'] as $product_option_values) {
 				foreach ($product_option_values as $product_option_value) {
-					$product_option_value['order_id'] = $order_id;
+					$product_option_value['order_id']         = $order_id;
 					$product_option_value['order_product_id'] = $order_product_id;
 
 					$this->insert('order_option', $product_option_value);
@@ -37,9 +37,9 @@ class System_Model_Order extends Model
 
 			if (!empty($cart_product['downloads'])) {
 				foreach ($cart_product['downloads'] as $download) {
-					$download['order_id'] = $order_id;
+					$download['order_id']         = $order_id;
 					$download['order_product_id'] = $order_product_id;
-					$download['remaining'] = $download['remaining'] * $cart_product['quantity'];
+					$download['remaining']        = $download['remaining'] * $cart_product['quantity'];
 
 					$this->insert('order_download', $download);
 				}
@@ -66,7 +66,7 @@ class System_Model_Order extends Model
 	public function editOrder($order_id, $data)
 	{
 		if (!isset($data['customer_id'])) {
-			$data['customer_id'] = 0;
+			$data['customer_id']       = 0;
 			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
 		}
 
@@ -89,18 +89,18 @@ class System_Model_Order extends Model
 				$order_product_id = $this->insert('order_product', $product);
 
 				foreach ($product['option'] as $option) {
-					$option['order_id'] = $order_id;
+					$option['order_id']         = $order_id;
 					$option['order_product_id'] = $order_product_id;
-					$option['value'] = $option['option_value'];
+					$option['value']            = $option['option_value'];
 
 					$this->insert('order_option', $option);
 				}
 
 				if (!empty($product['download'])) {
 					foreach ($product['download'] as $download) {
-						$download['order_id'] = $order_id;
+						$download['order_id']         = $order_id;
 						$download['order_product_id'] = $order_product_id;
-						$download['remaining'] = $download['remaining'] * $product['quantity'];
+						$download['remaining']        = $download['remaining'] * $product['quantity'];
 
 						$this->insert('order_download', $download);
 					}
@@ -129,14 +129,12 @@ class System_Model_Order extends Model
 		}
 
 		//Add Entry to Order History
-		$this->language->system('order');
-
 		$history_data = array(
-			'order_id' => $order_id,
+			'order_id'        => $order_id,
 			'order_status_id' => $data['order_status_id'],
-			'comment' => _l("Order Updated by %s", $this->user->info('username')),
-			'notify' => 0,
-			'date_added' => $this->date->now(),
+			'comment'         => _l("Order Updated by %s", $this->user->info('username')),
+			'notify'          => 0,
+			'date_added'      => $this->date->now(),
 		);
 
 		$this->insert('order_history', $history_data);
@@ -148,17 +146,17 @@ class System_Model_Order extends Model
 	{
 		$data = array(
 			'order_status_id' => $order_status_id,
-			'date_modified' => $this->date->now(),
+			'date_modified'   => $this->date->now(),
 		);
 
 		$this->update('order', $data, $order_id);
 
 		$history_data = array(
-			'order_id' => $order_id,
+			'order_id'        => $order_id,
 			'order_status_id' => $order_status_id,
-			'comment' => $comment,
-			'notify' => $notify,
-			'date_added' => $this->date->now(),
+			'comment'         => $comment,
+			'notify'          => $notify,
+			'date_added'      => $this->date->now(),
 		);
 
 		$this->insert('order_history', $history_data);
@@ -207,8 +205,7 @@ class System_Model_Order extends Model
 
 		if (!empty($data['order_id'])) {
 			$where .= " AND o.order_id = " . (int)$data['order_id'];
-		}
-		elseif (!empty($data['order_ids'])) {
+		} elseif (!empty($data['order_ids'])) {
 			$where .= " AND o.order_id IN (" . implode(',', $data['order_ids']) . ")";
 		}
 
@@ -222,11 +219,9 @@ class System_Model_Order extends Model
 
 		if (isset($data['order_status_id'])) {
 			$where .= " AND o.order_status_id = " . (int)$data['order_status_id'];
-		}
-		elseif (!empty($data['order_status_ids'])) {
+		} elseif (!empty($data['order_status_ids'])) {
 			$where .= " AND o.order_status_id IN (" . implode(',', $data['order_status_ids']) . ")";
-		}
-		elseif (!empty($data['!order_status_ids'])) {
+		} elseif (!empty($data['!order_status_ids'])) {
 			$where .= " AND o.order_status_id NOT IN (" . implode(',', $data['!order_status_ids']) . ")";
 		}
 
@@ -307,7 +302,7 @@ class System_Model_Order extends Model
 
 		$result = $this->query($query);
 
-		if($total) {
+		if ($total) {
 			return $result->row['total'];
 		}
 
@@ -319,13 +314,13 @@ class System_Model_Order extends Model
 		//Update Order Status
 		$order_status = array(
 			'order_status_id' => $data['order_status_id'],
-			'date_modified' => $this->date->now(),
+			'date_modified'   => $this->date->now(),
 		);
 
 		$this->update('order', $order_status, $order_id);
 
 		//Add History Entry
-		$data['order_id'] = $order_id;
+		$data['order_id']   = $order_id;
 		$data['date_added'] = $this->date->now();
 
 		return $this->insert('order_history', $data);
@@ -348,8 +343,7 @@ class System_Model_Order extends Model
 
 		if (!empty($data['order_id'])) {
 			$where .= " AND oh.order_id = " . (int)$data['order_id'];
-		}
-		elseif (!empty($data['order_ids'])) {
+		} elseif (!empty($data['order_ids'])) {
 			$where .= " AND oh.order_id IN (" . implode(',', $data['order_ids']) . ")";
 		}
 
@@ -371,7 +365,7 @@ class System_Model_Order extends Model
 
 		$result = $this->query($query);
 
-		if($total) {
+		if ($total) {
 			return $result->row['total'];
 		}
 

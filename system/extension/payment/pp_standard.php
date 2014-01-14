@@ -3,8 +3,6 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 {
 	public function renderTemplate()
 	{
-		$this->language->system('extension/payment/pp_standard');
-
 		if ($this->settings['test']) {
 			$this->data['action']   = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 			$this->data['business'] = $this->settings['test_email'] ? $this->settings['test_email'] : $this->settings['email'];
@@ -70,7 +68,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		$this->data['country']       = $payment_address_info['iso_code_2'];
 		$this->data['email']         = $order['email'];
 		$this->data['invoice']       = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
-		$this->data['lc']            = $this->language->code();
+		$this->data['lc']            = $this->language->info('code');
 		$this->data['notify_url']    = $this->callbackUrl('notify');
 		$this->data['cancel_return'] = $this->url->link('checkout/checkout');
 		$this->data['page_style']    = $this->settings['page_style'];
@@ -113,8 +111,6 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 		//TODO: implement this!
 		echo "This is not implemented yet!";
 		exit;
-
-		$this->language->load('payment/pp_standard');
 
 		$this->config->loadGroup('pp_standard');
 
@@ -184,7 +180,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 			$this->data['country']       = $payment_address_info['iso_code_2'];
 			$this->data['email']         = $subscription['email'];
 			$this->data['invoice']       = $subscription['invoice_id'] . ' - ' . html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
-			$this->data['lc']            = $this->language->code();
+			$this->data['lc']            = $this->language->info('code');
 			$this->data['notify_url']    = $this->url->link('payment/pp_standard/callback');
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
 			$this->data['page_style']    = $this->settings['page_style'];
@@ -333,8 +329,6 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 	//TODO: This is not working. Need to verify PDT process?
 	public function auto_return()
 	{
-		$this->language->load('payment/pp_standard');
-
 		if ($this->settings['debug']) {
 			$this->log->write('PP_STANDARD :: Auto Return called');
 		}
@@ -417,8 +411,8 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 			//TODO: Move this to mail Controller
 			$subject = _l("ATTENTION: There was a critical error while resolving an order payment!");
 			$message = _l("There was an error while verifying the payment for %s from Paypal.", $name) .
-						  _l("The transaction completed, but payment status their order information could not be resolved.") .
-						  _l("<br />Order ID: %s<br />Paid Amount: %s<br />Customer ID: %s<br />Customer Email: %s<br />", $order_id, $amount, $customer_id, $email);
+				_l("The transaction completed, but payment status their order information could not be resolved.") .
+				_l("<br />Order ID: %s<br />Paid Amount: %s<br />Customer ID: %s<br />Customer Email: %s<br />", $order_id, $amount, $customer_id, $email);
 
 			$this->mail->init();
 
@@ -436,8 +430,6 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 
 	public function validate($address, $total)
 	{
-		$this->language->system('extension/payment/pp_standard');
-
 		if (!parent::validate($address, $total)) {
 			return false;
 		}

@@ -28,7 +28,7 @@ final class Registry
 	public function has($key)
 	{
 		return isset($this->data[$key]);
-  	}
+	}
 
 	public function loadClass($class, $return_instance = true)
 	{
@@ -40,14 +40,13 @@ final class Registry
 
 			$path = explode("_", $class);
 
-			array_walk($path, function(&$e, $index){
+			array_walk($path, function (&$e, $index) {
 				$e = preg_replace("/([a-z])([A-Z])/", "\$1_\$2", $e);
 				$e = strtolower($e);
 			});
 
 			$file = SITE_DIR . implode('/', $path) . '.php';
-		}
-		//Resolve non-relative from root paths
+		} //Resolve non-relative from root paths
 		else {
 			//Check in Library
 			$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';

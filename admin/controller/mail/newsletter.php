@@ -4,8 +4,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function index()
 	{
-		$this->language->load('mail/newsletter');
-
 		$this->document->setTitle(_l("Newsletter"));
 
 		$this->getList();
@@ -13,7 +11,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function insert()
 	{
-		$this->language->load('mail/newsletter');
 		$this->document->setTitle(_l("Newsletter"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -31,8 +28,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function update()
 	{
-		$this->language->load('mail/newsletter');
-
 		$this->document->setTitle(_l("Newsletter"));
 
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -48,8 +43,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function batch_update()
 	{
-		$this->language->load('mail/newsletter');
-
 		$this->document->setTitle(_l("Newsletter"));
 
 		if (isset($_GET['selected']) && isset($_GET['action']) && $this->validateModify()) {
@@ -87,8 +80,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	private function getList()
 	{
 		$this->template->load('mail/newsletter_list');
-		$this->language->load('mail/newsletter');
-
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Newsletter"), $this->url->link('mail/newsletter'));
 
@@ -163,8 +154,9 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 		$url = $this->url->getQuery('filter', 'sort', 'order', 'page');
 
-		$this->data['update_actions'] = array('enable'  => 'Enable',
-		                                      'disable' => 'Disable'
+		$this->data['update_actions'] = array(
+			'enable'  => 'Enable',
+			'disable' => 'Disable'
 		);
 
 		$this->data['batch_update'] = $this->url->link('mail/newsletter/batch_update', $url . '&action=%action%');
@@ -191,8 +183,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	private function getForm()
 	{
-		$this->language->load('mail/newsletter');
-
 		$this->template->load('mail/newsletter_form');
 
 		$newsletter_id = $this->data['newsletter_id'] = isset($_GET['newsletter_id']) ? $_GET['newsletter_id'] : 0;
@@ -298,8 +288,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	public function preview()
 	{
 		$store_id = $this->config->get('config_default_store');
-
-		$this->language->load('mail/newsletter');
 
 		if ($this->request->isPost()) {
 			if ($this->validateForm()) {

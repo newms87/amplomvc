@@ -5,8 +5,6 @@ class Admin_Controller_Report_SaleTax extends Controller
 	{
 		$this->template->load('report/sale_tax');
 
-		$this->language->load('report/sale_tax');
-
 		$this->document->setTitle(_l("Tax Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -83,8 +81,8 @@ class Admin_Controller_Report_SaleTax extends Controller
 
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
-				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], 'short'),
+				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'title'      => $result['title'],
 				'orders'     => $result['orders'],
 				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))

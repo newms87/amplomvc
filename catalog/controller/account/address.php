@@ -31,12 +31,10 @@ class Catalog_Controller_Account_Address extends Controller
 					}
 
 					$this->message->add('success', _l("You have successfully added an address to your account!"));
-				}
-				else {
+				} else {
 					$this->message->add('error', $this->address->getError());
 				}
-			}
-			//Update
+			} //Update
 			else {
 				if ($this->customer->editAddress($_GET['address_id'], $_POST)) {
 
@@ -55,8 +53,7 @@ class Catalog_Controller_Account_Address extends Controller
 					}
 
 					$this->message->add('success', _l("You have successfully updated your address."));
-				}
-				else {
+				} else {
 					$this->message->add('error', $this->address->getError());
 				}
 			}
@@ -64,8 +61,7 @@ class Catalog_Controller_Account_Address extends Controller
 			if ($this->request->isAjax()) {
 				$this->response->setOutput($this->message->toJSON());
 				return;
-			}
-			elseif (!$this->message->hasError()) {
+			} elseif (!$this->message->hasError()) {
 				$this->url->redirect('account/address');
 			}
 		}
@@ -109,8 +105,6 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function getList()
 	{
-		$this->language->load('account/address');
-
 		//Page Head
 		$this->document->setTitle(_l("Address Book"));
 
@@ -154,8 +148,6 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function getForm()
 	{
-		$this->language->load('account/address');
-
 		//Page Head
 		$this->document->setTitle(_l("Address Book"));
 
@@ -191,8 +183,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		if ($this->request->isPost()) {
 			$address_info = $_POST;
-		}
-		elseif ($address_id) {
+		} elseif ($address_id) {
 			$address_info = $this->customer->getAddress($_GET['address_id']);
 
 			$address_info['default'] = (int)$this->customer->getDefaultShippingAddressId() === $address_id;

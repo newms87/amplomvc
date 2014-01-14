@@ -8,7 +8,7 @@
 		<div id="<?= $slider_id; ?>" <?= count($slides) > 1 ? "class=\"nivoSlider\"" : ''; ?>>
 			<? foreach ($slides as $slide) { ?>
 				<? if (!empty($slide['thumb'])) { ?>
-					<img src="<?= $slide['thumb']; ?>" />
+					<img src="<?= $slide['thumb']; ?>"/>
 				<? } ?>
 			<? } ?>
 		</div>
@@ -16,7 +16,7 @@
 </div>
 
 <? if (count($slides) > 1) { ?>
-<script type="text/javascript">
-$('#<?= $slider_id; ?>').nivoSlider(<?= $json_params; ?>);
-</script>
+	<script type="text/javascript">
+		$('#<?= $slider_id; ?>').nivoSlider(<?= $json_params; ?>);
+	</script>
 <? } ?>

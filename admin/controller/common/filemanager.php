@@ -24,8 +24,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 	{
 		//Template and Language
 		$this->template->load('common/ckeditor');
-		$this->language->load('common/filemanager');
-
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 
 		$this->data['directory'] = HTTP_IMAGE . 'data/';
@@ -146,8 +144,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function create()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['directory'])) {
@@ -183,8 +179,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function delete()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['path'])) {
@@ -247,8 +241,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function move()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['from']) && isset($_POST['to'])) {
@@ -290,8 +282,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function copy()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['path']) && isset($_POST['name'])) {
@@ -378,8 +368,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function rename()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['path']) && isset($_POST['name'])) {
@@ -421,8 +409,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function upload()
 	{
-		$this->language->load('common/filemanager');
-
 		$json = array();
 
 		if (isset($_POST['directory'])) {

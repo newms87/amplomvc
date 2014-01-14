@@ -12,7 +12,6 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 		$limit = !empty($settings['limit']) ? $settings['limit'] : null;
 
 		//Template and Language
-		$this->language->load('block/product/suggestions');
 		$this->template->load('block/product/suggestions');
 
 		$image_width  = $this->config->get('config_image_related_width');

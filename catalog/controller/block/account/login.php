@@ -4,11 +4,6 @@ class Catalog_Controller_Block_Account_Login extends Controller
 {
 	public function index($settings)
 	{
-		//If Customer is Logged In, display nothing
-		if ($this->customer->isLogged()) {
-			return;
-		}
-
 		if (!empty($settings['redirect'])) {
 			$this->request->setRedirect($settings['redirect']);
 		}

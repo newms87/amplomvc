@@ -5,8 +5,6 @@ class __class_name__ extends Controller
 	{
 		//Template and Language
 		$this->template->load('block/__route__');
-		$this->language->load('block/__route__');
-
 		//The Data
 		$this->data = $settings;
 

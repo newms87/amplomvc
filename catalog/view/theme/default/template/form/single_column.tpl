@@ -1,6 +1,6 @@
 <? if ($show_tag) { ?>
-	<form action="<?= $action; ?>" method="<?= $method; ?>">
-<? } ?>
+<form action="<?= $action; ?>" method="<?= $method; ?>">
+	<? } ?>
 
 	<table id="<?= $form_id; ?>" class="form form_single_column">
 		<? foreach ($fields as $name => $field) { ?>
@@ -44,6 +44,6 @@
 
 	</table>
 
-<? if ($show_tag) { ?>
-	</form>
+	<? if ($show_tag) { ?>
+</form>
 <? } ?>

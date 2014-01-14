@@ -151,8 +151,7 @@ class Catalog_Model_Catalog_Category extends Model
 			foreach ($categories as &$category) {
 				if ($category['parent_id']) {
 					$parent_ref[$category['parent_id']]['children'][$category['category_id']] = & $category;
-				}
-				elseif ((int)$category['parent_id'] === 0) {
+				} elseif ((int)$category['parent_id'] === 0) {
 					$category_tree['children'][$category['category_id']] = & $category;
 				}
 			}

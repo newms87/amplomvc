@@ -85,8 +85,8 @@ class Admin_Controller_Tool_Logs extends Controller
 			$base = $file->getBasename('.txt');
 
 			$file = array(
-				'name' => $base === 'log' ? _l("Default") : ucfirst($base),
-				'href' => $this->url->link('tool/logs', 'log=' . $base),
+				'name'     => $base === 'log' ? _l("Default") : ucfirst($base),
+				'href'     => $this->url->link('tool/logs', 'log=' . $base),
 				'selected' => $base === $log,
 			);
 		}
