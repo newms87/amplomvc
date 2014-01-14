@@ -18,7 +18,11 @@ class Catalog_Model_Block_Login_Google extends Model
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
+		if (strpos($this->url->getPath(), 'account/logout') !== 0) {
+			$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
+		} else {
+			$this->request->setRedirect($this->url->link('account/management'), null, 'gp_redirect');
+		}
 
 		$query = array(
 			'scope'         => "https://www.googleapis.com/auth/plus.profile.emails.read",
@@ -45,45 +49,46 @@ class Catalog_Model_Block_Login_Google extends Model
 		}
 
 		if (empty($_GET['code'])) {
-			$this->error['code'] = _l("sYour access code was unable to be verified");
+			$this->error['code'] = _l("Your access code was unable to be verified");
 			return false;
 		}
 
-		require_once DIR_RESOURCES . "googleAPI/php_client/src/Google_Client.php";
-		require_once DIR_RESOURCES . "googleAPI/php_client/src/contrib/Google_PlusService.php";
-
-		$client = new Google_Client();
-		$client->setApplicationName($this->application_name);
-		$client->setClientId($this->client_id);
-		$client->setClientSecret($this->client_secret);
-		$client->setRedirectUri($this->url->link("block/login/google/connect"));
-
-		try {
-			$client->authenticate();
-		} catch (Exception $e) {
-			$this->error_log->write($e);
-			$this->error['exception'] = _l("There was a problem authenticating your credentials.");
-			return false;
-		}
-
-		$jsonTokens        = $client->getAccessToken();
-		$_SESSION['token'] = $jsonTokens;
-
-		$tokens = json_decode($jsonTokens);
-
-		$query = array(
-			'access_token' => $tokens->access_token,
+		//Authentication
+		$auth_data = array(
+			'code' => $_GET['code'],
+		   'client_id' => $this->client_id,
+		   'client_secret' => $this->client_secret,
+		   'redirect_uri' => $this->url->link("block/login/google/connect"),
+		   'grant_type' => 'authorization_code',
 		);
 
-		$response = $this->curl->get("https://www.googleapis.com/plus/v1/people/me", $query);
+		$response = $this->curl->post("https://accounts.google.com/o/oauth2/token", $auth_data, Curl::RESPONSE_JSON);
 
-		$data = json_decode($response['content']);
+		if (empty($response->access_token)) {
+			$msg = _l("There was a problem authenticating your credentials.");
+			$this->error['exception'] = $msg;
+			$this->error_log->write($msg);
+			return false;
+		}
+
+		$_SESSION['token'] = $response->access_token;
+
+		$query = array(
+			'access_token' => $response->access_token,
+		);
+
+		$data = $this->curl->get("https://www.googleapis.com/plus/v1/people/me", $query, Curl::RESPONSE_JSON);
 
 		if (empty($data)) {
 			$this->error['data'] = _l("There was an error in the response from Google+");
 			return false;
 		}
 
+		return $this->registerCustomer($data);
+	}
+
+	private function registerCustomer($data)
+	{
 		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data->id) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer

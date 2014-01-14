@@ -3,42 +3,50 @@ class Curl extends Library
 {
 	private $response;
 
+	const RESPONSE_TEXT = 'Text';
+	const RESPONSE_JSON = 'JSON';
+	const RESPONSE_DATA = 'Data';
+
 	public function getResponse()
 	{
 		return $this->response;
 	}
 
-	public function get($url, $data = '', $options = array())
+	public function get($url, $data = '', $response_type = self::RESPONSE_TEXT, $options = array())
 	{
 		$url = $this->url->link($url, $data);
 
 		$opts = $options + array(
-				CURLOPT_RETURNTRANSFER => true,
 				// return web page
-				CURLOPT_HEADER         => false,
+				CURLOPT_RETURNTRANSFER => true,
 				// don't return headers
-				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HEADER         => false,
 				// follow redirects
-				CURLOPT_ENCODING       => "",
+				CURLOPT_FOLLOWLOCATION => true,
 				// handle all encodings
+				CURLOPT_ENCODING       => "",
+				// The AmploCart Browser
 				CURLOPT_USERAGENT      => "AmploCart " . AC_VERSION . " - Curl post request",
+				// set referrer on redirect
 				CURLOPT_AUTOREFERER    => true,
-				// set referer on redirect
-				CURLOPT_CONNECTTIMEOUT => 120,
 				// timeout on connect
-				CURLOPT_TIMEOUT        => 120,
+				CURLOPT_CONNECTTIMEOUT => 120,
 				// timeout on response
-				CURLOPT_MAXREDIRS      => 10,
+				CURLOPT_TIMEOUT        => 120,
 				// stop after 10 redirects
+				CURLOPT_MAXREDIRS      => 10,
+				//SSL Verified
 				CURLOPT_SSL_VERIFYPEER => false,
+				//Explain everything
 				CURLOPT_VERBOSE        => 1,
+				//1 time use
 				CURLOPT_FORBID_REUSE   => 1,
 			);
 
-		return $this->call($url, $opts);
+		return $this->call($url, $response_type, $opts);
 	}
 
-	public function post($url, $data, $options = array())
+	public function post($url, $data, $response_type = self::RESPONSE_TEXT, $options = array())
 	{
 		$opts = $options + array(
 				CURLOPT_RETURNTRANSFER => true,
@@ -65,10 +73,10 @@ class Curl extends Library
 				CURLOPT_FORBID_REUSE   => 1,
 			);
 
-		return $this->call($url, $opts);
+		return $this->call($url, $response_type, $opts);
 	}
 
-	public function call($url, $options)
+	public function call($url, $response_type, $options)
 	{
 		//Init Curl
 		$ch = curl_init($url);
@@ -105,6 +113,16 @@ class Curl extends Library
 		}
 
 		//Response
-		return $this->response;
+		switch ($response_type) {
+			case self::RESPONSE_JSON:
+				return @json_decode($this->response['content']);
+
+			case self::RESPONSE_TEXT:
+				return $this->response['content'];
+
+			case self::RESPONSE_DATA:
+			default:
+				return $this->response;
+		}
 	}
 }

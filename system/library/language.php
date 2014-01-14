@@ -119,7 +119,7 @@ class Language extends Library
 		}
 
 		//Language requested was invalid, attempt to detect language or revert to default
-		if (!$language) {
+		if (empty($language)) {
 			$language = $this->detect();
 
 			//Last Resort Load English or any language

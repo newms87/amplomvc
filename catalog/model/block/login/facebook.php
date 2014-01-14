@@ -17,7 +17,11 @@ class Catalog_Model_Block_Login_Facebook extends Model
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
+		if (strpos($this->url->getPath(), 'account/logout') !== 0) {
+			$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
+		} else {
+			$this->request->setRedirect($this->url->link('account/management'), null, 'fb_redirect');
+		}
 
 		$query = array(
 			'app_id'        => $this->app_id,
@@ -56,7 +60,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 
 		$response = $this->curl->get("https://graph.facebook.com/oauth/access_token", $query);
 
-		$values = explode('&', $response['content']);
+		$values = explode('&', $response);
 
 		$tokens = array();
 
@@ -75,10 +79,13 @@ class Catalog_Model_Block_Login_Facebook extends Model
 			'access_token' => $tokens['access_token'],
 		);
 
-		$response = $this->curl->get("https://graph.facebook.com/me", $query);
+		$user_info = $this->curl->get("https://graph.facebook.com/me", $query, Curl::RESPONSE_JSON);
 
-		$user_info = json_decode($response['content']);
+		return $this->registerCustomer($user_info);
+	}
 
+	private function registerCustomer($user_info)
+	{
 		if (empty($user_info)) {
 			$this->error['user_info'] = _l("We were unable to find your user information on Facebook");
 			return false;
