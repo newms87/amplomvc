@@ -5,7 +5,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
-			<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
 		<div class="section">
 			<div class="vtabs"><a href="#tab-return"><?= $tab_return; ?></a><a

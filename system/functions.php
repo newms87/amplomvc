@@ -64,7 +64,7 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 	</a>
 
 	<? if ($first) { ?>
-	<script type='text/javascript'>//<!--
+	<script type='text/javascript'>
 		function open_html_dump(id) {
 			var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
 			document.getElementById(id + '-output').setAttribute('style', 'display:block');

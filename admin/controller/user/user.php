@@ -220,7 +220,7 @@ class Admin_Controller_User_User extends Controller
 			'id'   => $user_id
 		);
 
-		$this->data['contact_template'] = $this->getChild('includes/contact', $contact);
+		$this->data['contact_template'] = $this->renderController('includes/contact', $contact);
 
 
 		if (!$user_id) {

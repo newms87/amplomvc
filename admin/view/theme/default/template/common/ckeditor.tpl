@@ -117,7 +117,7 @@
 		<a id="move" class="button"
 			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= $button_move; ?></a>
 		<a id="copy" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= $button_copy; ?></a>
+			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= _l("Copy"); ?></a>
 		<a id="rename" class="button"
 			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= $button_rename; ?></a>
 		<a id="upload" class="button"
@@ -268,7 +268,7 @@ $('#create').bind('click', function () {
 		$('#dialog').remove();
 
 		html = '<div id="dialog">';
-		html += '<?= $entry_folder; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+		html += '<?= _l("Folder"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 		html += '</div>';
 
 		$('#column-right').prepend(html);
@@ -391,7 +391,7 @@ $('#move').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= $entry_move; ?> <select name="to"></select> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '<?= _l("Move"); ?> <select name="to"></select> <input type="button" value="<?= $button_submit; ?>" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);
@@ -488,13 +488,13 @@ $('#copy').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= $entry_copy; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '<?= _l("Copy"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);
 
 	$('#dialog').dialog({
-		title: '<?= $button_copy; ?>',
+		title: '<?= _l("Copy"); ?>',
 		resizable: false
 	});
 
@@ -585,7 +585,7 @@ $('#rename').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= $entry_rename; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
+	html += '<?= _l("Rename"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);

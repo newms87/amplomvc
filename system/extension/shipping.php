@@ -15,7 +15,7 @@ class System_Extension_Shipping extends System_Extension_Model
 
 	public function get($code)
 	{
-		return $this->loadClass('shipping', $code);
+		return $this->registry->get('System_Extension_Shipping_' . $this->tool->formatClassname($code));
 	}
 
 	public function getActive()
@@ -35,7 +35,7 @@ class System_Extension_Shipping extends System_Extension_Model
 		$extensions = array();
 
 		foreach ($active as $code => $extension) {
-			$extensions[$code] = $this->loadClass('shipping', $code, $extension);
+			$extensions[$code] = $this->get($code);
 		}
 
 		return $extensions;

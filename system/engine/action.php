@@ -142,7 +142,7 @@ final class Action
 			return true;
 		}
 
-		trigger_error("The method $this->method() was not callable in $this->class. Please make sure it is a public method!");
+		trigger_error("The method $this->method() was not callable in $this->class. Please make sure it is a public method!" . get_caller(0,5));
 
 		return false;
 	}

@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Cart_Subscription extends CartExtension
+class Catalog_Controller_Extension_Cart_Subscription extends Controller
 {
 	public function renderCart()
 	{
@@ -63,7 +63,7 @@ class System_Extension_Cart_Subscription extends CartExtension
 		}
 
 		//The Template
-		$this->template->load('block/cart/subscription');
+		$this->template->load('extension/cart/subscription');
 
 		//Render
 		$this->render();

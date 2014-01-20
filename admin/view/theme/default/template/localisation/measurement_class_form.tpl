@@ -8,7 +8,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'measurement.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location="<?= $cancel; ?>";" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a onclick="location="<?= $cancel; ?>";" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -23,14 +23,14 @@
 					<div id="language<?= $language['language_id']; ?>">
 						<table class="form">
 							<tr>
-								<td class="required"> <?= $entry_title; ?></td>
+								<td class="required"> <?= _l("Title"); ?></td>
 								<td><input type="text" name="measurement_class[<?= $language['language_id']; ?>][title]" value="<?= isset($measurement_class[$language['language_id']]) ? $measurement_class[$language['language_id']]['title'] : ''; ?>"/>
 									<? if (isset($error_title[$language['language_id']])) { ?>
 										<span class="error"><?= $error_title[$language['language_id']]; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td class="required"> <?= $entry_unit; ?></td>
+								<td class="required"> <?= _l("Unit"); ?></td>
 								<td><input type="text" name="measurement_class[<?= $language['language_id']; ?>][unit]" value="<?= isset($measurement_class[$language['language_id']]) ? $measurement_class[$language['language_id']]['unit'] : ''; ?>"/>
 									<? if (isset($error_unit[$language['language_id']])) { ?>
 										<span class="error"><?= $error_unit[$language['language_id']]; ?></span>

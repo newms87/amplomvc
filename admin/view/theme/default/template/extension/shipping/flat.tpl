@@ -6,15 +6,15 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="content shipping_flat">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><?= $entry_title; ?></td>
+						<td><?= _l("Title"); ?></td>
 						<td><input type="text" name="flat_title" value="<?= $flat_title; ?>"/></td>
 					</tr>
 					<tr>
@@ -27,7 +27,7 @@
 					</tr>
 					<tr>
 						<td valign="top">
-							<?= $entry_flat_rates; ?><br/><br/>
+							<?= _l("Flat Rates"); ?><br/><br/>
 							<a id="add_flat_rate"><?= $button_add_rate; ?></a>
 						</td>
 						<td>
@@ -50,32 +50,32 @@
 
 									<table class="form rate <?= $key; ?>">
 										<tr>
-											<td><?= $entry_method_title; ?></td>
+											<td><?= _l("Method Title"); ?></td>
 											<td>
 												<input type="hidden" name="flat_rates[<?= $row; ?>][method]" value="<?= $rate['method']; ?>"/>
 												<input type="text" name="flat_rates[<?= $row; ?>][title]" value="<?= $rate['title']; ?>"/>
 											</td>
 										</tr>
 										<tr>
-											<td><?= $entry_cost; ?></td>
+											<td><?= _l("Cost"); ?></td>
 											<td><input type="text" name="flat_rates[<?= $row; ?>][cost]" value="<?= $rate['cost']; ?>"/></td>
 										</tr>
 										<tr>
-											<td><?= $entry_rule; ?></td>
+											<td><?= _l("Rule"); ?></td>
 											<td>
 												<?= $this->builder->build('select', $data_rule_types, "flat_rates[$row][rule][type]", $rate['rule']['type']); ?>
 												<input type="text" name="flat_rates[<?= $row; ?>][rule][value]" value="<?= $rate['rule']['value']; ?>"/>
 											</td>
 										</tr>
 										<tr>
-											<td><?= $entry_tax_class; ?></td>
+											<td><?= _l("Tax Class"); ?></td>
 											<td>
 												<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 												<?= $this->builder->build('select', $data_tax_classes, "flat_rates[$row][tax_class_id]", $rate['tax_class_id']); ?>
 											</td>
 										</tr>
 										<tr>
-											<td><?= $entry_geo_zone; ?></td>
+											<td><?= _l("Geo Zone"); ?></td>
 											<td>
 												<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 												<?= $this->builder->build('select', $data_geo_zones, "flat_rates[$row][geo_zone_id]", $rate['geo_zone_id']); ?>

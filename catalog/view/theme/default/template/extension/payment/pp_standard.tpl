@@ -1,5 +1,5 @@
 <? if ($testmode) { ?>
-	<div class="message_box warning"><?= $text_testmode; ?></div>
+	<div class="message_box warning"><?= _l("This payment method is in sandbox mode. You will not be charged for your purchase"); ?></div>
 <? } ?>
 <form action="<?= $action; ?>" method="post" target="_blank">
 	<input type="hidden" name="cmd" value="_cart"/>

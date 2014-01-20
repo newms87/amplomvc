@@ -45,7 +45,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="3"><?= $text_no_results; ?></td>
+								<td class="center" colspan="3"><?= _l("There are no results to display."); ?></td>
 							</tr>
 						<? } ?>
 					</tbody>

@@ -71,7 +71,7 @@ abstract class Controller
 		}
 	}
 
-	protected function getChild($child, $parameters = array())
+	protected function renderController($child, $parameters = array())
 	{
 		$action = new Action($this->registry, $child, $parameters);
 
@@ -108,7 +108,7 @@ abstract class Controller
 		} else {
 			//Render Dependencies
 			foreach ($this->children as $child) {
-				$this->data[basename($child)] = $this->getChild($child);
+				$this->data[basename($child)] = $this->renderController($child);
 			}
 		}
 

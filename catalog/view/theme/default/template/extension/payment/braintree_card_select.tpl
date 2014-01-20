@@ -1,7 +1,7 @@
 <div id="braintree_card_select">
 	<? if (empty($cards)) { ?>
-		<h3><?= $text_no_cards; ?></h3>
-		<a class="register_card button subscribe" href="<?= $register_card; ?>"><?= $button_add_card; ?></a>
+		<h3><?= _l("Please register a card."); ?></h3>
+		<a class="register_card button subscribe" href="<?= $register_card; ?>"><?= _l("Add Card"); ?></a>
 	<? } else { ?>
 		<div id="braintree_card_list" class="card_list noselect">
 			<input type="hidden" name="payment_method_id" value="braintree"/>
@@ -22,7 +22,7 @@
 					<? } ?>
 				</div>
 			<? } ?>
-			<a class="new_card add_slide" href="<?= $register_card; ?>"><?= $button_add_card; ?></a>
+			<a class="new_card add_slide" href="<?= $register_card; ?>"><?= _l("Add Card"); ?></a>
 		</div>
 	<? } ?>
 </div>

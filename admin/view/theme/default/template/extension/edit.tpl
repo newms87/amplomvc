@@ -11,8 +11,8 @@
 			</h1>
 
 			<div class="buttons">
-				<a onclick="$('#extension_editor').submit()" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a onclick="$('#extension_editor').submit()" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">

@@ -34,14 +34,14 @@
 		<td><label for="login_redirect"><?= _l("Login Redirection URL:"); ?></label></td>
 		<td>
 			<input id="login_redirect" type="text" name="settings[login_redirect]" value="<?= $login_redirect; ?>"/>
-			<label for="login_redirect" class="janrain_label_desc"><?= $entry_login_redirect_description; ?></label>
+			<label for="login_redirect" class="janrain_label_desc"><?= _l("Login Redirect Description"); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<td><label for="logout_redirect"><?= _l("Logout Redirection URL:"); ?></label></td>
 		<td>
 			<input id="logout_redirect" type="text" name="settings[logout_redirect]" value="<?= $logout_redirect; ?>"/>
-			<label for="logout_redirect" class="janrain_label_desc"><?= $entry_logout_redirect_description; ?></label>
+			<label for="logout_redirect" class="janrain_label_desc"><?= _l("Logout Redirect Description"); ?></label>
 		</td>
 	</tr>
 	<tr>

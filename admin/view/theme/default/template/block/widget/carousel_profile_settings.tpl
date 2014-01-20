@@ -1,13 +1,13 @@
 <? foreach ($profile_settings as $row => $profile_setting) { ?>
 	<div data-extend="tab-profile-setting-<?= $row; ?>">
-		<h2><?= $text_carousel_settings; ?></h2>
+		<h2><?= _l("Carousel Settings"); ?></h2>
 		<table class="form">
 			<tr>
-				<td><?= $entry_pauseTime; ?></td>
+				<td><?= _l("Pause Time"); ?></td>
 				<td><input type="text" size="2" name="profile_settings[<?= $row; ?>][params][pauseTime]" value="<?= $profile_setting['params']['pauseTime']; ?>"/></td>
 			</tr>
 			<tr>
-				<td><?= $entry_animSpeed; ?></td>
+				<td><?= _l("Animation Speed"); ?></td>
 				<td><input type="text" size="2" name="profile_settings[<?= $row; ?>][params][animSpeed]" value="<?= $profile_setting['params']['animSpeed']; ?>"/></td>
 			</tr>
 		</table>

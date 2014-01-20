@@ -5,40 +5,40 @@
 
 		<div class="section">
 			<form action="<?= $submit; ?>" method="POST" id="braintree-payment-form">
-				<h2><?= $text_customer_information; ?></h2>
+				<h2><?= _l("Customer Information"); ?></h2>
 
 				<p>
-					<label for="firstname"><?= $entry_firstname; ?></label>
+					<label for="firstname"><?= _l("First Name"); ?></label>
 					<input type="text" name="firstname" id="firstname" value="<?= $firstname; ?>"/>
 				</p>
 
 				<p>
-					<label for="lastname"><?= $entry_lastname; ?></label>
+					<label for="lastname"><?= _l("Last Name"); ?></label>
 					<input type="text" name="lastname" id="lastname" value="<?= $lastname; ?>"/>
 				</p>
 
 				<p>
-					<label for="postcode"><?= $entry_postcode; ?></label>
+					<label for="postcode"><?= _l("Postal Code"); ?></label>
 					<input type="text" name="postcode" id="postcode" value="<?= $postcode; ?>"/>
 				</p>
 
-				<h2><?= $text_credit_card; ?></h2>
+				<h2><?= _l("Credit Card Details"); ?></h2>
 
 				<p>
-					<label for="card_number"><?= $entry_card_number; ?></label>
+					<label for="card_number"><?= _l("Card Number"); ?></label>
 					<input id="card_number" type="text" size="20" autocomplete="off" data-encrypted-name="number"/>
 				</p>
 
 				<p>
-					<label for="cvv"><?= $entry_cvv; ?></label>
+					<label for="cvv"><?= _l("3 or 4 digit CVV"); ?></label>
 					<input id="cvv" type="text" size="4" autocomplete="off" data-encrypted-name="cvv"/>
 				</p>
 
 				<p>
-					<label for="expiration"><?= $entry_expiration; ?></label>
+					<label for="expiration"><?= _l("Expiration Date"); ?></label>
 					<input id="expiration" type="text" class="center" size="2" maxlength="2" data-encrypted-name="month"/> / <input type="text" class="center" size="4" maxlength="4" data-encrypted-name="year"/>
 				</p>
-				<input class="button subscribe" id="register_card_submit" type="submit" value="<?= $button_submit; ?>"/>
+				<input class="button subscribe" id="register_card_submit" type="submit" value="<?= _l("Submit"); ?>"/>
 			</form>
 		</div>
 	</div>

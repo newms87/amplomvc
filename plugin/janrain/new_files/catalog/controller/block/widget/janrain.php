@@ -60,7 +60,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 
 		$this->data['janrain_lang']      = 'en';
 		$janrain_site                    = 'https://' . $application_domain . '.rpxnow.com/';
-		$this->data['janrain_token_url'] = $this->url->link('block/widget/janrain/janrain_auth');;
+		$this->data['janrain_token_url'] = $this->url->link('block/widget/janrain/janrain_auth');
 
 		// Janrain Engage Application name
 		$this->data['application_domain'] = $application_domain;

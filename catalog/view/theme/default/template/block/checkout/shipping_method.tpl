@@ -1,12 +1,12 @@
 <? if (!empty($no_shipping_address)) { ?>
-	<h2><?= $text_no_shipping_address; ?></h2>
+	<h2><?= _l("Please select a delivery address.");; ?></h2>
 
 <? } elseif (!empty($cart_error_shipping_method)) { ?>
 	<h2><?= $cart_error_shipping_method; ?></h2>
 
 	<? if (!empty($allowed_shipping_zones)) { ?>
 		<br/>
-		<h2><?= $text_zone_allowed; ?></h2>
+		<h2><?= _l("We deliver to the following locations:"); ?></h2>
 		<div class="allowed_zone_list">
 			<? foreach ($allowed_shipping_zones as $i => $geo_zone) { ?>
 				<span

@@ -13,11 +13,12 @@ class PrettyLanguage
 
 	public function lang_replace_global()
 	{
-		$ext   = array('php');
-		$files = $this->get_all_files_r(SITE_DIR . 'catalog/controller/', $ext);
+		$current_match = !empty($_POST['current_match']) ? $_POST['current_match'] : false;
+		$current_value = !empty($_POST['current_value']) ? $_POST['current_value'] : false;
+		$replace_all = !empty($_POST['replace_all']);
 
-		$_ = array();
-		require(SITE_DIR . 'catalog/language/english/english.php');
+		$ext   = array('tpl');
+		$files = $this->get_all_files_r(SITE_DIR . 'plugin/dev/', $ext);
 
 		foreach ($files as $file) {
 
@@ -29,32 +30,38 @@ class PrettyLanguage
 
 			$new_lines = array();
 
-			$regx = "/(['\"])(" . implode('|', array_keys($_)) . ")['\"]/";
+			$regx = "/<\\?=\\s*\\\$text_([a-z_]+);\\s*\\?>/";
 
 			foreach ($lines as $num => $line) {
 				$matches = null;
 				if (preg_match_all($regx, $line, $matches)) {
+					foreach ($matches[1] as $match) {
+						if (!$current_value) {
+							$lines[$num] .= " <---- REPLACE";
+							?>
 
-					foreach ($matches[2] as $key => $match) {
-						$quote = $matches[1][0];
+							<html><head>
+									<body>
+										<? $this->print_lines($orig_lines, $lines, false, true); ?>
+										<form action="" method="post">
+											<input type="text" name="current_match" value="<?= $match; ?>" />
+											<input type="text" name="current_value" value="<?= ucfirst($match); ?>" id="replace_in" />
+											<input type="checkbox" id="replace_all" name="replace_all" value="1" /> <label for="replace_all">Replace All?</label>
+											<input type="submit" value="Replace" />
+										</form>
+										<script type="text/javascript">document.getElementById("replace_in").focus();</script>
+									</body>
+							</head></html>
+						<? exit;}
 
-						$line = str_replace("\$this->_($quote$match$quote)", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\")", $line);
-						$line = preg_replace("/\\\$this->message->add\\(['\"](warning|notify|success|error)['\"],\\s*$quote$match$quote\\)/", "\\\$this->message->add('$1', _l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\"))", $line);
+						if ($match === $current_match && $replace_all !== 'replaced') {
+							if (!$replace_all) $replace_all = 'replaced';
 
-						$pos = strpos(trim($line), "\$this->_($quote$match$quote,");
-
-						if ($pos === 0) {
-							echo "Place in Template<br>";
-							$this->pl($num, trim(str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line)));
-						} elseif ($pos !== false) {
-							$line = str_replace("\$this->_($quote$match$quote,", "_l(\"" . str_replace("\\'", "'", addslashes($_[$match])) . "\",", $line);
+							$line = preg_replace("/<\\?=\\s*\\\$text_" . $match . ";\\s*\\?>/", "<?= _l(\"" . $current_value . "\"); ?>", $line);
 						}
 					}
 
-					if ($line === $orig_lines[$num]) {
-						echo "Unresolved<br>";
-						$this->pl($num, $line);
-					} else {
+					if ($line !== $lines[$num]) {
 						$count++;
 					}
 				}
@@ -68,6 +75,11 @@ class PrettyLanguage
 				file_put_contents($file, implode("\n", $new_lines));
 			} else {
 				echo "<div style=\"color:grey\">nothing to do $file</div>";
+			}
+
+			if ($replace_all === 'replaced') { ?>
+<script>location = '';</script>
+				<? exit;
 			}
 		}
 	}
@@ -814,7 +826,7 @@ class PrettyLanguage
 		}
 	}
 
-	public function get_all_files_r($dir, $ignore = array(), $ext = array('php'), $depth = 0)
+	public function get_all_files_r($dir, $ext = array('php'), $ignore = array(), $depth = 0)
 	{
 		if ($depth > 20) {
 			echo "we have too many recursions!";

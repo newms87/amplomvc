@@ -1,9 +1,16 @@
 <?php
-abstract class System_Extension_Model extends Model
+final class System_Extension_Model extends Model
 {
 	private $extensions;
 
-	protected function _updateExtension($type, $code, $data)
+	public function extensionExists($type, $code)
+	{
+		$this->getExtensions($type);
+
+		return isset($this->extensions[$type][$code]);
+	}
+
+	public function updateExtension($type, $code, $data)
 	{
 		$where = array(
 			'type' => $type,
@@ -13,9 +20,63 @@ abstract class System_Extension_Model extends Model
 		$data['settings'] = !empty($data['settings']) ? serialize($data['settings']) : '';
 
 		$this->update('extension', $data, $where);
+
+		$this->cache->delete('extension.' . $type);
 	}
 
-	protected function getExtension($type, $code)
+	public function install($type, $code)
+	{
+		if (!$this->user->can('modify', 'extension/' . $type)) {
+			$this->error['permission'] = _l("You do not have permission to modify the %s extensions.", ucfirst($type));
+			return false;
+		}
+
+		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'access', "$type/$code");
+		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'modify', "$type/$code");
+
+		$data = array(
+			'type'       => $type,
+			'code'       => $code,
+			'title'      => $this->codeTitle($code),
+			'settings'   => '',
+			'sort_order' => 0,
+			'status'     => 1,
+		);
+
+		$extension = $this->registry->get('System_Extension_' . $type . '_' . $code);
+
+		if (method_exists($extension, 'install')) {
+			$extension->install();
+		}
+
+		$this->cache->delete('extension.' . $type);
+
+		return $this->insert('extension', $data);
+	}
+
+	public function uninstall($type, $code, $full = true)
+	{
+		if ($full) {
+			$extension = $this->registry->get('System_Extension_' . $type . '_' . $code);
+
+			if (method_exists($extension, 'uninstall')) {
+				$extension->uninstall();
+			}
+		}
+
+		$where = array(
+			'type' => $type,
+			'code' => $code,
+		);
+
+		$this->delete('extension', $where);
+
+		$this->cache->delete('extension.' . $type);
+
+		return true;
+	}
+
+	public function getExtension($type, $code)
 	{
 		if ($this->extensionExists($type, $code)) {
 			return $this->extensions[$type][$code];
@@ -24,7 +85,8 @@ abstract class System_Extension_Model extends Model
 		return null;
 	}
 
-	protected function getExtensions($type, $filter = array())
+	//TODO: Add caching...
+	public function getExtensions($type, $filter = array())
 	{
 		if (!isset($this->extensions[$type])) {
 			$extensions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "' ORDER BY sort_order ASC", 'code');
@@ -52,7 +114,7 @@ abstract class System_Extension_Model extends Model
 			foreach ($extensions as $code => &$extension) {
 				//The file does not exist
 				if (!isset($extension['installed'])) {
-					$this->uninstallExtension($type, $code, false);
+					$this->uninstall($type, $code, false);
 					unset($extensions[$code]);
 					continue;
 				}
@@ -124,78 +186,12 @@ abstract class System_Extension_Model extends Model
 		return $extensions;
 	}
 
-	protected function extensionExists($type, $code)
+	public function getTotal($type, $filter = array())
 	{
-		$this->getExtensions($type);
+		unset($filter['start']);
+		unset($filter['limit']);
 
-		return isset($this->extensions[$type][$code]);
-	}
-
-	protected function installExtension($type, $code)
-	{
-		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'access', "$type/$code");
-		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'modify', "$type/$code");
-
-		$data = array(
-			'type'       => $type,
-			'code'       => $code,
-			'title'      => $this->codeTitle($code),
-			'settings'   => '',
-			'sort_order' => 0,
-			'status'     => 1,
-		);
-
-		$extension = $this->loadClass($type, $code, $data);
-
-		if (method_exists($extension, 'install')) {
-			$extension->install();
-		}
-
-		$this->insert('extension', $data);
-	}
-
-	protected function uninstallExtension($type, $code, $full = true)
-	{
-		if ($full) {
-			$extension = $this->loadClass($type, $code);
-
-			if (method_exists($extension, 'uninstall')) {
-				$extension->uninstall();
-			}
-		}
-
-		$where = array(
-			'type' => $type,
-			'code' => $code,
-		);
-
-		$this->delete('extension', $where);
-	}
-
-	protected function loadClass($type, $code, $info = null)
-	{
-		require_once(_ac_mod_file(DIR_SYSTEM . 'extension/extension.php'));
-
-		$ext_file = DIR_SYSTEM . 'extension/' . $type . '/' . $code . '.php';
-
-		if (!is_file($ext_file)) {
-			$this->message->add('warning', _l("Unable to load %s because %s was not found.", $code, $ext_file));
-			return null;
-		}
-
-		require_once(_ac_mod_file($ext_file));
-
-		$class = 'System_Extension_' . $this->tool->formatClassname($type) . '_' . $this->tool->formatClassname($code);
-
-		$extension = new $class($this->registry);
-
-		if (!$info) {
-			$info = $this->getExtension($type, $code);
-		}
-
-		$extension->setInfo($info);
-
-		return $extension;
+		return count($this->getExtensions($type, $filter));
 	}
 
 	private function codeTitle($code)

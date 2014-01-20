@@ -79,7 +79,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="9"><?= $text_no_results; ?></td>
+								<td class="center" colspan="9"><?= _l("There are no results to display."); ?></td>
 							</tr>
 						<? } ?>
 					</tbody>

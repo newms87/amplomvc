@@ -85,7 +85,7 @@ switch ($js) {
 		$errors    = json_encode($args[0]);
 		$script_id = "script" . uniqid(); ?>
 
-		<script id="<?= $script_id; ?>" type="text/javascript">//<!--
+		<script id="<?= $script_id; ?>" type="text/javascript">
 			var errors = <?=$errors;?>;
 			var error_holder = $('#<?= $script_id; ?>').parent();
 

@@ -1,6 +1,6 @@
 <div id="list_grid_toggle">
-	<span><?= $text_display; ?></span>
-	<a id="toggle_list"><?= $text_list; ?></a> <b>/</b> <a class="active" id="toggle_grid"><?= $text_grid; ?></a>
+	<span><?= _l("Display"); ?></span>
+	<a id="toggle_list"><?= _l("List"); ?></a> <b>/</b> <a class="active" id="toggle_grid"><?= _l("Grid"); ?></a>
 </div>
 
 <div id="catalog_list" class="grid">
@@ -37,7 +37,7 @@
 
 					<? if ($show_price_tax) { ?>
 						<br/>
-						<span class="price-tax"><?= $text_tax; ?> <?= $product['tax']; ?></span>
+						<span class="price-tax"><?= _l("Tax:"); ?> <?= $product['tax']; ?></span>
 					<? } ?>
 				</div>
 			<? } ?>

@@ -19,7 +19,7 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 
 		//Template Data
 		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
-		$this->data['data_braintree_plans'] = $this->System_Extension_Payment->get('braintree')->getPlans();
+		$this->data['data_braintree_plans'] = $this->System_Extension_Payment_Braintree->getPlans();
 
 		$this->data['data_modes'] = array(
 			'sandbox' => _l("Test Mode"),

@@ -1,6 +1,6 @@
 <html dir="ltr" lang="en">
 	<head>
-		<title><?= $text_shipping_return_title; ?></title>
+		<title><?= _l("Shipping / Return Policies"); ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	</head>
 	<body>

@@ -14,7 +14,7 @@
 				<table class="form">
 					<tr>
 						<td>
-							<label><?= $entry_backup; ?></label>
+							<label><?= _l("Backup"); ?></label>
 							<input type="submit" class="button" name="site_backup" value="<?= $button_backup; ?>"/>
 							<br/><br/>
 							<input type="submit" class="button" name="sync_file" value="<?= $button_sync_file; ?>"/>
@@ -26,7 +26,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= $entry_restore; ?></td>
+						<td><?= _l("Restore"); ?></td>
 						<td>
 							<? foreach ($data_backup_files as $file) { ?>
 								<span class="radio_button">
@@ -53,7 +53,7 @@
 				<table class="form">
 					<tr>
 						<td>
-							<label><?= $entry_execute_file; ?></label>
+							<label><?= _l("Execute File"); ?></label>
 							<input type="submit" class="button" name="execute_file" value="<?= $button_execute_file; ?>"/>
 							<br/><br/>
 							<input type="submit" class="button" name="execute_sync_file" value="<?= $button_execute_sync_file; ?>"/>

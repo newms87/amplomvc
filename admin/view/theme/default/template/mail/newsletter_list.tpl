@@ -11,7 +11,7 @@
 			</div>
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>
-				<a onclick="do_batch_action('copy')" class="button"><?= $button_copy; ?></a>
+				<a onclick="do_batch_action('copy')" class="button"><?= _l("Copy"); ?></a>
 			</div>
 		</div>
 		<div class="section">

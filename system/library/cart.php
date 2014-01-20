@@ -145,7 +145,7 @@ class Cart extends Library
 			$count += $item['quantity'];
 		}
 
-		return $count;;
+		return $count;
 	}
 
 	//TODO: Need to implement a more dynamic cart system to incorporate other cart types (eg: subscriptions, user_custom_types, etc..)
@@ -461,7 +461,7 @@ class Cart extends Library
 				}
 
 				unset($cart_products[$key]);
-				$this->remove(self::PRODUCTS, $key);
+				$this->removeItem(self::PRODUCTS, $key);
 
 				continue;
 			}

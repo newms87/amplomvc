@@ -1,24 +1,22 @@
 <?php
 class System_Extension_Cart extends Controller
 {
-	public function __construct($registry)
+	public function get($code)
 	{
-		parent::__construct($registry);
-
-		require_once(DIR_SYSTEM . "extension/cart_extension.php");
+		return $this->registry->get("Catalog_Controller_Extension_Cart_" . $code);
 	}
 
 	public function renderCarts()
 	{
-		$carts = $this->tool->get_files_r(DIR_SYSTEM . "extension/cart/", array('php'), FILELIST_STRING);
+
+		//TODO: Should only get installed Cart extensions...
+		$carts = $this->tool->get_files_r(SITE_DIR . "catalog/controller/extension/cart/", array('php'), FILELIST_STRING);
 
 		$inline = '';
 		$extend = '';
 
 		foreach ($carts as $cart) {
-			$classname = "System_Extension_Cart_" . pathinfo($cart, PATHINFO_FILENAME);
-
-			$class = $this->$classname;
+			$class = $this->get(pathinfo($cart, PATHINFO_FILENAME));
 
 			if (method_exists($class, 'renderCart')) {
 				$class->renderCart();

@@ -170,7 +170,7 @@
 									<? $this->builder->setConfig(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_return_policies, 'return_policy_id', $return_policy_id); ?>
 								<? } ?>
-								<p><?= $text_add_return_policy; ?></p>
+								<p><?= _l("Add"); ?> <a href="<?= $add_return_policy; ?>" target="_blank"><?= _l("Return Policy"); ?></p>
 							</td>
 						</tr>
 						<tr>
@@ -186,7 +186,7 @@
 									<? $this->builder->setConfig(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_shipping_policies, 'shipping_policy_id', $shipping_policy_id); ?>
 								<? } ?>
-								<p><?= $text_add_shipping_policy; ?></p>
+								<p><?= _l("Add"); ?> <a href="<?= $add_shipping_policy; ?>" target="_blank"><?= _l("Shipping Policy"); ?></p>
 							</td>
 						</tr>
 						<tr>

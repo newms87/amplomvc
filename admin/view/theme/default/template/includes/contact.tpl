@@ -31,7 +31,7 @@
 								<li>
 									<input type="text" name="contact[<?= $row; ?>][phone][<?= $key; ?>][number]" value="<?= is_array($phone) ? $phone['number'] : $phone->number; ?>"/>
 									<?= $this->builder->build('select', $phone_types, "contact[$row][phone][$key][type]", is_array($phone) ? $phone['type'] : $phone->type); ?>
-									<a onclick="$(this).parent().remove()"><?= $button_remove_phone; ?></a>
+									<a onclick="$(this).parent().remove()"><?= _l("Remove");_phone; ?></a>
 								</li>
 							<?
 							}
@@ -82,7 +82,7 @@
 		html = '<li>';
 		html += '	<input type="text" name="contact[%row%][phone][%phonerow%][number]" />';
 		html += "	<?= $this->builder->build('select',$phone_types,"contact[%row%][phone][%phonerow%][type]"); ?>";
-		html += '	<a onclick="$(this).parent().remove()"><?= $button_remove_phone; ?></a>';
+		html += '	<a onclick="$(this).parent().remove()"><?= _l("Remove");_phone; ?></a>';
 		html += '</li>';
 		return html.replace(/%row%/g, row).replace(/%phonerow%/g, phonerow);
 	}

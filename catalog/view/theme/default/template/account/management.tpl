@@ -59,7 +59,7 @@
 							</div>
 							<div class="clear inactive"><?= $text_subscription_inactive; ?></div>
 							<a href="<?= $subscription['edit']; ?>" class="clear reactivate small button"><?= $text_edit_cancelled; ?></a>
-							<a href="<?= $subscription['remove']; ?>" class="small button delete"><?= $button_remove; ?></a>
+							<a href="<?= $subscription['remove']; ?>" class="small button delete"><?= _l("Remove"); ?></a>
 						</div>
 					<? } ?>
 				<? } ?>
@@ -74,7 +74,7 @@
 	<div class="clear buttons">
 		<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
 		<div class="right">
-			<input type="submit" value="<?= $button_save; ?>" class="button"/>
+			<input type="submit" value="<?= _l("Save"); ?>" class="button"/>
 		</div>
 	</div>
 

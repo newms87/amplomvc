@@ -8,8 +8,8 @@
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'total.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
+						href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 			</div>
 			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">

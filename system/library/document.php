@@ -267,7 +267,7 @@ class Document extends Library
 		foreach ($scripts as $script) {
 			if (strpos($script, 'local:') === 0) {
 				if (is_file($file = substr($script, 6))) {
-					$html .= "<script type=\"text/javascript\">//<!--\r\n";
+					$html .= "<script type=\"text/javascript\">\r\n";
 					ob_start();
 					include($file);
 					$html .= ob_get_clean();

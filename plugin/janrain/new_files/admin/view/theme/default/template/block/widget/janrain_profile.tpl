@@ -32,7 +32,7 @@
 				</td>
 				<td class="center"><input type="text" name="janrain_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 				<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
-						class="button"><span><?= $button_remove; ?></span></a></td>
+						class="button"><span><?= _l("Remove"); ?></span></a></td>
 			</tr>
 		</tbody>
 		<? $module_row++; ?>

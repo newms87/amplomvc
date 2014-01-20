@@ -140,7 +140,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="10"><?= $text_no_results; ?></td>
+								<td class="center" colspan="10"><?= _l("There are no results to display."); ?></td>
 							</tr>
 						<? } ?>
 					</tbody>

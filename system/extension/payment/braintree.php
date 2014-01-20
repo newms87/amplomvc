@@ -1,29 +1,9 @@
 <?php
-class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
+class System_Extension_Payment_Braintree extends System_Extension_Payment
 {
 	private $cards;
 	private $bt_customer;
 	private $init = false;
-
-	public function renderTemplate()
-	{
-		//Entry Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-		$this->data['cards']          = $this->customer->getMeta('braintree_cards');
-
-		$this->data['card_select'] = $this->cardSelect($this->customer->getMeta('default_payment_key'));
-
-		//Action Buttons
-		$this->data['confirm'] = $this->confirmUrl();
-
-		$this->data['user_logged'] = $this->customer->isLogged();
-
-		//The Template
-		$this->template->load('payment/braintree');
-
-		//Render
-		$this->render();
-	}
 
 	public function charge($transaction)
 	{
@@ -56,25 +36,25 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 	{
 		if (!$this->initAPI()) {
 			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id'));
-			$this->message->add('warning', _l("There was a problem while processing your transaction. Please choose a different Payment Method, or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
+			$this->error = _l("There was a problem while processing your transaction. Please choose a different Payment Method, or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
 			$this->error_log->write(__METHOD__ . ": Failed to load Braintree API.");
-			$this->url->redirect('checkout/checkout');
+			return false;
 		}
 
 		$order = $this->order->get($_GET['order_id']);
 
 		if (empty($order)) {
 			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id'));
-			$this->message->add('warning', _l("We were unable to process your order. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
+			$this->error = _l("We were unable to process your order. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
 			$this->error_log->write(__METHOD__ . ": Failed to lookup order ID: $_GET[order_id]. Unable to confirm checkout payment.");
-			$this->url->redirect('checkout/checkout');
+			return false;
 		}
 
 		//Pay with Existing Credit Card
 		if (!empty($_POST['existing_payment_card'])) {
 			if (!$this->customer->isLogged()) {
-				$this->message->add('warning', _l("You must be logged in to use a card from your account! Please try checking out again"));
-				$this->url->redirect('checkout/checkout');
+				$this->error = _l("You must be logged in to use a card from your account! Please try checking out again");
+				return false;
 			}
 
 			$this->loadCustomer();
@@ -86,12 +66,10 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			);
 
 			$this->customer->setMeta('default_payment_key', $_POST['payment_key']);
-		} //New Credit Card
-		else {
-
+		} else {
+			//New Credit Card
 			if (!$this->validateCard($_POST)) {
-				$this->message->add('warning', $this->error);
-				$this->url->redirect('checkout/checkout');
+				return false;
 			}
 
 			$sale = array(
@@ -123,18 +101,23 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			}
 		}
 
-		$result = Braintree_Transaction::sale($sale);
-
-		if ($result->success) {
-			$this->order->updateOrder($_GET['order_id'], $this->settings['complete_order_status_id'], _l("Order Completed via Braintree Payments"), true);
-
-			$this->url->redirect('checkout/success', 'order_id=' . $_GET['order_id']);
-		} else {
-			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
-			$this->message->add('warning', _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact));
-			$this->error_log->write(__METHOD__ . ": Braintree_Transaction:sale() failed for order ID $_GET[order_id]. Unable to confirm checkout payment.");
-			$this->url->redirect('checkout/checkout');
+		try {
+			$result = Braintree_Transaction::sale($sale);
+		} catch (Braintree_Exception $e) {
+			$this->error = $e->getMessage();
+			return false;
 		}
+
+		if (!$result->success) {
+			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
+			$this->error = _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
+			$this->error_log->write(__METHOD__ . ": Braintree_Transaction:sale() failed for order ID $_GET[order_id]. Unable to confirm checkout payment.");
+			return false;
+		}
+
+		$this->order->updateOrder($_GET['order_id'], $this->settings['complete_order_status_id'], _l("Order Completed via Braintree Payments"), true);
+
+		return true;
 	}
 
 	/********************
@@ -167,7 +150,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 					foreach ($this->bt_customer->creditCards as $card2) {
 						if ($card2->token !== $card->token && $card2->uniqueNumberIdentifier === $card->uniqueNumberIdentifier) {
 							$this->message->add('warning', _l("That card was already added to your account!"));
-							$this->remove_card($card2->token);
+							$this->removeCard($card2->token);
 							continue 2;
 						}
 					}
@@ -190,10 +173,10 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 		return $this->cards;
 	}
 
-	public function add_card($card = array())
+	public function addCard($card = array())
 	{
 		if (!$this->initAPI()) {
-			return;
+			return false;
 		}
 
 		//Handle POST
@@ -220,42 +203,25 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 					),
 				);
 
-				$result = Braintree_CreditCard::create($data);
+				try {
+					$result = Braintree_CreditCard::create($data);
 
-				if (!empty($result->errors)) {
-					$this->resultError($result);
+					if (!empty($result->errors)) {
+						$this->resultError($result);
+					}
+				} catch (Braintree_Exception $e) {
+					$this->error[] = $e->getMessage();
 				}
 			}
 		}
 
-		//Resolve redirect
-		$redirect = !empty($_SESSION['redirect']) ? $_SESSION['redirect'] : $this->url->link('account/update');
-		unset($_SESSION['redirect']);
-
-		if ($this->error) {
-			$this->message->add('error', $this->error);
-			$redirect = $this->callbackUrl('register_card');
-		} else {
-			$this->message->add('success', _l("You have successfully registered your card with us!"));
-		}
-
-		if ($this->request->isAjax()) {
-			$json = $this->message->fetch();
-
-			if (!$this->error) {
-				$json['redirect'] = $redirect;
-			}
-
-			$this->response->setOutput(json_encode($json));
-		} else {
-			$this->url->redirect($redirect);
-		}
+		return $this->error ? false : true;
 	}
 
-	public function update_card($id = null, $data)
+	public function updateCard($id = null, $data)
 	{
 		if (!$this->initAPI()) {
-			return;
+			return false;
 		}
 
 		if (!empty($data['default'])) {
@@ -265,86 +231,28 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			);
 		}
 
-		Braintree_CreditCard::update($id, $data);
+		try {
+			Braintree_CreditCard::update($id, $data);
+		} catch (Braintree_Exception $e) {
+			$this->error[] = $e->getMessage();
+		}
+
+		return $this->error ? false : true;
 	}
 
-	public function remove_card($id = null)
+	public function removeCard($card_id)
 	{
 		if (!$this->initAPI()) {
-			return;
+			return false;
 		}
 
-		if (!$id) {
-			$id = $_GET['card_id'];
+		try {
+			Braintree_CreditCard::delete($card_id);
+		} catch (Braintree_Exception $e) {
+			$this->error[] = $e->getMessage();
 		}
 
-		Braintree_CreditCard::delete($id);
-
-		$this->message->add('notify', _l("You have successfully removed the card from your account"));
-
-		$this->url->redirect('account/update');
-	}
-
-	public function cardSelect($select_id = '', $remove = false)
-	{
-		//Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-		$this->data['cards']          = $this->getCards();
-
-		foreach ($this->data['cards'] as &$card) {
-			if ($remove) {
-				$card['remove'] = $this->callbackUrl('remove_card', 'card_id=' . $card['id']);
-			}
-
-			if ($select_id) {
-				$card['default'] = $select_id === $card['id'];
-			}
-		}
-
-		//Action Buttons
-		$this->data['register_card'] = $this->callbackUrl('register_card');
-
-		//The Template
-		$this->template->load('payment/braintree_card_select');
-
-		//Render
-		return $this->render();
-	}
-
-	public function register_card()
-	{
-		//Initialize BrainTree API
-		if (!$this->initAPI()) {
-			return;
-		}
-
-		$payment_address = $this->customer->getDefaultPaymentAddress();
-
-		$defaults = array(
-			'firstname' => $this->customer->info('firstname'),
-			'lastname'  => $this->customer->info('lastname'),
-			'postcode'  => $payment_address ? $payment_address['postcode'] : '',
-		);
-
-		$this->data += $_POST + $defaults;
-
-		//Template Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-
-		//Action Buttons
-		$this->data['submit'] = $this->callbackUrl('add_card');
-
-		//The Template
-		$this->template->load('payment/braintree_register_card');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer',
-		);
-
-		//Render
-		$this->response->setOutput($this->render());
+		return $this->error ? false : true;
 	}
 
 	public function getSubscription($id)
@@ -353,7 +261,13 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			return;
 		}
 
-		return Braintree_Subscription::find($id);
+		try {
+			return Braintree_Subscription::find($id);
+		} catch (Braintree_Exception $e) {
+			$this->error[] = $e->getMessage();
+		}
+
+		return false;
 	}
 
 	public function getPlans()
@@ -375,8 +289,8 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			}
 		} catch (Exception $e) {
 			$this->error_log->write($e);
-			$error_log = $this->url->admin('tool/logs', 'log=error');
-			$this->message->add('warning', _l("There was a problem while communicating with Braintree. See more details in the <a target=\"_blank\" href=\"%s\">Error Log.</a>", $error_log));
+			$error_log   = $this->url->admin('tool/logs', 'log=error');
+			$this->error = _l("There was a problem while communicating with Braintree. See more details in the <a target=\"_blank\" href=\"%s\">Error Log.</a>", $error_log);
 		}
 	}
 
@@ -437,13 +351,13 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 	private function loadCustomer()
 	{
 		if (!$this->customer->isLogged()) {
-			return;
+			return false;
 		}
 
 		if (!$this->bt_customer) {
 			//Load BrainTree API
 			if (!$this->initAPI()) {
-				return;
+				return false;
 			}
 
 			$braintree_id = $this->customer->getMeta('braintree_id');
@@ -451,10 +365,10 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 			if ($braintree_id) {
 				try {
 					$this->bt_customer = Braintree_Customer::find($braintree_id);
-				} catch (Braintree_Exception_NotFound $e) {
-					$this->message->add('warning', _l("Your Customer information was not found. Please try <a href=\"%s\">registering a credit card</a>", $this->callbackUrl('register_card')));
+				} catch (Braintree_Exception $e) {
+					$this->error[] = _l("Your Customer information was not found. Please try <a href=\"%s\">registering a credit card</a>", $this->url->link('extension/payment/braintree/register_card'));
 					$this->error_log->write(__METHOD__ . _l("(): The customer with ID %s was not found!", $braintree_id));
-					$this->url->redirect($this->callbackUrl('register_card'));
+					return false;
 				}
 			} else {
 				$customer = $this->customer->info();
@@ -468,15 +382,23 @@ class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 					//TODO: Add website to customers ... 'website' => $customer['website'],
 				);
 
-				$result = Braintree_Customer::create($data);
+				try {
+					$result = Braintree_Customer::create($data);
 
-				if ($result->success) {
-					//If new customer created, save customer ID for braintree (NOTE: $result->customer->id returned only for new customers)
-					if (!empty($result->customer) && !empty($result->customer->id)) {
-						$this->customer->setMeta('braintree_id', $result->customer->id);
+					if ($result->success) {
+						//If new customer created, save customer ID for braintree (NOTE: $result->customer->id returned only for new customers)
+						if (!empty($result->customer) && !empty($result->customer->id)) {
+							$this->customer->setMeta('braintree_id', $result->customer->id);
+						}
+
+						return true;
+
+					} elseif (!empty($result->errors)) {
+						$this->resultError($result);
 					}
-				} elseif (!empty($result->errors)) {
-					$this->resultError($result);
+				} catch (Braintree_Exception $e) {
+					$this->error[] = $e->getMessage();
+					return false;
 				}
 			}
 		}

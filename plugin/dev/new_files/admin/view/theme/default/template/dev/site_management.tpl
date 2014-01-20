@@ -13,11 +13,11 @@
 			<form action="" method="post">
 				<table class="form">
 					<tr>
-						<td><label for="domain"><?= $entry_domain; ?></label></td>
+						<td><label for="domain"><?= _l("Domain"); ?></label></td>
 						<td><input id="domain" type="text" name="domain" value="<?= $domain; ?>" size="100"/></td>
 					</tr>
 					<tr>
-						<td><label for="username"><?= $entry_username; ?></label></td>
+						<td><label for="username"><?= _l("Username"); ?></label></td>
 						<td><input id="username" type="text" name="username" value="<?= $username; ?>"/></td>
 					</tr>
 					<tr>

@@ -18,22 +18,6 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 	}
 
-	//TODO: Implement the Add / Delete functionality for Extensions
-	public function delete()
-	{
-		if (!empty($_GET['code']) && $this->validateDelete()) {
-			$this->System_Extension_Total->deleteExtension($_GET['code']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
-			}
-
-			$this->url->redirect('extension/total', $this->url->getQueryExclude('name'));
-		}
-
-		$this->index();
-	}
-
 	private function getList()
 	{
 		//Page Head
@@ -85,8 +69,8 @@ class Admin_Controller_Extension_Total extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
-		$extension_total = $this->System_Extension_Total->getTotal($filter);
-		$extensions      = $this->System_Extension_Total->getFiltered($sort + $filter);
+		$extension_total = $this->System_Extension_Model->getTotal('total', $filter);
+		$extensions      = $this->System_Extension_Model->getExtensions('total', $sort + $filter);
 
 		foreach ($extensions as &$extension) {
 			if ($extension['installed']) {
@@ -161,30 +145,32 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->extension_controller->saveSettings($_POST['settings']);
 			}
 
-			$this->System_Extension_Total->updateExtension($code, $_POST);
+			$this->System_Extension_Model->updateExtension('total', $code, $_POST);
 
 			$this->message->add('success', _l("Successfully saved settings for %s!", $code));
 
 			$this->url->redirect('extension/total');
 		}
 
-		if (!$this->request->isPost()) {
-			$extension = $this->System_Extension_Total->get($code)->getInfo();
-		} else {
-			$extension = $_POST;
-
-		}
+		$total_extension = $this->System_Extension_Total->get($code);
 
 		//Page Head
-		$this->document->setTitle($extension['title']);
-		$this->data['page_title'] = $extension['title'];
+		$this->document->setTitle($total_extension->info('title'));
 
-		//Template and Language
-		$this->template->load('extension/total');
+		//Page Title
+		$this->data['page_title'] = $total_extension->info('title');
+
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Order Totals Extensions"), $this->url->link('extension/total'));
-		$this->breadcrumb->add($extension['title'], $this->url->link('extension/total', 'code=' . $code));
+		$this->breadcrumb->add($total_extension->info('title'), $this->url->link('extension/total', 'code=' . $code));
+
+		//Entry Data
+		if ($this->request->isPost()) {
+			$extension = $_POST;
+		} else {
+			$extension = $total_extension->info();
+		}
 
 		$defaults = array(
 			'title'      => '',
@@ -209,6 +195,9 @@ class Admin_Controller_Extension_Total extends Controller
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/total', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/total');
+
+		//Template
+		$this->template->load('extension/total');
 
 		//Dependencies
 		$this->children = array(
@@ -244,7 +233,7 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 		//Load extension
-		$extension = $this->System_Extension_Total->get($code)->getInfo();
+		$extension = $this->System_Extension_Total->get($code)->info();
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -301,18 +290,9 @@ class Admin_Controller_Extension_Total extends Controller
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'extension/total')) {
-			$this->error['warning'] = _l("You do not have permission to modify the Totals system extension!");
-		}
-
-		return $this->error ? false : true;
-	}
-
 	public function install()
 	{
-		if ($this->System_Extension_Total->install($_GET['code'])) {
+		if ($this->System_Extension_Model->install('total', $_GET['code'])) {
 			$this->loadExtensionController($_GET['code']);
 
 			$settings = array();
@@ -322,11 +302,11 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->extension_controller->settings($settings);
 			}
 
-			$this->System_Extension_Total->updateExtension($_GET['code'], array('settings' => $settings));
+			$this->System_Extension_Model->updateExtension('total', $_GET['code'], array('settings' => $settings));
 
 			$this->message->add('success', _l("Successfully installed the %s extension for Order Totals", $_GET['code']));
-		} elseif ($this->System_Extension_Total->hasError()) {
-			$this->message->add('warning', $this->System_Extension_Total->getError());
+		} elseif ($this->System_Extension_Model->hasError()) {
+			$this->message->add('warning', $this->System_Extension_Model->getError());
 		}
 
 		$this->url->redirect('extension/total');
@@ -334,7 +314,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 	public function uninstall()
 	{
-		if ($this->System_Extension_Total->uninstall($_GET['code'])) {
+		if ($this->System_Extension_Model->uninstall('total', $_GET['code'])) {
 			$this->message->add('notify', _l("Uninstalled the %s extension for Order Totals.", $_GET['code']));
 		}
 

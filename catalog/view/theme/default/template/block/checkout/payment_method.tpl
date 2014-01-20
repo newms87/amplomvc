@@ -1,9 +1,9 @@
 <? if (isset($no_payment_address)) { ?>
-	<h2><?= $text_no_payment_address; ?></h2>
+	<h2><?= _l("Please select a payment address."); ?></h2>
 
 <? } elseif (!empty($payment_methods)) { ?>
 	<form action="<?= $validate_payment_method; ?>" method="post">
-		<p><?= $text_payment_method; ?></p>
+		<p><?= _l("Payment Method"); ?></p>
 		<table class="radio">
 			<? foreach ($payment_methods as $payment_method) { ?>
 				<tr class="payment_method checkout_method highlight">
@@ -17,7 +17,7 @@
 		<br/>
 
 		<div id="add_comment">
-			<div><?= $text_comments; ?></div>
+			<div><?= _l("Order Comments"); ?></div>
 			<textarea name="comment" rows="8"><?= $comment; ?></textarea>
 		</div>
 
@@ -41,5 +41,5 @@
 	</script>
 
 <? } else { ?>
-	<h2><?= $error_no_payment_method; ?></h2>
+	<h2><?= _l("There are no payment methods available for your billing address."); ?></h2>
 <? } ?>

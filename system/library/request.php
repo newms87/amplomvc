@@ -49,11 +49,18 @@ class Request extends Library
 
 	public function doRedirect($context = '')
 	{
+		if ($this->hasRedirect($context)) {
+			$this->url->redirect($this->fetchRedirect($context));
+		}
+	}
+
+	public function fetchRedirect($context = '')
+	{
 		$redirect = $this->getRedirect($context);
 
 		$this->clearRedirect($context);
 
-		$this->url->redirect($redirect);
+		return $redirect;
 	}
 
 	public function setRedirect($url, $query = '', $context = '')

@@ -580,7 +580,7 @@ class Mod extends Library
 
 		//echo "<br><br>SEEKING BLOCK FROM $start_index<br>";
 		for ($i = $start_index; $i < $file_length; $i++) {
-			//echo htmlspecialchars(trim($file[$i])) . "  === compare === " . htmlspecialchars($block[0]).'<br>';;
+			//echo htmlspecialchars(trim($file[$i])) . "  === compare === " . htmlspecialchars($block[0]).'<br>';
 			if (trim($file[$i]) == $block[0]) {
 				//echo "START: " . htmlspecialchars($block[0]) . "<br>";
 				$f_index = $i;

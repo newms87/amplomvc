@@ -18,22 +18,6 @@ class Admin_Controller_Extension_Payment extends Controller
 		}
 	}
 
-	//TODO: Implement the Add / Delete functionality for Extensions
-	public function delete()
-	{
-		if (!empty($_GET['code']) && $this->validateDelete()) {
-			$this->System_Extension_Payment->deleteExtension($_GET['code']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
-			}
-
-			$this->url->redirect('extension/payment', $this->url->getQueryExclude('name'));
-		}
-
-		$this->index();
-	}
-
 	private function getList()
 	{
 		//Page Head
@@ -85,8 +69,8 @@ class Admin_Controller_Extension_Payment extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
-		$extension_total = $this->System_Extension_Payment->getTotal($filter);
-		$extensions      = $this->System_Extension_Payment->getFiltered($sort + $filter);
+		$extension_total = $this->System_Extension_Model->getTotal('payment', $filter);
+		$extensions      = $this->System_Extension_Model->getExtensions('payment', $sort + $filter);
 
 		foreach ($extensions as &$extension) {
 			if ($extension['installed']) {
@@ -161,31 +145,30 @@ class Admin_Controller_Extension_Payment extends Controller
 				$this->extension_controller->saveSettings($_POST['settings']);
 			}
 
-			$this->System_Extension_Payment->updateExtension($code, $_POST);
+			$this->System_Extension_Model->updateExtension('payment', $code, $_POST);
 
 			$this->message->add('success', _l("Successfully updated the settings for %s", $code));
 
 			$this->url->redirect('extension/payment');
 		}
 
-		$extension = $this->System_Extension_Payment->get($code);
+		$payment_extension = $this->System_Extension_Payment->get($code);
 
 		//Page Head
-		$this->document->setTitle($extension->getInfo('title'));
-		$this->data['page_title'] = $extension->getInfo('title');
+		$this->document->setTitle($payment_extension->info('title'));
+		$this->data['page_title'] = $payment_extension->info('title');
 
-		//Template and Language
-		$this->template->load('extension/payment');
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Payment Extensions"), $this->url->link('extension/payment'));
-		$this->breadcrumb->add($extension->getInfo('title'), $this->url->link('extension/payment', 'code=' . $code));
+		$this->breadcrumb->add($payment_extension->info('title'), $this->url->link('extension/payment', 'code=' . $code));
 
-		//Load Information
-		if (!$this->request->isPost()) {
-			$extension = $this->System_Extension_Payment->get($code)->getInfo();
-		} else {
+		//Entry Data
+		if ($this->request->isPost()) {
 			$extension = $_POST;
+		} else {
+			$extension = $payment_extension->info();
+
 		}
 
 		$settings_defaults = array(
@@ -224,6 +207,9 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->data['save']   = $this->url->link('extension/payment', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/payment');
 
+		//The Template
+		$this->template->load('extension/payment');
+
 		//Dependencies
 		$this->children = array(
 			'common/header',
@@ -258,7 +244,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		}
 
 		//Load extension
-		$extension = $this->System_Extension_Payment->get($code)->getInfo();
+		$extension = $this->System_Extension_Payment->get($code)->info();
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -326,7 +312,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function install()
 	{
-		if ($this->System_Extension_Payment->install($_GET['code'])) {
+		if ($this->System_Extension_Model->install('payment', $_GET['code'])) {
 			$this->loadExtensionController($_GET['code']);
 
 			$settings = array(
@@ -340,11 +326,11 @@ class Admin_Controller_Extension_Payment extends Controller
 				$this->extension_controller->settings($settings);
 			}
 
-			$this->System_Extension_Payment->updateExtension($_GET['code'], array('settings' => $settings));
+			$this->System_Extension_Model->updateExtension('payment', $_GET['code'], array('settings' => $settings));
 
 			$this->message->add('success', _l("Successfully installed the %s extension for Payments", $_GET['code']));
-		} elseif ($this->System_Extension_Payment->hasError()) {
-			$this->message->add('error', $this->System_Extension_Payment->getError());
+		} elseif ($this->System_Extension_Model->hasError()) {
+			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
 		$this->url->redirect('extension/payment');
@@ -352,7 +338,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	public function uninstall()
 	{
-		if ($this->System_Extension_Payment->uninstall($_GET['code'])) {
+		if ($this->System_Extension_Model->uninstall('payment', $_GET['code'])) {
 			$this->message->add('notify', _l("Uninstalled the %s extension for Payments", $_GET['code']));
 		}
 

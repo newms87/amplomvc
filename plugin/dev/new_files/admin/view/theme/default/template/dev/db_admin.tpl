@@ -13,7 +13,7 @@
 				<form id="form_db_query" action="" method="post">
 					<table class="form">
 						<tr>
-							<td><label for="db_query"><?= $entry_backup; ?></label></td>
+							<td><label for="db_query"><?= _l("Backup"); ?></label></td>
 							<td>
 								<textarea name="query" id="db_query" rows="10" cols="100"><?= $query; ?></textarea>
 							</td>

@@ -48,7 +48,7 @@
 	echo $this->builder->js('ckeditor');
 } ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$.ac_datepicker();
 
 	$('select[name=batch_action]').change(function () {

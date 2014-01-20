@@ -559,9 +559,6 @@ class Admin_Controller_Catalog_Product extends Controller
 			0 => _l("No"),
 		);
 
-		$this->data['text_add_shipping_policy'] = _l("Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
-		$this->data['text_add_return_policy']   = _l("Add <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
-
 		$this->data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
 
 		//TODO: do we really need ths here?
@@ -603,6 +600,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'name'                  => '',
 			'display_name'          => '',
 			'type'                  => '',
+			'group_type'            => '',
 			'required'              => 1,
 			'sort_order'            => 0,
 			'unused_option_values'  => array(
@@ -679,9 +677,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['url_option_autocomplete']    = $this->url->link('catalog/option/autocomplete');
 
 		//Action Buttons
-		$this->data['save']         = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
-		$this->data['cancel']       = $this->url->link('catalog/product');
-		$this->data['change_class'] = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
+		$this->data['save']                = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
+		$this->data['cancel']              = $this->url->link('catalog/product');
+		$this->data['change_class']        = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
+		$this->data['add_shipping_policy'] = $this->url->link('setting/shipping_policy');
+		$this->data['add_return_policy']   = $this->url->link('setting/return_policy');
 
 		//Dependencies
 		$this->children = array(

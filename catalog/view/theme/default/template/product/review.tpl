@@ -15,15 +15,15 @@
 	<div id="tab-review" class="tab-content">
 		<div id="review"></div>
 		<h2 id="review-title"><?= $text_write; ?></h2>
-		<b><?= $entry_name; ?></b><br/>
+		<b><?= _l("Name"); ?></b><br/>
 		<input type="text" name="name" value=""/>
 		<br/>
 		<br/>
-		<b><?= $entry_review; ?></b>
+		<b><?= _l("Review"); ?></b>
 		<textarea name="text" cols="40" rows="8" style="width: 98%;"></textarea>
 		<span style="font-size: 11px;"><?= $text_note; ?></span><br/>
 		<br/>
-		<b><?= $entry_rating; ?></b> <span><?= $entry_bad; ?></span>&nbsp;
+		<b><?= _l("Rating"); ?></b> <span><?= _l("Bad"); ?></span>&nbsp;
 		<input type="radio" name="rating" value="1"/>
 		&nbsp;
 		<input type="radio" name="rating" value="2"/>
@@ -33,9 +33,9 @@
 		<input type="radio" name="rating" value="4"/>
 		&nbsp;
 		<input type="radio" name="rating" value="5"/>
-		&nbsp; <span><?= $entry_good; ?></span><br/>
+		&nbsp; <span><?= _l("Good"); ?></span><br/>
 		<br/>
-		<b><?= $entry_captcha; ?></b><br/>
+		<b><?= _l("Captcha"); ?></b><br/>
 		<input type="text" name="captcha" value=""/>
 		<br/>
 		<img src="index.php?route=product/product/captcha" alt="" id="captcha"/><br/>

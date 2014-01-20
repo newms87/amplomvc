@@ -6,7 +6,7 @@
 	<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
 	<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= $button_invoice; ?></a><a
-			href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 </div>
 <div class="section">
 <div class="vtabs">
@@ -245,7 +245,7 @@
 					<? } ?>
 				<? } else { ?>
 					<tr>
-						<td class="center" colspan="4"><?= $text_no_results; ?></td>
+						<td class="center" colspan="4"><?= _l("There are no results to display."); ?></td>
 					</tr>
 				<? } ?>
 			</tbody>
