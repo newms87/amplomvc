@@ -23,9 +23,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Payment"));
 
-		//Template
-		$this->template->load('extension/payment_list');
-
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Payment"), $this->url->link('extension/payment'));
 
@@ -102,7 +100,6 @@ class Admin_Controller_Extension_Payment extends Controller
 		unset($extension);
 
 		//Build The Table
-
 		$this->table->init();
 		$this->table->setTemplate('table/list_view');
 		$this->table->setColumns($columns);
@@ -122,6 +119,9 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->pagination->total = $extension_total;
 
 		$this->data['pagination'] = $this->pagination->render();
+
+		//The Template
+		$this->template->load('extension/payment_list');
 
 		//Dependencies
 		$this->children = array(
@@ -156,6 +156,8 @@ class Admin_Controller_Extension_Payment extends Controller
 
 		//Page Head
 		$this->document->setTitle($payment_extension->info('title'));
+
+		//Page Title
 		$this->data['page_title'] = $payment_extension->info('title');
 
 		//Breadcrumbs
@@ -165,11 +167,21 @@ class Admin_Controller_Extension_Payment extends Controller
 
 		//Entry Data
 		if ($this->request->isPost()) {
-			$extension = $_POST;
+			$extension_info = $_POST;
 		} else {
-			$extension = $payment_extension->info();
+			$extension_info = $payment_extension->info();
 
+			$extension_info['settings'] = $payment_extension->settings();
 		}
+
+		//NOTE: 'settings', 'sort_order', and 'status' defaults are never used (in theory. Defaults are set in System_Extension_Model.
+		$defaults = array(
+			'settings'   => array(),
+			'sort_order' => 0,
+			'status'     => 1,
+		);
+
+		$this->data += $extension_info + $defaults;
 
 		$settings_defaults = array(
 			'min_total'                => 0,
@@ -177,18 +189,9 @@ class Admin_Controller_Extension_Payment extends Controller
 			'geo_zone_id'              => 0,
 		);
 
-		//Note: these in theory should be worthless, all data is set in System_Extension_Extension::getExtensions() method
-		$defaults = array(
-			'settings'   => array(),
-			'sort_order' => 0,
-			'status'     => 1,
-		);
-
-		$this->data += $extension + $defaults;
 		$this->data['settings'] += $settings_defaults;
 
 		//Get additional extension settings and profile data (this is the plugin part)
-
 		if (method_exists($this->extension_controller, 'settings')) {
 			$this->extension_controller->settings($this->data['settings']);
 			$this->data['extend_settings'] = $this->extension_controller->output;
@@ -244,25 +247,25 @@ class Admin_Controller_Extension_Payment extends Controller
 		}
 
 		//Load extension
-		$extension = $this->System_Extension_Payment->get($code)->info();
+		$payment_extension = $this->System_Extension_Payment->get($code);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Payment Extensions"), $this->url->link('extension/payment'));
-		$this->breadcrumb->add($extension['title'], $this->url->link('extension/payment/edit', 'code=' . $code));
+		$this->breadcrumb->add($payment_extension->info('title'), $this->url->link('extension/payment/edit', 'code=' . $code));
 
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
 		//Template Data
-		$this->data['page_title'] = $extension['title'];
+		$this->data['page_title'] = $payment_extension->info('title');
 		$this->data['edit_file']  = $file;
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('extension/payment/edit', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/payment');
 
-		//Template
+		//The Template
 		$this->template->load('extension/edit');
 
 		//Dependencies
@@ -296,15 +299,6 @@ class Admin_Controller_Extension_Payment extends Controller
 			if (!$this->extension_controller->validate()) {
 				return false;
 			}
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'extension/payment')) {
-			$this->error['warning'] = _l("You do not have permission to modify the Payments system extension!");
 		}
 
 		return $this->error ? false : true;

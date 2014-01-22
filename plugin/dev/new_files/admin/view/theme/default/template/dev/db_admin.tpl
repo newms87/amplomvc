@@ -6,7 +6,7 @@
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
 				<div class="buttons">
-					<a href="<?= $return; ?>" class="button"><?= $button_return; ?></a>
+					<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
 				</div>
 			</div>
 			<div class="section">
@@ -23,7 +23,7 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td><input type="submit" class="button" name="submit_query" value="<?= $button_submit_query; ?>"/>
+							<td><input type="submit" class="button" name="submit_query" value="<?= _l("Submit Query"); ?>"/>
 							</td>
 						</tr>
 						<? if (!empty($results)) { ?>

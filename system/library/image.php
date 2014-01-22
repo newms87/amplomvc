@@ -35,7 +35,7 @@ class Image extends Library
 		return $filename;
 	}
 
-	public function getInfo($key = null)
+	public function info($key = null)
 	{
 		if ($key) {
 			return isset($this->info[$key]) ? $this->info[$key] : null;

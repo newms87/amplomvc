@@ -20,7 +20,7 @@
 	</div>
 
 	<div class="buttons">
-		<div class="right"><input type="submit" value="<?= $button_submit; ?>" class="button"/></div>
+		<div class="right"><input type="submit" value="<?= _l("Submit"); ?>" class="button"/></div>
 	</div>
 </form>
 

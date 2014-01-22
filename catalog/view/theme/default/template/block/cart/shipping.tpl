@@ -10,7 +10,7 @@
 		</tr>
 		<tr>
 			<td class="required"> <?= _l("Region / State:"); ?></td>
-			<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
+			<td><select name="zone_id" class="zone_select" data-zone_id="<?= $zone_id; ?>"></select></td>
 		</tr>
 		<tr>
 			<td class="required"> <?= _l("Post Code:"); ?></td>

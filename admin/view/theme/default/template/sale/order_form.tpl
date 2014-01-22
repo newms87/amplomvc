@@ -99,7 +99,7 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Region / State:"); ?></td>
-							<td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id; ?>"></select></td>
+							<td><select name="payment_zone_id" class="zone_select" data-zone_id="<?= $payment_zone_id; ?>"></select></td>
 						</tr>
 					</table>
 				</div>
@@ -151,7 +151,7 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Region / State:"); ?></td>
-							<td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
+							<td><select name="shipping_zone_id" data-zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
 						</tr>
 					</table>
 				</div>

@@ -18,11 +18,11 @@
 							<td><?= _l("Status"); ?></td>
 							<td><select name="reward_status">
 									<? if ($reward_status) { ?>
-										<option value="1" selected="selected"><?= $text_enabled; ?></option>
-										<option value="0"><?= $text_disabled; ?></option>
+										<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
+										<option value="0"><?= _l("Disabled"); ?></option>
 									<? } else { ?>
-										<option value="1"><?= $text_enabled; ?></option>
-										<option value="0" selected="selected"><?= $text_disabled; ?></option>
+										<option value="1"><?= _l("Enabled"); ?></option>
+										<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
 									<? } ?>
 								</select></td>
 						</tr>

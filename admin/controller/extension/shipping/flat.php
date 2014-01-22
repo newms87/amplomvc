@@ -1,9 +1,9 @@
 <?php
 class Admin_Controller_Extension_Shipping_Flat extends Controller
 {
-	public function index()
+	public function settings()
 	{
-		$this->template->load('shipping/flat');
+
 
 		$this->document->setTitle(_l("Flat Rate Shipping"));
 
@@ -22,39 +22,40 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 		$this->data['action'] = $this->url->link('shipping/flat');
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
-		$flat_info = $this->config->loadGroup('shipping_flat');
+		//Entry Data
+		$flat_info = array();
 
-		$defaults = array(
-			'flat_title'      => '',
-			'flat_rates'      => array(),
-			'flat_status'     => 1,
-			'flat_sort_order' => 0,
-		);
-
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($flat_info[$key])) {
-				$this->data[$key] = $flat_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
+		if ($this->request->isPost()) {
+			$flat_info = $_POST;
+		} else {
+			$flat_info = $this->config->loadGroup('shipping_flat');
 		}
 
-		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$defaults = array(
+			'rates'      => array(),
+		);
 
-		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
+		$this->data += $flat_info = $defaults;
+
+		//Template Data
+		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['data_geo_zones']   = $this->Model_Localisation_GeoZone->getGeoZones();
 
 		$this->data['data_rule_types'] = array(
 			'item_qty' => _l("Product Quantity"),
 			'weight'   => _l("Weight of Cart"),
 		);
 
+		//The Template
+		$this->template->load('shipping/flat');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

@@ -3,8 +3,8 @@ abstract class System_Extension_Extension extends Model
 {
 	static $extension_info = array();
 
-	private $type;
-	private $code;
+	protected $type;
+	protected $code;
 	protected $info;
 	protected $settings;
 

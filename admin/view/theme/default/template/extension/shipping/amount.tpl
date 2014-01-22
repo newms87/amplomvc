@@ -12,34 +12,34 @@
 						<td></td>
 					</tr>
 				</thead>
-				<? $set_row = 0; ?>
-				<? foreach ($amount_priceset as $set) { ?>
-					<tbody id="set-row<?= $set_row; ?>">
-						<tr>
-							<td class="left"><?= $this->builder->build('select', $priceset_ranges, "amount_priceset[$set_row][range]", $set['range'], array('onclick' => 'range_values($(this))')); ?></td>
+				<tbody id="priceset_list">
+					<? foreach ($priceset as $row => $set) { ?>
+						<tr class="priceset" data-row="<?= $row; ?>">
+							<td class="left">
+								<?= $this->builder->build('select', $data_ranges, "settings[priceset][$row][range]", $set['range'], array('onchange' => 'range_values($(this))')); ?>
+							</td>
 							<td class="left pricetotal">
 								<span class="total" <?= $set['range'] == 'range' ? "style=\"display:none\"" : ''; ?>>
-									<input type="text" name="amount_priceset[<?= $set_row; ?>][total]" value="<?= $set['total']; ?>"/>
+									<input type="text" name="settings[priceset][<?= $row; ?>][total]" value="<?= $set['total']; ?>"/>
 								</span>
 								<span class="pricerange" <?= $set['range'] != 'range' ? "style=\"display:none\"" : ''; ?>>
-										<?= _l("Min Price"); ?>
-									<input type="text" name="amount_priceset[<?= $set_row; ?>][from]" value="<?= $set['from']; ?>"/>
-									<?= _l("Max Price"); ?><input type="text" name="amount_priceset[<?= $set_row; ?>][to]" value="<?= $set['to']; ?>"/>
+									<?= _l("Min Price"); ?>
+									<input type="text" name="settings[priceset][<?= $row; ?>][from]" value="<?= $set['from']; ?>"/>
+									<?= _l("Max Price"); ?><input type="text" name="settings[priceset][<?= $row; ?>][to]" value="<?= $set['to']; ?>"/>
 								</span>
 							</td>
-							<td class="left"><input type="text" name="amount_priceset[<?= $set_row; ?>][cost]" value="<?= $set['cost']; ?>"/></td>
-							<td
-								class="left"><?= $this->builder->build('select', $priceset_types, "amount_priceset[$set_row][type]", $set['type']); ?></td>
-							<td class="left"><a onclick="$('#set-row<?= $set_row; ?>').remove();"
-									class="button"><?= _l("Remove"); ?></a></td>
+							<td class="left"><input type="text" name="settings[priceset][<?= $row; ?>][cost]" value="<?= $set['cost']; ?>"/></td>
+							<td class="left">
+								<?= $this->builder->build('select', $data_types, "settings[priceset][$row][type]", $set['type']); ?>
+							</td>
+							<td class="left"><a onclick="$(this).closest('.priceset').remove();" class="button remove"><?= _l("X"); ?></a></td>
 						</tr>
-					</tbody>
-					<? $set_row++; ?>
-				<? } ?>
+					<? } ?>
+				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="6"></td>
-						<td class="left"><a onclick="addPriceSet();" class="button"><?= _l("Add Price Set"); ?></a>
+						<td colspan="4"></td>
+						<td class="left"><a onclick="add_price_set()" class="button"><?= _l("Add Price Set"); ?></a>
 						</td>
 					</tr>
 				</tfoot>
@@ -59,31 +59,25 @@
 						<td></td>
 					</tr>
 				</thead>
-				<? $rule_row = 0; ?>
-				<? foreach ($amount_zonerule as $rule) { ?>
-					<tbody id="rule-row<?= $rule_row; ?>">
-						<tr>
+				<tbody id="zonerule_list">
+					<? foreach ($zonerule as $row => $rule) { ?>
+						<tr class="zonerule" data-row="<?= $row; ?>">
 							<td class="left">
 								<? $this->builder->setConfig('country_id', 'name'); ?>
-								<?= $this->builder->build('select', $countries, "amount_zonerule[$rule_row][country_id]", $rule['country_id'], array('class' => 'country_select')); ?>
-								<select id="zone_id-<?= $rule_row; ?>" name="amount_zonerule[<?= $rule_row; ?>][zone_id]" class="zone_select"
-									zone_id="<?= $rule['zone_id']; ?>"></select>
+								<?= $this->builder->build('select', $data_countries, "settings[zonerule][$row][country_id]", $rule['country_id'], array('class' => 'country_select')); ?>
+								<select name="settings[zonerule][<?= $row; ?>][zone_id]" class="zone_select" data-zone_id="<?= $rule['zone_id']; ?>"></select>
 							</td>
-							<td
-								class="left"><?= $this->builder->build('select', $rule_mods, "amount_zonerule[$rule_row][mod]", $rule['mod'], array('id' => "zone_id-$rule_row")); ?></td>
-							<td class="left"><input type="text" name="amount_zonerule[<?= $rule_row; ?>][cost]" value="<?= $rule['cost']; ?>"/></td>
-							<td
-								class="left"><?= $this->builder->build('select', $priceset_types, "amount_zonerule[$rule_row][type]", $rule['type']); ?></td>
-							<td class="left"><a onclick="$('#rule-row<?= $rule_row; ?>').remove();"
-									class="button"><?= _l("Remove"); ?></a></td>
+							<td class="left"><?= $this->builder->build('select', $data_mods, "settings[zonerule][$row][mod]", $rule['mod']); ?></td>
+							<td class="left"><input type="text" name="settings[zonerule][<?= $row; ?>][cost]" value="<?= $rule['cost']; ?>"/></td>
+							<td class="left"><?= $this->builder->build('select', $data_types, "settings[zonerule][$row][type]", $rule['type']); ?></td>
+							<td class="left"><a onclick="$(this).closest('.zonerule').remove();" class="button remove"><?= _l("X"); ?></a></td>
 						</tr>
-					</tbody>
-					<? $rule_row++; ?>
-				<? } ?>
+					<? } ?>
+				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="6"></td>
-						<td class="left"><a onclick="addZoneRule();" class="button"><?= _l("Add Zone Rule"); ?></a>
+						<td colspan="4"></td>
+						<td class="left"><a onclick="add_zone_rule();" class="button"><?= _l("Add Zone Rule"); ?></a>
 						</td>
 					</tr>
 				</tfoot>
@@ -92,25 +86,23 @@
 	</tr>
 </table>
 
-<script type="text/javascript">
-	var set_row = <?= $set_row; ?>;
-	function addPriceSet() {
-		html = '<tbody id="set-row%set_row%">';
-		html += '	<tr>';
-		html += '		<td class="left">' + "<?= $this->builder->build('select',$priceset_ranges,"amount_priceset[%set_row%][range]",'',array('onclick'=>'range_values($(this))'),true); ?>" + '</td>';
-		html += '		<td class="left pricetotal"><span class="total"><input type="text" name="amount_priceset[%set_row%][total]" value="" /></span><span class="pricerange" style="display:none;"><?= _l("Min Price"); ?> <input type="text" name="amount_priceset[%set_row%][from]" value="" /> <?= _l("Max Price"); ?> <input type="text" name="amount_priceset[%set_row%][to]" value="" /></span></td>';
-		html += '		<td class="left"><input type="text" name="amount_priceset[%set_row%][cost]" value="" /></td>';
-		html += '		<td class="left">' + "<?= $this->builder->build('select',$priceset_types,"amount_priceset[%set_row%][type]"); ?>" + '</td>';
-		html += '		<td class="left"><a onclick="$(\'#set-row%set_row%\').remove();" class="button"><?= _l("Remove"); ?></a></td>';
-		html += '	</tr>';
-		html += '</tbody>';
+<?= $this->builder->js('load_zones', '.zonerule', '.country_select', '.zone_select'); ?>
 
-		$('#pricesets').append(html.replace(/%set_row%/g, set_row));
-		set_row++;
+<script type="text/javascript">
+	/* Flat Pricing List */
+	var ps_list = $('#priceset_list');
+	ps_list.ac_template('ps_list', {defaults: <?= json_encode($priceset['__ac_template__']); ?>});
+
+	function add_price_set() {
+		$.ac_template('ps_list', 'add');
 	}
 
+	ps_list.sortable({cursor: 'move', stop: function () {
+		$(this).update_index('.sort_order');
+	}});
+
 	function range_values(context) {
-		pricetotal = context.closest('tbody').find('.pricetotal');
+		pricetotal = context.closest('.priceset').find('.pricetotal');
 		if (context.val() == 'range') {
 			pricetotal.find('.pricerange').show();
 			pricetotal.find('.total').hide();
@@ -121,23 +113,12 @@
 		}
 	}
 
-	var rule_row = <?= $rule_row; ?>;
-	function addZoneRule() {
-		html = '<tbody id="rule-row%rule_row%">';
-		html += '	<tr>';
-		<? $this->builder->setConfig('country_id','name');?>
-		html += '		<td class="left">' + "<?= $this->builder->build('select',$countries,"amount_zonerule[%rule_row%][country_id]",'',array('class'=>'country_select'),true); ?>"
-			+ '<select id="zone_id-%rule_row%" name="amount_zonerule[%rule_row%][zone_id]" class="zone_select"></select></td>';
-		html += '		<td class="left">' + "<?= $this->builder->build('select',$rule_mods,"amount_zonerule[%rule_row%][mod]"); ?>" + '</td>';
-		html += '		<td class="left"><input type="text" name="amount_zonerule[%rule_row%][cost]" value="" /></td>';
-		html += '		<td class="left">' + "<?= $this->builder->build('select',$priceset_types,"amount_zonerule[%rule_row%][type]"); ?>" + '</td>';
-		html += '		<td class="left"><a onclick="$(\'#rule-row%rule_row%\').remove();" class="button"><?= _l("Remove"); ?> </a></td>';
-		html += '	</tr>';
-		html += '</tbody>';
+	/* Zone Rules */
+	var zr_list = $('#zonerule_list');
+	zr_list.ac_template('zr_list', {defaults: <?= json_encode($zonerule['__ac_template__']); ?>});
 
-		zr = $(html.replace(/%rule_row%/g, rule_row));
-		$('#zonerules').append(zr);
+	function add_zone_rule() {
+		var zr = $.ac_template('zr_list', 'add');
 		zr.find('.country_select').trigger('change');
-		rule_row++;
 	}
 </script>

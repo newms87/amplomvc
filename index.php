@@ -18,7 +18,7 @@ if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 
 $__start = microtime(true);
 
-/*  PRETTY LANGUAGE TESTING */
+/*  PRETTY LANGUAGE TESTING
 echo 'testing pretty language<br /><br />';
 require_once(DIR_SYSTEM . 'library/pretty_language.php');
 new PrettyLanguage();

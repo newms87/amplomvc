@@ -172,7 +172,7 @@
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Region / State:"); ?></td>
-									<td><select name="address[<?= $address_row; ?>][zone_id]" zone_id="<?= $address['zone_id']; ?>"
+									<td><select name="address[<?= $address_row; ?>][zone_id]" data-zone_id="<?= $address['zone_id']; ?>"
 											class="zone_select"></select>
 										<? if (isset($error_address_zone[$address_row])) { ?>
 											<span class="error"><?= $error_address_zone[$address_row]; ?></span>

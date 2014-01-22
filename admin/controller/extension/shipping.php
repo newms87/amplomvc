@@ -87,8 +87,8 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
-		$extension_total = $this->System_Extension_Shipping->getTotal($filter);
-		$extensions      = $this->System_Extension_Shipping->getFiltered($sort + $filter);
+		$extension_total = $this->System_Extension_Model->getTotal('shipping', $filter);
+		$extensions      = $this->System_Extension_Model->getExtensions('shipping', $sort + $filter);
 
 		foreach ($extensions as &$extension) {
 			if ($extension['installed']) {
@@ -160,47 +160,50 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 		$this->loadExtensionController($code);
 
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
 			//If Extension needs to customize the way data is stored
 			if (method_exists($this->extension_controller, 'saveSettings')) {
 				$this->extension_controller->saveSettings($_POST['settings']);
 			}
 
-			$this->System_Extension_Shipping->updateExtension($code, $_POST);
+			$this->System_Extension_Model->updateExtension('shipping', $code, $_POST);
 
 			$this->message->add('success', _l("You have successfully modified the %s extension!", $code));
 
 			$this->url->redirect('extension/shipping');
 		}
 
-		$extension = $this->System_Extension_Shipping->get($code);
-
-		$title = $extension->getInfo('title');
+		$shipping_extension = $this->System_Extension_Shipping->get($code);
 
 		//Page Head
-		$this->document->setTitle($title);
-		$this->data['page_title'] = $title;
+		$this->document->setTitle($shipping_extension->info('title'));
+
+		//Page Title
+		$this->data['page_title'] = $shipping_extension->info('title');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Shipping Extensions"), $this->url->link('extension/shipping'));
-		$this->breadcrumb->add($title, $this->url->link('extension/shipping', 'code=' . $code));
+		$this->breadcrumb->add($shipping_extension->info('title'), $this->url->link('extension/shipping', 'code=' . $code));
 
 		//Load Information
-		if (!$this->request->isPost()) {
-			$extension = $this->System_Extension_Shipping->get($code)->getInfo();
+		if ($this->request->isPost()) {
+			$extension_info = $_POST;
 		} else {
-			$extension = $_POST;
+			$extension_info = $shipping_extension->info();
+
+			$extension_info['settings']= $shipping_extension->settings();
 		}
 
-		//Note: these in theory should be worthless, all data is set in System_Extension_Extension::getExtensions() method
+		//NOTE: 'settings', 'sort_order', and 'status' defaults are never used (in theory. Defaults are set in System_Extension_Model.
 		$defaults = array(
 			'settings'   => array(),
 			'sort_order' => 0,
 			'status'     => 1,
 		);
 
-		$this->data += $extension + $defaults;
+		$this->data += $extension_info + $defaults;
 
 		$settings_defaults = array(
 			'min_total'                => 0,
@@ -266,18 +269,18 @@ class Admin_Controller_Extension_Shipping extends Controller
 		}
 
 		//Load extension
-		$extension = $this->System_Extension_Shipping->get($code)->getInfo();
+		$shipping_extension = $this->System_Extension_Shipping->get($code);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Shipping Extensions"), $this->url->link('extension/shipping'));
-		$this->breadcrumb->add($extension['title'], $this->url->link('extension/shipping/edit', 'code=' . $code));
+		$this->breadcrumb->add($shipping_extension->info('title'), $this->url->link('extension/shipping/edit', 'code=' . $code));
 
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
 		//Template Data
-		$this->data['page_title'] = $extension['title'];
+		$this->data['page_title'] = $shipping_extension->info('title');
 		$this->data['edit_file']  = $file;
 
 		//Action Buttons
@@ -325,7 +328,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 	public function install()
 	{
-		if ($this->System_Extension_Shipping->install($_GET['code'])) {
+		if ($this->System_Extension_Model->install('shipping', $_GET['code'])) {
 			$this->loadExtensionController($_GET['code']);
 
 			$settings = array(
@@ -338,11 +341,11 @@ class Admin_Controller_Extension_Shipping extends Controller
 				$this->extension_controller->settings($settings);
 			}
 
-			$this->System_Extension_Shipping->updateExtension($_GET['code'], array('settings' => $settings));
+			$this->System_Extension_Model->updateExtension('shipping', $_GET['code'], array('settings' => $settings));
 
 			$this->message->add('success', _l("You have successfully installed %s!", $_GET['code']));
-		} elseif ($this->System_Extension_Shipping->hasError()) {
-			$this->message->add('error', $this->System_Extension_Shipping->getError());
+		} elseif ($this->System_Extension_Model->hasError()) {
+			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
 		$this->url->redirect('extension/shipping');
@@ -350,10 +353,10 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 	public function uninstall()
 	{
-		if ($this->System_Extension_Shipping->uninstall($_GET['code'])) {
+		if ($this->System_Extension_Model->uninstall('shipping', $_GET['code'])) {
 			$this->message->add('notify', _l("%s has been uninstalled.", $_GET['code']));
-		} elseif ($this->System_Extension_Shipping->hasError()) {
-			$this->message->add('error', $this->System_Extension_Shipping->getError());
+		} elseif ($this->System_Extension_Model->hasError()) {
+			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
 		$this->url->redirect('extension/shipping');

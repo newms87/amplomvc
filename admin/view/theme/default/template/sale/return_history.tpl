@@ -7,10 +7,10 @@
 <table class="list">
 	<thead>
 		<tr>
-			<td class="left"><b><?= $column_date_added; ?></b></td>
-			<td class="left"><b><?= $column_comment; ?></b></td>
-			<td class="left"><b><?= $column_status; ?></b></td>
-			<td class="left"><b><?= $column_notify; ?></b></td>
+			<td class="left"><b><?= _l("Date Added"); ?></b></td>
+			<td class="left"><b><?= _l("Comment"); ?></b></td>
+			<td class="left"><b><?= _l("Status"); ?></b></td>
+			<td class="left"><b><?= _l("Notify"); ?></b></td>
 		</tr>
 	</thead>
 	<tbody>

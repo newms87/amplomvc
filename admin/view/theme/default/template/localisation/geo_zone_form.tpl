@@ -56,7 +56,7 @@
 										style="text-decoration:none; display:block"><?= _l("[ Add All Zones ]"); ?></a>
 								</td>
 								<td class="left">
-									<select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id']; ?>"
+									<select name="zones[<?= $row; ?>][zone_id]" data-zone_id="<?= $zone['zone_id']; ?>"
 										class="zone_selector"></select>
 								</td>
 								<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"

@@ -1,9 +1,9 @@
 <? if (!empty($allowed_geo_zones)) { ?>
-	<h2><?= $text_zone_allowed; ?></h2>
+	<h2><?= _l("We deliver to the following locations:"); ?></h2>
 	<div class="allowed_zone_list">
 		<? foreach ($allowed_geo_zones as $i => $geo_zone) { ?>
 			<span
-				class="allowed_zone_item"><?= $geo_zone['country']['name'] . (($i == count($allowed_geo_zones) - 1) ? '' : $text_zone_separator); ?></span>
+				class="allowed_zone_item"><?= $geo_zone['country']['name'] . (($i == count($allowed_geo_zones) - 1) ? '' : ', '); ?></span>
 		<? } ?>
 	</div>
 <? } ?>
@@ -11,7 +11,7 @@
 <? if ($data_addresses) { ?>
 	<input type="radio" name="shipping_address" value="existing"
 		id="shipping-address-existing" <?= $data_addresses ? 'checked="checked"' : ''; ?> />
-	<label for="shipping-address-existing"><?= $text_address_existing; ?></label>
+	<label for="shipping-address-existing"><?= _l("Use an existing delivery address:"); ?></label>
 
 	<div id="shipping_existing" <?= $data_addresses ? '' : 'style="display: none;"'; ?>>
 		<form action="<?= $validate_selection; ?>" method="post">
@@ -24,7 +24,7 @@
 				<? } ?>
 			</select>
 			<noscript>
-				<input type="submit" name="shipping_existing" value="<?= $button_select; ?>"/>
+				<input type="submit" name="shipping_existing" value="<?= _l("Select"); ?>"/>
 			</noscript>
 		</form>
 	</div>
@@ -32,7 +32,7 @@
 
 <p>
 	<input type="radio" name="shipping_address" value="new" id="shipping-address-new" <?= $data_addresses ? '' : 'checked="checked"'; ?> />
-	<label for="shipping-address-new"><?= $text_address_new; ?></label>
+	<label for="shipping-address-new"><?= _l("Use a new address:"); ?></label>
 </p>
 <div id="shipping_new" class="address_form" <?= $data_addresses ? 'style="display: none;"' : ''; ?>>
 	<?= $form_shipping_address; ?>

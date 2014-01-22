@@ -10,6 +10,7 @@
 				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
+
 		<div class="section">
 			<form action="<?= $save; ?>" method="post" id="form">
 				<table class="form">

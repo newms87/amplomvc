@@ -75,12 +75,12 @@
 	<div class="buttons">
 		<div class="right">
 			<div id="submit_pp_button">
-				<div id="submit_payment"><?= $text_submit_payment; ?></div>
-				<input type="submit" value="<?= $button_confirm; ?>" class="button"/></div>
+				<div id="submit_payment"><?= _l("Submit Payment"); ?></div>
+				<input type="submit" value="<?= _l("Confirm"); ?>" class="button"/></div>
 			<div id="processing_payment">
 				<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>"
-					alt=""/><span><?= $text_processing_payment; ?></span><br/>
-				<input type="submit" value="<?= $button_try_again; ?>" class="button"/>
+					alt=""/><span><?= _l("Processing Payment"); ?></span><br/>
+				<input type="submit" value="<?= _l("Try Again"); ?>" class="button"/>
 			</div>
 		</div>
 	</div>

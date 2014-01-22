@@ -112,7 +112,7 @@
 		</tr>
 		<tr>
 			<td><?= _l("Region / State:"); ?></td>
-			<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id; ?>"></select></td>
+			<td><select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select></td>
 		</tr>
 		<tr>
 			<td><?= _l("Language:"); ?></td>
@@ -248,7 +248,7 @@
 					<? $this->builder->setConfig(false, 'title'); ?>
 					<?= $this->builder->build('select', $data_return_policies, 'config_default_return_policy', $config_default_return_policy); ?>
 				<? } ?>
-				<p><?= $text_add_return_policy; ?></p>
+				<p><?= _l("Add Return Policy"); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -258,7 +258,7 @@
 					<? $this->builder->setConfig(false, 'title'); ?>
 					<?= $this->builder->build('select', $data_shipping_policies, 'config_default_shipping_policy', $config_default_shipping_policy); ?>
 				<? } ?>
-				<p><?= $text_add_shipping_policy; ?></p>
+				<p><?= _l("Add Shipping Policy"); ?></p>
 			</td>
 		</tr>
 		<tr>

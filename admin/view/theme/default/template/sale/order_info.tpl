@@ -5,7 +5,7 @@
 <div class="heading">
 	<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
-	<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= $button_invoice; ?></a><a
+	<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= _l("Invoice"); ?></a><a
 			href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 </div>
 <div class="section">
@@ -274,7 +274,7 @@
 					<textarea name="comment" cols="40" rows="8"></textarea>
 
 					<div>
-						<input type="submit" id="button-history" class="button" value="<?= $button_add_history; ?>"/>
+						<input type="submit" id="button-history" class="button" value="<?= _l("Add History"); ?>"/>
 					</div>
 				</td>
 			</tr>
@@ -511,7 +511,7 @@
 			<? } ?>
 			<? if ($bin_name) { ?>
 				<tr>
-					<td><?= $text_bin_name; ?></td>
+					<td><?= _l("Binary Name"); ?></td>
 					<td><?= $bin_name; ?></td>
 				</tr>
 			<? } ?>
@@ -523,7 +523,7 @@
 			<? } ?>
 			<? if ($bin_phone) { ?>
 				<tr>
-					<td><?= $text_bin_phone; ?></td>
+					<td><?= _l("Binary Phone"); ?></td>
 					<td><?= $bin_phone; ?></td>
 				</tr>
 			<? } ?>

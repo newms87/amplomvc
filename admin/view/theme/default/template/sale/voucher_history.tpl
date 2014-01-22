@@ -1,10 +1,10 @@
 <table class="list">
 	<thead>
 		<tr>
-			<td class="right"><b><?= $column_order_id; ?></b></td>
-			<td class="left"><b><?= $column_customer; ?></b></td>
-			<td class="right"><b><?= $column_amount; ?></b></td>
-			<td class="left"><b><?= $column_date_added; ?></b></td>
+			<td class="right"><b><?= _l("Order Id"); ?></b></td>
+			<td class="left"><b><?= _l("Customer"); ?></b></td>
+			<td class="right"><b><?= _l("Amount"); ?></b></td>
+			<td class="left"><b><?= _l("Date Added"); ?></b></td>
 		</tr>
 	</thead>
 	<tbody>

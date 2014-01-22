@@ -17,8 +17,15 @@ class PrettyLanguage
 		$current_value = !empty($_POST['current_value']) ? $_POST['current_value'] : false;
 		$replace_all = !empty($_POST['replace_all']);
 
+		$skip = array(
+			'pager',
+		   'message',
+		   'left',
+		   'right',
+		);
+
 		$ext   = array('tpl');
-		$files = $this->get_all_files_r(SITE_DIR . 'plugin/dev/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'admin/', $ext);
 
 		foreach ($files as $file) {
 
@@ -30,26 +37,37 @@ class PrettyLanguage
 
 			$new_lines = array();
 
-			$regx = "/<\\?=\\s*\\\$text_([a-z_]+);\\s*\\?>/";
+			$regx = "/<\\?=\\s*\\\$column_([a-z_]+);\\s*\\?>/";
 
 			foreach ($lines as $num => $line) {
 				$matches = null;
 				if (preg_match_all($regx, $line, $matches)) {
 					foreach ($matches[1] as $match) {
+						if (in_array($match, $skip)) {
+							continue;
+						}
+
 						if (!$current_value) {
 							$lines[$num] .= " <---- REPLACE";
+
+							$entries = explode('_', $match);
+							array_walk($entries, function(&$a) { $a = ucfirst($a);});
+							$value = implode(' ', $entries);
 							?>
 
 							<html><head>
 									<body>
+										<?= $file . '<BR>'; ?>
 										<? $this->print_lines($orig_lines, $lines, false, true); ?>
 										<form action="" method="post">
 											<input type="text" name="current_match" value="<?= $match; ?>" />
-											<input type="text" name="current_value" value="<?= ucfirst($match); ?>" id="replace_in" />
+											<input type="text" name="current_value" value="<?= $value; ?>" id="replace_in" />
 											<input type="checkbox" id="replace_all" name="replace_all" value="1" /> <label for="replace_all">Replace All?</label>
 											<input type="submit" value="Replace" />
 										</form>
-										<script type="text/javascript">document.getElementById("replace_in").focus();</script>
+										<script type="text/javascript">
+											document.getElementById("replace_in").focus();
+										</script>
 									</body>
 							</head></html>
 						<? exit;}
@@ -57,7 +75,7 @@ class PrettyLanguage
 						if ($match === $current_match && $replace_all !== 'replaced') {
 							if (!$replace_all) $replace_all = 'replaced';
 
-							$line = preg_replace("/<\\?=\\s*\\\$text_" . $match . ";\\s*\\?>/", "<?= _l(\"" . $current_value . "\"); ?>", $line);
+							$line = preg_replace("/<\\?=\\s*\\\$column_" . $match . ";\\s*\\?>/", "<?= _l(\"" . $current_value . "\"); ?>", $line);
 						}
 					}
 
@@ -74,7 +92,7 @@ class PrettyLanguage
 				$this->print_lines($orig_lines, $new_lines, false, true);
 				file_put_contents($file, implode("\n", $new_lines));
 			} else {
-				echo "<div style=\"color:grey\">nothing to do $file</div>";
+				//echo "<div style=\"color:grey\">nothing to do $file</div>";
 			}
 
 			if ($replace_all === 'replaced') { ?>
@@ -848,11 +866,11 @@ class PrettyLanguage
 			$file_path = rtrim($dir, '/') . '/' . $file;
 
 			if (is_dir($file_path)) {
-				$files = array_merge($files, $this->get_all_files_r($file_path, $ignore, $ext, $depth + 1));
+				$files = array_merge($files, $this->get_all_files_r($file_path, $ext,$ignore, $depth + 1));
 			} else {
 				if (!empty($ext)) {
 					$match = null;
-					preg_match("/[^\.]*$/", $file, $match);
+					preg_match("/[^\\.]*$/", $file, $match);
 
 					if (!in_array($match[0], $ext)) {
 						continue;

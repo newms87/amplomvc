@@ -6,7 +6,7 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
 			<div class="buttons">
-				<a href="<?= $return; ?>" class="button"><?= $button_return; ?></a>
+				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
 			</div>
 		</div>
 		<div class="section">
@@ -15,11 +15,11 @@
 					<tr>
 						<td>
 							<label><?= _l("Backup"); ?></label>
-							<input type="submit" class="button" name="site_backup" value="<?= $button_backup; ?>"/>
+							<input type="submit" class="button" name="site_backup" value="<?= _l("Backup"); ?>"/>
 							<br/><br/>
-							<input type="submit" class="button" name="sync_file" value="<?= $button_sync_file; ?>"/>
+							<input type="submit" class="button" name="sync_file" value="<?= _l("Sync File"); ?>"/>
 							<br/><br/>
-							<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= $button_default_installation; ?>"/>
+							<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= _l("Overwrite Default Installation DB File"); ?>"/>
 						</td>
 						<td>
 							<?= $this->builder->build('multiselect', $data_tables, 'tables', $tables); ?>
@@ -43,8 +43,8 @@
 					<tr>
 						<td></td>
 						<td>
-							<input type="submit" class="button" name="site_restore" value="<?= $button_restore; ?>"/>
-							<input type="submit" class="button" onclick="$(this).closest('form').attr('target', '_blank');" name="backup_download" value="<?= $button_download; ?>"/>
+							<input type="submit" class="button" name="site_restore" value="<?= _l("Restore"); ?>"/>
+							<input type="submit" class="button" onclick="$(this).closest('form').attr('target', '_blank');" name="backup_download" value="<?= _l("Download"); ?>"/>
 						</td>
 					</tr>
 				</table>
@@ -54,9 +54,9 @@
 					<tr>
 						<td>
 							<label><?= _l("Execute File"); ?></label>
-							<input type="submit" class="button" name="execute_file" value="<?= $button_execute_file; ?>"/>
+							<input type="submit" class="button" name="execute_file" value="<?= _l("Execute File"); ?>"/>
 							<br/><br/>
-							<input type="submit" class="button" name="execute_sync_file" value="<?= $button_execute_sync_file; ?>"/>
+							<input type="submit" class="button" name="execute_sync_file" value="<?= _l("Execute Sync File"); ?>"/>
 						</td>
 						<td>
 							<input type="file" name="filename" value=""/>

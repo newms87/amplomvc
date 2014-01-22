@@ -49,16 +49,16 @@
 
 			<? if ($list_show_add_to_cart) { ?>
 				<div class="cart">
-					<input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');"
+					<input type="button" value="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');"
 						class="button"/>
 				</div>
 			<? } ?>
 
 			<? if ($wishlist_status) { ?>
-				<div class="wishlist"><a onclick="addToWishList('<?= $product['product_id']; ?>');"><?= $button_wishlist; ?></a></div>
+				<div class="wishlist"><a onclick="addToWishList('<?= $product['product_id']; ?>');"><?= _l("Add to Wishlist"); ?></a></div>
 			<? } ?>
 			<? if ($compare_status) { ?>
-				<div class="compare"><a onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
+				<div class="compare"><a onclick="addToCompare('<?= $product['product_id']; ?>');"><?= _l("Add to Compare"); ?></a></div>
 			<? } ?>
 		</a>
 	<? } ?>

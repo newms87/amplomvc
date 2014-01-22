@@ -73,6 +73,10 @@ abstract class Controller
 
 	protected function renderController($child, $parameters = array())
 	{
+		if (!is_array($parameters)) {
+			$parameters = array($parameters);
+		}
+
 		$action = new Action($this->registry, $child, $parameters);
 
 		if ($action->execute()) {

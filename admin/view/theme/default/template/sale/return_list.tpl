@@ -84,7 +84,7 @@
 									class="datepicker"/></td>
 							<td><input type="text" name="filter_date_modified" value="<?= $filter_date_modified; ?>" size="12"
 									class="datepicker"/></td>
-							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
+							<td align="right"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
 						</tr>
 						<? if ($returns) { ?>
 							<? foreach ($returns as $return) { ?>

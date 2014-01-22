@@ -37,7 +37,7 @@
 							}
 						} ?>
 					</ul>
-					<a onclick="add_contact_phone(this);"><?= $button_add_phone; ?></a>
+					<a onclick="add_contact_phone(this);"><?= _l("Add Phone"); ?></a>
 				</td>
 				<td class="contact_address left">
 					<div class="contact_street_1"><label for="street_1_<?= $row; ?>"><?= _l("Street Address: "); ?></label><input
@@ -52,7 +52,7 @@
 					</div>
 					<div class="contact_zone">
 						<label>   <?= _l("Zone: "); ?></label>
-						<select id="zone_id-<?= $row; ?>" zone_id="<?= $contact['zone_id']; ?>" name="contact[<?= $row; ?>][zone_id]"></select>
+						<select id="zone_id-<?= $row; ?>" data-zone_id="<?= $contact['zone_id']; ?>" name="contact[<?= $row; ?>][zone_id]"></select>
 					</div>
 					<div class="contact_postcode"><label for="postcode_<?= $row; ?>"><?= _l("Postal Code: "); ?></label><input
 							id="postcode_<?= $row; ?>" type="text" maxlength="10" name="contact[<?= $row; ?>][postcode]" value="<?= $contact['postcode']; ?>"/></div>
@@ -67,7 +67,7 @@
 	<tbody>
 		<tr>
 			<td class="left" colspan="4"></td>
-			<td class="center"><a onclick="add_contact_entry(this);" class="button"><?= $button_add_contact; ?></a></td>
+			<td class="center"><a onclick="add_contact_entry(this);" class="button"><?= _l("Add Contact"); ?></a></td>
 			<td class="left" colspan="3"></td>
 		</tr>
 	</tbody>
@@ -101,7 +101,7 @@
 		html += '			<td class="left"><input type="text" name="contact[%row%][company]" /></td>';
 		html += '			<td class="left"><input type="text" name="contact[%row%][email]" /></td>';
 		html += '			<td class="left"><input type="text" name="contact[%row%][website]" /></td>';
-		html += '			<td class="left"><ul class="phone_list" row="%row%">' + build_phone_item(contact_row, 0) + '</ul><a onclick="add_contact_phone(this);"><?= $button_add_phone; ?></a></td>';
+		html += '			<td class="left"><ul class="phone_list" row="%row%">' + build_phone_item(contact_row, 0) + '</ul><a onclick="add_contact_phone(this);"><?= _l("Add Phone"); ?></a></td>';
 		html += '			<td class="contact_address left">';
 		html += '				<div class="contact_street_1"><label for="street_1_%row%"><?= _l("Street Address: "); ?></label><input id="street_1_%row%" type="text" name="contact[%row%][street_1]" /></div>';
 		html += '				<div class="contact_street_2"><label for="street_2_%row%"><?= _l("Street Address 2: "); ?></label><input id="street_2_%row%" type="text" name="contact[%row%][street_2]" /></div>';

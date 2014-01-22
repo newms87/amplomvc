@@ -25,14 +25,14 @@
 			<div class="right"><?= $description; ?></div>
 		</div>
 		<div class="product_video_helper">
-			<?= $text_video_helper; ?>
+			<?= _l("Please complete your payment on our partners site."); ?>
 		</div>
 
 		<div class="description">
 			<? if (isset($manufacturer) && $manufacturer) { ?>
-				<div class="description_manufacturer"><span><?= $text_more_from_designer; ?></span><a
+				<div class="description_manufacturer"><span><?= _l("More from this Designer"); ?></span><a
 						href="<?= $manufacturer_url; ?>" class="manufacturer_link"><?= $manufacturer; ?></a><span
-						style="margin-left:7px"><?= $text_on_store; ?></span></div>
+						style="margin-left:7px"><?= _l("On Store"); ?></span></div>
 			<? } ?>
 
 			<? if (isset($block_sharing)) { ?>
@@ -42,7 +42,7 @@
 	</div>
 
 	<? if ($tags) { ?>
-		<div class="tags"><b><?= $text_tags; ?></b>
+		<div class="tags"><b><?= _l("Tags"); ?></b>
 			<? foreach ($tags as $i => $tag) { ?>
 				<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['tag']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
 			<? } ?>

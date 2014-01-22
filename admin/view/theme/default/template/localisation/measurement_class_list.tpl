@@ -11,7 +11,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'measurement.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-			<div class="buttons"><a onclick="location="<?= $insert; ?>"" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+			<div class="buttons"><a onclick="location="<?= $insert; ?>"" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,16 +21,16 @@
 							<td width="1" style="align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'title') { ?>
-									<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= $column_title; ?></a>
+									<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= _l("Title"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_title; ?>"><?= $column_title; ?></a>
+									<a href="<?= $sort_title; ?>"><?= _l("Title"); ?></a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'unit') { ?>
-									<a href="<?= $sort_unit; ?>" class="<?= strtolower($order); ?>"><?= $column_unit; ?></a>
+									<a href="<?= $sort_unit; ?>" class="<?= strtolower($order); ?>"><?= _l("Unit"); ?></a>
 								<? } else { ?>
-									<a href="<?= $sort_unit; ?>"><?= $column_unit; ?></a>
+									<a href="<?= $sort_unit; ?>"><?= _l("Unit"); ?></a>
 								<? } ?></td>
-							<td class="right"><?= $column_action; ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
 						</tr>
 					</thead>
 					<tbody>

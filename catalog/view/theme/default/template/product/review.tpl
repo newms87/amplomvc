@@ -8,20 +8,20 @@
 	<? } ?>
 	<div class="pagination"><?= $pagination; ?></div>
 <? } else { ?>
-	<div class="section"><?= $text_no_reviews; ?></div>
+	<div class="section"><?= _l("No Reviews"); ?></div>
 <? } ?>
 
 <? if ($review_status) { ?>
 	<div id="tab-review" class="tab-content">
 		<div id="review"></div>
-		<h2 id="review-title"><?= $text_write; ?></h2>
+		<h2 id="review-title"><?= _l("Write a Review"); ?></h2>
 		<b><?= _l("Name"); ?></b><br/>
 		<input type="text" name="name" value=""/>
 		<br/>
 		<br/>
 		<b><?= _l("Review"); ?></b>
 		<textarea name="text" cols="40" rows="8" style="width: 98%;"></textarea>
-		<span style="font-size: 11px;"><?= $text_note; ?></span><br/>
+		<span style="font-size: 11px;"><?= _l("Note"); ?></span><br/>
 		<br/>
 		<b><?= _l("Rating"); ?></b> <span><?= _l("Bad"); ?></span>&nbsp;
 		<input type="radio" name="rating" value="1"/>
@@ -42,7 +42,7 @@
 		<br/>
 
 		<div class="buttons">
-			<div class="right"><a id="button-review" class="button"><?= $button_continue; ?></a></div>
+			<div class="right"><a id="button-review" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 	</div>
 <? } ?>
@@ -83,7 +83,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-review').attr('disabled', true);
-			$('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
+			$('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please wait"); ?></div>');
 		}
 		,
 		complete: function () {

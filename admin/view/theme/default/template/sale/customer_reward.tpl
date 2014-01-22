@@ -7,9 +7,9 @@
 <table class="list">
 	<thead>
 		<tr>
-			<td class="left"><?= $column_date_added; ?></td>
-			<td class="left"><?= $column_description; ?></td>
-			<td class="right"><?= $column_points; ?></td>
+			<td class="left"><?= _l("Date Added"); ?></td>
+			<td class="left"><?= _l("Description"); ?></td>
+			<td class="right"><?= _l("Points"); ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -23,7 +23,7 @@
 			<? } ?>
 			<tr>
 				<td></td>
-				<td class="right"><b><?= $text_balance; ?></b></td>
+				<td class="right"><b><?= _l("Balance"); ?></b></td>
 				<td class="right"><?= $balance; ?></td>
 			</tr>
 		<? } else { ?>

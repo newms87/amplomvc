@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Payment_Cod extends PaymentExtension
+class System_Extension_Payment_Cod extends System_Extension_Payment
 {
 	public function charge()
 	{

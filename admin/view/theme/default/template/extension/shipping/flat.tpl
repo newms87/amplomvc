@@ -28,7 +28,7 @@
 					<tr>
 						<td valign="top">
 							<?= _l("Flat Rates"); ?><br/><br/>
-							<a id="add_flat_rate"><?= $button_add_rate; ?></a>
+							<a id="add_flat_rate"><?= _l("Add Rate"); ?></a>
 						</td>
 						<td>
 							<? $flat_rates['template_row'] = array(
@@ -82,7 +82,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td colspan="2"><a class="delete" onclick="$(this).closest('.rate').remove();"><?= $button_delete; ?></a>
+											<td colspan="2"><a class="delete" onclick="$(this).closest('.rate').remove();"><?= _l("Delete"); ?></a>
 											</td>
 										</tr>
 									</table>

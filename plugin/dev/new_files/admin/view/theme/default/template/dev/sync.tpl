@@ -6,7 +6,7 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
 			<div class="buttons">
-				<a href="<?= $return; ?>" class="button"><?= $button_return; ?></a>
+				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
 			</div>
 		</div>
 		<div class="section">
@@ -30,7 +30,7 @@
 						<td><input id="password" type="password" name="password" value=""/></td>
 					</tr>
 					<tr>
-						<td><input type="submit" class="button" name="sync_site" value="<?= $button_sync; ?>"/></td>
+						<td><input type="submit" class="button" name="sync_site" value="<?= _l("Sync"); ?>"/></td>
 					</tr>
 				</table>
 			</form>

@@ -98,7 +98,7 @@
 						</tr>
 						<tr>
 							<td><?= _l("Region / State:"); ?></td>
-							<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id; ?>"></select></td>
+							<td><select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select></td>
 						</tr>
 						<tr>
 							<td><?= _l("Language:"); ?></td>

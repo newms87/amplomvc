@@ -12,7 +12,7 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer"); ?></h1>
 
 			<div class="buttons"><a onclick="$('form').attr('action', '<?= $approve; ?>'); $('form').submit();"
-					class="button"><?= $button_approve; ?></a><a onclick="location = '<?= $insert; ?>'"
+					class="button"><?= _l("Approve"); ?></a><a onclick="location = '<?= $insert; ?>'"
 					class="button"><?= _l("Insert"); ?></a><a onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();"
 					class="button"><?= _l("Delete"); ?></a></div>
 		</div>
@@ -110,7 +110,7 @@
 							<td><input type="text" name="filter_date_added" value="<?= $filter_date_added; ?>" size="12"
 									id="date"/></td>
 							<td></td>
-							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
+							<td align="right"><a onclick="filter();" class="button"><?= _l("Filter"); ?></a></td>
 						</tr>
 						<? if ($customers) { ?>
 							<? foreach ($customers as $customer) { ?>

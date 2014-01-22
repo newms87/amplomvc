@@ -1,7 +1,7 @@
 <? if ($data_addresses) { ?>
 	<input type="radio" name="payment_address" value="existing"
 		id="payment-address-existing" <?= $data_addresses ? 'checked="checked"' : ''; ?> />
-	<label for="payment-address-existing"><?= $text_address_existing; ?></label>
+	<label for="payment-address-existing"><?= _l("Use an existing billing address:"); ?></label>
 
 	<div id="payment_existing" <?= $data_addresses ? '' : 'style="display: none;"'; ?>>
 		<form action="<?= $validate_selection; ?>" method="post">
@@ -14,7 +14,7 @@
 				<? } ?>
 			</select>
 			<noscript>
-				<input type="submit" name="payment_existing" value="<?= $button_select; ?>"/>
+				<input type="submit" name="payment_existing" value="<?= _l("Select"); ?>"/>
 			</noscript>
 		</form>
 	</div>
@@ -23,7 +23,7 @@
 <p>
 	<input type="radio" name="payment_address" value="new"
 		id="payment-address-new" <?= $data_addresses ? '' : 'checked="checked"'; ?> />
-	<label for="payment-address-new"><?= $text_address_new; ?></label>
+	<label for="payment-address-new"><?= _l("Use a new address"); ?></label>
 </p>
 <div id="payment_new" class="address_form" <?= $data_addresses ? 'style="display: none;"' : ''; ?>>
 	<?= $form_payment_address; ?>

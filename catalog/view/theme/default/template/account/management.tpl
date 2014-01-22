@@ -44,7 +44,7 @@
 									<div class="price"><?= $subscription['total_display']; ?></div>
 								</div>
 							</div>
-							<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= $text_edit_subscription; ?></a>
+							<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Edit Subscription"); ?></a>
 						</div>
 					<? } else { ?>
 						<div class="subscription cancelled">
@@ -57,8 +57,8 @@
 									<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
 								</div>
 							</div>
-							<div class="clear inactive"><?= $text_subscription_inactive; ?></div>
-							<a href="<?= $subscription['edit']; ?>" class="clear reactivate small button"><?= $text_edit_cancelled; ?></a>
+							<div class="clear inactive"><?= _l("Subscription Inactive"); ?></div>
+							<a href="<?= $subscription['edit']; ?>" class="clear reactivate small button"><?= _l("Reactivate"); ?></a>
 							<a href="<?= $subscription['remove']; ?>" class="small button delete"><?= _l("Remove"); ?></a>
 						</div>
 					<? } ?>
@@ -72,7 +72,7 @@
 	</div>
 
 	<div class="clear buttons">
-		<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+		<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
 		<div class="right">
 			<input type="submit" value="<?= _l("Save"); ?>" class="button"/>
 		</div>
@@ -83,7 +83,7 @@
 
 <script type="text/javascript">
 	$('.cancelled .button.delete').click(function () {
-		return confirm("<?= $text_confirm_remove; ?>");
+		return confirm("<?= _l("Are you sure you want to remove the subscription? All the information associated with your subscription will be removed."); ?>");
 	});
 </script>
 

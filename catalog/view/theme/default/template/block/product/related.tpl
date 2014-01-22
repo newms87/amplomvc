@@ -22,7 +22,7 @@
 						<div class="rating"><img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>"
 								alt="<?= $product['reviews']; ?>"/></div>
 					<? } ?>
-					<a onclick="addToCart('<?= $product['product_id']; ?>');" class="button"><?= $button_cart; ?></a></div>
+					<a onclick="addToCart('<?= $product['product_id']; ?>');" class="button"><?= _l("Add to Cart"); ?></a></div>
 			<? } ?>
 		</div>
 	</div>

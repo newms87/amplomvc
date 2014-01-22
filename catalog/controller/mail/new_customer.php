@@ -28,8 +28,8 @@ class Catalog_Controller_Mail_NewCustomer extends Controller
 		$this->data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
 
 		//Get resized image width x height. Note: $logo_width / $logo_height may be null or 0 meaning auto resize
-		$this->data['logo_width']  = $this->image->getInfo('width');
-		$this->data['logo_height'] = $this->image->getInfo('height');
+		$this->data['logo_width']  = $this->image->info('width');
+		$this->data['logo_height'] = $this->image->info('height');
 
 		if ($this->config->get('config_account_approval')) {
 			$this->data['approval'] = _l('Your account must be approved before you can login. You will be notified once your account has been approved');

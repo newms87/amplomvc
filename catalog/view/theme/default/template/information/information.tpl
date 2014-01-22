@@ -4,7 +4,8 @@
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
-		<h1><?= $head_title; ?></h1>
+		<h1><?= $page_title; ?></h1>
+
 		<?= $description; ?>
 		<div class="buttons">
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>

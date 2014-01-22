@@ -1001,8 +1001,19 @@ class Cart extends Library
 				return false;
 			}
 
-			$classname = "Catalog_Model_Shipping_" . $this->tool->formatClassname($code);
-			$quotes    = $this->$classname->getQuote($shipping_address);
+			$shipping = $this->System_Extension_Shipping->get($code);
+
+
+
+			//TODO: Come back here after implementing Full shipping Extension
+
+
+
+			if ($extension->isActive() && $extension->validate($payment_address, $this->getTotal())) {
+				return $extension;
+			}
+
+			$quotes    = $shipping->getQuote($shipping_address);
 
 			if (!empty($quotes)) {
 				if (!$method) {

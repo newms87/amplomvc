@@ -1,87 +1,23 @@
 <?php
-class System_Extension_Shipping extends System_Extension_Model
+class System_Extension_Shipping extends System_Extension_Extension
 {
-	public function __construct($registry)
+	//This is a required function
+	public function getQuote($address)
 	{
-		parent::__construct($registry);
-
-		require_once(DIR_SYSTEM . "extension/shipping_extension.php");
+		exit(_l("Implement %s for the %s extension", __METHOD__, $this->code));
 	}
 
-	public function has($code)
+	public function validate($address, $total)
 	{
-		return $this->extensionExists('shipping', $code);
-	}
-
-	public function get($code)
-	{
-		return $this->registry->get('System_Extension_Shipping_' . $this->tool->formatClassname($code));
-	}
-
-	public function getActive()
-	{
-		$active = $this->cache->get('extension.shipping.active');
-
-		if (is_null($active)) {
-			$filter = array(
-				'status' => 1,
-			);
-
-			$active = $this->getFiltered($filter);
-
-			$this->cache->set('extension.shipping.active', $active);
-		}
-
-		$extensions = array();
-
-		foreach ($active as $code => $extension) {
-			$extensions[$code] = $this->get($code);
-		}
-
-		return $extensions;
-	}
-
-	public function updateExtension($code, $data)
-	{
-		$this->_updateExtension('shipping', $code, $data);
-
-		$this->cache->delete('extension.shipping');
-	}
-
-	public function getFiltered($filter = array())
-	{
-		$extensions = $this->getExtensions('shipping', $filter);
-
-		return $extensions;
-	}
-
-	public function getTotal($filter = array())
-	{
-		unset($filter['start']);
-		unset($filter['limit']);
-
-		return count($this->getFiltered($filter));
-	}
-
-	public function install($code)
-	{
-		if (!$this->user->can('modify', 'extension/shipping')) {
-			$this->error['permission'] = _l("User does not have permission to modify the Shipping Extension");
+		if ((int)$this->settings['min_total'] > $total) {
+			$this->error['total'] = _l("The total order must be at least " . (int)$this->settings['min_total'] . " to use this shipping method.");
 			return false;
 		}
 
-		$this->installExtension('shipping', $code);
-
-		$this->cache->delete('extension.shipping');
-
-		return true;
-	}
-
-	public function uninstall($code)
-	{
-		$this->uninstallExtension('shipping', $code);
-
-		$this->cache->delete('extension.shipping');
+		if (!$this->address->inGeoZone($address, $this->settings['geo_zone_id'])) {
+			$this->error['geo_zone'] = _l("This shipping method cannot ship to the requested location.");
+			return false;
+		}
 
 		return true;
 	}

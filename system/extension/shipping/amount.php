@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Shipping_Amount extends ShippingExtension
+class System_Extension_Shipping_Amount extends System_Extension_Shipping
 {
 	public function getQuote($address)
 	{
@@ -16,64 +16,35 @@ class System_Extension_Shipping_Amount extends ShippingExtension
 			foreach ($pricesets as $set) {
 				switch ($set['range']) {
 					case 'range':
-						if ($total_price >= $set['from'] && $total_price <= $set['to']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price >= $set['from'] && $total_price <= $set['to'];
 						break;
 					case 'lt':
-						if ($total_price < $set['total']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price < $set['total'];
 						break;
 					case 'lte':
-						if ($total_price <= $set['total']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price <= $set['total'];
 						break;
 					case 'gt':
-						if ($total_price > $set['total']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price > $set['total'];
 						break;
 					case 'gte':
-						if ($total_price >= $set['total']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price >= $set['total'];
 						break;
 					case 'eq':
-						if ($total_price == $set['total']) {
-							if ($set['type'] == 'fixed') {
-								$cost = $set['cost'];
-							} else {
-								$cost = ($set['cost'] / 100) * $total_price;
-							}
-						}
+						$is_valid = $total_price == $set['total'];
 						break;
 					default:
+						$is_valid = false;
 						break;
 				}
 
-				if ($cost !== false) {
+				if ($is_valid) {
+					if ($set['type'] == 'fixed') {
+						$cost = $set['cost'];
+					} else {
+						$cost = ($set['cost'] / 100) * $total_price;
+					}
+
 					break;
 				}
 			}

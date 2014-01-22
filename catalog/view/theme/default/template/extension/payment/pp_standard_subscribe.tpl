@@ -1,5 +1,5 @@
 <? if ($testmode) { ?>
-	<div class="message_box warning"><?= $text_testmode; ?></div>
+	<div class="message_box warning"><?= _l("The PayPal payment method is in sandbox mode. Your account will not be charged."); ?></div>
 <? } ?>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 	<!-- Identify your business so that you can collect the payments. -->
@@ -83,10 +83,10 @@
 
 	<div class="buttons">
 		<div class="right">
-			<div id="submit_pp_button"><div id="submit_payment"><?= $text_submit_payment; ?></div><input type="submit" value="<?= $button_confirm; ?>" class="button" /></div>
+			<div id="submit_pp_button"><div id="submit_payment"><?= _l("Submit Payment"); ?></div><input type="submit" value="<?= _l("Confirm"); ?>" class="button" /></div>
 			<div id="processing_payment">
-				<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /><span><?= $text_processing_payment; ?></span><br />
-				<input type="submit" value="<?= $button_try_again; ?>" class="button" />
+				<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /><span><?= _l("Processing Payment"); ?></span><br />
+				<input type="submit" value="<?= _l("Try Again"); ?>" class="button" />
 			</div>
 		</div>
 	</div>

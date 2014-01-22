@@ -25,7 +25,7 @@ switch ($js) {
 		<script type="text/javascript">
 			country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
 
-			country_selectors.change(function (event) {
+			country_selectors.change(function () {
 				cs = $(this);
 
 				if (!$(this).is('select')) {
@@ -36,16 +36,16 @@ switch ($js) {
 
 				zone_selector = cs.closest('<?= $parent_selector;?>').find('<?=$zone_selector;?>');
 
-				if (zone_selector.attr('country_id') == cs.val()) return;
+				if (zone_selector.children().length && zone_selector.attr('country_id') == cs.val()) return;
 
 				zone_selector.attr('country_id', cs.val());
 
-				zone_selector.attr('zone_id', zone_selector.val() || zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
+				zone_selector.attr('data-zone_id', zone_selector.val() || zone_selector.attr('data-zone_id') || zone_selector.attr('select_value') || 0);
 
 				zone_selector.load("<?= $url_load_zones;?>" + cs.val(),
 					function () {
 						zs = $(this).closest('<?= $parent_selector;?>').find('<?= $zone_selector;?>');
-						zs.val(zs.attr('zone_id') || 0).trigger('change');
+						zs.val(zs.attr('data-zone_id') || 0).trigger('change');
 					});
 			});
 
