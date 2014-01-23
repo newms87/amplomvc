@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= _l("Site Management"); ?></h1>
 
 			<div class="buttons">
 				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
