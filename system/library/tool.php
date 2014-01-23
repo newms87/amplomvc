@@ -19,14 +19,24 @@ class Tool extends Library
 		return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 	}
 
-	public function formatClassname($component)
+	public function _2CamelCase($str, $lower = false)
 	{
-		$parts = explode('_', $component);
+		$parts = explode('_', $str);
 
 		//capitalize each component of the class name
-		array_walk($parts, function (&$e, $i) { $e = ucfirst($e); });
+		array_walk($parts, function (&$e) { $e = ucfirst($e); });
 
-		return implode('', $parts);
+		$str = implode('', $parts);
+
+		return $lower ? lcfirst($str) : $str;
+	}
+
+	public function camelCase2_($str)
+	{
+		$matches = null;
+		preg_match_all("/([A-Z][a-z0-9]*)/", ucfirst($str), $matches);
+
+		return strtolower(implode("_", $matches[1]));
 	}
 
 	public function name_format($format, $data)

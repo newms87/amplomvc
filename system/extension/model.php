@@ -85,45 +85,50 @@ final class System_Extension_Model extends Model
 		return null;
 	}
 
-	//TODO: Add caching...
 	public function getExtensions($type, $filter = array())
 	{
-		if (!isset($this->extensions[$type])) {
-			$extensions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "' ORDER BY sort_order ASC", 'code');
+		if (empty($this->extensions[$type])) {
+			$this->extensions[$type] = $this->cache->get('extension.' . $type);
 
-			$files = glob(DIR_SYSTEM . "extension/$type/*.php");
+			if (empty($this->extensions[$type]) || true) {
+				$extensions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "' ORDER BY sort_order ASC", 'code');
 
-			foreach ($files as $file) {
-				$code = basename($file, '.php');
+				$files = glob(DIR_SYSTEM . "extension/$type/*.php");
 
-				if (!isset($extensions[$code])) {
-					$extensions[$code] = array(
-						'type'       => $type,
-						'code'       => $code,
-						'title'      => $this->codeTitle($code),
-						'settings'   => array(),
-						'sort_order' => '',
-						'status'     => 0,
-						'installed'  => 0,
-					);
-				} else {
-					$extensions[$code]['installed'] = 1;
-				}
-			}
+				foreach ($files as $file) {
+					$code = basename($file, '.php');
 
-			foreach ($extensions as $code => &$extension) {
-				//The file does not exist
-				if (!isset($extension['installed'])) {
-					$this->uninstall($type, $code, false);
-					unset($extensions[$code]);
-					continue;
+					if (!isset($extensions[$code])) {
+						$extensions[$code] = array(
+							'type'       => $type,
+							'code'       => $code,
+							'title'      => $this->codeTitle($code),
+							'settings'   => array(),
+							'sort_order' => '',
+							'status'     => 0,
+							'installed'  => 0,
+						);
+					} else {
+						$extensions[$code]['installed'] = 1;
+					}
 				}
 
-				$extension['settings'] = !empty($extension['settings']) ? unserialize($extension['settings']) : array();
-			}
-			unset ($extension);
+				foreach ($extensions as $code => &$extension) {
+					//The file does not exist
+					if (!isset($extension['installed'])) {
+						$this->uninstall($type, $code, false);
+						unset($extensions[$code]);
+						continue;
+					}
 
-			$this->extensions[$type] = $extensions;
+					$extension['settings'] = !empty($extension['settings']) ? unserialize($extension['settings']) : array();
+				}
+				unset ($extension);
+
+				$this->extensions[$type] = $extensions;
+
+				$this->cache->set('extension.' . $type, $this->extensions[$type]);
+			}
 		}
 
 		if ($filter) {

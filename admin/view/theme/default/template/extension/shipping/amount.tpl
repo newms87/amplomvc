@@ -86,7 +86,7 @@
 	</tr>
 </table>
 
-<?= $this->builder->js('load_zones', '.zonerule', '.country_select', '.zone_select'); ?>
+<?= $this->builder->js('load_zones', '.zonerule', '.country_select', '.zone_select', true); ?>
 
 <script type="text/javascript">
 	/* Flat Pricing List */
@@ -97,9 +97,7 @@
 		$.ac_template('ps_list', 'add');
 	}
 
-	ps_list.sortable({cursor: 'move', stop: function () {
-		$(this).update_index('.sort_order');
-	}});
+	ps_list.sortable({cursor: 'move'});
 
 	function range_values(context) {
 		pricetotal = context.closest('.priceset').find('.pricetotal');
@@ -116,6 +114,8 @@
 	/* Zone Rules */
 	var zr_list = $('#zonerule_list');
 	zr_list.ac_template('zr_list', {defaults: <?= json_encode($zonerule['__ac_template__']); ?>});
+
+	zr_list.sortable({cursor: 'move'});
 
 	function add_zone_rule() {
 		var zr = $.ac_template('zr_list', 'add');

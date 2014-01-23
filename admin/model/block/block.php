@@ -12,7 +12,7 @@ class Admin_Model_Block_Block extends Model
 		$language_dir = $this->language->info('directory');
 
 		$parts      = explode('/', $data['route']);
-		$class_name = "Block_" . $this->tool->formatClassname($parts[0]) . '_' . $this->tool->formatClassname($parts[1]);
+		$class_name = "Block_" . $this->tool->_2CamelCase($parts[0]) . '_' . $this->tool->_2CamelCase($parts[1]);
 
 		/**
 		 * Add Backend Files

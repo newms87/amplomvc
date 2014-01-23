@@ -22,7 +22,7 @@ abstract class System_Extension_Extension extends Model
 
 	public function get($code)
 	{
-		return $this->registry->get('System_Extension_' . $this->type . '_' . $this->tool->formatClassname($code));
+		return $this->registry->get('System_Extension_' . $this->type . '_' . $this->tool->_2CamelCase($code));
 	}
 
 	public function isActive()
@@ -76,35 +76,15 @@ abstract class System_Extension_Extension extends Model
 
 		//Load Information for Payment Extension
 		if (!empty($matches[2])) {
-			$this->code = strtolower($matches[2]);
+			$this->code = $this->tool->camelCase2_($matches[2]);
 
-			//Load Information for all of this extension type (we'll probably need all of it anyway!)
-			if (empty(self::$extension_info[$this->type])) {
-				self::$extension_info[$this->type] = $this->cache->get('extension.model.' . $this->type);
-
-				if (empty(self::$extension_info[$this->type])) {
-					self::$extension_info[$this->type] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($this->type) . "' ORDER BY sort_order ASC", 'code');
-
-					$this->cache->set('extension.model.' . $this->type, self::$extension_info[$this->type]);
-				}
-			}
-
-
-
-			//The Code may be in format extcode or ext_code, which will both have class name System_Extension_Type_Extcode
-			//(note: in PHP class names are case insensitive)
-			foreach (self::$extension_info[$this->type] as $ext_code => $ext_info) {
-				if (strtolower(str_replace('_','',$ext_code)) === $this->code) {
-					$this->info = $ext_info;
-				}
-			}
+			$this->info = $this->System_Extension_Model->getExtension($this->type, $this->code);
 
 			if (!$this->info) {
-				html_dump(self::$extension_info[$this->type], 'ext_info for ' . $this->type . '/' . $this->code);
 				trigger_error(_l("The extension %s was not installed!", $this->code));
 			}
 			else {
-				$this->settings = unserialize($this->info['settings']);
+				$this->settings = $this->info['settings'];
 			}
 		}
 	}

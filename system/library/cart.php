@@ -1080,7 +1080,7 @@ class Cart extends Library
 			list($code, $method) = explode("__", $shipping_method_id, 2);
 		}
 
-		$classname = "Catalog_Model_Shipping_" . $this->tool->formatClassname($code);
+		$classname = "Catalog_Model_Shipping_" . $this->tool->_2CamelCase($code);
 
 		if (method_exists($this->$classname, 'data')) {
 			return $this->$classname->data($method);

@@ -20,7 +20,7 @@ switch ($js) {
 		$country_selector = $args[1];
 		$zone_selector    = $args[2];
 
-		$url_load_zones = $this->url->link('tool/data/load_zones', ((count($args) > 3 && $args[3]) ? "allow_all" : "") . '&country_id=');
+		$url_load_zones = $this->url->link('data/locale/load_zones', ((count($args) > 3 && $args[3]) ? "allow_all" : "") . '&country_id=');
 		?>
 		<script type="text/javascript">
 			country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');

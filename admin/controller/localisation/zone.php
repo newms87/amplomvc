@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Localisation_Zone extends Controller
 {
-
-
 	public function index()
 	{
 		$this->document->setTitle(_l("Zones"));

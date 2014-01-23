@@ -47,11 +47,11 @@ final class Action
 				(!$is_file || ($is_file && $is_dir && ($i < ($count - 1)) && (is_file($next . '.php') || is_dir($next))))
 			) {
 				$filepath .= '/';
-				$this->class .= $this->tool->formatClassname($part) . '_';
+				$this->class .= $this->tool->_2CamelCase($part) . '_';
 			} elseif ($is_file) {
 				$this->file = SITE_DIR . $filepath . '.php';
 
-				$this->class .= $this->tool->formatClassname($part);
+				$this->class .= $this->tool->_2CamelCase($part);
 			} elseif ($this->file) {
 				$this->method    = $part;
 				$this->classpath = str_replace('/' . $part, '', $this->classpath);
