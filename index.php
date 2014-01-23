@@ -2,19 +2,18 @@
 // Configuration
 if (is_file('ac_config.php')) {
 	require_once('ac_config.php');
-} else {
-	define('SITE_DIR', str_replace('\\', '/', dirname(__FILE__) . '/'));
 }
-
-//System / URL Paths
-require_once('path_config.php');
-require_once(DIR_SYSTEM . 'functions.php');
 
 // Install
 if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 	define("AMPLOCART_INSTALL", true);
 	require_once('system/install/install.php');
+	exit;
 }
+
+//System / URL Paths
+require_once('path_config.php');
+require_once(DIR_SYSTEM . 'functions.php');
 
 $__start = microtime(true);
 

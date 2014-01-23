@@ -5,8 +5,17 @@ if (!defined("AMPLOCART_INSTALL")) {
 	exit;
 }
 
-define("SITE_DIR", str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/')));
+$root = str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/'));
+if (!is_file($root . 'ac_config.php')) {
+	define("SITE_DIR", $root);
+}
+else {
+	require_once($root . 'ac_config.php');
+}
+
 define("DIR_DATABASE", SITE_DIR . 'system/database/');
+
+require_once(SITE_DIR . 'system/functions.php');
 
 $template    = !empty($_GET['page']) ? $_GET['page'] : 'db';
 $error_msg   = '';
@@ -87,16 +96,15 @@ $db_types = array(
 
 require_once("system/install/install_{$template}.tpl");
 
-
 function setup_db()
 {
 	define("DB_PREFIX", $_POST['db_prefix']);
 
-	require_once(DIR_DATABASE . "database.php");
-	require_once(DIR_SYSTEM . "engine/library.php");
-	require_once(DIR_SYSTEM . "library/db.php");
+	require_once(SITE_DIR . 'system/engine/model.php');
+	require_once(SITE_DIR . "system/engine/library.php");
+	require_once(SITE_DIR . "system/database/db.php");
 
-	$db = @new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
+	$db = new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
 	$error = $db->getError();
 
@@ -106,7 +114,7 @@ function setup_db()
 
 	$db_prefix = DB_PREFIX;
 
-	$db_sql = DIR_SYSTEM . 'install/db.sql';
+	$db_sql = SITE_DIR . 'system/install/db.sql';
 
 	$contents = file_get_contents($db_sql);
 
@@ -116,7 +124,7 @@ function setup_db()
 		return $db->getError();
 	}
 
-	$config_template = DIR_SYSTEM . 'install/config_template.php';
+	$config_template = SITE_DIR . 'system/install/config_template.php';
 	$ac_config       = SITE_DIR . 'ac_config.php';
 
 	$contents = file_get_contents($config_template);
@@ -157,7 +165,7 @@ function setup_db()
 	file_put_contents($ac_config, $contents);
 
 	//Setup .htaccess file
-	$htaccess_template = DIR_SYSTEM . 'install/template.htaccess';
+	$htaccess_template = SITE_DIR . 'system/install/template.htaccess';
 	$htaccess          = SITE_DIR . '.htaccess';
 
 	$contents = file_get_contents($htaccess_template);
@@ -177,9 +185,10 @@ function setup_user()
 		return _l("The password and confirmation do not match!");
 	}
 
-	require_once("ac_config.php");
-	require_once(DIR_SYSTEM . "engine/library.php");
-	require_once(DIR_SYSTEM . "library/db.php");
+	require_once(SITE_DIR . 'system/engine/model.php');
+	require_once(SITE_DIR . "system/engine/library.php");
+	require_once(SITE_DIR . "system/database/database.php");
+	require_once(SITE_DIR . "system/database/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 

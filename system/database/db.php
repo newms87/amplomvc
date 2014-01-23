@@ -15,7 +15,7 @@ class DB
 		}
 
 		//the database interface
-		if (function_exists("_require_once")) {
+		if (function_exists("_ac_mod_file")) {
 			require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
 
 			if (file_exists(DIR_DATABASE . $driver . '.php')) {
