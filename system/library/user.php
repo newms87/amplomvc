@@ -48,6 +48,13 @@ class User extends Library
 
 		$user_group = $this->queryRow("SELECT name as group_type, permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user['user_group_id'] . "'");
 
+		if (!$user_group) {
+			$msg = _l("User was assigned an invalid group!");
+			$this->error_log->write($msg);
+			$this->message->add('error', $msg);
+			return;
+		}
+
 		$this->permissions = unserialize($user_group['permission']);
 
 		$this->user = $user + $user_group;

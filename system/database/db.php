@@ -436,9 +436,9 @@ class DB
 		return false;
 	}
 
-	public function setAutoincrement($table, $value)
+	public function setAutoIncrement($table, $value)
 	{
-		if (!$this->driver->setAutoincrement($table, $value)) {
+		if (!$this->driver->setAutoIncrement($table, $value)) {
 			trigger_error($this->driver->getError());
 
 			return false;

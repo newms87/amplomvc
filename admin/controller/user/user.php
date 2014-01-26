@@ -279,21 +279,8 @@ class Admin_Controller_User_User extends Controller
 				$this->error['password'] = _l("Password must be between 4 and 20 characters!");
 			}
 
-			if ($_POST['password'] != $_POST['confirm']) {
-				$this->error['confirm'] = _l("Password and password confirmation do not match!");
-			}
-		}
-
-		if ($this->user->isAdmin()) {
-			//if this is a Designer user
-			if ($_POST['user_group_id'] == 12) {
-				if (!isset($_POST['designers'])) {
-					$this->error['no_designer'] = _l("You must add a Designer for users under the User Group Designer!");
-				}
-
-				if (!isset($_POST['contact'])) {
-					$this->error['no_contact'] = _l("You must add at least 1 contact entry for users in the User Group Designer!");
-				}
+			if ($_POST['password'] !== $_POST['confirm']) {
+				$this->error['confirm'] = _l("Password and Confirmation do not match!");
 			}
 		}
 
