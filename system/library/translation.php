@@ -182,9 +182,12 @@ class Translation extends Library
 	{
 		$this->cache->delete('translate');
 
-		$this->query("INSERT INTO " . DB_PREFIX . "translation SET `table` = '" . $this->escape($table) . "', `field` = '" . $this->escape($field) . "'");
+		$translation = array(
+			'table' => $table,
+		   'field' => $field,
+		);
 
-		return $this->getLastId();
+		return $this->insert('translation', $translation);
 	}
 
 	public function remove($table, $field)

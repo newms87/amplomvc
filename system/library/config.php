@@ -336,7 +336,7 @@ class Config extends Library
 		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
 
 		if (!$default_exists) {
-			$this->setAutoincrement('store', 0);
+			$this->db->setAutoIncrement('store', 0);
 			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
 		}
 	}

@@ -53,7 +53,7 @@ class Theme extends Library
 		if (is_file($theme_settings_file)) {
 			$theme_settings = $this->cache->get('theme_settings.' . $theme);
 
-			if ($theme_settings || $theme_settings['mod_time'] != filemtime($theme_settings_file)) {
+			if (!$theme_settings || $theme_settings['mod_time'] != filemtime($theme_settings_file)) {
 
 				$_ = array();
 
@@ -67,6 +67,8 @@ class Theme extends Library
 			}
 
 			$this->settings = $theme_settings;
+
+			return $this->settings;
 		}
 
 		return null;
@@ -124,7 +126,7 @@ class Theme extends Library
 			}
 		}
 
-		if (!$themes) {
+		if (!$themes || true) {
 			$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
 
 			$themes = array();

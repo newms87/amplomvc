@@ -117,11 +117,21 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->pagination->total = $product_total;
 
 			$this->data['pagination'] = $this->pagination->render();
+
+			//In case there was a problem with the block_product_list
+			$this->data['continue'] = $this->url->link('common/home');
 		} else {
 			$this->data['category_name'] = $category_info['name'];
-		}
 
-		$this->data['continue'] = $this->url->link('common/home');
+			$parent = $this->getParent($category_id);
+
+			if ($parent && $parent['category_id'] !== 0) {
+				$this->data['continue'] = $this->url->link('product/category', 'category_id=' . $parent['category_id']);
+			}
+			else {
+				$this->data['continue'] = $this->url->link('common/home');
+			}
+		}
 
 		//Dependencies
 		$this->children = array(

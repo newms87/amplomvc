@@ -41,7 +41,7 @@ umask(0022);
 define("AMPLOCART_SESSION", "cross-store-session");
 
 //Password Hashing
-define("PASSWORD_COST", %password_cost %);
+define("PASSWORD_COST", %password_cost%);
 
 //ROOT DIRECTORY
 define('SITE_DIR', str_replace('\\', '/', dirname(__FILE__) . '/'));
