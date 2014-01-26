@@ -94,6 +94,11 @@ class Catalog_Model_Catalog_Category extends Model
 		return $children_ids;
 	}
 
+	public function getParent($category)
+	{
+		return current($this->getParents($category));
+	}
+
 	public function getParents($category)
 	{
 		$category_tree = $this->getCategoryTree($category);
@@ -117,6 +122,7 @@ class Catalog_Model_Catalog_Category extends Model
 		return $parents;
 	}
 
+	//TODO: Make this into a real OO tree with nodes, array is not the best way....
 	public function getCategoryTree($category_id = 0)
 	{
 		$language_id = $this->config->get('config_language_id');
@@ -124,7 +130,7 @@ class Catalog_Model_Catalog_Category extends Model
 
 		$category_tree = $this->cache->get("category.tree.$store_id.$language_id");
 
-		if (!$category_tree || true) {
+		if (!$category_tree) {
 			$categories = $this->getCategories();
 
 			$category_tree = array(
