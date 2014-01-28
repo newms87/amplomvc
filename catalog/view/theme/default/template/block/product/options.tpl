@@ -8,22 +8,14 @@
 			<? if ($product_option['required']) { ?>
 				<span class="required"></span>
 			<? } ?>
-			<span class="name"><?= $product_option['display_name']; ?>:</span><br/>
+			<span class="name"><?= $product_option['display_name']; ?></span><br/>
 
 			<? switch ($product_option['type']) {
 				case 'select':
-					?>
-					<?= $this->builder->build('select', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
-					<? break;
-
 				case 'radio':
-					?>
-					<?= $this->builder->build('radio', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
-					<? break;
-
 				case 'checkbox':
 					?>
-					<?= $this->builder->build('checkbox', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
+					<?= $this->builder->build($product_option['type'], $product_option['product_option_values'], "options[$product_option[product_option_id]]", $product_option['default']); ?>
 					<? break;
 
 				case 'image':

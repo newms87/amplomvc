@@ -6,7 +6,7 @@
 
 	<h1><?= _l("Account Manager"); ?></h1>
 
-	<div class="section left">
+	<div class="section left customer_info">
 		<h2><?= _l("Customer Information"); ?></h2>
 
 		<div class="name"><?= $customer['display_name']; ?></div>
@@ -23,20 +23,23 @@
 
 		<div class="newsletter"><?= $newsletter_display; ?></div>
 		<br/>
-		<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _l("Edit Information"); ?></a>
+
+		<div class="center">
+			<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _l("Edit Information"); ?></a>
+		</div>
 	</div>
 
 	<? if (!empty($data_subscriptions)) { ?>
 		<div class="section right">
-			<h2><?= $section_subscription; ?></h2>
+			<h2><?= _l("Subscriptions"); ?></h2>
 
 			<div id="subscription_list">
 				<? foreach ($data_subscriptions as $subscription) { ?>
-					<? if ($subscription['status']) { ?>
-						<div class="subscription">
+					<? if ($subscription['status'] === Subscription::ACTIVE) { ?>
+						<div class="subscription active">
 							<div class="info">
 								<div class="image left">
-									<img src="<?= $subscription['product']['thumb']; ?>"/>
+									<img src="<?= $subscription['thumb']; ?>"/>
 								</div>
 								<div class="info_text left">
 									<div class="name"><?= $subscription['product']['name']; ?></div>
@@ -44,22 +47,28 @@
 									<div class="price"><?= $subscription['total_display']; ?></div>
 								</div>
 							</div>
-							<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Edit Subscription"); ?></a>
+							<div class="buttons">
+								<a href="<?= $subscription['choose_meals']; ?>" class="clear meals button"><?= _l("Choose Meals"); ?></a>
+								<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Manage Subscription"); ?></a>
+							</div>
 						</div>
-					<? } else { ?>
-						<div class="subscription cancelled">
+					<? } elseif ($subscription['status'] === Subscription::ON_HOLD) { ?>
+						<div class="subscription on_hold">
 							<div class="info">
 								<div class="image left">
-									<img src="<?= $subscription['product']['thumb']; ?>"/>
+									<img src="<?= $subscription['thumb']; ?>"/>
 								</div>
 								<div class="info_text left">
 									<div class="name"><?= $subscription['product']['name']; ?></div>
 									<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
+									<div class="price"><?= $subscription['total_display']; ?></div>
 								</div>
 							</div>
-							<div class="clear inactive"><?= _l("Subscription Inactive"); ?></div>
-							<a href="<?= $subscription['edit']; ?>" class="clear reactivate small button"><?= _l("Reactivate"); ?></a>
-							<a href="<?= $subscription['remove']; ?>" class="small button delete"><?= _l("Remove"); ?></a>
+							<div class="clear on_hold_text"><?= _l("On Hold until %s", $subscription['resume_date']); ?></div>
+							<div class="buttons">
+								<a href="<?= $subscription['resume']; ?>" class="clear resume subscribe button"><?= _l("Resume"); ?></a>
+								<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Manage Subscription"); ?></a>
+							</div>
 						</div>
 					<? } ?>
 				<? } ?>
@@ -67,24 +76,15 @@
 		</div>
 	<? } ?>
 
-	<div class="clear links">
-		<a href="<?= $url_order_history; ?>" class="button small"><?= _l("Order History"); ?></a>
-	</div>
-
-	<div class="clear buttons">
-		<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
+	<div class="clear account_links clearfix">
+		<div class="left"><a href="<?= $back; ?>" class="button medium"><?= _l("Home"); ?></a></div>
 		<div class="right">
-			<input type="submit" value="<?= _l("Save"); ?>" class="button"/>
+			<a href="<?= $url_order_history; ?>" class="button medium"><?= _l("View Order History"); ?></a>
+			<a href="<?= $url_returns; ?>" class="button medium"><?= _l("Product Returns"); ?></a>
 		</div>
 	</div>
 
 	<?= $content_bottom; ?>
 </div>
-
-<script type="text/javascript">
-	$('.cancelled .button.delete').click(function () {
-		return confirm("<?= _l("Are you sure you want to remove the subscription? All the information associated with your subscription will be removed."); ?>");
-	});
-</script>
 
 <?= $footer; ?>

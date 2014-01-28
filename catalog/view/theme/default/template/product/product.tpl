@@ -11,7 +11,7 @@
 					<a id="zoombox_image_link" onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>" title="<?= $page_title; ?>" class="zoombox" rel="gal1">
 						<img src="<?= $thumb; ?>" title="<?= $page_title; ?>" alt="<?= $page_title; ?>" id="image"/>
 					</a>
-					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= _l("View Full Sized Image"); ?></a>
+					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= _l("View Full Size Image"); ?></a>
 				</div>
 			<? } ?>
 
@@ -36,11 +36,10 @@
 			<div class="description">
 				<? if ($manufacturer) { ?>
 					<div class="description_manufacturer">
-						<span class="view_more"><a href="<?= $category['url']; ?>"><?= _l("view all from %s", $category['name']); ?></a></span>
-						<span class="keep_shopping"><?= _l("or"); ?> <a href="<?= $keep_shopping; ?>"><?= _l("Return to Catalog"); ?></a></span>
+						<span class="view_more"><a href="<?= $category['url']; ?>"><?= _l("View More in %s", $category['name']); ?></a></span>
+						<span class="keep_shopping"><a href="<?= $keep_shopping; ?>"><?= _l("Keep Shopping"); ?></a></span>
 					</div>
 				<? } ?>
-
 				<? if ($display_model) { ?>
 					<div class="description_model">
 						<span><?= _l("Model:"); ?></span>
@@ -88,7 +87,7 @@
 							<br/>
 							<div class="discount">
 								<? foreach ($discounts as $discount) { ?>
-									<?= _l("%s or more %s", $discount['quantity'], $discount['price']); ?><br/>
+									<?= _l("Discount for %s: %s", $discount['quantity'], $discount['price']); ?><br/>
 								<? } ?>
 							</div>
 						<? } ?>
@@ -129,10 +128,10 @@
 							</div>
 							<div id="product_buttons_box">
 								<div id="buy_product_buttons">
-									<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button_buy_now" class="button"/>
-									<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button_add_to_cart" class="button"/>
+									<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button_buy_now" class="button medium"/>
+									<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button_add_to_cart" class="button medium"/>
 								</div>
-								<div id="processing_product" class="hidden"><?= _l("Processing... please wait."); ?></div>
+								<div id="processing_product" class="hidden"><?= _l("Processing...please wait."); ?></div>
 							</div>
 						</div>
 
@@ -284,7 +283,7 @@
 			position: 'right',
 			xOffset: 25,
 			yOffset: 0,
-			preloadText: '<?= _l("Grabbing off the rack..."); ?>'
+			preloadText: '<?= _l("Loading High Resolution Image"); ?>'
 		});
 	});
 
