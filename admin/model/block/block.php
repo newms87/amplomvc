@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Model_Block_Block extends Model
 {
 	public function addBlock($data)
@@ -232,6 +233,8 @@ class Admin_Model_Block_Block extends Model
 		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
 
 		if ($block) {
+			$block['name'] = $this->getBlockname($path);
+
 			if (!empty($block['settings'])) {
 				$block['settings'] = unserialize($block['settings']);
 			} else {
@@ -252,6 +255,7 @@ class Admin_Model_Block_Block extends Model
 		} else {
 			$block = array(
 				'path'             => $path,
+				'name'             => $this->getBlockName($path),
 				'settings'         => array(),
 				'profile_settings' => array(),
 				'profiles'         => array(),
@@ -275,7 +279,7 @@ class Admin_Model_Block_Block extends Model
 		$blocks = array();
 
 		foreach ($block_files as &$file) {
-			$path  = preg_replace("/.*[\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
+			$path  = preg_replace("/.*[\\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
 			$block = $this->getBlock($path);
 
 			//filter name

@@ -145,13 +145,12 @@
 	function load_assigned_blocks() {
 		$('#assigned_block_list tbody').empty();
 
-		url = "<?= $url_load_blocks; ?>";
-
 		data = $('[name="stores[]"], [name=layout_id]').serialize();
-		$.post(url, data, function (json) {
+		console.log(data);
+		$.post("<?= $url_load_blocks; ?>", data, function (json) {
 			if (json) {
 				for (var b in json) {
-					add_block_item(json[b]['display_name'], json[b]['store_name'], json[b]['position']);
+					add_block_item(json[b]['name'], json[b]['store_name'], json[b]['position']);
 				}
 			}
 		}, 'json');
@@ -160,8 +159,6 @@
 	$('[name="stores[]"], [name=layout_id]').change(load_assigned_blocks).first().change();
 
 	$('#create_layout').click(function () {
-		url = "<?= $url_create_layout; ?>";
-
 		layout_name = $('[name=title]').val();
 
 		if (!layout_name) {
@@ -176,7 +173,7 @@
 		$('#create_layout_load').show();
 		$("#create_layout").hide();
 
-		$('#layout_select').load(url, data, function () {
+		$('#layout_select').load("<?= $url_create_layout; ?>", data, function () {
 			$('#create_layout_load').hide();
 			$('#create_layout').show();
 		});
@@ -245,7 +242,7 @@
 	});
 </script>
 
-<?= $this->builder->js('translations', $translations); ?>
+<? //$this->builder->js('translations', $translations); ?>
 
 <?= $this->builder->js('errors', $errors); ?>
 
