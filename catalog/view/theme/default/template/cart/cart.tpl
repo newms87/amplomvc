@@ -10,10 +10,6 @@
 		<? } ?>
 	</h1>
 	<? if (!$cart_empty) { ?>
-		<div class="buttons">
-			<div class="right"><a href="<?= $checkout; ?>" class="button"><?= _l("Checkout"); ?></a></div>
-			<div class="center"><a href="<?= $continue; ?>" class="button"><?= _l("Continue Shopping"); ?></a></div>
-		</div>
 
 		<?= $block_cart; ?>
 
@@ -21,7 +17,7 @@
 			<h2><?= _l("What would you like to do next?"); ?></h2>
 			<? if (!empty($block_coupon)) { ?>
 				<div>
-					<a id="text_block_coupon" onclick="$('#toggle_block_coupon').slideToggle();"><?= _l("Use Coupon"); ?></a>
+					<a id="text_block_coupon" onclick="$('#toggle_block_coupon').slideToggle();"><?= _l("Use Coupon Code"); ?></a>
 
 					<div id="toggle_block_coupon" class="content">
 						<?= $block_coupon; ?>
@@ -41,7 +37,7 @@
 
 			<? if (!empty($block_reward)) { ?>
 				<div>
-					<a id="text_block_reward" onclick="$('#toggle_block_reward').slideToggle();"><?= _l("Use EReward"); ?></a>
+					<a id="text_block_reward" onclick="$('#toggle_block_reward').slideToggle();"><?= _l("Use Reward"); ?></a>
 
 					<div id="toggle_block_reward" class="content">
 						<?= $block_reward; ?>
@@ -60,16 +56,20 @@
 			<? } ?>
 		</div>
 
-		<? if (isset($block_total)) { ?>
+		<? if (!empty($block_total) && $can_checkout) { ?>
 			<div id="cart_block_total">
 				<?= $block_total; ?>
 			</div>
 		<? } ?>
 
 		<div class="buttons">
-			<div class="right"><a href="<?= $checkout; ?>" class="button"><?= _l("Checkout"); ?></a></div>
+			<? if ($can_checkout) { ?>
+				<div class="right"><a href="<?= $checkout; ?>" class="button"><?= _l("Checkout"); ?></a></div>
+			<? } ?>
+
 			<div class="center"><a href="<?= $continue; ?>" class="button"><?= _l("Continue Shopping"); ?></a></div>
 		</div>
+
 	<? } else { ?>
 		<?= $block_cart; ?>
 		<div class="center"><a href="<?= $continue; ?>" class="button"><?= _l("Continue Shopping"); ?></a></div>

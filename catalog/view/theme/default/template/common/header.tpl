@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <? if (isset($_SERVER['HTTP_USER_AGENT']) && !strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6')) {
-	echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 } ?>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?= $direction; ?>" lang="<?= $lang; ?>" xml:lang="<?= $lang; ?>">
 	<head>
@@ -39,13 +39,13 @@
 		</script>
 
 		<!--[if IE 9]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie9.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie9.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie8.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie8.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 7]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie7.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie7.css"; ?>" />
 		<![endif]-->
 
 		<? if ($google_analytics) { ?>
@@ -69,9 +69,7 @@
 			<noscript>
 				<div class="statcounter">
 					<a title="tumblr tracker" href="http://statcounter.com/tumblr/" target="_blank">
-						<img class="statcounter"
-							src="http://c.statcounter.com/<?= $statcounter['project']; ?>/0/<?= $statcounter['security']; ?>/1/"
-							alt="tumblr tracker">
+						<img class="statcounter" src="http://c.statcounter.com/<?= $statcounter['project']; ?>/0/<?= $statcounter['security']; ?>/1/" alt="tumblr tracker"/>
 					</a>
 				</div>
 			</noscript>
@@ -79,6 +77,19 @@
 
 	</head>
 	<body class="<?= $body_class; ?>">
+		<? if (!empty($admin_bar)) { ?>
+			<div id="admin_bar">
+				<a href="<?= $admin_link; ?>" target="_blank" class="admin_link"><?= _l("Admin Panel"); ?></a>
+
+				<div class="clock">
+					<?= $clock_time; ?>
+					<a class="sim_time back" href="<?= $sim_back; ?>"></a>
+					<a class="sim_time reset" href="<?= $sim_reset; ?>"></a>
+					<a class="sim_time forward" href="<?= $sim_forward; ?>"></a>
+				</div>
+			</div>
+		<? } ?>
+
 		<div id="container">
 			<div id="page">
 				<div id="header">
@@ -87,7 +98,9 @@
 							<a href="<?= $home; ?>">
 								<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
-								<div id="slogan"><?= _l(""); ?></div>
+								<? if (!empty($slogan)) { ?>
+								<div id="slogan"><?= $slogan; ?></div>
+								<? } ?>
 							</a>
 						</div>
 					<? } ?>
@@ -104,14 +117,14 @@
 						<div id="links_account">
 							<? if (!$is_logged) { ?>
 								<? if (!empty($block_login)) { ?>
-									<span><?= $block_login; ?></span>
+									<div class="login_form"><?= $block_login; ?></div>
 								<? } else { ?>
-									<span><a href="<?= $login; ?>"><?= _l("Sign In"); ?></a></span>
+									<div class="login_text"><?= _l("Login"); ?></div>
 								<? } ?>
 								<?= $this->document->renderLinks($links_account); ?>
 							<? } else { ?>
-								<? $this->builder->setConfig("href", "display_name"); ?>
-								<?= $this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()")); ?>
+								<div class="welcome_text"><?= _l("Hey there %s!", $customer['firstname']); ?></div>
+								<?= $this->document->renderLinks($links_account); ?>
 							<? } ?>
 						</div>
 
@@ -133,6 +146,7 @@
 							<?= $this->document->renderLinks($links_secondary); ?>
 						</div>
 					<? } ?>
+
 					<? if (!empty($links_primary)) { ?>
 						<div id="links_primary" class="links dropdown">
 							<?= $this->document->renderLinks($links_primary); ?>
