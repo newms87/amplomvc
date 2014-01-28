@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Page_Page extends Controller
 {
 	public function index()
@@ -253,6 +254,9 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->data += $page_info + $defaults;
 
+		$_POST = $this->data;
+		//$this->loadBlocks();
+
 		//Template Data
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
@@ -333,11 +337,11 @@ class Admin_Controller_Page_Page extends Controller
 				foreach ($block['profiles'] as $profile) {
 					foreach ($profile['store_ids'] as $store_id) {
 						$blocks[] = array(
-							'name'         => $block['name'],
-							'display_name' => $block['display_name'],
-							'position'     => $data_positions[$profile['position']],
-							'store_id'     => $store_id,
-							'store_name'   => $this->Model_Setting_Store->getStoreName($store_id),
+							'path'       => $block['path'],
+							'name'       => $block['name'],
+							'position'   => $data_positions[$profile['position']],
+							'store_id'   => $store_id,
+							'store_name' => $this->Model_Setting_Store->getStoreName($store_id),
 						);
 					}
 				}

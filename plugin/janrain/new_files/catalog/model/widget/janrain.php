@@ -107,19 +107,9 @@ class Catalog_Model_Widget_Janrain extends Model
 
 	public function addCustomer($user_data)
 	{
-		$query = "INSERT INTO `" . DB_PREFIX . "customer` SET
-					firstname  = '" . $this->escape($user_data['firstname']) . "',
-					lastname = '" . $this->escape($user_data['lastname']) . "',
-					email = '" . $this->escape($user_data['email']) . "',
-					password = '" . $this->user->encrypt($user_data['password']) . "',
-					customer_group_id = '" . (int)$user_data['customer_group_id'] . "',
-					status = '" . (int)$user_data['status'] . "',
-					approved  = '" . (int)$user_data['approved'] . "',
-					date_added = NOW()
-				";
+		$user_data['date_added'] = $this->date->now();
 
-		$this->query($query);
-		return (int)$this->db->getLastId();
+		return $this->customer->add($user_data);
 	}
 
 	public function janrainGetCustomerGroupId()

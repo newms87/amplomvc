@@ -15,9 +15,11 @@ class Tag Extends Library
 		$tag_id = $this->get($text);
 
 		if (!$tag_id) {
-			$this->query("INSERT INTO " . DB_PREFIX . "tag SET `text` = '" . $this->escape(strtolower(trim($text))) . "'");
+			$tag = array(
+				'text' => strtolower(trim($text)),
+			);
 
-			$tag_id = $this->getLastId();
+			$tag_id = $this->insert('tag', $tag);
 		}
 
 		return $tag_id;

@@ -49,6 +49,6 @@ class Captcha extends Library
 
 	public function validate($code)
 	{
-		return !empty($this->session->data['captcha']) && ($this->session->set('captcha', == $code));
+		return $this->session->get('captcha') === $code;
 	}
 }
