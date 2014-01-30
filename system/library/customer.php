@@ -276,14 +276,13 @@ class Customer extends Library
 
 	public function addAddress($address)
 	{
-		if (!$this->customer_id) {
-			$this->error['login'] = _l("Must be logged in to add an address to your account");
-			return false;
-		}
-
 		$address_id = $this->address->add($address);
 
 		if ($address_id) {
+			if (!$this->customer_id) {
+				return $address_id;
+			}
+
 			//Associate address to customer
 			$customer_address = array(
 				'customer_id' => $this->customer_id,
@@ -323,9 +322,9 @@ class Customer extends Library
 		}
 
 		if ($this->isLogged()) {
-			$is_customer_address = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id . " AND address_id = " . (int)$address_id);
+			$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_address WHERE address_id = " . (int)$address_id . " LIMIT 1");
 
-			if (!$is_customer_address) {
+			if ($customer_id && $customer_id != $this->customer_id) {
 				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
 
 				return null;

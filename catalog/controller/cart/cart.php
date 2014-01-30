@@ -73,9 +73,9 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
 		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
 
-		$this->cart->addItem($type, $product_id, $quantity, $options);
+		$key = $this->addToCart($type, $product_id, $quantity, $options);
 
-		if (!$this->cart->hasError('add')) {
+		if ($key) {
 			if ($type === Cart::PRODUCTS) {
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
@@ -87,6 +87,8 @@ class Catalog_Controller_Cart_Cart extends Controller
 			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
 		} else {
 			$this->message->add('error', $this->cart->getError('add'));
+
+			$this->url->redirect('product/product', 'product_id=' . $product_id);
 		}
 
 		$this->url->redirect('checkout/checkout');
@@ -99,9 +101,9 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
 		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
 
-		$key = $this->cart->addItem($type, $product_id, $quantity, $options);
+		$key = $this->addToCart($type, $product_id, $quantity, $options);
 
-		if (!$this->cart->hasError('add')) {
+		if ($key) {
 			if ($type === Cart::PRODUCTS) {
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
@@ -122,6 +124,26 @@ class Catalog_Controller_Cart_Cart extends Controller
 		}
 
 		$this->response->setOutput($this->message->toJSON());
+	}
+
+	private function addToCart()
+	{
+		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
+		$type       = !empty($_POST['type']) ? $_POST['type'] : Cart::PRODUCTS;
+		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
+		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
+
+		if ($type === Cart::PRODUCTS) {
+			$key = $this->cart->addProduct($product_id, $quantity, $options);
+		}
+		elseif ($type === Cart::VOUCHERS) {
+			$key = $this->cart->addVoucher($product_id, $quantity, $options);
+		}
+		else {
+			$key = $this->cart->addItem($type, $product_id, $quantity, $options);
+		}
+
+		return $this->cart->hasError('add') ? false : $key;
 	}
 
 	public function remove()

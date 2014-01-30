@@ -48,6 +48,7 @@
 										<? } ?>
 
 										<? if (!empty($cart_product['options'])) { ?>
+											<? html_dump($cart_product['options'], 'options'); ?>
 											<div class="product_option_description">
 												<? foreach ($cart_product['options'] as $product_option_id => $product_option_values) { ?>
 													<? foreach ($product_option_values as $product_option_value) { ?>

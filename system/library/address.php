@@ -47,8 +47,10 @@ class Address extends Library
 	{
 		$address = $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "'");
 
-		$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
-		$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+		if ($address) {
+			$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+			$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+		}
 
 		return $address;
 	}

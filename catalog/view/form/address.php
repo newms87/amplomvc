@@ -3,7 +3,7 @@
 
 $_['firstname'] = array(
 	'type'       => 'text',
-	'label'      => "First Name",
+	'label'      => _l("First Name"),
 	'validation' => array(
 		'text',
 		3,
@@ -14,7 +14,7 @@ $_['firstname'] = array(
 
 $_['lastname'] = array(
 	'type'       => 'text',
-	'label'      => "Last Name",
+	'label'      => _l("Last Name"),
 	'validation' => array(
 		'text',
 		3,
@@ -25,7 +25,7 @@ $_['lastname'] = array(
 
 $_['company'] = array(
 	'type'       => 'text',
-	'label'      => "Company",
+	'label'      => _l("Company"),
 	'validation' => array(
 		'text',
 		1,
@@ -36,7 +36,7 @@ $_['company'] = array(
 
 $_['address_1'] = array(
 	'type'       => 'text',
-	'label'      => "Address",
+	'label'      => _l("Address"),
 	'validation' => array(
 		'text',
 		2,
@@ -47,7 +47,7 @@ $_['address_1'] = array(
 
 $_['address_2'] = array(
 	'type'       => 'text',
-	'label'      => "Address Line 2",
+	'label'      => _l("Address Line 2"),
 	'validation' => array(
 		'text',
 		0,
@@ -58,7 +58,7 @@ $_['address_2'] = array(
 
 $_['city'] = array(
 	'type'       => 'text',
-	'label'      => "City",
+	'label'      => _l("City"),
 	'validation' => array(
 		'text',
 		1,
@@ -69,14 +69,14 @@ $_['city'] = array(
 
 $_['postcode'] = array(
 	'type'       => 'text',
-	'label'      => "Postal Code",
+	'label'      => _l("Postal Code"),
 	'validation' => 'postcode',
 	'required'   => true,
 );
 
 $_['country_id'] = array(
 	'type'          => 'select',
-	'label'         => "Country",
+	'label'         => _l("Country"),
 	'#class'        => 'country_select',
 	'validation'    => 'not_empty_zero',
 	'default_value' => 223,
@@ -85,7 +85,7 @@ $_['country_id'] = array(
 
 $_['zone_id'] = array(
 	'type'       => 'select',
-	'label'      => "State",
+	'label'      => _l("State"),
 	'#class'     => 'zone_select',
 	'validation' => 'not_empty_zero',
 	'required'   => true,
@@ -93,12 +93,12 @@ $_['zone_id'] = array(
 
 $_['default'] = array(
 	'type'          => 'radio',
-	'label'         => 'Set As Default Address?',
+	'label'         => _l('Set As Default Address?'),
 	'default_value' => 1,
 	'required'      => false,
 );
 
 $_['submit_address'] = array(
 	'type'  => 'submit',
-	'value' => 'Submit Address',
+	'value' => _l('Submit Address'),
 );

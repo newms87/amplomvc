@@ -258,10 +258,6 @@ class Form extends Library
 				$field['required'] = false;
 			}
 
-			if (!isset($field['display_name']) && isset($field['label'])) {
-				$field['display_name'] = $field['label'];
-			}
-
 			if (!isset($field['attrs'])) {
 				$field['attrs'] = array();
 			}
@@ -288,6 +284,10 @@ class Form extends Library
 				} else {
 					$field['value'] = '';
 				}
+			}
+
+			if (!isset($field['display_name'])) {
+				$field['display_name'] = !empty($field['label']) ? $field['label'] : $field['value'];
 			}
 
 			switch ($field['type']) {

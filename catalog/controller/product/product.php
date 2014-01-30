@@ -37,6 +37,13 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
 
+		if (!$product_info['category']) {
+			$product_info['category'] = array(
+				'category_id' => 0,
+			   'name' => '',
+			);
+		}
+
 		$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
 
 		//Setup Document

@@ -395,7 +395,7 @@ class Cart extends Library
 	public function addProduct($product_id, $quantity = 1, $options = array())
 	{
 		if ($this->validateProduct($product_id, $quantity, $options) && (int)$quantity > 0) {
-			$this->addItem(self::PRODUCTS, $product_id, $quantity, $options);
+			return $this->addItem(self::PRODUCTS, $product_id, $quantity, $options);
 		}
 	}
 
@@ -539,8 +539,13 @@ class Cart extends Library
 		if ($product_info) {
 			$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);
 
+			//Validate all of the options for this product (including ones that were not in $selected_options)
 			foreach ($product_options as $product_option) {
+
+				//If there are values for this product option, and the option is required, validate it!
 				if (!empty($product_option['product_option_values']) && $product_option['required']) {
+
+					//If the option was not selected by the customer, throw an error!
 					if (empty($selected_options[$product_option['product_option_id']])) {
 						$this->error['add']['option'][$product_option['product_option_id']] = _l("Please select a %s.", $product_option['display_name']);
 						$this->error_code                                                   = self::ERROR_PRODUCT_OPTION_EMPTY;
