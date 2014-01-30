@@ -618,6 +618,7 @@ class Catalog_Model_Catalog_Product extends Model
 				return false;
 			}
 
+			html_dump($options, 'values');
 			foreach ($options as $values) {
 				foreach ($values as $product_option_value) {
 					if (empty($product_option_value)) {
