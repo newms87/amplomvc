@@ -17,6 +17,11 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$this->data = $product_info;
 
+		$this->data = array(
+			'title' => 'this',
+
+		);
+
 		//Layout Override (only if set)
 		$layout_id = $this->Model_Catalog_Product->getProductLayoutId($product_id);
 

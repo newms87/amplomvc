@@ -3,8 +3,7 @@ class Catalog_Controller_Page_Page extends Controller
 {
 	public function index()
 	{
-		$this->template->load('page/page');
-
+		//The page
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 
 		$page = $this->Model_Page_Page->getPage($page_id);
@@ -23,19 +22,22 @@ class Catalog_Controller_Page_Page extends Controller
 		//Change Layout to desired page layout
 		$this->config->set('config_layout_id', $page['layout_id']);
 
-		$page['content'] = html_entity_decode($page['content']);
-
 		$this->data = $page;
 
+		//The Template
+		$this->template->load('page/page');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'
+			'common/header',
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

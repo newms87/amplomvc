@@ -116,6 +116,13 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			if ($this->data['cart_empty']) {
 				$this->request->redirectBrowser($this->url->link('cart/cart'));
 			}
+
+
+
+			//TODO: how to handle ajax. Do we need $this->response->setOutput() for non-ajax calls?
+
+
+
 		}
 
 		//The Template
