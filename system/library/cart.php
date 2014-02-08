@@ -703,7 +703,7 @@ class Cart extends Library
 
 	public function getPaymentAddressId()
 	{
-		return $this->session->get('payment_address_id');
+		return (int)$this->session->get('payment_address_id');
 	}
 
 	public function getPaymentAddress()
@@ -713,8 +713,6 @@ class Cart extends Library
 
 	public function setPaymentAddress($address)
 	{
-		$this->clearPaymentMethod();
-
 		//New Address
 		if (!$address) {
 			$this->error['payment_address'] = _l("No Payment Address was specified.");
@@ -731,6 +729,11 @@ class Cart extends Library
 		} //Set Existing Address
 		else {
 			$address_id = (int)$address;
+		}
+
+		//Address changed, invalidate the payment method
+		if (!$this->getPaymentAddressId() !== $address_id) {
+			$this->clearPaymentMethod();
 		}
 
 		if (!empty($address_id)) {
@@ -798,7 +801,7 @@ class Cart extends Library
 
 	public function getShippingAddressId()
 	{
-		return $this->session->get('shipping_address_id');
+		return (int)$this->session->get('shipping_address_id');
 	}
 
 	public function getShippingAddress()
@@ -808,8 +811,6 @@ class Cart extends Library
 
 	public function setShippingAddress($address)
 	{
-		$this->clearShippingMethod();
-
 		if (!$address) {
 			$this->error['shipping_address'] = _l("No Shipping Address Specified.");
 			return false;
@@ -826,6 +827,11 @@ class Cart extends Library
 		} //Set Existing Address
 		else {
 			$address_id = (int)$address;
+		}
+
+		//Address changed, invalidate the shipping method
+		if ($this->getShippingAddressId() !== $address_id) {
+			$this->clearShippingMethod();
 		}
 
 		if (!empty($address_id)) {

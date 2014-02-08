@@ -213,6 +213,20 @@ class Config extends Library
 		return $setting_id;
 	}
 
+	public function remove($group, $key, $store_id = null)
+	{
+		$where = array(
+			'group' => $group,
+		   'key' => $key,
+		);
+
+		if ($store_id) {
+			$where['store_id'] = $store_id;
+		}
+
+		$this->delete('setting', $where);
+	}
+
 	public function loadGroup($group, $store_id = null)
 	{
 		static $loaded_groups = array();

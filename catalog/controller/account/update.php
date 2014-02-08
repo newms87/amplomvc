@@ -3,7 +3,6 @@ class Catalog_Controller_Account_Update extends Controller
 {
 	public function index()
 	{
-		//Load Language
 		//Login Verification
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/update'));
@@ -16,16 +15,13 @@ class Catalog_Controller_Account_Update extends Controller
 			$this->customer->edit($_POST);
 
 			if (!empty($_POST['payment_code']) && !empty($_POST['payment_key'])) {
-				$this->System_Extension_Payment->get($_POST['payment_code'])->update_card($_POST['payment_key'], array('default' => true));
+				$this->System_Extension_Payment->get($_POST['payment_code'])->updateCard($_POST['payment_key'], array('default' => true));
 			}
 
 			$this->message->add('success', _l("Your account information has been updated successfully!"));
 
 			$this->url->redirect('account/account');
 		}
-
-		//The Template
-		$this->template->load('account/update');
 
 		//Page Head
 		$this->document->setTitle(_l("My Account Information"));
@@ -74,12 +70,17 @@ class Catalog_Controller_Account_Update extends Controller
 
 		$this->data['data_addresses'] = $addresses;
 
-		$this->data['card_select'] = $this->System_Extension_Payment->get('braintree')->cardSelect(null, true);
+
+		//TODO: This is a temporary hack to integrate with braintree
+		$this->data['card_select'] = $this->renderController('extension/payment/braintree/select_card', array(null, true));
 
 		//Action Buttons
 		$this->data['save']        = $this->url->link('account/update');
 		$this->data['back']        = $this->url->link('account/account');
 		$this->data['add_address'] = $this->url->link('account/address/update');
+
+		//The Template
+		$this->template->load('account/update');
 
 		//Dependencies
 		$this->children = array(
@@ -132,10 +133,12 @@ class Catalog_Controller_Account_Update extends Controller
 			$this->error['telephone'] = _l("The phone number you provided is invalid.");
 		}
 
-		if (!$this->validation->password($_POST['password'])) {
-			$this->error['password'] = $this->validation->getError();
-		} elseif ($_POST['password'] !== $_POST['confirm']) {
-			$this->error['confirm'] = _l("Your password and confirmation do not match!");
+		if (!empty($_POST['password'])) {
+			if (!$this->validation->password($_POST['password'])) {
+				$this->error['password'] = $this->validation->getError();
+			} elseif ($_POST['password'] !== $_POST['confirm']) {
+				$this->error['confirm'] = _l("Your password and confirmation do not match!");
+			}
 		}
 
 		$_POST['newsletter'] = !empty($_POST['newsletter']) ? 1 : 0;

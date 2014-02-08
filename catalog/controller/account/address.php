@@ -191,6 +191,8 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->data = $address_info + $defaults;
 
+		$this->data['address_id'] = $address_id;
+
 		//Template Data
 		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
@@ -200,10 +202,9 @@ class Catalog_Controller_Account_Address extends Controller
 		);
 
 		//Action Buttons
-		if ($this->request->isAjax()) {
-			$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
-		} else {
-			$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
+		$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
+
+		if (!$this->request->isAjax()) {
 			$this->data['back'] = $this->url->link('account/address');
 		}
 

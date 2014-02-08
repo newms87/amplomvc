@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div id="braintree_register_card" class="content">
 	<div class="box">
-		<div class="box_heading"><?= $register_card_title; ?></div>
+		<div class="box_heading"><?= _l("Register a New Card"); ?></div>
 
 		<div class="section">
 			<form action="<?= $submit; ?>" method="POST" id="braintree-payment-form">

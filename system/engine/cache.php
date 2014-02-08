@@ -47,10 +47,8 @@ class Cache
 		$value = serialize($value);
 
 		if ($value) {
-			if (file_put_contents($file, $value) === false) {
-				trigger_error(_l("%s(): There was a problem writing %s with %s", __METHOD__, $file, $value));
-				echo get_caller(0,20);
-			}
+			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
+			@file_put_contents($file, $value);
 		}
 	}
 

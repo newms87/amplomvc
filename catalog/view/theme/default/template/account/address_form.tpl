@@ -8,10 +8,14 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= _l("Address Book"); ?></h1>
-
 	<div class="box">
-		<h2 class="box_heading"><?= _l("Edit Address"); ?></h2>
+		<h2 class="box_heading">
+			<? if ($address_id) { ?>
+				<?= _l("Edit Address"); ?>
+			<? } else { ?>
+				<?= _l("Add Address"); ?>
+			<? } ?>
+		</h2>
 
 		<div class="section">
 			<form id="new_address_form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
@@ -82,13 +86,13 @@
 <? if ($this->request->isAjax()) { ?>
 	<script type="text/javascript">
 		$('#new_address_form').submit(function () {
-			$.post($(this).attr('action'), $(this).serialize(), function (html) {
-				if (html) {
-					$('#address_update').parent().html(html);
+			$.post($(this).attr('action'), $(this).serialize(), function (json) {
+				if (!json || !json['success']) {
+					$('#address_update').parent().html(json);
 				} else {
 					location.reload()
 				}
-			});
+			}, 'json');
 			return false;
 		});
 	</script>

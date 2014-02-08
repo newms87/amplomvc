@@ -9,17 +9,70 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 	public function charge($transaction)
 	{
 		if (!$this->initAPI()) {
-			return;
+			return false;
 		}
 
-		$data = array(
-			'amount'             => $transaction['amount'],
-			'paymentMethodToken' => $transaction['payment_key'],
-			'recurring'          => $transaction['type'] === 'subscription',
-		);
+		if (!$transaction['payment_key']) {
+			$this->error = _l("Payment Method was not specified.");
+			return false;
+		}
+		//Charge New Card without saving card to account (save customer details for reference)
+		if (strpos($transaction['payment_key'], 'new_card') === 0) {
+			$order_id = (int)str_replace('new_card_', '', $transaction['payment_key']);
+			$order    = $this->order->get($order_id);
+
+			//Load New Card data
+			$new_card = $this->config->load('braintree', $transaction['payment_key']);
+
+			//Remove temporary New Card data
+			$this->config->remove('braintree', $transaction['payment_key'], 0);
+
+			if (!$order) {
+				$this->error = _l("Failed to load Order information. Transaction failed.");
+				return false;
+			}
+
+			if (!$new_card) {
+				$this->error = _l("Failed to load Payment Card data. Unable to process transaction.");
+				return false;
+			}
+
+			$sale = array(
+				"amount"     => $transaction['amount'],
+				"creditCard" => array(
+					"number"          => $new_card["number"],
+					"cvv"             => $new_card["cvv"],
+					"expirationMonth" => $new_card["month"],
+					"expirationYear"  => $new_card["year"]
+				),
+				'customer'   => array(
+					'firstName' => $order['firstname'],
+					'lastName'  => $order['lastname'],
+					'email'     => $order['email'],
+					'phone'     => $order['telephone'],
+					'fax'       => $order['fax'],
+				),
+				"options"    => array(
+					"submitForSettlement" => true,
+					'storeInVault'        => false,
+				),
+			);
+		} else {
+			$this->loadCustomer();
+
+			$sale = array(
+				'customerId'         => $this->bt_customer->id,
+				'amount'             => $transaction['amount'],
+				'paymentMethodToken' => $transaction['payment_key'],
+				'recurring'          => $transaction['type'] === 'subscription',
+				'options'    => array(
+					'submitForSettlement' => true,
+				),
+			);
+		}
 
 		try {
-			$result = Braintree_Transaction::sale($data);
+			$result = Braintree_Transaction::sale($sale);
 
 			if ($result->success) {
 				return true;
@@ -51,96 +104,46 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			return false;
 		}
 
-
-
-
-
-
-
-		//TODO: When creating a new card, we need to call create new card and save information, or save transaction information
-		//TODO: If we do not save the credit card, then we will need to generate a transaction, and when the transaction is confirmed
-		//TODO: Up in the $this->confirm(); we will have the transaction key and confirm the transaction w/ braintree...
-		//TODO: Alternatively, we can call the sale like below, but enter temporary_card for payment key, which tells $this->confirm() not to
-		//TODO: process this transaction. (This may not be ideal, if something causes the order/ transaction to fail in between calls. avoid this if possible!
-
-echo "WE ARE HERE!";exit;
-
-
-
-
-
-
 		//New Credit Card
 		if ($new_card) {
 			if (!$this->validateCard($new_card)) {
 				return false;
 			}
 
-			$sale = array(
-				"amount"     => $order['total'],
-				"creditCard" => array(
-					"number"          => $new_card["number"],
-					"cvv"             => $new_card["cvv"],
-					"expirationMonth" => $new_card["month"],
-					"expirationYear"  => $new_card["year"]
-				),
-				"options"    => array(
-					"submitForSettlement" => true,
-				)
-			);
-
 			if (!empty($new_card['save_to_account']) && $this->customer->isLogged()) {
 				$this->loadCustomer();
 
-				$sale['customerId']              = $this->bt_customer->id;
-				$sale['options']['storeInVault'] = true;
-			} else {
-				$sale['customer'] = array(
-					'firstName' => $order['firstname'],
-					'lastName'  => $order['lastname'],
-					'email'     => $order['email'],
-					'phone'     => $order['telephone'],
-					'fax'       => $order['fax'],
+				$credit_card = array(
+					'customerId'      => $this->bt_customer->id,
+					'number'          => $new_card["number"],
+					'cvv'             => $new_card["cvv"],
+					'expirationMonth' => $new_card["month"],
+					'expirationYear'  => $new_card["year"]
 				);
-			}
-		}
-		else {
-			//Existing Credit Card
-			$this->loadCustomer();
 
-			$payment_key = $this->cart->getPaymentKey();
+				try {
+					$result = Braintree_CreditCard::create($credit_card);
+				} catch (Braintree_Exception $e) {
+					$this->error = $e->getMessage();
+					return false;
+				}
 
-			$sale = array(
-				'amount'             => $order['total'],
-				'customerId'         => $this->bt_customer->id,
-				'paymentMethodToken' => $payment_key,
-			);
+				if ($result->success) {
+					//Update the payment key for the transaction to the new card
+					if (!empty($result->creditCard->_attributes['token'])) {
+						$this->order->setPaymentMethod($order_id, 'braintree', $result->creditCard->_attributes['token']);
+					}
+				} else {
+					$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
+					$this->error = _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
+					$this->error_log->write(__METHOD__ . ": Braintree_CreditCard:create() failed for order ID $order_id. Unable to confirm checkout payment method.");
+					return false;
+				}
 
-			$this->customer->setMeta('default_payment_key', $payment_key);
-		}
-
-
-		try {
-			$result = Braintree_Transaction::sale($sale);
-
-			html_dump($result, 'result');
-			exit;
-		} catch (Braintree_Exception $e) {
-			$this->error = $e->getMessage();
-			return false;
-		}
-
-		if (!$result->success) {
-			$url_contact = $this->url->link('page/page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
-			$this->error = _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
-			$this->error_log->write(__METHOD__ . ": Braintree_Transaction:sale() failed for order ID $order_id. Unable to confirm checkout payment.");
-			return false;
-		}
-
-		//Update the payment key for new cards
-		if ($new_card) {
-			if (!empty($result->transaction->_attributes['creditCard']['token'])) {
-				$this->order->setPaymentMethod($order_id, 'braintree', $result->transaction->_attributes['creditCard']['token']);
+			} else {
+				//Save the new card information temporarily to be processed after transaction is confirmed (in $this->charge())
+				$this->config->save('braintree', 'new_card_' . $order_id, $new_card);
+				$this->order->setPaymentMethod($order_id, 'braintree', 'new_card_' . $order_id);
 			}
 		}
 
@@ -176,7 +179,6 @@ echo "WE ARE HERE!";exit;
 				foreach ($this->bt_customer->creditCards as $card) {
 					foreach ($this->bt_customer->creditCards as $card2) {
 						if ($card2->token !== $card->token && $card2->uniqueNumberIdentifier === $card->uniqueNumberIdentifier) {
-							$this->message->add('warning', _l("That card was already added to your account!"));
 							$this->removeCard($card2->token);
 							continue 2;
 						}

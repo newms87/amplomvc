@@ -153,7 +153,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['system_update']  = $this->url->link('setting/update');
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/store/update');
+		$this->data['insert']   = $this->url->link('setting/store/update');
 		$this->data['delete'] = $this->url->link('setting/store/delete');
 
 		//Dependencies

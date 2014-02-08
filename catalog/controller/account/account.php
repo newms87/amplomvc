@@ -3,34 +3,41 @@ class Catalog_Controller_Account_Account extends Controller
 {
 	public function index()
 	{
-		//Verify Customer Logged in
+		//Login Verification
 		if (!$this->customer->isLogged()) {
-			$this->request->setRedirect('account/account');
+			$this->session->set('redirect', $this->url->link('account/account'));
+
 			$this->url->redirect('account/login');
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("My Account"));
+		$this->document->setTitle(_l("Account Manager"));
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("My Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account Manager"), $this->url->link('account/account'));
 
-		//Actions
-		$this->data['update']         = $this->url->link('account/update');
-		$this->data['password']       = $this->url->link('account/password');
-		$this->data['address']        = $this->url->link('account/address');
-		$this->data['wishlist']       = $this->url->link('account/wishlist');
-		$this->data['order']          = $this->url->link('account/order');
-		$this->data['download']       = $this->url->link('account/download');
-		$this->data['return_view']    = $this->url->link('account/return');
-		$this->data['return_request'] = $this->url->link('account/return/insert');
-		$this->data['transaction']    = $this->url->link('account/transaction');
-		$this->data['newsletter']     = $this->url->link('account/newsletter');
+		//Page Information
+		$shipping_address               = $this->customer->getDefaultShippingAddress();
+		$shipping_address['display']    = $this->address->format($shipping_address);
+		$this->data['shipping_address'] = $shipping_address;
 
-		if ($this->config->get('reward_status')) {
-			$this->data['reward'] = $this->url->link('account/reward');
-		}
+		//Customer Information
+		$customer = $this->customer->info() + $this->customer->getMeta();
+
+		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
+
+		$this->data['newsletter_display'] = $customer['newsletter'] ? _l("Send me RealMeal weekly updates!") : _l("Do not send me any emails.");
+
+		$this->data['customer'] = $customer;
+
+		//Urls
+		$this->data['url_order_history'] = $this->url->link('account/order');
+		$this->data['url_returns']       = $this->url->link('account/return');
+
+		//Action Buttons
+		$this->data['edit_account'] = $this->url->link('account/update');
+		$this->data['back']         = $this->url->link('common/home');
 
 		//The Template
 		$this->template->load('account/account');

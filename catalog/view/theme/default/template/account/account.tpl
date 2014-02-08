@@ -1,41 +1,90 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div class="content">
-		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+<div id="account_manage" class="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
 
-		<h1><?= _l("My Account"); ?></h1>
+	<h1><?= _l("Account Manager"); ?></h1>
 
-		<div class="content_account content">
-			<h2><?= _l("My Account"); ?></h2>
-			<ul>
-				<li><a href="<?= $update; ?>"><?= _l("Update your account information"); ?></a></li>
-				<li><a href="<?= $password; ?>"><?= _l("Change your password"); ?></a></li>
-				<li><a href="<?= $address; ?>"><?= _l("Modify your address book entries"); ?></a></li>
-				<li><a href="<?= $wishlist; ?>"><?= _l("Modify your wish list"); ?></a></li>
-			</ul>
-		</div>
-		<div class="content_account content">
-			<h2><?= _l("My Orders"); ?></h2>
-			<ul>
-				<li><a href="<?= $order; ?>"><?= _l("View your order history"); ?></a></li>
-				<li><a href="<?= $download; ?>"><?= _l("Downloads"); ?></a></li>
-				<? if (!empty($reward)) { ?>
-					<li><a href="<?= $reward; ?>"><?= _l("Your Reward Points"); ?></a></li>
-				<? } ?>
-				<li><a href="<?= $return_view; ?>"><?= _l("View your return requests"); ?></a></li>
-				<li><a href="<?= $return_request; ?>"><?= _l("Return a product"); ?></a></li>
-				<li><a href="<?= $transaction; ?>"><?= _l("Your Transactions"); ?></a></li>
-			</ul>
-		</div>
-		<div class="content_account content">
-			<h2><?= _l("Newsletter"); ?></h2>
-			<ul>
-				<li><a href="<?= $newsletter; ?>"><?= _l("Subscribe / unsubscribe to newsletter"); ?></a></li>
-			</ul>
-		</div>
+	<div class="section left customer_info">
+		<h2><?= _l("Customer Information"); ?></h2>
 
-		<?= $content_bottom; ?>
+		<div class="name"><?= $customer['display_name']; ?></div>
+		<div class="phone"><?= $customer['telephone']; ?></div>
+		<div class="email"><?= $customer['email']; ?></div>
+		<br/>
+
+		<h2><?= _l("Default Shipping Address"); ?></h2>
+
+		<div class="shipping_address"><?= $shipping_address['display']; ?></div>
+		<br/>
+
+		<h2><?= _l("Newsletter"); ?></h2>
+
+		<div class="newsletter"><?= $newsletter_display; ?></div>
+		<br/>
+
+		<div class="center">
+			<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _l("Edit Information"); ?></a>
+		</div>
 	</div>
+
+	<? if (!empty($data_subscriptions)) { ?>
+		<div class="section right">
+			<h2><?= _l("Subscriptions"); ?></h2>
+
+			<div id="subscription_list">
+				<? foreach ($data_subscriptions as $subscription) { ?>
+					<? if ($subscription['status'] === Subscription::ACTIVE) { ?>
+						<div class="subscription active">
+							<div class="info">
+								<div class="image left">
+									<img src="<?= $subscription['thumb']; ?>"/>
+								</div>
+								<div class="info_text left">
+									<div class="name"><?= $subscription['product']['name']; ?></div>
+									<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
+									<div class="price"><?= $subscription['total_display']; ?></div>
+								</div>
+							</div>
+							<div class="buttons">
+								<a href="<?= $subscription['choose_meals']; ?>" class="clear meals button"><?= _l("Choose Meals"); ?></a>
+								<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Manage Subscription"); ?></a>
+							</div>
+						</div>
+					<? } elseif ($subscription['status'] === Subscription::ON_HOLD) { ?>
+						<div class="subscription on_hold">
+							<div class="info">
+								<div class="image left">
+									<img src="<?= $subscription['thumb']; ?>"/>
+								</div>
+								<div class="info_text left">
+									<div class="name"><?= $subscription['product']['name']; ?></div>
+									<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
+									<div class="price"><?= $subscription['total_display']; ?></div>
+								</div>
+							</div>
+							<div class="clear on_hold_text"><?= _l("On Hold until %s", $subscription['resume_date']); ?></div>
+							<div class="buttons">
+								<a href="<?= $subscription['resume']; ?>" class="clear resume subscribe button"><?= _l("Resume"); ?></a>
+								<a href="<?= $subscription['edit']; ?>" class="clear update small button"><?= _l("Manage Subscription"); ?></a>
+							</div>
+						</div>
+					<? } ?>
+				<? } ?>
+			</div>
+		</div>
+	<? } ?>
+
+	<div class="clear account_links clearfix">
+		<div class="left"><a href="<?= $back; ?>" class="button medium"><?= _l("Home"); ?></a></div>
+		<div class="right">
+			<a href="<?= $url_order_history; ?>" class="button medium"><?= _l("View Order History"); ?></a>
+			<a href="<?= $url_returns; ?>" class="button medium"><?= _l("Product Returns"); ?></a>
+		</div>
+	</div>
+
+	<?= $content_bottom; ?>
+</div>
 
 <?= $footer; ?>
