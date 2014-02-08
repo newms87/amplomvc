@@ -49,7 +49,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 					//If the payment address in the cart has been updated, invalidate the payment method
 					if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-						$this->cart->setPaymentMethod();
+						$this->cart->clearPaymentMethod();
 					}
 
 					$this->message->add('success', _l("You have successfully updated your address."));
@@ -86,13 +86,13 @@ class Catalog_Controller_Account_Address extends Controller
 			$this->address->remove($_GET['address_id']);
 
 			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-				$this->cart->setShippingAddress();
-				$this->cart->setShippingMethod();
+				$this->cart->clearShippingAddress();
+				$this->cart->clearShippingMethod();
 			}
 
 			if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-				$this->cart->setPaymentAddress();
-				$this->cart->setPaymentMethod();
+				$this->cart->clearPaymentAddress();
+				$this->cart->clearPaymentMethod();
 			}
 
 			$this->message->add('success', _l("Your address has been successfully deleted"));

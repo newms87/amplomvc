@@ -31,7 +31,7 @@ class Table extends Library
 
 	public function setTemplate($file)
 	{
-		if (!preg_match("/\.tpl$/", $file)) {
+		if (!preg_match("/\\.tpl$/", $file)) {
 			$file .= '.tpl';
 		}
 
@@ -40,7 +40,7 @@ class Table extends Library
 		} elseif (file_exists(DIR_THEME . 'default/template/' . $file)) {
 			$this->file = DIR_THEME . 'default/template/' . $file;
 		} else {
-			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(1, 3));
+			trigger_error(_l("%s(): Could not load form template %s!", __METHOD__, DIR_THEME . $this->path . $file));
 			exit();
 		}
 	}
@@ -48,7 +48,7 @@ class Table extends Library
 	public function mapAttribute($attr, $values)
 	{
 		if (empty($this->columns)) {
-			trigger_error("Error: You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!" . get_caller());
+			trigger_error(_l("%s(): You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!", __METHOD__));
 			exit();
 		}
 
@@ -62,7 +62,7 @@ class Table extends Library
 		$this->prepare();
 
 		extract($this->template_data);
-		
+
 		$columns = $this->columns;
 		$rows    = $this->rows;
 
@@ -77,7 +77,7 @@ class Table extends Library
 	private function prepare()
 	{
 		if (!$this->file || !file_exists($this->file)) {
-			trigger_error("You must set the template for the form before building! " . get_caller(2, 2));
+			trigger_error(_l("You must set the template for the form before building!"));
 			exit();
 		}
 
@@ -92,7 +92,7 @@ class Table extends Library
 		foreach ($this->columns as $slug => &$column) {
 
 			if (!isset($column['type'])) {
-				trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(2, 2));
+				trigger_error(_l("Invalid table column! The type was not set for %s!", $slug));
 				exit();
 			}
 
@@ -148,13 +148,13 @@ class Table extends Library
 					break;
 				case 'select':
 					if (empty($column['build_data'])) {
-						trigger_error("You must specify build_data for the column $slug of type select! " . get_caller(2, 2));
+						trigger_error(_l("You must specify build_data for the column %s of type select!", $slug));
 						exit();
 					}
 
 					if (!isset($column['build_config'])) {
 						if (is_array(current($column['build_data']))) {
-							trigger_error("You must specify build_config for the column $slug of type select with this nature of build_data! " . get_caller(2, 2));
+							trigger_error(_l("You must specify build_config for the column %s of type select with this nature of build_data!", $slug));
 							exit();
 						}
 					}

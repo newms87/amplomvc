@@ -1,23 +1,4 @@
 /******** PAGE DEFAULTS ********************/
-
-@font-face {
-	font-family: 'Kredit';
-	src: url(../fonts/kredit/kredit.eot);
-	src: url(../fonts/kredit/kredit.eot?#iefix) format('embedded-opentype'), url(../fonts/kredit/kredit.woff) format('woff'), url(../fonts/kredit/kredit.ttf) format('truetype'), url(../fonts/kredit/kredit.otf) format('opentype'), url(../fonts/kredit/kredit.svg#kreditregular) format('svg');
-
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'KreditFront';
-	src: url(../fonts/kredit/kredit_front.eot);
-	src: url(../fonts/kredit/kredit_front.eot?#iefix) format('embedded-opentype'), url(../fonts/kredit/kredit_front.woff) format('woff'), url(../fonts/kredit/kredit_front.ttf) format('truetype'), url(../fonts/kredit/kredit_front.otf) format('opentype'), url(../fonts/kredit/kredit_front.svg#kreditfront) format('svg');
-
-	font-weight: normal;
-	font-style: normal;
-}
-
 html {
 	overflow: -moz-scrollbars-vertical;
 	margin: 0;
@@ -2290,7 +2271,15 @@ ul.return_success_list li .label {
 }
 
 .cart-info .cart_product_option_value {
-	margin-left: 5px;
+	margin: 3px 5px;
+}
+
+.cart-info .cart_product_option_value .name {
+	font-weight: bold;
+}
+
+.cart-info .cart_product_option_value .name:after {
+	content: ':';
 }
 
 .cart-info tbody .image img {

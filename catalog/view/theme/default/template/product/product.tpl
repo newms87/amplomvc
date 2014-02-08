@@ -34,7 +34,7 @@
 			<div class="title"><?= $page_title; ?></div>
 
 			<div class="description">
-				<? if ($manufacturer) { ?>
+				<? if (!empty($manufacturer)) { ?>
 					<div class="description_manufacturer">
 						<span class="view_more"><a href="<?= $category['url']; ?>"><?= _l("View More in %s", $category['name']); ?></a></span>
 						<span class="keep_shopping"><a href="<?= $keep_shopping; ?>"><?= _l("Keep Shopping"); ?></a></span>
@@ -80,7 +80,7 @@
 						<? if (!empty($tax)) { ?>
 							<span class="price-tax"><?= _l("Ex Tax:"); ?> <?= $tax; ?></span><br/>
 						<? } ?>
-						<? if ($points) { ?>
+						<? if (!empty($points)) { ?>
 							<span class="reward"><small><?= _l("Price in reward points:"); ?> <?= $points; ?></small></span><br/>
 						<? } ?>
 						<? if ($discounts) { ?>
@@ -94,7 +94,7 @@
 					</div>
 				<? } ?>
 
-				<? if ($reward) { ?>
+				<? if (!empty($reward)) { ?>
 					<div class="description_reward"><span><?= _l("Reward Points:"); ?></span><span><?= $reward; ?></span></div>
 				<? } ?>
 
@@ -105,7 +105,7 @@
 					</div>
 				<? } ?>
 
-				<? if ($description) { ?>
+				<? if (!empty($description)) { ?>
 					<div class="product_description">
 						<div class="scroll_wrapper">
 							<?= $description; ?>
@@ -196,19 +196,19 @@
 				<p class="final_sale_explain"><?= $is_final_explanation; ?></p>
 			<? } ?>
 
-			<? if (!empty($policies)) { ?>
+			<? if (!empty($data_policies)) { ?>
 				<p>
 					<?= _l("Please see our"); ?>
-					<a onclick="return colorbox($(this))" href="<?= $policies; ?>"><?= _l("Shipping & Return Policy"); ?></a>
+					<a onclick="return colorbox($(this))" href="<?= $data_policies; ?>"><?= _l("Shipping & Return Policy"); ?></a>
 					<?= _l("for more information."); ?>
 				</p>
 			<? } ?>
 		</div>
 
-		<? if (!empty($attribute_groups)) { ?>
+		<? if (!empty($data_attribute_groups)) { ?>
 			<div id="tab-attribute" class="tab-content">
 				<table class="attribute">
-					<? foreach ($attribute_groups as $attribute_group) { ?>
+					<? foreach ($data_attribute_groups as $attribute_group) { ?>
 						<thead>
 							<tr>
 								<td colspan="2"><?= $attribute_group['name']; ?></td>

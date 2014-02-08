@@ -41,7 +41,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 				$json['error']['warning'] = _l("Invalid Billing Address!");
 			} else {
 				if (!$this->cart->setPaymentAddress($_POST['address_id'])) {
-					$json['error']['address'] = $this->cart->get_errors('payment_address');
+					$json['error']['address'] = $this->cart->getError('payment_address');
 				}
 			}
 		}
@@ -66,16 +66,20 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 			if (!$json) {
 				if (!$this->cart->setPaymentAddress($_POST)) {
-					$json['error']['payment_address'] = $this->cart->get_errors('payment_address');
+					$json['error']['payment_address'] = $this->cart->getError('payment_address');
 				}
 			}
 
-			//IF this is an ajax call
-			if (!isset($_POST['async'])) {
-				if ($json['error']) {
-					$this->message->add('warning', $json['error']);
-				} else {
-					$this->message->add('success', _l("Your payment address has been verified!"));
+			if (!$json) {
+				$json['success'] = _l("Your Payment Address has been verified!");
+			}
+
+			//If this is not an ajax call
+			if (!$this->request->isAjax()) {
+				if (!empty($json['success'])) {
+					$this->message->add('success', $json['success']);
+				} elseif(!empty($json['error'])) {
+					$this->message->add('error', $json['error']);
 				}
 
 				//We redirect because we are only a block, not a full page!
@@ -95,7 +99,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 			$json['redirect'] = $this->url->link('checkout/checkout');
 		} elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-			$this->message->add('warning', $this->cart->get_errors());
+			$this->message->add('warning', $this->cart->getError());
 		}
 
 		return $json;

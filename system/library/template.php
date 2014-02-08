@@ -42,7 +42,7 @@ class Template extends Library
 				$this->cache->delete('template' . $this->name);
 			}
 
-			trigger_error('Template::set_file(): Could not find file ' . $file_name . '.tpl! ' . get_caller(0, 2));
+			trigger_error('Template::set_file(): Could not find file ' . $file_name . '.tpl! ');
 			return false;
 		}
 
@@ -59,7 +59,7 @@ class Template extends Library
 		$this->name = $name;
 
 		if (!$this->set_file($this->name, $theme, $admin)) {
-			trigger_error("Unable to load template! " . get_caller());
+			trigger_error(_l("Unable to load template!"));
 			exit();
 		}
 	}
@@ -107,7 +107,7 @@ class Template extends Library
 	public function render()
 	{
 		if (!$this->file) {
-			trigger_error("No template was set!" . get_caller(0, 2));
+			trigger_error(_l("No template was set!"));
 			exit();
 		}
 
@@ -121,7 +121,7 @@ class Template extends Library
 
 			return ob_get_clean();
 		} else {
-			trigger_error('Error: Could not load template file ' . $this->file . '! ' . get_caller(0, 2));
+			trigger_error(__METHOD__ . _l("(): Could not load template file %s!", $this->file));
 			exit();
 		}
 	}

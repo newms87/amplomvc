@@ -1,4 +1,5 @@
 <?php
+
 class Catalog_Controller_Account_Order extends Controller
 {
 	public function index()
@@ -75,8 +76,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 	public function info()
 	{
-		//Template and Language
-		$this->template->load('account/order_info');
+		//Order ID
 		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
 
 		//Login Validation
@@ -87,7 +87,9 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 
 		//Order Validation
-		$order = $this->order->get($order_id);
+		$order                = $this->order->get($order_id);
+		$order['transaction'] = $this->transaction->get($order['transaction_id']);
+		$order['shipping']    = $this->shipping->get($order['shipping_id']);
 
 		if (!$order) {
 			$this->message->add('warning', _l("Unable to find requested order. Please choose an order to view from the list."));
@@ -112,13 +114,9 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->data['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
 		$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 
-
-		//TODO: Update to make use of new extension system
-
-
 		//Shipping / Payment Methods
-		$this->data['payment_method']  = $this->cart->getPaymentMethodData($order['payment_method_id']);
-		$this->data['shipping_method'] = $this->cart->getShippingMethodData($order['shipping_method_id']);
+		$this->data['payment_method']  = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
+		$this->data['shipping_method'] = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
 
 		$order['comment'] = nl2br($order['comment']);
 
@@ -197,6 +195,9 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Action Buttons
 		$this->data['continue'] = $this->url->link('account/order');
+
+		//The Template
+		$this->template->load('account/order_info');
 
 		//Dependencies
 		$this->children = array(

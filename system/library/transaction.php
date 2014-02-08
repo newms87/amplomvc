@@ -89,7 +89,7 @@ class Transaction extends Library
 			return false;
 		}
 
-		$payment = $this->System_Extension_Payment->get($transaction['payment_method']);
+		$payment = $this->System_Extension_Payment->get($transaction['payment_code']);
 
 		if (!$payment || !$payment->charge($transaction)) {
 			$data = array(

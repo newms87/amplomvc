@@ -2,15 +2,16 @@
 class System_Extension_Shipping extends System_Extension_Extension
 {
 	//This is a required function
-	public function getQuote($address)
+	public function getQuotes($address)
 	{
 		exit(_l("Implement %s for the %s extension", __METHOD__, $this->code));
 	}
 
-	public function validate($address, $total)
+	public function validate($address)
 	{
-		if ((int)$this->settings['min_total'] > $total) {
-			$this->error['total'] = _l("The total order must be at least " . (int)$this->settings['min_total'] . " to use this shipping method.");
+		//NOTE: Very important! Shipping should only call getSubTotal. calling cart->getTotals() may cause an infinite loop!
+		if ((int)$this->settings['min_total'] > $this->cart->getSubTotal()) {
+			$this->error['total'] = _l("The total order must be at least %s to use this shipping method.", $this->settings['min_total']);
 			return false;
 		}
 

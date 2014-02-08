@@ -19,18 +19,21 @@
 	<form action="<?= $validate_shipping_method; ?>" method="post">
 
 		<table class="radio">
-			<? foreach ($shipping_methods as $id => $shipping_method) { ?>
+			<? foreach ($shipping_methods as $shipping_method) { ?>
 				<tr>
-					<td colspan="3"><b><?= $shipping_method['code_title']; ?></b></td>
+					<td colspan="3"><b><?= $shipping_method['title']; ?></b></td>
 				</tr>
-				<tr class="shipping_method checkout_method highlight">
-					<td class="method_id">
-						<input type="radio" name="shipping_method" value="<?= $id; ?>"
-							id="<?= $id; ?>" <?= $id == $shipping_method_id ? 'checked="checked"' : ''; ?> />
-					</td>
-					<td class="method_title"><label for="<?= $id; ?>"><?= $shipping_method['title']; ?></label></td>
-					<td class="method_content"><label for="<?= $id; ?>"><?= $shipping_method['text']; ?></label></td>
-				</tr>
+				<? foreach ($shipping_method['quotes'] as $quote) { ?>
+					<? $checked = !empty($quote['selected']) ? 'checked="checked"' : ''; ?>
+					<? $id = $shipping_method['code'] . ',' . $quote['shipping_key']; ?>
+					<tr class="shipping_method checkout_method highlight">
+						<td class="method_id">
+							<input type="radio" id="<?= $id; ?>" name="shipping_method" value="<?= $id; ?>" <?= $checked; ?> />
+						</td>
+						<td class="method_title"><label for="<?= $id; ?>"><?= $quote['title']; ?></label></td>
+						<td class="method_content"><label for="<?= $id; ?>"><?= $quote['cost_display']; ?></label></td>
+					</tr>
+				<? } ?>
 			<? } ?>
 		</table>
 

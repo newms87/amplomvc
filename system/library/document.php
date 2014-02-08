@@ -1,4 +1,5 @@
 <?php
+
 class Document extends Library
 {
 	private $title;
@@ -76,7 +77,7 @@ class Document extends Library
 	public function addLink($group = 'primary', $link_info)
 	{
 		if (empty($link_info['name'])) {
-			trigger_error('Document::addLink(): You must provide a link name! ' . get_caller());
+			trigger_error(_l("%s(): You must provide a link name!"));
 			return;
 		}
 
@@ -92,15 +93,7 @@ class Document extends Library
 			'target'       => '',
 		);
 
-		$new_link = array();
-
-		foreach ($defaults as $key => $default) {
-			if (isset($link_info[$key])) {
-				$new_link[$key] = $link_info[$key];
-			} else {
-				$new_link[$key] = $default;
-			}
-		}
+		$new_link = $link_info + $defaults;
 
 		//If group doesn't exist, make a new group
 		if (!isset($this->links[$group])) {
@@ -151,7 +144,7 @@ class Document extends Library
 			return true;
 		}
 
-		trigger_error("Document::addLink(): Unable to find $new_link[parent] in link group $group! " . get_caller());
+		trigger_error(_l("%s(): Unable to find %s in link group %s!", __METHOD__, $new_link[parent], $group));
 
 		return false;
 	}
@@ -419,7 +412,9 @@ class Document extends Library
 		}
 
 		if ($sort) {
-			usort($links, function ($a, $b) { return (int)$a['sort_order'] > (int)$b['sort_order']; });
+			usort($links, function ($a, $b) {
+				return (int)$a['sort_order'] > (int)$b['sort_order'];
+			});
 		}
 
 		if ($depth === 0) {

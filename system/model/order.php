@@ -142,26 +142,6 @@ class System_Model_Order extends Model
 		return $order_id;
 	}
 
-	public function updateOrderStatus($order_id, $order_status_id, $comment = '', $notify = false)
-	{
-		$data = array(
-			'order_status_id' => $order_status_id,
-			'date_modified'   => $this->date->now(),
-		);
-
-		$this->update('order', $data, $order_id);
-
-		$history_data = array(
-			'order_id'        => $order_id,
-			'order_status_id' => $order_status_id,
-			'comment'         => $comment,
-			'notify'          => $notify,
-			'date_added'      => $this->date->now(),
-		);
-
-		$this->insert('order_history', $history_data);
-	}
-
 	public function generateInvoiceId($data)
 	{
 		$invoice_prefix = $this->config->get('config_invoice_prefix');
@@ -307,23 +287,6 @@ class System_Model_Order extends Model
 		}
 
 		return $result->rows;
-	}
-
-	public function addOrderHistory($order_id, $data)
-	{
-		//Update Order Status
-		$order_status = array(
-			'order_status_id' => $data['order_status_id'],
-			'date_modified'   => $this->date->now(),
-		);
-
-		$this->update('order', $order_status, $order_id);
-
-		//Add History Entry
-		$data['order_id']   = $order_id;
-		$data['date_added'] = $this->date->now();
-
-		return $this->insert('order_history', $data);
 	}
 
 	public function getOrderHistories($data = array(), $select = '', $total = false)

@@ -44,7 +44,14 @@ class Cache
 	{
 		$file = DIR_CACHE . $key . '.cache';
 
-		file_put_contents($file, serialize($value));
+		$value = serialize($value);
+
+		if ($value) {
+			if (file_put_contents($file, $value) === false) {
+				trigger_error(_l("%s(): There was a problem writing %s with %s", __METHOD__, $file, $value));
+				echo get_caller(0,20);
+			}
+		}
 	}
 
 	public function delete($key)

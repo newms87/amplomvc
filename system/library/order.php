@@ -1,4 +1,5 @@
 <?php
+
 class Order Extends Library
 {
 	public function add()
@@ -53,11 +54,11 @@ class Order Extends Library
 
 		//Payment info
 		$transaction = array(
-			'description'    => _l('Order payment'),
-			'amount'         => $this->cart->getTotal(),
-			'payment_method' => $this->cart->getPaymentMethodId(),
-			'payment_key'    => $this->cart->getPaymentKey(),
-			'address_id'     => $this->cart->getPaymentAddressId(),
+			'description'  => _l('Order payment'),
+			'amount'       => $this->cart->getTotal(),
+			'payment_code' => $this->cart->getPaymentCode(),
+			'payment_key'  => $this->cart->getPaymentKey(),
+			'address_id'   => $this->cart->getPaymentAddressId(),
 		);
 
 		$data['transaction_id'] = $this->transaction->add('order', $transaction);
@@ -66,9 +67,10 @@ class Order Extends Library
 		if ($this->cart->hasShipping()) {
 
 			$shipping = array(
-				'shipping_methd' => $this->cart->getShippingMethodId(),
-				'tracking'       => '',
-				'address_id'     => $this->cart->getShippingAddressId(),
+				'shipping_code' => $this->cart->getShippingCode(),
+				'shipping_key'  => $this->cart->getShippingKey(),
+				'tracking'      => '',
+				'address_id'    => $this->cart->getShippingAddressId(),
 			);
 
 			$data['shipping_id'] = $this->shipping->add('order', $shipping);
@@ -118,6 +120,24 @@ class Order Extends Library
 		$this->session->set('order_id', $order_id);
 
 		return $order_id;
+	}
+
+	public function setPaymentMethod($order_id, $payment_code, $payment_key = null)
+	{
+		$order = $this->get($order_id);
+
+		$data = array(
+			'payment_code' => $payment_code,
+			'payment_key'  => $payment_key,
+		);
+
+		$result = $this->transaction->edit($order['transaction_id'], $data);
+
+		if (!$result) {
+			$this->error = $this->transaction->getError();
+		}
+
+		return $result;
 	}
 
 	public function hasOrder()
@@ -284,6 +304,11 @@ class Order Extends Library
 	 *
 	 */
 
+	public function confirmOrder($order_id, $comment = '', $notify = false)
+	{
+		return $this->updateOrder($order_id, $this->config->get('config_order_complete_status_id'), $comment, $notify);
+	}
+
 	public function updateOrder($order_id, $order_status_id, $comment = '', $notify = false)
 	{
 		$order = $this->get($order_id);
@@ -303,20 +328,49 @@ class Order Extends Library
 			$order_status_id = $this->config->get('config_order_blacklist_status_id');
 		}
 
-		$this->System_Model_Order->updateOrderStatus($order_id, $order_status_id, $comment, $notify);
-
 		if (!$order['confirmed'] && $order_status_id === $this->config->get('config_order_complete_status_id')) {
-			$this->confirm($order);
+			if (!$this->confirm($order)) {
+				return false;
+			}
 		}
+
+		$data = array(
+			'order_status_id' => $order_status_id,
+			'date_modified'   => $this->date->now(),
+		);
+
+		$this->update('order', $data, $order_id);
+
+		$history_data = array(
+			'order_status_id' => $order_status_id,
+			'comment'         => $comment,
+			'notify'          => $notify,
+		);
+
+		$this->addHistory($order_id, $history_data);
 
 		if ($notify) {
 			$this->mail->sendTemplate('order_update_notify', $comment, $order_status_id, $order);
 		}
+
+		return true;
 	}
 
 	private function confirm($order)
 	{
 		$order_id = (int)$order['order_id'];
+
+		//Confirm the Transaction. If the transaction failed to make the payment, do not confirm the order.
+		if (!$this->transaction->confirm($order['transaction_id'])) {
+			$this->error = $this->transaction->getError();
+			return false;
+		}
+
+		$order['transaction'] = $this->transaction->get($order['transaction_id']);
+
+		//Confirm Shipping
+		$this->shipping->confirm($order['shipping_id']);
+		$order['shipping'] = $this->shipping->get($order['shipping_id']);
 
 		//Confirm Order
 		$this->query("UPDATE " . DB_PREFIX . "order SET confirmed = 1 WHERE order_id = $order_id");
@@ -383,70 +437,21 @@ class Order Extends Library
 
 		$order['order_totals'] = $order_totals;
 
-		//Confirm Transaction
-		$this->transaction->confirm($order['transaction_id']);
-
-		//Confirm Shipping
-		$this->shipping->confirm($order['shipping_id']);
-
 		//Order Status
 		$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 
 		//Send Order Emails
 		$this->mail->sendTemplate('order', $order);
+
+		return true;
 	}
 
 	public function addHistory($order_id, $data)
 	{
-		$this->System_Model_Order->addOrderHistory($order_id, $data);
+		$data['order_id']   = $order_id;
+		$data['date_added'] = $this->date->now();
 
-		// Send out any gift voucher mails
-		if ($this->config->get('config_complete_status_id') == $data['order_status_id']) {
-			$this->confirm($this->get($order_id));
-		}
-
-		//TODO: finish implementing mail sending for Order History notification
-		if (!empty($data['notify'])) {
-			$this->message->add('warning', "The notification email for order history has not yet been implemented! Please notify manually.");
-			return;
-
-			$order_info = $this->getOrder($order_id);
-
-			$this->language->setLanguage($order_info['language_id']);
-
-			$subject = sprintf($language->get('text_subject'), $order_info['store_name'], $order_id);
-
-			$message = $language->get('text_order') . ' ' . $order_id . "\n";
-			$message .= $language->get('text_date_added') . ' ' . $this->date->format($order_info['date_added'], $language->get('date_format_short')) . "\n\n";
-
-			$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$data['order_status_id'] . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
-
-			if ($order_status_query->num_rows) {
-				$message .= $language->get('text_order_status') . "\n";
-				$message .= $order_status_query->row['name'] . "\n\n";
-			}
-
-			if ($order_info['customer_id']) {
-				$message .= $language->get('text_link') . "\n";
-				$message .= html_entity_decode($this->url->store($order_info['store_id'], 'account/order/info', 'order_id=' . $order_id), ENT_QUOTES, 'UTF-8') . "\n\n";
-			}
-
-			if ($data['comment']) {
-				$message .= $language->get('text_comment') . "\n\n";
-				$message .= strip_tags(html_entity_decode($data['comment'], ENT_QUOTES, 'UTF-8')) . "\n\n";
-			}
-
-			$message .= $language->get('text_footer');
-
-			$this->mail->init();
-
-			$this->mail->setTo($order_info['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($order_info['store_name']);
-			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
-			$this->mail->send();
-		}
+		$this->insert('order_history', $data);
 	}
 
 	public function clear()

@@ -113,7 +113,33 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 
 	if ($error) {
 		if ($config->get('config_error_display')) {
-			echo '<b>' . $error . '</b>: ' . _l($errstr) . ' in <b>' . $errfile . '</b> ' . _l('on line') . ' <b>' . $errline . '</b><br /><br />';
+			$stack = get_caller(1,6);
+
+			echo <<<HTML
+			<style>
+				.error_display {
+					padding: 10px;
+					border-radius: 5px;
+					background: white;
+					color: black;
+					font-size: 14px;
+					border: 1px solid black;
+				}
+				.error_display .label {
+					width: 70px;
+					display:inline-block;
+					font-weight: bold;
+				}
+			</style>
+			<div class="error_display">
+				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>
+				<div class="message"><span class="label">Message:</span> <span class="value">$errstr</span></div>
+				<div class="file"><span class="label">File:</span> <span class="value">$errfile</span></div>
+				<div class="line"><span class="label">Line:</span> <span class="value">$errline</span></div>
+				<div class="stack">$stack</div>
+			</div>
+HTML;
+
 			flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 		}
 

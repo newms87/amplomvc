@@ -1,4 +1,5 @@
 <?php
+
 class Cart extends Library
 {
 	const PRODUCTS = 'products';
@@ -52,39 +53,9 @@ class Cart extends Library
 		return $code === $this->error_code;
 	}
 
-	public function getCode()
+	public function getErrorCode()
 	{
 		return $this->error_code;
-	}
-
-	//TODO: This function exists in the Library abstract class. Use that maybe?
-	public function get_errors($type = null, $pop = false, $name_format = false)
-	{
-		//Get Specific Error
-		if ($type) {
-			if (isset($this->error[$type])) {
-				$e = $this->error[$type];
-
-				if ($pop) {
-					unset($this->error[$type]);
-				}
-			} else {
-				return array();
-			}
-		} //Get All Errors
-		else {
-			$e = $this->error;
-
-			if ($pop) {
-				$this->error = array();
-			}
-		}
-
-		if ($name_format) {
-			return $this->tool->name_format($name_format, $e);
-		}
-
-		return $e;
 	}
 
 	/******************
@@ -258,10 +229,8 @@ class Cart extends Library
 		$this->session->set('cart', array());
 		$this->session->set('wishlist', array());
 
-		unset($this->session->data['shipping_address_id']);
-		unset($this->session->data['payment_address_id']);
-		unset($this->session->data['shipping_method_id']);
-		unset($this->session->data['payment_method_id']);
+		$this->clearPaymentAddress();
+		$this->clearShippingAddress();
 		unset($this->session->data['comment']);
 		unset($this->session->data['coupons']);
 		unset($this->session->data['reward']);
@@ -311,7 +280,7 @@ class Cart extends Library
 	public function getTotals($refresh = false)
 	{
 		if (!$this->totals || $refresh) {
-			$total_data = array();
+			$this->totals = array();
 			$total      = 0;
 			$taxes      = $this->getTaxes();
 
@@ -319,21 +288,21 @@ class Cart extends Library
 
 			foreach ($total_extensions as $code => $extension) {
 				if (method_exists($extension, 'getTotal')) {
-					$data = $extension->getTotal($total_data, $total, $taxes);
+					$data = $extension->getTotal($this->totals, $total, $taxes);
 
 					if ($data) {
-						$total_data[$code] = $data;
+						$this->totals[$code] = $data;
 					}
 				}
 
-				if (isset($total_data[$code])) {
-					$total_data[$code] += $extension->info();
+				if (isset($this->totals[$code])) {
+					$this->totals[$code] += $extension->info();
 				}
 			}
 
-			uasort($total_data, function ($a, $b) { return $a['sort_order'] > $b['sort_order']; });
-
-			$this->totals = $total_data;
+			uasort($this->totals, function ($a, $b) {
+				return $a['sort_order'] > $b['sort_order'];
+			});
 		}
 
 		return $this->totals;
@@ -650,10 +619,10 @@ class Cart extends Library
 		if (!$this->validate()) {
 			$this->error_code        = self::ERROR_CHECKOUT_VALIDATE;
 			$this->error['checkout'] = _l("The contents of you cart have changed. Please proceed to checkout again.");
-		} elseif (!$this->validatePaymentDetails()) {
+		} elseif (!$this->validatePaymentMethod()) {
 			$this->error_code        = self::ERROR_CHECKOUT_PAYMENT;
 			$this->error['checkout'] = _l("The Payment Options have changed! Please select a new Payment Method.");
-		} elseif (!$this->validateShippingDetails()) {
+		} elseif (!$this->validateShippingMethod()) {
 			$this->error_code        = self::ERROR_CHECKOUT_SHIPPING;
 			$this->error['checkout'] = _l("The Shipping Options have changed! Please select a new Shipping Method.");
 		}
@@ -667,7 +636,7 @@ class Cart extends Library
 
 	public function getWishlist()
 	{
-		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
+		return $this->session->get('wishlist');
 	}
 
 	public function mergeWishlist($wishlist)
@@ -699,12 +668,16 @@ class Cart extends Library
 
 	public function get_compare_list()
 	{
-		return !empty($this->session->data['compare']) ? $this->session->data['compare'] : null;
+		return $this->session->get('compare');
 	}
 
 	public function get_compare_count()
 	{
-		return !empty($this->session->data['compare']) ? count($this->session->data['compare']) : null;
+		if ($this->session->has('compare')) {
+			return count($this->session->get('compare'));
+		}
+
+		return null;
 	}
 
 
@@ -725,33 +698,31 @@ class Cart extends Library
 
 	public function hasPaymentAddress()
 	{
-		return !empty($this->session->data['payment_address_id']);
+		return $this->session->has('payment_address_id');
 	}
 
 	public function getPaymentAddressId()
 	{
-		return isset($this->session->data['payment_address_id']) ? $this->session->data['payment_address_id'] : false;
+		return $this->session->get('payment_address_id');
 	}
 
 	public function getPaymentAddress()
 	{
-		if (isset($this->session->data['payment_address_id'])) {
-			return $this->customer->getAddress($this->session->data['payment_address_id']);
-		}
-
-		return false;
+		return $this->customer->getAddress($this->session->get('payment_address_id'));
 	}
 
-	public function setPaymentAddress($address = null)
+	public function setPaymentAddress($address)
 	{
-		//Unset Payment Address
-		if (empty($address)) {
-			unset($this->session->data['payment_address_id']);
-			$this->setPaymentMethod();
-			return true;
-		} //Set New Address
-		elseif (is_array($address)) {
-			$address_id = $this->address->add($address);
+		$this->clearPaymentMethod();
+
+		//New Address
+		if (!$address) {
+			$this->error['payment_address'] = _l("No Payment Address was specified.");
+			return false;
+		}
+
+		if (is_array($address)) {
+			$address_id = $this->customer->addAddress($address);
 
 			if (!$address_id) {
 				$this->error['payment_address'] = $this->address->getError();
@@ -767,12 +738,45 @@ class Cart extends Library
 		}
 
 		if (!$this->validatePaymentAddress()) {
-			unset($this->session->data['payment_address_id']);
-
-			$this->setPaymentMethod();
+			$this->clearPaymentAddress();
 		}
 
 		return empty($this->error['payment_address']);
+	}
+
+	public function clearPaymentAddress()
+	{
+		unset($this->session->data['payment_address_id']);
+		$this->clearPaymentMethod();
+	}
+
+	public function validatePaymentAddress()
+	{
+		unset($this->error['payment_address']);
+
+		if (!$this->hasPaymentAddress()) {
+			$this->error_code               = self::ERROR_PAYMENT_ADDRESS;
+			$this->error['payment_address'] = _l("You must specify a Billing Address!");
+			return false;
+		}
+
+		if (!$this->canBillTo($this->getPaymentAddress())) {
+			$this->clearPaymentAddress();
+			return false;
+		}
+
+		return true;
+	}
+
+	public function canBillTo($address)
+	{
+		if (!$this->address->validate($address)) {
+			$this->error['payment_address'] = $this->address->getError();
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/** Shipping Address Operations **/
@@ -789,37 +793,34 @@ class Cart extends Library
 
 	public function hasShippingAddress()
 	{
-		return !empty($this->session->data['shipping_address_id']);
+		return $this->session->has('shipping_address_id');
 	}
 
 	public function getShippingAddressId()
 	{
-		return isset($this->session->data['shipping_address_id']) ? $this->session->data['shipping_address_id'] : false;
+		return $this->session->get('shipping_address_id');
 	}
 
 	public function getShippingAddress()
 	{
-		if (isset($this->session->data['shipping_address_id'])) {
-			return $this->customer->getAddress($this->session->data['shipping_address_id']);
-		}
-
-		return false;
+		return $this->customer->getAddress($this->session->get('shipping_address_id'));
 	}
 
-	public function setShippingAddress($address = null)
+	public function setShippingAddress($address)
 	{
-		$this->setShippingMethod();
+		$this->clearShippingMethod();
 
-		//Unset Shipping Address
-		if (empty($address)) {
-			unset($this->session->data['shipping_address_id']);
-			return true;
-		} //Set New Address
-		elseif (is_array($address)) {
-			$address_id = $this->address->add($address);
+		if (!$address) {
+			$this->error['shipping_address'] = _l("No Shipping Address Specified.");
+			return false;
+		}
+
+		//New Address
+		if (is_array($address)) {
+			$address_id = $this->customer->addAddress($address);
 
 			if (!$address_id) {
-				$this->error['shipping_address'] = $this->address->getError();
+				$this->error['shipping_address'] = $this->customer->getError();
 				return false;
 			}
 		} //Set Existing Address
@@ -831,56 +832,79 @@ class Cart extends Library
 			$this->session->set('shipping_address_id', $address_id);
 		}
 
-		$this->validateShippingAddress();
+		if (!$this->validateShippingAddress()) {
+			$this->clearShippingAddress();
+		}
 
 		return empty($this->error['shipping_address']);
 	}
 
-	//TODO: Move this to System_Extension_Payment controller...
+	public function clearShippingAddress()
+	{
+		unset($this->session->data['shipping_address_id']);
+		$this->clearShippingMethod();
+	}
+
+	public function validateShippingAddress()
+	{
+		unset($this->error['shipping_address']);
+
+		if (!$this->hasShippingAddress()) {
+			$this->error_code                = self::ERROR_SHIPPING_ADDRESS;
+			$this->error['shipping_address'] = _l("You must specify a Delivery Address!");
+			return false;
+		}
+
+		if (!$this->canShipTo($this->getShippingAddress())) {
+			$this->clearShippingAddress();
+			return false;
+		}
+
+		return true;
+	}
+
+	public function canShipTo($address)
+	{
+		if (!$this->address->validate($address)) {
+			$this->error['shipping_address'] = $this->address->getError();
+		} elseif (!$this->address->inGeoZone($address, $this->config->get('config_allowed_shipping_zone'))) {
+			$this->error_code                = self::ERROR_SHIPPING_ADDRESS_GEOZONE;
+			$this->error['shipping_address'] = _l("We do not ship to the location you selected.");
+		}
+
+		return empty($this->error['shipping_address']);
+	}
+
 	/** Payment Method Operations **/
 
 	public function hasPaymentMethod()
 	{
-		return $this->session->has('payment_method_id');
+		return $this->session->has('payment_code');
 	}
 
-	public function getPaymentMethodId()
+	public function getPaymentCode()
 	{
-		return $this->session->get('payment_method_id');
+		return $this->session->get('payment_code');
 	}
 
-	public function getPaymentMethod($payment_method_id = null, $payment_address = null)
+	public function getPaymentKey()
 	{
-		if (!$payment_method_id) {
-			$payment_method_id = $this->getPaymentMethodId();
-		}
+		return $this->session->get('payment_key');
+	}
 
-		if ($payment_method_id) {
-			if (!empty($payment_address)) {
-				if (!is_array($payment_address)) {
-					$payment_address = $this->customer->getAddress($payment_address);
-				}
-			} else {
-				$payment_address = $this->getPaymentAddress();
-			}
+	public function getPaymentMethod()
+	{
+		$payment_code = $this->getPaymentCode();
 
-			$extension = $this->System_Extension_Payment->get($payment_method_id);
+		if ($payment_code) {
+			$payment_ext = $this->System_Extension_Payment->get($payment_code);
 
-			if ($extension->isActive() && $extension->validate($payment_address, $this->getTotal())) {
-				return $extension;
+			if ($payment_ext->isActive()) {
+				return $payment_ext;
 			}
 		}
 
 		return false;
-	}
-
-	public function getPaymentMethodData($payment_method_id = null)
-	{
-		if (!$payment_method_id) {
-			return false;
-		}
-
-		return $this->System_Extension_Payment->get($payment_method_id)->info();
 	}
 
 	public function getPaymentMethods($payment_address = null)
@@ -898,138 +922,119 @@ class Cart extends Library
 		$methods            = array();
 
 		foreach ($payment_extensions as $code => $extension) {
-			if ($extension->validate($payment_address, $this->getTotal())) {
+			if ($extension->validate($payment_address)) {
 				$methods[$code] = $extension->info();
 			}
 		}
 
 		if (empty($methods)) {
-			$this->error['checkout']['payment_method'] = _l("There are no available Payment Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", $this->config->get('config_email'));
+			$this->error['payment_method'] = _l("There are no available Payment Methods for your order! Please contact <a href=\"mailto:%s\">Customer Support</a> to complete your order.", $this->config->get('config_email'));
 
-			$this->setPaymentMethod();
+			$this->clearPaymentMethod();
 
 			return false;
 		}
 
-		uasort($methods, function ($a, $b) { return $a['sort_order'] > $b['sort_order']; });
+		uasort($methods, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
 
-		//Validate the currenlty selected payment method
-		if ($this->hasPaymentMethod() && !isset($methods[$this->getPaymentMethodId()])) {
-			$this->setPaymentMethod(null);
+		//Validate the currently selected payment method
+		$payment_code = $this->getPaymentCode();
+		if ($payment_code && !isset($methods[$payment_code])) {
+			$this->clearPaymentMethod();
 		}
 
 		return $methods;
 	}
 
-	public function setPaymentMethod($method = null)
+	public function setPaymentMethod($payment_code, $payment_key = null)
 	{
-		if (!$method) {
-			unset($this->session->data['payment_method_id']);
+		$payment_methods = $this->getPaymentMethods();
+
+		if (!isset($payment_methods[$payment_code])) {
+			$this->error_code              = self::ERROR_PAYMENT_METHOD;
+			$this->error['payment_method'] = _l("There was no Payment Method specified!");
+
+			return false;
+		}
+
+		$this->session->set('payment_code', $payment_code);
+		$this->session->set('payment_key', $payment_key);
+
+		return true;
+	}
+
+	public function clearPaymentMethod()
+	{
+		unset($this->session->data['payment_code']);
+		unset($this->session->data['payment_key']);
+	}
+
+	public function validatePaymentMethod()
+	{
+		if (!$this->validatePaymentAddress()) {
+			$this->error_code        = self::ERROR_PAYMENT_ADDRESS;
+			$this->error['payment_method'] = _l("You must specify a Billing Address!");
+		}  elseif (!$this->hasPaymentMethod()) {
+			$this->error_code = self::ERROR_PAYMENT_METHOD;
+			$this->error['payment_method'] = _l("There was no Payment Method specified");
 		} else {
-			$payment_methods = $this->getPaymentMethods();
+			$payment_method = $this->getPaymentMethod();
 
-			if (is_string($method)) {
-				$payment_method_id = isset($payment_methods[$method]['code']) ? $payment_methods[$method]['code'] : false;
-			} else {
-				$payment_method_id = $method['code'];
-			}
-
-			if (!$payment_method_id) {
-				$this->error_code              = self::ERROR_PAYMENT_METHOD;
-				$this->error['payment_method'] = _l("There was no Payment Method specified!");
-			} else {
-				$this->session->set('payment_method_id', $payment_method_id);
+			if (!$payment_method->validate($this->getPaymentAddress())) {
+				$this->clearPaymentMethod();
+				$this->error_code        = self::ERROR_PAYMENT_METHOD;
+				$this->error['payment_method'] = _l("The Payment Method selected is not available for this billing address!");
 			}
 		}
 
 		return empty($this->error['payment_method']);
 	}
 
-	public function getPaymentKey()
-	{
-		return $this->session->get('payment_key');
-	}
-
-	public function setPaymentKey($key)
-	{
-		$this->session->set('payment_key', $key);
-	}
-
-	//TODO: Move this to System_Extension_Shipping controller...
 	/** Shipping Method Operations **/
 
 	public function hasShippingMethod()
 	{
-		return !empty($this->session->data['shipping_method_id']);
+		return $this->session->has('shipping_code') && $this->session->has('shipping_key');
 	}
 
-	public function getShippingMethodId()
+	public function getShippingCode()
 	{
-		if (isset($this->session->data['shipping_method_id'])) {
-			return $this->session->data['shipping_method_id'];
+		return $this->session->get('shipping_code');
+	}
+
+	public function getShippingKey()
+	{
+		return $this->session->get('shipping_key');
+	}
+
+	public function getShippingQuote()
+	{
+		$shipping_method = $this->getShippingMethod();
+
+		if ($shipping_method) {
+			$quotes = $shipping_method->getQuotes($this->getShippingAddress());
+
+			$shipping_key = $this->getShippingKey();
+
+			if (isset($quotes[$shipping_key])) {
+				return $quotes[$shipping_key];
+			}
 		}
 
 		return false;
 	}
 
-	public function getShippingMethod($shipping_method_id = null, $shipping_address = null)
+	public function getShippingMethod()
 	{
-		if (!$shipping_method_id) {
-			$shipping_method_id = $this->getShippingMethodId();
-		}
+		$shipping_code = $this->getShippingCode();
 
-		if ($shipping_method_id) {
-			//Invalid Shipping method ID
-			if (!strpos($shipping_method_id, '__')) {
-				$code   = $shipping_method_id;
-				$method = false;
-			} else {
-				list($code, $method) = explode("__", $shipping_method_id, 2);
-			}
+		if ($shipping_code) {
+			$shipping_ext = $this->System_Extension_Shipping->get($shipping_code);
 
-			if (!empty($shipping_address)) {
-				if (!is_array($shipping_address)) {
-					$shipping_address = $this->customer->getAddress($shipping_address);
-				}
-			} elseif ($this->hasShippingAddress()) {
-				$shipping_address = $this->getShippingAddress();
-			} else {
-				$this->error_code               = self::ERROR_SHIPPING_ADDRESS;
-				$this->error['shipping_method'] = _l("You must specify a Delivery Address!");
-				return false;
-			}
-
-			//TODO: This is validated in getQuote typically.. maybe rethink how we handle this.
-			if (!$this->isAllowedShippingZone($shipping_address)) {
-				$this->error_code               = self::ERROR_SHIPPING_GEOZONE;
-				$this->error['shipping_method'] = _l("We do not ship to this Region / State!");
-				return false;
-			}
-
-			$shipping = $this->System_Extension_Shipping->get($code);
-
-
-
-			//TODO: Come back here after implementing Full shipping Extension
-
-
-
-			if ($extension->isActive() && $extension->validate($payment_address, $this->getTotal())) {
-				return $extension;
-			}
-
-			$quotes    = $shipping->getQuote($shipping_address);
-
-			if (!empty($quotes)) {
-				if (!$method) {
-					return $quotes;
-				}
-
-				foreach ($quotes as $quote) {
-					if ($quote['method'] === $method) {
-						return $quote;
-					}
-				}
+			if ($shipping_ext->isActive()) {
+				return $shipping_ext;
 			}
 		}
 
@@ -1038,117 +1043,92 @@ class Cart extends Library
 
 	public function getShippingMethods($shipping_address = null)
 	{
-		//Find Available Shipping Methods
-		$results = $this->Model_Setting_Extension->getExtensions('shipping');
+		if (!empty($shipping_address)) {
+			if (!is_array($shipping_address)) {
+				$shipping_address = $this->customer->getAddress($shipping_address);
+			}
+		} else {
+			$shipping_address = $this->getShippingAddress();
+		}
 
-		$methods = array();
+		// Shipping Methods
+		$shipping_extensions = $this->System_Extension_Shipping->getActive();
+		$methods             = array();
 
-		foreach ($results as $result) {
-			$quotes = $this->getShippingMethod($result['code'], $shipping_address);
-
-			if (!empty($quotes)) {
-				foreach ($quotes as $quote) {
-					$methods[$quote['code'] . '__' . $quote['method']] = $quote;
-				}
+		foreach ($shipping_extensions as $code => $extension) {
+			if ($extension->validate($shipping_address)) {
+				$methods[$code] = $extension->info();
 			}
 		}
 
-		if ($methods) {
-			//Validate the currently selected shipping method
-			if (!$shipping_address && $this->hasShippingMethod() && !isset($methods[$this->getShippingMethodId()])) {
-				$this->setShippingMethod();
-			}
+		//No Shipping Methods Available!
+		if (empty($methods)) {
+			$this->error_code               = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
+			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id')));
 
-			uasort($methods, function ($a, $b) { return $a['sort_order'] > $b['sort_order']; });
+			$this->clearShippingMethod();
 
-			return $methods;
-		}
-
-		//No Shipping Options Available!
-		$this->error_code               = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
-		$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", $this->url->link('information/contact'));
-
-		return false;
-	}
-
-	public function getShippingMethodData($shipping_method_id)
-	{
-		if (!$shipping_method_id) {
 			return false;
 		}
 
-		//Invalid Shipping method ID
-		if (!strpos($shipping_method_id, '__')) {
-			$code   = $shipping_method_id;
-			$method = false;
-		} else {
-			list($code, $method) = explode("__", $shipping_method_id, 2);
+		uasort($methods, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
+
+		//Validate the currently selected payment method
+		$shipping_code = $this->getShippingCode();
+
+		if ($shipping_code && !isset($methods[$shipping_code])) {
+			$this->clearShippingMethod();
 		}
 
-		$classname = "Catalog_Model_Shipping_" . $this->tool->_2CamelCase($code);
-
-		if (method_exists($this->$classname, 'data')) {
-			return $this->$classname->data($method);
-		}
-
-		return false;
+		return $methods;
 	}
 
-	public function setShippingMethod($method = null)
+	public function setShippingMethod($shipping_code, $shipping_key = null)
 	{
-		if (!$method) {
-			unset($this->session->data['shipping_method_id']);
-		} else {
-			$shipping_methods = $this->getShippingMethods();
+		$shipping_methods = $this->getShippingMethods();
 
-			$shipping_method_id = is_array($method) ? $method['code'] . '__' . $method['method'] : $method;
+		if (!isset($shipping_methods[$shipping_code])) {
+			$this->error_code              = self::ERROR_SHIPPING_METHOD;
+			$this->error['shipping_method'] = _l("There was no Shipping Method specified!");
 
-			if (!isset($shipping_methods[$shipping_method_id])) {
-				$this->error_code               = self::ERROR_SHIPPING_METHOD;
-				$this->error['shipping_method'] = _l("There was no Delivery Method specified!");
-			} else {
-				$this->session->set('shipping_method_id', $shipping_method_id);
-			}
+			return false;
 		}
 
-		return empty($this->error['shipping_method']);
+		$this->session->set('shipping_code', $shipping_code);
+		$this->session->set('shipping_key', $shipping_key);
+
+		return true;
 	}
 
-	public function validateShippingDetails()
+	public function clearShippingMethod()
+	{
+		unset($this->session->data['shipping_code']);
+		unset($this->session->data['shipping_key']);
+	}
+
+	public function validateShippingMethod()
 	{
 		if ($this->hasShipping()) {
 			if (!$this->validateShippingAddress()) {
 				$this->error_code        = self::ERROR_SHIPPING_ADDRESS;
-				$this->error['checkout'] = _l("You must specify a Delivery Address!");
-			} elseif (!$this->getShippingMethod()) {
-				$this->error_code        = self::ERROR_SHIPPING_METHOD;
-				$this->error['checkout'] = _l("There was no Delivery Method specified!");
+				$this->error['shipping_method'] = _l("You must specify a Delivery Address!");
+			} elseif (!$this->hasShippingMethod()) {
+				$this->error_code = self::ERROR_SHIPPING_METHOD;
+				$this->error['shipping_method'] = _l("There was no Delivery Method specified");
+			} else {
+				$shipping_method = $this->getShippingMethod();
+
+				if (!$shipping_method->validate($this->getShippingAddress())) {
+					$this->clearShippingMethod();
+					$this->error_code        = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
+					$this->error['shipping_method'] = _l("There delivery method was not valid for the requested delivery address!");
+				}
 			}
 		}
 
-		return empty($this->error['checkout']);
-	}
-
-	public function validatePaymentDetails()
-	{
-		if (!$this->validatePaymentAddress()) {
-			$this->error_code        = self::ERROR_PAYMENT_ADDRESS;
-			$this->error['checkout'] = _l("You must specify a Billing Address!");
-		} elseif (!$this->getPaymentMethod()) {
-			$this->error_code        = self::ERROR_PAYMENT_METHOD;
-			$this->error['checkout'] = _l("There was no Payment Method specified!");
-		}
-
-		return empty($this->error['checkout']);
-	}
-
-	public function isAllowedShippingZone($shipping_address)
-	{
-		if (!empty($shipping_address['country_id']) && !empty($shipping_address['zone_id'])) {
-			return $this->address->inGeoZone($shipping_address, $this->config->get('config_allowed_shipping_zone'));
-		}
-
-		return false;
+		return empty($this->error['shipping_method']);
 	}
 
 	public function getAllowedShippingZones()
@@ -1179,66 +1159,6 @@ class Cart extends Library
 		}
 
 		return array();
-	}
-
-	public function validatePaymentAddress($address = null)
-	{
-		unset($this->error['payment_address']);
-
-		if (empty($address)) {
-			if ($this->hasPaymentAddress()) {
-				$address = $this->getPaymentAddress();
-			} else {
-				$this->error_code               = self::ERROR_PAYMENT_ADDRESS;
-				$this->error['payment_address'] = _l("You must specify a Billing Address!");
-				return false;
-			}
-		}
-
-		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
-		$zone_id    = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
-
-		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
-			$this->error_code               = self::ERROR_PAYMENT_ADDRESS_COUNTRY;
-			$this->error['payment_address'] = _l("Invalid Country selected.");
-		} elseif (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
-			$this->error_code               = self::ERROR_PAYMENT_ADDRESS_ZONE;
-			$this->error['payment_address'] = _l("Invalid Zone selected.");
-		}
-
-		return empty($this->error['payment_address']);
-	}
-
-	public function validateShippingAddress($address = null)
-	{
-		unset($this->error['shipping_address']);
-
-		if (empty($address)) {
-			if ($this->hasShippingAddress()) {
-				$address = $this->getShippingAddress();
-			} else {
-				$this->error_code                = self::ERROR_SHIPPING_ADDRESS;
-				$this->error['shipping_address'] = _l("You must specify a Delivery Address!");
-				return false;
-			}
-		}
-
-		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
-		$zone_id    = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
-
-		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
-			$this->error_code                = self::ERROR_SHIPPING_ADDRESS_COUNTRY;
-			$this->error['shipping_address'] = _l("Invalid Country Selected");
-
-		} elseif (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
-			$this->error_code                = self::ERROR_SHIPPING_ADDRESS_ZONE;
-			$this->error['shipping_address'] = _l("Invalid Zone Selected");
-		} elseif (!$this->isAllowedShippingZone($address)) {
-			$this->error_code                = self::ERROR_SHIPPING_ADDRESS_GEOZONE;
-			$this->error['shipping_address'] = _l("We do not ship to the location you selected.");
-		}
-
-		return empty($this->error['shipping_address']);
 	}
 
 

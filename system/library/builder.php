@@ -227,7 +227,7 @@ class Builder extends Library
 
 			if (is_array($display)) {
 				if (!isset($this->builder_id) || !isset($this->builder_name) || ($this->builder_id ? !isset($display[$this->builder_id]) : false) || !isset($display[$this->builder_name])) {
-					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->setConfig(\$id,\$name). " . get_caller());
+					trigger_error(_l("You must set the ID and Name to keys in the \$data Array using \$this->builder->setConfig(\$id,\$name)."));
 					return;
 				}
 

@@ -5,38 +5,40 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 	{
 		$this->template->load('block/checkout/confirm');
 		//Verify the shipping details, if only the shipping method is invalid, choose a shipping method automatically
-		if (!$this->cart->validateShippingDetails()) {
-			if ($this->cart->hasShippingAddress() && !$this->cart->hasShippingMethod()) {
+		if (!$this->cart->validateShippingMethod()) {
+			if ($this->cart->hasShippingAddress()) {
 				$methods = $this->cart->getShippingMethods();
 
 				if (!empty($methods)) {
 					$this->cart->setShippingMethod(current($methods));
 				} else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');
-					$this->message->add('warning', $this->cart->get_errors());
+					$this->message->add('warning', $this->cart->getError());
 				}
 			}
 		}
 
 		//Verify the payment details, if only the payment method is invalid, choose a payment method automatically
-		if (!$this->cart->validatePaymentDetails()) {
+		if (!$this->cart->validatePaymentMethod()) {
 			if ($this->cart->hasPaymentAddress() && !$this->cart->hasPaymentMethod()) {
 				$methods = $this->cart->getPaymentMethods();
 
 				if (!empty($methods)) {
-					$this->cart->setPaymentMethod(current($methods));
+					$method = current($methods);
+					$this->cart->setPaymentMethod($method['code']);
 				} else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');
-					$this->message->add('warning', $this->cart->get_errors());
+					$this->message->add('warning', $this->cart->getError());
 				}
 			}
 		}
 
 		if (empty($this->data['redirect'])) {
 			if (!$this->cart->validateCheckout()) {
-				$this->message->add('warning', $this->cart->get_errors('checkout'));
+				$this->message->add('warning', $this->cart->getError());
 
-				if ($this->cart->get_error_code() === 'CKO-1') {
+				//If the cart contents are invalid (ie: out of stock), redirect to cart
+				if ($this->cart->getErrorCode() === Cart::ERROR_CHECKOUT_VALIDATE) {
 					$this->data['redirect'] = $this->url->link('cart/cart');
 				} else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');
@@ -69,9 +71,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 
 				$this->data['checkout_url'] = $this->url->link('checkout/checkout');
 
-				$payment = $this->cart->getPaymentMethod();
-				$payment->renderTemplate();
-				$this->data['payment'] = $payment->output;
+				$this->data['payment'] = $this->cart->getPaymentMethod()->renderTemplate();
 			}
 		}
 

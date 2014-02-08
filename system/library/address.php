@@ -168,11 +168,13 @@ class Address extends Library
 
 	public function inGeoZone($address, $geo_zone_id)
 	{
+		if (!$address || empty($address['country_id']) || empty($address['zone_id'])) {
+			return false;
+		}
+
+		//If zero valued, shipping zone is All Zones
 		if (!$geo_zone_id) {
 			return true;
-		}
-		if (!$address) {
-			return false;
 		}
 
 		if (!is_array($address)) {
@@ -284,6 +286,8 @@ class Address extends Library
 		// Note: Error messages can be changed from Admin Panel based on localization
 		if (empty($address['zone_id'])) {
 			$this->error['zone_id'] = _l("Please select a state.");
+		} elseif (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = " . (int)$address['zone_id'] . " AND country_id = " . (int)$address['country_id'])) {
+			$this->error['zone_id'] = _l("Invalid Zone!");
 		}
 
 		return $this->error ? false : true;

@@ -184,7 +184,7 @@ class Url extends Library
 		$link = $this->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 
 		if (!is_string($link)) {
-			trigger_error("Error in Url Library: Store did not exist! store_id = " . $store_id . '.  ' . get_caller(0, 3));
+			trigger_error(__METHOD__ . _l("(): Store did not exist! Store ID: %s.", $store_id));
 			return '';
 		}
 
@@ -311,7 +311,7 @@ class Url extends Library
 	private function find_alias($path, $query = '', $store_id = false, $redirect = false)
 	{
 		if (!$path) {
-			trigger_error("Url::find_alias(): Path was not specified! " . get_caller(0, 2));
+			trigger_error(__METHOD__ . _l("(): Path was not specified!"));
 
 			return false;
 		}

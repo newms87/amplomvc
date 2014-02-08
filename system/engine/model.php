@@ -1,4 +1,5 @@
 <?php
+
 abstract class Model
 {
 	protected $registry;
@@ -135,7 +136,7 @@ abstract class Model
 		$success = $this->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
 		if (!$success) {
-			trigger_error("There was a problem inserting entry for $table and was not modified." . get_caller(0, 4));
+			trigger_error("There was a problem inserting entry for $table and was not modified.");
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -167,7 +168,7 @@ abstract class Model
 			$where = "WHERE `$primary_key` = $update_id";
 		} elseif (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			if (!$primary_key) {
-				trigger_error("UPDATE $table " . _l("does not have an integer primary key!") . get_caller(0, 4));
+				trigger_error("UPDATE $table " . _l("does not have an integer primary key!"));
 				return null;
 			}
 
@@ -185,7 +186,7 @@ abstract class Model
 		$success = $this->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
 
 		if (!$success) {
-			trigger_error("There was a problem updating entry for $table and was not modified." . get_caller(0, 4));
+			trigger_error("There was a problem updating entry for $table and was not modified.");
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -204,7 +205,7 @@ abstract class Model
 		if (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			$primary_key = $this->get_primary_key($table);
 			if (!$primary_key) {
-				trigger_error("DELETE " . _l("%s does not have an integer primary key!") . get_caller(0, 4));
+				trigger_error("DELETE " . _l("%s does not have an integer primary key!"));
 				return null;
 			}
 
@@ -221,7 +222,7 @@ abstract class Model
 			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 
 			if (!$truncate_allowed) {
-				trigger_error("Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller(0, 4));
+				trigger_error("Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality.");
 
 				return;
 			}
@@ -230,7 +231,7 @@ abstract class Model
 		$success = $this->query("DELETE FROM " . DB_PREFIX . "$table $where");
 
 		if (!$success) {
-			trigger_error("There was a problem deleting entry for $table and was not modified." . get_caller(0, 4));
+			trigger_error("There was a problem deleting entry for $table and was not modified.");
 
 			if ($this->db->hasError()) {
 				trigger_error($this->db->getError());
@@ -281,7 +282,7 @@ abstract class Model
 		foreach ($data as $key => &$value) {
 
 			if (is_resource($value) || is_array($value) || is_object($value)) {
-				trigger_error(__METHOD__ . "(): " . _l("The field %s was given a value that was not a valid type! Value: %s.", $key, gettype($value)) . get_caller(0, 4));
+				trigger_error(_l("%s(): The field %s was given a value that was not a valid type! Value: %s.", __METHOD__, $key, gettype($value)));
 				exit;
 			}
 
@@ -386,7 +387,7 @@ abstract class Model
 					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $row['Type'])));
 
 					//we only care about ints and floats because only these we will do something besides escape
-					$ints = array(
+					$ints   = array(
 						'bigint',
 						'mediumint',
 						'smallint',

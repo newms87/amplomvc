@@ -17,7 +17,7 @@ class Catalog_Model_Shipping_Flat extends System_Extension_Shipping
 		}
 	}
 
-	public function getQuote($address)
+	public function getQuotes($address)
 	{
 		$quote_data = array();
 

@@ -42,7 +42,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 				$json['error']['warning'] = _l("Invalid Delivery Address");
 			} else {
 				if (!$this->cart->setShippingAddress($_POST['address_id'])) {
-					$json['error']['address'] = $this->cart->get_errors('shipping_address');
+					$json['error']['address'] = $this->cart->getError('shipping_address');
 				}
 			}
 		}
@@ -62,20 +62,23 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 				$json['error'] = $this->form->get_errors();
 			}
 
-			if (!$json && !$this->cart->validateShippingAddress($_POST)) {
-				$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address');
-			} else {
-				if (!$this->cart->setShippingAddress($_POST)) {
-					$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address');
-				}
+			if (!$json && !$this->cart->canShipTo($_POST)) {
+				$json['error'] = $this->cart->getError();
+			} elseif (!$this->cart->setShippingAddress($_POST)) {
+				$json['error'] = $this->cart->getError();
+			}
+
+
+			if (!$json) {
+				$json['success'] = _l("Delivery address is valid!");
 			}
 
 			//If this is not an ajax call
-			if (!isset($_POST['async'])) {
-				if ($json) {
-					$this->message->add('warning', $json['error']);
-				} else {
-					$this->message->add('success', _l("Delivery address is valid!"));
+			if (!$this->request->isAjax()) {
+				if (!empty($json['success'])) {
+					$this->message->add('success', $json['success']);
+				} elseif(!empty($json['error'])) {
+					$this->message->add('error', $json['error']);
 				}
 
 				//We redirect because we are only a block, not a full page!
@@ -95,7 +98,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 			$json['redirect'] = $this->url->link('checkout/checkout');
 		} elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-			$this->message->add($this->cart->get_errors());
+			$this->message->add($this->cart->getError());
 		} elseif (!$this->cart->hasShipping()) {
 			$json['redirect'] = $this->url->link('checkout/checkout');
 			$this->message->add('warning', _l("Shipping is not required for this order"));

@@ -289,7 +289,9 @@ class Customer extends Library
 				'address_id'  => $address_id,
 			);
 
-			return $this->insert('customer_address', $customer_address);
+			$this->insert('customer_address', $customer_address);
+
+			return $address_id;
 		}
 
 		$this->error = $this->address->getError();

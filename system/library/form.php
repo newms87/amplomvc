@@ -98,7 +98,7 @@ class Form extends Library
 			$this->fields[$field]['options']      = $options;
 			$this->fields[$field]['build_config'] = $config;
 		} else {
-			trigger_error("Attempt to set options for unknown field $field! " . get_caller());
+			trigger_error("Attempt to set options for unknown field $field! ");
 		}
 	}
 
@@ -206,7 +206,7 @@ class Form extends Library
 		$this->template_file = $this->template->findFile($file);
 
 		if (!$this->template_file) {
-			$this->error = "Could not load form template $file!" . get_caller();
+			$this->error = "Could not load form template $file!";
 			trigger_error($this->error);
 		}
 	}
@@ -215,7 +215,7 @@ class Form extends Library
 	{
 		//Prep the form data
 		if (!$this->prepare()) {
-			trigger_error($this->error . ' ' . get_caller());
+			trigger_error($this->error);
 			return false;
 		}
 

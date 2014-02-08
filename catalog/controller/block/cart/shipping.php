@@ -65,8 +65,8 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 			if (!$this->form->validate($_POST)) {
 				$json['error'] = $this->form->get_errors();
-			} elseif (!$this->cart->validateShippingAddress($_POST)) {
-				$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address');
+			} elseif (!$this->cart->canShipTo($_POST)) {
+				$json['error']['shipping_address'] = $this->cart->getError('shipping_address');
 			}
 		}
 
@@ -99,8 +99,8 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		}
 
 		if (!empty($_POST['add_address'])) {
-			if (!$this->cart->validateShippingAddress($_POST)) {
-				$json['error'] = $this->cart->get_errors('shipping_address');
+			if (!$this->cart->canShipTo($_POST)) {
+				$json['error'] = $this->cart->getError('shipping_address');
 			} else {
 				$address_id = $this->address->add($_POST);
 			}
@@ -117,7 +117,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 		if (!empty($address_id)) {
 			if (!$this->cart->setShippingAddress($address_id)) {
-				$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address') . $address_id;
+				$json['error']['shipping_address'] = $this->cart->getError('shipping_address') . $address_id;
 			} else {
 				$result = $this->cart->setShippingMethod($_POST['shipping_method']);
 
@@ -125,7 +125,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 					if ($result) {
 						$this->message->add('success', _l("Success: Your shipping estimate has been applied!"));
 					} else {
-						$this->message->add('warning', $this->cart->get_errors('shipping_method'));
+						$this->message->add('warning', $this->cart->getError('shipping_method'));
 					}
 
 					$this->url->redirect(urldecode($_POST['redirect']));
@@ -134,7 +134,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 				if ($result) {
 					$json['success'] = _l("Success: Your shipping estimate has been applied!");
 				} else {
-					$json['error'] = $this->cart->get_errors('shipping_method');
+					$json['error'] = $this->cart->getError('shipping_method');
 				}
 			}
 

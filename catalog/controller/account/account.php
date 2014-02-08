@@ -3,19 +3,20 @@ class Catalog_Controller_Account_Account extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/account');
-
+		//Verify Customer Logged in
 		if (!$this->customer->isLogged()) {
 			$this->request->setRedirect('account/account');
-
 			$this->url->redirect('account/login');
 		}
 
+		//Page Head
 		$this->document->setTitle(_l("My Account"));
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("My Account"), $this->url->link('account/account'));
 
+		//Actions
 		$this->data['update']         = $this->url->link('account/update');
 		$this->data['password']       = $this->url->link('account/password');
 		$this->data['address']        = $this->url->link('account/address');
@@ -31,6 +32,10 @@ class Catalog_Controller_Account_Account extends Controller
 			$this->data['reward'] = $this->url->link('account/reward');
 		}
 
+		//The Template
+		$this->template->load('account/account');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -40,6 +45,7 @@ class Catalog_Controller_Account_Account extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 }

@@ -15,13 +15,9 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
 		$order['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 
-
-		//TODO: This needs to be updated to match System_Extension_Payment, System_Extension_Shipping
-
-
 		//Shipping / Payment Methods
-		$order['payment_method']  = $this->cart->getPaymentMethod($order['payment_method_id'])->info();
-		$order['shipping_method'] = $this->cart->getShippingMethod($order['shipping_method_id']);
+		$order['payment_method']  = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
+		$order['shipping_method'] = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
 
 		// Vouchers
 		foreach ($order['order_vouchers'] as &$voucher) {
@@ -85,7 +81,6 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();
-
 
 		// Admin Alert Mail
 		if ($this->config->get('config_alert_mail')) {

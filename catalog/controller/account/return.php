@@ -138,9 +138,8 @@ class Catalog_Controller_Account_Return extends Controller
 
 	public function insert()
 	{
-		$this->template->load('account/return_form');
+		//Order ID
 		$order_id   = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
-		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 
 		$order_lookup = isset($_GET['order_lookup']) ? $_GET['order_lookup'] : 0;
 
@@ -148,8 +147,8 @@ class Catalog_Controller_Account_Return extends Controller
 			$return_data = $_POST;
 
 			foreach ($return_data['return_products'] as &$product) {
-				$product['rma']      = $this->Model_Account_Return->generateRma($return_data);
-				$product['quantity'] = $return_data['return_quantity'];
+				$product['rma']      = $this->Model_Account_Return->generateRma($return_data + $product);
+				$product['quantity'] = $product['return_quantity'];
 
 				$product['return_id'] = $this->Model_Account_Return->addReturn($return_data + $product);
 			}
@@ -298,11 +297,17 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->message->add('warning', _l("You must be logged in to request a return. Your orders will automatically be associated to your account via your email address"));
 		}
 
+		$this->data['data_yes_no'] = array(
+			0 => _l("No"),
+		   1 => _l("Yes"),
+		);
+
 		//Action Buttons
 		$this->data['action'] = $this->url->link('account/return/insert');
-
-		//Ajax Urls
 		$this->data['url_captcha_image'] = $this->url->link('account/return/captcha');
+
+		//The Template
+		$this->template->load('account/return_form');
 
 		//Dependencies
 		$this->children = array(
@@ -413,7 +418,7 @@ class Catalog_Controller_Account_Return extends Controller
 				if (!empty($product['return_quantity'])) {
 					$has_product = true;
 
-					if (empty($product['return_reason_id']) && $product['return_reason_id'] !== '0') {
+					if (!isset($product['return_reason_id']) || (!$product['return_reason_id'] && $product['return_reason_id'] !== '0')) {
 						$this->error["return_products[$product[product_id]][return_reason_id"] = _l("You must select a Reason For Return!");
 					}
 				}

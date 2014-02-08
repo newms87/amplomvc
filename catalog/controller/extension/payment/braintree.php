@@ -19,7 +19,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->data['card_select'] = $this->select_card($this->customer->getMeta('default_payment_key'));
 
 		//Action Buttons
-		$this->data['confirm'] = $this->url->link('extension/payment/braintree/confirm');
+		$this->data['confirm'] = $this->url->link('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
 
 		$this->data['user_logged'] = $this->customer->isLogged();
 
@@ -143,11 +143,37 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 	public function confirm()
 	{
-		if (!$this->System_Extension_Payment_Braintree->confirm()) {
+		$order_id = !empty($_GET['order_id']) ? $_GET['order_id'] : 0;
+
+		if (!$order_id) {
+			$this->message->add('error', _l("Order was not processed. Please try submitting your order again."));
+			$this->url->redirect('checkout/checkout');
+		}
+
+		//Pay with Existing Credit Card
+		if (!empty($_POST['existing_payment_card']) && !empty($_POST['payment_key'])) {
+			if (!$this->customer->isLogged()) {
+				$this->message->add('error', _l("You must be logged in to use a card from your account! Please try checking out again"));
+				return false;
+			}
+
+			$this->order->setPaymentMethod($order_id, 'braintree', $_POST['payment_key']);
+
+			$result = $this->System_Extension_Payment_Braintree->confirm($order_id);
+		}
+		//Pay with New Card
+		else {
+			$result = $this->System_Extension_Payment_Braintree->confirm($order_id, $_POST);
+		}
+
+		if (!$result) {
 			$this->message->add('error', $this->System_Extension_Payment_Braintree->getError());
 			$this->url->redirect('checkout/checkout');
 		}
 
-		$this->url->redirect('checkout/success', 'order_id=' . $_GET['order_id']);
+		//Clear Cart
+		$this->cart->clear();
+
+		$this->url->redirect('checkout/success', 'order_id=' .$order_id);
 	}
 }

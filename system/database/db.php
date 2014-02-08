@@ -188,7 +188,7 @@ class DB
 
 	private function queryError($sql = '')
 	{
-		trigger_error($this->driver->getError() . get_caller(0, 5));
+		trigger_error($this->driver->getError());
 	}
 
 	public function multiquery($string)
@@ -450,7 +450,7 @@ class DB
 	public function escape($value)
 	{
 		if (is_resource($value) || is_object($value)) {
-			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller(0, 3));
+			trigger_error(_l("%s(): Argument for value was not a a valid type! Value: %s.", gettype($value)));
 			exit;
 		} elseif (is_array($value)) {
 			$driver = $this->driver;

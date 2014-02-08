@@ -56,7 +56,7 @@ class Sort extends Library
 		$template_file = $this->template->findFile($template);
 
 		if (!$template_file) {
-			trigger_error("Sort::render_sort(): Sort template $template was found! " . get_caller());
+			trigger_error(_l("%s(): Sort template %s was found!", __METHOD__, $template));
 			return;
 		}
 
@@ -95,7 +95,7 @@ class Sort extends Library
 		$template_file = $this->template->findFile($template);
 
 		if (!$template_file) {
-			trigger_error("Sort::render_sort(): Limit template $template was found! " . get_caller());
+			trigger_error(_l("%s(): Limit template %s was found!", __METHOD__, $template));
 			return;
 		}
 

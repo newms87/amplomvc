@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/checkout/payment_method');
-
 		if ($this->cart->hasPaymentAddress()) {
 			$payment_methods = $this->cart->getPaymentMethods();
 
@@ -12,7 +10,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 				$payment_methods = array();
 			} else {
 				if ($this->cart->hasPaymentMethod()) {
-					$this->data['code'] = $this->cart->getPaymentMethodId();
+					$this->data['code'] = $this->cart->getPaymentCode();
 				} else {
 					$this->data['code'] = key($payment_methods);
 				}
@@ -32,21 +30,21 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			}
 		}
 
+		//Session data
 		$session_defaults = array(
 			'comment' => '',
 			'agree'   => '',
 		);
 
-		foreach ($session_defaults as $key => $default) {
-			if (isset($this->session->data[$key])) {
-				$this->data[$key] = $this->session->data[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $this->session->data + $session_defaults;
 
+		//Actions
 		$this->data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');
 
+		//The Template
+		$this->template->load('block/checkout/payment_method');
+
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -63,7 +61,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 
 		if (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-			$this->message->add('warning', $this->cart->get_errors());
+			$this->message->add('warning', $this->cart->getError());
 		}
 
 		if (!$json) {
@@ -79,7 +77,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 				//_payment_method to avoid $this->builder->js('errors', ...) adding message on form
 				$json['error']['_payment_method'] = _l("Invalid Payment Method");
 			} elseif (!$this->cart->setPaymentMethod($_POST['payment_method'])) {
-				$json['error'] = $this->cart->get_errors('payment_method');
+				$json['error'] = $this->cart->getError('payment_method');
 			}
 
 			if (!$json) {

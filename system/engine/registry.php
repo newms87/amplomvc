@@ -64,7 +64,7 @@ final class Registry
 			return true;
 		}
 
-		trigger_error("Unable to resolve class $class. Failed to load class file." . get_caller(0, 4));
+		trigger_error(_l("Unable to resolve class %s. Failed to load class file.", $class));
 
 		return false;
 	}

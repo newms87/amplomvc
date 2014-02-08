@@ -48,13 +48,19 @@
 										<? } ?>
 
 										<? if (!empty($cart_product['options'])) { ?>
-											<? html_dump($cart_product['options'], 'options'); ?>
 											<div class="product_option_description">
 												<? foreach ($cart_product['options'] as $product_option_id => $product_option_values) { ?>
 													<? foreach ($product_option_values as $product_option_value) { ?>
+														<? if ($product_option_value['display_value']) { ?>
 														<div class="cart_product_option_value">
 															<?= $product_option_value['display_value']; ?>
 														</div>
+														<? } else { ?>
+															<div class="cart_product_option_value">
+																<span class="name"><?= $product_option_value['name']; ?></span>
+																<span class="value"><?= $product_option_value['value']; ?></span>
+															</div>
+														<? } ?>
 													<? } ?>
 												<? } ?>
 											</div>
@@ -143,7 +149,7 @@
 
 		data.push({name: context.attr('name'), value: context.attr('value')});
 
-		$.post("<?= $ajax_block_cart; ?>", data, function (html) {
+		$.post("<?= $url_block_cart; ?>", data, function (html) {
 			//Cart is empty (or something went wrong)
 			if (!html) {
 				location = "<?= $url_cart; ?>";

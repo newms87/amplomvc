@@ -3,8 +3,6 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 {
 	public function index()
 	{
-		//Template and Languge
-		$this->template->load('setting/return_reason');
 		//Page Head
 		$this->document->setTitle(_l("Return Reasons"));
 
@@ -52,7 +50,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		unset($return_reason);
 
 		//Add in the template row
-		$return_reasonse['__ac_template__'] = array(
+		$return_reasons['__ac_template__'] = array(
 			'title' => _l("Return Reason Title"),
 		);
 
@@ -71,6 +69,9 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		//Action Buttons
 		$this->data['save']   = $this->url->link('setting/return_reason');
 		$this->data['cancel'] = $this->url->link('setting/store');
+
+		//The Template
+		$this->template->load('setting/return_reason');
 
 		//Dependencies
 		$this->children = array(

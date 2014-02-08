@@ -24,7 +24,7 @@ abstract class Controller
 	public function __set($key, $value)
 	{
 		//TODO __set() has been deprecated for AmploCart. DO NOT USE THIS FEATURE.
-		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled." . get_caller(0, 5));
+		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled.");
 		exit;
 	}
 
@@ -48,7 +48,7 @@ abstract class Controller
 		$block = 'block/' . $path;
 
 		if (!is_array($args)) {
-			trigger_error('Error: In Controller ' . get_class($this) . ' while retreiving block ' . $block . ' - $args passed to Controller::getBlock() must be an array of parameters to be passed to the block method. ' . get_caller());
+			trigger_error(_l("%s(): In Controller %s while retrieving block %s. Parameters (%s) passed to must be an array to forward to the block method.", __METHOD__, get_class($this), $block, $args));
 			exit();
 		}
 
@@ -67,7 +67,7 @@ abstract class Controller
 		if ($action->execute()) {
 			return $action->getOutput();
 		} else {
-			trigger_error('Error: Could not load block ' . $block . '! The file was missing.');
+			trigger_error(_l("%s(): Could not load block %s! The file was missing.", __METHOD__, $block));
 		}
 	}
 

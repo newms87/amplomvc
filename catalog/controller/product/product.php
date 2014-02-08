@@ -1,4 +1,5 @@
 <?php
+
 class Catalog_Controller_Product_Product extends Controller
 {
 	public function index()
@@ -17,11 +18,6 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$this->data = $product_info;
 
-		$this->data = array(
-			'title' => 'this',
-
-		);
-
 		//Layout Override (only if set)
 		$layout_id = $this->Model_Catalog_Product->getProductLayoutId($product_id);
 
@@ -31,27 +27,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$this->data['product_id'] = $product_id;
 
-		//Build Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-
-		$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
-
-		if ($manufacturer_info && $this->config->get('config_breadcrumbs_show_manufacturer')) {
-			$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
-		}
-
-		$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
-
-		if (!$product_info['category']) {
-			$product_info['category'] = array(
-				'category_id' => 0,
-			   'name' => '',
-			);
-		}
-
-		$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
-
-		//Setup Document
+		//Page Head
 		$this->document->setTitle($product_info['name']);
 		$this->document->setDescription($product_info['meta_description']);
 		$this->document->setKeywords($product_info['meta_keywords']);
@@ -59,15 +35,28 @@ class Catalog_Controller_Product_Product extends Controller
 		//Page Title
 		$this->data['page_title'] = $product_info['name'];
 
-		if ($product_info['template']) {
-			$this->template->load('product/' . $product_info['template']);
-		} elseif ($product_info['product_class_id']) {
-			$this->template->load($this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']));
-		} else {
-			$this->template->load('product/product');
+		//Build Breadcrumbs
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+
+		$manufacturer = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
+
+		if ($manufacturer && $this->config->get('config_breadcrumbs_show_manufacturer')) {
+			$this->breadcrumb->add($manufacturer['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 		}
 
+		$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
+
+		if (!$product_info['category']) {
+			$product_info['category'] = array(
+				'category_id' => 0,
+				'name'        => '',
+			);
+		}
+
+		$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
+
 		//Product Information
+		$this->data['manufacturer']     = $manufacturer;
 		$this->data['url_manufacturer'] = $this->url->link('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
 
 		$this->data['is_purchasable'] = $this->cart->productPurchasable($product_info);
@@ -157,8 +146,7 @@ class Catalog_Controller_Product_Product extends Controller
 		$product_info['category']['url'] = $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']);
 		$this->data['category']          = $product_info['category'];
 
-		$this->data['keep_shopping'] = $this->url->link('product/category');
-
+		$this->data['keep_shopping']          = $this->url->link('product/category');
 		$this->data['view_cart_link']         = $this->url->link('cart/cart');
 		$this->data['checkout_link']          = $this->url->link('checkout/checkout');
 		$this->data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
@@ -203,11 +191,11 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Template Data
 		if ($this->config->get('config_shipping_return_info_id')) {
-			$this->data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+			$this->data['data_policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 		}
 
 		if ($this->config->get('config_show_product_attributes')) {
-			$this->data['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
+			$this->data['data_attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
 		}
 
 		//Related Products
@@ -244,6 +232,15 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Action Buttons
 		$this->data['buy_now'] = $this->url->link('cart/cart/buy_now');
+
+		//The Template
+		if ($product_info['template']) {
+			$this->template->load('product/' . $product_info['template']);
+		} elseif ($product_info['product_class_id']) {
+			$this->template->load($this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']));
+		} else {
+			$this->template->load('product/product');
+		}
 
 		//Dependencies
 		$this->children = array(

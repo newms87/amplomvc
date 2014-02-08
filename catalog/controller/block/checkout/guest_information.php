@@ -64,7 +64,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 
 		//Redirect if set
 		if ($json) {
-			if (!empty($_POST['async'])) {
+			if ($this->request->isAjax()) {
 				$this->url->redirect('checkout/checkout');
 			}
 		} else {
@@ -98,14 +98,14 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 
 			if (!$json) {
 				if (!$this->cart->setPaymentAddress($_POST['payment_address'])) {
-					$json['error']['payment_address'] = $this->cart->get_errors('payment_address');
+					$json['error']['payment_address'] = $this->cart->getError('payment_address');
 				}
 			}
 
 			//Same Shipping as Billing
 			if (!empty($_POST['same_shipping_address'])) {
 				if (!$this->cart->setShippingAddress($this->cart->getPaymentAddressId())) {
-					$this->error['shipping_address'] = $this->cart->get_errors('shipping_address');
+					$this->error['shipping_address'] = $this->cart->getError('shipping_address');
 				}
 			} else {
 				//Validate Shipping Address
@@ -121,13 +121,13 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 
 				if (!$json) {
 					if (!$this->cart->setShippingAddress($_POST['shipping_address'])) {
-						$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address');
+						$json['error']['shipping_address'] = $this->cart->getError('shipping_address');
 					}
 				}
 			}
 
 			//If this is an ajax request
-			if (!isset($_POST['async'])) {
+			if (!$this->request->isAjax()) {
 				if ($json['error']) {
 					$this->message->add('warning', $json['error']);
 				} else {

@@ -242,8 +242,8 @@ class Admin_Controller_Sale_Order extends Controller
 			'shipping_address'   => array(),
 			'payment_address'    => array(),
 
-			'shipping_method_id' => '',
-			'payment_method_id'  => '',
+			'shipping_code' => '',
+			'payment_code'  => '',
 			'order_products'     => array(),
 			'order_vouchers'     => array(),
 			'order_totals'       => array(),
@@ -429,11 +429,11 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->data += $order_info;
 
-		$this->data['payment_method']  = $this->cart->getPaymentMethodData($order_info['payment_method_id']);
+		$this->data['payment_method']  = $this->System_Extension_Payment->get($order_info['payment_code'])->info();
 		$this->data['payment_address'] = $this->address->format($this->order->getPaymentAddress($order_id));
 
-		if ($order_info['shipping_method_id']) {
-			$this->data['shipping_method']  = $this->cart->getShippingMethodData($order_info['shipping_method_id']);
+		if ($order_info['shipping_code']) {
+			$this->data['shipping_method']  = $this->System_Extension_Shipping->get($order_info['shipping_code'])->info();
 			$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 		}
 

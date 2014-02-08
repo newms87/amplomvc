@@ -21,10 +21,10 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 
 		//Check if the shipping estimate was invalidated and that we are not in the checkout process
 		// -> update the shipping estimate to the first Shipping option
-		if (!$this->order->hasOrder() && $this->cart->hasShippingMethod()) {
+		if (!$this->order->hasOrder() && !$this->cart->validateShippingMethod()) {
 			$shipping_methods = $this->cart->getShippingMethods();
 
-			if (!empty($shipping_methods) && !isset($shipping_methods[$this->cart->getShippingMethodId()])) {
+			if (!empty($shipping_methods)) {
 				$this->cart->setShippingMethod(key($shipping_methods));
 			}
 		}
@@ -34,7 +34,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if (!$this->cart->validate()) {
-			$this->message->add('error', $this->cart->get_errors(null, true));
+			$this->message->add('error', $this->cart->getError());
 		}
 
 		$show_return_policy = $this->config->get('config_cart_show_return_policy');
@@ -97,9 +97,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 
 		//Url
 		$this->data['url_cart'] = $this->url->link('cart/cart');
-
-		//Ajax
-		$this->data['ajax_block_cart'] = $this->url->link("block/cart/cart");
+		$this->data['url_block_cart'] = $this->url->link("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
@@ -129,6 +127,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		$this->template->load('block/cart/cart');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->render();
 	}
 }

@@ -113,9 +113,9 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 		}
 	}
 
-	public function validate($address, $total)
+	public function validate($address)
 	{
-		if (!parent::validate($address, $total)) {
+		if (!parent::validate($address)) {
 			return false;
 		}
 

@@ -15,8 +15,8 @@ class Catalog_Controller_Account_Update extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);
 
-			if (!empty($_POST['payment_method_id']) && !empty($_POST['payment_key'])) {
-				$this->System_Extension_Payment->get($_POST['payment_method_id'])->update_card($_POST['payment_key'], array('default' => true));
+			if (!empty($_POST['payment_code']) && !empty($_POST['payment_key'])) {
+				$this->System_Extension_Payment->get($_POST['payment_code'])->update_card($_POST['payment_key'], array('default' => true));
 			}
 
 			$this->message->add('success', _l("Your account information has been updated successfully!"));

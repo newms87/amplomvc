@@ -108,9 +108,9 @@ final class Action
 				$this->controller = new $class($this->registry);
 			} else {
 				if (!$this->file) {
-					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller." . get_caller(0, 3));
+					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller.");
 				} else {
-					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!" . get_caller(0, 3));
+					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
 				}
 			}
 		}
@@ -142,7 +142,7 @@ final class Action
 			return true;
 		}
 
-		trigger_error("The method $this->method() was not callable in $this->class. Please make sure it is a public method!" . get_caller(0,5));
+		trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $this->method, $this->class));
 
 		return false;
 	}

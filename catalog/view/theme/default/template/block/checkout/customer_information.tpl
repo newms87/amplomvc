@@ -96,7 +96,7 @@
 			info_item = form.closest('.info_item');
 
 			if (!json || json['error']) {
-				set_validation_status(info_item, 'invalid', '<?= _l(""); ?>');
+				set_validation_status(info_item, 'invalid', '<?= _l("Invalid"); ?>');
 
 			} else {
 				set_validation_status(info_item, 'valid', '');

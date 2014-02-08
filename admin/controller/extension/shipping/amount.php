@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Extension_Shipping_Amount extends Controller
 {
 	public function settings(&$settings)

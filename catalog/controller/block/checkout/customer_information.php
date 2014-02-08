@@ -3,16 +3,16 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/checkout/customer_information');
 		if (!$this->customer->isLogged()) {
 			$this->data['guest_checkout'] = true;
 
 			$this->data['block_guest_information'] = $this->getBlock('checkout/guest_information');
 		} else {
 			//Use Customer Payment Preference
-			if ($this->customer->getMeta('default_payment_method_id')) {
+			if ($this->customer->getMeta('default_payment_code')) {
+
 				if (!$this->cart->hasPaymentMethod()) {
-					$this->cart->setPaymentMethod($this->customer->getMeta('default_payment_method_id'));
+					$this->cart->setPaymentMethod($this->customer->getMeta('default_payment_code'), $this->customer->getMeta('default_payment_key'));
 				}
 
 				if (!$this->cart->hasPaymentAddress()) {
@@ -20,15 +20,15 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 				}
 			}
 
-			//Load pyament block
+			//Load payment block
 			$this->data['block_payment_address'] = $this->getBlock('checkout/payment_address');
 
 
 			if ($this->cart->hasShipping()) {
 				//Use customer Shipping Preference
-				if ($this->customer->getMeta('default_shipping_method_id')) {
+				if ($this->customer->getMeta('default_shipping_code')) {
 					if (!$this->cart->hasShippingMethod()) {
-						$this->cart->setShippingMethod($this->customer->getMeta('default_shipping_method_id'));
+						$this->cart->setShippingMethod($this->customer->getMeta('default_shipping_code'), $this->customer->getMeta('default_shipping_key'));
 					}
 
 					if (!$this->cart->hasShippingAddress()) {
@@ -49,6 +49,10 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 		$this->data['validate_customer_checkout'] = $this->url->link('block/checkout/customer_information/validate');
 
+		//The Template
+		$this->template->load('block/checkout/customer_information');
+
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -64,10 +68,10 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			$json['error']['payment_method'] = _l("Please specify a Payment Method");
 		}
 
-		//TODO: Need to add default_payment_method_id and default_shipping_method_id into customer Library API
 		//Save Customer Payment Preferences (for future reference)
 		if (!$json && $this->customer->isLogged()) {
-			$this->customer->setMeta('default_payment_method_id', $this->cart->getPaymentMethodId());
+			$this->customer->setMeta('default_payment_code', $this->cart->getPaymentCode());
+			$this->customer->setMeta('default_payment_key', $this->cart->getPaymentKey());
 			$this->customer->setDefaultPaymentAddress($this->cart->getPaymentAddressId());
 		}
 
@@ -83,7 +87,8 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 			//Save Customer Shipping Preferences (for future reference)
 			if (!$json && $this->customer->isLogged()) {
-				$this->customer->setMeta('default_shipping_method_id', $this->cart->getShippingMethodId());
+				$this->customer->setMeta('default_shipping_code', $this->cart->getShippingCode());
+				$this->customer->setMeta('default_shipping_key', $this->cart->getShippingKey());
 				$this->customer->setDefaultShippingAddress($this->cart->getShippingAddressId());
 			}
 		}

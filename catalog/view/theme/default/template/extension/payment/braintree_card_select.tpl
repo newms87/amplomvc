@@ -4,7 +4,7 @@
 		<a class="register_card button subscribe" href="<?= $register_card; ?>"><?= _l("Add Card"); ?></a>
 	<? } else { ?>
 		<div id="braintree_card_list" class="card_list noselect">
-			<input type="hidden" name="payment_method_id" value="braintree"/>
+			<input type="hidden" name="payment_code" value="braintree"/>
 			<? foreach ($cards as $card) { ?>
 				<div class="card <?= !empty($card['default']) ? 'checked' : ''; ?>">
 					<div class="card_type">

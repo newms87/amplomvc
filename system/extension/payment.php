@@ -8,9 +8,18 @@ class System_Extension_Payment extends System_Extension_Extension
 		require_once(DIR_SYSTEM . "extension/payment_interfaces.php");
 	}
 
-	public function validate($address, $total)
+	public function renderTemplate()
 	{
-		if ((int)$this->settings['min_total'] > $total) {
+		$action = new Action($this->registry, 'extension/payment/' . $this->code);
+
+		if ($action->isValid() && $action->execute()) {
+			return $action->getOutput();
+		}
+	}
+
+	public function validate($address)
+	{
+		if ((int)$this->settings['min_total'] > $this->cart->getTotal()) {
 			return false;
 		}
 
