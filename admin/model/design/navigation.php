@@ -613,10 +613,6 @@ class Admin_Model_Design_Navigation extends Model
 							),
 						),
 					),
-					'system_backup__restore' => array(
-						'display_name' => 'Backup / Restore',
-						'href'         => 'tool/backup',
-					),
 					'system_system_tools'    => array(
 						'display_name' => 'System Tools',
 						'href'         => 'tool/tool',
