@@ -123,7 +123,7 @@ class Catalog_Controller_Product_Category extends Controller
 		} else {
 			$this->data['category_name'] = $category_info['name'];
 
-			$parent = $this->getParent($category_id);
+			$parent = $this->Model_Catalog_Category->getParent($category_id);
 
 			if ($parent && $parent['category_id'] !== 0) {
 				$this->data['continue'] = $this->url->link('product/category', 'category_id=' . $parent['category_id']);
