@@ -237,11 +237,11 @@ class Mail extends Library
 		}
 
 		if (!$this->subject) {
-			$errors .= _l('E-Mail subject required!');
+			$this->subject = "(No Subject)";
 		}
 
 		if ((!$this->text) && (!$this->html)) {
-			$errors .= _l('E-Mail message required!');
+			$this->text = ' ';
 		}
 
 		if ($errors) {
@@ -446,7 +446,7 @@ class Mail extends Library
 
 		foreach ($this->to as $recipient) {
 			if (!$this->talk('RCPT TO: <' . $recipient . '>', $reply_codes)) {
-				$this->trigger_error('RCPT TO not accepted from server!');
+				$this->trigger_error('RCPT TO not accepted from server! ' . 'RCPT TO: < ' . $recipient . ' >');
 				return false;
 			}
 		}

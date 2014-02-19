@@ -75,9 +75,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 			$mail['text'] = htmlentities($mail['message']);
 		}
 
-		$this->mail->init();
-
-		$this->mail->setData($mail);
+		$this->mail->init($mail);
 
 		if (!$this->mail->send()) {
 			return false;

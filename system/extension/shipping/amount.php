@@ -12,6 +12,10 @@ class System_Extension_Shipping_Amount extends System_Extension_Shipping
 		$total_price = $this->cart->getSubTotal();
 		$cost        = false;
 
+		if (empty($this->settings['priceset'])) {
+			return array();
+		}
+		
 		$pricesets = $this->settings['priceset'];
 
 		foreach ($pricesets as $set) {
@@ -50,37 +54,39 @@ class System_Extension_Shipping_Amount extends System_Extension_Shipping
 			}
 		}
 
-		$zonerules = $this->settings['zonerule'];
-		$orig_cost = $cost;
-		foreach ($zonerules as $rule) {
-			if ($address['country_id'] != $rule['country_id'] || ($address['zone_id'] != $rule['zone_id'] && $rule['zone_id'] != 0)) {
-				continue;
-			}
-			switch ($rule['mod']) {
-				case 'add':
-					if ($rule['type'] === 'fixed') {
-						$cost += $rule['cost'];
-					} else {
-						$cost += $orig_cost * ($rule['cost'] / 100);
-					}
-					break;
-				case 'subtract':
-					if ($rule['type'] === 'fixed') {
-						$cost -= $rule['cost'];
-					} else {
-						$cost -= $orig_cost * ($rule['cost'] / 100);
-					}
-					break;
-				case 'fixed':
-					if ($rule['type'] === 'fixed') {
-						$cost = $rule['cost'];
-					} else {
-						$cost = $orig_cost * ($rule['cost'] / 100);
-					}
-					//We are done for fixed price (exit foreach loop)
-					break 2;
-				default:
-					break;
+		if (!empty($this->settings['zonerule'])) {
+			$zonerules = $this->settings['zonerule'];
+			$orig_cost = $cost;
+			foreach ($zonerules as $rule) {
+				if ($address['country_id'] != $rule['country_id'] || ($address['zone_id'] != $rule['zone_id'] && $rule['zone_id'] != 0)) {
+					continue;
+				}
+				switch ($rule['mod']) {
+					case 'add':
+						if ($rule['type'] === 'fixed') {
+							$cost += $rule['cost'];
+						} else {
+							$cost += $orig_cost * ($rule['cost'] / 100);
+						}
+						break;
+					case 'subtract':
+						if ($rule['type'] === 'fixed') {
+							$cost -= $rule['cost'];
+						} else {
+							$cost -= $orig_cost * ($rule['cost'] / 100);
+						}
+						break;
+					case 'fixed':
+						if ($rule['type'] === 'fixed') {
+							$cost = $rule['cost'];
+						} else {
+							$cost = $orig_cost * ($rule['cost'] / 100);
+						}
+						//We are done for fixed price (exit foreach loop)
+						break 2;
+					default:
+						break;
+				}
 			}
 		}
 

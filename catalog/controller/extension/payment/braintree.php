@@ -53,7 +53,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->template->load('extension/payment/braintree_card_select');
 
 		//Render
-		$this->render();
+		return $this->render();
 	}
 
 	public function register_card()
