@@ -94,10 +94,10 @@ class Customer extends Library
 
 		$customer['approved'] = $this->config->get('config_customer_approval') ? 1 : 0;
 
-		$customer_id = $this->insert('customer', $customer);
+		$this->customer_id = $this->insert('customer', $customer);
 
 		//Address will be extracted from customer information, if it exists
-		$this->addAddress($customer, $customer_id);
+		$this->addAddress($customer);
 
 		//Customer MetaData
 		if (!empty($customer['metadata'])) {
@@ -106,11 +106,11 @@ class Customer extends Library
 			}
 		}
 
-		$customer['customer_id'] = $customer_id;
+		$customer['customer_id'] = $this->customer_id;
 
 		$this->mail->sendTemplate('new_customer', $customer);
 
-		return $customer_id;
+		return $this->customer_id;
 	}
 
 	public function edit($data)
@@ -444,11 +444,8 @@ class Customer extends Library
 
 	public function getShippingAddresses($filter = array())
 	{
-		$allowed_zones = $this->cart->getAllowedShippingZones();
-
 		$defaults = array(
-			'country_ids' => array_column_recursive($allowed_zones, 'country_id'),
-			'zone_ids'    => array_column_recursive($allowed_zones, 'zone_id'),
+			'geo_zones' => $this->cart->getAllowedShippingZones(),
 		);
 
 		$addresses = $this->getAddresses($filter + $defaults);

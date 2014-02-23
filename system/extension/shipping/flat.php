@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Flat extends System_Extension_Shipping
+class System_Extension_Shipping_Flat extends System_Extension_Shipping
 {
 	private $flat_info;
 	private $rates;

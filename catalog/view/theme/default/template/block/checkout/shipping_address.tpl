@@ -1,9 +1,8 @@
 <? if (!empty($allowed_geo_zones)) { ?>
 	<h2><?= _l("We deliver to the following locations:"); ?></h2>
 	<div class="allowed_zone_list">
-		<? foreach ($allowed_geo_zones as $i => $geo_zone) { ?>
-			<span
-				class="allowed_zone_item"><?= $geo_zone['country']['name'] . (($i == count($allowed_geo_zones) - 1) ? '' : ', '); ?></span>
+		<? foreach ($allowed_geo_zones as $country_id => $country) { ?>
+			<span class="allowed_zone_item"><?= $country['name']; ?><?= empty($c) ? $c = ',' : ''; ?></span>
 		<? } ?>
 	</div>
 <? } ?>

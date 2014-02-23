@@ -242,6 +242,10 @@ if (!function_exists('array_column_recursive')) {
 
 		if (is_array($array) && !empty($array)) {
 			foreach ($array as $row) {
+				if (!is_array($row)) {
+					continue;
+				}
+
 				if (!isset($row[$column])) {
 					$values += array_column_recursive($row, $column);
 				} else {
@@ -395,7 +399,7 @@ function get_caller($offset = 0, $limit = 1)
 
 	$limit += $offset;
 
-	while ($offset < $limit && $offset < count($calls)) {
+	while ($offset < $limit && $offset < (count($calls)-1)) {
 		$caller = $calls[$offset + 1];
 
 		if (isset($caller['file'])) {

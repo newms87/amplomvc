@@ -84,6 +84,22 @@ class Address extends Library
 			$where .= " AND a.zone_id IN (0, " . implode(',', $data['zone_ids']) . ")";
 		}
 
+		if (!empty($data['geo_zones'])) {
+			$zones = array();
+
+			foreach ($data['geo_zones'] as $country_id => $country) {
+				$zone = "country_id = " . (int)$country_id;
+
+				if (!empty($country['zones']) && !isset($country['zones'][0])) {
+					$zone .= " AND a.zone_id IN (" . implode(',', array_keys($country['zones'])) . ")";
+				}
+
+				$zones[] = $zone;
+			}
+
+			$where .= " AND ((" . implode($zones, ') OR (') . "))";
+		}
+
 		if (isset($data['status'])) {
 			$where .= " AND a.status = " . $data['status'] ? 1 : 0;
 		}

@@ -1144,18 +1144,18 @@ class Cart extends Library
 		if ($geo_zone_id > 0) {
 			$allowed_geo_zones = $this->cache->get('zone.allowed.' . $geo_zone_id);
 
-			if (!$allowed_geo_zones) {
+			if (is_null($allowed_geo_zones)) {
 				$allowed_geo_zones = array();
 
 				$zones = $this->Model_Localisation_Zone->getZonesByGeoZone($geo_zone_id);
 
 				foreach ($zones as $zone) {
-					$country = $this->Model_Localisation_Country->getCountry($zone['country_id']);
+					if (empty($allowed_geo_zones[$zone['country_id']])) {
+						$allowed_geo_zones[$zone['country_id']] = $this->Model_Localisation_Country->getCountry($zone['country_id']);
+						$allowed_geo_zones[$zone['country_id']]['zones'] = array();
+					}
 
-					$allowed_geo_zones[] = array(
-						'country' => $country,
-						'zone'    => $zone
-					);
+					$allowed_geo_zones[$zone['country_id']]['zones'][$zone['zone_id']] = $zone;
 				}
 
 				$this->cache->set('zone.allowed.' . $geo_zone_id, $allowed_geo_zones);
