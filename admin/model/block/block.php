@@ -8,10 +8,6 @@ class Admin_Model_Block_Block extends Model
 
 		$data['route'] = strtolower($data['route']);
 
-		$eol = "\r\n";
-
-		$language_dir = $this->language->info('directory');
-
 		$parts      = explode('/', $data['route']);
 		$class_name = "Block_" . $this->tool->_2CamelCase($parts[0]) . '_' . $this->tool->_2CamelCase($parts[1]);
 
@@ -50,21 +46,6 @@ class Admin_Model_Block_Block extends Model
 
 		file_put_contents($controller_file, $content);
 
-		$language_template = $dir_templates . 'admin_language.php';
-		$language_file     = SITE_DIR . 'admin/language/' . $language_dir . '/block/' . $data['route'] . '.php';
-
-		$insertables = array(
-			'head_title' => $data['name'],
-		);
-
-		$content = file_get_contents($language_template);
-
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
-
-		_is_writable(dirname($language_file));
-
-		file_put_contents($language_file, $content);
-
 		//Profile Template File
 		$profiles_template = $dir_templates . 'profile.tpl';
 		$profiles_file     = DIR_THEME . 'default/template/block/' . $data['route'] . '_profile.tpl';
@@ -102,22 +83,6 @@ class Admin_Model_Block_Block extends Model
 		_is_writable(dirname($controller_file));
 
 		file_put_contents($controller_file, $content);
-
-		//Front Language file
-		$language_template = $dir_templates . 'front_language.php';
-		$language_file     = SITE_DIR . 'catalog/language/' . $language_dir . '/block/' . $data['route'] . '.php';
-
-		$insertables = array(
-			'head_title' => $data['name'],
-		);
-
-		$content = file_get_contents($language_template);
-
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
-
-		_is_writable(dirname($language_file));
-
-		file_put_contents($language_file, $content);
 
 		//Front Template Files
 		if (!empty($data['themes'])) {

@@ -34,7 +34,9 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if (!$this->cart->validate()) {
-			$this->message->add('error', $this->cart->getError());
+			if ($this->cart->getErrorCode() !== Cart::ERROR_CART_EMPTY) {
+				$this->message->add('error', $this->cart->getError());
+			}
 		}
 
 		$show_return_policy = $this->config->get('config_cart_show_return_policy');

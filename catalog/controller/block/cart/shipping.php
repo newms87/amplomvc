@@ -64,7 +64,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 			$this->form->set_fields('country_id', 'zone_id', 'postcode');
 
 			if (!$this->form->validate($_POST)) {
-				$json['error'] = $this->form->get_errors();
+				$json['error'] = $this->form->getError();
 			} elseif (!$this->cart->canShipTo($_POST)) {
 				$json['error']['shipping_address'] = $this->cart->getError('shipping_address');
 			}

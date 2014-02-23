@@ -18,9 +18,6 @@ class Bitstamp extends Library
 		if (preg_match("/[^a-z0-9\"]/i", $response['content'])) {
 			$response_data = unserialize($response['content']);
 
-			html_dump($response, 'response');
-			html_dump($response_data, 'data');
-
 			return false;
 		}
 

@@ -59,7 +59,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 			$this->form->init('address');
 
 			if (!$this->form->validate($_POST)) {
-				$json['error'] = $this->form->get_errors();
+				$json['error'] = $this->form->getError();
 			}
 
 			if (!$json && !$this->cart->canShipTo($_POST)) {

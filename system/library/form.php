@@ -48,7 +48,7 @@ class Form extends Library
 		}
 	}
 
-	public function get_errors()
+	public function getError()
 	{
 		if ($this->name_format) {
 			return $this->tool->name_format($this->name_format, $this->error);

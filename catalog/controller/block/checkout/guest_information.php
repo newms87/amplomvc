@@ -73,7 +73,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 			$this->form->set_fields('firstname', 'lastname', 'email');
 
 			if (!$this->form->validate($_POST)) {
-				$json['error'] = $this->form->get_errors();
+				$json['error'] = $this->form->getError();
 			}
 
 			//Save Guest Information
@@ -93,7 +93,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 					$json['error'] = array();
 				}
 
-				$json['error'] += $this->form->get_errors();
+				$json['error'] += $this->form->getError();
 			}
 
 			if (!$json) {
@@ -116,7 +116,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 						$json['error'] = array();
 					}
 
-					$json['error'] += $this->form->get_errors();
+					$json['error'] += $this->form->getError();
 				}
 
 				if (!$json) {
