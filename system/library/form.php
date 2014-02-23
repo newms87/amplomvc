@@ -48,15 +48,6 @@ class Form extends Library
 		}
 	}
 
-	public function getError()
-	{
-		if ($this->name_format) {
-			return $this->tool->name_format($this->name_format, $this->error);
-		}
-
-		return $this->error;
-	}
-
 	public function show_form_tag($show = true)
 	{
 		$this->show_tag = $show;
