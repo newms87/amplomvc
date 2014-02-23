@@ -14,7 +14,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		}
 
 		$this->request->setRedirect($this->url->link('checkout/checkout'));
-		
+
 		//Page Head
 		$this->document->setTitle(_l("Checkout"));
 

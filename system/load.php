@@ -113,7 +113,7 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 
 	if ($error) {
 		if ($config->get('config_error_display')) {
-			$stack = get_caller(1,6);
+			$stack = get_caller(1,10);
 
 			echo <<<HTML
 			<style>
