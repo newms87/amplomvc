@@ -165,7 +165,7 @@ class DB
 			return array();
 		}
 
-		return array_column_recursive($resource->rows, key($resource->row));
+		return array_column($resource->rows, key($resource->row));
 	}
 
 	/**

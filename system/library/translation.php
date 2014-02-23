@@ -77,7 +77,7 @@ class Translation extends Library
 
 		//Identify all necessary fields
 		if (empty($fields)) {
-			$fields = array_column_recursive($results, 'field');
+			$fields = array_column($results, 'field');
 		}
 
 		//set all fields with all languages

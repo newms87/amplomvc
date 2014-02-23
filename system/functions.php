@@ -198,6 +198,33 @@ function debug_stack($depth = 10, $offset = 0)
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
+if (!function_exists('array_column')) {
+	/**
+	 * PHP < 5.5 backwards Compatibility
+	 *
+	 * Returns an array of elements from the column of an array
+	 *
+	 * @param array array - An associative array of arrays
+	 * @param column string - The key column of the $array to get elements for
+	 *
+	 * @return array - an array of values of the column requested
+	 */
+	function array_column($array, $column)
+	{
+		$values = array();
+
+		foreach ($array as $row) {
+			if (!isset($row[$column])) {
+				$values[] = null;
+			} else {
+				$values[] = $row[$column];
+			}
+		}
+
+		return $values;
+	}
+}
+
 if (!function_exists('array_column_recursive')) {
 	/**
 	 * PHP < 5.5 backwards Compatibility
@@ -213,11 +240,13 @@ if (!function_exists('array_column_recursive')) {
 	{
 		$values = array();
 
-		foreach ($array as $row) {
-			if (!isset($row[$column])) {
-				$values[] = null;
-			} else {
-				$values[] = $row[$column];
+		if (is_array($array) && !empty($array)) {
+			foreach ($array as $row) {
+				if (!isset($row[$column])) {
+					$values += array_column_recursive($row, $column);
+				} else {
+					$values[] = $row[$column];
+				}
 			}
 		}
 

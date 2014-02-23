@@ -416,7 +416,7 @@ class Cart extends Library
 	{
 		$products = $this->get(self::PRODUCTS);
 
-		return array_column_recursive($products, 'id');
+		return array_column($products, 'id');
 	}
 
 	public function getProducts()
