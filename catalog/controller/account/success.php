@@ -19,7 +19,7 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->data['continue'] = $this->url->link('account/account');
 
 		//The Template
-		$this->template->load('common/success');
+		$this->template->load('account/success');
 
 		//Dependencies
 		$this->children = array(
