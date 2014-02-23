@@ -3,7 +3,7 @@ class Catalog_Controller_Mail_Return extends Controller
 {
 	public function index($return_data)
 	{
-		$rmas = array_column($return_data['return_products'], 'rma');
+		$rmas = array_column_recursive($return_data['return_products'], 'rma');
 
 		$this->data['rmas'] = $rmas;
 

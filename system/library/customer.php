@@ -447,8 +447,8 @@ class Customer extends Library
 		$allowed_zones = $this->cart->getAllowedShippingZones();
 
 		$defaults = array(
-			'country_ids' => array_column($allowed_zones, 'country_id'),
-			'zone_ids'    => array_column($allowed_zones, 'zone_id'),
+			'country_ids' => array_column_recursive($allowed_zones, 'country_id'),
+			'zone_ids'    => array_column_recursive($allowed_zones, 'zone_id'),
 		);
 
 		$addresses = $this->getAddresses($filter + $defaults);

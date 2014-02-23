@@ -198,7 +198,7 @@ function debug_stack($depth = 10, $offset = 0)
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
-if (!function_exists('array_column')) {
+if (!function_exists('array_column_recursive')) {
 	/**
 	 * PHP < 5.5 backwards Compatibility
 	 *
@@ -209,7 +209,7 @@ if (!function_exists('array_column')) {
 	 *
 	 * @return array - an array of values of the column requested
 	 */
-	function array_column($array, $column)
+	function array_column_recursive($array, $column)
 	{
 		$values = array();
 

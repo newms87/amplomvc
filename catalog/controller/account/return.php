@@ -157,7 +157,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->mail->sendTemplate('return', $return_data);
 
 			$url_query = array(
-				'return_ids' => array_column($_POST['return_products'], 'return_id'),
+				'return_ids' => array_column_recursive($_POST['return_products'], 'return_id'),
 			);
 
 			$this->url->redirect('account/return/success', $url_query);
@@ -184,7 +184,7 @@ class Catalog_Controller_Account_Return extends Controller
 		if ($customer_orders) {
 			if ($order_lookup) {
 				//If order does not belong to this customer, lookup the order info
-				if (!empty($customer_orders) && !in_array($order_id, array_column($customer_orders, 'order_id'))) {
+				if (!empty($customer_orders) && !in_array($order_id, array_column_recursive($customer_orders, 'order_id'))) {
 					$order_info = $this->order->get($order_id, false);
 
 					//If the lookup email does not match the order email, customer may not view this order

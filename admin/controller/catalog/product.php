@@ -580,7 +580,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		foreach ($this->data['product_options'] as &$product_option) {
 			if (!empty($product_option['product_option_values'])) {
 				$filter = array(
-					'!option_value_ids' => array_column($product_option['product_option_values'], 'option_value_id'),
+					'!option_value_ids' => array_column_recursive($product_option['product_option_values'], 'option_value_id'),
 				);
 			} else {
 				$filter = array();

@@ -128,7 +128,7 @@ class Admin_Controller_Design_Layout extends Controller
 			);
 
 			$routes           = $this->Model_Design_Layout->getLayoutRoutes($layout['layout_id']);
-			$layout['routes'] = implode('<br />', array_column($routes, 'route'));
+			$layout['routes'] = implode('<br />', array_column_recursive($routes, 'route'));
 		}
 		unset($layout);
 

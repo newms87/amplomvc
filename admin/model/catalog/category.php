@@ -202,7 +202,7 @@ class Admin_Model_Catalog_Category extends Model
 				$parents = $this->Model_Catalog_Category->getParents($category['category_id']);
 
 				if (!empty($parents)) {
-					$category['pathname'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
+					$category['pathname'] = implode($delimeter, array_column_recursive($parents, 'name')) . $delimeter . $category['name'];
 				}
 			} else {
 				$category['pathname'] = $category['name'];
