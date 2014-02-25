@@ -153,21 +153,14 @@
 
 		if (json['redirect']) {
 			location = json['redirect'];
+			return;
 		}
 
 		form.find('.message_box, .error').remove();
 
 		if (json['error']) {
-			msgs = '';
-			for (var e in json['error']) {
-				msg = '<span class="error">' + json['error'][e] + '</span>';
-				form.find('[name="' + e + '"]').after(msg);
-				msgs += msg;
-			}
-			if (msgs) {
-				form.prepend('<div class="message_box warning" style="display: none;">' + msgs + '</div>');
-				$('.warning').fadeIn('fast');
-			}
+			form.ac_msgbox('error', json['error'], true);
+			form.ac_errors(json['error']);
 		}
 	}
 </script>

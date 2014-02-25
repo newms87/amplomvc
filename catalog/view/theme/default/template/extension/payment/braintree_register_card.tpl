@@ -73,7 +73,7 @@
 			}
 			else if (json['error']) {
 				show_msgs(json['error'], 'error');
-				show_errors(json['error'], $('#braintree-payment-form'));
+				$('#braintree-payment-form').ac_errors(json['error']);
 			} else if (json['success']) {
 				show_msg('success', json['success']);
 			}

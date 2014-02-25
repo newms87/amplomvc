@@ -321,6 +321,13 @@ $.fn.apply_filter = function (url) {
 }
 
 $.fn.ac_msgbox = function (type, msg, prepend, replace) {
+	if (typeof msg == 'object') {
+		for (var m in msg) {
+			this.ac_msgbox(type, msg[m], prepend, replace);
+		}
+		return this;
+	}
+
 	replace = replace || false;
 
 	if (replace) {
@@ -464,9 +471,34 @@ function show_errors(errors, context) {
 			ele = $('#' + e);
 		if (!ele.length)
 			ele = $(e);
-		ele.after("<span class=\"error\">" + errors[e] + "</span");
+		ele.after("<span class=\"error\">" + errors[e] + "</span>");
 	}
-	;
+}
+$.fn.ac_errors = function (errors) {
+	for (err in errors) {
+		if (typeof errors[err] == 'object') {
+			this.ac_errors(errors[err]);
+			continue;
+		}
+
+		var ele = this.find('[name="' + err + '"]');
+
+		if (!ele.length) {
+			ele = $('#' + e);
+		}
+
+		if (!ele.length) {
+			ele = $(e);
+		}
+
+		ele.after("<span class=\"error\">" + errors[err] + "</span>");
+	}
+
+	return this;
+}
+
+$.ac_errors = function (errors) {
+	$('body').ac_errors(errors);
 }
 
 $.fn.display_error = function (msg, id) {
