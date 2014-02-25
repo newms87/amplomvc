@@ -435,19 +435,19 @@ class Mail extends Library
 			return false;
 		}
 
-		if (!is_array($this->to)) {
-			$this->to = array($this->to);
-		}
-
 		$reply_codes = array(
 			250,
 			251
 		);
 
-		foreach ($this->to as $recipient) {
+		if (!is_array($this->to)) {
+			$this->to = explode(',', $this->to);
+		}
+
+		foreach ($this->to as $key => $recipient) {
 			if (!$this->talk('RCPT TO: <' . $recipient . '>', $reply_codes)) {
-				$this->trigger_error('RCPT TO not accepted from server! ' . 'RCPT TO: < ' . $recipient . ' >');
-				return false;
+				$this->message->add('warning', _l("%s is an invalid recipient. Mail was not delivered to this address.", $recipient));
+				unset($this->to[$key]);
 			}
 		}
 
@@ -520,8 +520,6 @@ class Mail extends Library
 
 	private function trigger_error($msg)
 	{
-		$msg .= get_caller(0, 2);
-
 		$this->log("MAIL ERROR: " . $msg, true);
 
 		//Hide Mail errors when ajax pages are requested
