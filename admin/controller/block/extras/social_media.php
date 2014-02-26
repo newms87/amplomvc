@@ -29,7 +29,7 @@ class Admin_Controller_Block_Extras_SocialMedia extends Controller
 		$this->render();
 	}
 
-	public function validate()
+	public function save()
 	{
 		if (!empty($_POST['settings']['networks'])) {
 			foreach ($_POST['settings']['networks'] as $network) {

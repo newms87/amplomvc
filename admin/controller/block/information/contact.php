@@ -26,7 +26,7 @@ class Admin_Controller_Block_Information_Contact extends Controller
 		$this->render();
 	}
 
-	public function validate()
+	public function save()
 	{
 		return $this->error;
 	}

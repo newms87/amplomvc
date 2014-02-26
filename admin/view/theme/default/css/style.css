@@ -21,6 +21,10 @@ input[type='text'], input[type='password'] {
 	padding: 2px;
 }
 
+input.long {
+	width: 300px;
+}
+
 select {
 	padding: 1px;
 }
@@ -106,6 +110,12 @@ div.right {
 	margin-right: 5px;
 }
 
+/** Settings */
+
+.setting-item label {
+	width: 115px;
+	display: inline-block;
+}
 /* Main Navigation Links */
 #menu.links {
 	background: #414141; /* Old browsers */
@@ -563,6 +573,9 @@ ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a
 	border-radius: 7px 7px 0 0;
 }
 
+.box > .heading .icon {
+	width: 20px;
+}
 .box > .heading h1 {
 	margin: 0;
 	padding: 11px 0 0 0;
@@ -634,6 +647,7 @@ ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a
 	transition: .05s;
 }
 
+button.button,
 input.button {
 	margin: 0;
 	border: 0;

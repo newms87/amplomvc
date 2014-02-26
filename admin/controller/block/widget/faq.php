@@ -14,21 +14,7 @@ class Admin_Controller_Block_Widget_Faq extends Controller
 		$this->render();
 	}
 
-
-	/*
-	public function profile(&$profiles)
-	{
-		$this->template->load('block/widget/faq_profile');
-
-		//Add your code here
-
-		$this->data['profiles'] = $profiles;
-
-		$this->render();
-	}
-	*/
-
-	public function validate()
+	public function save()
 	{
 		return $this->error;
 	}

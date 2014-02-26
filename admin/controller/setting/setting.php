@@ -1,4 +1,11 @@
 <?php
+/**
+ * Class Admin_Controller_Setting_Setting
+ *
+ * Title: General Settings
+ * Icon: admin_settings.php
+ *
+ */
 class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()

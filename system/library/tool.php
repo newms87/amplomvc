@@ -158,7 +158,7 @@ class Tool extends Library
 	 *
 	 * @return array - An associative array with key as the Comment Directive, and value of the String following the ':'
 	 */
-	public function getFileCommentDirectives($file)
+	public function getFileCommentDirectives($file, $trim = true)
 	{
 		$directives = array();
 
@@ -172,6 +172,10 @@ class Tool extends Library
 					}
 				}
 			}
+		}
+
+		if ($trim) {
+			array_walk($directives, function(&$a){$a = trim($a);});
 		}
 
 		return $directives;

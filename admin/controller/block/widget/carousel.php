@@ -37,7 +37,7 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 		$this->render();
 	}
 
-	public function validate()
+	public function save()
 	{
 		return $this->error;
 	}

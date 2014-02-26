@@ -1,4 +1,12 @@
 <?php
+/**
+ * Class Admin_Controller_Setting_Update
+ *
+ * Title: System Update
+ * Icon: system_update.png
+ * Order: 1
+ *
+ */
 class Admin_Controller_Setting_Update extends Controller
 {
 	public function index()

@@ -2,8 +2,14 @@
 
 class Catalog_Model_Block_Login_Facebook extends Model
 {
-	private $app_id = '229627630541727';
-	private $app_secret = '45053593dfc8fab0cbee7a1a452b9e6e';
+	private $settings;
+
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+
+		$this->settings = $this->config->load('login_settings', 'facebook');
+	}
 
 	public function getStateToken()
 	{
@@ -24,7 +30,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 		}
 
 		$query = array(
-			'app_id'        => $this->app_id,
+			'app_id'        => $this->settings['app_id'],
 			'state'         => $this->getStateToken(),
 			'redirect_uri'  => $this->url->link('block/login/facebook/connect'),
 			'response_type' => 'code',
@@ -52,9 +58,9 @@ class Catalog_Model_Block_Login_Facebook extends Model
 		}
 
 		$query = array(
-			'client_id'     => $this->app_id,
+			'client_id'     => $this->settings['app_id'],
 			'redirect_uri'  => $this->url->link('block/login/facebook/connect'),
-			'client_secret' => $this->app_secret,
+			'client_secret' => $this->settings['app_secret'],
 			'code'          => $_GET['code'],
 		);
 
@@ -65,8 +71,10 @@ class Catalog_Model_Block_Login_Facebook extends Model
 		$tokens = array();
 
 		foreach ($values as $value) {
-			list($key, $value) = explode('=', $value);
-			$tokens[$key] = $value;
+			if (strpos($value,'=')) {
+				list($key, $value) = explode('=', $value);
+				$tokens[$key] = $value;
+			}
 		}
 
 
