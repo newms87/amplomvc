@@ -20,71 +20,68 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 		}
 		unset($slide);
 
-		$settings['slider'] = 'slidejs';
-
 		//Params
 		switch ($settings['slider']) {
 			case 'nivo':
-			$default_params = array(
-				'effect'           => 'random',
-				'slices'           => 22,
-				'boxCols'          => 12,
-				'boxRows'          => 6,
-				'animSpeed'        => 500,
-				'pauseTime'        => 4000,
-				'startSlide'       => 0,
-				'directionNav'     => false,
-				'controlNav'       => false,
-				'controlNavThumbs' => false,
-				'pauseOnHover'     => false,
-				'manualAdvance'    => false,
-				'prevText'         => 'Prev',
-				'nextText'         => 'Next',
-				'randomStart'      => false,
-			);
+				$default_params = array(
+					'effect'           => 'random',
+					'slices'           => 22,
+					'boxCols'          => 12,
+					'boxRows'          => 6,
+					'animSpeed'        => 500,
+					'pauseTime'        => 4000,
+					'startSlide'       => 0,
+					'directionNav'     => false,
+					'controlNav'       => false,
+					'controlNavThumbs' => false,
+					'pauseOnHover'     => false,
+					'manualAdvance'    => false,
+					'prevText'         => 'Prev',
+					'nextText'         => 'Next',
+					'randomStart'      => false,
+				);
 
-			break;
+				$this->tool->fillDefaults($settings['nivo'], $default_params);
+				break;
 
 			case 'slidejs':
 			default:
 				$default_params = array(
-					'width' => 1024,
-				   'height' => 400,
-				   'start' => 1,
-				   'navigation' => array(
-					   'active' => false,
-				      'effect' => 'fade',
-				   ),
-				   'pagination' => array(
-					   'active' => false,
-				      'effect' => 'fade',
-				   ),
-				   'play' => array(
-					   'active' => false,
-				      'effect' => 'fade',
-				      'interval' => 5000,
-				      'auto' => true,
-				      'swap' => false,
-				      'pauseOnHover' => true,
-				      'restartDelay' => 2500,
-				   ),
-				   'effect' => array(
-					   'slide' => array(
-						   'speed' => 200,
-					   ),
-					   'fade' => array(
-						   'speed' => 300,
-						   'crossfade' => true,
-					   ),
-				   ),
+					'width'      => 1024,
+					'height'     => 400,
+					'start'      => 1,
+					'navigation' => array(
+						'active' => false,
+						'effect' => 'fade',
+					),
+					'pagination' => array(
+						'active' => false,
+						'effect' => 'fade',
+					),
+					'play'       => array(
+						'active'       => false,
+						'effect'       => 'fade',
+						'interval'     => 5000,
+						'auto'         => true,
+						'swap'         => false,
+						'pauseOnHover' => true,
+						'restartDelay' => 2500,
+					),
+					'effect'     => array(
+						'slide' => array(
+							'speed' => 200,
+						),
+						'fade'  => array(
+							'speed'     => 300,
+							'crossfade' => true,
+						),
+					),
 				);
 
+				array_walk_recursive($settings['slidesjs'], function(&$value) {if ($value === 'false' || $value === 'true') $value = $value === 'true';});
+				$this->tool->fillDefaults($settings['slidesjs'], $default_params);
 				break;
 		}
-
-		$settings['params'] += $default_params;
-
-		$this->data['json_params'] = json_encode($settings['params']);
 
 		$this->data += $settings;
 
