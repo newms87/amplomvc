@@ -10,10 +10,14 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 		$defaults = array(
 			'slider'   => 'slidesjs',
 			'slides'   => array(),
+
+			//Nivo Settings
 			'nivo'     => array(
 				'pauseTime' => 4000,
 				'animSpeed' => 500,
 			),
+
+			//Slides JS Settings
 			'slidesjs' => array(
 				'width'      => 1024,
 				'height'     => 400,

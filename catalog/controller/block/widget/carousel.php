@@ -78,7 +78,12 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 					),
 				);
 
-				array_walk_recursive($settings['slidesjs'], function(&$value) {if ($value === 'false' || $value === 'true') $value = $value === 'true';});
+				array_walk_recursive($settings['slidesjs'], function (&$value) {
+					if ($value === 'false' || $value === 'true') {
+						$value = $value === 'true';
+					}
+				});
+
 				$this->tool->fillDefaults($settings['slidesjs'], $default_params);
 				break;
 		}
