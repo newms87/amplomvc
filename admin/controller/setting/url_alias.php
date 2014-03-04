@@ -1,79 +1,13 @@
 <?php
+
+/**
+ * Title: URL Aliases
+ * Icon: url_alias_icon.png
+ * Order: 7
+ */
 class Admin_Controller_Setting_UrlAlias extends Controller
 {
 	public function index()
-	{
-		$this->getList();
-	}
-
-	public function update()
-	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (empty($_GET['url_alias_id'])) {
-				$this->Model_Setting_UrlAlias->addUrlAlias($_POST);
-			} //Update
-			else {
-				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
-
-				$this->url->redirect('setting/url_alias');
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
-			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
-
-				$this->url->redirect('setting/url_alias');
-			}
-		}
-
-		$this->index();
-	}
-
-	public function batch_update()
-	{
-		if (!empty($_GET['selected']) && isset($_GET['action'])) {
-			foreach ($_GET['selected'] as $url_alias_id) {
-				$data = array();
-
-				switch ($_GET['action']) {
-					case 'enable':
-						$data['status'] = 1;
-						break;
-					case 'disable':
-						$data['status'] = 0;
-						break;
-					case 'delete':
-						$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
-						break;
-					default:
-						break 2; //Break For loop
-				}
-
-				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
-			}
-		}
-
-		$this->url->redirect('setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
-	}
-
-	private function getList()
 	{
 		//Page Head
 		$this->document->setTitle(_l("URL Aliases"));
@@ -83,6 +17,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
 		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
 
 		//The Table Columns
@@ -207,6 +142,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('setting/url_alias/update');
 		$this->data['delete'] = $this->url->link('setting/url_alias/delete');
+		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//Dependencies
 		$this->children = array(
@@ -216,6 +152,73 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function update()
+	{
+		if ($this->request->isPost() && $this->validateForm()) {
+			//Insert
+			if (empty($_GET['url_alias_id'])) {
+				$this->Model_Setting_UrlAlias->addUrlAlias($_POST);
+			} //Update
+			else {
+				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
+			}
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+
+				$this->url->redirect('setting/url_alias');
+			}
+		}
+
+		$this->getForm();
+	}
+
+	public function delete()
+	{
+		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
+			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+
+				$this->url->redirect('setting/url_alias');
+			}
+		}
+
+		$this->index();
+	}
+
+	public function batch_update()
+	{
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $url_alias_id) {
+				$data = array();
+
+				switch ($_GET['action']) {
+					case 'enable':
+						$data['status'] = 1;
+						break;
+					case 'disable':
+						$data['status'] = 0;
+						break;
+					case 'delete':
+						$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+						break;
+					default:
+						break 2; //Break For loop
+				}
+
+				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
+			}
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+			}
+		}
+
+		$this->url->redirect('setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	public function getForm()

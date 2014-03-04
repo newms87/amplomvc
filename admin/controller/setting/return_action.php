@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Return Actions
+ * Icon: return_action_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_ReturnAction extends Controller
 {
 	public function index()

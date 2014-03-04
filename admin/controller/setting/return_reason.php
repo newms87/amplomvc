@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Return Reasons
+ * Icon: return_reasons_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_ReturnReason extends Controller
 {
 	public function index()

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Return Policy
+ * Icon: return_policy_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_ReturnPolicy extends Controller
 {
 	public function index()

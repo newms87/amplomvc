@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Order Statuses
+ * Icon: order_status_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_OrderStatus extends Controller
 {
 	public function index()

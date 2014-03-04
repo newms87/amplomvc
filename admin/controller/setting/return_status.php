@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Return Statuses
+ * Icon: return_status_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_ReturnStatus extends Controller
 {
 	public function index()

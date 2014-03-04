@@ -1,4 +1,10 @@
 <?php
+/**
+ * Title: Shipping Policies
+ * Icon: shipping_policy_icon.png
+ * Order: 7
+ */
+
 class Admin_Controller_Setting_ShippingPolicy extends Controller
 {
 	public function index()

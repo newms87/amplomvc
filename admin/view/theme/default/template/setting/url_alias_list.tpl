@@ -10,6 +10,7 @@
 			</div>
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">

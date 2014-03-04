@@ -11,9 +11,10 @@ class Admin_Controller_Setting_Update extends Controller
 {
 	public function index()
 	{
-		$this->template->load('setting/update');
+		//Page Head
 		$this->document->setTitle(_l("System Update"));
 
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['version'])) {
 				$this->System_Update->updateSystem($_POST['version']);
@@ -33,11 +34,16 @@ class Admin_Controller_Setting_Update extends Controller
 			}
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("System Update"), $this->url->link('setting/update'));
 
+		//Actions
 		$this->data['action'] = $this->url->link('setting/update');
-		$this->data['cancel'] = $this->url->link('common/home');
+		$this->data['cancel'] = $this->url->link('setting/store');
+
+		//Data
+		$update_info = array();
 
 		if (!$this->request->isPost()) {
 			$update_info = $this->config->loadGroup('system');
@@ -48,16 +54,9 @@ class Admin_Controller_Setting_Update extends Controller
 			'auto_update' => 0,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($update_info[$key])) {
-				$this->data[$key] = $update_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $update_info + $defaults;
 
+		//Template Data
 		$version_list = $this->System_Update->getVersions();
 
 		$versions = array();
@@ -68,11 +67,16 @@ class Admin_Controller_Setting_Update extends Controller
 
 		$this->data['data_versions'] = $versions;
 
+		//The Template
+		$this->template->load('setting/update');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

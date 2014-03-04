@@ -25,7 +25,12 @@ class Admin_Model_Setting_Setting extends Model
 					$widget['icon'] = HTTP_THEME_IMAGE . 'admin_settings.png';
 				}
 
-				$widget['url'] = $this->url->link('setting/' . str_replace('.php','',basename($file)));
+				if (!empty($directives['path'])) {
+					$query = !empty($directives['query']) ? $directives['query'] : '';
+					$widget['url'] = $this->url->link($directives['path'], $query);
+				} else {
+					$widget['url'] = $this->url->link('setting/' . str_replace('.php','',basename($file)));
+				}
 
 				$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;
 
