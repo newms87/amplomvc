@@ -20,7 +20,7 @@ class Admin_Controller_Block_Module_Sidebar extends Controller
 		$this->render();
 	}
 
-	public function validate()
+	public function save()
 	{
 		return $this->error;
 	}

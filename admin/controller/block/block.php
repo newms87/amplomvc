@@ -326,8 +326,8 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		$this->loadBlockController();
 
-		if (method_exists($this->block_controller, 'validate')) {
-			$this->error += $this->block_controller->validate();
+		if (method_exists($this->block_controller, 'save')) {
+			$this->error += $this->block_controller->save();
 		}
 	}
 }

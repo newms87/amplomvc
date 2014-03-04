@@ -81,6 +81,28 @@ class Tool extends Library
 		return strip_tags(preg_replace("/<br\\s*\/?>/", ' ', $text));
 	}
 
+	public function fillDefaults(&$array, $defaults)
+	{
+		if (!is_array($defaults)) {
+			if (!isset($array)) {
+				$array = $defaults;
+			}
+			return;
+		}
+
+		if (!isset($array)) {
+			$array = array();
+		}
+
+		foreach ($defaults as $key => &$default) {
+			if (!isset($array[$key])) {
+				$array[$key] = null;
+			}
+			$this->fillDefaults($array[$key], $default);
+		}
+		unset($default);
+	}
+
 	/**
 	 * limits the number of characters in a string to the nearest word or character
 	 */
@@ -158,7 +180,7 @@ class Tool extends Library
 	 *
 	 * @return array - An associative array with key as the Comment Directive, and value of the String following the ':'
 	 */
-	public function getFileCommentDirectives($file)
+	public function getFileCommentDirectives($file, $trim = true)
 	{
 		$directives = array();
 
@@ -172,6 +194,10 @@ class Tool extends Library
 					}
 				}
 			}
+		}
+
+		if ($trim) {
+			array_walk($directives, function(&$a){$a = trim($a);});
 		}
 
 		return $directives;

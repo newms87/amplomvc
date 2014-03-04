@@ -54,8 +54,6 @@ class Admin_Controller_Setting_Store extends Controller
 		//The Template
 		$this->template->load('setting/store_list');
 
-		$url = $this->url->getQuery('page');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
@@ -148,9 +146,8 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$this->data['pagination'] = $this->pagination->render();
 
-		//Urls
-		$this->data['admin_settings'] = $this->url->link('setting/setting');
-		$this->data['system_update']  = $this->url->link('setting/update');
+		//Settings Items
+		$this->data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
 		$this->data['insert']   = $this->url->link('setting/store/update');

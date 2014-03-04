@@ -17,7 +17,7 @@ class Admin_Controller_Block_Module_Press extends Controller
 		$this->render();
 	}
 
-	public function validate()
+	public function save()
 	{
 		return $this->error;
 	}

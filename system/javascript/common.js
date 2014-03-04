@@ -89,12 +89,6 @@ $.fn.codemirror = function (params) {
 	});
 }
 
-$.fn.nivoSlider = function (params) {
-	$.fn.nivoSlider = null;
-	syncload('system/javascript/jquery/nivo_slider/nivo-slider.js');
-	if (this.nivoSlider) this.nivoSlider(params);
-}
-
 $.ac_template = $.fn.ac_template = function (name, action, data) {
 	$.ac_template = $.fn.ac_template = null;
 	syncload('system/javascript/jquery/ac_template.js');

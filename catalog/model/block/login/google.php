@@ -1,10 +1,14 @@
 <?php
 class Catalog_Model_Block_Login_Google extends Model
 {
-	private $application_name = "Google+ PHP Quickstart";
-	private $client_id = '876588091863.apps.googleusercontent.com';
-	private $client_secret = 'lTIREo7JyWzm_TRLL4PNeklN';
-	private $api_key = 'AIzaSyBMltXCirsFleaevacaAe7KEpb27UZa6xA';
+	private $settings;
+
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+
+		$this->settings = $this->config->load('login_settings', 'google_plus');
+	}
 
 	public function getStateToken()
 	{
@@ -29,7 +33,7 @@ class Catalog_Model_Block_Login_Google extends Model
 			'state'         => $this->getStateToken(),
 			'redirect_uri'  => $this->url->link("block/login/google/connect"),
 			'response_type' => 'code',
-			'client_id'     => $this->client_id,
+			'client_id'     => $this->settings['client_id'],
 			'access_type'   => 'offline',
 		);
 
@@ -56,8 +60,8 @@ class Catalog_Model_Block_Login_Google extends Model
 		//Authentication
 		$auth_data = array(
 			'code' => $_GET['code'],
-		   'client_id' => $this->client_id,
-		   'client_secret' => $this->client_secret,
+		   'client_id' => $this->settings['client_id'],
+		   'client_secret' => $this->settings['client_secret'],
 		   'redirect_uri' => $this->url->link("block/login/google/connect"),
 		   'grant_type' => 'authorization_code',
 		);
