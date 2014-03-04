@@ -2492,6 +2492,21 @@ div .easy_list li > * + * {
 	margin-top: 15px;
 }
 
+.ac_carousel_slide .slide_href {
+	display: block;
+	width: 140px;
+	box-sizing: border-box;
+	margin: 5px auto;
+	padding: 2px 5px;
+}
+
+.ac_carousel_slide select {
+	display: block;
+	width: 140px;
+	margin: 5px auto;
+	padding: 2px 5px;
+}
+
 .ac_carousel_slide .button.delete {
 	position: absolute;
 	top: 5px;

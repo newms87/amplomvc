@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name: Carousel
  */
@@ -60,6 +61,8 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 		$profile_settings['__ac_template__']['slides']['__ac_template__'] = array(
 			'title'      => 'New Slide __ac_template__',
 			'image'      => '',
+			'href'       => '',
+			'target'     => '_blank',
 			'sort_order' => 0,
 		);
 
@@ -81,6 +84,12 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 			'slide' => _l("Slide"),
 		);
 
+		$this->data['data_targets'] = array(
+			'_blank'  => _l("New Window"),
+			'_self'   => _l("Self"),
+			'_parent' => _l("Parent"),
+			'_top'    => _l("Top"),
+		);
 
 		//The Template
 		$this->template->load('block/widget/carousel_profile_settings');

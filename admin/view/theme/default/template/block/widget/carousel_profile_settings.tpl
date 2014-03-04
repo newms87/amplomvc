@@ -93,10 +93,15 @@
 
 		<div class="ac_carousel_list clearfix">
 			<? foreach ($profile_setting['slides'] as $slide_row => $slide) { ?>
+				<? $row_name = "profile_settings[$row][slides][$slide_row]"; ?>
+
 				<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
-					<?= $this->builder->imageInput("profile_settings[$row][slides][$slide_row][image]", $slide['image']); ?>
+					<?= $this->builder->imageInput($row_name . "[image]", $slide['image']); ?>
+					<input class="slide_href" placeholder="<?= _l("URL (or leave blank)"); ?>" type="text" name="<?= $row_name; ?>[href]" value="<?= $slide['href']; ?>" />
+					<?= $this->builder->build('select', $data_targets, $row_name . '[target]', $slide['target']); ?>
 					<div class="button delete" onclick="$(this).closest('.ac_carousel_slide').remove()">X</div>
 				</div>
+
 			<? } ?>
 		</div>
 		<div class="button add_carousel_slide"><?= _l("Add Slide"); ?></div>

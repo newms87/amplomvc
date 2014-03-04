@@ -7,8 +7,19 @@
 	<div class="box_content">
 		<div id="<?= $slider_id; ?>" <?= count($slides) > 1 ? "class=\"slider $slider\"" : ''; ?>>
 			<? foreach ($slides as $slide) { ?>
-				<? if (!empty($slide['thumb'])) { ?>
-					<img class="slide" src="<?= $slide['thumb']; ?>"/>
+				<? if (!empty($slide['href'])) { ?>
+					<a class="slide" href="<?= $slide['href']; ?>" target="<?= $slide['target']; ?>">
+						<? if (!empty($slide['thumb'])) { ?>
+							<img class="image" src="<?= $slide['thumb']; ?>"/>
+						<? } ?>
+					</a>
+
+				<? } else { ?>
+					<span class="slide">
+						<? if (!empty($slide['thumb'])) { ?>
+							<img class="image" src="<?= $slide['thumb']; ?>"/>
+						<? } ?>
+					</span>
 				<? } ?>
 			<? } ?>
 		</div>

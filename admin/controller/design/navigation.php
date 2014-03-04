@@ -3,92 +3,6 @@ class Admin_Controller_Design_Navigation extends Controller
 {
 	public function index()
 	{
-		$this->getList();
-	}
-
-	public function update()
-	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (empty($_GET['navigation_group_id'])) {
-				$this->Model_Design_Navigation->addNavigationGroup($_POST);
-			} //Update
-			else {
-				$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
-
-				$this->url->redirect('design/navigation');
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
-			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
-
-				$this->url->redirect('design/navigation');
-			}
-		}
-
-		$this->getList();
-	}
-
-	public function reset_admin_navigation()
-	{
-		$this->Model_Design_Navigation->reset_admin_navigation_group();
-
-		$this->message->add("notify", "Admin Navigation Group has been reset!");
-
-		$this->url->redirect('design/navigation');
-	}
-
-	public function batch_update()
-	{
-		$this->document->setTitle(_l("Navigation"));
-
-		if (isset($_GET['selected']) && isset($_GET['action'])) {
-			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_GET['selected'] as $navigation_group_id) {
-					switch ($_GET['action']) {
-						case 'enable':
-							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-							break;
-						case 'disable':
-							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-							break;
-						case 'delete':
-							$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
-							break;
-					}
-					if ($this->error) {
-						break;
-					}
-				}
-			}
-
-			if (!$this->error) {
-				if (!$this->message->hasError()) {
-					$this->message->add('success', _l("Success: You have modified navigation!"));
-
-					$this->url->redirect('design/navigation');
-				}
-			}
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
 		//Page Head
 		$this->document->setTitle(_l("Navigation"));
 
@@ -224,6 +138,87 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->response->setOutput($this->render());
 	}
 
+	public function update()
+	{
+		if ($this->request->isPost() && $this->validateForm()) {
+			//Insert
+			if (empty($_GET['navigation_group_id'])) {
+				$this->Model_Design_Navigation->addNavigationGroup($_POST);
+			} //Update
+			else {
+				$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
+			}
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified navigation!"));
+
+				$this->url->redirect('design/navigation');
+			}
+		}
+
+		$this->getForm();
+	}
+
+	public function delete()
+	{
+		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
+			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified navigation!"));
+
+				$this->url->redirect('design/navigation');
+			}
+		}
+
+		$this->index();
+	}
+
+	public function reset_admin_navigation()
+	{
+		$this->Model_Design_Navigation->reset_admin_navigation_group();
+
+		$this->message->add("notify", "Admin Navigation Group has been reset!");
+
+		$this->url->redirect('design/navigation');
+	}
+
+	public function batch_update()
+	{
+		$this->document->setTitle(_l("Navigation"));
+
+		if (isset($_GET['selected']) && isset($_GET['action'])) {
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
+				foreach ($_GET['selected'] as $navigation_group_id) {
+					switch ($_GET['action']) {
+						case 'enable':
+							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+							break;
+						case 'disable':
+							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+							break;
+						case 'delete':
+							$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+							break;
+					}
+					if ($this->error) {
+						break;
+					}
+				}
+			}
+
+			if (!$this->error) {
+				if (!$this->message->hasError()) {
+					$this->message->add('success', _l("Success: You have modified navigation!"));
+
+					$this->url->redirect('design/navigation');
+				}
+			}
+		}
+
+		$this->index();
+	}
+
 	private function getForm()
 	{
 		//Page Head
@@ -306,6 +301,12 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function choose_link()
+	{
+		//TODO: This will be an ajax call to display a template to help choose a URL
+		// Categories, Products, custom, etc...
 	}
 
 	private function validateForm()
