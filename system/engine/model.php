@@ -2,7 +2,7 @@
 
 abstract class Model
 {
-	protected $registry;
+	protected $registry, $load;
 	protected $error;
 
 	private $synctime = false;
@@ -10,6 +10,7 @@ abstract class Model
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
+		$this->load = $registry;
 
 		global $ac_time_offset;
 

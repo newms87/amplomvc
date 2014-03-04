@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Sale_Customer extends Controller
 {
 	public function index()
@@ -252,283 +253,124 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	private function getList()
 	{
-		$this->template->load('sale/customer_list');
+		//Page Head
+		$this->document->setTitle(_l("Customers"));
 
-		if (isset($_GET['filter_name'])) {
-			$filter_name = $_GET['filter_name'];
-		} else {
-			$filter_name = null;
-		}
-
-		if (isset($_GET['filter_email'])) {
-			$filter_email = $_GET['filter_email'];
-		} else {
-			$filter_email = null;
-		}
-
-		if (isset($_GET['filter_customer_group_id'])) {
-			$filter_customer_group_id = $_GET['filter_customer_group_id'];
-		} else {
-			$filter_customer_group_id = null;
-		}
-
-		if (isset($_GET['filter_status'])) {
-			$filter_status = $_GET['filter_status'];
-		} else {
-			$filter_status = null;
-		}
-
-		if (isset($_GET['filter_approved'])) {
-			$filter_approved = $_GET['filter_approved'];
-		} else {
-			$filter_approved = null;
-		}
-
-		if (isset($_GET['filter_ip'])) {
-			$filter_ip = $_GET['filter_ip'];
-		} else {
-			$filter_ip = null;
-		}
-
-		if (isset($_GET['filter_date_added'])) {
-			$filter_date_added = $_GET['filter_date_added'];
-		} else {
-			$filter_date_added = null;
-		}
-
-		if (isset($_GET['sort'])) {
-			$sort = $_GET['sort'];
-		} else {
-			$sort = 'name';
-		}
-
-		if (isset($_GET['order'])) {
-			$order = $_GET['order'];
-		} else {
-			$order = 'ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
-		} else {
-			$page = 1;
-		}
-
-		$url = '';
-
-		if (isset($_GET['filter_name'])) {
-			$url .= '&filter_name=' . $_GET['filter_name'];
-		}
-
-		if (isset($_GET['filter_email'])) {
-			$url .= '&filter_email=' . $_GET['filter_email'];
-		}
-
-		if (isset($_GET['filter_customer_group_id'])) {
-			$url .= '&filter_customer_group_id=' . $_GET['filter_customer_group_id'];
-		}
-
-		if (isset($_GET['filter_status'])) {
-			$url .= '&filter_status=' . $_GET['filter_status'];
-		}
-
-		if (isset($_GET['filter_approved'])) {
-			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}
-
-		if (isset($_GET['filter_ip'])) {
-			$url .= '&filter_ip=' . $_GET['filter_ip'];
-		}
-
-		if (isset($_GET['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-		}
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Customer"), $this->url->link('sale/customer', $url));
+		$this->breadcrumb->add(_l("Customer"), $this->url->here());
 
-		$this->data['approve'] = $this->url->link('sale/customer/approve', $url);
-		$this->data['insert']  = $this->url->link('sale/customer/insert', $url);
-		$this->data['delete']  = $this->url->link('sale/customer/delete', $url);
+		//The Table Columns
+		$columns = array();
+
+		$columns['name'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Customer"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['email'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Email"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['customer_group'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Customer Group"),
+			'build_config' => array('customer_group_id', 'name'),
+			'build_data'   => $this->Model_Sale_CustomerGroup->getCustomerGroups(),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['status'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Status"),
+			'build_data'   => array(
+				0 => _l("Inactive"),
+				1 => _l("Active")
+			),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['date_added'] = array(
+			'type'         => 'date',
+			'display_name' => _l("Date Added"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
 
 		$this->data['customers'] = array();
 
-		$data = array(
-			'filter_name'              => $filter_name,
-			'filter_email'             => $filter_email,
-			'filter_customer_group_id' => $filter_customer_group_id,
-			'filter_status'            => $filter_status,
-			'filter_approved'          => $filter_approved,
-			'filter_date_added'        => $filter_date_added,
-			'filter_ip'                => $filter_ip,
-			'sort'                     => $sort,
-			'order'                    => $order,
-			'start'                    => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                    => $this->config->get('config_admin_limit')
+		//Sort / Filter
+		$sort   = $this->sort->getQueryDefaults('customer_id', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+
+		//Data
+		$customer_total = $this->Model_Sale_Customer->getTotalCustomers($filter);
+		$customers      = $this->Model_Sale_Customer->getCustomers($sort + $filter);
+
+		$query = $this->url->getQueryExclude("customer_id");
+
+		foreach ($customers as &$customer) {
+			$customer['actions'] = array(
+				'edit'   => array(
+					'text' => _l("Edit"),
+					'href' => $this->url->link('sale/customer/update', 'customer_id=' . $customer['customer_id'] . '&' . $query)
+				),
+				'delete' => array(
+					'text' => _l("Delete"),
+					'href' => $this->url->link('sale/customer/delete', 'customer_id=' . $customer['customer_id'] . '&' . $query)
+				),
+
+			);
+
+			$customer['approved'] = $customer['approved'] ? _l("Yes") : _l("No");
+		}
+		unset($customer);
+
+		//Build The Table
+		$tt_data = array(
+			'row_id' => 'customer_id',
 		);
 
-		$customer_total = $this->Model_Sale_Customer->getTotalCustomers($data);
+		$this->table->init();
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($customers);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 
-		$results = $this->Model_Sale_Customer->getCustomers($data);
+		$this->data['list_view'] = $this->table->render();
 
-		foreach ($results as $result) {
-			$action = array();
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->renderLimits();
 
-			$action[] = array(
-				'text' => _l("Edit"),
-				'href' => $this->url->link('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
-			);
-
-			$this->data['customers'][] = array(
-				'customer_id'    => $result['customer_id'],
-				'name'           => $result['name'],
-				'email'          => $result['email'],
-				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? _l("Enabled") : _l("Disabled")),
-				'approved'       => ($result['approved'] ? _l("Yes") : _l("No")),
-				'ip'             => $result['ip'],
-				'date_added'     => $this->date->format($result['date_added'], 'short'),
-				'selected'       => isset($_GET['selected']) && in_array($result['customer_id'], $_GET['selected']),
-				'action'         => $action
-			);
-		}
-
-		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
-
-		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
-
-			unset($this->session->data['success']);
-		} else {
-			$this->data['success'] = '';
-		}
-
-		$url = '';
-
-		if (isset($_GET['filter_name'])) {
-			$url .= '&filter_name=' . $_GET['filter_name'];
-		}
-
-		if (isset($_GET['filter_email'])) {
-			$url .= '&filter_email=' . $_GET['filter_email'];
-		}
-
-		if (isset($_GET['filter_customer_group_id'])) {
-			$url .= '&filter_customer_group_id=' . $_GET['filter_customer_group_id'];
-		}
-
-		if (isset($_GET['filter_status'])) {
-			$url .= '&filter_status=' . $_GET['filter_status'];
-		}
-
-		if (isset($_GET['filter_approved'])) {
-			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}
-
-		if (isset($_GET['filter_ip'])) {
-			$url .= '&filter_ip=' . $_GET['filter_ip'];
-		}
-
-		if (isset($_GET['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-		}
-
-		if ($order == 'ASC') {
-			$url .= '&order=DESC';
-		} else {
-			$url .= '&order=ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
-		$this->data['sort_name']           = $this->url->link('sale/customer', 'sort=name' . $url);
-		$this->data['sort_email']          = $this->url->link('sale/customer', 'sort=c.email' . $url);
-		$this->data['sort_customer_group'] = $this->url->link('sale/customer', 'sort=customer_group' . $url);
-		$this->data['sort_status']         = $this->url->link('sale/customer', 'sort=c.status' . $url);
-		$this->data['sort_approved']       = $this->url->link('sale/customer', 'sort=c.approved' . $url);
-		$this->data['sort_ip']             = $this->url->link('sale/customer', 'sort=c.ip' . $url);
-		$this->data['sort_date_added']     = $this->url->link('sale/customer', 'sort=c.date_added' . $url);
-
-		$url = '';
-
-		if (isset($_GET['filter_name'])) {
-			$url .= '&filter_name=' . $_GET['filter_name'];
-		}
-
-		if (isset($_GET['filter_email'])) {
-			$url .= '&filter_email=' . $_GET['filter_email'];
-		}
-
-		if (isset($_GET['filter_customer_group_id'])) {
-			$url .= '&filter_customer_group_id=' . $_GET['filter_customer_group_id'];
-		}
-
-		if (isset($_GET['filter_status'])) {
-			$url .= '&filter_status=' . $_GET['filter_status'];
-		}
-
-		if (isset($_GET['filter_approved'])) {
-			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}
-
-		if (isset($_GET['filter_ip'])) {
-			$url .= '&filter_ip=' . $_GET['filter_ip'];
-		}
-
-		if (isset($_GET['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-		}
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
+		//Pagination
 		$this->pagination->init();
-		$this->pagination->total  = $customer_total;
+		$this->pagination->total = $customer_total;
+
 		$this->data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_name']              = $filter_name;
-		$this->data['filter_email']             = $filter_email;
-		$this->data['filter_customer_group_id'] = $filter_customer_group_id;
-		$this->data['filter_status']            = $filter_status;
-		$this->data['filter_approved']          = $filter_approved;
-		$this->data['filter_ip']                = $filter_ip;
-		$this->data['filter_date_added']        = $filter_date_added;
+		//Actions
+		$this->data['approve'] = $this->url->link('sale/customer/approve');
+		$this->data['insert']  = $this->url->link('sale/customer/insert');
+		$this->data['delete']  = $this->url->link('sale/customer/delete');
 
-		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		//The Template
+		$this->template->load('sale/customer_list');
 
-		$this->data['data_stores'] = array('' => _l(" --- Please Select --- ")) + $this->Model_Setting_Store->getStores();
-
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
-
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

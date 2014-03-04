@@ -3,49 +3,6 @@ class Admin_Controller_Sale_Order extends Controller
 {
 	public function index()
 	{
-		$this->getList();
-	}
-
-	public function update()
-	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (!isset($_GET['order_id'])) {
-				$this->System_Model_Order->addOrder($_POST);
-			} //Update
-			else {
-				$this->System_Model_Order->editOrder($_GET['order_id'], $_POST);
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified orders!"));
-
-				$this->url->redirect('sale/order');
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		$this->document->setTitle(_l("Orders"));
-
-		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
-			$this->System_Model_Order->deleteOrder($_GET['order_id']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified orders!"));
-
-				$this->url->redirect('sale/order');
-			}
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
 		//The Template
 		$this->template->load('sale/order_list');
 
@@ -186,6 +143,44 @@ class Admin_Controller_Sale_Order extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function update()
+	{
+		if ($this->request->isPost() && $this->validateForm()) {
+			//Insert
+			if (!isset($_GET['order_id'])) {
+				$this->System_Model_Order->addOrder($_POST);
+			} //Update
+			else {
+				$this->System_Model_Order->editOrder($_GET['order_id'], $_POST);
+			}
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified orders!"));
+
+				$this->url->redirect('sale/order');
+			}
+		}
+
+		$this->getForm();
+	}
+
+	public function delete()
+	{
+		$this->document->setTitle(_l("Orders"));
+
+		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
+			$this->System_Model_Order->deleteOrder($_GET['order_id']);
+
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified orders!"));
+
+				$this->url->redirect('sale/order');
+			}
+		}
+
+		$this->index();
 	}
 
 	public function getForm()

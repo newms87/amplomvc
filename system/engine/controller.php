@@ -2,7 +2,7 @@
 
 abstract class Controller
 {
-	protected $registry;
+	protected $registry, $load;
 	protected $children = array();
 	public $output;
 	public $template;
@@ -12,6 +12,7 @@ abstract class Controller
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
+		$this->load = $registry;
 
 		$this->template = new Template($registry);
 	}

@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Model_Catalog_Category extends Model
 {
 	public function addCategory($data)
@@ -252,6 +253,18 @@ class Admin_Model_Catalog_Category extends Model
 		}
 
 		return $parents;
+	}
+
+	public function getCategoryTree()
+	{
+		$categories = $this->getCategories();
+
+		$this->load->resource('tree');
+
+		$tree = new Tree();
+		$tree->addNodes($categories, 'category_id');
+
+		$tree->printTree();
 	}
 
 	public function getCategoryStores($category_id)

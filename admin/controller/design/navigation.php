@@ -1,7 +1,6 @@
 <?php
 class Admin_Controller_Design_Navigation extends Controller
 {
-
 	public function index()
 	{
 		$this->getList();
@@ -230,9 +229,6 @@ class Admin_Controller_Design_Navigation extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Navigation"));
 
-		//The Template
-		$this->template->load('design/navigation_form');
-
 		//Insert or Update
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
@@ -278,6 +274,8 @@ class Admin_Controller_Design_Navigation extends Controller
 		);
 
 		//Template Data
+		$this->data['categories'] = $this->Model_Catalog_Category->getCategoryTree();
+
 		$admin_store = array(
 			'admin' => array(
 				'store_id' => -1,
@@ -296,6 +294,9 @@ class Admin_Controller_Design_Navigation extends Controller
 		//Action Buttons
 		$this->data['save']   = $this->url->link('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
 		$this->data['cancel'] = $this->url->link('design/navigation');
+
+		//The Template
+		$this->template->load('design/navigation_form');
 
 		//Dependencies
 		$this->children = array(

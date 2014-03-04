@@ -1,19 +1,27 @@
 <?= $header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
-	<div class="box">
-		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
-		</div>
-		<div class="section">
-			<div id="vtabs" class="vtabs"><a href="#tab-customer"><?= _l("Customer Details"); ?></a><a
-					href="#tab-payment"><?= _l("Payment Details"); ?></a><a href="#tab-shipping"><?= _l("Shipping Details"); ?></a><a
-					href="#tab-product"><?= _l("Products"); ?></a><a href="#tab-voucher"><?= _l("Vouchers"); ?></a><a
-					href="#tab-total"><?= _l("Totals"); ?></a></div>
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+	<div class="box">
+		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<div class="heading">
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+
+				<div class="buttons">
+					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				</div>
+			</div>
+			<div class="section">
+				<div id="vtabs" class="vtabs">
+					<a href="#tab-customer"><?= _l("Customer Details"); ?></a>
+					<a href="#tab-payment"><?= _l("Payment Details"); ?></a>
+					<a href="#tab-shipping"><?= _l("Shipping Details"); ?></a>
+					<a href="#tab-product"><?= _l("Products"); ?></a>
+					<a href="#tab-voucher"><?= _l("Vouchers"); ?></a>
+					<a href="#tab-total"><?= _l("Totals"); ?></a>
+				</div>
+
 				<div id="tab-customer" class="vtabs-content">
 					<table class="form">
 						<tr>
@@ -99,7 +107,9 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Region / State:"); ?></td>
-							<td><select name="payment_zone_id" class="zone_select" data-zone_id="<?= $payment_zone_id; ?>"></select></td>
+							<td>
+								<select name="payment_zone_id" class="zone_select" data-zone_id="<?= $payment_zone_id; ?>"></select>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -151,324 +161,334 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Region / State:"); ?></td>
-							<td><select name="shipping_zone_id" data-zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
+							<td>
+								<select name="shipping_zone_id" data-zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select>
+							</td>
 						</tr>
 					</table>
 				</div>
 				<div id="tab-product" class="vtabs-content">
 					<table class="list">
 						<thead>
-							<tr>
-								<td></td>
-								<td class="left"><?= _l("Product"); ?></td>
-								<td class="left"><?= _l("Model"); ?></td>
-								<td class="right"><?= _l("Quantity"); ?></td>
-								<td class="right"><?= _l("Unit Price"); ?></td>
-								<td class="right"><?= _l("Total"); ?></td>
-							</tr>
+						<tr>
+							<td></td>
+							<td class="left"><?= _l("Product"); ?></td>
+							<td class="left"><?= _l("Model"); ?></td>
+							<td class="right"><?= _l("Quantity"); ?></td>
+							<td class="right"><?= _l("Unit Price"); ?></td>
+							<td class="right"><?= _l("Total"); ?></td>
+						</tr>
 						</thead>
 						<? $product_row = 0; ?>
 						<? $option_row = 0; ?>
 						<? $download_row = 0; ?>
 						<tbody id="product">
-							<? if ($order_products) { ?>
-								<? foreach ($order_products as $order_product) { ?>
-									<tr id="product-row<?= $product_row; ?>">
-										<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-												title="<?= _l("Remove"); ?>"
-												alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
-										</td>
-										<td class="left"><?= $order_product['name']; ?><br/>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]" value="<?= $order_product['order_product_id']; ?>"/>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]" value="<?= $order_product['product_id']; ?>"/>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][name]" value="<?= $order_product['name']; ?>"/>
-											<? foreach ($order_product['option'] as $option) { ?>
-												-
-												<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]" value="<?= $option['order_option_id']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]" value="<?= $option['product_option_id']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]" value="<?= $option['product_option_value_id']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]" value="<?= $option['name']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]" value="<?= $option['value']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]" value="<?= $option['type']; ?>"/>
-												<? $option_row++; ?>
-											<? } ?>
-											<? foreach ($order_product['download'] as $download) { ?>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]" value="<?= $download['order_download_id']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]" value="<?= $download['name']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]" value="<?= $download['filename']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]" value="<?= $download['mask']; ?>"/>
-												<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]" value="<?= $download['remaining']; ?>"/>
-												<? $download_row++; ?>
-											<? } ?></td>
-										<td class="left"><?= $order_product['model']; ?>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][model]" value="<?= $order_product['model']; ?>"/></td>
-										<td class="right"><?= $order_product['quantity']; ?>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]" value="<?= $order_product['quantity']; ?>"/></td>
-										<td class="right"><?= $order_product['price']; ?>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][price]" value="<?= $order_product['price']; ?>"/></td>
-										<td class="right"><?= $order_product['total']; ?>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][total]" value="<?= $order_product['total']; ?>"/>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][tax]" value="<?= $order_product['tax']; ?>"/>
-											<input type="hidden" name="order_product[<?= $product_row; ?>][reward]" value="<?= $order_product['reward']; ?>"/></td>
-									</tr>
-									<? $product_row++; ?>
-								<? } ?>
-							<? } else { ?>
-								<tr>
-									<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+						<? if ($order_products) { ?>
+							<? foreach ($order_products as $order_product) { ?>
+								<tr id="product-row<?= $product_row; ?>">
+									<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+									                                            title="<?= _l("Remove"); ?>"
+									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
+									</td>
+									<td class="left"><?= $order_product['name']; ?><br/>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]" value="<?= $order_product['order_product_id']; ?>"/>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]" value="<?= $order_product['product_id']; ?>"/>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][name]" value="<?= $order_product['name']; ?>"/>
+										<? foreach ($order_product['option'] as $option) { ?>
+											-
+											<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]" value="<?= $option['order_option_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]" value="<?= $option['product_option_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]" value="<?= $option['product_option_value_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]" value="<?= $option['name']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]" value="<?= $option['value']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]" value="<?= $option['type']; ?>"/>
+											<? $option_row++; ?>
+										<? } ?>
+										<? foreach ($order_product['download'] as $download) { ?>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]" value="<?= $download['order_download_id']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]" value="<?= $download['name']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]" value="<?= $download['filename']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]" value="<?= $download['mask']; ?>"/>
+											<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]" value="<?= $download['remaining']; ?>"/>
+											<? $download_row++; ?>
+										<? } ?></td>
+									<td class="left"><?= $order_product['model']; ?>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][model]" value="<?= $order_product['model']; ?>"/>
+									</td>
+									<td class="right"><?= $order_product['quantity']; ?>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]" value="<?= $order_product['quantity']; ?>"/>
+									</td>
+									<td class="right"><?= $order_product['price']; ?>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][price]" value="<?= $order_product['price']; ?>"/>
+									</td>
+									<td class="right"><?= $order_product['total']; ?>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][total]" value="<?= $order_product['total']; ?>"/>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][tax]" value="<?= $order_product['tax']; ?>"/>
+										<input type="hidden" name="order_product[<?= $product_row; ?>][reward]" value="<?= $order_product['reward']; ?>"/>
+									</td>
 								</tr>
+								<? $product_row++; ?>
 							<? } ?>
+						<? } else { ?>
+							<tr>
+								<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+							</tr>
+						<? } ?>
 						</tbody>
 					</table>
 					<table class="list">
 						<thead>
-							<tr>
-								<td colspan="2" class="left"><?= _l("Add Product(s)"); ?></td>
-							</tr>
+						<tr>
+							<td colspan="2" class="left"><?= _l("Add Product(s)"); ?></td>
+						</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="left"><?= _l("Choose Product:"); ?></td>
-								<td class="left"><input type="text" name="product" value=""/>
-									<input type="hidden" name="product_id" value=""/></td>
-							</tr>
-							<tr id="option"></tr>
-							<tr>
-								<td class="left"><?= _l("Quantity:"); ?></td>
-								<td class="left"><input type="text" name="quantity" value="1"/></td>
-							</tr>
+						<tr>
+							<td class="left"><?= _l("Choose Product:"); ?></td>
+							<td class="left"><input type="text" name="product" value=""/>
+								<input type="hidden" name="product_id" value=""/></td>
+						</tr>
+						<tr id="option"></tr>
+						<tr>
+							<td class="left"><?= _l("Quantity:"); ?></td>
+							<td class="left"><input type="text" name="quantity" value="1"/></td>
+						</tr>
 						</tbody>
 						<tfoot>
-							<tr>
-								<td class="left">&nbsp;</td>
-								<td class="left"><a id="button-product" class="button"><?= _l("Add Product"); ?></a></td>
-							</tr>
+						<tr>
+							<td class="left">&nbsp;</td>
+							<td class="left"><a id="button-product" class="button"><?= _l("Add Product"); ?></a></td>
+						</tr>
 						</tfoot>
 					</table>
 				</div>
 				<div id="tab-voucher" class="vtabs-content">
 					<table class="list">
 						<thead>
-							<tr>
-								<td></td>
-								<td class="left"><?= _l("Product"); ?></td>
-								<td class="left"><?= _l("Model"); ?></td>
-								<td class="right"><?= _l("Quantity"); ?></td>
-								<td class="right"><?= _l("Unit Price"); ?></td>
-								<td class="right"><?= _l("Total"); ?></td>
-							</tr>
+						<tr>
+							<td></td>
+							<td class="left"><?= _l("Product"); ?></td>
+							<td class="left"><?= _l("Model"); ?></td>
+							<td class="right"><?= _l("Quantity"); ?></td>
+							<td class="right"><?= _l("Unit Price"); ?></td>
+							<td class="right"><?= _l("Total"); ?></td>
+						</tr>
 						</thead>
 						<tbody id="voucher">
-							<? $voucher_row = 0; ?>
-							<? if ($order_vouchers) { ?>
-								<? foreach ($order_vouchers as $order_voucher) { ?>
-									<tr id="voucher-row<?= $voucher_row; ?>">
-										<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-												title="<?= _l("Remove"); ?>"
-												alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
-										</td>
-										<td class="left"><?= $order_voucher['description']; ?>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]" value="<?= $order_voucher['order_voucher_id']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]" value="<?= $order_voucher['voucher_id']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]" value="<?= $order_voucher['description']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]" value="<?= $order_voucher['code']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]" value="<?= $order_voucher['from_name']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]" value="<?= $order_voucher['from_email']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]" value="<?= $order_voucher['to_name']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]" value="<?= $order_voucher['to_email']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]" value="<?= $order_voucher['voucher_theme_id']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]" value="<?= $order_voucher['message']; ?>"/>
-											<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]" value="<?= $order_voucher['amount']; ?>"/></td>
-										<td class="left"></td>
-										<td class="right">1</td>
-										<td class="right"><?= $order_voucher['amount']; ?></td>
-										<td class="right"><?= $order_voucher['amount']; ?></td>
-									</tr>
-									<? $voucher_row++; ?>
-								<? } ?>
-							<? } else { ?>
-								<tr>
-									<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+						<? $voucher_row = 0; ?>
+						<? if ($order_vouchers) { ?>
+							<? foreach ($order_vouchers as $order_voucher) { ?>
+								<tr id="voucher-row<?= $voucher_row; ?>">
+									<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+									                                            title="<?= _l("Remove"); ?>"
+									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
+									</td>
+									<td class="left"><?= $order_voucher['description']; ?>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]" value="<?= $order_voucher['order_voucher_id']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]" value="<?= $order_voucher['voucher_id']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]" value="<?= $order_voucher['description']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]" value="<?= $order_voucher['code']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]" value="<?= $order_voucher['from_name']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]" value="<?= $order_voucher['from_email']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]" value="<?= $order_voucher['to_name']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]" value="<?= $order_voucher['to_email']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]" value="<?= $order_voucher['voucher_theme_id']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]" value="<?= $order_voucher['message']; ?>"/>
+										<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]" value="<?= $order_voucher['amount']; ?>"/>
+									</td>
+									<td class="left"></td>
+									<td class="right">1</td>
+									<td class="right"><?= $order_voucher['amount']; ?></td>
+									<td class="right"><?= $order_voucher['amount']; ?></td>
 								</tr>
+								<? $voucher_row++; ?>
 							<? } ?>
+						<? } else { ?>
+							<tr>
+								<td class="center" colspan="6"><?= _l("No results!"); ?></td>
+							</tr>
+						<? } ?>
 						</tbody>
 					</table>
 					<table class="list">
 						<thead>
-							<tr>
-								<td colspan="2" class="left"><?= _l("Add Voucher(s)"); ?></td>
-							</tr>
+						<tr>
+							<td colspan="2" class="left"><?= _l("Add Voucher(s)"); ?></td>
+						</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Recipient\'s Name:"); ?></td>
-								<td class="left"><input type="text" name="to_name" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Recipient\'s Email:"); ?></td>
-								<td class="left"><input type="text" name="to_email" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Senders Name:"); ?></td>
-								<td class="left"><input type="text" name="from_name" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Senders Email:"); ?></td>
-								<td class="left"><input type="text" name="from_email" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Gift Certificate Theme:"); ?></td>
-								<td class="left"><select name="voucher_theme_id">
-										<? foreach ($voucher_themes as $voucher_theme) { ?>
-											<option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
-										<? } ?>
-									</select></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Message:"); ?></td>
-								<td class="left"><textarea name="message" cols="40" rows="5"></textarea></td>
-							</tr>
-							<tr>
-								<td class="left"><span class="required"></span> <?= _l("Amount:"); ?></td>
-								<td class="left"><input type="text" name="amount" value="25.00" size="5"/></td>
-							</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Recipient\'s Name:"); ?></td>
+							<td class="left"><input type="text" name="to_name" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Recipient\'s Email:"); ?></td>
+							<td class="left"><input type="text" name="to_email" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Senders Name:"); ?></td>
+							<td class="left"><input type="text" name="from_name" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Senders Email:"); ?></td>
+							<td class="left"><input type="text" name="from_email" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Gift Certificate Theme:"); ?></td>
+							<td class="left"><select name="voucher_theme_id">
+									<? foreach ($voucher_themes as $voucher_theme) { ?>
+										<option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
+									<? } ?>
+								</select></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Message:"); ?></td>
+							<td class="left"><textarea name="message" cols="40" rows="5"></textarea></td>
+						</tr>
+						<tr>
+							<td class="left"><span class="required"></span> <?= _l("Amount:"); ?></td>
+							<td class="left"><input type="text" name="amount" value="25.00" size="5"/></td>
+						</tr>
 						</tbody>
 						<tfoot>
-							<tr>
-								<td class="left">&nbsp;</td>
-								<td class="left"><a id="button-voucher" class="button"><?= _l("Add Voucher"); ?></a></td>
-							</tr>
+						<tr>
+							<td class="left">&nbsp;</td>
+							<td class="left"><a id="button-voucher" class="button"><?= _l("Add Voucher"); ?></a></td>
+						</tr>
 						</tfoot>
 					</table>
 				</div>
 				<div id="tab-total" class="vtabs-content">
 					<table class="list">
 						<thead>
-							<tr>
-								<td class="left"><?= _l("Product"); ?></td>
-								<td class="left"><?= _l("Model"); ?></td>
-								<td class="right"><?= _l("Quantity"); ?></td>
-								<td class="right"><?= _l("Unit Price"); ?></td>
-								<td class="right"><?= _l("Total"); ?></td>
-							</tr>
+						<tr>
+							<td class="left"><?= _l("Product"); ?></td>
+							<td class="left"><?= _l("Model"); ?></td>
+							<td class="right"><?= _l("Quantity"); ?></td>
+							<td class="right"><?= _l("Unit Price"); ?></td>
+							<td class="right"><?= _l("Total"); ?></td>
+						</tr>
 						</thead>
 						<tbody id="total">
-							<? $total_row = 0; ?>
-							<? if ($order_products || $order_vouchers || $order_totals) { ?>
-								<? foreach ($order_products as $order_product) { ?>
-									<tr>
-										<td class="left"><?= $order_product['name']; ?><br/>
-											<? foreach ($order_product['option'] as $option) { ?>
-												-
-												<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
-											<? } ?></td>
-										<td class="left"><?= $order_product['model']; ?></td>
-										<td class="right"><?= $order_product['quantity']; ?></td>
-										<td class="right"><?= $order_product['price']; ?></td>
-										<td class="right"><?= $order_product['total']; ?></td>
-									</tr>
-								<? } ?>
-								<? foreach ($order_vouchers as $order_voucher) { ?>
-									<tr>
-										<td class="left"><?= $order_voucher['description']; ?></td>
-										<td class="left"></td>
-										<td class="right">1</td>
-										<td class="right"><?= $order_voucher['amount']; ?></td>
-										<td class="right"><?= $order_voucher['amount']; ?></td>
-									</tr>
-								<? } ?>
-								<? foreach ($order_totals as $order_total) { ?>
-									<tr id="total-row<?= $total_row; ?>">
-										<td class="right" colspan="4"><?= $order_total['title']; ?>:
-											<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]" value="<?= $order_total['order_total_id']; ?>"/>
-											<input type="hidden" name="order_total[<?= $total_row; ?>][code]" value="<?= $order_total['code']; ?>"/>
-											<input type="hidden" name="order_total[<?= $total_row; ?>][title]" value="<?= $order_total['title']; ?>"/>
-											<input type="hidden" name="order_total[<?= $total_row; ?>][text]" value="<?= $order_total['text']; ?>"/>
-											<input type="hidden" name="order_total[<?= $total_row; ?>][value]" value="<?= $order_total['value']; ?>"/>
-											<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]" value="<?= $order_total['sort_order']; ?>"/></td>
-										<td class="right"><?= $order_total['value']; ?></td>
-									</tr>
-									<? $total_row++; ?>
-								<? } ?>
-							<? } else { ?>
+						<? $total_row = 0; ?>
+						<? if ($order_products || $order_vouchers || $order_totals) { ?>
+							<? foreach ($order_products as $order_product) { ?>
 								<tr>
-									<td class="center" colspan="5"><?= _l("No results!"); ?></td>
+									<td class="left"><?= $order_product['name']; ?><br/>
+										<? foreach ($order_product['option'] as $option) { ?>
+											-
+											<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
+										<? } ?></td>
+									<td class="left"><?= $order_product['model']; ?></td>
+									<td class="right"><?= $order_product['quantity']; ?></td>
+									<td class="right"><?= $order_product['price']; ?></td>
+									<td class="right"><?= $order_product['total']; ?></td>
 								</tr>
 							<? } ?>
+							<? foreach ($order_vouchers as $order_voucher) { ?>
+								<tr>
+									<td class="left"><?= $order_voucher['description']; ?></td>
+									<td class="left"></td>
+									<td class="right">1</td>
+									<td class="right"><?= $order_voucher['amount']; ?></td>
+									<td class="right"><?= $order_voucher['amount']; ?></td>
+								</tr>
+							<? } ?>
+							<? foreach ($order_totals as $order_total) { ?>
+								<tr id="total-row<?= $total_row; ?>">
+									<td class="right" colspan="4"><?= $order_total['title']; ?>:
+										<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]" value="<?= $order_total['order_total_id']; ?>"/>
+										<input type="hidden" name="order_total[<?= $total_row; ?>][code]" value="<?= $order_total['code']; ?>"/>
+										<input type="hidden" name="order_total[<?= $total_row; ?>][title]" value="<?= $order_total['title']; ?>"/>
+										<input type="hidden" name="order_total[<?= $total_row; ?>][text]" value="<?= $order_total['text']; ?>"/>
+										<input type="hidden" name="order_total[<?= $total_row; ?>][value]" value="<?= $order_total['value']; ?>"/>
+										<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]" value="<?= $order_total['sort_order']; ?>"/>
+									</td>
+									<td class="right"><?= $order_total['value']; ?></td>
+								</tr>
+								<? $total_row++; ?>
+							<? } ?>
+						<? } else { ?>
+							<tr>
+								<td class="center" colspan="5"><?= _l("No results!"); ?></td>
+							</tr>
+						<? } ?>
 						</tbody>
 					</table>
 					<table class="list">
 						<thead>
-							<tr>
-								<td class="left" colspan="2"><?= _l("Order Details"); ?></td>
-							</tr>
+						<tr>
+							<td class="left" colspan="2"><?= _l("Order Details"); ?></td>
+						</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="left"><?= _l("Shipping Method:"); ?></td>
-								<td class="left"><select name="shipping">
-										<option value=""><?= _l(" --- Please Select --- "); ?></option>
-										<? if ($shipping_code) { ?>
-											<option value="<?= $shipping_code; ?>" selected="selected"><?= $shipping_method; ?></option>
+						<tr>
+							<td class="left"><?= _l("Shipping Method:"); ?></td>
+							<td class="left"><select name="shipping">
+									<option value=""><?= _l(" --- Please Select --- "); ?></option>
+									<? if ($shipping_code) { ?>
+										<option value="<?= $shipping_code; ?>" selected="selected"><?= $shipping_method; ?></option>
+									<? } ?>
+								</select>
+								<input type="hidden" name="shipping_method" value="<?= $shipping_method; ?>"/>
+								<input type="hidden" name="shipping_code" value="<?= $shipping_code; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Payment Method:"); ?></td>
+							<td class="left"><select name="payment">
+									<option value=""><?= _l(" --- Please Select --- "); ?></option>
+									<? if ($payment_code) { ?>
+										<option value="<?= $payment_code; ?>" selected="selected"><?= $payment_method; ?></option>
+									<? } ?>
+								</select>
+								<input type="hidden" name="payment_method" value="<?= $payment_method; ?>"/>
+								<input type="hidden" name="payment_code" value="<?= $payment_code; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Coupon:"); ?></td>
+							<td class="left"><input type="text" name="coupon" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Voucher:"); ?></td>
+							<td class="left"><input type="text" name="voucher" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Reward:"); ?></td>
+							<td class="left"><input type="text" name="reward" value=""/></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Order Status:"); ?></td>
+							<td class="left"><select name="order_status_id">
+									<? foreach ($order_statuses as $order_status) { ?>
+										<? if ($order_status['order_status_id'] == $order_status_id) { ?>
+											<option value="<?= $order_status['order_status_id']; ?>"
+											        selected="selected"><?= $order_status['name']; ?></option>
+										<? } else { ?>
+											<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
 										<? } ?>
-									</select>
-									<input type="hidden" name="shipping_method" value="<?= $shipping_method; ?>"/>
-									<input type="hidden" name="shipping_code" value="<?= $shipping_code; ?>"/></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Payment Method:"); ?></td>
-								<td class="left"><select name="payment">
-										<option value=""><?= _l(" --- Please Select --- "); ?></option>
-										<? if ($payment_code) { ?>
-											<option value="<?= $payment_code; ?>" selected="selected"><?= $payment_method; ?></option>
-										<? } ?>
-									</select>
-									<input type="hidden" name="payment_method" value="<?= $payment_method; ?>"/>
-									<input type="hidden" name="payment_code" value="<?= $payment_code; ?>"/></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Coupon:"); ?></td>
-								<td class="left"><input type="text" name="coupon" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Voucher:"); ?></td>
-								<td class="left"><input type="text" name="voucher" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Reward:"); ?></td>
-								<td class="left"><input type="text" name="reward" value=""/></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Order Status:"); ?></td>
-								<td class="left"><select name="order_status_id">
-										<? foreach ($order_statuses as $order_status) { ?>
-											<? if ($order_status['order_status_id'] == $order_status_id) { ?>
-												<option value="<?= $order_status['order_status_id']; ?>"
-													selected="selected"><?= $order_status['name']; ?></option>
-											<? } else { ?>
-												<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-											<? } ?>
-										<? } ?>
-									</select></td>
-							</tr>
-							<tr>
-								<td class="left"><?= _l("Comment:"); ?></td>
-								<td class="left"><textarea name="comment" cols="40" rows="5"><?= $comment; ?></textarea></td>
-							</tr>
+									<? } ?>
+								</select></td>
+						</tr>
+						<tr>
+							<td class="left"><?= _l("Comment:"); ?></td>
+							<td class="left"><textarea name="comment" cols="40" rows="5"><?= $comment; ?></textarea></td>
+						</tr>
 						</tbody>
 						<tfoot>
-							<tr>
-								<td class="left">&nbsp;</td>
-								<td class="left"><a id="button-update" class="button"><?= _l("Update Totals"); ?></a></td>
-							</tr>
+						<tr>
+							<td class="left">&nbsp;</td>
+							<td class="left"><a id="button-update" class="button"><?= _l("Update Totals"); ?></a></td>
+						</tr>
 						</tfoot>
 					</table>
 				</div>
-			</form>
-		</div>
+
+			</div>
+		</form>
 	</div>
 </div>
+
 <script type="text/javascript">
 	$.widget('custom.catcomplete', $.ui.autocomplete, {
 		_renderMenu: function (ul, items) {
@@ -487,24 +507,24 @@
 	});
 
 	$('input[name=\'customer\']').catcomplete({
-		delay: 0,
+		delay:  0,
 		source: function (request, response) {
 			$.ajax({
-				url: "<?= $url_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				url:     "<?= $url_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
 				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
 						return {
-							category: item['customer_group'],
-							label: item['name'],
-							value: item['customer_id'],
+							category:          item['customer_group'],
+							label:             item['name'],
+							value:             item['customer_id'],
 							customer_group_id: item['customer_group_id'],
-							firstname: item['firstname'],
-							lastname: item['lastname'],
-							email: item['email'],
-							telephone: item['telephone'],
-							fax: item['fax'],
-							address: item['address']
+							firstname:         item['firstname'],
+							lastname:          item['lastname'],
+							email:             item['email'],
+							telephone:         item['telephone'],
+							fax:               item['fax'],
+							address:           item['address']
 						}
 					}));
 				}
@@ -535,7 +555,7 @@
 
 	$('select[name=\'payment_address\']').bind('change', function () {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			url:     "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
 			dataType: "json',
 			success: function (json) {
 				if (json != '') {
@@ -559,7 +579,7 @@
 
 	$('select[name=\'shipping_address\']').bind('change', function () {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			url:     "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
 			dataType: "json',
 			success: function (json) {
 				if (json != '') {
@@ -586,19 +606,19 @@
 
 <script type="text/javascript">
 	$('input[name=\'product\']').autocomplete({
-		delay: 0,
+		delay:  0,
 		source: function (request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				url:     "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
 				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
 						return {
-							label: item.name,
-							value: item.product_id,
-							model: item.model,
+							label:  item.name,
+							value:  item.product_id,
+							model:  item.model,
 							option: item.option,
-							price: item.price
+							price:  item.price
 						}
 					}));
 				}
@@ -812,15 +832,15 @@
 
 					if (option['type'] == 'file') {
 						new AjaxUpload('#button-option-' + option['product_option_id'], {
-							action: "<?= HTTP_ADMIN . "index.php?route=sale/order/upload"; ?>",
-							name: 'file',
-							autoSubmit: true,
+							action:       "<?= HTTP_ADMIN . "index.php?route=sale/order/upload"; ?>",
+							name:         'file',
+							autoSubmit:   true,
 							responseType: 'json',
-							data: option,
-							onSubmit: function (file, extension) {
+							data:         option,
+							onSubmit:     function (file, extension) {
 								$('#button-option-' + (this._settings.data['product_option_id'] + '-' + this._settings.data['product_option_id'])).after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" />');
 							},
-							onComplete: function (file, json) {
+							onComplete:   function (file, json) {
 
 								$('.error').remove();
 
@@ -896,16 +916,16 @@
 		data += '#tab-total input[type=\'text\'], #tab-total input[type=\'hidden\'], #tab-total input[type=\'radio\']:checked, #tab-total input[type=\'checkbox\']:checked, #tab-total select, #tab-total textarea';
 
 		$.ajax({
-			url: '<?= $store_url; ?>index.php?route=checkout/manual',
-			type: 'post',
-			data: $(data),
-			dataType: 'json',
+			url:        '<?= $store_url; ?>index.php?route=checkout/manual',
+			type:       'post',
+			data:       $(data),
+			dataType:   'json',
 			beforeSend: function () {
 				$('.success, .warning, .attention, .error').remove();
 
 				$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 			},
-			success: function (json) {
+			success:    function (json) {
 				$('.success, .warning, .attention, .error').remove();
 
 				// Check for errors
@@ -1320,7 +1340,7 @@
 					$('input[name=\'payment_code\']').attr('value', $('select[name=\'payment\'] option:selected').attr('value'));
 				}
 			},
-			error: function (xhr, ajaxOptions, thrownError) {
+			error:      function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});

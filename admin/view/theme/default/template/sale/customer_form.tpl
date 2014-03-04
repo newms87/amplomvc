@@ -1,33 +1,40 @@
 <?= $header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
-	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
-		<div class="message_box warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
-	<? } ?>
-	<div class="box">
-		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer"); ?></h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
-		</div>
-		<div class="section">
-			<div id="htabs" class="htabs"><a href="#tab-general"><?= _l("General"); ?></a>
-				<? if ($customer_id) { ?>
-					<a href="#tab-transaction"><?= _l("Transactions"); ?></a><a href="#tab-reward"><?= _l("Reward Points"); ?></a>
-				<? } ?>
-				<a href="#tab-ip"><?= _l("IP Addresses"); ?></a></div>
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+	<div class="box">
+		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+
+			<div class="heading">
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer"); ?></h1>
+
+				<div class="buttons">
+					<button class="button"><?= _l("Save"); ?></button>
+					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				</div>
+			</div>
+
+			<div class="section">
+				<div id="htabs" class="htabs">
+					<a href="#tab-general"><?= _l("General"); ?></a>
+					<? if ($customer_id) { ?>
+						<a href="#tab-transaction"><?= _l("Transactions"); ?></a>
+						<a href="#tab-reward"><?= _l("Reward Points"); ?></a>
+					<? } ?>
+					<a href="#tab-ip"><?= _l("IP Addresses"); ?></a>
+				</div>
+
 				<div id="tab-general">
 					<div id="vtabs" class="vtabs"><a href="#tab-customer"><?= _l("General"); ?></a>
 						<? $address_row = 1; ?>
 						<? foreach ($addresses as $address) { ?>
 							<a href="#tab-address-<?= $address_row; ?>"
-								id="address-<?= $address_row; ?>"><?= _l("Address") . ' ' . $address_row; ?>&nbsp;<img
+							   id="address-<?= $address_row; ?>"><?= _l("Address") . ' ' . $address_row; ?>&nbsp;<img
 									src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('#vtabs a:first').trigger('click'); $('#address-<?= $address_row; ?>').remove(); $('#tab-address-<?= $address_row; ?>').remove(); return false;"/></a>
 							<? $address_row++; ?>
 						<? } ?>
-						<span id="address-add"><?= _l("Add Address"); ?>&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="" onclick="addAddress();"/></span></div>
+						<span id="address-add"><?= _l("Add Address"); ?>
+							&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="" onclick="addAddress();"/></span></div>
 					<div id="tab-customer" class="vtabs-content">
 						<table class="form">
 							<tr>
@@ -95,7 +102,7 @@
 										<? foreach ($customer_groups as $customer_group) { ?>
 											<? if ($customer_group['customer_group_id'] == $customer_group_id) { ?>
 												<option value="<?= $customer_group['customer_group_id']; ?>"
-													selected="selected"><?= $customer_group['name']; ?></option>
+												        selected="selected"><?= $customer_group['name']; ?></option>
 											<? } else { ?>
 												<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
 											<? } ?>
@@ -123,43 +130,53 @@
 							<table class="form">
 								<tr>
 									<td class="required"> <?= _l("First Name:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][firstname]" value="<?= $address['firstname']; ?>"/>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][firstname]" value="<?= $address['firstname']; ?>"/>
 										<? if (isset($error_address_firstname[$address_row])) { ?>
 											<span class="error"><?= $error_address_firstname[$address_row]; ?></span>
 										<? } ?></td>
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Last Name:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][lastname]" value="<?= $address['lastname']; ?>"/>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][lastname]" value="<?= $address['lastname']; ?>"/>
 										<? if (isset($error_address_lastname[$address_row])) { ?>
 											<span class="error"><?= $error_address_lastname[$address_row]; ?></span>
 										<? } ?></td>
 								</tr>
 								<tr>
 									<td><?= _l("Company:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][company]" value="<?= $address['company']; ?>"/></td>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][company]" value="<?= $address['company']; ?>"/>
+									</td>
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Address 1:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][address_1]" value="<?= $address['address_1']; ?>"/>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][address_1]" value="<?= $address['address_1']; ?>"/>
 										<? if (isset($error_address_address_1[$address_row])) { ?>
 											<span class="error"><?= $error_address_address_1[$address_row]; ?></span>
 										<? } ?></td>
 								</tr>
 								<tr>
 									<td><?= _l("Address 2:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][address_2]" value="<?= $address['address_2']; ?>"/></td>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][address_2]" value="<?= $address['address_2']; ?>"/>
+									</td>
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("City:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][city]" value="<?= $address['city']; ?>"/>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][city]" value="<?= $address['city']; ?>"/>
 										<? if (isset($error_address_city[$address_row])) { ?>
 											<span class="error"><?= $error_address_city[$address_row]; ?></span>
 										<? } ?></td>
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Postcode:"); ?></td>
-									<td><input type="text" name="address[<?= $address_row; ?>][postcode]" value="<?= $address['postcode']; ?>"/></td>
+									<td>
+										<input type="text" name="address[<?= $address_row; ?>][postcode]" value="<?= $address['postcode']; ?>"/>
+									</td>
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Country:"); ?></td>
@@ -172,8 +189,9 @@
 								</tr>
 								<tr>
 									<td class="required"> <?= _l("Region / State:"); ?></td>
-									<td><select name="address[<?= $address_row; ?>][zone_id]" data-zone_id="<?= $address['zone_id']; ?>"
-											class="zone_select"></select>
+									<td>
+										<select name="address[<?= $address_row; ?>][zone_id]" data-zone_id="<?= $address['zone_id']; ?>"
+										        class="zone_select"></select>
 										<? if (isset($error_address_zone[$address_row])) { ?>
 											<span class="error"><?= $error_address_zone[$address_row]; ?></span>
 										<? } ?></td>
@@ -182,7 +200,7 @@
 									<td><?= _l("Default Address:"); ?></td>
 									<td><? if (($address['address_id'] == $address_id) || !$addresses) { ?>
 										<input type="radio" name="address[<?= $address_row; ?>][default]" value="<?= $address_row; ?>"
-											checked="checked"/></td>
+										       checked="checked"/></td>
 									<? } else { ?>
 										<input type="radio" name="address[<?= $address_row; ?>][default]" value="<?= $address_row; ?>"/>
 										</td>
@@ -205,7 +223,8 @@
 								<td><input type="text" name="amount" value=""/></td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align: right;"><a id="button-reward" class="button" onclick="addTransaction();"><span><?= _l("Add Transaction"); ?></span></a>
+								<td colspan="2" style="text-align: right;">
+									<a id="button-reward" class="button" onclick="addTransaction();"><span><?= _l("Add Transaction"); ?></span></a>
 								</td>
 							</tr>
 						</table>
@@ -222,7 +241,8 @@
 								<td><input type="text" name="points" value=""/></td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align: right;"><a id="button-reward" class="button" onclick="addRewardPoints();"><span><?= _l("Add Reward Points"); ?></span></a>
+								<td colspan="2" style="text-align: right;">
+									<a id="button-reward" class="button" onclick="addRewardPoints();"><span><?= _l("Add Reward Points"); ?></span></a>
 								</td>
 							</tr>
 						</table>
@@ -232,40 +252,44 @@
 				<div id="tab-ip">
 					<table class="list">
 						<thead>
-							<tr>
-								<td class="left"><?= _l("IP"); ?></td>
-								<td class="right"><?= _l("Total Accounts"); ?></td>
-								<td class="left"><?= _l("Date Added"); ?></td>
-								<td class="right"><?= _l("Action"); ?></td>
-							</tr>
+						<tr>
+							<td class="left"><?= _l("IP"); ?></td>
+							<td class="right"><?= _l("Total Accounts"); ?></td>
+							<td class="left"><?= _l("Date Added"); ?></td>
+							<td class="right"><?= _l("Action"); ?></td>
+						</tr>
 						</thead>
 						<tbody>
-							<? if ($ips) { ?>
-								<? foreach ($ips as $ip) { ?>
-									<tr>
-										<td class="left"><a onclick="window.open('http://www.geoiptool.com/en/?IP=<?= $ip['ip']; ?>');"><?= $ip['ip']; ?></a>
-										</td>
-										<td class="right"><a onclick="window.open('<?= $ip['filter_ip']; ?>');"><?= $ip['total']; ?></a></td>
-										<td class="left"><?= $ip['date_added']; ?></td>
-										<td class="right"><? if ($ip['blacklist']) { ?>
-												<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="removeBlacklist('<?= $ip['ip']; ?>');"><?= _l("Remove Blacklist"); ?></a>
-												<b>]</b>
-											<? } else { ?>
-												<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="addBlacklist('<?= $ip['ip']; ?>');"><?= _l("Add Blacklist"); ?></a>
-												<b>]</b>
-											<? } ?></td>
-									</tr>
-								<? } ?>
-							<? } else { ?>
+						<? if ($ips) { ?>
+							<? foreach ($ips as $ip) { ?>
 								<tr>
-									<td class="center" colspan="3"><?= _l("No results!"); ?></td>
+									<td class="left">
+										<a onclick="window.open('http://www.geoiptool.com/en/?IP=<?= $ip['ip']; ?>');"><?= $ip['ip']; ?></a>
+									</td>
+									<td class="right">
+										<a onclick="window.open('<?= $ip['filter_ip']; ?>');"><?= $ip['total']; ?></a></td>
+									<td class="left"><?= $ip['date_added']; ?></td>
+									<td class="right"><? if ($ip['blacklist']) { ?>
+											<b>[</b>
+											<a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="removeBlacklist('<?= $ip['ip']; ?>');"><?= _l("Remove Blacklist"); ?></a>
+											<b>]</b>
+										<? } else { ?>
+											<b>[</b>
+											<a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="addBlacklist('<?= $ip['ip']; ?>');"><?= _l("Add Blacklist"); ?></a>
+											<b>]</b>
+										<? } ?></td>
 								</tr>
 							<? } ?>
+						<? } else { ?>
+							<tr>
+								<td class="center" colspan="3"><?= _l("No results!"); ?></td>
+							</tr>
+						<? } ?>
 						</tbody>
 					</table>
 				</div>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
 </div>
 <script type="text/javascript"><
@@ -337,22 +361,21 @@
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
-<script type="text/javascript"><
-	!--
-		$('#transaction .pagination a').live('click', function () {
-			$('#transaction').load(this.href);
+<script type="text/javascript">
+	$('#transaction .pagination a').live('click', function () {
+		$('#transaction').load(this.href);
 
-			return false;
-		});
+		return false;
+	});
 
 	$('#transaction').load("<?= $url_transaction; ?>");
 
 	function addTransaction() {
 		$.ajax({
-			url: "<?= $url_transaction; ?>",
-			type: 'post',
+			url:      "<?= $url_transaction; ?>",
+			type:     'post',
 			dataType: 'html',
-			data: 'description=" + encodeURIComponent($("#tab-transaction input[name=\'description\']').val()
+			data:     'description=" + encodeURIComponent($("#tab-transaction input[name=\'description\']').val()
 	)
 		+'&amount=" + encodeURIComponent($("#tab-transaction input[name=\'amount\']'
 	).
@@ -380,22 +403,21 @@
 	;
 	}
 </script>
-<script type="text/javascript"><
-	!--
-		$('#reward .pagination a').live('click', function () {
-			$('#reward').load(this.href);
+<script type="text/javascript">
+	$('#reward .pagination a').live('click', function () {
+		$('#reward').load(this.href);
 
-			return false;
-		});
+		return false;
+	});
 
 	$('#reward').load("<?= $url_reward; ?>");
 
 	function addRewardPoints() {
 		$.ajax({
-			url: "<?= $url_reward; ?>",
-			type: 'post',
+			url:      "<?= $url_reward; ?>",
+			type:     'post',
 			dataType: 'html',
-			data: 'description=" + encodeURIComponent($("#tab-reward input[name=\'description\']').val()
+			data:     'description=" + encodeURIComponent($("#tab-reward input[name=\'description\']').val()
 	)
 		+'&points=" + encodeURIComponent($("#tab-reward input[name=\'points\']'
 	).
@@ -425,19 +447,19 @@
 
 	function addBlacklist(ip) {
 		$.ajax({
-			url: "<?= $url_blacklist; ?>",
-			type: 'post',
-			dataType: 'json',
+			url:        "<?= $url_blacklist; ?>",
+			type:       'post',
+			dataType:   'json',
 			data: 'ip=" + encodeURIComponent(ip),
 			beforeSend: function () {
 				$(".success, .warning').remove();
 
 				$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
 			},
-			complete: function () {
+			complete:   function () {
 				$('.attention').remove();
 			},
-			success: function (json) {
+			success:    function (json) {
 				if (json['error']) {
 					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
 
@@ -457,19 +479,19 @@
 
 	function removeBlacklist(ip) {
 		$.ajax({
-			url: "<?= $url_remove_blacklist; ?>",
-			type: 'post',
-			dataType: 'json',
+			url:        "<?= $url_remove_blacklist; ?>",
+			type:       'post',
+			dataType:   'json',
 			data: 'ip=" + encodeURIComponent(ip),
 			beforeSend: function () {
 				$(".success, .warning').remove();
 
 				$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
 			},
-			complete: function () {
+			complete:   function () {
 				$('.attention').remove();
 			},
-			success: function (json) {
+			success:    function (json) {
 				if (json['error']) {
 					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
 
@@ -488,9 +510,8 @@
 	}
 	;
 </script>
-<script type="text/javascript"><
-	!--
-		$('.htabs a').tabs();
+<script type="text/javascript">
+	$('.htabs a').tabs();
 	$('.vtabs a').tabs();
 </script>
 <?= $footer; ?>
