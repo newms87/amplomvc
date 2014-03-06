@@ -1335,6 +1335,10 @@ ul.scrollbox li {
 	margin-left: 205px;
 }
 
+.vtabs-content .list {
+	clear: none;
+}
+
 .vtabs a .tab_title {
 	display: inline-block;
 }

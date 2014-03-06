@@ -762,6 +762,26 @@ class Admin_Model_Catalog_Product extends Model
 		return $attributes;
 	}
 
+	public function getProductOption($product_id, $product_option_id)
+	{
+		$product_option = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " AND product_option_id = " . (int)$product_option_id);
+
+		if ($product_option) {
+			$product_option['product_option_values'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option_id, 'product_option_value_id');
+		}
+
+		return $product_option;
+	}
+
+	public function getProductOptionValue($product_id, $product_option_id, $product_option_value_id)
+	{
+		$product_option_value = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_id = " . (int)$product_id . " AND product_option_id = " . (int)$product_option_id . " AND product_option_value_id = " . (int)$product_option_value_id);
+
+		$this->translation->translate('product_option_value', $product_option_value_id, $product_option_value);
+
+		return $product_option_value;
+	}
+
 	public function getProductOptions($product_id)
 	{
 		$product_options = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC", 'product_option_id');

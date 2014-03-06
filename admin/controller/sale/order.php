@@ -407,9 +407,6 @@ class Admin_Controller_Sale_Order extends Controller
 			$this->url->redirect('sale/order');
 		}
 
-		//Template
-		$this->template->load('sale/order_info');
-
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
 
@@ -418,17 +415,16 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 		$this->breadcrumb->add($order_info['invoice_id'], $this->url->link('sale/order/info', 'order_id=' . $order_id));
 
-		//Action Buttons
-		$this->data['invoice'] = $this->url->link('sale/order/invoice', 'order_id=' . $order_id);
-		$this->data['cancel']  = $this->url->link('sale/order');
-
 		$this->data += $order_info;
 
-		$this->data['payment_method']  = $this->System_Extension_Payment->get($order_info['payment_code'])->info();
+		$transaction = $this->transaction->get($order_info['transaction_id']);
+		$shipping = $this->shipping->get($order_info['shipping_id']);
+
+		$this->data['payment_method']  = $this->System_Extension_Payment->get($transaction['payment_code'])->info();
 		$this->data['payment_address'] = $this->address->format($this->order->getPaymentAddress($order_id));
 
-		if ($order_info['shipping_code']) {
-			$this->data['shipping_method']  = $this->System_Extension_Shipping->get($order_info['shipping_code'])->info();
+		if ($shipping && $shipping['shipping_code']) {
+			$this->data['shipping_method']  = $this->System_Extension_Shipping->get($shipping['shipping_code'])->info();
 			$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 		}
 
@@ -446,7 +442,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data['total']   = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value']);
 
 		$this->data['credit']       = max(0, -1 * $order_info['total']);
-		$this->data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($order_id);
+		//$this->data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($order_id);
 		$this->data['reward_total'] = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($order_id);
 
 		$this->data['order_status'] = $this->order->getOrderStatus($order_info['order_status_id']);
@@ -501,6 +497,13 @@ class Admin_Controller_Sale_Order extends Controller
 
 		//History
 		$this->data['history'] = $this->history();
+
+		//Action Buttons
+		$this->data['invoice'] = $this->url->link('sale/order/invoice', 'order_id=' . $order_id);
+		$this->data['cancel']  = $this->url->link('sale/order');
+
+		//Template
+		$this->template->load('sale/order_info');
 
 		//Dependencies
 		$this->children = array(
@@ -775,7 +778,7 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 
 		foreach ($orders as $order_id) {
-			$order_info = $this->Model_Sale_Order->getOrder($order_id);
+			$order_info = $this->System_Model_Order->getOrder($order_id);
 
 			if ($order_info) {
 				$store_info = $this->config->loadGroup('config', $order_info['store_id']);

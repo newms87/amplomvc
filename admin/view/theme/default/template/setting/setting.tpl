@@ -452,7 +452,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td><?= _l("Return Status:<br /><span class=\"help\">Set the default return status when an returns request is submitted.</span>"); ?></td>
+			<td><?= _l("Return Status:<br /><span class=\"help\">Set the default Return Status when a return request is submitted.</span>"); ?></td>
 			<? $this->builder->setConfig(false, 'title'); ?>
 			<td><?= $this->builder->build('select', $data_return_statuses, 'config_return_status_id', $config_return_status_id); ?></td>
 		</tr>
