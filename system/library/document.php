@@ -174,6 +174,52 @@ class Document extends Library
 		return array();
 	}
 
+	public function compileSass($file, $reference, $syntax = 'sass', $style = 'nested')
+	{
+		if (!is_file($file)) {
+			return null;
+		}
+
+		$mtime = filemtime($file);
+
+		$sass_file = DIR_CACHE . 'sass/' . $reference .  $mtime . '.css';
+
+		//If file is not in cached, or original file has been modified, regenerate the SASS file
+		if (!is_file($sass_file) || filemtime($sass_file) < $mtime) {
+
+			//Cleared cached files for this reference
+			$cached_files = glob(DIR_CACHE . 'sass/' . $reference . '*.css');
+			foreach ($cached_files as $cache) {
+				@unlink($cache);
+			}
+
+			//Load PHPSass
+			require_once(DIR_RESOURCES . 'css/phpsass/SassParser.php');
+
+			$options = array(
+				'style' => $style,
+				'cache' => FALSE,
+				'syntax' => $syntax,
+				'debug' => FALSE,
+				'callbacks' => array(
+					'warn' => function ($message, $context) {echo $context . ': ' . $message;},
+					'debug' => function ($message) {echo $message;},
+				),
+			);
+
+			// Execute the compiler.
+			$parser = new SassParser($options);
+			$css = $parser->toCss($file);
+
+			//Write cache file
+			_is_writable(dirname($sass_file));
+			file_put_contents($sass_file, $css);
+		}
+
+		//Return the URL for the cache file
+		return str_replace(DIR_CACHE , SITE_URL . 'system/cache/', $sass_file);
+	}
+
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
 	{
 		$this->styles[md5($href)] = array(
@@ -333,7 +379,6 @@ class Document extends Library
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
 	}
 
-
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
 		if (!$page) {
@@ -486,7 +531,7 @@ class Document extends Library
 
 			$target = !empty($link['target']) ? "target=\"$link[target]\"" : '';
 
-			$html .= "<li $attr_list style=\"z-index:$zindex\"><a $href $target class=\"menu_link\">$link[display_name]</a>$children</li>";
+			$html .= "<li $attr_list style=\"z-index: " . $zindex . "\"><a $href $target class=\"menu_link\">$link[display_name]</a>$children</li>";
 
 			$zindex--;
 		}

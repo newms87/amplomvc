@@ -4,10 +4,6 @@ class Admin_Controller_Common_Header extends Controller
 	public function index()
 	{
 		$this->template->load('common/header');
-		if ($this->config->get('config_debug') && !empty($_SESSION['debug'])) {
-			$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
-			unset($_SESSION['debug']);
-		}
 
 		$this->data['title'] = $this->document->getTitle();
 

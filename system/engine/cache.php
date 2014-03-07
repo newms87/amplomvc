@@ -1,4 +1,5 @@
 <?php
+
 class Cache
 {
 	private $expired;
@@ -12,10 +13,14 @@ class Cache
 		_is_writable(DIR_CACHE);
 	}
 
-	public function get($key)
+	public function get($key, $return_file = false)
 	{
 		if (isset($this->loaded[$key])) {
-			return $this->loaded[$key]['data'];
+			if ($return_file) {
+				return $this->loaded[$key]['file'];
+			} elseif (isset($this->loaded[$key]['data'])) {
+				return $this->loaded[$key]['data'];
+			}
 		}
 
 		$file = DIR_CACHE . $key . '.cache';
@@ -33,8 +38,12 @@ class Cache
 				}
 			}
 
-			$this->loaded[$key]['data'] = unserialize(@file_get_contents($file));
-			$this->loaded[$key]['file'] = $file;
+			if ($return_file) {
+				return $this->loaded[$key]['file'] = $file;
+			} else {
+				$this->loaded[$key]['data'] = unserialize(@file_get_contents($file));
+				$this->loaded[$key]['file'] = $file;
+			}
 
 			return $this->loaded[$key]['data'];
 		}
@@ -50,6 +59,8 @@ class Cache
 			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
 			@file_put_contents($file, $value);
 		}
+
+		return $file;
 	}
 
 	public function delete($key)

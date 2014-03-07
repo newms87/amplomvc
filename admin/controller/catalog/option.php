@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Catalog_Option extends Controller
 {
 	public function index()
@@ -70,7 +71,6 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		$this->getList();
 	}
-
 
 	private function getList()
 	{
@@ -242,12 +242,13 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		//Product Options Template Defaults
 		$this->data['option_values']['__ac_template__'] = array(
-			'option_id'     => 0,
-			'name'          => '',
-			'value'         => '',
-			'display_value' => '',
-			'image'         => '',
-			'sort_order'    => 0,
+			'option_id'       => 0,
+			'option_value_id' => '',
+			'name'            => '',
+			'value'           => '',
+			'display_value'   => '',
+			'image'           => '',
+			'sort_order'      => 0,
 		);
 
 		//Dependencies

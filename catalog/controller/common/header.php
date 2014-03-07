@@ -6,18 +6,19 @@ class Catalog_Controller_Common_Header extends Controller
 	{
 		$this->template->load('common/header');
 
-		//TODO: Probably dont need this anymore...
-		if ($this->config->get('config_debug') && isset($_SESSION['debug'])) {
-			html_dump($_SESSION['debug'], 'debug');
-			unset($_SESSION['debug']);
-		}
-
 		$this->data['title'] = $this->document->getTitle();
 
 		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 
 		//Add Styles
-		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
+		if (is_file(DIR_THEME_STYLE . 'style.sass')) {
+			$style = $this->document->compileSass(DIR_THEME_STYLE . 'style.sass', 'core-style');
+		} else {
+			$style = HTTP_THEME_STYLE . 'style.css';
+		}
+
+		$this->document->addStyle($style);
+
 		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
 
