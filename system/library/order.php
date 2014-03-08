@@ -315,6 +315,7 @@ class Order Extends Library
 
 		//order does not exist or has already been processed
 		if (!$order || $order['order_status_id'] === $order_status_id) {
+			$this->error['status'] = _l("The status was unchanged.");
 			return false;
 		}
 

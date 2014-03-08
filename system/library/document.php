@@ -174,7 +174,8 @@ class Document extends Library
 		return array();
 	}
 
-	public function compileSass($file, $reference, $syntax = 'sass', $style = 'nested')
+	//TODO: Find a functioning compiler for Sass / Scss
+	public function compileSass($file, $reference, $syntax = 'scss', $style = 'nested')
 	{
 		if (!is_file($file)) {
 			return null;
@@ -185,7 +186,7 @@ class Document extends Library
 		$sass_file = DIR_CACHE . 'sass/' . $reference .  $mtime . '.css';
 
 		//If file is not in cached, or original file has been modified, regenerate the SASS file
-		if (!is_file($sass_file) || filemtime($sass_file) < $mtime) {
+		if (true || !is_file($sass_file) || filemtime($sass_file) < $mtime) {
 
 			//Cleared cached files for this reference
 			$cached_files = glob(DIR_CACHE . 'sass/' . $reference . '*.css');
@@ -218,6 +219,42 @@ class Document extends Library
 
 		//Return the URL for the cache file
 		return str_replace(DIR_CACHE , SITE_URL . 'system/cache/', $sass_file);
+	}
+
+	public function compileLess($file, $reference)
+	{
+		if (!is_file($file)) {
+			return null;
+		}
+
+		$mtime = filemtime($file);
+
+		$less_file = DIR_CACHE . 'less/' . $reference .  $mtime . '.css';
+
+		//If file is not in cached, or original file has been modified, regenerate the SASS file
+		if (!is_file($less_file) || filemtime($less_file) < $mtime) {
+
+			echo 'from cache';
+			//Cleared cached files for this reference
+			$cached_files = glob(DIR_CACHE . 'less/' . $reference . '*.css');
+			foreach ($cached_files as $cache) {
+				@unlink($cache);
+			}
+
+			//Load PHPSass
+			require_once(DIR_RESOURCES . 'css/lessphp/lessc.inc.php');
+
+			$less = new lessc();
+
+			$css = $less->compileFile($file);
+
+			//Write cache file
+			_is_writable(dirname($less_file));
+			file_put_contents($less_file, $css);
+		}
+
+		//Return the URL for the cache file
+		return str_replace(DIR_CACHE , SITE_URL . 'system/cache/', $less_file);
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')

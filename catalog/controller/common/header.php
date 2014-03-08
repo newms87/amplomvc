@@ -11,8 +11,8 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 
 		//Add Styles
-		if (is_file(DIR_THEME_STYLE . 'style.sass')) {
-			$style = $this->document->compileSass(DIR_THEME_STYLE . 'style.sass', 'core-style');
+		if (is_file(DIR_THEME_STYLE . 'style.less')) {
+			$style = $this->document->compileLess(DIR_THEME_STYLE . 'style.less', 'core-style');
 		} else {
 			$style = HTTP_THEME_STYLE . 'style.css';
 		}
@@ -57,7 +57,6 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['statcounter']      = $this->config->get('config_statcounter');
 
 		$this->data['messages'] = $this->message->fetch();
-		$this->data['icon']     = $this->image->get($this->config->get('config_icon'));
 		$this->data['name']     = $this->config->get('config_name');
 
 		$logo_width  = $this->config->get('config_logo_width');
@@ -66,6 +65,17 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
 
 		$this->data['slogan'] = $this->config->get('config_slogan');
+
+
+		//Icons
+		$icons = $this->config->get('config_icons');
+
+		foreach ($icons as &$icon) {
+			$icon['image'] = $this->image->get($icon['image']);
+		}
+		unset($icon);
+
+		$this->data['icons'] = $icons;
 
 		//Admin Bar
 		if ($this->user->isLogged()) {

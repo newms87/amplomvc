@@ -431,7 +431,8 @@ ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a
 	border-color: #BBDF8D;
 }
 
-.message_box.warning {
+.message_box.warning,
+.message_box.error {
 	background: #FFD1D1 url('../image/warning.png') 10px 10px no-repeat;
 	border-color: #F8ACAC;
 }

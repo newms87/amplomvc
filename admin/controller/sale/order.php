@@ -644,9 +644,13 @@ class Admin_Controller_Sale_Order extends Controller
 			if (!$this->user->can('modify', 'sale/order')) {
 				$this->message->add('warning', _l("Warning: You do not have permission to modify orders!"));
 			} else {
-				$this->order->addHistory($order_id, $_POST);
+				$result = $this->order->updateOrder($order_id, $_POST['order_status_id'], $_POST['comment'], !empty($_POST['notify']) ? 1 : 0);
 
-				$this->message->add('success', _l("Success: You have modified orders!"));
+				if ($result) {
+					$this->message->add('success', _l("Success: You have modified orders!"));
+				} else {
+					$this->message->add('error', $this->order->getError());
+				}
 			}
 		}
 
