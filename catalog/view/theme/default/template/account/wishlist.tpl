@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<h1><?= _l("My Wish List"); ?></h1>
 		<? if ($products) { ?>
@@ -38,9 +38,9 @@
 											<? } ?>
 										</div>
 									<? } ?></td>
-								<td class="action"><img src="<?= HTTP_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= _l("Add to Cart"); ?>"
+								<td class="action"><img src="<?= URL_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= _l("Add to Cart"); ?>"
 										title="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
-										href="<?= $product['remove']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>"
+										href="<?= $product['remove']; ?>"><img src="<?= URL_THEME_IMAGE . 'remove.png'; ?>"
 											alt="<?= _l("Remove"); ?>"
 											title="<?= _l("Remove"); ?>"/></a></td>
 							</tr>
@@ -58,7 +58,7 @@
 			</div>
 		<? } ?>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

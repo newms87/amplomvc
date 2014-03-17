@@ -11,7 +11,7 @@ class Admin_Controller_Setting_Setting extends Controller
 	public function index()
 	{
 		//The Template and Language
-		$this->template->load('setting/setting');
+		$this->view->load('setting/setting');
 		//Page Head
 		$this->document->setTitle(_l("General Settings"));
 
@@ -266,7 +266,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			return false;
 		}
 
-		$image = DIR_CATALOG . 'view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
+		$image = DIR_SITE . 'catalog/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
 
 		$width  = 300; //$this->config->get('config_image_admin_thumb_width');
 		$height = 300; //$this->config->get('config_image_admin_thumb_height');

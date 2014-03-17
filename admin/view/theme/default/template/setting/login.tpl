@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
-			<h1><img class="icon" src="<?= HTTP_THEME_IMAGE . 'login_settings.png'; ?>" alt=""/> <?= _l("Login Settings"); ?></h1>
+			<h1><img class="icon" src="<?= URL_THEME_IMAGE . 'login_settings.png'; ?>" alt=""/> <?= _l("Login Settings"); ?></h1>
 
 			<div class="buttons">
 				<button class="button"><?= _l("Save"); ?></button>
@@ -57,4 +57,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

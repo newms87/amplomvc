@@ -5,7 +5,7 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 
 	public function index()
 	{
-		$this->template->load('feed/google_base');
+		$this->view->load('feed/google_base');
 
 		$this->document->setTitle(_l("Google Base"));
 

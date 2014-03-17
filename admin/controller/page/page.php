@@ -89,7 +89,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//The Template
-		$this->template->load('page/page_list');
+		$this->view->load('page/page_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -210,7 +210,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//The Template
-		$this->template->load('page/page_form');
+		$this->view->load('page/page_form');
 
 		//Insert or Update
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;

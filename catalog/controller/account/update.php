@@ -72,7 +72,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 
 		//TODO: This is a temporary hack to integrate with braintree
-		$this->data['card_select'] = $this->renderController('extension/payment/braintree/select_card', array(null, true));
+		$this->data['card_select'] = $this->call('extension/payment/braintree/select_card', array(null, true));
 
 		//Action Buttons
 		$this->data['save']        = $this->url->link('account/update');
@@ -80,14 +80,14 @@ class Catalog_Controller_Account_Update extends Controller
 		$this->data['add_address'] = $this->url->link('account/address/update');
 
 		//The Template
-		$this->template->load('account/update');
+		$this->view->load('account/update');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

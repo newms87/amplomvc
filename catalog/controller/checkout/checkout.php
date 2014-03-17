@@ -35,14 +35,14 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->data['shipping_required'] = $this->cart->hasShipping();
 
 		//The Template
-		$this->template->load('checkout/checkout');
+		$this->view->load('checkout/checkout');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

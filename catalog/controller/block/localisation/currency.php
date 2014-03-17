@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/localisation/currency');
+		$this->view->load('block/localisation/currency');
 		if (isset($_POST['currency_code'])) {
 			$this->currency->set($_POST['currency_code']);
 

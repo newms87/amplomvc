@@ -10,7 +10,7 @@ class System_Extension_Cart extends Controller
 	{
 
 		//TODO: Should only get installed Cart extensions...
-		$carts = $this->tool->get_files_r(SITE_DIR . "catalog/controller/extension/cart/", array('php'), FILELIST_STRING);
+		$carts = $this->tool->get_files_r(DIR_SITE . "catalog/controller/extension/cart/", array('php'), FILELIST_STRING);
 
 		$inline = '';
 		$extend = '';

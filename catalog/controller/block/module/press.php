@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Module_Press extends Controller
 {
 	public function index($settings)
 	{
-		$this->template->load('block/module/press');
+		$this->view->load('block/module/press');
 
 		$settings['image_width']  = 185;
 		$settings['image_height'] = 240;

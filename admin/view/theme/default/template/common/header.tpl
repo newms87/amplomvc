@@ -25,7 +25,7 @@
 					<div class="div2"><a href="<?= $home; ?>" style="display:block"><img src="<?= $admin_logo; ?>"
 								title="<?= _l("Administration"); ?>"/></a></div>
 					<? if ($logged) { ?>
-						<div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt=""
+						<div class="div3"><img src="<?= URL_THEME_IMAGE . 'lock.png'; ?>" alt=""
 								id="header_secure_lock"/><?= $logged; ?></div>
 						<div class="div3" style="clear:right"><?= $support; ?></div>
 					<? } ?>

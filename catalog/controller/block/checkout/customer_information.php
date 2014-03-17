@@ -50,7 +50,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 		$this->data['validate_customer_checkout'] = $this->url->link('block/checkout/customer_information/validate');
 
 		//The Template
-		$this->template->load('block/checkout/customer_information');
+		$this->view->load('block/checkout/customer_information');
 
 		//Render
 		$this->response->setOutput($this->render());

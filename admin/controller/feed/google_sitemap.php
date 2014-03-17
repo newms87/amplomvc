@@ -5,7 +5,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 	public function index()
 	{
-		$this->template->load('feed/google_sitemap');
+		$this->view->load('feed/google_sitemap');
 
 		$this->document->setTitle(_l("Google Sitemap"));
 

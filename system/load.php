@@ -1,7 +1,8 @@
 <?php
+//SIM TIME
 //TODO: Move to Dev plugin
 //Virtual time (for simulating time progression)
-$ac_time_offset = (int)@file_get_contents(DIR_SYSTEM . 'timeoffset');
+$ac_time_offset = !empty($_COOKIE['ac_time_offset']) ? (int)$_COOKIE['ac_time_offset'] : 0;
 
 function _time()
 {
@@ -15,19 +16,18 @@ function _filemtime($file)
 	return filemtime($file) + ($ac_time_offset * 1000);
 }
 
-//Sim time
-if (!empty($_GET['sim_time'])) {
-	global $ac_time_offset;
-
-	$time_file = DIR_SYSTEM . 'timeoffset';
+//Only allow logged in users to sim time.
+if (empty($_SESSION['user_id'])) {
+	$ac_time_offset = 0;
+} elseif (!empty($_GET['sim_time'])) {
 	if ($_GET['sim_time'] === 'reset') {
 		$ac_time_offset = 0;
 	} else {
-		$ac_time_offset = (int)@file_get_contents($time_file) + (int)$_GET['sim_time'];
+		$ac_time_offset += (int)$_GET['sim_time'];
 	}
-
-	file_put_contents($time_file, $ac_time_offset);
 }
+
+
 
 // Registry
 $registry = new Registry();

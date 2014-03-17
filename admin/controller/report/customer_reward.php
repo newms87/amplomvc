@@ -3,7 +3,7 @@ class Admin_Controller_Report_CustomerReward extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/customer_reward');
+		$this->view->load('report/customer_reward');
 
 		$this->document->setTitle(_l("Customer Reward Points Report"));
 

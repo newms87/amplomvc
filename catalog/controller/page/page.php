@@ -25,14 +25,14 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->data = $page;
 
 		//The Template
-		$this->template->load('page/page');
+		$this->view->load('page/page');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header',
 		);
@@ -60,21 +60,21 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Add Styles
-		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
+		$this->document->addStyle(URL_THEME . 'style/style.css');
+		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
+		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add Scripts
 		if ($this->config->get('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
-			$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
-			$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(HTTP_JS . 'common.js', 53);
-		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
+		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
+		$this->document->addScript(URL_THEME_JS . 'common.js', 56);
 
 		//Page Head
 		$this->data['direction'] = $this->language->info('direction');
@@ -88,7 +88,7 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->data += $page;
 
 		//The Template
-		$this->template->load('page/page_preview');
+		$this->view->load('page/page_preview');
 
 		//Render
 		$this->response->setOutput($this->render());

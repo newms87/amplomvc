@@ -78,7 +78,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->document->setTitle(_l("Options"));
 
 		//The Template
-		$this->template->load('catalog/option_list');
+		$this->view->load('catalog/option_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -176,7 +176,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->document->setTitle(_l("Options"));
 
 		//The Template
-		$this->template->load('catalog/option_form');
+		$this->view->load('catalog/option_form');
 
 		//Insert or Update
 		$option_id = isset($_GET['option_id']) ? (int)$_GET['option_id'] : 0;

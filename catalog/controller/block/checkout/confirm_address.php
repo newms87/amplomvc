@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Checkout_ConfirmAddress extends Controller
 {
 	public function index($settings = array())
 	{
-		$this->template->load('block/checkout/confirm_address');
+		$this->view->load('block/checkout/confirm_address');
 		if ($this->cart->hasShipping() && $this->cart->hasShippingAddress()) {
 			$shipping_address = $this->cart->getShippingAddress();
 

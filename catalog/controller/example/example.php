@@ -47,14 +47,14 @@ class Catalog_Controller_Example_Example extends Controller
 		$this->data['content'] = _l("A whole bunch of content for the page");
 
 		//The Template
-		$this->template->load('example/example');
+		$this->view->load('example/example');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header',
 		);

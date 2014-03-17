@@ -126,7 +126,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		//The Template
-		$this->template->load('block/cart/cart');
+		$this->view->load('block/cart/cart');
 
 		//Render
 		$this->render();

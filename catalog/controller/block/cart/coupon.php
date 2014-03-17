@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 {
 	public function index($settings)
 	{
-		$this->template->load('block/cart/coupon');
+		$this->view->load('block/cart/coupon');
 
 		$ajax = isset($settings['ajax']) ? $settings['ajax'] : false;
 

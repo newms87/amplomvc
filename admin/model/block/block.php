@@ -17,7 +17,7 @@ class Admin_Model_Block_Block extends Model
 
 		//Admin Controller File
 		$controller_template = $dir_templates . 'admin_controller.php';
-		$controller_file     = SITE_DIR . 'admin/controller/block/' . $data['route'] . '.php';
+		$controller_file     = DIR_SITE . 'admin/controller/block/' . $data['route'] . '.php';
 
 		$insertables = array(
 			'route'          => $data['route'],
@@ -48,7 +48,7 @@ class Admin_Model_Block_Block extends Model
 
 		//Profile Template File
 		$profiles_template = $dir_templates . 'profile.tpl';
-		$profiles_file     = DIR_THEME . 'default/template/block/' . $data['route'] . '_profile.tpl';
+		$profiles_file     = DIR_THEMES . 'default/template/block/' . $data['route'] . '_profile.tpl';
 
 		_is_writable(dirname($profiles_file));
 
@@ -56,7 +56,7 @@ class Admin_Model_Block_Block extends Model
 
 		//Settings Template File
 		$settings_template = $dir_templates . 'settings.tpl';
-		$settings_file     = DIR_THEME . 'default/template/block/' . $data['route'] . '_settings.tpl';
+		$settings_file     = DIR_THEMES . 'default/template/block/' . $data['route'] . '_settings.tpl';
 
 		_is_writable(dirname($settings_file));
 
@@ -69,7 +69,7 @@ class Admin_Model_Block_Block extends Model
 
 		//Front Controller File
 		$controller_template = $dir_templates . 'front_controller.php';
-		$controller_file     = SITE_DIR . 'catalog/controller/block/' . $data['route'] . '.php';
+		$controller_file     = DIR_SITE . 'catalog/controller/block/' . $data['route'] . '.php';
 
 		$content = file_get_contents($controller_template);
 
@@ -89,7 +89,7 @@ class Admin_Model_Block_Block extends Model
 			$front_template = $dir_templates . 'front_template.tpl';
 
 			foreach ($data['themes'] as $theme) {
-				$template_file = SITE_DIR . 'catalog/view/theme/' . $theme . '/template/block/' . $data['route'] . '.tpl';
+				$template_file = DIR_SITE . 'catalog/view/theme/' . $theme . '/template/block/' . $data['route'] . '.tpl';
 
 				_is_writable(dirname($template_file));
 
@@ -134,23 +134,23 @@ class Admin_Model_Block_Block extends Model
 	public function deleteBlock($path)
 	{
 		$files = array(
-			SITE_DIR . 'catalog/controller/block/' . $path . '.php',
-			DIR_THEME . 'default/template/block/' . $path . '_settings.tpl',
-			DIR_THEME . 'default/template/block/' . $path . '_profile.tpl',
-			SITE_DIR . 'admin/controller/block/' . $path . '.php',
+			DIR_SITE . 'catalog/controller/block/' . $path . '.php',
+			DIR_THEMES . 'default/template/block/' . $path . '_settings.tpl',
+			DIR_THEMES . 'default/template/block/' . $path . '_profile.tpl',
+			DIR_SITE . 'admin/controller/block/' . $path . '.php',
 		);
 
 		$languages = $this->language->getLanguages();
 
 		foreach ($languages as $language) {
-			$files[] = SITE_DIR . 'admin/language/' . $language['directory'] . '/block/' . $path . '.php';
-			$files[] = SITE_DIR . 'catalog/language/' . $language['directory'] . '/block/' . $path . '.php';
+			$files[] = DIR_SITE . 'admin/language/' . $language['directory'] . '/block/' . $path . '.php';
+			$files[] = DIR_SITE . 'catalog/language/' . $language['directory'] . '/block/' . $path . '.php';
 		}
 
 		$themes = $this->theme->getThemes();
 
 		foreach ($themes as $theme) {
-			$files[] = SITE_DIR . 'catalog/view/theme/' . $theme['name'] . '/template/block/' . $path . '.tpl';
+			$files[] = DIR_SITE . 'catalog/view/theme/' . $theme['name'] . '/template/block/' . $path . '.tpl';
 		}
 
 		foreach ($files as $file) {
@@ -181,14 +181,14 @@ class Admin_Model_Block_Block extends Model
 
 	public function getBlockName($path)
 	{
-		$directives = $this->tool->getFileCommentDirectives(SITE_DIR . 'admin/controller/block/' . $path . '.php');
+		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'admin/controller/block/' . $path . '.php');
 
 		return !empty($directives['name']) ? $directives['name'] : $path;
 	}
 
 	public function isBlock($path)
 	{
-		return is_file(SITE_DIR . 'admin/controller/block/' . $path . '.php');
+		return is_file(DIR_SITE . 'admin/controller/block/' . $path . '.php');
 	}
 
 
@@ -233,7 +233,7 @@ class Admin_Model_Block_Block extends Model
 
 	public function getBlocks($filter = array(), $total = false)
 	{
-		$block_files = glob(SITE_DIR . 'admin/controller/block/*/*.php');
+		$block_files = glob(DIR_SITE . 'admin/controller/block/*/*.php');
 
 		$this->cleanDb($block_files);
 

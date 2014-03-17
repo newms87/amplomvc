@@ -163,7 +163,7 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function getFrontTemplates()
 	{
-		$front_templates = $this->template->getTemplatesFrom('product', false, _l("Default Template"));
+		$front_templates = $this->theme->getTemplatesFrom('product', false, _l("Default Template"));
 
 		foreach ($front_templates as $theme => &$templates) {
 			if ($theme !== 'default') {
@@ -177,7 +177,7 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function getAdminTemplates()
 	{
-		$admin_templates = $this->template->getTemplatesFrom('catalog/product_class', true, _l("Default Template"));
+		$admin_templates = $this->theme->getTemplatesFrom('catalog/product_class', true, _l("Default Template"));
 
 		foreach ($admin_templates as $theme => &$templates) {
 			if ($theme !== 'default') {

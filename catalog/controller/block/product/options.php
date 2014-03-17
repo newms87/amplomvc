@@ -17,7 +17,7 @@ class Catalog_Controller_Block_Product_Options extends Controller
 		}
 
 		//Template and Language
-		$this->template->load('block/product/options');
+		$this->view->load('block/product/options');
 
 		$image_width        = $this->config->get('config_image_product_option_width');
 		$image_height       = $this->config->get('config_image_product_option_height');

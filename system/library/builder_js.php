@@ -70,9 +70,9 @@ switch ($js) {
 		<? if (!isset($js_loaded_files['image_manager'])) { ?>
 		<script type="text/javascript">
 			var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
-			var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
+			var no_image = "<?= URL_THEME_IMAGE . "no_image.png"; ?>"
 		</script>
-		<script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
+		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/image_manager.js'; ?>"></script>
 	<? } ?>
 		<? break;
 
@@ -98,7 +98,7 @@ switch ($js) {
 	case 'ckeditor':
 		?>
 		<? if (!isset($js_loaded_files['ckeditor'])) { ?>
-		<script type="text/javascript" src="<?= HTTP_JS . 'ckeditor/ckeditor.js'; ?>"></script>
+		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/ckeditor/ckeditor.js'; ?>"></script>
 		<script type="text/javascript">
 			var ckedit_index = 0;
 
@@ -109,12 +109,12 @@ switch ($js) {
 					}
 
 					CKEDITOR.replace($(e).attr('id'), {
-						filebrowserBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
-						filebrowserImageBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
-						filebrowserFlashBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
-						filebrowserUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
-						filebrowserImageUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
-						filebrowserFlashUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>"
+						filebrowserBrowseUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>",
+						filebrowserImageBrowseUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>",
+						filebrowserFlashBrowseUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>",
+						filebrowserUploadUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>",
+						filebrowserImageUploadUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>",
+						filebrowserFlashUploadUrl: "<?= URL_AJAX . 'common/filemanager/ckeditor'; ?>"
 					});
 				});
 			}
@@ -152,7 +152,7 @@ switch ($js) {
 				<? foreach ($languages as $language) { ?>
 					<div class="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>"
 						title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
-						<img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>"/>
+						<img alt="<?= $language['name']; ?>" src="<?= URL_THEME_IMAGE . "flags/$language[image]"; ?>"/>
 					</div>
 				<? } ?>
 			</div>

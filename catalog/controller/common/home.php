@@ -11,14 +11,14 @@ class Catalog_Controller_Common_Home extends Controller
 		$this->data['page_title'] = $this->config->get('config_title');
 
 		//The Template
-		$this->template->load('common/home');
+		$this->view->load('common/home');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

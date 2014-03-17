@@ -1,10 +1,10 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'log.png'; ?>" alt=""/> <?= _l("%s Log", $log_name); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'log.png'; ?>" alt=""/> <?= _l("%s Log", $log_name); ?></h1>
 
 			<div class="change_log right">
 				<? foreach ($data_log_files as $file) { ?>
@@ -98,4 +98,4 @@
 		});
 	}
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

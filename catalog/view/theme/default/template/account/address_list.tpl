@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<h1><?= _l("Address Book"); ?></h1>
 
@@ -24,6 +24,6 @@
 			<div class="right"><a href="<?= $insert; ?>" class="button"><?= _l("New Address"); ?></a></div>
 		</div>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -142,7 +142,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 
 		//The Template
-		$this->template->load('extension/shipping_list');
+		$this->view->load('extension/shipping_list');
 
 		//Dependencies
 		$this->children = array(
@@ -233,7 +233,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
 		//The Template
-		$this->template->load('extension/shipping');
+		$this->view->load('extension/shipping');
 
 		//Dependencies
 		$this->children = array(
@@ -288,7 +288,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
 		//Template
-		$this->template->load('extension/edit');
+		$this->view->load('extension/edit');
 
 		//Dependencies
 		$this->children = array(

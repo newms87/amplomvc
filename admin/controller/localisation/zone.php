@@ -99,7 +99,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 	private function getList()
 	{
-		$this->template->load('localisation/zone_list');
+		$this->view->load('localisation/zone_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -227,7 +227,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('localisation/zone_form');
+		$this->view->load('localisation/zone_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

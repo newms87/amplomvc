@@ -3,7 +3,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/customer_order');
+		$this->view->load('report/customer_order');
 
 		$this->document->setTitle(_l("Customer Orders Report"));
 

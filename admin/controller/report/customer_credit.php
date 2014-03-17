@@ -3,7 +3,7 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/customer_credit');
+		$this->view->load('report/customer_credit');
 
 		$this->document->setTitle(_l("Customer Credit Report"));
 

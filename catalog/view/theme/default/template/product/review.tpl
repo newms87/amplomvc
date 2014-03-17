@@ -1,7 +1,7 @@
 <? if ($reviews) { ?>
 	<? foreach ($reviews as $review) { ?>
 		<div class="section"><b><?= $review['author']; ?></b> | <img
-				src="<?= HTTP_THEME_IMAGE . "stars-$review[rating].png"; ?>" alt="<?= $review['reviews']; ?>"/><br/>
+				src="<?= URL_THEME_IMAGE . "stars-$review[rating].png"; ?>" alt="<?= $review['reviews']; ?>"/><br/>
 			<?= $review['date_added']; ?><br/>
 			<br/>
 			<?= $review['text']; ?></div>
@@ -83,7 +83,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-review').attr('disabled', true);
-			$('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please wait"); ?></div>');
+			$('#review-title').after('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please wait"); ?></div>');
 		}
 		,
 		complete: function () {

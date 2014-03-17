@@ -57,7 +57,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	private function getList()
 	{
-		$this->template->load('setting/db_rules_list');
+		$this->view->load('setting/db_rules_list');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("DB Rules"), $this->url->link('setting/db_rules'));
@@ -96,7 +96,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	public function getForm()
 	{
-		$this->template->load('setting/db_rules_form');
+		$this->view->load('setting/db_rules_form');
 
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id'] : null;
 

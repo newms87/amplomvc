@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit()" class="button"><?= _l("Save"); ?></a>
@@ -46,7 +46,7 @@
 															<span class="display_name"><?= $link['display_name']; ?></span>
 																<span class="show_link_edit" onclick="toggle_edit_link($(this))">
 																<span class="edit_text"><?= _l("Edit Link"); ?></span>
-																<img class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest('li').remove();"/></span>
+																<img class="remove_link" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest('li').remove();"/></span>
 														</div>
 														<div class="editable" style="display:none">
 															<input type="hidden" class="parent_id" name="links[<?= $nav_id; ?>][parent_id]" value="<?= $link['parent_id']; ?>"/>
@@ -98,7 +98,7 @@
 	</div>
 </div>
 </div>
-<?= $footer; ?>
+<?= $common_footer; ?>
 
 <script type="text/javascript">
 	$('#sorted_links').ac_template('link_list', {defaults: <?= json_encode($links['__ac_template__']); ?>});

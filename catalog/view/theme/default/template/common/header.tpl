@@ -39,13 +39,13 @@
 		</script>
 
 		<!--[if IE 9]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie9.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie9.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie8.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie8.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 7]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "/ie7.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie7.css"; ?>" />
 		<![endif]-->
 
 		<? if ($google_analytics) { ?>
@@ -78,8 +78,8 @@
 	</head>
 	<body class="<?= $body_class; ?>">
 		<? if (!empty($admin_bar)) { ?>
-			<div id="admin_bar">
-				<a href="<?= $admin_link; ?>" target="_blank" class="admin_link"><?= _l("Admin Panel"); ?></a>
+			<div id="admin-bar">
+				<a href="<?= $admin_link; ?>" target="_blank" class="admin-link"><?= _l("Admin Panel"); ?></a>
 
 				<div class="clock">
 					<?= $clock_time; ?>
@@ -160,8 +160,8 @@
 					<?= $this->builder->displayMessages($messages); ?>
 
 					<script type="text/javascript">
-						$('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);
-						function top_menu_hoverin() {
+						$('#links_primary .top-menu > li').hover(top-menu_hoverin, top-menu_hoverout);
+						function top-menu_hoverin() {
 							$(this).addClass('hover');
 
 							if ($(this).find('ul').children().length) {
@@ -169,9 +169,9 @@
 							}
 						}
 
-						function top_menu_hoverout() {
+						function top-menu_hoverout() {
 							$(this).removeClass('hover').find('.submenu_arrow').remove();
 						}
 					</script>
 
-					<?= $above_content; ?>
+					<?= $above; ?>

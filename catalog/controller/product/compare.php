@@ -3,7 +3,7 @@ class Catalog_Controller_Product_Compare extends Controller
 {
 	public function index()
 	{
-		$this->template->load('product/compare');
+		$this->view->load('product/compare');
 
 		if (!isset($this->session->data['compare'])) {
 			$this->session->set('compare', array());
@@ -114,10 +114,10 @@ class Catalog_Controller_Product_Compare extends Controller
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

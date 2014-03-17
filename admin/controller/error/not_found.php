@@ -3,7 +3,7 @@ class Admin_Controller_Error_NotFound extends Controller
 {
 	public function index()
 	{
-		$this->template->load('error/not_found');
+		$this->view->load('error/not_found');
 
 		$this->document->setTitle(_l("Page Not Found!"));
 

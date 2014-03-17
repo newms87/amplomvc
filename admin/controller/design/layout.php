@@ -83,7 +83,7 @@ class Admin_Controller_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//The Template
-		$this->template->load('design/layout_list');
+		$this->view->load('design/layout_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -191,7 +191,7 @@ class Admin_Controller_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//The Template
-		$this->template->load('design/layout_form');
+		$this->view->load('design/layout_form');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

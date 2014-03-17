@@ -257,10 +257,10 @@ if ($filemanager == TRUE) {
 	$url_path = 'http://'.$_SERVER['HTTP_HOST'];
 } else if ($imagemanager == true) {
 	$path_to_use = '../../../image/data' . $relpath;
-	$url_path = HTTP_IMAGE . '/data' . $relpath;
+	$url_path = URL_IMAGE . '/data' . $relpath;
 } else {
 	$path_to_use = '../../../image/data' . $relpath;
-	$url_path = HTTP_IMAGE . '/data' . $relpath;
+	$url_path = URL_IMAGE . '/data' . $relpath;
 }
 
 $logger = new elFinderSimpleLogger('../files/temp/log.txt');

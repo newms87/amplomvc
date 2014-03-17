@@ -93,7 +93,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$this->document->setTitle(_l("Manufacturer"));
 
 		//The Template
-		$this->template->load('catalog/manufacturer_list');
+		$this->view->load('catalog/manufacturer_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -259,7 +259,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	{
 		$this->document->setTitle(_l("Manufacturer"));
 
-		$this->template->load('catalog/manufacturer_form');
+		$this->view->load('catalog/manufacturer_form');
 
 		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 

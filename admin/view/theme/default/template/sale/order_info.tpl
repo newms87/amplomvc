@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
 			<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= _l("Invoice"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
@@ -289,4 +289,4 @@
 	$('.vtabs a').tabs();
 </script>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

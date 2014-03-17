@@ -21,7 +21,7 @@ class Catalog_Controller_Information_Information extends Controller
 			$this->config->set('config_layout_id', $layout_id);
 		}
 
-		$this->template->load('information/information');
+		$this->view->load('information/information');
 
 		$this->document->setTitle($information_info['title']);
 
@@ -35,10 +35,10 @@ class Catalog_Controller_Information_Information extends Controller
 		$this->data['continue'] = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : $this->url->link('common/home');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -48,7 +48,7 @@ class Catalog_Controller_Information_Information extends Controller
 
 	public function info()
 	{
-		$this->template->load('information/information_only');
+		$this->view->load('information/information_only');
 
 		$information_id = isset($_GET['information_id']) ? $_GET['information_id'] : 0;
 
@@ -65,7 +65,7 @@ class Catalog_Controller_Information_Information extends Controller
 
 	public function shipping_return_policy()
 	{
-		$this->template->load('information/shipping_return_policy');
+		$this->view->load('information/shipping_return_policy');
 
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 

@@ -7,15 +7,15 @@ if (!defined("AMPLOCART_INSTALL")) {
 
 $root = str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/'));
 if (!is_file($root . 'ac_config.php')) {
-	define("SITE_DIR", $root);
+	define("DIR_SITE", $root);
 }
 else {
 	require_once($root . 'ac_config.php');
 }
 
-define("DIR_DATABASE", SITE_DIR . 'system/database/');
+define("DIR_DATABASE", DIR_SITE . 'system/database/');
 
-require_once(SITE_DIR . 'system/functions.php');
+require_once(DIR_SITE . 'system/functions.php');
 
 $template    = !empty($_GET['page']) ? $_GET['page'] : 'db';
 $error_msg   = '';
@@ -100,9 +100,9 @@ function setup_db()
 {
 	define("DB_PREFIX", $_POST['db_prefix']);
 
-	require_once(SITE_DIR . 'system/engine/model.php');
-	require_once(SITE_DIR . "system/engine/library.php");
-	require_once(SITE_DIR . "system/database/db.php");
+	require_once(DIR_SITE . 'system/engine/model.php');
+	require_once(DIR_SITE . "system/engine/library.php");
+	require_once(DIR_SITE . "system/database/db.php");
 
 	$db = new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
@@ -114,7 +114,7 @@ function setup_db()
 
 	$db_prefix = DB_PREFIX;
 
-	$db_sql = SITE_DIR . 'system/install/db.sql';
+	$db_sql = DIR_SITE . 'system/install/db.sql';
 
 	$contents = file_get_contents($db_sql);
 
@@ -124,8 +124,8 @@ function setup_db()
 		return $db->getError();
 	}
 
-	$config_template = SITE_DIR . 'system/install/config_template.php';
-	$ac_config       = SITE_DIR . 'ac_config.php';
+	$config_template = DIR_SITE . 'system/install/config_template.php';
+	$ac_config       = DIR_SITE . 'ac_config.php';
 
 	$contents = file_get_contents($config_template);
 
@@ -141,11 +141,10 @@ function setup_db()
 		$uri = $_SERVER['REQUEST_URI'];
 	}
 
-	$url .= rtrim($uri, '/') . '/';
+	$url .= rtrim($uri, '/');
 
 	$patterns = array(
-		"/%site_url%/"       => 'http://' . $url,
-		'/%site_ssl%/'       => 'https://' . $url,
+		"/%domain%/"       => $url,
 		'/%db_type%/'        => $_POST['db_type'],
 		'/%db_name%/'        => $_POST['db_name'],
 		'/%db_host%/'        => $_POST['db_host'],
@@ -165,8 +164,8 @@ function setup_db()
 	file_put_contents($ac_config, $contents);
 
 	//Setup .htaccess file
-	$htaccess_template = SITE_DIR . 'system/install/template.htaccess';
-	$htaccess          = SITE_DIR . '.htaccess';
+	$htaccess_template = DIR_SITE . 'system/install/template.htaccess';
+	$htaccess          = DIR_SITE . '.htaccess';
 
 	$contents = file_get_contents($htaccess_template);
 
@@ -185,10 +184,10 @@ function setup_user()
 		return _l("The password and confirmation do not match!");
 	}
 
-	require_once(SITE_DIR . 'system/engine/model.php');
-	require_once(SITE_DIR . "system/engine/library.php");
-	require_once(SITE_DIR . "system/database/database.php");
-	require_once(SITE_DIR . "system/database/db.php");
+	require_once(DIR_SITE . 'system/engine/model.php');
+	require_once(DIR_SITE . "system/engine/library.php");
+	require_once(DIR_SITE . "system/database/database.php");
+	require_once(DIR_SITE . "system/database/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
@@ -205,7 +204,7 @@ function setup_user()
 		return $db->getError();
 	}
 
-	$ac_config = SITE_DIR . 'ac_config.php';
+	$ac_config = DIR_SITE . 'ac_config.php';
 
 	//remove user install configuration
 	$contents = file_get_contents($ac_config);
@@ -225,7 +224,7 @@ function setup_user()
 		'success' => array(_l("Admin User account setup successfully!")),
 	);
 
-	header("Location: " . SITE_URL . 'admin');
+	header("Location: " . URL_SITE . 'admin');
 }
 
 function getCostBenchmark()

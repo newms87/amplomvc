@@ -126,7 +126,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 
 		//The Template
-		$this->template->load('block/list');
+		$this->view->load('block/list');
 
 		//Dependencies
 		$this->children = array(
@@ -246,7 +246,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['cancel'] = $this->url->link('block/block');
 
 		//The Template
-		$this->template->load('block/block');
+		$this->view->load('block/block');
 
 		//Dependencies
 		$this->children = array(

@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= $head_title; ?></h1>
 	<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
@@ -49,7 +49,7 @@
 		</div>
 	<? } ?>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

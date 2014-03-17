@@ -17,7 +17,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 		$contact_form = $this->getForm();
 
 		//The Block template
-		$this->template->load('block/information/contact');
+		$this->view->load('block/information/contact');
 
 		$contact_info = html_entity_decode($settings['contact_info'], ENT_QUOTES, 'UTF-8');
 
@@ -33,7 +33,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 	private function getForm()
 	{
 		//Template and Language
-		$this->template->load('block/information/contact_form');
+		$this->view->load('block/information/contact_form');
 
 		//Captcha Image
 		$this->data['captcha_url'] = $this->url->link("block/information/contact/captcha");
@@ -63,7 +63,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 
 	public function success()
 	{
-		$this->template->load('block/information/contact_success');
+		$this->view->load('block/information/contact_success');
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->render();

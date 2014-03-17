@@ -1,7 +1,7 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div id="order_info" class="content">
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 
 	<h1><?= _l("Order Information"); ?></h1>
@@ -85,7 +85,7 @@
 							<div class="final_sale_small"><span class="final_sale"></span></div>
 						<? } else { ?>
 							<a href="<?= $product['return']; ?>">
-								<img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= _l("Return Products"); ?>" title="<?= _l("Return Products"); ?>"/>
+								<img src="<?= URL_THEME_IMAGE . 'return.png'; ?>" alt="<?= _l("Return Products"); ?>" title="<?= _l("Return Products"); ?>"/>
 							</a>
 						<? } ?>
 					</td>
@@ -163,7 +163,7 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

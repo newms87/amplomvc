@@ -274,7 +274,7 @@ ul {
 }
 
 /* Admin Bar */
-#admin_bar {
+#admin-bar {
 	width: 95%;
 	background: black;
 	height: 20px;
@@ -284,7 +284,7 @@ ul {
 	min-width: 600px;
 }
 
-#admin_bar .admin_link {
+#admin-bar .admin-link {
 	font-size: 14px;
 	font-weight: bold;
 	color: white;
@@ -293,17 +293,17 @@ ul {
 	background: rgba(255, 255, 255, .2);
 }
 
-#admin_bar .admin_link:hover {
+#admin-bar .admin-link:hover {
 	background: rgba(255, 255, 255, .5);
 }
 
-#admin_bar .clock {
+#admin-bar .clock {
 	float: right;
 	position: relative;
 	right: 15px;
 }
 
-#admin_bar .sim_time {
+#admin-bar .sim_time {
 	color: white;
 	font-size: 16px;
 	font-weight: bold;
@@ -315,19 +315,19 @@ ul {
 	margin-top: 5px;
 }
 
-#admin_bar .sim_time:hover {
+#admin-bar .sim_time:hover {
 	background: rgba(255, 255, 255, .6);
 }
 
-#admin_bar .sim_time.forward:after {
+#admin-bar .sim_time.forward:after {
 	content: "+";
 }
 
-#admin_bar .sim_time.reset:after {
+#admin-bar .sim_time.reset:after {
 	content: "=";
 }
 
-#admin_bar .sim_time.back:after {
+#admin-bar .sim_time.back:after {
 	content: "-";
 }
 
@@ -441,7 +441,7 @@ ul {
 	margin-right: 22px;
 }
 
-#links_account ul.link_list.top_menu {
+#links_account ul.link-list.top-menu {
 	text-align: right;
 	margin-top: 6px;
 	margin-right: 15px;
@@ -483,7 +483,7 @@ ul {
 	text-decoration: none;
 }
 
-#links_primary ul.child_menu {
+#links_primary ul.child-menu {
 	position: relative;
 	background: none;
 	box-shadow: none;
@@ -493,8 +493,8 @@ ul {
 	left: 0 !important;
 }
 
-#header #links_primary ul li.active > a.menu_link,
-#header #links_primary ul li.active_parent > a.menu_link {
+#header #links_primary ul li.active > a.menu-link,
+#header #links_primary ul li.active_parent > a.menu-link {
 	color: #888;
 }
 
@@ -533,12 +533,12 @@ ul {
 	margin-right: 0;
 }
 
-ul.link_list > li {
+ul.link-list > li {
 	position: relative;
 
 }
 
-.dropdown li ul.link_list {
+.dropdown li ul.link-list {
 	position: absolute;
 	top: 100%;
 	left: -9999px;
@@ -551,33 +551,33 @@ ul.link_list > li {
 	box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
 }
 
-.dropdown li ul.link_list li a {
+.dropdown li ul.link-list li a {
 	padding: 4px 20px;
 	border-radius: 15px;
 	cursor: pointer;
 	display: block;
 }
 
-.dropdown ul.link_list.top_menu > li:hover > a {
+.dropdown ul.link-list.top-menu > li:hover > a {
 	padding-bottom: 40px;
 }
 
-.dropdown li ul.link_list li a:hover {
+.dropdown li ul.link-list li a:hover {
 	background: rgba(100, 100, 100, .2);
 }
 
-.dropdown li:hover > ul.link_list, li.hover > ul.link_list {
+.dropdown li:hover > ul.link-list, li.hover > ul.link-list {
 	left: 0 !important;
 }
 
-.across ul.link_list {
+.across ul.link-list {
 	position: absolute;
 	margin: 0;
 	left: 0;
 	top: 0;
 }
 
-.across ul.top_menu {
+.across ul.top-menu {
 	position: relative;
 	display: inline-block;
 }
@@ -588,7 +588,7 @@ ul.link_list > li {
 
 }
 
-.across li ul.link_list {
+.across li ul.link-list {
 	left: -9999px;
 	opacity: 0;
 	white-space: nowrap;
@@ -597,7 +597,7 @@ ul.link_list > li {
 	transition: left 0s linear .8s, opacity .8s;
 }
 
-.across li:hover > ul.link_list {
+.across li:hover > ul.link-list {
 	left: 100%;
 	opacity: 1;
 	transition: opacity .3s;
@@ -625,20 +625,20 @@ ul.link_list > li {
 	padding-right: 15px;
 }
 
-#links_cart ul.link_list {
+#links_cart ul.link-list {
 	list-style: none;
 }
 
-#links_cart ul.link_list li {
+#links_cart ul.link-list li {
 	list-style: none;
 }
 
-#links_cart ul.top_menu > li {
+#links_cart ul.top-menu > li {
 	display: inline-block;
 	padding: 0 10px;
 }
 
-#links_cart ul.top_menu > li + li {
+#links_cart ul.top-menu > li + li {
 	border-left: 1px solid #DDD;
 }
 
@@ -653,17 +653,17 @@ ul.link_list > li {
 	font-size: 20px;
 }
 
-#links_category ul.link_list > li > a {
+#links_category ul.link-list > li > a {
 	background: rgba(230, 200, 145, .8);
 	border-radius: 10px;
 	padding: 5px 10px;
 }
 
-#links_category ul.link_list > li:hover > a {
+#links_category ul.link-list > li:hover > a {
 	background: rgba(215, 150, 90, 1);
 }
 
-#links_category ul.link_list > li.active > a {
+#links_category ul.link-list > li.active > a {
 	text-decoration: none;
 	font-size: 25px;
 	font-weight: bold;
@@ -2693,7 +2693,7 @@ table.form_single_column select {
 	text-decoration: none;
 }
 
-#links_footer ul.link_list.top_menu > li:hover > a {
+#links_footer ul.link-list.top-menu > li:hover > a {
 	padding-bottom: 0;
 }
 
@@ -3050,11 +3050,11 @@ form .set_default_address input[type="radio"] {
 	font-weight: normal;
 }
 
-#sidebar_menu_links .attribute_menu {
+#sidebar_menu-links .attribute_menu {
 	margin-top: 15px;
 }
 
-#sidebar_menu_links .attribute_menu .label {
+#sidebar_menu-links .attribute_menu .label {
 	padding: 3px 5px;
 	color: #F0F2F3;
 	background: #AAA;
@@ -3063,7 +3063,7 @@ form .set_default_address input[type="radio"] {
 	margin-bottom: 5px;
 }
 
-#sidebar_menu_links li a {
+#sidebar_menu-links li a {
 	display: block;
 	border-radius: 10px;
 	padding: 2px 10px;
@@ -3073,28 +3073,28 @@ form .set_default_address input[type="radio"] {
 	text-decoration: none;
 }
 
-#sidebar_menu_links ul.top_menu > li + li {
+#sidebar_menu-links ul.top-menu > li + li {
 	margin-top: 8px;
 }
 
-#sidebar_menu_links ul.top_menu li ul {
+#sidebar_menu-links ul.top-menu li ul {
 	margin-left: 10px;
 }
 
-#sidebar_menu_links ul.top_menu > li > a {
+#sidebar_menu-links ul.top-menu > li > a {
 
 }
 
-#sidebar_menu_links li.active > a {
+#sidebar_menu-links li.active > a {
 	background: #EEEEEE;
 }
 
-#sidebar_menu_links li a:hover {
+#sidebar_menu-links li a:hover {
 	background: #CCCCCC;
 
 }
 
-#sidebar_menu_links li ul.link_list {
+#sidebar_menu-links li ul.link-list {
 	position: relative;
 	top: 0;
 	left: 0;
@@ -3104,14 +3104,14 @@ form .set_default_address input[type="radio"] {
 	padding: 0;
 }
 
-#sidebar_menu_links .sidebar_additional {
+#sidebar_menu-links .sidebar_additional {
 	margin-top: 20px;
 }
 
 /* IE Sidebar */
-.IE8 #sidebar_menu_links .top_menu > li,
-.IE9 #sidebar_menu_links .top_menu > li,
-.IE10 #sidebar_menu_links .top_menu > li {
+.IE8 #sidebar_menu-links .top-menu > li,
+.IE9 #sidebar_menu-links .top-menu > li,
+.IE10 #sidebar_menu-links .top-menu > li {
 	position: relative;
 	left: -42px;
 	margin-left: 0;

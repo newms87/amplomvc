@@ -8,7 +8,7 @@ class Catalog_Controller_Extension_Payment_Cod extends Controller
 		$this->data['confirm'] = $this->url->link('extension/payment/cod/confirm', 'order_id=' . $this->order->getId());
 
 		//The Template
-		$this->template->load('extension/payment/cod');
+		$this->view->load('extension/payment/cod');
 
 		//Render
 		$this->render();

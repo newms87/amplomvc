@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 
 	public function review()
 	{
-		$this->template->load('product/review');
+		$this->view->load('product/review');
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {

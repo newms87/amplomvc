@@ -57,7 +57,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	private function getList()
 	{
-		$this->template->load('localisation/language_list');
+		$this->view->load('localisation/language_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -165,7 +165,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('localisation/language_form');
+		$this->view->load('localisation/language_form');
 
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
 

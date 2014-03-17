@@ -1,7 +1,7 @@
 <div id="sidebar_menu" class="box sidebar_box">
 	<div class="box_heading"><?= _l("Store Directory"); ?></div>
 	<div class="box_content">
-		<div id="sidebar_menu_links">
+		<div id="sidebar_menu-links">
 			<div class="sidebar_main">
 				<!--<div class="label"><?= $main_menu['label']; ?></div>-->
 				<div class="links"><?= $this->document->renderLinks($main_menu['menu']); ?></div>
@@ -16,7 +16,7 @@
 				<? foreach ($attribute_menu as $attr_menu) { ?>
 					<div class="attribute_menu">
 						<div class="label"><?= $attr_menu['label']; ?></div>
-						<div class="links"><?= $this->document->renderLinks($attr_menu['menu'], false); ?></div>
+						<div class="links"><?= $this->document->renderLinks($attr_menu['menu'], 'default', false); ?></div>
 					</div>
 				<? } ?>
 			<? } ?>

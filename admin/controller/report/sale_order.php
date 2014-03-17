@@ -3,7 +3,7 @@ class Admin_Controller_Report_SaleOrder extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/sale_order');
+		$this->view->load('report/sale_order');
 
 		$this->document->setTitle(_l("Sales Report"));
 

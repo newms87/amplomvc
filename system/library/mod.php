@@ -51,14 +51,14 @@ class Mod extends Library
 
 	public function getSourceDestination($source)
 	{
-		return str_replace(SITE_DIR, DIR_MOD_FILES, $source);
+		return str_replace(DIR_SITE, DIR_MOD_FILES, $source);
 	}
 
 	public function addFile($source, $mod_file, $destination = null, $directives = array())
 	{
 		if (!is_file($source)) {
-			if (is_file(SITE_DIR . $source)) {
-				$source = SITE_DIR . $source;
+			if (is_file(DIR_SITE . $source)) {
+				$source = DIR_SITE . $source;
 			} else {
 				$this->message->add('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
 				return false;
@@ -66,8 +66,8 @@ class Mod extends Library
 		}
 
 		if (!is_file($mod_file)) {
-			if (is_file(SITE_DIR . $mod_file)) {
-				$mod_file = SITE_DIR . $mod_file;
+			if (is_file(DIR_SITE . $mod_file)) {
+				$mod_file = DIR_SITE . $mod_file;
 			} else {
 				$this->message->add('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
 				return false;
@@ -148,9 +148,9 @@ class Mod extends Library
 		}
 
 		if (!empty($directives['originalsource'])) {
-			$source = SITE_DIR . trim($directives['source']);
+			$source = DIR_SITE . trim($directives['source']);
 		} elseif (!empty($directives['source'])) {
-			$source = SITE_DIR . trim($directives['source']);
+			$source = DIR_SITE . trim($directives['source']);
 
 			if (!is_file($source)) {
 				$this->error[] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
@@ -162,13 +162,13 @@ class Mod extends Library
 		}
 
 		if (!empty($directives['destination'])) {
-			$destination = SITE_DIR . trim($directives['destination']);
+			$destination = DIR_SITE . trim($directives['destination']);
 		} else {
 			$this->error[] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
 			return false;
 		}
 
-		$set_file_root = function (&$file) { $file = SITE_DIR . trim($file); };
+		$set_file_root = function (&$file) { $file = DIR_SITE . trim($file); };
 		$file_filter   = function ($file) { return trim($file); };
 
 		if (!empty($directives['require'])) {
@@ -277,7 +277,7 @@ class Mod extends Library
 		$directives = $this->tool->getFileCommentDirectives($mod_file);
 
 		if (!$source) {
-			$source = preg_replace("/(.*?)file_mods\\//", SITE_DIR, $mod_file);
+			$source = preg_replace("/(.*?)file_mods\\//", DIR_SITE, $mod_file);
 		}
 
 		if (!is_file($source) || $source == $mod_file) {
@@ -287,7 +287,7 @@ class Mod extends Library
 		}
 
 		if (!$destination) {
-			$destination = str_replace(SITE_DIR, DIR_MOD_FILES, $source);
+			$destination = str_replace(DIR_SITE, DIR_MOD_FILES, $source);
 		}
 
 		if (!empty($directives['algorithm'])) {
@@ -378,7 +378,7 @@ class Mod extends Library
 
 		//this makes the filepaths safe for displaying
 		$roots  = array(
-			SITE_DIR,
+			DIR_SITE,
 			DIR_MOD_FILES
 		);
 		$source = str_replace($roots, array(
@@ -417,7 +417,7 @@ class Mod extends Library
 					$block = $this->findBlock($code_block, $original, $index);
 
 					if ($block === false) {
-						$this->setError(SITE_DIR . $mod_file, $line, $mod, "The code block starting at this line was not found in the source file: $source.!");
+						$this->setError(DIR_SITE . $mod_file, $line, $mod, "The code block starting at this line was not found in the source file: $source.!");
 						return false;
 					} else {
 						list($block_start, $block_end) = $block;
@@ -681,7 +681,7 @@ class Mod extends Library
 				$this->message->add('notify', "The Mod File Registry was out of date and has been updated");
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
-				$plugin_url = HTTP_ADMIN . 'extension/plugin';
+				$plugin_url = $this->url->admin('extension/plugin');
 				$this->message->add('warning', $this->fetchErrors());
 				$this->message->add('warning', 'Please visit the <a href="' . $plugin_url . '">Plugins</a> and resolve the issue.');
 			}

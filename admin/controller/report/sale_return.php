@@ -3,7 +3,7 @@ class Admin_Controller_Report_SaleReturn extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/sale_return');
+		$this->view->load('report/sale_return');
 
 		$this->document->setTitle(_l("Returns Report"));
 

@@ -8,7 +8,7 @@ class Catalog_Controller_Mail_Voucher extends Controller
 			return;
 		}
 
-		$this->template->load('mail/voucher');
+		$this->view->load('mail/voucher');
 
 		if (!empty($voucher['order_id'])) {
 			$order = $this->order->get($voucher['order_id']);

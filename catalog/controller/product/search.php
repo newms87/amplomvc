@@ -3,7 +3,7 @@ class Catalog_Controller_Product_Search extends Controller
 {
 	public function index()
 	{
-		$this->template->load('product/search');
+		$this->view->load('product/search');
 
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
@@ -407,10 +407,10 @@ class Catalog_Controller_Product_Search extends Controller
 		$this->data['limit'] = $limit;
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

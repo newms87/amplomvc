@@ -3,7 +3,7 @@ class Catalog_Controller_Account_Return extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/return_list');
+		$this->view->load('account/return_list');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/return'));
@@ -45,10 +45,10 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['continue'] = $this->url->link('account/account');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -82,7 +82,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 
 		if ($return_info) {
-			$this->template->load('account/return_info');
+			$this->view->load('account/return_info');
 
 			$return_info['comment']       = nl2br($return_info['comment']);
 			$return_info['opened']        = $return_info['opened'] ? _l("Yes") : _l("No");
@@ -107,27 +107,27 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->data['continue'] = $this->url->link('account/return', $url_query);
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
+				'area/left',
+				'area/right',
+				'area/top',
+				'area/bottom',
 				'common/footer',
 				'common/header'
 			);
 
 			$this->response->setOutput($this->render());
 		} else {
-			$this->template->load('error/not_found');
+			$this->view->load('error/not_found');
 
 			$this->data['page_title'] = _l("Return Information");
 
 			$this->data['continue'] = $this->url->link('account/return');
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
+				'area/left',
+				'area/right',
+				'area/top',
+				'area/bottom',
 				'common/footer',
 				'common/header'
 			);
@@ -307,14 +307,14 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['url_captcha_image'] = $this->url->link('account/return/captcha');
 
 		//The Template
-		$this->template->load('account/return_form');
+		$this->view->load('account/return_form');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -357,7 +357,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 	public function success()
 	{
-		$this->template->load('account/return_success');
+		$this->view->load('account/return_success');
 		$this->document->setTitle(_l("Return Success"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -378,10 +378,10 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

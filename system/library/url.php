@@ -178,7 +178,7 @@ class Url extends Library
 		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB).
 		//-1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
 		if ((int)$store_id === -1) {
-			return SITE_URL . 'admin/';
+			return URL_SITE . 'admin/';
 		}
 
 		$link = $this->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
@@ -193,7 +193,7 @@ class Url extends Library
 
 	public function site($uri = '', $query = '', $base_site = false)
 	{
-		return ($base_site ? SITE_URL : $this->url) . $uri . (!empty($query) ? "?$query" : '');
+		return ($base_site ? URL_SITE : $this->url) . $uri . (!empty($query) ? "?$query" : '');
 	}
 
 	public function urlencode_link($uri = '', $query = '')

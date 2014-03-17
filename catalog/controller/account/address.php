@@ -109,7 +109,7 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//The Template
-		$this->template->load('account/address_list');
+		$this->view->load('account/address_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -134,10 +134,10 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -152,7 +152,7 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//The Template
-		$this->template->load('account/address_form');
+		$this->view->load('account/address_form');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -210,10 +210,10 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

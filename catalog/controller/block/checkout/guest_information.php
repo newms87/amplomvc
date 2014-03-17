@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/checkout/guest_information');
+		$this->view->load('block/checkout/guest_information');
 
 		//Extra Information saved about the guest (name, email, etc..)
 		$guest_info = $this->cart->loadGuestInfo();
@@ -50,7 +50,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 
 	public function validate()
 	{
-		$this->template->load('block/checkout/guest_information');
+		$this->view->load('block/checkout/guest_information');
 
 		$json = array();
 

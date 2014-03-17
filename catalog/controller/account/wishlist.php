@@ -3,7 +3,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/wishlist');
+		$this->view->load('account/wishlist');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/wishlist'));
@@ -92,10 +92,10 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->data['continue'] = $this->url->link('account/account');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

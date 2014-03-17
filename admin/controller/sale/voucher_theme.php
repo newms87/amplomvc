@@ -48,7 +48,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$this->document->setTitle(_l("Voucher Themes"));
 
 		//The Template
-		$this->template->load('sale/voucher_theme_list');
+		$this->view->load('sale/voucher_theme_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -159,7 +159,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$this->document->setTitle(_l("Voucher Themes"));
 
 		//The Template
-		$this->template->load('sale/voucher_theme_form');
+		$this->view->load('sale/voucher_theme_form');
 
 		//Insert or Update
 		$voucher_theme_id = isset($_GET['voucher_theme_id']) ? (int)$_GET['voucher_theme_id'] : 0;

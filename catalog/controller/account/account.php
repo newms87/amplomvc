@@ -40,14 +40,14 @@ class Catalog_Controller_Account_Account extends Controller
 		$this->data['back']         = $this->url->link('common/home');
 
 		//The Template
-		$this->template->load('account/account');
+		$this->view->load('account/account');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

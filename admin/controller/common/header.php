@@ -3,29 +3,36 @@ class Admin_Controller_Common_Header extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/header');
+		$this->view->load('common/header');
 
 		$this->data['title'] = $this->document->getTitle();
 
-		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		$this->data['base'] = URL_SITE;
 
 		$this->data['theme'] = $this->config->get('config_theme');
 
 		//Add Styles
-		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
+		if (is_file(DIR_THEME . 'css/style.less')) {
+			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'default.style');
+		} else {
+			$style = URL_THEME . 'css/style.css';
+		}
+
+		$this->document->addStyle($style);
+
+		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 
 		//Add jQuery from the CDN or locally
 		if ($this->config->get('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
-			$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
-			$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(HTTP_JS . 'common.js', 53);
-		$this->document->addScript(HTTP_THEME_JS . 'common.js', 54);
+		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
+		$this->document->addScript(URL_THEME_JS . 'common.js', 54);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_admin_thumb_width'));
@@ -54,7 +61,7 @@ class Admin_Controller_Common_Header extends Controller
 
 			$this->data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
 
-			$this->data['store'] = SITE_URL;
+			$this->data['store'] = URL_SITE;
 
 			//Add Store Settings
 			$stores = $this->Model_Setting_Store->getStores();

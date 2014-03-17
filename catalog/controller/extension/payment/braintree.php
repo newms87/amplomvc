@@ -24,7 +24,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->data['user_logged'] = $this->customer->isLogged();
 
 		//The Template
-		$this->template->load('extension/payment/braintree');
+		$this->view->load('extension/payment/braintree');
 
 		//Render
 		$this->render();
@@ -50,7 +50,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->data['register_card'] = $this->url->link('extension/payment/braintree/register_card');
 
 		//The Template
-		$this->template->load('extension/payment/braintree_card_select');
+		$this->view->load('extension/payment/braintree_card_select');
 
 		//Render
 		return $this->render();
@@ -82,7 +82,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->data['submit'] = $this->url->link('extension/payment/braintree/add_card');
 
 		//The Template
-		$this->template->load('extension/payment/braintree_register_card');
+		$this->view->load('extension/payment/braintree_register_card');
 
 		//Dependencies
 		$this->children = array(

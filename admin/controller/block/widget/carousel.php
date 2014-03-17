@@ -92,7 +92,7 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 		);
 
 		//The Template
-		$this->template->load('block/widget/carousel_profile_settings');
+		$this->view->load('block/widget/carousel_profile_settings');
 
 		//Render
 		$this->render();

@@ -345,11 +345,11 @@ if (!function_exists('array_walk_children')) {
 			$array_tree = array($array_tree);
 		}
 
-		foreach ($array_tree as &$node) {
+		foreach ($array_tree as $key => &$node) {
 			$args = func_get_args();
 			array_splice($args, 0, 3);
 
-			call_user_func_array($callback, array_merge(array(&$node), $args));
+			call_user_func_array($callback, array_merge(array(&$node, $key), $args));
 
 			if (!empty($node[$children])) {
 				call_user_func_array('array_walk_children', array_merge(array(
@@ -460,5 +460,5 @@ function console($msg)
 
 
 if (!defined('PASSWORD_DEFAULT')) {
-	require_once(SITE_DIR . 'system/resources/password_compat.php');
+	require_once(DIR_SITE . 'system/resources/password_compat.php');
 }

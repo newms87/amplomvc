@@ -3,7 +3,7 @@ class Catalog_Controller_Product_Category extends Controller
 {
 	public function index()
 	{
-		$this->template->load('product/category');
+		$this->view->load('product/category');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("All Categories"), $this->url->link('product/category'));
@@ -135,10 +135,10 @@ class Catalog_Controller_Product_Category extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

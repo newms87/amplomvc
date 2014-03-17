@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Credit Report"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Credit Report"); ?></h1>
 		</div>
 		<div class="section">
 			<table class="list">
@@ -42,4 +42,4 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?>
+<?= $common_footer; ?>

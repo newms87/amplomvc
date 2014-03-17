@@ -194,7 +194,7 @@ class Form extends Library
 
 	public function set_template($file)
 	{
-		$this->template_file = $this->template->findFile($file);
+		$this->template_file = $this->theme->findFile($file);
 
 		if (!$this->template_file) {
 			$this->error = "Could not load form template $file!";

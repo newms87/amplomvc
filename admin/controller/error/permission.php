@@ -3,7 +3,7 @@ class Admin_Controller_Error_Permission extends Controller
 {
 	public function index()
 	{
-		$this->template->load('error/permission');
+		$this->view->load('error/permission');
 
 		$this->document->setTitle(_l("Permission Denied!"));
 

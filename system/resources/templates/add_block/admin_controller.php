@@ -5,7 +5,7 @@ __settings_start__
 	public function settings(&$settings)
 	{
 		//Template-(Lanuage preloaded)
-		$this->template->load('block/__route___settings');
+		$this->view->load('block/__route___settings');
 
 		//This is an example (feel free to remove this if you dont need it!)
 		$defaults = array(
@@ -27,7 +27,7 @@ __settings_end__
 __profile_start__
 	public function profile(&$profiles)
 	{
-		$this->template->load('block/__route___profile');
+		$this->view->load('block/__route___profile');
 
 		//Add your code here
 

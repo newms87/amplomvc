@@ -69,7 +69,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setSubject($subject);
 
 		//Text Email
-		$this->template->load('mail/order_text');
+		$this->view->load('mail/order_text');
 		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 
 		//HTML email
@@ -77,14 +77,14 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->data['shipping_address_html'] = $this->data['shipping_address'];
 		$this->data['payment_address_html']  = $this->data['payment_address'];
 
-		$this->template->load('mail/order_html');
+		$this->view->load('mail/order_html');
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();
 
 		// Admin Alert Mail
 		if ($this->config->get('config_alert_mail')) {
-			$this->template->load('mail/order_text_admin');
+			$this->view->load('mail/order_text_admin');
 
 			$to = $this->config->get('config_email');
 

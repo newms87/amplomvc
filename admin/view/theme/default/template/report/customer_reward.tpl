@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Reward Points Report"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Customer Reward Points Report"); ?></h1>
 		</div>
 		<div class="section">
 			<table class="form">
@@ -60,7 +60,7 @@
 <script type="text/javascript"><
 	!--
 		function filter() {
-			url = "<?= HTTP_ADMIN . "index.php?route=report/customer_reward"; ?>";
+			url = "<?= URL_SITE . "admin/index.php?route=report/customer_reward"; ?>";
 
 			var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 
@@ -85,4 +85,4 @@
 			$('#date-end').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

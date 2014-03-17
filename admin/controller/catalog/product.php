@@ -141,7 +141,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->document->setTitle(_l("Products"));
 
 		//The Template
-		$this->template->load('catalog/product_list');
+		$this->view->load('catalog/product_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -545,7 +545,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_categories']        = $this->Model_Catalog_Category->getCategoriesWithParents();
 		$this->data['data_stores']            = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts']           = array('' => '') + $this->Model_Design_Layout->getLayouts();
-		$this->data['data_templates']         = $this->template->getTemplatesFrom('product', false, '');
+		$this->data['data_templates']         = $this->theme->getTemplatesFrom('product', false, '');
 		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
 
@@ -692,14 +692,14 @@ class Admin_Controller_Catalog_Product extends Controller
 		//The Template
 		$template = $this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']);
 
-		if (!$this->template->findFile($template)) {
+		if (!$this->theme->findFile($template)) {
 			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
 			$this->message->add('warning', _l("The %s Class template file %s could not be found!", $product_class['name'], $template));
 
 			$template = 'catalog/product_form';
 		}
 
-		$this->template->load($template);
+		$this->view->load($template);
 
 		//Render
 		$this->response->setOutput($this->render());

@@ -73,7 +73,7 @@
 									<td class="model"><?= $product['model']; ?></td>
 									<td class="quantity">
 										<input type="text" name="quantity[<?= $cart_product['key']; ?>]" value="<?= $cart_product['quantity']; ?>" size="1"/>
-										<input class="update" type="image" name="cart_update" value="1" onclick="return cart_update($(this));" src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
+										<input class="update" type="image" name="cart_update" value="1" onclick="return cart_update($(this));" src="<?= URL_THEME_IMAGE . 'update.png'; ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
 										<label><?= _l("Update"); ?></label>
 									</td>
 

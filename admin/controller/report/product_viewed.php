@@ -3,7 +3,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/product_viewed');
+		$this->view->load('report/product_viewed');
 
 		$this->document->setTitle(_l("Products Viewed Report"));
 

@@ -20,7 +20,7 @@ class Draw extends Library
 	{
 		parent::__construct($registry);
 
-		$this->font_path = $this->config->isAdmin() ? DIR_APPLICATION . "view/fonts/" : DIR_THEME . $this->config->get('config_theme') . '/fonts/';
+		$this->font_path = DIR_THEME . "fonts/";
 
 		$this->set_canvas('default');
 	}
@@ -133,7 +133,7 @@ class Draw extends Library
 	public function render($file = null)
 	{
 		if (!$file) {
-			$file = DIR_GENERATED_IMAGE . 'image_' . uniqid() . '.png';
+			$file = DIR_IMAGE . 'generated/image_' . uniqid() . '.png';
 		}
 
 		if (!is_dir(dirname($file))) {
@@ -143,7 +143,7 @@ class Draw extends Library
 		}
 
 		if (imagepng($this->canvas, $file)) {
-			$this->image_url = str_replace(SITE_DIR, SITE_URL, $file);
+			$this->image_url = str_replace(DIR_SITE, URL_SITE, $file);
 
 			return $file;
 		} else {

@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<h1><?= _l("Account Downloads"); ?></h1>
 		<? foreach ($downloads as $download) { ?>
@@ -15,7 +15,7 @@
 					<div><b><?= _l("Remaining:"); ?></b> <?= $download['remaining']; ?></div>
 					<div class="download-info">
 						<? if ($download['remaining'] > 0) { ?>
-							<a href="<?= $download['href']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>"
+							<a href="<?= $download['href']; ?>"><img src="<?= URL_THEME_IMAGE . 'download.png'; ?>"
 									alt="<?= _l("Download"); ?>"
 									title="<?= _l("Download"); ?>"/></a>
 						<? } ?>
@@ -28,7 +28,7 @@
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

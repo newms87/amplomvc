@@ -5,7 +5,7 @@ abstract class Controller
 	protected $registry, $load;
 	protected $children = array();
 	public $output;
-	public $template;
+	public $view;
 	public $data = array();
 	public $error = array();
 
@@ -14,7 +14,7 @@ abstract class Controller
 		$this->registry = $registry;
 		$this->load = $registry;
 
-		$this->template = new Template($registry);
+		$this->view = new View($registry);
 	}
 
 	public function __get($key)
@@ -72,7 +72,7 @@ abstract class Controller
 		}
 	}
 
-	protected function renderController($child, $parameters = array())
+	protected function call($child, $parameters = array())
 	{
 		if (!is_array($parameters)) {
 			$parameters = array($parameters);
@@ -88,17 +88,20 @@ abstract class Controller
 		}
 	}
 
-	protected function render()
+	protected function render($template = null, $data = array())
 	{
+		$data += $this->data;
+
+		//TODO All validation should be done in Model! Remove this after removing all validation methods.
 		//Display Error Messages
-		$this->data['errors'] = array();
+		$data['errors'] = array();
 
 		if ($this->error) {
 			if (!$this->request->isAjax()) {
 				$this->message->add('warning', $this->error);
 			}
 
-			$this->data['errors'] = $this->error;
+			$data['errors'] = $this->error;
 
 			$this->error = array();
 		}
@@ -108,18 +111,16 @@ abstract class Controller
 			$this->breadcrumb->clear();
 
 			foreach ($this->children as $child) {
-				$this->data[basename($child)] = '';
+				$data[str_replace('/','_',$child)] = '';
 			}
 		} else {
 			//Render Dependencies
 			foreach ($this->children as $child) {
-				$this->data[basename($child)] = $this->renderController($child);
+				$data[str_replace('/','_',$child)] = $this->call($child);
 			}
 		}
 
-		$this->template->setData($this->data);
-
-		$this->output = $this->template->render();
+		$this->output = $this->view->render($template, $data);
 
 		return $this->output;
 	}

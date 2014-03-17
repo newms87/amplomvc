@@ -1,4 +1,4 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
@@ -6,7 +6,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= _l("Tax Rates"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'tax.png'; ?>" alt=""/> <?= _l("Tax Rates"); ?></h1>
 
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
@@ -81,4 +81,4 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?>
+<?= $common_footer; ?>

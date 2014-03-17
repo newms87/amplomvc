@@ -24,7 +24,7 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->document->setTitle(_l("Order Totals"));
 
 		//Template
-		$this->template->load('extension/total_list');
+		$this->view->load('extension/total_list');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Order Totals"), $this->url->link('extension/total'));
@@ -197,7 +197,7 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		//Template
-		$this->template->load('extension/total');
+		$this->view->load('extension/total');
 
 		//Dependencies
 		$this->children = array(
@@ -252,7 +252,7 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		//Template
-		$this->template->load('extension/edit');
+		$this->view->load('extension/edit');
 
 		//Dependencies
 		$this->children = array(

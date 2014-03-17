@@ -3,7 +3,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 {
 	public function index()
 	{
-		$this->template->load('product/manufacturer');
+		$this->view->load('product/manufacturer');
 		$this->document->setTitle(_l("Find Your Favorite Brand"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -33,10 +33,10 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -46,7 +46,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 	public function product()
 	{
-		$this->template->load('product/category');
+		$this->view->load('product/category');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Manufacturers"), $this->url->link('product/manufacturer'));
@@ -116,10 +116,10 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

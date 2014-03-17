@@ -4,7 +4,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 	public function index()
 	{
-		$this->template->load('mail/send_email');
+		$this->view->load('mail/send_email');
 
 		$this->document->setTitle(_l("Send Email"));
 

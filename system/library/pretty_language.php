@@ -107,7 +107,7 @@ class PrettyLanguage
 
 					$lines[$num] .= "**REMOVE ME**";
 
-					$to_add[end($brackets)] = '$this->template->load(' . $template . ');' . "\r\n";
+					$to_add[end($brackets)] = '$this->view->load(' . $template . ');' . "\r\n";
 				} elseif ($dir_temp == 3) {
 					$this->pl($num, $line);
 					echo "PROBLEM at 3";

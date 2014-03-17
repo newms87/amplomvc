@@ -1,10 +1,10 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->displayMessages($messages); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Betty 2.0 Documentation"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Betty 2.0 Documentation"); ?></h1>
 		</div>
 		<div id="help_docs" class="section">
 			<? function display_levels($sub, $level)
@@ -78,4 +78,4 @@
 			return false;
 		}
 	</script>
-	<?= $footer; ?>
+	<?= $common_footer; ?>

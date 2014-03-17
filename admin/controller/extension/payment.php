@@ -121,7 +121,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 
 		//The Template
-		$this->template->load('extension/payment_list');
+		$this->view->load('extension/payment_list');
 
 		//Dependencies
 		$this->children = array(
@@ -211,7 +211,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->data['cancel'] = $this->url->link('extension/payment');
 
 		//The Template
-		$this->template->load('extension/payment');
+		$this->view->load('extension/payment');
 
 		//Dependencies
 		$this->children = array(
@@ -266,7 +266,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->data['cancel'] = $this->url->link('extension/payment');
 
 		//The Template
-		$this->template->load('extension/edit');
+		$this->view->load('extension/edit');
 
 		//Dependencies
 		$this->children = array(

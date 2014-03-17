@@ -1,10 +1,10 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 
 <div id="user_login" class="content">
 	<?= $this->breadcrumb->render(); ?>
 
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Account Login"); ?></h1>
 
@@ -50,7 +50,7 @@
 		</div>
 	</div>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

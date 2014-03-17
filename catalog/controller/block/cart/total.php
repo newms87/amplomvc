@@ -14,7 +14,7 @@ class Catalog_Controller_Block_Cart_Total extends Controller
 		$this->data['totals'] = $totals;
 
 		//The Template
-		$this->template->load('block/cart/total');
+		$this->view->load('block/cart/total');
 
 		//Render
 		$this->response->setOutput($this->render());

@@ -4,7 +4,7 @@ class Admin_Controller_Includes_Contact extends Controller
 
 	public function index($args)
 	{
-		$this->template->load('includes/contact');
+		$this->view->load('includes/contact');
 
 		$id   = isset($args['id']) ? $args['id'] : null;
 		$type = isset($args['type']) ? $args['type'] : 'general';

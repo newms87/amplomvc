@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Shopping Cart"); ?>
 		<? if (isset($weight)) { ?>
@@ -75,7 +75,7 @@
 		<div class="center"><a href="<?= $continue; ?>" class="button"><?= _l("Continue Shopping"); ?></a></div>
 	<? } ?>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
 
@@ -100,4 +100,4 @@
 </script>
 
 
-<?= $footer; ?>
+<?= $common_footer; ?>

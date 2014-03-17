@@ -45,7 +45,7 @@ final class Registry
 				$e = strtolower($e);
 			});
 
-			$file = SITE_DIR . implode('/', $path) . '.php';
+			$file = DIR_SITE . implode('/', $path) . '.php';
 		} //Resolve non-relative from root paths
 		else {
 			//Check in Library

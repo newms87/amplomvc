@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Cart_Reward
 {
 	public function index($settings = null)
 	{
-		$this->template->load('block/cart/reward');
+		$this->view->load('block/cart/reward');
 
 
 		if (isset($_POST['reward']) && $this->validateReward()) {

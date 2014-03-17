@@ -1,11 +1,11 @@
 <?php
 // Configuration
 if (is_file('ac_config.php')) {
-	require_once('ac_config.php');
+	include_once('ac_config.php');
 }
 
 // Install
-if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
+if (!defined('DOMAIN') || defined("AMPLOCART_INSTALL_USER")) {
 	define("AMPLOCART_INSTALL", true);
 	require_once('system/install/install.php');
 	exit;

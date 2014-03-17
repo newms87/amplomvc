@@ -38,7 +38,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 		$subscription = $this->subscription->getCartSubscription();
 
 		if ($subscription) {
-			$this->template->load('payment/pp_standard_subscribe');
+			$this->view->load('payment/pp_standard_subscribe');
 
 			$this->data['order_id']  = $subscription['order_id'];
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
@@ -97,7 +97,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 				$this->data['return'] = $this->url->link('checkout/success');
 			}
 
-			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
+			$server = URL_IMAGE;
 
 			//Ajax Urls
 			$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);

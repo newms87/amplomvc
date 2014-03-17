@@ -3,7 +3,7 @@ class Admin_Controller_Report_SaleShipping extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/sale_shipping');
+		$this->view->load('report/sale_shipping');
 
 		$this->document->setTitle(_l("Shipping Report"));
 

@@ -7,7 +7,7 @@ class Catalog_Controller_Common_Maintenance extends Controller
 		$this->document->setTitle(_l("Maintenance"));
 
 		//The Template
-		$this->template->load('common/maintenance');
+		$this->view->load('common/maintenance');
 
 		//Dependencies
 		$this->children = array(

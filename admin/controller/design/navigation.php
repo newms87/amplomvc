@@ -7,7 +7,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->document->setTitle(_l("Navigation"));
 
 		//The Template
-		$this->template->load('design/navigation_list');
+		$this->view->load('design/navigation_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -291,7 +291,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->data['cancel'] = $this->url->link('design/navigation');
 
 		//The Template
-		$this->template->load('design/navigation_form');
+		$this->view->load('design/navigation_form');
 
 		//Dependencies
 		$this->children = array(

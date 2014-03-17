@@ -1,11 +1,11 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="box">
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+				<h1><img src="<?= URL_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
 				<div class="buttons">
 					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
@@ -186,7 +186,7 @@
 						<? if ($order_products) { ?>
 							<? foreach ($order_products as $order_product) { ?>
 								<tr id="product-row<?= $product_row; ?>">
-									<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+									<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"
 									                                            title="<?= _l("Remove"); ?>"
 									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
 									</td>
@@ -280,7 +280,7 @@
 						<? if ($order_vouchers) { ?>
 							<? foreach ($order_vouchers as $order_voucher) { ?>
 								<tr id="voucher-row<?= $voucher_row; ?>">
-									<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
+									<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"
 									                                            title="<?= _l("Remove"); ?>"
 									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
 									</td>
@@ -555,7 +555,7 @@
 
 	$('select[name=\'payment_address\']').bind('change', function () {
 		$.ajax({
-			url:     "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			url:     "<?= URL_SITE . "admin/index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
 			dataType: "json',
 			success: function (json) {
 				if (json != '') {
@@ -567,7 +567,7 @@
 					$('input[name=\'payment_city\']').attr('value', json['city']);
 					$('input[name=\'payment_postcode\']').attr('value', json['postcode']);
 					$('select[name=\'payment_country_id\']').attr('value', json['country_id']);
-					$('select[name=\'payment_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
+					$('select[name=\'payment_zone_id\']').load("<?= URL_SITE . "admin/index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
 				]
 					+'&zone_id=" + json["zone_id'
 				])
@@ -579,7 +579,7 @@
 
 	$('select[name=\'shipping_address\']').bind('change', function () {
 		$.ajax({
-			url:     "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+			url:     "<?= URL_SITE . "admin/index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
 			dataType: "json',
 			success: function (json) {
 				if (json != '') {
@@ -591,7 +591,7 @@
 					$('input[name=\'shipping_city\']').attr('value', json['city']);
 					$('input[name=\'shipping_postcode\']').attr('value', json['postcode']);
 					$('select[name=\'shipping_country_id\']').attr('value', json['country_id']);
-					$('select[name=\'shipping_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
+					$('select[name=\'shipping_zone_id\']').load("<?= URL_SITE . "admin/index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'
 				]
 					+'&zone_id=" + json["zone_id'
 				])
@@ -609,7 +609,7 @@
 		delay:  0,
 		source: function (request, response) {
 			$.ajax({
-				url:     "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				url:     "<?= URL_SITE . "admin/index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
 				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
@@ -832,13 +832,13 @@
 
 					if (option['type'] == 'file') {
 						new AjaxUpload('#button-option-' + option['product_option_id'], {
-							action:       "<?= HTTP_ADMIN . "index.php?route=sale/order/upload"; ?>",
+							action:       "<?= URL_SITE . "admin/index.php?route=sale/order/upload"; ?>",
 							name:         'file',
 							autoSubmit:   true,
 							responseType: 'json',
 							data:         option,
 							onSubmit:     function (file, extension) {
-								$('#button-option-' + (this._settings.data['product_option_id'] + '-' + this._settings.data['product_option_id'])).after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" />');
+								$('#button-option-' + (this._settings.data['product_option_id'] + '-' + this._settings.data['product_option_id'])).after('<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" class="loading" />');
 							},
 							onComplete:   function (file, json) {
 
@@ -923,7 +923,7 @@
 			beforeSend: function () {
 				$('.success, .warning, .attention, .error').remove();
 
-				$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+				$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 			},
 			success:    function (json) {
 				$('.success, .warning, .attention, .error').remove();
@@ -1126,7 +1126,7 @@
 						product = json['order_product'][i];
 
 						html += '<tr id="product-row' + product_row + '">';
-						html += '	<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#product-row' + product_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
+						html += '	<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#product-row' + product_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
 						html += '	<td class="left">' + product['name'] + '<br /><input type="hidden" name="order_product[' + product_row + '][order_product_id]" value="" /><input type="hidden" name="order_product[' + product_row + '][product_id]" value="' + product['product_id'] + '" /><input type="hidden" name="order_product[' + product_row + '][name]" value="' + product['name'] + '" />';
 
 						if (product['option']) {
@@ -1188,7 +1188,7 @@
 						voucher = json['order_voucher'][i];
 
 						html += '<tr id="voucher-row' + voucher_row + '">';
-						html += '	<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#voucher-row' + voucher_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
+						html += '	<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#voucher-row' + voucher_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
 						html += '	<td class="left">' + voucher['description'];
 						html += '	<input type="hidden" name="order_voucher[' + voucher_row + '][order_voucher_id]" value="" />';
 						html += '	<input type="hidden" name="order_voucher[' + voucher_row + '][voucher_id]" value="' + voucher['voucher_id'] + '" />';
@@ -1351,4 +1351,4 @@
 <script type="text/javascript">
 	$('.vtabs a').tabs();
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Search"); ?></h1>
 	<b><?= _l("Search Criteria"); ?></b>
@@ -113,7 +113,7 @@
 						</div>
 					<? } ?>
 					<? if ($product['rating']) { ?>
-						<div class="rating"><img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>"
+						<div class="rating"><img src="<?= URL_THEME_IMAGE . "stars-$product[rating].png"; ?>"
 								alt="<?= $product['reviews']; ?>"/></div>
 					<? } ?>
 					<div class="cart"><input type="button" value="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></div>
@@ -127,7 +127,7 @@
 		<div class="section"><?= _l("There is no product that matches the search criteria."); ?></div>
 	<? } ?>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
 <script type="text/javascript">
@@ -257,4 +257,4 @@
 		display('list');
 	}
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

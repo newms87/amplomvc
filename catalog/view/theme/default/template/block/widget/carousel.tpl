@@ -28,13 +28,13 @@
 
 <? if (count($slides) > 1) { ?>
 	<? if ($slider === 'nivo') { ?>
-		<script type="text/javascript" src="<?= HTTP_JS . 'jquery/nivo_slider/nivo-slider.js'; ?>"></script>
+		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/jquery/nivo_slider/nivo-slider.js'; ?>"></script>
 
 		<script type="text/javascript">
 			$('#<?= $slider_id; ?>').nivoSlider(<?= json_encode($nivo); ?>);
 		</script>
 	<? } else { ?>
-		<script type="text/javascript" src="<?= HTTP_JS . 'jquery/slidejs/jquery.slides.min.js'; ?>"></script>
+		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/jquery/slidejs/jquery.slides.min.js'; ?>"></script>
 
 		<script type="text/javascript">
 			$('#<?= $slider_id; ?>').slidesjs(<?= json_encode($slidesjs); ?>);

@@ -10,7 +10,7 @@ class Admin_Model_Sale_Order extends Model
 			$store_url  = $store_info['url'];
 		} else {
 			$store_name = $this->config->get('config_name');
-			$store_url  = HTTP_CATALOG;
+			$store_url  = URL_SITE;
 		}
 
 		$setting_info = $this->config->loadGroup('setting', $data['store_id']);

@@ -52,7 +52,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//The Template
-		$this->template->load('setting/store_list');
+		$this->view->load('setting/store_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -117,7 +117,7 @@ class Admin_Controller_Setting_Store extends Controller
 			}
 
 			$theme          = $this->config->load('config', 'config_theme', $store['store_id']);
-			$image          = DIR_CATALOG . 'view/theme/' . $theme . '/' . $theme . '.png';
+			$image          = DIR_SITE . 'catalog/view/theme/' . $theme . '/' . $theme . '.png';
 			$store['thumb'] = $this->image->resize($image, $image_width, $image_height);
 
 		}
@@ -169,7 +169,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//The Template
-		$this->template->load('setting/store_form');
+		$this->view->load('setting/store_form');
 
 		//Insert or Update
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;

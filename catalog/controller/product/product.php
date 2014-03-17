@@ -235,19 +235,19 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//The Template
 		if ($product_info['template']) {
-			$this->template->load('product/' . $product_info['template']);
+			$this->view->load('product/' . $product_info['template']);
 		} elseif ($product_info['product_class_id']) {
-			$this->template->load($this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']));
+			$this->view->load($this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']));
 		} else {
-			$this->template->load('product/product');
+			$this->view->load('product/product');
 		}
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

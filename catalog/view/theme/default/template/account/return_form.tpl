@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Product Returns"); ?></h1>
 
@@ -129,7 +129,7 @@
 		</form>
 	<? }//end if ((!empty($return_products))) ?>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
 <script type="text/javascript">
@@ -140,4 +140,4 @@
 
 <?= $this->builder->js('datepicker'); ?>
 <?= $this->builder->js('errors', $errors); ?>
-<?= $footer; ?>
+<?= $common_footer; ?>

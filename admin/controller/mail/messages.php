@@ -4,7 +4,7 @@ class Admin_Controller_Mail_Messages extends Controller
 
 	public function index()
 	{
-		$this->template->load('mail/messages');
+		$this->view->load('mail/messages');
 
 		$this->document->setTitle(_l("Mail Messages"));
 

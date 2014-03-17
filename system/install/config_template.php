@@ -1,12 +1,13 @@
 <?php
-/*
- * By Setting the SITE_URL & SITE_SSL we are limiting the domain to these specific URL's (this is probably what we want)
- * Alternatively, we can dynamically set these (based on waht the user requests), then we can modify the URL based on the DB
- * entries for each store.
- */
-//SITE URL
-define('SITE_URL', '%site_url%');
-define('SITE_SSL', '%site_ssl%');
+//Site Domain
+define('DOMAIN', '%domain%');
+
+//Site Urls
+define('URL_SITE', '//' . DOMAIN . '/');
+define('HTTP_SITE', 'http://' . DOMAIN . '/');
+
+//If your SSL site is on a different domain, modify this entry
+define('HTTPS_SITE', 'https://' . DOMAIN . '/');
 
 // SERVER SETUP
 define('DEFAULT_TIMEZONE', '%time_zone_name%');
@@ -44,4 +45,14 @@ define("AMPLOCART_SESSION", "cross-store-session");
 define("PASSWORD_COST", %password_cost%);
 
 //ROOT DIRECTORY
-define('SITE_DIR', str_replace('\\', '/', dirname(__FILE__) . '/'));
+define('DIR_SITE', str_replace('\\', '/', dirname(__FILE__) . '/'));
+
+//Urls
+define('URL_RESOURCES', URL_SITE . 'system/resources/');
+define('URL_IMAGE', URL_SITE . 'image/');
+
+//Directories
+define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
+define('DIR_IMAGE', DIR_SITE . 'image/');
+define('DIR_LOGS', DIR_SITE . 'system/logs/');
+define('DIR_DOWNLOAD', DIR_SITE . 'download/');

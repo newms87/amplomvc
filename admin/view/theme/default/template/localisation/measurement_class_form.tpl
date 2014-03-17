@@ -1,4 +1,4 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
@@ -6,7 +6,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'measurement.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'measurement.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a onclick="location="<?= $cancel; ?>";" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
@@ -15,7 +15,7 @@
 				<div class="tabs">
 					<? foreach ($languages as $language) { ?>
 						<a href="#language<?= $language['language_id']; ?>"><img
-								src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
+								src="<?= URL_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
 								title="<?= $language['name']; ?>"/> <?= $language['name']; ?></a>
 					<? } ?>
 				</div>
@@ -56,4 +56,4 @@
 	!--
 		$('.tabs a').tabs();
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

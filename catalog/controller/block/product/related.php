@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Product_Related extends Controller
 			return;
 		}
 
-		$this->template->load('block/product/related');
+		$this->view->load('block/product/related');
 
 		//Find the related products
 		$related_products = $this->Model_Catalog_Product->getProductRelated($product_id);

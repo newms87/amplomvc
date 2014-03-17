@@ -3,7 +3,7 @@ class Admin_Controller_Report_SaleTax extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/sale_tax');
+		$this->view->load('report/sale_tax');
 
 		$this->document->setTitle(_l("Tax Report"));
 

@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/cart/shipping');
+		$this->view->load('block/cart/shipping');
 		$this->data['action'] = '';
 
 		$defaults = array(

@@ -362,7 +362,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		$this->data['delete']  = $this->url->link('sale/customer/delete');
 
 		//The Template
-		$this->template->load('sale/customer_list');
+		$this->view->load('sale/customer_list');
 
 		//Dependencies
 		$this->children = array(
@@ -376,7 +376,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('sale/customer_form');
+		$this->view->load('sale/customer_form');
 
 		if (isset($_GET['customer_id'])) {
 			$this->data['customer_id'] = $_GET['customer_id'];
@@ -774,7 +774,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$this->url->redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
 			}
 		} else {
-			$this->template->load('error/not_found');
+			$this->view->load('error/not_found');
 
 			$this->document->setTitle(_l("Customer"));
 
@@ -792,7 +792,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function transaction()
 	{
-		$this->template->load('sale/customer_transaction');
+		$this->view->load('sale/customer_transaction');
 
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
@@ -836,7 +836,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function reward()
 	{
-		$this->template->load('sale/customer_reward');
+		$this->view->load('sale/customer_reward');
 
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);

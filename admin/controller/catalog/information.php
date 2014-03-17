@@ -108,7 +108,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->document->setTitle(_l("Information"));
 
 		//The Template
-		$this->template->load('catalog/information_list');
+		$this->view->load('catalog/information_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -234,7 +234,7 @@ class Admin_Controller_Catalog_Information extends Controller
 	{
 		$this->document->setTitle(_l("Information"));
 
-		$this->template->load('catalog/information_form');
+		$this->view->load('catalog/information_form');
 
 		$information_id = !empty($_GET['information_id']) ? $_GET['information_id'] : 0;
 

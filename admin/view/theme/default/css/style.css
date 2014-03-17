@@ -116,6 +116,7 @@ div.right {
 	width: 115px;
 	display: inline-block;
 }
+
 /* Main Navigation Links */
 #menu.links {
 	background: #414141; /* Old browsers */
@@ -145,44 +146,44 @@ div.right {
 	text-align: right;
 }
 
-#menu.links ul.top_menu > li + li {
+#menu.links ul.top-menu > li + li {
 	border-left: 2px ridge #545454;
 }
 
-#menu.links ul.top_menu > li {
+#menu.links ul.top-menu > li {
 	display: inline-block;
 	text-decoration: none;
 	margin: 2px 0;
 	padding: 6px 0;
 }
 
-#menu.links ul.top_menu > li:hover {
+#menu.links ul.top-menu > li:hover {
 	background-color: black;
 	cursor: pointer;
 }
 
-#menu.links ul.top_menu > li:first-child {
+#menu.links ul.top-menu > li:first-child {
 	margin-left: 0;
 }
 
-#menu.links ul.top_menu > li:last-child {
+#menu.links ul.top-menu > li:last-child {
 	margin-right: 0;
 }
 
-#menu.links ul.top_menu > li > a {
+#menu.links ul.top-menu > li > a {
 	color: #EEEEEE;
 	font-size: 14px;
 	text-decoration: none;
 	padding: 0 15px;
 }
 
-#menu li ul.link_list {
+#menu li ul.link-list {
 	text-align: left;
 	background: rgba(0, 0, 0, .8);
 	box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
 }
 
-#menu.links li ul.link_list li > a {
+#menu.links li ul.link-list li > a {
 	color: #EEEEEE;
 	font-size: 14px;
 	text-decoration: none;
@@ -190,11 +191,11 @@ div.right {
 	padding: 7px 10px;
 }
 
-#menu li ul.link_list li {
+#menu li ul.link-list li {
 	border-radius: 0;
 }
 
-#menu li ul.link_list li:hover {
+#menu li ul.link-list li:hover {
 	background-color: black;
 }
 
@@ -206,11 +207,11 @@ div.right {
 }
 
 /* General Link Functionality */
-ul.link_list > li {
+ul.link-list > li {
 	position: relative;
 }
 
-ul.sub_menu {
+ul.sub-menu {
 	position: absolute;
 	top: 108%;
 	left: -9999px;
@@ -223,8 +224,8 @@ ul.sub_menu {
 	transform-origin: 0 0;
 }
 
-li.hover > ul.sub_menu,
-li:hover > ul.sub_menu {
+li.hover > ul.sub-menu,
+li:hover > ul.sub-menu {
 	left: 0;
 	-webkit-transform: scale3d(1, 1, 1) !important;
 	transform: scale3d(1, 1, 1) !important;
@@ -232,12 +233,12 @@ li:hover > ul.sub_menu {
 	transition: transform .2s linear 0s, left 0s linear 0s;
 }
 
-li.inactive > ul.sub_menu {
+li.inactive > ul.sub-menu {
 	-webkit-transition: all 0s linear .5s;
 	transition: all 0s linear .5s;
 }
 
-ul.child_menu {
+ul.child-menu {
 	position: absolute;
 	top: 0;
 	left: -9999px;
@@ -250,8 +251,8 @@ ul.child_menu {
 	transform-origin: 0 0;
 }
 
-li.hover > ul.child_menu,
-li:hover > ul.child_menu {
+li.hover > ul.child-menu,
+li:hover > ul.child-menu {
 	left: 100%;
 	-webkit-transform: scale3d(1, 1, 1) !important;
 	transform: scale3d(1, 1, 1) !important;
@@ -259,28 +260,28 @@ li:hover > ul.child_menu {
 	transition: transform .2s linear;
 }
 
-li.inactive > ul.child_menu {
+li.inactive > ul.child-menu {
 	-webkit-transition: all 0s linear .5s;
 	transition: all 0s linear .5s;
 }
 
-ul.sub_menu li {
+ul.sub-menu li {
 	padding: 0;
 	cursor: pointer;
 }
 
-ul.sub_menu li.has_children:after {
+ul.sub-menu li.has-children:after {
 	content: url('../image/arrow-right.png');
 	position: absolute;
 	top: 5px;
 	right: 10px;
 }
 
-li ul.link_list li:hover {
+li ul.link-list li:hover {
 	background-color: black;
 }
 
-ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a {
+ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a {
 	padding-bottom: 25px !important;
 }
 
@@ -577,6 +578,7 @@ ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a
 .box > .heading .icon {
 	width: 20px;
 }
+
 .box > .heading h1 {
 	margin: 0;
 	padding: 11px 0 0 0;
@@ -1932,6 +1934,14 @@ td.mail_info label {
 .login_header {
 	background: #F0F0F0;
 	border-radius: 8px;
+}
+
+#login-box {
+	width: 400px;
+	min-height: 300px;
+	margin-top: 40px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /** Social Network Form */

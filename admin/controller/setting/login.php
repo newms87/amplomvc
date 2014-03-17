@@ -57,7 +57,7 @@ class Admin_Controller_Setting_Login extends Controller
 		);
 
 		//The Template
-		$this->template->load('setting/login');
+		$this->view->load('setting/login');
 
 		//Render
 		$this->response->setOutput($this->render());

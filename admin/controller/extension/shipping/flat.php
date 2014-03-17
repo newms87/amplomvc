@@ -47,7 +47,7 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 		);
 
 		//The Template
-		$this->template->load('shipping/flat');
+		$this->view->load('shipping/flat');
 
 		//Dependencies
 		$this->children = array(

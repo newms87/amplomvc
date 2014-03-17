@@ -1,12 +1,12 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="section">
 		<h1><?= _l("Register Account"); ?></h1>
 
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<p><?= _l("If you already have an account with us, please login at the"); ?> <a href="<?= $login; ?>"><?= _l("login page"); ?></a></p>
 
@@ -105,7 +105,7 @@
 			</form>
 		</div>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
 </div>
 
@@ -113,4 +113,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

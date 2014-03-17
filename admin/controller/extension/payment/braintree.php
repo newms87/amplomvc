@@ -27,7 +27,7 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 		);
 
 		//Template
-		$this->template->load('extension/payment/braintree');
+		$this->view->load('extension/payment/braintree');
 
 		//Render
 		$this->render();

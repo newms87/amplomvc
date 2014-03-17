@@ -7,23 +7,11 @@ class Session extends Library
 	{
 		parent::__construct($registry);
 
-		if (!session_id()) {
-			ini_set('session.use_cookies', 'On');
-			ini_set('session.use_trans_sid', 'Off');
-
-			session_name(AMPLOCART_SESSION);
-
-			session_set_cookie_params(0, '/', COOKIE_DOMAIN);
-
-			session_start();
-		}
-
-		$this->data =& $_SESSION;
-
+		$this->data = & $_SESSION;
 		//TODO: validate this is safe? Since the token has to be in database and we will only save to db right before calling an admin page only.
 
 		//These will load the session / token if we are using curlopt
-		if (!isset($this->data['token']) && isset($_COOKIE['token'])) {
+		if (!isset($_SESSION['token']) && isset($_COOKIE['token'])) {
 			$this->loadTokenSession($_COOKIE['token']);
 			unset($this->data['session_token_saved']);
 		}
@@ -31,32 +19,32 @@ class Session extends Library
 		//refresh this logged in session
 		if (isset($_COOKIE['token'])) {
 			$this->setCookie('token', $_COOKIE['token'], 3600);
-			if (isset($this->data['session_token_saved'])) {
+			if (isset($_SESSION['session_token_saved'])) {
 				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
-				unset($this->data['session_token_saved']);
+				unset($_SESSION['session_token_saved']);
 			}
-		} elseif (isset($this->data['token']) && empty($_COOKIE)) {
-			unset($this->data['token']);
-			$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
+		} elseif (isset($_SESSION['token']) && empty($_COOKIE)) {
+			unset($_SESSION['token']);
+			$this->message->add('warning', _l("You must enable cookies to login to the admin portal!"));
 			$this->url->redirect('common/home');
-		} elseif (!isset($this->data['session_token_saved'])) {
+		} elseif (!isset($_SESSION['session_token_saved'])) {
 			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 
 			if ($ip_session_exists) {
 				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
-				$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
+				$this->message->add('warning', _l("Unable to authenticate user. Please check that cookies are enabled."));
 			}
 		}
 	}
 
 	public function has($key)
 	{
-		return isset($this->data[$key]);
+		return isset($_SESSION[$key]);
 	}
 
 	public function get($key)
 	{
-		return isset($this->data[$key]) ? $this->data[$key] : null;
+		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
 
 	public function set($key, $value)
@@ -70,23 +58,23 @@ class Session extends Library
 
 		if ($query->num_rows) {
 			$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->escape($token) . "'");
-			$this->data['token']   = $query->row['token'];
-			$this->data['user_id'] = $query->row['user_id'];
+			$_SESSION['token']   = $query->row['token'];
+			$_SESSION['user_id'] = $query->row['user_id'];
 
 			if ($query->row['data']) {
-				$this->data += unserialize($query->row['data']);
+				$_SESSION += unserialize($query->row['data']);
 			}
 		}
 	}
 
 	public function saveTokenSession()
 	{
-		if (empty($this->data['token']) || empty($this->data['user_id'])) {
+		if (empty($_SESSION['token']) || empty($_SESSION['user_id'])) {
 			return false;
 		}
 
-		$this->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->escape($this->data['token']) . "', `user_id` = '" . $this->escape($this->data['user_id']) . "', `data` = '" . $this->escape(serialize($this->data)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
-		$this->data['session_token_saved'] = 1;
+		$this->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->escape($_SESSION['token']) . "', `user_id` = '" . $this->escape($_SESSION['user_id']) . "', `data` = '" . $this->escape(serialize($_SESSION)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
+		$_SESSION['session_token_saved'] = 1;
 	}
 
 	public function endTokenSession()
@@ -117,9 +105,10 @@ class Session extends Library
 		return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
 	}
 
-	public function setCookie($name, $value, $expire = 3600)
+	public function setCookie($name, $value, $expire = 0)
 	{
-		setcookie($name, $value, time() + $expire, '/', COOKIE_DOMAIN);
+		$expire = $expire ? time() + $expire : 0;
+		setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
 	}
 
 	public function deleteCookie($name)
@@ -132,7 +121,8 @@ class Session extends Library
 		if (!$token) {
 			$token = md5(mt_rand());
 		}
-		$this->setCookie("token", $token, 3600);
-		$this->data['token'] = $token;
+
+		$this->setCookie("token", $token, 0);
+		$_SESSION['token'] = $token;
 	}
 }

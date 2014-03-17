@@ -4,7 +4,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('setting/controller_override');
+		$this->view->load('setting/controller_override');
 		//Page Head
 		$this->document->setTitle(_l("Controller Override"));
 
@@ -68,11 +68,11 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 
 		if (!empty($_POST['controller_overrides'])) {
 			foreach ($_POST['controller_overrides'] as $key => $override) {
-				if (!is_file(SITE_DIR . $override['original'] . '.php')) {
+				if (!is_file(DIR_SITE . $override['original'] . '.php')) {
 					$this->error["controller_overrides[$key][original]"] = _l("The Original Controller at %s did not exist!", $override['original']);
 				}
 
-				if (!is_file(SITE_DIR . $override['alternate'] . '.php')) {
+				if (!is_file(DIR_SITE . $override['alternate'] . '.php')) {
 					$this->error["controller_overrides[$key][alternate]"] = _l("The Alternate Controller at %s did not exist!", $override['alternate']);
 				}
 			}

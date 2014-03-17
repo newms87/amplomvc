@@ -84,7 +84,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->document->setTitle(_l("Gift Voucher"));
 
 		//The Template
-		$this->template->load('sale/voucher_list');
+		$this->view->load('sale/voucher_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -232,7 +232,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->document->setTitle(_l("Gift Voucher"));
 
 		//The Template
-		$this->template->load('sale/voucher_form');
+		$this->view->load('sale/voucher_form');
 
 		//Insert or Update
 		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
@@ -374,7 +374,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	public function history()
 	{
-		$this->template->load('sale/voucher_history');
+		$this->view->load('sale/voucher_history');
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {

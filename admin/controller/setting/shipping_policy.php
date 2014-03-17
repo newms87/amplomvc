@@ -10,7 +10,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('setting/shipping_policy');
+		$this->view->load('setting/shipping_policy');
 		//Page Head
 		$this->document->setTitle(_l("Shipping Policies"));
 

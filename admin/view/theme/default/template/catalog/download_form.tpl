@@ -1,4 +1,4 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
@@ -6,7 +6,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>" alt=""/> <?= _l("Downloads"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'download.png'; ?>" alt=""/> <?= _l("Downloads"); ?></h1>
 
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
@@ -18,7 +18,7 @@
 						<td class="required"> <?= _l("Download Name:"); ?></td>
 						<td><? foreach ($languages as $language) { ?>
 								<input type="text" name="download_description[<?= $language['language_id']; ?>][name]" value="<?= isset($download_description[$language['language_id']]) ? $download_description[$language['language_id']]['name'] : ''; ?>"/>
-								<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>"/><br/>
+								<img src="<?= URL_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>"/><br/>
 								<? if (isset(_l("Name must be between 3 and 64 characters!")[$language['language_id']])) { ?>
 									<span class="error"><?= _l("Name must be between 3 and 64 characters!")[$language['language_id']]; ?></span><br/>
 								<? } ?>
@@ -53,4 +53,4 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?>
+<?= $common_footer; ?>

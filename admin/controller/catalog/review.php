@@ -101,7 +101,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	private function getList()
 	{
-		$this->template->load('catalog/review_list');
+		$this->view->load('catalog/review_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -233,7 +233,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('catalog/review_form');
+		$this->view->load('catalog/review_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

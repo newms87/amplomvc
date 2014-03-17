@@ -64,7 +64,7 @@
 	}
 
 	function info_page_loading(info_item) {
-		set_validation_status(info_item, 'validating', "<?= _l("Validating..."); ?> <img src=\"<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
+		set_validation_status(info_item, 'validating', "<?= _l("Validating..."); ?> <img src=\"<?= URL_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
 	}
 
 	function load_info_item(info_item, route, callback) {
@@ -75,7 +75,7 @@
 
 		set_validation_status(info_item, 'loading', '<?= _l("Loading... please wait."); ?>');
 
-		info_item.find('.info_content').load("<?= HTTP_ROOT; ?>" + route, {},
+		info_item.find('.info_content').load("<?= URL_SITE; ?>" + route, {},
 			function () {
 				set_validation_status(info_item, '', '');
 				if (typeof callback == 'function') {

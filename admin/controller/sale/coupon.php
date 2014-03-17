@@ -64,7 +64,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	private function getList()
 	{
-		$this->template->load('sale/coupon_list');
+		$this->view->load('sale/coupon_list');
 
 		$url_items = array(
 			'sort'  => 'name',
@@ -163,7 +163,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('sale/coupon_form');
+		$this->view->load('sale/coupon_form');
 
 		$coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
 
@@ -317,7 +317,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function history()
 	{
-		$this->template->load('sale/coupon_history');
+		$this->view->load('sale/coupon_history');
 		$coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
 
 		if (isset($_GET['page'])) {

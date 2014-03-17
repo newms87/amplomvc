@@ -163,7 +163,7 @@ class Mail extends Library
 		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
 
 		//Set the Template to the Front End
-		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
+		$this->theme->setThemesDirectory(DIR_SITE . 'catalog/view/theme/');
 
 		if (!$action->execute()) {
 			if ($controller === 'error') {

@@ -4,34 +4,34 @@ class Catalog_Controller_Common_Header extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/header');
+		$data = array(
+			'title' => $this->document->getTitle(),
+		);
 
-		$this->data['title'] = $this->document->getTitle();
-
-		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
+		$data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 
 		//Add Styles
-		if (is_file(DIR_THEME_STYLE . 'style.less')) {
-			$style = $this->document->compileLess(DIR_THEME_STYLE . 'style.less', 'core-style');
+		if (is_file(DIR_THEME . 'css/style.less')) {
+			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'fluid.style.less');
 		} else {
-			$style = HTTP_THEME_STYLE . 'style.css';
+			$style = URL_THEME . 'css/style.css';
 		}
 
 		$this->document->addStyle($style);
 
-		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
+		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
+		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add jQuery from the CDN or locally
 		if ($this->config->get('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
-			$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
-			$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
+			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(HTTP_JS . 'common.js', 53);
+		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_thumb_width'));
@@ -39,89 +39,87 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->localizeVar('url_add_to_cart', $this->url->link('cart/cart/add'));
 
 		//Add Theme Scripts
-		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
+		$this->document->addScript(URL_THEME_JS . 'common.js', 56);
 
 		//Page Head
-		$this->data['direction']      = $this->language->info('direction');
-		$this->data['description']    = $this->document->getDescription();
-		$this->data['keywords']       = $this->document->getKeywords();
-		$this->data['canonical_link'] = $this->document->getCanonicalLink();
-		$this->data['body_class']     = $this->tool->getSlug($this->url->getPath());
+		$data['direction']      = $this->language->info('direction');
+		$data['description']    = $this->document->getDescription();
+		$data['keywords']       = $this->document->getKeywords();
+		$data['canonical_link'] = $this->document->getCanonicalLink();
+		$data['body_class']     = $this->tool->getSlug($this->url->getPath());
 
-		$this->data['styles']  = $this->document->renderStyles();
-		$this->data['scripts'] = $this->document->renderScripts();
+		$data['styles']  = $this->document->renderStyles();
+		$data['scripts'] = $this->document->renderScripts();
 
-		$this->data['lang'] = $this->language->info('code');
+		$data['lang'] = $this->language->info('code');
 
-		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		$this->data['statcounter']      = $this->config->get('config_statcounter');
+		$data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
+		$data['statcounter']      = $this->config->get('config_statcounter');
 
-		$this->data['messages'] = $this->message->fetch();
-		$this->data['name']     = $this->config->get('config_name');
+		$data['messages'] = $this->message->fetch();
+		$data['name']     = $this->config->get('config_name');
 
 		$logo_width  = $this->config->get('config_logo_width');
 		$logo_height = $this->config->get('config_logo_height');
 
-		$this->data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
+		$data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
 
-		$this->data['slogan'] = $this->config->get('config_slogan');
-
+		$data['slogan'] = $this->config->get('config_slogan');
 
 		//Icons
 		$icons = $this->config->get('config_icons');
 
-		foreach ($icons as &$icon) {
-			$icon['image'] = $this->image->get($icon['image']);
-		}
-		unset($icon);
+		if (!empty($icons)) {
+			foreach ($icons as &$icon) {
+				$icon['image'] = $this->image->get($icon['image']);
+			}
+			unset($icon);
 
-		$this->data['icons'] = $icons;
+			$data['icons'] = $icons;
+		}
 
 		//Admin Bar
 		if ($this->user->isLogged()) {
-			$this->data['admin_bar']   = $this->config->get('config_admin_bar');
-			$this->data['admin_link']  = $this->url->admin();
-			$this->data['clock_time']  = $this->date->now('datetime_long');
-			$time_inc                  = 3600 * 24;
-			$this->data['sim_forward'] = $this->url->here('sim_time=' . $time_inc);
-			$this->data['sim_back']    = $this->url->here('sim_time=-' . $time_inc);
-			$this->data['sim_reset']   = $this->url->here('sim_time=reset');
+			$data['block_admin_bar'] = $this->getBlock('widget/admin_bar');
 		}
 
 		//Navigation
-		$this->data['links_primary']   = $this->document->getLinks('primary');
-		$this->data['links_secondary'] = $this->document->getLinks('secondary');
-		$this->data['links_account']   = $this->document->getLinks('account');
-		$this->data['links_cart']      = $this->document->getLinks('cart');
+		$data['links_primary']   = $this->document->getLinks('primary');
+		$data['links_secondary'] = $this->document->getLinks('secondary');
+		$data['links_account']   = $this->document->getLinks('account');
+		$data['links_cart']      = $this->document->getLinks('cart');
 
 		//Login Check & The Welcome Message
-		$this->data['is_logged'] = $this->customer->isLogged();
-		$this->data['customer']  = $this->customer->info();
+		$data['is_logged'] = $this->customer->isLogged();
+		$data['customer']  = $this->customer->info();
 
-		if (!$this->data['is_logged']) {
-			$this->data['block_login'] = $this->getBlock('account/login');
-
-			$this->data['login'] = $this->url->link('account/login');
+		if (!$data['is_logged']) {
+			$data['block_login'] = $this->getBlock('account/login');
 		}
 
-		$this->data['home'] = $this->url->link('common/home');
+		//Action Buttons
+		$data['home']     = $this->url->link('common/home');
+		$data['login']    = $this->url->link('account/login');
+		$data['register'] = $this->url->link('account/register');
+		$data['logout']   = $this->url->link('account/logout');
 
-		$this->data['social_networks'] = $this->getBlock('extras/social_media');
+
+		$data['social_networks'] = $this->getBlock('extras/social_media');
 
 		if ($this->config->get('config_multi_language')) {
-			$this->data['block_languages'] = $this->getBlock('localisation/language');
+			$data['block_languages'] = $this->getBlock('localisation/language');
 		}
 
 		if ($this->config->get('config_multi_currency')) {
-			$this->data['block_currencies'] = $this->getBlock('localisation/currency');
+			$data['block_currencies'] = $this->getBlock('localisation/currency');
 		}
 
 		//Dependencies
 		$this->children = array(
-			'common/above_content',
+			'area/above',
 		);
 
 		//Render
-		$this->render();
+		$this->render('common/header', $data);
 	}
 }

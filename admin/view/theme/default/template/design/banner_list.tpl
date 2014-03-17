@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= _l("Banners"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= _l("Banners"); ?></h1>
 
 			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
@@ -56,4 +56,4 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?>
+<?= $common_footer; ?>

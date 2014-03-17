@@ -9,7 +9,7 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 			$output .= '<channel>';
 			$output .= '<title>' . $this->config->get('config_name') . '</title>';
 			$output .= '<description>' . $this->config->get('config_meta_description') . '</description>';
-			$output .= '<link>' . SITE_URL . '</link>';
+			$output .= '<link>' . URL_SITE . '</link>';
 
 			$products = $this->Model_Catalog_Product->getProducts();
 

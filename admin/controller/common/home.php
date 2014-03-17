@@ -3,7 +3,7 @@ class Admin_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/home');
+		$this->view->load('common/home');
 		$this->document->setTitle(_l("Dashboard"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));

@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
 			<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
@@ -141,14 +141,14 @@
 	!--
 		$('select[name=\'return_action_id\']').bind('change', function () {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/return/action"; ?>" + '&return_id=<?= $return_id; ?>',
+				url: "<?= URL_SITE . "admin/index.php?route=sale/return/action"; ?>" + '&return_id=<?= $return_id; ?>',
 				type: 'post',
 				dataType: 'json',
 				data: 'return_action_id=" + this.value,
 				beforeSend: function () {
 					$(".success, .warning, .attention').remove();
 
-					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+					$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 				},
 				success: function (json) {
 					$('.success, .warning, .attention').remove();
@@ -177,11 +177,11 @@
 		return false;
 	});
 
-	$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/return/history"; ?>" + '&return_id=<?= $return_id; ?>');
+	$('#history').load("<?= URL_SITE . "admin/index.php?route=sale/return/history"; ?>" + '&return_id=<?= $return_id; ?>');
 
 	function history() {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/return/history"; ?>" + '&return_id=<?= $return_id; ?>',
+			url: "<?= URL_SITE . "admin/index.php?route=sale/return/history"; ?>" + '&return_id=<?= $return_id; ?>',
 			type: 'post',
 			dataType: 'html',
 			data: 'return_status_id=" + encodeURIComponent($("select[name=\'return_status_id\']').val()
@@ -201,7 +201,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-history').attr('disabled', true);
-			$('#history').prepend('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+			$('#history').prepend('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 		}
 	,
 		complete: function () {
@@ -225,4 +225,4 @@
 	!--
 		$('.vtabs a').tabs();
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -3,7 +3,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/transaction');
+		$this->view->load('account/transaction');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/transaction'));
@@ -55,10 +55,10 @@ class Catalog_Controller_Account_Transaction extends Controller
 		$this->data['continue'] = $this->url->link('account/account');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

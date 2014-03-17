@@ -50,7 +50,7 @@ class Catalog_Controller_Mail_NewCustomer extends Controller
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 
 		//Set HTML message
-		$this->template->load('mail/new_customer');
+		$this->view->load('mail/new_customer');
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();

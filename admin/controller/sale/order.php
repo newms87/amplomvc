@@ -4,7 +4,7 @@ class Admin_Controller_Sale_Order extends Controller
 	public function index()
 	{
 		//The Template
-		$this->template->load('sale/order_list');
+		$this->view->load('sale/order_list');
 
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
@@ -186,7 +186,7 @@ class Admin_Controller_Sale_Order extends Controller
 	public function getForm()
 	{
 		//The Template
-		$this->template->load('sale/order_form');
+		$this->view->load('sale/order_form');
 
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
@@ -267,7 +267,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		//Urls
-		$this->data['store_url'] = SITE_URL;
+		$this->data['store_url'] = URL_SITE;
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('sale/order/update', 'order_id=' . $order_id);
@@ -503,7 +503,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data['cancel']  = $this->url->link('sale/order');
 
 		//Template
-		$this->template->load('sale/order_info');
+		$this->view->load('sale/order_info');
 
 		//Dependencies
 		$this->children = array(
@@ -697,7 +697,7 @@ class Admin_Controller_Sale_Order extends Controller
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->template->load('error/not_found');
+			$this->view->load('error/not_found');
 
 			$this->document->setTitle(_l("Orders"));
 
@@ -763,11 +763,11 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function invoice()
 	{
-		$this->template->load('sale/order_invoice');
+		$this->view->load('sale/order_invoice');
 
 		$this->data['title'] = _l("Orders");
 
-		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		$this->data['base'] = URL_SITE;
 
 		$this->data['language'] = $this->language->info('code');
 

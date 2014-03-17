@@ -7,7 +7,7 @@ class Catalog_Controller_Block_Login_Facebook extends Controller
 		$this->data['connect'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		//The Template
-		$this->template->load('block/login/facebook');
+		$this->view->load('block/login/facebook');
 
 		//Render
 		$this->render();

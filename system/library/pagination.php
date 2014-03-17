@@ -1,9 +1,10 @@
 <?php
+
 class Pagination extends Library
 {
+	private $view;
 	private $template;
 	private $default_template = 'block/widget/pagination';
-	private $file;
 
 	public $total;
 	public $page;
@@ -18,12 +19,12 @@ class Pagination extends Library
 
 		$this->init();
 
-		$this->template = new Template($registry);
+		$this->view = new View($registry);
 	}
 
 	public function init()
 	{
-		$this->file      = $this->default_template;
+		$this->template  = $this->default_template;
 		$this->total     = 0;
 		$this->page      = 0;
 		$this->limit     = 0;
@@ -34,13 +35,16 @@ class Pagination extends Library
 		);
 	}
 
+	public function setTemplate($template)
+	{
+		$this->template = $template;
+	}
+
 	public function render()
 	{
 		if ($this->total < 1) {
 			return '';
 		}
-
-		$this->template->load($this->file);
 
 		if (!$this->page_url) {
 			$this->page_url = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('page'));
@@ -136,8 +140,6 @@ class Pagination extends Library
 		//TODO: Allow Admin panel access to change how this is displayed (separate entries for admin / each store)
 		$data['text_pager'] = $this->tool->insertables($insertables, _l("Showing %start% to %end% of %total% (%pages% Pages)"));
 
-		$this->template->setData($data);
-
-		return $this->template->render();
+		return $this->view->render($this->template, $data);
 	}
 }

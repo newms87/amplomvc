@@ -3,7 +3,7 @@ class Catalog_Controller_Product_SearchResults extends Controller
 {
 	public function index()
 	{
-		$this->template->load('product/search_results');
+		$this->view->load('product/search_results');
 
 		$post = $_POST;
 		if (!isset($post['action']) || $post['action'] != 'betty_search') {

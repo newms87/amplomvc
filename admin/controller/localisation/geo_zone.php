@@ -57,7 +57,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	private function getList()
 	{
-		$this->template->load('localisation/geo_zone_list');
+		$this->view->load('localisation/geo_zone_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -183,7 +183,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('localisation/geo_zone_form');
+		$this->view->load('localisation/geo_zone_form');
 
 		$geo_zone_id = isset($_GET['geo_zone_id']) ? $_GET['geo_zone_id'] : 0;
 

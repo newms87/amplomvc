@@ -7,7 +7,7 @@ class Catalog_Controller_Block_Login_Google extends Controller
 		$this->data['connect'] = $this->Model_Block_Login_Google->getConnectUrl();
 
 		//The Template
-		$this->template->load('block/login/google');
+		$this->view->load('block/login/google');
 
 		//Render
 		$this->render();

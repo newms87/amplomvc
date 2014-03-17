@@ -26,10 +26,10 @@ class Image extends Library
 		$filename = str_replace('\\', '/', $filename);
 
 		if (is_file(DIR_IMAGE . $filename)) {
-			return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
+			return URL_IMAGE . $filename;
 		} elseif (is_file($filename)) {
-			$url = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
-			return str_replace(SITE_DIR, $url, $filename);
+			$url = URL_SITE;
+			return str_replace(DIR_SITE, $url, $filename);
 		}
 
 		return $filename;
@@ -146,7 +146,7 @@ class Image extends Library
 		if (!is_file(DIR_IMAGE . $filename)) {
 			//If the file exists but not in the image directory, move it to the image directory and continue
 			if (is_string($filename) && is_file($filename)) {
-				$copy_file = 'import/' . str_replace(SITE_DIR, '', $filename);
+				$copy_file = 'import/' . str_replace(DIR_SITE, '', $filename);
 
 				if (!is_file(DIR_IMAGE . $copy_file)) {
 					_is_writable(DIR_IMAGE . dirname($copy_file));

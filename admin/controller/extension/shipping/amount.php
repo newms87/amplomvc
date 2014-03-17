@@ -64,7 +64,7 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//Template
-		$this->template->load('extension/shipping/amount');
+		$this->view->load('extension/shipping/amount');
 
 		//Render
 		$this->render();

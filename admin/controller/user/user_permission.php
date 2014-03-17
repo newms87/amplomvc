@@ -81,7 +81,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	private function getList()
 	{
-		$this->template->load('user/user_group_list');
+		$this->view->load('user/user_group_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -205,7 +205,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('user/user_group_form');
+		$this->view->load('user/user_group_form');
 
 		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
 

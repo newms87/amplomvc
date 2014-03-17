@@ -3,7 +3,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 {
 	public function index()
 	{
-		$this->template->load('block/checkout/shipping_address');
+		$this->view->load('block/checkout/shipping_address');
 
 		if ($this->cart->validateShippingAddress()) {
 			$this->data['shipping_address_id'] = $this->cart->getShippingAddressId();

@@ -6,7 +6,7 @@ class Admin_Controller_Block_Widget_Youtube extends Controller
 {
 	public function settings(&$settings)
 	{
-		$this->template->load('block/widget/youtube_settings');
+		$this->view->load('block/widget/youtube_settings');
 
 		//Your code goes here
 

@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<h1><?= _l("Product Comparison"); ?></h1>
 		<? if ($products) { ?>
@@ -65,7 +65,7 @@
 						<td><?= _l("Rating"); ?></td>
 						<? foreach ($products as $product) { ?>
 							<td><img
-									src="<?= HTTP_THEME_IMAGE . "stars-" . $products[$product['product_id']]['rating'] . ".png"; ?>"
+									src="<?= URL_THEME_IMAGE . "stars-" . $products[$product['product_id']]['rating'] . ".png"; ?>"
 									alt="<?= $products[$product['product_id']]['reviews']; ?>"/><br/>
 								<?= $products[$product['product_id']]['reviews']; ?></td>
 						<? } ?>
@@ -136,7 +136,7 @@
 			</div>
 		<? } ?>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

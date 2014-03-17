@@ -3,7 +3,7 @@ class Catalog_Controller_Account_Newsletter extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/newsletter');
+		$this->view->load('account/newsletter');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/newsletter'));
@@ -37,10 +37,10 @@ class Catalog_Controller_Account_Newsletter extends Controller
 		$this->data['back'] = $this->url->link('account/account');
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

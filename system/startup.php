@@ -10,6 +10,7 @@ if (version_compare(phpversion(), '5.3.0', '<') == true) {
 	exit('PHP5.3+ Required');
 }
 
+
 //Date Constants
 define('DATETIME_ZERO', '0000-00-00 00:00:00');
 define("AC_DATE_STRING", 1);
@@ -17,22 +18,25 @@ define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
-$domain = parse_url(SITE_URL, PHP_URL_HOST);
+$domain = parse_url(URL_SITE, PHP_URL_HOST);
 
-if ($domain === 'localhost') {
+if (!$domain || $domain === 'localhost') {
 	define('COOKIE_DOMAIN', '');
 } else {
 	define('COOKIE_DOMAIN', '.' . $domain);
 }
 
-// Register Globals
+//Start Session
+ini_set('session.use_cookies', 'On');
+ini_set('session.use_trans_sid', 'Off');
+
+session_name(AMPLOCART_SESSION);
+
+session_set_cookie_params(0, '/', COOKIE_DOMAIN);
+session_start();
+
+// Unregister Globals
 if (ini_get('register_globals')) {
-	ini_set('session.use_cookies', 'On');
-	ini_set('session.use_trans_sid', 'Off');
-
-	session_set_cookie_params(0, '/');
-	session_start();
-
 	$globals = array(
 		$_REQUEST,
 		$_SESSION,
@@ -85,8 +89,9 @@ require_once(_ac_mod_file(DIR_DATABASE . 'db.php'));
 // Engine
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/controller.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'engine/router.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/model.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/view.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/router.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/registry.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/cache.php'));

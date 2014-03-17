@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'error.png'; ?>" alt=""/> <?= _l("Page Not Found!"); ?></h1>
+				<h1><img src="<?= URL_THEME_IMAGE . 'error.png'; ?>" alt=""/> <?= _l("Page Not Found!"); ?></h1>
 			</div>
 			<div class="section">
 				<div
@@ -11,4 +11,4 @@
 			</div>
 		</div>
 	</div>
-<?= $footer; ?>
+<?= $common_footer; ?>

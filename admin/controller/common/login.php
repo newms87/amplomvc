@@ -3,24 +3,11 @@ class Admin_Controller_Common_Login extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/login');
-
 		$this->document->setTitle(_l("Administration"));
 
-		//IF user is logged in, redirect to the homepage
-		if (isset($_POST['username']) && isset($_POST['password'])) {
-			$this->user->logout();
-		} elseif ($this->user->isLogged()) {
+		//I user is logged in, redirect to the homepage
+		if ($this->user->isLogged()) {
 			$this->url->redirect('common/home');
-		}
-
-		//if user is not logged in and has provided valid login credentials
-		if ($this->request->isPost() && $this->validate()) {
-			if (!empty($_GET['redirect'])) {
-				$this->url->redirect(urldecode($_GET['redirect']));
-			} else {
-				$this->url->redirect('common/home');
-			}
 		}
 
 		$this->data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
@@ -33,65 +20,55 @@ class Admin_Controller_Common_Login extends Controller
 
 		$defaults = array(
 			'username' => '',
-			'password' => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			$this->data[$key] = isset($_POST[$key]) ? $_POST[$key] : $default;
-		}
+		$this->data += $_POST + $defaults;
 
 		//If trying to access an admin page, redirect after login
-		if (!isset($_GET['redirect'])) {
-			$route = $this->url->getPath();
-
-			if ($route) {
-				$not_allowed = array(
-					'common/login',
-					'common/logout'
-				);
-
-				if (in_array($route, $not_allowed)) {
-					$redirect = urlencode($this->url->link('common/home'));
-				} else {
-					$redirect = urlencode(preg_replace("/redirect=[^&#]*/", '', $this->url->here()));
-				}
-			} else {
-				$redirect = urlencode($this->url->link('common/home'));
-			}
+		if (!empty($_REQUEST['redirect'])) {
+			$redirect = $_REQUEST['redirect'];
 		} else {
-			$redirect = $_GET['redirect'];
+			$redirect = 'common/home';
 		}
 
-		$this->data['action'] = $this->url->link('common/login', 'redirect=' . $redirect);
+		$this->request->setRedirect('login', $redirect);
 
+		//Actions
+		$this->data['action'] = $this->url->link('common/login/authenticate');
 		$this->data['forgotten'] = $this->url->link('common/forgotten');
 
+		//The Template
+		$this->view->load('common/login');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate()
+	public function authenticate()
 	{
-		if (isset($_POST['username']) && isset($_POST['password']) && !$this->user->login($_POST['username'], $_POST['password'])) {
-			if (!empty($_GET['response'])) {
-				echo "FAILURE";
-				exit;
+		if ($this->user->isLogged()) {
+			$this->message->add('notify', _l("You are already logged in. Please log out first."));
+		}
+		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
+			if (!empty($_REQUEST['redirect'])) {
+				$redirect = $_REQUEST['redirect'];
+			} elseif ($this->request->hasRedirect('login')) {
+				$this->request->doRedirect('login');
+			} else {
+				$redirect = 'common/home';
 			}
 
-			$this->message->add('warning', _l("No match for Username and/or Password."));
-
-			return false;
+			$this->url->redirect($redirect);
+		} else {
+			$this->message->add('warning', $this->user->getError());
 		}
 
-		if (!empty($_GET['response'])) {
-			echo "SUCCESS";
-			exit;
-		}
-
-		return true;
+		$this->url->redirect('common/login');
 	}
 }

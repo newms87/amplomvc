@@ -3,7 +3,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/sale_coupon');
+		$this->view->load('report/sale_coupon');
 
 		$this->document->setTitle(_l("Coupon Report"));
 

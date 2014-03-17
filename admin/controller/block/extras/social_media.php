@@ -6,7 +6,7 @@ class Admin_Controller_Block_Extras_SocialMedia extends Controller
 {
 	public function settings(&$settings)
 	{
-		$this->template->load('block/extras/social_media_settings');
+		$this->view->load('block/extras/social_media_settings');
 
 		$thumb_width  = 40;
 		$thumb_height = 40;

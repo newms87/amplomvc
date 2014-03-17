@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Page"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Page"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit()" class="button"><?= _l("Save"); ?></a>
@@ -43,8 +43,8 @@
 							<input type="text" id="zoom_value" value="80%"/>
 
 							<div class="zoom_change">
-								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>"/>
-								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>"/>
+								<img class="zoom_in" src="<?= URL_THEME_IMAGE . 'zoom-in.png'; ?>"/>
+								<img class="zoom_out" src="<?= URL_THEME_IMAGE . 'zoom-out.png'; ?>"/>
 							</div>
 						</div>
 						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
@@ -246,4 +246,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

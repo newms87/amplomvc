@@ -197,7 +197,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 	private function getList()
 	{
-		$this->template->load('sale/return_list');
+		$this->view->load('sale/return_list');
 
 		if (isset($_GET['filter_return_id'])) {
 			$filter_return_id = $_GET['filter_return_id'];
@@ -506,7 +506,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('sale/return_form');
+		$this->view->load('sale/return_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -778,7 +778,7 @@ class Admin_Controller_Sale_Return extends Controller
 		$return_info = $this->Model_Sale_Return->getReturn($return_id);
 
 		if ($return_info) {
-			$this->template->load('sale/return_info');
+			$this->view->load('sale/return_info');
 			$this->document->setTitle(_l("Product Returns"));
 
 			$url = '';
@@ -868,7 +868,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 			$this->response->setOutput($this->render());
 		} else {
-			$this->template->load('error/not_found');
+			$this->view->load('error/not_found');
 			$this->document->setTitle(_l("Product Returns"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -956,7 +956,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function history()
 	{
-		$this->template->load('sale/return_history');
+		$this->view->load('sale/return_history');
 
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);

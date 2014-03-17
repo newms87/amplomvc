@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= $page_title; ?></h1>
 
@@ -13,7 +13,7 @@
 	</div>
 
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

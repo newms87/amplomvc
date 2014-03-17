@@ -7,7 +7,7 @@ class Admin_Controller_Block_Widget_Faq extends Controller
 
 	public function settings(&$settings)
 	{
-		$this->template->load('block/widget/faq_settings');
+		$this->view->load('block/widget/faq_settings');
 
 		$this->data['settings'] = $settings;
 

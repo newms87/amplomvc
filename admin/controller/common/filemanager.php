@@ -3,9 +3,9 @@ class Admin_Controller_Common_Filemanager extends Controller
 {
 	public function index()
 	{
-		$this->template->load('common/filemanager');
+		$this->view->load('common/filemanager');
 
-		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		$this->data['base'] = URL_SITE;
 
 		$dir = '';
 
@@ -23,10 +23,10 @@ class Admin_Controller_Common_Filemanager extends Controller
 	public function ckeditor()
 	{
 		//Template and Language
-		$this->template->load('common/ckeditor');
-		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		$this->view->load('common/ckeditor');
+		$this->data['base'] = URL_SITE;
 
-		$this->data['directory'] = HTTP_IMAGE . 'data/';
+		$this->data['directory'] = URL_IMAGE . 'data/';
 
 		$defaults = array(
 			'field'           => '',

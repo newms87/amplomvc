@@ -36,10 +36,10 @@ final class Action
 
 			$filepath .= $part;
 
-			$is_file = is_file(SITE_DIR . $filepath . '.php');
-			$is_dir  = is_dir(SITE_DIR . $filepath);
+			$is_file = is_file(DIR_SITE . $filepath . '.php');
+			$is_dir  = is_dir(DIR_SITE . $filepath);
 
-			$next = ($i < ($count - 1)) ? SITE_DIR . $filepath . '/' . $parts[$i + 1] : '';
+			$next = ($i < ($count - 1)) ? DIR_SITE . $filepath . '/' . $parts[$i + 1] : '';
 
 			//Scan directories until we find file requested
 			//If part is a directory AND either not a file, or a file and the next part is a file or directory, assume the part is a directory
@@ -49,7 +49,7 @@ final class Action
 				$filepath .= '/';
 				$this->class .= $this->tool->_2CamelCase($part) . '_';
 			} elseif ($is_file) {
-				$this->file = SITE_DIR . $filepath . '.php';
+				$this->file = DIR_SITE . $filepath . '.php';
 
 				$this->class .= $this->tool->_2CamelCase($part);
 			} elseif ($this->file) {

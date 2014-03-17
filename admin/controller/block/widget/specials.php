@@ -9,7 +9,7 @@ class Admin_Controller_Block_Widget_Specials extends Controller
 		$this->data['settings'] = $settings;
 
 		//The Template
-		$this->template->load('block/widget/specials_settings');
+		$this->view->load('block/widget/specials_settings');
 
 		//Render
 		$this->render();

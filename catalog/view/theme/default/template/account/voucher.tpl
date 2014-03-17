@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Purchase a Gift Certificate"); ?></h1>
 
@@ -76,9 +76,9 @@
 		</div>
 	</form>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -68,7 +68,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->data['data_versions'] = $versions;
 
 		//The Template
-		$this->template->load('setting/update');
+		$this->view->load('setting/update');
 
 		//Dependencies
 		$this->children = array(

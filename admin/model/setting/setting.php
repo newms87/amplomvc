@@ -5,7 +5,7 @@ class Admin_Model_Setting_Setting extends Model
 	{
 		$widgets = array();
 
-		$files = glob(DIR_APPLICATION . 'controller/setting/*');
+		$files = glob(DIR_SITE . 'admin/controller/setting/*');
 
 		if ($files) {
 			$order = 0;
@@ -20,9 +20,9 @@ class Admin_Model_Setting_Setting extends Model
 				$widget['title'] = _l($directives['title']);
 
 				if (!empty($directives['icon']) && is_file(DIR_THEME_IMAGE . $directives['icon'])) {
-					$widget['icon'] = HTTP_THEME_IMAGE . $directives['icon'];
+					$widget['icon'] = URL_THEME_IMAGE . $directives['icon'];
 				} else {
-					$widget['icon'] = HTTP_THEME_IMAGE . 'admin_settings.png';
+					$widget['icon'] = URL_THEME_IMAGE . 'admin_settings.png';
 				}
 
 				if (!empty($directives['path'])) {

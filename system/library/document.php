@@ -19,7 +19,7 @@ class Document extends Library
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
-		$this->ac_vars['site_url'] = SITE_URL;
+		$this->ac_vars['url_site'] = URL_SITE;
 
 		if ($ac_vars = $this->config->get('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
@@ -87,22 +87,30 @@ class Document extends Library
 			'href'         => '',
 			'query'        => null,
 			'title'        => '',
+			'class'        => array(),
 			'sort_order'   => null,
 			'parent'       => 0,
 			'attrs'        => array(),
 			'target'       => '',
+			'children'     => array(),
 		);
 
 		$new_link = $link_info + $defaults;
 
 		//If group doesn't exist, make a new group
 		if (!isset($this->links[$group])) {
-			$this->links[$group] = array($new_link);
+			$this->links[$group][$new_link['name']] = $new_link;
 			return;
 		}
 
 		//Find the children list for the parent
 		if ($new_link['parent']) {
+			array_walk_children($this->links[$group], 'children', function (&$link, $index) use ($new_link) {
+				if ($index === $new_link['parent']) {
+					$link['children'][$new_link['name']] = $new_link;
+				}
+			});
+
 			$stack       = array();
 			$stack_index = 0;
 
@@ -144,7 +152,7 @@ class Document extends Library
 			return true;
 		}
 
-		trigger_error(_l("%s(): Unable to find %s in link group %s!", __METHOD__, $new_link[parent], $group));
+		trigger_error(_l("%s(): Unable to find %s in link group %s!", __METHOD__, $new_link['parent'], $group));
 
 		return false;
 	}
@@ -183,7 +191,7 @@ class Document extends Library
 
 		$mtime = filemtime($file);
 
-		$sass_file = DIR_CACHE . 'sass/' . $reference .  $mtime . '.css';
+		$sass_file = DIR_CACHE . 'sass/' . $reference . $mtime . '.css';
 
 		//If file is not in cached, or original file has been modified, regenerate the SASS file
 		if (true || !is_file($sass_file) || filemtime($sass_file) < $mtime) {
@@ -198,19 +206,23 @@ class Document extends Library
 			require_once(DIR_RESOURCES . 'css/phpsass/SassParser.php');
 
 			$options = array(
-				'style' => $style,
-				'cache' => FALSE,
-				'syntax' => $syntax,
-				'debug' => FALSE,
+				'style'     => $style,
+				'cache'     => false,
+				'syntax'    => $syntax,
+				'debug'     => false,
 				'callbacks' => array(
-					'warn' => function ($message, $context) {echo $context . ': ' . $message;},
-					'debug' => function ($message) {echo $message;},
+					'warn'  => function ($message, $context) {
+							echo $context . ': ' . $message;
+						},
+					'debug' => function ($message) {
+							echo $message;
+						},
 				),
 			);
 
 			// Execute the compiler.
 			$parser = new SassParser($options);
-			$css = $parser->toCss($file);
+			$css    = $parser->toCss($file);
 
 			//Write cache file
 			_is_writable(dirname($sass_file));
@@ -218,25 +230,40 @@ class Document extends Library
 		}
 
 		//Return the URL for the cache file
-		return str_replace(DIR_CACHE , SITE_URL . 'system/cache/', $sass_file);
+		return str_replace(DIR_CACHE, URL_SITE . 'system/cache/', $sass_file);
 	}
 
-	public function compileLess($file, $reference)
+	public function compileLess($file, $reference, $refresh = false)
 	{
 		if (!is_file($file)) {
 			return null;
 		}
 
-		$mtime = filemtime($file);
+		$mtime = _filemtime($file);
 
-		$less_file = DIR_CACHE . 'less/' . $reference .  $mtime . '.css';
+		$less_file = DIR_CACHE . 'less/' . $reference . '.' . $mtime . '.css';
 
-		//If file is not in cached, or original file has been modified, regenerate the SASS file
-		if (!is_file($less_file) || filemtime($less_file) < $mtime) {
+		if (is_file($less_file)) {
+			//Check Less @imports for modifications
+			$dependencies = $this->cache->get('less.' . $reference);
 
-			echo 'from cache';
+			if (!empty($dependencies)) {
+				foreach ($dependencies as $d => $d_mtime) {
+					if (_filemtime($less_file) < _filemtime($d)) {
+						$refresh = true;
+						break;
+					}
+				}
+			}
+		} else {
+			$refresh = true;
+		}
+
+		//If refresh requested or cache is invalid
+		if ($refresh) {
 			//Cleared cached files for this reference
 			$cached_files = glob(DIR_CACHE . 'less/' . $reference . '*.css');
+
 			foreach ($cached_files as $cache) {
 				@unlink($cache);
 			}
@@ -248,13 +275,17 @@ class Document extends Library
 
 			$css = $less->compileFile($file);
 
+			$dependencies = $less->allParsedFiles();
+
+			$this->cache->set('less.' . $reference, $dependencies);
+
 			//Write cache file
 			_is_writable(dirname($less_file));
 			file_put_contents($less_file, $css);
 		}
 
 		//Return the URL for the cache file
-		return str_replace(DIR_CACHE , SITE_URL . 'system/cache/', $less_file);
+		return str_replace(DIR_CACHE, URL_SITE . 'system/cache/', $less_file);
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
@@ -285,17 +316,17 @@ class Document extends Library
 	public function addScript($script, $priority = 100)
 	{
 		if (!is_file($script)) {
-			if (is_file(SITE_DIR . $script)) {
-				$script = SITE_URL . $script;
-			} elseif (is_file(DIR_JS . $script)) {
-				$script = HTTP_JS . $script;
+			if (is_file(DIR_SITE . $script)) {
+				$script = URL_SITE . $script;
+			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
+				$script = URL_RESOURCES . 'js/' . $script;
 			} elseif ($this->config->isAdmin()) {
-				if (is_file(SITE_DIR . 'admin/view/javascript/' . $script)) {
-					$script = SITE_URL . 'admin/view/javascript/' . $script;
+				if (is_file(DIR_SITE . 'admin/view/javascript/' . $script)) {
+					$script = URL_SITE . 'admin/view/javascript/' . $script;
 				}
 			} else {
-				if (is_file(SITE_DIR . 'catalog/view/javascript/' . $script)) {
-					$script = SITE_URL . 'catalog/view/javascript/' . $script;
+				if (is_file(DIR_SITE . 'catalog/view/javascript/' . $script)) {
+					$script = URL_SITE . 'catalog/view/javascript/' . $script;
 				}
 			}
 		}
@@ -400,11 +431,13 @@ class Document extends Library
 		//Filter Conditional Links
 		//TODO: This leaves null values in group links. Consider changing approach.
 		foreach ($nav_groups as &$group) {
-			array_walk_children($group, 'children', function (&$l, $ctrl) {
-				if (!empty($l['condition']) && !$ctrl->condition->is($l['condition'])) {
+			array_walk_children($group, 'children', function (&$l) {
+				global $registry;
+
+				if (!empty($l['condition']) && !$registry->get('condition')->is($l['condition'])) {
 					$l = null;
 				}
-			}, $this);
+			});
 		}
 		unset($group);
 
@@ -426,7 +459,7 @@ class Document extends Library
 		}
 
 		foreach ($links as $key => &$link) {
-			if (!preg_match("/^https?:\/\//", $link['href'])) {
+			if (!preg_match("/^https?:\\/\\//", $link['href'])) {
 				if (!empty($link['is_route'])) {
 					$query        = isset($link['query']) ? $link['query'] : '';
 					$link['href'] = $this->url->link($link['href'], $query);
@@ -478,12 +511,6 @@ class Document extends Library
 			$active_link['active'] = 'active';
 		}
 
-		//If the link wasn't found, try changing the route to the index function and search for the active link again
-		//if (preg_match("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", $this->url->getPath())) {
-		//	$current_page['query']['route'] = preg_replace("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", "\$1", $this->url->getPath());
-		//	$this->findActiveLink($links, $current_page);
-		//}
-
 		return $active_link;
 	}
 
@@ -505,21 +532,25 @@ class Document extends Library
 
 		switch ($depth) {
 			case 0:
-				$class = "top_menu";
+				$class = "top-menu";
 				break;
 			case 1:
-				$class = "sub_menu";
+				$class = "sub-menu";
 				break;
 			default:
-				$class = "child_menu child_$depth";
+				$class = "child-menu child-$depth";
 				break;
 		}
 
-		$html = "<ul class=\"link_list $class\">";
+		$html = "<ul class=\"link-list $class\">";
 
 		$zindex = count($links);
 
 		foreach ($links as $link) {
+			if (!$link) {
+				continue;
+			}
+
 			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
 				$link['attrs']['title'] = $link['title'];
 			}
@@ -533,9 +564,9 @@ class Document extends Library
 			if (!empty($link['children'])) {
 				$children = $this->renderLinks($link['children'], $sort, $depth + 1);
 				if (!empty($link['attrs']['class'])) {
-					$link['attrs']['class'] .= ' has_children';
+					$link['attrs']['class'] .= ' has-children';
 				} else {
-					$link['attrs']['class'] = 'has_children';
+					$link['attrs']['class'] = 'has-children';
 				}
 			}
 
@@ -568,7 +599,7 @@ class Document extends Library
 
 			$target = !empty($link['target']) ? "target=\"$link[target]\"" : '';
 
-			$html .= "<li $attr_list style=\"z-index: " . $zindex . "\"><a $href $target class=\"menu_link\">$link[display_name]</a>$children</li>";
+			$html .= "<li $attr_list style=\"z-index: " . $zindex . "\"><a $href $target class=\"menu-link\">$link[display_name]</a>$children</li>";
 
 			$zindex--;
 		}

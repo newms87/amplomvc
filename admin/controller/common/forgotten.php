@@ -47,7 +47,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		);
 
 		//The Template
-		$this->template->load('common/forgotten');
+		$this->view->load('common/forgotten');
 
 		//Render
 		$this->response->setOutput($this->render());
@@ -97,7 +97,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		$this->data['cancel'] = $this->url->link('common/login');
 
 		//The Template
-		$this->template->load('common/reset');
+		$this->view->load('common/reset');
 
 		//Dependencies
 		$this->children = array(

@@ -18,7 +18,7 @@ class Catalog_Controller_Account_Download extends Controller
 		$download_total = $this->Model_Account_Download->getTotalDownloads();
 
 		if ($download_total) {
-			$this->template->load('account/download');
+			$this->view->load('account/download');
 
 			if (isset($_GET['page'])) {
 				$page = $_GET['page'];
@@ -71,27 +71,27 @@ class Catalog_Controller_Account_Download extends Controller
 			$this->data['continue'] = $this->url->link('account/account');
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
+				'area/left',
+				'area/right',
+				'area/top',
+				'area/bottom',
 				'common/footer',
 				'common/header'
 			);
 
 			$this->response->setOutput($this->render());
 		} else {
-			$this->template->load('error/not_found');
+			$this->view->load('error/not_found');
 
 			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
 
 			$this->data['continue'] = $this->url->link('account/account');
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
+				'area/left',
+				'area/right',
+				'area/top',
+				'area/bottom',
 				'common/footer',
 				'common/header'
 			);

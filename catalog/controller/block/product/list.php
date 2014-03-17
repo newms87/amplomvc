@@ -7,7 +7,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 		$template     = !empty($settings['template']) ? $settings['template'] : 'block/product/product_list';
 		$process_data = isset($settings['process_data']) ? $settings['process_data'] : true;
 
-		$this->template->load($template);
+		$this->view->load($template);
 		//TODO: need to implement these options in admin panel!
 		$this->data['list_show_add_to_cart'] = $this->config->get('config_list_show_add_to_cart');
 		$this->data['show_price_tax']        = $this->config->get('config_show_price_with_tax');

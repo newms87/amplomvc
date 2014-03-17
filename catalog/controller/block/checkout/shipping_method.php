@@ -35,7 +35,7 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 		$this->data['validate_shipping_method'] = $this->url->link('block/checkout/shipping_method/validate');
 
 		//The Template
-		$this->template->load('block/checkout/shipping_method');
+		$this->view->load('block/checkout/shipping_method');
 
 		//Render
 		$this->response->setOutput($this->render());

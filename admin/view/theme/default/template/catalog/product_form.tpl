@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= _l("Products"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'product.png'; ?>" alt=""/> <?= _l("Products"); ?></h1>
 
 			<div class="buttons">
 				<? if (count($data_product_classes) > 1) { ?>
@@ -262,7 +262,7 @@
 										<div class="product_related" data-row="<?= $row; ?>">
 											<input type="hidden" name="product_related[]" value="<?= $related['product_id']; ?>"/>
 											<span class="related_name"><?= $related['name']; ?></span>
-											<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete" onclick="$(this).closest('.product_related').remove();"/>
+											<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" class="delete" onclick="$(this).closest('.product_related').remove();"/>
 										</div>
 									<? } ?>
 								</div>
@@ -278,14 +278,14 @@
 							<? foreach ($product_options as $row => $product_option) { ?>
 								<a href="#tab-option-<?= $row; ?>" class="option_tab_button" data-row="<?= $row; ?>">
 									<span class="option_tab_title"><?= $product_option['name']; ?></span>
-									<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="return remove_option($(this));"/>
+									<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="return remove_option($(this));"/>
 								</a>
 							<? } ?>
 						</div>
 
 						<div id="option-add">
 							<input id="product_option_autocomplete" value=""/>
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= _l("Add Option"); ?>" title="<?= _l("Add Option"); ?>"/>
+							<img src="<?= URL_THEME_IMAGE . 'add.png'; ?>" alt="<?= _l("Add Option"); ?>" title="<?= _l("Add Option"); ?>"/>
 						</div>
 						<div class="help">
 							<div><?= _l("To add an option category:"); ?></div>
@@ -335,7 +335,7 @@
 												<? foreach ($product_option['unused_option_values'] as $uov_row => $option_value) { ?>
 													<div class="unused_option_value" data-row="<?= $uov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));">
 														<span class="uov_label"><?= $option_value['value']; ?></span>
-														<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>"/>
+														<img src="<?= URL_THEME_IMAGE . "add.png"; ?>"/>
 														<script type="text/javascript">
 															$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
 														</script>
@@ -1009,4 +1009,4 @@
 <?= $this->builder->js('translations', $translations); ?>
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

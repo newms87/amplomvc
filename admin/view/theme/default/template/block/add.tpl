@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div id="add_block" class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("New Block"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("New Block"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= _l("Create Block"); ?></a>
@@ -63,4 +63,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

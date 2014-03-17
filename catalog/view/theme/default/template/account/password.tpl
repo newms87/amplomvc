@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 
 	<h1><?= _l("Change Password"); ?></h1>
 
@@ -33,7 +33,7 @@
 		</div>
 	</form>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -101,7 +101,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	private function getList()
 	{
-		$this->template->load('localisation/currency_list');
+		$this->view->load('localisation/currency_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -231,7 +231,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('localisation/currency_form');
+		$this->view->load('localisation/currency_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

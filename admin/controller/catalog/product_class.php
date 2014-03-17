@@ -70,7 +70,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->document->setTitle(_l("Product Classes"));
 
 		//The Template
-		$this->template->load('catalog/product_class_list');
+		$this->view->load('catalog/product_class_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -191,7 +191,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->document->setTitle(_l("Product Classes"));
 
 		//The template
-		$this->template->load('catalog/product_class_form');
+		$this->view->load('catalog/product_class_form');
 
 		//Insert or Update
 		$product_class_id = isset($_GET['product_class_id']) ? (int)$_GET['product_class_id'] : 0;

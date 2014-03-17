@@ -1,7 +1,7 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 <div class="content">
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 
 	<h1><?= _l("Order History"); ?></h1>
@@ -22,10 +22,10 @@
 					</div>
 					<div class="order_info">
 						<a class="view" href="<?= $order['href']; ?>">
-							<img src="<?= HTTP_THEME_IMAGE . 'view.png'; ?>" alt="<?= _l("View"); ?>" title="<?= _l("View Order"); ?>"/>
+							<img src="<?= URL_THEME_IMAGE . 'view.png'; ?>" alt="<?= _l("View"); ?>" title="<?= _l("View Order"); ?>"/>
 						</a>
 						<a class="reorder" href="<?= $order['reorder']; ?>">
-							<img src="<?= HTTP_THEME_IMAGE . 'reorder.png'; ?>" alt="<?= _l("Reorder"); ?>" title="<?= _l("Reorder"); ?>"/>
+							<img src="<?= URL_THEME_IMAGE . 'reorder.png'; ?>" alt="<?= _l("Reorder"); ?>" title="<?= _l("Reorder"); ?>"/>
 						</a>
 					</div>
 				</div>
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
 
 			<div class="batch_actions">
 				<a href="<?= $download_email_list; ?>" class="button email_list"><?= _l("Download Email List"); ?></a>
@@ -23,4 +23,4 @@
 	</div>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

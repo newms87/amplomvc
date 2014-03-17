@@ -10,7 +10,7 @@
 		href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>"/>
 	<script type="text/javascript" src="<?= HTTP_JS . "jquery/ajaxupload.js"; ?>"></script>
 	<script type="text/javascript" src="<?= HTTP_JS . "common.js"; ?>"></script>
-	<script type="text/javascript" src="<?= HTTP_THEME_JS . "common.js"; ?>"></script>
+	<script type="text/javascript" src="<?= URL_THEME_JS . "common.js"; ?>"></script>
 	<style type="text/css">
 		body {
 			padding: 0;
@@ -111,19 +111,19 @@
 <div id="container">
 	<div id="menu">
 		<a id="create" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/folder.png"; ?>');"><?= _l("Folder"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/folder.png"; ?>');"><?= _l("Folder"); ?></a>
 		<a id="delete" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');"><?= _l("Delete"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');"><?= _l("Delete"); ?></a>
 		<a id="move" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= _l("Move"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= _l("Move"); ?></a>
 		<a id="copy" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= _l("Copy"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= _l("Copy"); ?></a>
 		<a id="rename" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= _l("Rename"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= _l("Rename"); ?></a>
 		<a id="upload" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= _l("Upload"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= _l("Upload"); ?></a>
 		<a id="refresh" class="button"
-			style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= _l("Refresh"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= _l("Refresh"); ?></a>
 	</div>
 	<div id="column-left"></div>
 	<div id="column-right"></div>
@@ -137,7 +137,7 @@ $(document).ready(function () {
 			async: true,
 			opts: {
 				method: 'post',
-				url: "<?= HTTP_AJAX . "common/filemanager/directory"; ?>"
+				url: "<?= URL_AJAX . "common/filemanager/directory"; ?>"
 			}
 		},
 		selected: 'top',
@@ -180,7 +180,7 @@ $(document).ready(function () {
 			},
 			onselect: function (NODE, TREE_OBJ) {
 				$.ajax({
-					url: "<?= HTTP_AJAX . "common/filemanager/files"; ?>",
+					url: "<?= URL_AJAX . "common/filemanager/files"; ?>",
 					type: 'post',
 					data: 'directory=" + encodeURIComponent($(NODE).attr("directory')
 				),
@@ -212,7 +212,7 @@ $(document).ready(function () {
 
 					$('#column-right a').each(function (index, element) {
 						$.ajax({
-							url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=" + encodeURIComponent("data/' + $(element).find('input[name=\'image\']').attr('value')),
+							url: "<?= URL_AJAX . "common/filemanager/image"; ?>" + '?image=" + encodeURIComponent("data/' + $(element).find('input[name=\'image\']').attr('value')),
 							dataType
 						:
 						'html',
@@ -280,7 +280,7 @@ $('#create').bind('click', function () {
 
 		$('#dialog input[type=\'button\']').bind('click', function () {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/create"; ?>",
+				url: "<?= URL_AJAX . "common/filemanager/create"; ?>",
 				type: 'post',
 				data: 'directory=" + encodeURIComponent($(tree.selected).attr("directory')
 			)
@@ -324,7 +324,7 @@ $('#delete').bind('click', function () {
 
 	if (path) {
 		$.ajax({
-			url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
+			url: "<?= URL_AJAX . "common/filemanager/delete"; ?>",
 			type: 'post',
 			data: 'path=" + encodeURIComponent(path),
 			dataType: "json',
@@ -350,7 +350,7 @@ $('#delete').bind('click', function () {
 
 		if (tree.selected) {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
+				url: "<?= URL_AJAX . "common/filemanager/delete"; ?>",
 				type: 'post',
 				data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
 		),
@@ -401,14 +401,14 @@ $('#move').bind('click', function () {
 		resizable: false
 	});
 
-	$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
+	$('#dialog select[name=\'to\']').load("<?= URL_AJAX . "common/filemanager/folders"; ?>");
 
 	$('#dialog input[type=\'button\']').bind('click', function () {
 		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
 
 		if (path) {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
+				url: "<?= URL_AJAX . "common/filemanager/move"; ?>",
 				type: 'post',
 				data: 'from=" + encodeURIComponent(path) + "&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()
 		),
@@ -444,7 +444,7 @@ $('#move').bind('click', function () {
 		var tree = $.tree.focused();
 
 		$.ajax({
-			url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
+			url: "<?= URL_AJAX . "common/filemanager/move"; ?>",
 			type: 'post',
 			data: 'from=" + encodeURIComponent($(tree.selected).attr("directory')
 	)
@@ -498,14 +498,14 @@ $('#copy').bind('click', function () {
 		resizable: false
 	});
 
-	$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
+	$('#dialog select[name=\'to\']').load("<?= URL_AJAX . "common/filemanager/folders"; ?>");
 
 	$('#dialog input[type=\'button\']').bind('click', function () {
 		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
 
 		if (path) {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
+				url: "<?= URL_AJAX . "common/filemanager/copy"; ?>",
 				type: 'post',
 				data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()
 		),
@@ -541,7 +541,7 @@ $('#copy').bind('click', function () {
 		var tree = $.tree.focused();
 
 		$.ajax({
-			url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
+			url: "<?= URL_AJAX . "common/filemanager/copy"; ?>",
 			type: 'post',
 			data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
 	)
@@ -600,7 +600,7 @@ $('#rename').bind('click', function () {
 
 		if (path) {
 			$.ajax({
-				url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
+				url: "<?= URL_AJAX . "common/filemanager/rename"; ?>",
 				type: 'post',
 				data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()
 		),
@@ -636,7 +636,7 @@ $('#rename').bind('click', function () {
 		var tree = $.tree.focused();
 
 		$.ajax({
-			url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
+			url: "<?= URL_AJAX . "common/filemanager/rename"; ?>",
 			type: 'post',
 			data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')
 	)
@@ -677,7 +677,7 @@ $('#rename').bind('click', function () {
 ;
 
 new AjaxUpload('#upload', {
-	action: "<?= HTTP_AJAX . "common/filemanager/upload"; ?>",
+	action: "<?= URL_AJAX . "common/filemanager/upload"; ?>",
 	name: 'image',
 	autoSubmit: false,
 	responseType: 'json',
@@ -693,7 +693,7 @@ new AjaxUpload('#upload', {
 		this.submit();
 	},
 	onSubmit: function (file, extension) {
-		$('#upload').append('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
+		$('#upload').append('<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
 	},
 	onComplete: function (file, json) {
 		if (json.success) {

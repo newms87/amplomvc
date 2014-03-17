@@ -75,7 +75,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->document->setTitle(_l("Attribute Groups"));
 
 		//The Template
-		$this->template->load('catalog/attribute_group_list');
+		$this->view->load('catalog/attribute_group_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -184,7 +184,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->document->setTitle(_l("Attribute Groups"));
 
 		//The Template
-		$this->template->load('catalog/attribute_group_form');
+		$this->view->load('catalog/attribute_group_form');
 
 		//Insert or Update
 		$attribute_group_id = !empty($_GET['attribute_group_id']) ? $_GET['attribute_group_id'] : 0;

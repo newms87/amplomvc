@@ -10,7 +10,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('setting/order_status');
+		$this->view->load('setting/order_status');
 		//Page Head
 		$this->document->setTitle(_l("Order Statuses"));
 

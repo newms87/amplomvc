@@ -50,14 +50,14 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->data['checkout'] = $this->url->link('checkout/checkout');
 
 		//The Template
-		$this->template->load('cart/cart');
+		$this->view->load('cart/cart');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

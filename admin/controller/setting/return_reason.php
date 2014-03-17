@@ -77,7 +77,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//The Template
-		$this->template->load('setting/return_reason');
+		$this->view->load('setting/return_reason');
 
 		//Dependencies
 		$this->children = array(

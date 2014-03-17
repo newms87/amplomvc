@@ -3,14 +3,15 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 {
 	public function index($settings)
 	{
-		$this->template->load('block/module/sidebar');
+		$this->view->load('block/module/sidebar');
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
 		$categories = $this->Model_Catalog_Category->getCategoryTree();
 
-		array_walk_children($categories, 'children', function (&$category, $that) {
-			$category['href'] = $that->url->link('product/category', 'category_id=' . $category['category_id']);
-		}, $this);
+		array_walk_children($categories, 'children', function (&$category) {
+			global $registry;
+			$category['href'] = $registry->get('url')->link('product/category', 'category_id=' . $category['category_id']);
+		});
 
 		$main_menu = $categories;
 

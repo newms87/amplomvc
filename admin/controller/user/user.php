@@ -74,7 +74,7 @@ class Admin_Controller_User_User extends Controller
 
 	private function getList()
 	{
-		$this->template->load('user/user_list');
+		$this->view->load('user/user_list');
 
 		$url_items = array(
 			'sort'  => 'username',
@@ -159,7 +159,7 @@ class Admin_Controller_User_User extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('user/user_form');
+		$this->view->load('user/user_form');
 
 		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
@@ -220,7 +220,7 @@ class Admin_Controller_User_User extends Controller
 			'id'   => $user_id
 		);
 
-		$this->data['contact_template'] = $this->renderController('includes/contact', $contact);
+		$this->data['contact_template'] = $this->call('includes/contact', $contact);
 
 
 		if (!$user_id) {

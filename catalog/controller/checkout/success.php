@@ -28,14 +28,14 @@ class Catalog_Controller_Checkout_Success extends Controller
 		$this->data['continue'] = $this->url->link('common/home');
 
 		//Template and Language
-		$this->template->load('common/success');
+		$this->view->load('common/success');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

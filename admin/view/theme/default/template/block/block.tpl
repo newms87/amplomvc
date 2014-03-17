@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Blocks"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Blocks"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').trigger('saving').submit();" class="button"><?= _l("Save"); ?></a>
@@ -36,13 +36,13 @@
 					<div id="profile_settings_tab_list" class="vtabs">
 						<span id="add_profile_setting">
 							<span><?= _l("New Profile Setting"); ?></span>
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt=""/>
+							<img src="<?= URL_THEME_IMAGE . 'add.png'; ?>" alt=""/>
 						</span>
 
 						<? foreach ($profile_settings as $row => $profile_setting) { ?>
 							<a href="#tab-profile-setting-<?= $row; ?>" data-row="<?= $row; ?>">
 								<span class="tab_name"><?= $profile_setting['name']; ?></span>
-								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="return false" class="delete_tab"/>
+								<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" onclick="return false" class="delete_tab"/>
 							</a>
 						<? } ?>
 					</div>
@@ -75,13 +75,13 @@
 					<div id="profile_tab_list" class="vtabs">
 						<span id="add_profile">
 							<span><?= _l("New Profile"); ?></span>
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>"/>
+							<img src="<?= URL_THEME_IMAGE . 'add.png'; ?>"/>
 						</span>
 
 						<? foreach ($profiles as $row => $profile) { ?>
 							<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
 								<span class="tab_name"><?= $profile['name']; ?></span>
-								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete_tab"/>
+								<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" class="delete_tab"/>
 							</a>
 						<? } ?>
 					</div>
@@ -212,4 +212,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

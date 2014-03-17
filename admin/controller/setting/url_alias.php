@@ -13,7 +13,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->document->setTitle(_l("URL Aliases"));
 
 		//Template
-		$this->template->load('setting/url_alias_list');
+		$this->view->load('setting/url_alias_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -227,7 +227,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->document->setTitle(_l("URL Aliases"));
 
 		//Template
-		$this->template->load('setting/url_alias_form');
+		$this->view->load('setting/url_alias_form');
 
 		//Insert or Update
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;

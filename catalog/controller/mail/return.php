@@ -22,7 +22,7 @@ class Catalog_Controller_Mail_Return extends Controller
 		$this->mail->setSender($this->config->get('config_name'));
 		$this->mail->setSubject(_l("Your return request has been submitted!"));
 
-		$this->template->load('mail/return_html');
+		$this->view->load('mail/return_html');
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();

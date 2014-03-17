@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<h1><?= _l("Product Returns"); ?></h1>
 		<? if (!empty($returns)) { ?>
@@ -15,7 +15,7 @@
 							<b><?= _l("Order ID:"); ?></b> <?= $return['order_id']; ?></div>
 						<div><b><?= _l("Customer:"); ?></b> <?= $return['name']; ?></div>
 						<div class="return-info"><a href="<?= $return['href']; ?>"><img
-									src="<?= HTTP_THEME_IMAGE . 'info.png'; ?>" alt="<?= _l("View"); ?>"
+									src="<?= URL_THEME_IMAGE . 'info.png'; ?>" alt="<?= _l("View"); ?>"
 									title="<?= _l("View"); ?>"/></a></div>
 					</div>
 				</div>
@@ -29,7 +29,7 @@
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
-		<?= $content_bottom; ?>
+		<?= $area_bottom; ?>
 	</div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

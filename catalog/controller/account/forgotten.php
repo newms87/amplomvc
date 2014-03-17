@@ -39,14 +39,14 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		$this->data['back'] = $this->url->link('account/login');
 
 		//The Template
-		$this->template->load('account/forgotten');
+		$this->view->load('account/forgotten');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -99,7 +99,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		$this->data['cancel'] = $this->url->link('account/login');
 
 		//The Template
-		$this->template->load('common/reset');
+		$this->view->load('common/reset');
 
 		//Dependencies
 		$this->children = array(

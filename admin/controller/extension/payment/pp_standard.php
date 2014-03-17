@@ -46,7 +46,7 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 		);
 
 		//Template
-		$this->template->load('extension/payment/pp_standard');
+		$this->view->load('extension/payment/pp_standard');
 
 		//Render
 		$this->render();

@@ -1,11 +1,11 @@
-<?= $header; ?>
+<?= $common_header; ?>
 
 <div class="section clear">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Forgot Your Password?"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Forgot Your Password?"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#forgotten').submit();" class="button"><?= _l("Reset"); ?></a>
@@ -27,4 +27,4 @@
 	</div>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -79,7 +79,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	private function getList()
 	{
-		$this->template->load('mail/newsletter_list');
+		$this->view->load('mail/newsletter_list');
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Newsletter"), $this->url->link('mail/newsletter'));
 
@@ -183,7 +183,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('mail/newsletter_form');
+		$this->view->load('mail/newsletter_form');
 
 		$newsletter_id = $this->data['newsletter_id'] = isset($_GET['newsletter_id']) ? $_GET['newsletter_id'] : 0;
 		$store_id                                     = $this->config->get('config_default_store');
@@ -312,7 +312,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			$this->data += $newsletter_info;
 		}
 
-		$this->template->load('newsletter/betty-v2');
+		$this->view->load('newsletter/betty-v2');
 
 		$this->data['send_date'] = $this->date->format($this->data['send_date'], 'F d, Y');
 
@@ -324,7 +324,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->draw->set_background('#EC227B');
 		$this->draw->font_format('chaletpariseighty.ttf', 20, '#000000', 0, false);
 		$this->draw->write_text($featured_designer['name']);
-		$this->draw->render(DIR_GENERATED_IMAGE . 'newsletter/' . preg_replace("/[^A-Z0-9_]/i", '', $featured_designer['name']) . '.png');
+		$this->draw->render(DIR_IMAGE . 'newsletter/' . preg_replace("/[^A-Z0-9_]/i", '', $featured_designer['name']) . '.png');
 		$featured_designer['name_image'] = $this->draw->get_image_url();
 
 		//The title text image
@@ -332,7 +332,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->draw->set_background('#E8E8E8');
 		$this->draw->font_format('chaletpariseighty.ttf', 29, '#000000', 0, false);
 		$this->draw->write_text($featured_designer['title']);
-		$this->draw->render(DIR_GENERATED_IMAGE . 'newsletter/' . preg_replace("/[^A-Z0-9_]/i", '', $featured_designer['title']) . '.png');
+		$this->draw->render(DIR_IMAGE . 'newsletter/' . preg_replace("/[^A-Z0-9_]/i", '', $featured_designer['title']) . '.png');
 		$featured_designer['title_image'] = $this->draw->get_image_url();
 
 		$featured_designer['href'] = $this->url->store($store_id, 'designers/designers', 'designer_id=' . $featured_designer['designer_id']);

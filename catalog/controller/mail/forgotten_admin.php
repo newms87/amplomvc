@@ -16,7 +16,7 @@ class Catalog_Controller_Mail_ForgottenAdmin extends Controller
 		$this->data['store_name'] = $this->config->get('config_name');
 
 		//Render Mail Template
-		$this->template->load('mail/forgotten_admin');
+		$this->view->load('mail/forgotten_admin');
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();

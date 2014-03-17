@@ -97,7 +97,7 @@ class Admin_Controller_Setting_Cron extends Controller
 		$this->data['activate'] = $this->url->link('setting/cron/activate');
 
 		//The Template
-		$this->template->load('setting/cron');
+		$this->view->load('setting/cron');
 
 		//Dependencies
 		$this->children = array(

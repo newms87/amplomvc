@@ -101,7 +101,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	private function getList()
 	{
-		$this->template->load('sale/customer_blacklist_list');
+		$this->view->load('sale/customer_blacklist_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -227,7 +227,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('sale/customer_blacklist_form');
+		$this->view->load('sale/customer_blacklist_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

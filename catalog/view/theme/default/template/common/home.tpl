@@ -1,5 +1,5 @@
-<?= $header; ?>
-<?= $column_left . $column_right; ?>
-<?= $content_top; ?>
-<?= $content_bottom; ?>
-<?= $footer; ?>
+<?= $common_header; ?>
+<?= $area_left . $area_right; ?>
+<?= $area_top; ?>
+<?= $area_bottom; ?>
+<?= $common_footer; ?>

@@ -82,7 +82,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->document->setTitle(_l("Category"));
 
 		//The Template
-		$this->template->load('catalog/category_list');
+		$this->view->load('catalog/category_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -220,7 +220,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->document->setTitle(_l("Category"));
 
 		//The template
-		$this->template->load('catalog/category_form');
+		$this->view->load('catalog/category_form');
 
 		//Insert or Update
 		$category_id = $this->data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;

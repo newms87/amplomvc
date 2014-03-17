@@ -3,7 +3,7 @@ class Catalog_Controller_Information_Sitemap extends Controller
 {
 	public function index()
 	{
-		$this->template->load('information/sitemap');
+		$this->view->load('information/sitemap');
 
 		$this->document->setTitle(_l("Site Map"));
 
@@ -67,10 +67,10 @@ class Catalog_Controller_Information_Sitemap extends Controller
 		}
 
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

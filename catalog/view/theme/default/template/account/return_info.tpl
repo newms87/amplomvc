@@ -1,8 +1,8 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 
 <div class="content">
-	<?= $content_top; ?>
+	<?= $area_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 
 	<h1><?= _l("Return Information"); ?></h1>
@@ -95,7 +95,7 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

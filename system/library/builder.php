@@ -82,12 +82,9 @@ class Builder extends Library
 		);
 
 		//Load Batch Action template
-		$template = new Template($this->registry);
+		$view = new View($this->registry);
 
-		$template->load('block/widget/batch_action');
-		$template->setData($data);
-
-		return $template->render();
+		return $view->render('block/widget/batch_action', $data);
 	}
 
 	//TODO: This is a hack... Handle this better
@@ -172,7 +169,7 @@ class Builder extends Library
 				$html .= "<div class=\"image click_image\" onclick=\"upload_image($(this));\">";
 				$html .= "<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" /><br />";
 				$html .= "<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
-				$html .= "<div class=\"click_image_text\"><img src=\"" . HTTP_THEME_IMAGE . "small_plus_icon.gif\" /><span>Click to Change<span></div>";
+				$html .= "<div class=\"click_image_text\"><img src=\"" . URL_THEME_IMAGE . "small_plus_icon.gif\" /><span>Click to Change<span></div>";
 				$html .= "</div>";
 				break;
 		}

@@ -1,10 +1,10 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
 
 			<div class="buttons">
 				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _l("Run Cron"); ?></a>
@@ -120,4 +120,4 @@
 		}});
 	</script>
 
-	<?= $footer; ?>
+	<?= $common_footer; ?>

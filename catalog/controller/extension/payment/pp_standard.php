@@ -79,7 +79,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 			$this->data['return'] = $this->url->link('checkout/success');
 		}
 
-		$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
+		$server = URL_IMAGE;
 
 		//Ajax Urls
 		$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
@@ -91,7 +91,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		$this->data['testmode']      = $this->settings['test'];
 
 		//The Template
-		$this->template->load('payment/pp_standard');
+		$this->view->load('payment/pp_standard');
 
 		//Render
 		return $this->render();

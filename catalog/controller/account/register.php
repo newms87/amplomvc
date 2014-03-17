@@ -75,14 +75,14 @@ class Catalog_Controller_Account_Register extends Controller
 		$this->data['login'] = $this->url->link('account/login');
 
 		//The Template
-		$this->template->load('account/register');
+		$this->view->load('account/register');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

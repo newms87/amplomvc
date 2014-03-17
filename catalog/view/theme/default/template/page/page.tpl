@@ -1,5 +1,5 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
 
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
@@ -11,12 +11,12 @@
 			<h1><?= $title; ?></h1>
 		<? } ?>
 
-		<?= $content_top; ?>
+		<?= $area_top; ?>
 
 		<div class="page_content"><?= $content; ?></div>
 	</div>
 
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

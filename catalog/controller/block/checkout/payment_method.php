@@ -42,7 +42,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		$this->data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');
 
 		//The Template
-		$this->template->load('block/checkout/payment_method');
+		$this->view->load('block/checkout/payment_method');
 
 		//Render
 		$this->response->setOutput($this->render());

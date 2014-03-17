@@ -99,7 +99,7 @@ class Admin_Controller_Tool_Logs extends Controller
 		$this->data['limits'] = $this->sort->renderLimits();
 
 		//The Template
-		$this->template->load('tool/logs');
+		$this->view->load('tool/logs');
 
 		//Dependencies
 		$this->children = array(

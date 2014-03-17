@@ -235,7 +235,7 @@ class Plugin extends Library
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
-		$live_file   = str_replace($dir, SITE_DIR, $plugin_file);
+		$live_file   = str_replace($dir, DIR_SITE, $plugin_file);
 
 		//Live file already exists! This is a possible conflict...
 		//If it is not a registered plugin file for this plugin, ask admin what to do.
@@ -331,8 +331,8 @@ class Plugin extends Library
 
 			$rel_file = substr(str_replace($dir, '', $file), 1);
 
-			if (is_file(SITE_DIR . $rel_file)) {
-				$file_mods[SITE_DIR . $rel_file] = $file;
+			if (is_file(DIR_SITE . $rel_file)) {
+				$file_mods[DIR_SITE . $rel_file] = $file;
 				continue;
 			}
 		}

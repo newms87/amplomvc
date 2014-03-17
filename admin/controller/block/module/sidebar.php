@@ -8,7 +8,7 @@ class Admin_Controller_Block_Module_Sidebar extends Controller
 	public function settings(&$settings)
 	{
 		//Template
-		$this->template->load('block/module/sidebar_settings');
+		$this->view->load('block/module/sidebar_settings');
 
 		//The Data
 		$this->data['settings'] = $settings;

@@ -1,4 +1,4 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
@@ -9,7 +9,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
 			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>
@@ -123,7 +123,7 @@
 <script type="text/javascript"><
 	!--
 		function filter() {
-			url = "<?= HTTP_ADMIN . "index.php?route=sale/return"; ?>";
+			url = "<?= URL_SITE . "admin/index.php?route=sale/return"; ?>";
 
 			var filter_return_id = $('input[name=\'filter_return_id\']').attr('value');
 
@@ -198,7 +198,7 @@
 		delay: 0,
 		source: function (request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				url: "<?= URL_SITE . "admin/index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
 				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
@@ -224,4 +224,4 @@
 			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

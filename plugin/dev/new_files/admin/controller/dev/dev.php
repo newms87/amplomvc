@@ -3,7 +3,7 @@ class Admin_Controller_Dev_Dev extends Controller
 {
 	public function index()
 	{
-		$this->template->load('dev/dev');
+		$this->view->load('dev/dev');
 		$this->document->setTitle(_l("Development Console"));
 
 		$this->data['url_sync']            = $this->url->link("dev/dev/sync");
@@ -16,7 +16,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 	public function sync()
 	{
-		$this->template->load('dev/sync');
+		$this->view->load('dev/sync');
 
 		$this->document->setTitle(_l("Synchronize Sites"));
 
@@ -67,7 +67,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 	public function site_management()
 	{
-		$this->template->load('dev/site_management');
+		$this->view->load('dev/site_management');
 
 		$this->document->setTitle(_l("Site Management"));
 
@@ -120,7 +120,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	public function backup_restore()
 	{
 		//Template and Language
-		$this->template->load('dev/backup_restore');
+		$this->view->load('dev/backup_restore');
 		//Page Head
 		$this->document->setTitle(_l("Backup & Restore"));
 
@@ -203,7 +203,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 	public function content()
 	{
-		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
+		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
 		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);

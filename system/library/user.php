@@ -11,9 +11,9 @@ class User extends Library
 	{
 		parent::__construct($registry);
 
-		if (isset($this->session->data['user_id']) && $this->validate_token()) {
+		if (isset($_SESSION['user_id']) && $this->validate_token()) {
 
-			$user = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$this->session->data['user_id'] . "' AND status = '1'");
+			$user = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
 
 			if ($user) {
 				$this->loadUser($user);
@@ -58,18 +58,15 @@ class User extends Library
 		$this->permissions = unserialize($user_group['permission']);
 
 		$this->user = $user + $user_group;
-
-		//TODO: Do we need this??
-		$this->query("UPDATE " . DB_PREFIX . "user SET ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "' WHERE user_id = '" . (int)$user['user_id'] . "'");
 	}
 
 	public function validate_token()
 	{
-		if (!empty($this->session->data['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $this->session->data['token']) {
+		if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
 			return true;
 		}
 
-		if (isset($this->session->data['user_id'])) {
+		if (isset($_SESSION['user_id'])) {
 			$this->message->add("notify", "Your session has expired. Please log in again.");
 		}
 
@@ -82,7 +79,7 @@ class User extends Library
 	{
 		$username = $this->escape($username);
 
-		$user = $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND status = '1'");
+		$user = $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR LCASE(email) = '" . strtolower($username) . "') AND status = '1'");
 
 		if ($user) {
 			if (!password_verify($password, $user['password'])) {
@@ -96,6 +93,8 @@ class User extends Library
 
 			return true;
 		}
+
+		$this->error = _l("Unable to authenticate your log in credentials.");
 
 		return false;
 	}

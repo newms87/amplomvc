@@ -24,7 +24,7 @@ class Admin_Controller_Block_Add extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('block/add');
+		$this->view->load('block/add');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));

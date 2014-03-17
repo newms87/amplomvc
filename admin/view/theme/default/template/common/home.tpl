@@ -1,10 +1,10 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
 		</div>
 		<div class="section">
 			<div class="overview">
@@ -96,9 +96,9 @@
 	</div>
 </div>
 <!--[if IE]>
-<script type="text/javascript" src="<?= HTTP_JS . 'jquery/flot/excanvas.js'; ?>"></script>
+<script type="text/javascript" src="<?= URL_RESOURCES . 'js/jquery/flot/excanvas.js'; ?>"></script>
 <![endif]-->
-<script type="text/javascript" src="<?= HTTP_JS . 'jquery/flot/jquery.flot.js'; ?>"></script>
+<script type="text/javascript" src="<?= URL_RESOURCES . 'js/jquery/flot/jquery.flot.js'; ?>"></script>
 <script type="text/javascript">
 	function getSalesChart(range) {
 		$.ajax({
@@ -129,4 +129,4 @@
 
 	getSalesChart($('#range').val());
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

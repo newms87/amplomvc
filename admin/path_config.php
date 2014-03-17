@@ -6,47 +6,31 @@
 //Admin
 define("IS_ADMIN", true);
 
-// HTTP
-define('HTTP_ROOT', SITE_URL . 'admin/');
-define('HTTP_CONTENT', SITE_URL . 'admin/');
-define('HTTP_ADMIN', SITE_URL . 'admin/');
-define('HTTP_CATALOG', SITE_URL);
-define('HTTP_IMAGE', SITE_URL . 'image/');
-define('HTTP_JS', SITE_URL . 'system/javascript/');
-define('HTTP_THEME_JS', HTTP_ADMIN . 'view/javascript/');
-define('HTTP_AJAX', HTTP_ADMIN . '');
+//Url Constants
+define('URL_THEMES', URL_SITE . 'admin/view/theme/');
+define('URL_ELFINDER', URL_SITE . 'system/elfinder/');
 
-// HTTPS
-define('HTTPS_ROOT', SITE_SSL . 'admin/');
-define('HTTPS_IMAGE', SITE_SSL . 'image/');
+//TODO: Remove URL_AJAX after removing ckeditor
+define('URL_AJAX', URL_SITE . 'admin/');
 
-define('ELFINDER_URL', SITE_URL . 'system/elfinder/');
 
-// DIR
-define('DIR_APPLICATION', SITE_DIR . 'admin/');
-define('DIR_PLUGIN', SITE_DIR . 'plugin/');
-define('DIR_LANGUAGE', SITE_DIR . 'admin/language/');
-define('DIR_THEME', SITE_DIR . 'admin/view/theme/');
-define('DIR_THEME_OPTION', SITE_DIR . 'admin/view/template_option/');
-define('DIR_CATALOG', SITE_DIR . 'catalog/');
-define('DIR_GENERATED_IMAGE', SITE_DIR . 'image/generated/');
+// Directory Constants
+define('DIR_PLUGIN', DIR_SITE . 'plugin/');
+define('DIR_FORM', DIR_SITE . 'catalog/view/form/');
+define('DIR_THEMES', DIR_SITE . 'admin/view/theme/');
 
 //SYSTEM DIRECTORIES
-define('DIR_EXCEL_TEMPLATE', SITE_DIR . 'system/php-excel/templates/');
-define('DIR_EXCEL_FPO', SITE_DIR . 'upload/fpo/');
-define('DIR_RESOURCES', SITE_DIR . 'system/resources/');
-define('DIR_SYSTEM', SITE_DIR . 'system/');
-define('DIR_CRON', SITE_DIR . 'system/cron/');
-define('DIR_DATABASE', SITE_DIR . 'system/database/');
-define('DIR_DATABASE_BACKUP', SITE_DIR . 'system/database/backups/');
-define('DIR_CONFIG', SITE_DIR . 'system/config/');
-define('DIR_IMAGE', SITE_DIR . 'image/');
-define('DIR_JS', SITE_DIR . 'system/javascript/');
-define('DIR_CACHE', SITE_DIR . 'system/cache/');
-define('DIR_DOWNLOAD', SITE_DIR . 'download/');
-define('DIR_MOD_FILES', SITE_DIR . 'system/mods/');
-define('DIR_LOGS', SITE_DIR . 'system/logs/');
-define('DIR_LOCALE', SITE_DIR . 'system/locale/');
+define('DIR_EXCEL_TEMPLATE', DIR_SITE . 'system/php-excel/templates/');
+define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
+define('DIR_SYSTEM', DIR_SITE . 'system/');
+define('DIR_CRON', DIR_SITE . 'system/cron/');
+define('DIR_CACHE', DIR_SITE . 'system/cache/');
+define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
+define('DIR_DATABASE', DIR_SITE . 'system/database/');
+
+if (!defined('DIR_DATABASE_BACKUP')) {
+	define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+}
 
 //Log Files
 define("AC_LOG_FILE", DIR_LOGS . 'log.txt');

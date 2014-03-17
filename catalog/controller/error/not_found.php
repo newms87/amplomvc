@@ -4,7 +4,7 @@ class Catalog_Controller_Error_NotFound extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('error/not_found');
+		$this->view->load('error/not_found');
 		//Page Head
 		$this->document->setTitle(_l("The page you requested cannot be found!"));
 
@@ -19,10 +19,10 @@ class Catalog_Controller_Error_NotFound extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

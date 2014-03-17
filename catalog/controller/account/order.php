@@ -5,7 +5,7 @@ class Catalog_Controller_Account_Order extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('account/order_list');
+		$this->view->load('account/order_list');
 		//Login Validation
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/order'));
@@ -62,10 +62,10 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
@@ -197,14 +197,14 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->data['continue'] = $this->url->link('account/order');
 
 		//The Template
-		$this->template->load('account/order_info');
+		$this->view->load('account/order_info');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

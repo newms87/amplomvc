@@ -5,10 +5,10 @@ class Catalog_Controller_Block_Extras_SocialMedia extends Controller
 	{
 		switch ($type) {
 			case 'standard':
-				$this->template->load('block/extras/my_networks');
+				$this->view->load('block/extras/my_networks');
 				break;
 			default:
-				$this->template->load('block/extras/my_networks');
+				$this->view->load('block/extras/my_networks');
 				break;
 		}
 

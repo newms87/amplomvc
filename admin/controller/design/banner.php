@@ -65,7 +65,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	private function getList()
 	{
-		$this->template->load('design/banner_list');
+		$this->view->load('design/banner_list');
 
 		$default_urls = array(
 			'sort'  => 'name',
@@ -151,7 +151,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('design/banner_form');
+		$this->view->load('design/banner_form');
 
 		$banner_id = isset($_GET['banner_id']) ? $_GET['banner_id'] : 0;
 

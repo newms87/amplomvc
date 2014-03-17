@@ -3,7 +3,7 @@ class Admin_Controller_Tool_Tool extends Controller
 {
 	public function index()
 	{
-		$this->template->load('tool/tool');
+		$this->view->load('tool/tool');
 
 		$this->document->setTitle(_l("System Tools"));
 

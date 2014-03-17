@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section" id="mail_newsletter">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Newsletter"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="prepare_preview();$.post('<?= $preview; ?>', $('#form').serialize(), handle_preview, 'html');"
@@ -108,7 +108,7 @@
 												<input type="hidden" class="ac_item_id" name="newsletter[products][<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>"/>
 												<input type="text" size="60" name="newsletter[products][<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>"/>
 											</div>
-											<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
+											<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"/>
 										</li>
 									<? } ?>
 								<? } ?>
@@ -131,7 +131,7 @@
 											<div class="editable_label">
 												<input type="text" name="newsletter[designers][<?= $designer['designer_id']; ?>][name]" value="<?= $designer['name']; ?>"/>
 											</div>
-											<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
+											<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"/>
 										</li>
 									<? } ?>
 								<? } ?>
@@ -169,7 +169,7 @@
 													<input type="text" name="newsletter[articles][<?= $article_row; ?>][href]" value="<?= $article['href']; ?>" size="50"/>
 												</div>
 												<img onclick="$(this).parent().remove()"
-													src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
+													src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"/>
 											</li>
 											<? $article_row++; ?>
 										<? } ?>
@@ -207,7 +207,7 @@
 													<input type="text" name="newsletter[featured][articles][<?= $featured_article_row; ?>][href]" value="<?= $article['href']; ?>" size="80"/>
 												</div>
 												<img onclick="$(this).parent().remove()"
-													src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
+													src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"/>
 											</li>
 											<? $featured_article_row++; ?>
 										<? } ?>
@@ -296,7 +296,7 @@
 			html += '			<input type="text" name="newsletter[articles][%row%][title]" value="%title%" />';
 			html += '			<input type="text" name="newsletter[articles][%row%][href]" value="%href%" />';
 			html += '	</div>';
-			html += '	<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
+			html += '	<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" />';
 			html += '</li>';
 
 			html = html.replace(/%row%/g, 'new' + article_row)
@@ -325,7 +325,7 @@
 			html += '			<input type="text" name="newsletter[featured][articles][%row%][teaser]" value="%teaser%" />';
 			html += '			<input type="text" name="newsletter[featured][articles][%row%][href]" value="%href%" size="80"/>';
 			html += '	</div>';
-			html += '	<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
+			html += '	<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" />';
 			html += '</li>';
 
 			html = html.replace(/%row%/g, 'new' + featured_article_row)
@@ -380,7 +380,7 @@
 			html += '	<div class="autocomplete_label">';
 			html += '			<input type="text" name="newsletter[products][%product_id%][name]" value="%name%" />';
 			html += '	</div>';
-			html += '	<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
+			html += '	<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" />';
 			html += '</li>';
 
 			html = html.replace(/%product_id%/g, data.product_id)
@@ -397,7 +397,7 @@
 			html += '	<div class="autocomplete_label">';
 			html += '			<input type="text" name="newsletter[designers][%manufacturer_id%][name]" value="%name%" />';
 			html += '	</div>';
-			html += '	<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
+			html += '	<img onclick="$(this).parent().remove()" src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" />';
 			html += '</li>';
 
 			html = html.replace(/%manufacturer_id%/g, data.manufacturer_id)
@@ -420,7 +420,7 @@
 			shade.height(shade.parent().height());
 			shade.width(shade.parent().width());
 
-			$('#preview_page #preview_window').html('<div style="margin-top:20%;text-align:center">Loading Preview</div><div style="text-align:center"><img src="/admin/<?= HTTP_THEME_IMAGE . 'loading_bar.gif'; ?>" /></div>');
+			$('#preview_page #preview_window').html('<div style="margin-top:20%;text-align:center">Loading Preview</div><div style="text-align:center"><img src="/admin/<?= URL_THEME_IMAGE . 'loading_bar.gif'; ?>" /></div>');
 			$('#preview_page').fadeIn(500);
 		}
 
@@ -444,4 +444,4 @@
 
 	<?= $this->builder->js('errors'); ?>
 
-	<?= $footer; ?>
+	<?= $common_footer; ?>

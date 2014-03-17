@@ -51,6 +51,11 @@ class Cron extends Library
 
 					$msg .= _l("Executing %s\r\n", $task['name']);
 
+					//Verify class exists
+					if (!is_file(DIR_CRON . $task['file'] . '.php')) {
+						continue;
+					}
+
 					$classname = "System_Cron_" . $this->tool->_2CamelCase($task['file']);
 					$method    = $task['method'];
 

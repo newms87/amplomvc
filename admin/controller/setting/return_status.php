@@ -10,7 +10,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 	public function index()
 	{
 		//Template and Language
-		$this->template->load('setting/return_status');
+		$this->view->load('setting/return_status');
 		//Page Head
 		$this->document->setTitle(_l("Return Statuses"));
 

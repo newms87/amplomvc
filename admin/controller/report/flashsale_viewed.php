@@ -3,7 +3,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 {
 	public function index()
 	{
-		$this->template->load('report/flashsale_viewed');
+		$this->view->load('report/flashsale_viewed');
 
 		$this->document->setTitle(_l("Flashsales Viewed Report"));
 

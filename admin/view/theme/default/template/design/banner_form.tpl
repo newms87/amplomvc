@@ -1,9 +1,9 @@
-<?= $header; ?>
+<?= $common_header; ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= _l("Banners"); ?></h1>
+			<h1><img src="<?= URL_THEME_IMAGE . 'banner.png'; ?>" alt=""/> <?= _l("Banners"); ?></h1>
 
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
@@ -41,7 +41,7 @@
 							<tr class="imagerow" id="image-row<?= $image_row; ?>">
 								<td class="left"><? foreach ($languages as $language) { ?>
 										<input type="text" name="banner_image[<?= $image_row; ?>][banner_image_description][<?= $language['language_id']; ?>][title]" value="<?= isset($banner_image['banner_image_description'][$language['language_id']]) ? $banner_image['banner_image_description'][$language['language_id']]['title'] : ''; ?>"/>
-										<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>"
+										<img src="<?= URL_THEME_IMAGE . "flags/$language[image]"; ?>"
 											title="<?= $language['name']; ?>"/><br/>
 									<? } ?>
 								</td>
@@ -104,4 +104,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $footer; ?>
+<?= $common_footer; ?>

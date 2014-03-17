@@ -1,6 +1,8 @@
 <?php
+
 class Theme extends Library
 {
+	private $dir_themes;
 	private $theme;
 	private $default_theme = 'default';
 
@@ -10,25 +12,40 @@ class Theme extends Library
 	{
 		parent::__construct($registry);
 
+		$this->dir_themes = DIR_THEMES;
 		$this->theme = $this->config->get('config_theme');
 
-		if (!$this->theme || !is_dir(DIR_APPLICATION . '/view/theme/' . $this->theme)) {
+		if (!$this->theme || !is_dir(DIR_THEMES . $this->theme)) {
 			$this->theme = $this->default_theme;
 		}
 
-		define('HTTP_THEME_STYLE', HTTP_CONTENT . 'view/theme/' . $this->theme . '/css/');
-		define('HTTP_THEME_FONT', HTTP_CONTENT . 'view/theme/' . $this->theme . '/fonts/');
-		define('HTTP_THEME_IMAGE', HTTP_CONTENT . 'view/theme/' . $this->theme . '/image/');
-		define('DIR_THEME_STYLE', DIR_APPLICATION . 'view/theme/' . $this->theme . '/css/');
-		define('DIR_THEME_IMAGE', DIR_APPLICATION . 'view/theme/' . $this->theme . '/image/');
+		//Url Constants
+		define('URL_THEME', URL_THEMES . $this->theme . '/');
+		define('URL_THEME_IMAGE', URL_THEME . 'image/');
+		define('URL_THEME_JS', URL_THEME . 'js/');
+
+		//Directory Constants
+		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
+		define('DIR_THEME_IMAGE', DIR_THEME . 'image/');
+		define('DIR_THEME_JS', DIR_THEME . 'js/');
 
 		if ($this->config->isAdmin()) {
 			$this->settings = $this->loadAdminThemeSettings();
 		} else {
-			$theme_settings_file = $this->findFile('settings.php', $this->theme);
+			$theme_settings_file = $this->findFile('settings.php');
 
 			$this->getThemeSettings($theme_settings_file);
 		}
+	}
+
+	public function setTheme($theme)
+	{
+		$this->theme = $theme;
+	}
+
+	public function setThemesDirectory($dir)
+	{
+		$this->dir_themes = $dir;
 	}
 
 	public function getTheme()
@@ -85,7 +102,7 @@ class Theme extends Library
 		if (!$theme_settings_admin) {
 			$_ = array();
 
-			require_once(DIR_THEME . $this->theme . '/settings.php');
+			require_once(DIR_THEMES . $this->theme . '/settings.php');
 
 			$theme_settings_admin = $_;
 
@@ -108,9 +125,9 @@ class Theme extends Library
 	public function getThemes($admin = false)
 	{
 		if ($admin) {
-			$theme_dir = SITE_DIR . 'admin/view/theme/';
+			$theme_dir = DIR_SITE . 'admin/view/theme/';
 		} else {
-			$theme_dir = DIR_CATALOG . 'view/theme/';
+			$theme_dir = DIR_SITE . 'catalog/view/theme/';
 		}
 
 		$themes = $this->cache->get('themes' . ($admin ? '.admin' : ''));
@@ -149,28 +166,59 @@ class Theme extends Library
 		return $themes;
 	}
 
-	public function findFile($file, $theme = false, $root_dir = null)
+	public function getTemplatesFrom($path, $admin = false, $blank_row = false)
 	{
-		if ($root_dir && is_dir($root_dir)) {
-			$dir = $root_dir;
+		if ($admin) {
+			$root = DIR_SITE . 'admin/view/theme/';
 		} else {
-			$dir = DIR_THEME;
+			$root = DIR_SITE . 'catalog/view/theme/';
 		}
 
-		//Search By specified theme
-		if ($theme) {
-			if (file_exists($dir . $theme . '/' . $file)) {
-				return $dir . $theme . '/' . $file;
+		$themes = $this->getThemes($admin);
+
+		$templates = array();
+
+		foreach ($themes as $theme_dir => $theme) {
+			$dir = $root . $theme_dir . '/template/' . trim($path, '/') . '/';
+
+			if (!is_dir($dir)) {
+				continue;
 			}
-		} //Search By current theme
-		else {
-			if (file_exists($dir . $this->theme . '/' . $file)) {
-				return $dir . $this->theme . '/' . $file;
-			} elseif (file_exists($dir . $this->theme . '/template/' . $file)) {
-				return $dir . $this->theme . '/template/' . $file;
-			} elseif (file_exists($dir . $this->default_theme . '/template/' . $file)) {
-				return $dir . $this->default_theme . '/template/' . $file;
+
+			$files = scandir($dir);
+
+			$template_files = array();
+
+			if ($blank_row !== false) {
+				$template_files[''] = $blank_row;
 			}
+
+			foreach ($files as $file) {
+				if (is_file($dir . $file) && preg_match("/\\.tpl$/", $file) > 0) {
+					$filename                  = str_replace('.tpl', '', $file);
+					$template_files[$filename] = $filename;
+				}
+			}
+
+			$templates[$theme_dir] = $template_files;
+		}
+
+		return $templates;
+	}
+
+	public function findFile($file)
+	{
+		//Add tpl extension if no extension specified
+		if (!preg_match("/\\.[a-z0-9]+\$/i", $file)) {
+			$file .= '.tpl';
+		}
+
+		if (file_exists($this->dir_themes . $this->theme . '/' . $file)) {
+			return $this->dir_themes . $this->theme . '/' . $file;
+		} elseif (file_exists($this->dir_themes . $this->theme . '/template/' . $file)) {
+			return $this->dir_themes . $this->theme . '/template/' . $file;
+		} elseif (file_exists($this->dir_themes . $this->default_theme . '/template/' . $file)) {
+			return $this->dir_themes . $this->default_theme . '/template/' . $file;
 		}
 
 		//File not found

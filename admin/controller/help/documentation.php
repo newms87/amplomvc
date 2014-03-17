@@ -3,7 +3,7 @@ class Admin_Controller_Help_Documentation extends Controller
 {
 	public function index()
 	{
-		$this->template->load('help/documentation');
+		$this->view->load('help/documentation');
 
 		$this->document->setTitle(_l("Documentation"));
 

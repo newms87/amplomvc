@@ -91,7 +91,7 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 		$this->data += $settings;
 
 		//The Template
-		$this->template->load('block/widget/carousel');
+		$this->view->load('block/widget/carousel');
 
 		//Render
 		$this->render();

@@ -71,16 +71,16 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);
 
 		//The Template
-		$this->template->load('account/voucher');
+		$this->view->load('account/voucher');
 
 		//Render
 		$this->response->setOutput($this->render());
@@ -99,14 +99,14 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->data['continue'] = $this->url->link('cart/cart');
 
 		//The Template
-		$this->template->load('common/success');
+		$this->view->load('common/success');
 
 		//Dependencies
 		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
+			'area/left',
+			'area/right',
+			'area/top',
+			'area/bottom',
 			'common/footer',
 			'common/header'
 		);

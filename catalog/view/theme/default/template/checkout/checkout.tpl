@@ -1,6 +1,6 @@
-<?= $header; ?>
-<?= $column_left; ?><?= $column_right; ?>
-<div class="content"><?= $content_top; ?>
+<?= $common_header; ?>
+<?= $area_left; ?><?= $area_right; ?>
+<div class="content"><?= $area_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 	<h1><?= _l("Checkout"); ?></h1>
 	<? $step = 1; ?>
@@ -30,7 +30,7 @@
 			<div class="checkout-content clearfix"></div>
 		</div>
 	</div>
-	<?= $content_bottom; ?>
+	<?= $area_bottom; ?>
 </div>
 
 <script type="text/javascript">
@@ -53,7 +53,7 @@
 		if (!c_item || !route) return;
 
 		$.ajax({
-			url: "<?= HTTP_ROOT; ?>" + route,
+			url: "<?= URL_SITE; ?>" + route,
 			dataType: 'html',
 			beforeSend: page_loading,
 			complete: page_received,
@@ -94,7 +94,7 @@
 
 	function page_loading() {
 		$('#checkout_process .button').attr('disabled', true);
-		$('#checkout_process .button').after('<span class="wait">&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
+		$('#checkout_process .button').after('<span class="wait">&nbsp;<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
 	}
 
 	function page_received() {
@@ -164,4 +164,4 @@
 		}
 	}
 </script>
-<?= $footer; ?>
+<?= $common_footer; ?>

@@ -18,7 +18,7 @@ class Admin_Controller_Extension_Total_Handling extends Controller
 		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		//The Template
-		$this->template->load('extension/total/handling');
+		$this->view->load('extension/total/handling');
 
 		//Render
 		$this->render();

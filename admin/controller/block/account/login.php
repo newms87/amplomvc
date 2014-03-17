@@ -7,7 +7,7 @@ class Admin_Controller_Block_Extras_AccountLogin extends Controller
 	public function settings(&$settings)
 	{
 		//The Template
-		$this->template->load('block/account/login');
+		$this->view->load('block/account/login');
 
 		//Render
 		$this->render();
