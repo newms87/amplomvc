@@ -268,15 +268,10 @@ class Admin_Controller_Setting_Setting extends Controller
 
 		$image = DIR_SITE . 'catalog/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
 
-		$width  = 300; //$this->config->get('config_image_admin_thumb_width');
-		$height = 300; //$this->config->get('config_image_admin_thumb_height');
-
-		if ($image) {
-			$image = $this->image->resize($image, $width, $height);
-		}
+		$image = $this->image->get($image);
 
 		if (!$image) {
-			$image = $this->image->resize('no_image', $width, $height);
+			$image = $this->image->resize('no_image', 300, 300);
 		}
 
 		$this->response->setOutput("<img src=\"$image\" class =\"theme_preview\" />");

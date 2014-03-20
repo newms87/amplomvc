@@ -217,7 +217,7 @@ class Image extends Library
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
-		if (!is_file($new_image_file) || (filemtime($old_image) > filemtime($new_image_file))) {
+		if (!is_file($new_image_file) || (_filemtime($old_image) > _filemtime($new_image_file))) {
 			//Render new image
 			$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
 
