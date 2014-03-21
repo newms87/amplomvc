@@ -855,7 +855,7 @@ ul.link-list > li {
 	margin-bottom: 10px;
 }
 
-.message_box {
+.message {
 	position: relative;
 	width: 85%;
 	padding: 10px 10px 10px 33px;
@@ -867,30 +867,30 @@ ul.link-list > li {
 	overflow: auto;
 }
 
-.message_box div.message_list {
+.message div.message_list {
 	float: left;
 }
 
-.message_box.success {
+.message.success {
 	background: #EAF7D9 url('../image/success.png') 10px center no-repeat;
 	background-size: 16px 16px;
 	border-color: #BBDF8D;
 }
 
-.message_box.error,
-.message_box.warning {
+.message.error,
+.message.warning {
 	background: #FFD1D1 url('../image/warning.png') 10px center no-repeat;
 	background-size: 16px 16px;
 	border-color: #F8ACAC;
 }
 
-.message_box.attention, .message_box.notify {
+.message.attention, .message.notify {
 	background: #FFF5CC url('../image/attention.png') 10px center no-repeat;
 	background-size: 16px 16px;
 	border-color: #F2DD8C;
 }
 
-.message_box .close {
+.message .close {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -901,7 +901,7 @@ ul.link-list > li {
 	height: 16px;
 }
 
-.message_box .close:hover, .message_box .close:active {
+.message .close:hover, .message .close:active {
 	background-position: -16px 0px;
 }
 

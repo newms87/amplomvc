@@ -156,10 +156,10 @@
 			return;
 		}
 
-		form.find('.message_box, .error').remove();
+		form.find('.message, .error').remove();
 
 		if (json['error']) {
-			form.ac_msgbox('error', json['error'], true);
+			form.ac_msg('error', json['error'], true);
 			form.ac_errors(json['error']);
 		}
 	}

@@ -42,7 +42,10 @@ class Admin_Model_Block_Block extends Model
 
 		$content = $this->tool->insertables($insertables, $content, '__', '__');
 
-		_is_writable(dirname($controller_file));
+		$error = null;
+		if (!_is_writable(dirname($controller_file))) {
+			trigger_error($error);
+		}
 
 		file_put_contents($controller_file, $content);
 
@@ -50,7 +53,10 @@ class Admin_Model_Block_Block extends Model
 		$profiles_template = $dir_templates . 'profile.tpl';
 		$profiles_file     = DIR_THEMES . 'default/template/block/' . $data['route'] . '_profile.tpl';
 
-		_is_writable(dirname($profiles_file));
+		$error = null;
+		if (!_is_writable(dirname($profiles_file))) {
+			trigger_error($error);
+		}
 
 		copy($profiles_template, $profiles_file);
 
@@ -58,7 +64,10 @@ class Admin_Model_Block_Block extends Model
 		$settings_template = $dir_templates . 'settings.tpl';
 		$settings_file     = DIR_THEMES . 'default/template/block/' . $data['route'] . '_settings.tpl';
 
-		_is_writable(dirname($settings_file));
+		$error = null;
+		if (!_is_writable(dirname($settings_file))) {
+			trigger_error($error);
+		}
 
 		copy($settings_template, $settings_file);
 
@@ -80,7 +89,10 @@ class Admin_Model_Block_Block extends Model
 
 		$content = $this->tool->insertables($insertables, $content, '__', '__');
 
-		_is_writable(dirname($controller_file));
+		$error = null;
+		if (!_is_writable(dirname($controller_file))) {
+			trigger_error($error);
+		}
 
 		file_put_contents($controller_file, $content);
 
@@ -91,7 +103,10 @@ class Admin_Model_Block_Block extends Model
 			foreach ($data['themes'] as $theme) {
 				$template_file = DIR_SITE . 'catalog/view/theme/' . $theme . '/template/block/' . $data['route'] . '.tpl';
 
-				_is_writable(dirname($template_file));
+				if (!_is_writable(dirname($template_file))) {
+					trigger_error(_l("%s is not writable", $template_file));
+					continue;
+				}
 
 				$content = file_get_contents($front_template);
 

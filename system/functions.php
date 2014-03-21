@@ -427,7 +427,7 @@ if (!defined("AMPLOCART_FILE_MODE")) {
 }
 
 //TODO: do we allow different modes?
-function _is_writable($dir, $mode = 0755)
+function _is_writable($dir, &$error = null)
 {
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
@@ -436,13 +436,13 @@ function _is_writable($dir, $mode = 0755)
 		}
 
 		if (!is_dir($dir)) {
-			trigger_error("Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.");
+			$error = "Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.";
 			return false;
 		} else {
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
 			if (!is_file($t_file)) {
-				trigger_error("The write permissions on $dir are not set. Please change the permissions to allow writing to this directory");
+				$error = "The write permissions on $dir are not set. Please change the permissions to allow writing to this directory";
 				return false;
 			}
 			unlink($t_file);

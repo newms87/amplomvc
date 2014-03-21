@@ -93,11 +93,11 @@
 		,
 		success: function (data) {
 			if (data.error) {
-				$('#review-title').after('<div class="message_box warning">' + data.error + '</div>');
+				$('#review-title').after('<div class="message warning">' + data.error + '</div>');
 			}
 
 			if (data.success) {
-				$('#review-title').after('<div class="message_box success">' + data.success + '</div>');
+				$('#review-title').after('<div class="message success">' + data.success + '</div>');
 
 				$('input[name=\'name\']').val('');
 				$('textarea[name=\'text\']').val('');

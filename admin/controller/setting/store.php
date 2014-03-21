@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Setting_Store extends Controller
 {
 	public function index()
@@ -150,7 +151,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
-		$this->data['insert']   = $this->url->link('setting/store/update');
+		$this->data['insert'] = $this->url->link('setting/store/update');
 		$this->data['delete'] = $this->url->link('setting/store/delete');
 
 		//Dependencies
@@ -167,9 +168,6 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		//Page Head
 		$this->document->setTitle(_l("Settings"));
-
-		//The Template
-		$this->view->load('setting/store_form');
 
 		//Insert or Update
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
@@ -196,6 +194,8 @@ class Admin_Controller_Setting_Store extends Controller
 		} else {
 			$store_info = $_POST;
 		}
+
+		$data = array();
 
 		$defaults = array(
 			'name'                            => 'Store ' . $store_id,
@@ -231,7 +231,8 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_order_complete_status_id' => '',
 			'config_cart_weight'              => '',
 			'config_logo'                     => '',
-			'config_icon'                     => '',
+			//Icon defaults set below
+			'config_icon'                     => null,
 			'config_logo_width'               => 0,
 			'config_logo_height'              => 0,
 			'config_email_logo_width'         => 300,
@@ -258,41 +259,64 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_contact_page_id'          => '',
 		);
 
-		$this->data += $store_info + $defaults;
+		$data += $store_info + $defaults;
 
 		//Current Page Breadcrumb
-		$this->breadcrumb->add($this->data['name'], $this->url->link('setting/store/update', 'store_id=' . $store_id));
+		$this->breadcrumb->add($data['name'], $this->url->link('setting/store/update', 'store_id=' . $store_id));
 
 		//Additional Info
-		$this->data['layouts']              = $this->Model_Design_Layout->getLayouts();
-		$this->data['themes']               = $this->theme->getThemes();
-		$this->data['geo_zones']            = array_merge(array(0 => "--- All Zones ---"), $this->Model_Localisation_GeoZone->getGeoZones());
-		$this->data['countries']            = $this->Model_Localisation_Country->getCountries();
-		$this->data['languages']            = $this->Model_Localisation_Language->getLanguages();
-		$this->data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
-		$this->data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$this->data['informations']         = $this->Model_Catalog_Information->getInformations();
-		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
-		$this->data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
+		$data['layouts']              = $this->Model_Design_Layout->getLayouts();
+		$data['themes']               = $this->theme->getThemes();
+		$data['geo_zones']            = array_merge(array(0 => "--- All Zones ---"), $this->Model_Localisation_GeoZone->getGeoZones());
+		$data['countries']            = $this->Model_Localisation_Country->getCountries();
+		$data['languages']            = $this->Model_Localisation_Language->getLanguages();
+		$data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
+		$data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['informations']         = $this->Model_Catalog_Information->getInformations();
+		$data['data_order_statuses']  = $this->order->getOrderStatuses();
+		$data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
 
-		$this->data['data_stock_display_types'] = array(
+		$data['data_stock_display_types'] = array(
 			'hide'   => _l("Do not display stock"),
 			'status' => _l("Only show stock status"),
 			-1       => _l("Display stock quantity available"),
 			10       => _l("Display quantity up to 10"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
+		//Website Icon Sizes
+		if (!is_array($data['config_icon'])) {
+			$data['config_icon'] = array(
+				'orig' => '',
+				'ico'  => '',
+			);
+		}
+
+		$data['data_icon_sizes'] = array(
+			array(152,152),
+			array(120,120),
+			array(76,76),
+		);
+
+		foreach ($data['data_icon_sizes'] as $size) {
+			$key = $size[0] . 'x' . $size[1];
+
+			if (!isset($data['config_icon'][$key])) {
+				$data['config_icon'][$key] = '';
+			}
+		}
+
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/store/update', 'store_id=' . $store_id);
-		$this->data['cancel'] = $this->url->link('setting/store');
+		$data['save']               = $this->url->link('setting/store/update', 'store_id=' . $store_id);
+		$data['cancel']             = $this->url->link('setting/store');
+		$data['url_generate_icons'] = $this->url->link('setting/store/generate_icons');
 
 		//Ajax Urls
-		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		$data['load_theme_img'] = $this->url->link('setting/setting/theme');
 
 		//Dependencies
 		$this->children = array(
@@ -301,7 +325,47 @@ class Admin_Controller_Setting_Store extends Controller
 		);
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/store_form', $data));
+	}
+
+	public function generate_icons()
+	{
+		if (!empty($_POST['icon'])) {
+			$sizes = array(
+				array(
+					152,
+					152
+				),
+				array(
+					120,
+					120
+				),
+				array(
+					76,
+					76
+				),
+			);
+
+			$icon_files = array();
+
+			foreach ($sizes as $size) {
+				$url = $this->image->resize($_POST['icon'], $size[0], $size[1]);
+
+				$icon_files[$size[0] . 'x' . $size[1]] = array(
+					'url'     => $url,
+					'relpath' => str_replace(URL_IMAGE, '', $url),
+				);
+			}
+
+			$url = $this->image->ico($_POST['icon']);
+
+			$icon_files['ico'] = array(
+				'relpath' => str_replace(URL_IMAGE, '', $url),
+				'url'     => $url,
+			);
+
+			$this->response->setOutput(json_encode($icon_files));
+		}
 	}
 
 	private function validateForm()
@@ -365,19 +429,6 @@ class Admin_Controller_Setting_Store extends Controller
 
 		if ((int)$_POST['config_catalog_limit'] <= 0) {
 			$this->error['config_catalog_limit'] = _l("Limit required!");
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'setting/store')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify stores!");
-		}
-
-		foreach ($_GET['selected'] as $store_id) {
-			$this->canDelete($store_id);
 		}
 
 		return $this->error ? false : true;

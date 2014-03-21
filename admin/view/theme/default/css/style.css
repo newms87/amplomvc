@@ -347,7 +347,7 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	min-width: 120px;
 }
 
-.message_box {
+.message {
 	overflow: hidden;
 	position: fixed;
 	bottom: 0;
@@ -370,25 +370,25 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	-webkit-animation: messageIn .5s;
 }
 
-.message_box + .message_box {
+.message + .message {
 	padding-bottom: 70px;
 	z-index: 1004;
 }
 
-.message_box + .message_box:hover {
+.message + .message:hover {
 	padding-bottom: 110px;
 }
 
-.message_box + .message_box + .message_box {
+.message + .message + .message {
 	padding-bottom: 100px;
 	z-index: 1003;
 }
 
-.message_box + .message_box + .message_box:hover {
+.message + .message + .message:hover {
 	padding-bottom: 140px;
 }
 
-.message_box > .message_list > div {
+.message > .message_list > div {
 	padding-right: 20px;
 }
 
@@ -414,36 +414,36 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	}
 }
 
-.message_box:hover {
+.message:hover {
 	max-height: 50%;
 	min-height: 35px;
 	overflow: auto;
 }
 
-.message_box strong {
+.message strong {
 	color: #003A88;
 	font-weight: bold;
 	font-size: 15px;
 }
 
-.message_box.success {
+.message.success {
 	background: #EAF7D9 url('../image/success.png') 10px 10px no-repeat;
 	background-size: 16px 16px;
 	border-color: #BBDF8D;
 }
 
-.message_box.warning,
-.message_box.error {
+.message.warning,
+.message.error {
 	background: #FFD1D1 url('../image/warning.png') 10px 10px no-repeat;
 	border-color: #F8ACAC;
 }
 
-.message_box.attention, .message_box.notify {
+.message.attention, .message.notify {
 	background: #FFF5CC url('../image/attention.png') 10px 10px no-repeat;
 	border-color: #F2DD8C;
 }
 
-.message_box .close {
+.message .close {
 	position: absolute;
 	top: 5px;
 	right: 10px;
@@ -454,7 +454,7 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	height: 16px;
 }
 
-.message_box .close:hover, .message_box .close:active {
+.message .close:hover, .message .close:active {
 	background-position: -16px 0;
 }
 
@@ -558,6 +558,23 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	opacity: .7;
 	display: block;
 }
+
+
+#icon-generator .icon-files {
+	margin: 20px 20px 0 0;
+	padding: 10px;
+	border: 1px dashed gray;
+}
+
+#icon-generator .icon-file {
+	display:inline-block;
+	margin-left: 20px;
+}
+
+#icon-generator .icon-label {
+	text-align: center;
+}
+
 
 .box {
 	margin-bottom: 15px;
@@ -2629,7 +2646,7 @@ td.log_remove {
 	padding: 5px;
 }
 
-td.log_remove .message_box {
+td.log_remove .message {
 	position: absolute;
 	top: 5px;
 }

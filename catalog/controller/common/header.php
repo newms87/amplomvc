@@ -67,11 +67,11 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['slogan'] = $this->config->get('config_slogan');
 
 		//Icons
-		$icons = $this->config->get('config_icons');
+		$icons = $this->config->get('config_icon');
 
 		if (!empty($icons)) {
 			foreach ($icons as &$icon) {
-				$icon['image'] = $this->image->get($icon['image']);
+				$icon = $this->image->get($icon);
 			}
 			unset($icon);
 

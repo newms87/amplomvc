@@ -23,11 +23,11 @@
 
 				<div id="notification">
 					<? if ($error_msg) { ?>
-						<div class="message_box warning"><?= $error_msg; ?></div>
+						<div class="message warning"><?= $error_msg; ?></div>
 					<? } ?>
 
 					<? if ($success_msg) { ?>
-						<div class="message_box success"><?= $success_msg; ?></div>
+						<div class="message success"><?= $success_msg; ?></div>
 					<? } ?>
 				</div>
 

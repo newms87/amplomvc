@@ -297,10 +297,35 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= _l("Icon:<br /><span class=\"help\">The icon should be a PNG that is 16px x 16px.</span>"); ?></td>
 							<td>
-								<?= $this->builder->setBuilderTemplate('click_image'); ?>
-								<?= $this->builder->imageInput("config_icon", $config_icon); ?>
+								<span><?= _l("Icon:"); ?></span>
+								<span class="help"><?= _l("Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file."); ?></span>
+							</td>
+							<td>
+								<div id="icon-generator">
+									<div class="generate">
+										<div class="icon-file">
+											<?= $this->builder->setBuilderTemplate('click_image'); ?>
+											<?= $this->builder->imageInput("config_icon[orig]", $config_icon['orig']); ?>
+											<div class="icon-label">
+												<a id="generate-icons" class="button"><?= _l("Generate Icon Files"); ?></a>
+											</div>
+										</div>
+									</div>
+									<div class="icon-files">
+										<div class="icon-file icon-ico">
+											<?= $this->builder->imageInput("config_icon[ico]", $config_icon['ico'], URL_IMAGE . $config_icon['ico'], 64, 64); ?>
+											<div class="icon-label"><?= _l("ICO File"); ?></div>
+										</div>
+										<? foreach ($data_icon_sizes as $size) { ?>
+											<div class="icon-file icon-size">
+												<? $key = $size[0] . 'x' . $size[1]; ?>
+												<?= $this->builder->imageInput('config_icon[' . $key . ']', $config_icon[$key], URL_IMAGE . $config_icon[$key], $size[0], $size[1]); ?>
+												<div class="icon-label"><?= _l("%s X %s Icon", $size[0], $size[1]); ?></div>
+											</div>
+										<? } ?>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</table>
@@ -421,15 +446,29 @@
 	</div>
 </div>
 
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
+
 <script type="text/javascript">
 	$('[name=config_theme]').change(function () {
 		$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 	}).change();
-</script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
+	$('#generate-icons').click(function(){
+		var icon = $('[name="config_icon[orig]"]').val();
 
-<script type="text/javascript">
+		if (!icon) {
+			return $('#icon-generator').ac_msg('error', "<?= _l("You must choose an icon PNG image file first"); ?>");
+		}
+
+		$.post("<?= $url_generate_icons; ?>", {icon: icon}, function(json){
+			$gen = $('#icon-generator');
+			for (var c in json) {
+				input = $gen.find('[name="config_icon['+c+']"]').val(json[c].relpath);
+				input.closest('.image').find('img.iu_thumb').attr('src', json[c].url);
+			}
+		}, 'json');
+	});
+
 	$('#tabs a').tabs();
 </script>
 <?= $this->builder->js('errors', $errors); ?>

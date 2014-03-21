@@ -369,7 +369,7 @@ window.elFinder = function(node, opts) {
 	 * @type String
 	 * @default "en"
 	 **/
-	this.lang = this.i18[this.options.lang] && this.i18[this.options.lang].messages ? this.options.lang : 'en';
+	this.lang = this.i18[this.options.lang] && this.i18[this.options.lang].message ? this.options.lang : 'en';
 
 	i18n = this.lang == 'en'
 		? this.i18['en']
@@ -388,7 +388,7 @@ window.elFinder = function(node, opts) {
 	 *
 	 * @type Object
 	 **/
-	this.messages = i18n.messages;
+	this.message = i18n.message;
 
 	/**
 	 * Date/time format
@@ -2310,7 +2310,7 @@ elFinder.prototype = {
 	 */
 	notify : function(opts) {
 		var type     = opts.type,
-			msg      = this.messages['ntf'+type] ? this.i18n('ntf'+type) : this.i18n('ntfsmth'),
+			msg      = this.message['ntf'+type] ? this.i18n('ntf'+type) : this.i18n('ntfsmth'),
 			ndialog  = this.ui.notify,
 			notify   = ndialog.children('.elfinder-notify-'+type),
 			ntpl     = '<div class="elfinder-notify elfinder-notify-{type}"><span class="elfinder-dialog-icon elfinder-dialog-icon-{type}"/><span class="elfinder-notify-msg">{msg}</span> <span class="elfinder-notify-cnt"/><div class="elfinder-notify-progressbar"><div class="elfinder-notify-progress"/></div></div>',
@@ -2483,7 +2483,7 @@ elFinder.prototype = {
 	 **/
 	i18n : function() {
 		var self = this,
-			messages = this.messages,
+			messages = this.message,
 			input    = [],
 			ignore   = [],
 			message = function(m) {
@@ -2577,7 +2577,7 @@ elFinder.prototype = {
 			}
 		}
 
-		return this.messages['kind'+kind] ? this.i18n('kind'+kind) : mime;
+		return this.message['kind'+kind] ? this.i18n('kind'+kind) : mime;
 
 		var mime = typeof(f) == 'object' ? f.mime : f,
 			kind = this.kinds[mime]||'unknown';

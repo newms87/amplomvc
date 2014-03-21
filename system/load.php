@@ -133,7 +133,7 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 			</style>
 			<div class="error_display">
 				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>
-				<div class="message"><span class="label">Message:</span> <span class="value">$errstr</span></div>
+				<div class="msg"><span class="label">Message:</span> <span class="value">$errstr</span></div>
 				<div class="file"><span class="label">File:</span> <span class="value">$errfile</span></div>
 				<div class="line"><span class="label">Line:</span> <span class="value">$errline</span></div>
 				<div class="stack">$stack</div>
@@ -154,10 +154,19 @@ HTML;
 set_error_handler($error_handler);
 
 //Verify the necessary directories are writable
-_is_writable(DIR_IMAGE, $config->get('config_image_dir_mode'));
-_is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
-_is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
-_is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
+$dir_error = null;
+if (!_is_writable(DIR_IMAGE, $dir_error, $config->get('config_image_dir_mode'))) {
+	trigger_error("%s", $dir_error);
+}
+if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, $config->get('config_image_dir_mode'))) {
+	trigger_error("%s", $dir_error);
+}
+if (!_is_writable(DIR_DOWNLOAD, $dir_error, $config->get('config_default_dir_mode'))) {
+	trigger_error("%s", $dir_error);
+}
+if (!_is_writable(DIR_LOGS, $dir_error, $config->get('config_default_dir_mode'))) {
+	trigger_error("%s", $dir_error);
+}
 
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {

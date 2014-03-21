@@ -931,7 +931,7 @@
 				// Check for errors
 				if (json['error']) {
 					if (json['error']['warning']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['warning'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['warning'] + '</div>');
 					}
 
 					// Order Details
@@ -1026,12 +1026,12 @@
 						}
 
 						if (json['error']['product']['stock']) {
-							$('.box').before('<div class="message_box warning">' + json['error']['product']['stock'] + '</div>');
+							$('.box').before('<div class="message warning">' + json['error']['product']['stock'] + '</div>');
 						}
 
 						if (json['error']['product']['minimum']) {
 							for (i in json['error']['product']['minimum']) {
-								$('.box').before('<div class="message_box warning">' + json['error']['product']['minimum'][i] + '</div>');
+								$('.box').before('<div class="message warning">' + json['error']['product']['minimum'][i] + '</div>');
 							}
 						}
 					} else {
@@ -1073,27 +1073,27 @@
 
 					// Shipping Method
 					if (json['error']['shipping_method']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['shipping_method'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['shipping_method'] + '</div>');
 					}
 
 					// Payment Method
 					if (json['error']['payment_method']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['payment_method'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['payment_method'] + '</div>');
 					}
 
 					// Coupon
 					if (json['error']['coupon']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['coupon'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['coupon'] + '</div>');
 					}
 
 					// Voucher
 					if (json['error']['voucher']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['voucher'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['voucher'] + '</div>');
 					}
 
 					// Reward Points
 					if (json['error']['reward']) {
-						$('.box').before('<div class="message_box warning">' + json['error']['reward'] + '</div>');
+						$('.box').before('<div class="message warning">' + json['error']['reward'] + '</div>');
 					}
 				} else {
 					$('input[name=\'product\']').attr('value', '');
@@ -1110,7 +1110,7 @@
 				}
 
 				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
+					$('.box').before('<div class="message success" style="display: none;">' + json['success'] + '</div>');
 
 					$('.success').fadeIn('slow');
 				}

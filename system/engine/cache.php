@@ -10,7 +10,10 @@ class Cache
 	{
 		$this->expired = _time() - CACHE_FILE_EXPIRATION;
 
-		_is_writable(DIR_CACHE);
+		$error = null;
+		if (!_is_writable(DIR_CACHE, $error)) {
+			trigger_error($error);
+		}
 	}
 
 	public function get($key, $return_file = false)

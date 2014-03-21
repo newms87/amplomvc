@@ -258,7 +258,10 @@ class DB
 
 	public function dump($file, $tables = array(), $prefix = null)
 	{
-		_is_writable(dirname($file));
+		if (!_is_writable(dirname($file))) {
+			$this->error = _l("The directory was not writable for %s", $file);
+			return false;
+		}
 
 		$eol = "\r\n";
 
@@ -338,16 +341,11 @@ class DB
 		}
 
 		if (!file_put_contents($file, $sql)) {
-			trigger_error("DB::dump(): Failed to dump database tables, $table_string, to file $file");
-
-			return false;
+			$this->error = _l("%s(): failed to dump database to file %s", __METHOD__, $file);
+			trigger_error($this->error);
 		}
 
-		if ($this->getError()) {
-			return false;
-		}
-
-		return true;
+		return $this->hasError();
 	}
 
 	public function hasTable($table)

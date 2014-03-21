@@ -324,19 +324,21 @@ class Mod extends Library
 			return false;
 		}
 
-		_is_writable(dirname($destination));
+		if (!_is_writable(dirname($destination))) {
+			$this->error = _l("%s(): Destination directory was not writable: %s", $destination);
+		} else {
+			if (!is_file($destination)) {
+				touch($destination);
+			}
 
-		if (!is_file($destination)) {
-			touch($destination);
+			chmod($destination, 0777);
+
+			if (!file_put_contents($destination, $contents)) {
+				$this->error[] = "Could not write to file $destination!" . get_caller(0, 4);
+			}
+
+			chmod($destination, AMPLOCART_FILE_MODE);
 		}
-
-		chmod($destination, 0777);
-
-		if (!file_put_contents($destination, $contents)) {
-			$this->error[] = "Could not write to file $destination!" . get_caller(0, 4);
-		}
-
-		chmod($destination, AMPLOCART_FILE_MODE);
 
 		return $this->error ? false : true;
 	}

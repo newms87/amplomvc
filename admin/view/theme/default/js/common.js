@@ -75,9 +75,9 @@ function show_msg(type, html, showFor) {
 	if ($('.content:first .' + type).length) {
 		box = $('.content:first .' + type).append('<br />' + html).show();
 	} else {
-		$('.content:first').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
-		box = $('.message_box.' + type).fadeIn('slow');
-		$('.message_box .close').click(function () {
+		$('.content:first').prepend('<div class="message ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
+		box = $('.message.' + type).fadeIn('slow');
+		$('.message .close').click(function () {
 			$(this).parent().remove();
 		});
 	}

@@ -96,7 +96,7 @@
 				$('.wait').remove();
 			},
 			success: function (json) {
-				$('.message_box, .error').remove();
+				$('.message, .error').remove();
 
 				if (json['error']) {
 					msg = '';

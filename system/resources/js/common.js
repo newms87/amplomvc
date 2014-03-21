@@ -314,10 +314,10 @@ $.fn.apply_filter = function (url) {
 	location = url;
 }
 
-$.fn.ac_msgbox = function (type, msg, prepend, replace) {
+$.fn.ac_msg = function (type, msg, prepend, replace) {
 	if (typeof msg == 'object') {
 		for (var m in msg) {
-			this.ac_msgbox(type, msg[m], prepend, replace);
+			this.ac_msg(type, msg[m], prepend, replace);
 		}
 		return this;
 	}
@@ -325,14 +325,14 @@ $.fn.ac_msgbox = function (type, msg, prepend, replace) {
 	replace = replace || false;
 
 	if (replace) {
-		$('.message_box, .warning, .success, .notify').remove();
+		$('.message, .warning, .success, .notify').remove();
 	}
 
 	return this.each(function (i, e) {
-		var box = $(e).find('.message_box.' + type);
+		var box = $(e).find('.message.' + type);
 
 		if (!box.length) {
-			box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
+			box = $('<div class="message ' + type + '" style="display: none;"><span class="close"></span></div>');
 			box.fadeIn('slow').find('.close').click(function () {
 				$(this).parent().remove();
 			});

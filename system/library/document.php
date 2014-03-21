@@ -280,8 +280,11 @@ class Document extends Library
 			$this->cache->set('less.' . $reference, $dependencies);
 
 			//Write cache file
-			_is_writable(dirname($less_file));
-			file_put_contents($less_file, $css);
+			if (_is_writable(dirname($less_file))) {
+				file_put_contents($less_file, $css);
+			} else {
+				trigger_error(_l("%s(): Failed to write CSS file. Directory was unwritable: %s", __METHOD__, $css));
+			}
 		}
 
 		//Return the URL for the cache file

@@ -2,10 +2,10 @@
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
-		<div class="message_box warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
+		<div class="message warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 	<? } ?>
 	<? if ($success) { ?>
-		<div class="message_box success"><?= $success; ?></div>
+		<div class="message success"><?= $success; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">

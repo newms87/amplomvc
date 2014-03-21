@@ -35,7 +35,7 @@ class Builder extends Library
 	{
 		$html = '';
 		foreach ($messages as $type => $msgs) {
-			$html .= "<div class =\"message_box $type\">";
+			$html .= "<div class =\"message $type\">";
 			$html .= "<div class=\"message_list\">";
 			foreach ($msgs as $msg) {
 				if (!empty($msg)) {
@@ -44,8 +44,8 @@ class Builder extends Library
 			}
 			$html .= "</div>";
 
-			if ($this->config->get('config_allow_close_message_box')) {
-				$html .= "<span class =\"close\" onclick=\"$(this).closest('.message_box').remove()\"></span>";
+			if ($this->config->get('config_allow_close_message')) {
+				$html .= "<span class =\"close\" onclick=\"$(this).closest('.message').remove()\"></span>";
 			}
 
 			$html .= "</div>";

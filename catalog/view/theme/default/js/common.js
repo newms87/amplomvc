@@ -85,14 +85,14 @@ function show_msg(type, html, append) {
 	append = append || false;
 
 	if (!append) {
-		$('.message_box, .warning, .success, .notify').remove();
+		$('.message, .warning, .success, .notify').remove();
 	}
 
 	var notify = $('#notification').show();
-	var box = $('.message_box.' + type);
+	var box = $('.message.' + type);
 
 	if (!box.length) {
-		box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
+		box = $('<div class="message ' + type + '" style="display: none;"><span class="close"></span></div>');
 		notify.append(box.fadeIn('slow'));
 		box.find('.close').click(function () {
 			$(this).parent().remove();
@@ -119,7 +119,7 @@ function show_msgs(data, type) {
 }
 
 function clear_msgs() {
-	$('.message_box').remove();
+	$('.message').remove();
 }
 
 function update_floating_window() {

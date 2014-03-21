@@ -108,7 +108,10 @@ class Image extends Library
 
 	public function save($file, $quality = 90)
 	{
-		_is_writable(dirname($file));
+		if (!_is_writable(dirname($file))) {
+			$this->error_log->write(__METHOD__ . "(): Failed to save image file because directory was not writable: %s!", $file);
+			return false;
+		}
 
 		$info = pathinfo($file);
 
@@ -139,6 +142,8 @@ class Image extends Library
 		if (!$success) {
 			$this->error_log->write(__METHOD__ . "(): Failed to save image file %s as %s!", $file, $extension);
 		}
+
+		return $success;
 	}
 
 	public function resize($filename, $width = 0, $height = 0, $background_color = '')
@@ -149,7 +154,10 @@ class Image extends Library
 				$copy_file = 'import/' . str_replace(DIR_SITE, '', $filename);
 
 				if (!is_file(DIR_IMAGE . $copy_file)) {
-					_is_writable(DIR_IMAGE . dirname($copy_file));
+					if (!_is_writable(DIR_IMAGE . dirname($copy_file))) {
+						$this->error = _l("Directory was not writable: %s", $copy_file);
+						return '';
+					}
 
 					copy($filename, DIR_IMAGE . $copy_file);
 				}
@@ -245,6 +253,41 @@ class Image extends Library
 		}
 
 		return $this->get($new_image_path);
+	}
+
+	public function ico($source, $destination = null, $sizes = null)
+	{
+		require( DIR_RESOURCES . 'phpico/class-php-ico.php' );
+
+		if (is_file(DIR_IMAGE . $source)) {
+			$source = DIR_IMAGE . $source;
+		} elseif (!is_file($source)) {
+			$this->error = _l("Invalid Source File %s", $source);
+			return false;
+		}
+
+		if (!$destination) {
+			$destination = DIR_IMAGE . 'icon/' . pathinfo($source, PATHINFO_FILENAME) . '.ico';
+		}
+
+		if (!_is_writable(dirname($destination))) {
+			$this->error = _l("The Destination directory was not writable: %s", $destination);
+			return false;
+		}
+
+		if (!$sizes) {
+			$sizes = array(
+				array(16,16),
+			   array(32,32),
+			   array(48,48),
+			   array(64,64),
+			);
+		}
+
+		$ico_lib = new PHP_ICO( $source, $sizes);
+		$ico_lib->save_ico( $destination );
+
+		return str_replace(DIR_IMAGE, URL_IMAGE, $destination);
 	}
 
 	public function watermark($file, $position = 'bottomright')

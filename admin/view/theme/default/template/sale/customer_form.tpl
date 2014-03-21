@@ -461,13 +461,13 @@
 			},
 			success:    function (json) {
 				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
+					$('.box').before('<div class="message warning" style="display: none;">' + json['error'] + '</div>');
 
 					$('.warning').fadeIn('slow');
 				}
 
 				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
+					$('.box').before('<div class="message success" style="display: none;">' + json['success'] + '</div>');
 
 					$('.success').fadeIn('slow');
 
@@ -493,13 +493,13 @@
 			},
 			success:    function (json) {
 				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
+					$('.box').before('<div class="message warning" style="display: none;">' + json['error'] + '</div>');
 
 					$('.warning').fadeIn('slow');
 				}
 
 				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
+					$('.box').before('<div class="message success" style="display: none;">' + json['success'] + '</div>');
 
 					$('.success').fadeIn('slow');
 

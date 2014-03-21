@@ -273,7 +273,7 @@
 		</tr>
 		<tr>
 			<td><?= _l("Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>"); ?></td>
-			<td><?= $this->builder->build('radio', $data_yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+			<td><?= $this->builder->build('radio', $data_yes_no, 'config_allow_close_message', $config_allow_close_message); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Show Category Image:"); ?></td>

@@ -1,5 +1,5 @@
 <? if ($testmode) { ?>
-	<div class="message_box warning"><?= _l("The PayPal payment method is in sandbox mode. Your account will not be charged."); ?></div>
+	<div class="message warning"><?= _l("The PayPal payment method is in sandbox mode. Your account will not be charged."); ?></div>
 <? } ?>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 	<!-- Identify your business so that you can collect the payments. -->

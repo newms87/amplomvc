@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Controller_Setting_Setting
  *
@@ -55,7 +56,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_meta_description'                 => '',
 			'config_debug'                            => 0,
 			'config_cron_status'                      => 1,
-			'config_allow_close_message_box'          => 1,
+			'config_allow_close_message'              => 1,
 			'config_default_layout_id'                => '',
 			'config_theme'                            => 'default',
 			'config_address_format'                   => '',

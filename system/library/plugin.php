@@ -265,7 +265,10 @@ class Plugin extends Library
 		}
 
 		//Generate the live file with the contents of the plugin file
-		_is_writable(dirname($live_file));
+		if (!_is_writable(dirname($live_file))) {
+			$this->error = _l("%s(): Live File destination was not writable: %s", $live_file);
+			return false;
+		}
 
 		if (is_file($live_file)) {
 			@unlink($live_file);

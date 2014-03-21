@@ -1,7 +1,7 @@
 <div class="braintree_form">
 
 	<noscript>
-		<div class="message_box error"><?= _l("You must enable javascript to checkout using this payment method!"); ?></div>
+		<div class="message error"><?= _l("You must enable javascript to checkout using this payment method!"); ?></div>
 	</noscript>
 
 	<form action="<?= $confirm; ?>" method="post" id="braintree_payment_form">
@@ -56,7 +56,7 @@
 	function init_braintree() {
 		if (typeof Braintree === 'undefined') {
 			if (count++ > 3) {
-				$('#braintree_payment_form').ac_msgbox('warning', "<?= _l("There was a problem loading the Braintree Credit Card Payment Method. Please choose a different method."); ?>", true);
+				$('#braintree_payment_form').ac_msg('warning', "<?= _l("There was a problem loading the Braintree Credit Card Payment Method. Please choose a different method."); ?>", true);
 				setTimeout(function () {
 					location.reload()
 				}, 5000);
