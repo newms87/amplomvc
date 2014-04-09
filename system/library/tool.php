@@ -81,28 +81,6 @@ class Tool extends Library
 		return strip_tags(preg_replace("/<br\\s*\/?>/", ' ', $text));
 	}
 
-	public function fillDefaults(&$array, $defaults)
-	{
-		if (!is_array($defaults)) {
-			if (!isset($array)) {
-				$array = $defaults;
-			}
-			return;
-		}
-
-		if (!isset($array)) {
-			$array = array();
-		}
-
-		foreach ($defaults as $key => &$default) {
-			if (!isset($array[$key])) {
-				$array[$key] = null;
-			}
-			$this->fillDefaults($array[$key], $default);
-		}
-		unset($default);
-	}
-
 	/**
 	 * limits the number of characters in a string to the nearest word or character
 	 */

@@ -80,7 +80,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		//Admin Bar
 		if ($this->user->isLogged()) {
-			$data['block_admin_bar'] = $this->getBlock('widget/admin_bar');
+			$data['block_admin_bar'] = $this->block->render('widget/admin_bar');
 		}
 
 		//Navigation
@@ -94,7 +94,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['customer']  = $this->customer->info();
 
 		if (!$data['is_logged']) {
-			$data['block_login'] = $this->getBlock('account/login');
+			$data['block_login'] = $this->block->render('account/login');
 		}
 
 		//Action Buttons
@@ -104,14 +104,14 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['logout']   = $this->url->link('account/logout');
 
 
-		$data['social_networks'] = $this->getBlock('extras/social_media');
+		$data['social_networks'] = $this->block->render('extras/social_media');
 
 		if ($this->config->get('config_multi_language')) {
-			$data['block_languages'] = $this->getBlock('localisation/language');
+			$data['block_languages'] = $this->block->render('localisation/language');
 		}
 
 		if ($this->config->get('config_multi_currency')) {
-			$data['block_currencies'] = $this->getBlock('localisation/currency');
+			$data['block_currencies'] = $this->block->render('localisation/currency');
 		}
 
 		//Dependencies

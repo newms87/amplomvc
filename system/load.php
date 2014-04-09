@@ -210,6 +210,7 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isAdmin()) {
 
 //Router
 $router = new Router($registry);
+$registry->set('route', $router);
 $router->route();
 $router->dispatch();
 

@@ -55,8 +55,7 @@
 									<input type="text" name="option_value[<?= $row; ?>][display_value]" size="50" value="<?= $option_value['display_value']; ?>"/>
 								</td>
 								<td class="center">
-									<? $this->builder->setBuilderTemplate('click_image_small'); ?>
-									<?= $this->builder->imageInput("option_value[$row][image]", $option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
+									<input type="text" class="imageinput" name="option_value[<?= $row; ?>][image]" value="<?= $option_value['image']; ?>" data-thumb="<?= $option_value['thumb']; ?>"/>
 								</td>
 								<td class="center">
 									<input class="sort_order" type="text" name="option_value[<?= $row; ?>][sort_order]" value="<?= $option_value['sort_order']; ?>" size="1"/>
@@ -84,13 +83,16 @@
 	$('#option_value_list').ac_template('ov_list');
 
 	function add_option_value() {
-		$.ac_template('ov_list', 'add');
+		var ov = $.ac_template('ov_list', 'add');
+		ov.find('.imageinput').ac_imageinput();
 		$('#option_value_list').update_index('.sort_order');
 	}
 
 	$('#option_value_list').sortable({cursor: "move", stop: function () {
 		$('#option_value_list').update_index();
 	} });
+
+	$('.imageinput').ac_imageinput();
 </script>
 
 <?= $this->builder->js('errors', $errors); ?>

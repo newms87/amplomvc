@@ -19,7 +19,7 @@
 					</tr>
 					<tr>
 						<td><?= _l("Image:"); ?></td>
-						<td><?= $this->builder->imageInput("image", $image); ?></td>
+						<td><input type="text" class="imageinput" name="image" value="<?= $image; ?>" /></td>
 					</tr>
 				</table>
 			</form>
@@ -27,6 +27,9 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+	$('.imageinput').ac_imageinput();
+</script>
 <?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>
 

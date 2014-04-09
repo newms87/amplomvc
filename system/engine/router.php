@@ -4,6 +4,7 @@ final class Router
 	private $registry;
 	private $error_path = 'error/not_found';
 	private $path;
+	private $segments;
 
 	public function __construct($registry)
 	{
@@ -15,6 +16,20 @@ final class Router
 		return $this->registry->get($key);
 	}
 
+	public function getPath()
+	{
+		return $this->path;
+	}
+
+	public function getSegment($index = null)
+	{
+		if (is_null($index)) {
+			return $this->segments;
+		}
+
+		return isset($this->segments[$index]) ? $this->segments[$index] : '';
+	}
+
 	public function route()
 	{
 		$this->path = $this->url->getPath();
@@ -24,6 +39,8 @@ final class Router
 		} else {
 			$this->routeFront();
 		}
+
+		$this->segments = explode('/', $this->path);
 	}
 
 	public function routeAdmin()

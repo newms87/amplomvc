@@ -124,18 +124,16 @@ final class Action
 
 		$controller = $this->getController();
 
-		if (is_callable(array(
+		$callable = array(
 			$controller,
 			$this->method
-		))
-		) {
+		);
+
+		if (is_callable($callable)) {
 			//Set our language group for translations
 			$language_group = $this->class;
 
-			call_user_func_array(array(
-				$controller,
-				$this->method
-			), $this->parameters);
+			call_user_func_array($callable, $this->parameters);
 
 			$this->output = $controller->output;
 

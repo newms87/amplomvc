@@ -6,7 +6,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->data['guest_checkout'] = true;
 
-			$this->data['block_guest_information'] = $this->getBlock('checkout/guest_information');
+			$this->data['block_guest_information'] = $this->block->render('checkout/guest_information');
 		} else {
 			//Use Customer Payment Preference
 			if ($this->customer->getMeta('default_payment_code')) {
@@ -21,7 +21,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			}
 
 			//Load payment block
-			$this->data['block_payment_address'] = $this->getBlock('checkout/payment_address');
+			$this->data['block_payment_address'] = $this->block->render('checkout/payment_address');
 
 
 			if ($this->cart->hasShipping()) {
@@ -37,15 +37,15 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 				}
 
 				//Load Shipping Block
-				$this->data['block_shipping_address'] = $this->getBlock('checkout/shipping_address');
+				$this->data['block_shipping_address'] = $this->block->render('checkout/shipping_address');
 			}
 		}
 
 		if ($this->cart->hasShipping()) {
-			$this->data['block_shipping_method'] = $this->getBlock('checkout/shipping_method');
+			$this->data['block_shipping_method'] = $this->block->render('checkout/shipping_method');
 		}
 
-		$this->data['block_payment_method'] = $this->getBlock('checkout/payment_method');
+		$this->data['block_payment_method'] = $this->block->render('checkout/payment_method');
 
 		$this->data['validate_customer_checkout'] = $this->url->link('block/checkout/customer_information/validate');
 

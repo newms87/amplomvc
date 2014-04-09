@@ -7,7 +7,7 @@ class Catalog_Controller_Common_Footer extends Controller
 			'links_footer' => $this->document->getLinks('footer'),
 		);
 
-		$data['social_networks'] = $this->getBlock('extras/social_media');
+		$data['social_networks'] = $this->block->render('extras/social_media');
 
 		//Dependencies
 		$this->children = array(

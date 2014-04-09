@@ -327,7 +327,7 @@ class Admin_Controller_Page_Page extends Controller
 				'status'  => 1,
 			);
 
-			$block_list = $this->Model_Block_Block->getBlocks($filter);
+			$block_list = $this->block->getBlocks($filter);
 
 			$blocks = array();
 

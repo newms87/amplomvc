@@ -2,15 +2,12 @@
 /**
  * Name: Login
  */
-class Admin_Controller_Block_Extras_AccountLogin extends Controller
+class Admin_Controller_Block_Account_Login extends Admin_Controller_Block_Block
 {
 	public function settings(&$settings)
 	{
-		//The Template
-		$this->view->load('block/account/login');
-
 		//Render
-		$this->render();
+		$this->render('block/account/login', $settings);
 	}
 
 	public function save()

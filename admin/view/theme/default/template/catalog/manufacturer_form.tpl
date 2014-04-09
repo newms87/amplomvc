@@ -54,8 +54,7 @@
 						<tr>
 							<td><?= _l("Image:"); ?></td>
 							<td>
-								<?= $this->builder->setBuilderTemplate('click_image'); ?>
-								<?= $this->builder->imageInput("image", $image); ?>
+								<input type="text" class="imageinput" name="image" value="<?= $image; ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -103,9 +102,9 @@
 			$('input[name="keyword"]').val(json);
 		}, 'json');
 	}
-</script>
 
-<script type="text/javascript">
+	$('.imageinput').ac_imageinput();
+
 	$('#tabs a').tabs();
 </script>
 

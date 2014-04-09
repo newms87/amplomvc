@@ -42,7 +42,7 @@
 											</td>
 											<td class="center">
 												<div class="image">
-													<?= $this->builder->imageInput("attributes[$row][image]", $attribute['image']); ?>
+													<input type="text" class="imageinput" name="attributes[<?= $row; ?>][image]" value="<?= $attribute['image']; ?>" />
 												</div>
 											</td>
 											<td class="center">
@@ -80,13 +80,17 @@
 	a_list.ac_template('a_list');
 
 	$('#add_attribute').click(function () {
-		$.ac_template('a_list', 'add');
+		var a = $.ac_template('a_list', 'add');
+		a.find('.imageinput').ac_imageinput();
+
 		a_list.update_index('.sort_order');
 	});
 
 	a_list.sortable({cursor: 'move', stop: function () {
 		$(this).update_index('.sort_order');
 	}});
+
+	$('.imageinput').ac_imageinput();
 </script>
 
 <?= $this->builder->js('errors', $errors); ?>

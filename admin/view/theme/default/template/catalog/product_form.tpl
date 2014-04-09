@@ -130,8 +130,7 @@
 						<tr>
 							<td><?= _l("Image:"); ?></td>
 							<td>
-								<?= $this->builder->setBuilderTemplate('click_image'); ?>
-								<?= $this->builder->imageInput("image", $image); ?>
+								<input type="text" class="imageinput" name="image" value="<?= $image; ?>"/>
 							</td>
 						</tr>
 						<tr>
@@ -376,8 +375,7 @@
 													<input type="<?= $type; ?>" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
 												</td>
 												<td class="center">
-													<? $this->builder->setBuilderTemplate('click_image_small'); ?>
-													<?= $this->builder->imageInput($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
+													<input type="text" class="imageinput" name="<?= $product_option_value_row . '[image]'; ?>" value="<?= $product_option_value['image']; ?>"/>
 												</td>
 												<td class="center">
 													<input type="text" size="50" name="<?= $product_option_value_row; ?>[display_value]" value="<?= $product_option_value['display_value']; ?>"/>
@@ -487,8 +485,7 @@
 								</td>
 								<td class="left">
 									<div class="image">
-										<? $this->builder->setBuilderTemplate('browse_clear'); ?>
-										<?= $this->builder->imageInput("product_attributes[$row][image]", $product_attribute['image']); ?>
+										<input type="text" class="imageinput" name="product_attributes[<?= $row; ?>][image]" value="<?= $product_attribute['image']; ?>"/>
 									</div>
 								</td>
 								<td class="left">
@@ -617,13 +614,14 @@
 						<? foreach ($product_images as $row => $product_image) { ?>
 							<tr class="product_image" data-row="<?= $row; ?>">
 								<td class="center">
-									<?= $this->builder->imageInput("product_images[$row][image]", $product_image['image']); ?>
+									<input type="text" class="imageinput" name="product_images[<?= $row; ?>][image]" value="<?= $product_image['image']; ?>"/>
 								</td>
 								<td class="center">
 									<input class="sort_order" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2"/>
 								</td>
-								<td class="left"><a onclick="$(this).closest('.product_image').remove();"
-								                    class="button"><?= _l("Remove"); ?></a></td>
+								<td class="left">
+									<a onclick="$(this).closest('.product_image').remove();" class="button"><?= _l("Remove"); ?></a>
+								</td>
 							</tr>
 						<? } ?>
 						</tbody>
@@ -717,6 +715,7 @@
 		select: function (event, data) {
 			if (data.item.value && (related_row = $.ac_template('related_list', 'add', data.item))) {
 				related_row.find('.related_name').html(data.item.name);
+				related_row.find('.imageinput').ac_imageinput();
 			}
 
 			$(this).val('');
@@ -793,7 +792,7 @@
 				attribute_row.find('.attribute_name').html(data.item.name);
 
 				if (data.item.thumb) {
-					attribute_row.find('.image .iu_thumb').attr('src', data.item.thumb);
+					attribute_row.find('.imageinput').attr('src', data.item.thumb).ac_imageinput();
 				}
 			}
 
@@ -836,6 +835,8 @@
 
 		product_option.data('option', data.item);
 
+		product_option.find('.imageinput').ac_imageinput();
+
 		if (!product_option) {
 			//If false, the product option already exists
 			if (product_option === false) {
@@ -866,6 +867,7 @@
 
 			ov_row.data('option_value', option_value);
 			ov_row.find('.uov_label').html(option_value.value);
+			ov_row.find('.imageinput').ac_imageinput();
 		}
 
 		$('#option_tab_list a').tabs();
@@ -884,7 +886,7 @@
 		row.find('.option_value_label').html(ov_data.value);
 
 		if (ov_data.image) {
-			row.find('.image .iu_thumb').attr('src', ov_data.thumb);
+			row.find('.imageinput').attr('src', ov_data.thumb).ac_imageinput();
 		}
 
 		//Handle the default box
@@ -974,15 +976,18 @@
 	$('#product_image_list').ac_template('image_list', {defaults: <?= json_encode($product_images['__ac_template__']); ?>});
 
 	function add_product_image() {
-		$.ac_template('image_list', 'add');
+		var img = $.ac_template('image_list', 'add');
 
 		$('#product_image_list').update_index('.sort_order');
+
+		img.find('.imageinput').ac_imageinput();
 	}
-	;
 
 	$('#product_image_list').sortable({cursor: 'move', stop: function () {
 		$(this).update_index('.sort_order');
 	} });
+
+	$('.imageinput').ac_imageinput();
 </script>
 
 <script type="text/javascript">

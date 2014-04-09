@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Controller_Common_Header extends Controller
 {
 	public function index()
@@ -31,12 +32,14 @@ class Admin_Controller_Common_Header extends Controller
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
+		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 52);
 		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
 		$this->document->addScript(URL_THEME_JS . 'common.js', 54);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_admin_thumb_height'));
+		$this->document->localizeVar('url_site', URL_SITE);
 
 		$this->data['messages'] = $this->message->fetch();
 
@@ -92,7 +95,7 @@ class Admin_Controller_Common_Header extends Controller
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
-					'attrs'      => array('onclick' => 'image_manager();'),
+					'attrs'      => array('onclick' => 'ac_filemanager();'),
 				);
 
 				$this->document->addLink('admin', $link_image_manager);

@@ -49,7 +49,7 @@
 									<input type="text" name="banner_image[<?= $image_row; ?>][link]" value="<?= $banner_image['link']; ?>" size="50"/>
 								</td>
 								<td class="left">
-									<?= $this->builder->imageInput("banner_image[$image_row][image]", $banner_image['image']); ?>
+									<input type="text" class="imageinput" name="banner_image[<?= $image_row; ?>][image]" value="<?= $banner_image['image']; ?>" />
 								</td>
 								<td class="right"><input class="sortOrder" type="text" name="banner_image[<?= $image_row; ?>][sort_order]" value="<?= $banner_image['sort_order']; ?>" size="2"/></td>
 								<td class="left"><a onclick="$('#image-row<?= $image_row; ?>').remove();"
@@ -100,6 +100,8 @@
 			scrollSensitivity: 30,
 			scrollSpeed: 30});
 	});
+
+	$('.imageinput').ac_imageinput();
 </script>
 
 <?= $this->builder->js('errors', $errors); ?>

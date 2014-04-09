@@ -3,9 +3,9 @@
 /**
  * Name: Carousel
  */
-class Admin_Controller_Block_Widget_Carousel extends Controller
+class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Block
 {
-	public function profile_settings(&$profile_settings)
+	public function instances(&$instances)
 	{
 		//Defaults
 		$defaults = array(
@@ -52,13 +52,15 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 			),
 		);
 
-		foreach ($profile_settings as &$profile_setting) {
-			$this->tool->fillDefaults($profile_setting, $defaults);
+		foreach ($instances as &$instance) {
+			$instance = array_replace_recursive($instance, $defaults);
 		}
-		unset($profile_setting);
+		unset($instance);
 
 		//AC Template for slides
-		$profile_settings['__ac_template__']['slides']['__ac_template__'] = array(
+		$instances['__ac_template__']['settings'] = $defaults;
+
+		$instances['__ac_template__']['settings']['slides']['__ac_template__'] = array(
 			'title'      => 'New Slide __ac_template__',
 			'image'      => '',
 			'href'       => '',
@@ -66,36 +68,35 @@ class Admin_Controller_Block_Widget_Carousel extends Controller
 			'sort_order' => 0,
 		);
 
-		$this->data['profile_settings'] = $profile_settings;
+		$data = array(
+			'instances' => $instances,
+		);
 
 		//Template Data
-		$this->data['data_sliders'] = array(
+		$data['data_sliders'] = array(
 			'nivo'     => "Nivo Slider",
 			'slidesjs' => "Slides JS",
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			'true'  => _l("Yes"),
 			'false' => _l("No"),
 		);
 
-		$this->data['data_effects'] = array(
+		$data['data_effects'] = array(
 			'fade'  => _l("Fade"),
 			'slide' => _l("Slide"),
 		);
 
-		$this->data['data_targets'] = array(
+		$data['data_targets'] = array(
 			'_blank'  => _l("New Window"),
 			'_self'   => _l("Self"),
 			'_parent' => _l("Parent"),
 			'_top'    => _l("Top"),
 		);
 
-		//The Template
-		$this->view->load('block/widget/carousel_profile_settings');
-
 		//Render
-		$this->render();
+		return $this->render('block/widget/carousel_instances', $data);
 	}
 
 	public function save()

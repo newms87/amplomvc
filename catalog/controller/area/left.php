@@ -3,18 +3,18 @@ class Catalog_Controller_Area_Left extends Controller
 {
 	public function index()
 	{
-		$this->view->load('area/left');
-
 		//Load Blocks associated with this position
-		$blocks = $this->Model_Block_Block->getBlocksForPosition('left');
+		$blocks = $this->block->getInstancesFor('left');
 
-		$this->data['blocks'] = array();
+		$data = array(
+			'blocks' => array(),
+		);
 
 		foreach ($blocks as $key => $block) {
 			$settings               = $block['settings'] + $block['profile'];
-			$this->data['blocks'][] = $this->getBlock($key, array(), $settings);
+			$data['blocks'][] = $this->block->render($key, array(), $settings);
 		}
 
-		$this->render();
+		$this->render('area/left', $data);
 	}
 }

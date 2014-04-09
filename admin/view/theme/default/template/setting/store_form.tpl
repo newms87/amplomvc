@@ -292,8 +292,7 @@
 						<tr>
 							<td><?= _l("Store Logo:"); ?></td>
 							<td>
-								<?= $this->builder->setBuilderTemplate('click_image'); ?>
-								<?= $this->builder->imageInput("config_logo", $config_logo); ?>
+								<input type="text" class="imageinput" name="config_logo" value="<?= $config_logo; ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -305,8 +304,8 @@
 								<div id="icon-generator">
 									<div class="generate">
 										<div class="icon-file">
-											<?= $this->builder->setBuilderTemplate('click_image'); ?>
-											<?= $this->builder->imageInput("config_icon[orig]", $config_icon['orig']); ?>
+											<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']; ?>" />
+
 											<div class="icon-label">
 												<a id="generate-icons" class="button"><?= _l("Generate Icon Files"); ?></a>
 											</div>
@@ -314,13 +313,13 @@
 									</div>
 									<div class="icon-files">
 										<div class="icon-file icon-ico">
-											<?= $this->builder->imageInput("config_icon[ico]", $config_icon['ico'], URL_IMAGE . $config_icon['ico'], 64, 64); ?>
+											<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']; ?>" data-thumb="<?= URL_IMAGE . $config_icon['ico']; ?>"/>
 											<div class="icon-label"><?= _l("ICO File"); ?></div>
 										</div>
 										<? foreach ($data_icon_sizes as $size) { ?>
 											<div class="icon-file icon-size">
 												<? $key = $size[0] . 'x' . $size[1]; ?>
-												<?= $this->builder->imageInput('config_icon[' . $key . ']', $config_icon[$key], URL_IMAGE . $config_icon[$key], $size[0], $size[1]); ?>
+												<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]; ?>" data-thumb="<?= URL_IMAGE . $config_icon[$key]; ?>" data-width="<?= $size[0]; ?>" data-height="<?= $size[1]; ?>"/>
 												<div class="icon-label"><?= _l("%s X %s Icon", $size[0], $size[1]); ?></div>
 											</div>
 										<? } ?>
@@ -469,7 +468,11 @@
 		}, 'json');
 	});
 
+	$('.imageinput').ac_imageinput();
+
 	$('#tabs a').tabs();
 </script>
+
 <?= $this->builder->js('errors', $errors); ?>
+
 <?= $common_footer; ?>

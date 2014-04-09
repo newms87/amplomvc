@@ -41,5 +41,3 @@
 			<div class="content">
 				<?= $this->builder->displayMessages($messages); ?>
 
-				<?= $this->builder->js('image_manager'); ?>
-

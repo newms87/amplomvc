@@ -8,7 +8,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
 
-		$this->data['block_cart'] = $this->getBlock('cart/cart');
+		$this->data['block_cart'] = $this->block->render('cart/cart');
 
 		//We remove any active orders to allow shipping estimates to be updated
 		if ($this->order->hasOrder()) {
@@ -20,22 +20,22 @@ class Catalog_Controller_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('coupon_status')) {
-			$this->data['block_coupon'] = $this->getBlock('cart/coupon');
+			$this->data['block_coupon'] = $this->block->render('cart/coupon');
 		}
 
 		if ($this->config->get('voucher_status')) {
-			$this->data['block_voucher'] = $this->getBlock('cart/voucher');
+			$this->data['block_voucher'] = $this->block->render('cart/voucher');
 		}
 
 		if ($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
-			$this->data['block_reward'] = $this->getBlock('cart/reward');
+			$this->data['block_reward'] = $this->block->render('cart/reward');
 		}
 
 		if ($this->config->get('shipping_status') && $this->cart->hasShipping()) {
-			$this->data['block_shipping'] = $this->getBlock('cart/shipping');
+			$this->data['block_shipping'] = $this->block->render('cart/shipping');
 		}
 
-		$this->data['block_total'] = $this->getBlock('cart/total');
+		$this->data['block_total'] = $this->block->render('cart/total');
 
 		$this->data['cart_empty']   = $this->cart->isEmpty();
 		$this->data['can_checkout'] = $this->cart->canCheckout();

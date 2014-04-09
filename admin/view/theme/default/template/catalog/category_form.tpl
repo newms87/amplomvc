@@ -61,8 +61,7 @@
 						<tr>
 							<td><?= _l("Image:"); ?></td>
 							<td>
-								<?= $this->builder->setBuilderTemplate('click_image'); ?>
-								<?= $this->builder->imageInput("image", $image); ?>
+								<input type="text" class="imageinput" name="image" value="<?= $image; ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -108,7 +107,7 @@
 	function generate_url(context) {
 		$.clear_errors('gen_url');
 
-		name = $('input[name=name]').val();
+		var name = $('input[name=name]').val();
 
 		if (!name) {
 			alert("Please make a name for this Category before generating the URL");
@@ -121,6 +120,8 @@
 			$('input[name="alias"]').val(response);
 		});
 	}
+
+	$('.imageinput').ac_imageinput();
 
 	//Tabs
 	$('#tabs a').tabs();

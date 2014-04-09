@@ -64,7 +64,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		if ($this->data['is_purchasable']) {
 			//The Product Options Block
-			$this->data['block_product_options'] = $this->getBlock('product/options', array('product_id' => $product_info['product_id']));
+			$this->data['block_product_options'] = $this->block->render('product/options', array('product_id' => $product_info['product_id']));
 		}
 
 		//Stock
@@ -123,12 +123,12 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Product Review
 		if ($this->config->get('config_review_status')) {
-			$this->data['block_review'] = $this->getBlock('product/review');
+			$this->data['block_review'] = $this->block->render('product/review');
 		}
 
 		//Social Sharing
 		if ($this->config->get('config_share_status')) {
-			$this->data['block_sharing'] = $this->getBlock('extras/sharing');
+			$this->data['block_sharing'] = $this->block->render('extras/sharing');
 		}
 
 		//Shipping & Return Policies
@@ -208,7 +208,7 @@ class Catalog_Controller_Product_Product extends Controller
 			);
 
 			//TODO: Move product/suggestions to product/related...
-			$this->data['block_product_related'] = $this->getBlock('product/suggestions', $ps_params);
+			$this->data['block_product_related'] = $this->block->render('product/suggestions', $ps_params);
 		}
 
 		//The Tags associated with this product

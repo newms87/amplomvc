@@ -1,12 +1,5 @@
 <?php
-//TODO: This is a hack to allow config file to be found from elfinder imagemanager system (and possibly other systems)
-if (is_file('../ac_config.php')) {
-	require_once('../ac_config.php');
-} elseif (is_file('../../ac_config.php')) {
-	require_once('../../ac_config.php');
-} elseif (is_file('../../../ac_config.php')) {
-	require_once('../../../ac_config.php');
-}
+require_once('../ac_config.php');
 
 // Install
 if (!defined('DOMAIN') || defined("AMPLOCART_INSTALL_USER")) {

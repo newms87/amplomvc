@@ -8,11 +8,9 @@ define("IS_ADMIN", true);
 
 //Url Constants
 define('URL_THEMES', URL_SITE . 'admin/view/theme/');
-define('URL_ELFINDER', URL_SITE . 'system/elfinder/');
 
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'admin/');
-
 
 // Directory Constants
 define('DIR_PLUGIN', DIR_SITE . 'plugin/');

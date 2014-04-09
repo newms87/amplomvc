@@ -1,7 +1,6 @@
 <?php
 //Urls
 define('URL_THEMES', URL_SITE . 'catalog/view/theme/');
-define('URL_ELFINDER', URL_SITE . 'system/elfinder/');
 
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'ajax/');

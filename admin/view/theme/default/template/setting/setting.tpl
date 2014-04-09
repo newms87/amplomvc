@@ -516,15 +516,13 @@
 		<tr>
 			<td><?= _l("Admin Panel Logo:"); ?></td>
 			<td>
-				<?= $this->builder->setBuilderTemplate('click_image'); ?>
-				<?= $this->builder->imageInput("config_admin_logo", $config_admin_logo); ?>
+				<input type="text" class="imageinput" name="config_admin_logo" value="<?= $config_admin_logo; ?>" />
 			</td>
 		</tr>
 		<tr>
 			<td><?= _l("Icon:<br /><span class=\"help\">The icon should be a PNG that is 16px x 16px.</span>"); ?></td>
 			<td>
-				<?= $this->builder->setBuilderTemplate('click_image'); ?>
-				<?= $this->builder->imageInput("config_icon", $config_icon); ?>
+				<input type="text" class="imageinput" name="config_icon" value="<?= $config_icon; ?>" />
 			</td>
 		</tr>
 		<tr>
@@ -892,13 +890,13 @@
 	$('[name=config_theme]').change(function () {
 		$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 	}).change();
+
+	$('.imageinput').ac_imageinput();
+
+	$('#tabs a').tabs();
 </script>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
-
-<script type="text/javascript">
-	$('#tabs a').tabs();
-</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

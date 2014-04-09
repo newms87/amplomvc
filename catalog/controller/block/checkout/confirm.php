@@ -53,19 +53,19 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 			} else {
 				//If we are only reloading the totals section, do not include these other blocks
 				if (empty($_GET['reload_totals'])) {
-					$this->data['block_confirm_address'] = $this->getBlock('checkout/confirm_address');
+					$this->data['block_confirm_address'] = $this->block->render('checkout/confirm_address');
 
-					$this->data['block_cart'] = $this->getBlock('cart/cart', array('ajax_cart' => true));
+					$this->data['block_cart'] = $this->block->render('cart/cart', array('ajax_cart' => true));
 				} else {
 					$this->data['totals_only'] = true;
 				}
 
 
 				if ($this->config->get('coupon_status')) {
-					$this->data['block_coupon'] = $this->getBlock('cart/coupon', array('ajax' => true));
+					$this->data['block_coupon'] = $this->block->render('cart/coupon', array('ajax' => true));
 				}
 
-				$this->data['block_totals'] = $this->getBlock('cart/total');
+				$this->data['block_totals'] = $this->block->render('cart/total');
 
 				$this->data['reload_totals'] = $this->url->link('block/checkout/confirm', 'reload_totals=1');
 

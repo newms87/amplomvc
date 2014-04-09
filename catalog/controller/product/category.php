@@ -91,7 +91,7 @@ class Catalog_Controller_Product_Category extends Controller
 			);
 
 			//Load these products in the Product List block template
-			$this->data['block_product_list'] = $this->getBlock('product/list', $params);
+			$this->data['block_product_list'] = $this->block->render('product/list', $params);
 
 			//Sorting
 			$sorts = array(

@@ -1,12 +1,10 @@
 <?php
+
 class __class_name__ extends Controller
 {
 __settings_start__
 	public function settings(&$settings)
 	{
-		//Template-(Lanuage preloaded)
-		$this->view->load('block/__route___settings');
-
 		//This is an example (feel free to remove this if you dont need it!)
 		$defaults = array(
 			'my_variable' => _l("My Variable"),
@@ -18,27 +16,24 @@ __settings_start__
 			}
 		}
 
-		$this->data['settings'] = $settings;
+		$data = array(
+			'settings' => $settings,
+		);
 
-		$this->render();
+		$this->render('block/__path___settings', $data);
 	}
 __settings_end__
 
 __profile_start__
 	public function profile(&$profiles)
 	{
-		$this->view->load('block/__route___profile');
+		$data = array(
+			'profiles' => $profiles,
+		);
 
 		//Add your code here
 
-		$this->data['profiles'] = $profiles;
-
-		$this->render();
+		$this->render('block/__path___profile', $data);
 	}
 __profile_end__
-
-	public function validate()
-	{
-		return $this->error;
-	}
 }

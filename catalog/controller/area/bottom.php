@@ -3,18 +3,18 @@ class Catalog_Controller_Area_Bottom extends Controller
 {
 	public function index()
 	{
-		$this->view->load('area/bottom');
-
 		//Load Blocks associated with this position
-		$blocks = $this->Model_Block_Block->getBlocksForPosition('bottom');
+		$blocks = $this->block->getInstancesFor('bottom');
 
-		$this->data['blocks'] = array();
+		$data = array(
+			'blocks' => array(),
+		);
 
 		foreach ($blocks as $key => $block) {
 			$settings               = $block['settings'] + $block['profile'];
-			$this->data['blocks'][] = $this->getBlock($key, array(), $settings);
+			$data['blocks'][] = $this->block->render($key, array(), $settings);
 		}
 
-		$this->render();
+		$this->render('area/bottom', $data);
 	}
 }

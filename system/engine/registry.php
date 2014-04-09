@@ -32,6 +32,15 @@ final class Registry
 
 	public function loadClass($class, $return_instance = true)
 	{
+		//TODO: Integrate this.... hack to incorporate AWS AutoLoading
+		if (strpos($class, '\\') !== false) {
+			$file = DIR_RESOURCES . 'aws/' . $class . '.php';
+			if (is_file($file)) {
+				require_once($file);
+				return;
+			}
+		}
+
 		//Resolve Model
 		if (preg_match("/^(Model_|System_|Admin_|Catalog_)/", $class)) {
 			if (strpos($class, "Model_") === 0) {

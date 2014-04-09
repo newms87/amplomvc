@@ -205,7 +205,11 @@ class Admin_Controller_Catalog_Option extends Controller
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
 
+			$thumb_width  = $this->config->get('config_image_admin_thumb_width');
+			$thumb_height = $this->config->get('config_image_admin_thumb_height');
+
 			foreach ($option_values as &$option_value) {
+				$option_value['thumb']        = $this->image->resize($option_value['image'], $thumb_width, $thumb_height);
 				$option_value['translations'] = $this->Model_Catalog_Option->getOptionValueTranslations($option_value['option_value_id']);
 			}
 			unset($option_value);
@@ -248,6 +252,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			'value'           => '',
 			'display_value'   => '',
 			'image'           => '',
+			'thumb'           => '',
 			'sort_order'      => 0,
 		);
 

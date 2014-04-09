@@ -44,8 +44,7 @@
 									<? foreach ($press['images'] as $img_key => $image) { ?>
 										<? $image_row = $img_key === 'template_row' ? '%image_row%' : $img_row++; ?>
 										<div class="press_image <?= $img_key; ?>" image_id="<?= $image_row; ?>">
-											<?= $this->builder->setBuilderTemplate('click_image'); ?>
-											<?= $this->builder->imageInput("settings[press_items][$row][images][$image_row]", $image); ?>
+											<input type="text" class="imageinput" name="settings[press_items][<?= $row; ?>][images][<?= $image_row; ?>]" value="<?= $image; ?>" />
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
 												class="delete"><?= _l("Remove"); ?></a>
@@ -71,6 +70,8 @@
 <?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">
+	$('.imageinput').ac_imageinput();
+
 	var image_tmp = $('#press_list .press_image_list .template_row');
 	image_tmp.find('script').remove();
 	var image_template = image_tmp.html();

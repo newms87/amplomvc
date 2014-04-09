@@ -1,45 +1,38 @@
 <?php
+
 class Admin_Controller_Block_Block extends Controller
 {
-	private $block_controller;
+	protected $path;
 
-	public function index()
+	public function __construct($registry)
 	{
-		if (!empty($_GET['path'])) {
-			if (!$this->Model_Block_Block->isBlock($_GET['path'])) {
+		parent::__construct($registry);
+
+		if ($this->route->getSegment(1) !== 'block') {
+			$this->path = $this->route->getSegment(1) . '/' . $this->route->getSegment(2);
+
+			//Technically the router should never allow this to happen.
+			if (!$this->block->exists($this->path)) {
 				$this->message->add('warning', _l("Attempted to access unknown block!"));
 
 				$this->url->redirect('block/block');
 			}
-
-			$this->getForm();
-		} else {
-			$this->getList();
 		}
 	}
 
-	public function delete()
+	public function index()
 	{
-		if (!empty($_GET['path']) && $this->validateDelete()) {
-			$this->Model_Block_Block->deleteBlock($_GET['path']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("The Block was removed successfully!"));
-			}
-
-			$this->url->redirect('block/block', $this->url->getQueryExclude('path'));
+		if ($this->path) {
+			return $this->form();
 		}
 
-		$this->index();
-	}
-
-	private function getList()
-	{
 		//Page Head
 		$this->document->setTitle(_l("Blocks"));
 
 		//Page Title
-		$this->data['page_title'] = _l("Blocks");
+		$data = array(
+			'page_title' => _l("Blocks"),
+		);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -79,24 +72,24 @@ class Admin_Controller_Block_Block extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
-		$block_total = $this->Model_Block_Block->getTotalBlocks($filter);
-		$blocks      = $this->Model_Block_Block->getBlocks($sort + $filter);
+		$block_total = $this->block->getTotalBlocks($filter);
+		$blocks      = $this->block->getBlocks($sort + $filter);
 
 		foreach ($blocks as &$block) {
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('block/block', 'path=' . $block['path'])
+					'href' => $this->url->link('block/' . $block['path'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('block/block/delete', 'path=' . $block['path']),
+					'href' => $this->url->link('block/' . $block['path'] .'/delete'),
 				),
 			);
 
 			$block['actions'] = $actions;
 
-			$block['name'] = $this->Model_Block_Block->getBlockName($block['path']);
+			$block['name'] = $this->block->getName($block['path']);
 		}
 
 		//Build The Table
@@ -111,22 +104,19 @@ class Admin_Controller_Block_Block extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('block/add');
+		$data['insert'] = $this->url->link('block/add');
 
 		//Render limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $block_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//The Template
-		$this->view->load('block/list');
+		$data['pagination'] = $this->pagination->render();
 
 		//Dependencies
 		$this->children = array(
@@ -135,118 +125,145 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/list', $data));
 	}
 
-	private function getForm()
+	public function delete()
 	{
-		$path = $_GET['path'];
-
-		//Handle POST
-		if ($this->request->isPost() && $this->validate()) {
-			//If plugins have additional Data
-			$this->saveBlockData();
-
-			$this->Model_Block_Block->updateBlock($path, $_POST);
-
-			$this->message->add('success', _l("The Block was saved successfully!"));
-
+		if (!$this->user->can('modify', 'block/block')) {
+			$this->message->add('warning', _l("You do not have permission to modify Blocks"));
 			$this->url->redirect('block/block');
 		}
 
+		if (!$this->block->remove($this->path)) {
+			$this->message->add('error', $this->block->getError());
+		} else {
+			$this->message->add('success', _l("The Block %s was removed successfully!", $this->path));
+		}
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('block/block', $this->url->getQuery());
+		}
+
+		$this->response->setOutput($this->message->toJSON());
+	}
+
+	public function save()
+	{
+		if (!$this->user->can('modify', 'block/block')) {
+			$this->message->add('warning', _l("You do not have permission to modify Blocks"));
+			$this->url->redirect('block/block');
+		}
+
+		if (!$this->block->edit($this->path, $_POST)) {
+			$this->message->add('error', $this->block->getError());
+		} else {
+			$this->message->add('success', _l("The Block %s was saved successfully!", $this->path));
+		}
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('block/block');
+		}
+
+		$this->response->setOutput($this->message->toJSON());
+	}
+
+	private function form()
+	{
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
-		$this->breadcrumb->add($path, $this->url->link('block/block', 'path=' . $path));
+		$this->breadcrumb->add($this->path, $this->url->link('block/block/' . $this->path));
 
 		//Entry Data
 		$block = array();
 
 		if ($this->request->isPost()) {
 			$block = $_POST;
-		} elseif ($path) {
-			$block = $this->Model_Block_Block->getBlock($path);
+		} elseif ($this->path) {
+			$block = $this->block->get($this->path);
 		}
 
-		$default_profile_settings = array(
-			'name'             => _l("Default"),
-			'show_block_title' => 1,
+		$default_instance = array(
+			'name'             => _l("default"),
+			'title'            => _l("Default"),
+			'show_title' => 1,
 		);
 
 		$default_profile = array(
-			'name'               => _l("New Profile"),
-			'profile_setting_id' => 0,
-			'store_ids'          => array($this->config->get('config_default_store')),
-			'layout_ids'         => array(),
-			'position'           => '',
-			'status'             => 1,
+			'name'        => _l("New Profile"),
+			'instance_id' => 0,
+			'store_ids'   => array($this->config->get('config_default_store')),
+			'layout_ids'  => array(),
+			'position'    => '',
+			'status'      => 1,
 		);
 
 		$defaults = array(
-			'settings'         => array(),
-			'profile_settings' => array(),
-			'profiles'         => array(),
-			'status'           => 1,
+			'settings'  => array(),
+			'instances' => array(),
+			'profiles'  => array(),
+			'status'    => 1,
 		);
 
-		$this->data += $block + $defaults;
+		$data = $block + $defaults;
 
 		//Load Defaults for Settings, Profile Settings and Profiles
-		if (empty($this->data['profile_settings'])) {
-			$this->data['profile_settings'][0] = $default_profile_settings;
+		if (empty($data['instances'])) {
+			$data['instances'][0] = $default_instance;
 		}
 
 		//AC Templates
-		$this->data['profile_settings']['__ac_template__']         = $default_profile_settings;
-		$this->data['profile_settings']['__ac_template__']['name'] = 'Profile __ac_template__';
+		$data['instances']['__ac_template__']         = $default_instance;
+		$data['instances']['__ac_template__']['name'] = 'Profile __ac_template__';
 
-		$this->data['profiles']['__ac_template__']         = $default_profile;
-		$this->data['profiles']['__ac_template__']['name'] = 'Profile __ac_template__';
+		$data['profiles']['__ac_template__']         = $default_profile;
+		$data['profiles']['__ac_template__']['name'] = 'Profile __ac_template__';
 
-		foreach ($this->data['profiles'] as &$profile) {
-			if (empty($profile['profile_setting_id']) || !in_array($profile['profile_setting_id'], array_keys($this->data['profile_settings']))) {
-				$profile['profile_setting_id'] = key(current($this->data['profile_settings']));
+		foreach ($data['profiles'] as &$profile) {
+			if (empty($profile['instance_id']) || !in_array($profile['instance_id'], array_keys($data['instances']))) {
+				$profile['instance_id'] = key(current($data['instances']));
 			}
 		}
 		unset($profile);
 
-		$this->data['data_profile_settings'] = array_diff_key($this->data['profile_settings'], array('__ac_template__' => false));
-
-		//Get additional Block settings and profile data (this is the plugin part)
-		$this->loadBlockData();
+		$data['data_instances'] = array_diff_key($data['instances'], array('__ac_template__' => false));
 
 		$sort_store = array(
 			'sort'  => 'name',
 			'order' => 'ASC',
 		);
 
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
+		$data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
 
 		$sort_layout = array(
 			'sort'  => 'name',
 			'order' => 'ASC',
 		);
 
-		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
+		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 
-		$this->data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
+		$data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
-		//Action Buttons
-		$this->data['action'] = $this->url->link('block/block', 'path=' . $path);
-		$this->data['cancel'] = $this->url->link('block/block');
 
-		//The Template
-		$this->view->load('block/block');
+		//Extended Data
+		$data['extend_settings']  = $this->settings($data);
+		$data['extend_profiles']  = $this->profiles($data);
+		$data['extend_instances'] = $this->instances($data['instances']);
+
+		//Action Buttons
+		$data['save']   = $this->url->link('block/block/' . $this->path . '/save');
+		$data['cancel'] = $this->url->link('block/block');
 
 		//Dependencies
 		$this->children = array(
@@ -255,79 +272,24 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/block', $data));
 	}
 
-	private function loadBlockController()
+	protected function settings(&$data)
 	{
-		if ($this->block_controller || empty($_GET['path'])) {
-			return;
-		}
-
-		$action = new Action($this->registry, 'block/' . $_GET['path']);
-
-		$this->block_controller = $action->getController();
+		//override this method to add custom settings
+		return '';
 	}
 
-	private function loadBlockData()
+	protected function profiles(&$data)
 	{
-		$this->loadBlockController();
-
-		if (method_exists($this->block_controller, 'settings')) {
-			$this->block_controller->settings($this->data['settings']);
-			$this->data['extend_settings'] = $this->block_controller->output;
-		}
-
-		if (method_exists($this->block_controller, 'profile_settings')) {
-			$this->block_controller->profile_settings($this->data['profile_settings']);
-			$this->data['extend_profile_settings'] = $this->block_controller->output;
-		}
-
-		if (method_exists($this->block_controller, 'profile')) {
-			$this->block_controller->profile($this->data['profiles']);
-			$this->data['extend_profile'] = $this->block_controller->output;
-		}
+		//Override this method to add custom profiles
+		return '';
 	}
 
-	private function saveBlockData()
+	protected function instances(&$data)
 	{
-		$this->loadBlockController();
-
-		if (method_exists($this->block_controller, 'saveSettings')) {
-			$this->block_controller->saveSettings($_POST['settings']);
-		}
-
-		if (method_exists($this->block_controller, 'saveProfile')) {
-			$this->block_controller->saveProfile($_POST['profiles']);
-		}
-	}
-
-	private function validate()
-	{
-		if (!$this->user->can('modify', 'block/block')) {
-			$this->error['warning'] = _l("You do not have permission to modify Blocks");
-		}
-
-		$this->validate_block_data();
-
-		return $this->error ? false : true;
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'block/block')) {
-			$this->error['warning'] = _l("You do not have permission to modify Blocks");
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function validate_block_data()
-	{
-		$this->loadBlockController();
-
-		if (method_exists($this->block_controller, 'save')) {
-			$this->error += $this->block_controller->save();
-		}
+		//Override this method to add custom instances
+		return '';
 	}
 }

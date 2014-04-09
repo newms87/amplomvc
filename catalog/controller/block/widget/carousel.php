@@ -1,14 +1,19 @@
 <?php
+
 class Catalog_Controller_Block_Widget_Carousel extends Controller
 {
 	public function index($settings, $carousel_id = null)
 	{
 		if (!is_null($carousel_id)) {
-			$settings = $this->Model_Block_Block->getBlockProfileSettings('widget/carousel', $carousel_id) + $settings;
+			$instance = $this->block->getInstance('widget/carousel', $carousel_id);
+
+			$settings = $instance + $settings;
 		}
 
 		//The Data
-		$this->data['slider_id'] = 'carousel_' . uniqid();
+		$data = array(
+			'slider_id' => 'carousel_' . uniqid()
+		);
 
 		//Slides
 		foreach ($settings['slides'] as &$slide) {
@@ -41,7 +46,7 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 					'randomStart'      => false,
 				);
 
-				$this->tool->fillDefaults($settings['nivo'], $default_params);
+				$settings['nivo'] = array_replace_recursive($settings['nivo'], $default_params);
 				break;
 
 			case 'slidejs':
@@ -84,16 +89,13 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 					}
 				});
 
-				$this->tool->fillDefaults($settings['slidesjs'], $default_params);
+				$settigns['slidejs'] = array_replace_recursive($settings['slidesjs'], $default_params);
 				break;
 		}
 
-		$this->data += $settings;
-
-		//The Template
-		$this->view->load('block/widget/carousel');
+		$data += $settings;
 
 		//Render
-		$this->render();
+		$this->render('block/widget/carousel', $data);
 	}
 }

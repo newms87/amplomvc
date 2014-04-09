@@ -58,24 +58,6 @@ switch ($js) {
 		</script>
 		<?   break;
 
-	/**
-	 * upload_image
-	 *
-	 * Makes the function upload_image available which displays the image upload manager
-	 * with a callback to a image input field(s).
-	 */
-
-	case 'image_manager':
-		?>
-		<? if (!isset($js_loaded_files['image_manager'])) { ?>
-		<script type="text/javascript">
-			var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
-			var no_image = "<?= URL_THEME_IMAGE . "no_image.png"; ?>"
-		</script>
-		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/image_manager.js'; ?>"></script>
-	<? } ?>
-		<? break;
-
 
 	case 'errors':
 		if (!$args) {
