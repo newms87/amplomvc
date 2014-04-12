@@ -508,7 +508,7 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	cursor: pointer;
 }
 
-.imageinput {
+.imageinput-box {
 	border: 1px solid #EEEEEE;
 	padding: 10px;
 	display: inline-block;
@@ -516,15 +516,15 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	text-align: center;
 }
 
-.imageinput img {
+.imageinput-box img {
 	margin-bottom: 5px;
 }
 
-.imageinput.click-image {
+.imageinput-box.click-image {
 	cursor: pointer;
 }
 
-.imageinput.click-image.small {
+.imageinput-box.click-image.small {
 	border: none;
 	padding: 0;
 	display: inline-block;
@@ -546,7 +546,7 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	margin-right: 5px;
 }
 
-.imageinput .hover-change {
+.imageinput-box .hover-change {
 	display: none;
 	position: absolute;
 	top: 0;
@@ -556,13 +556,13 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	height: 100%;
 }
 
-.imageinput:hover .hover-change {
+.imageinput-box:hover .hover-change {
 	opacity: .7;
 	display: block;
 }
 
 
-.imageinput input.image-field {
+.imageinput-box input.image-field {
 	position:absolute;
 	left: -9999px;
 }
@@ -1345,6 +1345,28 @@ ul.scrollbox li {
 	text-align: right;
 	text-decoration: none;
 	color: #000000;
+}
+
+.add-vtab {
+	display: block;
+	float: left;
+	width: 160px;
+	margin-bottom: 5px;
+	clear: both;
+	border-top: 1px solid #DDDDDD;
+	border-left: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	background: #E0EFD5;
+	padding: 6px 14px 7px 15px;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: right;
+	color: #407619;
+	cursor: pointer;
+}
+
+.add-vtab:hover {
+	background: #C8E3B5
 }
 
 .vtabs a.selected {
@@ -2556,6 +2578,7 @@ div .easy_list li > * + * {
 	padding: 6px;
 	box-shadow: none;
 	opacity: .5;
+	z-index: 20;
 }
 
 .ac_carousel_slide .button.delete:hover {

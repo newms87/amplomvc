@@ -2,11 +2,13 @@ var _acicount = 0;
 
 $.fn.ac_imageinput = function (options) {
 	this.each(function (i, e) {
-		var $input = $(e).addClass('image-field');
+		var $input = $(e);
 
-		if ($input.parent.hasClass("imageinput")) {
+		if ($input.hasClass("image-field")) {
 			return true;
 		}
+
+		$input.addClass('image-field');
 
 		options = $.extend({}, {
 			class:       'click-image',
@@ -18,7 +20,7 @@ $.fn.ac_imageinput = function (options) {
 			height:      $input.attr('data-height') || $.ac_vars.image_thumb_height || 140
 		}, options);
 
-		var $imageinput = $('<div />').addClass('imageinput').addClass(options.class);
+		var $imageinput = $('<div />').addClass('imageinput-box').addClass(options.class);
 		$input.before($imageinput);
 
 		var $thumb = $('<img />').width(options.width).height(options.height);
@@ -82,7 +84,7 @@ $.ac_filemanager = function (options) {
 		fm_type:  'image'
 	}, options);
 
-	$('body').remove('#ac-filemanager');
+	$('#ac-filemanager').remove();
 
 	var type = 0;
 
@@ -112,13 +114,21 @@ $.ac_filemanager = function (options) {
 	var pos = $.cookie('ac-filemanager');
 
 	if (pos) {
-		pos = $.parseJSON(pos);
-		$acfm.css(pos);
+		try {
+			pos = $.parseJSON(pos);
+			console.log('load', pos);
+			pos.top += $('body').scrollTop();
+			console.log('after', pos);
+			$acfm.css(pos);
+		} catch(e){}
 	}
 
 	$acfm.append($iframe).append($close).draggable({
 		stop: function () {
-			$.cookie('ac-filemanager', JSON.stringify($('#ac-filemanager').position()));
+			var newpos = $('#ac-filemanager').position();
+			newpos.top -= $('body').scrollTop();
+			console.log(newpos, $('body').scrollTop());
+			$.cookie('ac-filemanager', JSON.stringify(newpos));
 		}
 	});
 

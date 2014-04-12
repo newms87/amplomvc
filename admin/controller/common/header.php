@@ -95,7 +95,7 @@ class Admin_Controller_Common_Header extends Controller
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
-					'attrs'      => array('onclick' => 'ac_filemanager();'),
+					'attrs'      => array('onclick' => '$.ac_filemanager();'),
 				);
 
 				$this->document->addLink('admin', $link_image_manager);

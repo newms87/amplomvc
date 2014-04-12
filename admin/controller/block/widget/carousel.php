@@ -7,6 +7,21 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 {
 	public function instances(&$instances)
 	{
+		$default_instance = array(
+			'name'       => _l("default"),
+			'title'      => _l("Default"),
+			'show_title' => 1,
+		);
+
+		//Load Defaults for Settings, Profile Settings and Profiles
+		if (empty($instances)) {
+			$instances[0] = $default_instance;
+		}
+
+		//AC Templates
+		$instances['__ac_template__']         = $default_instance;
+		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
+
 		//Defaults
 		$defaults = array(
 			'slider'   => 'slidesjs',
@@ -53,7 +68,7 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 		);
 
 		foreach ($instances as &$instance) {
-			$instance = array_replace_recursive($instance, $defaults);
+			$instance['settings'] = array_replace_recursive($instance, $defaults);
 		}
 		unset($instance);
 
@@ -97,10 +112,5 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 
 		//Render
 		return $this->render('block/widget/carousel_instances', $data);
-	}
-
-	public function save()
-	{
-		return $this->error;
 	}
 }

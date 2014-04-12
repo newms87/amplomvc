@@ -83,7 +83,7 @@ class Admin_Controller_Block_Block extends Controller
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('block/' . $block['path'] .'/delete'),
+					'href' => $this->url->link('block/' . $block['path'] . '/delete'),
 				),
 			);
 
@@ -170,6 +170,9 @@ class Admin_Controller_Block_Block extends Controller
 
 	private function form()
 	{
+		//Page Head
+		$this->document->setTitle(_l("Edit Block"));
+
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
@@ -184,21 +187,6 @@ class Admin_Controller_Block_Block extends Controller
 			$block = $this->block->get($this->path);
 		}
 
-		$default_instance = array(
-			'name'             => _l("default"),
-			'title'            => _l("Default"),
-			'show_title' => 1,
-		);
-
-		$default_profile = array(
-			'name'        => _l("New Profile"),
-			'instance_id' => 0,
-			'store_ids'   => array($this->config->get('config_default_store')),
-			'layout_ids'  => array(),
-			'position'    => '',
-			'status'      => 1,
-		);
-
 		$defaults = array(
 			'settings'  => array(),
 			'instances' => array(),
@@ -208,61 +196,13 @@ class Admin_Controller_Block_Block extends Controller
 
 		$data = $block + $defaults;
 
-		//Load Defaults for Settings, Profile Settings and Profiles
-		if (empty($data['instances'])) {
-			$data['instances'][0] = $default_instance;
-		}
-
-		//AC Templates
-		$data['instances']['__ac_template__']         = $default_instance;
-		$data['instances']['__ac_template__']['name'] = 'Profile __ac_template__';
-
-		$data['profiles']['__ac_template__']         = $default_profile;
-		$data['profiles']['__ac_template__']['name'] = 'Profile __ac_template__';
-
-		foreach ($data['profiles'] as &$profile) {
-			if (empty($profile['instance_id']) || !in_array($profile['instance_id'], array_keys($data['instances']))) {
-				$profile['instance_id'] = key(current($data['instances']));
-			}
-		}
-		unset($profile);
-
-		$data['data_instances'] = array_diff_key($data['instances'], array('__ac_template__' => false));
-
-		$sort_store = array(
-			'sort'  => 'name',
-			'order' => 'ASC',
-		);
-
-		$data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
-
-		$sort_layout = array(
-			'sort'  => 'name',
-			'order' => 'ASC',
-		);
-
-		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
-
-		$data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
-
-		$data['data_statuses'] = array(
-			0 => _l("Disabled"),
-			1 => _l("Enabled"),
-		);
-
-		$data['data_yes_no'] = array(
-			1 => _l("Yes"),
-			0 => _l("No"),
-		);
-
-
 		//Extended Data
-		$data['extend_settings']  = $this->settings($data);
-		$data['extend_profiles']  = $this->profiles($data);
-		$data['extend_instances'] = $this->instances($data['instances']);
+		$data['block_settings']  = $this->settings($data);
+		$data['block_instances'] = $this->instances($data['instances'], $data);
+		$data['block_profiles']  = $this->profiles($data['profiles'], $data);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('block/block/' . $this->path . '/save');
+		$data['save']   = $this->url->link('block/' . $this->path . '/save');
 		$data['cancel'] = $this->url->link('block/block');
 
 		//Dependencies
@@ -275,21 +215,89 @@ class Admin_Controller_Block_Block extends Controller
 		$this->response->setOutput($this->render('block/block', $data));
 	}
 
+	//override this method to add custom settings
 	protected function settings(&$data)
 	{
-		//override this method to add custom settings
-		return '';
+		$data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		return $this->render('block/block/settings', $data, true);
 	}
 
-	protected function profiles(&$data)
+	//Override this method to add custom profiles
+	protected function profiles(&$profiles)
 	{
-		//Override this method to add custom profiles
-		return '';
+		$instances = $this->block->getInstances($this->path);
+
+		$profiles['__ac_template__'] = array(
+			'name'        => 'Profile __ac_template__',
+			'block_instance_id' => 0,
+			'store_ids'   => array($this->config->get('config_default_store')),
+			'layout_ids'  => array(),
+			'position'    => '',
+			'status'      => 1,
+		);
+
+		foreach ($profiles as &$profile) {
+			if (empty($profile['block_instance_id']) || !in_array($profile['block_instance_id'], array_keys($instances))) {
+				reset($instances);
+				$profile['block_instance_id'] = key(current($instances));
+			}
+		}
+		unset($profile);
+
+		$sort_store = array(
+			'sort'  => 'name',
+			'order' => 'ASC',
+		);
+
+		$profile_data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
+
+		$sort_layout = array(
+			'sort'  => 'name',
+			'order' => 'ASC',
+		);
+
+		$profile_data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
+
+		$profile_data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
+
+		$profile_data['data_statuses'] = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$profile_data['data_instances'] = $instances;
+
+		$profile_data['profiles']       = $profiles;
+
+		return $this->render('block/block/profiles', $profile_data, true);
 	}
 
-	protected function instances(&$data)
+	//Override this method to add custom instances
+	protected function instances(&$instances)
 	{
-		//Override this method to add custom instances
-		return '';
+		$default_instance = array(
+			'name'       => _l("default"),
+			'title'      => _l("Default"),
+			'show_title' => 1,
+		);
+
+		//Load Defaults for Settings, Profile Settings and Profiles
+		if (empty($instances)) {
+			$instances[0] = $default_instance;
+		}
+
+		//AC Templates
+		$instances['__ac_template__']         = $default_instance;
+		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
+
+		$instance_data = array(
+			'instances' => $instances,
+		);
+
+		return $this->render('block/block/instances', $instance_data, true);
 	}
 }

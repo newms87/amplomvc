@@ -146,17 +146,13 @@ class Block extends Library
 
 	public function edit($path, $data)
 	{
-		if (!$this->block_exists($path)) {
+		if (!$this->exists($path)) {
 			$this->error = _l("Block %s does not exist!", $path);
 			return false;
 		}
 
 		if (isset($data['settings'])) {
 			$data['settings'] = serialize($data['settings']);
-		}
-
-		if (isset($data['profiles'])) {
-			$data['profiles'] = serialize($data['profiles']);
 		}
 
 		$data['path'] = $path;
@@ -168,9 +164,41 @@ class Block extends Library
 
 			foreach ($data['instances'] as $instance) {
 				$instance['path']     = $path;
-				$instance['settings'] = serialize($instance['settings']);
+
+				$instance['settings'] = !empty($instance['settings']) ? serialize($instance['settings']) : '';
 
 				$this->insert('block_instance', $instance);
+			}
+		}
+
+		if (isset($data['profiles'])) {
+			$profile_ids = $this->queryColumn("SELECT block_profile_id FROM " . DB_PREFIX . "block_profile WHERE path = '" . $this->escape($path) . "'");
+
+			if ($profile_ids) {
+				$profile_ids = implode(',', $profile_ids);
+
+				$this->delete('block_profile', "block_profile_id IN ($profile_ids)");
+				$this->delete('block_profile_layout', "block_profile_id IN ($profile_ids)");
+			}
+
+			foreach ($data['profiles'] as $profile) {
+				$profile['path'] = $path;
+
+				$block_profile_id = $this->insert('block_profile', $profile);
+
+				if (!empty($profile['store_ids']) && !empty($profile['layout_ids'])) {
+					foreach ($profile['store_ids'] as $store_id) {
+						foreach ($profile['layout_ids'] as $layout_id) {
+							$profile_layout = array(
+								'block_profile_id' => $block_profile_id,
+								'store_id'         => $store_id,
+								'layout_id'        => $layout_id,
+							);
+
+							$this->insert('block_profile_layout', $profile_layout);
+						}
+					}
+				}
 			}
 		}
 
@@ -234,7 +262,7 @@ class Block extends Library
 		if ($block) {
 			$block['name']      = $this->getName($path);
 			$block['settings']  = !empty($block['settings']) ? unserialize($block['settings']) : array();
-			$block['profiles']  = !empty($block['profiles']) ? unserialize($block['profiles']) : array();
+			$block['profiles']  = $this->getProfiles($path);
 			$block['instances'] = $this->getInstances($path);
 		} else {
 			$block = array(
@@ -375,15 +403,15 @@ class Block extends Library
 
 			foreach ($block_list as $block) {
 				$block['settings']  = $block['settings'] ? unserialize($block['settings']) : array();
-				$block['instances'] = $block['instances'] ? unserialize($block['instances']) : array();
-				$block['profiles']  = $block['profiles'] ? unserialize($block['profiles']) : array();
+				$block['instances'] = $this->getInstances($block['path']);
+				$block['profiles']  = $this->getProfiles($block['path']);
 
 				if (!empty($block['profiles'])) {
 					foreach ($block['profiles'] as $profile) {
 						if (in_array($store_id, $profile['store_ids'])) {
 							//Load this profiles settings
-							if (isset($profile['profile_setting_id']) && isset($block['instance'][$profile['profile_setting_id']])) {
-								$profile += $block['instances'][$profile['profile_setting_id']];
+							if (isset($profile['block_instance_id']) && isset($block['instances'][$profile['block_instance_id']])) {
+								$profile += $block['instances'][$profile['block_instance_id']];
 							}
 
 							$blocks[$block['path']]            = $block;
@@ -411,7 +439,20 @@ class Block extends Library
 
 	public function getProfiles($path)
 	{
-		return isset($this->blocks[$path]) ? $this->blocks[$path]['profiles'] : null;
+		if (isset($this->blocks[$path])) {
+			return $this->blocks[$path]['profiles'];
+		}
+
+		$profiles = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_profile WHERE `path` = '" . $this->escape($path) . "'", 'block_profile_id');
+
+		foreach ($profiles as &$profile) {
+			$layouts = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_profile_layout WHERE block_profile_id = " . $profile['block_profile_id']);
+
+			$profile['store_ids']  = array_column($layouts, 'store_id');
+			$profile['layout_ids'] = array_column($layouts, 'layout_id');
+		}
+
+		return $profiles;
 	}
 
 	public function getInstance($path, $instance_id)
@@ -425,7 +466,11 @@ class Block extends Library
 
 	public function getInstances($path)
 	{
-		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'");
+		if (isset($this->blocks[$path])) {
+			return $this->blocks[$path]['instances'];
+		}
+
+		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'block_instance_id');
 
 		foreach ($instances as &$instance) {
 			$instance['settings'] = unserialize($instance['settings']);
