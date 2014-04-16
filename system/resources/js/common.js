@@ -3,6 +3,11 @@ String.prototype.ajaxurl = function () {
 	return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
 }
 
+String.prototype.toSlug = function() {
+	return this.toLowerCase().replace(/\s/,'-').replace(/[^a-z0-9-_]/,'');
+}
+
+
 $._ajax = $.ajax;
 
 $.ajax = function (params, p2) {
@@ -388,17 +393,18 @@ $.fn.flash_highlight = function () {
 }
 
 $.fn.tabs = function (callback) {
-	var selector = this;
+	var $this = this;
+
 	this.each(function (i, obj) {
 		var obj = $(obj);
 
 		$(obj.attr('href')).hide();
 
 		obj.click(function () {
-			selector.removeClass('selected');
+			$this.removeClass('selected');
 
-			selector.each(function (i, element) {
-				$($(element).attr('href')).hide();
+			$this.each(function (i, e) {
+				$($(e).attr('href')).hide();
 			});
 
 			obj.addClass('selected');

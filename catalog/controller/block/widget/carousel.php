@@ -4,11 +4,7 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 {
 	public function index($settings, $carousel_id = null)
 	{
-		if (!is_null($carousel_id)) {
-			$instance = $this->block->getInstance('widget/carousel', $carousel_id);
-
-			$settings = $instance + $settings;
-		}
+		html_dump($settings, 'settings');
 
 		//The Data
 		$data = array(

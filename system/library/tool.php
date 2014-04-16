@@ -9,11 +9,11 @@ class Tool extends Library
 		define("FILELIST_SPLFILEINFO", 2);
 	}
 
-	public function getSlug($name)
+	public function getSlug($name, $allow = '')
 	{
 		$patterns = array(
 			"/[\s\\\\\/]/" => '_',
-			"/[^a-z0-9_]/" => '',
+			"/[^a-z0-9_$allow]/" => '',
 		);
 
 		return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));

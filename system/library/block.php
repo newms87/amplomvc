@@ -162,7 +162,21 @@ class Block extends Library
 		if (isset($data['instances'])) {
 			$this->delete('block_instance', array('path' => $path));
 
-			foreach ($data['instances'] as $instance) {
+			foreach ($data['instances'] as &$instance) {
+				$instance['name'] = $this->tool->getSlug($instance['name'], '-');
+
+				$duplicates = 0;
+
+				foreach ($data['instances'] as $i) {
+					if ($i['name'] === $instance['name']) {
+						$duplicates++;
+					}
+				}
+
+				if ($duplicates > 1) {
+					$instance['name'] .= '-' . $duplicates;
+				}
+
 				$instance['path']     = $path;
 
 				$instance['settings'] = !empty($instance['settings']) ? serialize($instance['settings']) : '';
@@ -455,13 +469,13 @@ class Block extends Library
 		return $profiles;
 	}
 
-	public function getInstance($path, $instance_id)
+	public function getInstance($path, $instance_name)
 	{
 		if (!isset($this->blocks[$path])) {
 			$this->blocks[$path] = $this->get($path);
 		}
 
-		return $this->blocks[$path]['instances'][$instance_id];
+		return $this->blocks[$path]['instances'][$instance_name];
 	}
 
 	public function getInstances($path)
@@ -470,7 +484,7 @@ class Block extends Library
 			return $this->blocks[$path]['instances'];
 		}
 
-		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'block_instance_id');
+		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'name');
 
 		foreach ($instances as &$instance) {
 			$instance['settings'] = unserialize($instance['settings']);
@@ -488,24 +502,13 @@ class Block extends Library
 		return array();
 	}
 
-	public function render($path, $args = array(), $settings = null)
+	public function render($path, $instance_name, $settings = array())
 	{
-		if (!is_array($args)) {
-			trigger_error(_l("%s(): \$args must be an array of arguments to pass to the block %s.", __METHOD__, $path));
-			exit();
-		}
-
 		$block = 'block/' . $path;
 
-		if (is_null($settings)) {
-			$settings = $this->getSettings($path);
-		}
+		$instance = $this->block->getInstance('widget/carousel', $instance_name);
 
-		if ($settings) {
-			$settings = $args + $settings;
-		} else {
-			$settings = $args;
-		}
+		$settings += $instance;
 
 		$action = new Action($this->registry, $block, array('settings' => $settings));
 

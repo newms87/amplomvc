@@ -13,15 +13,6 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 			'show_title' => 1,
 		);
 
-		//Load Defaults for Settings, Profile Settings and Profiles
-		if (empty($instances)) {
-			$instances[0] = $default_instance;
-		}
-
-		//AC Templates
-		$instances['__ac_template__']         = $default_instance;
-		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
-
 		//Defaults
 		$defaults = array(
 			'slider'   => 'slidesjs',
@@ -68,11 +59,14 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 		);
 
 		foreach ($instances as &$instance) {
-			$instance['settings'] = array_replace_recursive($instance, $defaults);
+			$instance['settings'] = array_replace_recursive($defaults, $instance['settings']);
 		}
 		unset($instance);
 
-		//AC Template for slides
+		//AC Template
+		$instances['__ac_template__']         = $default_instance;
+		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
+
 		$instances['__ac_template__']['settings'] = $defaults;
 
 		$instances['__ac_template__']['settings']['slides']['__ac_template__'] = array(
@@ -93,9 +87,14 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 			'slidesjs' => "Slides JS",
 		);
 
-		$data['data_yes_no'] = array(
+		$data['data_true_false'] = array(
 			'true'  => _l("Yes"),
 			'false' => _l("No"),
+		);
+
+		$data['data_yes_no'] = array(
+			0 => _l("Yes"),
+			1 => _l("No"),
 		);
 
 		$data['data_effects'] = array(

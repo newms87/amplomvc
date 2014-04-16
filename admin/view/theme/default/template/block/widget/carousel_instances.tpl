@@ -14,9 +14,15 @@
 		<div id="tab-instance-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content instance">
 			<table class="form">
 				<tr>
-					<td><?= _l("Instance Name"); ?></td>
+					<td><?= _l("Instance Identifier"); ?></td>
 					<td>
-						<input type="text" class="tab_name instance_name" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
+						<input type="text" class="tab_name instance_name" placeholder="(eg: my-instance-1)" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
+					</td>
+				</tr>
+				<tr>
+					<td><?= _l("Instance Title"); ?></td>
+					<td>
+						<input type="text" name="instances[<?= $row; ?>][title]" value="<?= $instance['title']; ?>"/>
 					</td>
 				</tr>
 				<tr>
@@ -25,7 +31,7 @@
 				</tr>
 			</table>
 
-			<? $row_name = "instance[$row][settings]"; ?>
+			<? $row_name = "instances[$row][settings]"; ?>
 			<? $settings = $instance['settings']; ?>
 			<div class="carousel-settings">
 				<h2><?= _l("Carousel Settings"); ?></h2>
@@ -73,7 +79,7 @@
 					</tr>
 					<tr>
 						<td><?= _l("Show Navigation"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][navigation][active]", $settings['slidesjs']['navigation']['active']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][navigation][active]", $settings['slidesjs']['navigation']['active']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Navigation Effect"); ?></td>
@@ -81,7 +87,7 @@
 					</tr>
 					<tr>
 						<td><?= _l("Show Pagination"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][pagination][active]", $settings['slidesjs']['pagination']['active']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][pagination][active]", $settings['slidesjs']['pagination']['active']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Pagination Effect"); ?></td>
@@ -89,7 +95,7 @@
 					</tr>
 					<tr>
 						<td><?= _l("Show Controls"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][play][active]", $settings['slidesjs']['play']['active']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][active]", $settings['slidesjs']['play']['active']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Controls Effect"); ?></td>
@@ -97,15 +103,15 @@
 					</tr>
 					<tr>
 						<td><?= _l("Auto Play"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][play][auto]", $settings['slidesjs']['play']['auto']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][auto]", $settings['slidesjs']['play']['auto']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Swap Stop / Play Buttons"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][play][swap]", $settings['slidesjs']['play']['swap']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][swap]", $settings['slidesjs']['play']['swap']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Pause Slides on Hover"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][play][pauseOnHover]", $settings['slidesjs']['play']['pauseOnHover']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][pauseOnHover]", $settings['slidesjs']['play']['pauseOnHover']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Slide Delay Time (ms)"); ?></td>
@@ -127,7 +133,7 @@
 					</tr>
 					<tr>
 						<td><?= _l("Fade Effect Cross-fade"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, $row_name . "[slidesjs][effect][fade][crossfade]", $settings['slidesjs']['effect']['fade']['crossfade']); ?></td>
+						<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][effect][fade][crossfade]", $settings['slidesjs']['effect']['fade']['crossfade']); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Slide Effect Speed"); ?></td>
@@ -181,6 +187,8 @@
 
 	//Update Tab Name
 	$('.instance_name').keyup(function () {
+		$(this).val($(this).val().toSlug());
+
 		update_instance_select();
 	});
 
@@ -219,8 +227,13 @@
 
 		var options = '';
 
-		$('#instances_tab_list a').each(function (i, e) {
-			options += '<option value="' + $(e).attr('data-row') + '">' + $(e).find('.tab_name').html() + '</option>';
+		$('.instance_name').each(function (i, e) {
+			var $instance = $(e).closest('.instance');
+			var name = $(e).val();
+
+			$('[href="#'+$instance.attr('id')+'"]').find('.tab_name').html(name);
+
+			options += '<option value="' + name + '">' + name + '</option>';
 		});
 
 		context.html(options);
