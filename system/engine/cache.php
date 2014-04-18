@@ -71,8 +71,6 @@ class Cache
 		$files = glob(DIR_CACHE . $key . '*.cache');
 
 		if ($files) {
-			clearstatcache();
-
 			foreach ($files as $file) {
 				//Suppress warnings as this will fail under race conditions
 				@unlink($file);

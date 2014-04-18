@@ -4,7 +4,7 @@ class Catalog_Controller_Area_Right extends Controller
 	public function index()
 	{
 		//Load Blocks associated with this position
-		$blocks = $this->block->getInstancesFor('right');
+		$blocks = $this->block->getAreaInstances('right');
 
 		$data = array(
 			'blocks' => array(),

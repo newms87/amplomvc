@@ -190,7 +190,6 @@ class Admin_Controller_Block_Block extends Controller
 		$defaults = array(
 			'settings'  => array(),
 			'instances' => array(),
-			'profiles'  => array(),
 			'status'    => 1,
 		);
 
@@ -199,7 +198,6 @@ class Admin_Controller_Block_Block extends Controller
 		//Extended Data
 		$data['block_settings']  = $this->settings($data);
 		$data['block_instances'] = $this->instances($data['instances'], $data);
-		$data['block_profiles']  = $this->profiles($data['profiles'], $data);
 
 		//Action Buttons
 		$data['save']   = $this->url->link('block/' . $this->path . '/save');
@@ -224,56 +222,6 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		return $this->render('block/block/settings', $data, true);
-	}
-
-	//Override this method to add custom profiles
-	protected function profiles(&$profiles)
-	{
-		$instances = $this->block->getInstances($this->path);
-
-		$profiles['__ac_template__'] = array(
-			'name'        => 'Profile __ac_template__',
-			'block_instance_id' => 0,
-			'store_ids'   => array($this->config->get('config_default_store')),
-			'layout_ids'  => array(),
-			'position'    => '',
-			'status'      => 1,
-		);
-
-		foreach ($profiles as &$profile) {
-			if (empty($profile['block_instance_id']) || !in_array($profile['block_instance_id'], array_keys($instances))) {
-				reset($instances);
-				$profile['block_instance_id'] = key(current($instances));
-			}
-		}
-		unset($profile);
-
-		$sort_store = array(
-			'sort'  => 'name',
-			'order' => 'ASC',
-		);
-
-		$profile_data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
-
-		$sort_layout = array(
-			'sort'  => 'name',
-			'order' => 'ASC',
-		);
-
-		$profile_data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
-
-		$profile_data['data_positions'] = array('' => _l(" --- None --- ")) + $this->theme->getSetting('data_positions');
-
-		$profile_data['data_statuses'] = array(
-			0 => _l("Disabled"),
-			1 => _l("Enabled"),
-		);
-
-		$profile_data['data_instances'] = $instances;
-
-		$profile_data['profiles']       = $profiles;
-
-		return $this->render('block/block/profiles', $profile_data, true);
 	}
 
 	//Override this method to add custom instances

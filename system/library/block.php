@@ -4,15 +4,6 @@ class Block extends Library
 {
 	private $blocks;
 
-	function __construct(&$registry)
-	{
-		parent::__construct($registry);
-
-		if (!$this->config->isAdmin()) {
-			$this->loadBlocks();
-		}
-	}
-
 	public function add($data)
 	{
 		if (!$this->validation->text($data['name'], 3, 128)) {
@@ -177,7 +168,7 @@ class Block extends Library
 					$instance['name'] .= '-' . $duplicates;
 				}
 
-				$instance['path']     = $path;
+				$instance['path'] = $path;
 
 				$instance['settings'] = !empty($instance['settings']) ? serialize($instance['settings']) : '';
 
@@ -185,40 +176,29 @@ class Block extends Library
 			}
 		}
 
-		if (isset($data['profiles'])) {
-			$profile_ids = $this->queryColumn("SELECT block_profile_id FROM " . DB_PREFIX . "block_profile WHERE path = '" . $this->escape($path) . "'");
-
-			if ($profile_ids) {
-				$profile_ids = implode(',', $profile_ids);
-
-				$this->delete('block_profile', "block_profile_id IN ($profile_ids)");
-				$this->delete('block_profile_layout', "block_profile_id IN ($profile_ids)");
-			}
-
-			foreach ($data['profiles'] as $profile) {
-				$profile['path'] = $path;
-
-				$block_profile_id = $this->insert('block_profile', $profile);
-
-				if (!empty($profile['store_ids']) && !empty($profile['layout_ids'])) {
-					foreach ($profile['store_ids'] as $store_id) {
-						foreach ($profile['layout_ids'] as $layout_id) {
-							$profile_layout = array(
-								'block_profile_id' => $block_profile_id,
-								'store_id'         => $store_id,
-								'layout_id'        => $layout_id,
-							);
-
-							$this->insert('block_profile_layout', $profile_layout);
-						}
-					}
-				}
-			}
-		}
-
 		$this->cache->delete('block');
 
 		return true;
+	}
+
+	public function setAreaBlocks($area, $store_id, $layout_id, $blocks, $path = null)
+	{
+		$this->delete('block_area', array('area' => $area));
+
+		$sort_order = 0;
+
+		foreach ($blocks as $block) {
+			$block_area = array(
+				'path'          => $path ? $path : $block['path'],
+				'instance_name' => $block['instance_name'],
+				'area'          => $area,
+				'layout_id'     => $layout_id,
+				'store_id'      => $store_id,
+				'sort_order'    => !empty($block['sort_order']) ? $block['sort_order'] : $sort_order++,
+			);
+
+			$this->insert('block_area', $block_area);
+		}
 	}
 
 	public function remove($path)
@@ -271,25 +251,33 @@ class Block extends Library
 
 	public function get($path)
 	{
-		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
+		if (!isset($this->blocks[$path])) {
+			$block = $this->cache->get('block.' . $path);
 
-		if ($block) {
-			$block['name']      = $this->getName($path);
-			$block['settings']  = !empty($block['settings']) ? unserialize($block['settings']) : array();
-			$block['profiles']  = $this->getProfiles($path);
-			$block['instances'] = $this->getInstances($path);
-		} else {
-			$block = array(
-				'path'      => $path,
-				'name'      => $this->getName($path),
-				'settings'  => array(),
-				'instances' => array(),
-				'profiles'  => array(),
-				'status'    => 0,
-			);
+			if (is_null($block)) {
+				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
+
+				if ($block) {
+					$block['name']      = $this->getName($path);
+					$block['settings']  = !empty($block['settings']) ? unserialize($block['settings']) : array();
+					$block['instances'] = $this->loadInstances($path);
+				} else {
+					$block = array(
+						'path'      => $path,
+						'name'      => $this->getName($path),
+						'settings'  => array(),
+						'instances' => array(),
+						'status'    => 0,
+					);
+				}
+
+				$this->cache->set('block.' . $path, $block);
+			}
+
+			$this->blocks[$path] = $block;
 		}
 
-		return $block;
+		return $this->blocks[$path];
 	}
 
 	public function getBlocks($filter = array(), $total = false)
@@ -329,48 +317,12 @@ class Block extends Library
 				}
 			}
 
-			//Filter Layout
-			if (isset($filter['layouts'])) {
-				$found = false;
-				foreach ($block['profiles'] as $profile) {
-					foreach ($profile['layout_ids'] as $layout_id) {
-						if (in_array($layout_id, $filter['layouts'])) {
-							$found = true;
-							break;
-						}
-					}
-				}
-
-				if (!$found) {
-					continue;
-				}
-			}
-
-			//Filter Stores
-			if (isset($filter['stores'])) {
-				$found = false;
-
-				foreach ($block['profiles'] as $profile) {
-					foreach ($profile['store_ids'] as $store_id) {
-						if (in_array($store_id, $filter['stores'])) {
-							$found = true;
-							break;
-						}
-					}
-				}
-
-				if (!$found) {
-					continue;
-				}
-			}
-
 			if (!$block) {
 				$block = array(
 					'path'      => $path,
 					'name'      => $this->getName($path),
 					'settings'  => array(),
 					'instances' => array(),
-					'profiles'  => array(),
 					'status'    => 1,
 				);
 			}
@@ -402,88 +354,26 @@ class Block extends Library
 		return $this->getBlocks($filter, true);
 	}
 
-	private function loadBlocks()
-	{
-		$store_id  = $this->config->get('config_store_id');
-		$layout_id = $this->config->get('config_layout_id');
-
-		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
-
-		//TODO: We can optimize this to grab cached blocks, then process the data. Should minimize cache file size, and we can use only 1 cache file.
-		if (is_null($blocks)) {
-			$block_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
-
-			$blocks = array('position' => array());
-
-			foreach ($block_list as $block) {
-				$block['settings']  = $block['settings'] ? unserialize($block['settings']) : array();
-				$block['instances'] = $this->getInstances($block['path']);
-				$block['profiles']  = $this->getProfiles($block['path']);
-
-				if (!empty($block['profiles'])) {
-					foreach ($block['profiles'] as $profile) {
-						if (in_array($store_id, $profile['store_ids'])) {
-							//Load this profiles settings
-							if (isset($profile['block_instance_id']) && isset($block['instances'][$profile['block_instance_id']])) {
-								$profile += $block['instances'][$profile['block_instance_id']];
-							}
-
-							$blocks[$block['path']]            = $block;
-							$blocks[$block['path']]['profile'] = $profile;
-
-							//Automatically loaded blocks for this layout
-							if (in_array($layout_id, $profile['layout_ids'])) {
-								$blocks['position'][$profile['position']][$block['path']] = & $blocks[$block['path']];
-							}
-						}
-					}
-				}
-			}
-
-			$this->cache->set("blocks.$store_id.$layout_id", $blocks);
-		}
-
-		$this->blocks = $blocks;
-	}
-
 	public function getSettings($path)
 	{
 		return isset($this->blocks[$path]) ? $this->blocks[$path]['settings'] : null;
 	}
 
-	public function getProfiles($path)
-	{
-		if (isset($this->blocks[$path])) {
-			return $this->blocks[$path]['profiles'];
-		}
-
-		$profiles = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_profile WHERE `path` = '" . $this->escape($path) . "'", 'block_profile_id');
-
-		foreach ($profiles as &$profile) {
-			$layouts = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_profile_layout WHERE block_profile_id = " . $profile['block_profile_id']);
-
-			$profile['store_ids']  = array_column($layouts, 'store_id');
-			$profile['layout_ids'] = array_column($layouts, 'layout_id');
-		}
-
-		return $profiles;
-	}
-
-	public function getInstance($path, $instance_name)
+	public function getInstance($path, $instance_name = null)
 	{
 		if (!isset($this->blocks[$path])) {
 			$this->blocks[$path] = $this->get($path);
 		}
 
-		return $this->blocks[$path]['instances'][$instance_name];
-	}
-
-	public function getInstances($path)
-	{
-		if (isset($this->blocks[$path])) {
-			return $this->blocks[$path]['instances'];
+		if ($instance_name) {
+			return isset($this->blocks[$path]['instances'][$instance_name]) ? $this->blocks[$path]['instances'][$instance_name] : null;
 		}
 
+		return $this->blocks[$path]['instances'];
+	}
+
+	private function loadInstances($path)
+	{
 		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'name');
 
 		foreach ($instances as &$instance) {
@@ -493,11 +383,20 @@ class Block extends Library
 		return $instances;
 	}
 
-	public function getInstancesFor($position)
+	public function getAreaInstances($area, $store_id = null, $layout_id = null)
 	{
-		if (isset($this->blocks['position'][$position])) {
-			return $this->blocks['position'][$position];
+		if (!$store_id) {
+			$store_id = $this->config->get('store_id');
 		}
+
+		if (!$layout_id) {
+			$layout_id = $this->config->get('layout_id');
+		}
+
+
+		html_dump($this->blocks, 'blocks');
+		exit;
+
 
 		return array();
 	}
@@ -506,7 +405,7 @@ class Block extends Library
 	{
 		$block = 'block/' . $path;
 
-		$instance = $this->block->getInstance('widget/carousel', $instance_name);
+		$instance = $this->getInstance('widget/carousel', $instance_name);
 
 		$settings += $instance;
 
