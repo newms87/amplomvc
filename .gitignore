@@ -3,9 +3,7 @@ ac_config.php
 /.project
 *.db
 
-/image/data
-!/image/data/ac_logo.png
-!/image/data/ac_icon.png
+/image
 
 logs
 
@@ -67,3 +65,4 @@ cache
 /system/mods
 /system/timeoffset
 /image/import
+/system/resources/js/responsive-filemanager/thumbs
