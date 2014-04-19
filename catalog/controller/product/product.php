@@ -64,7 +64,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		if ($this->data['is_purchasable']) {
 			//The Product Options Block
-			$this->data['block_product_options'] = $this->block->render('product/options', array('product_id' => $product_info['product_id']));
+			$this->data['block_product_options'] = $this->block->render('product/options', null, array('product_id' => $product_info['product_id']));
 		}
 
 		//Stock
@@ -208,7 +208,7 @@ class Catalog_Controller_Product_Product extends Controller
 			);
 
 			//TODO: Move product/suggestions to product/related...
-			$this->data['block_product_related'] = $this->block->render('product/suggestions', $ps_params);
+			$this->data['block_product_related'] = $this->block->render('product/suggestions', null, $ps_params);
 		}
 
 		//The Tags associated with this product

@@ -91,7 +91,7 @@ class Catalog_Controller_Product_Category extends Controller
 			);
 
 			//Load these products in the Product List block template
-			$this->data['block_product_list'] = $this->block->render('product/list', $params);
+			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sorting
 			$sorts = array(
@@ -121,7 +121,7 @@ class Catalog_Controller_Product_Category extends Controller
 			//In case there was a problem with the block_product_list
 			$this->data['continue'] = $this->url->link('common/home');
 		} else {
-			$this->data['category_name'] = $category_info['name'];
+			$this->data['category_name'] = !empty($category_info['name']) ? $category_info['name'] : _l("All Categories");
 
 			$parent = $this->Model_Catalog_Category->getParent($category_id);
 

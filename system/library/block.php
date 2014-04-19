@@ -181,26 +181,6 @@ class Block extends Library
 		return true;
 	}
 
-	public function setAreaBlocks($area, $store_id, $layout_id, $blocks, $path = null)
-	{
-		$this->delete('block_area', array('area' => $area));
-
-		$sort_order = 0;
-
-		foreach ($blocks as $block) {
-			$block_area = array(
-				'path'          => $path ? $path : $block['path'],
-				'instance_name' => $block['instance_name'],
-				'area'          => $area,
-				'layout_id'     => $layout_id,
-				'store_id'      => $store_id,
-				'sort_order'    => !empty($block['sort_order']) ? $block['sort_order'] : $sort_order++,
-			);
-
-			$this->insert('block_area', $block_area);
-		}
-	}
-
 	public function remove($path)
 	{
 		$files = array(
@@ -254,7 +234,7 @@ class Block extends Library
 		if (!isset($this->blocks[$path])) {
 			$block = $this->cache->get('block.' . $path);
 
-			if (is_null($block)) {
+			if (true || is_null($block)) {
 				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
 
 				if ($block) {
@@ -379,35 +359,56 @@ class Block extends Library
 		foreach ($instances as &$instance) {
 			$instance['settings'] = unserialize($instance['settings']);
 		}
+		unset($instance);
 
 		return $instances;
+	}
+
+	public function setAreaInstances($area, $store_id, $layout_id, $instances, $path = null)
+	{
+		$this->delete('block_area', array('area' => $area));
+
+		$sort_order = 0;
+
+		foreach ($instances as $instance) {
+			$block_area = array(
+				'path'          => $path ? $path : $instance['path'],
+				'instance_name' => $instance['instance_name'],
+				'area'          => $area,
+				'layout_id'     => $layout_id,
+				'store_id'      => $store_id,
+				'sort_order'    => !empty($instance['sort_order']) ? $instance['sort_order'] : $sort_order++,
+			);
+
+			$this->insert('block_area', $block_area);
+		}
 	}
 
 	public function getAreaInstances($area, $store_id = null, $layout_id = null)
 	{
 		if (!$store_id) {
-			$store_id = $this->config->get('store_id');
+			$store_id = $this->config->get('config_store_id');
 		}
 
 		if (!$layout_id) {
-			$layout_id = $this->config->get('layout_id');
+			$layout_id = $this->config->get('config_layout_id');
 		}
 
 
-		html_dump($this->blocks, 'blocks');
-		exit;
+		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_area WHERE layout_id = " . (int)$layout_id . " AND store_id = " . (int)$store_id . " AND area = '" . $this->escape($area) . "'", 'instance_name');
 
-
-		return array();
+		return $instances;
 	}
 
-	public function render($path, $instance_name, $settings = array())
+	public function render($path, $instance = null, $settings = array())
 	{
 		$block = 'block/' . $path;
 
-		$instance = $this->getInstance('widget/carousel', $instance_name);
+		if ($instance) {
+			$instance = $this->getInstance('widget/carousel', $instance);
 
-		$settings += $instance;
+			$settings += $instance;
+		}
 
 		$action = new Action($this->registry, $block, array('settings' => $settings));
 

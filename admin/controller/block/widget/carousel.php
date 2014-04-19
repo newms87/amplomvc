@@ -5,14 +5,8 @@
  */
 class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Block
 {
-	public function instances(&$instances)
+	public function instance($row, $instance, $last = true)
 	{
-		$default_instance = array(
-			'name'       => _l("default"),
-			'title'      => _l("Default"),
-			'show_title' => 1,
-		);
-
 		//Defaults
 		$defaults = array(
 			'slider'   => 'slidesjs',
@@ -58,27 +52,25 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 			),
 		);
 
-		foreach ($instances as &$instance) {
-			$instance['settings'] = array_replace_recursive($defaults, $instance['settings']);
-		}
-		unset($instance);
+
+		$instance['settings'] = array_replace_recursive($defaults, $instance['settings']);
 
 		//AC Template
-		$instances['__ac_template__']         = $default_instance;
-		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
+		if ($row === '__ac_template__') {
+			$instance['settings']['slides']['__ac_template__'] = array(
+				'title'      => 'New Slide __ac_template__',
+				'image'      => '',
+				'href'       => '',
+				'target'     => '_blank',
+				'sort_order' => 0,
+			);
+		}
 
-		$instances['__ac_template__']['settings'] = $defaults;
-
-		$instances['__ac_template__']['settings']['slides']['__ac_template__'] = array(
-			'title'      => 'New Slide __ac_template__',
-			'image'      => '',
-			'href'       => '',
-			'target'     => '_blank',
-			'sort_order' => 0,
-		);
 
 		$data = array(
-			'instances' => $instances,
+			'row'      => $row,
+			'instance' => $instance,
+			'last'     => $last,
 		);
 
 		//Template Data
@@ -110,6 +102,6 @@ class Admin_Controller_Block_Widget_Carousel extends Admin_Controller_Block_Bloc
 		);
 
 		//Render
-		return $this->render('block/widget/carousel_instances', $data);
+		return $this->render('block/widget/carousel/instance', $data);
 	}
 }

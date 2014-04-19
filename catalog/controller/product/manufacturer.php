@@ -83,7 +83,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 				'template' => 'block/product/product_list',
 			);
 
-			$this->data['block_product_list'] = $this->block->render('product/list', $params);
+			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sorting
 			$sorts = array(

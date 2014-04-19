@@ -16,7 +16,6 @@
 			<div id="tabs" class="htabs">
 				<a href="#tab-settings"><?= _l("Settings"); ?></a>
 				<a href="#tab-instances"><?= _l("Instances"); ?></a>
-				<a href="#tab-profile"><?= _l("Profiles"); ?></a>
 			</div>
 
 			<div id="tab-settings">
@@ -25,10 +24,6 @@
 
 			<div id="tab-instances">
 				<?= $block_instances; ?>
-			</div>
-
-			<div id="tab-profile">
-				<?= $block_profiles; ?>
 			</div>
 
 		</div>

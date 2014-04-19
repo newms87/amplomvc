@@ -12,7 +12,7 @@
 		<? if ($keywords) { ?>
 			<meta name="keywords" content="<?= $keywords; ?>"/>
 		<? } ?>
-		<? if ($icon) { ?>
+		<? if (!empty($icon)) { ?>
 			<link rel="icon" type="image/ico" href="<?= $icon; ?>"/>
 			<link rel="shortcut icon" href="<?= $icon; ?>"/>
 		<? } ?>
@@ -174,4 +174,4 @@
 						}
 					</script>
 
-					<?= $above; ?>
+					<?= $area_above; ?>

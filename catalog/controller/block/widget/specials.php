@@ -19,7 +19,7 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 				'template' => 'block/product/product_list',
 			);
 
-			$this->data['block_product_list'] = $this->block->render('product/list', $params);
+			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sort
 			$sorts = array(

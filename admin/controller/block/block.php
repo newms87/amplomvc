@@ -185,6 +185,9 @@ class Admin_Controller_Block_Block extends Controller
 			$block = $_POST;
 		} elseif ($this->path) {
 			$block = $this->block->get($this->path);
+
+			//Cast associative array to indexed array for __ac_template__
+			$block['instances'] = array_values($block['instances']);
 		}
 
 		$defaults = array(
@@ -193,15 +196,15 @@ class Admin_Controller_Block_Block extends Controller
 			'status'    => 1,
 		);
 
-		$data = $block + $defaults;
+		$block += $defaults;
 
 		//Extended Data
-		$data['block_settings']  = $this->settings($data);
-		$data['block_instances'] = $this->instances($data['instances'], $data);
+		$block['block_settings']  = $this->settings($block);
+		$block['block_instances'] = $this->instances($block['instances'], $block);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('block/' . $this->path . '/save');
-		$data['cancel'] = $this->url->link('block/block');
+		$block['save']   = $this->url->link('block/' . $this->path . '/save');
+		$block['cancel'] = $this->url->link('block/block');
 
 		//Dependencies
 		$this->children = array(
@@ -210,7 +213,7 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		//Render
-		$this->response->setOutput($this->render('block/block', $data));
+		$this->response->setOutput($this->render('block/block', $block));
 	}
 
 	//override this method to add custom settings
@@ -231,21 +234,39 @@ class Admin_Controller_Block_Block extends Controller
 			'name'       => _l("default"),
 			'title'      => _l("Default"),
 			'show_title' => 1,
+			'settings'   => array(),
 		);
-
-		//Load Defaults for Settings, Profile Settings and Profiles
-		if (empty($instances)) {
-			$instances[0] = $default_instance;
-		}
 
 		//AC Templates
 		$instances['__ac_template__']         = $default_instance;
-		$instances['__ac_template__']['name'] = 'Instance __ac_template__';
+		$instances['__ac_template__']['name'] = 'instance-__ac_template__';
+
+		$count = 1;
+		foreach ($instances as $row => &$instance) {
+			$instance['template'] = $this->instance($row, $instance, $count++ === count($instances));
+		}
+		unset($instance);
 
 		$instance_data = array(
 			'instances' => $instances,
 		);
 
 		return $this->render('block/block/instances', $instance_data, true);
+	}
+
+	//Override this method to add custom instance settings
+	protected function instance($row, $instance)
+	{
+		$data = array(
+			'row'      => $row,
+			'instance' => $instance,
+		);
+
+		$data['data_yes_no'] = array(
+			0 => _l("No"),
+			1 => _l("Yes"),
+		);
+
+		return $this->render('block/block/instance', $data, true);
 	}
 }

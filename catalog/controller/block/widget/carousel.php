@@ -2,24 +2,23 @@
 
 class Catalog_Controller_Block_Widget_Carousel extends Controller
 {
-	public function index($settings, $carousel_id = null)
+	public function index($instance)
 	{
-		html_dump($settings, 'settings');
-
-		//The Data
-		$data = array(
-			'slider_id' => 'carousel_' . uniqid()
-		);
+		$settings = $instance['settings'];
 
 		//Slides
-		foreach ($settings['slides'] as &$slide) {
-			if (!empty($slide['image_width'])) {
-				$slide['thumb'] = $this->image->resize($slide['image'], $slide['image_width'], $slide['image_height']);
-			} else {
-				$slide['thumb'] = $this->image->get($slide['image']);
+		if (!empty($settings['slides'])) {
+			foreach ($settings['slides'] as &$slide) {
+				if (!empty($slide['image_width']) || !empty($slide['image_height'])) {
+					$slide['thumb'] = $this->image->resize($slide['image'], $slide['image_width'], $slide['image_height']);
+				} else {
+					$slide['thumb'] = $this->image->get($slide['image']);
+				}
 			}
+			unset($slide);
+		} else {
+			$settings['slides'] = array();
 		}
-		unset($slide);
 
 		//Params
 		switch ($settings['slider']) {
@@ -85,13 +84,13 @@ class Catalog_Controller_Block_Widget_Carousel extends Controller
 					}
 				});
 
-				$settigns['slidejs'] = array_replace_recursive($settings['slidesjs'], $default_params);
+				$settings['slidejs'] = array_replace_recursive($settings['slidesjs'], $default_params);
 				break;
 		}
 
-		$data += $settings;
+		$instance += $settings;
 
 		//Render
-		$this->render('block/widget/carousel', $data);
+		$this->render('block/widget/carousel', $instance);
 	}
 }
