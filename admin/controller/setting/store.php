@@ -288,6 +288,9 @@ class Admin_Controller_Setting_Store extends Controller
 			0 => _l("No"),
 		);
 
+		//Logo Sizing
+		$data['logo_thumb'] = $this->image->get($data['config_logo']);
+
 		//Website Icon Sizes
 		if (!is_array($data['config_icon'])) {
 			$data['config_icon'] = array(

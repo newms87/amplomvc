@@ -292,7 +292,7 @@
 						<tr>
 							<td><?= _l("Store Logo:"); ?></td>
 							<td>
-								<input type="text" class="imageinput" name="config_logo" value="<?= $config_logo; ?>" />
+								<input type="text" class="imageinput" name="config_logo" data-thumb="<?= $logo_thumb; ?>" value="<?= $config_logo; ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -469,6 +469,7 @@
 		}, 'json');
 	});
 
+	$('[name=config_logo]').ac_imageinput({width: 'auto'});
 	$('.icon-file .imageinput').ac_imageinput({width:'auto', height: 'auto'});
 
 	$('.imageinput').ac_imageinput();
