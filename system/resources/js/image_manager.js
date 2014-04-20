@@ -23,7 +23,7 @@ $.fn.ac_imageinput = function (options) {
 		var $imageinput = $('<div />').addClass('imageinput-box').addClass(options.class);
 		$input.before($imageinput);
 
-		var $thumb = $('<img />').width(options.width).height(options.height);
+		var $thumb = $('<img />').addClass('thumb').width(options.width).height(options.height);
 		var thumb = $input.attr('data-thumb');
 
 		if (!thumb) {

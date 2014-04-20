@@ -1,6 +1,8 @@
 <?php
 session_start();
 mb_internal_encoding('UTF-8');
+require_once ('../../../../../ac_config.php');
+
 //------------------------------------------------------------------------------
 // DON'T COPY THIS VARIABLES IN FOLDERS config.php FILES
 //------------------------------------------------------------------------------
@@ -19,7 +21,7 @@ mb_internal_encoding('UTF-8');
 //    |   |   |   |- responsivefilemanager
 //    |   |   |   |   |- plugin.min.js
 
-$base_url ="http://".$_SERVER['HTTP_HOST'] . '/amplo';  // DON'T TOUCH (base url (only domain) of site (without final /)).
+$base_url = rtrim(URL_SITE, '/');  // DON'T TOUCH (base url (only domain) of site (without final /)).
 $upload_dir = '/image/'; // path from base_url to base of upload folder (with start and final /)
 $current_path = '../../../../../image/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder

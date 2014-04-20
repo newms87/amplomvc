@@ -567,6 +567,9 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 	left: -9999px;
 }
 
+#generate-icons {
+	margin-top: 10px;
+}
 #icon-generator .icon-files {
 	margin: 20px 20px 0 0;
 	padding: 10px;
@@ -576,6 +579,10 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 #icon-generator .icon-file {
 	display:inline-block;
 	margin-left: 20px;
+}
+
+#icon-generator .icon-file img.thumb {
+	max-width: 140px;
 }
 
 #icon-generator .icon-label {

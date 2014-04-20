@@ -304,22 +304,22 @@
 								<div id="icon-generator">
 									<div class="generate">
 										<div class="icon-file">
-											<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']; ?>" />
+											<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
 
 											<div class="icon-label">
 												<a id="generate-icons" class="button"><?= _l("Generate Icon Files"); ?></a>
 											</div>
 										</div>
 									</div>
-									<div class="icon-files">
+									<div class="icon-files left">
 										<div class="icon-file icon-ico">
-											<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']; ?>" data-thumb="<?= URL_IMAGE . $config_icon['ico']; ?>"/>
+											<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']['src']; ?>" data-thumb="<?= $config_icon['ico']['thumb']; ?>"/>
 											<div class="icon-label"><?= _l("ICO File"); ?></div>
 										</div>
 										<? foreach ($data_icon_sizes as $size) { ?>
 											<div class="icon-file icon-size">
 												<? $key = $size[0] . 'x' . $size[1]; ?>
-												<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]; ?>" data-thumb="<?= URL_IMAGE . $config_icon[$key]; ?>" data-width="<?= $size[0]; ?>" data-height="<?= $size[1]; ?>"/>
+												<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]['src']; ?>" data-thumb="<?= $config_icon[$key]['thumb']; ?>" data-width="<?= $size[0]; ?>" data-height="<?= $size[1]; ?>"/>
 												<div class="icon-label"><?= _l("%s X %s Icon", $size[0], $size[1]); ?></div>
 											</div>
 										<? } ?>
@@ -460,13 +460,16 @@
 		}
 
 		$.post("<?= $url_generate_icons; ?>", {icon: icon}, function(json){
-			$gen = $('#icon-generator');
+			var $gen = $('#icon-generator');
+
 			for (var c in json) {
 				input = $gen.find('[name="config_icon['+c+']"]').val(json[c].relpath);
-				input.closest('.image').find('img.iu_thumb').attr('src', json[c].url);
+				input.closest('.icon-file').find('img.thumb').attr('src', json[c].url);
 			}
 		}, 'json');
 	});
+
+	$('.icon-file .imageinput').ac_imageinput({width:'auto', height: 'auto'});
 
 	$('.imageinput').ac_imageinput();
 

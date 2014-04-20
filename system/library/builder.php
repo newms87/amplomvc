@@ -31,20 +31,19 @@ class Builder extends Library
 		$this->builder_template = $template;
 	}
 
-	public function displayMessages($messages)
+	public function displayMessages($messages, $close = true)
 	{
 		$html = '';
 		foreach ($messages as $type => $msgs) {
-			$html .= "<div class =\"message $type\">";
-			$html .= "<div class=\"message_list\">";
+			$html .= "<div class =\"messages $type\">";
+
 			foreach ($msgs as $msg) {
 				if (!empty($msg)) {
-					$html .= "<div>$msg</div>";
+					$html .= "<div class=\"message\">$msg</div>";
 				}
 			}
-			$html .= "</div>";
 
-			if ($this->config->get('config_allow_close_message')) {
+			if ($close && $this->config->get('config_allow_close_message')) {
 				$html .= "<span class =\"close\" onclick=\"$(this).closest('.message').remove()\"></span>";
 			}
 

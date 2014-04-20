@@ -855,42 +855,44 @@ ul.link-list > li {
 	margin-bottom: 10px;
 }
 
-.message {
+/*Messages */
+.messages {
 	position: relative;
-	width: 85%;
-	padding: 10px 10px 10px 33px;
-	margin: auto auto 15px auto;
+	padding: 8px 20px;
+	margin: 15px auto;
 	color: #555555;
-	border: 1px solid #CFCFCF;
-	background-color: #EEEEEE;
-	border-radius: 5px;
-	overflow: auto;
+	border: 2px solid #CFCFCF;
+	background-color: #555555;
+	border-radius: 6px;
+	font-size: 1.1em;
 }
 
-.message div.message_list {
-	float: left;
+.messages.success {
+	background: #EAF7D9;
+	border-color: #8DAD62;
+	color: #8DAD62;
 }
 
-.message.success {
-	background: #EAF7D9 url('../image/success.png') 10px center no-repeat;
-	background-size: 16px 16px;
-	border-color: #BBDF8D;
+.messages.error,
+.messages.warning {
+	background: #FFD1D1;
+	border-color: #D15252;
+	color: #D15252;
 }
 
-.message.error,
-.message.warning {
-	background: #FFD1D1 url('../image/warning.png') 10px center no-repeat;
-	background-size: 16px 16px;
-	border-color: #F8ACAC;
+.messages.attention {
+	background: #FFFBE9;
+	border-color: #E1CA34;
+	color: #E1CA34;
 }
 
-.message.attention, .message.notify {
-	background: #FFF5CC url('../image/attention.png') 10px center no-repeat;
-	background-size: 16px 16px;
-	border-color: #F2DD8C;
+.messages.notify {
+	background: #E6F1FB;
+	border-color: #8DAFCF;
+	color: #8DAFCF;
 }
 
-.message .close {
+.messages .close {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -901,7 +903,7 @@ ul.link-list > li {
 	height: 16px;
 }
 
-.message .close:hover, .message .close:active {
+.messages .close:hover, .messages .close:active {
 	background-position: -16px 0px;
 }
 

@@ -297,9 +297,18 @@ class Admin_Controller_Setting_Store extends Controller
 		}
 
 		$data['data_icon_sizes'] = array(
-			array(152,152),
-			array(120,120),
-			array(76,76),
+			array(
+				152,
+				152
+			),
+			array(
+				120,
+				120
+			),
+			array(
+				76,
+				76
+			),
 		);
 
 		foreach ($data['data_icon_sizes'] as $size) {
@@ -309,6 +318,14 @@ class Admin_Controller_Setting_Store extends Controller
 				$data['config_icon'][$key] = '';
 			}
 		}
+
+		foreach ($data['config_icon'] as &$icon) {
+			$icon = array(
+				'thumb' => $this->image->get($icon),
+				'src'   => $icon,
+			);
+		}
+		unset($icon);
 
 		//Action Buttons
 		$data['save']               = $this->url->link('setting/store/update', 'store_id=' . $store_id);
