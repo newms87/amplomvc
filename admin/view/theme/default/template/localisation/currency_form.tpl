@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<? if ($error_warning) { ?>
@@ -61,4 +61,4 @@
 			</div>
 		</div>
 	</div>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

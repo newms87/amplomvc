@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<div id="login-box" class="box">
 		<div class="heading">
@@ -39,4 +39,4 @@
 	</div>
 </div>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

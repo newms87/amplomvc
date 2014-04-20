@@ -1,12 +1,12 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
 
 	<div class="section">
 		<h1><?= _l("Register Account"); ?></h1>
 
-		<?= $area_top; ?>
+		<?= $this->area->render('top'); ?>
 
 		<p><?= _l("If you already have an account with us, please login at the"); ?> <a href="<?= $login; ?>"><?= _l("login page"); ?></a></p>
 
@@ -105,7 +105,7 @@
 			</form>
 		</div>
 
-		<?= $area_bottom; ?>
+		<?= $this->area->render('bottom'); ?>
 	</div>
 </div>
 
@@ -113,4 +113,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

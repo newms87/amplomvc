@@ -1,8 +1,8 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $area_top; ?>
+	<?= $this->area->render('top'); ?>
 
 	<? if (!empty($manufacturers)) { ?>
 		<h1><?= $page_title; ?></h1>
@@ -21,5 +21,5 @@
 		</div>
 	<? } ?>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>

@@ -1,12 +1,12 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div id="address_update" class="content">
 	<? if ($errors && $this->request->isAjax()) { ?>
 		<?= $this->builder->displayMessages(array('error' => $errors)); ?>
 	<? } ?>
 
 	<?= $this->breadcrumb->render(); ?>
-	<?= $area_top; ?>
+	<?= $this->area->render('top'); ?>
 
 	<div class="box">
 		<h2 class="box_heading">
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
@@ -100,4 +100,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

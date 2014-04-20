@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
@@ -116,4 +116,4 @@
 			$('#date-end').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

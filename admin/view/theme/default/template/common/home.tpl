@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
@@ -129,4 +129,4 @@
 
 	getSalesChart($('#range').val());
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

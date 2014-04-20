@@ -43,24 +43,25 @@ abstract class Controller
 		return $msg;
 	}
 
-	protected function call($child, $parameters = array())
+	protected function call($path, $parameters = array())
 	{
 		if (!is_array($parameters)) {
 			$parameters = array($parameters);
 		}
 
-		$action = new Action($this->registry, $child, $parameters);
+		$action = new Action($this->registry, $path, $parameters);
 
 		if ($action->execute()) {
 			return $action->getOutput();
 		} else {
-			trigger_error('Could not load controller ' . $child . '!');
+			trigger_error('Could not load controller ' . $path . '!');
 			exit();
 		}
 	}
 
-	protected function render($template = null, $data = array())
+	protected function render($path, $data = array())
 	{
+		//TODO: $this->data is deprecated. Remove when legacy support no longer needed.
 		$data += $this->data;
 
 		//TODO All validation should be done in Model! Remove this after removing all validation methods.
@@ -80,18 +81,22 @@ abstract class Controller
 		//Empty Dependencies and Breadcrumbs if an ajax request
 		if ($this->request->isAjax()) {
 			$this->breadcrumb->clear();
-
-			foreach ($this->children as $child) {
-				$data[str_replace('/','_',$child)] = '';
-			}
-		} else {
-			//Render Dependencies
-			foreach ($this->children as $child) {
-				$data[str_replace('/','_',$child)] = $this->call($child);
-			}
 		}
 
-		$this->output = $this->view->render($template, $data);
+		$template = $this->theme->findFile($path);
+
+		if (!$template || !is_file($template)) {
+			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));
+			exit();
+		}
+
+		extract($data);
+
+		ob_start();
+
+		include(_ac_mod_file($this->template));
+
+		$this->output = ob_get_clean();
 
 		return $this->output;
 	}

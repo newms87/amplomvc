@@ -1,8 +1,8 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $area_top; ?>
+		<?= $this->area->render('top'); ?>
 
 		<h1><?= _l("Product Returns"); ?></h1>
 		<? if (!empty($returns)) { ?>
@@ -29,7 +29,7 @@
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 		</div>
 
-		<?= $area_bottom; ?>
+		<?= $this->area->render('bottom'); ?>
 	</div>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 
@@ -61,4 +61,4 @@
 		$.ac_template('route_list', 'add');
 	});
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

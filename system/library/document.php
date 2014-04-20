@@ -243,11 +243,13 @@ class Document extends Library
 
 		$less_file = DIR_CACHE . 'less/' . $reference . '.' . $mtime . '.css';
 
-		if (is_file($less_file)) {
+		if (!$refresh && is_file($less_file)) {
 			//Check Less @imports for modifications
 			$dependencies = $this->cache->get('less.' . $reference);
 
-			if (!empty($dependencies)) {
+			if (is_null($dependencies)) {
+				$refresh = true;
+			} elseif (!empty($dependencies)) {
 				foreach ($dependencies as $d => $d_mtime) {
 					if (_filemtime($less_file) < _filemtime($d)) {
 						$refresh = true;
@@ -562,15 +564,13 @@ class Document extends Library
 				$link['display_name'] = $link['name'];
 			}
 
+			$link['attrs']['class'] = (!empty($link['attrs']['class']) ? ' ' : '') . 'link-' . $link['name'];
+
 			$children = '';
 
 			if (!empty($link['children'])) {
 				$children = $this->renderLinks($link['children'], $sort, $depth + 1);
-				if (!empty($link['attrs']['class'])) {
-					$link['attrs']['class'] .= ' has-children';
-				} else {
-					$link['attrs']['class'] = 'has-children';
-				}
+				$link['attrs']['class'] .= ' has-children';
 			}
 
 			$href = '';
@@ -580,11 +580,7 @@ class Document extends Library
 
 			//Set active class
 			if (!empty($link['active'])) {
-				if (!empty($link['attrs']['class'])) {
-					$link['attrs']['class'] .= ' ' . $link['active'];
-				} else {
-					$link['attrs']['class'] = $link['active'];
-				}
+				$link['attrs']['class'] .= ' ' . $link['active'];
 			}
 
 			//Build attribute list

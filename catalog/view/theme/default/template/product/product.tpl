@@ -1,8 +1,8 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $area_top; ?>
+	<?= $this->area->render('top'); ?>
 
 	<div class="product_info">
 		<div class="left">
@@ -236,7 +236,7 @@
 		</div>
 	<? } ?>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
 
@@ -290,4 +290,4 @@
 	$('#product_additional_tabs a').tabs();
 </script>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

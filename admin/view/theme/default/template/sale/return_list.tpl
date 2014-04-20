@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
@@ -224,4 +224,4 @@
 			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

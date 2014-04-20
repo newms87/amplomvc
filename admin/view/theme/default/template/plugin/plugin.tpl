@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
@@ -30,4 +30,4 @@
 	});
 </script>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

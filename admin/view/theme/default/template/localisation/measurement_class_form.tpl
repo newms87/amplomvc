@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
@@ -56,4 +56,4 @@
 	!--
 		$('.tabs a').tabs();
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

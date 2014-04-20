@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 
 <div class="section clear">
 	<?= $this->breadcrumb->render(); ?>
@@ -27,4 +27,4 @@
 	</div>
 </div>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

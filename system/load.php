@@ -133,6 +133,10 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 					display:inline-block;
 					font-weight: bold;
 				}
+
+				.error_display a {
+					color: blue;
+				}
 			</style>
 			<div class="error_display">
 				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>

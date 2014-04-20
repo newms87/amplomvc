@@ -4,7 +4,7 @@ class Catalog_Controller_Area_Below extends Controller
 	public function index()
 	{
 		//Load Blocks associated with this position
-		$instances = $this->block->getAreaInstances('below');
+		$instances = $this->area->getBlocks('below');
 
 		$blocks = array();
 

@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->displayMessages($messages); ?>
@@ -78,4 +78,4 @@
 			return false;
 		}
 	</script>
-	<?= $common_footer; ?>
+	<?= $this->call('common/footer'); ?>

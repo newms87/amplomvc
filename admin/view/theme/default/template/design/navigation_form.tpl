@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
@@ -98,7 +98,7 @@
 	</div>
 </div>
 </div>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>
 
 <script type="text/javascript">
 	$('#sorted_links').ac_template('link_list', {defaults: <?= json_encode($links['__ac_template__']); ?>});

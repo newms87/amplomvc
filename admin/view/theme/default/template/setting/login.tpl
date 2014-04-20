@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
@@ -57,4 +57,4 @@
 
 <?= $this->builder->js('errors', $errors); ?>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

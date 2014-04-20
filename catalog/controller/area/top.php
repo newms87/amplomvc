@@ -4,7 +4,7 @@ class Catalog_Controller_Area_Top extends Controller
 	public function index()
 	{
 		//Load Blocks associated with this position
-		$instances = $this->block->getAreaInstances('top');
+		$instances = $this->area->getBlocks('top');
 
 		$blocks = array();
 

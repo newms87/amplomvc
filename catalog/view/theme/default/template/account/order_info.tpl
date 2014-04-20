@@ -1,7 +1,7 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div id="order_info" class="content">
-	<?= $area_top; ?>
+	<?= $this->area->render('top'); ?>
 	<?= $this->breadcrumb->render(); ?>
 
 	<h1><?= _l("Order Information"); ?></h1>
@@ -163,7 +163,7 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

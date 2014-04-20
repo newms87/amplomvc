@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
@@ -27,4 +27,4 @@
 		return confirm("<?= _l("This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?"); ?>");
 	});
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

@@ -4,7 +4,7 @@ class Catalog_Controller_Area_Left extends Controller
 	public function index()
 	{
 		//Load Blocks associated with this position
-		$instances = $this->block->getAreaInstances('left');
+		$instances = $this->area->getBlocks('left');
 
 		$blocks = array();
 

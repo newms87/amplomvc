@@ -1,6 +1,6 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
-<div class="content"><?= $area_top; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<div class="content"><?= $this->area->render('top'); ?>
 	<?= $this->breadcrumb->render(); ?>
 	<h1><?= _l("Checkout"); ?></h1>
 	<? $step = 1; ?>
@@ -30,7 +30,7 @@
 			<div class="checkout-content clearfix"></div>
 		</div>
 	</div>
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
 <script type="text/javascript">
@@ -164,4 +164,4 @@
 		}
 	}
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

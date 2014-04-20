@@ -1,8 +1,8 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $area_top; ?>
+	<?= $this->area->render('top'); ?>
 
 	<h1><?= _l("My Account Information"); ?></h1>
 
@@ -91,7 +91,7 @@
 		</div>
 	</form>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
 <script type="text/javascript">
@@ -115,4 +115,4 @@
 
 	$.ac_datepicker({changeYear: true, yearRange: "c-150:c", changeMonth: true});
 </script>
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

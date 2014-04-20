@@ -1,5 +1,5 @@
-<?= $common_header; ?>
-<?= $area_left; ?><?= $area_right; ?>
+<?= $this->call('common/header'); ?>
+<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
@@ -11,12 +11,12 @@
 			<h1><?= $title; ?></h1>
 		<? } ?>
 
-		<?= $area_top; ?>
+		<?= $this->area->render('top'); ?>
 
 		<div class="page_content"><?= $content; ?></div>
 	</div>
 
-	<?= $area_bottom; ?>
+	<?= $this->area->render('bottom'); ?>
 </div>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

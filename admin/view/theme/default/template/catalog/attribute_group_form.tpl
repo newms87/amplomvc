@@ -1,4 +1,4 @@
-<?= $common_header; ?>
+<?= $this->call('common/header'); ?>
 <div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
@@ -99,4 +99,4 @@
 	<?= $this->builder->js('translations', $attribute['translations'], "attributes[$attribute[attribute_id]][%name%]"); ?>
 <? } ?>
 
-<?= $common_footer; ?>
+<?= $this->call('common/footer'); ?>

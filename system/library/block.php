@@ -364,48 +364,18 @@ class Block extends Library
 		return $instances;
 	}
 
-	public function setAreaInstances($area, $store_id, $layout_id, $instances, $path = null)
-	{
-		$this->delete('block_area', array('area' => $area));
-
-		$sort_order = 0;
-
-		foreach ($instances as $instance) {
-			$block_area = array(
-				'path'          => $path ? $path : $instance['path'],
-				'instance_name' => $instance['instance_name'],
-				'area'          => $area,
-				'layout_id'     => $layout_id,
-				'store_id'      => $store_id,
-				'sort_order'    => !empty($instance['sort_order']) ? $instance['sort_order'] : $sort_order++,
-			);
-
-			$this->insert('block_area', $block_area);
-		}
-	}
-
-	public function getAreaInstances($area, $store_id = null, $layout_id = null)
-	{
-		if (!$store_id) {
-			$store_id = $this->config->get('config_store_id');
-		}
-
-		if (!$layout_id) {
-			$layout_id = $this->config->get('config_layout_id');
-		}
-
-
-		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_area WHERE layout_id = " . (int)$layout_id . " AND store_id = " . (int)$store_id . " AND area = '" . $this->escape($area) . "'", 'instance_name');
-
-		return $instances;
-	}
-
-	public function render($path, $instance = null, $settings = array())
+	public function render($path, $instance_name = null, $settings = array())
 	{
 		$block = 'block/' . $path;
 
-		if ($instance) {
-			$instance = $this->getInstance('widget/carousel', $instance);
+		if ($instance_name) {
+			$instance = $this->getInstance($path, $instance_name);
+
+			if (!$instance) {
+				$link = $this->url->admin($block);
+				trigger_error(_l("%s(): Block Instance not found for %s: %s. Please <a href=\"%s\" target=\"_blank\">click here to create this instance</a> first!", __METHOD__, $path, $instance_name, $link));
+				return '';
+			}
 
 			$settings += $instance;
 		}
