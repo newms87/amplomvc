@@ -15,22 +15,19 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 
 		$settings += $defaults;
 
-		$this->data['settings'] = $settings;
+		$data['settings'] = $settings;
 
 		//Template Data
-		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
-		$this->data['data_braintree_plans'] = $this->System_Extension_Payment_Braintree->getPlans();
+		$data['data_order_statuses']  = $this->order->getOrderStatuses();
+		$data['data_braintree_plans'] = $this->System_Extension_Payment_Braintree->getPlans();
 
-		$this->data['data_modes'] = array(
+		$data['data_modes'] = array(
 			'sandbox' => _l("Test Mode"),
 			'live'    => _l("Live Mode"),
 		);
 
-		//Template
-		$this->view->load('extension/payment/braintree');
-
 		//Render
-		$this->render();
+		$this->render('extension/payment/braintree', $data);
 	}
 
 	public function validate()

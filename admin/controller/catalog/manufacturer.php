@@ -92,9 +92,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Manufacturer"));
 
-		//The Template
-		$this->view->load('catalog/manufacturer_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Manufacturer"), $this->url->link('catalog/manufacturer'));
@@ -213,10 +210,10 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -231,48 +228,40 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/manufacturer/batch_update';
+		$data['batch_update'] = 'catalog/manufacturer/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Action buttons
-		$this->data['insert'] = $this->url->link('catalog/manufacturer/insert');
+		$data['insert'] = $this->url->link('catalog/manufacturer/insert');
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $manufacturer_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/manufacturer_list', $data));
 	}
 
 	private function getForm()
 	{
 		$this->document->setTitle(_l("Manufacturer"));
 
-		$this->view->load('catalog/manufacturer_form');
-
-		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
+		$manufacturer_id = $data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Manufacturer"), $this->url->link('catalog/manufacturer'));
 
 		if (!$manufacturer_id) {
-			$this->data['action'] = $this->url->link('catalog/manufacturer/insert');
+			$data['action'] = $this->url->link('catalog/manufacturer/insert');
 		} else {
-			$this->data['action'] = $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id);
+			$data['action'] = $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id);
 		}
 
-		$this->data['cancel'] = $this->url->link('catalog/manufacturer');
+		$data['cancel'] = $this->url->link('catalog/manufacturer');
 
 		if ($manufacturer_id && !$this->request->isPost()) {
 			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
@@ -297,24 +286,24 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($manufacturer_info[$key])) {
-				$this->data[$key] = $manufacturer_info[$key];
+				$data[$key] = $manufacturer_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$data['data_stores'] = $this->Model_Setting_Store->getStores();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Ajax Urls
-		$this->data['url_generate_url'] = $this->url->link('catalog/manufacturer/generate_url');
-		$this->data['url_autocomplete'] = $this->url->link('catalog/manufacturer/autocomplete');
+		$data['url_generate_url'] = $this->url->link('catalog/manufacturer/generate_url');
+		$data['url_autocomplete'] = $this->url->link('catalog/manufacturer/autocomplete');
 
 		$translate_fields = array(
 			'name',
@@ -323,14 +312,9 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'shipping_return',
 		);
 
-		$this->data['translations'] = $this->translation->getTranslations('manufacturer', $manufacturer_id, $translate_fields);
+		$data['translations'] = $this->translation->getTranslations('manufacturer', $manufacturer_id, $translate_fields);
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/manufacturer_form', $data));
 	}
 
 	private function validateForm()

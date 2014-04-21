@@ -19,8 +19,8 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 		$this->breadcrumb->add(_l("Shipping Extensions"), $this->url->link('extension/shipping'));
 		$this->breadcrumb->add(_l("Flat Rate Shipping"), $this->url->link('shipping/flat'));
 
-		$this->data['action'] = $this->url->link('shipping/flat');
-		$this->data['cancel'] = $this->url->link('extension/shipping');
+		$data['action'] = $this->url->link('shipping/flat');
+		$data['cancel'] = $this->url->link('extension/shipping');
 
 		//Entry Data
 		$flat_info = array();
@@ -35,28 +35,19 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 			'rates'      => array(),
 		);
 
-		$this->data += $flat_info = $defaults;
+		$data += $flat_info = $defaults;
 
 		//Template Data
-		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
-		$this->data['data_geo_zones']   = $this->Model_Localisation_GeoZone->getGeoZones();
+		$data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$data['data_geo_zones']   = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['data_rule_types'] = array(
+		$data['data_rule_types'] = array(
 			'item_qty' => _l("Product Quantity"),
 			'weight'   => _l("Weight of Cart"),
 		);
 
-		//The Template
-		$this->view->load('shipping/flat');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('shipping/flat', $data));
 	}
 
 	private function validate()

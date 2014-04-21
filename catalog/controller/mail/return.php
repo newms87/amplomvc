@@ -5,13 +5,13 @@ class Catalog_Controller_Mail_Return extends Controller
 	{
 		$rmas = array_column($return_data['return_products'], 'rma');
 
-		$this->data['rmas'] = $rmas;
+		$data['rmas'] = $rmas;
 
 		$order = $this->order->get($return_data['order_id']);
-		$this->data['order'] = $order;
+		$data['order'] = $order;
 
-		$this->data['store'] = $this->config->getStore($order['store_id']);
-		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
+		$data['store'] = $this->config->getStore($order['store_id']);
+		$data['logo'] = $this->image->get($this->config->get('config_logo'));
 
 		//Send Customer Confirmation Email
 		$this->mail->init();
@@ -22,8 +22,7 @@ class Catalog_Controller_Mail_Return extends Controller
 		$this->mail->setSender($this->config->get('config_name'));
 		$this->mail->setSubject(_l("Your return request has been submitted!"));
 
-		$this->view->load('mail/return_html');
-		$this->mail->setHtml($this->render());
+		$this->mail->setHtml($this->render('mail/return_html', $data));
 
 		$this->mail->send();
 

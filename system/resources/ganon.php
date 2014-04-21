@@ -1278,8 +1278,7 @@ class HTML_Node
 			$c->parent = null;
 			$c->delete();
 		}
-		$this->children = array();
-	}
+		}
 
 	function getRoot()
 	{

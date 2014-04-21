@@ -140,9 +140,6 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Products"));
 
-		//The Template
-		$this->view->load('catalog/product_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
@@ -303,20 +300,22 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
-
 		//Template Data
+		$data = array();
+
+		$data['list_view'] = $this->table->render();
+
 		if (count($product_classes) > 1) {
 			foreach ($product_classes as &$product_class) {
 				$product_class['insert'] = $this->url->link('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
 			}
 			unset($product_class);
 
-			$this->data['product_classes'] = $product_classes;
+			$data['product_classes'] = $product_classes;
 		}
 
 		//Batch actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'             => array(
 				'label' => _l("Enable"),
 			),
@@ -393,28 +392,22 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/product/batch_update';
+		$data['batch_update'] = 'catalog/product/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/product/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('catalog/product/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/product_list', $data));
 	}
 
 	private function getForm()
@@ -423,7 +416,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->document->setTitle(_l("Products"));
 
 		//Insert or Update
-		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
+		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
+
+		$data = array(
+			'product_id' => $product_id,
+		);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -515,19 +512,19 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_templates'  => array(),
 		);
 
-		$this->data += $product_info + $defaults;
+		$data += $product_info + $defaults;
 
 		//TODO: Make tags into a list of tag inputs (with js)
-		if (is_string($this->data['product_tags'])) {
-			$this->data['product_tags'] = explode(',', $this->data['product_tags']);
+		if (is_string($data['product_tags'])) {
+			$data['product_tags'] = explode(',', $data['product_tags']);
 		}
 
 		//Format Data
-		foreach ($this->data['product_related'] as $key => &$related) {
+		foreach ($data['product_related'] as $key => &$related) {
 			$related_product = $this->Model_Catalog_Product->getProduct($related);
 
 			if (!$related_product) {
-				unset($this->data['product_related'][$key]);
+				unset($data['product_related'][$key]);
 			} else {
 				$related = $related_product;
 			}
@@ -535,40 +532,40 @@ class Admin_Controller_Catalog_Product extends Controller
 		unset($related);
 
 		//Template Data
-		$this->data['data_product_classes']   = $product_classes;
-		$this->data['data_manufacturers']     = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
-		$this->data['data_tax_classes']       = array('' => _l(" --- None --- ")) + $this->Model_Localisation_TaxClass->getTaxClasses();
-		$this->data['data_weight_classes']    = $this->Model_Localisation_WeightClass->getWeightClasses();
-		$this->data['data_length_classes']    = $this->Model_Localisation_LengthClass->getLengthClasses();
-		$this->data['data_customer_groups']   = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$this->data['data_downloads']         = $this->Model_Catalog_Download->getDownloads();
-		$this->data['data_categories']        = $this->Model_Catalog_Category->getCategoriesWithParents();
-		$this->data['data_stores']            = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts']           = array('' => '') + $this->Model_Design_Layout->getLayouts();
-		$this->data['data_templates']         = $this->theme->getTemplatesFrom('product', false, '');
-		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
-		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
+		$data['data_product_classes']   = $product_classes;
+		$data['data_manufacturers']     = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
+		$data['data_tax_classes']       = array('' => _l(" --- None --- ")) + $this->Model_Localisation_TaxClass->getTaxClasses();
+		$data['data_weight_classes']    = $this->Model_Localisation_WeightClass->getWeightClasses();
+		$data['data_length_classes']    = $this->Model_Localisation_LengthClass->getLengthClasses();
+		$data['data_customer_groups']   = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['data_downloads']         = $this->Model_Catalog_Download->getDownloads();
+		$data['data_categories']        = $this->Model_Catalog_Category->getCategoriesWithParents();
+		$data['data_stores']            = $this->Model_Setting_Store->getStores();
+		$data['data_layouts']           = array('' => '') + $this->Model_Design_Layout->getLayouts();
+		$data['data_templates']         = $this->theme->getTemplatesFrom('product', false, '');
+		$data['data_shipping_policies'] = $this->cart->getShippingPolicies();
+		$data['data_return_policies']   = $this->cart->getReturnPolicies();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
-		$this->data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
+		$data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
 
 		//TODO: do we really need ths here?
-		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
+		$data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
 
 		//Translations
-		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
+		$data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 
 		//Product Attribute Template Defaults
-		$this->data['product_attributes']['__ac_template__'] = array(
+		$data['product_attributes']['__ac_template__'] = array(
 			'attribute_id' => '',
 			'name'         => '',
 			'image'        => '',
@@ -577,7 +574,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//Product Options Unused Option Values
-		foreach ($this->data['product_options'] as &$product_option) {
+		foreach ($data['product_options'] as &$product_option) {
 			if (!empty($product_option['product_option_values'])) {
 				$filter = array(
 					'!option_value_ids' => array_column($product_option['product_option_values'], 'option_value_id'),
@@ -594,7 +591,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		unset($product_option);
 
 		//Product Options Template Defaults
-		$this->data['product_options']['__ac_template__'] = array(
+		$data['product_options']['__ac_template__'] = array(
 			'product_option_id'     => 0,
 			'option_id'             => '',
 			'name'                  => '',
@@ -637,7 +634,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//Product Discount Template Defaults
-		$this->data['product_discounts']['__ac_template__'] = array(
+		$data['product_discounts']['__ac_template__'] = array(
 			'customer_group_id' => $this->config->get('config_customer_group_id'),
 			'quantity'          => 0,
 			'priority'          => 0,
@@ -647,7 +644,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//Product Special Template Defaults
-		$this->data['product_specials']['__ac_template__'] = array(
+		$data['product_specials']['__ac_template__'] = array(
 			'customer_group_id' => $this->config->get('config_customer_group_id'),
 			'priority'          => 0,
 			'price'             => 0,
@@ -656,53 +653,45 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//Product Additional Images Template Defaults
-		$this->data['product_images']['__ac_template__'] = array(
+		$data['product_images']['__ac_template__'] = array(
 			'image'      => '',
 			'thumb'      => '',
 			'sort_order' => 0,
 		);
 
 		//Product Related Template Defaults
-		$this->data['product_related']['__ac_template__'] = array(
+		$data['product_related']['__ac_template__'] = array(
 			'product_id' => '',
 			'name'       => '',
 		);
 
 
 		//Ajax Urls
-		$this->data['url_generate_url']           = $this->url->link('catalog/product/generate_url');
-		$this->data['url_generate_model']         = $this->url->link('catalog/product/generate_model');
-		$this->data['url_autocomplete']           = $this->url->link('catalog/product/autocomplete');
-		$this->data['url_attribute_autocomplete'] = $this->url->link('catalog/attribute_group/autocomplete');
-		$this->data['url_option_autocomplete']    = $this->url->link('catalog/option/autocomplete');
+		$data['url_generate_url']           = $this->url->link('catalog/product/generate_url');
+		$data['url_generate_model']         = $this->url->link('catalog/product/generate_model');
+		$data['url_autocomplete']           = $this->url->link('catalog/product/autocomplete');
+		$data['url_attribute_autocomplete'] = $this->url->link('catalog/attribute_group/autocomplete');
+		$data['url_option_autocomplete']    = $this->url->link('catalog/option/autocomplete');
 
 		//Action Buttons
-		$this->data['save']                = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
-		$this->data['cancel']              = $this->url->link('catalog/product');
-		$this->data['change_class']        = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
-		$this->data['add_shipping_policy'] = $this->url->link('setting/shipping_policy');
-		$this->data['add_return_policy']   = $this->url->link('setting/return_policy');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']                = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
+		$data['cancel']              = $this->url->link('catalog/product');
+		$data['change_class']        = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
+		$data['add_shipping_policy'] = $this->url->link('setting/shipping_policy');
+		$data['add_return_policy']   = $this->url->link('setting/return_policy');
 
 		//The Template
-		$template = $this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']);
+		$template = $this->Model_Catalog_ProductClass->getTemplate($data['product_class_id']);
 
 		if (!$this->theme->findFile($template)) {
-			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
+			$product_class = array_search_key('product_class_id', $data['product_class_id'], $product_classes);
 			$this->message->add('warning', _l("The %s Class template file %s could not be found!", $product_class['name'], $template));
 
 			$template = 'catalog/product_form';
 		}
 
-		$this->view->load($template);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render($template, $data));
 	}
 
 	private function validateForm()

@@ -4,13 +4,10 @@ class Catalog_Controller_Block_Login_Facebook extends Controller
 	public function index()
 	{
 		//Actions
-		$this->data['connect'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
-
-		//The Template
-		$this->view->load('block/login/facebook');
+		$data['connect'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		//Render
-		$this->render();
+		$this->render('block/login/facebook', $data);
 	}
 
 	public function connect()

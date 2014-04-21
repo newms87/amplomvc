@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/module/sidebar');
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
 		$categories = $this->Model_Catalog_Category->getCategoryTree();
@@ -15,7 +14,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$main_menu = $categories;
 
-		$this->data['main_menu'] = array(
+		$data['main_menu'] = array(
 			'label' => _l("Main Menu"),
 			'menu'  => $main_menu,
 		);
@@ -70,7 +69,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 						'children' => $attribute_list,
 					);
 
-					$this->data['attribute_menu'][] = array(
+					$data['attribute_menu'][] = array(
 						'label' => $attribute_menu['menu_name'],
 						'menu'  => array($menu)
 					);
@@ -81,11 +80,11 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		//TODO: move this to admin panel once we implement!
 		$page_links = array();
 
-		$this->data['page_menu'] = array(
+		$data['page_menu'] = array(
 			'label' => '',
 			'menu'  => $page_links,
 		);
 
-		$this->render();
+		$this->render('block/module/sidebar', $data);
 	}
 }

@@ -70,23 +70,14 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		}
 		unset($return_reason);
 
-		$this->data['return_reasons'] = $return_reasons;
+		$data['return_reasons'] = $return_reasons;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/return_reason');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//The Template
-		$this->view->load('setting/return_reason');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/return_reason');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/return_reason', $data));
 	}
 
 	private function validate()

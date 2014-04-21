@@ -23,32 +23,19 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
 		$this->breadcrumb->add(_l("Checkout"), $this->url->link('checkout/checkout'));
 
-		$this->data['logged']         = $this->customer->isLogged();
-		$this->data['guest_checkout'] = $this->session->get('guest_checkout');
+		$data['logged']         = $this->customer->isLogged();
+		$data['guest_checkout'] = $this->session->get('guest_checkout');
 
-		if (!$this->customer->IsLogged() && !$this->data['guest_checkout']) {
-			$this->data['login_form'] = $this->block->render('account/login', null, array('template' => 'block/account/login'));
-		} elseif ($this->data['guest_checkout']) {
-			$this->data['cancel_guest_checkout'] = $this->url->link('checkout/checkout/cancel_guest_checkout');
+		if (!$this->customer->IsLogged() && !$data['guest_checkout']) {
+			$data['login_form'] = $this->block->render('account/login', null, array('template' => 'block/account/login'));
+		} elseif ($data['guest_checkout']) {
+			$data['cancel_guest_checkout'] = $this->url->link('checkout/checkout/cancel_guest_checkout');
 		}
 
-		$this->data['shipping_required'] = $this->cart->hasShipping();
-
-		//The Template
-		$this->view->load('checkout/checkout');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['shipping_required'] = $this->cart->hasShipping();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('checkout/checkout', $data));
 	}
 
 	public function guest_checkout()

@@ -39,8 +39,8 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->breadcrumb->add(_l("System Update"), $this->url->link('setting/update'));
 
 		//Actions
-		$this->data['action'] = $this->url->link('setting/update');
-		$this->data['cancel'] = $this->url->link('setting/store');
+		$data['action'] = $this->url->link('setting/update');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Data
 		$update_info = array();
@@ -54,7 +54,7 @@ class Admin_Controller_Setting_Update extends Controller
 			'auto_update' => 0,
 		);
 
-		$this->data += $update_info + $defaults;
+		$data += $update_info + $defaults;
 
 		//Template Data
 		$version_list = $this->System_Update->getVersions();
@@ -65,19 +65,10 @@ class Admin_Controller_Setting_Update extends Controller
 			$versions[$version] = _l("AmploCart Version %s", $version);
 		}
 
-		$this->data['data_versions'] = $versions;
-
-		//The Template
-		$this->view->load('setting/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['data_versions'] = $versions;
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/update', $data));
 	}
 
 	public function validate()

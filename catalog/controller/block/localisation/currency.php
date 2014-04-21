@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/localisation/currency');
 		if (isset($_POST['currency_code'])) {
 			$this->currency->set($_POST['currency_code']);
 
@@ -14,17 +13,17 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 			}
 		}
 
-		$this->data['action'] = $this->url->link('module/currency');
+		$data['action'] = $this->url->link('module/currency');
 
-		$this->data['currency_code'] = $this->currency->getCode();
+		$data['currency_code'] = $this->currency->getCode();
 
-		$this->data['currencies'] = array();
+		$data['currencies'] = array();
 
 		$results = $this->Model_Localisation_Currency->getCurrencies();
 
 		foreach ($results as $result) {
 			if ($result['status']) {
-				$this->data['currencies'][] = array(
+				$data['currencies'][] = array(
 					'title'        => $result['title'],
 					'code'         => $result['code'],
 					'symbol_left'  => $result['symbol_left'],
@@ -33,8 +32,8 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 			}
 		}
 
-		$this->data['redirect'] = $this->url->here();
+		$data['redirect'] = $this->url->here();
 
-		$this->render();
+		$this->render('block/localisation/currency', $data);
 	}
 }

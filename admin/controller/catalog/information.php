@@ -107,9 +107,6 @@ class Admin_Controller_Catalog_Information extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Information"));
 
-		//The Template
-		$this->view->load('catalog/information_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Information"), $this->url->link('catalog/information'));
@@ -188,10 +185,10 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -206,35 +203,27 @@ class Admin_Controller_Catalog_Information extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/information/batch_update';
+		$data['batch_update'] = 'catalog/information/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/information/insert');
+		$data['insert'] = $this->url->link('catalog/information/insert');
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $information_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/information_list', $data));
 	}
 
 	private function getForm()
 	{
 		$this->document->setTitle(_l("Information"));
-
-		$this->view->load('catalog/information_form');
 
 		$information_id = !empty($_GET['information_id']) ? $_GET['information_id'] : 0;
 
@@ -263,31 +252,31 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($information_info[$key])) {
-				$this->data[$key] = $information_info[$key];
+				$data[$key] = $information_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Data Lists
-		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts'] = array('' => _l(" --- None --- ")) + $this->Model_Design_Layout->getLayouts();
+		$data['data_stores']  = $this->Model_Setting_Store->getStores();
+		$data['data_layouts'] = array('' => _l(" --- None --- ")) + $this->Model_Design_Layout->getLayouts();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
 		if ($information_id) {
-			$this->data['action'] = $this->url->link('catalog/information/update', 'information_id=' . $information_id);
+			$data['action'] = $this->url->link('catalog/information/update', 'information_id=' . $information_id);
 		} else {
-			$this->data['action'] = $this->url->link('catalog/information/insert');
+			$data['action'] = $this->url->link('catalog/information/insert');
 		}
 
-		$this->data['cancel'] = $this->url->link('catalog/information');
+		$data['cancel'] = $this->url->link('catalog/information');
 
 		//Translations
 		$translate_fields = array(
@@ -295,15 +284,9 @@ class Admin_Controller_Catalog_Information extends Controller
 			'description',
 		);
 
-		$this->data['translations'] = $this->translation->getTranslations('information', $information_id, $translate_fields);
+		$data['translations'] = $this->translation->getTranslations('information', $information_id, $translate_fields);
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/information_form', $data));
 	}
 
 	private function validateForm()

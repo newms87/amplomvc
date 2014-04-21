@@ -35,32 +35,19 @@ class Catalog_Controller_Example_Example extends Controller
 		$this->breadcrumb->add(_l("Example"), $this->url->link('example/example'));
 
 		//Template Data
-		$this->data = $page;
+		$data = $page;
 
 		//To be more specific, we can set title and content here.
 		//For this example title and content are loaded form the model into the $page variable,
-		//which is then passed to $this->data.
+		//which is then passed to $data.
 
 		//Alternatively we can set those variables or any other template variable here.
 
-		$this->data['title'] = _l("Example Title");
-		$this->data['content'] = _l("A whole bunch of content for the page");
-
-		//The Template
-		$this->view->load('example/example');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header',
-		);
+		$data['title'] = _l("Example Title");
+		$data['content'] = _l("A whole bunch of content for the page");
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('example/example', $data));
 	}
 
 	//Accessed via /site_root/example/example/my_method

@@ -17,16 +17,6 @@ class Catalog_Controller_Common_Home extends Controller
 			'call_to_action' => $this->config->get('config_home_call_to_action'),
 		);
 
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
 		//Render
 		$this->response->setOutput($this->render('common/home', $data));
 	}

@@ -3,23 +3,16 @@ class Admin_Controller_Help_Documentation extends Controller
 {
 	public function index()
 	{
-		$this->view->load('help/documentation');
-
 		$this->document->setTitle(_l("Documentation"));
 
 		$s = $this->_('sections');
 		$this->replace_tokens($s);
-		$this->data['sections'] = $s;
+		$data['sections'] = $s;
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Documentation"), $this->url->link('help/documentation'));
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('help/documentation', $data));
 	}
 
 	function replace_tokens(&$section)

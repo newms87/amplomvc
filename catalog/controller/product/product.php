@@ -16,7 +16,7 @@ class Catalog_Controller_Product_Product extends Controller
 			$this->url->redirect('error/not_found');
 		}
 
-		$this->data = $product_info;
+		$data = $product_info;
 
 		//Layout Override (only if set)
 		$layout_id = $this->Model_Catalog_Product->getProductLayoutId($product_id);
@@ -25,7 +25,7 @@ class Catalog_Controller_Product_Product extends Controller
 			$this->config->set('config_layout_id', $layout_id);
 		}
 
-		$this->data['product_id'] = $product_id;
+		$data['product_id'] = $product_id;
 
 		//Page Head
 		$this->document->setTitle($product_info['name']);
@@ -33,7 +33,7 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->document->setKeywords($product_info['meta_keywords']);
 
 		//Page Title
-		$this->data['page_title'] = $product_info['name'];
+		$data['page_title'] = $product_info['name'];
 
 		//Build Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -56,100 +56,100 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
 
 		//Product Information
-		$this->data['manufacturer']     = $manufacturer;
-		$this->data['url_manufacturer'] = $this->url->link('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
+		$data['manufacturer']     = $manufacturer;
+		$data['url_manufacturer'] = $this->url->link('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
 
-		$this->data['is_purchasable'] = $this->cart->productPurchasable($product_info);
-		$this->data['display_model']  = $this->config->get('config_show_product_model');
+		$data['is_purchasable'] = $this->cart->productPurchasable($product_info);
+		$data['display_model']  = $this->config->get('config_show_product_model');
 
-		if ($this->data['is_purchasable']) {
+		if ($data['is_purchasable']) {
 			//The Product Options Block
-			$this->data['block_product_options'] = $this->block->render('product/options', null, array('product_id' => $product_info['product_id']));
+			$data['block_product_options'] = $this->block->render('product/options', null, array('product_id' => $product_info['product_id']));
 		}
 
 		//Stock
 		$stock_type = $this->config->get('config_stock_display');
 
 		if ($stock_type === 'hide') {
-			$this->data['stock_type']  = "";
-			$this->data['stock_class'] = 'hidden';
-		} elseif (!$this->data['is_purchasable']) {
-			$this->data['stock']       = _l("currently not available");
-			$this->data['stock_class'] = 'unavailable';
+			$data['stock_type']  = "";
+			$data['stock_class'] = 'hidden';
+		} elseif (!$data['is_purchasable']) {
+			$data['stock']       = _l("currently not available");
+			$data['stock_class'] = 'unavailable';
 		} elseif ($product_info['quantity'] <= 0) {
-			$this->data['stock']       = $product_info['stock_status'];
-			$this->data['stock_class'] = 'stock_empty';
+			$data['stock']       = $product_info['stock_status'];
+			$data['stock_class'] = 'stock_empty';
 		} else {
 			if ($stock_type === 'status') {
-				$this->data['stock']       = _l("In Stock");
-				$this->data['stock_class'] = 'available';
+				$data['stock']       = _l("In Stock");
+				$data['stock_class'] = 'available';
 			} elseif ((int)$product_info['quantity'] > (int)$stock_type) {
-				$this->data['stock']       = _l("More than %d available", (int)$stock_type);
-				$this->data['stock_class'] = 'surplus';
+				$data['stock']       = _l("More than %d available", (int)$stock_type);
+				$data['stock_class'] = 'surplus';
 			} elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
-				$this->data['stock']       = _l("Only %d left!", (int)$product_info['quantity']);
-				$this->data['stock_class'] = 'limited_qty';
+				$data['stock']       = _l("Only %d left!", (int)$product_info['quantity']);
+				$data['stock_class'] = 'limited_qty';
 			}
 		}
 
 		if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
-			$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
+			$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 		} else {
-			$this->data['price'] = false;
+			$data['price'] = false;
 		}
 
 		if ((float)$product_info['special']) {
-			$this->data['special'] = $this->currency->format($product_info['special'], $product_info['tax_class_id']);
+			$data['special'] = $this->currency->format($product_info['special'], $product_info['tax_class_id']);
 		}
 
 		if ($this->config->get('config_show_price_with_tax')) {
-			$this->data['tax'] = $this->currency->format($this->tax->calculate((float)$product_info['special'] ? $product_info['special'] : $product_info['price']));
+			$data['tax'] = $this->currency->format($this->tax->calculate((float)$product_info['special'] ? $product_info['special'] : $product_info['price']));
 		}
 
 		$discounts = $this->Model_Catalog_Product->getProductDiscounts($product_info['product_id']);
 
 		foreach ($discounts as &$discount) {
-			$this->data['discounts'][] = array(
+			$data['discounts'][] = array(
 				'quantity' => $discount['quantity'],
 				'price'    => $this->currency->format($this->tax->calculate($discount['price'], $product_info['tax_class_id']))
 			);
 		}
 		unset($discount);
 
-		$this->data['discounts'] = $discounts;
+		$data['discounts'] = $discounts;
 
 		//customers must order at least 1 of this product
-		$this->data['minimum'] = max((int)$product_info['minimum'], 1);
+		$data['minimum'] = max((int)$product_info['minimum'], 1);
 
 		//Product Review
 		if ($this->config->get('config_review_status')) {
-			$this->data['block_review'] = $this->block->render('product/review');
+			$data['block_review'] = $this->block->render('product/review');
 		}
 
 		//Social Sharing
 		if ($this->config->get('config_share_status')) {
-			$this->data['block_sharing'] = $this->block->render('extras/sharing');
+			$data['block_sharing'] = $this->block->render('extras/sharing');
 		}
 
 		//Shipping & Return Policies
-		$this->data['shipping_policy'] = $this->cart->getShippingPolicy($product_info['shipping_policy_id']);
-		$this->data['return_policy']   = $this->cart->getReturnPolicy($product_info['return_policy_id']);
+		$data['shipping_policy'] = $this->cart->getShippingPolicy($product_info['shipping_policy_id']);
+		$data['return_policy']   = $this->cart->getReturnPolicy($product_info['return_policy_id']);
 
-		$this->data['is_default_shipping_policy'] = $product_info['shipping_policy_id'] == $this->config->get('config_default_shipping_policy');
-		$this->data['is_default_return_policy']   = $product_info['return_policy_id'] == $this->config->get('config_default_return_policy');
+		$data['is_default_shipping_policy'] = $product_info['shipping_policy_id'] == $this->config->get('config_default_shipping_policy');
+		$data['is_default_return_policy']   = $product_info['return_policy_id'] == $this->config->get('config_default_return_policy');
 
-		if ($this->data['return_policy']['days'] < 0) {
-			$this->data['is_final_explanation'] = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", $this->url->link('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
+		if ($data['return_policy']['days'] < 0) {
+			$data['is_final_explanation'] = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", $this->url->link('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
 		}
 
 		//Links
 		$product_info['category']['url'] = $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']);
-		$this->data['category']          = $product_info['category'];
+		$data['category']                = $product_info['category'];
 
-		$this->data['keep_shopping']          = $this->url->link('product/category');
-		$this->data['view_cart_link']         = $this->url->link('cart/cart');
-		$this->data['checkout_link']          = $this->url->link('checkout/checkout');
-		$this->data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
+		$data['keep_shopping']          = $this->url->link('product/category');
+		$data['view_cart_link']         = $this->url->link('cart/cart');
+		$data['checkout_link']          = $this->url->link('checkout/checkout');
+		$data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
 
 		//Product Images
 		$image_width             = $this->config->get('config_image_thumb_width');
@@ -160,8 +160,8 @@ class Catalog_Controller_Product_Product extends Controller
 		$image_additional_height = $this->config->get('config_image_additional_height');
 
 		if ($product_info['image']) {
-			$this->data['popup'] = $this->image->resize($product_info['image'], $image_popup_width, $image_popup_height);
-			$this->data['thumb'] = $this->image->resize($product_info['image'], $image_width, $image_height);
+			$data['popup'] = $this->image->resize($product_info['image'], $image_popup_width, $image_popup_height);
+			$data['thumb'] = $this->image->resize($product_info['image'], $image_width, $image_height);
 		}
 
 		$image_list = $this->Model_Catalog_Product->getProductImages($product_info['product_id']);
@@ -187,15 +187,15 @@ class Catalog_Controller_Product_Product extends Controller
 			}
 		}
 
-		$this->data['images'] = $images;
+		$data['images'] = $images;
 
 		//Template Data
 		if ($this->config->get('config_shipping_return_info_id')) {
-			$this->data['data_policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+			$data['data_policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 		}
 
 		if ($this->config->get('config_show_product_attributes')) {
-			$this->data['data_attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
+			$data['data_attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
 		}
 
 		//Related Products
@@ -208,7 +208,7 @@ class Catalog_Controller_Product_Product extends Controller
 			);
 
 			//TODO: Move product/suggestions to product/related...
-			$this->data['block_product_related'] = $this->block->render('product/suggestions', null, $ps_params);
+			$data['block_product_related'] = $this->block->render('product/suggestions', null, $ps_params);
 		}
 
 		//The Tags associated with this product
@@ -224,35 +224,25 @@ class Catalog_Controller_Product_Product extends Controller
 			$tag['href'] = $this->url->link('product/search', $url_query);
 		}
 
-		$this->data['tags'] = $tags;
+		$data['tags'] = $tags;
 
 		if ($product_info['template'] == 'product_video') {
-			$this->data['description'] = html_entity_decode($product_info['description']);
+			$data['description'] = html_entity_decode($product_info['description']);
 		}
 
 		//Action Buttons
-		$this->data['buy_now'] = $this->url->link('cart/cart/buy_now');
+		$data['buy_now'] = $this->url->link('cart/cart/buy_now');
 
 		//The Template
 		if ($product_info['template']) {
-			$this->view->load('product/' . $product_info['template']);
+			$template = $product_info['template'];
 		} elseif ($product_info['product_class_id']) {
-			$this->view->load($this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']));
+			$template = $this->Model_Catalog_Product->getClassTemplate($product_info['product_class_id']);
 		} else {
-			$this->view->load('product/product');
+			$template = 'product/product';
 		}
 
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render($template, $data));
 	}
 }

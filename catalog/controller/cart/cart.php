@@ -8,7 +8,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
 
-		$this->data['block_cart'] = $this->block->render('cart/cart');
+		$data['block_cart'] = $this->block->render('cart/cart');
 
 		//We remove any active orders to allow shipping estimates to be updated
 		if ($this->order->hasOrder()) {
@@ -16,54 +16,41 @@ class Catalog_Controller_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('config_show_cart_weight')) {
-			$this->data['weight'] = $this->weight->format($this->cart->getWeight());
+			$data['weight'] = $this->weight->format($this->cart->getWeight());
 		}
 
 		if ($this->config->get('coupon_status')) {
-			$this->data['block_coupon'] = $this->block->render('cart/coupon');
+			$data['block_coupon'] = $this->block->render('cart/coupon');
 		}
 
 		if ($this->config->get('voucher_status')) {
-			$this->data['block_voucher'] = $this->block->render('cart/voucher');
+			$data['block_voucher'] = $this->block->render('cart/voucher');
 		}
 
 		if ($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
-			$this->data['block_reward'] = $this->block->render('cart/reward');
+			$data['block_reward'] = $this->block->render('cart/reward');
 		}
 
 		if ($this->config->get('shipping_status') && $this->cart->hasShipping()) {
-			$this->data['block_shipping'] = $this->block->render('cart/shipping');
+			$data['block_shipping'] = $this->block->render('cart/shipping');
 		}
 
-		$this->data['block_total'] = $this->block->render('cart/total');
+		$data['block_total'] = $this->block->render('cart/total');
 
-		$this->data['cart_empty']   = $this->cart->isEmpty();
-		$this->data['can_checkout'] = $this->cart->canCheckout();
+		$data['cart_empty']   = $this->cart->isEmpty();
+		$data['can_checkout'] = $this->cart->canCheckout();
 
 		//Set Continue to the redirect unless we are redirecting to the cart page
 		if (isset($_GET['redirect']) && preg_match("/cart\\/cart/", $_GET['redirect']) == 0) {
-			$this->data['continue'] = urldecode($_GET['redirect']);
+			$data['continue'] = urldecode($_GET['redirect']);
 		} else {
-			$this->data['continue'] = $this->url->link('product/category');
+			$data['continue'] = $this->url->link('product/category');
 		}
 
-		$this->data['checkout'] = $this->url->link('checkout/checkout');
-
-		//The Template
-		$this->view->load('cart/cart');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['checkout'] = $this->url->link('checkout/checkout');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('cart/cart', $data));
 	}
 
 	public function buy_now()

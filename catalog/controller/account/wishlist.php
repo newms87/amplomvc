@@ -3,8 +3,6 @@ class Catalog_Controller_Account_Wishlist extends Controller
 {
 	public function index()
 	{
-		$this->view->load('account/wishlist');
-
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/wishlist'));
 
@@ -34,14 +32,14 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->breadcrumb->add(_l("My Wish List"), $this->url->link('account/wishlist'));
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
-		$this->data['products'] = array();
+		$data['products'] = array();
 
 		foreach ($this->session->data['wishlist'] as $key => $product_id) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
@@ -73,7 +71,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 					$special = false;
 				}
 
-				$this->data['products'][] = array(
+				$data['products'][] = array(
 					'product_id' => $product_info['product_id'],
 					'thumb'      => $image,
 					'name'       => $product_info['name'],
@@ -89,18 +87,9 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			}
 		}
 
-		$this->data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account/account');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/wishlist', $data));
 	}
 
 	public function add()

@@ -3,8 +3,6 @@ class Catalog_Controller_Account_Transaction extends Controller
 {
 	public function index()
 	{
-		$this->view->load('account/transaction');
-
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/transaction'));
 
@@ -17,7 +15,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
 		$this->breadcrumb->add(_l("Your Transactions"), $this->url->link('account/transaction'));
 
-		$this->data['amount'] = $this->config->get('config_currency');
+		$data['amount'] = $this->config->get('config_currency');
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -25,7 +23,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 			$page = 1;
 		}
 
-		$this->data['transactions'] = array();
+		$data['transactions'] = array();
 
 		$data = array(
 			'sort'  => 'date_added',
@@ -39,7 +37,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 		$results = $this->Model_Account_Transaction->getTransactions($data);
 
 		foreach ($results as $result) {
-			$this->data['transactions'][] = array(
+			$data['transactions'][] = array(
 				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
 				'date_added'  => $this->date->format($result['date_added'], 'short'),
@@ -48,21 +46,12 @@ class Catalog_Controller_Account_Transaction extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $transaction_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['total'] = $this->currency->format($this->customer->getBalance());
+		$data['total'] = $this->currency->format($this->customer->getBalance());
 
-		$this->data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account/account');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/transaction', $data));
 	}
 }

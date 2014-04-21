@@ -74,9 +74,6 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Attribute Groups"));
 
-		//The Template
-		$this->view->load('catalog/attribute_group_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Attribute Groups"), $this->url->link('catalog/attribute_group'));
@@ -145,46 +142,37 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'delete' => array(
 				'label' => _l("Delete"),
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/attribute_group/batch_update';
+		$data['batch_update'] = 'catalog/attribute_group/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/attribute_group/update');
+		$data['insert'] = $this->url->link('catalog/attribute_group/update');
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $attribute_group_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/attribute_group_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Attribute Groups"));
-
-		//The Template
-		$this->view->load('catalog/attribute_group_form');
 
 		//Insert or Update
 		$attribute_group_id = !empty($_GET['attribute_group_id']) ? $_GET['attribute_group_id'] : 0;
@@ -225,11 +213,11 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($attribute_group_info[$key])) {
-				$this->data[$key] = $attribute_group_info[$key];
+				$data[$key] = $attribute_group_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
@@ -238,20 +226,20 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			'name',
 		);
 
-		$this->data['translations'] = $this->translation->getTranslations('attribute_group', $attribute_group_id, $translate_fields);
+		$data['translations'] = $this->translation->getTranslations('attribute_group', $attribute_group_id, $translate_fields);
 
 		//Translations for Attributes
 		$translate_fields = array(
 			'name',
 		);
 
-		foreach ($this->data['attributes'] as &$attribute) {
+		foreach ($data['attributes'] as &$attribute) {
 			$attribute['translations'] = $this->translation->getTranslations('attribute', $attribute['attribute_id'], $translate_fields);
 		}
 		unset($attribute);
 
 		//Attribute Defaults
-		$this->data['attributes']['__ac_template__'] = array(
+		$data['attributes']['__ac_template__'] = array(
 			'attribute_id' => '',
 			'name'         => '',
 			'image'        => '',
@@ -260,17 +248,11 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
-		$this->data['cancel'] = $this->url->link('catalog/attribute_group');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
+		$data['cancel'] = $this->url->link('catalog/attribute_group');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/attribute_group_form', $data));
 	}
 
 	private function validateForm()

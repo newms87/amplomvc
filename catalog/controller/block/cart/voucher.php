@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 {
 	public function index($settings = null)
 	{
-		$this->view->load('block/cart/voucher');
-
 		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->set('voucher', $_POST['voucher']);
 
@@ -17,16 +15,16 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($this->session->data[$key])) {
-				$this->data[$key] = $this->session->data[$key];
+				$data[$key] = $this->session->data[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/cart/voucher', $data));
 	}
 
 	private function validateVoucher()

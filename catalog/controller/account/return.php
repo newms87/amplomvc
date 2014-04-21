@@ -3,8 +3,6 @@ class Catalog_Controller_Account_Return extends Controller
 {
 	public function index()
 	{
-		$this->view->load('account/return_list');
-
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/return'));
 
@@ -28,10 +26,10 @@ class Catalog_Controller_Account_Return extends Controller
 			$return['href']       = $this->url->link('account/return/info', 'return_id=' . $return['return_id']);
 		}
 
-		$this->data['returns'] = $returns;
+		$data['returns'] = $returns;
 
 		//Template Data
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
@@ -40,20 +38,11 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->pagination->init();
 		$this->pagination->total = $return_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account/account');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/return_list', $data));
 	}
 
 	public function info()
@@ -82,16 +71,14 @@ class Catalog_Controller_Account_Return extends Controller
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 
 		if ($return_info) {
-			$this->view->load('account/return_info');
-
 			$return_info['comment']       = nl2br($return_info['comment']);
 			$return_info['opened']        = $return_info['opened'] ? _l("Yes") : _l("No");
 			$return_info['return_status'] = $this->order->getReturnStatus($return_info['return_status_id']);
 
-			$this->data = $return_info;
+			$data = $return_info;
 
-			$this->data['date_ordered'] = $this->date->format($return_info['date_ordered'], 'date_format_short');
-			$this->data['date_added']   = $this->date->format($return_info['date_added'], 'date_format_short');
+			$data['date_ordered'] = $this->date->format($return_info['date_ordered'], 'date_format_short');
+			$data['date_added']   = $this->date->format($return_info['date_added'], 'date_format_short');
 
 			$histories = $this->Model_Account_Return->getReturnHistories($return_id);
 
@@ -102,37 +89,17 @@ class Catalog_Controller_Account_Return extends Controller
 			}
 			unset($history);
 
-			$this->data['histories'] = $histories;
+			$data['histories'] = $histories;
 
-			$this->data['continue'] = $this->url->link('account/return', $url_query);
+			$data['continue'] = $this->url->link('account/return', $url_query);
 
-			$this->children = array(
-				'area/left',
-				'area/right',
-				'area/top',
-				'area/bottom',
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('account/return_info', $data));
 		} else {
-			$this->view->load('error/not_found');
+			$data['page_title'] = _l("Return Information");
 
-			$this->data['page_title'] = _l("Return Information");
+			$data['continue'] = $this->url->link('account/return');
 
-			$this->data['continue'] = $this->url->link('account/return');
-
-			$this->children = array(
-				'area/left',
-				'area/right',
-				'area/top',
-				'area/bottom',
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('error/not_found', $data));
 		}
 	}
 
@@ -271,7 +238,7 @@ class Catalog_Controller_Account_Return extends Controller
 			'captcha'      => '',
 		);
 
-		$this->data += $order_info + $defaults;
+		$data += $order_info + $defaults;
 
 		if (!empty($customer_orders)) {
 			foreach ($customer_orders as &$order) {
@@ -282,45 +249,32 @@ class Catalog_Controller_Account_Return extends Controller
 			unset($order);
 		}
 
-		$this->data['customer_orders'] = $customer_orders;
+		$data['customer_orders'] = $customer_orders;
 
-		$this->data['date_ordered_display'] = $this->date->format($this->data['date_ordered'], 'short');
-		$this->data['data_return_reasons']  = $this->order->getReturnReasons();
+		$data['date_ordered_display'] = $this->date->format($data['date_ordered'], 'short');
+		$data['data_return_reasons']  = $this->order->getReturnReasons();
 
-		$this->data['back']               = $this->url->link('account/account');
-		$this->data['return_product_url'] = $this->url->link('account/return/insert');
+		$data['back']               = $this->url->link('account/account');
+		$data['return_product_url'] = $this->url->link('account/return/insert');
 
-		$this->data['order_lookup']        = $order_lookup;
-		$this->data['order_lookup_action'] = $this->url->link('account/return/find');
+		$data['order_lookup']        = $order_lookup;
+		$data['order_lookup_action'] = $this->url->link('account/return/find');
 
 		if (!$this->customer->isLogged()) {
 			$this->message->add('warning', _l("You must be logged in to request a return. Your orders will automatically be associated to your account via your email address"));
 		}
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			0 => _l("No"),
 		   1 => _l("Yes"),
 		);
 
 		//Action Buttons
-		$this->data['action'] = $this->url->link('account/return/insert');
-		$this->data['url_captcha_image'] = $this->url->link('account/return/captcha');
-
-		//The Template
-		$this->view->load('account/return_form');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['action'] = $this->url->link('account/return/insert');
+		$data['url_captcha_image'] = $this->url->link('account/return/captcha');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/return_form', $data));
 	}
 
 	public function find()
@@ -357,7 +311,6 @@ class Catalog_Controller_Account_Return extends Controller
 
 	public function success()
 	{
-		$this->view->load('account/return_success');
 		$this->document->setTitle(_l("Return Success"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -373,20 +326,11 @@ class Catalog_Controller_Account_Return extends Controller
 			}
 		}
 
-		$this->data['returns'] = $returns;
+		$data['returns'] = $returns;
 
-		$this->data['continue'] = $this->url->link('common/home');
+		$data['continue'] = $this->url->link('common/home');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/return_success', $data));
 	}
 
 	private function validate()

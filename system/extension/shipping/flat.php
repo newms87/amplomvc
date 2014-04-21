@@ -55,7 +55,7 @@ class System_Extension_Shipping_Flat extends System_Extension_Shipping
 				continue;
 			}
 
-			$quote_data[] = $this->data($key);
+			$quote_data[] = $data($key);
 		}
 
 		return $quote_data;

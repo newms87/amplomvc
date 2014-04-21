@@ -44,23 +44,14 @@ class Admin_Controller_Setting_Login extends Controller
 			),
 		);
 
-		$this->data += $settings + $defaults;
+		$data += $settings + $defaults;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/login/save');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		//The Template
-		$this->view->load('setting/login');
+		$data['save']   = $this->url->link('setting/login/save');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/login', $data));
 	}
 
 	public function save()

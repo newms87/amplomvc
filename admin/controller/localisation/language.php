@@ -57,8 +57,6 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/language_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -82,10 +80,10 @@ class Admin_Controller_Localisation_Language extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
 
-		$this->data['insert'] = $this->url->link('localisation/language/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/language/delete', $url);
+		$data['insert'] = $this->url->link('localisation/language/insert', $url);
+		$data['delete'] = $this->url->link('localisation/language/delete', $url);
 
-		$this->data['languages'] = array();
+		$data['languages'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -112,7 +110,7 @@ class Admin_Controller_Localisation_Language extends Controller
 				'href' => $this->url->link('localisation/language/update', 'language_id=' . $result['language_id'] . $url)
 			);
 
-			$this->data['languages'][] = array(
+			$data['languages'][] = array(
 				'language_id' => $result['language_id'],
 				'name'        => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? _l(" <b>(Default)</b>") : null),
 				'code'        => $result['code'],
@@ -134,9 +132,9 @@ class Admin_Controller_Localisation_Language extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']       = $this->url->link('localisation/language', 'sort=name' . $url);
-		$this->data['sort_code']       = $this->url->link('localisation/language', 'sort=code' . $url);
-		$this->data['sort_sort_order'] = $this->url->link('localisation/language', 'sort=sort_order' . $url);
+		$data['sort_name']       = $this->url->link('localisation/language', 'sort=name' . $url);
+		$data['sort_code']       = $this->url->link('localisation/language', 'sort=code' . $url);
+		$data['sort_sort_order'] = $this->url->link('localisation/language', 'sort=sort_order' . $url);
 
 		$url = '';
 
@@ -150,23 +148,16 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $language_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/language_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/language_form');
-
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
@@ -175,12 +166,12 @@ class Admin_Controller_Localisation_Language extends Controller
 		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
 
 		if (!$language_id) {
-			$this->data['action'] = $this->url->link('localisation/language/insert', $url);
+			$data['action'] = $this->url->link('localisation/language/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/language/update', 'language_id=' . $language_id . '&' . $url);
+			$data['action'] = $this->url->link('localisation/language/update', 'language_id=' . $language_id . '&' . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/language', $url);
+		$data['cancel'] = $this->url->link('localisation/language', $url);
 
 		if ($language_id && !$this->request->isPost()) {
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
@@ -206,33 +197,27 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		foreach ($defaults as $d => $value) {
 			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
+				$data[$d] = $_POST[$d];
 			} elseif (isset($language_info[$d])) {
-				$this->data[$d] = $language_info[$d];
+				$data[$d] = $language_info[$d];
 			} elseif (!$language_id) {
-				$this->data[$d] = $value;
+				$data[$d] = $value;
 			}
 		}
 
 
 		//Template Data
-		$this->data['data_direction'] = array(
+		$data['data_direction'] = array(
 			'ltr' => _l("Left to Right"),
 			'rtl' => _l("Right to Left"),
 		);
-		$this->data['data_statuses']  = array(
+		$data['data_statuses']  = array(
 			-1 => _l('Disabled'),
 			0  => _l('Inactive'),
 			1  => _l('Active'),
 		);
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/language_form', $data));
 	}
 
 	private function validateForm()

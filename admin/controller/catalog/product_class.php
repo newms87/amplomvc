@@ -69,9 +69,6 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Product Classes"));
 
-		//The Template
-		$this->view->load('catalog/product_class_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
@@ -152,46 +149,37 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'delete' => array(
 				'label' => _l("Delete"),
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/product_class/batch_update';
+		$data['batch_update'] = 'catalog/product_class/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $product_class_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/product_class/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('catalog/product_class/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/product_class_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Product Classes"));
-
-		//The template
-		$this->view->load('catalog/product_class_form');
 
 		//Insert or Update
 		$product_class_id = isset($_GET['product_class_id']) ? (int)$_GET['product_class_id'] : 0;
@@ -222,24 +210,18 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			'admin_controller' => array(),
 		);
 
-		$this->data += $product_class_info + $defaults;
+		$data += $product_class_info + $defaults;
 
 		//Template Data
-		$this->data['data_front_templates'] = $this->Model_Catalog_ProductClass->getFrontTemplates();
-		$this->data['data_admin_templates'] = $this->Model_Catalog_ProductClass->getAdminTemplates();
+		$data['data_front_templates'] = $this->Model_Catalog_ProductClass->getFrontTemplates();
+		$data['data_admin_templates'] = $this->Model_Catalog_ProductClass->getAdminTemplates();
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id);
-		$this->data['cancel'] = $this->url->link('catalog/product_class');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id);
+		$data['cancel'] = $this->url->link('catalog/product_class');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/product_class_form', $data));
 	}
 
 	private function validateForm()

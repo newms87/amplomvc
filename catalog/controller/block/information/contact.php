@@ -11,13 +11,10 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 			return;
 		}
 
-		$this->data = $settings;
+		$data = $settings;
 
 		//The Contact Form
 		$contact_form = $this->getForm();
-
-		//The Block template
-		$this->view->load('block/information/contact');
 
 		$contact_info = html_entity_decode($settings['contact_info'], ENT_QUOTES, 'UTF-8');
 
@@ -25,21 +22,18 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 			'contact_form' => $contact_form,
 		);
 
-		$this->data['contact_info'] = $this->tool->insertables($insertables, $contact_info);
+		$data['contact_info'] = $this->tool->insertables($insertables, $contact_info);
 
-		$this->render();
+		$this->render('block/information/contact', $data);
 	}
 
 	private function getForm()
 	{
-		//Template and Language
-		$this->view->load('block/information/contact_form');
-
 		//Captcha Image
-		$this->data['captcha_url'] = $this->url->link("block/information/contact/captcha");
+		$data['captcha_url'] = $this->url->link("block/information/contact/captcha");
 
 		//Action
-		$this->data['action'] = $this->url->here();
+		$data['action'] = $this->url->here();
 
 		//Load Value or Defaults
 		$defaults = array(
@@ -51,22 +45,21 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Render
-		return $this->render();
+		return $this->render('block/information/contact_form', $data);
 	}
 
 	public function success()
 	{
-		$this->view->load('block/information/contact_success');
-		$this->data['continue'] = $this->url->link('common/home');
+		$data['continue'] = $this->url->link('common/home');
 
-		$this->render();
+		$this->render('block/information/contact_success', $data);
 	}
 
 	private function validate()

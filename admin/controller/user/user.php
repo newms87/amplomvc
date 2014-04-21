@@ -74,8 +74,6 @@ class Admin_Controller_User_User extends Controller
 
 	private function getList()
 	{
-		$this->view->load('user/user_list');
-
 		$url_items = array(
 			'sort'  => 'username',
 			'order' => 'ASC',
@@ -90,10 +88,10 @@ class Admin_Controller_User_User extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("User"), $this->url->link('user/user'));
 
-		$this->data['insert'] = $this->url->link('user/user/insert', $url);
-		$this->data['delete'] = $this->url->link('user/user/delete', $url);
+		$data['insert'] = $this->url->link('user/user/insert', $url);
+		$data['delete'] = $this->url->link('user/user/delete', $url);
 
-		$this->data['users'] = array();
+		$data['users'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -121,7 +119,7 @@ class Admin_Controller_User_User extends Controller
 		}
 		unset($result);
 
-		$this->data['users'] = $results;
+		$data['users'] = $results;
 
 		$url = $order == 'ASC' ? '&order=DESC' : '&order=ASC';
 
@@ -134,7 +132,7 @@ class Admin_Controller_User_User extends Controller
 			'date_added'
 		);
 		foreach ($sort_by as $s) {
-			$this->data['sort_' . $s] = $this->url->link('user/user', 'sort=' . $s . $url);
+			$data['sort_' . $s] = $this->url->link('user/user', 'sort=' . $s . $url);
 		}
 
 		$url = $this->get_url(array(
@@ -144,23 +142,16 @@ class Admin_Controller_User_User extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $user_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('user/user_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('user/user_form');
-
 		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
 		$url = $this->get_url();
@@ -170,12 +161,12 @@ class Admin_Controller_User_User extends Controller
 		$this->breadcrumb->add(_l("User"), $this->url->link('user/user'));
 
 		if (!$user_id) {
-			$this->data['action'] = $this->url->link('user/user/insert', $url);
+			$data['action'] = $this->url->link('user/user/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('user/user/update', 'user_id=' . $user_id . $url);
+			$data['action'] = $this->url->link('user/user/update', 'user_id=' . $user_id . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('user/user', $url);
+		$data['cancel'] = $this->url->link('user/user', $url);
 
 		if ($user_id && !$this->request->isPost()) {
 			$user_info = $this->Model_User_User->getUser($user_id);
@@ -200,46 +191,41 @@ class Admin_Controller_User_User extends Controller
 
 		foreach ($data_items as $item => $default) {
 			if (isset($_POST[$item])) {
-				$this->data[$item] = $_POST[$item];
+				$data[$item] = $_POST[$item];
 			} elseif (!empty($user_info) && !in_array($item, $no_fill)) {
-				$this->data[$item] = $user_info[$item];
+				$data[$item] = $user_info[$item];
 			} else {
-				$this->data[$item] = $default;
+				$data[$item] = $default;
 			}
 		}
 
 		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		foreach ($manufacturers as $m) {
-			$this->data['manufacturers'][$m['manufacturer_id']] = $m['name'];
+			$data['manufacturers'][$m['manufacturer_id']] = $m['name'];
 		}
 
-		$this->data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
+		$data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
 
 		$contact = array(
 			'type' => 'user',
 			'id'   => $user_id
 		);
 
-		$this->data['contact_template'] = $this->call('includes/contact', $contact);
+		$data['contact_template'] = $this->call('includes/contact', $contact);
 
 
 		if (!$user_id) {
 			$this->breadcrumb->add(_l("Creat New User"), $this->url->link('user/user/insert'));
 		} else {
-			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
+			$this->breadcrumb->add($data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('user/user_form', $data));
 	}
 
 	private function validateForm()

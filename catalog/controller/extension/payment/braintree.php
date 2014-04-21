@@ -13,30 +13,27 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 	public function index()
 	{
 		//Entry Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-		$this->data['cards']          = $this->customer->getMeta('braintree_cards');
+		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
+		$data['cards']          = $this->customer->getMeta('braintree_cards');
 
-		$this->data['card_select'] = $this->select_card($this->customer->getMeta('default_payment_key'));
+		$data['card_select'] = $this->select_card($this->customer->getMeta('default_payment_key'));
 
 		//Action Buttons
-		$this->data['confirm'] = $this->url->link('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
+		$data['confirm'] = $this->url->link('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
 
-		$this->data['user_logged'] = $this->customer->isLogged();
-
-		//The Template
-		$this->view->load('extension/payment/braintree');
+		$data['user_logged'] = $this->customer->isLogged();
 
 		//Render
-		$this->render();
+		$this->render('extension/payment/braintree', $data);
 	}
 
 	public function select_card($select_id = '', $remove = false)
 	{
 		//Entry Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-		$this->data['cards']          = $this->System_Extension_Payment_Braintree->getCards();
+		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
+		$data['cards']          = $this->System_Extension_Payment_Braintree->getCards();
 
-		foreach ($this->data['cards'] as &$card) {
+		foreach ($data['cards'] as &$card) {
 			if ($remove) {
 				$card['remove'] = $this->url->link('extension/payment/braintree/remove_card', 'card_id=' . $card['id']);
 			}
@@ -47,13 +44,10 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		}
 
 		//Action Buttons
-		$this->data['register_card'] = $this->url->link('extension/payment/braintree/register_card');
-
-		//The Template
-		$this->view->load('extension/payment/braintree_card_select');
+		$data['register_card'] = $this->url->link('extension/payment/braintree/register_card');
 
 		//Render
-		return $this->render();
+		return $this->render('extension/payment/braintree_card_select', $data);
 	}
 
 	public function register_card()
@@ -73,25 +67,16 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 			'postcode'  => $payment_address ? $payment_address['postcode'] : '',
 		);
 
-		$this->data += $card_info + $defaults;
+		$data += $card_info + $defaults;
 
 		//Template Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
+		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
 
 		//Action Buttons
-		$this->data['submit'] = $this->url->link('extension/payment/braintree/add_card');
-
-		//The Template
-		$this->view->load('extension/payment/braintree_register_card');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer',
-		);
+		$data['submit'] = $this->url->link('extension/payment/braintree/add_card');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('extension/payment/braintree_register_card', $data));
 	}
 
 	public function add_card($card = array())

@@ -3,30 +3,23 @@ class Admin_Controller_Mail_Error extends Controller
 {
 	public function index()
 	{
-		$this->view->load('mail/error');
-
 		$this->document->setTitle(_l("Failed Email Messages"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Failed Email Messages"), $this->url->link('mail/error'));
 
-		$this->data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = $this->url->link('common/home');
 
 		$messages = $this->Model_Mail_Error->getFailedMessages();
 
-		$this->data['messages'] = $messages;
+		$data['messages'] = $messages;
 
-		$this->data['send_message']   = $this->url->link('mail/error/resend');
-		$this->data['resend_message'] = $this->url->link('mail/error/resend');
-		$this->data['delete_message'] = $this->url->link('mail/error/delete');
-		$this->data['load_message']   = $this->url->link('mail/error/load_message');
+		$data['send_message']   = $this->url->link('mail/error/resend');
+		$data['resend_message'] = $this->url->link('mail/error/resend');
+		$data['delete_message'] = $this->url->link('mail/error/delete');
+		$data['load_message']   = $this->url->link('mail/error/load_message');
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('mail/error', $data));
 	}
 
 	public function load_message()

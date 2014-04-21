@@ -6,8 +6,8 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order_id = $order['order_id'];
 
 		//Order Information
-		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
-		$this->data['link'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
+		$data['logo'] = $this->image->get($this->config->get('config_logo'));
+		$data['link'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'short');
 
@@ -42,16 +42,16 @@ class Catalog_Controller_Mail_Order extends Controller
 		unset($total);
 
 		//Urls
-		$this->data['order_info_url'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
+		$data['order_info_url'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
 
 		if (!empty($order['order_downloads'])) {
-			$this->data['downloads_url'] = $this->url->store($order['store_id'], 'account/download');
+			$data['downloads_url'] = $this->url->store($order['store_id'], 'account/download');
 		}
 
-		$this->data += $order;
+		$data += $order;
 
 		$store               = $this->config->getStore($order['store_id']);
-		$this->data['store'] = $store;
+		$data['store'] = $store;
 
 		$this->mail->init();
 
@@ -68,24 +68,19 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject($subject);
 
-		//Text Email
-		$this->view->load('mail/order_text');
-		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
+		$this->mail->setText(html_entity_decode($this->render('mail/order_text', $data), ENT_QUOTES, 'UTF-8'));
 
 		//HTML email
 		//TODO: Need to verify that these will always have line breaks!! use nl2br() if not...
-		$this->data['shipping_address_html'] = $this->data['shipping_address'];
-		$this->data['payment_address_html']  = $this->data['payment_address'];
+		$data['shipping_address_html'] = $data['shipping_address'];
+		$data['payment_address_html']  = $data['payment_address'];
 
-		$this->view->load('mail/order_html');
-		$this->mail->setHtml($this->render());
+		$this->mail->setHtml($this->render('mail/order_html', $data));
 
 		$this->mail->send();
 
 		// Admin Alert Mail
 		if ($this->config->get('config_alert_mail')) {
-			$this->view->load('mail/order_text_admin');
-
 			$to = $this->config->get('config_email');
 
 			if ($this->config->get('config_alert_emails')) {
@@ -98,7 +93,7 @@ class Catalog_Controller_Mail_Order extends Controller
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($store['name']);
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-			$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
+			$this->mail->setText(html_entity_decode($this->render('mail/order_text_admin', $data), ENT_QUOTES, 'UTF-8'));
 			$this->mail->send();
 		}
 	}

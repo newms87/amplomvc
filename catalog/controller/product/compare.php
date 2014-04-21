@@ -3,8 +3,6 @@ class Catalog_Controller_Product_Compare extends Controller
 {
 	public function index()
 	{
-		$this->view->load('product/compare');
-
 		if (!isset($this->session->data['compare'])) {
 			$this->session->set('compare', array());
 		}
@@ -27,16 +25,16 @@ class Catalog_Controller_Product_Compare extends Controller
 		$this->breadcrumb->add(_l("Product Comparison"), $this->url->link('product/compare'));
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
-		$this->data['products'] = array();
+		$data['products'] = array();
 
-		$this->data['attribute_groups'] = array();
+		$data['attribute_groups'] = array();
 
 		foreach ($this->session->data['compare'] as $key => $product_id) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
@@ -78,7 +76,7 @@ class Catalog_Controller_Product_Compare extends Controller
 					}
 				}
 
-				$this->data['products'][$product_id] = array(
+				$data['products'][$product_id] = array(
 					'product_id'   => $product_info['product_id'],
 					'name'         => $product_info['name'],
 					'thumb'        => $image,
@@ -100,10 +98,10 @@ class Catalog_Controller_Product_Compare extends Controller
 				);
 
 				foreach ($attribute_groups as $attribute_group) {
-					$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['name'] = $attribute_group['name'];
+					$data['attribute_groups'][$attribute_group['attribute_group_id']]['name'] = $attribute_group['name'];
 
 					foreach ($attribute_group['attributes'] as $attribute) {
-						$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['attributes'][$attribute['attribute_id']]['name'] = $attribute['name'];
+						$data['attribute_groups'][$attribute_group['attribute_group_id']]['attributes'][$attribute['attribute_id']]['name'] = $attribute['name'];
 					}
 				}
 			} else {
@@ -111,18 +109,9 @@ class Catalog_Controller_Product_Compare extends Controller
 			}
 		}
 
-		$this->data['continue'] = $this->url->link('common/home');
+		$data['continue'] = $this->url->link('common/home');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/compare', $data));
 	}
 
 	public function add()

@@ -3,11 +3,10 @@ class Catalog_Controller_Block_Widget_Faq extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/widget/faq');
 		//Your code goes here...
 
-		$this->data = $settings;
+		$data = $settings;
 
-		$this->render();
+		$this->render('block/widget/faq', $data);
 	}
 }

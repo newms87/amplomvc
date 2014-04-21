@@ -197,8 +197,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	private function getList()
 	{
-		$this->view->load('sale/return_list');
-
 		if (isset($_GET['filter_return_id'])) {
 			$filter_return_id = $_GET['filter_return_id'];
 		} else {
@@ -314,10 +312,10 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
-		$this->data['insert'] = $this->url->link('sale/return/insert', $url);
-		$this->data['delete'] = $this->url->link('sale/return/delete', $url);
+		$data['insert'] = $this->url->link('sale/return/insert', $url);
+		$data['delete'] = $this->url->link('sale/return/delete', $url);
 
-		$this->data['returns'] = array();
+		$data['returns'] = array();
 
 		$data = array(
 			'filter_return_id'        => $filter_return_id,
@@ -351,7 +349,7 @@ class Admin_Controller_Sale_Return extends Controller
 				'href' => $this->url->link('sale/return/update', 'return_id=' . $result['return_id'] . $url)
 			);
 
-			$this->data['returns'][] = array(
+			$data['returns'][] = array(
 				'return_id'     => $result['return_id'],
 				'order_id'      => $result['order_id'],
 				'customer'      => $result['customer'],
@@ -366,21 +364,21 @@ class Admin_Controller_Sale_Return extends Controller
 		}
 
 		if (isset($this->session->data['error'])) {
-			$this->data['error_warning'] = $this->session->data['error'];
+			$data['error_warning'] = $this->session->data['error'];
 
 			unset($this->session->data['error']);
 		} elseif (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -427,14 +425,14 @@ class Admin_Controller_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_return_id']     = $this->url->link('sale/return', 'sort=r.return_id' . $url);
-		$this->data['sort_order_id']      = $this->url->link('sale/return', 'sort=r.order_id' . $url);
-		$this->data['sort_customer']      = $this->url->link('sale/return', 'sort=customer' . $url);
-		$this->data['sort_product']       = $this->url->link('sale/return', 'sort=product' . $url);
-		$this->data['sort_model']         = $this->url->link('sale/return', 'sort=model' . $url);
-		$this->data['sort_status']        = $this->url->link('sale/return', 'sort=status' . $url);
-		$this->data['sort_date_added']    = $this->url->link('sale/return', 'sort=r.date_added' . $url);
-		$this->data['sort_date_modified'] = $this->url->link('sale/return', 'sort=r.date_modified' . $url);
+		$data['sort_return_id']     = $this->url->link('sale/return', 'sort=r.return_id' . $url);
+		$data['sort_order_id']      = $this->url->link('sale/return', 'sort=r.order_id' . $url);
+		$data['sort_customer']      = $this->url->link('sale/return', 'sort=customer' . $url);
+		$data['sort_product']       = $this->url->link('sale/return', 'sort=product' . $url);
+		$data['sort_model']         = $this->url->link('sale/return', 'sort=model' . $url);
+		$data['sort_status']        = $this->url->link('sale/return', 'sort=status' . $url);
+		$data['sort_date_added']    = $this->url->link('sale/return', 'sort=r.date_added' . $url);
+		$data['sort_date_modified'] = $this->url->link('sale/return', 'sort=r.date_modified' . $url);
 
 		$url = '';
 
@@ -480,80 +478,73 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $return_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_return_id']        = $filter_return_id;
-		$this->data['filter_order_id']         = $filter_order_id;
-		$this->data['filter_customer']         = $filter_customer;
-		$this->data['filter_product']          = $filter_product;
-		$this->data['filter_model']            = $filter_model;
-		$this->data['filter_return_status_id'] = $filter_return_status_id;
-		$this->data['filter_date_added']       = $filter_date_added;
-		$this->data['filter_date_modified']    = $filter_date_modified;
+		$data['filter_return_id']        = $filter_return_id;
+		$data['filter_order_id']         = $filter_order_id;
+		$data['filter_customer']         = $filter_customer;
+		$data['filter_product']          = $filter_product;
+		$data['filter_model']            = $filter_model;
+		$data['filter_return_status_id'] = $filter_return_status_id;
+		$data['filter_date_added']       = $filter_date_added;
+		$data['filter_date_modified']    = $filter_date_modified;
 
-		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
+		$data['data_return_statuses'] = $this->order->getReturnStatuses();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/return_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('sale/return_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['order_id'])) {
-			$this->data['error_order_id'] = $this->error['order_id'];
+			$data['error_order_id'] = $this->error['order_id'];
 		} else {
-			$this->data['error_order_id'] = '';
+			$data['error_order_id'] = '';
 		}
 
 		if (isset($this->error['firstname'])) {
-			$this->data['error_firstname'] = $this->error['firstname'];
+			$data['error_firstname'] = $this->error['firstname'];
 		} else {
-			$this->data['error_firstname'] = '';
+			$data['error_firstname'] = '';
 		}
 
 		if (isset($this->error['lastname'])) {
-			$this->data['error_lastname'] = $this->error['lastname'];
+			$data['error_lastname'] = $this->error['lastname'];
 		} else {
-			$this->data['error_lastname'] = '';
+			$data['error_lastname'] = '';
 		}
 
 		if (isset($this->error['email'])) {
-			$this->data['error_email'] = $this->error['email'];
+			$data['error_email'] = $this->error['email'];
 		} else {
-			$this->data['error_email'] = '';
+			$data['error_email'] = '';
 		}
 
 		if (isset($this->error['telephone'])) {
-			$this->data['error_telephone'] = $this->error['telephone'];
+			$data['error_telephone'] = $this->error['telephone'];
 		} else {
-			$this->data['error_telephone'] = '';
+			$data['error_telephone'] = '';
 		}
 
 		if (isset($this->error['product'])) {
-			$this->data['error_product'] = $this->error['product'];
+			$data['error_product'] = $this->error['product'];
 		} else {
-			$this->data['error_product'] = '';
+			$data['error_product'] = '';
 		}
 
 		if (isset($this->error['model'])) {
-			$this->data['error_model'] = $this->error['model'];
+			$data['error_model'] = $this->error['model'];
 		} else {
-			$this->data['error_model'] = '';
+			$data['error_model'] = '';
 		}
 
 		$url = '';
@@ -606,165 +597,160 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
 		if (!isset($_GET['return_id'])) {
-			$this->data['action'] = $this->url->link('sale/return/insert', $url);
+			$data['action'] = $this->url->link('sale/return/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('sale/return/update', 'return_id=' . $_GET['return_id'] . $url);
+			$data['action'] = $this->url->link('sale/return/update', 'return_id=' . $_GET['return_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('sale/return', $url);
+		$data['cancel'] = $this->url->link('sale/return', $url);
 
 		if (isset($_GET['return_id']) && !$this->request->isPost()) {
 			$return_info = $this->Model_Sale_Return->getReturn($_GET['return_id']);
 		}
 
 		if (isset($_POST['order_id'])) {
-			$this->data['order_id'] = $_POST['order_id'];
+			$data['order_id'] = $_POST['order_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['order_id'] = $return_info['order_id'];
+			$data['order_id'] = $return_info['order_id'];
 		} else {
-			$this->data['order_id'] = '';
+			$data['order_id'] = '';
 		}
 
 		if (isset($_POST['date_ordered'])) {
-			$this->data['date_ordered'] = $_POST['date_ordered'];
+			$data['date_ordered'] = $_POST['date_ordered'];
 		} elseif (!empty($return_info)) {
-			$this->data['date_ordered'] = $return_info['date_ordered'];
+			$data['date_ordered'] = $return_info['date_ordered'];
 		} else {
-			$this->data['date_ordered'] = '';
+			$data['date_ordered'] = '';
 		}
 
 		if (isset($_POST['customer'])) {
-			$this->data['customer'] = $_POST['customer'];
+			$data['customer'] = $_POST['customer'];
 		} elseif (!empty($return_info)) {
-			$this->data['customer'] = $return_info['customer'];
+			$data['customer'] = $return_info['customer'];
 		} else {
-			$this->data['customer'] = '';
+			$data['customer'] = '';
 		}
 
 		if (isset($_POST['customer_id'])) {
-			$this->data['customer_id'] = $_POST['customer_id'];
+			$data['customer_id'] = $_POST['customer_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['customer_id'] = $return_info['customer_id'];
+			$data['customer_id'] = $return_info['customer_id'];
 		} else {
-			$this->data['customer_id'] = '';
+			$data['customer_id'] = '';
 		}
 
 		if (isset($_POST['firstname'])) {
-			$this->data['firstname'] = $_POST['firstname'];
+			$data['firstname'] = $_POST['firstname'];
 		} elseif (!empty($return_info)) {
-			$this->data['firstname'] = $return_info['firstname'];
+			$data['firstname'] = $return_info['firstname'];
 		} else {
-			$this->data['firstname'] = '';
+			$data['firstname'] = '';
 		}
 
 		if (isset($_POST['lastname'])) {
-			$this->data['lastname'] = $_POST['lastname'];
+			$data['lastname'] = $_POST['lastname'];
 		} elseif (!empty($return_info)) {
-			$this->data['lastname'] = $return_info['lastname'];
+			$data['lastname'] = $return_info['lastname'];
 		} else {
-			$this->data['lastname'] = '';
+			$data['lastname'] = '';
 		}
 
 		if (isset($_POST['email'])) {
-			$this->data['email'] = $_POST['email'];
+			$data['email'] = $_POST['email'];
 		} elseif (!empty($return_info)) {
-			$this->data['email'] = $return_info['email'];
+			$data['email'] = $return_info['email'];
 		} else {
-			$this->data['email'] = '';
+			$data['email'] = '';
 		}
 
 		if (isset($_POST['telephone'])) {
-			$this->data['telephone'] = $_POST['telephone'];
+			$data['telephone'] = $_POST['telephone'];
 		} elseif (!empty($return_info)) {
-			$this->data['telephone'] = $return_info['telephone'];
+			$data['telephone'] = $return_info['telephone'];
 		} else {
-			$this->data['telephone'] = '';
+			$data['telephone'] = '';
 		}
 
 		if (isset($_POST['product'])) {
-			$this->data['product'] = $_POST['product'];
+			$data['product'] = $_POST['product'];
 		} elseif (!empty($return_info)) {
-			$this->data['product'] = $return_info['product'];
+			$data['product'] = $return_info['product'];
 		} else {
-			$this->data['product'] = '';
+			$data['product'] = '';
 		}
 
 		if (isset($_POST['product_id'])) {
-			$this->data['product_id'] = $_POST['product_id'];
+			$data['product_id'] = $_POST['product_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['product_id'] = $return_info['product_id'];
+			$data['product_id'] = $return_info['product_id'];
 		} else {
-			$this->data['product_id'] = '';
+			$data['product_id'] = '';
 		}
 
 		if (isset($_POST['model'])) {
-			$this->data['model'] = $_POST['model'];
+			$data['model'] = $_POST['model'];
 		} elseif (!empty($return_info)) {
-			$this->data['model'] = $return_info['model'];
+			$data['model'] = $return_info['model'];
 		} else {
-			$this->data['model'] = '';
+			$data['model'] = '';
 		}
 
 		if (isset($_POST['quantity'])) {
-			$this->data['quantity'] = $_POST['quantity'];
+			$data['quantity'] = $_POST['quantity'];
 		} elseif (!empty($return_info)) {
-			$this->data['quantity'] = $return_info['quantity'];
+			$data['quantity'] = $return_info['quantity'];
 		} else {
-			$this->data['quantity'] = '';
+			$data['quantity'] = '';
 		}
 
 		if (isset($_POST['opened'])) {
-			$this->data['opened'] = $_POST['opened'];
+			$data['opened'] = $_POST['opened'];
 		} elseif (!empty($return_info)) {
-			$this->data['opened'] = $return_info['opened'];
+			$data['opened'] = $return_info['opened'];
 		} else {
-			$this->data['opened'] = '';
+			$data['opened'] = '';
 		}
 
 		if (isset($_POST['return_reason_id'])) {
-			$this->data['return_reason_id'] = $_POST['return_reason_id'];
+			$data['return_reason_id'] = $_POST['return_reason_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['return_reason_id'] = $return_info['return_reason_id'];
+			$data['return_reason_id'] = $return_info['return_reason_id'];
 		} else {
-			$this->data['return_reason_id'] = '';
+			$data['return_reason_id'] = '';
 		}
 
-		$this->data['return_reasons'] = $this->Model_Localisation_ReturnReason->getReturnReasons();
+		$data['return_reasons'] = $this->Model_Localisation_ReturnReason->getReturnReasons();
 
 		if (isset($_POST['return_action_id'])) {
-			$this->data['return_action_id'] = $_POST['return_action_id'];
+			$data['return_action_id'] = $_POST['return_action_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['return_action_id'] = $return_info['return_action_id'];
+			$data['return_action_id'] = $return_info['return_action_id'];
 		} else {
-			$this->data['return_action_id'] = '';
+			$data['return_action_id'] = '';
 		}
 
-		$this->data['return_actions'] = $this->Model_Localisation_ReturnAction->getReturnActions();
+		$data['return_actions'] = $this->Model_Localisation_ReturnAction->getReturnActions();
 
 		if (isset($_POST['comment'])) {
-			$this->data['comment'] = $_POST['comment'];
+			$data['comment'] = $_POST['comment'];
 		} elseif (!empty($return_info)) {
-			$this->data['comment'] = $return_info['comment'];
+			$data['comment'] = $return_info['comment'];
 		} else {
-			$this->data['comment'] = '';
+			$data['comment'] = '';
 		}
 
 		if (isset($_POST['return_status_id'])) {
-			$this->data['return_status_id'] = $_POST['return_status_id'];
+			$data['return_status_id'] = $_POST['return_status_id'];
 		} elseif (!empty($return_info)) {
-			$this->data['return_status_id'] = $return_info['return_status_id'];
+			$data['return_status_id'] = $return_info['return_status_id'];
 		} else {
-			$this->data['return_status_id'] = '';
+			$data['return_status_id'] = '';
 		}
 
-		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
+		$data['data_return_statuses'] = $this->order->getReturnStatuses();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/return_form', $data));
 	}
 
 	public function info()
@@ -778,7 +764,6 @@ class Admin_Controller_Sale_Return extends Controller
 		$return_info = $this->Model_Sale_Return->getReturn($return_id);
 
 		if ($return_info) {
-			$this->view->load('sale/return_info');
 			$this->document->setTitle(_l("Product Returns"));
 
 			$url = '';
@@ -830,56 +815,45 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 			$this->breadcrumb->add(_l("Product Returns"), $this->url->link('sale/return', $url));
 
-			$this->data['cancel'] = $this->url->link('sale/return', $url);
+			$data['cancel'] = $this->url->link('sale/return', $url);
 
-			$this->data = $return_info;
+			$data = $return_info;
 
 			$order_info = $this->order->get($return_info['order_id']);
 
 			if ($return_info['order_id'] && $order_info) {
-				$this->data['order'] = $this->url->link('sale/order/info', 'order_id=' . $return_info['order_id']);
+				$data['order'] = $this->url->link('sale/order/info', 'order_id=' . $return_info['order_id']);
 			} else {
-				$this->data['order'] = '';
+				$data['order'] = '';
 			}
 
-			$this->data['date_ordered'] = date('short', strtotime($return_info['date_ordered']));
+			$data['date_ordered'] = date('short', strtotime($return_info['date_ordered']));
 
 			if ($return_info['customer_id']) {
-				$this->data['customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $return_info['customer_id']);
+				$data['customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $return_info['customer_id']);
 			} else {
-				$this->data['customer'] = '';
+				$data['customer'] = '';
 			}
 
-			$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
-			$this->data['data_return_reasons']  = $this->order->getReturnReasons();
-			$this->data['data_return_actions']  = $this->order->getReturnActions();
+			$data['data_return_statuses'] = $this->order->getReturnStatuses();
+			$data['data_return_reasons']  = $this->order->getReturnReasons();
+			$data['data_return_actions']  = $this->order->getReturnActions();
 
-			$this->data['date_added']    = date('short', strtotime($return_info['date_added']));
-			$this->data['date_modified'] = date('short', strtotime($return_info['date_modified']));
+			$data['date_added']    = date('short', strtotime($return_info['date_added']));
+			$data['date_modified'] = date('short', strtotime($return_info['date_modified']));
 
-			$this->data['opened'] = $return_info['opened'] ? _l("Yes") : _l("No");
+			$data['opened'] = $return_info['opened'] ? _l("Yes") : _l("No");
 
-			$this->data['comment'] = nl2br($return_info['comment']);
+			$data['comment'] = nl2br($return_info['comment']);
 
-			$this->children = array(
-				'common/header',
-				'common/footer'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('sale/return_info', $data));
 		} else {
-			$this->view->load('error/not_found');
 			$this->document->setTitle(_l("Product Returns"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 			$this->breadcrumb->add(_l("Product Returns"), $this->url->link('error/not_found'));
 
-			$this->children = array(
-				'common/header',
-				'common/footer'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('error/not_found', $data));
 		}
 	}
 
@@ -956,8 +930,6 @@ class Admin_Controller_Sale_Return extends Controller
 
 	public function history()
 	{
-		$this->view->load('sale/return_history');
-
 		if ($this->request->isPost() && $this->user->can('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 
@@ -974,12 +946,12 @@ class Admin_Controller_Sale_Return extends Controller
 			$page = 1;
 		}
 
-		$this->data['histories'] = array();
+		$data['histories'] = array();
 
 		$results = $this->Model_Sale_Return->getReturnHistories($_GET['return_id'], ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$this->data['histories'][] = array(
+			$data['histories'][] = array(
 				'notify'     => $result['notify'] ? _l("Yes") : _l("No"),
 				'status'     => $result['status'],
 				'comment'    => nl2br($result['comment']),
@@ -991,9 +963,9 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $history_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/return_history', $data));
 	}
 }

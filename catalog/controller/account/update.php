@@ -50,16 +50,16 @@ class Catalog_Controller_Account_Update extends Controller
 			'newsletter' => 1,
 		);
 
-		$this->data += $customer_info + $defaults;
+		$data += $customer_info + $defaults;
 
 		//Template Data
-		$default_shipping_address_id = isset($this->data['metadata']['default_shipping_address_id']) ? $this->data['metadata']['default_shipping_address_id'] : null;
+		$default_shipping_address_id = isset($data['metadata']['default_shipping_address_id']) ? $data['metadata']['default_shipping_address_id'] : null;
 
 		$addresses = $this->customer->getShippingAddresses();
 
 		if (!empty($addresses) && (!$default_shipping_address_id || !array_search_key('address_id', $default_shipping_address_id, $addresses))) {
 			$first_address                                         = current($addresses);
-			$this->data['metadata']['default_shipping_address_id'] = $first_address['address_id'];
+			$data['metadata']['default_shipping_address_id'] = $first_address['address_id'];
 		}
 
 		foreach ($addresses as &$address) {
@@ -68,32 +68,19 @@ class Catalog_Controller_Account_Update extends Controller
 		}
 		unset($address);
 
-		$this->data['data_addresses'] = $addresses;
+		$data['data_addresses'] = $addresses;
 
 
 		//TODO: This is a temporary hack to integrate with braintree
-		$this->data['card_select'] = $this->call('extension/payment/braintree/select_card', array(null, true));
+		$data['card_select'] = $this->call('extension/payment/braintree/select_card', array(null, true));
 
 		//Action Buttons
-		$this->data['save']        = $this->url->link('account/update');
-		$this->data['back']        = $this->url->link('account/account');
-		$this->data['add_address'] = $this->url->link('account/address/update');
-
-		//The Template
-		$this->view->load('account/update');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['save']        = $this->url->link('account/update');
+		$data['back']        = $this->url->link('account/account');
+		$data['add_address'] = $this->url->link('account/address/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/update', $data));
 	}
 
 	public function remove_address()

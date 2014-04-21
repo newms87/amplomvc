@@ -18,15 +18,13 @@ class Catalog_Controller_Account_Download extends Controller
 		$download_total = $this->Model_Account_Download->getTotalDownloads();
 
 		if ($download_total) {
-			$this->view->load('account/download');
-
 			if (isset($_GET['page'])) {
 				$page = $_GET['page'];
 			} else {
 				$page = 1;
 			}
 
-			$this->data['downloads'] = array();
+			$data['downloads'] = array();
 
 			$results = $this->Model_Account_Download->getDownloads(($page - 1) * $this->config->get('config_catalog_limit'), $this->config->get('config_catalog_limit'));
 
@@ -53,7 +51,7 @@ class Catalog_Controller_Account_Download extends Controller
 						$i++;
 					}
 
-					$this->data['downloads'][] = array(
+					$data['downloads'][] = array(
 						'order_id'   => $result['order_id'],
 						'date_added' => $this->date->format($result['date_added'], 'short'),
 						'name'       => $result['name'],
@@ -66,37 +64,17 @@ class Catalog_Controller_Account_Download extends Controller
 
 			$this->pagination->init();
 			$this->pagination->total  = $download_total;
-			$this->data['pagination'] = $this->pagination->render();
+			$data['pagination'] = $this->pagination->render();
 
-			$this->data['continue'] = $this->url->link('account/account');
+			$data['continue'] = $this->url->link('account/account');
 
-			$this->children = array(
-				'area/left',
-				'area/right',
-				'area/top',
-				'area/bottom',
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('account/download', $data));
 		} else {
-			$this->view->load('error/not_found');
-
 			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
 
-			$this->data['continue'] = $this->url->link('account/account');
+			$data['continue'] = $this->url->link('account/account');
 
-			$this->children = array(
-				'area/left',
-				'area/right',
-				'area/top',
-				'area/bottom',
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('error/not_found', $data));
 		}
 	}
 

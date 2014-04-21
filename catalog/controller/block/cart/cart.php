@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$this->data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('account/login'), $this->url->link('account/register'));
+			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('account/login'), $this->url->link('account/register'));
 		}
 
 		if (!$this->cart->validate()) {
@@ -79,7 +79,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 			unset($product);
 
-			$this->data['cart_products'] = $cart_products;
+			$data['cart_products'] = $cart_products;
 		}
 
 		// Gift Voucher
@@ -91,29 +91,29 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 			unset($voucher);
 
-			$this->data['cart_vouchers'] = $vouchers;
+			$data['cart_vouchers'] = $vouchers;
 		}
 
 		//Template Data
-		$this->data['show_return_policy'] = $show_return_policy;
+		$data['show_return_policy'] = $show_return_policy;
 
 		//Url
-		$this->data['url_cart'] = $this->url->link('cart/cart');
-		$this->data['url_block_cart'] = $this->url->link("block/cart/cart");
+		$data['url_cart'] = $this->url->link('cart/cart');
+		$data['url_block_cart'] = $this->url->link("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
 
-		$this->data['cart_inline'] = $carts['inline'];
-		$this->data['cart_extend'] = $carts['extend'];
+		$data['cart_inline'] = $carts['inline'];
+		$data['cart_extend'] = $carts['extend'];
 
-		$this->data['cart_empty'] = $this->cart->isEmpty();
+		$data['cart_empty'] = $this->cart->isEmpty();
 
 		//Ajax Messages
 		if ($this->request->isAjax()) {
-			$this->data['messages'] = $this->message->fetch();
+			$data['messages'] = $this->message->fetch();
 
-			if ($this->data['cart_empty']) {
+			if ($data['cart_empty']) {
 				$this->request->redirectBrowser($this->url->link('cart/cart'));
 			}
 
@@ -125,10 +125,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 
 		}
 
-		//The Template
-		$this->view->load('block/cart/cart');
-
 		//Render
-		$this->render();
+		$this->render('block/cart/cart', $data);
 	}
 }

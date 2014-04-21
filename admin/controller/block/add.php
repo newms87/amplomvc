@@ -33,12 +33,6 @@ class Admin_Controller_Block_Add extends Controller
 		$data['save']   = $this->url->link('block/add/add');
 		$data['cancel'] = $this->url->link('block/block');
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
 		//Render
 		$this->response->setOutput($this->render('block/add', $data));
 	}

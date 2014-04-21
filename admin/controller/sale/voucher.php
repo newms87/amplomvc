@@ -83,9 +83,6 @@ class Admin_Controller_Sale_Voucher extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Gift Voucher"));
 
-		//The Template
-		$this->view->load('sale/voucher_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Voucher List"), $this->url->link('sale/voucher'));
@@ -184,10 +181,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable"),
 			),
@@ -202,37 +199,28 @@ class Admin_Controller_Sale_Voucher extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'sale/voucher/batch_update';
+		$data['batch_update'] = 'sale/voucher/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $voucher_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('sale/voucher/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('sale/voucher/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/voucher_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Gift Voucher"));
-
-		//The Template
-		$this->view->load('sale/voucher_form');
 
 		//Insert or Update
 		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
@@ -267,40 +255,34 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($voucher_info[$key])) {
-				$this->data[$key] = $voucher_info[$key];
+				$data[$key] = $voucher_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Template Data
-		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
+		$data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
-		$this->data['voucher_id'] = $voucher_id;
+		$data['voucher_id'] = $voucher_id;
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Ajax Urls
-		$this->data['url_history'] = $this->url->link('sale/voucher/history', 'voucher_id=' . $voucher_id);
+		$data['url_history'] = $this->url->link('sale/voucher/history', 'voucher_id=' . $voucher_id);
 
 		//Action Buttons
-		$this->data['send']   = $this->url->link('sale/voucher/send', 'voucher_id=' . $voucher_id);
-		$this->data['save']   = $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id);
-		$this->data['cancel'] = $this->url->link('sale/voucher');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['send']   = $this->url->link('sale/voucher/send', 'voucher_id=' . $voucher_id);
+		$data['save']   = $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id);
+		$data['cancel'] = $this->url->link('sale/voucher');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/voucher_form', $data));
 	}
 
 	private function validateForm()
@@ -374,19 +356,18 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	public function history()
 	{
-		$this->view->load('sale/voucher_history');
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
 		}
 
-		$this->data['histories'] = array();
+		$data['histories'] = array();
 
 		$results = $this->Model_Sale_Voucher->getVoucherHistories($_GET['voucher_id'], ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$this->data['histories'][] = array(
+			$data['histories'][] = array(
 				'order_id'   => $result['order_id'],
 				'customer'   => $result['customer'],
 				'amount'     => $this->currency->format($result['amount'], $this->config->get('config_currency')),
@@ -398,10 +379,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $history_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/voucher_history', $data));
 	}
 
 	public function send()

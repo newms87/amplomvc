@@ -3,8 +3,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/cart/shipping');
-		$this->data['action'] = '';
+		$data['action'] = '';
 
 		$defaults = array(
 			'country_id'      => $this->config->get('config_country_id'),
@@ -15,11 +14,11 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($this->session->data[$key])) {
-				$this->data[$key] = $this->session->data[$key];
+				$data[$key] = $this->session->data[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
@@ -29,22 +28,22 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		$this->form->set_fields('firstname', 'lastname', 'address_1', 'company', 'address_2', 'city');
 		$this->form->show_form_tag(false);
 
-		$this->data['form_address'] = $this->form->build();
+		$data['form_address'] = $this->form->build();
 
 
-		$this->data['shipping_method'] = !empty($this->data['shipping_method']) ? $this->data['shipping_method'] : false;
+		$data['shipping_method'] = !empty($data['shipping_method']) ? $data['shipping_method'] : false;
 
 		//Ajax Urls
-		$this->data['url_quote'] = $this->url->link('block/cart/shipping/quote');
+		$data['url_quote'] = $this->url->link('block/cart/shipping/quote');
 
 		//Action Buttons
-		$this->data['apply'] = $this->url->link('block/cart/shipping/apply');
+		$data['apply'] = $this->url->link('block/cart/shipping/apply');
 
-		$this->data['redirect'] = $this->url->here();
+		$data['redirect'] = $this->url->here();
 
-		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
+		$data['countries'] = $this->Model_Localisation_Country->getCountries();
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/cart/shipping', $data));
 	}
 
 	public function quote()

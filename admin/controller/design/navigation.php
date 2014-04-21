@@ -6,9 +6,6 @@ class Admin_Controller_Design_Navigation extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Navigation"));
 
-		//The Template
-		$this->view->load('design/navigation_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
@@ -100,10 +97,10 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable"),
 			),
@@ -117,25 +114,19 @@ class Admin_Controller_Design_Navigation extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url_query);
+		$data['batch_update'] = $this->url->link('design/navigation/batch_update', $url_query);
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $navigation_groups_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('design/navigation/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('design/navigation/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/navigation_list', $data));
 	}
 
 	public function update()
@@ -253,10 +244,10 @@ class Admin_Controller_Design_Navigation extends Controller
 			'status' => 1,
 		);
 
-		$this->data += $navigation_group_info + $defaults;
+		$data += $navigation_group_info + $defaults;
 
 		//Link AC Template
-		$this->data['links']['__ac_template__'] = array(
+		$data['links']['__ac_template__'] = array(
 			'navigation_id' => '',
 			'parent_id'     => '',
 			'name'          => 'new_link __ac_template__',
@@ -269,7 +260,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		);
 
 		//Template Data
-		$this->data['categories'] = $this->Model_Catalog_Category->getCategoryTree();
+		$data['categories'] = $this->Model_Catalog_Category->getCategoryTree();
 
 		$admin_store = array(
 			'admin' => array(
@@ -278,29 +269,20 @@ class Admin_Controller_Design_Navigation extends Controller
 			)
 		);
 
-		$this->data['data_stores']     = $admin_store + $this->Model_Setting_Store->getStores();
-		$this->data['data_conditions'] = $this->condition->getConditions();
+		$data['data_stores']     = $admin_store + $this->Model_Setting_Store->getStores();
+		$data['data_conditions'] = $this->condition->getConditions();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
-		$this->data['cancel'] = $this->url->link('design/navigation');
-
-		//The Template
-		$this->view->load('design/navigation_form');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
+		$data['cancel'] = $this->url->link('design/navigation');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/navigation_form', $data));
 	}
 
 	public function choose_link()

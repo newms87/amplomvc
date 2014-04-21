@@ -6,9 +6,6 @@ class Admin_Controller_Block_Information_Contact extends Controller
 {
 	public function settings(&$settings)
 	{
-		//Template-(Lanuage preloaded)
-		$this->view->load('block/information/contact_settings');
-
 		$defaults = array(
 			'contact_info' => _l("Please feel free to contact us with any questions!"),
 		);
@@ -20,10 +17,10 @@ class Admin_Controller_Block_Information_Contact extends Controller
 		}
 
 		//Send data to template
-		$this->data['settings'] = $settings;
+		$data['settings'] = $settings;
 
 		//Render
-		$this->render();
+		$this->render('block/information/contact_settings', $data);
 	}
 
 	public function save()

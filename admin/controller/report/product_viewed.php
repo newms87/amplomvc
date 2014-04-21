@@ -3,8 +3,6 @@ class Admin_Controller_Report_ProductViewed extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/product_viewed');
-
 		$this->document->setTitle(_l("Products Viewed Report"));
 
 		if (isset($_GET['page'])) {
@@ -61,7 +59,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$product_views_total = $this->Model_Report_Product->getTotalProductViews();
 
-		$this->data['products'] = array();
+		$data['products'] = array();
 
 		$results = $this->Model_Report_Product->getProductsViewed($data);
 
@@ -72,7 +70,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 				$percent = 0;
 			}
 
-			$this->data['products'][] = array(
+			$data['products'][] = array(
 				'name'          => $result['name'],
 				'model'         => $result['model'],
 				'viewed'        => $result['views'],
@@ -85,18 +83,13 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$url = $this->get_url();
 
-		$this->data['reset'] = $this->url->link('report/product_viewed/reset', $url);
+		$data['reset'] = $this->url->link('report/product_viewed/reset', $url);
 
 		$this->pagination->init();
 		$this->pagination->total  = $product_viewed_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/product_viewed', $data));
 	}
 
 	public function reset()

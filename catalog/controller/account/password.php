@@ -5,8 +5,6 @@ class Catalog_Controller_Account_Password extends Controller
 
 	public function index()
 	{
-		$this->view->load('account/password');
-
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/password'));
 
@@ -29,43 +27,34 @@ class Catalog_Controller_Account_Password extends Controller
 		$this->breadcrumb->add(_l("Change Password"), $this->url->link('account/password'));
 
 		if (isset($this->error['password'])) {
-			$this->data['error_password'] = $this->error['password'];
+			$data['error_password'] = $this->error['password'];
 		} else {
-			$this->data['error_password'] = '';
+			$data['error_password'] = '';
 		}
 
 		if (isset($this->error['confirm'])) {
-			$this->data['error_confirm'] = $this->error['confirm'];
+			$data['error_confirm'] = $this->error['confirm'];
 		} else {
-			$this->data['error_confirm'] = '';
+			$data['error_confirm'] = '';
 		}
 
-		$this->data['action'] = $this->url->link('account/password');
+		$data['action'] = $this->url->link('account/password');
 
 		if (isset($_POST['password'])) {
-			$this->data['password'] = $_POST['password'];
+			$data['password'] = $_POST['password'];
 		} else {
-			$this->data['password'] = '';
+			$data['password'] = '';
 		}
 
 		if (isset($_POST['confirm'])) {
-			$this->data['confirm'] = $_POST['confirm'];
+			$data['confirm'] = $_POST['confirm'];
 		} else {
-			$this->data['confirm'] = '';
+			$data['confirm'] = '';
 		}
 
-		$this->data['back'] = $this->url->link('account/account');
+		$data['back'] = $this->url->link('account/account');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/password', $data));
 	}
 
 	private function validate()

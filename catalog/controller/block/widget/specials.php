@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/widget/specials');
 		$sort_filter = array(
 			'has_special' => true,
 		);
@@ -19,7 +18,7 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 				'template' => 'block/product/product_list',
 			);
 
-			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
+			$data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sort
 			$sorts = array(
@@ -29,18 +28,18 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 				'sort=price&order=DESC'  => _l("Price (High &gt; Low)"),
 			);
 
-			$this->data['sorts'] = $this->sort->render_sort($sorts);
+			$data['sorts'] = $this->sort->render_sort($sorts);
 
-			$this->data['limits'] = $this->sort->renderLimits();
+			$data['limits'] = $this->sort->renderLimits();
 
 			$this->pagination->init();
 			$this->pagination->total = $product_total;
 
-			$this->data['pagination'] = $this->pagination->render();
+			$data['pagination'] = $this->pagination->render();
 		} else {
-			$this->data['continue'] = $this->url->link('common/home');
+			$data['continue'] = $this->url->link('common/home');
 		}
 
-		$this->render();
+		$this->render('block/widget/specials', $data);
 	}
 }

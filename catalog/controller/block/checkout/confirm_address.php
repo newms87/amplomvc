@@ -3,13 +3,12 @@ class Catalog_Controller_Block_Checkout_ConfirmAddress extends Controller
 {
 	public function index($settings = array())
 	{
-		$this->view->load('block/checkout/confirm_address');
 		if ($this->cart->hasShipping() && $this->cart->hasShippingAddress()) {
 			$shipping_address = $this->cart->getShippingAddress();
 
 			//Format Shipping Addresses
 			if ($shipping_address) {
-				$this->data['shipping_address'] = $this->address->format($shipping_address);
+				$data['shipping_address'] = $this->address->format($shipping_address);
 			}
 		}
 
@@ -17,11 +16,11 @@ class Catalog_Controller_Block_Checkout_ConfirmAddress extends Controller
 			$payment_address = $this->cart->getPaymentAddress();
 
 			if ($payment_address) {
-				$this->data['payment_address'] = $this->address->format($payment_address);
+				$data['payment_address'] = $this->address->format($payment_address);
 			}
 		}
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/confirm_address', $data));
 	}
 
 	public function string_to_html($format)

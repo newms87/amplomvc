@@ -90,7 +90,6 @@ require_once(_ac_mod_file(DIR_DATABASE . 'db.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/controller.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/model.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'engine/view.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/router.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/registry.php'));

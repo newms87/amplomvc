@@ -3,8 +3,6 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/sale_coupon');
-
 		$this->document->setTitle(_l("Coupon Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -42,7 +40,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Coupon Report"), $this->url->link('report/sale_coupon', $url));
 
-		$this->data['coupons'] = array();
+		$data['coupons'] = array();
 
 		$data = array(
 			'filter_date_start' => $filter_date_start,
@@ -63,7 +61,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 				'href' => $this->url->link('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
 			);
 
-			$this->data['coupons'][] = array(
+			$data['coupons'][] = array(
 				'name'   => $result['name'],
 				'code'   => $result['code'],
 				'orders' => $result['orders'],
@@ -84,16 +82,11 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $coupon_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end']   = $filter_date_end;
+		$data['filter_date_start'] = $filter_date_start;
+		$data['filter_date_end']   = $filter_date_end;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/sale_coupon', $data));
 	}
 }

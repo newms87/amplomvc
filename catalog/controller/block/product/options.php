@@ -16,9 +16,6 @@ class Catalog_Controller_Block_Product_Options extends Controller
 			return '';
 		}
 
-		//Template and Language
-		$this->view->load('block/product/options');
-
 		$image_width        = $this->config->get('config_image_product_option_width');
 		$image_height       = $this->config->get('config_image_product_option_height');
 		$image_thumb_width  = $this->config->get('config_image_thumb_width');
@@ -113,10 +110,10 @@ class Catalog_Controller_Block_Product_Options extends Controller
 		}
 		unset($product_option);
 
-		$this->data['product_options'] = $product_options;
+		$data['product_options'] = $product_options;
 
-		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
+		$data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/product/options', $data));
 	}
 }

@@ -106,31 +106,22 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->table->setRows($extensions);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('extension/add');
+		$data['insert'] = $this->url->link('extension/add');
 
 		//Render limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $extension_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//The Template
-		$this->view->load('extension/payment_list');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('extension/payment_list', $data));
 	}
 
 	private function getForm()
@@ -158,7 +149,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->document->setTitle($payment_extension->info('title'));
 
 		//Page Title
-		$this->data['page_title'] = $payment_extension->info('title');
+		$data['page_title'] = $payment_extension->info('title');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -181,7 +172,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			'status'     => 1,
 		);
 
-		$this->data += $extension_info + $defaults;
+		$data += $extension_info + $defaults;
 
 		$settings_defaults = array(
 			'min_total'                => 0,
@@ -189,38 +180,29 @@ class Admin_Controller_Extension_Payment extends Controller
 			'geo_zone_id'              => 0,
 		);
 
-		$this->data['settings'] += $settings_defaults;
+		$data['settings'] += $settings_defaults;
 
 		//Get additional extension settings and profile data (this is the plugin part)
 		if (method_exists($this->extension_controller, 'settings')) {
-			$this->extension_controller->settings($this->data['settings']);
-			$this->data['extend_settings'] = $this->extension_controller->output;
+			$this->extension_controller->settings($data['settings']);
+			$data['extend_settings'] = $this->extension_controller->output;
 		}
 
 		//Template Data
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
-		$this->data['data_geo_zones']      = array(0 => _l("All Zones")) + $this->Model_Localisation_GeoZone->getGeoZones();
+		$data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$data['data_geo_zones']      = array(0 => _l("All Zones")) + $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('extension/payment', 'code=' . $code);
-		$this->data['cancel'] = $this->url->link('extension/payment');
-
-		//The Template
-		$this->view->load('extension/payment');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('extension/payment', 'code=' . $code);
+		$data['cancel'] = $this->url->link('extension/payment');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('extension/payment', $data));
 	}
 
 	public function edit()
@@ -255,27 +237,18 @@ class Admin_Controller_Extension_Payment extends Controller
 		$this->breadcrumb->add($payment_extension->info('title'), $this->url->link('extension/payment/edit', 'code=' . $code));
 
 		//Load Contents
-		$this->data['contents'] = file_get_contents($file);
+		$data['contents'] = file_get_contents($file);
 
 		//Template Data
-		$this->data['page_title'] = $payment_extension->info('title');
-		$this->data['edit_file']  = $file;
+		$data['page_title'] = $payment_extension->info('title');
+		$data['edit_file']  = $file;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('extension/payment/edit', 'code=' . $code);
-		$this->data['cancel'] = $this->url->link('extension/payment');
-
-		//The Template
-		$this->view->load('extension/edit');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('extension/payment/edit', 'code=' . $code);
+		$data['cancel'] = $this->url->link('extension/payment');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('extension/edit', $data));
 	}
 
 	private function loadExtensionController($code)

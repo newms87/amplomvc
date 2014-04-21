@@ -9,8 +9,6 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/return_status');
 		//Page Head
 		$this->document->setTitle(_l("Return Statuses"));
 
@@ -76,20 +74,14 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		}
 		unset($return_status);
 
-		$this->data['return_statuses'] = $return_statuses;
+		$data['return_statuses'] = $return_statuses;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/return_status');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/return_status');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/return_status', $data));
 	}
 
 	private function validate()

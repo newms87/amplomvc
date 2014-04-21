@@ -20,10 +20,10 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 			$settings['zonerule'] = array();
 		}
 
-		$this->data = $settings;
+		$data = $settings;
 
 		//AC Templates
-		$this->data['priceset']['__ac_template__'] = array(
+		$data['priceset']['__ac_template__'] = array(
 			'range' => 'gt',
 			'total' => 0,
 			'cost'  => 10.00,
@@ -32,7 +32,7 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 			'to'    => 100,
 		);
 
-		$this->data['zonerule']['__ac_template__'] = array(
+		$data['zonerule']['__ac_template__'] = array(
 			'country_id' => 223,
 			'zone_id'    => 0,
 			'mod'        => 'add',
@@ -41,12 +41,12 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 		);
 
 		//Template Data
-		$this->data['data_types'] = array(
+		$data['data_types'] = array(
 			'percent' => _l("Percent"),
 			'fixed'   => _l("Fixed Amount")
 		);
 
-		$this->data['data_ranges'] = array(
+		$data['data_ranges'] = array(
 			'lt'    => "<",
 			'lte'   => '<=',
 			'gt'    => ">",
@@ -55,18 +55,15 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 			'range' => _l('range'),
 		);
 
-		$this->data['data_mods'] = array(
+		$data['data_mods'] = array(
 			'add'      => "+",
 			'subtract' => '-',
 			'fixed'    => "="
 		);
 
-		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
-
-		//Template
-		$this->view->load('extension/shipping/amount');
+		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//Render
-		$this->render();
+		$this->render('extension/shipping/amount', $data);
 	}
 }

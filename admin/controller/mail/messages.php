@@ -4,8 +4,6 @@ class Admin_Controller_Mail_Messages extends Controller
 
 	public function index()
 	{
-		$this->view->load('mail/messages');
-
 		$this->document->setTitle(_l("Mail Messages"));
 
 		if ($this->request->isPost() && $this->validate()) {
@@ -18,9 +16,9 @@ class Admin_Controller_Mail_Messages extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Mail Messages"), $this->url->link('mail/messages'));
 
-		$this->data['action'] = $this->url->link('mail/messages');
+		$data['action'] = $this->url->link('mail/messages');
 
-		$this->data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = $this->url->link('common/home');
 
 		$defaults = array(
 			'mail_registration_subject' => '',
@@ -29,20 +27,15 @@ class Admin_Controller_Mail_Messages extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif ($this->config->get($key)) {
-				$this->data[$key] = $this->config->get($key);
+				$data[$key] = $this->config->get($key);
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('mail/messages', $data));
 	}
 
 	public function validate()

@@ -3,21 +3,19 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/cart/coupon');
-
 		$ajax = isset($settings['ajax']) ? $settings['ajax'] : false;
 
 		if (isset($_POST['coupon_code'])) {
 			$this->apply_coupon();
 		}
 
-		$this->data['ajax'] = $ajax;
+		$data['ajax'] = $ajax;
 
 		if ($ajax) {
-			$this->data['ajax_url'] = $this->url->link('block/cart/coupon/ajax_apply_coupon');
+			$data['ajax_url'] = $this->url->link('block/cart/coupon/ajax_apply_coupon');
 		}
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/cart/coupon', $data));
 	}
 
 	//TODO: Handel SESSION coupons (probably from cart?) sitewide...

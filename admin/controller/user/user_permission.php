@@ -81,8 +81,6 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	private function getList()
 	{
-		$this->view->load('user/user_group_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -118,10 +116,10 @@ class Admin_Controller_User_UserPermission extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("User Permissions"), $this->url->link('user/user_permission', $url));
 
-		$this->data['insert'] = $this->url->link('user/user_permission/insert', $url);
-		$this->data['delete'] = $this->url->link('user/user_permission/delete', $url);
+		$data['insert'] = $this->url->link('user/user_permission/insert', $url);
+		$data['delete'] = $this->url->link('user/user_permission/delete', $url);
 
-		$this->data['user_groups'] = array();
+		$data['user_groups'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -142,7 +140,7 @@ class Admin_Controller_User_UserPermission extends Controller
 				'href' => $this->url->link('user/user_permission/update', 'user_group_id=' . $result['user_group_id'] . $url)
 			);
 
-			$this->data['user_groups'][] = array(
+			$data['user_groups'][] = array(
 				'user_group_id' => $result['user_group_id'],
 				'name'          => $result['name'],
 				'selected'      => isset($_GET['selected']) && in_array($result['user_group_id'], $_GET['selected']),
@@ -151,17 +149,17 @@ class Admin_Controller_User_UserPermission extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -176,7 +174,7 @@ class Admin_Controller_User_UserPermission extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name'] = $this->url->link('user/user_permission', 'sort=name' . $url);
+		$data['sort_name'] = $this->url->link('user/user_permission', 'sort=name' . $url);
 
 		$url = '';
 
@@ -190,23 +188,16 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $user_group_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('user/user_group_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('user/user_group_form');
-
 		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -215,12 +206,12 @@ class Admin_Controller_User_UserPermission extends Controller
 		$url_query = $this->url->getQuery('sort', 'order', 'page');
 
 		if ($user_group_id) {
-			$this->data['action'] = $this->url->link('user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
+			$data['action'] = $this->url->link('user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
 		} else {
-			$this->data['action'] = $this->url->link('user/user_permission/insert', $url_query);
+			$data['action'] = $this->url->link('user/user_permission/insert', $url_query);
 		}
 
-		$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
+		$data['cancel'] = $this->url->link('user/user_permission', $url_query);
 
 		if ($user_group_id && !$this->request->isPost()) {
 			$user_group_info = $this->Model_User_UserGroup->getUserGroup($user_group_id);
@@ -234,30 +225,25 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($user_group_info[$key])) {
-				$this->data[$key] = $user_group_info[$key];
+				$data[$key] = $user_group_info[$key];
 			} elseif (!$user_group_id) {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		if (!isset($this->data['permissions']['access'])) {
-			$this->data['permissions']['access'] = array();
+		if (!isset($data['permissions']['access'])) {
+			$data['permissions']['access'] = array();
 		}
 
-		if (!isset($this->data['permissions']['modify'])) {
-			$this->data['permissions']['modify'] = array();
+		if (!isset($data['permissions']['modify'])) {
+			$data['permissions']['modify'] = array();
 		}
 
-		$this->data['data_controllers'] = $this->Model_User_UserGroup->get_controller_list();
+		$data['data_controllers'] = $this->Model_User_UserGroup->get_controller_list();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('user/user_group_form', $data));
 	}
 
 	private function validateForm()

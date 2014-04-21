@@ -5,8 +5,6 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 	public function index()
 	{
-		$this->view->load('feed/google_sitemap');
-
 		$this->document->setTitle(_l("Google Sitemap"));
 
 		if ($this->request->isPost() && $this->validate()) {
@@ -18,33 +16,28 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Product Feeds"), $this->url->link('extension/feed'));
 		$this->breadcrumb->add(_l("Google Sitemap"), $this->url->link('feed/google_sitemap'));
 
-		$this->data['action'] = $this->url->link('feed/google_sitemap');
+		$data['action'] = $this->url->link('feed/google_sitemap');
 
-		$this->data['cancel'] = $this->url->link('extension/feed');
+		$data['cancel'] = $this->url->link('extension/feed');
 
 		if (isset($_POST['google_sitemap_status'])) {
-			$this->data['google_sitemap_status'] = $_POST['google_sitemap_status'];
+			$data['google_sitemap_status'] = $_POST['google_sitemap_status'];
 		} else {
-			$this->data['google_sitemap_status'] = $this->config->get('google_sitemap_status');
+			$data['google_sitemap_status'] = $this->config->get('google_sitemap_status');
 		}
 
-		$this->data['data_feed'] = $this->url->link('feed/google_sitemap');
+		$data['data_feed'] = $this->url->link('feed/google_sitemap');
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('feed/google_sitemap', $data));
 	}
 
 	private function validate()

@@ -3,8 +3,6 @@ class Catalog_Controller_Account_Reward extends Controller
 {
 	public function index()
 	{
-		$this->view->load('account/reward');
-
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/reward'));
 
@@ -23,7 +21,7 @@ class Catalog_Controller_Account_Reward extends Controller
 			$page = 1;
 		}
 
-		$this->data['rewards'] = array();
+		$data['rewards'] = array();
 
 		$data = array(
 			'sort'  => 'date_added',
@@ -37,7 +35,7 @@ class Catalog_Controller_Account_Reward extends Controller
 		$results = $this->Model_Account_Reward->getRewards($data);
 
 		foreach ($results as $result) {
-			$this->data['rewards'][] = array(
+			$data['rewards'][] = array(
 				'order_id'    => $result['order_id'],
 				'points'      => $result['points'],
 				'description' => $result['description'],
@@ -48,21 +46,12 @@ class Catalog_Controller_Account_Reward extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $reward_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['total'] = (int)$this->customer->getRewardPoints();
+		$data['total'] = (int)$this->customer->getRewardPoints();
 
-		$this->data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account/account');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/reward', $data));
 	}
 }

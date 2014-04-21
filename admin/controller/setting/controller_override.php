@@ -3,8 +3,6 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/controller_override');
 		//Page Head
 		$this->document->setTitle(_l("Controller Override"));
 
@@ -44,20 +42,14 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 			'condition' => _l("Query Condition Regular Expression (eg: 'product_id=*')"),
 		);
 
-		$this->data['controller_overrides'] = $controller_overrides;
+		$data['controller_overrides'] = $controller_overrides;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/controller_override');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/controller_override');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/controller_override', $data));
 	}
 
 	private function validate()

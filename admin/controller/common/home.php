@@ -3,23 +3,24 @@ class Admin_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
-		$this->view->load('common/home');
 		$this->document->setTitle(_l("Dashboard"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 
-		$this->data['total_sale']      = $this->currency->format($this->System_Model_Order->getGrossSales(), $this->config->get('config_currency'));
-		$this->data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), $this->config->get('config_currency'));
-		$this->data['total_order']     = $this->System_Model_Order->getTotalOrders();
+		$data = array();
 
-		$this->data['total_customer']          = $this->Model_Sale_Customer->getTotalCustomers();
-		$this->data['total_customer_approval'] = $this->Model_Sale_Customer->getTotalCustomersAwaitingApproval();
+		$data['total_sale']      = $this->currency->format($this->System_Model_Order->getGrossSales(), $this->config->get('config_currency'));
+		$data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), $this->config->get('config_currency'));
+		$data['total_order']     = $this->System_Model_Order->getTotalOrders();
 
-		$this->data['total_review']          = $this->Model_Catalog_Review->getTotalReviews();
-		$this->data['total_review_approval'] = $this->Model_Catalog_Review->getTotalReviewsAwaitingApproval();
+		$data['total_customer']          = $this->Model_Sale_Customer->getTotalCustomers();
+		$data['total_customer_approval'] = $this->Model_Sale_Customer->getTotalCustomersAwaitingApproval();
+
+		$data['total_review']          = $this->Model_Catalog_Review->getTotalReviews();
+		$data['total_review_approval'] = $this->Model_Catalog_Review->getTotalReviewsAwaitingApproval();
 
 		//Last 10 orders
-		$data = array(
+		$data += array(
 			'sort'              => 'o.date_added',
 			'order'             => 'DESC',
 			'start'             => 0,
@@ -53,21 +54,16 @@ class Admin_Controller_Common_Home extends Controller
 		}
 		unset($order);
 
-		$this->data['orders'] = $orders;
+		$data['orders'] = $orders;
 
 		if ($this->config->get('config_currency_auto')) {
 			$this->Model_Localisation_Currency->updateCurrencies();
 		}
 
 
-		$this->data['url_chart'] = $this->url->link('common/home/chart');
+		$data['url_chart'] = $this->url->link('common/home/chart');
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/home', $data));
 	}
 
 	public function chart()

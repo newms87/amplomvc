@@ -3,8 +3,6 @@ class Catalog_Controller_Product_Category extends Controller
 {
 	public function index()
 	{
-		$this->view->load('product/category');
-
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("All Categories"), $this->url->link('product/category'));
 
@@ -26,14 +24,14 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->document->setKeywords($category_info['meta_keywords']);
 
 			//Page Title
-			$this->data['page_title'] = $category_info['name'];
+			$data['page_title'] = $category_info['name'];
 
 			if ($this->config->get('config_show_category_image')) {
-				$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
+				$data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
 			}
 
 			if ($this->config->get('config_show_category_description')) {
-				$this->data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+				$data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
 			}
 
 			$parents = $this->Model_Catalog_Category->getParents($category_id);
@@ -50,11 +48,11 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->document->setKeywords(_l("all categories, categories, see list, view all, search, find"));
 
 			//Page Title
-			$this->data['page_title'] = _l("All Categories");
+			$data['page_title'] = _l("All Categories");
 
-			$this->data['thumb'] = '';
+			$data['thumb'] = '';
 
-			$this->data['description'] = '';
+			$data['description'] = '';
 		}
 
 		//TODO: How do we handle sub categories....?
@@ -91,7 +89,7 @@ class Catalog_Controller_Product_Category extends Controller
 			);
 
 			//Load these products in the Product List block template
-			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
+			$data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sorting
 			$sorts = array(
@@ -109,41 +107,31 @@ class Catalog_Controller_Product_Category extends Controller
 				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}
 
-			$this->data['sorts'] = $this->sort->render_sort($sorts);
+			$data['sorts'] = $this->sort->render_sort($sorts);
 
-			$this->data['limits'] = $this->sort->renderLimits();
+			$data['limits'] = $this->sort->renderLimits();
 
 			$this->pagination->init();
 			$this->pagination->total = $product_total;
 
-			$this->data['pagination'] = $this->pagination->render();
+			$data['pagination'] = $this->pagination->render();
 
 			//In case there was a problem with the block_product_list
-			$this->data['continue'] = $this->url->link('common/home');
+			$data['continue'] = $this->url->link('common/home');
 		} else {
-			$this->data['category_name'] = !empty($category_info['name']) ? $category_info['name'] : _l("All Categories");
+			$data['category_name'] = !empty($category_info['name']) ? $category_info['name'] : _l("All Categories");
 
 			$parent = $this->Model_Catalog_Category->getParent($category_id);
 
 			if ($parent && $parent['category_id'] !== 0) {
-				$this->data['continue'] = $this->url->link('product/category', 'category_id=' . $parent['category_id']);
+				$data['continue'] = $this->url->link('product/category', 'category_id=' . $parent['category_id']);
 			}
 			else {
-				$this->data['continue'] = $this->url->link('common/home');
+				$data['continue'] = $this->url->link('common/home');
 			}
 		}
 
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/category', $data));
 	}
 }

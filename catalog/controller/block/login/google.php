@@ -4,13 +4,10 @@ class Catalog_Controller_Block_Login_Google extends Controller
 	public function index()
 	{
 		//Actions
-		$this->data['connect'] = $this->Model_Block_Login_Google->getConnectUrl();
-
-		//The Template
-		$this->view->load('block/login/google');
+		$data['connect'] = $this->Model_Block_Login_Google->getConnectUrl();
 
 		//Render
-		$this->render();
+		$this->render('block/login/google', $data);
 	}
 
 	public function connect()

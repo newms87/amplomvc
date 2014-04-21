@@ -10,9 +10,6 @@ class Admin_Controller_Plugin_Plugin extends Controller
 
 	public function getList()
 	{
-		//The Template
-		$this->view->load('plugin/plugin');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Plugins"), $this->url->link('plugin/plugin'));
@@ -159,31 +156,23 @@ class Admin_Controller_Plugin_Plugin extends Controller
 		$this->table->setRows($plugins);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $plugin_total;
 
-		$this->data['pagination'] = $this->pagination->render();
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('plugin/plugin', $data));
 	}
 
 	public function getForm()
 	{
-		$this->view->load('plugin/plugin_form');
-
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', _l("Warning: There was no plugin found."));
 			$this->url->redirect('plugin/plugin');
@@ -196,22 +185,17 @@ class Admin_Controller_Plugin_Plugin extends Controller
 		$this->breadcrumb->add(_l("Plugins"), $this->url->link('plugin/plugin'));
 
 		if (isset($_POST['plugin_data'])) {
-			$this->data['plugin_data'] = $_POST['plugin_data'];
+			$data['plugin_data'] = $_POST['plugin_data'];
 		} else {
-			$this->data['plugin_data'] = $this->Model_Setting_Plugin->getPluginData($plugin_name);
+			$data['plugin_data'] = $this->Model_Setting_Plugin->getPluginData($plugin_name);
 		}
 
-		$this->data['name'] = $plugin_name;
+		$data['name'] = $plugin_name;
 
-		$this->data['action'] = $this->url->link('plugin/plugin/update', 'name=' . $plugin_name);
-		$this->data['cancel'] = $this->url->link('plugin/plugin');
+		$data['action'] = $this->url->link('plugin/plugin/update', 'name=' . $plugin_name);
+		$data['cancel'] = $this->url->link('plugin/plugin');
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('plugin/plugin_form', $data));
 	}
 
 	public function update()

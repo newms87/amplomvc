@@ -3,9 +3,6 @@ class Admin_Controller_Sale_Order extends Controller
 {
 	public function index()
 	{
-		//The Template
-		$this->view->load('sale/order_list');
-
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
 
@@ -119,30 +116,24 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['invoice'] = $this->url->link('sale/order/invoice');
-		$this->data['insert']  = $this->url->link('sale/order/insert');
-		$this->data['delete']  = $this->url->link('sale/order/delete');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['invoice'] = $this->url->link('sale/order/invoice');
+		$data['insert']  = $this->url->link('sale/order/insert');
+		$data['delete']  = $this->url->link('sale/order/delete');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/order_list', $data));
 	}
 
 	public function update()
@@ -185,9 +176,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function getForm()
 	{
-		//The Template
-		$this->view->load('sale/order_form');
-
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
 
@@ -246,41 +234,35 @@ class Admin_Controller_Sale_Order extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($order_info[$key])) {
-				$this->data[$key] = $order_info[$key];
+				$data[$key] = $order_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Template Data
-		foreach ($this->data['order_products'] as &$order_product) {
+		foreach ($data['order_products'] as &$order_product) {
 			$order_product['options']   = $this->System_Model_Order->getOrderOptions($order_id, $order_product['order_product_id']);
 			$order_product['downloads'] = $this->System_Model_Order->getOrderDownloads($order_id, $order_product['order_product_id']);
 		}
 		unset($order_product);
 
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
-		$this->data['data_stores']         = $this->Model_Setting_Store->getStores();
-		$this->data['data_countries']      = $this->Model_Localisation_Country->getCountries();
-		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
+		$data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$data['data_stores']         = $this->Model_Setting_Store->getStores();
+		$data['data_countries']      = $this->Model_Localisation_Country->getCountries();
+		$data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		//Urls
-		$this->data['store_url'] = URL_SITE;
+		$data['store_url'] = URL_SITE;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('sale/order/update', 'order_id=' . $order_id);
-		$this->data['cancel'] = $this->url->link('sale/order');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('sale/order/update', 'order_id=' . $order_id);
+		$data['cancel'] = $this->url->link('sale/order');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/order_form', $data));
 	}
 
 	private function validateForm()
@@ -415,40 +397,40 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->breadcrumb->add(_l("Orders"), $this->url->link('sale/order'));
 		$this->breadcrumb->add($order_info['invoice_id'], $this->url->link('sale/order/info', 'order_id=' . $order_id));
 
-		$this->data += $order_info;
+		$data += $order_info;
 
 		$transaction = $this->transaction->get($order_info['transaction_id']);
 		$shipping = $this->shipping->get($order_info['shipping_id']);
 
-		$this->data['payment_method']  = $this->System_Extension_Payment->get($transaction['payment_code'])->info();
-		$this->data['payment_address'] = $this->address->format($this->order->getPaymentAddress($order_id));
+		$data['payment_method']  = $this->System_Extension_Payment->get($transaction['payment_code'])->info();
+		$data['payment_address'] = $this->address->format($this->order->getPaymentAddress($order_id));
 
 		if ($shipping && $shipping['shipping_code']) {
-			$this->data['shipping_method']  = $this->System_Extension_Shipping->get($shipping['shipping_code'])->info();
-			$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
+			$data['shipping_method']  = $this->System_Extension_Shipping->get($shipping['shipping_code'])->info();
+			$data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 		}
 
 		if ($order_info['customer_id']) {
-			$this->data['url_customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $order_info['customer_id']);
+			$data['url_customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $order_info['customer_id']);
 		}
 
 		$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($order_info['customer_group_id']);
 
 		if ($customer_group_info) {
-			$this->data['customer_group'] = $customer_group_info['name'];
+			$data['customer_group'] = $customer_group_info['name'];
 		}
 
-		$this->data['comment'] = nl2br($order_info['comment']);
-		$this->data['total']   = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value']);
+		$data['comment'] = nl2br($order_info['comment']);
+		$data['total']   = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value']);
 
-		$this->data['credit']       = max(0, -1 * $order_info['total']);
-		//$this->data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($order_id);
-		$this->data['reward_total'] = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($order_id);
+		$data['credit']       = max(0, -1 * $order_info['total']);
+		//$data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($order_id);
+		$data['reward_total'] = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($order_id);
 
-		$this->data['order_status'] = $this->order->getOrderStatus($order_info['order_status_id']);
+		$data['order_status'] = $this->order->getOrderStatus($order_info['order_status_id']);
 
-		$this->data['date_added']    = $this->date->format($order_info['date_added'], 'datetime_long');
-		$this->data['date_modified'] = $this->date->format($order_info['date_modified'], 'datetime_long');
+		$data['date_added']    = $this->date->format($order_info['date_added'], 'datetime_long');
+		$data['date_modified'] = $this->date->format($order_info['date_modified'], 'datetime_long');
 
 		//Order Products
 		$products = $this->System_Model_Order->getOrderProducts($order_id);
@@ -464,7 +446,7 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 		unset($product);
 
-		$this->data['products'] = $products;
+		$data['products'] = $products;
 
 		$vouchers = $this->System_Model_Order->getOrderVouchers($order_id);
 
@@ -474,7 +456,7 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 		unset($voucher);
 
-		$this->data['vouchers'] = $vouchers;
+		$data['vouchers'] = $vouchers;
 
 		$totals = $this->System_Model_Order->getOrderTotals($order_id);
 
@@ -483,36 +465,27 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 		unset($total);
 
-		$this->data['totals'] = $totals;
+		$data['totals'] = $totals;
 
-		$this->data['downloads'] = $this->System_Model_Order->getOrderDownloads($order_id);
+		$data['downloads'] = $this->System_Model_Order->getOrderDownloads($order_id);
 
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$data['data_order_statuses'] = $this->order->getOrderStatuses();
 
 		// Fraud
-		$this->data['fraud'] = $this->Model_Sale_Fraud->getFraud($order_info['order_id']);
+		$data['fraud'] = $this->Model_Sale_Fraud->getFraud($order_info['order_id']);
 
 		//Store
-		$this->data['store'] = $this->Model_Setting_Store->getStore($order_info['store_id']);
+		$data['store'] = $this->Model_Setting_Store->getStore($order_info['store_id']);
 
 		//History
-		$this->data['history'] = $this->history();
+		$data['history'] = $this->history();
 
 		//Action Buttons
-		$this->data['invoice'] = $this->url->link('sale/order/invoice', 'order_id=' . $order_id);
-		$this->data['cancel']  = $this->url->link('sale/order');
-
-		//Template
-		$this->view->load('sale/order_info');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['invoice'] = $this->url->link('sale/order/invoice', 'order_id=' . $order_id);
+		$data['cancel']  = $this->url->link('sale/order');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/order_info', $data));
 	}
 
 	public function createInvoiceNo()
@@ -669,7 +642,7 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 		unset($history);
 
-		$this->data['histories'] = $histories;
+		$data['histories'] = $histories;
 	}
 
 	public function download()
@@ -697,19 +670,12 @@ class Admin_Controller_Sale_Order extends Controller
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->view->load('error/not_found');
-
 			$this->document->setTitle(_l("Orders"));
 
 			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 			$this->breadcrumb->add(_l("Orders"), $this->url->link('error/not_found'));
 
-			$this->children = array(
-				'common/header',
-				'common/footer'
-			);
-
-			$this->response->setOutput($this->render());
+			$this->response->setOutput($this->render('error/not_found', $data));
 		}
 	}
 
@@ -763,15 +729,13 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function invoice()
 	{
-		$this->view->load('sale/order_invoice');
+		$data['title'] = _l("Orders");
 
-		$this->data['title'] = _l("Orders");
+		$data['base'] = URL_SITE;
 
-		$this->data['base'] = URL_SITE;
+		$data['language'] = $this->language->info('code');
 
-		$this->data['language'] = $this->language->info('code');
-
-		$this->data['orders'] = array();
+		$data['orders'] = array();
 
 		$orders = array();
 
@@ -934,7 +898,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 				$total_data = $this->Model_Sale_Order->getOrderTotals($order_id);
 
-				$this->data['orders'][] = array(
+				$data['orders'][] = array(
 					'order_id'         => $order_id,
 					'invoice_no'       => $invoice_no,
 					'date_added'       => date('short', strtotime($order_info['date_added'])),
@@ -959,6 +923,6 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/order_invoice', $data));
 	}
 }

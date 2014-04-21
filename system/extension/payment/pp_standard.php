@@ -23,25 +23,23 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 		$testmode = $this->settings['test'];
 
 		if ($testmode) {
-			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			$data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 
 			if ($this->settings['test_email']) {
-				$this->data['business'] = $this->settings['test_email'];
+				$data['business'] = $this->settings['test_email'];
 			} else {
-				$this->data['business'] = $this->settings['email'];
+				$data['business'] = $this->settings['email'];
 			}
 		} else {
-			$this->data['action']   = 'https://www.paypal.com/cgi-bin/webscr';
-			$this->data['business'] = $this->settings['email'];
+			$data['action']   = 'https://www.paypal.com/cgi-bin/webscr';
+			$data['business'] = $this->settings['email'];
 		}
 
 		$subscription = $this->subscription->getCartSubscription();
 
 		if ($subscription) {
-			$this->view->load('payment/pp_standard_subscribe');
-
-			$this->data['order_id']  = $subscription['order_id'];
-			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+			$data['order_id']  = $subscription['order_id'];
+			$data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
 			$products = $this->cart->getProducts();
 
@@ -56,14 +54,14 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 			}
 			unset($product);
 
-			$this->data['subscriptions'] = $products;
+			$data['subscriptions'] = $products;
 
-			$this->data['discount_amount_cart'] = 0;
+			$data['discount_amount_cart'] = 0;
 
 			$total = $this->currency->format($subscription['total'] - $this->cart->getSubTotal(), $subscription['currency_code'], false, false);
 
 			if ($total > 0) {
-				$this->data['products'][] = array(
+				$data['products'][] = array(
 					'name'     => _l("Shipping, Handling, Discounts & Taxes"),
 					'model'    => '',
 					'price'    => $total,
@@ -71,45 +69,45 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 					'weight'   => 0
 				);
 			} else {
-				$this->data['discount_amount_cart'] -= $total;
+				$data['discount_amount_cart'] -= $total;
 			}
 
 			$payment_address_info = $this->Model_Localisation_Country->getCountry($subscription['payment_country_id']);
 
-			$this->data['currency_code'] = $subscription['currency_code'];
-			$this->data['first_name']    = html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8');
-			$this->data['last_name']     = html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
-			$this->data['address1']      = html_entity_decode($subscription['payment_address_1'], ENT_QUOTES, 'UTF-8');
-			$this->data['address2']      = html_entity_decode($subscription['payment_address_2'], ENT_QUOTES, 'UTF-8');
-			$this->data['city']          = html_entity_decode($subscription['payment_city'], ENT_QUOTES, 'UTF-8');
-			$this->data['zip']           = html_entity_decode($subscription['payment_postcode'], ENT_QUOTES, 'UTF-8');
-			$this->data['country']       = $payment_address_info['iso_code_2'];
-			$this->data['email']         = $subscription['email'];
-			$this->data['invoice']       = $subscription['invoice_id'] . ' - ' . html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
-			$this->data['lc']            = $this->language->info('code');
-			$this->data['notify_url']    = $this->url->link('payment/pp_standard/callback');
-			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
-			$this->data['page_style']    = $this->settings['page_style'];
+			$data['currency_code'] = $subscription['currency_code'];
+			$data['first_name']    = html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8');
+			$data['last_name']     = html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$data['address1']      = html_entity_decode($subscription['payment_address_1'], ENT_QUOTES, 'UTF-8');
+			$data['address2']      = html_entity_decode($subscription['payment_address_2'], ENT_QUOTES, 'UTF-8');
+			$data['city']          = html_entity_decode($subscription['payment_city'], ENT_QUOTES, 'UTF-8');
+			$data['zip']           = html_entity_decode($subscription['payment_postcode'], ENT_QUOTES, 'UTF-8');
+			$data['country']       = $payment_address_info['iso_code_2'];
+			$data['email']         = $subscription['email'];
+			$data['invoice']       = $subscription['invoice_id'] . ' - ' . html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$data['lc']            = $this->language->info('code');
+			$data['notify_url']    = $this->url->link('payment/pp_standard/callback');
+			$data['cancel_return'] = $this->url->link('checkout/checkout');
+			$data['page_style']    = $this->settings['page_style'];
 
 			if ($this->settings['pdt_enabled']) {
-				$this->data['return'] = $this->url->link('payment/pp_standard/auto_return');
+				$data['return'] = $this->url->link('payment/pp_standard/auto_return');
 			} else {
-				$this->data['return'] = $this->url->link('checkout/success');
+				$data['return'] = $this->url->link('checkout/success');
 			}
 
 			$server = URL_IMAGE;
 
 			//Ajax Urls
-			$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
+			$data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
 
 			//Template Data
-			$this->data['image_url']     = $server . $this->config->get('config_logo');
-			$this->data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
-			$this->data['custom']        = $this->encryption->encrypt($subscription['order_id']);
+			$data['image_url']     = $server . $this->config->get('config_logo');
+			$data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
+			$data['custom']        = $this->encryption->encrypt($subscription['order_id']);
 
-			$this->data['testmode'] = $testmode;
+			$data['testmode'] = $testmode;
 
-			$this->render();
+			$this->render('extension/payment/pp_standard', $data);
 		}
 	}
 

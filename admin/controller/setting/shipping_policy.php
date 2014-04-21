@@ -9,8 +9,6 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/shipping_policy');
 		//Page Head
 		$this->document->setTitle(_l("Shipping Policies"));
 
@@ -72,27 +70,21 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 		}
 		unset($shipping_policy);
 
-		$this->data['shipping_policies'] = $shipping_policies;
+		$data['shipping_policies'] = $shipping_policies;
 
 		//Template Data
-		$this->data['data_days'] = array(
+		$data['data_days'] = array(
 			'final' => _l("Final Sale"),
 			0       => _l("Shipping Anytime"),
 			1       => _l("Days:"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/shipping_policy');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/shipping_policy');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/shipping_policy', $data));
 	}
 
 	private function validate()

@@ -6,15 +6,13 @@ class Admin_Controller_Block_Module_Press extends Controller
 {
 	public function settings(&$settings)
 	{
-		$this->view->load('block/module/press_settings');
-
 		if (!isset($settings['press_items'])) {
-			$this->data['press_items'] = array();
+			$data['press_items'] = array();
 		}
 
-		$this->data += $settings;
+		$data += $settings;
 
-		$this->render();
+		$this->render('block/module/press_settings', $data);
 	}
 
 	public function save()

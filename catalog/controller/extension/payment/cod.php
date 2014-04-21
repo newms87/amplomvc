@@ -5,13 +5,10 @@ class Catalog_Controller_Extension_Payment_Cod extends Controller
 	public function index()
 	{
 		//Action Buttons
-		$this->data['confirm'] = $this->url->link('extension/payment/cod/confirm', 'order_id=' . $this->order->getId());
-
-		//The Template
-		$this->view->load('extension/payment/cod');
+		$data['confirm'] = $this->url->link('extension/payment/cod/confirm', 'order_id=' . $this->order->getId());
 
 		//Render
-		$this->render();
+		$this->render('extension/payment/cod', $data);
 	}
 
 	public function confirm()

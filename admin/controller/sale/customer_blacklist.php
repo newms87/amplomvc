@@ -101,8 +101,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	private function getList()
 	{
-		$this->view->load('sale/customer_blacklist_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Customer IP Blacklist"), $this->url->link('sale/customer_blacklist', $url));
 
-		$this->data['insert'] = $this->url->link('sale/customer_blacklist/insert', $url);
-		$this->data['delete'] = $this->url->link('sale/customer_blacklist/delete', $url);
+		$data['insert'] = $this->url->link('sale/customer_blacklist/insert', $url);
+		$data['delete'] = $this->url->link('sale/customer_blacklist/delete', $url);
 
-		$this->data['customer_blacklists'] = array();
+		$data['customer_blacklists'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				'href' => $this->url->link('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $result['customer_ip_blacklist_id'] . $url)
 			);
 
-			$this->data['customer_blacklists'][] = array(
+			$data['customer_blacklists'][] = array(
 				'customer_ip_blacklist_id' => $result['customer_ip_blacklist_id'],
 				'ip'                       => $result['ip'],
 				'total'                    => $result['total'],
@@ -173,17 +171,17 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -198,7 +196,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_ip'] = $this->url->link('sale/customer_blacklist', 'sort=ip' . $url);
+		$data['sort_ip'] = $this->url->link('sale/customer_blacklist', 'sort=ip' . $url);
 
 		$url = '';
 
@@ -212,33 +210,26 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $customer_blacklist_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/customer_blacklist_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('sale/customer_blacklist_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['ip'])) {
-			$this->data['error_ip'] = $this->error['ip'];
+			$data['error_ip'] = $this->error['ip'];
 		} else {
-			$this->data['error_ip'] = '';
+			$data['error_ip'] = '';
 		}
 
 		$url = '';
@@ -259,31 +250,26 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		$this->breadcrumb->add(_l("Customer IP Blacklist"), $this->url->link('sale/customer_blacklist', $url));
 
 		if (!isset($_GET['customer_ip_blacklist_id'])) {
-			$this->data['action'] = $this->url->link('sale/customer_blacklist/insert', $url);
+			$data['action'] = $this->url->link('sale/customer_blacklist/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $_GET['customer_ip_blacklist_id'] . $url);
+			$data['action'] = $this->url->link('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $_GET['customer_ip_blacklist_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
+		$data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
 
 		if (isset($_GET['customer_ip_blacklist_id']) && !$this->request->isPost()) {
 			$customer_blacklist_info = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
 		}
 
 		if (isset($_POST['ip'])) {
-			$this->data['ip'] = $_POST['ip'];
+			$data['ip'] = $_POST['ip'];
 		} elseif (!empty($customer_blacklist_info)) {
-			$this->data['ip'] = $customer_blacklist_info['ip'];
+			$data['ip'] = $customer_blacklist_info['ip'];
 		} else {
-			$this->data['ip'] = '';
+			$data['ip'] = '';
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/customer_blacklist_form', $data));
 	}
 
 	private function validateForm()

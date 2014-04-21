@@ -6,13 +6,10 @@ class Admin_Controller_Block_Widget_Specials extends Controller
 {
 	public function settings(&$settings)
 	{
-		$this->data['settings'] = $settings;
-
-		//The Template
-		$this->view->load('block/widget/specials_settings');
+		$data['settings'] = $settings;
 
 		//Render
-		$this->render();
+		$this->render('block/widget/specials_settings', $data);
 	}
 
 	public function save()

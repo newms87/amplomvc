@@ -3,8 +3,6 @@ class Admin_Controller_Report_SaleShipping extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/sale_shipping');
-
 		$this->document->setTitle(_l("Shipping Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -62,7 +60,7 @@ class Admin_Controller_Report_SaleShipping extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Shipping Report"), $this->url->link('report/sale_shipping', $url));
 
-		$this->data['orders'] = array();
+		$data['orders'] = array();
 
 		$data = array(
 			'filter_date_start'      => $filter_date_start,
@@ -78,7 +76,7 @@ class Admin_Controller_Report_SaleShipping extends Controller
 		$results = $this->Model_Report_Sale->getShipping($data);
 
 		foreach ($results as $result) {
-			$this->data['orders'][] = array(
+			$data['orders'][] = array(
 				'date_start' => $this->date->format($result['date_start'], 'short'),
 				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'title'      => $result['title'],
@@ -87,26 +85,26 @@ class Admin_Controller_Report_SaleShipping extends Controller
 			);
 		}
 
-		$this->data['order_statuses'] = $this->order->getOrderStatuses();
+		$data['order_statuses'] = $this->order->getOrderStatuses();
 
-		$this->data['groups'] = array();
+		$data['groups'] = array();
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Years"),
 			'value' => 'year',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Months"),
 			'value' => 'month',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Weeks"),
 			'value' => 'week',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Days"),
 			'value' => 'day',
 		);
@@ -131,18 +129,13 @@ class Admin_Controller_Report_SaleShipping extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $order_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_date_start']      = $filter_date_start;
-		$this->data['filter_date_end']        = $filter_date_end;
-		$this->data['filter_group']           = $filter_group;
-		$this->data['filter_order_status_id'] = $filter_order_status_id;
+		$data['filter_date_start']      = $filter_date_start;
+		$data['filter_date_end']        = $filter_date_end;
+		$data['filter_group']           = $filter_group;
+		$data['filter_order_status_id'] = $filter_order_status_id;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/sale_shipping', $data));
 	}
 }

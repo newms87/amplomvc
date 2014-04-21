@@ -10,8 +10,6 @@ class Catalog_Controller_Block_Product_Related extends Controller
 			return;
 		}
 
-		$this->view->load('block/product/related');
-
 		//Find the related products
 		$related_products = $this->Model_Catalog_Product->getProductRelated($product_id);
 
@@ -48,10 +46,8 @@ class Catalog_Controller_Block_Product_Related extends Controller
 			$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 		}
 
-		$this->data['products'] = $related_products;
+		$data['products'] = $related_products;
 
-		$this->children = array();
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/product/related', $data));
 	}
 }

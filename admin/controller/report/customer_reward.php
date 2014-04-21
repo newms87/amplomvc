@@ -3,8 +3,6 @@ class Admin_Controller_Report_CustomerReward extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/customer_reward');
-
 		$this->document->setTitle(_l("Customer Reward Points Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -42,7 +40,7 @@ class Admin_Controller_Report_CustomerReward extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Customer Reward Points Report"), $this->url->link('report/customer_reward', $url));
 
-		$this->data['customers'] = array();
+		$data['customers'] = array();
 
 		$data = array(
 			'filter_date_start' => $filter_date_start,
@@ -63,7 +61,7 @@ class Admin_Controller_Report_CustomerReward extends Controller
 				'href' => $this->url->link('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
 			);
 
-			$this->data['customers'][] = array(
+			$data['customers'][] = array(
 				'customer'       => $result['customer'],
 				'email'          => $result['email'],
 				'customer_group' => $result['customer_group'],
@@ -87,16 +85,11 @@ class Admin_Controller_Report_CustomerReward extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $customer_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end']   = $filter_date_end;
+		$data['filter_date_start'] = $filter_date_start;
+		$data['filter_date_end']   = $filter_date_end;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/customer_reward', $data));
 	}
 }

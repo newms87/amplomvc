@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/currency_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_Currency extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Currency"), $this->url->link('localisation/currency', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/currency/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/currency/delete', $url);
+		$data['insert'] = $this->url->link('localisation/currency/insert', $url);
+		$data['delete'] = $this->url->link('localisation/currency/delete', $url);
 
-		$this->data['currencies'] = array();
+		$data['currencies'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				'href' => $this->url->link('localisation/currency/update', 'currency_id=' . $result['currency_id'] . $url)
 			);
 
-			$this->data['currencies'][] = array(
+			$data['currencies'][] = array(
 				'currency_id'   => $result['currency_id'],
 				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? _l(" <b>(Default)</b>") : null),
 				'code'          => $result['code'],
@@ -174,17 +172,17 @@ class Admin_Controller_Localisation_Currency extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -199,10 +197,10 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_title']         = $this->url->link('localisation/currency', 'sort=title' . $url);
-		$this->data['sort_code']          = $this->url->link('localisation/currency', 'sort=code' . $url);
-		$this->data['sort_value']         = $this->url->link('localisation/currency', 'sort=value' . $url);
-		$this->data['sort_date_modified'] = $this->url->link('localisation/currency', 'sort=date_modified' . $url);
+		$data['sort_title']         = $this->url->link('localisation/currency', 'sort=title' . $url);
+		$data['sort_code']          = $this->url->link('localisation/currency', 'sort=code' . $url);
+		$data['sort_value']         = $this->url->link('localisation/currency', 'sort=value' . $url);
+		$data['sort_date_modified'] = $this->url->link('localisation/currency', 'sort=date_modified' . $url);
 
 		$url = '';
 
@@ -216,39 +214,32 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $currency_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/currency_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/currency_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['title'])) {
-			$this->data['error_title'] = $this->error['title'];
+			$data['error_title'] = $this->error['title'];
 		} else {
-			$this->data['error_title'] = '';
+			$data['error_title'] = '';
 		}
 
 		if (isset($this->error['code'])) {
-			$this->data['error_code'] = $this->error['code'];
+			$data['error_code'] = $this->error['code'];
 		} else {
-			$this->data['error_code'] = '';
+			$data['error_code'] = '';
 		}
 
 		$url = '';
@@ -269,79 +260,74 @@ class Admin_Controller_Localisation_Currency extends Controller
 		$this->breadcrumb->add(_l("Currency"), $this->url->link('localisation/currency', $url));
 
 		if (!isset($_GET['currency_id'])) {
-			$this->data['action'] = $this->url->link('localisation/currency/insert', $url);
+			$data['action'] = $this->url->link('localisation/currency/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/currency/update', 'currency_id=' . $_GET['currency_id'] . $url);
+			$data['action'] = $this->url->link('localisation/currency/update', 'currency_id=' . $_GET['currency_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/currency', $url);
+		$data['cancel'] = $this->url->link('localisation/currency', $url);
 
 		if (isset($_GET['currency_id']) && !$this->request->isPost()) {
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($_GET['currency_id']);
 		}
 
 		if (isset($_POST['title'])) {
-			$this->data['title'] = $_POST['title'];
+			$data['title'] = $_POST['title'];
 		} elseif (isset($currency_info)) {
-			$this->data['title'] = $currency_info['title'];
+			$data['title'] = $currency_info['title'];
 		} else {
-			$this->data['title'] = '';
+			$data['title'] = '';
 		}
 
 		if (isset($_POST['code'])) {
-			$this->data['code'] = $_POST['code'];
+			$data['code'] = $_POST['code'];
 		} elseif (isset($currency_info)) {
-			$this->data['code'] = $currency_info['code'];
+			$data['code'] = $currency_info['code'];
 		} else {
-			$this->data['code'] = '';
+			$data['code'] = '';
 		}
 
 		if (isset($_POST['symbol_left'])) {
-			$this->data['symbol_left'] = $_POST['symbol_left'];
+			$data['symbol_left'] = $_POST['symbol_left'];
 		} elseif (isset($currency_info)) {
-			$this->data['symbol_left'] = $currency_info['symbol_left'];
+			$data['symbol_left'] = $currency_info['symbol_left'];
 		} else {
-			$this->data['symbol_left'] = '';
+			$data['symbol_left'] = '';
 		}
 
 		if (isset($_POST['symbol_right'])) {
-			$this->data['symbol_right'] = $_POST['symbol_right'];
+			$data['symbol_right'] = $_POST['symbol_right'];
 		} elseif (isset($currency_info)) {
-			$this->data['symbol_right'] = $currency_info['symbol_right'];
+			$data['symbol_right'] = $currency_info['symbol_right'];
 		} else {
-			$this->data['symbol_right'] = '';
+			$data['symbol_right'] = '';
 		}
 
 		if (isset($_POST['decimal_place'])) {
-			$this->data['decimal_place'] = $_POST['decimal_place'];
+			$data['decimal_place'] = $_POST['decimal_place'];
 		} elseif (isset($currency_info)) {
-			$this->data['decimal_place'] = $currency_info['decimal_place'];
+			$data['decimal_place'] = $currency_info['decimal_place'];
 		} else {
-			$this->data['decimal_place'] = '';
+			$data['decimal_place'] = '';
 		}
 
 		if (isset($_POST['value'])) {
-			$this->data['value'] = $_POST['value'];
+			$data['value'] = $_POST['value'];
 		} elseif (isset($currency_info)) {
-			$this->data['value'] = $currency_info['value'];
+			$data['value'] = $currency_info['value'];
 		} else {
-			$this->data['value'] = '';
+			$data['value'] = '';
 		}
 
 		if (isset($_POST['status'])) {
-			$this->data['status'] = $_POST['status'];
+			$data['status'] = $_POST['status'];
 		} elseif (isset($currency_info)) {
-			$this->data['status'] = $currency_info['status'];
+			$data['status'] = $currency_info['status'];
 		} else {
-			$this->data['status'] = '';
+			$data['status'] = '';
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/currency_form', $data));
 	}
 
 	private function validateForm()

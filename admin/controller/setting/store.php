@@ -52,9 +52,6 @@ class Admin_Controller_Setting_Store extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Settings"));
 
-		//The Template
-		$this->view->load('setting/store_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
@@ -136,32 +133,29 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		//Template Data
+		$data = array();
+
+		$data['list_view'] = $this->table->render();
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $store_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Settings Items
-		$this->data['widgets'] = $this->Model_Setting_Setting->getWidgets();
+		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('setting/store/update');
-		$this->data['delete'] = $this->url->link('setting/store/delete');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('setting/store/update');
+		$data['delete'] = $this->url->link('setting/store/delete');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('store_form', $data));
 	}
 
 	public function getForm()
@@ -337,12 +331,6 @@ class Admin_Controller_Setting_Store extends Controller
 
 		//Ajax Urls
 		$data['load_theme_img'] = $this->url->link('setting/setting/theme');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_form', $data));

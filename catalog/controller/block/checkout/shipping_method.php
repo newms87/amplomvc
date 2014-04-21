@@ -23,22 +23,19 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 				}
 				unset($method);
 
-				$this->data['shipping_methods'] = $shipping_methods;
+				$data['shipping_methods'] = $shipping_methods;
 			} else {
-				$this->data['cart_error_shipping_method'] = $this->cart->getError('shipping_method');
-				$this->data['allowed_shipping_zones']     = $this->cart->getAllowedShippingZones();
+				$data['cart_error_shipping_method'] = $this->cart->getError('shipping_method');
+				$data['allowed_shipping_zones']     = $this->cart->getAllowedShippingZones();
 			}
 		} else {
-			$this->data['no_shipping_address'] = true;
+			$data['no_shipping_address'] = true;
 		}
 
-		$this->data['validate_shipping_method'] = $this->url->link('block/checkout/shipping_method/validate');
-
-		//The Template
-		$this->view->load('block/checkout/shipping_method');
+		$data['validate_shipping_method'] = $this->url->link('block/checkout/shipping_method/validate');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/shipping_method', $data));
 	}
 
 	public function validate()

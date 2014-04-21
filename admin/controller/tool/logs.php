@@ -17,8 +17,8 @@ class Admin_Controller_Tool_Logs extends Controller
 		$this->breadcrumb->add(_l("%s Log", $log_name), $this->url->link('tool/logs', 'log=' . $log));
 
 		//Action Buttons
-		$this->data['remove'] = $this->url->link('tool/logs/remove', 'log=' . $log);
-		$this->data['clear']  = $this->url->link('tool/logs/clear', 'log=' . $log);
+		$data['remove'] = $this->url->link('tool/logs/remove', 'log=' . $log);
+		$data['clear']  = $this->url->link('tool/logs/clear', 'log=' . $log);
 
 		//Sort and Filter
 		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
@@ -63,21 +63,21 @@ class Admin_Controller_Tool_Logs extends Controller
 			}
 		}
 
-		$this->data['entries'] = $entries;
+		$data['entries'] = $entries;
 
 		$next = $start + $limit;
 		$prev = $start - $limit > 0 ? $start - $limit : 0;
 
 		if ($current >= ($start + $limit)) {
-			$this->data['next'] = $this->url->link('tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
+			$data['next'] = $this->url->link('tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
 		}
 
 		if ($start > 0) {
-			$this->data['prev'] = $this->url->link('tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
+			$data['prev'] = $this->url->link('tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
 		}
 
 		//Template Data
-		$this->data['log_name'] = $log_name;
+		$data['log_name'] = $log_name;
 
 		$log_files = $this->tool->get_files_r(DIR_LOGS, array('txt'));
 
@@ -91,24 +91,15 @@ class Admin_Controller_Tool_Logs extends Controller
 			);
 		}
 
-		$this->data['data_log_files'] = $log_files;
+		$data['data_log_files'] = $log_files;
 
-		$this->data['limit'] = $sort['limit'];
+		$data['limit'] = $sort['limit'];
 
 		//Limits
-		$this->data['limits'] = $this->sort->renderLimits();
-
-		//The Template
-		$this->view->load('tool/logs');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('tool/logs', $data));
 	}
 
 	public function remove($lines = null)

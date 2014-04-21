@@ -9,8 +9,6 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/return_policy');
 		//Page Head
 		$this->document->setTitle(_l("Return Policies"));
 
@@ -73,27 +71,21 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 		}
 		unset($return_policy);
 
-		$this->data['return_policies'] = $return_policies;
+		$data['return_policies'] = $return_policies;
 
 		//Template Data
-		$this->data['data_days'] = array(
+		$data['data_days'] = array(
 			'final' => _l("Final Sale"),
 			0       => _l("Return Anytime"),
 			1       => _l("Days:"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/return_policy');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/return_policy');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/return_policy', $data));
 	}
 
 	private function validate()

@@ -108,9 +108,6 @@ class Catalog_Controller_Account_Address extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Address Book"));
 
-		//The Template
-		$this->view->load('account/address_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
@@ -126,33 +123,20 @@ class Catalog_Controller_Account_Address extends Controller
 		}
 		unset($address);
 
-		$this->data['addresses'] = $addresses;
+		$data['addresses'] = $addresses;
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('account/address/update');
-		$this->data['back']   = $this->url->link('account/account');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['insert'] = $this->url->link('account/address/update');
+		$data['back']   = $this->url->link('account/account');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/address_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Address Book"));
-
-		//The Template
-		$this->view->load('account/address_form');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -189,36 +173,26 @@ class Catalog_Controller_Account_Address extends Controller
 			$address_info['default'] = (int)$this->customer->getDefaultShippingAddressId() === $address_id;
 		}
 
-		$this->data = $address_info + $defaults;
+		$data = $address_info + $defaults;
 
-		$this->data['address_id'] = $address_id;
+		$data['address_id'] = $address_id;
 
 		//Template Data
-		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
+		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
+		$data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
 
 		if (!$this->request->isAjax()) {
-			$this->data['back'] = $this->url->link('account/address');
+			$data['back'] = $this->url->link('account/address');
 		}
 
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/address_form', $data));
 	}
 }

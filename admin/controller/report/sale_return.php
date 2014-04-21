@@ -3,8 +3,6 @@ class Admin_Controller_Report_SaleReturn extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/sale_return');
-
 		$this->document->setTitle(_l("Returns Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -62,7 +60,7 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Returns Report"), $this->url->link('report/sale_return', $url));
 
-		$this->data['returns'] = array();
+		$data['returns'] = array();
 
 		$data = array(
 			'filter_date_start'       => $filter_date_start,
@@ -78,33 +76,33 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		$results = $this->Model_Report_Return->getReturns($data);
 
 		foreach ($results as $result) {
-			$this->data['returns'][] = array(
+			$data['returns'][] = array(
 				'date_start' => $this->date->format($result['date_start'], 'short'),
 				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'returns'    => $result['returns']
 			);
 		}
 
-		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+		$data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 
-		$this->data['groups'] = array();
+		$data['groups'] = array();
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Years"),
 			'value' => 'year',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Months"),
 			'value' => 'month',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Weeks"),
 			'value' => 'week',
 		);
 
-		$this->data['groups'][] = array(
+		$data['groups'][] = array(
 			'text'  => _l("Days"),
 			'value' => 'day',
 		);
@@ -129,18 +127,13 @@ class Admin_Controller_Report_SaleReturn extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $return_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_date_start']       = $filter_date_start;
-		$this->data['filter_date_end']         = $filter_date_end;
-		$this->data['filter_group']            = $filter_group;
-		$this->data['filter_return_status_id'] = $filter_return_status_id;
+		$data['filter_date_start']       = $filter_date_start;
+		$data['filter_date_end']         = $filter_date_end;
+		$data['filter_group']            = $filter_group;
+		$data['filter_return_status_id'] = $filter_return_status_id;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/sale_return', $data));
 	}
 }

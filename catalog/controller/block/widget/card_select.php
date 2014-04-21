@@ -13,10 +13,8 @@ class Catalog_Controller_Block_Widget_CardSelect extends Controller
 			}
 		}
 
-		$this->data = $settings;
+		$data = $settings;
 
-		$this->view->load('block/widget/card_select');
-
-		$this->render();
+		$this->render('block/widget/card_select', $data);
 	}
 }

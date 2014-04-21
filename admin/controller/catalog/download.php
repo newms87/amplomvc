@@ -134,8 +134,6 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	private function getList()
 	{
-		$this->view->load('catalog/download_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -171,10 +169,10 @@ class Admin_Controller_Catalog_Download extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Downloads"), $this->url->link('catalog/download', $url));
 
-		$this->data['insert'] = $this->url->link('catalog/download/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/download/delete', $url);
+		$data['insert'] = $this->url->link('catalog/download/insert', $url);
+		$data['delete'] = $this->url->link('catalog/download/delete', $url);
 
-		$this->data['downloads'] = array();
+		$data['downloads'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -195,7 +193,7 @@ class Admin_Controller_Catalog_Download extends Controller
 				'href' => $this->url->link('catalog/download/update', 'download_id=' . $result['download_id'] . $url)
 			);
 
-			$this->data['downloads'][] = array(
+			$data['downloads'][] = array(
 				'download_id' => $result['download_id'],
 				'name'        => $result['name'],
 				'remaining'   => $result['remaining'],
@@ -216,8 +214,8 @@ class Admin_Controller_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']      = $this->url->link('catalog/download', 'sort=dd.name' . $url);
-		$this->data['sort_remaining'] = $this->url->link('catalog/download', 'sort=d.remaining' . $url);
+		$data['sort_name']      = $this->url->link('catalog/download', 'sort=dd.name' . $url);
+		$data['sort_remaining'] = $this->url->link('catalog/download', 'sort=d.remaining' . $url);
 
 		$url = '';
 
@@ -231,39 +229,32 @@ class Admin_Controller_Catalog_Download extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $download_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/download_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('catalog/download_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
+			$data['error_name'] = $this->error['name'];
 		} else {
-			$this->data['error_name'] = array();
+			$data['error_name'] = array();
 		}
 
 		if (isset($this->error['download'])) {
-			$this->data['error_download'] = $this->error['download'];
+			$data['error_download'] = $this->error['download'];
 		} else {
-			$this->data['error_download'] = '';
+			$data['error_download'] = '';
 		}
 
 		$url = '';
@@ -284,59 +275,54 @@ class Admin_Controller_Catalog_Download extends Controller
 		$this->breadcrumb->add(_l("Downloads"), $this->url->link('catalog/download', $url));
 
 		if (!isset($_GET['download_id'])) {
-			$this->data['action'] = $this->url->link('catalog/download/insert', $url);
+			$data['action'] = $this->url->link('catalog/download/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('catalog/download/update', 'download_id=' . $_GET['download_id'] . $url);
+			$data['action'] = $this->url->link('catalog/download/update', 'download_id=' . $_GET['download_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('catalog/download', $url);
+		$data['cancel'] = $this->url->link('catalog/download', $url);
 
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
+		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		if (isset($_GET['download_id']) && !$this->request->isPost()) {
 			$download_info = $this->Model_Catalog_Download->getDownload($_GET['download_id']);
 		}
 
 		if (isset($download_info['filename'])) {
-			$this->data['filename'] = $download_info['filename'];
+			$data['filename'] = $download_info['filename'];
 		} else {
-			$this->data['filename'] = '';
+			$data['filename'] = '';
 		}
 
 		if (isset($_GET['download_id'])) {
-			$this->data['show_update'] = true;
+			$data['show_update'] = true;
 		} else {
-			$this->data['show_update'] = false;
+			$data['show_update'] = false;
 		}
 
 		if (isset($_POST['download_description'])) {
-			$this->data['download_description'] = $_POST['download_description'];
+			$data['download_description'] = $_POST['download_description'];
 		} elseif (isset($_GET['download_id'])) {
-			$this->data['download_description'] = $this->Model_Catalog_Download->getDownloadDescriptions($_GET['download_id']);
+			$data['download_description'] = $this->Model_Catalog_Download->getDownloadDescriptions($_GET['download_id']);
 		} else {
-			$this->data['download_description'] = array();
+			$data['download_description'] = array();
 		}
 
 		if (isset($_POST['remaining'])) {
-			$this->data['remaining'] = $_POST['remaining'];
+			$data['remaining'] = $_POST['remaining'];
 		} elseif (!empty($download_info['remaining'])) {
-			$this->data['remaining'] = $download_info['remaining'];
+			$data['remaining'] = $download_info['remaining'];
 		} else {
-			$this->data['remaining'] = 1;
+			$data['remaining'] = 1;
 		}
 
 		if (isset($_POST['update'])) {
-			$this->data['update'] = $_POST['update'];
+			$data['update'] = $_POST['update'];
 		} else {
-			$this->data['update'] = false;
+			$data['update'] = false;
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/download_form', $data));
 	}
 
 	private function validateForm()

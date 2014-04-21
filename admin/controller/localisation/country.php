@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/country_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_Country extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Country"), $this->url->link('localisation/country', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/country/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/country/delete', $url);
+		$data['insert'] = $this->url->link('localisation/country/insert', $url);
+		$data['delete'] = $this->url->link('localisation/country/delete', $url);
 
-		$this->data['countries'] = array();
+		$data['countries'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_Country extends Controller
 				'href' => $this->url->link('localisation/country/update', 'country_id=' . $result['country_id'] . $url)
 			);
 
-			$this->data['countries'][] = array(
+			$data['countries'][] = array(
 				'country_id' => $result['country_id'],
 				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? _l(" <b>(Default)</b>") : null),
 				'iso_code_2' => $result['iso_code_2'],
@@ -173,17 +171,17 @@ class Admin_Controller_Localisation_Country extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -198,9 +196,9 @@ class Admin_Controller_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']       = $this->url->link('localisation/country', 'sort=name' . $url);
-		$this->data['sort_iso_code_2'] = $this->url->link('localisation/country', 'sort=iso_code_2' . $url);
-		$this->data['sort_iso_code_3'] = $this->url->link('localisation/country', 'sort=iso_code_3' . $url);
+		$data['sort_name']       = $this->url->link('localisation/country', 'sort=name' . $url);
+		$data['sort_iso_code_2'] = $this->url->link('localisation/country', 'sort=iso_code_2' . $url);
+		$data['sort_iso_code_3'] = $this->url->link('localisation/country', 'sort=iso_code_3' . $url);
 
 		$url = '';
 
@@ -214,33 +212,26 @@ class Admin_Controller_Localisation_Country extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $country_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/country_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/country_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
+			$data['error_name'] = $this->error['name'];
 		} else {
-			$this->data['error_name'] = '';
+			$data['error_name'] = '';
 		}
 
 		$url = '';
@@ -261,71 +252,66 @@ class Admin_Controller_Localisation_Country extends Controller
 		$this->breadcrumb->add(_l("Country"), $this->url->link('localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
-			$this->data['action'] = $this->url->link('localisation/country/insert', $url);
+			$data['action'] = $this->url->link('localisation/country/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);
+			$data['action'] = $this->url->link('localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/country', $url);
+		$data['cancel'] = $this->url->link('localisation/country', $url);
 
 		if (isset($_GET['country_id']) && !$this->request->isPost()) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
 		}
 
 		if (isset($_POST['name'])) {
-			$this->data['name'] = $_POST['name'];
+			$data['name'] = $_POST['name'];
 		} elseif (isset($country_info)) {
-			$this->data['name'] = $country_info['name'];
+			$data['name'] = $country_info['name'];
 		} else {
-			$this->data['name'] = '';
+			$data['name'] = '';
 		}
 
 		if (isset($_POST['iso_code_2'])) {
-			$this->data['iso_code_2'] = $_POST['iso_code_2'];
+			$data['iso_code_2'] = $_POST['iso_code_2'];
 		} elseif (isset($country_info)) {
-			$this->data['iso_code_2'] = $country_info['iso_code_2'];
+			$data['iso_code_2'] = $country_info['iso_code_2'];
 		} else {
-			$this->data['iso_code_2'] = '';
+			$data['iso_code_2'] = '';
 		}
 
 		if (isset($_POST['iso_code_3'])) {
-			$this->data['iso_code_3'] = $_POST['iso_code_3'];
+			$data['iso_code_3'] = $_POST['iso_code_3'];
 		} elseif (isset($country_info)) {
-			$this->data['iso_code_3'] = $country_info['iso_code_3'];
+			$data['iso_code_3'] = $country_info['iso_code_3'];
 		} else {
-			$this->data['iso_code_3'] = '';
+			$data['iso_code_3'] = '';
 		}
 
 		if (isset($_POST['address_format'])) {
-			$this->data['address_format'] = $_POST['address_format'];
+			$data['address_format'] = $_POST['address_format'];
 		} elseif (isset($country_info)) {
-			$this->data['address_format'] = $country_info['address_format'];
+			$data['address_format'] = $country_info['address_format'];
 		} else {
-			$this->data['address_format'] = '';
+			$data['address_format'] = '';
 		}
 
 		if (isset($_POST['postcode_required'])) {
-			$this->data['postcode_required'] = $_POST['postcode_required'];
+			$data['postcode_required'] = $_POST['postcode_required'];
 		} elseif (isset($country_info)) {
-			$this->data['postcode_required'] = $country_info['postcode_required'];
+			$data['postcode_required'] = $country_info['postcode_required'];
 		} else {
-			$this->data['postcode_required'] = 0;
+			$data['postcode_required'] = 0;
 		}
 
 		if (isset($_POST['status'])) {
-			$this->data['status'] = $_POST['status'];
+			$data['status'] = $_POST['status'];
 		} elseif (isset($country_info)) {
-			$this->data['status'] = $country_info['status'];
+			$data['status'] = $country_info['status'];
 		} else {
-			$this->data['status'] = '1';
+			$data['status'] = '1';
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/country_form', $data));
 	}
 
 	private function validateForm()

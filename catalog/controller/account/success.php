@@ -12,26 +12,13 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->breadcrumb->add(_l("Your Account Has Been Created!"), $this->url->link('account/success'));
 
 		//Template Data
-		$this->data['approved'] = !$this->config->get('config_customer_approval');
+		$data['approved'] = !$this->config->get('config_customer_approval');
 
 		//Action Buttons
-		$this->data['contact']  = $this->url->link('information/contact');
-		$this->data['continue'] = $this->url->link('account/account');
-
-		//The Template
-		$this->view->load('account/success');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['contact']  = $this->url->link('information/contact');
+		$data['continue'] = $this->url->link('account/account');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/success', $data));
 	}
 }

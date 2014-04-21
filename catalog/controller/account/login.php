@@ -31,16 +31,16 @@ class Catalog_Controller_Account_Login extends Controller
 			'username' => '',
 		);
 
-		$this->data += $user_info + $defaults;
+		$data += $user_info + $defaults;
 
 		//Template Data
-		$this->data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
-		$this->data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
+		$data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
+		$data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		//Action Buttons
-		$this->data['login']     = $this->url->link('account/login/login');
-		$this->data['register']  = $this->url->link('account/register');
-		$this->data['forgotten'] = $this->url->link('account/forgotten');
+		$data['login']     = $this->url->link('account/login/login');
+		$data['register']  = $this->url->link('account/register');
+		$data['forgotten'] = $this->url->link('account/forgotten');
 
 		//Resolve Redirect
 		if (!empty($_REQUEST['redirect'])) {
@@ -49,21 +49,8 @@ class Catalog_Controller_Account_Login extends Controller
 			$this->request->setRedirect('common/home');
 		}
 
-		//The Template
-		$this->view->load('account/login');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/login', $data));
 	}
 
 	public function login()

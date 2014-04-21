@@ -7,7 +7,7 @@ class Cleanup extends Library
 		$ext         = array('php');
 
 
-		$files = $this->getFiles(DIR_SITE . "catalog/controller/", $ext);
+		$files = $this->getFiles(DIR_SITE . "admin/controller/", $ext);
 
 		$this->noview($files);
 
@@ -44,7 +44,7 @@ class Cleanup extends Library
 					}
 
 					if (!empty($matches[2])) {
-						$this->error($num, "Render was not empty");
+						//$this->error($num, "Render was not empty");
 						continue 2;
 					}
 
@@ -57,7 +57,7 @@ class Cleanup extends Library
 			}
 
 			$this->print_lines($orig_lines, $new_lines, true);
-			//file_put_contents($file, implode("\n", $new_lines));
+			file_put_contents($file, implode("\n", $new_lines));
 		}
 	}
 

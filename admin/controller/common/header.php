@@ -4,13 +4,11 @@ class Admin_Controller_Common_Header extends Controller
 {
 	public function index()
 	{
-		$this->view->load('common/header');
+		$data['title'] = $this->document->getTitle();
 
-		$this->data['title'] = $this->document->getTitle();
+		$data['base'] = URL_SITE;
 
-		$this->data['base'] = URL_SITE;
-
-		$this->data['theme'] = $this->config->get('config_theme');
+		$data['theme'] = $this->config->get('config_theme');
 
 		//Add Styles
 		if (is_file(DIR_THEME . 'css/style.less')) {
@@ -41,30 +39,30 @@ class Admin_Controller_Common_Header extends Controller
 		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_admin_thumb_height'));
 		$this->document->localizeVar('url_site', URL_SITE);
 
-		$this->data['messages'] = $this->message->fetch();
+		$data['messages'] = $this->message->fetch();
 
-		$this->data['direction']      = $this->language->info('direction');
-		$this->data['description']    = $this->document->getDescription();
-		$this->data['keywords']       = $this->document->getKeywords();
-		$this->data['canonical_link'] = $this->document->getCanonicalLink();
-		$this->data['body_class']     = $this->tool->getSlug($this->url->getPath());
+		$data['direction']      = $this->language->info('direction');
+		$data['description']    = $this->document->getDescription();
+		$data['keywords']       = $this->document->getKeywords();
+		$data['canonical_link'] = $this->document->getCanonicalLink();
+		$data['body_class']     = $this->tool->getSlug($this->url->getPath());
 
-		$this->data['lang'] = $this->language->info('code');
+		$data['lang'] = $this->language->info('code');
 
-		$this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
+		$data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
 
 		if (!$this->user->isLogged()) {
-			$this->data['logged'] = '';
+			$data['logged'] = '';
 
-			$this->data['home'] = $this->url->link('common/login');
+			$data['home'] = $this->url->link('common/login');
 		} else {
-			$this->data['home'] = $this->url->link('common/home');
+			$data['home'] = $this->url->link('common/home');
 
-			$this->data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
+			$data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
 
-			$this->data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
+			$data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
 
-			$this->data['store'] = URL_SITE;
+			$data['store'] = URL_SITE;
 
 			//Add Store Settings
 			$stores = $this->Model_Setting_Store->getStores();
@@ -101,7 +99,7 @@ class Admin_Controller_Common_Header extends Controller
 				$this->document->addLink('admin', $link_image_manager);
 			}
 
-			$this->data['links_admin'] = $this->document->getLinks('admin');
+			$data['links_admin'] = $this->document->getLinks('admin');
 
 			//Store Fronts and Settings
 			$link_stores = array(
@@ -135,12 +133,12 @@ class Admin_Controller_Common_Header extends Controller
 
 			$this->document->addLink('right', $link_logout);
 
-			$this->data['links_right'] = $this->document->getLinks('right');
+			$data['links_right'] = $this->document->getLinks('right');
 		}
 
 
-		$this->data['styles']  = $this->document->renderStyles();
-		$this->data['scripts'] = $this->document->renderScripts();
+		$data['styles']  = $this->document->renderStyles();
+		$data['scripts'] = $this->document->renderScripts();
 
 		//Failed Email Messages warnings
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();
@@ -150,6 +148,6 @@ class Admin_Controller_Common_Header extends Controller
 			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 
-		$this->render();
+		$this->render('common/header', $data);
 	}
 }

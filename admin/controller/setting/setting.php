@@ -11,8 +11,6 @@ class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
 	{
-		//The Template and Language
-		$this->view->load('setting/setting');
 		//Page Head
 		$this->document->setTitle(_l("General Settings"));
 
@@ -179,7 +177,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_plugin_dir_mode'                  => 755,
 		);
 
-		$this->data += $config_data + $defaults;
+		$data += $config_data + $defaults;
 
 		$octals = array(
 			'config_default_file_mode',
@@ -192,72 +190,66 @@ class Admin_Controller_Setting_Setting extends Controller
 
 		//convert octals in strings back to regular integers
 		foreach ($octals as $oct) {
-			$this->data[$oct] = intval($this->data[$oct]);
+			$data[$oct] = intval($data[$oct]);
 		}
 
 		//Template Data
-		$this->data['data_layouts']           = $this->Model_Design_Layout->getLayouts();
-		$this->data['themes']                 = $this->theme->getThemes();
-		$this->data['stores']                 = $this->Model_Setting_Store->getStores();
-		$this->data['countries']              = $this->Model_Localisation_Country->getCountries();
-		$this->data['languages']              = $this->Model_Localisation_Language->getLanguages();
-		$this->data['currencies']             = $this->Model_Localisation_Currency->getCurrencies();
-		$this->data['length_classes']         = $this->Model_Localisation_LengthClass->getLengthClasses();
-		$this->data['weight_classes']         = $this->Model_Localisation_WeightClass->getWeightClasses();
-		$this->data['tax_classes']            = $this->Model_Localisation_TaxClass->getTaxClasses();
-		$this->data['customer_groups']        = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$this->data['data_informations']      = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Information->getInformations();
-		$this->data['data_stock_statuses']    = $this->Model_Localisation_StockStatus->getStockStatuses();
-		$this->data['data_order_statuses']    = $this->order->getOrderStatuses();
-		$this->data['data_return_statuses']   = $this->order->getReturnStatuses();
-		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
-		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
+		$data['data_layouts']           = $this->Model_Design_Layout->getLayouts();
+		$data['themes']                 = $this->theme->getThemes();
+		$data['stores']                 = $this->Model_Setting_Store->getStores();
+		$data['countries']              = $this->Model_Localisation_Country->getCountries();
+		$data['languages']              = $this->Model_Localisation_Language->getLanguages();
+		$data['currencies']             = $this->Model_Localisation_Currency->getCurrencies();
+		$data['length_classes']         = $this->Model_Localisation_LengthClass->getLengthClasses();
+		$data['weight_classes']         = $this->Model_Localisation_WeightClass->getWeightClasses();
+		$data['tax_classes']            = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$data['customer_groups']        = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['data_informations']      = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Information->getInformations();
+		$data['data_stock_statuses']    = $this->Model_Localisation_StockStatus->getStockStatuses();
+		$data['data_order_statuses']    = $this->order->getOrderStatuses();
+		$data['data_return_statuses']   = $this->order->getReturnStatuses();
+		$data['data_return_policies']   = $this->cart->getReturnPolicies();
+		$data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 
-		$this->data['data_mail_protocols'] = array(
+		$data['data_mail_protocols'] = array(
 			'smtp' => "SMTP",
 			'mail' => _l("PHP Mail"),
 		);
 
-		$this->data['data_stock_display_types'] = array(
+		$data['data_stock_display_types'] = array(
 			'hide'   => _l("Do not display stock"),
 			'status' => _l("Only show stock status"),
 			-1       => _l("Display stock quantity available"),
 			10       => _l("Display quantity up to 10"),
 		);
 
-		$this->data['data_show_product_related'] = array(
+		$data['data_show_product_related'] = array(
 			0 => _l('Never'),
 			1 => _l('Only When Unavailable'),
 			2 => _l('Always'),
 		);
 
-		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		$data['load_theme_img'] = $this->url->link('setting/setting/theme');
 
-		$this->data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
-		$this->data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
+		$data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
+		$data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/setting');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/setting');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/setting', $data));
 	}
 
 	public function theme()

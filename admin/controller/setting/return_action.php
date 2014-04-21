@@ -9,8 +9,6 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/return_action');
 		//Page Head
 		$this->document->setTitle(_l("Return Actions"));
 
@@ -72,20 +70,14 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 		}
 		unset($return_action);
 
-		$this->data['return_actions'] = $return_actions;
+		$data['return_actions'] = $return_actions;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/return_action');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/return_action');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/return_action', $data));
 	}
 
 	private function validate()

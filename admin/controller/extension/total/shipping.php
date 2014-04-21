@@ -17,12 +17,9 @@ class Admin_Controller_Extension_Total_Shipping extends Controller
 
 		$settings += $defaults;
 
-		$this->data['settings'] = $settings;
-
-		//The Template
-		$this->view->load('extension/total/shipping');
+		$data['settings'] = $settings;
 
 		//Render
-		$this->render();
+		$this->render('extension/total/shipping', $data);
 	}
 }

@@ -3,8 +3,6 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/product_purchased');
-
 		$this->document->setTitle(_l("Products Purchased Report"));
 
 		if (isset($_GET['filter_date_start'])) {
@@ -52,7 +50,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Products Purchased Report"), $this->url->link('report/product_purchased', $url));
 
-		$this->data['products'] = array();
+		$data['products'] = array();
 
 		$data = array(
 			'filter_date_start'      => $filter_date_start,
@@ -67,7 +65,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 		$results = $this->Model_Report_Product->getPurchased($data);
 
 		foreach ($results as $result) {
-			$this->data['products'][] = array(
+			$data['products'][] = array(
 				'name'     => $result['name'],
 				'model'    => $result['model'],
 				'quantity' => $result['quantity'],
@@ -75,7 +73,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 			);
 		}
 
-		$this->data['order_statuses'] = $this->order->getOrderStatuses();
+		$data['order_statuses'] = $this->order->getOrderStatuses();
 
 		$url = '';
 
@@ -93,17 +91,12 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $product_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_date_start']      = $filter_date_start;
-		$this->data['filter_date_end']        = $filter_date_end;
-		$this->data['filter_order_status_id'] = $filter_order_status_id;
+		$data['filter_date_start']      = $filter_date_start;
+		$data['filter_date_end']        = $filter_date_end;
+		$data['filter_order_status_id'] = $filter_order_status_id;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/product_purchased', $data));
 	}
 }

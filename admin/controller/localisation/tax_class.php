@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/tax_class_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Tax Class"), $this->url->link('localisation/tax_class', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
+		$data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
+		$data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
 
-		$this->data['tax_classes'] = array();
+		$data['tax_classes'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 				'href' => $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $result['tax_class_id'] . $url)
 			);
 
-			$this->data['tax_classes'][] = array(
+			$data['tax_classes'][] = array(
 				'tax_class_id' => $result['tax_class_id'],
 				'title'        => $result['title'],
 				'selected'     => isset($_GET['selected']) && in_array($result['tax_class_id'], $_GET['selected']),
@@ -171,17 +169,17 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -196,7 +194,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_title'] = $this->url->link('localisation/tax_class', 'sort=title' . $url);
+		$data['sort_title'] = $this->url->link('localisation/tax_class', 'sort=title' . $url);
 
 		$url = '';
 
@@ -210,39 +208,32 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $tax_class_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer',
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/tax_class_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/tax_class_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['title'])) {
-			$this->data['error_title'] = $this->error['title'];
+			$data['error_title'] = $this->error['title'];
 		} else {
-			$this->data['error_title'] = '';
+			$data['error_title'] = '';
 		}
 
 		if (isset($this->error['description'])) {
-			$this->data['error_description'] = $this->error['description'];
+			$data['error_description'] = $this->error['description'];
 		} else {
-			$this->data['error_description'] = '';
+			$data['error_description'] = '';
 		}
 
 		$url = '';
@@ -263,49 +254,44 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		$this->breadcrumb->add(_l("Tax Class"), $this->url->link('localisation/tax_class', $url));
 
 		if (!isset($_GET['tax_class_id'])) {
-			$this->data['action'] = $this->url->link('localisation/tax_class/insert', $url);
+			$data['action'] = $this->url->link('localisation/tax_class/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $_GET['tax_class_id'] . $url);
+			$data['action'] = $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $_GET['tax_class_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/tax_class', $url);
+		$data['cancel'] = $this->url->link('localisation/tax_class', $url);
 
 		if (isset($_GET['tax_class_id']) && !$this->request->isPost()) {
 			$tax_class_info = $this->Model_Localisation_TaxClass->getTaxClass($_GET['tax_class_id']);
 		}
 
 		if (isset($_POST['title'])) {
-			$this->data['title'] = $_POST['title'];
+			$data['title'] = $_POST['title'];
 		} elseif (isset($tax_class_info)) {
-			$this->data['title'] = $tax_class_info['title'];
+			$data['title'] = $tax_class_info['title'];
 		} else {
-			$this->data['title'] = '';
+			$data['title'] = '';
 		}
 
 		if (isset($_POST['description'])) {
-			$this->data['description'] = $_POST['description'];
+			$data['description'] = $_POST['description'];
 		} elseif (isset($tax_class_info)) {
-			$this->data['description'] = $tax_class_info['description'];
+			$data['description'] = $tax_class_info['description'];
 		} else {
-			$this->data['description'] = '';
+			$data['description'] = '';
 		}
 
-		$this->data['tax_rates'] = $this->Model_Localisation_TaxRate->getTaxRates();
+		$data['tax_rates'] = $this->Model_Localisation_TaxRate->getTaxRates();
 
 		if (isset($_POST['tax_rule'])) {
-			$this->data['tax_rules'] = $_POST['tax_rule'];
+			$data['tax_rules'] = $_POST['tax_rule'];
 		} elseif (isset($_GET['tax_class_id'])) {
-			$this->data['tax_rules'] = $this->Model_Localisation_Taxclass->getTaxRules($_GET['tax_class_id']);
+			$data['tax_rules'] = $this->Model_Localisation_Taxclass->getTaxRules($_GET['tax_class_id']);
 		} else {
-			$this->data['tax_rules'] = array();
+			$data['tax_rules'] = array();
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer',
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/tax_class_form', $data));
 	}
 
 	private function validateForm()

@@ -3,21 +3,21 @@ class Admin_Controller_Dev_Dev extends Controller
 {
 	public function index()
 	{
-		$this->view->load('dev/dev');
+		//Page Head
 		$this->document->setTitle(_l("Development Console"));
 
-		$this->data['url_sync']            = $this->url->link("dev/dev/sync");
-		$this->data['url_site_management'] = $this->url->link("dev/dev/site_management");
-		$this->data['url_backup_restore']  = $this->url->link("dev/dev/backup_restore");
-		$this->data['url_db_admin']        = $this->url->link("dev/db_admin");
+		$data['url_sync']            = $this->url->link("dev/dev/sync");
+		$data['url_site_management'] = $this->url->link("dev/dev/site_management");
+		$data['url_backup_restore']  = $this->url->link("dev/dev/backup_restore");
+		$data['url_db_admin']        = $this->url->link("dev/db_admin");
 
-		$this->content();
+		$data['return'] = $this->url->link('common/home');
+
+		$this->response->setOutput($this->render('dev/dev', $data));
 	}
 
 	public function sync()
 	{
-		$this->view->load('dev/sync');
-
 		$this->document->setTitle(_l("Synchronize Sites"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
@@ -43,7 +43,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->breadcrumb->add(_l("Synchronize Sites"), $this->url->link('dev/dev/sync'));
 
-		$this->data['request_sync_table'] = $this->url->link('dev/dev/request_sync_table');
+		$data['request_sync_table'] = $this->url->link('dev/dev/request_sync_table');
 
 		$defaults = array(
 			'tables' => '',
@@ -52,23 +52,25 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		$this->data['data_sites'] = $dev_sites;
+		$data['data_sites'] = $dev_sites;
 
-		$this->data['data_tables'] = $this->db->getTables();
+		$data['data_tables'] = $this->db->getTables();
+
+		$data['return'] = $this->url->link('common/home');
 
 		$this->content();
+
+		$this->response->setOutput($this->render('dev/sync', $data));
 	}
 
 	public function site_management()
 	{
-		$this->view->load('dev/site_management');
-
 		$this->document->setTitle(_l("Site Management"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
@@ -100,27 +102,29 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		$this->data['data_site_status'] = array(
+		$data['data_site_status'] = array(
 			'live'     => _l("Live Site"),
 			'dev'      => _l("Development Site"),
 			'inactive' => _l("Inactive Site"),
 		);
 
-		$this->data['dev_sites'] = $dev_sites;
+		$data['dev_sites'] = $dev_sites;
+
+		$data['return'] = $this->url->link('common/home');
 
 		$this->content();
+
+		$this->response->setOutput($this->render('dev/site_management', $data));
 	}
 
 	public function backup_restore()
 	{
-		//Template and Language
-		$this->view->load('dev/backup_restore');
 		//Page Head
 		$this->document->setTitle(_l("Backup & Restore"));
 
@@ -181,9 +185,9 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
@@ -194,11 +198,15 @@ class Admin_Controller_Dev_Dev extends Controller
 			$backup['display_date'] = $this->date->format($backup['date'], 'd M, Y');
 		}
 
-		$this->data['data_backup_files'] = $backup_files;
+		$data['data_backup_files'] = $backup_files;
 
-		$this->data['data_tables'] = $this->db->getTables();
+		$data['data_tables'] = $this->db->getTables();
+
+		$data['return'] = $this->url->link('common/home');
 
 		$this->content();
+
+		$this->response->setOutput($this->render('dev/backup_restore', $data));
 	}
 
 	public function content()
@@ -207,16 +215,6 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
 		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);
-
-		$this->data['return'] = $this->url->link('common/home');
-
-
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
 	}
 
 	public function request_table_data()

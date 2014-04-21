@@ -114,11 +114,6 @@ class Catalog_Controller_Common_Header extends Controller
 			$data['block_currencies'] = $this->block->render('localisation/currency');
 		}
 
-		//Dependencies
-		$this->children = array(
-			'area/above',
-		);
-
 		//Render
 		$this->render('common/header', $data);
 	}

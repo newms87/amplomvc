@@ -3,7 +3,6 @@ class Catalog_Controller_Block_Widget_Youtube extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/widget/youtube');
 		foreach ($settings['videos'] as &$video) {
 			if (empty($video['width'])) {
 				$video['width'] = 600;
@@ -14,8 +13,8 @@ class Catalog_Controller_Block_Widget_Youtube extends Controller
 			}
 		}
 
-		$this->data = $settings;
+		$data = $settings;
 
-		$this->render();
+		$this->render('block/widget/youtube', $data);
 	}
 }

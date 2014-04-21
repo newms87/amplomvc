@@ -35,24 +35,11 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		$this->breadcrumb->add(_l('Forgotten Password'), $this->url->link('account/forgotten'));
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('account/forgotten');
-		$this->data['back'] = $this->url->link('account/login');
-
-		//The Template
-		$this->view->load('account/forgotten');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['save'] = $this->url->link('account/forgotten');
+		$data['back'] = $this->url->link('account/login');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/forgotten', $data));
 	}
 
 	public function reset()
@@ -95,20 +82,11 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('account/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('account/forgotten/reset', 'code=' . $code);
-		$this->data['cancel'] = $this->url->link('account/login');
-
-		//The Template
-		$this->view->load('common/reset');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('account/forgotten/reset', 'code=' . $code);
+		$data['cancel'] = $this->url->link('account/login');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/reset', $data));
 	}
 
 	private function validate()

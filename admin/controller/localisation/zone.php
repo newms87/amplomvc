@@ -99,8 +99,6 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/zone_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -136,10 +134,10 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/zone/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/zone/delete', $url);
+		$data['insert'] = $this->url->link('localisation/zone/insert', $url);
+		$data['delete'] = $this->url->link('localisation/zone/delete', $url);
 
-		$this->data['zones'] = array();
+		$data['zones'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -160,7 +158,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 				'href' => $this->url->link('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
 			);
 
-			$this->data['zones'][] = array(
+			$data['zones'][] = array(
 				'zone_id'  => $result['zone_id'],
 				'country'  => $result['country'],
 				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? _l(" <b>(Default)</b>") : null),
@@ -171,17 +169,17 @@ class Admin_Controller_Localisation_Zone extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -196,9 +194,9 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_country'] = $this->url->link('localisation/zone', 'sort=c.name' . $url);
-		$this->data['sort_name']    = $this->url->link('localisation/zone', 'sort=z.name' . $url);
-		$this->data['sort_code']    = $this->url->link('localisation/zone', 'sort=z.code' . $url);
+		$data['sort_country'] = $this->url->link('localisation/zone', 'sort=c.name' . $url);
+		$data['sort_name']    = $this->url->link('localisation/zone', 'sort=z.name' . $url);
+		$data['sort_code']    = $this->url->link('localisation/zone', 'sort=z.code' . $url);
 
 		$url = '';
 
@@ -212,33 +210,26 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $zone_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/zone_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/zone_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
+			$data['error_name'] = $this->error['name'];
 		} else {
-			$this->data['error_name'] = '';
+			$data['error_name'] = '';
 		}
 
 		$url = '';
@@ -259,57 +250,52 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {
-			$this->data['action'] = $this->url->link('localisation/zone/insert', $url);
+			$data['action'] = $this->url->link('localisation/zone/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
+			$data['action'] = $this->url->link('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/zone', $url);
+		$data['cancel'] = $this->url->link('localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
 			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);
 		}
 
 		if (isset($_POST['status'])) {
-			$this->data['status'] = $_POST['status'];
+			$data['status'] = $_POST['status'];
 		} elseif (isset($zone_info)) {
-			$this->data['status'] = $zone_info['status'];
+			$data['status'] = $zone_info['status'];
 		} else {
-			$this->data['status'] = '1';
+			$data['status'] = '1';
 		}
 
 		if (isset($_POST['name'])) {
-			$this->data['name'] = $_POST['name'];
+			$data['name'] = $_POST['name'];
 		} elseif (isset($zone_info)) {
-			$this->data['name'] = $zone_info['name'];
+			$data['name'] = $zone_info['name'];
 		} else {
-			$this->data['name'] = '';
+			$data['name'] = '';
 		}
 
 		if (isset($_POST['code'])) {
-			$this->data['code'] = $_POST['code'];
+			$data['code'] = $_POST['code'];
 		} elseif (isset($zone_info)) {
-			$this->data['code'] = $zone_info['code'];
+			$data['code'] = $zone_info['code'];
 		} else {
-			$this->data['code'] = '';
+			$data['code'] = '';
 		}
 
 		if (isset($_POST['country_id'])) {
-			$this->data['country_id'] = $_POST['country_id'];
+			$data['country_id'] = $_POST['country_id'];
 		} elseif (isset($zone_info)) {
-			$this->data['country_id'] = $zone_info['country_id'];
+			$data['country_id'] = $zone_info['country_id'];
 		} else {
-			$this->data['country_id'] = '';
+			$data['country_id'] = '';
 		}
 
-		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
+		$data['countries'] = $this->Model_Localisation_Country->getCountries();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/zone_form', $data));
 	}
 
 	private function validateForm()

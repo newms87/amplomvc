@@ -82,9 +82,6 @@ class Admin_Controller_Design_Layout extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Layouts"));
 
-		//The Template
-		$this->view->load('design/layout_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Layouts"), $this->url->link('design/layout'));
@@ -144,10 +141,10 @@ class Admin_Controller_Design_Layout extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -162,36 +159,27 @@ class Admin_Controller_Design_Layout extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'design/layout/batch_update';
+		$data['batch_update'] = 'design/layout/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total  = $layout_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('design/layout/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('design/layout/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/layout_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Layouts"));
-
-		//The Template
-		$this->view->load('design/layout_form');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -215,35 +203,29 @@ class Admin_Controller_Design_Layout extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($layout_info[$key])) {
-				$this->data[$key] = $layout_info[$key];
+				$data[$key] = $layout_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Template Defaults
-		$this->data['routes']['__ac_template__'] = array(
+		$data['routes']['__ac_template__'] = array(
 			'store_id' => 1,
 			'route'    => '',
 		);
 
 		//Template Data
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$data['data_stores'] = $this->Model_Setting_Store->getStores();
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('design/layout/update', 'layout_id=' . $layout_id);
-		$this->data['cancel'] = $this->url->link('design/layout');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('design/layout/update', 'layout_id=' . $layout_id);
+		$data['cancel'] = $this->url->link('design/layout');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/layout_form', $data));
 	}
 
 	private function validateForm()

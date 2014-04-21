@@ -26,7 +26,7 @@ class Catalog_Controller_Account_Register extends Controller
 		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
 		$this->breadcrumb->add(_l("Register"), $this->url->link('account/register'));
 
-		$this->data['action'] = $this->url->link('account/register');
+		$data['action'] = $this->url->link('account/register');
 
 		$registration_data = array();
 
@@ -51,44 +51,31 @@ class Catalog_Controller_Account_Register extends Controller
 			'agree'      => false
 		);
 
-		$this->data += $registration_data + $defaults;
+		$data += $registration_data + $defaults;
 
 		//Template Data
-		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
+		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//TODO: update this to a page!
 		if ($this->config->get('config_account_terms_info_id')) {
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
 			if ($information_info) {
-				$this->data['agree_to']    = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
-				$this->data['agree_title'] = $information_info['title'];
+				$data['agree_to']    = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
+				$data['agree_title'] = $information_info['title'];
 			}
 		}
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
 		//Action Buttons
-		$this->data['login'] = $this->url->link('account/login');
-
-		//The Template
-		$this->view->load('account/register');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['login'] = $this->url->link('account/login');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/register', $data));
 	}
 
 	public function validate()

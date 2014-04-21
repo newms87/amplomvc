@@ -8,8 +8,6 @@ class Catalog_Controller_Mail_Voucher extends Controller
 			return;
 		}
 
-		$this->view->load('mail/voucher');
-
 		if (!empty($voucher['order_id'])) {
 			$order = $this->order->get($voucher['order_id']);
 
@@ -31,20 +29,20 @@ class Catalog_Controller_Mail_Voucher extends Controller
 			$voucher['converted_amount'] = $this->currency->format($voucher['amount'], $currency_code, $currency_value);
 		}
 
-		$this->data += $voucher;
+		$data += $voucher;
 
-		$this->data['store_name'] = $store['name'];
-		$this->data['store_url']  = $store['url'];
+		$data['store_name'] = $store['name'];
+		$data['store_url']  = $store['url'];
 
-		$this->data['from_name']  = $voucher['from_name'];
-		$this->data['redeem_url'] = $this->url->store($store['store_id'], 'common/home');
+		$data['from_name']  = $voucher['from_name'];
+		$data['redeem_url'] = $this->url->store($store['store_id'], 'common/home');
 
-		$this->data['image'] = $this->image->get($voucher['image']);
+		$data['image'] = $this->image->get($voucher['image']);
 
-		$image_size = getimagesize($this->data['image']);
+		$image_size = getimagesize($data['image']);
 
-		$this->data['image_width']  = $image_size[0];
-		$this->data['image_height'] = $image_size[1];
+		$data['image_width']  = $image_size[0];
+		$data['image_height'] = $image_size[1];
 
 		$this->mail->init();
 
@@ -54,7 +52,7 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject(_l("You have been sent a gift voucher from %s", $voucher['from_name']));
 
-		$this->mail->setHtml($this->render());
+		$this->mail->setHtml($this->render('mail/voucher', $data));
 
 		$this->mail->send();
 	}

@@ -10,23 +10,23 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 				$payment_methods = array();
 			} else {
 				if ($this->cart->hasPaymentMethod()) {
-					$this->data['code'] = $this->cart->getPaymentCode();
+					$data['code'] = $this->cart->getPaymentCode();
 				} else {
-					$this->data['code'] = key($payment_methods);
+					$data['code'] = key($payment_methods);
 				}
 			}
 
-			$this->data['payment_methods'] = $payment_methods;
+			$data['payment_methods'] = $payment_methods;
 		} else {
-			$this->data['no_payment_address'] = true;
+			$data['no_payment_address'] = true;
 		}
 
 		if ($this->config->get('config_checkout_terms_info_id')) {
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 
 			if ($information_info) {
-				$this->data['checkout_terms']       = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
-				$this->data['checkout_terms_title'] = $information_info['title'];
+				$data['checkout_terms']       = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
+				$data['checkout_terms_title'] = $information_info['title'];
 			}
 		}
 
@@ -36,16 +36,13 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			'agree'   => '',
 		);
 
-		$this->data += $this->session->data + $session_defaults;
+		$data += $this->session->data + $session_defaults;
 
 		//Actions
-		$this->data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');
-
-		//The Template
-		$this->view->load('block/checkout/payment_method');
+		$data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/payment_method', $data));
 	}
 
 	public function validate()

@@ -7,17 +7,14 @@ class Admin_Controller_Block_Module_Sidebar extends Controller
 
 	public function settings(&$settings)
 	{
-		//Template
-		$this->view->load('block/module/sidebar_settings');
-
 		//The Data
-		$this->data['settings'] = $settings;
+		$data['settings'] = $settings;
 
 		//Template Data
-		$this->data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
+		$data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 
 		//Render
-		$this->render();
+		$this->render('block/module/sidebar_settings', $data);
 	}
 
 	public function save()

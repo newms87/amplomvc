@@ -57,13 +57,11 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	private function getList()
 	{
-		$this->view->load('setting/db_rules_list');
-
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("DB Rules"), $this->url->link('setting/db_rules'));
 
-		$this->data['insert'] = $this->url->link('setting/db_rules/insert');
-		$this->data['delete'] = $this->url->link('setting/db_rules/delete');
+		$data['insert'] = $this->url->link('setting/db_rules/insert');
+		$data['delete'] = $this->url->link('setting/db_rules/delete');
 
 		$url = $this->get_url(array('page'));
 
@@ -79,37 +77,30 @@ class Admin_Controller_Setting_DbRules extends Controller
 			$db_rule['action']   = $action;
 		}
 
-		$this->data['db_rules'] = $db_rules;
+		$data['db_rules'] = $db_rules;
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/db_rules_list', $data));
 	}
 
 	public function getForm()
 	{
-		$this->view->load('setting/db_rules_form');
-
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id'] : null;
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("DB Rules"), $this->url->link('setting/db_rules'));
 
 		if (!$db_rule_id) {
-			$this->data['action'] = $this->url->link('setting/db_rules/insert');
+			$data['action'] = $this->url->link('setting/db_rules/insert');
 		} else {
-			$this->data['action'] = $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule_id);
+			$data['action'] = $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule_id);
 		}
 
-		$this->data['cancel'] = $this->url->link('setting/db_rules');
+		$data['cancel'] = $this->url->link('setting/db_rules');
 
 		$db_rule_info = $db_rule_id ? $this->Model_Setting_DbRules->getDbRule($db_rule_id) : null;
 
@@ -122,15 +113,15 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		foreach ($defaults as $d => $value) {
 			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
+				$data[$d] = $_POST[$d];
 			} elseif (isset($db_rule_info[$d])) {
-				$this->data[$d] = $db_rule_info[$d];
+				$data[$d] = $db_rule_info[$d];
 			} elseif (!$db_rule_id) {
-				$this->data[$d] = $value;
+				$data[$d] = $value;
 			}
 		}
 
-		$this->data['data_escape_types'] = array(
+		$data['data_escape_types'] = array(
 			0 => _l('Normal Escape'),
 			1 => _l('No Escape'),
 			2 => _l("Image"),
@@ -139,17 +130,12 @@ class Admin_Controller_Setting_DbRules extends Controller
 			5 => _l("Datetime"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/db_rules_form', $data));
 	}
 
 	private function validateForm()

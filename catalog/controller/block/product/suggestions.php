@@ -11,9 +11,6 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 
 		$limit = !empty($settings['limit']) ? $settings['limit'] : null;
 
-		//Template and Language
-		$this->view->load('block/product/suggestions');
-
 		$image_width  = $this->config->get('config_image_related_width');
 		$image_height = $this->config->get('config_image_related_height');
 
@@ -47,10 +44,10 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 		}
 		unset($product);
 
-		$this->data['products'] = $suggestions;
+		$data['products'] = $suggestions;
 
-		$this->data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
+		$data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
 
-		$this->render();
+		$this->render('block/product/suggestions', $data);
 	}
 }

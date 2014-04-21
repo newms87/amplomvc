@@ -4,8 +4,6 @@ class Catalog_Controller_Account_Order extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('account/order_list');
 		//Login Validation
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/order'));
@@ -46,32 +44,22 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($order);
 
-		$this->data['orders'] = $orders;
+		$data['orders'] = $orders;
 
 		//Render Limit Menu
-		//$this->data['limits'] = $this->sort->renderLimits();
+		//$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['continue'] = $this->url->link('account/account');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['continue'] = $this->url->link('account/account');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/order_list', $data));
 	}
 
 	public function info()
@@ -106,21 +94,21 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$this->data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+		$data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
 
 		//Shipping / Payment Addresses
-		$this->data['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
-		$this->data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
+		$data['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
+		$data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
 
 		//Shipping / Payment Methods
-		$this->data['payment_method']  = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
-		$this->data['shipping_method'] = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
+		$data['payment_method']  = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
+		$data['shipping_method'] = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
 
 		$order['comment'] = nl2br($order['comment']);
 
-		$this->data += $order;
+		$data += $order;
 
 		//Order Products
 		$products = $this->System_Model_Order->getOrderProducts($order_id);
@@ -155,7 +143,7 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($product);
 
-		$this->data['products'] = $products;
+		$data['products'] = $products;
 
 		//Voucher
 		$vouchers = $this->System_Model_Order->getOrderVouchers($order_id);
@@ -165,7 +153,7 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($voucher);
 
-		$this->data['vouchers'] = $vouchers;
+		$data['vouchers'] = $vouchers;
 
 		//History
 		$history_filter = array(
@@ -181,7 +169,7 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($history);
 
-		$this->data['histories'] = $histories;
+		$data['histories'] = $histories;
 
 		//Totals
 		$totals = $this->System_Model_Order->getOrderTotals($order_id);
@@ -191,26 +179,13 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($total);
 
-		$this->data['totals'] = $totals;
+		$data['totals'] = $totals;
 
 		//Action Buttons
-		$this->data['continue'] = $this->url->link('account/order');
-
-		//The Template
-		$this->view->load('account/order_info');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['continue'] = $this->url->link('account/order');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/order_info', $data));
 	}
 
 	public function reorder()

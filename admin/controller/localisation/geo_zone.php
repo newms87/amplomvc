@@ -57,8 +57,6 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/geo_zone_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -94,10 +92,10 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Geo Zones"), $this->url->link('localisation/geo_zone', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/geo_zone/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/geo_zone/delete', $url);
+		$data['insert'] = $this->url->link('localisation/geo_zone/insert', $url);
+		$data['delete'] = $this->url->link('localisation/geo_zone/delete', $url);
 
-		$this->data['geo_zones'] = array();
+		$data['geo_zones'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -118,7 +116,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 				'href' => $this->url->link('localisation/geo_zone/update', 'geo_zone_id=' . $result['geo_zone_id'] . $url)
 			);
 
-			$this->data['geo_zones'][] = array(
+			$data['geo_zones'][] = array(
 				'geo_zone_id' => $result['geo_zone_id'],
 				'name'        => $result['name'],
 				'description' => $result['description'],
@@ -128,17 +126,17 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -153,8 +151,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']        = $this->url->link('localisation/geo_zone', 'sort=name' . $url);
-		$this->data['sort_description'] = $this->url->link('localisation/geo_zone', 'sort=description' . $url);
+		$data['sort_name']        = $this->url->link('localisation/geo_zone', 'sort=name' . $url);
+		$data['sort_description'] = $this->url->link('localisation/geo_zone', 'sort=description' . $url);
 
 		$url = '';
 
@@ -168,23 +166,16 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $geo_zone_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/geo_zone_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/geo_zone_form');
-
 		$geo_zone_id = isset($_GET['geo_zone_id']) ? $_GET['geo_zone_id'] : 0;
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
@@ -193,12 +184,12 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		$this->breadcrumb->add(_l("Geo Zones"), $this->url->link('localisation/geo_zone', $url));
 
 		if (!$geo_zone_id) {
-			$this->data['action'] = $this->url->link('localisation/geo_zone/insert', $url);
+			$data['action'] = $this->url->link('localisation/geo_zone/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/geo_zone/update', 'geo_zone_id=' . $geo_zone_id . '&' . $url);
+			$data['action'] = $this->url->link('localisation/geo_zone/update', 'geo_zone_id=' . $geo_zone_id . '&' . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/geo_zone', $url);
+		$data['cancel'] = $this->url->link('localisation/geo_zone', $url);
 
 		if ($geo_zone_id && !$this->request->isPost()) {
 			$geo_zone_info = $this->Model_Localisation_GeoZone->getGeoZone($geo_zone_id);
@@ -213,26 +204,21 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($geo_zone_info[$key])) {
-				$this->data[$key] = $geo_zone_info[$key];
+				$data[$key] = $geo_zone_info[$key];
 			} elseif (!$geo_zone_id) {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
-		$this->data['data_countries'] = $this->Model_Localisation_Country->getCountries();
+		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
-		if (!isset($this->data['zones'])) {
-			$this->data['zones'] = $this->Model_Localisation_GeoZone->getZones($geo_zone_id);
+		if (!isset($data['zones'])) {
+			$data['zones'] = $this->Model_Localisation_GeoZone->getZones($geo_zone_id);
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/geo_zone_form', $data));
 	}
 
 	private function validateForm()

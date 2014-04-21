@@ -47,9 +47,6 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Voucher Themes"));
 
-		//The Template
-		$this->view->load('sale/voucher_theme_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Voucher Themes"), $this->url->link('sale/voucher_theme'));
@@ -111,10 +108,10 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable"),
 			),
@@ -129,37 +126,28 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'sale/voucher_theme/batch_update';
+		$data['batch_update'] = 'sale/voucher_theme/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $voucher_theme_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('sale/voucher_theme/insert');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('sale/voucher_theme/insert');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/voucher_theme_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Voucher Themes"));
-
-		//The Template
-		$this->view->load('sale/voucher_theme_form');
 
 		//Insert or Update
 		$voucher_theme_id = isset($_GET['voucher_theme_id']) ? (int)$_GET['voucher_theme_id'] : 0;
@@ -187,29 +175,23 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($voucher_theme_info[$key])) {
-				$this->data[$key] = $voucher_theme_info[$key];
+				$data[$key] = $voucher_theme_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		//Translations
-		$this->data['translations'] = $this->Model_Sale_VoucherTheme->getVoucherThemeTranslations($voucher_theme_id);
+		$data['translations'] = $this->Model_Sale_VoucherTheme->getVoucherThemeTranslations($voucher_theme_id);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id);
-		$this->data['cancel'] = $this->url->link('sale/voucher_theme');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id);
+		$data['cancel'] = $this->url->link('sale/voucher_theme');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/voucher_theme_form', $data));
 	}
 
 	private function validateForm()

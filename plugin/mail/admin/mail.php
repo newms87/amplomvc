@@ -23,7 +23,7 @@ class Admin_Mail extends Controller
 		);
 
 		foreach ($configs as $c) {
-			$this->data[$c] = isset($_POST[$c]) ? $_POST[$c] : $this->config->get($c);
+			$data[$c] = isset($_POST[$c]) ? $_POST[$c] : $this->config->get($c);
 		}
 	}
 

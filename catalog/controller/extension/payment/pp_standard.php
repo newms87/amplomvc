@@ -4,11 +4,11 @@ class Catalog_Controller_Extension_Payment_PpStandard
 	public function renderTemplate()
 	{
 		if ($this->settings['test']) {
-			$this->data['action']   = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-			$this->data['business'] = $this->settings['test_email'] ? $this->settings['test_email'] : $this->settings['email'];
+			$data['action']   = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			$data['business'] = $this->settings['test_email'] ? $this->settings['test_email'] : $this->settings['email'];
 		} else {
-			$this->data['action']   = 'https://www.paypal.com/cgi-bin/webscr';
-			$this->data['business'] = $this->settings['email'];
+			$data['action']   = 'https://www.paypal.com/cgi-bin/webscr';
+			$data['business'] = $this->settings['email'];
 		}
 
 		$order = $this->order->get();
@@ -18,8 +18,8 @@ class Catalog_Controller_Extension_Payment_PpStandard
 			return;
 		}
 
-		$this->data['order_id']  = $order['order_id'];
-		$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+		$data['order_id']  = $order['order_id'];
+		$data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
 		$cart_products = $this->cart->getProducts();
 
@@ -36,14 +36,14 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		}
 		unset($cart_product);
 
-		$this->data['products'] = $cart_products;
+		$data['products'] = $cart_products;
 
-		$this->data['discount_amount_cart'] = 0;
+		$data['discount_amount_cart'] = 0;
 
 		$extra_total = $this->currency->format($order['total'] - $this->cart->getSubTotal(), $order['currency_code'], false, false);
 
 		if ($extra_total > 0) {
-			$this->data['extras'] = array(
+			$data['extras'] = array(
 				array(
 					'name'     => _l('Shipping, Handling, Discounts & Taxes'),
 					'model'    => '',
@@ -53,48 +53,45 @@ class Catalog_Controller_Extension_Payment_PpStandard
 				)
 			);
 		} else {
-			$this->data['discount_amount_cart'] -= $extra_total;
+			$data['discount_amount_cart'] -= $extra_total;
 		}
 
 		$payment_address_info = $this->Model_Localisation_Country->getCountry($order['payment_country_id']);
 
-		$this->data['currency_code'] = $order['currency_code'];
-		$this->data['first_name']    = html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8');
-		$this->data['last_name']     = html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
-		$this->data['address1']      = html_entity_decode($order['payment_address_1'], ENT_QUOTES, 'UTF-8');
-		$this->data['address2']      = html_entity_decode($order['payment_address_2'], ENT_QUOTES, 'UTF-8');
-		$this->data['city']          = html_entity_decode($order['payment_city'], ENT_QUOTES, 'UTF-8');
-		$this->data['zip']           = html_entity_decode($order['payment_postcode'], ENT_QUOTES, 'UTF-8');
-		$this->data['country']       = $payment_address_info['iso_code_2'];
-		$this->data['email']         = $order['email'];
-		$this->data['invoice']       = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
-		$this->data['lc']            = $this->language->info('code');
-		$this->data['notify_url']    = $this->callbackUrl('notify');
-		$this->data['cancel_return'] = $this->url->link('checkout/checkout');
-		$this->data['page_style']    = $this->settings['page_style'];
+		$data['currency_code'] = $order['currency_code'];
+		$data['first_name']    = html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8');
+		$data['last_name']     = html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
+		$data['address1']      = html_entity_decode($order['payment_address_1'], ENT_QUOTES, 'UTF-8');
+		$data['address2']      = html_entity_decode($order['payment_address_2'], ENT_QUOTES, 'UTF-8');
+		$data['city']          = html_entity_decode($order['payment_city'], ENT_QUOTES, 'UTF-8');
+		$data['zip']           = html_entity_decode($order['payment_postcode'], ENT_QUOTES, 'UTF-8');
+		$data['country']       = $payment_address_info['iso_code_2'];
+		$data['email']         = $order['email'];
+		$data['invoice']       = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
+		$data['lc']            = $this->language->info('code');
+		$data['notify_url']    = $this->callbackUrl('notify');
+		$data['cancel_return'] = $this->url->link('checkout/checkout');
+		$data['page_style']    = $this->settings['page_style'];
 
 		if ($this->settings['pdt_enabled']) {
-			$this->data['return'] = $this->callbackUrl('auto_return');
+			$data['return'] = $this->callbackUrl('auto_return');
 		} else {
-			$this->data['return'] = $this->url->link('checkout/success');
+			$data['return'] = $this->url->link('checkout/success');
 		}
 
 		$server = URL_IMAGE;
 
 		//Ajax Urls
-		$this->data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
+		$data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 
 		//Template Data
-		$this->data['image_url']     = $server . $this->config->get('config_logo');
-		$this->data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
-		$this->data['custom']        = $this->encryption->encrypt($order['order_id']);
-		$this->data['testmode']      = $this->settings['test'];
-
-		//The Template
-		$this->view->load('payment/pp_standard');
+		$data['image_url']     = $server . $this->config->get('config_logo');
+		$data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
+		$data['custom']        = $this->encryption->encrypt($order['order_id']);
+		$data['testmode']      = $this->settings['test'];
 
 		//Render
-		return $this->render();
+		return $this->render('payment/pp_standard', $data);
 	}
 
 	public function notify()

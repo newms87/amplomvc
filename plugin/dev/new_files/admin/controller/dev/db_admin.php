@@ -3,23 +3,27 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 {
 	public function index()
 	{
-		$this->view->load('dev/db_admin');
-		$this->document->setTitle(_l("Database Administration"));
+		if (!$this->user->can('modify', 'dev/dev')) {
+			$this->message->add('warning', _l("You do not have permission use the Database Administration Console"));
+			$this->url->redirect('common/home');
+		}
 
+		//Page Head
+		$this->document->setTitle(_l("Database Administration"));
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
 		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);
 		$this->breadcrumb->add(_l("Database Administration"), $this->url->link('dev/db_admin'));
 
-		$this->data['return'] = $this->url->link('common/home');
+		$data = array();
 
 		//Check for post data
-		if ($this->request->isPost() && $this->validate()) {
+		if ($this->request->isPost()) {
 			if (!empty($_POST['query'])) {
 				$results = $this->db->queryRows(html_entity_decode($_POST['query'], ENT_QUOTES, 'UTF-8'));
 
-				$this->data['results'] = $results;
+				$data['results'] = $results;
 			}
 		}
 
@@ -27,30 +31,13 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 			'query' => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$data += $_POST + $defaults;
 
-		$this->data['data_tables'] = $this->db->getTables();
+		$data['data_tables'] = $this->db->getTables();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['return'] = $this->url->link('common/home');
 
-		$this->response->setOutput($this->render());
-	}
-
-	public function validate()
-	{
-		if (!$this->user->can('modify', 'dev/dev')) {
-			$this->error['warning'] = _l("You do not have permission use the Database Administration Console");
-		}
-
-		return $this->error ? false : true;
+		//Render
+		$this->response->setOutput($this->render('dev/db_admin', $data));
 	}
 }

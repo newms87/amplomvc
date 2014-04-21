@@ -65,8 +65,6 @@ class Admin_Controller_Design_Banner extends Controller
 
 	private function getList()
 	{
-		$this->view->load('design/banner_list');
-
 		$default_urls = array(
 			'sort'  => 'name',
 			'order' => 'ASC',
@@ -81,10 +79,10 @@ class Admin_Controller_Design_Banner extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
 
-		$this->data['insert'] = $this->url->link('design/banner/insert', $url);
-		$this->data['delete'] = $this->url->link('design/banner/delete', $url);
+		$data['insert'] = $this->url->link('design/banner/insert', $url);
+		$data['delete'] = $this->url->link('design/banner/delete', $url);
 
-		$this->data['banners'] = array();
+		$data['banners'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -105,7 +103,7 @@ class Admin_Controller_Design_Banner extends Controller
 				'href' => $this->url->link('design/banner/update', 'banner_id=' . $result['banner_id'] . $url)
 			);
 
-			$this->data['banners'][] = array(
+			$data['banners'][] = array(
 				'banner_id' => $result['banner_id'],
 				'name'      => $result['name'],
 				'status'    => ($result['status'] ? _l("Enabled") : _l("Disabled")),
@@ -126,8 +124,8 @@ class Admin_Controller_Design_Banner extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']   = $this->url->link('design/banner', 'sort=name' . $url);
-		$this->data['sort_status'] = $this->url->link('design/banner', 'sort=status' . $url);
+		$data['sort_name']   = $this->url->link('design/banner', 'sort=name' . $url);
+		$data['sort_status'] = $this->url->link('design/banner', 'sort=status' . $url);
 
 		$url = $this->get_url(array(
 			'sort',
@@ -136,23 +134,16 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $banner_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/banner_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('design/banner_form');
-
 		$banner_id = isset($_GET['banner_id']) ? $_GET['banner_id'] : 0;
 
 		$url = $this->get_url();
@@ -161,12 +152,12 @@ class Admin_Controller_Design_Banner extends Controller
 		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
 
 		if (!$banner_id) {
-			$this->data['action'] = $this->url->link('design/banner/insert', $url);
+			$data['action'] = $this->url->link('design/banner/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('design/banner/update', 'banner_id=' . $banner_id . $url);
+			$data['action'] = $this->url->link('design/banner/update', 'banner_id=' . $banner_id . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('design/banner', $url);
+		$data['cancel'] = $this->url->link('design/banner', $url);
 
 		if ($banner_id && !$this->request->isPost()) {
 			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);
@@ -179,15 +170,15 @@ class Admin_Controller_Design_Banner extends Controller
 
 		foreach ($defaults as $d => $value) {
 			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
+				$data[$d] = $_POST[$d];
 			} elseif (isset($banner_info[$d])) {
-				$this->data[$d] = $banner_info[$d];
+				$data[$d] = $banner_info[$d];
 			} elseif (!$banner_id) {
-				$this->data[$d] = $value;
+				$data[$d] = $value;
 			}
 		}
 
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
+		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		if (isset($_POST['banner_image'])) {
 			$banner_images = $_POST['banner_image'];
@@ -197,7 +188,7 @@ class Admin_Controller_Design_Banner extends Controller
 			$banner_images = array();
 		}
 
-		$this->data['banner_images'] = array();
+		$data['banner_images'] = array();
 
 		foreach ($banner_images as $banner_image) {
 			if ($banner_image['image'] && file_exists(DIR_IMAGE . $banner_image['image'])) {
@@ -206,7 +197,7 @@ class Admin_Controller_Design_Banner extends Controller
 				$image = 'no_image.png';
 			}
 
-			$this->data['banner_images'][] = array(
+			$data['banner_images'][] = array(
 				'banner_image_description' => $banner_image['banner_image_description'],
 				'link'                     => $banner_image['link'],
 				'image'                    => $image,
@@ -215,19 +206,14 @@ class Admin_Controller_Design_Banner extends Controller
 			);
 		}
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
+		$data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('design/banner_form', $data));
 	}
 
 	private function validateForm()

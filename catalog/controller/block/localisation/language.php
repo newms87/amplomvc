@@ -3,8 +3,7 @@ class Catalog_Controller_Block_Localisation_Language extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/localisation/language');
-		$this->data['action'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('language_code') . '&language_code=');
+		$data['action'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('language_code') . '&language_code=');
 
 		$languages = $this->language->getLanguages();
 
@@ -12,8 +11,8 @@ class Catalog_Controller_Block_Localisation_Language extends Controller
 			$language['thumb'] = $this->image->resize(DIR_IMAGE . 'flags/' . $language['image'], 16, 11);
 		}
 
-		$this->data['languages'] = $languages;
+		$data['languages'] = $languages;
 
-		$this->render();
+		$this->render('block/localisation/language', $data);
 	}
 }

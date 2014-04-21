@@ -3,9 +3,6 @@ class Catalog_Controller_Block_Cart_Reward
 {
 	public function index($settings = null)
 	{
-		$this->view->load('block/cart/reward');
-
-
 		if (isset($_POST['reward']) && $this->validateReward()) {
 			$this->session->set('reward', $_POST['reward']);
 
@@ -24,12 +21,12 @@ class Catalog_Controller_Block_Cart_Reward
 			'reward' => '',
 		);
 
-		$this->data += $reward_info + $defaults;
+		$data += $reward_info + $defaults;
 
-		$this->data['reward_points'] = $this->customer->getRewardPoints();
-		$this->data['total_points']  = $this->cart->getTotalPoints();
+		$data['reward_points'] = $this->customer->getRewardPoints();
+		$data['total_points']  = $this->cart->getTotalPoints();
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/cart/reward', $data));
 	}
 
 	private function validateReward()

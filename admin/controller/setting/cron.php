@@ -39,10 +39,10 @@ class Admin_Controller_Setting_Cron extends Controller
 			$tasks = $this->config->load('cron', 'cron_tasks', 0);
 		}
 
-		$this->data = $tasks;
+		$data = $tasks;
 
 		//AC Template
-		$this->data['tasks']['__ac_template__'] = array(
+		$data['tasks']['__ac_template__'] = array(
 			'name'       => "New Task",
 			'file'       => '',
 			'method'     => '',
@@ -59,7 +59,7 @@ class Admin_Controller_Setting_Cron extends Controller
 		);
 
 		//Template Data
-		$this->data['cron_status'] = $this->config->get('config_cron_status');
+		$data['cron_status'] = $this->config->get('config_cron_status');
 
 		$cron_files = $this->tool->get_files_r(DIR_CRON);
 
@@ -82,31 +82,22 @@ class Admin_Controller_Setting_Cron extends Controller
 			$file = $filename;
 		}
 
-		$this->data['data_files']   = $cron_files;
-		$this->data['data_methods'] = $cron_methods;
+		$data['data_files']   = $cron_files;
+		$data['data_methods'] = $cron_methods;
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$this->data['save']     = $this->url->link('setting/cron');
-		$this->data['cancel']   = $this->url->link('setting/store');
-		$this->data['run_cron'] = $this->url->link('common/home', 'run_cron');
-		$this->data['activate'] = $this->url->link('setting/cron/activate');
-
-		//The Template
-		$this->view->load('setting/cron');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']     = $this->url->link('setting/cron');
+		$data['cancel']   = $this->url->link('setting/store');
+		$data['run_cron'] = $this->url->link('common/home', 'run_cron');
+		$data['activate'] = $this->url->link('setting/cron/activate');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/cron', $data));
 	}
 
 	public function activate()

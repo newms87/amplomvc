@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/stock_status_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Stock Status"), $this->url->link('localisation/stock_status', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/stock_status/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/stock_status/delete', $url);
+		$data['insert'] = $this->url->link('localisation/stock_status/insert', $url);
+		$data['delete'] = $this->url->link('localisation/stock_status/delete', $url);
 
-		$this->data['stock_statuses'] = array();
+		$data['stock_statuses'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 				'href' => $this->url->link('localisation/stock_status/update', 'stock_status_id=' . $result['stock_status_id'] . $url)
 			);
 
-			$this->data['stock_statuses'][] = array(
+			$data['stock_statuses'][] = array(
 				'stock_status_id' => $result['stock_status_id'],
 				'name'            => $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? _l(" <b>(Default)</b>") : null),
 				'selected'        => isset($_GET['selected']) && in_array($result['stock_status_id'], $_GET['selected']),
@@ -171,17 +169,17 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -196,7 +194,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name'] = $this->url->link('localisation/stock_status', 'sort=name' . $url);
+		$data['sort_name'] = $this->url->link('localisation/stock_status', 'sort=name' . $url);
 
 		$url = '';
 
@@ -210,33 +208,26 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $stock_status_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/stock_status_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/stock_status_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
+			$data['error_name'] = $this->error['name'];
 		} else {
-			$this->data['error_name'] = array();
+			$data['error_name'] = array();
 		}
 
 		$url = '';
@@ -257,29 +248,24 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		$this->breadcrumb->add(_l("Stock Status"), $this->url->link('localisation/stock_status', $url));
 
 		if (!isset($_GET['stock_status_id'])) {
-			$this->data['action'] = $this->url->link('localisation/stock_status/insert', $url);
+			$data['action'] = $this->url->link('localisation/stock_status/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/stock_status/update', 'stock_status_id=' . $_GET['stock_status_id'] . $url);
+			$data['action'] = $this->url->link('localisation/stock_status/update', 'stock_status_id=' . $_GET['stock_status_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/stock_status', $url);
+		$data['cancel'] = $this->url->link('localisation/stock_status', $url);
 
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
+		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		if (isset($_POST['stock_status'])) {
-			$this->data['stock_status'] = $_POST['stock_status'];
+			$data['stock_status'] = $_POST['stock_status'];
 		} elseif (isset($_GET['stock_status_id'])) {
-			$this->data['stock_status'] = $this->Model_Localisation_StockStatus->getStockStatusDescriptions($_GET['stock_status_id']);
+			$data['stock_status'] = $this->Model_Localisation_StockStatus->getStockStatusDescriptions($_GET['stock_status_id']);
 		} else {
-			$this->data['stock_status'] = array();
+			$data['stock_status'] = array();
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/stock_status_form', $data));
 	}
 
 	private function validateForm()

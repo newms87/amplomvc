@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/checkout/guest_information');
-
 		//Extra Information saved about the guest (name, email, etc..)
 		$guest_info = $this->cart->loadGuestInfo();
 
@@ -14,7 +12,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		$this->form->set_fields('firstname', 'lastname', 'email');
 		$this->form->set_data($guest_info);
 
-		$this->data['form_guest_info'] = $this->form->build();
+		$data['form_guest_info'] = $this->form->build();
 
 		$this->form->init('address');
 		$this->form->set_template('form/single_column');
@@ -27,7 +25,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 			$this->form->set_data($this->Cart->getPaymentAddress());
 		}
 
-		$this->data['form_payment_address'] = $this->form->build();
+		$data['form_payment_address'] = $this->form->build();
 
 		//Shipping
 		if ($this->cart->hasShipping()) {
@@ -38,20 +36,18 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 				$this->form->set_data($this->cart->getShippingAddress());
 			}
 
-			$this->data['form_shipping_address'] = $this->form->build();
+			$data['form_shipping_address'] = $this->form->build();
 
-			$this->data['same_shipping_address'] = isset($guest_info['same_shipping_address']) ? $guest_info['same_shipping_address'] : 1;
+			$data['same_shipping_address'] = isset($guest_info['same_shipping_address']) ? $guest_info['same_shipping_address'] : 1;
 		}
 
-		$this->data['validate_guest_checkout'] = $this->url->link('block/checkout/guest_information/validate');
+		$data['validate_guest_checkout'] = $this->url->link('block/checkout/guest_information/validate');
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/guest_information', $data));
 	}
 
 	public function validate()
 	{
-		$this->view->load('block/checkout/guest_information');
-
 		$json = array();
 
 		if ($this->customer->isLogged()) {

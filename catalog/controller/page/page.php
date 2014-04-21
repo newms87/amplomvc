@@ -22,23 +22,10 @@ class Catalog_Controller_Page_Page extends Controller
 		//Change Layout to desired page layout
 		$this->config->set('config_layout_id', $page['layout_id']);
 
-		$this->data = $page;
-
-		//The Template
-		$this->view->load('page/page');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header',
-		);
+		$data = $page;
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('page/page', $data));
 	}
 
 	public function preview()
@@ -77,20 +64,17 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->document->addScript(URL_THEME_JS . 'common.js', 56);
 
 		//Page Head
-		$this->data['direction'] = $this->language->info('direction');
-		$this->data['lang']      = $this->language->info('code');
+		$data['direction'] = $this->language->info('direction');
+		$data['lang']      = $this->language->info('code');
 
-		$this->data['styles']  = $this->document->renderStyles();
-		$this->data['scripts'] = $this->document->renderScripts();
+		$data['styles']  = $this->document->renderStyles();
+		$data['scripts'] = $this->document->renderScripts();
 
 		$page['content'] = html_entity_decode($page['content']);
 
-		$this->data += $page;
-
-		//The Template
-		$this->view->load('page/page_preview');
+		$data += $page;
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('page/page_preview', $data));
 	}
 }

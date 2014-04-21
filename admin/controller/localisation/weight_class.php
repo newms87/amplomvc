@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/weight_class_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Weight Class"), $this->url->link('localisation/weight_class', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/weight_class/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/weight_class/delete', $url);
+		$data['insert'] = $this->url->link('localisation/weight_class/insert', $url);
+		$data['delete'] = $this->url->link('localisation/weight_class/delete', $url);
 
-		$this->data['weight_classes'] = array();
+		$data['weight_classes'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 				'href' => $this->url->link('localisation/weight_class/update', 'weight_class_id=' . $result['weight_class_id'] . $url)
 			);
 
-			$this->data['weight_classes'][] = array(
+			$data['weight_classes'][] = array(
 				'weight_class_id' => $result['weight_class_id'],
 				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? _l(" <b>(Default)</b>") : null),
 				'unit'            => $result['unit'],
@@ -173,17 +171,17 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -198,9 +196,9 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_title'] = $this->url->link('localisation/weight_class', 'sort=title' . $url);
-		$this->data['sort_unit']  = $this->url->link('localisation/weight_class', 'sort=unit' . $url);
-		$this->data['sort_value'] = $this->url->link('localisation/weight_class', 'sort=value' . $url);
+		$data['sort_title'] = $this->url->link('localisation/weight_class', 'sort=title' . $url);
+		$data['sort_unit']  = $this->url->link('localisation/weight_class', 'sort=unit' . $url);
+		$data['sort_value'] = $this->url->link('localisation/weight_class', 'sort=value' . $url);
 
 		$url = '';
 
@@ -214,39 +212,32 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $weight_class_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/weight_class_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/weight_class_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['title'])) {
-			$this->data['error_title'] = $this->error['title'];
+			$data['error_title'] = $this->error['title'];
 		} else {
-			$this->data['error_title'] = array();
+			$data['error_title'] = array();
 		}
 
 		if (isset($this->error['unit'])) {
-			$this->data['error_unit'] = $this->error['unit'];
+			$data['error_unit'] = $this->error['unit'];
 		} else {
-			$this->data['error_unit'] = array();
+			$data['error_unit'] = array();
 		}
 
 		$url = '';
@@ -267,41 +258,36 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		$this->breadcrumb->add(_l("Weight Class"), $this->url->link('localisation/weight_class', $url));
 
 		if (!isset($_GET['weight_class_id'])) {
-			$this->data['action'] = $this->url->link('localisation/weight_class/insert', $url);
+			$data['action'] = $this->url->link('localisation/weight_class/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/weight_class/update', 'weight_class_id=' . $_GET['weight_class_id'] . $url);
+			$data['action'] = $this->url->link('localisation/weight_class/update', 'weight_class_id=' . $_GET['weight_class_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/weight_class', $url);
+		$data['cancel'] = $this->url->link('localisation/weight_class', $url);
 
 		if (isset($_GET['weight_class_id']) && !$this->request->isPost()) {
 			$weight_class_info = $this->Model_Localisation_WeightClass->getWeightClass($_GET['weight_class_id']);
 		}
 
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
+		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		if (isset($_POST['weight_class_description'])) {
-			$this->data['weight_class_description'] = $_POST['weight_class_description'];
+			$data['weight_class_description'] = $_POST['weight_class_description'];
 		} elseif (isset($_GET['weight_class_id'])) {
-			$this->data['weight_class_description'] = $this->Model_Localisation_WeightClass->getWeightClassDescriptions($_GET['weight_class_id']);
+			$data['weight_class_description'] = $this->Model_Localisation_WeightClass->getWeightClassDescriptions($_GET['weight_class_id']);
 		} else {
-			$this->data['weight_class_description'] = array();
+			$data['weight_class_description'] = array();
 		}
 
 		if (isset($_POST['value'])) {
-			$this->data['value'] = $_POST['value'];
+			$data['value'] = $_POST['value'];
 		} elseif (isset($weight_class_info)) {
-			$this->data['value'] = $weight_class_info['value'];
+			$data['value'] = $weight_class_info['value'];
 		} else {
-			$this->data['value'] = '';
+			$data['value'] = '';
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/weight_class_form', $data));
 	}
 
 	private function validateForm()

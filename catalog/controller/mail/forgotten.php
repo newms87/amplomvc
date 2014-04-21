@@ -11,12 +11,10 @@ class Catalog_Controller_Mail_Forgotten extends Controller
 		$this->mail->setSubject(_l("Password Reset Requested for your account with %s!", $this->config->get('config_name')));
 
 		//Template Data
-		$this->data += $data;
-		$this->data['store_name'] = $this->config->get('config_name');
+		$data += $data;
+		$data['store_name'] = $this->config->get('config_name');
 
-		//Render Mail Template
-		$this->view->load('mail/forgotten_password');
-		$this->mail->setHtml($this->render());
+		$this->mail->setHtml($this->render('mail/forgotten_password', $data));
 
 		$this->mail->send();
 	}

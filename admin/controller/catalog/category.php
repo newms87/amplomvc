@@ -81,9 +81,6 @@ class Admin_Controller_Catalog_Category extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Category"));
 
-		//The Template
-		$this->view->load('catalog/category_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
@@ -172,10 +169,10 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -190,28 +187,22 @@ class Admin_Controller_Catalog_Category extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/category/batch_update';
+		$data['batch_update'] = 'catalog/category/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $category_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/category/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('catalog/category/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/category_list', $data));
 	}
 
 	private function getForm()
@@ -219,11 +210,8 @@ class Admin_Controller_Catalog_Category extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Category"));
 
-		//The template
-		$this->view->load('catalog/category_form');
-
 		//Insert or Update
-		$category_id = $this->data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+		$category_id = $data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
@@ -262,7 +250,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'stores'           => array(0),
 		);
 
-		$this->data += $category_info + $defaults;
+		$data += $category_info + $defaults;
 
 		//All other categories to select parent
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -276,33 +264,27 @@ class Admin_Controller_Catalog_Category extends Controller
 		}
 
 		//Translations
-		$this->data['translations'] = $this->Model_Catalog_Category->getCategoryTranslations($category_id);
+		$data['translations'] = $this->Model_Catalog_Category->getCategoryTranslations($category_id);
 
 		//Template Data
-		$this->data['data_categories'] = array_merge(array(0 => _l(" --- None --- ")), $categories);
-		$this->data['data_stores']     = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts']    = array('' => '') + $this->Model_Design_Layout->getLayouts();
+		$data['data_categories'] = array_merge(array(0 => _l(" --- None --- ")), $categories);
+		$data['data_stores']     = $this->Model_Setting_Store->getStores();
+		$data['data_layouts']    = array('' => '') + $this->Model_Design_Layout->getLayouts();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Ajax Urls
-		$this->data['url_generate_url'] = $this->url->link('catalog/category/generate_url');
+		$data['url_generate_url'] = $this->url->link('catalog/category/generate_url');
 
 		//Action Buttons
-		$this->data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
-		$this->data['cancel'] = $this->url->link('catalog/category');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
+		$data['cancel'] = $this->url->link('catalog/category');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/category_form', $data));
 	}
 
 	public function generate_url()

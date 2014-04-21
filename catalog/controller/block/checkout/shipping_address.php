@@ -3,15 +3,13 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/checkout/shipping_address');
-
 		if ($this->cart->validateShippingAddress()) {
-			$this->data['shipping_address_id'] = $this->cart->getShippingAddressId();
+			$data['shipping_address_id'] = $this->cart->getShippingAddressId();
 		} else {
-			$this->data['shipping_address_id'] = $this->customer->getDefaultShippingAddressId();
+			$data['shipping_address_id'] = $this->customer->getDefaultShippingAddressId();
 		}
 
-		$this->data['data_addresses'] = $this->customer->getShippingAddresses();
+		$data['data_addresses'] = $this->customer->getShippingAddresses();
 
 		//Build Address Form
 		$this->form->init('address');
@@ -26,11 +24,11 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 
 		$this->form->set_field_options('default', $yes_no);
 
-		$this->data['form_shipping_address'] = $this->form->build();
+		$data['form_shipping_address'] = $this->form->build();
 
-		$this->data['validate_selection'] = $this->url->link('block/checkout/shipping_address/validate_selection');
+		$data['validate_selection'] = $this->url->link('block/checkout/shipping_address/validate_selection');
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/shipping_address', $data));
 	}
 
 	public function validate_selection()

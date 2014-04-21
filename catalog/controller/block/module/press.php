@@ -3,8 +3,6 @@ class Catalog_Controller_Block_Module_Press extends Controller
 {
 	public function index($settings)
 	{
-		$this->view->load('block/module/press');
-
 		$settings['image_width']  = 185;
 		$settings['image_height'] = 240;
 
@@ -32,8 +30,8 @@ class Catalog_Controller_Block_Module_Press extends Controller
 		}
 		unset($press);
 
-		$this->data['press_list'] = $settings['press_items'];
+		$data['press_list'] = $settings['press_items'];
 
-		$this->render();
+		$this->render('block/module/press', $data);
 	}
 }

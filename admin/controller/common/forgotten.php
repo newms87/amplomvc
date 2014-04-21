@@ -34,23 +34,14 @@ class Admin_Controller_Common_Forgotten extends Controller
 		$this->breadcrumb->add(_l("Forgotten Password"), $this->url->link('common/forgotten'));
 
 		//Entry Data
-		$this->data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
+		$data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
 
 		//Action Buttons
-		$this->data['action'] = $this->url->link('common/forgotten');
-		$this->data['cancel'] = $this->url->link('common/login');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		//The Template
-		$this->view->load('common/forgotten');
+		$data['action'] = $this->url->link('common/forgotten');
+		$data['cancel'] = $this->url->link('common/login');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/forgotten', $data));
 	}
 
 	public function reset()
@@ -93,20 +84,11 @@ class Admin_Controller_Common_Forgotten extends Controller
 		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('common/forgotten/reset', 'code=' . $code);
-		$this->data['cancel'] = $this->url->link('common/login');
-
-		//The Template
-		$this->view->load('common/reset');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('common/forgotten/reset', 'code=' . $code);
+		$data['cancel'] = $this->url->link('common/login');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/reset', $data));
 	}
 
 	private function validate()

@@ -64,8 +64,6 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	private function getList()
 	{
-		$this->view->load('sale/coupon_list');
-
 		$url_items = array(
 			'sort'  => 'name',
 			'order' => 'ASC',
@@ -80,10 +78,10 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
 
-		$this->data['insert'] = $this->url->link('sale/coupon/insert', $url);
-		$this->data['delete'] = $this->url->link('sale/coupon/delete', $url);
+		$data['insert'] = $this->url->link('sale/coupon/insert', $url);
+		$data['delete'] = $this->url->link('sale/coupon/delete', $url);
 
-		$this->data['coupons'] = array();
+		$data['coupons'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -104,7 +102,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'href' => $this->url->link('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
 			);
 
-			$this->data['coupons'][] = array(
+			$data['coupons'][] = array(
 				'coupon_id'  => $result['coupon_id'],
 				'name'       => $result['name'],
 				'code'       => $result['code'],
@@ -138,7 +136,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 			'status'
 		);
 		foreach ($sort_list as $s) {
-			$this->data['sort_' . $s] = $this->url->link('sale/coupon', 'sort=' . $s . $url);
+			$data['sort_' . $s] = $this->url->link('sale/coupon', 'sort=' . $s . $url);
 		}
 
 		$url = $this->get_url(array(
@@ -148,24 +146,17 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $coupon_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/coupon_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('sale/coupon_form');
-
-		$coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
+		$coupon_id = $data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
 
 		$url = $this->get_url();
 
@@ -173,12 +164,12 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
 
 		if (!$coupon_id) {
-			$this->data['action'] = $this->url->link('sale/coupon/insert', $url);
+			$data['action'] = $this->url->link('sale/coupon/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('sale/coupon/update', 'coupon_id=' . $coupon_id . $url);
+			$data['action'] = $this->url->link('sale/coupon/update', 'coupon_id=' . $coupon_id . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('sale/coupon', $url);
+		$data['cancel'] = $this->url->link('sale/coupon', $url);
 
 		if ($coupon_id && !$this->request->isPost()) {
 			$coupon_info = $this->Model_Sale_Coupon->getCoupon($coupon_id);
@@ -205,78 +196,73 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		foreach ($defaults as $d => $default) {
 			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
+				$data[$d] = $_POST[$d];
 			} elseif (isset($coupon_info[$d])) {
-				$this->data[$d] = $coupon_info[$d];
+				$data[$d] = $coupon_info[$d];
 			} elseif (!$coupon_id) {
-				$this->data[$d] = $default;
+				$data[$d] = $default;
 			}
 		}
 
-		if (!isset($this->data['coupon_products'])) {
+		if (!isset($data['coupon_products'])) {
 			$products = $this->Model_Sale_Coupon->getCouponProducts($coupon_id);
 
-			$this->data['coupon_products'] = array();
+			$data['coupon_products'] = array();
 			foreach ($products as $product) {
-				$this->data['coupon_products'][] = $this->Model_Catalog_Product->getProduct($product['product_id']);
+				$data['coupon_products'][] = $this->Model_Catalog_Product->getProduct($product['product_id']);
 			}
 		}
 
-		if (!isset($this->data['coupon_categories'])) {
+		if (!isset($data['coupon_categories'])) {
 			$categories = $this->Model_Sale_Coupon->getCouponCategories($coupon_id);
 
-			$this->data['coupon_categories'] = array();
+			$data['coupon_categories'] = array();
 			foreach ($categories as $category_id) {
-				$this->data['coupon_categories'][] = $this->Model_Catalog_Category->getCategory($category_id);
+				$data['coupon_categories'][] = $this->Model_Catalog_Category->getCategory($category_id);
 			}
 		}
 
-		if (!isset($this->data['coupon_customers'])) {
+		if (!isset($data['coupon_customers'])) {
 			$customers = $this->Model_Sale_Coupon->getCouponCustomers($coupon_id);
 
-			$this->data['coupon_customers'] = array();
+			$data['coupon_customers'] = array();
 			foreach ($customers as $customer) {
-				$this->data['coupon_customers'][] = $this->Model_Sale_Customer->getCustomer($customer['customer_id']);
+				$data['coupon_customers'][] = $this->Model_Sale_Customer->getCustomer($customer['customer_id']);
 			}
 		}
 
-		if (!isset($this->data['date_start'])) {
-			$this->data['date_start'] = date('Y-m-d', strtotime($coupon_info['date_start']));
+		if (!isset($data['date_start'])) {
+			$data['date_start'] = date('Y-m-d', strtotime($coupon_info['date_start']));
 		}
 
-		if (!isset($this->data['date_end'])) {
-			$this->data['date_end'] = date('Y-m-d', strtotime($coupon_info['date_end']));
+		if (!isset($data['date_end'])) {
+			$data['date_end'] = date('Y-m-d', strtotime($coupon_info['date_end']));
 		}
 
-		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
+		$data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
+		$data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->data['data_types'] = array(
+		$data['data_types'] = array(
 			'P' => _l("Percent"),
 			'F' => _l("Fixed Amount"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
 		//Ajax Urls
-		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
-		$this->data['url_coupon_history']       = $this->url->link('sale/coupon/history');
+		$data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
+		$data['url_coupon_history']       = $this->url->link('sale/coupon/history');
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/coupon_form', $data));
 	}
 
 	private function validateForm()
@@ -317,8 +303,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 	public function history()
 	{
-		$this->view->load('sale/coupon_history');
-		$coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
+		$coupon_id = $data['coupon_id'] = isset($_GET['coupon_id']) ? $_GET['coupon_id'] : 0;
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -326,12 +311,12 @@ class Admin_Controller_Sale_Coupon extends Controller
 			$page = 1;
 		}
 
-		$this->data['histories'] = array();
+		$data['histories'] = array();
 
 		$results = $this->Model_Sale_Coupon->getCouponHistories($coupon_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$this->data['histories'][] = array(
+			$data['histories'][] = array(
 				'order_id'   => $result['order_id'],
 				'customer'   => $result['customer'],
 				'amount'     => $result['amount'],
@@ -343,10 +328,10 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $history_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('sale/coupon_history', $data));
 	}
 
 	private function get_url($override = array())

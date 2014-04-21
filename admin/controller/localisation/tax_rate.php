@@ -101,8 +101,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	private function getList()
 	{
-		$this->view->load('localisation/tax_rate_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Tax Rates"), $this->url->link('localisation/tax_rate', $url));
 
-		$this->data['insert'] = $this->url->link('localisation/tax_rate/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);
+		$data['insert'] = $this->url->link('localisation/tax_rate/insert', $url);
+		$data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);
 
-		$this->data['tax_rates'] = array();
+		$data['tax_rates'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				'href' => $this->url->link('localisation/tax_rate/update', 'tax_rate_id=' . $result['tax_rate_id'] . $url)
 			);
 
-			$this->data['tax_rates'][] = array(
+			$data['tax_rates'][] = array(
 				'tax_rate_id'   => $result['tax_rate_id'],
 				'name'          => $result['name'],
 				'rate'          => $result['rate'],
@@ -176,17 +174,17 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -201,12 +199,12 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_name']          = $this->url->link('localisation/tax_rate', 'sort=tr.name' . $url);
-		$this->data['sort_rate']          = $this->url->link('localisation/tax_rate', 'sort=tr.rate' . $url);
-		$this->data['sort_type']          = $this->url->link('localisation/tax_rate', 'sort=tr.type' . $url);
-		$this->data['sort_geo_zone']      = $this->url->link('localisation/tax_rate', 'sort=gz.name' . $url);
-		$this->data['sort_date_added']    = $this->url->link('localisation/tax_rate', 'sort=tr.date_added' . $url);
-		$this->data['sort_date_modified'] = $this->url->link('localisation/tax_rate', 'sort=tr.date_modified' . $url);
+		$data['sort_name']          = $this->url->link('localisation/tax_rate', 'sort=tr.name' . $url);
+		$data['sort_rate']          = $this->url->link('localisation/tax_rate', 'sort=tr.rate' . $url);
+		$data['sort_type']          = $this->url->link('localisation/tax_rate', 'sort=tr.type' . $url);
+		$data['sort_geo_zone']      = $this->url->link('localisation/tax_rate', 'sort=gz.name' . $url);
+		$data['sort_date_added']    = $this->url->link('localisation/tax_rate', 'sort=tr.date_added' . $url);
+		$data['sort_date_modified'] = $this->url->link('localisation/tax_rate', 'sort=tr.date_modified' . $url);
 
 		$url = '';
 
@@ -220,39 +218,32 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $tax_rate_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/tax_rate_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('localisation/tax_rate_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
+			$data['error_name'] = $this->error['name'];
 		} else {
-			$this->data['error_name'] = '';
+			$data['error_name'] = '';
 		}
 
 		if (isset($this->error['rate'])) {
-			$this->data['error_rate'] = $this->error['rate'];
+			$data['error_rate'] = $this->error['rate'];
 		} else {
-			$this->data['error_rate'] = '';
+			$data['error_rate'] = '';
 		}
 
 		$url = '';
@@ -273,67 +264,62 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		$this->breadcrumb->add(_l("Tax Rates"), $this->url->link('localisation/tax_rate', $url));
 
 		if (!isset($_GET['tax_rate_id'])) {
-			$this->data['action'] = $this->url->link('localisation/tax_rate/insert', $url);
+			$data['action'] = $this->url->link('localisation/tax_rate/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/tax_rate/update', 'tax_rate_id=' . $_GET['tax_rate_id'] . $url);
+			$data['action'] = $this->url->link('localisation/tax_rate/update', 'tax_rate_id=' . $_GET['tax_rate_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('localisation/tax_rate', $url);
+		$data['cancel'] = $this->url->link('localisation/tax_rate', $url);
 
 		if (isset($_GET['tax_rate_id']) && !$this->request->isPost()) {
 			$tax_rate_info = $this->Model_Localisation_TaxRate->getTaxRate($_GET['tax_rate_id']);
 		}
 
 		if (isset($_POST['name'])) {
-			$this->data['name'] = $_POST['name'];
+			$data['name'] = $_POST['name'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['name'] = $tax_rate_info['name'];
+			$data['name'] = $tax_rate_info['name'];
 		} else {
-			$this->data['name'] = '';
+			$data['name'] = '';
 		}
 
 		if (isset($_POST['rate'])) {
-			$this->data['rate'] = $_POST['rate'];
+			$data['rate'] = $_POST['rate'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['rate'] = $tax_rate_info['rate'];
+			$data['rate'] = $tax_rate_info['rate'];
 		} else {
-			$this->data['rate'] = '';
+			$data['rate'] = '';
 		}
 
 		if (isset($_POST['type'])) {
-			$this->data['type'] = $_POST['type'];
+			$data['type'] = $_POST['type'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['type'] = $tax_rate_info['type'];
+			$data['type'] = $tax_rate_info['type'];
 		} else {
-			$this->data['type'] = '';
+			$data['type'] = '';
 		}
 
 		if (isset($_POST['tax_rate_customer_group'])) {
-			$this->data['tax_rate_customer_group'] = $_POST['tax_rate_customer_group'];
+			$data['tax_rate_customer_group'] = $_POST['tax_rate_customer_group'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['tax_rate_customer_group'] = $this->Model_Localisation_TaxRate->getTaxRateCustomerGroups($_GET['tax_rate_id']);
+			$data['tax_rate_customer_group'] = $this->Model_Localisation_TaxRate->getTaxRateCustomerGroups($_GET['tax_rate_id']);
 		} else {
-			$this->data['tax_rate_customer_group'] = array();
+			$data['tax_rate_customer_group'] = array();
 		}
 
-		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 
 		if (isset($_POST['geo_zone_id'])) {
-			$this->data['geo_zone_id'] = $_POST['geo_zone_id'];
+			$data['geo_zone_id'] = $_POST['geo_zone_id'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['geo_zone_id'] = $tax_rate_info['geo_zone_id'];
+			$data['geo_zone_id'] = $tax_rate_info['geo_zone_id'];
 		} else {
-			$this->data['geo_zone_id'] = '';
+			$data['geo_zone_id'] = '';
 		}
 
-		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
+		$data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('localisation/tax_rate_form', $data));
 	}
 
 	private function validateForm()

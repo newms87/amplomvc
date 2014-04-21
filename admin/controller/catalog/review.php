@@ -101,8 +101,6 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	private function getList()
 	{
-		$this->view->load('catalog/review_list');
-
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
@@ -138,10 +136,10 @@ class Admin_Controller_Catalog_Review extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Reviews"), $this->url->link('catalog/review', $url));
 
-		$this->data['insert'] = $this->url->link('catalog/review/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/review/delete', $url);
+		$data['insert'] = $this->url->link('catalog/review/insert', $url);
+		$data['delete'] = $this->url->link('catalog/review/delete', $url);
 
-		$this->data['reviews'] = array();
+		$data['reviews'] = array();
 
 		$data = array(
 			'sort'  => $sort,
@@ -162,7 +160,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				'href' => $this->url->link('catalog/review/update', 'review_id=' . $result['review_id'] . $url)
 			);
 
-			$this->data['reviews'][] = array(
+			$data['reviews'][] = array(
 				'review_id'  => $result['review_id'],
 				'name'       => $result['name'],
 				'author'     => $result['author'],
@@ -175,17 +173,17 @@ class Admin_Controller_Catalog_Review extends Controller
 		}
 
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+			$data['success'] = $this->session->data['success'];
 
 			unset($this->session->data['success']);
 		} else {
-			$this->data['success'] = '';
+			$data['success'] = '';
 		}
 
 		$url = '';
@@ -200,11 +198,11 @@ class Admin_Controller_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->data['sort_product']    = $this->url->link('catalog/review', 'sort=pd.name' . $url);
-		$this->data['sort_author']     = $this->url->link('catalog/review', 'sort=r.author' . $url);
-		$this->data['sort_rating']     = $this->url->link('catalog/review', 'sort=r.rating' . $url);
-		$this->data['sort_status']     = $this->url->link('catalog/review', 'sort=r.status' . $url);
-		$this->data['sort_date_added'] = $this->url->link('catalog/review', 'sort=r.date_added' . $url);
+		$data['sort_product']    = $this->url->link('catalog/review', 'sort=pd.name' . $url);
+		$data['sort_author']     = $this->url->link('catalog/review', 'sort=r.author' . $url);
+		$data['sort_rating']     = $this->url->link('catalog/review', 'sort=r.rating' . $url);
+		$data['sort_status']     = $this->url->link('catalog/review', 'sort=r.status' . $url);
+		$data['sort_date_added'] = $this->url->link('catalog/review', 'sort=r.date_added' . $url);
 
 		$url = '';
 
@@ -218,51 +216,44 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->pagination->init();
 		$this->pagination->total  = $review_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/review_list', $data));
 	}
 
 	private function getForm()
 	{
-		$this->view->load('catalog/review_form');
-
 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+			$data['error_warning'] = $this->error['warning'];
 		} else {
-			$this->data['error_warning'] = '';
+			$data['error_warning'] = '';
 		}
 
 		if (isset($this->error['product'])) {
-			$this->data['error_product'] = $this->error['product'];
+			$data['error_product'] = $this->error['product'];
 		} else {
-			$this->data['error_product'] = '';
+			$data['error_product'] = '';
 		}
 
 		if (isset($this->error['author'])) {
-			$this->data['error_author'] = $this->error['author'];
+			$data['error_author'] = $this->error['author'];
 		} else {
-			$this->data['error_author'] = '';
+			$data['error_author'] = '';
 		}
 
 		if (isset($this->error['text'])) {
-			$this->data['error_text'] = $this->error['text'];
+			$data['error_text'] = $this->error['text'];
 		} else {
-			$this->data['error_text'] = '';
+			$data['error_text'] = '';
 		}
 
 		if (isset($this->error['rating'])) {
-			$this->data['error_rating'] = $this->error['rating'];
+			$data['error_rating'] = $this->error['rating'];
 		} else {
-			$this->data['error_rating'] = '';
+			$data['error_rating'] = '';
 		}
 
 		$url = '';
@@ -283,75 +274,69 @@ class Admin_Controller_Catalog_Review extends Controller
 		$this->breadcrumb->add(_l("Reviews"), $this->url->link('catalog/review', $url));
 
 		if (!isset($_GET['review_id'])) {
-			$this->data['action'] = $this->url->link('catalog/review/insert', $url);
+			$data['action'] = $this->url->link('catalog/review/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('catalog/review/update', 'review_id=' . $_GET['review_id'] . $url);
+			$data['action'] = $this->url->link('catalog/review/update', 'review_id=' . $_GET['review_id'] . $url);
 		}
 
-		$this->data['cancel'] = $this->url->link('catalog/review', $url);
+		$data['cancel'] = $this->url->link('catalog/review', $url);
 
 		if (isset($_GET['review_id']) && !$this->request->isPost()) {
 			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
 		}
 
 		if (isset($_POST['product_id'])) {
-			$this->data['product_id'] = $_POST['product_id'];
+			$data['product_id'] = $_POST['product_id'];
 		} elseif (!empty($review_info)) {
-			$this->data['product_id'] = $review_info['product_id'];
+			$data['product_id'] = $review_info['product_id'];
 		} else {
-			$this->data['product_id'] = '';
+			$data['product_id'] = '';
 		}
 
 		if (isset($_POST['product'])) {
-			$this->data['product'] = $_POST['product'];
+			$data['product'] = $_POST['product'];
 		} elseif (!empty($review_info)) {
-			$this->data['product'] = $review_info['product'];
+			$data['product'] = $review_info['product'];
 		} else {
-			$this->data['product'] = '';
+			$data['product'] = '';
 		}
 
 		if (isset($_POST['author'])) {
-			$this->data['author'] = $_POST['author'];
+			$data['author'] = $_POST['author'];
 		} elseif (!empty($review_info)) {
-			$this->data['author'] = $review_info['author'];
+			$data['author'] = $review_info['author'];
 		} else {
-			$this->data['author'] = '';
+			$data['author'] = '';
 		}
 
 		if (isset($_POST['text'])) {
-			$this->data['text'] = $_POST['text'];
+			$data['text'] = $_POST['text'];
 		} elseif (!empty($review_info)) {
-			$this->data['text'] = $review_info['text'];
+			$data['text'] = $review_info['text'];
 		} else {
-			$this->data['text'] = '';
+			$data['text'] = '';
 		}
 
 		if (isset($_POST['rating'])) {
-			$this->data['rating'] = $_POST['rating'];
+			$data['rating'] = $_POST['rating'];
 		} elseif (!empty($review_info)) {
-			$this->data['rating'] = $review_info['rating'];
+			$data['rating'] = $review_info['rating'];
 		} else {
-			$this->data['rating'] = '';
+			$data['rating'] = '';
 		}
 
 		if (isset($_POST['status'])) {
-			$this->data['status'] = $_POST['status'];
+			$data['status'] = $_POST['status'];
 		} elseif (!empty($review_info)) {
-			$this->data['status'] = $review_info['status'];
+			$data['status'] = $review_info['status'];
 		} else {
-			$this->data['status'] = '';
+			$data['status'] = '';
 		}
 
 		//Ajax Urls
-		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
+		$data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/review_form', $data));
 	}
 
 	private function validateForm()

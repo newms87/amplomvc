@@ -30,26 +30,23 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 
 		$settings += $defaults;
 
-		$this->data['settings'] = $settings;
+		$data['settings'] = $settings;
 
 		//Template Data
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$data['data_order_statuses'] = $this->order->getOrderStatuses();
 
-		$this->data['data_auth_sale'] = array(
+		$data['data_auth_sale'] = array(
 			0 => _l("Authorization"),
 			1 => _l("Sale"),
 		);
 
-		$this->data['data_yes_no'] = array(
+		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
-		//Template
-		$this->view->load('extension/payment/pp_standard');
-
 		//Render
-		$this->render();
+		$this->render('extension/payment/pp_standard', $data);
 	}
 
 	public function validate()

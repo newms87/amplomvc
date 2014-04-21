@@ -3,8 +3,6 @@ class Catalog_Controller_Product_Search extends Controller
 {
 	public function index()
 	{
-		$this->view->load('product/search');
-
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
 		} else {
@@ -110,10 +108,10 @@ class Catalog_Controller_Product_Search extends Controller
 		$this->breadcrumb->add(_l("Search"), $this->url->link('product/search', $url));
 
 		$this->_('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
-		$this->data['compare'] = $this->url->link('product/compare');
+		$data['compare'] = $this->url->link('product/compare');
 
 		// 3 Level Category Search
-		$this->data['categories'] = array();
+		$data['categories'] = array();
 
 		$categories_1 = $this->Model_Catalog_Category->getCategories(0);
 
@@ -141,14 +139,14 @@ class Catalog_Controller_Product_Search extends Controller
 				);
 			}
 
-			$this->data['categories'][] = array(
+			$data['categories'][] = array(
 				'category_id' => $category_1['category_id'],
 				'name'        => $category_1['name'],
 				'children'    => $level_2_data
 			);
 		}
 
-		$this->data['products'] = array();
+		$data['products'] = array();
 
 		if (isset($_GET['filter_name']) || isset($_GET['product_tag'])) {
 			$data = array(
@@ -198,7 +196,7 @@ class Catalog_Controller_Product_Search extends Controller
 					$rating = false;
 				}
 
-				$this->data['products'][] = array(
+				$data['products'][] = array(
 					'product_id'  => $result['product_id'],
 					'thumb'       => $image,
 					'name'        => $result['name'],
@@ -238,59 +236,59 @@ class Catalog_Controller_Product_Search extends Controller
 				$url .= '&limit=' . $_GET['limit'];
 			}
 
-			$this->data['sorts'] = array();
+			$data['sorts'] = array();
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Default"),
 				'value' => 'p.sort_order-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url)
 			);
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Name (A - Z)"),
 				'value' => 'p.name-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.name&order=ASC' . $url)
 			);
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Name (Z - A)"),
 				'value' => 'p.name-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.name&order=DESC' . $url)
 			);
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Price (Low &gt; High)"),
 				'value' => 'p.price-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.price&order=ASC' . $url)
 			);
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Price (High &gt; Low)"),
 				'value' => 'p.price-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.price&order=DESC' . $url)
 			);
 
 			if ($this->config->get('config_review_status')) {
-				$this->data['sorts'][] = array(
+				$data['sorts'][] = array(
 					'text'  => _l("Rating (Highest)"),
 					'value' => 'rating-DESC',
 					'href'  => $this->url->link('product/search', 'sort=rating&order=DESC' . $url)
 				);
 
-				$this->data['sorts'][] = array(
+				$data['sorts'][] = array(
 					'text'  => _l("Rating (Lowest)"),
 					'value' => 'rating-ASC',
 					'href'  => $this->url->link('product/search', 'sort=rating&order=ASC' . $url)
 				);
 			}
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Model (A - Z)"),
 				'value' => 'p.model-ASC',
 				'href'  => $this->url->link('product/search', 'sort=p.model&order=ASC' . $url)
 			);
 
-			$this->data['sorts'][] = array(
+			$data['sorts'][] = array(
 				'text'  => _l("Model (Z - A)"),
 				'value' => 'p.model-DESC',
 				'href'  => $this->url->link('product/search', 'sort=p.model&order=DESC' . $url)
@@ -326,33 +324,33 @@ class Catalog_Controller_Product_Search extends Controller
 				$url .= '&order=' . $_GET['order'];
 			}
 
-			$this->data['limits'] = array();
+			$data['limits'] = array();
 
-			$this->data['limits'][] = array(
+			$data['limits'][] = array(
 				'text'  => $this->config->get('config_catalog_limit'),
 				'value' => $this->config->get('config_catalog_limit'),
 				'href'  => $this->url->link('product/search', $url . '&limit=' . $this->config->get('config_catalog_limit'))
 			);
 
-			$this->data['limits'][] = array(
+			$data['limits'][] = array(
 				'text'  => 25,
 				'value' => 25,
 				'href'  => $this->url->link('product/search', $url . '&limit=25')
 			);
 
-			$this->data['limits'][] = array(
+			$data['limits'][] = array(
 				'text'  => 50,
 				'value' => 50,
 				'href'  => $this->url->link('product/search', $url . '&limit=50')
 			);
 
-			$this->data['limits'][] = array(
+			$data['limits'][] = array(
 				'text'  => 75,
 				'value' => 75,
 				'href'  => $this->url->link('product/search', $url . '&limit=75')
 			);
 
-			$this->data['limits'][] = array(
+			$data['limits'][] = array(
 				'text'  => 100,
 				'value' => 100,
 				'href'  => $this->url->link('product/search', $url . '&limit=100')
@@ -394,27 +392,18 @@ class Catalog_Controller_Product_Search extends Controller
 
 			$this->pagination->init();
 			$this->pagination->total  = $product_total;
-			$this->data['pagination'] = $this->pagination->render();
+			$data['pagination'] = $this->pagination->render();
 		}
 
-		$this->data['filter_name']         = $filter_name;
-		$this->data['filter_description']  = $filter_description;
-		$this->data['filter_category_id']  = $filter_category_id;
-		$this->data['filter_sub_category'] = $filter_sub_category;
+		$data['filter_name']         = $filter_name;
+		$data['filter_description']  = $filter_description;
+		$data['filter_category_id']  = $filter_category_id;
+		$data['filter_sub_category'] = $filter_sub_category;
 
-		$this->data['sort']  = $sort;
-		$this->data['order'] = $order;
-		$this->data['limit'] = $limit;
+		$data['sort']  = $sort;
+		$data['order'] = $order;
+		$data['limit'] = $limit;
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/search', $data));
 	}
 }

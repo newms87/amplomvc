@@ -88,9 +88,6 @@ class Admin_Controller_Page_Page extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Page"));
 
-		//The Template
-		$this->view->load('page/page_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Page"), $this->url->link('page/page'));
@@ -165,10 +162,10 @@ class Admin_Controller_Page_Page extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -180,37 +177,28 @@ class Admin_Controller_Page_Page extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'page/page/batch_update';
+		$data['batch_update'] = 'page/page/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $page_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('page/page/update');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('page/page/update');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('page/page_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Page"));
-
-		//The Template
-		$this->view->load('page/page_form');
 
 		//Insert or Update
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
@@ -252,39 +240,33 @@ class Admin_Controller_Page_Page extends Controller
 			'translations'     => array(),
 		);
 
-		$this->data += $page_info + $defaults;
+		$data += $page_info + $defaults;
 
-		$_POST = $this->data;
+		$_POST = $data;
 		//$this->loadBlocks();
 
 		//Template Data
-		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$data['data_stores']  = $this->Model_Setting_Store->getStores();
+		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['url_blocks']        = $this->url->link('block/block');
-		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
-		$this->data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
+		$data['url_blocks']        = $this->url->link('block/block');
+		$data['url_create_layout'] = $this->url->link('page/page/create_layout');
+		$data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
 
-		$store_front                = current($this->data['stores']);
-		$this->data['page_preview'] = $this->url->store($store_front['store_id'], 'page/page/preview', 'page_id=' . $page_id);
+		$store_front                = current($data['stores']);
+		$data['page_preview'] = $this->url->store($store_front['store_id'], 'page/page/preview', 'page_id=' . $page_id);
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('page/page/update', 'page_id=' . $page_id);
-		$this->data['cancel'] = $this->url->link('page/page');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('page/page/update', 'page_id=' . $page_id);
+		$data['cancel'] = $this->url->link('page/page');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('page/page_form', $data));
 	}
 
 	public function create_layout()

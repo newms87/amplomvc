@@ -3,27 +3,26 @@ class Catalog_Controller_Block_Product_Review extends Controller
 {
 	public function single()
 	{
-		$this->data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
+		$data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
 
-		$this->data['rating'] = (int)$product_info['rating'];
+		$data['rating'] = (int)$product_info['rating'];
 	}
 
 	public function review()
 	{
-		$this->view->load('product/review');
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
 		}
 
-		$this->data['reviews'] = array();
+		$data['reviews'] = array();
 
 		$review_total = $this->Model_Catalog_Review->getTotalReviewsByProductId($_GET['product_id']);
 		$results      = $this->Model_Catalog_Review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
 
 		foreach ($results as $result) {
-			$this->data['reviews'][] = array(
+			$data['reviews'][] = array(
 				'author'     => $result['author'],
 				'text'       => $result['text'],
 				'rating'     => (int)$result['rating'],
@@ -34,22 +33,22 @@ class Catalog_Controller_Block_Product_Review extends Controller
 
 		$review_status = $this->config->get('config_review_status');
 
-		$this->data['review_status'] = $review_status;
+		$data['review_status'] = $review_status;
 
 		if ($review_status) {
-			$this->data['review_count'] = $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']);
+			$data['review_count'] = $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']);
 
-			$this->data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
+			$data['reviews'] = _l("%s reviews", (int)$product_info['reviews']);
 
-			$this->data['rating'] = (int)$product_info['rating'];
+			$data['rating'] = (int)$product_info['rating'];
 		}
 
 
 		$this->pagination->init();
 		$this->pagination->total  = $review_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/review', $data));
 	}
 
 	public function write()

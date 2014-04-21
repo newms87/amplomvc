@@ -9,8 +9,6 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 {
 	public function index()
 	{
-		//Template and Language
-		$this->view->load('setting/order_status');
 		//Page Head
 		$this->document->setTitle(_l("Order Statuses"));
 
@@ -69,20 +67,14 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		}
 		unset($order_status);
 
-		$this->data['order_statuses'] = $order_statuses;
+		$data['order_statuses'] = $order_statuses;
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/order_status');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/order_status');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/order_status', $data));
 	}
 
 	private function validate()

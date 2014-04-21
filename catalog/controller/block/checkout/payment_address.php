@@ -3,13 +3,12 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 {
 	public function index()
 	{
-		$this->view->load('block/checkout/payment_address');
-		$this->data['data_addresses'] = $this->customer->getPaymentAddresses();
+		$data['data_addresses'] = $this->customer->getPaymentAddresses();
 
 		if ($this->cart->validatePaymentAddress()) {
-			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
+			$data['payment_address_id'] = $this->cart->getPaymentAddressId();
 		} else {
-			$this->data['payment_address_id'] = $this->customer->getMeta('default_payment_address_id');
+			$data['payment_address_id'] = $this->customer->getMeta('default_payment_address_id');
 		}
 
 		//Build Address Form
@@ -25,11 +24,11 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		$this->form->set_field_options('default', $yes_no);
 
-		$this->data['form_payment_address'] = $this->form->build();
+		$data['form_payment_address'] = $this->form->build();
 
-		$this->data['validate_selection'] = $this->url->link('block/checkout/payment_address/validate_selection');
+		$data['validate_selection'] = $this->url->link('block/checkout/payment_address/validate_selection');
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('block/checkout/payment_address', $data));
 	}
 
 	public function validate_selection()

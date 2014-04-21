@@ -118,12 +118,6 @@ class Admin_Controller_Block_Block extends Controller
 
 		$data['pagination'] = $this->pagination->render();
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
 		//Render
 		$this->response->setOutput($this->render('block/list', $data));
 	}
@@ -205,12 +199,6 @@ class Admin_Controller_Block_Block extends Controller
 		//Action Buttons
 		$block['save']   = $this->url->link('block/' . $this->path . '/save');
 		$block['cancel'] = $this->url->link('block/block');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
 
 		//Render
 		$this->response->setOutput($this->render('block/block', $block));

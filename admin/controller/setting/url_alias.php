@@ -12,9 +12,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		//Page Head
 		$this->document->setTitle(_l("URL Aliases"));
 
-		//Template
-		$this->view->load('setting/url_alias_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
@@ -113,10 +110,10 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -128,30 +125,24 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			),
 		);
 
-		$this->data['batch_update'] = 'setting/url_alias/batch_update';
+		$data['batch_update'] = 'setting/url_alias/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $url_alias_total;
 
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('setting/url_alias/update');
-		$this->data['delete'] = $this->url->link('setting/url_alias/delete');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('setting/url_alias/update');
+		$data['delete'] = $this->url->link('setting/url_alias/delete');
+		$data['cancel'] = $this->url->link('setting/store');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/url_alias_list', $data));
 	}
 
 	public function update()
@@ -226,9 +217,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		//Page Head
 		$this->document->setTitle(_l("URL Aliases"));
 
-		//Template
-		$this->view->load('setting/url_alias_form');
-
 		//Insert or Update
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
 
@@ -259,11 +247,11 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif (isset($url_alias_info[$key])) {
-				$this->data[$key] = $url_alias_info[$key];
+				$data[$key] = $url_alias_info[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
@@ -279,9 +267,9 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			),
 		);
 
-		$this->data['data_stores'] = array_merge($non_stores, $this->Model_Setting_Store->getStores());
+		$data['data_stores'] = array_merge($non_stores, $this->Model_Setting_Store->getStores());
 
-		$this->data['data_non_stores'] = array(
+		$data['data_non_stores'] = array(
 			array(
 				'store_id' => '-1',
 				'name'     => _l("Admin Panel"),
@@ -292,23 +280,17 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			),
 		);
 
-		$this->data['data_statuses'] = array(
+		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
-		$this->data['cancel'] = $this->url->link('setting/url_alias');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['save']   = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
+		$data['cancel'] = $this->url->link('setting/url_alias');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('setting/url_alias_form', $data));
 	}
 
 	private function validateForm()

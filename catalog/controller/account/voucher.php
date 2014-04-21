@@ -36,11 +36,11 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('account/voucher'));
 
 		//Template Data
-		$this->data['min_value'] = $this->currency->format(1, false, 1);
-		$this->data['max_value'] = $this->currency->format(1000, false, 1);
+		$data['min_value'] = $this->currency->format(1, false, 1);
+		$data['max_value'] = $this->currency->format(1000, false, 1);
 
 		//Action Buttons
-		$this->data['action'] = $this->url->link('account/voucher');
+		$data['action'] = $this->url->link('account/voucher');
 
 		$voucher_info = array();
 
@@ -64,26 +64,13 @@ class Catalog_Controller_Account_Voucher extends Controller
 			'agree'            => false,
 		);
 
-		$this->data += $voucher_info + $defaults;
+		$data += $voucher_info + $defaults;
 
 		//Template Data
-		$this->data['voucher_themes'] = $this->Model_Cart_VoucherTheme->getVoucherThemes();
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		//The Template
-		$this->view->load('account/voucher');
+		$data['voucher_themes'] = $this->Model_Cart_VoucherTheme->getVoucherThemes();
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/voucher', $data));
 	}
 
 	public function success()
@@ -96,23 +83,10 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->breadcrumb->add(_l("Purchase a Gift Certificate"), $this->url->link('account/voucher'));
 
 		//Action Buttons
-		$this->data['continue'] = $this->url->link('cart/cart');
-
-		//The Template
-		$this->view->load('common/success');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['continue'] = $this->url->link('cart/cart');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/success', $data));
 	}
 
 	private function validate()

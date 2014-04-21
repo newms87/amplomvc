@@ -3,13 +3,12 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 {
 	public function index()
 	{
-		$this->view->load('product/manufacturer');
 		$this->document->setTitle(_l("Find Your Favorite Brand"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Brand"), $this->url->link('product/manufacturer'));
 
-		$this->data['categories'] = array();
+		$data['categories'] = array();
 
 		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 
@@ -20,34 +19,23 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 				$key = substr(strtoupper($manufacturer['name']), 0, 1);
 			}
 
-			if (!isset($this->data['manufacturers'][$key])) {
-				$this->data['categories'][$key]['name'] = $key;
+			if (!isset($data['manufacturers'][$key])) {
+				$data['categories'][$key]['name'] = $key;
 			}
 
-			$this->data['categories'][$key]['manufacturer'][] = array(
+			$data['categories'][$key]['manufacturer'][] = array(
 				'name' => $manufacturer['name'],
 				'href' => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
 			);
 		}
 
-		$this->data['continue'] = $this->url->link('common/home');
+		$data['continue'] = $this->url->link('common/home');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/manufacturer', $data));
 	}
 
 	public function product()
 	{
-		$this->view->load('product/category');
-
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Manufacturers"), $this->url->link('product/manufacturer'));
 
@@ -57,7 +45,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 		if ($manufacturer) {
 			$this->document->setTitle($manufacturer['name']);
-			$this->data['page_title'] = $manufacturer['name'];
+			$data['page_title'] = $manufacturer['name'];
 
 			$this->breadcrumb->add($manufacturer['name'], $this->url->here());
 
@@ -83,7 +71,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 				'template' => 'block/product/product_list',
 			);
 
-			$this->data['block_product_list'] = $this->block->render('product/list', null, $params);
+			$data['block_product_list'] = $this->block->render('product/list', null, $params);
 
 			//Sorting
 			$sorts = array(
@@ -101,29 +89,20 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}
 
-			$this->data['sorts'] = $this->sort->render_sort($sorts);
+			$data['sorts'] = $this->sort->render_sort($sorts);
 
-			$this->data['limits'] = $this->sort->renderLimits();
+			$data['limits'] = $this->sort->renderLimits();
 
 			//Pagination
 			$this->pagination->init();
 			$this->pagination->total = $product_total;
 
-			$this->data['pagination'] = $this->pagination->render();
+			$data['pagination'] = $this->pagination->render();
 		}
 
 		//Action Buttons
-		$this->data['continue'] = $this->url->link('common/home');
+		$data['continue'] = $this->url->link('common/home');
 
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/category', $data));
 	}
 }

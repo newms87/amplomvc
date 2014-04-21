@@ -3,16 +3,14 @@ class Admin_Controller_Tool_Tool extends Controller
 {
 	public function index()
 	{
-		$this->view->load('tool/tool');
-
 		$this->document->setTitle(_l("System Tools"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("System Tools"), $this->url->link('tool/tool'));
 
-		$this->data['clear_cache'] = $this->url->link('tool/tool/clear_cache');
+		$data['clear_cache'] = $this->url->link('tool/tool/clear_cache');
 
-		$this->data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = $this->url->link('common/home');
 
 		$defaults = array(
 			'cache_tables' => ''
@@ -20,19 +18,14 @@ class Admin_Controller_Tool_Tool extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('tool/tool', $data));
 	}
 
 	public function clear_cache()

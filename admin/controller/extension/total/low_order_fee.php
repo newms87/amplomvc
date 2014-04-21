@@ -12,15 +12,12 @@ class Admin_Controller_Extension_Total_LowOrderFee extends Controller
 
 		$settings += $defaults;
 
-		$this->data['settings'] = $settings;
+		$data['settings'] = $settings;
 
 		//Template Data
-		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
-
-		//The Template
-		$this->view->load('extension/total/low_order_fee');
+		$data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		//Render
-		$this->render();
+		$this->render('extension/total/low_order_fee', $data);
 	}
 }

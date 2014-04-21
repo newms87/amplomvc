@@ -4,8 +4,6 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 	public function index()
 	{
-		$this->view->load('mail/send_email');
-
 		$this->document->setTitle(_l("Send Email"));
 
 		if ($this->request->isPost()) {
@@ -19,9 +17,9 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Send Email"), $this->url->link('mail/send_email'));
 
-		$this->data['action'] = $this->url->link('mail/send_email');
+		$data['action'] = $this->url->link('mail/send_email');
 
-		$this->data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = $this->url->link('common/home');
 
 		$defaults = array(
 			'sender'     => $this->config->get('config_title'),
@@ -37,24 +35,19 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
+				$data[$key] = $_POST[$key];
 			} elseif ($this->config->get($key)) {
-				$this->data[$key] = $this->config->get($key);
+				$data[$key] = $this->config->get($key);
 			} else {
-				$this->data[$key] = $default;
+				$data[$key] = $default;
 			}
 		}
 
 		if ($this->request->isPost()) {
-			$this->data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
+			$data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('mail/send_email', $data));
 	}
 
 	public function send()

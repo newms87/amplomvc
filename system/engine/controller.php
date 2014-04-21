@@ -5,16 +5,12 @@ abstract class Controller
 	protected $registry, $load;
 	protected $children = array();
 	public $output;
-	public $view;
-	public $data = array();
 	public $error = array();
 
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
 		$this->load = $registry;
-
-		$this->view = new View($registry);
 	}
 
 	public function __get($key)
@@ -61,9 +57,6 @@ abstract class Controller
 
 	protected function render($path, $data = array())
 	{
-		//TODO: $this->data is deprecated. Remove when legacy support no longer needed.
-		$data += $this->data;
-
 		//TODO All validation should be done in Model! Remove this after removing all validation methods.
 		//Display Error Messages
 		$data['errors'] = array();
@@ -94,7 +87,7 @@ abstract class Controller
 
 		ob_start();
 
-		include(_ac_mod_file($this->template));
+		include(_ac_mod_file($template));
 
 		$this->output = ob_get_clean();
 

@@ -10,19 +10,19 @@ class Admin_Controller_Common_Login extends Controller
 			$this->url->redirect('common/home');
 		}
 
-		$this->data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
+		$data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
 
 		if (isset($this->session->data['token']) && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = _l("Invalid token session. Please login again.");
 		}
 
-		$this->data['messages'] = $this->message->fetch();
+		$data['messages'] = $this->message->fetch();
 
 		$defaults = array(
 			'username' => '',
 		);
 
-		$this->data += $_POST + $defaults;
+		$data += $_POST + $defaults;
 
 		//If trying to access an admin page, redirect after login
 		if (!empty($_REQUEST['redirect'])) {
@@ -34,20 +34,11 @@ class Admin_Controller_Common_Login extends Controller
 		$this->request->setRedirect('login', $redirect);
 
 		//Actions
-		$this->data['action'] = $this->url->link('common/login/authenticate');
-		$this->data['forgotten'] = $this->url->link('common/forgotten');
-
-		//The Template
-		$this->view->load('common/login');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['action'] = $this->url->link('common/login/authenticate');
+		$data['forgotten'] = $this->url->link('common/forgotten');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('common/login', $data));
 	}
 
 	public function authenticate()

@@ -3,8 +3,6 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 {
 	public function index()
 	{
-		$this->view->load('report/flashsale_viewed');
-
 		$this->document->setTitle(_l("Flashsales Viewed Report"));
 
 		if (isset($_GET['page'])) {
@@ -61,7 +59,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 
 		$flashsale_views_total = $this->Model_Report_Flashsale->getTotalFlashsaleViews();
 
-		$this->data['flashsales'] = array();
+		$data['flashsales'] = array();
 
 		$results = $this->Model_Report_Flashsale->getFlashsalesViewed($data);
 
@@ -72,7 +70,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 				$percent = 0;
 			}
 
-			$this->data['flashsales'][] = array(
+			$data['flashsales'][] = array(
 				'name'          => $result['name'],
 				'date_start'    => $result['date_start'],
 				'date_end'      => $result['date_end'],
@@ -86,18 +84,13 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 
 		$url = $this->get_url();
 
-		$this->data['reset'] = $this->url->link('report/flashsale_viewed/reset', $url);
+		$data['reset'] = $this->url->link('report/flashsale_viewed/reset', $url);
 
 		$this->pagination->init();
 		$this->pagination->total  = $flashsale_viewed_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('report/flashsale_viewed', $data));
 	}
 
 	public function reset()

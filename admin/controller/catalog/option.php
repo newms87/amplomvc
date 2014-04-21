@@ -77,9 +77,6 @@ class Admin_Controller_Catalog_Option extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Options"));
 
-		//The Template
-		$this->view->load('catalog/option_list');
-
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Options"), $this->url->link('catalog/option'));
@@ -137,46 +134,37 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->table->setTemplateData($tt_data);
 		$this->table->mapAttribute('filter_value', $filter);
 
-		$this->data['list_view'] = $this->table->render();
+		$data['list_view'] = $this->table->render();
 
 		//Batch Actions
-		$this->data['batch_actions'] = array(
+		$data['batch_actions'] = array(
 			'delete' => array(
 				'label' => _l("Delete"),
 			),
 		);
 
-		$this->data['batch_update'] = 'catalog/option/batch_update';
+		$data['batch_update'] = 'catalog/option/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->renderLimits();
+		$data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total  = $option_total;
-		$this->data['pagination'] = $this->pagination->render();
+		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/option/update');
-		$this->data['delete'] = $this->url->link('catalog/option/delete');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
+		$data['insert'] = $this->url->link('catalog/option/update');
+		$data['delete'] = $this->url->link('catalog/option/delete');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/option_list', $data));
 	}
 
 	private function getForm()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Options"));
-
-		//The Template
-		$this->view->load('catalog/option_form');
 
 		//Insert or Update
 		$option_id = isset($_GET['option_id']) ? (int)$_GET['option_id'] : 0;
@@ -192,8 +180,8 @@ class Admin_Controller_Catalog_Option extends Controller
 		}
 
 		//Action Buttons
-		$this->data['save']   = $this->url->link('catalog/option/update', 'option_id=' . $option_id);
-		$this->data['cancel'] = $this->url->link('catalog/option');
+		$data['save']   = $this->url->link('catalog/option/update', 'option_id=' . $option_id);
+		$data['cancel'] = $this->url->link('catalog/option');
 
 		//Load Information
 		$option_info = array();
@@ -226,10 +214,10 @@ class Admin_Controller_Catalog_Option extends Controller
 			'option_values' => array()
 		);
 
-		$this->data += $option_info + $defaults;
+		$data += $option_info + $defaults;
 
 		//Template Data
-		$this->data['data_option_types'] = array(
+		$data['data_option_types'] = array(
 			'#optgroup1' => _l('Choose'),
 			'select'     => _l('Select'),
 			'radio'      => _l('Radio'),
@@ -245,7 +233,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		);
 
 		//Product Options Template Defaults
-		$this->data['option_values']['__ac_template__'] = array(
+		$data['option_values']['__ac_template__'] = array(
 			'option_id'       => 0,
 			'option_value_id' => '',
 			'name'            => '',
@@ -256,14 +244,8 @@ class Admin_Controller_Catalog_Option extends Controller
 			'sort_order'      => 0,
 		);
 
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer'
-		);
-
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('catalog/option_form', $data));
 	}
 
 	private function validateForm()

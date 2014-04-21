@@ -20,39 +20,26 @@ class Catalog_Controller_Account_Account extends Controller
 		//Page Information
 		$shipping_address               = $this->customer->getDefaultShippingAddress();
 		$shipping_address['display']    = $this->address->format($shipping_address);
-		$this->data['shipping_address'] = $shipping_address;
+		$data['shipping_address'] = $shipping_address;
 
 		//Customer Information
 		$customer = $this->customer->info() + $this->customer->getMeta();
 
 		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
 
-		$this->data['newsletter_display'] = $customer['newsletter'] ? _l("Send me RealMeal weekly updates!") : _l("Do not send me any emails.");
+		$data['newsletter_display'] = $customer['newsletter'] ? _l("Send me RealMeal weekly updates!") : _l("Do not send me any emails.");
 
-		$this->data['customer'] = $customer;
+		$data['customer'] = $customer;
 
 		//Urls
-		$this->data['url_order_history'] = $this->url->link('account/order');
-		$this->data['url_returns']       = $this->url->link('account/return');
+		$data['url_order_history'] = $this->url->link('account/order');
+		$data['url_returns']       = $this->url->link('account/return');
 
 		//Action Buttons
-		$this->data['edit_account'] = $this->url->link('account/update');
-		$this->data['back']         = $this->url->link('common/home');
-
-		//The Template
-		$this->view->load('account/account');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['edit_account'] = $this->url->link('account/update');
+		$data['back']         = $this->url->link('common/home');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/account', $data));
 	}
 }

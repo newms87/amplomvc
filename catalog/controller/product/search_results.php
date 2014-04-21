@@ -3,17 +3,15 @@ class Catalog_Controller_Product_SearchResults extends Controller
 {
 	public function index()
 	{
-		$this->view->load('product/search_results');
-
 		$post = $_POST;
 		if (!isset($post['action']) || $post['action'] != 'betty_search') {
 			echo _l("No search request was made");
 			exit;
 		}
 
-		$this->data['search_category'] = "";
-		$this->data['search_country']  = "";
-		$this->data['search_color']    = '';
+		$data['search_category'] = "";
+		$data['search_country']  = "";
+		$data['search_color']    = '';
 
 		$search_query = array();
 		foreach ($post as $key => $p) {
@@ -32,8 +30,8 @@ class Catalog_Controller_Product_SearchResults extends Controller
 			$results[$key]['description'] = htmlspecialchars_decode($r['description']);
 		}
 
-		$this->data['results'] = $results;
+		$data['results'] = $results;
 
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('product/search_results', $data));
 	}
 }

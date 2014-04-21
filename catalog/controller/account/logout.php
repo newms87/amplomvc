@@ -20,22 +20,9 @@ class Catalog_Controller_Account_Logout extends Controller
 		$this->breadcrumb->add(_l("Logout"), $this->url->link('account/logout'));
 
 		//Action Buttons
-		$this->data['continue'] = $this->url->link('common/home');
-
-		//The Template
-		$this->view->load('account/logout');
-
-		//Dependencies
-		$this->children = array(
-			'area/left',
-			'area/right',
-			'area/top',
-			'area/bottom',
-			'common/footer',
-			'common/header'
-		);
+		$data['continue'] = $this->url->link('common/home');
 
 		//Render
-		$this->response->setOutput($this->render());
+		$this->response->setOutput($this->render('account/logout', $data));
 	}
 }
