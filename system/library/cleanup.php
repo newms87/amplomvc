@@ -1,5 +1,5 @@
 <?php
-class PrettyLanguage
+class Cleanup extends Library
 {
 	function __construct()
 	{
@@ -7,135 +7,61 @@ class PrettyLanguage
 		$ext         = array('php');
 
 
-		$this->lang_replace_global();
+		$files = $this->getFiles(DIR_SITE . "catalog/controller/", $ext);
+
+		$this->noview($files);
 
 	}
 
-	public function update_template_format($files)
+	public function noview($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
 
 			$orig_lines = $lines;
 
-			$brackets  = array();
-			$to_remove = array();
-			$to_add    = array();
+			$new_lines = array();
 
+			$view = null;
 			echo $file . '<br>';
 
-			$dir_temp = -1;
-
 			foreach ($lines as $num => $line) {
-				for ($i = 0; $i < strlen($line); $i++) {
-					if ($line[$i] == '{') {
-						array_push($brackets, $num);
-					} elseif ($line[$i] == '}') {
-						array_pop($brackets);
+				$matches = null;
+				if (preg_match("/\\\$this->view->load\\('([^']+)'\\);/", $line, $matches)) {
+					if ($view) {
+						$this->error($num, "2 Views found before render $view and $matches[1]");
+						continue 2;
 					}
-				}
 
-				if (strpos($line, "DIR_THEME") !== false) {
-					$dir_temp = 0;
+					$view = $matches[1];
 				}
+				elseif (preg_match("/(\\s*)\\\$this->render\\(([^)]*)\\)/", $line, $matches)) {
+					if (!$view) {
+						if (!$matches[2]) {
+							$this->error($num, "Render found without a view");
+						}
+						continue 2;
+					}
 
-				switch ($dir_temp) {
-					case 0:
-						if (!preg_match('/if\s*\(file_exists\(DIR_THEME\s*\.\s*\$this->config->get\([^\)]*\)\s*\.\s*\'[^\']*\'\)\)\s*\{/', $line)) {
-							echo "PROBLEM at 0";
-							exit;
-						}
-						$lines[$num] .= "**REMOVE ME**";
-						break;
-					case 1:
-						if (!preg_match('/\$this->template_file\s*=\s*\$this->config->get\(\'config_theme\'\)\s*\.\s*\'[^\']*\';/', $line)) {
-							echo "PROBLEM at 1";
-							exit;
-						}
-						$lines[$num] .= "**REMOVE ME**";
-						break;
-					case 3:
-						array_pop($brackets);
-						break;
-					case 2:
-						if (!preg_match('/\}\s*else\s*\{/', $line)) {
-							echo "PROBLEM at 2";
-							exit;
-						}
-						$lines[$num] .= "**REMOVE ME**";
-						break;
-					case 4:
-						if (trim($line) != '}') {
-							echo "PROBLEM at 4";
-							exit;
-						}
-						$lines[$num] .= "**REMOVE ME**";
-						break;
-					case 5:
-						if (!trim($line)) {
-							$lines[$num] .= "**REMOVE ME**";
-						}
-						$dir_temp = -1;
-					default:
-						break;
-				}
+					if (!empty($matches[2])) {
+						$this->error($num, "Render was not empty");
+						continue 2;
+					}
 
-				if ($dir_temp >= 0 && $dir_temp != 3) {
-					$dir_temp++;
+					$new_lines[] = str_replace("\$this->render()", "\$this->render('$view', \$data)", $line);
+					$view = null;
 					continue;
 				}
 
-				if (preg_match('/\$this->template_file/', $line)) {
-					if (substr_count($line, '=') > 1) {
-						echo "WEIRD TEMPLATE LINE!";
-						exit;
-					}
-					$template = trim(preg_replace(array(
-						'/\.tpl/',
-						'/;/',
-						'/[^=]*=/'
-					), '', $line));
-
-					if ($dir_temp == 3) {
-						if (!preg_match('/default\/template\//', $template)) {
-							echo "PROBLEM PREG at 3";
-							exit;
-						}
-						$template = str_replace("default/template/", '', $template);
-						$dir_temp++;
-					}
-
-					$lines[$num] .= "**REMOVE ME**";
-
-					$to_add[end($brackets)] = '$this->view->load(' . $template . ');' . "\r\n";
-				} elseif ($dir_temp == 3) {
-					$this->pl($num, $line);
-					echo "PROBLEM at 3";
-					exit;
-				}
+				$new_lines[] = $line;
 			}
 
-			$new_lines      = array();
-			$new_orig_lines = array();
-			foreach ($lines as $num => $l) {
-				if (!preg_match('/\*\*REMOVE ME\*\*/', $l)) {
-					$new_lines[] = $l;
-				} else {
-					$new_lines[] = null;
-				}
-				$new_orig_lines[] = $l;
-				if (in_array($num, array_keys($to_add))) {
-					$new_lines[]      = $to_add[$num];
-					$new_orig_lines[] = '';
-				}
-			}
-
-			//$this->print_lines($new_orig_lines, $new_lines, true);
-			file_put_contents($file, implode("\n", $new_lines));
+			$this->print_lines($orig_lines, $new_lines, true);
+			//file_put_contents($file, implode("\n", $new_lines));
 		}
 	}
 
-	public function get_all_files_r($dir, $ext = array('php'), $ignore = array(), $depth = 0)
+	public function getFiles($dir, $ext = array('php'), $ignore = array(), $depth = 0)
 	{
 		if ($depth > 20) {
 			echo "we have too many recursions!";
@@ -157,7 +83,7 @@ class PrettyLanguage
 			$file_path = rtrim($dir, '/') . '/' . $file;
 
 			if (is_dir($file_path)) {
-				$files = array_merge($files, $this->get_all_files_r($file_path, $ext,$ignore, $depth + 1));
+				$files = array_merge($files, $this->getFiles($file_path, $ext, $ignore, $depth + 1));
 			} else {
 				if (!empty($ext)) {
 					$match = null;
@@ -282,5 +208,10 @@ class PrettyLanguage
 		), $line);
 
 		echo "<div style='background: $color'>$num. $line</div>";
+	}
+
+	public function error($num, $msg)
+	{
+		echo "<div style=\"background: red; color:white\">$num.&nbsp;&nbsp;&nbsp; $msg</div>";
 	}
 }

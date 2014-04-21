@@ -4,6 +4,9 @@ class Catalog_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
+		$this->cleanup;
+		exit;
+
 		//Page Head
 		$this->document->setTitle($this->config->get('config_title'));
 		$this->document->setDescription($this->config->get('config_meta_description'));
@@ -25,7 +28,6 @@ class Catalog_Controller_Common_Home extends Controller
 		);
 
 		//Render
-		$output = $this->render('common/home', $data);
-		$this->response->setOutput($output);
+		$this->response->setOutput($this->render('common/home', $data));
 	}
 }

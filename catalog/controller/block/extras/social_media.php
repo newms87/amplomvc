@@ -3,15 +3,6 @@ class Catalog_Controller_Block_Extras_SocialMedia extends Controller
 {
 	public function index($settings, $type = 'standard')
 	{
-		switch ($type) {
-			case 'standard':
-				$this->view->load('block/extras/my_networks');
-				break;
-			default:
-				$this->view->load('block/extras/my_networks');
-				break;
-		}
-
 		if (isset($settings['networks'])) {
 			//TODO: MOVE the size settings to the block profile
 			if (!isset($settings['width'])) {
@@ -21,12 +12,21 @@ class Catalog_Controller_Block_Extras_SocialMedia extends Controller
 			foreach ($settings['networks'] as &$network) {
 				$network['thumb'] = $this->image->resize($network['icon'], $settings['width'], $settings['height']);
 			}
+			unset($network);
 
-			$this->data['networks'] = $settings['networks'];
 		} else {
 			return; // we return without rendering because there is nothing to output.
 		}
 
-		$this->render();
+		switch ($type) {
+			case 'standard':
+				$template = 'block/extras/my_networks';
+				break;
+			default:
+				$template = 'block/extras/my_networks';
+				break;
+		}
+
+		$this->render($template, $settings);
 	}
 }

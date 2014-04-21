@@ -3,21 +3,22 @@ class Catalog_Controller_Block_Product_List extends Controller
 {
 	public function index($settings)
 	{
-		$data         = !empty($settings['data']) ? $settings['data'] : array();
-		$template     = !empty($settings['template']) ? $settings['template'] : 'block/product/product_list';
 		$process_data = isset($settings['process_data']) ? $settings['process_data'] : true;
 
-		$this->view->load($template);
 		//TODO: need to implement these options in admin panel!
-		$this->data['list_show_add_to_cart'] = $this->config->get('config_list_show_add_to_cart');
-		$this->data['show_price_tax']        = $this->config->get('config_show_price_with_tax');
-		$this->data['review_status']         = $this->config->get('config_review_status');
+		$data = array(
+			'wishlist_status' => $this->config->get('config_wishlist_status'),
+			'compare_status'  => $this->config->get('config_compare_status'),
+			'list_show_add_to_cart' => $this->config->get('config_list_show_add_to_cart'),
+		   'show_price_tax' => $this->config->get('config_show_price_with_tax'),
+		   'review_status' => $this->config->get('config_review_status'),
+		);
 
 		$image_width  = $this->config->get('config_image_product_width');
 		$image_height = $this->config->get('config_image_product_height');
 
 		if ($process_data) {
-			foreach ($data as &$item) {
+			foreach ($settings['data'] as &$item) {
 				$item['thumb'] = $this->image->resize($item['image'], $image_width, $image_height);
 
 				if (!$item['thumb']) {
@@ -43,11 +44,11 @@ class Catalog_Controller_Block_Product_List extends Controller
 					$item['price'] = false;
 				}
 
-				if ($this->data['show_price_tax']) {
+				if ($data['show_price_tax']) {
 					$item['tax'] = $this->currency->format((float)$item['special'] ? $item['special'] : $item['price']);
 				}
 
-				if ($this->data['review_status']) {
+				if ($data['review_status']) {
 					$item['rating']  = (int)$item['rating'];
 					$item['reviews'] = _l("Based on %s reviews.", (int)$item['reviews']);
 				}
@@ -60,23 +61,21 @@ class Catalog_Controller_Block_Product_List extends Controller
 					$item['href'] = $this->url->link('product/product', 'product_id=' . $item['product_id']);
 				}
 			}
+			unset($item);
 		}
 
-		$this->data['products'] = $data;
+		$data += array(
+			'products'        => $settings['data'],
+			'sort_url'        => $this->sort->get_sort_url(),
+		);
 
-		//Product Wishlist
-		$this->data['wishlist_status'] = $this->config->get('config_wishlist_status');
-
-		//Product Compare
-		$this->data['compare_status'] = $this->config->get('config_compare_status');
-
-		if ($this->data['compare_status']) {
-			$this->data['compare_count'] = $this->cart->get_compare_count();
-			$this->data['compare']       = $this->url->link('product/compare');
+		if ($data['compare_status']) {
+			$data['compare_count'] = $this->cart->get_compare_count();
+			$data['compare']       = $this->url->link('product/compare');
 		}
 
-		$this->data['sort_url'] = $this->sort->get_sort_url();
+		$template = !empty($settings['template']) ? $settings['template'] : 'block/product/product_list';
 
-		$this->render();
+		$this->render($template, $data);
 	}
 }

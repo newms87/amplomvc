@@ -37,9 +37,8 @@ class Catalog_Controller_Block_Account_Login extends Controller
 
 		//The Template
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';
-		$this->view->load($template);
 
 		//Render
-		$this->render();
+		$this->render($template);
 	}
 }
