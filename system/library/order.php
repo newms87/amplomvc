@@ -142,12 +142,12 @@ class Order Extends Library
 
 	public function hasOrder()
 	{
-		return !empty($this->session->data['order_id']);
+		return $this->session->has('order_id');
 	}
 
 	public function getId()
 	{
-		return !empty($this->session->data['order_id']) ? $this->session->data['order_id'] : false;
+		return $this->session->get('order_id');
 	}
 
 	public function get($order_id = null)
@@ -457,6 +457,6 @@ class Order Extends Library
 
 	public function clear()
 	{
-		unset($this->session->data['order_id']);
+		$this->session->delete('order_id');
 	}
 }

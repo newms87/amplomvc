@@ -179,10 +179,10 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$data['error_warning'] = '';
 		}
 
-		if (isset($this->session->data['success'])) {
-			$data['success'] = $this->session->data['success'];
+		if ($this->session->has('success')) {
+			$data['success'] = $this->session->get('success');
 
-			unset($this->session->data['success']);
+			$this->session->delete('success');
 		} else {
 			$data['success'] = '';
 		}

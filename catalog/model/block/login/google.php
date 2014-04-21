@@ -12,11 +12,11 @@ class Catalog_Model_Block_Login_Google extends Model
 
 	public function getStateToken()
 	{
-		if (empty($this->session->data['gp_state'])) {
+		if (!$this->session->has('gp_state')) {
 			$this->session->set('gp_state', md5(rand()));
 		}
 
-		return $this->session->data['gp_state'];
+		return $this->session->get('gp_state');
 	}
 
 	public function getConnectUrl()
@@ -42,7 +42,7 @@ class Catalog_Model_Block_Login_Google extends Model
 
 	public function authenticate()
 	{
-		if (empty($_GET['state']) || empty($this->session->data['gp_state']) || $_GET['state'] !== $this->session->data['gp_state']) {
+		if (empty($_GET['state']) || !$this->session->get('gp_state') || $_GET['state'] !== $this->session->get('gp_state')) {
 			$this->error['state'] = _l("Unable to verify the User");
 			return false;
 		}

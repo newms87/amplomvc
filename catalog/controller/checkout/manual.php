@@ -14,14 +14,14 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			$this->cart->clear();
 			$this->customer->logout();
 
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
-			unset($this->session->data['payment_method']);
-			unset($this->session->data['payment_methods']);
-			unset($this->session->data['coupons']);
-			unset($this->session->data['reward']);
-			unset($this->session->data['voucher']);
-			unset($this->session->data['vouchers']);
+			$this->session->delete('shipping_method');
+			$this->session->delete('shipping_methods');
+			$this->session->delete('payment_method');
+			$this->session->delete('payment_methods');
+			$this->session->delete('coupons');
+			$this->session->delete('reward');
+			$this->session->delete('voucher');
+			$this->session->delete('vouchers');
 
 			// Settings
 			$settings = $this->config->loadGroup('config', $_POST['store_id']);
@@ -171,7 +171,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 			if (isset($_POST['order_voucher'])) {
 				foreach ($_POST['order_voucher'] as $voucher) {
-					$this->session->data['vouchers'][] = array(
+					$this->session->get('vouchers')[] = array(
 						'voucher_id'       => $voucher['voucher_id'],
 						'description'      => $voucher['description'],
 						'code'             => substr(md5(rand()), 0, 7),
@@ -224,7 +224,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 					$voucher_id = $this->Model_Cart_Voucher->addVoucher(0, $voucher_data);
 
-					$this->session->data['vouchers'][] = array(
+					$this->session->get('vouchers')[] = array(
 						'voucher_id'       => $voucher_id,
 						'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
 						'code'             => substr(md5(rand()), 0, 7),
@@ -241,7 +241,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 			$json['order_voucher'] = array();
 
-			foreach ($this->session->data['vouchers'] as $voucher) {
+			foreach ($this->session->get('vouchers') as $voucher) {
 				$json['order_voucher'][] = array(
 					'voucher_id'       => $voucher['voucher_id'],
 					'description'      => $voucher['description'],
@@ -370,7 +370,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				$coupon_info = $this->Model_Cart_Coupon->getCoupon($_POST['coupon']);
 
 				if ($coupon_info) {
-					$this->session->data['coupons'][$_POST['coupon']] = $coupon_info;
+					$this->session->get('coupons')[$_POST['coupon']] = $coupon_info;
 				} else {
 					$json['error']['coupon'] = _l("Warning: Coupon is either invalid, expired or reached it's usage limit!");
 				}
@@ -544,14 +544,14 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			$this->cart->clear();
 			$this->customer->logout();
 
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
-			unset($this->session->data['payment_method']);
-			unset($this->session->data['payment_methods']);
-			unset($this->session->data['coupons']);
-			unset($this->session->data['reward']);
-			unset($this->session->data['voucher']);
-			unset($this->session->data['vouchers']);
+			$this->session->delete('shipping_method');
+			$this->session->delete('shipping_methods');
+			$this->session->delete('payment_method');
+			$this->session->delete('payment_methods');
+			$this->session->delete('coupons');
+			$this->session->delete('reward');
+			$this->session->delete('voucher');
+			$this->session->delete('vouchers');
 		} else {
 			$json['error']['warning'] = _l("You do not have permission to access this page, please refer to your system administrator.");
 		}

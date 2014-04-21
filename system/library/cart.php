@@ -35,11 +35,11 @@ class Cart extends Library
 	{
 		parent::__construct($registry);
 
-		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
+		if (!$this->session->has('cart') || !is_array($this->session->get('cart'))) {
 			$this->session->set('cart', array());
 		}
 
-		if (!isset($this->session->data['wishlist']) || !is_array($this->session->data['wishlist'])) {
+		if (!$this->session->has('wishlist') || !is_array($this->session->get('wishlist'))) {
 			$this->session->set('wishlist', array());
 		}
 	}
@@ -65,10 +65,10 @@ class Cart extends Library
 	public function get($type = null)
 	{
 		if ($type) {
-			return !empty($this->session->data['cart'][$type]) ? $this->session->data['cart'][$type] : array();
+			return !empty($_SESSION['cart'][$type]) ? $_SESSION['cart'][$type] : array();
 		}
 
-		return $this->session->data['cart'];
+		return $this->session->get('cart');
 	}
 
 	public function getItem($type, $key)
@@ -80,13 +80,13 @@ class Cart extends Library
 
 	public function has($type)
 	{
-		return !empty($this->session->data['cart'][$type]);
+		return !empty($_SESSION['cart'][$type]);
 	}
 
 	public function isEmpty()
 	{
-		if (!empty($this->session->data['cart'])) {
-			foreach ($this->session->data['cart'] as $cart) {
+		if ($this->session->has('cart')) {
+			foreach ($this->session->get('cart') as $cart) {
 				if (!empty($cart)) {
 					return false;
 				}
@@ -145,15 +145,15 @@ class Cart extends Library
 	{
 		$key = (int)$item_id . ':' . base64_encode(serialize($options));
 
-		if (empty($this->session->data['cart'][$type][$key])) {
-			$this->session->data['cart'][$type][$key] = array(
+		if (empty($_SESSION['cart'][$type][$key])) {
+			$_SESSION['cart'][$type][$key] = array(
 				'id'       => $item_id,
 				'quantity' => $quantity,
 				'options'  => $options,
 				'key'      => $key,
 			);
 		} else {
-			$this->session->data['cart'][$type][$key]['quantity'] += $quantity;
+			$_SESSION['cart'][$type][$key]['quantity'] += $quantity;
 		}
 
 		//Invalidate Rendered Data
@@ -166,7 +166,7 @@ class Cart extends Library
 
 	public function updateItem($type, $key, $quantity)
 	{
-		if (!isset($this->session->data['cart'][$type][$key])) {
+		if (!isset($_SESSION['cart'][$type][$key])) {
 			return false;
 		}
 
@@ -183,8 +183,8 @@ class Cart extends Library
 
 	public function removeItem($type, $key)
 	{
-		if (isset($this->session->data['cart'][$type][$key])) {
-			unset($this->session->data['cart'][$type][$key]);
+		if (isset($_SESSION['cart'][$type][$key])) {
+			unset($_SESSION['cart'][$type][$key]);
 			$this->totals = null;
 
 			$this->saveCart();
@@ -207,10 +207,10 @@ class Cart extends Library
 
 		foreach ($cart as $type => $items) {
 			foreach ($items as $key => $data) {
-				if (!empty($this->session->data['cart'][$type][$key])) {
-					$this->session->data['cart'][$type][$key]['quantity'] += $data['quantity'];
+				if (!empty($_SESSION['cart'][$type][$key])) {
+					$_SESSION['cart'][$type][$key]['quantity'] += $data['quantity'];
 				} else {
-					$this->session->data['cart'][$type][$key] = $data;
+					$_SESSION['cart'][$type][$key] = $data;
 				}
 			}
 		}
@@ -231,10 +231,10 @@ class Cart extends Library
 
 		$this->clearPaymentAddress();
 		$this->clearShippingAddress();
-		unset($this->session->data['comment']);
-		unset($this->session->data['coupons']);
-		unset($this->session->data['reward']);
-		unset($this->session->data['vouchers']);
+		$this->session->delete('comment');
+		$this->session->delete('coupons');
+		$this->session->delete('reward');
+		$this->session->delete('vouchers');
 
 		$this->order->clear();
 
@@ -649,13 +649,13 @@ class Cart extends Library
 			return false;
 		}
 
-		if (!isset($this->session->data['wishlist'])) {
+		if (!$this->session->get('wishlist')) {
 			$this->session->set('wishlist', array());
 		}
 
 		foreach ($wishlist as $product_id) {
-			if (!in_array($product_id, $this->session->data['wishlist'])) {
-				$this->session->data['wishlist'][] = $product_id;
+			if (!in_array($product_id, $this->session->get('wishlist'))) {
+				$_SESSION['wishlist'][] = $product_id;
 			}
 		}
 
@@ -749,7 +749,7 @@ class Cart extends Library
 
 	public function clearPaymentAddress()
 	{
-		unset($this->session->data['payment_address_id']);
+		$this->session->delete('payment_address_id');
 		$this->clearPaymentMethod();
 	}
 
@@ -847,7 +847,7 @@ class Cart extends Library
 
 	public function clearShippingAddress()
 	{
-		unset($this->session->data['shipping_address_id']);
+		$this->session->delete('shipping_address_id');
 		$this->clearShippingMethod();
 	}
 
@@ -973,8 +973,8 @@ class Cart extends Library
 
 	public function clearPaymentMethod()
 	{
-		unset($this->session->data['payment_code']);
-		unset($this->session->data['payment_key']);
+		$this->session->delete('payment_code');
+		$this->session->delete('payment_key');
 	}
 
 	public function validatePaymentMethod()
@@ -1110,8 +1110,8 @@ class Cart extends Library
 
 	public function clearShippingMethod()
 	{
-		unset($this->session->data['shipping_code']);
-		unset($this->session->data['shipping_key']);
+		$this->session->delete('shipping_code');
+		$this->session->delete('shipping_key');
 	}
 
 	public function validateShippingMethod()
@@ -1175,15 +1175,15 @@ class Cart extends Library
 	public function hasVouchers($voucher_id = null)
 	{
 		if ($voucher_id) {
-			return !empty($this->session->data['vouchers'][$voucher_id]);
+			return !empty($_SESSION['vouchers'][$voucher_id]);
 		}
 
-		return !empty($this->session->data['vouchers']);
+		return $this->session->has('vouchers');
 	}
 
 	public function getVoucherIds()
 	{
-		return isset($this->session->data['vouchers']) ? $this->session->data['vouchers'] : array();
+		return $this->session->has('vouchers') ? $this->session->get('vouchers') : array();
 	}
 
 	public function getVouchers()
@@ -1197,8 +1197,8 @@ class Cart extends Library
 
 	public function addVoucher($voucher_id)
 	{
-		if (!isset($this->session->data['vouchers'])) {
-			$this->session->data['vouchers'][] = $voucher_id;
+		if (!$this->session->has('vouchers')) {
+			$_SESSION['vouchers'][] = $voucher_id;
 		} else {
 			$this->session->set('vouchers', array($voucher_id));
 		}
@@ -1206,12 +1206,12 @@ class Cart extends Library
 
 	public function removeVoucher($voucher_id)
 	{
-		unset($this->session->data['vouchers'][$voucher_id]);
+		unset($_SESSION['vouchers'][$voucher_id]);
 	}
 
 	public function removeAllVouchers()
 	{
-		unset($this->session->data['vouchers']);
+		$this->session->delete('vouchers');
 	}
 
 	/**
@@ -1225,7 +1225,7 @@ class Cart extends Library
 
 	public function loadGuestInfo()
 	{
-		return isset($this->session->data['guest_info']) ? $this->session->data['guest_info'] : null;
+		return $this->session->has('guest_info') ? $this->session->get('guest_info') : null;
 	}
 
 	/**
@@ -1234,7 +1234,7 @@ class Cart extends Library
 
 	public function getComment()
 	{
-		return !empty($this->session->data['comment']) ? $this->session->data['comment'] : null;
+		return $this->session->get('comment');
 	}
 
 	public function setComment($comment)
@@ -1312,15 +1312,15 @@ class Cart extends Library
 
 	public function saveCart()
 	{
-		if (empty($this->session->data['customer_id'])) {
+		if (!$this->session->get('customer_id')) {
 			return;
 		}
 
 		$customer_update = array(
-			'cart'     => serialize($this->session->data['cart']),
-			'wishlist' => serialize($this->session->data['wishlist']),
+			'cart'     => serialize($this->session->get('cart')),
+			'wishlist' => serialize($this->session->get('wishlist')),
 		);
 
-		$this->update('customer', $customer_update, (int)$this->session->data['customer_id']);
+		$this->update('customer', $customer_update, (int)$this->session->get('customer_id'));
 	}
 }

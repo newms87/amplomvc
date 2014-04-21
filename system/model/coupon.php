@@ -70,14 +70,14 @@ class System_Model_Coupon extends Model
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
 
 		if ($query->num_rows) {
-			if (!isset($this->session->data['coupons'])) {
+			if (!$this->session->has('coupons')) {
 				$this->session->set('coupons', array());
 			}
 
 			foreach ($query->rows as $cc) {
 				$coupon = $this->getCoupon((int)$cc['coupon_id']);
 				if ($coupon) {
-					$this->session->data['coupons'][$coupon['code']] = $coupon;
+					$this->session->get('coupons')[$coupon['code']] = $coupon;
 				}
 			}
 		}

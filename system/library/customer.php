@@ -11,8 +11,8 @@ class Customer extends Library
 		$registry->set('customer', $this);
 		parent::__construct($registry);
 
-		if (isset($this->session->data['customer_id'])) {
-			if ($this->setCustomer($this->session->data['customer_id'])) {
+		if ($this->session->has('customer_id')) {
+			if ($this->setCustomer($this->session->get('customer_id'))) {
 				$this->track();
 			} else {
 				$this->logout();
@@ -55,7 +55,7 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->escape($this->session->has('cart') ? serialize($this->session->get('cart')) : '') . "', wishlist = '" . $this->escape($this->session->has('wishlist') ? serialize($this->session->get('wishlist')) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 
 		$this->session->end();
 

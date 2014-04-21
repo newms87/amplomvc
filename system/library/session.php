@@ -1,19 +1,16 @@
 <?php
 class Session extends Library
 {
-	public $data = array();
-
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
 
-		$data = & $_SESSION;
 		//TODO: validate this is safe? Since the token has to be in database and we will only save to db right before calling an admin page only.
 
 		//These will load the session / token if we are using curlopt
 		if (!isset($_SESSION['token']) && isset($_COOKIE['token'])) {
 			$this->loadTokenSession($_COOKIE['token']);
-			unset($data['session_token_saved']);
+			unset($_SESSION['session_token_saved']);
 		}
 
 		//refresh this logged in session
@@ -50,6 +47,11 @@ class Session extends Library
 	public function set($key, $value)
 	{
 		$_SESSION[$key] = $value;
+	}
+
+	public function delete($key)
+	{
+		unset($_SESSION[$key]);
 	}
 
 	public function loadTokenSession($token)

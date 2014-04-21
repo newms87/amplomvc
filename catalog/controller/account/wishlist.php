@@ -9,15 +9,15 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			$this->url->redirect('account/login');
 		}
 
-		if (!isset($this->session->data['wishlist'])) {
+		if (!$this->session->has('wishlist')) {
 			$this->session->set('wishlist', array());
 		}
 
 		if (isset($_GET['remove'])) {
-			$key = array_search($_GET['remove'], $this->session->data['wishlist']);
+			$key = array_search($_GET['remove'], $this->session->get('wishlist'));
 
 			if ($key !== false) {
-				unset($this->session->data['wishlist'][$key]);
+				unset($this->session->get('wishlist')[$key]);
 			}
 
 			$this->message->add('success', _l("Success: You have modified your wishlist!"));
@@ -31,17 +31,17 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
 		$this->breadcrumb->add(_l("My Wish List"), $this->url->link('account/wishlist'));
 
-		if (isset($this->session->data['success'])) {
-			$data['success'] = $this->session->data['success'];
+		if ($this->session->has('success')) {
+			$data['success'] = $this->session->get('success');
 
-			unset($this->session->data['success']);
+			$this->session->delete('success');
 		} else {
 			$data['success'] = '';
 		}
 
 		$data['products'] = array();
 
-		foreach ($this->session->data['wishlist'] as $key => $product_id) {
+		foreach ($this->session->get('wishlist') as $key => $product_id) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 			if ($product_info) {
@@ -83,7 +83,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
 				);
 			} else {
-				unset($this->session->data['wishlist'][$key]);
+				unset($this->session->get('wishlist')[$key]);
 			}
 		}
 
@@ -96,7 +96,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 	{
 		$json = array();
 
-		if (!isset($this->session->data['wishlist'])) {
+		if (!$this->session->has('wishlist')) {
 			$this->session->set('wishlist', array());
 		}
 
@@ -109,8 +109,8 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 		if ($product_info) {
-			if (!in_array($_POST['product_id'], $this->session->data['wishlist'])) {
-				$this->session->data['wishlist'][] = $_POST['product_id'];
+			if (!in_array($_POST['product_id'], $this->session->get('wishlist'))) {
+				$this->session->get('wishlist')[] = $_POST['product_id'];
 			}
 
 			if ($this->customer->isLogged()) {
@@ -119,7 +119,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			}
 
-			$json['total'] = sprintf(_l("Wish List (%s)"), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+			$json['total'] = sprintf(_l("Wish List (%s)"), ($this->session->has('wishlist') ? count($this->session->get('wishlist')) : 0));
 		}
 
 		$this->response->setOutput(json_encode($json));

@@ -107,7 +107,7 @@ class Catalog_Controller_Product_Search extends Controller
 
 		$this->breadcrumb->add(_l("Search"), $this->url->link('product/search', $url));
 
-		$this->_('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+		$this->_('text_compare', ($this->session->has('compare') ? count($this->session->get('compare')) : 0));
 		$data['compare'] = $this->url->link('product/compare');
 
 		// 3 Level Category Search

@@ -3,15 +3,15 @@ class Catalog_Controller_Product_Compare extends Controller
 {
 	public function index()
 	{
-		if (!isset($this->session->data['compare'])) {
+		if (!$this->session->has('compare')) {
 			$this->session->set('compare', array());
 		}
 
 		if (isset($_GET['remove'])) {
-			$key = array_search($_GET['remove'], $this->session->data['compare']);
+			$key = array_search($_GET['remove'], $this->session->get('compare'));
 
 			if ($key !== false) {
-				unset($this->session->data['compare'][$key]);
+				unset($this->session->get('compare')[$key]);
 			}
 
 			$this->message->add('success', _l("Success: You have modified your product comparison!"));
@@ -24,10 +24,10 @@ class Catalog_Controller_Product_Compare extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Product Comparison"), $this->url->link('product/compare'));
 
-		if (isset($this->session->data['success'])) {
-			$data['success'] = $this->session->data['success'];
+		if ($this->session->has('success')) {
+			$data['success'] = $this->session->get('success');
 
-			unset($this->session->data['success']);
+			$this->session->delete('success');
 		} else {
 			$data['success'] = '';
 		}
@@ -36,7 +36,7 @@ class Catalog_Controller_Product_Compare extends Controller
 
 		$data['attribute_groups'] = array();
 
-		foreach ($this->session->data['compare'] as $key => $product_id) {
+		foreach ($this->session->get('compare') as $key => $product_id) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 			if ($product_info) {
@@ -105,7 +105,7 @@ class Catalog_Controller_Product_Compare extends Controller
 					}
 				}
 			} else {
-				unset($this->session->data['compare'][$key]);
+				unset($this->session->get('compare')[$key]);
 			}
 		}
 
@@ -118,7 +118,7 @@ class Catalog_Controller_Product_Compare extends Controller
 	{
 		$json = array();
 
-		if (!isset($this->session->data['compare'])) {
+		if (!$this->session->has('compare')) {
 			$this->session->set('compare', array());
 		}
 
@@ -131,17 +131,17 @@ class Catalog_Controller_Product_Compare extends Controller
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 		if ($product_info) {
-			if (!in_array($_POST['product_id'], $this->session->data['compare'])) {
-				if (count($this->session->data['compare']) >= 4) {
-					array_shift($this->session->data['compare']);
+			if (!in_array($_POST['product_id'], $this->session->get('compare'))) {
+				if (count($this->session->get('compare')) >= 4) {
+					array_shift($this->session->get('compare'));
 				}
 
-				$this->session->data['compare'][] = $_POST['product_id'];
+				$this->session->get('compare')[] = $_POST['product_id'];
 			}
 
 			$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">product comparison</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('product/compare'));
 
-			$json['total'] = sprintf(_l("Product Compare (%s)"), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+			$json['total'] = sprintf(_l("Product Compare (%s)"), ($this->session->has('compare') ? count($this->session->get('compare')) : 0));
 		}
 
 		$this->response->setOutput(json_encode($json));

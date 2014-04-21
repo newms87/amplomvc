@@ -106,8 +106,8 @@ class Language extends Library
 		//Resolve Language if it was requested
 		if (!empty($_GET['language_code'])) {
 			$code = $_GET['language_code'];
-		} elseif (!empty($this->session->data['language_code'])) {
-			$code = $this->session->data['language_code'];
+		} elseif ($this->session->has('language_code')) {
+			$code = $this->session->get('language_code');
 		} elseif (!empty($_COOKIE['language_code'])) {
 			$code = $_COOKIE['language_code'];
 		} else {

@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 
 		//TODO: Move this to cart Library
-		if (!isset($this->session->data['vouchers'])) {
+		if (!$this->session->has('vouchers')) {
 			$this->session->set('vouchers', array());
 		}
 

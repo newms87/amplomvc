@@ -15,7 +15,7 @@ class System_Extension_Total_Voucher extends System_Extension_Total
 
 				$total_data['voucher'] = array(
 					'method_id' => $vouchers['voucher_id'],
-					'title'     => _l("Voucher (%s)", $this->session->data['voucher']),
+					'title'     => _l("Voucher (%s)", $this->session->get('voucher')),
 					'value'     => -$amount,
 				);
 

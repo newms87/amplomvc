@@ -13,11 +13,11 @@ class Catalog_Model_Block_Login_Facebook extends Model
 
 	public function getStateToken()
 	{
-		if (empty($this->session->data['fb_state'])) {
+		if (!$this->session->has('fb_state')) {
 			$this->session->set('fb_state', md5(rand()));
 		}
 
-		return $this->session->data['fb_state'];
+		return $this->session->get('fb_state');
 	}
 
 	public function getConnectUrl()
@@ -42,7 +42,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 
 	public function authenticate()
 	{
-		if (empty($_GET['state']) || empty($this->session->data['fb_state']) || $_GET['state'] !== $this->session->data['fb_state']) {
+		if (empty($_GET['state']) || !$this->session->get('fb_state') || $_GET['state'] !== $this->session->get('fb_state')) {
 			$this->error['state'] = _l("Unable to verify the User");
 			return false;
 		}

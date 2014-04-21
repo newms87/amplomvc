@@ -7,17 +7,11 @@ final class Registry
 	{
 		$lcase_key = strtolower($key);
 
-		if (isset($this->data[$lcase_key])) {
-			return $this->data[$lcase_key];
+		if (!isset($this->data[$lcase_key])) {
+			$this->data[$lcase_key] = $this->loadClass($key);
 		}
 
-		$instance = $this->loadClass($key);
-
-		if ($instance) {
-			$this->data[$lcase_key] = $instance;
-
-			return $instance;
-		}
+		return $this->data[$lcase_key];
 	}
 
 	public function set($key, $value)

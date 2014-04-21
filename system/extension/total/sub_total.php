@@ -10,8 +10,8 @@ class System_Extension_Total_SubTotal extends System_Extension_Total
 		}
 
 		//TODO: Handle Vouchers properly sitewide!
-		if (isset($this->session->data['vouchers']) && $this->session->data['vouchers']) {
-			foreach ($this->session->data['vouchers'] as $voucher) {
+		if ($this->session->has('vouchers') && $this->session->get('vouchers')) {
+			foreach ($this->session->get('vouchers') as $voucher) {
 				$sub_total += $voucher['amount'];
 			}
 		}

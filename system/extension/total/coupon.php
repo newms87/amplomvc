@@ -7,8 +7,8 @@ class System_Extension_Total_Coupon extends System_Extension_Total
 
 		$coupon_list = array();
 
-		if (isset($this->session->data['coupons'])) {
-			foreach ($this->session->data['coupons'] as $code => $coupon) {
+		if ($this->session->has('coupons')) {
+			foreach ($this->session->get('coupons') as $code => $coupon) {
 				$coupon_info = $this->System_Model_Coupon->getCoupon($code);
 				if ($coupon_info) {
 					$coupon_list[$code] = $coupon_info;

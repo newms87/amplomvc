@@ -217,16 +217,6 @@ class Admin_Controller_Catalog_Download extends Controller
 		$data['sort_name']      = $this->url->link('catalog/download', 'sort=dd.name' . $url);
 		$data['sort_remaining'] = $this->url->link('catalog/download', 'sort=d.remaining' . $url);
 
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
 		$this->pagination->init();
 		$this->pagination->total  = $download_total;
 		$data['pagination'] = $this->pagination->render();

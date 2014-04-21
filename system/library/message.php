@@ -5,7 +5,7 @@ class Message extends Library
 	{
 		parent::__construct($registry);
 
-		if (!isset($this->session->data['messages'])) {
+		if (!$this->session->has('messages')) {
 			$this->session->set('messages', array());
 		}
 	}
@@ -13,7 +13,7 @@ class Message extends Library
 	public function add($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['messages'][$type][] = $message;
+			$_SESSION['messages'][$type][] = $message;
 		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key) use ($type) {
 				$_SESSION['messages'][$type][] = $value;
@@ -25,7 +25,7 @@ class Message extends Library
 	public function system($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['system_messages'][$type][] = $message;
+			$_SESSION['system_messages'][$type][] = $message;
 		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key, $data) {
 				$_SESSION['system_messages'][$data[1]][] = $data[0]->language->get($value);
@@ -39,36 +39,36 @@ class Message extends Library
 	public function hasError($type = null)
 	{
 		if ($type) {
-			return isset($this->session->data['messages']['error'][$type]) || isset($this->session->data['messages']['warning'][$type]);
+			return isset($_SESSION['message']['error'][$type]) || isset($_SESSION['message']['warning'][$type]);
 		}
 
-		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);
+		return isset($_SESSION['message']['error']) || isset($_SESSION['message']['warning']);
 	}
 
 	public function peek($type = null)
 	{
 		if ($type) {
-			if (isset($this->session->data['messages'][$type])) {
-				return $this->session->data['messages'][$type];
+			if (isset($_SESSION['message'][$type])) {
+				return $_SESSION['message'][$type];
 			} else {
 				return array();
 			}
 		}
 
-		return $this->session->data['messages'];
+		return $_SESSION['message'];
 	}
 
 	public function fetch($type = '')
 	{
-		if (empty($this->session->data['messages'])) {
+		if (!$this->session->has('message')) {
 			return array();
 		}
 
 		if ($type) {
-			if (isset($this->session->data['messages'][$type])) {
-				$msgs = $this->session->data['messages'][$type];
+			if (isset($_SESSION['message'][$type])) {
+				$msgs = $_SESSION['message'][$type];
 
-				unset($this->session->data['messages'][$type]);
+				unset($_SESSION['message'][$type]);
 
 				return $msgs;
 			} else {
@@ -76,9 +76,9 @@ class Message extends Library
 			}
 		}
 
-		$msgs = $this->session->data['messages'];
+		$msgs = $_SESSION['message'];
 
-		unset($this->session->data['messages']);
+		$this->session->delete('messages');
 
 		return $msgs;
 	}

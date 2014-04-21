@@ -131,7 +131,7 @@ class Url extends Library
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
 		if ($admin) {
-			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . $this->session->data['token']);
+			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . $this->session->get('token'));
 		}
 
 		$data = curl_exec($ch);

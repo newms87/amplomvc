@@ -19,7 +19,7 @@ class Catalog_Controller_Block_Account_Login extends Controller
 			'username' => ''
 		);
 
-		$data += $login_info + $defaults;
+		$data = $login_info + $defaults;
 
 		//Template Data
 		$data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();
@@ -39,6 +39,6 @@ class Catalog_Controller_Block_Account_Login extends Controller
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';
 
 		//Render
-		$this->render($template);
+		$this->render($template, $data);
 	}
 }

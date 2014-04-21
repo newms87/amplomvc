@@ -3,10 +3,10 @@ class System_Extension_Total_Reward extends System_Extension_Total
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		if (isset($this->session->data['reward'])) {
+		if ($this->session->has('reward')) {
 			$points = $this->customer->getRewardPoints();
 
-			if ($this->session->data['reward'] <= $points) {
+			if ($this->session->get('reward') <= $points) {
 				$discount_total = 0;
 
 				$points_total = 0;
@@ -23,7 +23,7 @@ class System_Extension_Total_Reward extends System_Extension_Total
 					$discount = 0;
 
 					if ($product['points']) {
-						$discount = $product['total'] * ($this->session->data['reward'] / $points_total);
+						$discount = $product['total'] * ($this->session->get('reward') / $points_total);
 
 						if ($product['tax_class_id']) {
 							$tax_rates = $this->tax->getRates($discount, $product['tax_class_id']);
@@ -40,8 +40,8 @@ class System_Extension_Total_Reward extends System_Extension_Total
 				}
 
 				$total_data['reward'] = array(
-					'method_id' => $this->session->data['reward'],
-					'title'     => _l("Reward (%s)", $this->session->data['reward']),
+					'method_id' => $this->session->get('reward'),
+					'title'     => _l("Reward (%s)", $this->session->get('reward')),
 					'value'     => -$discount_total,
 				);
 

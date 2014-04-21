@@ -23,8 +23,8 @@ class Currency extends Library
 
 		if (isset($_GET['currency']) && (array_key_exists($_GET['currency'], $this->currencies))) {
 			$this->set($_GET['currency']);
-		} elseif ((isset($this->session->data['currency'])) && (array_key_exists($this->session->data['currency'], $this->currencies))) {
-			$this->set($this->session->data['currency']);
+		} elseif (($this->session->has('currency')) && (array_key_exists($this->session->get('currency'), $this->currencies))) {
+			$this->set($this->session->get('currency'));
 		} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
 			$this->set($_COOKIE['currency']);
 		} else {
@@ -36,7 +36,7 @@ class Currency extends Library
 	{
 		$this->code = $currency;
 
-		if (!isset($this->session->data['currency']) || ($this->session->data['currency'] != $currency)) {
+		if (!$this->session->has('currency') || ($this->session->get('currency') != $currency)) {
 			$this->session->set('currency', $currency);
 		}
 
