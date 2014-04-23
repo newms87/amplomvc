@@ -50,7 +50,7 @@ class Catalog_Controller_Account_Update extends Controller
 			'newsletter' => 1,
 		);
 
-		$data += $customer_info + $defaults;
+		$data = $customer_info + $defaults;
 
 		//Template Data
 		$default_shipping_address_id = isset($data['metadata']['default_shipping_address_id']) ? $data['metadata']['default_shipping_address_id'] : null;
