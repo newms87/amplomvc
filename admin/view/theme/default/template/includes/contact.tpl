@@ -73,10 +73,8 @@
 	</tbody>
 </table>
 
-
-<?= $this->builder->js('load_zones', '.contact_address', '.contact_country select', '.contact_zone select'); ?>
-
 <script type="text/javascript">
+	$('.contact_address .contact_zone select').ac_zoneselect({listen: '.contact_address .contact_country select'});
 
 	function build_phone_item(row, phonerow) {
 		html = '<li>';

@@ -54,9 +54,9 @@
 	</form>
 </div>
 
-<?= $this->builder->js('load_zones', '#cart_shipping', '.country_select', '.zone_select'); ?>
-
 <script type="text/javascript">
+	$('#cart_shipping .zone_select').ac_zoneselect({listen: '#cart_shipping .country_select'});
+
 	var code_template = $('#shipping_quote_template .code')[0].outerHTML;
 	var method_template = $('#shipping_quote_template .method')[0].outerHTML;
 	var error_template = $('#shipping_quote_template .error_msg')[0].outerHTML;

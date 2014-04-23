@@ -15,8 +15,8 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$data[$key] = $_POST[$key];
-			} elseif (isset($this->session->data[$key])) {
-				$data[$key] = $this->session->data[$key];
+			} elseif (isset($_SESSION[$key])) {
+				$data[$key] = $_SESSION[$key];
 			} else {
 				$data[$key] = $default;
 			}

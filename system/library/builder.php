@@ -44,7 +44,7 @@ class Builder extends Library
 			}
 
 			if ($close && $this->config->get('config_allow_close_message')) {
-				$html .= "<span class =\"close\" onclick=\"$(this).closest('.message').remove()\"></span>";
+				$html .= "<span class =\"close\" onclick=\"$(this).closest('.messages').remove()\"></span>";
 			}
 
 			$html .= "</div>";

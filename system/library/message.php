@@ -5,18 +5,18 @@ class Message extends Library
 	{
 		parent::__construct($registry);
 
-		if (!$this->session->has('messages')) {
-			$this->session->set('messages', array());
+		if (!isset($_SESSION['message'])) {
+			$_SESSION['message'] = array();
 		}
 	}
 
 	public function add($type, $message)
 	{
 		if (is_string($message)) {
-			$_SESSION['messages'][$type][] = $message;
+			$_SESSION['message'][$type][] = $message;
 		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key) use ($type) {
-				$_SESSION['messages'][$type][] = $value;
+				$_SESSION['message'][$type][] = $value;
 			});
 		}
 	}
@@ -60,7 +60,7 @@ class Message extends Library
 
 	public function fetch($type = '')
 	{
-		if (!$this->session->has('message')) {
+		if (empty($_SESSION['message'])) {
 			return array();
 		}
 
@@ -78,7 +78,7 @@ class Message extends Library
 
 		$msgs = $_SESSION['message'];
 
-		$this->session->delete('messages');
+		unset($_SESSION['message']);
 
 		return $msgs;
 	}

@@ -1,7 +1,7 @@
 <?php
 final class Registry
 {
-	public $data = array();
+	protected $data = array();
 
 	public function get($key)
 	{

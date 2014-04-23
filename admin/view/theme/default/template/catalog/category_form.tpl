@@ -127,7 +127,9 @@
 	$('#tabs a').tabs();
 </script>
 
-<?= $this->builder->js('errors', $errors); ?>
+<script type="text/javascript">
+	$.ac_errors(<?= json_encode($errors); ?>);
+</script>
 <?= $this->builder->js('translations', $translations); ?>
 
 <?= $this->call('common/footer'); ?>

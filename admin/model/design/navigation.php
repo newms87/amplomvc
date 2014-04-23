@@ -408,9 +408,9 @@ class Admin_Model_Design_Navigation extends Model
 			'extensions' => array(
 				'display_name' => 'Extensions',
 				'children'     => array(
-					'extensions_plugins'       => array(
+					'plugin_plugins'       => array(
 						'display_name' => 'Plugins',
-						'href'         => 'extension/plugin',
+						'href'         => 'plugin/plugin',
 					),
 					'extensions_payments'      => array(
 						'display_name' => 'Payments',

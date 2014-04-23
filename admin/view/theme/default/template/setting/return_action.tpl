@@ -47,6 +47,8 @@
 	$('#return_action_list').sortable();
 </script>
 
-<?= $this->builder->js('errors', $errors); ?>
+<script type="text/javascript">
+	$.ac_errors(<?= json_encode($errors); ?>);
+</script>
 
 <?= $this->call('common/footer'); ?>

@@ -86,9 +86,9 @@
 	</tr>
 </table>
 
-<?= $this->builder->js('load_zones', '.zonerule', '.country_select', '.zone_select', true); ?>
-
 <script type="text/javascript">
+	$('.zonerule .zone_select').ac_zoneselect({listen: '.zonerule .country_select', allow_all: true});
+
 	/* Flat Pricing List */
 	var ps_list = $('#priceset_list');
 	ps_list.ac_template('ps_list', {defaults: <?= json_encode($priceset['__ac_template__']); ?>});

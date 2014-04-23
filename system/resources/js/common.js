@@ -3,10 +3,9 @@ String.prototype.ajaxurl = function () {
 	return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
 }
 
-String.prototype.toSlug = function() {
-	return this.toLowerCase().replace(/\s/,'-').replace(/[^a-z0-9-_]/,'');
+String.prototype.toSlug = function () {
+	return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
 }
-
 
 $._ajax = $.ajax;
 
@@ -22,10 +21,10 @@ function syncload(s) {
 	}
 
 	$.ajax({
-		async:    false,
-		cache:    true,
-		url:      s,
-		error:    function (e) {
+		async: false,
+		cache: true,
+		url: s,
+		error: function (e) {
 			$.error('Failed to load script from ' + s)
 		},
 		dataType: 'script'
@@ -43,18 +42,18 @@ $.fn.codemirror = function (params) {
 		syncload('system/resources/js/codemirror/ui/js/codemirror-ui.js');
 		uiOptions = {
 			searchMode: 'popup',
-			path:       'system/resources/js/codemirror/ui/js/',
-			imagePath:  'system/resources/js/codemirror/ui/images/silk'
+			path: 'system/resources/js/codemirror/ui/js/',
+			imagePath: 'system/resources/js/codemirror/ui/images/silk'
 		}
 
 		$.fn.codemirror.once = true;
 	}
 
 	params = $.extend({}, {
-		tabSize:        3,
+		tabSize: 3,
 		indentWithTabs: true,
-		lineNumbers:    false,
-		indentUnit:     3
+		lineNumbers: false,
+		indentUnit: 3
 	}, params);
 
 	var depends = {};
@@ -128,7 +127,7 @@ $.fn.ac_datepicker = function (params) {
 	}
 
 	params = $.extend({}, {
-		type:       null,
+		type: null,
 		dateFormat: 'yy-mm-dd',
 		timeFormat: 'HH:mm',
 	}, params);
@@ -166,7 +165,7 @@ $.fn.ac_radio = function (params) {
 $.fn.ac_checklist = function (params) {
 	params = $.extend({}, {
 		elements: $(this).children().not('.nocheck'),
-		change:   null
+		change: null
 	}, params);
 
 	this.find('input[type=checkbox]').hide();
@@ -209,16 +208,16 @@ $.fn.ac_slidelist = function (params) {
 		var add_slide = slider.children('.add_slide');
 
 		params = $.extend(true, {}, {
-			min_space_y:     10,
-			min_space_x:     0,
-			pad_y:           0,
-			pad_x:           0,
-			add_slide:       {x: 0, y: null, xout: 0, yout: 0},
-			item_height:     items.first().outerHeight(true),
-			item_width:      items.first().outerWidth(true),
-			max_rows:        4,
-			x_dir:           1,
-			hover_in_delay:  0,
+			min_space_y: 10,
+			min_space_x: 0,
+			pad_y: 0,
+			pad_x: 0,
+			add_slide: {x: 0, y: null, xout: 0, yout: 0},
+			item_height: items.first().outerHeight(true),
+			item_width: items.first().outerWidth(true),
+			max_rows: 4,
+			x_dir: 1,
+			hover_in_delay: 0,
 			hover_out_delay: 0
 		}, params);
 
@@ -243,10 +242,10 @@ $.fn.ac_slidelist = function (params) {
 
 		var sort = function () {
 			slider.children('.slideitem:first').css({
-				top:       -item_height,
-				bottom:    'auto',
-				left:      params.x_dir >= 0 ? 0 : 'auto',
-				right:     params.x_dir < 0 ? 0 : 'auto',
+				top: -item_height,
+				bottom: 'auto',
+				left: params.x_dir >= 0 ? 0 : 'auto',
+				right: params.x_dir < 0 ? 0 : 'auto',
 				'z-index': items.length
 			});
 
@@ -258,10 +257,10 @@ $.fn.ac_slidelist = function (params) {
 				right = params.x_dir < 0 ? x_perc + '%' : 'auto';
 
 				$(e).css({
-					top:       'auto',
-					bottom:    y_perc + '%',
-					left:      left,
-					right:     right,
+					top: 'auto',
+					bottom: y_perc + '%',
+					left: left,
+					right: right,
 					'z-index': items.length - i - 1
 				});
 			})
@@ -270,7 +269,7 @@ $.fn.ac_slidelist = function (params) {
 		function hoverIn() {
 			slider.css({
 				height: max_height,
-				width:  max_width
+				width: max_width
 			})
 
 			add_slide.css({
@@ -281,7 +280,7 @@ $.fn.ac_slidelist = function (params) {
 		function hoverOut() {
 			slider.css({
 				height: min_height,
-				width:  min_width
+				width: min_width
 			})
 
 			add_slide.css({
@@ -371,11 +370,11 @@ $.fn.flash_highlight = function () {
 
 	ele.css({
 		background: 'rgba(255,255,255,0)',
-		position:   'absolute',
-		top:        pos.top,
-		left:       pos.left,
-		opacity:    .8,
-		'z-index':  10000
+		position: 'absolute',
+		top: pos.top,
+		left: pos.left,
+		opacity: .8,
+		'z-index': 10000
 	})
 		.width($(this).width())
 		.height($(this).height());
@@ -444,11 +443,11 @@ function colorbox(context, data) {
 
 	defaults = {
 		overlayClose: true,
-		opacity:      0.5,
-		width:        '60%',
-		height:       '80%',
-		href:         href,
-		html:         html,
+		opacity: 0.5,
+		width: '60%',
+		height: '80%',
+		href: href,
+		html: html,
 	};
 
 	if (typeof data == 'object') {
@@ -460,19 +459,6 @@ function colorbox(context, data) {
 	$.colorbox(defaults);
 
 	return false;
-}
-
-function show_errors(errors, context) {
-	context = context || $('body');
-
-	for (var e in errors) {
-		ele = context.find('[name="' + e + '"]');
-		if (!ele.length)
-			ele = $('#' + e);
-		if (!ele.length)
-			ele = $(e);
-		ele.after("<span class=\"error\">" + errors[e] + "</span>");
-	}
 }
 
 $.fn.ac_errors = function (errors) {
@@ -492,7 +478,7 @@ $.fn.ac_errors = function (errors) {
 			ele = $(e);
 		}
 
-		ele.after("<span class=\"error\">" + errors[err] + "</span>");
+		ele.after($("<span/>").addClass('error').html(errors[err]));
 	}
 
 	return this;
@@ -542,9 +528,9 @@ $.loading = function (params) {
 	}
 
 	params = $.extend({}, {
-		dots:       8,
-		width:      null,
-		height:     null,
+		dots: 8,
+		width: null,
+		height: null,
 		animations: 'bounce, fadecolor'
 	}, params);
 
@@ -573,6 +559,56 @@ $.fn.postForm = function (callback, datatype, params) {
 	$.post(this.attr('action'), this.serialize(), callback, datatype);
 }
 
+$.fn.ac_zoneselect = function (params, callback) {
+	var $this = this;
+
+	params = $.extend({}, {
+		listen: null,
+		allow_all: false,
+		select: null,
+		url: $.ac_vars.url_site + 'data/locale/load_zones'
+	}, params);
+
+	if (!params.listen) {
+		throw "You must specify 'listen' in the parameters. This is the Country selector element";
+	} else {
+		params.listen = $(params.listen);
+	}
+
+	params.url = params.url.ajaxurl();
+
+	if (params.allow_all) {
+		params.url += '&allow_all';
+	}
+
+	if (params.select) {
+		params.url += '&zone_id=' + params.select;
+	}
+
+	if (callback) {
+		$this.success = callback;
+	}
+
+	params.listen.change(function () {
+		var $cs = $(this);
+
+		if (!$cs.val()) return;
+
+		if ($this.children().length && $this.attr('data-country-id') == $this.val()) return;
+
+		$this.attr('data-country-id', $cs.val());
+		$this.attr('data-zone-id', $this.val() || $this.attr('data-zone-id') || 0);
+
+		$this.load(params.url + '&country_id=' + $cs.val(), $this.success);
+	});
+
+	if ($this.children().length < 1 || !$this.val()) {
+		params.listen.change();
+	}
+
+	return $this;
+}
+
 String.prototype.repeat = function (times) {
 	return (new Array(times + 1)).join(this);
 };
@@ -599,13 +635,13 @@ function getQueryString(key, defaultValue) {
 
 function currency_format(number, params) {
 	params = $.extend({}, {
-		symbol_left:   $.ac_vars.currency.symbol_left,
-		symbol_right:  $.ac_vars.currency.symbol_right,
-		decimals:      $.ac_vars.currency.decimals,
-		dec_point:     $.ac_vars.currency.decimal_point,
+		symbol_left: $.ac_vars.currency.symbol_left,
+		symbol_right: $.ac_vars.currency.symbol_right,
+		decimals: $.ac_vars.currency.decimals,
+		dec_point: $.ac_vars.currency.decimal_point,
 		thousands_sep: $.ac_vars.currency.thousands_sep,
-		neg:           '-',
-		pos:           '+'
+		neg: '-',
+		pos: '+'
 	}, params);
 
 	str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);

@@ -36,7 +36,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			'agree'   => '',
 		);
 
-		$data += $this->session->data + $session_defaults;
+		$data += $_SESSION + $session_defaults;
 
 		//Actions
 		$data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');

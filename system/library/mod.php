@@ -16,15 +16,6 @@ class Mod extends Library
 		$this->validate();
 	}
 
-	public function fetchErrors()
-	{
-		$error = $this->error;
-
-		$this->error = null;
-
-		return $error;
-	}
-
 	private function setError($file, $line, $code, $msg)
 	{
 		if ($file) {
@@ -683,7 +674,7 @@ class Mod extends Library
 				$this->message->add('notify', "The Mod File Registry was out of date and has been updated");
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
-				$plugin_url = $this->url->admin('extension/plugin');
+				$plugin_url = $this->url->admin('plugin/plugin');
 				$this->message->add('warning', $this->fetchErrors());
 				$this->message->add('warning', 'Please visit the <a href="' . $plugin_url . '">Plugins</a> and resolve the issue.');
 			}

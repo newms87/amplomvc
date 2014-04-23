@@ -77,9 +77,9 @@
 	</div>
 </div>
 
-<?= $this->builder->js('load_zones', '.geozone_selector', '.country_selector', '.zone_selector', true); ?>
-
 <script type="text/javascript">
+	$('.geozone_selector .zone_selector').ac_zoneselect({listen: '.geozone_selector .country_selector', allow_all: true});
+
 	function add_all_zones(context) {
 		country_id = context.closest('.geozone_selector').find('.country_selector').val();
 		zone_id = context.closest('.geozone_selector').find('.zone_selector').val();
@@ -132,6 +132,8 @@
 	;
 </script>
 
-<?= $this->builder->js('errors', $errors); ?>
+<script type="text/javascript">
+	$.ac_errors(<?= json_encode($errors); ?>);
+</script>
 
 <?= $this->call('common/footer'); ?>

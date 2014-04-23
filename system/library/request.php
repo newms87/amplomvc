@@ -44,7 +44,7 @@ class Request extends Library
 	public function hasRedirect($context = '')
 	{
 		$key = $context ? 'redirect_' . $context : 'redirect';
-		return !empty($this->session->data[$key]);
+		return !empty($_SESSION[$key]);
 	}
 
 	public function doRedirect($context = '')
@@ -72,13 +72,13 @@ class Request extends Library
 	public function clearRedirect($context = '')
 	{
 		$key = $context ? 'redirect_' . $context : 'redirect';
-		unset($this->session->data[$key]);
+		unset($_SESSION[$key]);
 	}
 
 	public function getRedirect($context = '')
 	{
 		$key = $context ? 'redirect_' . $context : 'redirect';
-		return !empty($this->session->data[$key]) ? $this->session->data[$key] : null;
+		return !empty($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
 
 	/**

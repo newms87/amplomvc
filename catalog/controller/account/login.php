@@ -31,7 +31,7 @@ class Catalog_Controller_Account_Login extends Controller
 			'username' => '',
 		);
 
-		$data += $user_info + $defaults;
+		$data = $user_info + $defaults;
 
 		//Template Data
 		$data['gp_login'] = $this->Catalog_Model_Block_Login_Google->getConnectUrl();

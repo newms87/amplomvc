@@ -34,9 +34,10 @@
 	</form>
 </div>
 
-<?= $this->builder->js('load_zones', '#guest_checkout .shipping_address, #guest_checkout .payment_address', '.country_select', '.zone_select'); ?>
-
 <script type="text/javascript">
+	$('#guest_checkout .shipping_address .zone_select').ac_zoneselect({listen: '#guest_checkout .shipping_address .country_select'});
+	$('#guest_checkout .payment_address .zone_select').ac_zoneselect({listen: '#guest_checkout .payment_address .country_select'});
+
 	$('#guest_checkout input[name=same_shipping_address]').change(function () {
 		shipping_form = $('#guest_shipping_address');
 

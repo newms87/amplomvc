@@ -64,4 +64,6 @@
 </form>
 <? } ?>
 
-<?= $this->builder->js('load_zones', "#$form_id", '.country_select', '.zone_select'); ?>
+<script type="text/javascript">
+	$('#<?= $form_id; ?> .zone_select').ac_zoneselect({listen: '#<?= $form_id; ?> .country_select'});
+</script>

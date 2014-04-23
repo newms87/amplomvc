@@ -359,9 +359,9 @@
 	}
 </script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
-
 <script type="text/javascript">
+	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
+
 	$('#transaction .pagination a').live('click', function () {
 		$('#transaction').load(this.href);
 

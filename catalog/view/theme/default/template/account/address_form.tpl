@@ -81,10 +81,10 @@
 	<?= $this->area->render('bottom'); ?>
 </div>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
-
 <? if ($this->request->isAjax()) { ?>
 	<script type="text/javascript">
+		$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
+
 		$('#new_address_form').submit(function () {
 			$.post($(this).attr('action'), $(this).serialize(), function (json) {
 				if (!json || !json['success']) {
@@ -98,6 +98,8 @@
 	</script>
 <? } ?>
 
-<?= $this->builder->js('errors', $errors); ?>
+<script type="text/javascript">
+	$.ac_errors(<?= json_encode($errors); ?>);
+</script>
 
 <?= $this->call('common/footer'); ?>

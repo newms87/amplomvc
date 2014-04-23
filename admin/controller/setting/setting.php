@@ -177,7 +177,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_plugin_dir_mode'                  => 755,
 		);
 
-		$data += $config_data + $defaults;
+		$data = $config_data + $defaults;
 
 		$octals = array(
 			'config_default_file_mode',

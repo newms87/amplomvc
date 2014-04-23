@@ -67,7 +67,7 @@ class Plugin extends Library
 
 		//New Files
 		if (!$this->integrateNewFiles($name)) {
-			$this->message->add("warning", _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name));
+			$this->error['new_files'] = _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name);
 			$this->uninstall($name);
 			return false;
 		}
@@ -76,7 +76,7 @@ class Plugin extends Library
 		$file_mods = $this->getFileMods($name);
 
 		if ($file_mods === false) {
-			$this->message->add("warning", _l("There was a problem while appying file modifications for %s. The plugin has been uninstalled!", $name));
+			$this->error['mod_files'] = _l("There was a problem while applying file modifications for %s. The plugin has been uninstalled!", $name);
 			$this->uninstall($name);
 			return false;
 		}
@@ -84,20 +84,16 @@ class Plugin extends Library
 		$this->mod->addFiles(null, $file_mods);
 
 		if (!$this->mod->apply(true)) {
-			$this->message->add('warning', $this->mod->fetchErrors());
-			$this->message->add('warning', _l("The installation of the plugin %s has failed and has been uninstalled!", $name));
+			$this->error['mod_apply'] = $this->mod->getError();
 			$this->uninstall($name);
 			return false;
 		}
 
 		if (!$this->mod->write()) {
-			$this->message->add('warning', $this->mod->fetchErrors());
-			$this->message->add('warning', _l("The installation of the plugin %s has failed and has been uninstalled!", $name));
+			$this->error['mod_write'] = $this->mod->getError();
 			$this->uninstall($name);
 			return false;
 		}
-
-		$this->message->add('success', _l("%s was successfully installed!", $name));
 
 		return true;
 	}

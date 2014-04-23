@@ -231,8 +231,12 @@ class Admin_Controller_Plugin_Plugin extends Controller
 
 	public function install()
 	{
-		if (isset($_GET['name'])) {
-			$this->plugin->install($_GET['name']);
+		if (!empty($_GET['name'])) {
+			if (!$this->plugin->install($_GET['name'])) {
+				$this->message->add('error', $this->plugin->getError());
+			} else {
+				$this->message->add('success', _l("%s was successfully installed!", $_GET['name']));
+			}
 		}
 
 		$this->url->redirect('plugin/plugin');

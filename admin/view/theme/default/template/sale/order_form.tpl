@@ -602,9 +602,9 @@
 	});
 </script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
-
 <script type="text/javascript">
+	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
+
 	$('input[name=\'product\']').autocomplete({
 		delay:  0,
 		source: function (request, response) {

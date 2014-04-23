@@ -155,7 +155,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$data['delete'] = $this->url->link('setting/store/delete');
 
 		//Render
-		$this->response->setOutput($this->render('store_form', $data));
+		$this->response->setOutput($this->render('setting/store_list', $data));
 	}
 
 	public function getForm()

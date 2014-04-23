@@ -887,6 +887,8 @@
 </div>
 
 <script type="text/javascript">
+	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
+
 	$('[name=config_theme]').change(function () {
 		$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 	}).change();
@@ -896,8 +898,8 @@
 	$('#tabs a').tabs();
 </script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
-
-<?= $this->builder->js('errors', $errors); ?>
+<script type="text/javascript">
+	$.ac_errors(<?= json_encode($errors); ?>);
+</script>
 
 <?= $this->call('common/footer'); ?>
