@@ -4,9 +4,9 @@ final class Tax extends Library
 	private $store_address;
 	private $show_price_with_tax;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->store_address = array(
 			'country_id' => $this->config->get('config_country_id'),

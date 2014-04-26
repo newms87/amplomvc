@@ -1,21 +1,21 @@
 <?php
 class Breadcrumb extends Library
 {
-	private $crumbs = array();
-	private $default_separator;
+	protected $crumbs = array();
+	protected $separator;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
-		$this->default_separator = $this->config->get('config_breadcrumb_separator');
+		$this->separator = $this->config->get('config_breadcrumb_separator');
 	}
 
 	public function add($text, $href, $separator = '', $position = null)
 	{
 
 		if (!$separator) {
-			$separator = $this->default_separator;
+			$separator = $this->separator;
 		}
 
 		$crumb = array(
@@ -52,7 +52,7 @@ class Breadcrumb extends Library
 
 	public function set_separator($separator)
 	{
-		$this->default_separator = $separator;
+		$this->separator = $separator;
 	}
 
 	public function render()

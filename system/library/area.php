@@ -58,11 +58,7 @@ class Area extends Library
 	public function render($area)
 	{
 		if ($this->hasBlocks($area)) {
-			$action = new Action($this->registry, 'area/' . $area);
-
-			if ($action->isValid()) {
-				return $action->execute();
-			}
+			return _call('area/' . $area);
 		}
 
 		return '';

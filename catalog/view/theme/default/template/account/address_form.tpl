@@ -1,9 +1,9 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 <div id="address_update" class="content">
 
-	<?= $this->breadcrumb->render(); ?>
-	<?= $this->area->render('top'); ?>
+	<?= _breadcrumbs(); ?>
+	<?= _area('top'); ?>
 
 	<div class="box">
 		<h2 class="box_heading">
@@ -75,7 +75,7 @@
 		</div>
 	</div>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
 <? if ($this->request->isAjax()) { ?>
@@ -99,4 +99,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

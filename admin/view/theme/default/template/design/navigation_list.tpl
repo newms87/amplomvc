@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
@@ -27,4 +27,4 @@
 		return confirm("<?= _l("This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?"); ?>");
 	});
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

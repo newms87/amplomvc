@@ -42,7 +42,7 @@
 	</div>
 <? } ?>
 
-<a class="button" onclick="do_batch_action()"><?= _l("Do"); ?></a>
+<a class="button" onclick="do_batch_action()"><?= _l("Go"); ?></a>
 
 <? if ($ckeditor) {
 	echo $this->builder->js('ckeditor');

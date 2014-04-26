@@ -1,7 +1,6 @@
 <?php
 final class Action
 {
-	private $registry;
 	private $file;
 	private $path;
 	private $class;
@@ -11,9 +10,8 @@ final class Action
 	private $parameters = array();
 	private $output;
 
-	public function __construct($registry, $path, $parameters = array(), $classpath = '')
+	public function __construct($path, $parameters = array(), $classpath = '')
 	{
-		$this->registry   = $registry;
 		$this->file       = null;
 		$this->path       = $path;
 		$this->parameters = $parameters;
@@ -64,7 +62,8 @@ final class Action
 
 	public function __get($key)
 	{
-		return $this->registry->get($key);
+		global $registry;
+		return $registry->get($key);
 	}
 
 	public function isValid()
@@ -105,7 +104,7 @@ final class Action
 
 				$class = $this->class;
 
-				$this->controller = new $class($this->registry);
+				$this->controller = new $class();
 			} else {
 				if (!$this->file) {
 					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller.");

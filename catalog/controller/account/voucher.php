@@ -32,7 +32,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('account/voucher'));
 
 		//Template Data

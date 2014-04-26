@@ -26,6 +26,8 @@ final class System_Extension_Model extends Model
 
 	public function install($type, $code)
 	{
+		global $registry;
+
 		if (!$this->user->can('modify', 'extension/' . $type)) {
 			$this->error['permission'] = _l("You do not have permission to modify the %s extensions.", ucfirst($type));
 			return false;
@@ -43,7 +45,7 @@ final class System_Extension_Model extends Model
 			'status'     => 1,
 		);
 
-		$extension = $this->registry->get('System_Extension_' . $type . '_' . $code);
+		$extension = $registry->get('System_Extension_' . $type . '_' . $code);
 
 		if (method_exists($extension, 'install')) {
 			$extension->install();
@@ -57,7 +59,8 @@ final class System_Extension_Model extends Model
 	public function uninstall($type, $code, $full = true)
 	{
 		if ($full) {
-			$extension = $this->registry->get('System_Extension_' . $type . '_' . $code);
+			global $registry;
+			$extension = $registry->get('System_Extension_' . $type . '_' . $code);
 
 			if (method_exists($extension, 'uninstall')) {
 				$extension->uninstall();

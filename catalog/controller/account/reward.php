@@ -12,7 +12,7 @@ class Catalog_Controller_Account_Reward extends Controller
 		$this->document->setTitle(_l("Your Reward Points"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Reward Points"), $this->url->link('account/reward'));
 
 		if (isset($_GET['page'])) {
@@ -50,7 +50,7 @@ class Catalog_Controller_Account_Reward extends Controller
 
 		$data['total'] = (int)$this->customer->getRewardPoints();
 
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		$this->response->setOutput($this->render('account/reward', $data));
 	}

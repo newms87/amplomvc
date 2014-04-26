@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
@@ -129,4 +129,4 @@
 
 	getSalesChart($('#range').val());
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

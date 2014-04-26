@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
 		<div class="message warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 	<? } ?>
@@ -224,4 +224,4 @@
 			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

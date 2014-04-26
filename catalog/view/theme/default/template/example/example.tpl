@@ -1,19 +1,19 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 
 <div class="content">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 
 	<div class="section">
 
 		<h1><?= $title; ?></h1>
 
-		<?= $this->area->render('top'); ?>
+		<?= _area('top'); ?>
 
 		<div class="page_content"><?= $content; ?></div>
 	</div>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

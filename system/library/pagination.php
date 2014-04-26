@@ -14,9 +14,9 @@ class Pagination extends Library
 	public $page_url;
 	public $attrs = array();
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->init();
 	}

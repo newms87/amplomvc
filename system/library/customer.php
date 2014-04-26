@@ -6,10 +6,12 @@ class Customer extends Library
 	private $information;
 	private $metadata;
 
-	public function __construct($registry)
+	public function __construct()
 	{
+		global $registry;
 		$registry->set('customer', $this);
-		parent::__construct($registry);
+
+		parent::__construct();
 
 		if ($this->session->has('customer_id')) {
 			if ($this->setCustomer($this->session->get('customer_id'))) {
@@ -177,15 +179,51 @@ class Customer extends Library
 		//Editing password here is not allowed. Must use Customer::editPassword()
 		unset($data['password']);
 
-		$customer_id = !empty($data['customer_id']) ? $data['customer_id'] : $this->customer_id;
+		if (!$this->validation->text($data['firstname'], 1, 32)) {
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
+		}
 
-		$this->update('customer', $data, $customer_id);
+		if (!$this->validation->text($data['lastname'], 1, 32)) {
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
+		}
+
+		if (!$this->validation->email($data['email'])) {
+			$this->error['email'] = _l("The email address you provided is invalid.");
+		}
+
+		if (($this->customer->info('email') !== $data['email']) && $this->customer->emailRegistered($data['email'])) {
+			$this->error['email'] = _l("This email address is already registered under a different account.");
+		}
+
+		if (isset($data['telephone']) && !$this->validation->phone($data['telephone'])) {
+			$this->error['telephone'] = _l("The phone number you provided is invalid.");
+		}
+
+		if (!empty($data['password'])) {
+			if (!$this->validation->password($data['password'])) {
+				$this->error['password'] = $this->validation->getError();
+			} elseif ($data['password'] !== $data['confirm']) {
+				$this->error['confirm'] = _l("Your password and confirmation do not match!");
+			}
+		}
+
+		if (isset($data['newsletter'])) {
+			$data['newsletter'] = !empty($data['newsletter']) ? 1 : 0;
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
+		$this->update('customer', $data, $this->customer_id);
 
 		if (!empty($data['metadata'])) {
 			foreach ($data['metadata'] as $key => $value) {
 				$this->setMeta($key, $value);
 			}
 		}
+
+		return true;
 	}
 
 	public function updatePassword($password)

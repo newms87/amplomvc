@@ -44,7 +44,7 @@ class Catalog_Controller_Information_Sitemap extends Controller
 		}
 
 		$data['special']  = $this->url->link('product/special');
-		$data['account']  = $this->url->link('account/account');
+		$data['account']  = $this->url->link('account');
 		$data['edit']     = $this->url->link('account/edit');
 		$data['password'] = $this->url->link('account/password');
 		$data['address']  = $this->url->link('account/address');

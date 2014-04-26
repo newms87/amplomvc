@@ -1,8 +1,8 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 <div class="content">
-	<?= $this->breadcrumb->render(); ?>
-	<?= $this->area->render('top'); ?>
+	<?= _breadcrumbs(); ?>
+	<?= _area('top'); ?>
 
 	<h1><?= _l("Shopping Cart"); ?>
 		<? if (isset($weight)) { ?>
@@ -75,7 +75,7 @@
 		<div class="center"><a href="<?= $continue; ?>" class="button"><?= _l("Continue Shopping"); ?></a></div>
 	<? } ?>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
 
@@ -100,4 +100,4 @@
 </script>
 
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

@@ -4,9 +4,9 @@ class System_Extension_Shipping_Flat extends System_Extension_Shipping
 	private $flat_info;
 	private $rates;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->flat_info = $this->config->loadGroup('shipping_flat');
 

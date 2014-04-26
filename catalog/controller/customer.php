@@ -1,9 +1,9 @@
 <?php
 class Catalog_Controller_Customer extends Controller
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		//Only allow access to certain pages if already logged in
 		$allowed = array(
@@ -11,11 +11,11 @@ class Catalog_Controller_Customer extends Controller
 		);
 
 		if ($this->customer->isLogged() && !in_array($this->route->getPath(), $allowed)) {
-			$this->url->redirect('account/account');
+			$this->url->redirect('account');
 		}
 	}
 
-	public function login_form()
+	public function index()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Account Login"));
@@ -60,12 +60,12 @@ class Catalog_Controller_Customer extends Controller
 	public function login()
 	{
 		if (!$this->request->isPost()) {
-			return $this->login_form();
+			return $this->index();
 		}
 
 		if (!$this->customer->login($_POST['username'], $_POST['password'])) {
 			$this->message->add('warning', _l("Login failed. Invalid username and / or password."));
-			return $this->login_form();
+			return $this->index();
 		}
 
 		//Resolve Redirect
@@ -73,7 +73,7 @@ class Catalog_Controller_Customer extends Controller
 			$this->request->doRedirect();
 		}
 
-		$this->url->redirect('account/account');
+		$this->url->redirect('account');
 	}
 
 	public function logout()
@@ -86,7 +86,7 @@ class Catalog_Controller_Customer extends Controller
 	public function registration()
 	{
 		if ($this->customer->isLogged()) {
-			$this->url->redirect('account/account');
+			$this->url->redirect('account');
 		}
 
 		//Page Head

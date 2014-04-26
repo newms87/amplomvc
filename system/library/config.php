@@ -6,12 +6,13 @@ class Config extends Library
 	private $site_config;
 	private $translate = true;
 
-	public function __construct($registry, $store_id = null)
+	public function __construct($store_id = null)
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		//self assigning so we can use config immediately!
-		$this->registry->set('config', $this);
+		global $registry;
+		$registry->set('config', $this);
 
 		$this->loadDefaultSites();
 

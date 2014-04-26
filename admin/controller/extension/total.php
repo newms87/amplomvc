@@ -240,7 +240,7 @@ class Admin_Controller_Extension_Total extends Controller
 	private function loadExtensionController($code)
 	{
 		if (!$this->extension_controller && !empty($code)) {
-			$action = new Action($this->registry, 'extension/total/' . $code);
+			$action = new Action('extension/total/' . $code);
 
 			if ($action->isValid()) {
 				$this->extension_controller = $action->getController();

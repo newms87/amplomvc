@@ -5,11 +5,12 @@ class Plugin extends Library
 	private $plugin_registry;
 	private $installed;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
-		$this->registry->set('plugin', $this);
+		global $registry;
+		$registry->set('plugin', $this);
 
 		$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
 
@@ -39,7 +40,7 @@ class Plugin extends Library
 
 			$user_class = preg_replace("/[^A-Z0-9]/i", "", $name) . '_Setup';
 
-			$this->plugins[$name] = new $user_class($this->registry);
+			$this->plugins[$name] = new $user_class();
 		}
 
 		return $this->plugins[$name];

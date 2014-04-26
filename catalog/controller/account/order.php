@@ -16,7 +16,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
 
 		//Get Sorted / Filtered Data
@@ -56,7 +56,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/order_list', $data));
@@ -90,7 +90,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 

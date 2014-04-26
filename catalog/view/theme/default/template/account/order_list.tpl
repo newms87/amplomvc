@@ -1,8 +1,8 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 <div class="content">
-	<?= $this->area->render('top'); ?>
-	<?= $this->breadcrumb->render(); ?>
+	<?= _area('top'); ?>
+	<?= _breadcrumbs(); ?>
 
 	<h1><?= _l("Order History"); ?></h1>
 
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

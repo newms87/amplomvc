@@ -12,9 +12,9 @@ class Validation extends Library
 	const TEXT_LENGTH_MAX   = 'text_max';
 	const DATETIME_FORMAT   = 'date_format';
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->encoding = 'UTF-8';
 	}

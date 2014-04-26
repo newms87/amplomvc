@@ -1,9 +1,9 @@
 <?php
 class Tool extends Library
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		define("FILELIST_STRING", 1);
 		define("FILELIST_SPLFILEINFO", 2);

@@ -28,7 +28,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		$this->document->setTitle(_l("My Wish List"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("My Wish List"), $this->url->link('account/wishlist'));
 
 		if ($this->session->has('success')) {
@@ -87,7 +87,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			}
 		}
 
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		$this->response->setOutput($this->render('account/wishlist', $data));
 	}

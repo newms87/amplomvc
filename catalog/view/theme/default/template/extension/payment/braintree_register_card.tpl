@@ -1,4 +1,4 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div id="braintree_register_card" class="content">
 	<div class="box">
 		<div class="box_heading"><?= _l("Register a New Card"); ?></div>
@@ -102,4 +102,4 @@
 	$.getScript("https://js.braintreegateway.com/v1/braintree.js", braintree);
 </script>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

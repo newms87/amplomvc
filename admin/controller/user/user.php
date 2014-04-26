@@ -211,8 +211,6 @@ class Admin_Controller_User_User extends Controller
 			'id'   => $user_id
 		);
 
-		$data['contact_template'] = $this->call('includes/contact', $contact);
-
 
 		if (!$user_id) {
 			$this->breadcrumb->add(_l("Create New User"), $this->url->link('user/user/insert'));

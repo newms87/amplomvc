@@ -1,19 +1,14 @@
 <?php
 final class Router
 {
-	private $registry;
 	private $error_path = 'error/not_found';
 	private $path;
 	private $segments;
 
-	public function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-
 	public function __get($key)
 	{
-		return $this->registry->get($key);
+		global $registry;
+		return $registry->get($key);
 	}
 
 	public function getPath()
@@ -162,10 +157,10 @@ final class Router
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 
-		$action = new Action($this->registry, $this->path);
+		$action = new Action($this->path);
 
 		if (!$action->isValid() || !$action->execute()) {
-			$action = new Action($this->registry, $this->error_path);
+			$action = new Action($this->error_path);
 
 			if (!$action->execute()) {
 				trigger_error("Front::dispatch(): There is a problem with the system. Unable to execute any actions!");

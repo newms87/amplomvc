@@ -3,9 +3,9 @@ class Catalog_Model_Block_Login_Google extends Model
 {
 	private $settings;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->settings = $this->config->load('login_settings', 'google_plus');
 	}
@@ -25,7 +25,7 @@ class Catalog_Model_Block_Login_Google extends Model
 		if (strpos($this->url->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
 		} else {
-			$this->request->setRedirect($this->url->link('account/account'), null, 'gp_redirect');
+			$this->request->setRedirect($this->url->link('account'), null, 'gp_redirect');
 		}
 
 		$query = array(

@@ -1,7 +1,7 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 
 <div class="section clear">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
@@ -27,4 +27,4 @@
 	</div>
 </div>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

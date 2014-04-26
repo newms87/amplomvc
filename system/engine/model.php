@@ -2,14 +2,14 @@
 
 abstract class Model
 {
-	protected $registry, $load;
+	protected $load;
 	protected $error;
 
 	private $synctime = false;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		$this->registry = $registry;
+		global $registry;
 		$this->load = $registry;
 
 		global $ac_time_offset;
@@ -22,14 +22,15 @@ abstract class Model
 		//eg:( cart depends on customer, but customer depends on cart upon initialization which calls a cart method which requires a customer method)
 		$key = strtolower(get_class($this));
 
-		if (!$this->registry->has($key)) {
-			$this->registry->set($key, $this);
+		if (!$registry->has($key)) {
+			$registry->set($key, $this);
 		}
 	}
 
 	public function __get($key)
 	{
-		return $this->registry->get($key);
+		global $registry;
+		return $registry->get($key);
 	}
 
 	public function hasError($type = null)

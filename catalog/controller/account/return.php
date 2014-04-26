@@ -12,7 +12,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->document->setTitle(_l("Product Returns"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return'));
 
 		$sort_filter = $this->sort->getQueryDefaults('date_added', 'ASC');
@@ -40,7 +40,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$data['pagination'] = $this->pagination->render();
 
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		$this->response->setOutput($this->render('account/return_list', $data));
 	}
@@ -64,7 +64,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return', $url_query));
 		$this->breadcrumb->add(_l("Return Information"), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
 
@@ -135,7 +135,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Returns"), $this->url->link('account/return'));
 		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return/insert'));
 
@@ -254,7 +254,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$data['date_ordered_display'] = $this->date->format($data['date_ordered'], 'short');
 		$data['data_return_reasons']  = $this->order->getReturnReasons();
 
-		$data['back']               = $this->url->link('account/account');
+		$data['back']               = $this->url->link('account');
 		$data['return_product_url'] = $this->url->link('account/return/insert');
 
 		$data['order_lookup']        = $order_lookup;

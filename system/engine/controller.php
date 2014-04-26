@@ -2,20 +2,21 @@
 
 abstract class Controller
 {
-	protected $registry, $load;
+	protected $load;
 	protected $children = array();
 	public $output;
 	public $error = array();
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		$this->registry = $registry;
+		global $registry;
 		$this->load = $registry;
 	}
 
 	public function __get($key)
 	{
-		return $this->registry->get($key);
+		global $registry;
+		return $registry->get($key);
 	}
 
 	public function __set($key, $value)
@@ -37,21 +38,6 @@ abstract class Controller
 		array_walk_recursive($this->error, function ($value, $id, &$msg) use ($delimiter) { $msg .= ($msg ? $delimiter : '') . $value; });
 
 		return $msg;
-	}
-
-	protected function call($path, $parameters = array())
-	{
-		$args = func_get_args();
-		array_shift($args);
-
-		$action = new Action($this->registry, $path, $args);
-
-		if ($action->execute()) {
-			return $action->getOutput();
-		} else {
-			trigger_error('Could not load controller ' . $path . '!');
-			exit();
-		}
 	}
 
 	protected function render($path, $data = array())

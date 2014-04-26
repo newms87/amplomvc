@@ -1,9 +1,9 @@
 <?php
 class Message extends Library
 {
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if (!isset($_SESSION['message'])) {
 			$_SESSION['message'] = array();

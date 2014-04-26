@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -56,4 +56,4 @@
 	!--
 		$('.tabs a').tabs();
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

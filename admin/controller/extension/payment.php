@@ -254,7 +254,7 @@ class Admin_Controller_Extension_Payment extends Controller
 	private function loadExtensionController($code)
 	{
 		if (!$this->extension_controller && !empty($code)) {
-			$action = new Action($this->registry, 'extension/payment/' . $code);
+			$action = new Action('extension/payment/' . $code);
 
 			if ($action->isValid()) {
 				$this->extension_controller = $action->getController();

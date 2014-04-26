@@ -11,9 +11,9 @@ class Document extends Library
 	private $scripts = array();
 	private $ac_vars = array();
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->links = $this->getNavigationLinks();
 
@@ -72,6 +72,11 @@ class Document extends Library
 	public function getCanonicalLink()
 	{
 		return $this->canonical_link;
+	}
+
+	public function hasLinks($group = 'primary')
+	{
+		return !empty($this->links[$group]);
 	}
 
 	public function addLink($group = 'primary', $link_info)

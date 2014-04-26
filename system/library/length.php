@@ -3,9 +3,9 @@ class Length extends Library
 {
 	private $lengths = array();
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$length_class_query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class mc LEFT JOIN " . DB_PREFIX . "length_class_description mcd ON (mc.length_class_id = mcd.length_class_id) WHERE mcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 

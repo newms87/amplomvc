@@ -4,9 +4,9 @@ class Weight extends Library
 	private $weights = array();
 
 	//TODO: Update weight classes to stop using description table
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$weight_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 

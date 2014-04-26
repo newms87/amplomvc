@@ -31,9 +31,9 @@ class Cart extends Library
 	private $totals = null;
 	private $error_code = null;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if (!$this->session->has('cart') || !is_array($this->session->get('cart'))) {
 			$this->session->set('cart', array());

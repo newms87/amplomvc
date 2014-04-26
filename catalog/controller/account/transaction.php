@@ -12,7 +12,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 		$this->document->setTitle(_l("Your Transactions"));
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Your Transactions"), $this->url->link('account/transaction'));
 
 		$data['amount'] = $this->config->get('config_currency');
@@ -50,7 +50,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 
 		$data['total'] = $this->currency->format($this->customer->getBalance());
 
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		$this->response->setOutput($this->render('account/transaction', $data));
 	}

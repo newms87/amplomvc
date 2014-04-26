@@ -10,9 +10,9 @@ class Url extends Library
 	private $secure_pages = array();
 	private $store_info = array();
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->url = $this->config->get('config_url');
 

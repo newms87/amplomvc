@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Products Purchased Report"); ?></h1>
@@ -93,4 +93,4 @@
 			$('#date-end').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

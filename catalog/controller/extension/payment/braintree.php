@@ -3,9 +3,9 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 {
 	private $settings;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->settings = $this->System_Extension_Payment_Braintree->settings();
 	}

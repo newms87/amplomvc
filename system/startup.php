@@ -105,3 +105,6 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'library/response.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/session.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/theme.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
+
+//Helpers
+require_once(_ac_mod_file(DIR_SYSTEM . 'helper/caller.php'));

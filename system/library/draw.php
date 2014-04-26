@@ -16,9 +16,9 @@ class Draw extends Library
 	private $text_angle = 0;
 	private $antialias = 1;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->font_path = DIR_THEME . "fonts/";
 

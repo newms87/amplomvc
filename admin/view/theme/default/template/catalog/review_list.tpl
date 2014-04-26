@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= _l("Reviews"); ?></h1>
@@ -76,4 +76,4 @@
 		</div>
 	</div>
 </div>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

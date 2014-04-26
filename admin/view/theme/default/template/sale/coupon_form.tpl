@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Coupon"); ?></h1>
@@ -146,4 +146,4 @@
 <script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

@@ -1,9 +1,9 @@
 <?php
 class Session extends Library
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		//TODO: validate this is safe? Since the token has to be in database and we will only save to db right before calling an admin page only.
 

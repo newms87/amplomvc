@@ -4,9 +4,9 @@ class Admin_Controller_Block_Block extends Controller
 {
 	protected $path;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if ($this->route->getSegment(1) !== 'block') {
 			$this->path = $this->route->getSegment(1) . '/' . $this->route->getSegment(2);

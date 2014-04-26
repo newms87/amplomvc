@@ -4,9 +4,9 @@ class Currency extends Library
 	private $code;
 	private $currencies = array();
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency");
 

@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Success extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Your Account Has Been Created!"), $this->url->link('account/success'));
 
 		//Template Data
@@ -16,7 +16,7 @@ class Catalog_Controller_Account_Success extends Controller
 
 		//Action Buttons
 		$data['contact']  = $this->url->link('information/contact');
-		$data['continue'] = $this->url->link('account/account');
+		$data['continue'] = $this->url->link('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/success', $data));

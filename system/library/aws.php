@@ -17,9 +17,9 @@ class Aws extends Library
 	private $access_key_id = "AKIAJ2LA6XOU2CYEJVNQ";
 	private $secret_access_key = "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";
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 	}
 

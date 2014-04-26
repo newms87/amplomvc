@@ -58,10 +58,7 @@ class Builder extends Library
 			'url'      => $this->url->link($path, 'action=_action_&action_value=_action_value_&' . $this->url->getQueryExclude('action', 'action_value', 'selected')),
 		);
 
-		//Load Batch Action template
-		$view = new View($this->registry);
-
-		return $view->render('block/widget/batch_action', $data);
+		return _block('block/widget/batch_action', null, $data);
 	}
 
 	//TODO: This is a hack... Handle this better

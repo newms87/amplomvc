@@ -1,9 +1,9 @@
 <?php
 class Admin_Model_Catalog_ProductClass extends Model
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product_class")) {
 			$default_product_class = array(

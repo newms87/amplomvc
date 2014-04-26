@@ -1,8 +1,8 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 <div class="content">
-	<?= $this->breadcrumb->render(); ?>
-	<?= $this->area->render('top'); ?>
+	<?= _breadcrumbs(); ?>
+	<?= _area('top'); ?>
 
 	<h1><?= _l("Purchase a Gift Certificate"); ?></h1>
 
@@ -76,11 +76,11 @@
 		</div>
 	</form>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
 <script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

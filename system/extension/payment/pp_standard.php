@@ -1,9 +1,9 @@
 <?php
 class System_Extension_Payment_PpStandard extends System_Extension_Payment
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		//TODO: This is a hack. Find a better way to integrate this.
 		if (!empty($this->settings['button_graphic'])) {

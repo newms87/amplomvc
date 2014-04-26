@@ -1,9 +1,9 @@
 <?php
 class Request extends Library
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$action = array(
 			$this,

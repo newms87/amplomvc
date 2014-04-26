@@ -110,7 +110,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account/address'));
 
 		//Load Addresses
@@ -127,7 +127,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Action Buttons
 		$data['insert'] = $this->url->link('account/address/update');
-		$data['back']   = $this->url->link('account/account');
+		$data['back']   = $this->url->link('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/address_list', $data));
@@ -140,7 +140,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Home"), $this->url->link('account/address'));
 
 		$crumb_url = isset($_GET['address_id']) ? $this->url->link('account/address/update') : $this->url->link('account/address/update');

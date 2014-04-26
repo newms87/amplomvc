@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Navigation"); ?></h1>
@@ -98,7 +98,7 @@
 	</div>
 </div>
 </div>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>
 
 <script type="text/javascript">
 	$('#sorted_links').ac_template('link_list', {defaults: <?= json_encode($links['__ac_template__']); ?>});

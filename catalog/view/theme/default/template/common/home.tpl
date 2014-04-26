@@ -1,5 +1,5 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left') . $this->area->render('right'); ?>
-<?= $this->area->render('top'); ?>
-<?= $this->area->render('bottom'); ?>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left') . _area('right'); ?>
+<?= _area('top'); ?>
+<?= _area('bottom'); ?>
+<?= _call('common/footer'); ?>

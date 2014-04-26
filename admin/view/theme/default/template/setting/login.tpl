@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
 			<h1><img class="icon" src="<?= URL_THEME_IMAGE . 'login_settings.png'; ?>" alt=""/> <?= _l("Login Settings"); ?></h1>
@@ -59,4 +59,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

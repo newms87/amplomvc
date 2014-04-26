@@ -8,9 +8,9 @@ class Theme extends Library
 
 	private $settings;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->dir_themes = DIR_THEMES;
 		$this->theme = $this->config->get('config_theme');

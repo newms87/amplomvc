@@ -8,9 +8,9 @@ abstract class System_Extension_Extension extends Model
 	protected $info;
 	protected $settings;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->loadInfo();
 	}
@@ -22,7 +22,8 @@ abstract class System_Extension_Extension extends Model
 
 	public function get($code)
 	{
-		return $this->registry->get('System_Extension_' . $this->type . '_' . $this->tool->_2CamelCase($code));
+		global $registry;
+		return $registry->get('System_Extension_' . $this->type . '_' . $this->tool->_2CamelCase($code));
 	}
 
 	public function isActive()

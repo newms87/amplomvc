@@ -10,9 +10,9 @@ class Image extends Library
 	private $safe_shutdown;
 	private $shutdown_file = '';
 
-	public function __construct($registry, $file = null)
+	public function __construct($file = null)
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if ($file) {
 			$this->set_image($file);

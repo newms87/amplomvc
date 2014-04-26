@@ -28,9 +28,9 @@ class Mail extends Library
 	private $logging;
 	private $log_entry = '';
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->protocol  = $this->config->get('config_mail_protocol');
 		$this->parameter = $this->config->get('config_mail_parameter');
@@ -43,7 +43,8 @@ class Mail extends Library
 		$this->logging = $this->config->get('config_mail_logging');
 
 		if ($this->logging) {
-			$this->registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), $this->config->get('config_store_id'));
+			global $registry;
+			$registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), $this->config->get('config_store_id'));
 		}
 
 		$this->init();
@@ -160,7 +161,7 @@ class Mail extends Library
 		$args = func_get_args();
 		array_shift($args);
 
-		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
+		$action = new Action($controller, $args, 'catalog/controller/mail');
 
 		//Set the Template to the Front End
 		$this->theme->setThemesDirectory(DIR_SITE . 'catalog/view/theme/');
@@ -552,10 +553,7 @@ class Mail extends Library
 			'time'       => _time(),
 		);
 
-		$temp = $this->registry;
-		unset($this->registry);
 		$mail_fail      = serialize($mail_fail);
-		$this->registry = $temp;
 
 		$mail_fail = $this->escape($mail_fail);
 

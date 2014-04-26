@@ -1,16 +1,16 @@
 <?php
 class System_Extension_Payment extends System_Extension_Extension
 {
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		require_once(DIR_SYSTEM . "extension/payment_interfaces.php");
 	}
 
 	public function renderTemplate()
 	{
-		$action = new Action($this->registry, 'extension/payment/' . $this->code);
+		$action = new Action('extension/payment/' . $this->code);
 
 		if ($action->isValid() && $action->execute()) {
 			return $action->getOutput();

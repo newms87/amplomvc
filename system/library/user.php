@@ -7,9 +7,9 @@ class User extends Library
 
 	private $temp_user;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if (isset($_SESSION['user_id']) && $this->validate_token()) {
 

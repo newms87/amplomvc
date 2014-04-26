@@ -61,7 +61,7 @@ final class Registry
 
 
 			if ($return_instance) {
-				return new $class($this);
+				return new $class();
 			}
 
 			return true;

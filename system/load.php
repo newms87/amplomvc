@@ -27,31 +27,30 @@ if (empty($_SESSION['user_id'])) {
 	}
 }
 
-
-
 // Registry
 $registry = new Registry();
 
 //TODO: Maybe make this our main handler for loading (move out of registry)??
-spl_autoload_register(function ($class) use ($registry) {
+spl_autoload_register(function ($class) {
+	global $registry;
 	$registry->loadClass($class, false);
 });
 
 // Request (cleans globals)
-$registry->set('request', new Request($registry));
+$registry->set('request', new Request());
 
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
 // Cache
-$cache = new Cache($registry);
+$cache = new Cache();
 $registry->set('cache', $cache);
 
 //TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
 
 //config is self assigning to registry.
-$config = new Config($registry);
+$config = new Config();
 
 //Setup Cache ignore list
 $cache->ignore($config->get('config_cache_ignore'));
@@ -181,25 +180,25 @@ if (!defined("AC_CUSTOMER_OVERRIDE")) {
 }
 
 // Session
-$registry->set('session', new Session($registry));
+$registry->set('session', new Session());
 
 //Mod Files
-$registry->set('mod', new Mod($registry));
+$registry->set('mod', new Mod());
 
 //Theme
-$registry->set('theme', new Theme($registry));
+$registry->set('theme', new Theme());
 
 // Url
-$registry->set('url', new Url($registry));
+$registry->set('url', new Url());
 
 // Response
-$response = new Response($registry);
+$response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
 $registry->set('response', $response);
 
 //Plugins (self assigning to registry)
-$plugin = new Plugin($registry);
+$plugin = new Plugin();
 
 //Cron
 if (isset($_GET['run_cron'])) {
@@ -216,7 +215,7 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isAdmin()) {
 }
 
 //Router
-$router = new Router($registry);
+$router = new Router();
 $registry->set('route', $router);
 $router->route();
 $router->dispatch();

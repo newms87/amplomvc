@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("User"); ?></h1>
@@ -63,13 +63,13 @@
 					</table>
 				</div>
 				<div id="tab-contact">
-					<?= $contact_template; ?>
+					<?= _call('includes/contact', $contact); ?>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>
 
 
 <script type="text/javascript">

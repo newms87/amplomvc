@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'shipping.png'; ?>" alt=""/> <?= _l("Manufacturer"); ?></h1>
@@ -113,4 +113,4 @@
 </script>
 <?= $this->builder->js('translations', $translations); ?>
 
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

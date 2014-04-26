@@ -3,9 +3,9 @@ class Date extends Library
 {
 	private $timezone;
 
-	public function __construct($registry)
+	public function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 		$this->timezone = new DateTimeZone(DEFAULT_TIMEZONE);
 	}
 

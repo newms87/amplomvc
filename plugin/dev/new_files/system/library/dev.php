@@ -1,18 +1,6 @@
 <?php
-class Dev
+class Dev extends Library
 {
-	private $registry;
-
-	function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-
 	public function site_backup($file = null, $tables = null, $prefix = null)
 	{
 		$site_name = $this->config->get('config_name');

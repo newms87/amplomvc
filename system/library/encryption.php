@@ -3,9 +3,9 @@ class Encryption extends Library
 {
 	private $key;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->key = $this->config->get('config_encryption');
 	}

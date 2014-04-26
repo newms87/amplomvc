@@ -4,9 +4,9 @@ class Mod extends Library
 	private $mod_registry;
 	private $live_registry;
 
-	function __construct($registry)
+	function __construct()
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		global $mod_registry, $live_registry;
 

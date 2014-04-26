@@ -16,11 +16,11 @@ class Catalog_Controller_Account_Edit extends Controller
 
 			$this->message->add('success', _l("Success: Your account has been successfully updated."));
 
-			$this->url->redirect('account/account');
+			$this->url->redirect('account');
 		}
 
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
 		$this->breadcrumb->add(_l("Edit Information"), $this->url->link('account/edit'));
 
 		if (isset($this->error['warning'])) {
@@ -99,7 +99,7 @@ class Catalog_Controller_Account_Edit extends Controller
 			$data['fax'] = '';
 		}
 
-		$data['back'] = $this->url->link('account/account');
+		$data['back'] = $this->url->link('account');
 
 		$this->response->setOutput($this->render('account/edit', $data));
 	}

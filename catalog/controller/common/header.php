@@ -82,19 +82,9 @@ class Catalog_Controller_Common_Header extends Controller
 			$data['block_admin_bar'] = $this->block->render('widget/admin_bar');
 		}
 
-		//Navigation
-		$data['links_primary']   = $this->document->getLinks('primary');
-		$data['links_secondary'] = $this->document->getLinks('secondary');
-		$data['links_account']   = $this->document->getLinks('account');
-		$data['links_cart']      = $this->document->getLinks('cart');
-
 		//Login Check & The Welcome Message
 		$data['is_logged'] = $this->customer->isLogged();
 		$data['customer']  = $this->customer->info();
-
-		if (!$data['is_logged']) {
-			$data['block_login'] = $this->block->render('account/login');
-		}
 
 		//Action Buttons
 		$data['home']     = $this->url->link('common/home');

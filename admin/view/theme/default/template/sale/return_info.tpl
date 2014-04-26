@@ -1,6 +1,6 @@
-<?= $this->call('common/header'); ?>
+<?= _call('common/header'); ?>
 <div class="section">
-	<?= $this->breadcrumb->render(); ?>
+	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= URL_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
@@ -225,4 +225,4 @@
 	!--
 		$('.vtabs a').tabs();
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

@@ -1,8 +1,8 @@
-<?= $this->call('common/header'); ?>
-<?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
+<?= _call('common/header'); ?>
+<?= _area('left'); ?><?= _area('right'); ?>
 <div class="content">
-	<?= $this->breadcrumb->render(); ?>
-	<?= $this->area->render('top'); ?>
+	<?= _breadcrumbs(); ?>
+	<?= _area('top'); ?>
 
 	<h1><?= _l("Search"); ?></h1>
 	<b><?= _l("Search Criteria"); ?></b>
@@ -127,7 +127,7 @@
 		<div class="section"><?= _l("There is no product that matches the search criteria."); ?></div>
 	<? } ?>
 
-	<?= $this->area->render('bottom'); ?>
+	<?= _area('bottom'); ?>
 </div>
 
 <script type="text/javascript">
@@ -257,4 +257,4 @@
 		display('list');
 	}
 </script>
-<?= $this->call('common/footer'); ?>
+<?= _call('common/footer'); ?>

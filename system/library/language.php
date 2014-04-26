@@ -26,9 +26,9 @@ class Language extends Library
 		'status'                 => 1,
 	);
 
-	public function __construct($registry, $language_id = null, $set_session = true)
+	public function __construct($language_id = null, $set_session = true)
 	{
-		parent::__construct($registry);
+		parent::__construct();
 
 		if (empty($language_id)) {
 			$this->resolve();
