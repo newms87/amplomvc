@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/address'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		$this->getList();
@@ -17,7 +17,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/address'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		if ($this->request->isPost()) {
@@ -74,7 +74,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/address'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Address Book"));

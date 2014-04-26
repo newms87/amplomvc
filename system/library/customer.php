@@ -63,8 +63,7 @@ class Customer extends Library
 
 		$this->information = array();
 
-		//TODO: Add as option in admin panel $this->config->get('config_logout_message');
-		$this->message->add('notify', "Logged Out");
+		$this->message->add('notify', _l("You have been logged out of your account"));
 	}
 
 	public function getId()
@@ -72,10 +71,70 @@ class Customer extends Library
 		return $this->customer_id;
 	}
 
-	/** Customer Data **/
+	//TODO: Need to move customer database calls to library. This will resolve the customer_id issue.
+	public function setId($customer_id)
+	{
+		$this->customer_id = $customer_id;
+	}
+
+	/**
+	 * The same as Customer::add() except for an additional validation check for confirm password
+	 *
+	 * @param $customer - Customer Account Data
+	 */
+
+	public function register($customer)
+	{
+		if (empty($customer['confirm']) || $customer['confirm'] !== $customer['password']) {
+			$this->error['confirm'] = _l("Password confirmation does not match password!");
+		}
+
+		return $this->add($customer);
+	}
+
+	/**
+	 * Adds a Customer account
+	 *
+	 * @param $customer - Customer Account Data
+	 * @return bool - true on success, or false if failed to register customer
+	 */
 
 	public function add($customer)
 	{
+		if (!$this->validation->text($customer['firstname'], 1, 32)) {
+			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
+		}
+
+		if (!$this->validation->text($customer['lastname'], 1, 32)) {
+			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
+		}
+
+		if (!$this->validation->email($customer['email'])) {
+			$this->error['email'] = $this->validation->getError();
+		} elseif ($this->customer->emailRegistered($customer['email'])) {
+			$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
+		}
+
+		if (!$this->address->validate($customer)) {
+			$this->error += $this->address->getError();
+		}
+
+		if (!$this->validation->password($customer['password'])) {
+			$this->error['password'] = $this->validation->getError();
+		}
+
+		if ($this->config->get('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
+
+			if ($information_info && !isset($customer['agree'])) {
+				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $information_info['title']);
+			}
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
 		$customer['store_id']          = $this->config->get('config_store_id');
 		$customer['customer_group_id'] = $this->config->get('config_customer_group_id');
 		$customer['date_added']        = $this->date->now();
@@ -115,7 +174,7 @@ class Customer extends Library
 
 	public function edit($data)
 	{
-		//Editing password here is not allowed. Must use customer->editPassword()
+		//Editing password here is not allowed. Must use Customer::editPassword()
 		unset($data['password']);
 
 		$customer_id = !empty($data['customer_id']) ? $data['customer_id'] : $this->customer_id;
@@ -129,9 +188,14 @@ class Customer extends Library
 		}
 	}
 
-	public function editPassword($customer_id, $password)
+	public function updatePassword($password)
 	{
-		$this->update('customer', array('password' => $this->customer->encrypt($password)), $customer_id);
+		if (!$this->customer_id) {
+			$this->error['customer_id'] = _l("Customer is not logged in");
+			return false;
+		}
+
+		return $this->update('customer', array('password' => $this->encrypt($password)), $this->customer_id);
 	}
 
 	public function getCustomerGroupId()
@@ -220,28 +284,12 @@ class Customer extends Library
 	}
 
 	/** Customer Meta Data **/
-
-	public function getMeta($key = null)
-	{
-		if ($key === null) {
-			return $this->metadata;
-		}
-
-		return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
-	}
-
-	public function setMeta($key, $value)
+	public function addMeta($key, $value)
 	{
 		if (!$this->customer_id) {
-			return;
+			$this->error['customer_id'] = _l("Customer is not logged in");
+			return false;
 		}
-
-		$where = array(
-			'customer_id' => $this->customer_id,
-			'key'         => $key,
-		);
-
-		$this->delete('customer_meta', $where);
 
 		if (is_object($value) || is_array($value) || is_resource($value)) {
 			$value      = serialize($value);
@@ -257,19 +305,43 @@ class Customer extends Library
 			'serialized'  => $serialized,
 		);
 
-		$this->insert('customer_meta', $customer_meta);
-
 		$this->metadata[$key] = $value;
+
+		return $this->insert('customer_meta', $customer_meta);
+	}
+
+	public function setMeta($key, $value)
+	{
+		$this->deleteMeta($key);
+
+		return $this->addMeta($key, $value);
+	}
+
+	public function getMeta($key = null)
+	{
+		if ($key) {
+			return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
+		}
+
+		return $this->metadata;
 	}
 
 	public function deleteMeta($key)
 	{
+		if (!$this->customer_id) {
+			return false;
+		}
+
 		$where = array(
 			'customer_id' => $this->customer_id,
 			'key'         => $key,
 		);
 
 		$this->delete('customer_meta', $where);
+
+		unset($this->metadata[$key]);
+
+		return true;
 	}
 
 	/** Addresses **/
@@ -485,7 +557,7 @@ class Customer extends Library
 			$this->error['warning'] = _l("Must have at least 1 address associated to your account!");
 		}
 
-		if ((int)$this->customer->getMeta('default_shipping_address_id') === (int)$address_id) {
+		if ((int)$this->getMeta('default_shipping_address_id') === (int)$address_id) {
 			$this->error['warning'] = _l("Cannot remove the default shipping address! Please change your default shipping address first.");
 		}
 
@@ -683,45 +755,38 @@ class Customer extends Library
 		return (int)$this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
 	}
 
-	public function setCode($email, $code)
+	public function setResetCode($email, $code)
 	{
-		if (!$this->customer_id) {
-			$customer_id = $this->emailRegistered($email);
+		$customer_id = $this->emailRegistered($email);
 
-			if ($customer_id) {
-				$this->customer_id = $customer_id;
+		if ($customer_id) {
+			$this->customer_id = $customer_id;
 
-				$this->setMeta('password_reset_code', $code);
-
-				$this->customer_id = null;
-			}
+			return $this->setMeta('pass_reset_code', $code);
 		}
+
+		if (!$this->validation->email($email)) {
+			$this->error['email_invalid'] = _l("The email %s is not a valid email address", $email);
+		} else {
+			$this->error['email'] = _l("The email %s is not a registered email address.", $email);
+		}
+
+		return false;
 	}
 
-	public function lookupCode($code)
+	public function lookupResetCode($code)
 	{
-		if ($code) {
-			$query = "SELECT c.* FROM " . DB_PREFIX . "customer c" .
-				" JOIN " . DB_PREFIX . "customer_meta cm ON (cm.customer_id=c.customer_id)" .
-				" WHERE `key` = 'password_reset_code' AND 'value' = '" . $this->escape($code) . "' LIMIT 1";
+		return $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'pass_reset_code' AND `value` = '" . $this->escape($code) . "' LIMIT 1");
+	}
 
-			return $this->queryRow($query);
-		}
+	public function clearResetCode()
+	{
+		return $this->deleteMeta('pass_reset_code');
 	}
 
 	public function generateCode()
 	{
 		return str_shuffle(md5(microtime(true) * rand()));
-	}
-
-	public function clearCode($customer_id)
-	{
-		$where = array(
-			'customer_id' => $customer_id,
-			'key'         => "password_reset_code",
-		);
-
-		$this->delete('customer_meta', $where);
 	}
 
 	public function isBlacklisted($customer_id = null, $ips = array())

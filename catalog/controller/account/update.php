@@ -7,7 +7,7 @@ class Catalog_Controller_Account_Update extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/update'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		//Handle POST
@@ -72,7 +72,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 
 		//TODO: This is a temporary hack to integrate with braintree
-		$data['card_select'] = $this->call('extension/payment/braintree/select_card', array(null, true));
+		$data['card_select'] = $this->call('extension/payment/braintree/select_card', null, true);
 
 		//Action Buttons
 		$data['save']        = $this->url->link('account/update');

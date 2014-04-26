@@ -16,7 +16,11 @@ class Message extends Library
 			$_SESSION['message'][$type][] = $message;
 		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key) use ($type) {
-				$_SESSION['message'][$type][] = $value;
+				if (is_string($key)) {
+					$_SESSION['message'][$type][$key] = $value;
+				} else {
+					$_SESSION['message'][$type][] = $value;
+				}
 			});
 		}
 	}
@@ -45,7 +49,7 @@ class Message extends Library
 		return isset($_SESSION['message']['error']) || isset($_SESSION['message']['warning']);
 	}
 
-	public function peek($type = null)
+	public function get($type = null)
 	{
 		if ($type) {
 			if (isset($_SESSION['message'][$type])) {
@@ -86,5 +90,29 @@ class Message extends Library
 	public function toJSON($type = '')
 	{
 		return json_encode($this->fetch($type));
+	}
+
+	public function render($type = null, $close = true)
+	{
+		$messages = $this->fetch($type);
+
+		$html = '';
+		foreach ($messages as $type => $msgs) {
+			$html .= "<div class =\"messages $type\">";
+
+			foreach ($msgs as $msg) {
+				if (!empty($msg)) {
+					$html .= "<div class=\"message\">$msg</div>";
+				}
+			}
+
+			if ($close && $this->config->get('config_allow_close_message')) {
+				$html .= "<span class =\"close\" onclick=\"$(this).closest('.messages').remove()\"></span>";
+			}
+
+			$html .= "</div>";
+		}
+
+		return $html;
 	}
 }

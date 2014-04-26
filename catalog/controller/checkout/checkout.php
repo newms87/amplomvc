@@ -27,7 +27,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$data['guest_checkout'] = $this->session->get('guest_checkout');
 
 		if (!$this->customer->IsLogged() && !$data['guest_checkout']) {
-			$data['login_form'] = $this->block->render('account/login', null, array('template' => 'block/account/login'));
+			$data['login_form'] = $this->block->render('customer/login', null, array('template' => 'block/customer/login'));
 		} elseif ($data['guest_checkout']) {
 			$data['cancel_guest_checkout'] = $this->url->link('checkout/checkout/cancel_guest_checkout');
 		}

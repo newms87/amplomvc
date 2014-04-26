@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Return extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/return'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Product Returns"));
@@ -54,7 +54,7 @@ class Catalog_Controller_Account_Return extends Controller
 				'redirect' => $this->url->link('account/return/info', 'return_id=' . $return_id)
 			);
 
-			$this->url->redirect('account/login', $query);
+			$this->url->redirect('customer/login', $query);
 		}
 
 		//Page Title

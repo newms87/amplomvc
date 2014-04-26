@@ -7,7 +7,7 @@ class Catalog_Controller_Account_Account extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->request->setRedirect('account/account');
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		//Page Head
@@ -27,7 +27,7 @@ class Catalog_Controller_Account_Account extends Controller
 
 		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
 
-		$data['newsletter_display'] = $customer['newsletter'] ? _l("Send me %s weekly updates!", $this->config->get('config_name')) : _l("Do not send me any emails.");
+		$data['newsletter_display'] = $customer['newsletter'] ? _l("Send me weekly updates from %s!", $this->config->get('config_name')) : _l("Do not send me any emails.");
 
 		$data['customer'] = $customer;
 

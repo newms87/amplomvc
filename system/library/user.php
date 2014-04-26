@@ -60,6 +60,11 @@ class User extends Library
 		$this->user = $user + $user_group;
 	}
 
+	public function lookupUserByEmail($email)
+	{
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "user WHERE email = '$email'");
+	}
+
 	public function validate_token()
 	{
 		if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
@@ -125,6 +130,64 @@ class User extends Library
 		$this->Model_User_User->editPassword($user_id, $password);
 	}
 
+	public function addMeta($user_id, $key, $value)
+	{
+		if (is_array($value) || is_object($value) || is_resource($value)) {
+			$serialized = 1;
+			$value      = serialize($value);
+		} else {
+			$serialized = 0;
+		}
+
+		$meta = array(
+			'user_id'    => $user_id,
+			'key'        => $key,
+			'value'      => $value,
+			'serialized' => $serialized,
+		);
+
+		return $this->insert('user_meta', $meta);
+	}
+
+	public function setMeta($user_id, $key, $value)
+	{
+		$where = array(
+			'user_id' => $user_id,
+			'key'     => $key,
+		);
+
+		$this->delete('user_meta', $where);
+
+		return $this->addMeta($user_id, $key, $value);
+	}
+
+	public function deleteMeta($user_id, $key, $value = null)
+	{
+		$where = array(
+			'user_id' => $user_id,
+		   'key' => $key,
+		);
+
+		if (!is_null($value)) {
+			if (is_array($value) || is_object($value) || is_resource($value)) {
+				$value = serialize($value);
+			}
+
+			$where['value'] = $value;
+		}
+
+		return $this->delete('user_meta', $where);
+	}
+
+	public function getMeta($user_id, $key, $single = true)
+	{
+		if ($single) {
+			return $this->queryRow("SELECT * FROM " . DB_PREFIX . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+		}
+
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+	}
+
 	//TODO: Make this current
 	public function canPreview($type)
 	{
@@ -180,25 +243,32 @@ class User extends Library
 		return substr(str_shuffle(md5(microtime())), 0, (int)rand(10, 13));
 	}
 
-	public function setCode($email, $code)
+	public function setResetCode($email, $code)
 	{
-		$this->update('user', array('code' => $code), array('email' => $email));
+		$user = $this->lookupUserByEmail($email);
+
+		if (!$user) {
+			$this->error = _l("The email %s is not associated to an account.", $email);
+			return false;
+		}
+
+		return $this->setMeta($user['user_id'], 'pass_reset_code', $code);
 	}
 
-	public function lookupCode($code)
+	public function lookupResetCode($code)
 	{
 		if ($code) {
-			return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->escape($code) . "'");
+			return $this->queryVar("SELECT user_id FROM " . DB_PREFIX . "user_meta WHERE `key` = 'pass_reset_code' AND value = " . $this->escape($code) . "'");
 		}
+	}
+
+	public function clearResetCode($user_id)
+	{
+		$this->deleteMeta($user_id, 'pass_reset_code');
 	}
 
 	public function generateCode()
 	{
 		return str_shuffle(md5(microtime(true) * rand()));
-	}
-
-	public function clearCode($user_id)
-	{
-		$this->update('user', array('code' => ''), array('user_id' => $user_id));
 	}
 }

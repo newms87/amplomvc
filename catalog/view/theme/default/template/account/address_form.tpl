@@ -1,9 +1,6 @@
 <?= $this->call('common/header'); ?>
 <?= $this->area->render('left'); ?><?= $this->area->render('right'); ?>
 <div id="address_update" class="content">
-	<? if ($errors && $this->request->isAjax()) { ?>
-		<?= $this->builder->displayMessages(array('error' => $errors)); ?>
-	<? } ?>
 
 	<?= $this->breadcrumb->render(); ?>
 	<?= $this->area->render('top'); ?>

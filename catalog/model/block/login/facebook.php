@@ -23,7 +23,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		if (strpos($this->url->getPath(), 'account/logout') !== 0) {
+		if (strpos($this->url->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
 		} else {
 			$this->request->setRedirect($this->url->link('account/account'), null, 'fb_redirect');

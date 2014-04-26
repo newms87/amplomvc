@@ -22,7 +22,7 @@ class Catalog_Model_Block_Login_Google extends Model
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		if (strpos($this->url->getPath(), 'account/logout') !== 0) {
+		if (strpos($this->url->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
 		} else {
 			$this->request->setRedirect($this->url->link('account/account'), null, 'gp_redirect');

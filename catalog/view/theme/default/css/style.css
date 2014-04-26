@@ -1879,12 +1879,12 @@ a.button:active, input.button:active {
 	font-weight: bold;
 }
 
-.product_option .checkbox_button {
+.product_option .checkbox-button {
 	display: block;
 	margin-left: 10px;
 }
 
-.product_option .radio_button {
+.product_option .radio-button {
 	display: block;
 	margin-left: 10px;
 }
@@ -3846,8 +3846,8 @@ form .set_default_address input[type="radio"] {
 	margin-left: 10px;
 }
 
-#customer_subscription .option_values .checkbox_button,
-#customer_subscription .option_values .radio_button {
+#customer_subscription .option_values .checkbox-button,
+#customer_subscription .option_values .radio-button {
 	display: block;
 }
 

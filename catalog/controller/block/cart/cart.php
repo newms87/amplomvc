@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('account/login'), $this->url->link('account/register'));
+			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('customer/login'), $this->url->link('customer/registration'));
 		}
 
 		if (!$this->cart->validate()) {

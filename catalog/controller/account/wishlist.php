@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/wishlist'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		if (!$this->session->has('wishlist')) {
@@ -116,7 +116,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			if ($this->customer->isLogged()) {
 				$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			} else {
-				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
+				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('customer/login'), $this->url->link('customer/registration'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			}
 
 			$json['total'] = sprintf(_l("Wish List (%s)"), ($this->session->has('wishlist') ? count($this->session->get('wishlist')) : 0));

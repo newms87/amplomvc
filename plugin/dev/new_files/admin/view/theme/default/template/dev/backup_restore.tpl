@@ -29,9 +29,9 @@
 						<td><?= _l("Restore"); ?></td>
 						<td>
 							<? foreach ($data_backup_files as $file) { ?>
-								<span class="radio_button">
-									<input type="radio" name="backup_file" value="<?= $file['path']; ?>" id="radio_button_<?= md5($file['path']); ?>"/>
-									<label for="radio_button_<?= md5($file['path']); ?>">
+								<span class="radio-button">
+									<input type="radio" name="backup_file" value="<?= $file['path']; ?>" id="radio-button_<?= md5($file['path']); ?>"/>
+									<label for="radio-button_<?= md5($file['path']); ?>">
 										<span class="date"><?= $file['display_date']; ?></span> -
 										<span class="name"><?= $file['name']; ?></span> -
 										<span class="size"><?= $file['display_size']; ?></span>

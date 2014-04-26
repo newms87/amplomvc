@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Download extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/download'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Account Downloads"));
@@ -83,7 +83,7 @@ class Catalog_Controller_Account_Download extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/download'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		if (isset($_GET['order_download_id'])) {

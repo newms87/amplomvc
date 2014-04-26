@@ -745,9 +745,10 @@ if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
 	$(window).load(function(){
 		$('input:-webkit-autofill[autocomplete="off"]').each(function(){
 			var $this = $(this);
-			$this.val('');
-			setTimeout(function(){$this.val('');}, 500);
-			console.log($this.attr('name'), $this.val());
+			if (!$this.attr('value')) {
+				$this.val('');
+				setTimeout(function(){$this.val('');}, 200);
+			}
 		});
 	});
 }

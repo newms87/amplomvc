@@ -37,9 +37,9 @@ class Catalog_Controller_Mail_NewCustomer extends Controller
 
 		//If the customer did not generate their own password
 		if (!empty($customer['no_password_set'])) {
-			$data['reset_password'] = $this->url->link('account/forgotten');
+			$data['reset_password'] = $this->url->link('customer/forgotten');
 		} else {
-			$data['login'] = $this->url->link('account/login');
+			$data['login'] = $this->url->link('customer/login');
 		}
 
 		$this->mail->init();

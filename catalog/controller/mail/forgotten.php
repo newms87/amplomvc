@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Mail_Forgotten extends Controller
 {
-	public function index(array $data)
+	public function index($data)
 	{
 		$this->mail->init();
 
@@ -11,7 +11,6 @@ class Catalog_Controller_Mail_Forgotten extends Controller
 		$this->mail->setSubject(_l("Password Reset Requested for your account with %s!", $this->config->get('config_name')));
 
 		//Template Data
-		$data += $data;
 		$data['store_name'] = $this->config->get('config_name');
 
 		$this->mail->setHtml($this->render('mail/forgotten_password', $data));

@@ -48,6 +48,7 @@ final class Router
 		//Initialize site configurations
 		$this->config->run_site_config();
 
+		//TODO: We should not validate pages user can access in router.
 		if (!$this->user->isLogged()) {
 			$allowed = array(
 				'common/forgotten',

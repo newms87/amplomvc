@@ -2,11 +2,11 @@
 
 class Catalog_Controller_Common_Header extends Controller
 {
-	public function index()
+	public function index($settings = array())
 	{
-		$data = array(
-			'title' => $this->document->getTitle(),
-		);
+		$data = $settings;
+
+		$data['title'] = $this->document->getTitle();
 
 		$data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 
@@ -56,7 +56,6 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 		$data['statcounter']      = $this->config->get('config_statcounter');
 
-		$data['messages'] = $this->message->fetch();
 		$data['name']     = $this->config->get('config_name');
 
 		$logo_width  = $this->config->get('config_logo_width');
@@ -99,9 +98,9 @@ class Catalog_Controller_Common_Header extends Controller
 
 		//Action Buttons
 		$data['home']     = $this->url->link('common/home');
-		$data['login']    = $this->url->link('account/login');
-		$data['register'] = $this->url->link('account/register');
-		$data['logout']   = $this->url->link('account/logout');
+		$data['login']    = $this->url->link('customer/login');
+		$data['register'] = $this->url->link('customer/registration');
+		$data['logout']   = $this->url->link('customer/logout');
 
 
 		$data['social_networks'] = $this->block->render('extras/social_media');

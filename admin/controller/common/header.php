@@ -2,8 +2,10 @@
 
 class Admin_Controller_Common_Header extends Controller
 {
-	public function index()
+	public function index($settings = array())
 	{
+		$data = $settings;
+
 		$data['title'] = $this->document->getTitle();
 
 		$data['base'] = URL_SITE;

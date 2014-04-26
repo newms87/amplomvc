@@ -31,28 +31,6 @@ class Builder extends Library
 		$this->builder_template = $template;
 	}
 
-	public function displayMessages($messages, $close = true)
-	{
-		$html = '';
-		foreach ($messages as $type => $msgs) {
-			$html .= "<div class =\"messages $type\">";
-
-			foreach ($msgs as $msg) {
-				if (!empty($msg)) {
-					$html .= "<div class=\"message\">$msg</div>";
-				}
-			}
-
-			if ($close && $this->config->get('config_allow_close_message')) {
-				$html .= "<span class =\"close\" onclick=\"$(this).closest('.messages').remove()\"></span>";
-			}
-
-			$html .= "</div>";
-		}
-
-		return $html;
-	}
-
 	public function batchAction($selector, $actions, $path)
 	{
 		foreach ($actions as $key => &$action) {
@@ -115,6 +93,12 @@ class Builder extends Library
 		if (!is_array($data)) {
 			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given." . get_caller(0, 1));
 			return;
+		}
+
+		if (!isset($attr_list['class'])) {
+			$attr_list['class'] = 'builder-' . $type;
+		} else {
+			$attr_list['class'] .= ' builder-' . $type;
 		}
 
 		//build the attributes
@@ -207,12 +191,12 @@ class Builder extends Library
 
 				case 'radio':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<span class=\"radio_button\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><label for=\"radio-$name-$value\">$display</label></span>";
+					$options .= "<div class=\"radio-button\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><label for=\"radio-$name-$value\">$display</label></div>";
 					break;
 
 				case 'checkbox':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<span class=\"checkbox_button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></span>";
+					$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></div>";
 					break;
 
 				case 'multiselect':
@@ -240,10 +224,10 @@ class Builder extends Library
 
 			case 'radio':
 			case 'checkbox':
-				return "<span $attrs>$options</span>";
+				return "<div $attrs>$options</div>";
 
 			case 'multiselect':
-				return "<ul class =\"scrollbox\" $attrs>$options</ul>" .
+				return "<ul class=\"scrollbox\" $attrs>$options</ul>" .
 				"<div class=\"scrollbox_buttons\">" .
 				"<a class=\"check_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').attr('checked','checked')\">[ Check All ]</a>" .
 				"<a class=\"uncheck_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').removeAttr('checked')\">[ Uncheck All ]</a>" .

@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/order'));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		//Page Head
@@ -71,7 +71,7 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->set('redirect', $this->url->link('account/order/info', 'order_id=' . $order_id));
 
-			$this->url->redirect('account/login');
+			$this->url->redirect('customer/login');
 		}
 
 		//Order Validation

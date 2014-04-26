@@ -41,11 +41,10 @@ abstract class Controller
 
 	protected function call($path, $parameters = array())
 	{
-		if (!is_array($parameters)) {
-			$parameters = array($parameters);
-		}
+		$args = func_get_args();
+		array_shift($args);
 
-		$action = new Action($this->registry, $path, $parameters);
+		$action = new Action($this->registry, $path, $args);
 
 		if ($action->execute()) {
 			return $action->getOutput();
@@ -59,16 +58,18 @@ abstract class Controller
 	{
 		//TODO All validation should be done in Model! Remove this after removing all validation methods.
 		//Display Error Messages
-		$data['errors'] = array();
+		if (!isset($data['errors'])) {
+			$data['errors'] = array();
 
-		if ($this->error) {
-			if (!$this->request->isAjax()) {
-				$this->message->add('warning', $this->error);
+			if ($this->error) {
+				if (!$this->request->isAjax()) {
+					$this->message->add('warning', $this->error);
+				}
+
+				$data['errors'] = $this->error;
+
+				$this->error = array();
 			}
-
-			$data['errors'] = $this->error;
-
-			$this->error = array();
 		}
 
 		//Empty Dependencies and Breadcrumbs if an ajax request

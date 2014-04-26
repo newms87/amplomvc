@@ -39,13 +39,13 @@
 		</script>
 
 		<!--[if IE 9]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie9.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . " style/ie9.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie8.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . " style/ie8.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 7]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ie7.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . " style/ie7.css"; ?>" />
 		<![endif]-->
 
 		<? if ($google_analytics) { ?>
@@ -99,7 +99,7 @@
 								<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
 								<? if (!empty($slogan)) { ?>
-								<div id="slogan"><?= $slogan; ?></div>
+									<div id="slogan"><?= $slogan; ?></div>
 								<? } ?>
 							</a>
 						</div>
@@ -157,11 +157,14 @@
 				<div id="notification"></div>
 				<div id="content_holder">
 
-					<?= $this->builder->displayMessages($messages); ?>
+					<? if (empty($disable_messages)) { ?>
+						<?= $this->message->render(); ?>
+					<? } ?>
 
 					<script type="text/javascript">
-						$('#links_primary .top-menu > li').hover(top-menu_hoverin, top-menu_hoverout);
-						function top-menu_hoverin() {
+						$('#links_primary .top-menu > li').hover(top_menu_hoverin, top_menu_hoverout);
+						function top_menu_hoverin()
+						{
 							$(this).addClass('hover');
 
 							if ($(this).find('ul').children().length) {
@@ -169,7 +172,8 @@
 							}
 						}
 
-						function top-menu_hoverout() {
+						function top_menu_hoverout()
+						{
 							$(this).removeClass('hover').find('.submenu_arrow').remove();
 						}
 					</script>

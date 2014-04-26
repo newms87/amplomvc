@@ -15,7 +15,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$code = $this->user->generateCode();
 
-			$this->user->setCode($_POST['email'], $code);
+			$this->user->setResetCode($_POST['email'], $code);
 
 			$email_data = array(
 				'reset' => $this->url->link('common/forgotten/reset', 'code=' . $code),
@@ -52,10 +52,10 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 		$code = $_GET['code'];
 
-		$user = $this->user->lookupCode($code);
+		$user_id = $this->user->lookupResetCode($code);
 
 		//User not found
-		if (!$user) {
+		if (!$user_id) {
 			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
 			$this->url->redirect('common/login');
 		}
@@ -64,14 +64,14 @@ class Admin_Controller_Common_Forgotten extends Controller
 		if ($this->request->isPost()) {
 			//Validate Password
 			if (!$this->validation->password($_POST['password'])) {
-				if ($this->validation->isCode(Validation::PASSWORD_CONFIRM)) {
+				if ($this->validation->isErrorCode(Validation::PASSWORD_CONFIRM)) {
 					$this->error['confirm'] = $this->validation->getError();
 				} else {
 					$this->error['password'] = $this->validation->getError();
 				}
 			} else {
-				$this->user->updatePassword($user['user_id'], $_POST['password']);
-				$this->user->clearCode($user['user_id']);
+				$this->user->updatePassword($user_id, $_POST['password']);
+				$this->user->clearResetCode($user_id);
 
 				$this->message->add('success', _l('You have successfully updated your password!'));
 			}

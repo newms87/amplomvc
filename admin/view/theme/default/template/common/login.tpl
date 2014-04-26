@@ -5,7 +5,7 @@
 			<h1><img src="<?= URL_THEME_IMAGE . 'lockscreen.png'; ?>" alt=""/> <?= _l("Please enter your login details."); ?></h1>
 		</div>
 		<div class="section" style="min-height: 150px; overflow: hidden;">
-			<?= $this->builder->displayMessages($messages); ?>
+
 			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
 				<table style="width: 100%;">
 					<tr>

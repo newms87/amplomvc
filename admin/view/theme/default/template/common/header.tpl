@@ -39,5 +39,7 @@
 			</div>
 
 			<div class="content">
-				<?= $this->builder->displayMessages($messages); ?>
+				<? if (empty($disable_messages)) { ?>
+					<?= $this->message->render(); ?>
+				<? } ?>
 

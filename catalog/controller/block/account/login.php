@@ -31,9 +31,9 @@ class Catalog_Controller_Block_Account_Login extends Controller
 		}
 
 		//Action Buttons
-		$data['login']     = $this->url->link('account/login/login');
-		$data['register']  = $this->url->link('account/register');
-		$data['forgotten'] = $this->url->link('account/forgotten');
+		$data['login']     = $this->url->link('customer/login');
+		$data['register']  = $this->url->link('customer/registration');
+		$data['forgotten'] = $this->url->link('customer/forgotten');
 
 		//The Template
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';

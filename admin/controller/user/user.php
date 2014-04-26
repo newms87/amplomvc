@@ -215,7 +215,7 @@ class Admin_Controller_User_User extends Controller
 
 
 		if (!$user_id) {
-			$this->breadcrumb->add(_l("Creat New User"), $this->url->link('user/user/insert'));
+			$this->breadcrumb->add(_l("Create New User"), $this->url->link('user/user/insert'));
 		} else {
 			$this->breadcrumb->add($data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
