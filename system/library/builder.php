@@ -5,8 +5,6 @@ class Builder extends Library
 	private $builder_name;
 	private $builder_type;
 
-	private $builder_template;
-
 	/**
 	 * Use this to give the builder hints on how to builder the desired html structure
 	 *
@@ -26,10 +24,13 @@ class Builder extends Library
 		$this->builder_type = $type;
 	}
 
-	public function setBuilderTemplate($template)
-	{
-		$this->builder_template = $template;
-	}
+
+
+	//TODO: Get this outta here!
+
+
+
+
 
 	public function batchAction($selector, $actions, $path)
 	{
@@ -81,6 +82,17 @@ class Builder extends Library
 
 		return $html;
 	}
+
+
+
+
+
+	//TODO: Should accept an array with parameters. build($type, $params)
+	//TODO: Add build to helper/caller.php functions
+
+
+
+
 
 	function build($type, $data, $name = '', $select = null, $attr_list = array(), $escape_quotes = false)
 	{
