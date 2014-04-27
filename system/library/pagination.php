@@ -40,11 +40,6 @@ class Pagination extends Library
 		$this->template = $template;
 	}
 
-	public function useAjax($ajax = true)
-	{
-		$this->ajax = $ajax;
-	}
-
 	public function render()
 	{
 		if ($this->total < 1) {

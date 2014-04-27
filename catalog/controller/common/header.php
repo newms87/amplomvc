@@ -77,31 +77,16 @@ class Catalog_Controller_Common_Header extends Controller
 			$data['icons'] = $icons;
 		}
 
-		//Admin Bar
-		if ($this->user->isLogged()) {
-			$data['block_admin_bar'] = $this->block->render('widget/admin_bar');
-		}
-
 		//Login Check & The Welcome Message
 		$data['is_logged'] = $this->customer->isLogged();
 		$data['customer']  = $this->customer->info();
 
-		//Action Buttons
-		$data['home']     = $this->url->link('common/home');
-		$data['login']    = $this->url->link('customer/login');
-		$data['register'] = $this->url->link('customer/registration');
-		$data['logout']   = $this->url->link('customer/logout');
+		//Admin Bar
+		$data['show_admin_bar'] = $this->user->showAdminBar();
 
-
-		$data['social_networks'] = $this->block->render('extras/social_media');
-
-		if ($this->config->get('config_multi_language')) {
-			$data['block_languages'] = $this->block->render('localisation/language');
-		}
-
-		if ($this->config->get('config_multi_currency')) {
-			$data['block_currencies'] = $this->block->render('localisation/currency');
-		}
+		//Internationalization
+		$data['multi_language'] = $this->config->get('config_multi_language');
+		$data['multi_currency'] = $this->config->get('config_multi_currency');
 
 		//Render
 		$this->render('common/header', $data);

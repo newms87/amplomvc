@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Page_Page extends Controller
+class Catalog_Controller_Page extends Controller
 {
 	public function index()
 	{
@@ -24,8 +24,10 @@ class Catalog_Controller_Page_Page extends Controller
 
 		$data = $page;
 
+		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
+
 		//Render
-		$this->response->setOutput($this->render('page/page', $data));
+		$this->response->setOutput($this->render($template, $data));
 	}
 
 	public function preview()
@@ -75,6 +77,6 @@ class Catalog_Controller_Page_Page extends Controller
 		$data += $page;
 
 		//Render
-		$this->response->setOutput($this->render('page/page_preview', $data));
+		$this->response->setOutput($this->render('page/preview', $data));
 	}
 }

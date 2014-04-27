@@ -1,9 +1,15 @@
 <div id="listing">
+	<? if ($show_limits) { ?>
+		<div class="limits">
+			<?= $this->sort->renderLimits($limit_settings); ?>
+		</div>
+	<? } ?>
+
 	<div class="listings">
 		<?= $listing; ?>
 	</div>
 
-	<?php if (!empty($pagination)) { ?>
+	<?php if ($show_pagination) { ?>
 		<?= _block('widget/pagination', null, $pagination_settings); ?>
 	<?php } ?>
 </div>
@@ -11,7 +17,7 @@
 
 <?php if (!empty($ajax)) { ?>
 	<script type="text/javascript">
-		$('#listing').find('.pagination a, .sortable, .filter-button, .reset-button').click(function(){
+		$('#listing').find('.pagination a, .sortable, .filter-button, .reset-button, .limits a').click(function(){
 			var $this = $(this);
 			$('#listing').addClass("loading");
 

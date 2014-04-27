@@ -473,12 +473,8 @@ class Document extends Library
 
 		foreach ($links as $key => &$link) {
 			if (!preg_match("/^https?:\\/\\//", $link['href'])) {
-				if (!empty($link['is_route'])) {
-					$query        = isset($link['query']) ? $link['query'] : '';
-					$link['href'] = $this->url->link($link['href'], $query);
-				} elseif ($link['href']) {
-					$link['href'] = $this->url->site($link['href']);
-				}
+				$query        = isset($link['query']) ? $link['query'] : '';
+				$link['href'] = $this->url->link($link['href'], $query);
 			}
 
 			$components = parse_url(str_replace('&amp;', '&', $link['href']));

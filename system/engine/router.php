@@ -68,9 +68,9 @@ final class Router
 			if (!$this->pathIsIn($ignore)) {
 				$parts = explode('/', $this->path);
 
-				if (!isset($parts[0]) || !isset($parts[1])) {
+				if (!isset($parts[0])) {
 					$this->path = 'common/home';
-				} elseif (!$this->user->can('access', $parts[0] . '/' . $parts[1])) {
+				} elseif (!$this->user->can('access', $parts[0] . (!empty($parts[1]) ? '/' . $parts[1] : ''))) {
 					$this->path = 'error/permission';
 				}
 			}

@@ -48,3 +48,15 @@ function _breadcrumbs()
 	global $registry;
 	return $registry->get('breadcrumb')->render();
 }
+
+function site_url($path, $query = '')
+{
+	global $registry;
+	return $registry->get('url')->link($path, $query);
+}
+
+function store_url($store_id, $path, $query = '')
+{
+	global $registry;
+	return $registry->get('url')->link($store_id, $path, $query);
+}

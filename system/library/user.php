@@ -223,6 +223,11 @@ class User extends Library
 		return $this->user_id ? true : false;
 	}
 
+	public function showAdminBar()
+	{
+		return $this->isLogged();
+	}
+
 	public function info($key)
 	{
 		return isset($this->user[$key]) ? $this->user[$key] : null;

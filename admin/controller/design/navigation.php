@@ -25,18 +25,16 @@ class Admin_Controller_Design_Navigation extends Controller
 			),
 		);
 
-		$batch_action = array(
+		$data['batch_action'] = array(
 			'actions' => $actions,
 			'path'    => $this->url->link('design/navigation/batch_update'),
 		);
 
-		$data['batch_action'] = $batch_action;
+		//The Listing
+		$data['listing'] = $this->listing();
 
 		//Action Buttons
 		$data['insert'] = $this->url->link('design/navigation/update');
-
-		//The Listing
-		$data['listing'] = $this->listing();
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_list', $data));
@@ -126,7 +124,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $navigation_groups_total,
-		   'listing_path' => 'design/navigation/listing',
+			'listing_path'   => 'design/navigation/listing',
 		);
 
 		$output = _block('widget/listing', null, $listing);
@@ -188,8 +186,6 @@ class Admin_Controller_Design_Navigation extends Controller
 		if (!$this->user->can('modify', 'design/navigation')) {
 			$this->message->add('warning', _l("Warning: You do not have permission to modify navigation!"));
 		}
-
-		$this->document->setTitle(_l("Navigation"));
 
 		if (isset($_POST['batch']) && isset($_POST['action'])) {
 			foreach ($_POST['batch'] as $navigation_group_id) {

@@ -4,12 +4,14 @@ class Admin_Controller_Block_Widget_Listing extends Controller
 	public function build($settings)
 	{
 		$defaults = array(
-			'template'      => 'table/list_view',
-			'ajax'          => 1,
-			'rows'          => array(),
-			'template_data' => array(),
-			'filter_value'  => array(),
-			'pagination'    => true,
+			'template'        => 'table/list_view',
+			'ajax'            => 1,
+			'rows'            => array(),
+			'template_data'   => array(),
+			'filter_value'    => array(),
+			'show_pagination' => true,
+			'show_limits'     => true,
+			'limits'          => null,
 		);
 
 		$settings += $defaults;
@@ -30,13 +32,24 @@ class Admin_Controller_Block_Widget_Listing extends Controller
 
 		$settings['listing'] = $this->table->render();
 
-		if ($settings['pagination']) {
+		//Limits
+		if ($settings['show_limits']) {
+			$settings['limit_settings'] = array(
+				'path' => $settings['listing_path'],
+			);
+
+			if ($settings['limits']) {
+				$settings['limit_settings']['limits'] = $settings['limits'];
+			}
+		}
+
+		//Pagination
+		if ($settings['show_pagination']) {
 			$settings['pagination_settings'] = array(
 				'total' => $settings['total_listings'],
 				'path'  => $settings['listing_path'],
 			);
 		}
-
 
 		//Render
 		$this->render('block/widget/listing', $settings);

@@ -8,7 +8,6 @@ class Sort extends Library
 	private $page;
 	private $data = array();
 	private $sort_template;
-	private $limit_template;
 
 	//TODO: Move this to the admin panel
 	static $limits = array(
@@ -71,46 +70,32 @@ class Sort extends Library
 		return ob_get_clean();
 	}
 
-	public function get_limits()
+	public function renderLimits($settings = array())
 	{
-		return Sort::$limits;
-	}
+		$defaults = array(
+			'template' => 'block/widget/limit',
+			'limits'   => self::$limits,
+			'path'     => $this->url->getPath(),
+		);
 
-	public function set_limits($limits)
-	{
-		$this->limits = $limits;
-	}
+		$settings += $defaults;
 
-	public function set_limit_template($template)
-	{
-		$this->sort_template = $template;
-	}
-
-	public function renderLimits($limits = null)
-	{
-		if (!$this->limit_template) {
-			$template = 'block/widget/limit';
-		}
-
-		$template_file = $this->theme->findFile($template);
+		$template_file = $this->theme->findFile($settings['template']);
 
 		if (!$template_file) {
-			trigger_error(_l("%s(): Limit template %s was found!", __METHOD__, $template));
+			trigger_error(_l("%s(): Limit template %s was found!", __METHOD__, $template_file));
 			return;
 		}
 
-		$limit_url = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('limit', 'page') . '&limit=');
-
-		$limit = $this->limit;
-
-		if (empty($limits)) {
-			$limits = Sort::$limits;
-		}
-
 		//Set limit for pagination compatibility
-		if (empty($_GET['limit']) || $_GET['limit'] !== $limit) {
-			$_GET['limit'] = $limit;
+		if (empty($_GET['limit']) || $_GET['limit'] !== $this->limit) {
+			$_GET['limit'] = $this->limit;
 		}
+
+		$settings['limit_url'] = $this->url->link($settings['path'], $this->url->getQueryExclude('limit', 'page') . '&limit=');
+		$settings['limit'] = $this->limit;
+
+		extract($settings);
 
 		ob_start();
 

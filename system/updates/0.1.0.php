@@ -30,3 +30,7 @@ SQL
 $this->db->changeColumn('block', 'path', 'path', "VARCHAR(128) NOT NULL");
 $this->db->dropColumn('block', 'profile_settings');
 $this->db->dropColumn('block', 'profiles');
+
+
+//Page
+$this->db->addColumn('page', 'template', "VARCHAR(128) NOT NULL AFTER `layout_id`");

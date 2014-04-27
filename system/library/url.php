@@ -153,7 +153,7 @@ class Url extends Library
 		return $link;
 	}
 
-	public function store($store_id = false, $path = 'common/home', $query = '')
+	public function store($store_id, $path = 'common/home', $query = '')
 	{
 		if (!$store_id) {
 			$store_id = $this->config->get('config_default_store');
