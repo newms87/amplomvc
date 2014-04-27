@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Cart extends Controller
 {
-	public function index($settings = array())
+	public function build($settings = array())
 	{
 		if ($this->request->isPost()) {
 			//Update Product

@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Widget_Specials extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$sort_filter = array(
 			'has_special' => true,

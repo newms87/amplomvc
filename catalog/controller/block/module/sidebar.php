@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Module_Sidebar extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 

@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Product_List extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$process_data = isset($settings['process_data']) ? $settings['process_data'] : true;
 

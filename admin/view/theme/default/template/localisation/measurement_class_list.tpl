@@ -38,9 +38,9 @@
 							<? foreach ($measurement_classes as $measurement_class) { ?>
 								<tr>
 									<td style="align: center;"><? if ($measurement_class['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $measurement_class['measurement_class_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $measurement_class['measurement_class_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $measurement_class['measurement_class_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $measurement_class['measurement_class_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $measurement_class['title']; ?></td>
 									<td class="left"><?= $measurement_class['unit']; ?></td>

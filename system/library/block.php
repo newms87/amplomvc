@@ -380,7 +380,7 @@ class Block extends Library
 			$settings += $instance;
 		}
 
-		$action = new Action($block, array('settings' => $settings));
+		$action = new Action($block . '/build', array('settings' => $settings));
 
 		if ($action->execute()) {
 			return $action->getOutput();

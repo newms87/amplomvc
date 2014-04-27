@@ -315,7 +315,7 @@ $.fn.apply_filter = function (url) {
 		url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
 	}
 
-	location = url;
+	return url;
 }
 
 $.fn.ac_msg = function (type, msg, prepend, replace) {

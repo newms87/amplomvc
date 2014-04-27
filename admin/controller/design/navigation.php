@@ -10,6 +10,40 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
 		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
 
+		//Batch Actions
+		$actions = array(
+			'enable'  => array(
+				'label' => _l("Enable"),
+			),
+
+			'disable' => array(
+				'label' => _l("Disable"),
+			),
+
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
+		);
+
+		$batch_action = array(
+			'actions' => $actions,
+			'path'    => $this->url->link('design/navigation/batch_update'),
+		);
+
+		$data['batch_action'] = $batch_action;
+
+		//Action Buttons
+		$data['insert'] = $this->url->link('design/navigation/update');
+
+		//The Listing
+		$data['listing'] = $this->listing();
+
+		//Render
+		$this->response->setOutput($this->render('design/navigation_list', $data));
+	}
+
+	public function listing()
+	{
 		//Column Build Data
 		$stores = array(
 			'admin' => array(
@@ -85,48 +119,23 @@ class Admin_Controller_Design_Navigation extends Controller
 			}
 		}
 
-		//Build The Table
-		$tt_data = array(
-			'row_id' => 'navigation_group_id',
+		$listing = array(
+			'row_id'         => 'navigation_group_id',
+			'columns'        => $columns,
+			'rows'           => $navigation_groups,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $navigation_groups_total,
+		   'listing_path' => 'design/navigation/listing',
 		);
 
-		$this->table->init();
-		$this->table->setTemplate('table/list_view');
-		$this->table->setColumns($columns);
-		$this->table->setRows($navigation_groups);
-		$this->table->setTemplateData($tt_data);
-		$this->table->mapAttribute('filter_value', $filter);
+		$output = _block('widget/listing', null, $listing);
 
-		$data['list_view'] = $this->table->render();
+		if (!$this->request->isAjax()) {
+			return $output;
+		}
 
-		//Batch Actions
-		$data['batch_actions'] = array(
-			'enable'  => array(
-				'label' => _l("Enable"),
-			),
-
-			'disable' => array(
-				'label' => _l("Disable"),
-			),
-
-			'delete'  => array(
-				'label' => _l("Delete"),
-			),
-		);
-
-		$data['batch_update'] = $this->url->link('design/navigation/batch_update', $url_query);
-
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total = $navigation_groups_total;
-
-		$data['pagination'] = $this->pagination->render();
-
-		//Action Buttons
-		$data['insert'] = $this->url->link('design/navigation/update');
-
-		//Render
-		$this->response->setOutput($this->render('design/navigation_list', $data));
+		$this->response->setOutput($output);
 	}
 
 	public function update()
@@ -176,38 +185,44 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	public function batch_update()
 	{
+		if (!$this->user->can('modify', 'design/navigation')) {
+			$this->message->add('warning', _l("Warning: You do not have permission to modify navigation!"));
+		}
+
 		$this->document->setTitle(_l("Navigation"));
 
-		if (isset($_GET['selected']) && isset($_GET['action'])) {
-			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_GET['selected'] as $navigation_group_id) {
-					switch ($_GET['action']) {
-						case 'enable':
-							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-							break;
-						case 'disable':
-							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-							break;
-						case 'delete':
-							$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
-							break;
-					}
-					if ($this->error) {
+		if (isset($_POST['batch']) && isset($_POST['action'])) {
+			foreach ($_POST['batch'] as $navigation_group_id) {
+				switch ($_POST['action']) {
+					case 'enable':
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
 						break;
-					}
+
+					case 'disable':
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+						break;
+
+					case 'delete':
+						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+						break;
 				}
 			}
 
-			if (!$this->error) {
-				if (!$this->message->hasError()) {
-					$this->message->add('success', _l("Success: You have modified navigation!"));
-
-					$this->url->redirect('design/navigation');
-				}
+			if (!$this->message->hasError()) {
+				$this->message->add('success', _l("Success: You have modified navigation!"));
 			}
 		}
 
-		$this->index();
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('design/navigation');
+		}
+
+		if ($this->message->hasError()) {
+			echo $this->message->toJSON();
+			exit;
+		}
+
+		$this->listing();
 	}
 
 	private function getForm()
@@ -244,7 +259,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'status' => 1,
 		);
 
-		$data += $navigation_group_info + $defaults;
+		$data = $navigation_group_info + $defaults;
 
 		//Link AC Template
 		$data['links']['__ac_template__'] = array(
@@ -332,15 +347,6 @@ class Admin_Controller_Design_Navigation extends Controller
 
 				$_POST['links'][$key]['name'] = $check_name;
 			}
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'design/navigation')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify navigation!");
 		}
 
 		return $this->error ? false : true;

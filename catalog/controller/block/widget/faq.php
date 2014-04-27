@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Widget_Faq extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		//Your code goes here...
 

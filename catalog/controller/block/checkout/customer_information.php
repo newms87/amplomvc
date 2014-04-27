@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 {
-	public function index()
+	public function build()
 	{
 		if (!$this->customer->isLogged()) {
 			$data['guest_checkout'] = true;

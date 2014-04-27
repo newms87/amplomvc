@@ -81,7 +81,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		if (!empty($_GET['address_id'])) {
 			if (!$this->customer->removeAddress($_POST['address_id'])) {
-				$this->error += $this->address->getError();
+				$this->message->add('error', $this->address->getError());
 			}
 			$this->address->remove($_GET['address_id']);
 

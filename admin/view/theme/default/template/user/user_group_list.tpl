@@ -33,10 +33,10 @@
 							<? foreach ($user_groups as $user_group) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($user_group['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $user_group['user_group_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $user_group['user_group_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $user_group['user_group_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $user_group['user_group_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $user_group['name']; ?></td>
 									<td class="right"><? foreach ($user_group['action'] as $action) { ?>

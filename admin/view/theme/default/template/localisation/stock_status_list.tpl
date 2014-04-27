@@ -33,9 +33,9 @@
 							<? foreach ($stock_statuses as $stock_status) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($stock_status['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $stock_status['stock_status_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $stock_status['stock_status_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $stock_status['stock_status_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $stock_status['stock_status_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $stock_status['name']; ?></td>
 									<td class="right"><? foreach ($stock_status['action'] as $action) { ?>

@@ -2,7 +2,7 @@
 
 class Catalog_Controller_Block_Widget_AdminBar extends Controller
 {
-	public function index($settings = array())
+	public function build($settings = array())
 	{
 		if (!empty($_COOKIE['disable_admin_bar'])) {
 			return;

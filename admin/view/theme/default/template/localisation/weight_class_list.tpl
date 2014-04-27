@@ -43,9 +43,9 @@
 							<? foreach ($weight_classes as $weight_class) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($weight_class['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $weight_class['weight_class_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $weight_class['weight_class_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $weight_class['weight_class_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $weight_class['weight_class_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $weight_class['title']; ?></td>
 									<td class="left"><?= $weight_class['unit']; ?></td>

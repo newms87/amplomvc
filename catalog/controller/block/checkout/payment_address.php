@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 {
-	public function index()
+	public function build()
 	{
 		$data['data_addresses'] = $this->customer->getPaymentAddresses();
 

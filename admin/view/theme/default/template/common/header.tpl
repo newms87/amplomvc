@@ -32,8 +32,8 @@
 				</div>
 				<? if ($logged) { ?>
 					<div id="menu" class="links clearfix">
-						<div class="left"><?= $this->document->renderLinks($links_admin); ?></div>
-						<div class="right"><?= $this->document->renderLinks($links_right); ?></div>
+						<div class="left"><?= _links('admin'); ?></div>
+						<div class="right"><?= _links('right'); ?></div>
 					</div>
 				<? } ?>
 			</div>

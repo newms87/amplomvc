@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Module_Press extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$settings['image_width']  = 185;
 		$settings['image_height'] = 240;

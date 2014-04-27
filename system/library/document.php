@@ -420,6 +420,9 @@ class Document extends Library
 			foreach ($result as &$group) {
 				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
 
+				if (empty($nav_group_links)) {
+					continue;
+				}
 				$parent_ref = array();
 
 				foreach ($nav_group_links as $key => &$link) {
@@ -528,6 +531,10 @@ class Document extends Library
 	{
 		if (is_string($links)) {
 			$links = $this->getLinks($links);
+		}
+
+		if (!$links) {
+			return;
 		}
 
 		if ($sort) {

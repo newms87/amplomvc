@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Localisation_Language extends Controller
 {
-	public function index()
+	public function build()
 	{
 		$data['action'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('language_code') . '&language_code=');
 

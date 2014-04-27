@@ -33,9 +33,9 @@
 							<? foreach ($customer_groups as $customer_group) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($customer_group['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $customer_group['customer_group_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $customer_group['customer_group_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $customer_group['customer_group_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $customer_group['customer_group_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $customer_group['name']; ?></td>
 									<td class="right"><? foreach ($customer_group['action'] as $action) { ?>

@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 {
-	public function index()
+	public function build()
 	{
 		//Extra Information saved about the guest (name, email, etc..)
 		$guest_info = $this->cart->loadGuestInfo();

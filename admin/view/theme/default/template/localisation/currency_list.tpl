@@ -49,10 +49,10 @@
 							<? foreach ($currencies as $currency) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($currency['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $currency['currency_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $currency['currency_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $currency['currency_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $currency['currency_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $currency['title']; ?></td>
 									<td class="left"><?= $currency['code']; ?></td>

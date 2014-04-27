@@ -26,6 +26,11 @@ final class Registry
 
 	public function loadClass($class, $return_instance = true)
 	{
+		//So a child instance may call the registry directly via __get()
+		if ($class === 'load') {
+			return $this;
+		}
+
 		//TODO: Integrate this.... hack to incorporate AWS AutoLoading
 		if (strpos($class, '\\') !== false) {
 			$file = DIR_RESOURCES . 'aws/' . $class . '.php';

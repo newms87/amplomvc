@@ -33,10 +33,10 @@
 							<? foreach ($tax_classes as $tax_class) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($tax_class['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $tax_class['tax_class_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $tax_class['tax_class_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $tax_class['tax_class_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $tax_class['tax_class_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $tax_class['title']; ?></td>
 									<td class="right"><? foreach ($tax_class['action'] as $action) { ?>

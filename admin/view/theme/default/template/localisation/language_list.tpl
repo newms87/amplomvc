@@ -38,10 +38,10 @@
 							<? foreach ($languages as $language) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($language['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $language['language_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $language['language_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $language['language_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $language['language_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $language['name']; ?></td>
 									<td class="left"><?= $language['code']; ?></td>

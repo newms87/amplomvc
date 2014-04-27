@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_ConfirmAddress extends Controller
 {
-	public function index($settings = array())
+	public function build($settings = array())
 	{
 		if ($this->cart->hasShipping() && $this->cart->hasShippingAddress()) {
 			$shipping_address = $this->cart->getShippingAddress();

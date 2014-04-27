@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_Confirm extends Controller
 {
-	public function index()
+	public function build()
 	{
 		//Verify the shipping details, if only the shipping method is invalid, choose a shipping method automatically
 		if (!$this->cart->validateShippingMethod()) {

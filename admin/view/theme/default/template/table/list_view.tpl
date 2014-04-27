@@ -19,7 +19,7 @@
 	<thead>
 		<tr>
 			<? if (!empty($row_id)) { ?>
-				<td width="1" class="center"><input type="checkbox" onclick="$('[name=\'selected[]\']').prop('checked', this.checked).change();"/></td>
+				<td width="1" class="center"><input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/></td>
 			<? } ?>
 			<td class="center column_title"><span><?= _l("Action"); ?></span></td>
 			<? foreach ($columns as $slug => $column) { ?>
@@ -44,9 +44,9 @@
 				<td></td>
 			<? } ?>
 			<td align="center">
-				<a onclick="return apply_filter();" class="button"><?= _l("Filter"); ?></a>
+				<a class="button filter-button"><?= _l("Filter"); ?></a>
 				<? if (!empty($_GET['filter'])) { ?>
-					<a onclick="return reset_filter();" class="reset"><?= _l("Reset"); ?></a>
+					<a class="reset reset-button"><?= _l("Reset"); ?></a>
 				<? } ?>
 			</td>
 			<? foreach ($columns as $slug => $column) { ?>
@@ -129,9 +129,9 @@
 				<? } ?>
 			<? } ?>
 			<td align="center">
-				<a onclick="return apply_filter();" class="button"><?= _l("Filter"); ?></a>
+				<a class="button filter-button"><?= _l("Filter"); ?></a>
 				<? if (!empty($_GET['filter'])) { ?>
-					<a onclick="return reset_filter();" class="reset"><?= _l("Reset"); ?></a>
+					<a class="reset reset-button"><?= _l("Reset"); ?></a>
 				<? } ?>
 			</td>
 		</tr>
@@ -140,7 +140,7 @@
 				<tr class="filter_list_item">
 					<? if (!empty($row_id)) { ?>
 						<td class="center">
-							<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? "checked=\"checked\"" : ""; ?> />
+							<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
 							<label for="rowid<?= $row[$row_id]; ?>" class="rowid"><?= $row[$row_id]; ?></label>
 						</td>
 					<? } ?>
@@ -263,12 +263,6 @@
 </table>
 
 <script type="text/javascript">
-	$("#filter_list").keydown(function (e) {
-		if (e.keyCode == 13) {
-			return apply_filter();
-		}
-	});
-
 	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
 
 	function zoom_hover_in() {
@@ -320,7 +314,7 @@
 
 	//Add Item Selector
 	$('.filter_list_item').click(function () {
-		cb = $(this).find('[name="selected[]"]');
+		cb = $(this).find('[name="batch[]"]');
 		if (cb.data('clicked')) {
 			cb.data('clicked', false);
 		} else {
@@ -328,17 +322,26 @@
 		}
 	});
 
-	$('.filter_list_item [name="selected[]"]').change(function () {
+	$('.filter_list_item [name="batch[]"]').change(function () {
 		$(this).closest('.filter_list_item').toggleClass('active', $(this).prop('checked'));
 	});
 
-	function apply_filter() {
-		$('#filter_list').apply_filter("<?= $this->url->link($this->url->getPath(), $this->url->getQueryExclude('filter')); ?>");
-		return false;
-	}
+	$('.filter-button').click(function() {
+		$(this).attr('href', apply_filter());
+	});
 
-	function reset_filter() {
+	$('.reset-button').click(function() {
 		$('#filter_list').find('[name]').val('');
-		return apply_filter();
+		$(this).attr('href', apply_filter());
+	});
+
+	$("#filter_list").keydown(function (e) {
+		if (e.keyCode == 13) {
+			$('.filter-button').click()[0].click();
+		}
+	});
+
+	function apply_filter() {
+		return $('#filter_list').apply_filter("<?= $filter_url; ?>");
 	}
 </script>

@@ -90,10 +90,10 @@
 							<? foreach ($returns as $return) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($return['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $return['return_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $return['return_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $return['return_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $return['return_id']; ?>"/>
 										<? } ?></td>
 									<td class="right"><?= $return['return_id']; ?></td>
 									<td class="right"><?= $return['order_id']; ?></td>

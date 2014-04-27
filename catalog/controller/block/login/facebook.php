@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Login_Facebook extends Controller
 {
-	public function index()
+	public function build()
 	{
 		//Actions
 		$data['connect'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();

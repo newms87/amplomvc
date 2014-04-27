@@ -29,6 +29,7 @@ class Pagination extends Library
 		$this->limit     = 0;
 		$this->num_links = 10;
 		$this->page_url  = '';
+		$this->ajax_url  = '';
 		$this->attrs     = array(
 			'class' => 'links'
 		);
@@ -39,13 +40,20 @@ class Pagination extends Library
 		$this->template = $template;
 	}
 
+	public function useAjax($ajax = true)
+	{
+		$this->ajax = $ajax;
+	}
+
 	public function render()
 	{
 		if ($this->total < 1) {
 			return '';
 		}
 
-		if (!$this->page_url) {
+		if ($this->ajax_url) {
+			$this->page_url = $this->ajax_url;
+		} else if (!$this->page_url) {
 			$this->page_url = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('page'));
 		}
 

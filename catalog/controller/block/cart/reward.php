@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Reward
 {
-	public function index($settings = null)
+	public function build($settings = null)
 	{
 		if (isset($_POST['reward']) && $this->validateReward()) {
 			$this->session->set('reward', $_POST['reward']);
@@ -21,7 +21,7 @@ class Catalog_Controller_Block_Cart_Reward
 			'reward' => '',
 		);
 
-		$data += $reward_info + $defaults;
+		$data = $reward_info + $defaults;
 
 		$data['reward_points'] = $this->customer->getRewardPoints();
 		$data['total_points']  = $this->cart->getTotalPoints();

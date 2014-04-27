@@ -55,10 +55,10 @@
 							<? foreach ($coupons as $coupon) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($coupon['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $coupon['coupon_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $coupon['coupon_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $coupon['coupon_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $coupon['coupon_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $coupon['name']; ?></td>
 									<td class="left"><?= $coupon['code']; ?></td>

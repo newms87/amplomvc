@@ -61,10 +61,10 @@
 							<? foreach ($tax_rates as $tax_rate) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($tax_rate['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $tax_rate['tax_rate_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $tax_rate['tax_rate_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $tax_rate['tax_rate_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $tax_rate['tax_rate_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $tax_rate['name']; ?></td>
 									<td class="right"><?= $tax_rate['rate']; ?></td>

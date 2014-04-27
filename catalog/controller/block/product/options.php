@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Product_Options extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$product_id = !empty($settings['product_id']) ? $settings['product_id'] : null;
 

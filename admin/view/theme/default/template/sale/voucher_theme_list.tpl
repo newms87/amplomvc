@@ -6,7 +6,7 @@
 			<h1><img src="<?= URL_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= _l("Voucher Themes"); ?></h1>
 
 			<div class="batch_actions">
-				<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
+				<?= _block('block/widget/batch_action', null, $batch_action); ?>
 			</div>
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>

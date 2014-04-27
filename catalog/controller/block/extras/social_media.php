@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Extras_SocialMedia extends Controller
 {
-	public function index($settings, $type = 'standard')
+	public function build($settings, $type = 'standard')
 	{
 		if (isset($settings['networks'])) {
 			//TODO: MOVE the size settings to the block profile

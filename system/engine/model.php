@@ -2,17 +2,13 @@
 
 abstract class Model
 {
-	protected $load;
 	protected $error;
 
 	private $synctime = false;
 
 	public function __construct()
 	{
-		global $registry;
-		$this->load = $registry;
-
-		global $ac_time_offset;
+		global $registry, $ac_time_offset;
 
 		if ($ac_time_offset) {
 			$this->synctime = true;

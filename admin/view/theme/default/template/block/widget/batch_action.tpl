@@ -15,8 +15,8 @@
 		<? switch ($action['type']) {
 			case 'text':
 				?>
-				<input type="text" name="action_value value="<?= $action['default']; ?>" />
-			<? break;
+				<input type="text" name="action_value" value="<?= $action['default']; ?>"/>
+				<? break;
 			case 'ckedit':
 				?>
 				<? $ckeditor = true; ?>
@@ -57,26 +57,35 @@
 	});
 
 	function do_batch_action(action) {
-		selected = $('<?= $selector; ?>:checked');
+		var $listing = $('<?= $replace; ?>');
+		var $selected = $('<?= $selector; ?>:checked');
 
-		if (!selected.length) {
-			alert("<?= _l("Please select an option to perform for Batch Action"); ?>");
+		if (!$selected.length) {
+			alert("<?= _l("Please select items to perform the batch action on."); ?>");
 			return false;
-		}
-
-		if (!action) {
-			action = $('select[name=batch_action]').val();
 		}
 
 		av = $('.action_value.active [name=action_value]');
 
 		if (av.hasClass('ckedit'))
-			av = escape(CKEDITOR.instances[av.attr('id')].getData());
+			av = CKEDITOR.instances[av.attr('id')].getData();
 		else
 			av = av.val() || '';
 
-		url = '<?= $url; ?>'.replace(/_action_/, action).replace(/_action_value_/, av);
+		var data = $selected.serializeArray();
 
-		location = url + '&' + selected.serialize();
+		data.push({name: 'action', value: action || $('select[name=batch_action]').val()});
+		data.push({name: 'value', value: av});
+
+		$listing.addClass('loading');
+		var url = '<?= $url; ?>';
+
+		url += (url.match(/\?/)?'&':'?') + window.location.search;
+
+		$.post(url, data, function (response) {
+			$listing.replaceWith(response);
+		});
+
+		return false;
 	}
 </script>

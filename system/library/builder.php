@@ -25,43 +25,6 @@ class Builder extends Library
 	}
 
 
-
-	//TODO: Get this outta here!
-
-
-
-
-
-	public function batchAction($selector, $actions, $path)
-	{
-		foreach ($actions as $key => &$action) {
-			$action['attrs'] = '';
-
-			//All keys beginning with '#' are html tag attributes
-			foreach ($action as $attr => $val) {
-				if (strpos($attr, '#') === 0) {
-					$action['attrs'] .= "$attr='$val' ";
-				}
-			}
-
-			if (!isset($action['default'])) {
-				$action['default'] = '';
-			}
-
-			if (!isset($action['key'])) {
-				$action['key'] = $key;
-			}
-		}
-
-		$data = array(
-			'selector' => $selector,
-			'actions'  => $actions,
-			'url'      => $this->url->link($path, 'action=_action_&action_value=_action_value_&' . $this->url->getQueryExclude('action', 'action_value', 'selected')),
-		);
-
-		return _block('block/widget/batch_action', null, $data);
-	}
-
 	//TODO: This is a hack... Handle this better
 	public function finalSale()
 	{

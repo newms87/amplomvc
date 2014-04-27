@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Widget_CardSelect extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		foreach ($settings['videos'] as &$video) {
 			if (empty($video['width'])) {

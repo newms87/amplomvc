@@ -101,8 +101,6 @@ class Admin_Controller_Common_Header extends Controller
 				$this->document->addLink('admin', $link_image_manager);
 			}
 
-			$data['links_admin'] = $this->document->getLinks('admin');
-
 			//Store Fronts and Settings
 			$link_stores = array(
 				'name'         => 'stores',
@@ -134,8 +132,6 @@ class Admin_Controller_Common_Header extends Controller
 			);
 
 			$this->document->addLink('right', $link_logout);
-
-			$data['links_right'] = $this->document->getLinks('right');
 		}
 
 

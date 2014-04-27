@@ -39,10 +39,10 @@
 							<? foreach ($geo_zones as $geo_zone) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($geo_zone['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $geo_zone['geo_zone_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $geo_zone['geo_zone_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $geo_zone['geo_zone_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $geo_zone['geo_zone_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $geo_zone['name']; ?></td>
 									<td class="left"><?= $geo_zone['description']; ?></td>

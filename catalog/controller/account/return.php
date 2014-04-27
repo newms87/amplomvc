@@ -238,7 +238,7 @@ class Catalog_Controller_Account_Return extends Controller
 			'captcha'      => '',
 		);
 
-		$data += $order_info + $defaults;
+		$data = $order_info + $defaults;
 
 		if (!empty($customer_orders)) {
 			foreach ($customer_orders as &$order) {
@@ -333,6 +333,8 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->response->setOutput($this->render('account/return_success', $data));
 	}
 
+
+	//TODO: Add to Library::Order->returnProducts();
 	private function validate()
 	{
 		if (empty($_POST['order_id'])) {

@@ -39,10 +39,10 @@
 							<? foreach ($downloads as $download) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($download['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $download['download_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $download['download_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $download['download_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $download['download_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $download['name']; ?></td>
 									<td class="right"><?= $download['remaining']; ?></td>

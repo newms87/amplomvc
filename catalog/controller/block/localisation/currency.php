@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Localisation_Currency extends Controller
 {
-	public function index()
+	public function build()
 	{
 		if (isset($_POST['currency_code'])) {
 			$this->currency->set($_POST['currency_code']);

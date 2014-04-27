@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Voucher extends Controller
 {
-	public function index($settings = null)
+	public function build($settings)
 	{
 		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->set('voucher', $_POST['voucher']);

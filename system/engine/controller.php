@@ -2,42 +2,15 @@
 
 abstract class Controller
 {
-	protected $load;
-	protected $children = array();
 	public $output;
 	public $error = array();
 
-	public function __construct()
-	{
-		global $registry;
-		$this->load = $registry;
-	}
+	public function __construct() {}
 
 	public function __get($key)
 	{
 		global $registry;
 		return $registry->get($key);
-	}
-
-	public function __set($key, $value)
-	{
-		//TODO __set() has been deprecated for AmploCart. DO NOT USE THIS FEATURE.
-		trigger_error("__set() is deprecated in AmploCart. This feature has been disabled.");
-		exit;
-	}
-
-	public function getError()
-	{
-		return $this->error;
-	}
-
-	public function getErrorMsg($delimiter = "\r\n")
-	{
-		$msg = '';
-
-		array_walk_recursive($this->error, function ($value, $id, &$msg) use ($delimiter) { $msg .= ($msg ? $delimiter : '') . $value; });
-
-		return $msg;
 	}
 
 	protected function render($path, $data = array())
@@ -63,9 +36,9 @@ abstract class Controller
 			$this->breadcrumb->clear();
 		}
 
-		$template = $this->theme->findFile($path);
+		$_template = $this->theme->findFile($path);
 
-		if (!$template || !is_file($template)) {
+		if (!$_template || !is_file($_template)) {
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));
 			exit();
 		}
@@ -74,7 +47,7 @@ abstract class Controller
 
 		ob_start();
 
-		include(_ac_mod_file($template));
+		include(_ac_mod_file($_template));
 
 		$this->output = ob_get_clean();
 

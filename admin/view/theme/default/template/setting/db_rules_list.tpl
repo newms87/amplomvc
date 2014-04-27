@@ -29,7 +29,7 @@
 							<? foreach ($db_rules as $db_rule) { ?>
 								<tr>
 									<td style="text-align: center;">
-										<input type="checkbox" name="selected[]" value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected'] ? "checked=\"checked\"" : ""; ?> />
+										<input type="checkbox" name="batch[]" value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected'] ? "checked=\"checked\"" : ""; ?> />
 									</td>
 									<td class="left"><?= $db_rule['table']; ?></td>
 									<td class="left"><?= $db_rule['column']; ?></td>

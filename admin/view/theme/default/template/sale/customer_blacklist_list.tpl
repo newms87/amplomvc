@@ -34,9 +34,9 @@
 							<? foreach ($customer_blacklists as $customer_blacklist) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($customer_blacklist['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $customer_blacklist['customer_ip_blacklist_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $customer_blacklist['customer_ip_blacklist_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $customer_blacklist['customer_ip_blacklist_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $customer_blacklist['customer_ip_blacklist_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $customer_blacklist['ip']; ?></td>
 									<td class="right"><? if ($customer_blacklist['total']) { ?>

@@ -32,10 +32,10 @@
 							<? foreach ($banners as $banner) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($banner['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $banner['banner_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $banner['banner_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $banner['banner_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $banner['banner_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $banner['name']; ?></td>
 									<td class="left"><?= $banner['status']; ?></td>

@@ -43,10 +43,10 @@
 							<? foreach ($users as $user) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($user['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $user['user_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $user['user_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $user['user_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $user['user_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $user['username']; ?></td>
 									<td class="left"><?= $user['email']; ?></td>

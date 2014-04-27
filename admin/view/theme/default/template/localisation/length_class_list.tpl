@@ -43,9 +43,9 @@
 							<? foreach ($length_classes as $length_class) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($length_class['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $length_class['length_class_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="batch[]" value="<?= $length_class['length_class_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $length_class['length_class_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $length_class['length_class_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $length_class['title']; ?></td>
 									<td class="left"><?= $length_class['unit']; ?></td>

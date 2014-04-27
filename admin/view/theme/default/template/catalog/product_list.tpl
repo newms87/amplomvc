@@ -6,7 +6,7 @@
 			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Products"); ?></h1>
 
 			<div class="batch_actions">
-				<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
+				<?= _block('block/widget/batch_action', null, $batch_action); ?>
 			</div>
 			<div class="buttons">
 				<? if (!empty($product_classes)) { ?>

@@ -2,7 +2,7 @@
 
 class Catalog_Controller_Block_Widget_Carousel extends Controller
 {
-	public function index($instance)
+	public function build($instance)
 	{
 		$settings = $instance['settings'];
 

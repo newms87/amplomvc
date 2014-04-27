@@ -44,10 +44,10 @@
 							<? foreach ($zones as $zone) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($zone['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $zone['zone_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $zone['zone_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $zone['zone_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $zone['zone_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $zone['country']; ?></td>
 									<td class="left"><?= $zone['name']; ?></td>

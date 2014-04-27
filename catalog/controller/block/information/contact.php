@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Information_Contact extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		if ($this->request->isPost() && $this->validate()) {
 			$this->mail->sendTemplate('contact', $_POST);

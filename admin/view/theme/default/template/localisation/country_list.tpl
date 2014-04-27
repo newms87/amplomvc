@@ -45,10 +45,10 @@
 							<? foreach ($countries as $country) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($country['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $country['country_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $country['country_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $country['country_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $country['country_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $country['name']; ?></td>
 									<td class="left"><?= $country['iso_code_2']; ?></td>

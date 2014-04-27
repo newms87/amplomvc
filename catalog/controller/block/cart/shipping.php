@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Shipping extends Controller
 {
-	public function index()
+	public function build()
 	{
 		$data['action'] = '';
 

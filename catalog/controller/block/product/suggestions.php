@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Product_Suggestions extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$product_info = !empty($settings['product_info']) ? $settings['product_info'] : null;
 

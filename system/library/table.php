@@ -84,8 +84,16 @@ class Table extends Library
 		//Add Sort data
 		$this->template_data += $this->sort->getSortData();
 
+		if (empty($this->template_data['listing_path'])) {
+			$this->template_data['listing_path'] = $this->route->getPath();
+		}
+
 		if (empty($this->template_data['sort_url'])) {
-			$this->template_data['sort_url'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('sort', 'order', 'page'));
+			$this->template_data['sort_url'] = $this->url->link($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
+		}
+
+		if (empty($this->template_data['filter_url'])) {
+			$this->template_data['filter_url'] =  $this->url->link($this->template_data['listing_path'], $this->url->getQueryExclude('filter'));
 		}
 
 		//Normalize Columns

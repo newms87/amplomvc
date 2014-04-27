@@ -49,10 +49,10 @@
 							<? foreach ($reviews as $review) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($review['selected']) { ?>
-											<input type="checkbox" name="selected[]" value="<?= $review['review_id']; ?>"
+											<input type="checkbox" name="batch[]" value="<?= $review['review_id']; ?>"
 												checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]" value="<?= $review['review_id']; ?>"/>
+											<input type="checkbox" name="batch[]" value="<?= $review['review_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $review['name']; ?></td>
 									<td class="left"><?= $review['author']; ?></td>

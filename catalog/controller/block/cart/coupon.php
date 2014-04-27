@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Coupon extends Controller
 {
-	public function index($settings)
+	public function build($settings)
 	{
 		$ajax = isset($settings['ajax']) ? $settings['ajax'] : false;
 

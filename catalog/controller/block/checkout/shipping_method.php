@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 {
-	public function index()
+	public function build()
 	{
 		if (isset($_POST['shipping_method'])) {
 			$this->validate();
