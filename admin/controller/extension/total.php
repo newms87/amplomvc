@@ -260,7 +260,7 @@ class Admin_Controller_Extension_Total extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function install()

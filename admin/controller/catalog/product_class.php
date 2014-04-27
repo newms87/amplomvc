@@ -17,7 +17,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 				$this->Model_Catalog_ProductClass->editProductClass($_GET['product_class_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
 				$this->url->redirect('catalog/product_class');
@@ -32,7 +32,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		if (!empty($_GET['product_class_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_ProductClass->deleteProductClass($_GET['product_class_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
 				$this->url->redirect('catalog/product_class');
@@ -56,7 +56,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 				}
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 			}
 		}
@@ -234,7 +234,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			$this->error['name'] = _l("The name for the Product Class must be between 3 and 45 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -243,6 +243,6 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			$this->error['warning'] = _l("You do not have permission to modify Product Classes");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -53,6 +53,6 @@ class Catalog_Controller_Block_Cart_Reward
 			$this->error['warning'] = sprintf(_l("Warning: The maximum number of points that can be applied is %s!"), $points_total);
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

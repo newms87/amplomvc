@@ -147,7 +147,7 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->System_Model_Order->editOrder($_GET['order_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified orders!"));
 
 				$this->url->redirect('sale/order');
@@ -164,7 +164,7 @@ class Admin_Controller_Sale_Order extends Controller
 		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
 			$this->System_Model_Order->deleteOrder($_GET['order_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified orders!"));
 
 				$this->url->redirect('sale/order');
@@ -365,7 +365,7 @@ class Admin_Controller_Sale_Order extends Controller
 			$this->error['warning'] = _l("Warning: Please check the form carefully for errors!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -374,7 +374,7 @@ class Admin_Controller_Sale_Order extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify orders!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function info()

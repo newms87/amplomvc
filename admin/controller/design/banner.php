@@ -236,7 +236,7 @@ class Admin_Controller_Design_Banner extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -245,7 +245,7 @@ class Admin_Controller_Design_Banner extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify banners!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function get_url($filters = null)

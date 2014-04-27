@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 
 			$this->config->save('product_return', 'return_actions', $return_actions, 0, false);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Return Actions"));
 				$this->url->redirect('setting/setting');
 			}
@@ -113,6 +113,6 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

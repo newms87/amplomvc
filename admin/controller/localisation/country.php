@@ -324,7 +324,7 @@ class Admin_Controller_Localisation_Country extends Controller
 			$this->error['name'] = _l("Country Name must be between 3 and 128 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -363,6 +363,6 @@ class Admin_Controller_Localisation_Country extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

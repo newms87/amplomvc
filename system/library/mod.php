@@ -187,7 +187,7 @@ class Mod extends Library
 			$this->write();
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function apply($invalidated_only = false)
@@ -237,7 +237,7 @@ class Mod extends Library
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function write()
@@ -255,7 +255,7 @@ class Mod extends Library
 
 		chmod(AC_MOD_REGISTRY, 0444);
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function modifyFile($source, $mod_file, $destination = null)
@@ -331,7 +331,7 @@ class Mod extends Library
 			chmod($destination, AMPLOCART_FILE_MODE);
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function Ganon($source, $mod_file)

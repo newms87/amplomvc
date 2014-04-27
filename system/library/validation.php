@@ -63,7 +63,7 @@ class Validation extends Library
 			$this->error[self::PHONE_INVALID] = _l("Phone Number is Invalid");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function email($email)
@@ -74,7 +74,7 @@ class Validation extends Library
 			$this->error[self::EMAIL_INVALID] = _l("Email address is invalid!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function url($url, $protocol_required = false)
@@ -85,7 +85,7 @@ class Validation extends Library
 			$this->error[self::URL_INVALID] = _l("Url is invalid!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function text($text, $min = 1, $max = -1)
@@ -100,7 +100,7 @@ class Validation extends Library
 			$this->error[self::TEXT_LENGTH_MAX] = _l("Text length must be at most $max characters");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function password($password, $confirm = null)
@@ -117,7 +117,7 @@ class Validation extends Library
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function postcode($postcode)
@@ -147,7 +147,7 @@ class Validation extends Library
 			$this->error[self::DATETIME_FORMAT] = _l("invalid datetime format");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function fileUpload($file_upload)
@@ -187,6 +187,6 @@ class Validation extends Library
 			$this->error[$file_upload['error']] = $error;
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

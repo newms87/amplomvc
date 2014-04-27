@@ -156,7 +156,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
 				$this->url->redirect('setting/url_alias');
@@ -171,7 +171,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
 				$this->url->redirect('setting/url_alias');
@@ -204,7 +204,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 			}
 		}
@@ -303,7 +303,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$this->error['alias'];
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -312,6 +312,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

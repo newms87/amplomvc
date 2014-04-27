@@ -97,6 +97,6 @@ class Admin_Controller_Common_Forgotten extends Controller
 			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

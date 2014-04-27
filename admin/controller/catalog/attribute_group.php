@@ -17,7 +17,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
@@ -32,7 +32,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		if (!empty($_GET['attribute_group_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_AttributeGroup->deleteAttributeGroup($_GET['attribute_group_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
@@ -59,7 +59,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
 				$this->url->redirect('catalog/attribute_group');
@@ -265,7 +265,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$this->error['name'] = _l("Attribute Group Name must be between 3 and 64 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -292,7 +292,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function autocomplete()

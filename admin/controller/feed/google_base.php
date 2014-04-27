@@ -46,6 +46,6 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify Google Base feed!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

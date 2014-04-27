@@ -10,7 +10,7 @@
 				</div>
 			</div>
 			<div class="section">
-				<div class="menu_icons">
+				<div class="menu_icons clearfix">
 					<? foreach ($widgets as $widget) { ?>
 						<a class="menu_item" href="<?= $widget['url']; ?>">
 							<div class="title"><?= $widget['title']; ?></div>
@@ -18,6 +18,7 @@
 						</a>
 					<? } ?>
 				</div>
+
 				<div class="section">
 					<div class="limits">
 						<?= $limits; ?>

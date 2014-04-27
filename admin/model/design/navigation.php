@@ -3,6 +3,10 @@ class Admin_Model_Design_Navigation extends Model
 {
 	public function addNavigationGroup($data)
 	{
+		if (!$this->validateNavigationGroup($data)) {
+			return false;
+		}
+
 		$navigation_group_id = $this->insert("navigation_group", $data);
 
 		//Add Stores
@@ -21,10 +25,18 @@ class Admin_Model_Design_Navigation extends Model
 		}
 
 		$this->cache->delete('navigation');
+
+		return true;
 	}
 
 	public function editNavigationGroup($navigation_group_id, $data)
 	{
+		$data['navigation_group_id'] = $navigation_group_id;
+
+		if (!$this->validateNavigationGroup($data)) {
+			return false;
+		}
+
 		$this->update("navigation_group", $data, $navigation_group_id);
 
 		//Update Stores
@@ -42,27 +54,41 @@ class Admin_Model_Design_Navigation extends Model
 		}
 
 		//Update Links
-		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
+		if (isset($data['links'])) {
+			$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
-		if (!empty($data['links'])) {
-			$this->addNavigationLinks($navigation_group_id, $data['links']);
+			if (!empty($data['links'])) {
+				$this->addNavigationLinks($navigation_group_id, $data['links']);
+			}
 		}
 
 		$this->cache->delete('navigation');
+
+		return true;
 	}
 
 	public function deleteNavigationGroup($navigation_group_id)
 	{
+		if (!$this->validateDeleteNavigationGroup($navigation_group_id)) {
+			return false;
+		}
+
 		$this->delete("navigation_group", $navigation_group_id);
 
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
 		$this->cache->delete('navigation');
+
+		return true;
 	}
 
 	public function addNavigationLink($navigation_group_id, $link)
 	{
+		if (!$this->validateNavigationLink($navigation_group_id, $link)) {
+			return false;
+		}
+
 		$link['navigation_group_id'] = $navigation_group_id;
 
 		if (!empty($link['parent'])) {
@@ -99,6 +125,8 @@ class Admin_Model_Design_Navigation extends Model
 				$this->addNavigationLinkTree($navigation_group_id, $link['children'], $navigation_id);
 			}
 		}
+
+		return empty($this->error);
 	}
 
 	public function addNavigationLinks($navigation_group_id, $links)
@@ -134,25 +162,35 @@ class Admin_Model_Design_Navigation extends Model
 		return $this->addNavigationLinkTree($navigation_group_id, $links);
 	}
 
-	public function editNavigationLink($navigation_group_id, $link_id, $link)
+	public function editNavigationLink($navigation_group_id, $navigation_id, $link)
 	{
+		$link['navigation_id'] = $navigation_id;
+
+		if (!$this->validateNavigationLink($navigation_group_id, $link)) {
+			return false;
+		}
+
 		$link['navigation_group_id'] = $navigation_group_id;
-		$link['navigation_id']       = $link_id;
+		$link['navigation_id']       = $navigation_id;
 
 		if (!empty($link['parent'])) {
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$this->update("navigation", $link);
-
 		$this->cache->delete('navigation');
+
+		return $this->update("navigation", $link, $navigation_id);
 	}
 
 	public function deleteNavigationLink($navigation_id)
 	{
-		$this->delete("navigation", $navigation_id);
+		if (!$this->validateDeleteNavigationLink($navigation_id)) {
+			return false;
+		}
 
 		$this->cache->delete('navigation');
+
+		return $this->delete("navigation", $navigation_id);
 	}
 
 	public function getNavigationGroup($navigation_group_id)
@@ -283,7 +321,7 @@ class Admin_Model_Design_Navigation extends Model
 		return $this->getNavigationGroups($data, '', true);
 	}
 
-	public function reset_admin_navigation_group()
+	public function resetAdminNavigationGroup()
 	{
 		$links = array(
 			'home'       => array(
@@ -299,7 +337,7 @@ class Admin_Model_Design_Navigation extends Model
 					),
 					'content_pages'       => array(
 						'display_name' => 'Pages',
-						'href'         => 'page/page',
+						'href'         => 'page',
 					),
 					'content_leaderboard' => array(
 						'display_name' => 'Leaderboard',
@@ -447,7 +485,7 @@ class Admin_Model_Design_Navigation extends Model
 					),
 				),
 			),
-			'reports'    => array(
+			/*'reports'    => array(
 				'display_name' => 'Reports',
 				'children'     => array(
 					'reports_customers' => array(
@@ -506,7 +544,7 @@ class Admin_Model_Design_Navigation extends Model
 						),
 					),
 				),
-			),
+			), */
 			'system'     => array(
 				'display_name' => 'System',
 				'children'     => array(
@@ -697,6 +735,52 @@ class Admin_Model_Design_Navigation extends Model
 			'links'  => $links,
 		);
 
-		$this->addNavigationGroup($data);
+		return $this->addNavigationGroup($data);
+	}
+
+	public function validateNavigationGroup($data)
+	{
+		if (isset($data['name']) && !$this->validation->text($data['name'], 3, 64)) {
+			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
+		}
+
+		if (!empty($data['links'])) {
+			foreach ($data['links'] as $key => $link) {
+				$this->validateNavigationLink($key, $link);
+			}
+		}
+
+		return empty($this->error);
+	}
+
+	public function validateDeleteNavigationGroup()
+	{
+		return empty($this->error);
+	}
+
+	public function validateNavigationLink($navigation_id, $link)
+	{
+		if (!empty($link['name'])) {
+			$link_name = $link['name'];
+		} elseif (!empty($link['display_name'])) {
+			$link_name = $link['display_name'];
+		} else {
+			$link_name = $navigation_id;
+		}
+
+		if (empty($link['name']) || !$this->validation->text($link['name'], 1, 45)) {
+			$this->error["links[$navigation_id][name]"] = _l("The Name for the link %s must be between 1 and 45 characters!", $link_name);
+		}
+
+		if (empty($link['display_name']) || !$this->validation->text($link['display_name'], 1, 255)) {
+			$this->error["links[$navigation_id][display_name]"] = _l("The Display Name for the link %s must be between 1 and 255 characters!", $link_name);
+		}
+
+		return empty($this->error);
+	}
+
+	public function validateDeleteNavigationLink()
+	{
+		return empty($this->error);
 	}
 }

@@ -41,8 +41,6 @@ class Admin_Controller_Common_Header extends Controller
 		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_admin_thumb_height'));
 		$this->document->localizeVar('url_site', URL_SITE);
 
-		$data['messages'] = $this->message->fetch();
-
 		$data['direction']      = $this->language->info('direction');
 		$data['description']    = $this->document->getDescription();
 		$data['keywords']       = $this->document->getKeywords();

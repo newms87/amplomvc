@@ -25,7 +25,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			if (!empty($_GET['code'])) {
 				$this->System_Extension_Shipping->deleteExtension($_GET['code']);
 
-				if (!$this->message->hasError()) {
+				if (!$this->message->has('error', 'warning')) {
 					$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
 				}
 
@@ -296,7 +296,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function install()

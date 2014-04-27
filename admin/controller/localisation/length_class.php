@@ -306,7 +306,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -331,6 +331,6 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

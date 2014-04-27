@@ -90,6 +90,6 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -126,6 +126,6 @@ class Catalog_Controller_Account_Edit extends Controller
 			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

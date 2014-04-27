@@ -40,13 +40,34 @@ class Message extends Library
 		}
 	}
 
-	public function hasError($type = null)
+	/**
+	 * @param $type - message type to check for, pass as many $type parameters as needed
+	 *
+	 * @return bool
+	 */
+	public function has()
 	{
-		if ($type) {
-			return isset($_SESSION['message']['error'][$type]) || isset($_SESSION['message']['warning'][$type]);
+		$types = func_get_args();
+
+		if (empty($types)) {
+			return !empty($_SESSION['message']);
 		}
 
-		return isset($_SESSION['message']['error']) || isset($_SESSION['message']['warning']);
+		foreach ($types as $type) {
+			if (is_array($type)) {
+				foreach ($type as $t) {
+					if ($this->has($t)) {
+						return true;
+					}
+				}
+			} else {
+				if (!empty($_SESSION['message'][$type]) || !empty($_SESSION['message'][$type])) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public function get($type = null)

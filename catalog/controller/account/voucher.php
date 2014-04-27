@@ -119,6 +119,6 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->error['warning'] = _l("Warning: You must agree that the gift certificates are non-refundable!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

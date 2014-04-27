@@ -1,7 +1,8 @@
 <?php
 final class Router
 {
-	private $error_path = 'error/not_found';
+	private $error_404 = 'error/not_found';
+	private $error_permission = 'error/permission';
 	private $path;
 	private $segments;
 
@@ -42,39 +43,6 @@ final class Router
 	{
 		//Initialize site configurations
 		$this->config->run_site_config();
-
-		//TODO: We should not validate pages user can access in router.
-		if (!$this->user->isLogged()) {
-			$allowed = array(
-				'common/forgotten',
-				'common/reset',
-				'common/login',
-			);
-
-			if (!$this->pathIsIn($allowed)) {
-				$this->path = 'common/login';
-			}
-		} else {
-			$ignore = array(
-				'common/home',
-				'common/login',
-				'common/logout',
-				'common/forgotten',
-				'common/reset',
-				'error/not_found',
-				'error/permission'
-			);
-
-			if (!$this->pathIsIn($ignore)) {
-				$parts = explode('/', $this->path);
-
-				if (!isset($parts[0])) {
-					$this->path = 'common/home';
-				} elseif (!$this->user->can('access', $parts[0] . (!empty($parts[1]) ? '/' . $parts[1] : ''))) {
-					$this->path = 'error/permission';
-				}
-			}
-		}
 
 		//Controller Overrides
 		$controller_overrides = $this->config->load('controller_override', 'controller_override');
@@ -160,11 +128,15 @@ final class Router
 		$action = new Action($this->path);
 
 		if (!$action->isValid() || !$action->execute()) {
-			$action = new Action($this->error_path);
+			redirect($this->error_404);
+		}
 
-			if (!$action->execute()) {
-				trigger_error("Front::dispatch(): There is a problem with the system. Unable to execute any actions!");
+		if (!$this->user->canDoAction($action)) {
+			if (!$this->user->isLogged()) {
+				redirect('common/login');
 			}
+
+			redirect($this->error_permission);
 		}
 	}
 }

@@ -308,7 +308,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$this->error['name'] = _l("Zone Name must be between 3 and 128 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -341,6 +341,6 @@ class Admin_Controller_Localisation_Zone extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

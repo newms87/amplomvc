@@ -55,7 +55,7 @@ class Admin_Controller_Page extends Controller
 				$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Page was updated successfully!"));
 
 				if (!$this->request->isAjax()) {
@@ -82,7 +82,7 @@ class Admin_Controller_Page extends Controller
 		if (isset($_GET['page_id'])) {
 			$this->Model_Page_Page->deletePage($_GET['page_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('notify', _l("Page was deleted!"));
 			}
 		}
@@ -116,7 +116,7 @@ class Admin_Controller_Page extends Controller
 					}
 				}
 
-				if (!$this->message->hasError()) {
+				if (!$this->message->has('error', 'warning')) {
 					$this->message->add('success', _l("Success: You have modified Pages!"));
 				}
 			}
@@ -126,7 +126,7 @@ class Admin_Controller_Page extends Controller
 			$this->url->redirect('page');
 		}
 
-		if ($this->message->hasError()) {
+		if ($this->message->has('error', 'warning')) {
 			echo $this->message->toJSON();
 			exit;
 		}
@@ -365,13 +365,13 @@ class Admin_Controller_Page extends Controller
 			$_POST['display_title'] = 0;
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
 	{
 
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -48,6 +48,6 @@ class Admin_Controller_Tool_Tool extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify tools!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

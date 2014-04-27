@@ -22,7 +22,7 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->config->saveGroup('config', $_POST, $_GET['store_id']);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified settings!"));
 
 				$this->url->redirect('setting/store');
@@ -39,7 +39,7 @@ class Admin_Controller_Setting_Store extends Controller
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);
 			$this->config->deleteGroup('config', $_GET['store_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified settings!"));
 			}
 		}
@@ -439,7 +439,7 @@ class Admin_Controller_Setting_Store extends Controller
 			$this->error['config_catalog_limit'] = _l("Limit required!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function canDelete($store_id, $silent = false)

@@ -44,6 +44,6 @@ class Admin_Controller_Mail_Messages extends Controller
 			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

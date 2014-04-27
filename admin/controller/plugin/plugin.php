@@ -266,6 +266,6 @@ class Admin_Controller_Plugin_Plugin extends Controller
 
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

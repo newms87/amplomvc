@@ -17,7 +17,7 @@ class Admin_Controller_Catalog_Category extends Controller
 				$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category');
@@ -32,7 +32,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		if (!empty($_GET['category_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category');
@@ -66,7 +66,7 @@ class Admin_Controller_Catalog_Category extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified categories!"));
 
 				$this->url->redirect('catalog/category', $this->url->getQueryExclude('action'));
@@ -310,7 +310,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			$this->error['name'] = _l("Category Name must be between 2 and 64 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -319,6 +319,6 @@ class Admin_Controller_Catalog_Category extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify categories!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

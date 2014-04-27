@@ -129,6 +129,6 @@ class Admin_Controller_Mail_SendEmail extends Controller
 			$this->error['message'] = _l("You must provide a Message!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -310,7 +310,7 @@ class Url extends Library
 
 	private function find_alias($path, $query = '', $store_id = false, $redirect = false)
 	{
-		if (!$path) {
+		if (!$path && $path !== '') {
 			trigger_error(__METHOD__ . _l("(): Path was not specified!"));
 
 			return false;

@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 
 			$this->config->save('product_return', 'return_statuses', $return_statuses, 0, false);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Return Statuses"));
 				$this->url->redirect('setting/setting');
 			}
@@ -121,6 +121,6 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

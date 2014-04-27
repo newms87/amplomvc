@@ -308,7 +308,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$this->error['description'] = _l("Description must be between 3 and 255 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -329,6 +329,6 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

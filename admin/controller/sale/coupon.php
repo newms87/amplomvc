@@ -289,7 +289,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -298,7 +298,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify coupons!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function history()

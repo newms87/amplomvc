@@ -244,7 +244,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function updateCard($id = null, $data)
@@ -266,7 +266,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			$this->error[] = $e->getMessage();
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function removeCard($card_id)
@@ -281,7 +281,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			$this->error[] = $e->getMessage();
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function getSubscription($id)
@@ -341,7 +341,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			$this->error['year'] = _l("You must provide the 4 digit credit card Expiration Year");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function resultError($result)

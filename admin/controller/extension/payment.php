@@ -274,7 +274,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function install()

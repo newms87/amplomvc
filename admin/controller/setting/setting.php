@@ -387,6 +387,6 @@ class Admin_Controller_Setting_Setting extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -344,7 +344,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$this->error['code'] = _l("Currency Code must contain 3 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -379,6 +379,6 @@ class Admin_Controller_Localisation_Currency extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

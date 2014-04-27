@@ -371,6 +371,6 @@ class Form extends Library
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

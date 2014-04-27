@@ -282,7 +282,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 			$this->error['ip'] = _l("IP must be between 1 and 15 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -291,6 +291,6 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify customer IP blacklist!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

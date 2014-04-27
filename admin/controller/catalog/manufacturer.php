@@ -11,7 +11,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 			}
 
@@ -28,7 +28,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 				$this->url->redirect('catalog/manufacturer');
 			}
@@ -42,7 +42,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		if (isset($_GET['manufacturer_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
 			}
@@ -77,7 +77,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 
 				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('action'));
@@ -331,7 +331,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$_POST['alias'] = $this->tool->getSlug($_POST['name']);
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -362,7 +362,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function generate_url()

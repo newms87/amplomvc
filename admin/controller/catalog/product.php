@@ -17,7 +17,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
@@ -32,7 +32,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->can('modify', 'catalog/product')) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("The Product's Class has been changed!"));
 			}
 		}
@@ -47,7 +47,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Product->deleteProduct($_GET['product_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
@@ -64,7 +64,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (!empty($_GET['product_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Product->copyProduct($_GET['product_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
 				$this->url->redirect('catalog/product');
@@ -127,7 +127,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				}
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 			}
 		}
@@ -782,7 +782,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			unset($product_option);
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -807,7 +807,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateCopy()
@@ -816,7 +816,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify products!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function select()

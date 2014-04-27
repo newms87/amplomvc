@@ -268,7 +268,7 @@ class Admin_Controller_User_User extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -283,7 +283,7 @@ class Admin_Controller_User_User extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function get_url($override = array())

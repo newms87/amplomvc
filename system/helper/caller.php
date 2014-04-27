@@ -1,5 +1,5 @@
 <?php
-function _call($path, $params = array())
+function _call($path, $params = null)
 {
 	$args = func_get_args();
 	array_shift($args);
@@ -13,7 +13,7 @@ function _call($path, $params = array())
 	}
 }
 
-function _block($block, $instance_name = '', $settings = array())
+function _block($block, $instance_name = null, $settings = null)
 {
 	global $registry;
 	return $registry->get('block')->render($block, $instance_name, $settings);
@@ -49,14 +49,19 @@ function _breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
-function site_url($path, $query = '')
+function site_url($path, $query = null)
 {
 	global $registry;
 	return $registry->get('url')->link($path, $query);
 }
 
-function store_url($store_id, $path, $query = '')
+function store_url($store_id, $path, $query = null)
 {
 	global $registry;
 	return $registry->get('url')->link($store_id, $path, $query);
+}
+
+function redirect($path, $query = null, $status = null) {
+	global $registry;
+	$registry->get('url')->redirect($path, $query, $status);
 }

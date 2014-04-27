@@ -1,6 +1,14 @@
 <?php
 class Admin_Controller_Design_Navigation extends Controller
 {
+	static $can_modify = array(
+		'update',
+	   'delete',
+	   'batch_update',
+	   'reset_admin_navigation',
+	   'form',
+	);
+
 	public function index()
 	{
 		//Page Head
@@ -34,7 +42,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('design/navigation/update');
+		$data['insert'] = $this->url->link('design/navigation/form');
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_list', $data));
@@ -100,7 +108,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			$nav_group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+					'href' => $this->url->link('design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
@@ -138,90 +146,47 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	public function update()
 	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (empty($_GET['navigation_group_id'])) {
-				$this->Model_Design_Navigation->addNavigationGroup($_POST);
-			} //Update
-			else {
-				$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
-
-				$this->url->redirect('design/navigation');
-			}
+		//Insert
+		if (empty($_GET['navigation_group_id'])) {
+			$this->Model_Design_Navigation->addNavigationGroup($_POST);
+		} //Update
+		else {
+			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 		}
 
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
-			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
-
-				$this->url->redirect('design/navigation');
-			}
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			return $this->form();
 		}
 
-		$this->index();
-	}
-
-	public function reset_admin_navigation()
-	{
-		$this->Model_Design_Navigation->reset_admin_navigation_group();
-
-		$this->message->add("notify", "Admin Navigation Group has been reset!");
-
-		$this->url->redirect('design/navigation');
-	}
-
-	public function batch_update()
-	{
-		if (!$this->user->can('modify', 'design/navigation')) {
-			$this->message->add('warning', _l("Warning: You do not have permission to modify navigation!"));
-		}
-
-		if (isset($_POST['batch']) && isset($_POST['action'])) {
-			foreach ($_POST['batch'] as $navigation_group_id) {
-				switch ($_POST['action']) {
-					case 'enable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-						break;
-
-					case 'disable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-						break;
-
-					case 'delete':
-						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
-						break;
-				}
-			}
-
-			if (!$this->message->hasError()) {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
-			}
-		}
+		$this->message->add('success', _l("Success: You have modified Navigation!"));
 
 		if (!$this->request->isAjax()) {
 			$this->url->redirect('design/navigation');
 		}
 
-		if ($this->message->hasError()) {
-			echo $this->message->toJSON();
-			exit;
-		}
-
-		$this->listing();
+		$this->response->setOutput($this->message->toJSON());
 	}
 
-	private function getForm()
+	public function delete()
+	{
+		$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
+
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			$this->url->redirect('design/navigation');
+		}
+
+		$this->message->add('success', _l("Success: You have modified Navigation!"));
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('design/navigation');
+		}
+
+		$this->response->setOutput($this->message->toJSON());
+	}
+
+	public function form()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Navigation"));
@@ -296,55 +261,62 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->response->setOutput($this->render('design/navigation_form', $data));
 	}
 
+	public function reset_admin_navigation()
+	{
+		$this->Model_Design_Navigation->resetAdminNavigationGroup();
+
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			$this->url->redirect('design/navigation');
+		}
+
+		$this->message->add("notify", "Admin Navigation Group has been reset!");
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('design/navigation');
+		}
+
+		$this->response->setOutput($this->message->toJSON());
+	}
+
+	public function batch_update()
+	{
+		if (isset($_POST['batch']) && isset($_POST['action'])) {
+			foreach ($_POST['batch'] as $navigation_group_id) {
+				switch ($_POST['action']) {
+					case 'enable':
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+						break;
+
+					case 'disable':
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+						break;
+
+					case 'delete':
+						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+						break;
+				}
+			}
+
+			if ($this->Model_Design_Navigation->hasError()) {
+				$this->message->add('error', $this->Model_Design_Navigation->getError());
+			}
+		}
+
+		if (!$this->message->has('error')) {
+			$this->message->add('success', _l("Success: You have modified navigation!"));
+		}
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect('design/navigation');
+		}
+
+		$this->listing();
+	}
+
 	public function choose_link()
 	{
 		//TODO: This will be an ajax call to display a template to help choose a URL
 		// Categories, Products, custom, etc...
-	}
-
-	private function validateForm()
-	{
-		if (!$this->user->can('modify', 'design/navigation')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify navigation!");
-		}
-
-		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : 0;
-
-		if (!isset($_POST['stores'])) {
-			$_POST['stores'] = array('');
-		}
-
-		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
-		}
-
-		if (!empty($_POST['links'])) {
-			foreach ($_POST['links'] as $key => $link) {
-				if (!$this->validation->text($link['display_name'], 1, 255)) {
-					$link_name                                = !empty($link['name']) ? $link['name'] : (!empty($link['display_name']) ? $link['display_name'] : $key);
-					$this->error["links[$key][display_name]"] = _l("The Display Name for the link %s must be between 1 and 255 characters!", $link_name);
-				}
-
-				//If name already exists in database, append _n to the name
-				if (empty($link['name'])) {
-					$name = $this->tool->getSlug($link['display_name']);
-				} else {
-					$name = $this->db->escape($this->tool->getSlug($link['name']));
-				}
-
-				$count = 0;
-				do {
-					$check_name = $count ? $name . '_' . $count : $name;
-
-					$result = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "navigation_group WHERE name = '$check_name' AND navigation_group_id != $navigation_group_id");
-
-					$count++;
-				} while ($result->row['total']);
-
-				$_POST['links'][$key]['name'] = $check_name;
-			}
-		}
-
-		return $this->error ? false : true;
 	}
 }

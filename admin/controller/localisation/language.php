@@ -250,7 +250,7 @@ class Admin_Controller_Localisation_Language extends Controller
 			$this->error['image'] = _l("Image Filename must be between 3 and 64 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -289,6 +289,6 @@ class Admin_Controller_Localisation_Language extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

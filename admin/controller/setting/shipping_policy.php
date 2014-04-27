@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 			$this->config->save('policies', 'shipping_policies', $shipping_policies, 0, false);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated Shipping Policies"));
 				$this->url->redirect('setting/setting');
 			}
@@ -119,6 +119,6 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

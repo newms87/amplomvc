@@ -61,7 +61,7 @@ class Catalog_Controller_Account_Address extends Controller
 			if ($this->request->isAjax()) {
 				$this->response->setOutput($this->message->toJSON());
 				return;
-			} elseif (!$this->message->hasError()) {
+			} elseif (!$this->message->has('error', 'warning')) {
 				$this->url->redirect('account/address');
 			}
 		}

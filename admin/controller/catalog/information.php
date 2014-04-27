@@ -11,7 +11,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->addInformation($_POST);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information');
@@ -26,7 +26,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information');
@@ -41,7 +41,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if (isset($_GET['information_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Information->copyInformation($_GET['information_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
@@ -56,7 +56,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		if (isset($_GET['information_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Information->deleteInformation($_GET['information_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
@@ -92,7 +92,7 @@ class Admin_Controller_Catalog_Information extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
 				$this->url->redirect('catalog/information', $this->url->getQueryExclude('action'));
@@ -321,7 +321,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateCopy()
@@ -330,7 +330,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify information!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -363,6 +363,6 @@ class Admin_Controller_Catalog_Information extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

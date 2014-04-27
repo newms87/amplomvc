@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 			$this->config->save('policies', 'return_policies', $return_policies, 0, false);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated Return Policies"));
 				$this->url->redirect('setting/setting');
 			}
@@ -120,6 +120,6 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

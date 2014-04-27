@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Option extends Controller
 				$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option');
@@ -35,7 +35,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		if (isset($_GET['option_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Option->deleteOption($_GET['option_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option');
@@ -62,7 +62,7 @@ class Admin_Controller_Catalog_Option extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
 				$this->url->redirect('catalog/option', $this->url->getQueryExclude('action'));
@@ -276,7 +276,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -285,7 +285,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify options!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function autocomplete()

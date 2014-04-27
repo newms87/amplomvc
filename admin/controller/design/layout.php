@@ -17,7 +17,7 @@ class Admin_Controller_Design_Layout extends Controller
 				$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout');
@@ -32,7 +32,7 @@ class Admin_Controller_Design_Layout extends Controller
 		if (isset($_GET['layout_id']) && $this->validateDelete()) {
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout');
@@ -67,7 +67,7 @@ class Admin_Controller_Design_Layout extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
 				$this->url->redirect('design/layout', $this->url->getQueryExclude('action'));
@@ -238,7 +238,7 @@ class Admin_Controller_Design_Layout extends Controller
 			$this->error['name'] = _l("Layout Name must be between 3 and 64 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -253,7 +253,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->canDelete($_GET['layout_id']);
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function canDelete($layout_id)

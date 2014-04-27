@@ -6,6 +6,7 @@ final class Action
 	private $class;
 	private $classpath;
 	private $controller;
+	private $controller_path;
 	private $method;
 	private $parameters = array();
 	private $output;
@@ -50,6 +51,7 @@ final class Action
 				$this->file = DIR_SITE . $filepath . '.php';
 
 				$this->class .= $this->tool->_2CamelCase($part);
+				$this->controller_path = str_replace($this->classpath, '', $filepath);
 			} elseif ($this->file) {
 				$this->method    = $part;
 				$this->classpath = str_replace('/' . $part, '', $this->classpath);
@@ -84,6 +86,11 @@ final class Action
 	public function getClassPath()
 	{
 		return $this->classpath;
+	}
+
+	public function getControllerPath()
+	{
+		return $this->controller_path;
 	}
 
 	public function getMethod()

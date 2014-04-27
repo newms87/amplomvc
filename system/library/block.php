@@ -366,6 +366,10 @@ class Block extends Library
 
 	public function render($path, $instance_name = null, $settings = array())
 	{
+		if (!is_array($settings)) {
+			$settings = array();
+		}
+
 		$block = 'block/' . $path;
 
 		if ($instance_name) {

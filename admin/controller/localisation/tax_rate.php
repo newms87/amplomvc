@@ -336,7 +336,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			$this->error['rate'] = _l("Tax Rate required!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -353,6 +353,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

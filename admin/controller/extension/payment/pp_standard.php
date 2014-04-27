@@ -65,6 +65,6 @@ class Admin_Controller_Extension_Payment_PpStandard extends Controller
 			$this->error['settings[pdt_token]'] = _l("PDT Token is required to enable Payment Data Transfer!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

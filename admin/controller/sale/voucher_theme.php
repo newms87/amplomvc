@@ -19,7 +19,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 				$this->Model_Sale_VoucherTheme->editVoucherTheme($_GET['voucher_theme_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified voucher themes!"));
 				$this->url->redirect('sale/voucher_theme');
 			}
@@ -33,7 +33,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		if (isset($_GET['voucher_theme_id']) && $this->validateDelete()) {
 			$this->Model_Sale_VoucherTheme->deleteVoucherTheme($_GET['voucher_theme_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified voucher themes!"));
 				$this->url->redirect('sale/voucher_theme');
 			}
@@ -208,7 +208,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$this->error['image'] = _l("Image required!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -236,6 +236,6 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

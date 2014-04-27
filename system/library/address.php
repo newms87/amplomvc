@@ -306,6 +306,6 @@ class Address extends Library
 			$this->error['zone_id'] = _l("Invalid Zone!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

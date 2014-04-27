@@ -125,6 +125,50 @@ class User extends Library
 		return false;
 	}
 
+	public function canDoAction($action)
+	{
+		$path = $action->getControllerPath();
+
+		if (!$this->isLogged()) {
+			$allowed = array(
+				'common/forgotten',
+				'common/reset',
+				'common/login',
+			);
+
+			if (!in_array($path, $allowed)) {
+				return false;
+			}
+		} else {
+			$ignore = array(
+				'common/home',
+				'common/login',
+				'common/logout',
+				'common/forgotten',
+				'common/reset',
+				'error/not_found',
+				'error/permission'
+			);
+
+			if (!in_array($path, $ignore)) {
+				if (!$this->can('access', $path)) {
+					return false;
+				}
+
+				$class = $action->getClass();
+				$method = $action->getMethod();
+
+				if (property_exists($class, 'can_modify') && in_array($method, $class::$can_modify)) {
+					if (!$this->can('modify', $path)) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 	public function updatePassword($user_id, $password)
 	{
 		$this->Model_User_User->editPassword($user_id, $password);

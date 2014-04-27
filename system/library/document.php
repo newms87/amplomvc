@@ -217,11 +217,11 @@ class Document extends Library
 				'debug'     => false,
 				'callbacks' => array(
 					'warn'  => function ($message, $context) {
-							echo $context . ': ' . $message;
-						},
+						echo $context . ': ' . $message;
+					},
 					'debug' => function ($message) {
-							echo $message;
-						},
+						echo $message;
+					},
 				),
 			);
 
@@ -325,7 +325,8 @@ class Document extends Library
 
 	public function addScript($script, $priority = 100)
 	{
-		if (!is_file($script)) {
+		//First check for a URL wrapper, then check if it is a file
+		if (strpos($script, '//') === false && !is_file($script)) {
 			if (is_file(DIR_SITE . $script)) {
 				$script = URL_SITE . $script;
 			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
@@ -408,7 +409,7 @@ class Document extends Library
 
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 
-		if (is_null($nav_groups) || true) {
+		if (is_null($nav_groups)) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
 				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
 				" WHERE ng.status='1' AND ns.store_id='$store_id'";
@@ -472,32 +473,35 @@ class Document extends Library
 		}
 
 		foreach ($links as $key => &$link) {
-			if (!preg_match("/^https?:\\/\\//", $link['href'])) {
-				$query        = isset($link['query']) ? $link['query'] : '';
-				$link['href'] = $this->url->link($link['href'], $query);
-			}
+			if ($link['href'] || $link['query']) {
 
-			$components = parse_url(str_replace('&amp;', '&', $link['href']));
+				if (!preg_match("/^https?:\\/\\//", $link['href'])) {
+					$query        = isset($link['query']) ? $link['query'] : '';
+					$link['href'] = $this->url->link($link['href'], $query);
+				}
 
-			if ($page['path'] === $components['path']) {
-				if (!empty($components['query'])) {
-					$queryVars = null;
-					parse_str($components['query'], $queryVars);
+				$components = parse_url(str_replace('&amp;', '&', $link['href']));
 
-					$num_matches = 0;
+				if ($page['path'] === $components['path']) {
+					if (!empty($components['query'])) {
+						$queryVars = null;
+						parse_str($components['query'], $queryVars);
 
-					foreach ($queryVars as $key => $value) {
-						if (isset($page['query'][$key]) && $page['query'][$key] === $value) {
-							$num_matches++;
+						$num_matches = 0;
+
+						foreach ($queryVars as $key => $value) {
+							if (isset($page['query'][$key]) && $page['query'][$key] === $value) {
+								$num_matches++;
+							}
 						}
-					}
 
-					if ($num_matches >= count($queryVars) && $num_matches >= $highest_match) {
-						$highest_match = $num_matches;
-						$active_link   = & $link;
+						if ($num_matches >= count($queryVars) && $num_matches >= $highest_match) {
+							$highest_match = $num_matches;
+							$active_link   = & $link;
+						}
+					} else {
+						$active_link = & $link;
 					}
-				} else {
-					$active_link = & $link;
 				}
 			}
 

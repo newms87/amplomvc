@@ -29,7 +29,7 @@ class Admin_Controller_Setting_Update extends Controller
 				}
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->url->redirect('setting/update');
 			}
 		}
@@ -77,6 +77,6 @@ class Admin_Controller_Setting_Update extends Controller
 			$this->error['permission'] = _l("You do not have permission to run the System Update");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

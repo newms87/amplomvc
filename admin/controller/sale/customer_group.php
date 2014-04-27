@@ -280,7 +280,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$this->error['name'] = _l("Customer Group Name must be between 3 and 64 characters!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -307,6 +307,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

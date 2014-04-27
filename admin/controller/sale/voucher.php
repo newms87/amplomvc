@@ -17,7 +17,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				$this->Model_Sale_Voucher->editVoucher($_GET['voucher_id'], $_POST);
 			}
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher');
@@ -32,7 +32,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		if (isset($_GET['voucher_id']) && $this->validateDelete()) {
 			$this->Model_Sale_Voucher->deleteVoucher($_GET['voucher_id']);
 
-			if (!$this->message->hasError()) {
+			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher');
@@ -68,7 +68,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				}
 			}
 
-			if (!$this->error && !$this->message->hasError()) {
+			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
 				$this->url->redirect('sale/voucher', $this->url->getQueryExclude('action'));
@@ -323,7 +323,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$this->error['amount'] = _l("Amount must be greater than or equal to 1!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -351,7 +351,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			}
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function history()

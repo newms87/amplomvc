@@ -240,7 +240,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to use the development console!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function getDefaultInstallProfile()

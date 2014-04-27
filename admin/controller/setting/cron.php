@@ -115,6 +115,6 @@ class Admin_Controller_Setting_Cron extends Controller
 			$this->error['warning'] = _l('You do not have permission to modify the Automated Tasks');
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

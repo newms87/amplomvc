@@ -895,7 +895,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->error['warning'] = _l("Warning: Please check the form carefully for errors!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -904,7 +904,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify returns!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function action()

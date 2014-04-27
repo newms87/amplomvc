@@ -35,6 +35,6 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 			$this->error['warning'] = _l("Warning: Gift Voucher is either invalid or the balance has been used up!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

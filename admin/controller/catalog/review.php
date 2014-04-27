@@ -361,7 +361,7 @@ class Admin_Controller_Catalog_Review extends Controller
 			$this->error['rating'] = _l("Review rating required!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	private function validateDelete()
@@ -370,6 +370,6 @@ class Admin_Controller_Catalog_Review extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify reviews!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

@@ -32,6 +32,6 @@ class Admin_Controller_Extension_Payment_BrainTree extends Controller
 
 	public function validate()
 	{
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 }

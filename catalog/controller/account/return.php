@@ -379,7 +379,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->error['captcha'] = _l("Verification code does not match the image!");
 		}
 
-		return $this->error ? false : true;
+		return empty($this->error);
 	}
 
 	public function captcha()
