@@ -146,14 +146,19 @@
 					<? } ?>
 
 					<? $quick_actions = '';
-					foreach ($row['actions'] as $key => $action) {
-						$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
-						if (!empty($action['href'])) {
-							$quick_actions .= "<a href=\"$action[href]\"" . $this->builder->attrs($action) . ">$action[text]</a>";
-						} else {
-							$quick_actions .= "<span " . $this->builder->attrs($action) . ">$action[text]</span>";
+
+					if (!empty($row['actions'])) {
+						foreach ($row['actions'] as $key => $action) {
+							$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
+							if (!empty($action['href'])) {
+								$quick_actions .= "<a href=\"$action[href]\"" . $this->builder->attrs($action) . ">$action[text]</a>";
+							} else {
+								$quick_actions .= "<span " . $this->builder->attrs($action) . ">$action[text]</span>";
+							}
+
 						}
-					} ?>
+					}
+					?>
 
 					<td class="center actions">
 						<?= $quick_actions; ?>

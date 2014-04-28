@@ -4,9 +4,9 @@ class Catalog_Controller_Account_Address extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/address'));
+			$this->session->set('redirect', site_url('account/address'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->getList();
@@ -15,9 +15,9 @@ class Catalog_Controller_Account_Address extends Controller
 	public function update()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/address'));
+			$this->session->set('redirect', site_url('account/address'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		if ($this->request->isPost()) {
@@ -62,7 +62,7 @@ class Catalog_Controller_Account_Address extends Controller
 				$this->response->setOutput($this->message->toJSON());
 				return;
 			} elseif (!$this->message->has('error', 'warning')) {
-				$this->url->redirect('account/address');
+				redirect('account/address');
 			}
 		}
 
@@ -72,9 +72,9 @@ class Catalog_Controller_Account_Address extends Controller
 	public function delete()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/address'));
+			$this->session->set('redirect', site_url('account/address'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Address Book"));
@@ -97,7 +97,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 			$this->message->add('success', _l("Your address has been successfully deleted"));
 
-			$this->url->redirect('account/address');
+			redirect('account/address');
 		}
 
 		$this->getList();
@@ -109,25 +109,25 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account/address'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
 
 		//Load Addresses
 		$addresses = $this->customer->getAddresses();
 
 		foreach ($addresses as &$address) {
 			$address['address'] = $this->address->format($address);
-			$address['update']  = $this->url->link('account/address/update', 'address_id=' . $address['address_id']);
-			$address['delete']  = $this->url->link('account/address/delete', 'address_id=' . $address['address_id']);
+			$address['update']  = site_url('account/address/update', 'address_id=' . $address['address_id']);
+			$address['delete']  = site_url('account/address/delete', 'address_id=' . $address['address_id']);
 		}
 		unset($address);
 
 		$data['addresses'] = $addresses;
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('account/address/update');
-		$data['back']   = $this->url->link('account');
+		$data['insert'] = site_url('account/address/update');
+		$data['back']   = site_url('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/address_list', $data));
@@ -139,11 +139,11 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Address Book"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Home"), $this->url->link('account/address'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Address Book"), site_url('account'));
+		$this->breadcrumb->add(_l("Home"), site_url('account/address'));
 
-		$crumb_url = isset($_GET['address_id']) ? $this->url->link('account/address/update') : $this->url->link('account/address/update');
+		$crumb_url = isset($_GET['address_id']) ? site_url('account/address/update') : site_url('account/address/update');
 		$this->breadcrumb->add(_l("Address Book"), $crumb_url);
 
 		//Insert or Update
@@ -186,10 +186,10 @@ class Catalog_Controller_Account_Address extends Controller
 		);
 
 		//Action Buttons
-		$data['save'] = $this->url->link('account/address/update', 'address_id=' . $address_id);
+		$data['save'] = site_url('account/address/update', 'address_id=' . $address_id);
 
 		if (!$this->request->isAjax()) {
-			$data['back'] = $this->url->link('account/address');
+			$data['back'] = site_url('account/address');
 		}
 
 		//Render

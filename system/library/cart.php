@@ -569,7 +569,7 @@ class Cart extends Library
 			$product = $cart_product['product'];
 			if (!$cart_product['in_stock']) {
 				$this->error_code    = self::ERROR_PRODUCT_QUANTITY;
-				$this->error['cart'] = _l('We do not have the request quantity for <a href="%s">%s</a> (marked with <span class="out_of_stock"></span>) available at this time.', $this->url->link('product/product', 'product_id=' . $product['product_id']), $product['name']);
+				$this->error['cart'] = _l('We do not have the request quantity for <a href="%s">%s</a> (marked with <span class="out_of_stock"></span>) available at this time.', site_url('product/product', 'product_id=' . $product['product_id']), $product['name']);
 			}
 		}
 
@@ -1070,7 +1070,7 @@ class Cart extends Library
 		//No Shipping Methods Available!
 		if (empty($methods)) {
 			$this->error_code               = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
-			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", $this->url->link('page/page', 'page_id=' . $this->config->get('config_contact_page_id')));
+			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", site_url('page/page', 'page_id=' . $this->config->get('config_contact_page_id')));
 
 			$this->clearShippingMethod();
 

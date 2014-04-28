@@ -58,7 +58,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 				}
 
 				if (empty($item['href'])) {
-					$item['href'] = $this->url->link('product/product', 'product_id=' . $item['product_id']);
+					$item['href'] = site_url('product/product', 'product_id=' . $item['product_id']);
 				}
 			}
 			unset($item);
@@ -71,7 +71,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 
 		if ($data['compare_status']) {
 			$data['compare_count'] = $this->cart->get_compare_count();
-			$data['compare']       = $this->url->link('product/compare');
+			$data['compare']       = site_url('product/compare');
 		}
 
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/product/product_list';

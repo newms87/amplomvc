@@ -411,17 +411,21 @@ class Url extends Library
 
 	public function setAlias($alias, $path, $query = '', $store_id = 0)
 	{
-		$url_alias = array(
-			'alias'    => $alias,
-			'path'     => $path,
-			'query'    => $query,
-			'store_id' => $store_id,
-			'status'   => 1,
-		);
-
 		$this->removeAlias($path, $query, $store_id);
 
-		$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+		if ($alias) {
+			$url_alias = array(
+				'alias'    => $alias,
+				'path'     => $path,
+				'query'    => $query,
+				'store_id' => $store_id,
+				'status'   => 1,
+			);
+
+			return $this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+		}
+
+		return true;
 	}
 
 	public function removeAlias($path, $query = '', $store_id = 0, $alias = '')
@@ -441,5 +445,7 @@ class Url extends Library
 		foreach ($url_alias_ids as $url_alias_id) {
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
 		}
+
+		return $this->Model_Setting_UrlAlias->hasError();
 	}
 }

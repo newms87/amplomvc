@@ -19,7 +19,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$data['card_select'] = $this->select_card($this->customer->getMeta('default_payment_key'));
 
 		//Action Buttons
-		$data['confirm'] = $this->url->link('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
+		$data['confirm'] = site_url('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
 
 		$data['user_logged'] = $this->customer->isLogged();
 
@@ -35,7 +35,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		foreach ($data['cards'] as &$card) {
 			if ($remove) {
-				$card['remove'] = $this->url->link('extension/payment/braintree/remove_card', 'card_id=' . $card['id']);
+				$card['remove'] = site_url('extension/payment/braintree/remove_card', 'card_id=' . $card['id']);
 			}
 
 			if ($select_id) {
@@ -44,7 +44,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		}
 
 		//Action Buttons
-		$data['register_card'] = $this->url->link('extension/payment/braintree/register_card');
+		$data['register_card'] = site_url('extension/payment/braintree/register_card');
 
 		//Render
 		return $this->render('extension/payment/braintree_card_select', $data);
@@ -73,7 +73,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
 
 		//Action Buttons
-		$data['submit'] = $this->url->link('extension/payment/braintree/add_card');
+		$data['submit'] = site_url('extension/payment/braintree/add_card');
 
 		//Render
 		$this->response->setOutput($this->render('extension/payment/braintree_register_card', $data));
@@ -91,7 +91,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		//Resolve redirect
 		if ($this->error) {
 			$this->message->add('error', $this->error);
-			$redirect = $this->url->link('extension/payment/braintree/register_card');
+			$redirect = site_url('extension/payment/braintree/register_card');
 		} else {
 			$redirect = $this->request->fetchRedirect();
 			$this->message->add('success', _l("You have successfully registered your card with us!"));
@@ -106,7 +106,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 			$this->response->setOutput(json_encode($json));
 		} else {
-			$this->url->redirect($redirect);
+			redirect($redirect);
 		}
 	}
 
@@ -123,7 +123,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 			$this->message->add('warning', _l("There was no card selected to be removed."));
 		}
 
-		$this->url->redirect('account/update');
+		redirect('account/update');
 	}
 
 	public function confirm()
@@ -132,7 +132,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		if (!$order_id) {
 			$this->message->add('error', _l("Order was not processed. Please try submitting your order again."));
-			$this->url->redirect('checkout/checkout');
+			redirect('checkout/checkout');
 		}
 
 		//Pay with Existing Credit Card
@@ -153,12 +153,12 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		if (!$result) {
 			$this->message->add('error', $this->System_Extension_Payment_Braintree->getError());
-			$this->url->redirect('checkout/checkout');
+			redirect('checkout/checkout');
 		}
 
 		//Clear Cart
 		$this->cart->clear();
 
-		$this->url->redirect('checkout/success', 'order_id=' .$order_id);
+		redirect('checkout/success', 'order_id=' .$order_id);
 	}
 }

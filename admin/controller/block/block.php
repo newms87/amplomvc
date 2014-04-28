@@ -28,8 +28,8 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), site_url('block/block'));
 
 		//The Table Columns
 		$columns = array();
@@ -72,11 +72,11 @@ class Admin_Controller_Block_Block extends Controller
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('block/' . $block['path'])
+					'href' => site_url('block/' . $block['path'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('block/' . $block['path'] . '/delete'),
+					'href' => site_url('block/' . $block['path'] . '/delete'),
 				),
 			);
 
@@ -100,7 +100,7 @@ class Admin_Controller_Block_Block extends Controller
 		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('block/block/add');
+		$data['insert'] = site_url('block/block/add');
 
 		//Render limit Menu
 		$data['limits'] = $this->sort->renderLimits();
@@ -119,7 +119,7 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		if (!$this->user->can('modify', 'block/add')) {
 			$this->error['warning'] = _l("You do not have permission to Add Blocks");
-			$this->url->redirect('block/block');
+			redirect('block/block');
 		}
 
 		//Notify User this is oly for developers
@@ -129,9 +129,9 @@ class Admin_Controller_Block_Block extends Controller
 		$this->document->setTitle(_l("New Block"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
-		$this->breadcrumb->add(_l("New Block"), $this->url->link('block/add'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), site_url('block/block'));
+		$this->breadcrumb->add(_l("New Block"), site_url('block/add'));
 
 		$defaults = array(
 			'name'                => '',
@@ -148,8 +148,8 @@ class Admin_Controller_Block_Block extends Controller
 		$data['data_themes'] = $this->theme->getThemes();
 
 		//Actions
-		$data['save']   = $this->url->link('block/add_block');
-		$data['cancel'] = $this->url->link('block/block');
+		$data['save']   = site_url('block/add_block');
+		$data['cancel'] = site_url('block/block');
 
 		//Render
 		$this->response->setOutput($this->render('block/add', $data));
@@ -159,23 +159,23 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		if (!$this->user->can('modify', 'block/add')) {
 			$this->error['warning'] = _l("You do not have permission to Add Blocks");
-			$this->url->redirect('block/block');
+			redirect('block/block');
 		}
 
 		if (!$this->block->add($_POST)) {
 			$this->message->add('error', $this->block->getError());
-			$this->url->redirect('block/block/add');
+			redirect('block/block/add');
 		}
 
 		$this->message->add('success', _l("The Block %s was created successfully!", $_POST['name']));
-		$this->url->redirect('block/block', 'name=' . $_POST['path']);
+		redirect('block/block', 'name=' . $_POST['path']);
 	}
 
 	public function delete()
 	{
 		if (!$this->user->can('modify', 'block/block')) {
 			$this->message->add('warning', _l("You do not have permission to modify Blocks"));
-			$this->url->redirect('block/block');
+			redirect('block/block');
 		}
 
 		if (!$this->block->remove($this->path)) {
@@ -185,7 +185,7 @@ class Admin_Controller_Block_Block extends Controller
 		}
 
 		if (!$this->request->isAjax()) {
-			$this->url->redirect('block/block', $this->url->getQuery());
+			redirect('block/block', $this->url->getQuery());
 		}
 
 		$this->response->setOutput($this->message->toJSON());
@@ -195,7 +195,7 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		if (!$this->user->can('modify', 'block/block')) {
 			$this->message->add('warning', _l("You do not have permission to modify Blocks"));
-			$this->url->redirect('block/block');
+			redirect('block/block');
 		}
 
 		if (!$this->block->edit($this->path, $_POST)) {
@@ -205,7 +205,7 @@ class Admin_Controller_Block_Block extends Controller
 		}
 
 		if (!$this->request->isAjax()) {
-			$this->url->redirect('block/block');
+			redirect('block/block');
 		}
 
 		$this->response->setOutput($this->message->toJSON());
@@ -217,9 +217,9 @@ class Admin_Controller_Block_Block extends Controller
 		$this->document->setTitle(_l("Edit Block"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Blocks"), $this->url->link('block/block'));
-		$this->breadcrumb->add($this->path, $this->url->link('block/block/' . $this->path));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Blocks"), site_url('block/block'));
+		$this->breadcrumb->add($this->path, site_url('block/block/' . $this->path));
 
 		//Entry Data
 		$block = array();
@@ -246,8 +246,8 @@ class Admin_Controller_Block_Block extends Controller
 		$block['block_instances'] = $this->instances($block['instances'], $block);
 
 		//Action Buttons
-		$block['save']   = $this->url->link('block/' . $this->path . '/save');
-		$block['cancel'] = $this->url->link('block/block');
+		$block['save']   = site_url('block/' . $this->path . '/save');
+		$block['cancel'] = site_url('block/block');
 
 		//Render
 		$this->response->setOutput($this->render('block/block', $block));

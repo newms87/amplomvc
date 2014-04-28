@@ -26,18 +26,18 @@ class Catalog_Model_Block_Login_Facebook extends Model
 		if (strpos($this->url->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
 		} else {
-			$this->request->setRedirect($this->url->link('account'), null, 'fb_redirect');
+			$this->request->setRedirect(site_url('account'), null, 'fb_redirect');
 		}
 
 		$query = array(
 			'app_id'        => $this->settings['app_id'],
 			'state'         => $this->getStateToken(),
-			'redirect_uri'  => $this->url->link('block/login/facebook/connect'),
+			'redirect_uri'  => site_url('block/login/facebook/connect'),
 			'response_type' => 'code',
 			'scope'         => 'email',
 		);
 
-		return $this->url->link("https://www.facebook.com/dialog/oauth", $query);
+		return site_url("https://www.facebook.com/dialog/oauth", $query);
 	}
 
 	public function authenticate()
@@ -59,7 +59,7 @@ class Catalog_Model_Block_Login_Facebook extends Model
 
 		$query = array(
 			'client_id'     => $this->settings['app_id'],
-			'redirect_uri'  => $this->url->link('block/login/facebook/connect'),
+			'redirect_uri'  => site_url('block/login/facebook/connect'),
 			'client_secret' => $this->settings['app_secret'],
 			'code'          => $_GET['code'],
 		);

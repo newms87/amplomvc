@@ -50,7 +50,7 @@ class Request extends Library
 	public function doRedirect($context = '')
 	{
 		if ($this->hasRedirect($context)) {
-			$this->url->redirect($this->fetchRedirect($context));
+			redirect($this->fetchRedirect($context));
 		}
 	}
 
@@ -66,7 +66,7 @@ class Request extends Library
 	public function setRedirect($url, $query = '', $context = '')
 	{
 		$key = $context ? 'redirect_' . $context : 'redirect';
-		$this->session->set($key, $this->url->link($url, $query));
+		$this->session->set($key, site_url($url, $query));
 	}
 
 	public function clearRedirect($context = '')

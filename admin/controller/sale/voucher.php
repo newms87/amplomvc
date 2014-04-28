@@ -20,7 +20,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
-				$this->url->redirect('sale/voucher');
+				redirect('sale/voucher');
 			}
 		}
 
@@ -35,7 +35,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
-				$this->url->redirect('sale/voucher');
+				redirect('sale/voucher');
 			}
 		}
 
@@ -71,7 +71,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified vouchers!"));
 
-				$this->url->redirect('sale/voucher', $this->url->getQueryExclude('action'));
+				redirect('sale/voucher', $this->url->getQueryExclude('action'));
 			}
 		}
 
@@ -84,8 +84,8 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->document->setTitle(_l("Gift Voucher"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Voucher List"), $this->url->link('sale/voucher'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Voucher List"), site_url('sale/voucher'));
 
 		//The Table Columns
 		$columns = array();
@@ -156,11 +156,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$voucher['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
+					'href' => site_url('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('sale/voucher/delete', 'voucher_id=' . $voucher['voucher_id'] . '&' . $url_query)
+					'href' => site_url('sale/voucher/delete', 'voucher_id=' . $voucher['voucher_id'] . '&' . $url_query)
 				)
 			);
 
@@ -211,7 +211,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('sale/voucher/update');
+		$data['insert'] = site_url('sale/voucher/update');
 
 		//Render
 		$this->response->setOutput($this->render('sale/voucher_list', $data));
@@ -226,13 +226,13 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('sale/voucher'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Gift Voucher"), site_url('sale/voucher'));
 
 		if ($voucher_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('sale/voucher/update', 'voucher_id=' . $voucher_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('sale/voucher/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('sale/voucher/update'));
 		}
 
 		//Load Information
@@ -274,12 +274,12 @@ class Admin_Controller_Sale_Voucher extends Controller
 		);
 
 		//Ajax Urls
-		$data['url_history'] = $this->url->link('sale/voucher/history', 'voucher_id=' . $voucher_id);
+		$data['url_history'] = site_url('sale/voucher/history', 'voucher_id=' . $voucher_id);
 
 		//Action Buttons
-		$data['send']   = $this->url->link('sale/voucher/send', 'voucher_id=' . $voucher_id);
-		$data['save']   = $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id);
-		$data['cancel'] = $this->url->link('sale/voucher');
+		$data['send']   = site_url('sale/voucher/send', 'voucher_id=' . $voucher_id);
+		$data['save']   = site_url('sale/voucher/update', 'voucher_id=' . $voucher_id);
+		$data['cancel'] = site_url('sale/voucher');
 
 		//Render
 		$this->response->setOutput($this->render('sale/voucher_form', $data));
@@ -346,7 +346,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$order_id = $this->db->queryVar("SELECT order_id FROM " . DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$voucher_id);
 
 			if ($order_id) {
-				$this->error['warning'] = _l("Warning: This voucher cannot be deleted as it is part of an <a href=\"%s\">order</a>!", $this->url->link('sale/order/info', 'order_id=' . (int)$order_id));
+				$this->error['warning'] = _l("Warning: This voucher cannot be deleted as it is part of an <a href=\"%s\">order</a>!", site_url('sale/order/info', 'order_id=' . (int)$order_id));
 				break;
 			}
 		}

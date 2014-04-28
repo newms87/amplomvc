@@ -25,19 +25,19 @@ class Catalog_Model_Block_Login_Google extends Model
 		if (strpos($this->url->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
 		} else {
-			$this->request->setRedirect($this->url->link('account'), null, 'gp_redirect');
+			$this->request->setRedirect(site_url('account'), null, 'gp_redirect');
 		}
 
 		$query = array(
 			'scope'         => "https://www.googleapis.com/auth/plus.profile.emails.read",
 			'state'         => $this->getStateToken(),
-			'redirect_uri'  => $this->url->link("block/login/google/connect"),
+			'redirect_uri'  => site_url("block/login/google/connect"),
 			'response_type' => 'code',
 			'client_id'     => $this->settings['client_id'],
 			'access_type'   => 'offline',
 		);
 
-		return $this->url->link('https://accounts.google.com/o/oauth2/auth', $query);
+		return site_url('https://accounts.google.com/o/oauth2/auth', $query);
 	}
 
 	public function authenticate()
@@ -62,7 +62,7 @@ class Catalog_Model_Block_Login_Google extends Model
 			'code' => $_GET['code'],
 		   'client_id' => $this->settings['client_id'],
 		   'client_secret' => $this->settings['client_secret'],
-		   'redirect_uri' => $this->url->link("block/login/google/connect"),
+		   'redirect_uri' => site_url("block/login/google/connect"),
 		   'grant_type' => 'authorization_code',
 		);
 

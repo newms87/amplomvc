@@ -13,10 +13,10 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		$this->document->setTitle(_l("Order Statuses"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
-		$this->breadcrumb->add(_l("Order Statuses"), $this->url->link('setting/order_status'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Stores"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/setting'));
+		$this->breadcrumb->add(_l("Order Statuses"), site_url('setting/order_status'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -26,7 +26,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Order Statuses"));
-				$this->url->redirect('setting/setting');
+				redirect('setting/setting');
 			}
 		}
 
@@ -70,8 +70,8 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		$data['order_statuses'] = $order_statuses;
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/order_status');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['save']   = site_url('setting/order_status');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/order_status', $data));

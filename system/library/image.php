@@ -80,7 +80,7 @@ class Image extends Library
 
 		if (!$this->register_safe_shutdown($image)) {
 			$this->message->add('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
-			$this->url->redirect($this->url->here());
+			redirect($this->url->here());
 		}
 
 		//increase the maximum memory limit from the settings

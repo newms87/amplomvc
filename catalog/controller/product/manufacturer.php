@@ -5,8 +5,8 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 	{
 		$this->document->setTitle(_l("Find Your Favorite Brand"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Brand"), $this->url->link('product/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Brand"), site_url('product/manufacturer'));
 
 		$data['categories'] = array();
 
@@ -25,19 +25,19 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 			$data['categories'][$key]['manufacturer'][] = array(
 				'name' => $manufacturer['name'],
-				'href' => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
+				'href' => site_url('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
 			);
 		}
 
-		$data['continue'] = $this->url->link('common/home');
+		$data['continue'] = site_url('common/home');
 
 		$this->response->setOutput($this->render('product/manufacturer', $data));
 	}
 
 	public function product()
 	{
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Manufacturers"), $this->url->link('product/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Manufacturers"), site_url('product/manufacturer'));
 
 		$manufacturer_id = isset($_GET['manufacturer_id']) ? $_GET['manufacturer_id'] : 0;
 
@@ -101,7 +101,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		}
 
 		//Action Buttons
-		$data['continue'] = $this->url->link('common/home');
+		$data['continue'] = site_url('common/home');
 
 		$this->response->setOutput($this->render('product/category', $data));
 	}

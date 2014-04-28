@@ -11,7 +11,7 @@ class Catalog_Controller_Customer extends Controller
 		);
 
 		if ($this->customer->isLogged() && !in_array($this->route->getPath(), $allowed)) {
-			$this->url->redirect('account');
+			redirect('account');
 		}
 	}
 
@@ -21,8 +21,8 @@ class Catalog_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Account Login"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Login"), $this->url->link('customer/login'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
 
 		//Input Data
 		$user_info = array();
@@ -42,9 +42,9 @@ class Catalog_Controller_Customer extends Controller
 		$data['fb_login'] = $this->Catalog_Model_Block_Login_Facebook->getConnectUrl();
 
 		//Action Buttons
-		$data['login']     = $this->url->link('customer/login');
-		$data['register']  = $this->url->link('customer/registration');
-		$data['forgotten'] = $this->url->link('customer/forgotten');
+		$data['login']     = site_url('customer/login');
+		$data['register']  = site_url('customer/registration');
+		$data['forgotten'] = site_url('customer/forgotten');
 
 		//Resolve Redirect
 		if (!empty($_REQUEST['redirect'])) {
@@ -73,29 +73,29 @@ class Catalog_Controller_Customer extends Controller
 			$this->request->doRedirect();
 		}
 
-		$this->url->redirect('account');
+		redirect('account');
 	}
 
 	public function logout()
 	{
 		$this->customer->logout();
 
-		$this->url->redirect('common/home');
+		redirect('common/home');
 	}
 
 	public function registration()
 	{
 		if ($this->customer->isLogged()) {
-			$this->url->redirect('account');
+			redirect('account');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Register Account"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Login"), $this->url->link('customer/login'));
-		$this->breadcrumb->add(_l("Register"), $this->url->link('customer/registration'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
+		$this->breadcrumb->add(_l("Register"), site_url('customer/registration'));
 
 		$registration_data = array();
 
@@ -130,7 +130,7 @@ class Catalog_Controller_Customer extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 
 			if ($information_info) {
-				$data['agree_to']    = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
+				$data['agree_to']    = site_url('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
 				$data['agree_title'] = $information_info['title'];
 			}
 		}
@@ -143,8 +143,8 @@ class Catalog_Controller_Customer extends Controller
 		$data['errors'] = $this->message->get('error');
 
 		//Action Buttons
-		$data['login']    = $this->url->link('customer/login');
-		$data['register'] = $this->url->link('customer/register');
+		$data['login']    = site_url('customer/login');
+		$data['register'] = site_url('customer/register');
 
 		//Render
 		$this->response->setOutput($this->render('customer/registration', $data));
@@ -164,7 +164,7 @@ class Catalog_Controller_Customer extends Controller
 			$this->request->doRedirect();
 		}
 
-		$this->url->redirect('account/success');
+		redirect('account/success');
 	}
 
 	public function forgotten()
@@ -173,13 +173,13 @@ class Catalog_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l('Login'), $this->url->link('customer/login'));
-		$this->breadcrumb->add(_l('Forgotten Password'), $this->url->link('customer/forgotten'));
+		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
+		$this->breadcrumb->add(_l('Login'), site_url('customer/login'));
+		$this->breadcrumb->add(_l('Forgotten Password'), site_url('customer/forgotten'));
 
 		//Action Buttons
-		$data['save'] = $this->url->link('customer/generate_reset_code');
-		$data['back'] = $this->url->link('customer/login');
+		$data['save'] = site_url('customer/generate_reset_code');
+		$data['back'] = site_url('customer/login');
 
 		//Render
 		$this->response->setOutput($this->render('customer/forgotten', $data));
@@ -195,7 +195,7 @@ class Catalog_Controller_Customer extends Controller
 
 			$email_data = array(
 				'email' => $_POST['email'],
-				'reset' => $this->url->link('customer/reset_form', 'code=' . $code),
+				'reset' => site_url('customer/reset_form', 'code=' . $code),
 			);
 
 			$this->mail->sendTemplate('forgotten', $email_data);
@@ -203,13 +203,13 @@ class Catalog_Controller_Customer extends Controller
 			$this->message->add('notify', _l("Please follow the link that was sent to your email to reset your password."));
 		}
 
-		$this->url->redirect('customer/login');
+		redirect('customer/login');
 	}
 
 	public function reset_form()
 	{
 		if ($this->customer->isLogged() || empty($_GET['code'])) {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 
 		$code = $_GET['code'];
@@ -219,16 +219,16 @@ class Catalog_Controller_Customer extends Controller
 		//User not found
 		if (!$customer_id) {
 			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('customer/reset', 'code=' . $code));
+		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
+		$this->breadcrumb->add(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
 		//Action Buttons
-		$data['save']   = $this->url->link('customer/reset_password', 'code=' . $code);
-		$data['cancel'] = $this->url->link('customer/login');
+		$data['save']   = site_url('customer/reset_password', 'code=' . $code);
+		$data['cancel'] = site_url('customer/login');
 
 		//Render
 		$this->response->setOutput($this->render('customer/reset_form', $data));
@@ -241,13 +241,13 @@ class Catalog_Controller_Customer extends Controller
 		//User not found
 		if (!$customer_id) {
 			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Validate Password
 		if (!$this->validation->password($_POST['password'])) {
 			$this->message->add('error', $this->validation->getError());
-			$this->url->redirect('customer/reset_form');
+			redirect('customer/reset_form');
 		}
 
 		$this->customer->setId($customer_id);
@@ -256,6 +256,6 @@ class Catalog_Controller_Customer extends Controller
 
 		$this->message->add('success', _l('You have successfully updated your password!'));
 
-		$this->url->redirect('customer/login');
+		redirect('customer/login');
 	}
 }

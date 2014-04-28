@@ -66,10 +66,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			}
 		}
 
-		if (!empty($data['alias'])) {
+		if (isset($data['alias'])) {
 			$this->url->setAlias($data['alias'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
-		} else {
-			$this->url->removeAlias('product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		}
 
 		if (!empty($data['translations'])) {

@@ -4,9 +4,9 @@ class Catalog_Controller_Account_Wishlist extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/wishlist'));
+			$this->session->set('redirect', site_url('account/wishlist'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		if (!$this->session->has('wishlist')) {
@@ -22,14 +22,14 @@ class Catalog_Controller_Account_Wishlist extends Controller
 
 			$this->message->add('success', _l("Success: You have modified your wishlist!"));
 
-			$this->url->redirect('account/wishlist');
+			redirect('account/wishlist');
 		}
 
 		$this->document->setTitle(_l("My Wish List"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("My Wish List"), $this->url->link('account/wishlist'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("My Wish List"), site_url('account/wishlist'));
 
 		if ($this->session->has('success')) {
 			$data['success'] = $this->session->get('success');
@@ -79,15 +79,15 @@ class Catalog_Controller_Account_Wishlist extends Controller
 					'stock'      => $stock,
 					'price'      => $price,
 					'special'    => $special,
-					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
-					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
+					'href'       => site_url('product/product', 'product_id=' . $product_info['product_id']),
+					'remove'     => site_url('account/wishlist', 'remove=' . $product_info['product_id'])
 				);
 			} else {
 				unset($this->session->get('wishlist')[$key]);
 			}
 		}
 
-		$data['continue'] = $this->url->link('account');
+		$data['continue'] = site_url('account');
 
 		$this->response->setOutput($this->render('account/wishlist', $data));
 	}
@@ -114,9 +114,9 @@ class Catalog_Controller_Account_Wishlist extends Controller
 			}
 
 			if ($this->customer->isLogged()) {
-				$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
+				$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), site_url('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], site_url('account/wishlist'));
 			} else {
-				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), $this->url->link('customer/login'), $this->url->link('customer/registration'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
+				$json['success'] = sprintf(_l("You must <a href=\"%s\">login</a> or <a href=\"%s\">create an account</a> to save <a href=\"%s\">%s</a> to your <a href=\"%s\">wish list</a>!"), site_url('customer/login'), site_url('customer/registration'), site_url('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], site_url('account/wishlist'));
 			}
 
 			$json['total'] = sprintf(_l("Wish List (%s)"), ($this->session->has('wishlist') ? count($this->session->get('wishlist')) : 0));

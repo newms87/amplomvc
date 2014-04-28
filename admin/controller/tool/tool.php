@@ -5,12 +5,12 @@ class Admin_Controller_Tool_Tool extends Controller
 	{
 		$this->document->setTitle(_l("System Tools"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("System Tools"), $this->url->link('tool/tool'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("System Tools"), site_url('tool/tool'));
 
-		$data['clear_cache'] = $this->url->link('tool/tool/clear_cache');
+		$data['clear_cache'] = site_url('tool/tool/clear_cache');
 
-		$data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = site_url('common/home');
 
 		$defaults = array(
 			'cache_tables' => ''

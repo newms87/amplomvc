@@ -37,7 +37,7 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 
 			$data['pagination'] = $this->pagination->render();
 		} else {
-			$data['continue'] = $this->url->link('common/home');
+			$data['continue'] = site_url('common/home');
 		}
 
 		$this->render('block/widget/specials', $data);

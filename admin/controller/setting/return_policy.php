@@ -13,10 +13,10 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 		$this->document->setTitle(_l("Return Policies"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
-		$this->breadcrumb->add(_l("Return Policies"), $this->url->link('setting/return_policy'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Stores"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/setting'));
+		$this->breadcrumb->add(_l("Return Policies"), site_url('setting/return_policy'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -26,7 +26,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated Return Policies"));
-				$this->url->redirect('setting/setting');
+				redirect('setting/setting');
 			}
 		}
 
@@ -81,8 +81,8 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/return_policy');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['save']   = site_url('setting/return_policy');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/return_policy', $data));

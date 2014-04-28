@@ -21,7 +21,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('design/banner', $url);
+			redirect('design/banner', $url);
 		}
 
 		$this->getForm();
@@ -38,7 +38,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('design/banner', $url);
+			redirect('design/banner', $url);
 		}
 
 		$this->getForm();
@@ -57,7 +57,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('design/banner', $url);
+			redirect('design/banner', $url);
 		}
 
 		$this->getList();
@@ -76,11 +76,11 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Banners"), site_url('design/banner'));
 
-		$data['insert'] = $this->url->link('design/banner/insert', $url);
-		$data['delete'] = $this->url->link('design/banner/delete', $url);
+		$data['insert'] = site_url('design/banner/insert', $url);
+		$data['delete'] = site_url('design/banner/delete', $url);
 
 		$data['banners'] = array();
 
@@ -100,7 +100,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('design/banner/update', 'banner_id=' . $result['banner_id'] . $url)
+				'href' => site_url('design/banner/update', 'banner_id=' . $result['banner_id'] . $url)
 			);
 
 			$data['banners'][] = array(
@@ -124,8 +124,8 @@ class Admin_Controller_Design_Banner extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']   = $this->url->link('design/banner', 'sort=name' . $url);
-		$data['sort_status'] = $this->url->link('design/banner', 'sort=status' . $url);
+		$data['sort_name']   = site_url('design/banner', 'sort=name' . $url);
+		$data['sort_status'] = site_url('design/banner', 'sort=status' . $url);
 
 		$url = $this->get_url(array(
 			'sort',
@@ -148,16 +148,16 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Banners"), $this->url->link('design/banner'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Banners"), site_url('design/banner'));
 
 		if (!$banner_id) {
-			$data['action'] = $this->url->link('design/banner/insert', $url);
+			$data['action'] = site_url('design/banner/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('design/banner/update', 'banner_id=' . $banner_id . $url);
+			$data['action'] = site_url('design/banner/update', 'banner_id=' . $banner_id . $url);
 		}
 
-		$data['cancel'] = $this->url->link('design/banner', $url);
+		$data['cancel'] = site_url('design/banner', $url);
 
 		if ($banner_id && !$this->request->isPost()) {
 			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);

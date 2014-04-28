@@ -7,15 +7,15 @@ class Catalog_Controller_Account extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->request->setRedirect('account');
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Account Manager"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account Manager"), $this->url->link('account'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account Manager"), site_url('account'));
 
 		//Page Information
 		$shipping_address            = $this->customer->getDefaultShippingAddress();
@@ -32,12 +32,12 @@ class Catalog_Controller_Account extends Controller
 		$data['customer'] = $customer;
 
 		//Urls
-		$data['url_order_history'] = $this->url->link('account/order');
-		$data['url_returns']       = $this->url->link('account/return');
+		$data['url_order_history'] = site_url('account/order');
+		$data['url_returns']       = site_url('account/return');
 
 		//Action Buttons
-		$data['edit_account'] = $this->url->link('account/update');
-		$data['back']         = $this->url->link('common/home');
+		$data['edit_account'] = site_url('account/update');
+		$data['back']         = site_url('common/home');
 
 		//Render
 		$this->response->setOutput($this->render('account/account', $data));
@@ -47,18 +47,18 @@ class Catalog_Controller_Account extends Controller
 	{
 		//Login Verification
 		if (!$this->customer->isLogged()) {
-			$this->request->setRedirect($this->url->link('account/update'));
+			$this->request->setRedirect(site_url('account/update'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("My Account Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Edit Information"), $this->url->link('account/update'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Edit Information"), site_url('account/update'));
 
 		//Handle POST
 		if (!$this->request->isPost()) {
@@ -93,16 +93,16 @@ class Catalog_Controller_Account extends Controller
 
 		foreach ($addresses as &$address) {
 			$address['display'] = $this->address->format($address);
-			$address['remove']  = $this->url->link('account/remove_address', 'address_id=' . $address['address_id']);
+			$address['remove']  = site_url('account/remove_address', 'address_id=' . $address['address_id']);
 		}
 		unset($address);
 
 		$data['data_addresses'] = $addresses;
 
 		//Action Buttons
-		$data['save']        = $this->url->link('account/submit_update');
-		$data['back']        = $this->url->link('account');
-		$data['add_address'] = $this->url->link('account/address/update');
+		$data['save']        = site_url('account/submit_update');
+		$data['back']        = site_url('account');
+		$data['add_address'] = site_url('account/address/update');
 
 		//Render
 		$this->response->setOutput($this->render('account/update', $data));
@@ -118,7 +118,7 @@ class Catalog_Controller_Account extends Controller
 
 		$this->message->add('success', _l("Your account information has been updated successfully!"));
 
-		$this->url->redirect('account');
+		redirect('account');
 	}
 
 	public function remove_address()
@@ -132,7 +132,7 @@ class Catalog_Controller_Account extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			$this->url->redirect('account/update');
+			redirect('account/update');
 		}
 	}
 }

@@ -9,14 +9,14 @@ class Catalog_Controller_Page extends Controller
 		$page = $this->Model_Page_Page->getPage($page_id);
 
 		if (!$page) {
-			$this->url->redirect("error/not_found");
+			redirect("error/not_found");
 		}
 
 		//Page Head
 		$this->document->setTitle($page['title']);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
@@ -45,7 +45,7 @@ class Catalog_Controller_Page extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Add Styles

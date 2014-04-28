@@ -21,7 +21,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified voucher themes!"));
-				$this->url->redirect('sale/voucher_theme');
+				redirect('sale/voucher_theme');
 			}
 		}
 
@@ -35,7 +35,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified voucher themes!"));
-				$this->url->redirect('sale/voucher_theme');
+				redirect('sale/voucher_theme');
 			}
 		}
 
@@ -48,8 +48,8 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$this->document->setTitle(_l("Voucher Themes"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Voucher Themes"), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Voucher Themes"), site_url('sale/voucher_theme'));
 
 		//The Table Columns
 		$columns = array();
@@ -84,11 +84,11 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$voucher_theme['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme['voucher_theme_id'])
+					'href' => site_url('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme['voucher_theme_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('sale/voucher_theme/delete', 'voucher_theme_id=' . $voucher_theme['voucher_theme_id'] . '&' . $url_query)
+					'href' => site_url('sale/voucher_theme/delete', 'voucher_theme_id=' . $voucher_theme['voucher_theme_id'] . '&' . $url_query)
 				)
 			);
 
@@ -138,7 +138,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('sale/voucher_theme/insert');
+		$data['insert'] = site_url('sale/voucher_theme/insert');
 
 		//Render
 		$this->response->setOutput($this->render('sale/voucher_theme_list', $data));
@@ -153,13 +153,13 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$voucher_theme_id = isset($_GET['voucher_theme_id']) ? (int)$_GET['voucher_theme_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Voucher Themes"), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Voucher Themes"), site_url('sale/voucher_theme'));
 
 		if ($voucher_theme_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('sale/voucher_theme/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('sale/voucher_theme/update'));
 		}
 
 		//Load Information
@@ -187,8 +187,8 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$data['translations'] = $this->Model_Sale_VoucherTheme->getVoucherThemeTranslations($voucher_theme_id);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id);
-		$data['cancel'] = $this->url->link('sale/voucher_theme');
+		$data['save']   = site_url('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id);
+		$data['cancel'] = site_url('sale/voucher_theme');
 
 		//Render
 		$this->response->setOutput($this->render('sale/voucher_theme_form', $data));

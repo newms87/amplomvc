@@ -25,7 +25,7 @@ class Admin_Controller_Setting_Store extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified settings!"));
 
-				$this->url->redirect('setting/store');
+				redirect('setting/store');
 			}
 		}
 
@@ -44,7 +44,7 @@ class Admin_Controller_Setting_Store extends Controller
 			}
 		}
 
-		$this->url->redirect('setting/store');
+		redirect('setting/store');
 	}
 
 	private function getList()
@@ -53,8 +53,8 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
 
 		//The Table Columns
 		$columns = array();
@@ -103,14 +103,14 @@ class Admin_Controller_Setting_Store extends Controller
 			$store['actions'] = array(
 				'edit' => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id']),
+					'href' => site_url('setting/store/update', 'store_id=' . $store['store_id']),
 				),
 			);
 
 			if ($this->canDelete($store['store_id'], true)) {
 				$store['actions']['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('setting/store/delete', 'store_id=' . $store['store_id']),
+					'href' => site_url('setting/store/delete', 'store_id=' . $store['store_id']),
 				);
 			}
 
@@ -151,8 +151,8 @@ class Admin_Controller_Setting_Store extends Controller
 		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('setting/store/update');
-		$data['delete'] = $this->url->link('setting/store/delete');
+		$data['insert'] = site_url('setting/store/update');
+		$data['delete'] = site_url('setting/store/delete');
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_list', $data));
@@ -167,15 +167,15 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
 
 		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
 			if (!$store) {
 				$this->message->add('warning', _l("You attempted to access a store that does not exist!"));
-				$this->url->redirect('setting/store');
+				redirect('setting/store');
 			}
 
 			$store_config = $this->config->loadGroup('config', $store_id);
@@ -256,7 +256,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$data += $store_info + $defaults;
 
 		//Current Page Breadcrumb
-		$this->breadcrumb->add($data['name'], $this->url->link('setting/store/update', 'store_id=' . $store_id));
+		$this->breadcrumb->add($data['name'], site_url('setting/store/update', 'store_id=' . $store_id));
 
 		//Additional Info
 		$data['layouts']              = $this->Model_Design_Layout->getLayouts();
@@ -325,12 +325,12 @@ class Admin_Controller_Setting_Store extends Controller
 		unset($icon);
 
 		//Action Buttons
-		$data['save']               = $this->url->link('setting/store/update', 'store_id=' . $store_id);
-		$data['cancel']             = $this->url->link('setting/store');
-		$data['url_generate_icons'] = $this->url->link('setting/store/generate_icons');
+		$data['save']               = site_url('setting/store/update', 'store_id=' . $store_id);
+		$data['cancel']             = site_url('setting/store');
+		$data['url_generate_icons'] = site_url('setting/store/generate_icons');
 
 		//Ajax Urls
-		$data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		$data['load_theme_img'] = site_url('setting/setting/theme');
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_form', $data));

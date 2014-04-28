@@ -12,6 +12,7 @@ class Admin_Controller_Block_Widget_Listing extends Controller
 			'show_pagination' => true,
 			'show_limits'     => true,
 			'limits'          => null,
+			'show_messages'   => null,
 		);
 
 		$settings += $defaults;
@@ -22,6 +23,10 @@ class Admin_Controller_Block_Widget_Listing extends Controller
 		);
 
 		$settings['template_data'] += $template_defaults;
+
+		if (!isset($settings['show_messages'])) {
+			$settings['show_messages'] = $settings['ajax'] && $this->request->isAjax();
+		}
 
 		$this->table->init();
 		$this->table->setTemplate('table/list_view');

@@ -70,19 +70,19 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		$data['invoice']       = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
 		$data['lc']            = $this->language->info('code');
 		$data['notify_url']    = $this->callbackUrl('notify');
-		$data['cancel_return'] = $this->url->link('checkout/checkout');
+		$data['cancel_return'] = site_url('checkout/checkout');
 		$data['page_style']    = $this->settings['page_style'];
 
 		if ($this->settings['pdt_enabled']) {
 			$data['return'] = $this->callbackUrl('auto_return');
 		} else {
-			$data['return'] = $this->url->link('checkout/success');
+			$data['return'] = site_url('checkout/success');
 		}
 
 		$server = URL_IMAGE;
 
 		//Ajax Urls
-		$data['url_check_order_status'] = $this->url->link('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
+		$data['url_check_order_status'] = site_url('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 
 		//Template Data
 		$data['image_url']     = $server . $this->config->get('config_logo');
@@ -312,6 +312,6 @@ class Catalog_Controller_Extension_Payment_PpStandard
 			$this->mail->send();
 		}
 
-		//$this->url->redirect('checkout/success');
+		//redirect('checkout/success');
 	}
 }

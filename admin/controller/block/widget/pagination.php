@@ -64,7 +64,7 @@ class Admin_Controller_Block_Widget_Pagination extends Admin_Controller_Block_Bl
 		}
 
 		//Link Url (without page, as this is variable)
-		$url = $this->url->link($settings['path'], $url_query);
+		$url = site_url($settings['path'], $url_query);
 
 		//Pages
 		$pages = array();

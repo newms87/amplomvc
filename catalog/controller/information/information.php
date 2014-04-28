@@ -3,7 +3,7 @@ class Catalog_Controller_Information_Information extends Controller
 {
 	public function index()
 	{
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 
 		$information_id = isset($_GET['information_id']) ? $_GET['information_id'] : 0;
 
@@ -11,7 +11,7 @@ class Catalog_Controller_Information_Information extends Controller
 
 		//Page Not Found
 		if (!$information_info) {
-			$this->url->redirect('common/error');
+			redirect('common/error');
 		}
 
 		//Layout override (only if set)
@@ -23,14 +23,14 @@ class Catalog_Controller_Information_Information extends Controller
 
 		$this->document->setTitle($information_info['title']);
 
-		$this->breadcrumb->add($information_info['title'], $this->url->link('information/information', 'information_id=' . $information_id));
+		$this->breadcrumb->add($information_info['title'], site_url('information/information', 'information_id=' . $information_id));
 
 		//Page Title
 		$data['page_title'] = $information_info['title'];
 
 		$data['description'] = html_entity_decode($information_info['description'], ENT_QUOTES, 'UTF-8');
 
-		$data['continue'] = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : $this->url->link('common/home');
+		$data['continue'] = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : site_url('common/home');
 
 		$this->response->setOutput($this->render('information/information', $data));
 	}

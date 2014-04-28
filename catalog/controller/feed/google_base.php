@@ -17,7 +17,7 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 				if ($product['description']) {
 					$output .= '<item>';
 					$output .= '<title>' . $product['name'] . '</title>';
-					$output .= '<link>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</link>';
+					$output .= '<link>' . site_url('product/product', 'product_id=' . $product['product_id']) . '</link>';
 					$output .= '<description>' . $product['description'] . '</description>';
 					$output .= '<g:brand>' . html_entity_decode($product['manufacturer'], ENT_QUOTES, 'UTF-8') . '</g:brand>';
 					$output .= '<g:condition>new</g:condition>';

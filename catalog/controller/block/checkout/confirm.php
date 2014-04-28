@@ -11,7 +11,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 				if (!empty($methods)) {
 					$this->cart->setShippingMethod(current($methods));
 				} else {
-					$data['redirect'] = $this->url->link('checkout/checkout');
+					$data['redirect'] = site_url('checkout/checkout');
 					$this->message->add('warning', $this->cart->getError());
 				}
 			}
@@ -26,7 +26,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 					$method = current($methods);
 					$this->cart->setPaymentMethod($method['code']);
 				} else {
-					$data['redirect'] = $this->url->link('checkout/checkout');
+					$data['redirect'] = site_url('checkout/checkout');
 					$this->message->add('warning', $this->cart->getError());
 				}
 			}
@@ -38,16 +38,16 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 
 				//If the cart contents are invalid (ie: out of stock), redirect to cart
 				if ($this->cart->getErrorCode() === Cart::ERROR_CHECKOUT_VALIDATE) {
-					$data['redirect'] = $this->url->link('cart/cart');
+					$data['redirect'] = site_url('cart/cart');
 				} else {
-					$data['redirect'] = $this->url->link('checkout/checkout');
+					$data['redirect'] = site_url('checkout/checkout');
 				}
 			} elseif (!$this->order->add()) {
 				if ($this->order->hasError()) {
 					$this->message->add('warning', $this->order->getError());
-					$data['redirect'] = $this->url->link('cart/cart');
+					$data['redirect'] = site_url('cart/cart');
 				} else {
-					$data['redirect'] = $this->url->link('checkout/checkout');
+					$data['redirect'] = site_url('checkout/checkout');
 				}
 			} else {
 				//If we are only reloading the totals section, do not include these other blocks
@@ -66,9 +66,9 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 
 				$data['block_totals'] = $this->block->render('cart/total');
 
-				$data['reload_totals'] = $this->url->link('block/checkout/confirm', 'reload_totals=1');
+				$data['reload_totals'] = site_url('block/checkout/confirm', 'reload_totals=1');
 
-				$data['checkout_url'] = $this->url->link('checkout/checkout');
+				$data['checkout_url'] = site_url('checkout/checkout');
 
 				$data['payment'] = $this->cart->getPaymentMethod()->renderTemplate();
 			}
@@ -87,7 +87,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 			if ($order['confirmed']) {
 				$json = array(
 					'status'   => $this->order->getOrderStatus($order['order_status_id']),
-					'redirect' => $this->url->link('checkout/success'),
+					'redirect' => site_url('checkout/success'),
 				);
 			}
 		}

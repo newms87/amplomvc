@@ -430,10 +430,8 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product URL Alias
-		if (!empty($data['alias'])) {
+		if (isset($data['alias'])) {
 			$this->url->setAlias($data['alias'], 'product/product', 'product_id=' . (int)$product_id);
-		} elseif (!$strict) {
-			$this->url->removeAlias('product/product', 'product_id=' . (int)$product_id);
 		}
 
 		//Translations

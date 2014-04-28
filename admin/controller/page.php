@@ -8,8 +8,8 @@ class Admin_Controller_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Page"), $this->url->link('page'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Page"), site_url('page'));
 
 		//Batch Actions
 		$actions = array(
@@ -33,7 +33,7 @@ class Admin_Controller_Page extends Controller
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('page/update');
+		$data['insert'] = site_url('page/update');
 
 		//Render
 		$this->response->setOutput($this->render('page/list', $data));
@@ -41,97 +41,44 @@ class Admin_Controller_Page extends Controller
 
 	public function update()
 	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (empty($_GET['page_id'])) {
-				$page_id = $this->Model_Page_Page->addPage($_POST);
+		//Insert
+		if (empty($_GET['page_id'])) {
+			$this->Model_Page_Page->addPage($_POST);
+		} //Update
+		else {
+			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
+		}
 
-				if ($this->request->isAjax()) {
-					$this->response->setOutput(json_encode(array('redirect' => $this->url->link('page', 'page_id=' . $page_id))));
-					return;
-				}
-			} //Update
-			else {
-				$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
-			}
-
-			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Page was updated successfully!"));
-
-				if (!$this->request->isAjax()) {
-					$this->url->redirect('page');
-				}
-			}
+		if ($this->Model_Page_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page_Page->getError());
+		} else {
+			$this->message->add('success', _l("The Page has been updated successfully!"));
 		}
 
 		if ($this->request->isAjax()) {
-			$json = $this->error ? array('error' => $this->error) : $this->message->fetch();
-			$this->response->setOutput(json_encode($json));
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
 		} else {
-			$this->getForm();
+			redirect('page');
 		}
 	}
 
 	public function delete()
 	{
-		if (!$this->user->can('modify', 'page')) {
-			$this->message->add('warning', _l("You do not have permission to modify Pages!"));
-			$this->url->redirect('common/home');
-		}
+		$this->Model_Page_Page->deletePage($_GET['page_id']);
 
-		if (isset($_GET['page_id'])) {
-			$this->Model_Page_Page->deletePage($_GET['page_id']);
-
-			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('notify', _l("Page was deleted!"));
-			}
-		}
-
-		$this->url->redirect('page');
-	}
-
-	public function batch_update()
-	{
-		if (!$this->user->can('modify', 'page')) {
-			$this->message->add('warning', _l("You do not have permission to modify Pages!"));
+		if ($this->Model_Page_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page_Page->getError());
 		} else {
-
-			if (!empty($_POST['batch']) && isset($_POST['action'])) {
-				foreach ($_POST['batch'] as $page_id) {
-					switch ($_POST['action']) {
-						case 'enable':
-							$this->Model_Page_Page->update_field($page_id, array('status' => 1));
-							break;
-						case 'disable':
-							$this->Model_Page_Page->update_field($page_id, array('status' => 0));
-							break;
-						case 'delete':
-							$this->Model_Page_Page->deletePage($page_id);
-							break;
-						case 'copy':
-							$this->Model_Page_Page->copyPage($page_id);
-							break;
-						default:
-							break 2; //Exit the For Loop
-					}
-				}
-
-				if (!$this->message->has('error', 'warning')) {
-					$this->message->add('success', _l("Success: You have modified Pages!"));
-				}
-			}
+			$this->message->add('notify', _l("Page was deleted!"));
 		}
 
-		if (!$this->request->isAjax()) {
-			$this->url->redirect('page');
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('page');
 		}
-
-		if ($this->message->has('error', 'warning')) {
-			echo $this->message->toJSON();
-			exit;
-		}
-
-		$this->listing();
 	}
 
 	public function listing()
@@ -182,11 +129,11 @@ class Admin_Controller_Page extends Controller
 			$page['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('page/update', 'page_id=' . $page['page_id'])
+					'href' => site_url('page/update', 'page_id=' . $page['page_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
+					'href' => site_url('page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
 				)
 			);
 
@@ -206,14 +153,14 @@ class Admin_Controller_Page extends Controller
 
 		$output = _block('widget/listing', null, $listing);
 
-		if (!$this->request->isAjax()) {
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
+		} else {
 			return $output;
 		}
-
-		$this->response->setOutput($output);
 	}
 
-	private function getForm()
+	public function form()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Page"));
@@ -222,13 +169,13 @@ class Admin_Controller_Page extends Controller
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Page"), $this->url->link('page'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Page"), site_url('page'));
 
 		if ($page_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('page/update', 'page_id=' . $page_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('page/update', 'page_id=' . $page_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('page/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('page/update'));
 		}
 
 		//Load Information from POST or DB
@@ -258,18 +205,15 @@ class Admin_Controller_Page extends Controller
 			'translations'     => array(),
 		);
 
-		$data += $page_info + $defaults;
-
-		$_POST = $data;
-		//$this->loadBlocks();
+		$data = $page_info + $defaults;
 
 		//Template Data
 		$data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$data['url_blocks']        = $this->url->link('block/block');
-		$data['url_create_layout'] = $this->url->link('page/create_layout');
-		$data['url_load_blocks']   = $this->url->link('page/loadBlocks');
+		$data['url_blocks']        = site_url('block/block');
+		$data['url_create_layout'] = site_url('page/create_layout');
+		$data['url_load_blocks']   = site_url('page/loadBlocks');
 
 		$store_front          = current($data['stores']);
 		$data['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
@@ -280,11 +224,46 @@ class Admin_Controller_Page extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('page/update', 'page_id=' . $page_id);
-		$data['cancel'] = $this->url->link('page');
+		$data['save']   = site_url('page/update', 'page_id=' . $page_id);
+		$data['cancel'] = site_url('page');
 
 		//Render
 		$this->response->setOutput($this->render('page/form', $data));
+	}
+
+	public function batch_update()
+	{
+		foreach ($_POST['batch'] as $page_id) {
+			switch ($_POST['action']) {
+				case 'enable':
+					$this->Model_Page_Page->update_field($page_id, array('status' => 1));
+					break;
+
+				case 'disable':
+					$this->Model_Page_Page->update_field($page_id, array('status' => 0));
+					break;
+
+				case 'delete':
+					$this->Model_Page_Page->deletePage($page_id);
+					break;
+
+				case 'copy':
+					$this->Model_Page_Page->copyPage($page_id);
+					break;
+			}
+		}
+
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+		} else {
+			$this->message->add('success', _l("Success: You have modified navigation!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->listing();
+		} else {
+			redirect('design/navigation');
+		}
 	}
 
 	public function create_layout()
@@ -364,13 +343,6 @@ class Admin_Controller_Page extends Controller
 		if (empty($_POST['display_title'])) {
 			$_POST['display_title'] = 0;
 		}
-
-		return empty($this->error);
-	}
-
-	private function validateDelete()
-	{
-
 
 		return empty($this->error);
 	}

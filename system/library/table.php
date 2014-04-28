@@ -89,11 +89,11 @@ class Table extends Library
 		}
 
 		if (empty($this->template_data['sort_url'])) {
-			$this->template_data['sort_url'] = $this->url->link($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
+			$this->template_data['sort_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
 		}
 
 		if (empty($this->template_data['filter_url'])) {
-			$this->template_data['filter_url'] =  $this->url->link($this->template_data['listing_path'], $this->url->getQueryExclude('filter'));
+			$this->template_data['filter_url'] =  site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter'));
 		}
 
 		//Normalize Columns

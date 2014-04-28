@@ -43,7 +43,7 @@ class Catalog_Controller_Block_Product_Related extends Controller
 
 			$product['reviews'] = _l("There are %d review for this product.", (int)$product['reviews']);
 
-			$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
+			$product['href'] = site_url('product/product', 'product_id=' . $product['product_id']);
 		}
 
 		$data['products'] = $related_products;

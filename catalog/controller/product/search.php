@@ -65,7 +65,7 @@ class Catalog_Controller_Product_Search extends Controller
 			$this->document->setTitle(_l("Search"));
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 
 		$url = '';
 
@@ -105,10 +105,10 @@ class Catalog_Controller_Product_Search extends Controller
 			$url .= '&limit=' . $_GET['limit'];
 		}
 
-		$this->breadcrumb->add(_l("Search"), $this->url->link('product/search', $url));
+		$this->breadcrumb->add(_l("Search"), site_url('product/search', $url));
 
 		$this->_('text_compare', ($this->session->has('compare') ? count($this->session->get('compare')) : 0));
-		$data['compare'] = $this->url->link('product/compare');
+		$data['compare'] = site_url('product/compare');
 
 		// 3 Level Category Search
 		$data['categories'] = array();
@@ -206,7 +206,7 @@ class Catalog_Controller_Product_Search extends Controller
 					'tax'         => $tax,
 					'rating'      => $result['rating'],
 					'reviews'     => sprintf(_l("Based on %s reviews."), (int)$result['reviews']),
-					'href'        => $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
+					'href'        => site_url('product/product', $url . '&product_id=' . $result['product_id'])
 				);
 			}
 
@@ -241,57 +241,57 @@ class Catalog_Controller_Product_Search extends Controller
 			$data['sorts'][] = array(
 				'text'  => _l("Default"),
 				'value' => 'p.sort_order-ASC',
-				'href'  => $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url)
+				'href'  => site_url('product/search', 'sort=p.sort_order&order=ASC' . $url)
 			);
 
 			$data['sorts'][] = array(
 				'text'  => _l("Name (A - Z)"),
 				'value' => 'p.name-ASC',
-				'href'  => $this->url->link('product/search', 'sort=p.name&order=ASC' . $url)
+				'href'  => site_url('product/search', 'sort=p.name&order=ASC' . $url)
 			);
 
 			$data['sorts'][] = array(
 				'text'  => _l("Name (Z - A)"),
 				'value' => 'p.name-DESC',
-				'href'  => $this->url->link('product/search', 'sort=p.name&order=DESC' . $url)
+				'href'  => site_url('product/search', 'sort=p.name&order=DESC' . $url)
 			);
 
 			$data['sorts'][] = array(
 				'text'  => _l("Price (Low &gt; High)"),
 				'value' => 'p.price-ASC',
-				'href'  => $this->url->link('product/search', 'sort=p.price&order=ASC' . $url)
+				'href'  => site_url('product/search', 'sort=p.price&order=ASC' . $url)
 			);
 
 			$data['sorts'][] = array(
 				'text'  => _l("Price (High &gt; Low)"),
 				'value' => 'p.price-DESC',
-				'href'  => $this->url->link('product/search', 'sort=p.price&order=DESC' . $url)
+				'href'  => site_url('product/search', 'sort=p.price&order=DESC' . $url)
 			);
 
 			if ($this->config->get('config_review_status')) {
 				$data['sorts'][] = array(
 					'text'  => _l("Rating (Highest)"),
 					'value' => 'rating-DESC',
-					'href'  => $this->url->link('product/search', 'sort=rating&order=DESC' . $url)
+					'href'  => site_url('product/search', 'sort=rating&order=DESC' . $url)
 				);
 
 				$data['sorts'][] = array(
 					'text'  => _l("Rating (Lowest)"),
 					'value' => 'rating-ASC',
-					'href'  => $this->url->link('product/search', 'sort=rating&order=ASC' . $url)
+					'href'  => site_url('product/search', 'sort=rating&order=ASC' . $url)
 				);
 			}
 
 			$data['sorts'][] = array(
 				'text'  => _l("Model (A - Z)"),
 				'value' => 'p.model-ASC',
-				'href'  => $this->url->link('product/search', 'sort=p.model&order=ASC' . $url)
+				'href'  => site_url('product/search', 'sort=p.model&order=ASC' . $url)
 			);
 
 			$data['sorts'][] = array(
 				'text'  => _l("Model (Z - A)"),
 				'value' => 'p.model-DESC',
-				'href'  => $this->url->link('product/search', 'sort=p.model&order=DESC' . $url)
+				'href'  => site_url('product/search', 'sort=p.model&order=DESC' . $url)
 			);
 
 			$url = '';
@@ -329,31 +329,31 @@ class Catalog_Controller_Product_Search extends Controller
 			$data['limits'][] = array(
 				'text'  => $this->config->get('config_catalog_limit'),
 				'value' => $this->config->get('config_catalog_limit'),
-				'href'  => $this->url->link('product/search', $url . '&limit=' . $this->config->get('config_catalog_limit'))
+				'href'  => site_url('product/search', $url . '&limit=' . $this->config->get('config_catalog_limit'))
 			);
 
 			$data['limits'][] = array(
 				'text'  => 25,
 				'value' => 25,
-				'href'  => $this->url->link('product/search', $url . '&limit=25')
+				'href'  => site_url('product/search', $url . '&limit=25')
 			);
 
 			$data['limits'][] = array(
 				'text'  => 50,
 				'value' => 50,
-				'href'  => $this->url->link('product/search', $url . '&limit=50')
+				'href'  => site_url('product/search', $url . '&limit=50')
 			);
 
 			$data['limits'][] = array(
 				'text'  => 75,
 				'value' => 75,
-				'href'  => $this->url->link('product/search', $url . '&limit=75')
+				'href'  => site_url('product/search', $url . '&limit=75')
 			);
 
 			$data['limits'][] = array(
 				'text'  => 100,
 				'value' => 100,
-				'href'  => $this->url->link('product/search', $url . '&limit=100')
+				'href'  => site_url('product/search', $url . '&limit=100')
 			);
 
 			$url = '';

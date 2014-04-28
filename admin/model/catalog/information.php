@@ -71,10 +71,8 @@ class Admin_Model_Catalog_Information extends Model
 			}
 		}
 
-		if (!empty($data['alias'])) {
+		if (isset($data['alias'])) {
 			$this->url->setAlias($data['alias'], 'information/information', 'information_id=' . (int)$information_id);
-		} else {
-			$this->url->removeAlias('information/information', 'information_id=' . (int)$information_id);
 		}
 
 		if (!empty($data['translations'])) {

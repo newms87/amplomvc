@@ -37,8 +37,8 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Customer Credit Report"), $this->url->link('report/customer_credit', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Customer Credit Report"), site_url('report/customer_credit', $url));
 
 		$data['customers'] = array();
 
@@ -58,7 +58,7 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
+				'href' => site_url('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
 			);
 
 			$data['customers'][] = array(

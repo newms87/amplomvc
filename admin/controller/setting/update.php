@@ -30,17 +30,17 @@ class Admin_Controller_Setting_Update extends Controller
 			}
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->url->redirect('setting/update');
+				redirect('setting/update');
 			}
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("System Update"), $this->url->link('setting/update'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("System Update"), site_url('setting/update'));
 
 		//Actions
-		$data['action'] = $this->url->link('setting/update');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['action'] = site_url('setting/update');
+		$data['cancel'] = site_url('setting/store');
 
 		//Data
 		$update_info = array();

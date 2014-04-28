@@ -5,7 +5,7 @@ class Admin_Controller_Common_Home extends Controller
 	{
 		$this->document->setTitle(_l("Dashboard"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 
 		$data = array();
 
@@ -34,7 +34,7 @@ class Admin_Controller_Common_Home extends Controller
 			$order['action'] = array(
 				'view' => array(
 					'text' => _l("View"),
-					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'])
+					'href' => site_url('sale/order/info', 'order_id=' . $order['order_id'])
 				),
 			);
 
@@ -61,7 +61,7 @@ class Admin_Controller_Common_Home extends Controller
 		}
 
 
-		$data['url_chart'] = $this->url->link('common/home/chart');
+		$data['url_chart'] = site_url('common/home/chart');
 
 		$this->response->setOutput($this->render('common/home', $data));
 	}

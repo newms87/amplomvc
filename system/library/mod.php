@@ -675,7 +675,7 @@ class Mod extends Library
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
 				$plugin_url = $this->url->admin('plugin/plugin');
-				$this->message->add('warning', $this->fetchErrors());
+				$this->message->add('warning', $this->getError());
 				$this->message->add('warning', 'Please visit the <a href="' . $plugin_url . '">Plugins</a> and resolve the issue.');
 			}
 		}

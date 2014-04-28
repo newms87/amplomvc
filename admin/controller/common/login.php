@@ -7,7 +7,7 @@ class Admin_Controller_Common_Login extends Controller
 
 		//I user is logged in, redirect to the homepage
 		if ($this->user->isLogged()) {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 
 		$data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
@@ -34,8 +34,8 @@ class Admin_Controller_Common_Login extends Controller
 		$this->request->setRedirect('login', $redirect);
 
 		//Actions
-		$data['action'] = $this->url->link('common/login/authenticate');
-		$data['forgotten'] = $this->url->link('common/forgotten');
+		$data['action'] = site_url('common/login/authenticate');
+		$data['forgotten'] = site_url('common/forgotten');
 
 		//Render
 		$this->response->setOutput($this->render('common/login', $data));
@@ -55,11 +55,11 @@ class Admin_Controller_Common_Login extends Controller
 				$redirect = 'common/home';
 			}
 
-			$this->url->redirect($redirect);
+			redirect($redirect);
 		} else {
 			$this->message->add('warning', $this->user->getError());
 		}
 
-		$this->url->redirect('common/login');
+		redirect('common/login');
 	}
 }

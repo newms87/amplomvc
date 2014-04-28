@@ -12,7 +12,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 			$this->message->add('success', _l("Success: You have modified Google Sitemap feed!"));
 
-			$this->url->redirect('extension/feed');
+			redirect('extension/feed');
 		}
 
 		if (isset($this->error['warning'])) {
@@ -21,13 +21,13 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 			$data['error_warning'] = '';
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Product Feeds"), $this->url->link('extension/feed'));
-		$this->breadcrumb->add(_l("Google Sitemap"), $this->url->link('feed/google_sitemap'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Product Feeds"), site_url('extension/feed'));
+		$this->breadcrumb->add(_l("Google Sitemap"), site_url('feed/google_sitemap'));
 
-		$data['action'] = $this->url->link('feed/google_sitemap');
+		$data['action'] = site_url('feed/google_sitemap');
 
-		$data['cancel'] = $this->url->link('extension/feed');
+		$data['cancel'] = site_url('extension/feed');
 
 		if (isset($_POST['google_sitemap_status'])) {
 			$data['google_sitemap_status'] = $_POST['google_sitemap_status'];
@@ -35,7 +35,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 			$data['google_sitemap_status'] = $this->config->get('google_sitemap_status');
 		}
 
-		$data['data_feed'] = $this->url->link('feed/google_sitemap');
+		$data['data_feed'] = site_url('feed/google_sitemap');
 
 		$this->response->setOutput($this->render('feed/google_sitemap', $data));
 	}

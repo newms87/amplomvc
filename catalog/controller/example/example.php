@@ -18,7 +18,7 @@ class Catalog_Controller_Example_Example extends Controller
 			//For this example, if no page is found, we dont really care, so continue to load page.
 
 			//You may want to redirect here though..
-			//$this->url->redirect('error/not_found');
+			//redirect('error/not_found');
 		}
 
 		//Alternative messages
@@ -31,8 +31,8 @@ class Catalog_Controller_Example_Example extends Controller
 		$this->document->setTitle(_l("My Page Title"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Example"), $this->url->link('example/example'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Example"), site_url('example/example'));
 
 		//Template Data
 		$data = $page;

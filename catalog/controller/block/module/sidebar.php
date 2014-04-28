@@ -54,7 +54,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 						$attribute_filter[$attribute_group_id] = $attribute['attribute_id'];
 						$attribute_query                       = http_build_query(array('attribute' => $attribute_filter));
 
-						$attribute['href'] = $this->url->link($route, $url_query . '&' . $attribute_query);
+						$attribute['href'] = site_url($route, $url_query . '&' . $attribute_query);
 					}
 					unset($attribute);
 
@@ -65,7 +65,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 					$menu = array(
 						'name'     => $attribute_menu['group_name'],
-						'href'     => $this->url->link($route, $url_query . '&' . $attribute_query),
+						'href'     => site_url($route, $url_query . '&' . $attribute_query),
 						'children' => $attribute_list,
 					);
 

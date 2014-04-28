@@ -77,11 +77,11 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Language"), site_url('localisation/language'));
 
-		$data['insert'] = $this->url->link('localisation/language/insert', $url);
-		$data['delete'] = $this->url->link('localisation/language/delete', $url);
+		$data['insert'] = site_url('localisation/language/insert', $url);
+		$data['delete'] = site_url('localisation/language/delete', $url);
 
 		$data['languages'] = array();
 
@@ -107,7 +107,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('localisation/language/update', 'language_id=' . $result['language_id'] . $url)
+				'href' => site_url('localisation/language/update', 'language_id=' . $result['language_id'] . $url)
 			);
 
 			$data['languages'][] = array(
@@ -132,9 +132,9 @@ class Admin_Controller_Localisation_Language extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']       = $this->url->link('localisation/language', 'sort=name' . $url);
-		$data['sort_code']       = $this->url->link('localisation/language', 'sort=code' . $url);
-		$data['sort_sort_order'] = $this->url->link('localisation/language', 'sort=sort_order' . $url);
+		$data['sort_name']       = site_url('localisation/language', 'sort=name' . $url);
+		$data['sort_code']       = site_url('localisation/language', 'sort=code' . $url);
+		$data['sort_sort_order'] = site_url('localisation/language', 'sort=sort_order' . $url);
 
 		$url = '';
 
@@ -162,16 +162,16 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Language"), $this->url->link('localisation/language'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Language"), site_url('localisation/language'));
 
 		if (!$language_id) {
-			$data['action'] = $this->url->link('localisation/language/insert', $url);
+			$data['action'] = site_url('localisation/language/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('localisation/language/update', 'language_id=' . $language_id . '&' . $url);
+			$data['action'] = site_url('localisation/language/update', 'language_id=' . $language_id . '&' . $url);
 		}
 
-		$data['cancel'] = $this->url->link('localisation/language', $url);
+		$data['cancel'] = site_url('localisation/language', $url);
 
 		if ($language_id && !$this->request->isPost()) {
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);

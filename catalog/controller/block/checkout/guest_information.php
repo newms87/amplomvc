@@ -41,7 +41,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 			$data['same_shipping_address'] = isset($guest_info['same_shipping_address']) ? $guest_info['same_shipping_address'] : 1;
 		}
 
-		$data['validate_guest_checkout'] = $this->url->link('block/checkout/guest_information/validate');
+		$data['validate_guest_checkout'] = site_url('block/checkout/guest_information/validate');
 
 		$this->response->setOutput($this->render('block/checkout/guest_information', $data));
 	}
@@ -51,17 +51,17 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		$json = array();
 
 		if ($this->customer->isLogged()) {
-			$json['redirect'] = $this->url->link('checkout/checkout');
+			$json['redirect'] = site_url('checkout/checkout');
 		} elseif ((!$this->cart->hasProducts() && !$this->cart->hasVouchers()) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$json['redirect'] = $this->url->link('cart/cart');
+			$json['redirect'] = site_url('cart/cart');
 		} elseif (!$this->config->get('config_guest_checkout') || $this->cart->hasDownload()) {
-			$json['redirect'] = $this->url->link('cart/cart');
+			$json['redirect'] = site_url('cart/cart');
 		}
 
 		//Redirect if set
 		if ($json) {
 			if ($this->request->isAjax()) {
-				$this->url->redirect('checkout/checkout');
+				redirect('checkout/checkout');
 			}
 		} else {
 			//Validate Guest Information
@@ -131,7 +131,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				$this->url->redirect('checkout/checkout');
+				redirect('checkout/checkout');
 			}
 		}
 

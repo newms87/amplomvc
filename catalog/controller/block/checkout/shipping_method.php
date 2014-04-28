@@ -32,7 +32,7 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 			$data['no_shipping_address'] = true;
 		}
 
-		$data['validate_shipping_method'] = $this->url->link('block/checkout/shipping_method/validate');
+		$data['validate_shipping_method'] = site_url('block/checkout/shipping_method/validate');
 
 		//Render
 		$this->response->setOutput($this->render('block/checkout/shipping_method', $data));
@@ -45,10 +45,10 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 		// Validate cart contents
 		if (!$this->cart->validate()) {
 			$this->message->add('warning', $this->cart->getError());
-			$json['redirect'] = $this->url->link('cart/cart');
+			$json['redirect'] = site_url('cart/cart');
 		} elseif (!$this->cart->hasShipping()) {
 			$this->message->add('warning', _l("Shipping is not required for this order."));
-			$json['redirect'] = $this->url->link('checkout/checkout');
+			$json['redirect'] = site_url('checkout/checkout');
 		}
 
 		if (!empty($_POST['shipping_method']) && strpos($_POST['shipping_method'], ',') !== false) {

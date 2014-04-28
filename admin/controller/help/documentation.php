@@ -9,8 +9,8 @@ class Admin_Controller_Help_Documentation extends Controller
 		$this->replace_tokens($s);
 		$data['sections'] = $s;
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Documentation"), $this->url->link('help/documentation'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Documentation"), site_url('help/documentation'));
 
 		$this->response->setOutput($this->render('help/documentation', $data));
 	}
@@ -24,7 +24,7 @@ class Admin_Controller_Help_Documentation extends Controller
 			} else {
 				if (preg_match_all("/%@[^%]*%@/", $s, $matches)) {
 					foreach ($matches[0] as $m) {
-						$s = preg_replace("/%@[^%]*%@/", $this->url->link(preg_replace("/%@/", '', $m)), $s, 1);
+						$s = preg_replace("/%@[^%]*%@/", site_url(preg_replace("/%@/", '', $m)), $s, 1);
 					}
 				}
 				if (preg_match_all("/%%[^%]*%%/", $s, $matches)) {

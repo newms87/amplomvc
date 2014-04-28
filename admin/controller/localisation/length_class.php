@@ -33,7 +33,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/length_class', $url);
+			redirect('localisation/length_class', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/length_class', $url);
+			redirect('localisation/length_class', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/length_class', $url);
+			redirect('localisation/length_class', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Length Class"), $this->url->link('localisation/length_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Length Class"), site_url('localisation/length_class', $url));
 
-		$data['insert'] = $this->url->link('localisation/length_class/insert', $url);
-		$data['delete'] = $this->url->link('localisation/length_class/delete', $url);
+		$data['insert'] = site_url('localisation/length_class/insert', $url);
+		$data['delete'] = site_url('localisation/length_class/delete', $url);
 
 		$data['length_classes'] = array();
 
@@ -157,7 +157,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('localisation/length_class/update', 'length_class_id=' . $result['length_class_id'] . $url)
+				'href' => site_url('localisation/length_class/update', 'length_class_id=' . $result['length_class_id'] . $url)
 			);
 
 			$data['length_classes'][] = array(
@@ -196,9 +196,9 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_title'] = $this->url->link('localisation/length_class', 'sort=title' . $url);
-		$data['sort_unit']  = $this->url->link('localisation/length_class', 'sort=unit' . $url);
-		$data['sort_value'] = $this->url->link('localisation/length_class', 'sort=value' . $url);
+		$data['sort_title'] = site_url('localisation/length_class', 'sort=title' . $url);
+		$data['sort_unit']  = site_url('localisation/length_class', 'sort=unit' . $url);
+		$data['sort_value'] = site_url('localisation/length_class', 'sort=value' . $url);
 
 		$url = '';
 
@@ -254,16 +254,16 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Length Class"), $this->url->link('localisation/length_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Length Class"), site_url('localisation/length_class', $url));
 
 		if (!isset($_GET['length_class_id'])) {
-			$data['action'] = $this->url->link('localisation/length_class/insert', $url);
+			$data['action'] = site_url('localisation/length_class/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('localisation/length_class/update', 'length_class_id=' . $_GET['length_class_id'] . $url);
+			$data['action'] = site_url('localisation/length_class/update', 'length_class_id=' . $_GET['length_class_id'] . $url);
 		}
 
-		$data['cancel'] = $this->url->link('localisation/length_class', $url);
+		$data['cancel'] = site_url('localisation/length_class', $url);
 
 		if (isset($_GET['length_class_id']) && !$this->request->isPost()) {
 			$length_class_info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);

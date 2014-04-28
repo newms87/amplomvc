@@ -60,7 +60,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer', $url);
+			redirect('sale/customer', $url);
 		}
 
 		$this->getForm();
@@ -117,7 +117,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer', $url);
+			redirect('sale/customer', $url);
 		}
 
 		$this->getForm();
@@ -176,7 +176,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer', $url);
+			redirect('sale/customer', $url);
 		}
 
 		$this->getList();
@@ -245,7 +245,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer', $url);
+			redirect('sale/customer', $url);
 		}
 
 		$this->getList();
@@ -257,7 +257,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		$this->document->setTitle(_l("Customers"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add(_l("Customer"), $this->url->here());
 
 		//The Table Columns
@@ -320,11 +320,11 @@ class Admin_Controller_Sale_Customer extends Controller
 			$customer['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('sale/customer/update', 'customer_id=' . $customer['customer_id'] . '&' . $query)
+					'href' => site_url('sale/customer/update', 'customer_id=' . $customer['customer_id'] . '&' . $query)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('sale/customer/delete', 'customer_id=' . $customer['customer_id'] . '&' . $query)
+					'href' => site_url('sale/customer/delete', 'customer_id=' . $customer['customer_id'] . '&' . $query)
 				),
 
 			);
@@ -357,9 +357,9 @@ class Admin_Controller_Sale_Customer extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Actions
-		$data['approve'] = $this->url->link('sale/customer/approve');
-		$data['insert']  = $this->url->link('sale/customer/insert');
-		$data['delete']  = $this->url->link('sale/customer/delete');
+		$data['approve'] = site_url('sale/customer/approve');
+		$data['insert']  = site_url('sale/customer/insert');
+		$data['delete']  = site_url('sale/customer/delete');
 
 		//Render
 		$this->response->setOutput($this->render('sale/customer_list', $data));
@@ -495,16 +495,16 @@ class Admin_Controller_Sale_Customer extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Customer"), $this->url->link('sale/customer', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Customer"), site_url('sale/customer', $url));
 
 		if (!isset($_GET['customer_id'])) {
-			$data['action'] = $this->url->link('sale/customer/insert', $url);
+			$data['action'] = site_url('sale/customer/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('sale/customer/update', 'customer_id=' . $_GET['customer_id'] . $url);
+			$data['action'] = site_url('sale/customer/update', 'customer_id=' . $_GET['customer_id'] . $url);
 		}
 
-		$data['cancel'] = $this->url->link('sale/customer', $url);
+		$data['cancel'] = site_url('sale/customer', $url);
 
 		if (isset($_GET['customer_id']) && !$this->request->isPost()) {
 			$customer_info = $this->Model_Sale_Customer->getCustomer($_GET['customer_id']);
@@ -618,17 +618,17 @@ class Admin_Controller_Sale_Customer extends Controller
 					'ip'         => $result['ip'],
 					'total'      => $this->Model_Sale_Customer->getTotalCustomersByIp($result['ip']),
 					'date_added' => date('d/m/y', strtotime($result['date_added'])),
-					'filter_ip'  => $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
+					'filter_ip'  => site_url('sale/customer', 'filter_ip=' . $result['ip']),
 					'blacklist'  => $blacklist_total
 				);
 			}
 		}
 
 		//Ajax Urls
-		$data['url_transaction']      = $this->url->link('sale/customer/transaction', 'customer_id=' . (int)$customer_id);
-		$data['url_reward']           = $this->url->link('sale/customer/reward', 'customer_id=' . (int)$customer_id);
-		$data['url_blacklist']        = $this->url->link('sale/customer/addblacklist');
-		$data['url_remove_blacklist'] = $this->url->link('sale/customer/removeblacklist');
+		$data['url_transaction']      = site_url('sale/customer/transaction', 'customer_id=' . (int)$customer_id);
+		$data['url_reward']           = site_url('sale/customer/reward', 'customer_id=' . (int)$customer_id);
+		$data['url_blacklist']        = site_url('sale/customer/addblacklist');
+		$data['url_remove_blacklist'] = site_url('sale/customer/removeblacklist');
 
 		$this->response->setOutput($this->render('sale/customer_form', $data));
 	}
@@ -753,15 +753,15 @@ class Admin_Controller_Sale_Customer extends Controller
 			$store_info = $this->Model_Setting_Store->getStore($store_id);
 
 			if ($store_info) {
-				$this->url->redirect($this->url->store($store_id, 'account/login'));
+				redirect($this->url->store($store_id, 'account/login'));
 			} else {
-				$this->url->redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
+				redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
 			}
 		} else {
 			$this->document->setTitle(_l("Customer"));
 
-			$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-			$this->breadcrumb->add(_l("Customer"), $this->url->link('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+			$this->breadcrumb->add(_l("Customer"), site_url('error/not_found'));
 
 			$this->response->setOutput($this->render('error/not_found', $data));
 		}

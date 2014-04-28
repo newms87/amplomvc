@@ -27,20 +27,20 @@ class Catalog_Controller_Account_Voucher extends Controller
 				)
 			));
 
-			$this->url->redirect('account/voucher/success');
+			redirect('account/voucher/success');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Gift Voucher"), $this->url->link('account/voucher'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Gift Voucher"), site_url('account/voucher'));
 
 		//Template Data
 		$data['min_value'] = $this->currency->format(1, false, 1);
 		$data['max_value'] = $this->currency->format(1000, false, 1);
 
 		//Action Buttons
-		$data['action'] = $this->url->link('account/voucher');
+		$data['action'] = site_url('account/voucher');
 
 		$voucher_info = array();
 
@@ -79,11 +79,11 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->document->setTitle(_l("Purchase a Gift Certificate"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Purchase a Gift Certificate"), $this->url->link('account/voucher'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Purchase a Gift Certificate"), site_url('account/voucher'));
 
 		//Action Buttons
-		$data['continue'] = $this->url->link('cart/cart');
+		$data['continue'] = site_url('cart/cart');
 
 		//Render
 		$this->response->setOutput($this->render('common/success', $data));

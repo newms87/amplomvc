@@ -4,9 +4,9 @@ class Catalog_Controller_Account_Edit extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/edit'));
+			$this->session->set('redirect', site_url('account/edit'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("My Account Information"));
@@ -16,12 +16,12 @@ class Catalog_Controller_Account_Edit extends Controller
 
 			$this->message->add('success', _l("Success: Your account has been successfully updated."));
 
-			$this->url->redirect('account');
+			redirect('account');
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Edit Information"), $this->url->link('account/edit'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Edit Information"), site_url('account/edit'));
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -53,7 +53,7 @@ class Catalog_Controller_Account_Edit extends Controller
 			$data['error_telephone'] = '';
 		}
 
-		$data['action'] = $this->url->link('account/edit');
+		$data['action'] = site_url('account/edit');
 
 		if (!$this->request->isPost()) {
 			$customer_info = $this->customer->info();
@@ -99,7 +99,7 @@ class Catalog_Controller_Account_Edit extends Controller
 			$data['fax'] = '';
 		}
 
-		$data['back'] = $this->url->link('account');
+		$data['back'] = site_url('account');
 
 		$this->response->setOutput($this->render('account/edit', $data));
 	}

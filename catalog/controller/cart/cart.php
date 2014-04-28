@@ -5,8 +5,8 @@ class Catalog_Controller_Cart_Cart extends Controller
 	{
 		$this->document->setTitle(_l("Shopping Cart"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Shopping Cart"), $this->url->link('cart/cart'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Shopping Cart"), site_url('cart/cart'));
 
 		$data['block_cart'] = $this->block->render('cart/cart');
 
@@ -44,10 +44,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 		if (isset($_GET['redirect']) && preg_match("/cart\\/cart/", $_GET['redirect']) == 0) {
 			$data['continue'] = urldecode($_GET['redirect']);
 		} else {
-			$data['continue'] = $this->url->link('product/category');
+			$data['continue'] = site_url('product/category');
 		}
 
-		$data['checkout'] = $this->url->link('checkout/checkout');
+		$data['checkout'] = site_url('checkout/checkout');
 
 		//Render
 		$this->response->setOutput($this->render('cart/cart', $data));
@@ -67,18 +67,18 @@ class Catalog_Controller_Cart_Cart extends Controller
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
 
-			$this->request->setRedirect($this->url->link('product/product', 'product_id=' . $product_id));
+			$this->request->setRedirect(site_url('product/product', 'product_id=' . $product_id));
 
-			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
-			$url_cart    = $this->url->link('cart/cart');
+			$url_product = site_url('product/product', 'product_id=' . $product_id);
+			$url_cart    = site_url('cart/cart');
 			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
 		} else {
 			$this->message->add('error', $this->cart->getError('add'));
 
-			$this->url->redirect('product/product', 'product_id=' . $product_id);
+			redirect('product/product', 'product_id=' . $product_id);
 		}
 
-		$this->url->redirect('checkout/checkout');
+		redirect('checkout/checkout');
 	}
 
 	public function add()
@@ -95,10 +95,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
 
-			$this->request->setRedirect($this->url->link('product/product', 'product_id=' . $product_id));
+			$this->request->setRedirect(site_url('product/product', 'product_id=' . $product_id));
 
-			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
-			$url_cart    = $this->url->link('cart/cart');
+			$url_product = site_url('product/product', 'product_id=' . $product_id);
+			$url_cart    = site_url('cart/cart');
 			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
 
 			$item_count = $this->cart->countItems();
@@ -137,12 +137,12 @@ class Catalog_Controller_Cart_Cart extends Controller
 	{
 		$cart_product = $this->cart->getProduct($_GET['cart_key'], true);
 
-		$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', $this->url->link('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
+		$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', site_url('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
 
 		$this->cart->removeProduct($_GET['cart_key']);
 
 		if (!$this->request->isAjax()) {
-			$this->url->redirect('cart/cart');
+			redirect('cart/cart');
 		}
 	}
 }

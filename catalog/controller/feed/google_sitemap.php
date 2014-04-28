@@ -11,7 +11,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 
 			foreach ($products as $product) {
 				$output .= '<url>';
-				$output .= '<loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</loc>';
+				$output .= '<loc>' . site_url('product/product', 'product_id=' . $product['product_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>1.0</priority>';
 				$output .= '</url>';
@@ -23,7 +23,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 
 			foreach ($manufacturers as $manufacturer) {
 				$output .= '<url>';
-				$output .= '<loc>' . $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id']) . '</loc>';
+				$output .= '<loc>' . site_url('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>0.7</priority>';
 				$output .= '</url>';
@@ -32,7 +32,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 
 				foreach ($products as $product) {
 					$output .= '<url>';
-					$output .= '<loc>' . $this->url->link('product/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&product_id=' . $product['product_id']) . '</loc>';
+					$output .= '<loc>' . site_url('product/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&product_id=' . $product['product_id']) . '</loc>';
 					$output .= '<changefreq>weekly</changefreq>';
 					$output .= '<priority>1.0</priority>';
 					$output .= '</url>';
@@ -43,7 +43,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 
 			foreach ($informations as $information) {
 				$output .= '<url>';
-				$output .= '<loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id']) . '</loc>';
+				$output .= '<loc>' . site_url('information/information', 'information_id=' . $information['information_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>0.5</priority>';
 				$output .= '</url>';
@@ -70,7 +70,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 			}
 
 			$output .= '<url>';
-			$output .= '<loc>' . $this->url->link('product/category', 'path=' . $new_path) . '</loc>';
+			$output .= '<loc>' . site_url('product/category', 'path=' . $new_path) . '</loc>';
 			$output .= '<changefreq>weekly</changefreq>';
 			$output .= '<priority>0.7</priority>';
 			$output .= '</url>';
@@ -79,7 +79,7 @@ class Catalog_Controller_Feed_GoogleSitemap extends Controller
 
 			foreach ($products as $product) {
 				$output .= '<url>';
-				$output .= '<loc>' . $this->url->link('product/product', 'path=' . $new_path . '&product_id=' . $product['product_id']) . '</loc>';
+				$output .= '<loc>' . site_url('product/product', 'path=' . $new_path . '&product_id=' . $product['product_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>1.0</priority>';
 				$output .= '</url>';

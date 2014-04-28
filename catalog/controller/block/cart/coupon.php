@@ -12,7 +12,7 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 		$data['ajax'] = $ajax;
 
 		if ($ajax) {
-			$data['ajax_url'] = $this->url->link('block/cart/coupon/ajax_apply_coupon');
+			$data['ajax_url'] = site_url('block/cart/coupon/ajax_apply_coupon');
 		}
 
 		$this->response->setOutput($this->render('block/cart/coupon', $data));

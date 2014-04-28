@@ -14,7 +14,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
-				$this->url->redirect('catalog/information');
+				redirect('catalog/information');
 			}
 		}
 
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
-				$this->url->redirect('catalog/information');
+				redirect('catalog/information');
 			}
 		}
 
@@ -44,7 +44,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
-				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
+				redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
 		}
 
@@ -59,7 +59,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
-				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
+				redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
 		}
 
@@ -95,7 +95,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified information!"));
 
-				$this->url->redirect('catalog/information', $this->url->getQueryExclude('action'));
+				redirect('catalog/information', $this->url->getQueryExclude('action'));
 			}
 		}
 
@@ -108,8 +108,8 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->document->setTitle(_l("Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Information"), $this->url->link('catalog/information'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Information"), site_url('catalog/information'));
 
 		//The Table Columns
 		$columns = array();
@@ -157,15 +157,15 @@ class Admin_Controller_Catalog_Information extends Controller
 			$information['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('catalog/information/update', 'information_id=' . $information['information_id'])
+					'href' => site_url('catalog/information/update', 'information_id=' . $information['information_id'])
 				),
 				'copy'   => array(
 					'text' => _l("Copy"),
-					'href' => $this->url->link('catalog/information/copy', 'information_id=' . $information['information_id'] . '&' . $url_query)
+					'href' => site_url('catalog/information/copy', 'information_id=' . $information['information_id'] . '&' . $url_query)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('catalog/information/delete', 'information_id=' . $information['information_id'] . '&' . $url_query)
+					'href' => site_url('catalog/information/delete', 'information_id=' . $information['information_id'] . '&' . $url_query)
 				),
 			);
 
@@ -209,7 +209,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('catalog/information/insert');
+		$data['insert'] = site_url('catalog/information/insert');
 
 		//Pagination
 		$this->pagination->init();
@@ -228,9 +228,9 @@ class Admin_Controller_Catalog_Information extends Controller
 		$information_id = !empty($_GET['information_id']) ? $_GET['information_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Information Pages"), $this->url->link('catalog/information'));
-		$this->breadcrumb->add(_l("Information"), $this->url->link('catalog/information', 'information_id=' . $information_id));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Information Pages"), site_url('catalog/information'));
+		$this->breadcrumb->add(_l("Information"), site_url('catalog/information', 'information_id=' . $information_id));
 
 		//Saved Data
 		if ($information_id && !$this->request->isPost()) {
@@ -271,12 +271,12 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		//Action Buttons
 		if ($information_id) {
-			$data['action'] = $this->url->link('catalog/information/update', 'information_id=' . $information_id);
+			$data['action'] = site_url('catalog/information/update', 'information_id=' . $information_id);
 		} else {
-			$data['action'] = $this->url->link('catalog/information/insert');
+			$data['action'] = site_url('catalog/information/insert');
 		}
 
-		$data['cancel'] = $this->url->link('catalog/information');
+		$data['cancel'] = site_url('catalog/information');
 
 		//Translations
 		$translate_fields = array(

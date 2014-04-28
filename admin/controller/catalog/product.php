@@ -20,7 +20,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				$this->url->redirect('catalog/product');
+				redirect('catalog/product');
 			}
 		}
 
@@ -37,7 +37,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		$this->url->redirect('catalog/product/update', $this->url->getQuery());
+		redirect('catalog/product/update', $this->url->getQuery());
 	}
 
 	public function delete()
@@ -50,7 +50,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				$this->url->redirect('catalog/product');
+				redirect('catalog/product');
 			}
 		}
 
@@ -67,7 +67,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				$this->url->redirect('catalog/product');
+				redirect('catalog/product');
 			}
 		}
 
@@ -132,7 +132,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		$this->url->redirect('catalog/product', $this->url->getQueryExclude('action', 'action_value'));
+		redirect('catalog/product', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()
@@ -141,8 +141,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->document->setTitle(_l("Products"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Products"), site_url('catalog/product'));
 
 		//The Table Columns
 		$categories      = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -248,18 +248,18 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product['actions'] = array(
 				'edit' => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
+					'href' => site_url('catalog/product/update', 'product_id=' . $product['product_id'])
 				),
 				'copy' => array(
 					'text' => _l("Copy"),
-					'href' => $this->url->link('catalog/product/copy', 'product_id=' . $product['product_id'])
+					'href' => site_url('catalog/product/copy', 'product_id=' . $product['product_id'])
 				)
 			);
 
 			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
 				$product['actions']['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
+					'href' => site_url('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
 				);
 			}
 
@@ -307,7 +307,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		if (count($product_classes) > 1) {
 			foreach ($product_classes as &$product_class) {
-				$product_class['insert'] = $this->url->link('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
+				$product_class['insert'] = site_url('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
 			}
 			unset($product_class);
 
@@ -404,7 +404,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('catalog/product/update');
+		$data['insert'] = site_url('catalog/product/update');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/product_list', $data));
@@ -423,13 +423,13 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Products"), $this->url->link('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Products"), site_url('catalog/product'));
 
 		if (!$product_id) {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/product/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('catalog/product/update'));
 		} else {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/product/update', 'product_id=' . $product_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('catalog/product/update', 'product_id=' . $product_id));
 		}
 
 		//Load Information
@@ -667,18 +667,18 @@ class Admin_Controller_Catalog_Product extends Controller
 
 
 		//Ajax Urls
-		$data['url_generate_url']           = $this->url->link('catalog/product/generate_url');
-		$data['url_generate_model']         = $this->url->link('catalog/product/generate_model');
-		$data['url_autocomplete']           = $this->url->link('catalog/product/autocomplete');
-		$data['url_attribute_autocomplete'] = $this->url->link('catalog/attribute_group/autocomplete');
-		$data['url_option_autocomplete']    = $this->url->link('catalog/option/autocomplete');
+		$data['url_generate_url']           = site_url('catalog/product/generate_url');
+		$data['url_generate_model']         = site_url('catalog/product/generate_model');
+		$data['url_autocomplete']           = site_url('catalog/product/autocomplete');
+		$data['url_attribute_autocomplete'] = site_url('catalog/attribute_group/autocomplete');
+		$data['url_option_autocomplete']    = site_url('catalog/option/autocomplete');
 
 		//Action Buttons
-		$data['save']                = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
-		$data['cancel']              = $this->url->link('catalog/product');
-		$data['change_class']        = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
-		$data['add_shipping_policy'] = $this->url->link('setting/shipping_policy');
-		$data['add_return_policy']   = $this->url->link('setting/return_policy');
+		$data['save']                = site_url('catalog/product/update', 'product_id=' . $product_id);
+		$data['cancel']              = site_url('catalog/product');
+		$data['change_class']        = site_url('catalog/product/change_class', 'product_id=' . $product_id);
+		$data['add_shipping_policy'] = site_url('setting/shipping_policy');
+		$data['add_return_policy']   = site_url('setting/return_policy');
 
 		//The Template
 		$template = $this->Model_Catalog_ProductClass->getTemplate($data['product_class_id']);

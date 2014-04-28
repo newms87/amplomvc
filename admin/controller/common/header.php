@@ -54,9 +54,9 @@ class Admin_Controller_Common_Header extends Controller
 		if (!$this->user->isLogged()) {
 			$data['logged'] = '';
 
-			$data['home'] = $this->url->link('common/login');
+			$data['home'] = site_url('common/login');
 		} else {
-			$data['home'] = $this->url->link('common/home');
+			$data['home'] = site_url('common/home');
 
 			$data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
 
@@ -80,7 +80,7 @@ class Admin_Controller_Common_Header extends Controller
 				$link_store_setting = array(
 					'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
 					'display_name' => $store['name'],
-					'href'         => $this->url->link('setting/store/update', 'store_id=' . $store['store_id']),
+					'href'         => site_url('setting/store/update', 'store_id=' . $store['store_id']),
 					'parent'       => 'system_settings_stores',
 					'sort_order'   => $index,
 				);
@@ -125,7 +125,7 @@ class Admin_Controller_Common_Header extends Controller
 			$link_logout = array(
 				'name'         => 'logout',
 				'display_name' => _l("Logout"),
-				'href'         => $this->url->link('common/logout'),
+				'href'         => site_url('common/logout'),
 				'sort_order'   => 10,
 			);
 

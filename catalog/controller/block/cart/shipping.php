@@ -34,10 +34,10 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		$data['shipping_method'] = !empty($data['shipping_method']) ? $data['shipping_method'] : false;
 
 		//Ajax Urls
-		$data['url_quote'] = $this->url->link('block/cart/shipping/quote');
+		$data['url_quote'] = site_url('block/cart/shipping/quote');
 
 		//Action Buttons
-		$data['apply'] = $this->url->link('block/cart/shipping/apply');
+		$data['apply'] = site_url('block/cart/shipping/apply');
 
 		$data['redirect'] = $this->url->here();
 
@@ -55,7 +55,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		}
 
 		if (!$this->cart->hasShipping()) {
-			$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), $this->url->link('information/contact'));
+			$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), site_url('information/contact'));
 		}
 
 		if (!$json) {
@@ -75,7 +75,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 			if ($shipping_methods) {
 				$json['shipping_method'] = $shipping_methods;
 			} else {
-				$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), $this->url->link('information/contact'));
+				$json['error']['warning'] = sprintf(_l("Warning: No Shipping options are available. Please <a href=\"%s\">contact us</a> for assistance!"), site_url('information/contact'));
 			}
 		}
 
@@ -89,7 +89,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		if (empty($_POST['shipping_method'])) {
 			if (!empty($_POST['redirect'])) {
 				$this->message->add('warning', _l("Please choose a shipping method!"));
-				$this->url->redirect(urldecode($_POST['redirect']));
+				redirect(urldecode($_POST['redirect']));
 			} else {
 				$json['error'] = _l("Please choose a shipping method!");
 				$this->response->setOutput(json_encode($json));
@@ -127,7 +127,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 						$this->message->add('warning', $this->cart->getError('shipping_method'));
 					}
 
-					$this->url->redirect(urldecode($_POST['redirect']));
+					redirect(urldecode($_POST['redirect']));
 				}
 
 				if ($result) {

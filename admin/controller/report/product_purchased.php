@@ -47,8 +47,8 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Products Purchased Report"), $this->url->link('report/product_purchased', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Products Purchased Report"), site_url('report/product_purchased', $url));
 
 		$data['products'] = array();
 

@@ -31,9 +31,9 @@ class Admin_Model_Page_Page extends Model
 	{
 		$this->update('page', $data, $page_id);
 
-		$this->delete('page_store', array('page_id' => $page_id));
+		if (isset($data['stores'])) {
+			$this->delete('page_store', array('page_id' => $page_id));
 
-		if (!empty($data['stores'])) {
 			foreach ($data['stores'] as $store_id) {
 				$store_data = array(
 					'page_id'  => $page_id,
@@ -44,22 +44,17 @@ class Admin_Model_Page_Page extends Model
 			}
 		}
 
-		if (!empty($data['alias'])) {
+		if (isset($data['alias'])) {
 			$this->url->setAlias($data['alias'], 'page/page', 'page_id=' . (int)$page_id);
-		} else {
-			$this->url->removeAlias('page/page', 'page_id=' . (int)$page_id);
 		}
 
-		if (!empty($data['translations'])) {
+		if (isset($data['translations'])) {
 			$this->translation->setTranslations('page', $page_id, $data['translations']);
 		}
 
 		$this->cache->delete('page');
-	}
 
-	public function update_field($page_id, $data)
-	{
-		$this->update('page', $data, $page_id);
+		return $page_id;
 	}
 
 	public function copyPage($page_id)
@@ -145,10 +140,10 @@ class Admin_Model_Page_Page extends Model
 		}
 
 		//The Query
-		$sql = "SELECT $select FROM $from $where $order $limit";
+		$query = "SELECT $select FROM $from $where $order $limit";
 
 		//Execute
-		$result = $this->query($sql);
+		$result = $this->query($query);
 
 		//Process Results
 		if ($total) {

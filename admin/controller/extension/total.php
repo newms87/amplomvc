@@ -9,7 +9,7 @@ class Admin_Controller_Extension_Total extends Controller
 			if (!$this->System_Extension_Total->has($_GET['code'])) {
 				$this->message->add('warning', _l("The extension %s does not exist!", $_GET['code']));
 
-				$this->url->redirect('extension/total');
+				redirect('extension/total');
 			}
 
 			$this->getForm();
@@ -23,8 +23,8 @@ class Admin_Controller_Extension_Total extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Order Totals"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Order Totals"), $this->url->link('extension/total'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Order Totals"), site_url('extension/total'));
 
 		//The Table Columns
 		$columns = array();
@@ -74,22 +74,22 @@ class Admin_Controller_Extension_Total extends Controller
 				$actions = array(
 					'edit'      => array(
 						'text' => _l("Edit"),
-						'href' => $this->url->link('extension/total/edit', 'code=' . $extension['code'])
+						'href' => site_url('extension/total/edit', 'code=' . $extension['code'])
 					),
 					'settings'  => array(
 						'text' => _l("Settings"),
-						'href' => $this->url->link('extension/total', 'code=' . $extension['code'])
+						'href' => site_url('extension/total', 'code=' . $extension['code'])
 					),
 					'uninstall' => array(
 						'text' => _l("Uninstall"),
-						'href' => $this->url->link('extension/total/uninstall', 'code=' . $extension['code']),
+						'href' => site_url('extension/total/uninstall', 'code=' . $extension['code']),
 					),
 				);
 			} else {
 				$actions = array(
 					'install' => array(
 						'text' => _l("Install"),
-						'href' => $this->url->link('extension/total/install', 'code=' . $extension['code'])
+						'href' => site_url('extension/total/install', 'code=' . $extension['code'])
 					),
 				);
 			}
@@ -109,7 +109,7 @@ class Admin_Controller_Extension_Total extends Controller
 		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('extension/add');
+		$data['insert'] = site_url('extension/add');
 
 		//Render limit Menu
 		$data['limits'] = $this->sort->renderLimits();
@@ -140,7 +140,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 			$this->message->add('success', _l("Successfully saved settings for %s!", $code));
 
-			$this->url->redirect('extension/total');
+			redirect('extension/total');
 		}
 
 		$total_extension = $this->System_Extension_Total->get($code);
@@ -152,9 +152,9 @@ class Admin_Controller_Extension_Total extends Controller
 		$data['page_title'] = $total_extension->info('title');
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Order Totals Extensions"), $this->url->link('extension/total'));
-		$this->breadcrumb->add($total_extension->info('title'), $this->url->link('extension/total', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Order Totals Extensions"), site_url('extension/total'));
+		$this->breadcrumb->add($total_extension->info('title'), site_url('extension/total', 'code=' . $code));
 
 		//Entry Data
 		if ($this->request->isPost()) {
@@ -184,8 +184,8 @@ class Admin_Controller_Extension_Total extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('extension/total', 'code=' . $code);
-		$data['cancel'] = $this->url->link('extension/total');
+		$data['save']   = site_url('extension/total', 'code=' . $code);
+		$data['cancel'] = site_url('extension/total');
 
 		//Render
 		$this->response->setOutput($this->render('extension/total', $data));
@@ -200,7 +200,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 		if (!is_file($file)) {
 			$this->message->add('warning', _l("The extension file %s does not exist!", $file));
-			$this->url->redirect('extension/total');
+			redirect('extension/total');
 		}
 
 		//Handle POST
@@ -211,16 +211,16 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->message->add('warning', _l("There was a problem while saving the file %s!", $file));
 			}
 
-			$this->url->redirect('extension/total');
+			redirect('extension/total');
 		}
 
 		//Load extension
 		$extension = $this->System_Extension_Total->get($code)->info();
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Order Totals Extensions"), $this->url->link('extension/total'));
-		$this->breadcrumb->add($extension['title'], $this->url->link('extension/total/edit', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Order Totals Extensions"), site_url('extension/total'));
+		$this->breadcrumb->add($extension['title'], site_url('extension/total/edit', 'code=' . $code));
 
 		//Load Contents
 		$data['contents'] = file_get_contents($file);
@@ -230,8 +230,8 @@ class Admin_Controller_Extension_Total extends Controller
 		$data['edit_file']  = $file;
 
 		//Action Buttons
-		$data['save']   = $this->url->link('extension/total/edit', 'code=' . $code);
-		$data['cancel'] = $this->url->link('extension/total');
+		$data['save']   = site_url('extension/total/edit', 'code=' . $code);
+		$data['cancel'] = site_url('extension/total');
 
 		//Render
 		$this->response->setOutput($this->render('extension/edit', $data));
@@ -282,7 +282,7 @@ class Admin_Controller_Extension_Total extends Controller
 			$this->message->add('warning', $this->System_Extension_Model->getError());
 		}
 
-		$this->url->redirect('extension/total');
+		redirect('extension/total');
 	}
 
 	public function uninstall()
@@ -292,6 +292,6 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 
-		$this->url->redirect('extension/total');
+		redirect('extension/total');
 	}
 }

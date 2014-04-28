@@ -1,90 +1,100 @@
 <?php
 class Admin_Controller_Catalog_Category extends Controller
 {
+	static $can_modify = array(
+		'update',
+	   'delete',
+	   'form',
+	   'batch_update',
+	);
+
 	public function index()
-	{
-		$this->getList();
-	}
-
-	public function update()
-	{
-		if ($this->request->isPost() && $this->validateForm()) {
-			//Insert
-			if (empty($_GET['category_id'])) {
-				$this->Model_Catalog_Category->addCategory($_POST);
-			} //Update
-			else {
-				$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
-			}
-
-			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified categories!"));
-
-				$this->url->redirect('catalog/category');
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		if (!empty($_GET['category_id']) && $this->validateDelete()) {
-			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
-
-			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified categories!"));
-
-				$this->url->redirect('catalog/category');
-			}
-		}
-
-		$this->getList();
-	}
-
-	public function batch_update()
-	{
-		if (!empty($_GET['selected']) && isset($_GET['action'])) {
-			foreach ($_GET['selected'] as $category_id) {
-				switch ($_GET['action']) {
-					case 'enable':
-						$this->Model_Catalog_Category->updateField($category_id, array('status' => 1));
-						break;
-					case 'disable':
-						$this->Model_Catalog_Category->updateField($category_id, array('status' => 0));
-						break;
-					case 'delete':
-						$this->Model_Catalog_Category->deleteCategory($category_id);
-						break;
-					case 'copy':
-						$this->Model_Catalog_Category->copyCategory($category_id);
-						break;
-				}
-
-				if ($this->error) {
-					break;
-				}
-			}
-
-			if (!$this->error && !$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified categories!"));
-
-				$this->url->redirect('catalog/category', $this->url->getQueryExclude('action'));
-			}
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Category"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Category"), site_url('catalog/category'));
 
+		//Batch Actions
+		$actions = array(
+			'enable'  => array(
+				'label' => _l("Enable")
+			),
+			'disable' => array(
+				'label' => _l("Disable"),
+			),
+			'copy'    => array(
+				'label' => _l("Copy"),
+			),
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
+		);
+
+		$data['batch_action'] = array(
+			'actions' => $actions,
+		   'path' => 'catalog/category/batch_update',
+		);
+
+		//The Listing
+		$data['listing'] = $this->listing();
+
+		//Permission
+		$data['can_modify'] = $this->user->can('modify', 'catalog/category');
+
+		//Action Buttons
+		$data['insert'] = site_url('catalog/category/form');
+
+		//Render
+		$this->response->setOutput($this->render('catalog/category_list', $data));
+	}
+
+	public function update()
+	{
+		//Insert
+		if (empty($_GET['category_id'])) {
+			$this->Model_Catalog_Category->add($_POST);
+		} //Update
+		else {
+			$this->Model_Catalog_Category->edit($_GET['category_id'], $_POST);
+		}
+
+		if ($this->Model_Catalog_Category->hasError()) {
+			$this->message->add('error', $this->Model_Catalog_Category->getError());
+		} else {
+			$this->message->add('success', _l("The Category has been updated!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
+		} else {
+			redirect('catalog/category');
+		}
+	}
+
+	public function delete()
+	{
+		$this->Model_Catalog_Category->remove($_GET['category_id']);
+
+		if ($this->Model_Catalog_Category->hasError()) {
+			$this->message->add('error', $this->Model_Catalog_Category->getError());
+		} else {
+			$this->message->add('notify', _l("Category was deleted!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('catalog/category');
+		}
+	}
+
+	public function listing()
+	{
 		//The Table Columns
 		$columns = array();
 
@@ -138,16 +148,18 @@ class Admin_Controller_Catalog_Category extends Controller
 		$image_height = $this->config->get('config_image_admin_list_height');
 
 		foreach ($categories as &$category) {
-			$category['actions'] = array(
-				'edit'   => array(
-					'text' => _l("Edit"),
-					'href' => $this->url->link('catalog/category/update', 'category_id=' . $category['category_id'])
-				),
-				'delete' => array(
-					'text' => _l("Delete"),
-					'href' => $this->url->link('catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
-				)
-			);
+			if ($this->user->can('modify', 'catalog/category')) {
+				$category['actions'] = array(
+					'edit'   => array(
+						'text' => _l("Edit"),
+						'href' => site_url('catalog/category/form', 'category_id=' . $category['category_id'])
+					),
+					'delete' => array(
+						'text' => _l("Delete"),
+						'href' => site_url('catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
+					)
+				);
+			}
 
 			$category['name'] = $category['pathname'];
 
@@ -157,70 +169,41 @@ class Admin_Controller_Catalog_Category extends Controller
 		}
 		unset($category);
 
-		//Build The Table
-		$tt_data = array(
-			'row_id' => 'category_id',
+		$listing = array(
+			'row_id'         => 'category_id',
+			'columns'        => $columns,
+			'rows'           => $categories,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $category_total,
+			'listing_path'   => 'catalog/category/listing',
 		);
 
-		$this->table->init();
-		$this->table->setTemplate('table/list_view');
-		$this->table->setColumns($columns);
-		$this->table->setRows($categories);
-		$this->table->setTemplateData($tt_data);
-		$this->table->mapAttribute('filter_value', $filter);
+		$output = _block('widget/listing', null, $listing);
 
-		$data['list_view'] = $this->table->render();
-
-		//Batch Actions
-		$data['batch_actions'] = array(
-			'enable'  => array(
-				'label' => _l("Enable")
-			),
-			'disable' => array(
-				'label' => _l("Disable"),
-			),
-			'copy'    => array(
-				'label' => _l("Copy"),
-			),
-			'delete'  => array(
-				'label' => _l("Delete"),
-			),
-		);
-
-		$data['batch_update'] = 'catalog/category/batch_update';
-
-		//Render Limit Menu
-		$data['limits'] = $this->sort->renderLimits();
-
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total = $category_total;
-
-		$data['pagination'] = $this->pagination->render();
-
-		//Action Buttons
-		$data['insert'] = $this->url->link('catalog/category/update');
-
-		//Render
-		$this->response->setOutput($this->render('catalog/category_list', $data));
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
+		} else {
+			return $output;
+		}
 	}
 
-	private function getForm()
+	public function form()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Category"));
 
 		//Insert or Update
-		$category_id = $data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+		$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Category"), $this->url->link('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Category"), site_url('catalog/category'));
 
 		if ($category_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/category/update', 'category_id=' . $category_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('catalog/category/form', 'category_id=' . $category_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/category/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('catalog/category/form'));
 		}
 
 		//Load Information
@@ -250,7 +233,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'stores'           => array(0),
 		);
 
-		$data += $category_info + $defaults;
+		$data = $category_info + $defaults;
 
 		//All other categories to select parent
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -277,14 +260,49 @@ class Admin_Controller_Catalog_Category extends Controller
 		);
 
 		//Ajax Urls
-		$data['url_generate_url'] = $this->url->link('catalog/category/generate_url');
+		$data['url_generate_url'] = site_url('catalog/category/generate_url');
 
 		//Action Buttons
-		$data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
-		$data['cancel'] = $this->url->link('catalog/category');
+		$data['action'] = site_url('catalog/category/update', 'category_id=' . $category_id);
+		$data['cancel'] = site_url('catalog/category');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/category_form', $data));
+	}
+
+	public function batch_update()
+	{
+		foreach ($_POST['batch'] as $category_id) {
+			switch ($_POST['action']) {
+				case 'enable':
+					$this->Model_Catalog_Category->edit($category_id, array('status' => 1));
+					break;
+
+				case 'disable':
+					$this->Model_Catalog_Category->edit($category_id, array('status' => 0));
+					break;
+
+				case 'delete':
+					$this->Model_Catalog_Category->remove($category_id);
+					break;
+
+				case 'copy':
+					$this->Model_Catalog_Category->copy($category_id);
+					break;
+			}
+		}
+
+		if ($this->Model_Catalog_Category->hasError()) {
+			$this->message->add('error', $this->Model_Catalog_Category->getError());
+		} else {
+			$this->message->add('success', _l("Categories have been modified!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->listing();
+		} else {
+			redirect('catalog/category');
+		}
 	}
 
 	public function generate_url()
@@ -298,27 +316,5 @@ class Admin_Controller_Catalog_Category extends Controller
 		}
 
 		$this->response->setOutput($url);
-	}
-
-	private function validateForm()
-	{
-		if (!$this->user->can('modify', 'catalog/category')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify categories!");
-		}
-
-		if (!$this->validation->text($_POST['name'], 2, 64)) {
-			$this->error['name'] = _l("Category Name must be between 2 and 64 characters!");
-		}
-
-		return empty($this->error);
-	}
-
-	private function validateDelete()
-	{
-		if (!$this->user->can('modify', 'catalog/category')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify categories!");
-		}
-
-		return empty($this->error);
 	}
 }

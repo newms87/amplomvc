@@ -16,13 +16,13 @@ class Catalog_Controller_Product_Compare extends Controller
 
 			$this->message->add('success', _l("Success: You have modified your product comparison!"));
 
-			$this->url->redirect('product/compare');
+			redirect('product/compare');
 		}
 
 		$this->document->setTitle(_l("Product Comparison"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Product Comparison"), $this->url->link('product/compare'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Product Comparison"), site_url('product/compare'));
 
 		if ($this->session->has('success')) {
 			$data['success'] = $this->session->get('success');
@@ -93,8 +93,8 @@ class Catalog_Controller_Product_Compare extends Controller
 					'width'        => $this->length->format($product_info['width'], $product_info['length_class_id']),
 					'height'       => $this->length->format($product_info['height'], $product_info['length_class_id']),
 					'attribute'    => $attribute_data,
-					'href'         => $this->url->link('product/product', 'product_id=' . $product_id),
-					'remove'       => $this->url->link('product/compare', 'remove=' . $product_id)
+					'href'         => site_url('product/product', 'product_id=' . $product_id),
+					'remove'       => site_url('product/compare', 'remove=' . $product_id)
 				);
 
 				foreach ($attribute_groups as $attribute_group) {
@@ -109,7 +109,7 @@ class Catalog_Controller_Product_Compare extends Controller
 			}
 		}
 
-		$data['continue'] = $this->url->link('common/home');
+		$data['continue'] = site_url('common/home');
 
 		$this->response->setOutput($this->render('product/compare', $data));
 	}
@@ -139,7 +139,7 @@ class Catalog_Controller_Product_Compare extends Controller
 				$this->session->get('compare')[] = $_POST['product_id'];
 			}
 
-			$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">product comparison</a>!"), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('product/compare'));
+			$json['success'] = sprintf(_l("Success: You have added <a href=\"%s\">%s</a> to your <a href=\"%s\">product comparison</a>!"), site_url('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], site_url('product/compare'));
 
 			$json['total'] = sprintf(_l("Product Compare (%s)"), ($this->session->has('compare') ? count($this->session->get('compare')) : 0));
 		}

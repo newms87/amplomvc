@@ -6,12 +6,12 @@ class Admin_Controller_Dev_Dev extends Controller
 		//Page Head
 		$this->document->setTitle(_l("Development Console"));
 
-		$data['url_sync']            = $this->url->link("dev/dev/sync");
-		$data['url_site_management'] = $this->url->link("dev/dev/site_management");
-		$data['url_backup_restore']  = $this->url->link("dev/dev/backup_restore");
-		$data['url_db_admin']        = $this->url->link("dev/db_admin");
+		$data['url_sync']            = site_url("dev/dev/sync");
+		$data['url_site_management'] = site_url("dev/dev/site_management");
+		$data['url_backup_restore']  = site_url("dev/dev/backup_restore");
+		$data['url_db_admin']        = site_url("dev/db_admin");
 
-		$data['return'] = $this->url->link('common/home');
+		$data['return'] = site_url('common/home');
 
 		$this->response->setOutput($this->render('dev/dev', $data));
 	}
@@ -41,9 +41,9 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Synchronize Sites"), $this->url->link('dev/dev/sync'));
+		$this->breadcrumb->add(_l("Synchronize Sites"), site_url('dev/dev/sync'));
 
-		$data['request_sync_table'] = $this->url->link('dev/dev/request_sync_table');
+		$data['request_sync_table'] = site_url('dev/dev/request_sync_table');
 
 		$defaults = array(
 			'tables' => '',
@@ -62,7 +62,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$data['data_tables'] = $this->db->getTables();
 
-		$data['return'] = $this->url->link('common/home');
+		$data['return'] = site_url('common/home');
 
 		$this->content();
 
@@ -92,7 +92,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
-		$this->breadcrumb->add(_l("Site Management"), $this->url->link('dev/dev/site_management'));
+		$this->breadcrumb->add(_l("Site Management"), site_url('dev/dev/site_management'));
 
 		$defaults = array(
 			'domain'   => '',
@@ -116,7 +116,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$data['dev_sites'] = $dev_sites;
 
-		$data['return'] = $this->url->link('common/home');
+		$data['return'] = site_url('common/home');
 
 		$this->content();
 
@@ -177,7 +177,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Backup & Restore"), $this->url->link('dev/dev/backup_restore'));
+		$this->breadcrumb->add(_l("Backup & Restore"), site_url('dev/dev/backup_restore'));
 
 		$defaults = array(
 			'tables' => '',
@@ -202,7 +202,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$data['data_tables'] = $this->db->getTables();
 
-		$data['return'] = $this->url->link('common/home');
+		$data['return'] = site_url('common/home');
 
 		$this->content();
 
@@ -213,8 +213,8 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'), '', 0);
-		$this->breadcrumb->add(_l("Development Console"), $this->url->link('dev/dev'), '', 1);
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'), '', 0);
+		$this->breadcrumb->add(_l("Development Console"), site_url('dev/dev'), '', 1);
 	}
 
 	public function request_table_data()

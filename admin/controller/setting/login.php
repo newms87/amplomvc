@@ -14,9 +14,9 @@ class Admin_Controller_Setting_Login extends Controller
 		$this->document->setTitle(_l("Login Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
-		$this->breadcrumb->add(_l("Login"), $this->url->link('setting/login'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/setting'));
+		$this->breadcrumb->add(_l("Login"), site_url('setting/login'));
 
 		//Load Data or Defaults
 		if (!$this->request->isPost()) {
@@ -47,8 +47,8 @@ class Admin_Controller_Setting_Login extends Controller
 		$data += $settings + $defaults;
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/login/save');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['save']   = site_url('setting/login/save');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/login', $data));
@@ -58,13 +58,13 @@ class Admin_Controller_Setting_Login extends Controller
 	{
 		//No Data
 		if (!$this->request->isPost()) {
-			$this->url->redirect('setting/login');
+			redirect('setting/login');
 		}
 
 		//User Permissions
 		if (!$this->user->can('modify', 'setting/login')) {
 			$this->message->add('warning', _l("You do not have permission to modify Login Settings."));
-			$this->url->redirect('setting/store');
+			redirect('setting/store');
 		}
 
 		//Validate Settings
@@ -75,7 +75,7 @@ class Admin_Controller_Setting_Login extends Controller
 
 		if (!$this->config->hasError()) {
 			$this->message->add('success', _l("You have successfully updated the Login Settings"));
-			$this->url->redirect('setting/store');
+			redirect('setting/store');
 		}
 
 	}

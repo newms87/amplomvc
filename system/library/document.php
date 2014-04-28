@@ -477,7 +477,7 @@ class Document extends Library
 
 				if (!preg_match("/^https?:\\/\\//", $link['href'])) {
 					$query        = isset($link['query']) ? $link['query'] : '';
-					$link['href'] = $this->url->link($link['href'], $query);
+					$link['href'] = site_url($link['href'], $query);
 				}
 
 				$components = parse_url(str_replace('&amp;', '&', $link['href']));

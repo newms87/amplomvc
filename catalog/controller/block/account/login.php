@@ -27,13 +27,13 @@ class Catalog_Controller_Block_Account_Login extends Controller
 
 		//For Guest Checkout (on checkout page)
 		if ($this->cart->guestCheckoutAllowed()) {
-			$data['guest_checkout'] = $this->url->link('checkout/checkout/guest_checkout');
+			$data['guest_checkout'] = site_url('checkout/checkout/guest_checkout');
 		}
 
 		//Action Buttons
-		$data['login']     = $this->url->link('customer/login');
-		$data['register']  = $this->url->link('customer/registration');
-		$data['forgotten'] = $this->url->link('customer/forgotten');
+		$data['login']     = site_url('customer/login');
+		$data['register']  = site_url('customer/registration');
+		$data['forgotten'] = site_url('customer/forgotten');
 
 		//The Template
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';

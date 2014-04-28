@@ -14,7 +14,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 		//Build Address Form
 		$this->form->init('address');
 		$this->form->set_template('form/address');
-		$this->form->set_action($this->url->link('block/checkout/payment_address/validate_form'));
+		$this->form->set_action(site_url('block/checkout/payment_address/validate_form'));
 		$this->form->set_field_options('country_id', $this->Model_Localisation_Country->getCountries(), array('country_id' => 'name'));
 
 		$yes_no = array(
@@ -26,7 +26,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		$data['form_payment_address'] = $this->form->build();
 
-		$data['validate_selection'] = $this->url->link('block/checkout/payment_address/validate_selection');
+		$data['validate_selection'] = site_url('block/checkout/payment_address/validate_selection');
 
 		$this->response->setOutput($this->render('block/checkout/payment_address', $data));
 	}
@@ -82,7 +82,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				$this->url->redirect('checkout/checkout');
+				redirect('checkout/checkout');
 			}
 		}
 
@@ -95,9 +95,9 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
-			$json['redirect'] = $this->url->link('checkout/checkout');
+			$json['redirect'] = site_url('checkout/checkout');
 		} elseif (!$this->cart->validate()) {
-			$json['redirect'] = $this->url->link('cart/cart');
+			$json['redirect'] = site_url('cart/cart');
 			$this->message->add('warning', $this->cart->getError());
 		}
 

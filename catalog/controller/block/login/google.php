@@ -25,7 +25,7 @@ class Catalog_Controller_Block_Login_Google extends Controller
 		if ($this->request->hasRedirect('gp_redirect')) {
 			$this->request->doRedirect('gp_redirect');
 		} else {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 	}
 
@@ -42,7 +42,7 @@ class Catalog_Controller_Block_Login_Google extends Controller
 		} else {
 			$this->message->add('warning', _l("Invalid Token"));
 		}
-		$this->url->redirect('common/home');
+		redirect('common/home');
 	}
 
 	public function people()

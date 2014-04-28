@@ -7,13 +7,13 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 			$this->currency->set($_POST['currency_code']);
 
 			if (isset($_POST['redirect'])) {
-				$this->url->redirect($_POST['redirect']);
+				redirect($_POST['redirect']);
 			} else {
-				$this->url->redirect('common/home');
+				redirect('common/home');
 			}
 		}
 
-		$data['action'] = $this->url->link('module/currency');
+		$data['action'] = site_url('module/currency');
 
 		$data['currency_code'] = $this->currency->getCode();
 

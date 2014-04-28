@@ -22,7 +22,7 @@ class Catalog_Controller_Block_Login_Facebook extends Controller
 		if ($this->request->hasRedirect('fb_redirect')) {
 			$this->request->doRedirect('fb_redirect');
 		} else {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 	}
 
@@ -39,6 +39,6 @@ class Catalog_Controller_Block_Login_Facebook extends Controller
 		} else {
 			$this->message->add('warning', _l("Invalid Token"));
 		}
-		$this->url->redirect('common/home');
+		redirect('common/home');
 	}
 }

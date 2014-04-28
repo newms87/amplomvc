@@ -3,8 +3,8 @@ class Catalog_Controller_Product_Category extends Controller
 {
 	public function index()
 	{
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("All Categories"), $this->url->link('product/category'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("All Categories"), site_url('product/category'));
 
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 		$attributes  = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
@@ -37,10 +37,10 @@ class Catalog_Controller_Product_Category extends Controller
 			$parents = $this->Model_Catalog_Category->getParents($category_id);
 
 			foreach ($parents as $parent) {
-				$this->breadcrumb->add($parent['name'], $this->url->link('product/category', 'category_id=' . $parent['category_id']));
+				$this->breadcrumb->add($parent['name'], site_url('product/category', 'category_id=' . $parent['category_id']));
 			}
 
-			$this->breadcrumb->add($category_info['name'], $this->url->link('product/category', 'category_id=' . $category_id));
+			$this->breadcrumb->add($category_info['name'], site_url('product/category', 'category_id=' . $category_id));
 		} else {
 			//Page Head
 			$this->document->setTitle(_l("All Categories"));
@@ -117,17 +117,17 @@ class Catalog_Controller_Product_Category extends Controller
 			$data['pagination'] = $this->pagination->render();
 
 			//In case there was a problem with the block_product_list
-			$data['continue'] = $this->url->link('common/home');
+			$data['continue'] = site_url('common/home');
 		} else {
 			$data['category_name'] = !empty($category_info['name']) ? $category_info['name'] : _l("All Categories");
 
 			$parent = $this->Model_Catalog_Category->getParent($category_id);
 
 			if ($parent && $parent['category_id'] !== 0) {
-				$data['continue'] = $this->url->link('product/category', 'category_id=' . $parent['category_id']);
+				$data['continue'] = site_url('product/category', 'category_id=' . $parent['category_id']);
 			}
 			else {
-				$data['continue'] = $this->url->link('common/home');
+				$data['continue'] = site_url('common/home');
 			}
 		}
 

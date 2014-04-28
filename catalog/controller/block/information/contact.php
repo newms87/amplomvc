@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 	private function getForm()
 	{
 		//Captcha Image
-		$data['captcha_url'] = $this->url->link("block/information/contact/captcha");
+		$data['captcha_url'] = site_url("block/information/contact/captcha");
 
 		//Action
 		$data['action'] = $this->url->here();
@@ -57,7 +57,7 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 
 	public function success()
 	{
-		$data['continue'] = $this->url->link('common/home');
+		$data['continue'] = site_url('common/home');
 
 		$this->render('block/information/contact_success', $data);
 	}

@@ -31,7 +31,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/zone', $url);
+			redirect('localisation/zone', $url);
 		}
 
 		$this->getForm();
@@ -60,7 +60,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/zone', $url);
+			redirect('localisation/zone', $url);
 		}
 
 		$this->getForm();
@@ -91,7 +91,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('localisation/zone', $url);
+			redirect('localisation/zone', $url);
 		}
 
 		$this->getList();
@@ -131,11 +131,11 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Zones"), site_url('localisation/zone', $url));
 
-		$data['insert'] = $this->url->link('localisation/zone/insert', $url);
-		$data['delete'] = $this->url->link('localisation/zone/delete', $url);
+		$data['insert'] = site_url('localisation/zone/insert', $url);
+		$data['delete'] = site_url('localisation/zone/delete', $url);
 
 		$data['zones'] = array();
 
@@ -155,7 +155,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
+				'href' => site_url('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
 			);
 
 			$data['zones'][] = array(
@@ -194,9 +194,9 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_country'] = $this->url->link('localisation/zone', 'sort=c.name' . $url);
-		$data['sort_name']    = $this->url->link('localisation/zone', 'sort=z.name' . $url);
-		$data['sort_code']    = $this->url->link('localisation/zone', 'sort=z.code' . $url);
+		$data['sort_country'] = site_url('localisation/zone', 'sort=c.name' . $url);
+		$data['sort_name']    = site_url('localisation/zone', 'sort=z.name' . $url);
+		$data['sort_code']    = site_url('localisation/zone', 'sort=z.code' . $url);
 
 		$url = '';
 
@@ -246,16 +246,16 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Zones"), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Zones"), site_url('localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {
-			$data['action'] = $this->url->link('localisation/zone/insert', $url);
+			$data['action'] = site_url('localisation/zone/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
+			$data['action'] = site_url('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
 		}
 
-		$data['cancel'] = $this->url->link('localisation/zone', $url);
+		$data['cancel'] = site_url('localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
 			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);

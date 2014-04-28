@@ -27,9 +27,9 @@ class Admin_Model_Setting_Setting extends Model
 
 				if (!empty($directives['path'])) {
 					$query = !empty($directives['query']) ? $directives['query'] : '';
-					$widget['url'] = $this->url->link($directives['path'], $query);
+					$widget['url'] = site_url($directives['path'], $query);
 				} else {
-					$widget['url'] = $this->url->link('setting/' . str_replace('.php','',basename($file)));
+					$widget['url'] = site_url('setting/' . str_replace('.php','',basename($file)));
 				}
 
 				$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;

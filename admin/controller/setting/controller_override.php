@@ -7,10 +7,10 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		$this->document->setTitle(_l("Controller Override"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Stores"), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/setting'));
-		$this->breadcrumb->add(_l("Controller Override"), $this->url->link('setting/controller_override'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Stores"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/setting'));
+		$this->breadcrumb->add(_l("Controller Override"), site_url('setting/controller_override'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -20,7 +20,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Controller Overrides"));
-				$this->url->redirect('setting/setting');
+				redirect('setting/setting');
 			}
 		}
 
@@ -45,8 +45,8 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		$data['controller_overrides'] = $controller_overrides;
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/controller_override');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['save']   = site_url('setting/controller_override');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/controller_override', $data));

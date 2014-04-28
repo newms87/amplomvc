@@ -6,18 +6,18 @@ class Catalog_Controller_Account_Order extends Controller
 	{
 		//Login Validation
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/order'));
+			$this->session->set('redirect', site_url('account/order'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Order History"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Order History"), site_url('account/order'));
 
 		//Get Sorted / Filtered Data
 		$sort = $this->sort->getQueryDefaults('order_id', 'DESC', 10);
@@ -38,8 +38,8 @@ class Catalog_Controller_Account_Order extends Controller
 			$order['products']     = ($product_total + $voucher_total);
 			$order['total']        = $this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
 			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
-			$order['href']         = $this->url->link('account/order/info', 'order_id=' . $order['order_id']);
-			$order['reorder']      = $this->url->link('account/order/reorder', 'order_id=' . $order['order_id']);
+			$order['href']         = site_url('account/order/info', 'order_id=' . $order['order_id']);
+			$order['reorder']      = site_url('account/order/reorder', 'order_id=' . $order['order_id']);
 
 		}
 		unset($order);
@@ -56,7 +56,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['continue'] = $this->url->link('account');
+		$data['continue'] = site_url('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/order_list', $data));
@@ -69,9 +69,9 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Login Validation
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/order/info', 'order_id=' . $order_id));
+			$this->session->set('redirect', site_url('account/order/info', 'order_id=' . $order_id));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		//Order Validation
@@ -82,19 +82,19 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$order) {
 			$this->message->add('warning', _l("Unable to find requested order. Please choose an order to view from the list."));
 
-			$this->url->redirect('account/order');
+			redirect('account/order');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Order Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Order History"), $this->url->link('account/order'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Order History"), site_url('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$data['policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+		$data['policies'] = site_url('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
 
@@ -138,7 +138,7 @@ class Catalog_Controller_Account_Order extends Controller
 			$product['shipping_policy'] = $this->cart->getShippingPolicy($product['shipping_policy_id']);
 
 			if ($product['return_policy']['days'] >= 0) {
-				$product['return'] = $this->url->link('account/return/insert', 'order_id=' . $order['order_id'] . '&product_id=' . $product['product_id']);
+				$product['return'] = site_url('account/return/insert', 'order_id=' . $order['order_id'] . '&product_id=' . $product['product_id']);
 			}
 		}
 		unset($product);
@@ -182,7 +182,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$data['totals'] = $totals;
 
 		//Action Buttons
-		$data['continue'] = $this->url->link('account/order');
+		$data['continue'] = site_url('account/order');
 
 		//Render
 		$this->response->setOutput($this->render('account/order_info', $data));
@@ -212,7 +212,7 @@ class Catalog_Controller_Account_Order extends Controller
 					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $options);
 				}
 
-				$this->url->redirect('cart/cart');
+				redirect('cart/cart');
 			}
 		}
 

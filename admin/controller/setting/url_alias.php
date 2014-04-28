@@ -13,9 +13,9 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->document->setTitle(_l("URL Aliases"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("URL Aliases"), site_url('setting/url_alias'));
 
 		//The Table Columns
 		$columns = array();
@@ -88,11 +88,11 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$url_alias['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
+					'href' => site_url('setting/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
+					'href' => site_url('setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
 				)
 			);
 		}
@@ -137,9 +137,9 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('setting/url_alias/update');
-		$data['delete'] = $this->url->link('setting/url_alias/delete');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['insert'] = site_url('setting/url_alias/update');
+		$data['delete'] = site_url('setting/url_alias/delete');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/url_alias_list', $data));
@@ -159,7 +159,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
-				$this->url->redirect('setting/url_alias');
+				redirect('setting/url_alias');
 			}
 		}
 
@@ -174,7 +174,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified the url alias table!"));
 
-				$this->url->redirect('setting/url_alias');
+				redirect('setting/url_alias');
 			}
 		}
 
@@ -209,7 +209,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 		}
 
-		$this->url->redirect('setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
+		redirect('setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	public function getForm()
@@ -221,13 +221,13 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("URL Aliases"), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("URL Aliases"), site_url('setting/url_alias'));
 
 		if (!$url_alias_id) {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('setting/url_alias/udpate'));
+			$this->breadcrumb->add(_l("Add"), site_url('setting/url_alias/udpate'));
 		} else {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
 
 		//Load Information
@@ -286,8 +286,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
-		$data['cancel'] = $this->url->link('setting/url_alias');
+		$data['save']   = site_url('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
+		$data['cancel'] = site_url('setting/url_alias');
 
 		//Render
 		$this->response->setOutput($this->render('setting/url_alias_form', $data));

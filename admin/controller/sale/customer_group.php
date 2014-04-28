@@ -33,7 +33,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer_group', $url);
+			redirect('sale/customer_group', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer_group', $url);
+			redirect('sale/customer_group', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect('sale/customer_group', $url);
+			redirect('sale/customer_group', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Customer Group"), $this->url->link('sale/customer_group', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Customer Group"), site_url('sale/customer_group', $url));
 
-		$data['insert'] = $this->url->link('sale/customer_group/insert', $url);
-		$data['delete'] = $this->url->link('sale/customer_group/delete', $url);
+		$data['insert'] = site_url('sale/customer_group/insert', $url);
+		$data['delete'] = site_url('sale/customer_group/delete', $url);
 
 		$data['customer_groups'] = array();
 
@@ -157,7 +157,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('sale/customer_group/update', 'customer_group_id=' . $result['customer_group_id'] . $url)
+				'href' => site_url('sale/customer_group/update', 'customer_group_id=' . $result['customer_group_id'] . $url)
 			);
 
 			$data['customer_groups'][] = array(
@@ -194,7 +194,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name'] = $this->url->link('sale/customer_group', 'sort=name' . $url);
+		$data['sort_name'] = site_url('sale/customer_group', 'sort=name' . $url);
 
 		$url = '';
 
@@ -244,16 +244,16 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Customer Group"), $this->url->link('sale/customer_group', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Customer Group"), site_url('sale/customer_group', $url));
 
 		if (!isset($_GET['customer_group_id'])) {
-			$data['action'] = $this->url->link('sale/customer_group/insert', $url);
+			$data['action'] = site_url('sale/customer_group/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('sale/customer_group/update', 'customer_group_id=' . $_GET['customer_group_id'] . $url);
+			$data['action'] = site_url('sale/customer_group/update', 'customer_group_id=' . $_GET['customer_group_id'] . $url);
 		}
 
-		$data['cancel'] = $this->url->link('sale/customer_group', $url);
+		$data['cancel'] = site_url('sale/customer_group', $url);
 
 		if (isset($_GET['customer_group_id']) && !$this->request->isPost()) {
 			$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($_GET['customer_group_id']);

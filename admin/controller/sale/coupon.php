@@ -20,7 +20,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('sale/coupon', $url);
+			redirect('sale/coupon', $url);
 		}
 
 		$this->getForm();
@@ -37,7 +37,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('sale/coupon', $url);
+			redirect('sale/coupon', $url);
 		}
 
 		$this->getForm();
@@ -56,7 +56,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('sale/coupon', $url);
+			redirect('sale/coupon', $url);
 		}
 
 		$this->getList();
@@ -75,11 +75,11 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Coupon"), site_url('sale/coupon'));
 
-		$data['insert'] = $this->url->link('sale/coupon/insert', $url);
-		$data['delete'] = $this->url->link('sale/coupon/delete', $url);
+		$data['insert'] = site_url('sale/coupon/insert', $url);
+		$data['delete'] = site_url('sale/coupon/delete', $url);
 
 		$data['coupons'] = array();
 
@@ -99,7 +99,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
+				'href' => site_url('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
 			);
 
 			$data['coupons'][] = array(
@@ -136,7 +136,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 			'status'
 		);
 		foreach ($sort_list as $s) {
-			$data['sort_' . $s] = $this->url->link('sale/coupon', 'sort=' . $s . $url);
+			$data['sort_' . $s] = site_url('sale/coupon', 'sort=' . $s . $url);
 		}
 
 		$url = $this->get_url(array(
@@ -160,16 +160,16 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Coupon"), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Coupon"), site_url('sale/coupon'));
 
 		if (!$coupon_id) {
-			$data['action'] = $this->url->link('sale/coupon/insert', $url);
+			$data['action'] = site_url('sale/coupon/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('sale/coupon/update', 'coupon_id=' . $coupon_id . $url);
+			$data['action'] = site_url('sale/coupon/update', 'coupon_id=' . $coupon_id . $url);
 		}
 
-		$data['cancel'] = $this->url->link('sale/coupon', $url);
+		$data['cancel'] = site_url('sale/coupon', $url);
 
 		if ($coupon_id && !$this->request->isPost()) {
 			$coupon_info = $this->Model_Sale_Coupon->getCoupon($coupon_id);
@@ -259,8 +259,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 		);
 
 		//Ajax Urls
-		$data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
-		$data['url_coupon_history']       = $this->url->link('sale/coupon/history');
+		$data['url_product_autocomplete'] = site_url('catalog/product/autocomplete');
+		$data['url_coupon_history']       = site_url('sale/coupon/history');
 
 		$this->response->setOutput($this->render('sale/coupon_form', $data));
 	}

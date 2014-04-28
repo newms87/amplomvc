@@ -4,16 +4,16 @@ class Catalog_Controller_Account_Download extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/download'));
+			$this->session->set('redirect', site_url('account/download'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Account Downloads"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Downloads"), $this->url->link('account/download'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Downloads"), site_url('account/download'));
 
 		$download_total = $this->Model_Account_Download->getTotalDownloads();
 
@@ -57,7 +57,7 @@ class Catalog_Controller_Account_Download extends Controller
 						'name'       => $result['name'],
 						'remaining'  => $result['remaining'],
 						'size'       => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
-						'href'       => $this->url->link('account/download/download', 'order_download_id=' . $result['order_download_id'])
+						'href'       => site_url('account/download/download', 'order_download_id=' . $result['order_download_id'])
 					);
 				}
 			}
@@ -66,13 +66,13 @@ class Catalog_Controller_Account_Download extends Controller
 			$this->pagination->total  = $download_total;
 			$data['pagination'] = $this->pagination->render();
 
-			$data['continue'] = $this->url->link('account');
+			$data['continue'] = site_url('account');
 
 			$this->response->setOutput($this->render('account/download', $data));
 		} else {
 			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
 
-			$data['continue'] = $this->url->link('account');
+			$data['continue'] = site_url('account');
 
 			$this->response->setOutput($this->render('error/not_found', $data));
 		}
@@ -81,9 +81,9 @@ class Catalog_Controller_Account_Download extends Controller
 	public function download()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/download'));
+			$this->session->set('redirect', site_url('account/download'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		if (isset($_GET['order_download_id'])) {
@@ -121,7 +121,7 @@ class Catalog_Controller_Account_Download extends Controller
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->url->redirect('account/download');
+			redirect('account/download');
 		}
 	}
 }

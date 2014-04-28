@@ -20,7 +20,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
-				$this->url->redirect('catalog/product_class');
+				redirect('catalog/product_class');
 			}
 		}
 
@@ -35,7 +35,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Product Classes!"));
 
-				$this->url->redirect('catalog/product_class');
+				redirect('catalog/product_class');
 			}
 		}
 
@@ -61,7 +61,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			}
 		}
 
-		$this->url->redirect('catalog/product_class', $this->url->getQueryExclude('action', 'action_value'));
+		redirect('catalog/product_class', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()
@@ -70,8 +70,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->document->setTitle(_l("Product Classes"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Product Classes"), site_url('catalog/product_class'));
 
 		//The Table Columns
 		$columns = array();
@@ -107,11 +107,11 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			$product_class['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class['product_class_id'])
+					'href' => site_url('catalog/product_class/update', 'product_class_id=' . $product_class['product_class_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('catalog/product_class/delete', 'product_class_id=' . $product_class['product_class_id'] . '&' . $url_query)
+					'href' => site_url('catalog/product_class/delete', 'product_class_id=' . $product_class['product_class_id'] . '&' . $url_query)
 				)
 			);
 
@@ -170,7 +170,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('catalog/product_class/update');
+		$data['insert'] = site_url('catalog/product_class/update');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/product_class_list', $data));
@@ -185,13 +185,13 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$product_class_id = isset($_GET['product_class_id']) ? (int)$_GET['product_class_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Product Classes"), $this->url->link('catalog/product_class'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Product Classes"), site_url('catalog/product_class'));
 
 		if ($product_class_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('catalog/product_class/update', 'product_class_id=' . $product_class_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('catalog/product_class/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('catalog/product_class/update'));
 		}
 
 		//Load Information
@@ -217,8 +217,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$data['data_admin_templates'] = $this->Model_Catalog_ProductClass->getAdminTemplates();
 
 		//Action Buttons
-		$data['save']   = $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id);
-		$data['cancel'] = $this->url->link('catalog/product_class');
+		$data['save']   = site_url('catalog/product_class/update', 'product_class_id=' . $product_class_id);
+		$data['cancel'] = site_url('catalog/product_class');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/product_class_form', $data));

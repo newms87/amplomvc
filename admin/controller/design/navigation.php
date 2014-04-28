@@ -15,8 +15,8 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->document->setTitle(_l("Navigation"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Navigation"), site_url('design/navigation'));
 
 		//Batch Actions
 		$actions = array(
@@ -35,17 +35,59 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'path'    => $this->url->link('design/navigation/batch_update'),
+			'path'    => site_url('design/navigation/batch_update'),
 		);
 
 		//The Listing
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = $this->url->link('design/navigation/form');
+		$data['insert'] = site_url('design/navigation/form');
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_list', $data));
+	}
+
+	public function update()
+	{
+		//Insert
+		if (empty($_GET['navigation_group_id'])) {
+			$this->Model_Design_Navigation->addNavigationGroup($_POST);
+		} //Update
+		else {
+			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
+		}
+
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+		} else {
+			$this->message->add('success', _l("Navigation has been updated!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
+		} else {
+			redirect('design/navigation');
+		}
+	}
+
+	public function delete()
+	{
+		$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
+
+		if ($this->Model_Design_Navigation->hasError()) {
+			$this->message->add('error', $this->Model_Design_Navigation->getError());
+		} else {
+			$this->message->add('success', _l("Success: You have modified Navigation!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('design/navigation');
+		}
 	}
 
 	public function listing()
@@ -108,18 +150,18 @@ class Admin_Controller_Design_Navigation extends Controller
 			$nav_group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => $this->url->link('design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+					'href' => site_url('design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => $this->url->link('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
+					'href' => site_url('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
 				)
 			);
 
 			if ($nav_group['name'] == 'admin') {
 				$nav_group['actions']['reset'] = array(
 					'text'   => _l("Reset Admin Navigation"),
-					'href'   => $this->url->link('design/navigation/reset_admin_navigation' . '&' . $url_query),
+					'href'   => site_url('design/navigation/reset_admin_navigation' . '&' . $url_query),
 					'#class' => 'reset',
 				);
 			}
@@ -137,53 +179,11 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$output = _block('widget/listing', null, $listing);
 
-		if (!$this->request->isAjax()) {
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
+		} else {
 			return $output;
 		}
-
-		$this->response->setOutput($output);
-	}
-
-	public function update()
-	{
-		//Insert
-		if (empty($_GET['navigation_group_id'])) {
-			$this->Model_Design_Navigation->addNavigationGroup($_POST);
-		} //Update
-		else {
-			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
-		}
-
-		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
-			return $this->form();
-		}
-
-		$this->message->add('success', _l("Success: You have modified Navigation!"));
-
-		if (!$this->request->isAjax()) {
-			$this->url->redirect('design/navigation');
-		}
-
-		$this->response->setOutput($this->message->toJSON());
-	}
-
-	public function delete()
-	{
-		$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
-
-		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
-			$this->url->redirect('design/navigation');
-		}
-
-		$this->message->add('success', _l("Success: You have modified Navigation!"));
-
-		if (!$this->request->isAjax()) {
-			$this->url->redirect('design/navigation');
-		}
-
-		$this->response->setOutput($this->message->toJSON());
 	}
 
 	public function form()
@@ -195,13 +195,13 @@ class Admin_Controller_Design_Navigation extends Controller
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Navigation"), $this->url->link('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Navigation"), site_url('design/navigation'));
 
 		if ($navigation_group_id) {
-			$this->breadcrumb->add(_l("Edit"), $this->url->link('design/navigation', 'navigation_group_id=' . $navigation_group_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('design/navigation', 'navigation_group_id=' . $navigation_group_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), $this->url->link('design/navigation'));
+			$this->breadcrumb->add(_l("Add"), site_url('design/navigation'));
 		}
 
 		//Load Values or Defaults
@@ -254,11 +254,42 @@ class Admin_Controller_Design_Navigation extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
-		$data['cancel'] = $this->url->link('design/navigation');
+		$data['save']   = site_url('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
+		$data['cancel'] = site_url('design/navigation');
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_form', $data));
+	}
+
+	public function batch_update()
+	{
+		foreach ($_POST['batch'] as $navigation_group_id) {
+			switch ($_POST['action']) {
+				case 'enable':
+					$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+					break;
+
+				case 'disable':
+					$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+					break;
+
+				case 'delete':
+					$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+					break;
+			}
+
+			if ($this->Model_Design_Navigation->hasError()) {
+				$this->message->add('error', $this->Model_Design_Navigation->getError());
+			} else {
+				$this->message->add('success', _l("Success: You have modified navigation!"));
+			}
+		}
+
+		if ($this->request->isAjax()) {
+			$this->listing();
+		} else {
+			redirect('design/navigation');
+		}
 	}
 
 	public function reset_admin_navigation()
@@ -267,51 +298,16 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		if ($this->Model_Design_Navigation->hasError()) {
 			$this->message->add('error', $this->Model_Design_Navigation->getError());
-			$this->url->redirect('design/navigation');
+			redirect('design/navigation');
 		}
 
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 
 		if (!$this->request->isAjax()) {
-			$this->url->redirect('design/navigation');
+			redirect('design/navigation');
 		}
 
 		$this->response->setOutput($this->message->toJSON());
-	}
-
-	public function batch_update()
-	{
-		if (isset($_POST['batch']) && isset($_POST['action'])) {
-			foreach ($_POST['batch'] as $navigation_group_id) {
-				switch ($_POST['action']) {
-					case 'enable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-						break;
-
-					case 'disable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-						break;
-
-					case 'delete':
-						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
-						break;
-				}
-			}
-
-			if ($this->Model_Design_Navigation->hasError()) {
-				$this->message->add('error', $this->Model_Design_Navigation->getError());
-			}
-		}
-
-		if (!$this->message->has('error')) {
-			$this->message->add('success', _l("Success: You have modified navigation!"));
-		}
-
-		if (!$this->request->isAjax()) {
-			$this->url->redirect('design/navigation');
-		}
-
-		$this->listing();
 	}
 
 	public function choose_link()

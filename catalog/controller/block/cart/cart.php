@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", $this->url->link('customer/login'), $this->url->link('customer/registration'));
+			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", site_url('customer/login'), site_url('customer/registration'));
 		}
 
 		if (!$this->cart->validate()) {
@@ -74,8 +74,8 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					}
 				}
 
-				$cart_product['href']   = $this->url->link('product/product', 'product_id=' . $product['product_id']);
-				$cart_product['remove'] = $this->url->link("cart/cart/remove", 'cart_key=' . $cart_product['key']);
+				$cart_product['href']   = site_url('product/product', 'product_id=' . $product['product_id']);
+				$cart_product['remove'] = site_url("cart/cart/remove", 'cart_key=' . $cart_product['key']);
 			}
 			unset($product);
 
@@ -98,8 +98,8 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		$data['show_return_policy'] = $show_return_policy;
 
 		//Url
-		$data['url_cart'] = $this->url->link('cart/cart');
-		$data['url_block_cart'] = $this->url->link("block/cart/cart");
+		$data['url_cart'] = site_url('cart/cart');
+		$data['url_block_cart'] = site_url("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
@@ -114,7 +114,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			$data['messages'] = $this->message->fetch();
 
 			if ($data['cart_empty']) {
-				$this->request->redirectBrowser($this->url->link('cart/cart'));
+				$this->request->redirectBrowser(site_url('cart/cart'));
 			}
 
 

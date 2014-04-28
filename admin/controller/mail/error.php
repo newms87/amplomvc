@@ -5,19 +5,19 @@ class Admin_Controller_Mail_Error extends Controller
 	{
 		$this->document->setTitle(_l("Failed Email Messages"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Failed Email Messages"), $this->url->link('mail/error'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Failed Email Messages"), site_url('mail/error'));
 
-		$data['cancel'] = $this->url->link('common/home');
+		$data['cancel'] = site_url('common/home');
 
 		$messages = $this->Model_Mail_Error->getFailedMessages();
 
 		$data['messages'] = $messages;
 
-		$data['send_message']   = $this->url->link('mail/error/resend');
-		$data['resend_message'] = $this->url->link('mail/error/resend');
-		$data['delete_message'] = $this->url->link('mail/error/delete');
-		$data['load_message']   = $this->url->link('mail/error/load_message');
+		$data['send_message']   = site_url('mail/error/resend');
+		$data['resend_message'] = site_url('mail/error/resend');
+		$data['delete_message'] = site_url('mail/error/delete');
+		$data['load_message']   = site_url('mail/error/load_message');
 
 		$this->response->setOutput($this->render('mail/error', $data));
 	}

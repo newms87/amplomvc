@@ -14,7 +14,7 @@ class Curl extends Library
 
 	public function get($url, $data = '', $response_type = self::RESPONSE_TEXT, $options = array())
 	{
-		$url = $this->url->link($url, $data);
+		$url = site_url($url, $data);
 
 		$opts = $options + array(
 				// return web page

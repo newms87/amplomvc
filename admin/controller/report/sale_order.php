@@ -18,8 +18,8 @@ class Admin_Controller_Report_SaleOrder extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Sales Report"), $this->url->link('report/sale_order'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Sales Report"), site_url('report/sale_order'));
 
 		$data['orders'] = array();
 

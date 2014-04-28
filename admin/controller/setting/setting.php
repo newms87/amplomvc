@@ -25,13 +25,13 @@ class Admin_Controller_Setting_Setting extends Controller
 
 			$this->message->add('success', _l("Success: You have modified settings!"));
 
-			$this->url->redirect('setting/store');
+			redirect('setting/store');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Settings"), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l("General Settings"), $this->url->link('setting/setting'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("General Settings"), site_url('setting/setting'));
 
 		//Load Information
 		if (!$this->request->isPost()) {
@@ -229,10 +229,10 @@ class Admin_Controller_Setting_Setting extends Controller
 			2 => _l('Always'),
 		);
 
-		$data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		$data['load_theme_img'] = site_url('setting/setting/theme');
 
-		$data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", $this->url->link('setting/return_policy'));
-		$data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", $this->url->link('setting/shipping_policy'));
+		$data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", site_url('setting/return_policy'));
+		$data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", site_url('setting/shipping_policy'));
 
 		$data['data_statuses'] = array(
 			0 => _l("Disabled"),
@@ -245,8 +245,8 @@ class Admin_Controller_Setting_Setting extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = $this->url->link('setting/setting');
-		$data['cancel'] = $this->url->link('setting/store');
+		$data['save']   = site_url('setting/setting');
+		$data['cancel'] = site_url('setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/setting', $data));

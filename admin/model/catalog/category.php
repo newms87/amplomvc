@@ -2,8 +2,16 @@
 
 class Admin_Model_Catalog_Category extends Model
 {
-	public function addCategory($data)
+	public function add($data)
 	{
+		if (!$this->validation->text($data['name'], 2, 64)) {
+			$this->error['name'] = _l("Category Name must be between 2 and 64 characters!");
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
 		$data['date_added']    = $this->date->now();
 		$data['date_modified'] = $data['date_added'];
 
@@ -44,15 +52,25 @@ class Admin_Model_Catalog_Category extends Model
 		return $category_id;
 	}
 
-	public function editCategory($category_id, $data)
+	public function edit($category_id, $data)
 	{
+		if (isset($data['name']) && !$this->validation->text($data['name'], 2, 64)) {
+			$this->error['name'] = _l("Category Name must be between 2 and 64 characters!");
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
 		$data['date_modified'] = $this->date->now();
 
-		$this->update('category', $data, $category_id);
+		if (!$this->update('category', $data, $category_id)) {
+			return false;
+		}
 
-		$this->delete('category_to_store', array('category_id' => $category_id));
+		if (isset($data['category_store'])) {
+			$this->delete('category_to_store', array('category_id' => $category_id));
 
-		if (!empty($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
 				$store = array(
 					'category_id' => $category_id,
@@ -63,9 +81,9 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 
-		$this->delete('category_to_layout', array('category_id' => $category_id));
-
 		if (isset($data['category_layout'])) {
+			$this->delete('category_to_layout', array('category_id' => $category_id));
+
 			foreach ($data['category_layout'] as $store_id => $layout) {
 				if ($layout['layout_id']) {
 					$layout['category_id'] = $category_id;
@@ -76,21 +94,20 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 
-		if (!empty($data['alias'])) {
+		if (isset($data['alias'])) {
 			$this->url->setAlias($data['alias'], 'product/category', 'category_id=' . (int)$category_id);
-		} else {
-			$this->url->removeAlias('product/category', 'category_id=' . (int)$category_id);
 		}
 
-
-		if (!empty($data['translations'])) {
+		if (isset($data['translations'])) {
 			$this->translation->setTranslations('category', $category_id, $data['translations']);
 		}
 
 		$this->cache->delete('category');
+
+		return $category_id;
 	}
 
-	public function deleteCategory($category_id)
+	public function remove($category_id)
 	{
 		$this->delete('category', $category_id);
 		$this->delete('category_to_store', array('category_id' => $category_id));
@@ -109,6 +126,22 @@ class Admin_Model_Catalog_Category extends Model
 		}
 
 		$this->cache->delete('category');
+
+		return true;
+	}
+
+	public function copy($category_id)
+	{
+		$category = $this->getCategory($category_id);
+
+		$category['category_store']   = $this->getCategoryStores($category_id);
+		$category['category_layout'] = $this->getCategoryLayouts($category_id);
+		$category['translations']     = $this->getCategoryTranslations($category_id);
+
+		$copy_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "category WHERE `name` like '$category[name]%'");
+		$category['name'] .= ' - Copy(' . $copy_count . ')';
+
+		return $this->add($category);
 	}
 
 	public function getCategory($category_id)
@@ -134,6 +167,10 @@ class Admin_Model_Catalog_Category extends Model
 
 		//Where
 		$where = "1";
+
+		if (!empty($data['name'])) {
+			$where .= " AND `name` like '%" . $this->escape($data['name']) . "%'";
+		}
 
 		if (!empty($data['category_ids'])) {
 			$where .= " AND category_id IN (" . implode(',', $data['category_ids']) . ")";
@@ -186,11 +223,6 @@ class Admin_Model_Catalog_Category extends Model
 		);
 
 		return $this->translation->getTranslations('category', $category_id, $translate_fields);
-	}
-
-	public function update_field($category_id, $data)
-	{
-		$this->update('category', $data, $category_id);
 	}
 
 	//TODO: Update Categories in Admin to Category Tree style (see front end!)

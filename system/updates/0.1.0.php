@@ -34,3 +34,4 @@ $this->db->dropColumn('block', 'profiles');
 
 //Page
 $this->db->addColumn('page', 'template', "VARCHAR(128) NOT NULL AFTER `layout_id`");
+$this->db->addColumn('page', 'name', "VARCHAR(128) NOT NULL AFTER `page_id`");

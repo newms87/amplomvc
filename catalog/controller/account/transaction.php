@@ -4,16 +4,16 @@ class Catalog_Controller_Account_Transaction extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/transaction'));
+			$this->session->set('redirect', site_url('account/transaction'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Your Transactions"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Your Transactions"), $this->url->link('account/transaction'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Your Transactions"), site_url('account/transaction'));
 
 		$data['amount'] = $this->config->get('config_currency');
 
@@ -50,7 +50,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 
 		$data['total'] = $this->currency->format($this->customer->getBalance());
 
-		$data['continue'] = $this->url->link('account');
+		$data['continue'] = site_url('account');
 
 		$this->response->setOutput($this->render('account/transaction', $data));
 	}

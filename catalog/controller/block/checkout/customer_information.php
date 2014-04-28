@@ -47,7 +47,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 		$data['block_payment_method'] = $this->block->render('checkout/payment_method');
 
-		$data['validate_customer_checkout'] = $this->url->link('block/checkout/customer_information/validate');
+		$data['validate_customer_checkout'] = site_url('block/checkout/customer_information/validate');
 
 		//Render
 		$this->response->setOutput($this->render('block/checkout/customer_information', $data));

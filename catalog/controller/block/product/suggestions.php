@@ -40,7 +40,7 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']));
 			}
 
-			$product['href'] = $this->url->link('product/product', 'product_id=' . (int)$product['product_id']);
+			$product['href'] = site_url('product/product', 'product_id=' . (int)$product['product_id']);
 		}
 		unset($product);
 

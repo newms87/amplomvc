@@ -57,8 +57,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Returns Report"), $this->url->link('report/sale_return', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Returns Report"), site_url('report/sale_return', $url));
 
 		$data['returns'] = array();
 

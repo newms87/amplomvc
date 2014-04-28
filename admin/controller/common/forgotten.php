@@ -5,7 +5,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 	{
 		//Verify User is not already logged in
 		if ($this->user->isLogged()) {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 
 		//Page Title
@@ -18,7 +18,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 			$this->user->setResetCode($_POST['email'], $code);
 
 			$email_data = array(
-				'reset' => $this->url->link('common/forgotten/reset', 'code=' . $code),
+				'reset' => site_url('common/forgotten/reset', 'code=' . $code),
 				'email' => $_POST['email'],
 			);
 
@@ -26,19 +26,19 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 			$this->message->add('success', _l("Please follow the link that was sent to your email to reset your password."));
 
-			$this->url->redirect('common/login');
+			redirect('common/login');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Forgotten Password"), $this->url->link('common/forgotten'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Forgotten Password"), site_url('common/forgotten'));
 
 		//Entry Data
 		$data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
 
 		//Action Buttons
-		$data['action'] = $this->url->link('common/forgotten');
-		$data['cancel'] = $this->url->link('common/login');
+		$data['action'] = site_url('common/forgotten');
+		$data['cancel'] = site_url('common/login');
 
 		//Render
 		$this->response->setOutput($this->render('common/forgotten', $data));
@@ -47,7 +47,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 	public function reset()
 	{
 		if ($this->user->isLogged() || empty($_GET['code'])) {
-			$this->url->redirect('common/home');
+			redirect('common/home');
 		}
 
 		$code = $_GET['code'];
@@ -57,7 +57,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		//User not found
 		if (!$user_id) {
 			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
-			$this->url->redirect('common/login');
+			redirect('common/login');
 		}
 
 		//Handle POST
@@ -76,16 +76,16 @@ class Admin_Controller_Common_Forgotten extends Controller
 				$this->message->add('success', _l('You have successfully updated your password!'));
 			}
 
-			$this->url->redirect('common/login');
+			redirect('common/login');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l('Password Reset'), $this->url->link('common/forgotten/reset', 'code=' . $code));
+		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
+		$this->breadcrumb->add(_l('Password Reset'), site_url('common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons
-		$data['save']   = $this->url->link('common/forgotten/reset', 'code=' . $code);
-		$data['cancel'] = $this->url->link('common/login');
+		$data['save']   = site_url('common/forgotten/reset', 'code=' . $code);
+		$data['cancel'] = site_url('common/login');
 
 		//Render
 		$this->response->setOutput($this->render('common/reset', $data));

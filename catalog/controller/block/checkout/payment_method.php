@@ -25,7 +25,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 
 			if ($information_info) {
-				$data['checkout_terms']       = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
+				$data['checkout_terms']       = site_url('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
 				$data['checkout_terms_title'] = $information_info['title'];
 			}
 		}
@@ -39,7 +39,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		$data += $_SESSION + $session_defaults;
 
 		//Actions
-		$data['validate_payment_method'] = $this->url->link('block/checkout/payment_method/validate');
+		$data['validate_payment_method'] = site_url('block/checkout/payment_method/validate');
 
 		//Render
 		$this->response->setOutput($this->render('block/checkout/payment_method', $data));
@@ -57,7 +57,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		}
 
 		if (!$this->cart->validate()) {
-			$json['redirect'] = $this->url->link('cart/cart');
+			$json['redirect'] = site_url('cart/cart');
 			$this->message->add('warning', $this->cart->getError());
 		}
 

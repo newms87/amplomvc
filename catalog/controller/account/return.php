@@ -4,16 +4,16 @@ class Catalog_Controller_Account_Return extends Controller
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', $this->url->link('account/return'));
+			$this->session->set('redirect', site_url('account/return'));
 
-			$this->url->redirect('customer/login');
+			redirect('customer/login');
 		}
 
 		$this->document->setTitle(_l("Product Returns"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('account/return'));
 
 		$sort_filter = $this->sort->getQueryDefaults('date_added', 'ASC');
 
@@ -23,7 +23,7 @@ class Catalog_Controller_Account_Return extends Controller
 		foreach ($returns as &$return) {
 			$return['name']       = $return['firstname'] . ' ' . $return['lastname'];
 			$return['date_added'] = $this->date->format($return['date_added'], 'short');
-			$return['href']       = $this->url->link('account/return/info', 'return_id=' . $return['return_id']);
+			$return['href']       = site_url('account/return/info', 'return_id=' . $return['return_id']);
 		}
 
 		$data['returns'] = $returns;
@@ -40,7 +40,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$data['pagination'] = $this->pagination->render();
 
-		$data['continue'] = $this->url->link('account');
+		$data['continue'] = site_url('account');
 
 		$this->response->setOutput($this->render('account/return_list', $data));
 	}
@@ -51,10 +51,10 @@ class Catalog_Controller_Account_Return extends Controller
 
 		if (!$this->customer->isLogged()) {
 			$query = array(
-				'redirect' => $this->url->link('account/return/info', 'return_id=' . $return_id)
+				'redirect' => site_url('account/return/info', 'return_id=' . $return_id)
 			);
 
-			$this->url->redirect('customer/login', $query);
+			redirect('customer/login', $query);
 		}
 
 		//Page Title
@@ -63,10 +63,10 @@ class Catalog_Controller_Account_Return extends Controller
 		$url_query = $this->url->getQuery('page');
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return', $url_query));
-		$this->breadcrumb->add(_l("Return Information"), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('account/return', $url_query));
+		$this->breadcrumb->add(_l("Return Information"), site_url('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
 
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 
@@ -91,13 +91,13 @@ class Catalog_Controller_Account_Return extends Controller
 
 			$data['histories'] = $histories;
 
-			$data['continue'] = $this->url->link('account/return', $url_query);
+			$data['continue'] = site_url('account/return', $url_query);
 
 			$this->response->setOutput($this->render('account/return_info', $data));
 		} else {
 			$data['page_title'] = _l("Return Information");
 
-			$data['continue'] = $this->url->link('account/return');
+			$data['continue'] = site_url('account/return');
 
 			$this->response->setOutput($this->render('error/not_found', $data));
 		}
@@ -127,17 +127,17 @@ class Catalog_Controller_Account_Return extends Controller
 				'return_ids' => array_column($_POST['return_products'], 'return_id'),
 			);
 
-			$this->url->redirect('account/return/success', $url_query);
+			redirect('account/return/success', $url_query);
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Product Returns"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Account"), $this->url->link('account'));
-		$this->breadcrumb->add(_l("Returns"), $this->url->link('account/return'));
-		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return/insert'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Returns"), site_url('account/return'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('account/return/insert'));
 
 		//The Data
 		if ($this->request->isPost()) {
@@ -157,7 +157,7 @@ class Catalog_Controller_Account_Return extends Controller
 					//If the lookup email does not match the order email, customer may not view this order
 					if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
 						$this->message->add('warning', _l("This order ID %s is associated with another account! Please login to that account to request a return.", $order_id));
-						$this->url->redirect('account/return/insert');
+						redirect('account/return/insert');
 					}
 				} //This order belongs to this customer, so they may request an exchange
 				else {
@@ -254,11 +254,11 @@ class Catalog_Controller_Account_Return extends Controller
 		$data['date_ordered_display'] = $this->date->format($data['date_ordered'], 'short');
 		$data['data_return_reasons']  = $this->order->getReturnReasons();
 
-		$data['back']               = $this->url->link('account');
-		$data['return_product_url'] = $this->url->link('account/return/insert');
+		$data['back']               = site_url('account');
+		$data['return_product_url'] = site_url('account/return/insert');
 
 		$data['order_lookup']        = $order_lookup;
-		$data['order_lookup_action'] = $this->url->link('account/return/find');
+		$data['order_lookup_action'] = site_url('account/return/find');
 
 		if (!$this->customer->isLogged()) {
 			$this->message->add('warning', _l("You must be logged in to request a return. Your orders will automatically be associated to your account via your email address"));
@@ -270,8 +270,8 @@ class Catalog_Controller_Account_Return extends Controller
 		);
 
 		//Action Buttons
-		$data['action'] = $this->url->link('account/return/insert');
-		$data['url_captcha_image'] = $this->url->link('account/return/captcha');
+		$data['action'] = site_url('account/return/insert');
+		$data['url_captcha_image'] = site_url('account/return/captcha');
 
 		//Render
 		$this->response->setOutput($this->render('account/return_form', $data));
@@ -306,17 +306,17 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->message->add("warning", _l("We were unable to find the order requested!"));
 		}
 
-		$this->url->redirect('account/return/insert', $url_query);
+		redirect('account/return/insert', $url_query);
 	}
 
 	public function success()
 	{
 		$this->document->setTitle(_l("Return Success"));
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Returns"), $this->url->link('account/return'));
-		$this->breadcrumb->add(_l("Product Returns"), $this->url->link('account/return/insert'));
-		$this->breadcrumb->add(_l("Return Success"), $this->url->link('account/return/success'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Returns"), site_url('account/return'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('account/return/insert'));
+		$this->breadcrumb->add(_l("Return Success"), site_url('account/return/success'));
 
 		$returns = array();
 
@@ -328,7 +328,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$data['returns'] = $returns;
 
-		$data['continue'] = $this->url->link('common/home');
+		$data['continue'] = site_url('common/home');
 
 		$this->response->setOutput($this->render('account/return_success', $data));
 	}

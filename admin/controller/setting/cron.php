@@ -25,13 +25,13 @@ class Admin_Controller_Setting_Cron extends Controller
 
 			$this->message->add('success', _l('Successfully updated the Automated Tasks!'));
 
-			$this->url->redirect('setting/cron');
+			redirect('setting/cron');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l('System Settings'), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_l('Automated Tasks'), $this->url->link('setting/cron'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l('System Settings'), site_url('setting/store'));
+		$this->breadcrumb->add(_l('Automated Tasks'), site_url('setting/cron'));
 
 		if ($this->request->isPost()) {
 			$tasks = $_POST;
@@ -91,10 +91,10 @@ class Admin_Controller_Setting_Cron extends Controller
 		);
 
 		//Action Buttons
-		$data['save']     = $this->url->link('setting/cron');
-		$data['cancel']   = $this->url->link('setting/store');
-		$data['run_cron'] = $this->url->link('common/home', 'run_cron');
-		$data['activate'] = $this->url->link('setting/cron/activate');
+		$data['save']     = site_url('setting/cron');
+		$data['cancel']   = site_url('setting/store');
+		$data['run_cron'] = site_url('common/home', 'run_cron');
+		$data['activate'] = site_url('setting/cron/activate');
 
 		//Render
 		$this->response->setOutput($this->render('setting/cron', $data));
@@ -106,7 +106,7 @@ class Admin_Controller_Setting_Cron extends Controller
 			$this->config->save('config', 'config_cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
 		}
 
-		$this->url->redirect('setting/cron');
+		redirect('setting/cron');
 	}
 
 	private function validate()

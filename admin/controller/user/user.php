@@ -24,9 +24,9 @@ class Admin_Controller_User_User extends Controller
 			$url = $this->get_url();
 
 			if ($this->user->isAdmin()) {
-				$this->url->redirect('user/user', $url);
+				redirect('user/user', $url);
 			} else {
-				$this->url->redirect('common/home', $url);
+				redirect('common/home', $url);
 			}
 		}
 
@@ -43,7 +43,7 @@ class Admin_Controller_User_User extends Controller
 			$url = $this->get_url();
 
 			$this->message->add('success', _l("Success: You have modified users!"));
-			$this->url->redirect('user/user', $url);
+			redirect('user/user', $url);
 		}
 
 		$this->getForm();
@@ -66,7 +66,7 @@ class Admin_Controller_User_User extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect('user/user', $url);
+			redirect('user/user', $url);
 		}
 
 		$this->getList();
@@ -85,11 +85,11 @@ class Admin_Controller_User_User extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("User"), $this->url->link('user/user'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("User"), site_url('user/user'));
 
-		$data['insert'] = $this->url->link('user/user/insert', $url);
-		$data['delete'] = $this->url->link('user/user/delete', $url);
+		$data['insert'] = site_url('user/user/insert', $url);
+		$data['delete'] = site_url('user/user/delete', $url);
 
 		$data['users'] = array();
 
@@ -109,7 +109,7 @@ class Admin_Controller_User_User extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('user/user/update', 'user_id=' . $result['user_id'] . $url)
+				'href' => site_url('user/user/update', 'user_id=' . $result['user_id'] . $url)
 			);
 
 			$result['status']     = $result['status'] ? _l("Enabled") : _l("Disabled");
@@ -132,7 +132,7 @@ class Admin_Controller_User_User extends Controller
 			'date_added'
 		);
 		foreach ($sort_by as $s) {
-			$data['sort_' . $s] = $this->url->link('user/user', 'sort=' . $s . $url);
+			$data['sort_' . $s] = site_url('user/user', 'sort=' . $s . $url);
 		}
 
 		$url = $this->get_url(array(
@@ -157,16 +157,16 @@ class Admin_Controller_User_User extends Controller
 		$url = $this->get_url();
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("User"), $this->url->link('user/user'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("User"), site_url('user/user'));
 
 		if (!$user_id) {
-			$data['action'] = $this->url->link('user/user/insert', $url);
+			$data['action'] = site_url('user/user/insert', $url);
 		} else {
-			$data['action'] = $this->url->link('user/user/update', 'user_id=' . $user_id . $url);
+			$data['action'] = site_url('user/user/update', 'user_id=' . $user_id . $url);
 		}
 
-		$data['cancel'] = $this->url->link('user/user', $url);
+		$data['cancel'] = site_url('user/user', $url);
 
 		if ($user_id && !$this->request->isPost()) {
 			$user_info = $this->Model_User_User->getUser($user_id);
@@ -213,9 +213,9 @@ class Admin_Controller_User_User extends Controller
 
 
 		if (!$user_id) {
-			$this->breadcrumb->add(_l("Create New User"), $this->url->link('user/user/insert'));
+			$this->breadcrumb->add(_l("Create New User"), site_url('user/user/insert'));
 		} else {
-			$this->breadcrumb->add($data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
+			$this->breadcrumb->add($data['username'], site_url('user/user/update', 'user_id=' . $user_id));
 		}
 
 		$data['data_statuses'] = array(

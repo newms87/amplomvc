@@ -13,7 +13,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Redirect if requested product was not found
 		if (empty($product_info)) {
-			$this->url->redirect('error/not_found');
+			redirect('error/not_found');
 		}
 
 		$data = $product_info;
@@ -36,12 +36,12 @@ class Catalog_Controller_Product_Product extends Controller
 		$data['page_title'] = $product_info['name'];
 
 		//Build Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 
 		$manufacturer = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
 
 		if ($manufacturer && $this->config->get('config_breadcrumbs_show_manufacturer')) {
-			$this->breadcrumb->add($manufacturer['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
+			$this->breadcrumb->add($manufacturer['name'], site_url('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 		}
 
 		$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
@@ -53,11 +53,11 @@ class Catalog_Controller_Product_Product extends Controller
 			);
 		}
 
-		$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
+		$this->breadcrumb->add($product_info['name'], site_url('product/product', 'product_id=' . $product_info['product_id']));
 
 		//Product Information
 		$data['manufacturer']     = $manufacturer;
-		$data['url_manufacturer'] = $this->url->link('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
+		$data['url_manufacturer'] = site_url('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
 
 		$data['is_purchasable'] = $this->cart->productPurchasable($product_info);
 		$data['display_model']  = $this->config->get('config_show_product_model');
@@ -139,16 +139,16 @@ class Catalog_Controller_Product_Product extends Controller
 		$data['is_default_return_policy']   = $product_info['return_policy_id'] == $this->config->get('config_default_return_policy');
 
 		if ($data['return_policy']['days'] < 0) {
-			$data['is_final_explanation'] = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", $this->url->link('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
+			$data['is_final_explanation'] = _l("A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.", site_url('information/information/shipping_return_policy', 'product_id=' . $product_info['product_id']));
 		}
 
 		//Links
-		$product_info['category']['url'] = $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']);
+		$product_info['category']['url'] = site_url('product/category', 'category_id=' . $product_info['category']['category_id']);
 		$data['category']                = $product_info['category'];
 
-		$data['keep_shopping']          = $this->url->link('product/category');
-		$data['view_cart_link']         = $this->url->link('cart/cart');
-		$data['checkout_link']          = $this->url->link('checkout/checkout');
+		$data['keep_shopping']          = site_url('product/category');
+		$data['view_cart_link']         = site_url('cart/cart');
+		$data['checkout_link']          = site_url('checkout/checkout');
 		$data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
 
 		//Product Images
@@ -191,7 +191,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Template Data
 		if ($this->config->get('config_shipping_return_info_id')) {
-			$data['data_policies'] = $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+			$data['data_policies'] = site_url('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
 		}
 
 		if ($this->config->get('config_show_product_attributes')) {
@@ -221,7 +221,7 @@ class Catalog_Controller_Product_Product extends Controller
 				),
 			);
 
-			$tag['href'] = $this->url->link('product/search', $url_query);
+			$tag['href'] = site_url('product/search', $url_query);
 		}
 
 		$data['tags'] = $tags;
@@ -231,7 +231,7 @@ class Catalog_Controller_Product_Product extends Controller
 		}
 
 		//Action Buttons
-		$data['buy_now'] = $this->url->link('cart/cart/buy_now');
+		$data['buy_now'] = site_url('cart/cart/buy_now');
 
 		//The Template
 		if ($product_info['template']) {

@@ -37,8 +37,8 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_l("Coupon Report"), $this->url->link('report/sale_coupon', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Coupon Report"), site_url('report/sale_coupon', $url));
 
 		$data['coupons'] = array();
 
@@ -58,7 +58,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => $this->url->link('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
+				'href' => site_url('sale/coupon/update', 'coupon_id=' . $result['coupon_id'] . $url)
 			);
 
 			$data['coupons'][] = array(
