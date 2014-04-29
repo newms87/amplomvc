@@ -54,7 +54,7 @@ class Catalog_Controller_Page extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add Scripts
-		if ($this->config->get('config_jquery_cdn')) {
+		if (option('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {

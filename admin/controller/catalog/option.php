@@ -193,8 +193,8 @@ class Admin_Controller_Catalog_Option extends Controller
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
 
-			$thumb_width  = $this->config->get('config_image_admin_thumb_width');
-			$thumb_height = $this->config->get('config_image_admin_thumb_height');
+			$thumb_width  = option('config_image_admin_thumb_width');
+			$thumb_height = option('config_image_admin_thumb_height');
 
 			foreach ($option_values as &$option_value) {
 				$option_value['thumb']        = $this->image->resize($option_value['image'], $thumb_width, $thumb_height);
@@ -291,7 +291,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	public function autocomplete()
 	{
 		//Sort / Filter
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
+		$sort   = $this->sort->getQueryDefaults('name', 'ASC', option('config_autocomplete_limit'));
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Label and Value
@@ -309,8 +309,8 @@ class Admin_Controller_Catalog_Option extends Controller
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option['option_id']);
 
-			$image_width  = $this->config->get('config_image_product_option_width');
-			$image_height = $this->config->get('config_image_product_option_height');
+			$image_width  = option('config_image_product_option_width');
+			$image_height = option('config_image_product_option_height');
 
 			foreach ($option_values as &$option_value) {
 				$option_value['thumb'] = $this->image->resize($option_value['image'], $image_width, $image_height);

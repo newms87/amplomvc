@@ -10,7 +10,7 @@ class Admin_Controller_Common_Header extends Controller
 
 		$data['base'] = URL_SITE;
 
-		$data['theme'] = $this->config->get('config_theme');
+		$data['theme'] = option('config_theme');
 
 		//Add Styles
 		if (is_file(DIR_THEME . 'css/style.less')) {
@@ -24,7 +24,7 @@ class Admin_Controller_Common_Header extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 
 		//Add jQuery from the CDN or locally
-		if ($this->config->get('config_jquery_cdn')) {
+		if (option('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
@@ -37,8 +37,8 @@ class Admin_Controller_Common_Header extends Controller
 		$this->document->addScript(URL_THEME_JS . 'common.js', 54);
 
 		//TODO: Move this to admin Panel?
-		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_admin_thumb_width'));
-		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_admin_thumb_height'));
+		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
+		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
 		$this->document->localizeVar('url_site', URL_SITE);
 
 		$data['direction']      = $this->language->info('direction');
@@ -49,7 +49,7 @@ class Admin_Controller_Common_Header extends Controller
 
 		$data['lang'] = $this->language->info('code');
 
-		$data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
+		$data['admin_logo'] = $this->image->get(option('config_admin_logo'));
 
 		if (!$this->user->isLogged()) {
 			$data['logged'] = '';
@@ -60,7 +60,7 @@ class Admin_Controller_Common_Header extends Controller
 
 			$data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
 
-			$data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", $this->config->get('config_email_support'));
+			$data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", option('config_email_support'));
 
 			$data['store'] = URL_SITE;
 

@@ -67,8 +67,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 			'filter_date_end'         => $filter_date_end,
 			'filter_group'            => $filter_group,
 			'filter_return_status_id' => $filter_return_status_id,
-			'start'                   => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                   => $this->config->get('config_admin_limit')
+			'start'                   => ($page - 1) * option('config_admin_limit'),
+			'limit'                   => option('config_admin_limit')
 		);
 
 		$return_total = $this->Model_Report_Return->getTotalReturns($data);

@@ -36,9 +36,9 @@ class Order Extends Library
 		//Customer Checkout
 		if ($this->customer->isLogged()) {
 			$data = $this->customer->info();
-		} elseif ($this->config->get('config_guest_checkout')) {
+		} elseif (option('config_guest_checkout')) {
 			$data['customer_id']       = 0;
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+			$data['customer_group_id'] = option('config_customer_group_id');
 			$data += $this->cart->loadGuestInfo();
 		} else {
 			//Guest checkout not allowed and customer not logged in
@@ -47,8 +47,8 @@ class Order Extends Library
 		}
 
 		//Order Information
-		$data['store_id']       = $this->config->get('config_store_id');
-		$data['language_id']    = $this->config->get('config_language_id');
+		$data['store_id']       = option('config_store_id');
+		$data['language_id']    = option('config_language_id');
 		$data['currency_code']  = $this->currency->getCode();
 		$data['currency_value'] = $this->currency->getValue();
 
@@ -223,7 +223,7 @@ class Order Extends Library
 			$order = $this->get($order);
 		}
 
-		return strtotime($order['date_added']) > strtotime('-' . (int)$this->config->get('config_order_edit') . ' day');
+		return strtotime($order['date_added']) > strtotime('-' . (int)option('config_order_edit') . ' day');
 	}
 
 	public function getOrderStatus($order_status_id)
@@ -306,7 +306,7 @@ class Order Extends Library
 
 	public function confirmOrder($order_id, $comment = '', $notify = false)
 	{
-		return $this->updateOrder($order_id, $this->config->get('config_order_complete_status_id'), $comment, $notify);
+		return $this->updateOrder($order_id, option('config_order_complete_status_id'), $comment, $notify);
 	}
 
 	public function updateOrder($order_id, $order_status_id, $comment = '', $notify = false)
@@ -320,16 +320,16 @@ class Order Extends Library
 		}
 
 		// Fraud Detection
-		if ($this->config->get('config_fraud_detection') && $this->fraud->atRisk($order)) {
-			$order_status_id = $this->config->get('config_order_fraud_status_id');
+		if (option('config_fraud_detection') && $this->fraud->atRisk($order)) {
+			$order_status_id = option('config_order_fraud_status_id');
 		}
 
 		// Blacklist
 		if ($order['customer_id'] && $this->customer->isBlacklisted($order['customer_id'], array($order['ip']))) {
-			$order_status_id = $this->config->get('config_order_blacklist_status_id');
+			$order_status_id = option('config_order_blacklist_status_id');
 		}
 
-		if (!$order['confirmed'] && $order_status_id === $this->config->get('config_order_complete_status_id')) {
+		if (!$order['confirmed'] && $order_status_id === option('config_order_complete_status_id')) {
 			if (!$this->confirm($order)) {
 				return false;
 			}

@@ -10,7 +10,7 @@ class System_Model_Order extends Model
 		}
 
 		if (!isset($data['customer_group_id'])) {
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+			$data['customer_group_id'] = option('config_customer_group_id');
 		}
 
 		$data['date_added']    = $this->date->now();
@@ -67,7 +67,7 @@ class System_Model_Order extends Model
 	{
 		if (!isset($data['customer_id'])) {
 			$data['customer_id']       = 0;
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+			$data['customer_group_id'] = option('config_customer_group_id');
 		}
 
 		//Invoice ID cannot be modified
@@ -144,7 +144,7 @@ class System_Model_Order extends Model
 
 	public function generateInvoiceId($data)
 	{
-		$invoice_prefix = $this->config->get('config_invoice_prefix');
+		$invoice_prefix = option('config_invoice_prefix');
 
 		$date_format = null;
 		preg_match("/%(.*)%/", $invoice_prefix, $date_format);

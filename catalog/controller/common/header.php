@@ -8,7 +8,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		$data['title'] = $this->document->getTitle();
 
-		$data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
+		$data['base'] = $this->url->is_ssl() ? option('config_ssl') : option('config_url');
 
 		//Add Styles
 		if (is_file(DIR_THEME . 'css/style.less')) {
@@ -23,7 +23,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add jQuery from the CDN or locally
-		if ($this->config->get('config_jquery_cdn')) {
+		if (option('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
@@ -34,8 +34,8 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
 
 		//TODO: Move this to admin Panel?
-		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_thumb_width'));
-		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_thumb_height'));
+		$this->document->localizeVar('image_thumb_width', option('config_image_thumb_width'));
+		$this->document->localizeVar('image_thumb_height', option('config_image_thumb_height'));
 		$this->document->localizeVar('url_add_to_cart', site_url('cart/cart/add'));
 
 		//Add Theme Scripts
@@ -53,20 +53,20 @@ class Catalog_Controller_Common_Header extends Controller
 
 		$data['lang'] = $this->language->info('code');
 
-		$data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		$data['statcounter']      = $this->config->get('config_statcounter');
+		$data['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
+		$data['statcounter']      = option('config_statcounter');
 
-		$data['name']     = $this->config->get('config_name');
+		$data['name']     = option('config_name');
 
-		$logo_width  = $this->config->get('config_logo_width');
-		$logo_height = $this->config->get('config_logo_height');
+		$logo_width  = option('config_logo_width');
+		$logo_height = option('config_logo_height');
 
-		$data['logo'] = $this->image->resize($this->config->get('config_logo'), $logo_width, $logo_height);
+		$data['logo'] = $this->image->resize(option('config_logo'), $logo_width, $logo_height);
 
-		$data['slogan'] = $this->config->get('config_slogan');
+		$data['slogan'] = option('config_slogan');
 
 		//Icons
-		$icons = $this->config->get('config_icon');
+		$icons = option('config_icon');
 
 		if (!empty($icons)) {
 			foreach ($icons as &$icon) {
@@ -85,8 +85,8 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['show_admin_bar'] = $this->user->showAdminBar();
 
 		//Internationalization
-		$data['multi_language'] = $this->config->get('config_multi_language');
-		$data['multi_currency'] = $this->config->get('config_multi_currency');
+		$data['multi_language'] = option('config_multi_language');
+		$data['multi_currency'] = option('config_multi_currency');
 
 		//Render
 		$this->render('common/header', $data);

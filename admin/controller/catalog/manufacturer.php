@@ -192,7 +192,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				$manufacturer['date_expires'] = $this->date->format($manufacturer['date_active'], 'datetime_format_long');
 			}
 
-			$manufacturer['thumb'] = $this->image->resize($manufacturer['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
+			$manufacturer['thumb'] = $this->image->resize($manufacturer['image'], option('config_image_admin_list_width'), option('config_image_admin_list_height'));
 
 			$manufacturer['stores'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer['manufacturer_id']);
 		}
@@ -381,7 +381,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	public function autocomplete()
 	{
 		//Sort
-		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', option('config_autocomplete_limit'));
 
 		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();

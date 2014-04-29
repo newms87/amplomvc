@@ -59,7 +59,7 @@ class Admin_Controller_Setting_Cron extends Controller
 		);
 
 		//Template Data
-		$data['cron_status'] = $this->config->get('config_cron_status');
+		$data['cron_status'] = option('config_cron_status');
 
 		$cron_files = $this->tool->get_files_r(DIR_CRON);
 

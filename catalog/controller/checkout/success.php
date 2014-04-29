@@ -19,9 +19,9 @@ class Catalog_Controller_Checkout_Success extends Controller
 		$data['page_title'] = _l("Success");
 
 		if ($this->customer->isLogged()) {
-			$data['message'] = _l("<p>Your order has been successfully processed!</p><p>You can view your order history by going to the <a href=\"%s\">my account</a> page and by clicking on <a href=\"%s\">history</a>.</p><p>If you have any questions or concerns please feel free to <a href=\"%s\">contact us</a>.</p><p>Thanks for shopping with %s!</p>", site_url('account'), site_url('account/order'), site_url('information/contact'), $this->config->get('config_name'));
+			$data['message'] = _l("<p>Your order has been successfully processed!</p><p>You can view your order history by going to the <a href=\"%s\">my account</a> page and by clicking on <a href=\"%s\">history</a>.</p><p>If you have any questions or concerns please feel free to <a href=\"%s\">contact us</a>.</p><p>Thanks for shopping with %s!</p>", site_url('account'), site_url('account/order'), site_url('information/contact'), option('config_name'));
 		} else {
-			$data['message'] = _l("<p>Your order has been successfully processed!</p><p>If you have any questions or concerns please feel free to <a href=\"%s\">contact us</a>.</p><p>Thanks for shopping with %s!</p>", site_url('information/contact'), $this->config->get('config_name'));
+			$data['message'] = _l("<p>Your order has been successfully processed!</p><p>If you have any questions or concerns please feel free to <a href=\"%s\">contact us</a>.</p><p>Thanks for shopping with %s!</p>", site_url('information/contact'), option('config_name'));
 		}
 
 		//Action Buttons

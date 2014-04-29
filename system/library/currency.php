@@ -28,7 +28,7 @@ class Currency extends Library
 		} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
 			$this->set($_COOKIE['currency']);
 		} else {
-			$this->set($this->config->get('config_currency'));
+			$this->set(option('config_currency'));
 		}
 	}
 

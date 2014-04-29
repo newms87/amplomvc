@@ -22,8 +22,8 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		$data['cancel'] = site_url('common/home');
 
 		$defaults = array(
-			'sender'     => $this->config->get('config_title'),
-			'from'       => $this->config->get('config_email'),
+			'sender'     => option('config_title'),
+			'from'       => option('config_email'),
 			'to'         => '',
 			'cc'         => '',
 			'bcc'        => '',
@@ -36,8 +36,8 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$data[$key] = $_POST[$key];
-			} elseif ($this->config->get($key)) {
-				$data[$key] = $this->config->get($key);
+			} elseif (option($key)) {
+				$data[$key] = option($key);
 			} else {
 				$data[$key] = $default;
 			}

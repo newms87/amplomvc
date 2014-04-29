@@ -88,8 +88,8 @@ class Admin_Controller_Localisation_Language extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$data['status'] = array(
@@ -112,7 +112,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 			$data['languages'][] = array(
 				'language_id' => $result['language_id'],
-				'name'        => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? _l(" <b>(Default)</b>") : null),
+				'name'        => $result['name'] . (($result['code'] == option('config_language')) ? _l(" <b>(Default)</b>") : null),
 				'code'        => $result['code'],
 				'sort_order'  => $result['sort_order'],
 				'selected'    => isset($_GET['selected']) && in_array($result['language_id'], $_GET['selected']),
@@ -263,11 +263,11 @@ class Admin_Controller_Localisation_Language extends Controller
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 
 			if ($language_info) {
-				if ($this->config->get('config_language') == $language_info['code']) {
+				if (option('config_language') == $language_info['code']) {
 					$this->error['warning'] = _l("Warning: This language cannot be deleted as it is currently assigned as the default store language!");
 				}
 
-				if ($this->config->get('config_admin_language') == $language_info['code']) {
+				if (option('config_admin_language') == $language_info['code']) {
 					$this->error['warning'] = _l("Warning: This Language cannot be deleted as it is currently assigned as the administration language!");
 				}
 

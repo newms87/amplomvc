@@ -36,7 +36,7 @@ class Admin_Model_Localisation_StockStatus extends Model
 
 	public function getStockStatus($stock_status_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "stock_status WHERE stock_status_id = '" . (int)$stock_status_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "stock_status WHERE stock_status_id = '" . (int)$stock_status_id . "' AND language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row;
 	}
@@ -44,7 +44,7 @@ class Admin_Model_Localisation_StockStatus extends Model
 	public function getStockStatuses($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'";
+			$sql = "SELECT * FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)option('config_language_id') . "'";
 
 			$sql .= " ORDER BY name";
 
@@ -70,14 +70,14 @@ class Admin_Model_Localisation_StockStatus extends Model
 
 			return $query->rows;
 		} else {
-			$stock_status_data = $this->cache->get('stock_status.' . (int)$this->config->get('config_language_id'));
+			$stock_status_data = $this->cache->get('stock_status.' . (int)option('config_language_id'));
 
 			if (!$stock_status_data) {
-				$query = $this->query("SELECT stock_status_id, name FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY name");
+				$query = $this->query("SELECT stock_status_id, name FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)option('config_language_id') . "' ORDER BY name");
 
 				$stock_status_data = $query->rows;
 
-				$this->cache->set('stock_status.' . (int)$this->config->get('config_language_id'), $stock_status_data);
+				$this->cache->set('stock_status.' . (int)option('config_language_id'), $stock_status_data);
 			}
 
 			return $stock_status_data;
@@ -99,7 +99,7 @@ class Admin_Model_Localisation_StockStatus extends Model
 
 	public function getTotalStockStatuses()
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row['total'];
 	}

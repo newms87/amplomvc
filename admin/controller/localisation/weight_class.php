@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$weight_class_total = $this->Model_Localisation_WeightClass->getTotalWeightClasses();
@@ -162,7 +162,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 			$data['weight_classes'][] = array(
 				'weight_class_id' => $result['weight_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? _l(" <b>(Default)</b>") : null),
+				'title'           => $result['title'] . (($result['unit'] == option('config_weight_class')) ? _l(" <b>(Default)</b>") : null),
 				'unit'            => $result['unit'],
 				'value'           => $result['value'],
 				'selected'        => isset($_GET['selected']) && in_array($result['weight_class_id'], $_GET['selected']),
@@ -316,7 +316,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		}
 
 		foreach ($_GET['selected'] as $weight_class_id) {
-			if ($this->config->get('config_weight_class_id') == $weight_class_id) {
+			if (option('config_weight_class_id') == $weight_class_id) {
 				$this->error['warning'] = _l("Warning: This weight class cannot be deleted as it is currently assigned as the default store weight class!");
 			}
 

@@ -26,7 +26,7 @@ class Catalog_Controller_Account_Download extends Controller
 
 			$data['downloads'] = array();
 
-			$results = $this->Model_Account_Download->getDownloads(($page - 1) * $this->config->get('config_catalog_limit'), $this->config->get('config_catalog_limit'));
+			$results = $this->Model_Account_Download->getDownloads(($page - 1) * option('config_catalog_limit'), option('config_catalog_limit'));
 
 			foreach ($results as $result) {
 				if (file_exists(DIR_DOWNLOAD . $result['filename'])) {

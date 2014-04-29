@@ -31,7 +31,7 @@ class System_Model_Voucher extends Model
 			" LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (vt.voucher_theme_id=v.voucher_theme_id)" .
 			" LEFT JOIN " . DB_PREFIX . "order o ON (o.order_id=v.order_id)" .
 			" WHERE v.code = '" . $this->db->escape($code) . "' AND v.status = 1" .
-			" AND (v.order_id = 0 OR o.order_status_id = '" . (int)$this->config->get('config_complete_status_id') . "')";
+			" AND (v.order_id = 0 OR o.order_status_id = '" . (int)option('config_complete_status_id') . "')";
 
 		$voucher = $this->queryRow($query);
 

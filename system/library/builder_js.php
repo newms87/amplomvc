@@ -50,7 +50,7 @@ switch ($js) {
 
 		$languages = $this->System_Model_Language->getEnabledLanguages();
 
-		$default_language = $this->config->get('config_language_id');
+		$default_language = option('config_language_id');
 
 		$translations = json_encode($args[0]); ?>
 

@@ -19,7 +19,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->config->saveGroup('config', $_POST, 0, true);
 
 			//TODO: Move this to Cron
-			if ($this->config->get('config_currency_auto')) {
+			if (option('config_currency_auto')) {
 				$this->Model_Localisation_Currency->updateCurrencies();
 			}
 

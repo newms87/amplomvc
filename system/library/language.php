@@ -126,7 +126,7 @@ class Language extends Library
 			if (!$language) {
 				$query = "SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'" .
 					" ORDER BY CASE" .
-					" WHEN `code` = '" . $this->escape($this->config->get('config_language')) . "' THEN 2" .
+					" WHEN `code` = '" . $this->escape(option('config_language')) . "' THEN 2" .
 					" WHEN `code` = 'en' THEN 1" .
 					" ELSE 0" .
 					" END DESC LIMIT 1";
@@ -148,7 +148,7 @@ class Language extends Library
 	{
 		//Detect Language From Browser
 		if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-			$use_macro = $this->config->get('config_use_macro_languages');
+			$use_macro = option('config_use_macro_languages');
 
 			$languages = $this->cache->get('language.locales');
 

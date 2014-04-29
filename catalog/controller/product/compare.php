@@ -41,12 +41,12 @@ class Catalog_Controller_Product_Compare extends Controller
 
 			if ($product_info) {
 				if ($product_info['image']) {
-					$image = $this->image->resize($product_info['image'], $this->config->get('config_image_compare_width'), $this->config->get('config_image_compare_height'));
+					$image = $this->image->resize($product_info['image'], option('config_image_compare_width'), option('config_image_compare_height'));
 				} else {
 					$image = false;
 				}
 
-				if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
+				if ((option('config_customer_hide_price') && $this->customer->isLogged()) || !option('config_customer_hide_price')) {
 					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 				} else {
 					$price = false;
@@ -60,7 +60,7 @@ class Catalog_Controller_Product_Compare extends Controller
 
 				if ($product_info['quantity'] <= 0) {
 					$availability = $product_info['stock_status'];
-				} elseif ($this->config->get('config_stock_display')) {
+				} elseif (option('config_stock_display')) {
 					$availability = $product_info['quantity'];
 				} else {
 					$availability = _l("In Stock");

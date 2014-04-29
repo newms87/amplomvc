@@ -5,7 +5,7 @@ class Fraud extends Library
 	{
 		$risk_score = $this->getRiskScore($data);
 
-		return $risk_score > $this->config->get('config_fraud_score');
+		return $risk_score > option('config_fraud_score');
 	}
 
 	public function getRiskScore($data)
@@ -29,7 +29,7 @@ class Fraud extends Library
 				'country'         => $data['payment_country'],
 				'domain'          => substr(strrchr($data['email'], '@'), 1),
 				'custPhone'       => $data['telephone'],
-				'license_key'     => $this->config->get('config_fraud_key'),
+				'license_key'     => option('config_fraud_key'),
 				'user_agent'      => $data['user_agent'],
 				'forwardedIP'     => $data['forwarded_ip'],
 				'emailMD5'        => md5(strtolower($data['email'])),

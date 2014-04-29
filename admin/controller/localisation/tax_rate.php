@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$tax_rate_total = $this->Model_Localisation_TaxRate->getTotalTaxRates();

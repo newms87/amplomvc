@@ -565,7 +565,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		} elseif (!empty($customer_info)) {
 			$data['customer_group_id'] = $customer_info['customer_group_id'];
 		} else {
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+			$data['customer_group_id'] = option('config_customer_group_id');
 		}
 
 		if (isset($_POST['status'])) {
@@ -755,7 +755,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			if ($store_info) {
 				redirect($this->url->store($store_id, 'account/login'));
 			} else {
-				redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
+				redirect($this->url->store(option('config_default_store'), 'account/login'));
 			}
 		} else {
 			$this->document->setTitle(_l("Customer"));
@@ -791,13 +791,13 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		foreach ($results as $result) {
 			$data['transactions'][] = array(
-				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
+				'amount'      => $this->currency->format($result['amount'], option('config_currency')),
 				'description' => $result['description'],
 				'date_added'  => $this->date->format($result['date_added'], 'short'),
 			);
 		}
 
-		$data['balance'] = $this->currency->format($this->Model_Sale_Customer->getTransactionTotal($_GET['customer_id']), $this->config->get('config_currency'));
+		$data['balance'] = $this->currency->format($this->Model_Sale_Customer->getTransactionTotal($_GET['customer_id']), option('config_currency'));
 
 		$transaction_total = $this->Model_Sale_Customer->getTotalTransactions($_GET['customer_id']);
 
@@ -888,7 +888,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	public function autocomplete()
 	{
 		//Sort
-		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', option('config_autocomplete_limit'));
 
 		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();

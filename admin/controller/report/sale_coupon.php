@@ -45,8 +45,8 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 		$data = array(
 			'filter_date_start' => $filter_date_start,
 			'filter_date_end'   => $filter_date_end,
-			'start'             => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'             => $this->config->get('config_admin_limit')
+			'start'             => ($page - 1) * option('config_admin_limit'),
+			'limit'             => option('config_admin_limit')
 		);
 
 		$coupon_total = $this->Model_Report_Coupon->getTotalCoupons($data);
@@ -65,7 +65,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 				'name'   => $result['name'],
 				'code'   => $result['code'],
 				'orders' => $result['orders'],
-				'total'  => $this->currency->format($result['total'], $this->config->get('config_currency')),
+				'total'  => $this->currency->format($result['total'], option('config_currency')),
 				'action' => $action
 			);
 		}

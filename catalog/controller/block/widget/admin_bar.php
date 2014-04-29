@@ -11,7 +11,7 @@ class Catalog_Controller_Block_Widget_AdminBar extends Controller
 		$data = $settings;
 
 		$data += array(
-			'admin_bar' => $this->config->get('config_admin_bar'),
+			'admin_bar' => option('config_admin_bar'),
 		   'admin_link' => $this->url->admin(),
 		   'clock_time' => $this->date->now('datetime_long'),
 		);

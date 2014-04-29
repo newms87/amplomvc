@@ -12,7 +12,7 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->breadcrumb->add(_l("Your Account Has Been Created!"), site_url('account/success'));
 
 		//Template Data
-		$data['approved'] = !$this->config->get('config_customer_approval');
+		$data['approved'] = !option('config_customer_approval');
 
 		//Action Buttons
 		$data['contact']  = site_url('information/contact');

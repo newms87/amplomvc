@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$stock_status_total = $this->Model_Localisation_StockStatus->getTotalStockStatuses();
@@ -162,7 +162,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 			$data['stock_statuses'][] = array(
 				'stock_status_id' => $result['stock_status_id'],
-				'name'            => $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? _l(" <b>(Default)</b>") : null),
+				'name'            => $result['name'] . (($result['stock_status_id'] == option('config_stock_status_id')) ? _l(" <b>(Default)</b>") : null),
 				'selected'        => isset($_GET['selected']) && in_array($result['stock_status_id'], $_GET['selected']),
 				'action'          => $action
 			);
@@ -290,7 +290,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		}
 
 		foreach ($_GET['selected'] as $stock_status_id) {
-			if ($this->config->get('config_stock_status_id') == $stock_status_id) {
+			if (option('config_stock_status_id') == $stock_status_id) {
 				$this->error['warning'] = _l("You cannot delete the default Stock Status");
 			}
 

@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$currency_total = $this->Model_Localisation_Currency->getTotalCurrencies();
@@ -162,7 +162,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 			$data['currencies'][] = array(
 				'currency_id'   => $result['currency_id'],
-				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? _l(" <b>(Default)</b>") : null),
+				'title'         => $result['title'] . (($result['code'] == option('config_currency')) ? _l(" <b>(Default)</b>") : null),
 				'code'          => $result['code'],
 				'value'         => $result['value'],
 				'date_modified' => $this->date->format($result['date_modified'], 'short'),
@@ -357,7 +357,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($currency_id);
 
 			if ($currency_info) {
-				if ($this->config->get('config_currency') == $currency_info['code']) {
+				if (option('config_currency') == $currency_info['code']) {
 					$this->error['warning'] = _l("Warning: This currency cannot be deleted as it is currently assigned as the default store currency!");
 				}
 

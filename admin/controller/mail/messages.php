@@ -28,8 +28,8 @@ class Admin_Controller_Mail_Messages extends Controller
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$data[$key] = $_POST[$key];
-			} elseif ($this->config->get($key)) {
-				$data[$key] = $this->config->get($key);
+			} elseif (option($key)) {
+				$data[$key] = option($key);
 			} else {
 				$data[$key] = $default;
 			}

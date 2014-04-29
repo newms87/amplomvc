@@ -164,7 +164,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				)
 			);
 
-			$voucher['amount']     = $this->currency->format($voucher['amount'], $this->config->get('config_currency'));
+			$voucher['amount']     = $this->currency->format($voucher['amount'], option('config_currency'));
 			$voucher['date_added'] = $this->date->format($voucher['date_added'], 'short');
 		}
 		unset($voucher);
@@ -370,7 +370,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			$data['histories'][] = array(
 				'order_id'   => $result['order_id'],
 				'customer'   => $result['customer'],
-				'amount'     => $this->currency->format($result['amount'], $this->config->get('config_currency')),
+				'amount'     => $this->currency->format($result['amount'], option('config_currency')),
 				'date_added' => $this->date->format($result['date_added'], 'short'),
 			);
 		}

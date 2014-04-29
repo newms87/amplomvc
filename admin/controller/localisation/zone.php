@@ -142,8 +142,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$zone_total = $this->Model_Localisation_Zone->getTotalZones();
@@ -161,7 +161,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$data['zones'][] = array(
 				'zone_id'  => $result['zone_id'],
 				'country'  => $result['country'],
-				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? _l(" <b>(Default)</b>") : null),
+				'name'     => $result['name'] . (($result['zone_id'] == option('config_zone_id')) ? _l(" <b>(Default)</b>") : null),
 				'code'     => $result['code'],
 				'selected' => isset($_GET['selected']) && in_array($result['zone_id'], $_GET['selected']),
 				'action'   => $action
@@ -318,7 +318,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 		}
 
 		foreach ($_GET['selected'] as $zone_id) {
-			if ($this->config->get('config_zone_id') == $zone_id) {
+			if (option('config_zone_id') == $zone_id) {
 				$this->error['warning'] = _l("Warning: This zone cannot be deleted as it is currently assigned as the default store zone!");
 			}
 

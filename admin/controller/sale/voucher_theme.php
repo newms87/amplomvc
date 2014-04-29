@@ -77,8 +77,8 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$voucher_themes      = $this->Model_Sale_VoucherTheme->getVoucherThemes($sort + $filter);
 
 		$url_query    = $this->url->getQueryExclude('voucher_theme_id');
-		$image_width  = $this->config->get('config_image_admin_list_width');
-		$image_height = $this->config->get('config_image_admin_list_height');
+		$image_width  = option('config_image_admin_list_width');
+		$image_height = option('config_image_admin_list_height');
 
 		foreach ($voucher_themes as &$voucher_theme) {
 			$voucher_theme['actions'] = array(

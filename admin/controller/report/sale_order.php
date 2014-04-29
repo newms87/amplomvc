@@ -28,8 +28,8 @@ class Admin_Controller_Report_SaleOrder extends Controller
 			'filter_date_end'        => $filter_date_end,
 			'filter_group'           => $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'start'                  => ($page - 1) * option('config_admin_limit'),
+			'limit'                  => option('config_admin_limit')
 		);
 
 		$order_total = $this->Model_Report_Sale->getTotalOrders($data);
@@ -42,9 +42,9 @@ class Admin_Controller_Report_SaleOrder extends Controller
 				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'orders'     => $result['orders'],
 				'products'   => $result['products'],
-				'tax'        => $this->currency->format($result['tax'], $this->config->get('config_currency')),
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency')),
-				'net'        => $this->currency->format($result['total'] - $result['cost'], $this->config->get('config_currency'))
+				'tax'        => $this->currency->format($result['tax'], option('config_currency')),
+				'total'      => $this->currency->format($result['total'], option('config_currency')),
+				'net'        => $this->currency->format($result['total'] - $result['cost'], option('config_currency'))
 			);
 		}
 

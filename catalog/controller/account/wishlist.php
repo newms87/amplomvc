@@ -46,20 +46,20 @@ class Catalog_Controller_Account_Wishlist extends Controller
 
 			if ($product_info) {
 				if ($product_info['image']) {
-					$image = $this->image->resize($product_info['image'], $this->config->get('config_image_wishlist_width'), $this->config->get('config_image_wishlist_height'));
+					$image = $this->image->resize($product_info['image'], option('config_image_wishlist_width'), option('config_image_wishlist_height'));
 				} else {
 					$image = false;
 				}
 
 				if ($product_info['quantity'] <= 0) {
 					$stock = $product_info['stock_status'];
-				} elseif ($this->config->get('config_stock_display')) {
+				} elseif (option('config_stock_display')) {
 					$stock = $product_info['quantity'];
 				} else {
 					$stock = _l("In Stock");
 				}
 
-				if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
+				if ((option('config_customer_hide_price') && $this->customer->isLogged()) || !option('config_customer_hide_price')) {
 					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 				} else {
 					$price = false;

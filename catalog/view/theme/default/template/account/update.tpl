@@ -57,7 +57,7 @@
 				<h2><?= _l("Choose Your Default Shipping Address:"); ?></h2>
 				<? if (empty($data_addresses)) { ?>
 					<h3><?= _l("You do not have an address registered with us."); ?></h3>
-					<a href="<?= $add_address; ?>" class="button" onclick="return colorbox($(this));"><?= _l("Register New Address"); ?></a>
+					<a href="<?= $add_address; ?>" class="button colorbox"><?= _l("Register New Address"); ?></a>
 				<? } else { ?>
 					<div class="address_list_box">
 						<div class="address_list noselect">
@@ -68,7 +68,7 @@
 									<a href="<?= $address['remove']; ?>" class="remove"></a>
 								</div>
 							<? } ?>
-							<a href="<?= $add_address; ?>" class="address add_slide noradio" onclick="return colorbox($(this));"><?= _l("Add New Address"); ?></a>
+							<a href="<?= $add_address; ?>" class="address add_slide noradio colorbox"><?= _l("Add New Address"); ?></a>
 						</div>
 					</div>
 				<? } ?>

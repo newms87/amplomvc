@@ -86,8 +86,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$coupon_total = $this->Model_Sale_Coupon->getTotalCoupons();

@@ -328,8 +328,8 @@ class Admin_Controller_Sale_Return extends Controller
 			'filter_date_modified'    => $filter_date_modified,
 			'sort'                    => $sort,
 			'order'                   => $order,
-			'start'                   => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                   => $this->config->get('config_admin_limit')
+			'start'                   => ($page - 1) * option('config_admin_limit'),
+			'limit'                   => option('config_admin_limit')
 		);
 
 		$return_total = $this->Model_Sale_Return->getTotalReturns($data);

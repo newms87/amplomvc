@@ -14,10 +14,10 @@ class Url extends Library
 	{
 		parent::__construct();
 
-		$this->url = $this->config->get('config_url');
+		$this->url = option('config_url');
 
-		if ($this->config->get('config_use_ssl')) {
-			$this->ssl = $this->config->get('config_ssl');
+		if (option('config_use_ssl')) {
+			$this->ssl = option('config_ssl');
 
 			//TODO - finish secure pages
 			$query              = $this->query("SELECT * FROM " . DB_PREFIX . "secure_page");
@@ -37,7 +37,7 @@ class Url extends Library
 			$this->path = 'common/home';
 		}
 
-		if ($this->config->get('config_seo_url')) {
+		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
 		}
 	}
@@ -156,7 +156,7 @@ class Url extends Library
 	public function store($store_id, $path = 'common/home', $query = '')
 	{
 		if (!$store_id) {
-			$store_id = $this->config->get('config_default_store');
+			$store_id = option('config_default_store');
 		}
 
 		return $this->find_alias($path, $query, $store_id);
@@ -169,8 +169,8 @@ class Url extends Library
 
 	public function store_base($store_id, $ssl = false)
 	{
-		if ((int)$store_id === 0 || $store_id == $this->config->get('config_store_id')) {
-			return $ssl ? $this->config->get('config_ssl') : $this->config->get('config_url');
+		if ((int)$store_id === 0 || $store_id == option('config_store_id')) {
+			return $ssl ? option('config_ssl') : option('config_url');
 		}
 
 		$scheme = $ssl ? 'ssl' : 'url';
@@ -262,7 +262,7 @@ class Url extends Library
 		$sql =
 			"SELECT * FROM " . DB_PREFIX . "url_alias" .
 			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
-			" AND status = '1' AND store_id IN ($default, " . (int)$this->config->get('config_store_id') . ") LIMIT 1";
+			" AND status = '1' AND store_id IN ($default, " . (int)option('config_store_id') . ") LIMIT 1";
 
 		$url_alias = $this->queryRow($sql);
 
@@ -270,9 +270,9 @@ class Url extends Library
 			//TODO: We need to reconsider how we handle all stores...
 			if ($url_alias['store_id'] === 0) {
 				if (!$this->config->isAdmin()) {
-					$url_alias['store_id'] = (int)$this->config->get('config_store_id');
+					$url_alias['store_id'] = (int)option('config_store_id');
 				} else {
-					$this->redirect($this->store($this->config->get('default_store_id'), $url_alias['path'], $url_alias['query']));
+					$this->redirect($this->store(option('default_store_id'), $url_alias['path'], $url_alias['query']));
 				}
 			}
 
@@ -288,7 +288,7 @@ class Url extends Library
 			}
 
 
-			if ((int)$url_alias['store_id'] !== (int)$this->config->get('config_store_id') && (int)$url_alias['store_id'] !== 0) {
+			if ((int)$url_alias['store_id'] !== (int)option('config_store_id') && (int)$url_alias['store_id'] !== 0) {
 				if ((int)$url_alias['store_id'] === -1) {
 					$this->redirect($this->admin($url_alias['path'], $url_alias['query']));
 				} else {
@@ -327,7 +327,7 @@ class Url extends Library
 		}
 
 		if (!$store_id && $store_id !== 0) {
-			$store_id = $this->config->get('config_store_id');
+			$store_id = option('config_store_id');
 		}
 
 		if ($query) {

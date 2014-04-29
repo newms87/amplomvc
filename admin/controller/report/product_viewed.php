@@ -17,8 +17,8 @@ class Admin_Controller_Report_ProductViewed extends Controller
 		$this->breadcrumb->add(_l("Products Viewed Report"), site_url('report/product_viewed'));
 
 		$data = array(
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$product_view_list = $this->Model_Report_Product->getProductViews();

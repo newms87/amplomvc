@@ -18,7 +18,7 @@ class Image extends Library
 			$this->set_image($file);
 		}
 
-		$this->dir_mode = $this->config->get('config_image_dir_mode');
+		$this->dir_mode = option('config_image_dir_mode');
 	}
 
 	public function get($filename)
@@ -84,7 +84,7 @@ class Image extends Library
 		}
 
 		//increase the maximum memory limit from the settings
-		$max = isset($this->config) ? $this->config->get('config_image_max_mem') : '2G';
+		$max = isset($this->config) ? option('config_image_max_mem') : '2G';
 		ini_set('memory_limit', $max);
 
 		if ($mime == 'image/gif') {

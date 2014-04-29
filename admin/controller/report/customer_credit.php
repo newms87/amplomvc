@@ -45,8 +45,8 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 		$data = array(
 			'filter_date_start' => $filter_date_start,
 			'filter_date_end'   => $filter_date_end,
-			'start'             => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'             => $this->config->get('config_admin_limit')
+			'start'             => ($page - 1) * option('config_admin_limit'),
+			'limit'             => option('config_admin_limit')
 		);
 
 		$customer_total = $this->Model_Report_Customer->getTotalCredit($data);
@@ -66,7 +66,7 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 				'email'          => $result['email'],
 				'customer_group' => $result['customer_group'],
 				'status'         => ($result['status'] ? _l("Enabled") : _l("Disabled")),
-				'total'          => $this->currency->format($result['total'], $this->config->get('config_currency')),
+				'total'          => $this->currency->format($result['total'], option('config_currency')),
 				'action'         => $action
 			);
 		}

@@ -3,7 +3,7 @@ class System_Extension_Total_Credit extends System_Extension_Total
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		if ($this->config->get('credit_status')) {
+		if (option('credit_status')) {
 			$balance = $this->customer->getBalance();
 
 			if ((float)$balance) {

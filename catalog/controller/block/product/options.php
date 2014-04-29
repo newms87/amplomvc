@@ -16,12 +16,12 @@ class Catalog_Controller_Block_Product_Options extends Controller
 			return '';
 		}
 
-		$image_width        = $this->config->get('config_image_product_option_width');
-		$image_height       = $this->config->get('config_image_product_option_height');
-		$image_thumb_width  = $this->config->get('config_image_thumb_width');
-		$image_thumb_height = $this->config->get('config_image_thumb_height');
-		$image_popup_width  = $this->config->get('config_image_popup_width');
-		$image_popup_height = $this->config->get('config_image_popup_height');
+		$image_width        = option('config_image_product_option_width');
+		$image_height       = option('config_image_product_option_height');
+		$image_thumb_width  = option('config_image_thumb_width');
+		$image_thumb_height = option('config_image_thumb_height');
+		$image_popup_width  = option('config_image_popup_width');
+		$image_popup_height = option('config_image_popup_height');
 
 		foreach ($product_options as $key => &$product_option) {
 			if (empty($product_option['product_option_values'])) {
@@ -35,10 +35,10 @@ class Catalog_Controller_Block_Product_Options extends Controller
 				//if this product is still in stock
 				if (!$product_option_value['subtract'] || ((int)$product_option_value['quantity'] > 0)) {
 					//Hide Price for non-logged customers
-					if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
+					if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
 						$product_option_value['price'] = false;
 					} else {
-						if ($this->config->get('config_show_price_with_tax')) {
+						if (option('config_show_price_with_tax')) {
 							$product_option_value['price'] = $this->tax->calculate($product_option_value['price'], $product_info['tax_class_id']);
 						}
 
@@ -112,7 +112,7 @@ class Catalog_Controller_Block_Product_Options extends Controller
 
 		$data['product_options'] = $product_options;
 
-		$data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
+		$data['no_image'] = $this->image->resize('no_image.png', option('config_image_product_option_width'), option('config_image_product_option_height'));
 
 		$this->response->setOutput($this->render('block/product/options', $data));
 	}

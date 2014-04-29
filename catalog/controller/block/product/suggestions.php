@@ -11,8 +11,8 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 
 		$limit = !empty($settings['limit']) ? $settings['limit'] : null;
 
-		$image_width  = $this->config->get('config_image_related_width');
-		$image_height = $this->config->get('config_image_related_height');
+		$image_width  = option('config_image_related_width');
+		$image_height = option('config_image_related_height');
 
 		$suggestions = $this->Model_Catalog_Product->getProductSuggestions($product_info, $limit);
 
@@ -21,7 +21,7 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 				$product['thumb'] = $this->image->resize($product['image'], $image_width, $image_height);
 			}
 
-			if ($this->config->get('config_show_product_list_hover_image')) {
+			if (option('config_show_product_list_hover_image')) {
 				$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
 
 				if (!empty($product['images'])) {
@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 				}
 			}
 
-			if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
+			if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
 				$product['price'] = false;
 			} else {
 				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
@@ -46,7 +46,7 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 
 		$data['products'] = $suggestions;
 
-		$data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
+		$data['show_price_tax'] = option('config_show_price_with_tax');
 
 		$this->render('block/product/suggestions', $data);
 	}

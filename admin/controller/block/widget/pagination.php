@@ -7,7 +7,7 @@ class Admin_Controller_Block_Widget_Pagination extends Admin_Controller_Block_Bl
 			'total'     => 0,
 			'template'  => 'block/widget/pagination',
 			'page'      => isset($_GET['page']) ? (int)$_GET['page'] : 1,
-			'limit'     => isset($_GET['limit']) ? (int)$_GET['limit'] : $this->config->get('config_admin_limit'),
+			'limit'     => isset($_GET['limit']) ? (int)$_GET['limit'] : option('config_admin_limit'),
 			'url'       => '',
 			'num_links' => 10,
 			'text'      => _l("Showing %start% to %end% of %total% (%pages% Pages)"),

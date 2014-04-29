@@ -32,7 +32,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 		if (isset($_POST['google_sitemap_status'])) {
 			$data['google_sitemap_status'] = $_POST['google_sitemap_status'];
 		} else {
-			$data['google_sitemap_status'] = $this->config->get('google_sitemap_status');
+			$data['google_sitemap_status'] = option('google_sitemap_status');
 		}
 
 		$data['data_feed'] = site_url('feed/google_sitemap');

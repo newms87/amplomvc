@@ -137,7 +137,7 @@ class Draw extends Library
 		}
 
 		if (!is_dir(dirname($file))) {
-			$mode = octdec($this->config->get('config_image_dir_mode'));
+			$mode = octdec(option('config_image_dir_mode'));
 			mkdir(dirname($file), $mode, true);
 			chmod(dirname($file), $mode);
 		}

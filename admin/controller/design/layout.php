@@ -247,7 +247,7 @@ class Admin_Controller_Design_Layout extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
-		if ($this->config->get('config_default_layout_id') == $_GET['layout_id']) {
+		if (option('config_default_layout_id') == $_GET['layout_id']) {
 			$this->error['warning'] = _l("Warning: This layout cannot be deleted as it is currently assigned as the default store layout!");
 		}
 

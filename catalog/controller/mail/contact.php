@@ -11,7 +11,7 @@ class Catalog_Controller_Mail_Contact extends Controller
 
 		$this->mail->init();
 
-		$this->mail->setTo($this->config->get('config_email'));
+		$this->mail->setTo(option('config_email'));
 		$this->mail->setFrom($contact_info['email']);
 		$this->mail->setSender($contact_info['name']);
 		$this->mail->setSubject(html_entity_decode(sprintf(_l("Enquiry From %s"), $contact_info['name']), ENT_QUOTES, 'UTF-8'));

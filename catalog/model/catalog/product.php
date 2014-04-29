@@ -4,8 +4,8 @@ class Catalog_Model_Catalog_Product extends Model
 	public function getProduct($product_id, $ignore_status = false)
 	{
 		$product_id        = (int)$product_id;
-		$language_id       = $this->config->get('config_language_id');
-		$store_id          = (int)$this->config->get('config_store_id');
+		$language_id       = option('config_language_id');
+		$store_id          = (int)option('config_store_id');
 		$customer_group_id = $this->customer->getCustomerGroupId();
 
 		$product = $this->cache->get("product.$product_id.$language_id.$customer_group_id.$store_id");
@@ -26,7 +26,7 @@ class Catalog_Model_Catalog_Product extends Model
 			$length_class = "(SELECT lcd.unit FROM " . DB_PREFIX . "length_class_description lcd WHERE p.length_class_id = lcd.length_class_id AND lcd.language_id = '$language_id') AS length_class";
 			$rating       = "(SELECT AVG(rating) AS total FROM " . DB_PREFIX . "review r1 WHERE r1.product_id = p.product_id AND r1.status = '1' GROUP BY r1.product_id) AS rating";
 			$reviews      = "(SELECT COUNT(*) AS total FROM " . DB_PREFIX . "review r2 WHERE r2.product_id = p.product_id AND r2.status = '1' GROUP BY r2.product_id) AS reviews";
-			$template     = "(SELECT template FROM " . DB_PREFIX . "product_template pt WHERE pt.product_id = p.product_id AND pt.theme = '" . $this->config->get('config_theme') . "' AND store_id = '$store_id') as template";
+			$template     = "(SELECT template FROM " . DB_PREFIX . "product_template pt WHERE pt.product_id = p.product_id AND pt.theme = '" . option('config_theme') . "' AND store_id = '$store_id') as template";
 
 			$manufacturer = DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id)";
 			$category     = DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)";
@@ -73,7 +73,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProducts($data = array(), $select = '*', $total = false)
 	{
-		$store_id = (int)$this->config->get('config_store_id');
+		$store_id = (int)option('config_store_id');
 
 		/* TODO:
 		 *
@@ -82,7 +82,7 @@ class Catalog_Model_Catalog_Product extends Model
 		 * The quantity (any other changers?) will delete the cache file on product purchase
 		 *
 		 * Need to search in translations as well:
-		 * if ($language_id !== $this->config->get('config_default_language_id'))
+		 * if ($language_id !== option('config_default_language_id'))
 		 *
 		if (empty($data['search'])) {
 			//unique cache string for this query
@@ -159,7 +159,7 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 
 		//Reviews / Ratings
-		if ($this->config->get('config_review_status') && (isset($data['rating_min']) || isset($data['rating_max']))) {
+		if (option('config_review_status') && (isset($data['rating_min']) || isset($data['rating_max']))) {
 			$select .= "(SELECT AVG(rating) AS total FROM " . DB_PREFIX . "review r1 WHERE r1.product_id = p.product_id AND r1.status = '1' GROUP BY r1.product_id) AS rating";
 
 			if (isset($data['rating_min'])) {
@@ -431,7 +431,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProductRelated($product_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = " . (int)$product_id . " AND p.status = 1 AND p.date_available <= NOW() AND p2s.store_id = " . (int)$this->config->get('config_store_id'));
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = " . (int)$product_id . " AND p.status = 1 AND p.date_available <= NOW() AND p2s.store_id = " . (int)option('config_store_id'));
 	}
 
 	public function getProductTags($product_id)
@@ -441,7 +441,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProductLayoutId($product_id)
 	{
-		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
+		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)option('config_store_id') . "'");
 	}
 
 	public function getCategories($product_id)
@@ -451,7 +451,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getAttributes($data = array(), $select = '', $total = false)
 	{
-		$language_id = $this->config->get('config_language_id');
+		$language_id = option('config_language_id');
 
 		$cache_id = "attributes." . md5(serialize($data)) . ($total ? 'total' : "$select.$language_id");
 
@@ -573,7 +573,7 @@ class Catalog_Model_Catalog_Product extends Model
 	{
 		$customer_group_id = $this->customer->getCustomerGroupId();
 
-		$result = $this->query("SELECT COUNT(DISTINCT ps.product_id) AS total FROM " . DB_PREFIX . "product_special ps LEFT JOIN " . DB_PREFIX . "product p ON (ps.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND ps.customer_group_id = '" . (int)$customer_group_id . "' AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '" . DATETIME_ZERO . "' OR ps.date_end > NOW()))");
+		$result = $this->query("SELECT COUNT(DISTINCT ps.product_id) AS total FROM " . DB_PREFIX . "product_special ps LEFT JOIN " . DB_PREFIX . "product p ON (ps.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)option('config_store_id') . "' AND ps.customer_group_id = '" . (int)$customer_group_id . "' AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '" . DATETIME_ZERO . "' OR ps.date_end > NOW()))");
 
 		if (isset($result->row['total'])) {
 			return $result->row['total'];

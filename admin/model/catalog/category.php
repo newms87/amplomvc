@@ -247,7 +247,7 @@ class Admin_Model_Catalog_Category extends Model
 
 	public function getParents($category_id)
 	{
-		$language_id = $this->config->get('config_language_id');
+		$language_id = option('config_language_id');
 
 		$parents = $this->cache->get("category.parents.$category_id.$language_id");
 

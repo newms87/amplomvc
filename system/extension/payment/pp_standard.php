@@ -39,7 +39,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 
 		if ($subscription) {
 			$data['order_id']  = $subscription['order_id'];
-			$data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+			$data['item_name'] = html_entity_decode(option('config_name'), ENT_QUOTES, 'UTF-8');
 
 			$products = $this->cart->getProducts();
 
@@ -101,7 +101,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 			$data['url_check_order_status'] = site_url('block/checkout/confirm/check_order_status', 'order_id=' . $subscription['order_id']);
 
 			//Template Data
-			$data['image_url']     = $server . $this->config->get('config_logo');
+			$data['image_url']     = $server . option('config_logo');
 			$data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
 			$data['custom']        = $this->encryption->encrypt($subscription['order_id']);
 

@@ -29,7 +29,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 		}
 
-		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
+		if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
 			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", site_url('customer/login'), site_url('customer/registration'));
 		}
 
@@ -39,14 +39,14 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 		}
 
-		$show_return_policy = $this->config->get('config_cart_show_return_policy');
+		$show_return_policy = option('config_cart_show_return_policy');
 
 		//Get the cart Products
 		if ($this->cart->hasProducts()) {
 			$cart_products = $this->cart->getProducts();
 
-			$image_width  = $this->config->get('config_image_cart_width');
-			$image_height = $this->config->get('config_image_cart_height');
+			$image_width  = option('config_image_cart_width');
+			$image_height = option('config_image_cart_height');
 
 			foreach ($cart_products as &$cart_product) {
 				$product = & $cart_product['product'];

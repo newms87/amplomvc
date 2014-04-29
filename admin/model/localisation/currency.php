@@ -5,7 +5,7 @@ class Admin_Model_Localisation_Currency extends Model
 	{
 		$this->query("INSERT INTO " . DB_PREFIX . "currency SET title = '" . $this->escape($data['title']) . "', code = '" . $this->escape($data['code']) . "', symbol_left = '" . $this->escape($data['symbol_left']) . "', symbol_right = '" . $this->escape($data['symbol_right']) . "', decimal_place = '" . $this->escape($data['decimal_place']) . "', value = '" . $this->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW()");
 
-		if ($this->config->get('config_currency_auto')) {
+		if (option('config_currency_auto')) {
 			$this->updateCurrencies(true);
 		}
 
@@ -114,13 +114,13 @@ class Admin_Model_Localisation_Currency extends Model
 			$data = array();
 
 			if ($force) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape($this->config->get('config_currency')) . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape(option('config_currency')) . "'");
 			} else {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape($this->config->get('config_currency')) . "' AND date_modified < '" . $this->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape(option('config_currency')) . "' AND date_modified < '" . $this->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
 			}
 
 			foreach ($query->rows as $result) {
-				$data[] = $this->config->get('config_currency') . $result['code'] . '=X';
+				$data[] = option('config_currency') . $result['code'] . '=X';
 			}
 
 			$curl = curl_init();
@@ -143,7 +143,7 @@ class Admin_Model_Localisation_Currency extends Model
 				}
 			}
 
-			$this->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" . $this->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->escape($this->config->get('config_currency')) . "'");
+			$this->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" . $this->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->escape(option('config_currency')) . "'");
 
 			$this->cache->delete('currency');
 		}

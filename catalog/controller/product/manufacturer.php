@@ -60,7 +60,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($filter);
 			$products      = $this->Model_Catalog_Product->getProducts($sort);
 
-			if ($this->config->get('config_show_product_list_hover_image')) {
+			if (option('config_show_product_list_hover_image')) {
 				foreach ($products as &$product) {
 					$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
 				}
@@ -84,7 +84,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 				'sort=p.model&order=DESC'     => _l("Model (Z - A)"),
 			);
 
-			if ($this->config->get('config_review_status')) {
+			if (option('config_review_status')) {
 				$sorts['sort=rating&order=ASC']  = _l("Rating (Lowest)");
 				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}

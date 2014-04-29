@@ -124,8 +124,8 @@ class Admin_Controller_User_UserPermission extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$user_group_total = $this->Model_User_UserGroup->getTotalUserGroups();

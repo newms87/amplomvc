@@ -3,12 +3,12 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 {
 	public function index()
 	{
-		if ($this->config->get('google_base_status')) {
+		if (option('google_base_status')) {
 			$output = '<?xml version="1.0" encoding="UTF-8" ?>';
 			$output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
 			$output .= '<channel>';
-			$output .= '<title>' . $this->config->get('config_name') . '</title>';
-			$output .= '<description>' . $this->config->get('config_meta_description') . '</description>';
+			$output .= '<title>' . option('config_name') . '</title>';
+			$output .= '<description>' . option('config_meta_description') . '</description>';
 			$output .= '<link>' . URL_SITE . '</link>';
 
 			$products = $this->Model_Catalog_Product->getProducts();
@@ -40,7 +40,7 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 					if (in_array($this->currency->getCode(), $supported_currencies)) {
 						$currency = $this->currency->getCode();
 					} else {
-						$currency = ($this->config->get('google_base_status')) ? $this->config->get('google_base_status') : 'USD';
+						$currency = (option('google_base_status')) ? option('google_base_status') : 'USD';
 					}
 
 					if ((float)$product['special']) {

@@ -127,7 +127,7 @@ class Message extends Library
 				}
 			}
 
-			if ($close && $this->config->get('config_allow_close_message')) {
+			if ($close && option('config_allow_close_message')) {
 				$html .= "<span class =\"close\" onclick=\"$(this).closest('.messages').remove()\"></span>";
 			}
 

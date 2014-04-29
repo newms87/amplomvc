@@ -8,7 +8,7 @@ class Breadcrumb extends Library
 	{
 		parent::__construct();
 
-		$this->separator = $this->config->get('config_breadcrumb_separator');
+		$this->separator = option('config_breadcrumb_separator');
 	}
 
 	public function add($text, $href, $separator = '', $position = null)
@@ -41,7 +41,7 @@ class Breadcrumb extends Library
 		$this->crumbs = array();
 	}
 
-	public function get_prev_url()
+	public function prevUrl()
 	{
 		if (count($this->crumbs) > 1) {
 			return $this->crumbs[count($this->crumbs) - 2]['href'];

@@ -244,7 +244,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'title'       => '',
 			'description' => '',
 			'alias'       => '',
-			'stores'      => array($this->config->get('config_default_store')),
+			'stores'      => array(option('config_default_store')),
 			'layouts'     => array(),
 			'sort_order'  => 0,
 			'status'      => 1,
@@ -348,11 +348,11 @@ class Admin_Controller_Catalog_Information extends Controller
 		}
 
 		foreach ($information_ids as $information_id) {
-			if ($this->config->get('config_account_terms_info_id') == $information_id) {
+			if (option('config_account_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store account terms!");
 			}
 
-			if ($this->config->get('config_checkout_terms_info_id') == $information_id) {
+			if (option('config_checkout_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = _l("Warning: This information page cannot be deleted as it is currently assigned as the store checkout terms!");
 			}
 

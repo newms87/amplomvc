@@ -693,7 +693,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 				$allowed = array();
 
-				$filetypes = explode(',', $this->config->get('config_upload_allowed'));
+				$filetypes = explode(',', option('config_upload_allowed'));
 
 				foreach ($filetypes as $filetype) {
 					$allowed[] = trim($filetype);
@@ -757,10 +757,10 @@ class Admin_Controller_Sale_Order extends Controller
 					$store_telephone = $store_info['config_telephone'];
 					$store_fax       = $store_info['config_fax'];
 				} else {
-					$store_address   = $this->config->get('config_address');
-					$store_email     = $this->config->get('config_email');
-					$store_telephone = $this->config->get('config_telephone');
-					$store_fax       = $this->config->get('config_fax');
+					$store_address   = option('config_address');
+					$store_email     = option('config_email');
+					$store_telephone = option('config_telephone');
+					$store_fax       = option('config_fax');
 				}
 
 				if ($order_info['invoice_no']) {

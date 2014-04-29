@@ -16,14 +16,14 @@ class Catalog_Controller_Account_Voucher extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->session->set('vouchers', array(
 				rand() => array(
-					'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
+					'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), option('config_currency'))), $_POST['to_name']),
 					'to_name'          => $_POST['to_name'],
 					'to_email'         => $_POST['to_email'],
 					'from_name'        => $_POST['from_name'],
 					'from_email'       => $_POST['from_email'],
 					'voucher_theme_id' => $_POST['voucher_theme_id'],
 					'message'          => $_POST['message'],
-					'amount'           => $this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))
+					'amount'           => $this->currency->convert($_POST['amount'], $this->currency->getCode(), option('config_currency'))
 				)
 			));
 

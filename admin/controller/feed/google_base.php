@@ -32,7 +32,7 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 		if (isset($_POST['google_base_status'])) {
 			$data['google_base_status'] = $_POST['google_base_status'];
 		} else {
-			$data['google_base_status'] = $this->config->get('google_base_status');
+			$data['google_base_status'] = option('google_base_status');
 		}
 
 		$data['data_feed'] = site_url('feed/google_base');

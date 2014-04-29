@@ -127,7 +127,7 @@ class Cart extends Library
 
 	public function guestCheckoutAllowed()
 	{
-		return $this->config->get('config_guest_checkout') && !$this->config->get('config_customer_hide_price') && !$this->cart->hasDownload();
+		return option('config_guest_checkout') && !option('config_customer_hide_price') && !$this->cart->hasDownload();
 	}
 
 	/**
@@ -490,7 +490,7 @@ class Cart extends Library
 			return false;
 		}
 
-		if ($product['quantity'] < 1 && !$this->config->get('config_stock_checkout')) {
+		if ($product['quantity'] < 1 && !option('config_stock_checkout')) {
 			return false;
 		}
 
@@ -604,7 +604,7 @@ class Cart extends Library
 		if ($this->isEmpty()) {
 			$this->error_code    = self::ERROR_CART_EMPTY;
 			$this->error['cart'] = _l("Your shopping cart is empty!");
-		} elseif (!$this->config->get('config_stock_checkout') && !$this->hasStock()) {
+		} elseif (!option('config_stock_checkout') && !$this->hasStock()) {
 			$this->error_code    = self::ERROR_CART_STOCK;
 			$this->error['cart'] = _l("There are products in your cart that are out of stock");
 		} else {
@@ -873,7 +873,7 @@ class Cart extends Library
 	{
 		if (!$this->address->validate($address)) {
 			$this->error['shipping_address'] = $this->address->getError();
-		} elseif (!$this->address->inGeoZone($address, $this->config->get('config_allowed_shipping_zone'))) {
+		} elseif (!$this->address->inGeoZone($address, option('config_allowed_shipping_zone'))) {
 			$this->error_code                = self::ERROR_SHIPPING_ADDRESS_GEOZONE;
 			$this->error['shipping_address'] = _l("We do not ship to the location you selected.");
 		}
@@ -934,7 +934,7 @@ class Cart extends Library
 		}
 
 		if (empty($methods)) {
-			$this->error['payment_method'] = _l("There are no available Payment Methods for your order! Please contact <a href=\"mailto:%s\">Customer Support</a> to complete your order.", $this->config->get('config_email'));
+			$this->error['payment_method'] = _l("There are no available Payment Methods for your order! Please contact <a href=\"mailto:%s\">Customer Support</a> to complete your order.", option('config_email'));
 
 			$this->clearPaymentMethod();
 
@@ -1070,7 +1070,7 @@ class Cart extends Library
 		//No Shipping Methods Available!
 		if (empty($methods)) {
 			$this->error_code               = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
-			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", site_url('page/page', 'page_id=' . $this->config->get('config_contact_page_id')));
+			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", site_url('page/page', 'page_id=' . option('config_contact_page_id')));
 
 			$this->clearShippingMethod();
 
@@ -1139,7 +1139,7 @@ class Cart extends Library
 
 	public function getAllowedShippingZones()
 	{
-		$geo_zone_id = $this->config->get('config_allowed_shipping_zone');
+		$geo_zone_id = option('config_allowed_shipping_zone');
 
 		if ($geo_zone_id > 0) {
 			$allowed_geo_zones = $this->cache->get('zone.allowed.' . $geo_zone_id);
@@ -1252,6 +1252,7 @@ class Cart extends Library
 
 			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
 
+			$policy['is_default'] = $shipping_policy_id == option('config_default_shipping_policy');
 			return $policy;
 		}
 
@@ -1283,6 +1284,7 @@ class Cart extends Library
 
 			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
 
+			$policy['is_default'] = $return_policy_id == option('config_default_return_policy');
 			return $policy;
 		}
 

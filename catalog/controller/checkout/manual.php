@@ -97,7 +97,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				}
 			}
 
-			if (!$this->cart->hasStock() && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
+			if (!$this->cart->hasStock() && (!option('config_stock_checkout') || option('config_stock_warning'))) {
 				$json['error']['product']['stock'] = _l("Products marked with *** are not available in the desired quantity or not in stock!");
 			}
 
@@ -105,11 +105,11 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			if ($this->cart->hasShipping()) {
 				$this->tax->setShippingAddress($_POST['shipping_country_id'], $_POST['shipping_zone_id'], $_POST['shipping_postcode']);
 			} else {
-				$this->tax->setShippingAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
+				$this->tax->setShippingAddress(option('config_country_id'), option('config_zone_id'));
 			}
 
 			$this->tax->setPaymentAddress($_POST['payment_country_id'], $_POST['payment_zone_id'], $_POST['shipping_postcode']);
-			$this->tax->setStoreAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
+			$this->tax->setStoreAddress(option('config_country_id'), option('config_zone_id'));
 
 			// Products
 			$json['order_product'] = array();
@@ -205,7 +205,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				}
 
 				if (($_POST['amount'] < 1) || ($_POST['amount'] > 1000)) {
-					$json['error']['vouchers']['amount'] = sprintf(_l("Amount must be between %s and %s!"), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->config->get('config_currency'));
+					$json['error']['vouchers']['amount'] = sprintf(_l("Amount must be between %s and %s!"), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . option('config_currency'));
 				}
 
 				if (!isset($json['error']['vouchers'])) {
@@ -226,7 +226,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 					$this->session->get('vouchers')[] = array(
 						'voucher_id'       => $voucher_id,
-						'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
+						'description'      => sprintf(_l("%s Gift Certificate for %s"), $this->currency->format($_POST['amount'], option('config_currency')), $_POST['to_name']),
 						'code'             => substr(md5(rand()), 0, 7),
 						'from_name'        => $_POST['from_name'],
 						'from_email'       => $_POST['from_email'],
@@ -324,7 +324,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					$results = $this->Model_Setting_Extension->getExtensions('shipping');
 
 					foreach ($results as $result) {
-						if ($this->config->get($result['code'] . '_status')) {
+						if (option($result['code'] . '_status')) {
 
 							$quote = $this->{'model_shipping_' . $result['code']}->getQuote($address_data);
 
@@ -424,13 +424,13 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			$results = $this->Model_Setting_Extension->getExtensions('total');
 
 			foreach ($results as $key => $value) {
-				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+				$sort_order[$key] = option($value['code'] . '_sort_order');
 			}
 
 			array_multisort($sort_order, SORT_ASC, $results);
 
 			foreach ($results as $result) {
-				if ($this->config->get($result['code'] . '_status')) {
+				if (option($result['code'] . '_status')) {
 
 					$this->{'model_total_' . $result['code']}->getTotal($json['order_total'], $total, $taxes);
 				}
@@ -503,7 +503,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 				$results = $this->Model_Setting_Extension->getExtensions('payment');
 
 				foreach ($results as $result) {
-					if ($this->config->get($result['code'] . '_status')) {
+					if (option($result['code'] . '_status')) {
 
 						$method = $this->{'model_payment_' . $result['code']}->getMethod($address_data, $total);
 

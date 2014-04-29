@@ -263,7 +263,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				);
 			}
 
-			$product['thumb'] = $this->image->resize($product['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
+			$product['thumb'] = $this->image->resize($product['image'], option('config_image_admin_list_width'), option('config_image_admin_list_height'));
 
 			$product['categories'] = $this->Model_Catalog_Product->getProductCategories($product['product_id']);
 
@@ -349,7 +349,7 @@ class Admin_Controller_Catalog_Product extends Controller
 					false,
 					'title'
 				),
-				'default'      => $this->config->get('config_default_shipping_policy'),
+				'default'      => option('config_default_shipping_policy'),
 			),
 
 			'return_policy_id'   => array(
@@ -360,7 +360,7 @@ class Admin_Controller_Catalog_Product extends Controller
 					false,
 					'title'
 				),
-				'default'      => $this->config->get('config_default_return_policy'),
+				'default'      => option('config_default_return_policy'),
 			),
 
 			'add_cat'            => array(
@@ -457,7 +457,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Apply Product Class
 		$product_classes          = $this->Model_Catalog_ProductClass->getProductClasses();
-		$default_product_class_id = isset($_GET['product_class_id']) ? $_GET['product_class_id'] : $this->config->get('config_default_product_class_id');
+		$default_product_class_id = isset($_GET['product_class_id']) ? $_GET['product_class_id'] : option('config_default_product_class_id');
 
 		//Set Values or Defaults
 		$defaults = array(
@@ -478,9 +478,9 @@ class Admin_Controller_Catalog_Product extends Controller
 			'shipping'           => 1,
 			'price'              => '',
 			'cost'               => '',
-			'return_policy_id'   => $this->config->get('config_default_return_policy'),
-			'shipping_policy_id' => $this->config->get('config_default_shipping_policy'),
-			'tax_class_id'       => $this->config->get('config_tax_default_id'),
+			'return_policy_id'   => option('config_default_return_policy'),
+			'shipping_policy_id' => option('config_default_shipping_policy'),
+			'tax_class_id'       => option('config_tax_default_id'),
 			'date_available'     => $this->date->now(),
 			'date_expires'       => '',
 			'editable'           => 1,
@@ -488,15 +488,15 @@ class Admin_Controller_Catalog_Product extends Controller
 			'minimum'            => 1,
 			'subtract'           => 1,
 			'sort_order'         => 1,
-			'stock_status_id'    => $this->config->get('config_stock_status_id'),
+			'stock_status_id'    => option('config_stock_status_id'),
 			'status'             => 1,
 			'weight'             => '',
-			'weight_class_id'    => $this->config->get('config_weight_class_id'),
+			'weight_class_id'    => option('config_weight_class_id'),
 			'length'             => '',
 			'width'              => '',
 			'height'             => '',
-			'length_class_id'    => $this->config->get('config_length_class_id'),
-			'product_stores'     => array($this->config->get('config_default_store_id')),
+			'length_class_id'    => option('config_length_class_id'),
+			'product_stores'     => array(option('config_default_store_id')),
 			'product_options'    => array(),
 			'product_discounts'  => array(),
 			'product_specials'   => array(),
@@ -556,10 +556,10 @@ class Admin_Controller_Catalog_Product extends Controller
 			0 => _l("No"),
 		);
 
-		$data['help_email'] = _l("mailto:%s?subject=New Product Option Request", $this->config->get('config_email'));
+		$data['help_email'] = _l("mailto:%s?subject=New Product Option Request", option('config_email'));
 
 		//TODO: do we really need ths here?
-		$data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
+		$data['no_image'] = $this->image->resize('no_image.png', option('config_image_admin_thumb_width'), option('config_image_admin_thumb_height'));
 
 		//Translations
 		$data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
@@ -635,7 +635,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Product Discount Template Defaults
 		$data['product_discounts']['__ac_template__'] = array(
-			'customer_group_id' => $this->config->get('config_customer_group_id'),
+			'customer_group_id' => option('config_customer_group_id'),
 			'quantity'          => 0,
 			'priority'          => 0,
 			'price'             => 0,
@@ -645,7 +645,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Product Special Template Defaults
 		$data['product_specials']['__ac_template__'] = array(
-			'customer_group_id' => $this->config->get('config_customer_group_id'),
+			'customer_group_id' => option('config_customer_group_id'),
 			'priority'          => 0,
 			'price'             => 0,
 			'date_start'        => $this->date->now(),
@@ -731,7 +731,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		if (empty($_POST['alias']) && $this->config->get('config_seo_url')) {
+		if (empty($_POST['alias']) && option('config_seo_url')) {
 			$_POST['alias'] = $this->Model_Setting_UrlAlias->getUniqueAlias($_POST['name'], 'product/product', 'product_id=' . $product_id);
 		}
 
@@ -857,7 +857,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	public function autocomplete()
 	{
 		//Sort
-		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', option('config_autocomplete_limit'));
 
 		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();

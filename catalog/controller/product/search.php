@@ -56,7 +56,7 @@ class Catalog_Controller_Product_Search extends Controller
 		if (isset($_GET['limit'])) {
 			$limit = $_GET['limit'];
 		} else {
-			$limit = $this->config->get('config_catalog_limit');
+			$limit = option('config_catalog_limit');
 		}
 
 		if (isset($_GET['keyword'])) {
@@ -167,12 +167,12 @@ class Catalog_Controller_Product_Search extends Controller
 
 			foreach ($results as $result) {
 				if ($result['image']) {
-					$image = $this->image->resize($result['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
+					$image = $this->image->resize($result['image'], option('config_image_product_width'), option('config_image_product_height'));
 				} else {
 					$image = false;
 				}
 
-				if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
+				if ((option('config_customer_hide_price') && $this->customer->isLogged()) || !option('config_customer_hide_price')) {
 					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
 				} else {
 					$price = false;
@@ -184,13 +184,13 @@ class Catalog_Controller_Product_Search extends Controller
 					$special = false;
 				}
 
-				if ($this->config->get('config_show_price_with_tax')) {
+				if (option('config_show_price_with_tax')) {
 					$tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price']);
 				} else {
 					$tax = false;
 				}
 
-				if ($this->config->get('config_review_status')) {
+				if (option('config_review_status')) {
 					$rating = (int)$result['rating'];
 				} else {
 					$rating = false;
@@ -268,7 +268,7 @@ class Catalog_Controller_Product_Search extends Controller
 				'href'  => site_url('product/search', 'sort=p.price&order=DESC' . $url)
 			);
 
-			if ($this->config->get('config_review_status')) {
+			if (option('config_review_status')) {
 				$data['sorts'][] = array(
 					'text'  => _l("Rating (Highest)"),
 					'value' => 'rating-DESC',
@@ -327,9 +327,9 @@ class Catalog_Controller_Product_Search extends Controller
 			$data['limits'] = array();
 
 			$data['limits'][] = array(
-				'text'  => $this->config->get('config_catalog_limit'),
-				'value' => $this->config->get('config_catalog_limit'),
-				'href'  => site_url('product/search', $url . '&limit=' . $this->config->get('config_catalog_limit'))
+				'text'  => option('config_catalog_limit'),
+				'value' => option('config_catalog_limit'),
+				'href'  => site_url('product/search', $url . '&limit=' . option('config_catalog_limit'))
 			);
 
 			$data['limits'][] = array(

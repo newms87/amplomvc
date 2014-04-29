@@ -94,7 +94,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add(_l("Order History"), site_url('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$data['policies'] = site_url('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id'));
+		$data['policies'] = site_url('information/information/info', 'information_id=' . option('config_shipping_return_info_id'));
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
 

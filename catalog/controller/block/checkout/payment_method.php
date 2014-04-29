@@ -21,11 +21,11 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$data['no_payment_address'] = true;
 		}
 
-		if ($this->config->get('config_checkout_terms_info_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
+		if (option('config_checkout_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation(option('config_checkout_terms_info_id'));
 
 			if ($information_info) {
-				$data['checkout_terms']       = site_url('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id'));
+				$data['checkout_terms']       = site_url('information/information/info', 'information_id=' . option('config_checkout_terms_info_id'));
 				$data['checkout_terms_title'] = $information_info['title'];
 			}
 		}
@@ -62,8 +62,8 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		}
 
 		if (!$json) {
-			if ($this->config->get('config_checkout_terms_info_id')) {
-				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
+			if (option('config_checkout_terms_info_id')) {
+				$information_info = $this->Model_Catalog_Information->getInformation(option('config_checkout_terms_info_id'));
 
 				if ($information_info && empty($_POST['agree'])) {
 					$json['error']['agree'] = _l("You must agree to the %", $information_info['title']);

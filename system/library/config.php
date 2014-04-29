@@ -64,7 +64,7 @@ class Config extends Library
 
 	public function getDefaultStore()
 	{
-		return $this->getStore($this->config->get('config_default_store'));
+		return $this->getStore(option('config_default_store'));
 	}
 
 	public function getStore($store_id = null)

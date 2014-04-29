@@ -47,7 +47,7 @@ class Catalog_Controller_Mail_Voucher extends Controller
 		$this->mail->init();
 
 		$this->mail->setTo($voucher['to_email']);
-		$this->mail->setBcc($this->config->get('config_email'));
+		$this->mail->setBcc(option('config_email'));
 		$this->mail->setFrom($voucher['from_email']);
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject(_l("You have been sent a gift voucher from %s", $voucher['from_name']));

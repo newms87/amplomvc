@@ -7,7 +7,7 @@ class Encryption extends Library
 	{
 		parent::__construct();
 
-		$this->key = $this->config->get('config_encryption');
+		$this->key = option('config_encryption');
 	}
 
 	function encrypt($value)

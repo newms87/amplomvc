@@ -11,7 +11,7 @@ class Export extends Library
 	public function saveFile($file)
 	{
 		if (!is_dir(dirname($file))) {
-			$mode = octdec($this->config->get('config_default_dir_mode'));
+			$mode = octdec(option('config_default_dir_mode'));
 			mkdir($path, dirname($file), true);
 			chmod($path, dirname($file));
 		}

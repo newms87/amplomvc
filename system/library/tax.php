@@ -9,12 +9,12 @@ final class Tax extends Library
 		parent::__construct();
 
 		$this->store_address = array(
-			'country_id' => $this->config->get('config_country_id'),
-			'zone_id'    => $this->config->get('config_zone_id'),
-			'postcode'   => $this->config->get('config_postcode')
+			'country_id' => option('config_country_id'),
+			'zone_id'    => option('config_zone_id'),
+			'postcode'   => option('config_postcode')
 		);
 
-		$this->show_price_with_tax = $this->config->get('config_show_price_with_tax');
+		$this->show_price_with_tax = option('config_show_price_with_tax');
 	}
 
 	public function apply(&$taxes, $value, $tax_class_id)

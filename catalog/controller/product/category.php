@@ -26,11 +26,11 @@ class Catalog_Controller_Product_Category extends Controller
 			//Page Title
 			$data['page_title'] = $category_info['name'];
 
-			if ($this->config->get('config_show_category_image')) {
-				$data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
+			if (option('config_show_category_image')) {
+				$data['thumb'] = $this->image->resize($category_info['image'], option('config_image_category_width'), option('config_image_category_height'));
 			}
 
-			if ($this->config->get('config_show_category_description')) {
+			if (option('config_show_category_description')) {
 				$data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
 			}
 
@@ -77,7 +77,7 @@ class Catalog_Controller_Product_Category extends Controller
 		if ($product_total) {
 			$products = $this->Model_Catalog_Product->getProducts($sort + $filter);
 
-			if ($this->config->get('config_show_product_list_hover_image')) {
+			if (option('config_show_product_list_hover_image')) {
 				foreach ($products as &$product) {
 					$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
 				}
@@ -102,7 +102,7 @@ class Catalog_Controller_Product_Category extends Controller
 				'sort=p.model&order=DESC'     => _l("Model (Z - A)"),
 			);
 
-			if ($this->config->get('config_review_status')) {
+			if (option('config_review_status')) {
 				$sorts['sort=rating&order=ASC']  = _l("Rating (Lowest)");
 				$sorts['sort=rating&order=DESC'] = _l("Rating (Highest)");
 			}

@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$length_class_total = $this->Model_Localisation_LengthClass->getTotalLengthClasses();
@@ -162,7 +162,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 			$data['length_classes'][] = array(
 				'length_class_id' => $result['length_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? _l(" <b>(Default)</b>") : null),
+				'title'           => $result['title'] . (($result['unit'] == option('config_length_class')) ? _l(" <b>(Default)</b>") : null),
 				'unit'            => $result['unit'],
 				'value'           => $result['value'],
 				'selected'        => isset($_GET['selected']) && in_array($result['length_class_id'], $_GET['selected']),
@@ -316,7 +316,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 		foreach ($_GET['selected'] as $length_class_id) {
-			if ($this->config->get('config_length_class_id') == $length_class_id) {
+			if (option('config_length_class_id') == $length_class_id) {
 				$this->error['warning'] = _l("Warning: This length class cannot be deleted as it is currently assigned as the default store length class!");
 			}
 

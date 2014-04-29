@@ -31,7 +31,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 			);
 		}
 
-		$review_status = $this->config->get('config_review_status');
+		$review_status = option('config_review_status');
 
 		$data['review_status'] = $review_status;
 

@@ -13,7 +13,7 @@ class Theme extends Library
 		parent::__construct();
 
 		$this->dir_themes = DIR_THEMES;
-		$this->theme = $this->config->get('config_theme');
+		$this->theme = option('config_theme');
 
 		if (!$this->theme || !is_dir(DIR_THEMES . $this->theme)) {
 			$this->theme = $this->default_theme;

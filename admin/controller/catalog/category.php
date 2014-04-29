@@ -144,8 +144,8 @@ class Admin_Controller_Catalog_Category extends Controller
 		$categories     = $this->Model_Catalog_Category->getCategoriesWithParents($sort + $filter);
 
 		$url_query    = $this->url->getQueryExclude('category_id');
-		$image_width  = $this->config->get('config_image_admin_list_width');
-		$image_height = $this->config->get('config_image_admin_list_height');
+		$image_width  = option('config_image_admin_list_width');
+		$image_height = option('config_image_admin_list_height');
 
 		foreach ($categories as &$category) {
 			if ($this->user->can('modify', 'catalog/category')) {

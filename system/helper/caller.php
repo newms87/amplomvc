@@ -65,3 +65,9 @@ function redirect($path, $query = null, $status = null) {
 	global $registry;
 	$registry->get('url')->redirect($path, $query, $status);
 }
+
+function option($option)
+{
+	global $registry;
+	return $registry->get('config')->get($option);
+}

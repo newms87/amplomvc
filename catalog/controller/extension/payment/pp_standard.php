@@ -19,7 +19,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		}
 
 		$data['order_id']  = $order['order_id'];
-		$data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+		$data['item_name'] = html_entity_decode(option('config_name'), ENT_QUOTES, 'UTF-8');
 
 		$cart_products = $this->cart->getProducts();
 
@@ -85,7 +85,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		$data['url_check_order_status'] = site_url('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 
 		//Template Data
-		$data['image_url']     = $server . $this->config->get('config_logo');
+		$data['image_url']     = $server . option('config_logo');
 		$data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
 		$data['custom']        = $this->encryption->encrypt($order['order_id']);
 		$data['testmode']      = $this->settings['test'];
@@ -273,7 +273,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		}
 
 		if (empty($response) || strpos($response, "FAIL") === 0) {
-			$this->message->add('warning', _l("There was an error while verifying your payment from Paypal. Please contact <a href=\"%s\">Customer Support</a> to resolve the payment.", $this->config->get('config_email')));
+			$this->message->add('warning', _l("There was an error while verifying your payment from Paypal. Please contact <a href=\"%s\">Customer Support</a> to resolve the payment.", option('config_email')));
 
 			if (!$order) {
 				if (!empty($_POST['first_name'])) {
@@ -303,9 +303,9 @@ class Catalog_Controller_Extension_Payment_PpStandard
 
 			$this->mail->init();
 
-			$this->mail->setTo($this->config->get('config_email'));
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($this->config->get('config_name'));
+			$this->mail->setTo(option('config_email'));
+			$this->mail->setFrom(option('config_email'));
+			$this->mail->setSender(option('config_name'));
 			$this->mail->setSubject($subject);
 			$this->mail->setText($message);
 

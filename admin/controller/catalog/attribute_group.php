@@ -298,7 +298,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	public function autocomplete()
 	{
 		//Sort / Filter
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
+		$sort   = $this->sort->getQueryDefaults('name', 'ASC', option('config_autocomplete_limit'));
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Label and Value
@@ -308,8 +308,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		//Load Sorted / Filtered Data
 		$attributes = $this->Model_Catalog_AttributeGroup->getAttributesFilter($sort + $filter);
 
-		$image_width  = $this->config->get('config_image_admin_thumb_width');
-		$image_height = $this->config->get('config_image_admin_thumb_height');
+		$image_width  = option('config_image_admin_thumb_width');
+		$image_height = option('config_image_admin_thumb_height');
 
 		foreach ($attributes as &$attribute) {
 			$attribute['label'] = $attribute[$label];

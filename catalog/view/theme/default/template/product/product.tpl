@@ -1,243 +1,245 @@
 <?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
-<div class="content">
-	<?= _breadcrumbs(); ?>
+<?= _area('left'); ?>
+<?= _area('right'); ?>
+
+<section id="product-<?= $product_id; ?>" class="product-content content">
+	<header class="row top-row">
+		<div class="wrap">
+			<?= _breadcrumbs(); ?>
+
+			<h1><?= $name; ?></h1>
+		</div>
+	</header>
+
 	<?= _area('top'); ?>
 
-	<div class="product_info">
-		<div class="left">
-			<? if (!empty($thumb)) { ?>
-				<div id="the_zoombox" class="image">
-					<a id="zoombox_image_link" onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>" title="<?= $page_title; ?>" class="zoombox" rel="gal1">
-						<img src="<?= $thumb; ?>" title="<?= $page_title; ?>" alt="<?= $page_title; ?>" id="image"/>
-					</a>
-					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= _l("View Full Size Image"); ?></a>
-				</div>
-			<? } ?>
-
-			<? if (!empty($images)) { ?>
-				<div class="image-additional">
-					<? foreach ($images as $img) { ?>
-						<a href="javscript:void(0);" title="<?= $page_title; ?>" rel="<?= $img['rel']; ?>">
-							<img src="<?= $img['thumb']; ?>" title="<?= $page_title; ?>" alt="<?= $page_title; ?>"/>
+	<div class="row product-row">
+		<div class="wrap">
+			<div class="col xs-12 md-6">
+				<? if (!empty($thumb)) { ?>
+					<div id="the-zoombox" class="image">
+						<a id="zoombox-image-link"  href="<?= $popup; ?>" title="<?= $name; ?>" class="zoombox" onclick="$.colorbox({href: $(this).attr('href'), width: '70%', height: '90%'})" rel="gal1">
+							<img src="<?= $thumb; ?>" title="<?= $name; ?>" alt="<?= $name; ?>" id="image"/>
 						</a>
-					<? } ?>
-				</div>
-			<? } ?>
-
-			<? if (!empty($block_product_related)) { ?>
-				<?= $block_product_related; ?>
-			<? } ?>
-		</div>
-
-		<div class="right">
-			<div class="title"><?= $page_title; ?></div>
-
-			<div class="description">
-				<? if (!empty($manufacturer)) { ?>
-					<div class="description_manufacturer">
-						<span class="view_more"><a href="<?= $category['url']; ?>"><?= _l("View More in %s", $category['name']); ?></a></span>
-						<span class="keep_shopping"><a href="<?= $keep_shopping; ?>"><?= _l("Keep Shopping"); ?></a></span>
-					</div>
-				<? } ?>
-				<? if ($display_model) { ?>
-					<div class="description_model">
-						<span><?= _l("Model:"); ?></span>
-						<span><?= $model; ?></span>
+						<a class="view-full-size" onclick="$.colorbox({href: $('#zoombox-image-link').attr('href'), width: '70%', height: '90%'});"><?= _l("View Full Size Image"); ?></a>
 					</div>
 				<? } ?>
 
-				<? if ($price && $is_purchasable) { ?>
-					<div class="price">
-						<?= _l(""); ?>
-
-						<? if (empty($special)) { ?>
-							<span class="regular"><?= $price; ?></span>
-						<? } else { ?>
-							<span class="special"><?= $special; ?></span>
-							<span class="retail"><?= _l("%s retail", $price); ?></span>
-						<? } ?>
-
-						<? if (!empty($is_final_explanation)) { ?>
-							<div class="extra_info_block">
-								<span class="final_sale"></span>
-								<span class="help_icon">
-									<span class="help_icon_popup"><?= $is_final_explanation; ?></span>
-								</span>
-							</div>
-						<? } ?>
-
-						<? if (!empty($is_default_shipping)) { ?>
-							<div class="extra_info_block">
-								<span class="not_default_shipping"></span>
-								<span class="help_icon">
-									<span class="help_icon_popup"><?= $shipping_policy['description']; ?></span>
-								</span>
-							</div>
-						<? } ?>
-
-						<br class="clear"/>
-						<? if (!empty($tax)) { ?>
-							<span class="price-tax"><?= _l("Ex Tax:"); ?> <?= $tax; ?></span><br/>
-						<? } ?>
-						<? if (!empty($points)) { ?>
-							<span class="reward"><small><?= _l("Price in reward points:"); ?> <?= $points; ?></small></span><br/>
-						<? } ?>
-						<? if ($discounts) { ?>
-							<br/>
-							<div class="discount">
-								<? foreach ($discounts as $discount) { ?>
-									<?= _l("Discount for %s: %s", $discount['quantity'], $discount['price']); ?><br/>
-								<? } ?>
-							</div>
+				<? if (!empty($images)) { ?>
+					<div class="image-additional">
+						<? foreach ($images as $img) { ?>
+							<a href="javscript:void(0);" title="<?= $name; ?>" rel="<?= $img['rel']; ?>">
+								<img src="<?= $img['thumb']; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
+							</a>
 						<? } ?>
 					</div>
 				<? } ?>
 
-				<? if (!empty($reward)) { ?>
-					<div class="description_reward"><span><?= _l("Reward Points:"); ?></span><span><?= $reward; ?></span></div>
-				<? } ?>
-
-				<? if (!empty($stock)) { ?>
-					<div class="description_stock <?= $stock_class; ?>">
-						<span class="text"><?= _l("Availability:"); ?></span>
-						<span class="stock"><?= $stock; ?></span>
-					</div>
-				<? } ?>
-
-				<? if (!empty($description)) { ?>
-					<div class="product_description">
-						<div class="scroll_wrapper">
-							<?= $description; ?>
-						</div>
-					</div>
+				<? if (option('config_show_product_related')) { ?>
+					<?= _block('product/related'); ?>
 				<? } ?>
 			</div>
 
-			<? if ($is_purchasable) { ?>
-				<form id="product_form" action="<?= $buy_now; ?>" method="post">
-					<div class="cart clear">
-						<? if (isset($block_product_options)) { ?>
-							<?= $block_product_options; ?>
-						<? } ?>
-						<div id="product_submit_box" class="clear">
-							<div class="quantity">
-								<label><?= _l("Quantity"); ?></label>
-								<input type="text" name="quantity" id="quantity" size="2" value="<?= $minimum; ?>"/>
-								<input type="hidden" id="product_id" name="product_id" size="2" value="<?= $product_id; ?>"/>
-							</div>
-							<div id="product_buttons_box">
-								<div id="buy_product_buttons">
-									<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button_buy_now" class="button medium"/>
-									<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button_add_to_cart" class="button medium"/>
-								</div>
-								<div id="processing_product" class="hidden"><?= _l("Processing...please wait."); ?></div>
-							</div>
+			<div class="col xs-12 md-6">
+				<div class="product-top">
+					<? if ($show_model) { ?>
+						<div class="description-model">
+							<span><?= _l("Model:"); ?></span>
+							<span><?= $model; ?></span>
 						</div>
+					<? } ?>
 
-						<div id="cart_additional_buttons">
-							<a href="<?= $view_cart_link; ?>"><?= _l("View Cart"); ?></a>
-							<a href="<?= $checkout_link; ?>"><?= _l("Checkout"); ?></a>
-							<a href="<?= $continue_shopping_link; ?>"><?= _l("Continue Shopping"); ?></a>
-						</div>
-						<? if ($minimum > 1) { ?>
-							<div class="minimum"><?= _l("This product has a minimum quantity of %s", $minimum); ?></div>
-						<? } ?>
-					</div>
-				</form>
+					<? if ($price && $is_purchasable) { ?>
+						<div class="price">
+							<?= _l(""); ?>
 
-			<? } else { ?>
-				<div id="product_inactive"><?= _l("This product is currently unavailable."); ?></div>
-			<? } ?>
-
-			<? if (!empty($block_review)) { ?>
-				<div class="clear"><?= $block_review; ?></div>
-			<? } ?>
-
-			<? if (!empty($block_sharing)) { ?>
-				<div id="share_product" class="clear"><?= $block_sharing; ?></div>
-			<? } ?>
-		</div>
-	</div>
-
-	<div id="additional_information">
-		<div id="product_additional_tabs" class="htabs">
-			<? if ($information) { ?>
-				<a href="#tab-information"><?= _l("More Info"); ?></a>
-			<? } ?>
-
-			<a href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
-
-			<? if (!empty($attribute_groups)) { ?>
-				<a href="#tab-attribute"><?= _l("Additional Information"); ?></a>
-			<? } ?>
-		</div>
-
-		<? if ($information) { ?>
-			<div id="tab-information" class="tab-content"><?= $information; ?></div>
-		<? } ?>
-
-		<div id="tab-shipping-return" class="tab-content">
-			<? if ($shipping_policy) { ?>
-				<div class="shipping_policy">
-					<div class="title"><?= $shipping_policy['title']; ?></div>
-					<div class="description"><?= $shipping_policy['description']; ?></div>
-				</div>
-			<? } ?>
-
-			<? if ($return_policy) { ?>
-				<div class="return_policy">
-					<div class="title"><?= $return_policy['title']; ?></div>
-					<div class="description"><?= $return_policy['description']; ?></div>
-				</div>
-			<? } ?>
-
-			<? if (!empty($is_final_explanation)) { ?>
-				<p class="final_sale_explain"><?= $is_final_explanation; ?></p>
-			<? } ?>
-
-			<? if (!empty($data_policies)) { ?>
-				<p>
-					<?= _l("Please see our"); ?>
-					<a onclick="return colorbox($(this))" href="<?= $data_policies; ?>"><?= _l("Shipping & Return Policy"); ?></a>
-					<?= _l("for more information."); ?>
-				</p>
-			<? } ?>
-		</div>
-
-		<? if (!empty($data_attribute_groups)) { ?>
-			<div id="tab-attribute" class="tab-content">
-				<table class="attribute">
-					<? foreach ($data_attribute_groups as $attribute_group) { ?>
-						<thead>
-							<tr>
-								<td colspan="2"><?= $attribute_group['name']; ?></td>
-							</tr>
-						</thead>
-						<tbody>
-							<? foreach ($attribute_group['attributes'] as $attribute) { ?>
-								<tr>
-									<td><?= $attribute['name']; ?></td>
-									<td><?= $attribute['text']; ?></td>
-								</tr>
+							<? if (empty($special)) { ?>
+								<span class="regular"><?= $price; ?></span>
+							<? } else { ?>
+								<span class="special"><?= $special; ?></span>
+								<span class="retail"><?= _l("%s retail", $price); ?></span>
 							<? } ?>
-						</tbody>
+
+							<? if (!empty($tax)) { ?>
+								<div class="price-tax"><?= _l("Ex Tax: %s", $tax); ?></div>
+							<? } ?>
+
+							<? if (!empty($points)) { ?>
+								<div class="price-reward"><?= _l("Price in reward points: %s", $points); ?></div>
+							<? } ?>
+
+							<? if (!empty($discounts)) { ?>
+								<div class="discounts">
+									<? foreach ($discounts as $discount) { ?>
+										<div class="discount"><?= _l("Discount for %s: %s", $discount['quantity'], $discount['price']); ?></div>
+									<? } ?>
+								</div>
+							<? } ?>
+						</div>
 					<? } ?>
-				</table>
+				</div>
+
+				<div class="product-tabs htabs">
+					<a href="#tab-description"><?= _l("Description"); ?></a>
+
+					<? if ($information) { ?>
+						<a href="#tab-information"><?= _l("More Info"); ?></a>
+					<? } ?>
+
+					<a href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
+
+					<? if (!empty($attribute_groups)) { ?>
+						<a href="#tab-attribute"><?= _l("Specifications"); ?></a>
+					<? } ?>
+				</div>
+
+				<div class="tab-contents">
+					<div id="tab-description" class="description">
+						<? if (!empty($reward)) { ?>
+							<div class="reward"><?= _l("You will earn %s points!", $reward); ?></div>
+						<? } ?>
+
+						<? if (!empty($stock)) { ?>
+							<div class="description_stock <?= $stock_class; ?>">
+								<span class="text"><?= _l("Availability:"); ?></span>
+								<span class="stock"><?= $stock; ?></span>
+							</div>
+						<? } ?>
+
+						<? if (!empty($description)) { ?>
+							<div class="product-description">
+								<div class="scroll-wrapper">
+									<?= $description; ?>
+								</div>
+							</div>
+						<? } ?>
+
+						<? if ($is_purchasable) { ?>
+							<div class="product-options">
+								<?= _block('product/options', null, array('product_id' => $product_id)); ?>
+							</div>
+						<? } ?>
+
+						<? if ($is_purchasable) { ?>
+							<form id="product-form" action="<?= site_url('cart/cart/buy_now'); ?>" method="post">
+								<div class="cart clear">
+
+									<div id="product-submit-box" class="clear">
+										<div class="quantity">
+											<label><?= _l("Quantity"); ?></label>
+											<input type="text" name="quantity" id="quantity" size="2" value="<?= $minimum; ?>"/>
+											<input type="hidden" id="product-id" name="product_id" size="2" value="<?= $product_id; ?>"/>
+										</div>
+										<div id="product-buttons-box">
+											<div id="buy-product-buttons">
+												<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button-buy-now" class="button medium"/>
+												<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button-add-to-cart" class="button medium"/>
+											</div>
+											<div class="processing hidden"><?= _l("Processing...please wait."); ?></div>
+										</div>
+									</div>
+
+									<div id="cart-additional-buttons">
+										<a href="<?= site_url('cart/cart'); ?>"><?= _l("View Cart"); ?></a>
+										<a href="<?= site_url('checkout/checkout'); ?>"><?= _l("Checkout"); ?></a>
+										<a href="<?= $this->breadcrumb->prevUrl(); ?>"><?= _l("Continue Shopping"); ?></a>
+									</div>
+									<? if ($minimum > 1) { ?>
+										<div class="minimum"><?= _l("This product has a minimum quantity of %s", $minimum); ?></div>
+									<? } ?>
+								</div>
+							</form>
+
+						<? } else { ?>
+							<div id="product-inactive"><?= _l("This product is currently unavailable."); ?></div>
+						<? } ?>
+					</div>
+
+					<? if ($information) { ?>
+						<div id="tab-information" class="tab-content"><?= $information; ?></div>
+					<? } ?>
+
+					<div id="tab-shipping-return" class="tab-content">
+						<? if ($shipping_policy) { ?>
+							<div class="shipping-policy">
+								<div class="title"><?= $shipping_policy['title']; ?></div>
+								<div class="description"><?= $shipping_policy['description']; ?></div>
+							</div>
+						<? } ?>
+
+						<? if ($return_policy) { ?>
+							<div class="return-policy">
+								<div class="title"><?= $return_policy['title']; ?></div>
+								<div class="description"><?= $return_policy['description']; ?></div>
+							</div>
+						<? } ?>
+
+						<? if ($is_final) { ?>
+							<div class="final-sale">
+								<?= _l("A Product Marked as <span class=\"final_sale\"></span> cannot be returned. Read our <a href=\"%s\" onclick=\"$(this).colorbox()\">Return Policy</a> for details.", site_url('page/shipping_return_policy', 'product_id=' . $product_id)); ?>
+							</div>
+						<? } ?>
+
+						<? if (option('config_shipping_return_info_id')) { ?>
+							<p>
+								<?= _l("Please see our"); ?>
+								<a class="colorbox" href="<?= site_url('information/information/info', 'information_id=' . option('config_shipping_return_info_id')); ?>"><?= _l("Shipping & Return Policy"); ?></a>
+								<?= _l("for more information."); ?>
+							</p>
+						<? } ?>
+					</div>
+
+					<? if (!empty($data_attribute_groups)) { ?>
+						<div id="tab-attribute" class="tab-content">
+							<table class="attribute">
+								<? foreach ($data_attribute_groups as $attribute_group) { ?>
+									<thead>
+										<tr>
+											<td colspan="2"><?= $attribute_group['name']; ?></td>
+										</tr>
+									</thead>
+									<tbody>
+										<? foreach ($attribute_group['attributes'] as $attribute) { ?>
+											<tr>
+												<td><?= $attribute['name']; ?></td>
+												<td><?= $attribute['text']; ?></td>
+											</tr>
+										<? } ?>
+									</tbody>
+								<? } ?>
+							</table>
+						</div>
+					<? } ?>
+				</div>
+
+				<? if ($show_sharing) { ?>
+					<?= _block('extras/sharing'); ?>
+				<? } ?>
+
+				<? if (!empty($tags)) { ?>
+					<div class="tags"><b><?= _l("Tags:"); ?></b>
+						<? foreach ($tags as $i => $tag) { ?>
+							<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
+						<? } ?>
+					</div>
+				<? } ?>
 			</div>
-		<? } ?>
+
+		</div>
 	</div>
 
-	<? if (!empty($tags)) { ?>
-		<div class="tags"><b><?= _l("Tags:"); ?></b>
-			<? foreach ($tags as $i => $tag) { ?>
-				<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
-			<? } ?>
+
+	<? if ($show_reviews) { ?>
+		<div class="row review-row">
+			<div class="wrap">
+				<?= _block('product/review'); ?>
+			</div>
 		</div>
 	<? } ?>
 
 	<?= _area('bottom'); ?>
-</div>
+
+</section>
 
 
 <script type="text/javascript">

@@ -15,13 +15,13 @@ class Catalog_Controller_Block_Product_Related extends Controller
 
 		foreach ($related_products as &$product) {
 			if ($product['image']) {
-				$product['image'] = $this->image->resize($product['image'], $this->config->get('config_image_related_width'), $this->config->get('config_image_related_height'));
+				$product['image'] = $this->image->resize($product['image'], option('config_image_related_width'), option('config_image_related_height'));
 			} else {
 				$product['image'] = false;
 			}
 
-			if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
-				if ($this->config->get('config_show_price_with_tax')) {
+			if ((option('config_customer_hide_price') && $this->customer->isLogged()) || !option('config_customer_hide_price')) {
+				if (option('config_show_price_with_tax')) {
 					$product['price'] = $this->tax->calculate($product['price'], $product['tax_class_id']);
 				}
 				$product['price'] = $this->currency->format($product['price']);
@@ -35,7 +35,7 @@ class Catalog_Controller_Block_Product_Related extends Controller
 				$product['special'] = false;
 			}
 
-			if ($this->config->get('config_review_status')) {
+			if (option('config_review_status')) {
 				$product['rating'] = (int)$product['rating'];
 			} else {
 				$product['rating'] = false;

@@ -109,7 +109,7 @@ class Extend extends Library
 	{
 		$config_id = 'db_hook_' . $action . '_' . $table;
 
-		$hooks = $this->config->get($config_id);
+		$hooks = option($config_id);
 
 		if (!is_array($hooks)) {
 			$hooks = array();
@@ -233,8 +233,8 @@ class Extend extends Library
 			return;
 		}
 
-		$width  = $this->config->get('config_image_admin_list_width');
-		$height = $this->config->get('config_image_admin_list_height');
+		$width  = option('config_image_admin_list_width');
+		$height = option('config_image_admin_list_height');
 
 		//Performance Optimization: Much quicker to resize (plus caching) than evaluate color or large image
 		$image = str_replace(URL_IMAGE, DIR_IMAGE, $this->image->resize($data[$column], $width, $height));

@@ -15,23 +15,23 @@ class Catalog_Controller_Cart_Cart extends Controller
 			$this->order->clear();
 		}
 
-		if ($this->config->get('config_show_cart_weight')) {
+		if (option('config_show_cart_weight')) {
 			$data['weight'] = $this->weight->format($this->cart->getWeight());
 		}
 
-		if ($this->config->get('coupon_status')) {
+		if (option('coupon_status')) {
 			$data['block_coupon'] = $this->block->render('cart/coupon');
 		}
 
-		if ($this->config->get('voucher_status')) {
+		if (option('voucher_status')) {
 			$data['block_voucher'] = $this->block->render('cart/voucher');
 		}
 
-		if ($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
+		if (option('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
 			$data['block_reward'] = $this->block->render('cart/reward');
 		}
 
-		if ($this->config->get('shipping_status') && $this->cart->hasShipping()) {
+		if (option('shipping_status') && $this->cart->hasShipping()) {
 			$data['block_shipping'] = $this->block->render('cart/shipping');
 		}
 

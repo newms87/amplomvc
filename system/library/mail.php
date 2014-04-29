@@ -32,19 +32,19 @@ class Mail extends Library
 	{
 		parent::__construct();
 
-		$this->protocol  = $this->config->get('config_mail_protocol');
-		$this->parameter = $this->config->get('config_mail_parameter');
-		$this->hostname  = $this->config->get('config_smtp_host');
-		$this->username  = $this->config->get('config_smtp_username');
-		$this->password  = $this->config->get('config_smtp_password');
-		$this->port      = $this->config->get('config_smtp_port');
-		$this->timeout   = $this->config->get('config_smtp_timeout');
+		$this->protocol  = option('config_mail_protocol');
+		$this->parameter = option('config_mail_parameter');
+		$this->hostname  = option('config_smtp_host');
+		$this->username  = option('config_smtp_username');
+		$this->password  = option('config_smtp_password');
+		$this->port      = option('config_smtp_port');
+		$this->timeout   = option('config_smtp_timeout');
 
-		$this->logging = $this->config->get('config_mail_logging');
+		$this->logging = option('config_mail_logging');
 
 		if ($this->logging) {
 			global $registry;
-			$registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), $this->config->get('config_store_id'));
+			$registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), option('config_store_id'));
 		}
 
 		$this->init();
@@ -252,8 +252,8 @@ class Mail extends Library
 
 			$this->trigger_error($msg);
 
-			if (isset($this->config) && $this->config->get('config_email_error')) {
-				$this->to      = $this->config->get('config_email_error');
+			if (isset($this->config) && option('config_email_error')) {
+				$this->to      = option('config_email_error');
 				$this->cc      = '';
 				$this->bcc     = '';
 				$this->subject = "There was a problem sending out the email!";
@@ -524,7 +524,7 @@ class Mail extends Library
 		$this->log("MAIL ERROR: " . $msg, true);
 
 		//Hide Mail errors when ajax pages are requested
-		if ($this->request->isAjax() && $this->config->get('config_error_display')) {
+		if ($this->request->isAjax() && option('config_error_display')) {
 			$this->config->set('config_error_display', false);
 			trigger_error($msg);
 			$this->config->set('config_error_display', true);
@@ -532,7 +532,7 @@ class Mail extends Library
 			trigger_error($msg);
 		}
 
-		if ($this->config->get('config_error_display')) {
+		if (option('config_error_display')) {
 			$view_mail_errors = $this->url->admin('mail/error');
 			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}
@@ -549,7 +549,7 @@ class Mail extends Library
 			'html'       => $this->html,
 			'text'       => $this->text,
 			'attachment' => $this->attachments,
-			'store_id'   => $this->config->get('config_store_id'),
+			'store_id'   => option('config_store_id'),
 			'time'       => _time(),
 		);
 

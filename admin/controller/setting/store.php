@@ -96,8 +96,8 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
 		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
 
-		$image_width  = $this->config->get('config_image_admin_thumb_width');
-		$image_height = $this->config->get('config_image_admin_thumb_height');
+		$image_width  = option('config_image_admin_thumb_width');
+		$image_height = option('config_image_admin_thumb_height');
 
 		foreach ($stores as &$store) {
 			$store['actions'] = array(
@@ -204,10 +204,10 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_meta_description'         => '',
 			'config_default_layout_id'        => '',
 			'config_theme'                    => '',
-			'config_country_id'               => $this->config->get('config_country_id'),
-			'config_zone_id'                  => $this->config->get('config_zone_id'),
-			'config_language'                 => $this->config->get('config_language'),
-			'config_currency'                 => $this->config->get('config_currency'),
+			'config_country_id'               => option('config_country_id'),
+			'config_zone_id'                  => option('config_zone_id'),
+			'config_language'                 => option('config_language'),
+			'config_currency'                 => option('config_currency'),
 			'config_catalog_limit'            => '12',
 			'config_allowed_shipping_zone'    => 0,
 			'config_show_price_with_tax'      => '',

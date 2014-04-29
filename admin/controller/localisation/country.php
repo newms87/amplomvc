@@ -144,8 +144,8 @@ class Admin_Controller_Localisation_Country extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$country_total = $this->Model_Localisation_Country->getTotalCountries();
@@ -162,7 +162,7 @@ class Admin_Controller_Localisation_Country extends Controller
 
 			$data['countries'][] = array(
 				'country_id' => $result['country_id'],
-				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? _l(" <b>(Default)</b>") : null),
+				'name'       => $result['name'] . (($result['country_id'] == option('config_country_id')) ? _l(" <b>(Default)</b>") : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
 				'selected'   => isset($_GET['selected']) && in_array($result['country_id'], $_GET['selected']),
@@ -334,7 +334,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		}
 
 		foreach ($_GET['selected'] as $country_id) {
-			if ($this->config->get('config_country_id') == $country_id) {
+			if (option('config_country_id') == $country_id) {
 				$this->error['warning'] = _l("Warning: This country cannot be deleted as it is currently assigned as the default store country!");
 			}
 

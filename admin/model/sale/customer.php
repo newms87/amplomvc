@@ -174,8 +174,8 @@ class Admin_Model_Sale_Customer extends Model
 				$store_name = $store_info['name'];
 				$store_url  = $this->url->store($store_info['store_id'], 'account/login');
 			} else {
-				$store_name = $this->config->get('config_name');
-				$store_url  = $this->url->store($this->config->get('config_default_store'), 'account/login');
+				$store_name = option('config_name');
+				$store_url  = $this->url->store(option('config_default_store'), 'account/login');
 			}
 
 			$patterns     = array(
@@ -190,13 +190,13 @@ class Admin_Model_Sale_Customer extends Model
 				$store_name,
 				$store_url
 			);
-			$subject      = preg_replace($patterns, $replacements, $this->config->get('mail_registration_subject'));
-			$message      = preg_replace($patterns, $replacements, $this->config->get('mail_registration_message'));
+			$subject      = preg_replace($patterns, $replacements, option('mail_registration_subject'));
+			$message      = preg_replace($patterns, $replacements, option('mail_registration_message'));
 
 			$this->mail->init();
 
 			$this->mail->setTo($customer_info['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setFrom(option('config_email'));
 			$this->mail->setSender($store_name);
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setHtml(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
@@ -367,21 +367,21 @@ class Admin_Model_Sale_Customer extends Model
 				if ($store_info) {
 					$store_name = $store_info['store_name'];
 				} else {
-					$store_name = $this->config->get('config_name');
+					$store_name = option('config_name');
 				}
 			} else {
-				$store_name = $this->config->get('config_name');
+				$store_name = option('config_name');
 			}
 
-			$message = sprintf($this->_('text_transaction_received'), $this->currency->format($amount, $this->config->get('config_currency'))) . "\n\n";
+			$message = sprintf($this->_('text_transaction_received'), $this->currency->format($amount, option('config_currency'))) . "\n\n";
 			$message .= sprintf($this->_('text_transaction_total'), $this->currency->format($this->getTransactionTotal($customer_id)));
 
 			$this->mail->init();
 
 			$this->mail->setTo($customer_info['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setFrom(option('config_email'));
 			$this->mail->setSender($store_name);
-			$this->mail->setSubject(html_entity_decode(sprintf($this->_('text_transaction_subject'), $this->config->get('config_name')), ENT_QUOTES, 'UTF-8'));
+			$this->mail->setSubject(html_entity_decode(sprintf($this->_('text_transaction_subject'), option('config_name')), ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$this->mail->send();
 		}
@@ -433,10 +433,10 @@ class Admin_Model_Sale_Customer extends Model
 				if ($order_info) {
 					$store_name = $order_info['store_name'];
 				} else {
-					$store_name = $this->config->get('config_name');
+					$store_name = option('config_name');
 				}
 			} else {
-				$store_name = $this->config->get('config_name');
+				$store_name = option('config_name');
 			}
 
 			$message = sprintf($this->_('text_reward_received'), $points) . "\n\n";
@@ -445,7 +445,7 @@ class Admin_Model_Sale_Customer extends Model
 			$this->mail->init();
 
 			$this->mail->setTo($customer_info['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setFrom(option('config_email'));
 			$this->mail->setSender($store_name);
 			$this->mail->setSubject(html_entity_decode(sprintf($this->_('text_reward_subject'), $store_name), ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));

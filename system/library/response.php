@@ -71,7 +71,7 @@ class Response extends Library
 		}
 
 		//Performance Logging
-		if ($this->config->get('config_performance_log')) {
+		if (option('config_performance_log')) {
 			$this->performance();
 		}
 

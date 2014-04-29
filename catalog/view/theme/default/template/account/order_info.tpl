@@ -156,7 +156,7 @@
 		<?= _l("* A Product Marked as"); ?>
 		<span class="final_sale"></span>
 		<?= _l("cannot be returned. Read our"); ?>
-		<a href="<?= $policies; ?>" onclick="return colorbox($(this));"><?= _l("Return Policy"); ?></a>
+		<a href="<?= $policies; ?>" class="colorbox"><?= _l("Return Policy"); ?></a>
 		<?= _l("for details."); ?>
 	</div>
 	<div class="buttons">

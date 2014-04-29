@@ -216,7 +216,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$defaults = array(
 			'name'   => '',
 			'links'  => array(),
-			'stores' => array($this->config->get('config_default_store')),
+			'stores' => array(option('config_default_store')),
 			'status' => 1,
 		);
 

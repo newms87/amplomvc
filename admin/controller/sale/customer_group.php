@@ -144,8 +144,8 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+			'start' => ($page - 1) * option('config_admin_limit'),
+			'limit' => option('config_admin_limit')
 		);
 
 		$customer_group_total = $this->Model_Sale_CustomerGroup->getTotalCustomerGroups();
@@ -162,7 +162,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 			$data['customer_groups'][] = array(
 				'customer_group_id' => $result['customer_group_id'],
-				'name'              => $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? _l(" <b>(Default)</b>") : null),
+				'name'              => $result['name'] . (($result['customer_group_id'] == option('config_customer_group_id')) ? _l(" <b>(Default)</b>") : null),
 				'selected'          => isset($_GET['selected']) && in_array($result['customer_group_id'], $_GET['selected']),
 				'action'            => $action
 			);
@@ -290,7 +290,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		}
 
 		foreach ($_GET['selected'] as $customer_group_id) {
-			if ($this->config->get('config_customer_group_id') == $customer_group_id) {
+			if (option('config_customer_group_id') == $customer_group_id) {
 				$this->error['warning'] = _l("Warning: This customer group cannot be deleted as it is currently assigned as the default store customer group!");
 			}
 

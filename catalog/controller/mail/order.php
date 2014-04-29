@@ -6,7 +6,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order_id = $order['order_id'];
 
 		//Order Information
-		$data['logo'] = $this->image->get($this->config->get('config_logo'));
+		$data['logo'] = $this->image->get(option('config_logo'));
 		$data['link'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
 
 		$order['date_added'] = $this->date->format($order['date_added'], 'short');
@@ -58,13 +58,13 @@ class Catalog_Controller_Mail_Order extends Controller
 		$subject = _l('%s - Order %s', $store['name'], $order_id);
 
 		if (empty($order['email'])) {
-			$order['email'] = $this->config->get('config_email_error');
+			$order['email'] = option('config_email_error');
 			$subject .= " (No Order Email was found!)";
 		}
 
 		$this->mail->setTo($order['email']);
-		$this->mail->setCc($this->config->get('config_email'));
-		$this->mail->setFrom($this->config->get('config_email'));
+		$this->mail->setCc(option('config_email'));
+		$this->mail->setFrom(option('config_email'));
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject($subject);
 
@@ -80,17 +80,17 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->send();
 
 		// Admin Alert Mail
-		if ($this->config->get('config_alert_mail')) {
-			$to = $this->config->get('config_email');
+		if (option('config_alert_mail')) {
+			$to = option('config_email');
 
-			if ($this->config->get('config_alert_emails')) {
-				$to .= ',' . $this->config->get('config_alert_emails');
+			if (option('config_alert_emails')) {
+				$to .= ',' . option('config_alert_emails');
 			}
 
 			$this->mail->init();
 
 			$this->mail->setTo($to);
-			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setFrom(option('config_email'));
 			$this->mail->setSender($store['name']);
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($this->render('mail/order_text_admin', $data), ENT_QUOTES, 'UTF-8'));

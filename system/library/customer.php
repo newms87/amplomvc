@@ -31,7 +31,7 @@ class Customer extends Library
 	{
 		$where = "LOWER(email) = '" . $this->escape(strtolower($email)) . "' AND status = '1'";
 
-		if ($this->config->get('config_customer_approval')) {
+		if (option('config_customer_approval')) {
 			$where .= " AND approved = '1'";
 		}
 
@@ -125,8 +125,8 @@ class Customer extends Library
 			$this->error['password'] = $this->validation->getError();
 		}
 
-		if ($this->config->get('config_account_terms_info_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
+		if (option('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation(option('config_account_terms_info_id'));
 
 			if ($information_info && !isset($customer['agree'])) {
 				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $information_info['title']);
@@ -137,8 +137,8 @@ class Customer extends Library
 			return false;
 		}
 
-		$customer['store_id']          = $this->config->get('config_store_id');
-		$customer['customer_group_id'] = $this->config->get('config_customer_group_id');
+		$customer['store_id']          = option('config_store_id');
+		$customer['customer_group_id'] = option('config_customer_group_id');
 		$customer['date_added']        = $this->date->now();
 		$customer['status']            = 1;
 
@@ -153,7 +153,7 @@ class Customer extends Library
 
 		$customer['password'] = $this->encrypt($customer['password']);
 
-		$customer['approved'] = $this->config->get('config_customer_approval') ? 1 : 0;
+		$customer['approved'] = option('config_customer_approval') ? 1 : 0;
 
 		$this->customer_id = $this->insert('customer', $customer);
 
@@ -242,7 +242,7 @@ class Customer extends Library
 			return $this->information['customer_group_id'];
 		}
 
-		return (int)$this->config->get('config_customer_group_id');
+		return (int)option('config_customer_group_id');
 	}
 
 	public function getCustomer($customer_id)

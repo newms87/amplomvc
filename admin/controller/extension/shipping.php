@@ -198,7 +198,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 		$settings_defaults = array(
 			'min_total'                => 0,
-			'complete_order_status_id' => $this->config->get('config_order_complete_status_id'),
+			'complete_order_status_id' => option('config_order_complete_status_id'),
 			'geo_zone_id'              => 0,
 		);
 

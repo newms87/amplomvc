@@ -38,7 +38,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 	public function getWeightClasses($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+			$sql = "SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)option('config_language_id') . "'";
 
 			$sort_data = array(
 				'title',
@@ -74,14 +74,14 @@ class Admin_Model_Localisation_WeightClass extends Model
 
 			return $query->rows;
 		} else {
-			$weight_class_data = $this->cache->get('weight_class.' . (int)$this->config->get('config_language_id'));
+			$weight_class_data = $this->cache->get('weight_class.' . (int)option('config_language_id'));
 
 			if (!$weight_class_data) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)option('config_language_id') . "'");
 
 				$weight_class_data = $query->rows;
 
-				$this->cache->set('weight_class.' . (int)$this->config->get('config_language_id'), $weight_class_data);
+				$this->cache->set('weight_class.' . (int)option('config_language_id'), $weight_class_data);
 			}
 
 			return $weight_class_data;
@@ -90,14 +90,14 @@ class Admin_Model_Localisation_WeightClass extends Model
 
 	public function getWeightClass($weight_class_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wc.weight_class_id = '" . (int)$weight_class_id . "' AND wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wc.weight_class_id = '" . (int)$weight_class_id . "' AND wcd.language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row;
 	}
 
 	public function getWeightClassDescriptionByUnit($unit)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class_description WHERE unit = '" . $this->escape($unit) . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class_description WHERE unit = '" . $this->escape($unit) . "' AND language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row;
 	}

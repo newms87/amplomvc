@@ -3,7 +3,7 @@ class Catalog_Model_Page_Page extends Model
 {
 	public function getPage($page_id)
 	{
-		$store_id = $this->config->get('config_store_id');
+		$store_id = option('config_store_id');
 
 		$query =
 			"SELECT * FROM " . DB_PREFIX . "page p" .

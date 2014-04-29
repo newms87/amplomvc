@@ -60,7 +60,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 				}
 
 
-				if ($this->config->get('coupon_status')) {
+				if (option('coupon_status')) {
 					$data['block_coupon'] = $this->block->render('cart/coupon', null, array('ajax' => true));
 				}
 

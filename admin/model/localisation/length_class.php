@@ -38,7 +38,7 @@ class Admin_Model_Localisation_LengthClass extends Model
 	public function getLengthClasses($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+			$sql = "SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = '" . (int)option('config_language_id') . "'";
 
 			$sort_data = array(
 				'title',
@@ -74,14 +74,14 @@ class Admin_Model_Localisation_LengthClass extends Model
 
 			return $query->rows;
 		} else {
-			$length_class_data = $this->cache->get('length_class.' . (int)$this->config->get('config_language_id'));
+			$length_class_data = $this->cache->get('length_class.' . (int)option('config_language_id'));
 
 			if (!$length_class_data) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = '" . (int)option('config_language_id') . "'");
 
 				$length_class_data = $query->rows;
 
-				$this->cache->set('length_class.' . (int)$this->config->get('config_language_id'), $length_class_data);
+				$this->cache->set('length_class.' . (int)option('config_language_id'), $length_class_data);
 			}
 
 			return $length_class_data;
@@ -90,14 +90,14 @@ class Admin_Model_Localisation_LengthClass extends Model
 
 	public function getLengthClass($length_class_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lc.length_class_id = '" . (int)$length_class_id . "' AND lcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lc.length_class_id = '" . (int)$length_class_id . "' AND lcd.language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row;
 	}
 
 	public function getLengthClassDescriptionByUnit($unit)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class_description WHERE unit = '" . $this->escape($unit) . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class_description WHERE unit = '" . $this->escape($unit) . "' AND language_id = '" . (int)option('config_language_id') . "'");
 
 		return $query->row;
 	}

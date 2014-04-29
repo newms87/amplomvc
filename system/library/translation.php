@@ -3,7 +3,7 @@ class Translation extends Library
 {
 	public function translate($table, $object_id, &$data)
 	{
-		if ($this->language->info('code') == $this->config->get('config_language')) {
+		if ($this->language->info('code') == option('config_language')) {
 			return;
 		}
 
@@ -12,7 +12,7 @@ class Translation extends Library
 		$translations = $this->cache->get('translate.' . $table . '.' . (int)$object_id);
 
 		if (!$translations) {
-			$language_id = $this->config->get('config_language_id');
+			$language_id = option('config_language_id');
 
 			$translations = array();
 
@@ -57,7 +57,7 @@ class Translation extends Library
 			$languages = array();
 
 			foreach ($language_ids->rows as $language) {
-				if ($language['language_id'] == $this->config->get('config_language_id')) {
+				if ($language['language_id'] == option('config_language_id')) {
 					continue;
 				}
 

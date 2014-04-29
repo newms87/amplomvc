@@ -28,7 +28,7 @@ class Catalog_Model_Design_Layout extends Model
 			}
 
 			if (!$layout_id) {
-				$query = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->escape($route) . "' LIKE CONCAT(route, '%') AND store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+				$query = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->escape($route) . "' LIKE CONCAT(route, '%') AND store_id = '" . (int)option('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 
 				if ($query->num_rows) {
 					$layout_id = $query->row['layout_id'];
@@ -36,7 +36,7 @@ class Catalog_Model_Design_Layout extends Model
 			}
 
 			if (!$layout_id) {
-				$layout_id = $this->config->get('config_default_layout_id');
+				$layout_id = option('config_default_layout_id');
 			}
 
 			$this->layout_ids[$route] = $layout_id;

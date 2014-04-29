@@ -7,15 +7,15 @@ class Catalog_Controller_Block_Product_List extends Controller
 
 		//TODO: need to implement these options in admin panel!
 		$data = array(
-			'wishlist_status' => $this->config->get('config_wishlist_status'),
-			'compare_status'  => $this->config->get('config_compare_status'),
-			'list_show_add_to_cart' => $this->config->get('config_list_show_add_to_cart'),
-		   'show_price_tax' => $this->config->get('config_show_price_with_tax'),
-		   'review_status' => $this->config->get('config_review_status'),
+			'wishlist_status' => option('config_wishlist_status'),
+			'compare_status'  => option('config_compare_status'),
+			'list_show_add_to_cart' => option('config_list_show_add_to_cart'),
+		   'show_price_tax' => option('config_show_price_with_tax'),
+		   'review_status' => option('config_review_status'),
 		);
 
-		$image_width  = $this->config->get('config_image_product_width');
-		$image_height = $this->config->get('config_image_product_height');
+		$image_width  = option('config_image_product_width');
+		$image_height = option('config_image_product_height');
 
 		if ($process_data) {
 			foreach ($settings['data'] as &$item) {
@@ -25,14 +25,14 @@ class Catalog_Controller_Block_Product_List extends Controller
 					$item['thumb'] = $this->image->resize('no_image.png', $image_width, $image_height);
 				}
 
-				if ($this->config->get('config_show_product_list_hover_image')) {
+				if (option('config_show_product_list_hover_image')) {
 					if (!empty($item['images'])) {
 						reset($item['images']);
 						$item['backup_thumb'] = $this->image->resize(current($item['images']), $image_width, $image_height);
 					}
 				}
 
-				if (($this->config->get('config_customer_hide_price') ? $this->customer->isLogged() : true)) {
+				if ((option('config_customer_hide_price') ? $this->customer->isLogged() : true)) {
 					if (!empty($item['price'])) {
 						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class_id']));
 					}

@@ -67,8 +67,8 @@ class Admin_Controller_Report_SaleShipping extends Controller
 			'filter_date_end'        => $filter_date_end,
 			'filter_group'           => $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'start'                  => ($page - 1) * option('config_admin_limit'),
+			'limit'                  => option('config_admin_limit')
 		);
 
 		$order_total = $this->Model_Report_Sale->getTotalShipping($data);
@@ -81,7 +81,7 @@ class Admin_Controller_Report_SaleShipping extends Controller
 				'date_end'   => $this->date->format($result['date_end'], 'short'),
 				'title'      => $result['title'],
 				'orders'     => $result['orders'],
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
+				'total'      => $this->currency->format($result['total'], option('config_currency'))
 			);
 		}
 

@@ -66,7 +66,7 @@ abstract class Model
 		$resource = $this->db->query($sql);
 
 		if (!$resource) {
-			if ($this->config->get('config_error_display')) {
+			if (option('config_error_display')) {
 				$this->message->add("warning", _l("The Database Query Failed!"));
 
 				if ($this->db->hasError()) {
@@ -447,7 +447,7 @@ abstract class Model
 
 	private function action_filter($action, $table, &$data)
 	{
-		$hooks = $this->config->get('db_hook_' . $action . '_' . $table);
+		$hooks = option('db_hook_' . $action . '_' . $table);
 
 		if ($hooks) {
 			foreach ($hooks as $hook) {

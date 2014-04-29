@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 		$this->breadcrumb->add(_l("Account"), site_url('account'));
 		$this->breadcrumb->add(_l("Your Transactions"), site_url('account/transaction'));
 
-		$data['amount'] = $this->config->get('config_currency');
+		$data['amount'] = option('config_currency');
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -38,7 +38,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 
 		foreach ($results as $result) {
 			$data['transactions'][] = array(
-				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
+				'amount'      => $this->currency->format($result['amount'], option('config_currency')),
 				'description' => $result['description'],
 				'date_added'  => $this->date->format($result['date_added'], 'short'),
 			);

@@ -4,7 +4,7 @@ class Catalog_Model_Account_Return extends Model
 	public function addReturn($data)
 	{
 		$data['customer_id']      = $this->customer->getId();
-		$data['return_status_id'] = $this->config->get('config_return_status_id');
+		$data['return_status_id'] = option('config_return_status_id');
 		$data['date_added']       = $this->date->now();
 		$data['date_modified']    = $this->date->now();
 

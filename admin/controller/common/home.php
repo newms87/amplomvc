@@ -9,8 +9,8 @@ class Admin_Controller_Common_Home extends Controller
 
 		$data = array();
 
-		$data['total_sale']      = $this->currency->format($this->System_Model_Order->getGrossSales(), $this->config->get('config_currency'));
-		$data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), $this->config->get('config_currency'));
+		$data['total_sale']      = $this->currency->format($this->System_Model_Order->getGrossSales(), option('config_currency'));
+		$data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), option('config_currency'));
 		$data['total_order']     = $this->System_Model_Order->getTotalOrders();
 
 		$data['total_customer']          = $this->Model_Sale_Customer->getTotalCustomers();
@@ -56,7 +56,7 @@ class Admin_Controller_Common_Home extends Controller
 
 		$data['orders'] = $orders;
 
-		if ($this->config->get('config_currency_auto')) {
+		if (option('config_currency_auto')) {
 			$this->Model_Localisation_Currency->updateCurrencies();
 		}
 

@@ -136,10 +136,10 @@ class Admin_Model_Sale_Return extends Model
 
 		//TODO: move this either the controller or to an emailer system
 		if ($data['notify']) {
-			$return_query = $this->query("SELECT *, rs.name AS status FROM `" . DB_PREFIX . "return` r LEFT JOIN " . DB_PREFIX . "return_status rs ON (r.return_status_id = rs.return_status_id) WHERE r.return_id = '" . (int)$return_id . "' AND rs.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+			$return_query = $this->query("SELECT *, rs.name AS status FROM `" . DB_PREFIX . "return` r LEFT JOIN " . DB_PREFIX . "return_status rs ON (r.return_status_id = rs.return_status_id) WHERE r.return_id = '" . (int)$return_id . "' AND rs.language_id = '" . (int)option('config_language_id') . "'");
 
 			if ($return_query->num_rows) {
-				$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'), $return_id);
+				$subject = sprintf($this->_('text_subject'), option('config_name'), $return_id);
 
 				$message = $this->_('text_return_id') . ' ' . $return_id . "\n";
 				$message .= $this->_('text_date_added') . ' ' . $this->date->format($return_query->row['date_added'], 'short') . "\n\n";
@@ -156,8 +156,8 @@ class Admin_Model_Sale_Return extends Model
 				$this->mail->init();
 
 				$this->mail->setTo($return_query->row['email']);
-				$this->mail->setFrom($this->config->get('config_email'));
-				$this->mail->setSender($this->config->get('config_name'));
+				$this->mail->setFrom(option('config_email'));
+				$this->mail->setSender(option('config_name'));
 				$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 				$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 				$this->mail->send();

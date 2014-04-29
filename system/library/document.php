@@ -21,7 +21,7 @@ class Document extends Library
 
 		$this->ac_vars['url_site'] = URL_SITE;
 
-		if ($ac_vars = $this->config->get('config_ac_vars')) {
+		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}
 	}
@@ -405,7 +405,7 @@ class Document extends Library
 
 	public function getNavigationLinks()
 	{
-		$store_id = $this->config->get("config_store_id");
+		$store_id = option("config_store_id");
 
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 

@@ -6,7 +6,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		$data['action'] = '';
 
 		$defaults = array(
-			'country_id'      => $this->config->get('config_country_id'),
+			'country_id'      => option('config_country_id'),
 			'zone_id'         => '',
 			'postcode'        => '',
 			'shipping_method' => '',

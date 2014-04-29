@@ -112,7 +112,7 @@ class Catalog_Controller_Customer extends Controller
 			'address_2'  => '',
 			'postcode'   => '',
 			'city'       => '',
-			'country_id' => $this->config->get('config_country_id'),
+			'country_id' => option('config_country_id'),
 			'zone_id'    => '',
 			'password'   => '',
 			'confirm'    => '',
@@ -126,11 +126,11 @@ class Catalog_Controller_Customer extends Controller
 		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
 
 		//TODO: update this to a page!
-		if ($this->config->get('config_account_terms_info_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
+		if (option('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation(option('config_account_terms_info_id'));
 
 			if ($information_info) {
-				$data['agree_to']    = site_url('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id'));
+				$data['agree_to']    = site_url('information/information/info', 'information_id=' . option('config_account_terms_info_id'));
 				$data['agree_title'] = $information_info['title'];
 			}
 		}

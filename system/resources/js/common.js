@@ -105,12 +105,6 @@ $.fn.jqzoom = function (params) {
 	if (this.jqzoom) this.jqzoom(params);
 }
 
-$.colorbox = $.fn.colorbox = function (params, loadonly) {
-	$.colorbox = $.fn.colorbox = null;
-	syncload('system/resources/js/jquery/colorbox/colorbox.js');
-	if (this.colorbox && !loadonly) this.colorbox(params);
-}
-
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
 	$('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
@@ -430,37 +424,6 @@ $.fn.tabs = function (callback) {
 	return this;
 };
 
-function colorbox(context, data) {
-	context = context || $(this);
-
-	if (context.attr('href')) {
-		href = context.attr('href');
-		html = null;
-	} else {
-		href = null
-		html = context.html();
-	}
-
-	defaults = {
-		overlayClose: true,
-		opacity: 0.5,
-		width: '60%',
-		height: '80%',
-		href: href,
-		html: html,
-	};
-
-	if (typeof data == 'object') {
-		for (var d in data) {
-			defaults[d] = data[d];
-		}
-	}
-
-	$.colorbox(defaults);
-
-	return false;
-}
-
 $.fn.ac_errors = function (errors) {
 	for (err in errors) {
 		if (typeof errors[err] == 'object') {
@@ -716,8 +679,19 @@ $(document).ready(function () {
 		}
 	});
 
-	if ($('.colorbox').click(colorbox).length) {
-		$.colorbox(null, true); //load colorbox script
+	var $colorbox = $('.colorbox');
+
+	if ($colorbox.length) {
+		$.getScript($.ac_vars.url_site + 'system/resources/js/jquery/colorbox/colorbox.js', function() {
+			var defaults = {
+				overlayClose: true,
+				opacity: 0.5,
+				width: '60%',
+				height: '80%'
+			}
+
+			$colorbox.colorbox(defaults);
+		});
 	}
 
 	//AC Checkbox (No IE8)

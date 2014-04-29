@@ -10,7 +10,7 @@ class Admin_Controller_Common_Login extends Controller
 			redirect('common/home');
 		}
 
-		$data['to_front'] = $this->url->store($this->config->get('config_default_store'), 'common/home');
+		$data['to_front'] = $this->url->store(option('config_default_store'), 'common/home');
 
 		if ($this->session->has('token') && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = _l("Invalid token session. Please login again.");

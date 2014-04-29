@@ -117,7 +117,7 @@ class Admin_Controller_Tool_Logs extends Controller
 				$this->message->add('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
 			}
 
-			$file = DIR_LOGS . $this->config->get('config_error_filename');
+			$file = DIR_LOGS . option('config_error_filename');
 
 			$file_lines = explode("\n", file_get_contents($file));
 

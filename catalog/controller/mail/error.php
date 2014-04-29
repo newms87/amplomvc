@@ -4,11 +4,11 @@ class Catalog_Controller_Mail_Error extends Controller
 	public function index($error_msg, $data = array())
 	{
 		$defaults = array(
-			'to'      => $this->config->get('config_email_error'),
+			'to'      => option('config_email_error'),
 			'cc'      => '',
 			'bcc'     => '',
-			'from'    => $this->config->get('config_email'),
-			'sender'  => $this->config->get('config_name'),
+			'from'    => option('config_email'),
+			'sender'  => option('config_name'),
 			'subject' => "There was a critical error encountered that requires immediate attention!",
 			'text'    => html2text($error_msg),
 		);

@@ -3,7 +3,7 @@ class Dev extends Library
 {
 	public function site_backup($file = null, $tables = null, $prefix = null)
 	{
-		$site_name = $this->config->get('config_name');
+		$site_name = option('config_name');
 
 		if (!$file) {
 			if (!empty($tables)) {
@@ -27,7 +27,7 @@ class Dev extends Library
 
 	public function site_restore($file, $sync_file = false)
 	{
-		$site_name = $this->config->get('config_name');
+		$site_name = option('config_name');
 
 		if (!is_file($file)) {
 			$this->message->add('warning', "Failed to restore $site_name from $file. The File was not found.");

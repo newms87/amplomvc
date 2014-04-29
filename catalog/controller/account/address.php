@@ -158,7 +158,7 @@ class Catalog_Controller_Account_Address extends Controller
 			'address_2'  => '',
 			'postcode'   => '',
 			'city'       => '',
-			'country_id' => $this->config->get('config_country_id'),
+			'country_id' => option('config_country_id'),
 			'zone_id'    => '',
 			'default'    => false,
 		);

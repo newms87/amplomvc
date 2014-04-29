@@ -62,7 +62,7 @@ final class Router
 	{
 		//Do not show maintenance page if user is an admin
 		// or if the path is a a request by a payment provider (IPN from Paypal, etc.)
-		if ($this->config->get('config_maintenance')) {
+		if (option('config_maintenance')) {
 			if ($this->user->isAdmin()) {
 				if (isset($_GET['hide_maintenance_msg'])) {
 					$_SESSION['hide_maintenance_msg'] = 1;
@@ -100,8 +100,8 @@ final class Router
 		}
 
 		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . $this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
-		$layout_id = $layout ? $layout['layout_id'] : $this->config->get('config_default_layout_id');
+		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
 		$this->config->set('config_layout_id', $layout_id);
 	}
 
@@ -121,7 +121,7 @@ final class Router
 		//Page Views tracking
 		$path     = $this->db->escape($this->path);
 		$query    = $this->url->getQueryExclude('_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
-		$store_id = (int)$this->config->get('config_store_id');
+		$store_id = (int)option('config_store_id');
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 

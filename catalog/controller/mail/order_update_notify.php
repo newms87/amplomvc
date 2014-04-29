@@ -34,7 +34,7 @@ class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 		$this->mail->init();
 
 		$this->mail->setTo($order['email']);
-		$this->mail->setFrom($this->config->get('config_email'));
+		$this->mail->setFrom(option('config_email'));
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 		$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
