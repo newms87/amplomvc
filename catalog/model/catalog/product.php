@@ -554,8 +554,8 @@ class Catalog_Model_Catalog_Product extends Model
 			$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
 
 			$product_class = array(
-				'controller' => $product_class['front_controller'][$theme],
-				'template'   => $product_class['front_template'][$theme],
+				'controller' => isset($product_class['front_controller'][$theme]) ? $product_class['front_controller'][$theme] : '',
+				'template'   => isset($product_class['front_template'][$theme]) ? $product_class['front_template'][$theme] : '',
 			);
 
 			$this->cache->set('product_class.' . $product_class_id, $product_class);

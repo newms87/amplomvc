@@ -127,6 +127,10 @@ class User extends Library
 
 	public function canDoAction($action)
 	{
+		if (!$this->isAdmin()) {
+			return true;
+		}
+
 		$path = $action->getControllerPath();
 
 		if (!$this->isLogged()) {

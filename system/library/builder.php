@@ -163,12 +163,12 @@ class Builder extends Library
 
 				case 'radio':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<div class=\"radio-button\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><label for=\"radio-$name-$value\">$display</label></div>";
+					$options .= "<label for=\"radio-$name-$value\" class=\"ac-radio\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><span class=\"text\">$display</span></label>";
 					break;
 
 				case 'checkbox':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></div>";
+					$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></div>";
 					break;
 
 				case 'multiselect':

@@ -15,10 +15,10 @@
 
 	<div class="row product-row">
 		<div class="wrap">
-			<div class="col xs-12 md-6">
+			<div class="product-image col xs-12 md-6">
 				<? if (!empty($thumb)) { ?>
-					<div id="the-zoombox" class="image">
-						<a id="zoombox-image-link"  href="<?= $popup; ?>" title="<?= $name; ?>" class="zoombox" onclick="$.colorbox({href: $(this).attr('href'), width: '70%', height: '90%'})" rel="gal1">
+					<div id="the-zoombox" class="image clearfix">
+						<a id="zoombox-image-link" href="<?= $popup; ?>" title="<?= $name; ?>" class="zoombox clearfix" rel="gal1">
 							<img src="<?= $thumb; ?>" title="<?= $name; ?>" alt="<?= $name; ?>" id="image"/>
 						</a>
 						<a class="view-full-size" onclick="$.colorbox({href: $('#zoombox-image-link').attr('href'), width: '70%', height: '90%'});"><?= _l("View Full Size Image"); ?></a>
@@ -40,7 +40,7 @@
 				<? } ?>
 			</div>
 
-			<div class="col xs-12 md-6">
+			<div class="product-info col xs-12 md-6">
 				<div class="product-top">
 					<? if ($show_model) { ?>
 						<div class="description-model">
@@ -49,10 +49,8 @@
 						</div>
 					<? } ?>
 
-					<? if ($price && $is_purchasable) { ?>
+					<? if ($show_price && $is_purchasable) { ?>
 						<div class="price">
-							<?= _l(""); ?>
-
 							<? if (empty($special)) { ?>
 								<span class="regular"><?= $price; ?></span>
 							<? } else { ?>
@@ -79,17 +77,17 @@
 					<? } ?>
 				</div>
 
-				<div class="product-tabs htabs">
-					<a href="#tab-description"><?= _l("Description"); ?></a>
+				<div class="product-tabs tab-header htabs">
+					<a class="tab" href="#tab-description"><?= _l("Description"); ?></a>
 
 					<? if ($information) { ?>
-						<a href="#tab-information"><?= _l("More Info"); ?></a>
+						<a class="tab" href="#tab-information"><?= _l("More Info"); ?></a>
 					<? } ?>
 
-					<a href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
+					<a class="tab" href="#tab-shipping-return"><?= _l("Shipping / Returns"); ?></a>
 
 					<? if (!empty($attribute_groups)) { ?>
-						<a href="#tab-attribute"><?= _l("Specifications"); ?></a>
+						<a class="tab" href="#tab-attribute"><?= _l("Specifications"); ?></a>
 					<? } ?>
 				</div>
 
@@ -112,46 +110,6 @@
 									<?= $description; ?>
 								</div>
 							</div>
-						<? } ?>
-
-						<? if ($is_purchasable) { ?>
-							<div class="product-options">
-								<?= _block('product/options', null, array('product_id' => $product_id)); ?>
-							</div>
-						<? } ?>
-
-						<? if ($is_purchasable) { ?>
-							<form id="product-form" action="<?= site_url('cart/cart/buy_now'); ?>" method="post">
-								<div class="cart clear">
-
-									<div id="product-submit-box" class="clear">
-										<div class="quantity">
-											<label><?= _l("Quantity"); ?></label>
-											<input type="text" name="quantity" id="quantity" size="2" value="<?= $minimum; ?>"/>
-											<input type="hidden" id="product-id" name="product_id" size="2" value="<?= $product_id; ?>"/>
-										</div>
-										<div id="product-buttons-box">
-											<div id="buy-product-buttons">
-												<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button-buy-now" class="button medium"/>
-												<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button-add-to-cart" class="button medium"/>
-											</div>
-											<div class="processing hidden"><?= _l("Processing...please wait."); ?></div>
-										</div>
-									</div>
-
-									<div id="cart-additional-buttons">
-										<a href="<?= site_url('cart/cart'); ?>"><?= _l("View Cart"); ?></a>
-										<a href="<?= site_url('checkout/checkout'); ?>"><?= _l("Checkout"); ?></a>
-										<a href="<?= $this->breadcrumb->prevUrl(); ?>"><?= _l("Continue Shopping"); ?></a>
-									</div>
-									<? if ($minimum > 1) { ?>
-										<div class="minimum"><?= _l("This product has a minimum quantity of %s", $minimum); ?></div>
-									<? } ?>
-								</div>
-							</form>
-
-						<? } else { ?>
-							<div id="product-inactive"><?= _l("This product is currently unavailable."); ?></div>
 						<? } ?>
 					</div>
 
@@ -212,20 +170,61 @@
 					<? } ?>
 				</div>
 
-				<? if ($show_sharing) { ?>
-					<?= _block('extras/sharing'); ?>
+				<? if ($is_purchasable) { ?>
+					<form id="product-form" class="form full-width" action="<?= site_url('cart/cart/buy_now'); ?>" method="post">
+
+						<div class="option-list">
+							<?= _block('product/options', null, array('product_id' => $product_id)); ?>
+						</div>
+
+						<div class="cart">
+
+							<div id="product-submit-box" class="clear">
+								<div class="quantity form-item">
+									<label><?= _l("Quantity"); ?></label>
+									<input type="text" name="quantity" id="quantity" size="2" value="<?= $minimum; ?>"/>
+									<input type="hidden" id="product-id" name="product_id" size="2" value="<?= $product_id; ?>"/>
+								</div>
+								<div id="product-buttons-box">
+									<div id="buy-product-buttons">
+										<input type="submit" name="buy_now" value="<?= _l("Buy Now"); ?>" id="button-buy-now" class="button medium"/>
+										<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button-add-to-cart" class="button medium"/>
+									</div>
+								</div>
+							</div>
+
+							<div class="product-nav">
+								<a href="<?= site_url('cart/cart'); ?>"><?= _l("View Cart"); ?></a>
+								<a href="<?= site_url('checkout/checkout'); ?>"><?= _l("Checkout"); ?></a>
+								<a href="<?= $this->breadcrumb->prevUrl(); ?>"><?= _l("Continue Shopping"); ?></a>
+							</div>
+							<? if ($minimum > 1) { ?>
+								<div class="minimum"><?= _l("This product has a minimum quantity of %s", $minimum); ?></div>
+							<? } ?>
+						</div>
+					</form>
+
+				<? } else { ?>
+					<div id="product-inactive"><?= _l("This product is currently unavailable."); ?></div>
 				<? } ?>
 
-				<? if (!empty($tags)) { ?>
-					<div class="tags"><b><?= _l("Tags:"); ?></b>
-						<? foreach ($tags as $i => $tag) { ?>
-							<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
-						<? } ?>
+				<? if ($show_sharing) { ?>
+					<div class="product-sharing">
+						<?= _block('extras/sharing'); ?>
 					</div>
 				<? } ?>
 			</div>
 
+			<? if (!empty($tags)) { ?>
+				<div class="tags"><b><?= _l("Tags:"); ?></b>
+					<? foreach ($tags as $i => $tag) { ?>
+						<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) - 1) ? '' : ','; ?>
+					<? } ?>
+				</div>
+			<? } ?>
 		</div>
+
+	</div>
 	</div>
 
 
@@ -272,24 +271,35 @@
 
 	$('#button_add_to_cart').add_to_cart(data);
 
+	$('#zoombox-image-link').click(function() {
+		if (!screen_sm) {
+			$.colorbox({href: $(this).attr('href'), width: '70%', height: '90%'});
+		}
+
+		return false;
+	});
+
 	$(document).ready(function () {
-		$('.image-additional a img, .option_image a img').click(function () {
-			if ($(this).attr('src').replace(/-\d+x\d+/, '') == $('#the_zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/, '')) {
+		$('.image-additional a img, .option-image a img').click(function () {
+			if ($(this).attr('src').replace(/-\d+x\d+/, '') == $('#the-zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/, '')) {
 				event.preventDefault();
 				return false;
 			}
 		});
-		$('.zoombox').jqzoom({
-			zoomWidth: $.ac_vars.image_thumb_width,
-			zoomHeight: $.ac_vars.image_thumb_height,
-			position: 'right',
-			xOffset: 25,
-			yOffset: 0,
-			preloadText: '<?= _l("Loading High Resolution Image"); ?>'
-		});
+
+		if (screen_md || screen_lg) {
+			$('.zoombox').jqzoom({
+				zoomWidth: $.ac_vars.image_thumb_width,
+				zoomHeight: $.ac_vars.image_thumb_height,
+				position: 'right',
+				xOffset: 25,
+				yOffset: 0,
+				preloadText: '<?= _l("Loading High Resolution Image"); ?>'
+			});
+		}
 	});
 
-	$('#product_additional_tabs a').tabs();
+	$('.product-tabs a').tabs();
 </script>
 
 <?= _call('common/footer'); ?>

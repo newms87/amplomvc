@@ -34,9 +34,11 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Product Configs
 		$product['is_purchasable'] = $this->cart->productPurchasable($product);
-		$product['show_model'] = option('config_show_product_model');
-		$product['show_reviews'] = option('config_review_status');
-		$product['show_sharing'] = option('config_share_status');
+		$product['show_model']     = option('config_show_product_model');
+		$product['show_reviews']   = option('config_review_status');
+		$product['show_sharing']   = option('config_share_status');
+		$product['show_price']     = option('config_customer_hide_price') && !$this->customer->isLogged();
+		$product['show_tax']       = option('config_show_price_with_tax');
 
 		//Manufacturer
 		$manufacturer = $this->Model_Catalog_Manufacturer->getManufacturer($product['manufacturer_id']);
@@ -45,7 +47,7 @@ class Catalog_Controller_Product_Product extends Controller
 			$this->breadcrumb->add($manufacturer['name'], site_url('product/manufacturer/product', 'manufacturer_id=' . $product['manufacturer_id']));
 		}
 
-		$product['manufacturer']     = $manufacturer;
+		$product['manufacturer'] = $manufacturer;
 
 		//Category
 		$category = $this->Model_Catalog_Category->getCategory($product['category_id']);
@@ -88,17 +90,13 @@ class Catalog_Controller_Product_Product extends Controller
 		$product['stock_class'] = array($stock_class => $stock_classes[$stock_class]);
 
 		//Product Price
-		if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$product['price'] = false;
-		}
-
-		if (option('config_show_price_with_tax')) {
-			$product['tax'] = $this->currency->format($this->tax->calculate((float)$product['special'] ? $product['special'] : $product['price'], $product['tax_class_id']));
-		}
+		$product['formatted_price'] = $this->currency->format($product['price']);
 
 		if ((float)$product['special']) {
-			$product['special'] = $this->currency->format($product['special']);
+			$product['formatted_special'] = $this->currency->format($product['special']);
 		}
+
+		$product['tax'] = $this->currency->format($this->tax->calculate((float)$product['special'] ? $product['special'] : $product['price'], $product['tax_class_id']));
 
 		//Discounts
 		$discounts = $this->Model_Catalog_Product->getProductDiscounts($product['product_id']);
@@ -161,7 +159,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Template Data
 		if (option('config_show_product_attributes')) {
-			$product['data_attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product['product_id']);
+			$product['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product['product_id']);
 		}
 
 		//The Tags associated with this product

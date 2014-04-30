@@ -1,3 +1,11 @@
+//Similar to LESS screen sizing
+var screen_width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+var screen_lg = screen_width >= 1200,
+	 screen_md = screen_width >= 768 && screen_width < 1200,
+	 screen_sm = screen_width >= 480 && screen_width < 768,
+	 screen_xs = screen_width < 480;
+
+
 //Ensures all ajax requests are submitted as an ajax URL
 String.prototype.ajaxurl = function () {
 	return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
@@ -7,6 +15,20 @@ String.prototype.toSlug = function () {
 	return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
 }
 
+String.prototype.repeat = function (times) {
+	return (new Array(times + 1)).join(this);
+};
+
+String.prototype.str_replace = function (find, replace) {
+	var str = this;
+	for (var i = 0; i < find.length; i++) {
+		str = str.replace(find[i], replace[i]);
+	}
+	return str;
+};
+
+
+//Always append ajax=1 to query in ajax requests
 $._ajax = $.ajax;
 
 $.ajax = function (params, p2) {
@@ -572,18 +594,6 @@ $.fn.ac_zoneselect = function (params, callback) {
 	return $this;
 }
 
-String.prototype.repeat = function (times) {
-	return (new Array(times + 1)).join(this);
-};
-
-//Utility Functions
-String.prototype.str_replace = function (find, replace) {
-	var str = this;
-	for (var i = 0; i < find.length; i++) {
-		str = str.replace(find[i], replace[i]);
-	}
-	return str;
-};
 
 function getQueryString(key, defaultValue) {
 	if (defaultValue == null) defaultValue = "";

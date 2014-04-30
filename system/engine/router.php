@@ -127,7 +127,7 @@ final class Router
 
 		$action = new Action($this->path);
 
-		if (!$action->isValid() || !$action->execute()) {
+		if (!$action->isValid()) {
 			redirect($this->error_404);
 		}
 
@@ -138,5 +138,7 @@ final class Router
 
 			redirect($this->error_permission);
 		}
+
+		$action->execute();
 	}
 }
