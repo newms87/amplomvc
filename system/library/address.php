@@ -213,6 +213,10 @@ class Address extends Library
 	{
 		static $address_formats = array();
 
+		if (!is_array($address)) {
+			$address = $this->getAddress($address);
+		}
+
 		if (!$this->validate($address)) {
 			return '';
 		}

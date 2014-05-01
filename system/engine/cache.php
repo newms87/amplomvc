@@ -44,7 +44,16 @@ class Cache
 			if ($return_file) {
 				return $this->loaded[$key]['file'] = $file;
 			} else {
-				$this->loaded[$key]['data'] = unserialize(@file_get_contents($file));
+				$str = @file_get_contents($file);
+				$data = @unserialize($str);
+
+				//Check for bad data
+				if ($data === false && $str !== serialize(false)) {
+					unlink($file);
+					return null;
+				}
+
+				$this->loaded[$key]['data'] = $data;
 				$this->loaded[$key]['file'] = $file;
 			}
 

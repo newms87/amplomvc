@@ -23,19 +23,32 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->breadcrumb->add(_l("Shopping Cart"), site_url('cart/cart'));
 		$this->breadcrumb->add(_l("Checkout"), site_url('checkout/checkout'));
 
-		$data['logged']         = $this->customer->isLogged();
-		$data['guest_checkout'] = $this->session->get('guest_checkout');
+		//Statuses
+		$data['is_logged']    = $this->customer->isLogged();
+		$data['is_guest']     = $this->session->get('guest_checkout');
+		$data['has_shipping'] = $this->cart->hasShipping();
 
-		if (!$this->customer->IsLogged() && !$data['guest_checkout']) {
-			$data['login_form'] = $this->block->render('customer/login', null, array('template' => 'block/customer/login'));
-		} elseif ($data['guest_checkout']) {
-			$data['cancel_guest_checkout'] = site_url('checkout/checkout/cancel_guest_checkout');
+		//Shipping Address
+		if ($this->cart->validateShippingAddress()) {
+			$data['shipping_address_id'] = $this->cart->getShippingAddressId();
+		} else {
+			$data['shipping_address_id'] = $this->customer->getDefaultShippingAddressId();
 		}
 
-		$data['shipping_required'] = $this->cart->hasShipping();
+		//Payment Address
+		if ($this->cart->validatePaymentAddress()) {
+			$data['payment_address_id'] = $this->cart->getPaymentAddressId();
+		} else {
+			$data['payment_address_id'] = $this->customer->getDefaultPaymentAddressId();
+		}
 
 		//Render
 		$this->response->setOutput($this->render('checkout/checkout', $data));
+	}
+
+	public function guest()
+	{
+		$this->render('checkout/guest');
 	}
 
 	public function guest_checkout()

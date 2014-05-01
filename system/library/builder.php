@@ -161,9 +161,10 @@ class Builder extends Library
 					}
 					break;
 
+				case 'ac-radio':
 				case 'radio':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<label for=\"radio-$name-$value\" class=\"ac-radio\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><span class=\"text\">$display</span></label>";
+					$options .= "<label for=\"radio-$name-$value\" class=\"$type\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><div class=\"text\">$display</div></label>";
 					break;
 
 				case 'checkbox':
@@ -195,6 +196,7 @@ class Builder extends Library
 				return "<select name=\"$name\" $attrs>$options</select>";
 
 			case 'radio':
+			case 'ac-radio':
 			case 'checkbox':
 				return "<div $attrs>$options</div>";
 

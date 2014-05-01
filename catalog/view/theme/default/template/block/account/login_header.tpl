@@ -4,7 +4,7 @@
 		<a href="<?= $fb_login; ?>" class="fb_login small" title="<?= _l("Sign in with Facebook"); ?>"></a>
 	</div>
 
-	<form action="<?= $login; ?>" method="post" class="login-form">
+	<form action="<?= site_url('customer/login'); ?>" method="post" class="login-form">
 		<div class="email">
 			<input type="text" value="<?= $username; ?>" name="username" placeholder="<?= _("username / email"); ?>"/>
 		</div>

@@ -2,6 +2,10 @@
 	<?= $this->builder->setConfig('product_option_value_id', 'value'); ?>
 
 	<? foreach ($product_options as $product_option) { ?>
+		<? if ($product_option['type'] === 'radio') { ?>
+			<? $product_option['type'] = 'ac-radio'; ?>
+		<? } ?>
+
 		<div class="product-option form-item" data-po-id="<?= $product_option['product_option_id']; ?>">
 			<? if ($product_option['required']) { ?>
 				<span class="required"></span>
@@ -10,6 +14,7 @@
 
 			<? switch ($product_option['type']) {
 				case 'select':
+				case 'ac-radio':
 				case 'radio':
 				case 'checkbox':
 					?>
