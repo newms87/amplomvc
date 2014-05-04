@@ -5,7 +5,7 @@
 	<div class="box">
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<div class="heading">
-				<h1><img src="<?= URL_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+				<h1><img src="<?= theme_url('image/order.png'); ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
 				<div class="buttons">
 					<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
@@ -186,7 +186,7 @@
 						<? if ($order_products) { ?>
 							<? foreach ($order_products as $order_product) { ?>
 								<tr id="product-row<?= $product_row; ?>">
-									<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"
+									<td class="center" style="width: 3px;"><img src="<?= theme_url('image/delete.png') ?>"
 									                                            title="<?= _l("Remove"); ?>"
 									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
 									</td>
@@ -280,7 +280,7 @@
 						<? if ($order_vouchers) { ?>
 							<? foreach ($order_vouchers as $order_voucher) { ?>
 								<tr id="voucher-row<?= $voucher_row; ?>">
-									<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>"
+									<td class="center" style="width: 3px;"><img src="<?= theme_url('image/loading.gif')?>"
 									                                            title="<?= _l("Remove"); ?>"
 									                                            alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
 									</td>
@@ -838,7 +838,7 @@
 							responseType: 'json',
 							data:         option,
 							onSubmit:     function (file, extension) {
-								$('#button-option-' + (this._settings.data['product_option_id'] + '-' + this._settings.data['product_option_id'])).after('<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" class="loading" />');
+								$('#button-option-' + (this._settings.data['product_option_id'] + '-' + this._settings.data['product_option_id'])).after('<img src="<?= theme_url('image/loading.gif')?>" class="loading" />');
 							},
 							onComplete:   function (file, json) {
 
@@ -923,7 +923,7 @@
 			beforeSend: function () {
 				$('.success, .warning, .attention, .error').remove();
 
-				$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+				$('.box').before('<div class="attention"><img src="<?= theme_url('image/delete.png'); ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 			},
 			success:    function (json) {
 				$('.success, .warning, .attention, .error').remove();
@@ -1126,7 +1126,7 @@
 						product = json['order_product'][i];
 
 						html += '<tr id="product-row' + product_row + '">';
-						html += '	<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#product-row' + product_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
+						html += '	<td class="center" style="width: 3px;"><img src="<?= URL_Ttheme_url('image/delete.png') title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#product-row' + product_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
 						html += '	<td class="left">' + product['name'] + '<br /><input type="hidden" name="order_product[' + product_row + '][order_product_id]" value="" /><input type="hidden" name="order_product[' + product_row + '][product_id]" value="' + product['product_id'] + '" /><input type="hidden" name="order_product[' + product_row + '][name]" value="' + product['name'] + '" />';
 
 						if (product['option']) {
@@ -1188,7 +1188,7 @@
 						voucher = json['order_voucher'][i];
 
 						html += '<tr id="voucher-row' + voucher_row + '">';
-						html += '	<td class="center" style="width: 3px;"><img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#voucher-row' + voucher_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
+						html += '	<td class="center" style="width: 3px;"><img src="<?= theme_url('image/delete.png'); ?>" title="<?= _l("Remove"); ?>" alt="<?= _l("Remove"); ?>" style="cursor: pointer;" onclick="$(\'#voucher-row' + voucher_row + '\').remove(); $(\'#button-update\').trigger(\'click\');" /></td>';
 						html += '	<td class="left">' + voucher['description'];
 						html += '	<input type="hidden" name="order_voucher[' + voucher_row + '][order_voucher_id]" value="" />';
 						html += '	<input type="hidden" name="order_voucher[' + voucher_row + '][voucher_id]" value="' + voucher['voucher_id'] + '" />';

@@ -9,7 +9,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'stock-status.png'; ?>" alt=""/> <?= _l("Stock Status"); ?></h1>
+			<h1><img src="<?= theme_url('image/stock-status.png'); ?>" alt=""/> <?= _l("Stock Status"); ?></h1>
 
 			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
 		</div>

@@ -4,7 +4,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $page_title; ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= $page_title; ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').trigger('saving').submit();" class="button"><?= _l("Save"); ?></a>

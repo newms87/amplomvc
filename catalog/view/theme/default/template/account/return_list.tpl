@@ -15,7 +15,7 @@
 							<b><?= _l("Order ID:"); ?></b> <?= $return['order_id']; ?></div>
 						<div><b><?= _l("Customer:"); ?></b> <?= $return['name']; ?></div>
 						<div class="return-info"><a href="<?= $return['href']; ?>"><img
-									src="<?= URL_THEME_IMAGE . 'info.png'; ?>" alt="<?= _l("View"); ?>"
+									src="<?= theme_url('image/info.png'); ?>" alt="<?= _l("View"); ?>"
 									title="<?= _l("View"); ?>"/></a></div>
 					</div>
 				</div>

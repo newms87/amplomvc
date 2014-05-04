@@ -78,7 +78,7 @@
 				<div id="submit_payment"><?= _l("Submit Payment"); ?></div>
 				<input type="submit" value="<?= _l("Confirm"); ?>" class="button"/></div>
 			<div id="processing_payment">
-				<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>"
+				<img src="<?= theme_url('image/loading.gif'); ?>"
 					alt=""/><span><?= _l("Processing Payment"); ?></span><br/>
 				<input type="submit" value="<?= _l("Try Again"); ?>" class="button"/>
 			</div>

@@ -4,7 +4,7 @@
 	<? foreach ($profiles as $row => $profile) { ?>
 		<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
 			<span class="tab_name"><?= $profile['name']; ?></span>
-			<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" class="delete_tab"/>
+			<img src="<?= theme_url('image/delete.png'); ?>" class="delete_tab"/>
 		</a>
 	<? } ?>
 </div>

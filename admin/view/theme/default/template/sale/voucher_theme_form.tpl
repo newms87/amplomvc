@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= _l("Voucher Themes"); ?></h1>
+			<h1><img src="<?= theme_url('image/payment.png'); ?>" alt=""/> <?= _l("Voucher Themes"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>

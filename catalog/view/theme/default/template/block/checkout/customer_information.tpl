@@ -64,7 +64,7 @@
 	}
 
 	function info_page_loading(info_item) {
-		set_validation_status(info_item, 'validating', "<?= _l("Validating..."); ?> <img src=\"<?= URL_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
+		set_validation_status(info_item, 'validating', "<?= _l("Validating..."); ?> <img src=\"<?= theme_url('image/loading.gif'); ?>\" alt=\"\" />");
 	}
 
 	function load_info_item(info_item, route, callback) {

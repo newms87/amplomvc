@@ -116,18 +116,35 @@ $.ac_filemanager = function (options) {
 	if (pos) {
 		try {
 			pos = $.parseJSON(pos);
-			console.log('load', pos);
-			pos.top += $('body').scrollTop();
-			console.log('after', pos);
+			half_window = $(window).scrollTop() + ($(window).height() / 2);
+
+			pos.top += $(window).scrollTop();
+
+			if (pos.top > half_window) {
+				pos.top = half_window;
+			}
+
 			$acfm.css(pos);
 		} catch(e){}
 	}
 
 	$acfm.append($iframe).append($close).draggable({
+		drag: function() {
+			var newpos = $('#ac-filemanager').offset();
+
+			if (newpos.top > $(window).height()) {
+				$acfm.css({top: $(window).scrollTop() + ($(window).height() / 2)});
+			}
+		},
 		stop: function () {
-			var newpos = $('#ac-filemanager').position();
-			newpos.top -= $('body').scrollTop();
-			console.log(newpos, $('body').scrollTop());
+			var newpos = $('#ac-filemanager').offset();
+
+			if (newpos.top > $(window).height()) {
+				$acfm.css({top: $(window).scrollTop() + ($(window).height() / 2)});
+			}
+
+			newpos.top -= $(window).scrollTop();
+
 			$.cookie('ac-filemanager', JSON.stringify(newpos));
 		}
 	});

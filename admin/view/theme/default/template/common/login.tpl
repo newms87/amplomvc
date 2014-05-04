@@ -2,14 +2,14 @@
 <div class="section">
 	<div id="login-box" class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'lockscreen.png'; ?>" alt=""/> <?= _l("Please enter your login details."); ?></h1>
+			<h1><img src="<?= theme_url('image/lockscreen.png'); ?>" alt=""/> <?= _l("Please enter your login details."); ?></h1>
 		</div>
 		<div class="section" style="min-height: 150px; overflow: hidden;">
 
 			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
 				<table style="width: 100%;">
 					<tr>
-						<td style="text-align: center;" rowspan="4"><img src="<?= URL_THEME_IMAGE . 'login.png'; ?>"
+						<td style="text-align: center;" rowspan="4"><img src="<?= theme_url('image/login.png'); ?>"
 								alt="<?= _l("Please enter your login details."); ?>"/></td>
 					</tr>
 					<tr>

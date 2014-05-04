@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'information.png'; ?>" alt=""/> <?= _l("Information"); ?></h1>
+			<h1><img src="<?= theme_url('image/information.png'); ?>" alt=""/> <?= _l("Information"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>

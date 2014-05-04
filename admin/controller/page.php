@@ -310,7 +310,7 @@ class Admin_Controller_Page extends Controller
 
 			$blocks = array();
 
-			$data_positions = $this->theme->getSetting('data_positions');
+			$data_positions = $this->theme->getPositions();
 
 			foreach ($block_list as $block) {
 				foreach ($block['profiles'] as $profile) {
@@ -328,22 +328,5 @@ class Admin_Controller_Page extends Controller
 		}
 
 		$this->response->setOutput(json_encode($blocks));
-	}
-
-	private function validateForm()
-	{
-		if (!$this->user->can('modify', 'page')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify Pages!");
-		}
-
-		if (!$this->validation->text($_POST['title'], 3, 64)) {
-			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
-		}
-
-		if (empty($_POST['display_title'])) {
-			$_POST['display_title'] = 0;
-		}
-
-		return empty($this->error);
 	}
 }

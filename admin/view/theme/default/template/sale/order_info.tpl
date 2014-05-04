@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'order.png'; ?>" alt=""/> <?= _l("Orders"); ?></h1>
+			<h1><img src="<?= theme_url('image/order.png'); ?>" alt=""/> <?= _l("Orders"); ?></h1>
 
 			<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= _l("Invoice"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>

@@ -14,14 +14,14 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			$this->cart->clear();
 			$this->customer->logout();
 
-			$this->session->delete('shipping_method');
-			$this->session->delete('shipping_methods');
-			$this->session->delete('payment_method');
-			$this->session->delete('payment_methods');
-			$this->session->delete('coupons');
-			$this->session->delete('reward');
-			$this->session->delete('voucher');
-			$this->session->delete('vouchers');
+			$this->session->remove('shipping_method');
+			$this->session->remove('shipping_methods');
+			$this->session->remove('payment_method');
+			$this->session->remove('payment_methods');
+			$this->session->remove('coupons');
+			$this->session->remove('reward');
+			$this->session->remove('voucher');
+			$this->session->remove('vouchers');
 
 			// Settings
 			$settings = $this->config->loadGroup('config', $_POST['store_id']);
@@ -544,14 +544,14 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			$this->cart->clear();
 			$this->customer->logout();
 
-			$this->session->delete('shipping_method');
-			$this->session->delete('shipping_methods');
-			$this->session->delete('payment_method');
-			$this->session->delete('payment_methods');
-			$this->session->delete('coupons');
-			$this->session->delete('reward');
-			$this->session->delete('voucher');
-			$this->session->delete('vouchers');
+			$this->session->remove('shipping_method');
+			$this->session->remove('shipping_methods');
+			$this->session->remove('payment_method');
+			$this->session->remove('payment_methods');
+			$this->session->remove('coupons');
+			$this->session->remove('reward');
+			$this->session->remove('voucher');
+			$this->session->remove('vouchers');
 		} else {
 			$json['error']['warning'] = _l("You do not have permission to access this page, please refer to your system administrator.");
 		}

@@ -144,18 +144,18 @@ class Mod extends Library
 			$source = DIR_SITE . trim($directives['source']);
 
 			if (!is_file($source)) {
-				$this->error[] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
+				$this->error['source'] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
 				return false;
 			}
 		} else {
-			$this->error[] = "File Mod failed for $mod_file. You must specify a Source File in the PHPDoc Comment Directives. (eg: /** Source: relative/path/to/mysourcefile.php */)" . get_caller(0, 4);
+			$this->error['source'] = "File Mod failed for $mod_file. You must specify a Source File in the PHPDoc Comment Directives. (eg: /** Source: relative/path/to/mysourcefile.php */)" . get_caller(0, 4);
 			return false;
 		}
 
 		if (!empty($directives['destination'])) {
 			$destination = DIR_SITE . trim($directives['destination']);
 		} else {
-			$this->error[] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
+			$this->error['destination'] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
 			return false;
 		}
 

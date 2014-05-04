@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Error_NotFound extends Controller
 {
-	public function index()
+	public function index($data = array())
 	{
 		$this->document->setTitle(_l("Page Not Found!"));
 

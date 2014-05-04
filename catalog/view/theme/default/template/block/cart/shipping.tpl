@@ -89,7 +89,7 @@
 			dataType: 'json',
 			beforeSend: function () {
 				$('#button-quote').attr('disabled', true);
-				$('#button-quote').after('<span class="wait"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
+				$('#button-quote').after('<span class="wait"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /></span>');
 			},
 			complete: function () {
 				$('#button-quote').attr('disabled', false);
@@ -160,7 +160,7 @@
 			dataType: 'json',
 			beforeSend: function () {
 				context.attr('disabled', true);
-				context.after('<span class="wait"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
+				context.after('<span class="wait"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /></span>');
 			},
 			complete: function () {
 				context.attr('disabled', false);

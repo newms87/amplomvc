@@ -63,7 +63,7 @@ class Catalog_Controller_Page extends Controller
 		}
 
 		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
-		$this->document->addScript(URL_THEME_JS . 'common.js', 56);
+		$this->document->addScript(theme_url('js/common.js'), 56);
 
 		//Page Head
 		$data['direction'] = $this->language->info('direction');

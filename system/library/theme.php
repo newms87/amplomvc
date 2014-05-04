@@ -4,38 +4,34 @@ class Theme extends Library
 {
 	private $dir_themes;
 	private $theme;
-	private $default_theme = 'default';
-
-	private $settings;
+	private $parent_theme;
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->dir_themes = DIR_THEMES;
-		$this->theme = option('config_theme');
+
+		if ($this->config->isAdmin()) {
+			$this->theme        = option('config_admin_theme', 'default');
+			$this->parent_theme = option('config_admin_parent_theme', 'default');
+		} else {
+			$this->theme        = option('config_theme', 'fluid');
+			$this->parent_theme = option('config_parent_theme', 'fluid');
+		}
+
 
 		if (!$this->theme || !is_dir(DIR_THEMES . $this->theme)) {
-			$this->theme = $this->default_theme;
+			$this->theme = $this->parent_theme;
 		}
 
 		//Url Constants
 		define('URL_THEME', URL_THEMES . $this->theme . '/');
-		define('URL_THEME_IMAGE', URL_THEME . 'image/');
-		define('URL_THEME_JS', URL_THEME . 'js/');
+		define('URL_THEME_PARENT', URL_THEMES . $this->parent_theme . '/');
 
 		//Directory Constants
 		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
-		define('DIR_THEME_IMAGE', DIR_THEME . 'image/');
-		define('DIR_THEME_JS', DIR_THEME . 'js/');
-
-		if ($this->config->isAdmin()) {
-			$this->settings = $this->loadAdminThemeSettings();
-		} else {
-			$theme_settings_file = $this->findFile('settings.php');
-
-			$this->getThemeSettings($theme_settings_file);
-		}
+		define('DIR_THEME_PARENT', DIR_THEMES . $this->parent_theme . '/');
 	}
 
 	public function setTheme($theme)
@@ -53,75 +49,6 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function getSetting($key)
-	{
-		if (isset($this->settings[$key])) {
-			return $this->settings[$key];
-		}
-
-		return null;
-	}
-
-	private function getThemeSettings($theme_settings_file, $theme = false)
-	{
-		if (!$theme) {
-			$theme = $this->theme;
-		}
-
-		if (is_file($theme_settings_file)) {
-			$theme_settings = $this->cache->get('theme_settings.' . $theme);
-
-			if (!$theme_settings || $theme_settings['mod_time'] != filemtime($theme_settings_file)) {
-
-				$_ = array();
-
-				require_once($theme_settings_file);
-
-				$theme_settings = $_;
-
-				$theme_settings['mod_time'] = filemtime($theme_settings_file);
-
-				$this->cache->set('theme_settings.' . $theme, $theme_settings);
-			}
-
-			$this->settings = $theme_settings;
-
-			return $this->settings;
-		}
-
-		return null;
-	}
-
-	private function loadAdminThemeSettings()
-	{
-		//We get the Themes here to validate the file modified times for caching
-		$themes = $this->getThemes();
-
-		$theme_settings_admin = $this->cache->get('theme_settings_admin');
-
-		if (!$theme_settings_admin) {
-			$_ = array();
-
-			require_once(DIR_THEMES . $this->theme . '/settings.php');
-
-			$theme_settings_admin = $_;
-
-			//TODO - move this somewhere to make more easily dynamic (if we want to add other settings from the Themes)
-			//We must load all the Themes' data for the admin
-			$theme_settings_admin['data_positions'] = array();
-
-			foreach ($themes as $theme) {
-				$theme_settings_admin['data_positions'] += !empty($theme['settings']['data_positions']) ? $theme['settings']['data_positions'] : array();
-			}
-
-			$theme_settings_admin['themes'] = $themes;
-
-			$this->cache->set('theme_settings_admin', $theme_settings_admin);
-		}
-
-		return $theme_settings_admin;
-	}
-
 	public function getThemes($admin = false)
 	{
 		if ($admin) {
@@ -132,19 +59,7 @@ class Theme extends Library
 
 		$themes = $this->cache->get('themes' . ($admin ? '.admin' : ''));
 
-		//invalidate all themes if one of the themes' settings has been updated
-		if ($themes) {
-			foreach ($themes as $theme) {
-				$settings_file = $theme_dir . $theme['name'] . '/settings.php';
-				if (is_file($settings_file) && filemtime($settings_file) != $theme['settings']['mod_time']) {
-					$themes = false;
-					$this->cache->delete('theme');
-					break;
-				}
-			}
-		}
-
-		if (!$themes || true) {
+		if (is_null($themes)) {
 			$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
 
 			$themes = array();
@@ -152,11 +67,8 @@ class Theme extends Library
 			foreach ($dir_themes as $dir) {
 				$name = basename($dir);
 
-				$theme_settings_file = $theme_dir . $name . '/settings.php';
-
 				$themes[$name] = array(
-					'name'     => $name,
-					'settings' => $this->getThemeSettings($theme_settings_file, $name),
+					'name' => $name,
 				);
 			}
 
@@ -206,6 +118,20 @@ class Theme extends Library
 		return $templates;
 	}
 
+	public function getPositions()
+	{
+		$area_files = glob(URL_SITE . 'catalog/controller/area/*');
+
+		$areas = array();
+
+		foreach ($area_files as $area) {
+			$pos         = pathinfo($area, PATHINFO_FILENAME);
+			$areas[$pos] = $pos;
+		}
+
+		return $areas;
+	}
+
 	public function findFile($file)
 	{
 		//Add tpl extension if no extension specified
@@ -217,8 +143,8 @@ class Theme extends Library
 			return $this->dir_themes . $this->theme . '/' . $file;
 		} elseif (file_exists($this->dir_themes . $this->theme . '/template/' . $file)) {
 			return $this->dir_themes . $this->theme . '/template/' . $file;
-		} elseif (file_exists($this->dir_themes . $this->default_theme . '/template/' . $file)) {
-			return $this->dir_themes . $this->default_theme . '/template/' . $file;
+		} elseif (file_exists($this->dir_themes . $this->parent_theme . '/template/' . $file)) {
+			return $this->dir_themes . $this->parent_theme . '/template/' . $file;
 		}
 
 		//File not found

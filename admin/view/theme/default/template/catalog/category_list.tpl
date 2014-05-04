@@ -5,7 +5,7 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Category"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Category"); ?></h1>
 
 			<? if ($can_modify) { ?>
 				<div class="batch_actions">

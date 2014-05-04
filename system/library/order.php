@@ -457,6 +457,6 @@ class Order Extends Library
 
 	public function clear()
 	{
-		$this->session->delete('order_id');
+		$this->session->remove('order_id');
 	}
 }

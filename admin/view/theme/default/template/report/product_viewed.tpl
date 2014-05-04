@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Products Viewed Report"); ?></h1>
+			<h1><img src="<?= theme_url('image/report.png'); ?>" alt=""/> <?= _l("Products Viewed Report"); ?></h1>
 
 			<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= _l("Reset"); ?></a>
 			</div>

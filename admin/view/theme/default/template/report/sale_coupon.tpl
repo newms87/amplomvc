@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'report.png'; ?>" alt=""/> <?= _l("Coupon Report"); ?></h1>
+			<h1><img src="<?= theme_url('image/report.png'); ?>" alt=""/> <?= _l("Coupon Report"); ?></h1>
 		</div>
 		<div class="section">
 			<table class="form">

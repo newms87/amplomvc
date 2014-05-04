@@ -231,10 +231,10 @@ class Cart extends Library
 
 		$this->clearPaymentAddress();
 		$this->clearShippingAddress();
-		$this->session->delete('comment');
-		$this->session->delete('coupons');
-		$this->session->delete('reward');
-		$this->session->delete('vouchers');
+		$this->session->remove('comment');
+		$this->session->remove('coupons');
+		$this->session->remove('reward');
+		$this->session->remove('vouchers');
 
 		$this->order->clear();
 
@@ -749,7 +749,7 @@ class Cart extends Library
 
 	public function clearPaymentAddress()
 	{
-		$this->session->delete('payment_address_id');
+		$this->session->remove('payment_address_id');
 		$this->clearPaymentMethod();
 	}
 
@@ -847,7 +847,7 @@ class Cart extends Library
 
 	public function clearShippingAddress()
 	{
-		$this->session->delete('shipping_address_id');
+		$this->session->remove('shipping_address_id');
 		$this->clearShippingMethod();
 	}
 
@@ -973,8 +973,8 @@ class Cart extends Library
 
 	public function clearPaymentMethod()
 	{
-		$this->session->delete('payment_code');
-		$this->session->delete('payment_key');
+		$this->session->remove('payment_code');
+		$this->session->remove('payment_key');
 	}
 
 	public function validatePaymentMethod()
@@ -1070,7 +1070,7 @@ class Cart extends Library
 		//No Shipping Methods Available!
 		if (empty($methods)) {
 			$this->error_code               = self::ERROR_SHIPPING_METHOD_UNAVAILABLE;
-			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", site_url('page/page', 'page_id=' . option('config_contact_page_id')));
+			$this->error['shipping_method'] = _l("There are no available Shipping Methods for your order! Please contact <a href=\"%s\">Customer Support</a> to complete your order.", site_url('page', 'page_id=' . option('config_contact_page_id')));
 
 			$this->clearShippingMethod();
 
@@ -1110,8 +1110,8 @@ class Cart extends Library
 
 	public function clearShippingMethod()
 	{
-		$this->session->delete('shipping_code');
-		$this->session->delete('shipping_key');
+		$this->session->remove('shipping_code');
+		$this->session->remove('shipping_key');
 	}
 
 	public function validateShippingMethod()
@@ -1211,7 +1211,7 @@ class Cart extends Library
 
 	public function removeAllVouchers()
 	{
-		$this->session->delete('vouchers');
+		$this->session->remove('vouchers');
 	}
 
 	/**

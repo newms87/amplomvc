@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
+			<h1><img src="<?= theme_url('image/customer.png'); ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
 
 			<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
 		</div>
@@ -148,7 +148,7 @@
 				beforeSend: function () {
 					$(".success, .warning, .attention').remove();
 
-					$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+					$('.box').before('<div class="attention"><img src="<?= theme_url('image/loading.gif') ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 				},
 				success: function (json) {
 					$('.success, .warning, .attention').remove();
@@ -201,7 +201,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-history').attr('disabled', true);
-			$('#history').prepend('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+			$('#history').prepend('<div class="attention"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 		}
 	,
 		complete: function () {

@@ -12,7 +12,6 @@ class User extends Library
 		parent::__construct();
 
 		if (isset($_SESSION['user_id']) && $this->validate_token()) {
-
 			$user = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
 
 			if ($user) {
@@ -127,7 +126,7 @@ class User extends Library
 
 	public function canDoAction($action)
 	{
-		if (!$this->isAdmin()) {
+		if (!$this->config->isAdmin()) {
 			return true;
 		}
 

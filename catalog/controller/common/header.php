@@ -23,7 +23,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add jQuery from the CDN or locally
-		if (option('config_jquery_cdn')) {
+		if (true || option('config_jquery_cdn')) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
@@ -39,7 +39,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->localizeVar('url_add_to_cart', site_url('cart/cart/add'));
 
 		//Add Theme Scripts
-		$this->document->addScript(URL_THEME_JS . 'common.js', 56);
+		$this->document->addScript(theme_url('js/common.js'), 56);
 
 		//Page Head
 		$data['direction']      = $this->language->info('direction');
@@ -56,7 +56,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 		$data['statcounter']      = option('config_statcounter');
 
-		$data['name']     = option('config_name');
+		$data['name'] = option('config_name');
 
 		$logo_width  = option('config_logo_width');
 		$logo_height = option('config_logo_height');

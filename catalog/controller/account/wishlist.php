@@ -34,7 +34,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		if ($this->session->has('success')) {
 			$data['success'] = $this->session->get('success');
 
-			$this->session->delete('success');
+			$this->session->remove('success');
 		} else {
 			$data['success'] = '';
 		}

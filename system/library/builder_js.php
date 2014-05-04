@@ -59,7 +59,7 @@ switch ($js) {
 				<? foreach ($languages as $language) { ?>
 					<div class="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>"
 						title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
-						<img alt="<?= $language['name']; ?>" src="<?= URL_THEME_IMAGE . "flags/$language[image]"; ?>"/>
+						<img alt="<?= $language['name']; ?>" src="<?= theme_url("image/flags/$language[image]"); ?>"/>
 					</div>
 				<? } ?>
 			</div>

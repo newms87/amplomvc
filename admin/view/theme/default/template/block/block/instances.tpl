@@ -4,7 +4,7 @@
 	<? foreach ($instances as $row => $instance) { ?>
 		<a href="#tab-instance-<?= $row; ?>" data-row="<?= $row; ?>">
 			<span class="tab_name"><?= $instance['name']; ?></span>
-			<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" onclick="return false" class="delete_tab"/>
+			<img src="<?= theme_url('image/delete.png'); ?>" onclick="return false" class="delete_tab"/>
 		</a>
 	<? } ?>
 </div>

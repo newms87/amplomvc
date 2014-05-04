@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
-			<h1><img class="icon" src="<?= URL_THEME_IMAGE . 'login_settings.png'; ?>" alt=""/> <?= _l("Login Settings"); ?></h1>
+			<h1><img class="icon" src="<?= theme_url('image/login_settings.png'); ?>" alt=""/> <?= _l("Login Settings"); ?></h1>
 
 			<div class="buttons">
 				<button class="button"><?= _l("Save"); ?></button>

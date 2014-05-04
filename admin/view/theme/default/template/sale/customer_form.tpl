@@ -6,7 +6,7 @@
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 
 			<div class="heading">
-				<h1><img src="<?= URL_THEME_IMAGE . 'customer.png'; ?>" alt=""/> <?= _l("Customer"); ?></h1>
+				<h1><img src="<?= theme_url('image/customer.png'); ?>" alt=""/> <?= _l("Customer"); ?></h1>
 
 				<div class="buttons">
 					<button class="button"><?= _l("Save"); ?></button>
@@ -30,11 +30,11 @@
 						<? foreach ($addresses as $address) { ?>
 							<a href="#tab-address-<?= $address_row; ?>"
 							   id="address-<?= $address_row; ?>"><?= _l("Address") . ' ' . $address_row; ?>&nbsp;<img
-									src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('#vtabs a:first').trigger('click'); $('#address-<?= $address_row; ?>').remove(); $('#tab-address-<?= $address_row; ?>').remove(); return false;"/></a>
+									src="<?= theme_url('image/add.png') ?>" alt="" onclick="$('#vtabs a:first').trigger('click'); $('#address-<?= $address_row; ?>').remove(); $('#tab-address-<?= $address_row; ?>').remove(); return false;"/></a>
 							<? $address_row++; ?>
 						<? } ?>
 						<span id="address-add"><?= _l("Add Address"); ?>
-							&nbsp;<img src="<?= URL_THEME_IMAGE . 'add.png'; ?>" alt="" onclick="addAddress();"/></span></div>
+							&nbsp;<img src="<?= URL_Ttheme_url('image/delete.png') alt="" onclick="addAddress();"/></span></div>
 					<div id="tab-customer" class="vtabs-content">
 						<table class="form">
 							<tr>
@@ -349,7 +349,7 @@
 
 		$('#tab-general').append(html);
 
-		$('#address-add').before('<a href="#tab-address-' + address_row + '" id="address-' + address_row + '"><?= _l("Address"); ?> ' + address_row + '&nbsp;<img src="<?= URL_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$(\'#vtabs a:first\').trigger(\'click\'); $(\'#address-' + address_row + '\').remove(); $(\'#tab-address-' + address_row + '\').remove(); return false;" /></a>');
+		$('#address-add').before('<a href="#tab-address-' + address_row + '" id="address-' + address_row + '"><?= _l("Address"); ?> ' + address_row + '&nbsp;<img src="<?= theme_url('image/loading.gif'); ?>" alt="" onclick="$(\'#vtabs a:first\').trigger(\'click\'); $(\'#address-' + address_row + '\').remove(); $(\'#tab-address-' + address_row + '\').remove(); return false;" /></a>');
 
 		$('.vtabs a').tabs();
 
@@ -384,7 +384,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-transaction').attr('disabled', true);
-			$('#transaction').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+			$('#transaction').before('<div class="attention"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
 		}
 	,
 		complete: function () {
@@ -426,7 +426,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-reward').attr('disabled', true);
-			$('#reward').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please Wait!"); ?></div>');
+			$('#reward').before('<div class="attention"><img src="<?= URL_theme_url('image/loading.gif')" alt="" /> <?= _l("Please Wait!"); ?></div>');
 		}
 	,
 		complete: function () {
@@ -454,7 +454,7 @@
 			beforeSend: function () {
 				$(".success, .warning').remove();
 
-				$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
+				$('.box').before('<div class="attention"><img src="<?= URL_Ttheme_url('image/loading.gif') alt="" /> Please wait!</div>');
 			},
 			complete:   function () {
 				$('.attention').remove();
@@ -486,7 +486,7 @@
 			beforeSend: function () {
 				$(".success, .warning').remove();
 
-				$('.box').before('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
+				$('.box').before('<div class="attention"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /> Please wait!</div>');
 			},
 			complete:   function () {
 				$('.attention').remove();

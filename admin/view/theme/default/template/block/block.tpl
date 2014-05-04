@@ -4,7 +4,7 @@
 
 	<form id="form" class="box" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Blocks"); ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("Blocks"); ?></h1>
 
 			<div class="buttons">
 				<button class="save button"><?= _l("Save"); ?></button>

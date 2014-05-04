@@ -366,7 +366,7 @@ class Admin_Controller_Sale_Return extends Controller
 		if ($this->session->has('error')) {
 			$data['error_warning'] = $this->session->get('error');
 
-			$this->session->delete('error');
+			$this->session->remove('error');
 		} elseif (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
 		} else {
@@ -376,7 +376,7 @@ class Admin_Controller_Sale_Return extends Controller
 		if ($this->session->has('success')) {
 			$data['success'] = $this->session->get('success');
 
-			$this->session->delete('success');
+			$this->session->remove('success');
 		} else {
 			$data['success'] = '';
 		}

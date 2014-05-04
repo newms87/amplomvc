@@ -142,13 +142,17 @@ class Block extends Library
 			return false;
 		}
 
-		if (isset($data['settings'])) {
-			$data['settings'] = serialize($data['settings']);
-		}
+		$data['settings'] = isset($data['settings']) ? serialize($data['settings']) : '';
 
 		$data['path'] = $path;
 
-		$this->update('block', $data, array('path' => $path));
+		$block_id = $this->queryVar("SELECT block_id FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . " LIMIT 1");
+
+		if (!$block_id) {
+			$block_id = $this->insert('block', $data);
+		} else {
+			$this->update('block', $data, $block_id);
+		}
 
 		if (isset($data['instances'])) {
 			$this->delete('block_instance', array('path' => $path));

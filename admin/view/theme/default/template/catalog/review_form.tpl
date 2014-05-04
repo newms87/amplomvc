@@ -6,7 +6,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'review.png'; ?>" alt=""/> <?= _l("Reviews"); ?></h1>
+			<h1><img src="<?= theme_url('image/review.png'); ?>" alt=""/> <?= _l("Reviews"); ?></h1>
 
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>

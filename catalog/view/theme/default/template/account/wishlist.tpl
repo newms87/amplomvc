@@ -38,9 +38,9 @@
 											<? } ?>
 										</div>
 									<? } ?></td>
-								<td class="action"><img src="<?= URL_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= _l("Add to Cart"); ?>"
+								<td class="action"><img src="<?= theme_url('image/cart-add.png'); ?>" alt="<?= _l("Add to Cart"); ?>"
 										title="<?= _l("Add to Cart"); ?>" onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
-										href="<?= $product['remove']; ?>"><img src="<?= URL_THEME_IMAGE . 'remove.png'; ?>"
+										href="<?= $product['remove']; ?>"><img src="<?= theme_url('image/remove.png'); ?>"
 											alt="<?= _l("Remove"); ?>"
 											title="<?= _l("Remove"); ?>"/></a></td>
 							</tr>

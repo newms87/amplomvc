@@ -4,7 +4,7 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
 
 			<div class="buttons">
 				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _l("Run Cron"); ?></a>

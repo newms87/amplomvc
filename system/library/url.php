@@ -322,7 +322,7 @@ class Url extends Library
 			$query = urldecode($query);
 		}
 
-		if (strpos($path, 'http') === 0) {
+		if (strpos($path, 'http') === 0 || strpos($path, '//') === 0) {
 			return $path . ($query ? '?' . $query : '');
 		}
 

@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Layouts"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Layouts"); ?></h1>
 
 			<div class="batch_actions">
 				<?= _block('widget/batch_action', null, $batch_action); ?>

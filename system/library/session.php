@@ -49,7 +49,7 @@ class Session extends Library
 		$_SESSION[$key] = $value;
 	}
 
-	public function delete($key)
+	public function remove($key)
 	{
 		unset($_SESSION[$key]);
 	}

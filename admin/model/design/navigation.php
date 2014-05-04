@@ -768,8 +768,8 @@ class Admin_Model_Design_Navigation extends Model
 			$link_name = $navigation_id;
 		}
 
-		if (empty($link['name']) || !$this->validation->text($link['name'], 1, 45)) {
-			$this->error["links[$navigation_id][name]"] = _l("The Name for the link %s must be between 1 and 45 characters!", $link_name);
+		if (empty($link_name) || !$this->validation->text($link_name, 1, 45)) {
+			$this->error["links[$navigation_id][name]"] = _l("The name for the link %s must be between 1 and 45 characters!", $link_name);
 		}
 
 		if (empty($link['display_name']) || !$this->validation->text($link['display_name'], 1, 255)) {

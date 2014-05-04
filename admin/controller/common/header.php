@@ -34,7 +34,7 @@ class Admin_Controller_Common_Header extends Controller
 
 		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 52);
 		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
-		$this->document->addScript(URL_THEME_JS . 'common.js', 54);
+		$this->document->addScript(theme_url('js/common.js'), 54);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
@@ -51,6 +51,8 @@ class Admin_Controller_Common_Header extends Controller
 
 		$data['admin_logo'] = $this->image->get(option('config_admin_logo'));
 
+		$data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", option('config_email_support'));
+
 		if (!$this->user->isLogged()) {
 			$data['logged'] = '';
 
@@ -59,8 +61,6 @@ class Admin_Controller_Common_Header extends Controller
 			$data['home'] = site_url('common/home');
 
 			$data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
-
-			$data['support'] = _l("<a href=\"mailto:%s?subject=Support%%20Request\" target=\"_blank\">Support</a>", option('config_email_support'));
 
 			$data['store'] = URL_SITE;
 

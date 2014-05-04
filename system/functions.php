@@ -77,16 +77,6 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 	}
 	?>
 
-	<? if ($first) { ?>
-	<style>
-		.html_dump {
-			display: inline-block;
-			margin-bottom: 15px;
-			margin-left: 20px
-		}
-	</style>
-<? } ?>
-
 	<a id="<?= $id; ?>" class='html_dump' onclick="open_html_dump('<?= $id; ?>')">
 		<style>
 			.html_dump_label {
@@ -125,11 +115,11 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 		<span class='html_dump_label'><?= $label; ?></span>
 
 		<div class='dump_output' id='<?= $id; ?>-output' style='display:none'>
-			<? $dump = html_dump_r($var, $level, $max); ?>
+			<?php $dump = html_dump_r($var, $level, $max); ?>
 		</div>
 	</a>
 
-	<? if ($first) { ?>
+	<?php if ($first) { ?>
 	<script type='text/javascript'>
 		function open_html_dump(id) {
 			var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
@@ -138,9 +128,9 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 			document.getElementById(id + '-output').setAttribute('style', 'display:none');
 		}
 	</script>
-<? } ?>
+<?php } ?>
 
-	<?
+	<?php
 	$first = false;
 
 	if (!$print) {

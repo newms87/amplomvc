@@ -83,7 +83,7 @@
 		beforeSend: function () {
 			$('.success, .warning').remove();
 			$('#button-review').attr('disabled', true);
-			$('#review-title').after('<div class="attention"><img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= _l("Please wait"); ?></div>');
+			$('#review-title').after('<div class="attention"><img src="<?= theme_url('image/loading.gif'); ?>" alt="" /> <?= _l("Please wait"); ?></div>');
 		}
 		,
 		complete: function () {

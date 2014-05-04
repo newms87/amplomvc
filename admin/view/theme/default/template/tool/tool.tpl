@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= _l("System Tools"); ?></h1>
+			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("System Tools"); ?></h1>
 
 			<div class="buttons">
 				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>

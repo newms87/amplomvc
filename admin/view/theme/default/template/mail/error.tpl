@@ -3,7 +3,7 @@
 	<?= _breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= _l("Failed Email Messages"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Failed Email Messages"); ?></h1>
 
 			<div class="buttons">
 				<a onclick="$('#mail_form').submit();" class="button"><?= _l("Send"); ?></a>

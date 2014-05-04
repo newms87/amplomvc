@@ -19,10 +19,12 @@ class Admin_Model_Setting_Setting extends Model
 
 				$widget['title'] = _l($directives['title']);
 
-				if (!empty($directives['icon']) && is_file(DIR_THEME_IMAGE . $directives['icon'])) {
-					$widget['icon'] = URL_THEME_IMAGE . $directives['icon'];
-				} else {
-					$widget['icon'] = URL_THEME_IMAGE . 'admin_settings.png';
+				if (!empty($directives['icon'])) {
+					$widget['icon'] = theme_url('image/' . $directives['icon']);
+				}
+
+				if (empty($widget['icon'])) {
+					$widget['icon'] = theme_url('image/admin_settings.png');
 				}
 
 				if (!empty($directives['path'])) {

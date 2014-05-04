@@ -22,10 +22,10 @@
 					</div>
 					<div class="order_info">
 						<a class="view" href="<?= $order['href']; ?>">
-							<img src="<?= URL_THEME_IMAGE . 'view.png'; ?>" alt="<?= _l("View"); ?>" title="<?= _l("View Order"); ?>"/>
+							<img src="<?= theme_url('image/view.png'); ?>" alt="<?= _l("View"); ?>" title="<?= _l("View Order"); ?>"/>
 						</a>
 						<a class="reorder" href="<?= $order['reorder']; ?>">
-							<img src="<?= URL_THEME_IMAGE . 'reorder.png'; ?>" alt="<?= _l("Reorder"); ?>" title="<?= _l("Reorder"); ?>"/>
+							<img src="<?= theme_url('image/reorder.png'); ?>" alt="<?= _l("Reorder"); ?>" title="<?= _l("Reorder"); ?>"/>
 						</a>
 					</div>
 				</div>

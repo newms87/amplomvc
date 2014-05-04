@@ -157,7 +157,7 @@ class Admin_Controller_User_UserPermission extends Controller
 		if ($this->session->has('success')) {
 			$data['success'] = $this->session->get('success');
 
-			$this->session->delete('success');
+			$this->session->remove('success');
 		} else {
 			$data['success'] = '';
 		}

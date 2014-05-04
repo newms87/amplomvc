@@ -85,7 +85,7 @@
 							<div class="final_sale_small"><span class="final_sale"></span></div>
 						<? } else { ?>
 							<a href="<?= $product['return']; ?>">
-								<img src="<?= URL_THEME_IMAGE . 'return.png'; ?>" alt="<?= _l("Return Products"); ?>" title="<?= _l("Return Products"); ?>"/>
+								<img src="<?= theme_url('image/return.png'); ?>" alt="<?= _l("Return Products"); ?>" title="<?= _l("Return Products"); ?>"/>
 							</a>
 						<? } ?>
 					</td>

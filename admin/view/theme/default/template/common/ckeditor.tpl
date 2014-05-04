@@ -693,7 +693,7 @@ new AjaxUpload('#upload', {
 		this.submit();
 	},
 	onSubmit: function (file, extension) {
-		$('#upload').append('<img src="<?= URL_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
+		$('#upload').append('<img src="<?= theme_url('image/loading.gif'); ?>" class="loading" style="padding-left: 5px;" />');
 	},
 	onComplete: function (file, json) {
 		if (json.success) {

@@ -4,7 +4,7 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= URL_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
+			<h1><img src="<?= theme_url('image/home.png'); ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
 		</div>
 		<div class="section">
 			<div class="overview">

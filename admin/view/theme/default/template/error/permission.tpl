@@ -3,7 +3,7 @@
 		<?= _breadcrumbs(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= URL_THEME_IMAGE . 'error.png'; ?>" alt=""/> <?= _l("Permission Denied!"); ?></h1>
+				<h1><img src="<?= theme_url('image/error.png'); ?>" alt=""/> <?= _l("Permission Denied!"); ?></h1>
 			</div>
 			<div class="section">
 				<div

@@ -3,6 +3,14 @@ class Admin_Model_Page_Page extends Model
 {
 	public function addPage($data)
 	{
+		if (!$this->validation->text($data['title'], 3, 64)) {
+			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
 		$page_id = $this->insert('page', $data);
 
 		if (!empty($data['stores'])) {
@@ -25,10 +33,20 @@ class Admin_Model_Page_Page extends Model
 		}
 
 		$this->cache->delete('page');
+
+		return $page_id;
 	}
 
 	public function editPage($page_id, $data)
 	{
+		if (isset($data['title']) && !$this->validation->text($data['title'], 3, 64)) {
+			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
 		$this->update('page', $data, $page_id);
 
 		if (isset($data['stores'])) {
