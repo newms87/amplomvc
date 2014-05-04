@@ -49,6 +49,12 @@ function _breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
+function image($image, $width = null, $height = null)
+{
+	global $registry;
+	return $registry->get('image')->resize($image, $width, $height);
+}
+
 function site_url($path = '', $query = null)
 {
 	global $registry;

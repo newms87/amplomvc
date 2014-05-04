@@ -519,7 +519,7 @@ $.loading = function (params) {
 		animations: 'bounce, fadecolor'
 	}, params);
 
-	loader = $('<div class="loader">' + '<div class="loader_item"></div>'.repeat(params.dots) + '</div>');
+	loader = $('<div class="loader">' + '<div class="loader-item"></div>'.repeat(params.dots) + '</div>');
 
 	loader.children('.loader_item').each(function (i, e) {
 		$(e).attr('style', '-webkit-animation-name: ' + params.animations + '; animation-name: ' + params.animations);
