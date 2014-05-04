@@ -101,3 +101,19 @@ function option($option, $default = null)
 
 	return is_null($value) ? $default : $value;
 }
+
+function format($type, $data)
+{
+	global $registry;
+	return $registry->get($type)->format($data);
+}
+
+function build($type, $params)
+{
+	global $registry;
+	if (isset($params['key_id'])) {
+		$registry->get('builder')->setConfig($params['key_id'], $params['key_value']);
+	}
+
+	return $registry->get('builder')->build($type, $params['data'], $params['name'], $params['value']);
+}

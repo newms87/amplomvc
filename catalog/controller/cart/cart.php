@@ -1,53 +1,47 @@
 <?php
+
 class Catalog_Controller_Cart_Cart extends Controller
 {
-	public function index()
+	public function index($data = array())
 	{
+		//Page Head
 		$this->document->setTitle(_l("Shopping Cart"));
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add(_l("Shopping Cart"), site_url('cart/cart'));
-
-		$data['block_cart'] = $this->block->render('cart/cart');
 
 		//We remove any active orders to allow shipping estimates to be updated
 		if ($this->order->hasOrder()) {
 			$this->order->clear();
 		}
 
-		if (option('config_show_cart_weight')) {
-			$data['weight'] = $this->weight->format($this->cart->getWeight());
-		}
-
-		if (option('coupon_status')) {
-			$data['block_coupon'] = $this->block->render('cart/coupon');
-		}
-
-		if (option('voucher_status')) {
-			$data['block_voucher'] = $this->block->render('cart/voucher');
-		}
-
-		if (option('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
-			$data['block_reward'] = $this->block->render('cart/reward');
-		}
-
-		if (option('shipping_status') && $this->cart->hasShipping()) {
-			$data['block_shipping'] = $this->block->render('cart/shipping');
-		}
-
-		$data['block_total'] = $this->block->render('cart/total');
-
-		$data['cart_empty']   = $this->cart->isEmpty();
-		$data['can_checkout'] = $this->cart->canCheckout();
+		$data += array(
+			'show_total'      => option('config_show_cart_total', true),
+			'show_weight'     => option('config_show_cart_weight'),
+			'show_coupons'    => option('coupon_status'),
+			'show_vouchers'   => option('voucher_status'),
+			'show_rewards'    => option('reward_status'),
+			'has_shipping'    => option('shipping_status') && $this->cart->hasShipping(),
+			'weight'          => $this->cart->getWeight(),
+			'customer_points' => $this->customer->getRewardPoints(),
+			'cart_points'     => $this->cart->getTotalPoints(),
+			'is_empty'        => $this->cart->isEmpty(),
+			'can_checkout'    => $this->cart->canCheckout(),
+		);
 
 		//Set Continue to the redirect unless we are redirecting to the cart page
-		if (isset($_GET['redirect']) && preg_match("/cart\\/cart/", $_GET['redirect']) == 0) {
-			$data['continue'] = urldecode($_GET['redirect']);
+		if (isset($_GET['redirect']) && !preg_match("/cart\\/cart/", $_GET['redirect'])) {
+			$continue = urldecode($_GET['redirect']);
 		} else {
-			$data['continue'] = site_url('product/category');
+			$continue = site_url('product/category');
 		}
 
-		$data['checkout'] = site_url('checkout/checkout');
+		//Action
+		$data += array(
+			'continue' => $continue,
+		   'checkout' => site_url('checkout/checkout'),
+		);
 
 		//Render
 		$this->response->setOutput($this->render('cart/cart', $data));
@@ -122,11 +116,9 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		if ($type === Cart::PRODUCTS) {
 			$key = $this->cart->addProduct($product_id, $quantity, $options);
-		}
-		elseif ($type === Cart::VOUCHERS) {
+		} elseif ($type === Cart::VOUCHERS) {
 			$key = $this->cart->addVoucher($product_id, $quantity, $options);
-		}
-		else {
+		} else {
 			$key = $this->cart->addItem($type, $product_id, $quantity, $options);
 		}
 

@@ -95,7 +95,7 @@
 	<? }?>
 
 	$('#the_cart').on('cart_loaded', function () {
-		load_block($('#cart_block_total'), 'block/cart/total');
+		load_block($('#cart-block-total'), 'block/cart/total');
 	});
 </script>
 

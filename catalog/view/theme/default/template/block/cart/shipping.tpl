@@ -179,7 +179,7 @@
 
 				if (json['success']) {
 					$.colorbox.close();
-					load_block($('#cart_block_total'), 'block/cart/total');
+					load_block($('#cart-block-total'), 'block/cart/total');
 				}
 			}
 		});
