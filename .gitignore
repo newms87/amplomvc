@@ -1,4 +1,6 @@
 ac_config.php
+/.idea
+/.idea/*
 .htaccess
 /.project
 *.db
