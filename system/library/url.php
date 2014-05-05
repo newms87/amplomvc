@@ -29,8 +29,8 @@ class Url extends Library
 		if (isset($_GET['_path_'])) {
 			$this->path = trim($_GET['_path_'], '/ ');
 
-			$this->path = preg_replace("/^admin\/?/", '', $this->path);
-			$this->path = preg_replace("/^controller\/?/", '', $this->path);
+			$this->path = preg_replace("/^admin\\/?/", '', $this->path);
+			$this->path = preg_replace("/^controller\\/?/", '', $this->path);
 
 			unset($_GET['_path_']);
 		} else {
@@ -245,8 +245,7 @@ class Url extends Library
 			$url = $this->link($url, $query);
 		}
 
-		header('Status: ' . $status);
-		header('Location: ' . str_replace('&amp;', '&', $url));
+		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
 		exit();
 	}
 
