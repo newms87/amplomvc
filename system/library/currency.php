@@ -11,7 +11,6 @@ class Currency extends Library
 		$this->currencies = $this->cache->get('currencies');
 
 		if (!$this->currencies) {
-			echo "SELECT * FROM " . DB_PREFIX . "currency WHERE status = 1<BR>";
 			$this->currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency WHERE status = 1", 'code');
 
 			$this->cache->set('currencies', $this->currencies);
@@ -36,12 +35,11 @@ class Currency extends Library
 	public function set($code)
 	{
 		if (!isset($this->currencies[$code])) {
-			$code = key($this->currencies);
-		}
+			if (!empty($this->currencies)) {
+				trigger_error(_l("There are no currencies available!"));
+			}
 
-		if (!$code) {
-			html_dump($this->currencies, 'currencies');
-			$code = 'USD';
+			$code = key($this->currencies);
 		}
 
 		$this->code = $code;
