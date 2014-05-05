@@ -24,7 +24,7 @@ cache
 !/plugin/mail
 
 /catalog/view/theme/*
-!/catalog/view/theme/default
+!/catalog/view/theme/fluid
 
 /admin/view/theme/*
 !/admin/view/theme/default

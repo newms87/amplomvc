@@ -1,0 +1,133 @@
+.row {
+  display: block;
+}
+
+.wrap {
+  margin: auto;
+  min-width: @page-width-min;
+  max-width: @page-width-max;
+  position: relative;
+  padding: @page-wrap-pad;
+}
+
+.row:after, .wrap:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.col {
+  float: left;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  min-height: 1px;
+}
+
+@media (min-width: @xs) {
+  .wrap {
+    width: @page-width-xs;
+  }
+
+  .columns(@num_cols);
+
+  .columns(@cols, @c: 1) when (@c =< @cols) {
+    .col.xs-@{c} {
+      width: (@c * 100% / @cols);
+
+      &.center {
+        margin-left: ((100% - (@c * 100% / @cols)) / 2)
+      }
+    }
+    .columns(@cols, @c + 1);
+  }
+
+  .hidden-xs, .visible-sm, .visible-md, .visible-lg {
+    display: none !important;
+  }
+
+  .visible-xs {
+    display: inherit;
+  }
+}
+
+@media (min-width: @sm) {
+  .wrap {
+    width: @page-width-sm;
+  }
+
+  .columns(@num_cols);
+
+  .columns(@cols, @c: 1) when (@c =< @cols) {
+    .col.sm-@{c} {
+      width: (@c * 100% / @cols);
+      &.center {
+        margin-left: ((100% - (@c * 100% / @cols)) / 2)
+      }
+    }
+    .columns(@cols, @c + 1);
+  }
+
+  .visible-xs, .hidden-sm, .visible-md, .visible-lg {
+    display: none !important;
+  }
+
+  .visible-sm {
+    display: inherit;
+  }
+}
+
+@media (min-width: @md) {
+  .wrap {
+    width: @page-width-md;
+  }
+
+  .columns(@num_cols);
+
+  .columns(@cols, @c: 1) when (@c =< @cols) {
+    .col.md-@{c} {
+      width: (@c * 100% / @cols);
+      &.center {
+        margin-left: ((100% - (@c * 100% / @cols)) / 2)
+      }
+    }
+    .columns(@cols, @c + 1);
+  }
+
+  .visible-xs, .visible-sm, .hidden-md, .visible-lg {
+    display: none !important;
+  }
+
+  .visible-md {
+    display: inherit;
+  }
+}
+
+@media (min-width: @lg) {
+  .wrap {
+    width: @page-width-lg;
+  }
+
+  .columns(@num_cols);
+
+  .columns(@cols, @c: 1) when (@c =< @cols) {
+    .col.lg-@{c} {
+      width: (@c * 100% / @cols);
+      &.center {
+        margin-left: ((100% - (@c * 100% / @cols)) / 2)
+      }
+    }
+    .columns(@cols, @c + 1);
+  }
+
+  .visible-xs, .visible-sm, .visible-md, .hidden-lg {
+    display: none !important;
+  }
+
+  .visible-lg {
+    display: inherit;
+  }
+}
