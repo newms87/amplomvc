@@ -11,7 +11,7 @@ class Currency extends Library
 		$this->currencies = $this->cache->get('currencies');
 
 		if (is_null($this->currencies)) {
-			$this->currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency AND status = 1", 'code');
+			$this->currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency WHERE status = 1", 'code');
 
 			$this->cache->set('currencies', $this->currencies);
 		}
