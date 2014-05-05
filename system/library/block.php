@@ -146,7 +146,7 @@ class Block extends Library
 
 		$data['path'] = $path;
 
-		$block_id = $this->queryVar("SELECT block_id FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . " LIMIT 1");
+		$block_id = $this->queryVar("SELECT block_id FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "' LIMIT 1");
 
 		if (!$block_id) {
 			$block_id = $this->insert('block', $data);
