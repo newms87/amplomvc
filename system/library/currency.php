@@ -8,22 +8,18 @@ class Currency extends Library
 	{
 		parent::__construct();
 
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency");
+		$this->currencies = $this->cache->get('currencies');
 
-		foreach ($query->rows as $result) {
-			$this->currencies[$result['code']] = array(
-				'currency_id'   => $result['currency_id'],
-				'title'         => $result['title'],
-				'symbol_left'   => $result['symbol_left'],
-				'symbol_right'  => $result['symbol_right'],
-				'decimal_place' => $result['decimal_place'],
-				'value'         => $result['value']
-			);
+		if (is_null($this->currencies)) {
+			$this->currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency AND status = 1", 'code');
+
+			$this->cache->set('currencies', $this->currencies);
 		}
+
 
 		if (isset($_GET['currency']) && (array_key_exists($_GET['currency'], $this->currencies))) {
 			$this->set($_GET['currency']);
-		} elseif (($this->session->has('currency')) && (array_key_exists($this->session->get('currency'), $this->currencies))) {
+		} elseif ($this->session->has('currency') && (array_key_exists($this->session->get('currency'), $this->currencies))) {
 			$this->set($this->session->get('currency'));
 		} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
 			$this->set($_COOKIE['currency']);
