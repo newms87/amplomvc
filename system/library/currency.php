@@ -39,6 +39,7 @@ class Currency extends Library
 		}
 
 		if (!$code) {
+			html_dump($this->currencies, 'currencies');
 			$code = 'USD';
 		}
 
