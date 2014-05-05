@@ -81,32 +81,6 @@ class Tool extends Library
 		return strip_tags(preg_replace("/<br\\s*\/?>/", ' ', $text));
 	}
 
-	/**
-	 * limits the number of characters in a string to the nearest word or character
-	 */
-	public function limit_characters($string, $num, $append = '...', $keep_word = true)
-	{
-		if ($keep_word) {
-			$words = explode(' ', $string);
-			$short = '';
-			foreach ($words as $word) {
-				if ((strlen($short) + strlen($word) + 1) > $num) {
-					$short .= $append;
-					break;
-				}
-				$short .= empty($short) ? $word : ' ' . $word;
-			}
-		} else {
-			if (strlen($string) > $num) {
-				$short = substr($string, 0, $num) . $append;
-			} else {
-				$short = $string;
-			}
-		}
-
-		return $short;
-	}
-
 	public function bytes2str($size, $decimals = 2, $unit = null)
 	{
 		$unit_sizes = array(

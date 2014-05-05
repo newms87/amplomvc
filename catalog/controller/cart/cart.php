@@ -129,11 +129,15 @@ class Catalog_Controller_Cart_Cart extends Controller
 	{
 		$cart_product = $this->cart->getProduct($_GET['cart_key'], true);
 
-		$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', site_url('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
+		if ($this->cart->removeProduct($_GET['cart_key'])) {
+			$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', site_url('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
+		} else {
+			$this->message->add('error', $this->cart->getError());
+		}
 
-		$this->cart->removeProduct($_GET['cart_key']);
-
-		if (!$this->request->isAjax()) {
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
 			redirect('cart/cart');
 		}
 	}

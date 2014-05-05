@@ -617,6 +617,54 @@ class Customer extends Library
 		return (int)$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id);
 	}
 
+	public function setDefaultShippingMethod($shipping_code, $shipping_key)
+	{
+		$methods = $this->getDefaultShippingMethod();
+
+		if (!$methods) {
+			$methods = array();
+		}
+
+		$methods[$shipping_code] = $shipping_key;
+
+		$this->setMeta('default_shipping_method', $methods);
+	}
+
+	public function getDefaultShippingMethod($shipping_code = null)
+	{
+		$methods = $this->getMeta('default_shipping_method');
+
+		if ($shipping_code) {
+			return isset($methods[$shipping_code]) ? $methods[$shipping_code] : null;
+		}
+
+		return $methods;
+	}
+
+	public function setDefaultPaymentMethod($payment_code, $payment_key)
+	{
+		$methods = $this->getDefaultPaymentMethod();
+
+		if (!$methods) {
+			$methods = array();
+		}
+
+		$methods[$payment_code] = $payment_key;
+
+		$this->setMeta('default_payment_method', $methods);
+	}
+
+	public function getDefaultPaymentMethod($payment_code = null)
+	{
+		$methods = $this->getMeta('default_payment_method');
+
+		if ($payment_code) {
+			return isset($methods[$payment_code]) ? $methods[$payment_code] : null;
+		}
+
+		return $methods;
+	}
+
 	/** Customer Info **/
 
 	public function info($key = null)

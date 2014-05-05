@@ -16,8 +16,6 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
 		$data['cards']          = $this->customer->getMeta('braintree_cards');
 
-		$data['card_select'] = $this->select_card($this->customer->getMeta('default_payment_key'));
-
 		//Action Buttons
 		$data['confirm'] = site_url('extension/payment/braintree/confirm', 'order_id=' . $this->order->getId());
 
@@ -27,30 +25,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->render('extension/payment/braintree', $data);
 	}
 
-	public function select_card($select_id = '', $remove = false)
-	{
-		//Entry Data
-		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
-		$data['cards']          = $this->System_Extension_Payment_Braintree->getCards();
-
-		foreach ($data['cards'] as &$card) {
-			if ($remove) {
-				$card['remove'] = site_url('extension/payment/braintree/remove_card', 'card_id=' . $card['id']);
-			}
-
-			if ($select_id) {
-				$card['default'] = $select_id === $card['id'];
-			}
-		}
-
-		//Action Buttons
-		$data['register_card'] = site_url('extension/payment/braintree/register_card');
-
-		//Render
-		return $this->render('extension/payment/braintree_card_select', $data);
-	}
-
-	public function register_card()
+	public function register_card($data = array())
 	{
 		//Entry Data
 		$card_info = array();
@@ -79,34 +54,23 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$this->response->setOutput($this->render('extension/payment/braintree_register_card', $data));
 	}
 
-	public function add_card($card = array())
+	public function add_card()
 	{
 		//Handle POST
-		if ($this->request->isPost() && !empty($_POST)) {
-			if (!$this->System_Extension_Payment_Braintree->addCard($_POST)) {
-				$this->error = $this->System_Extension_Payment_Braintree->getError();
-			}
-		}
-
-		//Resolve redirect
-		if ($this->error) {
-			$this->message->add('error', $this->error);
-			$redirect = site_url('extension/payment/braintree/register_card');
+		if (!$this->System_Extension_Payment_Braintree->addCard($_POST)) {
+			$this->message->add('error', $this->System_Extension_Payment_Braintree->getError());
 		} else {
-			$redirect = $this->request->fetchRedirect();
 			$this->message->add('success', _l("You have successfully registered your card with us!"));
 		}
 
 		if ($this->request->isAjax()) {
-			$json = $this->message->fetch();
-
-			if (!$this->error) {
-				$json['redirect'] = $redirect;
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
 			}
 
-			$this->response->setOutput(json_encode($json));
-		} else {
-			redirect($redirect);
+			redirect('account');
 		}
 	}
 

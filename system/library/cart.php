@@ -167,6 +167,7 @@ class Cart extends Library
 	public function updateItem($type, $key, $quantity)
 	{
 		if (!isset($_SESSION['cart'][$type][$key])) {
+			$this->error = _l("That product is not your cart");
 			return false;
 		}
 
@@ -179,6 +180,8 @@ class Cart extends Library
 		$this->totals = null;
 
 		$this->saveCart();
+
+		return true;
 	}
 
 	public function removeItem($type, $key)
@@ -188,7 +191,13 @@ class Cart extends Library
 			$this->totals = null;
 
 			$this->saveCart();
+
+			return true;
 		}
+
+		$this->error = _l("The product was already removed from your cart");
+
+		return false;
 	}
 
 	public function merge($cart)

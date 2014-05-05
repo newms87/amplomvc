@@ -12,7 +12,10 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			if ($this->customer->getMeta('default_payment_code')) {
 
 				if (!$this->cart->hasPaymentMethod()) {
-					$this->cart->setPaymentMethod($this->customer->getMeta('default_payment_code'), $this->customer->getMeta('default_payment_key'));
+					$payment_method = $this->customer->getDefaultPaymentMethod(option('config_default_payment_code', 'braintree'));
+					if ($payment_method) {
+						$this->cart->setPaymentMethod($payment_method['payment_code'], $payment_method['payment_key']);
+					}
 				}
 
 				if (!$this->cart->hasPaymentAddress()) {
@@ -28,7 +31,10 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 				//Use customer Shipping Preference
 				if ($this->customer->getMeta('default_shipping_code')) {
 					if (!$this->cart->hasShippingMethod()) {
-						$this->cart->setShippingMethod($this->customer->getMeta('default_shipping_code'), $this->customer->getMeta('default_shipping_key'));
+						$shipping_method = $this->customer->getDefaultShippingMethod(option('config_default_shipping_code', 'flat'));
+						if ($shipping_method) {
+							$this->cart->setShippingMethod($shipping_method['shipping_code'], $shipping_method['shipping_key']);
+						}
 					}
 
 					if (!$this->cart->hasShippingAddress()) {
@@ -67,8 +73,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 		//Save Customer Payment Preferences (for future reference)
 		if (!$json && $this->customer->isLogged()) {
-			$this->customer->setMeta('default_payment_code', $this->cart->getPaymentCode());
-			$this->customer->setMeta('default_payment_key', $this->cart->getPaymentKey());
+			$this->customer->setDefaultPaymentMethod($this->cart->getPaymentCode(), $this->cart->getPaymentKey());
 			$this->customer->setDefaultPaymentAddress($this->cart->getPaymentAddressId());
 		}
 
@@ -84,8 +89,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 			//Save Customer Shipping Preferences (for future reference)
 			if (!$json && $this->customer->isLogged()) {
-				$this->customer->setMeta('default_shipping_code', $this->cart->getShippingCode());
-				$this->customer->setMeta('default_shipping_key', $this->cart->getShippingKey());
+				$this->customer->setDefaultShippingMethod($this->cart->getShippingCode(), $this->cart->getShippingKey());
 				$this->customer->setDefaultShippingAddress($this->cart->getShippingAddressId());
 			}
 		}

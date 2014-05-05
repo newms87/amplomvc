@@ -117,3 +117,25 @@ function build($type, $params)
 
 	return $registry->get('builder')->build($type, $params['data'], $params['name'], $params['value']);
 }
+
+function charlimit($string, $limit, $append = '...', $keep_word = true) {
+	if ($keep_word) {
+		$words = explode(' ', $string);
+		$short = '';
+		foreach ($words as $word) {
+			if ((strlen($short) + strlen($word) + 1) > $limit) {
+				$short .= $append;
+				break;
+			}
+			$short .= empty($short) ? $word : ' ' . $word;
+		}
+	} else {
+		if (strlen($string) > $limit) {
+			$short = substr($string, 0, $limit) . $append;
+		} else {
+			$short = $string;
+		}
+	}
+
+	return $short;
+}

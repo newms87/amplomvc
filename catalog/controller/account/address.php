@@ -1,110 +1,15 @@
 <?php
+
 class Catalog_Controller_Account_Address extends Controller
 {
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', site_url('account/address'));
+			$this->request->setRedirect('account/address/form');
 
 			redirect('customer/login');
 		}
 
-		$this->getList();
-	}
-
-	public function update()
-	{
-		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', site_url('account/address'));
-
-			redirect('customer/login');
-		}
-
-		if ($this->request->isPost()) {
-			//Insert
-			if (empty($_GET['address_id'])) {
-				$address_id = $this->customer->addAddress($_POST);
-
-				if ($address_id) {
-					if (!empty($_POST['default'])) {
-						$this->customer->setDefaultShippingAddress($address_id);
-					}
-
-					$this->message->add('success', _l("You have successfully added an address to your account!"));
-				} else {
-					$this->message->add('error', $this->address->getError());
-				}
-			} //Update
-			else {
-				if ($this->customer->editAddress($_GET['address_id'], $_POST)) {
-
-					if (!empty($_POST['default'])) {
-						$this->customer->setDefaultShippingAddress($_GET['address_id']);
-					}
-
-					//If the shipping address in the cart has been updated, invalidate the shipping method
-					if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-						$this->cart->setShippingMethod();
-					}
-
-					//If the payment address in the cart has been updated, invalidate the payment method
-					if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-						$this->cart->clearPaymentMethod();
-					}
-
-					$this->message->add('success', _l("You have successfully updated your address."));
-				} else {
-					$this->message->add('error', $this->address->getError());
-				}
-			}
-
-			if ($this->request->isAjax()) {
-				$this->response->setOutput($this->message->toJSON());
-				return;
-			} elseif (!$this->message->has('error', 'warning')) {
-				redirect('account/address');
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', site_url('account/address'));
-
-			redirect('customer/login');
-		}
-
-		$this->document->setTitle(_l("Address Book"));
-
-		if (!empty($_GET['address_id'])) {
-			if (!$this->customer->removeAddress($_POST['address_id'])) {
-				$this->message->add('error', $this->address->getError());
-			}
-			$this->address->remove($_GET['address_id']);
-
-			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-				$this->cart->clearShippingAddress();
-				$this->cart->clearShippingMethod();
-			}
-
-			if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-				$this->cart->clearPaymentAddress();
-				$this->cart->clearPaymentMethod();
-			}
-
-			$this->message->add('success', _l("Your address has been successfully deleted"));
-
-			redirect('account/address');
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
 		//Page Head
 		$this->document->setTitle(_l("Address Book"));
 
@@ -126,22 +31,103 @@ class Catalog_Controller_Account_Address extends Controller
 		$data['addresses'] = $addresses;
 
 		//Action Buttons
-		$data['insert'] = site_url('account/address/update');
+		$data['insert'] = site_url('account/address/form');
 		$data['back']   = site_url('account');
 
 		//Render
 		$this->response->setOutput($this->render('account/address_list', $data));
 	}
 
-	private function getForm()
+	public function update()
+	{
+		//Insert
+		if (empty($_GET['address_id'])) {
+			$address_id = $this->customer->addAddress($_POST);
+
+			if ($address_id) {
+				if (!empty($_POST['default'])) {
+					$this->customer->setDefaultShippingAddress($address_id);
+				}
+
+				$this->message->add('success', _l("You have successfully added an address to your account!"));
+			} else {
+				$this->message->add('error', $this->address->getError());
+			}
+		} //Update
+		else {
+			if ($this->customer->editAddress($_GET['address_id'], $_POST)) {
+
+				if (!empty($_POST['default'])) {
+					$this->customer->setDefaultShippingAddress($_GET['address_id']);
+				}
+
+				//If the shipping address in the cart has been updated, invalidate the shipping method
+				if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
+					$this->cart->setShippingMethod();
+				}
+
+				//If the payment address in the cart has been updated, invalidate the payment method
+				if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
+					$this->cart->clearPaymentMethod();
+				}
+
+				$this->message->add('success', _l("You have successfully updated your address."));
+			} else {
+				$this->message->add('error', $this->address->getError());
+			}
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
+		} else {
+			redirect('account/address');
+		}
+	}
+
+	public function delete()
+	{
+		if (!empty($_GET['address_id'])) {
+			$this->customer->removeAddress($_POST['address_id']);
+
+			if ($this->customer->hasError()) {
+				$this->message->add('error', $this->customer->getError());
+			} else {
+				if (!$this->address->remove($_GET['address_id'])) {
+					$this->message->add('error', $this->address->getError());
+				}
+
+				if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
+					$this->cart->clearShippingAddress();
+				}
+
+				if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
+					$this->cart->clearPaymentAddress();
+				}
+			}
+
+			if (!$this->message->has('error')) {
+				$this->message->add('success', _l("Your address has been successfully deleted"));
+			}
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('account/address');
+		}
+	}
+
+	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Address Book"));
+		$this->document->setTitle(_l("Address Form"));
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Address Book"), site_url('account'));
-		$this->breadcrumb->add(_l("Home"), site_url('account/address'));
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
 
 		$crumb_url = isset($_GET['address_id']) ? site_url('account/address/update') : site_url('account/address/update');
 		$this->breadcrumb->add(_l("Address Book"), $crumb_url);
@@ -185,14 +171,13 @@ class Catalog_Controller_Account_Address extends Controller
 			0 => _l("No"),
 		);
 
+		$data['is_ajax'] = $this->request->isAjax();
+
 		//Action Buttons
 		$data['save'] = site_url('account/address/update', 'address_id=' . $address_id);
 
-		if (!$this->request->isAjax()) {
-			$data['back'] = site_url('account/address');
-		}
-
 		//Render
-		$this->response->setOutput($this->render('account/address_form', $data));
+		$template = $this->request->isAjax() ? 'account/address_form_ajax' : 'account/address_form';
+		$this->response->setOutput($this->render($template, $data));
 	}
 }

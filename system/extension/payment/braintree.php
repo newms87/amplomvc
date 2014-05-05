@@ -226,11 +226,16 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 					'expirationMonth' => $card['month'],
 					'expirationYear'  => $card['year'],
 					'cvv'             => $card['cvv'],
-					'cardholderName'  => $card['firstname'] . ' ' . $card['lastname'],
 					'options'         => array(
 						'verifyCard' => true,
 					),
 				);
+
+				if (!empty($card['name'])) {
+					$data['cardholderName']  = $card['name'];
+				} elseif (!empty($card['lastname'])) {
+					$data['cardholderName']  = $card['firstname'] . ' ' . $card['lastname'];
+				}
 
 				try {
 					$result = Braintree_CreditCard::create($data);

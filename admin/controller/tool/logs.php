@@ -16,10 +16,6 @@ class Admin_Controller_Tool_Logs extends Controller
 		$this->breadcrumb->add(_l('Log Files'), site_url('tool/logs'));
 		$this->breadcrumb->add(_l("%s Log", $log_name), site_url('tool/logs', 'log=' . $log));
 
-		//Action Buttons
-		$data['remove'] = site_url('tool/logs/remove', 'log=' . $log);
-		$data['clear']  = site_url('tool/logs/clear', 'log=' . $log);
-
 		//Sort and Filter
 		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
 		$filter = isset($_GET['filter']) ? $_GET['filter'] : null;
@@ -90,6 +86,7 @@ class Admin_Controller_Tool_Logs extends Controller
 				'selected' => $base === $log,
 			);
 		}
+		unset($file);
 
 		$data['data_log_files'] = $log_files;
 
@@ -97,6 +94,10 @@ class Admin_Controller_Tool_Logs extends Controller
 
 		//Limits
 		$data['limits'] = $this->sort->renderLimits();
+
+		//Action Buttons
+		$data['remove'] = site_url('tool/logs/remove', 'log=' . $log);
+		$data['clear']  = site_url('tool/logs/clear', 'log=' . $log);
 
 		//Render
 		$this->response->setOutput($this->render('tool/logs', $data));

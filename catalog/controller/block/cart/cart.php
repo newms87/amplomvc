@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$data['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", site_url('customer/login'), site_url('customer/registration'));
+			$settings['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", site_url('customer/login'), site_url('customer/registration'));
 		}
 
 		if (!$this->cart->validate()) {
@@ -79,7 +79,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 			unset($product);
 
-			$data['cart_products'] = $cart_products;
+			$settings['cart_products'] = $cart_products;
 		}
 
 		// Gift Voucher
@@ -91,41 +91,36 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 			unset($voucher);
 
-			$data['cart_vouchers'] = $vouchers;
+			$settings['cart_vouchers'] = $vouchers;
 		}
 
 		//Template Data
-		$data['show_return_policy'] = $show_return_policy;
+		$settings['show_return_policy'] = $show_return_policy;
 
 		//Url
-		$data['url_cart'] = site_url('cart/cart');
-		$data['url_block_cart'] = site_url("block/cart/cart");
+		$settings['url_cart'] = site_url('cart/cart');
+		$settings['url_block_cart'] = site_url("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
 
-		$data['cart_inline'] = $carts['inline'];
-		$data['cart_extend'] = $carts['extend'];
+		$settings['cart_inline'] = $carts['inline'];
+		$settings['cart_extend'] = $carts['extend'];
 
-		$data['cart_empty'] = $this->cart->isEmpty();
+		$settings['cart_empty'] = $this->cart->isEmpty();
+
+		$settings['is_ajax'] = $this->request->isAjax();
 
 		//Ajax Messages
 		if ($this->request->isAjax()) {
-			$data['messages'] = $this->message->fetch();
+			$settings['messages'] = $this->message->fetch();
 
-			if ($data['cart_empty']) {
+			if ($settings['cart_empty']) {
 				$this->request->redirectBrowser(site_url('cart/cart'));
 			}
-
-
-
-			//TODO: how to handle ajax. Do we need $this->response->setOutput() for non-ajax calls?
-
-
-
 		}
 
 		//Render
-		$this->render('block/cart/cart', $data);
+		$this->render('block/cart/cart', $settings);
 	}
 }

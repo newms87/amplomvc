@@ -109,7 +109,7 @@ class Response extends Library
 
 		$html = "<div class=\"performance\">$html</div>";
 
-		$html = "<script>show_msg('success', '$html')</script>";
+		$html = "<script>$.ac_msg('success', '$html')</script>";
 
 		$this->output = str_replace("</body>", $html . "</body>", $this->output);
 	}
