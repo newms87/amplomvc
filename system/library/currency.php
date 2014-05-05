@@ -38,6 +38,10 @@ class Currency extends Library
 			$code = key($this->currencies);
 		}
 
+		if (!$code) {
+			$code = 'USD';
+		}
+
 		$this->code = $code;
 
 		$currency = $this->currencies[$code];
