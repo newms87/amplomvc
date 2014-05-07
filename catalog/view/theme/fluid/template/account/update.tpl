@@ -1,17 +1,17 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="account-update-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h1><?= _l("My Account Information"); ?></h1>
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<form action="<?= $save; ?>" class="form labels" method="post" autocomplete="off" enctype="multipart/form-data">
 		<div class="row account-update-form">
@@ -66,19 +66,20 @@
 						<h2><?= _l("Default Shipping Address:"); ?></h2>
 						<? if (empty($data_addresses)) { ?>
 							<h3><?= _l("You do not have an address registered with us."); ?></h3>
-							<a href="<?= $add_address; ?>" class="button" onclick="return colorbox($(this));"><?= _l("Register New Address"); ?></a>
+							<a href="<?= site_url('account/address/form'); ?>" class="button colorbox"><?= _l("Register New Address"); ?></a>
 						<? } else { ?>
-							<div class="address-list-box">
-								<div class="address-list noselect">
-									<? foreach ($data_addresses as $address) { ?>
-										<div class="address <?= $address['default_shipping'] ? 'checked' : ''; ?>">
-											<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $address['default_shipping'] ? 'checked="checked"' : ''; ?> />
-											<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
-											<a href="<?= $address['remove']; ?>" class="remove"></a>
-										</div>
-									<? } ?>
-									<a href="<?= $add_address; ?>" class="address add-slide noradio" onclick="return colorbox($(this));"><?= _l("Add New Address"); ?></a>
-								</div>
+							<div class="address-list">
+								<? $build = array(
+									'name'   => 'metadata[default_shipping_address_id]',
+									'data'   => format_all('address', $data_addresses),
+									'select' => $metadata['default_shipping_address_id'],
+									'key'    => 'address_id',
+									'value'  => 'formatted',
+								); ?>
+
+								<?= build('ac-radio', $build); ?>
+
+								<a href="<?= site_url('account/address/form'); ?>" class="add-address colorbox"><?= _l("Add New Address"); ?></a>
 							</div>
 						<? } ?>
 					</section>
@@ -87,7 +88,7 @@
 						<h2><?= _l("Default Credit Card:"); ?></h2>
 
 						<div class="credit-card-list">
-							<?= _block('account/card/select'); ?>
+							<?= block('account/card/select'); ?>
 						</div>
 					</section>
 				</div>
@@ -97,7 +98,7 @@
 		<div class="button-row row">
 			<div class="wrap">
 				<div class="col xs-10 sm-7 center">
-					<div class="left"><a href="<?= $back; ?>" class="button"><?= _l("Back"); ?></a></div>
+					<div class="left"><a href="<?= site_url('account'); ?>" class="button"><?= _l("Back"); ?></a></div>
 					<div class="right">
 						<button class="button"><?= _l("Save"); ?></button>
 					</div>
@@ -106,7 +107,8 @@
 		</div>
 	</form>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
+
 </section>
 
 <script type="text/javascript">
@@ -131,4 +133,4 @@
 	$.ac_datepicker({changeYear: true, yearRange: "c-150:c", changeMonth: true});
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

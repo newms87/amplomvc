@@ -79,7 +79,7 @@
 
 	<body class="<?= $body_class; ?>">
 		<? if ($show_admin_bar) { ?>
-			<?= _block('widget/admin_bar'); ?>
+			<?= block('widget/admin_bar'); ?>
 		<? } ?>
 
 		<section id="container">
@@ -99,11 +99,11 @@
 						<? } ?>
 
 						<? if ($multi_language) { ?>
-							<?= _block('localisation/language'); ?>
+							<?= block('localisation/language'); ?>
 						<? } ?>
 
 						<? if ($multi_currency) { ?>
-							<?= _block('localisation/currency'); ?>
+							<?= block('localisation/currency'); ?>
 						<? } ?>
 
 						<div id="links-account" class="links">
@@ -113,7 +113,7 @@
 									<a class="button scale register" href="<?= site_url('customer/registration'); ?>"><?= _l("Sign Up"); ?></a>
 								</div>
 								<div class="login-content">
-									<div class="login-form"><?= _block('account/login'); ?></div>
+									<div class="login-form"><?= block('account/login'); ?></div>
 								</div>
 							<? } else { ?>
 								<div class="login-welcome"><?= _l("Hey there %s!", $customer['firstname']); ?></div>
@@ -124,29 +124,29 @@
 							<? } ?>
 
 							<div class="login-links">
-								<?= _links('account'); ?>
+								<?= links('account'); ?>
 							</div>
 						</div>
 
-						<? if (_has_links('cart')) { ?>
+						<? if (has_links('cart')) { ?>
 							<div id="links-cart" class="links">
-								<?= _links('cart'); ?>
+								<?= links('cart'); ?>
 							</div>
 						<? } ?>
 
 						<div id="header-social-networks">
-							<?= _block('extras/social_media'); ?>
+							<?= block('extras/social_media'); ?>
 						</div>
 
-						<? if (_has_links('secondary')) { ?>
+						<? if (has_links('secondary')) { ?>
 							<div id="links-secondary" class="links">
-								<?= _links('secondary'); ?>
+								<?= links('secondary'); ?>
 							</div>
 						<? } ?>
 
-						<? if (_has_links('primary')) { ?>
+						<? if (has_links('primary')) { ?>
 							<nav id="links-primary" class="links">
-								<?= _links('primary'); ?>
+								<?= links('primary'); ?>
 							</nav>
 						<? } ?>
 
@@ -161,10 +161,10 @@
 
 			<main class="main clearfix">
 
-				<? if (_area_has_blocks('above')) { ?>
+				<? if (area_has_blocks('above')) { ?>
 					<section class="area-above row">
 						<div class="wrap">
-							<?= _area('above'); ?>
+							<?= area('above'); ?>
 						</div>
 					</section>
 				<? } ?>

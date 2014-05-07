@@ -11,7 +11,7 @@
 
 			<input type="radio" name="existing_payment_card" value="1" <?= !empty($card_select) ? 'checked="checked"' : ''; ?> />
 
-			<?= _block('account/select_card', null, array('payment_code' => 'braintree')); ?>
+			<?= block('account/select_card', null, array('payment_code' => 'braintree')); ?>
 		</div>
 
 		<div class="braintree-checkout right">

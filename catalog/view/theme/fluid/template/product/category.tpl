@@ -1,8 +1,8 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 <div class="content category">
-	<?= _breadcrumbs(); ?>
-	<?= _area('top'); ?>
+	<?= breadcrumbs(); ?>
+	<?= area('top'); ?>
 
 	<h1><?= $page_title; ?></h1>
 
@@ -34,7 +34,7 @@
 		</div>
 	<? } ?>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

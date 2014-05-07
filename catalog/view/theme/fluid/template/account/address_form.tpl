@@ -1,12 +1,12 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="address-form" class="content">
 
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h2>
 				<? if ($address_id) { ?>
@@ -18,7 +18,7 @@
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="address-row row">
 		<div class="wrap">
@@ -46,11 +46,11 @@
 				</div>
 				<div class="form-item country-select">
 					<? $build = array(
-						'data'      => $data_countries,
-						'name'      => 'country_id',
-						'value'     => $country_id,
-						'key_id'    => 'country_id',
-						'key_value' => 'name',
+						'name'   => 'country_id',
+						'data'   => $data_countries,
+						'select' => $country_id,
+						'key'    => 'country_id',
+						'value'  => 'name',
 					); ?>
 
 					<?= build('select', $build); ?>
@@ -61,9 +61,9 @@
 				<div class="form-item default-address">
 					<div class="text"><?= _l("Set as Default Address?"); ?></div>
 					<? $build = array(
-						'data'  => $data_yes_no,
-						'name'  => 'default',
-						'value' => $default,
+						'name'   => 'default',
+						'data'   => $data_yes_no,
+						'select' => $default,
 					); ?>
 
 					<?= build('ac-radio', $build); ?>
@@ -81,7 +81,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 
 </section>
 
@@ -91,4 +91,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

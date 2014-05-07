@@ -5,16 +5,16 @@
 		<div class="form-item card-list noselect">
 			<input type="hidden" name="payment_code" value="<?= $payment_code; ?>"/>
 
-			<? array_walk($cards, function (&$c) {
-				$c['formatted'] = "<img src=\"$c[image]\" /><span class=\"last-4\">" . _l("Ending in %s", $c['last4']) . "</span>";
-			}); ?>
+			<? $card_format = function (&$c) {
+				return "<img src=\"$c[image]\" /><span class=\"last-4\">" . _l("Ending in %s", $c['last4']) . "</span>";
+			}; ?>
 
 			<? $build = array(
-				'data'      => $cards,
-				'name'      => 'payment_key',
-				'value'     => $payment_key,
-				'key_id'    => 'id',
-				'key_value' => 'formatted',
+				'name'   => 'payment_key',
+				'data'   => format_all($card_format, $cards),
+				'select' => $payment_key,
+				'key'    => 'id',
+				'value'  => 'formatted',
 			); ?>
 
 			<?= build('ac-radio', $build); ?>

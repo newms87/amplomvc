@@ -1,17 +1,17 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="product-<?= $product_id; ?>" class="product-content content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h1><?= $name; ?></h1>
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="row product-row">
 		<div class="wrap">
@@ -36,7 +36,7 @@
 				<? } ?>
 
 				<? if (option('config_show_product_related')) { ?>
-					<?= _block('product/related'); ?>
+					<?= block('product/related'); ?>
 				<? } ?>
 			</div>
 
@@ -174,7 +174,7 @@
 					<form id="product-form" class="form full-width" action="<?= site_url('cart/cart/buy_now'); ?>" method="post">
 
 						<div class="option-list">
-							<?= _block('product/options', null, array('product_id' => $product_id)); ?>
+							<?= block('product/options', null, array('product_id' => $product_id)); ?>
 						</div>
 
 						<div class="cart">
@@ -210,7 +210,7 @@
 
 				<? if ($show_sharing) { ?>
 					<div class="product-sharing">
-						<?= _block('extras/sharing'); ?>
+						<?= block('extras/sharing'); ?>
 					</div>
 				<? } ?>
 			</div>
@@ -231,12 +231,12 @@
 	<? if ($show_reviews) { ?>
 		<div class="row review-row">
 			<div class="wrap">
-				<?= _block('product/review'); ?>
+				<?= block('product/review'); ?>
 			</div>
 		</div>
 	<? } ?>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 
 </section>
 
@@ -302,4 +302,4 @@
 	$('.product-tabs a').tabs();
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

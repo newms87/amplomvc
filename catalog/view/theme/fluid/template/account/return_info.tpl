@@ -1,9 +1,9 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 
 <div class="content">
-	<?= _area('top'); ?>
-	<?= _breadcrumbs(); ?>
+	<?= area('top'); ?>
+	<?= breadcrumbs(); ?>
 
 	<h1><?= _l("Return Information"); ?></h1>
 	<table class="list">
@@ -95,7 +95,7 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

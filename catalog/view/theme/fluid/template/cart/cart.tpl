@@ -1,11 +1,11 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="cart-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-		<?= _breadcrumbs(); ?>
+		<?= breadcrumbs(); ?>
 
 		<h1><?= _l("Shopping Cart"); ?>
 			<? if ($show_weight) { ?>
@@ -15,13 +15,13 @@
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="cart-row row">
 		<div class="wrap">
 			<? if (!$is_empty) { ?>
 
-				<?= _block('cart/cart'); ?>
+				<?= block('cart/cart'); ?>
 
 				<div id="cart_actions">
 					<h2><?= _l("What would you like to do next?"); ?></h2>
@@ -30,7 +30,7 @@
 							<a id="text_block_coupon" onclick="$('#toggle_block_coupon').slideToggle();"><?= _l("Use Coupon Code"); ?></a>
 
 							<div id="toggle_block_coupon" class="content">
-								<?= _block('cart/coupon'); ?>
+								<?= block('cart/coupon'); ?>
 							</div>
 						</div>
 					<? } ?>
@@ -40,7 +40,7 @@
 							<a class="toggle" onclick="$('#block-voucher').slideToggle();"><?= _l("Use Voucher"); ?></a>
 
 							<div id="block-voucher" class="content">
-								<?= _block('cart/vouchers'); ?>
+								<?= block('cart/vouchers'); ?>
 							</div>
 						</div>
 					<? } ?>
@@ -50,7 +50,7 @@
 							<a class="toggle" onclick="$('#block-reward').slideToggle();"><?= _l("Use Reward"); ?></a>
 
 							<div id="block-reward" class="content">
-								<?= _block('cart/reward'); ?>
+								<?= block('cart/reward'); ?>
 							</div>
 						</div>
 					<? } ?>
@@ -60,7 +60,7 @@
 							<a class="toggle" onclick="$('#block-shipping').slideToggle();"><?= _l("Estimate Shipping"); ?></a>
 
 							<div id="block-shipping" class="content">
-								<?= _block('cart/shipping'); ?>
+								<?= block('cart/shipping'); ?>
 							</div>
 						</div>
 					<? } ?>
@@ -68,7 +68,7 @@
 
 				<? if ($show_total && $can_checkout) { ?>
 					<div id="cart-block-total">
-						<?= _block('cart/total'); ?>
+						<?= block('cart/total'); ?>
 					</div>
 				<? } ?>
 
@@ -87,7 +87,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 
 </section>
 
@@ -98,4 +98,4 @@
 	});
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

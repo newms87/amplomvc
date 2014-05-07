@@ -1,11 +1,11 @@
-<?= _call('common/header'); ?>
-<?= _area('left') . _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left') . area('right'); ?>
 
 <section id="home-page" class="home-video content">
 	<? if ($this->area->hasBlocks('top')) { ?>
 		<div class="row area-top">
 			<div class="wrap">
-				<?= _area('top'); ?>
+				<?= area('top'); ?>
 			</div>
 		</div>
 	<? } ?>
@@ -176,11 +176,11 @@
 	<? if ($this->area->hasBlocks('bottom')) { ?>
 		<div class="row area-bottom">
 			<div class="wrap">
-				<?= _area('bottom'); ?>
+				<?= area('bottom'); ?>
 			</div>
 		</div>
 	<? } ?>
 
 </section>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

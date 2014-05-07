@@ -1,18 +1,18 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="account-manage-page" class="content">
 
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h1><?= _l("Account Manager"); ?></h1>
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="customer-info row">
 		<div class="wrap">
@@ -105,7 +105,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </section>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

@@ -1,17 +1,17 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="forgotten-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h1><?= _l("Request a New Pasword"); ?></h1>
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="row forgotten-content">
 		<div class="wrap">
@@ -37,7 +37,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </section>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

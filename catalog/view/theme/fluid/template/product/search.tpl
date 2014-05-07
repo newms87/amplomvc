@@ -1,8 +1,8 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 <div class="content">
-	<?= _breadcrumbs(); ?>
-	<?= _area('top'); ?>
+	<?= breadcrumbs(); ?>
+	<?= area('top'); ?>
 
 	<h1><?= _l("Search"); ?></h1>
 	<b><?= _l("Search Criteria"); ?></b>
@@ -127,7 +127,7 @@
 		<div class="section"><?= _l("There is no product that matches the search criteria."); ?></div>
 	<? } ?>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </div>
 
 <script type="text/javascript">
@@ -257,4 +257,4 @@
 		display('list');
 	}
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

@@ -1,5 +1,5 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 
 <section id="page-<?= $page_id; ?>" class="page page-<?= $template; ?> content">
 	<? if (!empty($css)) { ?>
@@ -8,7 +8,7 @@
 
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<? if (!empty($display_title)) { ?>
 				<h1><?= $title; ?></h1>
@@ -16,7 +16,7 @@
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="page-content row">
 		<div class="wrap">
@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </section>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

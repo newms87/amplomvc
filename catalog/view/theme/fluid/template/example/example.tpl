@@ -1,19 +1,19 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 
 <div class="content">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 
 	<div class="section">
 
 		<h1><?= $title; ?></h1>
 
-		<?= _area('top'); ?>
+		<?= area('top'); ?>
 
 		<div class="page-content"><?= $content; ?></div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

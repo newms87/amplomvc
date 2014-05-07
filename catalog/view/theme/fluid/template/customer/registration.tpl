@@ -1,11 +1,11 @@
-<?= _call('common/header', array('disable_messages' => 1)); ?>
-<?= _area('left'); ?>
-<?= _area('right'); ?>
+<?= call('common/header', array('disable_messages' => 1)); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
 <section id="user-login" class="content">
 	<header class="login-top row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 			<h1><?= _l("Register Account"); ?></h1>
 
 			<h3>
@@ -15,7 +15,7 @@
 		</div>
 	</header>
 
-	<?= _area('top'); ?>
+	<?= area('top'); ?>
 
 	<div class="login-page row">
 		<div class="wrap">
@@ -103,7 +103,7 @@
 		</div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </section>
 
 <script type="text/javascript">
@@ -114,4 +114,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

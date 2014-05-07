@@ -1,8 +1,8 @@
-<?= _call('common/header'); ?>
-<?= _area('left'); ?><?= _area('right'); ?>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 <div id="order-info" class="content">
-	<?= _area('top'); ?>
-	<?= _breadcrumbs(); ?>
+	<?= area('top'); ?>
+	<?= breadcrumbs(); ?>
 
 	<h1><?= _l("Order Information"); ?></h1>
 
@@ -163,7 +163,7 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= _l("Continue"); ?></a></div>
 	</div>
 
-	<?= _area('bottom'); ?>
+	<?= area('bottom'); ?>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

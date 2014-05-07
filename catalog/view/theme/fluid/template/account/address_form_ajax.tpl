@@ -37,11 +37,11 @@
 				</div>
 				<div class="form-item country-select">
 					<? $build = array(
-						'data'      => $data_countries,
-						'name'      => 'country_id',
-						'value'     => $country_id,
-						'key_id'    => 'country_id',
-						'key_value' => 'name',
+						'name'   => 'country_id',
+						'data'   => $data_countries,
+						'select' => $country_id,
+						'key'    => 'country_id',
+						'value'  => 'name',
 					); ?>
 
 					<?= build('select', $build); ?>
@@ -52,9 +52,9 @@
 				<div class="form-item default-address">
 					<div class="text"><?= _l("Set as Default Address?"); ?></div>
 					<? $build = array(
-						'data'  => $data_yes_no,
-						'name'  => 'default',
-						'value' => $default,
+						'name'   => 'default',
+						'data'   => $data_yes_no,
+						'select' => $default,
 					); ?>
 
 					<?= build('ac-radio', $build); ?>
