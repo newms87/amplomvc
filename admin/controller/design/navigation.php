@@ -177,7 +177,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'listing_path'   => 'design/navigation/listing',
 		);
 
-		$output = _block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);

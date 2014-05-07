@@ -52,7 +52,7 @@
 		sc.data('orig_height', sc.data('orig_height') || sc.height());
 		sc.data('href', href);
 		sc.height(440);
-		function cbox_closed_call() {
+		function cbox_closedcall() {
 			sc.height(sc.data('orig_height'));
 		}
 

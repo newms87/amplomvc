@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _("Backup / Restore"); ?></h1>
@@ -74,4 +74,4 @@
 	});
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

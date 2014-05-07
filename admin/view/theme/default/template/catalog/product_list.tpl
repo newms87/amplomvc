@@ -1,12 +1,12 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Products"); ?></h1>
 
 			<div class="batch_actions">
-				<?= _block('widget/batch_action', null, $batch_action); ?>
+				<?= block('widget/batch_action', null, $batch_action); ?>
 			</div>
 			<div class="buttons">
 				<? if (!empty($product_classes)) { ?>
@@ -33,4 +33,4 @@
 	</div>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

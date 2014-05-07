@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("Site Management"); ?></h1>
@@ -61,4 +61,4 @@
 	</div>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

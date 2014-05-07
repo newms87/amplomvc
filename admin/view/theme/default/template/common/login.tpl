@@ -1,4 +1,4 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
 	<div id="login-box" class="box">
 		<div class="heading">
@@ -39,4 +39,4 @@
 	</div>
 </div>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

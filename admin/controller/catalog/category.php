@@ -179,7 +179,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'listing_path'   => 'catalog/category/listing',
 		);
 
-		$output = _block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);

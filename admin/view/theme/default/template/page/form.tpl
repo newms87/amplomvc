@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?></h1>
@@ -248,4 +248,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

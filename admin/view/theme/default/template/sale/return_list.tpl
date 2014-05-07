@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<? if (_l("Warning: Please check the form carefully for errors!")) { ?>
 		<div class="message warning"><?= _l("Warning: Please check the form carefully for errors!"); ?></div>
 	<? } ?>
@@ -224,4 +224,4 @@
 			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 		});
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

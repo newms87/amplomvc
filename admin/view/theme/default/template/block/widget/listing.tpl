@@ -14,7 +14,7 @@
 	</div>
 
 	<? if ($show_pagination) { ?>
-		<?= _block('widget/pagination', null, $pagination_settings); ?>
+		<?= block('widget/pagination', null, $pagination_settings); ?>
 	<? } ?>
 
 	<? if (!empty($ajax)) { ?>

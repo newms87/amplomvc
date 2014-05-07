@@ -1,4 +1,5 @@
 <?php
+
 class Catalog_Controller_Account extends Controller
 {
 	public function index()
@@ -82,27 +83,14 @@ class Catalog_Controller_Account extends Controller
 		$data = $customer_info + $defaults;
 
 		//Template Data
-		$default_shipping_address_id = isset($data['metadata']['default_shipping_address_id']) ? $data['metadata']['default_shipping_address_id'] : null;
-
-		$addresses = $this->customer->getShippingAddresses();
-
-		if (!empty($addresses) && (!$default_shipping_address_id || !array_search_key('address_id', $default_shipping_address_id, $addresses))) {
-			$first_address                                         = current($addresses);
-			$data['metadata']['default_shipping_address_id'] = $first_address['address_id'];
+		if (!isset($data['metadata']['default_shipping_address_id'])) {
+			$data['metadata']['default_shipping_address_id'] = '';
 		}
 
-		foreach ($addresses as &$address) {
-			$address['display'] = $this->address->format($address);
-			$address['remove']  = site_url('account/remove_address', 'address_id=' . $address['address_id']);
-		}
-		unset($address);
+		$data['data_addresses'] = $this->customer->getShippingAddresses();
 
-		$data['data_addresses'] = $addresses;
-
-		//Action Buttons
-		$data['save']        = site_url('account/submit_update');
-		$data['back']        = site_url('account');
-		$data['add_address'] = site_url('account/address/update');
+		//Actions
+		$data['save'] = site_url('account/submit_update');
 
 		//Render
 		$this->response->setOutput($this->render('account/update', $data));

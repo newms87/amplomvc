@@ -1,9 +1,9 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 
 <section id="reset-password-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= _breadcrumbs(); ?>
+			<?= breadcrumbs(); ?>
 
 			<h1><?= _l("Reset Your Password"); ?></h1>
 		</div>
@@ -40,4 +40,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

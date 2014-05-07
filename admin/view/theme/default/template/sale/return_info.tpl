@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/customer.png'); ?>" alt=""/> <?= _l("Product Returns"); ?></h1>
@@ -225,4 +225,4 @@
 	!--
 		$('.vtabs a').tabs();
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

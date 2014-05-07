@@ -58,7 +58,7 @@ class Area extends Library
 	public function render($area)
 	{
 		if ($this->hasBlocks($area)) {
-			return _call('area/' . $area);
+			return call('area/' . $area);
 		}
 
 		return '';

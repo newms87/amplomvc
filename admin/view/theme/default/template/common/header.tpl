@@ -32,8 +32,8 @@
 				</div>
 				<? if ($logged) { ?>
 					<div id="menu" class="links clearfix">
-						<div class="left"><?= _links('admin'); ?></div>
-						<div class="right"><?= _links('right'); ?></div>
+						<div class="left"><?= links('admin'); ?></div>
+						<div class="right"><?= links('right'); ?></div>
 					</div>
 				<? } ?>
 			</div>

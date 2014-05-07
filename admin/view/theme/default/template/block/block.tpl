@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 
 	<form id="form" class="box" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 		<div class="heading">
@@ -38,4 +38,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

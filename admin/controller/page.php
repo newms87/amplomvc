@@ -151,7 +151,7 @@ class Admin_Controller_Page extends Controller
 			'listing_path'   => 'page/listing',
 		);
 
-		$output = _block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);

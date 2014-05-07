@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Return Policies"); ?></h1>
@@ -75,4 +75,4 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

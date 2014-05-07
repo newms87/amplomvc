@@ -1,5 +1,5 @@
 <?php
-function _call($path, $params = null)
+function call($path, $params = null)
 {
 	$args = func_get_args();
 	array_shift($args);
@@ -13,37 +13,37 @@ function _call($path, $params = null)
 	}
 }
 
-function _block($block, $instance_name = null, $settings = null)
+function block($block, $instance_name = null, $settings = null)
 {
 	global $registry;
 	return $registry->get('block')->render($block, $instance_name, $settings);
 }
 
-function _area($area)
+function area($area)
 {
 	global $registry;
 	return $registry->get('area')->render($area);
 }
 
-function _area_has_blocks($area)
+function area_has_blocks($area)
 {
 	global $registry;
 	return $registry->get('area')->hasBlocks($area);
 }
 
-function _links($group)
+function links($group)
 {
 	global $registry;
 	return $registry->get('document')->renderLinks($group);
 }
 
-function _has_links($group)
+function has_links($group)
 {
 	global $registry;
 	return $registry->get('document')->hasLinks($group);
 }
 
-function _breadcrumbs()
+function breadcrumbs()
 {
 	global $registry;
 	return $registry->get('breadcrumb')->render();
@@ -89,7 +89,8 @@ function theme_dir($path = '')
 	return false;
 }
 
-function redirect($path = '', $query = null, $status = null) {
+function redirect($path = '', $query = null, $status = null)
+{
 	global $registry;
 	$registry->get('url')->redirect($path, $query, $status);
 }
@@ -105,20 +106,34 @@ function option($option, $default = null)
 function format($type, $data)
 {
 	global $registry;
+	if (is_callable($type)) {
+		return $type($data);
+	}
+
 	return $registry->get($type)->format($data);
+}
+
+function format_all($type, &$array, $index = null, $key = 'formatted')
+{
+	array_walk($array, function (&$a) use ($type, $index, $key) {
+		$a[$key] = $index ? format($type, $a[$index]) : format($type, $a);
+	});
+
+	return $array;
 }
 
 function build($type, $params)
 {
 	global $registry;
-	if (isset($params['key_id'])) {
-		$registry->get('builder')->setConfig($params['key_id'], $params['key_value']);
+	if (isset($params['key'])) {
+		$registry->get('builder')->setConfig($params['key'], $params['value']);
 	}
 
-	return $registry->get('builder')->build($type, $params['data'], $params['name'], $params['value']);
+	return $registry->get('builder')->build($type, $params['data'], $params['name'], $params['select']);
 }
 
-function charlimit($string, $limit, $append = '...', $keep_word = true) {
+function charlimit($string, $limit, $append = '...', $keep_word = true)
+{
 	if ($keep_word) {
 		$words = explode(' ', $string);
 		$short = '';

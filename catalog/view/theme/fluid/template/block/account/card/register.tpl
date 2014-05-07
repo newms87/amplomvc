@@ -1,1 +1,1 @@
-<?= _call("extension/payment/braintree/register_card"); ?>
+<?= call("extension/payment/braintree/register_card"); ?>

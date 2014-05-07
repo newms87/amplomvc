@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 
 	<div class="box">
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -1351,4 +1351,4 @@
 <script type="text/javascript">
 	$('.vtabs a').tabs();
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

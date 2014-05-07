@@ -31,19 +31,6 @@ class Catalog_Controller_Block_Account_Address extends Controller
 				break;
 		}
 
-		foreach ($addresses as &$address) {
-			$address['format'] = $this->address->format($address);
-		}
-		unset($address);
-
-
-		if ($settings['add_address']) {
-			$addresses[] = array(
-				'address_id' => 'new',
-				'format'     => '<div class="add-address">' . _l("New Address") . '</div>',
-			);
-		}
-
 		$settings['addresses'] = $addresses;
 
 		$this->render('block/account/address_select', $settings);

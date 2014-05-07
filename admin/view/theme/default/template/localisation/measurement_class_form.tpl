@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -56,4 +56,4 @@
 	!--
 		$('.tabs a').tabs();
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

@@ -1,6 +1,6 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/order.png'); ?>" alt=""/> <?= _l("Attribute Groups"); ?></h1>
@@ -101,4 +101,4 @@
 	<?= $this->builder->js('translations', $attribute['translations'], "attributes[$attribute[attribute_id]][%name%]"); ?>
 <? } ?>
 
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>

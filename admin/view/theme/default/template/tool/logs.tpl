@@ -1,7 +1,7 @@
-<?= _call('common/header'); ?>
+<?= call('common/header'); ?>
 
 <div class="section">
-	<?= _breadcrumbs(); ?>
+	<?= breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
@@ -99,4 +99,4 @@
 		});
 	}
 </script>
-<?= _call('common/footer'); ?>
+<?= call('common/footer'); ?>
