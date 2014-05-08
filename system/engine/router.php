@@ -26,11 +26,16 @@ final class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
+	public function isAdmin()
+	{
+		return defined("IS_ADMIN");
+	}
+
 	public function route()
 	{
 		$this->path = $this->url->getPath();
 
-		if ($this->config->isAdmin()) {
+		if ($this->route->isAdmin()) {
 			$this->routeAdmin();
 		} else {
 			$this->routeFront();
@@ -131,12 +136,21 @@ final class Router
 			redirect($this->error_404);
 		}
 
-		if (!$this->user->canDoAction($action)) {
-			if (!$this->user->isLogged()) {
-				redirect('common/login');
-			}
+		if ($this->isAdmin()) {
+			if (!$this->user->canDoAction($action)) {
+				if (!$this->user->isLogged()) {
+					$this->request->setRedirect($this->url->here());
+					redirect('common/login');
+				}
 
-			redirect($this->error_permission);
+				redirect($this->error_permission);
+			}
+		} else {
+			//Login Verification
+			if (!$this->customer->canDoAction($action)) {
+				$this->request->setRedirect($this->url->here());
+				redirect('customer/login');
+			}
 		}
 
 		$action->execute();

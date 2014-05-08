@@ -19,7 +19,7 @@ final class Action
 		$this->method     = 'index';
 
 		if (!$classpath) {
-			$this->classpath = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
+			$this->classpath = ($this->route->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		} else {
 			$this->classpath = rtrim($classpath, '/') . '/';
 		}

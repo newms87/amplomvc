@@ -256,7 +256,7 @@ class Url extends Library
 		$query = $this->escape($this->getQuery());
 
 		//Default Store
-		$default = $this->config->isAdmin() ? -1 : 0;
+		$default = $this->route->isAdmin() ? -1 : 0;
 
 		$sql =
 			"SELECT * FROM " . DB_PREFIX . "url_alias" .
@@ -268,7 +268,7 @@ class Url extends Library
 		if ($url_alias) {
 			//TODO: We need to reconsider how we handle all stores...
 			if ($url_alias['store_id'] === 0) {
-				if (!$this->config->isAdmin()) {
+				if (!$this->route->isAdmin()) {
 					$url_alias['store_id'] = (int)option('config_store_id');
 				} else {
 					$this->redirect($this->store(option('default_store_id'), $url_alias['path'], $url_alias['query']));

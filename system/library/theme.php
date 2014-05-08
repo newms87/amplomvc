@@ -12,7 +12,7 @@ class Theme extends Library
 
 		$this->dir_themes = DIR_THEMES;
 
-		if ($this->config->isAdmin()) {
+		if ($this->route->isAdmin()) {
 			$this->theme        = option('config_admin_theme', 'default');
 			$this->parent_theme = option('config_admin_parent_theme', 'default');
 		} else {

@@ -36,6 +36,10 @@ spl_autoload_register(function ($class) {
 	$registry->loadClass($class, false);
 });
 
+//Initialize Router
+$router = new Router();
+$registry->set('route', $router);
+
 // Request (cleans globals)
 $registry->set('request', new Request());
 
@@ -215,8 +219,6 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isAdmin()) {
 }
 
 //Router
-$router = new Router();
-$registry->set('route', $router);
 $router->route();
 $router->dispatch();
 

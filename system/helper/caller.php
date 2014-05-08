@@ -103,14 +103,14 @@ function option($option, $default = null)
 	return is_null($value) ? $default : $value;
 }
 
-function format($type, $data)
+function format($type, $data, $param = null)
 {
 	global $registry;
-	if (is_callable($type)) {
+	if (!is_string($type) && is_callable($type)) {
 		return $type($data);
 	}
 
-	return $registry->get($type)->format($data);
+	return $registry->get($type)->format($data, $param);
 }
 
 function format_all($type, &$array, $index = null, $key = 'formatted')

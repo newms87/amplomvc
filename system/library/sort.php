@@ -107,7 +107,7 @@ class Sort extends Library
 	public function getQueryDefaults($sort_default = 'sort_order', $order_default = 'ASC', $limit_default = null, $page_default = 1)
 	{
 		if (empty($limit_default) || (int)$limit_default < 1) {
-			$limit_default = $this->config->isAdmin() ? option('config_admin_limit') : option('config_catalog_limit');
+			$limit_default = $this->route->isAdmin() ? option('config_admin_limit') : option('config_catalog_limit');
 		}
 
 		$data = array();

@@ -2,15 +2,10 @@
 
 class Catalog_Controller_Account extends Controller
 {
+	static $can_access = '.*';
+
 	public function index()
 	{
-		//Login Verification
-		if (!$this->customer->isLogged()) {
-			$this->request->setRedirect('account');
-
-			redirect('customer/login');
-		}
-
 		//Page Head
 		$this->document->setTitle(_l("Account Manager"));
 
@@ -19,26 +14,16 @@ class Catalog_Controller_Account extends Controller
 		$this->breadcrumb->add(_l("Account Manager"), site_url('account'));
 
 		//Page Information
-		$shipping_address            = $this->customer->getDefaultShippingAddress();
-		$shipping_address['display'] = $this->address->format($shipping_address);
-		$data['shipping_address']    = $shipping_address;
+		$data['shipping_address'] = $this->customer->getDefaultShippingAddress();
 
 		//Customer Information
-		$customer = $this->customer->info() + $this->customer->getMeta();
+		$data['customer'] = $this->customer->info() + $this->customer->getMeta();
 
-		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
+		//TODO: Put this in subscription plugin
+		$data['subscriptions'] = $this->subscription->getCustomerSubscriptions();
 
-		$data['newsletter_display'] = $customer['newsletter'] ? _l("Send me weekly updates from %s!", option('config_name')) : _l("Do not send me any emails.");
-
-		$data['customer'] = $customer;
-
-		//Urls
-		$data['url_order_history'] = site_url('account/order');
-		$data['url_returns']       = site_url('account/return');
-
-		//Action Buttons
+		//Actions
 		$data['edit_account'] = site_url('account/update');
-		$data['back']         = site_url('common/home');
 
 		//Render
 		$this->response->setOutput($this->render('account/account', $data));
@@ -46,13 +31,6 @@ class Catalog_Controller_Account extends Controller
 
 	public function update()
 	{
-		//Login Verification
-		if (!$this->customer->isLogged()) {
-			$this->request->setRedirect(site_url('account/update'));
-
-			redirect('customer/login');
-		}
-
 		//Page Head
 		$this->document->setTitle(_l("My Account Information"));
 

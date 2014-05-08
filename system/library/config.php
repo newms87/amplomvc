@@ -57,11 +57,6 @@ class Config extends Library
 		$this->data[$key] = $value;
 	}
 
-	public function isAdmin()
-	{
-		return defined("IS_ADMIN");
-	}
-
 	public function getDefaultStore()
 	{
 		return $this->getStore(option('config_default_store'));
@@ -72,7 +67,7 @@ class Config extends Library
 		if (is_null($store_id)) {
 			//TODO: Admin should be only 1 domain, should not be a store!! We can have different templates for admin,
 			//but should always be the same domain etc.. store_id 0 should be all stores.
-			if ($this->isAdmin()) {
+			if ($this->route->isAdmin()) {
 				return $this->site_config['admin_store'];
 			} else {
 				//Resolve Store ID

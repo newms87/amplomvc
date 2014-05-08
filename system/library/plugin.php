@@ -14,7 +14,7 @@ class Plugin extends Library
 
 		$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
 
-		if ($this->config->isAdmin()) {
+		if ($this->route->isAdmin()) {
 			$this->validatePluginModFiles();
 		}
 	}
