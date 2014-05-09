@@ -35,11 +35,13 @@ class Currency extends Library
 	public function set($code)
 	{
 		if (!isset($this->currencies[$code])) {
-			if (!empty($this->currencies)) {
-				trigger_error(_l("There are no currencies available!"));
+			if (empty($this->currencies)) {
+				$this->error['currency'] = _l("There are no currencies available");
+				trigger_error($this->error['currency']);
+				return false;
+			} else {
+				$code = key($this->currencies);
 			}
-
-			$code = key($this->currencies);
 		}
 
 		$this->code = $code;
@@ -52,6 +54,8 @@ class Currency extends Library
 		);
 
 		$this->document->localizeVar('currency', $currency);
+
+		return true;
 	}
 
 	public function format($number, $code = '', $value = '', $format = true, $decimals = null)

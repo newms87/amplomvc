@@ -29,15 +29,13 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 		}
 
-		if (option('config_customer_hide_price') && !$this->customer->isLogged()) {
-			$settings['no_price_display'] = _l("Please <a href=\"%s\">Login</a> or <a href=\"%s\">Register</a> to see Prices.", site_url('customer/login'), site_url('customer/registration'));
-		}
-
 		if (!$this->cart->validate()) {
 			if ($this->cart->getErrorCode() !== Cart::ERROR_CART_EMPTY) {
 				$this->message->add('error', $this->cart->getError());
 			}
 		}
+
+		$settings['show_price'] = !option('config_customer_hide_price') || $this->customer->isLogged();
 
 		$show_return_policy = option('config_cart_show_return_policy');
 
@@ -45,22 +43,11 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		if ($this->cart->hasProducts()) {
 			$cart_products = $this->cart->getProducts();
 
-			$image_width  = option('config_image_cart_width');
-			$image_height = option('config_image_cart_height');
-
 			foreach ($cart_products as &$cart_product) {
 				$product = & $cart_product['product'];
 
-				if ($product['image']) {
-					$cart_product['thumb'] = $this->image->resize($product['image'], $image_width, $image_height);
-				}
-
-				$cart_product['price_display'] = $this->currency->format($this->tax->calculate($cart_product['price'], $product['tax_class_id']));
-				$cart_product['total_display'] = $this->currency->format($this->tax->calculate($cart_product['total'], $product['tax_class_id']));
-
-				if ($product['reward']) {
-					$product['reward'] = _l("Total Points: %s", $product['reward']);
-				}
+				$cart_product['price'] = $this->tax->calculate($cart_product['price'], $product['tax_class_id']);
+				$cart_product['total'] = $this->tax->calculate($cart_product['total'], $product['tax_class_id']);
 
 				if ($show_return_policy) {
 					$policy = $this->cart->getReturnPolicy($product['return_policy_id']);
@@ -73,9 +60,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 						$product['return_policy'] = $this->builder->finalSale();
 					}
 				}
-
-				$cart_product['href']   = site_url('product/product', 'product_id=' . $product['product_id']);
-				$cart_product['remove'] = site_url("cart/cart/remove", 'cart_key=' . $cart_product['key']);
 			}
 			unset($product);
 
@@ -84,14 +68,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 
 		// Gift Voucher
 		if ($this->cart->hasVouchers()) {
-			$vouchers = $this->cart->getVouchers();
-
-			foreach ($vouchers as $voucher_id => &$voucher) {
-				$voucher['amount_display'] = $this->currency->format($voucher['amount']);
-			}
-			unset($voucher);
-
-			$settings['cart_vouchers'] = $vouchers;
+			$settings['cart_vouchers'] = $this->cart->getVouchers();
 		}
 
 		//Template Data

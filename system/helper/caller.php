@@ -64,7 +64,7 @@ function site_url($path = '', $query = null)
 function store_url($store_id, $path = '', $query = null)
 {
 	global $registry;
-	return $registry->get('url')->link($store_id, $path, $query);
+	return $registry->get('url')->store($store_id, $path, $query);
 }
 
 function theme_url($path = '', $query = null)

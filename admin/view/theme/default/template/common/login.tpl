@@ -1,42 +1,35 @@
 <?= call('common/header'); ?>
-<div class="section">
-	<div id="login-box" class="box">
-		<div class="heading">
-			<h1><img src="<?= theme_url('image/lockscreen.png'); ?>" alt=""/> <?= _l("Please enter your login details."); ?></h1>
-		</div>
-		<div class="section" style="min-height: 150px; overflow: hidden;">
 
-			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
-				<table style="width: 100%;">
-					<tr>
-						<td style="text-align: center;" rowspan="4"><img src="<?= theme_url('image/login.png'); ?>"
-								alt="<?= _l("Please enter your login details."); ?>"/></td>
-					</tr>
-					<tr>
-						<td><?= _l("Username:"); ?><br/>
-							<input type="text" name="username" value="<?= $username; ?>" style="margin-top: 4px;"/>
-							<br/>
-							<br/>
-							<?= _l("Password:"); ?><br/>
-							<input type="password" autocomplete="off" name="password" value=""
-								style="margin-top: 4px;"/>
-							<br/>
-							<a href="<?= $forgotten; ?>"><?= _l("Forgotten Password"); ?></a></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td style="text-align: right;"><input type="submit" class="button" value="<?= _l("Login"); ?>"/>
-						</td>
-					</tr>
-				</table>
-			</form>
+<section id="admin-login" class="content">
+	<header class="row top-row">
+		<div class="wrap">
+			<h1><img src="<?= theme_url('image/lockscreen.png'); ?>" alt=""/> <?= _l("Admin Login"); ?></h1>
 		</div>
-		<div class="section" style="min-height:80px">
-			<div class="help"><?= _l("Not sure how you got here? Please"); ?> <a href="<?= $to_front; ?>"><?= _l("return to the shop!"); ?></a></div>
+	</header>
+
+	<div class="content-row row">
+		<div class="wrap">
+			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" class="form">
+				<div class="form-item username">
+					<input type="text" name="username" placeholder="<?= _l("Username / Email"); ?>" value="<?= $username; ?>"/>
+				</div>
+				<div class="form-item password">
+					<input type="password" name="password" placeholder="<?= _l("Password"); ?>" value=""/>
+					<br/>
+					<a href="<?= site_url('common/forgotten'); ?>" class="forgotten-link"><?= _l("Forgot your Password?"); ?></a>
+				</div>
+				<div class="form-item submit">
+					<button><?= _l("Login"); ?></button>
+				</div>
+			</form>
+
+			<div class="help">
+				<?= _l("Not sure how you got here? Please"); ?>
+				<a href="<?= store_url(1); ?>"><br/>
+					<?= _l("return to the shop!"); ?></a>
+			</div>
 		</div>
 	</div>
-</div>
+</section>
 
 <?= call('common/footer'); ?>
