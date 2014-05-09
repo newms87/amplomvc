@@ -23,7 +23,7 @@
 
 				<?= block('cart/cart'); ?>
 
-				<div id="cart_actions">
+				<div id="cart-actions">
 					<h2><?= _l("What would you like to do next?"); ?></h2>
 					<? if ($show_coupons) { ?>
 						<div>
