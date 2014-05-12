@@ -19,16 +19,15 @@ class Admin_Controller_Setting_Login extends Controller
 		$this->breadcrumb->add(_l("Login"), site_url('setting/login'));
 
 		//Load Data or Defaults
+		$settings = $_POST;
+
 		if (!$this->request->isPost()) {
 			$settings = $this->config->loadGroup('login_settings', 0);
 
 			if (!$settings) {
 				$settings = array();
 			}
-		} else {
-			$settings = $_POST;
 		}
-
 
 		$defaults = array(
 			'google_plus' => array(
@@ -44,14 +43,13 @@ class Admin_Controller_Setting_Login extends Controller
 			),
 		);
 
-		$data += $settings + $defaults;
+		$settings += $defaults;
 
-		//Action Buttons
-		$data['save']   = site_url('setting/login/save');
-		$data['cancel'] = site_url('setting/store');
+		//Actions
+		$settings['save']   = site_url('setting/login/save');
 
 		//Render
-		$this->response->setOutput($this->render('setting/login', $data));
+		$this->response->setOutput($this->render('setting/login', $settings));
 	}
 
 	public function save()

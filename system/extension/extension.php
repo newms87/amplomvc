@@ -70,6 +70,7 @@ abstract class System_Extension_Extension extends Model
 
 	private function loadInfo()
 	{
+		$this->settings = array();
 		$matches = null;
 		preg_match("/System_Extension_([a-z]+)_?(.*)/i", get_class($this), $matches);
 

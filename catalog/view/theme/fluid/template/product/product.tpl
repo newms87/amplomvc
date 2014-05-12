@@ -8,6 +8,12 @@
 			<?= breadcrumbs(); ?>
 
 			<h1><?= $name; ?></h1>
+			<? if ($show_model) { ?>
+				<h2 class="product-model">
+					<span class="label"><?= _l("Model:"); ?></span>
+					<span class="model"><?= $model; ?></span>
+				</h2>
+			<? } ?>
 		</div>
 	</header>
 
@@ -42,13 +48,6 @@
 
 			<div class="product-info col xs-12 md-6">
 				<div class="product-top">
-					<? if ($show_model) { ?>
-						<div class="description-model">
-							<span><?= _l("Model:"); ?></span>
-							<span><?= $model; ?></span>
-						</div>
-					<? } ?>
-
 					<? if ($show_price && $is_purchasable) { ?>
 						<div class="price">
 							<? if (empty($special)) { ?>
@@ -78,7 +77,9 @@
 				</div>
 
 				<div class="product-tabs tab-header htabs">
+					<? if ($description) { ?>
 					<a class="tab" href="#tab-description"><?= _l("Description"); ?></a>
+					<? } ?>
 
 					<? if ($information) { ?>
 						<a class="tab" href="#tab-information"><?= _l("More Info"); ?></a>
@@ -93,17 +94,6 @@
 
 				<div class="tab-contents">
 					<div id="tab-description" class="description">
-						<? if (!empty($reward)) { ?>
-							<div class="reward"><?= _l("You will earn %s points!", $reward); ?></div>
-						<? } ?>
-
-						<? if (!empty($stock)) { ?>
-							<div class="description_stock <?= $stock_class; ?>">
-								<span class="text"><?= _l("Availability:"); ?></span>
-								<span class="stock"><?= $stock; ?></span>
-							</div>
-						<? } ?>
-
 						<? if (!empty($description)) { ?>
 							<div class="product-description">
 								<div class="scroll-wrapper">
@@ -191,6 +181,19 @@
 										<input type="button" name="add_to_cart" value="<?= _l("Add to Cart"); ?>" id="button-add-to-cart" class="button medium"/>
 									</div>
 								</div>
+							</div>
+
+							<div class="product-more">
+								<? if (!empty($reward)) { ?>
+									<div class="reward"><?= _l("You will earn %s points!", $reward); ?></div>
+								<? } ?>
+
+								<? if (!empty($stock)) { ?>
+									<div class="description_stock <?= $stock_class; ?>">
+										<span class="text"><?= _l("Availability:"); ?></span>
+										<span class="stock"><?= $stock; ?></span>
+									</div>
+								<? } ?>
 							</div>
 
 							<div class="product-nav">

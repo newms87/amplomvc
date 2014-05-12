@@ -7,14 +7,20 @@
 
 			<div class="buttons">
 				<button class="button"><?= _l("Save"); ?></button>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= site_url('setting/store'); ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 
 		<div class="section">
 			<table class="form">
 				<tr>
-					<td><?= _l("Google Login"); ?></td>
+					<td>
+						<div class="label"><?= _l("Google Login"); ?></div>
+						<div class="help">
+							<a href="https://developers.google.com/+/web/signin/server-side-flow"><?= _l("Learn to setup with Google+ API"); ?></a><br /><br />
+							Use <?= store_url(1, "block/login/google/connect"); ?> for the Authorized Redirect URI
+						</div>
+					</td>
 					<td>
 						<div class="setting-item">
 							<label for="google-application-name"><?= _l("Application Name"); ?></label>
@@ -37,6 +43,7 @@
 				<tr>
 					<td>
 						<?= _l("Facebook Login"); ?>
+						<span class="help"><?= _l("Go to <a href=\"%s\">Facebook Developer Console</a> to acquire your API Key and Secret. <a href=\"%s\">Learn Here if you need help</a>", 'https://developers.facebook.com', 'https://developers.facebook.com/docs/facebook-login/login-flow-for-web/v2.0'); ?> </span>
 						<span class="help"><?= _l("(NOTE: If you enter App ID incorrectly, facebook will stop at a whitescreen during login.)"); ?></span>
 					</td>
 					<td>

@@ -41,14 +41,14 @@ a {
   color: #003366;
   text-decoration: underline;
   cursor: pointer;
-}
 
-a:visited {
-  color: #003366;
-}
+  &:visited {
+    color: #003366;
+  }
 
-a img {
-  border: 0;
+  img {
+    border: 0;
+  }
 }
 
 form {
@@ -70,6 +70,12 @@ label {
 
 .right {
   float: right;
+}
+
+td {
+  &.left, &.right {
+    float: none;
+  }
 }
 
 .clearfix:after {
@@ -729,52 +735,54 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
 
 .box {
   margin-bottom: 15px;
-}
 
-.box > .heading {
-  height: 38px;
-  padding-left: 7px;
-  padding-right: 7px;
-  border: 1px solid #DBDBDB;
-  background: url('@{themepath}image/box.png') repeat-x;
-  -webkit-border-radius: 7px 7px 0 0;
-  -moz-border-radius: 7px 7px 0 0;
-  -khtml-border-radius: 7px 7px 0 0;
-  border-radius: 7px 7px 0 0;
-}
+  & > .heading {
+    height: 38px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border: 1px solid #DBDBDB;
+    background: url('@{themepath}image/box.png') repeat-x;
+    -webkit-border-radius: 7px 7px 0 0;
+    -moz-border-radius: 7px 7px 0 0;
+    -khtml-border-radius: 7px 7px 0 0;
+    border-radius: 7px 7px 0 0;
 
-.box > .heading .icon {
-  width: 20px;
-}
+    h1 {
+      margin: 0;
+      padding: 11px 0 0 0;
+      color: #003A88;
+      font-size: 16px;
+      float: left;
 
-.box > .heading h1 {
-  margin: 0;
-  padding: 11px 0 0 0;
-  color: #003A88;
-  font-size: 16px;
-  float: left;
-}
+      img {
+        float: left;
+        margin-top: -1px;
+        margin-left: 3px;
+        margin-right: 8px;
+      }
 
-.box > .heading h1 img {
-  float: left;
-  margin-top: -1px;
-  margin-left: 3px;
-  margin-right: 8px;
-}
+    }
 
-.box > .heading .buttons {
-  float: right;
-  padding-top: 7px;
-  margin-right: 5px;
-}
+    .icon {
+      width: 20px;
+    }
 
-.box > .heading .buttons .button {
-  margin-left: 5px;
-}
+    .buttons {
+      float: right;
+      padding-top: 4px;
+      margin: 0;
+      clear: none;
 
-.box > .heading .buttons .insert_classes {
-  float: left;
-  margin-right: 20px;
+      .button {
+        margin-left: 5px;
+
+        .insert_classes {
+          float: left;
+          margin-right: 20px;
+        }
+      }
+    }
+  }
 }
 
 .box > .section .limits, .box > section .limits {
@@ -808,6 +816,10 @@ button, .button {
   outline: 0;
   text-decoration: none;
   cursor: pointer;
+
+  &:visited {
+    color: @font-light;
+  }
 
   &:hover, &:active {
     color: @font-light;

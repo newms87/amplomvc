@@ -623,22 +623,6 @@ class Cart extends Library
 		return empty($this->error['cart']);
 	}
 
-	public function validateCheckout()
-	{
-		if (!$this->validate()) {
-			$this->error_code        = self::ERROR_CHECKOUT_VALIDATE;
-			$this->error['checkout'] = _l("The contents of you cart have changed. Please proceed to checkout again.");
-		} elseif (!$this->validatePaymentMethod()) {
-			$this->error_code        = self::ERROR_CHECKOUT_PAYMENT;
-			$this->error['checkout'] = _l("The Payment Options have changed! Please select a new Payment Method.");
-		} elseif (!$this->validateShippingMethod()) {
-			$this->error_code        = self::ERROR_CHECKOUT_SHIPPING;
-			$this->error['checkout'] = _l("The Shipping Options have changed! Please select a new Shipping Method.");
-		}
-
-		return empty($this->error['checkout']);
-	}
-
 	/**
 	 * Wishlist Functions
 	 */
@@ -943,11 +927,11 @@ class Cart extends Library
 		}
 
 		if (empty($methods)) {
-			$this->error['payment_method'] = _l("There are no available Payment Methods for your order! Please contact <a href=\"mailto:%s\">Customer Support</a> to complete your order.", option('config_email'));
+			$this->error['payment_method'] = _l("No Payment Methods Available");
 
 			$this->clearPaymentMethod();
 
-			return false;
+			return array();
 		}
 
 		uasort($methods, function ($a, $b) {
@@ -1083,7 +1067,7 @@ class Cart extends Library
 
 			$this->clearShippingMethod();
 
-			return false;
+			return array();
 		}
 
 		uasort($methods, function ($a, $b) {

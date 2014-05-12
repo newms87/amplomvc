@@ -29,6 +29,8 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$data['has_shipping'] = $this->cart->hasShipping();
 
 		//Shipping Address
+		$data['shipping_addresses'] = $this->customer->getShippingAddresses();
+
 		if ($this->cart->validateShippingAddress()) {
 			$data['shipping_address_id'] = $this->cart->getShippingAddressId();
 		} else {
@@ -36,14 +38,83 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		}
 
 		//Payment Address
+		$data['payment_addresses'] = $this->customer->getPaymentAddresses();
+
 		if ($this->cart->validatePaymentAddress()) {
 			$data['payment_address_id'] = $this->cart->getPaymentAddressId();
 		} else {
 			$data['payment_address_id'] = $this->customer->getDefaultPaymentAddressId();
 		}
 
+		//Methods
+		$data['shipping_key'] = $this->cart->getShippingKey();
+		$data['payment_key'] = $this->cart->getPaymentKey();
+
 		//Render
 		$this->response->setOutput($this->render('checkout/checkout', $data));
+	}
+
+	public function methods($data = array())
+	{
+		if ($this->request->isPost()) {
+			if (!empty($_POST['shipping_address_id'])) {
+				$this->cart->setShippingAddress($_POST['shipping_address_id']);
+			}
+
+			if (!empty($_POST['payment_address_id'])) {
+				$this->cart->setPaymentAddress($_POST['payment_address_id']);
+			}
+		}
+
+		//Shipping Methods
+		$data['shipping_methods'] = $this->cart->getShippingMethods();
+		$data['shipping_key'] = $this->cart->getShippingKey();
+
+		//Payment Methods
+		$data['payment_methods'] = $this->cart->getPaymentMethods();
+		$data['payment_key'] = $this->cart->getPaymentKey();
+
+		$output = $this->render('checkout/methods', $data, true);
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
+		} else {
+			return $output;
+		}
+	}
+
+	public function confirm()
+	{
+		if (!$this->cart->validate()) {
+			$this->message->add('error', $this->cart->getError());
+
+			if (!$this->request->isAjax()) {
+				redirect('cart/cart');
+			}
+		} else {
+			$this->cart->validateShippingMethod();
+			$this->cart->validatePaymentMethod();
+
+			if ($this->cart->hasError()) {
+				$this->message->add('error', $this->cart->getError());
+
+				if (!$this->request->isAjax()) {
+					redirect('checkout/checkout');
+				}
+			}
+		}
+
+		if ($this->message->has('error') && $this->request->isAjax()) {
+			return $this->response->setOutput($this->message->toJSON());
+		}
+
+		if (option('coupon_status')) {
+			$data['block_coupon'] = $this->block->render('cart/coupon', null, array('ajax' => true));
+		}
+		$data['block_totals'] = $this->block->render('cart/total');
+		$data['payment'] = $this->cart->getPaymentMethod()->renderTemplate();
+
+		$this->response->setOutput($this->render('block/checkout/confirm', $data));
 	}
 
 	public function guest()
