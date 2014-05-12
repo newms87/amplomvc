@@ -34,7 +34,7 @@
 			<h3><?= _l("Payment Method"); ?></h3>
 
 			<? $method_format = function ($a) {
-				return 'hurray';
+				return call('extension/payment/' . $a['code'] . '/register_card', null);
 			}; ?>
 
 			<? $build = array(
