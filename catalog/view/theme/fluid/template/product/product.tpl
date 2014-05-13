@@ -161,7 +161,7 @@
 				</div>
 
 				<? if ($is_purchasable) { ?>
-					<form id="product-form" class="form full-width" action="<?= site_url('cart/cart/buy_now'); ?>" method="post">
+					<form id="product-form" class="form full-width" action="<?= site_url('cart/buy_now'); ?>" method="post">
 
 						<div class="option-list">
 							<?= block('product/options', null, array('product_id' => $product_id)); ?>
@@ -197,7 +197,7 @@
 							</div>
 
 							<div class="product-nav">
-								<a href="<?= site_url('cart/cart'); ?>"><?= _l("View Cart"); ?></a>
+								<a href="<?= site_url('cart'); ?>"><?= _l("View Cart"); ?></a>
 								<a href="<?= site_url('checkout/checkout'); ?>"><?= _l("Checkout"); ?></a>
 								<a href="<?= $this->breadcrumb->prevUrl(); ?>"><?= _l("Continue Shopping"); ?></a>
 							</div>
@@ -292,8 +292,8 @@
 
 		if (screen_md || screen_lg) {
 			$('.zoombox').jqzoom({
-				zoomWidth: $.ac_vars.image_thumb_width,
-				zoomHeight: $.ac_vars.image_thumb_height,
+				zoomWidth: $ac.image_thumb_width,
+				zoomHeight: $ac.image_thumb_height,
 				position: 'right',
 				xOffset: 25,
 				yOffset: 0,

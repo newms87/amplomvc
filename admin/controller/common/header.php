@@ -8,7 +8,7 @@ class Admin_Controller_Common_Header extends Controller
 
 		$data['title'] = $this->document->getTitle();
 
-		$data['base'] = URL_SITE;
+		$data['base'] = site_url();
 
 		$data['theme'] = option('config_theme');
 
@@ -16,7 +16,7 @@ class Admin_Controller_Common_Header extends Controller
 		if (is_file(DIR_THEME . 'css/style.less')) {
 			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'default.style');
 		} else {
-			$style = URL_THEME . 'css/style.css';
+			$style = theme_url('css/style.css');
 		}
 
 		$this->document->addStyle($style);
@@ -39,7 +39,9 @@ class Admin_Controller_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
-		$this->document->localizeVar('url_site', URL_SITE);
+		$this->document->localizeVar('site_url', site_url());
+		$this->document->localizeVar('theme_url', theme_url());
+
 
 		$data['direction']      = $this->language->info('direction');
 		$data['description']    = $this->document->getDescription();
@@ -62,7 +64,7 @@ class Admin_Controller_Common_Header extends Controller
 
 			$data['logged'] = _l("You are logged in as <span>%s</span>", $this->user->info('username'));
 
-			$data['store'] = URL_SITE;
+			$data['store'] = site_url();
 
 			//Add Store Settings
 			$stores = $this->Model_Setting_Store->getStores();

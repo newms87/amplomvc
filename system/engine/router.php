@@ -153,6 +153,8 @@ final class Router
 			}
 		}
 
-		$action->execute();
+		if (!$action->execute()) {
+			redirect($this->error_404);
+		}
 	}
 }

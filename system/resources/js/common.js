@@ -39,7 +39,7 @@ $.ajax = function (params, p2) {
 //Load synchronously
 function syncload(s) {
 	if (!s.match(/^https?:\/\//)) {
-		s = $.ac_vars.url_site + s;
+		s = $ac.site_url + s;
 	}
 
 	$.ajax({
@@ -136,7 +136,7 @@ $.fn.ac_datepicker = function (params) {
 	if (!$.ui.timepicker) {
 		var selector = this;
 		$.ajaxSetup({cache: true});
-		$.getScript($.ac_vars.url_site + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
+		$.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
 			selector.ac_datepicker(params);
 		});
 		return;
@@ -337,6 +337,7 @@ $.fn.apply_filter = function (url) {
 $.fn.ac_msg = function (type, msg, append, close) {
 	if (typeof msg == 'undefined') {
 		msg = type;
+		type = null;
 	}
 
 	if (typeof msg == 'object') {
@@ -575,7 +576,7 @@ $.fn.ac_zoneselect = function (params, callback) {
 		listen: null,
 		allow_all: false,
 		select: null,
-		url: $.ac_vars.url_site + 'data/locale/load_zones'
+		url: $ac.site_url + 'data/locale/load_zones'
 	}, params);
 
 	if (!params.listen) {
@@ -632,11 +633,11 @@ function getQueryString(key, defaultValue) {
 
 function currency_format(number, params) {
 	params = $.extend({}, {
-		symbol_left: $.ac_vars.currency.symbol_left,
-		symbol_right: $.ac_vars.currency.symbol_right,
-		decimals: $.ac_vars.currency.decimals,
-		dec_point: $.ac_vars.currency.decimal_point,
-		thousands_sep: $.ac_vars.currency.thousands_sep,
+		symbol_left: $ac.currency.symbol_left,
+		symbol_right: $ac.currency.symbol_right,
+		decimals: $ac.currency.decimals,
+		dec_point: $ac.currency.decimal_point,
+		thousands_sep: $ac.currency.thousands_sep,
 		neg: '-',
 		pos: '+'
 	}, params);
@@ -716,7 +717,7 @@ $(document).ready(function () {
 	var $colorbox = $('.colorbox');
 
 	if ($colorbox.length) {
-		$.getScript($.ac_vars.url_site + 'system/resources/js/jquery/colorbox/colorbox.js', function() {
+		$.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function() {
 			var defaults = {
 				overlayClose: true,
 				opacity: 0.5,

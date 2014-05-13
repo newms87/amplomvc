@@ -23,8 +23,15 @@
 
 				<?= block('cart/cart'); ?>
 
+				<? if ($show_total && $can_checkout) { ?>
+					<div id="cart-block-total">
+						<?= block('cart/total'); ?>
+					</div>
+				<? } ?>
+
 				<div id="cart-actions">
 					<h2><?= _l("What would you like to do next?"); ?></h2>
+
 					<? if ($show_coupons) { ?>
 						<div>
 							<a id="text_block_coupon" onclick="$('#toggle_block_coupon').slideToggle();"><?= _l("Use Coupon Code"); ?></a>
@@ -65,12 +72,6 @@
 						</div>
 					<? } ?>
 				</div>
-
-				<? if ($show_total && $can_checkout) { ?>
-					<div id="cart-block-total">
-						<?= block('cart/total'); ?>
-					</div>
-				<? } ?>
 
 				<div class="buttons">
 					<? if ($can_checkout) { ?>

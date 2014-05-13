@@ -14,7 +14,7 @@ class Catalog_Controller_Common_Header extends Controller
 		if (is_file(DIR_THEME . 'css/style.less')) {
 			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'fluid.style.less');
 		} else {
-			$style = URL_THEME . 'css/style.css';
+			$style = theme_url('css/style.css');
 		}
 
 		$this->document->addStyle($style);
@@ -36,7 +36,8 @@ class Catalog_Controller_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_thumb_height'));
-		$this->document->localizeVar('url_add_to_cart', site_url('cart/cart/add'));
+		$this->document->localizeVar('site_url', site_url());
+		$this->document->localizeVar('theme_url', theme_url());
 
 		//Add Theme Scripts
 		$this->document->addScript(theme_url('js/common.js'), 56);
@@ -58,24 +59,12 @@ class Catalog_Controller_Common_Header extends Controller
 
 		$data['name'] = option('config_name');
 
-		$logo_width  = option('config_logo_width');
-		$logo_height = option('config_logo_height');
-
-		$data['logo'] = $this->image->resize(option('config_logo'), $logo_width, $logo_height);
+		$data['logo'] = option('config_logo');
 
 		$data['slogan'] = option('config_slogan');
 
 		//Icons
-		$icons = option('config_icon');
-
-		if (!empty($icons)) {
-			foreach ($icons as &$icon) {
-				$icon = $this->image->get($icon);
-			}
-			unset($icon);
-
-			$data['icons'] = $icons;
-		}
+		$data['icons'] = option('config_icon');
 
 		//Login Check & The Welcome Message
 		$data['is_logged'] = $this->customer->isLogged();

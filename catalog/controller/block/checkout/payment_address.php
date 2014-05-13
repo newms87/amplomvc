@@ -97,7 +97,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 		if (!$this->customer->isLogged()) {
 			$json['redirect'] = site_url('checkout/checkout');
 		} elseif (!$this->cart->validate()) {
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 			$this->message->add('warning', $this->cart->getError());
 		}
 

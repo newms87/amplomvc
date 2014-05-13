@@ -27,9 +27,9 @@
 		<? if (!empty($icons)) { ?>
 			<? foreach ($icons as $size => $icon) { ?>
 				<? if ($size === 'ico') { ?>
-					<link href="<?= $icon; ?>" rel="apple-touch-icon icon shortcut"/>
+					<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
 				<? } elseif ($size !== 'orig') { ?>
-					<link href="<?= $icon; ?>" rel="apple-touch-icon" sizes="<?= $size; ?>"/>
+					<link href="<?= image($icon); ?>" rel="apple-touch-icon" sizes="<?= $size; ?>"/>
 				<? } ?>
 			<? } ?>
 		<? } ?>
@@ -89,7 +89,7 @@
 						<? if ($logo) { ?>
 							<div id="logo">
 								<a href="<?= site_url(); ?>" class="block">
-									<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
+									<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
 									<? if (!empty($slogan)) { ?>
 										<div id="slogan"><?= $slogan; ?></div>

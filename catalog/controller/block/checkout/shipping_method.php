@@ -45,7 +45,7 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 		// Validate cart contents
 		if (!$this->cart->validate()) {
 			$this->message->add('warning', $this->cart->getError());
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 		} elseif (!$this->cart->hasShipping()) {
 			$this->message->add('warning', _l("Shipping is not required for this order."));
 			$json['redirect'] = site_url('checkout/checkout');

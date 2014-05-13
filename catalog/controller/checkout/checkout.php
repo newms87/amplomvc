@@ -6,11 +6,11 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		//TODO: Need to implement a more dynamic cart system to incorporate other cart types (eg: subscriptions, user_custom_types, etc..)
 		if (!$this->cart->canCheckout()) {
 			$this->message->add("warning", _l("You do not have any products in your cart. Please continue with your purchase via a different method provided from the cart."));
-			redirect('cart/cart');
+			redirect('cart');
 		}
 
 		if (!$this->cart->validate()) {
-			redirect('cart/cart');
+			redirect('cart');
 		}
 
 		$this->request->setRedirect(site_url('checkout/checkout'));
@@ -20,7 +20,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Shopping Cart"), site_url('cart/cart'));
+		$this->breadcrumb->add(_l("Shopping Cart"), site_url('cart'));
 		$this->breadcrumb->add(_l("Checkout"), site_url('checkout/checkout'));
 
 		//Statuses
@@ -89,7 +89,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 			$this->message->add('error', $this->cart->getError());
 
 			if (!$this->request->isAjax()) {
-				redirect('cart/cart');
+				redirect('cart');
 			}
 		} else {
 			$this->cart->validateShippingMethod();

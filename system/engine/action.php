@@ -146,7 +146,9 @@ final class Action
 			return true;
 		}
 
-		trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $this->method, $this->class));
+		if (method_exists($controller, $this->method)) {
+			trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $this->method, $this->class));
+		}
 
 		return false;
 	}

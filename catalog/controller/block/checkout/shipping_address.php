@@ -95,7 +95,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 		if (!$this->customer->isLogged()) {
 			$json['redirect'] = site_url('checkout/checkout');
 		} elseif (!$this->cart->validate()) {
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 			$this->message->add($this->cart->getError());
 		} elseif (!$this->cart->hasShipping()) {
 			$json['redirect'] = site_url('checkout/checkout');

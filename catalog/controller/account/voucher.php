@@ -83,7 +83,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 		$this->breadcrumb->add(_l("Purchase a Gift Certificate"), site_url('account/voucher'));
 
 		//Action Buttons
-		$data['continue'] = site_url('cart/cart');
+		$data['continue'] = site_url('cart');
 
 		//Render
 		$this->response->setOutput($this->render('common/success', $data));

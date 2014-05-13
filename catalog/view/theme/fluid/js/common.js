@@ -1,5 +1,5 @@
 $.fn._block = function(path, params) {
-	return this.load($.ac_vars.url_site + 'block/' + path, params);
+	return this.load($ac.site_url + 'block/' + path, params);
 }
 
 $.add_to_cart = function (params) {
@@ -30,7 +30,7 @@ $.add_to_cart = function (params) {
 	}
 
 	$.ajax({
-		url: $.ac_vars.url_add_to_cart,
+		url: $ac.site_url,
 		type: 'post',
 		data: data,
 		dataType: 'json',

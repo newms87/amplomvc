@@ -212,7 +212,7 @@ class Catalog_Controller_Account_Order extends Controller
 					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $options);
 				}
 
-				redirect('cart/cart');
+				redirect('cart');
 			}
 		}
 

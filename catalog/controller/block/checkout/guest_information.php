@@ -53,9 +53,9 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		if ($this->customer->isLogged()) {
 			$json['redirect'] = site_url('checkout/checkout');
 		} elseif ((!$this->cart->hasProducts() && !$this->cart->hasVouchers()) || (!$this->cart->hasStock() && !option('config_stock_checkout'))) {
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 		} elseif (!option('config_guest_checkout') || $this->cart->hasDownload()) {
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 		}
 
 		//Redirect if set

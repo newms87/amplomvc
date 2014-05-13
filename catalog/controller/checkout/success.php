@@ -8,7 +8,7 @@ class Catalog_Controller_Checkout_Success extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Basket"), site_url('cart/cart'));
+		$this->breadcrumb->add(_l("Basket"), site_url('cart'));
 		$this->breadcrumb->add(_l("Checkout"), site_url('checkout/checkout'));
 		$this->breadcrumb->add(_l("Success"), site_url('checkout/success'));
 

@@ -3,22 +3,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 {
 	public function build($settings = array())
 	{
-		if ($this->request->isPost()) {
-			//Update Product
-			if (isset($_POST['cart_update'])) {
-				if (!empty($_POST['quantity'])) {
-					foreach ($_POST['quantity'] as $key => $quantity) {
-						$this->cart->updateProduct($key, $quantity);
-					}
-
-					$this->message->add('success', _l("Your cart has been updated!"));
-				}
-			} elseif (isset($_POST['cart_remove_voucher'])) {
-				$this->cart->removeVoucher($_POST['remove_voucher']);
-				$this->message->add('success', _l('The voucher was removed from your cart.'));
-			}
-		}
-
 		//Check if the shipping estimate was invalidated and that we are not in the checkout process
 		// -> update the shipping estimate to the first Shipping option
 		if (!$this->order->hasOrder() && !$this->cart->validateShippingMethod()) {
@@ -67,16 +51,10 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 
 		// Gift Voucher
-		if ($this->cart->hasVouchers()) {
-			$settings['cart_vouchers'] = $this->cart->getVouchers();
-		}
+		$settings['cart_vouchers'] = $this->cart->getVouchers();
 
 		//Template Data
 		$settings['show_return_policy'] = $show_return_policy;
-
-		//Url
-		$settings['url_cart'] = site_url('cart/cart');
-		$settings['url_block_cart'] = site_url("block/cart/cart");
 
 		//Render Additional Carts
 		$carts = $this->System_Extension_Cart->renderCarts();
@@ -84,18 +62,8 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		$settings['cart_inline'] = $carts['inline'];
 		$settings['cart_extend'] = $carts['extend'];
 
-		$settings['cart_empty'] = $this->cart->isEmpty();
-
+		$settings['is_empty'] = $this->cart->isEmpty();
 		$settings['is_ajax'] = $this->request->isAjax();
-
-		//Ajax Messages
-		if ($this->request->isAjax()) {
-			$settings['messages'] = $this->message->fetch();
-
-			if ($settings['cart_empty']) {
-				$this->request->redirectBrowser(site_url('cart/cart'));
-			}
-		}
 
 		//Render
 		$this->render('block/cart/cart', $settings);

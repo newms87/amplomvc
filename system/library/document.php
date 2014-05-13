@@ -397,7 +397,7 @@ class Document extends Library
 		}
 
 		if (!empty($this->ac_vars)) {
-			$html .= "<script type=\"text/javascript\">\r\n$.ac_vars = " . json_encode($this->ac_vars) . ";\r\n</script>";
+			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
 		}
 
 		return $html;

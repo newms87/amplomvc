@@ -15,9 +15,9 @@ $.fn.ac_imageinput = function (options) {
 			allow_clear: false,
 			show_help:   false,
 			show_hover:  true,
-			noimage:     $.ac_vars.url_site + 'image/no_image.png',
-			width:       $input.attr('data-width') || $.ac_vars.image_thumb_width || 140,
-			height:      $input.attr('data-height') || $.ac_vars.image_thumb_height || 140
+			noimage:     $ac.site_url + 'image/no_image.png',
+			width:       $input.attr('data-width') || $ac.image_thumb_width || 140,
+			height:      $input.attr('data-height') || $ac.image_thumb_height || 140
 		}, options);
 
 		var $imageinput = $('<div />').addClass('imageinput-box').addClass(options.class);
@@ -30,7 +30,7 @@ $.fn.ac_imageinput = function (options) {
 			thumb = options.noimage;
 
 			if ($input.val()) {
-				$.get($.ac_vars.url_site + 'admin/filemanager/filemanager/get_thumb', {image: $input.val()}, function (response) {
+				$.get($ac.site_url + 'admin/filemanager/filemanager/get_thumb', {image: $input.val()}, function (response) {
 					$thumb.attr('src', response);
 				});
 			}
@@ -97,7 +97,7 @@ $.ac_filemanager = function (options) {
 			break;
 	}
 
-	var url = $.ac_vars.url_site + 'system/resources/js/responsive-filemanager/filemanager/dialog.php?type=' + type;
+	var url = $ac.site_url + 'system/resources/js/responsive-filemanager/filemanager/dialog.php?type=' + type;
 
 	if (options.field_id) {
 		url += '&field_id=' + options.field_id;

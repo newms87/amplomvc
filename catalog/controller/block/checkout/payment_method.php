@@ -57,7 +57,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		}
 
 		if (!$this->cart->validate()) {
-			$json['redirect'] = site_url('cart/cart');
+			$json['redirect'] = site_url('cart');
 			$this->message->add('warning', $this->cart->getError());
 		}
 

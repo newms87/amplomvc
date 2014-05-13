@@ -396,7 +396,7 @@ class Cart extends Library
 
 		$this->cache->delete("product.$product_id.$customer_id.$cart_key");
 
-		$this->removeItem(self::PRODUCTS, $key);
+		return $this->removeItem(self::PRODUCTS, $key);
 	}
 
 	public function hasProducts()

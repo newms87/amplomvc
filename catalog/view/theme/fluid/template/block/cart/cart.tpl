@@ -35,9 +35,9 @@
 							<? $product = $cart_product['product']; ?>
 							<tr class="product">
 								<td class="image">
-									<? if ($cart_product['image']) { ?>
+									<? if ($cart_product['product']['image']) { ?>
 										<a href="<?= site_url('product/product', 'product_id=' . $product['product_id']); ?>">
-											<img src="<?= image($cart_product['image'], option('config_image_cart_width'), option('config_image_cart_height')); ?>" alt="<?= $product['name']; ?>" title="<?= $product['name']; ?>"/>
+											<img src="<?= image($cart_product['product']['image'], option('config_image_cart_width'), option('config_image_cart_height')); ?>" alt="<?= $product['name']; ?>" title="<?= $product['name']; ?>"/>
 										</a>
 									<? } ?>
 								</td>
@@ -73,8 +73,8 @@
 								<td class="model"><?= $product['model']; ?></td>
 								<td class="quantity">
 									<input type="text" name="quantity[<?= $cart_product['key']; ?>]" value="<?= $cart_product['quantity']; ?>" size="1"/>
-									<input class="update" type="image" name="cart_update" value="1" onclick="return cart_update($(this));" src="<?= theme_url('image/update.png'); ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
-									<label><?= _l("Update"); ?></label>
+									<input id="update-<?= $cart_product['key']; ?>" class="update" type="image" name="cart_update" value="1" src="<?= theme_url('image/update.png'); ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
+									<label for="update-<?= $cart_product['key']; ?>" data-loading="<?= _l("Updating..."); ?>"><?= _l("Update"); ?></label>
 								</td>
 
 								<? if (!empty($show_return_policy)) { ?>
@@ -89,7 +89,7 @@
 								<? } ?>
 
 								<td class="center">
-									<a href="<?= site_url("cart/cart/remove", 'cart_key=' . $cart_product['key']); ?>" class="button remove"></a>
+									<a href="<?= site_url("cart/remove", 'cart_key=' . $cart_product['key']); ?>" class="button remove" data-loading="O"><?= _l("X"); ?></a>
 								</td>
 							</tr>
 						<? } ?>
@@ -109,7 +109,7 @@
 								<? } ?>
 
 								<td class="remove-voucher center">
-									<a href="<?= site_url('cart/cart/remove', 'cart_key=' . $voucher['key']); ?>" class="button remove"><?= _l("Remove"); ?></a>
+									<a href="<?= site_url('cart/remove_voucher', 'voucher_key=' . $voucher['key']); ?>" class="button remove" data-loading="O"><?= _l("X"); ?></a>
 								</td>
 							</tr>
 						<? } ?>
@@ -120,7 +120,7 @@
 					</tbody>
 				</table>
 			</div>
-		<? } elseif ($cart_empty) { ?>
+		<? } elseif ($is_empty) { ?>
 			<div class="center">
 				<h2><?= _l("Your shopping cart is empty! Please check back here after you have added something to your cart!"); ?></h2>
 			</div>
@@ -131,30 +131,45 @@
 		<? } ?>
 	</form>
 
-	<?= $cart_extend; ?>
+	<div id="cart-extended">
+		<?= $cart_extend; ?>
+	</div>
 </div>
 
 <script type="text/javascript">
-	var the_cart = $('#the_cart');
+	$('[name=cart_update]').click(function() {
+		var $this = $(this);
+		var data = $this.closest('form').serializeArray();
 
-	function cart_update(context) {
-		var data = context.closest('form').serializeArray();
+		data.push({name: 'cart_update', value: $this.val()});
 
-		data.push({name: context.attr('name'), value: context.attr('value')});
-
-		$.post("<?= $url_block_cart; ?>", data, function (html) {
-			//Cart is empty (or something went wrong)
+		$this.siblings('label').loading();
+		$this.closest('td').addClass('loading');
+		$.post("<?= site_url('cart/update'); ?>", data, function (html) {
 			if (!html) {
-				location = "<?= $url_cart; ?>";
+				html = "<div id=\"the-cart\"><?= _l("The Cart is empty."); ?></div>";
 			}
 
-			var new_cart = $('<div />').append(html).find('#the_cart');
-
-			the_cart.html(new_cart.length ? new_cart.html() : html);
-
-			the_cart.trigger('cart_loaded');
+			$('#the-cart').replaceWith(html);
 		}, 'html');
 
 		return false;
-	}
+	});
+
+	$('#cart-form .remove').click(function() {
+		var $this = $(this);
+
+		$this.loading();
+		$.get($this.attr('href'), {}, function (response) {
+			$this.loading('stop');
+
+			$this.closest('form').ac_msg(response);
+
+			if (response.success) {
+				$this.closest('tr').remove();
+			}
+		}, 'json');
+
+		return false;
+	});
 </script>
