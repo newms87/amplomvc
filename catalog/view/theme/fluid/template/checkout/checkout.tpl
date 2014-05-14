@@ -129,4 +129,5 @@
 		$('#checkout-form').removeClass('confirmation');
 	});
 </script>
+
 <?= call('common/footer'); ?>

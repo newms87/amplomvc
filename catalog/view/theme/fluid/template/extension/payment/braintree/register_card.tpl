@@ -1,4 +1,4 @@
-<section id="braintree-register-card" class="content">
+<section class="braintree-register-card content">
 	<header class="row top-row">
 		<div class="wrap">
 		<h1><?= _l("Register a New Card"); ?></h1>

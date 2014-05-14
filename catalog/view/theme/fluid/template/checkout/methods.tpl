@@ -8,10 +8,10 @@
 			}; ?>
 
 			<? $build = array(
-				'name'   => 'shipping_key',
+				'name'   => 'shipping_code',
 				'data'   => format_all($method_format, $shipping_methods),
 				'select' => $shipping_key,
-				'key'    => 'shipping_key',
+				'key'    => 'code',
 				'value'  => 'formatted',
 			); ?>
 
@@ -34,11 +34,11 @@
 			<h3><?= _l("Payment Method"); ?></h3>
 
 			<? $method_format = function ($a) {
-				return call('extension/payment/' . $a['code'] . '/register_card', null);
+				return call('extension/payment/' . $a['code'], null);
 			}; ?>
 
 			<? $build = array(
-				'name'   => 'payment_key',
+				'name'   => 'payment_code',
 				'data'   => format_all($method_format, $payment_methods),
 				'select' => $payment_key,
 				'key'    => 'code',

@@ -107,7 +107,7 @@ function format($type, $data, $param = null)
 {
 	global $registry;
 	if (!is_string($type) && is_callable($type)) {
-		return $type($data);
+		return $type($data, $param);
 	}
 
 	return $registry->get($type)->format($data, $param);
@@ -115,8 +115,8 @@ function format($type, $data, $param = null)
 
 function format_all($type, &$array, $index = null, $key = 'formatted')
 {
-	array_walk($array, function (&$a) use ($type, $index, $key) {
-		$a[$key] = $index ? format($type, $a[$index]) : format($type, $a);
+	array_walk($array, function (&$a, $i) use ($type, $index, $key) {
+		$a[$key] = $index ? format($type, $a[$index], $i) : format($type, $a, $i);
 	});
 
 	return $array;

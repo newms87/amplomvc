@@ -1,4 +1,5 @@
 <?php
+
 class Catalog_Controller_Extension_Payment_Braintree extends Controller
 {
 	private $settings;
@@ -22,11 +23,16 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$data['user_logged'] = $this->customer->isLogged();
 
 		//Render
-		$this->render('extension/payment/braintree', $data);
+		$this->render('extension/payment/braintree/braintree', $data);
 	}
 
-	public function register_card($data = array())
+	public function register_card($settings = array())
 	{
+		//Default Settings
+		$settings += array(
+			'template' => 'extension/payment/braintree/register_card',
+		);
+
 		//Entry Data
 		$card_info = array();
 
@@ -42,16 +48,46 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 			'postcode'  => $payment_address ? $payment_address['postcode'] : '',
 		);
 
-		$data += $card_info + $defaults;
+		$settings += $card_info + $defaults;
 
 		//Template Data
 		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
 
 		//Action Buttons
-		$data['submit'] = site_url('extension/payment/braintree/add_card');
+		$settings['submit'] = site_url('extension/payment/braintree/add_card');
 
 		//Render
-		$this->response->setOutput($this->render('extension/payment/braintree_register_card', $data));
+		$this->response->setOutput($this->render($settings['template'], $settings));
+	}
+
+	public function select_card($settings = array())
+	{
+		//Default Settings
+		$settings += array(
+			'new_card'    => false,
+			'remove_card' => false,
+		);
+
+		//Data
+		$cards = $this->System_Extension_Payment_Braintree->getCards();
+
+		if (!empty($settings['new_card'])) {
+			$template = 'extension/payment/braintree/' . (is_string($settings['new_card']) ? $settings['new_card'] : 'register_fields');
+
+			$cards['new'] = array(
+				'id' => 'new',
+			   'settings' => array(
+				   'template' => $template,
+			   ),
+			);
+		}
+
+		$settings['cards'] = $cards;
+
+		$settings['payment_key'] = $this->customer->getDefaultPaymentMethod('braintree');
+
+		//Render
+		$this->response->setOutput($this->render('extension/payment/braintree/select_card', $settings));
 	}
 
 	public function add_card()
@@ -79,8 +115,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		if (!empty($_GET['card_id'])) {
 			if ($this->System_Extension_Payment_Braintree->removeCard($_GET['card_id'])) {
 				$this->message->add('notify', _l("You have successfully removed the card from your account"));
-			}
-			else {
+			} else {
 				$this->message->add('warning', $this->System_Extension_Payment_Braintree->getError());
 			}
 		} else {
@@ -109,8 +144,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 			$this->order->setPaymentMethod($order_id, 'braintree', $_POST['payment_key']);
 
 			$result = $this->System_Extension_Payment_Braintree->confirm($order_id);
-		}
-		//Pay with New Card
+		} //Pay with New Card
 		else {
 			$result = $this->System_Extension_Payment_Braintree->confirm($order_id, $_POST);
 		}
@@ -123,6 +157,6 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		//Clear Cart
 		$this->cart->clear();
 
-		redirect('checkout/success', 'order_id=' .$order_id);
+		redirect('checkout/success', 'order_id=' . $order_id);
 	}
 }
