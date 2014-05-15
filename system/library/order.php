@@ -304,8 +304,12 @@ class Order Extends Library
 	 *
 	 */
 
-	public function confirmOrder($order_id, $comment = '', $notify = false)
+	public function confirmOrder($order_id = null, $comment = '', $notify = false)
 	{
+		if (!$order_id) {
+			$order_id = $this->session->get('order_id');
+		}
+
 		return $this->updateOrder($order_id, option('config_order_complete_status_id'), $comment, $notify);
 	}
 

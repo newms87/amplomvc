@@ -14,19 +14,21 @@
 
 	<?= area('top'); ?>
 
-	<? if ((!$has_shipping || $shipping_key) && $payment_key) { ?>
-		<? $step = 'confirmation'; ?>
-	<? } elseif ((!$has_shipping || $shipping_address_id) && $payment_address_id) { ?>
-		<? $step = 'methods'; ?>
-	<? } else { ?>
-		<? $step = 'address'; ?>
-	<? } ?>
+	<? if (!$is_logged && !$is_guest) {
+		$step = 'login';
+	} elseif (($has_shipping && !$shipping_address_id) || !$payment_address_id) {
+		$step = 'address';
+	} elseif (($has_shipping && !$shipping_key) || !$payment_key) {
+		$step = 'methods';
+	} else {
+		$step = 'confirmation';
+	} ?>
 
-	<form id="checkout-form" action="<?= site_url('checkout/checkout/confirm'); ?>" class="form <?= $step; ?>" method="post">
+	<form id="checkout-form" action="<?= site_url('checkout/checkout/add_order'); ?>" class="form <?= $step; ?>" method="post">
 
 		<div class="row checkout-row">
 			<div class="wrap">
-				<? if (!$is_logged && !$is_guest) { ?>
+				<? if ($step === 'login') { ?>
 					<?= block('account/login', null, array('template' => 'block/account/login')); ?>
 				<? } else { ?>
 					<? if ($is_guest) { ?>

@@ -51,7 +51,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$settings += $card_info + $defaults;
 
 		//Template Data
-		$data['encryption_key'] = $this->settings['client_side_encryption_key'];
+		$settings['encryption_key'] = $this->settings['client_side_encryption_key'];
 
 		//Action Buttons
 		$settings['submit'] = site_url('extension/payment/braintree/add_card');

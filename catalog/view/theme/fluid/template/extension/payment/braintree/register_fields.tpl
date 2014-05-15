@@ -1,4 +1,4 @@
-<section class="braintree-register-card content">
+<section class="braintree-register-card braintree-fields content">
 	<header class="row top-row">
 		<div class="wrap">
 			<h1><?= _l("Register a New Card"); ?></h1>
@@ -24,24 +24,23 @@
 </section>
 
 <script>
-	var $form = $('.braintree-register-fields').closest('form');
+	var $form = $('.braintree-register-card').closest('form');
 
-	var ajax_submit = function (e) {
-		console.log('submitting after bt');
-		return false;
-	}
+	$('.ac-radio').click(function () {
+		$(this).closest('label').children('input[type=radio]').prop('checked', true);
+	});
 
 	function braintree() {
-		if (typeof Braintree == 'undefined') {
-			setTimeout(braintree, 5);
-		} else {
-			if (!$form.attr('id')) {
-				$form.attr('id', 'braintree-register-form');
+		$form.submit(function () {
+			if ($('[data-encrypted-name]').val()) {
+				var bt = Braintree.create("<?= $encryption_key; ?>");
+				bt.encryptForm($form[0]);
 			}
-			var bt = Braintree.create("<?= $encryption_key; ?>");
-			bt.onSubmitEncryptForm($form.attr('id'), ajax_submit);
-		}
-	};
+		});
+
+		//Hack to reverse the jQuery event queue. Always encrypt before submitting!
+		$._data($form[0], 'events').submit.reverse();
+	}
 
 	$.getScript("https://js.braintreegateway.com/v1/braintree.js", braintree);
 </script>

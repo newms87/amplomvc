@@ -39,7 +39,8 @@ class Admin_Controller_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
-		$this->document->localizeVar('site_url', site_url());
+		$this->document->localizeVar('site_url', URL_SITE);
+		$this->document->localizeVar('admin_url', site_url());
 		$this->document->localizeVar('theme_url', theme_url());
 
 

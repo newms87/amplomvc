@@ -47,11 +47,11 @@ class Admin_Controller_Extension_Shipping_Amount extends Controller
 		);
 
 		$data['data_ranges'] = array(
-			'lt'    => "<",
-			'lte'   => '<=',
-			'gt'    => ">",
-			'gte'   => '>=',
-			'eq'    => '=',
+			'lt'    => _l('Less than'),
+			'lte'   => _l('Less than or equals'),
+			'gt'    => _l('Greater than'),
+			'gte'   => _l('Greater than or equals'),
+			'eq'    => _l('Equals'),
 			'range' => _l('range'),
 		);
 

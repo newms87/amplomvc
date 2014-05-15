@@ -5,7 +5,6 @@
 			<table id="pricesets" class="list">
 				<thead>
 					<tr>
-						<td class="left"><?= _l("Total Price Range"); ?></td>
 						<td class="left"><?= _l("Total in Cart"); ?></td>
 						<td class="left"><?= _l("Shipping Cost"); ?></td>
 						<td class="left"><?= _l("Cost Type"); ?></td>
@@ -15,10 +14,8 @@
 				<tbody id="priceset_list">
 					<? foreach ($priceset as $row => $set) { ?>
 						<tr class="priceset" data-row="<?= $row; ?>">
-							<td class="left">
-								<?= $this->builder->build('select', $data_ranges, "settings[priceset][$row][range]", $set['range'], array('onchange' => 'range_values($(this))')); ?>
-							</td>
 							<td class="left pricetotal">
+								<?= $this->builder->build('select', $data_ranges, "settings[priceset][$row][range]", $set['range'], array('onchange' => 'range_values($(this))')); ?>
 								<span class="total" <?= $set['range'] == 'range' ? "style=\"display:none\"" : ''; ?>>
 									<input type="text" name="settings[priceset][<?= $row; ?>][total]" value="<?= $set['total']; ?>"/>
 								</span>
@@ -38,7 +35,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="4"></td>
+						<td colspan="3"></td>
 						<td class="left"><a onclick="add_price_set()" class="button"><?= _l("Add Price Set"); ?></a>
 						</td>
 					</tr>

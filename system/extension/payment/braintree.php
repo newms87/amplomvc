@@ -240,8 +240,12 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 				try {
 					$result = Braintree_CreditCard::create($data);
 
-					if (!empty($result->errors)) {
+					if (!empty($result->success)) {
+						return $result->creditCard->_attributes['token'];
+					} elseif (!empty($result->errors)) {
 						$this->resultError($result);
+					} else {
+						$this->error[] = _l("There was a problem creating the credit card");
 					}
 				} catch (Braintree_Exception $e) {
 					$this->error[] = $e->getMessage();

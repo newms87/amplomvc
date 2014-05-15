@@ -3,8 +3,6 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 {
 	public function settings()
 	{
-
-
 		$this->document->setTitle(_l("Flat Rate Shipping"));
 
 		if ($this->request->isPost() && $this->validate()) {
@@ -15,16 +13,14 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 			redirect('extension/shipping');
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('extension/shipping'));
 		$this->breadcrumb->add(_l("Flat Rate Shipping"), site_url('shipping/flat'));
 
 		$data['action'] = site_url('shipping/flat');
-		$data['cancel'] = site_url('extension/shipping');
 
 		//Entry Data
-		$flat_info = array();
-
 		if ($this->request->isPost()) {
 			$flat_info = $_POST;
 		} else {
@@ -35,7 +31,7 @@ class Admin_Controller_Extension_Shipping_Flat extends Controller
 			'rates'      => array(),
 		);
 
-		$data += $flat_info = $defaults;
+		$data += $flat_info + $defaults;
 
 		//Template Data
 		$data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
