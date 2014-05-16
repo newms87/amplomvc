@@ -40,7 +40,7 @@ class Catalog_Controller_Cart extends Controller
 		//Action
 		$data += array(
 			'continue' => $continue,
-		   'checkout' => site_url('checkout/checkout'),
+		   'checkout' => site_url('checkout'),
 		);
 
 		//Render
@@ -72,7 +72,7 @@ class Catalog_Controller_Cart extends Controller
 			redirect('product/product', 'product_id=' . $product_id);
 		}
 
-		redirect('checkout/checkout');
+		redirect('checkout');
 	}
 
 	public function add()

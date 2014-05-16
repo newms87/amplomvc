@@ -1,25 +1,27 @@
-<div id="coupon_block">
-	<form action="" method="post" <?= $ajax ? "onclick=\"return apply_coupon();\"" : ''; ?>>
-		<span><?= _l("Enter your coupon here:"); ?></span>
-		<input id="coupon_code" type="text" name="coupon_code" value=""/>
-		<input type="submit" value="<?= _l("Apply Coupon"); ?>" class="button small"/>
+<div class="block-cart-coupon">
+	<form action="<?= $action; ?>" class="coupon-form form" method="post">
+		<div class="form-item coupon-code">
+			<input id="coupon-code" type="text" name="coupon_code" placeholder="<?= _l("Enter Coupon Code"); ?>" value=""/>
+			<button data-loading="<?= _l("Applying..."); ?>"><?= _l("Apply Coupon"); ?></button>
+		</div>
 	</form>
 </div>
 
-<? if ($ajax) { ?>
-	<script type="text/javascript">
-		function apply_coupon() {
-			if ($('#coupon_code').val()) {
-				submit_block('coupon', '<?= $ajax_url; ?>', $('#coupon_block form'));
+<script type="text/javascript">
+	$('.coupon-form').submit(function () {
+		var $this = $(this);
+
+		$this.find('button').loading();
+		$.post($this.attr('action'), $this.serialize(), function (response) {
+			$this.find('button').loading('stop');
+
+			if (response.success) {
+				$('body').trigger('reload_totals');
 			}
 
-			return false;
-		}
+			$this.ac_msg(response);
+		}, 'json');
 
-		$('body').bind('coupon_success', function () {
-			$('input[name=coupon_code]').val('');
-		});
-		$('body').bind('coupon_error', function () {
-		});
-	</script>
-<? } ?>
+		return false;
+	});
+</script>

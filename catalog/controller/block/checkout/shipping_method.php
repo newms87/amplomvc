@@ -48,7 +48,7 @@ class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 			$json['redirect'] = site_url('cart');
 		} elseif (!$this->cart->hasShipping()) {
 			$this->message->add('warning', _l("Shipping is not required for this order."));
-			$json['redirect'] = site_url('checkout/checkout');
+			$json['redirect'] = site_url('checkout');
 		}
 
 		if (!empty($_POST['shipping_method']) && strpos($_POST['shipping_method'], ',') !== false) {

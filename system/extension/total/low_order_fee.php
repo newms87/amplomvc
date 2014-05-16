@@ -21,7 +21,7 @@ class System_Extension_Total_LowOrderFee extends System_Extension_Total
 			}
 
 			$data = array(
-				'value' => $this->settings['fee'],
+				'amount' => $this->settings['fee'],
 			);
 
 			return $data;

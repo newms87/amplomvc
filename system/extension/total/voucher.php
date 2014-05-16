@@ -16,7 +16,7 @@ class System_Extension_Total_Voucher extends System_Extension_Total
 				$total_data['voucher'] = array(
 					'method_id' => $vouchers['voucher_id'],
 					'title'     => _l("Voucher (%s)", $this->session->get('voucher')),
-					'value'     => -$amount,
+					'amount'     => -$amount,
 				);
 
 				$total -= $amount;
@@ -34,7 +34,7 @@ class System_Extension_Total_Voucher extends System_Extension_Total
 		$voucher_info = $this->System_Model_Voucher->getVoucher($order_total['method_id']);
 
 		if ($voucher_info) {
-			$this->System_Model_Voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['value']);
+			$this->System_Model_Voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['amount']);
 		}
 	}
 }

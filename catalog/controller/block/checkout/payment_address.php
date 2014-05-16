@@ -82,7 +82,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				redirect('checkout/checkout');
+				redirect('checkout');
 			}
 		}
 
@@ -95,7 +95,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
-			$json['redirect'] = site_url('checkout/checkout');
+			$json['redirect'] = site_url('checkout');
 		} elseif (!$this->cart->validate()) {
 			$json['redirect'] = site_url('cart');
 			$this->message->add('warning', $this->cart->getError());

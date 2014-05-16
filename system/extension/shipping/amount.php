@@ -4,7 +4,7 @@ class System_Extension_Shipping_Amount extends System_Extension_Shipping
 {
 	public function getQuotes($address)
 	{
-		if (!parent::validate($address)) {
+		if (!$this->validate($address)) {
 			return array();
 		}
 
@@ -15,7 +15,7 @@ class System_Extension_Shipping_Amount extends System_Extension_Shipping
 		if (empty($this->settings['priceset'])) {
 			return array();
 		}
-		
+
 		$pricesets = $this->settings['priceset'];
 
 		foreach ($pricesets as $set) {
@@ -93,11 +93,12 @@ class System_Extension_Shipping_Amount extends System_Extension_Shipping
 		$quote_data = array();
 
 		if ($cost !== false) {
-			$quote_data['amount'] = array(
-				'shipping_key' => 'amount',
+			$key = 'amount-' . $cost;
+
+			$quote_data[$key] = array(
+				'shipping_key' => $key,
 				'title'        => _l("Flat Rate Shipping"),
 				'cost'         => $cost,
-				'cost_display' => $this->currency->format($cost),
 			);
 		}
 

@@ -10,7 +10,7 @@ class System_Extension_Total_Tax extends System_Extension_Total
 
 				$total_data['tax'] = array(
 					'title' => $tax_info['name'] . ($tax_info['type'] == 'P' ? ' @ ' . $tax_info['rate'] . '%' : ''),
-					'value' => $value,
+					'amount' => $value,
 				);
 
 				$total += $value;

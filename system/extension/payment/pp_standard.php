@@ -86,7 +86,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 			$data['invoice']       = $subscription['invoice_id'] . ' - ' . html_entity_decode($subscription['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($subscription['payment_lastname'], ENT_QUOTES, 'UTF-8');
 			$data['lc']            = $this->language->info('code');
 			$data['notify_url']    = site_url('payment/pp_standard/callback');
-			$data['cancel_return'] = site_url('checkout/checkout');
+			$data['cancel_return'] = site_url('checkout');
 			$data['page_style']    = $this->settings['page_style'];
 
 			if ($this->settings['pdt_enabled']) {

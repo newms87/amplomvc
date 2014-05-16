@@ -51,7 +51,7 @@ class Catalog_Controller_Information_Sitemap extends Controller
 		$data['history']  = site_url('account/order');
 		$data['download'] = site_url('account/download');
 		$data['cart']     = site_url('cart');
-		$data['checkout'] = site_url('checkout/checkout');
+		$data['checkout'] = site_url('checkout');
 		$data['search']   = site_url('product/search');
 		$data['contact']  = site_url('information/contact');
 

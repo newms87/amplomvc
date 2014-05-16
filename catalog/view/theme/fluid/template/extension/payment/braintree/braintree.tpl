@@ -9,6 +9,7 @@
 		<? $settings = array(
 			'payment_code' => 'braintree',
 			'new_card'     => 'register_fields',
+			'payment_key'  => $payment_key,
 		); ?>
 
 		<?= call('extension/payment/braintree/select_card', $settings); ?>

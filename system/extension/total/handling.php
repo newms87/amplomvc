@@ -6,7 +6,7 @@ class System_Extension_Total_Handling extends System_Extension_Total
 		if (($this->cart->getSubTotal() < option('handling_total')) && ($this->cart->getSubTotal() > 0)) {
 			$total_data['handling'] = array(
 				'title' => _l("Shipping & Handling"),
-				'value' => option('handling_fee'),
+				'amount' => option('handling_fee'),
 			);
 
 			if (option('handling_tax_class_id')) {

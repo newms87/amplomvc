@@ -1,66 +1,67 @@
 <?php
+
 class System_Model_Coupon extends Model
 {
 	public function getCoupon($code)
 	{
-		$code = $this->escape($code);
+		$code = $this->escape(strtolower($code));
 
-		$coupon_query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE (LCASE(coupon_id) = LCASE('$code') OR LCASE(code) = LCASE('$code')) AND ((date_start = '0000-00-00' OR date_start <= NOW()) AND (date_end = '0000-00-00' OR date_end >= NOW())) AND status = '1'");
+		$coupon = $this->queryRow("SELECT * FROM " . DB_PREFIX . "coupon WHERE LCASE(code) = '$code' AND (date_start <= NOW() AND (date_end = '0000-00-00' OR date_end >= NOW())) AND status = '1' LIMIT 1");
 
-		if (!$coupon_query->num_rows) {
+		if (!$coupon) {
+			$this->error['coupon_code'] = _l("Coupon is either invalid or expired!");
 			return false;
 		}
 
-		if ($coupon_query->row['total'] > $this->cart->getSubTotal()) {
+		if ($coupon['total'] > $this->cart->getSubTotal()) {
+			$this->error['coupon_total'] = _l("You must have at least %s in your cart for this coupon.", $this->currency->format($coupon['total']));
 			return false;
 		}
 
-		$coupon_history_query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "coupon_history` ch WHERE ch.coupon_id = '" . (int)$coupon_query->row['coupon_id'] . "'");
+		if ($coupon['uses_total'] > 0) {
+			$use_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "coupon_history WHERE coupon_id = " . (int)$coupon['coupon_id']);
 
-		if ($coupon_query->row['uses_total'] > 0 && ($coupon_history_query->row['total'] >= $coupon_query->row['uses_total'])) {
-			return false;
-		}
-
-		if ($coupon_query->row['logged'] && !$this->customer->getId()) {
-			return false;
-		}
-
-		if ($this->customer->getId()) {
-			$coupon_history_query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "coupon_history` ch WHERE ch.coupon_id = '" . (int)$coupon_query->row['coupon_id'] . "' AND ch.customer_id = '" . (int)$this->customer->getId() . "'");
-
-			if ($coupon_query->row['uses_customer'] > 0 && ($coupon_history_query->row['total'] >= $coupon_query->row['uses_customer'])) {
+			if ($use_count >= $coupon['uses_total']) {
+				$this->error['coupon_uses'] = _l("This coupon has reached its usage limit.");
 				return false;
 			}
 		}
 
-		$coupon_products = array();
+		if (($coupon['uses_customer'] > 0 || $coupon['logged']) && !$this->customer->isLogged()) {
+			$this->error['coupon_logged'] = _l("You must be logged in to use this coupon");
+			return false;
+		}
 
-		$coupon_product_query = $this->query("SELECT product_id FROM " . DB_PREFIX . "coupon_product WHERE coupon_id = '" . (int)$coupon_query->row['coupon_id'] . "'");
+		if ($coupon['uses_customer'] > 0) {
+			$customer_uses = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "coupon_history WHERE coupon_id = " . (int)$coupon['coupon_id'] . " AND customer_id = " . (int)$this->customer->getId());
 
-		if ($coupon_product_query->num_rows) {
-
-			foreach ($coupon_product_query->rows as $row) {
-				$coupon_products[] = $row['product_id'];
+			if ($customer_uses >= $coupon['uses_customer']) {
+				$this->error['coupon_customer_uses'] = _l("You have reached the usage limit for this coupon.");
+				return false;
 			}
+		}
 
-			$coupon_product = false;
+		$product_ids = $this->queryColumn("SELECT product_id FROM " . DB_PREFIX . "coupon_product WHERE coupon_id = " . (int)$coupon['coupon_id']);
+
+		if ($product_ids) {
+			$has_product = false;
 
 			foreach ($this->cart->getProductIds() as $product) {
-				if (in_array($product['product_id'], $coupon_products)) {
-					$coupon_product = true;
-
+				if (in_array($product['product_id'], $product_ids)) {
+					$has_product = true;
 					break;
 				}
 			}
 
-			if (!$coupon_product) {
+			if (!$has_product) {
+				$this->error['coupon_product'] = _l("You do not have the required products in your cart to use this coupon.");
 				return false;
 			}
 		}
 
-		$coupon_query->row['product'] = $coupon_products;
+		$coupon['product'] = $product_ids;
 
-		return $coupon_query->row;
+		return $coupon;
 	}
 
 	public function loadAutoCoupons()
@@ -85,6 +86,14 @@ class System_Model_Coupon extends Model
 
 	public function redeem($coupon_id, $order_id, $customer_id, $amount)
 	{
-		$this->query("INSERT INTO `" . DB_PREFIX . "coupon_history` SET coupon_id = '" . (int)$coupon_id . "', order_id = '" . (int)$order_id . "', customer_id = '" . (int)$customer_id . "', amount = '" . (float)$amount . "', date_added = NOW()");
+		$redeem = array(
+			'coupon_id'   => $coupon_id,
+			'order_id'    => $order_id,
+			'customer_id' => $customer_id,
+			'amount'      => $amount,
+			'date_added'  => $this->date->now(),
+		);
+
+		$this->insert('coupon_history', $redeem);
 	}
 }

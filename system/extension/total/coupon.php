@@ -103,7 +103,7 @@ class System_Extension_Total_Coupon extends System_Extension_Total
 				$data = array(
 					'method_id' => $coupon_info['code'],
 					'title'     => _l("Coupon (%s)", $coupon_info['code']),
-					'value'     => -$discount_total,
+					'amount'     => -$discount_total,
 				);
 
 				$total_data['code__' . $coupon_info['code']] = $data + $this->info();
@@ -121,7 +121,7 @@ class System_Extension_Total_Coupon extends System_Extension_Total
 			$coupon_info = $this->System_Model_Coupon->getCoupon($order_total['method_id']);
 
 			if ($coupon_info) {
-				$this->System_Model_Coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
+				$this->System_Model_Coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['amount']);
 			}
 		}
 	}

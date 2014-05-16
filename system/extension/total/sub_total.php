@@ -19,7 +19,7 @@ class System_Extension_Total_SubTotal extends System_Extension_Total
 		$total += $sub_total;
 
 		$data = array(
-			'value' => $sub_total,
+			'amount' => $sub_total,
 		);
 
 		return $data;

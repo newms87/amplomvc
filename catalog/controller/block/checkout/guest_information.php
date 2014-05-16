@@ -51,7 +51,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		$json = array();
 
 		if ($this->customer->isLogged()) {
-			$json['redirect'] = site_url('checkout/checkout');
+			$json['redirect'] = site_url('checkout');
 		} elseif ((!$this->cart->hasProducts() && !$this->cart->hasVouchers()) || (!$this->cart->hasStock() && !option('config_stock_checkout'))) {
 			$json['redirect'] = site_url('cart');
 		} elseif (!option('config_guest_checkout') || $this->cart->hasDownload()) {
@@ -61,7 +61,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		//Redirect if set
 		if ($json) {
 			if ($this->request->isAjax()) {
-				redirect('checkout/checkout');
+				redirect('checkout');
 			}
 		} else {
 			//Validate Guest Information
@@ -131,7 +131,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				redirect('checkout/checkout');
+				redirect('checkout');
 			}
 		}
 

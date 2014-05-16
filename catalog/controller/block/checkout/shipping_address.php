@@ -80,7 +80,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				redirect('checkout/checkout');
+				redirect('checkout');
 			}
 		}
 
@@ -93,12 +93,12 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
-			$json['redirect'] = site_url('checkout/checkout');
+			$json['redirect'] = site_url('checkout');
 		} elseif (!$this->cart->validate()) {
 			$json['redirect'] = site_url('cart');
 			$this->message->add($this->cart->getError());
 		} elseif (!$this->cart->hasShipping()) {
-			$json['redirect'] = site_url('checkout/checkout');
+			$json['redirect'] = site_url('checkout');
 			$this->message->add('warning', _l("Shipping is not required for this order"));
 		}
 

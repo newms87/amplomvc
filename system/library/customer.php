@@ -448,7 +448,7 @@ class Customer extends Library
 
 	public function getAddresses($filter = array())
 	{
-		if (!isset($filter['customer_ids'])) {
+		if (!isset($filter['customer_ids']) && $this->customer_id) {
 			$filter['customer_ids'] = array($this->customer_id);
 		}
 

@@ -22,6 +22,8 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		$data['user_logged'] = $this->customer->isLogged();
 
+		$data['payment_key'] = $this->cart->getPaymentKey();
+
 		//Render
 		$this->render('extension/payment/braintree/braintree', $data);
 	}
@@ -66,6 +68,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 		$settings += array(
 			'new_card'    => false,
 			'remove_card' => false,
+		   'payment_key' => null,
 		);
 
 		//Data
@@ -84,7 +87,9 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		$settings['cards'] = $cards;
 
-		$settings['payment_key'] = $this->customer->getDefaultPaymentMethod('braintree');
+		if (is_null($settings['payment_key'])) {
+			$settings['payment_key'] = $this->customer->getDefaultPaymentMethod('braintree');
+		}
 
 		//Render
 		$this->response->setOutput($this->render('extension/payment/braintree/select_card', $settings));
@@ -131,7 +136,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		if (!$order_id) {
 			$this->message->add('error', _l("Order was not processed. Please try submitting your order again."));
-			redirect('checkout/checkout');
+			redirect('checkout');
 		}
 
 		//Pay with Existing Credit Card
@@ -151,7 +156,7 @@ class Catalog_Controller_Extension_Payment_Braintree extends Controller
 
 		if (!$result) {
 			$this->message->add('error', $this->System_Extension_Payment_Braintree->getError());
-			redirect('checkout/checkout');
+			redirect('checkout');
 		}
 
 		//Clear Cart

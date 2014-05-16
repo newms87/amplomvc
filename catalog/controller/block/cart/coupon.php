@@ -3,19 +3,9 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 {
 	public function build($settings)
 	{
-		$ajax = isset($settings['ajax']) ? $settings['ajax'] : false;
+		$settings['action'] = site_url('block/cart/coupon/apply_coupon');
 
-		if (isset($_POST['coupon_code'])) {
-			$this->apply_coupon();
-		}
-
-		$data['ajax'] = $ajax;
-
-		if ($ajax) {
-			$data['ajax_url'] = site_url('block/cart/coupon/ajax_apply_coupon');
-		}
-
-		$this->response->setOutput($this->render('block/cart/coupon', $data));
+		$this->response->setOutput($this->render('block/cart/coupon', $settings));
 	}
 
 	//TODO: Handel SESSION coupons (probably from cart?) sitewide...
@@ -25,27 +15,21 @@ class Catalog_Controller_Block_Cart_Coupon extends Controller
 		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
 
 		if (!$coupon_info) {
-			$this->message->add('warning', _l("Warning: Coupon is either invalid, expired or reached it's usage limit!"));
+			$this->message->add('error', $this->System_Model_Coupon->getError());
 		} else {
-			$this->session->get('coupons')[$_POST['coupon_code']] = $coupon_info;
+			$_SESSION['coupons'][$_POST['coupon_code']] = $coupon_info;
 
-			$this->message->add('success', _l("Success: Your coupon discount has been applied!"));
-		}
-	}
-
-	public function ajax_apply_coupon()
-	{
-		//TODO: This should be moved to $this->cart->getCoupon()
-		$coupon_info = $this->System_Model_Coupon->getCoupon($_POST['coupon_code']);
-
-		if (!$coupon_info) {
-			$json['error'] = _l("Warning: Coupon is either invalid, expired or reached it's usage limit!");
-		} else {
-			$this->session->get('coupons')[$_POST['coupon_code']] = $coupon_info;
-
-			$json['success'] = _l("Success: Your coupon discount has been applied!");
+			$this->message->add('success', _l("Your coupon has been applied!"));
 		}
 
-		$this->response->setOutput(json_encode($json));
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			} else {
+				redirect('cart/cart');
+			}
+		}
 	}
 }

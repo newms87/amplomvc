@@ -42,7 +42,7 @@ class System_Extension_Total_Reward extends System_Extension_Total
 				$total_data['reward'] = array(
 					'method_id' => $this->session->get('reward'),
 					'title'     => _l("Reward (%s)", $this->session->get('reward')),
-					'value'     => -$discount_total,
+					'amount'     => -$discount_total,
 				);
 
 				$total -= $discount_total;

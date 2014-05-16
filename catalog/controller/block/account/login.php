@@ -21,7 +21,7 @@ class Catalog_Controller_Block_Account_Login extends Controller
 
 		//For Guest Checkout (on checkout page)
 		if ($this->cart->guestCheckoutAllowed()) {
-			$data['guest_checkout'] = site_url('checkout/checkout/guest_checkout');
+			$data['guest_checkout'] = site_url('checkout/guest_checkout');
 		}
 
 		//The Template

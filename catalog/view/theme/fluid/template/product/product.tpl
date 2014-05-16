@@ -198,7 +198,7 @@
 
 							<div class="product-nav">
 								<a href="<?= site_url('cart'); ?>"><?= _l("View Cart"); ?></a>
-								<a href="<?= site_url('checkout/checkout'); ?>"><?= _l("Checkout"); ?></a>
+								<a href="<?= site_url('checkout'); ?>"><?= _l("Checkout"); ?></a>
 								<a href="<?= $this->breadcrumb->prevUrl(); ?>"><?= _l("Continue Shopping"); ?></a>
 							</div>
 							<? if ($minimum > 1) { ?>

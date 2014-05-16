@@ -1,10 +1,26 @@
-<div class="cart-total">
-	<table id="total">
-		<? foreach ($totals as $total) { ?>
-			<tr>
-				<td class="total_title"><b><?= $total['title']; ?>:</b></td>
-				<td class="total_text"><?= $total['display_value']; ?></td>
-			</tr>
-		<? } ?>
-	</table>
+<div class="cart-total row">
+	<div class="col xs-12 sm-6 md-4 center">
+		<div class="total-line-items">
+			<? foreach ($totals as $total) { ?>
+				<div class="line-item">
+					<div class="title"><?= $total['title']; ?>:</div>
+					<div class="text"><?= format('currency', $total['amount']); ?></div>
+				</div>
+			<? } ?>
+		</div>
+	</div>
 </div>
+
+<script type="text/javascript">
+	var reload_totals = function() {
+		$totals = $('.cart-total');
+
+		$totals.loading();
+
+		$.get("<?= site_url("block/cart/total/build"); ?>", {}, function(response) {
+			$totals.replaceWith(response);
+		}, 'html');
+	}
+
+	$('body').on('reload_totals', reload_totals);
+</script>

@@ -24,7 +24,7 @@
 		$step = 'confirmation';
 	} ?>
 
-	<form id="checkout-form" action="<?= site_url('checkout/checkout/add_order'); ?>" class="form <?= $step; ?>" method="post">
+	<form id="checkout-form" action="<?= site_url('checkout/add_order'); ?>" class="form <?= $step; ?>" method="post">
 
 		<div class="row checkout-row">
 			<div class="wrap">
@@ -32,7 +32,7 @@
 					<?= block('account/login', null, array('template' => 'block/account/login')); ?>
 				<? } else { ?>
 					<? if ($is_guest) { ?>
-						<?= call('checkout/checkout/guest'); ?>
+						<?= call('checkout/guest'); ?>
 					<? } else { ?>
 						<div class="checkout-delivery col xs-12 md-6">
 							<div id="shipping-address" class="address-list">
@@ -76,7 +76,7 @@
 
 		<div class="row checkout-methods">
 			<div class="wrap">
-				<?= call('checkout/checkout/methods'); ?>
+				<?= call('checkout/methods'); ?>
 			</div>
 		</div>
 
@@ -91,6 +91,14 @@
 		</div>
 	</form>
 
+	<div class="row checkout-confirmation">
+		<div class="wrap">
+			<? if ($step === 'confirmation') { ?>
+				<?= call('checkout/confirmation'); ?>
+			<? } ?>
+		</div>
+	</div>
+
 	<?= area('bottom'); ?>
 
 </section>
@@ -104,8 +112,25 @@
 
 		$.post($this.attr('action'), $this.serialize(), function (response) {
 			$button.loading('stop');
-			$this.after(response);
-		});
+
+			if (!response) {
+				response = {error: "<?= _l("There was a problem checking you out. Please try again."); ?>"}
+			}
+
+			if (response.success) {
+				$co_form.removeClass("methods address").addClass("confirmation");
+
+				$confirmation = $co_form.find('.checkout-confirmation');
+
+				$.post("<?= site_url('checkout/confirmation'); ?>", {}, function (response) {
+					$confirmation.find('.wrap').html(response);
+				}, 'html');
+
+				$co_form.find('.checkout-submit').ac_msg(response);
+			} else {
+				$co_form.find('.checkout-submit').ac_errors(response);
+			}
+		}, 'json');
 
 		return false;
 	});
@@ -114,7 +139,7 @@
 		if ($('[name=shipping_address_id]').val() && $('[name=payment_address_id]').val()) {
 			$co_form.loading();
 
-			$.post("<?= site_url("checkout/checkout/methods"); ?>", $co_form.serialize(), function(response) {
+			$.post("<?= site_url('checkout/methods'); ?>", $co_form.serialize(), function(response) {
 				$co_form.loading('stop');
 
 				$co_form.addClass('methods');

@@ -274,7 +274,7 @@ class Cart extends Library
 			$this->getTotals();
 		}
 
-		return $this->totals['sub_total']['value'];
+		return $this->totals['sub_total']['amount'];
 	}
 
 	public function getTotal()
@@ -283,7 +283,7 @@ class Cart extends Library
 			$this->getTotals();
 		}
 
-		return $this->totals['total']['value'];
+		return $this->totals['total']['amount'];
 	}
 
 	public function getTotals($refresh = false)
@@ -929,20 +929,12 @@ class Cart extends Library
 		if (empty($methods)) {
 			$this->error['payment_method'] = _l("No Payment Methods Available");
 
-			$this->clearPaymentMethod();
-
 			return array();
 		}
 
 		uasort($methods, function ($a, $b) {
 			return $a['sort_order'] > $b['sort_order'];
 		});
-
-		//Validate the currently selected payment method
-		$payment_code = $this->getPaymentCode();
-		if ($payment_code && !isset($methods[$payment_code])) {
-			$this->clearPaymentMethod();
-		}
 
 		return $methods;
 	}
@@ -1073,13 +1065,6 @@ class Cart extends Library
 		uasort($methods, function ($a, $b) {
 			return $a['sort_order'] > $b['sort_order'];
 		});
-
-		//Validate the currently selected payment method
-		$shipping_code = $this->getShippingCode();
-
-		if ($shipping_code && !isset($methods[$shipping_code])) {
-			$this->clearShippingMethod();
-		}
 
 		return $methods;
 	}
@@ -1298,11 +1283,6 @@ class Cart extends Library
 	public function getReturnPolicies()
 	{
 		return $this->config->load('policies', 'return_policies', 0);
-	}
-
-	public function isCheckout()
-	{
-		return $this->url->is('block/checkout') || $this->url->is('checkout/checkout');
 	}
 
 	public function saveCart()

@@ -16,8 +16,7 @@ class System_Extension_Total_Shipping extends System_Extension_Total
 
 			$data = array(
 				'title'      => $shipping_method['title'],
-				'value'      => $shipping_method['cost'],
-				'display_value' => $shipping_method['cost_display'],
+				'amount'      => $shipping_method['cost'],
 			);
 
 			return $data;

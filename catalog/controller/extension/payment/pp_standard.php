@@ -70,7 +70,7 @@ class Catalog_Controller_Extension_Payment_PpStandard
 		$data['invoice']       = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
 		$data['lc']            = $this->language->info('code');
 		$data['notify_url']    = $this->callbackUrl('notify');
-		$data['cancel_return'] = site_url('checkout/checkout');
+		$data['cancel_return'] = site_url('checkout');
 		$data['page_style']    = $this->settings['page_style'];
 
 		if ($this->settings['pdt_enabled']) {
