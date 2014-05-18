@@ -34,9 +34,7 @@ class Catalog_Controller_Account_Order extends Controller
 			$voucher_total = $this->System_Model_Order->getTotalOrderVouchers($order['order_id']);
 
 			$order['name']         = $order['firstname'] . ' ' . $order['lastname'];
-			$order['date_added']   = $this->date->format($order['date_added'], 'short');
 			$order['products']     = ($product_total + $voucher_total);
-			$order['total']        = $this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
 			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 			$order['href']         = site_url('account/order/info', 'order_id=' . $order['order_id']);
 			$order['reorder']      = site_url('account/order/reorder', 'order_id=' . $order['order_id']);
@@ -55,9 +53,6 @@ class Catalog_Controller_Account_Order extends Controller
 
 		$data['pagination'] = $this->pagination->render();
 
-		//Action Buttons
-		$data['continue'] = site_url('account');
-
 		//Render
 		$this->response->setOutput($this->render('account/order_list', $data));
 	}
@@ -69,7 +64,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Login Validation
 		if (!$this->customer->isLogged()) {
-			$this->session->set('redirect', site_url('account/order/info', 'order_id=' . $order_id));
+			$this->request->setRedirect(site_url('account/order/info', 'order_id=' . $order_id), 'login');
 
 			redirect('customer/login');
 		}
@@ -94,21 +89,11 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add(_l("Order History"), site_url('account/order'));
 		$this->breadcrumb->add(_l("Order Information"), $this->url->here());
 
-		$data['policies'] = site_url('information/information/info', 'information_id=' . option('config_shipping_return_info_id'));
-
-		$order['date_added'] = $this->date->format($order['date_added'], 'datetime_long');
-
 		//Shipping / Payment Addresses
-		$data['payment_address']  = $this->address->format($this->order->getPaymentAddress($order_id));
-		$data['shipping_address'] = $this->address->format($this->order->getShippingAddress($order_id));
-
-		//Shipping / Payment Methods
-		$data['payment_method']  = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
-		$data['shipping_method'] = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
-
-		$order['comment'] = nl2br($order['comment']);
-
-		$data += $order;
+		$order['payment_address']  = $this->order->getPaymentAddress($order_id);
+		$order['payment_method']   = $this->System_Extension_Payment->get($order['transaction']['payment_code'])->info();
+		$order['shipping_address'] = $this->order->getShippingAddress($order_id);
+		$order['shipping_method']  = $this->System_Extension_Shipping->get($order['shipping']['shipping_code'])->info();
 
 		//Order Products
 		$products = $this->System_Model_Order->getOrderProducts($order_id);
@@ -121,18 +106,10 @@ class Catalog_Controller_Account_Order extends Controller
 			foreach ($options as &$option) {
 				$option = $this->Model_Catalog_Product->getProductOptionValue($product['product_id'], $option['product_option_id'], $option['product_option_value_id']);
 				$option += $this->Model_Catalog_Product->getProductOption($product['product_id'], $option['product_option_id']);
-
-				if (!$option['display_value']) {
-					$option['display_value'] = ($option['name'] ? $option['name'] . ': ' : '') . $option['value'];
-				}
-
-				$option['display_value'] = $this->tool->limit_characters($option['display_value'], 30);
 			}
 			unset($option);
 
 			$product['options'] = $options;
-			$product['price']   = $this->currency->format($product['price'], $order['currency_code'], $order['currency_value']);
-			$product['total']   = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 
 			$product['return_policy']   = $this->cart->getReturnPolicy($product['return_policy_id']);
 			$product['shipping_policy'] = $this->cart->getShippingPolicy($product['shipping_policy_id']);
@@ -143,17 +120,10 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		unset($product);
 
-		$data['products'] = $products;
+		$order['products'] = $products;
 
 		//Voucher
-		$vouchers = $this->System_Model_Order->getOrderVouchers($order_id);
-
-		foreach ($vouchers as &$voucher) {
-			$voucher['amount'] = $this->currency->format($voucher['amount'], $order['currency_code'], $order['currency_value']);
-		}
-		unset($voucher);
-
-		$data['vouchers'] = $vouchers;
+		$order['vouchers'] = $this->System_Model_Order->getOrderVouchers($order_id);
 
 		//History
 		$history_filter = array(
@@ -164,28 +134,16 @@ class Catalog_Controller_Account_Order extends Controller
 
 		foreach ($histories as &$history) {
 			$history['order_status'] = $this->order->getOrderStatus($history['order_status_id']);
-			$history['date_added']   = $this->date->format($history['date_added'], 'short');
-			$history['comment']      = nl2br($history['comment']);
 		}
 		unset($history);
 
-		$data['histories'] = $histories;
+		$order['histories'] = $histories;
 
 		//Totals
-		$totals = $this->System_Model_Order->getOrderTotals($order_id);
-
-		foreach ($totals as &$total) {
-			$total['text'] = $this->currency->format($total['value'], $order['currency_code'], $order['currency_value']);
-		}
-		unset($total);
-
-		$data['totals'] = $totals;
-
-		//Action Buttons
-		$data['continue'] = site_url('account/order');
+		$order['totals'] = $this->System_Model_Order->getOrderTotals($order_id);
 
 		//Render
-		$this->response->setOutput($this->render('account/order_info', $data));
+		$this->response->setOutput($this->render('account/order_info', $order));
 	}
 
 	public function reorder()

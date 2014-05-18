@@ -53,11 +53,11 @@
 						<? foreach ($subscriptions as $subscription) { ?>
 							<? if ($subscription['status'] === Subscription::ACTIVE) { ?>
 								<div class="subscription active">
-									<div class="info">
-										<div class="image left">
-											<img src="<?= image($subscription['product']['image'], 240, 240); ?>"/>
+									<div class="info row">
+										<div class="image">
+											<img src="<?= image($subscription['product']['image'], 160, 160); ?>"/>
 										</div>
-										<div class="info-text left">
+										<div class="info-text">
 											<div class="name"><?= $subscription['product']['name']; ?></div>
 											<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
 											<div class="price"><?= $subscription['total_display']; ?></div>
@@ -71,10 +71,10 @@
 							<? } elseif ($subscription['status'] === Subscription::ON_HOLD) { ?>
 								<div class="subscription on-hold">
 									<div class="info">
-										<div class="image left">
+										<div class="image">
 											<img src="<?= image($subscription['product']['image'], 240, 240); ?>"/>
 										</div>
-										<div class="info-text left">
+										<div class="info-text">
 											<div class="name"><?= $subscription['product']['name']; ?></div>
 											<div class="teaser"><?= $subscription['product']['teaser']; ?></div>
 											<div class="price"><?= $subscription['total_display']; ?></div>

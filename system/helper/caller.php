@@ -106,11 +106,15 @@ function option($option, $default = null)
 function format($type, $data, $param = null)
 {
 	global $registry;
+
+	$args = func_get_args();
+	array_shift($args);
+
 	if (!is_string($type) && is_callable($type)) {
-		return $type($data, $param);
+		return call_user_func_array($type, $args);
 	}
 
-	return $registry->get($type)->format($data, $param);
+	return call_user_func_array(array($registry->get($type), 'format'), $args);
 }
 
 function format_all($type, &$array, $index = null, $key = 'formatted')
