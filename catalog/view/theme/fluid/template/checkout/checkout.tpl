@@ -109,9 +109,11 @@
 		var $this = $(this);
 		var $button = $this.find('button');
 		$button.loading();
+		$co_form.loading();
 
 		$.post($this.attr('action'), $this.serialize(), function (response) {
 			$button.loading('stop');
+			$co_form.loading('stop');
 
 			if (!response) {
 				response = {error: "<?= _l("There was a problem checking you out. Please try again."); ?>"}
@@ -119,11 +121,13 @@
 
 			if (response.success) {
 				$co_form.removeClass("methods address").addClass("confirmation");
-
-				$confirmation = $co_form.find('.checkout-confirmation');
+				$co_form.loading();
+				$button.loading();
 
 				$.post("<?= site_url('checkout/confirmation'); ?>", {}, function (response) {
-					$confirmation.find('.wrap').html(response);
+					$co_form.loading('stop');
+					$button.loading('stop');
+					$('#checkout-page').find('.checkout-confirmation .wrap').html(response);
 				}, 'html');
 
 				$co_form.find('.checkout-submit').ac_msg(response);
@@ -135,25 +139,36 @@
 		return false;
 	});
 
-	$('[name=shipping_address_id], [name=payment_address_id]').change(function () {
-		if ($('[name=shipping_address_id]').val() && $('[name=payment_address_id]').val()) {
-			$co_form.loading();
+	$('.address-list label').click(function () {
+		var $this = $(this);
+
+		if ($this.hasClass('checked')) {
+			return;
+		}
+
+		$this.closest('.address-list').find('label').removeClass('checked');
+		$this.addClass('checked');
+
+		if ($('[name=shipping_address_id]:checked').length && $('[name=payment_address_id]:checked').length) {
+			$co_form.find('button').loading({text: "<?= _l("Loading"); ?>"});
+			var $co_methods = $co_form.find('.checkout-methods .wrap');
+			$co_methods.children().fadeOut();
+			$co_methods.loading();
 
 			$.post("<?= site_url('checkout/methods'); ?>", $co_form.serialize(), function(response) {
-				$co_form.loading('stop');
-
+				$co_form.find('button').loading('stop');
 				$co_form.addClass('methods');
-				$('.checkout-methods .wrap').html(response);
+				$co_methods.html(response);
 			});
 		}
 	});
 
 	$('.change-address').click(function () {
-		$('#checkout-form').removeClass('methods confirmation');
+		$('#checkout-form').removeClass('methods confirmation').addClass('address');
 	});
 
 	$('.change-method').click(function () {
-		$('#checkout-form').removeClass('confirmation');
+		$('#checkout-form').removeClass('confirmation').addClass('methods');
 	});
 </script>
 

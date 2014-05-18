@@ -1,9 +1,9 @@
 //Similar to LESS screen sizing
 var screen_width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 var screen_lg = screen_width >= 1200,
-	 screen_md = screen_width >= 768 && screen_width < 1200,
-	 screen_sm = screen_width >= 480 && screen_width < 768,
-	 screen_xs = screen_width < 480;
+	screen_md = screen_width >= 768 && screen_width < 1200,
+	screen_sm = screen_width >= 480 && screen_width < 768,
+	screen_xs = screen_width < 480;
 
 
 //Ensures all ajax requests are submitted as an ajax URL
@@ -43,10 +43,10 @@ function syncload(s) {
 	}
 
 	$.ajax({
-		async: false,
-		cache: true,
-		url: s,
-		error: function (e) {
+		async:    false,
+		cache:    true,
+		url:      s,
+		error:    function (e) {
 			$.error('Failed to load script from ' + s)
 		},
 		dataType: 'script'
@@ -64,18 +64,18 @@ $.fn.codemirror = function (params) {
 		syncload('system/resources/js/codemirror/ui/js/codemirror-ui.js');
 		uiOptions = {
 			searchMode: 'popup',
-			path: 'system/resources/js/codemirror/ui/js/',
-			imagePath: 'system/resources/js/codemirror/ui/images/silk'
+			path:       'system/resources/js/codemirror/ui/js/',
+			imagePath:  'system/resources/js/codemirror/ui/images/silk'
 		}
 
 		$.fn.codemirror.once = true;
 	}
 
 	params = $.extend({}, {
-		tabSize: 3,
+		tabSize:        3,
 		indentWithTabs: true,
-		lineNumbers: false,
-		indentUnit: 3
+		lineNumbers:    false,
+		indentUnit:     3
 	}, params);
 
 	var depends = {};
@@ -143,14 +143,14 @@ $.fn.ac_datepicker = function (params) {
 	}
 
 	params = $.extend({}, {
-		type: null,
+		type:       null,
 		dateFormat: 'yy-mm-dd',
 		timeFormat: 'HH:mm',
 	}, params);
 
 	return this.each(function (i, e) {
 		type = params.type ||
-		$(e).hasClass('datepicker') ? 'datepicker' :
+			$(e).hasClass('datepicker') ? 'datepicker' :
 			$(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
 
 		$(e)[type](params);
@@ -181,7 +181,7 @@ $.fn.ac_radio = function (params) {
 $.fn.ac_checklist = function (params) {
 	params = $.extend({}, {
 		elements: $(this).children().not('.nocheck'),
-		change: null
+		change:   null
 	}, params);
 
 	this.find('input[type=checkbox]').hide();
@@ -224,16 +224,16 @@ $.fn.ac_slidelist = function (params) {
 		var add_slide = slider.children('.add_slide');
 
 		params = $.extend(true, {}, {
-			min_space_y: 10,
-			min_space_x: 0,
-			pad_y: 0,
-			pad_x: 0,
-			add_slide: {x: 0, y: null, xout: 0, yout: 0},
-			item_height: items.first().outerHeight(true),
-			item_width: items.first().outerWidth(true),
-			max_rows: 4,
-			x_dir: 1,
-			hover_in_delay: 0,
+			min_space_y:     10,
+			min_space_x:     0,
+			pad_y:           0,
+			pad_x:           0,
+			add_slide:       {x: 0, y: null, xout: 0, yout: 0},
+			item_height:     items.first().outerHeight(true),
+			item_width:      items.first().outerWidth(true),
+			max_rows:        4,
+			x_dir:           1,
+			hover_in_delay:  0,
 			hover_out_delay: 0
 		}, params);
 
@@ -258,10 +258,10 @@ $.fn.ac_slidelist = function (params) {
 
 		var sort = function () {
 			slider.children('.slideitem:first').css({
-				top: -item_height,
-				bottom: 'auto',
-				left: params.x_dir >= 0 ? 0 : 'auto',
-				right: params.x_dir < 0 ? 0 : 'auto',
+				top:       -item_height,
+				bottom:    'auto',
+				left:      params.x_dir >= 0 ? 0 : 'auto',
+				right:     params.x_dir < 0 ? 0 : 'auto',
 				'z-index': items.length
 			});
 
@@ -273,10 +273,10 @@ $.fn.ac_slidelist = function (params) {
 				right = params.x_dir < 0 ? x_perc + '%' : 'auto';
 
 				$(e).css({
-					top: 'auto',
-					bottom: y_perc + '%',
-					left: left,
-					right: right,
+					top:       'auto',
+					bottom:    y_perc + '%',
+					left:      left,
+					right:     right,
 					'z-index': items.length - i - 1
 				});
 			})
@@ -285,7 +285,7 @@ $.fn.ac_slidelist = function (params) {
 		function hoverIn() {
 			slider.css({
 				height: max_height,
-				width: max_width
+				width:  max_width
 			})
 
 			add_slide.css({
@@ -296,7 +296,7 @@ $.fn.ac_slidelist = function (params) {
 		function hoverOut() {
 			slider.css({
 				height: min_height,
-				width: min_width
+				width:  min_width
 			})
 
 			add_slide.css({
@@ -359,7 +359,7 @@ $.fn.ac_msg = function (type, msg, append, close) {
 			box = $('<div />').addClass('messages ' + type);
 
 			if (typeof close == 'undefined' || close) {
-				box.append($('<div />').addClass('close').click(function(){
+				box.append($('<div />').addClass('close').click(function () {
 					$(this).closest('.messages').remove();
 				}));
 			}
@@ -394,11 +394,11 @@ $.fn.flash_highlight = function () {
 
 	ele.css({
 		background: 'rgba(255,255,255,0)',
-		position: 'absolute',
-		top: pos.top,
-		left: pos.left,
-		opacity: .8,
-		'z-index': 10000
+		position:   'absolute',
+		top:        pos.top,
+		left:       pos.left,
+		opacity:    .8,
+		'z-index':  10000
 	})
 		.width($(this).width())
 		.height($(this).height());
@@ -525,9 +525,9 @@ $.loading = function (params) {
 	}
 
 	params = $.extend({}, {
-		dots: 8,
-		width: null,
-		height: null,
+		dots:       8,
+		width:      null,
+		height:     null,
 		animations: 'bounce, fadecolor'
 	}, params);
 
@@ -549,14 +549,16 @@ $.loading = function (params) {
 }
 
 $.fn.loading = function (params) {
-	if (this.attr('data-loading')) {
+	var text = params ? params.text : this.attr('data-loading');
+
+	if (text || this.data('original')) {
 		if (params == 'stop') {
 			this.prop('disabled', false);
 			this.html(this.data('original'));
 		} else {
 			this.prop('disabled', true);
 			this.data('original', this.html());
-			this.html(this.attr('data-loading'));
+			this.html(text);
 		}
 
 		return this;
@@ -573,10 +575,10 @@ $.fn.ac_zoneselect = function (params, callback) {
 	var $this = this;
 
 	params = $.extend({}, {
-		listen: null,
+		listen:    null,
 		allow_all: false,
-		select: null,
-		url: $ac.site_url + 'data/locale/load_zones'
+		select:    null,
+		url:       $ac.site_url + 'data/locale/load_zones'
 	}, params);
 
 	if (!params.listen) {
@@ -633,13 +635,13 @@ function getQueryString(key, defaultValue) {
 
 function currency_format(number, params) {
 	params = $.extend({}, {
-		symbol_left: $ac.currency.symbol_left,
-		symbol_right: $ac.currency.symbol_right,
-		decimals: $ac.currency.decimals,
-		dec_point: $ac.currency.decimal_point,
+		symbol_left:   $ac.currency.symbol_left,
+		symbol_right:  $ac.currency.symbol_right,
+		decimals:      $ac.currency.decimals,
+		dec_point:     $ac.currency.decimal_point,
 		thousands_sep: $ac.currency.thousands_sep,
-		neg: '-',
-		pos: '+'
+		neg:           '-',
+		pos:           '+'
 	}, params);
 
 	str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);
@@ -701,6 +703,14 @@ $.cookie = function (key, value, options) {
 	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 
+function ac_radio_bubble() {
+	$('.ac-radio').not('ac-radio-bubble').click(function () {
+		$(this).addClass('ac-radio-bubble');
+		var $labels = $(this).parents('label');
+		$labels.children('input[type=radio]').prop('checked', true);
+	});
+}
+
 $(document).ready(function () {
 	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
 		if (!ui.item.value && ui.item.href) {
@@ -714,15 +724,19 @@ $(document).ready(function () {
 		}
 	});
 
+	$(document).on("DOMNodeInserted", function () {
+		ac_radio_bubble();
+	});
+
 	var $colorbox = $('.colorbox');
 
 	if ($colorbox.length) {
-		$.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function() {
+		$.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function () {
 			var defaults = {
 				overlayClose: true,
-				opacity: 0.5,
-				width: '60%',
-				height: '80%'
+				opacity:      0.5,
+				width:        '60%',
+				height:       '80%'
 			}
 
 			$colorbox.colorbox(defaults);
@@ -751,12 +765,14 @@ $(document).ready(function () {
 
 //Chrome Autofill disable hack
 if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
-	$(window).load(function(){
-		$('input:-webkit-autofill[autocomplete="off"]').each(function(){
+	$(window).load(function () {
+		$('input:-webkit-autofill[autocomplete="off"]').each(function () {
 			var $this = $(this);
 			if (!$this.attr('value')) {
 				$this.val('');
-				setTimeout(function(){$this.val('');}, 200);
+				setTimeout(function () {
+					$this.val('');
+				}, 200);
 			}
 		});
 	});

@@ -26,10 +26,6 @@
 <script>
 	var $form = $('.braintree-register-card').closest('form');
 
-	$('.ac-radio').click(function () {
-		$(this).closest('label').children('input[type=radio]').prop('checked', true);
-	});
-
 	function braintree() {
 		$form.submit(function () {
 			if ($('[data-encrypted-name]').val()) {

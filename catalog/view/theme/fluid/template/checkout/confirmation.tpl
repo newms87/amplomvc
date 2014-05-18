@@ -1,11 +1,11 @@
 <div id="checkout-confirmation-form">
 	<? if (option('coupon_status')) { ?>
-		<div class="checkout-coupon">
+		<div class="checkout-coupon col xs-12 md-6 center">
 			<?= block('cart/coupon'); ?>
 		</div>
 	<? } ?>
 
-	<form action="<?= $action; ?>" class="form" method="post">
+	<form action="<?= $action; ?>" class="form clear" method="post">
 		<div class="checkout-totals">
 			<?= block('cart/total'); ?>
 		</div>

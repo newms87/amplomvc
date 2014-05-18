@@ -724,10 +724,13 @@ class Cart extends Library
 			$address_id = (int)$address;
 		}
 
-		//Address changed, invalidate the payment method
-		if (!$this->getPaymentAddressId() !== $address_id) {
-			$this->clearPaymentMethod();
+		//Address unchanged
+		if ($this->getPaymentAddressId() == $address_id) {
+			return true;
 		}
+
+		//Invalidate the Payment Method
+		$this->clearPaymentMethod();
 
 		if (!empty($address_id)) {
 			$this->session->set('payment_address_id', $address_id);
@@ -822,10 +825,13 @@ class Cart extends Library
 			$address_id = (int)$address;
 		}
 
-		//Address changed, invalidate the shipping method
-		if ($this->getShippingAddressId() !== $address_id) {
-			$this->clearShippingMethod();
+		//Address unchanged
+		if ($this->getShippingAddressId() == $address_id) {
+			return true;
 		}
+
+		//Invalidate the Shipping method
+		$this->clearShippingMethod();
 
 		if (!empty($address_id)) {
 			$this->session->set('shipping_address_id', $address_id);

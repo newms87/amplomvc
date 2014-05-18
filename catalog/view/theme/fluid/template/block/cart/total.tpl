@@ -1,5 +1,5 @@
 <div class="cart-total row">
-	<div class="col xs-12 sm-6 md-4 center">
+	<div class="col xs-12 sm-8 md-6 lg-4 center">
 		<div class="total-line-items">
 			<? foreach ($totals as $total) { ?>
 				<div class="line-item">

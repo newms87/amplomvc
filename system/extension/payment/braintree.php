@@ -90,7 +90,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 	{
 		if (!$this->initAPI()) {
 			$url_contact = site_url('page', 'page_id=' . option('config_contact_page_id'));
-			$this->error = _l("There was a problem while processing your transaction. Please choose a different Payment Method, or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
+			$this->error['braintree_api'] = _l("There was a problem while processing your transaction. Please choose a different Payment Method, or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
 			$this->error_log->write(__METHOD__ . ": Failed to load Braintree API.");
 			return false;
 		}
@@ -99,7 +99,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 
 		if (empty($order)) {
 			$url_contact = site_url('page', 'page_id=' . option('config_contact_page_id'));
-			$this->error = _l("We were unable to process your order. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
+			$this->error['order_id'] = _l("We were unable to process your order. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
 			$this->error_log->write(__METHOD__ . ": Failed to lookup order ID: $order_id. Unable to confirm checkout payment.");
 			return false;
 		}
@@ -107,6 +107,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 		//New Credit Card
 		if ($new_card) {
 			if (!$this->validateCard($new_card)) {
+				$this->error['new_card'] = _l("The Credit Card Information was invalid");
 				return false;
 			}
 
@@ -124,7 +125,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 				try {
 					$result = Braintree_CreditCard::create($credit_card);
 				} catch (Braintree_Exception $e) {
-					$this->error = $e->getMessage();
+					$this->error['braintree_error'] = $e->getMessage();
 					return false;
 				}
 
@@ -135,7 +136,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 					}
 				} else {
 					$url_contact = site_url('page', 'page_id=' . $this->config->load('config', 'config_contact_page_id'));
-					$this->error = _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
+					$this->error['braintree_result'] = _l("There was a problem processing your transaction. Please try again or <a href=\"%s\">contact us</a> to complete your order.", $url_contact);
 					$this->error_log->write(__METHOD__ . ": Braintree_CreditCard:create() failed for order ID $order_id. Unable to confirm checkout payment method.");
 					return false;
 				}
@@ -147,7 +148,14 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			}
 		}
 
-		return $this->order->updateOrder($order_id, $this->settings['complete_order_status_id'], _l("Order Completed via Braintree Payments"), true);
+		$complete_status_id = $this->settings['complete_order_status_id'] ? $this->settings['complete_order_status_id'] : option("config_order_complete_status_id");
+
+		if (!$this->order->updateOrder($order_id, $complete_status_id, _l("Order Completed via Braintree Payments"), true)) {
+			$this->error = $this->order->getError();
+			return false;
+		}
+
+		return true;
 	}
 
 	/********************

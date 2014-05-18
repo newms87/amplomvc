@@ -210,6 +210,10 @@ class Catalog_Controller_Checkout extends Controller
 
 		if (!$payment_ext->confirm($this->order->getId())) {
 			$this->message->add('error', $payment_ext->getError());
+
+			if (!$this->request->isAjax()) {
+				redirect('checkout');
+			}
 		}
 
 		if (!$this->message->has('error')) {
