@@ -1,11 +1,7 @@
 <?= call('common/header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
-<section id="page-<?= $page_id; ?>" class="page page-<?= $template; ?> content">
-	<? if (!empty($css)) { ?>
-		<style><?= $css; ?></style>
-	<? } ?>
-
+<section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
 	<header class="row top-row">
 		<div class="wrap">
 			<?= breadcrumbs(); ?>
@@ -20,7 +16,7 @@
 
 	<div class="page-content row">
 		<div class="wrap">
-			<?= $content; ?>
+			<? include($content); ?>
 		</div>
 	</div>
 

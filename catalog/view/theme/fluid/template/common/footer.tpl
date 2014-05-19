@@ -1,5 +1,5 @@
 
-			<? if (area_has_blocks('below')) { ?>
+			<? if (show_area('below')) { ?>
 				<section class="area-below row">
 					<div class="wrap">
 						<?= area('below'); ?>

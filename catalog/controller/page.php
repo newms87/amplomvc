@@ -1,4 +1,5 @@
 <?php
+
 class Catalog_Controller_Page extends Controller
 {
 	public function index()
@@ -15,6 +16,16 @@ class Catalog_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
+		if ($page['style']) {
+			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
+				$style = $this->document->compileLess($page['style'], 'page-' . $page['name']);
+			} else {
+				$style = $page['style'];
+			}
+
+			$this->document->addStyle($style);
+		}
+
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add($page['title'], $this->url->here());
@@ -22,12 +33,10 @@ class Catalog_Controller_Page extends Controller
 		//Change Layout to desired page layout
 		$this->config->set('config_layout_id', $page['layout_id']);
 
-		$data = $page;
-
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 
 		//Render
-		$this->response->setOutput($this->render($template, $data));
+		$this->response->setOutput($this->render($template, $page));
 	}
 
 	public function preview()
@@ -71,8 +80,6 @@ class Catalog_Controller_Page extends Controller
 
 		$data['styles']  = $this->document->renderStyles();
 		$data['scripts'] = $this->document->renderScripts();
-
-		$page['content'] = html_entity_decode($page['content']);
 
 		$data += $page;
 

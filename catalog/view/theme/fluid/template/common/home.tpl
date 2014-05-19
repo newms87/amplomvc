@@ -14,7 +14,7 @@
 		<div class="wrap">
 			<div id="start-video">
 				<video preload="none" loop autoplay poster="//fast.wistia.com/assets/images/blank.gif">
-					<source src="<?= theme_url('video/home.mp4'); ?>" type="video/mp4">
+					<source src="<?= theme_url('video/homepage.mp4'); ?>" type="video/mp4">
 					<div class="no-video"></div>
 				</video>
 			</div>
@@ -22,8 +22,8 @@
 			<div class="intro">
 				<h1><?= _l("THINK INSIDE THE BOX"); ?></h1>
 
-				<h2><?= _l("First home delivery food service that cares about nutrition and flavor"); ?></h2>
-				<a href="<?= $call_to_action; ?>" class="call-to-action button large"><?= _l("SUBSCRIBE NOW"); ?></a>
+				<h2><?= _l("The first home delivery smoothie service that is tastefully nutritious."); ?></h2>
+				<a href="<?= $call_to_action; ?>" class="call-to-action button large"><?= _l("Subscribe Now"); ?></a>
 			</div>
 		</div>
 	</div>
@@ -67,20 +67,26 @@
 					<div class="image">
 						<img src="<?= theme_url('image/content/icons/study.png'); ?>"/>
 					</div>
-					<h4 class="explain"><?= _l("We Study Nutrition and Provide Nutrition Courses Free"); ?></h4>
+					<h4 class="explain"><?= _l("We provide all the nutrition explanations"); ?></h4>
 				</div>
 			</div>
 
 			<div class="icon-list what-you-do clearfix">
 				<h3><?= _l("What You Do"); ?></h3>
 
-				<div class="icon cook col xs-12 sm-6">
+				<div class="icon cook col xs-12 sm-6 md-4">
 					<div class="image">
-						<img src="<?= theme_url('image/content/icons/cook.png'); ?>"/>
+						<img src="<?= theme_url('image/content/icons/blender.png'); ?>"/>
 					</div>
-					<h4 class="explain"><?= _l("You Cook"); ?></h4>
+					<h4 class="explain"><?= _l("You Blend"); ?></h4>
 				</div>
-				<div class="icon learn col xs-12 sm-6">
+				<div class="icon enjoy col xs-12 sm-6 md-4">
+					<div class="image">
+						<img src="<?= theme_url('image/content/icons/smoothie.png'); ?>"/>
+					</div>
+					<h4 class="explain"><?= _l("You Enjoy"); ?></h4>
+				</div>
+				<div class="icon learn col xs-12 sm-6 md-4">
 					<div class="image">
 						<img src="<?= theme_url('image/content/icons/learn.png'); ?>"/>
 					</div>

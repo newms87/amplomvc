@@ -161,7 +161,7 @@
 
 			<main class="main clearfix">
 
-				<? if (area_has_blocks('above')) { ?>
+				<? if (show_area('above')) { ?>
 					<section class="area-above row">
 						<div class="wrap">
 							<?= area('above'); ?>

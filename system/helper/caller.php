@@ -25,7 +25,7 @@ function area($area)
 	return $registry->get('area')->render($area);
 }
 
-function area_has_blocks($area)
+function show_area($area)
 {
 	global $registry;
 	return $registry->get('area')->hasBlocks($area);
@@ -75,7 +75,7 @@ function theme_url($path = '', $query = null)
 		return site_url(URL_THEME_PARENT . $path, $query);
 	}
 
-	return false;
+	return site_url(URL_THEME . $path, $query);
 }
 
 function theme_dir($path = '')
