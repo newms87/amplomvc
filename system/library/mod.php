@@ -359,7 +359,7 @@ class Mod extends Library
 				''
 			),
 			'html' => array(
-				"<? #",
+				"<?php #",
 				"?>"
 			)
 		);

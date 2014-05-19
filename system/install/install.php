@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!defined("AMPLOCART_INSTALL")) {
 	echo "Please call the Amplo Cart index.php in your installation root directory.";

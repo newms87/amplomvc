@@ -247,8 +247,8 @@ class Plugin extends Library
 						return false;
 					}
 				} else {
-					$overwrite_file_url = site_url($this->url->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
-					$force_install_url  = site_url($this->url->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
+					$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+					$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
 
 					$msg =
 						_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .

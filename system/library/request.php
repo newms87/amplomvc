@@ -32,6 +32,11 @@ class Request extends Library
 		return !empty($_GET['ajax']);
 	}
 
+	public function isSSL()
+	{
+		return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+	}
+
 	public function clean(&$value)
 	{
 		$value = htmlspecialchars($value, ENT_COMPAT);

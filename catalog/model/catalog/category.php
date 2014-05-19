@@ -6,7 +6,7 @@ class Catalog_Model_Catalog_Category extends Model
 		$category = $this->queryRow(
 			"SELECT * FROM " . DB_PREFIX . "category c" .
 			" LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)" .
-			" WHERE c.category_id = '" . (int)$category_id . "' AND c2s.store_id = '" . (int)option('config_store_id') . "' AND c.status = '1'"
+			" WHERE c.category_id = '" . (int)$category_id . "' AND c2s.store_id = '" . (int)option('store_id') . "' AND c.status = '1'"
 		);
 
 		if ($category) {
@@ -30,7 +30,7 @@ class Catalog_Model_Catalog_Category extends Model
 			" LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c2s.category_id=c.category_id)";
 
 		//Where
-		$where = "c2s.store_id = " . (int)option('config_store_id') . " AND c.status = 1";
+		$where = "c2s.store_id = " . (int)option('store_id') . " AND c.status = 1";
 
 		if (!empty($data['category_ids'])) {
 			$where .= " AND category_id IN (" . implode(',', $data['category_ids']) . ")";
@@ -126,7 +126,7 @@ class Catalog_Model_Catalog_Category extends Model
 	public function getCategoryTree($category_id = 0)
 	{
 		$language_id = option('config_language_id');
-		$store_id    = option('config_store_id');
+		$store_id    = option('store_id');
 
 		$category_tree = $this->cache->get("category.tree.$store_id.$language_id");
 
@@ -199,6 +199,6 @@ class Catalog_Model_Catalog_Category extends Model
 
 	public function getCategoryLayoutId($category_id)
 	{
-		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)option('config_store_id') . "'");
+		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)option('store_id') . "'");
 	}
 }

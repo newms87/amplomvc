@@ -49,7 +49,7 @@ class Pagination extends Library
 		if ($this->ajax_url) {
 			$this->page_url = $this->ajax_url;
 		} else if (!$this->page_url) {
-			$this->page_url = site_url($this->url->getPath(), $this->url->getQueryExclude('page'));
+			$this->page_url = site_url($this->route->getPath(), $this->url->getQueryExclude('page'));
 		}
 
 		//Setup Query to add page=n

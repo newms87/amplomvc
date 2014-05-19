@@ -10,6 +10,7 @@ if (version_compare(phpversion(), '5.3.0', '<') == true) {
 	exit('PHP5.3+ Required');
 }
 
+date_default_timezone_set(DEFAULT_TIMEZONE);
 
 //Date Constants
 define('DATETIME_ZERO', '0000-00-00 00:00:00');
@@ -66,11 +67,7 @@ define('DB_AUTO_INCREMENT_PK', 10);
 if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 	if (isset($_SERVER['SCRIPT_FILENAME'])) {
 		$_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen($_SERVER['PHP_SELF'])));
-	}
-}
-
-if (!isset($_SERVER['DOCUMENT_ROOT'])) {
-	if (isset($_SERVER['PATH_TRANSLATED'])) {
+	} elseif (isset($_SERVER['PATH_TRANSLATED'])) {
 		$_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr(str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']), 0, 0 - strlen($_SERVER['PHP_SELF'])));
 	}
 }

@@ -7,7 +7,7 @@ class Area extends Library
 	{
 		if (is_null($store_id) && is_null($layout_id)) {
 			if (!$this->counts) {
-				$store_id = option('config_store_id');
+				$store_id = option('store_id');
 				$layout_id = option('config_layout_id');
 
 				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . DB_PREFIX . "block_area WHERE store_id = $store_id AND layout_id = $layout_id GROUP BY area");
@@ -44,7 +44,7 @@ class Area extends Library
 	public function getBlocks($area, $store_id = null, $layout_id = null)
 	{
 		if (!$store_id) {
-			$store_id = option('config_store_id');
+			$store_id = option('store_id');
 		}
 
 		if (!$layout_id) {

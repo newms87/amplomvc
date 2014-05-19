@@ -44,7 +44,7 @@ class Mail extends Library
 
 		if ($this->logging) {
 			global $registry;
-			$registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), option('config_store_id'));
+			$registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), option('store_id'));
 		}
 
 		$this->init();
@@ -549,7 +549,7 @@ class Mail extends Library
 			'html'       => $this->html,
 			'text'       => $this->text,
 			'attachment' => $this->attachments,
-			'store_id'   => option('config_store_id'),
+			'store_id'   => option('store_id'),
 			'time'       => _time(),
 		);
 

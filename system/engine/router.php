@@ -1,10 +1,22 @@
 <?php
 final class Router
 {
-	private $error_404 = 'error/not_found';
-	private $error_permission = 'error/permission';
 	private $path;
 	private $segments;
+
+	public function __construct()
+	{
+		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
+
+		$base = trim(SITE_BASE, '/');
+		if ($base && strpos($uri, $base) === 0) {
+			$uri = trim(substr($uri, strlen($base)), '/');
+		}
+
+		$this->path = $uri ? preg_replace("/^admin\\/?/", '', $uri) : DEFAULT_PATH;
+
+		$this->segments = explode('/', $this->path);
+	}
 
 	public function __get($key)
 	{
@@ -15,6 +27,12 @@ final class Router
 	public function getPath()
 	{
 		return $this->path;
+	}
+
+	public function setPath($path)
+	{
+		$this->path = $path;
+		$this->segments = explode('/', $path);
 	}
 
 	public function getSegment($index = null)
@@ -33,15 +51,11 @@ final class Router
 
 	public function route()
 	{
-		$this->path = $this->url->getPath();
-
 		if ($this->route->isAdmin()) {
 			$this->routeAdmin();
 		} else {
 			$this->routeFront();
 		}
-
-		$this->segments = explode('/', $this->path);
 	}
 
 	public function routeAdmin()
@@ -105,56 +119,46 @@ final class Router
 		}
 
 		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('store_id') . "' ORDER BY route ASC LIMIT 1");
 		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
 		$this->config->set('config_layout_id', $layout_id);
-	}
-
-	public function pathIsIn($paths)
-	{
-		foreach ($paths as $path) {
-			if (strpos($this->path, $path) === 0) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public function dispatch()
 	{
 		//Page Views tracking
 		$path     = $this->db->escape($this->path);
-		$query    = $this->url->getQueryExclude('_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
-		$store_id = (int)option('config_store_id');
+		$query    = $this->url->getQueryExclude('sort', 'order', 'limit', 'redirect', 'filter');
+		$store_id = (int)option('store_id');
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 
 		$action = new Action($this->path);
 
-		if (!$action->isValid()) {
-			redirect($this->error_404);
-		}
+		$valid = $action->isValid();
 
-		if ($this->isAdmin()) {
-			if (!$this->user->canDoAction($action)) {
-				if (!$this->user->isLogged()) {
-					$this->request->setRedirect($this->url->here());
-					redirect('common/login');
+		if ($valid) {
+			if ($this->isAdmin()) {
+				if (!$this->user->canDoAction($action)) {
+					if (!$this->user->isLogged()) {
+						$this->request->setRedirect($this->url->here());
+						redirect('common/login');
+					}
+
+					redirect('error/permission');
 				}
-
-				redirect($this->error_permission);
-			}
-		} else {
-			//Login Verification
-			if (!$this->customer->canDoAction($action)) {
-				$this->request->setRedirect($this->url->here());
-				redirect('customer/login');
+			} else {
+				//Login Verification
+				if (!$this->customer->canDoAction($action)) {
+					$this->request->setRedirect($this->url->here());
+					redirect('customer/login');
+				}
 			}
 		}
 
-		if (!$action->execute()) {
-			redirect($this->error_404);
+		if (!$valid || !$action->execute()) {
+			$action = new Action(ERROR_404_PATH);
+			$action->execute();
 		}
 	}
 }

@@ -6,7 +6,7 @@ class Catalog_Model_Catalog_Information extends Model
 		$query =
 			"SELECT * FROM " . DB_PREFIX . "information i" .
 			" LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id)" .
-			" WHERE i.information_id = '" . (int)$information_id . "' AND i2s.store_id = '" . (int)option('config_store_id') . "' AND i.status = '1'";
+			" WHERE i.information_id = '" . (int)$information_id . "' AND i2s.store_id = '" . (int)option('store_id') . "' AND i.status = '1'";
 
 		$information = $this->queryRow($query);
 
@@ -20,7 +20,7 @@ class Catalog_Model_Catalog_Information extends Model
 		$query =
 			"SELECT * FROM " . DB_PREFIX . "information i" .
 			" LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id)" .
-			" WHERE i2s.store_id = '" . (int)option('config_store_id') . "' AND i.status = '1'" .
+			" WHERE i2s.store_id = '" . (int)option('store_id') . "' AND i.status = '1'" .
 			" ORDER BY i.sort_order, LCASE(i.title) ASC";
 
 		$informations = $this->queryRows($query);
@@ -32,6 +32,6 @@ class Catalog_Model_Catalog_Information extends Model
 
 	public function getInformationLayoutId($information_id)
 	{
-		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "' AND store_id = '" . (int)option('config_store_id') . "'");
+		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "' AND store_id = '" . (int)option('store_id') . "'");
 	}
 }

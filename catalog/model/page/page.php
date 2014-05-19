@@ -4,7 +4,7 @@ class Catalog_Model_Page_Page extends Model
 	//TODO: Develop good caching method for pages.
 	public function getPage($page_id)
 	{
-		$store_id = option('config_store_id');
+		$store_id = option('store_id');
 
 		$query =
 			"SELECT * FROM " . DB_PREFIX . "page p" .

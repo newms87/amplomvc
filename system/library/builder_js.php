@@ -3,8 +3,7 @@
 switch ($js) {
 
 	case 'ckeditor':
-		?>
-		<? if (!isset($js_loaded_files['ckeditor'])) { ?>
+		if (!isset($js_loaded_files['ckeditor'])) { ?>
 		<script type="text/javascript" src="<?= URL_RESOURCES . 'js/ckeditor/ckeditor.js'; ?>"></script>
 		<script type="text/javascript">
 			var ckedit_index = 0;
@@ -34,7 +33,7 @@ switch ($js) {
 				});
 			}
 		</script>
-	<? } ?>
+	<?php } ?>
 		<?php break;
 
 	case 'translations':
@@ -56,12 +55,12 @@ switch ($js) {
 
 		<div id="language_menu_template">
 			<div class="language_menu">
-				<? foreach ($languages as $language) { ?>
+				<?php foreach ($languages as $language) { ?>
 					<div class="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>"
 						title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
 						<img alt="<?= $language['name']; ?>" src="<?= theme_url("image/flags/$language[image]"); ?>"/>
 					</div>
-				<? } ?>
+				<?php } ?>
 			</div>
 		</div>
 
@@ -81,11 +80,11 @@ switch ($js) {
 			var default_language = "<?= $default_language ?>";
 
 			for (var t in translations) {
-				<? if ($name_format) { ?>
+				<?php if ($name_format) { ?>
 				context = $('[name="<?= $name_format; ?>"]'.replace(/%name%/, t));
-				<? } else { ?>
+				<?php } else { ?>
 				context = $('[name="' + t + '"]');
-				<? } ?>
+				<?php } ?>
 
 				if (!context.length) {
 					context = $(t);
@@ -100,11 +99,11 @@ switch ($js) {
 				box.append(context);
 
 				for (var lang in translations[t]) {
-					<? if ($name_format) { ?>
+					<?php if ($name_format) { ?>
 					t_name = "<?= $name_format; ?>".replace(/%name%/, "translations][" + t + "][" + lang + "");
-					<? } else { ?>
+					<?php } else { ?>
 					t_name = "translations[" + t + "][" + lang + "]";
-					<? } ?>
+					<?php } ?>
 
 					t_input = context.clone();
 					t_input.attr('name', t_name);
@@ -115,9 +114,9 @@ switch ($js) {
 
 						box.append($('<div class ="translation ' + lang + '" />').append(t_input));
 
-						<? if (isset($js_loaded_files['ckeditor'])) { ?>
+						<?php if (isset($js_loaded_files['ckeditor'])) { ?>
 						init_ckeditor_for($('#translation_' + t + '_' + lang));
-						<? } ?>
+						<?php } ?>
 					}
 					else {
 						t_input.addClass('translation ' + lang);

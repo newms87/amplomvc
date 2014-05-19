@@ -8,7 +8,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		$data['title'] = $this->document->getTitle();
 
-		$data['base'] = $this->url->is_ssl() ? option('config_ssl') : option('config_url');
+		$data['base'] = $this->request->isSSL() ? HTTP_SITE : HTTPS_SITE;
 
 		//Add Styles
 		if (is_file(DIR_THEME . 'css/style.less')) {
@@ -47,7 +47,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$data['description']    = $this->document->getDescription();
 		$data['keywords']       = $this->document->getKeywords();
 		$data['canonical_link'] = $this->document->getCanonicalLink();
-		$data['body_class']     = $this->tool->getSlug($this->url->getPath());
+		$data['body_class']     = $this->tool->getSlug($this->route->getPath());
 
 		$data['styles']  = $this->document->renderStyles();
 		$data['scripts'] = $this->document->renderScripts();

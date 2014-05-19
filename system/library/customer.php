@@ -137,7 +137,7 @@ class Customer extends Library
 			return false;
 		}
 
-		$customer['store_id']          = option('config_store_id');
+		$customer['store_id']          = option('store_id');
 		$customer['customer_group_id'] = option('config_customer_group_id');
 		$customer['date_added']        = $this->date->now();
 		$customer['status']            = 1;

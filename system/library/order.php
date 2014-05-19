@@ -47,7 +47,7 @@ class Order Extends Library
 		}
 
 		//Order Information
-		$data['store_id']       = option('config_store_id');
+		$data['store_id']       = option('store_id');
 		$data['language_id']    = option('config_language_id');
 		$data['currency_code']  = $this->currency->getCode();
 		$data['currency_value'] = $this->currency->getValue();

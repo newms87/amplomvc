@@ -35,7 +35,7 @@ class Sort extends Library
 
 	public function get_sort_url()
 	{
-		$sort_url = site_url($this->url->getPath(), $this->url->getQueryExclude('sort', 'order', 'page'));
+		$sort_url = site_url($this->route->getPath(), $this->url->getQueryExclude('sort', 'order', 'page'));
 		$sort_url .= strpos($sort_url, '?') === false ? '?' : '&';
 
 		return $sort_url;
@@ -75,7 +75,7 @@ class Sort extends Library
 		$defaults = array(
 			'template' => 'block/widget/limit',
 			'limits'   => self::$limits,
-			'path'     => $this->url->getPath(),
+			'path'     => $this->route->getPath(),
 		);
 
 		$settings += $defaults;

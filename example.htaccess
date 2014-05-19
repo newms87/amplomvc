@@ -1,0 +1,18 @@
+Options +FollowSymLinks
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Protect Hidden files / directories (eg: .git, .htaccess, .svn)
+    <Files .*>
+        Order Deny,Allow
+        Deny From All
+    </Files>
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    RewriteRule .* index.php [L]
+</IfModule>

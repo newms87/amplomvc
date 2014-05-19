@@ -48,7 +48,7 @@ class Admin_Controller_Common_Header extends Controller
 		$data['description']    = $this->document->getDescription();
 		$data['keywords']       = $this->document->getKeywords();
 		$data['canonical_link'] = $this->document->getCanonicalLink();
-		$data['body_class']     = $this->tool->getSlug($this->url->getPath());
+		$data['body_class']     = $this->tool->getSlug($this->route->getPath());
 
 		$data['lang'] = $this->language->info('code');
 

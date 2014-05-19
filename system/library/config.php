@@ -1,7 +1,8 @@
 <?php
+
 class Config extends Library
 {
-	private $data = array();
+	private $store = array();
 	private $store_id;
 	private $site_config;
 	private $translate = true;
@@ -16,12 +17,8 @@ class Config extends Library
 
 		$this->loadDefaultSites();
 
-		$store = $this->getStore($store_id);
-
-		$this->store_id                = $store['store_id'];
-		$this->data['config_store_id'] = $store['store_id'];
-		$this->data['config_url']      = $store['url'];
-		$this->data['config_ssl']      = $store['ssl'];
+		$this->data = $this->getStore($store_id);
+		$this->store_id = $this->data['store_id'];
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
@@ -71,22 +68,15 @@ class Config extends Library
 				return $this->site_config['admin_store'];
 			} else {
 				//Resolve Store ID
-				if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-					$scheme = 'https://';
-					$field  = 'ssl';
+				if ($this->request->isSSL()) {
+					$url   = HTTPS_SITE;
+					$field = 'ssl';
 				} else {
-					$scheme = 'http://';
-					$field  = 'url';
+					$url   = HTTP_SITE;
+					$field = 'url';
 				}
-
-				$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
 
 				$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->escape($url) . "'");
-
-				if (empty($store)) {
-					$store_id = $this->queryVar("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
-					$store    = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
-				}
 			}
 		} else {
 			$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
@@ -213,7 +203,7 @@ class Config extends Library
 	{
 		$where = array(
 			'group' => $group,
-		   'key' => $key,
+			'key'   => $key,
 		);
 
 		if ($store_id) {

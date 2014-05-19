@@ -4,59 +4,26 @@ class Url extends Library
 	private $path;
 	private $url = '';
 	private $ssl = '';
-	private $is_ssl;
 	private $rewrite = array();
 	private $seo_url;
 	private $secure_pages = array();
-	private $store_info = array();
 
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->url = option('config_url');
+		$this->url = option('url');
 
 		if (option('config_use_ssl')) {
-			$this->ssl = option('config_ssl');
+			$this->ssl = option('ssl');
 
 			//TODO - finish secure pages
-			$query              = $this->query("SELECT * FROM " . DB_PREFIX . "secure_page");
-			$this->secure_pages = $query->rows;
-		}
-
-		$this->is_ssl = isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'));
-
-		if (isset($_GET['_path_'])) {
-			$this->path = trim($_GET['_path_'], '/ ');
-
-			$this->path = preg_replace("/^admin\\/?/", '', $this->path);
-			$this->path = preg_replace("/^controller\\/?/", '', $this->path);
-
-			unset($_GET['_path_']);
-		} else {
-			$this->path = 'common/home';
+			$this->secure_pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "secure_page");
 		}
 
 		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
 		}
-	}
-
-	/**
-	 * Checks if the current path starts with $path
-	 *
-	 * @param string $path - The path to check
-	 * @return bool true if the current path starts with $path
-	 */
-
-	public function is($path)
-	{
-		return strpos($this->path, $path) === 0;
-	}
-
-	public function getPath()
-	{
-		return $this->path;
 	}
 
 	public function getQuery()
@@ -99,18 +66,13 @@ class Url extends Library
 
 	public function here($append_query = '')
 	{
-		return $this->link($this->path, $this->getQuery() . '&' . $append_query);
+		return $this->link($this->route->getPath(), $this->getQuery() . '&' . $append_query);
 	}
 
 	public function reload_page()
 	{
 		header("Location: " . $this->here());
 		exit;
-	}
-
-	public function is_ssl()
-	{
-		return $this->is_ssl;
 	}
 
 	public function load($url, $admin = false)
@@ -169,8 +131,8 @@ class Url extends Library
 
 	public function store_base($store_id, $ssl = false)
 	{
-		if ((int)$store_id === 0 || $store_id == option('config_store_id')) {
-			return $ssl ? option('config_ssl') : option('config_url');
+		if ((int)$store_id === 0 || $store_id == option('store_id')) {
+			return $ssl ? option('ssl') : option('url');
 		}
 
 		$scheme = $ssl ? 'ssl' : 'url';
@@ -252,7 +214,7 @@ class Url extends Library
 	private function loadSeoUrl()
 	{
 		// Decode URL
-		$path  = $this->escape($this->path);
+		$path  = $this->escape($this->route->getPath());
 		$query = $this->escape($this->getQuery());
 
 		//Default Store
@@ -261,7 +223,7 @@ class Url extends Library
 		$sql =
 			"SELECT * FROM " . DB_PREFIX . "url_alias" .
 			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
-			" AND status = '1' AND store_id IN ($default, " . (int)option('config_store_id') . ") LIMIT 1";
+			" AND status = '1' AND store_id IN ($default, " . (int)option('store_id') . ") LIMIT 1";
 
 		$url_alias = $this->queryRow($sql);
 
@@ -269,14 +231,14 @@ class Url extends Library
 			//TODO: We need to reconsider how we handle all stores...
 			if ($url_alias['store_id'] === 0) {
 				if (!$this->route->isAdmin()) {
-					$url_alias['store_id'] = (int)option('config_store_id');
+					$url_alias['store_id'] = (int)option('store_id');
 				} else {
 					$this->redirect($this->store(option('default_store_id'), $url_alias['path'], $url_alias['query']));
 				}
 			}
 
 			$url_query     = $this->getQuery();
-			$this->seo_url = $this->store_base($url_alias['store_id']) . $this->path . ($url_query ? '?' . $url_query : '');
+			$this->seo_url = $this->store_base($url_alias['store_id']) . $path . ($url_query ? '?' . $url_query : '');
 
 			if ($url_alias['redirect']) {
 				if (!parse_url($url_alias['redirect'], PHP_URL_SCHEME)) {
@@ -287,7 +249,7 @@ class Url extends Library
 			}
 
 
-			if ((int)$url_alias['store_id'] !== (int)option('config_store_id') && (int)$url_alias['store_id'] !== 0) {
+			if ((int)$url_alias['store_id'] !== (int)option('store_id') && (int)$url_alias['store_id'] !== 0) {
 				if ((int)$url_alias['store_id'] === -1) {
 					$this->redirect($this->admin($url_alias['path'], $url_alias['query']));
 				} else {
@@ -299,9 +261,9 @@ class Url extends Library
 
 			parse_str($url_alias['query'], $args);
 
-			$_GET += $args;
+			$_GET = $args + $_GET;
 
-			$this->path = $url_alias['path'];
+			$this->route->setPath($url_alias['path']);
 		} else {
 			$this->seo_url = $this->here();
 		}
@@ -326,7 +288,7 @@ class Url extends Library
 		}
 
 		if (!$store_id && $store_id !== 0) {
-			$store_id = option('config_store_id');
+			$store_id = option('store_id');
 		}
 
 		if ($query) {
@@ -376,13 +338,7 @@ class Url extends Library
 
 		parse_str($query, $args);
 
-		$disclude = array(
-			'_path_',
-		);
-
-		if (!empty($alias_query)) {
-			$disclude = array_merge($disclude, array_keys($alias_query));
-		}
+		$disclude = !empty($alias_query) ? array_keys($alias_query) : array();
 
 		foreach ($disclude as $key) {
 			unset($args[$key]);
