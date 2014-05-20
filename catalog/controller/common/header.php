@@ -8,7 +8,7 @@ class Catalog_Controller_Common_Header extends Controller
 
 		$data['title'] = $this->document->getTitle();
 
-		$data['base'] = $this->request->isSSL() ? HTTP_SITE : HTTPS_SITE;
+		$data['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
 
 		//Add Styles
 		if (is_file(DIR_THEME . 'css/style.less')) {
@@ -23,7 +23,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add jQuery from the CDN or locally
-		if (true || option('config_jquery_cdn')) {
+		if (option('config_jquery_cdn', true)) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {

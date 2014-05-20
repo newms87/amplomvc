@@ -405,7 +405,7 @@ class Document extends Library
 
 	public function getNavigationLinks()
 	{
-		$store_id = option("config_store_id");
+		$store_id = option('store_id');
 
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 
@@ -435,6 +435,7 @@ class Document extends Library
 						unset($nav_group_links[$key]);
 					}
 				}
+				unset($link);
 
 				$nav_groups[$group['name']] = $nav_group_links;
 			}
