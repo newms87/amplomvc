@@ -450,7 +450,7 @@
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
 
 	$('[name=config_theme]').change(function () {
-		$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
+		$('#theme').load(siteurl + 'setting/setting/theme?theme=' + $(this).val());
 	}).change();
 
 	$('#generate-icons').click(function(){

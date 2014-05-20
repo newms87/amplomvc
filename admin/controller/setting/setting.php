@@ -229,8 +229,6 @@ class Admin_Controller_Setting_Setting extends Controller
 			2 => _l('Always'),
 		);
 
-		$data['load_theme_img'] = site_url('setting/setting/theme');
-
 		$data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", site_url('setting/return_policy'));
 		$data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", site_url('setting/shipping_policy'));
 
