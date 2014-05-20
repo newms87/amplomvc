@@ -19,8 +19,6 @@ class Document extends Library
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
-		$this->ac_vars['url_site'] = URL_SITE;
-
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}

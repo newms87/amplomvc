@@ -168,12 +168,6 @@ class Admin_Model_Page_Page extends Model
 			return $result->row['total'];
 		}
 
-		foreach ($result->rows as &$row) {
-			$row['content'] = html_entity_decode($row['content']);
-			$row['css']     = html_entity_decode($row['css']);
-		}
-		unset($row);
-
 		return $result->rows;
 	}
 

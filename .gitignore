@@ -5,7 +5,9 @@ ac_config.php
 /.project
 *.db
 
-/image
+/image/*
+!/image/ac_logo.png
+!/image/ac_icon.png
 
 logs
 
@@ -19,7 +21,6 @@ cache
 /system/database/backups
 
 /plugin/*
-!/plugin/janrain
 !/plugin/dev
 !/plugin/mail
 
@@ -29,18 +30,6 @@ cache
 /admin/view/theme/*
 !/admin/view/theme/default
 
-/admin/controller/block/widget/janrain.php
-/admin/language/english/block/widget/janrain.php
-/admin/view/theme/default/template/block/widget/janrain_profile.tpl
-/admin/view/theme/default/template/block/widget/janrain_settings.tpl
-/catalog/controller/block/widget/janrain.php
-/catalog/language/english/block/widget/janrain.php
-/catalog/model/widget/janrain.php
-/catalog/view/theme/default/template/block/widget/janrain.tpl
-/image/janrain/rpx-icons16.png
-/image/janrain/rpx-icons30.png
-/admin/controller/catalog/subscription.php
-/admin/language/english/catalog/subscription.php
 /admin/model/catalog/subscription.php
 /admin/view/theme/default/template/catalog/subscription_form.tpl
 /admin/view/theme/default/template/catalog/subscription_list.tpl
