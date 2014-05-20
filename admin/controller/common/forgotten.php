@@ -22,7 +22,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 				'email' => $_POST['email'],
 			);
 
-			$this->mail->sendTemplate('forgotten_admin', $email_data);
+			call('mail/forgotten_admin', $email_data);
 
 			$this->message->add('success', _l("Please follow the link that was sent to your email to reset your password."));
 

@@ -1,4 +1,12 @@
 <?php
+$tables = $this->db->getTables();
+
+foreach ($tables as $table) {
+	if (strpos($table, 'oc_')) {
+		$this->query("ALTER TABLE `$table` RENAME TO " . DB_PREFIX . str_replace("oc_", '', $table));
+	}
+}
+
 if (!$this->db->hasColumn('information', 'title')) {
 	$this->db->query("ALTER TABLE `" . DB_PREFIX . "information` ADD COLUMN `title` VARCHAR(128) NOT NULL  AFTER `sort_order`");
 

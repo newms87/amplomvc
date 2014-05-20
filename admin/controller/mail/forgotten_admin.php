@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Mail_ForgottenAdmin extends Controller
+class Admin_Controller_Mail_ForgottenAdmin extends Controller
 {
 	public function index(array $data)
 	{
