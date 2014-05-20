@@ -890,15 +890,14 @@
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
 
 	$('[name=config_theme]').change(function () {
-		$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
+		var url = siteurl + 'setting/setting/theme?theme=' + $(this).val();
+		$('#theme').load(url);
 	}).change();
 
 	$('.imageinput').ac_imageinput();
 
 	$('#tabs a').tabs();
-</script>
 
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
