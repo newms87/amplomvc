@@ -23,7 +23,7 @@ class App_Controller_Common_Header extends Controller
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
 		//Add jQuery from the CDN or locally
-		if (true || option('config_jquery_cdn')) {
+		if (option('config_jquery_cdn', true)) {
 			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {

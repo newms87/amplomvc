@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Admin_Common_Forgotten extends Controller
+class Admin_Controller_Common_Forgotten extends Controller
 {
 	public function index()
 	{

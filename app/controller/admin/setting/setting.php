@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Class App_Controller_Admin_Setting_Setting
+ * Class Admin_Controller_Setting_Setting
  *
  * Title: General Settings
  * Icon: admin_settings.php
  *
  */
-class App_Controller_Admin_Setting_Setting extends Controller
+class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
 	{
@@ -73,7 +73,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_performance_log'                  => 0,
 			'config_default_return_policy'            => 0,
 			'config_default_shipping_policy'          => 0,
-			'config_shipping_return_page_id'          => 0,
+			'config_shipping_return_info_id'          => 0,
 			'config_cache_ignore'                     => '',
 			'config_cart_show_return_policy'          => 1,
 			'config_show_price_with_tax'              => '',
@@ -86,8 +86,8 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_customer_hide_price'              => 0,
 			'config_customer_approval'                => 0,
 			'config_guest_checkout'                   => '',
-			'config_account_terms_page_id'            => 0,
-			'config_checkout_terms_page_id'           => 0,
+			'config_account_terms_info_id'            => 0,
+			'config_checkout_terms_info_id'           => 0,
 			'config_breadcrumb_display'               => 1,
 			'config_breadcrumb_separator'             => '/',
 			'config_breadcrumb_separator_admin'       => '/',
@@ -204,7 +204,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$data['weight_classes']         = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$data['tax_classes']            = $this->Model_Localisation_TaxClass->getTaxClasses();
 		$data['customer_groups']        = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
+		$data['data_informations']      = array('' => _l(" --- None --- ")) + $this->Model_Catalog_Information->getInformations();
 		$data['data_stock_statuses']    = $this->Model_Localisation_StockStatus->getStockStatuses();
 		$data['data_order_statuses']    = $this->order->getOrderStatuses();
 		$data['data_return_statuses']   = $this->order->getReturnStatuses();
@@ -228,8 +228,6 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			1 => _l('Only When Unavailable'),
 			2 => _l('Always'),
 		);
-
-		$data['load_theme_img'] = site_url('setting/setting/theme');
 
 		$data['text_add_return_policy']   = _l("Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>", site_url('setting/return_policy'));
 		$data['text_add_shipping_policy'] = _l("Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>", site_url('setting/shipping_policy'));

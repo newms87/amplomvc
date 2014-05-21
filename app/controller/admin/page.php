@@ -129,7 +129,7 @@ class App_Controller_Admin_Page extends Controller
 			$page['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('page/update', 'page_id=' . $page['page_id'])
+					'href' => site_url('page/form', 'page_id=' . $page['page_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),

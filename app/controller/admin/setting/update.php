@@ -9,37 +9,22 @@
  */
 class App_Controller_Admin_Setting_Update extends Controller
 {
+	static $can_modify = array(
+		'index',
+	   //'update',
+	);
+
 	public function index()
 	{
 		//Page Head
 		$this->document->setTitle(_l("System Update"));
-
-		//Handle POST
-		if ($this->request->isPost() && $this->validate()) {
-			if (!empty($_POST['version'])) {
-				$this->System_Update->updateSystem($_POST['version']);
-				$this->message->add('success', _l("You have successfully updated to version %s", $_POST['version']));
-			} elseif (isset($_POST['auto_update'])) {
-				$this->config->save('system', 'auto_update', $_POST['auto_update']);
-
-				if ($_POST['auto_update']) {
-					$this->message->add('success', _l("Automatic system updates has been activated!"));
-				} else {
-					$this->message->add('notify', _l("You have deactivated automatic system updates!"));
-				}
-			}
-
-			if (!$this->message->has('error', 'warning')) {
-				redirect('setting/update');
-			}
-		}
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
 		$this->breadcrumb->add(_l("System Update"), site_url('setting/update'));
 
 		//Actions
-		$data['action'] = site_url('setting/update');
+		$data['action'] = site_url('setting/update/update');
 		$data['cancel'] = site_url('setting/store');
 
 		//Data
@@ -71,12 +56,37 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$this->response->setOutput($this->render('setting/update', $data));
 	}
 
-	public function validate()
+	public function update()
 	{
-		if (!$this->user->can('modify', 'setting/update')) {
-			$this->error['permission'] = _l("You do not have permission to run the System Update");
+		if (!empty($_REQUEST['version'])) {
+			if (!$this->System_Update->updateSystem($_POST['version'])) {
+				$this->message->add('error', $this->System_Update->getError());
+			} else {
+				$this->message->add('success', _l("You have successfully updated to version %s", $_REQUEST['version']));
+			}
 		}
 
-		return empty($this->error);
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('setting/update');
+		}
+	}
+
+	public function auto_update()
+	{
+		$this->config->save('system', 'auto_update', $_POST['auto_update']);
+
+		if ($_POST['auto_update']) {
+			$this->message->add('success', _l("Automatic system updates has been activated!"));
+		} else {
+			$this->message->add('notify', _l("You have deactivated automatic system updates!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('setting/update');
+		}
 	}
 }
