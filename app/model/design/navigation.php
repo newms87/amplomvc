@@ -390,10 +390,6 @@ class App_Model_Design_Navigation extends Model
 						'display_name' => 'Reviews',
 						'href'         => 'catalog/review',
 					),
-					'catalog_information'  => array(
-						'display_name' => 'Information',
-						'href'         => 'catalog/information',
-					),
 				),
 			),
 			'sales'      => array(
