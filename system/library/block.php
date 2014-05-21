@@ -28,12 +28,12 @@ class Block extends Library
 		 */
 
 		//Admin Controller File
-		$controller_template = $dir_templates . 'admin_controller.php';
+		$controller_template = $dir_templates . 'App_Controller_Admin.php';
 		$controller_file     = DIR_SITE . 'admin/controller/block/' . $data['path'] . '.php';
 
 		$insertables = array(
 			'path'           => $data['path'],
-			'class_name'     => "Admin_Controller_" . $class_name,
+			'class_name'     => "App_Controller_Admin_" . $class_name,
 			'settings_start' => '',
 			'settings_end'   => '',
 			'profile_start'  => '',
@@ -96,7 +96,7 @@ class Block extends Library
 
 		$insertables = array(
 			'path'       => $data['path'],
-			'class_name' => "Catalog_Controller_" . $class_name,
+			'class_name' => "App_Controller_" . $class_name,
 		);
 
 		$content = $this->tool->insertables($insertables, $content, '__', '__');

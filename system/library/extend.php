@@ -38,7 +38,7 @@ class Extend extends Library
 		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->escape($group) . "'");
 
 		if ($navigation_group_id) {
-			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
+			$this->App_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
 		} else {
 			$this->message->add('warning', __METHOD__ . "(): " . _l("The Navigation Group $group does not exist!"));
 			return false;
@@ -56,11 +56,11 @@ class Extend extends Library
 		$navigation_ids = $this->queryColumn($query);
 
 		foreach ($navigation_ids as $navigation_id) {
-			$this->Admin_Model_Design_Navigation->deleteNavigationLink($navigation_id);
+			$this->App_Model_Design_Navigation->deleteNavigationLink($navigation_id);
 		}
 	}
 
-	public function add_layout($name, $routes = array(), $data = array())
+	public function addLayout($name, $routes = array(), $data = array())
 	{
 		if (!is_array($routes)) {
 			$routes = array($routes);
@@ -80,7 +80,7 @@ class Extend extends Library
 		$layout += $data;
 
 		if (!empty($routes)) {
-			$stores = $this->Admin_Model_Setting_Store->getStores();
+			$stores = $this->App_Model_Setting_Store->getStores();
 
 			foreach ($stores as $store) {
 				foreach ($routes as $route) {
@@ -92,20 +92,20 @@ class Extend extends Library
 			}
 		}
 
-		return $this->Admin_Model_Design_Layout->addLayout($layout);
+		return $this->App_Model_Design_Layout->addLayout($layout);
 	}
 
 	//TODO: This should remove based on a unique ID not the name...
-	public function remove_layout($name)
+	public function removeLayout($name)
 	{
 		$result = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
-			$this->Admin_Model_Design_Layout->deleteLayout($result->row['layout_id']);
+			$this->App_Model_Design_Layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 
-	public function add_db_hook($hook_id, $action, $table, $callback, $param = null, $priority = 0)
+	public function addHook($hook_id, $action, $table, $callback, $param = null, $priority = 0)
 	{
 		$config_id = 'db_hook_' . $action . '_' . $table;
 
@@ -132,7 +132,7 @@ class Extend extends Library
 		$this->config->save('db_hook', $config_id, $hooks);
 	}
 
-	public function remove_db_hook($hook_id)
+	public function removeHook($hook_id)
 	{
 		$db_hooks = $this->config->loadGroup('db_hook');
 
@@ -189,11 +189,11 @@ class Extend extends Library
 	{
 		$hook_id = '__image_sort__' . $table . '_' . $column;
 
-		$this->add_db_hook($hook_id, 'insert', $table, array('Extend' => 'update_hsv_value'), array(
+		$this->addHook($hook_id, 'insert', $table, array('Extend' => 'update_hsv_value'), array(
 			$table,
 			$column
 		));
-		$this->add_db_hook($hook_id, 'update', $table, array('Extend' => 'update_hsv_value'), array(
+		$this->addHook($hook_id, 'update', $table, array('Extend' => 'update_hsv_value'), array(
 			$table,
 			$column
 		));
@@ -213,11 +213,11 @@ class Extend extends Library
 		}
 	}
 
-	public function disable_image_sorting($table, $column)
+	public function disableImageSorting($table, $column)
 	{
 		$hook_id = '__image_sort__' . $table . '_' . $column;
 
-		$this->remove_db_hook($hook_id);
+		$this->removeHook($hook_id);
 
 		$this->dropColumn($table, '__image_sort__' . $column);
 	}

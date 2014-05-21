@@ -56,7 +56,7 @@ class System_Model_Voucher extends Model
 
 		$voucher['order_id'] = $this->queryVar("SELECT order_id FROM " . DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$order_id . " LIMIT 1");
 
-		$this->mail->sendTemplate('voucher', $voucher);
+		call('mail/voucher', $voucher);
 
 		return true;
 	}

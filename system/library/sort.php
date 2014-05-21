@@ -52,7 +52,7 @@ class Sort extends Library
 			$template = 'block/widget/sort';
 		}
 
-		$template_file = $this->theme->findFile($template);
+		$template_file = $this->theme->getFile($template);
 
 		if (!$template_file) {
 			trigger_error(_l("%s(): Sort template %s was found!", __METHOD__, $template));
@@ -80,7 +80,7 @@ class Sort extends Library
 
 		$settings += $defaults;
 
-		$template_file = $this->theme->findFile($settings['template']);
+		$template_file = $this->theme->getFile($settings['template']);
 
 		if (!$template_file) {
 			trigger_error(_l("%s(): Limit template %s was found!", __METHOD__, $template_file));

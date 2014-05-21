@@ -1,14 +1,14 @@
 <?php
 //Urls
-define('URL_THEMES', URL_SITE . 'catalog/view/theme/');
+define('URL_THEMES', URL_SITE . 'app/view/theme/');
 
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'ajax/');
 
 //Directories
 define('DIR_PLUGIN', DIR_SITE . 'plugin/');
-define('DIR_FORM', DIR_SITE . 'catalog/view/form/');
-define('DIR_THEMES', DIR_SITE . 'catalog/view/theme/');
+define('DIR_FORM', DIR_SITE . 'app/view/form/');
+define('DIR_THEMES', DIR_SITE . 'app/view/theme/');
 define('DIR_SYSTEM', DIR_SITE . 'system/');
 
 define('DIR_EXCEL_TEMPLATE', DIR_SITE . 'system/php-excel/templates/');

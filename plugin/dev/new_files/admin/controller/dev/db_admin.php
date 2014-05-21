@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Dev_DbAdmin extends Controller
+class App_Controller_Admin_Dev_DbAdmin extends Controller
 {
 	public function index()
 	{

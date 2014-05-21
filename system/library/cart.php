@@ -462,7 +462,7 @@ class Cart extends Library
 			//fillProductDetails will cache results, so we need to save the quantity
 			$qty = $product['quantity'];
 
-			if (!$this->Catalog_Model_Catalog_Product->fillProductDetails($product, $product['id'], $product['quantity'], $product['options'])) {
+			if (!$this->Model_Catalog_Product->fillProductDetails($product, $product['id'], $product['quantity'], $product['options'])) {
 				return false;
 			}
 

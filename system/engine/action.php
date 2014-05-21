@@ -1,65 +1,85 @@
 <?php
+
 final class Action
 {
+	private $dir;
 	private $file;
 	private $path;
 	private $class;
 	private $classpath;
 	private $controller;
-	private $controller_path;
 	private $method;
 	private $parameters = array();
+	private $is_valid;
 	private $output;
 
-	public function __construct($path, $parameters = array(), $classpath = '')
+	public function __construct($path, $parameters = array())
 	{
-		$this->file       = null;
-		$this->path       = $path;
-		$this->parameters = $parameters;
-		$this->method     = 'index';
+		$dir = DIR_SITE . 'app/controller/';
 
-		if (!$classpath) {
-			$this->classpath = ($this->route->isAdmin() ? "admin/" : "catalog/") . "controller/";
-		} else {
-			$this->classpath = rtrim($classpath, '/') . '/';
-		}
+		$parts = explode('/', $path);
 
-		$parts = explode('/', str_replace('../', '', $this->classpath . $this->path));
+		$file   = '';
+		$class  = 'App_Controller';
+		$classpath = '';
+		$method = '';
+		$args   = array();
 
-		$filepath = '';
+		foreach ($parts as $part) {
+			if (!$file) {
+				if (is_dir($dir . $part)) {
+					$dir .= $part . '/';
+					$class .= '_' . str_replace('_', '', $part);
+					$classpath .= $part . '/';
+				} elseif (is_file($dir . $part . '.php')) {
+					$file = $dir . $part . '.php';
+					$class .= '_' . str_replace('_', '', $part);
+					$classpath .= $part;
+				} elseif (is_file(rtrim($dir, '/') . '.php')) {
+					$file = rtrim($dir, '/') . '.php';
+				} else {
+					break;
+				}
 
-		$count = count($parts);
+				continue;
+			}
 
-		for ($i = 0; $i < $count; $i++) {
-			$part = $parts[$i];
-
-			$filepath .= $part;
-
-			$is_file = is_file(DIR_SITE . $filepath . '.php');
-			$is_dir  = is_dir(DIR_SITE . $filepath);
-
-			$next = ($i < ($count - 1)) ? DIR_SITE . $filepath . '/' . $parts[$i + 1] : '';
-
-			//Scan directories until we find file requested
-			//If part is a directory AND either not a file, or a file and the next part is a file or directory, assume the part is a directory
-			if ($is_dir &&
-				(!$is_file || ($is_file && $is_dir && ($i < ($count - 1)) && (is_file($next . '.php') || is_dir($next))))
-			) {
-				$filepath .= '/';
-				$this->class .= $this->tool->_2CamelCase($part) . '_';
-			} elseif ($is_file) {
-				$this->file = DIR_SITE . $filepath . '.php';
-
-				$this->class .= $this->tool->_2CamelCase($part);
-				$this->controller_path = str_replace($this->classpath, '', $filepath);
-			} elseif ($this->file) {
-				$this->method    = $part;
-				$this->classpath = str_replace('/' . $part, '', $this->classpath);
-				break;
+			if (!$method) {
+				$method = $part;
 			} else {
-				return false;
+				$args[] = $part;
 			}
 		}
+
+		if (!$file) {
+			$this->is_valid = false;
+			return;
+		}
+
+		if (!$method) {
+			$method = 'index';
+		}
+
+		require_once(_ac_mod_file($file));
+
+		$callable = array(
+			$class,
+			$method
+		);
+
+		$this->is_valid = is_callable($callable);
+
+		if (!$this->is_valid && method_exists($class, $method)) {
+			trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $method, $class));
+		}
+
+		$this->dir        = $dir;
+		$this->file       = $file;
+		$this->path       = $path;
+		$this->classpath  = $classpath;
+		$this->class      = $class;
+		$this->method     = $method;
+		$this->parameters = $parameters ? $parameters : $args;
 	}
 
 	public function __get($key)
@@ -70,12 +90,22 @@ final class Action
 
 	public function isValid()
 	{
-		return $this->file ? true : false;
+		return $this->is_valid;
+	}
+
+	public function getDir()
+	{
+		return $this->dir;
 	}
 
 	public function getFile()
 	{
 		return $this->file;
+	}
+
+	public function getPath()
+	{
+		return $this->path;
 	}
 
 	public function getClass()
@@ -86,11 +116,6 @@ final class Action
 	public function getClassPath()
 	{
 		return $this->classpath;
-	}
-
-	public function getControllerPath()
-	{
-		return $this->controller_path;
 	}
 
 	public function getMethod()
@@ -106,19 +131,8 @@ final class Action
 	public function getController()
 	{
 		if (!$this->controller) {
-			if (is_file($this->file)) {
-				require_once(_ac_mod_file($this->file));
-
-				$class = $this->class;
-
-				$this->controller = new $class();
-			} else {
-				if (!$this->file) {
-					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller.");
-				} else {
-					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
-				}
-			}
+			$class            = $this->class;
+			$this->controller = new $class();
 		}
 
 		return $this->controller;
@@ -128,26 +142,22 @@ final class Action
 	{
 		global $language_group;
 
-		$controller = $this->getController();
+		if ($this->is_valid) {
+			$controller = $this->getController();
 
-		$callable = array(
-			$controller,
-			$this->method
-		);
-
-		if (is_callable($callable)) {
 			//Set our language group for translations
 			$language_group = $this->class;
+
+			$callable = array(
+				$controller,
+				$this->method,
+			);
 
 			call_user_func_array($callable, $this->parameters);
 
 			$this->output = $controller->output;
 
 			return true;
-		}
-
-		if (method_exists($controller, $this->method)) {
-			trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $this->method, $this->class));
 		}
 
 		return false;

@@ -131,13 +131,13 @@ class User extends Library
 			return true;
 		}
 
-		$path = $action->getControllerPath();
+		$path = $action->getClassPath();
 
 		if (!$this->isLogged()) {
 			$allowed = array(
-				'common/forgotten',
-				'common/reset',
-				'common/login',
+				'admin/common/forgotten',
+				'admin/common/reset',
+				'admin/common/login',
 			);
 
 			if (!in_array($path, $allowed)) {
@@ -145,13 +145,13 @@ class User extends Library
 			}
 		} else {
 			$ignore = array(
-				'common/home',
-				'common/login',
-				'common/logout',
-				'common/forgotten',
-				'common/reset',
-				'error/not_found',
-				'error/permission'
+				'admin/common/home',
+				'admin/common/login',
+				'admin/common/logout',
+				'admin/common/forgotten',
+				'admin/common/reset',
+				'admin/error/not_found',
+				'admin/error/permission'
 			);
 
 			if (!in_array($path, $ignore)) {
@@ -276,9 +276,13 @@ class User extends Library
 		return $this->isLogged();
 	}
 
-	public function info($key)
+	public function info($key = null)
 	{
-		return isset($this->user[$key]) ? $this->user[$key] : null;
+		if ($key) {
+			return isset($this->user[$key]) ? $this->user[$key] : null;
+		}
+
+		return $this->user;
 	}
 
 	public function getId()

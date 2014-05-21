@@ -12,17 +12,37 @@ class Theme extends Library
 
 		$this->dir_themes = DIR_THEMES;
 
-		if ($this->route->isAdmin()) {
-			$this->theme        = option('config_admin_theme', 'default');
-			$this->parent_theme = option('config_admin_parent_theme', 'default');
-		} else {
-			$this->theme        = option('config_theme', 'fluid');
-			$this->parent_theme = option('config_parent_theme', 'fluid');
+		$admin_theme        = option('config_admin_theme', 'admin');
+		$admin_parent_theme = option('config_admin_parent_theme', 'admin');
+		$theme              = option('config_theme', 'fluid');
+		$parent_theme       = option('config_parent_theme', 'fluid');
+
+		if (!is_dir(DIR_THEMES . $admin_theme)) {
+			set_option('config_admin_theme', 'admin');
+			$admin_theme = 'admin';
 		}
 
+		if (!is_dir(DIR_THEMES . $admin_parent_theme)) {
+			set_option('config_admin_parent_theme', 'admin');
+			$admin_parent_theme = 'admin';
+		}
 
-		if (!$this->theme || !is_dir(DIR_THEMES . $this->theme)) {
-			$this->theme = $this->parent_theme;
+		if (!is_dir(DIR_THEMES . $theme)) {
+			set_option('config_theme', 'fluid');
+			$theme = 'fluid';
+		}
+
+		if (!is_dir(DIR_THEMES . $parent_theme)) {
+			set_option('config_parent_theme', 'fluid');
+			$parent_theme = 'fluid';
+		}
+
+		if ($this->route->isAdmin()) {
+			$this->theme        = $admin_theme;
+			$this->parent_theme = $admin_parent_theme;
+		} else {
+			$this->theme        = $theme;
+			$this->parent_theme = $parent_theme;
 		}
 
 		//Url Constants
@@ -132,19 +152,46 @@ class Theme extends Library
 		return $areas;
 	}
 
-	public function findFile($file)
+	public function getFile($file, $theme = null, $parent_theme = null)
 	{
+		$file = $this->findFile($file, $theme, $parent_theme);
+
+		if ($file) {
+			return $this->dir_themes . $file;
+		}
+
+		return false;
+	}
+
+	public function getUrl($file, $theme = null, $parent_theme = null)
+	{
+		$file = $this->findFile($file, $theme, $parent_theme);
+
+		if ($file) {
+			return URL_THEMES . $file;
+		}
+
+		return false;
+	}
+
+	public function findFile($file, $theme = null, $parent_theme = null)
+	{
+		$theme = $theme ? $theme : $this->theme;
+		$parent_theme = $parent_theme ? $parent_theme : $this->parent_theme;
+
 		//Add tpl extension if no extension specified
 		if (!preg_match("/\\.[a-z0-9]+\$/i", $file)) {
 			$file .= '.tpl';
 		}
 
-		if (file_exists($this->dir_themes . $this->theme . '/' . $file)) {
-			return $this->dir_themes . $this->theme . '/' . $file;
-		} elseif (file_exists($this->dir_themes . $this->theme . '/template/' . $file)) {
-			return $this->dir_themes . $this->theme . '/template/' . $file;
-		} elseif (file_exists($this->dir_themes . $this->parent_theme . '/template/' . $file)) {
-			return $this->dir_themes . $this->parent_theme . '/template/' . $file;
+		if (file_exists($this->dir_themes . $theme . '/' . $file)) {
+			return $theme . '/' . $file;
+		} elseif (file_exists($this->dir_themes . $parent_theme . '/' . $file)) {
+			return $parent_theme . '/' . $file;
+		} elseif (file_exists($this->dir_themes . $theme . '/template/' . $file)) {
+			return $theme . '/template/' . $file;
+		} elseif (file_exists($this->dir_themes . $parent_theme . '/template/' . $file)) {
+			return $parent_theme . '/template/' . $file;
 		}
 
 		//File not found

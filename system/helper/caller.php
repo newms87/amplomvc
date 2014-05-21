@@ -69,13 +69,15 @@ function store_url($store_id, $path = '', $query = null)
 
 function theme_url($path = '', $query = null)
 {
-	if (is_file(DIR_THEME . $path)) {
-		return site_url(URL_THEME . $path, $query);
-	} elseif (is_file(DIR_THEME_PARENT . $path)) {
-		return site_url(URL_THEME_PARENT . $path, $query);
+	global $registry;
+
+	$url = $registry->get('theme')->getUrl($path);
+
+	if (!$url) {
+		$url = URL_THEME . $path;
 	}
 
-	return site_url(URL_THEME . $path, $query);
+	return site_url($url, $query);
 }
 
 function theme_dir($path = '')
@@ -101,6 +103,12 @@ function option($option, $default = null)
 	$value = $registry->get('config')->get($option);
 
 	return is_null($value) ? $default : $value;
+}
+
+function set_option($option, $value)
+{
+	global $registry;
+	$registry->get('config')->save('config', $option, $value);
 }
 
 function format($type, $data, $param = null)

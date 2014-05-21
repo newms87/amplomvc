@@ -13,7 +13,7 @@ final class Router
 			$uri = trim(substr($uri, strlen($base)), '/');
 		}
 
-		$this->path = $uri ? preg_replace("/^admin\\/?/", '', $uri) : DEFAULT_PATH;
+		$this->path = $uri ? $uri : DEFAULT_PATH;
 
 		$this->segments = explode('/', $this->path);
 	}
@@ -46,7 +46,7 @@ final class Router
 
 	public function isAdmin()
 	{
-		return defined("IS_ADMIN");
+		return $this->getSegment(0) === 'admin';
 	}
 
 	public function route()

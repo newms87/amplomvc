@@ -359,8 +359,8 @@ class Image extends Library
 	{
 		$merge = $this->create($file);
 
-		$merge_width  = imagesx($image);
-		$merge_height = imagesy($image);
+		$merge_width  = imagesx($this->image);
+		$merge_height = imagesy($this->image);
 
 		imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
 	}

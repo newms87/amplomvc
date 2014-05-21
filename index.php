@@ -17,15 +17,6 @@ require_once(DIR_SYSTEM . 'functions.php');
 
 $__start = microtime(true);
 
-/*  PRETTY LANGUAGE TESTING
-echo 'testing pretty language<br /><br />';
-require_once(DIR_SYSTEM . 'library/pretty_language.php');
-new PrettyLanguage();
-echo '<br /><br />pretty_language_done';
-exit;
-//*/
-
-
 //File Modifications
 require_once(DIR_SYSTEM . 'ac_mod_file.php');
 

@@ -40,30 +40,28 @@ final class Registry
 			}
 		}
 
-		//Resolve Model
-		if (preg_match("/^(Model_|System_|Admin_|Catalog_)/", $class)) {
-			if (strpos($class, "Model_") === 0) {
-				$class = (defined("IS_ADMIN") ? 'Admin_' : 'Catalog_') . $class;
+		//Check for file in library
+		$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
+
+		//If not in library, check in Model
+		if (!is_file($file)) {
+			if (preg_match("/^model_/i", $class)) {
+				$class = 'App_' . $class;
 			}
 
 			$path = explode("_", $class);
 
-			array_walk($path, function (&$e, $index) {
-				$e = preg_replace("/([a-z])([A-Z])/", "\$1_\$2", $e);
-				$e = strtolower($e);
-			});
+			foreach ($path as &$p) {
+				$p = strtolower($this->get('tool')->camelCase2_($p));
+			}
+			unset($p);
 
 			$file = DIR_SITE . implode('/', $path) . '.php';
-		} //Resolve non-relative from root paths
-		else {
-			//Check in Library
-			$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
 		}
 
 		//Check for relative path from root
 		if (is_file($file)) {
 			require_once(_ac_mod_file($file));
-
 
 			if ($return_instance) {
 				return new $class();
@@ -72,7 +70,7 @@ final class Registry
 			return true;
 		}
 
-		trigger_error(_l("Unable to resolve class %s. Failed to load class file.", $class));
+		trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
 
 		return false;
 	}

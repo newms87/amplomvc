@@ -156,26 +156,6 @@ class Mail extends Library
 		}
 	}
 
-	public function sendTemplate($controller)
-	{
-		$args = func_get_args();
-		array_shift($args);
-
-		$action = new Action($controller, $args, 'catalog/controller/mail');
-
-		//Set the Template to the Front End
-		$this->theme->setThemesDirectory(DIR_SITE . 'catalog/view/theme/');
-
-		if (!$action->execute()) {
-			if ($controller === 'error') {
-				trigger_error(_l("There was a problem while sending an email and the Error email template is missing!"));
-				exit;
-			}
-
-			$this->sendTemplate('error', _l("Failed to call Mail Controller: %s!", $action->getClass()) . get_caller(0, 2));
-		}
-	}
-
 	public function setData($data)
 	{
 		if ($data) {

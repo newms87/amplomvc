@@ -142,7 +142,7 @@ class Pagination extends Library
 		//TODO: Allow Admin panel access to change how this is displayed (separate entries for admin / each store)
 		$data['text_pager'] = $this->tool->insertables($insertables, _l("Showing %start% to %end% of %total% (%pages% Pages)"));
 
-		$template = $this->theme->findFile($this->template);
+		$template = $this->theme->getFile($this->template);
 
 		if (!$template || !is_file($template)) {
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $this->template));

@@ -31,14 +31,9 @@ abstract class Controller
 			}
 		}
 
-		//Empty Dependencies and Breadcrumbs if an ajax request
-		if ($this->request->isAjax()) {
-			$this->breadcrumb->clear();
-		}
+		$_template = $this->theme->getFile($path);
 
-		$_template = $this->theme->findFile($path);
-
-		if (!$_template || !is_file($_template)) {
+		if (!$_template) {
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));
 			exit();
 		}

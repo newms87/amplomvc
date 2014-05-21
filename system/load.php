@@ -78,10 +78,10 @@ if ($row) {
 }
 
 //System Logs
-$error_log = new Log(AC_LOG_ERROR_FILE, $config->get('config_store_id'));
+$error_log = new Log(AC_LOG_ERROR_FILE, $config->get('store_id'));
 $registry->set('error_log', $error_log);
 
-$log = new Log(AC_LOG_FILE, $config->get('config_store_id'));
+$log = new Log(AC_LOG_FILE, $config->get('store_id'));
 $registry->set('log', $log);
 
 //Error Callbacks allow customization of error display / messages

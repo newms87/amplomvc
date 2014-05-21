@@ -31,18 +31,7 @@ class Table extends Library
 
 	public function setTemplate($file)
 	{
-		if (!preg_match("/\\.tpl$/", $file)) {
-			$file .= '.tpl';
-		}
-
-		if (file_exists(DIR_THEME . $this->path . $file)) {
-			$this->file = DIR_THEME . $this->path . $file;
-		} elseif (file_exists(DIR_THEMES . 'default/template/' . $file)) {
-			$this->file = DIR_THEMES . 'default/template/' . $file;
-		} else {
-			trigger_error(_l("%s(): Could not load form template %s!", __METHOD__, DIR_THEME . $this->path . $file));
-			exit();
-		}
+		$this->file = $this->theme->getFile($file);
 	}
 
 	public function mapAttribute($attr, $values)

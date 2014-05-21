@@ -310,9 +310,6 @@ $this->db->changeColumn('navigation', 'parent_id', 'parent_id', "INT(10) UNSIGNE
 //$this->db->query("ALTER TABLE `realmeal`.`ac_product` DROP PRIMARY KEY , ADD PRIMARY KEY (`product_id`)");
 $this->db->changeColumn('product', 'product_id', 'product_id', "INT(11) UNSIGNED NOT NULL AUTO_INCREMENT");
 
-//Page
-$this->db->addColumn("page", 'css', "TEXT NOT NULL  AFTER `content`");
-
 //Product Class
 $this->db->addColumn('product_class', 'status', "INT(10) UNSIGNED NOT NULL DEFAULT '1'");
 
@@ -329,7 +326,7 @@ if (strpos($contents, 'PASSWORD_COST') === false) {
 	file_put_contents($ac_config, $contents);
 }
 
-$this->db->addColumn('product_class', 'admin_controller', 'TEXT NOT NULL');
+$this->db->addColumn('product_class', 'App_Controller_Admin', 'TEXT NOT NULL');
 $this->db->addColumn('product_class', 'front_controller', 'TEXT NOT NULL');
 
 //Order options

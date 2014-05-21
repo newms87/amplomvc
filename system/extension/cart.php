@@ -4,7 +4,7 @@ class System_Extension_Cart extends Controller
 	public function get($code)
 	{
 		global $registry;
-		return $registry->get("Catalog_Controller_Extension_Cart_" . $code);
+		return $registry->get("App_Controller_Extension_Cart_" . $code);
 	}
 
 	public function renderCarts()

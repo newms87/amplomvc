@@ -33,8 +33,8 @@ final class System_Extension_Model extends Model
 			return false;
 		}
 
-		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'access', "$type/$code");
-		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'modify', "$type/$code");
+		$this->App_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'access', "$type/$code");
+		$this->App_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'modify', "$type/$code");
 
 		$data = array(
 			'type'       => $type,

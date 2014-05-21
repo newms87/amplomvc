@@ -355,7 +355,7 @@ class Order Extends Library
 		$this->addHistory($order_id, $history_data);
 
 		if ($notify) {
-			$this->mail->sendTemplate('order_update_notify', $comment, $order_status_id, $order);
+			call('mail/order_update_notify', $comment, $order_status_id, $order);
 		}
 
 		return true;
@@ -446,7 +446,7 @@ class Order Extends Library
 		$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 
 		//Send Order Emails
-		$this->mail->sendTemplate('order', $order);
+		call('mail/order', $order);
 
 		return true;
 	}

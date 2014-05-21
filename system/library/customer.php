@@ -125,11 +125,11 @@ class Customer extends Library
 			$this->error['password'] = $this->validation->getError();
 		}
 
-		if (option('config_account_terms_info_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation(option('config_account_terms_info_id'));
+		if (option('config_account_terms_page_id')) {
+			$page_info = $this->Model_Page_Page->getPage(option('config_account_terms_page_id'));
 
-			if ($information_info && !isset($customer['agree'])) {
-				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $information_info['title']);
+			if ($page_info && !isset($customer['agree'])) {
+				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $page_info['title']);
 			}
 		}
 
@@ -169,7 +169,7 @@ class Customer extends Library
 
 		$customer['customer_id'] = $this->customer_id;
 
-		$this->mail->sendTemplate('new_customer', $customer);
+		call('mail/new_customer', $customer);
 
 		return $this->customer_id;
 	}
