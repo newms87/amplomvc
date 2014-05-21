@@ -7,10 +7,17 @@ class Catalog_Controller_Page extends Controller
 		//The page
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 
-		$page = $this->Model_Page_Page->getPage($page_id);
+		$page = $this->Model_Page_Page->getActivePage($page_id);
 
 		if (!$page) {
-			redirect("error/not_found");
+			//If page did not exist in the database, lookup the page by name
+			if (is_null($page)) {
+				$page = $this->Model_Page_Page->getPageByName($this->route->getSegment(1));
+			}
+
+			if (!$page) {
+				redirect("error/not_found");
+			}
 		}
 
 		//Page Head

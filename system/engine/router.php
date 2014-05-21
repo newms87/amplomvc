@@ -100,6 +100,10 @@ final class Router
 			$this->path = $this->Model_Catalog_Product->getClassController($_GET['product_id']);
 		}
 
+		if (strpos($this->path, 'page/') === 0) {
+			$this->path = 'page';
+		}
+
 		//Controller Overrides
 		$controller_overrides = $this->config->load('controller_override', 'controller_override');
 

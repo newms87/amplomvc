@@ -240,11 +240,7 @@
 	$(document).ready(function () {
 		$('#preview_frame').attr('src', "<?= $page_preview; ?>");
 	});
-</script>
 
-<? //$this->builder->js('translations', $translations); ?>
-
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
