@@ -207,6 +207,8 @@ class Url extends Library
 			$url = $this->link($url, $query);
 		}
 
+		echo $url;
+		exit;
 		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
 		exit();
 	}
@@ -312,9 +314,9 @@ class Url extends Library
 
 				if (!$scheme) {
 					if ($url_alias['store_id']) {
-						$url_alias['redirect'] = $this->url->store($url_alias['store_id'], '', $url_alias['redirect']);
+						$url_alias['redirect'] = $this->store($url_alias['store_id'], '', $url_alias['redirect']);
 					} else {
-						$url_alias['redirect'] = $this->url->admin('', $url_alias['redirect']);
+						$url_alias['redirect'] = $this->link('', $url_alias['redirect']);
 					}
 				}
 

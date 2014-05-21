@@ -69,49 +69,34 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function getThemes($admin = false)
+	public function getThemes()
 	{
-		if ($admin) {
-			$theme_dir = DIR_SITE . 'admin/view/theme/';
-		} else {
-			$theme_dir = DIR_SITE . 'catalog/view/theme/';
-		}
+		$theme_dir = DIR_SITE . 'app/view/theme/';
 
-		$themes = $this->cache->get('themes' . ($admin ? '.admin' : ''));
+		$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
 
-		if (is_null($themes)) {
-			$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
+		$themes = array();
 
-			$themes = array();
+		foreach ($dir_themes as $dir) {
+			$name = basename($dir);
 
-			foreach ($dir_themes as $dir) {
-				$name = basename($dir);
-
-				$themes[$name] = array(
-					'name' => $name,
-				);
-			}
-
-			$this->cache->set('themes' . ($admin ? '.admin' : ''), $themes);
+			$themes[$name] = array(
+				'dir' => $dir . '/',
+				'name' => $name,
+			);
 		}
 
 		return $themes;
 	}
 
-	public function getTemplatesFrom($path, $admin = false, $blank_row = false)
+	public function getTemplatesFrom($path, $blank_row = false)
 	{
-		if ($admin) {
-			$root = DIR_SITE . 'admin/view/theme/';
-		} else {
-			$root = DIR_SITE . 'catalog/view/theme/';
-		}
-
-		$themes = $this->getThemes($admin);
+		$themes = $this->getThemes();
 
 		$templates = array();
 
 		foreach ($themes as $theme_dir => $theme) {
-			$dir = $root . $theme_dir . '/template/' . trim($path, '/') . '/';
+			$dir = $theme['dir'] . 'template/' . trim($path, '/') . '/';
 
 			if (!is_dir($dir)) {
 				continue;
@@ -140,7 +125,7 @@ class Theme extends Library
 
 	public function getPositions()
 	{
-		$area_files = glob(URL_SITE . 'catalog/controller/area/*');
+		$area_files = glob(URL_SITE . 'app/controller/area/*');
 
 		$areas = array();
 

@@ -23,9 +23,9 @@ class App_Controller_Admin_Setting_Store extends Controller
 			}
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified settings!"));
+				$this->message->add('success', _l("The Store settings have been saved!"));
 
-				redirect('setting/store');
+				redirect('admin/setting/store');
 			}
 		}
 
@@ -115,8 +115,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 			}
 
 			$theme          = $this->config->load('config', 'config_theme', $store['store_id']);
-			$image          = DIR_SITE . 'catalog/view/theme/' . $theme . '/' . $theme . '.png';
-			$store['thumb'] = $this->image->resize($image, $image_width, $image_height);
+			$image          = DIR_SITE . 'app/view/theme/' . $theme . '/' . $theme . '.png';
+			$store['thumb'] = image($image, $image_width, $image_height);
 
 		}
 		unset($store);
@@ -260,7 +260,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Additional Info
 		$data['layouts']              = $this->Model_Design_Layout->getLayouts();
-		$data['themes']               = $this->theme->getThemes();
+		$data['data_themes']               = $this->theme->getThemes();
 		$data['geo_zones']            = array_merge(array(0 => "--- All Zones ---"), $this->Model_Localisation_GeoZone->getGeoZones());
 		$data['countries']            = $this->Model_Localisation_Country->getCountries();
 		$data['languages']            = $this->Model_Localisation_Language->getLanguages();
@@ -328,9 +328,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['save']               = site_url('setting/store/update', 'store_id=' . $store_id);
 		$data['cancel']             = site_url('setting/store');
 		$data['url_generate_icons'] = site_url('setting/store/generate_icons');
-
-		//Ajax Urls
-		$data['load_theme_img'] = site_url('setting/setting/theme');
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_form', $data));

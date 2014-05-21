@@ -329,14 +329,8 @@ class Document extends Library
 				$script = URL_SITE . $script;
 			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
 				$script = URL_RESOURCES . 'js/' . $script;
-			} elseif ($this->route->isAdmin()) {
-				if (is_file(DIR_SITE . 'admin/view/javascript/' . $script)) {
-					$script = URL_SITE . 'admin/view/javascript/' . $script;
-				}
-			} else {
-				if (is_file(DIR_SITE . 'catalog/view/javascript/' . $script)) {
-					$script = URL_SITE . 'catalog/view/javascript/' . $script;
-				}
+			} elseif (is_file(DIR_SITE . 'app/view/javascript/' . $script)) {
+				$script = URL_SITE . 'app/view/javascript/' . $script;
 			}
 		}
 

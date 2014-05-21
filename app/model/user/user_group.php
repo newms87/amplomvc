@@ -92,7 +92,7 @@ class App_Model_User_UserGroup extends Model
 			'common/header'
 		);
 
-		$files = glob(DIR_SITE . 'admin/controller/*/*.php');
+		$files = glob(DIR_SITE . 'app/controller/admin/*/*.php');
 
 		$permissions = array();
 

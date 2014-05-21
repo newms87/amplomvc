@@ -68,9 +68,9 @@ final class Router
 
 		if ($controller_overrides) {
 			foreach ($controller_overrides as $override) {
-				if (('admin/controller/' . $this->path) === $override['original']) {
+				if (('app/controller/admin/' . $this->path) === $override['original']) {
 					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
-						$this->path = str_replace('admin/controller/', '', $override['alternate']);
+						$this->path = str_replace('app/controller/admin/', '', $override['alternate']);
 					}
 				}
 			}
@@ -79,9 +79,8 @@ final class Router
 
 	public function routeFront()
 	{
-		//Do not show maintenance page if user is an admin
-		// or if the path is a a request by a payment provider (IPN from Paypal, etc.)
 		if (option('config_maintenance')) {
+			//Do not show maintenance page if user is an admin
 			if ($this->user->isAdmin()) {
 				if (isset($_GET['hide_maintenance_msg'])) {
 					$_SESSION['hide_maintenance_msg'] = 1;
@@ -109,9 +108,9 @@ final class Router
 
 		if ($controller_overrides) {
 			foreach ($controller_overrides as $override) {
-				if (('catalog/controller/' . $this->path) === $override['original']) {
+				if (('app/controller/' . $this->path) === $override['original']) {
 					if (empty($override['condition']) || preg_match("/" . $override['condition'] . "/", urldecode($this->url->getQuery()))) {
-						$this->path = str_replace('catalog/controller/', '', $override['alternate']);
+						$this->path = str_replace('app/controller/', '', $override['alternate']);
 					}
 				}
 			}

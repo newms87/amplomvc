@@ -74,7 +74,7 @@
 			<td><?= _l("Theme:"); ?></td>
 			<td>
 				<? $this->builder->setConfig('name', 'name'); ?>
-				<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
+				<?= $this->builder->build('select', $data_themes, 'config_theme', $config_theme); ?>
 			</td>
 		</tr>
 		<tr>

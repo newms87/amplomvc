@@ -7,7 +7,7 @@ class Cleanup extends Library
 		$ext         = array('php');
 
 
-		$files = $this->getFiles(DIR_SITE . "admin/controller/", $ext);
+		$files = $this->getFiles(DIR_SITE . "app/controller/admin/", $ext);
 
 		$this->noview($files);
 

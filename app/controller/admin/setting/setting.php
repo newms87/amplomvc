@@ -195,7 +195,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 
 		//Template Data
 		$data['data_layouts']           = $this->Model_Design_Layout->getLayouts();
-		$data['themes']                 = $this->theme->getThemes();
+		$data['data_themes']            = $this->theme->getThemes();
 		$data['stores']                 = $this->Model_Setting_Store->getStores();
 		$data['countries']              = $this->Model_Localisation_Country->getCountries();
 		$data['languages']              = $this->Model_Localisation_Language->getLanguages();
@@ -257,12 +257,12 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			return false;
 		}
 
-		$image = DIR_SITE . 'catalog/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
+		$image = DIR_SITE . 'app/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
 
-		$image = $this->image->get($image);
+		$image = image($image);
 
 		if (!$image) {
-			$image = $this->image->resize('no_image', 300, 300);
+			$image = image('no_image', 300, 300);
 		}
 
 		$this->response->setOutput("<img src=\"$image\" class =\"theme_preview\" />");

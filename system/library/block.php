@@ -29,7 +29,7 @@ class Block extends Library
 
 		//Admin Controller File
 		$controller_template = $dir_templates . 'App_Controller_Admin.php';
-		$controller_file     = DIR_SITE . 'admin/controller/block/' . $data['path'] . '.php';
+		$controller_file     = DIR_SITE . 'app/controller/admin/block/' . $data['path'] . '.php';
 
 		$insertables = array(
 			'path'           => $data['path'],
@@ -90,7 +90,7 @@ class Block extends Library
 
 		//Front Controller File
 		$controller_template = $dir_templates . 'front_controller.php';
-		$controller_file     = DIR_SITE . 'catalog/controller/block/' . $data['path'] . '.php';
+		$controller_file     = DIR_SITE . 'app/controller/block/' . $data['path'] . '.php';
 
 		$content = file_get_contents($controller_template);
 
@@ -113,7 +113,7 @@ class Block extends Library
 			$front_template = $dir_templates . 'front_template.tpl';
 
 			foreach ($data['themes'] as $theme) {
-				$template_file = DIR_SITE . 'catalog/view/theme/' . $theme . '/template/block/' . $data['path'] . '.tpl';
+				$template_file = DIR_SITE . 'app/view/theme/' . $theme . '/template/block/' . $data['path'] . '.tpl';
 
 				if (!_is_writable(dirname($template_file))) {
 					trigger_error(_l("%s is not writable", $template_file));
@@ -188,23 +188,16 @@ class Block extends Library
 	public function remove($path)
 	{
 		$files = array(
-			DIR_SITE . 'catalog/controller/block/' . $path . '.php',
+			DIR_SITE . 'app/controller/block/' . $path . '.php',
 			DIR_THEMES . 'default/template/block/' . $path . '_settings.tpl',
 			DIR_THEMES . 'default/template/block/' . $path . '_profile.tpl',
-			DIR_SITE . 'admin/controller/block/' . $path . '.php',
+			DIR_SITE . 'app/controller/admin/block/' . $path . '.php',
 		);
-
-		$languages = $this->language->getLanguages();
-
-		foreach ($languages as $language) {
-			$files[] = DIR_SITE . 'admin/language/' . $language['directory'] . '/block/' . $path . '.php';
-			$files[] = DIR_SITE . 'catalog/language/' . $language['directory'] . '/block/' . $path . '.php';
-		}
 
 		$themes = $this->theme->getThemes();
 
 		foreach ($themes as $theme) {
-			$files[] = DIR_SITE . 'catalog/view/theme/' . $theme['name'] . '/template/block/' . $path . '.tpl';
+			$files[] = DIR_SITE . 'app/view/theme/' . $theme['name'] . '/template/block/' . $path . '.tpl';
 		}
 
 		foreach ($files as $file) {
@@ -266,7 +259,7 @@ class Block extends Library
 
 	public function getBlocks($filter = array(), $total = false)
 	{
-		$block_files = glob(DIR_SITE . 'admin/controller/block/*/*.php');
+		$block_files = glob(DIR_SITE . 'app/controller/admin/block/*/*.php');
 
 		$this->cleanDb($block_files);
 
@@ -399,12 +392,12 @@ class Block extends Library
 
 	public function exists($path)
 	{
-		return is_file(DIR_SITE . 'admin/controller/block/' . $path . '.php');
+		return is_file(DIR_SITE . 'app/controller/admin/block/' . $path . '.php');
 	}
 
 	public function getName($path)
 	{
-		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'admin/controller/block/' . $path . '.php');
+		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'app/controller/admin/block/' . $path . '.php');
 
 		return !empty($directives['name']) ? $directives['name'] : $path;
 	}

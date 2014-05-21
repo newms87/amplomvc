@@ -23,7 +23,7 @@
 						<td class="required"><?= _l("Block Path"); ?></td>
 						<td>
 							<input type="text" name="path" placeholder="widget/myblock" value="<?= $path; ?>"/><br/>
-							<span class="help"><?= _l("Relative to the Block Root Directory (admin/controller/block/) for example: widget/myblock"); ?></span>
+							<span class="help"><?= _l("Relative to the Block Root Directory (app/controller/block/) for example: widget/myblock"); ?></span>
 						</td>
 					</tr>
 					<tr>
