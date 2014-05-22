@@ -56,4 +56,11 @@ class System_Cron_AcCron extends System_Cron_Job
 			$this->delete('address', $address_id);
 		}
 	}
+
+	public function updateCurrencies()
+	{
+		if (option('config_currency_auto')) {
+			$this->Model_Localisation_Currency->updateCurrencies();
+		}
+	}
 }

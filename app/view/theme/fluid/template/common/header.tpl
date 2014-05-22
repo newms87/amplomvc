@@ -128,12 +128,6 @@
 							</div>
 						</div>
 
-						<? if (has_links('cart')) { ?>
-							<div id="links-cart" class="links">
-								<?= links('cart'); ?>
-							</div>
-						<? } ?>
-
 						<div id="header-social-networks">
 							<?= block('extras/social_media'); ?>
 						</div>

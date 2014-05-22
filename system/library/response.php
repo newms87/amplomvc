@@ -116,71 +116,31 @@ class Response extends Library
 
 	private function dbProfile()
 	{
+		global $__start;
 		$profile = $this->db->getProfile();
 
-		$total = 0;
-
-		$html = '';
+		$db_time = 0;
 
 		usort($profile, function ($a, $b) { return $a['time'] < $b['time']; });
 
 		foreach ($profile as $p) {
-			$total += $p['time'];
-			$html .= "<div>$p[time]<span>$p[query]</span></div>";
+			$db_time += $p['time'];
 		}
 
-		$total = _l("Total Time: %s in %s transactions", $total, count($profile));
+		$run_time = microtime(true) - $__start;
 
-		$html = <<<HTML
-<div id="db_profile_box" style="display:none">
-<style>
-	#db_profile{
-		clear:both;
-	}
-	#db_profile .profile_list{
-		position:relative;
-	}
-	#db_profile .profile_list div{
-		position:relative;
-		margin: 10px 0 10px 15px;
-		cursor: pointer;
-		padding: 5px 10px;
-		background: #38B0E3;
-		border-radius: 5px;
-		width: 200px;
-	}
-	#db_profile .profile_list div span {
-		position:absolute;
-		width: 400px;
-		top:0;
-		left: 10%;
-		display:none;
-		background:white;
-		padding: 10px 20px;
-		border-radius: 10px;
-		box-shadow: 5px 5px 5px rgba(0,0,0,.6);
-		z-index: 10;
-	}
-	#db_profile .profile_list div:hover span{
-		display:block;
-	}
-</style>
+		$mb = 1024 * 1024;
+		$memory = (memory_get_peak_usage() / $mb) . " MB";
+		$real_memory = (memory_get_peak_usage(true) / $mb) . " MB";
 
-	<div id="db_profile">
-		<div class="total">$total</div>
-		<div class="profile_list">$html</div>
-	</div>
-</div>
+		$file_list = get_included_files();
+		$total_files = count($file_list);
 
-<script type="text/javascript">
-var w = window.open(null, "DB_Profiler");
+		$file = $this->theme->getFile('common/amplo_profile');
 
-if (w) {
-	w.document.title = "DB Profile";
-	w.document.body.innerHTML = document.getElementById('db_profile_box').innerHTML;
-}
-</script>
-HTML;
+		ob_start();
+		include($file);
+		$html = ob_get_clean();
 
 		$this->output = str_replace("</body>", $html . "</body>", $this->output);
 	}

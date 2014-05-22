@@ -76,7 +76,7 @@ class DB
 	 */
 	public function query($sql)
 	{
-		if (defined("DB_PROFILE") && DB_PROFILE) {
+		if (DB_PROFILE) {
 			$start = microtime(true);
 
 			if (DB_PROFILE && !DB_PROFILE_CACHE) {

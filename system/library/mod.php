@@ -328,7 +328,7 @@ class Mod extends Library
 				$this->error[] = "Could not write to file $destination!" . get_caller(0, 4);
 			}
 
-			chmod($destination, AMPLOCART_FILE_MODE);
+			chmod($destination, AMPLO_FILE_MODE);
 		}
 
 		return empty($this->error);

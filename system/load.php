@@ -44,6 +44,14 @@ $registry->set('route', $router);
 $registry->set('request', new Request());
 
 // Database
+if (!defined("DB_PROFILE")) {
+	define("DB_PROFILE", false);
+}
+
+if (!defined("DB_PROFILE_CACHE")) {
+	define("DB_PROFILE_CACHE", false);
+}
+
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
@@ -58,14 +66,6 @@ $config = new Config();
 
 //Setup Cache ignore list
 $cache->ignore($config->get('config_cache_ignore'));
-
-if (!defined("DB_PROFILE")) {
-	define("DB_PROFILE", $config->get('config_db_profile'));
-}
-
-if (!defined("DB_PROFILE_CACHE")) {
-	define("DB_PROFILE_CACHE", $config->get('config_db_profile_cache'));
-}
 
 $db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 

@@ -35,7 +35,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		$defaults = array(
-			'version'     => AC_VERSION,
+			'version'     => AMPLO_VERSION,
 			'auto_update' => 0,
 		);
 

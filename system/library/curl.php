@@ -25,8 +25,8 @@ class Curl extends Library
 				CURLOPT_FOLLOWLOCATION => true,
 				// handle all encodings
 				CURLOPT_ENCODING       => "",
-				// The AmploCart Browser
-				CURLOPT_USERAGENT      => "AmploCart " . AC_VERSION . " - Curl post request",
+				// The Amplo MVC Browser
+				CURLOPT_USERAGENT      => "Amplo MVC " . AMPLO_VERSION . " - Curl post request",
 				// set referrer on redirect
 				CURLOPT_AUTOREFERER    => true,
 				// timeout on connect
@@ -57,7 +57,7 @@ class Curl extends Library
 				// follow redirects
 				CURLOPT_ENCODING       => "",
 				// handle all encodings
-				CURLOPT_USERAGENT      => "AmploCart " . AC_VERSION . " - Curl post request",
+				CURLOPT_USERAGENT      => "Amplo MVC " . AMPLO_VERSION . " - Curl post request",
 				CURLOPT_AUTOREFERER    => true,
 				// set referer on redirect
 				CURLOPT_CONNECTTIMEOUT => 120,

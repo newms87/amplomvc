@@ -5,17 +5,17 @@ if (is_file('ac_config.php')) {
 }
 
 // Install
-if (!defined('DOMAIN') || defined("AMPLOCART_INSTALL_USER")) {
-	define("AMPLOCART_INSTALL", true);
+if (!defined('DOMAIN') || defined("AMPLO_INSTALL_USER")) {
+	define("AMPLO_INSTALL", true);
 	require_once('system/install/install.php');
 	exit;
 }
 
+$__start = microtime(true);
+
 //System / URL Paths
 require_once('path_config.php');
 require_once(DIR_SYSTEM . 'functions.php');
-
-$__start = microtime(true);
 
 //File Modifications
 require_once(DIR_SYSTEM . 'ac_mod_file.php');

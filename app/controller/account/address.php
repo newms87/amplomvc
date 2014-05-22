@@ -61,16 +61,6 @@ class App_Controller_Account_Address extends Controller
 					$this->customer->setDefaultShippingAddress($_GET['address_id']);
 				}
 
-				//If the shipping address in the cart has been updated, invalidate the shipping method
-				if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-					$this->cart->setShippingMethod();
-				}
-
-				//If the payment address in the cart has been updated, invalidate the payment method
-				if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-					$this->cart->clearPaymentMethod();
-				}
-
 				$this->message->add('success', _l("You have successfully updated your address."));
 			} else {
 				$this->message->add('error', $this->address->getError());
@@ -96,14 +86,6 @@ class App_Controller_Account_Address extends Controller
 			} else {
 				if (!$this->address->remove($_GET['address_id'])) {
 					$this->message->add('error', $this->address->getError());
-				}
-
-				if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
-					$this->cart->clearShippingAddress();
-				}
-
-				if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
-					$this->cart->clearPaymentAddress();
 				}
 			}
 

@@ -88,7 +88,7 @@ class Date extends Library
 	 *         (see first link on relative formats) If not set, the current date will be returned.
 	 * @param Int $return_type (optional) - Can be AC_DATE_STRING, AC_DATE_OBJECT, or AC_DATE_TIMESTAMP. Default is AC_DATE_STRING
 	 * @param String $format (optional) - The date format compatible with PHP's date_format().
-	 *         Or 'short', 'long', 'datetime' ('default' is alias) for AmploCart Language specific format. Default uses the language Datetime default format.
+	 *         Or 'short', 'long', 'datetime' ('default' is alias) for Amplo MVC Language specific format. Default uses the language Datetime default format.
 	 *         Only used with $return_type = AC_DATE_STRING
 	 *
 	 * @link http://www.php.net/manual/en/datetime.formats.relative.php

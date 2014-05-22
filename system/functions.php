@@ -408,12 +408,12 @@ function get_caller($offset = 0, $limit = 1)
 	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
 }
 
-if (!defined("AMPLOCART_DIR_MODE")) {
-	define("AMPLOCART_DIR_MODE", 0755);
+if (!defined("AMPLO_DIR_MODE")) {
+	define("AMPLO_DIR_MODE", 0755);
 }
 
-if (!defined("AMPLOCART_FILE_MODE")) {
-	define("AMPLOCART_FILE_MODE", 0755);
+if (!defined("AMPLO_FILE_MODE")) {
+	define("AMPLO_FILE_MODE", 0755);
 }
 
 //TODO: do we allow different modes?
@@ -421,8 +421,8 @@ function _is_writable($dir, &$error = null)
 {
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
-			mkdir($dir, AMPLOCART_DIR_MODE, true);
-			chmod($dir, AMPLOCART_DIR_MODE);
+			mkdir($dir, AMPLO_DIR_MODE, true);
+			chmod($dir, AMPLO_DIR_MODE);
 		}
 
 		if (!is_dir($dir)) {

@@ -4,7 +4,7 @@
 } ?>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
 	<head>
-		<title><?= _l("AmploCart Installation"); ?></title>
+		<title><?= _l("Amplo MVC Installation"); ?></title>
 
 		<link rel="stylesheet" media="screen" type="text/css" href="system/install/install.css"/>
 	</head>
@@ -14,12 +14,12 @@
 				<div id="logo">
 					<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
-					<div id="slogan"><?= _l("This is the AmploCart Installation page. We'll get you setup quick!"); ?></div>
+					<div id="slogan"><?= _l("This is the Amplo MVC Installation page. We'll get you setup quick!"); ?></div>
 				</div>
 			</div>
 
 			<div id="content_holder">
-				<h1><?= _l("Please fill out the following information to setup AmploCart"); ?></h1>
+				<h1><?= _l("Please fill out the following information to setup Amplo MVC"); ?></h1>
 
 				<div id="notification">
 					<? if ($error_msg) { ?>

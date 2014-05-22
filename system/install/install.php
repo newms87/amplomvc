@@ -1,7 +1,7 @@
 <?php
 
-if (!defined("AMPLOCART_INSTALL")) {
-	echo "Please call the Amplo Cart index.php in your installation root directory.";
+if (!defined("AMPLO_INSTALL")) {
+	echo "Please call the Amplo MVC index.php in your installation root directory.";
 	exit;
 }
 
@@ -159,7 +159,7 @@ function setup_db()
 	$contents = preg_replace(array_keys($patterns), array_values($patterns), $contents);
 
 	//Allows for user installation (will be removed after user installation
-	$contents .= "\r\n\r\ndefine(\"AMPLOCART_INSTALL_USER\", 1);";
+	$contents .= "\r\n\r\ndefine(\"AMPLO_INSTALL_USER\", 1);";
 
 	file_put_contents($ac_config, $contents);
 
@@ -209,14 +209,14 @@ function setup_user()
 	//remove user install configuration
 	$contents = file_get_contents($ac_config);
 
-	$contents = str_replace("\r\n\r\ndefine(\"AMPLOCART_INSTALL_USER\", 1);", '', $contents);
+	$contents = str_replace("\r\n\r\ndefine(\"AMPLO_INSTALL_USER\", 1);", '', $contents);
 
 	file_put_contents($ac_config, $contents);
 
 	//Start the session so we can send a message for the new user
 	ini_set('session.use_cookies', 'On');
 	ini_set('session.use_trans_sid', 'Off');
-	session_name(AMPLOCART_SESSION);
+	session_name(AMPLO_SESSION);
 	session_set_cookie_params(0, '/', COOKIE_DOMAIN);
 	session_start();
 

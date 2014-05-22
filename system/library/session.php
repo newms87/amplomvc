@@ -83,7 +83,7 @@ class Session extends Library
 	{
 		$this->deleteCookie('token');
 
-		$this->deleteCookie(AMPLOCART_SESSION);
+		$this->deleteCookie(AMPLO_SESSION);
 
 		$this->end();
 	}

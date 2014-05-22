@@ -19,11 +19,6 @@ class App_Controller_Block_Account_Login extends Controller
 		$data['gp_login'] = $this->Model_Block_Login_Google->getConnectUrl();
 		$data['fb_login'] = $this->Model_Block_Login_Facebook->getConnectUrl();
 
-		//For Guest Checkout (on checkout page)
-		if ($this->cart->guestCheckoutAllowed()) {
-			$data['guest_checkout'] = site_url('checkout/guest_checkout');
-		}
-
 		//The Template
 		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';
 
