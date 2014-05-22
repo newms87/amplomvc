@@ -76,10 +76,10 @@ class DB
 	 */
 	public function query($sql)
 	{
-		if (DB_PROFILE) {
+		if (defined("SHOW_DB_PROFILE") && SHOW_DB_PROFILE) {
 			$start = microtime(true);
 
-			if (DB_PROFILE && !DB_PROFILE_CACHE) {
+			if (SHOW_DB_PROFILE && !DB_PROFILE_CACHE) {
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 

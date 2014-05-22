@@ -344,12 +344,6 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
-			$address_total = $this->Model_Sale_Customer->getTotalAddressesByCountryId($country_id);
-
-			if ($address_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
-			}
-
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);
 
 			if ($zone_total) {

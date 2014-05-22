@@ -367,16 +367,6 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 					$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
-
-			$filter = array(
-				'currencies' => array($currency_info['code']),
-			);
-
-			$order_total = $this->System_Model_Order->getTotalOrders($filter);
-
-			if ($order_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s orders!"), $order_total);
-			}
 		}
 
 		return empty($this->error);

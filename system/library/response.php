@@ -66,7 +66,7 @@ class Response extends Library
 	public function output()
 	{
 		//Database Profiling
-		if (DB_PROFILE && !$this->request->isAjax()) {
+		if (SHOW_DB_PROFILE && !$this->request->isAjax()) {
 			$this->dbProfile();
 		}
 
@@ -117,31 +117,35 @@ class Response extends Library
 	private function dbProfile()
 	{
 		global $__start;
-		$profile = $this->db->getProfile();
 
-		$db_time = 0;
+		$file = $this->theme->getFile('common/amplo_profile', 'fluid');
 
-		usort($profile, function ($a, $b) { return $a['time'] < $b['time']; });
+		if ($file) {
+			$profile = $this->db->getProfile();
 
-		foreach ($profile as $p) {
-			$db_time += $p['time'];
+			$db_time = 0;
+
+			usort($profile, function ($a, $b) {
+					return $a['time'] < $b['time'];
+				});
+
+			foreach ($profile as $p) {
+				$db_time += $p['time'];
+			}
+
+			$run_time = microtime(true) - $__start;
+
+			$mb          = 1024 * 1024;
+			$memory      = (memory_get_peak_usage() / $mb) . " MB";
+			$real_memory = (memory_get_peak_usage(true) / $mb) . " MB";
+
+			$file_list   = get_included_files();
+			$total_files = count($file_list);
+			ob_start();
+			include($file);
+			$html = ob_get_clean();
+
+			$this->output = str_replace("</body>", $html . "</body>", $this->output);
 		}
-
-		$run_time = microtime(true) - $__start;
-
-		$mb = 1024 * 1024;
-		$memory = (memory_get_peak_usage() / $mb) . " MB";
-		$real_memory = (memory_get_peak_usage(true) / $mb) . " MB";
-
-		$file_list = get_included_files();
-		$total_files = count($file_list);
-
-		$file = $this->theme->getFile('common/amplo_profile');
-
-		ob_start();
-		include($file);
-		$html = ob_get_clean();
-
-		$this->output = str_replace("</body>", $html . "</body>", $this->output);
 	}
 }

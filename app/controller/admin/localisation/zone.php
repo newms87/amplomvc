@@ -328,12 +328,6 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
-			$address_total = $this->Model_Sale_Customer->getTotalAddressesByZoneId($zone_id);
-
-			if ($address_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
-			}
-
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);
 
 			if ($zone_to_geo_zone_total) {

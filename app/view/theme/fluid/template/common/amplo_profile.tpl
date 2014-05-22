@@ -1,20 +1,37 @@
 <div id="db_profile_box">
 	<style>
 		#db_profile_box {
-			position: absolute;
-			top: 20%;
+			position: fixed;
+			bottom: 15px;
+			left: 15px;
+			width: auto;
+			height: 20px;
+			box-shadow: 4px 4px 20px rgba(0,0,0,.7);
+			overflow: hidden;
+			background: white;
+			padding: 15px;
+			border-radius: 8px;
+			z-index: 1000;
+			-webkit-transition: all .2s;
+			transition: all .2s;
+			cursor: pointer;
+		}
+
+		#db_profile_box.show {
+			bottom: 20%;
 			left: 30%;
 			width: 40%;
 			height: 60%;
 			box-shadow: 4px 4px 20px rgba(0,0,0,.7);
 			overflow: auto;
 			background: white;
-			padding: 15px;
+			padding: 25px 15px 15px;
+			cursor: default;
 		}
 
 		#db_profile_box h2 {
 			font-size: 1.5em;
-			margin: 15px auto;
+			margin: 0 auto 15px auto;
 			text-align: center;
 		}
 		#db_profile_box .close {
@@ -26,9 +43,10 @@
 			padding: 4px 8px;
 			cursor: pointer;
 			border-radius: 4px;
+			display: none;
 		}
 		#db_profile{
-			clear:both;
+			display: none;
 		}
 		#db_profile .profile_list{
 			position:relative;
@@ -46,20 +64,29 @@
 			position:absolute;
 			width: 400px;
 			top:0;
-			left: 10%;
+			left: 50%;
 			display:none;
 			background:white;
 			padding: 10px 20px;
 			border-radius: 10px;
-			box-shadow: 5px 5px 5px rgba(0,0,0,.6);
+			box-shadow: 5px 5px 20px rgba(0,0,0,.6);
 			z-index: 10;
 		}
 		#db_profile .profile_list div:hover span{
 			display:block;
 		}
+
+		#amplo_profile {
+			display: none;
+		}
+
+		#db_profile_box.show .close, #db_profile_box.show #db_profile, #db_profile_box.show #amplo_profile {
+			display: block;
+		}
 	</style>
 
 	<h2>Amplo DB / Performance Profile</h2>
+
 	<div id="amplo_profile">
 		<div class="total"><?= _l("Run Time: %s seconds", $run_time); ?></div>
 		<div class="memory"><?= _l("Max Memory / Allocated: %s / %s", $memory, $real_memory); ?></div>
@@ -78,8 +105,15 @@
 	<div class="close">X</div>
 
 	<script>
+		$('#db_profile_box').click(function() {
+			if (!$(this).hasClass('closing')) {
+				$(this).addClass('show');
+			}
+		});
+
 		$('#db_profile_box .close').click(function(){
-			$('#db_profile_box').remove();
+			$('#db_profile_box').removeClass('show').addClass('closing');
+			setTimeout(function(){$('#db_profile_box').removeClass('closing')}, 200);
 		});
 	</script>
 </div>

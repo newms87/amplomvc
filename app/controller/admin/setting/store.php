@@ -209,23 +209,10 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'config_language'                 => option('config_language'),
 			'config_currency'                 => option('config_currency'),
 			'config_catalog_limit'            => '12',
-			'config_allowed_shipping_zone'    => 0,
-			'config_show_price_with_tax'      => '',
-			'config_tax_default'              => '',
-			'config_tax_customer'             => '',
 			'config_customer_group_id'        => '',
-			'config_customer_hide_price'      => '',
-			'config_show_product_model'       => 1,
 			'config_customer_approval'        => '',
-			'config_guest_checkout'           => '',
 			'config_account_terms_page_id'               => '',
-			'config_checkout_terms_page_id'              => '',
-			'config_stock_display'            => '',
-			'config_stock_checkout'           => '',
-			'config_order_complete_status_id' => '',
-			'config_cart_weight'              => '',
 			'config_logo'                     => '',
-			//Icon defaults set below
 			'config_icon'                     => null,
 			'config_logo_width'               => 0,
 			'config_logo_height'              => 0,
@@ -235,20 +222,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'config_image_thumb_height'       => 228,
 			'config_image_popup_width'        => 500,
 			'config_image_popup_height'       => 500,
-			'config_image_product_width'      => 80,
-			'config_image_product_height'     => 80,
-			'config_image_category_width'     => 80,
-			'config_image_category_height'    => 80,
-			'config_image_additional_width'   => 74,
-			'config_image_additional_height'  => 74,
-			'config_image_related_width'      => 80,
-			'config_image_related_height'     => 80,
-			'config_image_compare_width'      => 90,
-			'config_image_compare_height'     => 90,
-			'config_image_wishlist_width'     => 50,
-			'config_image_wishlist_height'    => 50,
-			'config_image_cart_width'         => 80,
-			'config_image_cart_height'        => 80,
 			'config_use_ssl'                  => '',
 			'config_contact_page_id'          => '',
 		);
@@ -265,17 +238,9 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['countries']            = $this->Model_Localisation_Country->getCountries();
 		$data['languages']            = $this->Model_Localisation_Language->getLanguages();
 		$data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
-		$data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
 		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
-		$data['data_order_statuses']  = $this->order->getOrderStatuses();
 		$data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
-
-		$data['data_stock_display_types'] = array(
-			'hide'   => _l("Do not display stock"),
-			'status' => _l("Only show stock status"),
-			-1       => _l("Display stock quantity available"),
-			10       => _l("Display quantity up to 10"),
-		);
 
 		$data['data_yes_no'] = array(
 			1 => _l("Yes"),
@@ -415,12 +380,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'image_category'   => "Category List",
 			'image_thumb'      => "Product Thumb",
 			'image_popup'      => "Product Popup",
-			'image_product'    => "Product List",
-			'image_additional' => "Product Additional",
-			'image_related'    => "Product Related",
-			'image_compare'    => "Product Compare",
-			'image_wishlist'   => "Product Wishlist",
-			'image_cart'       => "Cart",
 		);
 
 		foreach ($image_sizes as $image_key => $image_size) {
@@ -443,16 +402,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 	{
 		if ((int)$store_id < 1) {
 			$error[$store_id]['warning'] = _l("Warning: You can not delete your default store!");
-		} else {
-			$filter = array(
-				'store_ids' => array($store_id),
-			);
-
-			$store_total = $this->System_Model_Order->getTotalOrders($filter);
-
-			if ($store_total) {
-				$error[$store_id]['warning'] = _l("Warning: This Store cannot be deleted as it is currently assigned to %s orders!", $store_total);
-			}
 		}
 
 		if (!$silent) {

@@ -60,6 +60,8 @@ final class Router
 
 	public function routeAdmin()
 	{
+		$this->config->set('store_id', -1);
+
 		//Initialize site configurations
 		$this->config->run_site_config();
 

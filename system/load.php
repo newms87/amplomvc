@@ -44,14 +44,6 @@ $registry->set('route', $router);
 $registry->set('request', new Request());
 
 // Database
-if (!defined("DB_PROFILE")) {
-	define("DB_PROFILE", false);
-}
-
-if (!defined("DB_PROFILE_CACHE")) {
-	define("DB_PROFILE_CACHE", false);
-}
-
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
@@ -64,8 +56,15 @@ $registry->set('cache', $cache);
 //config is self assigning to registry.
 $config = new Config();
 
+//Amplo Performance Logging
+define("SHOW_DB_PROFILE", (defined("DB_PROFILE") & DB_PROFILE) ? true : option('config_performance_log', false));
+
+if (!defined("DB_PROFILE_CACHE")) {
+	define("DB_PROFILE_CACHE", false);
+}
+
 //Setup Cache ignore list
-$cache->ignore($config->get('config_cache_ignore'));
+$cache->ignore(option('config_cache_ignore'));
 
 $db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 
@@ -78,10 +77,10 @@ if ($row) {
 }
 
 //System Logs
-$error_log = new Log(AC_LOG_ERROR_FILE, $config->get('store_id'));
+$error_log = new Log(AC_LOG_ERROR_FILE, option('store_id'));
 $registry->set('error_log', $error_log);
 
-$log = new Log(AC_LOG_FILE, $config->get('store_id'));
+$log = new Log(AC_LOG_FILE, option('store_id'));
 $registry->set('log', $log);
 
 //Error Callbacks allow customization of error display / messages
@@ -118,7 +117,7 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 	}
 
 	if ($error) {
-		if ($config->get('config_error_display')) {
+		if (option('config_error_display')) {
 			$stack = get_caller(1,10);
 
 			echo <<<HTML
@@ -153,7 +152,7 @@ HTML;
 			flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 		}
 
-		if ($config->get('config_error_log')) {
+		if (option('config_error_log')) {
 			$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 		}
 	}
@@ -165,16 +164,16 @@ set_error_handler($error_handler);
 
 //Verify the necessary directories are writable
 $dir_error = null;
-if (!_is_writable(DIR_IMAGE, $dir_error, $config->get('config_image_dir_mode'))) {
+if (!_is_writable(DIR_IMAGE, $dir_error, option('config_image_dir_mode'))) {
 	trigger_error("%s", $dir_error);
 }
-if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, $config->get('config_image_dir_mode'))) {
+if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, option('config_image_dir_mode'))) {
 	trigger_error("%s", $dir_error);
 }
-if (!_is_writable(DIR_DOWNLOAD, $dir_error, $config->get('config_default_dir_mode'))) {
+if (!_is_writable(DIR_DOWNLOAD, $dir_error, option('config_default_dir_mode'))) {
 	trigger_error("%s", $dir_error);
 }
-if (!_is_writable(DIR_LOGS, $dir_error, $config->get('config_default_dir_mode'))) {
+if (!_is_writable(DIR_LOGS, $dir_error, option('config_default_dir_mode'))) {
 	trigger_error("%s", $dir_error);
 }
 
@@ -198,7 +197,7 @@ $registry->set('url', new Url());
 // Response
 $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
-$response->setCompression($config->get('config_compression'));
+$response->setCompression(option('config_compression'));
 $registry->set('response', $response);
 
 //Plugins (self assigning to registry)
@@ -208,7 +207,7 @@ $plugin = new Plugin();
 if (isset($_GET['run_cron'])) {
 	echo nl2br($registry->get('cron')->run());
 	exit;
-} elseif ($config->get('config_cron_status')) {
+} elseif (option('config_cron_status')) {
 	$registry->get('cron')->check();
 }
 

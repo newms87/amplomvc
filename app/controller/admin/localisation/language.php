@@ -277,16 +277,6 @@ class App_Controller_Admin_Localisation_Language extends Controller
 					$this->error['warning'] = sprintf(_l("Warning: This language cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
-
-			$filter = array(
-				'language_ids' => array($language_id),
-			);
-
-			$order_total = $this->System_Model_Order->getTotalOrders($filter);
-
-			if ($order_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This language cannot be deleted as it is currently assigned to %s orders!"), $order_total);
-			}
 		}
 
 		return empty($this->error);
