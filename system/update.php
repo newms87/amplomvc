@@ -3,7 +3,7 @@ class System_Update extends Model
 {
 	public function getVersions()
 	{
-		$version_list = $this->tool->get_files_r(DIR_SYSTEM . 'updates/', array('php'), FILELIST_STRING);
+		$version_list = $this->tool->getFiles(DIR_SYSTEM . 'updates/', array('php'), FILELIST_STRING);
 
 		natsort($version_list);
 

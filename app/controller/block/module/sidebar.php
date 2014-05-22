@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Module_Sidebar extends Controller
+
+/**
+ * Class App_Controller_Block_Module_Sidebar
+ * Name: Amplo Sidebar
+ */
+class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

@@ -31,7 +31,7 @@ class Table extends Library
 
 	public function setTemplate($file)
 	{
-		$this->file = $this->theme->getFile($file);
+		$this->file = is_file($file) ? $file : $this->theme->getFile($file);
 	}
 
 	public function mapAttribute($attr, $values)
@@ -65,7 +65,7 @@ class Table extends Library
 
 	private function prepare()
 	{
-		if (!$this->file || !file_exists($this->file)) {
+		if (!$this->file || !is_file($this->file)) {
 			trigger_error(_l("You must set the template for the form before building!"));
 			exit();
 		}

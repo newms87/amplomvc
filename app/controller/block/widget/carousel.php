@@ -1,6 +1,10 @@
 <?php
 
-class App_Controller_Block_Widget_Carousel extends Controller
+/**
+ * Class App_Controller_Block_Widget_Carousel
+ * Name: Amplo Carousel
+ */
+class App_Controller_Block_Widget_Carousel extends App_Controller_Block_Block
 {
 	public function build($instance)
 	{

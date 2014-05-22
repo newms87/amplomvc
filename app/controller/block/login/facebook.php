@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Block_Login_Facebook extends Controller
+class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 {
 	public function build()
 	{

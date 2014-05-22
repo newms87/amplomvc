@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Widget_BatchAction extends Controller
+
+/**
+ * Class App_Controller_Block_Widget_BatchAction
+ * Name: Batch Action Widget
+ */
+class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 {
 	/**
 	 * @param $settings = array(

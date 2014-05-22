@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Extras_SocialMedia extends Controller
+
+/**
+ * Class App_Controller_Block_Extras_SocialMedia
+ * Name: Social Media for Amplo MVC
+ */
+class App_Controller_Block_Extras_SocialMedia extends App_Controller_Block_Block
 {
 	public function build($settings, $type = 'standard')
 	{

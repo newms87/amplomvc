@@ -177,7 +177,7 @@ class Mod extends Library
 
 	public function addModDirectory($dir)
 	{
-		$mod_files = $this->tool->get_files_r($dir, null, FILELIST_STRING);
+		$mod_files = $this->tool->getFiles($dir, null, FILELIST_STRING);
 
 		foreach ($mod_files as $mod_file) {
 			$this->addModFile($mod_file);

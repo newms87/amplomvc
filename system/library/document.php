@@ -167,7 +167,7 @@ class Document extends Library
 		$sass_file = DIR_CACHE . 'sass/' . $reference . $mtime . '.css';
 
 		//If file is not in cached, or original file has been modified, regenerate the SASS file
-		if (true || !is_file($sass_file) || filemtime($sass_file) < $mtime) {
+		if (!is_file($sass_file) || filemtime($sass_file) < $mtime) {
 
 			//Cleared cached files for this reference
 			$cached_files = glob(DIR_CACHE . 'sass/' . $reference . '*.css');
@@ -371,7 +371,7 @@ class Document extends Library
 
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 
-		if (true || is_null($nav_groups)) {
+		if (is_null($nav_groups)) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
 				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
 				" WHERE ng.status='1' AND ns.store_id='$store_id'";

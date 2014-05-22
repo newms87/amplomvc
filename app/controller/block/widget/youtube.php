@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Widget_Youtube extends Controller
+
+/**
+ * Class App_Controller_Block_Widget_Youtube
+ * Name: You Tube Videos
+ */
+class App_Controller_Block_Widget_Youtube extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

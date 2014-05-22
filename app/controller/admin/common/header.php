@@ -123,7 +123,6 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-
 		$data['styles']  = $this->document->renderStyles();
 		$data['scripts'] = $this->document->renderScripts();
 

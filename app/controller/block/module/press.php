@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Module_Press extends Controller
+
+/**
+ * Class App_Controller_Block_Module_Press
+ * Name: Amplo Press / Editorial
+ */
+class App_Controller_Block_Module_Press extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

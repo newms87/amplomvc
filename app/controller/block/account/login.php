@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Block_Account_Login extends Controller
+class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 {
 	public function build($settings = array())
 	{

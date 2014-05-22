@@ -17,11 +17,7 @@ class Config extends Library
 
 		$this->loadDefaultSites();
 
-		if (!$store_id) {
-			$store_id = option('store_id');
-		}
-
-		$this->data = $this->getStore($store_id);
+		$this->data     = $this->getStore($store_id);
 		$this->store_id = $this->data['store_id'];
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
@@ -65,14 +61,37 @@ class Config extends Library
 
 	public function getStore($store_id)
 	{
-		$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$store_id);
+		$stores = $this->cache->get('store.all');
+
+		if (is_null($stores)) {
+			$stores = $this->Model_Setting_Store->getStores();
+
+			$this->cache->set('store.all', $stores);
+		}
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . $_SERVER['HTTP_HOST'] . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		foreach ($stores as $s) {
+			if ($store_id) {
+				if ($store_id == $s['store_id']) {
+					$store = $s;
+					break;
+				}
+			} else {
+				if (strpos($url, trim($s['url'], '/ ')) === 0 || strpos($url, trim($s['ssl'], '/ ')) === 0) {
+					$store = $s;
+					break;
+				}
+			}
+		}
 
 		if (empty($store)) {
 			$store = array(
 				'store_id' => 0,
-				'name' => "Default",
-				'url' => HTTP_SITE,
-			   'ssl' => HTTPS_SITE,
+				'name'     => "Default",
+				'url'      => HTTP_SITE,
+				'ssl'      => HTTPS_SITE,
 			);
 		}
 

@@ -28,8 +28,8 @@ class Block extends Library
 		 */
 
 		//Admin Controller File
-		$controller_template = $dir_templates . 'App_Controller_Admin.php';
-		$controller_file     = DIR_SITE . 'app/controller/admin/block/' . $data['path'] . '.php';
+		$controller_template = $dir_templates . 'app/view/block/' . $data['path'] . '.php';
+		$controller_file     = DIR_SITE . 'app/controller/block/' . $data['path'] . '.php';
 
 		$insertables = array(
 			'path'           => $data['path'],
@@ -187,11 +187,13 @@ class Block extends Library
 
 	public function remove($path)
 	{
+		echo "NOT IPMLEMENTED";
+		exit;
 		$files = array(
 			DIR_SITE . 'app/controller/block/' . $path . '.php',
 			DIR_THEMES . 'default/template/block/' . $path . '_settings.tpl',
 			DIR_THEMES . 'default/template/block/' . $path . '_profile.tpl',
-			DIR_SITE . 'app/controller/admin/block/' . $path . '.php',
+			DIR_SITE . 'app/controller/block/' . $path . '.php',
 		);
 
 		$themes = $this->theme->getThemes();
@@ -259,18 +261,31 @@ class Block extends Library
 
 	public function getBlocks($filter = array(), $total = false)
 	{
-		$block_files = glob(DIR_SITE . 'app/controller/admin/block/*/*.php');
+		static $blocks = array();
 
-		$this->cleanDb($block_files);
+		if (!$blocks) {
+			$block_files = $this->tool->getFiles(DIR_SITE . 'app/controller/block/', 'php', FILELIST_RELATIVE);
 
-		if ($total) {
-			return count($block_files);
+			foreach ($block_files as $file) {
+				$path = str_replace('.php', '', $file);
+
+				if ($path === 'block') {
+					continue;
+				}
+
+				$blocks[] = $path;
+			}
+
+			$this->cleanDb($blocks);
 		}
 
-		$blocks = array();
+		if ($total) {
+			return count($blocks);
+		}
 
-		foreach ($block_files as &$file) {
-			$path  = preg_replace("/.*[\\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
+		$block_list = array();
+
+		foreach ($blocks as $path) {
 			$block = $this->get($path);
 
 			//filter name
@@ -304,11 +319,11 @@ class Block extends Library
 				);
 			}
 
-			$blocks[] = $block;
+			$block_list[] = $block;
 		}
 
 		if (isset($filter['sort'])) {
-			uasort($blocks, function ($a, $b) use ($filter) {
+			uasort($block_list, function ($a, $b) use ($filter) {
 				if (!empty($filter['order']) && $filter['order'] === 'DESC') {
 					return $a[$filter['sort']] < $b[$filter['sort']];
 				} else {
@@ -321,9 +336,9 @@ class Block extends Library
 		$start = isset($filter['start']) ? (int)$filter['start'] : 0;
 		$limit = isset($filter['limit']) ? $start + (int)$filter['limit'] : null;
 
-		$blocks = array_slice($blocks, $start, $limit);
+		$block_list = array_slice($block_list, $start, $limit);
 
-		return $blocks;
+		return $block_list;
 	}
 
 	public function getTotalBlocks($filter = array())
@@ -392,25 +407,19 @@ class Block extends Library
 
 	public function exists($path)
 	{
-		return is_file(DIR_SITE . 'app/controller/admin/block/' . $path . '.php');
+		return is_file(DIR_SITE . 'app/controller/block/' . $path . '.php');
 	}
 
 	public function getName($path)
 	{
-		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'app/controller/admin/block/' . $path . '.php');
+		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'app/controller/block/' . $path . '.php');
 
 		return !empty($directives['name']) ? $directives['name'] : $path;
 	}
 
-	public function cleanDb($valid_files)
+	public function cleanDb($blocks)
 	{
-		$paths = array();
-
-		foreach ($valid_files as $file) {
-			$paths[] = preg_replace("/.*[\\/\\\\]/", '', dirname($file)) . '/' . preg_replace("/.php\$/", '', basename($file));
-		}
-
-		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $paths) . "')");
+		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $blocks) . "')");
 
 		if ($this->countAffected()) {
 			$this->cache->delete('block');

@@ -142,14 +142,14 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		}
 
 		//Template Data
-		$data['data_layouts']           = $this->Model_Design_Layout->getLayouts();
-		$data['data_themes']            = $this->theme->getThemes();
-		$data['stores']                 = $this->Model_Setting_Store->getStores();
-		$data['countries']              = $this->Model_Localisation_Country->getCountries();
-		$data['languages']              = $this->Model_Localisation_Language->getLanguages();
-		$data['currencies']             = $this->Model_Localisation_Currency->getCurrencies();
-		$data['customer_groups']        = $this->Model_Customer->getCustomerGroups();
-		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
+		$data['data_layouts']    = $this->Model_Design_Layout->getLayouts();
+		$data['data_themes']     = $this->theme->getThemes();
+		$data['stores']          = $this->Model_Setting_Store->getStores();
+		$data['countries']       = $this->Model_Localisation_Country->getCountries();
+		$data['languages']       = $this->Model_Localisation_Language->getLanguages();
+		$data['currencies']      = $this->Model_Localisation_Currency->getCurrencies();
+		$data['customer_groups'] = $this->Model_Customer->getCustomerGroups();
+		$data['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
 
 		$data['data_mail_protocols'] = array(
 			'smtp' => "SMTP",
@@ -222,60 +222,8 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			$this->error['config_email_support'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
-		if ((strlen($_POST['config_telephone']) < 3) || (strlen($_POST['config_telephone']) > 32)) {
-			$this->error['config_telephone'] = _l("Telephone must be between 3 and 32 characters!");
-		}
-
 		if (!$_POST['config_title']) {
 			$this->error['config_title'] = _l("Title must be between 3 and 32 characters!");
-		}
-
-		if (!$_POST['config_image_admin_thumb_width'] || !$_POST['config_image_admin_thumb_height']) {
-			$this->error['image_admin_thumb'] = _l("Product Image Admin Thumb Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_admin_list_width'] || !$_POST['config_image_admin_list_height']) {
-			$this->error['image_admin_list'] = _l("Product Image Admin List Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_category_width'] || !$_POST['config_image_category_height']) {
-			$this->error['image_category'] = _l("Category List Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_manufacturer_width'] || !$_POST['config_image_manufacturer_height']) {
-			$this->error['image_manufacturer'] = _l("Designer List Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_thumb_width'] || !$_POST['config_image_thumb_height']) {
-			$this->error['image_thumb'] = _l("Product Image Thumb Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_popup_width'] || !$_POST['config_image_popup_height']) {
-			$this->error['image_popup'] = _l("Product Image Popup Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_product_width'] || !$_POST['config_image_product_height']) {
-			$this->error['image_product'] = _l("Product List Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_additional_width'] || !$_POST['config_image_additional_height']) {
-			$this->error['image_additional'] = _l("Additional Product Image Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_related_width'] || !$_POST['config_image_related_height']) {
-			$this->error['image_related'] = _l("Related Product Image Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_compare_width'] || !$_POST['config_image_compare_height']) {
-			$this->error['image_compare'] = _l("Compare Image Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_wishlist_width'] || !$_POST['config_image_wishlist_height']) {
-			$this->error['image_wishlist'] = _l("Wish List Image Size dimensions required!");
-		}
-
-		if (!$_POST['config_image_cart_width'] || !$_POST['config_image_cart_height']) {
-			$this->error['image_cart'] = _l("Cart Image Size dimensions required!");
 		}
 
 		if (!$_POST['config_log_filename']) {
@@ -300,8 +248,9 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_image_file_mode',
 			'config_image_dir_mode',
 			'config_plugin_file_mode',
-			'config_plugin_dir_mode'
+			'config_plugin_dir_mode',
 		);
+
 		foreach ($octals as $oct) {
 			if ($_POST[$oct]) {
 				$oct_val     = $_POST[$oct];
