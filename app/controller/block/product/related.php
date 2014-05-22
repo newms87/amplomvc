@@ -11,7 +11,7 @@ class App_Controller_Block_Product_Related extends Controller
 		}
 
 		//Find the related products
-		$related_products = $this->Model_Catalog_Product->getProductRelated($product_id);
+		$related_products = $this->Model_Catalog_Product->getProductActiveRelated($product_id);
 
 		foreach ($related_products as &$product) {
 			if ($product['image']) {

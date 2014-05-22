@@ -4,13 +4,15 @@ class App_Controller_Block_Widget_Specials extends Controller
 	public function build($settings)
 	{
 		$sort_filter = array(
-			'has_special' => true,
+			'special' => array(
+				'low' => 0,
+			),
 		);
 
 		$sort_filter += $this->sort->getQueryDefaults('price', 'ASC');
 
-		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
-		$products      = $this->Model_Catalog_Product->getProducts($sort_filter);
+		$product_total = $this->Model_Catalog_Product->getTotalActiveProducts($sort_filter);
+		$products      = $this->Model_Catalog_Product->getActiveProducts($sort_filter);
 
 		if (!empty($products)) {
 			$params = array(

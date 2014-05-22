@@ -93,9 +93,7 @@
 	} });
 
 	$('.imageinput').ac_imageinput();
-</script>
 
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 

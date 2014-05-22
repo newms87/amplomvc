@@ -110,20 +110,22 @@ class App_Controller_Product_Search extends Controller
 		$this->_('text_compare', ($this->session->has('compare') ? count($this->session->get('compare')) : 0));
 		$data['compare'] = site_url('product/compare');
 
+		//TODO: Absolutely not this.
+
 		// 3 Level Category Search
 		$data['categories'] = array();
 
-		$categories_1 = $this->Model_Catalog_Category->getCategories(0);
+		$categories_1 = $this->Model_Catalog_Category->getActiveCategories(0);
 
 		foreach ($categories_1 as $category_1) {
 			$level_2_data = array();
 
-			$categories_2 = $this->Model_Catalog_Category->getCategories($category_1['category_id']);
+			$categories_2 = $this->Model_Catalog_Category->getActiveCategories($category_1['category_id']);
 
 			foreach ($categories_2 as $category_2) {
 				$level_3_data = array();
 
-				$categories_3 = $this->Model_Catalog_Category->getCategories($category_2['category_id']);
+				$categories_3 = $this->Model_Catalog_Category->getActiveCategories($category_2['category_id']);
 
 				foreach ($categories_3 as $category_3) {
 					$level_3_data[] = array(
@@ -161,9 +163,9 @@ class App_Controller_Product_Search extends Controller
 				'limit'               => $limit
 			);
 
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
+			$product_total = $this->Model_Catalog_Product->getTotalActiveProducts($data);
 
-			$results = $this->Model_Catalog_Product->getProducts($data);
+			$results = $this->Model_Catalog_Product->getActiveProducts($data);
 
 			foreach ($results as $result) {
 				if ($result['image']) {

@@ -11,7 +11,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 			$output .= '<description>' . option('config_meta_description') . '</description>';
 			$output .= '<link>' . URL_SITE . '</link>';
 
-			$products = $this->Model_Catalog_Product->getProducts();
+			$products = $this->Model_Catalog_Product->getActiveProducts();
 
 			foreach ($products as $product) {
 				if ($product['description']) {
@@ -49,7 +49,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 						$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
 					}
 
-					$categories = $this->Model_Catalog_Product->getCategories($product['product_id']);
+					$categories = $this->Model_Catalog_Product->getActiveCategories($product['product_id']);
 
 					foreach ($categories as $category) {
 						$path = $this->getPath($category['category_id']);
@@ -58,7 +58,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 							$string = '';
 
 							foreach (explode('_', $path) as $path_id) {
-								$category_info = $this->Model_Catalog_Category->getCategory($path_id);
+								$category_info = $this->Model_Catalog_Category->getActiveCategory($path_id);
 
 								if ($category_info) {
 									if (!$string) {
@@ -91,7 +91,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 
 	protected function getPath($parent_id, $current_path = '')
 	{
-		$category_info = $this->Model_Catalog_Category->getCategory($parent_id);
+		$category_info = $this->Model_Catalog_Category->getActiveCategory($parent_id);
 
 		if ($category_info) {
 			if (!$current_path) {

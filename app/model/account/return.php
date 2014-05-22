@@ -36,7 +36,7 @@ class App_Model_Account_Return extends Model
 		$return = $this->queryRow($query);
 
 		if ($return) {
-			$return['product'] = $this->Model_Catalog_Product->getProduct($return['product_id'], true);
+			$return['product'] = $this->Model_Catalog_Product->getProduct($return['product_id']);
 
 			$return['status'] = $this->order->getReturnStatus($return['return_status_id']);
 			$return['reason'] = $this->order->getReturnReason($return['return_reason_id']);

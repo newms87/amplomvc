@@ -42,7 +42,7 @@ class App_Controller_Account_Wishlist extends Controller
 		$data['products'] = array();
 
 		foreach ($this->session->get('wishlist') as $key => $product_id) {
-			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
+			$product_info = $this->Model_Catalog_Product->getActiveProduct($product_id);
 
 			if ($product_info) {
 				if ($product_info['image']) {
@@ -106,7 +106,7 @@ class App_Controller_Account_Wishlist extends Controller
 			$product_id = 0;
 		}
 
-		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getActiveProduct($product_id);
 
 		if ($product_info) {
 			if (!in_array($_POST['product_id'], $this->session->get('wishlist'))) {

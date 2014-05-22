@@ -492,7 +492,7 @@ class Cart extends Library
 	public function productPurchasable($product)
 	{
 		if (is_integer($product)) {
-			$product = $this->Model_Catalog_Product->getProduct($product);
+			$product = $this->Model_Catalog_Product->getActiveProduct($product);
 		}
 
 		if (!$product['status']) {
@@ -512,7 +512,7 @@ class Cart extends Library
 
 	public function validateProduct($product_id, $quantity, &$selected_options = array())
 	{
-		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getActiveProduct($product_id);
 
 		if ($product_info) {
 			$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);

@@ -207,8 +207,6 @@ class Url extends Library
 			$url = $this->link($url, $query);
 		}
 
-		echo $url;
-		exit;
 		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
 		exit();
 	}

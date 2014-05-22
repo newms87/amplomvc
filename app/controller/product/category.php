@@ -9,7 +9,7 @@ class App_Controller_Product_Category extends Controller
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 		$attributes  = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
 
-		$category_info = $this->Model_Catalog_Category->getCategory($category_id);
+		$category_info = $this->Model_Catalog_Category->getActiveCategory($category_id);
 
 		if ($category_info) {
 			//Layout override (only if set)
@@ -71,11 +71,11 @@ class App_Controller_Product_Category extends Controller
 			$filter['attribute'] = $attributes;
 		}
 
-		$product_total = $this->Model_Catalog_Product->getTotalProducts($filter);
+		$product_total = $this->Model_Catalog_Product->getTotalActiveProducts($filter);
 
 		//Sorted / Filtered Products
 		if ($product_total) {
-			$products = $this->Model_Catalog_Product->getProducts($sort + $filter);
+			$products = $this->Model_Catalog_Product->getActiveProducts($sort + $filter);
 
 			if (option('config_show_product_list_hover_image')) {
 				foreach ($products as &$product) {

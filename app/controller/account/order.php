@@ -99,7 +99,7 @@ class App_Controller_Account_Order extends Controller
 		$products = $this->System_Model_Order->getOrderProducts($order_id);
 
 		foreach ($products as &$product) {
-			$product += $this->Model_Catalog_Product->getProduct($product['product_id'], true);
+			$product += $this->Model_Catalog_Product->getProduct($product['product_id']);
 
 			$options = $this->System_Model_Order->getOrderProductOptions($order_id, $product['order_product_id']);
 

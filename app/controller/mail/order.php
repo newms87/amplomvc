@@ -31,7 +31,7 @@ class App_Controller_Mail_Order extends Controller
 			$product['cost']  = $this->currency->format($product['cost'], $order['currency_code'], $order['currency_value']);
 			$product['total'] = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 
-			$product += $this->Model_Catalog_Product->getProduct($product['product_id']);
+			$product += $this->Model_Catalog_Product->getActiveProduct($product['product_id']);
 		}
 		unset($product);
 

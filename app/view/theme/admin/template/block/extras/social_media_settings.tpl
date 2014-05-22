@@ -4,22 +4,20 @@
 			<?= _l("Your Social Networks:"); ?>
 			<span class="help"><?= _l("Include the http:// or https://"); ?></span>
 
-			<div id="add_network" onclick="add_network()"><?= _l("Add Network"); ?></div>
+			<div id="add_network"><?= _l("Add Network"); ?></div>
 		</td>
 		<td>
 			<ul id="social_network_list">
-				<? $network_id = 0; ?>
-				<? foreach ($networks as $network) { ?>
-					<li class="social_network">
-					<span class="social_icon">
-						<input type="text" class="imageinput" name="settings[networks][<?= $network_id; ?>][icon]" value="<?= $network['icon']; ?>" data-thumb="<?= $network['thumb']; ?>" />
-					</span>
-					<span class="social_url">
-						<input type="text" name="settings[networks][<?= $network_id; ?>][href]" value="<?= $network['href']; ?>"/>
-					</span>
-						<img src="<?= theme_url('image/delete.png'); ?>" class="delete" onclick="$(this).parent().remove()"/>
+				<? foreach ($networks as $row => $network) { ?>
+					<li class="social_network" data-row="<?= $row;?>">
+						<span class="social_icon">
+							<input type="text" class="imageinput" name="settings[networks][<?= $row; ?>][icon]" value="<?= $network['icon']; ?>" data-thumb="<?= image($network['icon'] ? $network['icon'] : theme_url('image/no_image.png'), $thumb_width, $thumb_height); ?>"/>
+						</span>
+						<span class="social_url">
+							<input type="text" name="settings[networks][<?= $row; ?>][href]" value="<?= $network['href']; ?>"/>
+						</span>
+						<img src="<?= theme_url('image/delete.png'); ?>" class="delete" onclick="$(this).closest('.social_network').remove()"/>
 					</li>
-					<? $network_id++; ?>
 				<? } ?>
 			</ul>
 		</td>
@@ -27,12 +25,14 @@
 </table>
 
 <script type="text/javascript">
+	$('#social_network_list').ac_template('sn_list');
+
 	$('.imageinput').ac_imageinput();
 
-//TODO: implement AC Template
-	$('#social_network_list').sortable();
-
-	$('#form').submit(function () {
-		$('#network_template').remove();
+	$('#add_network').click(function () {
+		var sn = $.ac_template('sn_list', 'add');
+		sn.find('.imageinput').ac_imageinput();
 	});
+
+	$('#social_network_list').sortable();
 </script>

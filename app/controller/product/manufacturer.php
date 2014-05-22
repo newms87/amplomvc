@@ -10,7 +10,7 @@ class App_Controller_Product_Manufacturer extends Controller
 
 		$data['categories'] = array();
 
-		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
+		$manufacturers = $this->Model_Catalog_Manufacturer->getActiveManufacturers();
 
 		foreach ($manufacturers as $manufacturer) {
 			if (is_numeric(substr($manufacturer['name'], 0, 1))) {
@@ -41,7 +41,7 @@ class App_Controller_Product_Manufacturer extends Controller
 
 		$manufacturer_id = isset($_GET['manufacturer_id']) ? $_GET['manufacturer_id'] : 0;
 
-		$manufacturer = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
+		$manufacturer = $this->Model_Catalog_Manufacturer->getActiveManufacturer($manufacturer_id);
 
 		if ($manufacturer) {
 			$this->document->setTitle($manufacturer['name']);
@@ -57,8 +57,8 @@ class App_Controller_Product_Manufacturer extends Controller
 				'manufacturer_ids' => array($manufacturer_id),
 			);
 
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($filter);
-			$products      = $this->Model_Catalog_Product->getProducts($sort);
+			$product_total = $this->Model_Catalog_Product->getTotalActiveProducts($filter);
+			$products      = $this->Model_Catalog_Product->getActiveProducts($sort + $filter);
 
 			if (option('config_show_product_list_hover_image')) {
 				foreach ($products as &$product) {

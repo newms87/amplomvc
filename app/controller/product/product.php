@@ -8,7 +8,7 @@ class App_Controller_Product_Product extends Controller
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
 
 		if ($product_id) {
-			$product = $this->Model_Catalog_Product->getProduct($product_id);
+			$product = $this->Model_Catalog_Product->getActiveProduct($product_id);
 		}
 
 		//Redirect if requested product was not found
@@ -41,7 +41,7 @@ class App_Controller_Product_Product extends Controller
 		$product['show_tax']       = option('config_show_price_with_tax');
 
 		//Manufacturer
-		$manufacturer = $this->Model_Catalog_Manufacturer->getManufacturer($product['manufacturer_id']);
+		$manufacturer = $this->Model_Catalog_Manufacturer->getActiveManufacturer($product['manufacturer_id']);
 
 		if ($manufacturer && option('configbreadcrumbs_show_manufacturer')) {
 			$this->breadcrumb->add($manufacturer['name'], site_url('product/manufacturer/product', 'manufacturer_id=' . $product['manufacturer_id']));
@@ -50,7 +50,7 @@ class App_Controller_Product_Product extends Controller
 		$product['manufacturer'] = $manufacturer;
 
 		//Category
-		$category = $this->Model_Catalog_Category->getCategory($product['category_id']);
+		$category = $this->Model_Catalog_Category->getActiveCategory($product['category_id']);
 
 		if (!$category) {
 			$category = array(
@@ -99,7 +99,7 @@ class App_Controller_Product_Product extends Controller
 		$product['tax'] = $this->currency->format($this->tax->calculate((float)$product['special'] ? $product['special'] : $product['price'], $product['tax_class_id']));
 
 		//Discounts
-		$discounts = $this->Model_Catalog_Product->getProductDiscounts($product['product_id']);
+		$discounts = $this->Model_Catalog_Product->getProductActiveDiscounts($product['product_id']);
 
 		foreach ($discounts as &$discount) {
 			$product['discounts'][] = array(
@@ -159,7 +159,7 @@ class App_Controller_Product_Product extends Controller
 
 		//Template Data
 		if (option('config_show_product_attributes')) {
-			$product['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product['product_id']);
+			$product['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributeGroups($product['product_id']);
 		}
 
 		//The Tags associated with this product
