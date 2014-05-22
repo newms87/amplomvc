@@ -14,9 +14,7 @@ class App_Controller_Page extends Controller
 		}
 
 		if (!$page) {
-			if (!$page) {
-				redirect("error/not_found");
-			}
+			redirect("error/not_found");
 		}
 
 		//Page Head
