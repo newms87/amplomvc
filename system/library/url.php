@@ -134,26 +134,21 @@ class Url extends Library
 
 	public function store_base($store_id, $ssl = false)
 	{
-		if ((int)$store_id === 0 || $store_id == option('store_id')) {
+		static $stores = array();
+
+		if (!$store_id || $store_id == option('store_id')) {
 			return $ssl ? option('ssl') : option('url');
 		}
 
-		$scheme = $ssl ? 'ssl' : 'url';
-
-		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB).
-		//-1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
-		if ((int)$store_id === -1) {
-			return URL_SITE . 'admin/';
+		if (!isset($stores[$store_id])) {
+			$stores[$store_id] = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$store_id);
 		}
 
-		$link = $this->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
-
-		if (!is_string($link)) {
-			trigger_error(__METHOD__ . _l("(): Store did not exist! Store ID: %s.", $store_id));
-			return '';
+		if ($stores[$store_id]) {
+			return $ssl ? $stores[$store_id]['ssl'] : $stores[$store_id]['url'];
 		}
 
-		return $link;
+		return URL_SITE;
 	}
 
 	public function site($uri = '', $query = '', $base_site = false)

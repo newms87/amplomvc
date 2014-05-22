@@ -39,8 +39,8 @@ class App_Controller_Admin_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
-		$this->document->localizeVar('site_url', URL_SITE);
-		$this->document->localizeVar('admin_url', site_url());
+		$this->document->localizeVar('site_url', site_url());
+		$this->document->localizeVar('admin_url', site_url('admin/admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
 
 
@@ -71,7 +71,7 @@ class App_Controller_Admin_Common_Header extends Controller
 				$link_store_setting = array(
 					'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
 					'display_name' => $store['name'],
-					'href'         => site_url('setting/store/update', 'store_id=' . $store['store_id']),
+					'href'         => site_url('admin/setting/store/update', 'store_id=' . $store['store_id']),
 					'parent'       => 'system_settings_stores',
 					'sort_order'   => $index,
 				);
@@ -116,7 +116,7 @@ class App_Controller_Admin_Common_Header extends Controller
 			$link_logout = array(
 				'name'         => 'logout',
 				'display_name' => _l("Logout"),
-				'href'         => site_url('common/logout'),
+				'href'         => site_url('admin/common/logout'),
 				'sort_order'   => 10,
 			);
 

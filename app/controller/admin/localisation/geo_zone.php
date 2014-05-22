@@ -19,7 +19,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 			$this->message->add('success', _l("Success: You have modified geo zones!"));
 
-			redirect('localisation/geo_zone');
+			redirect('admin/localisation/geo_zone');
 		}
 
 		$this->getForm();
@@ -34,7 +34,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 			$this->message->add('success', _l("Success: You have modified geo zones!"));
 
-			redirect('localisation/geo_zone');
+			redirect('admin/localisation/geo_zone');
 		}
 
 		$this->getForm();
@@ -89,11 +89,11 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Geo Zones"), site_url('localisation/geo_zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
 
-		$data['insert'] = site_url('localisation/geo_zone/insert', $url);
-		$data['delete'] = site_url('localisation/geo_zone/delete', $url);
+		$data['insert'] = site_url('admin/localisation/geo_zone/insert', $url);
+		$data['delete'] = site_url('admin/localisation/geo_zone/delete', $url);
 
 		$data['geo_zones'] = array();
 
@@ -113,7 +113,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/geo_zone/update', 'geo_zone_id=' . $result['geo_zone_id'] . $url)
+				'href' => site_url('admin/localisation/geo_zone/update', 'geo_zone_id=' . $result['geo_zone_id'] . $url)
 			);
 
 			$data['geo_zones'][] = array(
@@ -151,8 +151,8 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']        = site_url('localisation/geo_zone', 'sort=name' . $url);
-		$data['sort_description'] = site_url('localisation/geo_zone', 'sort=description' . $url);
+		$data['sort_name']        = site_url('admin/localisation/geo_zone', 'sort=name' . $url);
+		$data['sort_description'] = site_url('admin/localisation/geo_zone', 'sort=description' . $url);
 
 		$url = '';
 
@@ -180,16 +180,16 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Geo Zones"), site_url('localisation/geo_zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
 
 		if (!$geo_zone_id) {
-			$data['action'] = site_url('localisation/geo_zone/insert', $url);
+			$data['action'] = site_url('admin/localisation/geo_zone/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/geo_zone/update', 'geo_zone_id=' . $geo_zone_id . '&' . $url);
+			$data['action'] = site_url('admin/localisation/geo_zone/update', 'geo_zone_id=' . $geo_zone_id . '&' . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/geo_zone', $url);
+		$data['cancel'] = site_url('admin/localisation/geo_zone', $url);
 
 		if ($geo_zone_id && !$this->request->isPost()) {
 			$geo_zone_info = $this->Model_Localisation_GeoZone->getGeoZone($geo_zone_id);

@@ -8,8 +8,8 @@ class App_Controller_Admin_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Page"), site_url('page'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Page"), site_url('admin/page'));
 
 		//Batch Actions
 		$actions = array(
@@ -33,7 +33,7 @@ class App_Controller_Admin_Page extends Controller
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = site_url('page/update');
+		$data['insert'] = site_url('admin/page/update');
 
 		//Render
 		$this->response->setOutput($this->render('page/list', $data));
@@ -60,7 +60,7 @@ class App_Controller_Admin_Page extends Controller
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
-			redirect('page');
+			redirect('admin/page');
 		}
 	}
 
@@ -77,7 +77,7 @@ class App_Controller_Admin_Page extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('page');
+			redirect('admin/page');
 		}
 	}
 
@@ -129,11 +129,11 @@ class App_Controller_Admin_Page extends Controller
 			$page['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('page/form', 'page_id=' . $page['page_id'])
+					'href' => site_url('admin/page/form', 'page_id=' . $page['page_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
+					'href' => site_url('admin/page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
 				)
 			);
 
@@ -169,13 +169,13 @@ class App_Controller_Admin_Page extends Controller
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Page"), site_url('page'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Page"), site_url('admin/page'));
 
 		if ($page_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('page/update', 'page_id=' . $page_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/page/update', 'page_id=' . $page_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('page/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/page/update'));
 		}
 
 		//Load Information from POST or DB
@@ -211,9 +211,9 @@ class App_Controller_Admin_Page extends Controller
 		$data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$data['url_blocks']        = site_url('block/block');
-		$data['url_create_layout'] = site_url('page/create_layout');
-		$data['url_load_blocks']   = site_url('page/loadBlocks');
+		$data['url_blocks']        = site_url('admin/block/block');
+		$data['url_create_layout'] = site_url('admin/page/create_layout');
+		$data['url_load_blocks']   = site_url('admin/page/loadBlocks');
 
 		$store_front          = current($data['stores']);
 		$data['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
@@ -224,8 +224,8 @@ class App_Controller_Admin_Page extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('page/update', 'page_id=' . $page_id);
-		$data['cancel'] = site_url('page');
+		$data['save']   = site_url('admin/page/update', 'page_id=' . $page_id);
+		$data['cancel'] = site_url('admin/page');
 
 		//Render
 		$this->response->setOutput($this->render('page/form', $data));
@@ -262,7 +262,7 @@ class App_Controller_Admin_Page extends Controller
 		if ($this->request->isAjax()) {
 			$this->listing();
 		} else {
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 	}
 

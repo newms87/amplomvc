@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Block_Block extends Controller
+class App_Controller_Block_Block extends Controller
 {
 	protected $path;
 

@@ -31,7 +31,7 @@ class App_Controller_Admin_User_UserPermission extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('user/user_permission', $url);
+			redirect('admin/user/user_permission', $url);
 		}
 
 		$this->getForm();
@@ -60,7 +60,7 @@ class App_Controller_Admin_User_UserPermission extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('user/user_permission', $url);
+			redirect('admin/user/user_permission', $url);
 		}
 
 		$this->getForm();
@@ -76,7 +76,7 @@ class App_Controller_Admin_User_UserPermission extends Controller
 			$this->message->add('success', _l("You have successfully removed the user group"));
 		}
 
-		redirect('user/user_permission');
+		redirect('admin/user/user_permission');
 	}
 
 	private function getList()
@@ -113,11 +113,11 @@ class App_Controller_Admin_User_UserPermission extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("User Permissions"), site_url('user/user_permission', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("User Permissions"), site_url('admin/user/user_permission', $url));
 
-		$data['insert'] = site_url('user/user_permission/insert', $url);
-		$data['delete'] = site_url('user/user_permission/delete', $url);
+		$data['insert'] = site_url('admin/user/user_permission/insert', $url);
+		$data['delete'] = site_url('admin/user/user_permission/delete', $url);
 
 		$data['user_groups'] = array();
 
@@ -137,7 +137,7 @@ class App_Controller_Admin_User_UserPermission extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('user/user_permission/update', 'user_group_id=' . $result['user_group_id'] . $url)
+				'href' => site_url('admin/user/user_permission/update', 'user_group_id=' . $result['user_group_id'] . $url)
 			);
 
 			$data['user_groups'][] = array(
@@ -174,7 +174,7 @@ class App_Controller_Admin_User_UserPermission extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name'] = site_url('user/user_permission', 'sort=name' . $url);
+		$data['sort_name'] = site_url('admin/user/user_permission', 'sort=name' . $url);
 
 		$url = '';
 
@@ -200,18 +200,18 @@ class App_Controller_Admin_User_UserPermission extends Controller
 	{
 		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("User Permissions"), site_url('user/user_permission'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("User Permissions"), site_url('admin/user/user_permission'));
 
 		$url_query = $this->url->getQuery('sort', 'order', 'page');
 
 		if ($user_group_id) {
-			$data['action'] = site_url('user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
+			$data['action'] = site_url('admin/user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
 		} else {
-			$data['action'] = site_url('user/user_permission/insert', $url_query);
+			$data['action'] = site_url('admin/user/user_permission/insert', $url_query);
 		}
 
-		$data['cancel'] = site_url('user/user_permission', $url_query);
+		$data['cancel'] = site_url('admin/user/user_permission', $url_query);
 
 		if ($user_group_id && !$this->request->isPost()) {
 			$user_group_info = $this->Model_User_UserGroup->getUserGroup($user_group_id);

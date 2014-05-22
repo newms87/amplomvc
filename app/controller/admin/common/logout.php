@@ -5,6 +5,6 @@ class App_Controller_Admin_Common_Logout extends Controller
 	{
 		$this->user->logout();
 
-		redirect('common/login');
+		redirect('admin/common/login');
 	}
 }

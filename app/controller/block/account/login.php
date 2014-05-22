@@ -25,4 +25,15 @@ class App_Controller_Block_Account_Login extends Controller
 		//Render
 		$this->render($template, $data);
 	}
+
+	public function settings(&$settings)
+	{
+		//Render
+		$this->render('block/account/login', $settings);
+	}
+
+	public function save()
+	{
+		return '';
+	}
 }

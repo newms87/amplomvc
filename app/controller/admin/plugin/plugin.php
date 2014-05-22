@@ -11,8 +11,8 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 	public function getList()
 	{
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Plugins"), site_url('plugin/plugin'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Plugins"), site_url('admin/plugin/plugin'));
 
 		//The Table Columns
 		$columns = array();
@@ -92,21 +92,21 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			if ($plugin['installed']) {
 				$plugin['actions'] = array( /*'edit' => array(
 						'text' => _l("Edit"),
-						'href' => site_url('plugin/plugin/update', 'name=' . $plugin['name']),
+						'href' => site_url('admin/plugin/plugin/update', 'name=' . $plugin['name']),
 					),*/
 				);
 
 				if ($this->plugin->hasChanges($plugin['name'])) {
 					$plugin['actions']['add_changes'] = array(
 						'text' => _l("Add Changes"),
-						'href' => site_url('plugin/plugin/add_changes', 'name=' . $plugin['name']),
+						'href' => site_url('admin/plugin/plugin/add_changes', 'name=' . $plugin['name']),
 					);
 				}
 
 				if ($this->Model_Setting_Plugin->canUninstall($plugin['name'])) {
 					$plugin['actions']['uninstall'] = array(
 						'text' => _l("Uninstall"),
-						'href' => site_url('plugin/plugin/uninstall', 'name=' . $plugin['name']),
+						'href' => site_url('admin/plugin/plugin/uninstall', 'name=' . $plugin['name']),
 					);
 				} else {
 					$plugin['actions']['error'] = array(
@@ -119,7 +119,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 					$plugin['actions'] = array(
 						'install' => array(
 							'text' => _l("Install"),
-							'href' => site_url('plugin/plugin/install', 'name=' . $plugin['name']),
+							'href' => site_url('admin/plugin/plugin/install', 'name=' . $plugin['name']),
 						)
 					);
 				} else {
@@ -175,14 +175,14 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 	{
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', _l("Warning: There was no plugin found."));
-			redirect('plugin/plugin');
+			redirect('admin/plugin/plugin');
 		}
 		$plugin_name = $_GET['name'];
 
 		$this->document->setTitle(_l("Plugins"));
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Plugins"), site_url('plugin/plugin'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Plugins"), site_url('admin/plugin/plugin'));
 
 		if (isset($_POST['plugin_data'])) {
 			$data['plugin_data'] = $_POST['plugin_data'];
@@ -192,8 +192,8 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 		$data['name'] = $plugin_name;
 
-		$data['action'] = site_url('plugin/plugin/update', 'name=' . $plugin_name);
-		$data['cancel'] = site_url('plugin/plugin');
+		$data['action'] = site_url('admin/plugin/plugin/update', 'name=' . $plugin_name);
+		$data['cancel'] = site_url('admin/plugin/plugin');
 
 		$this->response->setOutput($this->render('plugin/plugin_form', $data));
 	}
@@ -204,7 +204,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', _l("Warning: There was no plugin found."));
-			redirect('plugin/plugin');
+			redirect('admin/plugin/plugin');
 		}
 
 		$this->document->setTitle(_l("Plugins"));
@@ -214,7 +214,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 			$this->message->add('success', _l("You have successfully updated the plugins!"));
 
-			redirect('plugin/plugin');
+			redirect('admin/plugin/plugin');
 		}
 
 		$this->getForm();
@@ -226,7 +226,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			$this->plugin->integrateChanges($_GET['name']);
 		}
 
-		redirect('plugin/plugin');
+		redirect('admin/plugin/plugin');
 	}
 
 	public function install()
@@ -239,7 +239,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			}
 		}
 
-		redirect('plugin/plugin');
+		redirect('admin/plugin/plugin');
 	}
 
 	public function uninstall()
@@ -250,7 +250,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			$this->plugin->uninstall($_GET['name'], $keep_data);
 		}
 
-		redirect('plugin/plugin');
+		redirect('admin/plugin/plugin');
 	}
 
 	private function validateForm()

@@ -162,9 +162,13 @@ class User extends Library
 				$class  = $action->getClass();
 				$method = $action->getMethod();
 
-				if (property_exists($class, 'can_modify') && in_array($method, $class::$can_modify)) {
-					if (!$this->can('modify', $path)) {
-						return false;
+				if (property_exists($class, 'allow')) {
+					$allow = $class::$allow;
+
+					if (!empty($allow['modify']) && in_array($method, $allow['modify'])) {
+						if (!$this->can('modify', $path)) {
+							return false;
+						}
 					}
 				}
 			}

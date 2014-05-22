@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Admin_Block_Widget_Listing extends Controller
+class App_Controller_Block_Widget_Listing extends Controller
 {
 	public function build($settings)
 	{

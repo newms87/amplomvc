@@ -14,12 +14,12 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Send Email"), site_url('mail/send_email'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Send Email"), site_url('admin/mail/send_email'));
 
-		$data['action'] = site_url('mail/send_email');
+		$data['action'] = site_url('admin/mail/send_email');
 
-		$data['cancel'] = site_url('common/home');
+		$data['cancel'] = site_url('admin/common/home');
 
 		$defaults = array(
 			'sender'     => option('config_title'),

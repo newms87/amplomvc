@@ -12,9 +12,9 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$this->document->setTitle(_l("%s Log", $log_name));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
-		$this->breadcrumb->add(_l('Log Files'), site_url('tool/logs'));
-		$this->breadcrumb->add(_l("%s Log", $log_name), site_url('tool/logs', 'log=' . $log));
+		$this->breadcrumb->add(_l('Home'), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l('Log Files'), site_url('admin/tool/logs'));
+		$this->breadcrumb->add(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
 
 		//Sort and Filter
 		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
@@ -65,11 +65,11 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$prev = $start - $limit > 0 ? $start - $limit : 0;
 
 		if ($current >= ($start + $limit)) {
-			$data['next'] = site_url('tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
+			$data['next'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
 		}
 
 		if ($start > 0) {
-			$data['prev'] = site_url('tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
+			$data['prev'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
 		}
 
 		//Template Data
@@ -82,7 +82,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 			$file = array(
 				'name'     => $base === 'log' ? _l("Default") : ucfirst($base),
-				'href'     => site_url('tool/logs', 'log=' . $base),
+				'href'     => site_url('admin/tool/logs', 'log=' . $base),
 				'selected' => $base === $log,
 			);
 		}
@@ -96,8 +96,8 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
-		$data['remove'] = site_url('tool/logs/remove', 'log=' . $log);
-		$data['clear']  = site_url('tool/logs/clear', 'log=' . $log);
+		$data['remove'] = site_url('admin/tool/logs/remove', 'log=' . $log);
+		$data['clear']  = site_url('admin/tool/logs/clear', 'log=' . $log);
 
 		//Render
 		$this->response->setOutput($this->render('tool/logs', $data));
@@ -106,7 +106,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 	public function remove($lines = null)
 	{
 		if (empty($_GET['log'])) {
-			redirect('tool/logs');
+			redirect('admin/tool/logs');
 		}
 
 		if (!isset($_POST['entries']) && $lines === null) {
@@ -141,14 +141,14 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('tool/logs', 'log=' . $_GET['log']);
+			redirect('admin/tool/logs', 'log=' . $_GET['log']);
 		}
 	}
 
 	public function clear()
 	{
 		if (empty($_GET['log'])) {
-			redirect('tool/logs');
+			redirect('admin/tool/logs');
 		}
 
 		$file = DIR_LOGS . $_GET['log'] . '.txt';
@@ -157,6 +157,6 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		$this->message->add('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
 
-		redirect('tool/logs', 'log=' . $_GET['log']);
+		redirect('admin/tool/logs', 'log=' . $_GET['log']);
 	}
 }

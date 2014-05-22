@@ -2,7 +2,7 @@
 
 class Config extends Library
 {
-	private $store = array();
+	private $data = array();
 	private $store_id;
 	private $site_config;
 	private $translate = true;
@@ -16,6 +16,10 @@ class Config extends Library
 		$registry->set('config', $this);
 
 		$this->loadDefaultSites();
+
+		if (!$store_id) {
+			$store_id = option('store_id');
+		}
 
 		$this->data = $this->getStore($store_id);
 		$this->store_id = $this->data['store_id'];
@@ -59,34 +63,20 @@ class Config extends Library
 		return $this->getStore(option('config_default_store'));
 	}
 
-	public function getStore($store_id = null)
+	public function getStore($store_id)
 	{
-		if (is_null($store_id)) {
-			//TODO: Admin should be only 1 domain, should not be a store!! We can have different templates for admin,
-			//but should always be the same domain etc.. store_id 0 should be all stores.
-			if ($this->route->isAdmin()) {
-				return $this->site_config['admin_store'];
-			} else {
-				//Resolve Store ID
-				if ($this->request->isSSL()) {
-					$url   = HTTPS_SITE;
-					$field = 'ssl';
-				} else {
-					$url   = HTTP_SITE;
-					$field = 'url';
-				}
+		$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$store_id);
 
-				$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->escape($url) . "'");
-			}
-		} else {
-			$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+		if (empty($store)) {
+			$store = array(
+				'store_id' => 0,
+				'name' => "Default",
+				'url' => HTTP_SITE,
+			   'ssl' => HTTPS_SITE,
+			);
 		}
 
-		if (!empty($store)) {
-			return $store;
-		}
-
-		return $this->site_config['default_store'];
+		return $store;
 	}
 
 	public function all()

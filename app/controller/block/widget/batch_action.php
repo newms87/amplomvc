@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Admin_Block_Widget_BatchAction extends Controller
+class App_Controller_Block_Widget_BatchAction extends Controller
 {
 	/**
 	 * @param $settings = array(

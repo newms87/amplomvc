@@ -17,4 +17,18 @@ class App_Controller_Block_Widget_Youtube extends Controller
 
 		$this->render('block/widget/youtube', $data);
 	}
+
+	public function settings(&$settings)
+	{
+		//Your code goes here
+
+		$data['settings'] = $settings;
+
+		$this->render('block/widget/youtube_settings', $data);
+	}
+
+	public function save()
+	{
+		return $this->error;
+	}
 }

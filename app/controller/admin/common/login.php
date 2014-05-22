@@ -7,7 +7,7 @@ class App_Controller_Admin_Common_Login extends Controller
 
 		//I user is logged in, redirect to the homepage
 		if ($this->user->isLogged()) {
-			redirect('common/home');
+			redirect('admin/common/home');
 		}
 
 		$data['to_front'] = $this->url->store(option('config_default_store'), 'common/home');
@@ -29,10 +29,10 @@ class App_Controller_Admin_Common_Login extends Controller
 			$redirect = 'common/home';
 		}
 
-		$this->request->setRedirect('login', $redirect);
+		$this->request->setredirect('admin/login', $redirect);
 
 		//Actions
-		$data['action'] = site_url('common/login/authenticate');
+		$data['action'] = site_url('admin/common/login/authenticate');
 
 		//Render
 		$this->response->setOutput($this->render('common/login', $data));
@@ -46,8 +46,8 @@ class App_Controller_Admin_Common_Login extends Controller
 		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
 			if (!empty($_REQUEST['redirect'])) {
 				$redirect = $_REQUEST['redirect'];
-			} elseif ($this->request->hasRedirect('login')) {
-				$this->request->doRedirect('login');
+			} elseif ($this->request->hasredirect('admin/login')) {
+				$this->request->doredirect('admin/login');
 			} else {
 				$redirect = 'common/home';
 			}
@@ -57,6 +57,6 @@ class App_Controller_Admin_Common_Login extends Controller
 			$this->message->add('warning', $this->user->getError());
 		}
 
-		redirect('common/login');
+		redirect('admin/common/login');
 	}
 }

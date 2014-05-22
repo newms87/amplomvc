@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Admin_Block_Widget_Pagination extends App_Controller_Admin_Block_Block
+class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

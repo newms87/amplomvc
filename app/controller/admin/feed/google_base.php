@@ -12,7 +12,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 
 			$this->message->add('success', _l("Success: You have modified Google Base feed!"));
 
-			redirect('extension/feed');
+			redirect('admin/extension/feed');
 		}
 
 		if (isset($this->error['warning'])) {
@@ -21,13 +21,13 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 			$data['error_warning'] = '';
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Product Feeds"), site_url('extension/feed'));
-		$this->breadcrumb->add(_l("Google Base"), site_url('feed/google_base'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Product Feeds"), site_url('admin/extension/feed'));
+		$this->breadcrumb->add(_l("Google Base"), site_url('admin/feed/google_base'));
 
-		$data['action'] = site_url('feed/google_base');
+		$data['action'] = site_url('admin/feed/google_base');
 
-		$data['cancel'] = site_url('extension/feed');
+		$data['cancel'] = site_url('admin/extension/feed');
 
 		if (isset($_POST['google_base_status'])) {
 			$data['google_base_status'] = $_POST['google_base_status'];
@@ -35,7 +35,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 			$data['google_base_status'] = option('google_base_status');
 		}
 
-		$data['data_feed'] = site_url('feed/google_base');
+		$data['data_feed'] = site_url('admin/feed/google_base');
 
 		$this->response->setOutput($this->render('feed/google_base', $data));
 	}

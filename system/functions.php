@@ -68,16 +68,28 @@ function _lg($group, $message = null)
 //custom var dump
 function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = true)
 {
-	static $first = true;
+	static $first = true, $count = 0;
 
-	$id = uniqid('html_dump-');
+	$id = uniqid('html_dump-' . $count++);
 
 	if (!$print) {
 		ob_start();
 	}
-	?>
 
-	<a id="<?= $id; ?>" class='html_dump' onclick="open_html_dump('<?= $id; ?>')">
+	if ($first) {
+		echo <<<HTML
+	<style>
+		.html_dump {
+			display: inline-block;
+			margin-bottom: 15px;
+			margin-left: 20px
+		}
+	</style>
+HTML;
+	}
+
+	echo <<<HTML
+	<a id="$id" class='html_dump' onclick="open_html_dump('$id')">
 		<style>
 			.html_dump_label {
 				cursor: pointer;
@@ -112,14 +124,18 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 				word-wrap: break-word
 			}
 		</style>
-		<span class='html_dump_label'><?= $label; ?></span>
+		<span class='html_dump_label'>$label</span>
 
-		<div class='dump_output' id='<?= $id; ?>-output' style='display:none'>
-			<?php $dump = html_dump_r($var, $level, $max); ?>
+		<div class='dump_output' id='$id-output' style='display:none'>
+HTML;
+	html_dump_r($var, $level, $max);
+	echo <<<HTML
 		</div>
 	</a>
+HTML;
 
-	<?php if ($first) { ?>
+	if ($first) {
+		echo <<<HTML
 	<script type='text/javascript'>
 		function open_html_dump(id) {
 			var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
@@ -128,9 +144,9 @@ function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = t
 			document.getElementById(id + '-output').setAttribute('style', 'display:none');
 		}
 	</script>
-<?php } ?>
+HTML;
+	}
 
-	<?php
 	$first = false;
 
 	if (!$print) {
@@ -186,6 +202,33 @@ function html_backtrace($depth = 3, $var_depth = -1, $print = true)
 function debug_stack($depth = 10, $offset = 0)
 {
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
+}
+
+function get_caller($offset = 0, $limit = 1)
+{
+	$calls = debug_backtrace(false);
+
+	$html = "";
+
+	$limit += $offset;
+
+	while ($offset < $limit && $offset < (count($calls)-1)) {
+		$caller = $calls[$offset + 1];
+
+		if (isset($caller['file'])) {
+			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
+		} elseif (isset($caller['class'])) {
+			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
+		} else {
+			$msg = "Called from <b style=\"color:red\">$caller[function]()</b>";
+		}
+
+		$html = "<div style=\"margin-top:5px\"><b>&#187;</b> $msg</div>" . $html;
+
+		$offset++;
+	}
+
+	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
 }
 
 if (!function_exists('array_column')) {
@@ -339,14 +382,24 @@ if (!function_exists('array_walk_children')) {
 			$args = func_get_args();
 			array_splice($args, 0, 3);
 
-			call_user_func_array($callback, array_merge(array(&$node, $key), $args));
+			$return = call_user_func_array($callback, array_merge(array(&$node, $key), $args));
+
+			//Cancel the walk
+			if ($return === false) {
+				return false;
+			}
 
 			if (!empty($node[$children])) {
-				call_user_func_array('array_walk_children', array_merge(array(
+				$return = call_user_func_array('array_walk_children', array_merge(array(
 					&$node[$children],
 					$children,
 					$callback
 				), $args));
+
+				//Cancel the walk
+				if ($return === false) {
+					return false;
+				}
 			}
 		}
 	}
@@ -380,32 +433,23 @@ function _is_link($filename)
 	return is_link($filename) || readlink($filename) !== $filename;
 }
 
+if (!function_exists('sort_by')) {
+	function sort_by(&$array, $key, $reverse = false, $assoc = true, $limit = null)
+	{
+		$sort = function ($a, $b) use ($key, $reverse) {
+			return $reverse ? $a[$key] < $b[$key] : $a[$key] > $b[$key];
+		};
 
-function get_caller($offset = 0, $limit = 1)
-{
-	$calls = debug_backtrace(false);
-
-	$html = "";
-
-	$limit += $offset;
-
-	while ($offset < $limit && $offset < (count($calls)-1)) {
-		$caller = $calls[$offset + 1];
-
-		if (isset($caller['file'])) {
-			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
-		} elseif (isset($caller['class'])) {
-			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
+		if ($assoc) {
+			uasort($array, $sort);
 		} else {
-			$msg = "Called from <b style=\"color:red\">$caller[function]()</b>";
+			usort($array, $sort);
 		}
 
-		$html = "<div style=\"margin-top:5px\"><b>&#187;</b> $msg</div>" . $html;
-
-		$offset++;
+		if ($limit) {
+			$array = array_slice($array, 0, $limit);
+		}
 	}
-
-	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
 }
 
 if (!defined("AMPLO_DIR_MODE")) {
@@ -441,13 +485,6 @@ function _is_writable($dir, &$error = null)
 
 	return true;
 }
-
-//prints to the console in javascript
-function console($msg)
-{
-	echo "<script>console.log('$msg');</script>";
-}
-
 
 if (!defined('PASSWORD_DEFAULT')) {
 	require_once(DIR_SITE . 'system/resources/password_compat.php');

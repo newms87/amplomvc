@@ -2,7 +2,9 @@
 
 class App_Controller_Account extends Controller
 {
-	static $can_access = '.*';
+	static $allow = array(
+		'access' => '.*',
+	);
 
 	public function index()
 	{

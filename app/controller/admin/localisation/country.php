@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/country', $url);
+			redirect('admin/localisation/country', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/country', $url);
+			redirect('admin/localisation/country', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/country', $url);
+			redirect('admin/localisation/country', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Country"), site_url('localisation/country', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Country"), site_url('admin/localisation/country', $url));
 
-		$data['insert'] = site_url('localisation/country/insert', $url);
-		$data['delete'] = site_url('localisation/country/delete', $url);
+		$data['insert'] = site_url('admin/localisation/country/insert', $url);
+		$data['delete'] = site_url('admin/localisation/country/delete', $url);
 
 		$data['countries'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/country/update', 'country_id=' . $result['country_id'] . $url)
+				'href' => site_url('admin/localisation/country/update', 'country_id=' . $result['country_id'] . $url)
 			);
 
 			$data['countries'][] = array(
@@ -196,9 +196,9 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']       = site_url('localisation/country', 'sort=name' . $url);
-		$data['sort_iso_code_2'] = site_url('localisation/country', 'sort=iso_code_2' . $url);
-		$data['sort_iso_code_3'] = site_url('localisation/country', 'sort=iso_code_3' . $url);
+		$data['sort_name']       = site_url('admin/localisation/country', 'sort=name' . $url);
+		$data['sort_iso_code_2'] = site_url('admin/localisation/country', 'sort=iso_code_2' . $url);
+		$data['sort_iso_code_3'] = site_url('admin/localisation/country', 'sort=iso_code_3' . $url);
 
 		$url = '';
 
@@ -248,16 +248,16 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Country"), site_url('localisation/country', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Country"), site_url('admin/localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
-			$data['action'] = site_url('localisation/country/insert', $url);
+			$data['action'] = site_url('admin/localisation/country/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);
+			$data['action'] = site_url('admin/localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/country', $url);
+		$data['cancel'] = site_url('admin/localisation/country', $url);
 
 		if (isset($_GET['country_id']) && !$this->request->isPost()) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
