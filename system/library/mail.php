@@ -513,7 +513,7 @@ class Mail extends Library
 		}
 
 		if (option('config_error_display')) {
-			$view_mail_errors = $this->url->admin('mail/error');
+			$view_mail_errors = site_url('admin/mail/error');
 			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}
 

@@ -62,6 +62,10 @@ final class Router
 	{
 		$this->config->set('store_id', -1);
 
+		if (count($this->segments) === 1) {
+			$this->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/common/home');
+		}
+
 		//Initialize site configurations
 		$this->config->run_site_config();
 
@@ -147,10 +151,10 @@ final class Router
 				if (!$this->user->canDoAction($action)) {
 					if (!$this->user->isLogged()) {
 						$this->request->setRedirect($this->url->here());
-						redirect('common/login');
+						redirect('admin/common/login');
 					}
 
-					redirect('error/permission');
+					redirect('admin/error/permission');
 				}
 			} else {
 				//Login Verification
