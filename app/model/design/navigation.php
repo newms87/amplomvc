@@ -336,7 +336,6 @@ class App_Model_Design_Navigation extends Model
 					'content_blocks' => array(
 						'display_name' => 'Blocks',
 						'href'         => 'admin/block/block',
-						'store_id'     => 0,
 					),
 					'content_pages'  => array(
 						'display_name' => 'Pages',

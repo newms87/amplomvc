@@ -104,10 +104,10 @@ class App_Model_Page_Page extends Model
 
 	public function copyPage($page_id)
 	{
-		$page           = $this->getPage($page_id);
-		$page['stores'] = $this->getPageStores($page_id);
+		$page            = $this->getPage($page_id);
+		$page['stores']  = $this->getPageStores($page_id);
 		$page['content'] = $this->getPageContent($page['name']);
-		$page['style'] = $this->getPageStyle($page['name']);
+		$page['style']   = $this->getPageStyle($page['name']);
 
 		$this->addPage($page);
 	}
@@ -129,7 +129,7 @@ class App_Model_Page_Page extends Model
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 
 		$page['content'] = $this->getPageContent($page['name']);
-		$page['style'] = $this->getPageStyle($page['name']);
+		$page['style']   = $this->getPageStyle($page['name']);
 
 		$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
@@ -153,16 +153,46 @@ class App_Model_Page_Page extends Model
 
 		$query =
 			"SELECT * FROM " . DB_PREFIX . "page p" .
-			" LEFT JOIN " . DB_PREFIX . "page_store ps ON(ps.page_id=p.page_id)" .
-			" WHERE p.page_id='" . (int)$page_id . "' AND p.status = '1' AND ps.store_id IN ('-1', '$store_id')";
+			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
+			" WHERE p.page_id = " . (int)$page_id . " AND p.status = 1 AND ps.store_id = " . (int)$store_id;
 
 		$page = $this->queryRow($query);
 
 		if ($page) {
 			$page['content'] = $this->getPageContent($page['name']);
-			$page['style'] = $this->getPageStyle($page['name']);
+			$page['style']   = $this->getPageStyle($page['name']);
+		}
 
-			$this->translation->translate('page', $page_id, $page);
+		return $page;
+	}
+
+	public function getPageByName($name)
+	{
+		$store_id = option('store_id');
+
+		$query =
+			"SELECT * FROM " . DB_PREFIX . "page p" .
+			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
+			" WHERE p.name = '" . $this->escape($name) . "' AND p.status = 1 AND ps.store_id = " . (int)$store_id;
+
+		$page = $this->queryRow($query);
+
+		if ($page) {
+			$page['content'] = $this->getPageContent($page['name']);
+			$page['style']   = $this->getPageStyle($page['name']);
+		} else {
+			if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "page WHERE `name` = '" . $this->escape($name) . "'")) {
+				$page = array(
+					'name'          => $name,
+					'title'         => ucfirst($name),
+					'layout_id'     => option('config_layout_id'),
+					'status'        => 1,
+					'display_title' => 1,
+					'cache'         => 1,
+				);
+
+				$this->insert('page', $page);
+			}
 		}
 
 		return $page;
@@ -174,7 +204,7 @@ class App_Model_Page_Page extends Model
 
 		if ($page) {
 			$page['content'] = $this->getPageContent($page['name']);
-			$page['style'] = $this->getPageStyle($page['name']);
+			$page['style']   = $this->getPageStyle($page['name']);
 
 			$this->translation->translate('page', $page_id, $page);
 		}
@@ -235,7 +265,7 @@ class App_Model_Page_Page extends Model
 
 		foreach ($result->rows as &$page) {
 			$page['content'] = $this->getPageContent($page['name']);
-			$page['style'] = $this->getPageStyle($page['name']);
+			$page['style']   = $this->getPageStyle($page['name']);
 		}
 		unset($row);
 

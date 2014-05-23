@@ -4,7 +4,8 @@
 	<div class="box">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("General Settings"); ?></h1>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("General Settings"); ?>
+			</h1>
 
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>

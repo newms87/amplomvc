@@ -1,4 +1,7 @@
 <?php
+$this->db->addColumn('page', 'cache', "tinyint unsigned not null DEFAULT '1'");
+$this->db->addColumn('page_store', 'layout_id', "int(11) unsigned not null DEFAULT '1'");
+
 $pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "page");
 
 foreach ($pages as $page) {
@@ -15,11 +18,19 @@ foreach ($pages as $page) {
 		file_put_contents($dir . 'content.tpl', html_entity_decode($page['content']));
 		file_put_contents($dir . 'style.less', html_entity_decode($page['css']));
 	}
+
+	$page_store = array(
+		'page_id'   => $page['page_id'],
+		'store_id'  => 1,
+		'layout_id' => $page['layout_id'],
+	);
+
+	$this->insert('page_store', $page_store);
 }
 
 $this->db->dropColumn('page', 'content');
 $this->db->dropColumn('page', 'css');
-$this->db->addColumn('page', 'cache', "tinyint unsigned not null DEFAULT '1'");
+$this->db->dropColumn('page', 'layout_id');
 
 //Informations to Pages
 $informations = $this->queryRows("SELECT * FROM " . DB_PREFIX . "information");
@@ -31,7 +42,6 @@ foreach ($informations as $info) {
 		'name'          => $this->tool->getSlug($info['title']),
 		'title'         => $info['title'],
 		'status'        => $info['status'],
-		'layout_id'     => $layout_id,
 		'display_title' => 1,
 		'cache'         => 1,
 	);

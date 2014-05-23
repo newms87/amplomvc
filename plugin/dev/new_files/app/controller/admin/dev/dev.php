@@ -197,6 +197,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			$backup['display_size'] = $this->tool->bytes2str($backup['size'], 2);
 			$backup['display_date'] = $this->date->format($backup['date'], 'd M, Y');
 		}
+		unset($backup);
 
 		$data['data_backup_files'] = $backup_files;
 
