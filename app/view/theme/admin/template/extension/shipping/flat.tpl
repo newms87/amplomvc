@@ -7,7 +7,7 @@
 
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
-				<a href="<?= site_url('extension/shipping'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= site_url('admin/extension/shipping'); ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="content shipping_flat">

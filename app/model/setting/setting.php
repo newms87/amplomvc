@@ -31,7 +31,7 @@ class App_Model_Setting_Setting extends Model
 					$query = !empty($directives['query']) ? $directives['query'] : '';
 					$widget['url'] = site_url($directives['path'], $query);
 				} else {
-					$widget['url'] = site_url('setting/' . str_replace('.php','',basename($file)));
+					$widget['url'] = site_url('admin/setting/' . str_replace('.php','',basename($file)));
 				}
 
 				$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;

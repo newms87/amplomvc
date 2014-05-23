@@ -10,8 +10,6 @@ class App_Controller_Admin_Common_Login extends Controller
 			redirect('admin/common/home');
 		}
 
-		$data['to_front'] = $this->url->store(option('config_default_store'), 'common/home');
-
 		if ($this->session->has('token') && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = _l("Invalid token session. Please login again.");
 		}
@@ -20,16 +18,7 @@ class App_Controller_Admin_Common_Login extends Controller
 			'username' => '',
 		);
 
-		$data += $_POST + $defaults;
-
-		//If trying to access an admin page, redirect after login
-		if (!empty($_REQUEST['redirect'])) {
-			$redirect = $_REQUEST['redirect'];
-		} else {
-			$redirect = 'common/home';
-		}
-
-		$this->request->setredirect('admin/login', $redirect);
+		$data = $_POST + $defaults;
 
 		//Actions
 		$data['action'] = site_url('admin/common/login/authenticate');
@@ -46,10 +35,10 @@ class App_Controller_Admin_Common_Login extends Controller
 		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
 			if (!empty($_REQUEST['redirect'])) {
 				$redirect = $_REQUEST['redirect'];
-			} elseif ($this->request->hasredirect('admin/login')) {
-				$this->request->doredirect('admin/login');
+			} elseif ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
 			} else {
-				$redirect = 'common/home';
+				$redirect = 'admin/common/home';
 			}
 
 			redirect($redirect);

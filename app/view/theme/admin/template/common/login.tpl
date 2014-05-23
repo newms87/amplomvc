@@ -16,7 +16,7 @@
 				<div class="form-item password">
 					<input type="password" name="password" placeholder="<?= _l("Password"); ?>" value=""/>
 					<br/>
-					<a href="<?= site_url('common/forgotten'); ?>" class="forgotten-link"><?= _l("Forgot your Password?"); ?></a>
+					<a href="<?= site_url('admin/common/forgotten'); ?>" class="forgotten-link"><?= _l("Forgot your Password?"); ?></a>
 				</div>
 				<div class="form-item submit">
 					<button><?= _l("Login"); ?></button>
@@ -25,7 +25,7 @@
 
 			<div class="help">
 				<?= _l("Not sure how you got here? Please"); ?>
-				<a href="<?= store_url(1); ?>"><br/>
+				<a href="<?= store_url(option('config_default_store'), 'common/home'); ?>"><br/>
 					<?= _l("return to the shop!"); ?></a>
 			</div>
 		</div>

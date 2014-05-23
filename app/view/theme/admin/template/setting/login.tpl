@@ -7,7 +7,7 @@
 
 			<div class="buttons">
 				<button class="button"><?= _l("Save"); ?></button>
-				<a href="<?= site_url('setting/store'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= site_url('admin/setting/store'); ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 

@@ -2,7 +2,7 @@
 /**
  * Title: Development
  * Icon: dev_settings.png
- * Path: dev/dev
+ * Path: admin/dev/dev
  * Order: 8
  *
  */

@@ -40,7 +40,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
 		$this->document->localizeVar('site_url', site_url());
-		$this->document->localizeVar('admin_url', site_url('admin/admin/'));
+		$this->document->localizeVar('admin_url', site_url('admin'));
 		$this->document->localizeVar('theme_url', theme_url());
 
 
@@ -130,7 +130,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();
 
 		if ($failed_count) {
-			$view_mail_errors = $this->url->admin('mail/error');
+			$view_mail_errors = site_url('admin/mail/error');
 			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 

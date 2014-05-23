@@ -335,7 +335,7 @@ class System_Extension_Payment_Braintree extends System_Extension_Payment
 			}
 		} catch (Exception $e) {
 			$this->error_log->write($e);
-			$error_log   = $this->url->admin('tool/logs', 'log=error');
+			$error_log   = site_url('admin/tool/logs', 'log=error');
 			$this->error = _l("There was a problem while communicating with Braintree. See more details in the <a target=\"_blank\" href=\"%s\">Error Log.</a>", $error_log);
 		}
 	}

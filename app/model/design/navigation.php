@@ -325,12 +325,12 @@ class App_Model_Design_Navigation extends Model
 	public function resetAdminNavigationGroup()
 	{
 		$links = array(
-			'home'    => array(
+			'home'       => array(
 				'display_name' => 'Home',
 				'href'         => 'admin/common/home',
 			),
 
-			'content' => array(
+			'content'    => array(
 				'display_name' => 'Content',
 				'children'     => array(
 					'content_blocks' => array(
@@ -348,41 +348,41 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'catalog_attributes'   => array(
 						'display_name' => 'Attribute Groups',
-						'href'         => 'catalog/attribute_group',
+						'href'         => 'admin/catalog/attribute_group',
 					),
 					'catalog_options'      => array(
 						'display_name' => 'Options',
-						'href'         => 'catalog/option',
+						'href'         => 'admin/catalog/option',
 					),
 					'catalog_categories'   => array(
 						'display_name' => 'Categories',
-						'href'         => 'catalog/category',
+						'href'         => 'admin/catalog/category',
 					),
 					'catalog_products'     => array(
 						'display_name' => 'Products',
-						'href'         => 'catalog/product',
+						'href'         => 'admin/catalog/product',
 						'children'     => array(
 							'catalog_products_insert'        => array(
 								'display_name' => 'Add Product',
-								'href'         => 'catalog/product/update',
+								'href'         => 'admin/catalog/product/update',
 							),
 							'catalog_products_product_class' => array(
 								'display_name' => 'Product Classes',
-								'href'         => 'catalog/product_class',
+								'href'         => 'admin/catalog/product_class',
 							),
 						),
 					),
 					'catalog_manufacturer' => array(
 						'display_name' => 'Manufacturers',
-						'href'         => 'catalog/manufacturer',
+						'href'         => 'admin/catalog/manufacturer',
 					),
 					'catalog_downloads'    => array(
 						'display_name' => 'Downloads',
-						'href'         => 'catalog/download',
+						'href'         => 'admin/catalog/download',
 					),
 					'catalog_reviews'      => array(
 						'display_name' => 'Reviews',
-						'href'         => 'catalog/review',
+						'href'         => 'admin/catalog/review',
 					),
 				),
 			),
@@ -391,74 +391,74 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'sales_coupons'       => array(
 						'display_name' => 'Coupons',
-						'href'         => 'sale/coupon',
+						'href'         => 'admin/sale/coupon',
 					),
 					'sales_customers'     => array(
 						'display_name' => 'Customers',
 						'children'     => array(
 							'sales_customers_customers'       => array(
 								'display_name' => 'Customers',
-								'href'         => 'sale/customer',
+								'href'         => 'admin/sale/customer',
 							),
 							'sales_customers_customer_groups' => array(
 								'display_name' => 'Customer Groups',
-								'href'         => 'sale/customer_group',
+								'href'         => 'admin/sale/customer_group',
 							),
 							'sales_customers_ip_blacklist'    => array(
 								'display_name' => 'IP Blacklist',
-								'href'         => 'sale/customer_blacklist',
+								'href'         => 'admin/sale/customer_blacklist',
 							),
 						),
 					),
 					'sales_orders'        => array(
 						'display_name' => 'Orders',
-						'href'         => 'sale/order',
+						'href'         => 'admin/sale/order',
 					),
 					'sales_gift_vouchers' => array(
 						'display_name' => 'Gift Vouchers',
 						'children'     => array(
 							'sales_gift_vouchers_voucher_themes' => array(
 								'display_name' => 'Voucher Themes',
-								'href'         => 'sale/voucher_theme',
+								'href'         => 'admin/sale/voucher_theme',
 							),
 							'sales_gift_vouchers_gift_vouchers'  => array(
 								'display_name' => 'Gift Vouchers',
-								'href'         => 'sale/voucher',
+								'href'         => 'admin/sale/voucher',
 							),
 						),
 					),
 					'sales_returns'       => array(
 						'display_name' => 'Returns',
-						'href'         => 'sale/return',
+						'href'         => 'admin/sale/return',
 					),
 				),
 			),
 			'extensions' => array(
 				'display_name' => 'Extensions',
 				'children'     => array(
-					'plugin_plugins'       => array(
+					'plugin_plugins'           => array(
 						'display_name' => 'Plugins',
-						'href'         => 'plugin/plugin',
+						'href'         => 'admin/plugin/plugin',
 					),
 					'extensions_payments'      => array(
 						'display_name' => 'Payments',
-						'href'         => 'extension/payment',
+						'href'         => 'admin/extension/payment',
 					),
 					'extensions_modules'       => array(
 						'display_name' => 'Modules',
-						'href'         => 'extension/module',
+						'href'         => 'admin/extension/module',
 					),
 					'extensions_product_feeds' => array(
 						'display_name' => 'Product Feeds',
-						'href'         => 'extension/feed',
+						'href'         => 'admin/extension/feed',
 					),
 					'extensions_order_totals'  => array(
 						'display_name' => 'Order Totals',
-						'href'         => 'extension/total',
+						'href'         => 'admin/extension/total',
 					),
 					'extensions_shipping'      => array(
 						'display_name' => 'Shipping',
-						'href'         => 'extension/shipping',
+						'href'         => 'admin/extension/shipping',
 					),
 				),
 			),
@@ -483,15 +483,15 @@ class App_Model_Design_Navigation extends Model
 						'children'     => array(
 							'reports_customers_credit'        => array(
 								'display_name' => 'Credit',
-								'href'         => 'report/customer_credit',
+								'href' => 'admin/report/customer_credit',
 							),
 							'reports_customers_reward_points' => array(
 								'display_name' => 'Reward Points',
-								'href'         => 'report/customer_reward',
+								'href' => 'admin/report/customer_reward',
 							),
 							'reports_customers_orders'        => array(
 								'display_name' => 'Orders',
-								'href'         => 'report/customer_order',
+								'href' => 'admin/report/customer_order',
 							),
 						),
 					),
@@ -500,11 +500,11 @@ class App_Model_Design_Navigation extends Model
 						'children'     => array(
 							'reports_products_purchased' => array(
 								'display_name' => 'Purchased',
-								'href'         => 'report/product_purchased',
+								'href' => 'admin/report/product_purchased',
 							),
 							'reports_products_viewed'    => array(
 								'display_name' => 'Viewed',
-								'href'         => 'report/product_viewed',
+								'href' => 'admin/report/product_viewed',
 							),
 						),
 					),
@@ -513,23 +513,23 @@ class App_Model_Design_Navigation extends Model
 						'children'     => array(
 							'reports_sales_orders'   => array(
 								'display_name' => 'Orders',
-								'href'         => 'report/sale_order',
+								'href' => 'admin/report/sale_order',
 							),
 							'reports_sales_tax'      => array(
 								'display_name' => 'Tax',
-								'href'         => 'report/sale_tax',
+								'href' => 'admin/report/sale_tax',
 							),
 							'reports_sales_coupons'  => array(
 								'display_name' => 'Coupons',
-								'href'         => 'report/sale_coupon',
+								'href' => 'admin/report/sale_coupon',
 							),
 							'reports_sales_shipping' => array(
 								'display_name' => 'Shipping',
-								'href'         => 'report/sale_shipping',
+								'href' => 'admin/report/sale_shipping',
 							),
 							'reports_sales_returns'  => array(
 								'display_name' => 'Returns',
-								'href'         => 'report/sale_return',
+								'href' => 'admin/report/sale_return',
 							),
 						),
 					),
@@ -538,7 +538,7 @@ class App_Model_Design_Navigation extends Model
 			'system'     => array(
 				'display_name' => 'System',
 				'children'     => array(
-					'system_settings'        => array(
+					'system_settings'          => array(
 						'display_name' => 'Settings',
 						'href'         => 'admin/setting/store',
 						'children'     => array(
@@ -555,7 +555,7 @@ class App_Model_Design_Navigation extends Model
 								'children'     => array(
 									'system_settings_orders_order_statuses' => array(
 										'display_name' => 'Order Statuses',
-										'href'         => 'setting/order_status',
+										'href'         => 'admin/setting/order_status',
 									),
 								),
 							),
@@ -564,11 +564,11 @@ class App_Model_Design_Navigation extends Model
 								'children'     => array(
 									'system_settings_policies_shipping_policies' => array(
 										'display_name' => 'Shipping Policies',
-										'href'         => 'setting/shipping_policy',
+										'href'         => 'admin/setting/shipping_policy',
 									),
 									'system_settings_policies_return_policies'   => array(
 										'display_name' => 'Return Policies',
-										'href'         => 'setting/return_policy',
+										'href'         => 'admin/setting/return_policy',
 									),
 								),
 							),
@@ -577,15 +577,15 @@ class App_Model_Design_Navigation extends Model
 								'children'     => array(
 									'system_settings_returns_return_reasons'  => array(
 										'display_name' => 'Return Reasons',
-										'href'         => 'setting/return_reason',
+										'href'         => 'admin/setting/return_reason',
 									),
 									'system_settings_returns_return_actions'  => array(
 										'display_name' => 'Return Actions',
-										'href'         => 'setting/return_action',
+										'href'         => 'admin/setting/return_action',
 									),
 									'system_settings_returns_return_statuses' => array(
 										'display_name' => 'Return Statuses',
-										'href'         => 'setting/return_status',
+										'href'         => 'admin/setting/return_status',
 									),
 								),
 							),
@@ -595,7 +595,7 @@ class App_Model_Design_Navigation extends Model
 							),
 						),
 					),
-					'system_mail'         => array(
+					'system_mail'              => array(
 						'display_name' => 'Mail',
 						'children'     => array(
 							'system_mail_send_email'    => array(
@@ -612,23 +612,23 @@ class App_Model_Design_Navigation extends Model
 							),
 						),
 					),
-					'system_url_alias'       => array(
+					'system_url_alias'         => array(
 						'display_name' => 'URL Alias',
 						'href'         => 'admin/setting/url_alias',
 					),
-					'system_db_rules'        => array(
+					'system_db_rules'          => array(
 						'display_name' => 'DB Rules',
 						'href'         => 'admin/setting/db_rules',
 					),
-					'system_cron'            => array(
+					'system_cron'              => array(
 						'display_name' => 'Cron',
 						'href'         => 'admin/setting/cron',
 					),
-					'system_navigation'   => array(
+					'system_navigation'        => array(
 						'display_name' => 'Navigation',
 						'href'         => 'admin/design/navigation',
 					),
-					'system_design'       => array(
+					'system_design'            => array(
 						'display_name' => 'Design',
 						'children'     => array(
 							'system_design_layouts' => array(
@@ -641,15 +641,15 @@ class App_Model_Design_Navigation extends Model
 						'display_name' => 'Clear Cache',
 						'href'         => 'admin/tool/tool/clear_cache',
 					),
-					'system_system_tools' => array(
+					'system_system_tools'      => array(
 						'display_name' => 'System Tools',
 						'href'         => 'admin/tool/tool',
 					),
-					'system_logs'         => array(
+					'system_logs'              => array(
 						'display_name' => 'Logs',
 						'href'         => 'admin/tool/logs',
 					),
-					'system_localisation'    => array(
+					'system_localisation'      => array(
 						'display_name' => 'Localisation',
 						'children'     => array(
 							'system_localisation_currencies'     => array(
@@ -665,11 +665,11 @@ class App_Model_Design_Navigation extends Model
 								'children'     => array(
 									'system_localisation_taxes_tax_classes' => array(
 										'display_name' => 'Tax Classes',
-										'href'         => 'localisation/tax_class',
+										'href'         => 'admin/localisation/tax_class',
 									),
 									'system_localisation_taxes_tax_rates'   => array(
 										'display_name' => 'Tax Rates',
-										'href'         => 'localisation/tax_rate',
+										'href'         => 'admin/localisation/tax_rate',
 									),
 								),
 							),
@@ -687,15 +687,15 @@ class App_Model_Design_Navigation extends Model
 							),
 							'system_localisation_stock_statuses' => array(
 								'display_name' => 'Stock Statuses',
-								'href'         => 'localisation/stock_status',
+								'href'         => 'admin/localisation/stock_status',
 							),
 							'system_localisation_length_classes' => array(
 								'display_name' => 'Length Classes',
-								'href'         => 'localisation/length_class',
+								'href'         => 'admin/localisation/length_class',
 							),
 							'system_localisation_weight_classes' => array(
 								'display_name' => 'Weight Classes',
-								'href'         => 'localisation/weight_class',
+								'href'         => 'admin/localisation/weight_class',
 							),
 						),
 					),

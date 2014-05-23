@@ -111,25 +111,18 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function admin($path = 'common/home', $query = '')
-	{
-		$link = $this->find_alias($path, $query, -1);
-
-		return $link;
-	}
-
 	public function store($store_id, $path = 'common/home', $query = '')
 	{
 		if (!$store_id) {
 			$store_id = option('config_default_store');
 		}
 
-		return $this->find_alias($path, $query, $store_id);
+		return $this->findAlias($path, $query, $store_id);
 	}
 
 	public function link($path, $query = '')
 	{
-		return $this->find_alias($path, $query);
+		return $this->findAlias($path, $query);
 	}
 
 	public function store_base($store_id, $ssl = false)
@@ -211,145 +204,74 @@ class Url extends Library
 
 	private function loadSeoUrl()
 	{
-		// Decode URL
-		$path  = $this->escape($this->route->getPath());
-		$query = $this->escape($this->getQuery());
-
-		//Default Store
-		$default = $this->route->isAdmin() ? -1 : 0;
-
-		$sql =
-			"SELECT * FROM " . DB_PREFIX . "url_alias" .
-			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
-			" AND status = '1' AND store_id IN ($default, " . (int)option('store_id') . ") LIMIT 1";
-
-		$url_alias = $this->queryRow($sql);
+		$url_alias = $this->lookupAlias($this->route->getPath(), $this->getQuery(), option('store_id'));
 
 		if ($url_alias) {
-			//TODO: We need to reconsider how we handle all stores...
-			if ($url_alias['store_id'] === 0) {
-				if (!$this->route->isAdmin()) {
-					$url_alias['store_id'] = (int)option('store_id');
-				} else {
-					$this->redirect($this->store(option('default_store_id'), $url_alias['path'], $url_alias['query']));
-				}
+			//Get Original Query without URL Alias query
+			if ($url_alias) {
+				parse_str($url_alias['query'], $alias_query);
+
+				$query = $this->getQueryExclude($alias_query);
 			}
 
-			$url_query     = $this->getQuery();
-			$this->seo_url = $this->store_base($url_alias['store_id']) . $path . ($url_query ? '?' . $url_query : '');
-
-			if ($url_alias['redirect']) {
-				if (!parse_url($url_alias['redirect'], PHP_URL_SCHEME)) {
-					$url_alias['redirect'] = $this->get_base($url_alias['store_id']) . 'index.php?' . $url_alias['redirect'];
-				}
-
-				$this->redirect($url_alias['redirect']);
-			}
-
-
-			if ((int)$url_alias['store_id'] !== (int)option('store_id') && (int)$url_alias['store_id'] !== 0) {
-				if ((int)$url_alias['store_id'] === -1) {
-					$this->redirect($this->admin($url_alias['path'], $url_alias['query']));
-				} else {
-					$this->redirect($this->store($url_alias['store_id'], $url_alias['path'], $url_alias['query']));
-				}
-			}
-
-			$args = null;
-
-			parse_str($url_alias['query'], $args);
-
-			$_GET = $args + $_GET;
-
-			$this->route->setPath($url_alias['path']);
-		} else {
-			$this->seo_url = $this->here();
+			//Build the New URL
+			redirect($this->store_base(option('store_id')) . $url_alias['path'] . ($query ? '?' . http_build_query($query) : ''));
 		}
+
+		$this->seo_url = $this->here();
 	}
 
-	private function find_alias($path, $query = '', $store_id = false, $redirect = false)
+	private function findAlias($path, $query = '', $store_id = false, $redirect = false)
 	{
 		if (!$path && $path !== '') {
 			trigger_error(__METHOD__ . _l("(): Path was not specified!"));
-
 			return false;
 		}
 
 		if (is_array($query)) {
-			$query = http_build_query($query);
+			$query_str = http_build_query($query);
 		} else {
-			$query = urldecode($query);
+			$query_str = urldecode($query);
+			parse_str($query, $args);
+			$query = $args;
 		}
 
 		//If already an alias, or has a URL scheme (eg: http://, ftp:// etc..) skip lookup
 		if (isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME)) {
-			return $path . (($query && strpos($path, '?') === false) ? '?' . $query : '');
+			if ($query_str) {
+				$path .= (strpos($path, '?') === false ? '?' : '&') . $query_str;
+			}
+
+			return $path;
 		}
 
-		$url_alias = null;
-		foreach ($this->aliases as $a) {
-			if ($store_id && $store_id != $a['store_id']) {
+		$url_alias = $this->lookupAlias($path, $query_str, $store_id);
+
+		//Get Original Query without URL Alias query
+		if ($url_alias) {
+			$path = $url_alias['alias'];
+
+			parse_str($url_alias['query'], $alias_query);
+			$query = array_diff_assoc($query, $alias_query);
+		}
+
+		//Build the New URL
+		return $this->store_base($store_id) . $path . ($query ? '?' . http_build_query($query) : '');
+	}
+
+	public function lookupAlias($path, $query, $store_id = false)
+	{
+		//Lookup URL Alias
+		foreach ($this->aliases as $alias) {
+			if ($store_id && $store_id != $alias['store_id']) {
 				continue;
 			}
 
-			$match_path = preg_match("|^" . $a['path'] . "|", $path);
-
-			if ($query) {
-				$match_query = $a['query'] ? preg_match("|" . $a['query'] . "|", $query) : false;
-			} else {
-				$match_query = true;
-			}
-
-			if ($match_path && $match_query) {
-				$url_alias = $a;
-				break;
-			}
-		}
-
-		if ($url_alias) {
-			if ($url_alias['redirect']) {
-				$scheme = parse_url($url_alias['redirect'], PHP_URL_SCHEME);
-
-				if (!$scheme) {
-					if ($url_alias['store_id']) {
-						$url_alias['redirect'] = $this->store($url_alias['store_id'], '', $url_alias['redirect']);
-					} else {
-						$url_alias['redirect'] = $this->link('', $url_alias['redirect']);
-					}
-				}
-
-				if ($redirect) {
-					$this->redirect($url_alias['redirect']);
-				} else {
-					return $url_alias['redirect'];
+			if (preg_match("|^" . $alias['path'] . "|", $path)) {
+				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|", $query)) {
+					return $alias;
 				}
 			}
-
-			$alias = $url_alias['alias'];
-
-			$alias_query = null;
-
-			parse_str($url_alias['query'], $alias_query);
-		}
-
-		$url = $this->store_base($store_id);
-
-		//rewrite query without path (or alias query if set)
-
-		parse_str($query, $args);
-
-		$disclude = !empty($alias_query) ? array_keys($alias_query) : array();
-
-		foreach ($disclude as $key) {
-			unset($args[$key]);
-		}
-
-		$query = !empty($args) ? http_build_query($args) : '';
-
-		if (empty($alias)) {
-			return $url . $path . ($query ? '?' . $query : '');
-		} else {
-			return $url . $alias . ($query ? '?' . $query : '');
 		}
 	}
 

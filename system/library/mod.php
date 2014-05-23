@@ -674,9 +674,8 @@ class Mod extends Library
 				$this->message->add('notify', "The Mod File Registry was out of date and has been updated");
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
-				$plugin_url = $this->url->admin('plugin/plugin');
 				$this->message->add('warning', $this->getError());
-				$this->message->add('warning', 'Please visit the <a href="' . $plugin_url . '">Plugins</a> and resolve the issue.');
+				$this->message->add('warning', 'Please visit the <a href="' . site_url('admin/plugin/plugin') . '">Plugins</a> and resolve the issue.');
 			}
 		}
 	}
