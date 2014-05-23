@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Module_Sidebar extends Controller
+
+/**
+ * Class App_Controller_Block_Module_Sidebar
+ * Name: Amplo Sidebar
+ */
+class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
@@ -86,5 +91,22 @@ class App_Controller_Block_Module_Sidebar extends Controller
 		);
 
 		$this->render('block/module/sidebar', $data);
+	}
+
+	public function settings(&$settings)
+	{
+		//The Data
+		$data['settings'] = $settings;
+
+		//Template Data
+		$data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
+
+		//Render
+		$this->render('block/module/sidebar_settings', $data);
+	}
+
+	public function save()
+	{
+		return $this->error;
 	}
 }

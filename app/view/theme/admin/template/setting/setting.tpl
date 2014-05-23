@@ -1,173 +1,196 @@
 <?= call('admin/common/header'); ?>
 <div class="section">
-<?= breadcrumbs(); ?>
-<div class="box">
-<div class="heading">
-	<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("General Settings"); ?></h1>
+	<?= breadcrumbs(); ?>
+	<div class="box">
+		<div class="heading">
+			<h1>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("General Settings"); ?>
+			</h1>
 
-	<div class="buttons">
-		<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
-		<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
-	</div>
-</div>
-<div class="section">
-<div id="tabs" class="htabs">
-	<a href="#tab-general"><?= _l("General"); ?></a>
-	<a href="#tab-store"><?= _l("Store"); ?></a>
-	<a href="#tab-local"><?= _l("Local"); ?></a>
-	<a href="#tab-option"><?= _l("Option"); ?></a>
-	<a href="#tab-image"><?= _l("Image"); ?></a>
-	<a href="#tab-mail"><?= _l("Mail"); ?></a>
-	<a href="#tab-fraud"><?= _l("Fraud"); ?></a>
-	<a href="#tab-file-permissions"><?= _l("File Permissions"); ?></a>
-	<a href="#tab-server"><?= _l("Server"); ?></a>
-</div>
-<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
-<div id="tab-general">
-	<table class="form">
-		<tr>
-			<td class="required"> <?= _l("Store Name:"); ?></td>
-			<td><input type="text" name="config_name" value="<?= $config_name; ?>" size="40"/>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("Store Owner:"); ?></td>
-			<td><input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("Address:"); ?></td>
-			<td><textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("E-Mail:"); ?></td>
-			<td><input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("Support Email:<span class =\"help\">Please specify an email to send support requests to.</span>"); ?></td>
-			<td><input type="text" name="config_email_support" value="<?= $config_email_support; ?>" size="40"/>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("Error Email:<span class=\"help\">Please specify an email to notify when a critical system error has occurred.</span>"); ?></td>
-			<td><input type="text" name="config_email_error" value="<?= $config_email_error; ?>" size="40"/>
-		</tr>
-		<tr>
-			<td class="required"> <?= _l("Telephone:"); ?></td>
-			<td><input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/>
-		</tr>
-		<tr>
-			<td><?= _l("Fax:"); ?></td>
-			<td><input type="text" name="config_fax" value="<?= $config_fax; ?>"/></td>
-		</tr>
-	</table>
-</div>
-<div id="tab-store">
-	<table class="form">
-		<tr>
-			<td class="required"> <?= _l("Title:"); ?></td>
-			<td><input type="text" name="config_title" value="<?= $config_title; ?>"/>
-		</tr>
-		<tr>
-			<td><?= _l("Meta Tag Description:"); ?></td>
-			<td><textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
-			</td>
-		</tr>
-		<tr>
-			<td><?= _l("Theme:"); ?></td>
-			<td>
-				<? $this->builder->setConfig('name', 'name'); ?>
-				<?= $this->builder->build('select', $data_themes, 'config_theme', $config_theme); ?>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td id="theme"></td>
-		</tr>
-		<tr>
-			<td><?= _l("Default Store"); ?></td>
-			<td>
-				<? $this->builder->setConfig('store_id', 'name'); ?>
-				<?= $this->builder->build('select', $stores, 'config_default_store', $config_default_store); ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?= _l("Default Layout:"); ?></td>
-			<? $this->builder->setConfig('layout_id', 'name'); ?>
-			<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id); ?></td>
-		</tr>
-	</table>
-</div>
-<div id="tab-local">
-	<table class="form">
-		<tr>
-			<td><?=
-				_l("Default Address Format: <span class=\"help\">Insertables:<br/>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+			</div>
+		</div>
+		<div class="section">
+			<div id="tabs" class="htabs">
+				<a href="#tab-general"><?= _l("General"); ?></a>
+				<a href="#tab-store"><?= _l("Store"); ?></a>
+				<a href="#tab-local"><?= _l("Local"); ?></a>
+				<a href="#tab-option"><?= _l("Option"); ?></a>
+				<a href="#tab-image"><?= _l("Image"); ?></a>
+				<a href="#tab-mail"><?= _l("Mail"); ?></a>
+				<a href="#tab-fraud"><?= _l("Fraud"); ?></a>
+				<a href="#tab-file-permissions"><?= _l("File Permissions"); ?></a>
+				<a href="#tab-server"><?= _l("Server"); ?></a>
+			</div>
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
+				<div id="tab-general">
+					<table class="form">
+						<tr>
+							<td class="required"> <?= _l("Store Name:"); ?></td>
+							<td>
+								<input type="text" name="config_name" value="<?= $config_name; ?>" size="40"/>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Store Owner:"); ?></td>
+							<td>
+								<input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Address:"); ?></td>
+							<td>
+								<textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("E-Mail:"); ?></td>
+							<td>
+								<input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Support Email:<span class =\"help\">Please specify an email to send support requests to.</span>"); ?></td>
+							<td>
+								<input type="text" name="config_email_support" value="<?= $config_email_support; ?>" size="40"/>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Error Email:<span class=\"help\">Please specify an email to notify when a critical system error has occurred.</span>"); ?></td>
+							<td>
+								<input type="text" name="config_email_error" value="<?= $config_email_error; ?>" size="40"/>
+						</tr>
+						<tr>
+							<td class="required"> <?= _l("Telephone:"); ?></td>
+							<td>
+								<input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/>
+						</tr>
+						<tr>
+							<td><?= _l("Fax:"); ?></td>
+							<td>
+								<input type="text" name="config_fax" value="<?= $config_fax; ?>"/>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab-store">
+					<table class="form">
+						<tr>
+							<td class="required"> <?= _l("Title:"); ?></td>
+							<td>
+								<input type="text" name="config_title" value="<?= $config_title; ?>"/>
+						</tr>
+						<tr>
+							<td><?= _l("Meta Tag Description:"); ?></td>
+							<td>
+								<textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Theme:"); ?></td>
+							<td>
+								<? $this->builder->setConfig('name', 'name'); ?>
+								<?= $this->builder->build('select', $data_themes, 'config_theme', $config_theme); ?>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td id="theme"></td>
+						</tr>
+						<tr>
+							<td><?= _l("Default Store"); ?></td>
+							<td>
+								<? $this->builder->setConfig('store_id', 'name'); ?>
+								<?= $this->builder->build('select', $stores, 'config_default_store', $config_default_store); ?>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Default Layout:"); ?></td>
+							<? $this->builder->setConfig('layout_id', 'name'); ?>
+							<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id); ?></td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab-local">
+					<table class="form">
+						<tr>
+							<td><?=
+								_l("Default Address Format: <span class=\"help\">Insertables:<br/>
 {firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>"); ?></td>
-			<td><textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format; ?></textarea></td>
-		</tr>
-		<tr>
-			<td><?= _l("Country:"); ?></td>
-			<td>
-				<?= $this->builder->setConfig('country_id', 'name'); ?>
-				<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?= _l("Region / State:"); ?></td>
-			<td><select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select></td>
-		</tr>
-		<tr>
-			<td><?= _l("Language:"); ?></td>
-			<td><select name="config_language">
-					<? foreach ($languages as $language) { ?>
-						<? if ($language['code'] == $config_language) { ?>
-							<option value="<?= $language['code']; ?>" selected="selected"><?= $language['name']; ?></option>
-						<? } else { ?>
-							<option value="<?= $language['code']; ?>"><?= $language['name']; ?></option>
-						<? } ?>
-					<? } ?>
-				</select></td>
-		</tr>
-		<tr>
-			<td><?= _l("Administration Language:"); ?></td>
-			<td><select name="config_admin_language">
-					<? foreach ($languages as $language) { ?>
-						<? if ($language['code'] == $config_admin_language) { ?>
-							<option value="<?= $language['code']; ?>" selected="selected"><?= $language['name']; ?></option>
-						<? } else { ?>
-							<option value="<?= $language['code']; ?>"><?= $language['name']; ?></option>
-						<? } ?>
-					<? } ?>
-				</select></td>
-		</tr>
-		<tr>
-			<td><?= _l("Use Macro Languages (experimental):<span class=\"help\">Attempt to resolve languages by country specific macro codes</span>"); ?></td>
-			<td><?= $this->builder->build('select', $data_yes_no, 'config_use_macro_languages', $config_use_macro_languages); ?></td>
-		</tr>
-		<tr>
-			<td><?= _l("Currency:<br /><span class=\"help\">Change the default currency. Clear your browser cache to see the change and reset your existing cookie.</span>"); ?></td>
-			<td><select name="config_currency">
-					<? foreach ($currencies as $currency) { ?>
-						<? if ($currency['code'] == $config_currency) { ?>
-							<option value="<?= $currency['code']; ?>"
-								selected="selected"><?= $currency['title']; ?></option>
-						<? } else { ?>
-							<option value="<?= $currency['code']; ?>"><?= $currency['title']; ?></option>
-						<? } ?>
-					<? } ?>
-				</select></td>
-		</tr>
-		<tr>
-			<td><?= _l("Auto Update Currency:<br /><span class=\"help\">Set your store to automatically update currencies daily.</span>"); ?></td>
-			<td><? if ($config_currency_auto) { ?>
-					<input type="radio" name="config_currency_auto" value="1" checked="checked"/>
-					<?= _l("Yes"); ?>
-					<input type="radio" name="config_currency_auto" value="0"/>
-					<?= _l("No"); ?>
-				<? } else { ?>
-					<input type="radio" name="config_currency_auto" value="1"/>
-					<?= _l("Yes"); ?>
-					<input type="radio" name="config_currency_auto" value="0" checked="checked"/>
-					<?= _l("No"); ?>
-				<? } ?></td>
+							<td>
+								<textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format; ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Country:"); ?></td>
+							<td>
+								<?= $this->builder->setConfig('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Region / State:"); ?></td>
+							<td>
+								<select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Language:"); ?></td>
+							<td>
+								<select name="config_language">
+									<? foreach ($languages as $language) { ?>
+										<? if ($language['code'] == $config_language) { ?>
+											<option value="<?= $language['code']; ?>" selected="selected"><?= $language['name']; ?></option>
+										<? } else { ?>
+											<option value="<?= $language['code']; ?>"><?= $language['name']; ?></option>
+										<? } ?>
+									<? } ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Administration Language:"); ?></td>
+							<td>
+								<select name="config_admin_language">
+									<? foreach ($languages as $language) { ?>
+										<? if ($language['code'] == $config_admin_language) { ?>
+											<option value="<?= $language['code']; ?>" selected="selected"><?= $language['name']; ?></option>
+										<? } else { ?>
+											<option value="<?= $language['code']; ?>"><?= $language['name']; ?></option>
+										<? } ?>
+									<? } ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Use Macro Languages (experimental):<span class=\"help\">Attempt to resolve languages by country specific macro codes</span>"); ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_use_macro_languages', $config_use_macro_languages); ?></td>
+						</tr>
+						<tr>
+							<td><?= _l("Currency:<br /><span class=\"help\">Change the default currency. Clear your browser cache to see the change and reset your existing cookie.</span>"); ?></td>
+							<td>
+								<select name="config_currency">
+									<? foreach ($currencies as $currency) { ?>
+										<? if ($currency['code'] == $config_currency) { ?>
+											<option value="<?= $currency['code']; ?>"
+											        selected="selected"><?= $currency['title']; ?></option>
+										<? } else { ?>
+											<option value="<?= $currency['code']; ?>"><?= $currency['title']; ?></option>
+										<? } ?>
+									<? } ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?= _l("Auto Update Currency:<br /><span class=\"help\">Set your store to automatically update currencies daily.</span>"); ?></td>
+							<td><? if ($config_currency_auto) { ?>
+									<input type="radio" name="config_currency_auto" value="1" checked="checked"/>
+									<?= _l("Yes"); ?>
+									<input type="radio" name="config_currency_auto" value="0"/>
+									<?= _l("No"); ?>
+								<? } else { ?>
+									<input type="radio" name="config_currency_auto" value="1"/>
+									<?= _l("Yes"); ?>
+									<input type="radio" name="config_currency_auto" value="0" checked="checked"/>
+									<?= _l("No"); ?>
+								<? } ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Length Class:"); ?></td>
@@ -268,8 +291,10 @@
 				<?= $this->builder->build('select', $data_pages, 'config_shipping_return_page_id', $config_shipping_return_page_id); ?>
 			</td>
 		<tr>
-			<td><?= _l("Cache Ignore List:<span class=\"help\">(comma separated list)</span>"); ?></td>
-			<td><textarea name="config_cache_ignore"><?= $config_cache_ignore; ?></textarea></td>
+							<td><?= _l("Cache Ignore List:<span class=\"help\">(comma separated list)</span>"); ?></td>
+							<td>
+								<textarea name="config_cache_ignore"><?= $config_cache_ignore; ?></textarea>
+							</td>
 		</tr>
 		<tr>
 			<td><?= _l("Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>"); ?></td>

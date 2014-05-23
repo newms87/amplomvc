@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Design_Navigation extends Model
 {
 	public function addNavigationGroup($data)
@@ -324,28 +325,21 @@ class App_Model_Design_Navigation extends Model
 	public function resetAdminNavigationGroup()
 	{
 		$links = array(
-			'home'       => array(
+			'home'    => array(
 				'display_name' => 'Home',
-				'href'         => 'common/home',
+				'href'         => 'admin/common/home',
 			),
-			'content'    => array(
+
+			'content' => array(
 				'display_name' => 'Content',
 				'children'     => array(
-					'content_blocks'      => array(
+					'content_blocks' => array(
 						'display_name' => 'Blocks',
-						'href'         => 'block/block',
+						'href'         => 'admin/block/block',
 					),
-					'content_pages'       => array(
+					'content_pages'  => array(
 						'display_name' => 'Pages',
-						'href'         => 'page',
-					),
-					'content_leaderboard' => array(
-						'display_name' => 'Leaderboard',
-						'href'         => 'module/page_headers',
-					),
-					'content_newsletter'  => array(
-						'display_name' => 'Newsletter',
-						'href'         => 'mail/newsletter',
+						'href'         => 'admin/page',
 					),
 				),
 			),
@@ -473,11 +467,11 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'users_users'       => array(
 						'display_name' => 'Users',
-						'href'         => 'user/user',
+						'href'         => 'admin/user/user',
 					),
 					'users_user_groups' => array(
 						'display_name' => 'User Groups',
-						'href'         => 'user/user_permission',
+						'href'         => 'admin/user/user_permission',
 					),
 				),
 			),
@@ -546,15 +540,15 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'system_settings'        => array(
 						'display_name' => 'Settings',
-						'href'         => 'setting/store',
+						'href'         => 'admin/setting/store',
 						'children'     => array(
 							'system_settings_general'              => array(
 								'display_name' => 'General',
-								'href'         => 'setting/setting',
+								'href'         => 'admin/setting/setting',
 							),
 							'system_settings_update'               => array(
 								'display_name' => 'Update',
-								'href'         => 'setting/update',
+								'href'         => 'admin/setting/update',
 							),
 							'system_settings_orders'               => array(
 								'display_name' => 'Orders',
@@ -597,74 +591,74 @@ class App_Model_Design_Navigation extends Model
 							),
 							'system_settings_controller_overrides' => array(
 								'display_name' => 'Controller Overrides',
-								'href'         => 'setting/controller_override',
+								'href'         => 'admin/setting/controller_override',
 							),
 						),
 					),
-					'system_mail'            => array(
+					'system_mail'         => array(
 						'display_name' => 'Mail',
 						'children'     => array(
 							'system_mail_send_email'    => array(
 								'display_name' => 'Send Email',
-								'href'         => 'mail/send_email',
+								'href'         => 'admin/mail/send_email',
 							),
 							'system_mail_mail_messages' => array(
 								'display_name' => 'Mail Messages',
-								'href'         => 'mail/messages',
+								'href'         => 'admin/mail/messages',
 							),
 							'system_mail_error'         => array(
 								'display_name' => 'Failed Messages',
-								'href'         => 'mail/error',
+								'href'         => 'admin/mail/error',
 							),
 						),
 					),
 					'system_url_alias'       => array(
 						'display_name' => 'URL Alias',
-						'href'         => 'setting/url_alias',
+						'href'         => 'admin/setting/url_alias',
 					),
 					'system_db_rules'        => array(
 						'display_name' => 'DB Rules',
-						'href'         => 'setting/db_rules',
+						'href'         => 'admin/setting/db_rules',
 					),
 					'system_cron'            => array(
 						'display_name' => 'Cron',
-						'href'         => 'setting/cron',
+						'href'         => 'admin/setting/cron',
 					),
-					'system_design'          => array(
+					'system_navigation'   => array(
+						'display_name' => 'Navigation',
+						'href'         => 'admin/design/navigation',
+					),
+					'system_design'       => array(
 						'display_name' => 'Design',
 						'children'     => array(
-							'system_design_banners'    => array(
-								'display_name' => 'Banners',
-								'href'         => 'design/banner',
-							),
-							'system_design_navigation' => array(
-								'display_name' => 'Navigation',
-								'href'         => 'design/navigation',
-							),
-							'system_design_layouts'    => array(
+							'system_design_layouts' => array(
 								'display_name' => 'Layouts',
-								'href'         => 'design/layout',
+								'href'         => 'admin/design/layout',
 							),
 						),
 					),
-					'system_system_tools'    => array(
-						'display_name' => 'System Tools',
-						'href'         => 'tool/tool',
+					'system_system_clearcache' => array(
+						'display_name' => 'Clear Cache',
+						'href'         => 'admin/tool/tool/clear_cache',
 					),
-					'system_logs'            => array(
+					'system_system_tools' => array(
+						'display_name' => 'System Tools',
+						'href'         => 'admin/tool/tool',
+					),
+					'system_logs'         => array(
 						'display_name' => 'Logs',
-						'href'         => 'tool/logs',
+						'href'         => 'admin/tool/logs',
 					),
 					'system_localisation'    => array(
 						'display_name' => 'Localisation',
 						'children'     => array(
 							'system_localisation_currencies'     => array(
 								'display_name' => 'Currencies',
-								'href'         => 'localisation/currency',
+								'href'         => 'admin/localisation/currency',
 							),
 							'system_localisation_languages'      => array(
 								'display_name' => 'Languages',
-								'href'         => 'localisation/language',
+								'href'         => 'admin/localisation/language',
 							),
 							'system_localisation_taxes'          => array(
 								'display_name' => 'Taxes',
@@ -681,15 +675,15 @@ class App_Model_Design_Navigation extends Model
 							),
 							'system_localisation_zones'          => array(
 								'display_name' => 'Zones',
-								'href'         => 'localisation/zone',
+								'href'         => 'admin/localisation/zone',
 							),
 							'system_localisation_countries'      => array(
 								'display_name' => 'Countries',
-								'href'         => 'localisation/country',
+								'href'         => 'admin/localisation/country',
 							),
 							'system_localisation_geo_zones'      => array(
 								'display_name' => 'Geo Zones',
-								'href'         => 'localisation/geo_zone',
+								'href'         => 'admin/localisation/geo_zone',
 							),
 							'system_localisation_stock_statuses' => array(
 								'display_name' => 'Stock Statuses',
@@ -704,15 +698,6 @@ class App_Model_Design_Navigation extends Model
 								'href'         => 'localisation/weight_class',
 							),
 						),
-					),
-				),
-			),
-			'help'       => array(
-				'display_name' => 'Help',
-				'children'     => array(
-					'help_documentation' => array(
-						'display_name' => 'Documentation',
-						'href'         => 'help/documentation',
 					),
 				),
 			),

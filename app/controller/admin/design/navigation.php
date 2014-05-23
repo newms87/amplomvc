@@ -1,12 +1,14 @@
 <?php
 class App_Controller_Admin_Design_Navigation extends Controller
 {
-	static $can_modify = array(
-		'update',
-	   'delete',
-	   'batch_update',
-	   'reset_admin_navigation',
-	   'form',
+	static $allow = array(
+		'modify '=> array(
+			'update',
+		   'delete',
+		   'batch_update',
+		   'reset_admin_navigation',
+		   'form',
+		),
 	);
 
 	public function index()
@@ -15,8 +17,8 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->document->setTitle(_l("Navigation"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Navigation"), site_url('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
 
 		//Batch Actions
 		$actions = array(
@@ -35,14 +37,14 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'path'    => site_url('design/navigation/batch_update'),
+			'path'    => site_url('admin/design/navigation/batch_update'),
 		);
 
 		//The Listing
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = site_url('design/navigation/form');
+		$data['insert'] = site_url('admin/design/navigation/form');
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_list', $data));
@@ -69,7 +71,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 	}
 
@@ -86,7 +88,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 	}
 
@@ -150,18 +152,18 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			$nav_group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+					'href' => site_url('admin/design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
+					'href' => site_url('admin/design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
 				)
 			);
 
 			if ($nav_group['name'] == 'admin') {
 				$nav_group['actions']['reset'] = array(
 					'text'   => _l("Reset Admin Navigation"),
-					'href'   => site_url('design/navigation/reset_admin_navigation' . '&' . $url_query),
+					'href'   => site_url('admin/design/navigation/reset_admin_navigation', $url_query),
 					'#class' => 'reset',
 				);
 			}
@@ -195,13 +197,13 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Navigation"), site_url('design/navigation'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
 
 		if ($navigation_group_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('design/navigation', 'navigation_group_id=' . $navigation_group_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/design/navigation', 'navigation_group_id=' . $navigation_group_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('design/navigation'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/design/navigation'));
 		}
 
 		//Load Values or Defaults
@@ -254,8 +256,8 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
-		$data['cancel'] = site_url('design/navigation');
+		$data['save']   = site_url('admin/design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
+		$data['cancel'] = site_url('admin/design/navigation');
 
 		//Render
 		$this->response->setOutput($this->render('design/navigation_form', $data));
@@ -288,7 +290,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		if ($this->request->isAjax()) {
 			$this->listing();
 		} else {
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 	}
 
@@ -298,13 +300,13 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		if ($this->Model_Design_Navigation->hasError()) {
 			$this->message->add('error', $this->Model_Design_Navigation->getError());
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 
 		if (!$this->request->isAjax()) {
-			redirect('design/navigation');
+			redirect('admin/design/navigation');
 		}
 
 		$this->response->setOutput($this->message->toJSON());

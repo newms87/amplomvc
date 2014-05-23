@@ -9,8 +9,8 @@ class App_Controller_Admin_Help_Documentation extends Controller
 		$this->replace_tokens($s);
 		$data['sections'] = $s;
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Documentation"), site_url('help/documentation'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Documentation"), site_url('admin/help/documentation'));
 
 		$this->response->setOutput($this->render('help/documentation', $data));
 	}

@@ -1,6 +1,10 @@
 <?php
 
-class App_Controller_Block_Widget_AdminBar extends Controller
+/**
+ * Class App_Controller_Block_Widget_AdminBar
+ * Name: Admin Bar for Front End
+ */
+class App_Controller_Block_Widget_AdminBar extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

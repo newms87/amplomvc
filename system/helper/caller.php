@@ -77,7 +77,11 @@ function theme_url($path = '', $query = null)
 		$url = URL_THEME . $path;
 	}
 
-	return site_url($url, $query);
+	if ($query) {
+		$url .= (strpos($url, '?') ? '&' : '?') . $query;
+	}
+
+	return $url;
 }
 
 function theme_dir($path = '')

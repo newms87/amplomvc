@@ -14,8 +14,6 @@ abstract class Model
 			$this->synctime = true;
 		}
 
-		//Self Assign to registry (for recursive usage
-		//eg:( cart depends on customer, but customer depends on cart upon initialization which calls a cart method which requires a customer method)
 		$key = strtolower(get_class($this));
 
 		if (!$registry->has($key)) {

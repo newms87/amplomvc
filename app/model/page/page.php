@@ -1,5 +1,4 @@
 <?php
-
 class App_Model_Page_Page extends Model
 {
 	private $page_theme;

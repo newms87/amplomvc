@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Admin_Block_Widget_Listing extends Controller
+
+/**
+ * Class App_Controller_Block_Widget_Listing
+ * Name: The Listings for Admin
+ */
+class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{

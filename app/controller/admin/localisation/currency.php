@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/currency', $url);
+			redirect('admin/localisation/currency', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/currency', $url);
+			redirect('admin/localisation/currency', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/currency', $url);
+			redirect('admin/localisation/currency', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Currency"), site_url('localisation/currency', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Currency"), site_url('admin/localisation/currency', $url));
 
-		$data['insert'] = site_url('localisation/currency/insert', $url);
-		$data['delete'] = site_url('localisation/currency/delete', $url);
+		$data['insert'] = site_url('admin/localisation/currency/insert', $url);
+		$data['delete'] = site_url('admin/localisation/currency/delete', $url);
 
 		$data['currencies'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/currency/update', 'currency_id=' . $result['currency_id'] . $url)
+				'href' => site_url('admin/localisation/currency/update', 'currency_id=' . $result['currency_id'] . $url)
 			);
 
 			$data['currencies'][] = array(
@@ -197,10 +197,10 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_title']         = site_url('localisation/currency', 'sort=title' . $url);
-		$data['sort_code']          = site_url('localisation/currency', 'sort=code' . $url);
-		$data['sort_value']         = site_url('localisation/currency', 'sort=value' . $url);
-		$data['sort_date_modified'] = site_url('localisation/currency', 'sort=date_modified' . $url);
+		$data['sort_title']         = site_url('admin/localisation/currency', 'sort=title' . $url);
+		$data['sort_code']          = site_url('admin/localisation/currency', 'sort=code' . $url);
+		$data['sort_value']         = site_url('admin/localisation/currency', 'sort=value' . $url);
+		$data['sort_date_modified'] = site_url('admin/localisation/currency', 'sort=date_modified' . $url);
 
 		$url = '';
 
@@ -256,16 +256,16 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Currency"), site_url('localisation/currency', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Currency"), site_url('admin/localisation/currency', $url));
 
 		if (!isset($_GET['currency_id'])) {
-			$data['action'] = site_url('localisation/currency/insert', $url);
+			$data['action'] = site_url('admin/localisation/currency/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/currency/update', 'currency_id=' . $_GET['currency_id'] . $url);
+			$data['action'] = site_url('admin/localisation/currency/update', 'currency_id=' . $_GET['currency_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/currency', $url);
+		$data['cancel'] = site_url('admin/localisation/currency', $url);
 
 		if (isset($_GET['currency_id']) && !$this->request->isPost()) {
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($_GET['currency_id']);
@@ -366,16 +366,6 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 				if ($store_total) {
 					$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
-			}
-
-			$filter = array(
-				'currencies' => array($currency_info['code']),
-			);
-
-			$order_total = $this->System_Model_Order->getTotalOrders($filter);
-
-			if ($order_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s orders!"), $order_total);
 			}
 		}
 

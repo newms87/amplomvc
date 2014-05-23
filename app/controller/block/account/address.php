@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Block_Account_Address extends Controller
+class App_Controller_Block_Account_Address extends App_Controller_Block_Block
 {
 	public function select($settings)
 	{

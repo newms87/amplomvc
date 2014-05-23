@@ -17,7 +17,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 			$this->message->add('success', _l("Success: You have modified db rules!"));
 
-			redirect('setting/db_rules');
+			redirect('admin/setting/db_rules');
 		}
 
 		$this->getForm();
@@ -32,7 +32,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 			$this->message->add('success', _l("Success: You have modified db rules!"));
 
-			redirect('setting/db_rules', 'store_id=' . $_GET['store_id']);
+			redirect('admin/setting/db_rules', 'store_id=' . $_GET['store_id']);
 		}
 
 		$this->getForm();
@@ -49,7 +49,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 			$this->message->add('success', _l("Success: You have modified db rules!"));
 
-			redirect('setting/db_rules');
+			redirect('admin/setting/db_rules');
 		}
 
 		$this->getList();
@@ -57,11 +57,11 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 	private function getList()
 	{
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("DB Rules"), site_url('setting/db_rules'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("DB Rules"), site_url('admin/setting/db_rules'));
 
-		$data['insert'] = site_url('setting/db_rules/insert');
-		$data['delete'] = site_url('setting/db_rules/delete');
+		$data['insert'] = site_url('admin/setting/db_rules/insert');
+		$data['delete'] = site_url('admin/setting/db_rules/delete');
 
 		$url = $this->get_url(array('page'));
 
@@ -70,7 +70,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 		foreach ($db_rules as &$db_rule) {
 			$action = array(
 				'text' => _l("Edit"),
-				'href' => site_url('setting/db_rules/update', 'db_rule_id=' . $db_rule['db_rule_id'])
+				'href' => site_url('admin/setting/db_rules/update', 'db_rule_id=' . $db_rule['db_rule_id'])
 			);
 
 			$db_rule['selected'] = isset($_GET['selected']) && in_array($result['db_rule_id'], $_GET['selected']);
@@ -91,16 +91,16 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 	{
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id'] : null;
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("DB Rules"), site_url('setting/db_rules'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("DB Rules"), site_url('admin/setting/db_rules'));
 
 		if (!$db_rule_id) {
-			$data['action'] = site_url('setting/db_rules/insert');
+			$data['action'] = site_url('admin/setting/db_rules/insert');
 		} else {
-			$data['action'] = site_url('setting/db_rules/update', 'db_rule_id=' . $db_rule_id);
+			$data['action'] = site_url('admin/setting/db_rules/update', 'db_rule_id=' . $db_rule_id);
 		}
 
-		$data['cancel'] = site_url('setting/db_rules');
+		$data['cancel'] = site_url('admin/setting/db_rules');
 
 		$db_rule_info = $db_rule_id ? $this->Model_Setting_DbRules->getDbRule($db_rule_id) : null;
 

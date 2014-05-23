@@ -8,7 +8,7 @@
 
 			<div class="buttons">
 				<button class="save button"><?= _l("Save"); ?></button>
-				<a href="<?= $cancel; ?>" class="cancel button"><?= _l("Cancel"); ?></a>
+				<a href="<?= site_url('admin/block'); ?>" class="cancel button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 
@@ -32,9 +32,7 @@
 
 <script type="text/javascript">
 	$('#tabs a').tabs();
-</script>
 
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 

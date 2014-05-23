@@ -359,7 +359,7 @@
 											<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
 
 											<div class="icon-label">
-												<a id="generate-icons" class="button"><?= _l("Generate Icon Files"); ?></a>
+												<a id="generate-icons" data-loading="<?= _l("Generating..."); ?>" class="button"><?= _l("Generate Icon Files"); ?></a>
 											</div>
 										</div>
 									</div>
@@ -518,13 +518,17 @@
 	}).change();
 
 	$('#generate-icons').click(function () {
+		var $this = $(this);
 		var icon = $('[name="config_icon[orig]"]').val();
 
 		if (!icon) {
 			return $('#icon-generator').ac_msg('error', "<?= _l("You must choose an icon PNG image file first"); ?>");
 		}
 
+		$this.loading();
 		$.post("<?= $url_generate_icons; ?>", {icon: icon}, function (json) {
+			$this.loading('stop');
+
 			var $gen = $('#icon-generator');
 
 			for (var c in json) {
@@ -540,9 +544,7 @@
 	$('.imageinput').ac_imageinput();
 
 	$('#tabs a').tabs();
-</script>
 
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 

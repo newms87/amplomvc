@@ -3,11 +3,11 @@
  * The Development Plugin
  *
  * Version: 0.7
- * Title: AmploCart Development
- * Description: Makes Development for AmploCart a thousands times easier! A Necessity for any and all AmlpoCart Devs.
+ * Title: Amplo MVC Development
+ * Description: Makes Development for Amplo MVC a thousands times easier! A Necessity for any and all Amlpo MVC Devs.
  * Author: Daniel Newman
  * Date: 3/15/2013
- * Link: http://www.amplocart.com/plugins/dev
+ * Link: http://www.amplomvc.com/plugins/dev
  *
  */
 class Dev_Setup extends PluginSetup

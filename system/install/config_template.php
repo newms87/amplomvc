@@ -30,8 +30,8 @@ define('DB_PREFIX', '%db_prefix%');
 define('CACHE_FILE_EXPIRATION', 3600);
 
 //File permissions
-define('AMPLOCART_DIR_MODE', 0755);
-define('AMPLOCART_FILE_MODE', 0644);
+define('AMPLO_DIR_MODE', 0755);
+define('AMPLO_FILE_MODE', 0644);
 define('DEFAULT_PLUGIN_DIR_MODE', 0755);
 define('DEFAULT_PLUGIN_FILE_MODE', 0644);
 
@@ -39,7 +39,7 @@ define('DEFAULT_PLUGIN_FILE_MODE', 0644);
 umask(0022);
 
 //This allows for cross store sessions
-define("AMPLOCART_SESSION", "cross-store-session");
+define("AMPLO_SESSION", "cross-store-session");
 
 //Password Hashing
 define("PASSWORD_COST", %password_cost%);

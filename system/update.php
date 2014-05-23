@@ -3,7 +3,7 @@ class System_Update extends Model
 {
 	public function getVersions()
 	{
-		$version_list = $this->tool->get_files_r(DIR_SYSTEM . 'updates/', array('php'), FILELIST_STRING);
+		$version_list = $this->tool->getFiles(DIR_SYSTEM . 'updates/', array('php'), FILELIST_STRING);
 
 		natsort($version_list);
 
@@ -24,7 +24,7 @@ class System_Update extends Model
 	public function updateSystem($update_version = null)
 	{
 		if (!$update_version) {
-			$update_version = AC_VERSION;
+			$update_version = AMPLO_VERSION;
 		}
 
 		$versions = $this->getVersions();
@@ -35,6 +35,6 @@ class System_Update extends Model
 			}
 		}
 
-		$this->config->save('system', 'ac_version', AC_VERSION, 0);
+		$this->config->save('system', 'AMPLO_VERSION', AMPLO_VERSION, 0);
 	}
 }

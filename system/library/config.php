@@ -2,7 +2,7 @@
 
 class Config extends Library
 {
-	private $store = array();
+	private $data = array();
 	private $store_id;
 	private $site_config;
 	private $translate = true;
@@ -17,7 +17,7 @@ class Config extends Library
 
 		$this->loadDefaultSites();
 
-		$this->data = $this->getStore($store_id);
+		$this->data     = $this->getStore($store_id);
 		$this->store_id = $this->data['store_id'];
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
@@ -59,34 +59,43 @@ class Config extends Library
 		return $this->getStore(option('config_default_store'));
 	}
 
-	public function getStore($store_id = null)
+	public function getStore($store_id)
 	{
-		if (is_null($store_id)) {
-			//TODO: Admin should be only 1 domain, should not be a store!! We can have different templates for admin,
-			//but should always be the same domain etc.. store_id 0 should be all stores.
-			if ($this->route->isAdmin()) {
-				return $this->site_config['admin_store'];
-			} else {
-				//Resolve Store ID
-				if ($this->request->isSSL()) {
-					$url   = HTTPS_SITE;
-					$field = 'ssl';
-				} else {
-					$url   = HTTP_SITE;
-					$field = 'url';
+		$stores = $this->cache->get('store.all');
+
+		if (is_null($stores)) {
+			$stores = $this->Model_Setting_Store->getStores();
+
+			$this->cache->set('store.all', $stores);
+		}
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . $_SERVER['HTTP_HOST'] . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		foreach ($stores as $s) {
+			if ($store_id) {
+				if ($store_id == $s['store_id']) {
+					$store = $s;
+					break;
 				}
-
-				$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->escape($url) . "'");
+			} else {
+				if (strpos($url, trim($s['url'], '/ ')) === 0 || strpos($url, trim($s['ssl'], '/ ')) === 0) {
+					$store = $s;
+					break;
+				}
 			}
-		} else {
-			$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 		}
 
-		if (!empty($store)) {
-			return $store;
+		if (empty($store)) {
+			$store = array(
+				'store_id' => 0,
+				'name'     => "Default",
+				'url'      => HTTP_SITE,
+				'ssl'      => HTTPS_SITE,
+			);
 		}
 
-		return $this->site_config['default_store'];
+		return $store;
 	}
 
 	public function all()
@@ -343,12 +352,12 @@ class Config extends Library
 
 	public function checkForUpdates()
 	{
-		$version = !empty($this->data['ac_version']) ? $this->data['ac_version'] : null;
+		$version = !empty($this->data['AMPLO_VERSION']) ? $this->data['AMPLO_VERSION'] : null;
 
-		if ($version !== AC_VERSION) {
-			$this->message->add('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AC_VERSION));
+		if ($version !== AMPLO_VERSION) {
+			$this->message->add('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
 
-			$this->System_Update->updateSystem(AC_VERSION);
+			$this->System_Update->updateSystem(AMPLO_VERSION);
 		}
 	}
 }

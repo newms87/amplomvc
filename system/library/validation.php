@@ -125,14 +125,6 @@ class Validation extends Library
 		return $this->text($postcode, 5, 12);
 	}
 
-	/*
-	 TODO: this is used in Form/address.php validation. Consider removing that functionality and this method...
-	 */
-	public function not_empty_zero($value)
-	{
-		return !empty($value);
-	}
-
 	public function datetime($date, $format = null)
 	{
 		$this->reset();

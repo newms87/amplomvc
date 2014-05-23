@@ -7,6 +7,7 @@ class Tool extends Library
 
 		define("FILELIST_STRING", 1);
 		define("FILELIST_SPLFILEINFO", 2);
+		define("FILELIST_RELATIVE", 3);
 	}
 
 	public function getSlug($name, $allow = '')
@@ -160,11 +161,11 @@ class Tool extends Library
 	 *
 	 * @param $dir - the directory to recursively search for files
 	 * @param $exts - the file extensions to search for. Use false to include all file extensions.
-	 * @param $return_type - can by FILELIST_STRING (for a string) or FILELIST_SPLFILEINFO (for an SPLFileInfo Object)
+	 * @param $return_type - can by FILELIST_STRING, FILELIST_RELATIVE (Relative path from $dir) or FILELIST_SPLFILEINFO (for an SPLFileInfo Object)
 	 *
 	 * @return array - Each value in the array will be determined by the $return_type param.
 	 */
-	public function get_files_r($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
+	public function getFiles($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
 	{
 		if (is_null($exts)) {
 			$exts = array(
@@ -173,6 +174,8 @@ class Tool extends Library
 				'css',
 				'js'
 			);
+		} elseif (is_string($exts)) {
+			$exts = explode(',', $exts);
 		}
 
 		if (!is_dir($dir)) {
@@ -188,7 +191,10 @@ class Tool extends Library
 			if ($file->isFile() && (!$exts || in_array($file->getExtension(), $exts))) {
 				switch ($return_type) {
 					case FILELIST_STRING:
-						$files[] = $file->getPathName();
+						$files[] = str_replace('\\', '/', $file->getPathName());
+						break;
+					case FILELIST_RELATIVE:
+						$files[] = substr(str_replace('\\', '/', $file->getPathName()), strlen($dir));
 						break;
 					case FILELIST_SPLFILEINFO:
 						$files[] = $file;

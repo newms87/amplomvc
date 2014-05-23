@@ -1,10 +1,13 @@
 <?php
-class App_Controller_Block_Widget_Links extends Controller
+
+/**
+ * Class App_Controller_Block_Widget_Links
+ * Name: Link Builder
+ */
+class App_Controller_Block_Widget_Links extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		$data = $settings;
-
-		$this->render('block/widget/links');
+		$this->render('block/widget/links', $settings);
 	}
 }

@@ -20,7 +20,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
-				redirect('design/layout');
+				redirect('admin/design/layout');
 			}
 		}
 
@@ -35,7 +35,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
-				redirect('design/layout');
+				redirect('admin/design/layout');
 			}
 		}
 
@@ -68,7 +68,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified layouts!"));
 
-				redirect('design/layout', $this->url->getQueryExclude('action'));
+				redirect('admin/design/layout', $this->url->getQueryExclude('action'));
 			}
 		}
 
@@ -81,8 +81,8 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Layouts"), site_url('design/layout'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
 
 		//The Table Columns
 		$columns = array();
@@ -114,11 +114,11 @@ class App_Controller_Admin_Design_Layout extends Controller
 			$layout['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('design/layout/update', 'layout_id=' . $layout['layout_id'])
+					'href' => site_url('admin/design/layout/update', 'layout_id=' . $layout['layout_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('design/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
+					'href' => site_url('admin/design/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
 				)
 			);
 
@@ -168,7 +168,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('design/layout/update');
+		$data['insert'] = site_url('admin/design/layout/update');
 
 		//Render
 		$this->response->setOutput($this->render('design/layout_list', $data));
@@ -180,8 +180,8 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Layouts"), site_url('design/layout'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
 
 		//Insert or Update
 		$layout_id = isset($_GET['layout_id']) ? (int)$_GET['layout_id'] : 0;
@@ -219,8 +219,8 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$data['data_stores'] = $this->Model_Setting_Store->getStores();
 
 		//Action Buttons
-		$data['save']   = site_url('design/layout/update', 'layout_id=' . $layout_id);
-		$data['cancel'] = site_url('design/layout');
+		$data['save']   = site_url('admin/design/layout/update', 'layout_id=' . $layout_id);
+		$data['cancel'] = site_url('admin/design/layout');
 
 		//Render
 		$this->response->setOutput($this->render('design/layout_form', $data));

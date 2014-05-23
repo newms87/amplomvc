@@ -10,10 +10,7 @@
 				</div>
 			</div>
 			<div class="section">
-				<div id="listing">
-					<?= $list_view; ?>
-				</div>
-				<div class="pagination"><?= $pagination; ?></div>
+				<?= $listing; ?>
 			</div>
 		</div>
 	</div>

@@ -7,6 +7,7 @@ class Url extends Library
 	private $rewrite = array();
 	private $seo_url;
 	private $secure_pages = array();
+	private $aliases = array();
 
 	public function __construct()
 	{
@@ -20,6 +21,8 @@ class Url extends Library
 			//TODO - finish secure pages
 			$this->secure_pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "secure_page");
 		}
+
+		$this->loadAliases();
 
 		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
@@ -131,26 +134,21 @@ class Url extends Library
 
 	public function store_base($store_id, $ssl = false)
 	{
-		if ((int)$store_id === 0 || $store_id == option('store_id')) {
+		static $stores = array();
+
+		if (!$store_id || $store_id == option('store_id')) {
 			return $ssl ? option('ssl') : option('url');
 		}
 
-		$scheme = $ssl ? 'ssl' : 'url';
-
-		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB).
-		//-1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
-		if ((int)$store_id === -1) {
-			return URL_SITE . 'admin/';
+		if (!isset($stores[$store_id])) {
+			$stores[$store_id] = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$store_id);
 		}
 
-		$link = $this->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
-
-		if (!is_string($link)) {
-			trigger_error(__METHOD__ . _l("(): Store did not exist! Store ID: %s.", $store_id));
-			return '';
+		if ($stores[$store_id]) {
+			return $ssl ? $stores[$store_id]['ssl'] : $stores[$store_id]['url'];
 		}
 
-		return $link;
+		return URL_SITE;
 	}
 
 	public function site($uri = '', $query = '', $base_site = false)
@@ -283,28 +281,30 @@ class Url extends Library
 			$query = urldecode($query);
 		}
 
-		if (strpos($path, 'http') === 0 || strpos($path, '//') === 0) {
-			return $path . ($query ? '?' . $query : '');
+		//If already an alias, or has a URL scheme (eg: http://, ftp:// etc..) skip lookup
+		if (isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME)) {
+			return $path . (($query && strpos($path, '?') === false) ? '?' . $query : '');
 		}
 
-		if (!$store_id && $store_id !== 0) {
-			$store_id = option('store_id');
+		$url_alias = null;
+		foreach ($this->aliases as $a) {
+			if ($store_id && $store_id != $a['store_id']) {
+				continue;
+			}
+
+			$match_path = preg_match("|^" . $a['path'] . "|", $path);
+
+			if ($query) {
+				$match_query = $a['query'] ? preg_match("|" . $a['query'] . "|", $query) : false;
+			} else {
+				$match_query = true;
+			}
+
+			if ($match_path && $match_query) {
+				$url_alias = $a;
+				break;
+			}
 		}
-
-		if ($query) {
-			$query_sql = "'" . $this->escape($query) . "' like CONCAT('%', query, '%')";
-		} else {
-			$query_sql = "query = ''";
-		}
-
-		$where = "WHERE $query_sql AND status='1'";
-		$where .= " AND store_id IN (0, " . (int)$store_id . ")";
-		$where .= " AND path = '" . $this->escape($path) . "'";
-
-		//TODO: Validate that we need to ORDER BY query here... can be costly with a large number of aliases
-		$sql = "SELECT * FROM " . DB_PREFIX . "url_alias $where ORDER BY query DESC LIMIT 1";
-
-		$url_alias = $this->queryRow($sql);
 
 		if ($url_alias) {
 			if ($url_alias['redirect']) {
@@ -402,5 +402,16 @@ class Url extends Library
 		}
 
 		return $this->Model_Setting_UrlAlias->hasError();
+	}
+
+	public function loadAliases()
+	{
+		$this->aliases = $this->cache->get('url_alias.all');
+
+		if (is_null($this->aliases)) {
+			$this->aliases = $this->queryRows("SELECT * FROM " . DB_PREFIX . "url_alias WHERE status = 1", 'alias');
+
+			$this->cache->set('url_alias.all', $this->aliases);
+		}
 	}
 }

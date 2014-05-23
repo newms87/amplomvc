@@ -31,7 +31,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/zone', $url);
+			redirect('admin/localisation/zone', $url);
 		}
 
 		$this->getForm();
@@ -60,7 +60,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/zone', $url);
+			redirect('admin/localisation/zone', $url);
 		}
 
 		$this->getForm();
@@ -91,7 +91,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/zone', $url);
+			redirect('admin/localisation/zone', $url);
 		}
 
 		$this->getList();
@@ -131,11 +131,11 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Zones"), site_url('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Zones"), site_url('admin/localisation/zone', $url));
 
-		$data['insert'] = site_url('localisation/zone/insert', $url);
-		$data['delete'] = site_url('localisation/zone/delete', $url);
+		$data['insert'] = site_url('admin/localisation/zone/insert', $url);
+		$data['delete'] = site_url('admin/localisation/zone/delete', $url);
 
 		$data['zones'] = array();
 
@@ -155,7 +155,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
+				'href' => site_url('admin/localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
 			);
 
 			$data['zones'][] = array(
@@ -194,9 +194,9 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_country'] = site_url('localisation/zone', 'sort=c.name' . $url);
-		$data['sort_name']    = site_url('localisation/zone', 'sort=z.name' . $url);
-		$data['sort_code']    = site_url('localisation/zone', 'sort=z.code' . $url);
+		$data['sort_country'] = site_url('admin/localisation/zone', 'sort=c.name' . $url);
+		$data['sort_name']    = site_url('admin/localisation/zone', 'sort=z.name' . $url);
+		$data['sort_code']    = site_url('admin/localisation/zone', 'sort=z.code' . $url);
 
 		$url = '';
 
@@ -246,16 +246,16 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Zones"), site_url('localisation/zone', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Zones"), site_url('admin/localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {
-			$data['action'] = site_url('localisation/zone/insert', $url);
+			$data['action'] = site_url('admin/localisation/zone/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
+			$data['action'] = site_url('admin/localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/zone', $url);
+		$data['cancel'] = site_url('admin/localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
 			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);
@@ -326,12 +326,6 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s stores!"), $store_total);
-			}
-
-			$address_total = $this->Model_Sale_Customer->getTotalAddressesByZoneId($zone_id);
-
-			if ($address_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s address book entries!"), $address_total);
 			}
 
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);

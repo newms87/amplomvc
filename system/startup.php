@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.1.0');
+define('AMPLO_VERSION', '0.1.0');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -31,7 +31,7 @@ if (!$domain || $domain === 'localhost') {
 ini_set('session.use_cookies', 'On');
 ini_set('session.use_trans_sid', 'Off');
 
-session_name(AMPLOCART_SESSION);
+session_name(AMPLO_SESSION);
 
 session_set_cookie_params(0, '/', COOKIE_DOMAIN);
 session_start();

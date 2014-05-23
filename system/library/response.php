@@ -66,7 +66,7 @@ class Response extends Library
 	public function output()
 	{
 		//Database Profiling
-		if (DB_PROFILE && !$this->request->isAjax()) {
+		if (SHOW_DB_PROFILE && !$this->request->isAjax()) {
 			$this->dbProfile();
 		}
 
@@ -116,72 +116,36 @@ class Response extends Library
 
 	private function dbProfile()
 	{
-		$profile = $this->db->getProfile();
+		global $__start;
 
-		$total = 0;
+		$file = $this->theme->getFile('common/amplo_profile', 'fluid');
 
-		$html = '';
+		if ($file) {
+			$profile = $this->db->getProfile();
 
-		usort($profile, function ($a, $b) { return $a['time'] < $b['time']; });
+			$db_time = 0;
 
-		foreach ($profile as $p) {
-			$total += $p['time'];
-			$html .= "<div>$p[time]<span>$p[query]</span></div>";
+			usort($profile, function ($a, $b) {
+					return $a['time'] < $b['time'];
+				});
+
+			foreach ($profile as $p) {
+				$db_time += $p['time'];
+			}
+
+			$run_time = microtime(true) - $__start;
+
+			$mb          = 1024 * 1024;
+			$memory      = (memory_get_peak_usage() / $mb) . " MB";
+			$real_memory = (memory_get_peak_usage(true) / $mb) . " MB";
+
+			$file_list   = get_included_files();
+			$total_files = count($file_list);
+			ob_start();
+			include($file);
+			$html = ob_get_clean();
+
+			$this->output = str_replace("</body>", $html . "</body>", $this->output);
 		}
-
-		$total = _l("Total Time: %s in %s transactions", $total, count($profile));
-
-		$html = <<<HTML
-<div id="db_profile_box" style="display:none">
-<style>
-	#db_profile{
-		clear:both;
-	}
-	#db_profile .profile_list{
-		position:relative;
-	}
-	#db_profile .profile_list div{
-		position:relative;
-		margin: 10px 0 10px 15px;
-		cursor: pointer;
-		padding: 5px 10px;
-		background: #38B0E3;
-		border-radius: 5px;
-		width: 200px;
-	}
-	#db_profile .profile_list div span {
-		position:absolute;
-		width: 400px;
-		top:0;
-		left: 10%;
-		display:none;
-		background:white;
-		padding: 10px 20px;
-		border-radius: 10px;
-		box-shadow: 5px 5px 5px rgba(0,0,0,.6);
-		z-index: 10;
-	}
-	#db_profile .profile_list div:hover span{
-		display:block;
-	}
-</style>
-
-	<div id="db_profile">
-		<div class="total">$total</div>
-		<div class="profile_list">$html</div>
-	</div>
-</div>
-
-<script type="text/javascript">
-var w = window.open(null, "DB_Profiler");
-
-if (w) {
-	w.document.title = "DB Profile";
-	w.document.body.innerHTML = document.getElementById('db_profile_box').innerHTML;
-}
-</script>
-HTML;
-
-		$this->output = str_replace("</body>", $html . "</body>", $this->output);
 	}
 }

@@ -1,9 +1,14 @@
 <?php
-class App_Controller_Admin_Block_Widget_Pagination extends App_Controller_Admin_Block_Block
+
+/**
+ * Class App_Controller_Block_Widget_Pagination
+ * Name: List Pagination
+ */
+class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		$defaults = array(
+		$settings += array(
 			'total'     => 0,
 			'template'  => 'block/widget/pagination',
 			'page'      => isset($_GET['page']) ? (int)$_GET['page'] : 1,
@@ -13,8 +18,6 @@ class App_Controller_Admin_Block_Widget_Pagination extends App_Controller_Admin_
 			'text'      => _l("Showing %start% to %end% of %total% (%pages% Pages)"),
 			'class'     => 'default',
 		);
-
-		$settings += $defaults;
 
 		if ($settings['total'] < 1) {
 			return '';

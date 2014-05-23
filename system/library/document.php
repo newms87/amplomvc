@@ -92,7 +92,8 @@ class Document extends Library
 			'title'        => '',
 			'class'        => array(),
 			'sort_order'   => null,
-			'parent'       => 0,
+			'parent_id'    => 0,
+			'parent'       => '',
 			'attrs'        => array(),
 			'target'       => '',
 			'children'     => array(),
@@ -107,57 +108,26 @@ class Document extends Library
 		}
 
 		//Find the children list for the parent
-		if ($new_link['parent']) {
-			array_walk_children($this->links[$group], 'children', function (&$link, $index) use ($new_link) {
-				if ($index === $new_link['parent']) {
+		if ($new_link['parent'] || $new_link['parent_id']) {
+			$return = array_walk_children($this->links[$group], 'children', function (&$link) use ($new_link) {
+				if ($new_link['parent'] === $link['name']) {
 					$link['children'][$new_link['name']] = $new_link;
+					return false;
+				} elseif (!empty($link['navigation_id']) && $new_link['parent_id'] === $link['navigation_id']) {
+					$link['children'][$new_link['name']] = $new_link;
+					return false;
 				}
 			});
 
-			$stack       = array();
-			$stack_index = 0;
-
-			$curr = & $this->links[$group];
-
-			do {
-				reset($curr);
-				do {
-					$node = & $curr[key($curr)];
-
-					if (isset($node['href']) && $node['name'] === $new_link['parent']) {
-						if (empty($node['children'])) {
-							$node['children'] = array($new_link['name'] => $new_link);
-							return true;
-						}
-
-						$child_list = & $node['children'];
-						$stack      = null;
-						break;
-					}
-
-					if (!empty($node['children'])) {
-						$stack[] = & $node['children'];
-					}
-				} while (next($curr));
-				unset($curr);
-
-				if (!empty($stack)) {
-					$curr = & $stack[$stack_index++];
-				}
-			} while ($stack_index < count($stack));
+			//$return === false when link is found
+			if ($return !== false) {
+				trigger_error(_l("Unable to locate link %s in Link Group %s", $new_link['parent'], $group));
+			}
 		} else {
-			$child_list = & $this->links[$group];
+			$this->links[$group][] = $new_link;
 		}
 
-		if (isset($child_list)) {
-			$child_list[] = $new_link;
-
-			return true;
-		}
-
-		trigger_error(_l("%s(): Unable to find %s in link group %s!", __METHOD__, $new_link['parent'], $group));
-
-		return false;
+		return true;
 	}
 
 	public function addLinks($group, $links)
@@ -197,7 +167,7 @@ class Document extends Library
 		$sass_file = DIR_CACHE . 'sass/' . $reference . $mtime . '.css';
 
 		//If file is not in cached, or original file has been modified, regenerate the SASS file
-		if (true || !is_file($sass_file) || filemtime($sass_file) < $mtime) {
+		if (!is_file($sass_file) || filemtime($sass_file) < $mtime) {
 
 			//Cleared cached files for this reference
 			$cached_files = glob(DIR_CACHE . 'sass/' . $reference . '*.css');

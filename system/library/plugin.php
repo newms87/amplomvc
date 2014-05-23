@@ -132,7 +132,7 @@ class Plugin extends Library
 	{
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		return $this->tool->get_files_r($dir, false);
+		return $this->tool->getFiles($dir, false);
 	}
 
 	public function integrateNewFiles($name)
@@ -322,7 +322,7 @@ class Plugin extends Library
 			return array();
 		}
 
-		$files = $this->tool->get_files_r($dir, false, FILELIST_STRING);
+		$files = $this->tool->getFiles($dir, false, FILELIST_STRING);
 
 		$file_mods = array();
 

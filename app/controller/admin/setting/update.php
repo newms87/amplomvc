@@ -9,9 +9,11 @@
  */
 class App_Controller_Admin_Setting_Update extends Controller
 {
-	static $can_modify = array(
-		'index',
-	   //'update',
+	static $allow = array(
+		'modify '=> array(
+			'index',
+		   //'update',
+		),
 	);
 
 	public function index()
@@ -20,12 +22,12 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$this->document->setTitle(_l("System Update"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("System Update"), site_url('setting/update'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("System Update"), site_url('admin/setting/update'));
 
 		//Actions
-		$data['action'] = site_url('setting/update/update');
-		$data['cancel'] = site_url('setting/store');
+		$data['action'] = site_url('admin/setting/update/update');
+		$data['cancel'] = site_url('admin/setting/store');
 
 		//Data
 		$update_info = array();
@@ -35,7 +37,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		$defaults = array(
-			'version'     => AC_VERSION,
+			'version'     => AMPLO_VERSION,
 			'auto_update' => 0,
 		);
 
@@ -69,7 +71,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('setting/update');
+			redirect('admin/setting/update');
 		}
 	}
 
@@ -86,7 +88,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('setting/update');
+			redirect('admin/setting/update');
 		}
 	}
 }

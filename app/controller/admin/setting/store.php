@@ -25,7 +25,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("The Store settings have been saved!"));
 
-				redirect('admin/setting/store');
+				redirect('admin/admin/setting/store');
 			}
 		}
 
@@ -44,7 +44,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			}
 		}
 
-		redirect('setting/store');
+		redirect('admin/setting/store');
 	}
 
 	private function getList()
@@ -53,8 +53,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 
 		//The Table Columns
 		$columns = array();
@@ -103,14 +103,14 @@ class App_Controller_Admin_Setting_Store extends Controller
 			$store['actions'] = array(
 				'edit' => array(
 					'text' => _l("Edit"),
-					'href' => site_url('setting/store/update', 'store_id=' . $store['store_id']),
+					'href' => site_url('admin/setting/store/update', 'store_id=' . $store['store_id']),
 				),
 			);
 
 			if ($this->canDelete($store['store_id'], true)) {
 				$store['actions']['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => site_url('setting/store/delete', 'store_id=' . $store['store_id']),
+					'href' => site_url('admin/setting/store/delete', 'store_id=' . $store['store_id']),
 				);
 			}
 
@@ -151,8 +151,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
-		$data['insert'] = site_url('setting/store/update');
-		$data['delete'] = site_url('setting/store/delete');
+		$data['insert'] = site_url('admin/setting/store/update');
+		$data['delete'] = site_url('admin/setting/store/delete');
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_list', $data));
@@ -167,15 +167,15 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 
 		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
 			if (!$store) {
 				$this->message->add('warning', _l("You attempted to access a store that does not exist!"));
-				redirect('setting/store');
+				redirect('admin/setting/store');
 			}
 
 			$store_config = $this->config->loadGroup('config', $store_id);
@@ -225,7 +225,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'config_order_complete_status_id' => '',
 			'config_cart_weight'              => '',
 			'config_logo'                     => '',
-			//Icon defaults set below
 			'config_icon'                     => null,
 			'config_logo_width'               => 0,
 			'config_logo_height'              => 0,
@@ -256,7 +255,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data += $store_info + $defaults;
 
 		//Current Page Breadcrumb
-		$this->breadcrumb->add($data['name'], site_url('setting/store/update', 'store_id=' . $store_id));
+		$this->breadcrumb->add($data['name'], site_url('admin/setting/store/update', 'store_id=' . $store_id));
 
 		//Additional Info
 		$data['layouts']              = $this->Model_Design_Layout->getLayouts();
@@ -265,7 +264,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['countries']            = $this->Model_Localisation_Country->getCountries();
 		$data['languages']            = $this->Model_Localisation_Language->getLanguages();
 		$data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
-		$data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
 		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
 		$data['data_order_statuses']  = $this->order->getOrderStatuses();
 		$data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
@@ -325,9 +324,9 @@ class App_Controller_Admin_Setting_Store extends Controller
 		unset($icon);
 
 		//Action Buttons
-		$data['save']               = site_url('setting/store/update', 'store_id=' . $store_id);
-		$data['cancel']             = site_url('setting/store');
-		$data['url_generate_icons'] = site_url('setting/store/generate_icons');
+		$data['save']               = site_url('admin/setting/store/update', 'store_id=' . $store_id);
+		$data['cancel']             = site_url('admin/setting/store');
+		$data['url_generate_icons'] = site_url('admin/setting/store/generate_icons');
 
 		//Render
 		$this->response->setOutput($this->render('setting/store_form', $data));
@@ -443,16 +442,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 	{
 		if ((int)$store_id < 1) {
 			$error[$store_id]['warning'] = _l("Warning: You can not delete your default store!");
-		} else {
-			$filter = array(
-				'store_ids' => array($store_id),
-			);
-
-			$store_total = $this->System_Model_Order->getTotalOrders($filter);
-
-			if ($store_total) {
-				$error[$store_id]['warning'] = _l("Warning: This Store cannot be deleted as it is currently assigned to %s orders!", $store_total);
-			}
 		}
 
 		if (!$silent) {

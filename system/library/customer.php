@@ -766,13 +766,15 @@ class Customer extends Library
 		$class = $action->getClass();
 		$method = $action->getMethod();
 
-		if (property_exists($class, 'can_access')) {
-			$can_access = $class::$can_access;
+		if (property_exists($class, 'allow')) {
+			$allow = $class::$allow;
 
-			if (is_string($can_access)) {
-				$private = preg_match("/$can_access/", $method);
-			} elseif (is_array($can_access)) {
-				$private = in_array($method, $can_access);
+			if (!empty($allow['access'])) {
+				if (is_string($allow['access'])) {
+					$private = preg_match("/$allow[access]/", $method);
+				} else {
+					$private = in_array($method, $allow['access']);
+				}
 			}
 		}
 

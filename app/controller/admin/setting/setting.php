@@ -25,13 +25,13 @@ class App_Controller_Admin_Setting_Setting extends Controller
 
 			$this->message->add('success', _l("Success: You have modified settings!"));
 
-			redirect('setting/store');
+			redirect('admin/setting/store');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Settings"), site_url('setting/store'));
-		$this->breadcrumb->add(_l("General Settings"), site_url('setting/setting'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
+		$this->breadcrumb->add(_l("General Settings"), site_url('admin/setting/setting'));
 
 		//Load Information
 		if (!$this->request->isPost()) {
@@ -203,7 +203,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$data['length_classes']         = $this->Model_Localisation_LengthClass->getLengthClasses();
 		$data['weight_classes']         = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$data['tax_classes']            = $this->Model_Localisation_TaxClass->getTaxClasses();
-		$data['customer_groups']        = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$data['customer_groups'] = $this->Model_Customer->getCustomerGroups();
 		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
 		$data['data_stock_statuses']    = $this->Model_Localisation_StockStatus->getStockStatuses();
 		$data['data_order_statuses']    = $this->order->getOrderStatuses();
@@ -243,8 +243,8 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('setting/setting');
-		$data['cancel'] = site_url('setting/store');
+		$data['save']   = site_url('admin/setting/setting');
+		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/setting', $data));
@@ -376,8 +376,9 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_image_file_mode',
 			'config_image_dir_mode',
 			'config_plugin_file_mode',
-			'config_plugin_dir_mode'
+			'config_plugin_dir_mode',
 		);
+
 		foreach ($octals as $oct) {
 			if ($_POST[$oct]) {
 				$oct_val     = $_POST[$oct];

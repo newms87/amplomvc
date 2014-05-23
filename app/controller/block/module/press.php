@@ -1,5 +1,10 @@
 <?php
-class App_Controller_Block_Module_Press extends Controller
+
+/**
+ * Class App_Controller_Block_Module_Press
+ * Name: Amplo Press / Editorial
+ */
+class App_Controller_Block_Module_Press extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
@@ -33,5 +38,21 @@ class App_Controller_Block_Module_Press extends Controller
 		$data['press_list'] = $settings['press_items'];
 
 		$this->render('block/module/press', $data);
+	}
+
+	public function settings(&$settings)
+	{
+		if (!isset($settings['press_items'])) {
+			$data['press_items'] = array();
+		}
+
+		$data += $settings;
+
+		$this->render('block/module/press_settings', $data);
+	}
+
+	public function save()
+	{
+		return $this->error;
 	}
 }

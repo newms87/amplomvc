@@ -7,7 +7,7 @@ class App_Controller_Feed_GoogleSitemap extends Controller
 			$output = '<?xml version="1.0" encoding="UTF-8"?>';
 			$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-			$products = $this->Model_Catalog_Product->getActiveProducts();
+			$products = $this->Model_Catalog_Product->getProducts();
 
 			foreach ($products as $product) {
 				$output .= '<url>';
@@ -28,7 +28,7 @@ class App_Controller_Feed_GoogleSitemap extends Controller
 				$output .= '<priority>0.7</priority>';
 				$output .= '</url>';
 
-				$products = $this->Model_Catalog_Product->getActiveProducts(array('manufacturer_id' => $manufacturer['manufacturer_id']));
+				$products = $this->Model_Catalog_Product->getProducts(array('filter_manufacturer_id' => $manufacturer['manufacturer_id']));
 
 				foreach ($products as $product) {
 					$output .= '<url>';
@@ -75,7 +75,7 @@ class App_Controller_Feed_GoogleSitemap extends Controller
 			$output .= '<priority>0.7</priority>';
 			$output .= '</url>';
 
-			$products = $this->Model_Catalog_Product->getActiveProducts(array('category_ids' => array($result['category_id'])));
+			$products = $this->Model_Catalog_Product->getProducts(array('filter_category_id' => $result['category_id']));
 
 			foreach ($products as $product) {
 				$output .= '<url>';
