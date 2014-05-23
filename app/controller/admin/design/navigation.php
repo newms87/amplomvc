@@ -1,13 +1,14 @@
 <?php
+
 class App_Controller_Admin_Design_Navigation extends Controller
 {
 	static $allow = array(
-		'modify '=> array(
+		'modify ' => array(
 			'update',
-		   'delete',
-		   'batch_update',
-		   'reset_admin_navigation',
-		   'form',
+			'delete',
+			'batch_action',
+			'reset_admin_navigation',
+			'form',
 		),
 	);
 
@@ -37,7 +38,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'path'    => site_url('admin/design/navigation/batch_update'),
+			'url'     => site_url('admin/design/navigation/batch_action'),
 		);
 
 		//The Listing
@@ -263,7 +264,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->response->setOutput($this->render('design/navigation_form', $data));
 	}
 
-	public function batch_update()
+	public function batch_action()
 	{
 		foreach ($_POST['batch'] as $navigation_group_id) {
 			switch ($_POST['action']) {

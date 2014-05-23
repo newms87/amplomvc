@@ -15,7 +15,7 @@ class App_Model_Page_Page extends Model
 
 	public function addPage($data)
 	{
-		if (!$this->validation->text($data['title'], 3, 64)) {
+		if (!validate('text', $data['title'], 3, 64)) {
 			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
 		}
 
@@ -56,7 +56,7 @@ class App_Model_Page_Page extends Model
 
 	public function editPage($page_id, $data)
 	{
-		if (isset($data['title']) && !$this->validation->text($data['title'], 3, 64)) {
+		if (isset($data['title']) && !validate('text', $data['title'], 3, 64)) {
 			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
 		}
 

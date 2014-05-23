@@ -115,6 +115,22 @@ function set_option($option, $value)
 	$registry->get('config')->save('config', $option, $value);
 }
 
+function user_can($level, $path)
+{
+	global $registry;
+	return $registry->get('user')->can($level, $path);
+}
+
+function validate($method, $value)
+{
+	global $registry;
+
+	$args = func_get_args();
+	array_shift($args);
+
+	return call_user_func_array(array($registry->get('validation'), $method), $args);
+}
+
 function format($type, $data, $param = null)
 {
 	global $registry;

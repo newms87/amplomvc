@@ -106,15 +106,15 @@ class App_Controller_Account_Edit extends Controller
 
 	private function validate()
 	{
-		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
+		if (!validate('text', $_POST['firstname'], 1, 32)) {
 			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
+		if (!validate('text', $_POST['lastname'], 1, 32)) {
 			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->email($_POST['email'])) {
+		if (!validate('email', $_POST['email'])) {
 			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
@@ -122,7 +122,7 @@ class App_Controller_Account_Edit extends Controller
 			$this->error['warning'] = _l("Warning: E-Mail address is already registered!");
 		}
 
-		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {
+		if (isset($_POST['telephone']) && !validate('phone', $_POST['telephone'])) {
 			$this->error['telephone'] = _l("Telephone must be between 3 and 32 characters!");
 		}
 

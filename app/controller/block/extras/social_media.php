@@ -60,7 +60,7 @@ class App_Controller_Block_Extras_SocialMedia extends App_Controller_Block_Block
 	{
 		if (!empty($_POST['settings']['networks'])) {
 			foreach ($_POST['settings']['networks'] as $network) {
-				if (!$this->validation->url($network['href'])) {
+				if (!validate('url', $network['href'])) {
 					$this->error['networks'][] = _l("%s is not a valid URL. You must include the http:// or https:// protocol.", $network['href']);
 				}
 			}

@@ -6,7 +6,7 @@ class Block extends Library
 
 	public function add($data)
 	{
-		if (!$this->validation->text($data['name'], 3, 128)) {
+		if (!validate('text', $data['name'], 3, 128)) {
 			$this->error['name'] = _l("Block name must be between 1 and 128 characters!");
 			return false;
 		}

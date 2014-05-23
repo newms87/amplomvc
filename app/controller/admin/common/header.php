@@ -80,7 +80,7 @@ class App_Controller_Admin_Common_Header extends Controller
 			}
 
 			//Add the Image Manager to the Main Menu if user has permissions
-			if ($this->user->can('access', 'common/filemanager')) {
+			if ($this->user->can('access', 'filemanager/filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,

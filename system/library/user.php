@@ -27,18 +27,18 @@ class User extends Library
 	{
 		//Change User permissions and user ID to the system user
 		$this->temp_user = array(
-			'group_type' => $this->user['group_type'],
-			'user_id'    => $this->user_id,
+			'role'    => $this->user['role'],
+			'user_id' => $this->user_id,
 		);
 
-		$this->user_id            = -1;
-		$this->user['group_type'] = "Top Administrator";
+		$this->user_id      = -1;
+		$this->user['role'] = "Top Administrator";
 	}
 
 	public function logoutSystemUser()
 	{
-		$this->user_id            = $this->temp_user['user_id'];
-		$this->user['group_type'] = $this->temp_user['group_type'];
+		$this->user_id      = $this->temp_user['user_id'];
+		$this->user['role'] = $this->temp_user['role'];
 	}
 
 	private function loadUser($user)
@@ -46,18 +46,17 @@ class User extends Library
 		$this->user_id = $user['user_id'];
 		$this->session->set('user_id', $user['user_id']);
 
-		$user_group = $this->queryRow("SELECT name as group_type, permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user['user_group_id'] . "'");
+		$user_role = $this->Model_User_Role->getRole($user['user_role_id']);
 
-		if (!$user_group) {
-			$msg = _l("User was assigned an invalid group!");
-			$this->error_log->write($msg);
-			$this->message->add('error', $msg);
-			return;
+		if ($user_role) {
+			$this->permissions = $user_role['permissions'];
+			$user['role']      = $user_role['name'];
+		} else {
+			$this->permissions = array();
+			$user['role']      = '';
 		}
 
-		$this->permissions = unserialize($user_group['permission']);
-
-		$this->user = $user + $user_group;
+		$this->user = $user;
 	}
 
 	public function lookupUserByEmail($email)
@@ -118,11 +117,8 @@ class User extends Library
 			return true;
 		}
 
-		if (isset($this->permissions[$key])) {
-			return in_array($value, $this->permissions[$key]);
-		}
-
-		return false;
+		$value = str_replace('admin/', '', $value);
+		return !empty($this->permissions[$key][$value]);
 	}
 
 	public function canDoAction($action)
@@ -262,12 +258,12 @@ class User extends Library
 			"Top Administrator"
 		);
 
-		return in_array($this->info('group_type'), $admin_types);
+		return in_array($this->info('role'), $admin_types);
 	}
 
 	public function isTopAdmin()
 	{
-		return $this->info('group_type') === "Top Administrator";
+		return $this->info('role') === "Top Administrator";
 	}
 
 	public function isLogged()

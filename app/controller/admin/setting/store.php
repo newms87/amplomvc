@@ -344,15 +344,15 @@ class App_Controller_Admin_Setting_Store extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify stores!");
 		}
 
-		if (!$this->validation->text($_POST['name'], 1, 64)) {
+		if (!validate('text', $_POST['name'], 1, 64)) {
 			$this->error['name'] = _l("Store Name must be between 1 and 64 characters!");
 		}
 
-		if (!$this->validation->url($_POST['url'])) {
+		if (!validate('url', $_POST['url'])) {
 			$this->error['url'] = _l("Store URL invalid! Please provide a properly formatted URL (eg: http://yourstore.com)");
 		}
 
-		if (!$this->validation->url($_POST['ssl'])) {
+		if (!validate('url', $_POST['ssl'])) {
 			$this->error['ssl'] = _l("Store SSL invalid!  Please provide a properly formatted URL (eg: http://yourstore.com). NOTE: you may set this to the same value as URL, does not have to be HTTPS protocol.");
 		}
 

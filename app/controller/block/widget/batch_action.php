@@ -9,7 +9,7 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 	/**
 	 * @param $settings = array(
 	 *           'actions' => array(),
-	 *           'path' => 'controller/path',
+	 *           'url' => 'string', - URL to batch action method
 	 *           'selector' => 'string',
 	 *        );
 	 *
@@ -27,7 +27,7 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 	public function build($settings)
 	{
 		//No Actions == nothing to do
-		if (empty($settings['actions'])) {
+		if (empty($settings['actions']) || empty($settings['url'])) {
 			return;
 		}
 
@@ -58,8 +58,6 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 			}
 		}
 		unset($action);
-
-		$settings['url'] = site_url($settings['path']);
 
 		$this->render('block/widget/batch_action', $settings);
 	}

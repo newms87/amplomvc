@@ -85,7 +85,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 
 		if (!$_POST['from']) {
 			$this->error['from'] = _l("You must specify an email to send from!");
-		} elseif (!$this->validation->email($_POST['from'])) {
+		} elseif (!validate('email', $_POST['from'])) {
 			$this->error['from'] = _l("The From email address is invalid!");
 		}
 
@@ -95,7 +95,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			$emails = explode(',', $_POST['to']);
 
 			foreach ($emails as $e) {
-				if (!$this->validation->email(trim($e))) {
+				if (!validate('email', trim($e))) {
 					$this->error['to'] = _l("The To email address is invalid!");
 				}
 			}
@@ -105,7 +105,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			$emails = explode(',', $_POST['cc']);
 
 			foreach ($emails as $e) {
-				if (!$this->validation->email(trim($e))) {
+				if (!validate('email', trim($e))) {
 					$this->error['cc'] = _l("The Copy To email address is invalid!");
 				}
 			}
@@ -115,7 +115,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			$emails = explode(',', $_POST['bcc']);
 
 			foreach ($emails as $e) {
-				if (!$this->validation->email(trim($e))) {
+				if (!validate('email', trim($e))) {
 					$this->error['bcc'] = _l("The Blind Copy To email address is invalid!");
 				}
 			}

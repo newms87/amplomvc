@@ -335,7 +335,7 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'content_blocks' => array(
 						'display_name' => 'Blocks',
-						'href'         => 'admin/block/block',
+						'href'         => 'admin/block',
 					),
 					'content_pages'  => array(
 						'display_name' => 'Pages',
@@ -356,9 +356,9 @@ class App_Model_Design_Navigation extends Model
 						'display_name' => 'Users',
 						'href'         => 'admin/user/user',
 					),
-					'users_user_groups' => array(
-						'display_name' => 'User Groups',
-						'href'         => 'admin/user/user_permission',
+					'users_user_roles' => array(
+						'display_name' => 'User Roles',
+						'href'         => 'admin/user/role',
 					),
 				),
 			),
@@ -485,7 +485,7 @@ class App_Model_Design_Navigation extends Model
 
 	public function validateNavigationGroup($data)
 	{
-		if (isset($data['name']) && !$this->validation->text($data['name'], 3, 64)) {
+		if (isset($data['name']) && !validate('text', $data['name'], 3, 64)) {
 			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
 		}
 
@@ -513,11 +513,11 @@ class App_Model_Design_Navigation extends Model
 			$link_name = $navigation_id;
 		}
 
-		if (empty($link_name) || !$this->validation->text($link_name, 1, 45)) {
+		if (empty($link_name) || !validate('text', $link_name, 1, 45)) {
 			$this->error["links[$navigation_id][name]"] = _l("The name for the link %s must be between 1 and 45 characters!", $link_name);
 		}
 
-		if (empty($link['display_name']) || !$this->validation->text($link['display_name'], 1, 255)) {
+		if (empty($link['display_name']) || !validate('text', $link['display_name'], 1, 255)) {
 			$this->error["links[$navigation_id][display_name]"] = _l("The Display Name for the link %s must be between 1 and 255 characters!", $link_name);
 		}
 
