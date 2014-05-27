@@ -665,15 +665,15 @@ class App_Model_Catalog_Product extends Model
 			$where .= " AND p.manufacturer_id IN (" . implode(",", $data['manufacturer_ids']) . ")";
 		}
 
-		if (isset($data['manufacturer_status'])) {
-			$from .= " JOIN " . DB_PREFIX . "manufacturer m ON (m.manufacturer_id = p.manufacturer_id AND m.status = " . (int)$data['manufacturer_status'];
-		}
-
-		if ((isset($data['sort']) && $data['sort'] == 'manufacturer_name') || !empty($data['manufacturer_name'])) {
-			$from .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id)";
+		if (isset($data['manufacturer_status']) || (isset($data['sort']) && $data['sort'] == 'manufacturer_name') || !empty($data['manufacturer_name'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id = p.manufacturer_id)";
 
 			if (!empty($data['manufacturer_name'])) {
 				$where .= " AND LCASE(m.name) = '" . strtolower($this->escape($data['m.name'])) . "'";
+			}
+
+			if (isset($data['manufacturer_status'])) {
+				$where .= " AND (m.status IS NULL OR m.status = 1)";
 			}
 		}
 
@@ -1064,9 +1064,9 @@ class App_Model_Catalog_Product extends Model
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " ORDER BY quantity, priority, price");
 	}
 
-	public function getProductActiveDiscount($product_id)
+	public function getProductActiveDiscounts($product_id)
 	{
-		return $this->queryVar("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC LIMIT 1");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC");
 	}
 
 	public function getProductSpecialPrice($product_id)
@@ -1326,7 +1326,7 @@ class App_Model_Catalog_Product extends Model
 		$product = isset($details['product']) ? $details['product'] : $this->getActiveProduct($product_id, $ignore_status);
 
 		$product['special']  = $this->getProductActiveSpecial($product_id);
-		$product['discount'] = $this->getProductActiveDiscount($product_id);
+		$product['discounts'] = $this->getProductActiveDiscounts($product_id);
 		$product['reward']   = $this->getProductReward($product_id);
 
 		if (!$product) {
@@ -1336,8 +1336,8 @@ class App_Model_Catalog_Product extends Model
 		// Product Specials / Discounts
 		if ($product['special']) {
 			$price = $product['special'];
-		} elseif ($product['discount']) {
-			$price = $product['discount'];
+		} elseif ($product['discounts']) {
+			$price = $product['discount'][0]['price'];
 		} else {
 			$price = $product['price'];
 		}
