@@ -3,14 +3,16 @@ class App_Model_User_User extends Model
 {
 	public function add($data)
 	{
-		if (!$this->validate($data)) {
-			return false;
-		}
-
 		$data['date_added'] = $this->date->now();
 
 		if (isset($data['password'])) {
 			$data['password'] = $this->user->encrypt($data['password']);
+		} elseif (isset($data['encrypted_password'])) {
+			$data['password'] = $data['encrypted_password'];
+		}
+
+		if (!$this->validate($data)) {
+			return false;
 		}
 
 		return $this->insert('user', $data);
@@ -18,12 +20,14 @@ class App_Model_User_User extends Model
 
 	public function edit($user_id, $data)
 	{
-		if (!$this->validate($data, $user_id)) {
-			return false;
-		}
-
 		if (isset($data['password'])) {
 			$data['password'] = $this->user->encrypt($data['password']);
+		} elseif (isset($data['encrypted_password'])) {
+			$data['password'] = $data['encrypted_password'];
+		}
+
+		if (!$this->validate($data, $user_id)) {
+			return false;
 		}
 
 		return $this->update('user', $data, $user_id);
@@ -129,7 +133,7 @@ class App_Model_User_User extends Model
 		}
 
 		if (!$user_id || isset($user['password'])) {
-			if (!validate('password', $user['password'], $user['confirm'])) {
+			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
 				$this->error['password'] = $this->validation->getError();
 			}
 		}

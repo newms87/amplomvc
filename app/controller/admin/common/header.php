@@ -55,32 +55,8 @@ class App_Controller_Admin_Common_Header extends Controller
 		$data['logged'] = $this->user->isLogged();
 
 		if ($data['logged']) {
-			//Add Store Settings
-			$stores = $this->Model_Setting_Store->getStores();
-
-			$link_stores = array(
-				'name'         => 'system_settings_stores',
-				'display_name' => _l("Stores"),
-				'parent'       => 'system_settings',
-				'sort_order'   => 1,
-			);
-
-			$this->document->addLink('admin', $link_stores);
-
-			foreach ($stores as $index => $store) {
-				$link_store_setting = array(
-					'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
-					'display_name' => $store['name'],
-					'href'         => site_url('admin/setting/store/update', 'store_id=' . $store['store_id']),
-					'parent'       => 'system_settings_stores',
-					'sort_order'   => $index,
-				);
-
-				$this->document->addLink('admin', $link_store_setting);
-			}
-
 			//Add the Image Manager to the Main Menu if user has permissions
-			if ($this->user->can('access', 'filemanager/filemanager')) {
+			if (user_can('access', 'filemanager/filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
@@ -90,7 +66,34 @@ class App_Controller_Admin_Common_Header extends Controller
 				$this->document->addLink('admin', $link_image_manager);
 			}
 
-			//Store Fronts and Settings
+			$stores = $this->Model_Setting_Store->getStores();
+
+			if (user_can('access', 'setting/store')) {
+				//Store Front Settings
+
+				$link_stores = array(
+					'name'         => 'system_settings_stores',
+					'display_name' => _l("Stores"),
+					'parent'       => 'system_settings',
+					'sort_order'   => 1,
+				);
+
+				$this->document->addLink('admin', $link_stores);
+
+				foreach ($stores as $index => $store) {
+					$link_store_setting = array(
+						'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
+						'display_name' => $store['name'],
+						'href'         => site_url('admin/setting/store/update', 'store_id=' . $store['store_id']),
+						'parent'       => 'system_settings_stores',
+						'sort_order'   => $index,
+					);
+
+					$this->document->addLink('admin', $link_store_setting);
+				}
+			}
+
+			//Store Front Links
 			$link_stores = array(
 				'name'         => 'stores',
 				'display_name' => _l("Stores"),

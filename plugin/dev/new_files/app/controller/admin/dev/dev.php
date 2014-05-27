@@ -237,7 +237,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->can('modify', 'dev/dev')) {
+		if (!user_can('modify', 'dev/dev')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to use the development console!");
 		}
 

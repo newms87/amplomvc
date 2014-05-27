@@ -78,12 +78,12 @@
 	</head>
 
 	<body class="<?= $body_class; ?>">
-		<? if ($show_admin_bar) { ?>
-			<?= block('widget/admin_bar'); ?>
-		<? } ?>
-
 		<section id="container">
 			<header class="main-header">
+				<? if ($show_admin_bar) { ?>
+					<?= block('widget/admin_bar'); ?>
+				<? } ?>
+
 				<div class="wrap">
 					<div class="row">
 						<? if ($logo) { ?>

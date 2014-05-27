@@ -300,7 +300,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'localisation/zone')) {
+		if (!user_can('modify', 'localisation/zone')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify zones!");
 		}
 
@@ -313,7 +313,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->can('modify', 'localisation/zone')) {
+		if (!user_can('modify', 'localisation/zone')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify zones!");
 		}
 

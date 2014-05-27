@@ -255,7 +255,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'plugin/plugin')) {
+		if (!user_can('modify', 'plugin/plugin')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify plugins!");
 		}
 

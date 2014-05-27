@@ -3,38 +3,6 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 {
 	public function build($settings)
 	{
-		if ($this->request->isPost() && $this->validate()) {
-			call('mail/contact', $_POST);
-
-			$this->success();
-
-			return;
-		}
-
-		$data = $settings;
-
-		//The Contact Form
-		$contact_form = $this->getForm();
-
-		$contact_info = html_entity_decode($settings['contact_info'], ENT_QUOTES, 'UTF-8');
-
-		$insertables = array(
-			'contact_form' => $contact_form,
-		);
-
-		$data['contact_info'] = $this->tool->insertables($insertables, $contact_info);
-
-		$this->render('block/information/contact', $data);
-	}
-
-	private function getForm()
-	{
-		//Captcha Image
-		$data['captcha_url'] = site_url("block/information/contact/captcha");
-
-		//Action
-		$data['action'] = $this->url->here();
-
 		//Load Value or Defaults
 		$defaults = array(
 			'name'    => $this->customer->info('firstname'),
@@ -43,44 +11,54 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 			'captcha' => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$data[$key] = $_POST[$key];
-			} else {
-				$data[$key] = $default;
-			}
-		}
+		$settings += $defaults;
+
+		//Captcha Image
+		$settings['captcha_url'] = site_url("block/information/contact/captcha");
+
+		//Action
+		$settings['action'] = site_url('block/information/contact/submit');
+
+		//Set Error Redirect
+		$this->request->setRedirect($this->url->here(), null, 'contact-form');
 
 		//Render
-		return $this->render('block/information/contact_form', $data);
+		$this->render('block/information/contact', $settings);
 	}
 
-	public function success()
-	{
-		$data['continue'] = site_url('common/home');
-
-		$this->render('block/information/contact_success', $data);
-	}
-
-	private function validate()
+	public function submit()
 	{
 		if (!validate('text', $_POST['name'], 3, 64)) {
-			$this->error['name'] = _l("Name must be between 3 and 32 characters!");
+			$this->message->add('error', _l("Name must be between 3 and 32 characters!"));
 		}
 
 		if (!validate('email', $_POST['email'])) {
-			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
+			$this->message->add('error', _l("E-Mail Address does not appear to be valid!"));
 		}
 
 		if (!validate('text', $_POST['enquiry'], 10, 3000)) {
-			$this->error['enquiry'] = _l("Enquiry must be between 10 and 3000 characters!");
+			$this->message->add('error', _l("Enquiry must be between 10 and 3000 characters!"));
 		}
 
 		if (!$this->captcha->validate($_POST['captcha'])) {
-			$this->error['captcha'] = _l("Verification code does not match the image!");
+			$this->message->add('error', _l("Verification code does not match the image!"));
 		}
 
-		return empty($this->error);
+		if (!$this->message->has('error')) {
+			call('mail/contact', $_POST);
+			$this->message->add('success', _l("We have received your message! We will be in contact with you shortly."));
+		}
+
+		//Response
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			if ($this->message->has('error')) {
+				redirect($this->request->getRedirect('contact-form'));
+			} else {
+				redirect('common/home');
+			}
+		}
 	}
 
 	public function captcha()
@@ -94,21 +72,12 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 			'contact_info' => _l("Please feel free to contact us with any questions!"),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (!isset($settings[$key])) {
-				$settings[$key] = $default;
-			}
-		}
+		$settings += $defaults;
 
 		//Send data to template
 		$data['settings'] = $settings;
 
 		//Render
 		$this->render('block/information/contact_settings', $data);
-	}
-
-	public function save()
-	{
-		return $this->error;
 	}
 }

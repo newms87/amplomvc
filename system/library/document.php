@@ -7,6 +7,7 @@ class Document extends Library
 	private $keywords;
 	private $canonical_link = null;
 	private $links = array();
+	private $restricted;
 	private $styles = array();
 	private $scripts = array();
 	private $ac_vars = array();
@@ -15,6 +16,7 @@ class Document extends Library
 	{
 		parent::__construct();
 
+		$this->restricted = $this->Model_User_Role->getControllers();
 		$this->links = $this->getNavigationLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
@@ -410,29 +412,60 @@ class Document extends Library
 		}
 
 		//Filter Conditional Links And Access Permissions
-		$paths = $this->Model_User_Role->getControllers();
+
 
 		//TODO: This leaves null values in group links. Consider changing approach.
 		foreach ($nav_groups as &$group) {
-			array_walk_children($group, 'children', function (&$l) use($paths) {
-				global $registry;
-
-				if (!empty($l['condition']) && !$registry->get('condition')->is($l['condition'])) {
-					$l = null;
-				}
-
-				if ($this->route->isAdmin()) {
-					$path = str_replace('admin/', '', $l['href']);
-
-					if ($path && in_array($path, $paths) && !user_can('access', $path)) {
-						$l = null;
-					}
-				}
-			});
+			$this->filterLinks($group);
 		}
 		unset($group);
 
 		return $nav_groups;
+	}
+
+	public function filterLinks(&$links)
+	{
+		foreach ($links as $key => &$link) {
+			if (!empty($link['children'])) {
+				$this->filterLinks($link['children']);
+			}
+
+			//Filter by Conditions
+			if (!empty($link['condition']) && !$this->condition->is($link['condition'])) {
+				unset($links[$key]);
+				continue;
+			}
+
+			//Filter restricted paths, current user cannot access
+			if ($this->route->isAdmin()) {
+				$path = str_replace('admin/', '', $link['href']);
+
+				$check_path = false;
+
+				if ($path) {
+					if (in_array($path, $this->restricted)) {
+						$check_path = $path;
+					} else {
+						foreach ($this->restricted as $restricted_path) {
+							if (strpos($path, $restricted_path . '/') === 0) {
+								$check_path = $restricted_path;
+								break;
+							}
+						}
+					}
+				}
+
+				if ($check_path && !user_can('access', $check_path)) {
+					unset($links[$key]);
+					continue;
+				}
+			}
+
+			//Filter empty non-links
+			if (empty($link['href']) && empty($link['children'])) {
+				unset($links[$key]);
+			}
+		}
 	}
 
 	public function getNavigationGroupLinks($navigation_group_id)

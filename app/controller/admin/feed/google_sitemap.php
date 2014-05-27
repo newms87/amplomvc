@@ -42,7 +42,7 @@ class App_Controller_Admin_Feed_GoogleSitemap extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->can('modify', 'feed/google_sitemap')) {
+		if (!user_can('modify', 'feed/google_sitemap')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify Google Sitemap feed!");
 		}
 

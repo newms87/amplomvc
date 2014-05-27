@@ -216,7 +216,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'design/banner')) {
+		if (!user_can('modify', 'design/banner')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify banners!");
 		}
 
@@ -239,7 +239,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->can('modify', 'design/banner')) {
+		if (!user_can('modify', 'design/banner')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify banners!");
 		}
 

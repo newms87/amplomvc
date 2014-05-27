@@ -140,7 +140,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'setting/db_rules')) {
+		if (!user_can('modify', 'setting/db_rules')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify db rules!");
 		}
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Setting_DbRules extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->can('modify', 'setting/db_rules')) {
+		if (!user_can('modify', 'setting/db_rules')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify db rules!");
 		}
 

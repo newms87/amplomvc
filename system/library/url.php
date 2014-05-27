@@ -1,7 +1,6 @@
 <?php
 class Url extends Library
 {
-	private $path;
 	private $url = '';
 	private $ssl = '';
 	private $rewrite = array();
@@ -208,20 +207,22 @@ class Url extends Library
 
 		if ($url_alias) {
 			//Get Original Query without URL Alias query
-			if ($url_alias) {
-				parse_str($url_alias['query'], $alias_query);
+			parse_str($url_alias['query'], $alias_query);
 
-				$query = $this->getQueryExclude($alias_query);
-			}
+			$query = $this->getQueryExclude($alias_query);
+
+			$_GET += $alias_query;
+
+			$this->route->setPath($url_alias['path']);
 
 			//Build the New URL
-			redirect($this->store_base(option('store_id')) . $url_alias['path'] . ($query ? '?' . http_build_query($query) : ''));
+			$this->seo_url = $this->store_base(option('store_id')) . $url_alias['alias'] . ($query ? '?' . $query : '');
+		} else {
+			$this->seo_url = $this->here();
 		}
-
-		$this->seo_url = $this->here();
 	}
 
-	private function findAlias($path, $query = '', $store_id = false, $redirect = false)
+	private function findAlias($path, $query = '', $store_id = false)
 	{
 		if (!$path && $path !== '') {
 			trigger_error(__METHOD__ . _l("(): Path was not specified!"));
@@ -261,6 +262,10 @@ class Url extends Library
 
 	public function lookupAlias($path, $query, $store_id = false)
 	{
+		if (isset($this->aliases[$path])) {
+			return $this->aliases[$path];
+		}
+
 		//Lookup URL Alias
 		foreach ($this->aliases as $alias) {
 			if ($store_id && $store_id != $alias['store_id']) {

@@ -108,6 +108,7 @@ class Validation extends Library
 		$this->reset();
 
 		if (strlen($password) < 8) {
+			echo $password;
 			$this->error[self::PASSWORD_STRENGTH] = _l("Password must be at least 8 characters long.");
 		}
 

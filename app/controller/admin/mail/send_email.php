@@ -79,7 +79,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->can('modify', 'mail/send_email')) {
+		if (!user_can('modify', 'mail/send_email')) {
 			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
 		}
 
