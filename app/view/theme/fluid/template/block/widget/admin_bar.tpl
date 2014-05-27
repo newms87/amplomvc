@@ -15,5 +15,6 @@
 	$('#disable-admin-bar').click(function(){
 		$.cookie('disable_admin_bar', '1');
 		$(this).closest('#admin-bar').remove();
+		$('body').removeClass("admin-bar");
 	});
 </script>

@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Catalog_Product extends Model
 {
 	public function addProduct($data)
@@ -1063,9 +1064,9 @@ class App_Model_Catalog_Product extends Model
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " ORDER BY quantity, priority, price");
 	}
 
-	public function getProductActiveDiscounts($product_id)
+	public function getProductActiveDiscount($product_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC");
+		return $this->queryVar("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC LIMIT 1");
 	}
 
 	public function getProductSpecialPrice($product_id)
@@ -1240,7 +1241,7 @@ class App_Model_Catalog_Product extends Model
 
 	public function getProductActiveSpecial($product_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_special WHERE product_id = " . (int)$product_id . " AND date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW()) ORDER BY priority, price LIMIT 1");
+		return $this->queryVar("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = " . (int)$product_id . " AND date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW()) ORDER BY priority, price LIMIT 1");
 	}
 
 	public function getProductRewards($product_id)
@@ -1323,6 +1324,10 @@ class App_Model_Catalog_Product extends Model
 	public function fillProductDetails(&$details, $product_id, $quantity, &$options = array(), $ignore_status = false)
 	{
 		$product = isset($details['product']) ? $details['product'] : $this->getActiveProduct($product_id, $ignore_status);
+
+		$product['special']  = $this->getProductActiveSpecial($product_id);
+		$product['discount'] = $this->getProductActiveDiscount($product_id);
+		$product['reward']   = $this->getProductReward($product_id);
 
 		if (!$product) {
 			return false;

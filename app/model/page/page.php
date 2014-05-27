@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Page_Page extends Model
 {
 	private $page_theme;
@@ -28,13 +29,22 @@ class App_Model_Page_Page extends Model
 		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $data['name'];
 
 		file_put_contents($dir . '/content.tpl', $data['content']);
-		file_put_contents($dir . '/content.tpl', $data['style']);
+		file_put_contents($dir . '/style.less', $data['style']);
 
 		if (!empty($data['stores'])) {
-			foreach ($data['stores'] as $store_id) {
+			foreach ($data['stores'] as $store) {
+				if (is_array($store)) {
+					$layout_id = $store['layout_id'];
+					$store_id  = $store['store_id'];
+				} else {
+					$store_id  = $store;
+					$layout_id = option('config_default_layout_id');
+				}
+
 				$store_data = array(
-					'page_id'  => $page_id,
-					'store_id' => $store_id
+					'page_id'   => $page_id,
+					'store_id'  => $store_id,
+					'layout_id' => $layout_id,
 				);
 
 				$this->insert('page_store', $store_data);
@@ -79,10 +89,19 @@ class App_Model_Page_Page extends Model
 		if (isset($data['stores'])) {
 			$this->delete('page_store', array('page_id' => $page_id));
 
-			foreach ($data['stores'] as $store_id) {
+			foreach ($data['stores'] as $store) {
+				if (is_array($store)) {
+					$layout_id = $store['layout_id'];
+					$store_id  = $store['store_id'];
+				} else {
+					$store_id  = $store;
+					$layout_id = option('config_default_layout_id');
+				}
+
 				$store_data = array(
-					'page_id'  => $page_id,
-					'store_id' => $store_id
+					'page_id'   => $page_id,
+					'store_id'  => $store_id,
+					'layout_id' => $layout_id,
 				);
 
 				$this->insert('page_store', $store_data);
@@ -177,21 +196,33 @@ class App_Model_Page_Page extends Model
 
 		$page = $this->queryRow($query);
 
+		$file = $this->theme->findFile('page/' . $name . '/content');
+
+		//Page Does Not Exist, but found in database
+		if ($page && !$file) {
+			$this->deletePage($page['page_id']);
+			$page = array();
+		}
+
 		if ($page) {
 			$page['content'] = $this->getPageContent($page['name']);
 			$page['style']   = $this->getPageStyle($page['name']);
-		} else {
+		} elseif ($file) {
 			if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "page WHERE `name` = '" . $this->escape($name) . "'")) {
 				$page = array(
 					'name'          => $name,
 					'title'         => ucfirst($name),
 					'layout_id'     => option('config_layout_id'),
+					'content'       => file_get_contents(URL_THEMES . $file),
 					'status'        => 1,
 					'display_title' => 1,
 					'cache'         => 1,
+					'stores'        => array(
+						option('store_id'),
+					),
 				);
 
-				$this->insert('page', $page);
+				$this->addPage($page);
 			}
 		}
 

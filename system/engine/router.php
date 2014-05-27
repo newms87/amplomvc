@@ -105,10 +105,6 @@ final class Router
 			$this->path = $this->Model_Catalog_Product->getClassController($_GET['product_id']);
 		}
 
-		if (strpos($this->path, 'page/') === 0) {
-			$this->path = 'page';
-		}
-
 		//Controller Overrides
 		$controller_overrides = $this->config->load('controller_override', 'controller_override');
 
@@ -142,7 +138,13 @@ final class Router
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 
-		$action = new Action($this->path);
+		if (strpos($this->path, 'page/') === 0) {
+			$path = 'page';
+		} else {
+			$path = $this->path;
+		}
+
+		$action = new Action($path);
 
 		$valid = $action->isValid();
 

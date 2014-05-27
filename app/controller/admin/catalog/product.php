@@ -264,19 +264,19 @@ class App_Controller_Admin_Catalog_Product extends Controller
 				);
 			}
 
-			$product['thumb'] = $this->image->resize($product['image'], option('config_image_admin_list_width'), option('config_image_admin_list_height'));
+			$product['thumb'] = image($product['image'], option('config_image_admin_list_width'), option('config_image_admin_list_height'));
 
 			$product['categories'] = $this->Model_Catalog_Product->getProductCategories($product['product_id']);
 
-			$product['price'] = $this->currency->format($product['price']);
-			$product['cost']  = $this->currency->format($product['cost']);
+			$product['price'] = format('currency', $product['price']);
 
-			$special            = $this->Model_Catalog_Product->getProductActiveSpecial($product['product_id']);
-			$product['special'] = !empty($special) ? $this->currency->format($special['price']) : '';
+			$special = $this->Model_Catalog_Product->getProductActiveSpecial($product['product_id']);
 
-			if ($product['special']) {
-				$product['price'] = "<span class =\"product_retail\">$product[price]</span><br /><span class=\"product_special\">$product[special]</span>";
+			if ($special) {
+				$product['price'] = "<span class =\"product_retail\">$product[price]</span><br /><span class=\"product_special\">" . format('currency', $special) . "</span>";
 			}
+
+			$product['cost'] = format('currency', $product['cost']);
 
 			//The # in front of the key signifies we want to output the raw string for the value when rendering the table
 			if ($product['date_expires'] === DATETIME_ZERO) {

@@ -273,7 +273,7 @@ class User extends Library
 
 	public function showAdminBar()
 	{
-		return $this->isLogged();
+		return $this->isLogged() && empty($_COOKIE['disable_admin_bar']);
 	}
 
 	public function info($key = null)
