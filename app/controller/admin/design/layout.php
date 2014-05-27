@@ -232,7 +232,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
-		if (!$this->validation->text($_POST['name'], 3, 64)) {
+		if (!validate('text', $_POST['name'], 3, 64)) {
 			$this->error['name'] = _l("Layout Name must be between 3 and 64 characters!");
 		}
 

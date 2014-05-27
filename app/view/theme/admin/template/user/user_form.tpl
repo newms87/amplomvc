@@ -1,19 +1,19 @@
 <?= call('admin/common/header'); ?>
 
-<div class="section">
-	<?= breadcrumbs(); ?>
+	<div class="section">
+		<?= breadcrumbs(); ?>
 
-	<div class="box">
-		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+		<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 			<div class="heading">
 				<h1>
 					<img src="<?= theme_url('image/user.png'); ?>" alt=""/> <?= _l("User"); ?></h1>
 
 				<div class="buttons">
 					<button><?= _l("Save"); ?></button>
-					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+					<a href="<?= site_url('admin/user/user'); ?>" class="button"><?= _l("Cancel"); ?></a>
 				</div>
 			</div>
+
 			<div class="section">
 				<table class="form">
 					<tr>
@@ -43,45 +43,48 @@
 					<tr>
 						<td><?= _l("User Group:"); ?></td>
 						<td>
-							<? if ($this->user->isTopAdmin()) { ?>
-								<? $this->builder->setConfig('user_group_id', 'name'); ?>
-								<?= $this->builder->build('select', $user_groups, "user_group_id", (int)$user_group_id); ?>
-							<? } else { ?>
-								<? foreach ($user_groups as $ug) {
-									if ($ug['user_group_id'] == $user_group_id) {
-										?>
-										<input type="hidden" name="user_group_id" value="<?= $user_group_id; ?>"/>
-										<div><?= $ug['name']; ?></div>
-									<?
-									}
-								} ?>
-							<? } ?>
+							<? $build = array(
+								'name'   => 'user_role_id',
+								'data'   => $data_user_roles,
+								'select' => $user_role_id,
+								'key'    => 'user_role_id',
+								'value'  => 'name',
+							); ?>
+
+							<?= build('select', $build); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Password:<span class=\"help\">Leave blank to keep same password.</span>"); ?></td>
 						<td>
-							<input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/>
+							<input type="password" autocomplete="off" name="password" value=""/>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Confirm:"); ?></td>
 						<td>
-							<input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/>
+							<input type="password" autocomplete="off" name="confirm" value=""/>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Status:"); ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
+						<td>
+							<? $build = array(
+								'name'   => 'status',
+								'data'   => $data_statuses,
+								'select' => $status,
+							); ?>
+
+							<?= build('select', $build); ?>
+						</td>
 					</tr>
 				</table>
 			</div>
 		</form>
 	</div>
-</div>
 
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
-</script>
+	<script type="text/javascript">
+		$.ac_errors(<?= json_encode($errors); ?>);
+	</script>
 
 <?= call('admin/common/footer'); ?>

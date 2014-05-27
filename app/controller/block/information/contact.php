@@ -64,15 +64,15 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 
 	private function validate()
 	{
-		if (!$this->validation->text($_POST['name'], 3, 64)) {
+		if (!validate('text', $_POST['name'], 3, 64)) {
 			$this->error['name'] = _l("Name must be between 3 and 32 characters!");
 		}
 
-		if (!$this->validation->email($_POST['email'])) {
+		if (!validate('email', $_POST['email'])) {
 			$this->error['email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
-		if (!$this->validation->text($_POST['enquiry'], 10, 3000)) {
+		if (!validate('text', $_POST['enquiry'], 10, 3000)) {
 			$this->error['enquiry'] = _l("Enquiry must be between 10 and 3000 characters!");
 		}
 

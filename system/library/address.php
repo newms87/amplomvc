@@ -271,23 +271,23 @@ class Address extends Library
 	{
 		$this->error = array();
 
-		if (isset($address['firstname']) && !$this->validation->text($address['firstname'], 3, 45)) {
+		if (isset($address['firstname']) && !validate('text', $address['firstname'], 3, 45)) {
 			$this->error['firstname'] = _l("First Name must be between 3 and 45 characters");
 		}
 
-		if (isset($address['lastname']) && !$this->validation->text($address['lastname'], 3, 45)) {
+		if (isset($address['lastname']) && !validate('text', $address['lastname'], 3, 45)) {
 			$this->error['lastname'] = _l("Last Name must be between 3 and 45 characters");
 		}
 
 		if (empty($address['address_1'])) {
 			$this->error['address_1'] = _l("Please provide the Street Address.");
-		} elseif (!$this->validation->text($address['address_1'], 3, 128)) {
+		} elseif (!validate('text', $address['address_1'], 3, 128)) {
 			$this->error['address_1'] = _l("Address must be between 3 and 128 characters!");
 		}
 
 		if (empty($address['city'])) {
 			$this->error['city'] = _l("Please provide the city.");
-		} elseif (!$this->validation->text($address['city'], 2, 128)) {
+		} elseif (!validate('text', $address['city'], 2, 128)) {
 			$this->error['city'] = _l("City must be between 2 and 128 characters!");
 		}
 
@@ -298,7 +298,7 @@ class Address extends Library
 
 			if (!$country_info) {
 				$this->error['country_id'] = _l("Invalid Country!");
-			} elseif ($country_info['postcode_required'] && !$this->validation->text($address['postcode'], 2, 10)) {
+			} elseif ($country_info['postcode_required'] && !validate('text', $address['postcode'], 2, 10)) {
 				$this->error['postcode'] = _l("Postcode must be between 2 and 10 characters");
 			}
 		}

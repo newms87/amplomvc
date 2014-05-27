@@ -227,11 +227,11 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
 		}
 
-		if (!$this->validation->text($_POST['name'], 3, 32)) {
+		if (!validate('text', $_POST['name'], 3, 32)) {
 			$this->error['name'] = _l("Geo Zone Name must be between 3 and 32 characters!");
 		}
 
-		if (!$this->validation->text($_POST['description'], 3, 255)) {
+		if (!validate('text', $_POST['description'], 3, 255)) {
 			$this->error['description'] = _l("Description Name must be between 3 and 255 characters!");
 		}
 

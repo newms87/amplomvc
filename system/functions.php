@@ -374,7 +374,7 @@ if (!function_exists('array_walk_children')) {
 	{
 		reset($array_tree);
 
-		if (!is_array(current($array_tree))) {
+		if (!is_array($array_tree)) {
 			$array_tree = array($array_tree);
 		}
 
@@ -402,6 +402,7 @@ if (!function_exists('array_walk_children')) {
 				}
 			}
 		}
+		unset($node);
 	}
 }
 

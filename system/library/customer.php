@@ -103,15 +103,15 @@ class Customer extends Library
 
 	public function add($customer)
 	{
-		if (!$this->validation->text($customer['firstname'], 1, 32)) {
+		if (!validate('text', $customer['firstname'], 1, 32)) {
 			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->text($customer['lastname'], 1, 32)) {
+		if (!validate('text', $customer['lastname'], 1, 32)) {
 			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->email($customer['email'])) {
+		if (!validate('email', $customer['email'])) {
 			$this->error['email'] = $this->validation->getError();
 		} elseif ($this->customer->emailRegistered($customer['email'])) {
 			$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
@@ -121,7 +121,7 @@ class Customer extends Library
 			$this->error += $this->address->getError();
 		}
 
-		if (!$this->validation->password($customer['password'])) {
+		if (!validate('password', $customer['password'])) {
 			$this->error['password'] = $this->validation->getError();
 		}
 
@@ -179,15 +179,15 @@ class Customer extends Library
 		//Editing password here is not allowed. Must use Customer::editPassword()
 		unset($data['password']);
 
-		if (!$this->validation->text($data['firstname'], 1, 32)) {
+		if (!validate('text', $data['firstname'], 1, 32)) {
 			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->text($data['lastname'], 1, 32)) {
+		if (!validate('text', $data['lastname'], 1, 32)) {
 			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
 		}
 
-		if (!$this->validation->email($data['email'])) {
+		if (!validate('email', $data['email'])) {
 			$this->error['email'] = _l("The email address you provided is invalid.");
 		}
 
@@ -195,12 +195,12 @@ class Customer extends Library
 			$this->error['email'] = _l("This email address is already registered under a different account.");
 		}
 
-		if (isset($data['telephone']) && !$this->validation->phone($data['telephone'])) {
+		if (isset($data['telephone']) && !validate('phone', $data['telephone'])) {
 			$this->error['telephone'] = _l("The phone number you provided is invalid.");
 		}
 
 		if (!empty($data['password'])) {
-			if (!$this->validation->password($data['password'])) {
+			if (!validate('password', $data['password'])) {
 				$this->error['password'] = $this->validation->getError();
 			} elseif ($data['password'] !== $data['confirm']) {
 				$this->error['confirm'] = _l("Your password and confirmation do not match!");
@@ -877,7 +877,7 @@ class Customer extends Library
 			return $this->setMeta('pass_reset_code', $code);
 		}
 
-		if (!$this->validation->email($email)) {
+		if (!validate('email', $email)) {
 			$this->error['email_invalid'] = _l("The email %s is not a valid email address", $email);
 		} else {
 			$this->error['email'] = _l("The email %s is not a registered email address.", $email);

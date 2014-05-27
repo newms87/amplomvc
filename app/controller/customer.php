@@ -245,7 +245,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Validate Password
-		if (!$this->validation->password($_POST['password'])) {
+		if (!validate('password', $_POST['password'])) {
 			$this->message->add('error', $this->validation->getError());
 			redirect('customer/reset_form');
 		}

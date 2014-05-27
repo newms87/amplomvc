@@ -198,7 +198,7 @@ function setup_user()
 	$date_added = date('Y-m-d H:i:s', time());
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
-	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_group_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', ip = '$ip', status = '1', date_added = '$date_added'");
+	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', ip = '$ip', status = '1', date_added = '$date_added'");
 
 	if ($db->getError()) {
 		return $db->getError();

@@ -183,7 +183,7 @@ class App_Controller_Admin_Block extends Controller
 		exit;
 		if (!$this->block->add($_POST)) {
 			$this->message->add('error', $this->block->getError());
-			redirect('block/block/add');
+			redirect('admin/block/add');
 		}
 
 		$this->message->add('success', _l("The Block %s was created successfully!", $_POST['name']));
@@ -203,8 +203,8 @@ class App_Controller_Admin_Block extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Blocks"), site_url('block/block'));
-		$this->breadcrumb->add(_l("New Block"), site_url('block/add'));
+		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
+		$this->breadcrumb->add(_l("New Block"), site_url('admin/block/add'));
 
 		$defaults = array(
 			'name'                => '',
@@ -221,8 +221,8 @@ class App_Controller_Admin_Block extends Controller
 		$data['data_themes'] = $this->theme->getThemes();
 
 		//Actions
-		$data['save']   = site_url('block/add');
-		$data['cancel'] = site_url('block/block');
+		$data['save']   = site_url('admin/block/add');
+		$data['cancel'] = site_url('admin/block');
 
 		//Render
 		$this->response->setOutput($this->render('block/add', $data));

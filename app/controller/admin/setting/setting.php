@@ -294,7 +294,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			$this->error['config_email_error'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
-		if (!$this->validation->email($_POST['config_email_support'])) {
+		if (!validate('email', $_POST['config_email_support'])) {
 			$this->error['config_email_support'] = _l("E-Mail Address does not appear to be valid!");
 		}
 

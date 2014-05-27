@@ -1,304 +1,247 @@
 <?php
+
 class App_Controller_Admin_User_User extends Controller
 {
+	static $allow = array(
+		'modify' => array(
+			'form',
+			'update',
+			'delete',
+			'batch_action',
+		),
+	);
+
 	public function index()
 	{
+		//Page Head
 		$this->document->setTitle(_l("User"));
-
-		$this->getList();
-	}
-
-	public function insert()
-	{
-		$this->document->setTitle(_l("User"));
-
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_User_User->addUser($_POST);
-
-			if ($this->user->isAdmin()) {
-				$this->message->add('success', _l("Success: You have modified users!"));
-			} else {
-				$this->message->add('success', _l("Success: You have updated your account!"));
-			}
-
-			$url = $this->get_url();
-
-			if ($this->user->isAdmin()) {
-				redirect('admin/user/user', $url);
-			} else {
-				redirect('admin/common/home', $url);
-			}
-		}
-
-		$this->getForm();
-	}
-
-	public function update()
-	{
-		$this->document->setTitle(_l("User"));
-
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
-
-			$url = $this->get_url();
-
-			$this->message->add('success', _l("Success: You have modified users!"));
-			redirect('admin/user/user', $url);
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		$this->document->setTitle(_l("User"));
-
-		if (isset($_GET['selected']) && $this->validateDelete()) {
-			foreach ($_GET['selected'] as $user_id) {
-				$this->Model_User_User->deleteUser($user_id);
-			}
-
-			if ($this->user->isAdmin()) {
-				$this->message->add('success', _l("Success: You have modified users!"));
-			} else {
-				$this->message->add('success', _l("Success: You have updated your account!"));
-			}
-
-			$url = $this->get_url();
-
-			redirect('admin/user/user', $url);
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
-		$url_items = array(
-			'sort'  => 'username',
-			'order' => 'ASC',
-			'page'  => 1
-		);
-		foreach ($url_items as $item => $default) {
-			$$item = isset($_GET[$item]) ? $_GET[$item] : $default;
-		}
-
-		$url = $this->get_url();
-
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
-		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
-
-		$data['insert'] = site_url('admin/user/user/insert', $url);
-		$data['delete'] = site_url('admin/user/user/delete', $url);
-
-		$data['users'] = array();
-
-		$data = array(
-			'sort'  => $sort,
-			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
-		);
-
-		$user_total = $this->Model_User_User->getTotalUsers();
-
-		$results = $this->Model_User_User->getUsers($data);
-
-		foreach ($results as &$result) {
-			$action = array();
-
-			$action[] = array(
-				'text' => _l("Edit"),
-				'href' => site_url('admin/user/user/update', 'user_id=' . $result['user_id'] . $url)
-			);
-
-			$result['status']     = $result['status'] ? _l("Enabled") : _l("Disabled");
-			$result['date_added'] = $this->date->format($result['date_added'], 'short');
-			$result['selected']   = isset($_GET['selected']) && in_array($result['user_id'], $_GET['selected']);
-			$result['action']     = $action;
-		}
-		unset($result);
-
-		$data['users'] = $results;
-
-		$url = $order == 'ASC' ? '&order=DESC' : '&order=ASC';
-
-		$url .= $this->get_url(array('page'));
-
-		$sort_by = array(
-			'username',
-			'email',
-			'status',
-			'date_added'
-		);
-		foreach ($sort_by as $s) {
-			$data['sort_' . $s] = site_url('admin/user/user', 'sort=' . $s . $url);
-		}
-
-		$url = $this->get_url(array(
-			'sort',
-			'order'
-		));
-
-		$this->pagination->init();
-		$this->pagination->total  = $user_total;
-		$data['pagination'] = $this->pagination->render();
-
-		$data['sort']  = $sort;
-		$data['order'] = $order;
-
-		$this->response->setOutput($this->render('user/user_list', $data));
-	}
-
-	private function getForm()
-	{
-		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
-
-		$url = $this->get_url();
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
 		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
 
-		if (!$user_id) {
-			$data['action'] = site_url('admin/user/user/insert', $url);
-		} else {
-			$data['action'] = site_url('admin/user/user/update', 'user_id=' . $user_id . $url);
-		}
+		//Listing
+		$data['listing'] = $this->listing();
 
-		$data['cancel'] = site_url('admin/user/user', $url);
-
-		if ($user_id && !$this->request->isPost()) {
-			$user_info = $this->Model_User_User->getUser($user_id);
-		}
-
-		$data_items = array(
-			'username'      => '',
-			'password'      => '',
-			'confirm'       => '',
-			'firstname'     => '',
-			'lastname'      => '',
-			'email'         => '',
-			'designers'     => array(),
-			'user_group_id' => 12,
-			'status'        => 0,
-		);
-		$no_fill    = array(
-			'confirm',
-			'password',
-			'designers'
+		//Batch Actions
+		$actions = array(
+			'enable'  => array(
+				'label' => _l("Enable")
+			),
+			'disable' => array(
+				'label' => _l("Disable"),
+			),
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
 		);
 
-		foreach ($data_items as $item => $default) {
-			if (isset($_POST[$item])) {
-				$data[$item] = $_POST[$item];
-			} elseif (!empty($user_info) && !in_array($item, $no_fill)) {
-				$data[$item] = $user_info[$item];
-			} else {
-				$data[$item] = $default;
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'url'     => site_url('admin/user/user/batch_action'),
+		);
+
+		//Actions
+		$data['insert'] = site_url('admin/user/user/form');
+
+		//Response
+		$this->response->setOutput($this->render('user/user_list', $data));
+	}
+
+	public function listing()
+	{
+		//The Table Columns
+		$columns = array();
+
+		$columns['username'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Username"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['lastname'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Name"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['status'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Status"),
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		//The Sort & Filter Data
+		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+
+		$user_total = $this->Model_User_User->getTotalUsers($filter);
+		$users      = $this->Model_User_User->getUsers($sort + $filter);
+
+		foreach ($users as &$user) {
+			$actions = array(
+				'edit'   => array(
+					'text' => _l("Edit"),
+					'href' => site_url('admin/user/user/form', 'user_id=' . $user['user_id'])
+				),
+				'delete' => array(
+					'text' => _l("Delete"),
+					'href' => site_url('admin/user/user/delete', 'user_id=' . $user['user_id'])
+				),
+			);
+
+			$user['actions'] = $actions;
+
+			if (!$user['lastname']) {
+				$user['lastname'] = $user['firstname'] ? $user['firstname'] : _l("No Name");
+			} elseif ($user['firstname']) {
+				$user['lastname'] .= ', ' . $user['firstname'];
 			}
 		}
+		unset($user);
 
-		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
-		foreach ($manufacturers as $m) {
-			$data['manufacturers'][$m['manufacturer_id']] = $m['name'];
-		}
-
-		$data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
-
-		$contact = array(
-			'type' => 'user',
-			'id'   => $user_id
+		$listing = array(
+			'row_id'         => 'user_id',
+			'columns'        => $columns,
+			'rows'           => $users,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $user_total,
+			'listing_path'   => 'admin/user/user/listing',
 		);
 
+		$output = block('widget/listing', null, $listing);
 
-		if (!$user_id) {
-			$this->breadcrumb->add(_l("Create New User"), site_url('admin/user/user/insert'));
-		} else {
-			$this->breadcrumb->add($data['username'], site_url('admin/user/user/update', 'user_id=' . $user_id));
+		//Response
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
 		}
 
-		$data['data_statuses'] = array(
+		return $output;
+	}
+
+	public function form()
+	{
+		//Page Head
+		$this->document->setTitle(_l("User Information"));
+
+		//Insert or Update
+		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+
+		//Breadcrumbs
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
+		$this->breadcrumb->add($user_id ? _l("Update") : _l("New"), site_url('admin/user/user/form', 'user_id=' . $user_id));
+
+		//The Data
+		$user = $_POST;
+
+		if ($user_id && !$this->request->isPost()) {
+			$user = $this->Model_User_User->getUser($user_id);
+		}
+
+		$defaults = array(
+			'username'     => '',
+			'firstname'    => '',
+			'lastname'     => '',
+			'email'        => '',
+			'user_role_id' => option('config_default_user_role', 12),
+			'status'       => 0,
+		);
+
+		$user += $defaults;
+
+		$user['data_user_roles'] = $this->Model_User_Role->getRoles();
+
+		$user['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$this->response->setOutput($this->render('user/user_form', $data));
+		//Actions
+		$user['save'] = site_url('admin/user/user/form', 'user_id=' . $user_id);
+
+		//Response
+		$this->response->setOutput($this->render('user/user_form', $user));
 	}
 
-	private function validateForm()
+	public function update()
 	{
-		if (!$this->user->can('modify', 'user/user')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify users!");
+		//Insert
+		if (empty($_GET['user_id'])) {
+			$this->Model_User_User->add($_POST);
+		} //Update
+		else {
+			$this->Model_User_User->edit($_GET['user_id'], $_POST);
 		}
 
-		if ($this->user->isAdmin()) {
-			if ((strlen($_POST['username']) < 3) || (strlen($_POST['username']) > 20)) {
-				$this->error['username'] = _l("Username must be between 3 and 20 characters!");
-			}
-
-			$user_info = $this->Model_User_User->getUserByUsername($_POST['username']);
-
-			if (!isset($_GET['user_id'])) {
-				if ($user_info) {
-					$this->error['warning'] = _l("Warning: Username is already in use!");
-				}
-			} else {
-				if ($user_info && ($_GET['user_id'] != $user_info['user_id'])) {
-					$this->error['warning'] = _l("Warning: Username is already in use!");
-				}
-			}
+		if ($this->Model_User_User->hasError()) {
+			$this->message->add('error', $this->Model_User_User->getError());
+		} else {
+			$this->message->add('success', _l("The Page has been updated successfully!"));
 		}
 
-		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
+		} else {
+			redirect('admin/user/user');
 		}
-
-		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-		}
-
-		if ($_POST['password'] || (!isset($_GET['user_id']))) {
-			if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-				$this->error['password'] = _l("Password must be between 4 and 20 characters!");
-			}
-
-			if ($_POST['password'] !== $_POST['confirm']) {
-				$this->error['confirm'] = _l("Password and Confirmation do not match!");
-			}
-		}
-
-		return empty($this->error);
 	}
 
-	private function validateDelete()
+	public function delete()
 	{
-		if (!$this->user->can('modify', 'user/user')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify users!");
+		$this->Model_User_User->remove($_GET['user_id']);
+
+		if ($this->Model_User_User->hasError()) {
+			$this->message->add('error', $this->Model_User_User->getError());
+		} else {
+			$this->message->add('notify', _l("User was deleted!"));
 		}
 
-		foreach ($_GET['selected'] as $user_id) {
-			if ($this->user->getId() == $user_id) {
-				$this->error['warning'] = _l("Warning: You can not delete your own account!");
-			}
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('admin/user/user');
 		}
-
-		return empty($this->error);
 	}
 
-	private function get_url($override = array())
+	public function batch_action()
 	{
-		$url     = '';
-		$filters = !empty($override) ? $override : array(
-			'sort',
-			'order',
-			'page'
-		);
-		foreach ($filters as $f) {
-			if (isset($_GET[$f])) {
-				$url .= "&$f=" . $_GET[$f];
+		foreach ($_POST['batch'] as $user_id) {
+			switch ($_POST['action']) {
+				case 'enable':
+					$this->Model_User_User->edit($user_id, array('status' => 1));
+					break;
+
+				case 'disable':
+					$this->Model_User_User->edit($user_id, array('status' => 0));
+					break;
+
+				case 'delete':
+					$this->Model_User_User->remove($user_id);
+					break;
 			}
 		}
-		return $url;
+
+		if ($this->Model_User_User->hasError()) {
+			$this->message->add('error', $this->Model_User_User->getError());
+		} else {
+			$this->message->add('success', _l("Success: You have modified navigation!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->listing();
+		} else {
+			redirect('admin/user/user');
+		}
 	}
 }

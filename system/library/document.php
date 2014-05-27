@@ -110,6 +110,9 @@ class Document extends Library
 		//Find the children list for the parent
 		if ($new_link['parent'] || $new_link['parent_id']) {
 			$return = array_walk_children($this->links[$group], 'children', function (&$link) use ($new_link) {
+				if (empty($link)) {
+					return;
+				}
 				if ($new_link['parent'] === $link['name']) {
 					$link['children'][$new_link['name']] = $new_link;
 					return false;
@@ -373,8 +376,8 @@ class Document extends Library
 
 		if (is_null($nav_groups)) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
-				" WHERE ng.status='1' AND ns.store_id='$store_id'";
+				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id = ns.navigation_group_id)" .
+				" WHERE ng.status = 1 AND ns.store_id = " . (int)$store_id;
 
 			$result = $this->queryRows($query);
 
@@ -401,18 +404,29 @@ class Document extends Library
 
 				$nav_groups[$group['name']] = $nav_group_links;
 			}
+			unset($group);
 
 			$this->cache->set("navigation_groups.store.$store_id", $nav_groups);
 		}
 
-		//Filter Conditional Links
+		//Filter Conditional Links And Access Permissions
+		$paths = $this->Model_User_Role->getControllers();
+
 		//TODO: This leaves null values in group links. Consider changing approach.
 		foreach ($nav_groups as &$group) {
-			array_walk_children($group, 'children', function (&$l) {
+			array_walk_children($group, 'children', function (&$l) use($paths) {
 				global $registry;
 
 				if (!empty($l['condition']) && !$registry->get('condition')->is($l['condition'])) {
 					$l = null;
+				}
+
+				if ($this->route->isAdmin()) {
+					$path = str_replace('admin/', '', $l['href']);
+
+					if ($path && in_array($path, $paths) && !user_can('access', $path)) {
+						$l = null;
+					}
 				}
 			});
 		}

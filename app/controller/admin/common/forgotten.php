@@ -63,7 +63,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		//Handle POST
 		if ($this->request->isPost()) {
 			//Validate Password
-			if (!$this->validation->password($_POST['password'])) {
+			if (!validate('password', $_POST['password'])) {
 				if ($this->validation->isErrorCode(Validation::PASSWORD_CONFIRM)) {
 					$this->error['confirm'] = $this->validation->getError();
 				} else {

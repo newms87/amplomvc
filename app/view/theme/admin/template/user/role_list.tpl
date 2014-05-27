@@ -3,9 +3,9 @@
 		<?= breadcrumbs(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Users"); ?></h1>
+				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("User Roles"); ?></h1>
 
-				<? if (user_can('modify', 'user/user')) { ?>
+				<? if (user_can('modify', 'user/role')) { ?>
 					<div class="batch_actions">
 						<?= block('widget/batch_action', null, $batch_action); ?>
 					</div>

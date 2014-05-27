@@ -26,7 +26,7 @@ class App_Controller_Admin_Page extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'path'    => 'page/batch_update',
+			'path'    => site_url('admin/page/batch_action'),
 		);
 
 		//The Listing
@@ -37,48 +37,6 @@ class App_Controller_Admin_Page extends Controller
 
 		//Render
 		$this->response->setOutput($this->render('page/list', $data));
-	}
-
-	public function update()
-	{
-		//Insert
-		if (empty($_GET['page_id'])) {
-			$this->Model_Page_Page->addPage($_POST);
-		} //Update
-		else {
-			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
-		}
-
-		if ($this->Model_Page_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page_Page->getError());
-		} else {
-			$this->message->add('success', _l("The Page has been updated successfully!"));
-		}
-
-		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
-		} elseif ($this->message->has('error')) {
-			$this->form();
-		} else {
-			redirect('admin/page');
-		}
-	}
-
-	public function delete()
-	{
-		$this->Model_Page_Page->deletePage($_GET['page_id']);
-
-		if ($this->Model_Page_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page_Page->getError());
-		} else {
-			$this->message->add('notify', _l("Page was deleted!"));
-		}
-
-		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
-		} else {
-			redirect('admin/page');
-		}
 	}
 
 	public function listing()
@@ -211,7 +169,7 @@ class App_Controller_Admin_Page extends Controller
 		$data['data_stores']  = $this->Model_Setting_Store->getStores();
 		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$data['url_blocks']        = site_url('admin/block/block');
+		$data['url_blocks']        = site_url('admin/block');
 		$data['url_create_layout'] = site_url('admin/page/create_layout');
 		$data['url_load_blocks']   = site_url('admin/page/loadBlocks');
 
@@ -231,7 +189,49 @@ class App_Controller_Admin_Page extends Controller
 		$this->response->setOutput($this->render('page/form', $data));
 	}
 
-	public function batch_update()
+	public function update()
+	{
+		//Insert
+		if (empty($_GET['page_id'])) {
+			$this->Model_Page_Page->addPage($_POST);
+		} //Update
+		else {
+			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
+		}
+
+		if ($this->Model_Page_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page_Page->getError());
+		} else {
+			$this->message->add('success', _l("The Page has been updated successfully!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} elseif ($this->message->has('error')) {
+			$this->form();
+		} else {
+			redirect('admin/page');
+		}
+	}
+
+	public function delete()
+	{
+		$this->Model_Page_Page->deletePage($_GET['page_id']);
+
+		if ($this->Model_Page_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page_Page->getError());
+		} else {
+			$this->message->add('notify', _l("Page was deleted!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('admin/page');
+		}
+	}
+
+	public function batch_action()
 	{
 		foreach ($_POST['batch'] as $page_id) {
 			switch ($_POST['action']) {
@@ -253,8 +253,8 @@ class App_Controller_Admin_Page extends Controller
 			}
 		}
 
-		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
+		if ($this->Model_Page_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page_Page->getError());
 		} else {
 			$this->message->add('success', _l("Success: You have modified navigation!"));
 		}
