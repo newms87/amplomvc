@@ -295,7 +295,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'setting/url_alias')) {
+		if (!user_can('modify', 'setting/url_alias')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 
@@ -308,7 +308,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->can('modify', 'setting/url_alias')) {
+		if (!user_can('modify', 'setting/url_alias')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 

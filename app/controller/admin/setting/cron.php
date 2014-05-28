@@ -111,7 +111,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->can('modify', 'setting/cron')) {
+		if (!user_can('modify', 'setting/cron')) {
 			$this->error['warning'] = _l('You do not have permission to modify the Automated Tasks');
 		}
 

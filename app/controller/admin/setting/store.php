@@ -35,7 +35,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 	public function delete()
 	{
 		//TODO: Change Permissions to include a query parameter (eg: store_id=$store_id). (by default this can be *, so no code breaking necessary)
-		if (!empty($_GET['store_id']) && $this->user->can('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
+		if (!empty($_GET['store_id']) && user_can('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);
 			$this->config->deleteGroup('config', $_GET['store_id']);
 
@@ -374,7 +374,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->can('modify', 'setting/store')) {
+		if (!user_can('modify', 'setting/store')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify stores!");
 		}
 

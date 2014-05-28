@@ -797,7 +797,7 @@ class Customer extends Library
 
 	public function setCustomerOverride($customer, $ignore_status = true)
 	{
-		if ($this->user->can('modify', 'customer')) {
+		if (user_can('modify', 'customer')) {
 			$this->setCustomer($customer, true);
 		}
 	}

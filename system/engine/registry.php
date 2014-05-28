@@ -57,6 +57,8 @@ final class Registry
 			unset($p);
 
 			$file = DIR_SITE . implode('/', $path) . '.php';
+		} else {
+			$class = str_replace('_', '', $class);
 		}
 
 		//Check for relative path from root

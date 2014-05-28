@@ -42,7 +42,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->can('modify', 'feed/google_base')) {
+		if (!user_can('modify', 'feed/google_base')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify Google Base feed!");
 		}
 

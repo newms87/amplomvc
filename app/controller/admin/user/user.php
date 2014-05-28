@@ -153,7 +153,7 @@ class App_Controller_Admin_User_User extends Controller
 			'lastname'     => '',
 			'email'        => '',
 			'user_role_id' => option('config_default_user_role', 12),
-			'status'       => 0,
+			'status'       => 1,
 		);
 
 		$user += $defaults;
@@ -166,7 +166,7 @@ class App_Controller_Admin_User_User extends Controller
 		);
 
 		//Actions
-		$user['save'] = site_url('admin/user/user/form', 'user_id=' . $user_id);
+		$user['save'] = site_url('admin/user/user/update', 'user_id=' . $user_id);
 
 		//Response
 		$this->response->setOutput($this->render('user/user_form', $user));

@@ -3,6 +3,7 @@
 abstract class Model
 {
 	protected $error;
+	protected $prefix;
 
 	private $synctime = false;
 
@@ -13,6 +14,8 @@ abstract class Model
 		if ($ac_time_offset) {
 			$this->synctime = true;
 		}
+
+		$this->prefix = DB_PREFIX;
 
 		$key = strtolower(get_class($this));
 
@@ -129,7 +132,7 @@ abstract class Model
 
 		$values = $this->getInsertString($table, $data, false);
 
-		$success = $this->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
+		$success = $this->query("INSERT INTO " . $this->prefix . "$table SET $values");
 
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
@@ -179,7 +182,7 @@ abstract class Model
 			}
 		}
 
-		$success = $this->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
+		$success = $this->query("UPDATE " . $this->prefix . "$table SET $values $where");
 
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
@@ -214,17 +217,9 @@ abstract class Model
 
 		if ($where !== '1') {
 			$where = "WHERE $where";
-		} else {
-			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
-
-			if (!$truncate_allowed) {
-				trigger_error("Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality.");
-
-				return;
-			}
 		}
 
-		$success = $this->query("DELETE FROM " . DB_PREFIX . "$table $where");
+		$success = $this->query("DELETE FROM " . $this->prefix . "$table $where");
 
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
@@ -364,60 +359,48 @@ abstract class Model
 		if (!$table_model) {
 			$table = $this->db->escape($table);
 
-			$query = $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "$table`");
-
-			$rules_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table'");
-
-			$rules = array();
-
-			foreach ($rules_q->rows as $rule) {
-				$rules[$rule['column']] = $rule['escape_type'];
-			}
+			$columns = $this->db->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
 
 			$table_model = array();
 
-			foreach ($query->rows as $row) {
-				if (in_array($row['Field'], array_keys($rules))) {
-					$table_model[$row['Field']] = $rules[$row['Field']];
-				} else {
-					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $row['Type'])));
+			foreach ($columns as $col) {
+				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $col['Type'])));
 
-					//we only care about ints and floats because only these we will do something besides escape
-					$ints   = array(
-						'bigint',
-						'mediumint',
-						'smallint',
-						'tinyint',
-						'int'
-					);
-					$floats = array(
-						'decimal',
-						'float',
-						'double'
-					);
+				//we only care about ints and floats because only these we will do something besides escape
+				$ints   = array(
+					'bigint',
+					'mediumint',
+					'smallint',
+					'tinyint',
+					'int'
+				);
+				$floats = array(
+					'decimal',
+					'float',
+					'double'
+				);
 
-					if ($row['Key'] == 'PRI' && in_array($type, $ints)) {
-						if ($row['Extra'] == 'auto_increment') {
-							$escape_type = DB_AUTO_INCREMENT_PK;
-						} else {
-							$escape_type = DB_PRIMARY_KEY_INTEGER;
-						}
-					} elseif ($row['Extra'] == 'auto_increment') {
-						$escape_type = DB_AUTO_INCREMENT;
-					} elseif (in_array($type, $ints)) {
-						$escape_type = DB_INTEGER;
-					} elseif (in_array($type, $floats)) {
-						$escape_type = DB_FLOAT;
-					} elseif ($type == 'datetime') {
-						$escape_type = DB_DATETIME;
-					} elseif (strtolower($row['Field']) == 'image') {
-						$escape_type = DB_IMAGE;
+				if ($col['Key'] == 'PRI' && in_array($type, $ints)) {
+					if ($col['Extra'] == 'auto_increment') {
+						$escape_type = DB_AUTO_INCREMENT_PK;
 					} else {
-						$escape_type = DB_ESCAPE;
+						$escape_type = DB_PRIMARY_KEY_INTEGER;
 					}
-
-					$table_model[$row['Field']] = $escape_type;
+				} elseif ($col['Extra'] == 'auto_increment') {
+					$escape_type = DB_AUTO_INCREMENT;
+				} elseif (in_array($type, $ints)) {
+					$escape_type = DB_INTEGER;
+				} elseif (in_array($type, $floats)) {
+					$escape_type = DB_FLOAT;
+				} elseif ($type == 'datetime') {
+					$escape_type = DB_DATETIME;
+				} elseif (strtolower($col['Field']) == 'image') {
+					$escape_type = DB_IMAGE;
+				} else {
+					$escape_type = DB_ESCAPE;
 				}
+
+				$table_model[$col['Field']] = $escape_type;
 			}
 
 			$this->cache->set('model.' . $table, $table_model);

@@ -270,7 +270,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->can('modify', 'setting/setting')) {
+		if (!user_can('modify', 'setting/setting')) {
 			$this->error['permission'] = _l("Warning: You do not have permission to modify settings!");
 		}
 
@@ -286,11 +286,11 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			$this->error['config_address'] = _l("Store Address must be between 10 and 256 characters!");
 		}
 
-		if (!$this->validation->email($_POST['config_email'])) {
+		if (!validate('email', $_POST['config_email'])) {
 			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
-		if (!$this->validation->email($_POST['config_email_error'])) {
+		if (!validate('email', $_POST['config_email_error'])) {
 			$this->error['config_email_error'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
