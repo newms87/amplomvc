@@ -20,11 +20,29 @@
 }
 
 .col {
-  float: left;
+  display: inline-block;
   box-sizing: border-box;
+  vertical-align: middle;
   text-align: center;
   position: relative;
   min-height: 1px;
+
+  &.top {
+    vertical-align: top;
+  }
+
+  &.middle {
+    vertical-align: middle;
+  }
+
+  &.bottom {
+    vertical-align: bottom;
+  }
+
+  //Hack to overcome whitespace between inline-block elements
+  & + .col {
+    margin-left:-.25em;
+  }
 }
 
 @media (min-width: @xs) {
