@@ -185,11 +185,13 @@ class App_Model_Design_Navigation extends Model
 
 	public function deleteNavigationLink($navigation_id)
 	{
-		if (!$this->validateDeleteNavigationLink($navigation_id)) {
-			return false;
-		}
-
 		$this->cache->delete('navigation');
+
+		$children = $this->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE parent_id = " . (int)$navigation_id);
+
+		foreach ($children as $child_id) {
+			$this->deleteNavigationLink($child_id);
+		}
 
 		return $this->delete("navigation", $navigation_id);
 	}
@@ -521,11 +523,6 @@ class App_Model_Design_Navigation extends Model
 			$this->error["links[$navigation_id][display_name]"] = _l("The Display Name for the link %s must be between 1 and 255 characters!", $link_name);
 		}
 
-		return empty($this->error);
-	}
-
-	public function validateDeleteNavigationLink()
-	{
 		return empty($this->error);
 	}
 }

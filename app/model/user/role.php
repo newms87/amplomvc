@@ -76,6 +76,11 @@ class App_Model_User_Role extends Model
 		return $user_role;
 	}
 
+	public function getRoleId($role)
+	{
+		return $this->queryVar("SELECT user_role_id FROM " . DB_PREFIX . "user_role WHERE name = '" . $this->escape($role) . "'");
+	}
+
 	public function getRoles($filter = array(), $select = '*', $total = false)
 	{
 		//Select

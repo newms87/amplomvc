@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_User_User extends Model
 {
 	public function add($data)
@@ -70,8 +71,35 @@ class App_Model_User_User extends Model
 		//Where
 		$where = "1";
 
+		if (isset($filter['name'])) {
+			$where .= " AND CONCAT(lastname, ' ', firstname) like '%" . $this->escape($filter['name']) . "%'";
+		}
+
+		if (isset($filter['username'])) {
+			$where .= " AND username like '%" . $this->escape($filter['username']) . "%'";
+		}
+
+		if (isset($filter['user_role_id'])) {
+			$user_role_ids = is_array($filter['user_role_id']) ? array((int)$filter['user_role_id']) : $this->escape($filter['user_role_id']);
+
+			$where .= " AND user_role_id IN (" . implode(',', $user_role_ids) . ")";
+		}
+
+		if (isset($filter['status'])) {
+			$where .= " AND status = " . (int)$filter['status'];
+		}
+
 		//Order and Limit
 		if (!$total) {
+			if (!empty($filter['sort'])) {
+				if ($filter['sort'] === 'name') {
+					$filter['sort'] = array(
+						'lastname'  => $filter['order'],
+						'firstname' => $filter['order'],
+					);
+				}
+			}
+
 			$order = $this->extractOrder($filter);
 			$limit = $this->extractLimit($filter);
 		} else {

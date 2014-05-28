@@ -17,8 +17,12 @@ class Date extends Library
 			try {
 				$date = new DateTime($date);
 			} catch (Exception $e) {
-				trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
-				$date = new Datetime("@" . _time());
+				try {
+					$date = date_create_from_format("m-d-Y H:i:s", $date);
+				} catch (Exception $e) {
+					trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
+					$date = new Datetime("@" . _time());
+				}
 			}
 		} elseif (is_int($date)) {
 			$date = new DateTime("@" . $date);
