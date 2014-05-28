@@ -8,22 +8,21 @@ class App_Controller_Block_Widget_Faq extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		//Your code goes here...
-
-		$data = $settings;
-
-		$this->render('block/widget/faq', $data);
+		$this->render('block/widget/faq', $settings);
 	}
 
-	public function settings(&$settings)
+	public function settings(&$block)
 	{
-		$data['settings'] = $settings;
+		$block['settings']['faqs']['__ac_template__'] = array(
+			'title' => '',
+			'questions'   => array(
+				'__ac_template__' => array(
+					'question' => '',
+					'answer'   => '',
+				),
+			),
+		);
 
-		$this->render('block/widget/faq_settings', $data);
-	}
-
-	public function save()
-	{
-		return $this->error;
+		return $this->render('block/widget/faq/settings', $block);
 	}
 }

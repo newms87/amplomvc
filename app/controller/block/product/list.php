@@ -54,7 +54,7 @@ class App_Controller_Block_Product_List extends Controller
 				}
 
 				if (!empty($item['teaser'])) {
-					$item['teaser'] = $this->tool->limit_characters(html_entity_decode($item['teaser'], ENT_QUOTES, 'UTF-8'), 100);
+					$item['teaser'] = charlimit(html_entity_decode($item['teaser'], ENT_QUOTES, 'UTF-8'), 100);
 				}
 
 				if (empty($item['href'])) {

@@ -26,7 +26,7 @@ class App_Controller_Extension_Payment_PpStandard
 		foreach ($cart_products as &$cart_product) {
 			foreach ($cart_product['options'] as $product_option_id => &$product_option_values) {
 				foreach ($product_option_values as &$product_option_value) {
-					$product_option_value['display_value'] = $this->tool->limit_characters($product_option_value['display_value'], 20);
+					$product_option_value['display_value'] = charlimit($product_option_value['display_value'], 20);
 				}
 				unset($product_option_value);
 			}

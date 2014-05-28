@@ -1,0 +1,52 @@
+#faq-groups {
+  .faq-group {
+    position: relative;
+    margin-bottom: 2em;
+    max-width: 700px;
+    border: 2px dashed black;
+    padding: 1em;
+
+    .title {
+      font-size: 1.5em;
+    }
+    .faq-list {
+      margin-top: 1em;
+      margin-left: 2em;
+      width: 100%;
+      max-width: 600px;
+
+      .faq {
+        position: relative;
+        margin-bottom: 1em;
+
+        .question {
+          font-size: 1.2em;
+          display: block;
+          width: 85%;
+        }
+
+        .answer {
+          display: block;
+          margin-top: .5em;
+          width: 95%;
+        }
+
+        .remove-faq {
+          position: absolute;
+          top: 0;
+          right: 4%;
+        }
+      }
+    }
+
+    .add-faq {
+      margin: 2em 0 0 2em;
+    }
+
+    .remove-group {
+      position: absolute;
+      top: .5em;
+      right: .5em;
+    }
+  }
+}

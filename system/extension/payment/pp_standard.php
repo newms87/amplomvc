@@ -46,7 +46,7 @@ class System_Extension_Payment_PpStandard extends System_Extension_Payment
 			foreach ($products as &$product) {
 				foreach ($product['selected_options'] as &$selected_option) {
 					$selected_option['product_option'] = $this->Model_Catalog_Product->getProductOption($product['product_id'], $selected_option['product_option_id']);
-					$selected_option['value']          = $this->tool->limit_characters($selected_option['value'], 20);
+					$selected_option['value']          = charlimit($selected_option['value'], 20);
 				}
 				unset($product_option);
 
