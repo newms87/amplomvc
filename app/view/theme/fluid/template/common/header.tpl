@@ -147,10 +147,6 @@
 					<?= links('primary'); ?>
 				</nav>
 			<? } ?>
-
-			<div id="header-action">
-				<a href="<?= site_url("boxes"); ?>" class="button"><?= _l("Subscribe Now"); ?></a>
-			</div>
 		</div>
 	</header>
 
