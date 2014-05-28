@@ -51,14 +51,14 @@ class App_Controller_Block_Block extends Controller
 	}
 
 	//override this method to add custom settings
-	public function settings(&$data)
+	public function settings(&$block)
 	{
-		$data['data_statuses'] = array(
+		$block['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		return $this->render('block/block/settings', $data, true);
+		return $this->render('block/block/settings', $block, true);
 	}
 
 	//Override this method to add custom instances

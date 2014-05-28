@@ -8,3 +8,5 @@ $this->db->changeColumn('user', 'user_group_id', 'user_role_id', "INT(11) NOT NU
 $this->db->changeColumn('user', 'username', 'username', "VARCHAR(128) NOT NULL DEFAULT ''");
 $this->db->changeColumn('user', 'firstname', 'firstname', "VARCHAR(45) NOT NULL DEFAULT ''");
 $this->db->changeColumn('user', 'lastname', 'lastname', "VARCHAR(45) NOT NULL DEFAULT ''");
+
+$this->db->dropTable('db_rule');

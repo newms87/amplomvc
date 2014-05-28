@@ -348,7 +348,11 @@ class Block extends Library
 
 	public function getSettings($path)
 	{
-		return isset($this->blocks[$path]) ? $this->blocks[$path]['settings'] : null;
+		if (!isset($this->blocks[$path])) {
+			$this->blocks[$path] = $this->get($path);
+		}
+
+		return isset($this->blocks[$path]) ? $this->blocks[$path]['settings'] : array();
 	}
 
 	public function getInstance($path, $instance_name = null)
@@ -395,6 +399,8 @@ class Block extends Library
 
 			$settings += $instance;
 		}
+
+		$settings += $this->getSettings($path);
 
 		$action = new Action($block . '/build', array('settings' => $settings));
 
