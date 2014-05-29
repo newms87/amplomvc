@@ -88,7 +88,7 @@ $error_callbacks = array();
 
 $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use ($error_log, $config) {
 	// error was suppressed with the @-operator
-	if (0 === error_reporting()) { return false;}
+	if (!error_reporting()) { return false;}
 
 	switch ($errno) {
 		case E_NOTICE:
