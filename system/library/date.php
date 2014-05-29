@@ -9,25 +9,30 @@ class Date extends Library
 		$this->timezone = new DateTimeZone(DEFAULT_TIMEZONE);
 	}
 
-	public function datetime(&$date = null)
+	public function datetime(&$date = null, $format = null)
 	{
 		if (!$date) {
 			$date = new DateTime("@" . _time());
 		} elseif (is_string($date)) {
 			try {
-				$date = new DateTime($date);
-			} catch (Exception $e) {
-				try {
-					$date = date_create_from_format("m-d-Y H:i:s", $date);
-				} catch (Exception $e) {
-					trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
-					$date = new Datetime("@" . _time());
+				if ($format) {
+					$date = date_create_from_format($format, $date);
+				} else {
+					$date = new DateTime($date);
 				}
+			} catch (Exception $e) {
+				$this->error['date_string'] = $e;
+				return false;
 			}
 		} elseif (is_int($date)) {
 			$date = new DateTime("@" . $date);
 		}
 
+		if (!$date) {
+			$this->error['format'] = _l("Invalid Date Format");
+			return false;
+		}
+		
 		return $date->setTimezone($this->timezone);
 	}
 
@@ -192,9 +197,11 @@ class Date extends Library
 		return $this->diff($d1, $d2)->invert === 1;
 	}
 
-	public function format($date = null, $format = '')
+	public function format($date = null, $format = '', $from_format = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date, $from_format)) {
+			return false;
+		}
 
 		if (!$format) {
 			$format = $this->language->info('datetime_format');
