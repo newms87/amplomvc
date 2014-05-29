@@ -32,7 +32,7 @@ class Date extends Library
 			$this->error['format'] = _l("Invalid Date Format");
 			return false;
 		}
-		
+
 		return $date->setTimezone($this->timezone);
 	}
 
@@ -50,7 +50,9 @@ class Date extends Library
 
 	public function now($format = '', $return_type = AC_DATE_STRING)
 	{
-		$date = $this->datetime();
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		switch ($return_type) {
 			case AC_DATE_OBJECT:
@@ -69,7 +71,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		$diff = $date->diff($this->datetime());
 
@@ -82,7 +86,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		$diff = $date->diff($this->datetime());
 
@@ -107,7 +113,9 @@ class Date extends Library
 	 */
 	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		if (!empty($interval) && is_string($interval)) {
 			$interval = date_interval_create_from_date_string($interval);
@@ -130,7 +138,9 @@ class Date extends Library
 
 	public function getCronUnits($date = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		return array(
 			'i' => (int)$this->format($date, 'i'),
@@ -145,17 +155,29 @@ class Date extends Library
 
 	public function getDayOfWeek($date = null)
 	{
-		return $this->datetime($date)->format('w');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('w');
 	}
 
 	public function getDayOfMonth($date = null)
 	{
-		return $this->datetime($date)->format('d');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('d');
 	}
 
 	public function getDayOfYear($date = null)
 	{
-		return $this->datetime($date)->format('z');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('z');
 	}
 
 	public function isEqual($d1, $d2)
@@ -181,9 +203,14 @@ class Date extends Library
 
 	public function diff($d1, $d2 = null)
 	{
-		$this->datetime($d1);
-		$this->datetime($d2);
+		if (!$this->datetime($d1)) {
+			return false;
+		}
 
+		if (!$this->datetime($d2)) {
+			return false;
+		}
+		
 		return $d1->diff($d2);
 	}
 
