@@ -22,7 +22,7 @@ class App_Controller_Admin_Block extends Controller
 		);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
 		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
 
 		//The Listing
@@ -139,7 +139,7 @@ class App_Controller_Admin_Block extends Controller
 		$this->document->setTitle(_l("Edit Block"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
 		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
 		$this->breadcrumb->add($path, site_url('admin/block/form', 'path=' . $path));
 
@@ -209,7 +209,7 @@ class App_Controller_Admin_Block extends Controller
 		$this->document->setTitle(_l("New Block"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
 		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
 		$this->breadcrumb->add(_l("New Block"), site_url('admin/block/add'));
 

@@ -15,7 +15,7 @@ $.fn.ac_imageinput = function (options) {
 			allow_clear: false,
 			show_help:   false,
 			show_hover:  true,
-			noimage:     $ac.site_url + 'image/no_image.png',
+			noimage:     $ac.theme_url + 'image/no_image.png',
 			width:       $input.attr('data-width') || $ac.image_thumb_width || 140,
 			height:      $input.attr('data-height') || $ac.image_thumb_height || 140
 		}, options);

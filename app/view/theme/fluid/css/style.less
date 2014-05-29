@@ -130,13 +130,19 @@ a {
 
   .close {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 8px;
+    right: 17px;
     cursor: pointer;
-    background: transparent url('../image/close.png') 0px 0px no-repeat;
-    background-size: 32px 16px;
     width: 16px;
     height: 16px;
+
+    &:after {
+      content: "X";
+      color: white;
+      background: @color-lighter;
+      padding: .2em .5em;
+      border-radius: 5px;
+    }
 
     &:hover, &:active {
       background-position: -16px 0px;
@@ -218,7 +224,7 @@ button, .button {
 
       }
 
-      &:hover, &.active {
+      &:hover, &.hover {
         .sub-menu {
           display: block;
         }
@@ -281,9 +287,78 @@ button, .button {
   top: -7px;
 }
 
+//Tables
+table.list {
+  width: 100%;
+
+  thead {
+    tr {
+      background: @color-lighter;
+      td {
+        padding: .5em .4em;
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  tr {
+    td {
+      padding: .2em .4em;
+
+      &.left {
+        float: none;
+        text-align: left;
+      }
+
+      &.center {
+        float: none;
+        text-align: center;
+      }
+
+      &.right {
+        float: none;
+        text-align: right;
+      }
+    }
+  }
+
+  tfoot {
+    tr {
+      background: @color-lightest;
+    }
+  }
+}
+
 /*************************
  *  III. Header          *
  *************************/
+.message-row.row {
+  .wrap {
+    border: none;
+    padding: 0;
+  }
+}
+
+header.main-header.row {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, .5);
+  z-index: 100;
+
+  .wrap {
+    border: none;
+  }
+}
+
+#container {
+  padding-top: 150px;
+}
+
+body.admin-bar #container {
+  padding-top: 190px;
+}
 
 //Logo
 #logo {
@@ -307,7 +382,7 @@ button, .button {
 #links-primary {
   display: block;
   clear: both;
-  margin: 20px auto;
+  margin: 0 auto;
 
   a {
     color: @color-dark;
@@ -329,13 +404,6 @@ button, .button {
         color: @color-lighter;
       }
     }
-  }
-  li.link-concept > .sub-menu {
-    left: 15%;
-  }
-
-  li.link-boxes > .sub-menu {
-    left: 25%;
   }
 }
 
@@ -388,6 +456,7 @@ button, .button {
 
     video {
       width: 100%;
+      max-height: 430px;
     }
   }
 
@@ -410,37 +479,6 @@ button, .button {
       margin: 20px auto;
       max-width: 550px;
       font-size: 1.4em;
-    }
-
-    .call-to-action {
-    }
-  }
-
-  .icon-list {
-    margin-bottom: 40px;
-
-    h3 {
-      text-align: center;
-      font-size: 2.5em;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .icon {
-      margin-bottom: 15px;
-
-      .image {
-        height: 220px;
-      }
-
-      h4 {
-        font-size: 1.4em;
-        color: @color-dark;
-      }
-
-      .explain {
-        margin-top: 8px;
-      }
     }
   }
 }
@@ -465,6 +503,30 @@ button, .button {
   h2 {
     font-size: 1.8em;
     margin-bottom: 15px;
+  }
+
+  .icon-list {
+    margin-bottom: 40px;
+
+    h3 {
+      text-align: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .icon {
+      margin-bottom: 15px;
+
+      h4 {
+        font-size: 1.4em;
+        color: @color-dark;
+      }
+
+      .explain {
+        margin-top: 8px;
+      }
+    }
   }
 }
 
@@ -523,6 +585,21 @@ button, .button {
       }
     }
 
+    input[type="radio"], input[type="checkbox"] {
+      vertical-align: middle;
+      display: inline-block;
+
+      & + label {
+        position: relative;
+        top: 7px;
+        margin: 0 0 .4em .6em;
+        min-width: 0;
+        text-align: left;
+        vertical-align: middle;
+        display: inline-block;
+      }
+    }
+
     label {
       width: 20%;
       min-width: 150px;
@@ -561,6 +638,22 @@ button, .button {
   }
 }
 
+//Information Lists
+.info-list {
+  .info-item {
+    .label {
+      width: 5em;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .info {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
 //AC Radio Buttons
 .builder-ac-radio {
   display: inline-block;
@@ -570,8 +663,9 @@ button, .button {
 
     width: auto;
     min-width: 0;
-    margin-top: 8px;
-    input {
+    margin: .5em;
+
+    & > input[type="radio"] {
       position: absolute;
       left: -9999px;
 
@@ -586,9 +680,22 @@ button, .button {
         background: @color-light;
       }
     }
+
+    //Nested Radios
+    .ac-radio {
+      & > input[type="radio"] {
+        & + .text {
+          background: white;
+          border: 2px dashed @color-dark;
+        }
+
+        &:checked + .text {
+          background: @color-lighter;
+        }
+      }
+    }
   }
 }
-
 
 //Not Found
 #not-found-page .not-found.row {
@@ -635,14 +742,22 @@ button, .button {
 }
 
 //Address Select Block
-.block-address-select {
+.address-list {
   .builder-ac-radio {
-    input[value="new"] + .text {
-      padding: 20px 10px;
-      vertical-align: top;
+    .ac-radio {
+      margin: 0 .5em .5em;
+      width: 220px;
     }
   }
+
+  .add-address {
+    display: block;
+    text-align: center;
+    margin-top: .3em;
+    font-size: 1.3em;
+  }
 }
+
 //Login Block
 #block-account-login {
   .login-register {
@@ -672,6 +787,11 @@ button, .button {
 }
 
 .product-content {
+  h2.product-model {
+    text-align: center;
+    font-size: 1.1em;
+  }
+
   .product-info {
     max-width: 450px;
     padding: 0 20px;
@@ -732,13 +852,38 @@ button, .button {
   }
 }
 
+
+
 /*************************
- *  VI. Checkout         *
+ *  V. Blocks            *
  *************************/
-#checkout-page {
-  #checkout-content {
-    .change-address, .change-method {
-      display: none;
+
+#block-widget-faq {
+  .faq-groups {
+    .group {
+      margin-bottom: 2em;
+
+      h3 {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 1em;
+      }
+
+      .faq-list {
+        margin-left: 1.5em;
+
+        .faq {
+          margin-bottom: .7em;
+
+          .question {
+            font-size: 1.5em;
+          }
+
+          .answer {
+            margin-left: 1.2em;
+          }
+        }
+      }
     }
   }
 }
@@ -772,6 +917,120 @@ footer.row {
         }
       }
     }
+  }
+}
+
+/*************************
+ *  IX. Loader           *
+ *************************/
+
+/** CSS Loader **/
+.loader {
+  position: relative;
+  width: 100px;
+  height: 10px;
+  margin: 5px auto;
+}
+
+.loader-item {
+  position: absolute;
+  top: 0;
+  background-color: #577A53;
+  width: 10%;
+  height: 100%;
+
+  -webkit-animation: bounce 1.5s linear 0 infinite;
+  -webkit-transform: scale(.3);
+
+  animation: bounce 1.5s linear 0 infinite;
+  transform: scale(.3);
+
+  border-radius: 50%;
+
+  @num_loaders: 8;
+
+  .loaders(@num_loaders);
+
+  .loaders(@ls, @l: 1) when (@l =< @ls) {
+    &:nth-child(@{l}) {
+      left: ((@l - 1) * (100%/@ls));
+      -webkit-animation-delay: ((@l - 1) * (1s / @ls));
+      animation-delay: ((@l - 1) * (1s / @ls));
+    }
+
+    .loaders(@ls, @l + 1);
+  }
+}
+
+@-webkit-keyframes sidecircle {
+  0% {
+    -webkit-transform: scale(.3);
+    left: 0;
+  }
+  50% {
+    -webkit-transform: scale(1);
+    top: 500%;
+    left: 100%;
+  }
+}
+
+@-webkit-keyframes drop {
+  0% {
+    top: -100%;
+  }
+  10% {
+    top: 0;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+@keyframes drop {
+  0% {
+    top: -100%;
+  }
+  10% {
+    top: 0;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+@-webkit-keyframes fadecolor {
+  0% {
+    background-color: #577A53;
+  }
+  100% {
+    background-color: #B8D9E7;
+  }
+}
+
+@keyframes fadecolor {
+  0% {
+    background-color: #577A53;
+  }
+  100% {
+    background-color: #B8D9E7;
+  }
+}
+
+@-webkit-keyframes bounce {
+  0% {
+    -webkit-transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(.3);
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(.3);
   }
 }
 
@@ -836,7 +1095,6 @@ footer.row {
       }
     }
 
-
     .product-top {
       margin-top: 25px;
     }
@@ -868,16 +1126,6 @@ footer.row {
       .call-to-action {
         font-size: 1.1em;
       }
-    }
-  }
-
-  #links-primary {
-    li.link-concept > .sub-menu {
-      left: 5%;
-    }
-
-    li.link-boxes > .sub-menu {
-      left: 15%;
     }
   }
 }
