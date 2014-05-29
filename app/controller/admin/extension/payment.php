@@ -9,7 +9,7 @@ class App_Controller_Admin_Extension_Payment extends Controller
 			if (!$this->System_Extension_Payment->has($_GET['code'])) {
 				$this->message->add('warning', _l("The extension %s does not exist!", $_GET['code']));
 
-				redirect('extension/payment');
+				redirect('admin/extension/payment');
 			}
 
 			$this->getForm();
@@ -24,8 +24,8 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		$this->document->setTitle(_l("Payment"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Payment"), site_url('extension/payment'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Payment"), site_url('admin/extension/payment'));
 
 		//The Table Columns
 		$columns = array();
@@ -75,22 +75,22 @@ class App_Controller_Admin_Extension_Payment extends Controller
 				$actions = array(
 					'edit'      => array(
 						'text' => _l("Edit"),
-						'href' => site_url('extension/payment/edit', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/payment/edit', 'code=' . $extension['code'])
 					),
 					'settings'  => array(
 						'text' => _l("Settings"),
-						'href' => site_url('extension/payment', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/payment', 'code=' . $extension['code'])
 					),
 					'uninstall' => array(
 						'text' => _l("Uninstall"),
-						'href' => site_url('extension/payment/uninstall', 'code=' . $extension['code']),
+						'href' => site_url('admin/extension/payment/uninstall', 'code=' . $extension['code']),
 					),
 				);
 			} else {
 				$actions = array(
 					'install' => array(
 						'text' => _l("Install"),
-						'href' => site_url('extension/payment/install', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/payment/install', 'code=' . $extension['code'])
 					),
 				);
 			}
@@ -109,7 +109,7 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('extension/add');
+		$data['insert'] = site_url('admin/extension/add');
 
 		//Render limit Menu
 		$data['limits'] = $this->sort->renderLimits();
@@ -140,7 +140,7 @@ class App_Controller_Admin_Extension_Payment extends Controller
 
 			$this->message->add('success', _l("Successfully updated the settings for %s", $code));
 
-			redirect('extension/payment');
+			redirect('admin/extension/payment');
 		}
 
 		$payment_extension = $this->System_Extension_Payment->get($code);
@@ -152,9 +152,9 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		$data['page_title'] = $payment_extension->info('title');
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Payment Extensions"), site_url('extension/payment'));
-		$this->breadcrumb->add($payment_extension->info('title'), site_url('extension/payment', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Payment Extensions"), site_url('admin/extension/payment'));
+		$this->breadcrumb->add($payment_extension->info('title'), site_url('admin/extension/payment', 'code=' . $code));
 
 		//Entry Data
 		if ($this->request->isPost()) {
@@ -198,8 +198,8 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('extension/payment', 'code=' . $code);
-		$data['cancel'] = site_url('extension/payment');
+		$data['save']   = site_url('admin/extension/payment', 'code=' . $code);
+		$data['cancel'] = site_url('admin/extension/payment');
 
 		//Render
 		$this->response->setOutput($this->render('extension/payment', $data));
@@ -214,7 +214,7 @@ class App_Controller_Admin_Extension_Payment extends Controller
 
 		if (!is_file($file)) {
 			$this->message->add('warning', _l("The extension file %s does not exist!", $file));
-			redirect('extension/payment');
+			redirect('admin/extension/payment');
 		}
 
 		//Handle POST
@@ -225,16 +225,16 @@ class App_Controller_Admin_Extension_Payment extends Controller
 				$this->message->add('warning', _l("There was a problem while saving the file %s!", $file));
 			}
 
-			redirect('extension/payment');
+			redirect('admin/extension/payment');
 		}
 
 		//Load extension
 		$payment_extension = $this->System_Extension_Payment->get($code);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Payment Extensions"), site_url('extension/payment'));
-		$this->breadcrumb->add($payment_extension->info('title'), site_url('extension/payment/edit', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Payment Extensions"), site_url('admin/extension/payment'));
+		$this->breadcrumb->add($payment_extension->info('title'), site_url('admin/extension/payment/edit', 'code=' . $code));
 
 		//Load Contents
 		$data['contents'] = file_get_contents($file);
@@ -244,8 +244,8 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		$data['edit_file']  = $file;
 
 		//Action Buttons
-		$data['save']   = site_url('extension/payment/edit', 'code=' . $code);
-		$data['cancel'] = site_url('extension/payment');
+		$data['save']   = site_url('admin/extension/payment/edit', 'code=' . $code);
+		$data['cancel'] = site_url('admin/extension/payment');
 
 		//Render
 		$this->response->setOutput($this->render('extension/edit', $data));
@@ -300,7 +300,7 @@ class App_Controller_Admin_Extension_Payment extends Controller
 			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
-		redirect('extension/payment');
+		redirect('admin/extension/payment');
 	}
 
 	public function uninstall()
@@ -310,6 +310,6 @@ class App_Controller_Admin_Extension_Payment extends Controller
 		}
 
 
-		redirect('extension/payment');
+		redirect('admin/extension/payment');
 	}
 }

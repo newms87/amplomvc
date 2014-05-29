@@ -7,8 +7,8 @@ class App_Controller_Admin_Sale_Order extends Controller
 		$this->document->setTitle(_l("Orders"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Orders"), site_url('sale/order'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Orders"), site_url('admin/sale/order'));
 
 		//The Table Columns
 		$columns = array();
@@ -78,14 +78,14 @@ class App_Controller_Admin_Sale_Order extends Controller
 			$order['actions'] = array(
 				'view' => array(
 					'text' => _l("View"),
-					'href' => site_url('sale/order/info', 'order_id=' . $order['order_id'] . '&' . $url_query)
+					'href' => site_url('admin/sale/order/info', 'order_id=' . $order['order_id'] . '&' . $url_query)
 				),
 			);
 
 			if ($this->order->isEditable($order)) {
 				$action['edit'] = array(
 					'text' => _l("Edit"),
-					'href' => site_url('sale/order/update', 'order_id=' . $order['order_id'] . '&' . $url_query)
+					'href' => site_url('admin/sale/order/update', 'order_id=' . $order['order_id'] . '&' . $url_query)
 				);
 			}
 
@@ -128,9 +128,9 @@ class App_Controller_Admin_Sale_Order extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['invoice'] = site_url('sale/order/invoice');
-		$data['insert']  = site_url('sale/order/insert');
-		$data['delete']  = site_url('sale/order/delete');
+		$data['invoice'] = site_url('admin/sale/order/invoice');
+		$data['insert']  = site_url('admin/sale/order/insert');
+		$data['delete']  = site_url('admin/sale/order/delete');
 
 		//Render
 		$this->response->setOutput($this->render('sale/order_list', $data));
@@ -150,7 +150,7 @@ class App_Controller_Admin_Sale_Order extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified orders!"));
 
-				redirect('sale/order');
+				redirect('admin/sale/order');
 			}
 		}
 
@@ -167,7 +167,7 @@ class App_Controller_Admin_Sale_Order extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified orders!"));
 
-				redirect('sale/order');
+				redirect('admin/sale/order');
 			}
 		}
 
@@ -183,13 +183,13 @@ class App_Controller_Admin_Sale_Order extends Controller
 		$order_id = !empty($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Orders"), site_url('sale/order'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Orders"), site_url('admin/sale/order'));
 
 		if ($order_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('sale/order/update', 'order_id=' . $order_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/sale/order/update', 'order_id=' . $order_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('sale/order/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/sale/order/update'));
 		}
 
 		//Load Information
@@ -258,8 +258,8 @@ class App_Controller_Admin_Sale_Order extends Controller
 		$data['store_url'] = URL_SITE;
 
 		//Action Buttons
-		$data['save']   = site_url('sale/order/update', 'order_id=' . $order_id);
-		$data['cancel'] = site_url('sale/order');
+		$data['save']   = site_url('admin/sale/order/update', 'order_id=' . $order_id);
+		$data['cancel'] = site_url('admin/sale/order');
 
 		//Render
 		$this->response->setOutput($this->render('sale/order_form', $data));
@@ -386,16 +386,16 @@ class App_Controller_Admin_Sale_Order extends Controller
 		//Order Not Found
 		if (!$order_info) {
 			$this->message->add("warning", _l("The Order was not found in the system"));
-			redirect('sale/order');
+			redirect('admin/sale/order');
 		}
 
 		//Page Head
 		$this->document->setTitle(_l("Orders"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Orders"), site_url('sale/order'));
-		$this->breadcrumb->add($order_info['invoice_id'], site_url('sale/order/info', 'order_id=' . $order_id));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Orders"), site_url('admin/sale/order'));
+		$this->breadcrumb->add($order_info['invoice_id'], site_url('admin/sale/order/info', 'order_id=' . $order_id));
 
 		$data += $order_info;
 
@@ -411,7 +411,7 @@ class App_Controller_Admin_Sale_Order extends Controller
 		}
 
 		if ($order_info['customer_id']) {
-			$data['url_customer'] = site_url('sale/customer/update', 'customer_id=' . $order_info['customer_id']);
+			$data['url_customer'] = site_url('admin/sale/customer/update', 'customer_id=' . $order_info['customer_id']);
 		}
 
 		$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($order_info['customer_group_id']);
@@ -442,7 +442,7 @@ class App_Controller_Admin_Sale_Order extends Controller
 
 			$product['price_display'] = $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']);
 			$product['total_display'] = $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']);
-			$product['href']          = site_url('catalog/product/update', 'product_id=' . $product['product_id']);
+			$product['href']          = site_url('admin/catalog/product/update', 'product_id=' . $product['product_id']);
 		}
 		unset($product);
 
@@ -452,7 +452,7 @@ class App_Controller_Admin_Sale_Order extends Controller
 
 		foreach ($vouchers as &$voucher) {
 			$voucher['amount_display'] = $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value']);
-			$voucher['href']           = site_url('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id']);
+			$voucher['href']           = site_url('admin/sale/voucher/update', 'voucher_id=' . $voucher['voucher_id']);
 		}
 		unset($voucher);
 
@@ -481,8 +481,8 @@ class App_Controller_Admin_Sale_Order extends Controller
 		$data['history'] = $this->history();
 
 		//Action Buttons
-		$data['invoice'] = site_url('sale/order/invoice', 'order_id=' . $order_id);
-		$data['cancel']  = site_url('sale/order');
+		$data['invoice'] = site_url('admin/sale/order/invoice', 'order_id=' . $order_id);
+		$data['cancel']  = site_url('admin/sale/order');
 
 		//Render
 		$this->response->setOutput($this->render('sale/order_info', $data));
@@ -672,8 +672,8 @@ class App_Controller_Admin_Sale_Order extends Controller
 		} else {
 			$this->document->setTitle(_l("Orders"));
 
-			$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-			$this->breadcrumb->add(_l("Orders"), site_url('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+			$this->breadcrumb->add(_l("Orders"), site_url('admin/error/not_found'));
 
 			$this->response->setOutput($this->render('error/not_found', $data));
 		}

@@ -33,7 +33,7 @@ class App_Controller_Admin_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/review', $url);
+			redirect('admin/catalog/review', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/review', $url);
+			redirect('admin/catalog/review', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/review', $url);
+			redirect('admin/catalog/review', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Reviews"), site_url('catalog/review', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Reviews"), site_url('admin/catalog/review', $url));
 
-		$data['insert'] = site_url('catalog/review/insert', $url);
-		$data['delete'] = site_url('catalog/review/delete', $url);
+		$data['insert'] = site_url('admin/catalog/review/insert', $url);
+		$data['delete'] = site_url('admin/catalog/review/delete', $url);
 
 		$data['reviews'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Catalog_Review extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('catalog/review/update', 'review_id=' . $result['review_id'] . $url)
+				'href' => site_url('admin/catalog/review/update', 'review_id=' . $result['review_id'] . $url)
 			);
 
 			$data['reviews'][] = array(
@@ -198,11 +198,11 @@ class App_Controller_Admin_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_product']    = site_url('catalog/review', 'sort=pd.name' . $url);
-		$data['sort_author']     = site_url('catalog/review', 'sort=r.author' . $url);
-		$data['sort_rating']     = site_url('catalog/review', 'sort=r.rating' . $url);
-		$data['sort_status']     = site_url('catalog/review', 'sort=r.status' . $url);
-		$data['sort_date_added'] = site_url('catalog/review', 'sort=r.date_added' . $url);
+		$data['sort_product']    = site_url('admin/catalog/review', 'sort=pd.name' . $url);
+		$data['sort_author']     = site_url('admin/catalog/review', 'sort=r.author' . $url);
+		$data['sort_rating']     = site_url('admin/catalog/review', 'sort=r.rating' . $url);
+		$data['sort_status']     = site_url('admin/catalog/review', 'sort=r.status' . $url);
+		$data['sort_date_added'] = site_url('admin/catalog/review', 'sort=r.date_added' . $url);
 
 		$url = '';
 
@@ -270,16 +270,16 @@ class App_Controller_Admin_Catalog_Review extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Reviews"), site_url('catalog/review', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Reviews"), site_url('admin/catalog/review', $url));
 
 		if (!isset($_GET['review_id'])) {
-			$data['action'] = site_url('catalog/review/insert', $url);
+			$data['action'] = site_url('admin/catalog/review/insert', $url);
 		} else {
-			$data['action'] = site_url('catalog/review/update', 'review_id=' . $_GET['review_id'] . $url);
+			$data['action'] = site_url('admin/catalog/review/update', 'review_id=' . $_GET['review_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('catalog/review', $url);
+		$data['cancel'] = site_url('admin/catalog/review', $url);
 
 		if (isset($_GET['review_id']) && !$this->request->isPost()) {
 			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
@@ -334,7 +334,7 @@ class App_Controller_Admin_Catalog_Review extends Controller
 		}
 
 		//Ajax Urls
-		$data['url_product_autocomplete'] = site_url('catalog/product/autocomplete');
+		$data['url_product_autocomplete'] = site_url('admin/catalog/product/autocomplete');
 
 		$this->response->setOutput($this->render('catalog/review_form', $data));
 	}

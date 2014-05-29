@@ -13,10 +13,10 @@ class App_Controller_Admin_Setting_ReturnReason extends Controller
 		$this->document->setTitle(_l("Return Reasons"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Stores"), site_url('setting/store'));
-		$this->breadcrumb->add(_l("Settings"), site_url('setting/setting'));
-		$this->breadcrumb->add(_l("Return Reasons"), site_url('setting/return_reason'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Stores"), site_url('admin/setting/store'));
+		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/setting'));
+		$this->breadcrumb->add(_l("Return Reasons"), site_url('admin/setting/return_reason'));
 
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
@@ -26,7 +26,7 @@ class App_Controller_Admin_Setting_ReturnReason extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("You have successfully updated the Return Reasons"));
-				redirect('setting/setting');
+				redirect('admin/setting/setting');
 			}
 		}
 
@@ -73,8 +73,8 @@ class App_Controller_Admin_Setting_ReturnReason extends Controller
 		$data['return_reasons'] = $return_reasons;
 
 		//Action Buttons
-		$data['save']   = site_url('setting/return_reason');
-		$data['cancel'] = site_url('setting/store');
+		$data['save']   = site_url('admin/setting/return_reason');
+		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
 		$this->response->setOutput($this->render('setting/return_reason', $data));

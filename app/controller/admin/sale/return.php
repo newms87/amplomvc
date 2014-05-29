@@ -65,7 +65,7 @@ class App_Controller_Admin_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/return', $url);
+			redirect('admin/sale/return', $url);
 		}
 
 		$this->getForm();
@@ -126,7 +126,7 @@ class App_Controller_Admin_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/return', $url);
+			redirect('admin/sale/return', $url);
 		}
 
 		$this->getForm();
@@ -189,7 +189,7 @@ class App_Controller_Admin_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/return', $url);
+			redirect('admin/sale/return', $url);
 		}
 
 		$this->getList();
@@ -309,11 +309,11 @@ class App_Controller_Admin_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Product Returns"), site_url('sale/return', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('admin/sale/return', $url));
 
-		$data['insert'] = site_url('sale/return/insert', $url);
-		$data['delete'] = site_url('sale/return/delete', $url);
+		$data['insert'] = site_url('admin/sale/return/insert', $url);
+		$data['delete'] = site_url('admin/sale/return/delete', $url);
 
 		$data['returns'] = array();
 
@@ -341,12 +341,12 @@ class App_Controller_Admin_Sale_Return extends Controller
 
 			$action[] = array(
 				'text' => _l("View"),
-				'href' => site_url('sale/return/info', 'return_id=' . $result['return_id'] . $url)
+				'href' => site_url('admin/sale/return/info', 'return_id=' . $result['return_id'] . $url)
 			);
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('sale/return/update', 'return_id=' . $result['return_id'] . $url)
+				'href' => site_url('admin/sale/return/update', 'return_id=' . $result['return_id'] . $url)
 			);
 
 			$data['returns'][] = array(
@@ -425,14 +425,14 @@ class App_Controller_Admin_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_return_id']     = site_url('sale/return', 'sort=r.return_id' . $url);
-		$data['sort_order_id']      = site_url('sale/return', 'sort=r.order_id' . $url);
-		$data['sort_customer']      = site_url('sale/return', 'sort=customer' . $url);
-		$data['sort_product']       = site_url('sale/return', 'sort=product' . $url);
-		$data['sort_model']         = site_url('sale/return', 'sort=model' . $url);
-		$data['sort_status']        = site_url('sale/return', 'sort=status' . $url);
-		$data['sort_date_added']    = site_url('sale/return', 'sort=r.date_added' . $url);
-		$data['sort_date_modified'] = site_url('sale/return', 'sort=r.date_modified' . $url);
+		$data['sort_return_id']     = site_url('admin/sale/return', 'sort=r.return_id' . $url);
+		$data['sort_order_id']      = site_url('admin/sale/return', 'sort=r.order_id' . $url);
+		$data['sort_customer']      = site_url('admin/sale/return', 'sort=customer' . $url);
+		$data['sort_product']       = site_url('admin/sale/return', 'sort=product' . $url);
+		$data['sort_model']         = site_url('admin/sale/return', 'sort=model' . $url);
+		$data['sort_status']        = site_url('admin/sale/return', 'sort=status' . $url);
+		$data['sort_date_added']    = site_url('admin/sale/return', 'sort=r.date_added' . $url);
+		$data['sort_date_modified'] = site_url('admin/sale/return', 'sort=r.date_modified' . $url);
 
 		$url = '';
 
@@ -593,16 +593,16 @@ class App_Controller_Admin_Sale_Return extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Product Returns"), site_url('sale/return', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Product Returns"), site_url('admin/sale/return', $url));
 
 		if (!isset($_GET['return_id'])) {
-			$data['action'] = site_url('sale/return/insert', $url);
+			$data['action'] = site_url('admin/sale/return/insert', $url);
 		} else {
-			$data['action'] = site_url('sale/return/update', 'return_id=' . $_GET['return_id'] . $url);
+			$data['action'] = site_url('admin/sale/return/update', 'return_id=' . $_GET['return_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('sale/return', $url);
+		$data['cancel'] = site_url('admin/sale/return', $url);
 
 		if (isset($_GET['return_id']) && !$this->request->isPost()) {
 			$return_info = $this->Model_Sale_Return->getReturn($_GET['return_id']);
@@ -812,17 +812,17 @@ class App_Controller_Admin_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-			$this->breadcrumb->add(_l("Product Returns"), site_url('sale/return', $url));
+			$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+			$this->breadcrumb->add(_l("Product Returns"), site_url('admin/sale/return', $url));
 
-			$data['cancel'] = site_url('sale/return', $url);
+			$data['cancel'] = site_url('admin/sale/return', $url);
 
 			$data = $return_info;
 
 			$order_info = $this->order->get($return_info['order_id']);
 
 			if ($return_info['order_id'] && $order_info) {
-				$data['order'] = site_url('sale/order/info', 'order_id=' . $return_info['order_id']);
+				$data['order'] = site_url('admin/sale/order/info', 'order_id=' . $return_info['order_id']);
 			} else {
 				$data['order'] = '';
 			}
@@ -830,7 +830,7 @@ class App_Controller_Admin_Sale_Return extends Controller
 			$data['date_ordered'] = date('short', strtotime($return_info['date_ordered']));
 
 			if ($return_info['customer_id']) {
-				$data['customer'] = site_url('sale/customer/update', 'customer_id=' . $return_info['customer_id']);
+				$data['customer'] = site_url('admin/sale/customer/update', 'customer_id=' . $return_info['customer_id']);
 			} else {
 				$data['customer'] = '';
 			}
@@ -850,8 +850,8 @@ class App_Controller_Admin_Sale_Return extends Controller
 		} else {
 			$this->document->setTitle(_l("Product Returns"));
 
-			$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-			$this->breadcrumb->add(_l("Product Returns"), site_url('error/not_found'));
+			$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+			$this->breadcrumb->add(_l("Product Returns"), site_url('admin/error/not_found'));
 
 			$this->response->setOutput($this->render('error/not_found', $data));
 		}

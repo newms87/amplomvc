@@ -13,8 +13,8 @@ class App_Controller_Admin_Report_FlashsaleViewed extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Flashsales Viewed Report"), site_url('report/flashsale_viewed'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Flashsales Viewed Report"), site_url('admin/report/flashsale_viewed'));
 
 		$data = array(
 			'start' => ($page - 1) * option('config_admin_limit'),
@@ -84,7 +84,7 @@ class App_Controller_Admin_Report_FlashsaleViewed extends Controller
 
 		$url = $this->get_url();
 
-		$data['reset'] = site_url('report/flashsale_viewed/reset', $url);
+		$data['reset'] = site_url('admin/report/flashsale_viewed/reset', $url);
 
 		$this->pagination->init();
 		$this->pagination->total  = $flashsale_viewed_total;
@@ -99,7 +99,7 @@ class App_Controller_Admin_Report_FlashsaleViewed extends Controller
 
 		$this->message->add('success', _l("Success: You have reset the flashsales viewed report!"));
 
-		redirect('report/flashsale_viewed');
+		redirect('admin/report/flashsale_viewed');
 	}
 
 	private function get_url($filters = null)

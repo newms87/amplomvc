@@ -33,7 +33,7 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/customer_blacklist', $url);
+			redirect('admin/sale/customer_blacklist', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/customer_blacklist', $url);
+			redirect('admin/sale/customer_blacklist', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('sale/customer_blacklist', $url);
+			redirect('admin/sale/customer_blacklist', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Customer IP Blacklist"), site_url('sale/customer_blacklist', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Customer IP Blacklist"), site_url('admin/sale/customer_blacklist', $url));
 
-		$data['insert'] = site_url('sale/customer_blacklist/insert', $url);
-		$data['delete'] = site_url('sale/customer_blacklist/delete', $url);
+		$data['insert'] = site_url('admin/sale/customer_blacklist/insert', $url);
+		$data['delete'] = site_url('admin/sale/customer_blacklist/delete', $url);
 
 		$data['customer_blacklists'] = array();
 
@@ -157,14 +157,14 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $result['customer_ip_blacklist_id'] . $url)
+				'href' => site_url('admin/sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $result['customer_ip_blacklist_id'] . $url)
 			);
 
 			$data['customer_blacklists'][] = array(
 				'customer_ip_blacklist_id' => $result['customer_ip_blacklist_id'],
 				'ip'                       => $result['ip'],
 				'total'                    => $result['total'],
-				'customer'                 => site_url('sale/customer', 'filter_ip=' . $result['ip']),
+				'customer'                 => site_url('admin/sale/customer', 'filter_ip=' . $result['ip']),
 				'selected'                 => isset($_GET['selected']) && in_array($result['customer_ip_blacklist_id'], $_GET['selected']),
 				'action'                   => $action
 			);
@@ -196,7 +196,7 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_ip'] = site_url('sale/customer_blacklist', 'sort=ip' . $url);
+		$data['sort_ip'] = site_url('admin/sale/customer_blacklist', 'sort=ip' . $url);
 
 		$url = '';
 
@@ -246,16 +246,16 @@ class App_Controller_Admin_Sale_CustomerBlacklist extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Customer IP Blacklist"), site_url('sale/customer_blacklist', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Customer IP Blacklist"), site_url('admin/sale/customer_blacklist', $url));
 
 		if (!isset($_GET['customer_ip_blacklist_id'])) {
-			$data['action'] = site_url('sale/customer_blacklist/insert', $url);
+			$data['action'] = site_url('admin/sale/customer_blacklist/insert', $url);
 		} else {
-			$data['action'] = site_url('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $_GET['customer_ip_blacklist_id'] . $url);
+			$data['action'] = site_url('admin/sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $_GET['customer_ip_blacklist_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('sale/customer_blacklist', $url);
+		$data['cancel'] = site_url('admin/sale/customer_blacklist', $url);
 
 		if (isset($_GET['customer_ip_blacklist_id']) && !$this->request->isPost()) {
 			$customer_blacklist_info = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);

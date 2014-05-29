@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/stock_status', $url);
+			redirect('admin/localisation/stock_status', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/stock_status', $url);
+			redirect('admin/localisation/stock_status', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/stock_status', $url);
+			redirect('admin/localisation/stock_status', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Stock Status"), site_url('localisation/stock_status', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Stock Status"), site_url('admin/localisation/stock_status', $url));
 
-		$data['insert'] = site_url('localisation/stock_status/insert', $url);
-		$data['delete'] = site_url('localisation/stock_status/delete', $url);
+		$data['insert'] = site_url('admin/localisation/stock_status/insert', $url);
+		$data['delete'] = site_url('admin/localisation/stock_status/delete', $url);
 
 		$data['stock_statuses'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/stock_status/update', 'stock_status_id=' . $result['stock_status_id'] . $url)
+				'href' => site_url('admin/localisation/stock_status/update', 'stock_status_id=' . $result['stock_status_id'] . $url)
 			);
 
 			$data['stock_statuses'][] = array(
@@ -194,7 +194,7 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name'] = site_url('localisation/stock_status', 'sort=name' . $url);
+		$data['sort_name'] = site_url('admin/localisation/stock_status', 'sort=name' . $url);
 
 		$url = '';
 
@@ -244,16 +244,16 @@ class App_Controller_Admin_Localisation_StockStatus extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Stock Status"), site_url('localisation/stock_status', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Stock Status"), site_url('admin/localisation/stock_status', $url));
 
 		if (!isset($_GET['stock_status_id'])) {
-			$data['action'] = site_url('localisation/stock_status/insert', $url);
+			$data['action'] = site_url('admin/localisation/stock_status/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/stock_status/update', 'stock_status_id=' . $_GET['stock_status_id'] . $url);
+			$data['action'] = site_url('admin/localisation/stock_status/update', 'stock_status_id=' . $_GET['stock_status_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/stock_status', $url);
+		$data['cancel'] = site_url('admin/localisation/stock_status', $url);
 
 		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 

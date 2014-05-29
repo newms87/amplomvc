@@ -13,8 +13,8 @@ class App_Controller_Admin_Report_ProductViewed extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Products Viewed Report"), site_url('report/product_viewed'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Products Viewed Report"), site_url('admin/report/product_viewed'));
 
 		$data = array(
 			'start' => ($page - 1) * option('config_admin_limit'),
@@ -83,7 +83,7 @@ class App_Controller_Admin_Report_ProductViewed extends Controller
 
 		$url = $this->get_url();
 
-		$data['reset'] = site_url('report/product_viewed/reset', $url);
+		$data['reset'] = site_url('admin/report/product_viewed/reset', $url);
 
 		$this->pagination->init();
 		$this->pagination->total  = $product_viewed_total;
@@ -98,7 +98,7 @@ class App_Controller_Admin_Report_ProductViewed extends Controller
 
 		$this->message->add('success', _l("Success: You have reset the product viewed report!"));
 
-		redirect('report/product_viewed');
+		redirect('admin/report/product_viewed');
 	}
 
 	private function get_url($filters = null)

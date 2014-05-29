@@ -57,8 +57,8 @@ class App_Controller_Admin_Report_SaleTax extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Tax Report"), site_url('report/sale_tax', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Tax Report"), site_url('admin/report/sale_tax', $url));
 
 		$data['orders'] = array();
 

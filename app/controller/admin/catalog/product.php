@@ -21,7 +21,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				redirect('catalog/product');
+				redirect('admin/catalog/product');
 			}
 		}
 
@@ -38,7 +38,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			}
 		}
 
-		redirect('catalog/product/update', $this->url->getQuery());
+		redirect('admin/catalog/product/update', $this->url->getQuery());
 	}
 
 	public function delete()
@@ -51,7 +51,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				redirect('catalog/product');
+				redirect('admin/catalog/product');
 			}
 		}
 
@@ -68,7 +68,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified products!"));
 
-				redirect('catalog/product');
+				redirect('admin/catalog/product');
 			}
 		}
 
@@ -133,7 +133,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			}
 		}
 
-		redirect('catalog/product', $this->url->getQueryExclude('action', 'action_value'));
+		redirect('admin/catalog/product', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()
@@ -142,8 +142,8 @@ class App_Controller_Admin_Catalog_Product extends Controller
 		$this->document->setTitle(_l("Products"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Products"), site_url('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Products"), site_url('admin/catalog/product'));
 
 		//The Table Columns
 		$categories      = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -249,18 +249,18 @@ class App_Controller_Admin_Catalog_Product extends Controller
 			$product['actions'] = array(
 				'edit' => array(
 					'text' => _l("Edit"),
-					'href' => site_url('catalog/product/update', 'product_id=' . $product['product_id'])
+					'href' => site_url('admin/catalog/product/update', 'product_id=' . $product['product_id'])
 				),
 				'copy' => array(
 					'text' => _l("Copy"),
-					'href' => site_url('catalog/product/copy', 'product_id=' . $product['product_id'])
+					'href' => site_url('admin/catalog/product/copy', 'product_id=' . $product['product_id'])
 				)
 			);
 
 			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
 				$product['actions']['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => site_url('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
+					'href' => site_url('admin/catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
 				);
 			}
 
@@ -308,7 +308,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 
 		if (count($product_classes) > 1) {
 			foreach ($product_classes as &$product_class) {
-				$product_class['insert'] = site_url('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
+				$product_class['insert'] = site_url('admin/catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
 			}
 			unset($product_class);
 
@@ -405,7 +405,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('catalog/product/update');
+		$data['insert'] = site_url('admin/catalog/product/update');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/product_list', $data));
@@ -424,13 +424,13 @@ class App_Controller_Admin_Catalog_Product extends Controller
 		);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Products"), site_url('catalog/product'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Products"), site_url('admin/catalog/product'));
 
 		if (!$product_id) {
-			$this->breadcrumb->add(_l("Add"), site_url('catalog/product/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/catalog/product/update'));
 		} else {
-			$this->breadcrumb->add(_l("Edit"), site_url('catalog/product/update', 'product_id=' . $product_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/catalog/product/update', 'product_id=' . $product_id));
 		}
 
 		//Load Information
@@ -559,9 +559,6 @@ class App_Controller_Admin_Catalog_Product extends Controller
 
 		$data['help_email'] = _l("mailto:%s?subject=New Product Option Request", option('config_email'));
 
-		//TODO: do we really need ths here?
-		$data['no_image'] = $this->image->resize('no_image.png', option('config_image_admin_thumb_width'), option('config_image_admin_thumb_height'));
-
 		//Translations
 		$data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 
@@ -668,18 +665,18 @@ class App_Controller_Admin_Catalog_Product extends Controller
 
 
 		//Ajax Urls
-		$data['url_generate_url']           = site_url('catalog/product/generate_url');
-		$data['url_generate_model']         = site_url('catalog/product/generate_model');
-		$data['url_autocomplete']           = site_url('catalog/product/autocomplete');
-		$data['url_attribute_autocomplete'] = site_url('catalog/attribute_group/autocomplete');
-		$data['url_option_autocomplete']    = site_url('catalog/option/autocomplete');
+		$data['url_generate_url']           = site_url('admin/catalog/product/generate_url');
+		$data['url_generate_model']         = site_url('admin/catalog/product/generate_model');
+		$data['url_autocomplete']           = site_url('admin/catalog/product/autocomplete');
+		$data['url_attribute_autocomplete'] = site_url('admin/catalog/attribute_group/autocomplete');
+		$data['url_option_autocomplete']    = site_url('admin/catalog/option/autocomplete');
 
 		//Action Buttons
-		$data['save']                = site_url('catalog/product/update', 'product_id=' . $product_id);
-		$data['cancel']              = site_url('catalog/product');
-		$data['change_class']        = site_url('catalog/product/change_class', 'product_id=' . $product_id);
-		$data['add_shipping_policy'] = site_url('setting/shipping_policy');
-		$data['add_return_policy']   = site_url('setting/return_policy');
+		$data['save']                = site_url('admin/catalog/product/update', 'product_id=' . $product_id);
+		$data['cancel']              = site_url('admin/catalog/product');
+		$data['change_class']        = site_url('admin/catalog/product/change_class', 'product_id=' . $product_id);
+		$data['add_shipping_policy'] = site_url('admin/setting/shipping_policy');
+		$data['add_return_policy']   = site_url('admin/setting/return_policy');
 
 		//The Template
 		$template = $this->Model_Catalog_ProductClass->getTemplate($data['product_class_id']);
@@ -738,7 +735,7 @@ class App_Controller_Admin_Catalog_Product extends Controller
 
 		if (isset($_POST['product_images'])) {
 			foreach ($_POST['product_images'] as $key => $image) {
-				if (strtolower($image['image']) == 'data/no_image.png' || !$image['image']) {
+				if (!$image['image']) {
 					unset($_POST['product_images'][$key]);
 				}
 			}

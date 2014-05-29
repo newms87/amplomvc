@@ -34,7 +34,7 @@ class App_Controller_Admin_Common_Home extends Controller
 			$order['action'] = array(
 				'view' => array(
 					'text' => _l("View"),
-					'href' => site_url('sale/order/info', 'order_id=' . $order['order_id'])
+					'href' => site_url('admin/sale/order/info', 'order_id=' . $order['order_id'])
 				),
 			);
 

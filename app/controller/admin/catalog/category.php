@@ -14,8 +14,8 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		$this->document->setTitle(_l("Category"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Category"), site_url('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Category"), site_url('admin/catalog/category'));
 
 		//Batch Actions
 		$actions = array(
@@ -45,7 +45,7 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		$data['can_modify'] = $this->user->can('modify', 'catalog/category');
 
 		//Action Buttons
-		$data['insert'] = site_url('catalog/category/form');
+		$data['insert'] = site_url('admin/catalog/category/form');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/category_list', $data));
@@ -72,7 +72,7 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
-			redirect('catalog/category');
+			redirect('admin/catalog/category');
 		}
 	}
 
@@ -89,7 +89,7 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} else {
-			redirect('catalog/category');
+			redirect('admin/catalog/category');
 		}
 	}
 
@@ -152,11 +152,11 @@ class App_Controller_Admin_Catalog_Category extends Controller
 				$category['actions'] = array(
 					'edit'   => array(
 						'text' => _l("Edit"),
-						'href' => site_url('catalog/category/form', 'category_id=' . $category['category_id'])
+						'href' => site_url('admin/catalog/category/form', 'category_id=' . $category['category_id'])
 					),
 					'delete' => array(
 						'text' => _l("Delete"),
-						'href' => site_url('catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
+						'href' => site_url('admin/catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
 					)
 				);
 			}
@@ -197,13 +197,13 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Category"), site_url('catalog/category'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Category"), site_url('admin/catalog/category'));
 
 		if ($category_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('catalog/category/form', 'category_id=' . $category_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/catalog/category/form', 'category_id=' . $category_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('catalog/category/form'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/catalog/category/form'));
 		}
 
 		//Load Information
@@ -260,11 +260,11 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		);
 
 		//Ajax Urls
-		$data['url_generate_url'] = site_url('catalog/category/generate_url');
+		$data['url_generate_url'] = site_url('admin/catalog/category/generate_url');
 
 		//Action Buttons
-		$data['action'] = site_url('catalog/category/update', 'category_id=' . $category_id);
-		$data['cancel'] = site_url('catalog/category');
+		$data['action'] = site_url('admin/catalog/category/update', 'category_id=' . $category_id);
+		$data['cancel'] = site_url('admin/catalog/category');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/category_form', $data));
@@ -301,7 +301,7 @@ class App_Controller_Admin_Catalog_Category extends Controller
 		if ($this->request->isAjax()) {
 			$this->listing();
 		} else {
-			redirect('catalog/category');
+			redirect('admin/catalog/category');
 		}
 	}
 

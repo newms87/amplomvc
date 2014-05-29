@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_class', $url);
+			redirect('admin/localisation/tax_class', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_class', $url);
+			redirect('admin/localisation/tax_class', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_class', $url);
+			redirect('admin/localisation/tax_class', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Tax Class"), site_url('localisation/tax_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Tax Class"), site_url('admin/localisation/tax_class', $url));
 
-		$data['insert'] = site_url('localisation/tax_class/insert', $url);
-		$data['delete'] = site_url('localisation/tax_class/delete', $url);
+		$data['insert'] = site_url('admin/localisation/tax_class/insert', $url);
+		$data['delete'] = site_url('admin/localisation/tax_class/delete', $url);
 
 		$data['tax_classes'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/tax_class/update', 'tax_class_id=' . $result['tax_class_id'] . $url)
+				'href' => site_url('admin/localisation/tax_class/update', 'tax_class_id=' . $result['tax_class_id'] . $url)
 			);
 
 			$data['tax_classes'][] = array(
@@ -194,7 +194,7 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_title'] = site_url('localisation/tax_class', 'sort=title' . $url);
+		$data['sort_title'] = site_url('admin/localisation/tax_class', 'sort=title' . $url);
 
 		$url = '';
 
@@ -250,16 +250,16 @@ class App_Controller_Admin_Localisation_TaxClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Tax Class"), site_url('localisation/tax_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Tax Class"), site_url('admin/localisation/tax_class', $url));
 
 		if (!isset($_GET['tax_class_id'])) {
-			$data['action'] = site_url('localisation/tax_class/insert', $url);
+			$data['action'] = site_url('admin/localisation/tax_class/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/tax_class/update', 'tax_class_id=' . $_GET['tax_class_id'] . $url);
+			$data['action'] = site_url('admin/localisation/tax_class/update', 'tax_class_id=' . $_GET['tax_class_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/tax_class', $url);
+		$data['cancel'] = site_url('admin/localisation/tax_class', $url);
 
 		if (isset($_GET['tax_class_id']) && !$this->request->isPost()) {
 			$tax_class_info = $this->Model_Localisation_TaxClass->getTaxClass($_GET['tax_class_id']);

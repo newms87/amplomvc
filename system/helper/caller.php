@@ -55,6 +55,11 @@ function image($image, $width = null, $height = null)
 	return $registry->get('image')->resize($image, $width, $height);
 }
 
+function theme_image($image, $width = null, $height = null)
+{
+	return image(theme_dir('image/' . $image), $width, $height);
+}
+
 function site_url($path = '', $query = null)
 {
 	global $registry;

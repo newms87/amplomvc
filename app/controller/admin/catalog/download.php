@@ -44,7 +44,7 @@ class App_Controller_Admin_Catalog_Download extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/download', $url);
+			redirect('admin/catalog/download', $url);
 		}
 
 		$this->getForm();
@@ -86,7 +86,7 @@ class App_Controller_Admin_Catalog_Download extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/download', $url);
+			redirect('admin/catalog/download', $url);
 		}
 
 		$this->getForm();
@@ -126,7 +126,7 @@ class App_Controller_Admin_Catalog_Download extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('catalog/download', $url);
+			redirect('admin/catalog/download', $url);
 		}
 
 		$this->getList();
@@ -166,11 +166,11 @@ class App_Controller_Admin_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Downloads"), site_url('catalog/download', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Downloads"), site_url('admin/catalog/download', $url));
 
-		$data['insert'] = site_url('catalog/download/insert', $url);
-		$data['delete'] = site_url('catalog/download/delete', $url);
+		$data['insert'] = site_url('admin/catalog/download/insert', $url);
+		$data['delete'] = site_url('admin/catalog/download/delete', $url);
 
 		$data['downloads'] = array();
 
@@ -190,7 +190,7 @@ class App_Controller_Admin_Catalog_Download extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('catalog/download/update', 'download_id=' . $result['download_id'] . $url)
+				'href' => site_url('admin/catalog/download/update', 'download_id=' . $result['download_id'] . $url)
 			);
 
 			$data['downloads'][] = array(
@@ -214,8 +214,8 @@ class App_Controller_Admin_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']      = site_url('catalog/download', 'sort=dd.name' . $url);
-		$data['sort_remaining'] = site_url('catalog/download', 'sort=d.remaining' . $url);
+		$data['sort_name']      = site_url('admin/catalog/download', 'sort=dd.name' . $url);
+		$data['sort_remaining'] = site_url('admin/catalog/download', 'sort=d.remaining' . $url);
 
 		$this->pagination->init();
 		$this->pagination->total  = $download_total;
@@ -261,16 +261,16 @@ class App_Controller_Admin_Catalog_Download extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Downloads"), site_url('catalog/download', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Downloads"), site_url('admin/catalog/download', $url));
 
 		if (!isset($_GET['download_id'])) {
-			$data['action'] = site_url('catalog/download/insert', $url);
+			$data['action'] = site_url('admin/catalog/download/insert', $url);
 		} else {
-			$data['action'] = site_url('catalog/download/update', 'download_id=' . $_GET['download_id'] . $url);
+			$data['action'] = site_url('admin/catalog/download/update', 'download_id=' . $_GET['download_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('catalog/download', $url);
+		$data['cancel'] = site_url('admin/catalog/download', $url);
 
 		$data['languages'] = $this->Model_Localisation_Language->getLanguages();
 

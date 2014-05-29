@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/weight_class', $url);
+			redirect('admin/localisation/weight_class', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/weight_class', $url);
+			redirect('admin/localisation/weight_class', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/weight_class', $url);
+			redirect('admin/localisation/weight_class', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Weight Class"), site_url('localisation/weight_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Weight Class"), site_url('admin/localisation/weight_class', $url));
 
-		$data['insert'] = site_url('localisation/weight_class/insert', $url);
-		$data['delete'] = site_url('localisation/weight_class/delete', $url);
+		$data['insert'] = site_url('admin/localisation/weight_class/insert', $url);
+		$data['delete'] = site_url('admin/localisation/weight_class/delete', $url);
 
 		$data['weight_classes'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/weight_class/update', 'weight_class_id=' . $result['weight_class_id'] . $url)
+				'href' => site_url('admin/localisation/weight_class/update', 'weight_class_id=' . $result['weight_class_id'] . $url)
 			);
 
 			$data['weight_classes'][] = array(
@@ -196,9 +196,9 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_title'] = site_url('localisation/weight_class', 'sort=title' . $url);
-		$data['sort_unit']  = site_url('localisation/weight_class', 'sort=unit' . $url);
-		$data['sort_value'] = site_url('localisation/weight_class', 'sort=value' . $url);
+		$data['sort_title'] = site_url('admin/localisation/weight_class', 'sort=title' . $url);
+		$data['sort_unit']  = site_url('admin/localisation/weight_class', 'sort=unit' . $url);
+		$data['sort_value'] = site_url('admin/localisation/weight_class', 'sort=value' . $url);
 
 		$url = '';
 
@@ -254,16 +254,16 @@ class App_Controller_Admin_Localisation_WeightClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Weight Class"), site_url('localisation/weight_class', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Weight Class"), site_url('admin/localisation/weight_class', $url));
 
 		if (!isset($_GET['weight_class_id'])) {
-			$data['action'] = site_url('localisation/weight_class/insert', $url);
+			$data['action'] = site_url('admin/localisation/weight_class/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/weight_class/update', 'weight_class_id=' . $_GET['weight_class_id'] . $url);
+			$data['action'] = site_url('admin/localisation/weight_class/update', 'weight_class_id=' . $_GET['weight_class_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/weight_class', $url);
+		$data['cancel'] = site_url('admin/localisation/weight_class', $url);
 
 		if (isset($_GET['weight_class_id']) && !$this->request->isPost()) {
 			$weight_class_info = $this->Model_Localisation_WeightClass->getWeightClass($_GET['weight_class_id']);

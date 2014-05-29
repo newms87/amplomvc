@@ -37,8 +37,8 @@ class App_Controller_Admin_Report_CustomerReward extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Customer Reward Points Report"), site_url('report/customer_reward', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Customer Reward Points Report"), site_url('admin/report/customer_reward', $url));
 
 		$data['customers'] = array();
 
@@ -58,7 +58,7 @@ class App_Controller_Admin_Report_CustomerReward extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
+				'href' => site_url('admin/sale/customer/update', 'customer_id=' . $result['customer_id'] . $url)
 			);
 
 			$data['customers'][] = array(

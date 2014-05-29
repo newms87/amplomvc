@@ -20,7 +20,7 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
-				redirect('catalog/attribute_group');
+				redirect('admin/catalog/attribute_group');
 			}
 		}
 
@@ -35,7 +35,7 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
-				redirect('catalog/attribute_group');
+				redirect('admin/catalog/attribute_group');
 			}
 		}
 
@@ -62,7 +62,7 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified attribute groups!"));
 
-				redirect('catalog/attribute_group');
+				redirect('admin/catalog/attribute_group');
 			}
 		}
 
@@ -75,8 +75,8 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 		$this->document->setTitle(_l("Attribute Groups"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Attribute Groups"), site_url('catalog/attribute_group'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Attribute Groups"), site_url('admin/catalog/attribute_group'));
 
 		//The Table Columns
 		$columns = array();
@@ -120,11 +120,11 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 			$attribute_group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
+					'href' => site_url('admin/catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('catalog/attribute_group/delete', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
+					'href' => site_url('admin/catalog/attribute_group/delete', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
 				)
 			);
 		}
@@ -157,7 +157,7 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 		$data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
-		$data['insert'] = site_url('catalog/attribute_group/update');
+		$data['insert'] = site_url('admin/catalog/attribute_group/update');
 
 		//Pagination
 		$this->pagination->init();
@@ -178,13 +178,13 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 		$attribute_group_id = !empty($_GET['attribute_group_id']) ? $_GET['attribute_group_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Attribute Groups"), site_url('catalog/attribute_group'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Attribute Groups"), site_url('admin/catalog/attribute_group'));
 
 		if (!$attribute_group_id) {
-			$this->breadcrumb->add(_l("Add"), site_url('catalog/attribute_group/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/catalog/attribute_group/update'));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id));
 		}
 
 		//Handle Post
@@ -248,8 +248,8 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
-		$data['cancel'] = site_url('catalog/attribute_group');
+		$data['save']   = site_url('admin/catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
+		$data['cancel'] = site_url('admin/catalog/attribute_group');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/attribute_group_form', $data));
@@ -321,7 +321,7 @@ class App_Controller_Admin_Catalog_AttributeGroup extends Controller
 		$attributes[] = array(
 			'label' => _l(" + Add Attribute"),
 			'value' => false,
-			'href'  => site_url('catalog/attribute_group'),
+			'href'  => site_url('admin/catalog/attribute_group'),
 		);
 
 		//JSON response

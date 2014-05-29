@@ -21,7 +21,7 @@ class App_Controller_Admin_Catalog_Option extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
-				redirect('catalog/option');
+				redirect('admin/catalog/option');
 			}
 		}
 
@@ -38,7 +38,7 @@ class App_Controller_Admin_Catalog_Option extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
-				redirect('catalog/option');
+				redirect('admin/catalog/option');
 			}
 		}
 
@@ -65,7 +65,7 @@ class App_Controller_Admin_Catalog_Option extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified options!"));
 
-				redirect('catalog/option', $this->url->getQueryExclude('action'));
+				redirect('admin/catalog/option', $this->url->getQueryExclude('action'));
 			}
 		}
 
@@ -78,8 +78,8 @@ class App_Controller_Admin_Catalog_Option extends Controller
 		$this->document->setTitle(_l("Options"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Options"), site_url('catalog/option'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Options"), site_url('admin/catalog/option'));
 
 		//The Table Columns
 		$columns = array();
@@ -111,11 +111,11 @@ class App_Controller_Admin_Catalog_Option extends Controller
 			$option['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('catalog/option/update', 'option_id=' . $option['option_id']),
+					'href' => site_url('admin/catalog/option/update', 'option_id=' . $option['option_id']),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query),
+					'href' => site_url('admin/catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query),
 				),
 			);
 
@@ -154,8 +154,8 @@ class App_Controller_Admin_Catalog_Option extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('catalog/option/update');
-		$data['delete'] = site_url('catalog/option/delete');
+		$data['insert'] = site_url('admin/catalog/option/update');
+		$data['delete'] = site_url('admin/catalog/option/delete');
 
 		//Render
 		$this->response->setOutput($this->render('catalog/option_list', $data));
@@ -170,18 +170,18 @@ class App_Controller_Admin_Catalog_Option extends Controller
 		$option_id = isset($_GET['option_id']) ? (int)$_GET['option_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Options"), site_url('catalog/option'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Options"), site_url('admin/catalog/option'));
 
 		if (!$option_id) {
-			$this->breadcrumb->add(_l("Add"), site_url('catalog/option/update'));
+			$this->breadcrumb->add(_l("Add"), site_url('admin/catalog/option/update'));
 		} else {
-			$this->breadcrumb->add(_l("Edit"), site_url('catalog/option/update', 'option_id=' . $option_id));
+			$this->breadcrumb->add(_l("Edit"), site_url('admin/catalog/option/update', 'option_id=' . $option_id));
 		}
 
 		//Action Buttons
-		$data['save']   = site_url('catalog/option/update', 'option_id=' . $option_id);
-		$data['cancel'] = site_url('catalog/option');
+		$data['save']   = site_url('admin/catalog/option/update', 'option_id=' . $option_id);
+		$data['cancel'] = site_url('admin/catalog/option');
 
 		//Load Information
 		$option_info = array();
@@ -326,7 +326,7 @@ class App_Controller_Admin_Catalog_Option extends Controller
 		$options[] = array(
 			'label' => _l(" + Add Option"),
 			'value' => false,
-			'href'  => site_url('catalog/option'),
+			'href'  => site_url('admin/catalog/option'),
 		);
 
 		//JSON response

@@ -10,15 +10,15 @@ class App_Controller_Admin_Extension_Shipping_Flat extends Controller
 
 			$this->message->add('success', _l("You have successfully updated Flat Rate Shipping settings"));
 
-			redirect('extension/shipping');
+			redirect('admin/extension/shipping');
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('extension/shipping'));
-		$this->breadcrumb->add(_l("Flat Rate Shipping"), site_url('shipping/flat'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('admin/extension/shipping'));
+		$this->breadcrumb->add(_l("Flat Rate Shipping"), site_url('admin/shipping/flat'));
 
-		$data['action'] = site_url('shipping/flat');
+		$data['action'] = site_url('admin/shipping/flat');
 
 		//Entry Data
 		if ($this->request->isPost()) {

@@ -33,7 +33,7 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_rate', $url);
+			redirect('admin/localisation/tax_rate', $url);
 		}
 
 		$this->getForm();
@@ -62,7 +62,7 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_rate', $url);
+			redirect('admin/localisation/tax_rate', $url);
 		}
 
 		$this->getForm();
@@ -93,7 +93,7 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			redirect('localisation/tax_rate', $url);
+			redirect('admin/localisation/tax_rate', $url);
 		}
 
 		$this->getList();
@@ -133,11 +133,11 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Tax Rates"), site_url('localisation/tax_rate', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Tax Rates"), site_url('admin/localisation/tax_rate', $url));
 
-		$data['insert'] = site_url('localisation/tax_rate/insert', $url);
-		$data['delete'] = site_url('localisation/tax_rate/delete', $url);
+		$data['insert'] = site_url('admin/localisation/tax_rate/insert', $url);
+		$data['delete'] = site_url('admin/localisation/tax_rate/delete', $url);
 
 		$data['tax_rates'] = array();
 
@@ -157,7 +157,7 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 
 			$action[] = array(
 				'text' => _l("Edit"),
-				'href' => site_url('localisation/tax_rate/update', 'tax_rate_id=' . $result['tax_rate_id'] . $url)
+				'href' => site_url('admin/localisation/tax_rate/update', 'tax_rate_id=' . $result['tax_rate_id'] . $url)
 			);
 
 			$data['tax_rates'][] = array(
@@ -199,12 +199,12 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$data['sort_name']          = site_url('localisation/tax_rate', 'sort=tr.name' . $url);
-		$data['sort_rate']          = site_url('localisation/tax_rate', 'sort=tr.rate' . $url);
-		$data['sort_type']          = site_url('localisation/tax_rate', 'sort=tr.type' . $url);
-		$data['sort_geo_zone']      = site_url('localisation/tax_rate', 'sort=gz.name' . $url);
-		$data['sort_date_added']    = site_url('localisation/tax_rate', 'sort=tr.date_added' . $url);
-		$data['sort_date_modified'] = site_url('localisation/tax_rate', 'sort=tr.date_modified' . $url);
+		$data['sort_name']          = site_url('admin/localisation/tax_rate', 'sort=tr.name' . $url);
+		$data['sort_rate']          = site_url('admin/localisation/tax_rate', 'sort=tr.rate' . $url);
+		$data['sort_type']          = site_url('admin/localisation/tax_rate', 'sort=tr.type' . $url);
+		$data['sort_geo_zone']      = site_url('admin/localisation/tax_rate', 'sort=gz.name' . $url);
+		$data['sort_date_added']    = site_url('admin/localisation/tax_rate', 'sort=tr.date_added' . $url);
+		$data['sort_date_modified'] = site_url('admin/localisation/tax_rate', 'sort=tr.date_modified' . $url);
 
 		$url = '';
 
@@ -260,16 +260,16 @@ class App_Controller_Admin_Localisation_TaxRate extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Tax Rates"), site_url('localisation/tax_rate', $url));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Tax Rates"), site_url('admin/localisation/tax_rate', $url));
 
 		if (!isset($_GET['tax_rate_id'])) {
-			$data['action'] = site_url('localisation/tax_rate/insert', $url);
+			$data['action'] = site_url('admin/localisation/tax_rate/insert', $url);
 		} else {
-			$data['action'] = site_url('localisation/tax_rate/update', 'tax_rate_id=' . $_GET['tax_rate_id'] . $url);
+			$data['action'] = site_url('admin/localisation/tax_rate/update', 'tax_rate_id=' . $_GET['tax_rate_id'] . $url);
 		}
 
-		$data['cancel'] = site_url('localisation/tax_rate', $url);
+		$data['cancel'] = site_url('admin/localisation/tax_rate', $url);
 
 		if (isset($_GET['tax_rate_id']) && !$this->request->isPost()) {
 			$tax_rate_info = $this->Model_Localisation_TaxRate->getTaxRate($_GET['tax_rate_id']);

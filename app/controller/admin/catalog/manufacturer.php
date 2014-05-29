@@ -15,7 +15,7 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 			}
 
-			redirect('catalog/manufacturer');
+			redirect('admin/catalog/manufacturer');
 		}
 
 		$this->getForm();
@@ -30,7 +30,7 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
-				redirect('catalog/manufacturer');
+				redirect('admin/catalog/manufacturer');
 			}
 		}
 
@@ -44,7 +44,7 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
-				redirect('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
+				redirect('admin/catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
 			}
 		}
 
@@ -80,7 +80,7 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("Success: You have modified manufacturers!"));
 
-				redirect('catalog/manufacturer', $this->url->getQueryExclude('action'));
+				redirect('admin/catalog/manufacturer', $this->url->getQueryExclude('action'));
 			}
 		}
 
@@ -93,8 +93,8 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 		$this->document->setTitle(_l("Manufacturer"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Manufacturer"), site_url('catalog/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Manufacturer"), site_url('admin/catalog/manufacturer'));
 
 		//The Table Columns
 		$columns = array();
@@ -172,11 +172,11 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 			$manufacturer['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
+					'href' => site_url('admin/catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . $url_query)
+					'href' => site_url('admin/catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . $url_query)
 				)
 			);
 
@@ -234,7 +234,7 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 		$data['limits'] = $this->sort->renderLimits();
 
 		//Action buttons
-		$data['insert'] = site_url('catalog/manufacturer/insert');
+		$data['insert'] = site_url('admin/catalog/manufacturer/insert');
 
 		//Pagination
 		$this->pagination->init();
@@ -252,16 +252,16 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 
 		$manufacturer_id = $data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Manufacturer"), site_url('catalog/manufacturer'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Manufacturer"), site_url('admin/catalog/manufacturer'));
 
 		if (!$manufacturer_id) {
-			$data['action'] = site_url('catalog/manufacturer/insert');
+			$data['action'] = site_url('admin/catalog/manufacturer/insert');
 		} else {
-			$data['action'] = site_url('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id);
+			$data['action'] = site_url('admin/catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id);
 		}
 
-		$data['cancel'] = site_url('catalog/manufacturer');
+		$data['cancel'] = site_url('admin/catalog/manufacturer');
 
 		if ($manufacturer_id && !$this->request->isPost()) {
 			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
@@ -302,8 +302,8 @@ class App_Controller_Admin_Catalog_Manufacturer extends Controller
 		);
 
 		//Ajax Urls
-		$data['url_generate_url'] = site_url('catalog/manufacturer/generate_url');
-		$data['url_autocomplete'] = site_url('catalog/manufacturer/autocomplete');
+		$data['url_generate_url'] = site_url('admin/catalog/manufacturer/generate_url');
+		$data['url_autocomplete'] = site_url('admin/catalog/manufacturer/autocomplete');
 
 		$translate_fields = array(
 			'name',

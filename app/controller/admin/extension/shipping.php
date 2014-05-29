@@ -9,7 +9,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 			if (!$this->System_Extension_Shipping->has($_GET['code'])) {
 				$this->message->add('warning', _l("The extension %s does not exist!", $_GET['code']));
 
-				redirect('extension/shipping');
+				redirect('admin/extension/shipping');
 			}
 
 			$this->getForm();
@@ -29,7 +29,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 					$this->message->add('success', _l("You have successfully removed the %s extension.", $_GET['code']));
 				}
 
-				redirect('extension/shipping', $this->url->getQueryExclude('name'));
+				redirect('admin/extension/shipping', $this->url->getQueryExclude('name'));
 			}
 		} else {
 			$this->error['permission'] = _l("You do not have permission to modify the Shipping extensions");
@@ -44,8 +44,8 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 		$this->document->setTitle(_l("Shipping Extensions"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('extension/shipping'));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('admin/extension/shipping'));
 
 		//The Table Columns
 		$columns = array();
@@ -95,22 +95,22 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 				$actions = array(
 					'edit'      => array(
 						'text' => _l("Edit"),
-						'href' => site_url('extension/shipping/edit', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/shipping/edit', 'code=' . $extension['code'])
 					),
 					'settings'  => array(
 						'text' => _l("Settings"),
-						'href' => site_url('extension/shipping', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/shipping', 'code=' . $extension['code'])
 					),
 					'uninstall' => array(
 						'text' => _l("Uninstall"),
-						'href' => site_url('extension/shipping/uninstall', 'code=' . $extension['code']),
+						'href' => site_url('admin/extension/shipping/uninstall', 'code=' . $extension['code']),
 					),
 				);
 			} else {
 				$actions = array(
 					'install' => array(
 						'text' => _l("Install"),
-						'href' => site_url('extension/shipping/install', 'code=' . $extension['code'])
+						'href' => site_url('admin/extension/shipping/install', 'code=' . $extension['code'])
 					),
 				);
 			}
@@ -130,7 +130,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 		$data['list_view'] = $this->table->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('extension/add');
+		$data['insert'] = site_url('admin/extension/add');
 
 		//Render limit Menu
 		$data['limits'] = $this->sort->renderLimits();
@@ -162,7 +162,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 
 			$this->message->add('success', _l("You have successfully modified the %s extension!", $code));
 
-			redirect('extension/shipping');
+			redirect('admin/extension/shipping');
 		}
 
 		$shipping_extension = $this->System_Extension_Shipping->get($code);
@@ -174,9 +174,9 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 		$data['page_title'] = $shipping_extension->info('title');
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('extension/shipping'));
-		$this->breadcrumb->add($shipping_extension->info('title'), site_url('extension/shipping', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('admin/extension/shipping'));
+		$this->breadcrumb->add($shipping_extension->info('title'), site_url('admin/extension/shipping', 'code=' . $code));
 
 		//Load Information
 		if ($this->request->isPost()) {
@@ -220,8 +220,8 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('extension/shipping', 'code=' . $code);
-		$data['cancel'] = site_url('extension/shipping');
+		$data['save']   = site_url('admin/extension/shipping', 'code=' . $code);
+		$data['cancel'] = site_url('admin/extension/shipping');
 
 		//Render
 		$this->response->setOutput($this->render('extension/shipping', $data));
@@ -236,7 +236,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 
 		if (!is_file($file)) {
 			$this->message->add('warning', _l("Unable to locate %s for editing!", $file));
-			redirect('extension/shipping');
+			redirect('admin/extension/shipping');
 		}
 
 		//Handle POST
@@ -247,16 +247,16 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 				$this->message->add('warning', _l("Failed to save changes to %s", $file));
 			}
 
-			redirect('extension/shipping');
+			redirect('admin/extension/shipping');
 		}
 
 		//Load extension
 		$shipping_extension = $this->System_Extension_Shipping->get($code);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
-		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('extension/shipping'));
-		$this->breadcrumb->add($shipping_extension->info('title'), site_url('extension/shipping/edit', 'code=' . $code));
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Shipping Extensions"), site_url('admin/extension/shipping'));
+		$this->breadcrumb->add($shipping_extension->info('title'), site_url('admin/extension/shipping/edit', 'code=' . $code));
 
 		//Load Contents
 		$data['contents'] = file_get_contents($file);
@@ -266,8 +266,8 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 		$data['edit_file']  = $file;
 
 		//Action Buttons
-		$data['save']   = site_url('extension/shipping/edit', 'code=' . $code);
-		$data['cancel'] = site_url('extension/shipping');
+		$data['save']   = site_url('admin/extension/shipping/edit', 'code=' . $code);
+		$data['cancel'] = site_url('admin/extension/shipping');
 
 		//Render
 		$this->response->setOutput($this->render('extension/edit', $data));
@@ -321,7 +321,7 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
-		redirect('extension/shipping');
+		redirect('admin/extension/shipping');
 	}
 
 	public function uninstall()
@@ -332,6 +332,6 @@ class App_Controller_Admin_Extension_Shipping extends Controller
 			$this->message->add('error', $this->System_Extension_Model->getError());
 		}
 
-		redirect('extension/shipping');
+		redirect('admin/extension/shipping');
 	}
 }
