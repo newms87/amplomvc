@@ -90,7 +90,6 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 	// error was suppressed with the @-operator
 	if (!ini_get('display_errors') || 0 === error_reporting()) { return false;}
 
-	echo "REPORTING ERROR " . (ini_get('display_errors') ? ' on ' : ' off ') . ini_get('display_errors') . '<BR>';
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
