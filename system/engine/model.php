@@ -319,21 +319,31 @@ abstract class Model
 
 	protected function extractOrder($data)
 	{
-		$sort = '';
-
-		if (!empty($data['sort'])) {
-			$order = (isset($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC';
-
-			if (!preg_match("/[^a-z0-9_]/i", $data['sort'])) {
-				$data['sort'] = "`" . $this->db->escape($data['sort']) . "`";
-			} else {
-				$data['sort'] = $this->db->escape($data['sort']);
-			}
-
-			$sort = "ORDER BY " . $data['sort'] . " $order";
+		if (empty($data['sort'])) {
+			return '';
+		}
+		//TODO: Legacy code to handle single column sort. Remove after Version 1.0
+		if (!is_array($data['sort'])) {
+			$data['sort'] = array(
+				$data['sort'] => !empty($data['order']) ? $data['order'] : 'ASC',
+			);
 		}
 
-		return $sort;
+		$sql = '';
+
+		foreach ($data['sort'] as $sort => $order) {
+			$sort = $this->db->escape($sort);
+
+			if (!preg_match("/[^a-z0-9_]/i", $sort)) {
+				$sort = "`" . $sort . "`";
+			}
+
+			$order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+
+			$sql .= ($sql ? ',' : '') . "$sort $order";
+		}
+
+		return "ORDER BY $sql";
 	}
 
 	protected function extractLimit($data)

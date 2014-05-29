@@ -9,19 +9,28 @@ class Date extends Library
 		$this->timezone = new DateTimeZone(DEFAULT_TIMEZONE);
 	}
 
-	public function datetime(&$date = null)
+	public function datetime(&$date = null, $format = null)
 	{
 		if (!$date) {
 			$date = new DateTime("@" . _time());
 		} elseif (is_string($date)) {
 			try {
-				$date = new DateTime($date);
+				if ($format) {
+					$date = date_create_from_format($format, $date);
+				} else {
+					$date = new DateTime($date);
+				}
 			} catch (Exception $e) {
-				trigger_error(__METHOD__ . "(): The date string $date is improperly formatted.");
-				$date = new Datetime("@" . _time());
+				$this->error['date_string'] = $e;
+				return false;
 			}
 		} elseif (is_int($date)) {
 			$date = new DateTime("@" . $date);
+		}
+
+		if (!$date) {
+			$this->error['format'] = _l("Invalid Date Format");
+			return false;
 		}
 
 		return $date->setTimezone($this->timezone);
@@ -41,7 +50,9 @@ class Date extends Library
 
 	public function now($format = '', $return_type = AC_DATE_STRING)
 	{
-		$date = $this->datetime();
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		switch ($return_type) {
 			case AC_DATE_OBJECT:
@@ -60,7 +71,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		$diff = $date->diff($this->datetime());
 
@@ -73,7 +86,9 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		$diff = $date->diff($this->datetime());
 
@@ -98,7 +113,9 @@ class Date extends Library
 	 */
 	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		if (!empty($interval) && is_string($interval)) {
 			$interval = date_interval_create_from_date_string($interval);
@@ -121,7 +138,9 @@ class Date extends Library
 
 	public function getCronUnits($date = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date)) {
+			return false;
+		}
 
 		return array(
 			'i' => (int)$this->format($date, 'i'),
@@ -136,17 +155,29 @@ class Date extends Library
 
 	public function getDayOfWeek($date = null)
 	{
-		return $this->datetime($date)->format('w');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('w');
 	}
 
 	public function getDayOfMonth($date = null)
 	{
-		return $this->datetime($date)->format('d');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('d');
 	}
 
 	public function getDayOfYear($date = null)
 	{
-		return $this->datetime($date)->format('z');
+		if (!$this->datetime($date)) {
+			return false;
+		}
+
+		return $date->format('z');
 	}
 
 	public function isEqual($d1, $d2)
@@ -172,9 +203,14 @@ class Date extends Library
 
 	public function diff($d1, $d2 = null)
 	{
-		$this->datetime($d1);
-		$this->datetime($d2);
+		if (!$this->datetime($d1)) {
+			return false;
+		}
 
+		if (!$this->datetime($d2)) {
+			return false;
+		}
+		
 		return $d1->diff($d2);
 	}
 
@@ -188,9 +224,11 @@ class Date extends Library
 		return $this->diff($d1, $d2)->invert === 1;
 	}
 
-	public function format($date = null, $format = '')
+	public function format($date = null, $format = '', $from_format = null)
 	{
-		$this->datetime($date);
+		if (!$this->datetime($date, $from_format)) {
+			return false;
+		}
 
 		if (!$format) {
 			$format = $this->language->info('datetime_format');

@@ -54,7 +54,7 @@
 	$('select[name=batch_action]').change(function () {
 		$('.action_value').removeClass('active');
 		$('#for-' + $(this).val()).addClass('active');
-	});
+	}).change();
 
 	function do_batch_action(action) {
 		var $listing = $('<?= $replace; ?>');

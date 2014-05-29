@@ -17,8 +17,7 @@ class Extend extends Library
 		$link += $defaults;
 
 		if (empty($link['display_name'])) {
-			$this->message->add("warning", __METHOD__ . "(): " . _l("You must specify the display_name when adding a new navigation link!"));
-
+			$this->error['display_name'] = _l("You must specify the display_name when adding a new navigation link!");
 			return false;
 		}
 
@@ -28,7 +27,8 @@ class Extend extends Library
 
 		//Link already exists
 		if ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->escape($link['name']) . "'")) {
-			return 'exists';
+			$this->error['duplicate'] = _l("The navigation link %s already exists", $link['name']);
+			return false;
 		}
 
 		if (!$link['parent_id'] && $link['parent']) {
@@ -38,10 +38,17 @@ class Extend extends Library
 		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->escape($group) . "'");
 
 		if ($navigation_group_id) {
-			$this->App_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
+			$this->Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
 		} else {
-			$this->message->add('warning', __METHOD__ . "(): " . _l("The Navigation Group $group does not exist!"));
+			$this->error['navigation_group'] = _l("The Navigation Group $group does not exist!");
 			return false;
+		}
+
+		if (!empty($link['children'])) {
+			foreach ($link['children'] as $child) {
+				$child['parent'] = $link['name'];
+				$this->addNavigationLink($group, $child);
+			}
 		}
 
 		return true;
@@ -56,7 +63,7 @@ class Extend extends Library
 		$navigation_ids = $this->queryColumn($query);
 
 		foreach ($navigation_ids as $navigation_id) {
-			$this->App_Model_Design_Navigation->deleteNavigationLink($navigation_id);
+			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);
 		}
 	}
 
@@ -80,7 +87,7 @@ class Extend extends Library
 		$layout += $data;
 
 		if (!empty($routes)) {
-			$stores = $this->App_Model_Setting_Store->getStores();
+			$stores = $this->Model_Setting_Store->getStores();
 
 			foreach ($stores as $store) {
 				foreach ($routes as $route) {
@@ -92,7 +99,7 @@ class Extend extends Library
 			}
 		}
 
-		return $this->App_Model_Design_Layout->addLayout($layout);
+		return $this->Model_Design_Layout->addLayout($layout);
 	}
 
 	//TODO: This should remove based on a unique ID not the name...
@@ -101,7 +108,7 @@ class Extend extends Library
 		$result = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
-			$this->App_Model_Design_Layout->deleteLayout($result->row['layout_id']);
+			$this->Model_Design_Layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 
