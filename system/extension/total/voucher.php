@@ -7,16 +7,19 @@ class System_Extension_Total_Voucher extends System_Extension_Total
 			$vouchers = $this->cart->getVouchers();
 
 			if ($vouchers) {
-				if ($vouchers['amount'] > $total) {
-					$amount = $total;
-				} else {
-					$amount = $vouchers['amount'];
+				foreach ($vouchers as $voucher) {
+					if ($voucher['remaining'] > $total) {
+						$amount = $total;
+					} else {
+						$amount = $voucher['amount'];
+					}
 				}
 
-				$total_data['voucher'] = array(
+
+				$total_data[$voucher['code']] = array(
 					'method_id' => $vouchers['voucher_id'],
 					'title'     => _l("Voucher (%s)", $this->session->get('voucher')),
-					'amount'     => -$amount,
+					'amount'    => -$amount,
 				);
 
 				$total -= $amount;
@@ -31,10 +34,10 @@ class System_Extension_Total_Voucher extends System_Extension_Total
 			return;
 		}
 
-		$voucher_info = $this->System_Model_Voucher->getVoucher($order_total['method_id']);
+		$voucher_info = $this->Model_Sale_Voucher->getVoucher($order_total['method_id']);
 
 		if ($voucher_info) {
-			$this->System_Model_Voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['amount']);
+			$this->System_Model_Sale_Voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['amount']);
 		}
 	}
 }

@@ -3,7 +3,36 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 {
 	public function index()
 	{
-		$this->getList();
+		//Page Head
+		$this->document->setTitle(_l("Gift Vouchers"));
+
+		//Breadcrumbs
+		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Voucher List"), site_url('admin/sale/voucher'));
+
+		//Batch Actions
+		$data['batch_actions'] = array(
+			'enable'  => array(
+				'label' => _l("Enable"),
+			),
+			'disable' => array(
+				'label' => _l("Disable"),
+			),
+			'copy'    => array(
+				'label' => _l("Copy"),
+			),
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
+		);
+
+		$data['batch_update'] = 'sale/voucher/batch_action';
+
+		//Action Buttons
+		$data['insert'] = site_url('admin/sale/voucher/form');
+
+		//Render
+		$this->response->setOutput($this->render('sale/voucher_list', $data));
 	}
 
 	public function update()
@@ -42,51 +71,8 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 		$this->getList();
 	}
 
-	public function batch_update()
+	private function listing()
 	{
-		if (!empty($_GET['selected']) && isset($_GET['action'])) {
-			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_GET['selected'] as $voucher_id) {
-					switch ($_GET['action']) {
-						case 'enable':
-							$this->Model_Sale_Voucher->editVoucher($voucher_id, array('status' => 1));
-							break;
-						case 'disable':
-							$this->Model_Sale_Voucher->editVoucher($voucher_id, array('status' => 0));
-							break;
-						case 'delete':
-							$this->Model_Sale_Voucher->deleteVoucher($voucher_id);
-							break;
-						case 'copy':
-							$this->Model_Sale_Voucher->copyVoucher($voucher_id);
-							break;
-					}
-
-					if ($this->error) {
-						break;
-					}
-				}
-			}
-
-			if (!$this->error && !$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified vouchers!"));
-
-				redirect('admin/sale/voucher', $this->url->getQueryExclude('action'));
-			}
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
-		//Page Head
-		$this->document->setTitle(_l("Gift Voucher"));
-
-		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
-		$this->breadcrumb->add(_l("Voucher List"), site_url('admin/sale/voucher'));
-
 		//The Table Columns
 		$columns = array();
 
@@ -150,17 +136,15 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 		$voucher_total = $this->Model_Sale_Voucher->getTotalVouchers($filter);
 		$vouchers      = $this->Model_Sale_Voucher->getVouchers($sort + $filter);
 
-		$url_query = $this->url->getQueryExclude('voucher_id');
-
 		foreach ($vouchers as &$voucher) {
 			$voucher['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
+					'href' => site_url('admin/sale/voucher/form', 'voucher_id=' . $voucher['voucher_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/sale/voucher/delete', 'voucher_id=' . $voucher['voucher_id'] . '&' . $url_query)
+					'href' => site_url('admin/sale/voucher/delete', 'voucher_id=' . $voucher['voucher_id'])
 				)
 			);
 
@@ -169,52 +153,23 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 		}
 		unset($voucher);
 
-		//Build The Table
-		$tt_data = array(
-			'row_id' => 'voucher_id',
+		$listing = array(
+			'row_id'         => 'category_id',
+			'columns'        => $columns,
+			'rows'           => $vouchers,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $voucher_total,
+			'listing_path'   => 'sale/voucher/listing',
 		);
 
-		$this->table->init();
-		$this->table->setTemplate('table/list_view');
-		$this->table->setColumns($columns);
-		$this->table->setRows($vouchers);
-		$this->table->setTemplateData($tt_data);
-		$this->table->mapAttribute('filter_value', $filter);
+		$output = block('widget/listing', null, $listing);
 
-		$data['list_view'] = $this->table->render();
-
-		//Batch Actions
-		$data['batch_actions'] = array(
-			'enable'  => array(
-				'label' => _l("Enable"),
-			),
-			'disable' => array(
-				'label' => _l("Disable"),
-			),
-			'copy'    => array(
-				'label' => _l("Copy"),
-			),
-			'delete'  => array(
-				'label' => _l("Delete"),
-			),
-		);
-
-		$data['batch_update'] = 'sale/voucher/batch_update';
-
-		//Render Limit Menu
-		$data['limits'] = $this->sort->renderLimits();
-
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total = $voucher_total;
-
-		$data['pagination'] = $this->pagination->render();
-
-		//Action Buttons
-		$data['insert'] = site_url('admin/sale/voucher/update');
-
-		//Render
-		$this->response->setOutput($this->render('sale/voucher_list', $data));
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($output);
+		} else {
+			return $output;
+		}
 	}
 
 	private function getForm()
@@ -354,6 +309,42 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 		return empty($this->error);
 	}
 
+	public function batch_action()
+	{
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
+				foreach ($_GET['selected'] as $voucher_id) {
+					switch ($_GET['action']) {
+						case 'enable':
+							$this->Model_Sale_Voucher->editVoucher($voucher_id, array('status' => 1));
+							break;
+						case 'disable':
+							$this->Model_Sale_Voucher->editVoucher($voucher_id, array('status' => 0));
+							break;
+						case 'delete':
+							$this->Model_Sale_Voucher->deleteVoucher($voucher_id);
+							break;
+						case 'copy':
+							$this->Model_Sale_Voucher->copyVoucher($voucher_id);
+							break;
+					}
+
+					if ($this->error) {
+						break;
+					}
+				}
+			}
+
+			if (!$this->error && !$this->message->has('error', 'warning')) {
+				$this->message->add('success', _l("Success: You have modified vouchers!"));
+
+				redirect('admin/sale/voucher', $this->url->getQueryExclude('action'));
+			}
+		}
+
+		$this->getList();
+	}
+
 	public function history()
 	{
 		if (isset($_GET['page'])) {
@@ -395,7 +386,7 @@ class App_Controller_Admin_Sale_Voucher extends Controller
 			$voucher_id = isset($_GET['voucher_id']) ? $_GET['voucher_id'] : false;
 
 			if ($voucher_id) {
-				$voucher = $this->System_Model_Voucher->getVoucher($voucher_id);
+				$voucher = $this->Model_Sale_Voucher->getVoucher($voucher_id);
 			} else {
 				$json['error'] = _l("You did not provide the voucher ID");
 			}

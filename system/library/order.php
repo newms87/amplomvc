@@ -418,13 +418,13 @@ class Order Extends Library
 		$order['order_products'] = $order_products;
 
 		// Downloads
-		$order['order_downloads'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '$order_id'");
+		$order['order_downloads'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = $order_id");
 
 		// Gift Voucher
-		$order_vouchers = $this->queryRows("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '$order_id'");
+		$order_vouchers = $this->queryColumn("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = $order_id");
 
-		foreach ($order_vouchers as $voucher) {
-			$this->System_Model_Voucher->activate($voucher['voucher_id']);
+		foreach ($order_vouchers as $voucher_id) {
+			$this->Model_Sale_Voucher->activate($voucher_id);
 		}
 
 		$order['order_vouchers'] = $order_vouchers;

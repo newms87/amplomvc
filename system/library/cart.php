@@ -1167,7 +1167,7 @@ class Cart extends Library
 
 	public function getVoucherIds()
 	{
-		return $this->session->has('vouchers') ? $this->session->get('vouchers') : array();
+		return !empty($_SESSION['vouchers']) ? $_SESSION['vouchers'] : array();
 	}
 
 	public function getVouchers()
@@ -1175,17 +1175,31 @@ class Cart extends Library
 		$vouchers = array();
 
 		foreach ($this->getVoucherIds() as $voucher_id) {
-			$vouchers[] = $this->System_Model_Voucher->getVoucher($voucher_id);
+			$vouchers[] = $this->Model_Sale_Voucher->getVoucher($voucher_id);
 		}
 	}
 
-	public function addVoucher($voucher_id)
+	public function addVoucher($code)
 	{
-		if (!$this->session->has('vouchers')) {
-			$_SESSION['vouchers'][] = $voucher_id;
-		} else {
-			$this->session->set('vouchers', array($voucher_id));
+		$voucher_id = $this->Model_Sale_Voucher->verifyVoucher($code);
+
+		if (!$voucher_id) {
+			$this->error['voucher'] = $this->Model_Sale_Voucher->getError();
+			return false;
 		}
+
+		if (isset($_SESSION['vouchers'][$voucher_id])) {
+			$this->error['voucher_added'] = _l("The Voucher %s has already been added to the cart", $code);
+			return false;
+		}
+
+		if (empty($_SESSION['vouchers'])) {
+			$_SESSION['vouchers'] = array($voucher_id => $code);
+		} else {
+			$_SESSION['vouchers'][$voucher_id] = $code;
+		}
+
+		return true;
 	}
 
 	public function removeVoucher($voucher_id)
@@ -1195,7 +1209,7 @@ class Cart extends Library
 
 	public function removeAllVouchers()
 	{
-		$this->session->remove('vouchers');
+		unset($_SESSION['vouchers']);
 	}
 
 	/**

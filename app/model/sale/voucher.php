@@ -1,84 +1,87 @@
 <?php
+
 class App_Model_Sale_Voucher extends Model
 {
-	public function addVoucher($data)
+	public function add($voucher)
 	{
+		if (!validate('text', $voucher['to_name'])) {
+			$this->error['to_name'] = _l("You must provide the recipient's name");
+		}
+
+		if (!validate('text', $voucher['to_email'])) {
+			$this->error['to_email'] = _l("You must provide the recipient's email");
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
+		$voucher += array(
+			'from_name'  => 'Anonymous',
+			'from_email' => 'anonymous@' . DOMAIN,
+			'message'    => _l("Someone has sent you a gift for %s!", option('config_name')),
+		);
+
 		$data['date_added'] = $this->date->now();
 
-		return $this->insert('voucher', $data);
+		return $this->insert('voucher', $voucher);
 	}
 
-	public function editVoucher($voucher_id, $data)
-	{
-		$this->update('voucher', $data, $voucher_id);
-	}
-
-	public function copyVoucher($voucher_id)
-	{
-		$voucher = $this->getVoucher($voucher_id);
-
-		$code_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE code like '" . $this->escape($voucher['code']) . "%'");
-
-		$voucher['code'] .= $code_count + 1;
-
-		$this->addVoucher($voucher);
-	}
-
-	public function deleteVoucher($voucher_id)
+	public function remove($voucher_id)
 	{
 		$this->delete('voucher', $voucher_id);
-		$this->delete('voucher_history', array('voucher_id' => $voucher_id));
 	}
 
 	public function getVoucher($voucher_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
+		$voucher = $this->queryRow("SELECT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = " . (int)$voucher_id);
+
+		if ($voucher) {
+			$spent = $this->queryVar("SELECT SUM(amount) FROM " . DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$voucher_id);
+			$voucher['remaining'] = $voucher['amount'] - $spent;
+		}
+
+		return $voucher;
 	}
 
 	public function getVoucherByCode($code)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->escape($code) . "' LIMIT 1");
+		$voucher_id = $this->queryVar("SELECT voucher_id FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->escape($code) . "' LIMIT 1");
+
+		return $this->getVoucher($voucher_id);
 	}
 
-	public function getVouchers($data = array(), $select = '', $total = false)
+	public function getVouchers($filter = array(), $select = '*', $index = null)
 	{
 		//Select
-		if ($total) {
-			$select = "COUNT(*) as total";
-		} elseif (empty($select)) {
-			$select = "v.*, vt.*, vt.name as theme";
+		if ($index === false) {
+			$select = "COUNT(*)";
 		}
 
 		//From
-		$from =
-			DB_PREFIX . "voucher v" .
-			" LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (vt.voucher_theme_id=v.voucher_theme_id)";
+		$from = DB_PREFIX . "voucher";
 
 		//Where
 		$where = '1';
 
 		if (isset($data['code'])) {
-			$where .= " AND LCASE(v.code) like '%" . $this->escape(strtolower($data['code'])) . "%'";
-		}
-
-		if (isset($data['theme'])) {
-			$where .= " AND vt.voucher_theme_id = " . (int)$data['theme'];
+			$where .= " AND LCASE(code) like '%" . $this->escape(strtolower($data['code'])) . "%'";
 		}
 
 		if (isset($data['to_name'])) {
-			$where .= " AND LCASE(v.to_name) like '%" . $this->escape(strtolower($data['to_name'])) . "%'";
+			$where .= " AND LCASE(to_name) like '%" . $this->escape(strtolower($data['to_name'])) . "%'";
 		}
 
 		if (isset($data['to_email'])) {
-			$where .= " AND LCASE(v.to_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
+			$where .= " AND LCASE(to_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
 		}
 
 		if (isset($data['from_name'])) {
-			$where .= " AND LCASE(v.from_name) like '%" . $this->escape(strtolower($data['from_name'])) . "%'";
+			$where .= " AND LCASE(from_name) like '%" . $this->escape(strtolower($data['from_name'])) . "%'";
 		}
 
 		if (isset($data['from_email'])) {
-			$where .= " AND LCASE(v.from_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
+			$where .= " AND LCASE(from_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
 		}
 
 		if (isset($data['amount'])) {
@@ -90,30 +93,24 @@ class App_Model_Sale_Voucher extends Model
 			}
 
 			if ($low) {
-				$where .= " AND v.amount >= " . (int)$low;
+				$where .= " AND amount >= " . (int)$low;
 			}
 
 			if ($high) {
-				$where .= " AND v.amount < " . (int)$high;
+				$where .= " AND amount < " . (int)$high;
 			}
 		}
 
-		if (isset($data['date_added'])) {
-			if (!empty($data['date_added']['start'])) {
-				$where .= " AND v.date_added >= '" . $this->date->format($data['date_added']['start']) . "'";
-			}
-
-			if (!empty($data['date_added']['end'])) {
-				$where .= " AND v.date_added < '" . $this->date->add($data['date_added']['end'], '1 day') . "'";
-			}
+		if (!empty($data['date_added']['start'])) {
+			$where .= " AND date_added >= '" . $this->date->format($data['date_added']['start']) . "'";
 		}
 
-		if (isset($data['status'])) {
-			$where .= " AND v.status = " . ($data['status'] ? 1 : 0);
+		if (!empty($data['date_added']['end'])) {
+			$where .= " AND date_added < '" . $this->date->add($data['date_added']['end'], '1 day') . "'";
 		}
 
 		//Order and Limit
-		if (!$total) {
+		if ($index !== false) {
 			$order = $this->extractOrder($data);
 			$limit = $this->extractLimit($data);
 		} else {
@@ -124,32 +121,36 @@ class App_Model_Sale_Voucher extends Model
 		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result->row['total'];
+		if ($index === false) {
+			return $this->queryVar($query);
 		}
 
-		return $result->rows;
+		return $this->queryRows($query, $index);
 	}
 
-	public function getTotalVouchers($data = array())
+	public function getTotalVouchers($filter = array())
 	{
-		return $this->getVouchers($data, '', true);
+		return $this->getVouchers($filter, '', false);
 	}
 
-	public function getTotalVouchersByVoucherThemeId($voucher_theme_id)
+	public function redeem($voucher_id, $order_id, $amount)
 	{
-		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
-	}
+		$set = array(
+			'amount' => $amount,
+		);
 
-	public function getVoucherHistories($voucher_id, $start = 0, $limit = 10)
-	{
-		return $this->queryRows("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
-	}
+		$where = array(
+			'order_id' => $order_id,
+		   'voucher_id' => $voucher_id,
+		);
 
-	public function getTotalVoucherHistories($voucher_id)
-	{
-		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
+		if (!$this->update('order_voucher', $set, $where)) {
+			$this->error['voucher_id'] = _l("The Voucher Ordered did not exist");
+			return false;
+		}
+
+		call('mail/voucher', $voucher_id);
+
+		return true;
 	}
 }

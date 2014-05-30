@@ -3,38 +3,26 @@ class App_Controller_Block_Cart_Voucher extends Controller
 {
 	public function build($settings)
 	{
-		if (isset($_POST['voucher']) && $this->validateVoucher()) {
-			$this->session->set('voucher', $_POST['voucher']);
-
-			$this->message->add('success', _l("Success: Your gift voucher discount has been applied!"));
-		}
-
-		$defaults = array(
+		$settings += array(
 			'voucher' => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$data[$key] = $_POST[$key];
-			} elseif (isset($_SESSION[$key])) {
-				$data[$key] = $_SESSION[$key];
-			} else {
-				$data[$key] = $default;
-			}
-		}
-
 		//Render
-		$this->response->setOutput($this->render('block/cart/voucher', $data));
+		$this->response->setOutput($this->render('block/cart/voucher', $settings));
 	}
 
-	private function validateVoucher()
+	public function add_voucher()
 	{
-		$voucher_info = $this->System_Model_Voucher->getVoucherByCode($_POST['voucher']);
-
-		if (!$voucher_info) {
-			$this->error['warning'] = _l("Warning: Gift Voucher is either invalid or the balance has been used up!");
+		if ($this->cart->addVoucher($_POST['voucher'])) {
+			$this->message->add('success', _l("Your Voucher has been added to your order"));
+		} else {
+			$this->message->add('error', $this->cart->getError());
 		}
 
-		return empty($this->error);
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			redirect('checkout/checkout');
+		}
 	}
 }

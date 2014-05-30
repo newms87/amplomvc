@@ -49,6 +49,8 @@ class System_Model_Order extends Model
 		if (!empty($data['vouchers'])) {
 			foreach ($data['vouchers'] as $voucher) {
 				$voucher['order_id'] = $order_id;
+				//Unused voucher (only use when order confirmed)
+				$voucher['amount'] = 0;
 
 				$this->insert('order_voucher', $voucher);
 			}
