@@ -27,7 +27,8 @@ define('DB_DATABASE', 'cadscope');
 define('DB_PREFIX', 'ac_');
 
 //DB Profiling
-define("DB_PROFILE", false);
+define("DB_PROFILE", true);
+define("DB_PROFILE_NO_CACHE", true);
 
 //Error Reporting
 error_reporting(E_ALL);

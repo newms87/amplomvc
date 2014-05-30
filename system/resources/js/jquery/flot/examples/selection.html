@@ -199,7 +199,7 @@
             $("#selection").text(ranges.xaxis.from.toFixed(1) + " to " + ranges.xaxis.to.toFixed(1));
 
             var zoom = $("#zoom").attr("checked");
-            if (zoom)
+            if ($zoom)
                 plot = $.plot(placeholder, data,
                         $.extend(true, {}, options, {
                             xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }

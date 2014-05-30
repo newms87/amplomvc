@@ -2,7 +2,7 @@
 class Table extends Library
 {
 	private $file;
-	private $template_data = array();
+	private $template_data;
 
 	private $columns;
 	private $rows;
@@ -11,6 +11,10 @@ class Table extends Library
 
 	public function init()
 	{
+		$this->file = '';
+		$this->template_data = array();
+		$this->columns = array();
+		$this->rows = array();
 		$this->path = '';
 	}
 
@@ -58,7 +62,7 @@ class Table extends Library
 		//render the file
 		ob_start();
 
-		require_once(_ac_mod_file($this->file));
+		include(_ac_mod_file($this->file));
 
 		return ob_get_clean();
 	}
@@ -82,7 +86,7 @@ class Table extends Library
 		}
 
 		if (empty($this->template_data['filter_url'])) {
-			$this->template_data['filter_url'] =  site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter'));
+			$this->template_data['filter_url'] =  site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter', 'page'));
 		}
 
 		//Normalize Columns
@@ -131,12 +135,16 @@ class Table extends Library
 				) {
 					$column['filter_blank'] = true;
 				}
+
+				if ($column['filter'] === true) {
+					$column['filter'] = $column['type'];
+				}
 			}
 
 			switch ($column['type']) {
 				case 'text':
 					break;
-				case 'multi':
+				case 'multiselect':
 					break;
 				case 'image':
 					if (!isset($column["sort_value"])) {

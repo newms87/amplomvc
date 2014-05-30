@@ -175,12 +175,13 @@ abstract class Model
 
 			$where = "WHERE `$primary_key` = $update_id";
 		} elseif (is_array($where)) {
-			$where = "WHERE " . $this->getWhere($table, $where);
-
 			if (isset($where[$primary_key])) {
 				$update_id = (int)$where[$primary_key];
 			}
+
+			$where = "WHERE " . $this->getWhere($table, $where, '', '', true);
 		}
+
 
 		$success = $this->query("UPDATE " . $this->prefix . "$table SET $values $where");
 
@@ -271,7 +272,6 @@ abstract class Model
 		$data = array_intersect_key($data, $table_model);
 
 		foreach ($data as $key => &$value) {
-
 			if (is_resource($value) || is_array($value) || is_object($value)) {
 				trigger_error(_l("%s(): The field %s was given a value that was not a valid type! Value: %s.", __METHOD__, $key, gettype($value)));
 				exit;
@@ -315,6 +315,40 @@ abstract class Model
 		unset($value);
 
 		return $data;
+	}
+
+	protected function extractFilter($columns, $filter)
+	{
+		$where = '1';
+
+		foreach ($columns as $key => $type) {
+			if (isset($filter[$key])) {
+				$value = $filter[$key];
+
+				switch ($type) {
+					case 'text_like':
+						$where .= " AND `$key` like '%" . $this->escape($value) . "%'";
+						break;
+
+					case 'text_equals':
+						$where .= " AND `$key` = '" . $this->escape($value) . "'";
+						break;
+
+					case 'text_in':
+						if (is_array($value)) {
+							$where .= " AND `$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
+						} else {
+							$where .= " AND `$key` = '" . $this->escape($value) . "'";
+						}
+						break;
+
+
+
+				}
+			}
+		}
+
+		return $where;
 	}
 
 	protected function extractOrder($data)

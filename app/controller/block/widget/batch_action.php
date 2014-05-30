@@ -32,7 +32,7 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 		}
 
 		if (empty($settings['replace'])) {
-			$settings['replace'] = '#listing';
+			$settings['replace'] = '.widget-listing:first';
 		}
 
 		if (empty($settings['selector'])) {

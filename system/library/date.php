@@ -210,7 +210,7 @@ class Date extends Library
 		if (!$this->datetime($d2)) {
 			return false;
 		}
-		
+
 		return $d1->diff($d2);
 	}
 

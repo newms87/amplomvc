@@ -454,7 +454,7 @@ YAHOO.register("yahoo", YAHOO, {version: "2.7.0", build: "1796"});
                             if (L.isString(Y.style.filter)) {
                                 Y.style.filter = "alpha(opacity=" + y * 100 + ")";
                                 if (!Y[a] || !Y[a].hasLayout) {
-                                    Y.style.zoom = 1;
+                                    Y.style.$zoom = 1;
                                 }
                             }
                             break;
@@ -1080,7 +1080,7 @@ YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
     }, getBorderWidth: function (X, Z) {
         var Y = null;
         if (!X[T][W]) {
-            X[H].zoom = 1;
+            X[H].$zoom = 1;
         }
         switch (Z) {
             case G:
