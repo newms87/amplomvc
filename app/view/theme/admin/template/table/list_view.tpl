@@ -15,7 +15,7 @@
  * );
  */
 ?>
-<table class="list">
+<table class="list table-list-view">
 	<thead>
 		<tr>
 			<? if (!empty($row_id)) { ?>
@@ -45,7 +45,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr id="filter_list">
+		<tr class="filter-list">
 			<? if (!empty($row_id)) { ?>
 				<td></td>
 			<? } ?>
@@ -172,11 +172,12 @@
 		</tr>
 		<? if (!empty($rows)) { ?>
 			<? foreach ($rows as $row) { ?>
-				<tr class="filter_list_item">
+				<tr class="filter-list-item">
 					<? if (!empty($row_id)) { ?>
+						<? $uniqid = uniqid($row[$row_id]); ?>
 						<td class="center">
-							<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
-							<label for="rowid<?= $row[$row_id]; ?>" class="rowid"><?= $row[$row_id]; ?></label>
+							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
+							<label for="rowid<?= $uniqid; ?>" class="rowid"><?= $row[$row_id]; ?></label>
 						</td>
 					<? } ?>
 
@@ -369,7 +370,9 @@
 	$.ac_datepicker();
 
 	//Add Item Selector
-	$('.filter_list_item').click(function () {
+	var table_list = $(".table-list-view").not('activated');
+
+	table_list.find('.filter-list-item').click(function () {
 		cb = $(this).find('[name="batch[]"]');
 		if (cb.data('clicked')) {
 			cb.data('clicked', false);
@@ -378,26 +381,26 @@
 		}
 	});
 
-	$('.filter_list_item [name="batch[]"]').change(function () {
-		$(this).closest('.filter_list_item').toggleClass('active', $(this).prop('checked'));
+	table_list.find('.filter-list-item [name="batch[]"]').change(function () {
+		$(this).closest('.filter-list-item').toggleClass('active', $(this).prop('checked'));
 	});
 
-	$('.filter-button').click(function () {
-		$(this).attr('href', apply_filter());
+	table_list.find('.filter-button').click(function () {
+		var $this = $(this);
+		$filter = $this.closest('.filter-list');
+		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
-	$('.reset-button').click(function () {
-		$('#filter_list').find('[name]').val('');
-		$(this).attr('href', apply_filter());
+	table_list.find('.reset-button').click(function () {
+		var $this = $(this);
+		$filter = $this.closest('.filter-list');
+		$this.closest('.filter-list').find('[name]').val('');
+		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
-	$("#filter_list").keydown(function (e) {
+	table_list.find('.filter-list').keyup(function (e) {
 		if (e.keyCode == 13) {
 			$('.filter-button').click()[0].click();
 		}
 	});
-
-	function apply_filter() {
-		return $('#filter_list').apply_filter("<?= $filter_url; ?>");
-	}
 </script>

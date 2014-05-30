@@ -971,139 +971,157 @@ button, .button {
   }
 }
 
-.list #filter_list > td {
-  background: #F5DDDD;
-}
+.list {
+  .filter-list {
+    & > td {
+      background: #F5DDDD;
+    }
 
-#filter_list .reset {
-  display: block;
-  margin-top: 3px;
-}
+    .reset {
+      display: block;
+      margin-top: 3px;
 
-#filter_list .reset:hover {
-  text-decoration: none;
-}
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
 
-.list td {
-  border-right: 1px solid #DDDDDD;
-  border-bottom: 1px solid #DDDDDD;
-}
+  tr {
+    &.filter td {
+      padding: 5px;
+      background: #E7EFEF;
+    }
 
-.list > thead > tr > td,
-.list > thead > tr > th {
-  background-color: #FDE2C6;
-  padding: 10px 10px;
-}
+    td {
+      border-right: 1px solid #DDDDDD;
+      border-bottom: 1px solid #DDDDDD;
+    }
+  }
 
-.list thead td a, .list thead td {
-  text-decoration: none;
-  color: #222222;
-  font-weight: bold;
-}
+  & > thead > tr > td,
+  & > thead > tr > th {
+    background-color: #FDE2C6;
+    padding: 10px 10px;
+  }
 
-.list tbody td {
-  vertical-align: middle;
-  padding: 5px 10px;
-  background: #FFFFFF;
-}
+  thead td a, .list thead td {
+    text-decoration: none;
+    color: #222222;
+    font-weight: bold;
+  }
 
-.list tbody tr:nth-child(even) > td {
-  background: rgba(0, 0, 200, .2);
-}
+  tbody {
+    tr {
+      td {
+        vertical-align: middle;
+        padding: 5px 10px;
+        background: #FFFFFF;
+      }
 
-.list tfoot tr td {
-  padding: 10px 10px;
-  background: #E4EEF7;
-}
+      &:nth-child(even) > td {
+        background: rgba(0, 0, 200, .2);
+      }
+    }
+  }
 
-.list .left {
-  text-align: left;
-  padding: 7px;
-}
+  tfoot {
+    tr {
+      td {
+        padding: 10px 10px;
+        background: #E4EEF7;
+      }
+    }
+  }
 
-.list .right {
-  text-align: right;
-  padding: 7px;
-}
+  .left {
+    text-align: left;
+    padding: 7px;
+  }
 
-.list .center {
-  text-align: center;
-  padding: 7px;
-}
+  .right {
+    text-align: right;
+    padding: 7px;
+  }
 
-.list .column_title {
-  min-width: 70px;
-  font-size: 17px;
-  font-weight: bold;
-}
+  .center {
+    text-align: center;
+    padding: 7px;
+  }
 
-.list .column_title > a {
-  position: relative;
-  top: -5px;
-}
+  .column_title {
+    min-width: 70px;
+    font-size: 17px;
+    font-weight: bold;
 
-.list .actions a {
-  text-decoration: none;
-}
+    & > a {
+      position: relative;
+      top: -5px;
+    }
+  }
 
-.list .ui-sortable {
-  cursor: move;
-}
+  .actions a {
+    text-decoration: none;
+  }
 
-.list .sortable:after {
-  position: relative;
-  top: 7px;
-  padding-left: 10px;
-  height: 24px;
-  width: 17px;
-  background: url('@{themepath}image/sort-sprite.png') right top no-repeat;
-  display: inline-block;
-  content: "";
-}
+  .ui-sortable {
+    cursor: move;
+  }
 
-.list .sortable.asc:after {
-  background-position: right center;
-}
+  .sortable {
+    &.asc:after {
+      background-position: right center;
 
-.list .sortable.desc:after {
-  background-position: right center;
+      &:hover {
+        background-position: right bottom;
 
-  -webkit-transform: scaleY(-1);
-  transform: scaleY(-1);
-  filter: FlipV;
-}
+        -webkit-transform: scaleY(-1);
+        transform: scaleY(-1);
+        filter: FlipV;
+      }
+    }
 
-.list .sortable:hover:after {
-  background-position: right bottom;
-}
+    &.desc:after {
+      background-position: right center;
 
-.list .sortable.asc:hover:after {
-  background-position: right bottom;
+      -webkit-transform: scaleY(-1);
+      transform: scaleY(-1);
+      filter: FlipV;
 
-  -webkit-transform: scaleY(-1);
-  transform: scaleY(-1);
-  filter: FlipV;
-}
+      &:hover {
+        background-position: right bottom;
+        -webkit-transform: none;
+        transform: none;
 
-.list .sortable.desc:hover:after {
-  background-position: right bottom;
-  -webkit-transform: none;
-  transform: none;
+        filter: none;
+      }
+    }
 
-  filter: none;
-}
+    &:after {
+      position: relative;
+      top: 7px;
+      padding-left: 10px;
+      height: 24px;
+      width: 17px;
+      background: url('@{themepath}image/sort-sprite.png') right top no-repeat;
+      display: inline-block;
+      content: "";
 
-.list tr.filter td {
-  padding: 5px;
-  background: #E7EFEF;
-}
+      &:hover {
+        background-position: right bottom;
+      }
+    }
+  }
 
-.list label.date_from {
-  margin: 0;
-}
+  label {
+    &.date_from {
+      margin: 0;
+    }
 
-.list label.date_to {
-  margin: 0 3px;
+    &.date_to {
+      margin: 0 3px;
+    }
+  }
 }
 
 /* Zoom Hover */
@@ -2436,18 +2454,18 @@ td.mail_info label {
 }
 
 /* Category List */
-.catalog_category .filter_list_item > .name > span,
-.filter_list_item .categories > span {
+.catalog_category .filter-list-item > .name > span,
+.filter-list-item .categories > span {
   text-align: left;
   display: block;
   margin-left: 10%;
 }
 
-.list tbody .filter_list_item:hover > td {
+.list tbody .filter-list-item:hover > td {
   background: #EBE9A2;
 }
 
-.list tbody .filter_list_item.active > td {
+.list tbody .filter-list-item.active > td {
   background: #C3EBA2;
 }
 
