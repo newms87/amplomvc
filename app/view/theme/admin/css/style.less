@@ -785,17 +785,6 @@ ul.top-menu > li.has-children:hover > a, ul.top-menu > li.has-children.hover > a
   }
 }
 
-.box > .section .limits, .box > section .limits {
-  float: right;
-  padding: 5px 0 15px 0;
-  margin-right: 20px;
-}
-
-.box > .section .limits .selected, .box > section .limits .selected {
-  color: black;
-  text-decoration: none;
-}
-
 .box > .section, .box > section {
   padding: 10px;
   border-left: 1px solid #CCCCCC;
@@ -1050,6 +1039,7 @@ button, .button {
   }
 }
 
+
 //TODO: remove #listing!! (After upgrading all controllers / views)
 #listing, .widget-listing {
   position: relative;
@@ -1071,6 +1061,28 @@ button, .button {
     min-width: 30px;
     text-align: center;
     margin-top: 2px;
+  }
+
+  .limits {
+    float:right;
+    margin: .5em;
+
+    .limit_text {
+      font-size: 1.2em;
+    }
+
+    .limit_item {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: .1em .3em;
+      background: @color-lightest;
+      border-radius: 3px;
+      text-decoration: none;
+
+      &:hover, &.selected {
+        background: @color-light;
+      }
+    }
   }
 
   .actions {
@@ -3023,23 +3035,51 @@ td.log_remove .message {
 }
 
 .block-widget-view {
+  [contenteditable] {
+    &:focus {
+      background: @color-lighter;
+    }
+  }
+
   .widget-view {
+    position: relative;
+    padding: 1em;
+    border: 2px dashed @color-dark;
     margin-bottom: 2em;
 
     .view-title {
-      font-size: 1.5em;
+      font-size: 2em;
       font-weight: bold;
       display: inline-block;
+      vertical-align: middle;
+      outline: 0;
+      padding: .4em;
     }
 
     .buttons {
-      float: right;
+      margin: 0;
 
       .show-view {
         display: inline-block;
       }
       .hide-view {
         display: none;
+      }
+
+      &.show-hide {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1em;
+      }
+
+      &.save-delete {
+        position:absolute;
+        top: 1em;
+        right: 1em;
+
+        .delete-view {
+          background: @color-delete;
+        }
       }
     }
 
@@ -3060,6 +3100,16 @@ td.log_remove .message {
       .listing {
         display: block;
       }
+    }
+  }
+
+  .views-actions {
+    text-align: center;
+    margin: 1.5em auto 0 auto;
+
+    .add-view {
+      font-size: 1.5em;
+      padding: .5em 1em;
     }
   }
 }

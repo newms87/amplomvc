@@ -1,13 +1,15 @@
 <?= call('admin/common/header'); ?>
-<div class="section">
+<section class="section">
 	<?= breadcrumbs(); ?>
-	<div class="box">
+
+	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?></h1>
+			<h1>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit()" class="button"><?= _l("Save"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<button><?= _l("Save"); ?></button>
+				<a href="<?= site_url('admin/page'); ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section clearfix">
@@ -18,115 +20,117 @@
 				<a href="#tab-design"><?= _l("Design"); ?></a>
 			</div>
 
-			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
-
-				<div id="tab-content">
-					<div id="code_editor_preview">
-						<div class="page_title">
-							<div class="title"><?= _l("Page Title"); ?></div>
-							<input type="text" name="title" size="60" value="<?= $title; ?>"/>
-							<span class="display_title">
-								<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1"/>
-								<label for="display_title"><?= _l("Display Title?"); ?></label>
-							</span>
-						</div>
-
-						<div class="html_title"><?= _l("HTML"); ?></div>
-						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
-
-						<div class="css_title"><?= _l("CSS"); ?></div>
-						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
+			<div id="tab-content">
+				<div id="code_editor_preview">
+					<div class="page_title">
+						<div class="title"><?= _l("Page Title"); ?></div>
+						<input type="text" name="title" size="60" value="<?= $title; ?>"/>
+						<span class="display_title">
+							<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1"/>
+							<label for="display_title"><?= _l("Display Title?"); ?></label>
+						</span>
 					</div>
 
-					<div id="code_preview">
-						<div id="zoom_preview">
-							<input type="text" id="zoom_value" value="80%"/>
+					<div class="html_title"><?= _l("HTML"); ?></div>
+					<textarea id="html_editor" name="content"><?= file_get_contents($content); ?></textarea>
 
-							<div class="zoom_change">
-								<img class="zoom_in" src="<?= theme_url('image/zoom-out.png') ?>"/>
-								<img class="zoom_out" src="<?= theme_url('image/zoom-out.png'); ?>"/>
-							</div>
+					<div class="css_title"><?= _l("Style"); ?></div>
+					<textarea id="css_editor" name="style"><?= file_get_contents($style); ?></textarea>
+				</div>
+
+				<div id="code_preview">
+					<div id="zoom_preview">
+						<input type="text" id="zoom_value" value="80%"/>
+
+						<div class="zoom_change">
+							<img class="zoom_in" src="<?= theme_url('image/zoom-out.png') ?>"/>
+							<img class="zoom_out" src="<?= theme_url('image/zoom-out.png'); ?>"/>
 						</div>
-						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
 					</div>
-
+					<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
 				</div>
-				<!-- /tab-content -->
 
-				<div id="tab-data">
-					<table class="form">
-						<tr>
-							<td class="required"> <?= _l("SEO URL:<br /><span class=\"help\">The Search Engine Optimized URL.</span>"); ?></td>
-							<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
-						</tr>
-						<tr>
-							<td><?= _l("Meta Keywords:"); ?></td>
-							<td><textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea></td>
-						</tr>
-						<tr>
-							<td><?= _l("Meta Description:"); ?></td>
-							<td><textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea></td>
-						</tr>
-						<tr>
-							<td><?= _l("Status:"); ?></td>
-							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
-						</tr>
-					</table>
-				</div>
-				<!-- /tab-data -->
+			</div>
+			<!-- /tab-content -->
 
-				<div id="tab-design">
-					<table class="form">
-						<tr>
-							<td class="required"> <?= _l("Layout:"); ?></td>
-							<td>
-								<? $this->builder->setConfig('layout_id', 'name'); ?>
-								<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
-								<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
-								<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Stores:"); ?></td>
-							<? $this->builder->setConfig('store_id', 'name'); ?>
-							<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
-						</tr>
-						<tr>
-							<td><?= _l("Blocks Associated with this Page"); ?></td>
-							<td>
-								<table id="assigned_block_list" class="list">
-									<thead>
-										<tr>
-											<td><?= _l("Block Name"); ?></td>
-											<td><?= _l("Store Name"); ?></td>
-											<td><?= _l("Position"); ?></td>
-										</tr>
-									</thead>
-									<tbody>
-										<tr id="block_template">
-											<td>%name%</td>
-											<td>%store%</td>
-											<td>%position%</td>
-										</tr>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="3">
-												<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
-											</td>
-										</tr>
-									</tfoot>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<!-- /tab-design -->
+			<div id="tab-data">
+				<table class="form">
+					<tr>
+						<td class="required"> <?= _l("SEO URL:<br /><span class=\"help\">The Search Engine Optimized URL.</span>"); ?></td>
+						<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
+					</tr>
+					<tr>
+						<td><?= _l("Meta Keywords:"); ?></td>
+						<td>
+							<textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td><?= _l("Meta Description:"); ?></td>
+						<td>
+							<textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td><?= _l("Status:"); ?></td>
+						<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
+					</tr>
+				</table>
+			</div>
+			<!-- /tab-data -->
 
-			</form>
+			<div id="tab-design">
+				<table class="form">
+					<tr>
+						<td class="required"> <?= _l("Layout:"); ?></td>
+						<td>
+							<? $this->builder->setConfig('layout_id', 'name'); ?>
+							<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
+							<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
+							<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="required"> <?= _l("Stores:"); ?></td>
+						<? $this->builder->setConfig('store_id', 'name'); ?>
+						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
+					</tr>
+					<tr>
+						<td><?= _l("Blocks Associated with this Page"); ?></td>
+						<td>
+							<table id="assigned_block_list" class="list">
+								<thead>
+								<tr>
+									<td><?= _l("Block Name"); ?></td>
+									<td><?= _l("Store Name"); ?></td>
+									<td><?= _l("Position"); ?></td>
+								</tr>
+								</thead>
+								<tbody>
+								<tr id="block_template">
+									<td>%name%</td>
+									<td>%store%</td>
+									<td>%position%</td>
+								</tr>
+								</tbody>
+								<tfoot>
+								<tr>
+									<td colspan="3">
+										<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
+									</td>
+								</tr>
+								</tfoot>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!-- /tab-design -->
+
 		</div>
-	</div>
-</div>
+	</form>
+</section>
+
 
 <script type="text/javascript">
 	var block_template = $('#block_template')[0].outerHTML;
@@ -188,7 +192,7 @@
 		var z = get_zoom_value();
 		var new_css = {
 			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
-			'transform': 'scale3d(' + z + ',' + z + ',1)'
+			'transform':         'scale3d(' + z + ',' + z + ',1)'
 		};
 		$('#preview_frame').contents().find('#container').css(new_css);
 	}

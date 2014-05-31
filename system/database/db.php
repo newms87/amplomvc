@@ -1,39 +1,61 @@
 <?php
 class DB
 {
+	static $drivers = array();
 	private $driver;
+
 	private $profile = array();
+
+	//Time Simulation
+	private $synctime = false;
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
 
-	public function __construct($driver, $hostname, $username, $password, $database)
+	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $database = null)
 	{
+		global $ac_time_offset;
+
+		if ($ac_time_offset) {
+			$this->synctime = true;
+		}
+
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if ($driver == 'mysqli') {
+		if ($driver === 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 
-		//the database interface
-		if (function_exists("_ac_mod_file")) {
-			require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
-
-			if (file_exists(DIR_DATABASE . $driver . '.php')) {
-				require_once(_ac_mod_file(DIR_DATABASE . $driver . '.php'));
-			} else {
-				die('Error: Could not load database file ' . $driver . '!');
-			}
-		} else {
-			require_once(DIR_DATABASE . 'database.php');
-
-			if (file_exists(DIR_DATABASE . $driver . '.php')) {
-				require_once(DIR_DATABASE . $driver . '.php');
-			} else {
-				$this->error = 'Error: Could not load database file ' . $driver . '!';
-			}
+		//Initialize w/ default driver
+		if (!$driver) {
+			$this->driver = current(self::$drivers);
+			return;
 		}
 
-		$this->driver = new $driver($hostname, $username, $password, $database);
+		//Initialize for specified driver
+		if (!isset(self::$drivers[$driver])) {
+			//the database interface
+			if (function_exists("_ac_mod_file")) {
+				require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
+
+				if (file_exists(DIR_DATABASE . $driver . '.php')) {
+					require_once(_ac_mod_file(DIR_DATABASE . $driver . '.php'));
+				} else {
+					die('Error: Could not load database file ' . $driver . '!');
+				}
+			} else {
+				require_once(DIR_DATABASE . 'database.php');
+
+				if (file_exists(DIR_DATABASE . $driver . '.php')) {
+					require_once(DIR_DATABASE . $driver . '.php');
+				} else {
+					$this->error = 'Error: Could not load database file ' . $driver . '!';
+				}
+			}
+
+			self::$drivers[$driver] = new $driver($hostname, $username, $password, $database);
+		}
+
+		$this->driver = self::$drivers[$driver];
 	}
 
 	public function hasError($type = null)
@@ -76,6 +98,10 @@ class DB
 	 */
 	public function query($sql)
 	{
+		if ($this->synctime) {
+			$sql = $this->synctime($sql);
+		}
+
 		if (defined("SHOW_DB_PROFILE") && SHOW_DB_PROFILE) {
 			$start = microtime(true);
 
@@ -85,9 +111,11 @@ class DB
 
 			$resource = $this->driver->query($sql);
 
+			$time = round(microtime(true) - $start, 6);
+
 			$this->profile[] = array(
 				'query' => $sql,
-				'time'  => microtime(true) - $start,
+				'time'  => $time ? $time : .000005,
 			);
 		} else {
 			$resource = $this->driver->query($sql);
@@ -472,5 +500,11 @@ class DB
 	public function getLastId()
 	{
 		return $this->driver->getLastId();
+	}
+
+	private function synctime($sql)
+	{
+		$now = new DateTime("@" . _time(), new DateTimeZone(DEFAULT_TIMEZONE));
+		return str_replace("NOW()", "'" . $now->format("Y-m-d H:i:s") . "'", $sql);
 	}
 }

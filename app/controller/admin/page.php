@@ -29,9 +29,6 @@ class App_Controller_Admin_Page extends Controller
 			'path'    => site_url('admin/page/batch_action'),
 		);
 
-		//The Listing
-		$data['listing'] = $this->listing();
-
 		//Action Buttons
 		$data['insert'] = site_url('admin/page/update');
 
@@ -78,8 +75,8 @@ class App_Controller_Admin_Page extends Controller
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
-		$page_total = $this->Model_Page_Page->getTotalPages($filter);
-		$pages      = $this->Model_Page_Page->getPages($sort + $filter);
+		$page_total = $this->Model_Page->getTotalPages($filter);
+		$pages      = $this->Model_Page->getPages($sort + $filter);
 
 		$url_query = $this->url->getQueryExclude('page_id');
 
@@ -95,7 +92,7 @@ class App_Controller_Admin_Page extends Controller
 				)
 			);
 
-			$page['stores'] = $this->Model_Page_Page->getPageStores($page['page_id']);
+			$page['stores'] = $this->Model_Page->getPageStores($page['page_id']);
 		}
 		unset($page);
 
@@ -106,16 +103,16 @@ class App_Controller_Admin_Page extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $page_total,
-			'listing_path'   => 'page/listing',
+			'listing_path'   => 'admin/page/listing',
 		);
 
 		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);
-		} else {
-			return $output;
 		}
+
+		return $output;
 	}
 
 	public function form()
@@ -129,22 +126,15 @@ class App_Controller_Admin_Page extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
 		$this->breadcrumb->add(_l("Page"), site_url('admin/page'));
-
-		if ($page_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('admin/page/update', 'page_id=' . $page_id));
-		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('admin/page/update'));
-		}
+		$this->breadcrumb->add($page_id ? _l("Edit") : _l("Add"), site_url('admin/page/form', 'page_id=' . $page_id));
 
 		//Load Information from POST or DB
-		if ($this->request->isPost()) {
-			$page_info = $_POST;
-		} elseif ($page_id) {
-			$page_info = $this->Model_Page_Page->getPage($page_id);
+		$page = $_POST;
 
-			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
-		} else {
-			$page_info = array();
+		if ($page_id && !$this->request->isPost()) {
+			$page = $this->Model_Page->getPage($page_id);
+
+			$page['stores'] = $this->Model_Page->getPageStores($page_id);
 		}
 
 		//Set Values or Defaults
@@ -163,44 +153,43 @@ class App_Controller_Admin_Page extends Controller
 			'translations'     => array(),
 		);
 
-		$data = $page_info + $defaults;
+		$page += $defaults;
 
 		//Template Data
-		$data['data_stores']  = $this->Model_Setting_Store->getStores();
-		$data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$page['data_stores']  = $this->Model_Setting_Store->getStores();
+		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$data['url_blocks']        = site_url('admin/block');
-		$data['url_create_layout'] = site_url('admin/page/create_layout');
-		$data['url_load_blocks']   = site_url('admin/page/loadBlocks');
+		$page['url_blocks']        = site_url('admin/block');
+		$page['url_create_layout'] = site_url('admin/page/create_layout');
+		$page['url_load_blocks']   = site_url('admin/page/loadBlocks');
 
-		$store_front          = current($data['stores']);
-		$data['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
+		$store_front          = current($page['stores']);
+		$page['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
 
-		$data['data_statuses'] = array(
+		$page['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('admin/page/update', 'page_id=' . $page_id);
-		$data['cancel'] = site_url('admin/page');
+		$page['save']   = site_url('admin/page/update', 'page_id=' . $page_id);
 
 		//Render
-		$this->response->setOutput($this->render('page/form', $data));
+		$this->response->setOutput($this->render('page/form', $page));
 	}
 
 	public function update()
 	{
 		//Insert
 		if (empty($_GET['page_id'])) {
-			$this->Model_Page_Page->addPage($_POST);
+			$this->Model_Page->addPage($_POST);
 		} //Update
 		else {
-			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
+			$this->Model_Page->editPage($_GET['page_id'], $_POST);
 		}
 
-		if ($this->Model_Page_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page_Page->getError());
+		if ($this->Model_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page->getError());
 		} else {
 			$this->message->add('success', _l("The Page has been updated successfully!"));
 		}
@@ -216,10 +205,10 @@ class App_Controller_Admin_Page extends Controller
 
 	public function delete()
 	{
-		$this->Model_Page_Page->deletePage($_GET['page_id']);
+		$this->Model_Page->deletePage($_GET['page_id']);
 
-		if ($this->Model_Page_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page_Page->getError());
+		if ($this->Model_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page->getError());
 		} else {
 			$this->message->add('notify', _l("Page was deleted!"));
 		}
@@ -236,25 +225,25 @@ class App_Controller_Admin_Page extends Controller
 		foreach ($_POST['batch'] as $page_id) {
 			switch ($_POST['action']) {
 				case 'enable':
-					$this->Model_Page_Page->update_field($page_id, array('status' => 1));
+					$this->Model_Page->update_field($page_id, array('status' => 1));
 					break;
 
 				case 'disable':
-					$this->Model_Page_Page->update_field($page_id, array('status' => 0));
+					$this->Model_Page->update_field($page_id, array('status' => 0));
 					break;
 
 				case 'delete':
-					$this->Model_Page_Page->deletePage($page_id);
+					$this->Model_Page->deletePage($page_id);
 					break;
 
 				case 'copy':
-					$this->Model_Page_Page->copyPage($page_id);
+					$this->Model_Page->copyPage($page_id);
 					break;
 			}
 		}
 
-		if ($this->Model_Page_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page_Page->getError());
+		if ($this->Model_Page->hasError()) {
+			$this->message->add('error', $this->Model_Page->getError());
 		} else {
 			$this->message->add('success', _l("Success: You have modified navigation!"));
 		}

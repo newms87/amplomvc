@@ -149,7 +149,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$data['languages']       = $this->Model_Localisation_Language->getLanguages();
 		$data['currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$data['customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$data['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
+		$data['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
 
 		$data['data_mail_protocols'] = array(
 			'smtp' => "SMTP",

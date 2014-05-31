@@ -7,12 +7,12 @@ class App_Controller_Example_Example extends Controller
 		//The page
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 
-		$page = $this->Model_Page_Page->getActivePage($page_id);
+		$page = $this->Model_Page->getActivePage($page_id);
 
 		if (!$page) {
 			//If you have an error in the Model call
-			if ($this->Model_Page_Page->hasError()) {
-				$this->message->add('error', $this->Model_Page_Page->getError());
+			if ($this->Model_Page->hasError()) {
+				$this->message->add('error', $this->Model_Page->getError());
 			}
 
 			//For this example, if no page is found, we dont really care, so continue to load page.

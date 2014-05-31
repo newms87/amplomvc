@@ -127,7 +127,7 @@ class App_Controller_Customer extends Controller
 
 		//TODO: update this to a page!
 		if (option('config_account_terms_page_id')) {
-			$information_info = $this->Model_Page_Page->getPage(option('config_account_terms_page_id'));
+			$information_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
 
 			if ($information_info) {
 				$data['agree_to']    = site_url('page', 'page_id=' . option('config_account_terms_page_id'));
