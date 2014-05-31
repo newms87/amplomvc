@@ -198,7 +198,7 @@
 	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function () {
 		var z = get_zoom_value();
 		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1, .1) : Math.min(z + .1, 3);
-		$('#zoom_value').val(parseInt($zoom * 100) + '%');
+		$('#zoom_value').val(parseInt(zoom * 100) + '%');
 		update_zoom();
 	});
 

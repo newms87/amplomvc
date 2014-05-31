@@ -25,7 +25,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("The Store settings have been saved!"));
 
-				redirect('admin/admin/setting/store');
+				redirect('admin/setting/store');
 			}
 		}
 
