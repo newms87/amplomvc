@@ -89,7 +89,7 @@ class App_Model_Page extends Model
 		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $page['name'];
 
 		if (isset($page['content'])) {
-			file_put_contents($dir . '/content.tpl', $page['content']);
+			file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']));
 		}
 
 		if (isset($page['style'])) {
@@ -200,12 +200,13 @@ class App_Model_Page extends Model
 		$store_id = option('store_id');
 
 		$query =
-			"SELECT * FROM " . DB_PREFIX . "page p" .
+			"SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
 			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
-			" WHERE p.name = '" . $this->escape($name) . "' AND p.status = 1 AND ps.store_id = " . (int)$store_id;
+			" WHERE p.name = '" . $this->escape($name) . "' AND ((p.status = 1 AND ps.store_id = " . (int)$store_id . ") OR ps.store_id IS NULL)";
 
 		$page = $this->queryRow($query);
 
+		html_dump($page, 'page');
 		$file = $this->theme->findFile('page/' . $name . '/content');
 
 		//Page Does Not Exist, but found in database

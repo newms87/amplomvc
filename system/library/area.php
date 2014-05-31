@@ -10,7 +10,11 @@ class Area extends Library
 				$store_id = option('store_id');
 				$layout_id = option('config_layout_id');
 
-				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . DB_PREFIX . "block_area WHERE store_id = $store_id AND layout_id = $layout_id GROUP BY area");
+				if (!$layout_id) {
+					$layout_id = option('config_default_layout', 0);
+				}
+
+				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . DB_PREFIX . "block_area WHERE store_id = "  .(int)$store_id . " AND layout_id = " . (int)$layout_id . " GROUP BY area");
 
 				foreach ($counts as $count) {
 					$this->counts[$count['area']] = $count['total'];
