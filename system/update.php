@@ -36,5 +36,7 @@ class System_Update extends Model
 		}
 
 		$this->config->save('system', 'AMPLO_VERSION', AMPLO_VERSION, 0);
+
+		return true;
 	}
 }

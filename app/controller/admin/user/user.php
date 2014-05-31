@@ -60,7 +60,7 @@ class App_Controller_Admin_User_User extends Controller
 			'sortable'     => true,
 		);
 
-		$columns['lastname'] = array(
+		$columns['name'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Name"),
 			'filter'       => true,
@@ -68,7 +68,7 @@ class App_Controller_Admin_User_User extends Controller
 		);
 
 		$columns['status'] = array(
-			'type'         => 'text',
+			'type'         => 'select',
 			'display_name' => _l("Status"),
 			'build_data'   => array(
 				0 => _l("Disabled"),
@@ -100,9 +100,11 @@ class App_Controller_Admin_User_User extends Controller
 			$user['actions'] = $actions;
 
 			if (!$user['lastname']) {
-				$user['lastname'] = $user['firstname'] ? $user['firstname'] : _l("No Name");
+				$user['name'] = $user['firstname'] ? $user['firstname'] : _l("No Name");
 			} elseif ($user['firstname']) {
-				$user['lastname'] .= ', ' . $user['firstname'];
+				$user['name'] = $user['lastname'] . ', ' . $user['firstname'];
+			} else {
+				$user['name'] = $user['lastname'];
 			}
 		}
 		unset($user);

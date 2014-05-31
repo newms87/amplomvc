@@ -61,6 +61,9 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			);
 		}
 
+		//Action
+		$settings['refresh'] = site_url($settings['listing_path'], $_GET);
+
 		//Render
 		$this->render('block/widget/listing', $settings);
 	}

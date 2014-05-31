@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_User_User extends Model
 {
 	public function add($data)
@@ -57,11 +58,11 @@ class App_Model_User_User extends Model
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
 	}
 
-	public function getUsers($filter = array(), $select = '*', $total = false)
+	public function getUsers($filter = array(), $select = '*', $index = null)
 	{
 		//Select
-		if ($total) {
-			$select = "COUNT(*) as total";
+		if ($index === false) {
+			$select = "COUNT(*)";
 		}
 
 		//From
@@ -70,8 +71,53 @@ class App_Model_User_User extends Model
 		//Where
 		$where = "1";
 
+		if (isset($filter['name'])) {
+			$where .= " AND CONCAT(lastname, ' ', firstname) like '%" . $this->escape($filter['name']) . "%'";
+		}
+
+		if (isset($filter['username'])) {
+			$where .= " AND username like '%" . $this->escape($filter['username']) . "%'";
+		}
+
+		if (isset($filter['user_role'])) {
+			$roles = $this->Model_User_Role->getRoles(null, '*', 'name');
+
+			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
+
+			if (isset($filter['user_role_id'])) {
+				$filter['user_role_id'] = is_array($filter['user_role_id']) ? $filter['user_role_id'] : array($filter['user_role_id']);
+			} else {
+				$filter['user_role_id'] = array();
+			}
+
+			foreach ($user_roles as $role_name) {
+				if (isset($roles[$role_name])) {
+					$filter['user_role_id'][] = $roles[$role_name]['user_role_id'];
+				}
+			}
+		}
+
+		if (!empty($filter['user_role_id'])) {
+			$user_role_ids = is_array($filter['user_role_id']) ? $this->escape($filter['user_role_id']) : array((int)$filter['user_role_id']);
+
+			$where .= " AND user_role_id IN (" . implode(',', $user_role_ids) . ")";
+		}
+
+		if (isset($filter['status'])) {
+			$where .= " AND status = " . (int)$filter['status'];
+		}
+
 		//Order and Limit
-		if (!$total) {
+		if ($index !== false) {
+			if (!empty($filter['sort'])) {
+				if ($filter['sort'] === 'name') {
+					$filter['sort'] = array(
+						'lastname'  => $filter['order'],
+						'firstname' => $filter['order'],
+					);
+				}
+			}
+
 			$order = $this->extractOrder($filter);
 			$limit = $this->extractLimit($filter);
 		} else {
@@ -82,18 +128,16 @@ class App_Model_User_User extends Model
 		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result->row['total'];
+		if ($index === false) {
+			return $this->queryVar($query);
 		}
 
-		return $result->rows;
+		return $this->queryRows($query, $index);
 	}
 
 	public function getTotalUsers($filter = array())
 	{
-		return $this->getUsers($filter, '', true);
+		return $this->getUsers($filter, '', false);
 	}
 
 	public function getTotalUsersByGroupId($user_role_id)

@@ -175,67 +175,6 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= _l("Allowed Shipping Geo Zone:"); ?></td>
-							<td>
-								<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
-								<?= $this->builder->build('select', $geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone); ?>
-							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Display Prices With Tax:"); ?></td>
-							<td><? if ($config_show_price_with_tax) { ?>
-									<input type="radio" name="config_show_price_with_tax" value="1" checked="checked"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_show_price_with_tax" value="0"/>
-									<?= _l("No"); ?>
-								<? } else { ?>
-									<input type="radio" name="config_show_price_with_tax" value="1"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_show_price_with_tax" value="0" checked="checked"/>
-									<?= _l("No"); ?>
-								<? } ?></td>
-						</tr>
-						<tr>
-							<td><?= _l("Use Store Tax Address:<br /><span class=\"help\">Use the store address to calculate taxes if no one is logged in. You can choose to use the store address for the customers shipping or payment address.</span>"); ?></td>
-							<td>
-								<select name="config_tax_default">
-									<option value=""><?= _l(" --- None --- "); ?></option>
-									<? if ($config_tax_default == 'shipping') { ?>
-										<option value="shipping" selected="selected"><?= _l("Shipping Address"); ?></option>
-									<? } else { ?>
-										<option value="shipping"><?= _l("Shipping Address"); ?></option>
-									<? } ?>
-									<? if ($config_tax_default == 'payment') { ?>
-										<option value="payment" selected="selected"><?= _l("Payment Address"); ?></option>
-									<? } else { ?>
-										<option value="payment"><?= _l("Payment Address"); ?></option>
-									<? } ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Display Model # on product page:"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_product_model', $config_show_product_model); ?></td>
-						</tr>
-						<tr>
-							<td><?= _l("Use Customer Tax Address:<br /><span class=\"help\">Use the customers default address when they login to calculate taxes. You can choose to use the default address for the customers shipping or payment address.</span>"); ?></td>
-							<td>
-								<select name="config_tax_customer">
-									<option value=""><?= _l(" --- None --- "); ?></option>
-									<? if ($config_tax_customer == 'shipping') { ?>
-										<option value="shipping" selected="selected"><?= _l("Shipping Address"); ?></option>
-									<? } else { ?>
-										<option value="shipping"><?= _l("Shipping Address"); ?></option>
-									<? } ?>
-									<? if ($config_tax_customer == 'payment') { ?>
-										<option value="payment" selected="selected"><?= _l("Payment Address"); ?></option>
-									<? } else { ?>
-										<option value="payment"><?= _l("Payment Address"); ?></option>
-									<? } ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
 							<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
 							<td>
 								<? $this->builder->setConfig('customer_group_id', 'name'); ?>
@@ -243,16 +182,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= _l("Login Display Prices:<br /><span class=\"help\">Only show prices when a customer is logged in.</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_hide_price', $config_customer_hide_price); ?></td>
-						</tr>
-						<tr>
 							<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
 							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
-						</tr>
-						<tr>
-							<td><?= _l("Guest Checkout:<br /><span class=\"help\">Allow customers to checkout without creating an account. This will not be available when a downloadable product is in the shopping cart.</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_guest_checkout', $config_guest_checkout); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("The Contact Page"); ?></td>
@@ -281,61 +212,6 @@
 
 								<?= build('select', $build); ?>
 							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Checkout Terms:<br /><span class=\"help\">Forces people to agree to terms before an a customer can checkout.</span>"); ?></td>
-							<td>
-								<? $build = array(
-									'name'   => 'config_checkout_terms_page_id',
-									'data'   => $data_pages,
-									'select' => $config_checkout_terms_page_id,
-									'key'    => 'page_id',
-									'value'  => 'title',
-								); ?>
-
-								<?= build('select', $build); ?>
-							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Display Stock:<br /><span class=\"help\">Display stock quantity on the product page.</span>"); ?></td>
-							<td>
-								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class' => 'display_stock_radio')); ?>
-							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Stock Checkout:<br /><span class=\"help\">Allow customers to still checkout if the products they are ordering are not in stock.</span>"); ?></td>
-							<td><? if ($config_stock_checkout) { ?>
-									<input type="radio" name="config_stock_checkout" value="1" checked="checked"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_stock_checkout" value="0"/>
-									<?= _l("No"); ?>
-								<? } else { ?>
-									<input type="radio" name="config_stock_checkout" value="1"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_stock_checkout" value="0" checked="checked"/>
-									<?= _l("No"); ?>
-								<? } ?></td>
-						</tr>
-						<tr>
-							<td><?= _l("Order Status:<br /><span class=\"help\">Set the default order status when an order is processed.</span>"); ?></td>
-							<td>
-								<?= $this->builder->setConfig(false, 'title'); ?>
-								<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
-							</td>
-						</tr>
-						<tr>
-							<td><?= _l("Display Weight on Cart Page:"); ?></td>
-							<td><? if ($config_cart_weight) { ?>
-									<input type="radio" name="config_cart_weight" value="1" checked="checked"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_cart_weight" value="0"/>
-									<?= _l("No"); ?>
-								<? } else { ?>
-									<input type="radio" name="config_cart_weight" value="1"/>
-									<?= _l("Yes"); ?>
-									<input type="radio" name="config_cart_weight" value="0" checked="checked"/>
-									<?= _l("No"); ?>
-								<? } ?></td>
 						</tr>
 					</table>
 				</div>
@@ -425,64 +301,6 @@
 								<input type="text" name="config_image_popup_width" value="<?= $config_image_popup_width; ?>" size="3"/>
 								x
 								<input type="text" name="config_image_popup_height" value="<?= $config_image_popup_height; ?>" size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Product Image List Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_product_width" value="<?= $config_image_product_width; ?>"
-								       size="3"/>
-								x
-								<input type="text" name="config_image_product_height" value="<?= $config_image_product_height; ?>"
-								       size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Additional Product Image Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_additional_width" value="<?= $config_image_additional_width; ?>"
-								       size="3"/>
-								x
-								<input type="text" name="config_image_additional_height" value="<?= $config_image_additional_height; ?>"
-								       size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Related Product Image Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_related_width" value="<?= $config_image_related_width; ?>"
-								       size="3"/>
-								x
-								<input type="text" name="config_image_related_height" value="<?= $config_image_related_height; ?>"
-								       size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Compare Image Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_compare_width" value="<?= $config_image_compare_width; ?>"
-								       size="3"/>
-								x
-								<input type="text" name="config_image_compare_height" value="<?= $config_image_compare_height; ?>"
-								       size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Wish List Image Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_wishlist_width" value="<?= $config_image_wishlist_width; ?>"
-								       size="3"/>
-								x
-								<input type="text" name="config_image_wishlist_height" value="<?= $config_image_wishlist_height; ?>"
-								       size="3"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="required"> <?= _l("Cart Image Size:"); ?></td>
-							<td>
-								<input type="text" name="config_image_cart_width" value="<?= $config_image_cart_width; ?>" size="3"/>
-								x
-								<input type="text" name="config_image_cart_height" value="<?= $config_image_cart_height; ?>" size="3"/>
 							</td>
 						</tr>
 					</table>

@@ -12,9 +12,7 @@ class Message extends Library
 
 	public function add($type, $message)
 	{
-		if (is_string($message)) {
-			$_SESSION['message'][$type][] = $message;
-		} elseif (is_array($message)) {
+		if (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key) use ($type) {
 				if (is_string($key)) {
 					$_SESSION['message'][$type][$key] = $value;
@@ -22,21 +20,23 @@ class Message extends Library
 					$_SESSION['message'][$type][] = $value;
 				}
 			});
+		} else {
+			$_SESSION['message'][$type][] = $message;
 		}
 	}
 
 	//TODO: Need to add system messages to backend!
 	public function system($type, $message)
 	{
-		if (is_string($message)) {
-			$_SESSION['system_messages'][$type][] = $message;
-		} elseif (is_array($message)) {
+		if (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key, $data) {
 				$_SESSION['system_messages'][$data[1]][] = $data[0]->language->get($value);
 			}, array(
 				$this,
 				$type
 			));
+		} else {
+			$_SESSION['system_messages'][$type][] = $message;
 		}
 	}
 

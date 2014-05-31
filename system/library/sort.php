@@ -1,4 +1,5 @@
 <?php
+
 class Sort extends Library
 {
 	private $sorts;
@@ -11,6 +12,7 @@ class Sort extends Library
 
 	//TODO: Move this to the admin panel
 	static $limits = array(
+		5   => '5',
 		10  => '10',
 		20  => '20',
 		50  => '50',
@@ -93,7 +95,7 @@ class Sort extends Library
 		}
 
 		$settings['limit_url'] = site_url($settings['path'], $this->url->getQueryExclude('limit', 'page') . '&limit=');
-		$settings['limit'] = $this->limit;
+		$settings['limit']     = $this->limit;
 
 		extract($settings);
 
