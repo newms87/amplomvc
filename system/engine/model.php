@@ -175,12 +175,13 @@ abstract class Model
 
 			$where = "WHERE `$primary_key` = $update_id";
 		} elseif (is_array($where)) {
-			$where = "WHERE " . $this->getWhere($table, $where);
-
 			if (isset($where[$primary_key])) {
 				$update_id = (int)$where[$primary_key];
 			}
+
+			$where = "WHERE " . $this->getWhere($table, $where, '', '', true);
 		}
+
 
 		$success = $this->query("UPDATE " . $this->prefix . "$table SET $values $where");
 
@@ -271,7 +272,6 @@ abstract class Model
 		$data = array_intersect_key($data, $table_model);
 
 		foreach ($data as $key => &$value) {
-
 			if (is_resource($value) || is_array($value) || is_object($value)) {
 				trigger_error(_l("%s(): The field %s was given a value that was not a valid type! Value: %s.", __METHOD__, $key, gettype($value)));
 				exit;
@@ -317,23 +317,67 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractOrder($data)
+	protected function extractFilter($columns, $filter)
 	{
-		$sort = '';
+		$where = '1';
 
-		if (!empty($data['sort'])) {
-			$order = (isset($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC';
+		foreach ($columns as $key => $type) {
+			if (isset($filter[$key])) {
+				$value = $filter[$key];
 
-			if (!preg_match("/[^a-z0-9_]/i", $data['sort'])) {
-				$data['sort'] = "`" . $this->db->escape($data['sort']) . "`";
-			} else {
-				$data['sort'] = $this->db->escape($data['sort']);
+				switch ($type) {
+					case 'text_like':
+						$where .= " AND `$key` like '%" . $this->escape($value) . "%'";
+						break;
+
+					case 'text_equals':
+						$where .= " AND `$key` = '" . $this->escape($value) . "'";
+						break;
+
+					case 'text_in':
+						if (is_array($value)) {
+							$where .= " AND `$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
+						} else {
+							$where .= " AND `$key` = '" . $this->escape($value) . "'";
+						}
+						break;
+
+
+
+				}
 			}
-
-			$sort = "ORDER BY " . $data['sort'] . " $order";
 		}
 
-		return $sort;
+		return $where;
+	}
+
+	protected function extractOrder($data)
+	{
+		if (empty($data['sort'])) {
+			return '';
+		}
+		//TODO: Legacy code to handle single column sort. Remove after Version 1.0
+		if (!is_array($data['sort'])) {
+			$data['sort'] = array(
+				$data['sort'] => !empty($data['order']) ? $data['order'] : 'ASC',
+			);
+		}
+
+		$sql = '';
+
+		foreach ($data['sort'] as $sort => $order) {
+			$sort = $this->db->escape($sort);
+
+			if (!preg_match("/[^a-z0-9_]/i", $sort)) {
+				$sort = "`" . $sort . "`";
+			}
+
+			$order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+
+			$sql .= ($sql ? ',' : '') . "$sort $order";
+		}
+
+		return "ORDER BY $sql";
 	}
 
 	protected function extractLimit($data)

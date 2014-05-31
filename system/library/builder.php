@@ -147,6 +147,8 @@ class Builder extends Library
 				}
 			}
 
+			$uniqid = uniqid($name . '-' . $value);
+
 			switch ($type) {
 				case 'select':
 					$s = $selected ? "selected='true'" : '';
@@ -164,17 +166,17 @@ class Builder extends Library
 				case 'ac-radio':
 				case 'radio':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<label for=\"radio-$name-$value\" class=\"$type\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><div class=\"text\">$display</div></label>";
+					$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$value\" $s /><div class=\"text\">$display</div></label>";
 					break;
 
 				case 'checkbox':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></div>";
+					$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$uniqid\">$display</label></div>";
 					break;
 
 				case 'multiselect':
 					$s = $selected ? 'checked="checked"' : '';
-					$options .= "<li><input id=\"checkbox_$name-$value\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$value\" $s /><label for=\"checkbox_$name-$value\">$display</label></li>";
+					$options .= "<li><input id=\"checkbox-$uniqid\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$value\" $s /><label for=\"checkbox-$uniqid\">$display</label></li>";
 					break;
 
 				case 'clickable_list':

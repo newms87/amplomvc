@@ -76,11 +76,16 @@ class App_Model_User_Role extends Model
 		return $user_role;
 	}
 
-	public function getRoles($filter = array(), $select = '*', $total = false)
+	public function getRoleId($role)
+	{
+		return $this->queryVar("SELECT user_role_id FROM " . DB_PREFIX . "user_role WHERE name = '" . $this->escape($role) . "'");
+	}
+
+	public function getRoles($filter = array(), $select = '*', $index = null)
 	{
 		//Select
-		if ($total) {
-			$select = "COUNT(*) as total";
+		if ($index === false) {
+			$select = "COUNT(*)";
 		}
 
 		//From
@@ -90,7 +95,7 @@ class App_Model_User_Role extends Model
 		$where = "1";
 
 		//Order and Limit
-		if (!$total) {
+		if ($index !== false) {
 			$order = $this->extractOrder($filter);
 			$limit = $this->extractLimit($filter);
 		} else {
@@ -101,13 +106,11 @@ class App_Model_User_Role extends Model
 		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result->row['total'];
+		if ($index === false) {
+			return $this->queryVar($query);
 		}
 
-		return $result->rows;
+		return $this->queryRows($query, $index);
 	}
 
 	public function getControllers()
@@ -138,6 +141,6 @@ class App_Model_User_Role extends Model
 
 	public function getTotalRoles($filter = array())
 	{
-		return $this->getRoles($filter, '', true);
+		return $this->getRoles($filter, '', false);
 	}
 }

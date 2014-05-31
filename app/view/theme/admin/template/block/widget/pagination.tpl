@@ -1,4 +1,4 @@
-<div class="pagination">
+<div class="pagination clearfix">
 	<div class="pager">
 		<? if ($page > 1) { ?>
 			<a class="pager-nav first" href="<?= $url_first; ?>"><?= _l("|&lt;"); ?></a>
