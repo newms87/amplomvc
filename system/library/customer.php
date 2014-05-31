@@ -47,8 +47,6 @@ class Customer extends Library
 
 			$this->setCustomer($customer);
 
-			$this->loadCart($customer);
-
 			return true;
 		}
 
@@ -57,8 +55,6 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->escape($this->session->has('cart') ? serialize($this->session->get('cart')) : '') . "', wishlist = '" . $this->escape($this->session->has('wishlist') ? serialize($this->session->get('wishlist')) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
-
 		$this->session->end();
 
 		$this->customer_id = null;
@@ -478,117 +474,6 @@ class Customer extends Library
 		return $addresses;
 	}
 
-	public function setDefaultShippingAddress($address_id)
-	{
-		$this->setMeta('default_shipping_address_id', $address_id);
-	}
-
-	public function setDefaultPaymentAddress($address_id)
-	{
-		$this->setMeta('default_payment_address_id', $address_id);
-	}
-
-	public function getDefaultShippingAddressId()
-	{
-		return $this->getMeta('default_shipping_address_id');
-	}
-
-	public function getDefaultPaymentAddressId()
-	{
-		return $this->getMeta('default_shipping_address_id');
-	}
-
-	public function getDefaultShippingAddress()
-	{
-		if (!$this->customer_id) {
-			return null;
-		}
-
-		$address_id = $this->getMeta('default_shipping_address_id');
-
-		if ($address_id) {
-			$address = $this->getAddress($address_id);
-
-			if ($address) {
-				return $address;
-			}
-		}
-
-		$first_address_id = $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id . " LIMIT 1");
-
-		if ($first_address_id) {
-			$this->setDefaultShippingAddress($first_address_id);
-
-			return $this->getAddress($first_address_id);
-		}
-
-		return null;
-	}
-
-	public function getDefaultPaymentAddress()
-	{
-		if (!$this->customer_id) {
-			return null;
-		}
-
-		$address_id = $this->getMeta('default_payment_address_id');
-
-		if ($address_id) {
-			$address = $this->getAddress($address_id);
-
-			if ($address) {
-				return $address;
-			}
-		}
-
-		$first_address_id = $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id . " LIMIT 1");
-
-		if ($first_address_id) {
-			$this->setDefaultPaymentAddress($first_address_id);
-
-			return $this->getAddress($first_address_id);
-		}
-
-		return null;
-	}
-
-	public function getShippingAddresses($filter = array())
-	{
-		$defaults = array(
-			'geo_zones' => $this->cart->getAllowedShippingZones(),
-		);
-
-		$addresses = $this->getAddresses($filter + $defaults);
-
-		if (empty($filter) && !array_search_key('default_shipping', true, $addresses)) {
-			//Reference first Address in array, then break loop
-			foreach ($addresses as &$address) {
-				$address['default_shipping'] = true;
-				break;
-			}
-			unset($address);
-		}
-
-		return $addresses;
-	}
-
-	public function getPaymentAddresses($filter = array())
-	{
-		$addresses = $this->getAddresses($filter);
-
-		if (empty($filter) && !array_search_key('default_payment', true, $addresses)) {
-			//Reference first Address in array, then break loop
-			foreach ($addresses as &$address) {
-				$address['default_payment'] = true;
-				$this->setMeta('default_payment_address_id', $address['address_id']);
-				break;
-			}
-			unset($address);
-		}
-
-		return $addresses;
-	}
-
 	public function removeAddress($address_id)
 	{
 		if ($this->getTotalAddresses() === 1) {
@@ -617,54 +502,6 @@ class Customer extends Library
 		return (int)$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id);
 	}
 
-	public function setDefaultShippingMethod($shipping_code, $shipping_key)
-	{
-		$methods = $this->getDefaultShippingMethod();
-
-		if (!$methods) {
-			$methods = array();
-		}
-
-		$methods[$shipping_code] = $shipping_key;
-
-		$this->setMeta('default_shipping_method', $methods);
-	}
-
-	public function getDefaultShippingMethod($shipping_code = null)
-	{
-		$methods = $this->getMeta('default_shipping_method');
-
-		if ($shipping_code) {
-			return isset($methods[$shipping_code]) ? $methods[$shipping_code] : null;
-		}
-
-		return $methods;
-	}
-
-	public function setDefaultPaymentMethod($payment_code, $payment_key)
-	{
-		$methods = $this->getDefaultPaymentMethod();
-
-		if (!$methods) {
-			$methods = array();
-		}
-
-		$methods[$payment_code] = $payment_key;
-
-		$this->setMeta('default_payment_method', $methods);
-	}
-
-	public function getDefaultPaymentMethod($payment_code = null)
-	{
-		$methods = $this->getMeta('default_payment_method');
-
-		if ($payment_code) {
-			return isset($methods[$payment_code]) ? $methods[$payment_code] : null;
-		}
-
-		return $methods;
-	}
-
 	/** Customer Info **/
 
 	public function info($key = null)
@@ -674,33 +511,6 @@ class Customer extends Library
 		}
 
 		return $this->information;
-	}
-
-	public function getOrders()
-	{
-		if ($this->customer_id) {
-			return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = " . (int)$this->customer_id . " AND order_status_id > 0");
-		}
-
-		return false;
-	}
-
-	public function getBalance()
-	{
-		if ($this->customer_id) {
-			return $this->queryVar("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = " . (int)$this->customer_id);
-		}
-
-		return 0;
-	}
-
-	public function getRewardPoints()
-	{
-		if ($this->customer_id) {
-			return $this->queryVar("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = " . (int)$this->customer_id);
-		}
-
-		return 0;
 	}
 
 	public function getIps($customer_id)
@@ -828,19 +638,6 @@ class Customer extends Library
 		}
 
 		return true;
-	}
-
-	public function loadCart($customer)
-	{
-		if (!empty($customer['cart'])) {
-			$this->cart->merge($customer['cart']);
-		}
-
-		if (!empty($customer['wishlist'])) {
-			$this->cart->mergeWishlist($customer['wishlist']);
-		}
-
-		$this->order->synchronizeOrders($customer);
 	}
 
 	private function track()
