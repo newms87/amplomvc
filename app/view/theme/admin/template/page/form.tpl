@@ -5,7 +5,9 @@
 	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?></h1>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?>
+				<a href="<?= site_url('page/' . $name); ?>" target="_blank">Preview</a>
+			</h1>
 
 			<div class="buttons">
 				<button><?= _l("Save"); ?></button>
