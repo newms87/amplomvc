@@ -131,13 +131,6 @@ final class Router
 
 	public function dispatch()
 	{
-		//Page Views tracking
-		$path     = $this->db->escape($this->path);
-		$query    = $this->url->getQueryExclude('sort', 'order', 'limit', 'redirect', 'filter');
-		$store_id = (int)option('store_id');
-
-		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
-
 		if (strpos($this->path, 'page/') === 0 && $this->path !== 'page/preview') {
 			$path = 'page';
 		} else {

@@ -69,11 +69,9 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function getThemes()
+	public function getThemes($filter = array(), $select = '*', $index = null)
 	{
-		$theme_dir = DIR_SITE . 'app/view/theme/';
-
-		$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
+		$dir_themes = glob(DIR_THEMES . '*', GLOB_ONLYDIR);
 
 		$themes = array();
 
@@ -86,7 +84,26 @@ class Theme extends Library
 			);
 		}
 
+		if ($index === false) {
+			return count($themes);
+		}
+
+		if (!empty($filter['sort']['name'])) {
+			$themes = uasort($themes, function($a, $b) use($filter) {
+				if (!empty($filter['order']) && strtoupper($filter['order']) === 'DESC') {
+					return $a['name'] > $b['name'];
+				}
+
+				return $a['name'] < $b['name'];
+			});
+		}
+
 		return $themes;
+	}
+
+	public function getTotalThemes($filter)
+	{
+		return $this->getThemes($filter, '', false);
 	}
 
 	public function getTemplatesFrom($path, $blank_row = false)
