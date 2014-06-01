@@ -58,7 +58,10 @@
 			<div id="tab-data">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("SEO URL:<br /><span class=\"help\">The Search Engine Optimized URL.</span>"); ?></td>
+						<td class="required">
+							<?= _l("URL Alias:"); ?>
+							<span class="help"><?= _l("The Search Engine Optimized URL."); ?></span>
+						</td>
 						<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
 					</tr>
 					<tr>

@@ -13,3 +13,6 @@ SQL
 
 $this->db->dropTable('layout_header');
 $this->db->dropTable('page_header');
+$this->db->dropTable('view_count');
+$this->db->dropTable('contact');
+$this->db->dropTable('type_to_contact');

@@ -108,6 +108,7 @@ class App_Controller_Admin_Page extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
+		//Response
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);
 		}

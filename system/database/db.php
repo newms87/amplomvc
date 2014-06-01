@@ -56,6 +56,8 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$driver];
+
+		$this->driver->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 	}
 
 	public function hasError($type = null)
