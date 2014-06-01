@@ -86,8 +86,13 @@
 						<tr>
 							<td><?= _l("Theme:"); ?></td>
 							<td>
-								<? $this->builder->setConfig('name', 'name'); ?>
-								<?= $this->builder->build('select', $data_themes, 'config_theme', $config_theme); ?>
+								<?= build('select', array(
+									'name'   => 'config_theme',
+									'data'   => $data_themes,
+									'select' => $config_theme,
+									'key'    => 'name',
+									'value'  => 'name',
+								)); ?>
 							</td>
 						</tr>
 						<tr>
@@ -97,14 +102,26 @@
 						<tr>
 							<td><?= _l("Default Store"); ?></td>
 							<td>
-								<? $this->builder->setConfig('store_id', 'name'); ?>
-								<?= $this->builder->build('select', $stores, 'config_default_store', $config_default_store); ?>
+								<?= build('select', array(
+									'name'   => 'config_default_store',
+									'data'   => $stores,
+									'select' => $config_default_store,
+									'key'    => 'store_id',
+									'value'  => 'name',
+								)); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= _l("Default Layout:"); ?></td>
-							<? $this->builder->setConfig('layout_id', 'name'); ?>
-							<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id); ?></td>
+							<td>
+								<?= build('select', array(
+									'name'   => 'config_default_layout_id',
+									'data'   => $data_layouts,
+									'select' => $config_default_layout_id,
+									'key'    => 'layout_id',
+									'value'  => 'name',
+								)); ?>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -121,8 +138,14 @@
 						<tr>
 							<td><?= _l("Country:"); ?></td>
 							<td>
-								<?= $this->builder->setConfig('country_id', 'name'); ?>
-								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
+								<?=
+								build('select', array(
+									'name'   => 'config_country_id',
+									'data'   => $countries,
+									'select' => $config_country_id,
+									'key'    => 'country_id',
+									'value'  => 'name',
+								)); ?>
 							</td>
 						</tr>
 						<tr>
@@ -161,7 +184,11 @@
 						</tr>
 						<tr>
 							<td><?= _l("Use Macro Languages (experimental):<span class=\"help\">Attempt to resolve languages by country specific macro codes</span>"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_use_macro_languages', $config_use_macro_languages); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'config_use_macro_languages',
+	'data'   => $data_yes_no,
+	'select' => $config_use_macro_languages
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Currency:<br /><span class=\"help\">Change the default currency. Clear your browser cache to see the change and reset your existing cookie.</span>"); ?></td>
@@ -201,18 +228,30 @@
 								<?= _l("Administration Bar"); ?>
 								<span class="help"><?= _l("This will display a small toolbar on the store fronts when logged into the Admin Panel"); ?></span>
 							</td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_admin_bar', $config_admin_bar); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_admin_bar',
+	'data'   => $data_yes_no,
+	'select' => $config_admin_bar
+)); ?></td>
 						</tr>
 						<tr>
 							<td>
 								<?= _l("Automated Tasks"); ?>
 								<span class="help"><?= _l("Highly recommended to leave this on!"); ?></span>
 							</td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_cron_status', $config_cron_status); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_cron_status',
+	'data'   => $data_yes_no,
+	'select' => $config_cron_status
+)); ?></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Display Breadcrumbs? <span class=\"help\">Display breadcrumbs in the storefront? (breadcrumbs will still display in the admin panel)</span>"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, "config_breadcrumb_display", $config_breadcrumb_display); ?></td>
+							<td><?= build('select', array(
+	'name'   => "config_breadcrumb_display",
+	'data'   => $data_yes_no,
+	'select' => $config_breadcrumb_display
+)); ?></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Breadcrumb Separator:"); ?></td>
@@ -241,7 +280,11 @@
 						</tr>
 						<tr>
 							<td><?= _l("Performance Logging:"); ?></td>
-							<td><?= $this->builder->build('select', $data_statuses, 'config_performance_log', $config_performance_log); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'config_performance_log',
+	'data'   => $data_statuses,
+	'select' => $config_performance_log
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Cache Ignore List:<span class=\"help\">(comma separated list)</span>"); ?></td>
@@ -251,7 +294,11 @@
 						</tr>
 						<tr>
 							<td><?= _l("Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_allow_close_message', $config_allow_close_message); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_allow_close_message',
+	'data'   => $data_yes_no,
+	'select' => $config_allow_close_message
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
@@ -270,19 +317,32 @@
 						</tr>
 						<tr>
 							<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_customer_approval',
+	'data'   => $data_yes_no,
+	'select' => $config_customer_approval
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Account Terms:<br /><span class=\"help\">Forces people to agree to terms before an account can be created.</span>"); ?></td>
 							<td>
-								<? $this->builder->setConfig('page_id', 'title'); ?>
-								<?= $this->builder->build('select', $data_pages, 'config_account_terms_page_id', $config_account_terms_page_id); ?>
+								<?= build('select', array(
+									'name'   => 'config_account_terms_page_id',
+									'data'   => $data_pages,
+									'select' => $config_account_terms_page_id,
+									'key'    => 'page_id',
+									'value'  => 'title',
+								)); ?>
 							</td>
 						</tr>
 
 						<tr>
 							<td><?= _l("Allow Social Sharing:"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, "config_share_status", $config_share_status); ?></td>
+							<td><?= build('select', array(
+	'name'   => "config_share_status",
+	'data'   => $data_yes_no,
+	'select' => $config_share_status
+)); ?></td>
 						</tr>
 
 						<tr>
@@ -354,7 +414,11 @@
 					<table class="form">
 						<tr>
 							<td><?= _l("Mail Protocol:<span class=\"help\">Only choose \'Mail\' unless your host has disabled the php mail function."); ?></td>
-							<td><?= $this->builder->build('select', $data_mail_protocols, "config_mail_protocol", $config_mail_protocol); ?></td>
+							<td><?= build('select', array(
+	'name'   => "config_mail_protocol",
+	'data'   => $data_mail_protocols,
+	'select' => $config_mail_protocol
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Mail Parameters:<span class=\"help\">When using \'Mail\', additional mail parameters can be added here (e.g. \"-femail@storeaddress.com\"."); ?></td>
@@ -394,11 +458,19 @@
 						</tr>
 						<tr>
 							<td><?= _l("New Order Alert Mail:<br /><span class=\"help\">Send a email to the store owner when a new order is created.</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_alert_mail', $config_alert_mail); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_alert_mail',
+	'data'   => $data_yes_no,
+	'select' => $config_alert_mail
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("New Account Alert Mail:<br /><span class=\"help\">Send a email to the store owner when a new account is registered.</span>"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_account_mail', $config_account_mail); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_account_mail',
+	'data'   => $data_yes_no,
+	'select' => $config_account_mail
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Additional Alert E-Mails:<br /><span class=\"help\">Any additional emails you want to receive the alert email, in addition to the main store email. (comma separated)</span>"); ?></td>
@@ -408,7 +480,11 @@
 						</tr>
 						<tr>
 							<td><?= _l("Enable Mail Logging"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_mail_logging', $config_mail_logging); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_mail_logging',
+	'data'   => $data_yes_no,
+	'select' => $config_mail_logging
+)); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -504,15 +580,27 @@
 					<table class="form">
 						<tr>
 							<td><?= _l("Turn on Global Debug:<span class=\"help\">Should be turned off for production sites.</span>"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_debug', (int)$config_debug); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'config_debug',
+	'data'   => $data_yes_no,
+	'select' => $config_debug
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Use the jQuery CDN:<span class=\"help\">This will load jQuery and jQuery UI from the jQuery Content Delivery Network. Recommended for production sites</span>"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_jquery_cdn', (int)$config_jquery_cdn); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'config_jquery_cdn',
+	'data'   => $data_yes_no,
+	'select' => $config_jquery_cdn
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Send Emails to third parties? <span class=\"help\">Emails sent to people other than the current user and the system emails</span>"); ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_debug_send_emails', (int)$config_debug_send_emails); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'config_debug_send_emails',
+	'data'   => $data_yes_no,
+	'select' => $config_debug_send_emails
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Use SSL:<br /><span class=\"help\">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>"); ?></td>
@@ -586,11 +674,19 @@
 						</tr>
 						<tr>
 							<td><?= _l("Display Errors:"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_display', $config_error_display); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_error_display',
+	'data'   => $data_yes_no,
+	'select' => $config_error_display
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Log Errors:"); ?></td>
-							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_log', $config_error_log); ?></td>
+							<td><?= build('radio', array(
+	'name'   => 'config_error_log',
+	'data'   => $data_yes_no,
+	'select' => $config_error_log
+)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Google Analytics Code:<br /><span class=\"help\">Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field.</span>"); ?></td>

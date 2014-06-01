@@ -42,7 +42,11 @@
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Reading Direction:"); ?></td>
-						<td><?= $this->builder->build('select', $data_direction, "direction", $direction); ?></td>
+						<td><?= build('select', array(
+	'name'   => "direction",
+	'data'   => $data_direction,
+	'select' => $direction
+)); ?></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Decimal Point:"); ?></td>
@@ -66,7 +70,11 @@
 					</tr>
 					<tr>
 						<td><?= _l("Status:<br /><span class=\"help\">Hide/Show it in language dropdown</span>"); ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, "status", (int)$status); ?></td>
+						<td><?= build('select', array(
+	'name'   => "status",
+	'data'   => $data_statuses,
+	'select' => $status
+)); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Sort Order:"); ?></td>

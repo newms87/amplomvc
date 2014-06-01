@@ -13,7 +13,11 @@
 	</tr>
 	<tr>
 		<td><?= _l("Show Block Title?"); ?></td>
-		<td><?= $this->builder->build('radio', $data_yes_no, "instances[$row][show_title]", $instance['show_title']); ?></td>
+		<td><?= build('radio', array(
+	'name'   => "instances[$row][show_title]",
+	'data'   => $data_yes_no,
+	'select' => $instance['show_title']
+)); ?></td>
 	</tr>
 </table>
 
@@ -25,7 +29,11 @@
 	<table class="form">
 		<tr>
 			<td><?= _l("Slider"); ?></td>
-			<td class="slider_select"><?= $this->builder->build('select', $data_sliders, $row_name . "[slider]", $settings['slider']); ?></td>
+			<td class="slider_select"><?= build('select', array(
+	'name'   => $row_name . "[slider]",
+	'data'   => $data_sliders,
+	'select' => $settings['slider']
+)); ?></td>
 		</tr>
 	</table>
 
@@ -65,39 +73,75 @@
 		</tr>
 		<tr>
 			<td><?= _l("Show Navigation"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][navigation][active]", $settings['slidesjs']['navigation']['active']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][navigation][active]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['navigation']['active']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Navigation Effect"); ?></td>
-			<td><?= $this->builder->build('select', $data_effects, $row_name . "[slidesjs][navigation][effect]", $settings['slidesjs']['navigation']['effect']); ?></td>
+			<td><?= build('select', array(
+	'name'   => $row_name . "[slidesjs][navigation][effect]",
+	'data'   => $data_effects,
+	'select' => $settings['slidesjs']['navigation']['effect']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Show Pagination"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][pagination][active]", $settings['slidesjs']['pagination']['active']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][pagination][active]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['pagination']['active']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Pagination Effect"); ?></td>
-			<td><?= $this->builder->build('select', $data_effects, $row_name . "[slidesjs][pagination][effect]", $settings['slidesjs']['pagination']['effect']); ?></td>
+			<td><?= build('select', array(
+	'name'   => $row_name . "[slidesjs][pagination][effect]",
+	'data'   => $data_effects,
+	'select' => $settings['slidesjs']['pagination']['effect']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Show Controls"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][active]", $settings['slidesjs']['play']['active']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][play][active]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['play']['active']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Controls Effect"); ?></td>
-			<td><?= $this->builder->build('select', $data_effects, $row_name . "[slidesjs][play][effect]", $settings['slidesjs']['play']['effect']); ?></td>
+			<td><?= build('select', array(
+	'name'   => $row_name . "[slidesjs][play][effect]",
+	'data'   => $data_effects,
+	'select' => $settings['slidesjs']['play']['effect']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Auto Play"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][auto]", $settings['slidesjs']['play']['auto']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][play][auto]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['play']['auto']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Swap Stop / Play Buttons"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][swap]", $settings['slidesjs']['play']['swap']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][play][swap]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['play']['swap']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Pause Slides on Hover"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][play][pauseOnHover]", $settings['slidesjs']['play']['pauseOnHover']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][play][pauseOnHover]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['play']['pauseOnHover']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Slide Delay Time (ms)"); ?></td>
@@ -119,7 +163,11 @@
 		</tr>
 		<tr>
 			<td><?= _l("Fade Effect Cross-fade"); ?></td>
-			<td><?= $this->builder->build('radio', $data_true_false, $row_name . "[slidesjs][effect][fade][crossfade]", $settings['slidesjs']['effect']['fade']['crossfade']); ?></td>
+			<td><?= build('radio', array(
+	'name'   => $row_name . "[slidesjs][effect][fade][crossfade]",
+	'data'   => $data_true_false,
+	'select' => $settings['slidesjs']['effect']['fade']['crossfade']
+)); ?></td>
 		</tr>
 		<tr>
 			<td><?= _l("Slide Effect Speed"); ?></td>
@@ -135,8 +183,11 @@
 
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
 				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>"/>
-				<input class="slide_href" placeholder="<?= _l("URL (or leave blank)"); ?>" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/>
-				<?= $this->builder->build('select', $data_targets, $slide_row_name . '[target]', $slide['target']); ?>
+				<input class="slide_href" placeholder="<?= _l("URL (or leave blank)"); ?>" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/><?= build('select', array(
+					'name'   => $slide_row_name . '[target]',
+					'data'   => $data_targets,
+					'select' => $slide['target']
+				)); ?>
 				<div class="button delete" onclick="$(this).closest('.ac_carousel_slide').remove()">X</div>
 			</div>
 

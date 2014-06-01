@@ -22,8 +22,11 @@
 					</tr>
 					<tr>
 						<td><label for="status"><?= _l("Status"); ?></label></td>
-						<td>
-							<?= $this->builder->build('select', $data_site_status, 'status', $status); ?>
+						<td><?= build('select', array(
+								'name'   => 'status',
+								'data'   => $data_site_status,
+								'select' => $status
+							)); ?>
 						</td>
 					</tr>
 					<tr>

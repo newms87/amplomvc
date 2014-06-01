@@ -22,34 +22,60 @@
 				<tr>
 					<td><?= _l("Instance"); ?></td>
 					<td>
-						<? $this->builder->setConfig(false, "name"); ?>
-						<?= $this->builder->build('select', $data_instances, "profiles[$row][block_instance_id]", $profile['block_instance_id']); ?>
+						<?=
+						build('select', array(
+							'name'   => "profiles[$row][block_instance_id]",
+							'data'   => $data_instances,
+							'select' => $profile['block_instance_id'],
+							'key'    => false,
+							'value'  => "name",
+						)); ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?= _l("Stores"); ?></td>
 					<td>
-						<? $this->builder->setConfig("store_id", "name"); ?>
-						<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", !empty($profile['store_ids']) ? $profile['store_ids'] : null); ?>
+						<?=
+						build('multiselect', array(
+							'name'   => "profiles[$row][store_ids]",
+							'data'   => $data_stores,
+							'select' => !empty($profile['store_ids']) ? $profile['store_ids'] : null,
+							'key'    => "store_id",
+							'value'  => "name",
+						)); ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?= _l("Layouts"); ?></td>
 					<td>
-						<? $this->builder->setConfig("layout_id", "name"); ?>
-						<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", !empty($profile['layout_ids']) ? $profile['layout_ids'] : null); ?>
+						<?=
+						build('multiselect', array(
+							'name'   => "profiles[$row][layout_ids]",
+							'data'   => $data_layouts,
+							'select' => !empty($profile['layout_ids']) ? $profile['layout_ids'] : null,
+							'key'    => "layout_id",
+							'value'  => "name",
+						)); ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?= _l("Positions"); ?></td>
-					<td>
-						<?= $this->builder->build('select', $data_positions, "profiles[$row][position]", $profile['position']); ?>
+					<td><?=
+						build('select', array(
+							'name'   => "profiles[$row][position]",
+							'data'   => $data_positions,
+							'select' => $profile['position']
+						)); ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?= _l("Profile Status"); ?></td>
-					<td>
-						<?= $this->builder->build('select', $data_statuses, "profiles[$row][status]", $profile['status']); ?>
+					<td><?=
+						build('select', array(
+							'name'   => "profiles[$row][status]",
+							'data'   => $data_statuses,
+							'select' => $profile['status']
+						)); ?>
 					</td>
 				</tr>
 			</table>

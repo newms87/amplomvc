@@ -78,7 +78,11 @@
 					</tr>
 					<tr>
 						<td><?= _l("Status:"); ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
+						<td><?= build('select', array(
+	'name'   => 'status',
+	'data'   => $data_statuses,
+	'select' => $status
+)); ?></td>
 					</tr>
 				</table>
 			</div>
@@ -89,16 +93,30 @@
 					<tr>
 						<td class="required"> <?= _l("Layout:"); ?></td>
 						<td>
-							<? $this->builder->setConfig('layout_id', 'name'); ?>
-							<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
+							<div id="layout_select">
+								<?= build('select', array(
+									'name' => 'layout_id',
+								   'data' => $data_layouts,
+								   'select' => $layout_id,
+								   'key' => 'layout_id',
+								   'value' => 'name',
+								)); ?>
+							</div>
 							<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
 							<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
 						</td>
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Stores:"); ?></td>
-						<? $this->builder->setConfig('store_id', 'name'); ?>
-						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
+						<td>
+						<?= build('multiselect', array(
+							'name'   => "stores",
+							'data'   => $data_stores,
+							'select' => $stores,
+							'key'    => 'store_id',
+							'value'  => 'name',
+						)); ?>
+						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Blocks Associated with this Page"); ?></td>

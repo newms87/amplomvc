@@ -18,7 +18,10 @@
 								<textarea name="query" id="db_query" rows="10" cols="100"><?= $query; ?></textarea>
 							</td>
 							<td id="db_tables">
-								<?= $this->builder->build('multiselect', $data_tables, 'tables'); ?>
+								<?= build('multiselect', array(
+									'name' => 'tables',
+									'data' => $data_tables,
+								)); ?>
 							</td>
 						</tr>
 						<tr>

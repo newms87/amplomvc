@@ -45,8 +45,13 @@
 					<tr>
 						<td><?= _l("Theme"); ?></td>
 						<td>
-							<? $this->builder->setConfig('name', 'name'); ?>
-							<?= $this->builder->build('multiselect', $data_themes, 'themes', $themes); ?>
+							<?= build('multiselect', array(
+								'name'   => 'themes',
+								'data'   => $data_themes,
+								'select' => $themes,
+								'key'    => 'name',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 				</table>

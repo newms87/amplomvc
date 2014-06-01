@@ -14,7 +14,11 @@
 					<table class="form">
 						<tr>
 							<td class="required"> <?= _l("Update system to Version:"); ?></td>
-							<td><?= $this->builder->build('select', $data_versions, 'version', $version); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'version',
+	'data'   => $data_versions,
+	'select' => $version
+)); ?></td>
 						</tr>
 						<tr>
 							<td></td>

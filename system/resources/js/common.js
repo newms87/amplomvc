@@ -145,7 +145,7 @@ $.fn.ac_datepicker = function (params) {
 	params = $.extend({}, {
 		type:       null,
 		dateFormat: 'yy-mm-dd',
-		timeFormat: 'HH:mm',
+		timeFormat: 'HH:mm'
 	}, params);
 
 	return this.each(function (i, e) {

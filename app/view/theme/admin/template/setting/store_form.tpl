@@ -22,6 +22,7 @@
 				<a href="#tab-image"><?= _l("Image"); ?></a>
 				<a href="#tab-server"><?= _l("Server"); ?></a>
 			</div>
+
 			<div id="tab-general">
 				<table class="form">
 					<tr>
@@ -74,6 +75,7 @@
 					</tr>
 				</table>
 			</div>
+
 			<div id="tab-store">
 				<table class="form">
 					<tr>
@@ -91,8 +93,23 @@
 					<tr>
 						<td><?= _l("Theme:"); ?></td>
 						<td>
-							<? $this->builder->setConfig('name', 'name'); ?>
-							<?= $this->builder->build('select', $data_themes, 'config_theme', $config_theme); ?>
+							<?=
+							build('select', array(
+								'name'   => 'config_theme',
+								'data'   => $data_themes,
+								'select' => $config_theme,
+								'key'    => 'name',
+								'value'  => 'name',
+							)); ?>
+
+							<?=
+							build('select', array(
+								'name'   => 'config_theme',
+								'data'   => $data_themes,
+								'select' => $config_theme,
+								'key'    => 'name',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
@@ -116,13 +133,20 @@
 					</tr>
 				</table>
 			</div>
+
 			<div id="tab-local">
 				<table class="form">
 					<tr>
 						<td><?= _l("Country:"); ?></td>
 						<td>
-							<?= $this->builder->setConfig('country_id', 'name'); ?>
-							<?= $this->builder->build('select', $data_countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
+							<?=
+							build('select', array(
+								'name'   => 'config_country_id',
+								'data'   => $data_countries,
+								'select' => $config_country_id,
+								'key'    => 'country_id',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
@@ -162,6 +186,7 @@
 					</tr>
 				</table>
 			</div>
+
 			<div id="tab-option">
 				<table class="form">
 					<tr>
@@ -173,13 +198,23 @@
 					<tr>
 						<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
 						<td>
-							<? $this->builder->setConfig('customer_group_id', 'name'); ?>
-							<?= $this->builder->build('select', $data_customer_groups, 'config_customer_gorup_id', $config_customer_group_id); ?>
+							<?=
+							build('select', array(
+								'name'   => 'config_customer_gorup_id',
+								'data'   => $data_customer_groups,
+								'select' => $config_customer_group_id,
+								'key'    => 'customer_group_id',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
-						<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
+						<td><?= build('radio', array(
+	'name'   => 'config_customer_approval',
+	'data'   => $data_yes_no,
+	'select' => $config_customer_approval
+)); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("The Contact Page"); ?></td>
@@ -211,6 +246,7 @@
 					</tr>
 				</table>
 			</div>
+
 			<div id="tab-image">
 				<table class="form">
 					<tr>
@@ -303,6 +339,7 @@
 					</tr>
 				</table>
 			</div>
+
 			<div id="tab-server">
 				<table class="form">
 					<tr>

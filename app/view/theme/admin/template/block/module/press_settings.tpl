@@ -67,7 +67,7 @@
 	</tr>
 </table>
 
-<?= $this->builder->js('ckeditor'); ?>
+<?= build_js('ckeditor'); ?>
 
 <script type="text/javascript">
 	$('.imageinput').ac_imageinput();

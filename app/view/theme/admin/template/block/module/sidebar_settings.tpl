@@ -2,8 +2,12 @@
 	<tr>
 		<td>
 			<?= _l("Attribute Filter:"); ?><br/>
-			<? $this->builder->setConfig("attribute_group_id", 'name'); ?>
-			<?= $this->builder->build('select', $data_attribute_groups, 'attribute_group_select'); ?>
+			<?= build('select', array(
+				'name'   => 'attribute_group_select',
+				'data'   => $data_attribute_groups,
+				'key'    => 'attribute_group_id',
+				'value'  => 'name',
+			)); ?>
 		</td>
 		<td>
 			<div id="attribute_list">

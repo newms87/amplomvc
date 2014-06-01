@@ -42,7 +42,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ckeditor'); ?>
+<?= build_js('ckeditor'); ?>
 
 <script type="text/javascript">
 	$('#allow_html').change(function () {

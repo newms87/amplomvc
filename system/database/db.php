@@ -1,10 +1,10 @@
 <?php
 class DB
 {
+	static $profile = array();
+
 	static $drivers = array();
 	private $driver;
-
-	private $profile = array();
 
 	//Time Simulation
 	private $synctime = false;
@@ -85,7 +85,7 @@ class DB
 
 	public function getProfile()
 	{
-		return $this->profile;
+		return self::$profile;
 	}
 
 	/**
@@ -115,7 +115,7 @@ class DB
 
 			$time = round(microtime(true) - $start, 6);
 
-			$this->profile[] = array(
+			self::$profile[] = array(
 				'query' => $sql,
 				'time'  => $time ? $time : .000005,
 			);

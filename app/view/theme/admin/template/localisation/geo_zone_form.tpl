@@ -50,8 +50,13 @@
 							<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
 							<tr class="geozone_selector <?= $key; ?>">
 								<td class="left">
-									<? $this->builder->setConfig('country_id', 'name'); ?>
-									<?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class' => 'country_selector')); ?>
+									<?= build('select', array(
+										'name'   => "zones[$row][country_id]",
+										'data'   => $data_countries,
+										'select' => $zone['country_id'], array('class' => 'country_selector'),
+										'key'    => 'country_id',
+										'value'  => 'name',
+									)); ?>
 									<a onclick="add_all_zones($(this))"
 										style="text-decoration:none; display:block"><?= _l("[ Add All Zones ]"); ?></a>
 								</td>
