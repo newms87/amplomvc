@@ -6,7 +6,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		'modify' => array(
 			'form',
 		   'save',
-		   'delete',
+		   'remove',
 		),
 	);
 
@@ -82,7 +82,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/setting/store/delete', 'store_id=' . $store['store_id']),
+					'href' => site_url('admin/setting/store/remove', 'store_id=' . $store['store_id']),
 				)
 			);
 
@@ -243,7 +243,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 	public function save()
 	{
 		//Insert or Update
-		$store_id = empty($_GET['store_id']) ? $_GET['store_id'] : 0;
+		$store_id = !empty($_GET['store_id']) ? $_GET['store_id'] : 0;
 
 		$store_id = $this->Model_Setting_Store->save($store_id, $_POST);
 
@@ -253,6 +253,10 @@ class App_Controller_Admin_Setting_Store extends Controller
 			$this->message->add('error', _l("There was a problem saving the store settings."));
 		} else {
 			$this->config->saveGroup('config', $_POST, $store_id);
+
+			if ($this->theme->install($store_id, $_POST['config_theme'])) {
+				$this->message->add('error', $this->theme->getError());
+			}
 
 			$this->message->add('success', _l("The Store settings have been saved."));
 		}
@@ -266,11 +270,11 @@ class App_Controller_Admin_Setting_Store extends Controller
 		}
 	}
 
-	public function delete()
+	public function remove()
 	{
-		$this->Model_Setting_Store->deleteStore($_GET['store_id']);
+		$this->Model_Setting_Store->remove($_GET['store_id']);
 
-		if ($this->Model_User_User->hasError()) {
+		if ($this->Model_Setting_Store->hasError()) {
 			$this->message->add('error', $this->Model_Setting_Store->getError());
 		} else {
 			if (!$this->config->deleteGroup('config', $_GET['store_id'])) {

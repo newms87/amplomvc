@@ -1,6 +1,7 @@
 /* Imports */
 @import 'base';
 @import 'reset';
+@import 'jqzoom';
 
 /**********************************
   I.    Base Style / Structure
@@ -194,6 +195,7 @@ button, .button {
   ul {
     li {
       display: inline-block;
+      position: relative;
 
       a {
         display: block;
@@ -202,9 +204,11 @@ button, .button {
 
       .sub-menu {
         position: absolute;
-        z-index: 50;
         top: 100%;
-        left: 0;
+        left: -50%;
+        text-align: center;
+        z-index: 50;
+        width: 20em;
         background: @color-light;
         box-shadow: 3px 3px 3px @color-lighter;
         border-radius: 5px;

@@ -101,15 +101,6 @@
 								'key'    => 'name',
 								'value'  => 'name',
 							)); ?>
-
-							<?=
-							build('select', array(
-								'name'   => 'config_theme',
-								'data'   => $data_themes,
-								'select' => $config_theme,
-								'key'    => 'name',
-								'value'  => 'name',
-							)); ?>
 						</td>
 					</tr>
 					<tr>
@@ -210,11 +201,12 @@
 					</tr>
 					<tr>
 						<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
-						<td><?= build('radio', array(
-	'name'   => 'config_customer_approval',
-	'data'   => $data_yes_no,
-	'select' => $config_customer_approval
-)); ?></td>
+						<td><?=
+							build('radio', array(
+								'name'   => 'config_customer_approval',
+								'data'   => $data_yes_no,
+								'select' => $config_customer_approval
+							)); ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("The Contact Page"); ?></td>
@@ -366,7 +358,7 @@
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
 
 	$('[name=config_theme]').change(function () {
-		$('#theme').load($ac.admin_url + 'setting/setting/theme?theme=' + $(this).val());
+		$('#theme').load($ac.site_url + 'admin/setting/setting/theme?theme=' + $(this).val());
 	}).change();
 
 	$('#generate-icons').click(function () {

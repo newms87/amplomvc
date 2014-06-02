@@ -91,13 +91,8 @@ function theme_url($path = '', $query = null)
 
 function theme_dir($path = '')
 {
-	if (is_file(DIR_THEME . $path)) {
-		return DIR_THEME . $path;
-	} elseif (is_file(DIR_THEME_PARENT . $path)) {
-		return DIR_THEME_PARENT . $path;
-	}
-
-	return false;
+	global $registry;
+	return  $registry->get('theme')->getFile($path);
 }
 
 function redirect($path = '', $query = null, $status = null)

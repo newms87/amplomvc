@@ -5,6 +5,7 @@ class Theme extends Library
 	private $dir_themes;
 	private $theme;
 	private $parent_theme;
+	private $settings;
 
 	public function __construct()
 	{
@@ -12,19 +13,12 @@ class Theme extends Library
 
 		$this->dir_themes = DIR_THEMES;
 
-		$admin_theme        = option('config_admin_theme', 'admin');
-		$admin_parent_theme = option('config_admin_parent_theme', 'admin');
-		$theme              = option('config_theme', 'fluid');
-		$parent_theme       = option('config_parent_theme', 'fluid');
+		$admin_theme = option('config_admin_theme', 'admin');
+		$theme       = option('config_theme', 'fluid');
 
 		if (!is_dir(DIR_THEMES . $admin_theme)) {
 			set_option('config_admin_theme', 'admin');
 			$admin_theme = 'admin';
-		}
-
-		if (!is_dir(DIR_THEMES . $admin_parent_theme)) {
-			set_option('config_admin_parent_theme', 'admin');
-			$admin_parent_theme = 'admin';
 		}
 
 		if (!is_dir(DIR_THEMES . $theme)) {
@@ -32,26 +26,18 @@ class Theme extends Library
 			$theme = 'fluid';
 		}
 
-		if (!is_dir(DIR_THEMES . $parent_theme)) {
-			set_option('config_parent_theme', 'fluid');
-			$parent_theme = 'fluid';
-		}
+		$this->theme    = $this->route->isAdmin() ? $admin_theme : $theme;
+		$this->settings = option('config_theme_settings', array());
 
-		if ($this->route->isAdmin()) {
-			$this->theme        = $admin_theme;
-			$this->parent_theme = $admin_parent_theme;
-		} else {
-			$this->theme        = $theme;
-			$this->parent_theme = $parent_theme;
-		}
+		$this->settings += array(
+			'parents' => array(),
+		);
 
 		//Url Constants
 		define('URL_THEME', URL_THEMES . $this->theme . '/');
-		define('URL_THEME_PARENT', URL_THEMES . $this->parent_theme . '/');
 
 		//Directory Constants
 		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
-		define('DIR_THEME_PARENT', DIR_THEMES . $this->parent_theme . '/');
 	}
 
 	public function setTheme($theme)
@@ -79,7 +65,7 @@ class Theme extends Library
 			$name = basename($dir);
 
 			$themes[$name] = array(
-				'dir' => $dir . '/',
+				'dir'  => $dir . '/',
 				'name' => $name,
 			);
 		}
@@ -89,7 +75,7 @@ class Theme extends Library
 		}
 
 		if (!empty($filter['sort']['name'])) {
-			$themes = uasort($themes, function($a, $b) use($filter) {
+			$themes = uasort($themes, function ($a, $b) use ($filter) {
 				if (!empty($filter['order']) && strtoupper($filter['order']) === 'DESC') {
 					return $a['name'] > $b['name'];
 				}
@@ -154,9 +140,9 @@ class Theme extends Library
 		return $areas;
 	}
 
-	public function getFile($file, $theme = null, $parent_theme = null)
+	public function getFile($file, $theme = '')
 	{
-		$file = $this->findFile($file, $theme, $parent_theme);
+		$file = $this->findFile($file, $theme);
 
 		if ($file) {
 			return $this->dir_themes . $file;
@@ -165,9 +151,9 @@ class Theme extends Library
 		return false;
 	}
 
-	public function getUrl($file, $theme = null, $parent_theme = null)
+	public function getUrl($file, $theme = '')
 	{
-		$file = $this->findFile($file, $theme, $parent_theme);
+		$file = $this->findFile($file, $theme);
 
 		if ($file) {
 			return URL_THEMES . $file;
@@ -176,27 +162,60 @@ class Theme extends Library
 		return false;
 	}
 
-	public function findFile($file, $theme = null, $parent_theme = null)
+	public function findFile($file, $theme = '')
 	{
 		$theme = $theme ? $theme : $this->theme;
-		$parent_theme = $parent_theme ? $parent_theme : $this->parent_theme;
 
 		//Add tpl extension if no extension specified
 		if (!preg_match("/\\.[a-z0-9]+\$/i", $file)) {
 			$file .= '.tpl';
 		}
 
-		if (file_exists($this->dir_themes . $theme . '/' . $file)) {
-			return $theme . '/' . $file;
-		} elseif (file_exists($this->dir_themes . $parent_theme . '/' . $file)) {
-			return $parent_theme . '/' . $file;
-		} elseif (file_exists($this->dir_themes . $theme . '/template/' . $file)) {
-			return $theme . '/template/' . $file;
-		} elseif (file_exists($this->dir_themes . $parent_theme . '/template/' . $file)) {
-			return $parent_theme . '/template/' . $file;
+		if ($theme) {
+			if (file_exists($this->dir_themes . $theme . '/' . $file)) {
+				return $theme . '/' . $file;
+			} elseif (file_exists($this->dir_themes . $theme . '/template/' . $file)) {
+				return $theme . '/template/' . $file;
+			}
+		}
+
+		foreach ($this->settings['parents'] as $parent) {
+			if (file_exists($this->dir_themes . $parent . '/' . $file)) {
+				return $parent . '/' . $file;
+			} elseif (file_exists($this->dir_themes . $parent . '/template/' . $file)) {
+				return $parent . '/template/' . $file;
+			}
 		}
 
 		//File not found
 		return false;
+	}
+
+	public function install($store_id, $theme)
+	{
+		//Resolve Parents
+		$parents = array();
+		$t = $theme;
+
+		while(is_file(DIR_THEMES . $t . '/setup.php')) {
+			$directives = $this->tool->getFileCommentDirectives(DIR_THEMES . $t . '/setup.php');
+
+			if (!empty($directives['parent'])) {
+				//Check for Self parent assignment
+				if ($t === $directives['parent']) {
+					break;
+				}
+				$t = $directives['parent'];
+				$parents[] = $t;
+			} else {
+				break;
+			}
+		}
+
+		$settings = array(
+			'parents' => $parents,
+		);
+
+		return $this->config->save('config', 'config_theme_settings', $settings, $store_id);
 	}
 }

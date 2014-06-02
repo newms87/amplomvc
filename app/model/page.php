@@ -36,6 +36,8 @@ class App_Model_Page extends Model
 
 		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $page['name'];
 
+		_is_writable($dir);
+
 		file_put_contents($dir . '/content.tpl', $page['content']);
 		file_put_contents($dir . '/style.less', $page['style']);
 
@@ -206,7 +208,6 @@ class App_Model_Page extends Model
 
 		$page = $this->queryRow($query);
 
-		html_dump($page, 'page');
 		$file = $this->theme->findFile('page/' . $name . '/content');
 
 		//Page Does Not Exist, but found in database
@@ -314,8 +315,6 @@ class App_Model_Page extends Model
 		$content = $this->theme->getFile('page/' . $name . '/content', $this->page_theme);
 
 		if (!$content) {
-			trigger_error(_l("The page %s content file was not found. Add page/%s/content.tpl to your theme", $name, $name));
-
 			$page_id = $this->queryVar("SELECT page_id FROM " . DB_PREFIX . "page WHERE `name` = '" . $this->escape($name) . "'");
 
 			if ($page_id) {
