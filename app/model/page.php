@@ -1,6 +1,6 @@
 <?php
 
-class App_Model_Page_Page extends Model
+class App_Model_Page extends Model
 {
 	private $page_theme;
 
@@ -12,27 +12,35 @@ class App_Model_Page_Page extends Model
 		if ($this->page_theme === 'admin') {
 			$this->page_theme = 'fluid';
 		}
+
+		$this->loadPages();
 	}
 
-	public function addPage($data)
+	public function addPage($page)
 	{
-		if (!validate('text', $data['title'], 3, 64)) {
-			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
+		//Defaults
+		$page += array(
+			'content' => '',
+			'style'   => '',
+		);
+
+		if (!validate('text', $page['title'], 1, 64)) {
+			$this->error['title'] = _l("Page Title must be between 1 and 64 characters!");
 		}
 
 		if ($this->error) {
 			return false;
 		}
 
-		$page_id = $this->insert('page', $data);
+		$page_id = $this->insert('page', $page);
 
-		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $data['name'];
+		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $page['name'];
 
-		file_put_contents($dir . '/content.tpl', $data['content']);
-		file_put_contents($dir . '/style.less', $data['style']);
+		file_put_contents($dir . '/content.tpl', $page['content']);
+		file_put_contents($dir . '/style.less', $page['style']);
 
-		if (!empty($data['stores'])) {
-			foreach ($data['stores'] as $store) {
+		if (!empty($page['stores'])) {
+			foreach ($page['stores'] as $store) {
 				if (is_array($store)) {
 					$layout_id = $store['layout_id'];
 					$store_id  = $store['store_id'];
@@ -51,12 +59,12 @@ class App_Model_Page_Page extends Model
 			}
 		}
 
-		if (!empty($data['alias'])) {
-			$this->url->setAlias($data['alias'], 'page/page', 'page_id=' . (int)$page_id);
+		if (!empty($page['alias'])) {
+			$this->url->setAlias($page['alias'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 
-		if (!empty($data['translations'])) {
-			$this->translation->setTranslations('page', $page_id, $data['translations']);
+		if (!empty($page['translations'])) {
+			$this->translation->setTranslations('page', $page_id, $page['translations']);
 		}
 
 		$this->cache->delete('page');
@@ -64,9 +72,9 @@ class App_Model_Page_Page extends Model
 		return $page_id;
 	}
 
-	public function editPage($page_id, $data)
+	public function editPage($page_id, $page)
 	{
-		if (isset($data['title']) && !validate('text', $data['title'], 3, 64)) {
+		if (isset($page['title']) && !validate('text', $page['title'], 3, 64)) {
 			$this->error['title'] = _l("Page Title must be between 3 and 64 characters!");
 		}
 
@@ -74,22 +82,24 @@ class App_Model_Page_Page extends Model
 			return false;
 		}
 
-		$this->update('page', $data, $page_id);
+		$this->update('page', $page, $page_id);
 
-		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $data['name'];
+		$page['name'] = $this->queryVar("SELECT name FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
 
-		if (isset($data['content'])) {
-			file_put_contents($dir . '/content.tpl', $data['content']);
+		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $page['name'];
+
+		if (isset($page['content'])) {
+			file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']));
 		}
 
-		if (isset($data['style'])) {
-			file_put_contents($dir . '/content.tpl', $data['style']);
+		if (isset($page['style'])) {
+			file_put_contents($dir . '/style.less', $page['style']);
 		}
 
-		if (isset($data['stores'])) {
+		if (isset($page['stores'])) {
 			$this->delete('page_store', array('page_id' => $page_id));
 
-			foreach ($data['stores'] as $store) {
+			foreach ($page['stores'] as $store) {
 				if (is_array($store)) {
 					$layout_id = $store['layout_id'];
 					$store_id  = $store['store_id'];
@@ -108,12 +118,12 @@ class App_Model_Page_Page extends Model
 			}
 		}
 
-		if (isset($data['alias'])) {
-			$this->url->setAlias($data['alias'], 'page/page', 'page_id=' . (int)$page_id);
+		if (isset($page['alias'])) {
+			$this->url->setAlias($page['alias'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 
-		if (isset($data['translations'])) {
-			$this->translation->setTranslations('page', $page_id, $data['translations']);
+		if (isset($page['translations'])) {
+			$this->translation->setTranslations('page', $page_id, $page['translations']);
 		}
 
 		$this->cache->delete('page');
@@ -190,12 +200,13 @@ class App_Model_Page_Page extends Model
 		$store_id = option('store_id');
 
 		$query =
-			"SELECT * FROM " . DB_PREFIX . "page p" .
+			"SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
 			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
-			" WHERE p.name = '" . $this->escape($name) . "' AND p.status = 1 AND ps.store_id = " . (int)$store_id;
+			" WHERE p.name = '" . $this->escape($name) . "' AND ((p.status = 1 AND ps.store_id = " . (int)$store_id . ") OR ps.store_id IS NULL)";
 
 		$page = $this->queryRow($query);
 
+		html_dump($page, 'page');
 		$file = $this->theme->findFile('page/' . $name . '/content');
 
 		//Page Does Not Exist, but found in database
@@ -243,64 +254,59 @@ class App_Model_Page_Page extends Model
 		return $page;
 	}
 
-	public function getPages($data = array(), $select = null, $total = false)
+	public function getPages($filter = array(), $select = '*', $index = null)
 	{
 		//Select
-		if ($total) {
-			$select = 'COUNT(*) as total';
-		} elseif (!$select) {
-			$select = '*';
+		if ($index === false) {
+			$select = 'COUNT(*)';
 		}
 
 		//From
 		$from = DB_PREFIX . "page p";
 
 		//Where
-		$where = 'WHERE 1';
+		$columns = array(
+			'title'  => 'text_like',
+			'status' => 'int_equals',
+		);
 
-		if (isset($data['title'])) {
-			$where .= " AND p.title like '%" . $this->escape($data['title']) . "%'";
-		}
+		$where = $this->extractFilter($columns, $filter);
 
-		if (!empty($data['stores'])) {
-			$store_ids = is_array($data['stores']) ? $data['stores'] : array($data['stores']);
+		if (!empty($filter['stores'])) {
+			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);
 
 			$from .= " LEFT JOIN " . DB_PREFIX . "page_store ps ON (p.page_id=ps.page_id)";
 
 			$where .= " AND ps.store_id IN (" . implode(',', $store_ids) . ")";
 		}
 
-		if (isset($data['status'])) {
-			$where .= " AND p.status = '" . ($data['status'] ? 1 : 0) . "'";
-		}
-
 		//Order By & Limit
-		if (!$total) {
-			$order = $this->extractOrder($data);
-			$limit = $this->extractLimit($data);
+		if (!$index) {
+			$order = $this->extractOrder($filter);
+			$limit = $this->extractLimit($filter);
 		} else {
 			$order = '';
 			$limit = '';
 		}
 
 		//The Query
-		$query = "SELECT $select FROM $from $where $order $limit";
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 
-		//Execute
-		$result = $this->query($query);
-
-		//Process Results
-		if ($total) {
-			return $result->row['total'];
+		//Get Total
+		if ($index === false) {
+			return $this->queryVar($query);
 		}
 
-		foreach ($result->rows as &$page) {
+		//Get Rows
+		$pages = $this->queryRows($query, $index);
+
+		foreach ($pages as &$page) {
 			$page['content'] = $this->getPageContent($page['name']);
 			$page['style']   = $this->getPageStyle($page['name']);
 		}
 		unset($row);
 
-		return $result->rows;
+		return $pages;
 	}
 
 	public function getPageContent($name)
@@ -338,6 +344,60 @@ class App_Model_Page_Page extends Model
 
 	public function getTotalPages($data = array())
 	{
-		return $this->getPages($data, null, true);
+		return $this->getPages($data, '*', false);
+	}
+
+	public function loadPages()
+	{
+		$pages = $this->cache->get('page.loaded');
+
+		if (is_null($pages)) {
+			$pages = $this->getPages(array(), '*', 'name');
+
+			$this->cache->set('page.loaded', $pages);
+		}
+
+		clearstatcache();
+
+		$handle = opendir(DIR_THEMES);
+
+		while (($file = readdir($handle)) !== false) {
+			if ($file === '.' || $file === '..' || $file === 'admin') {
+				continue;
+			}
+
+			if (filetype(DIR_THEMES . $file) === 'dir') {
+				$page_dir = DIR_THEMES . $file . '/template/page/';
+
+				if ($th = @opendir($page_dir)) {
+					while (($name = readdir($th)) !== false) {
+						if ($name === '.' || $name === '..') {
+							continue;
+						}
+
+						if (filetype($page_dir . $name) === 'dir') {
+							if (!isset($pages[$name])) {
+								$title = array_map(function ($a) { return ucfirst($a); }, explode('_', $name));
+								$title = implode(' ', $title);
+
+								$page = array(
+									'name'          => $name,
+									'title'         => $title,
+									'template'      => '',
+									'status'        => 1,
+									'display_title' => 1,
+									'cache'         => 1,
+								);
+
+								$this->addPage($page);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		closedir($handle);
+
 	}
 }

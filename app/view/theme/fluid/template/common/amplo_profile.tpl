@@ -94,26 +94,29 @@
 		<div class="file-lists"><?php html_dump($file_list, 'file list'); ?></div>
 	</div>
 
-	<div id="db_profile">
-		<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($profile)); ?></div>
-		<div class="profile_list">
-			<?php foreach ($profile as $p) { ?>
-				<div><?= $p['time']; ?><span><?= $p['query']; ?></span></div>
-			<?php } ?>
-		</div>
-	</div>
 	<div class="close">X</div>
 
-	<script>
-		$('#db_profile_box').click(function() {
-			if (!$(this).hasClass('closing')) {
-				$(this).addClass('show');
-			}
-		});
-
-		$('#db_profile_box .close').click(function(){
-			$('#db_profile_box').removeClass('show').addClass('closing');
-			setTimeout(function(){$('#db_profile_box').removeClass('closing')}, 200);
-		});
-	</script>
+	<?php if (DB_PROFILE) { ?>
+		<div id="db_profile">
+			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($profile)); ?></div>
+			<div class="profile_list">
+				<?php foreach ($profile as $p) { ?>
+					<div><?= $p['time']; ?><span><?= $p['query']; ?></span></div>
+				<?php } ?>
+			</div>
+		</div>
+	<?php } ?>
 </div>
+
+<script>
+	$('#db_profile_box').click(function() {
+		if (!$(this).hasClass('closing')) {
+			$(this).addClass('show');
+		}
+	});
+
+	$('#db_profile_box .close').click(function(){
+		$('#db_profile_box').removeClass('show').addClass('closing');
+		setTimeout(function(){$('#db_profile_box').removeClass('closing')}, 200);
+	});
+</script>

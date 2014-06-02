@@ -21,7 +21,7 @@ class Extend extends Library
 			return false;
 		}
 
-		if (!$link['name']) {
+		if (empty($link['name'])) {
 			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 
@@ -54,6 +54,19 @@ class Extend extends Library
 		return true;
 	}
 
+	public function addNavigationLinks($group, $links)
+	{
+		foreach ($links as $name => $link) {
+			if (!isset($link['name']) && is_string($name)) {
+				$link['name'] = $name;
+			}
+
+			$this->addNavigationLink($group, $link);
+		}
+
+		return empty($this->error);
+	}
+
 	public function removeNavigationLink($group, $name)
 	{
 		$query = "SELECT navigation_id FROM " . DB_PREFIX . "navigation n" .
@@ -64,6 +77,13 @@ class Extend extends Library
 
 		foreach ($navigation_ids as $navigation_id) {
 			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);
+		}
+	}
+
+	public function removeNavigationLinks($group, $links)
+	{
+		foreach ($links as $name => $link) {
+			$this->removeNavigationLink($group, isset($link['name']) ? $link['name'] : $name);
 		}
 	}
 

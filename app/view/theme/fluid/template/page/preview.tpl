@@ -1,61 +1,26 @@
-<!DOCTYPE html>
-<? if (isset($_SERVER['HTTP_USER_AGENT']) && !strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6')) {
-	echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-} ?>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?= $direction; ?>" lang="<?= $lang; ?>" xml:lang="<?= $lang; ?>">
-	<head>
-		<title><?= $title; ?></title>
+<?= call('common/header'); ?>
+<?= area('left'); ?><?= area('right'); ?>
 
-		<?= $styles; ?>
-		<?= $scripts; ?>
+<section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
+	<header class="row top-row">
+		<div class="wrap">
+			<?= breadcrumbs(); ?>
 
-		<script type="text/javascript">
-			if (Function('/*@cc_on return document.documentMode===10@*/')()) {
-				document.documentElement.className += ' IE10';
-			}
-			else if (Function('/*@cc_on return document.documentMode===9@*/')()) {
-				document.documentElement.className += ' IE9';
-			}
-			else if (Function('/*@cc_on return document.documentMode===8@*/')()) {
-				document.documentElement.className += ' IE8';
-			}
-			else if (Function('/*@cc_on return document.documentMode===7@*/')()) {
-				document.documentElement.className += ' IE7';
-			}
-		</script>
-
-		<!--[if IE 9]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ ie9.css"; ?>" />
-		<![endif]-->
-		<!--[if IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ ie8.css"; ?>" />
-		<![endif]-->
-		<!--[if IE 7]>
-		<link rel="stylesheet" type="text/css" href="<?= URL_THEME . "style/ ie7.css"; ?>" />
-		<![endif]-->
-	</head>
-
-	<body class="page-preview">
-		<div id="container" style="margin-left: -60px">
-			<div id="page">
-				<div id="content-holder">
-
-					<div class="content">
-						<style id="page-css"><?= $css; ?></style>
-
-						<div class="section">
-							<h1 id="page-title" <?= empty($display_title) ? 'style="display:none"' : ''; ?>><?= $title; ?></h1>
-
-							<div class="page-content"><?= $content; ?></div>
-						</div>
-
-					</div>
-				</div>
-			</div>
+			<? if (!empty($display_title)) { ?>
+				<h1><?= $title; ?></h1>
+			<? } ?>
 		</div>
-	</body>
-</html>
+	</header>
 
-<script type="text/javascript">
-	$('#container').draggable();
-</script>
+	<?= area('top'); ?>
+
+	<div class="page-content row">
+		<div class="wrap">
+			<? include($content); ?>
+		</div>
+	</div>
+
+	<?= area('bottom'); ?>
+</section>
+
+<?= call('common/footer'); ?>

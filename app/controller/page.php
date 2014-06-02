@@ -8,9 +8,9 @@ class App_Controller_Page extends Controller
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 
 		if ($page_id) {
-			$page = $this->Model_Page_Page->getActivePage($page_id);
+			$page = $this->Model_Page->getActivePage($page_id);
 		} else {
-			$page = $this->Model_Page_Page->getPageByName($this->route->getSegment(1));
+			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
 		if (!$page) {
@@ -48,7 +48,7 @@ class App_Controller_Page extends Controller
 		//The page
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 
-		$page = $this->Model_Page_Page->getActivePage($page_id);
+		$page = $this->Model_Page->getActivePage($page_id);
 
 		if (!$page) {
 			redirect("error/not_found");
@@ -69,12 +69,13 @@ class App_Controller_Page extends Controller
 		$page_id = !empty($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 		if ($page_id) {
-			$page = $this->Model_Page_Page->getPageForPreview($page_id);
+			$page = $this->Model_Page->getPageForPreview($page_id);
 		} else {
 			$page = array(
 				'title'         => "New Page",
 				'display_title' => 1,
 				'content'       => '',
+				'style'         => '',
 			);
 		}
 
@@ -83,7 +84,15 @@ class App_Controller_Page extends Controller
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Add Styles
-		$this->document->addStyle(URL_THEME . 'style/style.css');
+		//Add Styles
+		if (is_file(DIR_THEME . 'css/style.less')) {
+			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'fluid.style.less');
+		} else {
+			$style = theme_url('css/style.css');
+		}
+
+		$this->document->addStyle($style);
+
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
 
@@ -100,15 +109,13 @@ class App_Controller_Page extends Controller
 		$this->document->addScript(theme_url('js/common.js'), 56);
 
 		//Page Head
-		$data['direction'] = $this->language->info('direction');
-		$data['lang']      = $this->language->info('code');
+		$page['direction'] = $this->language->info('direction');
+		$page['lang']      = $this->language->info('code');
 
-		$data['styles']  = $this->document->renderStyles();
-		$data['scripts'] = $this->document->renderScripts();
-
-		$data += $page;
+		$page['styles']  = $this->document->renderStyles();
+		$page['scripts'] = $this->document->renderScripts();
 
 		//Render
-		$this->response->setOutput($this->render('page/preview', $data));
+		$this->response->setOutput($this->render('page/preview', $page));
 	}
 }

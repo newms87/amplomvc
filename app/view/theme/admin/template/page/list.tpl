@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div class="section">
-			<?= $listing; ?>
+			<?= block('widget/views', null, array('path' => 'admin/page/listing')); ?>
 		</div>
 	</div>
 </div>

@@ -138,7 +138,7 @@ final class Router
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 
-		if (strpos($this->path, 'page/') === 0) {
+		if (strpos($this->path, 'page/') === 0 && $this->path !== 'page/preview') {
 			$path = 'page';
 		} else {
 			$path = $this->path;

@@ -25,7 +25,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				$this->message->add('success', _l("The Store settings have been saved!"));
 
-				redirect('admin/admin/setting/store');
+				redirect('admin/setting/store');
 			}
 		}
 
@@ -239,8 +239,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['languages']            = $this->Model_Localisation_Language->getLanguages();
 		$data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
 		$data['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page_Page->getPages();
-		$data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page_Page->getPages();
+		$data['data_pages']             = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
+		$data['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getPages();
 
 		$data['data_yes_no'] = array(
 			1 => _l("Yes"),

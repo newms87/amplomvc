@@ -66,12 +66,7 @@ class Response extends Library
 	public function output()
 	{
 		//Database Profiling
-		if (SHOW_DB_PROFILE && !$this->request->isAjax()) {
-			$this->dbProfile();
-		}
-
-		//Performance Logging
-		if (option('config_performance_log')) {
+		if (option('config_performance_log', true) && !$this->request->isAjax()) {
 			$this->performance();
 		}
 
@@ -95,49 +90,31 @@ class Response extends Library
 	private function performance()
 	{
 		global $__start;
-		$stats = array(
-			'peak_memory'          => $this->tool->bytes2str(memory_get_peak_usage(true)),
-			'count_included_files' => count(get_included_files()),
-			'execution_time'       => microtime(true) - $__start,
-		);
-
-		$html = "<div class=\"title\">" . _l("System Performance:") . "</div>";
-
-		foreach ($stats as $key => $s) {
-			$html .= "<div>$key = $s</div>";
-		}
-
-		$html = "<div class=\"performance\">$html</div>";
-
-		$html = "<script>$.ac_msg('success', '$html')</script>";
-
-		$this->output = str_replace("</body>", $html . "</body>", $this->output);
-	}
-
-	private function dbProfile()
-	{
-		global $__start;
 
 		$file = $this->theme->getFile('common/amplo_profile', 'fluid');
 
 		if ($file) {
-			$profile = $this->db->getProfile();
+			if (DB_PROFILE) {
+				$profile = $this->db->getProfile();
 
-			$db_time = 0;
+				$db_time = 0;
 
-			usort($profile, function ($a, $b) {
-					return $a['time'] < $b['time'];
-				});
+				usort($profile, function ($a, $b) {
+						return $a['time'] < $b['time'];
+					});
 
-			foreach ($profile as $p) {
-				$db_time += $p['time'];
+				foreach ($profile as $p) {
+					$db_time += $p['time'];
+				}
+
+				$db_time = round($db_time, 6) . ' seconds';
 			}
 
-			$run_time = microtime(true) - $__start;
+			$run_time = round(microtime(true) - $__start, 6);
 
 			$mb          = 1024 * 1024;
-			$memory      = (memory_get_peak_usage() / $mb) . " MB";
-			$real_memory = (memory_get_peak_usage(true) / $mb) . " MB";
+			$memory      = round(memory_get_peak_usage() / $mb, 2) . " MB";
+			$real_memory = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
 
 			$file_list   = get_included_files();
 			$total_files = count($file_list);

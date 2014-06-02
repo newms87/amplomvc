@@ -1,19 +1,14 @@
 <?php
 
-abstract class Model
+abstract class Model extends DB
 {
-	protected $error;
 	protected $prefix;
-
-	private $synctime = false;
 
 	public function __construct()
 	{
-		global $registry, $ac_time_offset;
+		global $registry;
 
-		if ($ac_time_offset) {
-			$this->synctime = true;
-		}
+		parent::__construct();
 
 		$this->prefix = DB_PREFIX;
 
@@ -30,100 +25,9 @@ abstract class Model
 		return $registry->get($key);
 	}
 
-	public function hasError($type = null)
-	{
-		if ($type) {
-			return !empty($this->error[$type]);
-		}
-
-		return !empty($this->error);
-	}
-
-	public function getError($type = null)
-	{
-		if ($type) {
-			return isset($this->error[$type]) ? $this->error[$type] : null;
-		}
-
-		return $this->error;
-	}
-
 	public function clearErrors()
 	{
 		$this->error = array();
-	}
-
-	protected function countAffected()
-	{
-		return $this->db->countAffected();
-	}
-
-	protected function query($sql)
-	{
-		if ($this->synctime) {
-			$sql = $this->synctime($sql);
-		}
-
-		$resource = $this->db->query($sql);
-
-		if (!$resource) {
-			if (option('config_error_display')) {
-				$this->message->add("warning", _l("The Database Query Failed!"));
-
-				if ($this->db->hasError()) {
-					$this->message->add('warning', $this->db->getError());
-				}
-			}
-		}
-
-		return $resource;
-	}
-
-	protected function queryRows($sql, $key_column = null)
-	{
-		if ($this->synctime) {
-			$sql = $this->synctime($sql);
-		}
-
-		return $this->db->queryRows($sql, $key_column);
-	}
-
-	protected function queryRow($sql)
-	{
-		if ($this->synctime) {
-			$sql = $this->synctime($sql);
-		}
-
-		return $this->db->queryRow($sql);
-	}
-
-	protected function queryColumn($sql)
-	{
-		if ($this->synctime) {
-			$sql = $this->synctime($sql);
-		}
-
-		return $this->db->queryColumn($sql);
-	}
-
-	protected function queryVar($sql)
-	{
-		if ($this->synctime) {
-			$sql = $this->synctime($sql);
-		}
-
-		return $this->db->queryVar($sql);
-	}
-
-	private function synctime($sql)
-	{
-		$now = new DateTime("@" . _time(), new DateTimeZone(DEFAULT_TIMEZONE));
-		return str_replace("NOW()", "'" . $now->format("Y-m-d H:i:s") . "'", $sql);
-	}
-
-	protected function escape($value)
-	{
-		return $this->db->escape($value);
 	}
 
 	protected function insert($table, $data)
@@ -137,14 +41,14 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
 
-			if ($this->db->hasError()) {
-				trigger_error($this->db->getError());
+			if ($this->hasError()) {
+				trigger_error($this->getError());
 			}
 
 			return false;
 		}
 
-		return $this->db->getLastId();
+		return $this->getLastId();
 	}
 
 	protected function update($table, $data, $where = null)
@@ -188,8 +92,8 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
 
-			if ($this->db->hasError()) {
-				trigger_error($this->db->getError());
+			if ($this->hasError()) {
+				trigger_error($this->getError());
 			}
 
 			return false;
@@ -214,7 +118,7 @@ abstract class Model
 			$where = $this->getWhere($table, $where, null, null, true);
 		}
 
-		$table = $this->db->escape($table);
+		$table = $this->escape($table);
 
 		if ($where !== '1') {
 			$where = "WHERE $where";
@@ -225,8 +129,8 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
 
-			if ($this->db->hasError()) {
-				trigger_error($this->db->getError());
+			if ($this->hasError()) {
+				trigger_error($this->getError());
 			}
 
 			return false;
@@ -281,18 +185,18 @@ abstract class Model
 				case DB_AUTO_INCREMENT_PK:
 				case DB_AUTO_INCREMENT:
 					if ($auto_inc) {
-						$value = $this->db->escape($value);
+						$value = $this->escape($value);
 					} else {
 						unset($data[$key]);
 					}
 					break;
 				case DB_ESCAPE:
-					$value = $this->db->escape($value);
+					$value = $this->escape($value);
 					break;
 				case DB_NO_ESCAPE:
 					break;
 				case DB_IMAGE:
-					$value = $this->db->escape(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+					$value = $this->escape(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 					break;
 				case DB_INTEGER:
 					$value = (int)$value;
@@ -308,7 +212,7 @@ abstract class Model
 					break;
 
 				default:
-					$value = $this->db->escape($value);
+					$value = $this->escape($value);
 					break;
 			}
 		}
@@ -342,7 +246,18 @@ abstract class Model
 						}
 						break;
 
+					case 'float_equals':
+					case 'int_equals':
+						$value = $type === 'int_equals' ? (int)$value : (float)$value;
+					case 'number_equals':
+						$where .= " AND `$key` = " . $value;
+						break;
 
+					case 'float_in':
+					case 'int_in':
+					case 'number_in':
+						$where .= " AND `$key` IN (" . implode(',', $value) . ")";
+						break;
 
 				}
 			}
@@ -366,7 +281,7 @@ abstract class Model
 		$sql = '';
 
 		foreach ($data['sort'] as $sort => $order) {
-			$sort = $this->db->escape($sort);
+			$sort = $this->escape($sort);
 
 			if (!preg_match("/[^a-z0-9_]/i", $sort)) {
 				$sort = "`" . $sort . "`";
@@ -401,9 +316,9 @@ abstract class Model
 		$table_model = $this->cache->get('model.' . $table);
 
 		if (!$table_model) {
-			$table = $this->db->escape($table);
+			$table = $this->escape($table);
 
-			$columns = $this->db->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
+			$columns = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
 
 			$table_model = array();
 

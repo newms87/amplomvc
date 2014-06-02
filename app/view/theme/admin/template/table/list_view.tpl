@@ -370,7 +370,7 @@
 	$.ac_datepicker();
 
 	//Add Item Selector
-	var table_list = $(".table-list-view").not('activated');
+	var table_list = $(".table-list-view").not('.activated').addClass('activated');
 
 	table_list.find('.filter-list-item').click(function () {
 		cb = $(this).find('[name="batch[]"]');
