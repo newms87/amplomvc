@@ -33,7 +33,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ckeditor'); ?>
+<?= build_js('ckeditor'); ?>
 
 <script type="text/javascript">
 	$('#tabs a').tabs();

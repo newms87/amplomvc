@@ -21,8 +21,11 @@
 							<br/><br/>
 							<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= _l("Overwrite Default Installation DB File"); ?>"/>
 						</td>
-						<td>
-							<?= $this->builder->build('multiselect', $data_tables, 'tables', $tables); ?>
+						<td><?= build('multiselect', array(
+								'name'   => 'tables',
+								'data'   => $data_tables,
+								'select' => $tables
+							)); ?>
 						</td>
 					</tr>
 					<tr>

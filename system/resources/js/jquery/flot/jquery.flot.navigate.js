@@ -282,7 +282,7 @@
             if (zoomOut)
                 plot.zoomOut({ center: c });
             else
-                plot.$zoom({ center: c });
+                plot.zoom({ center: c });
         }
 
         function onMouseWheel(e, delta) {
@@ -332,8 +332,8 @@
 
         function bindEvents(plot, eventHolder) {
             var o = plot.getOptions();
-            if (o.$zoom.interactive) {
-                eventHolder[o.$zoom.trigger](onZoomClick);
+            if (o.zoom.interactive) {
+                eventHolder[o.zoom.trigger](onZoomClick);
                 eventHolder.mousewheel(onMouseWheel);
             }
 
@@ -349,18 +349,18 @@
                 args = {};
 
             if (!args.amount)
-                args.amount = plot.getOptions().$zoom.amount
+                args.amount = plot.getOptions().zoom.amount
 
             args.amount = 1 / args.amount;
-            plot.$zoom(args);
+            plot.zoom(args);
         }
 
-        plot.$zoom = function (args) {
+        plot.zoom = function (args) {
             if (!args)
                 args = {};
 
             var c = args.center,
-                amount = args.amount || plot.getOptions().$zoom.amount,
+                amount = args.amount || plot.getOptions().zoom.amount,
                 w = plot.width(), h = plot.height();
 
             if (!c)
@@ -463,7 +463,7 @@
         }
 
         function shutdown(plot, eventHolder) {
-            eventHolder.unbind(plot.getOptions().$zoom.trigger, onZoomClick);
+            eventHolder.unbind(plot.getOptions().zoom.trigger, onZoomClick);
             eventHolder.unbind("mousewheel", onMouseWheel);
             eventHolder.unbind("dragstart", onDragStart);
             eventHolder.unbind("drag", onDrag);

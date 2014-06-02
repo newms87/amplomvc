@@ -1,7 +1,11 @@
 <span class="batch_action_title"><?= _l("Batch Action"); ?></span>
 
-<? $this->builder->setConfig('key', 'label'); ?>
-<?= $this->builder->build('select', $actions, 'batch_action'); ?>
+<?= build('select', array(
+	'name'  => 'batch_action',
+	'data'  => $actions,
+	'key'   => 'key',
+	'value' => 'label',
+)); ?>
 
 <? $ckeditor = false; ?>
 
@@ -24,8 +28,13 @@
 				<? break;
 			case 'select':
 				?>
-				<? $this->builder->setConfig($action['build_config'][0], $action['build_config'][1]); ?>
-				<?= $this->builder->build('select', $action['build_data'], "action_value", $action['default']); ?>
+				<?= build('select', array(
+					'name'   => "action_value",
+					'data'   => $action['build_data'],
+					'select' => $action['default'],
+					'key'    => $action['build_config'][0],
+					'value'  => $action['build_config'][1],
+				)); ?>
 				<? break;
 
 			case 'date':
@@ -45,7 +54,7 @@
 <a class="button" onclick="do_batch_action()"><?= _l("Go"); ?></a>
 
 <? if ($ckeditor) {
-	echo $this->builder->js('ckeditor');
+	echo build_js('ckeditor');
 } ?>
 
 <script type="text/javascript">
@@ -80,7 +89,7 @@
 		$listing.addClass('loading');
 		var url = '<?= $url; ?>';
 
-		url += (url.match(/\?/)?'&':'?') + window.location.search;
+		url += (url.match(/\?/) ? '&' : '?') + window.location.search;
 
 		$.post(url, data, function (response) {
 			$listing.replaceWith(response);

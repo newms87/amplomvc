@@ -10,9 +10,16 @@ class App_Controller_Common_Header extends Controller
 
 		$data['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
 
+		$data['name']   = option('config_name');
+		$data['logo']   = option('config_logo');
+		$data['slogan'] = option('config_slogan');
+		$data['theme']  = option('config_theme');
+
 		//Add Styles
-		if (is_file(DIR_THEME . 'css/style.less')) {
-			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'fluid.style.less');
+		$style = theme_dir('css/config.less');
+
+		if ($style) {
+			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-config');
 		} else {
 			$style = theme_url('css/style.css');
 		}
@@ -52,16 +59,8 @@ class App_Controller_Common_Header extends Controller
 		$data['styles']  = $this->document->renderStyles();
 		$data['scripts'] = $this->document->renderScripts();
 
-		$data['lang'] = $this->language->info('code');
-
 		$data['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 		$data['statcounter']      = option('config_statcounter');
-
-		$data['name'] = option('config_name');
-
-		$data['logo'] = option('config_logo');
-
-		$data['slogan'] = option('config_slogan');
 
 		//Icons
 		$data['icons'] = option('config_icon');
@@ -74,6 +73,7 @@ class App_Controller_Common_Header extends Controller
 		$data['show_admin_bar'] = $this->user->showAdminBar();
 
 		//Internationalization
+		$data['lang']           = $this->language->info('code');
 		$data['multi_language'] = option('config_multi_language');
 		$data['multi_currency'] = option('config_multi_currency');
 

@@ -83,7 +83,11 @@
 									<?= empty($task['last_run']) ? _l("Never") : $task['last_run']; ?>
 									<input type="hidden" name="tasks[<?= $row; ?>][last_run]" value="<?= $task['last_run']; ?>"/>
 								</td>
-								<td class="left"><?= $this->builder->build('select', $data_statuses, "tasks[$row][status]", $task['status']); ?></td>
+								<td class="left"><?= build('select', array(
+	'name'   => "tasks[$row][status]",
+	'data'   => $data_statuses,
+	'select' => $task['status']
+)); ?></td>
 								<td class="left"><a onclick="$(this).closest('.task').remove();" class="button delete">X</a></td>
 							</tr>
 						<? } ?>

@@ -15,14 +15,22 @@
 					<tr>
 						<td>
 							<label><?= _l("Synchronize Site"); ?></label>
-							<? $this->builder->setConfig('domain', 'domain'); ?>
-							<?= $this->builder->build('select', $data_sites, 'domain', $domain); ?>
+							<?= build('select', array(
+								'name'   => 'domain',
+								'data'   => $data_sites,
+								'select' => $domain,
+								'key'    => 'domain',
+								'value'  => 'domain',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Sync Table"); ?></td>
-						<td>
-							<?= $this->builder->build('multiselect', $data_tables, 'tables', $tables); ?>
+						<td><?= build('multiselect', array(
+								'name'   => 'tables',
+								'data'   => $data_tables,
+								'select' => $tables
+							)); ?>
 						</td>
 					</tr>
 					<tr>

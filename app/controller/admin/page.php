@@ -108,6 +108,7 @@ class App_Controller_Admin_Page extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
+		//Response
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($output);
 		}
@@ -172,7 +173,7 @@ class App_Controller_Admin_Page extends Controller
 		);
 
 		//Action Buttons
-		$page['save']   = site_url('admin/page/update', 'page_id=' . $page_id);
+		$page['save'] = site_url('admin/page/update', 'page_id=' . $page_id);
 
 		//Render
 		$this->response->setOutput($this->render('page/form', $page));
@@ -279,9 +280,15 @@ class App_Controller_Admin_Page extends Controller
 
 		$layouts = $this->Model_Design_Layout->getLayouts($sort);
 
-		$this->builder->setConfig('layout_id', 'name');
+		$output = build('select', array(
+			'name'   => 'layout_id',
+			'data'   => $layouts,
+			'select' => $layout_id,
+			'key'    => 'layout_id',
+			'value'  => 'name',
+		));
 
-		$this->response->setOutput($this->builder->build('select', $layouts, 'layout_id', $layout_id));
+		$this->response->setOutput($output);
 	}
 
 	public function loadBlocks()

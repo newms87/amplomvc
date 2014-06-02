@@ -10,4 +10,4 @@
 	</tr>
 </table>
 
-<?= $this->builder->js('ckeditor'); ?>
+<?= build_js('ckeditor'); ?>

@@ -52,8 +52,11 @@
 						<h2><?= _l("Newsletter"); ?></h2>
 
 						<div class="form-item">
-							<label><?= _l("Subscribe"); ?></label>
-							<?= $this->builder->build('radio', $data_yes_no, 'newsletter', $newsletter); ?>
+							<label><?= _l("Subscribe"); ?></label><?= build('radio', array(
+								'name'   => 'newsletter',
+								'data'   => $data_yes_no,
+								'select' => $newsletter
+							)); ?>
 						</div>
 					</div>
 				</div>
@@ -75,8 +78,14 @@
 							<input type="text" placeholder="<?= _l("City"); ?>" name="city" value="<?= $city; ?>"/>
 						</div>
 						<div class="form-item required">
-							<?= $this->builder->setConfig('country_id', 'name'); ?>
-							<?= $this->builder->build('select', $data_countries, "country_id", $country_id, array('class' => "country-select")); ?>
+							<?=
+							build('select', array(
+								'name'   => 'country_id',
+								'data'   => $countries,
+								'select' => $country_id,
+								'key'    => 'country_id',
+								'value'  => 'name',
+							)); ?>
 						</div>
 						<div class="form-item required">
 							<select name="zone_id" class="zone-select" data-zone_id="<?= $zone_id; ?>"></select>

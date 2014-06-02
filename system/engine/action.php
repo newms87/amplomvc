@@ -35,9 +35,8 @@ final class Action
 					$file = $dir . $part . '.php';
 					$class .= '_' . str_replace('_', '', $part);
 					$classpath .= $part;
-				} elseif (is_file(rtrim($dir, '/') . '.php')) {
-					$file = rtrim($dir, '/') . '.php';
 				} else {
+					$method = $part;
 					break;
 				}
 
@@ -52,8 +51,12 @@ final class Action
 		}
 
 		if (!$file) {
-			$this->is_valid = false;
-			return;
+			if (is_file(rtrim($dir, '/') . '.php')) {
+				$file = rtrim($dir, '/') . '.php';
+			} else {
+				$this->is_valid = false;
+				return;
+			}
 		}
 
 		if (!$method) {

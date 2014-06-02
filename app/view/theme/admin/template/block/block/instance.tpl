@@ -8,6 +8,11 @@
 	</tr>
 	<tr>
 		<td><?= _l("Show Title?"); ?></td>
-		<td><?= $this->builder->build('radio', $data_yes_no, "instances[$row][show_title]", $instance['show_title']); ?></td>
+		<td><?=
+			build('radio', array(
+				'name'   => "instances[$row][show_title]",
+				'data'   => $data_yes_no,
+				'select' => $instance['show_title']
+			)); ?></td>
 	</tr>
 </table>

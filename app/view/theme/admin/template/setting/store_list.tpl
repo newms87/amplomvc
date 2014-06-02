@@ -3,10 +3,11 @@
 	<?= breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Settings"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Stores & Settings"); ?></h1>
 
 			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>
+				<a href="<?= $insert; ?>" class="button"><?= _l("Add Store"); ?></a>
+				<a href="<?= site_url('admin'); ?>"><?= _l("Back"); ?></a>
 			</div>
 		</div>
 		<div class="section">
@@ -20,14 +21,7 @@
 			</div>
 
 			<div class="section">
-				<div class="limits">
-					<?= $limits; ?>
-				</div>
-
-				<div id="listing">
-					<?= $list_view; ?>
-				</div>
-				<div class="pagination"><?= $pagination; ?></div>
+				<?= block('widget/views', null, array('path' => 'admin/setting/store/listing')); ?>
 			</div>
 		</div>
 	</div>

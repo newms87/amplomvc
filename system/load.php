@@ -66,8 +66,6 @@ if (!defined("DB_PROFILE_NO_CACHE")) {
 //Setup Cache ignore list
 $cache->ignore(option('config_cache_ignore'));
 
-$db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
-
 //Database Structure Validation
 $row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
 

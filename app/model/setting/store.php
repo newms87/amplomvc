@@ -1,22 +1,71 @@
 <?php
 class App_Model_Setting_Store extends Model
 {
-	public function addStore($data)
+	public function save($store_id, $store)
 	{
-		$store_id = $this->insert('store', $data);
+		if (!validate('text', $store['name'], 1, 64)) {
+			$this->error['name'] = _l("Store Name must be between 1 and 64 characters!");
+		}
+
+		if (!validate('url', $store['url'])) {
+			$this->error['url'] = _l("Store URL invalid! Please provide a properly formatted URL (eg: http://yourstore.com)");
+		}
+
+		if (!validate('url', $store['ssl'])) {
+			$this->error['ssl'] = _l("Store SSL invalid!  Please provide a properly formatted URL (eg: http://yourstore.com). NOTE: you may set this to the same value as URL, does not have to be HTTPS protocol.");
+		}
+
+		if (!validate('text', $store['config_owner'], 3, 64)) {
+			$this->error['config_owner'] = _l("Store Owner must be between 3 and 64 characters!");
+		}
+
+		if (!validate('text', $store['config_address'], 3, 256)) {
+			$this->error['config_address'] = _l("Store Address must be between 3 and 256 characters!");
+		}
+
+		if (!validate('email', $store['config_email'])) {
+			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
+		}
+
+		if (!validate('phone', $store['config_telephone'])) {
+			$this->error['config_telephone'] = $this->validate->getError();
+		}
+
+		if (!validate('text', $store['config_title'], 3, 32)) {
+			$this->error['config_title'] = _l("Title must be between 3 and 32 characters!");
+		}
+
+		$image_sizes = array(
+			'image_category' => "Category List",
+			'image_thumb'    => "Product Thumb",
+			'image_popup'    => "Product Popup",
+		);
+
+		foreach ($image_sizes as $image_key => $image_size) {
+			$image_width  = 'config_' . $image_key . '_width';
+			$image_height = 'config_' . $image_key . '_height';
+
+			if ((int)$store[$image_width] <= 0 || (int)$store[$image_height] <= 0) {
+				$this->error[$image_height] = _l("%s image dimensions are required.", $image_size);
+			}
+		}
+
+		if ((int)$store['config_catalog_limit'] <= 0) {
+			$this->error['config_catalog_limit'] = _l("Limit required!");
+		}
+
+		if ($this->error) {
+			return false;
+		}
 
 		$this->cache->delete('store');
 		$this->cache->delete('theme');
 
-		return $store_id;
-	}
-
-	public function editStore($store_id, $data)
-	{
-		$this->update('store', $data, $store_id);
-
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
+		if ($store_id) {
+			return $this->update('store', $store, $store_id);
+		} else {
+			return $this->insert('store', $store);
+		}
 	}
 
 	public function deleteStore($store_id)

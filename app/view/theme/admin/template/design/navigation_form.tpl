@@ -19,12 +19,23 @@
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Stores:"); ?></td>
-						<? $this->builder->setConfig('store_id', 'name'); ?>
-						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
+						<td>
+						<?= build('multiselect', array(
+							'name'   => "stores",
+							'data'   => $data_stores,
+							'select' => $stores,
+							'key'    => 'store_id',
+							'value'  => 'name',
+						)); ?>
+						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Status:"); ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
+						<td><?= build('select', array(
+	'name'   => 'status',
+	'data'   => $data_statuses,
+	'select' => $status
+)); ?></td>
 					</tr>
 
 					<tr id="links_list_data">
@@ -74,11 +85,21 @@
 															</div>
 															<div class="link_entry_condition">
 																<label for="link_condition_<?= $nav_id; ?>"><?= _l("Display When:"); ?></label>
-																<?= $this->builder->build('select', $data_conditions, "links[$nav_id][condition]", $link['condition'], array('id' => "link_condition_$nav_id")); ?>
+																<?= build('select', array(
+																	'name' => "links[$nav_id][condition]",
+																   'data' => $data_conditions,
+																   'select' => $link['condition'],
+																   '#id' => "link_condition_$nav_id",
+																)); ?>
 															</div>
 															<div class="link_entry_status">
 																<label for="link_status_<?= $nav_id; ?>"><?= _l("Status:"); ?></label>
-																<?= $this->builder->build('select', $data_statuses, "links[$nav_id][status]", $link['status'], array('id' => "link_status_$nav_id")); ?>
+																<?= build('select', array(
+																	'name' => "links[$nav_id][status]",
+																	'data' => $data_statuses,
+																	'select' => $link['status'],
+																	'#id' => "link_status_$nav_id",
+																)); ?>
 															</div>
 														</div>
 													</div>

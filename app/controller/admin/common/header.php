@@ -13,8 +13,10 @@ class App_Controller_Admin_Common_Header extends Controller
 		$data['theme'] = option('config_theme');
 
 		//Add Styles
-		if (is_file(DIR_THEME . 'css/style.less')) {
-			$style = $this->document->compileLess(DIR_THEME . 'css/style.less', 'default.style');
+		$style = theme_dir('css/config.less');
+
+		if ($style) {
+			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-config');
 		} else {
 			$style = theme_url('css/style.css');
 		}
@@ -84,7 +86,7 @@ class App_Controller_Admin_Common_Header extends Controller
 					$link_store_setting = array(
 						'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
 						'display_name' => $store['name'],
-						'href'         => site_url('admin/setting/store/update', 'store_id=' . $store['store_id']),
+						'href'         => site_url('admin/setting/store/form', 'store_id=' . $store['store_id']),
 						'parent'       => 'system_settings_stores',
 						'sort_order'   => $index,
 					);

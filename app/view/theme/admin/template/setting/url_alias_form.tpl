@@ -31,13 +31,22 @@
 						<tr>
 							<td><?= _l("Store:"); ?></td>
 							<td>
-								<? $this->builder->setConfig('store_id', 'name'); ?>
-								<?= $this->builder->build('select', $data_stores, 'store_id', $store_id); ?>
+								<?= build('select', array(
+									'name'   => 'store_id',
+									'data'   => $data_stores,
+									'select' => $store_id,
+									'key'    => 'store_id',
+									'value'  => 'name',
+								)); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= _l("Status:"); ?></td>
-							<td><?= $this->builder->build('select', $data_statuses, 'status', $status); ?></td>
+							<td><?= build('select', array(
+	'name'   => 'status',
+	'data'   => $data_statuses,
+	'select' => $status
+)); ?></td>
 						</tr>
 					</table>
 				</div>
