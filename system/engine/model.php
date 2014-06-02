@@ -1,22 +1,42 @@
 <?php
 
-abstract class Model extends DB
+abstract class Model
 {
+	protected $db;
 	protected $prefix;
+
+	const
+		TEXT = 'text',
+		NO_ESCAPE = 'no-escape',
+		IMAGE = 'image',
+		INTEGER = 'int',
+		FLOAT = 'float',
+		DATETIME = 'datetime',
+		PRIMARY_KEY_INTEGER = 'pk-int',
+		AUTO_INCREMENT = 'ai',
+		AUTO_INCREMENT_PK = 'pk';
+
+	//In case a plugin wants to wrap this Class
+	protected $error = array();
 
 	public function __construct()
 	{
 		global $registry;
 
-		parent::__construct();
-
 		$this->prefix = DB_PREFIX;
 
 		$key = strtolower(get_class($this));
 
-		if (!$registry->has($key)) {
-			$registry->set($key, $this);
+		//TODO: this is just for validation. Remove this for launch!
+		if ($registry->has($key)) {
+			trigger_error(_l("The model %s was called again!", get_class($this)));
 		}
+
+		$registry->set($key, $this);
+
+		//use default database
+		//(Note: setting our own $db property allows us to use a different database for new Model instances)
+		$this->db = $registry->get('db');
 	}
 
 	public function __get($key)
@@ -25,14 +45,77 @@ abstract class Model extends DB
 		return $registry->get($key);
 	}
 
+	public function hasError($type = null)
+	{
+		if ($type) {
+			return !empty($this->error[$type]);
+		}
+
+		return !empty($this->error);
+	}
+
+	public function getError($type = null)
+	{
+		if ($type) {
+			return isset($this->error[$type]) ? $this->error[$type] : null;
+		}
+
+		return $this->error;
+	}
+
 	public function clearErrors()
 	{
 		$this->error = array();
 	}
 
+	public function escape($value)
+	{
+		return $this->db->escape($value);
+	}
+
+	public function escapeHtml($value)
+	{
+		return $this->db->escape($value);
+	}
+
+	public function getLastId()
+	{
+		return $this->db->getLastId();
+	}
+
+	public function countAffected()
+	{
+		return $this->db->countAffected();
+	}
+
+	protected function query($sql)
+	{
+		return $this->db->query($sql);
+	}
+
+	protected function queryVar($sql)
+	{
+		return $this->db->queryVar($sql);
+	}
+
+	protected function queryRow($sql)
+	{
+		return $this->db->queryRow($sql);
+	}
+
+	protected function queryRows($sql, $index = null)
+	{
+		return $this->db->queryRows($sql, $index);
+	}
+
+	protected function queryColumn($sql)
+	{
+		return $this->db->queryColumn($sql);
+	}
+
 	protected function insert($table, $data)
 	{
-		$this->action_filter('insert', $table, $data);
+		$this->actionFilter('insert', $table, $data);
 
 		$values = $this->getInsertString($table, $data, false);
 
@@ -53,9 +136,9 @@ abstract class Model extends DB
 
 	protected function update($table, $data, $where = null)
 	{
-		$this->action_filter('update', $table, $data, $where);
+		$this->actionFilter('update', $table, $data, $where);
 
-		$primary_key = $this->get_primary_key($table);
+		$primary_key = $this->getPrimaryKey($table);
 
 		$values = $this->getInsertString($table, $data);
 
@@ -86,7 +169,6 @@ abstract class Model extends DB
 			$where = "WHERE " . $this->getWhere($table, $where, '', '', true);
 		}
 
-
 		$success = $this->query("UPDATE " . $this->prefix . "$table SET $values $where");
 
 		if (!$success) {
@@ -104,10 +186,10 @@ abstract class Model extends DB
 
 	protected function delete($table, $where = null)
 	{
-		$this->action_filter('delete', $table, $data);
+		$this->actionFilter('delete', $table, $data);
 
 		if (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
-			$primary_key = $this->get_primary_key($table);
+			$primary_key = $this->getPrimaryKey($table);
 			if (!$primary_key) {
 				trigger_error("DELETE " . _l("%s does not have an integer primary key!"));
 				return null;
@@ -171,9 +253,9 @@ abstract class Model extends DB
 
 	protected function getEscapedValues($table, $data, $auto_inc = true)
 	{
-		$table_model = $this->get_table_model($table);
+		$columns = $this->getTableColumns($table);
 
-		$data = array_intersect_key($data, $table_model);
+		$data = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {
 			if (is_resource($value) || is_array($value) || is_object($value)) {
@@ -181,30 +263,30 @@ abstract class Model extends DB
 				exit;
 			}
 
-			switch ((int)$table_model[$key]) {
-				case DB_AUTO_INCREMENT_PK:
-				case DB_AUTO_INCREMENT:
+			switch ((int)$columns[$key]) {
+				case self::AUTO_INCREMENT_PK:
+				case self::AUTO_INCREMENT:
 					if ($auto_inc) {
 						$value = $this->escape($value);
 					} else {
 						unset($data[$key]);
 					}
 					break;
-				case DB_ESCAPE:
+				case self::TEXT:
 					$value = $this->escape($value);
 					break;
-				case DB_NO_ESCAPE:
+				case self::NO_ESCAPE:
 					break;
-				case DB_IMAGE:
+				case self::IMAGE:
 					$value = $this->escape(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 					break;
-				case DB_INTEGER:
+				case self::INTEGER:
 					$value = (int)$value;
 					break;
-				case DB_FLOAT:
+				case self::FLOAT:
 					$value = (float)$value;
 					break;
-				case DB_DATETIME:
+				case self::DATETIME:
 					if (!$value) {
 						$value = DATETIME_ZERO;
 					}
@@ -221,45 +303,68 @@ abstract class Model extends DB
 		return $data;
 	}
 
-	protected function extractFilter($columns, $filter)
+	protected function extractFilter($table, $filter, $columns = array())
 	{
+		$method = array(
+			self::NO_ESCAPE           => 'equals',
+			self::TEXT                => 'like',
+			self::AUTO_INCREMENT      => 'int_in',
+			self::AUTO_INCREMENT_PK   => 'int_in',
+			self::PRIMARY_KEY_INTEGER => 'int_in',
+			self::FLOAT               => 'float_in',
+			self::INTEGER             => 'int_in',
+			self::DATETIME            => 'date',
+			self::IMAGE               => 'equals',
+		);
+
+		$columns += $this->getTableColumns($table);
+
 		$where = '1';
 
-		foreach ($columns as $key => $type) {
-			if (isset($filter[$key])) {
-				$value = $filter[$key];
+		foreach ($filter as $key => $value) {
+			if (!isset($columns[$key])) {
+				continue;
+			}
 
-				switch ($type) {
-					case 'text_like':
-						$where .= " AND `$key` like '%" . $this->escape($value) . "%'";
-						break;
+			if (is_array($columns[$key])) {
+				$type = isset($method[$columns[$key]['type']]) ? $method[$columns[$key]['type']] : 'equals';
+			} else {
+				$type = $columns[$key];
+			}
 
-					case 'text_equals':
+			switch ($type) {
+				case 'like':
+					$where .= " AND `$key` like '%" . $this->escape($value) . "%'";
+					break;
+
+				case 'equals':
+					$where .= " AND `$key` = '" . $this->escape($value) . "'";
+					break;
+
+				case 'text_in':
+					if (is_array($value)) {
+						$where .= " AND `$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
+					} else {
 						$where .= " AND `$key` = '" . $this->escape($value) . "'";
-						break;
+					}
+					break;
 
-					case 'text_in':
-						if (is_array($value)) {
-							$where .= " AND `$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
-						} else {
-							$where .= " AND `$key` = '" . $this->escape($value) . "'";
-						}
-						break;
+				case 'float_equals':
+				case 'int_equals':
+					$value = $type === 'int_equals' ? (int)$value : (float)$value;
+				case 'number_equals':
+					$where .= " AND `$key` = " . $value;
+					break;
 
-					case 'float_equals':
-					case 'int_equals':
-						$value = $type === 'int_equals' ? (int)$value : (float)$value;
-					case 'number_equals':
-						$where .= " AND `$key` = " . $value;
-						break;
+				case 'float_in':
+				case 'int_in':
+					array_walk($value, function (&$a) use ($type) {
+						$a = $type === 'int_in' ? (int)$a : (float)$a;
+					});
+				case 'number_in':
+					$where .= " AND `$key` IN (" . implode(',', $value) . ")";
+					break;
 
-					case 'float_in':
-					case 'int_in':
-					case 'number_in':
-						$where .= " AND `$key` IN (" . implode(',', $value) . ")";
-						break;
-
-				}
 			}
 		}
 
@@ -311,70 +416,62 @@ abstract class Model extends DB
 		return $limit;
 	}
 
-	private function get_table_model($table)
+	protected function getTableColumns($table)
 	{
-		$table_model = $this->cache->get('model.' . $table);
+		$columns = $this->cache->get('model.' . $table);
 
-		if (!$table_model) {
-			$table = $this->escape($table);
+		if (!$columns) {
+			$columns = $this->db->getTableColumns($table);
 
-			$columns = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
+			foreach ($columns as &$column) {
+				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
 
-			$table_model = array();
-
-			foreach ($columns as $col) {
-				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $col['Type'])));
-
-				//we only care about ints and floats because only these we will do something besides escape
-				$ints   = array(
-					'bigint',
-					'mediumint',
-					'smallint',
-					'tinyint',
-					'int'
-				);
-				$floats = array(
-					'decimal',
-					'float',
-					'double'
+				$cast = array(
+					'bigint'    => self::INTEGER,
+					'mediumint' => self::INTEGER,
+					'smallint'  => self::INTEGER,
+					'tinyint'   => self::INTEGER,
+					'int'       => self::INTEGER,
+					'decimal'   => self::FLOAT,
+					'float'     => self::FLOAT,
+					'double'    => self::FLOAT,
+					'datetime'  => self::DATETIME,
+					'timestamp' => self::INTEGER,
+					'binary'    => self::NO_ESCAPE,
+					'varbinary' => self::NO_ESCAPE,
 				);
 
-				if ($col['Key'] == 'PRI' && in_array($type, $ints)) {
-					if ($col['Extra'] == 'auto_increment') {
-						$escape_type = DB_AUTO_INCREMENT_PK;
+				$type = isset($cast[$type]) ? $cast[$type] : self::TEXT;
+
+				if ($column['Key'] === 'PRI' && $type === self::INTEGER) {
+					if ($column['Extra'] === 'auto_increment') {
+						$type = self::AUTO_INCREMENT_PK;
 					} else {
-						$escape_type = DB_PRIMARY_KEY_INTEGER;
+						$type = self::PRIMARY_KEY_INTEGER;
 					}
-				} elseif ($col['Extra'] == 'auto_increment') {
-					$escape_type = DB_AUTO_INCREMENT;
-				} elseif (in_array($type, $ints)) {
-					$escape_type = DB_INTEGER;
-				} elseif (in_array($type, $floats)) {
-					$escape_type = DB_FLOAT;
-				} elseif ($type == 'datetime') {
-					$escape_type = DB_DATETIME;
-				} elseif (strtolower($col['Field']) == 'image') {
-					$escape_type = DB_IMAGE;
-				} else {
-					$escape_type = DB_ESCAPE;
+				} elseif ($column['Extra'] === 'auto_increment') {
+					$type = self::AUTO_INCREMENT;
+				} elseif (strtolower($column['Field']) === 'image') {
+					$type = self::IMAGE;
 				}
 
-				$table_model[$col['Field']] = $escape_type;
+				$column['type'] = $type;
 			}
+			unset($column);
 
-			$this->cache->set('model.' . $table, $table_model);
+			$this->cache->set('model.' . $table, $columns);
 		}
 
-		return $table_model;
+		return $columns;
 	}
 
-	private function get_primary_key($table)
+	private function getPrimaryKey($table)
 	{
-		$table_model = $this->get_table_model($table);
+		$columns = $this->getTableColumns($table);
 
 		$primary_key = null;
-		foreach ($table_model as $key => $type) {
-			if ($type == DB_PRIMARY_KEY_INTEGER || $type == DB_AUTO_INCREMENT_PK) {
+		foreach ($columns as $key => $col) {
+			if ($col['type'] === self::PRIMARY_KEY_INTEGER || $col['type'] === self::AUTO_INCREMENT_PK) {
 				if ($primary_key) {
 					return null;
 				}
@@ -385,7 +482,7 @@ abstract class Model extends DB
 		return $primary_key;
 	}
 
-	private function action_filter($action, $table, &$data)
+	private function actionFilter($action, $table, &$data)
 	{
 		$hooks = option('db_hook_' . $action . '_' . $table);
 
@@ -409,13 +506,13 @@ abstract class Model extends DB
 							$method
 						), $params);
 					} else {
-						trigger_error("Model::action_filter(): The following method does not exist: $class::$method().");
+						trigger_error(_l("%s(): The following method does not exist: %s::%s().", __METHOD__, $class, $method));
 					}
 				} else {
 					if (function_exists($hook['callback'])) {
 						$hook['callback']($hook['param']);
 					} else {
-						trigger_error("Model::action_filter(): The following function does not exist: $hook[callback]().");
+						trigger_error(_l("%s(): The following function does not exist: %s().", __METHOD__, $hook['callback']));
 					}
 				}
 			}

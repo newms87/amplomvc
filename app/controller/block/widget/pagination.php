@@ -35,14 +35,10 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 		}
 
 		if ($settings['limit'] < 1) {
-			$settings['limit'] = 10;
-		}
-
-		$query['limit'] = $settings['limit'];
-
-		//To avoid divide by zero, we only want 1 page for no limit
-		if ($settings['limit'] < 1) {
 			$settings['limit'] = $settings['total'];
+			$query['limit'] = 0;
+		} else {
+			$query['limit'] = $settings['limit'];
 		}
 
 		$num_pages = ceil($settings['total'] / $settings['limit']);

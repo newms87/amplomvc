@@ -1,10 +1,12 @@
 <?php
+
 class DB
 {
 	static $profile = array();
-
 	static $drivers = array();
+
 	private $driver;
+	private $prefix;
 
 	//Time Simulation
 	private $synctime = false;
@@ -12,7 +14,7 @@ class DB
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
 
-	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $database = null)
+	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $database = null, $prefix = null)
 	{
 		global $ac_time_offset;
 
@@ -25,14 +27,9 @@ class DB
 			$driver = 'mysqlidb';
 		}
 
-		//Initialize w/ default driver
-		if (!$driver) {
-			$this->driver = current(self::$drivers);
-			return;
-		}
+		$key = $driver . $hostname . $username . $database;
 
-		//Initialize for specified driver
-		if (!isset(self::$drivers[$driver])) {
+		if (!isset(self::$drivers[$key])) {
 			//the database interface
 			if (function_exists("_ac_mod_file")) {
 				require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
@@ -52,12 +49,15 @@ class DB
 				}
 			}
 
-			self::$drivers[$driver] = new $driver($hostname, $username, $password, $database);
+			$db = new $driver($hostname, $username, $password, $database);
+
+			$db->query("SET time_zone = '" . MYSQL_TIMEZONE . "'");
+
+			self::$drivers[$key] = $db;
 		}
 
-		$this->driver = self::$drivers[$driver];
-
-		$this->driver->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
+		$this->driver = self::$drivers[$key];
+		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
 	}
 
 	public function hasError($type = null)
@@ -124,7 +124,7 @@ class DB
 		}
 
 		if (!$resource) {
-			$this->queryError($sql);
+			trigger_error($this->driver->getError());
 
 			return false;
 		}
@@ -137,10 +137,11 @@ class DB
 	 * and the column data as the values for the MySQL query
 	 *
 	 * @param $sql - the MySQL query string
+	 * @param $index - The table field to use as the associative array key index
 	 * @return mixed - an array of associative arrays of field => value pairs, or false on failure
 	 *
 	 */
-	public function queryRows($sql, $key_column = null)
+	public function queryRows($sql, $index = null)
 	{
 		$resource = $this->query($sql);
 
@@ -148,11 +149,11 @@ class DB
 			return array();
 		}
 
-		if ($key_column) {
+		if ($index) {
 			$rows = array();
 
 			foreach ($resource->rows as $row) {
-				$rows[$row[$key_column]] = $row;
+				$rows[$row[$index]] = $row;
 			}
 
 			return $rows;
@@ -216,22 +217,17 @@ class DB
 		return $resource->row ? current($resource->row) : null;
 	}
 
-	private function queryError($sql = '')
-	{
-		trigger_error($this->driver->getError());
-	}
-
 	public function multiquery($string)
 	{
-		$file_length = strlen($string);
+		$file_length     = strlen($string);
 		$quote_char_list = array(
 			"'",
 			"`",
 			'"'
 		);
-		$in_quote = false;
-		$sql = '';
-		$pos = 0;
+		$in_quote        = false;
+		$sql             = '';
+		$pos             = 0;
 
 		while ($pos < $file_length) {
 			$char = $string[$pos];
@@ -300,7 +296,7 @@ class DB
 		}
 
 		if (is_null($prefix)) {
-			$prefix = DB_PREFIX;
+			$prefix = $this->prefix;
 		}
 
 		$sql = '';
@@ -310,14 +306,14 @@ class DB
 				$table = current($table);
 			}
 
-			$table = preg_replace("/^" . DB_PREFIX . "/", '', $table);
+			$table = preg_replace("/^" . $this->prefix . "/", '', $table);
 
 			$tablename = $prefix . $table;
 
 			$sql .= "DROP TABLE IF EXISTS `$tablename`;" . $eol;
 			$sql .= "CREATE TABLE `$tablename` (" . $eol;
 
-			$columns = $this->queryRows("SHOW COLUMNS FROM `" . DB_PREFIX . "$table`");
+			$columns = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
 
 			$primary_key = array();
 
@@ -353,7 +349,7 @@ class DB
 
 			$sql .= ");" . $eol . $eol;
 
-			$rows = $this->queryRows("SELECT * FROM `" . DB_PREFIX . "$table`");
+			$rows = $this->queryRows("SELECT * FROM `" . $this->prefix . "$table`");
 
 			if (!empty($rows)) {
 				$sql .= "INSERT INTO `$tablename` VALUES ";
@@ -380,7 +376,7 @@ class DB
 
 	public function hasTable($table)
 	{
-		return $this->queryVar("SHOW TABLES LIKE '" . DB_PREFIX . $this->escape($table) . "'") ? true : false;
+		return $this->queryVar("SHOW TABLES LIKE '" . $this->prefix . $this->escape($table) . "'") ? true : false;
 	}
 
 	public function getTables()
@@ -398,12 +394,12 @@ class DB
 
 	public function createTable($table, $sql)
 	{
-		return $this->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "$table` ($sql)");
+		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
 	}
 
 	public function dropTable($table)
 	{
-		return $this->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "$table`");
+		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
 	}
 
 	public function countTables()
@@ -415,16 +411,16 @@ class DB
 
 	public function getKeyColumn($table)
 	{
-		$result = $this->queryRow("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
+		$result = $this->queryRow("SHOW KEYS FROM " . $this->prefix . "$table WHERE Key_name = 'PRIMARY'");
 
 		return $result ? $result['Column_name'] : false;
 	}
 
 	public function hasColumn($table, $column)
 	{
-		$rows = $this->queryRows("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
+		$columns = $this->getColumns($table);
 
-		foreach ($rows as $row) {
+		foreach ($columns as $row) {
 			if (strtolower($row['Field']) === strtolower($column)) {
 				return true;
 			}
@@ -433,10 +429,21 @@ class DB
 		return false;
 	}
 
+	public function getTableColumns($table)
+	{
+		static $columns;
+
+		if (!isset($columns[$table])) {
+			$columns[$table] = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`", 'Field');
+		}
+
+		return $columns[$table];
+	}
+
 	public function addColumn($table, $column, $options = '')
 	{
 		if (!$this->hasColumn($table, $column)) {
-			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
+			return $this->query("ALTER TABLE `" . $this->prefix . "$table` ADD COLUMN `$column` $options");
 		}
 
 		return false;
@@ -451,14 +458,14 @@ class DB
 				return false;
 			}
 
-			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
+			return $this->query("ALTER TABLE `" . $this->prefix . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
 
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
-			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
+			return $this->query("ALTER TABLE `" . $this->prefix . "$table` DROP COLUMN `$column`");
 		}
 
 		return false;
@@ -482,7 +489,9 @@ class DB
 			exit;
 		} elseif (is_array($value)) {
 			$driver = $this->driver;
-			array_walk_recursive($value, function (&$v) use ($driver) { $v = $driver->escape($v); });
+			array_walk_recursive($value, function (&$v) use ($driver) {
+				$v = $driver->escape($v);
+			});
 			return $value;
 		}
 

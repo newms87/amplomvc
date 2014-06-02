@@ -71,15 +71,15 @@ class App_Model_Setting_UrlAlias extends Model
 		$where = "1";
 
 		if (!empty($data['alias'])) {
-			$where .= " AND LCASE(ua.alias) like '%" . strtolower($this->db->escape($data['alias'])) . "%'";
+			$where .= " AND LCASE(ua.alias) like '%" . strtolower($this->escape($data['alias'])) . "%'";
 		}
 
 		if (!empty($data['path'])) {
-			$where .= " AND LCASE(ua.path) like '" . strtolower($this->db->escape($data['path'])) . "%'";
+			$where .= " AND LCASE(ua.path) like '" . strtolower($this->escape($data['path'])) . "%'";
 		}
 
 		if (!empty($data['query'])) {
-			$where .= " AND LCASE(ua.query) like '%" . strtolower($this->db->escape($data['query'])) . "%'";
+			$where .= " AND LCASE(ua.query) like '%" . strtolower($this->escape($data['query'])) . "%'";
 		}
 
 		if (isset($data['store_id'])) {

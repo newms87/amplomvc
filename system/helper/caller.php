@@ -326,8 +326,8 @@ function build($type, $params)
 		case 'multiselect':
 			return "<ul class=\"scrollbox\" $attrs>$options</ul>" .
 			"<div class=\"scrollbox_buttons\">" .
-			"<a class=\"check_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').attr('checked','checked')\">[ Check All ]</a>" .
-			"<a class=\"uncheck_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').removeAttr('checked')\">[ Uncheck All ]</a>" .
+			"<a class=\"check_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').prop('checked', true)\">[ Check All ]</a>" .
+			"<a class=\"uncheck_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').prop('checked', false)\">[ Uncheck All ]</a>" .
 			"</div>";
 
 		case 'clickable_list':

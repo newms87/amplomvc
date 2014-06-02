@@ -30,6 +30,10 @@ if (empty($_SESSION['user_id'])) {
 // Registry
 $registry = new Registry();
 
+// Database
+$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+$registry->set('db', $db);
+
 //TODO: Maybe make this our main handler for loading (move out of registry)??
 spl_autoload_register(function ($class) {
 	global $registry;
@@ -42,10 +46,6 @@ $registry->set('route', $router);
 
 // Request (cleans globals)
 $registry->set('request', new Request());
-
-// Database
-$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-$registry->set('db', $db);
 
 // Cache
 $cache = new Cache();
@@ -67,11 +67,11 @@ if (!defined("DB_PROFILE_NO_CACHE")) {
 $cache->ignore(option('config_cache_ignore'));
 
 //Database Structure Validation
-$row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
+$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
 
-if ($row) {
+if ($last_update) {
 	$cache->delete('model');
-	$cache->set('db_last_update', $row['Value']);
+	$cache->set('db_last_update', $last_update['Value']);
 }
 
 //System Logs

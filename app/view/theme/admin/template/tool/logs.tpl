@@ -79,7 +79,7 @@
 	function remove_entry(context) {
 		$.post("<?= $remove; ?>", {entries: context.attr('data-line'), no_page: 1},
 			function (msg) {
-				show_msg('warning', msg);
+				context.parent().ac_msg('warning', msg);
 
 				setTimeout(function () {
 					context.fadeOut(300);

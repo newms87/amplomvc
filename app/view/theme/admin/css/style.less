@@ -934,7 +934,7 @@ button, .button {
       }
 
       &:nth-child(even) > td {
-        background: rgba(0, 0, 200, .2);
+        background: #9FBED1;
       }
     }
   }
@@ -943,7 +943,7 @@ button, .button {
     tr {
       td {
         padding: 10px 10px;
-        background: #E4EEF7;
+        background: @color-lighter;
       }
     }
   }
@@ -1053,6 +1053,10 @@ button, .button {
     left: 0;
   }
 
+  .listings {
+    overflow: auto;
+  }
+  
   .rowid {
     font-weight: bold;
     display: block;
@@ -1080,6 +1084,42 @@ button, .button {
 
       &:hover, &.selected {
         background: @color-light;
+      }
+    }
+  }
+
+  .extra-cols {
+    position: relative;
+    display: inline-block;
+
+    .label {
+      padding: 5px 10px;
+      background: @color-lighter;
+      border-radius: 5px;
+      font-size: 1.2em;
+      cursor: pointer;
+      display: inline-block;
+      margin: 5px;
+    }
+
+    .select-cols {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      box-shadow: 4px 4px 20px rgba(0,0,0,.5);
+      padding: 10px;
+      display: none;
+      z-index: 100;
+
+      .buttons {
+        text-align: right;
+      }
+    }
+
+    &:hover {
+      .select-cols {
+        display: block;
       }
     }
   }
@@ -1452,6 +1492,7 @@ ul.scrollbox li {
 .scrollbox_buttons {
   width: 50%;
   text-align: center;
+  margin: 8px auto 0 auto;
 }
 
 .scrollbox_buttons a {

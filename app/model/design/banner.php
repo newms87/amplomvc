@@ -3,15 +3,13 @@ class App_Model_Design_Banner extends Model
 {
 	public function addBanner($data)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "banner SET name = '" . $this->escape($data['name']) . "', status = '" . (int)$data['status'] . "'");
-
-		$banner_id = $this->db->getLastId();
+		$banner_id = $this->insert('banner', $data);
 
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $banner_image) {
-				$this->query("INSERT INTO " . DB_PREFIX . "banner_image SET banner_id = '" . (int)$banner_id . "', link = '" . $this->escape($banner_image['link']) . "', image = '" . $this->escape($banner_image['image']) . "', sort_order = '" . (int)($this->escape($banner_image['sort_order'])) . "'");
+				$banner_image['banner_id'] = $banner_id;
 
-				$banner_image_id = $this->db->getLastId();
+				$banner_image_id = $this->insert('banner_image', $banner_image);
 
 				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
 					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" . $this->escape($banner_image_description['title']) . "'");

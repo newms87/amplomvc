@@ -267,11 +267,11 @@ class App_Model_Page extends Model
 
 		//Where
 		$columns = array(
-			'title'  => 'text_like',
-			'status' => 'int_equals',
+			'title'  => 'like',
+			'status' => 'equals',
 		);
 
-		$where = $this->extractFilter($columns, $filter);
+		$where = $this->extractFilter('page', $filter, $columns);
 
 		if (!empty($filter['stores'])) {
 			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);

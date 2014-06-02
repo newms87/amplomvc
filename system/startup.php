@@ -52,17 +52,6 @@ if (ini_get('register_globals')) {
 	}
 }
 
-//Database Escaping Entries
-define('DB_ESCAPE', 0);
-define('DB_NO_ESCAPE', 1);
-define('DB_IMAGE', 2);
-define('DB_INTEGER', 3);
-define('DB_FLOAT', 4);
-define('DB_DATETIME', 5);
-define('DB_PRIMARY_KEY_INTEGER', 8);
-define('DB_AUTO_INCREMENT', 9);
-define('DB_AUTO_INCREMENT_PK', 10);
-
 // Windows IIS Compatibility
 if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 	if (isset($_SERVER['SCRIPT_FILENAME'])) {

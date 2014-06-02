@@ -5,7 +5,7 @@ class App_Model_Localisation_LengthClass extends Model
 	{
 		$this->query("INSERT INTO " . DB_PREFIX . "length_class SET value = '" . (float)$data['value'] . "'");
 
-		$length_class_id = $this->db->getLastId();
+		$length_class_id = $this->getLastId();
 
 		foreach ($data['length_class_description'] as $language_id => $value) {
 			$this->query("INSERT INTO " . DB_PREFIX . "length_class_description SET length_class_id = '" . (int)$length_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->escape($value['title']) . "', unit = '" . $this->escape($value['unit']) . "'");

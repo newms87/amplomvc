@@ -8,9 +8,6 @@ class Customer extends Library
 
 	public function __construct()
 	{
-		global $registry;
-		$registry->set('customer', $this);
-
 		parent::__construct();
 
 		if ($this->session->has('customer_id')) {

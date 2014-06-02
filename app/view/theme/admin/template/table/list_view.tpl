@@ -413,7 +413,7 @@
 
 	table_list.find('.filter-list').keyup(function (e) {
 		if (e.keyCode == 13) {
-			$('.filter-button').click()[0].click();
+			$(this).find('.filter-button').click()[0].click();
 		}
 	});
 </script>

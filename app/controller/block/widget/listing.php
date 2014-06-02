@@ -9,6 +9,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 	public function build($settings)
 	{
 		$defaults = array(
+			'extra_cols'      => null,
 			'template'        => 'table/list_view',
 			'ajax'            => 1,
 			'rows'            => array(),
@@ -32,6 +33,18 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		if (!isset($settings['show_messages'])) {
 			$settings['show_messages'] = $settings['ajax'] && $this->request->isAjax();
 		}
+
+		//Normalize Extra Cols
+		foreach ($settings['extra_cols'] as $key => &$ec) {
+			if (!isset($ec['Field'])) {
+				$ec['Field'] = $key;
+			}
+
+			if (!isset($ec['display_name'])) {
+				$ec['display_name'] = $ec['Field'];
+			}
+		}
+		unset($ec);
 
 		$this->table->init();
 		$this->table->setTemplate('table/list_view');

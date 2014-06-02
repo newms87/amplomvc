@@ -62,7 +62,9 @@
 							<?= _l("URL Alias:"); ?>
 							<span class="help"><?= _l("The Search Engine Optimized URL."); ?></span>
 						</td>
-						<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
+						<td>
+							<input type="text" name="alias" size="60" value="<?= $alias; ?>"/>
+						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Meta Keywords:"); ?></td>
@@ -78,11 +80,12 @@
 					</tr>
 					<tr>
 						<td><?= _l("Status:"); ?></td>
-						<td><?= build('select', array(
-	'name'   => 'status',
-	'data'   => $data_statuses,
-	'select' => $status
-)); ?></td>
+						<td><?=
+							build('select', array(
+								'name'   => 'status',
+								'data'   => $data_statuses,
+								'select' => $status
+							)); ?></td>
 					</tr>
 				</table>
 			</div>
@@ -94,12 +97,13 @@
 						<td class="required"> <?= _l("Layout:"); ?></td>
 						<td>
 							<div id="layout_select">
-								<?= build('select', array(
-									'name' => 'layout_id',
-								   'data' => $data_layouts,
-								   'select' => $layout_id,
-								   'key' => 'layout_id',
-								   'value' => 'name',
+								<?=
+								build('select', array(
+									'name'   => 'layout_id',
+									'data'   => $data_layouts,
+									'select' => $layout_id,
+									'key'    => 'layout_id',
+									'value'  => 'name',
 								)); ?>
 							</div>
 							<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
@@ -109,13 +113,14 @@
 					<tr>
 						<td class="required"> <?= _l("Stores:"); ?></td>
 						<td>
-						<?= build('multiselect', array(
-							'name'   => "stores",
-							'data'   => $data_stores,
-							'select' => $stores,
-							'key'    => 'store_id',
-							'value'  => 'name',
-						)); ?>
+							<?=
+							build('multiselect', array(
+								'name'   => "stores",
+								'data'   => $data_stores,
+								'select' => $stores,
+								'key'    => 'store_id',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
@@ -123,25 +128,25 @@
 						<td>
 							<table id="assigned_block_list" class="list">
 								<thead>
-								<tr>
-									<td><?= _l("Block Name"); ?></td>
-									<td><?= _l("Store Name"); ?></td>
-									<td><?= _l("Position"); ?></td>
-								</tr>
+									<tr>
+										<td><?= _l("Block Name"); ?></td>
+										<td><?= _l("Store Name"); ?></td>
+										<td><?= _l("Position"); ?></td>
+									</tr>
 								</thead>
 								<tbody>
-								<tr id="block_template">
-									<td>%name%</td>
-									<td>%store%</td>
-									<td>%position%</td>
-								</tr>
+									<tr id="block_template">
+										<td>%name%</td>
+										<td>%store%</td>
+										<td>%position%</td>
+									</tr>
 								</tbody>
 								<tfoot>
-								<tr>
-									<td colspan="3">
-										<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
-									</td>
-								</tr>
+									<tr>
+										<td colspan="3">
+											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
+										</td>
+									</tr>
 								</tfoot>
 							</table>
 						</td>
@@ -215,7 +220,7 @@
 		var z = get_zoom_value();
 		var new_css = {
 			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
-			'transform':         'scale3d(' + z + ',' + z + ',1)'
+			'transform': 'scale3d(' + z + ',' + z + ',1)'
 		};
 		$('#preview_frame').contents().find('#container').css(new_css);
 	}
@@ -254,7 +259,7 @@
 			$('#css_editor')[0].cm_editor.mirror.save();
 
 			$('#form').postForm(function (response) {
-				handle_response(response);
+				$(this).ac_msg(response);
 			}, 'json');
 
 			e.preventDefault();
