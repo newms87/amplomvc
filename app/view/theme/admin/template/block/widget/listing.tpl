@@ -11,6 +11,7 @@
 
 	<a class="refresh-listing" href="<?= $refresh; ?>">Refresh</a>
 
+	<? if (!empty($extra_cols)) { ?>
 	<div class="extra-cols">
 		<div class="label"><?= _l("Choose Columns"); ?></div>
 		<div class="select-cols">
@@ -28,6 +29,7 @@
 			</div>
 		</div>
 	</div>
+	<? } ?>
 
 	<div class="listings">
 		<?= $listing; ?>
