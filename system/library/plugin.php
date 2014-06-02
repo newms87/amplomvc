@@ -375,7 +375,7 @@ class Plugin extends Library
 
 		$exclude_file = DIR_SITE . '.git/info/exclude';
 
-		if (_is_writable(DIR_SITE . '.git/info/')) {
+		if (is_dir(DIR_SITE . '.git') && _is_writable(DIR_SITE . '.git/info/')) {
 			$ignores = explode("\n",file_get_contents($exclude_file));
 
 			foreach ($ignores as $ignore) {
