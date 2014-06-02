@@ -26,6 +26,7 @@ logs
 /app/view/theme/*
 !/app/view/theme/fluid
 !/app/view/theme/admin
+/app/view/theme/fluid/template/page/*
 
 /system/mods
 /system/timeoffset

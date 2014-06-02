@@ -276,6 +276,8 @@ class Plugin extends Library
 			return false;
 		}
 
+		$this->gitIgnore($live_file);
+
 		$data = array(
 			'name'        => $name,
 			'date_added'  => $this->date->now(),
@@ -365,5 +367,26 @@ class Plugin extends Library
 				$this->mod->write(); //no mod->apply validation because we must get rid erroneous plugin files
 			}
 		}
+	}
+
+	public function gitIgnore($file)
+	{
+		$file = '/' . str_replace(DIR_SITE, '', $file);
+
+		$exclude_file = DIR_SITE . '.git/info/exclude';
+
+		if (_is_writable(DIR_SITE . '.git/info/')) {
+			$ignores = explode("\n",file_get_contents($exclude_file));
+
+			foreach ($ignores as $ignore) {
+				if ($ignore === $file) {
+					return true;
+				}
+			}
+
+			$ignores[] = $file;
+		}
+
+		return file_put_contents($exclude_file, implode("\n", $ignores));
 	}
 }
