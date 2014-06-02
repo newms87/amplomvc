@@ -3034,23 +3034,51 @@ td.log_remove .message {
 }
 
 .block-widget-view {
+  [contenteditable] {
+    &:focus {
+      background: @color-lighter;
+    }
+  }
+
   .widget-view {
+    position: relative;
+    padding: 1em;
+    border: 2px dashed @color-dark;
     margin-bottom: 2em;
 
     .view-title {
-      font-size: 1.5em;
+      font-size: 2em;
       font-weight: bold;
       display: inline-block;
+      vertical-align: middle;
+      outline: 0;
+      padding: .4em;
     }
 
     .buttons {
-      float:right;
+      margin: 0;
 
       .show-view {
         display: inline-block;
       }
       .hide-view {
         display: none;
+      }
+
+      &.show-hide {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1em;
+      }
+
+      &.save-delete {
+        position:absolute;
+        top: 1em;
+        right: 1em;
+
+        .delete-view {
+          background: @color-delete;
+        }
       }
     }
 
@@ -3071,6 +3099,16 @@ td.log_remove .message {
       .listing {
         display: block;
       }
+    }
+  }
+
+  .views-actions {
+    text-align: center;
+    margin: 1.5em auto 0 auto;
+
+    .add-view {
+      font-size: 1.5em;
+      padding: .5em 1em;
     }
   }
 }
