@@ -187,6 +187,9 @@ class App_Controller_Admin_Page extends Controller
 			$this->Model_Page->addPage($_POST);
 		} //Update
 		else {
+			if (empty($_POST['display_title'])) {
+				$_POST['display_title'] = 0;
+			}
 			$this->Model_Page->editPage($_GET['page_id'], $_POST);
 		}
 

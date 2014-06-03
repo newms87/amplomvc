@@ -203,7 +203,8 @@
 		$preview.find('#page-style').html(instance.getValue());
 	});
 
-	$('[name=title]').keyup(function () {
+	$('[name="title"]').keyup(function () {
+		console.log($(this).val());
 		$preview.find('#page-title').html($(this).val());
 	});
 

@@ -103,9 +103,9 @@ class App_Controller_Page extends Controller
 		//Change Layout to desired page layout
 		$this->config->set('config_layout_id', $page['layout_id']);
 
-		$page['template'] = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
+		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 
 		//Render
-		$this->response->setOutput($this->render('page/preview', $page));
+		$this->response->setOutput($this->render($template, $page));
 	}
 }
