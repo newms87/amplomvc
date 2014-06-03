@@ -130,8 +130,21 @@
 									)); ?>
 								</div>
 								<div class="value">
-									<? if (!empty($column['filter_value'])) { ?>
-										<?= charlimit(implode(', ', $column['filter_value']), 20, '...', false); ?>
+									<? if (!empty($column['filter_value'])) {
+										$vals = array();
+										foreach ($column['filter_value'] as $v) {
+											if ($build_key === false) {
+												$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+											} else {
+												foreach ($column['build_data'] as $bd) {
+													if ($bd[$build_key] === $v) {
+														$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
+													}
+												}
+											}
+										} ?>
+
+										<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
 									<? } else { ?>
 										<?= _l("Modify"); ?>
 									<? } ?>
