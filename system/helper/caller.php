@@ -101,6 +101,21 @@ function redirect($path = '', $query = null, $status = null)
 	$registry->get('url')->redirect($path, $query, $status);
 }
 
+function _get($key, $default = null)
+{
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
+}
+
+function _post($key, $default = null)
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+}
+
+function _request($key, $default = null)
+{
+	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
+}
+
 function option($option, $default = null)
 {
 	global $registry;
@@ -349,4 +364,10 @@ function build_js($js)
 	include(DIR_SYSTEM . 'helper/builder_js.php');
 
 	return ob_get_clean();
+}
+
+function rrmdir($dir) {
+	foreach(glob($dir . '/*') as $file) {
+		if(is_dir($file)) rrmdir($file); else unlink($file);
+	} rmdir($dir);
 }

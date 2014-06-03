@@ -2650,7 +2650,7 @@ div .easy_list li > * + * {
 	margin-bottom: 10px;
 }
 
-#preview_frame {
+#preview-frame {
 	width: 100%;
 	min-height: 814px;
 }

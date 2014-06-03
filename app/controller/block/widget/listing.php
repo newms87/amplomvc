@@ -9,7 +9,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 	public function build($settings)
 	{
 		$defaults = array(
-			'extra_cols'      => null,
+			'extra_cols'      => array(),
 			'template'        => 'table/list_view',
 			'ajax'            => 1,
 			'rows'            => array(),

@@ -2,11 +2,16 @@
 <section class="section">
 	<?= breadcrumbs(); ?>
 
-	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
+	<form id="page-form" action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?>
-				<a href="<?= site_url('page/' . $name); ?>" target="_blank">Preview</a>
+				<div class="page-url">
+					<span class="prefix-url"><?= site_url('page/'); ?></span>
+					<input type="text" name="name" value="<?= $name;?>" />
+				</div>
+
+				<a class="page-view" href="<?= site_url('page/' . $name); ?>" target="_blank">View</a>
 			</h1>
 
 			<div class="buttons">
@@ -34,10 +39,10 @@
 					</div>
 
 					<div class="html_title"><?= _l("HTML"); ?></div>
-					<textarea id="html_editor" name="content"><?= file_get_contents($content); ?></textarea>
+					<textarea id="html_editor" name="content"><?= $content ? file_get_contents($content) : ''; ?></textarea>
 
 					<div class="css_title"><?= _l("Style"); ?></div>
-					<textarea id="css_editor" name="style"><?= file_get_contents($style); ?></textarea>
+					<textarea id="css_editor" name="style"><?= $style ? file_get_contents($style) : $style; ?></textarea>
 				</div>
 
 				<div id="code_preview">
@@ -45,11 +50,11 @@
 						<input type="text" id="zoom_value" value="80%"/>
 
 						<div class="zoom_change">
-							<img class="zoom_in" src="<?= theme_url('image/zoom-out.png') ?>"/>
+							<img class="zoom_in" src="<?= theme_url('image/zoom-in.png') ?>"/>
 							<img class="zoom_out" src="<?= theme_url('image/zoom-out.png'); ?>"/>
 						</div>
 					</div>
-					<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
+					<iframe id="preview-frame" frameborder="1" scrolling="auto" marginheight="0"></iframe>
 				</div>
 
 			</div>
@@ -123,34 +128,6 @@
 							)); ?>
 						</td>
 					</tr>
-					<tr>
-						<td><?= _l("Blocks Associated with this Page"); ?></td>
-						<td>
-							<table id="assigned_block_list" class="list">
-								<thead>
-									<tr>
-										<td><?= _l("Block Name"); ?></td>
-										<td><?= _l("Store Name"); ?></td>
-										<td><?= _l("Position"); ?></td>
-									</tr>
-								</thead>
-								<tbody>
-									<tr id="block_template">
-										<td>%name%</td>
-										<td>%store%</td>
-										<td>%position%</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="3">
-											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= _l("Add More Blocks"); ?></a>
-										</td>
-									</tr>
-								</tfoot>
-							</table>
-						</td>
-					</tr>
 				</table>
 			</div>
 			<!-- /tab-design -->
@@ -161,34 +138,14 @@
 
 
 <script type="text/javascript">
-	var block_template = $('#block_template')[0].outerHTML;
-	$('#block_template').remove();
+	var $preview;
 
-	function add_block_item(name, store, position) {
-		template = block_template
-			.replace(/%name%/g, name)
-			.replace(/%store%/g, store)
-			.replace(/%position%/g, position);
+	$('#preview-frame').load(function() {
+		$preview = $('#preview-frame').contents();
+		//$preview.find('#container').draggable();
 
-		$('#assigned_block_list tbody').append($(template).attr('id', ''));
-	}
-	;
-
-	function load_assigned_blocks() {
-		$('#assigned_block_list tbody').empty();
-
-		data = $('[name="stores[]"], [name=layout_id]').serialize();
-		console.log(data);
-		$.post("<?= $url_load_blocks; ?>", data, function (json) {
-			if (json) {
-				for (var b in json) {
-					add_block_item(json[b]['name'], json[b]['store_name'], json[b]['position']);
-				}
-			}
-		}, 'json');
-	}
-
-	$('[name="stores[]"], [name=layout_id]').change(load_assigned_blocks).first().change();
+		update_zoom();
+	});
 
 	$('#create_layout').click(function () {
 		layout_name = $('[name=title]').val();
@@ -216,13 +173,14 @@
 	function get_zoom_value() {
 		return (parseInt($('#zoom_value').val()) || 0) / 100;
 	}
+
 	function update_zoom() {
 		var z = get_zoom_value();
 		var new_css = {
 			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
 			'transform': 'scale3d(' + z + ',' + z + ',1)'
 		};
-		$('#preview_frame').contents().find('#container').css(new_css);
+		$preview.find('#container').css(new_css);
 	}
 
 	$('#zoom_value').keyup(update_zoom);
@@ -238,28 +196,29 @@
 	$('#css_editor').codemirror({mode: 'css'});
 
 	$('#html_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
-		$('#preview_frame').contents().find('#content_holder .page_content').html(instance.getValue());
+		$preview.find('.page-content .wrap').html(instance.getValue());
 	});
 
 	$('#css_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
-		$('#preview_frame').contents().find('#page_css').html(instance.getValue());
+		$preview.find('#page-style').html(instance.getValue());
 	});
 
 	$('[name=title]').keyup(function () {
-		$('#preview_frame').contents().find('#page_title').html($(this).val());
+		$preview.find('#page-title').html($(this).val());
 	});
 
 	$('[name=display_title]').change(function () {
-		$('#preview_frame').contents().find('#page_title').stop().toggle($(this).val());
+		$preview.find('#page-title').stop().toggle($(this).val());
 	});
 
 	$(document).bind('keydown', function (e) {
 		if (e.ctrlKey && (e.which == 83)) {
+			var $form = $('#page-form');
 			$('#html_editor')[0].cm_editor.mirror.save();
 			$('#css_editor')[0].cm_editor.mirror.save();
 
-			$('#form').postForm(function (response) {
-				$(this).ac_msg(response);
+			$.post($form.attr('action'), $form.serialize(), function (response) {
+				$form.ac_msg(response);
 			}, 'json');
 
 			e.preventDefault();
@@ -270,7 +229,7 @@
 	$('#tabs a').tabs();
 
 	$(document).ready(function () {
-		$('#preview_frame').attr('src', "<?= $page_preview; ?>");
+		$('#preview-frame').attr('src', "<?= $page_preview; ?>");
 	});
 
 	$.ac_errors(<?= json_encode($errors); ?>);

@@ -1054,6 +1054,7 @@ button, .button {
   }
 
   .listings {
+    width: 100%;
     overflow: auto;
   }
 
@@ -2863,7 +2864,7 @@ div .easy_list li > * + * {
   margin-bottom: 10px;
 }
 
-#preview_frame {
+#preview-frame {
   width: 100%;
   min-height: 814px;
 }
@@ -2894,6 +2895,31 @@ div .easy_list li > * + * {
 
 #zoom_preview img:active {
   background: #E3F9DC;
+}
+
+#page-form {
+  .page-url {
+    display: inline-block;
+    margin-left: 1em;
+
+    input[name="name"] {
+      background: transparent;
+      color: @color-light;
+      border: none;
+      font-size: 1em;
+      margin: 0;
+      outline: 0;
+
+      &:focus {
+        background: @color-lightest;
+        color: @color-dark;
+      }
+    }
+  }
+
+  .page-view {
+    margin-left: 1em;
+  }
 }
 
 /** Cron Manager**/

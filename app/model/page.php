@@ -20,6 +20,7 @@ class App_Model_Page extends Model
 	{
 		//Defaults
 		$page += array(
+			'title'   => '',
 			'content' => '',
 			'style'   => '',
 		);
@@ -30,6 +31,12 @@ class App_Model_Page extends Model
 
 		if ($this->error) {
 			return false;
+		}
+
+		if (empty($page['name'])) {
+			$page['name'] = $this->tool->getSlug($page['title']);
+		} else {
+			$page['name'] = $this->tool->getSlug($page['name']);
 		}
 
 		$page_id = $this->insert('page', $page);
@@ -62,7 +69,7 @@ class App_Model_Page extends Model
 		}
 
 		if (!empty($page['alias'])) {
-			$this->url->setAlias($page['alias'], 'page/page', 'page_id=' . (int)$page_id);
+			$this->url->setAlias($page['alias'], 'page/' . $page['name']);
 		}
 
 		if (!empty($page['translations'])) {
@@ -84,19 +91,37 @@ class App_Model_Page extends Model
 			return false;
 		}
 
-		$this->update('page', $page, $page_id);
+		if (empty($page['name'])) {
+			$page['name'] = $this->getPageName($page_id);
+		} else {
+			$page['name'] = $this->tool->getSlug($page['name']);
+		}
 
-		$page['name'] = $this->queryVar("SELECT name FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
+		//Remove Old Directory if we are renaming page.
+		$old_name = $this->queryVar("SELECT name FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
+
+		if ($old_name && $old_name !== $page['name']) {
+			$old_dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $old_name;
+			if (is_dir($old_dir)) {
+				rrmdir($old_dir);
+			}
+		}
 
 		$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $page['name'];
 
 		if (isset($page['content'])) {
-			file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']));
+			if (_is_writable($dir)) {
+				file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']));
+			}
 		}
 
 		if (isset($page['style'])) {
-			file_put_contents($dir . '/style.less', $page['style']);
+			if (_is_writable($dir)) {
+				file_put_contents($dir . '/style.less', $page['style']);
+			}
 		}
+
+		$this->update('page', $page, $page_id);
 
 		if (isset($page['stores'])) {
 			$this->delete('page_store', array('page_id' => $page_id));
@@ -121,7 +146,7 @@ class App_Model_Page extends Model
 		}
 
 		if (isset($page['alias'])) {
-			$this->url->setAlias($page['alias'], 'page/page', 'page_id=' . (int)$page_id);
+			$this->url->setAlias($page['alias'], 'page/' . $page['name']);
 		}
 
 		if (isset($page['translations'])) {
@@ -157,22 +182,24 @@ class App_Model_Page extends Model
 
 	public function getPage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
-		$page['content'] = $this->getPageContent($page['name']);
-		$page['style']   = $this->getPageStyle($page['name']);
+		if ($page) {
+			$page['content'] = $this->getPageContent($page['name']);
+			$page['style']   = $this->getPageStyle($page['name']);
 
-		$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
+			$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
-		//Translations
-		$translate_fields = array(
-			'title',
-			'meta_keywords',
-			'meta_description',
-			'content',
-		);
+			//Translations
+			$translate_fields = array(
+				'title',
+				'meta_keywords',
+				'meta_description',
+				'content',
+			);
 
-		$page['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
+			$page['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
+		}
 
 		return $page;
 	}
@@ -195,6 +222,11 @@ class App_Model_Page extends Model
 		}
 
 		return $page;
+	}
+
+	public function getPageName($page_id)
+	{
+		return $this->queryVar("SELECT name FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
 	}
 
 	public function getPageByName($name)
@@ -243,9 +275,13 @@ class App_Model_Page extends Model
 
 	public function getPageForPreview($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p LEFT JOIN " . $this->prefix . "page_store ps ON (ps.page_id = p.page_id) WHERE p.page_id = " . (int)$page_id);
 
 		if ($page) {
+			$page += array(
+				'layout_id' => option('config_default_layout_id')
+			);
+
 			$page['content'] = $this->getPageContent($page['name']);
 			$page['style']   = $this->getPageStyle($page['name']);
 
