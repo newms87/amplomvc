@@ -418,7 +418,7 @@ class DB
 
 	public function hasColumn($table, $column)
 	{
-		$columns = $this->getColumns($table);
+		$columns = $this->getTableColumns($table);
 
 		foreach ($columns as $row) {
 			if (strtolower($row['Field']) === strtolower($column)) {
