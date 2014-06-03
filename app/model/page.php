@@ -170,14 +170,26 @@ class App_Model_Page extends Model
 
 	public function deletePage($page_id)
 	{
+		//Remove Old Directory if we are renaming page.
+		$name = $this->queryVar("SELECT name FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
+
+		if ($name) {
+			$dir = DIR_THEMES . option('config_default_theme', 'fluid') . '/template/page/' . $name;
+			if (is_dir($dir)) {
+				rrmdir($dir);
+			}
+		}
+
 		$this->delete('page', $page_id);
 		$this->delete('page_store', array('page_id' => $page_id));
 
-		$this->url->removeAlias('page/page', 'page_id=' . $page_id);
+		$this->url->removeAlias('page/' . $name, 'page_id=' . $page_id);
 
 		$this->translation->deleteTranslation('page', $page_id);
 
 		$this->cache->delete('page');
+
+		return $page_id;
 	}
 
 	public function getPage($page_id)
