@@ -373,7 +373,9 @@
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {
-				str += (str ? ', ' : '') + $(e).val();
+				var label = $('[for="' + $(e).attr('id') + '"]').html();
+
+				str += (str ? ', ' : '') + (label || $(e).val());
 			});
 			$value.html(str.length > 20 ? str.substr(0, 20) + '...' : str);
 		}
