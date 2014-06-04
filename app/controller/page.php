@@ -43,15 +43,15 @@ class App_Controller_Page extends Controller
 		$this->response->setOutput($this->render($template, $page));
 	}
 
-	public function content()
+	public function content($page = array())
 	{
 		//The page
 		$page_id = _get('page_id', 0);
 
-		$page = $this->Model_Page->getActivePage($page_id);
+		$page += $this->Model_Page->getActivePage($page_id);
 
 		if (!$page) {
-			redirect("error/not_found");
+			return '';
 		}
 
 		if ($page['style']) {
@@ -64,15 +64,15 @@ class App_Controller_Page extends Controller
 		$this->response->setOutput($this->render('page/content', $page));
 	}
 
-	public function preview()
+	public function preview($page = array())
 	{
 		//The page
 		$page_id = _get('page_id');
 
 		if ($page_id) {
-			$page = $this->Model_Page->getPageForPreview($page_id);
+			$page += $this->Model_Page->getPageForPreview($page_id);
 		} else {
-			$page = array(
+			$page += array(
 				'page_id'       => 0,
 				'name'          => 'new-page',
 				'title'         => "New Page",
@@ -107,5 +107,45 @@ class App_Controller_Page extends Controller
 
 		//Render
 		$this->response->setOutput($this->render($template, $page));
+	}
+
+	public function preview_content($page = array())
+	{
+		if ($this->request->isPost()) {
+			$temp_content = DIR_CACHE . 'preview/content.tpl';
+			$temp_style   = DIR_CACHE . 'preview/style.less';
+
+			_is_writable(dirname($temp_content));
+
+			file_put_contents($temp_content, html_entity_decode($_POST['content']));
+			file_put_contents($temp_style, html_entity_decode($_POST['style']));
+
+			$page = array(
+				'content' => $temp_content,
+				'style'   => $temp_style,
+			);
+		}
+
+		//The page
+		$page_id = _get('page_id', 0);
+
+		$page += $this->Model_Page->getPageForPreview($page_id);
+
+		if (!$page) {
+			return '';
+		}
+
+		if ($page['style']) {
+			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
+				$page['style'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style'], 'page-' . $page['name']));
+			}
+		}
+
+		//Render
+		if ($this->request->isPost()) {
+			$this->response->setOutput($this->render('page/content', $page));
+		} else {
+			$this->response->setOutput($this->render('page/default', $page));
+		}
 	}
 }

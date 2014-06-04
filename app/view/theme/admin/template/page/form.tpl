@@ -8,7 +8,7 @@
 				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?>
 				<div class="page-url">
 					<span class="prefix-url"><?= site_url('page/'); ?></span>
-					<input type="text" name="name" value="<?= $name;?>" />
+					<input type="text" name="name" value="<?= $name; ?>"/>
 				</div>
 
 				<a class="page-view" href="<?= site_url('page/' . $name); ?>" target="_blank">View</a>
@@ -46,6 +46,7 @@
 				</div>
 
 				<div id="code_preview">
+					<? /*
 					<div id="zoom_preview">
 						<input type="text" id="zoom_value" value="80%"/>
 
@@ -53,7 +54,10 @@
 							<img class="zoom_in" src="<?= theme_url('image/zoom-in.png') ?>"/>
 							<img class="zoom_out" src="<?= theme_url('image/zoom-out.png'); ?>"/>
 						</div>
-					</div>
+					</div>*/
+					?>
+
+					<a class="refresh-preview button" data-loading="<?= _l("Refreshing..."); ?>"><?= _l("Refresh"); ?></a>
 					<iframe id="preview-frame" frameborder="1" scrolling="auto" marginheight="0"></iframe>
 				</div>
 
@@ -99,6 +103,19 @@
 			<div id="tab-design">
 				<table class="form">
 					<tr>
+						<td class="required"><?= _l("Theme"); ?></td>
+						<td>
+							<?=
+							build('select', array(
+								'name'   => 'theme',
+								'data'   => $data_themes,
+								'select' => $theme,
+								'key'    => 'name',
+								'value'  => 'name',
+							)); ?>
+						</td>
+					</tr>
+					<tr>
 						<td class="required"> <?= _l("Layout:"); ?></td>
 						<td>
 							<div id="layout_select">
@@ -140,11 +157,16 @@
 <script type="text/javascript">
 	var $preview;
 
-	$('#preview-frame').load(function() {
+	$('#preview-frame').load(function () {
 		$preview = $('#preview-frame').contents();
 		//$preview.find('#container').draggable();
 
-		update_zoom();
+		//update_zoom();
+	});
+
+	$('#code_preview .refresh-preview').click(function () {
+		update_delay.delay = 0;
+		update_delay();
 	});
 
 	$('#create_layout').click(function () {
@@ -170,41 +192,72 @@
 		return false;
 	});
 
-	function get_zoom_value() {
-		return (parseInt($('#zoom_value').val()) || 0) / 100;
-	}
-
-	function update_zoom() {
-		var z = get_zoom_value();
-		var new_css = {
-			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
-			'transform': 'scale3d(' + z + ',' + z + ',1)'
-		};
-		$preview.find('#container').css(new_css);
-	}
-
-	$('#zoom_value').keyup(update_zoom);
-
-	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function () {
-		var z = get_zoom_value();
-		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1, .1) : Math.min(z + .1, 3);
-		$('#zoom_value').val(parseInt(zoom * 100) + '%');
-		update_zoom();
-	});
+	//	function get_zoom_value() {
+	//		return (parseInt($('#zoom_value').val()) || 0) / 100;
+	//	}
+	//
+	//	function update_zoom() {
+	//		var z = get_zoom_value();
+	//		var new_css = {
+	//			'-webkit-transform': 'scale3d(' + z + ',' + z + ',1)',
+	//			'transform': 'scale3d(' + z + ',' + z + ',1)'
+	//		};
+	//		$preview.find('#container').css(new_css);
+	//	}
+	//
+	//	$('#zoom_value').keyup(update_zoom);
+	//
+	//	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function () {
+	//		var z = get_zoom_value();
+	//		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1, .1) : Math.min(z + .1, 3);
+	//		$('#zoom_value').val(parseInt(zoom * 100) + '%');
+	//		update_zoom();
+	//	});
 
 	$('#html_editor').codemirror({mode: 'html'});
 	$('#css_editor').codemirror({mode: 'css'});
 
-	$('#html_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
-		$preview.find('.page-content .wrap').html(instance.getValue());
-	});
+	function update_preview() {
+		update_delay.delay = 1;
 
-	$('#css_editor')[0].cm_editor.mirror.on('keyup', function (instance, changeObj) {
-		$preview.find('#page-style').html(instance.getValue());
-	});
+		if (update_delay.dirty) {
+			return;
+		}
+
+		update_delay.dirty = true;
+		update_delay();
+	}
+
+	function update_delay() {
+		if (update_delay.delay < 1 && !update_delay.loading) {
+			var $refresh = $('.refresh-preview').loading();
+
+			update_delay.dirty = false;
+
+			var style = $('#css_editor')[0].cm_editor.mirror.getValue();
+			var content = $('#html_editor')[0].cm_editor.mirror.getValue();
+
+			var data = {
+				style:   style,
+				content: content
+			}
+			update_delay.loading = true;
+			$.post("<?= $page_preview; ?>", data, function (response) {
+				$refresh.loading('stop');
+				update_delay.loading = false;
+				$preview.find('main').html(response);
+			});
+		} else {
+			update_delay.delay--;
+			setTimeout(update_delay, 1000);
+		}
+	}
+
+	$('#html_editor')[0].cm_editor.mirror.on('keyup', update_preview);
+
+	$('#css_editor')[0].cm_editor.mirror.on('keyup', update_preview);
 
 	$('[name="title"]').keyup(function () {
-		console.log($(this).val());
 		$preview.find('#page-title').html($(this).val());
 	});
 

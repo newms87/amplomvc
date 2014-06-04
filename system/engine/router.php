@@ -131,7 +131,7 @@ final class Router
 
 	public function dispatch()
 	{
-		if (strpos($this->path, 'page/') === 0 && $this->path !== 'page/preview') {
+		if (strpos($this->path, 'page/') === 0 && strpos($this->path, 'page/preview') !== 0) {
 			$path = 'page';
 		} else {
 			$path = $this->path;

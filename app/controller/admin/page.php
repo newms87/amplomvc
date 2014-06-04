@@ -41,6 +41,13 @@ class App_Controller_Admin_Page extends Controller
 		//The Table Columns
 		$columns = array();
 
+		$columns['theme'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Theme"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
 		$columns['title'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Page Title"),
@@ -160,13 +167,12 @@ class App_Controller_Admin_Page extends Controller
 		//Template Data
 		$page['data_stores']  = $this->Model_Setting_Store->getStores();
 		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$page['data_themes'] = $this->theme->getThemes();
 
-		$page['url_blocks']        = site_url('admin/block');
 		$page['url_create_layout'] = site_url('admin/page/create_layout');
-		$page['url_load_blocks']   = site_url('admin/page/loadBlocks');
 
-		$store_front          = current($page['stores']);
-		$page['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
+		//Must set query inline, to bypass URL Aliasing.
+		$page['page_preview'] = site_url('page/preview_content?page_id=' . $page_id);
 
 		$page['data_statuses'] = array(
 			0 => _l("Disabled"),
