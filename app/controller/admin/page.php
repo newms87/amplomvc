@@ -55,6 +55,13 @@ class App_Controller_Admin_Page extends Controller
 			'sortable'     => true,
 		);
 
+		$all_stores = array(
+			'' => array(
+				'store_id' => 0,
+				'name'     => _l("All Stores")
+			),
+		);
+
 		$columns['stores'] = array(
 			'type'         => 'multiselect',
 			'display_name' => _l("Stores"),
@@ -63,7 +70,7 @@ class App_Controller_Admin_Page extends Controller
 				'store_id',
 				'name'
 			),
-			'build_data'   => $this->Model_Setting_Store->getStores(),
+			'build_data'   => $all_stores + $this->Model_Setting_Store->getStores(),
 			'sortable'     => false,
 		);
 
@@ -100,6 +107,10 @@ class App_Controller_Admin_Page extends Controller
 			);
 
 			$page['stores'] = $this->Model_Page->getPageStores($page['page_id']);
+
+			if (empty($page['stores'])) {
+				$page['stores'] = array(0);
+			}
 		}
 		unset($page);
 
@@ -151,7 +162,7 @@ class App_Controller_Admin_Page extends Controller
 			'title'            => 'New Page',
 			'alias'            => '',
 			'content'          => '',
-			'style'              => '',
+			'style'            => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'display_title'    => 1,
@@ -167,7 +178,7 @@ class App_Controller_Admin_Page extends Controller
 		//Template Data
 		$page['data_stores']  = $this->Model_Setting_Store->getStores();
 		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
-		$page['data_themes'] = $this->theme->getThemes();
+		$page['data_themes']  = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create_layout');
 

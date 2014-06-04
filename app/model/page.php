@@ -327,9 +327,10 @@ class App_Model_Page extends Model
 		if (!empty($filter['stores'])) {
 			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);
 
-			$from .= " LEFT JOIN " . DB_PREFIX . "page_store ps ON (p.page_id=ps.page_id)";
-
-			$where .= " AND ps.store_id IN (" . implode(',', $store_ids) . ")";
+			if (!in_array(0, $store_ids)) {
+				$from .= " LEFT JOIN " . DB_PREFIX . "page_store ps ON (p.page_id=ps.page_id)";
+				$where .= " AND ps.store_id IN (" . implode(',', $store_ids) . ")";
+			}
 		}
 
 		//Order By & Limit
