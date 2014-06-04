@@ -118,6 +118,22 @@ class Response extends Library
 
 			$file_list   = get_included_files();
 			$total_files = count($file_list);
+
+			foreach ($file_list as &$f) {
+				$f = array(
+					'name' => $f,
+				   'size' => filesize($f),
+				);
+			}
+			unset($f);
+
+			uasort($file_list, function ($a, $b) {return $a['size'] < $b['size'];});
+
+			foreach ($file_list as &$f) {
+				$f['size'] = round($f['size'] / 1024, 2) . " KB";
+			}
+			unset($f);
+
 			ob_start();
 			include($file);
 			$html = ob_get_clean();
