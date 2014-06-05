@@ -49,10 +49,20 @@ function breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
-function image($image, $width = null, $height = null)
+function image($image, $width = null, $height = null, $default = null)
 {
 	global $registry;
-	return $registry->get('image')->resize($image, $width, $height);
+	$image = $registry->get('image')->resize($image, $width, $height);
+
+	if (!$image && $default) {
+		if ($default === true) {
+			return theme_image('no_image.png', $width, $height);
+		}
+
+		return $registry->get('image')->resize($default, $width, $height);
+	}
+
+	return $image;
 }
 
 function theme_image($image, $width = null, $height = null)
