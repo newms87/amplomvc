@@ -49,10 +49,20 @@ function breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
-function image($image, $width = null, $height = null)
+function image($image, $width = null, $height = null, $default = null)
 {
 	global $registry;
-	return $registry->get('image')->resize($image, $width, $height);
+	$image = $registry->get('image')->resize($image, $width, $height);
+
+	if (!$image && $default) {
+		if ($default === true) {
+			return theme_image('no_image.png', $width, $height);
+		}
+
+		return $registry->get('image')->resize($default, $width, $height);
+	}
+
+	return $image;
 }
 
 function theme_image($image, $width = null, $height = null)
@@ -99,6 +109,21 @@ function redirect($path = '', $query = null, $status = null)
 {
 	global $registry;
 	$registry->get('url')->redirect($path, $query, $status);
+}
+
+function _get($key, $default = null)
+{
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
+}
+
+function _post($key, $default = null)
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+}
+
+function _request($key, $default = null)
+{
+	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
 }
 
 function option($option, $default = null)
@@ -344,4 +369,10 @@ function build_js($js)
 	include(DIR_SYSTEM . 'helper/builder_js.php');
 
 	return ob_get_clean();
+}
+
+function rrmdir($dir) {
+	foreach(glob($dir . '/*') as $file) {
+		if(is_dir($file)) rrmdir($file); else unlink($file);
+	} rmdir($dir);
 }

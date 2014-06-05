@@ -392,7 +392,7 @@ class Block extends Library
 			$instance = $this->getInstance($path, $instance_name);
 
 			if (!$instance) {
-				$link = site_url('admin/' . $block);
+				$link = site_url('admin/block/form', 'path=' . urlencode($path));
 				trigger_error(_l("%s(): Block Instance not found for %s: %s. Please <a href=\"%s\" target=\"_blank\">click here to create this instance</a> first!", __METHOD__, $path, $instance_name, $link));
 				return '';
 			}

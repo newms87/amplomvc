@@ -4,7 +4,6 @@ class Theme extends Library
 {
 	private $dir_themes;
 	private $theme;
-	private $parent_theme;
 	private $settings;
 
 	public function __construct()

@@ -30,7 +30,7 @@ class App_Controller_Admin_Page extends Controller
 		);
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/page/update');
+		$data['insert'] = site_url('admin/page/form');
 
 		//Render
 		$this->response->setOutput($this->render('page/list', $data));
@@ -41,11 +41,25 @@ class App_Controller_Admin_Page extends Controller
 		//The Table Columns
 		$columns = array();
 
+		$columns['theme'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Theme"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
 		$columns['title'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Page Title"),
 			'filter'       => true,
 			'sortable'     => true,
+		);
+
+		$all_stores = array(
+			'' => array(
+				'store_id' => 0,
+				'name'     => _l("All Stores")
+			),
 		);
 
 		$columns['stores'] = array(
@@ -56,7 +70,7 @@ class App_Controller_Admin_Page extends Controller
 				'store_id',
 				'name'
 			),
-			'build_data'   => $this->Model_Setting_Store->getStores(),
+			'build_data'   => $all_stores + $this->Model_Setting_Store->getStores(),
 			'sortable'     => false,
 		);
 
@@ -93,6 +107,10 @@ class App_Controller_Admin_Page extends Controller
 			);
 
 			$page['stores'] = $this->Model_Page->getPageStores($page['page_id']);
+
+			if (empty($page['stores'])) {
+				$page['stores'] = array(0);
+			}
 		}
 		unset($page);
 
@@ -122,7 +140,7 @@ class App_Controller_Admin_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//Insert or Update
-		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
+		$page_id = _get('page_id');
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
@@ -140,10 +158,11 @@ class App_Controller_Admin_Page extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
+			'name'             => '',
 			'title'            => 'New Page',
 			'alias'            => '',
 			'content'          => '',
-			'css'              => '',
+			'style'            => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'display_title'    => 1,
@@ -159,13 +178,12 @@ class App_Controller_Admin_Page extends Controller
 		//Template Data
 		$page['data_stores']  = $this->Model_Setting_Store->getStores();
 		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$page['data_themes']  = $this->theme->getThemes();
 
-		$page['url_blocks']        = site_url('admin/block');
 		$page['url_create_layout'] = site_url('admin/page/create_layout');
-		$page['url_load_blocks']   = site_url('admin/page/loadBlocks');
 
-		$store_front          = current($page['stores']);
-		$page['page_preview'] = $this->url->store($store_front['store_id'], 'page/preview', 'page_id=' . $page_id);
+		//Must set query inline, to bypass URL Aliasing.
+		$page['page_preview'] = site_url('page/preview_content?page_id=' . $page_id);
 
 		$page['data_statuses'] = array(
 			0 => _l("Disabled"),
@@ -186,6 +204,9 @@ class App_Controller_Admin_Page extends Controller
 			$this->Model_Page->addPage($_POST);
 		} //Update
 		else {
+			if (empty($_POST['display_title'])) {
+				$_POST['display_title'] = 0;
+			}
 			$this->Model_Page->editPage($_GET['page_id'], $_POST);
 		}
 

@@ -108,6 +108,7 @@
 										'select' => $column['filter_value'],
 										'key'    => $build_key,
 										'value'  => $build_value,
+<<<<<<< HEAD
 									));
 									break;
 
@@ -206,6 +207,32 @@
 								} else {
 									$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
 								}
+=======
+									)); ?>
+								</div>
+								<div class="value">
+									<? if (!empty($column['filter_value'])) {
+										$vals = array();
+										foreach ($column['filter_value'] as $v) {
+											if ($build_key === false) {
+												$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+											} else {
+												foreach ($column['build_data'] as $bd) {
+													if ($bd[$build_key] === $v) {
+														$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
+													}
+												}
+											}
+										} ?>
+
+										<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
+									<? } else { ?>
+										<?= _l("Modify"); ?>
+									<? } ?>
+								</div>
+							</div>
+							<? break;
+>>>>>>> d239aa0f85c4c2a3c567cbe32dea72f7e844674c
 
 							}
 						}
@@ -413,7 +440,9 @@
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {
-				str += (str ? ', ' : '') + $(e).val();
+				var label = $('[for="' + $(e).attr('id') + '"]').html();
+
+				str += (str ? ', ' : '') + (label || $(e).val());
 			});
 			$value.html(str.length > 20 ? str.substr(0, 20) + '...' : str);
 		}

@@ -3,6 +3,7 @@
 		<td><?= _l("Instance Identifier"); ?></td>
 		<td>
 			<input type="text" class="tab_name instance_name" placeholder="(eg: my-instance-1)" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
+			<div class="help"><?= _l("Insert <code>&lt;?= block('widget/carousel', '<span class=\"instance-name\">%s</span>'); ?&gt;</code> into a page to use this carousel.", $instance['name']); ?></div>
 		</td>
 	</tr>
 	<tr>
@@ -182,7 +183,7 @@
 			<? $slide_row_name = $row_name . "[slides][$slide_row]"; ?>
 
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
-				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>"/>
+				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>" data-thumb="<?= image($slide['image'], 140, 140); ?>" />
 				<input class="slide_href" placeholder="<?= _l("URL (or leave blank)"); ?>" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/><?= build('select', array(
 					'name'   => $slide_row_name . '[target]',
 					'data'   => $data_targets,
@@ -207,6 +208,10 @@
 	});
 
 	$('.ac_carousel_list').sortable();
+
+	$('.instance_name').keyup(function(){
+		$('code .instance-name').html($(this).val());
+	});
 
 	$('.slider_select select').change(function () {
 		var form = $(this).closest('.instance');

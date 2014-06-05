@@ -57,12 +57,6 @@
 				});
 
 				$.get($this.attr('href'), data, function (response) {
-					//This is necessary for batch action to be compatible with search / filter
-					if (history.pushState) {
-						var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + $this.attr('href').replace(/^[^?]*\?/, '').replace(/&ajax=?\d/, '');
-						window.history.pushState({path: newurl}, '', newurl);
-					}
-
 					$listing.siblings('.messages').remove();
 					$listing.replaceWith(response);
 				});

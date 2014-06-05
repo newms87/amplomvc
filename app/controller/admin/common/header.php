@@ -13,10 +13,10 @@ class App_Controller_Admin_Common_Header extends Controller
 		$data['theme'] = option('config_theme');
 
 		//Add Styles
-		$style = theme_dir('css/config.less');
+		$style = theme_dir('css/style.less');
 
 		if ($style) {
-			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-config');
+			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-style');
 		} else {
 			$style = theme_url('css/style.css');
 		}

@@ -16,3 +16,7 @@ $this->db->dropTable('page_header');
 $this->db->dropTable('view_count');
 $this->db->dropTable('contact');
 $this->db->dropTable('type_to_contact');
+
+//Page
+$this->db->addColumn('page', 'theme', "VARCHAR(45) NOT NULL AFTER `page_id`");
+$this->db->addColumn('page_store', 'layout_id', "int(10) UNSIGNED NOT NULL");
