@@ -8,7 +8,7 @@ class App_Controller_Block_Widget_Carousel extends App_Controller_Block_Block
 {
 	public function build($instance)
 	{
-		$settings = $instance['settings'];
+		$settings = !empty($instance['settings']) ? $instance['settings'] : $instance;
 
 		//Slides
 		if (!empty($settings['slides'])) {
