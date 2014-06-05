@@ -111,9 +111,18 @@ class App_Controller_Page extends Controller
 
 	public function preview_content($page = array())
 	{
+		//The page
+		$page_id = _get('page_id', 0);
+
+		$page += $this->Model_Page->getPageForPreview($page_id);
+
+		if (!$page) {
+			return '';
+		}
+
 		if ($this->request->isPost()) {
-			$temp_content = DIR_CACHE . 'preview/content.tpl';
-			$temp_style   = DIR_CACHE . 'preview/style.less';
+			$temp_content = DIR_CACHE . 'preview/' . $page['name'] . '/content.tpl';
+			$temp_style   = DIR_CACHE . 'preview/' . $page['name'] . '/style.less';
 
 			_is_writable(dirname($temp_content));
 
@@ -124,15 +133,6 @@ class App_Controller_Page extends Controller
 				'content' => $temp_content,
 				'style'   => $temp_style,
 			);
-		}
-
-		//The page
-		$page_id = _get('page_id', 0);
-
-		$page += $this->Model_Page->getPageForPreview($page_id);
-
-		if (!$page) {
-			return '';
 		}
 
 		if ($page['style']) {
