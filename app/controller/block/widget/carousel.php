@@ -17,10 +17,12 @@ class App_Controller_Block_Widget_Carousel extends App_Controller_Block_Block
 		//Slides
 		if (!empty($settings['slides'])) {
 			foreach ($settings['slides'] as &$slide) {
-				if (!empty($slide['image_width']) || !empty($slide['image_height'])) {
-					$slide['thumb'] = $this->image->resize($slide['image'], $slide['image_width'], $slide['image_height']);
-				} else {
-					$slide['thumb'] = $this->image->get($slide['image']);
+				if (empty($slide['image_width'])) {
+					$slide['image_width'] = null;
+				}
+
+				if (empty($slide['image_height'])) {
+					$slide['image_height'] = null;
 				}
 			}
 			unset($slide);
