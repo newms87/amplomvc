@@ -36,7 +36,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 
 		if ($settings['limit'] < 1) {
 			$settings['limit'] = $settings['total'];
-			$query['limit'] = 0;
+			$query['limit']    = 0;
 		} else {
 			$query['limit'] = $settings['limit'];
 		}
@@ -89,14 +89,14 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 
 		//Template Data
 		$settings += array(
-			'url_first'  => $url . '&page=1',
-			'url_prev'   => $url . '&page=' . ($settings['page'] - 1),
-			'url_next'   => $url . '&page=' . ($settings['page'] + 1),
-			'url_last'   => $url . '&page=' . $num_pages,
-			'start'      => $start,
-			'end'        => $end,
-			'num_pages'  => $num_pages,
-			'pages'      => $pages,
+			'url_first' => $url . '&page=1',
+			'url_prev'  => $url . '&page=' . ($settings['page'] - 1),
+			'url_next'  => $url . '&page=' . ($settings['page'] + 1),
+			'url_last'  => $url . '&page=' . $num_pages,
+			'start'     => $start,
+			'end'       => $end,
+			'num_pages' => $num_pages,
+			'pages'     => $pages,
 		);
 
 		$this->render($settings['template'], $settings);

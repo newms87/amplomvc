@@ -14,7 +14,7 @@ class App_Controller_Page extends Controller
 		}
 
 		if (!$page) {
-			redirect("error/not_found");
+			return call('error/not_found');
 		}
 
 		//Page Head
@@ -84,7 +84,7 @@ class App_Controller_Page extends Controller
 		}
 
 		if (!$page) {
-			redirect("error/not_found");
+			return call('error/not_found');
 		}
 
 		//Page Head

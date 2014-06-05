@@ -183,7 +183,7 @@
 			<? $slide_row_name = $row_name . "[slides][$slide_row]"; ?>
 
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
-				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>"/>
+				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>" data-thumb="<?= image($slide['image'], 140, 140); ?>" />
 				<input class="slide_href" placeholder="<?= _l("URL (or leave blank)"); ?>" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/><?= build('select', array(
 					'name'   => $slide_row_name . '[target]',
 					'data'   => $data_targets,
