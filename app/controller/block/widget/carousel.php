@@ -10,6 +10,10 @@ class App_Controller_Block_Widget_Carousel extends App_Controller_Block_Block
 	{
 		$settings = !empty($instance['settings']) ? $instance['settings'] : $instance;
 
+		if (empty($settings['slider']) || empty($settings['slides'])) {
+			return '';
+		}
+
 		//Slides
 		if (!empty($settings['slides'])) {
 			foreach ($settings['slides'] as &$slide) {
