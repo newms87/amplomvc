@@ -100,18 +100,20 @@ class App_Model_Page extends Model
 
 		$dir = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'];
 
-		if (!empty($page['content'])) {
+		if (isset($page['content'])) {
 			if (_is_writable($dir)) {
-				if (!file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']))) {
-					$this->error['content'] = _l("There was an error wile writing the content for the page");
-					return false;
+				if ($page['content']) {
+					if (file_put_contents($dir . '/content.tpl', html_entity_decode($page['content'])) === false) {
+						$this->error['content'] = _l("There was an error wile writing the content for the page");
+						return false;
+					}
 				}
 			}
 		}
 
-		if (!empty($page['style'])) {
+		if (isset($page['style'])) {
 			if (_is_writable($dir)) {
-				if (!file_put_contents($dir . '/style.less', $page['style'])) {
+				if (file_put_contents($dir . '/style.less', $page['style']) === false) {
 					$this->error['content'] = _l("There was an error wile writing the stylesheet for the page");
 					return false;
 				}
