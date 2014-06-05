@@ -1186,7 +1186,9 @@ button, .button {
   }
 
   .editable-options {
-    position: fixed;
+    position: absolute;
+    top: 30px;
+    left: 30%;
     display: none;
     background: white;
     padding: 8px;
@@ -1199,6 +1201,13 @@ button, .button {
 
       &.show {
         display: block;
+      }
+
+      .input {
+        .input-value {
+          width: 100%;
+          box-sizing: border-box;
+        }
       }
     }
 
@@ -1217,6 +1226,10 @@ button, .button {
         padding: 3px 6px;
       }
     }
+  }
+
+  td.editable .editable-options {
+    display: block;
   }
 }
 
@@ -2558,12 +2571,18 @@ td.mail_info label {
   margin-left: 10%;
 }
 
-.list tbody .filter-list-item:hover > td {
-  background: #EBE9A2;
-}
+.list tbody .filter-list-item {
+  td {
+    position: relative;
+  }
 
-.list tbody .filter-list-item.active > td {
-  background: #C3EBA2;
+  &:hover > td {
+    background: #EBE9A2;
+  }
+
+  &.active > td {
+    background: #C3EBA2;
+  }
 }
 
 /* Page Form */

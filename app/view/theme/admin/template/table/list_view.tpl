@@ -108,7 +108,6 @@
 										'select' => $column['filter_value'],
 										'key'    => $build_key,
 										'value'  => $build_value,
-<<<<<<< HEAD
 									));
 									break;
 
@@ -133,8 +132,21 @@
 											)); ?>
 										</div>
 										<div class="value">
-											<? if (!empty($column['filter_value'])) { ?>
-												<?= charlimit(implode(', ', $column['filter_value']), 20, '...', false); ?>
+											<? if (!empty($column['filter_value'])) {
+												$vals = array();
+												foreach ($column['filter_value'] as $v) {
+													if ($build_key === false) {
+														$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+													} else {
+														foreach ($column['build_data'] as $bd) {
+															if ($bd[$build_key] === $v) {
+																$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
+															}
+														}
+													}
+												} ?>
+
+												<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
 											<? } else { ?>
 												<?= _l("Modify"); ?>
 											<? } ?>
@@ -206,34 +218,8 @@
 									$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
 								} else {
 									$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
+
 								}
-=======
-									)); ?>
-								</div>
-								<div class="value">
-									<? if (!empty($column['filter_value'])) {
-										$vals = array();
-										foreach ($column['filter_value'] as $v) {
-											if ($build_key === false) {
-												$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
-											} else {
-												foreach ($column['build_data'] as $bd) {
-													if ($bd[$build_key] === $v) {
-														$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
-													}
-												}
-											}
-										} ?>
-
-										<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
-									<? } else { ?>
-										<?= _l("Modify"); ?>
-									<? } ?>
-								</div>
-							</div>
-							<? break;
->>>>>>> d239aa0f85c4c2a3c567cbe32dea72f7e844674c
-
 							}
 						}
 						?>
@@ -249,95 +235,94 @@
 							}
 							?>
 							<td class="<?= $column['align'] . ' ' . $slug . ($column['editable'] ? ' editable' : ''); ?>" data-field="<?= $slug; ?>">
-								<span>
-									<?
+								<?
+								$value = $row[$slug];
 
-									$value = $row[$slug];
+								//Check if the raw string override has been set for this value
+								if (isset($row['#' . $slug])) {
+									echo $row['#' . $slug];
+								} else {
+									switch ($column['type']) {
+										case 'text':
+										case 'int':
+											?>
+											<?= $value; ?>
+											<? break;
 
-									//Check if the raw string override has been set for this value
-									if (isset($row['#' . $slug])) {
-										echo $row['#' . $slug];
-									} else {
-										switch ($column['type']) {
-											case 'text':
-											case 'int':
-												?>
-												<?= $value; ?>
-												<? break;
+										case 'date':
+											?>
+											<?= $this->date->format($value, 'short'); ?>
+											<? break;
 
-											case 'date':
-												?>
-												<?= $this->date->format($value, 'short'); ?>
-												<? break;
+										case 'datetime':
+											?>
+											<?= $this->date->format($value, 'datetime_format_long'); ?>
+											<? break;
 
-											case 'datetime':
-												?>
-												<?= $this->date->format($value, 'datetime_format_long'); ?>
-												<? break;
+										case 'time':
+											?>
+											<?= $this->date->format($value, 'time'); ?>
+											<? break;
 
-											case 'time':
-												?>
-												<?= $this->date->format($value, 'time'); ?>
-												<? break;
+										case 'map':
+											?>
+											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+											<? break;
 
-											case 'map':
-												?>
-												<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-												<? break;
+										case 'select':
+											foreach ($column['build_data'] as $key => $c_data) {
+												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+													?>
+													<?= $c_data[$column['build_config'][1]]; ?>
+												<?
+												}
+											}
+											break;
 
-											case 'select':
-												foreach ($column['build_data'] as $key => $c_data) {
-													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-														?>
-														<?= $c_data[$column['build_config'][1]]; ?>
-													<?
+										case 'multiselect':
+											foreach ($value as $v) {
+												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+												foreach ($column['build_data'] as $c_data) {
+													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+														echo $c_data[$column['build_config'][1]] . "<br/>";
+														break;
 													}
 												}
-												break;
+											}
+											break;
 
-											case 'multiselect':
-												foreach ($value as $v) {
-													$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-													foreach ($column['build_data'] as $c_data) {
-														if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-															echo $c_data[$column['build_config'][1]] . "<br/>";
-															break;
-														}
-													}
+										case 'format':
+											?>
+											<?= sprintf($column['format'], $value); ?>
+											<? break;
+
+										case 'image':
+											?>
+											<img src="<?= $row['thumb']; ?>"/>
+											<? break;
+
+										case 'text_list':
+											if (!empty($value) && is_array($value)) {
+												foreach ($value as $item) {
+													echo $item[$column['display_data']];
 												}
-												break;
+											}
+											break;
 
-											case 'format':
-												?>
-												<?= sprintf($column['format'], $value); ?>
-												<? break;
-
-											case 'image':
-												?>
-												<img src="<?= $row['thumb']; ?>"/>
-												<? break;
-
-											case 'text_list':
-												if (!empty($value) && is_array($value)) {
-													foreach ($value as $item) {
-														echo $item[$column['display_data']];
-													}
-												}
-												break;
-
-											default:
-												break;
-										}
-									}?>
-								</span>
+										default:
+											break;
+									}
+								}?>
 							</td>
 						<? } ?>
 						<td class="center actions">
 							<?= $quick_actions; ?>
 						</td>
 					</tr>
-				<? } ?>
-			<? } else { ?>
+				<?
+				}
+			} else {
+				?>
 				<tr>
 					<td class="center" colspan="<?= count($columns) + 3; ?>"><?= _l("There are no items to list."); ?></td>
 				</tr>
@@ -491,36 +476,53 @@
 		var field = $this.attr('data-field');
 
 		if (field) {
-			var $options = $this.closest('.table-list-view-box').find('.editable-options').show();
+			var $options = $this.closest('.table-list-view-box').find('.editable-options');
 			$options.children('.show').removeClass('show');
-			$options.find('[data-field="'+field+'"]').addClass('show');
-
-			console.log($options, '[data-field="'+field+'"]');
-			$options.css({left: event.clientX, top: event.clientY});
+			$options.find('[data-field="' + field + '"]').addClass('show');
+			$this.append($options);
+			$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
 		}
 	});
 
-	$listview.find('.editable-options .save-edit').click(function() {
+	$listview.find('.editable-options .save-edit').click(function () {
 		var $this = $(this);
+		var $box = $this.closest('.table-list-view-box');
 		var $options = $this.closest('.editable-options');
 		var $option = $options.find('.show');
+		var $input = $option.find('.input-value');
+		var field = $option.attr('data-field');
+		var value = $input.val();
+
 		var data = {
-			id : $this.closest('data-row-id').attr('data-row-id')
+			id: $options.attr('data-id')
 		}
-		data[$option.attr('data-field')] = $option.find('.input-value').val();
+		data[field] = value;
 
 		$this.loading();
+		$box.append($options);
 
-		console.log("<?= site_url($save_path); ?>", data);
+		var display = value;
+
+		if ($input.is('select')) {
+			display = $input.find('option[value="'+value+'"]').html();
+		}
+
+		$box.find('[data-row-id="' + data.id + '"] td[data-field="'+field+'"]').html(display);
 
 		$.post("<?= site_url($save_path); ?>", data, function (response) {
 			$this.loading('stop');
 			$listview.ac_msg(response);
-			$options.hide();
 		}, 'json');
 	});
 
-	$listview.find('.editable-options .cancel-edit').click(function() {
-		$(this).closest('.editable-options').hide();
+	$listview.find('.editable-options').click(function(event) {
+		event.stopPropagation();
+		return false;
+	});
+	$listview.find('.editable-options .cancel-edit').click(function (event) {
+		var $box = $(this).closest('.table-list-view-box');
+		$box.append($(this).closest('.editable-options'));
+		event.stopPropagation();
+		return false;
 	});
 </script>
