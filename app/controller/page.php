@@ -116,10 +116,6 @@ class App_Controller_Page extends Controller
 
 		$page += $this->Model_Page->getPageForPreview($page_id);
 
-		if (!$page) {
-			return '';
-		}
-
 		if ($this->request->isPost()) {
 			$temp_content = DIR_CACHE . 'preview/' . $page['name'] . '/content.tpl';
 			$temp_style   = DIR_CACHE . 'preview/' . $page['name'] . '/style.less';
@@ -129,10 +125,12 @@ class App_Controller_Page extends Controller
 			file_put_contents($temp_content, html_entity_decode($_POST['content']));
 			file_put_contents($temp_style, html_entity_decode($_POST['style']));
 
-			$page = array(
-				'content' => $temp_content,
-				'style'   => $temp_style,
-			);
+			$page['content'] = $temp_content;
+			$page['style'] = $temp_style;
+		}
+
+		if (!$page) {
+			return '';
 		}
 
 		if ($page['style']) {
