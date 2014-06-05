@@ -98,24 +98,30 @@ class App_Model_Page extends Model
 		//Remove Old Directory if we are renaming page.
 		$old_page = $this->queryRow("SELECT name, theme FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
 
-		if ($old_page && $old_page['name'] !== $page['name']) {
-			$old_dir = DIR_THEMES . $old_page['theme'] . '/template/page/' . $old_page['name'];
-			if (is_dir($old_dir)) {
-				rrmdir($old_dir);
-			}
-		}
-
 		$dir = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'];
 
 		if (isset($page['content'])) {
 			if (_is_writable($dir)) {
-				file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']));
+				if (!file_put_contents($dir . '/content.tpl', html_entity_decode($page['content']))) {
+					$this->error['content'] = _l("There was an error wile writing the content for the page");
+					return false;
+				}
 			}
 		}
 
 		if (isset($page['style'])) {
 			if (_is_writable($dir)) {
-				file_put_contents($dir . '/style.less', $page['style']);
+				if (!file_put_contents($dir . '/style.less', $page['style'])) {
+					$this->error['content'] = _l("There was an error wile writing the stylesheet for the page");
+					return false;
+				}
+			}
+		}
+
+		if ($old_page && ($old_page['name'] !== $page['name'] || $page['theme'] !== $old_page['theme'])) {
+			$old_dir = DIR_THEMES . $old_page['theme'] . '/template/page/' . $old_page['name'];
+			if (is_dir($old_dir)) {
+				rrmdir($old_dir);
 			}
 		}
 
