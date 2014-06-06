@@ -21,9 +21,6 @@ class App_Controller_Account extends Controller
 		//Customer Information
 		$data['customer'] = $this->customer->info() + $this->customer->getMeta();
 
-		//TODO: Put this in subscription plugin
-		$data['subscriptions'] = $this->subscription->getCustomerSubscriptions();
-
 		//Actions
 		$data['edit_account'] = site_url('account/update');
 
