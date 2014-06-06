@@ -775,91 +775,6 @@ body.admin-bar #container {
   }
 }
 
-/*************************
- *  V. Product Page      *
- *************************/
-#the-zoombox {
-  float: right;
-  margin-right: 2em;
-
-  #zoombox-image-link {
-    display: block;
-  }
-  .view-full-size {
-    display: block;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 15px;
-    margin-top: 15px;
-  }
-}
-
-.product-content {
-  h2.product-model {
-    text-align: center;
-    font-size: 1.1em;
-  }
-
-  .product-info {
-    max-width: 450px;
-    padding: 0 20px;
-
-    .product-tabs {
-      text-align: left;
-    }
-    .tab-contents {
-      text-align: left;
-      min-height: 10em;
-    }
-
-    .form-item.quantity {
-
-      label {
-        width: auto;
-        min-width: 0;
-        display: inline-block;
-      }
-
-      input {
-        width: 60px !important;
-      }
-    }
-  }
-
-  .product-options {
-    text-align: left;
-
-    .form-item {
-      margin-bottom: 1.3em;
-
-      .checkbox-button {
-        label {
-          width: auto;
-          margin-left: 1.1em;
-          margin-top: 3px;
-          text-align: left;
-          position: relative;
-          top: 4px;
-        }
-      }
-    }
-  }
-
-  .product-nav {
-    margin-top: 20px;
-
-    a {
-      padding: 0 10px;
-    }
-  }
-
-  .product-sharing {
-    margin-top: 1.5em;
-    border-top: 2px solid @color-light;
-    padding-top: 15px;
-  }
-}
-
 
 
 /*************************
@@ -1093,32 +1008,6 @@ footer.row {
       }
     }
   }
-
-  .product-content {
-    .product-image {
-      text-align: center;
-
-      #the-zoombox {
-        float: none;
-      }
-    }
-
-    .product-top {
-      margin-top: 25px;
-    }
-    .product-info {
-      .product-tabs {
-        text-align: center;
-      }
-      .tab-contents {
-        text-align: center;
-      }
-    }
-
-    .product-options {
-      text-align: center;
-    }
-  }
 }
 
 @media (max-width: @lg) {
@@ -1137,6 +1026,3 @@ footer.row {
     }
   }
 }
-
-//At the bottom for importing config LESS Content for theme
-@import 'config';
