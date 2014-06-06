@@ -233,7 +233,11 @@ class Url extends Library
 		}
 
 		//If already an alias, or has a URL scheme (eg: http://, ftp:// etc..) skip lookup
-		if (!$path || isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME)) {
+		if (!$path || isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0) {
+			if (!$path) {
+				$path = URL_SITE;
+			}
+
 			if ($query_str) {
 				$path .= (strpos($path, '?') === false ? '?' : '&') . $query_str;
 			}
