@@ -329,7 +329,7 @@ class App_Model_Design_Navigation extends Model
 		$links = array(
 			'home'    => array(
 				'display_name' => 'Home',
-				'href'         => 'admin/common/home',
+				'href'         => '',
 			),
 
 			'content' => array(

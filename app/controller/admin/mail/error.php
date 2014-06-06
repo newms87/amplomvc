@@ -5,10 +5,10 @@ class App_Controller_Admin_Mail_Error extends Controller
 	{
 		$this->document->setTitle(_l("Failed Email Messages"));
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Failed Email Messages"), site_url('admin/mail/error'));
 
-		$data['cancel'] = site_url('admin/common/home');
+		$data['cancel'] = site_url();
 
 		$messages = $this->Model_Mail_Error->getFailedMessages();
 

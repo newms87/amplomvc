@@ -110,7 +110,7 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function store($store_id, $path = 'common/home', $query = '')
+	public function store($store_id, $path = '', $query = '')
 	{
 		if (!$store_id) {
 			$store_id = option('config_default_store');
@@ -222,13 +222,8 @@ class Url extends Library
 		}
 	}
 
-	private function findAlias($path, $query = '', $store_id = false)
+	private function findAlias($path = '', $query = '', $store_id = false)
 	{
-		if (!$path && $path !== '') {
-			trigger_error(__METHOD__ . _l("(): Path was not specified!"));
-			return false;
-		}
-
 		if (is_array($query)) {
 			$query_str = http_build_query($query);
 		} else {
@@ -238,7 +233,7 @@ class Url extends Library
 		}
 
 		//If already an alias, or has a URL scheme (eg: http://, ftp:// etc..) skip lookup
-		if (isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME)) {
+		if (!$path || isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME)) {
 			if ($query_str) {
 				$path .= (strpos($path, '?') === false ? '?' : '&') . $query_str;
 			}

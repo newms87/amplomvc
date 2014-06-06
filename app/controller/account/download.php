@@ -11,7 +11,7 @@ class App_Controller_Account_Download extends Controller
 
 		$this->document->setTitle(_l("Account Downloads"));
 
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Account"), site_url('account'));
 		$this->breadcrumb->add(_l("Downloads"), site_url('account/download'));
 

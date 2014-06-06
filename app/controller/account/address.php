@@ -14,7 +14,7 @@ class App_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Account"), site_url('account'));
 		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
 
@@ -107,7 +107,7 @@ class App_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Form"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Account"), site_url('account'));
 		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
 

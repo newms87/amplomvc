@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Name: Social Media Login
+ */
+
 class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 {
 	public function build($settings = array())
@@ -30,10 +34,5 @@ class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 	{
 		//Render
 		$this->render('block/account/login', $settings);
-	}
-
-	public function save()
-	{
-		return '';
 	}
 }

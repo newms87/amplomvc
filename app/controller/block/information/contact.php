@@ -56,7 +56,7 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 			if ($this->message->has('error')) {
 				redirect($this->request->getRedirect('contact-form'));
 			} else {
-				redirect('common/home');
+				redirect();
 			}
 		}
 	}

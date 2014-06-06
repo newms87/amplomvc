@@ -249,17 +249,17 @@ class App_Model_Page extends Model
 	public function getPageByName($name)
 	{
 		$store_id = option('store_id');
-		$theme    = option('config_theme');
+		$themes    = $this->theme->getStoreThemes();
 
 		$query =
 			"SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
 			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
-			" WHERE p.name = '" . $this->escape($name) . "' AND p.theme = '$theme'" .
+			" WHERE p.name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')" .
 			" AND p.status = 1 AND (ps.store_id = " . (int)$store_id . " OR ps.store_id IS NULL)";
 
 		$page = $this->queryRow($query);
 
-		$file = $this->theme->findFile('page/' . $name . '/content', $theme);
+		$file = $this->theme->findFile('page/' . $name . '/content');
 
 		//Page Does Not Exist, but found in database
 		if ($page && !$file) {
@@ -273,7 +273,7 @@ class App_Model_Page extends Model
 		} elseif ($file) {
 			if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "page WHERE `name` = '" . $this->escape($name) . "'")) {
 				$page = array(
-					'theme'         => $theme,
+					'theme'         => option('config_theme'),
 					'name'          => $name,
 					'title'         => ucfirst($name),
 					'layout_id'     => option('config_layout_id'),

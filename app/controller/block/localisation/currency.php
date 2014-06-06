@@ -9,7 +9,7 @@ class App_Controller_Block_Localisation_Currency extends App_Controller_Block_Bl
 			if (isset($_POST['redirect'])) {
 				redirect($_POST['redirect']);
 			} else {
-				redirect('common/home');
+				redirect();
 			}
 		}
 

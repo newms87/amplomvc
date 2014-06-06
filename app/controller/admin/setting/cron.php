@@ -29,7 +29,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l('System Settings'), site_url('admin/setting/store'));
 		$this->breadcrumb->add(_l('Automated Tasks'), site_url('admin/setting/cron'));
 
@@ -93,7 +93,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		//Action Buttons
 		$data['save']     = site_url('admin/setting/cron');
 		$data['cancel']   = site_url('admin/setting/store');
-		$data['run_cron'] = site_url('admin/common/home', 'run_cron');
+		$data['run_cron'] = site_url('', 'run_cron');
 		$data['activate'] = site_url('admin/setting/cron/activate');
 
 		//Render

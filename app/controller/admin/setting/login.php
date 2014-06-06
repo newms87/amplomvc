@@ -14,7 +14,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 		$this->document->setTitle(_l("Login Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/setting'));
 		$this->breadcrumb->add(_l("Login"), site_url('admin/setting/login'));
 

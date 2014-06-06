@@ -83,7 +83,7 @@ class Request extends Library
 		return $redirect;
 	}
 
-	public function setRedirect($url, $query = '', $context = '')
+	public function setRedirect($url = '', $query = '', $context = '')
 	{
 		$key = $context ? 'redirect_' . $context : 'redirect';
 		$this->session->set($key, site_url($url, $query));

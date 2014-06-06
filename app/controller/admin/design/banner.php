@@ -74,7 +74,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Banners"), site_url('admin/design/banner'));
 
 		$data['insert'] = site_url('admin/design/banner/insert', $url);
@@ -146,7 +146,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 		$url = $this->get_url();
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Banners"), site_url('admin/design/banner'));
 
 		if (!$banner_id) {

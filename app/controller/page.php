@@ -31,7 +31,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
@@ -97,7 +97,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout

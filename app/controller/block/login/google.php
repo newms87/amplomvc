@@ -25,7 +25,7 @@ class App_Controller_Block_Login_Google extends App_Controller_Block_Block
 		if ($this->request->hasRedirect('gp_redirect')) {
 			$this->request->doRedirect('gp_redirect');
 		} else {
-			redirect('common/home');
+			redirect();
 		}
 	}
 
@@ -42,7 +42,7 @@ class App_Controller_Block_Login_Google extends App_Controller_Block_Block
 		} else {
 			$this->message->add('warning', _l("Invalid Token"));
 		}
-		redirect('common/home');
+		redirect();
 	}
 
 	public function people()

@@ -9,7 +9,7 @@ class App_Model_Dev_Dev extends Model
 			'sql'
 		);
 
-		$file_list = $this->tool->get_files_r(DIR_DATABASE_BACKUP, $exts, FILELIST_STRING);
+		$file_list = $this->tool->getFiles(DIR_DATABASE_BACKUP, $exts, FILELIST_STRING);
 
 		$files = array();
 

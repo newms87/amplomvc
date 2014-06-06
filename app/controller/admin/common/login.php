@@ -7,7 +7,7 @@ class App_Controller_Admin_Common_Login extends Controller
 
 		//I user is logged in, redirect to the homepage
 		if ($this->user->isLogged()) {
-			redirect('admin/common/home');
+			redirect();
 		}
 
 		if ($this->session->has('token') && !isset($_COOKIE['token'])) {
@@ -38,7 +38,7 @@ class App_Controller_Admin_Common_Login extends Controller
 			} elseif ($this->request->hasRedirect()) {
 				$this->request->doRedirect();
 			} else {
-				$redirect = 'admin/common/home';
+				$redirect = '';
 			}
 
 			redirect($redirect);

@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Customer extends Controller
 {
 	public function __construct()
@@ -7,7 +8,8 @@ class App_Controller_Customer extends Controller
 
 		//Only allow access to certain pages if already logged in
 		$allowed = array(
-			'customer/logout'
+			'customer/logout',
+			'customer/success',
 		);
 
 		if ($this->customer->isLogged() && !in_array($this->route->getPath(), $allowed)) {
@@ -21,7 +23,7 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Account Login"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
 
 		//Input Data
@@ -50,7 +52,7 @@ class App_Controller_Customer extends Controller
 		if (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
 		} elseif (!$this->request->hasRedirect()) {
-			$this->request->setRedirect('common/home');
+			$this->request->setRedirect();
 		}
 
 		//Render
@@ -59,28 +61,33 @@ class App_Controller_Customer extends Controller
 
 	public function login()
 	{
-		if (!$this->request->isPost()) {
-			return $this->index();
+		if ($this->request->isPost()) {
+			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
+				$this->message->add('warning', _l("Login failed. Invalid username and / or password."));
+			}
 		}
 
-		if (!$this->customer->login($_POST['username'], $_POST['password'])) {
-			$this->message->add('warning', _l("Login failed. Invalid username and / or password."));
-			return $this->index();
-		}
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
+		} else {
+			if (!$this->request->isPost() || $this->message->has('error')) {
+				return $this->index();
 
-		//Resolve Redirect
-		if ($this->request->hasRedirect()) {
-			$this->request->doRedirect();
-		}
+			}
+			//Resolve Redirect
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			}
 
-		redirect('account');
+			redirect('account');
+		}
 	}
 
 	public function logout()
 	{
 		$this->customer->logout();
 
-		redirect('common/home');
+		redirect();
 	}
 
 	public function registration()
@@ -93,7 +100,7 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Register Account"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
 		$this->breadcrumb->add(_l("Register"), site_url('customer/registration'));
 
@@ -164,7 +171,21 @@ class App_Controller_Customer extends Controller
 			$this->request->doRedirect();
 		}
 
-		redirect('account/success');
+		redirect('customer/success');
+	}
+
+	public function success()
+	{
+		//Page Title
+		$this->document->setTitle(_l("Your Account Has Been Created!"));
+
+		//Breadcrumbs
+		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Account"), site_url('account'));
+		$this->breadcrumb->add(_l("Your Account Has Been Created!"), site_url('customer/success'));
+
+		//Render
+		$this->response->setOutput($this->render('customer/success'));
 	}
 
 	public function forgotten()
@@ -173,7 +194,7 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
+		$this->breadcrumb->add(_l('Home'), site_url());
 		$this->breadcrumb->add(_l('Login'), site_url('customer/login'));
 		$this->breadcrumb->add(_l('Forgotten Password'), site_url('customer/forgotten'));
 
@@ -209,7 +230,7 @@ class App_Controller_Customer extends Controller
 	public function reset_form()
 	{
 		if ($this->customer->isLogged() || empty($_GET['code'])) {
-			redirect('common/home');
+			redirect();
 		}
 
 		$code = $_GET['code'];
@@ -223,7 +244,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('common/home'));
+		$this->breadcrumb->add(_l('Home'), site_url());
 		$this->breadcrumb->add(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
 		//Action Buttons

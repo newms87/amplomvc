@@ -32,6 +32,8 @@ class Theme extends Library
 			'parents' => array(),
 		);
 
+		$this->store_themes = array_merge(array($this->theme), $this->settings['parents']);
+
 		//Url Constants
 		define('URL_THEME', URL_THEMES . $this->theme . '/');
 
@@ -52,6 +54,11 @@ class Theme extends Library
 	public function getTheme()
 	{
 		return $this->theme;
+	}
+
+	public function getStoreThemes()
+	{
+		return $this->store_themes;
 	}
 
 	public function getThemes($filter = array(), $select = '*', $index = null)
@@ -163,13 +170,12 @@ class Theme extends Library
 
 	public function findFile($file, $theme = '')
 	{
-		$theme = $theme ? $theme : $this->theme;
-
 		//Add tpl extension if no extension specified
 		if (!preg_match("/\\.[a-z0-9]+\$/i", $file)) {
 			$file .= '.tpl';
 		}
 
+		//Resolve specified theme directory
 		if ($theme) {
 			if (file_exists($this->dir_themes . $theme . '/' . $file)) {
 				return $theme . '/' . $file;
@@ -178,11 +184,12 @@ class Theme extends Library
 			}
 		}
 
-		foreach ($this->settings['parents'] as $parent) {
-			if (file_exists($this->dir_themes . $parent . '/' . $file)) {
-				return $parent . '/' . $file;
-			} elseif (file_exists($this->dir_themes . $parent . '/template/' . $file)) {
-				return $parent . '/template/' . $file;
+		//Resolve the current store themes heirachically
+		foreach ($this->store_themes as $store_theme) {
+			if (file_exists($this->dir_themes . $store_theme . '/' . $file)) {
+				return $store_theme . '/' . $file;
+			} elseif (file_exists($this->dir_themes . $store_theme . '/template/' . $file)) {
+				return $store_theme . '/template/' . $file;
 			}
 		}
 

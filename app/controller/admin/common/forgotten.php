@@ -5,7 +5,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 	{
 		//Verify User is not already logged in
 		if ($this->user->isLogged()) {
-			redirect('admin/common/home');
+			redirect();
 		}
 
 		//Page Title
@@ -30,7 +30,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Forgotten Password"), site_url('admin/common/forgotten'));
 
 		//Entry Data
@@ -47,7 +47,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 	public function reset()
 	{
 		if ($this->user->isLogged() || empty($_GET['code'])) {
-			redirect('admin/common/home');
+			redirect();
 		}
 
 		$code = $_GET['code'];
@@ -80,7 +80,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l('Home'), site_url());
 		$this->breadcrumb->add(_l('Password Reset'), site_url('admin/common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons

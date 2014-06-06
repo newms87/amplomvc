@@ -29,7 +29,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 		$this->breadcrumb->add(_l("General Settings"), site_url('admin/setting/setting'));
 

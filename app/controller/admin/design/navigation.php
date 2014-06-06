@@ -18,7 +18,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->document->setTitle(_l("Navigation"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
 
 		//Batch Actions
@@ -198,7 +198,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
 
 		if ($navigation_group_id) {

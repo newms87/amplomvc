@@ -52,7 +52,8 @@
 						<h2><?= _l("Newsletter"); ?></h2>
 
 						<div class="form-item">
-							<label><?= _l("Subscribe"); ?></label><?= build('radio', array(
+							<label><?= _l("Subscribe"); ?></label>
+							<?= build('ac-radio', array(
 								'name'   => 'newsletter',
 								'data'   => $data_yes_no,
 								'select' => $newsletter
@@ -81,7 +82,7 @@
 							<?=
 							build('select', array(
 								'name'   => 'country_id',
-								'data'   => $countries,
+								'data'   => $data_countries,
 								'select' => $country_id,
 								'key'    => 'country_id',
 								'value'  => 'name',
@@ -116,10 +117,8 @@
 </section>
 
 <script type="text/javascript">
-	$('.login-form .zone-select').ac_zoneselect({listen: '.login-form .country-select', select: '<?= $zone_id; ?>'});
-</script>
+	$('#user-login .zone-select').ac_zoneselect({listen: '#user-login [name=country_id]', select: '<?= $zone_id; ?>'});
 
-<script type="text/javascript">
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 

@@ -17,7 +17,7 @@ class App_Controller_Admin_User_User extends Controller
 		$this->document->setTitle(_l("User"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
 
 		//Listing
@@ -138,7 +138,7 @@ class App_Controller_Admin_User_User extends Controller
 		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
 		$this->breadcrumb->add($user_id ? _l("Update") : _l("New"), site_url('admin/user/user/form', 'user_id=' . $user_id));
 

@@ -22,7 +22,7 @@ class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 		if ($this->request->hasRedirect('fb_redirect')) {
 			$this->request->doRedirect('fb_redirect');
 		} else {
-			redirect('common/home');
+			redirect();
 		}
 	}
 
@@ -39,6 +39,6 @@ class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 		} else {
 			$this->message->add('warning', _l("Invalid Token"));
 		}
-		redirect('common/home');
+		redirect();
 	}
 }

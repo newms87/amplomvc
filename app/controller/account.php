@@ -12,7 +12,7 @@ class App_Controller_Account extends Controller
 		$this->document->setTitle(_l("Account Manager"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Account Manager"), site_url('account'));
 
 		//Page Information
@@ -37,7 +37,7 @@ class App_Controller_Account extends Controller
 		$this->document->setTitle(_l("My Account Information"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Account"), site_url('account'));
 		$this->breadcrumb->add(_l("Edit Information"), site_url('account/update'));
 

@@ -21,7 +21,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 			$data['error_warning'] = '';
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Product Feeds"), site_url('admin/extension/feed'));
 		$this->breadcrumb->add(_l("Google Base"), site_url('admin/feed/google_base'));
 

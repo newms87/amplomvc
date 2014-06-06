@@ -564,6 +564,8 @@ $.fn.loading = function (params) {
 		return this;
 	}
 
+	this.find('.loader').remove();
+
 	return this.append($.loading(params));
 }
 
@@ -709,6 +711,10 @@ function ac_radio_bubble() {
 		var $labels = $(this).parents('label');
 		$labels.children('input[type=radio]').prop('checked', true);
 	});
+}
+
+$.fn.ac_box = function (params) {
+
 }
 
 $(document).ready(function () {

@@ -133,7 +133,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Currency"), site_url('admin/localisation/currency', $url));
 
 		$data['insert'] = site_url('admin/localisation/currency/insert', $url);
@@ -256,7 +256,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Currency"), site_url('admin/localisation/currency', $url));
 
 		if (!isset($_GET['currency_id'])) {

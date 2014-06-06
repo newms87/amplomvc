@@ -131,7 +131,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Zones"), site_url('admin/localisation/zone', $url));
 
 		$data['insert'] = site_url('admin/localisation/zone/insert', $url);
@@ -246,7 +246,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Zones"), site_url('admin/localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {

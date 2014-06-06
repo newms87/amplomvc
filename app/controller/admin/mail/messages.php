@@ -13,12 +13,12 @@ class App_Controller_Admin_Mail_Messages extends Controller
 			$this->message->add('success', _l("Success: You have modified mail messages!"));
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin/common/home'));
+		$this->breadcrumb->add(_l("Home"), site_url());
 		$this->breadcrumb->add(_l("Mail Messages"), site_url('admin/mail/messages'));
 
 		$data['action'] = site_url('admin/mail/messages');
 
-		$data['cancel'] = site_url('admin/common/home');
+		$data['cancel'] = site_url();
 
 		$defaults = array(
 			'mail_registration_subject' => '',

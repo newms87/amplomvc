@@ -32,7 +32,7 @@
 			</div>
 
 			<div class="form-item submit">
-				<button><?= _l("Log In"); ?></button>
+				<button data-loading="<?= _l("Please Wait..."); ?>"><?= _l("Log In"); ?></button>
 			</div>
 		</form>
 	</div>
