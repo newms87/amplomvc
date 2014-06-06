@@ -1136,6 +1136,13 @@ button, .button {
     }
   }
 
+  .filter-list {
+    .scrollbox {
+      text-align: left;
+      min-width: 200px;
+    }
+  }
+
   .actions {
     .action {
       position: relative;
@@ -3245,3 +3252,68 @@ td.log_remove .message {
  *  Extra Styling      *
  ***********************/
 
+#theme-settings {
+  h2 {
+    font-size: 3em;
+    margin-bottom: 15px;
+  }
+  .select-store {
+    .store-list {
+      a {
+        display: inline-block;
+        border: 4px solid @color-light;
+        color: @color-dark;
+        background: @color-lightest;
+        padding: 15px;
+        font-size: 2em;
+        text-decoration: none;
+
+        &:hover, &.active {
+          background: @color-lighter;
+        }
+      }
+    }
+  }
+
+  .theme-settings {
+    .theme-setting-list {
+      .theme-setting {
+        max-width: 250px;
+        padding: 8px;
+        border: 2px dashed @color-dark;
+        display: inline-block;
+        margin: 0 1em 2em 1em;
+        text-align: center;
+
+        .cell {
+          display: table-cell;
+          vertical-align: middle;
+          height: 130px;
+
+          .key {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: .5em;
+          }
+
+          .description {
+            font-size: 1.1em;
+            margin-bottom: .3em;
+          }
+
+          .value {
+            input {
+              text-align: center;
+              font-size: 1.1em;
+              padding: 3px 8px;
+              font-weight: bold;
+              border: none;
+              background: @color-light;
+              color: @color-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 <?php
+
 class Tool extends Library
 {
 	public function __construct()
@@ -13,7 +14,7 @@ class Tool extends Library
 	public function getSlug($name, $allow = '')
 	{
 		$patterns = array(
-			"/[\s\\\\\/]/" => '_',
+			"/[\s\\\\\/]/"       => '_',
 			"/[^a-z0-9_$allow]/" => '',
 		);
 
@@ -25,7 +26,9 @@ class Tool extends Library
 		$parts = explode('_', $str);
 
 		//capitalize each component of the class name
-		array_walk($parts, function (&$e) { $e = ucfirst($e); });
+		array_walk($parts, function (&$e) {
+				$e = ucfirst($e);
+			});
 
 		$str = implode('', $parts);
 
@@ -135,22 +138,31 @@ class Tool extends Library
 	 */
 	public function getFileCommentDirectives($file, $trim = true)
 	{
+		if (is_file($file)) {
+			return $this->getCommentDirectives(file_get_contents($file), $trim);
+		}
+
+		return array();
+	}
+
+	public function getCommentDirectives($content, $trim = true)
+	{
 		$directives = array();
 
-		if (is_file($file)) {
-			$tokens = token_get_all(file_get_contents($file));
+		$tokens = token_get_all($content);
 
-			foreach ($tokens as $token) {
-				if ($token[0] === T_DOC_COMMENT) {
-					if (preg_match_all("/(.*?)([a-z0-9_]*?):(.*?)\\*/is", $token[1], $matches)) {
-						$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
-					}
+		foreach ($tokens as $token) {
+			if ($token[0] === T_DOC_COMMENT) {
+				if (preg_match_all("/(.*?)([a-z0-9_]*?):(.*?)\\*/is", $token[1], $matches)) {
+					$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
 				}
 			}
 		}
 
 		if ($trim) {
-			array_walk($directives, function(&$a){$a = trim($a);});
+			array_walk($directives, function (&$a) {
+				$a = trim($a);
+			});
 		}
 
 		return $directives;

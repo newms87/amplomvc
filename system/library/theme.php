@@ -197,29 +197,104 @@ class Theme extends Library
 		return false;
 	}
 
-	public function install($store_id, $theme)
+	public function saveThemeConfigs($store_id, $theme, $configs)
 	{
-		//Resolve Parents
-		$parents = array();
-		$t = $theme;
+		$config_file = DIR_THEMES . $theme . '/css/config.less';
 
-		while(is_file(DIR_THEMES . $t . '/setup.php')) {
-			$directives = $this->tool->getFileCommentDirectives(DIR_THEMES . $t . '/setup.php');
+		$less = '';
+
+		foreach ($configs as $config) {
+
+		}
+	}
+
+	public function getThemeConfigs($store_id, $theme)
+	{
+		//Load Theme Configs
+		$theme_list = $this->getThemeParents($theme);
+		array_unshift($theme_list, $theme);
+
+		$configs = array();
+
+		foreach ($theme_list as $theme) {
+			$config_file = DIR_THEMES . $theme . '/css/config.less';
+
+			if (is_file($config_file)) {
+				$configs += $this->getConfigs($config_file);
+			}
+		}
+
+		//Load Store Configs
+		$store_config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
+
+		if (!is_file($store_config_file)) {
+			touch($store_config_file);
+		}
+
+		$configs += $this->getConfigs($store_config_file);
+
+		return $configs;
+	}
+
+	public function getConfigs($file)
+	{
+		$configs = array();
+
+		//Prefix Less file with PHP tag for File Comment Directives.
+		$directives = $this->tool->getCommentDirectives("<?php " . file_get_contents($file));
+
+		$values = $this->parseConfigs($file);
+
+		foreach ($directives as $key => $description) {
+			$configs[$key] = array(
+				'key'         => $key,
+				'description' => $description,
+				'value'       => isset($values[$key]) ? $values[$key] : '',
+			);
+		}
+
+		return $configs;
+	}
+
+	public function parseConfigs($file)
+	{
+		preg_match_all("/(\\@[a-z_-]+):\\s*([^;\r\n]+);/i", file_get_contents($file), $matches);
+
+		$configs = array();
+
+		for ($i = 0; $i < count($matches[1]); $i++) {
+			$configs[str_replace("@", '',$matches[1][$i])] = $matches[2][$i];
+		}
+
+		return $configs;
+	}
+
+	public function getThemeParents($theme)
+	{
+		$parents = array();
+
+		while (is_file(DIR_THEMES . $theme . '/setup.php')) {
+			$directives = $this->tool->getFileCommentDirectives(DIR_THEMES . $theme . '/setup.php');
 
 			if (!empty($directives['parent'])) {
 				//Check for Self parent assignment
-				if ($t === $directives['parent']) {
+				if ($theme === $directives['parent']) {
 					break;
 				}
-				$t = $directives['parent'];
-				$parents[] = $t;
+				$theme     = $directives['parent'];
+				$parents[] = $theme;
 			} else {
 				break;
 			}
 		}
 
+		return $parents;
+	}
+
+	public function install($store_id, $theme)
+	{
 		$settings = array(
-			'parents' => $parents,
+			'parents' => $this->getThemeParents($theme),
 		);
 
 		return $this->config->save('config', 'config_theme_settings', $settings, $store_id);
