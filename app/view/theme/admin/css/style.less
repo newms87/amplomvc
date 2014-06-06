@@ -826,6 +826,10 @@ button, .button {
     font-size: 2em;
     padding: 10px 20px;
   }
+
+  &.remove {
+    background: @color-delete;
+  }
 }
 
 .buttons {
@@ -1046,7 +1050,6 @@ button, .button {
   }
 }
 
-
 //TODO: remove #listing!! (After upgrading all controllers / views)
 #listing, .widget-listing {
   position: relative;
@@ -1076,7 +1079,7 @@ button, .button {
   }
 
   .limits {
-    float:right;
+    float: right;
     margin: .5em;
 
     .limit_text {
@@ -1116,7 +1119,7 @@ button, .button {
       top: 100%;
       left: 0;
       background: white;
-      box-shadow: 4px 4px 20px rgba(0,0,0,.5);
+      box-shadow: 4px 4px 20px rgba(0, 0, 0, .5);
       padding: 10px;
       display: none;
       z-index: 100;
@@ -1180,6 +1183,53 @@ button, .button {
         left: 1px;
       }
     }
+  }
+
+  .editable-options {
+    position: absolute;
+    top: 30px;
+    left: 30%;
+    display: none;
+    background: white;
+    padding: 8px;
+    margin: auto;
+    box-shadow: 5px 5px 20px;
+    z-index: 1000;
+
+    .editable-option {
+      display: none;
+
+      &.show {
+        display: block;
+      }
+
+      .input {
+        .input-value {
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    .buttons {
+      width: 75%;
+      margin: 5px auto 0 auto!important;
+
+      .save-edit {
+        padding: 3px 6px;
+        font-size: 1.2em;
+        float: right;
+      }
+
+      .cancel-edit {
+        font-size: 1.2em;
+        padding: 3px 6px;
+      }
+    }
+  }
+
+  td.editable .editable-options {
+    display: block;
   }
 }
 
@@ -2521,12 +2571,18 @@ td.mail_info label {
   margin-left: 10%;
 }
 
-.list tbody .filter-list-item:hover > td {
-  background: #EBE9A2;
-}
+.list tbody .filter-list-item {
+  td {
+    position: relative;
+  }
 
-.list tbody .filter-list-item.active > td {
-  background: #C3EBA2;
+  &:hover > td {
+    background: #EBE9A2;
+  }
+
+  &.active > td {
+    background: #C3EBA2;
+  }
 }
 
 /* Page Form */
@@ -3147,13 +3203,9 @@ td.log_remove .message {
       }
 
       &.save-delete {
-        position:absolute;
+        position: absolute;
         top: 1em;
         right: 1em;
-
-        .delete-view {
-          background: @color-delete;
-        }
       }
     }
 

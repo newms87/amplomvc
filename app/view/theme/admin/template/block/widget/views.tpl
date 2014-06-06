@@ -14,7 +14,7 @@
 
 					<div class="save-delete buttons">
 						<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
-						<a class="delete-view button" data-loading="Removing..."><?= _l("X"); ?></a>
+						<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
 					</div>
 				</div>
 

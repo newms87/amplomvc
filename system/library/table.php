@@ -1,4 +1,5 @@
 <?php
+
 class Table extends Library
 {
 	private $file;
@@ -11,11 +12,11 @@ class Table extends Library
 
 	public function init()
 	{
-		$this->file = '';
+		$this->file          = '';
 		$this->template_data = array();
-		$this->columns = array();
-		$this->rows = array();
-		$this->path = '';
+		$this->columns       = array();
+		$this->rows          = array();
+		$this->path          = '';
 	}
 
 	public function setColumns($columns)
@@ -81,12 +82,16 @@ class Table extends Library
 			$this->template_data['listing_path'] = $this->route->getPath();
 		}
 
+		if (empty($this->template_data['save_path'])) {
+			$this->template_data['save_path'] = $this->route->getPath();
+		}
+
 		if (empty($this->template_data['sort_url'])) {
 			$this->template_data['sort_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
 		}
 
 		if (empty($this->template_data['filter_url'])) {
-			$this->template_data['filter_url'] =  site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter', 'page'));
+			$this->template_data['filter_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter', 'page'));
 		}
 
 		//Normalize Columns
@@ -104,13 +109,10 @@ class Table extends Library
 				'type'         => 'text',
 				'align'        => 'center',
 				'sortable'     => false,
+				'editable'     => null,
 			);
 
-			foreach ($default_values as $key => $default) {
-				if (!isset($column[$key])) {
-					$column[$key] = $default;
-				}
-			}
+			$column += $default_values;
 
 			//additional / overridden attributes
 			foreach ($column as $attr => $value) {
@@ -139,6 +141,19 @@ class Table extends Library
 				if ($column['filter'] === true) {
 					$column['filter'] = $column['type'];
 				}
+			}
+
+			//If Field is set, assume this came from Table Model, and therefore can be edited
+			if (is_null($column['editable'])) {
+				$column['editable'] = isset($column['Field']);
+			}
+
+			if ($column['editable'] && !is_string($column['editable'])) {
+				$column['editable'] = $column['type'];
+			}
+
+			if (!isset($column['editable_data'])) {
+				$column['editable_data'] = !empty($column['build_data']) ? $column['build_data'] : array();
 			}
 
 			switch ($column['type']) {

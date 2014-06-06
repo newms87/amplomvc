@@ -218,17 +218,12 @@ function attrs($data)
 function build($type, $params)
 {
 	$params += array(
-		'name'   => null,
+		'name'   => '',
 		'data'   => null,
 		'select' => array(),
 		'key'    => null,
 		'value'  => null,
 	);
-
-	if (!$params['name']) {
-		trigger_error(_l("You must set the 'name' parameter for %s", __METHOD__));
-		return false;
-	}
 
 	if (!is_array($params['data'])) {
 		trigger_error(_l("The 'data' parameter must be an array for %s", __METHOD__));

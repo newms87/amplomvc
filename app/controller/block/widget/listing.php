@@ -25,6 +25,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 
 		$template_defaults = array(
 			'listing_path' => !empty($settings['listing_path']) ? $settings['listing_path'] : $this->route->getPath(),
+			'save_path'    => !empty($settings['save_path']) ? $settings['save_path'] : $this->route->getPath(),
 			'row_id'       => !empty($settings['row_id']) ? $settings['row_id'] : '',
 		);
 
