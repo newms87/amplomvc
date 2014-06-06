@@ -59,6 +59,9 @@ class Table extends Library
 
 		$columns = $this->columns;
 		$rows    = $this->rows;
+		if (empty($row_id)) {
+			$row_id = '';
+		}
 
 		//render the file
 		ob_start();
