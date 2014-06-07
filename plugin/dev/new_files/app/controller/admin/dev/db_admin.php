@@ -12,7 +12,7 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 		$this->document->setTitle(_l("Database Administration"));
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
-		$this->breadcrumb->add(_l("Home"), site_url(), '', 0);
+		$this->breadcrumb->add(_l("Home"), site_url('admin'), '', 0);
 		$this->breadcrumb->add(_l("Development Console"), site_url('dev/dev'), '', 1);
 		$this->breadcrumb->add(_l("Database Administration"), site_url('dev/db_admin'));
 
@@ -35,7 +35,7 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 
 		$data['data_tables'] = $this->db->getTables();
 
-		$data['return'] = site_url();
+		$data['return'] = site_url('admin');
 
 		//Render
 		$this->response->setOutput($this->render('dev/db_admin', $data));

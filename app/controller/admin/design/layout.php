@@ -81,7 +81,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
 
 		//The Table Columns
@@ -180,7 +180,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
 
 		//Insert or Update

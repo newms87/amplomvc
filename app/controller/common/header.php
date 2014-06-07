@@ -16,15 +16,11 @@ class App_Controller_Common_Header extends Controller
 		$data['theme']  = option('config_theme');
 
 		//Add Styles
-		$style = theme_dir('css/style.less');
+		$style = $this->theme->getStoreThemeStyle(option('store_id'), $data['theme']);
 
 		if ($style) {
-			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-style');
-		} else {
-			$style = theme_url('css/style.css');
+			$this->document->addStyle($style);
 		}
-
-		$this->document->addStyle($style);
 
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');

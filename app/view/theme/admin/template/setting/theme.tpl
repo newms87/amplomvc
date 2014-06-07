@@ -5,7 +5,7 @@
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
 			<h1>
-				<img class="icon" src="<?= theme_url('image/theme_settings.png'); ?>" alt=""/> <?= _l("Theme Settings"); ?></h1>
+				<img class="icon" src="<?= theme_url('image/settings/theme.png'); ?>" alt=""/> <?= _l("Theme Settings"); ?></h1>
 
 			<div class="buttons">
 				<button class="button"><?= _l("Save"); ?></button>

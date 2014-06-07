@@ -13,12 +13,12 @@ class App_Controller_Admin_Tool_Tool extends Controller
 		$this->document->setTitle(_l("System Tools"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("System Tools"), site_url('admin/tool/tool'));
 
 		$data['clear_cache'] = site_url('admin/tool/tool/clear_cache');
 
-		$data['cancel'] = site_url();
+		$data['cancel'] = site_url('admin');
 
 		$defaults = array(
 			'cache_tables' => ''

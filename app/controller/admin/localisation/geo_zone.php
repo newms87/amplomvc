@@ -89,7 +89,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
 
 		$data['insert'] = site_url('admin/localisation/geo_zone/insert', $url);
@@ -180,7 +180,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
 
 		if (!$geo_zone_id) {

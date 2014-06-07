@@ -20,11 +20,11 @@ class App_Model_Setting_Setting extends Model
 				$widget['title'] = _l($directives['title']);
 
 				if (!empty($directives['icon'])) {
-					$widget['icon'] = $this->theme->getUrl('image/' . $directives['icon']);
+					$widget['icon'] = $this->theme->getUrl('image/settings/' . $directives['icon']);
 				}
 
 				if (empty($widget['icon'])) {
-					$widget['icon'] = $this->theme->getUrl('image/admin_settings.png');
+					$widget['icon'] = $this->theme->getUrl('image/settings/admin.png');
 				}
 
 				if (!empty($directives['path'])) {

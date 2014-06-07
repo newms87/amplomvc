@@ -3,7 +3,7 @@
  * Class App_Controller_Admin_Setting_Update
  *
  * Title: System Update
- * Icon: system_update.png
+ * Icon: system-update.png
  * Order: 1
  *
  */
@@ -22,7 +22,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$this->document->setTitle(_l("System Update"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("System Update"), site_url('admin/setting/update'));
 
 		//Actions

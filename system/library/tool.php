@@ -153,7 +153,7 @@ class Tool extends Library
 
 		foreach ($tokens as $token) {
 			if ($token[0] === T_DOC_COMMENT) {
-				if (preg_match_all("/(.*?)([a-z0-9_]*?):(.*?)\\*/is", $token[1], $matches)) {
+				if (preg_match_all("/(.*?)([a-z0-9_-]*?):(.*?)\\*/is", $token[1], $matches)) {
 					$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
 				}
 			}
