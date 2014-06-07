@@ -239,8 +239,8 @@ class Theme extends Library
 		$theme_list = $this->getThemeParents($theme);
 		array_unshift($theme_list, $theme);
 
-		foreach ($theme_list as $theme) {
-			$config_file = DIR_THEMES . $theme . '/css/config.less';
+		foreach ($theme_list as $t) {
+			$config_file = DIR_THEMES . $t . '/css/config.less';
 
 			if (is_file($config_file)) {
 				$configs += $this->getConfigs($config_file);
