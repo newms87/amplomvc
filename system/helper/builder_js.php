@@ -1,4 +1,5 @@
 <?php
+global $registry;
 
 switch ($js) {
 
@@ -37,6 +38,8 @@ switch ($js) {
 		<?php break;
 
 	case 'translations':
+		//TODO: Reimplement translations...
+		return '';
 		if (empty($args[0])) {
 			$args[0] = array();
 		}
@@ -47,7 +50,7 @@ switch ($js) {
 			$name_format = false;
 		}
 
-		$languages = $this->System_Model_Language->getEnabledLanguages();
+		$languages = $registry->System_Model_Language->getEnabledLanguages();
 
 		$default_language = option('config_language_id');
 
