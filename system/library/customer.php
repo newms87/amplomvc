@@ -114,7 +114,7 @@ class Customer extends Library
 			$this->error += $this->address->getError();
 		}
 
-		if (!validate('password', $customer['password'])) {
+		if (isset($customer['password']) && !validate('password', $customer['password'])) {
 			$this->error['password'] = $this->validation->getError();
 		}
 
