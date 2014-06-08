@@ -1,13 +1,16 @@
 <div id="block-account-login" class="block-content">
+	<? if (!empty($medias)) { ?>
 	<div class="col xs-12 sm-6 md-4 text-center">
 		<div class="one-click large">
 			<h2><?= _l("Connect With..."); ?></h2>
-			<a href="<?= $gp_login; ?>" class="gp-login large"></a>
-			<a href="<?= $fb_login; ?>" class="fb-login large"></a>
+			<? foreach ($medias as $media) { ?>
+				<a href="<?= $media['url']; ?>" class="social-login <?= $media['name'] . ' ' . $size; ?>"></a>
+			<? } ?>
 		</div>
 	</div>
+	<? } ?>
 
-	<div class="col xs-12 sm-6 md-4 text-center">
+	<div class="col <?= !empty($medias) ? 'xs-12 sm-6 md-4' : 'xs-12 sm-6'; ?> text-center">
 		<div class="login-register">
 			<h2><?= _l("Register a New Account"); ?></h2>
 
@@ -17,7 +20,7 @@
 		</div>
 	</div>
 
-	<div class="col xs-12 md-4 text-center">
+	<div class="col <?= !empty($medias) ? 'xs-12 sm-6 md-4' : 'xs-12 sm-6'; ?> text-center">
 		<h2><?= _l("Returning Customer"); ?></h2>
 
 		<form action="<?= site_url('customer/login'); ?>" class="form" method="post" enctype="multipart/form-data">
