@@ -1,0 +1,52 @@
+
+.ac-codemirror-ui {
+  background: white;
+
+  .CodeMirror {
+    border: 1px solid gray;
+  }
+
+  .menu-buttons {
+    padding: .3em;
+
+    .cm-btn {
+      //border: 1px solid @color-dark;
+      border-radius: 3px;
+      background: @color-lighter;
+      padding: 3px;
+      display: inline-block;
+      cursor: pointer;
+
+      &:hover {
+        background: @color-lightest;
+      }
+
+      .minimize {
+        display: none;
+      }
+    }
+  }
+
+  &.fullscreen {
+    position: fixed !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    height: auto;
+    z-index: 9;
+    padding: 1em;
+
+    .CodeMirror {
+      height: 90%;
+      overflow: auto;
+    }
+
+    .cm-btn {
+      .maximize {
+        display: none;
+      }
+
+      .minimize {
+        display: block;
+      }
+    }
+  }
+}

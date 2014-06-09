@@ -4,7 +4,7 @@ class Theme extends Library
 {
 	private $dir_themes;
 	private $theme;
-	private $settings;
+	private $settings = array();
 
 	public function __construct()
 	{
@@ -25,8 +25,12 @@ class Theme extends Library
 			$theme = 'fluid';
 		}
 
-		$this->theme    = $this->route->isAdmin() ? $admin_theme : $theme;
-		$this->settings = option('config_theme_settings', array());
+		if ($this->route->isAdmin()) {
+			$this->theme = $admin_theme;
+		} else {
+			$this->theme = $theme;
+			$this->settings = option('config_theme_settings', array());
+		}
 
 		$this->settings += array(
 			'parents' => array(),
@@ -212,10 +216,10 @@ class Theme extends Library
 		return theme_url('css/style.css');
 	}
 
-	public function saveThemeConfigs($store_id, $theme, $configs)
+	public function saveThemeConfigs($store_id, $theme, $configs, $stylesheet = null)
 	{
 		$config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
-		$main_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.main.less';
+		$main_file   = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.main.less';
 
 		$less = "";
 
@@ -228,7 +232,20 @@ class Theme extends Library
 		$main = "@import 'style';\n" .
 			"@import 'config.store.$store_id';\n";
 
+		if ($stylesheet) {
+			$style_file = DIR_THEMES . $theme . '/css/style.store.' . $store_id . '.less';
+
+			file_put_contents($style_file, $stylesheet);
+
+			$main .= "@import 'style.store.$store_id';\n";
+
+			$this->plugin->gitIgnore($style_file);
+		}
+
 		file_put_contents($main_file, $main);
+
+		$this->plugin->gitIgnore($config_file);
+		$this->plugin->gitIgnore($main_file);
 	}
 
 	public function getThemeConfigs($store_id, $theme)
@@ -261,7 +278,17 @@ class Theme extends Library
 			$configs[$key]['value'] = $value;
 		}
 
-		return $configs;
+		//Stylesheet
+		$style_file = DIR_THEMES . $theme . '/css/style.store.' . $store_id . '.less';
+
+		if (!is_file($style_file)) {
+			touch($style_file);
+		}
+
+		return array(
+			'stylesheet' => $style_file,
+			'configs'    => $configs,
+		);
 	}
 
 	public function getConfigs($file)

@@ -214,11 +214,14 @@
 	//		update_zoom();
 	//	});
 
-	$('#html_editor').codemirror({mode: 'html'});
-	$('#css_editor').codemirror({mode: 'css'});
+	$('#html_editor').codemirror({mode: 'html', update: update_preview});
+	$('#css_editor').codemirror({mode: 'css', update: update_preview});
 
 	function update_preview() {
 		update_delay.delay = 1;
+
+		$('#html_editor')[0].cm_editor.save();
+		$('#css_editor')[0].cm_editor.save();
 
 		if (update_delay.dirty) {
 			return;
@@ -234,8 +237,8 @@
 
 			update_delay.dirty = false;
 
-			var style = $('#css_editor')[0].cm_editor.mirror.getValue();
-			var content = $('#html_editor')[0].cm_editor.mirror.getValue();
+			var style = $('#css_editor')[0].cm_editor.getValue();
+			var content = $('#html_editor')[0].cm_editor.getValue();
 
 			var data = {
 				style:   style,
@@ -253,9 +256,6 @@
 		}
 	}
 
-	$('#html_editor')[0].cm_editor.mirror.on('keyup', update_preview);
-
-	$('#css_editor')[0].cm_editor.mirror.on('keyup', update_preview);
 
 	$('[name="title"]').keyup(function () {
 		$preview.find('#page-title').html($(this).val());
@@ -268,8 +268,6 @@
 	$(document).bind('keydown', function (e) {
 		if (e.ctrlKey && (e.which == 83)) {
 			var $form = $('#page-form');
-			$('#html_editor')[0].cm_editor.mirror.save();
-			$('#css_editor')[0].cm_editor.mirror.save();
 
 			$.post($form.attr('action'), $form.serialize(), function (response) {
 				$form.ac_msg(response);
