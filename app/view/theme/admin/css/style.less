@@ -980,9 +980,11 @@ button, .button {
     font-size: 17px;
     font-weight: bold;
 
-    & > a {
-      position: relative;
-      top: -5px;
+    & > a, & > span {
+      border: 2px solid transparent;
+      display: inline-block;
+      vertical-align: top;
+      padding: 2px 0;
     }
   }
 
@@ -995,47 +997,20 @@ button, .button {
   }
 
   .sortable {
-    &.asc:after {
-      background-position: right center;
+    &:hover {
+      border-top-color: green;
+    }
+
+    &.asc {
+      border-top-color: green;
 
       &:hover {
-        background-position: right bottom;
-
-        -webkit-transform: scaleY(-1);
-        transform: scaleY(-1);
-        filter: FlipV;
+        border-bottom-color: red;
       }
     }
 
-    &.desc:after {
-      background-position: right center;
-
-      -webkit-transform: scaleY(-1);
-      transform: scaleY(-1);
-      filter: FlipV;
-
-      &:hover {
-        background-position: right bottom;
-        -webkit-transform: none;
-        transform: none;
-
-        filter: none;
-      }
-    }
-
-    &:after {
-      position: relative;
-      top: 7px;
-      padding-left: 10px;
-      height: 24px;
-      width: 17px;
-      background: url('@{themepath}image/sort-sprite.png') right top no-repeat;
-      display: inline-block;
-      content: "";
-
-      &:hover {
-        background-position: right bottom;
-      }
+    &.desc {
+      border-bottom-color: red;
     }
   }
 
@@ -1194,8 +1169,9 @@ button, .button {
 
   .editable-options {
     position: absolute;
-    top: 30px;
-    left: 30%;
+    top: 80%;
+    left: 10%;
+    width: 80%;
     display: none;
     background: white;
     padding: 8px;
@@ -1219,18 +1195,20 @@ button, .button {
     }
 
     .buttons {
-      width: 75%;
       margin: 5px auto 0 auto!important;
 
       .save-edit {
         padding: 3px 6px;
         font-size: 1.2em;
         float: right;
+        margin-right: .5em;
       }
 
       .cancel-edit {
         font-size: 1.2em;
         padding: 3px 6px;
+        float: left;
+        margin-left: .5em;
       }
     }
   }

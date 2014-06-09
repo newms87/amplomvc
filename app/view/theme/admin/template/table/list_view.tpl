@@ -355,7 +355,15 @@
 								'value'  => $column['build_config'][1],
 								'#class' => 'input-value',
 							));
-					} ?>
+							break;
+
+						case 'date':
+						case 'datetime':
+						case 'time':
+							?>
+							<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>" />
+							<? break;
+				} ?>
 				</div>
 			</div>
 		<? } ?>
@@ -369,6 +377,8 @@
 </div>
 
 <script type="text/javascript">
+	$.ac_datepicker();
+
 	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
 
 	function zoom_hover_in() {
