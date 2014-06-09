@@ -16,7 +16,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 
 		//Settings Items
@@ -122,7 +122,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 		$this->breadcrumb->add(_l("Store"), site_url('admin/setting/store/form', 'store_id=' . $store_id));
 

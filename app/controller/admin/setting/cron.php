@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Automated Tasks
- * Icon: cron_icon.png
+ * Icon: cron.png
  * Order: 12
  */
 
@@ -29,7 +29,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l('System Settings'), site_url('admin/setting/store'));
 		$this->breadcrumb->add(_l('Automated Tasks'), site_url('admin/setting/cron'));
 

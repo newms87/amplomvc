@@ -11,7 +11,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		$data['url_backup_restore']  = site_url("dev/dev/backup_restore");
 		$data['url_db_admin']        = site_url("dev/db_admin");
 
-		$data['return'] = site_url();
+		$data['return'] = site_url('admin');
 
 		$this->response->setOutput($this->render('dev/dev', $data));
 	}
@@ -62,7 +62,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$data['data_tables'] = $this->db->getTables();
 
-		$data['return'] = site_url();
+		$data['return'] = site_url('admin');
 
 		$this->content();
 
@@ -116,7 +116,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$data['dev_sites'] = $dev_sites;
 
-		$data['return'] = site_url();
+		$data['return'] = site_url('admin');
 
 		$this->content();
 
@@ -203,7 +203,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$data['data_tables'] = $this->db->getTables();
 
-		$data['return'] = site_url();
+		$data['return'] = site_url('admin');
 
 		$this->content();
 
@@ -214,7 +214,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 	{
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
-		$this->breadcrumb->add(_l("Home"), site_url(), '', 0);
+		$this->breadcrumb->add(_l("Home"), site_url('admin'), '', 0);
 		$this->breadcrumb->add(_l("Development Console"), site_url('dev/dev'), '', 1);
 	}
 

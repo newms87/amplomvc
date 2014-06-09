@@ -8,7 +8,7 @@ class App_Controller_Admin_Page extends Controller
 		$this->document->setTitle(_l("Page"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Page"), site_url('admin/page'));
 
 		//Batch Actions
@@ -143,7 +143,7 @@ class App_Controller_Admin_Page extends Controller
 		$page_id = _get('page_id');
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Page"), site_url('admin/page'));
 		$this->breadcrumb->add($page_id ? _l("Edit") : _l("Add"), site_url('admin/page/form', 'page_id=' . $page_id));
 

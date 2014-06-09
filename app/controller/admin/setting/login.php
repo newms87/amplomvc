@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Class App_Controller_Admin_Setting_Login
  * Title: Login Settings
- * Icon: login_settings.png
+ * Icon: login.png
  * Order: 5
  *
  */
@@ -14,7 +15,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 		$this->document->setTitle(_l("Login Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/setting'));
 		$this->breadcrumb->add(_l("Login"), site_url('admin/setting/login'));
 
@@ -30,7 +31,9 @@ class App_Controller_Admin_Setting_Login extends Controller
 		}
 
 		$defaults = array(
+			'status'      => 1,
 			'google_plus' => array(
+				'active'           => '',
 				'api_key'          => '',
 				'client_id'        => '',
 				'client_secret'    => '',
@@ -38,6 +41,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 			),
 
 			'facebook'    => array(
+				'active'     => '',
 				'app_id'     => '',
 				'app_secret' => '',
 			),
@@ -45,8 +49,19 @@ class App_Controller_Admin_Setting_Login extends Controller
 
 		$settings += $defaults;
 
+		//Template Data
+		$settings['data_yes_no'] = array(
+			1 => _l("Yes"),
+			0 => _l("No"),
+		);
+
+		$settings['data_active'] = array(
+			1 => _l("Active"),
+			0 => _l("Inactive"),
+		);
+
 		//Actions
-		$settings['save']   = site_url('admin/setting/login/save');
+		$settings['save'] = site_url('admin/setting/login/save');
 
 		//Render
 		$this->response->setOutput($this->render('setting/login', $settings));

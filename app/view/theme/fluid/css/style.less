@@ -713,39 +713,78 @@ body.admin-bar #container {
 //Social Media
 .one-click {
   width: 90%;
+  margin-bottom: .5em;
 
   a {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
+    width: 32px;
+    height: 32px;
+    background-size: 32px 32px;
     padding: 0 2px;
   }
 
-  &.large {
-    margin-bottom: 10px;
+  &.extra-small {
+    margin-bottom: .3em;
 
     a {
-      width: 80px;
-      height: 80px;
-      background-size: 80px 80px;
+      width: 16px;
+      height: 16px;
+      background-size: 16px 16px;
+    }
+  }
+
+  &.medium {
+    margin-bottom: .7em;
+
+    a {
+      width: 32px;
+      height: 32px;
+      background-size: 32px 32px;
+    }
+  }
+
+  &.large {
+    margin-bottom: 1em;
+
+    a {
+      width: 64px;
+      height: 64px;
+      background-size: 64px 64px;
     }
   }
 }
 
-.gp-login {
-  background: url("@{themepath}image/gp_login_small.png") no-repeat top left;
+.social-login {
+  &.google-plus {
+    background: url("@{themepath}image/gp-login-sm.png") no-repeat top left;
 
-  .large {
-    background-image: url("@{themepath}image/gp_login.png");
+    &.extra-small {
+      background-image: url("@{themepath}image/gp-login-xs.png");
+    }
+
+    &.medium {
+      background-image: url("@{themepath}image/gp-login-md.png");
+    }
+
+    &.large {
+      background-image: url("@{themepath}image/gp-login-lg.png");
+    }
   }
-}
 
-.fb-login {
-  background: url("@{themepath}image/fb_login_small.png") no-repeat top left;
+  &.facebook {
+    background: url("@{themepath}image/fb-login-sm.png") no-repeat top left;
 
-  .large {
-    background-image: url("@{themepath}image/fb_login.png");
+    &.extra-small {
+      background-image: url("@{themepath}image/fb-login-xs.png");
+    }
+
+    &.medium {
+      background-image: url("@{themepath}image/fb-login-md.png");
+    }
+
+    &.large {
+      background-image: url("@{themepath}image/fb-login-lg.png");
+    }
   }
 }
 
@@ -807,6 +846,14 @@ body.admin-bar #container {
           }
         }
       }
+    }
+  }
+}
+
+.block-widget-carousel {
+  .slidesjs {
+    .image {
+      max-width: 100%;
     }
   }
 }

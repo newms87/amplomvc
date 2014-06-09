@@ -3,7 +3,6 @@
 /**
  * Name: Social Media Login
  */
-
 class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 {
 	public function build($settings = array())
@@ -12,22 +11,40 @@ class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 			$this->request->setRedirect($settings['redirect']);
 		}
 
-		//Input Data
+		//Block Settings
 		$defaults = array(
-			'username' => ''
+			'username' => '',
+			'size'     => 'large',
+		   'template' => 'block/account/login',
 		);
 
-		$data = $_POST + $defaults;
+		$settings += $_POST + $defaults;
 
 		//Template Data
-		$data['gp_login'] = $this->Model_Block_Login_Google->getConnectUrl();
-		$data['fb_login'] = $this->Model_Block_Login_Facebook->getConnectUrl();
+		$login_settings = $this->config->loadGroup('login_settings');
 
-		//The Template
-		$template = !empty($settings['template']) ? $settings['template'] : 'block/account/login_header';
+		$medias = array();
+
+		if (!empty($login_settings['status'])) {
+			if (!empty($login_settings['facebook']['active'])) {
+				$medias['facebook'] = array(
+					'name' => 'facebook',
+					'url'  => $this->Model_Block_Login_Facebook->getConnectUrl(),
+				);
+			}
+
+			if (!empty($login_settings['google_plus']['active'])) {
+				$medias['google-plus'] = array(
+					'name' => 'google-plus',
+					'url'  => $this->Model_Block_Login_Google->getConnectUrl(),
+				);
+			}
+		}
+
+		$settings['medias'] = $medias;
 
 		//Render
-		$this->render($template, $data);
+		$this->render($settings['template'], $settings);
 	}
 
 	public function settings(&$settings)

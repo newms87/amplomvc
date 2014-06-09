@@ -11,7 +11,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 	public function getList()
 	{
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Plugins"), site_url('admin/plugin/plugin'));
 
 		//The Table Columns
@@ -181,7 +181,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 		$this->document->setTitle(_l("Plugins"));
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Plugins"), site_url('admin/plugin/plugin'));
 
 		if (isset($_POST['plugin_data'])) {

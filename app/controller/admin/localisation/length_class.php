@@ -133,7 +133,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Length Class"), site_url('admin/localisation/length_class', $url));
 
 		$data['insert'] = site_url('admin/localisation/length_class/insert', $url);
@@ -254,7 +254,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Length Class"), site_url('admin/localisation/length_class', $url));
 
 		if (!isset($_GET['length_class_id'])) {

@@ -197,32 +197,56 @@ class Theme extends Library
 		return false;
 	}
 
+	public function getStoreThemeStyle($store_id, $theme)
+	{
+		$file = theme_dir('css/config.store.' . $store_id . '.main.less');
+
+		if (!$file) {
+			$file = theme_dir('css/style.less');
+		}
+
+		if ($file) {
+			return $this->document->compileLess($file, $theme . '-' . $store_id . '-theme-style');
+		}
+
+		return theme_url('css/style.css');
+	}
+
 	public function saveThemeConfigs($store_id, $theme, $configs)
 	{
-		$config_file = DIR_THEMES . $theme . '/css/config.less';
+		$config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
+		$main_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.main.less';
 
-		$less = '';
+		$less = "";
 
-		foreach ($configs as $config) {
-
+		foreach ($configs as $key => $value) {
+			$less .= "@$key: $value;\n";
 		}
+
+		file_put_contents($config_file, $less);
+
+		$main = "@import 'style';\n" .
+			"@import 'config.store.$store_id';\n";
+
+		file_put_contents($main_file, $main);
 	}
 
 	public function getThemeConfigs($store_id, $theme)
 	{
+		$configs = array();
+
 		//Load Theme Configs
 		$theme_list = $this->getThemeParents($theme);
 		array_unshift($theme_list, $theme);
 
-		$configs = array();
-
-		foreach ($theme_list as $theme) {
-			$config_file = DIR_THEMES . $theme . '/css/config.less';
+		foreach ($theme_list as $t) {
+			$config_file = DIR_THEMES . $t . '/css/config.less';
 
 			if (is_file($config_file)) {
 				$configs += $this->getConfigs($config_file);
 			}
 		}
+
 
 		//Load Store Configs
 		$store_config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
@@ -231,7 +255,11 @@ class Theme extends Library
 			touch($store_config_file);
 		}
 
-		$configs += $this->getConfigs($store_config_file);
+		$store_configs = $this->parseConfigs($store_config_file);
+
+		foreach ($store_configs as $key => $value) {
+			$configs[$key]['value'] = $value;
+		}
 
 		return $configs;
 	}
@@ -263,7 +291,8 @@ class Theme extends Library
 		$configs = array();
 
 		for ($i = 0; $i < count($matches[1]); $i++) {
-			$configs[str_replace("@", '',$matches[1][$i])] = $matches[2][$i];
+			$key           = str_replace("@", '', $matches[1][$i]);
+			$configs[$key] = $matches[2][$i];
 		}
 
 		return $configs;

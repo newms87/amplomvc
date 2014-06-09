@@ -2,7 +2,7 @@
 
 /**
  * Title: URL Aliases
- * Icon: url_alias_icon.png
+ * Icon: alias.png
  * Order: 7
  */
 class App_Controller_Admin_Setting_UrlAlias extends Controller
@@ -13,7 +13,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$this->document->setTitle(_l("URL Aliases"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
 		$this->breadcrumb->add(_l("URL Aliases"), site_url('admin/setting/url_alias'));
 
@@ -221,7 +221,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("URL Aliases"), site_url('admin/setting/url_alias'));
 
 		if (!$url_alias_id) {

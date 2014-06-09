@@ -30,7 +30,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Forgotten Password"), site_url('admin/common/forgotten'));
 
 		//Entry Data
@@ -80,7 +80,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url());
+		$this->breadcrumb->add(_l('Home'), site_url('admin'));
 		$this->breadcrumb->add(_l('Password Reset'), site_url('admin/common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons

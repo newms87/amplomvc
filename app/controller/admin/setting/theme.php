@@ -2,7 +2,7 @@
 
 /**
  * Title: Theme Settings
- * Icon: theme_settings.png
+ * Icon: theme.png
  * Order: 3
  *
  */
@@ -30,14 +30,14 @@ class App_Controller_Admin_Setting_Theme extends Controller
 			);
 		}
 
-		$theme = $this->config->load($store_id, 'config', 'config_theme');
+		$theme = $this->config->load('config', 'config_theme', $store_id);
 
 		if (!$theme) {
 			$theme = 'fluid';
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/setting'));
 		$this->breadcrumb->add(_l("Theme for %s", $store['name']), site_url('admin/setting/theme'));
 
@@ -56,7 +56,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		$settings['data_stores'] = $this->Model_Setting_Store->getStores();
 
 		//Actions
-		$settings['save'] = site_url('admin/setting/theme/save');
+		$settings['save'] = site_url('admin/setting/theme/save', 'store_id=' . $store_id);
 
 		//Render
 		$this->response->setOutput($this->render('setting/theme', $settings));
@@ -65,7 +65,11 @@ class App_Controller_Admin_Setting_Theme extends Controller
 	public function save()
 	{
 		$store_id = _get('store_id', 0);
-		$theme    = $this->config->load($store_id, 'config', 'config_theme');
+		$theme    = $this->config->load('config', 'config_theme', $store_id);
+
+		if (!$theme) {
+			$theme = 'fluid';
+		}
 
 		//Save Settings
 		$this->theme->saveThemeConfigs($store_id, $theme, $_POST['configs']);

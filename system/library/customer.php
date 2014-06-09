@@ -114,7 +114,7 @@ class Customer extends Library
 			$this->error += $this->address->getError();
 		}
 
-		if (!validate('password', $customer['password'])) {
+		if (isset($customer['password']) && !validate('password', $customer['password'])) {
 			$this->error['password'] = $this->validation->getError();
 		}
 
@@ -122,7 +122,7 @@ class Customer extends Library
 			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
 
 			if ($page_info && !isset($customer['agree'])) {
-				$this->error['warning'] = sprintf(_l("Warning: You must agree to the %s!"), $page_info['title']);
+				$this->error['warning'] = _l("You must agree to the %s!", $page_info['title']);
 			}
 		}
 

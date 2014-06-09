@@ -72,6 +72,14 @@ label {
   float: right;
 }
 
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
 td {
   &.left, &.right {
     float: none;
@@ -3256,7 +3264,7 @@ td.log_remove .message {
   .theme-settings {
     .theme-setting-list {
       .theme-setting {
-        max-width: 250px;
+        width: 250px;
         padding: 8px;
         border: 2px dashed @color-dark;
         display: inline-block;
@@ -3266,6 +3274,7 @@ td.log_remove .message {
         .cell {
           display: table-cell;
           vertical-align: middle;
+          width: 250px;
           height: 130px;
 
           .key {

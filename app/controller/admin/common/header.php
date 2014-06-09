@@ -8,7 +8,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 		$data['title'] = $this->document->getTitle();
 
-		$data['base'] = site_url();
+		$data['base'] = site_url('admin');
 
 		$data['theme'] = option('config_theme');
 
@@ -42,7 +42,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
 		$this->document->localizeVar('site_url', site_url());
-		$this->document->localizeVar('admin_url', site_url('admin'));
+		$this->document->localizeVar('admin_url', site_url('admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
 
 

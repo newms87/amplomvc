@@ -21,7 +21,7 @@ class App_Controller_Admin_Feed_GoogleSitemap extends Controller
 			$data['error_warning'] = '';
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url());
+		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Product Feeds"), site_url('admin/extension/feed'));
 		$this->breadcrumb->add(_l("Google Sitemap"), site_url('admin/feed/google_sitemap'));
 

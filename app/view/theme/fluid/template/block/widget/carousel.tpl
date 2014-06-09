@@ -1,10 +1,10 @@
-<div class="block_widget_carousel" class="box">
+<div class="block-widget-carousel" class="box">
 
 	<? if (!empty($show_block_title)) { ?>
-		<div class="box_heading"><?= _l("AC Carousel"); ?></div>
+		<div class="heading"><?= _l("AC Carousel"); ?></div>
 	<? } ?>
 
-	<div class="box_content">
+	<div class="content">
 		<div id="<?= $name; ?>" <?= count($slides) > 1 ? "class=\"slider $slider\"" : ''; ?>>
 			<? foreach ($slides as $slide) { ?>
 				<? if (!empty($slide['href'])) { ?>
