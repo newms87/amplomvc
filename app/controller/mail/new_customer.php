@@ -20,20 +20,12 @@ class App_Controller_Mail_NewCustomer extends Controller
 		$subject = $this->tool->insertables($insertables, option('mail_registration_subject'));
 		$message = $this->tool->insertables($insertables, option('mail_registration_message'));
 
-		$data['store'] = $this->config->getStore();
+		$store = $this->config->getStore();
 
-		$logo_width  = option('config_email_logo_width');
-		$logo_height = option('config_email_logo_height');
+		$data['logo'] = $this->config->load('config', 'config_logo', $store['store_id']);
 
-		$data['logo'] = $this->image->resize(option('config_logo'), $logo_width, $logo_height);
-
-		//Get resized image width x height. Note: $logo_width / $logo_height may be null or 0 meaning auto resize
-		$data['logo_width']  = $this->image->info('width');
-		$data['logo_height'] = $this->image->info('height');
-
-		if (option('config_account_approval')) {
-			$data['approval'] = _l('Your account must be approved before you can login. You will be notified once your account has been approved');
-		}
+		$logo_info = getimagesize($data['logo']);
+		$data['logo_width_height'] = $logo_info[3];
 
 		//If the customer did not generate their own password
 		if (!empty($customer['no_password_set'])) {
@@ -41,6 +33,8 @@ class App_Controller_Mail_NewCustomer extends Controller
 		} else {
 			$data['login'] = site_url('customer/login');
 		}
+
+		$data['store'] = $store;
 
 		$this->mail->init();
 

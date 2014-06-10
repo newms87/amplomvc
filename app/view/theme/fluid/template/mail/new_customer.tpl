@@ -8,23 +8,27 @@
 	<body style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000;">
 		<div style="width: 680px;">
 			<a href="<?= $store['url']; ?>" title="<?= $store['name']; ?>">
-				<img src="<?= $logo; ?>" alt="<?= $store['name']; ?>" width="<?= $logo_width; ?>" height="<?= $logo_height; ?>" style="margin-bottom: 20px; border: none;"/>
+				<img src="<?= image($logo, option('config_email_logo_weight'), option('config_email_logo_height')); ?>" alt="<?= $store['name']; ?>" <?= $logo_width_height; ?> style="margin-bottom: 20px; border: none;"/>
 			</a>
 
 			<p style="margin-top: 0px; margin-bottom: 20px;">
 				<?= _l("Thank you for registering with %s!", $store['name']); ?>
 			</p>
 
-			<? if (!empty($reset_password)) { ?>
-				<p>
-					<?= _l("Thank you for signing up with us! If you would like to access your account directly, please "); ?>
-					<a href="<?= $reset_password; ?>"><?= _l("Create a Password"); ?></a>
-				</p>
+			<? if (option('config_account_approval')) { ?>
+				<p><?= _l('Your account must be approved before you can login. You will be notified once your account has been approved.'); ?></p>
 			<? } else { ?>
-				<p>
-					<?= _l("You may login to your account using your username and password you just setup!"); ?>
-					<a href="<?= $login; ?>"><?= _l("Login Here."); ?></a>
-				</p>
+				<? if (!empty($reset_password)) { ?>
+					<p>
+						<?= _l("Thank you for signing up with us! If you would like to access your account directly, please "); ?>
+						<a href="<?= $reset_password; ?>"><?= _l("Create a Password"); ?></a>
+					</p>
+				<? } else { ?>
+					<p>
+						<?= _l("You may login to your account using your username and password you just setup!"); ?>
+						<a href="<?= $login; ?>"><?= _l("Login Here."); ?></a>
+					</p>
+				<? } ?>
 			<? } ?>
 
 			<p style="margin-top: 0px; margin-bottom: 20px;"><?= _l("Please reply to this email if you have any questions."); ?></p>
