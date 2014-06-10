@@ -674,10 +674,10 @@ function ac_radio_bubble() {
         var $labels = $(this).parents('label');
         $labels.children('input[type=radio]').prop('checked', true);
     });
-}
 
-$.fn.ac_box = function (params) {
-
+	$('.ac-radio input').focus(function() {
+		$(this).closest('.ac-radio').children('input[type=radio]').prop('checked', true);
+	});
 }
 
 $(document).ready(function () {
