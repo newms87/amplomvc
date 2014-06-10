@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div id="wysihtml5-editor-toolbar" class="">
+<div id="wysihtml5-editor-toolbar" class="hide">
 	<header>
 		<ul class="commands">
 			<li data-wysihtml5-command="bold" title="Make text bold (CTRL + B)" class="command" href="javascript:;" unselectable="on"></li>
