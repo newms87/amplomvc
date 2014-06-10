@@ -56,15 +56,15 @@
 <script type="text/javascript" src="<?= URL_RESOURCES . 'js/codemirror/codemirror.js'; ?>"></script>
 
 <!-- wysihtml5 parser rules -->
-<script src="<?= URL_RESOURCES . "js/wysihtml5/parser_rules/advanced.js"; ?>"></script>
-<script src="<?= URL_RESOURCES . "js/wysihtml5/dist/wysihtml5-0.3.0.min.js"; ?>"></script>
+<!--<script src="<?= URL_RESOURCES . "js/wysihtml5/parser_rules/advanced.js"; ?>"></script>
+<script src="<?= URL_RESOURCES . "js/wysihtml5/dist/wysihtml5-0.3.0.min.js"; ?>"></script> -->
 
 <script type="text/javascript">
-	var editor = new wysihtml5.Editor("wysihtml5-editor", {
-		parserRules:  wysihtml5ParserRules,
-		toolbar: 'wysihtml5-editor-toolbar',
-		stylesheets: ["http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css", $ac.site_url + "system/resources/js/wysihtml5/css/style.css"]
-	});
+//	var editor = new wysihtml5.Editor("wysihtml5-editor", {
+//		parserRules:  wysihtml5ParserRules,
+//		toolbar: 'wysihtml5-editor-toolbar',
+//		stylesheets: ["http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css", $ac.site_url + "system/resources/js/wysihtml5/css/style.css"]
+//	});
 
 	var $ac_cm_template = $('.ac-codemirror-ui').remove();
 
@@ -121,7 +121,6 @@
 		}
 
 		return this.each(function (i, e) {
-			console.log('build it here', e);
 			e.cm_editor = CodeMirror.fromTextArea(e, params);
 			var $clone = $ac_cm_template.clone(true);
 			$(e).after($clone.append($(e).siblings('.CodeMirror')));
