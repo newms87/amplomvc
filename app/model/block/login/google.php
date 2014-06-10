@@ -120,7 +120,10 @@ class App_Model_Block_Login_Google extends Model
 					'email'     => $email,
 				);
 
-				$this->customer->add($customer);
+				if (!$this->customer->add($customer)) {
+					$this->error = $this->customer->getError();
+					return false;
+				}
 			}
 		} else {
 			$customer = $this->customer->getCustomer($customer_id);

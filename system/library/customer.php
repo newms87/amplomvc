@@ -110,7 +110,7 @@ class Customer extends Library
 			$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
 		}
 
-		if (!$this->address->validate($customer)) {
+		if ((isset($customer['zone_id']) || isset($customer['country_id'])) && !$this->address->validate($customer)) {
 			$this->error += $this->address->getError();
 		}
 

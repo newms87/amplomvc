@@ -116,7 +116,10 @@ class App_Model_Block_Login_Facebook extends Model
 					'email'     => $user_info->email,
 				);
 
-				$this->customer->add($customer);
+				if (!$this->customer->add($customer)) {
+					$this->error = $this->customer->getError();
+					return false;
+				}
 			}
 		} else {
 			$customer = $this->customer->getCustomer($customer_id);
