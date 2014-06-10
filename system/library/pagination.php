@@ -127,6 +127,7 @@ class Pagination extends Library
 			'attrs'     => $attrs,
 			'num_pages' => $num_pages,
 			'pages'     => $pages,
+			'text'      => '',
 		);
 
 		$item_start = (($this->page - 1) * $this->limit) + 1;
