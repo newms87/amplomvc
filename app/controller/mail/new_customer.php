@@ -22,7 +22,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		$store = $this->config->getStore();
 
-		$data['logo'] = $this->config->load('config', 'config_logo', $store['store_id']);
+		$data['logo'] = image($this->config->load('config', 'config_logo', $store['store_id']));
 
 		$logo_info = getimagesize($data['logo']);
 		$data['logo_width_height'] = $logo_info[3];
