@@ -115,8 +115,8 @@ class App_Model_Block_Login_Google extends Model
 				}
 
 				$customer = array(
-					'firstname' => $data->name->givenName,
-					'lastname'  => $data->name->familyName,
+					'firstname' => !empty($data->name->givenName) ? $data->name->givenName : 'New',
+					'lastname'  => !empty($data->name->familyName) ? $data->name->familyName : 'Customer',
 					'email'     => $email,
 				);
 
