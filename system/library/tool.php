@@ -190,7 +190,7 @@ class Tool extends Library
 		$files = array();
 
 		foreach ($iterator as $file) {
-			if ($file->isFile() && (!$exts || in_array($file->getExtension(), $exts))) {
+			if ($file->isFile() && (!$exts || in_array(pathinfo($file->getFileName(), PATHINFO_EXTENSION), $exts))) {
 				switch ($return_type) {
 					case FILELIST_STRING:
 						$files[] = str_replace('\\', '/', $file->getPathName());
