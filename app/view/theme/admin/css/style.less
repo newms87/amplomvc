@@ -172,12 +172,11 @@ td {
 
   label.radio {
     display: inline-block;
-
     width: auto;
     min-width: 0;
-    margin-top: 8px;
+
     input {
-      position: relative;
+      position: absolute;
       left: -9999px;
 
       & + .text {
@@ -1198,13 +1197,14 @@ button, .button {
       .input {
         .input-value {
           width: 100%;
+          min-width: 0;
           box-sizing: border-box;
         }
       }
     }
 
     .buttons {
-      margin: 5px auto 0 auto!important;
+      margin: 5px auto 0 auto !important;
 
       .save-edit {
         padding: 3px 6px;
@@ -1224,6 +1224,14 @@ button, .button {
 
   td.editable .editable-options {
     display: block;
+  }
+}
+
+#ui-datepicker-div {
+  .ui-timepicker-div {
+    .ui-slider-horizontal {
+      margin: .6em;
+    }
   }
 }
 
@@ -1344,6 +1352,14 @@ table.form {
   border-collapse: collapse;
   margin-bottom: 20px;
   margin-left: 10px;
+
+  tbody {
+    tr {
+      td {
+        vertical-align: middle;
+      }
+    }
+  }
 }
 
 table.form > tbody > tr > td + td {
@@ -3235,7 +3251,6 @@ td.log_remove .message {
   }
 }
 
-
 /***********************
  *  Extra Styling      *
  ***********************/
@@ -3317,8 +3332,6 @@ td.log_remove .message {
     }
   }
 }
-
-
 
 #wysihtml5-editor-toolbar {
   position: absolute;

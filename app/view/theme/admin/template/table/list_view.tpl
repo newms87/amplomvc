@@ -251,17 +251,17 @@
 
 										case 'date':
 											?>
-											<?= $this->date->format($value, 'short'); ?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
 											<? break;
 
 										case 'datetime':
 											?>
-											<?= $this->date->format($value, 'datetime_format_long'); ?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
 											<? break;
 
 										case 'time':
 											?>
-											<?= $this->date->format($value, 'time'); ?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
 											<? break;
 
 										case 'map':
