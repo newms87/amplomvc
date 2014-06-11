@@ -453,6 +453,7 @@ abstract class Model
 				}
 
 				$column['type'] = $type;
+				$column['sortable'] = true;
 			}
 			unset($column);
 
