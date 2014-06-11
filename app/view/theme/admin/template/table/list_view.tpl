@@ -23,6 +23,7 @@
 				<? if (!empty($row_id)) { ?>
 					<td width="1" class="center">
 						<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
+						<a href="<?= $sort_url; ?>&sort=<?= $row_id; ?>&order=<?= ($sort === $row_id && $order === 'ASC') ? 'DESC' : 'ASC'; ?>" class="sortable <?= $row_id . ' ' . ($sort === $row_id ? strtolower($order) : ''); ?>"><?= $row_id; ?></a>
 					</td>
 				<? } ?>
 				<td class="center column_title">
