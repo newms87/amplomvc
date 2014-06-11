@@ -675,9 +675,9 @@ function ac_radio_bubble() {
         $labels.children('input[type=radio]').prop('checked', true);
     });
 
-	$('.ac-radio input').focus(function() {
-		$(this).closest('.ac-radio').children('input[type=radio]').prop('checked', true);
-	});
+    $('.ac-radio input').focus(function () {
+        $(this).closest('.ac-radio').children('input[type=radio]').prop('checked', true);
+    });
 }
 
 $(document).ready(function () {
@@ -690,6 +690,24 @@ $(document).ready(function () {
     $('form input').keydown(function (e) {
         if (e.keyCode == 13) {
             $(this).closest('form').submit();
+        }
+    });
+
+    $(document).keydown(function (e) {
+        if (e.ctrlKey && (e.which == 83)) {
+            $('form.ctrl-save').each(function (i, e) {
+                var $form = $(e);
+
+                var $btns = $form.find('button, input[type=submit]').loading({text: 'Saving...'});
+
+                $.post($form.attr('action'), $form.serialize(), function (response) {
+                    $btns.loading('stop');
+                    $form.ac_msg(response);
+                }, 'json');
+            });
+
+            e.preventDefault();
+            return false;
         }
     });
 

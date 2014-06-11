@@ -2,7 +2,7 @@
 <section class="section">
 	<?= breadcrumbs(); ?>
 
-	<form id="page-form" action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
+	<form id="page-form" action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?>
@@ -263,19 +263,6 @@
 
 	$('[name=display_title]').change(function () {
 		$preview.find('#page-title').stop().toggle($(this).val());
-	});
-
-	$(document).bind('keydown', function (e) {
-		if (e.ctrlKey && (e.which == 83)) {
-			var $form = $('#page-form');
-
-			$.post($form.attr('action'), $form.serialize(), function (response) {
-				$form.ac_msg(response);
-			}, 'json');
-
-			e.preventDefault();
-			return false;
-		}
 	});
 
 	$('#tabs a').tabs();

@@ -17,7 +17,7 @@ define("DIR_DATABASE", DIR_SITE . 'system/database/');
 
 require_once(DIR_SITE . 'system/functions.php');
 
-$template    = !empty($_GET['page']) ? $_GET['page'] : 'db';
+$template    = _get('page', 'db');
 $error_msg   = '';
 $success_msg = '';
 

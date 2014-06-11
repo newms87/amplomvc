@@ -22,7 +22,7 @@ class Extend extends Library
 		}
 
 		if (empty($link['name'])) {
-			$link['name'] = $this->tool->getSlug($link['display_name']);
+			$link['name'] = slug($link['display_name']);
 		}
 
 		//Link already exists

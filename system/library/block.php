@@ -123,7 +123,7 @@ class Block extends Library
 				$content = file_get_contents($front_template);
 
 				$insertables = array(
-					'slug' => $this->tool->getSlug($data['path']),
+					'slug' => slug($data['path']),
 				);
 
 				$content = $this->tool->insertables($insertables, $content, '__', '__');
@@ -158,7 +158,7 @@ class Block extends Library
 			$this->delete('block_instance', array('path' => $path));
 
 			foreach ($data['instances'] as &$instance) {
-				$instance['name'] = $this->tool->getSlug($instance['name'], '-');
+				$instance['name'] = slug($instance['name'], '-');
 
 				$duplicates = 0;
 
@@ -178,6 +178,7 @@ class Block extends Library
 
 				$this->insert('block_instance', $instance);
 			}
+			unset($instance);
 		}
 
 		$this->cache->delete('block');
@@ -231,7 +232,7 @@ class Block extends Library
 	public function get($path)
 	{
 		if (!isset($this->blocks[$path])) {
-			$block = $this->cache->get('block.' . $path);
+			$block = cache('block.' . $path);
 
 			if (true || is_null($block)) {
 				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
@@ -250,7 +251,7 @@ class Block extends Library
 					);
 				}
 
-				$this->cache->set('block.' . $path, $block);
+				cache('block.' . $path, $block);
 			}
 
 			$this->blocks[$path] = $block;

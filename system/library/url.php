@@ -332,12 +332,12 @@ class Url extends Library
 
 	public function loadAliases()
 	{
-		$this->aliases = $this->cache->get('url_alias.all');
+		$this->aliases = cache('url_alias.all');
 
 		if (is_null($this->aliases)) {
 			$this->aliases = $this->queryRows("SELECT * FROM " . DB_PREFIX . "url_alias WHERE status = 1", 'alias');
 
-			$this->cache->set('url_alias.all', $this->aliases);
+			cache('url_alias.all', $this->aliases);
 		}
 	}
 }

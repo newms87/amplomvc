@@ -158,7 +158,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	private function getForm()
 	{
-		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
+		$language_id = _get('language_id', false);
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 

@@ -14,7 +14,7 @@ class App_Controller_Block_Block extends Controller
 
 	public function delete()
 	{
-		$path = !empty($_GET['path']) ? $_GET['path'] : '';
+		$path = _get('path', '');
 
 		if ($path) {
 			if (!$this->block->remove($path)) {
@@ -33,7 +33,7 @@ class App_Controller_Block_Block extends Controller
 
 	public function save()
 	{
-		$path = !empty($_GET['path']) ? $_GET['path'] : '';
+		$path = _get('path', '');
 
 		if ($path) {
 			if (!$this->block->edit($path, $_POST)) {

@@ -4,7 +4,7 @@ class App_Model_Block_Widget_Views extends Model
 	public function save($view_id, $view)
 	{
 		if (!isset($view['name'])) {
-			$view['name'] = $this->tool->getSlug($view['title']);
+			$view['name'] = slug($view['title']);
 		}
 
 		if (!is_string($view['query'])) {

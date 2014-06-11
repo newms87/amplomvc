@@ -87,7 +87,7 @@ class App_Controller_Admin_Page extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$page_total = $this->Model_Page->getTotalPages($filter);
 		$pages      = $this->Model_Page->getPages($sort + $filter);

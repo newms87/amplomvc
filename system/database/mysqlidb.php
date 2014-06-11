@@ -1,5 +1,5 @@
 <?php
-final class mysqlidb implements Database
+class mysqlidb implements Database
 {
 	private $mysqli;
 	private $err_msg;
@@ -26,6 +26,11 @@ final class mysqlidb implements Database
 			$this->query("SET CHARACTER_SET_CONNECTION=utf8");
 			$this->query("SET SQL_MODE = ''");
 		}
+	}
+
+	public function getName()
+	{
+		return $this->database;
 	}
 
 	public function getError()

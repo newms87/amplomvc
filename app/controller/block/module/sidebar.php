@@ -28,7 +28,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 		if ($category_id) {
 			$route = 'product/category';
 
-			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
+			$current_filter = _get('attribute', array());
 
 			$url_query = $this->url->getQuery('category_id');
 
