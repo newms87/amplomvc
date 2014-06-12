@@ -91,9 +91,9 @@ class App_Model_Page extends Model
 
 		if (empty($page['name'])) {
 			$page['name'] = $this->getPageName($page_id);
-		} else {
-			$page['name'] = $this->tool->getSlug($page['name']);
 		}
+
+		$page['name'] = slug($page['name']);
 
 		//Remove Old Directory if we are renaming page.
 		$old_page = $this->queryRow("SELECT name, theme FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
