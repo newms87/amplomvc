@@ -47,7 +47,6 @@
 				<h3><?= _l("Custom Styles"); ?></h3>
 				<div class="code-editor">
 					<textarea id="stylesheet-editor" name="stylesheet" class=""><?= file_get_contents($stylesheet); ?></textarea>
-					<textarea id="wysihtml5-editor" name="stylesheet" class="" rows="40" cols="150"><?= file_get_contents($stylesheet); ?></textarea>
 				</div>
 			</div>
 		</div>

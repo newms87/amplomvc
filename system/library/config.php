@@ -23,7 +23,7 @@ class Config extends Library
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
 		//Get the settings specific to the requested store
-		$settings = $this->cache->get('setting.config.' . $this->store_id);
+		$settings = cache('setting.config.' . $this->store_id);
 
 		if (!$settings) {
 			//TODO: Should use $this->config->loadGroup('config', $this->store_id);
@@ -34,7 +34,7 @@ class Config extends Library
 			}
 			unset($setting);
 
-			$this->cache->set('setting.config.' . $this->store_id, $settings);
+			cache('setting.config.' . $this->store_id, $settings);
 		}
 
 		$this->data += $settings;
@@ -65,12 +65,12 @@ class Config extends Library
 			$store_id = option('store_id');
 		}
 
-		$stores = $this->cache->get('store.all');
+		$stores = cache('store.all');
 
 		if (is_null($stores)) {
 			$stores = $this->Model_Setting_Store->getStores();
 
-			$this->cache->set('store.all', $stores);
+			cache('store.all', $stores);
 		}
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
@@ -235,7 +235,7 @@ class Config extends Library
 		}
 
 		if (!isset($loaded_groups[$group][$store_id])) {
-			$data = $this->cache->get("setting.$group.$store_id");
+			$data = cache("setting.$group.$store_id");
 
 			if (is_null($data)) {
 				$data = array();
@@ -261,7 +261,7 @@ class Config extends Library
 					$data[$setting['key']] = $value;
 				}
 
-				$this->cache->set("setting.$group.$store_id", $data);
+				cache("setting.$group.$store_id", $data);
 			}
 
 			$this->data += $data;

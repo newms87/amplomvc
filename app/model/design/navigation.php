@@ -269,7 +269,7 @@ class App_Model_Design_Navigation extends Model
 
 	public function getNavigationLinks()
 	{
-		$nav_groups = $this->cache->get('navigation_groups.admin');
+		$nav_groups = cache('navigation_groups.admin');
 
 		if (!$nav_groups) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
@@ -303,7 +303,7 @@ class App_Model_Design_Navigation extends Model
 				$nav_groups[$group['name']] = $nav_group_links;
 			}
 
-			$this->cache->set('navigation_groups.admin', $nav_groups);
+			cache('navigation_groups.admin', $nav_groups);
 		}
 
 		return $nav_groups;

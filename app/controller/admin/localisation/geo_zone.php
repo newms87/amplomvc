@@ -176,7 +176,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	private function getForm()
 	{
-		$geo_zone_id = isset($_GET['geo_zone_id']) ? $_GET['geo_zone_id'] : 0;
+		$geo_zone_id = _get('geo_zone_id', 0);
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 

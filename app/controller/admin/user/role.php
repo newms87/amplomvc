@@ -56,7 +56,7 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$user_role_total = $this->Model_User_Role->getTotalRoles($filter);
 		$user_roles      = $this->Model_User_Role->getRoles($sort + $filter);

@@ -83,6 +83,11 @@ class DB
 		$this->error = array();
 	}
 
+	public function getName()
+	{
+		return $this->driver->getName();
+	}
+
 	public function getProfile()
 	{
 		return self::$profile;

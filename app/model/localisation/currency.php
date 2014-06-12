@@ -40,12 +40,12 @@ class App_Model_Localisation_Currency extends Model
 
 	public function getActiveCurrencies()
 	{
-		$currencies = $this->cache->get('currency.active');
+		$currencies = cache('currency.active');
 
 		if (!$currencies) {
 			$currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency WHERE status = 1 ORDER BY title ASC");
 
-			$this->cache->set('currency.active', $currencies);
+			cache('currency.active', $currencies);
 		}
 
 		return $currencies;
@@ -91,7 +91,7 @@ class App_Model_Localisation_Currency extends Model
 
 			return $query->rows;
 		} else {
-			$currency_data = $this->cache->get('currency');
+			$currency_data = cache('currency');
 
 			if (!$currency_data) {
 				$currency_data = array();
@@ -112,7 +112,7 @@ class App_Model_Localisation_Currency extends Model
 					);
 				}
 
-				$this->cache->set('currency', $currency_data);
+				cache('currency', $currency_data);
 			}
 
 			return $currency_data;

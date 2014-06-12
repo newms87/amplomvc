@@ -4,7 +4,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 	public function index()
 	{
 		//Log File
-		$log = isset($_GET['log']) ? $_GET['log'] : 'log';
+		$log = _get('log', 'log');
 
 		$log_name = $log === 'log' ? _l("Default") : ucfirst($log);
 
@@ -18,7 +18,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		//Sort and Filter
 		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
-		$filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+		$filter = _get('filter', null);
 
 		$start = $sort['start'];
 		$limit = $sort['limit'];

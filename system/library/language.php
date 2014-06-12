@@ -150,7 +150,7 @@ class Language extends Library
 		if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 			$use_macro = option('config_use_macro_languages');
 
-			$languages = $this->cache->get('language.locales');
+			$languages = cache('language.locales');
 
 			if (!$languages) {
 				$language_list = $this->getLanguages();
@@ -169,7 +169,7 @@ class Language extends Library
 					$languages[$language['code']] = $language;
 				}
 
-				$this->cache->set('language.locales', $languages);
+				cache('language.locales', $languages);
 			}
 
 			foreach ($languages as $language) {

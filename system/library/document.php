@@ -223,7 +223,7 @@ class Document extends Library
 
 		if (!$refresh && is_file($less_file)) {
 			//Check Less @imports for modifications
-			$dependencies = $this->cache->get('less.' . $reference);
+			$dependencies = cache('less.' . $reference);
 
 			if (is_null($dependencies)) {
 				$refresh = true;
@@ -257,7 +257,7 @@ class Document extends Library
 
 			$dependencies = $less->allParsedFiles();
 
-			$this->cache->set('less.' . $reference, $dependencies);
+			cache('less.' . $reference, $dependencies);
 
 			//Write cache file
 			if (_is_writable(dirname($less_file))) {
@@ -273,11 +273,23 @@ class Document extends Library
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
 	{
-		$this->styles[md5($href)] = array(
-			'href'  => $href,
-			'rel'   => $rel,
-			'media' => $media
-		);
+		if (preg_match("/\\.less$/", $href)) {
+			if (!is_file($href)) {
+				$href = str_replace(URL_SITE, DIR_SITE, $href);
+			}
+
+			if (is_file($href)) {
+				$href = $this->compileLess($href, slug(str_replace(DIR_SITE, '', $href), '-'));
+			}
+		}
+
+		if ($href) {
+			$this->styles[md5($href)] = array(
+				'href'  => $href,
+				'rel'   => $rel,
+				'media' => $media
+			);
+		}
 	}
 
 	public function getStyles()
@@ -374,7 +386,7 @@ class Document extends Library
 	{
 		$store_id = option('store_id');
 
-		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
+		$nav_groups = cache("navigation_groups.store.$store_id");
 
 		if (is_null($nav_groups)) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
@@ -408,7 +420,7 @@ class Document extends Library
 			}
 			unset($group);
 
-			$this->cache->set("navigation_groups.store.$store_id", $nav_groups);
+			cache("navigation_groups.store.$store_id", $nav_groups);
 		}
 
 		//Filter Conditional Links And Access Permissions

@@ -301,7 +301,7 @@ class Plugin extends Library
 
 	private function loadPluginFileRegistry()
 	{
-		$this->plugin_registry = $this->cache->get('plugin.registry');
+		$this->plugin_registry = cache('plugin.registry');
 
 		if (!$this->plugin_registry) {
 			$query = $this->query("SELECT * FROM " . DB_PREFIX . "plugin_registry");
@@ -312,7 +312,7 @@ class Plugin extends Library
 				$this->plugin_registry[$row['live_file']] = $row;
 			}
 
-			$this->cache->set('plugin.registry', $this->plugin_registry);
+			cache('plugin.registry', $this->plugin_registry);
 		}
 	}
 

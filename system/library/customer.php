@@ -3,7 +3,7 @@
 class Customer extends Library
 {
 	private $customer_id;
-	private $information;
+	private $info;
 	private $metadata;
 
 	public function __construct()
@@ -56,7 +56,7 @@ class Customer extends Library
 
 		$this->customer_id = null;
 
-		$this->information = array();
+		$this->info = array();
 
 		$this->message->add('notify', _l("You have been logged out of your account"));
 	}
@@ -64,6 +64,41 @@ class Customer extends Library
 	public function getId()
 	{
 		return $this->customer_id;
+	}
+
+	public function setCustomerOverride($customer)
+	{
+		if (user_can('modify', 'customer')) {
+			$this->setCustomer($customer, true);
+		}
+	}
+
+	private function setCustomer($customer, $ignore_status = false)
+	{
+		if (!is_array($customer)) {
+			$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
+		}
+
+		if (empty($customer)) {
+			return false;
+		}
+
+		$this->customer_id = (int)$customer['customer_id'];
+		$this->session->set('customer_id', $this->customer_id);
+		$this->info = $customer;
+
+		$this->displayMessages();
+
+		//Load Customer Settings
+		$metadata = $this->queryRows("SELECT * FROM " . DB_PREFIX . "customer_meta WHERE customer_id = " . $this->customer_id);
+
+		$this->metadata = array();
+
+		foreach ($metadata as $meta) {
+			$this->metadata[$meta['key']] = $meta['serialized'] ? unserialize($meta['value']) : $meta['value'];
+		}
+
+		return true;
 	}
 
 	//TODO: Need to move customer database calls to library. This will resolve the customer_id issue.
@@ -231,8 +266,8 @@ class Customer extends Library
 
 	public function getCustomerGroupId()
 	{
-		if (!empty($this->information['customer_group_id'])) {
-			return $this->information['customer_group_id'];
+		if (!empty($this->info['customer_group_id'])) {
+			return $this->info['customer_group_id'];
 		}
 
 		return (int)option('config_customer_group_id');
@@ -503,11 +538,11 @@ class Customer extends Library
 
 	public function info($key = null)
 	{
-		if ($key && isset($this->information[$key])) {
-			return $this->information[$key];
+		if ($key && isset($this->info[$key])) {
+			return $this->info[$key];
 		}
 
-		return $this->information;
+		return $this->info;
 	}
 
 	public function getIps($customer_id)
@@ -600,41 +635,6 @@ class Customer extends Library
 	public function generatePassword()
 	{
 		return substr(str_shuffle(MD5(microtime())), 0, (int)rand(10, 13));
-	}
-
-	public function setCustomerOverride($customer, $ignore_status = true)
-	{
-		if (user_can('modify', 'customer')) {
-			$this->setCustomer($customer, true);
-		}
-	}
-
-	private function setCustomer($customer, $ignore_status = false)
-	{
-		if (!is_array($customer)) {
-			$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
-		}
-
-		if (empty($customer)) {
-			return false;
-		}
-
-		$this->customer_id = (int)$customer['customer_id'];
-		$this->session->set('customer_id', $this->customer_id);
-		$this->information = $customer;
-
-		$this->displayMessages();
-
-		//Load Customer Settings
-		$metadata = $this->queryRows("SELECT * FROM " . DB_PREFIX . "customer_meta WHERE customer_id = " . $this->customer_id);
-
-		$this->metadata = array();
-
-		foreach ($metadata as $meta) {
-			$this->metadata[$meta['key']] = $meta['serialized'] ? unserialize($meta['value']) : $meta['value'];
-		}
-
-		return true;
 	}
 
 	private function track()

@@ -6,15 +6,15 @@ abstract class Model
 	protected $prefix;
 
 	const
-		TEXT = 'text',
-		NO_ESCAPE = 'no-escape',
-		IMAGE = 'image',
-		INTEGER = 'int',
-		FLOAT = 'float',
-		DATETIME = 'datetime',
+		TEXT                = 'text',
+		NO_ESCAPE           = 'no-escape',
+		IMAGE               = 'image',
+		INTEGER             = 'int',
+		FLOAT               = 'float',
+		DATETIME            = 'datetime',
 		PRIMARY_KEY_INTEGER = 'pk-int',
-		AUTO_INCREMENT = 'ai',
-		AUTO_INCREMENT_PK = 'pk';
+		AUTO_INCREMENT      = 'ai',
+		AUTO_INCREMENT_PK   = 'pk';
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
@@ -27,16 +27,13 @@ abstract class Model
 
 		$key = strtolower(get_class($this));
 
-		//TODO: this is just for validation. Remove this for launch!
-		if ($registry->has($key)) {
-			trigger_error(_l("The model %s was called again!", get_class($this)));
-		}
-
 		$registry->set($key, $this);
 
 		//use default database
-		//(Note: setting our own $db property allows us to use a different database for new Model instances)
-		$this->db = $registry->get('db');
+		if (!$this->db) {
+			//(Note: setting our own $db property allows us to use a different database for new Model instances)
+			$this->db = $registry->get('db');
+		}
 	}
 
 	public function __get($key)
@@ -416,9 +413,9 @@ abstract class Model
 		return $limit;
 	}
 
-	protected function getTableColumns($table)
+	protected function getTableColumns($table, $merge = array(), $filter = array())
 	{
-		$columns = $this->cache->get('model.' . $table);
+		$columns = cache('model.' . $table);
 
 		if (!$columns) {
 			$columns = $this->db->getTableColumns($table);
@@ -456,10 +453,30 @@ abstract class Model
 				}
 
 				$column['type'] = $type;
+				$column['sortable'] = true;
 			}
 			unset($column);
 
-			$this->cache->set('model.' . $table, $columns);
+			cache('model.' . $table, $columns);
+		}
+
+		//Merge
+		foreach ($merge as $field => $data) {
+			if (isset($columns[$field])) {
+				$columns[$field] = $data + $columns[$field];
+			} elseif ($filter === false) {
+				$columns[$field] = $data;
+			}
+		}
+
+		//Filter / Sort
+		if (!$filter && $filter !== false) {
+			$filter = array_combine(array_keys($columns), range(0, count($columns) - 1));
+		}
+
+		if ($filter) {
+			$columns = array_intersect_key($columns, $filter);
+			uksort($columns, function ($a, $b) use ($filter) { return $filter[$a] > $filter[$b]; });
 		}
 
 		return $columns;

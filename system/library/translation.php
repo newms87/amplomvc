@@ -9,7 +9,7 @@ class Translation extends Library
 
 		$table = $this->escape($table);
 
-		$translations = $this->cache->get('translate.' . $table . '.' . (int)$object_id);
+		$translations = cache('translate.' . $table . '.' . (int)$object_id);
 
 		if (!$translations) {
 			$language_id = option('config_language_id');
@@ -26,7 +26,7 @@ class Translation extends Library
 				}
 			}
 
-			$this->cache->set('translate.' . $table . '.' . (int)$object_id, $translations);
+			cache('translate.' . $table . '.' . (int)$object_id, $translations);
 		}
 
 		$data = $translations + $data;
@@ -49,7 +49,7 @@ class Translation extends Library
 			return $_POST['translations'];
 		}
 
-		$languages = $this->cache->get('language.id_list');
+		$languages = cache('language.id_list');
 
 		if (!$languages) {
 			$language_ids = $this->query("SELECT language_id FROM " . DB_PREFIX . "language WHERE status >= '0'");
@@ -64,7 +64,7 @@ class Translation extends Library
 				$languages[$language['language_id']] = '';
 			}
 
-			$this->cache->set('language.id_list', $languages);
+			cache('language.id_list', $languages);
 		}
 
 		if (empty($languages)) {

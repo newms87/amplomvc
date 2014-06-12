@@ -91,14 +91,14 @@ class App_Model_Localisation_GeoZone extends Model
 
 			return $query->rows;
 		} else {
-			$geo_zone_data = $this->cache->get('geo_zone');
+			$geo_zone_data = cache('geo_zone');
 
 			if (!$geo_zone_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "geo_zone ORDER BY name ASC");
 
 				$geo_zone_data = $query->rows;
 
-				$this->cache->set('geo_zone', $geo_zone_data);
+				cache('geo_zone', $geo_zone_data);
 			}
 
 			return $geo_zone_data;
