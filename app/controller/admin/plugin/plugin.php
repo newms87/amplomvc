@@ -81,7 +81,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$plugin_total = $this->Model_Setting_Plugin->getTotalPlugins($filter);
 		$plugins      = $this->Model_Setting_Plugin->getPlugins($sort + $filter);

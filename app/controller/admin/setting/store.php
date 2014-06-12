@@ -66,7 +66,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
 		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
@@ -119,7 +119,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$this->document->setTitle(_l("Store Settings"));
 
 		//Insert or Update
-		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
+		$store_id = _get('store_id', 0);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin'));
@@ -243,7 +243,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 	public function save()
 	{
 		//Insert or Update
-		$store_id = !empty($_GET['store_id']) ? $_GET['store_id'] : 0;
+		$store_id = _get('store_id', 0);
 
 		$store_id = $this->Model_Setting_Store->save($store_id, $_POST);
 

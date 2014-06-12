@@ -66,14 +66,14 @@ class App_Model_Localisation_Country extends Model
 
 			return $query->rows;
 		} else {
-			$country_data = $this->cache->get('country');
+			$country_data = cache('country');
 
 			if (!$country_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "country ORDER BY name ASC");
 
 				$country_data = $query->rows;
 
-				$this->cache->set('country', $country_data);
+				cache('country', $country_data);
 			}
 
 			return $country_data;
@@ -82,12 +82,12 @@ class App_Model_Localisation_Country extends Model
 
 	public function getActiveCountries()
 	{
-		$countries = $this->cache->get('country.active');
+		$countries = cache('country.active');
 
 		if (!$countries) {
 			$countries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
 
-			$this->cache->set('country.active', $countries);
+			cache('country.active', $countries);
 		}
 
 		return $countries;

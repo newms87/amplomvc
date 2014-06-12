@@ -5,7 +5,7 @@ class App_Controller_Example_Example extends Controller
 	public function index()
 	{
 		//The page
-		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
+		$page_id = _get('page_id', 0);
 
 		$page = $this->Model_Page->getActivePage($page_id);
 

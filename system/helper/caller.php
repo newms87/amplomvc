@@ -49,6 +49,17 @@ function breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
+function cache($key, $value = null)
+{
+	global $registry;
+
+	if (is_null($value)) {
+		return $registry->get('cache')->get($key);
+	} else {
+		return $registry->get('cache')->set($key, $value);
+	}
+}
+
 function image($image, $width = null, $height = null, $default = null)
 {
 	global $registry;
@@ -102,13 +113,23 @@ function theme_url($path = '', $query = null)
 function theme_dir($path = '')
 {
 	global $registry;
-	return  $registry->get('theme')->getFile($path);
+	return $registry->get('theme')->getFile($path);
 }
 
 function redirect($path = '', $query = null, $status = null)
 {
 	global $registry;
 	$registry->get('url')->redirect($path, $query, $status);
+}
+
+function slug($name, $sep = '_', $allow = '')
+{
+	$patterns = array(
+		"/[\\s\\\\\\/]/"     => $sep,
+		"/[^a-z0-9_-$allow]/" => '',
+	);
+
+	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 }
 
 function _get($key, $default = null)
@@ -153,7 +174,10 @@ function validate($method, $value)
 	$args = func_get_args();
 	array_shift($args);
 
-	return call_user_func_array(array($registry->get('validation'), $method), $args);
+	return call_user_func_array(array(
+			$registry->get('validation'),
+			$method
+		), $args);
 }
 
 function format($type, $data, $param = null)
@@ -167,7 +191,10 @@ function format($type, $data, $param = null)
 		return call_user_func_array($type, $args);
 	}
 
-	return call_user_func_array(array($registry->get($type), 'format'), $args);
+	return call_user_func_array(array(
+			$registry->get($type),
+			'format'
+		), $args);
 }
 
 function format_all($type, &$array, $index = null, $key = 'formatted')
@@ -243,6 +270,10 @@ function build($type, $params)
 	}
 
 	$attrs = attrs($params);
+
+	if ($type === 'text') {
+		return "<input type=\"text\" $attrs name=\"$name\" value=\"$select\" />";
+	}
 
 	//This is for select option groups
 	$opt_group_active = false;
@@ -371,8 +402,14 @@ function build_js($js)
 	return ob_get_clean();
 }
 
-function rrmdir($dir) {
-	foreach(glob($dir . '/*') as $file) {
-		if(is_dir($file)) rrmdir($file); else unlink($file);
-	} rmdir($dir);
+function rrmdir($dir)
+{
+	foreach (glob($dir . '/*') as $file) {
+		if (is_dir($file)) {
+			rrmdir($file);
+		} else {
+			unlink($file);
+		}
+	}
+	rmdir($dir);
 }

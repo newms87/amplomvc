@@ -8,12 +8,12 @@ class Currency extends Library
 	{
 		parent::__construct();
 
-		$this->currencies = $this->cache->get('currencies');
+		$this->currencies = cache('currencies');
 
 		if (!$this->currencies) {
 			$this->currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency WHERE status = 1", 'code');
 
-			$this->cache->set('currencies', $this->currencies);
+			cache('currencies', $this->currencies);
 		}
 
 		if (!empty($_GET['currency']) && $this->has($_GET['currency'])) {

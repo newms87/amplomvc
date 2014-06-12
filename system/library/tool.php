@@ -11,16 +11,6 @@ class Tool extends Library
 		define("FILELIST_RELATIVE", 3);
 	}
 
-	public function getSlug($name, $allow = '')
-	{
-		$patterns = array(
-			"/[\s\\\\\/]/"       => '_',
-			"/[^a-z0-9_$allow]/" => '',
-		);
-
-		return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
-	}
-
 	public function _2CamelCase($str, $lower = false)
 	{
 		$parts = explode('_', $str);
@@ -200,7 +190,7 @@ class Tool extends Library
 		$files = array();
 
 		foreach ($iterator as $file) {
-			if ($file->isFile() && (!$exts || in_array($file->getExtension(), $exts))) {
+			if ($file->isFile() && (!$exts || in_array(pathinfo($file->getFileName(), PATHINFO_EXTENSION), $exts))) {
 				switch ($return_type) {
 					case FILELIST_STRING:
 						$files[] = str_replace('\\', '/', $file->getPathName());

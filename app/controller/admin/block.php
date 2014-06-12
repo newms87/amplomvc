@@ -68,7 +68,7 @@ class App_Controller_Admin_Block extends Controller
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		//Table Row Data
 		$block_total = $this->block->getTotalBlocks($filter);
@@ -113,7 +113,7 @@ class App_Controller_Admin_Block extends Controller
 
 	public function delete()
 	{
-		$path = !empty($_GET['path']) ? $_GET['path'] : '';
+		$path = _get('path', '');
 
 		$action = new Action('block/' . $path);
 		$controller = $action->getController();
@@ -123,7 +123,7 @@ class App_Controller_Admin_Block extends Controller
 
 	public function save()
 	{
-		$path = !empty($_GET['path']) ? $_GET['path'] : '';
+		$path = _get('path', '');
 
 		$action = new Action('block/' . $path);
 		$controller = $action->getController();
@@ -133,22 +133,16 @@ class App_Controller_Admin_Block extends Controller
 
 	public function form()
 	{
-		$path = !empty($_GET['path']) ? $_GET['path'] : '';
+		$path = _get('path', '');
 
 		//Page Head
 		$this->document->setTitle(_l("Edit Block"));
+		$this->document->addStyle(theme_dir('block/' . $path . '/style.less'));
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
 		$this->breadcrumb->add($path, site_url('admin/block/form', 'path=' . $path));
-
-		$style = $this->theme->getFile('block/' . $path . '/style.less');
-
-		if ($style) {
-			$style = $this->document->compileLess($style, $this->tool->getSlug('admin/block/' . $path));
-			$this->document->addStyle($style);
-		}
 
 		//Entry Data
 		$block = array();

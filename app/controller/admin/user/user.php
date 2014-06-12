@@ -80,7 +80,7 @@ class App_Controller_Admin_User_User extends Controller
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$user_total = $this->Model_User_User->getTotalUsers($filter);
 		$users      = $this->Model_User_User->getUsers($sort + $filter);
@@ -135,7 +135,7 @@ class App_Controller_Admin_User_User extends Controller
 		$this->document->setTitle(_l("User Information"));
 
 		//Insert or Update
-		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+		$user_id = _get('user_id', null);
 
 		//Breadcrumbs
 		$this->breadcrumb->add(_l("Home"), site_url('admin'));

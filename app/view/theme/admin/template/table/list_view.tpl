@@ -23,6 +23,7 @@
 				<? if (!empty($row_id)) { ?>
 					<td width="1" class="center">
 						<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
+						<a href="<?= $sort_url; ?>&sort=<?= $row_id; ?>&order=<?= ($sort === $row_id && $order === 'ASC') ? 'DESC' : 'ASC'; ?>" class="sortable <?= $row_id . ' ' . ($sort === $row_id ? strtolower($order) : ''); ?>"><?= $row_id; ?></a>
 					</td>
 				<? } ?>
 				<td class="center column_title">
@@ -227,90 +228,86 @@
 						<td class="center actions">
 							<?= $quick_actions; ?>
 						</td>
-						<? foreach ($columns as $slug => $column) {
-							if (!isset($row[$slug])) {
-								?>
-								<td></td>
-								<? continue;
-							}
-							?>
+						<? foreach ($columns as $slug => $column) { ?>
 							<td class="<?= $column['align'] . ' ' . $slug . ($column['editable'] ? ' editable' : ''); ?>" data-field="<?= $slug; ?>">
 								<?
-								$value = $row[$slug];
+								if (isset($row[$slug])) {
+									$value = $row[$slug];
 
-								//Check if the raw string override has been set for this value
-								if (isset($row['#' . $slug])) {
-									echo $row['#' . $slug];
-								} else {
-									switch ($column['type']) {
-										case 'text':
-										case 'int':
-											?>
-											<?= $value; ?>
-											<? break;
+									//Check if the raw string override has been set for this value
+									if (isset($row['#' . $slug])) {
+										echo $row['#' . $slug];
+									} else {
+										switch ($column['type']) {
+											case 'text':
+											case 'int':
+												?>
+												<?= $value; ?>
+												<? break;
 
-										case 'date':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
-											<? break;
+											case 'date':
+												?>
+												<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+												<? break;
 
-										case 'datetime':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
-											<? break;
+											case 'datetime':
+												?>
+												<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+												<? break;
 
-										case 'time':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
-											<? break;
+											case 'time':
+												?>
+												<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+												<? break;
 
-										case 'map':
-											?>
-											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-											<? break;
+											case 'map':
+												?>
+												<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+												<? break;
 
-										case 'select':
-											foreach ($column['build_data'] as $key => $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-													?>
-													<?= $c_data[$column['build_config'][1]]; ?>
-												<?
-												}
-											}
-											break;
-
-										case 'multiselect':
-											foreach ($value as $v) {
-												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-												foreach ($column['build_data'] as $c_data) {
-													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-														echo $c_data[$column['build_config'][1]] . "<br/>";
-														break;
+											case 'select':
+												foreach ($column['build_data'] as $key => $c_data) {
+													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+														?>
+														<?= $c_data[$column['build_config'][1]]; ?>
+													<?
 													}
 												}
-											}
-											break;
+												break;
 
-										case 'format':
-											?>
-											<?= sprintf($column['format'], $value); ?>
-											<? break;
-
-										case 'image':
-											?>
-											<img src="<?= $row['thumb']; ?>"/>
-											<? break;
-
-										case 'text_list':
-											if (!empty($value) && is_array($value)) {
-												foreach ($value as $item) {
-													echo $item[$column['display_data']];
+											case 'multiselect':
+												foreach ($value as $v) {
+													$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+													foreach ($column['build_data'] as $c_data) {
+														if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+															echo $c_data[$column['build_config'][1]] . "<br/>";
+															break;
+														}
+													}
 												}
-											}
-											break;
+												break;
 
-										default:
-											break;
+											case 'format':
+												?>
+												<?= sprintf($column['format'], $value); ?>
+												<? break;
+
+											case 'image':
+												?>
+												<img src="<?= $row['thumb']; ?>"/>
+												<? break;
+
+											case 'text_list':
+												if (!empty($value) && is_array($value)) {
+													foreach ($value as $item) {
+														echo $item[$column['display_data']];
+													}
+												}
+												break;
+
+											default:
+												break;
+										}
 									}
 								}?>
 							</td>
@@ -529,10 +526,19 @@
 		event.stopPropagation();
 		return false;
 	});
+
 	$listview.find('.editable-options .cancel-edit').click(function (event) {
 		var $box = $(this).closest('.table-list-view-box');
 		$box.append($(this).closest('.editable-options'));
 		event.stopPropagation();
 		return false;
+	});
+
+	$listview.find('.editable-option .input input[type=text]').keyup(function (event) {
+		if (event.keyCode == 13) {
+			$(this).closest('.editable-options').find('.save-edit').click();
+			event.stopPropagation();
+			return false;
+		}
 	});
 </script>

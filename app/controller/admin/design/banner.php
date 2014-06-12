@@ -142,7 +142,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 	private function getForm()
 	{
-		$banner_id = isset($_GET['banner_id']) ? $_GET['banner_id'] : 0;
+		$banner_id = _get('banner_id', 0);
 
 		$url = $this->get_url();
 

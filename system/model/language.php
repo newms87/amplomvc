@@ -8,12 +8,12 @@ class System_Model_Language extends Model
 
 	public function getLanguages()
 	{
-		$languages = $this->cache->get('language');
+		$languages = cache('language');
 
 		if (!$languages) {
 			$languages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' ORDER BY sort_order, name");
 
-			$this->cache->set('language', $languages);
+			cache('language', $languages);
 		}
 
 		return $languages;
@@ -26,7 +26,7 @@ class System_Model_Language extends Model
 	 */
 	public function getEnabledLanguages()
 	{
-		$language_list = $this->cache->get('language.list');
+		$language_list = cache('language.list');
 
 		if (!$language_list) {
 			$languages = $this->queryRows("SELECT language_id, name, code, image, sort_order FROM " . DB_PREFIX . "language WHERE status >= 0 ORDER BY sort_order");
@@ -37,7 +37,7 @@ class System_Model_Language extends Model
 				$language_list[$language['language_id']] = $language;
 			}
 
-			$this->cache->set('language.list', $language_list);
+			cache('language.list', $language_list);
 		}
 
 		return $language_list;

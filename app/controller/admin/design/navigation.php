@@ -142,7 +142,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$navigation_groups_total = $this->Model_Design_Navigation->getTotalNavigationGroups($filter);
 		$navigation_groups       = $this->Model_Design_Navigation->getNavigationGroups($sort + $filter);

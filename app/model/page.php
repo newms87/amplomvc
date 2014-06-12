@@ -28,10 +28,10 @@ class App_Model_Page extends Model
 		}
 
 		if (empty($page['name'])) {
-			$page['name'] = $this->tool->getSlug($page['title']);
-		} else {
-			$page['name'] = $this->tool->getSlug($page['name']);
+			$page['name'] = $page['title'];
 		}
+
+		$page['name'] = slug($page['name']);
 
 		$page_id = $this->insert('page', $page);
 
@@ -408,7 +408,7 @@ class App_Model_Page extends Model
 
 	public function loadPages()
 	{
-		$pages = $this->cache->get('page.loaded');
+		$pages = cache('page.loaded');
 
 		if (is_null($pages)) {
 			$pages = array();
@@ -419,7 +419,7 @@ class App_Model_Page extends Model
 				$pages[$p['theme']][$p['name']] = $p;
 			}
 
-			$this->cache->set('page.loaded', $pages);
+			cache('page.loaded', $pages);
 		}
 
 		clearstatcache();

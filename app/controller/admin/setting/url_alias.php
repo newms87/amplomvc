@@ -77,7 +77,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('alias', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$url_alias_total = $this->Model_Setting_UrlAlias->getTotalUrlAliases($filter);
 		$url_aliases     = $this->Model_Setting_UrlAlias->getUrlAliases($sort + $filter);

@@ -50,7 +50,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$data['description']    = $this->document->getDescription();
 		$data['keywords']       = $this->document->getKeywords();
 		$data['canonical_link'] = $this->document->getCanonicalLink();
-		$data['body_class']     = $this->tool->getSlug($this->route->getPath());
+		$data['body_class']     = slug($this->route->getPath(), '-');
 
 		$data['lang'] = $this->language->info('code');
 
@@ -84,7 +84,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 				foreach ($stores as $index => $store) {
 					$link_store_setting = array(
-						'name'         => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
+						'name'         => 'system_settings_stores_' . slug($store['name']),
 						'display_name' => $store['name'],
 						'href'         => site_url('admin/setting/store/form', 'store_id=' . $store['store_id']),
 						'parent'       => 'system_settings_stores',

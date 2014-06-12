@@ -74,14 +74,14 @@ class App_Model_Localisation_Zone extends Model
 
 	public function getZonesByCountryId($country_id)
 	{
-		$zone_data = $this->cache->get('zone.' . (int)$country_id);
+		$zone_data = cache('zone.' . (int)$country_id);
 
 		if (!$zone_data) {
 			$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' ORDER BY name");
 
 			$zone_data = $query->rows;
 
-			$this->cache->set('zone.' . (int)$country_id, $zone_data);
+			cache('zone.' . (int)$country_id, $zone_data);
 		}
 
 		return $zone_data;
@@ -89,12 +89,12 @@ class App_Model_Localisation_Zone extends Model
 
 	public function getActiveZonesByCountryId($country_id)
 	{
-		$zones = $this->cache->get('zone.' . (int)$country_id);
+		$zones = cache('zone.' . (int)$country_id);
 
 		if (!$zones) {
 			$zones = $this->queryRows("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
 
-			$this->cache->set('zone.' . (int)$country_id, $zones);
+			cache('zone.' . (int)$country_id, $zones);
 		}
 
 		return $zones;

@@ -103,7 +103,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$filter = _get('filter', array());
 
 		$layout_total = $this->Model_Design_Layout->getTotalLayouts($filter);
 		$layouts      = $this->Model_Design_Layout->getLayouts($sort + $filter);
