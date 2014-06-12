@@ -299,16 +299,16 @@ $.fn.ac_msg = function (type, msg, append, close) {
         type = null;
     }
 
+	if (!append) {
+		append = 1;
+		this.find('.messages').remove();
+	}
+
     if (typeof msg == 'object') {
         for (var m in msg) {
             this.ac_msg(type || m, msg[m], append, close);
         }
         return this;
-    }
-
-    if (!append) {
-        append = 1;
-        this.find('.messages').remove();
     }
 
     return this.each(function (i, e) {
