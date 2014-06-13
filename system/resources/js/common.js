@@ -520,7 +520,9 @@ $.fn.loading = function (params) {
             this.html(this.data('original'));
         } else {
             this.prop('disabled', true);
-            this.data('original', this.html());
+	         if (!this.data('original')) {
+               this.data('original', this.html());
+	         }
             this.html(text);
         }
 
