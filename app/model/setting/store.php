@@ -167,11 +167,4 @@ class App_Model_Setting_Store extends Model
 
 		return $query->row['total'];
 	}
-
-	public function getTotalStoresByOrderStatusId($order_status_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_order_complete_status_id' AND `value` = '" . (int)$order_status_id . "' AND store_id != '0'");
-
-		return $query->row['total'];
-	}
 }
