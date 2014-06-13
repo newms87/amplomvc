@@ -465,7 +465,7 @@ abstract class Model
 		foreach ($merge as $field => $data) {
 			if (isset($columns[$field])) {
 				$columns[$field] = $data + $columns[$field];
-			} elseif ($filter === false) {
+			} elseif ($filter === false || isset($filter[$field])) {
 				$columns[$field] = $data;
 			}
 		}
