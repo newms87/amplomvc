@@ -6,15 +6,15 @@ abstract class Model
 	protected $prefix;
 
 	const
-		TEXT                = 'text',
-		NO_ESCAPE           = 'no-escape',
-		IMAGE               = 'image',
-		INTEGER             = 'int',
-		FLOAT               = 'float',
-		DATETIME            = 'datetime',
+		TEXT = 'text',
+		NO_ESCAPE = 'no-escape',
+		IMAGE = 'image',
+		INTEGER = 'int',
+		FLOAT = 'float',
+		DATETIME = 'datetime',
 		PRIMARY_KEY_INTEGER = 'pk-int',
-		AUTO_INCREMENT      = 'ai',
-		AUTO_INCREMENT_PK   = 'pk';
+		AUTO_INCREMENT = 'ai',
+		AUTO_INCREMENT_PK = 'pk';
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
@@ -452,8 +452,9 @@ abstract class Model
 					$type = self::IMAGE;
 				}
 
-				$column['type'] = $type;
+				$column['type']     = $type;
 				$column['sortable'] = true;
+				$column['filter']   = true;
 			}
 			unset($column);
 
@@ -476,7 +477,9 @@ abstract class Model
 
 		if ($filter) {
 			$columns = array_intersect_key($columns, $filter);
-			uksort($columns, function ($a, $b) use ($filter) { return $filter[$a] > $filter[$b]; });
+			uksort($columns, function ($a, $b) use ($filter) {
+					return $filter[$a] > $filter[$b];
+				});
 		}
 
 		return $columns;
