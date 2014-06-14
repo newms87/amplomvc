@@ -3,7 +3,7 @@
 <div class="section">
 	<?= breadcrumbs(); ?>
 
-	<form action="<?= $save; ?>" method="post" id="voucher-form" class="box">
+	<form action="<?= site_url('admin/catalog/product_class/voucher/update', 'product_id=' . $product_id); ?>" method="post" id="voucher-form" class="box">
 		<input type="hidden" name="product_class_id" value="<?= $product_class_id; ?>"/>
 
 		<div class="heading">
@@ -46,6 +46,18 @@
 						<td>
 							<input type="text" onfocus="$(this).display_error('<?= _l("<br>Warning! This may cause system instability! Please use the \\\'Generate URL\\\' button"); ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
 							<a class="gen_url" onclick="generate_url(this)"><?= _l("[Generate URL]"); ?></a>
+						</td>
+					</tr>
+					<tr>
+						<td><?= _l("Teaser: <span class=\"help\">A short teaser about the Gift Card.</span>"); ?></td>
+						<td>
+							<textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td><?= _l("Description: <span class=\"help\">This will show up at the top of the Gift Card Product page. You may use full HTML</span>"); ?></td>
+						<td>
+							<textarea name="description" class="ckedit"><?= $description; ?></textarea>
 						</td>
 					</tr>
 					<tr>

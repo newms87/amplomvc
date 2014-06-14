@@ -538,8 +538,8 @@ class Customer extends Library
 
 	public function info($key = null)
 	{
-		if ($key && isset($this->info[$key])) {
-			return $this->info[$key];
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : null;
 		}
 
 		return $this->info;

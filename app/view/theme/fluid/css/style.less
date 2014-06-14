@@ -586,8 +586,8 @@ body.admin-bar #container {
       padding: 5px 10px;
       outline: none;
       width: 60%;
-
       box-sizing: border-box;
+
       &:active, &:focus {
         background: @color-lighter;
       }
@@ -606,6 +606,18 @@ body.admin-bar #container {
         vertical-align: middle;
         display: inline-block;
       }
+    }
+
+    textarea {
+      border: @color-dark 2px solid;
+      border-radius: 6px;
+      font-size: 1.1em;
+      color: @color-dark;
+      background: @color-lightest;
+      padding: 5px 10px;
+      outline: none;
+      width: 60%;
+      box-sizing:border-box;
     }
 
     label {
@@ -640,7 +652,7 @@ body.admin-bar #container {
   }
 
   &.full-width {
-    input[type="text"], input[type="password"], select {
+    input[type="text"], input[type="password"], select, textarea {
       width: 100%;
     }
   }
