@@ -20,10 +20,3 @@ $this->db->createTable('voucher', <<<SQL
   PRIMARY KEY (`voucher_id`)
 SQL
 );
-
-$this->db->createTable('order_voucher', <<<SQL
-  `order_id` int(11) unsigned NOT NULL,
-  `voucher_id` int(11) NOT NULL,
-  `amount` int(10) unsigned NOT NULL
-SQL
-);
