@@ -63,7 +63,14 @@ final class Registry
 
 		//Check for relative path from root
 		if (is_file($file)) {
-			require_once(_ac_mod_file($file));
+			$acmod = _ac_mod_file($file);
+
+			if (pathinfo($acmod, PATHINFO_EXTENSION) === 'acmod') {
+				require_once($file);
+				$class .= "_acmod";
+			}
+
+			require_once($acmod);
 
 			if ($return_instance) {
 				return new $class();
