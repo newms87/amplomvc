@@ -1,0 +1,4 @@
+<?php
+class App_Controller_Admin_Catalog_ProductClass_Default extends App_Controller_Admin_Catalog_Product
+{
+}
