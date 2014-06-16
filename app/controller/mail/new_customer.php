@@ -22,16 +22,10 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		$store = $this->config->getStore();
 
-		$logo = image($this->config->load('config', 'config_logo', $store['store_id']));
-
-		if ($logo) {
-			$data['logo'] = $logo;
-			$logo_info = getimagesize($logo);
-			$data['logo_width_height'] = $logo_info[3];
-		} else {
-			$data['logo'] = '';
-			$data['logo_width_height'] = '';
-		}
+		$data['header'] = array(
+			'store' => $store,
+		   'title' => _l("Customer Registration"),
+		);
 
 		//If the customer did not generate their own password
 		if (!empty($customer['no_password_set'])) {
