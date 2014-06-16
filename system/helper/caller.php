@@ -125,7 +125,7 @@ function redirect($path = '', $query = null, $status = null)
 function slug($name, $sep = '_', $allow = '')
 {
 	$patterns = array(
-		"/[\\s\\\\\\/]/"     => $sep,
+		"/[\\s\\\\\\/]/"      => $sep,
 		"/[^a-z0-9_-$allow]/" => '',
 	);
 
@@ -175,9 +175,9 @@ function validate($method, $value)
 	array_shift($args);
 
 	return call_user_func_array(array(
-			$registry->get('validation'),
-			$method
-		), $args);
+		$registry->get('validation'),
+		$method
+	), $args);
 }
 
 function format($type, $data, $param = null)
@@ -192,9 +192,9 @@ function format($type, $data, $param = null)
 	}
 
 	return call_user_func_array(array(
-			$registry->get($type),
-			'format'
-		), $args);
+		$registry->get($type),
+		'format'
+	), $args);
 }
 
 function format_all($type, &$array, $index = null, $key = 'formatted')
@@ -412,4 +412,33 @@ function rrmdir($dir)
 		}
 	}
 	rmdir($dir);
+}
+
+function crypto_rand($min, $max)
+{
+	$range = $max - $min;
+	if ($range < 0) {
+		return $min;
+	} // not so random...
+	$log    = log($range, 2);
+	$bytes  = (int)($log / 8) + 1; // length in bytes
+	$bits   = (int)$log + 1; // length in bits
+	$filter = (int)(1 << $bits) - 1; // set all lower bits to 1
+	do {
+		$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+		$rnd = $rnd & $filter; // discard irrelevant bits
+	} while ($rnd >= $range);
+	return $min + $rnd;
+}
+
+function tokengen($length)
+{
+	$token        = "";
+	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
+	$codeAlphabet .= "0123456789";
+	for ($i = 0; $i < $length; $i++) {
+		$token .= $codeAlphabet[crypto_rand(0, strlen($codeAlphabet))];
+	}
+	return $token;
 }

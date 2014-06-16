@@ -4,6 +4,10 @@ class App_Controller_Page extends Controller
 {
 	public function index()
 	{
+		if (_get('content')) {
+			return $this->content();
+		}
+
 		//The page
 		$page_id = _get('page_id', 0);
 
