@@ -13,6 +13,12 @@ abstract class Controller
 		return $registry->get($key);
 	}
 
+	public function load($path, $class)
+	{
+		global $registry;
+		return $registry->load($path, $class);
+	}
+
 	protected function render($path, $data = array())
 	{
 		//TODO All validation should be done in Model! Remove this after removing all validation methods.

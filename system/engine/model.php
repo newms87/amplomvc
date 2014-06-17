@@ -42,6 +42,12 @@ abstract class Model
 		return $registry->get($key);
 	}
 
+	protected function load($path, $class)
+	{
+		global $registry;
+		return $registry->load($path, $class);
+	}
+
 	public function hasError($type = null)
 	{
 		if ($type) {

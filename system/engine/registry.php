@@ -16,7 +16,7 @@ final class Registry
 
 	public function set($key, $value)
 	{
-		$this->data[$key] = $value;
+		$this->data[strtolower($key)] = $value;
 	}
 
 	public function has($key)
@@ -82,6 +82,25 @@ final class Registry
 		trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
 
 		return false;
+	}
+
+	public function load($path, $class)
+	{
+		if (!$this->has($class)) {
+			if (!is_file($path)) {
+				$path = DIR_SITE . $path . '.php';
+
+				if (!is_file($path)) {
+					return null;
+				}
+			}
+
+			require_once($path);
+
+			$this->set($class, new $class());
+		}
+
+		return $this->get($class);
 	}
 
 	public function resource($name)
