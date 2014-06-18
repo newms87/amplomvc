@@ -42,6 +42,12 @@ abstract class Model
 		return $registry->get($key);
 	}
 
+	protected function load($path, $class)
+	{
+		global $registry;
+		return $registry->load($path, $class);
+	}
+
 	public function hasError($type = null)
 	{
 		if ($type) {
@@ -300,6 +306,18 @@ abstract class Model
 		return $data;
 	}
 
+	protected function extractSelect($table, $columns)
+	{
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		} else {
+			$t = $table;
+		}
+
+		$columns = array_intersect_key($columns, $this->getTableColumns($table));
+		return "`$t`." . implode(",`$t`.", array_keys($columns));
+	}
+
 	protected function extractFilter($table, $filter, $columns = array())
 	{
 		$method = array(
@@ -313,6 +331,12 @@ abstract class Model
 			self::DATETIME            => 'date',
 			self::IMAGE               => 'equals',
 		);
+
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		} else {
+			$t = $table;
+		}
 
 		$columns += $this->getTableColumns($table);
 
@@ -331,18 +355,18 @@ abstract class Model
 
 			switch ($type) {
 				case 'like':
-					$where .= " AND `$key` like '%" . $this->escape($value) . "%'";
+					$where .= " AND `$t`.`$key` like '%" . $this->escape($value) . "%'";
 					break;
 
 				case 'equals':
-					$where .= " AND `$key` = '" . $this->escape($value) . "'";
+					$where .= " AND `$t`.`$key` = '" . $this->escape($value) . "'";
 					break;
 
 				case 'text_in':
 					if (is_array($value)) {
-						$where .= " AND `$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
+						$where .= " AND `$t`.`$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
 					} else {
-						$where .= " AND `$key` = '" . $this->escape($value) . "'";
+						$where .= " AND `$t`.`$key` = '" . $this->escape($value) . "'";
 					}
 					break;
 
@@ -350,7 +374,7 @@ abstract class Model
 				case 'int_equals':
 					$value = $type === 'int_equals' ? (int)$value : (float)$value;
 				case 'number_equals':
-					$where .= " AND `$key` = " . $value;
+					$where .= " AND `$t`.`$key` = " . $value;
 					break;
 
 				case 'float_in':
@@ -359,7 +383,7 @@ abstract class Model
 						$a = $type === 'int_in' ? (int)$a : (float)$a;
 					});
 				case 'number_in':
-					$where .= " AND `$key` IN (" . implode(',', $value) . ")";
+					$where .= " AND `$t`.`$key` IN (" . implode(',', $value) . ")";
 					break;
 
 			}

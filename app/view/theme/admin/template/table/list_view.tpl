@@ -10,7 +10,7 @@
  * 	'sortable'		=> bool (optional) - Can this column can be sorted? Default is false.
  * 	'filter'			=> bool (optional) - Can this column be filtered? Default is false.
  * 	'filter_value' => mixed (optional) - Use this to override the filter value. Value is set if user has specified, otherwise the default filter value.
- * 	'build_data'	=> mixed (optoinal) - Fill data for the column. Used to display a key value as text, or with a filter depending on the 'type'.
+ * 	'build_data'	=> mixed (optional) - Fill data for the column. Used to display a key value as text, or with a filter depending on the 'type'.
  * 	'build_config' => array (optional) - Use this with 'build_data' to specify the array( $key => $value ) for the builder tool
  * );
  */

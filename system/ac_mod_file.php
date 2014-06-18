@@ -21,6 +21,12 @@ function _ac_mod_file($file)
 {
 	global $live_registry;
 
+	$ext = pathinfo($file, PATHINFO_EXTENSION);
+
+	if (is_file($file . '.acmod')) {
+		$file = $file . '.acmod';
+	}
+
 	if (isset($live_registry[$file])) {
 		$file = $live_registry[$file];
 
@@ -30,7 +36,7 @@ function _ac_mod_file($file)
 	}
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.
-	if (pathinfo($file, PATHINFO_EXTENSION) === 'tpl') {
+	if ($ext === 'tpl') {
 		$tpl = AC_TEMPLATE_CACHE . str_replace(DIR_SITE, '', $file);
 
 		if (!is_file($tpl) || filemtime($tpl) < filemtime($file)) {

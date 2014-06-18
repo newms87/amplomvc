@@ -2,11 +2,11 @@
 
 class User extends Library
 {
-	private $user_id;
-	private $user;
-	private $permissions = array();
+	protected $user_id;
+	protected $user;
+	protected $permissions = array();
 
-	private $temp_user;
+	protected $temp_user;
 
 	public function __construct()
 	{
@@ -41,7 +41,7 @@ class User extends Library
 		$this->user['role'] = $this->temp_user['role'];
 	}
 
-	private function loadUser($user)
+	protected function loadUser($user)
 	{
 		$this->user_id = $user['user_id'];
 		$this->session->set('user_id', $user['user_id']);

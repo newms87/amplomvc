@@ -78,6 +78,21 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			);
 		}
 
+		//Sort Columns
+		if (!empty($settings['extra_cols'])) {
+			uksort($settings['extra_cols'], function ($a, $b) use($settings) {
+				foreach ($settings['columns'] as $field => $col) {
+					if ($field === $a) {
+						return -1;
+					} elseif ($field === $b) {
+						return 1;
+					}
+				}
+
+				return 1;
+			});
+		}
+
 		//Action
 		$settings['refresh'] = site_url($settings['listing_path'], $_GET);
 
