@@ -8,6 +8,7 @@ class App_Controller_Admin_User_User extends Controller
 			'update',
 			'delete',
 			'batch_action',
+			'save_field',
 		),
 	);
 
@@ -51,32 +52,9 @@ class App_Controller_Admin_User_User extends Controller
 	public function listing()
 	{
 		//The Table Columns
-		$columns = array();
+		$requested_cols = $this->request->get('columns');
 
-		$columns['username'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Username"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Name"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'filter'       => true,
-			'sortable'     => true,
-		);
+		$columns = $this->Model_User_User->getColumns($requested_cols);
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
@@ -111,12 +89,14 @@ class App_Controller_Admin_User_User extends Controller
 
 		$listing = array(
 			'row_id'         => 'user_id',
+			'extra_cols'     => $this->Model_User_User->getColumns(false),
 			'columns'        => $columns,
 			'rows'           => $users,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_total,
 			'listing_path'   => 'admin/user/user/listing',
+			'save_path'      => 'admin/user/user/save_field',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -176,24 +156,66 @@ class App_Controller_Admin_User_User extends Controller
 
 	public function update()
 	{
-		//Insert
-		if (empty($_GET['user_id'])) {
-			$this->Model_User_User->add($_POST);
-		} //Update
-		else {
-			$this->Model_User_User->edit($_GET['user_id'], $_POST);
-		}
-
-		if ($this->Model_User_User->hasError()) {
-			$this->message->add('error', $this->Model_User_User->getError());
-		} else {
+		if ($this->Model_User_User->save(_get('user_id'), $_POST)) {
 			$this->message->add('success', _l("The Page has been updated successfully!"));
+		} else {
+			$this->message->add('error', $this->Model_User_User->getError());
 		}
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
+		} else {
+			redirect('admin/user/user');
+		}
+	}
+
+	public function batch_action()
+	{
+		foreach ($_POST['batch'] as $user_id) {
+			switch ($_POST['action']) {
+				case 'enable':
+					$this->Model_User_User->save_field($user_id, array('status' => 1));
+					break;
+
+				case 'disable':
+					$this->Model_User_User->save_field($user_id, array('status' => 0));
+					break;
+
+				case 'delete':
+					$this->Model_User_User->remove($user_id);
+					break;
+			}
+		}
+
+		if ($this->Model_User_User->hasError()) {
+			$this->message->add('error', $this->Model_User_User->getError());
+		} else {
+			$this->message->add('success', _l("Success: You have modified navigation!"));
+		}
+
+		if ($this->request->isAjax()) {
+			$this->listing();
+		} else {
+			redirect('admin/user/user');
+		}
+	}
+
+	public function save_field()
+	{
+		$id = _request('id');
+
+		if ($id) {
+			if ($this->Model_User_User->save($id, $_POST)) {
+				$this->message->add('success', _l("The User was updated successfully."));
+			} else {
+				$this->message->add('error', $this->Model_User_User->getError());
+			}
+		}
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput($this->message->toJSON());
 		} else {
 			redirect('admin/user/user');
 		}
@@ -211,37 +233,6 @@ class App_Controller_Admin_User_User extends Controller
 
 		if ($this->request->isAjax()) {
 			$this->response->setOutput($this->message->toJSON());
-		} else {
-			redirect('admin/user/user');
-		}
-	}
-
-	public function batch_action()
-	{
-		foreach ($_POST['batch'] as $user_id) {
-			switch ($_POST['action']) {
-				case 'enable':
-					$this->Model_User_User->edit($user_id, array('status' => 1));
-					break;
-
-				case 'disable':
-					$this->Model_User_User->edit($user_id, array('status' => 0));
-					break;
-
-				case 'delete':
-					$this->Model_User_User->remove($user_id);
-					break;
-			}
-		}
-
-		if ($this->Model_User_User->hasError()) {
-			$this->message->add('error', $this->Model_User_User->getError());
-		} else {
-			$this->message->add('success', _l("Success: You have modified navigation!"));
-		}
-
-		if ($this->request->isAjax()) {
-			$this->listing();
 		} else {
 			redirect('admin/user/user');
 		}

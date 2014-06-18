@@ -2,6 +2,7 @@
 
 class App_Model_Page extends Model
 {
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -249,7 +250,7 @@ class App_Model_Page extends Model
 	public function getPageByName($name)
 	{
 		$store_id = option('store_id');
-		$themes    = $this->theme->getStoreThemes();
+		$themes   = $this->theme->getStoreThemes();
 
 		$query =
 			"SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
@@ -471,5 +472,23 @@ class App_Model_Page extends Model
 		}
 
 		closedir($handle);
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns = array(
+			'status' => array(
+				'type'         => 'select',
+				'display_name' => _l("Status"),
+				'build_data'   => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
+				'filter'       => true,
+				'sortable'     => true,
+			),
+		);
+
+		return $this->getTableColumns('page', $columns, $filter);
 	}
 }

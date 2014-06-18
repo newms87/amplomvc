@@ -327,6 +327,7 @@
 		</tbody>
 	</table>
 
+	<? if (!empty($save_path)) { ?>
 	<div class="editable-options">
 		<? foreach ($columns as $field => $column) {
 			if (empty($column['editable'])) {
@@ -370,6 +371,7 @@
 			<a class="save-edit button save" data-loading="Saving..."><?= _l("Save"); ?></a>
 		</div>
 	</div>
+	<? } ?>
 
 </div>
 
@@ -478,6 +480,7 @@
 		}
 	});
 
+	<? if (!empty($save_path)) { ?>
 	$listview.find('tr.filter-list-item td.editable').click(function (event) {
 		var $this = $(this);
 		var field = $this.attr('data-field');
@@ -541,4 +544,5 @@
 			return false;
 		}
 	});
+	<? } ?>
 </script>
