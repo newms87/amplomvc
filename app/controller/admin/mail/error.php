@@ -19,7 +19,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 		$data['delete_message'] = site_url('admin/mail/error/delete');
 		$data['load_message']   = site_url('admin/mail/error/load_message');
 
-		$this->response->setOutput($this->render('mail/error', $data));
+		output($this->render('mail/error', $data));
 	}
 
 	public function load_message()
@@ -34,7 +34,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 			}
 		}
 
-		$this->response->setOutput($message);
+		output($message);
 	}
 
 	public function resend()

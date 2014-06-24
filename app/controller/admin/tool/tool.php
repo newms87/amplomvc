@@ -27,7 +27,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 		$data += $defaults;
 
 
-		$this->response->setOutput($this->render('tool/tool', $data));
+		output($this->render('tool/tool', $data));
 	}
 
 	public function clear_cache()

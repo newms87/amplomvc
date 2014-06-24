@@ -35,7 +35,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 			}
 		}
 
-		$this->response->setOutput($this->render('mail/messages', $data));
+		output($this->render('mail/messages', $data));
 	}
 
 	public function validate()

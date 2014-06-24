@@ -168,7 +168,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		$this->response->setOutput($this->render('plugin/plugin', $data));
+		output($this->render('plugin/plugin', $data));
 	}
 
 	public function getForm()
@@ -195,7 +195,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		$data['action'] = site_url('admin/plugin/plugin/update', 'name=' . $plugin_name);
 		$data['cancel'] = site_url('admin/plugin/plugin');
 
-		$this->response->setOutput($this->render('plugin/plugin_form', $data));
+		output($this->render('plugin/plugin_form', $data));
 	}
 
 	public function update()

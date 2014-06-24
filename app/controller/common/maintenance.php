@@ -7,6 +7,6 @@ class App_Controller_Common_Maintenance extends Controller
 		$this->document->setTitle(_l("Maintenance"));
 
 		//Render
-		$this->response->setOutput($this->render('common/maintenance', $data));
+		output($this->render('common/maintenance', $data));
 	}
 }

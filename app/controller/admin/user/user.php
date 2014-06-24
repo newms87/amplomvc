@@ -45,7 +45,7 @@ class App_Controller_Admin_User_User extends Controller
 		$data['insert'] = site_url('admin/user/user/form');
 
 		//Response
-		$this->response->setOutput($this->render('user/user_list', $data));
+		output($this->render('user/user_list', $data));
 	}
 
 	public function listing()
@@ -123,7 +123,7 @@ class App_Controller_Admin_User_User extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		}
 
 		return $output;
@@ -171,7 +171,7 @@ class App_Controller_Admin_User_User extends Controller
 		$user['save'] = site_url('admin/user/user/update', 'user_id=' . $user_id);
 
 		//Response
-		$this->response->setOutput($this->render('user/user_form', $user));
+		output($this->render('user/user_form', $user));
 	}
 
 	public function update()
@@ -191,7 +191,7 @@ class App_Controller_Admin_User_User extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -210,7 +210,7 @@ class App_Controller_Admin_User_User extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/user/user');
 		}

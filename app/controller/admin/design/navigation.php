@@ -48,7 +48,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$data['insert'] = site_url('admin/design/navigation/form');
 
 		//Render
-		$this->response->setOutput($this->render('design/navigation_list', $data));
+		output($this->render('design/navigation_list', $data));
 	}
 
 	public function update()
@@ -68,7 +68,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -87,7 +87,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/design/navigation');
 		}
@@ -183,7 +183,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		} else {
 			return $output;
 		}
@@ -261,7 +261,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$data['cancel'] = site_url('admin/design/navigation');
 
 		//Render
-		$this->response->setOutput($this->render('design/navigation_form', $data));
+		output($this->render('design/navigation_form', $data));
 	}
 
 	public function batch_action()
@@ -310,7 +310,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			redirect('admin/design/navigation');
 		}
 
-		$this->response->setOutput($this->message->toJSON());
+		output($this->message->toJSON());
 	}
 
 	public function choose_link()

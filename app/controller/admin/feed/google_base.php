@@ -37,7 +37,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 
 		$data['data_feed'] = site_url('admin/feed/google_base');
 
-		$this->response->setOutput($this->render('feed/google_base', $data));
+		output($this->render('feed/google_base', $data));
 	}
 
 	private function validate()

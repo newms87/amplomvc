@@ -26,7 +26,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$data['insert'] = site_url('admin/setting/store/form');
 
 		//Render
-		$this->response->setOutput($this->render('setting/store_list', $data));
+		output($this->render('setting/store_list', $data));
 	}
 
 	public function listing()
@@ -107,7 +107,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		}
 
 		return $output;
@@ -237,7 +237,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store['url_generate_icons'] = site_url('admin/setting/store/generate_icons');
 
 		//Render
-		$this->response->setOutput($this->render('setting/store_form', $store));
+		output($this->render('setting/store_form', $store));
 	}
 
 	public function save()
@@ -262,7 +262,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -285,7 +285,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/store');
 		}
@@ -327,7 +327,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 				'url'     => $url,
 			);
 
-			$this->response->setOutput(json_encode($icon_files));
+			output(json_encode($icon_files));
 		}
 	}
 }

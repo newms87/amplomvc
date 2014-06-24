@@ -44,7 +44,7 @@ class App_Controller_Page extends Controller
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 
 		//Render
-		$this->response->setOutput($this->render($template, $page));
+		output($this->render($template, $page));
 	}
 
 	public function content($page = array())
@@ -65,7 +65,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Render
-		$this->response->setOutput($this->render('page/content', $page));
+		output($this->render('page/content', $page));
 	}
 
 	public function preview($page = array())
@@ -110,7 +110,7 @@ class App_Controller_Page extends Controller
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 
 		//Render
-		$this->response->setOutput($this->render($template, $page));
+		output($this->render($template, $page));
 	}
 
 	public function preview_content($page = array())
@@ -145,9 +145,9 @@ class App_Controller_Page extends Controller
 
 		//Render
 		if ($this->request->isPost()) {
-			$this->response->setOutput($this->render('page/content', $page));
+			output($this->render('page/content', $page));
 		} else {
-			$this->response->setOutput($this->render('page/default', $page));
+			output($this->render('page/default', $page));
 		}
 	}
 }

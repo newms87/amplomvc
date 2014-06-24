@@ -85,7 +85,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 			$output .= '</rss>';
 
 			$this->response->addHeader('Content-Type: application/rss+xml');
-			$this->response->setOutput($output);
+			output($output);
 		}
 	}
 

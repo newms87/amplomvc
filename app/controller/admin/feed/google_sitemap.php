@@ -37,7 +37,7 @@ class App_Controller_Admin_Feed_GoogleSitemap extends Controller
 
 		$data['data_feed'] = site_url('admin/feed/google_sitemap');
 
-		$this->response->setOutput($this->render('feed/google_sitemap', $data));
+		output($this->render('feed/google_sitemap', $data));
 	}
 
 	private function validate()

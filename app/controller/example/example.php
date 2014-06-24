@@ -47,7 +47,7 @@ class App_Controller_Example_Example extends Controller
 		$data['content'] = _l("A whole bunch of content for the page");
 
 		//Render
-		$this->response->setOutput($this->render('example/example', $data));
+		output($this->render('example/example', $data));
 	}
 
 	//Accessed via /site_root/example/example/my_method

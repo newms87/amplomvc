@@ -24,7 +24,7 @@ class App_Controller_Admin_Common_Login extends Controller
 		$data['action'] = site_url('admin/common/login/authenticate');
 
 		//Render
-		$this->response->setOutput($this->render('common/login', $data));
+		output($this->render('common/login', $data));
 	}
 
 	public function authenticate()

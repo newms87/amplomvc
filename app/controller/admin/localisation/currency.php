@@ -219,7 +219,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/currency_list', $data));
+		output($this->render('localisation/currency_list', $data));
 	}
 
 	private function getForm()
@@ -327,7 +327,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			$data['status'] = '';
 		}
 
-		$this->response->setOutput($this->render('localisation/currency_form', $data));
+		output($this->render('localisation/currency_form', $data));
 	}
 
 	private function validateForm()

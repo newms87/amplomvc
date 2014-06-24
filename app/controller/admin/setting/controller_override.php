@@ -49,7 +49,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
-		$this->response->setOutput($this->render('setting/controller_override', $data));
+		output($this->render('setting/controller_override', $data));
 	}
 
 	private function validate()

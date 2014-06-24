@@ -56,7 +56,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Render
-		$this->response->setOutput($this->render('customer/login', $data));
+		output($this->render('customer/login', $data));
 	}
 
 	public function login()
@@ -68,7 +68,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			if (!$this->request->isPost() || $this->message->has('error')) {
 				return $this->index();
@@ -154,7 +154,7 @@ class App_Controller_Customer extends Controller
 		$data['register'] = site_url('customer/register');
 
 		//Render
-		$this->response->setOutput($this->render('customer/registration', $data));
+		output($this->render('customer/registration', $data));
 	}
 
 	public function register()
@@ -185,7 +185,7 @@ class App_Controller_Customer extends Controller
 		$this->breadcrumb->add(_l("Your Account Has Been Created!"), site_url('customer/success'));
 
 		//Render
-		$this->response->setOutput($this->render('customer/success'));
+		output($this->render('customer/success'));
 	}
 
 	public function forgotten()
@@ -203,7 +203,7 @@ class App_Controller_Customer extends Controller
 		$data['back'] = site_url('customer/login');
 
 		//Render
-		$this->response->setOutput($this->render('customer/forgotten', $data));
+		output($this->render('customer/forgotten', $data));
 	}
 
 	public function generate_reset_code()
@@ -252,7 +252,7 @@ class App_Controller_Customer extends Controller
 		$data['cancel'] = site_url('customer/login');
 
 		//Render
-		$this->response->setOutput($this->render('customer/reset_form', $data));
+		output($this->render('customer/reset_form', $data));
 	}
 
 	public function reset_password()

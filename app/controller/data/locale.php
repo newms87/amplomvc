@@ -36,6 +36,6 @@ class App_Controller_Data_Locale extends Controller
 			$output .= "<option value=\"0\" selected=\"selected\">" . _l(" --- None --- ") . "</option>";
 		}
 
-		$this->response->setOutput($output);
+		output($output);
 	}
 }

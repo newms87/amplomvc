@@ -28,7 +28,7 @@ class App_Controller_Block_Block extends Controller
 			redirect('admin/block', $this->url->getQuery());
 		}
 
-		$this->response->setOutput($this->message->toJSON());
+		output($this->message->toJSON());
 	}
 
 	public function save()
@@ -47,7 +47,7 @@ class App_Controller_Block_Block extends Controller
 			redirect('admin/block');
 		}
 
-		$this->response->setOutput($this->message->toJSON());
+		output($this->message->toJSON());
 	}
 
 	//override this method to add custom settings

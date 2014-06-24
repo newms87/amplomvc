@@ -171,7 +171,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$data['insert'] = site_url('admin/design/layout/update');
 
 		//Render
-		$this->response->setOutput($this->render('design/layout_list', $data));
+		output($this->render('design/layout_list', $data));
 	}
 
 	private function getForm()
@@ -223,7 +223,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$data['cancel'] = site_url('admin/design/layout');
 
 		//Render
-		$this->response->setOutput($this->render('design/layout_form', $data));
+		output($this->render('design/layout_form', $data));
 	}
 
 	private function validateForm()

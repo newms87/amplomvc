@@ -153,7 +153,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/language_list', $data));
+		output($this->render('localisation/language_list', $data));
 	}
 
 	private function getForm()
@@ -217,7 +217,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 			1  => _l('Active'),
 		);
 
-		$this->response->setOutput($this->render('localisation/language_form', $data));
+		output($this->render('localisation/language_form', $data));
 	}
 
 	private function validateForm()

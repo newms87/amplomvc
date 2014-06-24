@@ -171,13 +171,13 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
-		$this->response->setOutput($this->render('setting/setting', $data));
+		output($this->render('setting/setting', $data));
 	}
 
 	public function theme()
 	{
 		if (empty($_GET['theme'])) {
-			$this->response->setOutput('No Theme Requested.');
+			output('No Theme Requested.');
 			return false;
 		}
 
@@ -189,7 +189,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			$image = image('no_image', 300, 300);
 		}
 
-		$this->response->setOutput("<img src=\"$image\" class =\"theme_preview\" />");
+		output("<img src=\"$image\" class =\"theme_preview\" />");
 	}
 
 	public function validate()

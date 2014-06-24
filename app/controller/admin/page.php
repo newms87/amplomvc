@@ -33,7 +33,7 @@ class App_Controller_Admin_Page extends Controller
 		$data['insert'] = site_url('admin/page/form');
 
 		//Render
-		$this->response->setOutput($this->render('page/list', $data));
+		output($this->render('page/list', $data));
 	}
 
 	public function listing()
@@ -128,7 +128,7 @@ class App_Controller_Admin_Page extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		}
 
 		return $output;
@@ -195,7 +195,7 @@ class App_Controller_Admin_Page extends Controller
 		$page['save'] = site_url('admin/page/update', 'page_id=' . $page_id);
 
 		//Render
-		$this->response->setOutput($this->render('page/form', $page));
+		output($this->render('page/form', $page));
 	}
 
 	public function update()
@@ -218,7 +218,7 @@ class App_Controller_Admin_Page extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -237,7 +237,7 @@ class App_Controller_Admin_Page extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/page');
 		}
@@ -310,7 +310,7 @@ class App_Controller_Admin_Page extends Controller
 			'value'  => 'name',
 		));
 
-		$this->response->setOutput($output);
+		output($output);
 	}
 
 	public function loadBlocks()
@@ -345,6 +345,6 @@ class App_Controller_Admin_Page extends Controller
 			}
 		}
 
-		$this->response->setOutput(json_encode($blocks));
+		output(json_encode($blocks));
 	}
 }

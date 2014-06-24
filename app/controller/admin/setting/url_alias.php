@@ -142,7 +142,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
-		$this->response->setOutput($this->render('setting/url_alias_list', $data));
+		output($this->render('setting/url_alias_list', $data));
 	}
 
 	public function update()
@@ -290,7 +290,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$data['cancel'] = site_url('admin/setting/url_alias');
 
 		//Render
-		$this->response->setOutput($this->render('setting/url_alias_form', $data));
+		output($this->render('setting/url_alias_form', $data));
 	}
 
 	private function validateForm()
