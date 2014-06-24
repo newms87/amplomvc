@@ -446,5 +446,5 @@ function tokengen($length)
 function output($output)
 {
 	global $registry;
-	$registry->response->setOutput($output);
+	$registry->get('response')->setOutput($output);
 }
