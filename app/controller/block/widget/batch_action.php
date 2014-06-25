@@ -31,10 +31,6 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 			return;
 		}
 
-		if (empty($settings['replace'])) {
-			$settings['replace'] = '.widget-listing:first';
-		}
-
 		if (empty($settings['selector'])) {
 			$settings['selector'] = '[name="batch[]"]';
 		}

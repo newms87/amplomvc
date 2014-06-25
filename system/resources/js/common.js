@@ -1,30 +1,30 @@
 //Similar to LESS screen sizing
 var screen_width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 var screen_lg = screen_width >= 1200,
-	screen_md = screen_width >= 768 && screen_width < 1200,
-	screen_sm = screen_width >= 480 && screen_width < 768,
-	screen_xs = screen_width < 480;
+    screen_md = screen_width >= 768 && screen_width < 1200,
+    screen_sm = screen_width >= 480 && screen_width < 768,
+    screen_xs = screen_width < 480;
 
 
 //Ensures all ajax requests are submitted as an ajax URL
 String.prototype.ajaxurl = function () {
-	return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
+    return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
 }
 
 String.prototype.toSlug = function () {
-	return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
+    return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
 }
 
 String.prototype.repeat = function (times) {
-	return (new Array(times + 1)).join(this);
+    return (new Array(times + 1)).join(this);
 };
 
 String.prototype.str_replace = function (find, replace) {
-	var str = this;
-	for (var i = 0; i < find.length; i++) {
-		str = str.replace(find[i], replace[i]);
-	}
-	return str;
+    var str = this;
+    for (var i = 0; i < find.length; i++) {
+        str = str.replace(find[i], replace[i]);
+    }
+    return str;
 };
 
 
@@ -32,237 +32,245 @@ String.prototype.str_replace = function (find, replace) {
 $._ajax = $.ajax;
 
 $.ajax = function (params, p2) {
-	params.url = (params.url ? params.url : document.URL).ajaxurl();
-	return $._ajax(params, p2);
+    params.url = (params.url ? params.url : document.URL).ajaxurl();
+    return $._ajax(params, p2);
 }
 
 //Load synchronously
 function syncload(s) {
-	if (!s.match(/^https?:\/\//)) {
-		s = $ac.site_url + s;
-	}
+    if (!s.match(/^https?:\/\//)) {
+        s = $ac.site_url + s;
+    }
 
-	$.ajax({
-		async:    false,
-		cache:    true,
-		url:      s,
-		error:    function (e) {
-			$.error('Failed to load script from ' + s)
-		},
-		dataType: 'script'
-	});
+    $.ajax({
+        async: false,
+        cache: true,
+        url: s,
+        error: function (e) {
+            $.error('Failed to load script from ' + s)
+        },
+        dataType: 'script'
+    });
 }
 
 //Load jQuery Plugins On Call
 $.fn.codemirror = function (params) {
-	if (!$.fn.codemirror.once) {
-		$.fn.codemirror.once = [];
+    if (!$.fn.codemirror.once) {
+        $.fn.codemirror.once = [];
 
-		$.get($ac.site_url + 'admin/common/codemirror', {}, function (response) {
-			$('body').append(response);
-			var once = $.fn.codemirror.once;
-			for (var a in once) {
-				once[a].s.init_codemirror(once[a].p);
-			}
-		});
-	}
+        $.get($ac.site_url + 'admin/common/codemirror', {}, function (response) {
+            $('body').append(response);
+            var once = $.fn.codemirror.once;
+            for (var a in once) {
+                once[a].s.init_codemirror(once[a].p);
+            }
+        });
+    }
 
-	if (typeof this.init_codemirror == 'function') {
-		this.init_codemirror(params);
-	} else {
-		$.fn.codemirror.once.push({s: this, p: params});
-	}
+    if (typeof this.init_codemirror == 'function') {
+        this.init_codemirror(params);
+    } else {
+        $.fn.codemirror.once.push({s: this, p: params});
+    }
 }
 
 $.ac_template = $.fn.ac_template = function (name, action, data) {
-	$.ac_template = $.fn.ac_template = null;
-	syncload('system/resources/js/ac_template.js');
-	if (this.ac_template) this.ac_template(name, action, data);
+    $.ac_template = $.fn.ac_template = null;
+    syncload('system/resources/js/ac_template.js');
+    if (this.ac_template) this.ac_template(name, action, data);
 }
 
 $.fn.jqzoom = function (params) {
-	$.fn.jqzoom = null;
-	syncload('system/resources/js/jquery/jqzoom/jqzoom.js');
-	if (this.jqzoom) this.jqzoom(params);
+    $.fn.jqzoom = null;
+    syncload('system/resources/js/jquery/jqzoom/jqzoom.js');
+    if (this.jqzoom) this.jqzoom(params);
 }
 
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
-	$('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
+    $('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
 }
 
 $.fn.ac_datepicker = function (params) {
-	if (!$.ui.timepicker) {
-		var selector = this;
-		$.ajaxSetup({cache: true});
-		$.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
-			selector.ac_datepicker(params);
-		});
-		return;
-	}
+    if (!$.ui.timepicker) {
+        var selector = this;
+        $.ajaxSetup({cache: true});
+        $.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
+            selector.ac_datepicker(params);
+        });
+        return;
+    }
 
-	params = $.extend({}, {
-		type:       null,
-		dateFormat: 'yy-mm-dd',
-		timeFormat: 'HH:mm'
-	}, params);
+    params = $.extend({}, {
+        type: null,
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm'
+    }, params);
 
-	return this.each(function (i, e) {
-		type = params.type ||
-			$(e).hasClass('datepicker') ? 'datepicker' :
-			$(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
+    return this.each(function (i, e) {
+        type = params.type ||
+        $(e).hasClass('datepicker') ? 'datepicker' :
+            $(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
 
-		$(e)[type](params);
-	});
+        $(e)[type](params);
+    });
 }
 
 $.fn.ac_radio = function (params) {
-	params = $.extend({}, {
-		elements: $(this).children().not('.noradio')
-	}, params);
+    params = $.extend({}, {
+        elements: $(this).children().not('.noradio')
+    }, params);
 
-	this.find('input[type=radio]').hide();
+    this.find('input[type=radio]').hide();
 
-	params.elements.each(function (i, e) {
-		if ($(e).find('input[type=radio]:checked').length) {
-			$(e).addClass('checked');
-		}
-	})
+    params.elements.each(function (i, e) {
+        if ($(e).find('input[type=radio]:checked').length) {
+            $(e).addClass('checked');
+        }
+    })
 
-		.click(function () {
-			params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
-			$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
-		});
+        .click(function () {
+            params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
+            $(this).addClass("checked").find('input[type=radio]').prop('checked', true);
+        });
 
-	return this;
+    return this;
 }
 
 $.fn.ac_checklist = function (params) {
-	params = $.extend({}, {
-		elements: $(this).children().not('.nocheck'),
-		change:   null
-	}, params);
+    params = $.extend({}, {
+        elements: $(this).children().not('.nocheck'),
+        change: null
+    }, params);
 
-	this.find('input[type=checkbox]').hide();
+    this.find('input[type=checkbox]').hide();
 
-	params.elements.each(function (i, e) {
-		if ($(e).find('input[type=checkbox]:checked').length) {
-			$(e).addClass('checked');
-		}
-	})
+    params.elements.each(function (i, e) {
+        if ($(e).find('input[type=checkbox]:checked').length) {
+            $(e).addClass('checked');
+        }
+    })
 
-		.click(function () {
-			if ($(this).hasClass('checked')) {
-				$(this).removeClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked', false).change();
-			} else {
-				$(this).addClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked', true).change();
-			}
+        .click(function () {
+            if ($(this).hasClass('checked')) {
+                $(this).removeClass('checked');
+                $(this).find('input[type=checkbox]').prop('checked', false).change();
+            } else {
+                $(this).addClass('checked');
+                $(this).find('input[type=checkbox]').prop('checked', true).change();
+            }
 
-			if (typeof params.change === 'function') {
-				params.change($(this), $(this).hasClass('checked'));
-			}
-		});
+            if (typeof params.change === 'function') {
+                params.change($(this), $(this).hasClass('checked'));
+            }
+        });
 
-	return this;
+    return this;
 }
 
 //Apply a filter form to the URL
 $.fn.apply_filter = function (url) {
-	filter_list = this.find('[name]')
-		.filter(function (index) {
-			return $(this).val() !== '';
-		});
+    filter_list = this.find('[name]')
+        .filter(function (index) {
+            return $(this).val() !== '';
+        });
 
-	if (filter_list.length) {
-		url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
-	}
+    if (filter_list.length) {
+        filter_list.each(function(i,e){
+            if ($(e).closest('.column_filter').find('.not-switch').hasClass('not')) {
+                $(e).attr('name', $(e).attr('name').replace(/^filter\[/, 'filter[!'));
+            }
+        });
 
-	return url;
+        url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
+
+        console.log(url);
+    }
+
+    return url;
 }
 
 //A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
 $.fn.update_index = function (column) {
-	column = column || '.sort_order';
+    column = column || '.sort_order';
 
-	return this.each(function (i, ele) {
-		count = 0;
-		$(ele).find(column).each(function (i, e) {
-			$(e).val(count++);
-		});
-	});
+    return this.each(function (i, ele) {
+        count = 0;
+        $(ele).find(column).each(function (i, e) {
+            $(e).val(count++);
+        });
+    });
 }
 
 $.fn.flash_highlight = function () {
-	pos = this.offset();
+    pos = this.offset();
 
-	var ele = $('<div />');
+    var ele = $('<div />');
 
-	ele.css({
-		background: 'rgba(255,255,255,0)',
-		position:   'absolute',
-		top:        pos.top,
-		left:       pos.left,
-		opacity:    .8,
-		'z-index':  10000
-	})
-		.width($(this).width())
-		.height($(this).height());
+    ele.css({
+        background: 'rgba(255,255,255,0)',
+        position: 'absolute',
+        top: pos.top,
+        left: pos.left,
+        opacity: .8,
+        'z-index': 10000
+    })
+        .width($(this).width())
+        .height($(this).height());
 
-	$('body').css({position: 'relative'});
-	$('body').append(ele);
+    $('body').css({position: 'relative'});
+    $('body').append(ele);
 
-	ele.animate({'background-color': 'rgba(255,255,85,1)'}, {
-		duration: 300, always: function () {
-			ele.animate({'background-color': 'rgba(255,255,255,0)'}, {
-				duration: 700, always: function () {
-					ele.remove()
-				}
-			});
-		}
-	});
+    ele.animate({'background-color': 'rgba(255,255,85,1)'}, {
+        duration: 300, always: function () {
+            ele.animate({'background-color': 'rgba(255,255,255,0)'}, {
+                duration: 700, always: function () {
+                    ele.remove()
+                }
+            });
+        }
+    });
 
-	return this;
+    return this;
 }
 
 $.fn.tabs = function (callback) {
-	var $this = this;
+    var $this = this;
 
-	this.each(function (i, obj) {
-		var obj = $(obj);
+    this.each(function (i, obj) {
+        var obj = $(obj);
 
-		$(obj.attr('href')).hide();
+        $(obj.attr('href')).hide();
 
-		obj.click(function () {
-			$this.removeClass('selected');
+        obj.click(function () {
+            $this.removeClass('selected');
 
-			$this.each(function (i, e) {
-				$($(e).attr('href')).hide();
-			});
+            $this.each(function (i, e) {
+                $($(e).attr('href')).hide();
+            });
 
-			obj.addClass('selected');
+            obj.addClass('selected');
 
-			content = $(obj.attr('href')).show();
+            content = $(obj.attr('href')).show();
 
-			if (typeof callback === 'function') {
-				callback(content.attr('id'), obj, content);
-			}
-			return false;
-		});
+            if (typeof callback === 'function') {
+                callback(content.attr('id'), obj, content);
+            }
+            return false;
+        });
 
-		var tab_name = obj.find('.tab_name');
+        var tab_name = obj.find('.tab_name');
 
-		if (tab_name.length) {
-			$(obj.attr('href')).find('.tab_name').keyup(function () {
-				tab_name.html($(this).val());
-			});
-		}
-	});
+        if (tab_name.length) {
+            $(obj.attr('href')).find('.tab_name').keyup(function () {
+                tab_name.html($(this).val());
+            });
+        }
+    });
 
-	this.show().first().click();
+    this.show().first().click();
 
-	return this;
+    return this;
 };
 
 $.fn.ac_msg = function (type, msg, append, close) {
@@ -311,81 +319,81 @@ $.fn.ac_msg = function (type, msg, append, close) {
 }
 
 $.fn.ac_errors = function (errors) {
-	for (var err in errors) {
-		if (typeof errors[err] == 'object') {
-			this.ac_errors(errors[err]);
-			continue;
-		}
+    for (var err in errors) {
+        if (typeof errors[err] == 'object') {
+            this.ac_errors(errors[err]);
+            continue;
+        }
 
-		var ele = this.find('[name="' + err + '"]');
+        var ele = this.find('[name="' + err + '"]');
 
-		if (!ele.length) {
-			ele = $('#' + err);
-		}
+        if (!ele.length) {
+            ele = $('#' + err);
+        }
 
-		if (!ele.length) {
-			ele = $(err);
-		}
+        if (!ele.length) {
+            ele = $(err);
+        }
 
-		if (!ele.length) {
-			return this.ac_msg('error', errors);
-		}
+        if (!ele.length) {
+            return this.ac_msg('error', errors);
+        }
 
-		ele.after($("<div />").addClass('error').html(errors[err]));
-	}
+        ele.after($("<div />").addClass('error').html(errors[err]));
+    }
 
-	return this;
+    return this;
 }
 
 $.ac_errors = function (errors) {
-	$('body').ac_errors(errors);
+    $('body').ac_errors(errors);
 }
 
 $.fn.fade_post = function (url, data, callback, dataType) {
-	context = this;
+    context = this;
 
-	context.stop().fadeOut(300);
+    context.stop().fadeOut(300);
 
-	context.after($.loading);
+    context.after($.loading);
 
-	$.post(url, data, function (data) {
-		context.fadeIn(0);
-		$.loading('stop');
+    $.post(url, data, function (data) {
+        context.fadeIn(0);
+        $.loading('stop');
 
-		if (typeof callback === 'function') {
-			callback(data);
-		}
-	}, dataType || null);
+        if (typeof callback === 'function') {
+            callback(data);
+        }
+    }, dataType || null);
 
-	return this;
+    return this;
 }
 
-$('.ajax-form').submit(ac_form);
+$('.ajax-form').submit(function(){ac_form();});
 
 function ac_form(params) {
-    var $this = $(this);
+    var $form = $(this);
     var callback = params.success;
     var complete = params.complete;
-    var $button = $this.find('button, input[type=submit]');
+    var $button = $form.find('button, input[type=submit]');
     if (!$button.length) {
-        $button = $this;
+        $button = $form;
     }
 
     params = $.extend({}, {
-        data: $this.serialize(),
+        data: $form.serialize(),
         dataType: 'json'
     }, params);
 
-    params.success = function(data, textStatus, jqXHR) {
+    params.success = function (data, textStatus, jqXHR) {
         if (typeof data == 'object') {
             if (data.error) {
-                $this.ac_errors(data.error);
+                $form.ac_errors(data.error);
             }
 
-            $this.ac_msg(data);
+            $form.ac_msg(data);
         } else {
-            $this.replaceWith(data);
-            $('.ajax-form').submit(ac_form);
+            $form.replaceWith(data);
+            init_ajax();
         }
 
         if (typeof callback == 'function') {
@@ -393,7 +401,7 @@ function ac_form(params) {
         }
     }
 
-    params.complete = function(jqXHR, textStatus) {
+    params.complete = function (jqXHR, textStatus) {
         $button.loading('stop');
 
         if (typeof complete == 'function') {
@@ -403,295 +411,309 @@ function ac_form(params) {
 
     $button.loading();
 
-    $.ajax($this.attr('action'), params);
+    $.ajax($form.attr('action').ajaxurl(), params);
 
     return false;
 }
 
 $.loading = function (params) {
-	if (params == 'stop') {
-		$('.loader').remove();
-		return;
-	}
+    if (params == 'stop') {
+        $('.loader').remove();
+        return;
+    }
 
-	params = $.extend({}, {
-		dots:       8,
-		width:      null,
-		height:     null,
-		animations: 'bounce, fadecolor'
-	}, params);
+    params = $.extend({}, {
+        dots: 8,
+        width: null,
+        height: null,
+        animations: 'bounce, fadecolor'
+    }, params);
 
-	loader = $('<div class="loader">' + '<div class="loader-item"></div>'.repeat(params.dots) + '</div>');
+    loader = $('<div class="loader">' + '<div class="loader-item"></div>'.repeat(params.dots) + '</div>');
 
-	loader.children('.loader_item').each(function (i, e) {
-		$(e).attr('style', '-webkit-animation-name: ' + params.animations + '; animation-name: ' + params.animations);
-	});
+    loader.children('.loader_item').each(function (i, e) {
+        $(e).attr('style', '-webkit-animation-name: ' + params.animations + '; animation-name: ' + params.animations);
+    });
 
-	if (params.width) {
-		loader.width(params.width);
-	}
+    if (params.width) {
+        loader.width(params.width);
+    }
 
-	if (params.height) {
-		loader.height(params.height);
-	}
+    if (params.height) {
+        loader.height(params.height);
+    }
 
-	return loader[0].outerHTML;
+    return loader[0].outerHTML;
 }
 
 $.fn.loading = function (params) {
-	var text = params ? params.text : this.attr('data-loading');
+    var text = params ? params.text : this.attr('data-loading');
 
-	if (text || this.data('original')) {
-		if (params == 'stop') {
-			this.prop('disabled', false);
-			this.html(this.data('original'));
-		} else {
-			this.prop('disabled', true);
-			if (!this.data('original')) {
-				this.data('original', this.html());
-			}
-			this.html(text);
-		}
+    if (text || this.data('original')) {
+        if (params == 'stop') {
+            this.prop('disabled', false);
+            this.html(this.data('original'));
+        } else {
+            this.prop('disabled', true);
+            if (!this.data('original')) {
+                this.data('original', this.html());
+            }
+            this.html(text);
+        }
 
-		return this;
-	}
+        return this;
+    }
 
-	this.find('.loader').remove();
+    this.find('.loader').remove();
 
-	return this.append($.loading(params));
+    return this.append($.loading(params));
 }
 
 $.fn.ac_zoneselect = function (params, callback) {
-	var $this = this;
+    var $this = this;
 
-	params = $.extend({}, {
-		listen:    null,
-		allow_all: false,
-		select:    null,
-		url:       $ac.site_url + 'data/locale/load_zones'
-	}, params);
+    params = $.extend({}, {
+        listen: null,
+        allow_all: false,
+        select: null,
+        url: $ac.site_url + 'data/locale/load_zones'
+    }, params);
 
-	if (!params.listen) {
-		throw "You must specify 'listen' in the parameters. This is the Country selector element";
-	} else {
-		params.listen = $(params.listen);
-	}
+    if (!params.listen) {
+        throw "You must specify 'listen' in the parameters. This is the Country selector element";
+    } else {
+        params.listen = $(params.listen);
+    }
 
-	params.url = params.url.ajaxurl();
+    params.url = params.url.ajaxurl();
 
-	if (params.allow_all) {
-		params.url += '&allow_all';
-	}
+    if (params.allow_all) {
+        params.url += '&allow_all';
+    }
 
-	if (params.select) {
-		params.url += '&zone_id=' + params.select;
-	}
+    if (params.select) {
+        params.url += '&zone_id=' + params.select;
+    }
 
-	if (callback) {
-		$this.success = callback;
-	}
+    if (callback) {
+        $this.success = callback;
+    }
 
-	params.listen.change(function () {
-		var $cs = $(this);
+    params.listen.change(function () {
+        var $cs = $(this);
 
-		if (!$cs.val()) return;
+        if (!$cs.val()) return;
 
-		if ($this.children().length && $this.attr('data-country-id') == $this.val()) return;
+        if ($this.children().length && $this.attr('data-country-id') == $this.val()) return;
 
-		$this.attr('data-country-id', $cs.val());
-		$this.attr('data-zone-id', $this.val() || $this.attr('data-zone-id') || 0);
+        $this.attr('data-country-id', $cs.val());
+        $this.attr('data-zone-id', $this.val() || $this.attr('data-zone-id') || 0);
 
-		$this.load(params.url + '&country_id=' + $cs.val(), $this.success);
-	});
+        $this.load(params.url + '&country_id=' + $cs.val(), $this.success);
+    });
 
-	if ($this.children().length < 1 || !$this.val()) {
-		params.listen.change();
-	}
+    if ($this.children().length < 1 || !$this.val()) {
+        params.listen.change();
+    }
 
-	return $this;
+    return $this;
 }
 
 
 function getQueryString(key, defaultValue) {
-	if (defaultValue == null) defaultValue = "";
-	key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-	var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
-	var qs = regex.exec(window.location.href);
-	if (qs == null)
-		return defaultValue;
-	else
-		return qs[1];
+    if (defaultValue == null) defaultValue = "";
+    key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+    var qs = regex.exec(window.location.href);
+    if (qs == null)
+        return defaultValue;
+    else
+        return qs[1];
 }
 
 function currency_format(number, params) {
-	params = $.extend({}, {
-		symbol_left:   $ac.currency.symbol_left,
-		symbol_right:  $ac.currency.symbol_right,
-		decimals:      $ac.currency.decimals,
-		dec_point:     $ac.currency.decimal_point,
-		thousands_sep: $ac.currency.thousands_sep,
-		neg:           '-',
-		pos:           '+'
-	}, params);
+    params = $.extend({}, {
+        symbol_left: $ac.currency.symbol_left,
+        symbol_right: $ac.currency.symbol_right,
+        decimals: $ac.currency.decimals,
+        dec_point: $ac.currency.decimal_point,
+        thousands_sep: $ac.currency.thousands_sep,
+        neg: '-',
+        pos: '+'
+    }, params);
 
-	str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);
+    str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);
 
-	return (number < 0 ? params.neg : params.pos) + params.symbol_left + str + params.symbol_right;
+    return (number < 0 ? params.neg : params.pos) + params.symbol_left + str + params.symbol_right;
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {
-	number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-	var n = !isFinite(+number) ? 0 : +number,
-		prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-		sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-		dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-		s = '',
-		toFixedFix = function (n, prec) {
-			var k = Math.pow(10, prec);
-			return '' + Math.round(n * k) / k;
-		};
-	// Fix for IE parseFloat(0.55).toFixed(0) = 0;
-	s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-	if (s[0].length > 3) {
-		s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-	}
-	if ((s[1] || '').length < prec) {
-		s[1] = s[1] || '';
-		s[1] += new Array(prec - s[1].length + 1).join('0');
-	}
-	return s.join(dec);
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
 }
 
 $.cookie = function (key, value, options) {
-	if (arguments.length > 1 && (value === null || typeof value !== "object")) {
-		options = options || {};
+    if (arguments.length > 1 && (value === null || typeof value !== "object")) {
+        options = options || {};
 
-		if (value === null) {
-			options.expires = -1;
-		}
+        if (value === null) {
+            options.expires = -1;
+        }
 
-		if (typeof options.expires === 'number') {
-			var days = options.expires, t = options.expires = new Date();
-			t.setDate(t.getDate() + days);
-		}
+        if (typeof options.expires === 'number') {
+            var days = options.expires, t = options.expires = new Date();
+            t.setDate(t.getDate() + days);
+        }
 
-		return (document.cookie = [
-			encodeURIComponent(key), '=',
-			options.raw ? String(value) : encodeURIComponent(String(value)),
-			options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-			options.path ? '; path=' + options.path : '',
-			options.domain ? '; domain=' + options.domain : '',
-			options.secure ? '; secure' : ''
-		].join(''));
-	}
+        return (document.cookie = [
+            encodeURIComponent(key), '=',
+            options.raw ? String(value) : encodeURIComponent(String(value)),
+            options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+            options.path ? '; path=' + options.path : '',
+            options.domain ? '; domain=' + options.domain : '',
+            options.secure ? '; secure' : ''
+        ].join(''));
+    }
 
-	// key and possibly options given, get cookie...
-	options = value || {};
-	var result, decode = options.raw ? function (s) {
-		return s;
-	} : decodeURIComponent;
-	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
+    // key and possibly options given, get cookie...
+    options = value || {};
+    var result, decode = options.raw ? function (s) {
+        return s;
+    } : decodeURIComponent;
+    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 
 function ac_radio_bubble() {
-	$('.ac-radio').not('ac-radio-bubble').click(function () {
-		$(this).addClass('ac-radio-bubble');
-		var $radio = $(this).parents('label').children('input[type=radio]');
+    $('.ac-radio').not('ac-radio-bubble').click(function () {
+        $(this).addClass('ac-radio-bubble');
+        var $radio = $(this).parents('label').children('input[type=radio]');
 
-		if (!$radio.prop('checked')) {
-			$radio.prop('checked', true).change();
-		}
-	});
+        if (!$radio.prop('checked')) {
+            $radio.prop('checked', true).change();
+        }
+    });
 
-	$('.ac-radio input').focus(function () {
-		var $radio = $(this).closest('.ac-radio').children('input[type=radio]');
-		if (!$radio.prop('checked')) {
-			$radio.prop('checked', true).change();
-		}
-	});
+    $('.ac-radio input').focus(function () {
+        var $radio = $(this).closest('.ac-radio').children('input[type=radio]');
+        if (!$radio.prop('checked')) {
+            $radio.prop('checked', true).change();
+        }
+    });
+}
+
+$ac.init_ajax = false;
+
+function init_ajax() {
+    var $colorbox = $('.colorbox');
+
+    if ($colorbox.length) {
+        var defaults = {
+            overlayClose: true,
+            opacity: 0.5,
+            width: '60%',
+            height: '80%',
+            onComplete: init_ajax
+        }
+
+        if (!$ac.init_ajax) {
+            $ac.init_ajax = true;
+            $.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function () {
+                $colorbox.colorbox(defaults);
+            });
+        } else {
+            $colorbox.colorbox(defaults);
+        }
+    }
+
+    $('.ajax-form').submit(function(){ac_form();});
 }
 
 $(document).ready(function () {
-	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
-		if (!ui.item.value && ui.item.href) {
-			window.open(ui.item.href);
-		}
-	});
+    $('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
+        if (!ui.item.value && ui.item.href) {
+            window.open(ui.item.href);
+        }
+    });
 
-	$('form input').keydown(function (e) {
-		if (e.keyCode == 13) {
-			$(this).closest('form').submit();
-		}
-	});
+    $('form input').keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(this).closest('form').submit();
+        }
+    });
 
-	$(document).keydown(function (e) {
-		if (e.ctrlKey && (e.which == 83)) {
-			$('form.ctrl-save').each(function (i, e) {
-				var $form = $(e);
+    $(document).keydown(function (e) {
+        if (e.ctrlKey && (e.which == 83)) {
+            $('form.ctrl-save').each(function (i, e) {
+                var $form = $(e);
 
-				var $btns = $form.find('button, input[type=submit]').loading({text: 'Saving...'});
+                var $btns = $form.find('button, input[type=submit]').loading({text: 'Saving...'});
 
-				$.post($form.attr('action'), $form.serialize(), function (response) {
-					$btns.loading('stop');
-					$form.ac_msg(response);
-				}, 'json');
-			});
+                $.post($form.attr('action'), $form.serialize(), function (response) {
+                    $btns.loading('stop');
+                    $form.ac_msg(response);
+                }, 'json');
+            });
 
-			e.preventDefault();
-			return false;
-		}
-	});
+            e.preventDefault();
+            return false;
+        }
+    });
 
-	$(document).on("DOMNodeInserted", function () {
-		ac_radio_bubble();
-	});
+    $(document).on("DOMNodeInserted", function () {
+        ac_radio_bubble();
+    });
 
-	var $colorbox = $('.colorbox');
+    init_ajax();
 
-	if ($colorbox.length) {
-		$.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function () {
-			var defaults = {
-				overlayClose: true,
-				opacity:      0.5,
-				width:        '60%',
-				height:       '80%'
-			}
+    //AC Checkbox (No IE8)
+    if ($('body.IE8').length === 0) {
+        $('.ac_checkbox').each(function (i, e) {
+            var div = $('<div class="ac_checkbox"></div>');
+            var cb = $(e);
 
-			$colorbox.colorbox(defaults);
-		});
-	}
+            div.toggleClass("checked", cb.prop('checked'));
 
-	//AC Checkbox (No IE8)
-	if ($('body.IE8').length === 0) {
-		$('.ac_checkbox').each(function (i, e) {
-			var div = $('<div class="ac_checkbox"></div>');
-			var cb = $(e);
+            cb.after(div).removeClass('ac_checkbox');
+            $(e).appendTo(div);
 
-			div.toggleClass("checked", cb.prop('checked'));
-
-			cb.after(div).removeClass('ac_checkbox');
-			$(e).appendTo(div);
-
-			div.click(function () {
-				cb.prop('checked', !cb.prop('checked'));
-				div.toggleClass("checked", cb.prop('checked'));
-			});
-		});
-	}
+            div.click(function () {
+                cb.prop('checked', !cb.prop('checked'));
+                div.toggleClass("checked", cb.prop('checked'));
+            });
+        });
+    }
 });
 
 
 //Chrome Autofill disable hack
 if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
-	$(window).load(function () {
-		$('input:-webkit-autofill[autocomplete="off"]').each(function () {
-			var $this = $(this);
-			if (!$this.attr('value')) {
-				$this.val('');
-				setTimeout(function () {
-					$this.val('');
-				}, 200);
-			}
-		});
-	});
+    $(window).load(function () {
+        $('input:-webkit-autofill[autocomplete="off"]').each(function () {
+            var $this = $(this);
+            if (!$this.attr('value')) {
+                $this.val('');
+                setTimeout(function () {
+                    $this.val('');
+                }, 200);
+            }
+        });
+    });
 }

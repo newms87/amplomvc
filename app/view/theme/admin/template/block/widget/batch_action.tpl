@@ -51,7 +51,7 @@
 	</div>
 <? } ?>
 
-<a class="button" onclick="do_batch_action()"><?= _l("Go"); ?></a>
+<a class="button batch-action-go" data-loading="<?= _l("..."); ?>"><?= _l("Go"); ?></a>
 
 <? if ($ckeditor) {
 	echo build_js('ckeditor');
@@ -65,8 +65,14 @@
 		$('#for-' + $(this).val()).addClass('active');
 	}).change();
 
+	$('.batch-action-go').click(do_batch_action);
+
 	function do_batch_action(action) {
-		var $listing = $('<?= $replace; ?>');
+		if (!action || typeof action != 'string') {
+			action = $('select[name=batch_action]').val();
+		}
+
+		var $this = $(this);
 		var $selected = $('<?= $selector; ?>:checked');
 
 		if (!$selected.length) {
@@ -83,17 +89,16 @@
 
 		var data = $selected.serializeArray();
 
-		data.push({name: 'action', value: action || $('select[name=batch_action]').val()});
+		data.push({name: 'action', value: action});
 		data.push({name: 'value', value: av});
 
-		$listing.addClass('loading');
-		var url = '<?= $url; ?>';
+		$this.loading();
 
-		url += (url.match(/\?/) ? '&' : '?') + window.location.search;
-
-		$.post(url, data, function (response) {
-			$listing.replaceWith(response);
-		});
+		$.post('<?= $url; ?>', data, function (response) {
+			$this.loading('stop');
+			$this.ac_msg(response);
+			$('.refresh-listing').click();
+		}, 'json');
 
 		return false;
 	}

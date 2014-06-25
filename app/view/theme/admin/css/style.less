@@ -901,7 +901,36 @@ button, .button {
 
   .filter-list {
     & > td {
+      position: relative;
       background: #F5DDDD;
+
+      .not-switch {
+        position: absolute;
+        left: 10%;
+        width: 10px;
+        height:10px;
+        top:2px;
+        background: forestgreen;
+        border-radius: 5px;
+
+        &:after {
+          content: "in";
+          display: inline-block;
+          position: relative;
+          top: -1px;
+          left: 14px;
+          width: 32px;
+          text-align: left;
+        }
+
+        &.not {
+          background: red;
+
+          &:after {
+            content: "not in";
+          }
+        }
+      }
     }
 
     .reset {
@@ -910,6 +939,45 @@ button, .button {
 
       &:hover {
         text-decoration: none;
+      }
+    }
+
+    .hide-filter {
+      font-size: 12px;
+      color: gray;
+      margin-top: 3px;
+      display: block;
+      text-decoration: none;
+
+      &:hover {
+        color: lightgray;
+      }
+    }
+
+    &.hide {
+      height:5px;
+      display: table-row;
+
+      td {
+        * {
+          display: none;
+        }
+
+        &:hover {
+          background: #D3ACAC;
+
+          &:after {
+            content: "+";
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            line-height: 0;
+          }
+        }
+      }
+
+      &:hover {
+        background: #D3ACAC;
       }
     }
   }
@@ -1239,6 +1307,32 @@ button, .button {
   overflow: visible;
   margin: auto;
   position: relative;
+
+  .input {
+    position: absolute;
+    display: none;
+    background: white;
+    padding: 8px;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
+    z-index: 1000;
+  }
+
+  .value {
+    display: block;
+    padding-top: 5px;
+
+    font-size: 16px;
+    color: #003A88;
+  }
+
+  &.multiselect {
+    margin-top: 8px;
+
+    .value {
+      font-size: 13px;
+    }
+  }
 }
 
 .zoom_hover.active {
@@ -1257,24 +1351,6 @@ button, .button {
 .zoom_hover.active .value,
 .zoom_hover:hover .value {
 
-}
-
-.zoom_hover .input {
-  position: absolute;
-  display: none;
-  background: white;
-  padding: 8px;
-  margin: auto;
-  box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
-  z-index: 1000;
-}
-
-.zoom_hover .value {
-  display: block;
-  padding-top: 5px;
-
-  font-size: 16px;
-  color: #003A88;
 }
 
 .zoom_hover.int .input {

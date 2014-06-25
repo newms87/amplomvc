@@ -343,6 +343,13 @@ abstract class Model
 		$where = '1';
 
 		foreach ($filter as $key => $value) {
+			if (strpos($key, '!') === 0) {
+				$key = substr($key, 1);
+				$not = true;
+			} else {
+				$not = false;
+			}
+
 			if (!isset($columns[$key])) {
 				continue;
 			}
@@ -355,18 +362,18 @@ abstract class Model
 
 			switch ($type) {
 				case 'like':
-					$where .= " AND `$t`.`$key` like '%" . $this->escape($value) . "%'";
+					$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
 					break;
 
 				case 'equals':
-					$where .= " AND `$t`.`$key` = '" . $this->escape($value) . "'";
+					$where .= " AND `$t`.`$key` " . ($not?'!=':'=') . " '" . $this->escape($value) . "'";
 					break;
 
 				case 'text_in':
 					if (is_array($value)) {
-						$where .= " AND `$t`.`$key` IN ('" . implode("','", $this->escape($filter[$key])) . "')";
+						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " ('" . implode("','", $this->escape($value)) . "')";
 					} else {
-						$where .= " AND `$t`.`$key` = '" . $this->escape($value) . "'";
+						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " '" . $this->escape($value) . "'";
 					}
 					break;
 
@@ -374,7 +381,7 @@ abstract class Model
 				case 'int_equals':
 					$value = $type === 'int_equals' ? (int)$value : (float)$value;
 				case 'number_equals':
-					$where .= " AND `$t`.`$key` = " . $value;
+					$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
 					break;
 
 				case 'float_in':
@@ -383,7 +390,7 @@ abstract class Model
 						$a = $type === 'int_in' ? (int)$a : (float)$a;
 					});
 				case 'number_in':
-					$where .= " AND `$t`.`$key` IN (" . implode(',', $value) . ")";
+					$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
 					break;
 
 			}

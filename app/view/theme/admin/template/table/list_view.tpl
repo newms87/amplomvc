@@ -57,10 +57,12 @@
 					<? if (!empty($_GET['filter'])) { ?>
 						<a class="reset reset-button"><?= _l("Reset"); ?></a>
 					<? } ?>
+					<a class="hide-filter"><?= _l("Hide"); ?></a>
 				</td>
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
 						<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
+							<div class="not-switch <?= $column['filter_value_not'] ? 'not' : ''; ?>"></div>
 							<? switch ($column['filter']) {
 								case 'text':
 									?>
@@ -197,6 +199,7 @@
 					<? if (!empty($_GET['filter'])) { ?>
 						<a class="reset reset-button"><?= _l("Reset"); ?></a>
 					<? } ?>
+					<a class="hide-filter"><?= _l("Hide"); ?></a>
 				</td>
 			</tr>
 			<? if (!empty($rows)) { ?>
@@ -466,10 +469,15 @@
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
+	$listview.find('.not-switch').click(function(){
+		$(this).toggleClass('not');
+	});
+
 	$listview.find('.reset-button').click(function () {
 		var $this = $(this);
 		$filter = $this.closest('.filter-list');
-		$this.closest('.filter-list').find('[name]').val('');
+		$filter.find('[name]').val('');
+		$filter.find('.not-switch').removeClass('not');
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
@@ -477,7 +485,10 @@
 		if (e.keyCode == 13) {
 			$(this).find('.filter-button').click()[0].click();
 		}
-	});
+	})
+		.click(function(){
+			$(this).removeClass('hide');
+		});
 
 	$listview.find('tr.filter-list-item td.editable').click(function () {
 		var $this = $(this);
@@ -491,6 +502,16 @@
 			$this.append($options);
 			$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
 		}
+	});
+
+	$listview.find('.hide-filter').click(function(event){
+		var $this = $(this);
+		var $refresh = $this.closest('.listing').find('.refresh-listing');
+		$this.closest('.filter-list').toggleClass('hide');
+		$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/,'') + '&hidefilter=1');
+
+		event.stopPropagation();
+		return false;
 	});
 
 	$listview.find('.editable-options .save-edit').click(function () {

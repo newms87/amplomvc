@@ -361,6 +361,10 @@ class Document extends Library
 
 		$html = '';
 
+		if (!empty($this->ac_vars)) {
+			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
+		}
+
 		foreach ($scripts as $script) {
 			if (strpos($script, 'local:') === 0) {
 				if (is_file($file = substr($script, 6))) {
@@ -373,10 +377,6 @@ class Document extends Library
 			} else {
 				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
 			}
-		}
-
-		if (!empty($this->ac_vars)) {
-			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
 		}
 
 		return $html;
