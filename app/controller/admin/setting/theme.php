@@ -46,7 +46,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 
 		$settings = $_POST;
 
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			$settings['stylesheet'] = $theme_configs['stylesheet'];
 		}
 
@@ -87,7 +87,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 			$this->message->add('success', _l("You have successfully updated the Theme Settings!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/store');

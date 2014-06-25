@@ -6,7 +6,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 	{
 		$this->document->setTitle(_l("Send Email"));
 
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			if (!$this->send()) {
 				$this->message->add('warning', _l("Error sending email! Message was not sent!"));
 			} else {
@@ -43,7 +43,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			}
 		}
 
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			$data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
 

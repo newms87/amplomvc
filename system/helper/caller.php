@@ -147,6 +147,21 @@ function _request($key, $default = null)
 	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
 }
 
+function is_post()
+{
+	return $_SERVER['REQUEST_METHOD'] === 'POST';
+}
+
+function is_get()
+{
+	return $_SERVER['REQUEST_METHOD'] === 'GET';
+}
+
+function is_ajax()
+{
+	return !empty($_GET['ajax']);
+}
+
 function option($option, $default = null)
 {
 	global $registry;

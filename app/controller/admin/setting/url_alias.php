@@ -147,7 +147,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 	public function update()
 	{
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['url_alias_id'])) {
 				$this->Model_Setting_UrlAlias->addUrlAlias($_POST);
@@ -231,7 +231,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		}
 
 		//Load Information
-		if ($url_alias_id && !$this->request->isPost()) {
+		if ($url_alias_id && !is_post()) {
 			$url_alias_info = $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id);
 		}
 

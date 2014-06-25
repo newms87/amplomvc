@@ -15,7 +15,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$this->document->setTitle(_l("General Settings"));
 
 		//Handle Post
-		if ($this->request->isPost() && $this->validate()) {
+		if (is_post() && $this->validate()) {
 			$this->config->saveGroup('config', $_POST, 0, true);
 
 			//TODO: Move this to Cron
@@ -34,7 +34,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$this->breadcrumb->add(_l("General Settings"), site_url('admin/setting/setting'));
 
 		//Load Information
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			$config_data = $this->config->loadGroup('config', 0);
 		} else {
 			$config_data = $_POST;

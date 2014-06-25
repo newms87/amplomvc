@@ -22,7 +22,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 		//Load Data or Defaults
 		$settings = $_POST;
 
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			$settings = $this->config->loadGroup('login_settings', 0);
 
 			if (!$settings) {
@@ -70,7 +70,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 	public function save()
 	{
 		//No Data
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			redirect('admin/setting/login');
 		}
 

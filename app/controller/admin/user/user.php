@@ -122,7 +122,7 @@ class App_Controller_Admin_User_User extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($output);
 		}
 
@@ -145,7 +145,7 @@ class App_Controller_Admin_User_User extends Controller
 		//The Data
 		$user = $_POST;
 
-		if ($user_id && !$this->request->isPost()) {
+		if ($user_id && !is_post()) {
 			$user = $this->Model_User_User->getUser($user_id);
 		}
 
@@ -190,7 +190,7 @@ class App_Controller_Admin_User_User extends Controller
 			$this->message->add('success', _l("The Page has been updated successfully!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -209,7 +209,7 @@ class App_Controller_Admin_User_User extends Controller
 			$this->message->add('notify', _l("User was deleted!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/user/user');
@@ -240,7 +240,7 @@ class App_Controller_Admin_User_User extends Controller
 			$this->message->add('success', _l("Success: You have modified navigation!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			$this->listing();
 		} else {
 			redirect('admin/user/user');

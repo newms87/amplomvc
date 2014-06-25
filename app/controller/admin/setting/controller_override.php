@@ -13,7 +13,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 		$this->breadcrumb->add(_l("Controller Override"), site_url('admin/setting/controller_override'));
 
 		//Load Information
-		if ($this->request->isPost() && $this->validate()) {
+		if (is_post() && $this->validate()) {
 			$controller_overrides = !empty($_POST['controller_overrides']) ? $_POST['controller_overrides'] : array();
 
 			$this->config->save('controller_override', 'controller_override', $controller_overrides, 0, true);
@@ -25,7 +25,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 		}
 
 		//Load Data or Defaults
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			$controller_overrides = $this->config->load('controller_override', 'controller_override', 0);
 		} else {
 			$controller_overrides = $_POST['controller_overrides'];

@@ -168,6 +168,12 @@ $.fn.ac_checklist = function (params) {
 	return this;
 }
 
+
+
+
+//TODO REMOVE SLIDELIST, look for form post / handler for ajax save client form (and all forms of course)
+
+
 $.fn.ac_slidelist = function (params) {
 	var allowed = 'div, a, span';
 	this.each(function (i, e) {

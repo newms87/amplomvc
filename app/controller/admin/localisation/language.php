@@ -14,7 +14,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 	{
 		$this->document->setTitle(_l("Language"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
 
 			$this->message->add('success', _l("Success: You have modified languages!"));
@@ -29,7 +29,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 	{
 		$this->document->setTitle(_l("Language"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
 
 			$this->message->add('success', _l("Success: You have modified languages!"));
@@ -173,7 +173,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/language', $url);
 
-		if ($language_id && !$this->request->isPost()) {
+		if ($language_id && !is_post()) {
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 		}
 

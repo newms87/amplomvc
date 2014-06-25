@@ -70,7 +70,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			$this->message->add('error', $this->Model_Block_Widget_Views->getError());
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			$this->message->add('view_id', $view_id);
 			output($this->message->toJSON());
 		} else {
@@ -89,7 +89,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				$this->message->add('error', $this->Model_Block_Widget_Views->getError());
 			}
 
-			if ($this->request->isAjax()) {
+			if (is_ajax()) {
 				output($this->message->toJSON());
 			} else {
 				redirect($view['path']);

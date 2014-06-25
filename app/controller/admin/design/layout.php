@@ -8,7 +8,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 	public function update()
 	{
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['layout_id'])) {
 				$this->Model_Design_Layout->addLayout($_POST);
@@ -187,7 +187,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$layout_id = isset($_GET['layout_id']) ? (int)$_GET['layout_id'] : 0;
 
 		//Load Information
-		if ($layout_id && !$this->request->isPost()) {
+		if ($layout_id && !is_post()) {
 			$layout_info = $this->Model_Design_Layout->getLayout($layout_id);
 
 			$layout_info['routes'] = $this->Model_Design_Layout->getLayoutRoutes($layout_id);

@@ -230,7 +230,11 @@
 						</td>
 						<? foreach ($columns as $slug => $column) { ?>
 							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
-							<td class="<?= $column['align'] . ' ' . $slug . ($column['editable'] ? ' editable' : ''); ?>" data-field="<?= $slug; ?>" data-value="<?= is_array($value) ? implode(',', $value) : $value; ?>">
+							<? if ($column['editable']) { ?>
+							<td class="editable <?= $column['align'] . ' ' . $slug; ?>" data-field="<?= $slug; ?>" data-value="<?= is_array($value) ? implode(',', $value) : $value; ?>">
+							<? } else { ?>
+							<td class="<?= $column['align'] . ' ' . $slug; ?>">
+							<? } ?>
 								<?
 								//Check if the raw string override has been set for this value
 								if (isset($row['#' . $slug])) {

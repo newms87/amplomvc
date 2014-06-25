@@ -32,7 +32,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$settings['template_data'] += $template_defaults;
 
 		if (!isset($settings['show_messages'])) {
-			$settings['show_messages'] = $settings['ajax'] && $this->request->isAjax();
+			$settings['show_messages'] = $settings['ajax'] && is_ajax();
 		}
 
 		//Normalize Extra Cols

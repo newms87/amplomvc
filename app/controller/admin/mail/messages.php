@@ -6,7 +6,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 	{
 		$this->document->setTitle(_l("Mail Messages"));
 
-		if ($this->request->isPost() && $this->validate()) {
+		if (is_post() && $this->validate()) {
 
 			$this->config->saveGroup('mail_messages', $_POST);
 
