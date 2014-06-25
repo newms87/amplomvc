@@ -29,7 +29,7 @@ class App_Controller_Customer extends Controller
 		//Input Data
 		$user_info = array();
 
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			$user_info = $_POST;
 		}
 
@@ -61,16 +61,16 @@ class App_Controller_Customer extends Controller
 
 	public function login()
 	{
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
 				$this->message->add('warning', _l("Login failed. Invalid username and / or password."));
 			}
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
-			if (!$this->request->isPost() || $this->message->has('error')) {
+			if (!is_post() || $this->message->has('error')) {
 				return $this->index();
 
 			}
@@ -106,7 +106,7 @@ class App_Controller_Customer extends Controller
 
 		$registration_data = array();
 
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			$registration_data = $_POST;
 		}
 

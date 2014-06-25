@@ -14,7 +14,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 	{
 		$this->document->setTitle(_l("Geo Zones"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
 
 			$this->message->add('success', _l("Success: You have modified geo zones!"));
@@ -29,7 +29,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 	{
 		$this->document->setTitle(_l("Geo Zones"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
 
 			$this->message->add('success', _l("Success: You have modified geo zones!"));
@@ -191,7 +191,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/geo_zone', $url);
 
-		if ($geo_zone_id && !$this->request->isPost()) {
+		if ($geo_zone_id && !is_post()) {
 			$geo_zone_info = $this->Model_Localisation_GeoZone->getGeoZone($geo_zone_id);
 		}
 

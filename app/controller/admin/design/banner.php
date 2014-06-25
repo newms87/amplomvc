@@ -12,7 +12,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 	{
 		$this->document->setTitle(_l("Banners"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
 
 			$this->message->add('success', _l("Success: You have modified banners!"));
@@ -29,7 +29,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 	{
 		$this->document->setTitle(_l("Banners"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
 			$this->message->add('success', _l("Success: You have modified banners!"));
@@ -157,7 +157,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 		$data['cancel'] = site_url('admin/design/banner', $url);
 
-		if ($banner_id && !$this->request->isPost()) {
+		if ($banner_id && !is_post()) {
 			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);
 		}
 

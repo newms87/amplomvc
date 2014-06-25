@@ -138,7 +138,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 			$this->message->add('success', _l('Entry Removed!'));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/tool/logs', 'log=' . $_GET['log']);

@@ -7,7 +7,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 	{
 		$this->document->setTitle(_l("Google Base"));
 
-		if ($this->request->isPost() && $this->validate()) {
+		if (is_post() && $this->validate()) {
 			$this->config->saveGroup('google_base', $_POST);
 
 			$this->message->add('success', _l("Success: You have modified Google Base feed!"));

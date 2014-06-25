@@ -66,7 +66,7 @@ class Response extends Library
 	public function output()
 	{
 		//Database Profiling
-		if (option('config_performance_log', true) && !$this->request->isAjax()) {
+		if (option('config_performance_log', true) && !is_ajax()) {
 			$this->performance();
 		}
 

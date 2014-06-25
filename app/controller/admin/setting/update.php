@@ -32,7 +32,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		//Data
 		$update_info = array();
 
-		if (!$this->request->isPost()) {
+		if (!is_post()) {
 			$update_info = $this->config->loadGroup('system');
 		}
 
@@ -68,7 +68,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 			}
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/update');
@@ -85,7 +85,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 			$this->message->add('notify', _l("You have deactivated automatic system updates!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/update');

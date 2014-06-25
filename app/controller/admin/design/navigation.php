@@ -67,7 +67,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			$this->message->add('success', _l("Navigation has been updated!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -86,7 +86,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			$this->message->add('success', _l("Success: You have modified Navigation!"));
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/design/navigation');
@@ -182,7 +182,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			output($output);
 		} else {
 			return $output;
@@ -210,7 +210,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		//Load Values or Defaults
 		$navigation_group_info = array();
 
-		if ($this->request->isPost()) {
+		if (is_post()) {
 			$navigation_group_info = $_POST;
 		} elseif ($navigation_group_id) {
 			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
@@ -288,7 +288,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			}
 		}
 
-		if ($this->request->isAjax()) {
+		if (is_ajax()) {
 			$this->listing();
 		} else {
 			redirect('admin/design/navigation');
@@ -306,7 +306,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 
-		if (!$this->request->isAjax()) {
+		if (!is_ajax()) {
 			redirect('admin/design/navigation');
 		}
 

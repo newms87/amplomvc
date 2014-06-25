@@ -27,7 +27,7 @@ abstract class Controller
 			$data['errors'] = array();
 
 			if ($this->error) {
-				if (!$this->request->isAjax()) {
+				if (!is_ajax()) {
 					$this->message->add('warning', $this->error);
 				}
 

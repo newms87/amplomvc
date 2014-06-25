@@ -12,7 +12,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 	{
 		$this->document->setTitle(_l("Zones"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->addZone($_POST);
 
 			$this->message->add('success', _l("Success: You have modified zones!"));
@@ -41,7 +41,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 	{
 		$this->document->setTitle(_l("Zones"));
 
-		if ($this->request->isPost() && $this->validateForm()) {
+		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->editZone($_GET['zone_id'], $_POST);
 
 			$this->message->add('success', _l("Success: You have modified zones!"));
@@ -257,7 +257,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/zone', $url);
 
-		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
+		if (isset($_GET['zone_id']) && !is_post()) {
 			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);
 		}
 

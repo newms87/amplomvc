@@ -168,117 +168,6 @@ $.fn.ac_checklist = function (params) {
 	return this;
 }
 
-$.fn.ac_slidelist = function (params) {
-	var allowed = 'div, a, span';
-	this.each(function (i, e) {
-		var box = $('<div class="slidelistbox" />');
-		var slider = $('<div class="slidelist" />').width($(e).width()).append($(e).children(allowed));
-
-		if (params.x_dir < 0) {
-			box.addClass('right');
-		}
-		$(e).append(box.append(slider));
-
-		var items = slider.children(':not(.add_slide)').addClass('slideitem');
-		var add_slide = slider.children('.add_slide');
-
-		params = $.extend(true, {}, {
-			min_space_y:     10,
-			min_space_x:     0,
-			pad_y:           0,
-			pad_x:           0,
-			add_slide:       {x: 0, y: null, xout: 0, yout: 0},
-			item_height:     items.first().outerHeight(true),
-			item_width:      items.first().outerWidth(true),
-			max_rows:        4,
-			x_dir:           1,
-			hover_in_delay:  0,
-			hover_out_delay: 0
-		}, params);
-
-		if (params.add_slide.y === null) {
-			params.add_slide.y = params.item_height * .4;
-		}
-
-		var rows = Math.min(items.length - 1, params.max_rows);
-		var cols = Math.floor((items.length - 1) / rows);
-		var item_height = params.item_height;
-		var item_width = params.item_width;
-		var max_height = (params.pad_y + item_height) * rows;
-		var min_height = rows * params.min_space_y;
-		var max_width = (params.pad_x + item_width) * cols;
-		var min_width = cols * params.min_space_x;
-
-		slider.css({
-			'margin-top': item_height
-		});
-
-		box.width(params.item_width);
-
-		var sort = function () {
-			slider.children('.slideitem:first').css({
-				top:       -item_height,
-				bottom:    'auto',
-				left:      params.x_dir >= 0 ? 0 : 'auto',
-				right:     params.x_dir < 0 ? 0 : 'auto',
-				'z-index': items.length
-			});
-
-			slider.children('.slideitem').not(':first').each(function (i, e) {
-				y_perc = (rows - (i % rows) - 1) / rows * 100;
-				x_perc = Math.floor(i / rows) / cols * 100;
-
-				left = params.x_dir >= 0 ? x_perc + '%' : 'auto';
-				right = params.x_dir < 0 ? x_perc + '%' : 'auto';
-
-				$(e).css({
-					top:       'auto',
-					bottom:    y_perc + '%',
-					left:      left,
-					right:     right,
-					'z-index': items.length - i - 1
-				});
-			})
-		}
-
-		function hoverIn() {
-			slider.css({
-				height: max_height,
-				width:  max_width
-			})
-
-			add_slide.css({
-				bottom: (-params.add_slide.y / max_height * 100) + '%'
-			});
-		};
-
-		function hoverOut() {
-			slider.css({
-				height: min_height,
-				width:  min_width
-			})
-
-			add_slide.css({
-				bottom: ((params.add_slide.yout + min_height) / min_height) + '%'
-			});
-		};
-		hoverOut();//call this for initial position
-
-		slider.parent().hover(function () {
-			setTimeout(hoverIn, params.hover_in_delay);
-		}, function () {
-			setTimeout(hoverOut, params.hover_out_delay);
-		});
-
-		slider.click(function () {
-			slider.prepend(slider.children('.checked'));
-			sort();
-		}).click();
-	});
-
-	return this;
-};
-
 //Apply a filter form to the URL
 $.fn.apply_filter = function (url) {
 	filter_list = this.find('[name]')
@@ -291,47 +180,6 @@ $.fn.apply_filter = function (url) {
 	}
 
 	return url;
-}
-
-$.fn.ac_msg = function (type, msg, append, close) {
-	if (typeof msg == 'undefined') {
-		msg = type;
-		type = null;
-	}
-
-	if (!append) {
-		append = 1;
-		this.find('.messages').remove();
-	}
-
-	if (typeof msg == 'object') {
-		for (var m in msg) {
-			this.ac_msg(type || m, msg[m], append, close);
-		}
-		return this;
-	}
-
-	return this.each(function (i, e) {
-		var box = $(e).find('.messages.' + type);
-
-		if (!box.length) {
-			box = $('<div />').addClass('messages ' + type);
-
-			if (typeof close == 'undefined' || close) {
-				box.append($('<div />').addClass('close').click(function () {
-					$(this).closest('.messages').remove();
-				}));
-			}
-
-			if (append > 0) {
-				$(e).append(box);
-			} else {
-				$(e).prepend(box);
-			}
-		}
-
-		box.prepend($('<div />').addClass('message').html(msg));
-	});
 }
 
 //A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
@@ -417,6 +265,51 @@ $.fn.tabs = function (callback) {
 	return this;
 };
 
+$.fn.ac_msg = function (type, msg, append, close) {
+    if (type == 'clear') {
+        return $(this).find('.messages').remove();
+    }
+
+    if (typeof msg == 'undefined') {
+        msg = type;
+        type = null;
+    }
+
+    if (!append) {
+        append = 1;
+        this.find('.messages').remove();
+    }
+
+    if (typeof msg == 'object') {
+        for (var m in msg) {
+            this.ac_msg(type || m, msg[m], append, close);
+        }
+        return this;
+    }
+
+    return this.each(function (i, e) {
+        var box = $(e).find('.messages.' + type);
+
+        if (!box.length) {
+            box = $('<div />').addClass('messages ' + type);
+
+            if (typeof close == 'undefined' || close) {
+                box.append($('<div />').addClass('close').click(function () {
+                    $(this).closest('.messages').remove();
+                }));
+            }
+
+            if (append > 0) {
+                $(e).append(box);
+            } else {
+                $(e).prepend(box);
+            }
+        }
+
+        box.prepend($('<div />').addClass('message').html(msg));
+    });
+}
+
 $.fn.ac_errors = function (errors) {
 	for (var err in errors) {
 		if (typeof errors[err] == 'object') {
@@ -448,20 +341,6 @@ $.ac_errors = function (errors) {
 	$('body').ac_errors(errors);
 }
 
-$.fn.display_error = function (msg, id) {
-	if (id && $('#' + id).length) return;
-
-	this.after('<div class="display_error"' + (id ? 'id="' + id + '"' : '') + '>' + msg + '</div>');
-}
-
-$.clear_errors = function (id) {
-	if (id) {
-		$('#' + id).remove();
-	} else {
-		$('.display_error').remove();
-	}
-}
-
 $.fn.fade_post = function (url, data, callback, dataType) {
 	context = this;
 
@@ -479,6 +358,54 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 	}, dataType || null);
 
 	return this;
+}
+
+$('.ajax-form').submit(ac_form);
+
+function ac_form(params) {
+    var $this = $(this);
+    var callback = params.success;
+    var complete = params.complete;
+    var $button = $this.find('button, input[type=submit]');
+    if (!$button.length) {
+        $button = $this;
+    }
+
+    params = $.extend({}, {
+        data: $this.serialize(),
+        dataType: 'json'
+    }, params);
+
+    params.success = function(data, textStatus, jqXHR) {
+        if (typeof data == 'object') {
+            if (data.error) {
+                $this.ac_errors(data.error);
+            }
+
+            $this.ac_msg(data);
+        } else {
+            $this.replaceWith(data);
+            $('.ajax-form').submit(ac_form);
+        }
+
+        if (typeof callback == 'function') {
+            callback(data, textStatus, jqXHR);
+        }
+    }
+
+    params.complete = function(jqXHR, textStatus) {
+        $button.loading('stop');
+
+        if (typeof complete == 'function') {
+            complete(jqXHR, textStatus);
+        }
+    }
+
+    $button.loading();
+
+    $.ajax($this.attr('action'), params);
+
+    return false;
 }
 
 $.loading = function (params) {
@@ -532,10 +459,6 @@ $.fn.loading = function (params) {
 	this.find('.loader').remove();
 
 	return this.append($.loading(params));
-}
-
-$.fn.postForm = function (callback, datatype, params) {
-	$.post(this.attr('action'), this.serialize(), callback, datatype);
 }
 
 $.fn.ac_zoneselect = function (params, callback) {
