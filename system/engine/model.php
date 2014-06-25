@@ -502,8 +502,8 @@ abstract class Model
 		if ($filter) {
 			$columns = array_intersect_key($columns, $filter);
 			uksort($columns, function ($a, $b) use ($filter) {
-					return $filter[$a] > $filter[$b];
-				});
+				return $filter[$a] > $filter[$b];
+			});
 		}
 
 		return $columns;

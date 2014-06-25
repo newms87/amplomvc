@@ -85,10 +85,6 @@ class Table extends Library
 			$this->template_data['listing_path'] = $this->route->getPath();
 		}
 
-		if (empty($this->template_data['save_path'])) {
-			$this->template_data['save_path'] = $this->route->getPath();
-		}
-
 		if (empty($this->template_data['sort_url'])) {
 			$this->template_data['sort_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
 		}

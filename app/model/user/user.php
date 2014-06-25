@@ -2,11 +2,9 @@
 
 class App_Model_User_User extends Model
 {
-	public function add($data)
+	public function save($user_id, $data)
 	{
-		$data['date_added'] = $this->date->now();
-
-		if (!$this->validate($data)) {
+		if (!$this->validate($user_id, $data)) {
 			return false;
 		}
 
@@ -16,22 +14,16 @@ class App_Model_User_User extends Model
 			$data['password'] = $data['encrypted_password'];
 		}
 
-		return $this->insert('user', $data);
-	}
-
-	public function edit($user_id, $data)
-	{
-		if (!$this->validate($data, $user_id)) {
-			return false;
+		//New User
+		if (!$user_id) {
+			$data['date_added'] = $this->date->now();
+			$user_id = $this->insert('user', $data);
+		} else {
+			//Update User
+			$user_id = $this->update('user', $data, $user_id);
 		}
 
-		if (isset($data['password'])) {
-			$data['password'] = $this->user->encrypt($data['password']);
-		} elseif (isset($data['encrypted_password'])) {
-			$data['password'] = $data['encrypted_password'];
-		}
-
-		return $this->update('user', $data, $user_id);
+		return $user_id;
 	}
 
 	public function editPassword($user_id, $password)
@@ -150,7 +142,7 @@ class App_Model_User_User extends Model
 		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->escape($email) . "'");
 	}
 
-	public function validate($user, $user_id = null)
+	public function validate($user_id, $user)
 	{
 		if (!$user_id || isset($user['username'])) {
 			if (!validate('text', $user['username'], 3, 20)) {
@@ -184,5 +176,35 @@ class App_Model_User_User extends Model
 		}
 
 		return empty($this->error);
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns = array(
+			'user_role_id' => array(
+				'type'         => 'select',
+				'display_name' => _l("Role"),
+				'build_data'   => $this->Model_User_Role->getRoles(),
+				'build_config' => array('user_role_id', 'name'),
+				'filter'       => 'select',
+				'sortable'     => true,
+			),
+			'status'       => array(
+				'type'         => 'select',
+				'display_name' => _l("Status"),
+				'build_data'   => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
+				'filter'       => true,
+				'sortable'     => true,
+			),
+		);
+
+		$columns = $this->getTableColumns('user', $columns, $filter);
+
+		unset($columns['password']);
+
+		return $columns;
 	}
 }
