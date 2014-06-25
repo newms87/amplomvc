@@ -171,7 +171,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/geo_zone_list', $data));
+		output($this->render('localisation/geo_zone_list', $data));
 	}
 
 	private function getForm()
@@ -218,7 +218,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 			$data['zones'] = $this->Model_Localisation_GeoZone->getZones($geo_zone_id);
 		}
 
-		$this->response->setOutput($this->render('localisation/geo_zone_form', $data));
+		output($this->render('localisation/geo_zone_form', $data));
 	}
 
 	private function validateForm()

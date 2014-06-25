@@ -16,6 +16,6 @@ class App_Controller_Error_NotFound extends Controller
 		$data['continue'] = site_url();
 
 		//Render
-		$this->response->setOutput($this->render('error/not_found', $data));
+		output($this->render('error/not_found', $data));
 	}
 }

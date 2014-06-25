@@ -38,6 +38,6 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 		$data['return'] = site_url('admin');
 
 		//Render
-		$this->response->setOutput($this->render('dev/db_admin', $data));
+		output($this->render('dev/db_admin', $data));
 	}
 }

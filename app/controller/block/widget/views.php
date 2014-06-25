@@ -72,7 +72,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if ($this->request->isAjax()) {
 			$this->message->add('view_id', $view_id);
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect($_POST['path']);
 		}
@@ -90,7 +90,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			}
 
 			if ($this->request->isAjax()) {
-				$this->response->setOutput($this->message->toJSON());
+				output($this->message->toJSON());
 			} else {
 				redirect($view['path']);
 			}

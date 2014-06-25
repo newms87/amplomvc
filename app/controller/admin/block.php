@@ -32,7 +32,7 @@ class App_Controller_Admin_Block extends Controller
 		$data['insert'] = site_url('admin/block/add_block');
 
 		//Render
-		$this->response->setOutput($this->render('block/list', $data));
+		output($this->render('block/list', $data));
 	}
 
 	public function listing()
@@ -105,7 +105,7 @@ class App_Controller_Admin_Block extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		}
 
 		return $output;
@@ -175,7 +175,7 @@ class App_Controller_Admin_Block extends Controller
 		$block['save']   = site_url('admin/block/save', 'path=' . $path);
 
 		//Render
-		$this->response->setOutput($this->render('block/block', $block));
+		output($this->render('block/block', $block));
 	}
 
 	public function add()
@@ -226,6 +226,6 @@ class App_Controller_Admin_Block extends Controller
 		$data['cancel'] = site_url('admin/block');
 
 		//Render
-		$this->response->setOutput($this->render('block/add', $data));
+		output($this->render('block/add', $data));
 	}
 }

@@ -12,7 +12,7 @@ class App_Controller_Admin_Help_Documentation extends Controller
 		$this->breadcrumb->add(_l("Home"), site_url('admin'));
 		$this->breadcrumb->add(_l("Documentation"), site_url('admin/help/documentation'));
 
-		$this->response->setOutput($this->render('help/documentation', $data));
+		output($this->render('help/documentation', $data));
 	}
 
 	function replace_tokens(&$section)

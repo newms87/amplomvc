@@ -217,7 +217,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/length_class_list', $data));
+		output($this->render('localisation/length_class_list', $data));
 	}
 
 	private function getForm()
@@ -287,7 +287,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 			$data['value'] = '';
 		}
 
-		$this->response->setOutput($this->render('localisation/length_class_form', $data));
+		output($this->render('localisation/length_class_form', $data));
 	}
 
 	private function validateForm()

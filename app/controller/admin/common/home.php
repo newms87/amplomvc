@@ -9,6 +9,6 @@ class App_Controller_Admin_Common_Home extends Controller
 
 		$data = array();
 
-		$this->response->setOutput($this->render('common/home', $data));
+		output($this->render('common/home', $data));
 	}
 }

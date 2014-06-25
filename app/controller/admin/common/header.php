@@ -4,19 +4,25 @@ class App_Controller_Admin_Common_Header extends Controller
 {
 	public function index($settings = array())
 	{
-		$data = $settings;
-
-		$data['title'] = $this->document->getTitle();
-
-		$data['base'] = site_url('admin');
-
-		$data['theme'] = option('config_theme');
+		$settings += array(
+			'title'          => $this->document->getTitle(),
+			'base'           => site_url('admin'),
+			'theme'          => option('config_theme'),
+			'direction'      => $this->language->info('direction'),
+			'description'    => $this->document->getDescription(),
+			'keywords'       => $this->document->getKeywords(),
+			'canonical_link' => $this->document->getCanonicalLink(),
+			'body_class'     => slug($this->route->getPath(), '-'),
+			'lang'           => $this->language->info('code'),
+			'logged'         => $this->user->isLogged(),
+			'user'           => $this->user->info(),
+		);
 
 		//Add Styles
 		$style = theme_dir('css/style.less');
 
 		if ($style) {
-			$style = $this->document->compileLess($style, $data['theme'] . '-' . option('store_id') . '-theme-style');
+			$style = $this->document->compileLess($style, $settings['theme'] . '-' . option('store_id') . '-theme-style');
 		} else {
 			$style = theme_url('css/style.css');
 		}
@@ -45,18 +51,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$this->document->localizeVar('admin_url', site_url('admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
 
-
-		$data['direction']      = $this->language->info('direction');
-		$data['description']    = $this->document->getDescription();
-		$data['keywords']       = $this->document->getKeywords();
-		$data['canonical_link'] = $this->document->getCanonicalLink();
-		$data['body_class']     = slug($this->route->getPath(), '-');
-
-		$data['lang'] = $this->language->info('code');
-
-		$data['logged'] = $this->user->isLogged();
-
-		if ($data['logged']) {
+		if ($settings['logged']) {
 			//Add the Image Manager to the Main Menu if user has permissions
 			if (user_can('access', 'filemanager/filemanager')) {
 				$link_image_manager = array(
@@ -128,8 +123,8 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-		$data['styles']  = $this->document->renderStyles();
-		$data['scripts'] = $this->document->renderScripts();
+		$settings['styles']  = $this->document->renderStyles();
+		$settings['scripts'] = $this->document->renderScripts();
 
 		//Failed Email Messages warnings
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();
@@ -139,8 +134,6 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 
-		$data['user'] = $this->user->info();
-
-		$this->render('common/header', $data);
+		$this->render('common/header', $settings);
 	}
 }

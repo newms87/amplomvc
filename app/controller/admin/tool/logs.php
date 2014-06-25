@@ -100,7 +100,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$data['clear']  = site_url('admin/tool/logs/clear', 'log=' . $log);
 
 		//Render
-		$this->response->setOutput($this->render('tool/logs', $data));
+		output($this->render('tool/logs', $data));
 	}
 
 	public function remove($lines = null)
@@ -139,7 +139,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/tool/logs', 'log=' . $_GET['log']);
 		}

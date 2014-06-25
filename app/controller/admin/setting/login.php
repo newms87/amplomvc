@@ -64,7 +64,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 		$settings['save'] = site_url('admin/setting/login/save');
 
 		//Render
-		$this->response->setOutput($this->render('setting/login', $settings));
+		output($this->render('setting/login', $settings));
 	}
 
 	public function save()

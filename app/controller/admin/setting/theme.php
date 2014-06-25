@@ -66,7 +66,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		$settings['save'] = site_url('admin/setting/theme/save', 'store_id=' . $store_id);
 
 		//Render
-		$this->response->setOutput($this->render('setting/theme', $settings));
+		output($this->render('setting/theme', $settings));
 	}
 
 	public function save()
@@ -88,7 +88,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/store');
 		}

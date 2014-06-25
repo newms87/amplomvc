@@ -215,7 +215,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/zone_list', $data));
+		output($this->render('localisation/zone_list', $data));
 	}
 
 	private function getForm()
@@ -295,7 +295,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 		$data['countries'] = $this->Model_Localisation_Country->getCountries();
 
-		$this->response->setOutput($this->render('localisation/zone_form', $data));
+		output($this->render('localisation/zone_form', $data));
 	}
 
 	private function validateForm()

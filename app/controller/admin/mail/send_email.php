@@ -47,7 +47,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			$data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
 
-		$this->response->setOutput($this->render('mail/send_email', $data));
+		output($this->render('mail/send_email', $data));
 	}
 
 	public function send()

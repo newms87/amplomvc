@@ -217,7 +217,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('localisation/country_list', $data));
+		output($this->render('localisation/country_list', $data));
 	}
 
 	private function getForm()
@@ -311,7 +311,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$data['status'] = '1';
 		}
 
-		$this->response->setOutput($this->render('localisation/country_form', $data));
+		output($this->render('localisation/country_form', $data));
 	}
 
 	private function validateForm()

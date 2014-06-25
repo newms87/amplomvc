@@ -39,7 +39,7 @@ class App_Controller_Admin_User_Role extends Controller
 		$data['insert'] = site_url('admin/user/role/form');
 
 		//Render
-		$this->response->setOutput($this->render('user/role_list', $data));
+		output($this->render('user/role_list', $data));
 	}
 
 	public function listing()
@@ -91,7 +91,7 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($output);
+			output($output);
 		}
 
 		return $output;
@@ -135,7 +135,7 @@ class App_Controller_Admin_User_Role extends Controller
 		$user_role['save'] = site_url('admin/user/role/update', 'user_role_id=' . $user_role_id);
 
 		//Render
-		$this->response->setOutput($this->render('user/role_form', $user_role));
+		output($this->render('user/role_form', $user_role));
 	}
 
 	public function update()
@@ -157,7 +157,7 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -179,7 +179,7 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//Response
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/user/role');
 		}

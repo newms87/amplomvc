@@ -68,13 +68,13 @@ class App_Controller_Account_Download extends Controller
 
 			$data['continue'] = site_url('account');
 
-			$this->response->setOutput($this->render('account/download', $data));
+			output($this->render('account/download', $data));
 		} else {
 			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
 
 			$data['continue'] = site_url('account');
 
-			$this->response->setOutput($this->render('error/not_found', $data));
+			output($this->render('error/not_found', $data));
 		}
 	}
 

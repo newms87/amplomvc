@@ -41,7 +41,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		$data['cancel'] = site_url('admin/common/login');
 
 		//Render
-		$this->response->setOutput($this->render('common/forgotten', $data));
+		output($this->render('common/forgotten', $data));
 	}
 
 	public function reset()
@@ -88,7 +88,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		$data['cancel'] = site_url('admin/common/login');
 
 		//Render
-		$this->response->setOutput($this->render('common/reset', $data));
+		output($this->render('common/reset', $data));
 	}
 
 	private function validate()

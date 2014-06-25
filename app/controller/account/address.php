@@ -35,7 +35,7 @@ class App_Controller_Account_Address extends Controller
 		$data['back']   = site_url('account');
 
 		//Render
-		$this->response->setOutput($this->render('account/address_list', $data));
+		output($this->render('account/address_list', $data));
 	}
 
 	public function update()
@@ -68,7 +68,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -95,7 +95,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('account/address');
 		}
@@ -160,6 +160,6 @@ class App_Controller_Account_Address extends Controller
 
 		//Render
 		$template = $this->request->isAjax() ? 'account/address_form_ajax' : 'account/address_form';
-		$this->response->setOutput($this->render($template, $data));
+		output($this->render($template, $data));
 	}
 }

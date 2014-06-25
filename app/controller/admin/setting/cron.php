@@ -97,7 +97,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		$data['activate'] = site_url('admin/setting/cron/activate');
 
 		//Render
-		$this->response->setOutput($this->render('setting/cron', $data));
+		output($this->render('setting/cron', $data));
 	}
 
 	public function activate()

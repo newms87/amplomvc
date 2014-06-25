@@ -55,7 +55,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$data['data_versions'] = $versions;
 
 		//Render
-		$this->response->setOutput($this->render('setting/update', $data));
+		output($this->render('setting/update', $data));
 	}
 
 	public function update()
@@ -69,7 +69,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/update');
 		}
@@ -86,7 +86,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/update');
 		}

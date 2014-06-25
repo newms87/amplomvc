@@ -13,7 +13,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$data['return'] = site_url('admin');
 
-		$this->response->setOutput($this->render('dev/dev', $data));
+		output($this->render('dev/dev', $data));
 	}
 
 	public function sync()
@@ -66,7 +66,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$this->content();
 
-		$this->response->setOutput($this->render('dev/sync', $data));
+		output($this->render('dev/sync', $data));
 	}
 
 	public function site_management()
@@ -120,7 +120,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$this->content();
 
-		$this->response->setOutput($this->render('dev/site_management', $data));
+		output($this->render('dev/site_management', $data));
 	}
 
 	public function backup_restore()
@@ -207,7 +207,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$this->content();
 
-		$this->response->setOutput($this->render('dev/backup_restore', $data));
+		output($this->render('dev/backup_restore', $data));
 	}
 
 	public function content()

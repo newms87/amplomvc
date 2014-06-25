@@ -25,7 +25,7 @@ class App_Controller_Account extends Controller
 		$data['edit_account'] = site_url('account/update');
 
 		//Render
-		$this->response->setOutput($this->render('account/account', $data));
+		output($this->render('account/account', $data));
 	}
 
 	public function update()
@@ -70,7 +70,7 @@ class App_Controller_Account extends Controller
 		$data['save'] = site_url('account/submit_update');
 
 		//Render
-		$this->response->setOutput($this->render('account/update', $data));
+		output($this->render('account/update', $data));
 	}
 
 	public function submit_update()
@@ -95,7 +95,7 @@ class App_Controller_Account extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput($this->message->toJSON());
+			output($this->message->toJSON());
 		} else {
 			redirect('account/update');
 		}

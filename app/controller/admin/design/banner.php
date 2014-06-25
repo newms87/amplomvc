@@ -137,7 +137,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 
-		$this->response->setOutput($this->render('design/banner_list', $data));
+		output($this->render('design/banner_list', $data));
 	}
 
 	private function getForm()
@@ -211,7 +211,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 
 		$data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 
-		$this->response->setOutput($this->render('design/banner_form', $data));
+		output($this->render('design/banner_form', $data));
 	}
 
 	private function validateForm()

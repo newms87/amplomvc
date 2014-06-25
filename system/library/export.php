@@ -75,7 +75,7 @@ class Export extends Library
 
 		$this->response->setHeader($headers);
 
-		$this->response->setOutput($this->contents);
+		output($this->contents);
 
 		$this->response->output();
 
