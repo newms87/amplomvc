@@ -176,18 +176,10 @@ class App_Controller_Admin_User_User extends Controller
 
 	public function update()
 	{
-		//Insert
-		if (empty($_GET['user_id'])) {
-			$this->Model_User_User->add($_POST);
-		} //Update
-		else {
-			$this->Model_User_User->edit($_GET['user_id'], $_POST);
-		}
-
-		if ($this->Model_User_User->hasError()) {
-			$this->message->add('error', $this->Model_User_User->getError());
-		} else {
+		if ($this->Model_User_User->save(_get('user_id'), $_POST)) {
 			$this->message->add('success', _l("The Page has been updated successfully!"));
+		} else {
+			$this->message->add('error', $this->Model_User_User->getError());
 		}
 
 		if (is_ajax()) {
