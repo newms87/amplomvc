@@ -4,6 +4,10 @@ class App_Model_User_User extends Model
 {
 	public function save($user_id, $data)
 	{
+		if (empty($data['password'])) {
+			unset($data['password']);
+		}
+
 		if (!$this->validate($user_id, $data)) {
 			return false;
 		}
@@ -145,8 +149,8 @@ class App_Model_User_User extends Model
 	public function validate($user_id, $user)
 	{
 		if (!$user_id || isset($user['username'])) {
-			if (!validate('text', $user['username'], 3, 20)) {
-				$this->error['username'] = _l("Username must be between 3 and 20 characters!");
+			if (!validate('text', $user['username'], 3, 128)) {
+				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
 			} else {
 				$user_info = $this->Model_User_User->getUserByUsername($user['username']);
 
