@@ -193,12 +193,10 @@ class App_Controller_Admin_User_User extends Controller
 
 	public function delete()
 	{
-		$this->Model_User_User->remove($_GET['user_id']);
-
-		if ($this->Model_User_User->hasError()) {
-			$this->message->add('error', $this->Model_User_User->getError());
-		} else {
+		if ($this->Model_User_User->remove($_GET['user_id'])) {
 			$this->message->add('notify', _l("User was deleted!"));
+		} else {
+			$this->message->add('error', $this->Model_User_User->getError());
 		}
 
 		if (is_ajax()) {
