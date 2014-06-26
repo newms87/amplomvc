@@ -7,7 +7,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$settings += array(
 			'title'          => $this->document->getTitle(),
 			'base'           => site_url('admin'),
-			'theme'          => option('config_theme'),
+			'theme'          => option('config_admin_theme', 'admin'),
 			'direction'      => $this->language->info('direction'),
 			'description'    => $this->document->getDescription(),
 			'keywords'       => $this->document->getKeywords(),
@@ -19,15 +19,11 @@ class App_Controller_Admin_Common_Header extends Controller
 		);
 
 		//Add Styles
-		$style = theme_dir('css/style.less');
+		$style = $this->theme->getStoreThemeStyle(option('store_id'), $settings['theme']);
 
 		if ($style) {
-			$style = $this->document->compileLess($style, $settings['theme'] . '-' . option('store_id') . '-theme-style');
-		} else {
-			$style = theme_url('css/style.css');
+			$this->document->addStyle($style);
 		}
-
-		$this->document->addStyle($style);
 
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');

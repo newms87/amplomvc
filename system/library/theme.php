@@ -203,10 +203,10 @@ class Theme extends Library
 
 	public function getStoreThemeStyle($store_id, $theme)
 	{
-		$file = theme_dir('css/config.store.' . $store_id . '.main.less');
+		$file = $this->getFile('css/config.store.' . $store_id . '.main.less', $theme);
 
 		if (!$file) {
-			$file = theme_dir('css/style.less');
+			$file = $this->getFile('css/style.less');
 		}
 
 		if ($file) {

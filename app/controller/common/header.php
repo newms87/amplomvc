@@ -4,19 +4,17 @@ class App_Controller_Common_Header extends Controller
 {
 	public function index($settings = array())
 	{
-		$data = $settings;
+		$settings['title'] = $this->document->getTitle();
 
-		$data['title'] = $this->document->getTitle();
+		$settings['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
 
-		$data['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
-
-		$data['name']   = option('config_name');
-		$data['logo']   = option('config_logo');
-		$data['slogan'] = option('config_slogan');
-		$data['theme']  = option('config_theme');
+		$settings['name']   = option('config_name');
+		$settings['logo']   = option('config_logo');
+		$settings['slogan'] = option('config_slogan');
+		$settings['theme']  = option('config_theme');
 
 		//Add Styles
-		$style = $this->theme->getStoreThemeStyle(option('store_id'), $data['theme']);
+		$style = $this->theme->getStoreThemeStyle(option('store_id'), $settings['theme']);
 
 		if ($style) {
 			$this->document->addStyle($style);
@@ -46,34 +44,34 @@ class App_Controller_Common_Header extends Controller
 		$this->document->addScript(theme_url('js/common.js'), 56);
 
 		//Page Head
-		$data['direction']      = $this->language->info('direction');
-		$data['description']    = $this->document->getDescription();
-		$data['keywords']       = $this->document->getKeywords();
-		$data['canonical_link'] = $this->document->getCanonicalLink();
-		$data['body_class']     = slug($this->route->getPath(), '-');
+		$settings['direction']      = $this->language->info('direction');
+		$settings['description']    = $this->document->getDescription();
+		$settings['keywords']       = $this->document->getKeywords();
+		$settings['canonical_link'] = $this->document->getCanonicalLink();
+		$settings['body_class']     = slug($this->route->getPath(), '-');
 
-		$data['styles']  = $this->document->renderStyles();
-		$data['scripts'] = $this->document->renderScripts();
+		$settings['styles']  = $this->document->renderStyles();
+		$settings['scripts'] = $this->document->renderScripts();
 
-		$data['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		$data['statcounter']      = option('config_statcounter');
+		$settings['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
+		$settings['statcounter']      = option('config_statcounter');
 
 		//Icons
-		$data['icons'] = option('config_icon');
+		$settings['icons'] = option('config_icon');
 
 		//Login Check & The Welcome Message
-		$data['is_logged'] = $this->customer->isLogged();
-		$data['customer']  = $this->customer->info();
+		$settings['is_logged'] = $this->customer->isLogged();
+		$settings['customer']  = $this->customer->info();
 
 		//Admin Bar
-		$data['show_admin_bar'] = $this->user->showAdminBar();
+		$settings['show_admin_bar'] = $this->user->showAdminBar();
 
 		//Internationalization
-		$data['lang']           = $this->language->info('code');
-		$data['multi_language'] = option('config_multi_language');
-		$data['multi_currency'] = option('config_multi_currency');
+		$settings['lang']           = $this->language->info('code');
+		$settings['multi_language'] = option('config_multi_language');
+		$settings['multi_currency'] = option('config_multi_currency');
 
 		//Render
-		$this->render('common/header', $data);
+		$this->render('common/header', $settings);
 	}
 }

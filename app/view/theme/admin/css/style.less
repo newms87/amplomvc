@@ -1192,8 +1192,8 @@ button, .button {
   .actions {
     .action {
       position: relative;
-      margin: 0 3px 8px 3px;
-      display: inline-block;
+      margin: 0 3px 3px 3px;
+      display: block;
 
       &.action-error, &.action-error:visited {
         color: #550000;
@@ -1201,15 +1201,10 @@ button, .button {
     }
 
     a.action {
-      background: #B9D1FF;
-      padding: 2px 8px;
-      border-radius: 6px;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, .8);
-
-      &.action-edit {
-        padding: 5px 15px;
-        font-size: 16px;
-      }
+      .button;
+      display: block;
+      font-size: 14px;
+      padding: 2px 4px;
 
       &.action-copy, &.action-copy:visited {
         color: #9BA20B;
