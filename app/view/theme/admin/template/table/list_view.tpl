@@ -62,7 +62,7 @@
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
 						<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
-							<div class="not-switch <?= $column['filter_value_not'] ? 'not' : ''; ?>"></div>
+							<div class="not-switch <?= !empty($column['filter_value_not']) ? 'not' : ''; ?>"></div>
 							<? switch ($column['filter']) {
 								case 'text':
 									?>
