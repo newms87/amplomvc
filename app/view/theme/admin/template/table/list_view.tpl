@@ -48,7 +48,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="filter-list">
+			<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
 				<? if (!empty($row_id)) { ?>
 					<td></td>
 				<? } ?>
@@ -234,86 +234,86 @@
 						<? foreach ($columns as $slug => $column) { ?>
 							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
 							<? if ($column['editable']) { ?>
-							<td class="editable <?= $column['align'] . ' ' . $slug; ?>" data-field="<?= $slug; ?>" data-value="<?= is_array($value) ? implode(',', $value) : $value; ?>">
+								<td class="editable <?= $column['align'] . ' ' . $slug; ?>" data-field="<?= $slug; ?>" data-value="<?= is_array($value) ? implode(',', $value) : $value; ?>">
 							<? } else { ?>
-							<td class="<?= $column['align'] . ' ' . $slug; ?>">
+								<td class="<?= $column['align'] . ' ' . $slug; ?>">
 							<? } ?>
-								<?
-								//Check if the raw string override has been set for this value
-								if (isset($row['#' . $slug])) {
-									echo $row['#' . $slug];
-								} elseif (!is_null($value)) {
-									switch ($column['type']) {
-										case 'text':
-										case 'int':
-											?>
-											<?= $value; ?>
-											<? break;
+							<?
+							//Check if the raw string override has been set for this value
+							if (isset($row['#' . $slug])) {
+								echo $row['#' . $slug];
+							} elseif (!is_null($value)) {
+								switch ($column['type']) {
+									case 'text':
+									case 'int':
+										?>
+										<?= $value; ?>
+										<? break;
 
-										case 'date':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
-											<? break;
+									case 'date':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+										<? break;
 
-										case 'datetime':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
-											<? break;
+									case 'datetime':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+										<? break;
 
-										case 'time':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
-											<? break;
+									case 'time':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+										<? break;
 
-										case 'map':
-											?>
-											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-											<? break;
+									case 'map':
+										?>
+										<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+										<? break;
 
-										case 'select':
-											foreach ($column['build_data'] as $key => $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-													?>
-													<?= $c_data[$column['build_config'][1]]; ?>
-												<?
+									case 'select':
+										foreach ($column['build_data'] as $key => $c_data) {
+											if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+												?>
+												<?= $c_data[$column['build_config'][1]]; ?>
+											<?
+											}
+										}
+										break;
+
+									case 'multiselect':
+										foreach ($value as $v) {
+											$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+											foreach ($column['build_data'] as $c_data) {
+												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+													echo $c_data[$column['build_config'][1]] . "<br/>";
+													break;
 												}
 											}
-											break;
+										}
+										break;
 
-										case 'multiselect':
-											foreach ($value as $v) {
-												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-												foreach ($column['build_data'] as $c_data) {
-													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-														echo $c_data[$column['build_config'][1]] . "<br/>";
-														break;
-													}
-												}
+									case 'format':
+										?>
+										<?= sprintf($column['format'], $value); ?>
+										<? break;
+
+									case 'image':
+										?>
+										<img src="<?= $row['thumb']; ?>"/>
+										<? break;
+
+									case 'text_list':
+										if (!empty($value) && is_array($value)) {
+											foreach ($value as $item) {
+												echo $item[$column['display_data']];
 											}
-											break;
+										}
+										break;
 
-										case 'format':
-											?>
-											<?= sprintf($column['format'], $value); ?>
-											<? break;
-
-										case 'image':
-											?>
-											<img src="<?= $row['thumb']; ?>"/>
-											<? break;
-
-										case 'text_list':
-											if (!empty($value) && is_array($value)) {
-												foreach ($value as $item) {
-													echo $item[$column['display_data']];
-												}
-											}
-											break;
-
-										default:
-											break;
-									}
-								}?>
+									default:
+										break;
+								}
+							}?>
 							</td>
 						<? } ?>
 						<td class="center actions">
@@ -469,7 +469,7 @@
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
-	$listview.find('.not-switch').click(function(){
+	$listview.find('.not-switch').click(function () {
 		$(this).toggleClass('not');
 	});
 
@@ -485,10 +485,7 @@
 		if (e.keyCode == 13) {
 			$(this).find('.filter-button').click()[0].click();
 		}
-	})
-		.click(function(){
-			$(this).removeClass('hide');
-		});
+	});
 
 	$listview.find('tr.filter-list-item td.editable').click(function () {
 		var $this = $(this);
@@ -504,15 +501,25 @@
 		}
 	});
 
-	$listview.find('.hide-filter').click(function(event){
-		var $this = $(this);
-		var $refresh = $this.closest('.listing').find('.refresh-listing');
-		$this.closest('.filter-list').toggleClass('hide');
-		$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/,'') + '&hidefilter=1');
+	$listview.find('.hide-filter').click(function(){toggle_filter($(this).closest('.listing'));});
+
+	$listview.find('.filter-list > td').click(function() {
+		if ($(this).closest('.filter-list').hasClass('hide')) {
+			toggle_filter($(this).closest('.listing'), false);
+		}
+	});
+
+	function toggle_filter($listing, hide) {
+		var $list = $listing.find('.filter-list');
+		var $refresh = $listing.find('.refresh-listing');
+
+		console.log($listing, hide);
+		$list.toggleClass('hide', hide);
+		$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/, '') + ($list.hasClass('hide') ? '&hidefilter=1' : ''));
 
 		event.stopPropagation();
 		return false;
-	});
+	}
 
 	$listview.find('.editable-options .save-edit').click(function () {
 		var $this = $(this);
