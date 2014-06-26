@@ -168,15 +168,15 @@ class App_Controller_Admin_User_User extends Controller
 		);
 
 		//Actions
-		$user['save'] = site_url('admin/user/user/update', 'user_id=' . $user_id);
+		$user['save'] = site_url('admin/user/user/save', 'user_id=' . $user_id);
 
 		//Response
 		output($this->render('user/user_form', $user));
 	}
 
-	public function update()
+	public function save()
 	{
-		if ($this->Model_User_User->save(_get('user_id'), $_POST)) {
+		if ($this->Model_User_User->save(_request('user_id'), $_POST)) {
 			$this->message->add('success', _l("The Page has been updated successfully!"));
 		} else {
 			$this->message->add('error', $this->Model_User_User->getError());
@@ -193,7 +193,7 @@ class App_Controller_Admin_User_User extends Controller
 
 	public function delete()
 	{
-		if ($this->Model_User_User->remove($_GET['user_id'])) {
+		if ($this->Model_User_User->remove(_get('user_id'))) {
 			$this->message->add('notify', _l("User was deleted!"));
 		} else {
 			$this->message->add('error', $this->Model_User_User->getError());
@@ -208,7 +208,7 @@ class App_Controller_Admin_User_User extends Controller
 
 	public function batch_action()
 	{
-		foreach ($_POST['batch'] as $user_id) {
+		foreach (_post('batch', array()) as $user_id) {
 			switch ($_POST['action']) {
 				case 'enable':
 					$this->Model_User_User->edit($user_id, array('status' => 1));
