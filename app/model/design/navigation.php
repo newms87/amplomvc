@@ -407,10 +407,6 @@ class App_Model_Design_Navigation extends Model
 						'display_name' => 'URL Alias',
 						'href'         => 'admin/setting/url_alias',
 					),
-					'system_db_rules'     => array(
-						'display_name' => 'DB Rules',
-						'href'         => 'admin/setting/db_rules',
-					),
 					'system_cron'         => array(
 						'display_name' => 'Cron',
 						'href'         => 'admin/setting/cron',
