@@ -40,7 +40,7 @@
 	<? } ?>
 
 	<script type="text/javascript">
-		var $list_widget = $('.widget-listing').not('activated');
+		var $list_widget = $('.widget-listing').not('.activated').addClass('activated');
 
 		$list_widget.find('.select-cols .scrollbox').sortable();
 
@@ -63,8 +63,6 @@
 
 				return false;
 			});
-
-		$list_widget.addClass('activated');
 	</script>
 
 </div>

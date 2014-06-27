@@ -57,22 +57,24 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$this->table->setTemplateData($settings['template_data']);
 
 		$filter_values = array();
-		$filter_values_not = array();
+		$filter_types = array();
 
 		foreach ($settings['filter_value'] as $key => $fv) {
 			if (strpos($key, '!') === 0) {
 				$key = substr($key, 1);
-				$not = true;
+				$type = 'not';
+			} elseif ($fv === '' || (is_array($fv) && !count(array_filter($fv)))) {
+				$type = 'empty';
 			} else {
-				$not = false;
+				$type = '';
 			}
 
 			$filter_values[$key] = $fv;
-			$filter_values_not[$key] = $not;
+			$filter_types[$key] = $type;
 		}
 
 		$this->table->mapAttribute('filter_value', $filter_values);
-		$this->table->mapAttribute('filter_value_not', $filter_values_not);
+		$this->table->mapAttribute('filter_type', $filter_types);
 
 		$settings['listing'] = $this->table->render();
 

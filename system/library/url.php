@@ -256,7 +256,7 @@ class Url extends Library
 		}
 
 		//Build the New URL
-		return $this->store_base($store_id) . $path . ($query ? '?' . http_build_query($query) : '');
+		return $this->store_base($store_id) . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
 	}
 
 	public function lookupAlias($path, $query, $store_id = false)

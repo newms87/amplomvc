@@ -18,6 +18,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			return;
 		}
 
+		//Defaults
+		$settings += array(
+			'default_query' => array(),
+		);
+
 		$settings['controller'] = $action->getController();
 		$settings['listing']    = $action->getMethod();
 
@@ -43,7 +48,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'name'    => 'new-view-__ac_template__',
 			'title'   => 'New View __ac_template__',
 			'path'    => $settings['path'],
-			'query'   => array(),
+			'query'   => $settings['default_query'],
 			'show'    => 0,
 		);
 

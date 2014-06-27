@@ -33,6 +33,13 @@
 							?>
 							<input type="text" name="<?= $key; ?>" class="<?= $field['type']; ?>picker" value="<?= $field['value']; ?>" />
 							<? break;
+
+						case 'int':
+						case 'float':
+						case 'decimal':
+							?>
+							<input type="text" name="<?= $key; ?>" class="<?= $field['type']; ?>" value="<?= $field['value']; ?>" />
+							<? break;
 					} ?>
 				<? } ?>
 			</td>

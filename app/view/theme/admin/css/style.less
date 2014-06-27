@@ -16,6 +16,13 @@ body {
   background: #FFFFFF;
 }
 
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 body, td, th, input, select, textarea, option, optgroup {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
@@ -904,7 +911,8 @@ button, .button {
       position: relative;
       background: #F5DDDD;
 
-      .not-switch {
+      .filter-type {
+        .no-select;
         position: absolute;
         left: 10%;
         width: 10px;
@@ -928,6 +936,14 @@ button, .button {
 
           &:after {
             content: "not in";
+          }
+        }
+
+        &.empty {
+          background: yellow;
+
+          &:after {
+            content: "empty";
           }
         }
       }

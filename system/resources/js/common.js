@@ -170,21 +170,27 @@ $.fn.ac_checklist = function (params) {
 
 //Apply a filter form to the URL
 $.fn.apply_filter = function (url) {
-    filter_list = this.find('[name]')
-        .filter(function (index) {
-            return $(this).val() !== '';
-        });
+    var filter_list = this.find('[name]');
 
     if (filter_list.length) {
-        filter_list.each(function(i,e){
-            if ($(e).closest('.column_filter').find('.not-switch').hasClass('not')) {
-                $(e).attr('name', $(e).attr('name').replace(/^filter\[/, 'filter[!'));
+        filter_list.each(function (i, e) {
+            var $e = $(e);
+            var $filter = $e.closest('.column_filter');
+            var $type = $filter.find('.filter-type');
+
+            if ($type.hasClass('not')) {
+                $e.attr('name', $e.attr('name').replace(/^filter\[!?/, 'filter[!'));
+            } else if ($type.hasClass('empty')) {
+                $e.val('');
+                if ($e.is('[type=checkbox]')) {
+                    $filter.find('[name][type=checkbox]').prop('checked', false).first().prop('checked', true);
+                }
+            } else if ($(e).val() === '') {
+                delete filter_list[i];
             }
         });
 
         url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
-
-        console.log(url);
     }
 
     return url;
@@ -368,7 +374,9 @@ $.fn.fade_post = function (url, data, callback, dataType) {
     return this;
 }
 
-$('.ajax-form').submit(function(){ac_form();});
+$('.ajax-form').submit(function () {
+    ac_form();
+});
 
 function ac_form(params) {
     var $form = $(this);
@@ -643,7 +651,9 @@ function init_ajax() {
         }
     }
 
-    $('.ajax-form').submit(function(){ac_form();});
+    $('.ajax-form').submit(function () {
+        ac_form();
+    });
 }
 
 $(document).ready(function () {

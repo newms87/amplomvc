@@ -62,7 +62,7 @@
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
 						<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
-							<div class="not-switch <?= !empty($column['filter_value_not']) ? 'not' : ''; ?>"></div>
+							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
 							<? switch ($column['filter']) {
 								case 'text':
 									?>
@@ -451,7 +451,7 @@
 	var $listview = $(".table-list-view-box").not('.activated').addClass('activated');
 
 	$listview.find('.filter-list-item').click(function () {
-		cb = $(this).find('[name="batch[]"]');
+		var cb = $(this).find('[name="batch[]"]');
 		if (cb.data('clicked')) {
 			cb.data('clicked', false);
 		} else {
@@ -469,35 +469,28 @@
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
-	$listview.find('.not-switch').click(function () {
-		$(this).toggleClass('not');
+	$listview.find('.filter-type').click(function () {
+		var $this = $(this);
+		if ($this.hasClass('not')) {
+			$this.removeClass('not').addClass('empty');
+		} else if ($this.hasClass('empty')) {
+			$this.removeClass('empty');
+		} else {
+			$this.addClass('not');
+		}
 	});
 
 	$listview.find('.reset-button').click(function () {
 		var $this = $(this);
 		$filter = $this.closest('.filter-list');
 		$filter.find('[name]').val('');
-		$filter.find('.not-switch').removeClass('not');
+		$filter.find('.filter-type').removeClass('not empty');
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
 	$listview.find('.filter-list').keyup(function (e) {
 		if (e.keyCode == 13) {
-			$(this).find('.filter-button').click()[0].click();
-		}
-	});
-
-	$listview.find('tr.filter-list-item td.editable').click(function () {
-		var $this = $(this);
-		var field = $this.attr('data-field');
-		var value = $this.attr('data-value');
-
-		if (field) {
-			var $options = $this.closest('.table-list-view-box').find('.editable-options');
-			$options.children('.show').removeClass('show');
-			$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
-			$this.append($options);
-			$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
+			$(this).find('.filter-button')[0].click();
 		}
 	});
 
@@ -513,13 +506,26 @@
 		var $list = $listing.find('.filter-list');
 		var $refresh = $listing.find('.refresh-listing');
 
-		console.log($listing, hide);
 		$list.toggleClass('hide', hide);
 		$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/, '') + ($list.hasClass('hide') ? '&hidefilter=1' : ''));
 
 		event.stopPropagation();
 		return false;
 	}
+
+	$listview.find('tr.filter-list-item td.editable').click(function () {
+		var $this = $(this);
+		var field = $this.attr('data-field');
+		var value = $this.attr('data-value');
+
+		if (field) {
+			var $options = $this.closest('.table-list-view-box').find('.editable-options');
+			$options.children('.show').removeClass('show');
+			$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
+			$this.append($options);
+			$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
+		}
+	});
 
 	$listview.find('.editable-options .save-edit').click(function () {
 		var $this = $(this);
