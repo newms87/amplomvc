@@ -238,9 +238,6 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			'status'        => 1,
 		);
 
-		//Template Data
-		$data['categories'] = $this->Model_Catalog_Category->getCategoryTree();
-
 		$admin_store = array(
 			'admin' => array(
 				'store_id' => -1,
