@@ -22,14 +22,14 @@ class Session extends Library
 			}
 		} elseif (isset($_SESSION['token']) && empty($_COOKIE)) {
 			unset($_SESSION['token']);
-			$this->message->add('warning', _l("You must enable cookies to login to the admin portal!"));
+			message('warning', _l("You must enable cookies to login to the admin portal!"));
 			redirect();
 		} elseif (!isset($_SESSION['session_token_saved'])) {
 			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 
 			if ($ip_session_exists) {
 				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
-				$this->message->add('warning', _l("Unable to authenticate user. Please check that cookies are enabled."));
+				message('warning', _l("Unable to authenticate user. Please check that cookies are enabled."));
 			}
 		}
 	}

@@ -30,7 +30,7 @@ class App_Controller_Admin_Common_Login extends Controller
 	public function authenticate()
 	{
 		if ($this->user->isLogged()) {
-			$this->message->add('notify', _l("You are already logged in. Please log out first."));
+			message('notify', _l("You are already logged in. Please log out first."));
 		}
 		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
 			if (!empty($_REQUEST['redirect'])) {
@@ -43,7 +43,7 @@ class App_Controller_Admin_Common_Login extends Controller
 
 			redirect($redirect);
 		} else {
-			$this->message->add('warning', $this->user->getError());
+			message('warning', $this->user->getError());
 		}
 
 		redirect('admin/common/login');

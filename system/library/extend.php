@@ -96,7 +96,7 @@ class Extend extends Library
 		$exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
 
 		if ($exists) {
-			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
+			message("warning", "Error while adding $name to layout! Duplicate name exists!");
 			return false;
 		}
 

@@ -63,7 +63,7 @@ class App_Controller_Customer extends Controller
 	{
 		if (is_post()) {
 			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
-				$this->message->add('warning', _l("Login failed. Invalid username and / or password."));
+				message('warning', _l("Login failed. Invalid username and / or password."));
 			}
 		}
 
@@ -160,7 +160,7 @@ class App_Controller_Customer extends Controller
 	public function register()
 	{
 		if (!$this->customer->register($_POST)) {
-			$this->message->add('error', $this->customer->getError());
+			message('error', $this->customer->getError());
 			return $this->registration();
 		}
 
@@ -211,7 +211,7 @@ class App_Controller_Customer extends Controller
 		$code = $this->customer->generateCode();
 
 		if (!$this->customer->setResetCode($_POST['email'], $code)) {
-			$this->message->add('error', $this->customer->getError());
+			message('error', $this->customer->getError());
 		} else {
 
 			$email_data = array(
@@ -221,7 +221,7 @@ class App_Controller_Customer extends Controller
 
 			call('mail/forgotten', $email_data);
 
-			$this->message->add('notify', _l("Please follow the link that was sent to your email to reset your password."));
+			message('notify', _l("Please follow the link that was sent to your email to reset your password."));
 		}
 
 		redirect('customer/login');
@@ -239,7 +239,7 @@ class App_Controller_Customer extends Controller
 
 		//User not found
 		if (!$customer_id) {
-			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
+			message('warning', _l("Unable to locate password reset code. Please try again."));
 			redirect('customer/login');
 		}
 
@@ -261,13 +261,13 @@ class App_Controller_Customer extends Controller
 
 		//User not found
 		if (!$customer_id) {
-			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
+			message('warning', _l("Unable to locate password reset code. Please try again."));
 			redirect('customer/login');
 		}
 
 		//Validate Password
 		if (!validate('password', $_POST['password'])) {
-			$this->message->add('error', $this->validation->getError());
+			message('error', $this->validation->getError());
 			redirect('customer/reset_form');
 		}
 
@@ -275,7 +275,7 @@ class App_Controller_Customer extends Controller
 		$this->customer->updatePassword($_POST['password']);
 		$this->customer->clearResetCode();
 
-		$this->message->add('success', _l('You have successfully updated your password!'));
+		message('success', _l('You have successfully updated your password!'));
 
 		redirect('customer/login');
 	}

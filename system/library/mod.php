@@ -51,7 +51,7 @@ class Mod extends Library
 			if (is_file(DIR_SITE . $source)) {
 				$source = DIR_SITE . $source;
 			} else {
-				$this->message->add('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
+				message('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
 				return false;
 			}
 		}
@@ -60,7 +60,7 @@ class Mod extends Library
 			if (is_file(DIR_SITE . $mod_file)) {
 				$mod_file = DIR_SITE . $mod_file;
 			} else {
-				$this->message->add('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
+				message('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
 				return false;
 			}
 		}
@@ -206,7 +206,7 @@ class Mod extends Library
 						continue;
 					} //skip if no changes made
 
-					$this->message->add('notify', _l("Mod File $destination was updated"));
+					message('notify', _l("Mod File $destination was updated"));
 				}
 
 				//Each mod file using the same destination will stack changes on the destination file
@@ -341,7 +341,7 @@ class Mod extends Library
 		require_once DIR_RESOURCES . 'ganon.php';
 
 		if (!($node = file_get_dom($source))) {
-			$this->message->add('warning', "There was an error while parsing the source file $source with Ganon!");
+			message('warning', "There was an error while parsing the source file $source with Ganon!");
 
 			return false;
 		}
@@ -671,11 +671,11 @@ class Mod extends Library
 		if ($this->invalid) {
 			if ($this->apply(true)) {
 				$this->write();
-				$this->message->add('notify', "The Mod File Registry was out of date and has been updated");
+				message('notify', "The Mod File Registry was out of date and has been updated");
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
-				$this->message->add('warning', $this->getError());
-				$this->message->add('warning', 'Please visit the <a href="' . site_url('admin/plugin/plugin') . '">Plugins</a> and resolve the issue.');
+				message('warning', $this->getError());
+				message('warning', 'Please visit the <a href="' . site_url('admin/plugin/plugin') . '">Plugins</a> and resolve the issue.');
 			}
 		}
 	}

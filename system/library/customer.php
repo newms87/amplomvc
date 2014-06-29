@@ -58,7 +58,7 @@ class Customer extends Library
 
 		$this->info = array();
 
-		$this->message->add('notify', _l("You have been logged out of your account"));
+		message('notify', _l("You have been logged out of your account"));
 	}
 
 	public function getId()
@@ -561,7 +561,7 @@ class Customer extends Library
 		$messages = $this->queryColumn("SELECT value FROM " . DB_PREFIX . "customer_meta WHERE customer_id = " . (int)$this->customer_id . " AND `key` = 'message'");
 
 		foreach ($messages as $message) {
-			$this->message->add('notify', _l($message));
+			message('notify', _l($message));
 		}
 
 		$where = array(
@@ -587,7 +587,7 @@ class Customer extends Library
 		}
 
 		if ($this->customer_id && (int)$customer_id === (int)$this->customer_id) {
-			$this->message->add('notify', _l($msg));
+			message('notify', _l($msg));
 			return;
 		}
 

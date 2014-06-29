@@ -44,7 +44,7 @@
 							<span class="help"><?= _l("The Search Engine Optimized URL for the product page."); ?></span>
 						</td>
 						<td>
-							<input type="text" onfocus="$(this).ac_msg('error', "<?= _l("<br>Warning! This may cause system instability! Please use the 'Generate URL' button"); ?>");" name="alias" value="<?= $alias; ?>"/>
+							<input type="text" onfocus="$(this).ac_msg('error', '<?= _l("<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button"); ?>');" name="alias" value="<?= $alias; ?>"/>
 							<a class="gen_url" onclick="generate_url(this)"><?= _l("[Generate URL]"); ?></a>
 						</td>
 					</tr>

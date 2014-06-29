@@ -177,9 +177,9 @@ class App_Controller_Admin_User_User extends Controller
 	public function save()
 	{
 		if ($this->Model_User_User->save(_request('user_id'), $_POST)) {
-			$this->message->add('success', _l("The Page has been updated successfully!"));
+			message('success', _l("The Page has been updated successfully!"));
 		} else {
-			$this->message->add('error', $this->Model_User_User->getError());
+			message('error', $this->Model_User_User->getError());
 		}
 
 		if (is_ajax()) {
@@ -194,9 +194,9 @@ class App_Controller_Admin_User_User extends Controller
 	public function delete()
 	{
 		if ($this->Model_User_User->remove(_get('user_id'))) {
-			$this->message->add('notify', _l("User was deleted!"));
+			message('notify', _l("User was deleted!"));
 		} else {
-			$this->message->add('error', $this->Model_User_User->getError());
+			message('error', $this->Model_User_User->getError());
 		}
 
 		if (is_ajax()) {
@@ -225,9 +225,9 @@ class App_Controller_Admin_User_User extends Controller
 		}
 
 		if ($this->Model_User_User->hasError()) {
-			$this->message->add('error', $this->Model_User_User->getError());
+			message('error', $this->Model_User_User->getError());
 		} else {
-			$this->message->add('success', _l("Success: You have modified navigation!"));
+			message('success', _l("Success: You have modified navigation!"));
 		}
 
 		if (is_ajax()) {

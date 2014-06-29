@@ -19,7 +19,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 			$this->config->save('controller_override', 'controller_override', $controller_overrides, 0, true);
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("You have successfully updated the Controller Overrides"));
+				message('success', _l("You have successfully updated the Controller Overrides"));
 				redirect('admin/setting/setting');
 			}
 		}

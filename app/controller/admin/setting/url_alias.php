@@ -157,7 +157,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			}
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+				message('success', _l("Success: You have modified the url alias table!"));
 
 				redirect('admin/setting/url_alias');
 			}
@@ -172,7 +172,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+				message('success', _l("Success: You have modified the url alias table!"));
 
 				redirect('admin/setting/url_alias');
 			}
@@ -205,7 +205,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			}
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified the url alias table!"));
+				message('success', _l("Success: You have modified the url alias table!"));
 			}
 		}
 

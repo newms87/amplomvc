@@ -49,9 +49,9 @@ class App_Controller_Account_Address extends Controller
 					$this->customer->setDefaultShippingAddress($address_id);
 				}
 
-				$this->message->add('success', _l("You have successfully added an address to your account!"));
+				message('success', _l("You have successfully added an address to your account!"));
 			} else {
-				$this->message->add('error', $this->address->getError());
+				message('error', $this->address->getError());
 			}
 		} //Update
 		else {
@@ -61,9 +61,9 @@ class App_Controller_Account_Address extends Controller
 					$this->customer->setDefaultShippingAddress($_GET['address_id']);
 				}
 
-				$this->message->add('success', _l("You have successfully updated your address."));
+				message('success', _l("You have successfully updated your address."));
 			} else {
-				$this->message->add('error', $this->address->getError());
+				message('error', $this->address->getError());
 			}
 		}
 
@@ -82,15 +82,15 @@ class App_Controller_Account_Address extends Controller
 			$this->customer->removeAddress($_POST['address_id']);
 
 			if ($this->customer->hasError()) {
-				$this->message->add('error', $this->customer->getError());
+				message('error', $this->customer->getError());
 			} else {
 				if (!$this->address->remove($_GET['address_id'])) {
-					$this->message->add('error', $this->address->getError());
+					message('error', $this->address->getError());
 				}
 			}
 
 			if (!$this->message->has('error')) {
-				$this->message->add('success', _l("Your address has been successfully deleted"));
+				message('success', _l("Your address has been successfully deleted"));
 			}
 		}
 

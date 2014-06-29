@@ -13,13 +13,13 @@ class App_Controller_Block_Login_Google extends App_Controller_Block_Block
 	public function connect()
 	{
 		if ($this->Model_Block_Login_Google->authenticate()) {
-			$this->message->add('success', _l("You have been successfully logged in using Google+!"));
+			message('success', _l("You have been successfully logged in using Google+!"));
 		} else {
 			if ($this->Model_Block_Login_Google->hasError()) {
-				$this->message->add('error', $this->Model_Block_Login_Google->getError());
+				message('error', $this->Model_Block_Login_Google->getError());
 			}
 
-			$this->message->add('warning', _l("There was a problem while signing you in with Google+. Please try again, or try a different login method."));
+			message('warning', _l("There was a problem while signing you in with Google+. Please try again, or try a different login method."));
 		}
 
 		if ($this->request->hasRedirect('gp_redirect')) {
@@ -38,9 +38,9 @@ class App_Controller_Block_Login_Google extends App_Controller_Block_Block
 			// Remove the credentials from the user's session.
 			$app['session']->set('token', '');
 
-			$this->message->add('success', _l("Successfully Disconnected Google+"));
+			message('success', _l("Successfully Disconnected Google+"));
 		} else {
-			$this->message->add('warning', _l("Invalid Token"));
+			message('warning', _l("Invalid Token"));
 		}
 		redirect();
 	}

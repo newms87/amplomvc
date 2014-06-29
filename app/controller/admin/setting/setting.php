@@ -23,7 +23,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 				$this->Model_Localisation_Currency->updateCurrencies();
 			}
 
-			$this->message->add('success', _l("Success: You have modified settings!"));
+			message('success', _l("Success: You have modified settings!"));
 
 			redirect('admin/setting/store');
 		}

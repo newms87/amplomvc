@@ -174,7 +174,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 	public function getForm()
 	{
 		if (!isset($_GET['name'])) {
-			$this->message->add('warning', _l("Warning: There was no plugin found."));
+			message('warning', _l("Warning: There was no plugin found."));
 			redirect('admin/plugin/plugin');
 		}
 		$plugin_name = $_GET['name'];
@@ -203,7 +203,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		$this->cache->delete('model');
 
 		if (!isset($_GET['name'])) {
-			$this->message->add('warning', _l("Warning: There was no plugin found."));
+			message('warning', _l("Warning: There was no plugin found."));
 			redirect('admin/plugin/plugin');
 		}
 
@@ -212,7 +212,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
 
-			$this->message->add('success', _l("You have successfully updated the plugins!"));
+			message('success', _l("You have successfully updated the plugins!"));
 
 			redirect('admin/plugin/plugin');
 		}
@@ -233,9 +233,9 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 	{
 		if (!empty($_GET['name'])) {
 			if (!$this->plugin->install($_GET['name'])) {
-				$this->message->add('error', $this->plugin->getError());
+				message('error', $this->plugin->getError());
 			} else {
-				$this->message->add('success', _l("%s was successfully installed!", $_GET['name']));
+				message('success', _l("%s was successfully installed!", $_GET['name']));
 			}
 		}
 

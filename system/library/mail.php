@@ -427,7 +427,7 @@ class Mail extends Library
 
 		foreach ($this->to as $key => $recipient) {
 			if (!$this->talk('RCPT TO: <' . $recipient . '>', $reply_codes)) {
-				$this->message->add('warning', _l("%s is an invalid recipient. Mail was not delivered to this address.", $recipient));
+				message('warning', _l("%s is an invalid recipient. Mail was not delivered to this address.", $recipient));
 				unset($this->to[$key]);
 			}
 		}

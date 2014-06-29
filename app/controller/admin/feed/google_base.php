@@ -10,7 +10,7 @@ class App_Controller_Admin_Feed_GoogleBase extends Controller
 		if (is_post() && $this->validate()) {
 			$this->config->saveGroup('google_base', $_POST);
 
-			$this->message->add('success', _l("Success: You have modified Google Base feed!"));
+			message('success', _l("Success: You have modified Google Base feed!"));
 
 			redirect('admin/extension/feed');
 		}

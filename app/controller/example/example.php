@@ -12,7 +12,7 @@ class App_Controller_Example_Example extends Controller
 		if (!$page) {
 			//If you have an error in the Model call
 			if ($this->Model_Page->hasError()) {
-				$this->message->add('error', $this->Model_Page->getError());
+				message('error', $this->Model_Page->getError());
 			}
 
 			//For this example, if no page is found, we dont really care, so continue to load page.
@@ -22,10 +22,10 @@ class App_Controller_Example_Example extends Controller
 		}
 
 		//Alternative messages
-		$this->message->add('warning', "my error message"); //essentially same as error
-		$this->message->add('notify', "my notification message");
-		$this->message->add('success', "my success message");
-		$this->message->add('myclass', "my class message");
+		message('warning', "my error message"); //essentially same as error
+		message('notify', "my notification message");
+		message('success', "my success message");
+		message('myclass', "my class message");
 
 		//Page Head
 		$this->document->setTitle(_l("My Page Title"));

@@ -79,7 +79,7 @@ class Image extends Library
 		$mime = $this->info['mime'];
 
 		if (!$this->register_safe_shutdown($image)) {
-			$this->message->add('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
+			message('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
 			redirect($this->url->here());
 		}
 

@@ -24,7 +24,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 
 			call('admin/mail/forgotten_admin', $email_data);
 
-			$this->message->add('success', _l("Please follow the link that was sent to your email to reset your password."));
+			message('success', _l("Please follow the link that was sent to your email to reset your password."));
 
 			redirect('admin/common/login');
 		}
@@ -56,7 +56,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 
 		//User not found
 		if (!$user_id) {
-			$this->message->add('warning', _l("Unable to locate password reset code. Please try again."));
+			message('warning', _l("Unable to locate password reset code. Please try again."));
 			redirect('admin/common/login');
 		}
 
@@ -73,7 +73,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 				$this->user->updatePassword($user_id, $_POST['password']);
 				$this->user->clearResetCode($user_id);
 
-				$this->message->add('success', _l('You have successfully updated your password!'));
+				message('success', _l('You have successfully updated your password!'));
 			}
 
 			redirect('admin/common/login');

@@ -17,7 +17,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
 
-			$this->message->add('success', _l("Success: You have modified length classes!"));
+			message('success', _l("Success: You have modified length classes!"));
 
 			$url = '';
 
@@ -46,7 +46,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
 
-			$this->message->add('success', _l("Success: You have modified length classes!"));
+			message('success', _l("Success: You have modified length classes!"));
 
 			$url = '';
 
@@ -77,7 +77,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 				$this->Model_Localisation_Lengthclass->deleteLengthClass($length_class_id);
 			}
 
-			$this->message->add('success', _l("Success: You have modified length classes!"));
+			message('success', _l("Success: You have modified length classes!"));
 
 			$url = '';
 

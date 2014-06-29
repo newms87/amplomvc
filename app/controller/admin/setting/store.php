@@ -248,17 +248,17 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store_id = $this->Model_Setting_Store->save($store_id, $_POST);
 
 		if ($this->Model_Setting_Store->hasError()) {
-			$this->message->add('error', $this->Model_Setting_Store->getError());
+			message('error', $this->Model_Setting_Store->getError());
 		} elseif (empty($store_id)) {
-			$this->message->add('error', _l("There was a problem saving the store settings."));
+			message('error', _l("There was a problem saving the store settings."));
 		} else {
 			$this->config->saveGroup('config', $_POST, $store_id);
 
 			if ($this->theme->install($store_id, $_POST['config_theme'])) {
-				$this->message->add('error', $this->theme->getError());
+				message('error', $this->theme->getError());
 			}
 
-			$this->message->add('success', _l("The Store settings have been saved."));
+			message('success', _l("The Store settings have been saved."));
 		}
 
 		if (is_ajax()) {
@@ -275,12 +275,12 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$this->Model_Setting_Store->remove($_GET['store_id']);
 
 		if ($this->Model_Setting_Store->hasError()) {
-			$this->message->add('error', $this->Model_Setting_Store->getError());
+			message('error', $this->Model_Setting_Store->getError());
 		} else {
 			if (!$this->config->deleteGroup('config', $_GET['store_id'])) {
-				$this->message->add('error', $this->config->getError());
+				message('error', $this->config->getError());
 			} else {
-				$this->message->add('notify', _l("User was deleted!"));
+				message('notify', _l("User was deleted!"));
 			}
 		}
 

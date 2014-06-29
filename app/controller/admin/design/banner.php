@@ -15,7 +15,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
 
-			$this->message->add('success', _l("Success: You have modified banners!"));
+			message('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 
@@ -32,7 +32,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
-			$this->message->add('success', _l("Success: You have modified banners!"));
+			message('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 
@@ -51,7 +51,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 				$this->Model_Design_Banner->deleteBanner($banner_id);
 			}
 
-			$this->message->add('success', _l("Success: You have modified banners!"));
+			message('success', _l("Success: You have modified banners!"));
 
 			$url = $this->get_url();
 

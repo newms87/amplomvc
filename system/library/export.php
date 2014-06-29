@@ -22,7 +22,7 @@ class Export extends Library
 	public function downloadFile($file, $filename = null, $type = null)
 	{
 		if (!is_file($file)) {
-			$this->message->add('warning', "Export: $file failed. File not found.");
+			message('warning', "Export: $file failed. File not found.");
 
 			return false;
 		}

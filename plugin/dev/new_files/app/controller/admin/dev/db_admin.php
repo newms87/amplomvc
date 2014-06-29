@@ -4,7 +4,7 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 	public function index()
 	{
 		if (!user_can('modify', 'dev/dev')) {
-			$this->message->add('warning', _l("You do not have permission use the Database Administration Console"));
+			message('warning', _l("You do not have permission use the Database Administration Console"));
 			redirect();
 		}
 

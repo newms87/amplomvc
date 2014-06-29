@@ -60,6 +60,12 @@ function cache($key, $value = null)
 	}
 }
 
+function message($type, $message)
+{
+	global $registry;
+	$registry->get('message')->add($type, $message);
+}
+
 function image($image, $width = null, $height = null, $default = null)
 {
 	global $registry;

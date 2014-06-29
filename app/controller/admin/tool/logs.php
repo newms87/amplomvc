@@ -110,12 +110,12 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		}
 
 		if (!isset($_POST['entries']) && $lines === null) {
-			$this->message->add('warning', _l("No entries were selected for removal!"));
+			message('warning', _l("No entries were selected for removal!"));
 		} else {
 			$entries = ($lines !== null) ? $lines : $_POST['entries'];
 
 			if (preg_match("/[^\\d\\s,-]/", $entries) > 0) {
-				$this->message->add('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
+				message('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
 			}
 
 			$file = DIR_LOGS . option('config_error_filename');
@@ -135,7 +135,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 			file_put_contents($file, implode("\n", $file_lines));
 
-			$this->message->add('success', _l('Entry Removed!'));
+			message('success', _l('Entry Removed!'));
 		}
 
 		if (is_ajax()) {
@@ -155,7 +155,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		file_put_contents($file, '');
 
-		$this->message->add('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
+		message('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
 
 		redirect('admin/tool/logs', 'log=' . $_GET['log']);
 	}

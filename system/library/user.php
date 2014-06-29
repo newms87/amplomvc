@@ -71,7 +71,7 @@ class User extends Library
 		}
 
 		if (isset($_SESSION['user_id'])) {
-			$this->message->add("notify", "Your session has expired. Please log in again.");
+			message("notify", "Your session has expired. Please log in again.");
 		}
 
 		$this->logout();

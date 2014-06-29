@@ -17,7 +17,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
 
-			$this->message->add('success', _l("Success: You have modified geo zones!"));
+			message('success', _l("Success: You have modified geo zones!"));
 
 			redirect('admin/localisation/geo_zone');
 		}
@@ -32,7 +32,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		if (is_post() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
 
-			$this->message->add('success', _l("Success: You have modified geo zones!"));
+			message('success', _l("Success: You have modified geo zones!"));
 
 			redirect('admin/localisation/geo_zone');
 		}
@@ -49,7 +49,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 				$this->Model_Localisation_GeoZone->deleteGeoZone($geo_zone_id);
 			}
 
-			$this->message->add('success', _l("Success: You have modified geo zones!"));
+			message('success', _l("Success: You have modified geo zones!"));
 		}
 
 		$this->getList();

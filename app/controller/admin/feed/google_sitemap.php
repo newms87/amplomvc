@@ -10,7 +10,7 @@ class App_Controller_Admin_Feed_GoogleSitemap extends Controller
 		if (is_post() && $this->validate()) {
 			$this->config->saveGroup('google_sitemap', $_POST);
 
-			$this->message->add('success', _l("Success: You have modified Google Sitemap feed!"));
+			message('success', _l("Success: You have modified Google Sitemap feed!"));
 
 			redirect('admin/extension/feed');
 		}

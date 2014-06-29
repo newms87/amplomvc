@@ -81,7 +81,7 @@ class App_Controller_Account extends Controller
 			$this->System_Extension_Payment->get($_POST['payment_code'])->updateCard($_POST['payment_key'], array('default' => true));
 		}
 
-		$this->message->add('success', _l("Your account information has been updated successfully!"));
+		message('success', _l("Your account information has been updated successfully!"));
 
 		redirect('account');
 	}
@@ -90,7 +90,7 @@ class App_Controller_Account extends Controller
 	{
 		if (!empty($_GET['address_id'])) {
 			if (!$this->customer->removeAddress($_GET['address_id'])) {
-				$this->message->add('error', $this->customer->getError());
+				message('error', $this->customer->getError());
 			}
 		}
 

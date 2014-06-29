@@ -10,7 +10,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 
 			$this->config->saveGroup('mail_messages', $_POST);
 
-			$this->message->add('success', _l("Success: You have modified mail messages!"));
+			message('success', _l("Success: You have modified mail messages!"));
 		}
 
 		$this->breadcrumb->add(_l("Home"), site_url('admin'));

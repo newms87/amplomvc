@@ -367,14 +367,15 @@ body.admin-bar #container {
 
 //Logo
 #logo {
-  position: absolute;
-  top: .5em;
-  left: 0;
-  z-index: 5;
+  float: left;
+  position: relative;
+  z-index: 2;
 }
 
 //Account Navigation
 #links-account {
+  position: relative;
+  z-index: 2;
   float: right;
 
   .login-content {
@@ -388,9 +389,10 @@ body.admin-bar #container {
 
 //Primary Navigation
 #links-primary {
+  position: relative;
+  z-index: 1;
   display: block;
-  clear: both;
-  margin: 0 auto;
+  margin: 1em auto 0 auto;
 
   a {
     color: @color-dark;
@@ -1057,11 +1059,39 @@ footer.row {
 }
 
 /* ===== B. Large First ===== */
+@media (max-width: @sm) {
+  #logo {
+    float: none;
+  }
+
+  #links-account {
+    float: none;
+    margin-top: 1em;
+  }
+}
 
 @media (max-width: @md) {
+  body, body.admin-bar {
+    #container {
+      padding: 0;
+
+      header.main-header.row {
+        position: relative;
+
+        .wrap {
+          text-align: center;
+        }
+      }
+    }
+  }
+
   .button.large {
     font-size: 1.5em;
     padding: 8px 16px;
+  }
+
+  #links-primary {
+    clear: both;
   }
 
   #home-page {

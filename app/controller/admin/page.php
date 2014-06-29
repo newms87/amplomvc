@@ -212,9 +212,9 @@ class App_Controller_Admin_Page extends Controller
 		}
 
 		if ($this->Model_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->getError());
 		} else {
-			$this->message->add('success', _l("The Page has been updated successfully!"));
+			message('success', _l("The Page has been updated successfully!"));
 		}
 
 		if (is_ajax()) {
@@ -231,9 +231,9 @@ class App_Controller_Admin_Page extends Controller
 		$this->Model_Page->deletePage($_GET['page_id']);
 
 		if ($this->Model_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->getError());
 		} else {
-			$this->message->add('notify', _l("Page was deleted!"));
+			message('notify', _l("Page was deleted!"));
 		}
 
 		if (is_ajax()) {
@@ -266,9 +266,9 @@ class App_Controller_Admin_Page extends Controller
 		}
 
 		if ($this->Model_Page->hasError()) {
-			$this->message->add('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->getError());
 		} else {
-			$this->message->add('success', _l("Success: You have modified navigation!"));
+			message('success', _l("Success: You have modified navigation!"));
 		}
 
 		if (is_ajax()) {

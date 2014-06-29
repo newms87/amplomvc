@@ -18,9 +18,9 @@ class App_Controller_Block_Block extends Controller
 
 		if ($path) {
 			if (!$this->block->remove($path)) {
-				$this->message->add('error', $this->block->getError());
+				message('error', $this->block->getError());
 			} else {
-				$this->message->add('success', _l("The Block %s was removed successfully!", $path));
+				message('success', _l("The Block %s was removed successfully!", $path));
 			}
 		}
 
@@ -37,9 +37,9 @@ class App_Controller_Block_Block extends Controller
 
 		if ($path) {
 			if (!$this->block->edit($path, $_POST)) {
-				$this->message->add('error', $this->block->getError());
+				message('error', $this->block->getError());
 			} else {
-				$this->message->add('success', _l("The Block %s was saved successfully!", $path));
+				message('success', _l("The Block %s was saved successfully!", $path));
 			}
 		}
 

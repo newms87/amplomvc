@@ -8,9 +8,9 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 
 		if (is_post()) {
 			if (!$this->send()) {
-				$this->message->add('warning', _l("Error sending email! Message was not sent!"));
+				message('warning', _l("Error sending email! Message was not sent!"));
 			} else {
-				$this->message->add('success', _l("Success: Your message has been sent!"));
+				message('success', _l("Success: Your message has been sent!"));
 			}
 		}
 

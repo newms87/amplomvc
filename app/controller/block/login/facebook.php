@@ -13,10 +13,10 @@ class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 	public function connect()
 	{
 		if ($this->Model_Block_Login_Facebook->authenticate()) {
-			$this->message->add('success', _l("You have been successfully logged in using Facebook!"));
+			message('success', _l("You have been successfully logged in using Facebook!"));
 		} else {
-			$this->message->add('error', $this->Model_Block_Login_Facebook->getError());
-			$this->message->add('warning', _l("There was a problem while signing you in with Facebook. Please try again, or try a different login method."));
+			message('error', $this->Model_Block_Login_Facebook->getError());
+			message('warning', _l("There was a problem while signing you in with Facebook. Please try again, or try a different login method."));
 		}
 
 		if ($this->request->hasRedirect('fb_redirect')) {
@@ -35,9 +35,9 @@ class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 			// Remove the credentials from the user's session.
 			$app['session']->set('token', '');
 
-			$this->message->add('success', _l("Successfully Disconnected Google+"));
+			message('success', _l("Successfully Disconnected Google+"));
 		} else {
-			$this->message->add('warning', _l("Invalid Token"));
+			message('warning', _l("Invalid Token"));
 		}
 		redirect();
 	}

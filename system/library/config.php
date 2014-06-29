@@ -359,7 +359,7 @@ class Config extends Library
 		$version = !empty($this->data['AMPLO_VERSION']) ? $this->data['AMPLO_VERSION'] : null;
 
 		if ($version !== AMPLO_VERSION) {
-			$this->message->add('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
+			message('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
 
 			$this->System_Update->updateSystem(AMPLO_VERSION);
 		}

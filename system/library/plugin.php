@@ -30,7 +30,7 @@ class Plugin extends Library
 			$setup_file = DIR_PLUGIN . $name . '/setup.php';
 
 			if (!is_file($setup_file)) {
-				$this->message->add("warning", _l("The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!", $setup_file, $name));
+				message("warning", _l("The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!", $setup_file, $name));
 
 				return false;
 			}
@@ -120,9 +120,9 @@ class Plugin extends Library
 		if ($this->mod->apply(true)) {
 			$this->mod->write();
 
-			$this->message->add('notify', _l("%s has been uninstalled.", $name));
+			message('notify', _l("%s has been uninstalled.", $name));
 		} else {
-			$this->message->add('warning', $this->mod->getError());
+			message('warning', $this->mod->getError());
 		}
 
 		return true;
@@ -193,13 +193,13 @@ class Plugin extends Library
 		$changes = $this->getChanges($name);
 
 		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
-			$this->message->add('notify', _l("No Changes Were Made"));
+			message('notify', _l("No Changes Were Made"));
 			return false;
 		}
 
 		foreach ($changes['new_files'] as $file) {
 			$this->activatePluginFile($name, $file);
-			$this->message->add('success', _l("Add New File: %s", $file));
+			message('success', _l("Add New File: %s", $file));
 		}
 
 		$this->mod->addFiles(null, $changes['mod_files']);
@@ -207,18 +207,18 @@ class Plugin extends Library
 		if (!empty($changes['mod_files'])) {
 			if ($this->mod->apply()) {
 				foreach ($changes['mod_files'] as $file) {
-					$this->message->add('notify', _l("Integrate Mod File: %s", $file));
+					message('notify', _l("Integrate Mod File: %s", $file));
 				}
 
 				$this->mod->write();
 			} else {
-				$this->message->add('warning', $this->mod->getError());
-				$this->message->add('warning', _l("Failed while integrating the mod file changes!"));
+				message('warning', $this->mod->getError());
+				message('warning', _l("Failed while integrating the mod file changes!"));
 				return false;
 			}
 		}
 
-		$this->message->add('success', _l("Successfully Integrated the Changes for %s!", $name));
+		message('success', _l("Successfully Integrated the Changes for %s!", $name));
 
 		return true;
 	}
@@ -243,7 +243,7 @@ class Plugin extends Library
 
 				if ($conflicting_plugin) {
 					if ($conflicting_plugin['name'] !== $name) {
-						$this->message->add('warning', _l("There is a conflict with the <strong>%s</strong> plugin for the file %s. Please uninstall <strong>%s</strong> or resolve the conflict.", $conflicting_plugin['name'], $live_file, $conflicting_plugin['name']));
+						message('warning', _l("There is a conflict with the <strong>%s</strong> plugin for the file %s. Please uninstall <strong>%s</strong> or resolve the conflict.", $conflicting_plugin['name'], $live_file, $conflicting_plugin['name']));
 						return false;
 					}
 				} else {
@@ -255,7 +255,7 @@ class Plugin extends Library
 						_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
 						_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
 
-					$this->message->add("warning", $msg);
+					message("warning", $msg);
 					return false;
 				}
 			}
@@ -272,7 +272,7 @@ class Plugin extends Library
 		}
 
 		if (!symlink($plugin_file, $live_file)) {
-			$this->message->add("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
+			message("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
 			return false;
 		}
 

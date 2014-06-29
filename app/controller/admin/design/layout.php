@@ -18,7 +18,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			}
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified layouts!"));
+				message('success', _l("Success: You have modified layouts!"));
 
 				redirect('admin/design/layout');
 			}
@@ -33,7 +33,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 
 			if (!$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified layouts!"));
+				message('success', _l("Success: You have modified layouts!"));
 
 				redirect('admin/design/layout');
 			}
@@ -66,7 +66,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 			}
 
 			if (!$this->error && !$this->message->has('error', 'warning')) {
-				$this->message->add('success', _l("Success: You have modified layouts!"));
+				message('success', _l("Success: You have modified layouts!"));
 
 				redirect('admin/design/layout', $this->url->getQueryExclude('action'));
 			}

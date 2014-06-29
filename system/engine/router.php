@@ -92,7 +92,7 @@ final class Router
 					$_SESSION['hide_maintenance_msg'] = 1;
 				} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
 					$hide = $this->url->here('hide_maintenance_msg=1');
-					$this->message->add('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
+					message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
 				}
 			} //Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
 			else if (strpos($this->path, 'payment') !== 0) {

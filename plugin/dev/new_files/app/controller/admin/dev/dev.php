@@ -25,7 +25,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		if (is_post() && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
 				if (!isset($_POST['tables'])) {
-					$this->message->add('warning', "You must select at least 1 table to sync.");
+					message('warning', "You must select at least 1 table to sync.");
 				} else {
 					$key = array_search($_POST['domain'], $dev_sites);
 					foreach ($dev_sites as $site) {
@@ -134,7 +134,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 				if (!empty($_POST['backup_file'])) {
 					$this->export->downloadFile($_POST['backup_file']);
 				} else {
-					$this->message->add('warning', _l("Please select a backup file to download."));
+					message('warning', _l("Please select a backup file to download."));
 				}
 			} elseif (isset($_POST['default_installation'])) {
 				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '%__TABLE_PREFIX__%');
@@ -158,20 +158,20 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			} elseif (isset($_POST['execute_sync_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					if ($this->dev->site_restore($_FILES['filename']['tmp_name'], true)) {
-						$this->message->add('success', "Successfully synchronized your site!");
+						message('success', "Successfully synchronized your site!");
 					} else {
-						$this->message->add('warning', "There was a problem while synchronizing from the sync file. ");
-						$this->message->add('warning', $this->db->getError());
+						message('warning', "There was a problem while synchronizing from the sync file. ");
+						message('warning', $this->db->getError());
 					}
 				}
 			} elseif (isset($_POST['execute_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
 					if ($this->db->executeFile($_FILES['filename']['tmp_name'])) {
-						$this->message->add('success', _l("Successfully executed the contents of $filename!"));
+						message('success', _l("Successfully executed the contents of $filename!"));
 					} else {
-						$this->message->add('warning', _l("There was a problem while executing $filename. "));
-						$this->message->add('warning', $this->db->getError());
+						message('warning', _l("There was a problem while executing $filename. "));
+						message('warning', $this->db->getError());
 					}
 				}
 			}

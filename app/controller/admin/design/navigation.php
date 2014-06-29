@@ -62,9 +62,9 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		}
 
 		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			message('error', $this->Model_Design_Navigation->getError());
 		} else {
-			$this->message->add('success', _l("Navigation has been updated!"));
+			message('success', _l("Navigation has been updated!"));
 		}
 
 		if (is_ajax()) {
@@ -81,9 +81,9 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
 		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			message('error', $this->Model_Design_Navigation->getError());
 		} else {
-			$this->message->add('success', _l("Success: You have modified Navigation!"));
+			message('success', _l("Success: You have modified Navigation!"));
 		}
 
 		if (is_ajax()) {
@@ -279,9 +279,9 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			}
 
 			if ($this->Model_Design_Navigation->hasError()) {
-				$this->message->add('error', $this->Model_Design_Navigation->getError());
+				message('error', $this->Model_Design_Navigation->getError());
 			} else {
-				$this->message->add('success', _l("Success: You have modified navigation!"));
+				message('success', _l("Success: You have modified navigation!"));
 			}
 		}
 
@@ -297,11 +297,11 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->Model_Design_Navigation->resetAdminNavigationGroup();
 
 		if ($this->Model_Design_Navigation->hasError()) {
-			$this->message->add('error', $this->Model_Design_Navigation->getError());
+			message('error', $this->Model_Design_Navigation->getError());
 			redirect('admin/design/navigation');
 		}
 
-		$this->message->add("notify", "Admin Navigation Group has been reset!");
+		message("notify", "Admin Navigation Group has been reset!");
 
 		if (!is_ajax()) {
 			redirect('admin/design/navigation');

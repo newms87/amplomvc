@@ -15,11 +15,11 @@ class Dev extends Library
 		}
 
 		if ($this->db->dump($file, $tables, $prefix)) {
-			$this->message->add('success', "Successfully backed up $site_name!");
+			message('success', "Successfully backed up $site_name!");
 
 			return true;
 		} else {
-			$this->message->add('warning', "There was a problem while backing up $site_name!");
+			message('warning', "There was a problem while backing up $site_name!");
 		}
 
 		return false;
@@ -30,7 +30,7 @@ class Dev extends Library
 		$site_name = option('config_name');
 
 		if (!is_file($file)) {
-			$this->message->add('warning', "Failed to restore $site_name from $file. The File was not found.");
+			message('warning', "Failed to restore $site_name from $file. The File was not found.");
 			return false;
 		}
 
@@ -40,10 +40,10 @@ class Dev extends Library
 		}
 
 		if ($this->db->executeFile($file)) {
-			$this->message->add('success', "Successfully restored $site_name from backup file $file!");
+			message('success', "Successfully restored $site_name from backup file $file!");
 			return true;
 		} else {
-			$this->message->add('warning', "There was a problem while restoring $site_name!");
+			message('warning', "There was a problem while restoring $site_name!");
 		}
 
 		return false;
@@ -69,9 +69,9 @@ class Dev extends Library
 		if ($response == 'SUCCESS') {
 			return true;
 		} elseif ($response == 'FAILURE') {
-			$this->message->add('warning', "Login Failed for $domain!");
+			message('warning', "Login Failed for $domain!");
 		} else {
-			$this->message->add('warning', "There was an error while connecting to the server at $domain.");
+			message('warning', "There was an error while connecting to the server at $domain.");
 		}
 
 		return false;
@@ -101,7 +101,7 @@ class Dev extends Library
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		} else {
 			if (preg_match("/^ERROR/i", $response) || preg_match("/^WARNING/i", $response) || preg_match("/^NOTICE/i", $response)) {
-				$this->message->add('warning', "There was an error returned from the server: $response");
+				message('warning', "There was an error returned from the server: $response");
 
 				return false;
 			}
@@ -116,15 +116,15 @@ class Dev extends Library
 
 			//Execute the database sync file
 			if ($this->db->executeFile($file)) {
-				$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
+				message('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
 
 				return true;
 			} else {
-				$this->message->add('warning', $this->getError());
+				message('warning', $this->getError());
 			}
 		}
 
-		$this->message->add('warning', "There was a problem while synchronizing the requested tables from $conn_info[domain].");
+		message('warning', "There was a problem while synchronizing the requested tables from $conn_info[domain].");
 
 		return false;
 	}

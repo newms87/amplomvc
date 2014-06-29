@@ -23,7 +23,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		echo exec('rm -fv /tmp/crontab.txt');
 			*/
 
-			$this->message->add('success', _l('Successfully updated the Automated Tasks!'));
+			message('success', _l('Successfully updated the Automated Tasks!'));
 
 			redirect('admin/setting/cron');
 		}

@@ -70,13 +70,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$view_id = $this->Model_Block_Widget_Views->save($_POST['view_id'], $_POST);
 
 		if ($view_id) {
-			$this->message->add('success', _l("%s view was saved!", $_POST['title']));
+			message('success', _l("%s view was saved!", $_POST['title']));
 		} else {
-			$this->message->add('error', $this->Model_Block_Widget_Views->getError());
+			message('error', $this->Model_Block_Widget_Views->getError());
 		}
 
 		if (is_ajax()) {
-			$this->message->add('view_id', $view_id);
+			message('view_id', $view_id);
 			output($this->message->toJSON());
 		} else {
 			redirect($_POST['path']);
@@ -89,9 +89,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if ($view) {
 			if ($this->Model_Block_Widget_Views->remove($_POST['view_id'])) {
-				$this->message->add('success', _l("The %s view has been removed", $view['title']));
+				message('success', _l("The %s view has been removed", $view['title']));
 			} else {
-				$this->message->add('error', $this->Model_Block_Widget_Views->getError());
+				message('error', $this->Model_Block_Widget_Views->getError());
 			}
 
 			if (is_ajax()) {

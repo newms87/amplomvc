@@ -62,9 +62,9 @@ class App_Controller_Admin_Setting_Update extends Controller
 	{
 		if (!empty($_REQUEST['version'])) {
 			if (!$this->System_Update->updateSystem($_POST['version'])) {
-				$this->message->add('error', $this->System_Update->getError());
+				message('error', $this->System_Update->getError());
 			} else {
-				$this->message->add('success', _l("You have successfully updated to version %s", $_REQUEST['version']));
+				message('success', _l("You have successfully updated to version %s", $_REQUEST['version']));
 			}
 		}
 
@@ -80,9 +80,9 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$this->config->save('system', 'auto_update', $_POST['auto_update']);
 
 		if ($_POST['auto_update']) {
-			$this->message->add('success', _l("Automatic system updates has been activated!"));
+			message('success', _l("Automatic system updates has been activated!"));
 		} else {
-			$this->message->add('notify', _l("You have deactivated automatic system updates!"));
+			message('notify', _l("You have deactivated automatic system updates!"));
 		}
 
 		if (is_ajax()) {

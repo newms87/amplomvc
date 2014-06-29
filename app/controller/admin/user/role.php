@@ -150,9 +150,9 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//Success / Error
 		if ($this->Model_User_Role->hasError()) {
-			$this->message->add('error', $this->Model_User_Role->getError());
+			message('error', $this->Model_User_Role->getError());
 		} else {
-			$this->message->add('success', _l("The User Role has been updated!"));
+			message('success', _l("The User Role has been updated!"));
 		}
 
 		//Response
@@ -172,9 +172,9 @@ class App_Controller_Admin_User_Role extends Controller
 
 		//Success / Error
 		if ($this->Model_User_Role->hasError()) {
-			$this->message->add('error', $this->Model_User_Role->getError());
+			message('error', $this->Model_User_Role->getError());
 		} else {
-			$this->message->add('notify', _l("User Role was deleted!"));
+			message('notify', _l("User Role was deleted!"));
 		}
 
 		//Response
@@ -196,9 +196,9 @@ class App_Controller_Admin_User_Role extends Controller
 		}
 
 		if ($this->Model_User_Role->hasError()) {
-			$this->message->add('error', $this->Model_User_Role->getError());
+			message('error', $this->Model_User_Role->getError());
 		} else {
-			$this->message->add('success', _l("The User Groups have been updated!"));
+			message('success', _l("The User Groups have been updated!"));
 		}
 
 		if (is_ajax()) {

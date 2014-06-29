@@ -82,9 +82,9 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		$this->theme->saveThemeConfigs($store_id, $theme, $_POST['configs'], $_POST['stylesheet']);
 
 		if ($this->theme->hasError()) {
-			$this->message->add('error', $this->theme->getError());
+			message('error', $this->theme->getError());
 		} else {
-			$this->message->add('success', _l("You have successfully updated the Theme Settings!"));
+			message('success', _l("You have successfully updated the Theme Settings!"));
 		}
 
 		if (is_ajax()) {

@@ -29,24 +29,24 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 	public function submit()
 	{
 		if (!validate('text', $_POST['name'], 3, 64)) {
-			$this->message->add('error', _l("Name must be between 3 and 32 characters!"));
+			message('error', _l("Name must be between 3 and 32 characters!"));
 		}
 
 		if (!validate('email', $_POST['email'])) {
-			$this->message->add('error', _l("E-Mail Address does not appear to be valid!"));
+			message('error', _l("E-Mail Address does not appear to be valid!"));
 		}
 
 		if (!validate('text', $_POST['enquiry'], 10, 3000)) {
-			$this->message->add('error', _l("Enquiry must be between 10 and 3000 characters!"));
+			message('error', _l("Enquiry must be between 10 and 3000 characters!"));
 		}
 
 		if (!$this->captcha->validate($_POST['captcha'])) {
-			$this->message->add('error', _l("Verification code does not match the image!"));
+			message('error', _l("Verification code does not match the image!"));
 		}
 
 		if (!$this->message->has('error')) {
 			call('mail/contact', $_POST);
-			$this->message->add('success', _l("We have received your message! We will be in contact with you shortly."));
+			message('success', _l("We have received your message! We will be in contact with you shortly."));
 		}
 
 		//Response

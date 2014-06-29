@@ -183,11 +183,11 @@ class App_Controller_Admin_Block extends Controller
 		echo "NOT IMPLEMENTED";
 		exit;
 		if (!$this->block->add($_POST)) {
-			$this->message->add('error', $this->block->getError());
+			message('error', $this->block->getError());
 			redirect('admin/block/add');
 		}
 
-		$this->message->add('success', _l("The Block %s was created successfully!", $_POST['name']));
+		message('success', _l("The Block %s was created successfully!", $_POST['name']));
 		redirect('admin/block', 'path=' . $_POST['path']);
 	}
 
@@ -197,7 +197,7 @@ class App_Controller_Admin_Block extends Controller
 		exit;
 
 		//Notify User this is oly for developers
-		$this->message->add('notify', _l("Adding a Block will simply setup the files in the system on the front end and back end. If you are not a developer this is worthless!"));
+		message('notify', _l("Adding a Block will simply setup the files in the system on the front end and back end. If you are not a developer this is worthless!"));
 
 		//Page Title
 		$this->document->setTitle(_l("New Block"));

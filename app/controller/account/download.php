@@ -70,7 +70,7 @@ class App_Controller_Account_Download extends Controller
 
 			output($this->render('account/download', $data));
 		} else {
-			$this->message->add('error', _l("You have not made any previous downloadable orders!"));
+			message('error', _l("You have not made any previous downloadable orders!"));
 
 			$data['continue'] = site_url('account');
 
