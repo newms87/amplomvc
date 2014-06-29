@@ -10,8 +10,8 @@ class Customer extends Library
 	{
 		parent::__construct();
 
-		if ($this->session->has('customer_id')) {
-			if ($this->setCustomer($this->session->get('customer_id'))) {
+		if (!empty($_SESSION['customer']['customer_id'])) {
+			if ($this->setCustomer($_SESSION['customer']['customer_id'])) {
 				$this->track();
 			} else {
 				$this->logout();
@@ -52,13 +52,11 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->session->end();
+		unset($_SESSION['customer']);
 
 		$this->customer_id = null;
 
 		$this->info = array();
-
-		message('notify', _l("You have been logged out of your account"));
 	}
 
 	public function getId()
@@ -84,7 +82,7 @@ class Customer extends Library
 		}
 
 		$this->customer_id = (int)$customer['customer_id'];
-		$this->session->set('customer_id', $this->customer_id);
+		$_SESSION['customer']['customer_id'] = $this->customer_id;
 		$this->info = $customer;
 
 		$this->displayMessages();

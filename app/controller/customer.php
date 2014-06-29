@@ -87,6 +87,8 @@ class App_Controller_Customer extends Controller
 	{
 		$this->customer->logout();
 
+		message('notify', _l("You have been logged out of your account"));
+
 		redirect();
 	}
 
