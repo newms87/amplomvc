@@ -106,7 +106,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($output);
 		}
 
@@ -129,7 +129,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		//Store Data
 		$store = $_POST;
 
-		if ($store_id && !is_post()) {
+		if ($store_id && !IS_POST) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
 			$store_config = $this->config->loadGroup('config', $store_id);
@@ -261,7 +261,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			message('success', _l("The Store settings have been saved."));
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -284,7 +284,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			}
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/setting/store');

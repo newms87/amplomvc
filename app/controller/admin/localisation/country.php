@@ -14,7 +14,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 	{
 		$this->document->setTitle(_l("Country"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
 
 			message('success', _l("Success: You have modified countries!"));
@@ -43,7 +43,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 	{
 		$this->document->setTitle(_l("Country"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
 
 			message('success', _l("Success: You have modified countries!"));
@@ -259,7 +259,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/country', $url);
 
-		if (isset($_GET['country_id']) && !is_post()) {
+		if (isset($_GET['country_id']) && !IS_POST) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
 		}
 

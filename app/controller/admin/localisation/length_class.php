@@ -14,7 +14,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 	{
 		$this->document->setTitle(_l("Length Class"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
 
 			message('success', _l("Success: You have modified length classes!"));
@@ -43,7 +43,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 	{
 		$this->document->setTitle(_l("Length Class"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
 
 			message('success', _l("Success: You have modified length classes!"));
@@ -265,7 +265,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/length_class', $url);
 
-		if (isset($_GET['length_class_id']) && !is_post()) {
+		if (isset($_GET['length_class_id']) && !IS_POST) {
 			$length_class_info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);
 		}
 

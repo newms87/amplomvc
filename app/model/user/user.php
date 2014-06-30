@@ -18,6 +18,8 @@ class App_Model_User_User extends Model
 			$data['password'] = $data['encrypted_password'];
 		}
 
+		$this->cache->delete('user');
+
 		//New User
 		if (!$user_id) {
 			$data['date_added'] = $this->date->now();
@@ -36,11 +38,15 @@ class App_Model_User_User extends Model
 			'password' => $this->user->encrypt($password),
 		);
 
+		$this->cache->delete('user');
+
 		return $this->update('user', $data, $user_id);
 	}
 
 	public function remove($user_id)
 	{
+		$this->cache->delete('user');
+		
 		return $this->delete('user', $user_id);
 	}
 

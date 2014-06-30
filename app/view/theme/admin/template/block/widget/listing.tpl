@@ -47,6 +47,11 @@
 		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing, .filter-cols')
 			.click(function () {
 				var $this = $(this);
+
+				if (!$this.attr('href')) {
+					return false;
+				}
+
 				var $listing = $this.closest('.widget-listing');
 				$listing.addClass("loading");
 
@@ -59,6 +64,7 @@
 				$.get($this.attr('href'), data, function (response) {
 					$listing.siblings('.messages').remove();
 					$listing.replaceWith(response);
+					init_ajax();
 				});
 
 				return false;

@@ -24,7 +24,7 @@ class App_Controller_Block_Block extends Controller
 			}
 		}
 
-		if (!is_ajax()) {
+		if (!IS_AJAX) {
 			redirect('admin/block', $this->url->getQuery());
 		}
 
@@ -43,7 +43,7 @@ class App_Controller_Block_Block extends Controller
 			}
 		}
 
-		if (!is_ajax()) {
+		if (!IS_AJAX) {
 			redirect('admin/block');
 		}
 

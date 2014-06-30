@@ -104,7 +104,7 @@ class App_Controller_Admin_Block extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($output);
 		}
 
@@ -147,7 +147,7 @@ class App_Controller_Admin_Block extends Controller
 		//Entry Data
 		$block = array();
 
-		if (is_post()) {
+		if (IS_POST) {
 			$block = $_POST;
 		} elseif ($path) {
 			$block = $this->block->get($path);

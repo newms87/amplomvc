@@ -127,7 +127,7 @@ class App_Controller_Admin_Page extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($output);
 		}
 
@@ -150,7 +150,7 @@ class App_Controller_Admin_Page extends Controller
 		//Load Information from POST or DB
 		$page = $_POST;
 
-		if ($page_id && !is_post()) {
+		if ($page_id && !IS_POST) {
 			$page = $this->Model_Page->getPage($page_id);
 
 			$page['stores'] = $this->Model_Page->getPageStores($page_id);
@@ -217,7 +217,7 @@ class App_Controller_Admin_Page extends Controller
 			message('success', _l("The Page has been updated successfully!"));
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -236,7 +236,7 @@ class App_Controller_Admin_Page extends Controller
 			message('notify', _l("Page was deleted!"));
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/page');
@@ -271,7 +271,7 @@ class App_Controller_Admin_Page extends Controller
 			message('success', _l("Success: You have modified navigation!"));
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			$this->listing();
 		} else {
 			redirect('admin/design/navigation');

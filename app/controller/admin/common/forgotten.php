@@ -12,7 +12,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		//Handle POST
-		if (is_post() && $this->validate()) {
+		if (IS_POST && $this->validate()) {
 			$code = $this->user->generateCode();
 
 			$this->user->setResetCode($_POST['email'], $code);
@@ -61,7 +61,7 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Handle POST
-		if (is_post()) {
+		if (IS_POST) {
 			//Validate Password
 			if (!validate('password', $_POST['password'])) {
 				if ($this->validation->isErrorCode(Validation::PASSWORD_CONFIRM)) {

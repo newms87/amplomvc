@@ -67,7 +67,7 @@ class App_Controller_Account_Address extends Controller
 			}
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -94,7 +94,7 @@ class App_Controller_Account_Address extends Controller
 			}
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
 			redirect('account/address');
@@ -133,7 +133,7 @@ class App_Controller_Account_Address extends Controller
 
 		$address_info = array();
 
-		if (is_post()) {
+		if (IS_POST) {
 			$address_info = $_POST;
 		} elseif ($address_id) {
 			$address_info = $this->customer->getAddress($_GET['address_id']);
@@ -153,13 +153,13 @@ class App_Controller_Account_Address extends Controller
 			0 => _l("No"),
 		);
 
-		$data['is_ajax'] = is_ajax();
+		$data['is_ajax'] = IS_AJAX;
 
 		//Action Buttons
 		$data['save'] = site_url('account/address/update', 'address_id=' . $address_id);
 
 		//Render
-		$template = is_ajax() ? 'account/address_form_ajax' : 'account/address_form';
+		$template = IS_AJAX ? 'account/address_form_ajax' : 'account/address_form';
 		output($this->render($template, $data));
 	}
 }

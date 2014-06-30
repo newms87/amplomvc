@@ -155,6 +155,10 @@ class Table extends Library
 				$column['editable_data'] = !empty($column['build_data']) ? $column['build_data'] : array();
 			}
 
+			if (!isset($column["sort_value"])) {
+				$column["sort_value"] = $slug;
+			}
+
 			switch ($column['type']) {
 				case 'text':
 					break;
@@ -172,47 +176,44 @@ class Table extends Library
 					}
 
 					if (!isset($column['build_config'])) {
-						if (is_array(current($column['build_data']))) {
-							trigger_error(_l("You must specify build_config for the column %s of type select with this nature of build_data!", $slug));
-							exit();
-						}
-					}
-
-					if (!is_array(current($column['build_data']))) {
-						//normalize the data for easier processing
-						foreach ($column['build_data'] as $key => $bd_item) {
-							$column['build_data'][$key] = array(
-								'key'  => $key,
-								'name' => $bd_item
-							);
-						}
-						$column['build_config'] = array(
-							'key',
-							'name'
-						);
-					} elseif ($column['build_config'][0] === false) {
-						//normalize the data for easier processing
-						foreach ($column['build_data'] as $key => $bd_item) {
-							$column['build_data'][$key] = array(
-								'key'  => $key,
-								'name' => $bd_item[$column['build_config'][1]],
-							);
-						}
 						$column['build_config'] = array(
 							'key',
 							'name'
 						);
 					}
 
-					break;
-				default:
+					$build_key   = $column['build_config'][0];
+					$build_value = $column['build_config'][1];
+					$build_data  = array();
+
+					foreach ($column['build_data'] as $key => $bd_item) {
+						if (is_array($bd_item)) {
+							//Validate Data keys and values are set
+							if (($build_key !== false && !isset($bd_item[$build_key])) || !isset($bd_item[$build_value])) {
+								trigger_error(_l("You must set the build config to match a key and value in the build data for all values!", $slug));
+								exit();
+							}
+
+							$build_data[$key] = array(
+								'key'  => $build_key === false ? $key : $bd_item[$build_key],
+								'name' => $bd_item[$build_value],
+							);
+						} else {
+							$build_data[$key] = array(
+								'key'  => $key,
+								'name' => $bd_item,
+							);
+						}
+					}
+
+					$column['build_data'] = $build_data;
+					$column['build_config'] = array(
+						'key',
+						'name'
+					);
+
 					break;
 			}
-
-			if (!isset($column["sort_value"])) {
-				$column["sort_value"] = $slug;
-			}
-
 		}
 	}
 }

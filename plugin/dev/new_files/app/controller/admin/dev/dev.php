@@ -22,7 +22,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
-		if (is_post() && $this->validate()) {
+		if (IS_POST && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
 				if (!isset($_POST['tables'])) {
 					message('warning', "You must select at least 1 table to sync.");
@@ -75,7 +75,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
-		if (is_post() && $this->validate()) {
+		if (IS_POST && $this->validate()) {
 			if (isset($_POST['add_site'])) {
 				unset($_POST['add_site']);
 				$dev_sites[] = $_POST;
@@ -129,7 +129,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		$this->document->setTitle(_l("Backup & Restore"));
 
 		//Handle POST
-		if (is_post() && $this->validate()) {
+		if (IS_POST && $this->validate()) {
 			if (isset($_POST['backup_download'])) {
 				if (!empty($_POST['backup_file'])) {
 					$this->export->downloadFile($_POST['backup_file']);
@@ -220,7 +220,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 	public function request_table_data()
 	{
-		if (is_post() && isset($_POST['tables']) && $this->validate()) {
+		if (IS_POST && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 
 			$this->db->dump($file, $_POST['tables']);

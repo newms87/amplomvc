@@ -109,7 +109,7 @@ $.fn.ac_datepicker = function (params) {
 
     return this.each(function (i, e) {
         type = params.type ||
-        $(e).hasClass('datepicker') ? 'datepicker' :
+            $(e).hasClass('datepicker') ? 'datepicker' :
             $(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
 
         $(e)[type](params);
@@ -238,6 +238,22 @@ $.fn.flash_highlight = function () {
     });
 
     return this;
+}
+
+$.fn.overflown = function (dir) {
+    return this.each(function(i,e) {
+        var over;
+
+        if (dir) {
+            over = dir === 'height' ? e.scrollHeight > e.clientHeight : e.scrollWidth > e.clientWidth;
+        }
+
+        over = e.scrollHeight > e.clientHeight || e.scrollWidth > e.clientWidth;
+
+        if (over) {
+            $(e).addClass('overflown');
+        }
+    });
 }
 
 $.fn.tabs = function (callback) {
@@ -627,10 +643,10 @@ function ac_radio_bubble() {
     });
 }
 
-$ac.init_ajax = false;
+$ac.init_ajax = true;
 
 function init_ajax() {
-    var $colorbox = $('.colorbox');
+    var $colorbox = $('.colorbox').not('.colorbox-init').addClass('colorbox-init');
 
     if ($colorbox.length) {
         var defaults = {
@@ -641,8 +657,8 @@ function init_ajax() {
             onComplete: init_ajax
         }
 
-        if (!$ac.init_ajax) {
-            $ac.init_ajax = true;
+        if ($ac.init_ajax) {
+            $ac.init_ajax = false;
             $.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function () {
                 $colorbox.colorbox(defaults);
             });
@@ -651,7 +667,7 @@ function init_ajax() {
         }
     }
 
-    $('.ajax-form').submit(function () {
+    $('.ajax-form').not('ajax-init').addClass('ajax-init').submit(function () {
         ac_form();
     });
 }

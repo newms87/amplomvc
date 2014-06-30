@@ -122,7 +122,7 @@ class App_Controller_Page extends Controller
 
 		$page += $this->Model_Page->getPageForPreview($page_id);
 
-		if (is_post()) {
+		if (IS_POST) {
 			$temp_content = DIR_CACHE . 'preview/' . $page['name'] . '/content.tpl';
 			$temp_style   = DIR_CACHE . 'preview/' . $page['name'] . '/style.less';
 
@@ -146,7 +146,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Render
-		if (is_post()) {
+		if (IS_POST) {
 			output($this->render('page/content', $page));
 		} else {
 			output($this->render('page/default', $page));

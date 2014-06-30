@@ -146,16 +146,16 @@ final class Router
 				if (!$this->user->canDoAction($action)) {
 					if (!$this->user->isLogged()) {
 						$this->request->setRedirect($this->url->here());
-						redirect('admin/common/login');
+						redirect('admin/common/login', IS_AJAX ? 'ajax=1' : '');
 					}
 
-					redirect('admin/error/permission');
+					redirect('admin/error/permission', IS_AJAX ? 'ajax=1' : '');
 				}
 			} else {
 				//Login Verification
 				if (!$this->customer->canDoAction($action)) {
 					$this->request->setRedirect($this->url->here());
-					redirect('customer/login');
+					redirect('customer/login', IS_AJAX ? 'ajax=1' : '');
 				}
 			}
 		}

@@ -138,6 +138,10 @@ function slug($name, $sep = '_', $allow = '')
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 }
 
+define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
+define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
+define("IS_AJAX", !empty($_GET['ajax']));
+
 function _get($key, $default = null)
 {
 	return isset($_GET[$key]) ? $_GET[$key] : $default;
@@ -153,19 +157,9 @@ function _request($key, $default = null)
 	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
 }
 
-function is_post()
+function _session($key, $default = null)
 {
-	return $_SERVER['REQUEST_METHOD'] === 'POST';
-}
-
-function is_get()
-{
-	return $_SERVER['REQUEST_METHOD'] === 'GET';
-}
-
-function is_ajax()
-{
-	return !empty($_GET['ajax']);
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
 function option($option, $default = null)
@@ -306,21 +300,19 @@ function build($type, $params)
 	$options          = '';
 	$selected_options = ''; //for clickable list
 
-	foreach ($data as $value => $display) {
-
-		if (is_array($display)) {
-			if (($build_key && !isset($display[$build_key])) || ($build_value && !isset($display[$build_value]))) {
+	foreach ($data as $key => $value) {
+		if (is_array($value)) {
+			if (($build_key && !isset($value[$build_key])) || ($build_value && !isset($value[$build_value]))) {
 				trigger_error(_l("The associative indexes for 'key' and 'value' were not found in the data array."));
 				return;
 			}
 
 			if ($build_key) {
-				$value = $display[$build_key];
+				$key = $value[$build_key];
 			}
 
-			$display = $display[$build_value];
+			$value = $value[$build_value];
 		}
-
 
 		//Determine if the value is a selected value.
 		//If the user specified the type of vars, use that type.,
@@ -332,7 +324,7 @@ function build($type, $params)
 				$s = $s[$build_key];
 			}
 
-			$v = is_integer($s) ? (int)$value : $value;
+			$v = is_integer($s) ? (int)$key : $key;
 
 			if (((is_integer($v) && $s !== '' && !is_bool($s) && !is_null($s)) ? (int)$s : $s) === $v) {
 				$selected = true;
@@ -340,43 +332,43 @@ function build($type, $params)
 			}
 		}
 
-		$uniqid = uniqid($name . '-' . $value);
+		$uniqid = uniqid($name . '-' . $key);
 
 		switch ($type) {
 			case 'select':
 				$s = $selected ? "selected='true'" : '';
-				if (strpos($value, '#optgroup') === 0) {
+				if (strpos($key, '#optgroup') === 0) {
 					if ($opt_group_active) {
 						$options .= "</optgroup>";
 					}
-					$options .= "<optgroup label=\"$display\">";
+					$options .= "<optgroup label=\"$value\">";
 					$opt_group_active = true;
 				} else {
-					$options .= "<option value=\"$value\" $s>$display</option>";
+					$options .= "<option value=\"$key\" $s>$value</option>";
 				}
 				break;
 
 			case 'ac-radio':
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$value\" $s /><div class=\"text\">$display</div></label>";
+				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"text\">$value</div></label>";
 				break;
 
 			case 'checkbox':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$uniqid\">$display</label></div>";
+				$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$key\" $s /><label for=\"checkbox-$uniqid\">$value</label></div>";
 				break;
 
 			case 'multiselect':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<li><input id=\"checkbox-$uniqid\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$value\" $s /><label for=\"checkbox-$uniqid\">$display</label></li>";
+				$options .= "<li><input id=\"checkbox-$uniqid\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$key\" $s /><label for=\"checkbox-$uniqid\">$value</label></li>";
 				break;
 
 			case 'clickable_list':
 				if ($selected) {
-					$selected_options .= "<div onclick=\"clickable_list_remove($(this))\"><span>$display</span><input type=\"hidden\" value=\"$value\" name=\"$value\" /><img src=\"view/theme/default/image/remove.png\" /></div>";
+					$selected_options .= "<div onclick=\"clickable_list_remove($(this))\"><span>$value</span><input type=\"hidden\" value=\"$key\" name=\"$key\" /><img src=\"view/theme/default/image/remove.png\" /></div>";
 				} else {
-					$options .= "<div onclick=\"clickable_list_add($(this), '$value')\"><span>$display</span><img src=\"view/theme/default/image/add.png\" /></div>";
+					$options .= "<div onclick=\"clickable_list_add($(this), '$key')\"><span>$value</span><img src=\"view/theme/default/image/add.png\" /></div>";
 				}
 			default:
 				break;

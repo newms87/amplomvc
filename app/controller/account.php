@@ -39,7 +39,7 @@ class App_Controller_Account extends Controller
 		$this->breadcrumb->add(_l("Edit Information"), site_url('account/update'));
 
 		//Handle POST
-		if (!is_post()) {
+		if (!IS_POST) {
 			$customer_info             = $this->customer->info();
 			$customer_info['metadata'] = $this->customer->getMeta();
 		} else {
@@ -94,7 +94,7 @@ class App_Controller_Account extends Controller
 			}
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
 			redirect('account/update');

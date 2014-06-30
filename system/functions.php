@@ -142,6 +142,7 @@ HTML;
 			document.getElementById(id + '-output').setAttribute('style', 'display:block');
 			w.document.body.innerHTML = document.getElementById(id).innerHTML;
 			document.getElementById(id + '-output').setAttribute('style', 'display:none');
+			w.focus();
 		}
 	</script>
 HTML;

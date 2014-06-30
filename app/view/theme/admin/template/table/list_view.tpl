@@ -229,7 +229,9 @@
 						?>
 
 						<td class="center actions">
-							<?= $quick_actions; ?>
+							<div class="action-buttons">
+								<?= $quick_actions; ?>
+							</div>
 						</td>
 						<? foreach ($columns as $slug => $column) { ?>
 							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
@@ -317,7 +319,9 @@
 							</td>
 						<? } ?>
 						<td class="center actions">
-							<?= $quick_actions; ?>
+							<div class="action-buttons">
+								<?= $quick_actions; ?>
+							</div>
 						</td>
 					</tr>
 				<?
@@ -494,9 +498,11 @@
 		}
 	});
 
-	$listview.find('.hide-filter').click(function(){toggle_filter($(this).closest('.listing'));});
+	$listview.find('.hide-filter').click(function () {
+		toggle_filter($(this).closest('.listing'));
+	});
 
-	$listview.find('.filter-list > td').click(function() {
+	$listview.find('.filter-list > td').click(function () {
 		if ($(this).closest('.filter-list').hasClass('hide')) {
 			toggle_filter($(this).closest('.listing'), false);
 		}
@@ -577,4 +583,6 @@
 			return false;
 		}
 	});
+
+	$('.action-buttons').overflown();
 </script>

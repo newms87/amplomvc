@@ -67,6 +67,18 @@ class App_Controller_Admin_User_User extends Controller
 			'sortable'     => true,
 		);
 
+		$columns['user_role_id'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Role"),
+			'build_data'   => $this->Model_User_Role->getRoles(),
+			'build_config' => array(
+				'user_role_id',
+				'name'
+			),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
 		$columns['status'] = array(
 			'type'         => 'select',
 			'display_name' => _l("Status"),
@@ -122,7 +134,7 @@ class App_Controller_Admin_User_User extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($output);
 		}
 
@@ -145,7 +157,7 @@ class App_Controller_Admin_User_User extends Controller
 		//The Data
 		$user = $_POST;
 
-		if ($user_id && !is_post()) {
+		if ($user_id && !IS_POST) {
 			$user = $this->Model_User_User->getUser($user_id);
 		}
 
@@ -182,7 +194,7 @@ class App_Controller_Admin_User_User extends Controller
 			message('error', $this->Model_User_User->getError());
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -199,7 +211,7 @@ class App_Controller_Admin_User_User extends Controller
 			message('error', $this->Model_User_User->getError());
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
 			redirect('admin/user/user');
@@ -230,7 +242,7 @@ class App_Controller_Admin_User_User extends Controller
 			message('success', _l("Success: You have modified navigation!"));
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			$this->listing();
 		} else {
 			redirect('admin/user/user');

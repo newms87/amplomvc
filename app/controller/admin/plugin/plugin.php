@@ -209,7 +209,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 
 		$this->document->setTitle(_l("Plugins"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
 
 			message('success', _l("You have successfully updated the plugins!"));

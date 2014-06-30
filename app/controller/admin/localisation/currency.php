@@ -14,7 +14,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 	{
 		$this->document->setTitle(_l("Currency"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->addCurrency($_POST);
 
 			message('success', _l("Success: You have modified currencies!"));
@@ -43,7 +43,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 	{
 		$this->document->setTitle(_l("Currency"));
 
-		if (is_post() && $this->validateForm()) {
+		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->editCurrency($_GET['currency_id'], $_POST);
 
 			message('success', _l("Success: You have modified currencies!"));
@@ -267,7 +267,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 		$data['cancel'] = site_url('admin/localisation/currency', $url);
 
-		if (isset($_GET['currency_id']) && !is_post()) {
+		if (isset($_GET['currency_id']) && !IS_POST) {
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($_GET['currency_id']);
 		}
 

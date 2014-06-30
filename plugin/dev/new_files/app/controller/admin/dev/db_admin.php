@@ -19,7 +19,7 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 		$data = array();
 
 		//Check for post data
-		if (is_post()) {
+		if (IS_POST) {
 			if (!empty($_POST['query'])) {
 				$results = $this->db->queryRows(html_entity_decode($_POST['query'], ENT_QUOTES, 'UTF-8'));
 

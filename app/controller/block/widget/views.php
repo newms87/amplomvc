@@ -75,7 +75,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('error', $this->Model_Block_Widget_Views->getError());
 		}
 
-		if (is_ajax()) {
+		if (IS_AJAX) {
 			message('view_id', $view_id);
 			output($this->message->toJSON());
 		} else {
@@ -94,7 +94,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				message('error', $this->Model_Block_Widget_Views->getError());
 			}
 
-			if (is_ajax()) {
+			if (IS_AJAX) {
 				output($this->message->toJSON());
 			} else {
 				redirect($view['path']);
