@@ -206,16 +206,16 @@ button, .button {
       .sub-menu {
         position: absolute;
         top: 100%;
-        left: -7em;
-        text-align: center;
-        z-index: 50;
-        width: 20em;
+        left: 0;
+        text-align: left;
+        z-index: 500;
         background: @color-light;
         box-shadow: 3px 3px 3px @color-lighter;
         border-radius: 5px;
         display: none;
 
         li {
+          display: block;
           white-space: nowrap;
 
           a {
@@ -653,6 +653,10 @@ body.admin-bar #container {
       outline: none;
       width: 60%;
       box-sizing:border-box;
+
+      &:active, &:focus {
+        background: @color-lighter;
+      }
     }
 
     label {
@@ -705,6 +709,32 @@ body.admin-bar #container {
     .info {
       display: inline-block;
       vertical-align: middle;
+    }
+  }
+}
+
+.row.info-image {
+  padding: 1em .5em;
+
+  & + .row.info-image {
+    border-top: 2px dashed @color-dark;
+  }
+  .info {
+    h3 {
+      font-size: 1.6em;
+      margin-bottom: .4em;
+    }
+
+    font-size: 1.5em;
+    color: @color-dark;
+    padding: 1em;
+  }
+
+  .image {
+    text-align :center;
+
+    img {
+      max-width: 100%;
     }
   }
 }

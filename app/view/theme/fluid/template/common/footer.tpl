@@ -12,7 +12,7 @@
 
 		<div id="links-footer">
 			<? if (has_links('footer')) { ?>
-			<div class="links-footer col xs-12 sm-6 md-4 lg-3 left">
+			<div class="links-footer col xs-12 sm-6 md-4 lg-3 xs-center sm-left">
 				<h4><?= _l("Useful Links"); ?></h4>
 
 				<div class="links">
@@ -22,7 +22,7 @@
 			<? } ?>
 
 			<? if (has_links('footer-resources')) { ?>
-			<div class="links-footer-resources col left xs-12 sm-6 md-4 lg-3">
+			<div class="links-footer-resources col xs-center sm-left xs-12 sm-6 md-4 lg-3">
 				<h4><?= _l("Resources"); ?></h4>
 
 				<div class="links">
@@ -32,7 +32,7 @@
 			<? } ?>
 
 			<? if (has_links('footer-more')) { ?>
-			<div class="links-footer-more col left xs-12 sm-6 md-4 lg-3">
+			<div class="links-footer-more col xs-center sm-left xs-12 sm-6 md-4 lg-3">
 				<h4><?= _l("More Information"); ?></h4>
 
 				<div class="links">
