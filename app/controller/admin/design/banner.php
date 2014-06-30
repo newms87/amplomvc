@@ -199,7 +199,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 				'banner_image_description' => $banner_image['banner_image_description'],
 				'link'                     => $banner_image['link'],
 				'image'                    => $image,
-				'thumb'                    => $this->image->resize($image, 100, 100),
+				'thumb'                    => image($image, 100, 100),
 				'sort_order'               => $banner_image['sort_order']
 			);
 		}
@@ -209,7 +209,7 @@ class App_Controller_Admin_Design_Banner extends Controller
 			1 => _l("Enabled"),
 		);
 
-		$data['no_image'] = $this->image->resize('no_image.png', 100, 100);
+		$data['no_image'] = image('no_image.png', 100, 100);
 
 		output($this->render('design/banner_form', $data));
 	}

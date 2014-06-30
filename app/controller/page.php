@@ -4,10 +4,6 @@ class App_Controller_Page extends Controller
 {
 	public function index()
 	{
-		if (_get('content')) {
-			return $this->content();
-		}
-
 		//The page
 		$page_id = _get('page_id', 0);
 
@@ -15,6 +11,10 @@ class App_Controller_Page extends Controller
 			$page = $this->Model_Page->getActivePage($page_id);
 		} else {
 			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
+		}
+
+		if (isset($_GET['content'])) {
+			return $this->content($page);
 		}
 
 		if (!$page) {
@@ -52,7 +52,9 @@ class App_Controller_Page extends Controller
 		//The page
 		$page_id = _get('page_id', 0);
 
-		$page += $this->Model_Page->getActivePage($page_id);
+		if ($page_id) {
+			$page += $this->Model_Page->getActivePage($page_id);
+		}
 
 		if (!$page) {
 			return '';

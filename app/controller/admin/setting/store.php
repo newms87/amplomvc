@@ -312,7 +312,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			$icon_files = array();
 
 			foreach ($sizes as $size) {
-				$url = $this->image->resize($_POST['icon'], $size[0], $size[1]);
+				$url = image($_POST['icon'], $size[0], $size[1]);
 
 				$icon_files[$size[0] . 'x' . $size[1]] = array(
 					'url'     => $url,

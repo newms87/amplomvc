@@ -16,7 +16,7 @@ class App_Controller_Block_Module_Press extends App_Controller_Block_Block
 		foreach ($settings['press_items'] as &$press) {
 			if (!empty($press['images'])) {
 				$thumb          = current($press['images']);
-				$press['thumb'] = $this->image->resize($thumb, $settings['image_width'], $settings['image_height']);
+				$press['thumb'] = image($thumb, $settings['image_width'], $settings['image_height']);
 
 				foreach ($press['images'] as &$image) {
 					if ($settings['auto_size']) {
@@ -25,7 +25,7 @@ class App_Controller_Block_Module_Press extends App_Controller_Block_Block
 						$width  = !empty($press['image_width']) ? $press['image_width'] : $settings['image_width'];
 						$height = !empty($press['image_height']) ? $press['image_height'] : $settings['image_height'];
 
-						$image = $this->image->resize($image, $width, $height);
+						$image = image($image, $width, $height);
 					}
 				}
 				unset($image);

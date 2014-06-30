@@ -27,7 +27,7 @@ $this->db->createTable('voucher_history', <<<SQL
   `voucher_id` INT UNSIGNED NOT NULL,
   `order_id` INT UNSIGNED NOT NULL,
   `amount` INT UNSIGNED NOT NULL,
-  `message` VARCHAR(255) NOT NULL,,
+  `message` VARCHAR(255) NOT NULL,
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`voucher_history_id`)
 SQL
@@ -40,6 +40,6 @@ $this->db->createTable('order_product_meta', <<<SQL
   `key` VARCHAR(45) NOT NULL,
   `value` TEXT NOT NULL,
   `serialized` TINYINT UNSIGNED NOT NULL,
-  PRIMARY KEY (`order_meta_id`)
+  PRIMARY KEY (`order_product_meta_id`)
 SQL
 );

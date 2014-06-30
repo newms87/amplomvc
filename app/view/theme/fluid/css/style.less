@@ -262,34 +262,67 @@ button, .button {
 .ac-checkbox {
   position: relative;
   left: -9999px;
+
+  &:after {
+    display: block;
+    content: '';
+    position: relative;
+    left: 9999px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border: 2px solid @color-dark;
+    cursor: pointer;
+    overflow: visible;
+  }
+
+  &:before {
+    content: url("@{themepath}image/remove-small.png");
+    position: absolute;
+    left: 9998px;
+    top: -2px;
+    z-index: 50;
+  }
+
+  &:checked:before,
+  .checked:before {
+    content: url("@{themepath}image/checkmark-small.png");
+    left: 10000px;
+    top: -7px;
+  }
 }
 
-.ac-checkbox:after {
-  display: block;
-  content: '';
-  position: relative;
-  left: 9999px;
-  top: 0;
-  width: 16px;
-  height: 16px;
-  border: 2px solid @color-dark;
-  cursor: pointer;
-  overflow: visible;
-}
-
-.ac-checkbox:before {
-  content: url("@{themepath}image/remove-small.png");
+.image-checkbox, .form .form-item input.image-checkbox[type="checkbox"] {
   position: absolute;
-  left: 9998px;
-  top: -2px;
-  z-index: 50;
-}
+  left: -9999px;
 
-.ac-checkbox:checked:before,
-.ac-checkbox.checked:before {
-  content: url("@{themepath}image/checkmark-small.png");
-  left: 10000px;
-  top: -7px;
+  & + label {
+    color: #BBBBBB;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    top: 0;
+    left: 0;
+    min-width: 180px;
+
+    img {
+      filter: gray;
+      -webkit-filter: grayscale(1);
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  &:checked + label, &.checked + label {
+    color: @color-dark;
+
+    img {
+      filter: none;
+      -webkit-filter: grayscale(0);
+    }
+  }
 }
 
 //Tables

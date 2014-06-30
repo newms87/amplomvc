@@ -264,7 +264,7 @@ class Extend extends Library
 		$height = option('config_image_admin_list_height');
 
 		//Performance Optimization: Much quicker to resize (plus caching) than evaluate color or large image
-		$image = str_replace(URL_IMAGE, DIR_IMAGE, $this->image->resize($data[$column], $width, $height));
+		$image = str_replace(URL_IMAGE, DIR_IMAGE, image($data[$column], $width, $height));
 
 		$colors = $this->image->get_dominant_color($image);
 

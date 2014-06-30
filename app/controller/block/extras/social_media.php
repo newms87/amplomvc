@@ -15,7 +15,7 @@ class App_Controller_Block_Extras_SocialMedia extends App_Controller_Block_Block
 			}
 
 			foreach ($settings['networks'] as &$network) {
-				$network['thumb'] = $this->image->resize($network['icon'], $settings['width'], $settings['height']);
+				$network['thumb'] = image($network['icon'], $settings['width'], $settings['height']);
 			}
 			unset($network);
 
@@ -45,13 +45,13 @@ class App_Controller_Block_Extras_SocialMedia extends App_Controller_Block_Block
 		}
 
 		foreach ($settings['networks'] as &$network) {
-			$network['thumb'] = $this->image->resize($network['icon'], $thumb_width, $thumb_height);
+			$network['thumb'] = image($network['icon'], $thumb_width, $thumb_height);
 		}
 
 		$settings['thumb_width']  = $thumb_width;
 		$settings['thumb_height'] = $thumb_height;
 
-		$settings['no_image'] = $this->image->resize('no_image.png', $thumb_width, $thumb_height);
+		$settings['no_image'] = image('no_image.png', $thumb_width, $thumb_height);
 
 		$this->render('block/extras/social_media_settings', $settings);
 	}

@@ -8,7 +8,7 @@ class App_Controller_Block_Localisation_Language extends App_Controller_Block_Bl
 		$languages = $this->language->getLanguages();
 
 		foreach ($languages as &$language) {
-			$language['thumb'] = $this->image->resize(DIR_IMAGE . 'flags/' . $language['image'], 16, 11);
+			$language['thumb'] = image(DIR_IMAGE . 'flags/' . $language['image'], 16, 11);
 		}
 
 		$data['languages'] = $languages;

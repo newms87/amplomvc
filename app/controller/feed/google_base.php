@@ -24,9 +24,9 @@ class App_Controller_Feed_GoogleBase extends Controller
 					$output .= '<g:id>' . $product['product_id'] . '</g:id>';
 
 					if ($product['image']) {
-						$output .= '<g:image_link>' . $this->image->resize($product['image'], 500, 500) . '</g:image_link>';
+						$output .= '<g:image_link>' . image($product['image'], 500, 500) . '</g:image_link>';
 					} else {
-						$output .= '<g:image_link>' . $this->image->resize('no_image.png', 500, 500) . '</g:image_link>';
+						$output .= '<g:image_link>' . image('no_image.png', 500, 500) . '</g:image_link>';
 					}
 
 					$output .= '<g:mpn>' . $product['model'] . '</g:mpn>';
