@@ -260,11 +260,12 @@ function attrs($data)
 function build($type, $params)
 {
 	$params += array(
-		'name'   => '',
-		'data'   => null,
-		'select' => array(),
-		'key'    => null,
-		'value'  => null,
+		'name'     => '',
+		'data'     => null,
+		'select'   => array(),
+		'key'      => null,
+		'value'    => null,
+		'readonly' => false,
 	);
 
 	if (!is_array($params['data'])) {
@@ -277,6 +278,7 @@ function build($type, $params)
 	$select      = $params['select'];
 	$build_key   = $params['key'];
 	$build_value = $params['value'];
+	$readonly    = $params['readonly'];
 
 	if (!isset($params['#class'])) {
 		$params['#class'] = "builder-$type";
@@ -284,10 +286,44 @@ function build($type, $params)
 		$params['#class'] .= " builder-$type";
 	}
 
+	if ($readonly) {
+		$params['#class'] .= ' read-only';
+	}
+
+	//Type Specific groupings
+	$text_types = array(
+		'text',
+		'int',
+		'float',
+		'decimal',
+		'date',
+		'time',
+		'datetime',
+	);
+
+	$date_types = array(
+		'date',
+		'time',
+		'datetime',
+	);
+
+	//Add Date / Time picker
+	if (in_array($type, $date_types)) {
+		if ($readonly) {
+			$select = format('date', $select, $type . '_format_short');
+		} else {
+			$params['#class'] .= ' ' . $type . 'picker';
+		}
+	}
+
 	$attrs = attrs($params);
 
-	if ($type === 'text') {
-		return "<input type=\"text\" $attrs name=\"$name\" value=\"$select\" />";
+	if (in_array($type, $text_types)) {
+		if ($readonly) {
+			return "<span $attrs>$select</span>";
+		} else {
+			return "<input type=\"text\" $attrs name=\"$name\" value=\"$select\" />";
+		}
 	}
 
 	//This is for select option groups
@@ -332,6 +368,13 @@ function build($type, $params)
 			}
 		}
 
+		if ($readonly) {
+			if ($selected) {
+				$options .= "<div class=\"value\">$value</div>";
+			}
+			continue;
+		}
+
 		$uniqid = uniqid($name . '-' . $key);
 
 		switch ($type) {
@@ -373,6 +416,10 @@ function build($type, $params)
 			default:
 				break;
 		}
+	}
+
+	if ($readonly) {
+		return "<div $attrs>$options</div>";
 	}
 
 	switch ($type) {

@@ -942,6 +942,10 @@ button, .button {
         &.empty {
           background: yellow;
 
+          & + * {
+            display: none;
+          }
+
           &:after {
             content: "is blank";
           }
@@ -1278,8 +1282,6 @@ button, .button {
 
       &:hover {
         box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-        top: 1px;
-        left: 1px;
       }
     }
   }

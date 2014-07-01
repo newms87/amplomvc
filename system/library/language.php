@@ -56,7 +56,13 @@ class Language extends Library
 		if (!isset($this->loaded[$language_id])) {
 			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = " . (int)$language_id);
 
-			$this->loaded[$language_id] = $language + $this->defaults;
+			foreach ($this->defaults as $key => $default) {
+				if (empty($language[$key])) {
+					$language[$key] = $default;
+				}
+			}
+
+			$this->loaded[$language_id] = $language;
 		}
 
 		return $this->loaded[$language_id];
@@ -83,6 +89,12 @@ class Language extends Library
 	{
 		if (!is_array($language)) {
 			$language = $this->getLanguage((int)$language);
+		} else {
+			foreach ($this->defaults as $key => $default) {
+				if (empty($language[$key])) {
+					$language[$key] = $default;
+				}
+			}
 		}
 
 		$this->language_id = $language['language_id'];

@@ -3,6 +3,11 @@ class App_Model_Block_Widget_Views extends Model
 {
 	public function save($view_id, $view)
 	{
+		if (!isset($view['group'])) {
+			$this->error = _l("View group is required");
+			return false;
+		}
+
 		if (!isset($view['name'])) {
 			$view['name'] = slug($view['title']);
 		}
@@ -25,15 +30,26 @@ class App_Model_Block_Widget_Views extends Model
 		return $this->queryRow("SELECT * FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
 	}
 
-	public function getViews($path)
+	public function getViews($group)
 	{
-		$views = $this->queryRows("SELECT * FROM " . $this->prefix . "view WHERE `path` = '" . $this->escape($path) . "'");
+		$views = $this->queryRows("SELECT * FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($group) . "'");
 
 		foreach ($views as &$view) {
 			parse_str($view['query'], $view['query']);
 		} unset($view);
 
 		return $views;
+	}
+
+	public function removeGroup($group)
+	{
+		$views = $this->getViews($group);
+
+		foreach ($views as $view) {
+			$this->remove($view['view_id']);
+		}
+
+		return true;
 	}
 
 	public function remove($view_id)

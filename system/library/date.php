@@ -246,10 +246,12 @@ class Date extends Library
 				case 'long':
 					$format = $this->language->info('date_format_long');
 					break;
-				case 'time_format';
+				case 'time_format':
+				case 'time_format_short':
 				case'time':
 					$format = $this->language->info('time_format');
 					break;
+				case 'datetime_format_short':
 				case 'datetime_format_medium':
 				case 'datetime_medium':
 					$format = $this->language->info('datetime_format_medium');

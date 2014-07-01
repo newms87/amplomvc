@@ -46,7 +46,7 @@ class App_Model_User_User extends Model
 	public function remove($user_id)
 	{
 		$this->cache->delete('user');
-		
+
 		return $this->delete('user', $user_id);
 	}
 

@@ -3,7 +3,7 @@
 		<? foreach ($views as $row => $view) {
 			$_GET = $view['query']; ?>
 
-			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?>" data-row="<?= $row; ?>" data-path="<?= $view['path']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
+			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-path="<?= $view['path']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
 				<div class="view-header clearfix">
 					<h3 class="view-title" contenteditable><?= $view['title']; ?></h3>
 
@@ -43,10 +43,11 @@
 
 		var data = {
 			view_id: $view.attr('data-view-id'),
-			path:    $view.attr('data-path'),
-			query:   query,
-			title:   $view.find('.view-title').html(),
-			show:    $view.hasClass("show") ? 1 : 0
+			group: $view.attr('data-group'),
+			path: $view.attr('data-path'),
+			query: query,
+			title: $view.find('.view-title').html(),
+			show: $view.hasClass("show") ? 1 : 0
 		}
 
 		$this.loading();

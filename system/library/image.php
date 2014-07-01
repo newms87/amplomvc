@@ -221,7 +221,7 @@ class Image extends Library
 			$extension = $info['extension'];
 		}
 
-		$new_image_path = 'cache/' . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
+		$new_image_path = 'cache/' . ($info['dirname'] ? $info['dirname'] . '/' : '') . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
