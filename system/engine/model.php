@@ -365,11 +365,10 @@ abstract class Model
 					$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
 					break;
 
-				case 'equals':
-					$where .= " AND `$t`.`$key` " . ($not?'!=':'=') . " '" . $this->escape($value) . "'";
-					break;
-
-				case 'text_in':
+				case 'date':
+				case 'datetime':
+				case 'time':
+				case 'text':
 					if (is_array($value)) {
 						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " ('" . implode("','", $this->escape($value)) . "')";
 					} else {
@@ -377,20 +376,25 @@ abstract class Model
 					}
 					break;
 
-				case 'float_equals':
-				case 'int_equals':
-					$value = $type === 'int_equals' ? (int)$value : (float)$value;
-				case 'number_equals':
-					$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
+				case 'number':
+				case 'float':
+				case 'int':
+					if (is_array($value)) {
+						array_walk($value, function (&$a) use ($type) {
+							$a = $type === 'int' ? (int)$a : (float)$a;
+						});
+
+						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+					} else {
+						$value = $type === 'int' ? (int)$value : (float)$value;
+						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
+					}
 					break;
 
-				case 'float_in':
-				case 'int_in':
-					array_walk($value, function (&$a) use ($type) {
-						$a = $type === 'int_in' ? (int)$a : (float)$a;
-					});
-				case 'number_in':
-					$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+				case 'number_range':
+					break;
+
+				case 'date_range':
 					break;
 
 			}
