@@ -1,4 +1,5 @@
 ac_config.php
+*.git
 /.idea
 /.idea/*
 .htaccess
