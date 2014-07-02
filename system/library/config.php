@@ -171,7 +171,7 @@ class Config extends Library
 		}
 
 		//Serialize if necessary
-		if (is_array($value) || is_object($value)) {
+		if (_is_object($value)) {
 			$entry_value = serialize($value);
 			$serialized  = 1;
 		} else {

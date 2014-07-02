@@ -355,7 +355,7 @@ class Customer extends Library
 			return false;
 		}
 
-		if (is_object($value) || is_array($value) || is_resource($value)) {
+		if (_is_object($value)) {
 			$value      = serialize($value);
 			$serialized = 1;
 		} else {

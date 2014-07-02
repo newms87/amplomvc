@@ -23,10 +23,18 @@ class App_Model_User_User extends Model
 		//New User
 		if (!$user_id) {
 			$data['date_added'] = $this->date->now();
-			$user_id = $this->insert('user', $data);
+			$user_id            = $this->insert('user', $data);
 		} else {
 			//Update User
 			$user_id = $this->update('user', $data, $user_id);
+		}
+
+		if (!empty($data['meta_exactly']) && !isset($data['meta'])) {
+			$data['meta'] = array();
+		}
+
+		if (isset($data['meta'])) {
+			$this->setMeta($user_id, $data['meta'], !empty($data['meta_exactly']));
 		}
 
 		return $user_id;
@@ -53,6 +61,58 @@ class App_Model_User_User extends Model
 	public function getUser($user_id)
 	{
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
+	}
+
+	public function setMeta($user_id, $meta, $exactly = false)
+	{
+		if ($exactly) {
+			$this->delete('user_meta', array('user_id' => $user_id));
+		}
+
+		foreach ($meta as $key => $value) {
+			if (_is_object($value)) {
+				$value      = serialize($value);
+				$serialized = 1;
+			} else {
+				$serialized = 0;
+			}
+
+			if (!$exactly) {
+				//Delete old value (if any)
+				$where = array(
+					'user_id' => $user_id,
+					'key'     => $key,
+				);
+
+				$this->delete('user_meta', $where);
+			}
+
+			//Add new value
+			$data = array(
+				'user_id'    => $user_id,
+				'key'        => $key,
+				'value'      => $value,
+				'serialized' => $serialized,
+			);
+
+			$this->insert('user_meta', $data);
+		}
+
+		return true;
+	}
+
+	public function getMeta($user_id)
+	{
+		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+
+		foreach ($meta as &$m) {
+			if ($m['serialized']) {
+				$m['value'] = unserialize($m['value']);
+			}
+		}
+		unset($m);
+
+		return $meta;
 	}
 
 	public function getUserByUsername($username)
@@ -195,7 +255,10 @@ class App_Model_User_User extends Model
 				'type'         => 'select',
 				'display_name' => _l("Role"),
 				'build_data'   => $this->Model_User_Role->getRoles(),
-				'build_config' => array('user_role_id', 'name'),
+				'build_config' => array(
+					'user_role_id',
+					'name'
+				),
 				'filter'       => 'select',
 				'sortable'     => true,
 			),

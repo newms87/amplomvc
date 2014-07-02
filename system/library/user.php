@@ -180,7 +180,7 @@ class User extends Library
 
 	public function addMeta($user_id, $key, $value)
 	{
-		if (is_array($value) || is_object($value) || is_resource($value)) {
+		if (_is_object($value)) {
 			$serialized = 1;
 			$value      = serialize($value);
 		} else {
@@ -217,7 +217,7 @@ class User extends Library
 		);
 
 		if (!is_null($value)) {
-			if (is_array($value) || is_object($value) || is_resource($value)) {
+			if (_is_object($value)) {
 				$value = serialize($value);
 			}
 

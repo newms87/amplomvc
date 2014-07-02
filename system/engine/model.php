@@ -261,7 +261,7 @@ abstract class Model
 		$data = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {
-			if (is_resource($value) || is_array($value) || is_object($value)) {
+			if (_is_object($value)) {
 				trigger_error(_l("%s(): The field %s was given a value that was not a valid type! Value: %s.", __METHOD__, $key, gettype($value)));
 				exit;
 			}

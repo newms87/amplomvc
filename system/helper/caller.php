@@ -508,3 +508,7 @@ function output($output)
 	global $registry;
 	$registry->get('response')->setOutput($output);
 }
+
+function _is_object($o) {
+	return is_array($o) || is_object($o) || is_resource($o);
+}

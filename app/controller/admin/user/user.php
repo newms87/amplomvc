@@ -51,44 +51,9 @@ class App_Controller_Admin_User_User extends Controller
 	public function listing()
 	{
 		//The Table Columns
-		$columns = array();
+		$requested_cols = $this->request->get('columns');
 
-		$columns['username'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Username"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Name"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['user_role_id'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Role"),
-			'build_data'   => $this->Model_User_Role->getRoles(),
-			'build_config' => array(
-				'user_role_id',
-				'name'
-			),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'filter'       => true,
-			'sortable'     => true,
-		);
+		$columns = $this->Model_User_User->getColumns($requested_cols);
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
@@ -123,12 +88,14 @@ class App_Controller_Admin_User_User extends Controller
 
 		$listing = array(
 			'row_id'         => 'user_id',
+			'extra_cols'     => $this->Model_User_User->getColumns(false),
 			'columns'        => $columns,
 			'rows'           => $users,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_total,
 			'listing_path'   => 'admin/user/user/listing',
+			'save_path'      => 'admin/user/user/save',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -159,6 +126,8 @@ class App_Controller_Admin_User_User extends Controller
 
 		if ($user_id && !IS_POST) {
 			$user = $this->Model_User_User->getUser($user_id);
+
+			$user['meta'] = $this->Model_User_User->getMeta($user_id);
 		}
 
 		$defaults = array(
@@ -168,6 +137,7 @@ class App_Controller_Admin_User_User extends Controller
 			'email'        => '',
 			'user_role_id' => option('config_default_user_role', 12),
 			'status'       => 1,
+			'meta'         => array(),
 		);
 
 		$user += $defaults;
@@ -177,6 +147,11 @@ class App_Controller_Admin_User_User extends Controller
 		$user['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
+		);
+
+		$user['meta']['__ac_template__'] = array(
+			'key'   => 'my-key',
+			'value' => '',
 		);
 
 		//Actions
@@ -189,7 +164,7 @@ class App_Controller_Admin_User_User extends Controller
 	public function save()
 	{
 		if ($this->Model_User_User->save(_request('user_id'), $_POST)) {
-			message('success', _l("The Page has been updated successfully!"));
+			message('success', _l("The User has been updated successfully!"));
 		} else {
 			message('error', $this->Model_User_User->getError());
 		}
@@ -223,11 +198,11 @@ class App_Controller_Admin_User_User extends Controller
 		foreach (_post('batch', array()) as $user_id) {
 			switch ($_POST['action']) {
 				case 'enable':
-					$this->Model_User_User->edit($user_id, array('status' => 1));
+					$this->Model_User_User->save($user_id, array('status' => 1));
 					break;
 
 				case 'disable':
-					$this->Model_User_User->edit($user_id, array('status' => 0));
+					$this->Model_User_User->save($user_id, array('status' => 0));
 					break;
 
 				case 'delete':
@@ -239,7 +214,7 @@ class App_Controller_Admin_User_User extends Controller
 		if ($this->Model_User_User->hasError()) {
 			message('error', $this->Model_User_User->getError());
 		} else {
-			message('success', _l("Success: You have modified navigation!"));
+			message('success', _l("Users were updated successfully!"));
 		}
 
 		if (IS_AJAX) {
