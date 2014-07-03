@@ -22,8 +22,8 @@ class App_Controller_Admin_Block extends Controller
 		);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Blocks"), site_url('admin/block'));
 
 		//The Listing
 		$data['listing'] = $this->listing();
@@ -140,9 +140,9 @@ class App_Controller_Admin_Block extends Controller
 		$this->document->addStyle(theme_dir('block/' . $path . '/style.less'));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
-		$this->breadcrumb->add($path, site_url('admin/block/form', 'path=' . $path));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Blocks"), site_url('admin/block'));
+		breadcrumb($path, site_url('admin/block/form', 'path=' . $path));
 
 		//Entry Data
 		$block = array();
@@ -203,9 +203,9 @@ class App_Controller_Admin_Block extends Controller
 		$this->document->setTitle(_l("New Block"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Blocks"), site_url('admin/block'));
-		$this->breadcrumb->add(_l("New Block"), site_url('admin/block/add'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Blocks"), site_url('admin/block'));
+		breadcrumb(_l("New Block"), site_url('admin/block/add'));
 
 		$defaults = array(
 			'name'                => '',

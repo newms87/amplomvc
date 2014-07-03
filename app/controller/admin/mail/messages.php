@@ -13,8 +13,8 @@ class App_Controller_Admin_Mail_Messages extends Controller
 			message('success', _l("Success: You have modified mail messages!"));
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Mail Messages"), site_url('admin/mail/messages'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Mail Messages"), site_url('admin/mail/messages'));
 
 		$data['action'] = site_url('admin/mail/messages');
 

@@ -7,8 +7,8 @@ class App_Controller_Error_NotFound extends Controller
 		$this->document->setTitle(_l("The page you requested cannot be found!"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Not Found"), $this->url->here());
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Not Found"), $this->url->here());
 
 		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 

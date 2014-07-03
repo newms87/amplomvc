@@ -17,8 +17,8 @@ class App_Controller_Admin_User_User extends Controller
 		$this->document->setTitle(_l("User"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User"), site_url('admin/user/user'));
 
 		//Listing
 		$data['listing'] = $this->listing();
@@ -117,9 +117,9 @@ class App_Controller_Admin_User_User extends Controller
 		$user_id = _get('user_id', null);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("User"), site_url('admin/user/user'));
-		$this->breadcrumb->add($user_id ? _l("Update") : _l("New"), site_url('admin/user/user/form', 'user_id=' . $user_id));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User"), site_url('admin/user/user'));
+		breadcrumb($user_id ? _l("Update") : _l("New"), site_url('admin/user/user/form', 'user_id=' . $user_id));
 
 		//The Data
 		$user = $_POST;

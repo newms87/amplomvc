@@ -14,8 +14,8 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Send Email"), site_url('admin/mail/send_email'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Send Email"), site_url('admin/mail/send_email'));
 
 		$data['action'] = site_url('admin/mail/send_email');
 

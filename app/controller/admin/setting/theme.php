@@ -37,9 +37,9 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/setting'));
-		$this->breadcrumb->add(_l("Theme for %s", $store['name']), site_url('admin/setting/theme'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/setting/setting'));
+		breadcrumb(_l("Theme for %s", $store['name']), site_url('admin/setting/theme'));
 
 		//Load Data or Defaults
 		$theme_configs = $this->theme->getThemeConfigs($store_id, $theme);

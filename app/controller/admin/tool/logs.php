@@ -12,9 +12,9 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$this->document->setTitle(_l("%s Log", $log_name));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('admin'));
-		$this->breadcrumb->add(_l('Log Files'), site_url('admin/tool/logs'));
-		$this->breadcrumb->add(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
+		breadcrumb(_l('Home'), site_url('admin'));
+		breadcrumb(_l('Log Files'), site_url('admin/tool/logs'));
+		breadcrumb(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
 
 		//Sort and Filter
 		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');

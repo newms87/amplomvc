@@ -16,8 +16,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$this->document->setTitle(_l("Settings"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
 
 		//Settings Items
 		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
@@ -122,9 +122,9 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store_id = _get('store_id', 0);
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
-		$this->breadcrumb->add(_l("Store"), site_url('admin/setting/store/form', 'store_id=' . $store_id));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
+		breadcrumb(_l("Store"), site_url('admin/setting/store/form', 'store_id=' . $store_id));
 
 		//Store Data
 		$store = $_POST;

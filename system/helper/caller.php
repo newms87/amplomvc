@@ -43,6 +43,12 @@ function has_links($group)
 	return $registry->get('document')->hasLinks($group);
 }
 
+function breadcrumb($name, $url, $separator = '', $position = null)
+{
+	global $registry;
+	$registry->get('breadcrumb')->add($name, $url, $separator, $position);
+}
+
 function breadcrumbs()
 {
 	global $registry;

@@ -218,6 +218,11 @@
 						if (!empty($row['actions'])) {
 							foreach ($row['actions'] as $key => $action) {
 								$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
+
+								if (!empty($action['ajax'])) {
+									$action['#class'] .= ' colorbox';
+								}
+
 								if (!empty($action['href'])) {
 									$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
 								} else {
@@ -345,6 +350,9 @@
 				<div class="input">
 					<? switch ($column['type']) {
 						case 'text':
+						case 'int':
+						case 'float':
+						case 'decimal':
 							?>
 							<input type="text" class="input-value"/>
 							<? break;

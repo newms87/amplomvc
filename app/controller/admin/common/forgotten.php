@@ -30,8 +30,8 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Forgotten Password"), site_url('admin/common/forgotten'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Forgotten Password"), site_url('admin/common/forgotten'));
 
 		//Entry Data
 		$data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
@@ -80,8 +80,8 @@ class App_Controller_Admin_Common_Forgotten extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url('admin'));
-		$this->breadcrumb->add(_l('Password Reset'), site_url('admin/common/forgotten/reset', 'code=' . $code));
+		breadcrumb(_l('Home'), site_url('admin'));
+		breadcrumb(_l('Password Reset'), site_url('admin/common/forgotten/reset', 'code=' . $code));
 
 		//Action Buttons
 		$data['save']   = site_url('admin/common/forgotten/reset', 'code=' . $code);

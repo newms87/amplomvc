@@ -17,8 +17,8 @@ class App_Controller_Admin_User_Role extends Controller
 		$this->document->setTitle(_l("User Roles"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("User Roles"), site_url('admin/user/role'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User Roles"), site_url('admin/user/role'));
 
 		//Batch Actions
 		$actions = array(
@@ -106,9 +106,9 @@ class App_Controller_Admin_User_Role extends Controller
 		$user_role_id = !empty($_GET['user_role_id']) ? (int)$_GET['user_role_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("User Roles"), site_url('admin/user/role'));
-		$this->breadcrumb->add($user_role_id ? _l("Update") : _l("New"), site_url('admin/user/role/form', 'user_role_id=' . $user_role_id));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User Roles"), site_url('admin/user/role'));
+		breadcrumb($user_role_id ? _l("Update") : _l("New"), site_url('admin/user/role/form', 'user_role_id=' . $user_role_id));
 
 		//The Data
 		$user_role = $_POST;

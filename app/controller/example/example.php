@@ -31,8 +31,8 @@ class App_Controller_Example_Example extends Controller
 		$this->document->setTitle(_l("My Page Title"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Example"), site_url('example/example'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Example"), site_url('example/example'));
 
 		//Template Data
 		$data = $page;

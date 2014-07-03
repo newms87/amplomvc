@@ -14,9 +14,9 @@ class App_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Book"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Account"), site_url('account'));
-		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Account"), site_url('account'));
+		breadcrumb(_l("Address Book"), site_url('account/address'));
 
 		//Load Addresses
 		$addresses = $this->customer->getAddresses();
@@ -107,12 +107,12 @@ class App_Controller_Account_Address extends Controller
 		$this->document->setTitle(_l("Address Form"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Account"), site_url('account'));
-		$this->breadcrumb->add(_l("Address Book"), site_url('account/address'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Account"), site_url('account'));
+		breadcrumb(_l("Address Book"), site_url('account/address'));
 
 		$crumb_url = isset($_GET['address_id']) ? site_url('account/address/update') : site_url('account/address/update');
-		$this->breadcrumb->add(_l("Address Book"), $crumb_url);
+		breadcrumb(_l("Address Book"), $crumb_url);
 
 		//Insert or Update
 		$address_id = !empty($_GET['address_id']) ? (int)$_GET['address_id'] : 0;

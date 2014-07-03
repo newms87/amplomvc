@@ -23,8 +23,8 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Account Login"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Login"), site_url('customer/login'));
 
 		//Input Data
 		$user_info = array();
@@ -102,9 +102,9 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Register Account"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Login"), site_url('customer/login'));
-		$this->breadcrumb->add(_l("Register"), site_url('customer/registration'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Login"), site_url('customer/login'));
+		breadcrumb(_l("Register"), site_url('customer/registration'));
 
 		$registration_data = array();
 
@@ -182,9 +182,9 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Your Account Has Been Created!"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url());
-		$this->breadcrumb->add(_l("Account"), site_url('account'));
-		$this->breadcrumb->add(_l("Your Account Has Been Created!"), site_url('customer/success'));
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("Account"), site_url('account'));
+		breadcrumb(_l("Your Account Has Been Created!"), site_url('customer/success'));
 
 		//Render
 		output($this->render('customer/success'));
@@ -196,9 +196,9 @@ class App_Controller_Customer extends Controller
 		$this->document->setTitle(_l("Forgot Your Password?"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url());
-		$this->breadcrumb->add(_l('Login'), site_url('customer/login'));
-		$this->breadcrumb->add(_l('Forgotten Password'), site_url('customer/forgotten'));
+		breadcrumb(_l('Home'), site_url());
+		breadcrumb(_l('Login'), site_url('customer/login'));
+		breadcrumb(_l('Forgotten Password'), site_url('customer/forgotten'));
 
 		//Action Buttons
 		$data['save'] = site_url('customer/generate_reset_code');
@@ -246,8 +246,8 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l('Home'), site_url());
-		$this->breadcrumb->add(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
+		breadcrumb(_l('Home'), site_url());
+		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
 		//Action Buttons
 		$data['save']   = site_url('customer/reset_password', 'code=' . $code);

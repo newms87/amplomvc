@@ -18,8 +18,8 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$this->document->setTitle(_l("Navigation"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Navigation"), site_url('admin/design/navigation'));
 
 		//Batch Actions
 		$actions = array(
@@ -198,13 +198,13 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Navigation"), site_url('admin/design/navigation'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Navigation"), site_url('admin/design/navigation'));
 
 		if ($navigation_group_id) {
-			$this->breadcrumb->add(_l("Edit"), site_url('admin/design/navigation', 'navigation_group_id=' . $navigation_group_id));
+			breadcrumb(_l("Edit"), site_url('admin/design/navigation', 'navigation_group_id=' . $navigation_group_id));
 		} else {
-			$this->breadcrumb->add(_l("Add"), site_url('admin/design/navigation'));
+			breadcrumb(_l("Add"), site_url('admin/design/navigation'));
 		}
 
 		//Load Values or Defaults

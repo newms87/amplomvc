@@ -29,9 +29,9 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
-		$this->breadcrumb->add(_l("General Settings"), site_url('admin/setting/setting'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
+		breadcrumb(_l("General Settings"), site_url('admin/setting/setting'));
 
 		//Load Information
 		if (!IS_POST) {

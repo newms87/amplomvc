@@ -81,8 +81,8 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Layouts"), site_url('admin/design/layout'));
 
 		//The Table Columns
 		$columns = array();
@@ -180,8 +180,8 @@ class App_Controller_Admin_Design_Layout extends Controller
 		$this->document->setTitle(_l("Layouts"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Layouts"), site_url('admin/design/layout'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Layouts"), site_url('admin/design/layout'));
 
 		//Insert or Update
 		$layout_id = isset($_GET['layout_id']) ? (int)$_GET['layout_id'] : 0;

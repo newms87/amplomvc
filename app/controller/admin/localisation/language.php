@@ -77,8 +77,8 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Language"), site_url('admin/localisation/language'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Language"), site_url('admin/localisation/language'));
 
 		$data['insert'] = site_url('admin/localisation/language/insert', $url);
 		$data['delete'] = site_url('admin/localisation/language/delete', $url);
@@ -162,8 +162,8 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Language"), site_url('admin/localisation/language'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Language"), site_url('admin/localisation/language'));
 
 		if (!$language_id) {
 			$data['action'] = site_url('admin/localisation/language/insert', $url);

@@ -133,8 +133,8 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Country"), site_url('admin/localisation/country', $url));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Country"), site_url('admin/localisation/country', $url));
 
 		$data['insert'] = site_url('admin/localisation/country/insert', $url);
 		$data['delete'] = site_url('admin/localisation/country/delete', $url);
@@ -248,8 +248,8 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Country"), site_url('admin/localisation/country', $url));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Country"), site_url('admin/localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
 			$data['action'] = site_url('admin/localisation/country/insert', $url);

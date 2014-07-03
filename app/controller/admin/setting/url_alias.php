@@ -13,9 +13,9 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$this->document->setTitle(_l("URL Aliases"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("Settings"), site_url('admin/setting/store'));
-		$this->breadcrumb->add(_l("URL Aliases"), site_url('admin/setting/url_alias'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url_alias'));
 
 		//The Table Columns
 		$columns = array();
@@ -221,13 +221,13 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_l("Home"), site_url('admin'));
-		$this->breadcrumb->add(_l("URL Aliases"), site_url('admin/setting/url_alias'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url_alias'));
 
 		if (!$url_alias_id) {
-			$this->breadcrumb->add(_l("Add"), site_url('admin/setting/url_alias/udpate'));
+			breadcrumb(_l("Add"), site_url('admin/setting/url_alias/udpate'));
 		} else {
-			$this->breadcrumb->add(_l("Edit"), site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
+			breadcrumb(_l("Edit"), site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
 
 		//Load Information
