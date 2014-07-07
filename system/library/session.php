@@ -109,8 +109,10 @@ class Session extends Library
 
 	public function setCookie($name, $value, $expire = 0)
 	{
-		$expire = $expire ? time() + $expire : 0;
-		setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
+		if (!headers_sent()) {
+			$expire = $expire ? time() + $expire : 0;
+			setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
+		}
 	}
 
 	public function deleteCookie($name)

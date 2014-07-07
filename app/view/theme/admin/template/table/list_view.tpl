@@ -251,12 +251,6 @@
 								echo $row['#' . $slug];
 							} elseif (!is_null($value)) {
 								switch ($column['type']) {
-									case 'text':
-									case 'int':
-										?>
-										<?= $value; ?>
-										<? break;
-
 									case 'date':
 										?>
 										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
@@ -317,8 +311,14 @@
 										}
 										break;
 
+									case 'text':
+									case 'int':
+									case 'float':
+									case 'decimal':
 									default:
-										break;
+										?>
+										<?= $value; ?>
+										<? break;
 								}
 							}?>
 							</td>
@@ -349,14 +349,6 @@
 			<div class="editable-option" data-field="<?= $field; ?>">
 				<div class="input">
 					<? switch ($column['type']) {
-						case 'text':
-						case 'int':
-						case 'float':
-						case 'decimal':
-							?>
-							<input type="text" class="input-value"/>
-							<? break;
-
 						case 'select':
 						case 'radio':
 						case 'checkbox':
@@ -375,6 +367,15 @@
 						case 'time':
 							?>
 							<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
+							<? break;
+
+						case 'text':
+						case 'int':
+						case 'float':
+						case 'decimal':
+						default:
+							?>
+								<input type="text" class="input-value"/>
 							<? break;
 					} ?>
 				</div>
@@ -472,8 +473,15 @@
 	});
 
 	$listview.find('.filter-list-item [name="batch[]"]').change(function () {
-		$(this).closest('.filter-list-item').toggleClass('active', $(this).prop('checked'));
-	});
+		var $this = $(this);
+		$this.closest('.filter-list-item').toggleClass('active', $this.prop('checked'));
+	})
+		.siblings('label').click(function(event) {
+			var $input = $('#'+$(this).attr('for'));
+			$input.prop('checked', !$input.prop('checked')).change();
+			event.stopPropagation(); return false;
+		});
+
 
 	$listview.find('.filter-button').click(function () {
 		var $this = $(this);

@@ -8,24 +8,16 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		if (empty($settings['group']) || empty($settings['path'])) {
-			$this->output = _l("Invalid View Options: 'group' and 'path' must be set");
-			return;
-		}
-
-		$action = new Action($settings['path']);
-
-		if (!$action->isValid()) {
+		if (empty($settings['group'])) {
+			$this->output = _l("Invalid View Options: 'group' must be set");
 			return;
 		}
 
 		//Defaults
 		$settings += array(
+			'path'          => '',
 			'default_query' => array(),
 		);
-
-		$settings['controller'] = $action->getController();
-		$settings['listing']    = $action->getMethod();
 
 		//Save Original Query
 		$orig_get = $_GET;
@@ -34,30 +26,50 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$views = $this->Model_Block_Widget_Views->getViews($settings['group']);
 
-
-		if (!$views) {
-			$views[] = array(
-				'view_id' => 0,
-				'group'   => $settings['group'],
-				'name'    => 'default',
-				'title'   => _l("Default"),
-				'path'    => $settings['path'],
-				'query'   => $_GET,
-				'show'    => 1,
-			);
-		}
-
-		$views['__ac_template__'] = array(
+		$default_view = array(
 			'view_id' => 0,
 			'group'   => $settings['group'],
-			'name'    => 'new-view-__ac_template__',
-			'title'   => 'New View __ac_template__',
+			'name'    => 'default',
+			'title'   => _l("Default"),
 			'path'    => $settings['path'],
 			'query'   => $_GET,
-			'show'    => 0,
+			'show'    => !empty($settings['path']) ? 1 : 0,
 		);
 
+		if (!$views) {
+			$views[] = $default_view;
+		}
+
+		//AC Template
+		$views['__ac_template__'] = array(
+				'name'  => 'new-view-__ac_template__',
+				'title' => 'New View __ac_template__',
+			) + $default_view;
+
+
+		foreach ($views as $key => &$view) {
+			if (empty($view['path'])) {
+				$view['show'] = 0;
+				continue;
+			}
+
+			if ($view['show']) {
+				$action = new Action($view['path']);
+
+				if (!$action->isValid()) {
+					unset($views[$key]);
+					continue;
+				}
+
+				$view['controller'] = $action->getController();
+				$view['method']     = $action->getMethod();
+			}
+		}
+		unset($view);
+
 		$settings['views'] = $views;
+
+		$settings['data_listing_paths'] = array('' => _l("(Select Path)")) + $this->Model_Block_Widget_Views->getListingPaths();
 
 		//Action
 		$settings['save_view']   = site_url('block/widget/views/save_view');

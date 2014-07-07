@@ -353,7 +353,7 @@ function build($type, $params)
 				$key = $value[$build_key];
 			}
 
-			$value = $value[$build_value];
+			$value = isset($value[$build_value]) ? $value[$build_value] : '';
 		}
 
 		//Determine if the value is a selected value.

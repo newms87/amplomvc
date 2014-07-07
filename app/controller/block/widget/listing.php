@@ -108,7 +108,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 					}
 				}
 
-				return 1;
+				return strtolower($settings['extra_cols'][$a]['display_name']) > strtolower($settings['extra_cols'][$b]['display_name']);
 			});
 		}
 

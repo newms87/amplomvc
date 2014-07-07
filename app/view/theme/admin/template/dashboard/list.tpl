@@ -13,14 +13,30 @@
 		</div>
 		<div class="section">
 			<div class="dashboards">
-			<? foreach ($dashboards as $dashboard) { ?>
-				<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>" class="dashboard">
-					<h2><?= $dashboard['name']; ?></h2>
-				</a>
-			<? } ?>
+				<? foreach ($dashboards as $dashboard) { ?>
+					<div class="dashboard">
+						<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>" class="view">
+							<h2><?= $dashboard['name']; ?></h2>
+						</a>
+						<a class="button remove" href="<?= site_url('admin/dashboard/remove', 'dashboard_id=' . $dashboard['dashboard_id']); ?>"><?= _l("X"); ?></a>
+					</div>
+				<? } ?>
+				<div class="dashboard">
+					<a href="<?= site_url('admin/dashboard/view'); ?>" class="view add-dashboard">
+						<h2><?= _l("+"); ?></h2>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$('.dashboard .remove').click(function (){
+		if (!confirm("<?= _l("Are you sure you want to remove this dashboard?"); ?>")) {
+			return false;
+		}
+	});
+</script>
 
 <?= call('admin/common/footer'); ?>

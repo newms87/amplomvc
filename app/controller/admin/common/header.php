@@ -87,6 +87,21 @@ class App_Controller_Admin_Common_Header extends Controller
 				}
 			}
 
+			if (user_can('access', 'dashboard')) {
+				$dashboards = $this->Model_Dashboard->getDashboards();
+
+				foreach ($dashboards as $dashboard) {
+					$dashboard_link = array(
+						'name' => 'dashboards_dash-' . $dashboard['dashboard_id'],
+					   'display_name' => strip_tags($dashboard['name']),
+					   'href' => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
+					   'parent' => 'dashboards',
+					);
+
+					$this->document->addLink('admin', $dashboard_link);
+				}
+			}
+
 			//Store Front Links
 			$link_stores = array(
 				'name'         => 'stores',

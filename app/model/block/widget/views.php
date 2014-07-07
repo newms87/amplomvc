@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Block_Widget_Views extends Model
 {
 	public function save($view_id, $view)
@@ -36,7 +37,8 @@ class App_Model_Block_Widget_Views extends Model
 
 		foreach ($views as &$view) {
 			parse_str($view['query'], $view['query']);
-		} unset($view);
+		}
+		unset($view);
 
 		return $views;
 	}
@@ -55,5 +57,27 @@ class App_Model_Block_Widget_Views extends Model
 	public function remove($view_id)
 	{
 		return $this->delete('view', $view_id);
+	}
+
+	public function getListingPaths()
+	{
+		$paths = array(
+			'scopes'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=roofscope',
+				'name'  => "Roofscope",
+			),
+			'clients' => array(
+				'path' => 'admin/client/listing',
+				'name' => 'Clients',
+			),
+			'pages'    => array(
+				'path'  => 'admin/page/listing',
+				'query' => '',
+				'name'  => 'Page List',
+			),
+		);
+
+		return $paths;
 	}
 }

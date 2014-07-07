@@ -332,6 +332,11 @@ class App_Model_Design_Navigation extends Model
 				'href'         => '',
 			),
 
+			'dashboards' => array(
+				'display_name' => "Dashboards",
+				'href'         => 'admin/dashboard',
+			),
+
 			'content' => array(
 				'display_name' => 'Content',
 				'children'     => array(

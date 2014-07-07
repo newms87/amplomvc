@@ -323,11 +323,11 @@ abstract class Model
 		$method = array(
 			self::NO_ESCAPE           => 'equals',
 			self::TEXT                => 'like',
-			self::AUTO_INCREMENT      => 'int_in',
-			self::AUTO_INCREMENT_PK   => 'int_in',
-			self::PRIMARY_KEY_INTEGER => 'int_in',
-			self::FLOAT               => 'float_in',
-			self::INTEGER             => 'int_in',
+			self::AUTO_INCREMENT      => 'int',
+			self::AUTO_INCREMENT_PK   => 'int',
+			self::PRIMARY_KEY_INTEGER => 'int',
+			self::FLOAT               => 'float',
+			self::INTEGER             => 'int',
 			self::DATETIME            => 'date',
 			self::IMAGE               => 'equals',
 		);
@@ -355,14 +355,18 @@ abstract class Model
 			}
 
 			if (is_array($columns[$key])) {
-				$type = isset($method[$columns[$key]['type']]) ? $method[$columns[$key]['type']] : 'equals';
+				$type = isset($method[$columns[$key]['type']]) ? $method[$columns[$key]['type']] : 'text';
 			} else {
 				$type = $columns[$key];
 			}
 
 			switch ($type) {
 				case 'like':
-					$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
+					if ($value) {
+						$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
+					} else {
+						$where .= " AND `$t`.`$key` = ''";
+					}
 					break;
 
 				case 'date':
@@ -385,9 +389,11 @@ abstract class Model
 						});
 
 						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
-					} else {
+					} elseif ($value) {
 						$value = $type === 'int' ? (int)$value : (float)$value;
 						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
+					} else {
+						$where .= " AND `$t`.`$key` IN (0,'')";
 					}
 					break;
 
@@ -448,7 +454,7 @@ abstract class Model
 		return $limit;
 	}
 
-	protected function getTableColumns($table, $merge = array(), $filter = array())
+	protected function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
 	{
 		$columns = cache('model.' . $table);
 
@@ -512,9 +518,18 @@ abstract class Model
 
 		if ($filter) {
 			$columns = array_intersect_key($columns, $filter);
-			uksort($columns, function ($a, $b) use ($filter) {
-				return $filter[$a] > $filter[$b];
-			});
+
+			if ($sort) {
+				uksort($columns, function ($a, $b) use ($filter) {
+					return $filter[$a] > $filter[$b];
+				});
+			}
+		}
+
+		foreach ($columns as $key => &$column) {
+			if (!isset($column['display_name'])) {
+				$column['display_name'] = isset($column['Field']) ? $column['Field'] : $key;
+			}
 		}
 
 		return $columns;
