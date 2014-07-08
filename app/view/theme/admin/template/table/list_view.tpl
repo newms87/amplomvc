@@ -393,6 +393,7 @@
 </div>
 
 <script type="text/javascript">
+	$('.table-list-view-box').draggable({axis: 'x'});
 	$.ac_datepicker();
 
 	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);

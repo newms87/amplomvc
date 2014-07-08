@@ -13,12 +13,13 @@
 					</div>
 
 					<div class="configure">
-						<select name="path">
-							<option value=""><?= _l("(Select Listing)"); ?></option>
-							<? foreach ($data_listing_paths as $path) { ?>
-								<option data-query="<?= $path['query']; ?>" value="<?= $path['path']; ?>" <?= $path['path'] === $view['path'] ? 'selected' : ''; ?>><?= $path['name']; ?></option>
-							<? } ?>
-						</select>
+						<?= build('select', array(
+							'name'   => 'listing_id',
+							'data'   => array('' => _l("(Select Listing)")) + $data_listings,
+							'select' => $view['listing_id'],
+							'key'    => false,
+							'value'  => 'name',
+						)); ?>
 					</div>
 
 					<div class="save-delete buttons">
@@ -42,6 +43,8 @@
 </div>
 
 <script type="text/javascript">
+	var listings = <?= json_encode($data_listings); ?>;
+
 	$('.configure [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
@@ -59,6 +62,7 @@
 		var data = {
 			view_id: $view.attr('data-view-id'),
 			group: $view.attr('data-group'),
+			listing_id: $view.find('[name=listing_id]').val(),
 			path: $view.find('[name=path]').val(),
 			query: query,
 			title: $view.find('.view-title').html(),
@@ -98,14 +102,22 @@
 	$('.show-view').click(function () {
 		var $view = $(this).closest('.widget-view').addClass('show');
 		var $hide = $view.find('.hide-view');
-		var $path = $view.find('[name=path]');
-		var query = $path.find('option[value="' + $path.val() + '"]').attr('data-query');
+		var listing_id = $view.find('[name=listing_id]').val();
+
+		if (!listing_id) {
+			return alert("<?= _l("Please Choose a listing first for this view"); ?>");
+		}
+
+		var listing = listings[listing_id];
 
 		$hide.loading();
 
 		$view.find('.widget-listing').addClass('loading');
 
-		$view.find('.listing').load($path.val() + '?' + (query ? query + '&' : '') + $view.attr('data-query'), function () {
+		var q = $view.attr('data-query');
+		query = (q ? q + '&' : '') + listing.query;
+
+		$view.find('.listing').load(listing.path + (query ? '?' + query : ''), function () {
 			$hide.loading('stop');
 		});
 	});
@@ -114,6 +126,7 @@
 
 	$('.add-view').click(function () {
 		var $vlist = $('.block-widget-view .widget-view-list').ac_template('v-list', 'add');
+		$vlist.find('[name=listing_id] option:first').prop('selected', true);
 		$vlist.find('.show-view').click();
 	});
 </script>

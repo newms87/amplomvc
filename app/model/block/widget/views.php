@@ -59,13 +59,39 @@ class App_Model_Block_Widget_Views extends Model
 		return $this->delete('view', $view_id);
 	}
 
-	public function getListingPaths()
+	public function getListings()
 	{
 		$paths = array(
-			'scopes'  => array(
+			'roofscope'  => array(
 				'path'  => 'admin/scopes/listing',
 				'query' => 'scope=roofscope',
-				'name'  => "Roofscope",
+				'name'  => "RoofScope",
+			),
+			'gutterscope'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=gutterscope',
+				'name'  => "GutterScope",
+			),
+
+			'paintscope'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=paintscope',
+				'name'  => "PaintScope",
+			),
+			'sidingscope'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=sidingscope',
+				'name'  => "SidingScope",
+			),
+			'insulationscope'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=insulationscope',
+				'name'  => "InsulationScope",
+			),
+			'concretescope'  => array(
+				'path'  => 'admin/scopes/listing',
+				'query' => 'scope=concretescope',
+				'name'  => "ConcreteScope",
 			),
 			'clients' => array(
 				'path'  => 'admin/client/listing',

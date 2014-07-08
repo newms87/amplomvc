@@ -38,7 +38,7 @@ $.ajax = function (params, p2) {
 
 //Load synchronously
 function syncload(s) {
-    if (!s.match(/^https?:\/\//)) {
+    if (s.indexOf('//') != 0 && !s.match(/^https?:\/\//)) {
         s = $ac.site_url + s;
     }
 
