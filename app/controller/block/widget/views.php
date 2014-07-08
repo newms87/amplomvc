@@ -16,6 +16,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		//Defaults
 		$settings += array(
 			'path'          => '',
+			'listing_id'    => '',
 			'default_query' => array(),
 		);
 
@@ -31,7 +32,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'group'      => $settings['group'],
 			'name'       => 'default',
 			'title'      => _l("Default"),
-			'listing_id' => '',
+			'listing_id' => $settings['listing_id'],
 			'path'       => $settings['path'],
 			'query'      => $_GET,
 			'show'       => !empty($settings['path']) ? 1 : 0,

@@ -126,7 +126,8 @@
 
 	$('.add-view').click(function () {
 		var $vlist = $('.block-widget-view .widget-view-list').ac_template('v-list', 'add');
-		$vlist.find('[name=listing_id] option:first').prop('selected', true);
-		$vlist.find('.show-view').click();
+		if ($vlist.find('[name=listing_id]').val()) {
+			$vlist.find('.show-view').click();
+		}
 	});
 </script>
