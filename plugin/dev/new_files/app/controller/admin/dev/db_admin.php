@@ -12,9 +12,9 @@ class App_Controller_Admin_Dev_DbAdmin extends Controller
 		$this->document->setTitle(_l("Database Administration"));
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'), '', 0);
-		$this->breadcrumb->add(_l("Development Console"), site_url('dev/dev'), '', 1);
-		$this->breadcrumb->add(_l("Database Administration"), site_url('dev/db_admin'));
+		breadcrumb(_l("Home"), site_url('admin'), '', 0);
+		breadcrumb(_l("Development Console"), site_url('dev/dev'), '', 1);
+		breadcrumb(_l("Database Administration"), site_url('dev/db_admin'));
 
 		$data = array();
 

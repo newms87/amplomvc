@@ -41,7 +41,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Synchronize Sites"), site_url('dev/dev/sync'));
+		breadcrumb(_l("Synchronize Sites"), site_url('dev/dev/sync'));
 
 		$data['request_sync_table'] = site_url('dev/dev/request_sync_table');
 
@@ -92,7 +92,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
-		$this->breadcrumb->add(_l("Site Management"), site_url('dev/dev/site_management'));
+		breadcrumb(_l("Site Management"), site_url('dev/dev/site_management'));
 
 		$defaults = array(
 			'domain'   => '',
@@ -177,7 +177,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			}
 		}
 
-		$this->breadcrumb->add(_l("Backup & Restore"), site_url('dev/dev/backup_restore'));
+		breadcrumb(_l("Backup & Restore"), site_url('dev/dev/backup_restore'));
 
 		$defaults = array(
 			'tables' => '',
@@ -214,8 +214,8 @@ class App_Controller_Admin_Dev_Dev extends Controller
 	{
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
-		$this->breadcrumb->add(_l("Home"), site_url('admin'), '', 0);
-		$this->breadcrumb->add(_l("Development Console"), site_url('dev/dev'), '', 1);
+		breadcrumb(_l("Home"), site_url('admin'), '', 0);
+		breadcrumb(_l("Development Console"), site_url('dev/dev'), '', 1);
 	}
 
 	public function request_table_data()
