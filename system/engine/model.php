@@ -384,20 +384,28 @@ abstract class Model
 				case 'float':
 				case 'int':
 					if (is_array($value)) {
-						array_walk($value, function (&$a) use ($type) {
-							$a = $type === 'int' ? (int)$a : (float)$a;
-						});
+						if (isset($value['low']) || isset($value['high'])) {
+							$low = isset($value['low']) ? "`$t`.`$key` " . ($not?'<':'>=') . " " . ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : '';
+							$high = isset($value['high']) ? "`$t`.`$key` " . ($not?'>':'<=') . " " . ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : '';
 
-						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+							if ($low && $high) {
+								$where .= " AND ($low " . ($not?'OR':'AND') . " $high)";
+							} else {
+								$where .= " AND " . ($low?$low:$high);
+							}
+						} else {
+							array_walk($value, function (&$a) use ($type) {
+								$a = $type === 'int' ? (int)$a : (float)$a;
+							});
+
+							$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+						}
 					} elseif ($value) {
 						$value = $type === 'int' ? (int)$value : (float)$value;
 						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
 					} else {
 						$where .= " AND `$t`.`$key` IN (0,'')";
 					}
-					break;
-
-				case 'number_range':
 					break;
 
 				case 'date_range':

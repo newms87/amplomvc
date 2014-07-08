@@ -16,7 +16,7 @@
 						<select name="path">
 							<option value=""><?= _l("(Select Listing)"); ?></option>
 							<? foreach ($data_listing_paths as $path) { ?>
-								<option data-query="<?= $path['query']; ?>" value="<?= $path['path']; ?>"><?= $path['name']; ?></option>
+								<option data-query="<?= $path['query']; ?>" value="<?= $path['path']; ?>" <?= $path['path'] === $view['path'] ? 'selected' : ''; ?>><?= $path['name']; ?></option>
 							<? } ?>
 						</select>
 					</div>

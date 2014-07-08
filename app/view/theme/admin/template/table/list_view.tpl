@@ -70,6 +70,8 @@
 									<? break;
 
 								case 'int':
+								case 'float':
+								case 'decimal':
 									?>
 									<? if (!isset($column['filter_value']['low'])) {
 									$column['filter_value']['low'] = null;
