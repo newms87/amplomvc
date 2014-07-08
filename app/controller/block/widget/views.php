@@ -69,7 +69,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$settings['views'] = $views;
 
-		$settings['data_listing_paths'] = array('' => _l("(Select Path)")) + $this->Model_Block_Widget_Views->getListingPaths();
+		$settings['data_listing_paths'] = $this->Model_Block_Widget_Views->getListingPaths();
 
 		//Action
 		$settings['save_view']   = site_url('block/widget/views/save_view');

@@ -68,10 +68,11 @@ class App_Model_Block_Widget_Views extends Model
 				'name'  => "Roofscope",
 			),
 			'clients' => array(
-				'path' => 'admin/client/listing',
-				'name' => 'Clients',
+				'path'  => 'admin/client/listing',
+				'query' => '',
+				'name'  => 'Clients',
 			),
-			'pages'    => array(
+			'pages'   => array(
 				'path'  => 'admin/page/listing',
 				'query' => '',
 				'name'  => 'Page List',
