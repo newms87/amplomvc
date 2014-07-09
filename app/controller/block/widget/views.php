@@ -52,12 +52,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$listings = $this->Model_Block_Widget_Views->getListings();
 
 		foreach ($views as $key => &$view) {
-			if (empty($view['listing_id']) || !isset($listings[$view['listing_id']])) {
+			$listing = isset($listings[$view['listing_id']]) ? $listings[$view['listing_id']] : null;
+
+			if (!$listing) {
 				$view['show'] = 0;
 			}
 
 			if ($view['show']) {
-				$listing = $listings[$view['listing_id']];
 				$action  = new Action($listing['path']);
 
 				if (!$action->isValid()) {
@@ -79,6 +80,10 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$settings['views'] = $views;
 
 		$settings['data_listings'] = $listings;
+
+		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
+
+		$settings['can_modify'] = user_can('modify', $this->route->getPath());
 
 		//Action
 		$settings['save_view']   = site_url('block/widget/views/save_view');

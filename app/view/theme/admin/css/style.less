@@ -918,11 +918,15 @@ button, .button {
         width: 10px;
         height:10px;
         top:2px;
-        background: forestgreen;
+        background: gray;
         border-radius: 5px;
 
+        & + * {
+          display: none;
+        }
+
         &:after {
-          content: "is";
+          content: "off";
           display: inline-block;
           position: relative;
           top: -1px;
@@ -934,20 +938,24 @@ button, .button {
         &.not {
           background: red;
 
+          & + * {
+            display: block;
+          }
+
           &:after {
             content: "is not";
           }
         }
 
-        &.empty {
-          background: yellow;
+        &.equals {
+          background: forestgreen;
 
           & + * {
-            display: none;
+            display: block;
           }
 
           &:after {
-            content: "is blank";
+            content: "is";
           }
         }
       }
@@ -1898,7 +1906,7 @@ body.admin-dashboard-view {
       padding: .5em 1em;
       outline: 0;
 
-      &:hover {
+      &:hover, &:active, &:focus {
         background: @color-light;
       }
     }

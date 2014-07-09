@@ -222,7 +222,7 @@
 								$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
 
 								if (!empty($action['ajax'])) {
-									$action['#class'] .= ' colorbox';
+									$action['#class'] .= $action['ajax'] === 'modal' ? ' colorbox' : ' ajax';
 								}
 
 								if (!empty($action['href'])) {
@@ -318,9 +318,12 @@
 									case 'float':
 									case 'decimal':
 									default:
-										?>
-										<?= $value; ?>
-										<? break;
+										if (!empty($column['charlimit'])) {
+											echo charlimit($value, $column['charlimit']);
+										} else {
+											echo $value;
+										}
+										break;
 								}
 							}?>
 							</td>
@@ -369,6 +372,11 @@
 						case 'time':
 							?>
 							<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
+							<? break;
+
+						case 'longtext':
+							?>
+							<textarea class="input-value" rows="4" cols="40"></textarea>
 							<? break;
 
 						case 'text':
@@ -431,8 +439,8 @@
 		var $zoom = $(this).closest('.zoom_hover');
 		var $value = $zoom.find('.value');
 
-		start = $zoom.find('.date_start').val();
-		end = $zoom.find('.date_end').val();
+		var start = $zoom.find('.date_start').val();
+		var end = $zoom.find('.date_end').val();
 
 		if (end || start) {
 			$value.html(start + ' - ' + end);
@@ -488,6 +496,32 @@
 			return false;
 		});
 
+	$listview.find('.action.ajax').click(function () {
+		var $this = $(this);
+		var $list = $this.closest('.listing');
+
+		if ($this.attr('data-confirm') && !confirm($this.attr('data-confirm'))) {
+			return false;
+		}
+
+		$this.loading({text: 'loading...'});
+
+		$.get($(this).attr('href'), {}, function (response) {
+			$list.ac_msg(response);
+			$list.find('.refresh-listing').click();
+		}, 'json')
+			.always(function() {
+			$this.loading('stop');
+		});
+
+		return false;
+	});
+
+	$listview.find('.action[data-confirm]').not('.ajax').click(function() {
+		if (!confirm($(this).attr('data-confirm'))) {
+			return false;
+		}
+	});
 
 	$listview.find('.filter-button').click(function () {
 		var $this = $(this);
@@ -498,11 +532,11 @@
 	$listview.find('.filter-type').click(function () {
 		var $this = $(this);
 		if ($this.hasClass('not')) {
-			$this.removeClass('not').addClass('empty');
-		} else if ($this.hasClass('empty')) {
-			$this.removeClass('empty');
+			$this.removeClass('not');
+		} else if ($this.hasClass('equals')) {
+			$this.removeClass('equals').addClass('not');
 		} else {
-			$this.addClass('not');
+			$this.addClass('equals');
 		}
 	});
 
@@ -510,7 +544,7 @@
 		var $this = $(this);
 		$filter = $this.closest('.filter-list');
 		$filter.find('[name]').val('');
-		$filter.find('.filter-type').removeClass('not empty');
+		$filter.find('.filter-type').removeClass('not equals');
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 

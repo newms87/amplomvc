@@ -161,6 +161,9 @@ class Table extends Library
 
 			switch ($column['type']) {
 				case 'text':
+					if (isset($column['Length']) && ($column['Length'] == 0 || $column['Length'] > 100)) {
+						$column['type'] = 'longtext';
+					}
 					break;
 				case 'image':
 					if (!isset($column["sort_value"])) {
@@ -206,7 +209,7 @@ class Table extends Library
 						}
 					}
 
-					$column['build_data'] = $build_data;
+					$column['build_data']   = $build_data;
 					$column['build_config'] = array(
 						'key',
 						'name'

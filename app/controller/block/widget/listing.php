@@ -63,10 +63,8 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			if (strpos($key, '!') === 0) {
 				$key = substr($key, 1);
 				$type = 'not';
-			} elseif ($fv === '' || (is_array($fv) && !count(array_filter($fv)))) {
-				$type = 'empty';
 			} else {
-				$type = '';
+				$type = 'equals';
 			}
 
 			$filter_values[$key] = $fv;

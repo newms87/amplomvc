@@ -180,12 +180,9 @@ $.fn.apply_filter = function (url) {
 
             if ($type.hasClass('not')) {
                 $e.attr('name', $e.attr('name').replace(/^filter\[!?/, 'filter[!'));
-            } else if ($type.hasClass('empty')) {
-                $e.val('');
-                if ($e.is('[type=checkbox]')) {
-                    $filter.find('[name][type=checkbox]').prop('checked', false).first().prop('checked', true);
-                }
-            } else if ($(e).val() === '') {
+            }
+
+            if (!$type.hasClass('not') && !$type.hasClass('equals')) {
                 delete filter_list[i];
             }
         });

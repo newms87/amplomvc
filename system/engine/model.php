@@ -6,15 +6,15 @@ abstract class Model
 	protected $prefix;
 
 	const
-		TEXT = 'text',
-		NO_ESCAPE = 'no-escape',
-		IMAGE = 'image',
-		INTEGER = 'int',
-		FLOAT = 'float',
-		DATETIME = 'datetime',
+		TEXT                = 'text',
+		NO_ESCAPE           = 'no-escape',
+		IMAGE               = 'image',
+		INTEGER             = 'int',
+		FLOAT               = 'float',
+		DATETIME            = 'datetime',
 		PRIMARY_KEY_INTEGER = 'pk-int',
-		AUTO_INCREMENT = 'ai',
-		AUTO_INCREMENT_PK = 'pk';
+		AUTO_INCREMENT      = 'ai',
+		AUTO_INCREMENT_PK   = 'pk';
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
@@ -363,9 +363,9 @@ abstract class Model
 			switch ($type) {
 				case 'like':
 					if ($value) {
-						$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
+						$where .= " AND `$t`.`$key` " . ($not ? 'not like' : 'like') . " '%" . $this->escape($value) . "%'";
 					} else {
-						$where .= " AND `$t`.`$key` = ''";
+						$where .= " AND `$t`.`$key` " . ($not ? '!=':'=') . " ''";
 					}
 					break;
 
@@ -374,9 +374,9 @@ abstract class Model
 				case 'time':
 				case 'text':
 					if (is_array($value)) {
-						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " ('" . implode("','", $this->escape($value)) . "')";
+						$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
 					} else {
-						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " '" . $this->escape($value) . "'";
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
 					}
 					break;
 
@@ -385,24 +385,24 @@ abstract class Model
 				case 'int':
 					if (is_array($value)) {
 						if (isset($value['low']) || isset($value['high'])) {
-							$low = isset($value['low']) ? "`$t`.`$key` " . ($not?'<':'>=') . " " . ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : '';
-							$high = isset($value['high']) ? "`$t`.`$key` " . ($not?'>':'<=') . " " . ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : '';
+							$low  = isset($value['low']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " " . ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : '';
+							$high = isset($value['high']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " " . ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : '';
 
 							if ($low && $high) {
-								$where .= " AND ($low " . ($not?'OR':'AND') . " $high)";
+								$where .= " AND ($low " . ($not ? 'OR' : 'AND') . " $high)";
 							} else {
-								$where .= " AND " . ($low?$low:$high);
+								$where .= " AND " . ($low ? $low : $high);
 							}
 						} else {
 							array_walk($value, function (&$a) use ($type) {
 								$a = $type === 'int' ? (int)$a : (float)$a;
 							});
 
-							$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " (" . implode(',', $value) . ")";
 						}
 					} elseif ($value) {
 						$value = $type === 'int' ? (int)$value : (float)$value;
-						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
 					} else {
 						$where .= " AND `$t`.`$key` IN (0,'')";
 					}
@@ -504,6 +504,21 @@ abstract class Model
 				$column['type']     = $type;
 				$column['sortable'] = true;
 				$column['filter']   = true;
+
+				$field = explode('_', $column['Field']);
+				array_walk($field, function (&$a) {
+					$a = ucfirst($a);
+				});
+
+				$column['display_name'] = implode(' ', $field);
+
+				$length = null;
+				if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {
+					$column['Type'] = $length[1];
+					$column['Length'] = (int)$length[2];
+				} else {
+					$column['Length'] = 0;
+				}
 			}
 			unset($column);
 
@@ -531,12 +546,6 @@ abstract class Model
 				uksort($columns, function ($a, $b) use ($filter) {
 					return $filter[$a] > $filter[$b];
 				});
-			}
-		}
-
-		foreach ($columns as $key => &$column) {
-			if (!isset($column['display_name'])) {
-				$column['display_name'] = isset($column['Field']) ? $column['Field'] : $key;
 			}
 		}
 
