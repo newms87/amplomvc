@@ -365,18 +365,7 @@ abstract class Model
 					if ($value) {
 						$where .= " AND `$t`.`$key` " . ($not ? 'not like' : 'like') . " '%" . $this->escape($value) . "%'";
 					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? '!=':'=') . " ''";
-					}
-					break;
-
-				case 'date':
-				case 'datetime':
-				case 'time':
-				case 'text':
-					if (is_array($value)) {
-						$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
-					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
+						$where .= " AND `$t`.`$key` " . ($not ? '!=' : '=') . " ''";
 					}
 					break;
 
@@ -404,13 +393,43 @@ abstract class Model
 						$value = $type === 'int' ? (int)$value : (float)$value;
 						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
 					} else {
-						$where .= " AND `$t`.`$key` IN (0,'')";
+						$where .= " AND `$t`.`$key` " . ($not ? 'NOT IN' : 'IN') . " (0,'')";
 					}
 					break;
 
-				case 'date_range':
+				case 'date':
+				case 'datetime':
+				case 'time':
+					if (is_array($value)) {
+						if (!empty($value['start']) || !empty($value['end'])) {
+							$start  = !empty($value['start']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " '" . format('date', $value['start']) . "'" : '';
+							$end = !empty($value['end']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " '" . format('date', $value['end']) . "'" : '';
+
+							if ($start && $end) {
+								$where .= " AND ($start " . ($not ? 'OR' : 'AND') . " $end)";
+							} else {
+								$where .= " AND " . ($start ? $start : $end);
+							}
+						} elseif (!isset($value['start']) && !isset($value['end'])) {
+							array_walk($value, function (&$a) use ($type) {
+								$a = format('date', $a);
+							});
+
+							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $value) . "')";
+						}
+					} else {
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . ($value ? format('date', $value) . "'" : '');
+					}
 					break;
 
+				case 'text':
+				default:
+					if (is_array($value)) {
+						$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
+					} else {
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
+					}
+					break;
 			}
 		}
 
@@ -514,7 +533,7 @@ abstract class Model
 
 				$length = null;
 				if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {
-					$column['Type'] = $length[1];
+					$column['Type']   = $length[1];
 					$column['Length'] = (int)$length[2];
 				} else {
 					$column['Length'] = 0;
