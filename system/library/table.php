@@ -162,12 +162,12 @@ class Table extends Library
 			switch ($column['type']) {
 				case 'text':
 					break;
-				case 'multiselect':
-					break;
 				case 'image':
 					if (!isset($column["sort_value"])) {
 						$column['sort_value'] = "__image_sort__" . $slug;
 					}
+					break;
+				case 'multiselect':
 					break;
 				case 'select':
 					if (empty($column['build_data'])) {
@@ -213,6 +213,16 @@ class Table extends Library
 					);
 
 					break;
+			}
+
+			if (!empty($column['filter']) && is_string($column['filter'])) {
+				switch ($column['filter']) {
+					case 'multiselect':
+						if (!empty($column['filter_value']) && !is_array($column['filter_value'])) {
+							$column['filter_value'] = array($column['filter_value']);
+						}
+						break;
+				}
 			}
 		}
 	}

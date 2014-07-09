@@ -393,7 +393,6 @@
 </div>
 
 <script type="text/javascript">
-	$('.table-list-view-box').draggable({axis: 'x'});
 	$.ac_datepicker();
 
 	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
@@ -465,6 +464,9 @@
 
 	//Add Item Selector
 	var $listview = $(".table-list-view-box").not('.activated').addClass('activated');
+	var $table = $listview.find('.table-list-view');
+
+	$table.draggable({axis: 'x', containment: [-($table.outerWidth() - $listview.width()), -50, 100, 100]});
 
 	$listview.find('.filter-list-item').click(function () {
 		var cb = $(this).find('[name="batch[]"]');
@@ -479,10 +481,11 @@
 		var $this = $(this);
 		$this.closest('.filter-list-item').toggleClass('active', $this.prop('checked'));
 	})
-		.siblings('label').click(function(event) {
-			var $input = $('#'+$(this).attr('for'));
+		.siblings('label').click(function (event) {
+			var $input = $('#' + $(this).attr('for'));
 			$input.prop('checked', !$input.prop('checked')).change();
-			event.stopPropagation(); return false;
+			event.stopPropagation();
+			return false;
 		});
 
 
