@@ -275,7 +275,6 @@ td {
   padding-right: 30px;
   overflow: visible;
 
-
 }
 
 #menu ul {
@@ -916,13 +915,13 @@ button, .button {
         position: absolute;
         left: 10%;
         width: 10px;
-        height:10px;
-        top:2px;
+        height: 10px;
+        top: 2px;
         background: gray;
         border-radius: 5px;
 
         & + * {
-          display: none;
+          display: none !important;
         }
 
         &:after {
@@ -983,7 +982,7 @@ button, .button {
     }
 
     &.hide {
-      height:5px;
+      height: 5px;
       display: table-row;
 
       td {
@@ -1174,39 +1173,61 @@ button, .button {
     }
   }
 
-  .extra-cols {
-    position: relative;
+  .modify-view {
     display: inline-block;
+  }
 
-    .label {
-      padding: 5px 10px;
-      background: @color-lighter;
-      border-radius: 5px;
-      font-size: 1.2em;
-      cursor: pointer;
-      display: inline-block;
-      margin: 5px;
-    }
+  .view-config {
+    position: fixed;
+    width: 80%;
+    height: 90%;
+    background: white;
+    padding: 1em;
+    top: 5%;
+    left: 10%;
+    box-shadow: 50px 50px 200px rgba(0, 0, 0, .7);
+    z-index: 100;
+    display: none;
 
     .select-cols {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      box-shadow: 4px 4px 20px rgba(0, 0, 0, .5);
       padding: 10px;
-      display: none;
-      z-index: 100;
+      height: 100%;
+      box-sizing: border-box;
+
+      .scrollbox-div {
+        height: 100%;
+      }
 
       .buttons {
         text-align: right;
       }
     }
 
-    &:hover {
-      .select-cols {
-        display: block;
+    .sql-tab {
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 50%;
+        height: 400px;
       }
+    }
+
+    .tabs {
+      max-height: 10%;
+    }
+
+    .tab-content {
+      height: 90%;
+    }
+
+    .close {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+
+    &.show {
+      display: block;
     }
   }
 
@@ -1244,7 +1265,6 @@ button, .button {
           -webkit-transition: all .4s;
           transition: all .4s;
           max-height: 300px;
-
 
           &:after {
             content: '';
@@ -1555,149 +1575,145 @@ ul.item_list li img.remove {
   float: right;
 }
 
-ol.sccrollbox {
+ol.scrollbox {
   padding: 0;
   margin: 0;
+
+  li {
+    list-style: decimal inside;
+    padding: 0 3px;
+    margin: 0;
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    overflow: auto;
+  }
+
+  & > li > div {
+    margin-right: 30px;
+  }
 }
 
-ol.scrollbox li {
-  list-style: decimal inside;
-  padding: 0 3px;
-  margin: 0;
-  color: red;
-  font-size: 16px;
-  font-weight: bold;
-  overflow: auto;
-}
-
-.scrollbox {
-  padding: 3px 0;
-  border: 1px solid #CCCCCC;
-  width: 50%;
-  min-width: 450px;
+.scrollbox-div {
+  height: 100%;
+  overflow-y: auto;
   height: 150px;
-  background: #FFFFFF;
-  overflow-y: scroll;
+  min-width: 450px;
+  padding: .4em;
+  border: 2px solid #CCCCCC;
+  background: white;
   position: relative;
+
+  .scrollbox {
+    & > div {
+      position: relative;
+      margin-bottom: 2px;
+      padding: 2px 5px;
+    }
+
+    li {
+      margin: .4em 0;
+
+      input {
+        position: absolute;
+        left: -999px;
+
+        &:checked + label {
+          background: @color-light;
+        }
+      }
+
+      label {
+        cursor: pointer;
+        font-size: 1.5em;
+        padding: .2em 1em;
+        display: block;
+        height: 100%;
+        background: @color-lighter;
+      }
+
+      div {
+        padding: 2px;
+        display: inline-block;
+      }
+    }
+
+    img {
+      float: right;
+      cursor: pointer;
+    }
+
+    &.ui-sortable {
+      li {
+        cursor: move;
+      }
+    }
+
+    &.clickable {
+      div {
+        cursor: pointer;
+        overflow: auto;
+        padding: 1px 10px;
+
+        &:hover {
+          background: #BBDF8D;
+        }
+      }
+    }
+
+    &.editable_list {
+      input {
+        background: transparent;
+        border: 1px solid transparent;
+        padding: 2px;
+
+        &:hover {
+          border-color: #0A0A38;
+        }
+
+        &:active, &:focus {
+          background: #D4FFD4;
+          border-color: #008000;
+          color: #0A0A38;
+        }
+      }
+    }
+
+    &.large {
+      width: 90%;
+      height: 400px;
+
+      & > li > img {
+        width: 40px;
+      }
+    }
+
+    .delete {
+      position: absolute;
+      right: 5px;
+      top: 2px;
+    }
+  }
+
+  ul.scrollbox {
+    li {
+      list-style: none;
+      overflow: auto;
+      background: #FFF;
+    }
+  }
 }
 
-.scrollbox > div {
-  position: relative;
-  margin-bottom: 2px;
-  padding: 2px 5px;
-}
-
-.scrollbox input + label {
-  display: block;
-  padding: 3px;
-  margin: 0;
-}
-
-.scrollbox td:hover, .scrollbox li {
-  cursor: pointer;
-}
-
-.scrollbox td:hover, .scrollbox li:hover,
-.scrollbox > div:hover {
-  background: #BBDF8D !important;
-}
-
-.scrollbox li div {
-  padding: 2px;
-}
-
-ol.scrollbox > li > div {
-  margin-right: 30px;
-}
-
-.scrollbox div input, .scrollbox li input {
-  padding: 0;
-  margin: 3px 3px 0 3px;
-  float: left;
-}
-
-ul.scrollbox li {
-  list-style: none;
-  overflow: auto;
-  background: #FFF;
-}
-
-.scrollbox.ui-sortable li {
-  cursor: move;
-}
-
-.scrollbox li div {
-  display: inline-block;
-}
-
-.scrollbox li:nth-child(even) {
-  background: #E4EEF7;
-}
-
-.scrollbox div.even {
-  background: #FFFFFF;
-}
-
-.scrollbox div.odd {
-  background: #E4EEF7;
-}
-
-.scrollbox img {
-  float: right;
-  cursor: pointer;
-}
-
-.scrollbox.clickable div {
-  cursor: pointer;
-  overflow: auto;
-  padding: 1px 10px;
-}
-
-.scrollbox.clickable div:hover {
-  background: #BBDF8D;
-}
-
-.scrollbox.editable_list input {
-  background: transparent;
-  border: 1px solid transparent;
-  padding: 2px;
-}
-
-.scrollbox.editable_list input:hover {
-  border-color: #0A0A38;
-}
-
-.scrollbox.editable_list input:active, .scrollbox.editable_list input:focus {
-  background: #D4FFD4;
-  border-color: #008000;
-  color: #0A0A38;
-}
-
-.scrollbox.large {
-  width: 90%;
-  height: 400px;
-}
-
-.scrollbox.large > li > img {
-  width: 40px;
-}
-
-.scrollbox_buttons {
+.scrollbox-buttons {
   width: 50%;
   text-align: center;
   margin: 8px auto 0 auto;
-}
 
-.scrollbox_buttons a {
-  min-width: 80px;
-  text-align: center;
-  display: inline-block;
-}
-
-.scrollbox .delete {
-  position: absolute;
-  right: 5px;
-  top: 2px;
+  a {
+    min-width: 80px;
+    text-align: center;
+    display: inline-block;
+  }
 }
 
 .htabs {
@@ -1706,27 +1722,27 @@ ul.scrollbox li {
   line-height: 16px;
   border-bottom: 1px solid #DDDDDD;
   margin-bottom: 15px;
-}
 
-.htabs a {
-  border-top: 1px solid #DDDDDD;
-  border-left: 1px solid #DDDDDD;
-  border-right: 1px solid #DDDDDD;
-  background: #FFFFFF url('@{themepath}image/tab.png') repeat-x;
-  padding: 7px 15px 6px 15px;
-  float: left;
-  font-size: 13px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  color: #000000;
-  margin-right: 2px;
-  display: none;
-}
+  a {
+    border-top: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    background: #FFFFFF url('@{themepath}image/tab.png') repeat-x;
+    padding: 7px 15px 6px 15px;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+    margin-right: 2px;
+    display: none;
 
-.htabs a.selected {
-  padding-bottom: 7px;
-  background: #FFFFFF;
+    &.selected {
+      padding-bottom: 7px;
+      background: #FFFFFF;
+    }
+  }
 }
 
 .vtabs {
@@ -1736,28 +1752,43 @@ ul.scrollbox li {
   float: left;
   display: block;
   border-right: 1px solid #DDDDDD;
-}
 
-.vtabs a {
-  display: none;
-}
+  a {
+    display: none;
 
-.vtabs a, .vtabs > span {
-  display: block;
-  float: left;
-  width: 160px;
-  margin-bottom: 5px;
-  clear: both;
-  border-top: 1px solid #DDDDDD;
-  border-left: 1px solid #DDDDDD;
-  border-bottom: 1px solid #DDDDDD;
-  background: #F7F7F7;
-  padding: 6px 14px 7px 15px;
-  font-size: 13px;
-  font-weight: bold;
-  text-align: right;
-  text-decoration: none;
-  color: #000000;
+    &.selected {
+      padding-right: 15px;
+      background: #FFFFFF;
+    }
+  }
+
+  a, & > span {
+    display: block;
+    float: left;
+    width: 160px;
+    margin-bottom: 5px;
+    clear: both;
+    border-top: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    background: #F7F7F7;
+    padding: 6px 14px 7px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: right;
+    text-decoration: none;
+    color: #000000;
+
+    img {
+      position: relative;
+      top: 3px;
+      cursor: pointer;
+    }
+
+    .tab_title {
+      display: inline-block;
+    }
+  }
 }
 
 .add-vtab {
@@ -1776,21 +1807,10 @@ ul.scrollbox li {
   text-align: right;
   color: #407619;
   cursor: pointer;
-}
 
-.add-vtab:hover {
-  background: #C8E3B5
-}
-
-.vtabs a.selected {
-  padding-right: 15px;
-  background: #FFFFFF;
-}
-
-.vtabs a img, .vtabs span img {
-  position: relative;
-  top: 3px;
-  cursor: pointer;
+  &:hover {
+    background: #C8E3B5
+  }
 }
 
 .vtabs-content {
@@ -1799,10 +1819,6 @@ ul.scrollbox li {
 
 .vtabs-content .list {
   clear: none;
-}
-
-.vtabs a .tab_title {
-  display: inline-block;
 }
 
 .accordion-heading {
