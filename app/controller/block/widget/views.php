@@ -16,6 +16,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		//Defaults
 		$settings += array(
 			'path'          => '',
+			'listing_id'    => '',
 			'default_query' => array(),
 		);
 
@@ -27,13 +28,14 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$views = $this->Model_Block_Widget_Views->getViews($settings['group']);
 
 		$default_view = array(
-			'view_id' => 0,
-			'group'   => $settings['group'],
-			'name'    => 'default',
-			'title'   => _l("Default"),
-			'path'    => $settings['path'],
-			'query'   => $_GET,
-			'show'    => !empty($settings['path']) ? 1 : 0,
+			'view_id'    => 0,
+			'group'      => $settings['group'],
+			'name'       => 'default',
+			'title'      => _l("Default"),
+			'listing_id' => $settings['listing_id'],
+			'path'       => $settings['path'],
+			'query'      => $_GET,
+			'show'       => !empty($settings['path']) ? 1 : 0,
 		);
 
 		if (!$views) {
@@ -47,29 +49,41 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			) + $default_view;
 
 
+		$listings = $this->Model_Block_Widget_Views->getListings();
+
 		foreach ($views as $key => &$view) {
-			if (empty($view['path'])) {
+			$listing = isset($listings[$view['listing_id']]) ? $listings[$view['listing_id']] : null;
+
+			if (!$listing) {
 				$view['show'] = 0;
-				continue;
 			}
 
 			if ($view['show']) {
-				$action = new Action($view['path']);
+				$action  = new Action($listing['path']);
 
 				if (!$action->isValid()) {
-					unset($views[$key]);
+					$view['show'] = 0;
 					continue;
+				}
+
+				if (is_string($listing['query'])) {
+					parse_str($listing['query'], $listing['query']);
 				}
 
 				$view['controller'] = $action->getController();
 				$view['method']     = $action->getMethod();
+				$view['query']      = $listing['query'] + $view['query'];
 			}
 		}
 		unset($view);
 
 		$settings['views'] = $views;
 
-		$settings['data_listing_paths'] = array('' => _l("(Select Path)")) + $this->Model_Block_Widget_Views->getListingPaths();
+		$settings['data_listings'] = $listings;
+
+		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
+
+		$settings['can_modify'] = user_can('modify', $this->route->getPath());
 
 		//Action
 		$settings['save_view']   = site_url('block/widget/views/save_view');

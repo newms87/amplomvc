@@ -3,7 +3,7 @@ class App_Model_Dashboard extends Model
 {
 	public function save($dashboard_id, $dashboard = array())
 	{
-		if ($dashboard_id && empty($dashboard['name'])) {
+		if (!$dashboard_id && empty($dashboard['name'])) {
 			$count = 1;
 			while (empty($dashboard['name'])) {
 				$dashboard['name'] = 'New Dashboard ' . $count++;

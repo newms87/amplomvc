@@ -6,15 +6,15 @@ abstract class Model
 	protected $prefix;
 
 	const
-		TEXT = 'text',
-		NO_ESCAPE = 'no-escape',
-		IMAGE = 'image',
-		INTEGER = 'int',
-		FLOAT = 'float',
-		DATETIME = 'datetime',
+		TEXT                = 'text',
+		NO_ESCAPE           = 'no-escape',
+		IMAGE               = 'image',
+		INTEGER             = 'int',
+		FLOAT               = 'float',
+		DATETIME            = 'datetime',
 		PRIMARY_KEY_INTEGER = 'pk-int',
-		AUTO_INCREMENT = 'ai',
-		AUTO_INCREMENT_PK = 'pk';
+		AUTO_INCREMENT      = 'ai',
+		AUTO_INCREMENT_PK   = 'pk';
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
@@ -363,20 +363,9 @@ abstract class Model
 			switch ($type) {
 				case 'like':
 					if ($value) {
-						$where .= " AND `$t`.`$key` " . ($not?'not like':'like') . " '%" . $this->escape($value) . "%'";
+						$where .= " AND `$t`.`$key` " . ($not ? 'not like' : 'like') . " '%" . $this->escape($value) . "%'";
 					} else {
-						$where .= " AND `$t`.`$key` = ''";
-					}
-					break;
-
-				case 'date':
-				case 'datetime':
-				case 'time':
-				case 'text':
-					if (is_array($value)) {
-						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " ('" . implode("','", $this->escape($value)) . "')";
-					} else {
-						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " '" . $this->escape($value) . "'";
+						$where .= " AND `$t`.`$key` " . ($not ? '!=' : '=') . " ''";
 					}
 					break;
 
@@ -384,25 +373,63 @@ abstract class Model
 				case 'float':
 				case 'int':
 					if (is_array($value)) {
-						array_walk($value, function (&$a) use ($type) {
-							$a = $type === 'int' ? (int)$a : (float)$a;
-						});
+						if (isset($value['low']) || isset($value['high'])) {
+							$low  = isset($value['low']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " " . ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : '';
+							$high = isset($value['high']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " " . ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : '';
 
-						$where .= " AND `$t`.`$key` " . ($not?"NOT IN":"IN") . " (" . implode(',', $value) . ")";
+							if ($low && $high) {
+								$where .= " AND ($low " . ($not ? 'OR' : 'AND') . " $high)";
+							} else {
+								$where .= " AND " . ($low ? $low : $high);
+							}
+						} else {
+							array_walk($value, function (&$a) use ($type) {
+								$a = $type === 'int' ? (int)$a : (float)$a;
+							});
+
+							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " (" . implode(',', $value) . ")";
+						}
 					} elseif ($value) {
 						$value = $type === 'int' ? (int)$value : (float)$value;
-						$where .= " AND `$t`.`$key` " . ($not?"!=":"=") . " " . $value;
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
 					} else {
-						$where .= " AND `$t`.`$key` IN (0,'')";
+						$where .= " AND `$t`.`$key` " . ($not ? 'NOT IN' : 'IN') . " (0,'')";
 					}
 					break;
 
-				case 'number_range':
+				case 'date':
+				case 'datetime':
+				case 'time':
+					if (is_array($value)) {
+						if (!empty($value['start']) || !empty($value['end'])) {
+							$start  = !empty($value['start']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " '" . format('date', $value['start']) . "'" : '';
+							$end = !empty($value['end']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " '" . format('date', $value['end']) . "'" : '';
+
+							if ($start && $end) {
+								$where .= " AND ($start " . ($not ? 'OR' : 'AND') . " $end)";
+							} else {
+								$where .= " AND " . ($start ? $start : $end);
+							}
+						} elseif (!isset($value['start']) && !isset($value['end'])) {
+							array_walk($value, function (&$a) use ($type) {
+								$a = format('date', $a);
+							});
+
+							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $value) . "')";
+						}
+					} else {
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . ($value ? format('date', $value) . "'" : '');
+					}
 					break;
 
-				case 'date_range':
+				case 'text':
+				default:
+					if (is_array($value)) {
+						$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
+					} else {
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
+					}
 					break;
-
 			}
 		}
 
@@ -496,6 +523,21 @@ abstract class Model
 				$column['type']     = $type;
 				$column['sortable'] = true;
 				$column['filter']   = true;
+
+				$field = explode('_', $column['Field']);
+				array_walk($field, function (&$a) {
+					$a = ucfirst($a);
+				});
+
+				$column['display_name'] = implode(' ', $field);
+
+				$length = null;
+				if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {
+					$column['Type']   = $length[1];
+					$column['Length'] = (int)$length[2];
+				} else {
+					$column['Length'] = 0;
+				}
 			}
 			unset($column);
 
@@ -523,12 +565,6 @@ abstract class Model
 				uksort($columns, function ($a, $b) use ($filter) {
 					return $filter[$a] > $filter[$b];
 				});
-			}
-		}
-
-		foreach ($columns as $key => &$column) {
-			if (!isset($column['display_name'])) {
-				$column['display_name'] = isset($column['Field']) ? $column['Field'] : $key;
 			}
 		}
 
