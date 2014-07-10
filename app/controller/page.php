@@ -13,7 +13,7 @@ class App_Controller_Page extends Controller
 			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
-		if (isset($_GET['content'])) {
+		if (IS_AJAX || isset($_GET['content'])) {
 			return $this->content($page);
 		}
 
@@ -24,7 +24,7 @@ class App_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
-		if ($page['style']) {
+		if ($page['style'] && filesize($page['style']) > 0) {
 			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
 				$style = $this->document->compileLess($page['style'], 'page-' . $page['name']);
 			} else {
@@ -33,6 +33,9 @@ class App_Controller_Page extends Controller
 
 			$this->document->addStyle($style);
 		}
+
+		//load style in header only.
+		$page['style'] = null;
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
