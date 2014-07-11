@@ -1,11 +1,11 @@
 <div class="block-address-select form">
 	<div class="address-list ">
 		<? $build = array(
-			'name' => 'address_id',
-		   'data' => format_all('address', $addresses),
-		   'select' => $address_id,
-		   'key' => 'address_id',
-		   'value' => 'formatted',
+			'name'   => 'address_id',
+			'data'   => format_all('address', $addresses),
+			'select' => $address_id,
+			'key'    => 'address_id',
+			'value'  => 'formatted',
 		); ?>
 
 		<?= build('ac-radio', $build); ?>
