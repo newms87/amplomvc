@@ -22,15 +22,31 @@ class App_Controller_Mail_Header extends Controller
 		);
 
 		if ($data['logo']) {
-			$data['logo_width'] = option('config_email_logo_width', 400);
-			$data['logo_height'] = option('config_email_logo_height', 150);
+			$width = option('config_email_logo_width', 400);
+			$height = option('config_email_logo_height', 150);
 
 			if (!parse_url($data['logo'], PHP_URL_SCHEME) && strpos($data['logo'], '//') !== 0) {
-				$data['logo'] = image($data['logo'], $data['logo_width'], $data['logo_height']);
+				$data['logo'] = image($data['logo'], $width, $height);
 			}
 
 			if (!parse_url($data['logo'], PHP_URL_SCHEME)) {
 				$data['logo'] = 'http://' . ltrim($data['logo'], '/\\');
+			}
+
+			//Calculate width / height and scale if necessary
+			if ($width && $height) {
+				$data['logo_width'] = $width;
+				$data['logo_height'] = $height;
+			} else {
+				$imagesize = getimagesize($data['logo']);
+
+				if ($width || $height) {
+					$data['logo_width'] = $width ? $width : $imagesize[0] * ($height/$imagesize[1]);
+					$data['logo_height'] = $height ? $height : $imagesize[1] * ($width/$imagesize[0]);
+				} else {
+					$data['logo_width'] = $imagesize[0];
+					$data['logo_height'] = $imagesize[1];
+				}
 			}
 		}
 
