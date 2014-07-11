@@ -96,6 +96,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$_GET = $orig_get;
 	}
 
+	public function create()
+	{
+
+	}
+
 	public function save_view()
 	{
 		$view_id = $this->Model_Block_Widget_Views->save($_POST['view_id'], $_POST);
