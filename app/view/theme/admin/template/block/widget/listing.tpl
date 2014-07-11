@@ -20,7 +20,6 @@
 			<div class="view-tabs htabs">
 				<a href=".col-tab"><?= _l("Columns"); ?></a>
 				<a href=".group-tab"><?= _l("Groups / Aggregate"); ?></a>
-				<a href=".sql-tab"><?= _l("Custom View"); ?></a>
 			</div>
 
 			<? if (!empty($extra_cols)) { ?>
@@ -36,7 +35,7 @@
 					)); ?>
 
 					<div class="buttons">
-						<a class="filter-cols button" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>"><?= _l("Apply"); ?></a>
+						<a class="filter-cols button" data-loading="<?= _l("Applying..."); ?>" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>"><?= _l("Apply"); ?></a>
 					</div>
 				</div>
 			</div>
@@ -44,16 +43,6 @@
 
 			<div class="group-tab tab-content">
 				Group By / Aggregate... Waiting to be implemented.
-			</div>
-
-			<? //TODO: Move this to the Views Page, this should be in replacement of the listing_id dropdown ?>
-			<div class="sql-tab tab-content">
-				<form action="<?= site_url('block/widget/view/create', array('redirect' => $this->url->here())); ?>" method="post">
-					<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
-					<input type="text" name="name" value="<?= "View Name"; ?>" /><br />
-					<textarea name="view_sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
-					<button class="submit-view-sql"><?= _l("Create View"); ?></button>
-				</form>
 			</div>
 		</div>
 	</div>
@@ -80,6 +69,10 @@
 		});
 
 		$list_widget.find('.select-cols .scrollbox').sortable();
+
+		$list_widget.find('.filter-cols').click(function() {
+			$(this).closest('.view-config').find('.close').click();
+		});
 
 		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing, .filter-cols')
 			.click(function () {
