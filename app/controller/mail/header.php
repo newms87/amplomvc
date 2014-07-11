@@ -18,7 +18,7 @@ class App_Controller_Mail_Header extends Controller
 
 		$data += array(
 			'title' => _l("%s", $data['store']['name']),
-			'logo'  => $this->config->load('config', 'config_logo', $data['store']['store_id']),
+			'logo'  => str_replace("./", '', $this->config->load('config', 'config_logo', $data['store']['store_id'])),
 		);
 
 		if ($data['logo']) {
