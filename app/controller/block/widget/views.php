@@ -125,6 +125,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				'title'           => _post('title', $_POST['name']),
 				'query'           => '',
 				'show'            => 1,
+				'sort_order'      => 0,
 			);
 
 			$this->Model_Block_Widget_Views->saveView($view);

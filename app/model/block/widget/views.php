@@ -79,6 +79,14 @@ class App_Model_Block_Widget_Views extends Model
 
 		$view_listing_id = $this->saveViewListing(null, $view_listing);
 
+		if (!empty($view_listing['sql'])) {
+			$result = $this->query("CREATE VIEW " . $view_listing['sql']);
+
+			if (!$result) {
+				return false;
+			}
+		}
+
 		$query = 'view_listing_id=' . $view_listing_id . ($view_listing['query'] ? '&' . $view_listing['query'] : '');
 
 		$this->saveViewListing($view_listing_id, array('query' => $query));
