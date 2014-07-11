@@ -62,13 +62,10 @@
 					</div>
 				</div>
 
-				<div class="col xs-12 md-6 register-address">
+				<div class="col xs-12 md-6 top register-address">
 					<div class="form-section">
 						<h2><?= _l("Your Address"); ?> </h2>
 
-						<div class="form-item">
-							<input type="text" placeholder="<?= _l("Company"); ?>" name="company" value="<?= $company; ?>"/>
-						</div>
 						<div class="form-item required">
 							<input type="text" placeholder="<?= _l("Address"); ?>" name="address_1" value="<?= $address_1; ?>"/>
 						</div>
