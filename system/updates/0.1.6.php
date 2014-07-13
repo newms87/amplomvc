@@ -14,3 +14,6 @@ SQL
 
 
 $this->db->addColumn('view', 'listing_id', "VARCHAR(45) NOT NULL AFTER `title`");
+
+$this->db->dropColumn('product_option', 'option_value');
+$this->db->dropColumn('product_option_value', 'name');
