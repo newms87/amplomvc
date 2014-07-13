@@ -17,3 +17,16 @@ $this->db->addColumn('view', 'listing_id', "VARCHAR(45) NOT NULL AFTER `title`")
 
 $this->db->dropColumn('product_option', 'option_value');
 $this->db->dropColumn('product_option_value', 'name');
+
+$this->db->createTable('view_listing', <<<SQL
+  `view_listing_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `slug` VARCHAR(45) NOT NULL,
+  `path` VARCHAR(255) NOT NULL,
+  `query` TEXT NULL,
+  `sql` TEXT NULL,
+  PRIMARY KEY (`view_listing_id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `slug_UNIQUE` (`slug`)
+SQL
+);

@@ -15,9 +15,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		//Defaults
 		$settings += array(
-			'path'          => '',
-			'listing_id'    => '',
-			'default_query' => array(),
+			'path'            => '',
+			'view_listing_id' => '',
+			'default_query'   => array(),
 		);
 
 		//Save Original Query
@@ -27,15 +27,23 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$views = $this->Model_Block_Widget_Views->getViews($settings['group']);
 
+		if (!isset($settings['view_listing_id']) && !empty($settings['view_listing'])) {
+			$view_listing = $this->Model_Block_Widget_Views->getViewListingBySlug($settings['view_listing']);
+
+			if ($view_listing) {
+				$settings['view_listing_id'] = $view_listing['view_listing_id'];
+			}
+		}
+
 		$default_view = array(
-			'view_id'    => 0,
-			'group'      => $settings['group'],
-			'name'       => 'default',
-			'title'      => _l("Default"),
-			'listing_id' => $settings['listing_id'],
-			'path'       => $settings['path'],
-			'query'      => $_GET,
-			'show'       => !empty($settings['path']) ? 1 : 0,
+			'view_id'         => 0,
+			'group'           => $settings['group'],
+			'view_listing_id' => $settings['view_listing_id'],
+			'name'            => 'default',
+			'title'           => _l("Default"),
+			'path'            => $settings['path'],
+			'query'           => $_GET,
+			'show'            => !empty($settings['path']) ? 1 : 0,
 		);
 
 		if (!$views) {
@@ -49,17 +57,15 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			) + $default_view;
 
 
-		$listings = $this->Model_Block_Widget_Views->getListings();
-
 		foreach ($views as $key => &$view) {
-			$listing = isset($listings[$view['listing_id']]) ? $listings[$view['listing_id']] : null;
+			$listing = $this->Model_Block_Widget_Views->getViewListing($view['view_listing_id']);
 
 			if (!$listing) {
 				$view['show'] = 0;
 			}
 
 			if ($view['show']) {
-				$action  = new Action($listing['path']);
+				$action = new Action($listing['path']);
 
 				if (!$action->isValid()) {
 					$view['show'] = 0;
@@ -79,7 +85,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$settings['views'] = $views;
 
-		$settings['data_listings'] = $listings;
+		$settings['data_view_listings'] = $this->Model_Block_Widget_Views->getViewListings();
 
 		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
 
@@ -96,9 +102,42 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$_GET = $orig_get;
 	}
 
+	public function listing()
+	{
+		$view_listing_id = _request('view_listing_id');
+
+		echo "hurray " . $view_listing_id;
+		exit;
+	}
+
 	public function create()
 	{
+		$view_listing_id = $this->Model_Block_Widget_Views->createView($_POST);
 
+		if ($view_listing_id) {
+			message('success', _l("The View has been created"));
+
+			$view = array(
+				'group'           => $_POST['group'],
+				'view_listing_id' => $view_listing_id,
+				'user_group_id'   => 0,
+				'name'            => $_POST['name'],
+				'title'           => _post('title', $_POST['name']),
+				'query'           => '',
+				'show'            => 1,
+				'sort_order'      => 0,
+			);
+
+			$this->Model_Block_Widget_Views->saveView($view);
+		} else {
+			message('error', $this->Model_Block_Widget_Views->getError());
+		}
+
+		if (IS_AJAX) {
+			output($this->message->toJSON());
+		} else {
+			redirect(_post('path', 'common/home'));
+		}
 	}
 
 	public function save_view()
@@ -136,5 +175,21 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				redirect($view['path']);
 			}
 		}
+	}
+
+	public function save_sort_order()
+	{
+		foreach (_post('sort_order', array()) as $view_id => $sort_order) {
+			$this->Model_Block_Widget_Views->save($view_id, array('sort_order' => $sort_order));
+		}
+
+		if ($this->Model_Block_Widget_Views->hasError()) {
+			message('error', $this->Model_Block_Widget_Views->getError());
+		} else {
+			message('success', _l("Sort Order of Views has been updated"));
+		}
+
+		//Ajax only method
+		output($this->message->toJSON());
 	}
 }

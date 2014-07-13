@@ -87,6 +87,34 @@ class Extend extends Library
 		}
 	}
 
+	public function addViewListing($view_listing)
+	{
+		$view_listing_id = $this->Model_Block_Widget_Views->saveViewListing(null, $view_listing);
+
+		if (!$view_listing_id) {
+			$this->error = $this->Model_Block_Widget_Views->getError();
+		}
+
+		return $view_listing_id;
+	}
+
+	public function removeViewListing($name)
+	{
+		$view_listing_id = $this->Model_Block_Widget_Views->getViewListingBySlug(slug($name));
+
+		if ($view_listing_id) {
+			$view_listing_id = $this->Model_Block_Widget_Views->removeViewListing($view_listing_id);
+
+			if (!$view_listing_id) {
+				$this->error = $this->Model_Block_Widget_Views->getError();
+			}
+		} else {
+			$this->error['name'] = _l("Could not locate View Listing with name %s", $name);
+		}
+
+		return $view_listing_id;
+	}
+
 	public function addLayout($name, $routes = array(), $data = array())
 	{
 		if (!is_array($routes)) {

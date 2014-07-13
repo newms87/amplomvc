@@ -106,6 +106,23 @@ td {
 /**********************
  *  II. Content       *
  **********************/
+//Sprites
+.sprite {
+  box-sizing: border-box;
+  display: inline-block;
+  background: transparent url("@{themepath}image/sprite.png") 0 0 no-repeat;
+
+  &.move-up {
+    width: 27px;
+    height: 15px;
+  }
+
+  &.move-down {
+    width: 27px;
+    height: 15px;
+    background-position: 0 -15px;
+  }
+}
 
 //Forms
 .form {
@@ -920,10 +937,6 @@ button, .button {
         background: gray;
         border-radius: 5px;
 
-        & + * {
-          display: none !important;
-        }
-
         &:after {
           content: "off";
           display: inline-block;
@@ -932,6 +945,10 @@ button, .button {
           left: 14px;
           width: 45px;
           text-align: left;
+        }
+
+        & + * {
+          display: none;
         }
 
         &.not {
@@ -987,7 +1004,7 @@ button, .button {
 
       td {
         * {
-          display: none;
+          display: none !important;
         }
 
         &:hover {
@@ -1200,15 +1217,6 @@ button, .button {
 
       .buttons {
         text-align: right;
-      }
-    }
-
-    .sql-tab {
-      textarea {
-        box-sizing: border-box;
-        width: 100%;
-        min-height: 50%;
-        height: 400px;
       }
     }
 
@@ -3421,6 +3429,37 @@ td.log_remove .message {
       display: inline-block;
       vertical-align: middle;
       margin-left: 1em;
+
+      .create-view-box {
+        display: none;
+        position: fixed;
+        left: 10%;
+        width: 80%;
+        height: 500px;
+        max-height: 80%;
+        top: 10%;
+        background: white;
+        box-shadow: 20px 20px 150px #000;
+        padding: 1em;
+        z-index: 100;
+
+        textarea {
+          box-sizing: border-box;
+          width: 100%;
+          min-height: 50%;
+          height: 400px;
+        }
+
+        &.show {
+          display: block;
+        }
+
+        .close {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
+      }
     }
 
     .listing {
@@ -3444,6 +3483,11 @@ td.log_remove .message {
       .listing {
         display: block;
       }
+    }
+
+    .button.move {
+      padding: 4px 12px;
+      vertical-align: top;
     }
   }
 
