@@ -105,7 +105,12 @@ class App_Model_View extends Model
 			$slug = $this->escape($view_listing['slug']);
 			$this->query("DROP VIEW IF EXISTS `$slug`");
 
-			if (!$this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql'])) {
+			try {
+				if (!$this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql'])) {
+					return false;
+				}
+			} catch(Exception $e) {
+				$this->error = $e;
 				return false;
 			}
 		}
