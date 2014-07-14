@@ -132,7 +132,7 @@ class Plugin extends Library
 	{
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		return $this->tool->getFiles($dir, false);
+		return $this->tool->getFiles($dir, false, FILELIST_SPLFILEINFO, '^((?!\.git).)*$');
 	}
 
 	public function integrateNewFiles($name)
@@ -324,7 +324,7 @@ class Plugin extends Library
 			return array();
 		}
 
-		$files = $this->tool->getFiles($dir, false, FILELIST_STRING);
+		$files = $this->tool->getFiles($dir, false, FILELIST_STRING, '^((?!\.git).)*$');
 
 		$file_mods = array();
 

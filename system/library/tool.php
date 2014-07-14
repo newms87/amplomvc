@@ -167,7 +167,7 @@ class Tool extends Library
 	 *
 	 * @return array - Each value in the array will be determined by the $return_type param.
 	 */
-	public function getFiles($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
+	public function getFiles($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $filter_preg = null)
 	{
 		if (is_null($exts)) {
 			$exts = array(
@@ -190,7 +190,8 @@ class Tool extends Library
 		$files = array();
 
 		foreach ($iterator as $file) {
-			if ($file->isFile() && (!$exts || in_array(pathinfo($file->getFileName(), PATHINFO_EXTENSION), $exts))) {
+			$ext = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
+			if ($file->isFile() && (!$exts || in_array($ext, $exts)) && (!$filter_preg || preg_match("/".$filter_preg."/", $file->getPathName()))) {
 				switch ($return_type) {
 					case FILELIST_STRING:
 						$files[] = str_replace('\\', '/', $file->getPathName());
