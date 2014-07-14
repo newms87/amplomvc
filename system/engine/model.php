@@ -266,7 +266,7 @@ abstract class Model
 				exit;
 			}
 
-			switch ((int)$columns[$key]) {
+			switch ($columns[$key]['type']) {
 				case self::AUTO_INCREMENT_PK:
 				case self::AUTO_INCREMENT:
 					if ($auto_inc) {
