@@ -1,6 +1,7 @@
 <div class="block-widget-view block">
 	<div class="widget-view-list">
 		<? foreach ($views as $row => $view) {
+			$_REQUEST = $view['query'];
 			$_GET = $view['query']; ?>
 
 			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
@@ -10,7 +11,6 @@
 					<div class="show-hide buttons">
 						<a class="hide-view button" data-loading="Showing..."><?= _l("Hide"); ?></a>
 						<a class="show-view button"><?= _l("Show"); ?></a>
-						<a class="create-view button"><?= _l("Create View"); ?></a>
 					</div>
 
 					<? if ($can_modify) { ?>
@@ -24,19 +24,6 @@
 									'key'    => false,
 									'value'  => 'name',
 								)); ?>
-							</div>
-
-							<div class="create-view-box">
-								<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
-									<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
-									<input type="hidden" name="group" value="<?= $group; ?>" />
-									<input type="text" name="name" value="<?= "View Name"; ?>"/>
-									<br/>
-									<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
-									<button class="submit-view"><?= _l("Create View"); ?></button>
-								</form>
-
-								<a class="button close">X</a>
 							</div>
 						</div>
 
@@ -60,6 +47,20 @@
 
 	<div class="buttons views-actions">
 		<a class="add-view button"><?= _l("New View"); ?></a>
+		<a class="create-view button"><?= _l("Create View"); ?></a>
+
+		<div class="create-view-box">
+			<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
+				<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
+				<input type="hidden" name="group" value="<?= $group; ?>" />
+				<input type="text" name="name" value="<?= "View Name"; ?>"/>
+				<br/>
+				<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
+				<button class="submit-view"><?= _l("Create View"); ?></button>
+			</form>
+
+			<a class="button close">X</a>
+		</div>
 	</div>
 
 </div>
@@ -90,7 +91,7 @@
 	});
 
 	$('.create-view').click(function() {
-		$(this).closest('.widget-view').find('.create-view-box').addClass('show');
+		$('.create-view-box').addClass('show');
 	});
 
 	$('.create-view-box .close').click(function() {

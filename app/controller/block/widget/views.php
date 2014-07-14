@@ -21,14 +21,15 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		);
 
 		//Save Original Query
-		$orig_get = $_GET;
+		$orig_get     = $_GET;
+		$orig_request = $_REQUEST;
 
 		$_GET += $settings['default_query'];
 
-		$views = $this->Model_Block_Widget_Views->getViews($settings['group']);
+		$views = $this->Model_View->getViews($settings['group']);
 
-		if (!isset($settings['view_listing_id']) && !empty($settings['view_listing'])) {
-			$view_listing = $this->Model_Block_Widget_Views->getViewListingBySlug($settings['view_listing']);
+		if (empty($settings['view_listing_id']) && !empty($settings['view_listing'])) {
+			$view_listing = $this->Model_View->getViewListingBySlug($settings['view_listing']);
 
 			if ($view_listing) {
 				$settings['view_listing_id'] = $view_listing['view_listing_id'];
@@ -43,7 +44,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'title'           => _l("Default"),
 			'path'            => $settings['path'],
 			'query'           => $_GET,
-			'show'            => !empty($settings['path']) ? 1 : 0,
+			'show'            => !empty($settings['view_listing_id']) ? 1 : 0,
 		);
 
 		if (!$views) {
@@ -58,7 +59,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 
 		foreach ($views as $key => &$view) {
-			$listing = $this->Model_Block_Widget_Views->getViewListing($view['view_listing_id']);
+			$listing = $this->Model_View->getViewListing($view['view_listing_id']);
 
 			if (!$listing) {
 				$view['show'] = 0;
@@ -72,7 +73,15 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 					continue;
 				}
 
-				if (is_string($listing['query'])) {
+				if (!$view['query']) {
+					$view['query'] = array();
+				} elseif (is_string($view['query'])) {
+					parse_str($view['query'], $view['query']);
+				}
+
+				if (!$listing['query']) {
+					$listing['query'] = array();
+				} elseif (is_string($listing['query'])) {
 					parse_str($listing['query'], $listing['query']);
 				}
 
@@ -85,7 +94,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$settings['views'] = $views;
 
-		$settings['data_view_listings'] = $this->Model_Block_Widget_Views->getViewListings();
+		$settings['data_view_listings'] = $this->Model_View->getAllViewListings();
 
 		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
 
@@ -99,22 +108,65 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$this->render('block/widget/views', $settings);
 
 		//Restore Query to original
-		$_GET = $orig_get;
+		$_GET     = $orig_get;
+		$_REQUEST = $orig_request;
 	}
 
 	public function listing()
 	{
-		$view_listing_id = _request('view_listing_id');
+		$view_listing_id = (int)_request('view_listing_id');
 
-		echo "hurray " . $view_listing_id;
-		exit;
+		if (!$view_listing_id) {
+			$output = _l("View Listing not found with ID: %s", $view_listing_id);
+			return IS_AJAX ? output($output) : $output;
+		}
+
+		//The Table Columns
+		$requested_cols = _request('columns');
+
+		$columns = $this->Model_View->getViewListingColumns($view_listing_id, $requested_cols);
+
+		//The Sort & Filter Data
+		$sort   = $this->sort->getQueryDefaults();
+		$filter = _request('filter', array());
+
+		$record_total = $this->Model_View->getTotalRecords($view_listing_id, $filter);
+		$records      = $this->Model_View->getRecords($view_listing_id, $sort, $filter);
+
+		$listing = array(
+			'row_id'         => null,
+			'extra_cols'     => $this->Model_View->getViewListingColumns($view_listing_id, false),
+			'columns'        => $columns,
+			'rows'           => $records,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $record_total,
+			'listing_path'   => 'block/widget/views/listing',
+		);
+
+		$this->theme->addTheme('admin');
+
+		$output = block('widget/listing', null, $listing);
+
+		//Response
+		if (IS_AJAX) {
+			output($output);
+		}
+
+		return $output;
 	}
 
 	public function create()
 	{
-		$view_listing_id = $this->Model_Block_Widget_Views->createView($_POST);
+		$view_listing = $_POST;
+		$view_listing['path'] = 'block/widget/views/listing';
+
+		$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
 
 		if ($view_listing_id) {
+			$query = 'view_listing_id=' . $view_listing_id . ($view_listing['query'] ? '&' . $view_listing['query'] : '');
+			$this->saveViewListing($view_listing_id, array('query' => $query));
+
 			message('success', _l("The View has been created"));
 
 			$view = array(
@@ -128,26 +180,28 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				'sort_order'      => 0,
 			);
 
-			$this->Model_Block_Widget_Views->saveView($view);
+			if (!$this->Model_View->save(null, $view)) {
+				message('error', $this->Model_View->getError());
+			}
 		} else {
-			message('error', $this->Model_Block_Widget_Views->getError());
+			message('error', $this->Model_View->getError());
 		}
 
 		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} else {
-			redirect(_post('path', 'common/home'));
+			redirect(_request('redirect', _post('path', 'admin')));
 		}
 	}
 
 	public function save_view()
 	{
-		$view_id = $this->Model_Block_Widget_Views->save($_POST['view_id'], $_POST);
+		$view_id = $this->Model_View->save($_POST['view_id'], $_POST);
 
 		if ($view_id) {
 			message('success', _l("%s view was saved!", $_POST['title']));
 		} else {
-			message('error', $this->Model_Block_Widget_Views->getError());
+			message('error', $this->Model_View->getError());
 		}
 
 		if (IS_AJAX) {
@@ -160,13 +214,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 	public function remove_view()
 	{
-		$view = $this->Model_Block_Widget_Views->getView($_POST['view_id']);
+		$view = $this->Model_View->getView($_POST['view_id']);
 
 		if ($view) {
-			if ($this->Model_Block_Widget_Views->remove($_POST['view_id'])) {
+			if ($this->Model_View->remove($_POST['view_id'])) {
 				message('success', _l("The %s view has been removed", $view['title']));
 			} else {
-				message('error', $this->Model_Block_Widget_Views->getError());
+				message('error', $this->Model_View->getError());
 			}
 
 			if (IS_AJAX) {
@@ -180,11 +234,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 	public function save_sort_order()
 	{
 		foreach (_post('sort_order', array()) as $view_id => $sort_order) {
-			$this->Model_Block_Widget_Views->save($view_id, array('sort_order' => $sort_order));
+			$this->Model_View->save($view_id, array('sort_order' => $sort_order));
 		}
 
-		if ($this->Model_Block_Widget_Views->hasError()) {
-			message('error', $this->Model_Block_Widget_Views->getError());
+		if ($this->Model_View->hasError()) {
+			message('error', $this->Model_View->getError());
 		} else {
 			message('success', _l("Sort Order of Views has been updated"));
 		}

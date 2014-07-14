@@ -51,7 +51,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		unset($ec);
 
 		$this->table->init();
-		$this->table->setTemplate('table/list_view');
+		$this->table->setTemplate('table/list_view', isset($settings['theme']) ? $settings['theme'] : null);
 		$this->table->setColumns($settings['columns']);
 		$this->table->setRows($settings['rows']);
 		$this->table->setTemplateData($settings['template_data']);

@@ -335,7 +335,7 @@ abstract class Model
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		} else {
-			$t = $table;
+			$t = $this->prefix . $table;
 		}
 
 		$columns += $this->getTableColumns($table);
@@ -453,7 +453,7 @@ abstract class Model
 		foreach ($data['sort'] as $sort => $order) {
 			$sort = $this->escape($sort);
 
-			if (!preg_match("/[^a-z0-9_]/i", $sort)) {
+			if (strpos($sort, '.') === false) {
 				$sort = "`" . $sort . "`";
 			}
 

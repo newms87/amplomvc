@@ -315,7 +315,7 @@ class App_Model_Page extends Model
 		return $page;
 	}
 
-	public function getPages($filter = array(), $select = '*', $index = null)
+	public function getPages($sort = array(), $filter = array(), $select = '*', $index = null)
 	{
 		//Select
 		if ($index === false) {
@@ -343,9 +343,9 @@ class App_Model_Page extends Model
 		}
 
 		//Order By & Limit
-		if (!$index) {
-			$order = $this->extractOrder($filter);
-			$limit = $this->extractLimit($filter);
+		if ($index !== false) {
+			$order = $this->extractOrder($sort);
+			$limit = $this->extractLimit($sort);
 		} else {
 			$order = '';
 			$limit = '';
@@ -402,9 +402,9 @@ class App_Model_Page extends Model
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "page_store WHERE page_id = '" . (int)$page_id . "'");
 	}
 
-	public function getTotalPages($data = array())
+	public function getTotalPages($filter = array())
 	{
-		return $this->getPages($data, '*', false);
+		return $this->getPages(array(), $filter, '', false);
 	}
 
 	public function loadPages()
@@ -414,7 +414,7 @@ class App_Model_Page extends Model
 		if (is_null($pages)) {
 			$pages = array();
 
-			$page_list = $this->getPages(array(), '*');
+			$page_list = $this->getPages(array(), array(), '*');
 
 			foreach ($page_list as $p) {
 				$pages[$p['theme']][$p['name']] = $p;

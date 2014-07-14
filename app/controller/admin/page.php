@@ -90,7 +90,7 @@ class App_Controller_Admin_Page extends Controller
 		$filter = _get('filter', array());
 
 		$page_total = $this->Model_Page->getTotalPages($filter);
-		$pages      = $this->Model_Page->getPages($sort + $filter);
+		$pages      = $this->Model_Page->getPages($sort, $filter);
 
 		$url_query = $this->url->getQueryExclude('page_id');
 

@@ -24,7 +24,7 @@ class App_Model_Dashboard extends Model
 
 	public function remove($dashboard_id)
 	{
-		$this->Model_Block_Widget_Views->removeGroup('dash-' . $dashboard_id);
+		$this->Model_View->removeGroup('dash-' . $dashboard_id);
 
 		return $this->delete('dashboard', $dashboard_id);
 	}

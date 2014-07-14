@@ -237,15 +237,15 @@ $.fn.flash_highlight = function () {
     return this;
 }
 
-$.fn.overflown = function (dir) {
+$.fn.overflown = function (dir, tolerance) {
     return this.each(function(i,e) {
         var over;
 
         if (dir) {
-            over = dir === 'height' ? e.scrollHeight > e.clientHeight : e.scrollWidth > e.clientWidth;
+            over = dir === 'y' ? e.scrollHeight > (e.clientHeight+tolerance) : e.scrollWidth > (e.clientWidth+tolerance);
         }
 
-        over = e.scrollHeight > e.clientHeight || e.scrollWidth > e.clientWidth;
+        over = e.scrollHeight > (e.clientHeight+tolerance) || e.scrollWidth > (e.clientWidth+tolerance);
 
         if (over) {
             $(e).addClass('overflown');

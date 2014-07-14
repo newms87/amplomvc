@@ -206,7 +206,8 @@ if (isset($_GET['run_cron'])) {
 	echo nl2br($registry->get('cron')->run());
 	exit;
 } elseif (option('config_cron_status')) {
-	$registry->get('cron')->check();
+	//TODO: Cron disabled, has issues..
+	//$registry->get('cron')->check();
 }
 
 //PHP Info

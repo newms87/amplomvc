@@ -106,8 +106,12 @@ class Sort extends Library
 		return ob_get_clean();
 	}
 
-	public function getQueryDefaults($sort_default = 'sort_order', $order_default = 'ASC', $limit_default = null, $page_default = 1)
+	public function getQueryDefaults($sort_default = null, $order_default = 'ASC', $limit_default = null, $page_default = 1)
 	{
+		if (!$sort_default) {
+			$order_default = null;
+		}
+
 		if (empty($limit_default) || (int)$limit_default < 1) {
 			$limit_default = $this->route->isAdmin() ? option('config_admin_limit') : option('config_catalog_limit');
 		}

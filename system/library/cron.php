@@ -5,6 +5,9 @@ class Cron extends Library
 
 	public function check()
 	{
+		//TODO: Re-enable Cron when convenient
+		return;
+
 		$this->settings = $this->config->loadGroup('cron', 0);
 
 		if (empty($this->settings['cron_last_run'])) {

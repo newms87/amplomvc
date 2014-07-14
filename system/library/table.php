@@ -34,9 +34,13 @@ class Table extends Library
 		$this->template_data = $template_data;
 	}
 
-	public function setTemplate($file)
+	public function setTemplate($file, $theme = null)
 	{
-		$this->file = is_file($file) ? $file : $this->theme->getFile($file);
+		$this->file = is_file($file) ? $file : $this->theme->getFile($file, $theme);
+
+		if (!$this->file) {
+			echo $file  . ' is no a file<Br>';
+		}
 	}
 
 	public function mapAttribute($attr, $values)

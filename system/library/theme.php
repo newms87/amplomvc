@@ -3,6 +3,7 @@
 class Theme extends Library
 {
 	private $dir_themes;
+	private $store_themes;
 	private $theme;
 	private $settings = array();
 
@@ -43,6 +44,11 @@ class Theme extends Library
 
 		//Directory Constants
 		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
+	}
+
+	public function addTheme($theme)
+	{
+		$this->store_themes[] = $theme;
 	}
 
 	public function setTheme($theme)

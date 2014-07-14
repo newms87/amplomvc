@@ -640,5 +640,5 @@
 		}
 	});
 
-	$('.action-buttons').overflown();
+	$('.action-buttons').overflown('y', 5);
 </script>

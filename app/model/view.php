@@ -1,6 +1,6 @@
 <?php
 
-class App_Model_Block_Widget_Views extends Model
+class App_Model_View extends Model
 {
 	static $view_listings;
 
@@ -67,38 +67,15 @@ class App_Model_Block_Widget_Views extends Model
 		return $this->delete('view', $view_id);
 	}
 
-	public function createView($view_listing)
-	{
-		$view_listing += array(
-			'name'  => '',
-			'slug'  => '',
-			'path'  => 'block/widget/views/listing',
-			'query' => '',
-			'sql'   => '',
-		);
-
-		$view_listing_id = $this->saveViewListing(null, $view_listing);
-
-		if (!empty($view_listing['sql'])) {
-			$result = $this->query("CREATE VIEW " . $view_listing['sql']);
-
-			if (!$result) {
-				return false;
-			}
-		}
-
-		$query = 'view_listing_id=' . $view_listing_id . ($view_listing['query'] ? '&' . $view_listing['query'] : '');
-
-		$this->saveViewListing($view_listing_id, array('query' => $query));
-
-		return $view_listing_id;
-	}
+	/*********************
+	 *   View Listings   *
+	 *********************/
 
 	public function saveViewListing($view_listing_id, $view_listing)
 	{
 		if (!$view_listing_id || isset($view_listing['name'])) {
 			if (!validate('text', $view_listing['name'], 2, 45)) {
-				$this->error['name'] = _l("The name must be between 2 and 45 charaters");
+				$this->error['name'] = _l("The name must be between 2 and 45 characters");
 				return false;
 			}
 
@@ -123,18 +100,83 @@ class App_Model_Block_Widget_Views extends Model
 			$view_listing_id = $this->insert('view_listing', $view_listing);
 		}
 
+		//Create the SQL View
+		if (!empty($view_listing['sql'])) {
+			$slug = $this->escape($view_listing['slug']);
+			$this->query("DROP VIEW IF EXISTS `$slug`");
+
+			if (!$this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql'])) {
+				return false;
+			}
+		}
+
 		return $view_listing_id;
 	}
 
 	public function removeViewListing($view_listing_id)
 	{
+		$this->cache->delete('view_listing');
+
+		$this->delete('view', array('view_listing_id' => $view_listing_id));
+
 		return $this->delete('view_listing', $view_listing_id);
+	}
+
+	public function getRecords($view_listing_id, $sort = array(), $filter = array(), $select = '*', $index = null)
+	{
+		$table = $this->getViewListingTable($view_listing_id);
+
+		if (!$table) {
+			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
+			return false;
+		}
+
+		//Select
+		if ($index === false) {
+			$select = 'COUNT(*)';
+		}
+
+		//From
+		$from = $this->prefix . $table;
+
+		//Where
+		$where = $this->extractFilter($table, $filter);
+
+		//Order By & Limit
+		if ($index !== false) {
+			$order = $this->extractOrder($sort);
+			$limit = $this->extractLimit($sort);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+
+		//Get Total
+		if ($index === false) {
+			return $this->queryVar($query);
+		}
+
+		//Get Rows
+		return $this->queryRows($query, $index);
+	}
+
+	public function getTotalRecords($view_listing_id, $filter = array())
+	{
+		return $this->getRecords($view_listing_id, array(), $filter, '', false);
+	}
+
+	public function getViewListingTable($view_listing_id)
+	{
+		return $this->queryVar("SELECT slug FROM " . $this->prefix . "view_listing WHERE view_listing_id = " . (int)$view_listing_id);
 	}
 
 	public function getViewListingBySlug($slug)
 	{
 		if (!self::$view_listings) {
-			$this->getViewListings();
+			$this->getAllViewListings();
 		}
 
 		return array_search_key('slug', $slug, self::$view_listings);
@@ -143,19 +185,19 @@ class App_Model_Block_Widget_Views extends Model
 	public function getViewListing($view_listing_id)
 	{
 		if (!self::$view_listings) {
-			$this->getViewListings();
+			$this->getAllViewListings();
 		}
 
 		return isset(self::$view_listings[$view_listing_id]) ? self::$view_listings[$view_listing_id] : null;
 	}
 
-	public function getViewListings()
+	public function getAllViewListings()
 	{
 		if (!self::$view_listings) {
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				self::$view_listings = $this->queryRows("SELECT * FROM " . $this->prefix . "view_listing", 'view_listing_id');
+				self::$view_listings = $this->queryRows("SELECT * FROM " . $this->prefix . "view_listing ORDER BY name", 'view_listing_id');
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
@@ -172,8 +214,59 @@ class App_Model_Block_Widget_Views extends Model
 		return self::$view_listings;
 	}
 
+	public function getViewListings($sort = array(), $filter = array(), $select = '*', $index = null)
+	{
+		//Select
+		if ($index === false) {
+			$select = 'COUNT(*)';
+		}
+
+		//From
+		$from = $this->prefix . "view_listing vl";
+
+		$where = $this->extractFilter('view_listing vl', $filter);
+
+		//Order By & Limit
+		if ($index !== false) {
+			$order = $this->extractOrder($sort);
+			$limit = $this->extractLimit($sort);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+
+		//Get Total
+		if ($index === false) {
+			return $this->queryVar($query);
+		}
+
+		return $this->queryRows($query, $index);
+	}
+
+	public function getTotalViewListings($filter = array())
+	{
+		return $this->getViewListings(array(), $filter, '', false);
+	}
+
+	public function getColumns($filter = array())
+	{
+		return $this->getTableColumns('view_listing', array(), $filter);
+	}
+
+	public function getViewListingColumns($view_listing_id, $filter)
+	{
+		$table = $this->getViewListingTable($view_listing_id);
+
+		return $this->getTableColumns($table, array(), $filter);
+	}
+
 	protected function resetViewListings()
 	{
+		$this->cache->delete('view_listing');
+
 		$view_listings = array(
 			'clients' => array(
 				'path'  => 'admin/client/listing',
@@ -185,6 +278,11 @@ class App_Model_Block_Widget_Views extends Model
 				'query' => '',
 				'name'  => 'Page List',
 			),
+		   'view_listings' => array(
+			   'path' => 'admin/view/listing',
+		      'query' => '',
+		      'name' => 'View Listings',
+		   ),
 		);
 
 		foreach ($view_listings as $view_listing) {
