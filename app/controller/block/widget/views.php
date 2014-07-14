@@ -165,7 +165,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if ($view_listing_id) {
 			$query = 'view_listing_id=' . $view_listing_id . ($view_listing['query'] ? '&' . $view_listing['query'] : '');
-			$this->saveViewListing($view_listing_id, array('query' => $query));
+			$this->Model_View->saveViewListing($view_listing_id, array('query' => $query));
 
 			message('success', _l("The View has been created"));
 
