@@ -165,6 +165,8 @@ abstract class Model
 
 		$values = $this->getInsertString($table, $data);
 
+		$update_id = true;
+
 		if (!$where) {
 			if (empty($data[$primary_key])) {
 				return $this->insert($table, $data);
@@ -173,8 +175,12 @@ abstract class Model
 			$where = (int)$data[$primary_key];
 
 			$update_id = $where;
-		} elseif (isset($where[$primary_key])) {
-			$update_id = (int)$where[$primary_key];
+		} elseif (is_array($where)) {
+			if (isset($where[$primary_key])) {
+				$update_id = (int)$where[$primary_key];
+			}
+		} else {
+			$update_id = (int)$where;
 		}
 
 		$where = $this->getWhere($table, $where, '', '', true);
@@ -219,19 +225,19 @@ abstract class Model
 		return true;
 	}
 
-	protected function getWhere($table, $data, $prefix = '', $glue = '', $primary_key = false)
+	protected function getWhere($table, $where, $prefix = '', $glue = '', $primary_key = false)
 	{
-		if (is_integer($data) || (is_string($data) && preg_match("/[^\\d]/", $data) === 0)) {
+		if (is_integer($where) || is_string($where)) {
 			$primary_key = $this->getPrimaryKey($table);
 			if (!$primary_key) {
 				trigger_error("WHERE statement " . _l("%s does not have an integer primary key!", $table));
 				return null;
 			}
 
-			return "`$primary_key` = '" . $this->escape($data) . "'";
+			return "`$primary_key` = '" . $this->escape($where) . "'";
 		}
 
-		$data = $this->getEscapedValues($table, $data, $primary_key);
+		$where = $this->getEscapedValues($table, $where, $primary_key);
 
 		if (!$glue) {
 			$glue = 'AND';
@@ -239,7 +245,7 @@ abstract class Model
 
 		$values = '';
 
-		foreach ($data as $key => $value) {
+		foreach ($where as $key => $value) {
 			$values .= ($values ? ' ' . $glue . ' ' : '') . ($prefix ? "`$prefix`." : '') . "`$key` = '$value'";
 		}
 
