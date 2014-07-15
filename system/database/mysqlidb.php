@@ -3,6 +3,8 @@ class mysqlidb implements Database
 {
 	private $mysqli;
 	private $err_msg;
+	private $last_id;
+	private $affected_rows;
 
 	private $hostname;
 	private $username;
@@ -59,6 +61,8 @@ class mysqlidb implements Database
 
 				return $query;
 			} else {
+				$this->last_id = $this->mysqli->insert_id;
+				$this->affected_rows = $this->mysqli->affected_rows;
 				return true;
 			}
 		} else {
@@ -101,12 +105,12 @@ class mysqlidb implements Database
 
 	public function countAffected()
 	{
-		return $this->mysqli->affected_rows;
+		return $this->affected_rows;
 	}
 
 	public function getLastId()
 	{
-		return $this->mysqli->insert_id;
+		return $this->last_id;
 	}
 
 	public function __destruct()

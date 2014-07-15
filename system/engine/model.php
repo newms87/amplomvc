@@ -171,6 +171,10 @@ abstract class Model
 			}
 
 			$where = (int)$data[$primary_key];
+
+			$update_id = $where;
+		} elseif (isset($where[$primary_key])) {
+			$update_id = (int)$where[$primary_key];
 		}
 
 		$where = $this->getWhere($table, $where, '', '', true);
@@ -189,7 +193,7 @@ abstract class Model
 			return false;
 		}
 
-		return $this->getLastId();
+		return $update_id;
 	}
 
 	protected function delete($table, $where = null)

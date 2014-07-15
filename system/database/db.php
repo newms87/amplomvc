@@ -520,6 +520,8 @@ class DB
 
 	public function getLastId()
 	{
+		echo $this->driver->getLastId() . ' or ' . $this->driver->countAffected() . '<BR>';
+		flush();
 		return $this->driver->getLastId();
 	}
 
