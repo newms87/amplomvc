@@ -108,11 +108,12 @@ class Extend extends Library
 			if (!$view_listing_id) {
 				$this->error = $this->Model_View->getError();
 			}
+
+			return $view_listing_id;
 		} else {
 			$this->error['name'] = _l("Could not locate View Listing with name %s", $name);
+			return false;
 		}
-
-		return $view_listing_id;
 	}
 
 	public function addLayout($name, $routes = array(), $data = array())
