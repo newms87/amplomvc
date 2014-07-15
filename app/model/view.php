@@ -87,7 +87,29 @@ class App_Model_View extends Model
 			}
 		}
 
+		if (!$view_listing_id && empty($view_listing['slug'])) {
+			$view_listing['slug'] = slug($view_listing['name']);
+		}
+
 		$this->cache->delete('view_listing');
+
+		//Create the SQL View
+		if (!empty($view_listing['sql'])) {
+			$slug = !empty($view_listing['slug']) ? $view_listing['slug'] : $this->queryField('view_listing', 'slug', $view_listing_id);
+			$this->query("DROP VIEW IF EXISTS `" . $this->prefix . "$slug`");
+
+			$display_errors = ini_get('display_errors');
+			ini_set('display_errors', 0);
+
+			$result = $this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql']);
+
+			ini_set('display_errors', $display_errors);
+
+			if (!$result) {
+				$this->error['sql'] = _l("Invalid SELECT statement.<br /><Br /> %s", $this->db->getQueryError());
+				return false;
+			}
+		}
 
 		if ($view_listing_id) {
 			unset($view_listing['slug']);
@@ -98,21 +120,6 @@ class App_Model_View extends Model
 			}
 
 			$view_listing_id = $this->insert('view_listing', $view_listing);
-		}
-
-		//Create the SQL View
-		if (!empty($view_listing['sql'])) {
-			$slug = $this->escape($view_listing['slug']);
-			$this->query("DROP VIEW IF EXISTS `$slug`");
-
-			try {
-				if (!$this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql'])) {
-					return false;
-				}
-			} catch(Exception $e) {
-				$this->error = $e;
-				return false;
-			}
 		}
 
 		return $view_listing_id;

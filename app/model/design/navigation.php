@@ -408,6 +408,10 @@ class App_Model_Design_Navigation extends Model
 							),
 						),
 					),
+					'system_views' => array(
+						'display_name' => 'Views',
+					   'href' => 'admin/view',
+					),
 					'system_url_alias'    => array(
 						'display_name' => 'URL Alias',
 						'href'         => 'admin/setting/url_alias',

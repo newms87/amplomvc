@@ -95,23 +95,23 @@ class App_Controller_Admin_View extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Page"), site_url('admin/view'));
+		breadcrumb(_l("Views"), site_url('admin/view'));
 		breadcrumb($view_listing_id ? _l("Edit") : _l("Add"), site_url('admin/view/form', 'view_listing_id=' . $view_listing_id));
 
 		//Load Information from POST or DB
 		$view_listing = $_POST;
 
-		if ($view_listing_id && !IS_POST) {
-			$view_listing = $this->Model_View->getViewListing($view_listing_id);
+		if ($view_listing_id) {
+			$view_listing += $this->Model_View->getViewListing($view_listing_id);
 		}
 
 		//Set Values or Defaults
 		$defaults = array(
-			'name'  => '',
-			'slug'  => '',
-			'path'  => '',
-			'query' => '',
-			'sql'   => '',
+			'name'            => '',
+			'slug'            => '',
+			'path'            => '',
+			'query'           => '',
+			'sql'             => '',
 		);
 
 		$view_listing += $defaults;

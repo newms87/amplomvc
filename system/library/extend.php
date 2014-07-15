@@ -100,10 +100,10 @@ class Extend extends Library
 
 	public function removeViewListing($name)
 	{
-		$view_listing_id = $this->Model_View->getViewListingBySlug(slug($name));
+		$view_listing = $this->Model_View->getViewListingBySlug(slug($name));
 
-		if ($view_listing_id) {
-			$view_listing_id = $this->Model_View->removeViewListing($view_listing_id);
+		if ($view_listing) {
+			$view_listing_id = $this->Model_View->removeViewListing($view_listing['view_listing_id']);
 
 			if (!$view_listing_id) {
 				$this->error = $this->Model_View->getError();
