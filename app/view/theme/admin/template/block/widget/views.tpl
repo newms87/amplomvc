@@ -37,7 +37,7 @@
 				</div>
 
 				<div class="listing">
-					<? if ($view['show']) { ?>
+					<? if ($view['show'] && $row !== '__ac_template__') { ?>
 						<?= $view['controller']->$view['method'](); ?>
 					<? } ?>
 				</div>

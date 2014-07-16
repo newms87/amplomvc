@@ -492,12 +492,37 @@ abstract class Model
 		return $limit;
 	}
 
+	protected function hasIndex($table, $fields)
+	{
+		if (empty($fields)) {
+			return '';
+		}
+
+		if (!is_array($fields)) {
+			$fields = array($fields => 1);
+		}
+
+		$fields = array_keys($fields);
+
+		$columns = $this->getTableColumns($table);
+
+		foreach ($fields as $field) {
+			if (!empty($columns[$field]['Index'])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	protected function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
 	{
 		$columns = cache('model.' . $table);
 
 		if (!$columns) {
 			$columns = $this->db->getTableColumns($table);
+
+			$indexes = $this->queryRows("SHOW INDEX FROM `$this->prefix" . $this->escape($table) . "`");
 
 			foreach ($columns as &$column) {
 				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
@@ -548,6 +573,12 @@ abstract class Model
 					$column['Length'] = (int)$length[2];
 				} else {
 					$column['Length'] = 0;
+				}
+
+				foreach ($indexes as $index) {
+					if ($index['Column_name'] === $column['Field']) {
+						$column['Index'][] = $index;
+					}
 				}
 			}
 			unset($column);
