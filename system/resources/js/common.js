@@ -646,10 +646,12 @@ function init_ajax() {
     var $colorbox = $('.colorbox').not('.colorbox-init').addClass('colorbox-init');
 
     if ($colorbox.length) {
+	    var width = Math.max($('body').width() * .6, 400);
+
         var defaults = {
             overlayClose: true,
             opacity: 0.5,
-            width: '60%',
+            width: width,
             height: '80%',
             onComplete: init_ajax
         }

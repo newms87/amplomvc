@@ -45,11 +45,11 @@
     .columns(@cols, @c + 1);
   }
 
-  .hidden-xs, .visible-sm, .visible-md, .visible-lg {
+  .xs-hidden, .sm-visible, .md-visible, .lg-visible {
     display: none !important;
   }
 
-  .visible-xs {
+  .xs-visible {
     display: inherit;
   }
 }
@@ -71,11 +71,11 @@
     .columns(@cols, @c + 1);
   }
 
-  .visible-xs, .hidden-sm, .visible-md, .visible-lg {
+  .xs-visible, .sm-hidden, .md-visible, .lg-visible {
     display: none !important;
   }
 
-  .visible-sm {
+  .sm-visible {
     display: inherit;
   }
 }
@@ -97,11 +97,11 @@
     .columns(@cols, @c + 1);
   }
 
-  .visible-xs, .visible-sm, .hidden-md, .visible-lg {
+  .xs-visible, .sm-visible, .md-hidden, .lg-visible {
     display: none !important;
   }
 
-  .visible-md {
+  .md-visible {
     display: inherit;
   }
 }
@@ -123,11 +123,11 @@
     .columns(@cols, @c + 1);
   }
 
-  .visible-xs, .visible-sm, .visible-md, .hidden-lg {
+  .xs-visible, .sm-visible, .md-visible, .lg-hidden {
     display: none !important;
   }
 
-  .visible-lg {
+  .lg-visible {
     display: inherit;
   }
 }
