@@ -83,6 +83,11 @@ class DB
 		$this->error = array();
 	}
 
+	public function getQueryError()
+	{
+		return $this->driver->getError();
+	}
+
 	public function getName()
 	{
 		return $this->driver->getName();
