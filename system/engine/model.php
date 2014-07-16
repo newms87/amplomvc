@@ -508,11 +508,28 @@ abstract class Model
 
 		foreach ($fields as $field) {
 			if (!empty($columns[$field]['Index'])) {
-				return true;
+				return $field;
 			}
 		}
 
 		return false;
+	}
+
+	protected function calcFoundRows($table, $sort, $filter)
+	{
+		if (empty($sort['sort']) && empty($filter)) {
+			return true;
+		}
+
+		$indexed = $this->hasIndex($table, $sort['sort']);
+
+		if ($indexed) {
+			if (isset($filter[$indexed])) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
