@@ -103,7 +103,7 @@
 										$build_key = $build_value = null;
 									}
 
-									if ($column['filter_blank']) {
+									if ($column['filter_blank'] && !isset($column['build_data'][''])) {
 										$column['build_data'] = array('' => '') + $column['build_data'];
 									}
 
