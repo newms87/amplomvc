@@ -134,11 +134,11 @@ function redirect($path = '', $query = null, $status = null)
 	$registry->get('url')->redirect($path, $query, $status);
 }
 
-function slug($name, $sep = '_', $allow = '')
+function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 {
 	$patterns = array(
 		"/[\\s\\\\\\/]/"      => $sep,
-		"/[^a-z0-9_-$allow]/" => '',
+		"/[^$allow]/" => '',
 	);
 
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
