@@ -181,7 +181,7 @@ class App_Controller_Admin_User_User extends Controller
 	public function delete()
 	{
 		if ($this->Model_User_User->remove(_get('user_id'))) {
-			message('notify', _l("User was deleted!"));
+			message('success', _l("User was deleted!"));
 		} else {
 			message('error', $this->Model_User_User->getError());
 		}

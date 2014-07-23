@@ -28,7 +28,7 @@
 							</a>
 						</div>
 
-						<? if ($can_modify) { ?>
+						<? if ($can_modify && user_can('modify', 'views')) { ?>
 							<div class="view-settings buttons">
 								<div class="view-setting setting-buttons">
 									<a class="move-up button move">
@@ -79,20 +79,23 @@
 
 	<div class="buttons views-actions">
 		<a class="add-view button"><?= _l("New View"); ?></a>
-		<a class="create-view button"><?= _l("Create View"); ?></a>
 
-		<div class="create-view-box">
-			<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
-				<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
-				<input type="hidden" name="group" value="<?= $group; ?>"/>
-				<input type="text" name="name" value="<?= "View Name"; ?>"/>
-				<br/>
-				<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
-				<button class="submit-view"><?= _l("Create View"); ?></button>
-			</form>
+		<? if (user_can('modify', 'views')) { ?>
+			<a class="create-view button"><?= _l("Create View"); ?></a>
 
-			<a class="button close">X</a>
-		</div>
+			<div class="create-view-box">
+				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
+					<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
+					<input type="hidden" name="group" value="<?= $group; ?>"/>
+					<input type="text" name="name" value="<?= "View Name"; ?>"/>
+					<br/>
+					<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
+					<button class="submit-view"><?= _l("Create View"); ?></button>
+				</form>
+
+				<a class="button close">X</a>
+			</div>
+		<? } ?>
 	</div>
 
 </div>
@@ -163,7 +166,7 @@
 		});
 	});
 
-	<? if ($can_modify) { ?>
+	<? if ($can_modify && user_can('modify', 'views')) { ?>
 	$('.choose-view-box [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
@@ -226,7 +229,6 @@
 			});
 		}
 	});
-	<? } ?>
 
 	var col_sizes = <?= json_encode($col_sizes); ?>;
 
@@ -245,6 +247,7 @@
 		}
 		return classes;
 	}
+	<? } ?>
 
 	$('.block-widget-view').ac_template('v-list', {defaults: <?= json_encode($views['__ac_template__']); ?>});
 

@@ -474,7 +474,7 @@
 	var $listview = $(".table-list-view-box").not('.activated').addClass('activated');
 	var $table = $listview.find('.table-list-view');
 
-	$table.draggable({axis: 'x', containment: [-($table.outerWidth() - $listview.width()), -50, 100, 100]});
+	$table.draggable({axis: 'x'});
 
 	$listview.find('.filter-list-item').click(function () {
 		var cb = $(this).find('[name="batch[]"]');
