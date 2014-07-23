@@ -44,6 +44,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'title'           => _l("Default"),
 			'path'            => $settings['path'],
 			'query'           => $_GET,
+			'size'            => 100,
 			'show'            => !empty($settings['view_listing_id']) ? 1 : 0,
 		);
 
@@ -55,10 +56,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$views['__ac_template__'] = array(
 				'name'  => 'new-view-__ac_template__',
 				'title' => 'New View __ac_template__',
+				'size'  => 100,
 			) + $default_view;
 
 
 		foreach ($views as $key => &$view) {
+			$view += $default_view;
+
 			$listing = $this->Model_View->getViewListing($view['view_listing_id']);
 
 			if (!$listing) {
@@ -85,9 +89,17 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 					parse_str($listing['query'], $listing['query']);
 				}
 
+				$view['query'] = $listing['query'] + $view['query'];
+
+				$_GET     = $view['query'];
+				$_REQUEST = $view['query'];
+
 				$view['controller'] = $action->getController();
 				$view['method']     = $action->getMethod();
-				$view['query']      = $listing['query'] + $view['query'];
+
+				//Restore Query to original
+				$_GET     = $orig_get;
+				$_REQUEST = $orig_request;
 			}
 		}
 		unset($view);
@@ -95,6 +107,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$settings['views'] = $views;
 
 		$settings['data_view_listings'] = $this->Model_View->getAllViewListings();
+
+		$settings['data_view_sizes'] = array(
+			25  => '25%',
+			33  => '33%',
+			50  => '50%',
+			100 => '100%',
+		);
 
 		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
 
@@ -158,7 +177,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 	public function create()
 	{
-		$view_listing = $_POST;
+		$view_listing         = $_POST;
 		$view_listing['path'] = 'block/widget/views/listing';
 
 		$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);

@@ -4,15 +4,19 @@
 	<? } ?>
 
 	<? if ($show_limits) { ?>
-		<div class="limits">
+		<div class="limits clearfix">
 			<?= $this->sort->renderLimits($limit_settings); ?>
 		</div>
 	<? } ?>
 
 	<div class="view-controls">
-		<a class="refresh-listing" href="<?= $refresh; ?>">Refresh</a>
+		<a class="refresh-listing" href="<?= $refresh; ?>">
+			<b class="sprite refresh small"></b>
+		</a>
 
-		<button class="modify-view"><?= _l("Modify View"); ?></button>
+		<button class="modify-view small">
+			<b class="sprite settings small"></b>
+		</button>
 
 		<div class="view-config">
 			<button class="close">X</button>
@@ -84,6 +88,7 @@
 
 				var $listing = $this.closest('.widget-listing');
 				$listing.addClass("loading");
+				$listing.find('.refresh-listing').addClass('refreshing');
 
 				var data = {columns: {}};
 

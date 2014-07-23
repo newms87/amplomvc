@@ -20,11 +20,43 @@
 }
 
 .col {
-  float: left;
+  display: inline-block;
   box-sizing: border-box;
+  vertical-align: middle;
   text-align: center;
   position: relative;
   min-height: 1px;
+
+  &.top {
+    vertical-align: top;
+  }
+
+  &.middle {
+    vertical-align: middle;
+  }
+
+  &.bottom {
+    vertical-align: bottom;
+  }
+
+  //Hack to overcome whitespace between inline-block elements
+  & + .col {
+    margin-left:-.29em;
+  }
+
+  &.left {
+    text-align: left;
+    float: none;
+  }
+
+  &.center {
+    text-align: center;
+  }
+
+  &.right {
+    text-align: right;
+    float: none;
+  }
 }
 
 @media (min-width: @xs) {
@@ -45,12 +77,31 @@
     .columns(@cols, @c + 1);
   }
 
+  .col.xs-top {
+    vertical-align: top;
+  }
+  .col.xs-middle {
+    vertical-align: middle;
+  }
+  .col.xs-bottom {
+    vertical-align: bottom;
+  }
+  .col.xs-left {
+    text-align: left;
+  }
+  .col.xs-center {
+    text-align: center;
+  }
+  .col.xs-right {
+    text-align: right;
+  }
+
   .xs-hidden, .sm-visible, .md-visible, .lg-visible {
     display: none !important;
   }
 
   .xs-visible {
-    display: inherit;
+    display: inherit !important;
   }
 }
 
@@ -71,12 +122,31 @@
     .columns(@cols, @c + 1);
   }
 
+  .col.sm-top {
+    vertical-align: top;
+  }
+  .col.sm-middle {
+    vertical-align: middle;
+  }
+  .col.sm-bottom {
+    vertical-align: bottom;
+  }
+  .col.sm-left {
+    text-align: left;
+  }
+  .col.sm-center {
+    text-align: center;
+  }
+  .col.sm-right {
+    text-align: right;
+  }
+
   .xs-visible, .sm-hidden, .md-visible, .lg-visible {
     display: none !important;
   }
 
   .sm-visible {
-    display: inherit;
+    display: inherit !important;
   }
 }
 
@@ -97,12 +167,31 @@
     .columns(@cols, @c + 1);
   }
 
+  .col.md-top {
+    vertical-align: top;
+  }
+  .col.md-middle {
+    vertical-align: middle;
+  }
+  .col.md-bottom {
+    vertical-align: bottom;
+  }
+  .col.md-left {
+    text-align: left;
+  }
+  .col.md-center {
+    text-align: center;
+  }
+  .col.md-right {
+    text-align: right;
+  }
+
   .xs-visible, .sm-visible, .md-hidden, .lg-visible {
     display: none !important;
   }
 
   .md-visible {
-    display: inherit;
+    display: inherit !important;
   }
 }
 
@@ -123,11 +212,30 @@
     .columns(@cols, @c + 1);
   }
 
+  .col.lg-top {
+    vertical-align: top;
+  }
+  .col.lg-middle {
+    vertical-align: middle;
+  }
+  .col.lg-bottom {
+    vertical-align: bottom;
+  }
+  .col.lg-left {
+    text-align: left;
+  }
+  .col.lg-center {
+    text-align: center;
+  }
+  .col.lg-right {
+    text-align: right;
+  }
+
   .xs-visible, .sm-visible, .md-visible, .lg-hidden {
     display: none !important;
   }
 
   .lg-visible {
-    display: inherit;
+    display: inherit !important;
   }
 }

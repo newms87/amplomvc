@@ -134,11 +134,28 @@ function redirect($path = '', $query = null, $status = null)
 	$registry->get('url')->redirect($path, $query, $status);
 }
 
+function cast_http($url, $cast = 'http')
+{
+	$scheme = parse_url($url, PHP_URL_SCHEME);
+
+	if ($cast) {
+		$cast .= ':';
+	}
+
+	if ($scheme) {
+		return str_replace($scheme . '://', $cast . '//', $url);
+	} elseif (strpos($url, '//') === 0) {
+		return $cast . $url;
+	} else {
+		return $cast . '//' . $url;
+	}
+}
+
 function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 {
 	$patterns = array(
-		"/[\\s\\\\\\/]/"      => $sep,
-		"/[^$allow]/" => '',
+		"/[\\s\\\\\\/]/" => $sep,
+		"/[^$allow]/"    => '',
 	);
 
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
@@ -450,7 +467,7 @@ function build($type, $params)
 	<a class="uncheck_all" onclick="$(this).parent().prev().find('input[type=checkbox]').prop('checked', false)">[ Uncheck All ]</a>
 </div>
 HTML
-;
+				;
 
 		case 'clickable_list':
 			$added_list = "<div class=\"scrollbox clickable_added\">$selected_options</div>";
@@ -520,6 +537,7 @@ function output($output)
 	$registry->get('response')->setOutput($output);
 }
 
-function _is_object($o) {
+function _is_object($o)
+{
 	return is_array($o) || is_object($o) || is_resource($o);
 }

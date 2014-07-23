@@ -1,21 +1,46 @@
 <div class="block-widget-view block">
-	<div class="widget-view-list">
+	<div class="widget-view-list row">
 		<? foreach ($views as $row => $view) {
 			$_REQUEST = $view['query'];
-			$_GET = $view['query']; ?>
+			$_GET     = $view['query']; ?>
 
-			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
+			<? $col_sizes = array(
+				25  => 'xs-12 sm-6 lg-3',
+				33  => 'xs-12 sm-6 lg-4',
+				50  => 'xs-12 sm-6',
+				100 => 'xs-12',
+			); ?>
+			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?> col top left <?= isset($col_sizes[$view['size']]) ? $col_sizes[$view['size']] : 'xs-12'; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
 				<div class="view-header clearfix">
 					<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
 
 					<div class="show-hide buttons">
-						<a class="hide-view button" data-loading="Showing..."><?= _l("Hide"); ?></a>
-						<a class="show-view button"><?= _l("Show"); ?></a>
+						<a class="hide-view button small" data-loading="Showing...">
+							<b class="sprite hide-icon small"></b>
+						</a>
+						<a class="show-view button small">
+							<b class="sprite show-icon small"></b>
+						</a>
 					</div>
 
 					<? if ($can_modify) { ?>
-						<div class="configure">
-							<div class="choose-view-box">
+						<div class="view-settings buttons">
+							<div class="view-setting setting-buttons">
+								<a class="move-up button move">
+									<b class="move-up sprite"></b>
+								</a>
+								<a class="move-down button move">
+									<b class="sprite move-down"></b>
+								</a>
+								<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
+								<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
+							</div>
+							<a class="edit-view small button">
+								<b class="sprite edit small"></b>
+							</a>
+
+							<br/>
+							<div class="view-setting choose-view-box">
 								<?=
 								build('select', array(
 									'name'   => 'view_listing_id',
@@ -25,13 +50,14 @@
 									'value'  => 'name',
 								)); ?>
 							</div>
-						</div>
-
-						<div class="save-delete buttons">
-							<a class="move-up button move"><b class="move-up sprite"></b></a>
-							<a class="move-down button move"><b class="sprite move-down"></b></a>
-							<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
-							<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
+							<div class="view-setting choose-view-size">
+								<?=
+								build('select', array(
+									'name'   => 'size',
+									'data'   => $data_view_sizes,
+									'select' => $view['size'],
+								)); ?>
+							</div>
 						</div>
 					<? } ?>
 				</div>
@@ -52,7 +78,7 @@
 		<div class="create-view-box">
 			<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
 				<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
-				<input type="hidden" name="group" value="<?= $group; ?>" />
+				<input type="hidden" name="group" value="<?= $group; ?>"/>
 				<input type="text" name="name" value="<?= "View Name"; ?>"/>
 				<br/>
 				<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
@@ -68,7 +94,7 @@
 <script type="text/javascript">
 	var listings = <?= json_encode($data_view_listings); ?>;
 
-	$('.widget-view-list').find('.button.move').click(function() {
+	$('.widget-view-list').find('.button.move').click(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
 		if ($this.hasClass('move-down')) {
@@ -79,7 +105,7 @@
 
 		var sort_order = {};
 
-		$('.widget-view-list .widget-view').each(function (i,e) {
+		$('.widget-view-list .widget-view').each(function (i, e) {
 			sort_order[$(e).attr('data-view-id')] = i;
 		});
 
@@ -90,11 +116,17 @@
 		}, 'json');
 	});
 
-	$('.create-view').click(function() {
+	$('.edit-view').click(function () {
+		var $this = $(this);
+		$this.closest('.view-settings').toggleClass('active');
+		$this.find('.sprite').toggleClass('cancel');
+	});
+
+	$('.create-view').click(function () {
 		$('.create-view-box').addClass('show');
 	});
 
-	$('.create-view-box .close').click(function() {
+	$('.create-view-box .close').click(function () {
 		$(this).closest('.create-view-box').removeClass('show');
 	});
 
@@ -126,7 +158,7 @@
 	});
 
 	<? if ($can_modify) { ?>
-	$('.configure [name]').change(function () {
+	$('.choose-view-box [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
 		$view.find('.show-view').click();
@@ -184,6 +216,25 @@
 		}
 	});
 	<? } ?>
+
+	var col_sizes = <?= json_encode($col_sizes); ?>;
+
+	$('.choose-view-size [name=size]').change(function() {
+		var $this = $(this);
+		console.log($this.val(), col_sizes);
+		$this.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$this.val()]);
+	});
+
+	function all_col_sizes() {
+		var classes = '';
+		var sizes = ['xs','sm','md','lg'];
+		for (var s in sizes) {
+			for (var i=1;i<=12;i++) {
+				classes += sizes[s] + '-' + i + ' ';
+			}
+		}
+		return classes;
+	}
 
 	$('.block-widget-view').ac_template('v-list', {defaults: <?= json_encode($views['__ac_template__']); ?>});
 

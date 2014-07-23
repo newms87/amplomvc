@@ -112,6 +112,15 @@ td {
   display: inline-block;
   background: transparent url("@{themepath}image/sprite.png") 0 0 no-repeat;
 
+  width: 32px;
+  height: 32px;
+
+  &.small {
+    background-size: 18px 138px;
+    width: 18px;
+    height: 18px;
+  }
+
   &.move-up {
     width: 27px;
     height: 15px;
@@ -121,6 +130,48 @@ td {
     width: 27px;
     height: 15px;
     background-position: 0 -15px;
+  }
+
+  &.edit {
+    background-position: 0 -40px;
+    &.small {
+      background-position: 0 -21px;
+    }
+  }
+
+  &.cancel {
+    background-position: 0 -78px;
+    &.small {
+      background-position: 0 -40px;
+    }
+  }
+
+  &.refresh {
+    background-position: 0 -107px;
+    &.small {
+      background-position: 0 -61px;
+    }
+  }
+
+  &.settings {
+    background-position: 0 -136px;
+    &.small {
+      background-position: 0 -80px;
+    }
+  }
+
+  &.show-icon {
+    background-position: 0 -145px;
+    &.small {
+      background-position: 0 -99px;
+    }
+  }
+
+  &.hide-icon {
+    background-position: 0 -174px;
+    &.small {
+      background-position: 0 -118px;
+    }
   }
 }
 
@@ -851,6 +902,11 @@ button, .button {
     padding: 10px 20px;
   }
 
+  &.small {
+    font-size: 1em;
+    padding: 2px 4px;
+  }
+
   &.remove {
     background: @color-delete;
   }
@@ -1171,22 +1227,58 @@ button, .button {
 
   .limits {
     float: right;
-    margin: .5em;
+    text-align: right;
+    margin: .5em 0;
+    max-width: 100px;
+    height: 18px;
+    overflow: hidden;
+    -webkit-transition: all .1s linear .5s;
+    transition: all .1s linear .5s;
 
-    .limit_text {
+    .limit-text {
       font-size: 1.2em;
+      float: left;
     }
 
-    .limit_item {
+    .limit-item {
       font-size: 1.2em;
       font-weight: bold;
-      padding: .1em .3em;
+      margin-bottom: 5px;
       background: @color-lightest;
       border-radius: 3px;
       text-decoration: none;
+      max-width: 0;
+      padding: 0;
+      visibility: hidden;
+      -webkit-transition: all .1s linear .5s;
+      transition: all .1s linear .5s;
+      display: block;
+      float: left;
 
       &:hover, &.selected {
         background: @color-light;
+      }
+
+      &.selected {
+        max-width: 30px;
+        width: auto;
+        padding: .1em .3em;
+        visibility: visible;
+      }
+    }
+
+    &:hover {
+      -webkit-transition: all .5s;
+      transition: all .5s;
+      max-width: 300px;
+
+      .limit-item {
+        max-width: 30px;
+        padding: .1em .3em;
+        margin-left: 5px;
+        -webkit-transition: all .2s;
+        transition: all .2s;
+        visibility: visible;
       }
     }
   }
@@ -1195,6 +1287,20 @@ button, .button {
     display: inline-block;
   }
 
+  .view-controls {
+    .refresh-listing {
+      background: none;
+      outline: 0;
+      text-decoration: none;
+
+      &.refreshing {
+        .sprite {
+          -webkit-animation: infinite .7s rotation linear;
+          animation: infinite .7s rotation linear;
+        }
+      }
+    }
+  }
   .view-config {
     position: fixed;
     width: 80%;
@@ -3059,6 +3165,24 @@ div .easy_list li > * + * {
   }
 }
 
+@-webkit-keyframes rotation {
+  0% {
+    -webkit-transform: rotate(0turn);
+  }
+  100% {
+    -webkit-transform: rotate(1turn);
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0turn);
+  }
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
 /** AC Carousel Block **/
 .ac_carousel_slide {
   border: 2px dashed gray;
@@ -3390,6 +3514,7 @@ td.log_remove .message {
 
   .widget-view {
     position: relative;
+    display: inline-block;
     padding: 1em;
     border: 2px dashed @color-dark;
     margin-bottom: 2em;
@@ -3417,19 +3542,48 @@ td.log_remove .message {
         display: inline-block;
         vertical-align: middle;
         margin-left: 1em;
+        position: relative;
+        top: -2px;
+        font-size: 1.2em;
       }
 
-      &.save-delete {
+      &.view-settings {
         position: absolute;
+        text-align: right;
         top: 1em;
         right: 1em;
-      }
-    }
+        width: 32px;
+        padding: 0 0 .5em .5em;
+        .no-select;
+        background: white;
+        z-index: 10;
+        -webkit-transition: all 1s;
+        transition: all 1s;
 
-    .configure {
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 1em;
+        .view-setting {
+          display: none;
+          vertical-align: top;
+
+          .button {
+            height: 25px;
+            box-sizing: border-box;
+          }
+        }
+
+        .edit-view {
+          background-color: #8DAD62;
+          display: inline-block;
+          vertical-align: top;
+        }
+
+        &.active {
+          width: auto;
+
+          .view-setting {
+            display: inline-block;
+          }
+        }
+      }
     }
 
     .listing {

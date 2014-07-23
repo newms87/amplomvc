@@ -75,9 +75,10 @@ class Sort extends Library
 	public function renderLimits($settings = array())
 	{
 		$defaults = array(
-			'template' => 'block/widget/limit',
-			'limits'   => self::$limits,
-			'path'     => $this->route->getPath(),
+			'template'   => 'block/widget/limit',
+			'limits'     => self::$limits,
+			'path'       => $this->route->getPath(),
+			'limit_text' => '',
 		);
 
 		$settings += $defaults;
