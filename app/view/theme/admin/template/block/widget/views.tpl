@@ -9,63 +9,69 @@
 				33  => 'xs-12 sm-6 lg-4',
 				50  => 'xs-12 sm-6',
 				100 => 'xs-12',
-			); ?>
-			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?> col top left <?= isset($col_sizes[$view['size']]) ? $col_sizes[$view['size']] : 'xs-12'; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
-				<div class="view-header clearfix">
-					<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
+			);
 
-					<div class="show-hide buttons">
-						<a class="hide-view button small" data-loading="Showing...">
-							<b class="sprite hide-icon small"></b>
-						</a>
-						<a class="show-view button small">
-							<b class="sprite show-icon small"></b>
-						</a>
+			$col_class = isset($col_sizes[$view['settings']['size']]) ? $col_sizes[$view['settings']['size']] : 'xs-12';
+			?>
+
+			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?> col top left <?= $col_class; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
+				<div class="widget-view-box">
+					<div class="view-header clearfix">
+						<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
+
+						<div class="show-hide buttons">
+							<a class="hide-view button small" data-loading="Showing...">
+								<b class="sprite hide-icon small"></b>
+							</a>
+							<a class="show-view button small">
+								<b class="sprite show-icon small"></b>
+							</a>
+						</div>
+
+						<? if ($can_modify) { ?>
+							<div class="view-settings buttons">
+								<div class="view-setting setting-buttons">
+									<a class="move-up button move">
+										<b class="move-up sprite"></b>
+									</a>
+									<a class="move-down button move">
+										<b class="sprite move-down"></b>
+									</a>
+									<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
+									<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
+								</div>
+								<a class="edit-view small button">
+									<b class="sprite edit small"></b>
+								</a>
+
+								<br/>
+								<div class="view-setting choose-view-box">
+									<?=
+									build('select', array(
+										'name'   => 'view_listing_id',
+										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
+										'select' => $view['view_listing_id'],
+										'key'    => false,
+										'value'  => 'name',
+									)); ?>
+								</div>
+								<div class="view-setting choose-view-size">
+									<?=
+									build('select', array(
+										'name'   => 'settings[size]',
+										'data'   => $data_view_sizes,
+										'select' => $view['settings']['size'],
+									)); ?>
+								</div>
+							</div>
+						<? } ?>
 					</div>
 
-					<? if ($can_modify) { ?>
-						<div class="view-settings buttons">
-							<div class="view-setting setting-buttons">
-								<a class="move-up button move">
-									<b class="move-up sprite"></b>
-								</a>
-								<a class="move-down button move">
-									<b class="sprite move-down"></b>
-								</a>
-								<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
-								<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
-							</div>
-							<a class="edit-view small button">
-								<b class="sprite edit small"></b>
-							</a>
-
-							<br/>
-							<div class="view-setting choose-view-box">
-								<?=
-								build('select', array(
-									'name'   => 'view_listing_id',
-									'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
-									'select' => $view['view_listing_id'],
-									'key'    => false,
-									'value'  => 'name',
-								)); ?>
-							</div>
-							<div class="view-setting choose-view-size">
-								<?=
-								build('select', array(
-									'name'   => 'size',
-									'data'   => $data_view_sizes,
-									'select' => $view['size'],
-								)); ?>
-							</div>
-						</div>
-					<? } ?>
-				</div>
-
-				<div class="listing">
-					<? if ($view['show'] && $row !== '__ac_template__') { ?>
-						<?= $view['controller']->$view['method'](); ?>
-					<? } ?>
+					<div class="listing">
+						<? if ($view['show'] && $row !== '__ac_template__') { ?>
+							<?= $view['controller']->$view['method'](); ?>
+						<? } ?>
+					</div>
 				</div>
 			</div>
 		<? } ?>
@@ -172,6 +178,8 @@
 
 		$view.attr('data-query', query);
 
+		var settings = $view.find('[name*="settings["]').serializeObject();
+
 		var data = {
 			view_id: $view.attr('data-view-id'),
 			group: $view.attr('data-group'),
@@ -181,6 +189,8 @@
 			title: $view.find('.view-title').html(),
 			show: $view.hasClass("show") ? 1 : 0
 		}
+
+		data = $.fn.extend({}, settings, data);
 
 		$this.loading();
 
@@ -192,6 +202,7 @@
 			}
 
 			$view.ac_msg(response);
+			$view.find('.edit-view').click();
 		}, 'json');
 	});
 
@@ -219,17 +230,16 @@
 
 	var col_sizes = <?= json_encode($col_sizes); ?>;
 
-	$('.choose-view-size [name=size]').change(function() {
+	$('.choose-view-size select').change(function () {
 		var $this = $(this);
-		console.log($this.val(), col_sizes);
 		$this.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$this.val()]);
 	});
 
 	function all_col_sizes() {
 		var classes = '';
-		var sizes = ['xs','sm','md','lg'];
+		var sizes = ['xs', 'sm', 'md', 'lg'];
 		for (var s in sizes) {
-			for (var i=1;i<=12;i++) {
+			for (var i = 1; i <= 12; i++) {
 				classes += sizes[s] + '-' + i + ' ';
 			}
 		}

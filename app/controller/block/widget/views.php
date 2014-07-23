@@ -44,7 +44,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'title'           => _l("Default"),
 			'path'            => $settings['path'],
 			'query'           => $_GET,
-			'size'            => 100,
+			'settings'        => array(
+				'size' => 100,
+			),
 			'show'            => !empty($settings['view_listing_id']) ? 1 : 0,
 		);
 
@@ -56,12 +58,17 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$views['__ac_template__'] = array(
 				'name'  => 'new-view-__ac_template__',
 				'title' => 'New View __ac_template__',
-				'size'  => 100,
 			) + $default_view;
 
 
 		foreach ($views as $key => &$view) {
 			$view += $default_view;
+
+			if (!is_array($view['settings'])) {
+				$view['settings'] = array();
+			}
+
+			$view['settings'] += $default_view['settings'];
 
 			$listing = $this->Model_View->getViewListing($view['view_listing_id']);
 

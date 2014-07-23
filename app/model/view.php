@@ -14,6 +14,10 @@ class App_Model_View extends Model
 			}
 		}
 
+		if (!empty($view['settings'])) {
+			$view['settings'] = serialize($view['settings']);
+		}
+
 		if ($view_id) {
 			return $this->update('view', $view, $view_id);
 		} else {
@@ -32,7 +36,13 @@ class App_Model_View extends Model
 
 	public function getView($view_id)
 	{
-		return $this->queryRow("SELECT * FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+		$view = $this->queryRow("SELECT * FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+
+		if (!empty($view['settings'])) {
+			$view['settings'] = unserialize($view['settings']);
+		}
+
+		return $view;
 	}
 
 	public function getViews($group)
@@ -41,6 +51,10 @@ class App_Model_View extends Model
 
 		foreach ($views as &$view) {
 			parse_str($view['query'], $view['query']);
+
+			if (!empty($view['settings'])) {
+				$view['settings'] = unserialize($view['settings']);
+			}
 		}
 		unset($view);
 

@@ -1147,7 +1147,7 @@ button, .button {
 
   .column_title {
     min-width: 70px;
-    font-size: 17px;
+    font-size: 1.1em;
     font-weight: bold;
 
     & > a, & > span {
@@ -3515,103 +3515,108 @@ td.log_remove .message {
   .widget-view {
     position: relative;
     display: inline-block;
-    padding: 1em;
-    border: 2px dashed @color-dark;
-    margin-bottom: 2em;
+    padding: .2em .5em .8em .5em;
 
-    .view-title {
-      font-size: 1.5em;
-      font-weight: bold;
-      display: inline-block;
-      vertical-align: middle;
-      outline: 0;
-      padding: .3em;
-    }
+    .widget-view-box {
+      border: 2px dashed @color-dark;
+      padding: 1em;
 
-    .buttons {
-      margin: 0;
-
-      .show-view {
-        display: inline-block;
-      }
-      .hide-view {
-        display: none;
-      }
-
-      &.show-hide {
+      .view-title {
+        font-size: 1.5em;
+        font-weight: bold;
         display: inline-block;
         vertical-align: middle;
-        margin-left: 1em;
-        position: relative;
-        top: -2px;
-        font-size: 1.2em;
+        outline: 0;
+        padding: .3em;
       }
 
-      &.view-settings {
-        position: absolute;
-        text-align: right;
-        top: 1em;
-        right: 1em;
-        width: 32px;
-        padding: 0 0 .5em .5em;
-        .no-select;
-        background: white;
-        z-index: 10;
-        -webkit-transition: all 1s;
-        transition: all 1s;
+      .buttons {
+        margin: 0;
 
-        .view-setting {
-          display: none;
-          vertical-align: top;
-
-          .button {
-            height: 25px;
-            box-sizing: border-box;
-          }
-        }
-
-        .edit-view {
-          background-color: #8DAD62;
+        .show-view {
           display: inline-block;
-          vertical-align: top;
+        }
+        .hide-view {
+          display: none;
         }
 
-        &.active {
-          width: auto;
+        &.show-hide {
+          display: inline-block;
+          vertical-align: middle;
+          margin-left: 1em;
+          position: relative;
+          top: -2px;
+          font-size: 1.2em;
+        }
+
+        &.view-settings {
+          position: absolute;
+          text-align: right;
+          top: 1em;
+          right: 1em;
+          width: 32px;
+          padding: 0 0 .5em .5em;
+          .no-select;
+          background: white;
+          z-index: 10;
+          -webkit-transition: all 1s;
+          transition: all 1s;
 
           .view-setting {
-            display: inline-block;
+            display: none;
+            vertical-align: top;
+
+            .button {
+              height: 25px;
+              box-sizing: border-box;
+            }
           }
-        }
-      }
-    }
 
-    .listing {
-      display: none;
+          .edit-view {
+            background-color: #8DAD62;
+            display: inline-block;
+            vertical-align: top;
+          }
 
-      .table-list-view-box {
-        position: relative;
-      }
-    }
+          &.active {
+            width: auto;
 
-    &.show {
-      .buttons {
-        .hide-view {
-          display: inline-block;
-        }
-        .show-view {
-          display: none;
+            .view-setting {
+              display: inline-block;
+            }
+          }
         }
       }
 
       .listing {
-        display: block;
+        display: none;
+
+        .table-list-view-box {
+          position: relative;
+        }
+      }
+
+      .button.move {
+        padding: 4px 12px;
+        vertical-align: top;
       }
     }
 
-    .button.move {
-      padding: 4px 12px;
-      vertical-align: top;
+    &.show {
+      .widget-view-box {
+        .buttons {
+          .hide-view {
+            display: inline-block;
+          }
+          .show-view {
+            display: none;
+          }
+        }
+
+        .listing {
+          display: block;
+        }
+      }
     }
   }
 
