@@ -19,13 +19,30 @@
 					<div class="view-header clearfix">
 						<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
 
-						<div class="show-hide buttons">
-							<a class="hide-view button small" data-loading="Showing...">
-								<b class="sprite hide-icon small"></b>
-							</a>
-							<a class="show-view button small">
-								<b class="sprite show-icon small"></b>
-							</a>
+						<div class="view-choices buttons">
+							<div class="show-hide buttons">
+								<a class="hide-view button small" data-loading="Showing...">
+									<b class="sprite hide-icon small"></b>
+								</a>
+								<a class="show-view button small">
+									<b class="sprite show-icon small"></b>
+								</a>
+							</div>
+
+							<div class="view-list-chart buttons">
+								<a class="view-list button small">
+									<b class="sprite view-list small"></b>
+								</a>
+								<a class="chart-bar button small" data-chart-type="Bar">
+									<b class="sprite chart-bar small"></b>
+								</a>
+								<a class="chart-line button small" data-chart-type="Line">
+									<b class="sprite chart-line small"></b>
+								</a>
+								<a class="chart-pie button small" data-chart-type="Pie">
+									<b class="sprite chart-pie small"></b>
+								</a>
+							</div>
 						</div>
 
 						<? if ($can_modify && user_can('modify', 'views')) { ?>
@@ -69,7 +86,7 @@
 
 					<div class="listing">
 						<? if ($view['show'] && $row !== '__ac_template__') { ?>
-							<?= $view['controller']->$view['method'](); ?>
+							<?= $view['controller']->$view['method']($view['params']); ?>
 						<? } ?>
 					</div>
 				</div>
@@ -83,7 +100,7 @@
 		<? if (user_can('modify', 'views')) { ?>
 			<a class="create-view button"><?= _l("Create View"); ?></a>
 
-			<div class="create-view-box">
+			<div class="view-popup create-view-box">
 				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
 					<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
 					<input type="hidden" name="group" value="<?= $group; ?>"/>
@@ -135,10 +152,6 @@
 		$('.create-view-box').addClass('show');
 	});
 
-	$('.create-view-box .close').click(function () {
-		$(this).closest('.create-view-box').removeClass('show');
-	});
-
 	$('.hide-view').click(function () {
 		$(this).closest('.widget-view').removeClass('show');
 	});
@@ -161,9 +174,29 @@
 		var q = $view.attr('data-query');
 		query = (q ? q + '&' : '') + listing.query;
 
+		query += '&view_id=' + $view.attr('data-view-id');
+
 		$view.find('.listing').load(listing.path + (query ? '?' + query : ''), function () {
 			$hide.loading('stop');
 		});
+	});
+
+	$('.view-list-chart .button').click(function () {
+		var $this = $(this);
+		var $view = $this.closest('.widget-view');
+		var chart_type = $this.attr('data-chart-type');
+
+		$view.toggleClass('view-chart', chart_type ? true : false);
+
+		if (chart_type) {
+			var chart = $view.find('.widget-chart canvas').data('chart');
+
+			if (chart && chart[chart_type]) {
+				chart.chart.destroy();
+				chart[chart_type](chart.data, chart.options);
+			}
+		}
+
 	});
 
 	<? if ($can_modify && user_can('modify', 'views')) { ?>
@@ -248,6 +281,10 @@
 		return classes;
 	}
 	<? } ?>
+
+	$('.view-popup .close').click(function () {
+		$(this).closest('.view-popup').removeClass('show');
+	});
 
 	$('.block-widget-view').ac_template('v-list', {defaults: <?= json_encode($views['__ac_template__']); ?>});
 

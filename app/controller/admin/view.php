@@ -125,7 +125,7 @@ class App_Controller_Admin_View extends Controller
 
 	public function save()
 	{
-		$view_listing_id = _get('view_listing_id');
+		$view_listing_id = _request('view_listing_id');
 
 		if ($this->Model_View->saveViewListing($view_listing_id, $_POST)) {
 			message('success', _l("The View has been saved"));

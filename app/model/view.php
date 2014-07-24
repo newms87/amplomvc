@@ -45,6 +45,17 @@ class App_Model_View extends Model
 		return $view;
 	}
 
+	public function getViewSettings($view_id)
+	{
+		$settings = $this->queryVar("SELECT settings FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+
+		if ($settings) {
+			return unserialize($settings);
+		}
+
+		return array();
+	}
+
 	public function getViews($group)
 	{
 		$views = $this->queryRows("SELECT * FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($group) . "'");

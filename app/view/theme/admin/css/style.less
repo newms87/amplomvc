@@ -116,7 +116,7 @@ td {
   height: 32px;
 
   &.small {
-    background-size: 18px 138px;
+    background-size: 39px 138px;
     width: 18px;
     height: 18px;
   }
@@ -171,6 +171,34 @@ td {
     background-position: 0 -174px;
     &.small {
       background-position: 0 -118px;
+    }
+  }
+
+  &.chart-bar {
+    background-position: -37px -70px;
+    &.small {
+      background-position: -21px 0;
+    }
+  }
+
+  &.chart-line {
+    background-position: -37px -70px;
+    &.small {
+      background-position: -21px -21px;
+    }
+  }
+
+  &.chart-pie {
+    background-position: -37px -70px;
+    &.small {
+      background-position: -21px -41px;
+    }
+  }
+
+  &.view-list {
+    background-position: -37px -70px;
+    &.small {
+      background-position: -21px -60px;
     }
   }
 }
@@ -985,14 +1013,11 @@ button, .button {
 
       .filter-type {
         .no-select;
-        position: absolute;
-        left: 10%;
         width: 10px;
         height: 10px;
-        top: 2px;
         background: gray;
         border-radius: 5px;
-        margin: auto;
+        margin: 0 auto 5px auto;
 
         &:after {
           content: "off";
@@ -3540,13 +3565,21 @@ td.log_remove .message {
           display: none;
         }
 
-        &.show-hide {
+        &.view-choices {
           display: inline-block;
           vertical-align: middle;
           margin-left: 1em;
           position: relative;
           top: -2px;
           font-size: 1.2em;
+
+          .show-hide {
+            display: inline-block;
+          }
+
+          .view-list-chart {
+            display: inline-block;
+          }
         }
 
         &.view-settings {
@@ -3615,6 +3648,25 @@ td.log_remove .message {
 
         .listing {
           display: block;
+
+          .widget-chart {
+            display: none;
+          }
+        }
+      }
+
+      &.view-chart {
+        .widget-view-box {
+
+          .listing {
+            .listings {
+              display: none;
+            }
+
+            .widget-chart {
+              display: block;
+            }
+          }
         }
       }
     }
@@ -3628,36 +3680,36 @@ td.log_remove .message {
       font-size: 1.5em;
       padding: .5em 1em;
     }
+  }
 
-    .create-view-box {
-      display: none;
-      position: fixed;
-      left: 10%;
-      width: 80%;
-      height: 500px;
-      max-height: 80%;
-      top: 10%;
-      background: white;
-      box-shadow: 20px 20px 150px #000;
-      padding: 1em;
-      z-index: 100;
+  .view-popup {
+    display: none;
+    position: fixed;
+    left: 10%;
+    width: 80%;
+    height: 500px;
+    max-height: 80%;
+    top: 10%;
+    background: white;
+    box-shadow: 20px 20px 150px #000;
+    padding: 1em;
+    z-index: 100;
 
-      textarea {
-        box-sizing: border-box;
-        width: 100%;
-        min-height: 50%;
-        height: 400px;
-      }
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 50%;
+      height: 400px;
+    }
 
-      &.show {
-        display: block;
-      }
+    &.show {
+      display: block;
+    }
 
-      .close {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-      }
+    .close {
+      position: absolute;
+      top: 5px;
+      right: 5px;
     }
   }
 }

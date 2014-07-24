@@ -15,9 +15,18 @@
 
 				Chart.defaults.global.responsive = true;
 
-				var $chart = document.getElementById('<?= $chart_id; ?>').getContext('2d');
+				var $chart = $('#<?= $chart_id; ?>');
+				var data = <?= json_encode($chart_data); ?>;
+				var options = <?= json_encode($options); ?>;
+				var type = "<?= $type; ?>";
 
-				var the_chart = new Chart($chart).Line(<?= json_encode($data); ?>, <?= json_encode($options); ?>);
+				var the_chart = new Chart($chart[0].getContext('2d'));
+
+				the_chart.chart = the_chart[type](data, options);
+				the_chart.data = data;
+				the_chart.orig_options = options;
+
+				$chart.data('chart', the_chart);
 			}
 		}
 

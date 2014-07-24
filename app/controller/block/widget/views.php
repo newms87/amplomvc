@@ -103,6 +103,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 				$view['controller'] = $action->getController();
 				$view['method']     = $action->getMethod();
+				$view['params']     = $action->getParameters();
+
+				$view['params']['view_id'] = $view['view_id'];
 
 				//Restore Query to original
 				$_GET     = $orig_get;
@@ -138,7 +141,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$_REQUEST = $orig_request;
 	}
 
-	public function listing()
+	public function listing($listing = array())
 	{
 		$view_listing_id = (int)_request('view_listing_id');
 
@@ -159,7 +162,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$record_total = $this->Model_View->getTotalRecords($view_listing_id, $filter);
 		$records      = $this->Model_View->getRecords($view_listing_id, $sort, $filter);
 
-		$listing = array(
+		$listing += array(
 			'row_id'         => null,
 			'extra_cols'     => $this->Model_View->getViewListingColumns($view_listing_id, false),
 			'columns'        => $columns,
