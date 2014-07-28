@@ -53,27 +53,73 @@
 			</div>
 
 			<? if (user_can('modify', 'views')) { ?>
-				<div class="view-listing-tab tab-content">
-					<?=
-					build('select', array(
-						'name'   => 'chart[type]',
-						'data'   => $data_chart_types,
-						'select' => isset($chart['type']) ? $chart['type'] : null,
-					)); ?>
+				<div class="view-listing-tab tab-content form">
+					<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
+					<div class="form-item">
+						<label for="view-type-<?= $view_id; ?>"><?= _l("Default View Type"); ?></label>
+						<?=
+						build('select', array(
+							'name'   => 'view_type',
+							'data'   => $data_chart_types,
+							'select' => $view_type,
+							'#id'    => 'view-type-' . $view_id,
+						)); ?>
+					</div>
+
+					<br/>
+					<h2><?= _l("Chart Settings"); ?></h2>
+
+					<div class="form-item">
+						<label for="chart-group-<?= $view_id; ?>"><?= _l("X axis (Group Column)"); ?></label>
+						<?=
+						build('select', array(
+							'name'   => 'chart[group_by]',
+							'data'   => $extra_cols,
+							'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
+							'key'    => 'Field',
+							'value'  => 'display_name',
+							'#id'    => 'chart-group-' . $view_id,
+						)); ?>
+					</div>
+
+					<div class="form-item">
+						<label for="chart-data-<?= $view_id; ?>"><?= _l("Y axis (Data Column)"); ?></label>
+						<?=
+						build('select', array(
+							'name'   => 'chart[data_cols]',
+							'data'   => $extra_cols,
+							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
+							'key'    => 'Field',
+							'value'  => 'display_name',
+							'#id'    => 'chart-data-' . $view_id,
+						)); ?>
+					</div>
+
+					<div class="form-item submit buttons center">
+						<button class="save-settings" data-loading="<?= _l("Saving..."); ?>"><?= _l("Save Settings"); ?></button>
+					</div>
+
 				</div>
 			<? } ?>
 		</div>
 	</div>
 
-	<div class="listings">
-		<?= $listing; ?>
-	</div>
+	<div class="view-types">
+		<div class="listings view-type">
+			<?= $listing; ?>
+		</div>
 
-	<? if (!empty($chart)) { ?>
-		<?= block('widget/chart', null, array('data'     => $rows,
-		                                      'settings' => $chart
-		)); ?>
-	<? } ?>
+		<div class="charts view-type">
+			<? if (!empty($chart)) { ?>
+				<?=
+				block('widget/chart', null, array(
+					'data'     => $rows,
+					'settings' => $chart,
+					'type'     => $view_type,
+				)); ?>
+			<? } ?>
+		</div>
+	</div>
 
 	<? if ($show_pagination) { ?>
 		<?= block('widget/pagination', null, $pagination_settings); ?>
@@ -128,6 +174,27 @@
 
 				return false;
 			});
+
+		$list_widget.find('.save-settings').click(function () {
+			var $this = $(this);
+			var $form = $this.closest('.form');
+			var $widget = $this.closest('.widget-view');
+			var view_type = $form.find('[name="view_type"]').val();
+
+			$this.loading();
+
+			$.post("<?= site_url('block/widget/listing/save_settings'); ?>", $form.find('[name]').serialize(),function (response) {
+				$form.ac_msg(response);
+				$this.closest('.view-config').removeClass('show');
+				$widget.find('.refresh-listing').click();
+
+				//Hack to show chart / listing view
+				$widget.find('[data-view-type="' + view_type + '"]').click();
+
+			}, 'json').always(function () {
+				$this.loading('stop');
+			});
+		});
 	</script>
 
 </div>

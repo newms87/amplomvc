@@ -15,6 +15,8 @@ class App_Model_View extends Model
 		}
 
 		if (!empty($view['settings'])) {
+			$view['settings'] += $this->getViewSettings($view_id);
+
 			$view['settings'] = serialize($view['settings']);
 		}
 
@@ -45,15 +47,46 @@ class App_Model_View extends Model
 		return $view;
 	}
 
+	public function getField($view_id, $field)
+	{
+		return $this->queryVar("SELECT $field FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+	}
+
 	public function getViewSettings($view_id)
 	{
 		$settings = $this->queryVar("SELECT settings FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
 
 		if ($settings) {
-			return unserialize($settings);
+			$settings = unserialize($settings);
+
+			if (is_array($settings)) {
+				return $settings;
+			}
 		}
 
 		return array();
+	}
+
+	public function saveViewSetting($view_id, $key, $value = null)
+	{
+		$settings = $this->getViewSettings($view_id);
+
+		if (!is_array($settings)) {
+			$settings = array();
+		}
+
+		if (is_null($value)) {
+			unset($settings[$key]);
+		} else {
+			$settings[$key] = $value;
+		}
+
+		return $this->saveViewSettings($view_id, $settings);
+	}
+
+	public function saveViewSettings($view_id, $settings)
+	{
+		return $this->update('view', array('settings' => serialize($settings)), $view_id);
 	}
 
 	public function getViews($group)

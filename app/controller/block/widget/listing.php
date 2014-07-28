@@ -41,12 +41,12 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		}
 
 		if ($settings['view_id']) {
-			$settings = $this->Model_View->getViewSettings($settings['view_id']) + $settings;
+			$settings += $this->Model_View->getView($settings['view_id']);
 
-			$settings['chart'] = array(
-				'type'      => 'Bar',
-				'group_by'  => 'Scope',
-				'data_cols' => 'Total',
+			$settings = $this->Model_View->getViewSettings($settings['view_id']) + $settings;
+		} else {
+			$settings += array(
+				'view_type' => '',
 			);
 		}
 
@@ -124,6 +124,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 
 		//Template Data
 		$settings['data_chart_types'] = array(
+			''     => _l("Listing"),
 			'Line' => _l('Line Chart'),
 			'Bar'  => _l('Bar Chart'),
 			'Pie'  => _l('Pie Chart'),
@@ -134,5 +135,37 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 
 		//Render
 		$this->render('block/widget/listing', $settings);
+	}
+
+	public function save_settings()
+	{
+		$view_id = _request('view_id');
+
+		if ($view_id) {
+			$view = array(
+				'view_type' => _post('view_type', ''),
+			);
+
+			if ($this->Model_View->save($view_id, $view)) {
+				$settings = $this->Model_View->getViewSettings($view_id);
+
+				if (!is_array($settings)) {
+					$settings = array();
+				}
+
+				$settings['chart'] = _post('chart', array());
+
+				message('notify', print_r($settings['chart'], true));
+				$this->Model_View->saveViewSettings($view_id, $settings);
+			}
+
+			if ($this->Model_View->hasError()) {
+				message('error', $this->Model_View->getError());
+			} else {
+				message('success', _l("The Settings have been saved."));
+			}
+		}
+
+		output($this->message->toJSON());
 	}
 }

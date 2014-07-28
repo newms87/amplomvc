@@ -30,3 +30,4 @@ if ($this->db->hasColumn('view', 'listing_id')) {
 $this->db->addColumn('view', 'sort_order', "INT NOT NULL DEFAULT 0 AFTER `show`");
 $this->db->dropColumn('view', 'path');
 $this->db->addColumn('view', 'settings', "TEXT NULL AFTER `show`");
+$this->db->addColumn('view', 'view_type', "VARCHAR(45) NOT NULL AFTER `query`");

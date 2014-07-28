@@ -12,6 +12,8 @@
 			);
 
 			$col_class = isset($col_sizes[$view['settings']['size']]) ? $col_sizes[$view['settings']['size']] : 'xs-12';
+
+			$col_class .= ' ' . ($view['view_type'] ? 'view-chart' : '');
 			?>
 
 			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?> col top left <?= $col_class; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
@@ -30,18 +32,11 @@
 							</div>
 
 							<div class="view-list-chart buttons">
-								<a class="view-list button small">
-									<b class="sprite view-list small"></b>
-								</a>
-								<a class="chart-bar button small" data-chart-type="Bar">
-									<b class="sprite chart-bar small"></b>
-								</a>
-								<a class="chart-line button small" data-chart-type="Line">
-									<b class="sprite chart-line small"></b>
-								</a>
-								<a class="chart-pie button small" data-chart-type="Pie">
-									<b class="sprite chart-pie small"></b>
-								</a>
+								<? foreach ($data_view_types as $key => $view_type) { ?>
+									<a class="<?= $view_type; ?> button small <?= $view['view_type'] === $key ? 'active' : ''; ?>" data-view-type="<?= $key; ?>">
+										<b class="sprite <?= $view_type; ?> small"></b>
+									</a>
+								<? } ?>
 							</div>
 						</div>
 
@@ -183,8 +178,13 @@
 
 	$('.view-list-chart .button').click(function () {
 		var $this = $(this);
+
+		if ($this.hasClass('active')) {
+			return;
+		}
+
 		var $view = $this.closest('.widget-view');
-		var chart_type = $this.attr('data-chart-type');
+		var chart_type = $this.attr('data-view-type');
 
 		$view.toggleClass('view-chart', chart_type ? true : false);
 
@@ -192,11 +192,15 @@
 			var chart = $view.find('.widget-chart canvas').data('chart');
 
 			if (chart && chart[chart_type]) {
-				chart.chart.destroy();
+				if (chart.chart) {
+					chart.chart.destroy();
+				}
 				chart[chart_type](chart.data, chart.options);
 			}
 		}
 
+		$this.closest('.view-list-chart').find('.active').removeClass('active');
+		$this.addClass('active');
 	});
 
 	<? if ($can_modify && user_can('modify', 'views')) { ?>
@@ -223,6 +227,7 @@
 			path: $view.find('[name=path]').val(),
 			query: query,
 			title: $view.find('.view-title').html(),
+			view_type: $view.find('[data-view-type].active').attr('data-view-type'),
 			show: $view.hasClass("show") ? 1 : 0
 		}
 
@@ -268,6 +273,7 @@
 	$('.choose-view-size select').change(function () {
 		var $this = $(this);
 		$this.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$this.val()]);
+		window.dispatchEvent(new Event('resize'));
 	});
 
 	function all_col_sizes() {

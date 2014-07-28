@@ -47,6 +47,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'settings'        => array(
 				'size' => 100,
 			),
+			'view_type'       => '',
 			'show'            => !empty($settings['view_listing_id']) ? 1 : 0,
 		);
 
@@ -117,6 +118,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$settings['views'] = $views;
 
 		$settings['data_view_listings'] = $this->Model_View->getAllViewListings();
+
+		$settings['data_view_types'] = array(
+			''     => 'view-list',
+			'Bar'  => 'chart-bar',
+			'Line' => 'chart-line',
+			'Pie'  => 'chart-pie',
+		);
 
 		$settings['data_view_sizes'] = array(
 			25  => '25%',

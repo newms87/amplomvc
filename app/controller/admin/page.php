@@ -36,7 +36,7 @@ class App_Controller_Admin_Page extends Controller
 		output($this->render('page/list', $data));
 	}
 
-	public function listing()
+	public function listing($listing = array())
 	{
 		//The Table Columns
 		$columns = array();
@@ -114,7 +114,7 @@ class App_Controller_Admin_Page extends Controller
 		}
 		unset($page);
 
-		$listing = array(
+		$listing += array(
 			'row_id'         => 'page_id',
 			'columns'        => $columns,
 			'rows'           => $pages,

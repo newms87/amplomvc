@@ -32,7 +32,7 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 		}
 
 		if (empty($settings['type'])) {
-			$settings['type'] = isset($settings['settings']['type']) ? $settings['settings']['type'] : 'Line';
+			$settings['type'] = isset($settings['settings']['type']) ? $settings['settings']['type'] : 'Bar';
 		}
 
 		$settings['chart_data'] = array(
