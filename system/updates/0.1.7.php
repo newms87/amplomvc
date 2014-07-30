@@ -31,3 +31,14 @@ $this->db->addColumn('view', 'sort_order', "INT NOT NULL DEFAULT 0 AFTER `show`"
 $this->db->dropColumn('view', 'path');
 $this->db->addColumn('view', 'settings', "TEXT NULL AFTER `show`");
 $this->db->addColumn('view', 'view_type', "VARCHAR(45) NOT NULL AFTER `query`");
+
+$this->db->createTable('view_meta', <<<SQL
+  `view_meta_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `view_id` INT UNSIGNED NOT NULL,
+  `key` VARCHAR(45) NOT NULL,
+  `value` TEXT NOT NULL,
+  `serialized` TINYINT UNSIGNED NOT NULL,
+  `date` DATETIME NOT NULL,
+  PRIMARY KEY (`view_meta_id`)
+SQL
+);

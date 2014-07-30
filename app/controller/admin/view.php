@@ -107,11 +107,11 @@ class App_Controller_Admin_View extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
-			'name'            => '',
-			'slug'            => '',
-			'path'            => '',
-			'query'           => '',
-			'sql'             => '',
+			'name'  => '',
+			'slug'  => '',
+			'path'  => '',
+			'query' => '',
+			'sql'   => '',
 		);
 
 		$view_listing += $defaults;
@@ -159,24 +159,51 @@ class App_Controller_Admin_View extends Controller
 
 	public function save_png()
 	{
-		$name = !empty($_POST['name']) ? $_POST['name'] : date('Y-m-d');
+		$view_id = _post('view_id');
 
-		$img = str_replace('data:image/png;base64,', '', $_POST['img']);
-		$img = str_replace(' ', '+', $img);
-		$data = base64_decode($img);
-		$file = DIR_IMAGE . 'charts/' . $name . '.png';
-
-		_is_writable(dirname($file));
-
-		$success = file_put_contents($file, $data);
-
-		if ($success) {
-			message('success', _l("The file was saved as <a target=\"_blank\" href=\"%s\">%s</a>", str_replace(DIR_ASSETS, URL_ASSETS, $file), basename($file)));
+		if (!$view_id) {
+			message('error', _l("There was no view to save this image for"));
 		} else {
-			message('error', _l("Failed to save file. Try another name."));
+			$name = slug(_post('name', date('Y-m-d')));
+
+			$name = slug($name);
+
+			$img = str_replace('data:image/png;base64,', '', _post('img'));
+
+			if ($img) {
+				$dir = DIR_IMAGE . 'charts/';
+
+				$img  = str_replace(' ', '+', $img);
+				$data = base64_decode($img);
+				$file = $dir . $name . '.png';
+
+				_is_writable(dirname($file));
+
+				$count = 1;
+
+				while (file_exists($file)) {
+					$file = $dir . $name . '-' . $count++ . '.png';
+				}
+
+				if (!file_put_contents($file, $data)) {
+					message('error', _l("Failed to save file. Try another name."));
+				} else {
+
+					$img_url = str_replace(DIR_ASSETS, URL_ASSETS, $file);
+
+					if (!$this->Model_View->saveViewMeta($view_id, 'chart_image', $img_url)) {
+						message('error', $this->Model_View->getError());
+					} else {
+						message('success', _l("The file was saved as <a target=\"_blank\" href=\"%s\">%s</a>", $img_url, basename($file)));
+					}
+				}
+
+			} else {
+				message('error', _l("There was no image data"));
+			}
 		}
 
-		echo $this->message->toJSON();
+		output($this->message->toJSON());
 	}
 
 	public function batch_action()

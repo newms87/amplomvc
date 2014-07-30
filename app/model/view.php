@@ -3,6 +3,7 @@
 class App_Model_View extends Model
 {
 	static $view_listings;
+	static $meta = array();
 
 	public function save($view_id, $view)
 	{
@@ -127,6 +128,77 @@ class App_Model_View extends Model
 	public function remove($view_id)
 	{
 		return $this->delete('view', $view_id);
+	}
+
+	public function getViewMeta($view_id, $key = null, $single = true)
+	{
+		if (!isset(self::$meta[$view_id])) {
+			$rows = $this->queryRows("SELECT * FROM " . $this->prefix . "view_meta WHERE view_id = " . (int)$view_id);
+
+			foreach ($rows as $row) {
+				self::$meta[$view_id][$row['key']][] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+			}
+		}
+
+		if ($key) {
+			if (isset(self::$meta[$view_id][$key])) {
+				return $single ? current(self::$meta[$view_id][$key]) : self::$meta[$view_id][$key];
+			}
+		} elseif (isset(self::$meta[$view_id])) {
+			return self::$meta[$view_id];
+		}
+
+		return null;
+	}
+
+	public function saveViewMeta($view_id, $key, $value = null, $single = true)
+	{
+		if (_is_object($value)) {
+			$value      = serialize($value);
+			$serialized = 1;
+		} else {
+			$serialized = 0;
+		}
+
+		if ($single) {
+			$this->delete('view_meta', array('view_id' => $view_id));
+
+			if (is_null($value)) {
+				return true;
+			}
+		}
+
+		$view_meta = array(
+			'view_id'    => $view_id,
+			'key'        => $key,
+			'value'      => $value,
+			'serialized' => $serialized,
+			'date'       => $this->date->now(),
+		);
+
+		return $this->insert('view_meta', $view_meta);
+	}
+
+	public function updateViewMeta($view_meta_id, $key, $value = null)
+	{
+		if (_is_object($value)) {
+			$value      = serialize($value);
+			$serialized = 1;
+		} else {
+			$serialized = 0;
+		}
+
+		if (is_null($value)) {
+			return $this->delete('view_meta', $view_meta_id);
+		}
+
+		$view_meta = array(
+			'value'      => $value,
+			'serialized' => $serialized,
+			'date'       => $this->date->now(),
+		);
+
+		return $this->update('view_meta', $view_meta, $view_meta_id);
 	}
 
 	/*********************
@@ -342,21 +414,21 @@ class App_Model_View extends Model
 		$this->cache->delete('view_listing');
 
 		$view_listings = array(
-			'clients' => array(
+			'clients'       => array(
 				'path'  => 'admin/client/listing',
 				'query' => '',
 				'name'  => 'Clients',
 			),
-			'pages'   => array(
+			'pages'         => array(
 				'path'  => 'admin/page/listing',
 				'query' => '',
 				'name'  => 'Page List',
 			),
-		   'view_listings' => array(
-			   'path' => 'admin/view/listing',
-		      'query' => '',
-		      'name' => 'View Listings',
-		   ),
+			'view_listings' => array(
+				'path'  => 'admin/view/listing',
+				'query' => '',
+				'name'  => 'View Listings',
+			),
 		);
 
 		foreach ($view_listings as $view_listing) {
