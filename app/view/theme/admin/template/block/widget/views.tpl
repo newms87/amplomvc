@@ -40,7 +40,7 @@
 							</div>
 						</div>
 
-						<? if ($can_modify && user_can('modify', 'views')) { ?>
+						<? if ($can_modify && user_can('modify', 'view')) { ?>
 							<div class="view-settings buttons">
 								<div class="view-setting setting-buttons">
 									<a class="move-up button move">
@@ -92,7 +92,7 @@
 	<div class="buttons views-actions">
 		<a class="add-view button"><?= _l("New View"); ?></a>
 
-		<? if (user_can('modify', 'views')) { ?>
+		<? if (user_can('modify', 'view')) { ?>
 			<a class="create-view button"><?= _l("Create View"); ?></a>
 
 			<div class="view-popup create-view-box">
@@ -203,7 +203,7 @@
 		$this.addClass('active');
 	});
 
-	<? if ($can_modify && user_can('modify', 'views')) { ?>
+	<? if ($can_modify && user_can('modify', 'view')) { ?>
 	$('.choose-view-box [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
