@@ -19,7 +19,7 @@ abstract class Controller
 		return $registry->load($path, $class);
 	}
 
-	protected function render($path, $data = array())
+	protected function render($path, $data = array(), $theme = null)
 	{
 		//TODO All validation should be done in Model! Remove this after removing all validation methods.
 		//Display Error Messages
@@ -37,7 +37,7 @@ abstract class Controller
 			}
 		}
 
-		$_template = $this->theme->getFile($path);
+		$_template = $this->theme->getFile($path, $theme);
 
 		if (!$_template) {
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));

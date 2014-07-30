@@ -99,7 +99,7 @@
 				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
 					<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
 					<input type="hidden" name="group" value="<?= $group; ?>"/>
-					<input type="text" name="name" value="<?= "View Name"; ?>"/>
+					<input type="text" name="name" value="<?= _l("View Name"); ?>"/>
 					<br/>
 					<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
 					<button class="submit-view"><?= _l("Create View"); ?></button>

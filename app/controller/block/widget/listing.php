@@ -8,7 +8,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		$defaults = array(
+		$settings += array(
 			'extra_cols'      => array(),
 			'template'        => 'table/list_view',
 			'ajax'            => 1,
@@ -24,9 +24,8 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'row_id'          => '',
 			'view_id'         => _request('view_id'),
 			'chart'           => array(),
+			'theme'           => null,
 		);
-
-		$settings += $defaults;
 
 		$template_defaults = array(
 			'listing_path' => $settings['listing_path'],
@@ -134,7 +133,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$settings['refresh'] = site_url($settings['listing_path'], $_GET);
 
 		//Render
-		$this->render('block/widget/listing', $settings);
+		$this->render('block/widget/listing', $settings, $settings['theme']);
 	}
 
 	public function save_settings()

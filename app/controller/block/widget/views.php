@@ -183,9 +183,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'pagination'     => true,
 			'total_listings' => $record_total,
 			'listing_path'   => 'block/widget/views/listing',
+			'theme'          => 'admin'
 		);
-
-		$this->theme->addTheme('admin');
 
 		$output = block('widget/listing', null, $listing);
 
@@ -218,7 +217,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				'title'           => _post('title', $_POST['name']),
 				'query'           => '',
 				'show'            => 1,
-				'sort_order'      => 0,
 			);
 
 			if (!$this->Model_View->save(null, $view)) {

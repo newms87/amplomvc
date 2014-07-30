@@ -40,10 +40,8 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 			'datasets' => $settings['datasets'],
 		);
 
-		$this->theme->addTheme('admin');
-
 		//Render
-		output($this->render('block/widget/chart', $settings));
+		output($this->render('block/widget/chart', $settings, 'admin'));
 	}
 
 

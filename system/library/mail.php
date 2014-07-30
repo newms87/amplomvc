@@ -53,7 +53,7 @@ class Mail extends Library
 	public function init($data = array())
 	{
 		//Defaults
-		$data += array(
+		$defaults = array(
 			'handle'      => null,
 			'to'          => null,
 			'cc'          => null,
@@ -68,6 +68,10 @@ class Mail extends Library
 			'crlf'        => "\r\n",
 			'verp'        => false,
 		);
+
+		$data += $defaults;
+
+		$data = array_intersect($data, $defaults);
 
 		foreach ($data as $key => $value) {
 			$this->$key = $value;

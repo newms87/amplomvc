@@ -157,6 +157,28 @@ class App_Controller_Admin_View extends Controller
 		}
 	}
 
+	public function save_png()
+	{
+		$name = !empty($_POST['name']) ? $_POST['name'] : date('Y-m-d');
+
+		$img = str_replace('data:image/png;base64,', '', $_POST['img']);
+		$img = str_replace(' ', '+', $img);
+		$data = base64_decode($img);
+		$file = DIR_IMAGE . 'charts/' . $name . '.png';
+
+		_is_writable(dirname($file));
+
+		$success = file_put_contents($file, $data);
+
+		if ($success) {
+			message('success', _l("The file was saved as <a target=\"_blank\" href=\"%s\">%s</a>", str_replace(DIR_ASSETS, URL_ASSETS, $file), basename($file)));
+		} else {
+			message('error', _l("Failed to save file. Try another name."));
+		}
+
+		echo $this->message->toJSON();
+	}
+
 	public function batch_action()
 	{
 		foreach ($_POST['batch'] as $view_listing_id) {

@@ -78,4 +78,33 @@ class App_Controller_Admin_Dashboard extends Controller
 			redirect('admin/dashboard');
 		}
 	}
+
+	public function email_reports()
+	{
+		$dashboard_id = _request('dashboard_id');
+
+		//New Dashboard
+		if ($dashboard_id) {
+			$dashboard = $this->Model_Dashboard->getDashboard($dashboard_id);
+		}
+
+		if (empty($dashboard)) {
+			message('error', _l("Unable to locate dashboard"));
+		} else {
+			$views = $this->Model_View->getViews('dash-' . $dashboard_id);
+
+			$data = array(
+				'dashboard' => $dashboard,
+				'views'     => $views,
+			);
+
+			call('mail/reports', $data);
+		}
+
+		if (IS_AJAX) {
+			output($this->message->toJSON());
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 }

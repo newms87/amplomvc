@@ -135,7 +135,7 @@ class App_Controller_Page extends Controller
 			file_put_contents($temp_style, html_entity_decode($_POST['style']));
 
 			$page['content'] = $temp_content;
-			$page['style'] = $temp_style;
+			$page['style']   = $temp_style;
 		}
 
 		if (!$page) {
