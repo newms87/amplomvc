@@ -92,7 +92,7 @@
 	<div class="buttons views-actions">
 		<a class="add-view button"><?= _l("New View"); ?></a>
 
-		<? if (user_can('modify', 'view')) { ?>
+		<? if ($this->user->isTopAdmin()) { ?>
 			<a class="create-view button"><?= _l("Create View"); ?></a>
 
 			<div class="view-popup create-view-box">
