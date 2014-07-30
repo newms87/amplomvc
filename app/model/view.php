@@ -33,7 +33,7 @@ class App_Model_View extends Model
 			}
 
 			if (!isset($view['sort_order'])) {
-				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($view['group']) . "'");
+				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($view['group']) . "'") + 1;
 			}
 
 			return $this->insert('view', $view);
