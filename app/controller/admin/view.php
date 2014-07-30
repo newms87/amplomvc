@@ -189,7 +189,7 @@ class App_Controller_Admin_View extends Controller
 					message('error', _l("Failed to save file. Try another name."));
 				} else {
 
-					$img_url = str_replace(DIR_ASSETS, URL_ASSETS, $file);
+					$img_url = str_replace(DIR_IMAGE, URL_IMAGE, $file);
 
 					if (!$this->Model_View->saveViewMeta($view_id, 'chart_image', $img_url)) {
 						message('error', $this->Model_View->getError());
