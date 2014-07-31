@@ -13,9 +13,7 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 			'labels'   => '',
 			'datasets' => array(),
 			'options'  => array(
-				'responsive'      => true,
-				'scaleFontFamily' => 'Arial, Helvetica, sans-serif',
-				'scaleFontColor'  => '#E3B',
+				'responsive' => true,
 			),
 		);
 
