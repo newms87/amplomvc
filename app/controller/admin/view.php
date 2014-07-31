@@ -157,7 +157,7 @@ class App_Controller_Admin_View extends Controller
 		}
 	}
 
-	public function save_png()
+	public function save_data()
 	{
 		$view_id = _post('view_id');
 
