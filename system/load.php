@@ -86,7 +86,9 @@ $error_callbacks = array();
 
 $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use ($error_log, $config) {
 	// error was suppressed with the @-operator
-	if (!ini_get('display_errors') || 0 === error_reporting()) { return false;}
+	if (!ini_get('display_errors') || 0 === error_reporting()) {
+		return false;
+	}
 
 	switch ($errno) {
 		case E_NOTICE:
@@ -116,7 +118,7 @@ $error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use
 
 	if ($error) {
 		if (option('config_error_display')) {
-			$stack = get_caller(1,10);
+			$stack = get_caller(1, 10);
 
 			echo <<<HTML
 			<style>
@@ -201,17 +203,24 @@ $registry->set('response', $response);
 //Plugins (self assigning to registry)
 $plugin = new Plugin();
 
-//Cron
-if (isset($_GET['run_cron'])) {
-	echo nl2br($registry->get('cron')->run());
-	exit;
-} elseif (option('config_cron_status')) {
-	//TODO: Cron disabled, has issues..
-	//$registry->get('cron')->check();
+//Cron Called from system
+if (option('config_cron_status')) {
+	if (defined("RUN_CRON")) {
+		echo $registry->get('cron')->run();
+		exit;
+	} //Cron Called from browser
+	elseif (isset($_GET['run_cron'])) {
+		$result = $registry->get('cron')->run();
+		echo nl2br($result);
+		exit;
+	} //Check if poor man's cron should run
+	elseif (option('config_cron_check')) {
+		$registry->get('cron')->check();
+	}
 }
 
 //PHP Info
-if (isset($_GET['phpinfo']) && $registry->get('user')->isAdmin()) {
+if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	phpinfo();
 	exit;
 }

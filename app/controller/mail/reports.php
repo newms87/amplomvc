@@ -12,7 +12,6 @@ class App_Controller_Mail_Reports extends Controller
 			'bcc'     => '',
 			'from'    => option('config_email'),
 			'sender'  => option('config_name'),
-
 		);
 
 		$store = $this->config->getStore();

@@ -5,6 +5,7 @@ class DB
 	static $profile = array();
 	static $drivers = array();
 
+	private $database;
 	private $driver;
 	private $prefix;
 
@@ -56,6 +57,7 @@ class DB
 			self::$drivers[$key] = $db;
 		}
 
+		$this->database = $database;
 		$this->driver = self::$drivers[$key];
 		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
 	}
@@ -299,31 +301,42 @@ class DB
 			return false;
 		}
 
-		$eol = "\r\n";
-
-		if (!$tables) {
-			$tables = $this->queryRows("SHOW TABLES");
-		}
-
 		if (is_null($prefix)) {
 			$prefix = $this->prefix;
 		}
 
-		$sql = '';
+		$eol = "\r\n";
+
+		if (!$tables) {
+			$tables = $this->queryRows("SELECT table_name, table_type FROM information_schema.tables WHERE table_schema = '$this->database' ORDER BY table_type ASC, table_name ASC");
+		} else {
+			foreach ($tables as &$table) {
+				if (is_string($table)) {
+					$table = array(
+						'table_name' => preg_replace("/^" . $prefix . "/", '', $table),
+						'table_type' => 'BASE TABLE',
+					);
+				}
+			}
+			unset($table);
+		}
+
+		$sql = '#AMPLO_PREFIX=' . $prefix . $eol . $eol;
 
 		foreach ($tables as $table) {
-			if (is_array($table)) {
-				$table = current($table);
+			$name = $table['table_name'];
+
+			if (strtoupper($table['table_type']) === 'VIEW') {
+				$definition = $this->queryVar("SELECT view_definition FROM information_schema.views WHERE table_name = '$name' AND table_schema = '$this->database'");
+				$sql .= "CREATE VIEW `$name` AS $definition" . $eol;
+
+				continue;
 			}
 
-			$table = preg_replace("/^" . $this->prefix . "/", '', $table);
+			$sql .= "DROP TABLE IF EXISTS `$name`;" . $eol;
+			$sql .= "CREATE TABLE `$name` (" . $eol;
 
-			$tablename = $prefix . $table;
-
-			$sql .= "DROP TABLE IF EXISTS `$tablename`;" . $eol;
-			$sql .= "CREATE TABLE `$tablename` (" . $eol;
-
-			$columns = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`");
+			$columns = $this->queryRows("SHOW COLUMNS FROM `$name`");
 
 			$primary_key = array();
 
@@ -359,10 +372,10 @@ class DB
 
 			$sql .= ");" . $eol . $eol;
 
-			$rows = $this->queryRows("SELECT * FROM `" . $this->prefix . "$table`");
+			$rows = $this->queryRows("SELECT * FROM `$name`");
 
 			if (!empty($rows)) {
-				$sql .= "INSERT INTO `$tablename` VALUES ";
+				$sql .= "INSERT INTO `$name` VALUES ";
 				foreach ($rows as $row) {
 					$sql .= "(";
 					foreach ($row as $key => $value) {

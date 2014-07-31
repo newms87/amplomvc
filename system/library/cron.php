@@ -3,12 +3,16 @@ class Cron extends Library
 {
 	private $settings;
 
+	public function __construct()
+	{
+		parent::__construct();
+		$this->settings = $this->config->loadGroup('cron', 0);
+	}
+
 	public function check()
 	{
 		//TODO: Re-enable Cron when convenient
 		return;
-
-		$this->settings = $this->config->loadGroup('cron', 0);
 
 		if (empty($this->settings['cron_last_run'])) {
 			$this->run();
@@ -24,6 +28,9 @@ class Cron extends Library
 
 	public function run()
 	{
+		//Maximum execution time is 5 minutes
+		set_time_limit(defined("AMPLO_CRON_TIMEOUT") ? AMPLO_CRON_TIMEOUT : 300);
+
 		//System User enables full permissions
 		$this->user->loginSystemUser();
 
@@ -47,7 +54,15 @@ class Cron extends Library
 
 				$diff = $this->date->diff($last_scheduled, $task['last_run']);
 
-				if ($diff->days + $diff->h + $diff->i <= 0) {
+
+
+				//TODO REMOVE THIS FALSE
+
+
+
+
+
+				if (false && $diff->days + $diff->h + $diff->i <= 0) {
 					$msg .= _l("Already ran.");
 				} elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
 					$task['last_run'] = $this->date->now();

@@ -83,22 +83,12 @@ class App_Controller_Admin_Dashboard extends Controller
 	{
 		$dashboard_id = _request('dashboard_id');
 
-		//New Dashboard
-		if ($dashboard_id) {
-			$dashboard = $this->Model_Dashboard->getDashboard($dashboard_id);
-		}
+		$to = _request('to');
 
-		if (empty($dashboard)) {
-			message('error', _l("Unable to locate dashboard"));
+		if ($this->Model_Dashboard->emailReports($dashboard_id, $to)) {
+			message('success', _l("Reports were emailed to %s", $to));
 		} else {
-			$views = $this->Model_View->getViews('dash-' . $dashboard_id);
-
-			$data = array(
-				'dashboard' => $dashboard,
-				'views'     => $views,
-			);
-
-			call('mail/reports', $data);
+			message('error', $this->Model_Dashboard->getError());
 		}
 
 		if (IS_AJAX) {

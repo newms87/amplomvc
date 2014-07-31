@@ -29,9 +29,7 @@ class App_Controller_Mail_Header extends Controller
 				$data['logo'] = image($data['logo'], $width, $height);
 			}
 
-			if (!parse_url($data['logo'], PHP_URL_SCHEME)) {
-				$data['logo'] = 'http://' . ltrim($data['logo'], '/\\');
-			}
+			$data['logo'] = cast_http($data['logo']);
 
 			//Calculate width / height and scale if necessary
 			if ($width && $height) {

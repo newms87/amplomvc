@@ -72,17 +72,21 @@ function message($type, $message)
 	$registry->get('message')->add($type, $message);
 }
 
-function image($image, $width = null, $height = null, $default = null)
+function image($image, $width = null, $height = null, $default = null, $cast_http = false)
 {
 	global $registry;
 	$image = $registry->get('image')->resize($image, $width, $height);
 
 	if (!$image && $default) {
 		if ($default === true) {
-			return theme_image('no_image.png', $width, $height);
+			$image = theme_image('no_image.png', $width, $height);
+		} else {
+			$image = $registry->get('image')->resize($default, $width, $height);
 		}
+	}
 
-		return $registry->get('image')->resize($default, $width, $height);
+	if ($cast_http) {
+		return cast_http($image, is_string($cast_http) ? $cast_http : 'http');
 	}
 
 	return $image;

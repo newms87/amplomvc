@@ -71,7 +71,7 @@ class Mail extends Library
 
 		$data += $defaults;
 
-		$data = array_intersect($data, $defaults);
+		$data = array_intersect_key($data, $defaults);
 
 		foreach ($data as $key => $value) {
 			$this->$key = $value;
