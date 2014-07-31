@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=320, target-densitydpi=device-dpi">
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000;">
-<div style="width: 680px;text-align: center">
+<div style="width: 680px;text-align: center; margin: auto;">
 	<? if ($logo) { ?>
 		<div style="margin-bottom: 10px;">
 			<a href="<?= $store['url']; ?>" title="<?= $store['name']; ?>">
