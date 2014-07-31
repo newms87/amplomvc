@@ -13,7 +13,9 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 			'labels'   => '',
 			'datasets' => array(),
 			'options'  => array(
-				'responsive' => true,
+				'responsive'      => true,
+				'scaleFontFamily' => 'Arial, Helvetica, sans-serif',
+				'scaleFontColor'  => '#E3B',
 			),
 		);
 
@@ -43,6 +45,4 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 		//Render
 		output($this->render('block/widget/chart', $settings, 'admin'));
 	}
-
-
 }
