@@ -4,6 +4,12 @@ if (is_file('ac_config.php')) {
 	include_once('ac_config.php');
 }
 
+$_SERVER += array(
+	'HTTP_HOST'      => DOMAIN,
+	'REQUEST_METHOD' => 'GET',
+	'REMOTE_ADDR'    => '::1',
+);
+
 // Install
 if (!defined('DOMAIN') || defined("AMPLO_INSTALL_USER")) {
 	define("AMPLO_INSTALL", true);
