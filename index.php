@@ -1,13 +1,14 @@
 <?php
 // Configuration
-if (is_file('ac_config.php')) {
-	include_once('ac_config.php');
+if (is_file(dirname(__FILE__) . '/ac_config.php')) {
+	include_once(dirname(__FILE__) . '/ac_config.php');
 }
 
 $_SERVER += array(
 	'HTTP_HOST'      => DOMAIN,
 	'REQUEST_METHOD' => 'GET',
 	'REMOTE_ADDR'    => '::1',
+	'QUERY_STRING' => '',
 );
 
 // Install
