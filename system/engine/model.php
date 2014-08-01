@@ -517,6 +517,12 @@ abstract class Model
 
 	protected function calcFoundRows($table, $sort, $filter)
 	{
+		$table_model = $this->getTableModel($table);
+
+		if ($table_model['table_type'] === 'VIEW') {
+			return true;
+		}
+
 		if (empty($sort['sort']) && empty($filter)) {
 			return true;
 		}
@@ -534,12 +540,51 @@ abstract class Model
 
 	protected function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
 	{
-		$columns = cache('model.' . $table);
+		$table_model = $this->getTableModel($table);
 
-		if (!$columns) {
+		$columns = $table_model['columns'];
+
+		//Merge
+		foreach ($merge as $field => $data) {
+			if (isset($columns[$field])) {
+				$columns[$field] = $data + $columns[$field];
+			} elseif ($filter === false || isset($filter[$field])) {
+				$columns[$field] = $data;
+			}
+		}
+
+		//Filter / Sort
+		if (!$filter && $filter !== false) {
+			$filter = array_combine(array_keys($columns), range(0, count($columns) - 1));
+		}
+
+		if ($filter) {
+			$columns = array_intersect_key($columns, $filter);
+
+			if ($sort) {
+				uksort($columns, function ($a, $b) use ($filter) {
+					return $filter[$a] > $filter[$b];
+				});
+			}
+		}
+
+		return $columns;
+	}
+
+	public function getTableModel($table)
+	{
+		$schema = $this->db->getName();
+
+		$table_model = cache('model.' . $schema . '.' . $table);
+
+		if (!$table_model) {
+			$name = $this->prefix . $this->escape($table);
+
+			$table_model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$name'");
+
 			$columns = $this->db->getTableColumns($table);
 
-			$indexes = $this->queryRows("SHOW INDEX FROM `$this->prefix" . $this->escape($table) . "`");
+			$indexes = $this->queryRows("SHOW INDEX FROM `$name`");
 
 			foreach ($columns as &$column) {
 				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
@@ -600,34 +645,13 @@ abstract class Model
 			}
 			unset($column);
 
-			cache('model.' . $table, $columns);
+			$table_model['columns'] = $columns;
+			$table_model['indexes'] = $indexes;
+
+			cache('model.' . $schema . '.' . $table, $table_model);
 		}
 
-		//Merge
-		foreach ($merge as $field => $data) {
-			if (isset($columns[$field])) {
-				$columns[$field] = $data + $columns[$field];
-			} elseif ($filter === false || isset($filter[$field])) {
-				$columns[$field] = $data;
-			}
-		}
-
-		//Filter / Sort
-		if (!$filter && $filter !== false) {
-			$filter = array_combine(array_keys($columns), range(0, count($columns) - 1));
-		}
-
-		if ($filter) {
-			$columns = array_intersect_key($columns, $filter);
-
-			if ($sort) {
-				uksort($columns, function ($a, $b) use ($filter) {
-					return $filter[$a] > $filter[$b];
-				});
-			}
-		}
-
-		return $columns;
+		return $table_model;
 	}
 
 	private function getPrimaryKey($table)

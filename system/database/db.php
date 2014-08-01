@@ -5,7 +5,6 @@ class DB
 	static $profile = array();
 	static $drivers = array();
 
-	private $database;
 	private $driver;
 	private $prefix;
 
@@ -57,7 +56,6 @@ class DB
 			self::$drivers[$key] = $db;
 		}
 
-		$this->database = $database;
 		$this->driver = self::$drivers[$key];
 		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
 	}
@@ -308,7 +306,7 @@ class DB
 		$eol = "\r\n";
 
 		if (!$tables) {
-			$tables = $this->queryRows("SELECT table_name, table_type FROM information_schema.tables WHERE table_schema = '$this->database' ORDER BY table_type ASC, table_name ASC");
+			$tables = $this->queryRows("SELECT table_name, table_type FROM information_schema.tables WHERE table_schema = '" . $this->getName() . "' ORDER BY table_type ASC, table_name ASC");
 		} else {
 			foreach ($tables as &$table) {
 				if (is_string($table)) {
@@ -327,7 +325,7 @@ class DB
 			$name = $table['table_name'];
 
 			if (strtoupper($table['table_type']) === 'VIEW') {
-				$definition = $this->queryVar("SELECT view_definition FROM information_schema.views WHERE table_name = '$name' AND table_schema = '$this->database'");
+				$definition = $this->queryVar("SELECT view_definition FROM information_schema.views WHERE table_name = '$name' AND table_schema = '" . $this->getName() . "'");
 				$sql .= "CREATE VIEW `$name` AS $definition" . $eol;
 
 				continue;

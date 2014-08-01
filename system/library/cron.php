@@ -54,15 +54,7 @@ class Cron extends Library
 
 				$diff = $this->date->diff($last_scheduled, $task['last_run']);
 
-
-
-				//TODO REMOVE THIS FALSE
-
-
-
-
-
-				if (false && $diff->days + $diff->h + $diff->i <= 0) {
+				if ($diff->days + $diff->h + $diff->i <= 0) {
 					$msg .= _l("Already ran.");
 				} elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
 					$task['last_run'] = $this->date->now();

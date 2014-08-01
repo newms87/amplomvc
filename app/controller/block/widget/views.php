@@ -171,8 +171,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$sort   = $this->sort->getQueryDefaults();
 		$filter = _request('filter', array());
 
-		$record_total = $this->Model_View->getTotalRecords($view_listing_id, $filter);
-		$records      = $this->Model_View->getRecords($view_listing_id, $sort, $filter);
+		list($records, $record_total) = $this->Model_View->getRecords($view_listing_id, $sort, $filter, null, true);
 
 		$listing += array(
 			'row_id'         => null,
