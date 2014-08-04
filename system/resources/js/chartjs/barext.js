@@ -1,9 +1,8 @@
 // Notice now we're extending the particular Line chart type, rather than the base class.
-Chart.types.Bar.extend({
-    // Passing in a name registers this chart in the Chart namespace in the same way
+var chart_ext = {
     name: "BarExt",
     initialize: function (data) {
-        Chart.types.Bar.prototype.initialize.apply(this, arguments);
+        Chart.types[this.baseType()].prototype.initialize.apply(this, arguments);
 
         var canvas = this.chart.ctx.canvas;
         var me = this;
@@ -16,7 +15,8 @@ Chart.types.Bar.extend({
         }, false);
     },
     draw: function (data) {
-        Chart.types.Bar.prototype.draw.apply(this, arguments);
+        Chart.types[this.baseType()].prototype.draw.apply(this, arguments);
+
         var chart = this.chart,
             ctx = chart.ctx;
 
@@ -25,6 +25,9 @@ Chart.types.Bar.extend({
         if (chart.showing_values) {
             this.showValues();
         }
+    },
+    baseType: function (){
+      return this.__proto__.name.replace("Ext",'');
     },
     drawBox: function (ctx, x, y, width, height) {
         ctx.beginPath();
@@ -55,10 +58,16 @@ Chart.types.Bar.extend({
         };
     },
     showValues: function (chart) {
+        var type = this.baseType();
+
         chart = chart || this;
 
+        if (type === 'Pie') {
+            return;
+        }
+
         for (var d in chart.datasets) {
-            bars = chart.datasets[d].bars;
+            bars = chart.datasets[d].bars || chart.datasets[d].points;
 
             for (var b in bars) {
                 bar = bars[b];
@@ -81,7 +90,25 @@ Chart.types.Bar.extend({
             }
         }
     }
-});
+};
+
+function init_barext() {
+    if (typeof Chart === 'undefined') {
+        return setTimeout(init_barext, 300);
+    }
+
+    Chart.defaults.global.tooltipTemplate = "<%= value %>";
+
+    for (var t in Chart.types) {
+        if (t !== 'Pie') {
+            var ext = $.extend(true, {}, chart_ext);
+            ext.name = t + 'Ext';
+            Chart.types[t].extend(ext);
+        }
+    }
+}
+
+init_barext();
 
 $.fn.showValues = function (show) {
     return this.each(function (i, e) {
