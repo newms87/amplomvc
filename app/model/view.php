@@ -349,7 +349,7 @@ class App_Model_View extends Model
 					//Initialize the View Listings if the table is empty
 					if (!$this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "view_listing")) {
 						$this->resetViewListings();
-						return $this->getListings();
+						return $this->getViewListings();
 					}
 				}
 
