@@ -268,18 +268,17 @@ class App_Model_View extends Model
 		return $this->delete('view_listing', $view_listing_id);
 	}
 
-	public function getRecords($view_listing_id, $sort = array(), $filter = array(), $select = '*', $index = null)
+	public function getRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
+		if (!$select) {
+			$select = '*';
+		}
+
 		$table = $this->getViewListingTable($view_listing_id);
 
 		if (!$table) {
 			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
 			return false;
-		}
-
-		//Select
-		if ($index === false) {
-			$select = 'COUNT(*)';
 		}
 
 		//From
@@ -289,29 +288,31 @@ class App_Model_View extends Model
 		$where = $this->extractFilter($table, $filter);
 
 		//Order By & Limit
-		if ($index !== false) {
-			$order = $this->extractOrder($sort);
-			$limit = $this->extractLimit($sort);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		$order = $this->extractOrder($sort);
+		$limit = $this->extractLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		$calc_rows = ($total && $this->calcFoundRows($table, $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
 
-		//Get Total
-		if ($index === false) {
-			return $this->queryVar($query);
+		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
+
+		//Get Results
+		if ($total) {
+			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
+			$total_rows = $this->queryVar($query);
+
+			return array(
+				$rows,
+				$total_rows,
+			);
 		}
 
-		//Get Rows
-		return $this->queryRows($query, $index);
+		return $rows;
 	}
 
 	public function getTotalRecords($view_listing_id, $filter = array())
 	{
-		return $this->getRecords($view_listing_id, array(), $filter, '', false);
+		return $this->getRecords($view_listing_id, array(), $filter, 'COUNT(*)');
 	}
 
 	public function getViewListingTable($view_listing_id)

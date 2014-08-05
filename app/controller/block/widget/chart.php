@@ -29,6 +29,10 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 			if (empty($settings['datasets'])) {
 				$settings['datasets'] = $chart['datasets'];
 			}
+
+			if (empty($settings['discrete'])) {
+				$settings['discrete'] = $chart['discrete'];
+			}
 		}
 
 		if (empty($settings['type'])) {
@@ -38,6 +42,7 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 		$settings['chart_data'] = array(
 			'labels'   => $settings['labels'],
 			'datasets' => $settings['datasets'],
+			'discrete' => $settings['discrete'],
 		);
 
 		//Render

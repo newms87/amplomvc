@@ -1,8 +1,16 @@
 <?php
 // Configuration
-if (is_file('ac_config.php')) {
-	include_once('ac_config.php');
+if (is_file(dirname(__FILE__) . '/ac_config.php')) {
+	include_once(dirname(__FILE__) . '/ac_config.php');
 }
+
+//Default server values in case they are not set.
+$_SERVER += array(
+	'HTTP_HOST'      => DOMAIN,
+	'REQUEST_METHOD' => 'GET',
+	'REMOTE_ADDR'    => '::1',
+	'QUERY_STRING'   => '',
+);
 
 // Install
 if (!defined('DOMAIN') || defined("AMPLO_INSTALL_USER")) {
