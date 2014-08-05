@@ -189,24 +189,10 @@
 		$view.toggleClass('view-chart', chart_type ? true : false);
 
 		if (chart_type) {
-			var is_discrete = {
-				Pie: 1,
-				Doughnut: 1
-			}
+			var $canvas = $view.find('.widget-chart canvas');
+			var chart = $canvas.data('chart');
 
-			var chart = $view.find('.widget-chart canvas').data('chart');
-
-			if (chart && chart[chart_type]) {
-				if (chart.chart) {
-					chart.chart.destroy();
-				}
-
-				if (chart[chart_type + 'Ext']) {
-					chart_type += 'Ext';
-				}
-
-				chart[chart_type](is_discrete[chart_type] ? chart.discrete : chart.data, chart.options);
-			}
+			$canvas.renderChart(chart_type);
 		}
 
 		$this.closest('.view-list-chart').find('.active').removeClass('active');
