@@ -74,6 +74,18 @@ class Chart extends Library
 			'color' => '#933C3C',
 			'highlight' => "#DB9E9E",
 		),
+		7 => array(
+			'color' => '#298329',
+			'highlight' => "#7CBD7C",
+		),
+		8 => array(
+			'color' => '#182572',
+			'highlight' => "#707AB3",
+		),
+		9 => array(
+			'color' => '#DF1EDF',
+			'highlight' => "#E995E9",
+		),
 	);
 
 	public function convert($data, $settings = array())
@@ -108,6 +120,13 @@ class Chart extends Library
 
 		if ($data_index) {
 			foreach ($data as $entry) {
+				//So isset is not false if NULL
+				foreach ($entry as &$e) {
+					if (is_null($e)) {
+						$e = 0;
+					}
+				}unset($e);
+
 				foreach ($settings['data_cols'] as $col => $col_name) {
 					if (!isset($datasets[$col])) {
 						$datasets[$col] = array(

@@ -244,6 +244,15 @@ td {
       margin-right: 10px;
     }
 
+    .builder-multiselect {
+      label {
+        display: block;
+        width: auto;
+        text-align: left;
+        min-width: 0;
+      }
+    }
+
     /* Chrome Autofill Style Hack*/
     [autocomplete="off"]:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px @color-lightest inset;
@@ -1348,7 +1357,7 @@ button, .button {
       height: 100%;
       box-sizing: border-box;
 
-      .scrollbox-div {
+      .builder-multiselect {
         height: 100%;
       }
 
@@ -1363,6 +1372,13 @@ button, .button {
 
     .tab-content {
       height: 90%;
+
+      &.view-listing-tab {
+        .builder-multiselect {
+          width: 60%;
+          display: inline-block;
+        }
+      }
     }
 
     .close {
@@ -1377,7 +1393,7 @@ button, .button {
   }
 
   .filter-list {
-    .scrollbox {
+    .multiselect-list {
       text-align: left;
       min-width: 200px;
     }
@@ -1720,7 +1736,7 @@ ul.item_list li img.remove {
   float: right;
 }
 
-ol.scrollbox {
+ol.multiselect-list {
   padding: 0;
   margin: 0;
 
@@ -1739,7 +1755,7 @@ ol.scrollbox {
   }
 }
 
-.scrollbox-div {
+.builder-multiselect {
   height: 100%;
   overflow-y: auto;
   height: 150px;
@@ -1749,7 +1765,7 @@ ol.scrollbox {
   background: white;
   position: relative;
 
-  .scrollbox {
+  .multiselect-list {
     & > div {
       position: relative;
       margin-bottom: 2px;
@@ -1840,7 +1856,7 @@ ol.scrollbox {
     }
   }
 
-  ul.scrollbox {
+  ul.multiselect-list {
     li {
       list-style: none;
       overflow: auto;
@@ -1849,7 +1865,7 @@ ol.scrollbox {
   }
 }
 
-.scrollbox-buttons {
+.multiselect-buttons {
   width: 50%;
   text-align: center;
   margin: 8px auto 0 auto;

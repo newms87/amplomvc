@@ -90,8 +90,8 @@ var chart_ext_init = (function () {
                 }
 
                 new Chart.MultiTooltip({
-                    x: 15,
-                    y: 120,
+                    x: 5,
+                    y: 110,
                     xPadding: chart.options.tooltipXPadding,
                     yPadding: chart.options.tooltipYPadding,
                     xOffset: chart.options.tooltipXOffset,
