@@ -128,6 +128,7 @@ final class Router
 	{
 		$path = $this->path;
 
+		//TODO: Move this to an extend / plugin feature! Possibly resort to using a hook here... PRODUCT should be a part of AmploCart Plugin!
 		//Path Rerouting
 		switch ($this->getSegment(0)) {
 			case 'page':
