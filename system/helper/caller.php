@@ -463,10 +463,10 @@ function build($type, $params)
 
 		case 'multiselect':
 			return <<<HTML
-<div class="scrollbox-div">
-	<ul class="scrollbox" $attrs>$options</ul>
+<div $attrs>
+	<ul class="multiselect-list">$options</ul>
 </div>
-<div class="scrollbox-buttons">
+<div class="multiselect-buttons">
 	<a class="check_all" onclick="$(this).parent().prev().find('input[type=checkbox]').prop('checked', true)">[ Check All ]</a>
 	<a class="uncheck_all" onclick="$(this).parent().prev().find('input[type=checkbox]').prop('checked', false)">[ Uncheck All ]</a>
 </div>
@@ -474,8 +474,8 @@ HTML
 				;
 
 		case 'clickable_list':
-			$added_list = "<div class=\"scrollbox clickable_added\">$selected_options</div>";
-			$list       = "<div class=\"scrollbox clickable\">$options</div>";
+			$added_list = "<div class=\"multiselect-list clickable_added\">$selected_options</div>";
+			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
 }

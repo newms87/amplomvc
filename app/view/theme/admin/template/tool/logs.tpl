@@ -15,7 +15,8 @@
 
 			<div class="buttons">
 				<? if (!empty($prev) || !empty($next)) { ?>
-					<?= _l("Limit"); ?> <input type="text" id="limit" value="<?= $limit; ?>" onchange="update_limit();"/>
+					<?= _l("Limit"); ?>
+					<input type="text" id="limit" value="<?= $limit; ?>" onchange="update_limit();"/>
 					<? if (!empty($prev)) { ?>
 						<a id="button_prev" href="<?= $prev; ?>" class="button"><?= _l("Previous"); ?></a>
 					<? } ?>
@@ -35,7 +36,7 @@
 							<a class="button" onclick="$(this).closest('form').submit();"><?= _l("Remove"); ?></a>
 						</form>
 						<a href="<?= $clear; ?>" class="button"
-							style="float:left;margin-left:20px"><?= _l("Clear Log Entries"); ?></a>
+						   style="float:left;margin-left:20px"><?= _l("Clear Log Entries"); ?></a>
 					</td>
 				</tr>
 			</table>
@@ -56,7 +57,9 @@
 				<tbody>
 					<? foreach ($entries as $e) { ?>
 						<tr data-line="<?= $e['line']; ?>">
-							<td><a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a></td>
+							<td>
+								<a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a>
+							</td>
 							<td><?= $e['line']; ?></td>
 							<td><?= $e['date']; ?></td>
 							<td><?= $e['ip']; ?></td>
@@ -77,15 +80,13 @@
 	var remove_tpl = $('#log_template').remove().removeAttr('id');
 
 	function remove_entry(context) {
-		$.post("<?= $remove; ?>", {entries: context.attr('data-line'), no_page: 1},
-			function (msg) {
-				context.parent().ac_msg('warning', msg);
+		$.post("<?= $remove; ?>", {entries: context.attr('data-line'), no_page: 1}, function (msg) {
+			context.parent().ac_msg('warning', msg);
 
-				setTimeout(function () {
-					context.fadeOut(300);
-				}, 1000);
-			}
-		);
+			setTimeout(function () {
+				context.fadeOut(300);
+			}, 1000);
+		}, 'json');
 
 		context.loading();
 	}

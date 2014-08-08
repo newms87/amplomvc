@@ -85,13 +85,14 @@
 					<div class="form-item">
 						<label for="chart-data-<?= $view_id; ?>"><?= _l("Y axis (Data Column)"); ?></label>
 						<?=
-						build('select', array(
+						build('multiselect', array(
 							'name'   => 'chart[data_cols]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
 							'key'    => 'Field',
 							'value'  => 'display_name',
 							'#id'    => 'chart-data-' . $view_id,
+							'#class' => 'chart-data-cols',
 						)); ?>
 					</div>
 
@@ -138,7 +139,7 @@
 			$(this).closest('.view-config').removeClass('show');
 		});
 
-		$list_widget.find('.select-cols .scrollbox').sortable();
+		$list_widget.find('.select-cols .multiselect-list').sortable();
 
 		$list_widget.find('.filter-cols').click(function () {
 			$(this).closest('.view-config').find('.close').click();
@@ -174,6 +175,8 @@
 
 				return false;
 			});
+
+		$list_widget.find('.chart-data-cols .multiselect-list').sortable();
 
 		$list_widget.find('.save-settings').click(function () {
 			var $this = $(this);
