@@ -3,7 +3,7 @@
 <div class="section">
 	<?= breadcrumbs(); ?>
 
-	<form action="<?= site_url('admin/catalog/product_class/voucher/update', 'product_id=' . $product_id); ?>" method="post" id="voucher-form" class="box">
+	<form action="<?= site_url('admin/product/product_class/voucher/update', 'product_id=' . $product_id); ?>" method="post" id="voucher-form" class="box">
 		<input type="hidden" name="product_class_id" value="<?= $product_class_id; ?>"/>
 
 		<div class="heading">
@@ -13,7 +13,7 @@
 			</h1>
 			<div class="buttons">
 				<button><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/catalog/product'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= site_url('admin/product/product'); ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 

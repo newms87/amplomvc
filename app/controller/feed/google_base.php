@@ -11,7 +11,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 			$output .= '<description>' . option('config_meta_description') . '</description>';
 			$output .= '<link>' . URL_SITE . '</link>';
 
-			$products = $this->Model_Catalog_Product->getProducts();
+			$products = $this->Model_Product->getProducts();
 
 			foreach ($products as $product) {
 				if ($product['description']) {
@@ -49,7 +49,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 						$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
 					}
 
-					$categories = $this->Model_Catalog_Product->getCategories($product['product_id']);
+					$categories = $this->Model_Product->getCategories($product['product_id']);
 
 					foreach ($categories as $category) {
 						$path = $this->getPath($category['category_id']);

@@ -324,7 +324,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 				'length_class_id' => $length_class_id,
 			);
 
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
+			$product_total = $this->Model_Product->getTotalProducts($data);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf(_l("Warning: This length class cannot be deleted as it is currently assigned to %s products!"), $product_total);
