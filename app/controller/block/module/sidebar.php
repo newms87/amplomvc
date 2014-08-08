@@ -46,7 +46,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 						'attribute_group_ids' => array($attribute_group_id),
 					);
 
-					$attribute_list = $this->Model_Catalog_Product->getAttributes($sort + $filter);
+					$attribute_list = $this->Model_Product->getAttributes($sort + $filter);
 
 					if (empty($attribute_list)) {
 						continue;
