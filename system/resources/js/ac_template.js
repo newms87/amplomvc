@@ -1,10 +1,10 @@
 $.ac_template = $.fn.ac_template = function (name, action, data) {
 	templates = $.fn.ac_template.templates;
 
-	function get_count() {
+	function get_count(list) {
 		var count = 0;
 
-		list.children('[data-row]').each(function (i, e) {
+		list.find('[data-rel="'+list.data('rel')+'"]').each(function (i, e) {
 			count = Math.max(count, parseInt($(e).attr('data-row')) + 1);
 		});
 
@@ -19,6 +19,9 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 			$.error('Unable to find template row for ' + name + '! The element containing the template row must have the following attribute: data-row="__ac_template__"');
 			return this;
 		}
+
+        this.data('rel', name);
+        this.find('[data-row]').not('[data-rel]').attr('data-rel', name);
 
 		template = template_row.clone(true);
 		template_row.remove();
@@ -41,8 +44,8 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 			list = this;
 		}
 
-		if (action === 'add') {
-			if (row.unique && (duplicate = list.children('[data-id="' + data[row.unique] + '"]')).length) {
+        if (action === 'add') {
+            if (row.unique && (duplicate = list.children('[data-id="' + data[row.unique] + '"]')).length) {
 				setTimeout(function () {
 					duplicate.flash_highlight();
 				}, 100);
@@ -122,11 +125,6 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 				init_ckeditor_for($(e));
 			});
 
-			//TODO: remove this... this cant be right???
-			template.find('.date').each(function (i, e) {
-				init_ckeditor_for($(e));
-			});
-
 			//Replace all attribute occurrences
 			template.find('*').addBack().each(function(i,e){
 				$.each(this.attributes, function(a, attr) {
@@ -135,7 +133,6 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 						$(e).val($(e).attr('value'));
 					}
 				});
-
 			});
 
 			//Replace all text occurrences

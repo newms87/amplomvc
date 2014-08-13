@@ -72,46 +72,25 @@ var chart_ext_init = (function () {
         showValues: function (chart) {
             var type = this.baseType();
 
+            var labels = [],
+                colors = [];
+
             chart = chart || this;
 
             if (type === 'Pie' || type === 'Doughnut') {
-                var tooltipLabels = [],
-                    tooltipColors = [];
 
-                for (var d in this.chart.discrete) {
-                    var data = this.chart.discrete[d];
+                for (var d in chart.chart.discrete) {
+                    var data = chart.chart.discrete[d];
 
-                    tooltipLabels.push(data.label + ": " + data.value);
+                    labels.push(data.label + ": " + data.value);
 
-                    tooltipColors.push({
+                    colors.push({
                         fill: data.color,
                         stroke: data.highlight
                     });
                 }
 
-                new Chart.MultiTooltip({
-                    x: 5,
-                    y: 110,
-                    xPadding: chart.options.tooltipXPadding,
-                    yPadding: chart.options.tooltipYPadding,
-                    xOffset: chart.options.tooltipXOffset,
-                    fillColor: chart.options.tooltipFillColor,
-                    textColor: chart.options.tooltipFontColor,
-                    fontFamily: chart.options.tooltipFontFamily,
-                    fontStyle: chart.options.tooltipFontStyle,
-                    fontSize: chart.options.tooltipFontSize,
-                    titleTextColor: chart.options.tooltipTitleFontColor,
-                    titleFontFamily: chart.options.tooltipTitleFontFamily,
-                    titleFontStyle: chart.options.tooltipTitleFontStyle,
-                    titleFontSize: chart.options.tooltipTitleFontSize,
-                    cornerRadius: chart.options.tooltipCornerRadius,
-                    labels: tooltipLabels,
-                    legendColors: tooltipColors,
-                    legendColorBackground: chart.options.multiTooltipKeyBackground,
-                    title: 'Values',
-                    chart: chart.chart,
-                    ctx: chart.chart.ctx
-                }).draw();
+                this.displayLegend.call(this, 'Legend', labels, colors, 5, 110);
 
             } else {
 
@@ -121,25 +100,66 @@ var chart_ext_init = (function () {
                     for (var b in bars) {
                         bar = bars[b];
 
-                        new Chart.Tooltip({
-                            x: bar.x,
-                            y: bar.y,
-                            xPadding: chart.options.tooltipXPadding,
-                            yPadding: chart.options.tooltipYPadding,
-                            fillColor: chart.options.tooltipFillColor,
-                            textColor: chart.options.tooltipFontColor,
-                            fontFamily: chart.options.tooltipFontFamily,
-                            fontStyle: chart.options.tooltipFontStyle,
-                            fontSize: chart.options.tooltipFontSize,
-                            caretHeight: chart.options.tooltipCaretSize,
-                            cornerRadius: chart.options.tooltipCornerRadius,
-                            text: bar.value,
-                            chart: chart.chart
-                        }).draw();
+                        this.displayPopup.call(chart, bar.value, bar.x, bar.y);
                     }
                 }
 
+                if (chart.datasets.length > 1) {
+                    for (var d in chart.datasets) {
+                        var data = chart.datasets[d];
+
+                        labels.push(data.label);
+                        colors.push({fill: data.fillColor, stroke: data.strokeColor});
+                    }
+
+                    this.displayLegend.call(this, 'Legend', labels, colors, chart.chart.width - 50, 10);
+                }
             }
+        },
+        displayPopup: function (text, x, y) {
+            var chart = this;
+
+            new Chart.Tooltip({
+                x: x,
+                y: y,
+                xPadding: chart.options.tooltipXPadding,
+                yPadding: chart.options.tooltipYPadding,
+                fillColor: chart.options.tooltipFillColor,
+                textColor: chart.options.tooltipFontColor,
+                fontFamily: chart.options.tooltipFontFamily,
+                fontStyle: chart.options.tooltipFontStyle,
+                fontSize: chart.options.tooltipFontSize,
+                caretHeight: chart.options.tooltipCaretSize,
+                cornerRadius: chart.options.tooltipCornerRadius,
+                text: text,
+                chart: chart.chart
+            }).draw();
+        },
+        displayLegend: function(title, labels, colors, x, y) {
+            var chart = this;
+            new Chart.MultiTooltip({
+                x: x,
+                y: y,
+                xPadding: chart.options.tooltipXPadding,
+                yPadding: chart.options.tooltipYPadding,
+                xOffset: chart.options.tooltipXOffset,
+                fillColor: chart.options.tooltipFillColor,
+                textColor: chart.options.tooltipFontColor,
+                fontFamily: chart.options.tooltipFontFamily,
+                fontStyle: chart.options.tooltipFontStyle,
+                fontSize: chart.options.tooltipFontSize,
+                titleTextColor: chart.options.tooltipTitleFontColor,
+                titleFontFamily: chart.options.tooltipTitleFontFamily,
+                titleFontStyle: chart.options.tooltipTitleFontStyle,
+                titleFontSize: chart.options.tooltipTitleFontSize,
+                cornerRadius: chart.options.tooltipCornerRadius,
+                labels: labels,
+                legendColors: colors,
+                legendColorBackground: chart.options.multiTooltipKeyBackground,
+                title: title,
+                chart: chart.chart,
+                ctx: chart.chart.ctx
+            }).draw();
         },
         destroy: function () {
             for (var e in this.events) {

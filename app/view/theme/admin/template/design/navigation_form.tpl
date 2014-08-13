@@ -15,27 +15,31 @@
 				<table class="form">
 					<tr>
 						<td class="required"> <?= _l("Navigation Group:"); ?></td>
-						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
+						<td>
+							<input type="text" name="name" value="<?= $name; ?>"/>
+						</td>
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Stores:"); ?></td>
 						<td>
-						<?= build('multiselect', array(
-							'name'   => "stores",
-							'data'   => $data_stores,
-							'select' => $stores,
-							'key'    => 'store_id',
-							'value'  => 'name',
-						)); ?>
+							<?=
+							build('multiselect', array(
+								'name'   => "stores",
+								'data'   => $data_stores,
+								'select' => $stores,
+								'key'    => 'store_id',
+								'value'  => 'name',
+							)); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Status:"); ?></td>
-						<td><?= build('select', array(
-	'name'   => 'status',
-	'data'   => $data_statuses,
-	'select' => $status
-)); ?></td>
+						<td><?=
+							build('select', array(
+								'name'   => 'status',
+								'data'   => $data_statuses,
+								'select' => $status
+							)); ?></td>
 					</tr>
 
 					<tr id="links_list_data">
@@ -55,7 +59,7 @@
 													<div class="link_info">
 														<div class="link_name">
 															<span class="display_name"><?= $link['display_name']; ?></span>
-																<span class="show_link_edit" onclick="toggle_edit_link($(this))">
+															<span class="show_link_edit" onclick="toggle_edit_link($(this))">
 																<span class="edit_text"><?= _l("Edit Link"); ?></span>
 																<img class="remove_link" src="<?= theme_url('image/delete.png'); ?>" onclick="$(this).closest('li').remove();"/></span>
 														</div>
@@ -85,20 +89,22 @@
 															</div>
 															<div class="link_entry_condition">
 																<label for="link_condition_<?= $nav_id; ?>"><?= _l("Display When:"); ?></label>
-																<?= build('select', array(
-																	'name' => "links[$nav_id][condition]",
-																   'data' => $data_conditions,
-																   'select' => $link['condition'],
-																   '#id' => "link_condition_$nav_id",
+																<?=
+																build('select', array(
+																	'name'   => "links[$nav_id][condition]",
+																	'data'   => $data_conditions,
+																	'select' => $link['condition'],
+																	'#id'    => "link_condition_$nav_id",
 																)); ?>
 															</div>
 															<div class="link_entry_status">
 																<label for="link_status_<?= $nav_id; ?>"><?= _l("Status:"); ?></label>
-																<?= build('select', array(
-																	'name' => "links[$nav_id][status]",
-																	'data' => $data_statuses,
+																<?=
+																build('select', array(
+																	'name'   => "links[$nav_id][status]",
+																	'data'   => $data_statuses,
 																	'select' => $link['status'],
-																	'#id' => "link_status_$nav_id",
+																	'#id'    => "link_status_$nav_id",
 																)); ?>
 															</div>
 														</div>
@@ -119,7 +125,6 @@
 	</div>
 </div>
 </div>
-<?= call('admin/common/footer'); ?>
 
 <script type="text/javascript">
 	$('#sorted_links').ac_template('link_list', {defaults: <?= json_encode($links['__ac_template__']); ?>});
@@ -213,7 +218,8 @@
 	function update_display_name(context) {
 		context.closest('.link_info').find('.display_name').html(context.val())
 	}
-</script>
-<script type="text/javascript">
+
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
+
+<?= call('admin/common/footer'); ?>
