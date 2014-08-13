@@ -239,19 +239,22 @@ if (!function_exists('array_column')) {
 	 * Returns an array of elements from the column of an array
 	 *
 	 * @param array array - An associative array of arrays
-	 * @param column string - The key column of the $array to get elements for
+	 * @param column string - The key column of the $array to get elements from
+	 * @param assoc bool - Return an associative array with the key the same as the value (all values will be unique!)
 	 *
 	 * @return array - an array of values of the column requested
 	 */
-	function array_column($array, $column)
+	function array_column($array, $column, $assoc = false)
 	{
 		$values = array();
 
 		foreach ($array as $row) {
-			if (!isset($row[$column])) {
-				$values[] = null;
+			$value = isset($row[$column]) ? $row[$column] : null;
+
+			if ($assoc) {
+				$values[is_null($value) ? '' : $value] = $value;
 			} else {
-				$values[] = $row[$column];
+				$values[] = $value;
 			}
 		}
 

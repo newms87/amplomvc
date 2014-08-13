@@ -138,6 +138,16 @@ function redirect($path = '', $query = null, $status = null)
 	$registry->get('url')->redirect($path, $query, $status);
 }
 
+function slug($name, $sep = '_', $allow = 'a-z0-9_-')
+{
+	$patterns = array(
+		"/[\\s\\\\\\/]/" => $sep,
+		"/[^$allow]/"    => '',
+	);
+
+	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
+}
+
 function cast_http($url, $cast = 'http')
 {
 	$scheme = parse_url($url, PHP_URL_SCHEME);
@@ -155,19 +165,13 @@ function cast_http($url, $cast = 'http')
 	}
 }
 
-function slug($name, $sep = '_', $allow = 'a-z0-9_-')
-{
-	$patterns = array(
-		"/[\\s\\\\\\/]/" => $sep,
-		"/[^$allow]/"    => '',
-	);
-
-	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
-}
+define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
 define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
 define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
-define("IS_AJAX", !empty($_GET['ajax']));
+
+$headers = apache_request_headers();
+define("IS_AJAX", isset($headers['X-Requested-With']));
 
 function _get($key, $default = null)
 {

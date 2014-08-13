@@ -198,7 +198,7 @@ class DB
 	 * @return mixed - will return an indexed array or false on failure
 	 *
 	 */
-	public function queryColumn($sql)
+	public function queryColumn($sql, $assoc = false)
 	{
 		$resource = $this->query($sql);
 
@@ -206,7 +206,7 @@ class DB
 			return array();
 		}
 
-		return array_column($resource->rows, key($resource->row));
+		return array_column($resource->rows, key($resource->row), $assoc);
 	}
 
 	/**

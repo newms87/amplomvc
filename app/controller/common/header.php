@@ -6,7 +6,7 @@ class App_Controller_Common_Header extends Controller
 	{
 		$settings['title'] = $this->document->getTitle();
 
-		$settings['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
+		$settings['base'] = IS_SSL ? HTTPS_SITE : HTTP_SITE;
 
 		$settings['name']   = option('config_name');
 		$settings['logo']   = option('config_logo');
