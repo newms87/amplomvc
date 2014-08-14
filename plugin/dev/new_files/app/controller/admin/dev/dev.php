@@ -137,7 +137,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 					message('warning', _l("Please select a backup file to download."));
 				}
 			} elseif (isset($_POST['default_installation'])) {
-				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '%__TABLE_PREFIX__%');
+				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '');
 			} elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 

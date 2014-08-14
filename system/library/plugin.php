@@ -35,7 +35,7 @@ class Plugin extends Library
 				return false;
 			}
 
-			require_once(_ac_mod_file(DIR_SYSTEM . 'plugins/plugin_setup.php'));
+			require_once(_ac_mod_file(DIR_PLUGIN . 'setup.php'));
 			require_once(_ac_mod_file($setup_file));
 
 			$user_class = preg_replace("/[^A-Z0-9]/i", "", $name) . '_Setup';
