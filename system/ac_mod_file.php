@@ -2,6 +2,40 @@
 define('AC_MOD_REGISTRY', DIR_MOD_FILES . 'registry.ac');
 define('AC_TEMPLATE_CACHE', DIR_CACHE . 'templates/');
 
+if (!defined("AMPLO_DIR_MODE")) {
+	define("AMPLO_DIR_MODE", 0755);
+}
+
+if (!defined("AMPLO_FILE_MODE")) {
+	define("AMPLO_FILE_MODE", 0755);
+}
+
+//TODO: do we allow different modes?
+function _is_writable($dir, &$error = null)
+{
+	if (!is_writable($dir)) {
+		if (!is_dir($dir)) {
+			mkdir($dir, AMPLO_DIR_MODE, true);
+			chmod($dir, AMPLO_DIR_MODE);
+		}
+
+		if (!is_dir($dir)) {
+			$error = "Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.";
+			return false;
+		} else {
+			$t_file = $dir . uniqid('test') . '.txt';
+			touch($t_file);
+			if (!is_file($t_file)) {
+				$error = "The write permissions on $dir are not set. Please change the permissions to allow writing to this directory";
+				return false;
+			}
+			unlink($t_file);
+		}
+	}
+
+	return true;
+}
+
 if (!file_exists(AC_MOD_REGISTRY)) {
 	_is_writable(dirname(AC_MOD_REGISTRY));
 
@@ -29,10 +63,6 @@ function _ac_mod_file($file)
 
 	if (isset($live_registry[$file])) {
 		$file = $live_registry[$file];
-
-		if (!is_file($file)) {
-			echo get_caller(0, 3);
-		}
 	}
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.

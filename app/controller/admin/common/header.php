@@ -128,7 +128,7 @@ class App_Controller_Admin_Common_Header extends Controller
 			$link_logout = array(
 				'name'         => 'logout',
 				'display_name' => _l("Logout"),
-				'href'         => site_url('admin/common/logout'),
+				'href'         => site_url('admin/user/logout'),
 				'sort_order'   => 10,
 			);
 

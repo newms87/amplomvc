@@ -361,11 +361,11 @@ class App_Model_Design_Navigation extends Model
 				'children'     => array(
 					'users_users'       => array(
 						'display_name' => 'Users',
-						'href'         => 'admin/user/user',
+						'href'         => 'admin/user',
 					),
 					'users_user_roles' => array(
 						'display_name' => 'User Roles',
-						'href'         => 'admin/user/role',
+						'href'         => 'admin/setting/role',
 					),
 				),
 			),

@@ -35,3 +35,4 @@ logs
 /system/mods
 /system/timeoffset
 /system/resources/js/responsive-filemanager/thumbs
+/config.php

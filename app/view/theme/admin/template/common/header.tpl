@@ -23,7 +23,7 @@
 			<div id="header">
 				<div class="div1">
 					<div class="div2">
-						<a href="<?= $logged ? site_url('admin') : site_url('admin/common/login'); ?>">
+						<a href="<?= site_url('admin'); ?>">
 							<img src="<?= image(option('config_admin_logo')); ?>" title="<?= _l("Administration"); ?>"/>
 						</a>
 					</div>

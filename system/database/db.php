@@ -136,6 +136,8 @@ class DB
 		if (!$resource) {
 			trigger_error($this->driver->getError());
 
+			$this->error = $this->driver->getError();
+
 			return false;
 		}
 

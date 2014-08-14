@@ -54,7 +54,7 @@ class Dev extends Library
 		$request = 'username=' . $username;
 		$request .= '&password=' . $password;
 
-		$curl = curl_init($domain . '/admin/common/login?response=1');
+		$curl = curl_init($domain . '/admin/user/login?response=1');
 
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);

@@ -133,7 +133,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			100 => '100%',
 		);
 
-		//$settings['data_user_groups'] = $this->Model_User_User->getUserGroups();
+		//$settings['data_user_groups'] = $this->Model_User->getUserGroups();
 
 		if (is_file(DIR_SITE . 'app/controller/' . $this->route->getPath())) {
 			$settings['can_modify'] = user_can('modify', $this->route->getPath());

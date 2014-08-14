@@ -10,7 +10,7 @@
  * Link: http://www.amplomvc.com/plugins/dev
  *
  */
-class Dev_Setup extends PluginSetup
+class Dev_Setup extends Plugin_Setup
 {
 	public function install()
 	{

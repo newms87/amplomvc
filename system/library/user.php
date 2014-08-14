@@ -46,7 +46,7 @@ class User extends Library
 		$this->user_id = $user['user_id'];
 		$this->session->set('user_id', $user['user_id']);
 
-		$user_role = $this->Model_User_Role->getRole($user['user_role_id']);
+		$user_role = $this->Model_Setting_Role->getRole($user['user_role_id']);
 
 		if ($user_role) {
 			$this->permissions = $user_role['permissions'];
@@ -87,6 +87,7 @@ class User extends Library
 
 		if ($user) {
 			if (!password_verify($password, $user['password'])) {
+				$this->error['password'] = _l("The username / password combination was unable to be authenticated.");
 				return false;
 			}
 
@@ -127,13 +128,15 @@ class User extends Library
 			return true;
 		}
 
-		$path = $action->getClassPath();
+		$path = $action->getClassPath() . '/' . $action->getMethod();
 
 		if (!$this->isLogged()) {
 			$allowed = array(
-				'admin/common/forgotten',
-				'admin/common/reset',
-				'admin/common/login',
+				'admin/user/forgotten',
+				'admin/user/reset_request',
+				'admin/user/reset_password',
+				'admin/user/login',
+				'admin/user/authenticate',
 			);
 
 			if (!in_array($path, $allowed)) {
@@ -141,11 +144,9 @@ class User extends Library
 			}
 		} else {
 			$ignore = array(
-				'admin/common/home',
-				'admin/common/login',
-				'admin/common/logout',
-				'admin/common/forgotten',
-				'admin/common/reset',
+				'admin/common/home/index',
+				'admin/user/logout',
+				'admin/user/reset_password',
 				'admin/error/not_found',
 				'admin/error/permission'
 			);
@@ -175,7 +176,7 @@ class User extends Library
 
 	public function updatePassword($user_id, $password)
 	{
-		$this->Model_User_User->editPassword($user_id, $password);
+		$this->Model_User->editPassword($user_id, $password);
 	}
 
 	public function addMeta($user_id, $key, $value)
@@ -293,6 +294,25 @@ class User extends Library
 	public function encrypt($password)
 	{
 		return password_hash($password, PASSWORD_DEFAULT, array('cost' => PASSWORD_COST));
+	}
+
+	public function requestReset($email)
+	{
+		if (!$this->Model_User->getTotalUsersByEmail($_POST['email'])) {
+			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
+			return false;
+		}
+
+		$code = $this->user->generateCode();
+
+		$this->user->setResetCode($_POST['email'], $code);
+
+		$email_data = array(
+			'reset' => site_url('admin/user/reset_password', 'code=' . $code),
+			'email' => $_POST['email'],
+		);
+
+		call('admin/mail/forgotten_admin', $email_data);
 	}
 
 	public function generatePassword()
