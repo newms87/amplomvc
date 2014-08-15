@@ -17,10 +17,10 @@ class Condition extends Library
 				return true;
 
 			case 'user_logged':
-				return $this->customer->isLogged();
+				return is_logged();
 
 			case 'user_logged_out':
-				return !$this->customer->isLogged();
+				return !is_logged();
 		}
 	}
 }

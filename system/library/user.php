@@ -124,7 +124,7 @@ class User extends Library
 
 	public function canDoAction($action)
 	{
-		if (!$this->route->isAdmin()) {
+		if (!IS_ADMIN) {
 			return true;
 		}
 

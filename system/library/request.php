@@ -19,7 +19,7 @@ class Request extends Library
 
 	public function clean(&$value)
 	{
-		$value = htmlspecialchars($value, ENT_COMPAT);
+		$value = html_entity_decode($value, ENT_COMPAT);
 
 		if (get_magic_quotes_gpc()) {
 			$value = stripslashes($value);

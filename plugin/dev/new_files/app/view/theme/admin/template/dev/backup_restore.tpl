@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('admin/common/header'); ?>
 <div class="section">
 	<?= breadcrumbs(); ?>
 	<div class="box">
@@ -18,8 +18,6 @@
 							<input type="submit" class="button" name="site_backup" value="<?= _l("Backup"); ?>"/>
 							<br/><br/>
 							<input type="submit" class="button" name="sync_file" value="<?= _l("Sync File"); ?>"/>
-							<br/><br/>
-							<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= _l("Overwrite Default Installation DB File"); ?>"/>
 						</td>
 						<td><?= build('multiselect', array(
 								'name'   => 'tables',
@@ -67,14 +65,18 @@
 					</tr>
 				</table>
 			</form>
+
+			<div class="default-install">
+				<a id="overwrite_default_db" class="button" href="<?= site_url('admin/dev/default_install'); ?>"><?= _l("Overwrite Default Installation DB File"); ?></a>
+			</div>
 		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 	$('#overwrite_default_db').click(function () {
-		return confirm("This will overwrite the Default Database Installation for Amplo Cart! Are you sure you want to continue?");
+		return confirm("This will overwrite the Default Database Installation for Amplo MVC! Are you sure you want to continue?");
 	});
 </script>
 
-<?= call('common/footer'); ?>
+<?= call('admin/common/footer'); ?>

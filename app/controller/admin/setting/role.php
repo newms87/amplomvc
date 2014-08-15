@@ -39,7 +39,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		$data['insert'] = site_url('admin/setting/role/form');
 
 		//Render
-		output($this->render('setting/role_list', $data));
+		output($this->render('setting/role/list', $data));
 	}
 
 	public function listing()
@@ -168,13 +168,10 @@ class App_Controller_Admin_Setting_Role extends Controller
 	public function delete()
 	{
 		//Delete
-		$this->Model_Setting_Role->deleteUserRole($_GET['category_id']);
-
-		//Success / Error
-		if ($this->Model_Setting_Role->hasError()) {
-			message('error', $this->Model_Setting_Role->getError());
+		if ($this->Model_Setting_Role->remove(_get('user_role_id'))) {
+			message('success', _l("User Role has been removed"));
 		} else {
-			message('notify', _l("User Role was deleted!"));
+			message('error', $this->Model_Setting_Role->getError());
 		}
 
 		//Response

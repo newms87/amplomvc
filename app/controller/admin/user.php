@@ -229,7 +229,7 @@ class App_Controller_Admin_User extends Controller
 		$this->document->setTitle(_l("Administration"));
 
 		//If user is logged in, redirect to the homepage
-		if ($this->user->isLogged()) {
+		if (is_logged()) {
 			redirect('admin');
 		}
 
@@ -252,7 +252,7 @@ class App_Controller_Admin_User extends Controller
 
 	public function authenticate()
 	{
-		if ($this->user->isLogged()) {
+		if (is_logged()) {
 			message('notify', _l("You are already logged in. Please log out first."));
 		}
 		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
@@ -282,7 +282,7 @@ class App_Controller_Admin_User extends Controller
 	public function forgotten()
 	{
 		//Verify User is not already logged in
-		if ($this->user->isLogged()) {
+		if (is_logged()) {
 			redirect();
 		}
 
@@ -317,7 +317,7 @@ class App_Controller_Admin_User extends Controller
 
 	public function reset()
 	{
-		if ($this->user->isLogged() || empty($_GET['code'])) {
+		if (is_logged() || empty($_GET['code'])) {
 			redirect();
 		}
 

@@ -166,6 +166,45 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			0 => _l("No"),
 		);
 
+		//Website Icon Sizes
+		if (!is_array($data['config_icon'])) {
+			$data['config_icon'] = array(
+				'orig' => '',
+				'ico'  => '',
+			);
+		}
+
+		$data['data_icon_sizes'] = array(
+			'152' => array(
+				152,
+				152
+			),
+			'120' => array(
+				120,
+				120
+			),
+			'76' => array(
+				76,
+				76
+			),
+		);
+
+		foreach ($data['data_icon_sizes'] as $size) {
+			$key = $size[0] . 'x' . $size[1];
+
+			if (!isset($data['config_icon'][$key])) {
+				$data['config_icon'][$key] = '';
+			}
+		}
+
+		foreach ($data['config_icon'] as &$icon) {
+			$icon = array(
+				'thumb' => $this->image->get($icon),
+				'src'   => $icon,
+			);
+		}
+		unset($icon);
+
 		//Action Buttons
 		$data['save']   = site_url('admin/setting/setting');
 		$data['cancel'] = site_url('admin/setting/store');

@@ -230,13 +230,15 @@ function cast_http($url, $cast = 'http')
 	}
 }
 
-define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admin') === 0);
 
-define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
-define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
+define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
 $headers = apache_request_headers();
 define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
+
+define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
+define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
 
 function _get($key, $default = null)
 {
@@ -270,6 +272,16 @@ function set_option($option, $value)
 {
 	global $registry;
 	$registry->get('config')->save('config', $option, $value);
+}
+
+function is_logged()
+{
+	global $registry;
+	if (IS_ADMIN) {
+		return $registry->get('user')->isLogged();
+	} else {
+		return $registry->get('customer')->isLogged();
+	}
 }
 
 function user_can($level, $path)

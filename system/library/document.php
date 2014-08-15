@@ -449,7 +449,7 @@ class Document extends Library
 			}
 
 			//Filter restricted paths, current user cannot access
-			if ($this->route->isAdmin()) {
+			if (IS_ADMIN) {
 				$path = str_replace('admin/', '', $link['href']);
 
 				$check_path = false;

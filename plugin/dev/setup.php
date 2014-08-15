@@ -17,7 +17,7 @@ class Dev_Setup extends Plugin_Setup
 		$link = array(
 			'display_name' => "Development",
 			'name'         => 'development',
-			'href'         => 'dev/dev',
+			'href'         => 'admin/dev',
 			'sort_order'   => 15,
 		);
 

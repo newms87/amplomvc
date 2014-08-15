@@ -136,7 +136,7 @@ class DB
 		if (!$resource) {
 			trigger_error($this->driver->getError());
 
-			$this->error = $this->driver->getError();
+			$this->error['query'] = $this->driver->getError();
 
 			return false;
 		}
@@ -294,10 +294,10 @@ class DB
 		return true;
 	}
 
-	public function dump($file, $tables = array(), $prefix = null)
+	public function dump($file, $tables = array(), $prefix = null, $remove_prefix = false)
 	{
 		if (!_is_writable(dirname($file))) {
-			$this->error = _l("The directory was not writable for %s", $file);
+			$this->error['directory'] = _l("The directory was not writable for %s", $file);
 			return false;
 		}
 
@@ -313,7 +313,7 @@ class DB
 			foreach ($tables as &$table) {
 				if (is_string($table)) {
 					$table = array(
-						'table_name' => preg_replace("/^" . $prefix . "/", '', $table),
+						'table_name' => $table,
 						'table_type' => 'BASE TABLE',
 					);
 				}
@@ -321,7 +321,7 @@ class DB
 			unset($table);
 		}
 
-		$sql = '#AMPLO_PREFIX=' . $prefix . $eol . $eol;
+		$sql = $remove_prefix ? '' : '#AMPLO_PREFIX=' . $prefix . $eol . $eol;
 
 		foreach ($tables as $table) {
 			$name = $table['table_name'];
@@ -333,10 +333,15 @@ class DB
 				continue;
 			}
 
+			$columns = $this->queryRows("SHOW COLUMNS FROM `$name`");
+			$rows    = $this->queryRows("SELECT * FROM `$name`");
+
+			if ($remove_prefix) {
+				$name = preg_replace("/^$prefix/", '', $name);
+			}
+
 			$sql .= "DROP TABLE IF EXISTS `$name`;" . $eol;
 			$sql .= "CREATE TABLE `$name` (" . $eol;
-
-			$columns = $this->queryRows("SHOW COLUMNS FROM `$name`");
 
 			$primary_key = array();
 
@@ -372,8 +377,6 @@ class DB
 
 			$sql .= ");" . $eol . $eol;
 
-			$rows = $this->queryRows("SELECT * FROM `$name`");
-
 			if (!empty($rows)) {
 				$sql .= "INSERT INTO `$name` VALUES ";
 				foreach ($rows as $row) {
@@ -390,11 +393,11 @@ class DB
 		}
 
 		if (!file_put_contents($file, $sql)) {
-			$this->error = _l("%s(): failed to dump database to file %s", __METHOD__, $file);
+			$this->error = _l("%s(): failed to write sql dump to file %s", __METHOD__, $file);
 			trigger_error($this->error);
 		}
 
-		return $this->hasError();
+		return empty($this->error);
 	}
 
 	public function hasTable($table)
@@ -503,6 +506,18 @@ class DB
 		}
 
 		return true;
+	}
+
+	public function setPrefix($prefix, $old_prefix = '')
+	{
+		$tables = $this->getTables();
+
+		foreach ($tables as $table) {
+			$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
+			$this->query("RENAME TABLE $table TO $new_table");
+		}
+
+		return empty($this->error);
 	}
 
 	public function escape($value)

@@ -1,15 +1,15 @@
 <?php
-class App_Controller_Admin_Dev_Dev extends Controller
+class App_Controller_Admin_Dev extends Controller
 {
 	public function index()
 	{
 		//Page Head
 		$this->document->setTitle(_l("Development Console"));
 
-		$data['url_sync']            = site_url("dev/dev/sync");
-		$data['url_site_management'] = site_url("dev/dev/site_management");
-		$data['url_backup_restore']  = site_url("dev/dev/backup_restore");
-		$data['url_db_admin']        = site_url("dev/db_admin");
+		$data['url_sync']            = site_url("admin/dev/sync");
+		$data['url_site_management'] = site_url("admin/dev/site_management");
+		$data['url_backup_restore']  = site_url("admin/dev/backup_restore");
+		$data['url_db_admin']        = site_url("admin/dev/db_admin");
 
 		$data['return'] = site_url('admin');
 
@@ -41,9 +41,9 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			}
 		}
 
-		breadcrumb(_l("Synchronize Sites"), site_url('dev/dev/sync'));
+		breadcrumb(_l("Synchronize Sites"), site_url('admin/dev/sync'));
 
-		$data['request_sync_table'] = site_url('dev/dev/request_sync_table');
+		$data['request_sync_table'] = site_url('admin/dev/request_sync_table');
 
 		$defaults = array(
 			'tables' => '',
@@ -92,7 +92,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
-		breadcrumb(_l("Site Management"), site_url('dev/dev/site_management'));
+		breadcrumb(_l("Site Management"), site_url('admin/dev/site_management'));
 
 		$defaults = array(
 			'domain'   => '',
@@ -136,8 +136,6 @@ class App_Controller_Admin_Dev_Dev extends Controller
 				} else {
 					message('warning', _l("Please select a backup file to download."));
 				}
-			} elseif (isset($_POST['default_installation'])) {
-				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '');
 			} elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 
@@ -177,7 +175,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 			}
 		}
 
-		breadcrumb(_l("Backup & Restore"), site_url('dev/dev/backup_restore'));
+		breadcrumb(_l("Backup & Restore"), site_url('admin/dev/backup_restore'));
 
 		$defaults = array(
 			'tables' => '',
@@ -215,7 +213,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
-		breadcrumb(_l("Development Console"), site_url('dev/dev'), '', 1);
+		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
 	}
 
 	public function request_table_data()
@@ -237,11 +235,22 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 	private function validate()
 	{
-		if (!user_can('modify', 'dev/dev')) {
+		if (!user_can('modify', 'admin/dev')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to use the development console!");
 		}
 
 		return empty($this->error);
+	}
+
+	public function default_install()
+	{
+		if ($this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), DB_PREFIX, true)) {
+			message('success', _l("Default Installation has been updated"));
+		} else {
+			message('error', $this->dev->getError());
+		}
+
+		redirect("admin/dev/backup_restore");
 	}
 
 	private function getDefaultInstallProfile()
@@ -251,5 +260,45 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		//TODO: Setup DB Install Profile (or maybe make this accessible from Admin Panel?
 
 		return $tables;
+	}
+
+	public function db_admin()
+	{
+		if (!user_can('modify', 'admin/dev')) {
+			message('warning', _l("You do not have permission use the Database Administration Console"));
+			redirect();
+		}
+
+		//Page Head
+		$this->document->setTitle(_l("Database Administration"));
+		$this->document->addStyle(URL_THEME . 'style/dev.css');
+
+		breadcrumb(_l("Home"), site_url('admin'), '', 0);
+		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
+		breadcrumb(_l("Database Administration"), site_url('dev/db_admin'));
+
+		$data = array();
+
+		//Check for post data
+		if (IS_POST) {
+			if (!empty($_POST['query'])) {
+				$results = $this->db->queryRows(html_entity_decode($_POST['query'], ENT_QUOTES, 'UTF-8'));
+
+				$data['results'] = $results;
+			}
+		}
+
+		$defaults = array(
+			'query' => '',
+		);
+
+		$data += $_POST + $defaults;
+
+		$data['data_tables'] = $this->db->getTables();
+
+		$data['return'] = site_url('admin');
+
+		//Render
+		output($this->render('dev/db_admin', $data));
 	}
 }

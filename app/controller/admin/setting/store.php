@@ -234,7 +234,6 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Action Buttons
 		$store['save']               = site_url('admin/setting/store/save', 'store_id=' . $store_id);
-		$store['url_generate_icons'] = site_url('admin/setting/store/generate_icons');
 
 		//Render
 		output($this->render('setting/store_form', $store));

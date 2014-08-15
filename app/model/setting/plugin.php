@@ -14,7 +14,7 @@ class App_Model_Setting_Plugin extends Model
 
 			if ($plugin_dirs) {
 				foreach ($plugin_dirs as $plugin_name) {
-					if ($plugin_name == '.' || $plugin_name == '..') {
+					if ($plugin_name === '.' || $plugin_name === '..' || !is_dir(DIR_PLUGIN . $plugin_name)) {
 						continue;
 					}
 

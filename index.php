@@ -1,10 +1,12 @@
 <?php
+//TODO: Remove this eventually...
+if (is_file(dirname(__FILE__) . '/ac_config.php')) {
+	rename(dirname(__FILE__) . '/ac_config.php', dirname(__FILE__) . '/config.php');
+}
+
 // Configuration
 if (is_file(dirname(__FILE__) . '/config.php')) {
 	include_once(dirname(__FILE__) . '/config.php');
-} //TODO: Deprecated - Change config file name to config.php
-elseif (is_file(dirname(__FILE__) . '/ac_config.php')) {
-	include_once(dirname(__FILE__) . '/ac_config.php');
 }
 
 // Install

@@ -26,7 +26,7 @@ class Theme extends Library
 			$theme = 'fluid';
 		}
 
-		if ($this->route->isAdmin()) {
+		if (IS_ADMIN) {
 			$this->theme = $admin_theme;
 		} else {
 			$this->theme = $theme;

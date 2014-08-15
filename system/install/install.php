@@ -26,6 +26,26 @@ if ($action === 'user_setup') {
 	define("DIR_SITE", $root);
 }
 
+$uri_path = preg_replace("/\\?.*/", '', $_SERVER['REQUEST_URI']);
+
+if (strpos(DIR_SITE, $uri_path) === false) {
+	while (strpos(DIR_SITE, $uri_path) === false) {
+		$uri_path = dirname($uri_path);
+
+		if (!$uri_path || $uri_path === '/') {
+			echo "UNABLE TO LOCATE SERVER ROOT. Please point your browser to the root directory of your Amplo MVC installation";
+			exit;
+		}
+	}
+
+	header("Location: " . $uri_path);
+	exit;
+}
+
+if (!defined("SITE_BASE")) {
+	define("SITE_BASE", $uri_path);
+}
+
 define("DIR_DATABASE", DIR_SITE . 'system/database/');
 
 require_once(DIR_SITE . 'system/helper/functions.php');
@@ -119,8 +139,6 @@ function setup_db()
 		return $error;
 	}
 
-	$db_prefix = DB_PREFIX;
-
 	$db_sql = DIR_SITE . 'system/install/db.sql';
 
 	$contents = file_get_contents($db_sql);
@@ -129,21 +147,17 @@ function setup_db()
 		return $db->getError();
 	}
 
+	if (!$db->setPrefix(DB_PREFIX)) {
+		return $db->getError();
+	}
+
 	$config_template = DIR_SITE . 'example-config.php';
 	$config          = DIR_SITE . 'config.php';
 
 	$contents = file_get_contents($config_template);
 
-	if (strpos($_SERVER['REQUEST_URI'], 'index.php')) {
-		$base = dirname($_SERVER["REQUEST_URI"]);
-	} else {
-		$base = $_SERVER['REQUEST_URI'];
-	}
-
-	$base = '/' . trim(str_replace("localhost", '', $base), '/') . '/';
-
 	$defines = array(
-		'SITE_BASE'          => $base,
+		'SITE_BASE'          => SITE_BASE,
 		'DB_DRIVER'          => $_POST['db_driver'],
 		'DB_DATABASE'        => $_POST['db_name'],
 		'DB_HOSTNAME'        => $_POST['db_host'],
@@ -166,7 +180,7 @@ function setup_db()
 
 	$contents = file_get_contents($htaccess_template);
 
-	$contents = str_replace("RewriteBase /", "RewriteBase $base", $contents);
+	$contents = str_replace("RewriteBase /", "RewriteBase " . SITE_BASE, $contents);
 
 	file_put_contents($htaccess, $contents);
 
@@ -191,7 +205,6 @@ function setup_user()
 	$username   = $db->escape($_POST['username']);
 	$email      = $db->escape($_POST['email']);
 	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
-	$ip         = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s');
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
@@ -207,9 +220,19 @@ function setup_user()
 	file_put_contents($config, $contents);
 
 	//Start the session so we can send a message for the new user
+	$domain = parse_url(URL_SITE, PHP_URL_HOST);
+
+	if (!$domain || $domain === 'localhost') {
+		define('COOKIE_DOMAIN', '');
+	} else {
+		define('COOKIE_DOMAIN', '.' . $domain);
+	}
+
 	ini_set('session.use_cookies', 'On');
 	ini_set('session.use_trans_sid', 'Off');
+
 	session_name(AMPLO_SESSION);
+
 	session_set_cookie_params(0, '/', COOKIE_DOMAIN);
 	session_start();
 
