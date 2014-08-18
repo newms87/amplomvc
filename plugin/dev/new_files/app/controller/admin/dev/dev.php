@@ -132,7 +132,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 		if (IS_POST && $this->validate()) {
 			if (isset($_POST['backup_download'])) {
 				if (!empty($_POST['backup_file'])) {
-					$this->export->downloadFile($_POST['backup_file']);
+					$this->csv->downloadFile($_POST['backup_file']);
 				} else {
 					message('warning', _l("Please select a backup file to download."));
 				}
@@ -154,7 +154,7 @@ class App_Controller_Admin_Dev_Dev extends Controller
 
 				$this->dev->site_backup($sync_file, $tables, '__AC_PREFIX__');
 
-				$this->export->downloadFile($sync_file);
+				$this->csv->downloadFile($sync_file);
 			} elseif (isset($_POST['execute_sync_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					if ($this->dev->site_restore($_FILES['filename']['tmp_name'], true)) {

@@ -8,13 +8,23 @@ class Export extends Library
 		return $this->contents;
 	}
 
+	public function import($file)
+	{
+		$data = array();
+
+		if (($handle = fopen($file, "r")) !== FALSE) {
+			while (($data[] = fgetcsv($handle, 1000, ",")) !== FALSE) {
+				html_dump($data, 'data');
+			}
+			fclose($handle);
+		}
+
+		return $data;
+	}
+
 	public function saveFile($file)
 	{
-		if (!is_dir(dirname($file))) {
-			$mode = octdec(option('config_default_dir_mode'));
-			mkdir($path, dirname($file), true);
-			chmod($path, dirname($file));
-		}
+		_is_writable($file);
 
 		file_put_contents($file, $this->contents);
 	}
@@ -30,7 +40,7 @@ class Export extends Library
 		$this->contents = file_get_contents($file);
 
 		if (!$type) {
-			$type = preg_replace("/.*\.([a-z0-9]+)$/i", '$1', $file);
+			$type = preg_replace("/.*\\.([a-z0-9]+)$/i", '$1', $file);
 		}
 
 		if (!$filename) {
