@@ -23,20 +23,24 @@
 			<div id="header">
 				<div class="div1">
 					<div class="div2">
-						<a href="<?= $logged ? site_url('admin') : site_url('admin/common/login'); ?>">
+						<a href="<?= site_url('admin'); ?>">
 							<img src="<?= image(option('config_admin_logo')); ?>" title="<?= _l("Administration"); ?>"/>
 						</a>
 					</div>
 
-					<? if ($logged) { ?>
+					<? if (is_logged()) { ?>
 						<div class="div3">
-							<img src="<?= theme_url('image/lock.png'); ?>" alt="" id="header_secure_lock"/><?= _l("You are logged in as <span>%s</span>", $user['username']); ?></div>
-						<div class="div3" style="clear:right">
-							<a href="mailto:<?= option('config_email_support') . '?subject=' . urlencode("Admin Support"); ?>" target="_blank"></a>
+							<img src="<?= theme_url('image/lock.png'); ?>" alt="" id="header_secure_lock"/><?= _l("You are logged in as <span>%s</span>", $user['username']); ?>
 						</div>
+
+						<? if (option('config_email_support')) { ?>
+							<div class="div3" style="clear:right">
+								<a href="mailto:<?= option('config_email_support') . '?subject=' . urlencode("Admin Support"); ?>" target="_blank"></a>
+							</div>
+						<? } ?>
 					<? } ?>
 				</div>
-				<? if ($logged) { ?>
+				<? if (is_logged()) { ?>
 					<div id="menu" class="links clearfix">
 						<div class="left"><?= links('admin'); ?></div>
 						<div class="right"><?= links('right'); ?></div>

@@ -350,7 +350,7 @@ class Config extends Library
 
 		if (!$default_exists) {
 			$this->db->setAutoIncrement('store', 0);
-			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
+			$this->addStore($this->site_config['default_store']);
 		}
 	}
 

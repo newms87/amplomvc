@@ -44,14 +44,9 @@ final class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function isAdmin()
-	{
-		return $this->getSegment(0) === 'admin';
-	}
-
 	public function route()
 	{
-		if ($this->route->isAdmin()) {
+		if (IS_ADMIN) {
 			$this->routeAdmin();
 		} else {
 			$this->routeFront();
@@ -87,7 +82,7 @@ final class Router
 	{
 		if (option('config_maintenance')) {
 			//Do not show maintenance page if user is an admin
-			if ($this->user->isAdmin()) {
+			if (IS_ADMIN) {
 				if (isset($_GET['hide_maintenance_msg'])) {
 					$_SESSION['hide_maintenance_msg'] = 1;
 				} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
@@ -150,11 +145,12 @@ final class Router
 		$valid = $action->isValid();
 
 		if ($valid) {
-			if ($this->isAdmin()) {
+			if (IS_ADMIN) {
 				if (!$this->user->canDoAction($action)) {
-					if (!$this->user->isLogged()) {
+					if (!is_logged()) {
 						$this->request->setRedirect($this->url->here());
-						redirect('admin/common/login', IS_AJAX ? 'ajax=1' : '');
+
+						redirect('admin/user/login', IS_AJAX ? 'ajax=1' : '');
 					}
 
 					redirect('admin/error/permission', IS_AJAX ? 'ajax=1' : '');

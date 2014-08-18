@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('admin/common/header'); ?>
 	<div class="section">
 		<?= breadcrumbs(); ?>
 		<div class="box">
@@ -16,11 +16,11 @@
 				</a>
 				<a class="dev_console_item" href="<?= $url_sync; ?>">
 					<div class="title"><?= _l("Synchronize Sites"); ?></div>
-					<div class="image"><img src="<?= URL_THEME_IMAtheme_url('image/dev/restore.png')
+					<div class="image"><img src="<?= theme_url('image/dev/restore.png'); ?>" /></div>
 				</a>
 				<a class="dev_console_item" href="<?= $url_backup_restore; ?>">
 					<div class="title"><?= _l("Site Backup & Restore"); ?></div>
-					<div class="image"><img src="<?= URL_THEME_Itheme_url('image/dev/db_admin.png')v>
+					<div class="image"><img src="<?= theme_url('image/dev/db_admin.png'); ?>" /></div>
 				</a>
 				<a class="dev_console_item" href="<?= $url_db_admin; ?>">
 					<div class="title"><?= _l("DB Admin"); ?></div>
@@ -30,4 +30,4 @@
 		</div>
 	</div>
 
-<?= call('common/footer'); ?>
+<?= call('admin/common/footer'); ?>

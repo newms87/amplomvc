@@ -6,11 +6,6 @@ var screen_lg = screen_width >= 1200,
     screen_xs = screen_width < 480;
 
 
-//Ensures all ajax requests are submitted as an ajax URL
-String.prototype.ajaxurl = function () {
-    return this.match(/\?/) ? this + '&ajax=1' : this + '?ajax=1';
-}
-
 String.prototype.toSlug = function () {
     return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
 }
@@ -26,15 +21,6 @@ String.prototype.str_replace = function (find, replace) {
     }
     return str;
 };
-
-
-//Always append ajax=1 to query in ajax requests
-$._ajax = $.ajax;
-
-$.ajax = function (params, p2) {
-    params.url = (params.url ? params.url : document.URL).ajaxurl();
-    return $._ajax(params, p2);
-}
 
 //Load synchronously
 function syncload(s) {
@@ -432,7 +418,7 @@ function ac_form(params) {
 
     $button.loading();
 
-    $.ajax($form.attr('action').ajaxurl(), params);
+    $.ajax($form.attr('action'), params);
 
     return false;
 }
@@ -505,8 +491,6 @@ $.fn.ac_zoneselect = function (params, callback) {
     } else {
         params.listen = $(params.listen);
     }
-
-    params.url = params.url.ajaxurl();
 
     if (params.allow_all) {
         params.url += '&allow_all';

@@ -5,24 +5,56 @@ if (!defined("AMPLO_INSTALL")) {
 	exit;
 }
 
+$error_msg   = '';
+$success_msg = '';
+
+$action = !empty($_POST['action']) ? $_POST['action'] : false;
+
 $root = str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/'));
-if (!is_file($root . 'ac_config.php')) {
+
+if ($action === 'user_setup' && !is_file($root . 'config.php')) {
+	$action    = false;
+	$error_msg = "Unable to load config file. Please attempt installation again.";
+}
+
+if ($action === 'user_setup') {
+	require_once($root . 'config.php');
+} elseif (is_file($root . 'config.php')) {
+	echo "There is a problem with your config.php file. Please fix it or remove it to reinstall Amplo MVC";
+	exit;
+} else {
 	define("DIR_SITE", $root);
 }
-else {
-	require_once($root . 'ac_config.php');
+
+$uri_path = preg_replace("/\\?.*/", '', $_SERVER['REQUEST_URI']);
+
+if (strpos(DIR_SITE, $uri_path) === false) {
+	while (strpos(DIR_SITE, $uri_path) === false) {
+		$uri_path = dirname($uri_path);
+
+		if (!$uri_path || $uri_path === '/') {
+			echo "UNABLE TO LOCATE SERVER ROOT. Please point your browser to the root directory of your Amplo MVC installation";
+			exit;
+		}
+	}
+
+	header("Location: " . $uri_path);
+	exit;
+}
+
+if (!defined("SITE_BASE")) {
+	define("SITE_BASE", $uri_path);
 }
 
 define("DIR_DATABASE", DIR_SITE . 'system/database/');
 
-require_once(DIR_SITE . 'system/functions.php');
+require_once(DIR_SITE . 'system/helper/functions.php');
+require_once(DIR_SITE . 'system/helper/shortcuts.php');
 
-$template    = _get('page', 'db');
-$error_msg   = '';
-$success_msg = '';
+$template = _get('page', 'db');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
-	switch ($_POST['action']) {
+if ($action) {
+	switch ($action) {
 		case 'db_setup':
 			$result = setup_db();
 
@@ -46,13 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 			break;
 
 	}
-
 }
 
 switch ($template) {
 	case 'db':
 		$defaults = array(
-			'db_type'     => 'mysqlidb',
+			'db_driver'   => 'mysqlidb',
 			'db_host'     => '',
 			'db_name'     => '',
 			'db_username' => '',
@@ -75,36 +106,32 @@ switch ($template) {
 		exit;
 }
 
-foreach ($defaults as $key => $default) {
-	if (isset($_POST[$key])) {
-		$$key = $_POST[$key];
-	} else {
-		$$key = $default;
-	}
-}
+$data = $_POST + $defaults;
 
+extract($data);
 
-$logo = "image/data/ac_logo.png";
+$logo = "app/view/theme/admin/image/logo.png";
 
-$db_types = array(
+$db_drivers = array(
 	'mysqlidb' => "MySQL",
 	'mmsql'    => "MMSQL",
-	'odbc'     => "ODBC",
 	'postgre'  => "Postgre",
 	'sqlite'   => "SQLite",
 );
 
-require_once("system/install/install_{$template}.tpl");
+require_once("system/install/template/$template.tpl");
 
 function setup_db()
 {
 	define("DB_PREFIX", $_POST['db_prefix']);
+	define('DEFAULT_TIMEZONE', 'America/New_York');
+	define('MYSQL_TIMEZONE', '-4:00');
 
 	require_once(DIR_SITE . 'system/engine/model.php');
 	require_once(DIR_SITE . "system/engine/library.php");
 	require_once(DIR_SITE . "system/database/db.php");
 
-	$db = new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
+	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
 	$error = $db->getError();
 
@@ -112,64 +139,48 @@ function setup_db()
 		return $error;
 	}
 
-	$db_prefix = DB_PREFIX;
-
 	$db_sql = DIR_SITE . 'system/install/db.sql';
 
 	$contents = file_get_contents($db_sql);
-
-	$contents = str_replace("%__TABLE_PREFIX__%", DB_PREFIX, $contents);
 
 	if (!$db->multiquery($contents)) {
 		return $db->getError();
 	}
 
-	$config_template = DIR_SITE . 'system/install/config_template.php';
-	$ac_config       = DIR_SITE . 'ac_config.php';
+	if (!$db->setPrefix(DB_PREFIX)) {
+		return $db->getError();
+	}
+
+	$config_template = DIR_SITE . 'example-config.php';
+	$config          = DIR_SITE . 'config.php';
 
 	$contents = file_get_contents($config_template);
 
-	$url = $_SERVER["SERVER_NAME"];
-
-	if ($_SERVER["SERVER_PORT"] !== "80") {
-		$url .= ":" . $_SERVER["SERVER_PORT"];
-	}
-
-	if (strpos($_SERVER['REQUEST_URI'], 'index.php')) {
-		$uri = dirname($_SERVER["REQUEST_URI"]);
-	} else {
-		$uri = $_SERVER['REQUEST_URI'];
-	}
-
-	$url .= rtrim($uri, '/');
-
-	$patterns = array(
-		"/%domain%/"       => $url,
-		'/%db_type%/'        => $_POST['db_type'],
-		'/%db_name%/'        => $_POST['db_name'],
-		'/%db_host%/'        => $_POST['db_host'],
-		'/%db_username%/'    => $_POST['db_username'],
-		'/%db_password%/'    => $_POST['db_password'],
-		'/%db_prefix%/'      => $_POST['db_prefix'],
-		'/%time_zone_name%/' => "America/New_York",
-		'/%time_zone%/'      => "-4:00",
-		'/%password_cost%/'  => getCostBenchmark(),
+	$defines = array(
+		'SITE_BASE'          => SITE_BASE,
+		'DB_DRIVER'          => $_POST['db_driver'],
+		'DB_DATABASE'        => $_POST['db_name'],
+		'DB_HOSTNAME'        => $_POST['db_host'],
+		'DB_USERNAME'        => $_POST['db_username'],
+		'DB_PASSWORD'        => $_POST['db_password'],
+		'DB_PREFIX'          => $_POST['db_prefix'],
+		'PASSWORD_COST'      => getCostBenchmark(),
+		'AMPLO_INSTALL_USER' => 1,
 	);
 
-	$contents = preg_replace(array_keys($patterns), array_values($patterns), $contents);
+	foreach ($defines as $key => $value) {
+		$contents = set_define($contents, $key, $value);
+	}
 
-	//Allows for user installation (will be removed after user installation
-	$contents .= "\r\n\r\ndefine(\"AMPLO_INSTALL_USER\", 1);";
-
-	file_put_contents($ac_config, $contents);
+	file_put_contents($config, $contents);
 
 	//Setup .htaccess file
-	$htaccess_template = DIR_SITE . 'system/install/template.htaccess';
+	$htaccess_template = DIR_SITE . 'example.htaccess';
 	$htaccess          = DIR_SITE . '.htaccess';
 
 	$contents = file_get_contents($htaccess_template);
 
-	$contents = preg_replace("/%base%/", $uri, $contents);
+	$contents = str_replace("RewriteBase /", "RewriteBase " . SITE_BASE, $contents);
 
 	file_put_contents($htaccess, $contents);
 
@@ -194,33 +205,38 @@ function setup_user()
 	$username   = $db->escape($_POST['username']);
 	$email      = $db->escape($_POST['email']);
 	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
-	$ip         = $_SERVER['REMOTE_ADDR'];
-	$date_added = date('Y-m-d H:i:s', time());
+	$date_added = date('Y-m-d H:i:s');
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
-	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', ip = '$ip', status = '1', date_added = '$date_added'");
+	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = '$date_added'");
 
-	if ($db->getError()) {
+	if ($db->hasError()) {
 		return $db->getError();
 	}
 
-	$ac_config = DIR_SITE . 'ac_config.php';
-
 	//remove user install configuration
-	$contents = file_get_contents($ac_config);
-
-	$contents = str_replace("\r\n\r\ndefine(\"AMPLO_INSTALL_USER\", 1);", '', $contents);
-
-	file_put_contents($ac_config, $contents);
+	$config   = DIR_SITE . 'config.php';
+	$contents = set_define(file_get_contents($config), "AMPLO_INSTALL_USER");
+	file_put_contents($config, $contents);
 
 	//Start the session so we can send a message for the new user
+	$domain = parse_url(URL_SITE, PHP_URL_HOST);
+
+	if (!$domain || $domain === 'localhost') {
+		define('COOKIE_DOMAIN', '');
+	} else {
+		define('COOKIE_DOMAIN', '.' . $domain);
+	}
+
 	ini_set('session.use_cookies', 'On');
 	ini_set('session.use_trans_sid', 'Off');
+
 	session_name(AMPLO_SESSION);
+
 	session_set_cookie_params(0, '/', COOKIE_DOMAIN);
 	session_start();
 
-	$_SESSION['messages'] = array(
+	$_SESSION['message'] = array(
 		'success' => array(_l("Admin User account setup successfully!")),
 	);
 
@@ -240,6 +256,25 @@ function getCostBenchmark()
 	} while (($end - $start) < $timeTarget);
 
 	return $cost;
+}
+
+function set_define($string, $key, $value = null, $quotes = true)
+{
+	if (!is_null($value)) {
+		$define = "define(\"$key\", " . ($quotes ? "\"$value\"" : $value) . ");";
+
+		$count  = 0;
+		$string = preg_replace("/define\\(\\s*['\"]{$key}['\"]\\s*,[^)]+?\\);/", $define, $string, 1, $count);
+
+		if (!$count) {
+			$string .= "\r\n\r\n" . $define;
+		}
+
+		return $string;
+	}
+
+	//Remove this entry
+	return preg_replace("/define\\(['\"]{$key}['\"]\\s*,[^)]+?\\);\\s*/", '', $string);
 }
 
 exit;

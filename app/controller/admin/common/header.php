@@ -14,7 +14,6 @@ class App_Controller_Admin_Common_Header extends Controller
 			'canonical_link' => $this->document->getCanonicalLink(),
 			'body_class'     => slug($this->route->getPath(), '-'),
 			'lang'           => $this->language->info('code'),
-			'logged'         => $this->user->isLogged(),
 			'user'           => $this->user->info(),
 		);
 
@@ -48,7 +47,7 @@ class App_Controller_Admin_Common_Header extends Controller
 		$this->document->localizeVar('admin_url', site_url('admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
 
-		if ($settings['logged']) {
+		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
 			if (user_can('access', 'filemanager/filemanager')) {
 				$link_image_manager = array(
@@ -92,10 +91,10 @@ class App_Controller_Admin_Common_Header extends Controller
 
 				foreach ($dashboards as $dashboard) {
 					$dashboard_link = array(
-						'name' => 'dashboards_dash-' . $dashboard['dashboard_id'],
-					   'display_name' => strip_tags($dashboard['name']),
-					   'href' => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
-					   'parent' => 'dashboards',
+						'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
+						'display_name' => strip_tags($dashboard['name']),
+						'href'         => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
+						'parent'       => 'dashboards',
 					);
 
 					$this->document->addLink('admin', $dashboard_link);
@@ -128,7 +127,7 @@ class App_Controller_Admin_Common_Header extends Controller
 			$link_logout = array(
 				'name'         => 'logout',
 				'display_name' => _l("Logout"),
-				'href'         => site_url('admin/common/logout'),
+				'href'         => site_url('admin/user/logout'),
 				'sort_order'   => 10,
 			);
 

@@ -1,7 +1,19 @@
 <?php
-// Configuration
+//TODO: Remove this eventually...
 if (is_file(dirname(__FILE__) . '/ac_config.php')) {
-	include_once(dirname(__FILE__) . '/ac_config.php');
+	rename(dirname(__FILE__) . '/ac_config.php', dirname(__FILE__) . '/config.php');
+}
+
+// Configuration
+if (is_file(dirname(__FILE__) . '/config.php')) {
+	include_once(dirname(__FILE__) . '/config.php');
+}
+
+// Install
+if (!defined('DOMAIN') || defined("AMPLO_INSTALL_USER")) {
+	define("AMPLO_INSTALL", true);
+	require_once('system/install/install.php');
+	exit;
 }
 
 //Default server values in case they are not set.
@@ -12,18 +24,10 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
-// Install
-if (!defined('DOMAIN') || defined("AMPLO_INSTALL_USER")) {
-	define("AMPLO_INSTALL", true);
-	require_once('system/install/install.php');
-	exit;
-}
-
 $__start = microtime(true);
 
 //System / URL Paths
 require_once('path_config.php');
-require_once(DIR_SYSTEM . 'functions.php');
 
 //File Modifications
 require_once(DIR_SYSTEM . 'ac_mod_file.php');

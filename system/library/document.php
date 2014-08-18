@@ -16,7 +16,7 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->restricted = $this->Model_User_Role->getControllers();
+		$this->restricted = $this->Model_Setting_Role->getControllers();
 		$this->links = $this->getNavigationLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
@@ -249,7 +249,7 @@ class Document extends Library
 			}
 
 			//Load PHPSass
-			require_once(DIR_RESOURCES . 'css/lessphp/lessc.inc.php');
+			require_once(DIR_RESOURCES . 'lessphp/lessc.inc.php');
 
 			$less = new lessc();
 
@@ -449,7 +449,7 @@ class Document extends Library
 			}
 
 			//Filter restricted paths, current user cannot access
-			if ($this->route->isAdmin()) {
+			if (IS_ADMIN) {
 				$path = str_replace('admin/', '', $link['href']);
 
 				$check_path = false;

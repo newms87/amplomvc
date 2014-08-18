@@ -1,4 +1,5 @@
 <?php
+
 class Session extends Library
 {
 	public function __construct()
@@ -75,7 +76,15 @@ class Session extends Library
 			return false;
 		}
 
-		$this->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->escape($_SESSION['token']) . "', `user_id` = '" . $this->escape($_SESSION['user_id']) . "', `data` = '" . $this->escape(serialize($_SESSION)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
+		$session = array(
+			'token'   => $_SESSION['token'],
+			'user_id' => $_SESSION['user_id'],
+			'data'    => serialize($_SESSION),
+			'ip'      => $_SERVER['REMOTE_ADDR'],
+		);
+
+		$this->insert('session', $session);
+
 		$_SESSION['session_token_saved'] = 1;
 	}
 

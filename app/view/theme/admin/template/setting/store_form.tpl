@@ -370,7 +370,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= $url_generate_icons; ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/setting/store/generate_icons'); ?>", {icon: icon}, function (json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');

@@ -37,10 +37,6 @@ class App_Model_Design_Layout extends Model
 	{
 		$this->delete('layout', $layout_id);
 		$this->delete('layout_route', array('layout_id' => $layout_id));
-		$this->delete('layout_header', array('layout_id' => $layout_id));
-		$this->delete('category_to_layout', array('layout_id' => $layout_id));
-		$this->delete('product_to_layout', array('layout_id' => $layout_id));
-		$this->delete('information_to_layout', array('layout_id' => $layout_id));
 	}
 
 	public function getLayout($layout_id)

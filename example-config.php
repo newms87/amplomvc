@@ -1,7 +1,9 @@
 <?php
 //Site Domain
 define('DOMAIN', $_SERVER['HTTP_HOST']);
-define('SITE_BASE', '/dev/');
+
+//This is the path to Amplo MVC from the site's root directory. If it is in the root make this '/'
+define('SITE_BASE', '/');
 
 //Site Urls
 define('URL_SITE', '//' . DOMAIN . SITE_BASE);
@@ -21,14 +23,14 @@ define('MYSQL_TIMEZONE', '-4:00');
 // DB
 define('DB_DRIVER', 'mysqlidb');
 define('DB_HOSTNAME', 'localhost');
+define('DB_DATABASE', 'caddash');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_DATABASE', 'cadscope');
 define('DB_PREFIX', 'ac_');
 
 //DB Profiling
 define("DB_PROFILE", true);
-define("DB_PROFILE_NO_CACHE", true);
+define("DB_PROFILE_NO_CACHE", false);
 
 //Error Reporting
 error_reporting(E_ALL);

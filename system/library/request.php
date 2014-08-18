@@ -17,29 +17,9 @@ class Request extends Library
 		array_walk_recursive($_SERVER, $action);
 	}
 
-	public function isPost()
-	{
-		return $_SERVER['REQUEST_METHOD'] === 'POST';
-	}
-
-	public function isGet()
-	{
-		return $_SERVER['REQUEST_METHOD'] === 'GET';
-	}
-
-	public function isAjax()
-	{
-		return !empty($_GET['ajax']);
-	}
-
-	public function isSSL()
-	{
-		return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-	}
-
 	public function clean(&$value)
 	{
-		$value = htmlspecialchars($value, ENT_COMPAT);
+		$value = html_entity_decode($value, ENT_COMPAT);
 
 		if (get_magic_quotes_gpc()) {
 			$value = stripslashes($value);

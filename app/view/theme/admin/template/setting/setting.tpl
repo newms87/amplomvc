@@ -86,7 +86,8 @@
 						<tr>
 							<td><?= _l("Theme:"); ?></td>
 							<td>
-								<?= build('select', array(
+								<?=
+								build('select', array(
 									'name'   => 'config_theme',
 									'data'   => $data_themes,
 									'select' => $config_theme,
@@ -102,7 +103,8 @@
 						<tr>
 							<td><?= _l("Default Store"); ?></td>
 							<td>
-								<?= build('select', array(
+								<?=
+								build('select', array(
 									'name'   => 'config_default_store',
 									'data'   => $stores,
 									'select' => $config_default_store,
@@ -114,7 +116,8 @@
 						<tr>
 							<td><?= _l("Default Layout:"); ?></td>
 							<td>
-								<?= build('select', array(
+								<?=
+								build('select', array(
 									'name'   => 'config_default_layout_id',
 									'data'   => $data_layouts,
 									'select' => $config_default_layout_id,
@@ -184,11 +187,12 @@
 						</tr>
 						<tr>
 							<td><?= _l("Use Macro Languages (experimental):<span class=\"help\">Attempt to resolve languages by country specific macro codes</span>"); ?></td>
-							<td><?= build('select', array(
-	'name'   => 'config_use_macro_languages',
-	'data'   => $data_yes_no,
-	'select' => $config_use_macro_languages
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => 'config_use_macro_languages',
+									'data'   => $data_yes_no,
+									'select' => $config_use_macro_languages
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Currency:<br /><span class=\"help\">Change the default currency. Clear your browser cache to see the change and reset your existing cookie.</span>"); ?></td>
@@ -228,30 +232,33 @@
 								<?= _l("Administration Bar"); ?>
 								<span class="help"><?= _l("This will display a small toolbar on the store fronts when logged into the Admin Panel"); ?></span>
 							</td>
-							<td><?= build('radio', array(
-	'name'   => 'config_admin_bar',
-	'data'   => $data_yes_no,
-	'select' => $config_admin_bar
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_admin_bar',
+									'data'   => $data_yes_no,
+									'select' => $config_admin_bar
+								)); ?></td>
 						</tr>
 						<tr>
 							<td>
 								<?= _l("Automated Tasks"); ?>
 								<span class="help"><?= _l("Highly recommended to leave this on!"); ?></span>
 							</td>
-							<td><?= build('radio', array(
-	'name'   => 'config_cron_status',
-	'data'   => $data_yes_no,
-	'select' => $config_cron_status
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_cron_status',
+									'data'   => $data_yes_no,
+									'select' => $config_cron_status
+								)); ?></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Display Breadcrumbs? <span class=\"help\">Display breadcrumbs in the storefront? (breadcrumbs will still display in the admin panel)</span>"); ?></td>
-							<td><?= build('select', array(
-	'name'   => "config_breadcrumb_display",
-	'data'   => $data_yes_no,
-	'select' => $config_breadcrumb_display
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => "config_breadcrumb_display",
+									'data'   => $data_yes_no,
+									'select' => $config_breadcrumb_display
+								)); ?></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Breadcrumb Separator:"); ?></td>
@@ -280,11 +287,12 @@
 						</tr>
 						<tr>
 							<td><?= _l("Performance Logging:"); ?></td>
-							<td><?= build('select', array(
-	'name'   => 'config_performance_log',
-	'data'   => $data_statuses,
-	'select' => $config_performance_log
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => 'config_performance_log',
+									'data'   => $data_statuses,
+									'select' => $config_performance_log
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Cache Ignore List:<span class=\"help\">(comma separated list)</span>"); ?></td>
@@ -294,11 +302,12 @@
 						</tr>
 						<tr>
 							<td><?= _l("Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_allow_close_message',
-	'data'   => $data_yes_no,
-	'select' => $config_allow_close_message
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_allow_close_message',
+									'data'   => $data_yes_no,
+									'select' => $config_allow_close_message
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
@@ -317,16 +326,18 @@
 						</tr>
 						<tr>
 							<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_customer_approval',
-	'data'   => $data_yes_no,
-	'select' => $config_customer_approval
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_customer_approval',
+									'data'   => $data_yes_no,
+									'select' => $config_customer_approval
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Account Terms:<br /><span class=\"help\">Forces people to agree to terms before an account can be created.</span>"); ?></td>
 							<td>
-								<?= build('select', array(
+								<?=
+								build('select', array(
 									'name'   => 'config_account_terms_page_id',
 									'data'   => $data_pages,
 									'select' => $config_account_terms_page_id,
@@ -338,11 +349,12 @@
 
 						<tr>
 							<td><?= _l("Allow Social Sharing:"); ?></td>
-							<td><?= build('select', array(
-	'name'   => "config_share_status",
-	'data'   => $data_yes_no,
-	'select' => $config_share_status
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => "config_share_status",
+									'data'   => $data_yes_no,
+									'select' => $config_share_status
+								)); ?></td>
 						</tr>
 
 						<tr>
@@ -377,9 +389,37 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= _l("Icon:<br /><span class=\"help\">The icon should be a PNG that is 16px x 16px.</span>"); ?></td>
 							<td>
-								<input type="text" class="imageinput" name="config_icon" value="<?= $config_icon; ?>"/>
+								<span><?= _l("Icon:"); ?></span>
+								<span class="help"><?= _l("Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file."); ?></span>
+							</td>
+							<td>
+								<div id="icon-generator">
+									<div class="generate">
+										<div class="icon-file">
+											<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
+
+											<div class="icon-label">
+												<a id="generate-icons" data-loading="<?= _l("Generating..."); ?>" class="button"><?= _l("Generate Icon Files"); ?></a>
+											</div>
+										</div>
+									</div>
+									<div class="icon-files left">
+										<div class="icon-file icon-ico">
+											<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']['src']; ?>" data-thumb="<?= $config_icon['ico']['thumb']; ?>"/>
+
+											<div class="icon-label"><?= _l("ICO File"); ?></div>
+										</div>
+										<? foreach ($data_icon_sizes as $size) { ?>
+											<div class="icon-file icon-size">
+												<? $key = $size[0] . 'x' . $size[1]; ?>
+												<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]['src']; ?>" data-thumb="<?= $config_icon[$key]['thumb']; ?>" data-width="<?= $size[0]; ?>" data-height="<?= $size[1]; ?>"/>
+
+												<div class="icon-label"><?= _l("%s X %s Icon", $size[0], $size[1]); ?></div>
+											</div>
+										<? } ?>
+									</div>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -414,11 +454,12 @@
 					<table class="form">
 						<tr>
 							<td><?= _l("Mail Protocol:<span class=\"help\">Only choose \'Mail\' unless your host has disabled the php mail function."); ?></td>
-							<td><?= build('select', array(
-	'name'   => "config_mail_protocol",
-	'data'   => $data_mail_protocols,
-	'select' => $config_mail_protocol
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => "config_mail_protocol",
+									'data'   => $data_mail_protocols,
+									'select' => $config_mail_protocol
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Mail Parameters:<span class=\"help\">When using \'Mail\', additional mail parameters can be added here (e.g. \"-femail@storeaddress.com\"."); ?></td>
@@ -458,19 +499,21 @@
 						</tr>
 						<tr>
 							<td><?= _l("New Order Alert Mail:<br /><span class=\"help\">Send a email to the store owner when a new order is created.</span>"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_alert_mail',
-	'data'   => $data_yes_no,
-	'select' => $config_alert_mail
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_alert_mail',
+									'data'   => $data_yes_no,
+									'select' => $config_alert_mail
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("New Account Alert Mail:<br /><span class=\"help\">Send a email to the store owner when a new account is registered.</span>"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_account_mail',
-	'data'   => $data_yes_no,
-	'select' => $config_account_mail
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_account_mail',
+									'data'   => $data_yes_no,
+									'select' => $config_account_mail
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Additional Alert E-Mails:<br /><span class=\"help\">Any additional emails you want to receive the alert email, in addition to the main store email. (comma separated)</span>"); ?></td>
@@ -480,11 +523,12 @@
 						</tr>
 						<tr>
 							<td><?= _l("Enable Mail Logging"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_mail_logging',
-	'data'   => $data_yes_no,
-	'select' => $config_mail_logging
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_mail_logging',
+									'data'   => $data_yes_no,
+									'select' => $config_mail_logging
+								)); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -580,27 +624,30 @@
 					<table class="form">
 						<tr>
 							<td><?= _l("Turn on Global Debug:<span class=\"help\">Should be turned off for production sites.</span>"); ?></td>
-							<td><?= build('select', array(
-	'name'   => 'config_debug',
-	'data'   => $data_yes_no,
-	'select' => $config_debug
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => 'config_debug',
+									'data'   => $data_yes_no,
+									'select' => $config_debug
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Use the jQuery CDN:<span class=\"help\">This will load jQuery and jQuery UI from the jQuery Content Delivery Network. Recommended for production sites</span>"); ?></td>
-							<td><?= build('select', array(
-	'name'   => 'config_jquery_cdn',
-	'data'   => $data_yes_no,
-	'select' => $config_jquery_cdn
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => 'config_jquery_cdn',
+									'data'   => $data_yes_no,
+									'select' => $config_jquery_cdn
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Send Emails to third parties? <span class=\"help\">Emails sent to people other than the current user and the system emails</span>"); ?></td>
-							<td><?= build('select', array(
-	'name'   => 'config_debug_send_emails',
-	'data'   => $data_yes_no,
-	'select' => $config_debug_send_emails
-)); ?></td>
+							<td><?=
+								build('select', array(
+									'name'   => 'config_debug_send_emails',
+									'data'   => $data_yes_no,
+									'select' => $config_debug_send_emails
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Use SSL:<br /><span class=\"help\">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>"); ?></td>
@@ -674,19 +721,21 @@
 						</tr>
 						<tr>
 							<td><?= _l("Display Errors:"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_error_display',
-	'data'   => $data_yes_no,
-	'select' => $config_error_display
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_error_display',
+									'data'   => $data_yes_no,
+									'select' => $config_error_display
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Log Errors:"); ?></td>
-							<td><?= build('radio', array(
-	'name'   => 'config_error_log',
-	'data'   => $data_yes_no,
-	'select' => $config_error_log
-)); ?></td>
+							<td><?=
+								build('radio', array(
+									'name'   => 'config_error_log',
+									'data'   => $data_yes_no,
+									'select' => $config_error_log
+								)); ?></td>
 						</tr>
 						<tr>
 							<td><?= _l("Google Analytics Code:<br /><span class=\"help\">Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field.</span>"); ?></td>
@@ -721,6 +770,30 @@
 		var url = $ac.admin_url + 'setting/setting/theme?theme=' + $(this).val();
 		$('#theme').load(url);
 	}).change();
+
+	$('#generate-icons').click(function () {
+		var $this = $(this);
+		var icon = $('[name="config_icon[orig]"]').val();
+
+		if (!icon) {
+			return $('#icon-generator').ac_msg('error', "<?= _l("You must choose an icon PNG image file first"); ?>");
+		}
+
+		$this.loading();
+		$.post("<?= site_url('admin/setting/store/generate_icons'); ?>", {icon: icon}, function (json) {
+			$this.loading('stop');
+
+			var $gen = $('#icon-generator');
+
+			for (var c in json) {
+				input = $gen.find('[name="config_icon[' + c + ']"]').val(json[c].relpath);
+				input.closest('.icon-file').find('img.thumb').attr('src', json[c].url);
+			}
+		}, 'json');
+	});
+
+	$('[name=config_logo]').ac_imageinput({width: 'auto'});
+	$('.icon-file .imageinput').ac_imageinput({width: 'auto', height: 'auto'});
 
 	$('.imageinput').ac_imageinput();
 

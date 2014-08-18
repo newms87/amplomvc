@@ -4,7 +4,7 @@ class App_Controller_Account_Address extends Controller
 {
 	public function index()
 	{
-		if (!$this->customer->isLogged()) {
+		if (!is_logged()) {
 			$this->request->setRedirect('account/address/form');
 
 			redirect('customer/login');

@@ -12,7 +12,7 @@ class App_Controller_Customer extends Controller
 			'customer/success',
 		);
 
-		if ($this->customer->isLogged() && !in_array($this->route->getPath(), $allowed)) {
+		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
 			redirect('account');
 		}
 	}
@@ -94,7 +94,7 @@ class App_Controller_Customer extends Controller
 
 	public function registration()
 	{
-		if ($this->customer->isLogged()) {
+		if (is_logged()) {
 			redirect('account');
 		}
 
@@ -231,7 +231,7 @@ class App_Controller_Customer extends Controller
 
 	public function reset_form()
 	{
-		if ($this->customer->isLogged() || empty($_GET['code'])) {
+		if (is_logged() || empty($_GET['code'])) {
 			redirect();
 		}
 

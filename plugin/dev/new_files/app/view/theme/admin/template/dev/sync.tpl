@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('admin/common/header'); ?>
 <div class="section">
 	<?= breadcrumbs(); ?>
 	<div class="box">
@@ -46,4 +46,4 @@
 	</div>
 </div>
 
-<?= call('common/footer'); ?>
+<?= call('admin/common/footer'); ?>

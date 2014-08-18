@@ -1,7 +1,7 @@
 <?php
 session_start();
 mb_internal_encoding('UTF-8');
-require_once('../../../../../ac_config.php');
+require_once('../../../../../config.php');
 
 //------------------------------------------------------------------------------
 // DON'T COPY THIS VARIABLES IN FOLDERS config.php FILES

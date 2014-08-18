@@ -1,7 +1,7 @@
 <?php
 class Dev extends Library
 {
-	public function site_backup($file = null, $tables = null, $prefix = null)
+	public function site_backup($file = null, $tables = null, $prefix = null, $remove_prefix = false)
 	{
 		$site_name = option('config_name');
 
@@ -14,15 +14,13 @@ class Dev extends Library
 			}
 		}
 
-		if ($this->db->dump($file, $tables, $prefix)) {
-			message('success', "Successfully backed up $site_name!");
-
-			return true;
-		} else {
-			message('warning', "There was a problem while backing up $site_name!");
+		if (!$this->db->dump($file, $tables, $prefix, $remove_prefix)) {
+			$this->error['dump'] = $this->db->getError();
+			$this->error['failed'] = _l("Database backup failed.");
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public function site_restore($file, $sync_file = false)
@@ -30,7 +28,7 @@ class Dev extends Library
 		$site_name = option('config_name');
 
 		if (!is_file($file)) {
-			message('warning', "Failed to restore $site_name from $file. The File was not found.");
+			$this->error['file'] = "Failed to restore $site_name from $file. The File was not found.";
 			return false;
 		}
 
@@ -39,14 +37,12 @@ class Dev extends Library
 			file_put_contents($file, $contents);
 		}
 
-		if ($this->db->executeFile($file)) {
-			message('success', "Successfully restored $site_name from backup file $file!");
-			return true;
-		} else {
-			message('warning', "There was a problem while restoring $site_name!");
+		if (!$this->db->executeFile($file)) {
+			$this->error['restore'] = "There was a problem while restoring $site_name!";
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public function login_external_server($domain, $username, $password)
@@ -54,7 +50,7 @@ class Dev extends Library
 		$request = 'username=' . $username;
 		$request .= '&password=' . $password;
 
-		$curl = curl_init($domain . '/admin/common/login?response=1');
+		$curl = curl_init($domain . '/admin/user/login?response=1');
 
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
@@ -66,15 +62,14 @@ class Dev extends Library
 
 		$response = curl_exec($curl);
 
-		if ($response == 'SUCCESS') {
-			return true;
-		} elseif ($response == 'FAILURE') {
-			message('warning', "Login Failed for $domain!");
-		} else {
-			message('warning', "There was an error while connecting to the server at $domain.");
+		if ($response === 'FAILURE') {
+			$this->error['login'] = "Login Failed for $domain!";
+		} elseif ($response !== 'SUCCESS') {
+			$this->error['response'] = "There was an error while connecting to the server at $domain.";
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public function request_table_sync($conn_info, $tables)
@@ -83,7 +78,7 @@ class Dev extends Library
 			return false;
 		}
 
-		$curl = curl_init($conn_info['domain'] . '/admin/dev/dev/request_table_data');
+		$curl = curl_init($conn_info['domain'] . '/admin/dev/request_table_data');
 
 		$request = http_build_query(array('tables' => $tables));
 
@@ -101,8 +96,7 @@ class Dev extends Library
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		} else {
 			if (preg_match("/^ERROR/i", $response) || preg_match("/^WARNING/i", $response) || preg_match("/^NOTICE/i", $response)) {
-				message('warning', "There was an error returned from the server: $response");
-
+				$this->error['response'] = "There was an error returned from the server: $response";
 				return false;
 			}
 

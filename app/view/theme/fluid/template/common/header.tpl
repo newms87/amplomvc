@@ -106,7 +106,7 @@
 			<? } ?>
 
 			<div id="links-account" class="links">
-				<? if (!$is_logged) { ?>
+				<? if (!is_logged()) { ?>
 					<div class="login-buttons">
 						<a class="button scale login" href="<?= site_url('customer/login'); ?>"><?= _l("Log In"); ?></a>
 						<a class="button scale register" href="<?= site_url('customer/registration'); ?>"><?= _l("Sign Up"); ?></a>

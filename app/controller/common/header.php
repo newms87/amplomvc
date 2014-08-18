@@ -6,7 +6,7 @@ class App_Controller_Common_Header extends Controller
 	{
 		$settings['title'] = $this->document->getTitle();
 
-		$settings['base'] = $this->request->isSSL() ? HTTPS_SITE : HTTP_SITE;
+		$settings['base'] = IS_SSL ? HTTPS_SITE : HTTP_SITE;
 
 		$settings['name']   = option('config_name');
 		$settings['logo']   = option('config_logo');
@@ -40,9 +40,6 @@ class App_Controller_Common_Header extends Controller
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('theme_url', theme_url());
 
-		//Add Theme Scripts
-		$this->document->addScript(theme_url('js/common.js'), 56);
-
 		//Page Head
 		$settings['direction']      = $this->language->info('direction');
 		$settings['description']    = $this->document->getDescription();
@@ -60,7 +57,6 @@ class App_Controller_Common_Header extends Controller
 		$settings['icons'] = option('config_icon');
 
 		//Login Check & The Welcome Message
-		$settings['is_logged'] = $this->customer->isLogged();
 		$settings['customer']  = $this->customer->info();
 
 		//Admin Bar
