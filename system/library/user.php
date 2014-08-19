@@ -121,7 +121,7 @@ class User extends Library
 		$value = str_replace('admin/', '', $value);
 		$value = preg_replace("/\\/index$/", '', $value);
 
-		return !empty($this->permissions[$key][$value]);
+		return isset($this->permissions[$key][$value]) ? $this->permissions[$key][$value] : true;
 	}
 
 	public function canDoAction($action)
