@@ -1,5 +1,5 @@
 <?php
-class Export extends Library
+class Csv extends Library
 {
 	private $contents = '';
 
@@ -13,9 +13,12 @@ class Export extends Library
 		$data = array();
 
 		if (($handle = fopen($file, "r")) !== FALSE) {
-			while (($data[] = fgetcsv($handle, 1000, ",")) !== FALSE) {
-				html_dump($data, 'data');
+			if (($head = fgetcsv($handle, 1000, ",")) !== FALSE) {
+				while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+					$data[] = array_combine($head, $row);
+				}
 			}
+
 			fclose($handle);
 		}
 
