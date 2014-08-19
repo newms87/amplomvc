@@ -298,7 +298,11 @@ class User extends Library
 
 	public function requestReset($email)
 	{
-		if (!$this->Model_User->getTotalUsersByEmail($_POST['email'])) {
+		$filter = array(
+			'email' => $email,
+		);
+
+		if (!$this->Model_User->getTotalUsers($filter)) {
 			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 			return false;
 		}
