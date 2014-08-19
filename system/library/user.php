@@ -119,6 +119,8 @@ class User extends Library
 		}
 
 		$value = str_replace('admin/', '', $value);
+		$value = preg_replace("/\\/index$/", '', $value);
+
 		return !empty($this->permissions[$key][$value]);
 	}
 
@@ -130,7 +132,7 @@ class User extends Library
 
 		$path = $action->getClassPath() . '/' . $action->getMethod();
 
-		if (!$this->isLogged()) {
+		if (!is_logged()) {
 			$allowed = array(
 				'admin/user/forgotten',
 				'admin/user/reset_request',
