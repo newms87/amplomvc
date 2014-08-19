@@ -319,6 +319,8 @@ class User extends Library
 		);
 
 		call('admin/mail/forgotten', $email_data);
+
+		return true;
 	}
 
 	public function generatePassword()
