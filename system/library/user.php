@@ -307,9 +307,9 @@ class User extends Library
 			return false;
 		}
 
-		$code = $this->user->generateCode();
+		$code = $this->generateCode();
 
-		$this->user->setResetCode($_POST['email'], $code);
+		$this->setResetCode($_POST['email'], $code);
 
 		$email_data = array(
 			'reset' => site_url('admin/user/reset_password', 'code=' . $code),
