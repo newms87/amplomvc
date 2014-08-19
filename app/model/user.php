@@ -120,28 +120,18 @@ class App_Model_User extends Model
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
 	}
 
-	public function getUsers($filter = array(), $select = '*', $index = null)
+	public function getUsers($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
 		//Select
-		if ($index === false) {
-			$select = "COUNT(*)";
+		if (!$select) {
+			$select = '*';
 		}
 
 		//From
 		$from = DB_PREFIX . "user";
 
 		//Where
-		$where = "1";
-
-		if (isset($filter['name'])) {
-			$where .= " AND CONCAT(lastname, ' ', firstname) like '%" . $this->escape($filter['name']) . "%'";
-		}
-
-		if (isset($filter['username'])) {
-			$where .= " AND username like '%" . $this->escape($filter['username']) . "%'";
-		}
-
-		if (isset($filter['user_role'])) {
+		if (false && isset($filter['user_role'])) {
 			$roles = $this->Model_Setting_Role->getRoles(null, '*', 'name');
 
 			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
@@ -159,57 +149,47 @@ class App_Model_User extends Model
 			}
 		}
 
-		if (!empty($filter['user_role_id'])) {
-			$user_role_ids = is_array($filter['user_role_id']) ? $this->escape($filter['user_role_id']) : array((int)$filter['user_role_id']);
+		$where = $this->extractFilter('user', $filter);
 
-			$where .= " AND user_role_id IN (" . implode(',', $user_role_ids) . ")";
-		}
-
-		if (isset($filter['status'])) {
-			$where .= " AND status = " . (int)$filter['status'];
+		if (isset($filter['name'])) {
+			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
 		}
 
 		//Order and Limit
-		if ($index !== false) {
-			if (!empty($filter['sort'])) {
-				if ($filter['sort'] === 'name') {
-					$filter['sort'] = array(
-						'lastname'  => $filter['order'],
-						'firstname' => $filter['order'],
-					);
-				}
+		if (!empty($filter['sort'])) {
+			if ($filter['sort'] === 'name') {
+				$filter['sort'] = array(
+					'lastname'  => $filter['order'],
+					'firstname' => $filter['order'],
+				);
 			}
-
-			$order = $this->extractOrder($filter);
-			$limit = $this->extractLimit($filter);
-		} else {
-			$order = '';
-			$limit = '';
 		}
+
+		$order = $this->extractOrder($sort);
+		$limit = $this->extractLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		$calc_rows = ($total && $this->calcFoundRows('user', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
 
-		if ($index === false) {
-			return $this->queryVar($query);
+		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
+
+		//Get Results
+		if ($total) {
+			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
+			$total_rows = $this->queryVar($query);
+
+			return array(
+				$rows,
+				$total_rows,
+			);
 		}
 
-		return $this->queryRows($query, $index);
+		return $rows;
 	}
 
 	public function getTotalUsers($filter = array())
 	{
-		return $this->getUsers($filter, '', false);
-	}
-
-	public function getTotalUsersByGroupId($user_role_id)
-	{
-		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE user_role_id = '" . (int)$user_role_id . "'");
-	}
-
-	public function getTotalUsersByEmail($email)
-	{
-		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->escape($email) . "'");
+		return $this->getUsers(array(), $filter, "COUNT(*)");
 	}
 
 	public function validate($user_id, $user)

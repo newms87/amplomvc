@@ -59,8 +59,7 @@ class App_Controller_Admin_User extends Controller
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
 		$filter = _get('filter', array());
 
-		$user_total = $this->Model_User->getTotalUsers($filter);
-		$users      = $this->Model_User->getUsers($sort + $filter);
+		list($users, $user_total) = $this->Model_User->getUsers($sort, $filter, null, true);
 
 		foreach ($users as &$user) {
 			$actions = array(

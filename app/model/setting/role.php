@@ -47,7 +47,11 @@ class App_Model_Setting_Role extends Model
 
 	public function remove($user_role_id)
 	{
-		$total_users = $this->Model_User->getTotalUsersByGroupId($user_role_id);
+		$filter = array(
+			'user_role_id' => $user_role_id,
+		);
+
+		$total_users = $this->Model_User->getTotalUsers($filter);
 
 		if ($total_users) {
 			$name = $this->queryVar("SELECT name FROM " . DB_PREFIX . "user_role WHERE user_role_id = " . (int)$user_role_id);
