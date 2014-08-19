@@ -358,6 +358,6 @@ class App_Controller_Admin_User extends Controller
 		$data['cancel'] = site_url('admin/user/login');
 
 		//Render
-		output($this->render('common/reset', $data));
+		output($this->render('user/reset', $data));
 	}
 }
