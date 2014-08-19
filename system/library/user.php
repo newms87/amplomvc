@@ -343,7 +343,7 @@ class User extends Library
 	public function lookupResetCode($code)
 	{
 		if ($code) {
-			return $this->queryVar("SELECT user_id FROM " . DB_PREFIX . "user_meta WHERE `key` = 'pass_reset_code' AND value = " . $this->escape($code) . "'");
+			return $this->queryVar("SELECT user_id FROM " . DB_PREFIX . "user_meta WHERE `key` = 'pass_reset_code' AND value = '" . $this->escape($code) . "'");
 		}
 	}
 
