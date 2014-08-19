@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Mail_Forgotten extends Controller
+class App_Controller_Admin_Mail_Forgotten extends Controller
 {
 	public function index(array $data)
 	{
