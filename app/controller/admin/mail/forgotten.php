@@ -15,7 +15,7 @@ class App_Controller_Mail_ForgottenAdmin extends Controller
 
 		$data['store_name'] = option('config_name');
 
-		$this->mail->setHtml($this->render('mail/forgotten_admin', $data));
+		$this->mail->setHtml($this->render('mail/forgotten', $data));
 
 		$this->mail->send();
 	}

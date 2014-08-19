@@ -316,7 +316,7 @@ class User extends Library
 			'email' => $_POST['email'],
 		);
 
-		call('admin/mail/forgotten_admin', $email_data);
+		call('admin/mail/forgotten', $email_data);
 	}
 
 	public function generatePassword()
