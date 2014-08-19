@@ -136,7 +136,7 @@ class User extends Library
 			$allowed = array(
 				'admin/user/forgotten',
 				'admin/user/reset_request',
-				'admin/user/reset_password',
+				'admin/user/reset',
 				'admin/user/login',
 				'admin/user/authenticate',
 			);
@@ -148,7 +148,7 @@ class User extends Library
 			$ignore = array(
 				'admin/common/home/index',
 				'admin/user/logout',
-				'admin/user/reset_password',
+				'admin/user/reset',
 				'admin/error/not_found',
 				'admin/error/permission'
 			);
@@ -314,7 +314,7 @@ class User extends Library
 		$this->setResetCode($_POST['email'], $code);
 
 		$email_data = array(
-			'reset' => site_url('admin/user/reset_password', 'code=' . $code),
+			'reset' => site_url('admin/user/reset', 'code=' . $code),
 			'email' => $_POST['email'],
 		);
 

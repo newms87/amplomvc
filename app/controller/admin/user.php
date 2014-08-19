@@ -351,10 +351,10 @@ class App_Controller_Admin_User extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l('Home'), site_url('admin'));
-		breadcrumb(_l('Password Reset'), site_url('admin/user/reset_password', 'code=' . $code));
+		breadcrumb(_l('Password Reset'), site_url('admin/user/reset', 'code=' . $code));
 
 		//Action Buttons
-		$data['save']   = site_url('admin/user/reset_password', 'code=' . $code);
+		$data['save']   = site_url('admin/user/reset', 'code=' . $code);
 		$data['cancel'] = site_url('admin/user/login');
 
 		//Render
