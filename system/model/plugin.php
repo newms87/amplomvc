@@ -27,9 +27,11 @@ class System_Model_Plugin extends Model
 		foreach ($plugin_entries as $entry) {
 			//Only Remove symlinked files (in case someone already deleted this file and replaced it)
 			if (is_file($entry['live_file']) && _is_link($entry['live_file'])) {
-				message("notify", _l("Removed plugin file $entry[live_file]."));
-				chmod($entry['live_file'], 0777);
-				unlink($entry['live_file']);
+				if (unlink($entry['live_file'])) {
+					message("notify", _l("Removed plugin file $entry[live_file]."));
+				} else {
+					message("error", _l("Unable to remove plugin file $entry[live_file]."));
+				}
 			}
 		}
 

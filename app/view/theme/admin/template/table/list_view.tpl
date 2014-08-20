@@ -575,6 +575,7 @@
 		return false;
 	}
 
+	<? if (!empty($save_path)) { ?>
 	$listview.find('tr.filter-list-item td.editable').click(function () {
 		var $this = $(this);
 		var field = $this.attr('data-field');
@@ -639,6 +640,7 @@
 			return false;
 		}
 	});
+	<? } ?>
 
 	$('.action-buttons').overflown('y', 5);
 </script>
