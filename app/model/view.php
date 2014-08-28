@@ -243,6 +243,8 @@ class App_Model_View extends Model
 				$this->error['sql'] = _l("Invalid SELECT statement.<br /><Br /> %s", $this->db->getQueryError());
 				return false;
 			}
+
+			$this->cache->delete('model.' . $slug);
 		}
 
 		if ($view_listing_id) {
