@@ -8,6 +8,11 @@ class Csv extends Library
 		return $this->contents;
 	}
 
+	public function setContents($contents)
+	{
+		$this->contents = $contents;
+	}
+
 	public function import($file)
 	{
 		$data = array();
@@ -69,6 +74,17 @@ class Csv extends Library
 					"Content-Length: " . strlen($this->contents),
 				);
 				break;
+
+			case 'xml':
+				$headers = array(
+					"Content-type: application/xml",
+					"Content-Disposition: attachment; filename=\"$filename\"",
+					"Pragma: no-cache",
+					"Expires: 0",
+					"Content-Length: " . strlen($this->contents),
+				);
+				break;
+
 			case 'xls':
 			case 'xlsx':
 			default:

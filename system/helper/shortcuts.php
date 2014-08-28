@@ -622,6 +622,19 @@ function output($output)
 	$registry->get('response')->setOutput($output);
 }
 
+function output_as_file($contents, $type = 'txt', $filename = '')
+{
+	global $registry;
+	$registry->get('csv')->setContents($contents);
+	$registry->get('csv')->downloadContents($filename, $type);
+}
+
+function output_file($file, $type = null, $filename = null)
+{
+	global $registry;
+	$registry->get('csv')->downloadFile($file, $filename, $type);
+}
+
 function _is_object($o)
 {
 	return is_array($o) || is_object($o) || is_resource($o);
