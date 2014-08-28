@@ -244,7 +244,8 @@ class App_Model_View extends Model
 				return false;
 			}
 
-			$this->cache->delete('model.' . $slug);
+			//TODO- this can probably be optimized
+			$this->cache->delete('model');
 		}
 
 		if ($view_listing_id) {
