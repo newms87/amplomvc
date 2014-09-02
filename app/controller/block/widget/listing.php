@@ -43,11 +43,12 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			$settings += $this->Model_View->getView($settings['view_id']);
 
 			$settings = $this->Model_View->getViewSettings($settings['view_id']) + $settings;
-		} else {
-			$settings += array(
-				'view_type' => '',
-			);
 		}
+
+		//Default Settings
+		$settings += array(
+			'view_type' => '',
+		);
 
 		//Normalize Extra Cols
 		foreach ($settings['extra_cols'] as $key => &$ec) {
