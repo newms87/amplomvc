@@ -131,7 +131,7 @@ class App_Model_User extends Model
 		$from = DB_PREFIX . "user";
 
 		//Where
-		if (false && isset($filter['user_role'])) {
+		if (isset($filter['user_role'])) {
 			$roles = $this->Model_Setting_Role->getRoles(null, '*', 'name');
 
 			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
