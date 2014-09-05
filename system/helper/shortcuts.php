@@ -131,7 +131,7 @@ function cache($key, $value = null)
 	}
 }
 
-function message($type, $message)
+function message($type, $message = null)
 {
 	global $registry;
 	$registry->get('message')->add($type, $message);
@@ -236,6 +236,12 @@ define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
 $headers = apache_request_headers();
 define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
+
+define("REQUEST_ACCEPT", $headers['Accept']);
+
+function request_accepts($type) {
+	return strpos(REQUEST_ACCEPT, $type) !== false;
+}
 
 define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
 define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');

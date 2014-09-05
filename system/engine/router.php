@@ -150,6 +150,11 @@ final class Router
 					if (!is_logged()) {
 						$this->request->setRedirect($this->url->here());
 
+						if (request_accepts('application/json')) {
+							echo json_encode(array('error' => _l("You are not logged in. You are being redirected to the log in page.<script>window.location = '%s'</script>", site_url('admin/user/login'))));
+							exit;
+						}
+
 						redirect('admin/user/login', IS_AJAX ? 'ajax=1' : '');
 					}
 
@@ -159,6 +164,12 @@ final class Router
 				//Login Verification
 				if (!$this->customer->canDoAction($action)) {
 					$this->request->setRedirect($this->url->here());
+
+					if (request_accepts('application/json')) {
+						echo json_encode(array('error' => _l("Please log in to access this page. You are being redirected to the log in page.<script>window.location = '%s'</script>", site_url('customer/login'))));
+						exit;
+					}
+
 					redirect('customer/login', IS_AJAX ? 'ajax=1' : '');
 				}
 			}

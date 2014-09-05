@@ -1,4 +1,4 @@
-<?= call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <section id="admin-login" class="content">
 	<header class="row top-row">
@@ -32,4 +32,4 @@
 	</div>
 </section>
 
-<?= call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/common/footer'); ?>

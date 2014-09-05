@@ -227,6 +227,10 @@ abstract class Model
 
 	protected function getWhere($table, $where, $prefix = '', $glue = '', $primary_key = false)
 	{
+		if (!$where) {
+			return '1';
+		}
+
 		if (is_integer($where) || is_string($where)) {
 			$primary_key = $this->getPrimaryKey($table);
 			if (!$primary_key) {
@@ -331,6 +335,12 @@ abstract class Model
 
 	protected function extractFilter($table, $filter, $columns = array())
 	{
+		$where = '1';
+
+		if (!$filter) {
+			return $where;
+		}
+
 		$method = array(
 			self::NO_ESCAPE           => 'equals',
 			self::TEXT                => 'like',
@@ -350,8 +360,6 @@ abstract class Model
 		}
 
 		$columns += $this->getTableColumns($table);
-
-		$where = '1';
 
 		foreach ($filter as $key => $value) {
 			if (strpos($key, '!') === 0) {

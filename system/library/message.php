@@ -12,7 +12,9 @@ class Message extends Library
 
 	public function add($type, $message)
 	{
-		if (is_array($message)) {
+		if ($type === 'data') {
+			$_SESSION['message']['data'] = $message;
+		} elseif (is_array($message)) {
 			array_walk_recursive($message, function ($value, $key) use ($type) {
 				if (is_string($key)) {
 					$_SESSION['message'][$type][$key] = $value;
