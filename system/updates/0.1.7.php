@@ -17,7 +17,7 @@ if ($this->db->hasColumn('view', 'listing_id')) {
 
 			if (!$view_listing_id) {
 				trigger_error("VIEW LISTING ID NOT FOUND");
-				return false;
+				break;
 			}
 
 			$this->update('view', array('listing_id' => $view_listing_id), $view['view_id']);
