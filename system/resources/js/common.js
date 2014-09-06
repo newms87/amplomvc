@@ -483,7 +483,7 @@ $.fn.ac_zoneselect = function (params, callback) {
         listen: null,
         allow_all: false,
         select: null,
-        url: $ac.site_url + 'data/locale/load_zones'
+        url: $ac.site_url + 'data/locale/load_zones?ajax=1'
     }, params);
 
     if (!params.listen) {
