@@ -86,7 +86,7 @@ foreach ($files as $file) {
 }
 
 uasort($data, function ($a, $b) {
-	return $a['Memory (KB)'] > $b['Memory (KB)'];
+	return $a['Memory (KB)'] < $b['Memory (KB)'];
 });
 
 $fields = array_keys($data[0]);
