@@ -56,18 +56,18 @@ function run_test($file)
 	$unserialize_time = microtime(true) - $start;
 
 	return array(
-		'Name'               => basename($file),
+		'Name'                   => basename($file),
 		'json_encode() Time (s)' => $json_encode_time,
 		'json_decode() Time (s)' => $json_decode_time,
 		'serialize() Time (s)'   => $serialize_time,
 		'unserialize() Time (s)' => $unserialize_time,
-		'Elements'           => $count,
-		'Memory (KB)'             => $memory,
-		'Max Depth'          => $depth,
-		'json_encode() Win'  => ($json_encode_time > 0 && $json_encode_time < $serialize_time) ? number_format(($serialize_time / $json_encode_time - 1) * 100, 2) : '',
-		'serialize() Win'    => ($serialize_time > 0 && $serialize_time < $json_encode_time) ? number_format(($json_encode_time / $serialize_time - 1) * 100, 2) : '',
-		'json_decode() Win'  => ($json_decode_time > 0 && $json_decode_time < $serialize_time) ? number_format(($serialize_time / $json_decode_time - 1) * 100, 2) : '',
-		'unserialize() Win'  => ($unserialize_time > 0 && $unserialize_time < $json_decode_time) ? number_format(($json_decode_time / $unserialize_time - 1) * 100, 2) : '',
+		'Elements'               => $count,
+		'Memory (KB)'            => $memory,
+		'Max Depth'              => $depth,
+		'json_encode() Win'      => ($json_encode_time > 0 && $json_encode_time < $serialize_time) ? number_format(($serialize_time / $json_encode_time - 1) * 100, 2) : '',
+		'serialize() Win'        => ($serialize_time > 0 && $serialize_time < $json_encode_time) ? number_format(($json_encode_time / $serialize_time - 1) * 100, 2) : '',
+		'json_decode() Win'      => ($json_decode_time > 0 && $json_decode_time < $serialize_time) ? number_format(($serialize_time / $json_decode_time - 1) * 100, 2) : '',
+		'unserialize() Win'      => ($unserialize_time > 0 && $unserialize_time < $json_decode_time) ? number_format(($json_decode_time / $unserialize_time - 1) * 100, 2) : '',
 	);
 }
 
@@ -84,6 +84,10 @@ foreach ($files as $file) {
 		}
 	}
 }
+
+uasort($data, function ($a, $b) {
+	return $a['Memory (KB)'] > $b['Memory (KB)'];
+});
 
 $fields = array_keys($data[0]);
 ?>
@@ -103,7 +107,7 @@ $fields = array_keys($data[0]);
 			<?php foreach ($d as $key => $value) { ?>
 				<?php $is_win = strpos($key, 'Win'); ?>
 				<?php $color = ($is_win && $value) ? 'color: green;font-weight:bold;' : ''; ?>
-				<td style="text-align: center; vertical-align: middle; padding: 3px 6px; border: 1px solid gray; <?= $color; ?>"><?= $value . ($is_win?'%':''); ?></td>
+				<td style="text-align: center; vertical-align: middle; padding: 3px 6px; border: 1px solid gray; <?= $color; ?>"><?= $value . (($is_win && $value) ? '%' : ''); ?></td>
 			<?php } ?>
 		</tr>
 	<?php } ?>
