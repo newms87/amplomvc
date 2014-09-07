@@ -57,12 +57,12 @@ function run_test($file)
 
 	return array(
 		'Name'               => basename($file),
-		'json_encode() Time' => $json_encode_time,
-		'json_decode() Time' => $json_decode_time,
-		'serialize() Time'   => $serialize_time,
-		'unserialize() Time' => $unserialize_time,
+		'json_encode() Time (s)' => $json_encode_time,
+		'json_decode() Time (s)' => $json_decode_time,
+		'serialize() Time (s)'   => $serialize_time,
+		'unserialize() Time (s)' => $unserialize_time,
 		'Elements'           => $count,
-		'Memory'             => $memory,
+		'Memory (KB)'             => $memory,
 		'Max Depth'          => $depth,
 		'json_encode() Win'  => ($json_encode_time > 0 && $json_encode_time < $serialize_time) ? number_format(($serialize_time / $json_encode_time - 1) * 100, 2) : '',
 		'serialize() Win'    => ($serialize_time > 0 && $serialize_time < $json_encode_time) ? number_format(($json_encode_time / $serialize_time - 1) * 100, 2) : '',
@@ -92,7 +92,7 @@ $fields = array_keys($data[0]);
 	<thead>
 	<tr>
 		<?php foreach ($fields as $f) { ?>
-			<td style="border:1px solid black;padding: 4px 8px;font-weight:bold;font-size:1.1em"><?= $f; ?></td>
+			<td style="text-align: center; border:1px solid black;padding: 4px 8px;font-weight:bold;font-size:1.1em"><?= $f; ?></td>
 		<?php } ?>
 	</tr>
 	</thead>
@@ -101,8 +101,9 @@ $fields = array_keys($data[0]);
 	<?php foreach ($data as $d) { ?>
 		<tr>
 			<?php foreach ($d as $key => $value) { ?>
-				<?php $color = (strpos($key, 'Win') && $value) ? 'color: green;font-weight:bold;' : ''; ?>
-				<td style="text-align: center; vertical-align: middle; padding: 3px 6px; border: 1px solid gray; <?= $color; ?>"><?= $value; ?></td>
+				<?php $is_win = strpos($key, 'Win'); ?>
+				<?php $color = ($is_win && $value) ? 'color: green;font-weight:bold;' : ''; ?>
+				<td style="text-align: center; vertical-align: middle; padding: 3px 6px; border: 1px solid gray; <?= $color; ?>"><?= $value . ($is_win?'%':''); ?></td>
 			<?php } ?>
 		</tr>
 	<?php } ?>
