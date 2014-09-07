@@ -31,17 +31,21 @@ function run_test($file)
 	echo "PHP serialized in $serialize_e seconds / unserialized in $serialize_d seconds<br>";
 
 //  Compare them
-	if ($json_e < $serialize_e) {
+	if (!$json_d || !$serialize_e) {
+		echo "Too small sample size. Time difference was 0<BR>";
+	} elseif ($json_e < $serialize_e) {
 		echo "json_encode() was roughly " . number_format(($serialize_e / $json_e - 1) * 100, 2) . "% faster than serialize()<Br>";
-	} else if ($serialize_e < $json_e) {
+	} elseif ($serialize_e < $json_e) {
 		echo "serialize() was roughly " . number_format(($json_e / $serialize_e - 1) * 100, 2) . "% faster than json_encode()<Br>";
 	} else {
 		echo 'JSON encode / serialize === Unpossible!<Br>';
 	}
 
-	if ($json_d < $serialize_d) {
+	if (!$json_d || !$serialize_e) {
+		echo "Too small sample size. Time difference was 0";
+	} elseif ($json_d < $serialize_d) {
 		echo "json_decode() was roughly " . number_format(($serialize_d / $json_d - 1) * 100, 2) . "% faster than unserialize()";
-	} else if ($serialize_d < $json_d) {
+	} elseif ($serialize_d < $json_d) {
 		echo "unserialize() was roughly " . number_format(($json_d / $serialize_d - 1) * 100, 2) . "% faster than json_decode()";
 	} else {
 		echo 'JSON decode / unserialize === Unpossible!';
