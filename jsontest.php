@@ -3,61 +3,109 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+function _count_depth($array)
+{
+	$count     = 0;
+	$max_depth = 0;
+	foreach ($array as $a) {
+		if (is_array($a)) {
+			list($cnt, $depth) = _count_depth($a);
+			$count += $cnt;
+			$max_depth = max($max_depth, $depth);
+		} else {
+			$count++;
+		}
+	}
+
+	return array(
+		$count,
+		$max_depth + 1,
+	);
+}
+
 function run_test($file)
 {
-	echo 'TESTING ' . $file . '<BR>';
+	$memory     = memory_get_usage();
+	$test_array = unserialize(file_get_contents($file));
+	$memory     = round((memory_get_usage() - $memory) / 1024, 2);
 
-	$testArray = unserialize(file_get_contents($file));
+	if (empty($test_array) || !is_array($test_array)) {
+		return;
+	}
 
-	$start        = microtime(true);
-	$json_encoded = json_encode($testArray);
-	$json_e       = microtime(true) - $start;
+	list($count, $depth) = _count_depth($test_array);
 
+	//JSON encode test
+	$start            = microtime(true);
+	$json_encoded     = json_encode($test_array);
+	$json_encode_time = microtime(true) - $start;
+
+	//JSON decode test
 	$start = microtime(true);
 	json_decode($json_encoded);
-	$json_d = microtime(true) - $start;
+	$json_decode_time = microtime(true) - $start;
 
-	echo "JSON encoded in $json_e seconds / decoded in $json_d seconds<br>";
+	//serialize test
+	$start          = microtime(true);
+	$serialized     = serialize($test_array);
+	$serialize_time = microtime(true) - $start;
 
-//  Time serialization
-	$start       = microtime(true);
-	$serialized  = serialize($testArray);
-	$serialize_e = microtime(true) - $start;
-
+	//unserialize test
 	$start = microtime(true);
 	unserialize($serialized);
-	$serialize_d = microtime(true) - $start;
+	$unserialize_time = microtime(true) - $start;
 
-	echo "PHP serialized in $serialize_e seconds / unserialized in $serialize_d seconds<br>";
-
-//  Compare them
-	if (!$json_d || !$serialize_e) {
-		echo "Too small sample size. Time difference was 0<BR>";
-	} elseif ($json_e < $serialize_e) {
-		echo "json_encode() was roughly " . number_format(($serialize_e / $json_e - 1) * 100, 2) . "% faster than serialize()<Br>";
-	} elseif ($serialize_e < $json_e) {
-		echo "serialize() was roughly " . number_format(($json_e / $serialize_e - 1) * 100, 2) . "% faster than json_encode()<Br>";
-	} else {
-		echo 'JSON encode / serialize === Unpossible!<Br>';
-	}
-
-	if (!$json_d || !$serialize_e) {
-		echo "Too small sample size. Time difference was 0";
-	} elseif ($json_d < $serialize_d) {
-		echo "json_decode() was roughly " . number_format(($serialize_d / $json_d - 1) * 100, 2) . "% faster than unserialize()";
-	} elseif ($serialize_d < $json_d) {
-		echo "unserialize() was roughly " . number_format(($json_d / $serialize_d - 1) * 100, 2) . "% faster than json_decode()";
-	} else {
-		echo 'JSON decode / unserialize === Unpossible!';
-	}
-
-	echo "<BR><BR>";
+	return array(
+		'Name'               => basename($file),
+		'json_encode() Time' => $json_encode_time,
+		'json_decode() Time' => $json_decode_time,
+		'serialize() Time'   => $serialize_time,
+		'unserialize() Time' => $unserialize_time,
+		'Elements'           => $count,
+		'Memory'             => $memory,
+		'Max Depth'          => $depth,
+		'json_encode() Win'  => ($json_encode_time > 0 && $json_encode_time < $serialize_time) ? number_format(($serialize_time / $json_encode_time - 1) * 100, 2) : '',
+		'serialize() Win'    => ($serialize_time > 0 && $serialize_time < $json_encode_time) ? number_format(($json_encode_time / $serialize_time - 1) * 100, 2) : '',
+		'json_decode() Win'  => ($json_decode_time > 0 && $json_decode_time < $serialize_time) ? number_format(($serialize_time / $json_decode_time - 1) * 100, 2) : '',
+		'unserialize() Win'  => ($unserialize_time > 0 && $unserialize_time < $json_decode_time) ? number_format(($json_decode_time / $unserialize_time - 1) * 100, 2) : '',
+	);
 }
 
 $files = glob(dirname(__FILE__) . '/system/cache/*');
 
+$data = array();
+
 foreach ($files as $file) {
 	if (is_file($file)) {
-		run_test($file);
+		$result = run_test($file);
+
+		if ($result) {
+			$data[] = $result;
+		}
 	}
 }
+
+$fields = array_keys($data[0]);
+?>
+
+<table>
+	<thead>
+	<tr>
+		<?php foreach ($fields as $f) { ?>
+			<td style="border:1px solid black;padding: 4px 8px;font-weight:bold;font-size:1.1em"><?= $f; ?></td>
+		<?php } ?>
+	</tr>
+	</thead>
+
+	<tbody>
+	<?php foreach ($data as $d) { ?>
+		<tr>
+			<?php foreach ($d as $key => $value) { ?>
+				<?php $color = (strpos($key, 'Win') && $value) ? 'color: green;font-weight:bold;' : ''; ?>
+				<td style="text-align: center; vertical-align: middle; padding: 3px 6px; border: 1px solid gray; <?= $color; ?>"><?= $value; ?></td>
+			<?php } ?>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
