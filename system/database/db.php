@@ -197,10 +197,13 @@ class DB
 	 * Returns an array with each value as the first Select field of each row
 	 *
 	 * @param $sql - the MySQL query string
+	 * @param $index_key - The column to use as the index/keys for the returned array. Can be an integer, string, or true.
+	 *                     If it is true, the index key will be the first column in the returned result set.
+	 *
 	 * @return mixed - will return an indexed array or false on failure
 	 *
 	 */
-	public function queryColumn($sql, $assoc = false)
+	public function queryColumn($sql, $index_key = false)
 	{
 		$resource = $this->query($sql);
 
@@ -208,7 +211,11 @@ class DB
 			return array();
 		}
 
-		return array_column($resource->rows, key($resource->row), $assoc);
+		if ($index_key === true) {
+			$index_key = key($resource->row);
+		}
+
+		return array_column($resource->rows, key($resource->row), $index_key);
 	}
 
 	/**
