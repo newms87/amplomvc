@@ -203,7 +203,7 @@ class DB
 	 * @return mixed - will return an indexed array or false on failure
 	 *
 	 */
-	public function queryColumn($sql, $index_key = false)
+	public function queryColumn($sql, $index_key = null)
 	{
 		$resource = $this->query($sql);
 
