@@ -272,6 +272,10 @@ class Date extends Library
 			}
 		}
 
+		if (!$format) {
+			$format = 'Y-m-d H:is';
+		}
+
 		return $date->format($format);
 	}
 }
