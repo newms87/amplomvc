@@ -12,17 +12,20 @@ if (!function_exists('array_column')) {
 	 *
 	 * @return array - an array of values of the column requested
 	 */
-	function array_column($array, $column, $assoc = false)
+	function array_column($array, $column, $index_key = null)
 	{
 		$values = array();
 
 		foreach ($array as $row) {
 			$value = isset($row[$column]) ? $row[$column] : null;
 
-			if ($assoc) {
-				$values[is_null($value) ? '' : $value] = $value;
-			} else {
+			if (is_null($index_key)) {
 				$values[] = $value;
+			} elseif (isset($row[$index_key])) {
+				$values[$row[$index_key]] = $value;
+			} else {
+				trigger_error(_l("%s: The index key should be set for all rows in the array.", __FUNCTION__));
+				return array();
 			}
 		}
 

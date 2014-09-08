@@ -205,10 +205,9 @@ function setup_user()
 	$username   = $db->escape($_POST['username']);
 	$email      = $db->escape($_POST['email']);
 	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
-	$date_added = date('Y-m-d H:i:s');
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
-	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = '$date_added'");
+	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = 'NOW()'");
 
 	if ($db->hasError()) {
 		return $db->getError();
