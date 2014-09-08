@@ -111,9 +111,9 @@ abstract class Model
 		return $this->db->queryRows($sql, $index);
 	}
 
-	protected function queryColumn($sql, $assoc = false)
+	protected function queryColumn($sql, $index_key = null)
 	{
-		return $this->db->queryColumn($sql, $assoc);
+		return $this->db->queryColumn($sql, $index_key);
 	}
 
 	public function queryField($table, $field, $where)
