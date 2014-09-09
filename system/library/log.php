@@ -5,13 +5,9 @@ class Log
 	private $file;
 	private $store_id;
 
-	public function __construct($filename, $store_id = 0)
+	public function __construct($name, $store_id = 0)
 	{
-		$this->file = realpath(DIR_LOGS . $filename);
-
-		if (!$this->file) {
-			$this->file = DIR_LOGS . basename($filename);
-		}
+		$this->file = DIR_LOGS . $name . '.txt';
 
 		if (!_is_writable(dirname($this->file))) {
 			trigger_error(_l("Log file directory was not writable: %s", $this->file));

@@ -24,16 +24,18 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
+//Timer for full system response
 $__start = microtime(true);
 
-//System / URL Paths
-require_once('path_config.php');
-
 //File Modifications
-require_once(DIR_SYSTEM . 'ac_mod_file.php');
+require_once(DIR_SITE . 'system/ac_mod_file.php');
 
 // System Startup
-require_once(_ac_mod_file(DIR_SYSTEM . 'startup.php'));
+require_once(_ac_mod_file(DIR_SITE . 'system/startup.php'));
 
 // Load
 require_once(_ac_mod_file(DIR_SYSTEM . 'load.php'));
+
+if (AMPLO_TIME_LOG) {
+	timelog('finish');
+}

@@ -75,10 +75,10 @@ if ($last_update) {
 }
 
 //System Logs
-$error_log = new Log(AC_LOG_ERROR_FILE, option('store_id'));
+$error_log = new Log('error', option('store_id'));
 $registry->set('error_log', $error_log);
 
-$log = new Log(AC_LOG_FILE, option('store_id'));
+$log = new Log('default', option('store_id'));
 $registry->set('log', $log);
 
 //Error Callbacks allow customization of error display / messages
@@ -171,9 +171,6 @@ if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, option('config_image_dir_mod
 	trigger_error("%s", $dir_error);
 }
 if (!_is_writable(DIR_DOWNLOAD, $dir_error, option('config_default_dir_mode'))) {
-	trigger_error("%s", $dir_error);
-}
-if (!_is_writable(DIR_LOGS, $dir_error, option('config_default_dir_mode'))) {
 	trigger_error("%s", $dir_error);
 }
 

@@ -2,8 +2,26 @@
 // Version
 define('AMPLO_VERSION', '0.1.0');
 
-// Error Reporting
-error_reporting(E_ALL);
+//Directories
+define('DIR_SYSTEM', DIR_SITE . 'system/');
+define('DIR_DATABASE', DIR_SITE . 'system/database/');
+define('DIR_PLUGIN', DIR_SITE . 'plugin/');
+define('DIR_FORM', DIR_SITE . 'app/view/form/');
+define('DIR_THEMES', DIR_SITE . 'app/view/theme/');
+define('DIR_EXCEL_TEMPLATE', DIR_SITE . 'system/php-excel/templates/');
+define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
+define('DIR_CRON', DIR_SITE . 'system/cron/');
+define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
+
+if (!defined('DIR_DATABASE_BACKUP')) {
+	define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+}
+
+//URLs
+define('URL_THEMES', URL_SITE . 'app/view/theme/');
+
+//TODO: Remove URL_AJAX after removing ckeditor
+define('URL_AJAX', URL_SITE . 'ajax/');
 
 // Check Version
 if (version_compare(phpversion(), '5.3.0', '<') == true) {
@@ -95,3 +113,11 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
 //Helpers
 require_once(_ac_mod_file(DIR_SYSTEM . 'helper/functions.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'helper/shortcuts.php'));
+
+if (!defined("AMPLO_TIME_LOG")) {
+	define("AMPLO_TIME_LOG", false);
+}
+
+if (AMPLO_TIME_LOG) {
+	timelog('startup');
+}

@@ -1,5 +1,5 @@
 <?php
-define('AC_MOD_REGISTRY', DIR_MOD_FILES . 'registry.ac');
+define('AC_MOD_REGISTRY', DIR_SITE . 'system/mods/registry.ac');
 define('AC_TEMPLATE_CACHE', DIR_CACHE . 'templates/');
 
 if (!defined("AMPLO_DIR_MODE")) {

@@ -17,8 +17,8 @@ define("DEFAULT_PATH", 'common/home');
 define("ERROR_404_PATH", 'error/not_found');
 
 // SERVER SETUP
-define('DEFAULT_TIMEZONE', 'America/New_York');
-define('MYSQL_TIMEZONE', '-4:00');
+define('DEFAULT_TIMEZONE', 'America/Denver');
+define('MYSQL_TIMEZONE', '-6:00');
 
 // DB
 define('DB_DRIVER', 'mysqlidb');
@@ -66,4 +66,5 @@ define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
 define('DIR_IMAGE', DIR_SITE . 'image/');
 define('DIR_LOGS', DIR_SITE . 'system/logs/');
 define('DIR_DOWNLOAD', DIR_SITE . 'download/');
+define('DIR_CACHE', DIR_SITE . 'system/cache/');
 

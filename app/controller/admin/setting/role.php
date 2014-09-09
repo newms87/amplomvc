@@ -135,7 +135,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		$user_role['save'] = site_url('admin/setting/role/update', 'user_role_id=' . $user_role_id);
 
 		//Render
-		output($this->render('setting/role_form', $user_role));
+		output($this->render('setting/role/form', $user_role));
 	}
 
 	public function update()
