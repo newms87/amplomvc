@@ -1,4 +1,4 @@
-<?= call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/common/header'); ?>
 <section class="section">
 	<?= breadcrumbs(); ?>
 
@@ -25,4 +25,4 @@
 	});
 </script>
 
-<?= call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/common/footer'); ?>

@@ -1,4 +1,4 @@
-<?= call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/common/header'); ?>
 <div class="section">
 	<?= breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
@@ -69,4 +69,4 @@
 		</div>
 	</div>
 </div>
-<?= call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/common/footer'); ?>

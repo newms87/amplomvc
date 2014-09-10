@@ -1,4 +1,4 @@
-<?= call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div class="section">
 	<?= breadcrumbs(); ?>
@@ -174,4 +174,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/common/footer'); ?>

@@ -224,14 +224,14 @@ $.fn.flash_highlight = function () {
 }
 
 $.fn.overflown = function (dir, tolerance) {
-    return this.each(function(i,e) {
+    return this.each(function (i, e) {
         var over;
 
         if (dir) {
-            over = dir === 'y' ? e.scrollHeight > (e.clientHeight+tolerance) : e.scrollWidth > (e.clientWidth+tolerance);
+            over = dir === 'y' ? e.scrollHeight > (e.clientHeight + tolerance) : e.scrollWidth > (e.clientWidth + tolerance);
         }
 
-        over = e.scrollHeight > (e.clientHeight+tolerance) || e.scrollWidth > (e.clientWidth+tolerance);
+        over = e.scrollHeight > (e.clientHeight + tolerance) || e.scrollWidth > (e.clientWidth + tolerance);
 
         if (over) {
             $(e).addClass('overflown');
@@ -371,6 +371,67 @@ $.fn.fade_post = function (url, data, callback, dataType) {
     }, dataType || null);
 
     return this;
+}
+
+function register_ajax_calls(is_ajax) {
+    var $items = $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').not('.ajax-call').addClass('ajax-call');
+
+    $items.each(function (i, e) {
+        var $e = $(e);
+        var selector = $e.attr('data-if-ajax') || $e.attr('data-ajax');
+        var $replace = selector ? $(selector) : {};
+
+        if ($e.is('form')) {
+            $e.submit(function () {
+                $e.find('[data-loading]').loading();
+
+                $.post($e.attr('action'), $e.serialize(), function (response) {
+                    if ($replace.length) {
+                        $replace.replaceWith(response);
+                    } else {
+                        amplo_modal(response);
+                    }
+                }).always(function() {
+                    $e.find('[data-loading]').loading('stop');
+                });
+                return false;
+            });
+        } else {
+            $e.click(function () {
+                $.get($e.attr('href'), {}, function (response) {
+                    if ($replace.length) {
+                        $replace.replaceWith(response);
+                    } else {
+                        amplo_modal(response);
+                    }
+                });
+            });
+            return false;
+        }
+    });
+}
+
+function amplo_modal(content) {
+    var $modal = $('#amplo-modal'), $content;
+
+    if (!$modal.length) {
+        $modal = $('<div />').attr('id', 'amplo-modal')
+            .append($('<div />').addClass('modal-veil'));
+
+        $content = $('<div />').addClass('modal-content');
+    } else {
+        $content = $modal.find('.modal-content').html('');
+    }
+
+    var $close = $('<div />').addClass('modal-close button').click(function() {
+        $(this).closest('#amplo-modal').remove();
+    });
+
+    $modal.append($content.append(content).append($close));
+
+    $('body').append($modal);
+
+    $content.css({top: Math.max(0, (window.outerHeight - $content.outerHeight()) / 2) });
 }
 
 $('.ajax-form').submit(function () {
@@ -524,12 +585,12 @@ $.fn.ac_zoneselect = function (params, callback) {
     return $this;
 }
 
-jQuery.fn.serializeObject = function() {
+jQuery.fn.serializeObject = function () {
     var arrayData, objectData;
     arrayData = this.serializeArray();
     objectData = {};
 
-    $.each(arrayData, function() {
+    $.each(arrayData, function () {
         var value;
 
         if (this.value != null) {
@@ -657,7 +718,7 @@ function init_ajax() {
     var $colorbox = $('.colorbox').not('.colorbox-init').addClass('colorbox-init');
 
     if ($colorbox.length) {
-	    var width = Math.max($('body').width() * .6, Math.min($('body').width()-16, 400));
+        var width = Math.max($('body').width() * .6, Math.min($('body').width() - 16, 400));
 
         var defaults = {
             overlayClose: true,
@@ -683,6 +744,9 @@ function init_ajax() {
 }
 
 $(document).ready(function () {
+    register_ajax_calls(false);
+    $(document).ajaxComplete(register_ajax_calls);
+
     $('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
         if (!ui.item.value && ui.item.href) {
             window.open(ui.item.href);

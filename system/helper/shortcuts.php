@@ -168,11 +168,6 @@ function site_url($path = '', $query = null)
 	return $registry->get('url')->link($path, $query);
 }
 
-function ajax_url($path = '', $query = null)
-{
-	return site_url((strpos($path, '?') ? '&' : '?') . 'ajax=1', $query);
-}
-
 function store_url($store_id, $path = '', $query = null)
 {
 	global $registry;
@@ -202,10 +197,15 @@ function theme_dir($path = '')
 	return $registry->get('theme')->getFile($path);
 }
 
-function redirect($path = '', $query = null, $status = null, $no_ajax = false)
+function redirect($path = '', $query = null, $status = null)
 {
 	global $registry;
-	$registry->get('url')->redirect($path, $query, $status, $no_ajax);
+	$registry->get('url')->redirect($path, $query, $status);
+}
+
+function post_redirect($path = '', $query = null, $status = null) {
+	$_SESSION['__post_data__'] = $_POST;
+	redirect($path, $query, $status);
 }
 
 function slug($name, $sep = '_', $allow = 'a-z0-9_-')

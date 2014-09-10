@@ -373,6 +373,49 @@ td {
   display: inline-block;
 }
 
+/* Amplo MVC Modal */
+#amplo-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  z-index: 2000;
+  text-align: center;
+
+  .modal-veil {
+    background: rgba(0,0,0,.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .modal-content {
+    position:relative;
+    display: inline-block;
+    background: white;
+    border-radius: 5px;
+    padding: 1em;
+    z-index:2;
+
+    .modal-close {
+      position: absolute;
+      top: .5em;
+      right: .5em;
+      width: 1.5em;
+      padding: .4em .4em;
+
+      &:after {
+        content: 'X';
+        font-size: 1em;
+      }
+    }
+  }
+}
+
 /* Main Navigation Links */
 #menu.links {
   background: #414141; /* Old browsers */

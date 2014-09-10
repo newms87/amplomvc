@@ -265,7 +265,10 @@ class App_Controller_Admin_User extends Controller
 			message('warning', $this->user->getError());
 		}
 
-		redirect('admin/user/login');
+		//Minimize exposure of password
+		unset($_POST['password']);
+
+		post_redirect('admin/user/login');
 	}
 
 	public function logout()

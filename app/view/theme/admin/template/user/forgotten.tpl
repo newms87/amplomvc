@@ -1,4 +1,4 @@
-<?= call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div class="section clear">
 	<?= breadcrumbs(); ?>
@@ -27,4 +27,4 @@
 	</div>
 </div>
 
-<?= call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/common/footer'); ?>

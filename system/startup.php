@@ -70,6 +70,13 @@ if (ini_get('register_globals')) {
 	}
 }
 
+//Simulate POST request for post_redirect()
+if (isset($_SESSION['__post_data__'])) {
+	$_POST = $_SESSION['__post_data__'];
+	$_SERVER['REQUEST_METHOD'] = 'POST';
+	unset($_SESSION['__post_data__']);
+}
+
 // Windows IIS Compatibility
 if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 	if (isset($_SERVER['SCRIPT_FILENAME'])) {

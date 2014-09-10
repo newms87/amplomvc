@@ -6,6 +6,14 @@
  */
 class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 {
+	public function __construct() {
+		parent::__construct();
+
+		if (!$this->user->isLogged()) {
+			redirect('admin/user/login');
+		}
+	}
+
 	public function build($settings)
 	{
 		if (empty($settings['group'])) {

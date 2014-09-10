@@ -190,16 +190,11 @@ class Url extends Library
 	 * @param int $status - The header redirect status to send back to the requesting client.
 	 */
 
-	public function redirect($url, $query = '', $status = 302, $no_ajax = false)
+	public function redirect($url, $query = '', $status = 302)
 	{
 		//Check if this is a controller path
 		if (!preg_match("/https?:\\/\\//", $url)) {
 			$url = $this->link($url, $query);
-		}
-
-		//Propagate AJAX request
-		if (IS_AJAX && !$no_ajax) {
-			$url .= (strpos($url, '?') ? '&':'?') . 'ajax=1';
 		}
 
 		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
