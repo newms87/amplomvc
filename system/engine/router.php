@@ -155,10 +155,10 @@ final class Router
 							exit;
 						}
 
-						redirect('admin/user/login', IS_AJAX ? 'ajax=1' : '');
+						redirect('admin/user/login');
 					}
 
-					redirect('admin/error/permission', IS_AJAX ? 'ajax=1' : '');
+					redirect('admin/error/permission');
 				}
 			} else {
 				//Login Verification
@@ -170,7 +170,7 @@ final class Router
 						exit;
 					}
 
-					redirect('customer/login', IS_AJAX ? 'ajax=1' : '');
+					redirect('customer/login');
 				}
 			}
 		}

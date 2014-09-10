@@ -242,9 +242,6 @@ class App_Controller_Admin_User extends Controller
 
 		$data = $_POST + $defaults;
 
-		//Actions
-		$data['action'] = site_url('admin/user/authenticate');
-
 		//Render
 		output($this->render('user/login', $data));
 	}

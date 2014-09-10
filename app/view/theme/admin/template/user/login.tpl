@@ -9,7 +9,7 @@
 
 	<div class="content-row row">
 		<div class="wrap">
-			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" class="form">
+			<form action="<?= ajax_url('admin/user/authenticate') ?>" method="post" enctype="multipart/form-data" class="form">
 				<div class="form-item username">
 					<input type="text" name="username" placeholder="<?= _l("Username / Email"); ?>" value="<?= $username; ?>"/>
 				</div>
@@ -22,12 +22,6 @@
 					<button><?= _l("Login"); ?></button>
 				</div>
 			</form>
-
-			<div class="help">
-				<?= _l("Not sure how you got here? Please"); ?>
-				<a href="<?= store_url(option('config_default_store'), 'common/home'); ?>"><br/>
-					<?= _l("return to the shop!"); ?></a>
-			</div>
 		</div>
 	</div>
 </section>
