@@ -182,8 +182,7 @@ class Table extends Library
 					break;
 				case 'select':
 					if (empty($column['build_data'])) {
-						trigger_error(_l("You must specify build_data for the column %s of type select!", $slug));
-						exit();
+						$column['build_data'] = array('' => _l('(None)'));
 					}
 
 					if (!isset($column['build_config'])) {
