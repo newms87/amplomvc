@@ -415,11 +415,17 @@ class DB
 			$this->tables = array_change_key_case($this->queryColumn("SHOW TABLES", true));
 		}
 
-		$table = strtolower($table);
+		$table_name = strtolower($table);
 
-		if (isset($this->tables[$table])) {
+		if (isset($this->tables[$table_name])) {
+			if (defined("LOWERCASE_DB_TABLES")) {
+				return $table_name;
+			}
 			return $table;
-		} elseif (isset($this->tables[strtolower($this->prefix) . $table])) {
+		} elseif (isset($this->tables[strtolower($this->prefix) . $table_name])) {
+			if (defined("LOWERCASE_DB_TABLES")) {
+				return $this->prefix . $table_name;
+			}
 			return $this->prefix . $table;
 		}
 
