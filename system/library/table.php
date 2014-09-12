@@ -164,6 +164,10 @@ class Table extends Library
 			}
 
 			switch ($column['type']) {
+				case 'pk':
+					$column['editable'] = false;
+					break;
+
 				case 'text':
 					if (isset($column['Length']) && ($column['Length'] == 0 || $column['Length'] > 100)) {
 						$column['type'] = 'longtext';

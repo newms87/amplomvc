@@ -321,11 +321,26 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table, $columns)
+	protected function extractSelect($table_name, $columns)
 	{
-		if (strpos($table, ' ')) {
-			list($table, $t) = explode(' ', $table, 2);
+		if (is_string($columns)) {
+			return $columns;
+		}
+
+		if (strpos($table_name, ' ')) {
+			list($table_name, $t) = explode(' ', $table_name, 2);
 		} else {
+			$t = false;
+		}
+
+		$table = $this->db->hasTable($table_name);
+
+		if (!$table) {
+			trigger_error(_l("%s: Table %s does not exist!", __METHOD__, $table_name));
+			return false;
+		}
+
+		if (!$t) {
 			$t = $table;
 		}
 
@@ -562,7 +577,7 @@ abstract class Model
 		}
 
 		//Filter / Sort
-		if (!$filter && $filter !== false) {
+		if (!$filter && $filter !== false && !empty($columns)) {
 			$filter = array_combine(array_keys($columns), range(0, count($columns) - 1));
 		}
 
@@ -581,12 +596,14 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
+		$table = $this->db->hasTable($table);
+
 		$schema = $this->db->getName();
 
 		$table_model = cache('model.' . $schema . '.' . $table);
 
 		if (!$table_model) {
-			$name = $this->prefix . $this->escape($table);
+			$name = $this->escape($table);
 
 			$table_model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$name'");
 

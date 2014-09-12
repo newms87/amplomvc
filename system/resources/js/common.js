@@ -72,18 +72,26 @@ $.fn.jqzoom = function (params) {
     if (this.jqzoom) this.jqzoom(params);
 }
 
+$.fn.use_once = function (label) {
+    label = label || 'activated';
+    return this.not('.' + label).addClass(label);
+}
+
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
     $('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
 }
 
-$.fn.ac_datepicker = function (params) {
+$.fn.ac_datepicker = function ac_datepicker(params) {
     if (!$.ui.timepicker) {
         var selector = this;
         $.ajaxSetup({cache: true});
-        $.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
-            selector.ac_datepicker(params);
-        });
+        if (!$.ac_datepicker.loading) {
+            $.ac_datepicker.loading = true;
+            $.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
+                selector.ac_datepicker(params);
+            });
+        }
         return;
     }
 
@@ -355,14 +363,11 @@ $.ac_errors = function (errors) {
 }
 
 $.fn.fade_post = function (url, data, callback, dataType) {
-    context = this;
-
-    context.stop().fadeOut(300);
-
-    context.after($.loading);
+    var $this = this;
+    $this.stop().fadeOut(300).after($.loading);
 
     $.post(url, data, function (data) {
-        context.fadeIn(0);
+        $this.fadeIn(0);
         $.loading('stop');
 
         if (typeof callback === 'function') {
@@ -373,65 +378,110 @@ $.fn.fade_post = function (url, data, callback, dataType) {
     return this;
 }
 
-function register_ajax_calls(is_ajax) {
-    var $items = $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').not('.ajax-call').addClass('ajax-call');
+function register_confirms() {
+    var $confirms = $('[data-confirm], [data-confirm-text]').use_once();
 
-    $items.each(function (i, e) {
+    $confirms.click(function () {
+        var $this = $(this);
+
+        if ($this.prop('disabled')) {
+            return false;
+        }
+
+        if ($this.is('[data-confirm]') && !$this.hasClass('confirm')) {
+            setTimeout(function () {
+                $this.removeClass('confirm').loading('stop');
+            }, 2000);
+            $this.loading({text: $this.attr('data-confirm') || "Confirm?", disable: false}).addClass('confirm');
+
+            return false;
+        }
+
+        if ($this.is('[data-confirm-text]')) {
+            if (!confirm($this.attr('data-confirm-text') || "Are you sure you want to continue?")) {
+                return false;
+            }
+        }
+
+        if ($this.hasClass('ajax-call')) {
+            amplo_ajax_cb.call($this);
+            return false;
+        }
+    });
+
+    $('.action-delete').use_once().click(function () {
+        return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
+    });
+}
+
+function register_ajax_calls(is_ajax) {
+    $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').not('.ajax-call').addClass('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
+}
+
+var amplo_ajax_cb = function () {
+    var $this = $(this), callback;
+
+    if ($this.prop('disabled')) {
+        return false;
+    }
+
+    var ajax_cb = $this.attr('data-if-ajax') || $this.attr('data-ajax');
+
+    if (typeof window[ajax_cb] !== 'function') {
+        var $replace = $(ajax_cb);
+
+        if (!$replace.length) {
+            colorbox({href: $this.attr('href')});
+            return false;
+        }
+
+        callback = function (response) {
+            $replace.replaceWith(response);
+        }
+    } else {
+        callback = function (response) {
+            window[ajax_cb].call($this, response);
+        }
+    }
+
+    if ($this.is('form')) {
+        $this.find('[data-loading]').loading();
+
+        $.post($this.attr('action'), $this.serialize(), callback)
+            .always(function () {
+                $this.find('[data-loading]').loading('stop');
+            });
+    } else {
+        $this.loading({text: $this.is('[data-loading]') || 'Loading...'})
+        $.get($this.attr('href'), {}, callback)
+            .always(function () {
+                $this.loading('stop');
+            });
+
+    }
+
+    return false;
+};
+
+$.fn.amplo_ajax = function () {
+    return this.each(function (i, e) {
         var $e = $(e);
-        var selector = $e.attr('data-if-ajax') || $e.attr('data-ajax');
-        var $replace = selector ? $(selector) : {};
 
         if ($e.is('form')) {
-            $e.submit(function () {
-                $e.find('[data-loading]').loading();
-
-                $.post($e.attr('action'), $e.serialize(), function (response) {
-                    if ($replace.length) {
-                        $replace.replaceWith(response);
-                    } else {
-                        amplo_modal(response);
-                    }
-                }).always(function() {
-                    $e.find('[data-loading]').loading('stop');
-                });
-                return false;
-            });
+            $e.submit(amplo_ajax_cb);
         } else {
-            $e.click(function () {
-                $.get($e.attr('href'), {}, function (response) {
-                    if ($replace.length) {
-                        $replace.replaceWith(response);
-                    } else {
-                        amplo_modal(response);
-                    }
-                });
-            });
-            return false;
+            $e.click(amplo_ajax_cb);
         }
     });
 }
 
-function amplo_modal(content) {
-    var $modal = $('#amplo-modal'), $content;
-
-    if (!$modal.length) {
-        $modal = $('<div />').attr('id', 'amplo-modal')
-            .append($('<div />').addClass('modal-veil'));
-
-        $content = $('<div />').addClass('modal-content');
-    } else {
-        $content = $modal.find('.modal-content').html('');
-    }
-
-    var $close = $('<div />').addClass('modal-close button').click(function() {
-        $(this).closest('#amplo-modal').remove();
+function colorbox(params) {
+    $.extend(params, {
+        maxWidth: '90%',
+        maxHeight: '90%'
     });
 
-    $modal.append($content.append(content).append($close));
-
-    $('body').append($modal);
-
-    $content.css({top: Math.max(0, (window.outerHeight - $content.outerHeight()) / 2) });
+    $.colorbox(params);
 }
 
 $('.ajax-form').submit(function () {
@@ -515,18 +565,25 @@ $.loading = function (params) {
 }
 
 $.fn.loading = function (params) {
-    var text = params ? params.text : this.attr('data-loading');
+    if (typeof params !== 'string') {
+        params = $.extend({}, {
+            text: this.attr('data-loading'),
+            disable: true
+        }, params);
+    }
 
-    if (text || this.data('original')) {
-        if (params == 'stop') {
+    if (params.text || this.data('original')) {
+        if (params === 'stop') {
             this.prop('disabled', false);
             this.html(this.data('original'));
         } else {
-            this.prop('disabled', true);
+            if (params.disable) {
+                this.prop('disabled', true);
+            }
             if (!this.data('original')) {
                 this.data('original', this.html());
             }
-            this.html(text);
+            this.html(params.text);
         }
 
         return this;
@@ -743,9 +800,18 @@ function init_ajax() {
     });
 }
 
-$(document).ready(function () {
+function amplo_auto_ajax() {
     register_ajax_calls(false);
-    $(document).ajaxComplete(register_ajax_calls);
+    register_confirms();
+
+    $(document).ajaxComplete(function () {
+        register_ajax_calls(true);
+        register_confirms();
+    });
+}
+
+$(document).ready(function () {
+    amplo_auto_ajax();
 
     $('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
         if (!ui.item.value && ui.item.href) {

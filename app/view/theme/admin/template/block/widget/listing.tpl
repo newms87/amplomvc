@@ -127,7 +127,7 @@
 	<? } ?>
 
 	<script type="text/javascript">
-		var $list_widget = $('.widget-listing').not('.activated').addClass('activated');
+		var $list_widget = $('.widget-listing').use_once();
 
 		$list_widget.find('.view-tabs a').tabs();
 

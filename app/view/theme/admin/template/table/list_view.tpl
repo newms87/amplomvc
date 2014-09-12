@@ -23,7 +23,6 @@
 				<? if (!empty($row_id)) { ?>
 					<td width="1" class="center">
 						<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
-						<a href="<?= $sort_url; ?>&sort=<?= $row_id; ?>&order=<?= ($sort === $row_id && $order === 'ASC') ? 'DESC' : 'ASC'; ?>" class="sortable <?= $row_id . ' ' . ($sort === $row_id ? strtolower($order) : ''); ?>"><?= $row_id; ?></a>
 					</td>
 				<? } ?>
 				<td class="center column_title">
@@ -69,6 +68,7 @@
 									<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
 									<? break;
 
+								case 'pk':
 								case 'int':
 								case 'float':
 								case 'decimal':
@@ -211,7 +211,6 @@
 							<? $uniqid = uniqid($row[$row_id]); ?>
 							<td class="center">
 								<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
-								<label for="rowid<?= $uniqid; ?>" class="rowid"><?= $row[$row_id]; ?></label>
 							</td>
 						<? } ?>
 
@@ -471,10 +470,8 @@
 	$.ac_datepicker();
 
 	//Add Item Selector
-	var $listview = $(".table-list-view-box").not('.activated').addClass('activated');
+	var $listview = $(".table-list-view-box").use_once();
 	var $table = $listview.find('.table-list-view');
-
-	$table.draggable({axis: 'x'});
 
 	$listview.find('.filter-list-item').click(function () {
 		var cb = $(this).find('[name="batch[]"]');
@@ -496,32 +493,11 @@
 			return false;
 		});
 
-	$listview.find('.action.ajax').click(function () {
+	function refresh_listing() {
 		var $this = $(this);
-		var $list = $this.closest('.listing');
-
-		if ($this.attr('data-confirm') && !confirm($this.attr('data-confirm'))) {
-			return false;
-		}
-
-		$this.loading({text: 'loading...'});
-
-		$.get($(this).attr('href'), {}, function (response) {
-			$list.ac_msg(response);
-			$list.find('.refresh-listing').click();
-		}, 'json')
-			.always(function() {
-			$this.loading('stop');
-		});
-
-		return false;
-	});
-
-	$listview.find('.action[data-confirm]').not('.ajax').click(function() {
-		if (!confirm($(this).attr('data-confirm'))) {
-			return false;
-		}
-	});
+		var $list = $this.hasClass('listing') ? $this : $this.closest('.listing');
+		$list.find('.refresh-listing').click();
+	}
 
 	$listview.find('.filter-button').click(function () {
 		var $this = $(this);
@@ -613,7 +589,8 @@
 			display = $input.find('option[value="' + value + '"]').html();
 		}
 
-		$box.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
+		var $field = $box.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
+		$field.attr('data-value', $input.val());
 
 		$.post("<?= site_url($save_path); ?>", data, function (response) {
 			$this.loading('stop');

@@ -2,6 +2,8 @@
 
 class DB
 {
+	public $tables;
+
 	static $profile = array();
 	static $drivers = array();
 
@@ -409,7 +411,19 @@ class DB
 
 	public function hasTable($table)
 	{
-		return $this->queryVar("SHOW TABLES LIKE '" . $this->prefix . $this->escape($table) . "'") ? true : false;
+		if (!$this->tables) {
+			$this->tables = array_change_key_case($this->queryColumn("SHOW TABLES", true));
+		}
+
+		$table = strtolower($table);
+
+		if (isset($this->tables[$table])) {
+			return $table;
+		} elseif (isset($this->tables[strtolower($this->prefix) . $table])) {
+			return $this->prefix . $table;
+		}
+
+		return false;
 	}
 
 	public function getTables()
@@ -466,8 +480,10 @@ class DB
 	{
 		static $columns;
 
+		$table = $this->hasTable($table);
+
 		if (!isset($columns[$table])) {
-			$columns[$table] = $this->queryRows("SHOW COLUMNS FROM `" . $this->prefix . "$table`", 'Field');
+			$columns[$table] = $this->queryRows("SHOW COLUMNS FROM `$table`", 'Field');
 		}
 
 		return $columns[$table];

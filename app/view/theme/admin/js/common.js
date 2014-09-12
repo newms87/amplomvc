@@ -20,10 +20,6 @@ $(document).ready(function () {
 		}
 	});
 
-	$('.action-delete').click(function () {
-		return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
-	});
-
 	// Confirm Uninstall
 	$('a').click(function () {
 		if ($(this).attr('href') != null && $(this).attr('href').indexOf('uninstall', 1) != -1) {

@@ -60,6 +60,7 @@ define('DIR_SITE', str_replace('\\', '/', dirname(__FILE__) . '/'));
 //Urls
 define('URL_RESOURCES', URL_SITE . 'system/resources/');
 define('URL_IMAGE', URL_SITE . 'image/');
+define('URL_DOWNLOAD', URL_SITE . 'download/');
 
 //Directories
 define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
