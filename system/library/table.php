@@ -39,7 +39,7 @@ class Table extends Library
 		$this->file = is_file($file) ? $file : $this->theme->getFile($file, $theme);
 
 		if (!$this->file) {
-			echo $file  . ' is no a file<Br>';
+			echo $file . ' is no a file<Br>';
 		}
 	}
 
@@ -107,7 +107,6 @@ class Table extends Library
 
 			$default_values = array(
 				'display_name' => $slug,
-				'attrs'        => array(),
 				'filter'       => false,
 				'type'         => 'text',
 				'align'        => 'center',
@@ -117,19 +116,8 @@ class Table extends Library
 
 			$column += $default_values;
 
-			//additional / overridden attributes
-			foreach ($column as $attr => $value) {
-				if (strpos($attr, '#') === 0) {
-					$column['attrs'][substr($attr, 1)] = $value;
-				}
-			}
-
-			$column['html_attrs'] = '';
-
-			foreach ($column['attrs'] as $attr => $value) {
-				$column['html_attrs'] .= $attr . '="' . $value . '" ';
-			}
-
+			//Set Class
+			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];
 
 			//This sets a blank option in a dropdown by default
 			if ($column['filter']) {
@@ -174,6 +162,7 @@ class Table extends Library
 					}
 					break;
 				case 'image':
+				case 'link-image':
 					if (!isset($column["sort_value"])) {
 						$column['sort_value'] = "__image_sort__" . $slug;
 					}
@@ -234,6 +223,11 @@ class Table extends Library
 						break;
 				}
 			}
+
+			if ($column['editable']) {
+				$column['#class'] .= ' editable';
+			}
 		}
+		unset($column);
 	}
 }

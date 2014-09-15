@@ -241,90 +241,98 @@
 						</td>
 						<? foreach ($columns as $slug => $column) { ?>
 							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
-							<? if ($column['editable']) { ?>
-								<td class="editable <?= $column['align'] . ' ' . $slug; ?>" data-field="<?= $slug; ?>" data-value="<?= is_array($value) ? implode(',', $value) : $value; ?>">
-							<? } else { ?>
-								<td class="<?= $column['align'] . ' ' . $slug; ?>">
+
+							<? if ($column['editable']) {
+								$column['#data-field'] = $slug;
+								$column['#data-value'] = is_array($value) ? implode(',', $value) : $value; ?>
 							<? } ?>
-							<?
-							//Check if the raw string override has been set for this value
-							if (isset($row['#' . $slug])) {
-								echo $row['#' . $slug];
-							} elseif (!is_null($value)) {
-								switch ($column['type']) {
-									case 'date':
-										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
-										<? break;
 
-									case 'datetime':
-										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
-										<? break;
+							<td <?= attrs($column); ?>>
 
-									case 'time':
-										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
-										<? break;
+								<?
+								//Check if the raw string override has been set for this value
+								if (isset($row['#' . $slug])) {
+									echo $row['#' . $slug];
+								} elseif (!is_null($value)) {
+									switch ($column['type']) {
+										case 'date':
+											?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+											<? break;
 
-									case 'map':
-										?>
-										<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-										<? break;
+										case 'datetime':
+											?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+											<? break;
 
-									case 'select':
-										foreach ($column['build_data'] as $key => $c_data) {
-											if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-												?>
-												<?= $c_data[$column['build_config'][1]]; ?>
-											<?
-											}
-										}
-										break;
+										case 'time':
+											?>
+											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+											<? break;
 
-									case 'multiselect':
-										foreach ($value as $v) {
-											$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-											foreach ($column['build_data'] as $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-													echo $c_data[$column['build_config'][1]] . "<br/>";
-													break;
+										case 'map':
+											?>
+											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+											<? break;
+
+										case 'select':
+											foreach ($column['build_data'] as $key => $c_data) {
+												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+													?>
+													<?= $c_data[$column['build_config'][1]]; ?>
+												<?
 												}
 											}
-										}
-										break;
+											break;
 
-									case 'format':
-										?>
-										<?= sprintf($column['format'], $value); ?>
-										<? break;
-
-									case 'image':
-										?>
-										<img src="<?= $row['thumb']; ?>"/>
-										<? break;
-
-									case 'text_list':
-										if (!empty($value) && is_array($value)) {
-											foreach ($value as $item) {
-												echo $item[$column['display_data']];
+										case 'multiselect':
+											foreach ($value as $v) {
+												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+												foreach ($column['build_data'] as $c_data) {
+													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+														echo $c_data[$column['build_config'][1]] . "<br/>";
+														break;
+													}
+												}
 											}
-										}
-										break;
+											break;
 
-									case 'text':
-									case 'int':
-									case 'float':
-									case 'decimal':
-									default:
-										if (!empty($column['charlimit'])) {
-											echo charlimit($value, $column['charlimit']);
-										} else {
-											echo $value;
-										}
-										break;
-								}
-							}?>
+										case 'format':
+											?>
+											<?= sprintf($column['format'], $value); ?>
+											<? break;
+
+										case 'image':
+											?>
+											<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
+											<? break;
+
+										case 'link-image':
+											?>
+											<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
+											<? break;
+
+										case 'text_list':
+											if (!empty($value) && is_array($value)) {
+												foreach ($value as $item) {
+													echo $item[$column['display_data']];
+												}
+											}
+											break;
+
+										case 'text':
+										case 'int':
+										case 'float':
+										case 'decimal':
+										default:
+											if (!empty($column['charlimit'])) {
+												echo charlimit($value, $column['charlimit']);
+											} else {
+												echo $value;
+											}
+											break;
+									}
+								}?>
 							</td>
 						<? } ?>
 						<td class="center actions">
