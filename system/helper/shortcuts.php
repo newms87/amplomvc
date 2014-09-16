@@ -1,4 +1,18 @@
 <?php
+//Request Headers
+$headers = apache_request_headers();
+function _header($key, $default = null)
+{
+	global $headers;
+	return isset($headers[$key]) ? $headers[$key] : $default;
+}
+
+define("REQUEST_ACCEPT", _header('Accept'));
+
+function request_accepts($type) {
+	return strpos(REQUEST_ACCEPT, $type) !== false;
+}
+
 /**************************************
  * System Language Translation Engine *
  **************************************/
@@ -239,15 +253,7 @@ define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admi
 
 define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
-$headers = apache_request_headers();
 define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
-
-define("REQUEST_ACCEPT", $headers['Accept']);
-
-function request_accepts($type) {
-	return strpos(REQUEST_ACCEPT, $type) !== false;
-}
-
 define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
 define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
 
