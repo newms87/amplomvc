@@ -36,9 +36,11 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 52);
-		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
-		$this->document->addScript(theme_url('js/common.js'), 54);
+		$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+
+		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 53);
+		$this->document->addScript(URL_RESOURCES . 'js/common.js', 54);
+		$this->document->addScript(theme_url('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));

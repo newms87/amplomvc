@@ -32,6 +32,8 @@ class App_Controller_Common_Header extends Controller
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
+		$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+
 		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
 
 		//TODO: Move this to admin Panel?

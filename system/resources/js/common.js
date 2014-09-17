@@ -378,112 +378,6 @@ $.fn.fade_post = function (url, data, callback, dataType) {
     return this;
 }
 
-function register_confirms() {
-    var $confirms = $('[data-confirm], [data-confirm-text]').use_once();
-
-    $confirms.click(function () {
-        var $this = $(this);
-
-        if ($this.prop('disabled')) {
-            return false;
-        }
-
-        if ($this.is('[data-confirm]') && !$this.hasClass('confirm')) {
-            setTimeout(function () {
-                $this.removeClass('confirm').loading('stop');
-            }, 2000);
-            $this.loading({text: $this.attr('data-confirm') || "Confirm?", disable: false}).addClass('confirm');
-
-            return false;
-        }
-
-        if ($this.is('[data-confirm-text]')) {
-            if (!confirm($this.attr('data-confirm-text') || "Are you sure you want to continue?")) {
-                return false;
-            }
-        }
-
-        if ($this.hasClass('ajax-call')) {
-            amplo_ajax_cb.call($this);
-            return false;
-        }
-    });
-
-    $('.action-delete').use_once().click(function () {
-        return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
-    });
-}
-
-function register_ajax_calls(is_ajax) {
-    $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').not('.ajax-call').addClass('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
-}
-
-var amplo_ajax_cb = function () {
-    var $this = $(this), callback;
-
-    if ($this.prop('disabled')) {
-        return false;
-    }
-
-    var ajax_cb = $this.attr('data-if-ajax') || $this.attr('data-ajax');
-
-    if (typeof window[ajax_cb] !== 'function') {
-        var $replace = $(ajax_cb);
-
-        if (!$replace.length) {
-            colorbox({href: $this.attr('href')});
-            return false;
-        }
-
-        callback = function (response) {
-            $replace.replaceWith(response);
-        }
-    } else {
-        callback = function (response) {
-            window[ajax_cb].call($this, response);
-        }
-    }
-
-    if ($this.is('form')) {
-        $this.find('[data-loading]').loading();
-
-        $.post($this.attr('action'), $this.serialize(), callback)
-            .always(function () {
-                $this.find('[data-loading]').loading('stop');
-            });
-    } else {
-        $this.loading({text: $this.is('[data-loading]') || 'Loading...'})
-        $.get($this.attr('href'), {}, callback)
-            .always(function () {
-                $this.loading('stop');
-            });
-
-    }
-
-    return false;
-};
-
-$.fn.amplo_ajax = function () {
-    return this.each(function (i, e) {
-        var $e = $(e);
-
-        if ($e.is('form')) {
-            $e.submit(amplo_ajax_cb);
-        } else {
-            $e.click(amplo_ajax_cb);
-        }
-    });
-}
-
-function colorbox(params) {
-    $.extend(params, {
-        maxWidth: '90%',
-        maxHeight: '90%'
-    });
-
-    $.colorbox(params);
-}
-
 $('.ajax-form').submit(function () {
     ac_form();
 });
@@ -511,7 +405,6 @@ function ac_form(params) {
             $form.ac_msg(data);
         } else {
             $form.replaceWith(data);
-            init_ajax();
         }
 
         if (typeof callback == 'function') {
@@ -769,10 +662,52 @@ function ac_radio_bubble() {
     });
 }
 
-$ac.init_ajax = true;
+function register_confirms() {
+    var $confirms = $('[data-confirm], [data-confirm-text]').use_once();
 
-function init_ajax() {
-    var $colorbox = $('.colorbox').not('.colorbox-init').addClass('colorbox-init');
+    $confirms.click(function () {
+        var $this = $(this);
+
+        if ($this.prop('disabled')) {
+            return false;
+        }
+
+        if ($this.is('[data-confirm]') && !$this.hasClass('confirm')) {
+            setTimeout(function () {
+                $this.removeClass('confirm').loading('stop');
+            }, 2000);
+            $this.loading({text: $this.attr('data-confirm') || "Confirm?", disable: false}).addClass('confirm');
+
+            return false;
+        }
+
+        if ($this.is('[data-confirm-text]')) {
+            if (!confirm($this.attr('data-confirm-text') || "Are you sure you want to continue?")) {
+                return false;
+            }
+        }
+
+        if ($this.hasClass('ajax-call')) {
+            amplo_ajax_cb.call($this);
+            return false;
+        }
+    });
+
+    $('.action-delete').use_once().click(function () {
+        return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
+    });
+
+    $('.ajax-form').use_once('ajax-init').submit(function () {
+        ac_form();
+    });
+}
+
+function register_ajax_calls(is_ajax) {
+    $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
+}
+
+function register_colorbox() {
+    var $colorbox = $('.colorbox').use_once('colorbox-init');
 
     if ($colorbox.length) {
         var width = Math.max($('body').width() * .6, Math.min($('body').width() - 16, 400));
@@ -782,31 +717,87 @@ function init_ajax() {
             opacity: 0.5,
             width: width,
             height: '80%',
-            onComplete: init_ajax
         }
 
-        if ($ac.init_ajax) {
-            $ac.init_ajax = false;
-            $.getScript($ac.site_url + 'system/resources/js/jquery/colorbox/colorbox.js', function () {
-                $colorbox.colorbox(defaults);
-            });
-        } else {
-            $colorbox.colorbox(defaults);
+        $colorbox.colorbox(defaults);
+    }
+}
+
+function colorbox(params) {
+    $.extend(params, {
+        maxWidth: '90%',
+        maxHeight: '90%'
+    });
+
+    $.colorbox(params);
+}
+
+var amplo_ajax_cb = function () {
+    var $this = $(this), callback;
+
+    if ($this.prop('disabled')) {
+        return false;
+    }
+
+    var ajax_cb = $this.attr('data-if-ajax') || $this.attr('data-ajax');
+
+    if (typeof window[ajax_cb] !== 'function') {
+        var $replace = $(ajax_cb);
+
+        if (!$replace.length) {
+            colorbox({href: $this.attr('href')});
+            return false;
+        }
+
+        callback = function (response) {
+            $replace.replaceWith(response);
+        }
+    } else {
+        callback = function (response) {
+            window[ajax_cb].call($this, response);
         }
     }
 
-    $('.ajax-form').not('ajax-init').addClass('ajax-init').submit(function () {
-        ac_form();
+    if ($this.is('form')) {
+        $this.find('[data-loading]').loading();
+
+        $.post($this.attr('action'), $this.serialize(), callback)
+            .always(function () {
+                $this.find('[data-loading]').loading('stop');
+            });
+    } else {
+        $this.loading({text: $this.is('[data-loading]') || 'Loading...'})
+        $.get($this.attr('href'), {}, callback)
+            .always(function () {
+                $this.loading('stop');
+            });
+
+    }
+
+    return false;
+};
+
+$.fn.amplo_ajax = function () {
+    return this.each(function (i, e) {
+        var $e = $(e);
+
+        if ($e.is('form')) {
+            $e.submit(amplo_ajax_cb);
+        } else {
+            $e.click(amplo_ajax_cb);
+        }
     });
 }
 
 function amplo_auto_ajax() {
     register_ajax_calls(false);
     register_confirms();
+    register_colorbox();
 
     $(document).ajaxComplete(function () {
         register_ajax_calls(true);
         register_confirms();
+        register_colorbox();
     });
 }
 
@@ -846,8 +837,6 @@ $(document).ready(function () {
     $(document).on("DOMNodeInserted", function () {
         ac_radio_bubble();
     });
-
-    init_ajax();
 
     //AC Checkbox (No IE8)
     if ($('body.IE8').length === 0) {

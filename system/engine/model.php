@@ -323,6 +323,10 @@ abstract class Model
 
 	protected function extractSelect($table_name, $columns)
 	{
+		if (!$columns || !is_array($columns)) {
+			return '*';
+		}
+
 		if (is_string($columns)) {
 			return $columns;
 		}
