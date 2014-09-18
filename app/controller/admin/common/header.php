@@ -63,7 +63,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 			$stores = $this->Model_Setting_Store->getStores();
 
-			if (user_can('r', 'setting/store')) {
+			if (user_can('r', 'admin/setting/store')) {
 				//Store Front Settings
 
 				$link_stores = array(

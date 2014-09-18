@@ -40,7 +40,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 
 	public function validate()
 	{
-		if (!user_can('w', 'mail/messages')) {
+		if (!user_can('w', 'admin/mail/messages')) {
 			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
 		}
 

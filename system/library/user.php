@@ -159,7 +159,7 @@ class User extends Library
 			return true;
 		}
 
-		$path = $action->getClassPath() . '/' . $action->getMethod();
+		$path = rtrim($action->getClassPath(), '/') . '/' . $action->getMethod();
 
 		if (!is_logged()) {
 			$allowed = array(

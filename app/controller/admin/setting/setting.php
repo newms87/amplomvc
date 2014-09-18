@@ -233,7 +233,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 
 	public function validate()
 	{
-		if (!user_can('w', 'setting/setting')) {
+		if (!user_can('w', 'admin/setting/setting')) {
 			$this->error['permission'] = _l("Warning: You do not have permission to modify settings!");
 		}
 

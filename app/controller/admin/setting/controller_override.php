@@ -54,7 +54,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 
 	private function validate()
 	{
-		if (!user_can('w', 'localisation/controller_override')) {
+		if (!user_can('w', 'admin/localisation/controller_override')) {
 			$this->error['warning'] = _l("You do not have permission to modify Controller Overrides");
 		}
 

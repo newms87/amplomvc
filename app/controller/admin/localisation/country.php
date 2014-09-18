@@ -316,7 +316,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('w', 'localisation/country')) {
+		if (!user_can('w', 'admin/localisation/country')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify countries!");
 		}
 
@@ -329,7 +329,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('w', 'localisation/country')) {
+		if (!user_can('w', 'admin/localisation/country')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify countries!");
 		}
 

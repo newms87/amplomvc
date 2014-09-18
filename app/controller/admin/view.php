@@ -47,7 +47,7 @@ class App_Controller_Admin_View extends Controller
 		foreach ($view_listings as &$view_listing) {
 			$actions = array();
 
-			if (user_can('w', 'view')) {
+			if (user_can('w', 'admin/view')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),
 					'href' => site_url('admin/view/form', 'view_listing_id=' . $view_listing['view_listing_id'])

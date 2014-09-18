@@ -24,7 +24,7 @@
 			<div class="view-tabs htabs">
 				<a href=".col-tab"><?= _l("Columns"); ?></a>
 				<a href=".group-tab"><?= _l("Groups / Aggregate"); ?></a>
-				<? if (user_can('w', 'views')) { ?>
+				<? if (user_can('w', 'admin/views')) { ?>
 					<a href=".view-listing-tab"><?= _l("Settings"); ?></a>
 				<? } ?>
 			</div>
@@ -52,7 +52,7 @@
 				Group By / Aggregate... Waiting to be implemented.
 			</div>
 
-			<? if (user_can('w', 'views')) { ?>
+			<? if (user_can('w', 'admin/views')) { ?>
 				<div class="view-listing-tab tab-content form">
 					<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
 					<div class="form-item">

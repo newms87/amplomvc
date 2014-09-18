@@ -44,7 +44,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 	public function batch_update()
 	{
-		if (!empty($_GET['selected']) && isset($_GET['action']) && user_can('w', 'design/layout')) {
+		if (!empty($_GET['selected']) && isset($_GET['action']) && user_can('w', 'admin/design/layout')) {
 			foreach ($_GET['selected'] as $layout_id) {
 				switch ($_GET['action']) {
 					case 'enable':
@@ -228,7 +228,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('w', 'design/layout')) {
+		if (!user_can('w', 'admin/design/layout')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
@@ -241,7 +241,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('w', 'design/layout')) {
+		if (!user_can('w', 'admin/design/layout')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify layouts!");
 		}
 
