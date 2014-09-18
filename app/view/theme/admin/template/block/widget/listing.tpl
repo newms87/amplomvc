@@ -169,7 +169,6 @@
 					var $parent = $listing.closest('.listing');
 					$listing.siblings('.messages').remove();
 					$listing.replaceWith(response);
-					init_ajax();
 					$parent.trigger('loaded');
 				});
 
