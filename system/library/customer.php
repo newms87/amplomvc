@@ -66,7 +66,7 @@ class Customer extends Library
 
 	public function setCustomerOverride($customer)
 	{
-		if (user_can('modify', 'customer')) {
+		if (user_can('w', 'customer')) {
 			$this->setCustomer($customer, true);
 		}
 	}

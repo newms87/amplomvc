@@ -7,7 +7,6 @@ class Document extends Library
 	private $keywords;
 	private $canonical_link = null;
 	private $links = array();
-	private $restricted;
 	private $styles = array();
 	private $scripts = array();
 	private $ac_vars = array();
@@ -16,7 +15,6 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->restricted = $this->Model_Setting_Role->getControllers();
 		$this->links = $this->getNavigationLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
@@ -450,24 +448,7 @@ class Document extends Library
 
 			//Filter restricted paths, current user cannot access
 			if (IS_ADMIN) {
-				$path = str_replace('admin/', '', $link['href']);
-
-				$check_path = false;
-
-				if ($path) {
-					if (in_array($path, $this->restricted)) {
-						$check_path = $path;
-					} else {
-						foreach ($this->restricted as $restricted_path) {
-							if (strpos($path, $restricted_path . '/') === 0) {
-								$check_path = $restricted_path;
-								break;
-							}
-						}
-					}
-				}
-
-				if ($check_path && !user_can('access', $check_path)) {
+				if (!user_can('r', $link['href'])) {
 					unset($links[$key]);
 					continue;
 				}

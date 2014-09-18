@@ -16,7 +16,7 @@
 				<? foreach ($dashboards as $dashboard) { ?>
 					<div class="dashboard">
 						<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>" class="view">
-							<h2><?= $dashboard['name']; ?></h2>
+							<h2><?= $dashboard['title']; ?></h2>
 						</a>
 						<a class="button remove" href="<?= site_url('admin/dashboard/remove', 'dashboard_id=' . $dashboard['dashboard_id']); ?>"><?= _l("X"); ?></a>
 					</div>

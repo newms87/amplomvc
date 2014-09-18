@@ -40,7 +40,7 @@
 							</div>
 						</div>
 
-						<? if ($can_modify && user_can('modify', 'view')) { ?>
+						<? if ($can_modify && user_can('w', 'view')) { ?>
 							<div class="view-settings buttons">
 								<div class="view-setting setting-buttons">
 									<a class="move-up button move">
@@ -199,7 +199,7 @@
 		$this.addClass('active');
 	});
 
-	<? if ($can_modify && user_can('modify', 'view')) { ?>
+	<? if ($can_modify && user_can('w', 'view')) { ?>
 	$('.choose-view-box [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');

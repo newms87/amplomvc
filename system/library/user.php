@@ -118,10 +118,39 @@ class User extends Library
 			return true;
 		}
 
-		$value = str_replace('admin/', '', $value);
-		$value = preg_replace("/\\/index$/", '', $value);
+		if (!$value) {
+			return true;
+		}
 
-		return isset($this->permissions[$key][$value]) ? $this->permissions[$key][$value] : false;
+		$path = explode('/', $value);
+		$perm = $this->permissions;
+
+		foreach ($path as $p) {
+			if (isset($perm[$p])) {
+				$perm = $perm[$p];
+				continue;
+			}
+
+			if (!isset($perm['*'])) {
+				return false;
+			}
+
+			if (count($perm) === 1) {
+				return $key === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
+			}
+
+			return false;
+		}
+
+		if (isset($perm['index'])) {
+			return $key === 'w' ? $perm['index']['*'] === 'w' : (bool)$perm['index']['*'];
+		}
+
+		if (isset($perm['*'])) {
+			return $key === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
+		}
+
+		return false;
 	}
 
 	public function canDoAction($action)
@@ -146,7 +175,6 @@ class User extends Library
 			}
 		} else {
 			$ignore = array(
-				'admin/common/home/index',
 				'admin/user/logout',
 				'admin/user/reset',
 				'admin/error/not_found',
@@ -154,7 +182,7 @@ class User extends Library
 			);
 
 			if (!in_array($path, $ignore)) {
-				if (!$this->can('access', $path)) {
+				if (!$this->can('r', $path)) {
 					return false;
 				}
 
@@ -165,7 +193,7 @@ class User extends Library
 					$allow = $class::$allow;
 
 					if (!empty($allow['modify']) && in_array($method, $allow['modify'])) {
-						if (!$this->can('modify', $path)) {
+						if (!$this->can('w', $path)) {
 							return false;
 						}
 					}
@@ -244,11 +272,11 @@ class User extends Library
 	{
 		switch ($type) {
 			case 'flashsale':
-				return $this->can('modify', 'catalog/flashsale');
+				return $this->can('w', 'catalog/flashsale');
 			case 'designer':
-				return $this->can('modify', 'catalog/designer');
+				return $this->can('w', 'catalog/designer');
 			case 'product':
-				return $this->can('modify', 'catalog/product');
+				return $this->can('w', 'catalog/product');
 			default:
 				return false;
 		}

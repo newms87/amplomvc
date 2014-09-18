@@ -51,7 +51,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
-			if (user_can('access', 'filemanager/filemanager')) {
+			if (user_can('r', 'filemanager/filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
@@ -63,7 +63,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 			$stores = $this->Model_Setting_Store->getStores();
 
-			if (user_can('access', 'setting/store')) {
+			if (user_can('r', 'setting/store')) {
 				//Store Front Settings
 
 				$link_stores = array(
@@ -88,13 +88,13 @@ class App_Controller_Admin_Common_Header extends Controller
 				}
 			}
 
-			if (user_can('access', 'dashboard')) {
-				$dashboards = $this->Model_Dashboard->getDashboards();
+			if (user_can('r', 'admin/dashboards')) {
+				$dashboards = $this->Model_Dashboard->getDashboards(true);
 
 				foreach ($dashboards as $dashboard) {
 					$dashboard_link = array(
 						'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
-						'display_name' => strip_tags($dashboard['name']),
+						'display_name' => strip_tags($dashboard['title']),
 						'href'         => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
 						'parent'       => 'dashboards',
 					);

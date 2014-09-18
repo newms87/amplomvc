@@ -12,7 +12,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		breadcrumb(_l("Dashboard"), site_url('admin/dashboard'));
 
 		//Template Data
-		$data['dashboards'] = $this->Model_Dashboard->getDashboards();
+		$data['dashboards'] = $this->Model_Dashboard->getDashboards(true);
 
 		//Render
 		output($this->render('dashboard/list', $data));
@@ -24,8 +24,13 @@ class App_Controller_Admin_Dashboard extends Controller
 
 		//New Dashboard
 		if (!$dashboard_id) {
-			$dashboard_id = $this->Model_Dashboard->save(null, array());
-			redirect('admin/dashboard/view', 'dashboard_id=' . $dashboard_id);
+			if (user_can('w', 'admin/dashboard/save')) {
+				$dashboard_id = $this->Model_Dashboard->save(null, array());
+				redirect('admin/dashboard/view', 'dashboard_id=' . $dashboard_id);
+			} else {
+				message('error', _l("You do not have permission to modify Dashboards"));
+				redirect('admin/dashboard');
+			}
 		}
 
 		$dashboard = $this->Model_Dashboard->getDashboard($dashboard_id);
@@ -35,15 +40,21 @@ class App_Controller_Admin_Dashboard extends Controller
 			redirect('admin/dashboard');
 		}
 
+		if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {
+			message('error', _l("You do not have permission to view the %s dashboard", $dashboard['title']));
+			redirect('admin/dashboard');
+		}
+
 		//Page Head
-		$this->document->setTitle($dashboard['name']);
+		$this->document->setTitle($dashboard['title']);
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Dashboards"), site_url('admin/dashboard'));
-		breadcrumb($dashboard['name'], site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard_id));
+		breadcrumb($dashboard['title'], site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard_id));
 
-		$dashboard['group'] = 'dash-' . $dashboard_id;
+		$dashboard['group']    = 'dash-' . $dashboard_id;
+		$dashboard['can_edit'] = user_can('w', 'admin/dashboards/' . $dashboard['name']);
 
 		//Render
 		output($this->render('dashboard/view', $dashboard));
@@ -51,10 +62,19 @@ class App_Controller_Admin_Dashboard extends Controller
 
 	public function save()
 	{
-		if ($this->Model_Dashboard->save(_request('dashboard_id'), $_POST)) {
-			message('success', _l("The dashboard has been saved"));
-		} else {
-			message('error', $this->Model_Dashboard->getError());
+		$dashboard_id = _request('dashboard_id');
+		$dashboard    = $this->Model_Dashboard->getDashboard($dashboard_id);
+
+		if ($dashboard) {
+			if (user_can('w', 'admin/dashboards/' . $dashboard['name'])) {
+				if ($this->Model_Dashboard->save($dashboard_id, $_POST)) {
+					message('success', _l("The dashboard has been saved"));
+				} else {
+					message('error', $this->Model_Dashboard->getError());
+				}
+			} else {
+				message('error', _l("You do not have permission to modify the %s dashboard", $dashboard['title']));
+			}
 		}
 
 		if (IS_AJAX) {
@@ -66,10 +86,19 @@ class App_Controller_Admin_Dashboard extends Controller
 
 	public function remove()
 	{
-		if ($this->Model_Dashboard->remove(_get('dashboard_id'))) {
-			message('success', _l("The dashboard has been removed"));
-		} else {
-			message('error', $this->Model_Dashboard->getError());
+		$dashboard_id = _request('dashboard_id');
+		$dashboard    = $this->Model_Dashboard->getDashboard($dashboard_id);
+
+		if ($dashboard) {
+			if (user_can('w', 'admin/dashboards/' . $dashboard['name'])) {
+				if ($this->Model_Dashboard->remove($dashboard_id)) {
+					message('success', _l("The dashboard has been removed"));
+				} else {
+					message('error', $this->Model_Dashboard->getError());
+				}
+			} else {
+				message('error', _l("You do not have permission to modify the %s dashboard", $dashboard['title']));
+			}
 		}
 
 		if (IS_AJAX) {

@@ -103,7 +103,7 @@ $.fn.ac_datepicker = function ac_datepicker(params) {
 
     return this.each(function (i, e) {
         type = params.type ||
-            $(e).hasClass('datepicker') ? 'datepicker' :
+        $(e).hasClass('datepicker') ? 'datepicker' :
             $(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
 
         $(e)[type](params);
@@ -704,6 +704,27 @@ function register_confirms() {
 
 function register_ajax_calls(is_ajax) {
     $((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
+
+    // Multistate Checkboxes
+    $('[data-multistate]').use_once().click(function () {
+        var $this = $(this);
+        var val = $this.val();
+        var states = $this.attr('data-multistate').split(';');
+
+        if (!$this.prop('checked')) {
+            for (var s = 0; s < states.length; s++) {
+                if (states[s] === val) {
+                    if (s < states.length - 1) {
+                        $this.val(states[s + 1]);
+                    } else {
+                        $this.val(states[0]);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    });
 }
 
 function register_colorbox() {
@@ -716,7 +737,7 @@ function register_colorbox() {
             overlayClose: true,
             opacity: 0.5,
             width: width,
-            height: '80%',
+            height: '80%'
         }
 
         $colorbox.colorbox(defaults);
