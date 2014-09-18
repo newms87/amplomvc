@@ -72,6 +72,21 @@ class Document extends Library
 		return $this->canonical_link;
 	}
 
+	public function hasLink($group = 'primary', $link_name)
+	{
+		if (!empty($this->links[$group])) {
+			$result = array_walk_children($this->links[$group], 'children', function ($link) use($link_name) {
+				if (!empty($link) && $link_name === $link['name']) {
+					return false;
+				}
+			});
+
+			return $result === false;
+		}
+
+		return false;
+	}
+
 	public function hasLinks($group = 'primary')
 	{
 		return !empty($this->links[$group]);
@@ -405,10 +420,10 @@ class Document extends Library
 
 				foreach ($nav_group_links as $key => &$link) {
 					$link['children']                   = array();
-					$parent_ref[$link['navigation_id']] = & $link;
+					$parent_ref[$link['navigation_id']] = &$link;
 
 					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = & $link;
+						$parent_ref[$link['parent_id']]['children'][] = &$link;
 						unset($nav_group_links[$key]);
 					}
 				}
@@ -500,16 +515,16 @@ class Document extends Library
 
 						if ($num_matches >= count($queryVars) && $num_matches >= $highest_match) {
 							$highest_match = $num_matches;
-							$active_link   = & $link;
+							$active_link   = &$link;
 						}
 					} else {
-						$active_link = & $link;
+						$active_link = &$link;
 					}
 				}
 			}
 
 			if (!empty($link['children'])) {
-				$active_link = & $this->findActiveLink($link['children'], $page, $active_link, $highest_match);
+				$active_link = &$this->findActiveLink($link['children'], $page, $active_link, $highest_match);
 
 				if ($active_link) {
 					foreach ($link['children'] as $child) {

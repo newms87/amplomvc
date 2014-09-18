@@ -92,6 +92,15 @@ class App_Controller_Admin_Common_Header extends Controller
 				$dashboards = $this->Model_Dashboard->getDashboards(true);
 
 				foreach ($dashboards as $dashboard) {
+					if (!$this->document->hasLink('admin', 'dashboards')) {
+						$dashboards_link = array(
+							'name'         => 'dashboards',
+							'display_name' => _l("Dashboards"),
+						);
+
+						$this->document->addLink('admin', $dashboards_link);
+					}
+
 					$dashboard_link = array(
 						'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
 						'display_name' => strip_tags($dashboard['title']),
