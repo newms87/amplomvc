@@ -151,7 +151,7 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_http = false)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
 	$image = $registry->get('image')->resize($image, $width, $height);
@@ -164,8 +164,8 @@ function image($image, $width = null, $height = null, $default = null, $cast_htt
 		}
 	}
 
-	if ($cast_http) {
-		return cast_http($image, is_string($cast_http) ? $cast_http : 'http');
+	if ($cast_protocol) {
+		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
 	return $image;
@@ -232,7 +232,7 @@ function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 }
 
-function cast_http($url, $cast = 'http')
+function cast_protocol($url, $cast = 'http')
 {
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
@@ -241,7 +241,7 @@ function cast_http($url, $cast = 'http')
 	}
 
 	if ($scheme) {
-		return str_replace($scheme . '://', $cast . '//', $url);
+		return $cast . '//' . preg_replace("#^" . $scheme . '://#', '', $url);
 	} elseif (strpos($url, '//') === 0) {
 		return $cast . $url;
 	} else {
