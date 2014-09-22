@@ -75,7 +75,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 		}
 
 		//User Permissions
-		if (!user_can('modify', 'setting/login')) {
+		if (!user_can('w', 'admin/setting/login')) {
 			message('warning', _l("You do not have permission to modify Login Settings."));
 			redirect('admin/setting/store');
 		}

@@ -222,7 +222,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('modify', 'localisation/language')) {
+		if (!user_can('w', 'admin/localisation/language')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify languages!");
 		}
 
@@ -255,7 +255,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('modify', 'localisation/language')) {
+		if (!user_can('w', 'admin/localisation/language')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify languages!");
 		}
 

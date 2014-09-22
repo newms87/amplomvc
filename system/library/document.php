@@ -7,7 +7,6 @@ class Document extends Library
 	private $keywords;
 	private $canonical_link = null;
 	private $links = array();
-	private $restricted;
 	private $styles = array();
 	private $scripts = array();
 	private $ac_vars = array();
@@ -16,7 +15,6 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->restricted = $this->Model_Setting_Role->getControllers();
 		$this->links = $this->getNavigationLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
@@ -72,6 +70,21 @@ class Document extends Library
 	public function getCanonicalLink()
 	{
 		return $this->canonical_link;
+	}
+
+	public function hasLink($group = 'primary', $link_name)
+	{
+		if (!empty($this->links[$group])) {
+			$result = array_walk_children($this->links[$group], 'children', function ($link) use($link_name) {
+				if (!empty($link) && $link_name === $link['name']) {
+					return false;
+				}
+			});
+
+			return $result === false;
+		}
+
+		return false;
 	}
 
 	public function hasLinks($group = 'primary')
@@ -407,10 +420,10 @@ class Document extends Library
 
 				foreach ($nav_group_links as $key => &$link) {
 					$link['children']                   = array();
-					$parent_ref[$link['navigation_id']] = & $link;
+					$parent_ref[$link['navigation_id']] = &$link;
 
 					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = & $link;
+						$parent_ref[$link['parent_id']]['children'][] = &$link;
 						unset($nav_group_links[$key]);
 					}
 				}
@@ -450,24 +463,7 @@ class Document extends Library
 
 			//Filter restricted paths, current user cannot access
 			if (IS_ADMIN) {
-				$path = str_replace('admin/', '', $link['href']);
-
-				$check_path = false;
-
-				if ($path) {
-					if (in_array($path, $this->restricted)) {
-						$check_path = $path;
-					} else {
-						foreach ($this->restricted as $restricted_path) {
-							if (strpos($path, $restricted_path . '/') === 0) {
-								$check_path = $restricted_path;
-								break;
-							}
-						}
-					}
-				}
-
-				if ($check_path && !user_can('access', $check_path)) {
+				if (!user_can('r', $link['href'])) {
 					unset($links[$key]);
 					continue;
 				}
@@ -519,16 +515,16 @@ class Document extends Library
 
 						if ($num_matches >= count($queryVars) && $num_matches >= $highest_match) {
 							$highest_match = $num_matches;
-							$active_link   = & $link;
+							$active_link   = &$link;
 						}
 					} else {
-						$active_link = & $link;
+						$active_link = &$link;
 					}
 				}
 			}
 
 			if (!empty($link['children'])) {
-				$active_link = & $this->findActiveLink($link['children'], $page, $active_link, $highest_match);
+				$active_link = &$this->findActiveLink($link['children'], $page, $active_link, $highest_match);
 
 				if ($active_link) {
 					foreach ($link['children'] as $child) {

@@ -120,36 +120,30 @@ class App_Controller_Admin_Setting_Role extends Controller
 		// Defaults
 		$defaults = array(
 			'name'        => '',
-			'permissions' => array(
-				'access' => array(),
-				'modify' => array(),
-			),
+			'permissions' => array(),
 		);
 
 		$user_role += $defaults;
 
 		//Template Data
-		$user_role['data_controllers'] = $this->Model_Setting_Role->getControllers();
+		$areas = $this->Model_Setting_Role->getRestrictedAreas();
 
-		//Actions
-		$user_role['save'] = site_url('admin/setting/role/update', 'user_role_id=' . $user_role_id);
+		$this->fillAreaDefaults($areas, $user_role['permissions']);
+
+		$user_role['data_areas'] = $areas;
+		$user_role['data_perms'] = array(
+			''  => _l("none"),
+			'r' => _l("read"),
+			'w' => _l("write"),
+		);
 
 		//Render
 		output($this->render('setting/role/form', $user_role));
 	}
 
-	public function update()
+	public function save()
 	{
-		//Insert
-		if (empty($_GET['user_role_id'])) {
-			$this->Model_Setting_Role->add($_POST);
-		} //Update
-		else {
-			$this->Model_Setting_Role->edit($_GET['user_role_id'], $_POST);
-		}
-
-		//Success / Error
-		if ($this->Model_Setting_Role->hasError()) {
+		if (!$this->Model_Setting_Role->save(_get('user_role_id'), $_POST)) {
 			message('error', $this->Model_Setting_Role->getError());
 		} else {
 			message('success', _l("The User Role has been updated!"));
@@ -159,7 +153,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		if (IS_AJAX) {
 			output($this->message->toJSON());
 		} elseif ($this->message->has('error')) {
-			$this->form();
+			post_redirect('admin/setting/role/form');
 		} else {
 			redirect('admin/setting/role');
 		}
@@ -202,6 +196,23 @@ class App_Controller_Admin_Setting_Role extends Controller
 			$this->listing();
 		} else {
 			redirect('admin/setting/role');
+		}
+	}
+
+	private function fillAreaDefaults(&$areas, $perms)
+	{
+		foreach ($perms as $p => $value) {
+			if ($p === '*') {
+				continue;
+			}
+
+			if (isset($areas[$p])) {
+				$areas[$p]['*'] = isset($value['*']) ? $value['*'] : '';
+			}
+
+			if (count($value) > 1) {
+				$this->fillAreaDefaults($areas[$p], $value);
+			}
 		}
 	}
 }

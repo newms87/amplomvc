@@ -223,7 +223,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('modify', 'localisation/geo_zone')) {
+		if (!user_can('w', 'admin/localisation/geo_zone')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
 		}
 
@@ -244,7 +244,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('modify', 'localisation/geo_zone')) {
+		if (!user_can('w', 'admin/localisation/geo_zone')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
 		}
 

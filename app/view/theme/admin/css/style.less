@@ -1572,6 +1572,7 @@ button, .button {
   }
 }
 
+
 /* Zoom Hover */
 .zoom_hover {
   height: 100%;
@@ -1794,12 +1795,17 @@ ol.multiselect-list {
 .builder-multiselect {
   height: 100%;
   overflow-y: auto;
-  height: 150px;
+  max-height: 150px;
   min-width: 450px;
   padding: .4em;
   border: 2px solid #CCCCCC;
   background: white;
   position: relative;
+  .no-select;
+
+  &.tall {
+    max-height: 600px;
+  }
 
   .multiselect-list {
     & > div {
@@ -1897,6 +1903,47 @@ ol.multiselect-list {
       list-style: none;
       overflow: auto;
       background: #FFF;
+
+      label {
+        .expand {
+          text-decoration: none;
+
+          &:after {
+            content: "+";
+            color: @color-darkest;
+            width: 16px;
+            display: inline-block;
+            text-align: center;
+            border: 1px solid gray;
+            border-radius: 8px;
+          }
+
+          &:hover {
+            &:after {
+              border-color: @color-darkest;
+            }
+          }
+        }
+      }
+
+      ul.multiselect-list {
+        margin-left: 1.5em;
+        display: none;
+      }
+
+      &.expanded {
+        & > ul.multiselect-list {
+          display: block;
+        }
+
+        & > label {
+          .expand {
+            &:after {
+              content: "-";
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -2115,8 +2162,10 @@ body.admin-dashboard-view {
       padding: .5em 1em;
       outline: 0;
 
-      &:hover, &:active, &:focus {
-        background: @color-light;
+      &[contenteditable] {
+        &:hover, &:active, &:focus {
+          background: @color-light;
+        }
       }
     }
   }
@@ -2156,6 +2205,62 @@ body.admin-dashboard {
 
         .remove {
           display: block;
+        }
+      }
+    }
+  }
+}
+
+/* User Roles Form*/
+#admin-permissions {
+  .multiselect-list {
+    input {
+      & + label {
+        .permissions {
+          display: inline-block;
+          border: 1px solid gray;
+          border-radius: 8px;
+          background: white;
+          padding: 1px 5px;
+          margin: 0 .5em;
+
+          .perm {
+            display: block;
+            text-align: center;
+            font-size: .8em;
+            color: @color-dark;
+
+            &.r, &.w {
+              display: none;
+            }
+          }
+        }
+      }
+
+      &:checked {
+        & + label {
+          .perm {
+            display: none;
+
+            &.r {
+              display: block;
+            }
+          }
+        }
+      }
+      &[value="w"]:checked {
+        & + label {
+          background: #7AB78A;
+
+          .perm {
+            &.r {
+              display: none;
+            }
+
+            &.w {
+              display: block;
+            }
+          }
         }
       }
     }

@@ -1,4 +1,18 @@
 <?php
+//Request Headers
+$headers = apache_request_headers();
+function _header($key, $default = null)
+{
+	global $headers;
+	return isset($headers[$key]) ? $headers[$key] : $default;
+}
+
+define("REQUEST_ACCEPT", _header('Accept'));
+
+function request_accepts($type) {
+	return strpos(REQUEST_ACCEPT, $type) !== false;
+}
+
 /**************************************
  * System Language Translation Engine *
  **************************************/
@@ -137,7 +151,7 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_http = false)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
 	$image = $registry->get('image')->resize($image, $width, $height);
@@ -150,8 +164,8 @@ function image($image, $width = null, $height = null, $default = null, $cast_htt
 		}
 	}
 
-	if ($cast_http) {
-		return cast_http($image, is_string($cast_http) ? $cast_http : 'http');
+	if ($cast_protocol) {
+		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
 	return $image;
@@ -218,7 +232,7 @@ function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 }
 
-function cast_http($url, $cast = 'http')
+function cast_protocol($url, $cast = 'http')
 {
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
@@ -227,7 +241,7 @@ function cast_http($url, $cast = 'http')
 	}
 
 	if ($scheme) {
-		return str_replace($scheme . '://', $cast . '//', $url);
+		return $cast . '//' . preg_replace("#^" . $scheme . '://#', '', $url);
 	} elseif (strpos($url, '//') === 0) {
 		return $cast . $url;
 	} else {
@@ -239,15 +253,7 @@ define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admi
 
 define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
-$headers = apache_request_headers();
 define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
-
-define("REQUEST_ACCEPT", $headers['Accept']);
-
-function request_accepts($type) {
-	return strpos(REQUEST_ACCEPT, $type) !== false;
-}
-
 define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
 define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
 

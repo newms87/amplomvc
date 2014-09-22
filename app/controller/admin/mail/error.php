@@ -84,7 +84,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 
 	public function validate()
 	{
-		if (!user_can('modify', 'mail/error')) {
+		if (!user_can('w', 'admin/mail/error')) {
 			$this->error['permission'] = _l("Warning: You do not have permission to access Failed Email Messages!");
 		}
 

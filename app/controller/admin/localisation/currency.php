@@ -332,7 +332,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('modify', 'localisation/currency')) {
+		if (!user_can('w', 'admin/localisation/currency')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify currencies!");
 		}
 
@@ -349,7 +349,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('modify', 'localisation/currency')) {
+		if (!user_can('w', 'admin/localisation/currency')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify currencies!");
 		}
 

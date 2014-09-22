@@ -157,7 +157,10 @@ if (!function_exists('array_walk_children')) {
 			$args = func_get_args();
 			array_splice($args, 0, 3);
 
-			$return = call_user_func_array($callback, array_merge(array(&$node, $key), $args));
+			$return = call_user_func_array($callback, array_merge(array(
+						&$node,
+						$key
+					), $args));
 
 			//Cancel the walk
 			if ($return === false) {
@@ -192,6 +195,22 @@ if (!function_exists('html2text')) {
 	function html2text($html)
 	{
 		return strip_tags(preg_replace("/<br\s*\/?>/", "\r\n", $html));
+	}
+}
+
+
+if (!function_exists('apache_request_headers')) {
+	function apache_request_headers()
+	{
+		$headers = array();
+		foreach ($_SERVER as $k => $v) {
+			if (substr($k, 0, 5) == "HTTP_") {
+				$k = str_replace('_', ' ', substr($k, 5));
+				$k = str_replace(' ', '-', ucwords(strtolower($k)));
+				$headers[$k] = $v;
+			}
+		}
+		return $headers;
 	}
 }
 
@@ -240,7 +259,7 @@ function get_caller($offset = 0, $limit = 10)
 
 	$limit += $offset;
 
-	while ($offset < $limit && $offset < (count($calls)-1)) {
+	while ($offset < $limit && $offset < (count($calls) - 1)) {
 		$caller = $calls[$offset + 1];
 
 		if (isset($caller['file'])) {

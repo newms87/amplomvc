@@ -3,7 +3,7 @@
 	<?= breadcrumbs(); ?>
 
 	<div class="dashboard-header">
-		<h2 class="dashboard-name" data-orig="<?= $name; ?>" contenteditable><?= $name; ?></h2>
+		<h2 class="dashboard-name" data-orig="<?= $title; ?>" <?= $can_edit ? 'contenteditable' : ''; ?>><?= $title; ?></h2>
 	</div>
 
 	<div class="dashboard-view">
@@ -11,18 +11,21 @@
 	</div>
 </section>
 
+<? if ($can_edit) { ?>
 <script type="text/javascript">
-	$('.dashboard-name').blur(function(){
+	$('.dashboard-name').blur(function () {
 		var $this = $(this);
 		if ($this.attr('data-orig') != $this.html()) {
+			$this.attr('data-orig', $this.html());
 			var data = {
-				name: $this.html()
+				title: $this.html()
 			};
-			$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response){
+			$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response) {
 				$('.dashboard-header').ac_msg(response);
 			}, 'json');
 		}
 	});
 </script>
+<? } ?>
 
 <?= IS_AJAX ? '' : call('admin/common/footer'); ?>

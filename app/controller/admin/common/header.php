@@ -36,9 +36,11 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 52);
-		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
-		$this->document->addScript(theme_url('js/common.js'), 54);
+		$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+
+		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 53);
+		$this->document->addScript(URL_RESOURCES . 'js/common.js', 54);
+		$this->document->addScript(theme_url('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
@@ -49,7 +51,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
-			if (user_can('access', 'filemanager/filemanager')) {
+			if (user_can('r', 'filemanager/filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
@@ -61,7 +63,7 @@ class App_Controller_Admin_Common_Header extends Controller
 
 			$stores = $this->Model_Setting_Store->getStores();
 
-			if (user_can('access', 'setting/store')) {
+			if (user_can('r', 'admin/setting/store')) {
 				//Store Front Settings
 
 				$link_stores = array(
@@ -86,13 +88,22 @@ class App_Controller_Admin_Common_Header extends Controller
 				}
 			}
 
-			if (user_can('access', 'dashboard')) {
-				$dashboards = $this->Model_Dashboard->getDashboards();
+			if (user_can('r', 'admin/dashboards')) {
+				$dashboards = $this->Model_Dashboard->getDashboards(true);
 
 				foreach ($dashboards as $dashboard) {
+					if (!$this->document->hasLink('admin', 'dashboards')) {
+						$dashboards_link = array(
+							'name'         => 'dashboards',
+							'display_name' => _l("Dashboards"),
+						);
+
+						$this->document->addLink('admin', $dashboards_link);
+					}
+
 					$dashboard_link = array(
 						'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
-						'display_name' => strip_tags($dashboard['name']),
+						'display_name' => strip_tags($dashboard['title']),
 						'href'         => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
 						'parent'       => 'dashboards',
 					);

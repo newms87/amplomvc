@@ -235,7 +235,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	private function validate()
 	{
-		if (!user_can('modify', 'admin/dev')) {
+		if (!user_can('w', 'admin/dev')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to use the development console!");
 		}
 
@@ -264,7 +264,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function db_admin()
 	{
-		if (!user_can('modify', 'admin/dev')) {
+		if (!user_can('w', 'admin/dev')) {
 			message('warning', _l("You do not have permission use the Database Administration Console"));
 			redirect();
 		}

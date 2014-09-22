@@ -4,12 +4,12 @@ class App_Model_Dashboard extends Model
 {
 	public function save($dashboard_id, $dashboard = array())
 	{
-		if (!$dashboard_id && empty($dashboard['name'])) {
+		if (!$dashboard_id && empty($dashboard['title'])) {
 			$count = 1;
-			while (empty($dashboard['name'])) {
-				$dashboard['name'] = 'New Dashboard ' . $count++;
-				if ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "dashboard WHERE name = '$dashboard[name]'")) {
-					$dashboard['name'] = '';
+			while (empty($dashboard['title'])) {
+				$dashboard['title'] = 'New Dashboard ' . $count++;
+				if ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "dashboard WHERE `title` = '" . $dashboard['title'] . "'")) {
+					$dashboard['title'] = '';
 				}
 			}
 		}
@@ -17,6 +17,15 @@ class App_Model_Dashboard extends Model
 		if ($dashboard_id) {
 			$dashboard_id = $this->update('dashboard', $dashboard, $dashboard_id);
 		} else {
+			if (empty($dashboard['name'])) {
+				$dashboard['name'] = slug($dashboard['title']);
+			}
+
+			$count = 1;
+			while ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "dashboard WHERE `name` = '" . $dashboard['name'] . "'")) {
+				$dashboard['name'] = preg_replace("/_[\\d]+/", '', $dashboard['name']) . '_' . $count++;
+			}
+
 			$dashboard_id = $this->insert('dashboard', $dashboard);
 		}
 
@@ -35,20 +44,23 @@ class App_Model_Dashboard extends Model
 		$dashboard = $this->queryRow("SELECT * FROM " . $this->prefix . "dashboard WHERE dashboard_id = " . (int)$dashboard_id);
 
 		if ($dashboard) {
-			$dashboard['name'] = html_entity_decode($dashboard['name']);
+			$dashboard['title'] = html_entity_decode($dashboard['title']);
 		}
 
 		return $dashboard;
 	}
 
-	public function getDashboards()
+	public function getDashboards($check_perms = false)
 	{
 		$dashboards = $this->queryRows("SELECT * FROM " . $this->prefix . "dashboard");
 
-		foreach ($dashboards as &$dashboard) {
-			$dashboard['name'] = html_entity_decode($dashboard['name']);
+		foreach ($dashboards as $key => $dashboard) {
+			if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {
+				unset($dashboards[$key]);
+			} else {
+				$dashboards[$key]['title'] = html_entity_decode($dashboard['title']);
+			}
 		}
-		unset($dashboard);
 
 		return $dashboards;
 	}
@@ -74,7 +86,7 @@ class App_Model_Dashboard extends Model
 				'dashboard' => $dashboard,
 				'views'     => $views,
 				'to'        => $to ? $to : option('config_email'),
-				'subject'   => _l("%s", strip_tags($dashboard['name'])),
+				'subject'   => _l("%s", strip_tags($dashboard['title'])),
 			);
 
 			call('mail/reports', $data);

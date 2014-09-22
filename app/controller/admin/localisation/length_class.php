@@ -292,7 +292,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 
 	private function validateForm()
 	{
-		if (!user_can('modify', 'localisation/length_class')) {
+		if (!user_can('w', 'admin/localisation/length_class')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify length classes!");
 		}
 
@@ -311,7 +311,7 @@ class App_Controller_Admin_Localisation_LengthClass extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('modify', 'localisation/length_class')) {
+		if (!user_can('w', 'admin/localisation/length_class')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify length classes!");
 		}
 

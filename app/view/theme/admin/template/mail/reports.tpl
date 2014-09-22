@@ -10,7 +10,7 @@
 	<tr>
 		<td style="text-align: center">
 			<h3><?= $view['title']; ?></h3><br />
-			<img src="<?= cast_http($view['image']); ?>" width="800" height="400" />
+			<img src="<?= cast_protocol($view['image']); ?>" width="800" height="400" />
 			<br /><br />
 		</td>
 	</tr>
