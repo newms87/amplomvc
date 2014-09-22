@@ -6,15 +6,15 @@ abstract class Model
 	protected $prefix;
 
 	const
-		TEXT                = 'text',
-		NO_ESCAPE           = 'no-escape',
-		IMAGE               = 'image',
-		INTEGER             = 'int',
-		FLOAT               = 'float',
-		DATETIME            = 'datetime',
+		TEXT = 'text',
+		NO_ESCAPE = 'no-escape',
+		IMAGE = 'image',
+		INTEGER = 'int',
+		FLOAT = 'float',
+		DATETIME = 'datetime',
 		PRIMARY_KEY_INTEGER = 'pk-int',
-		AUTO_INCREMENT      = 'ai',
-		AUTO_INCREMENT_PK   = 'pk';
+		AUTO_INCREMENT = 'ai',
+		AUTO_INCREMENT_PK = 'pk';
 
 	//In case a plugin wants to wrap this Class
 	protected $error = array();
@@ -345,7 +345,13 @@ abstract class Model
 		}
 
 		$columns = array_intersect_key($columns, $this->getTableColumns($table));
-		return "`$t`." . implode(",`$t`.", array_keys($columns));
+
+		$select = '';
+		foreach ($columns as $col => $data) {
+			$select .= ($select?',':'') . "`$t`.`$col`";
+		}
+
+		return $select;
 	}
 
 	protected function extractFilter($table, $filter, $columns = array())
@@ -436,8 +442,8 @@ abstract class Model
 				case 'time':
 					if (is_array($value)) {
 						if (!empty($value['start']) || !empty($value['end'])) {
-							$start  = !empty($value['start']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " '" . format('date', $value['start']) . "'" : '';
-							$end = !empty($value['end']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " '" . format('date', $value['end']) . "'" : '';
+							$start = !empty($value['start']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " '" . format('date', $value['start']) . "'" : '';
+							$end   = !empty($value['end']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " '" . format('date', $value['end']) . "'" : '';
 
 							if ($start && $end) {
 								$where .= " AND ($start " . ($not ? 'OR' : 'AND') . " $end)";
@@ -561,34 +567,35 @@ abstract class Model
 		return true;
 	}
 
-	protected function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
+	public function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
 	{
 		$table_model = $this->getTableModel($table);
 
 		$columns = $table_model['columns'];
 
 		//Merge
-		foreach ($merge as $field => $data) {
-			if (isset($columns[$field])) {
-				$columns[$field] = $data + $columns[$field];
-			} elseif ($filter === false || isset($filter[$field])) {
-				$columns[$field] = $data;
+		if ($merge) {
+			foreach ($merge as $field => $data) {
+				if (isset($columns[$field])) {
+					$columns[$field] = $data + $columns[$field];
+				}
+				//$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
+				elseif ($filter === false || isset($filter[$field])) {
+					$columns[$field] = $data;
+				}
 			}
 		}
 
-		//Filter / Sort
-		if (!$filter && $filter !== false && !empty($columns)) {
-			$filter = array_combine(array_keys($columns), range(0, count($columns) - 1));
-		}
-
+		//Filter
 		if ($filter) {
 			$columns = array_intersect_key($columns, $filter);
+		}
 
-			if ($sort) {
-				uksort($columns, function ($a, $b) use ($filter) {
-					return $filter[$a] > $filter[$b];
-				});
-			}
+		//Sort
+		if ($sort) {
+			uksort($columns, function ($a, $b) {
+				return $a > $b;
+			});
 		}
 
 		return $columns;
@@ -596,8 +603,7 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table = $this->db->hasTable($table);
-
+		$table  = $this->db->hasTable($table);
 		$schema = $this->db->getName();
 
 		$table_model = cache('model.' . $schema . '.' . $table);

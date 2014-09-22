@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div class="section">
-			<?= block('widget/views', null, array('group' => 'pages', 'view_listing' => 'pages')); ?>
+			<?= block('widget/views', null, array('group' => 'pages', 'view_listing' => 'page_list')); ?>
 		</div>
 	</div>
 </div>
