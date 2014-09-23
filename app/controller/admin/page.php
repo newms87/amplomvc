@@ -45,22 +45,20 @@ class App_Controller_Admin_Page extends Controller
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = _get('filter', array());
 
-		list($pages, $page_total) = $this->Model_Page->getPages($sort, $filter, $columns);
+		list($pages, $page_total) = $this->Model_Page->getPages($sort, $filter, $columns, true, 'page_id');
 
-		$url_query = $this->url->getQueryExclude('page_id');
-
-		foreach ($pages as &$page) {
+		foreach ($pages as $page_id => &$page) {
 			$actions = array();
 
 			if (user_can('w', 'page')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/page/form', 'page_id=' . $page['page_id'])
+					'href' => site_url('admin/page/form', 'page_id=' . $page_id)
 				);
 
 				$actions['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
+					'href' => site_url('admin/page/delete', 'page_id=' . $page_id)
 				);
 			}
 

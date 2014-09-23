@@ -42,7 +42,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		breadcrumb(_l("Theme for %s", $store['name']), site_url('admin/setting/theme'));
 
 		//Load Data or Defaults
-		$theme_configs = $this->theme->getThemeConfigs($store_id, $theme);
+		$theme_configs = $this->theme->getStoreTheme($store_id, $theme);
 
 		$settings = $_POST;
 
@@ -79,7 +79,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		}
 
 		//Save Settings
-		$this->theme->saveThemeConfigs($store_id, $theme, $_POST['configs'], $_POST['stylesheet']);
+		$this->theme->saveStoreTheme($store_id, $theme, $_POST['configs'], $_POST['stylesheet']);
 
 		if ($this->theme->hasError()) {
 			message('error', $this->theme->getError());

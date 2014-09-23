@@ -134,14 +134,14 @@ function breadcrumbs()
 	return $registry->get('breadcrumb')->render();
 }
 
-function cache($key, $value = null)
+function cache($key, $value = null, $as_file = false)
 {
 	global $registry;
 
 	if (is_null($value)) {
-		return $registry->get('cache')->get($key);
+		return $registry->get('cache')->get($key, $as_file);
 	} else {
-		return $registry->get('cache')->set($key, $value);
+		return $registry->get('cache')->set($key, $value, $as_file);
 	}
 }
 

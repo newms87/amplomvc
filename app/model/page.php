@@ -315,11 +315,11 @@ class App_Model_Page extends Model
 		return $page;
 	}
 
-	public function getPages($sort = array(), $filter = array(), $select = '*', $total = true, $index = null)
+	public function getPages($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		$select = $this->extractSelect('page p', $select);
 
-		//From
+		//Froms
 		$from = DB_PREFIX . "page p";
 
 		//Where
