@@ -1,6 +1,6 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 <section class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<div class="dashboard-header">
 		<h2 class="dashboard-name" data-orig="<?= $title; ?>" <?= $can_edit ? 'contenteditable' : ''; ?>><?= $title; ?></h2>

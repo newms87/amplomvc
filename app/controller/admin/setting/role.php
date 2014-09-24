@@ -12,22 +12,20 @@ class App_Controller_Admin_Setting_Role extends Controller
 		breadcrumb(_l("User Roles"), site_url('admin/setting/role'));
 
 		//Batch Actions
-		$actions = array(
-			'delete' => array(
-				'label' => _l("Delete"),
-			),
-		);
+		if (user_can('w', 'admin/setting/role/batch_action')) {
+			$actions = array(
+				'delete' => array(
+					'label' => _l("Delete"),
+				),
+			);
 
-		$data['batch_action'] = array(
-			'actions' => $actions,
-			'url'     => site_url('admin/setting/role/batch_action'),
-		);
+			$data['batch_action'] = array(
+				'actions' => $actions,
+				'url'     => site_url('admin/setting/role/batch_action'),
+			);
+		}
 
-		//The Listing
-		$data['listing'] = $this->listing();
-
-		//Actions
-		$data['insert'] = site_url('admin/setting/role/form');
+		$data['view_listing_id'] = $this->Model_Setting_Role->getViewListingId();
 
 		//Render
 		output($this->render('setting/role/list', $data));
@@ -35,23 +33,28 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 	public function listing()
 	{
+		//The Table Columns
+		$disable = array(
+			'permissions' => false,
+		);
+
+		$columns = $this->Model_Setting_Role->getColumns($disable + (array)_request('columns'));
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		$user_role_total = $this->Model_Setting_Role->getTotalRoles($filter);
-		$user_roles      = $this->Model_Setting_Role->getRoles($sort + $filter);
+		list($user_roles, $user_role_total) = $this->Model_Setting_Role->getRoles($sort, $filter, $columns, true, 'user_role_id');
 
-		foreach ($user_roles as &$user_role) {
+		foreach ($user_roles as $user_role_id => &$user_role) {
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/setting/role/form', 'user_role_id=' . $user_role['user_role_id'])
+					'href' => site_url('admin/setting/role/form', 'user_role_id=' . $user_role_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/setting/role/delete', 'user_role_id=' . $user_role['user_role_id'])
+					'href' => site_url('admin/setting/role/delete', 'user_role_id=' . $user_role_id)
 				),
 			);
 
@@ -61,12 +64,14 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 		$listing = array(
 			'row_id'         => 'user_role_id',
+			'extra_cols'     => $this->Model_Setting_Role->getColumns($disable),
 			'columns'        => $columns,
 			'rows'           => $user_roles,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_role_total,
 			'listing_path'   => 'admin/setting/role/listing',
+			'save_path'      => 'admin/setting/role/save',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -125,7 +130,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 	public function save()
 	{
-		if (!$this->Model_Setting_Role->save(_get('user_role_id'), $_POST)) {
+		if (!$this->Model_Setting_Role->save(_request('user_role_id'), $_POST)) {
 			message('error', $this->Model_Setting_Role->getError());
 		} else {
 			message('success', _l("The User Role has been updated!"));

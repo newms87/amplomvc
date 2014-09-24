@@ -1,6 +1,6 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 <div class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>

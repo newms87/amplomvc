@@ -132,7 +132,7 @@ class App_Model_User extends Model
 
 		//Where
 		if (isset($filter['user_role'])) {
-			$roles = $this->Model_Setting_Role->getRoles(null, '*', 'name');
+			$roles = $this->Model_Setting_Role->getRoles(null, null, '*', false, 'name');
 
 			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
 
@@ -149,7 +149,7 @@ class App_Model_User extends Model
 			}
 		}
 
-		$where = $this->extractFilter('user', $filter);
+		$where = $this->extractWhere('user', $filter);
 
 		if (isset($filter['name'])) {
 			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
