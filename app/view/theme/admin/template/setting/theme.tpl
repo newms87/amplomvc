@@ -1,7 +1,7 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div id="theme-settings" class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
 			<h1>
@@ -24,15 +24,16 @@
 				<? } ?>
 			</div>
 
-			<div class="col xs-12 md-6 theme-settings">
-				<h3><?= _l("Modify Theme Settings for %s", $store['name']); ?></h3>
-
+			<div class="col xs-12 md-6 top theme-settings">
 				<div class="theme-setting-list">
 					<? foreach ($configs as $key => $config) { ?>
+						<? if ($config['type'] === 'section') { ?>
+							<h4><?= $config['title']; ?></h4>
+						<? continue; } ?>
 
 						<label for="config-<?= $key; ?>" class="theme-setting">
 							<div class="cell">
-								<div class="key"><?= $config['key']; ?></div>
+								<div class="key"><?= $config['title']; ?></div>
 								<div class="description"><?= $config['description']; ?></div>
 								<div class="value">
 									<input id="config-<?= $key; ?>" type="text" name="configs[<?= $key; ?>]" value="<?= $config['value']; ?>"/>
@@ -46,7 +47,7 @@
 			<div class="col xs-12 md-6 theme-stylesheet">
 				<h3><?= _l("Custom Styles"); ?></h3>
 				<div class="code-editor">
-					<textarea id="stylesheet-editor" name="stylesheet" class=""><?= file_get_contents($stylesheet); ?></textarea>
+					<textarea id="stylesheet-editor" name="stylesheet" class=""><?= $stylesheet; ?></textarea>
 				</div>
 			</div>
 		</div>

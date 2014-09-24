@@ -110,6 +110,7 @@ $data = $_POST + $defaults;
 
 extract($data);
 
+$name = "Amplo MVC";
 $logo = "app/view/theme/admin/image/logo.png";
 
 $db_drivers = array(

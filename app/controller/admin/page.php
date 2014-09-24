@@ -39,72 +39,30 @@ class App_Controller_Admin_Page extends Controller
 	public function listing($listing = array())
 	{
 		//The Table Columns
-		$columns = array();
-
-		$columns['theme'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Theme"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['title'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Page Title"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$all_stores = array(
-			'' => array(
-				'store_id' => 0,
-				'name'     => _l("All Stores")
-			),
-		);
-
-		$columns['stores'] = array(
-			'type'         => 'multiselect',
-			'display_name' => _l("Stores"),
-			'filter'       => true,
-			'build_config' => array(
-				'store_id',
-				'name'
-			),
-			'build_data'   => $all_stores + $this->Model_Setting_Store->getStores(),
-			'sortable'     => false,
-		);
-
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'sortable'     => true,
-		);
+		$columns = $this->Model_Page->getColumns(_request('columns'));
 
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = _get('filter', array());
 
-		$page_total = $this->Model_Page->getTotalPages($filter);
-		$pages      = $this->Model_Page->getPages($sort, $filter);
+		list($pages, $page_total) = $this->Model_Page->getPages($sort, $filter, $columns, true, 'page_id');
 
-		$url_query = $this->url->getQueryExclude('page_id');
+		foreach ($pages as $page_id => &$page) {
+			$actions = array();
 
-		foreach ($pages as &$page) {
-			$page['actions'] = array(
-				'edit'   => array(
+			if (user_can('w', 'page')) {
+				$actions['edit'] = array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/page/form', 'page_id=' . $page['page_id'])
-				),
-				'delete' => array(
+					'href' => site_url('admin/page/form', 'page_id=' . $page_id)
+				);
+
+				$actions['delete'] = array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
-				)
-			);
+					'href' => site_url('admin/page/delete', 'page_id=' . $page_id)
+				);
+			}
+
+			$page['actions'] = $actions;
 
 			$page['stores'] = $this->Model_Page->getPageStores($page['page_id']);
 

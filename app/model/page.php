@@ -315,23 +315,15 @@ class App_Model_Page extends Model
 		return $page;
 	}
 
-	public function getPages($sort = array(), $filter = array(), $select = '*', $index = null)
+	public function getPages($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
-		//Select
-		if ($index === false) {
-			$select = 'COUNT(*)';
-		}
+		$select = $this->extractSelect('page p', $select);
 
-		//From
+		//Froms
 		$from = DB_PREFIX . "page p";
 
 		//Where
-		$columns = array(
-			'title'  => 'like',
-			'status' => 'equals',
-		);
-
-		$where = $this->extractFilter('page', $filter, $columns);
+		$where = $this->extractFilter('page', $filter);
 
 		if (!empty($filter['stores'])) {
 			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);
@@ -342,33 +334,31 @@ class App_Model_Page extends Model
 			}
 		}
 
-		//Order By & Limit
-		if ($index !== false) {
-			$order = $this->extractOrder($sort);
-			$limit = $this->extractLimit($sort);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		$order = $this->extractOrder($sort);
+		$limit = $this->extractLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		$calc_rows = ($total && $this->calcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
 
-		//Get Total
-		if ($index === false) {
-			return $this->queryVar($query);
-		}
+		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 
-		//Get Rows
-		$pages = $this->queryRows($query, $index);
-
-		foreach ($pages as &$page) {
-			$page['content'] = $this->getPageContent($page);
-			$page['style']   = $this->getPageStyle($page);
+		foreach ($rows as &$row) {
+			$row['content'] = $this->getPageContent($row);
+			$row['style']   = $this->getPageStyle($row);
 		}
 		unset($row);
 
-		return $pages;
+		if ($total) {
+			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
+			$total_rows = $this->queryVar($query);
+
+			return array(
+				$rows,
+				$total_rows
+			);
+		}
+
+		return $rows;
 	}
 
 	public function getPageContent($page)
@@ -404,7 +394,7 @@ class App_Model_Page extends Model
 
 	public function getTotalPages($filter = array())
 	{
-		return $this->getPages(array(), $filter, '', false);
+		return $this->getPages(null, $filter, 'COUNT(*)', false);
 	}
 
 	public function loadPages()
@@ -414,7 +404,7 @@ class App_Model_Page extends Model
 		if (is_null($pages)) {
 			$pages = array();
 
-			$page_list = $this->getPages(array(), array(), '*');
+			$page_list = $this->getPages();
 
 			foreach ($page_list as $p) {
 				$pages[$p['theme']][$p['name']] = $p;
@@ -443,7 +433,9 @@ class App_Model_Page extends Model
 
 						if (filetype($page_dir . $name) === 'dir') {
 							if (!isset($pages[$theme][$name])) {
-								$title = array_map(function ($a) { return ucfirst($a); }, explode('_', $name));
+								$title = array_map(function ($a) {
+									return ucfirst($a);
+								}, explode('_', $name));
 								$title = implode(' ', $title);
 
 								$content_file = $page_dir . $name . '/content.tpl';
@@ -476,19 +468,41 @@ class App_Model_Page extends Model
 
 	public function getColumns($filter = array())
 	{
-		$columns = array(
-			'status' => array(
-				'type'         => 'select',
-				'display_name' => _l("Status"),
-				'build_data'   => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
-				),
-				'filter'       => true,
-				'sortable'     => true,
-			),
-		);
+		static $merge;
 
-		return $this->getTableColumns('page', $columns, $filter);
+		if (!$merge) {
+			$all_stores = array(
+				'' => array(
+					'store_id' => 0,
+					'name'     => _l("All Stores")
+				),
+			);
+
+			$merge = array(
+				'store'  => array(
+					'type'         => 'multiselect',
+					'display_name' => _l("Stores"),
+					'filter'       => true,
+					'build_config' => array(
+						'store_id',
+						'name'
+					),
+					'build_data'   => $all_stores + $this->Model_Setting_Store->getStores(),
+					'sortable'     => false,
+				),
+				'status' => array(
+					'type'         => 'select',
+					'display_name' => _l("Status"),
+					'build_data'   => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
+					'filter'       => true,
+					'sortable'     => true,
+				)
+			);
+		}
+
+		return $this->getTableColumns('page', $merge, $filter);
 	}
 }

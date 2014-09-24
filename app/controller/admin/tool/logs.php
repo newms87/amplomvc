@@ -4,9 +4,9 @@ class App_Controller_Admin_Tool_Logs extends Controller
 	public function index()
 	{
 		//Log File
-		$log = _get('log', 'log');
+		$log = _get('log', 'default');
 
-		$log_name = $log === 'log' ? _l("Default") : ucfirst($log);
+		$log_name = ucfirst($log);
 
 		//Page Head
 		$this->document->setTitle(_l("%s Log", $log_name));

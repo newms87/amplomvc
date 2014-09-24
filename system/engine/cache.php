@@ -16,10 +16,10 @@ class Cache
 		}
 	}
 
-	public function get($key, $return_file = false)
+	public function get($key, $get_file = false)
 	{
 		if (isset($this->loaded[$key])) {
-			if ($return_file) {
+			if ($get_file) {
 				return $this->loaded[$key]['file'];
 			} elseif (isset($this->loaded[$key]['data'])) {
 				return $this->loaded[$key]['data'];
@@ -41,7 +41,7 @@ class Cache
 				}
 			}
 
-			if ($return_file) {
+			if ($get_file) {
 				return $this->loaded[$key]['file'] = $file;
 			} else {
 				$str = @file_get_contents($file);
@@ -61,11 +61,13 @@ class Cache
 		}
 	}
 
-	public function set($key, $value)
+	public function set($key, $value, $set_file = false)
 	{
 		$file = DIR_CACHE . $key . '.cache';
 
-		$value = serialize($value);
+		if (!$set_file) {
+			$value = serialize($value);
+		}
 
 		if ($value) {
 			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.

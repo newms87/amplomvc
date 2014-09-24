@@ -29,7 +29,7 @@ class Theme extends Library
 		if (IS_ADMIN) {
 			$this->theme = $admin_theme;
 		} else {
-			$this->theme = $theme;
+			$this->theme    = $theme;
 			$this->settings = option('config_theme_settings', array());
 		}
 
@@ -207,54 +207,67 @@ class Theme extends Library
 		return false;
 	}
 
-	public function getStoreThemeStyle($store_id, $theme)
+	public function getStoreThemeStyle()
 	{
-		$file = $this->getFile('css/config.store.' . $store_id . '.main.less', $theme);
+		$store_id = option('store_id');
+		$theme    = IS_ADMIN ? 'admin' : option('config_theme');
 
-		if (!$file) {
-			$file = $this->getFile('css/style.less');
+		$cache_file = 'less/store_theme.' . $store_id . '.' . $theme;
+		$theme_file = cache($cache_file, null, true);
+
+		if (!is_file($theme_file)) {
+			$theme_file = false;
+
+			$store_theme = $this->config->loadGroup('store_theme');
+
+			if ($store_theme) {
+				$theme_style = "@import '@{themepath}css/style';\n\n";
+
+				if (!empty($store_theme['store_theme_config_' . $theme])) {
+					$theme_style .= $store_theme['store_theme_config_' . $theme];
+
+					if (!empty($store_theme['store_theme_style_' . $theme])) {
+						$theme_style .= "\n\n/* Custom Theme Styles */\n" . $store_theme['store_theme_style_' . $theme];
+					}
+
+					cache($cache_file, $theme_style, true);
+
+					//retrieve the cache file as a file
+					$theme_file = cache($cache_file, null, true);
+				}
+			}
+
+			if (!$theme_file) {
+				$theme_file = $this->getFile('css/style.less');
+			}
 		}
 
-		if ($file) {
-			return $this->document->compileLess($file, $theme . '-' . $store_id . '-theme-style');
+		if ($theme_file) {
+			return $this->document->compileLess($theme_file, $theme . '-' . $store_id . '-theme-style');
 		}
 
 		return theme_url('css/style.css');
 	}
 
-	public function saveThemeConfigs($store_id, $theme, $configs, $stylesheet = null)
+	public function saveStoreTheme($store_id, $theme, $configs, $stylesheet = null)
 	{
-		$config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
-		$main_file   = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.main.less';
-
-		$less = "";
+		$config = '';
 
 		foreach ($configs as $key => $value) {
-			$less .= "@$key: $value;\n";
+			$config .= "@$key: $value;\n";
 		}
 
-		file_put_contents($config_file, $less);
+		$store_theme = array(
+			'store_theme_config_' . $theme => $config,
+			'store_theme_style_' . $theme => $stylesheet,
+		);
 
-		$main = "@import 'style';\n" .
-			"@import 'config.store.$store_id';\n";
+		$this->config->saveGroup('store_theme', $store_theme, $store_id, false);
 
-		if ($stylesheet) {
-			$style_file = DIR_THEMES . $theme . '/css/style.store.' . $store_id . '.less';
-
-			file_put_contents($style_file, $stylesheet);
-
-			$main .= "@import 'style.store.$store_id';\n";
-
-			$this->plugin->gitIgnore($style_file);
-		}
-
-		file_put_contents($main_file, $main);
-
-		$this->plugin->gitIgnore($config_file);
-		$this->plugin->gitIgnore($main_file);
+		$this->cache->delete('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
-	public function getThemeConfigs($store_id, $theme)
+	public function getStoreTheme($store_id, $theme)
 	{
 		$configs = array();
 
@@ -270,29 +283,26 @@ class Theme extends Library
 			}
 		}
 
-
 		//Load Store Configs
-		$store_config_file = DIR_THEMES . $theme . '/css/config.store.' . $store_id . '.less';
+		$store_theme = $this->config->loadGroup('store_theme', $store_id);
 
-		if (!is_file($store_config_file)) {
-			touch($store_config_file);
-		}
+		if ($store_theme) {
+			if (!empty($store_theme['store_theme_config_' . $theme])) {
+				$store_configs = $this->parseConfigs($store_theme['store_theme_config_' . $theme]);
 
-		$store_configs = $this->parseConfigs($store_config_file);
+				foreach ($store_configs as $key => $value) {
+					$configs[$key]['value'] = $value;
+				}
+			}
 
-		foreach ($store_configs as $key => $value) {
-			$configs[$key]['value'] = $value;
-		}
+			$stylesheet = !empty($store_theme['store_theme_style_' . $theme]) ? $store_theme['store_theme_style_' . $theme] : '';
 
-		//Stylesheet
-		$style_file = DIR_THEMES . $theme . '/css/style.store.' . $store_id . '.less';
-
-		if (!is_file($style_file)) {
-			touch($style_file);
+		} else {
+			$stylesheet = '';
 		}
 
 		return array(
-			'stylesheet' => $style_file,
+			'stylesheet' => $stylesheet,
 			'configs'    => $configs,
 		);
 	}
@@ -307,8 +317,27 @@ class Theme extends Library
 		$values = $this->parseConfigs($file);
 
 		foreach ($directives as $key => $description) {
+			$title = $key;
+			$type  = 'text';
+
+			if (strpos($description, '---') === 0) {
+				$type  = 'section';
+				$title = ucfirst($title);
+			} elseif (strpos($description, '-')) {
+				list($title, $description) = explode('-', $description, 2);
+
+				if (preg_match("/\\s*([a-z\\s]*[a-z]?)\\s*\\(([^)]+)\\)/i", $title, $match)) {
+					$title = trim($match[1] ? $match[1] : $key);
+					$type  = $match[2];
+				} else {
+					$title = trim($title);
+				}
+			}
+
 			$configs[$key] = array(
 				'key'         => $key,
+				'title'       => $title,
+				'type'        => $type,
 				'description' => $description,
 				'value'       => isset($values[$key]) ? $values[$key] : '',
 			);
@@ -319,7 +348,9 @@ class Theme extends Library
 
 	public function parseConfigs($file)
 	{
-		preg_match_all("/(\\@[a-z_-]+):\\s*([^;\r\n]+);/i", file_get_contents($file), $matches);
+		$contents = is_file($file) ? file_get_contents($file) : $file;
+
+		preg_match_all("/(\\@[a-z_-]+):\\s*([^;\r\n]+);/i", $contents, $matches);
 
 		$configs = array();
 

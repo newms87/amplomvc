@@ -52,7 +52,6 @@
 	</div>
 </div>
 
-<link rel="stylesheet" type="text/css" href="<?= URL_RESOURCES . 'js/codemirror/codemirror.css'; ?>"/>
 <script type="text/javascript" src="<?= URL_RESOURCES . 'js/codemirror/codemirror.js'; ?>"></script>
 
 <!-- wysihtml5 parser rules -->
