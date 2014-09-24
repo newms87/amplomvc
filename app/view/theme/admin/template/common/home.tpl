@@ -1,7 +1,7 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">

@@ -288,7 +288,7 @@ class App_Model_View extends Model
 		$from = $this->prefix . $table;
 
 		//Where
-		$where = $this->extractFilter($table, $filter);
+		$where = $this->extractWhere($table, $filter);
 
 		//Order By & Limit
 		$order = $this->extractOrder($sort);
@@ -334,6 +334,10 @@ class App_Model_View extends Model
 
 	public function getViewListing($view_listing_id)
 	{
+		if (_is_object($view_listing_id)) {
+			return $view_listing_id;
+		}
+
 		if (!self::$view_listings) {
 			$this->getAllViewListings();
 		}
@@ -374,7 +378,7 @@ class App_Model_View extends Model
 		//From
 		$from = $this->prefix . "view_listing vl";
 
-		$where = $this->extractFilter('view_listing vl', $filter);
+		$where = $this->extractWhere('view_listing vl', $filter);
 
 		//Order By & Limit
 		if ($index !== false) {

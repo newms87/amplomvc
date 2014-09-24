@@ -67,36 +67,37 @@ class App_Model_Setting_Role extends Model
 		return $this->queryVar("SELECT user_role_id FROM " . DB_PREFIX . "user_role WHERE name = '" . $this->escape($role) . "'");
 	}
 
-	public function getRoles($filter = array(), $select = '*', $index = null)
+	public function getRoles($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		//Select
-		if ($index === false) {
-			$select = "COUNT(*)";
-		}
+		$select = $this->extractSelect('user_role', $select);
 
 		//From
 		$from = DB_PREFIX . "user_role";
 
 		//Where
-		$where = "1";
+		$where = $this->extractWhere('user_role', $filter);
 
 		//Order and Limit
-		if ($index !== false) {
-			$order = $this->extractOrder($filter);
-			$limit = $this->extractLimit($filter);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		$order = $this->extractOrder($sort);
+		$limit = $this->extractLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		$calc_rows = ($total && $this->calcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
 
-		if ($index === false) {
-			return $this->queryVar($query);
+		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
+
+		if ($total) {
+			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
+			$total_rows = $this->queryVar($query);
+
+			return array(
+				$rows,
+				$total_rows
+			);
 		}
 
-		return $this->queryRows($query, $index);
+		return $rows;
 	}
 
 	public function getRestrictedAreas()
@@ -164,6 +165,34 @@ class App_Model_Setting_Role extends Model
 	public function getTotalRoles($filter = array())
 	{
 		return $this->getRoles($filter, '', false);
+	}
+
+	public function getViewListingId()
+	{
+		$view_listing_id = $this->Model_View->getViewListingBySlug('user_role_list');
+
+		if (!$view_listing_id) {
+			$view_listing = array(
+				'name' => _l("User Roles"),
+			   'slug' => 'user_role_list',
+			   'path' => 'admin/setting/role/listing',
+			);
+
+			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
+		}
+
+		return $view_listing_id;
+	}
+
+	public function getColumns($filter = array())
+	{
+		static $merge;
+
+		if (!$merge) {
+			$merge = array();
+		}
+
+		return $this->getTableColumns('user_role', $merge, $filter);
 	}
 
 	private function sortAreas(&$areas)

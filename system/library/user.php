@@ -181,23 +181,8 @@ class User extends Library
 				'admin/error/permission'
 			);
 
-			if (!in_array($path, $ignore)) {
-				if (!$this->can('r', $path)) {
-					return false;
-				}
-
-				$class  = $action->getClass();
-				$method = $action->getMethod();
-
-				if (property_exists($class, 'allow')) {
-					$allow = $class::$allow;
-
-					if (!empty($allow['modify']) && in_array($method, $allow['modify'])) {
-						if (!$this->can('w', $path)) {
-							return false;
-						}
-					}
-				}
+			if (!in_array($path, $ignore) && !$this->can('r', $path)) {
+				return false;
 			}
 		}
 

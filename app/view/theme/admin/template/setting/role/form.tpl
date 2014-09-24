@@ -1,7 +1,7 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div id="admin-permissions" class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<form action="<?= site_url('admin/setting/role/save', 'user_role_id=' . $user_role_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 

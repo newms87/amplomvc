@@ -107,11 +107,12 @@ class App_Controller_Admin_View extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
-			'name'  => '',
-			'slug'  => '',
-			'path'  => '',
-			'query' => '',
-			'sql'   => '',
+			'view_listing_id' => $view_listing_id,
+			'name'            => '',
+			'slug'            => '',
+			'path'            => '',
+			'query'           => '',
+			'sql'             => '',
 		);
 
 		$view_listing += $defaults;

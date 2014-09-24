@@ -1,7 +1,7 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 
 <div class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<form action="<?= site_url('admin/product/product_class/voucher/update', 'product_id=' . $product_id); ?>" method="post" id="voucher-form" class="box">
 		<input type="hidden" name="product_class_id" value="<?= $product_class_id; ?>"/>

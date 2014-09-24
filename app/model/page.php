@@ -323,7 +323,7 @@ class App_Model_Page extends Model
 		$from = DB_PREFIX . "page p";
 
 		//Where
-		$where = $this->extractFilter('page', $filter);
+		$where = $this->extractWhere('page', $filter);
 
 		if (!empty($filter['stores'])) {
 			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);
@@ -504,5 +504,22 @@ class App_Model_Page extends Model
 		}
 
 		return $this->getTableColumns('page', $merge, $filter);
+	}
+
+	public function getViewListingId()
+	{
+		$view_listing_id = $this->Model_View->getViewListingBySlug('page_list');
+
+		if (!$view_listing_id) {
+			$view_listing = array(
+				'name' => _l("Pages"),
+				'slug' => 'page_list',
+				'path' => 'admin/page/listing',
+			);
+
+			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
+		}
+
+		return $view_listing_id;
 	}
 }

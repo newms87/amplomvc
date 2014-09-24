@@ -358,11 +358,16 @@ abstract class Model
 		return $select;
 	}
 
-	protected function extractFilter($table, $filter, $columns = array())
+	protected function extractWhere($table, $filter, $columns = array())
 	{
 		$where = '1';
 
 		if (!$filter) {
+			return $where;
+		}
+
+		if (!is_array($filter)) {
+			trigger_error(_l("%s(): \$filter must be an array. \$filter = '%s'", __METHOD__, print_r($filter, true)));
 			return $where;
 		}
 
@@ -592,13 +597,44 @@ abstract class Model
 
 		//Filter
 		if ($filter) {
-			$columns = array_intersect_key($columns, $filter);
+			foreach ($filter as $key => $f) {
+				if ($f === false) {
+					unset($columns[$key]);
+					unset($filter[$key]);
+				}
+			}
+
+			if ($filter) {
+				$columns = array_intersect_key($columns, $filter);
+			}
 		}
 
 		//Sort
 		if ($sort) {
-			uksort($columns, function ($a, $b) {
-				return $a > $b;
+			uksort($columns, function ($ka, $kb) use($filter, $columns) {
+				$a = $columns[$ka];
+				$b = $columns[$kb];
+
+				//sort as first if Primary Key
+				if ($a['type'] === 'pk') {
+					return -1;
+				} elseif ($b['type'] === 'pk') {
+					return 1;
+				}
+
+				$sort_a = isset($filter[$ka]) ? $filter[$ka] : 0;
+				$sort_b = isset($filter[$kb]) ? $filter[$kb] : 0;
+
+				//Sort by requested sort order
+				if ($sort_a !== $sort_b) {
+					return $sort_a > $sort_b;
+				}
+
+				$name_a = isset($a['display_name']) ? $a['display_name'] : $ka;
+				$name_b = isset($b['display_name']) ? $b['display_name'] : $kb;
+
+				//Sort by name by last resort
+				return $name_a > $name_b;
 			});
 		}
 

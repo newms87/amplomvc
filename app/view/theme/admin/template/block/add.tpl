@@ -1,6 +1,6 @@
 <?= IS_AJAX ? '' : call('admin/common/header'); ?>
 <div id="add_block" class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<form id="form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
