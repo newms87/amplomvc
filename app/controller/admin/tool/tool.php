@@ -1,12 +1,6 @@
 <?php
 class App_Controller_Admin_Tool_Tool extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-			'clear_cache',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

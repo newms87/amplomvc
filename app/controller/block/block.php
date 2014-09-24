@@ -2,16 +2,6 @@
 
 class App_Controller_Block_Block extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-		   'delete',
-		   'save',
-		   'instances',
-		   'instance',
-		   'settings',
-		),
-	);
-
 	public function delete()
 	{
 		$path = _get('path', '');

@@ -2,15 +2,6 @@
 
 class App_Controller_Admin_Setting_Role extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-			'form',
-			'listing',
-			'update',
-			'delete',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head
@@ -44,15 +35,6 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$columns = array();
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Name"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');

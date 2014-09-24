@@ -2,15 +2,6 @@
 
 class App_Controller_Admin_User extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-			'form',
-			'update',
-			'delete',
-			'batch_action',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

@@ -1,16 +1,6 @@
 <?php
 class App_Controller_Admin_Block extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-		   'form',
-		   'add_block',
-		   'delete',
-		   'add',
-		   'save',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

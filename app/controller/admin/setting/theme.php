@@ -8,12 +8,6 @@
  */
 class App_Controller_Admin_Setting_Theme extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-			'save',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

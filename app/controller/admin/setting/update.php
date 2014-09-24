@@ -9,13 +9,6 @@
  */
 class App_Controller_Admin_Setting_Update extends Controller
 {
-	static $allow = array(
-		'modify '=> array(
-			'index',
-		   //'update',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

@@ -2,16 +2,6 @@
 
 class App_Controller_Admin_Design_Navigation extends Controller
 {
-	static $allow = array(
-		'modify ' => array(
-			'update',
-			'delete',
-			'batch_action',
-			'reset_admin_navigation',
-			'form',
-		),
-	);
-
 	public function index()
 	{
 		//Page Head

@@ -2,14 +2,6 @@
 
 class App_Controller_Admin_Setting_Store extends Controller
 {
-	static $allow = array(
-		'modify' => array(
-			'form',
-		   'save',
-		   'remove',
-		),
-	);
-
 	public function index($data = array())
 	{
 		//Page Head

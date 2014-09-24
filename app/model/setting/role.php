@@ -166,6 +166,24 @@ class App_Model_Setting_Role extends Model
 		return $this->getRoles($filter, '', false);
 	}
 
+	public function getColumns($filter = array())
+	{
+		$columns = array(
+			'status' => array(
+				'type'         => 'select',
+				'display_name' => _l("Status"),
+				'build_data'   => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
+				'filter'       => true,
+				'sortable'     => true,
+			),
+		);
+
+		return $this->getTableColumns('page', $columns, $filter);
+	}
+
 	private function sortAreas(&$areas)
 	{
 		if (is_array($areas)) {

@@ -11,3 +11,5 @@ foreach ($dashboards as $dash) {
 		$this->db->query("UPDATE " . DB_PREFIX . "dashboard SET title = '" . $this->escape($dash['name']) . "', name = '" . $this->escape(slug($dash['name'])) . "' WHERE dashboard_id = " . (int)$dash['dashboard_id']);
 	}
 }
+
+$this->db->addColumn('user_role', 'level', "INT UNSIGNED NOT NULL");
