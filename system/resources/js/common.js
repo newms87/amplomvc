@@ -77,6 +77,25 @@ $.fn.use_once = function (label) {
     return this.not('.' + label).addClass(label);
 }
 
+$.fn.scrollTo = function (target, options) {
+    var $this = this;
+    options = $.extend({}, {
+        offset: 0,
+        callback: null
+    }, options);
+
+    var top = target.offset().top + options.offset;
+    this.stop();
+
+    $this.animate({scrollTop: top}, {
+        duration: 1000, complete: function (e) {
+            if (typeof options.callback == 'function') {
+                options.callback(e);
+            }
+        }
+    });
+}
+
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
     $('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);

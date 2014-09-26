@@ -110,11 +110,6 @@ class Message extends Library
 		return $msgs;
 	}
 
-	public function toJSON($type = '')
-	{
-		return json_encode($this->fetch($type));
-	}
-
 	public function render($type = null, $close = true)
 	{
 		$messages = $this->fetch($type);

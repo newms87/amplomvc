@@ -519,12 +519,12 @@ function build($type, $params)
 			case 'ac-radio':
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"text\">$value</div></label>";
+				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
 				break;
 
 			case 'checkbox':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<div class=\"checkbox-button\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" class=\"ac-checkbox\" name=\"{$name}[]\" value=\"$key\" $s /><label for=\"checkbox-$uniqid\">$value</label></div>";
+				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
 				break;
 
 			case 'multiselect':
@@ -637,6 +637,12 @@ function output($output)
 {
 	global $registry;
 	$registry->get('response')->setOutput($output);
+}
+
+function output_json($data)
+{
+	global $registry;
+	$registry->get('response')->setOutput(json_encode($data), 'application/json');
 }
 
 function output_as_file($contents, $type = 'txt', $filename = '')

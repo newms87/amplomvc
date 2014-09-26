@@ -27,9 +27,10 @@ class Response extends Library
 		$this->level = $level;
 	}
 
-	public function setOutput($output)
+	public function setOutput($output, $content_type = 'text/html')
 	{
 		$this->output = $output;
+		$this->headers['ContentType'] = $content_type;
 	}
 
 	private function compress($data, $level = 0)

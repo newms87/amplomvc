@@ -221,7 +221,7 @@ class Theme extends Library
 			$store_theme = $this->config->loadGroup('store_theme');
 
 			if ($store_theme) {
-				$theme_style = "@import '@{themepath}css/style';\n\n";
+				$theme_style = "@import '@{themepath}css/config';\n\n";
 
 				if (!empty($store_theme['store_theme_config_' . $theme])) {
 					$theme_style .= $store_theme['store_theme_config_' . $theme];
@@ -238,7 +238,11 @@ class Theme extends Library
 			}
 
 			if (!$theme_file) {
-				$theme_file = $this->getFile('css/style.less');
+				$theme_file = $this->getFile('css/config.less');
+
+				if (!$theme_file) {
+					$theme_file = $this->getFile('css/style.less');
+				}
 			}
 		}
 
