@@ -193,7 +193,7 @@ $registry->set('url', new Url());
 
 // Response
 $response = new Response();
-$response->addHeader('Content-Type: text/html; charset=utf-8');
+$response->addHeader('Content-Type', 'text/html; charset=UTF-8');
 $response->setCompression(option('config_compression'));
 $registry->set('response', $response);
 

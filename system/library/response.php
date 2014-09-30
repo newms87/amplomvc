@@ -6,9 +6,9 @@ class Response extends Library
 	private $level = 0;
 	private $output;
 
-	public function addHeader($header)
+	public function addHeader($key, $value)
 	{
-		$this->headers[] = $header;
+		$this->headers[$key] = $value;
 	}
 
 	public function setHeader($header)
@@ -16,21 +16,15 @@ class Response extends Library
 		$this->headers = is_array($header) ? $header : array($header);
 	}
 
-	public function redirect($url)
-	{
-		header('Location: ' . $url);
-		exit;
-	}
-
 	public function setCompression($level)
 	{
 		$this->level = $level;
 	}
 
-	public function setOutput($output, $content_type = 'text/html')
+	public function setOutput($output, $content_type = 'text/html; charset=UTF-8')
 	{
 		$this->output = $output;
-		$this->headers['ContentType'] = $content_type;
+		$this->headers['Content-Type'] = $content_type;
 	}
 
 	private function compress($data, $level = 0)
@@ -59,7 +53,7 @@ class Response extends Library
 			return $data;
 		}
 
-		$this->addHeader('Content-Encoding: ' . $encoding);
+		$this->addHeader('Content-Encoding', $encoding);
 
 		return gzencode($data, (int)$level);
 	}
@@ -73,18 +67,18 @@ class Response extends Library
 
 		if ($this->output) {
 			if ($this->level) {
-				$ouput = $this->compress($this->output, $this->level);
+				$output = $this->compress($this->output, $this->level);
 			} else {
-				$ouput = $this->output;
+				$output = $this->output;
 			}
 
 			if (!headers_sent()) {
-				foreach ($this->headers as $header) {
-					header($header, true);
+				foreach ($this->headers as $key => $value) {
+					header($key . ': ' . $value, true);
 				}
 			}
 
-			echo $ouput;
+			echo $output;
 		}
 	}
 

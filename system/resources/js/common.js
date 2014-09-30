@@ -350,10 +350,14 @@ $.fn.ac_msg = function (type, msg, append, close) {
     });
 }
 
-$.fn.ac_errors = function (errors) {
+$.fn.ac_errors = function (errors, noclear) {
+    if (!noclear) {
+        this.find('.err-msg').remove();
+    }
+
     for (var err in errors) {
         if (typeof errors[err] == 'object') {
-            this.ac_errors(errors[err]);
+            this.ac_errors(errors[err], true);
             continue;
         }
 
@@ -371,7 +375,7 @@ $.fn.ac_errors = function (errors) {
             return this.ac_msg('error', errors);
         }
 
-        ele.after($("<div />").addClass('error').html(errors[err]));
+        ele.after($("<div />").addClass('error err-msg').html(errors[err]));
     }
 
     return this;
