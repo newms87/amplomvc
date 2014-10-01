@@ -1,0 +1,294 @@
+/**
+  * General: ---
+  * @imgpath: Image Path - The Path to the Main image directory (accessible by the image manager)
+  * @themepath: Theme Path - The path to your theme's root directory for css assets (images, fonts, etc..)
+  * @xs: Device targeting for Extra Small (eg: Smart Phones) Screen Sizes
+  * @sm: Device targeting for Small (eg: Tablets) Screen Sizes
+  * @md: Device targeting for Medium (eg: small laptop / desktop monitors) Screen Sizes
+  * @lg: Device targeting for Large (eg: typical laptop / desktop monitors and larger) Screen Sizes
+  * @num-cols: The Number of columns to use for the fluid grid
+  * @page-width-min: The smallest width the screen will resize to.
+  * @page-width-xs: Page width for @xs sized devices
+  * @page-width-sm: Page width for @sm sized devices
+  * @page-width-md: Page width for @md sized screens
+  * @page-width-lg: Page width for @lg sized screens
+
+  * @color-lightest: The lightest color relative to @color-light
+  * @color-lighter: Lighter than @color-light
+  * @color-light: A light secondary color to your theme
+  * @color-main: The primary color for the theme
+  * @color-dark: A dark secondary color to your theme
+  * @color-darker: Darker than @color-dark
+  * @color-darkest: The darkest color relative to @color-dark
+
+  * @link-normal: Color for links (in the normal state)
+  * @link-hover: Color when you hover over a link (or active state)
+
+  * @font-dark: The primary text color for dark text
+  * @font-light: The primary text color for light text
+
+  * @bg-main: The background color / image
+
+  * @font-stack: The font families to use in order (eg: Arial, Helvetica, sans-serif)
+  * @font-size: The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
+
+  * Footer: ---
+  * @footer-link: Footer Link (color) - Footer link color
+  * @footer-link-hover: Footer Link Hover (color) - Footer link hover color
+  * @footer-background: Footer Background (background) - Footer Background style
+  * @footer-border: Footer Border (border) - Footer Border style
+
+  * Messages: ---
+  * @msg-fg-color: The default foreground color for messages
+  * @msg-bg-color: The default background color for messages
+  * @msg-success-fg-color: The foreground color for success type messages
+  * @msg-success-bg-color: The background color for success type messages
+  * @msg-error-fg-color: The foreground color for error type messages
+  * @msg-error-bg-color: The background color for error type messages
+  * @msg-attention-fg-color: The foreground color for attention type messages
+  * @msg-attention-bg-color: The background color for attention type messages
+  * @msg-notify-fg-color: The foreground color for notify type messages
+  * @msg-notify-bg-color: The background color for notify type messages
+*/
+
+/* LESS config */
+@imgpath: '../../../image/';
+@themepath: '../../../app/view/theme/metro/';
+@xs: 480px;
+@sm: 768px;
+@md: 1024px;
+@lg: 1280px;
+
+@num-cols: 12;
+
+//Page Layout
+@page-width-min: 320px;
+@page-width-xs: 90%;
+@page-width-sm: 768px;
+@page-width-md: 994px;
+@page-width-lg: 1120px;
+@page-width-max: 1120px;
+@page-wrap-pad: 20px 0;
+
+//Primary Styling
+@color-lightest: #E2F0FD;
+@color-lighter: #C4DBF1;
+@color-light: #92acc6;
+@color-main: #ffffff;
+@color-dark: #2f3d52;
+@color-darker: #1B2636;
+@color-darkest: black;
+
+@link-font: 1em;
+@link-font-hover: @link-font;
+@link-color: #00AEEF;
+@link-color-hover: lighten(@link-color, 25%);
+
+@font-light: #ffffff;
+@font-dark: #2f3d52;
+
+@bg-main: #ffffff;
+
+@font-base: 100% OpenSansRegular, Helvetica, sans-serif;
+@font-base-color: #6A6E6F;
+
+//Headers
+@h1-color: #6A6E6F;
+@h1-font: 1.7em OpenSansBold;
+@h2-color: #6A6E6F;
+@h2-font: 1.5em;
+@h3-color: #00AEEF;
+@h3-font: 1.9em RobotoBlack;
+@h4-color: #6A6E6F;
+@h4-font: 1.1em;
+@h5-color: #6A6E6F;
+@h5-font: 1em;
+@h6-color: #6A6E6F;
+@h6-font: .8em;
+
+//Buttons
+@button-font: 1.1em OpenSansBold;
+@button-font-color: white;
+@button-font-color-hover: white;
+@button-background: "background: #49C9FF; background: linear-gradient(to bottom, #49C9FF 0%, #00AEEF 100%);";
+@button-background-hover: "background: #00AEEF; background: linear-gradient(to bottom, #00AEEF 0%, #49C9FF 100%);";
+@button-border: none;
+@button-border-radius: 5px;
+@button-padding: .5em 1.5em;
+
+/* Form Styling */
+
+//Input Text / Password
+@form-input-font: 1.1em;
+@form-input-color: @font-base-color;
+@form-input-color-focus: @font-base-color;
+@form-input-color-hover: @font-base-color;
+@form-input-background: 'background: white';
+@form-input-background-focus: 'background: white';
+@form-input-background-hover: 'background: white';
+@form-input-border: @font-base-color 1px solid;
+@form-input-border-radius: 5px;
+@form-input-padding: 5px 10px;
+@form-input-outline: none;
+
+//Select
+@form-select-font: 1.1em;
+@form-select-color: @font-base-color;
+@form-select-color-focus: @font-base-color;
+@form-select-color-hover: @font-base-color;
+@form-select-background: 'background: white';
+@form-select-background-focus: 'background: white';
+@form-select-background-hover: 'background: white';
+@form-select-border: @font-base-color 1px solid;
+@form-select-border-radius: 5px;
+@form-select-padding: 5px 10px;
+@form-select-outline: none;
+
+//Radio
+@form-radio-font: 1.1em;
+@form-radio-color: @font-base-color;
+@form-radio-color-focus: @font-base-color;
+@form-radio-color-hover: @font-base-color;
+@form-radio-color-checked: white;
+@form-radio-background: 'background: white';
+@form-radio-background-focus: 'background: white';
+@form-radio-background-hover: 'background: white';
+@form-radio-background-checked: 'background: #00AEEF';
+@form-radio-border: #669EC1 1px solid;
+@form-radio-border-radius: 5px;
+@form-radio-padding: 5px 10px;
+@form-radio-outline: none;
+@form-radio-on: "background: url(@{themepath}image/radio-on.png) center center no-repeat; background-position: 0 -100px;";
+@form-radio-off: "background: url(@{themepath}image/radio-off.png) center center no-repeat; background-position: -17px -100px;";
+.radio-off {
+  background: url('@{themepath}image/sprite-icons8.png') center center no-repeat;
+  background-position: -34px -214px;
+  width: 17px;
+  height: 14px;
+}
+
+.radio-on {
+  background-position: -51px -214px;
+}
+
+//Checkbox
+@form-checkbox-font: 1.1em;
+@form-checkbox-color: @font-base-color;
+@form-checkbox-color-focus: @font-base-color;
+@form-checkbox-color-hover: @font-base-color;
+@form-checkbox-color-checked: white;
+@form-checkbox-background: 'background: white';
+@form-checkbox-background-focus: 'background: white';
+@form-checkbox-background-hover: 'background: white';
+@form-checkbox-background-checked: 'background: #00AEEF';
+@form-checkbox-border: #669EC1 1px solid;
+@form-checkbox-border-radius: 5px;
+@form-checkbox-padding: 5px 10px;
+@form-checkbox-outline: none;
+.checkbox-off {
+  background: url('@{themepath}image/sprite-icons8.png') center center no-repeat;
+  background-position: -17px -214px;
+  width: 17px;
+  height: 14px;
+}
+
+.checkbox-on {
+  background-position: 0 -214px;
+}
+
+//Textarea
+@form-textarea-font: 1em OpenSansRegular, Helvetica, sans-serif;
+@form-textarea-color: @font-base-color;
+@form-textarea-color-focus: @font-base-color;
+@form-textarea-color-hover: @font-base-color;
+@form-textarea-background: 'background: white';
+@form-textarea-background-focus: 'background: white';
+@form-textarea-background-hover: 'background: white';
+@form-textarea-border: @font-base-color 1px solid;
+@form-textarea-border-radius: 5px;
+@form-textarea-padding: 5px 10px;
+@form-textarea-outline: none;
+
+//Messages
+@msg-fg-color: #555555;
+@msg-bg-color: #CFCFCF;
+
+@msg-success-bg-color: #EAF7D9;
+@msg-success-fg-color: #8DAD62;
+
+@msg-error-bg-color: #FFD1D1;
+@msg-error-fg-color: #D15252;
+
+@msg-attention-bg-color: #FFFBE9;
+@msg-attention-fg-color: #E1CA34;
+
+@msg-notify-bg-color: #E6F1FB;
+@msg-notify-fg-color: #8DAFCF;
+
+/* SECTION STYLES */
+
+//Header
+@header-position: fixed;
+@header-width: 100%;
+@header-height: 5em;
+@header-background: 'background: #343434';
+@header-border: none;
+@header-box-shadow: none;
+@header-padding: 1em;
+
+//Style A
+@sa-background: 'background: white';
+@sa-font: @font-base;
+@sa-color: @font-base-color;
+@sa-link-font: .8em;
+@sa-link-color: @font-base-color;
+@sa-link-color-hover: lighter(@sa-link-color, 25%);
+@sa-border: none;
+@sa-padding: 1.5em 0 2em 0;
+@sa-margin: 0;
+
+//Style B
+@sb-background: 'background: #DEF6FF';
+@sb-font: @font-base;
+@sb-color: @font-base-color;
+@sb-link-font: .8em;
+@sb-link-color: @font-base-color;
+@sb-link-color-hover: lighter(@sb-link-color, 25%);
+@sb-border: none;
+@sb-padding: 3em 0;
+@sb-margin: 0;
+
+//Style C
+@sc-background: 'background: white';
+@sc-font: @font-base;
+@sc-color: @font-base-color;
+@sc-border: none;
+@sc-padding: 1.5em 0;
+@sc-margin: 0;
+
+//Style D
+@sd-background: 'background: #DCDCDC';
+@sd-font: .8em;
+@sd-color: @font-base-color;
+@sd-link-font: .8em;
+@sd-link-color: @font-base-color;
+@sd-link-color-hover: lighter(@sd-link-color, 25%);
+@sd-border: none;
+@sd-padding: .5em 0;
+@sd-margin: 0;
+
+//Footer
+@footer-position: static;
+@footer-font: .8em;
+@footer-color: white;
+@footer-link: white;
+@footer-link-hover: darker(@footer-link, 25%);
+@footer-background: 'background: #343434;';
+@footer-border: none;
+@footer-padding: 1em;
+
+/* Imports */
+@import 'base';
+@import 'reset';
+@import 'style';
+@import 'metro';
