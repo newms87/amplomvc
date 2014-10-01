@@ -2,7 +2,7 @@
 class mysqlidb implements Database
 {
 	private $mysqli;
-	private $err_msg;
+	private $error;
 	private $last_id;
 	private $affected_rows;
 
@@ -21,7 +21,7 @@ class mysqlidb implements Database
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 
 		if ($this->mysqli->connect_error) {
-			$this->err_msg = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
+			$this->error = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
 		} else {
 			$this->query("SET NAMES 'utf8'");
 			$this->query("SET CHARACTER SET utf8");
@@ -37,7 +37,7 @@ class mysqlidb implements Database
 
 	public function getError()
 	{
-		return $this->err_msg;
+		return $this->error;
 	}
 
 	public function query($sql)
@@ -66,7 +66,7 @@ class mysqlidb implements Database
 				return true;
 			}
 		} else {
-			$this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			$this->error = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
 
 			return false;
 		}
@@ -80,7 +80,7 @@ class mysqlidb implements Database
 		}
 
 		if ($this->mysqli->errno) {
-			$this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			$this->error = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
 
 			return false;
 		}

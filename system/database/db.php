@@ -53,6 +53,9 @@ class DB
 
 			$db = new $driver($hostname, $username, $password, $database);
 
+			//Set our errors to the driver errors if there were any
+			$this->error = $db->getError();
+
 			$db->query("SET time_zone = '" . MYSQL_TIMEZONE . "'");
 
 			self::$drivers[$key] = $db;
