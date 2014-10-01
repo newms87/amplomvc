@@ -14,7 +14,7 @@ $root = str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(_
 
 if ($action === 'user_setup' && !is_file($root . 'config.php')) {
 	$action    = false;
-	$error_msg = "Unable to load config file. Please attempt installation again.";
+	$error_msg = "Unable to load config file. Is your site's root directory writable by apache? Please attempt installation again.";
 }
 
 if ($action === 'user_setup') {
