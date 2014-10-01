@@ -52,9 +52,6 @@ class App_Controller_Common_Header extends Controller
 		$settings['styles']  = $this->document->renderStyles();
 		$settings['scripts'] = $this->document->renderScripts();
 
-		$settings['google_analytics'] = html_entity_decode(option('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		$settings['statcounter']      = option('config_statcounter');
-
 		//Icons
 		$settings['icons'] = option('config_icon');
 

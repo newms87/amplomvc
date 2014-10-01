@@ -2,12 +2,11 @@
 
 class App_Model_Page extends Model
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->loadPages();
+		//$this->loadPages();
 	}
 
 	public function addPage($page)
@@ -15,9 +14,7 @@ class App_Model_Page extends Model
 		//Defaults
 		$page += array(
 			'title'   => '',
-			'content' => '',
-			'style'   => '',
-			'theme'   => option('config_default_theme', 'fluid'),
+			'theme'   => option('config_default_theme', 'amplo'),
 		);
 
 		if (!validate('text', $page['title'], 1, 64)) {
@@ -40,8 +37,13 @@ class App_Model_Page extends Model
 
 		_is_writable($dir);
 
-		file_put_contents($dir . '/content.tpl', $page['content']);
-		file_put_contents($dir . '/style.less', $page['style']);
+		if (isset($page['content'])) {
+			file_put_contents($dir . '/content.tpl', $page['content']);
+		}
+
+		if (isset($page['style'])) {
+			file_put_contents($dir . '/style.less', $page['style']);
+		}
 
 		if (!empty($page['stores'])) {
 			foreach ($page['stores'] as $store) {
@@ -87,7 +89,7 @@ class App_Model_Page extends Model
 		}
 
 		if (empty($page['theme'])) {
-			$page['theme'] = option('config_default_theme', 'fluid');
+			$page['theme'] = option('config_default_theme', AMPLO_DEFAULT_THEME);
 		}
 
 		if (empty($page['name'])) {
@@ -167,10 +169,10 @@ class App_Model_Page extends Model
 
 	public function copyPage($page_id)
 	{
-		$page            = $this->getPage($page_id);
-		$page['stores']  = $this->getPageStores($page_id);
-		$page['content'] = $this->getPageContent($page);
-		$page['style']   = $this->getPageStyle($page);
+		$page                 = $this->getPage($page_id);
+		$page['stores']       = $this->getPageStores($page_id);
+		$page['content_file'] = $this->getPageContentFile($page);
+		$page['style_file']   = $this->getPageStyleFile($page);
 
 		$this->addPage($page);
 	}
@@ -204,8 +206,8 @@ class App_Model_Page extends Model
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
-			$page['content'] = $this->getPageContent($page);
-			$page['style']   = $this->getPageStyle($page);
+			$page['content_file'] = $this->getPageContentFile($page);
+			$page['style_file']   = $this->getPageStyleFile($page);
 
 			$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
@@ -235,8 +237,8 @@ class App_Model_Page extends Model
 		$page = $this->queryRow($query);
 
 		if ($page) {
-			$page['content'] = $this->getPageContent($page);
-			$page['style']   = $this->getPageStyle($page);
+			$page['content_file'] = $this->getPageContentFile($page);
+			$page['style_file']   = $this->getPageStyleFile($page);
 		}
 
 		return $page;
@@ -269,25 +271,32 @@ class App_Model_Page extends Model
 		}
 
 		if ($page) {
-			$page['content'] = $this->getPageContent($page);
-			$page['style']   = $this->getPageStyle($page);
+			$page['content_file'] = $this->getPageContentFile($page);
+			$page['style_file']   = $this->getPageStyleFile($page);
 		} elseif ($file) {
 			if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "page WHERE `name` = '" . $this->escape($name) . "'")) {
+				$page_data = $this->tool->getFileCommentDirectives(DIR_THEMES . $file);
+				$title     = !empty($page_data['title']) ? $page_data['title'] : ucfirst($name);
+				$cache     = isset($page_data['cache']) ? (int)$page_data['cache'] : 1;
+
 				$page = array(
 					'theme'         => option('config_theme'),
 					'name'          => $name,
-					'title'         => ucfirst($name),
+					'title'         => $title,
 					'layout_id'     => option('config_layout_id'),
-					'content'       => file_get_contents(URL_THEMES . $file),
+					'content_file'  => DIR_THEMES . $file,
+					'style_file'    => $this->theme->getFile('page/' . $name . '/style.less'),
 					'status'        => 1,
-					'display_title' => 1,
-					'cache'         => 1,
+					'display_title' => $title ? 1 : 0,
+					'cache'         => $cache,
 					'stores'        => array(
 						option('store_id'),
 					),
 				);
 
-				$this->addPage($page);
+				$page_id = $this->addPage($page);
+
+				$page['page_id'] = $page_id;
 			}
 		}
 
@@ -306,8 +315,8 @@ class App_Model_Page extends Model
 				'layout_id' => option('config_default_layout_id')
 			);
 
-			$page['content'] = $this->getPageContent($page);
-			$page['style']   = $this->getPageStyle($page);
+			$page['content_file'] = $this->getPageContentFile($page);
+			$page['style_file']   = $this->getPageStyleFile($page);
 
 			$this->translation->translate('page', $page_id, $page);
 		}
@@ -343,8 +352,8 @@ class App_Model_Page extends Model
 		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 
 		foreach ($rows as &$row) {
-			$row['content'] = $this->getPageContent($row);
-			$row['style']   = $this->getPageStyle($row);
+			$row['content_file'] = $this->getPageContentFile($row);
+			$row['style_file']   = $this->getPageStyleFile($row);
 		}
 		unset($row);
 
@@ -361,7 +370,7 @@ class App_Model_Page extends Model
 		return $rows;
 	}
 
-	public function getPageContent($page)
+	public function getPageContentFile($page)
 	{
 		$content = $this->theme->getFile('page/' . $page['name'] . '/content', $page['theme']);
 
@@ -376,7 +385,7 @@ class App_Model_Page extends Model
 		return $content;
 	}
 
-	public function getPageStyle($page)
+	public function getPageStyleFile($page)
 	{
 		$style = $this->theme->getFile('page/' . $page['name'] . '/style.less', $page['theme']);
 
@@ -433,29 +442,7 @@ class App_Model_Page extends Model
 
 						if (filetype($page_dir . $name) === 'dir') {
 							if (!isset($pages[$theme][$name])) {
-								$title = array_map(function ($a) {
-									return ucfirst($a);
-								}, explode('_', $name));
-								$title = implode(' ', $title);
-
-								$content_file = $page_dir . $name . '/content.tpl';
-								$style_file   = $page_dir . $name . '/style.less';
-								$content      = is_file($content_file) ? file_get_contents($content_file) : '';
-								$style        = is_file($style_file) ? file_get_contents($style_file) : '';
-
-								$page = array(
-									'theme'         => $theme,
-									'name'          => $name,
-									'title'         => $title,
-									'template'      => '',
-									'content'       => $content,
-									'style'         => $style,
-									'status'        => 1,
-									'display_title' => 1,
-									'cache'         => 1,
-								);
-
-								$this->addPage($page);
+								$this->syncPageDB($theme, $name);
 							}
 						}
 					}
@@ -464,6 +451,33 @@ class App_Model_Page extends Model
 		}
 
 		closedir($handle);
+	}
+
+	private function syncPageDB($theme, $name)
+	{
+		$title = array_map(function ($a) {
+			return ucfirst($a);
+		}, explode('_', $name));
+		$title = implode(' ', $title);
+
+		$content_file = DIR_THEMES . $theme .'/' . $name . '/content.tpl';
+		$style_file   = DIR_THEMES . $theme .'/' . $name . '/style.less';
+		$content      = is_file($content_file) ? file_get_contents($content_file) : '';
+		$style        = is_file($style_file) ? file_get_contents($style_file) : '';
+
+		$page = array(
+			'theme'         => $theme,
+			'name'          => $name,
+			'title'         => $title,
+			'template'      => '',
+			'content'       => $content,
+			'style'         => $style,
+			'status'        => 1,
+			'display_title' => 1,
+			'cache'         => 1,
+		);
+
+		return $this->addPage($page);
 	}
 
 	public function getColumns($filter = array())

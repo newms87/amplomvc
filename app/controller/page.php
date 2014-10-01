@@ -24,18 +24,20 @@ class App_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
-		if ($page['style'] && filesize($page['style']) > 0) {
-			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
-				$style = $this->document->compileLess($page['style'], 'page-' . $page['name']);
+		if (!empty($page['style_file']) && filesize($page['style_file']) > 0) {
+			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
+				$style = $this->document->compileLess($page['style_file'], 'page-' . $page['name']);
 			} else {
-				$style = $page['style'];
+				$style = $page['style_file'];
 			}
 
 			$this->document->addStyle($style);
 		}
 
 		//load style in header only.
-		$page['style'] = null;
+		$page['style_file'] = null;
+
+		$page['page_id'] = $page_id;
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -63,9 +65,9 @@ class App_Controller_Page extends Controller
 			return '';
 		}
 
-		if ($page['style']) {
-			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
-				$page['style'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style'], 'page-' . $page['name']));
+		if ($page['style_file']) {
+			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
+				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
 			}
 		}
 
@@ -86,8 +88,8 @@ class App_Controller_Page extends Controller
 				'name'          => 'new-page',
 				'title'         => "New Page",
 				'display_title' => 1,
-				'content'       => '',
-				'style'         => '',
+				'content_file'  => '',
+				'style_file'    => '',
 				'layout_id'     => option('config_default_layout'),
 			);
 		}
@@ -99,9 +101,9 @@ class App_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
-		if ($page['style']) {
-			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
-				$page['style'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style'], 'page-' . $page['name']));
+		if ($page['style_file']) {
+			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
+				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
 			}
 		}
 
@@ -134,17 +136,17 @@ class App_Controller_Page extends Controller
 			file_put_contents($temp_content, html_entity_decode($_POST['content']));
 			file_put_contents($temp_style, html_entity_decode($_POST['style']));
 
-			$page['content'] = $temp_content;
-			$page['style']   = $temp_style;
+			$page['content_file'] = $temp_content;
+			$page['style_file']   = $temp_style;
 		}
 
 		if (!$page) {
 			return '';
 		}
 
-		if ($page['style']) {
-			if (pathinfo($page['style'], PATHINFO_EXTENSION) === 'less') {
-				$page['style'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style'], 'page-' . $page['name']));
+		if ($page['style_file']) {
+			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
+				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
 			}
 		}
 

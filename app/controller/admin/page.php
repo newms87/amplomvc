@@ -117,12 +117,12 @@ class App_Controller_Admin_Page extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
-			'theme'            => option('config_default_theme', 'fluid'),
+			'theme'            => option('config_default_theme', AMPLO_DEFAULT_THEME),
 			'name'             => '',
 			'title'            => 'New Page',
 			'alias'            => '',
-			'content'          => '',
-			'style'            => '',
+			'content_file'     => '',
+			'style_file'       => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'display_title'    => 1,

@@ -6,7 +6,7 @@ class Response extends Library
 	private $level = 0;
 	private $output;
 
-	public function addHeader($key, $value)
+	public function addHeader($key, $value = null)
 	{
 		$this->headers[$key] = $value;
 	}
@@ -74,7 +74,11 @@ class Response extends Library
 
 			if (!headers_sent()) {
 				foreach ($this->headers as $key => $value) {
-					header($key . ': ' . $value, true);
+					if ($value) {
+						header($key . ': ' . $value, true);
+					} else {
+						header($key, true);
+					}
 				}
 			}
 
@@ -86,7 +90,7 @@ class Response extends Library
 	{
 		global $__start;
 
-		$file = $this->theme->getFile('common/amplo_profile', 'fluid');
+		$file = $this->theme->getFile('common/amplo_profile', AMPLO_DEFAULT_THEME);
 
 		if ($file) {
 			if (DB_PROFILE) {

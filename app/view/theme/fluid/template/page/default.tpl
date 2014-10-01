@@ -2,8 +2,10 @@
 <?= area('left'); ?><?= area('right'); ?>
 
 <style id="page-style">
-	<? if (is_file($style)) { ?>
-	<?= file_get_contents($style); ?>
+	<? if (!empty($style_file)) { ?>
+	<?= file_get_contents($style_file); ?>
+	<? } elseif (!empty($style)) { ?>
+	<?= $style; ?>
 	<? } ?>
 </style>
 
@@ -22,8 +24,10 @@
 
 	<div class="page-content row">
 		<div class="wrap">
-			<? if ($content) { ?>
-				<? include($content); ?>
+			<? if (!empty($content_file)) { ?>
+				<? include($content_file); ?>
+			<? } elseif (!empty($content)) { ?>
+				<?= $content; ?>
 			<? } ?>
 		</div>
 	</div>

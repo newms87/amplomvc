@@ -1,6 +1,7 @@
 <?php
 // Version
 define('AMPLO_VERSION', '0.1.0');
+define('AMPLO_DEFAULT_THEME', 'amplo');
 
 //Directories
 define('DIR_SYSTEM', DIR_SITE . 'system/');

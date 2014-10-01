@@ -14,7 +14,7 @@ class Theme extends Library
 		$this->dir_themes = DIR_THEMES;
 
 		$admin_theme = option('config_admin_theme', 'admin');
-		$theme       = option('config_theme', 'fluid');
+		$theme       = option('config_theme', AMPLO_DEFAULT_THEME);
 
 		if (!is_dir(DIR_THEMES . $admin_theme)) {
 			set_option('config_admin_theme', 'admin');
@@ -22,8 +22,8 @@ class Theme extends Library
 		}
 
 		if (!is_dir(DIR_THEMES . $theme)) {
-			set_option('config_theme', 'fluid');
-			$theme = 'fluid';
+			set_option('config_theme', AMPLO_DEFAULT_THEME);
+			$theme = AMPLO_DEFAULT_THEME;
 		}
 
 		if (IS_ADMIN) {
