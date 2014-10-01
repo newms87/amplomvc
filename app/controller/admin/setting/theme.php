@@ -27,7 +27,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		$theme = $this->config->load('config', 'config_theme', $store_id);
 
 		if (!$theme) {
-			$theme = 'fluid';
+			$theme = AMPLO_DEFAULT_THEME;
 		}
 
 		//Breadcrumbs
@@ -69,7 +69,7 @@ class App_Controller_Admin_Setting_Theme extends Controller
 		$theme    = $this->config->load('config', 'config_theme', $store_id);
 
 		if (!$theme) {
-			$theme = 'fluid';
+			$theme = AMPLO_DEFAULT_THEME;
 		}
 
 		//Save Settings

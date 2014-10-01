@@ -39,10 +39,10 @@
 					</div>
 
 					<div class="html_title"><?= _l("HTML"); ?></div>
-					<textarea id="html_editor" name="content"><?= $content ? file_get_contents($content) : ''; ?></textarea>
+					<textarea id="html_editor" name="content"><?= $content_file ? file_get_contents($content_file) : ''; ?></textarea>
 
 					<div class="css_title"><?= _l("Style"); ?></div>
-					<textarea id="css_editor" name="style"><?= $style ? file_get_contents($style) : $style; ?></textarea>
+					<textarea id="css_editor" name="style"><?= $style_file ? file_get_contents($style_file) : ''; ?></textarea>
 				</div>
 
 				<div id="code_preview">

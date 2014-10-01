@@ -738,9 +738,12 @@
 								)); ?></td>
 						</tr>
 						<tr>
-							<td><?= _l("Google Analytics Code:<br /><span class=\"help\">Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field.</span>"); ?></td>
 							<td>
-								<textarea name="config_google_analytics" cols="40" rows="5"><?= $config_google_analytics; ?></textarea>
+								<?= _l("Google Analytics Code:"); ?>
+								<div class="help"><?= _l("Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field."); ?></div>
+							</td>
+							<td>
+								<input type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>" />
 							</td>
 						</tr>
 						<tr>
