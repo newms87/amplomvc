@@ -135,7 +135,7 @@ class App_Controller_Admin_View extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -152,7 +152,7 @@ class App_Controller_Admin_View extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/view');
 		}
@@ -204,7 +204,7 @@ class App_Controller_Admin_View extends Controller
 			}
 		}
 
-		output($this->message->toJSON());
+		output_json($this->message->fetch());
 	}
 
 	public function batch_action()
@@ -224,7 +224,7 @@ class App_Controller_Admin_View extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/view');
 		}

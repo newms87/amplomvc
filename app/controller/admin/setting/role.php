@@ -138,7 +138,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 		//Response
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/setting/role/form');
 		} else {
@@ -157,7 +157,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 		//Response
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/setting/role');
 		}

@@ -14,7 +14,7 @@ $root = str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(_
 
 if ($action === 'user_setup' && !is_file($root . 'config.php')) {
 	$action    = false;
-	$error_msg = "Unable to load config file. Please attempt installation again.";
+	$error_msg = "Unable to load config file. Is your site's root directory writable by apache? Please attempt installation again.";
 }
 
 if ($action === 'user_setup') {
@@ -136,20 +136,23 @@ function setup_db()
 
 	$error = $db->getError();
 
+	if (!$error) {
+		$db_sql = DIR_SITE . 'system/install/db.sql';
+
+		$contents = file_get_contents($db_sql);
+
+		if (!$db->multiquery($contents)) {
+			$error = $db->getError();
+		} elseif (!$db->setPrefix(DB_PREFIX)) {
+			$error = $db->getError();
+		}
+	}
+
 	if ($error) {
+		if (is_array($error)) {
+			$error = implode("<br>", $error);
+		}
 		return $error;
-	}
-
-	$db_sql = DIR_SITE . 'system/install/db.sql';
-
-	$contents = file_get_contents($db_sql);
-
-	if (!$db->multiquery($contents)) {
-		return $db->getError();
-	}
-
-	if (!$db->setPrefix(DB_PREFIX)) {
-		return $db->getError();
 	}
 
 	$config_template = DIR_SITE . 'example-config.php';
@@ -203,9 +206,9 @@ function setup_user()
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-	$username   = $db->escape($_POST['username']);
-	$email      = $db->escape($_POST['email']);
-	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
+	$username = $db->escape($_POST['username']);
+	$email    = $db->escape($_POST['email']);
+	$password = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
 	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = 'NOW()'");

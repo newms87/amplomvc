@@ -166,12 +166,15 @@ set_error_handler($error_handler);
 $dir_error = null;
 if (!_is_writable(DIR_IMAGE, $dir_error, option('config_image_dir_mode'))) {
 	trigger_error("%s", $dir_error);
+	die ($dir_error);
 }
 if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, option('config_image_dir_mode'))) {
 	trigger_error("%s", $dir_error);
+	die ($dir_error);
 }
 if (!_is_writable(DIR_DOWNLOAD, $dir_error, option('config_default_dir_mode'))) {
 	trigger_error("%s", $dir_error);
+	die ($dir_error);
 }
 
 //Customer Override (alternative logins)

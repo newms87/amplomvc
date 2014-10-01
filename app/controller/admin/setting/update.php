@@ -62,7 +62,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/setting/update');
 		}
@@ -79,7 +79,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/setting/update');
 		}

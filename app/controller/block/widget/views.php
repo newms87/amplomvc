@@ -234,7 +234,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect(_request('redirect', _post('path', 'admin')));
 		}
@@ -252,7 +252,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if (IS_AJAX) {
 			message('view_id', $view_id);
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect($_POST['path']);
 		}
@@ -270,7 +270,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			}
 
 			if (IS_AJAX) {
-				output($this->message->toJSON());
+				output_json($this->message->fetch());
 			} else {
 				redirect($view['path']);
 			}
@@ -290,6 +290,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		//Ajax only method
-		output($this->message->toJSON());
+		output_json($this->message->fetch());
 	}
 }
