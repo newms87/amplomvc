@@ -139,7 +139,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/tool/logs', 'log=' . $_GET['log']);
 		}

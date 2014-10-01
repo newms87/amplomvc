@@ -78,7 +78,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/dashboard');
 		}
@@ -102,7 +102,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/dashboard');
 		}
@@ -121,7 +121,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/dashboard');
 		}

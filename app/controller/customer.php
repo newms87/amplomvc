@@ -68,7 +68,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			if (!IS_POST || $this->message->has('error')) {
 				return $this->index();

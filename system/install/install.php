@@ -137,6 +137,9 @@ function setup_db()
 	$error = $db->getError();
 
 	if ($error) {
+		if (is_array($error)) {
+			$error = implode("<br>", $error);
+		}
 		return $error;
 	}
 

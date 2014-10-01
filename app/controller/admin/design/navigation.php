@@ -58,7 +58,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -77,7 +77,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('admin/design/navigation');
 		}
@@ -297,7 +297,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			redirect('admin/design/navigation');
 		}
 
-		output($this->message->toJSON());
+		output_json($this->message->fetch());
 	}
 
 	public function choose_link()

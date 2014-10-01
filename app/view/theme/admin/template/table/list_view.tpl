@@ -244,7 +244,7 @@
 
 							<? if ($column['editable']) {
 								$column['#data-field'] = $slug;
-								$column['#data-value'] = is_array($value) ? implode(',', $value) : $value; ?>
+								$column['#data-value'] = str_replace('"', '&quot;', is_array($value) ? implode(',', $value) : $value); ?>
 							<? } ?>
 
 							<td <?= attrs($column); ?>>
@@ -563,7 +563,7 @@
 	$listview.find('tr.filter-list-item td.editable').click(function () {
 		var $this = $(this);
 		var field = $this.attr('data-field');
-		var value = $this.attr('data-value');
+		var value = $this.attr('data-value').replace(/&quot;/g, '"');
 
 		if (field) {
 			var $options = $this.closest('.table-list-view-box').find('.editable-options');
@@ -598,7 +598,7 @@
 		}
 
 		var $field = $box.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
-		$field.attr('data-value', $input.val());
+		$field.attr('data-value', value.replace('"', '&quot;'));
 
 		$.post("<?= site_url($save_path); ?>", data, function (response) {
 			$this.loading('stop');

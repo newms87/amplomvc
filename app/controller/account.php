@@ -95,7 +95,7 @@ class App_Controller_Account extends Controller
 		}
 
 		if (IS_AJAX) {
-			output($this->message->toJSON());
+			output_json($this->message->fetch());
 		} else {
 			redirect('account/update');
 		}

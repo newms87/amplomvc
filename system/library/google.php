@@ -19,8 +19,7 @@ class Google extends Library
 	public function geocodeLatLng($lat, $lng)
 	{
 		$data = array(
-			'lat' => (float)$lat,
-		   'lng' => (float)$lng,
+			'latlng' => (float)$lat . ',' . (float)$lng,
 		);
 
 		return $this->geocode($data);
