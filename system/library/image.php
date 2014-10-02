@@ -26,13 +26,12 @@ class Image extends Library
 		$filename = str_replace('\\', '/', $filename);
 
 		if (is_file(DIR_IMAGE . $filename)) {
-			return URL_IMAGE . $filename;
+			$filename = URL_IMAGE . $filename;
 		} elseif (is_file($filename)) {
-			$url = URL_SITE;
-			return str_replace(DIR_SITE, $url, $filename);
+			$filename = str_replace(DIR_SITE, URL_SITE, $filename);
 		}
 
-		return $filename;
+		return str_replace('/./', '/', $filename);
 	}
 
 	public function info($key = null)

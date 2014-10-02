@@ -145,6 +145,12 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
+		$icons = option("config_icon");
+
+		if ($icons) {
+
+		}
+
 		$settings['styles']  = $this->document->renderStyles();
 		$settings['scripts'] = $this->document->renderScripts();
 

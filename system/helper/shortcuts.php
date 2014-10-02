@@ -171,6 +171,36 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
+function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
+{
+	$new_image = image($image, $width, $height, $default, false);
+
+	if ($new_image) {
+		if (!$save_as) {
+			$save_as = str_replace(URL_IMAGE . 'cache/', 'saved/', $new_image);
+		} else {
+			$save_as = str_replace(DIR_IMAGE, '', $save_as);
+		}
+
+		if ($save_as) {
+			$new_image_file = str_replace(URL_IMAGE, DIR_IMAGE, $new_image);
+
+			if (is_file($new_image_file)) {
+				if (_is_writable(dirname(DIR_IMAGE . $save_as))) {
+					rename($new_image_file, DIR_IMAGE . $save_as);
+					$new_image = URL_IMAGE . $save_as;
+				}
+			}
+		}
+	}
+
+	if ($cast_protocol) {
+		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
+	}
+
+	return $new_image;
+}
+
 function theme_image($image, $width = null, $height = null)
 {
 	return image(theme_dir('image/' . $image), $width, $height);

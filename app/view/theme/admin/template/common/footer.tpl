@@ -1,4 +1,4 @@
 </div><!-- /content -->
 </div><!-- /contianer -->
-<div id="footer"><?= _l("Copyright &copy; 2012-2014 Newman, LLC."); ?></div>
+<div id="footer"><?= _l("Copyright &copy; 2014-%s Newman, LLC.", date('Y')); ?></div>
 </body></html>
