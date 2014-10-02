@@ -14,6 +14,16 @@
 			<link href="<?= $canonical_link; ?>" rel="canonical"/>
 		<? } ?>
 
+		<? if (option('config_icon')) { ?>
+			<? foreach (option('config_icon') as $size => $icon) { ?>
+				<? if ($size === 'ico') { ?>
+					<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
+				<? } elseif ($size !== 'orig') { ?>
+					<link href="<?= image($icon); ?>" rel="apple-touch-icon" sizes="<?= $size; ?>"/>
+				<? } ?>
+			<? } ?>
+		<? } ?>
+
 		<?= $styles; ?>
 		<?= $scripts; ?>
 
