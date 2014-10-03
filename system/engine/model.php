@@ -611,9 +611,12 @@ abstract class Model
 
 		//Sort
 		if ($sort) {
-			uksort($columns, function ($ka, $kb) use($filter, $columns) {
-				$a = $columns[$ka];
-				$b = $columns[$kb];
+			//To avoid issues with PHP 5.3.3
+			$temp = $columns;
+
+			uksort($columns, function ($ka, $kb) use($filter, $temp) {
+				$a = $temp[$ka];
+				$b = $temp[$kb];
 
 				//sort as first if Primary Key
 				if ($a['type'] === 'pk') {
