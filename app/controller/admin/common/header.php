@@ -126,7 +126,7 @@ class App_Controller_Admin_Common_Header extends Controller
 				$link_store = array(
 					'name'         => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
-					'href'         => $this->url->store($store['store_id'], 'common/home', ''),
+					'href'         => $this->url->store($store['store_id'], '', ''),
 					'parent'       => 'stores',
 					'target'       => '_blank',
 				);
