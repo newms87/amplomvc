@@ -26,7 +26,7 @@ function _is_writable($dir, &$error = null)
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
 			if (!is_file($t_file)) {
-				$error = "The write permissions on $dir are not set. Please change the permissions to allow writing to this directory";
+				$error = "The write permissions on $dir are not set to allow apache to write. Please change the permissions to allow writing to this directory";
 				return false;
 			}
 			unlink($t_file);
