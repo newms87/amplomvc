@@ -52,9 +52,6 @@ class App_Controller_Common_Header extends Controller
 		$settings['styles']  = $this->document->renderStyles();
 		$settings['scripts'] = $this->document->renderScripts();
 
-		//Icons
-		$settings['icons'] = option('config_icon');
-
 		//Login Check & The Welcome Message
 		$settings['customer']  = $this->customer->info();
 
