@@ -75,7 +75,11 @@ class Response extends Library
 			if (!headers_sent()) {
 				foreach ($this->headers as $key => $value) {
 					if ($value) {
-						header($key . ': ' . $value, true);
+						if (is_string($key)) {
+							header($key . ': ' . $value, true);
+						} else {
+							header($value, true);
+						}
 					} else {
 						header($key, true);
 					}
