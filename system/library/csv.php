@@ -1,4 +1,5 @@
 <?php
+
 class Csv extends Library
 {
 	private $contents = '';
@@ -17,9 +18,9 @@ class Csv extends Library
 	{
 		$data = array();
 
-		if (($handle = fopen($file, "r")) !== FALSE) {
-			if (($head = fgetcsv($handle, 1000, ",")) !== FALSE) {
-				while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+		if (($handle = fopen($file, "r")) !== false) {
+			if (($head = fgetcsv($handle, 1000, ",")) !== false) {
+				while (($row = fgetcsv($handle, 1000, ",")) !== false) {
 					$data[] = array_combine($head, $row);
 				}
 			}
@@ -67,21 +68,21 @@ class Csv extends Library
 		switch ($type) {
 			case 'csv':
 				$headers = array(
-					"Content-type: text/csv",
-					"Content-Disposition: attachment; filename=\"$filename\"",
-					"Pragma: no-cache",
-					"Expires: 0",
-					"Content-Length: " . strlen($this->contents),
+					"Content-type"        => "text/csv",
+					"Content-Disposition" => "attachment; filename=\"$filename\"",
+					"Pragma"              => "no-cache",
+					"Expires"             => "0",
+					"Content-Length"      => strlen($this->contents),
 				);
 				break;
 
 			case 'xml':
 				$headers = array(
-					"Content-type: application/xml",
-					"Content-Disposition: attachment; filename=\"$filename\"",
-					"Pragma: no-cache",
-					"Expires: 0",
-					"Content-Length: " . strlen($this->contents),
+					"Content-type"        => "application/xml",
+					"Content-Disposition" => "attachment; filename=\"$filename\"",
+					"Pragma"              => "no-cache",
+					"Expires"             => "0",
+					"Content-Length"      => strlen($this->contents),
 				);
 				break;
 
@@ -89,14 +90,14 @@ class Csv extends Library
 			case 'xlsx':
 			default:
 				$headers = array(
-					"Content-Type: application/octet-stream",
-					"Content-Description: File Transfer",
-					"Content-Disposition: attachment; filename=\"$filename\"",
-					"Content-Transfer-Encoding: binary",
-					"Cache-Control: must-revalidate, post-check=0, pre-check=0",
-					"Pragma: public",
-					"Expires: 0",
-					"Content-Length: " . strlen($this->contents),
+					"Content-Type"              => "application/octet-stream",
+					"Content-Description"       => "File Transfer",
+					"Content-Disposition"       => "attachment; filename=\"$filename\"",
+					"Content-Transfer-Encoding" => "binary",
+					"Cache-Control"             => "must-revalidate, post-check=0, pre-check=0",
+					"Pragma"                    => "public",
+					"Expires"                   => "0",
+					"Content-Length"            => strlen($this->contents),
 				);
 
 				break;

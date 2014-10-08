@@ -177,7 +177,9 @@ function image_save($image, $save_as = null, $width = null, $height = null, $def
 
 	if ($new_image) {
 		if (!$save_as) {
-			$save_as = str_replace(URL_IMAGE . 'cache/', 'saved/', $new_image);
+			if (strpos($new_image, URL_IMAGE . 'cache/') === 0) {
+				$save_as = str_replace(URL_IMAGE . 'cache/', 'saved/', $new_image);
+			}
 		} else {
 			$save_as = str_replace(DIR_IMAGE, '', $save_as);
 		}
