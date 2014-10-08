@@ -762,6 +762,17 @@
 									</div>
 									<div class="button add"><?= _l("Add Domain"); ?></div>
 								</div>
+
+								<br />
+								<br />
+								<div class="ga-click-tracking">
+									<h3><?= _l("Enable full page click tracking?"); ?></h3>
+									<?= build('radio', array(
+										'name' => 'config_ga_click_tracking',
+									   'data' => array(1 => _l("Yes"), 0 => _l("No")),
+									   'select' => $config_ga_click_tracking,
+									)); ?>
+								</div>
 							</td>
 						</tr>
 						<tr>
