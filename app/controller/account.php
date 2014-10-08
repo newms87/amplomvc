@@ -19,7 +19,7 @@ class App_Controller_Account extends Controller
 		$data['shipping_address'] = $this->customer->getDefaultShippingAddress();
 
 		//Customer Information
-		$data['customer'] = $this->customer->info() + $this->customer->getMeta();
+		$data['customer'] = customer_info() + $this->customer->getMeta();
 
 		//Actions
 		$data['edit_account'] = site_url('account/update');
@@ -40,7 +40,7 @@ class App_Controller_Account extends Controller
 
 		//Handle POST
 		if (!IS_POST) {
-			$customer_info             = $this->customer->info();
+			$customer_info             = customer_info();
 			$customer_info['metadata'] = $this->customer->getMeta();
 		} else {
 			$customer_info = $_POST;

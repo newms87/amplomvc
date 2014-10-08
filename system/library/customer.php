@@ -217,7 +217,7 @@ class Customer extends Library
 			$this->error['email'] = _l("The email address you provided is invalid.");
 		}
 
-		if (($this->customer->info('email') !== $data['email']) && $this->customer->emailRegistered($data['email'])) {
+		if ((customer_info('email') !== $data['email']) && $this->customer->emailRegistered($data['email'])) {
 			$this->error['email'] = _l("This email address is already registered under a different account.");
 		}
 

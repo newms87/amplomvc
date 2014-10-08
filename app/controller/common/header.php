@@ -53,7 +53,7 @@ class App_Controller_Common_Header extends Controller
 		$settings['scripts'] = $this->document->renderScripts();
 
 		//Login Check & The Welcome Message
-		$settings['customer']  = $this->customer->info();
+		$settings['customer']  = customer_info();
 
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();
