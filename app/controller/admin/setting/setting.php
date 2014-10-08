@@ -92,7 +92,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_image_thumb_height'               => 120,
 			'config_image_popup_width'                => 1024,
 			'config_image_popup_height'               => 1024,
-			'config_mail_protocol'                    => 'smpt',
+			'config_mail_protocol'                    => 'smtp',
 			'config_mail_parameter'                   => '',
 			'config_smtp_host'                        => '',
 			'config_smtp_username'                    => '',
@@ -116,6 +116,10 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_error_log'                        => '',
 			'config_error_filename'                   => '',
 			'config_google_analytics'                 => '',
+			'config_ga_experiment_id'                 => '',
+			'config_ga_exp_vars'                      => 0,
+			'config_ga_domains'                       => array(),
+			'config_ga_click_tracking'                => 0,
 			'config_statcounter'                      => '',
 			'config_default_file_mode'                => 644,
 			'config_default_dir_mode'                 => 755,
@@ -183,7 +187,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 				120,
 				120
 			),
-			'76' => array(
+			'76'  => array(
 				76,
 				76
 			),
@@ -204,6 +208,9 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			);
 		}
 		unset($icon);
+
+		//Domains AC Template
+		$data['config_ga_domains']['__ac_template__'] = '';
 
 		//Action Buttons
 		$data['save']   = site_url('admin/setting/setting');

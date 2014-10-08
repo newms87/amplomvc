@@ -2,6 +2,26 @@
 
 class Google extends Library
 {
+	private $exp_var;
+
+	/************************
+	 * Google Analytics API *
+	 ************************/
+
+	public function getExperimentVariation()
+	{
+		if (is_null($this->exp_var)) {
+			$vars = (int)option('config_ga_exp_vars', 0);
+			$this->exp_var = $vars ? rand(0, $vars) : 0;
+		}
+
+		return $this->exp_var;
+	}
+
+	/*******************
+	 * Google Maps API *
+	 *******************/
+
 	public function geocodeAddress($address)
 	{
 		if (!$address) {
