@@ -5,8 +5,8 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 	{
 		//Load Value or Defaults
 		$defaults = array(
-			'name'    => $this->customer->info('firstname'),
-			'email'   => $this->customer->info('email'),
+			'name'    => customer_info('firstname'),
+			'email'   => customer_info('email'),
 			'enquiry' => '',
 			'captcha' => '',
 		);

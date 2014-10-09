@@ -10,6 +10,7 @@ class Document extends Library
 	private $styles = array();
 	private $scripts = array();
 	private $ac_vars = array();
+	private $body_class = array();
 
 	function __construct()
 	{
@@ -75,7 +76,7 @@ class Document extends Library
 	public function hasLink($group = 'primary', $link_name)
 	{
 		if (!empty($this->links[$group])) {
-			$result = array_walk_children($this->links[$group], 'children', function ($link) use($link_name) {
+			$result = array_walk_children($this->links[$group], 'children', function ($link) use ($link_name) {
 				if (!empty($link) && $link_name === $link['name']) {
 					return false;
 				}
@@ -393,6 +394,26 @@ class Document extends Library
 		}
 
 		return $html;
+	}
+
+	public function setBodyClass($class)
+	{
+		if (!$class) {
+			$this->body_class = array();
+		} else {
+			$class            = is_array($class) ? $class : explode(' ', $class);
+			$this->body_class = array_combine(array_keys($class), $class);
+		}
+	}
+
+	public function addBodyClass($class)
+	{
+		$this->body_class[$class] = $class;
+	}
+
+	public function getBodyClass()
+	{
+		return implode(' ', $this->body_class);
 	}
 
 	public function getNavigationLinks()

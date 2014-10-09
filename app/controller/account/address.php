@@ -119,8 +119,8 @@ class App_Controller_Account_Address extends Controller
 
 		//Load Information
 		$defaults = array(
-			'firstname'  => $this->customer->info('firstname'),
-			'lastname'   => $this->customer->info('lastname'),
+			'firstname'  => customer_info('firstname'),
+			'lastname'   => customer_info('lastname'),
 			'company'    => '',
 			'address_1'  => '',
 			'address_2'  => '',
