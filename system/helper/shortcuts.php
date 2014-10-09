@@ -333,10 +333,22 @@ function is_logged()
 	}
 }
 
+function customer_info($key = null)
+{
+	global $registry;
+	return $registry->get('customer')->info($key);
+}
+
 function user_can($level, $path)
 {
 	global $registry;
 	return $registry->get('user')->can($level, $path);
+}
+
+function user_info($key = null)
+{
+	global $registry;
+	return $registry->get('user')->info($key);
 }
 
 function validate($method, $value)

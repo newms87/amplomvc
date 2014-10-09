@@ -115,9 +115,10 @@ class App_Controller_Admin_Setting_Role extends Controller
 		//Template Data
 		$areas = $this->Model_Setting_Role->getRestrictedAreas();
 
-		$this->fillAreaDefaults($areas, $user_role['permissions']);
+		$this->fillAreaDefaults($areas, (array)$user_role['permissions']);
 
 		$user_role['data_areas'] = $areas;
+
 		$user_role['data_perms'] = array(
 			''  => _l("none"),
 			'r' => _l("read"),
@@ -186,7 +187,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		}
 	}
 
-	private function fillAreaDefaults(&$areas, $perms)
+	private function fillAreaDefaults(&$areas, array $perms)
 	{
 		foreach ($perms as $p => $value) {
 			if ($p === '*') {

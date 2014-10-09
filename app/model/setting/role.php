@@ -110,7 +110,7 @@ class App_Model_Setting_Role extends Model
 		);
 
 		$areas = array(
-			'admin' => array(),
+			'admin' => array('*' => ''),
 		);
 
 		foreach ($files as $file) {
