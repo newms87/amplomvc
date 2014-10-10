@@ -64,12 +64,6 @@ class App_Controller_Admin_Page extends Controller
 			}
 
 			$page['actions'] = $actions;
-
-			$page['stores'] = $this->Model_Page->getPageStores($page['page_id']);
-
-			if (empty($page['stores'])) {
-				$page['stores'] = array(0);
-			}
 		}
 		unset($page);
 
@@ -111,8 +105,6 @@ class App_Controller_Admin_Page extends Controller
 
 		if ($page_id && !IS_POST) {
 			$page = $this->Model_Page->getPage($page_id);
-
-			$page['stores'] = $this->Model_Page->getPageStores($page_id);
 		}
 
 		//Set Values or Defaults
@@ -127,7 +119,6 @@ class App_Controller_Admin_Page extends Controller
 			'meta_description' => '',
 			'display_title'    => 1,
 			'layout_id'        => 0,
-			'stores'           => array(0),
 			'blocks'           => array(),
 			'status'           => 1,
 			'translations'     => array(),
@@ -136,7 +127,6 @@ class App_Controller_Admin_Page extends Controller
 		$page += $defaults;
 
 		//Template Data
-		$page['data_stores']  = $this->Model_Setting_Store->getStores();
 		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		$page['data_themes']  = $this->theme->getThemes();
 
@@ -276,10 +266,9 @@ class App_Controller_Admin_Page extends Controller
 	{
 		$blocks = array();
 
-		if (!empty($_POST['layout_id']) && !empty($_POST['stores'])) {
+		if (!empty($_POST['layout_id'])) {
 			$filter = array(
 				'layouts' => array($_POST['layout_id']),
-				'stores'  => $_POST['stores'],
 				'status'  => 1,
 			);
 
@@ -291,15 +280,11 @@ class App_Controller_Admin_Page extends Controller
 
 			foreach ($block_list as $block) {
 				foreach ($block['profiles'] as $profile) {
-					foreach ($profile['store_ids'] as $store_id) {
-						$blocks[] = array(
-							'path'       => $block['path'],
-							'name'       => $block['name'],
-							'position'   => $data_positions[$profile['position']],
-							'store_id'   => $store_id,
-							'store_name' => $this->Model_Setting_Store->getStoreName($store_id),
-						);
-					}
+					$blocks[] = array(
+						'path'     => $block['path'],
+						'name'     => $block['name'],
+						'position' => $data_positions[$profile['position']],
+					);
 				}
 			}
 		}

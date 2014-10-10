@@ -132,19 +132,6 @@
 							<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
 						</td>
 					</tr>
-					<tr>
-						<td class="required"> <?= _l("Stores:"); ?></td>
-						<td>
-							<?=
-							build('multiselect', array(
-								'name'   => "stores",
-								'data'   => $data_stores,
-								'select' => $stores,
-								'key'    => 'store_id',
-								'value'  => 'name',
-							)); ?>
-						</td>
-					</tr>
 				</table>
 			</div>
 			<!-- /tab-design -->

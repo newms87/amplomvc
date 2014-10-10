@@ -13,8 +13,8 @@ class App_Model_Page extends Model
 	{
 		//Defaults
 		$page += array(
-			'title'   => '',
-			'theme'   => option('config_default_theme', 'amplo'),
+			'title' => '',
+			'theme' => option('config_default_theme', 'amplo'),
 		);
 
 		if (!validate('text', $page['title'], 1, 64)) {
@@ -43,26 +43,6 @@ class App_Model_Page extends Model
 
 		if (isset($page['style'])) {
 			file_put_contents($dir . '/style.less', $page['style']);
-		}
-
-		if (!empty($page['stores'])) {
-			foreach ($page['stores'] as $store) {
-				if (is_array($store)) {
-					$layout_id = $store['layout_id'];
-					$store_id  = $store['store_id'];
-				} else {
-					$store_id  = $store;
-					$layout_id = option('config_default_layout_id');
-				}
-
-				$store_data = array(
-					'page_id'   => $page_id,
-					'store_id'  => $store_id,
-					'layout_id' => $layout_id,
-				);
-
-				$this->insert('page_store', $store_data);
-			}
 		}
 
 		if (!empty($page['alias'])) {
@@ -132,28 +112,6 @@ class App_Model_Page extends Model
 
 		$this->update('page', $page, $page_id);
 
-		if (isset($page['stores'])) {
-			$this->delete('page_store', array('page_id' => $page_id));
-
-			foreach ($page['stores'] as $store) {
-				if (is_array($store)) {
-					$layout_id = $store['layout_id'];
-					$store_id  = $store['store_id'];
-				} else {
-					$store_id  = $store;
-					$layout_id = option('config_default_layout_id');
-				}
-
-				$store_data = array(
-					'page_id'   => $page_id,
-					'store_id'  => $store_id,
-					'layout_id' => $layout_id,
-				);
-
-				$this->insert('page_store', $store_data);
-			}
-		}
-
 		if (isset($page['alias'])) {
 			$this->url->setAlias($page['alias'], 'page/' . $page['name']);
 		}
@@ -170,7 +128,6 @@ class App_Model_Page extends Model
 	public function copyPage($page_id)
 	{
 		$page                 = $this->getPage($page_id);
-		$page['stores']       = $this->getPageStores($page_id);
 		$page['content_file'] = $this->getPageContentFile($page);
 		$page['style_file']   = $this->getPageStyleFile($page);
 
@@ -190,7 +147,6 @@ class App_Model_Page extends Model
 		}
 
 		$this->delete('page', $page_id);
-		$this->delete('page_store', array('page_id' => $page_id));
 
 		$this->url->removeAlias('page/' . $page['name']);
 
@@ -227,14 +183,7 @@ class App_Model_Page extends Model
 	//TODO: Develop good caching method for pages.
 	public function getActivePage($page_id)
 	{
-		$store_id = option('store_id');
-
-		$query =
-			"SELECT * FROM " . DB_PREFIX . "page p" .
-			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
-			" WHERE p.page_id = " . (int)$page_id . " AND p.status = 1 AND (ps.store_id = " . (int)$store_id . " OR ps.store_id IS NULL)";
-
-		$page = $this->queryRow($query);
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id . " AND status = 1");
 
 		if ($page) {
 			$page['content_file'] = $this->getPageContentFile($page);
@@ -251,14 +200,9 @@ class App_Model_Page extends Model
 
 	public function getPageByName($name)
 	{
-		$store_id = option('store_id');
-		$themes   = $this->theme->getStoreThemes();
+		$themes = $this->theme->getStoreThemes();
 
-		$query =
-			"SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
-			" LEFT JOIN " . DB_PREFIX . "page_store ps ON (ps.page_id = p.page_id)" .
-			" WHERE p.name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')" .
-			" AND p.status = 1 AND (ps.store_id = " . (int)$store_id . " OR ps.store_id IS NULL)";
+		$query = "SELECT * FROM " . DB_PREFIX . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')";
 
 		$page = $this->queryRow($query);
 
@@ -289,9 +233,6 @@ class App_Model_Page extends Model
 					'status'        => 1,
 					'display_title' => $title ? 1 : 0,
 					'cache'         => $cache,
-					'stores'        => array(
-						option('store_id'),
-					),
 				);
 
 				$page_id = $this->addPage($page);
@@ -305,10 +246,7 @@ class App_Model_Page extends Model
 
 	public function getPageForPreview($page_id)
 	{
-		$query = "SELECT p.*, ps.layout_id, ps.store_id FROM " . DB_PREFIX . "page p" .
-			" LEFT JOIN " . $this->prefix . "page_store ps ON (ps.page_id = p.page_id) WHERE p.page_id = " . (int)$page_id;
-
-		$page = $this->queryRow($query);
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$page += array(
@@ -326,23 +264,15 @@ class App_Model_Page extends Model
 
 	public function getPages($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
-		$select = $this->extractSelect('page p', $select);
+		$select = $this->extractSelect('page', $select);
 
-		//Froms
-		$from = DB_PREFIX . "page p";
+		//From
+		$from = DB_PREFIX . "page";
 
 		//Where
 		$where = $this->extractWhere('page', $filter);
 
-		if (!empty($filter['stores'])) {
-			$store_ids = is_array($filter['stores']) ? $filter['stores'] : array($filter['stores']);
-
-			if (!in_array(0, $store_ids)) {
-				$from .= " LEFT JOIN " . DB_PREFIX . "page_store ps ON (p.page_id=ps.page_id)";
-				$where .= " AND ps.store_id IN (" . implode(',', $store_ids) . ")";
-			}
-		}
-
+		//Order / Limit
 		$order = $this->extractOrder($sort);
 		$limit = $this->extractLimit($sort);
 
@@ -394,11 +324,6 @@ class App_Model_Page extends Model
 		}
 
 		return $style;
-	}
-
-	public function getPageStores($page_id)
-	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "page_store WHERE page_id = '" . (int)$page_id . "'");
 	}
 
 	public function getTotalPages($filter = array())
@@ -460,8 +385,8 @@ class App_Model_Page extends Model
 		}, explode('_', $name));
 		$title = implode(' ', $title);
 
-		$content_file = DIR_THEMES . $theme .'/' . $name . '/content.tpl';
-		$style_file   = DIR_THEMES . $theme .'/' . $name . '/style.less';
+		$content_file = DIR_THEMES . $theme . '/' . $name . '/content.tpl';
+		$style_file   = DIR_THEMES . $theme . '/' . $name . '/style.less';
 		$content      = is_file($content_file) ? file_get_contents($content_file) : '';
 		$style        = is_file($style_file) ? file_get_contents($style_file) : '';
 
@@ -485,25 +410,7 @@ class App_Model_Page extends Model
 		static $merge;
 
 		if (!$merge) {
-			$all_stores = array(
-				'' => array(
-					'store_id' => 0,
-					'name'     => _l("All Stores")
-				),
-			);
-
 			$merge = array(
-				'store'  => array(
-					'type'         => 'multiselect',
-					'display_name' => _l("Stores"),
-					'filter'       => true,
-					'build_config' => array(
-						'store_id',
-						'name'
-					),
-					'build_data'   => $all_stores + $this->Model_Setting_Store->getStores(),
-					'sortable'     => false,
-				),
 				'status' => array(
 					'type'         => 'select',
 					'display_name' => _l("Status"),
