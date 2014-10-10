@@ -194,7 +194,7 @@ function image_srcset($image, $nx = 3, $width = null, $height = null, $default =
 	$srcset = '';
 
 	while ($nx > 1) {
-		$srcset .= ($srcset ? ', ' : '') . image($image, $width * $nx, $height * $nx, $default, $cast_protocol) . ' ' . $nx . 'x';
+		$srcset = image($image, $width * $nx, $height * $nx, $default, $cast_protocol) . ' ' . $nx . 'x' . ($srcset ? ', ' : '') . $srcset;
 		$nx--;
 	}
 
