@@ -14,6 +14,10 @@
 			<b class="sprite refresh small"></b>
 		</a>
 
+		<a href="<?= site_url($refresh, 'export'); ?>" class="button export-view small">
+			<b class="sprite export small"></b>
+		</a>
+
 		<button class="modify-view small">
 			<b class="sprite settings small"></b>
 		</button>
