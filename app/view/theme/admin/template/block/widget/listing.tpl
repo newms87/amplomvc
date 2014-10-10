@@ -133,6 +133,13 @@
 	<script type="text/javascript">
 		var $list_widget = $('.widget-listing').use_once();
 
+		$list_widget.find('.export-view').click(function() {
+			if (confirm("<?= _l("Do you want to export the full data set?"); ?>")) {
+				window.location = $(this).attr('href') + '&limit=0';
+				return false;
+			}
+		});
+
 		$list_widget.find('.view-tabs a').tabs();
 
 		$list_widget.find('.modify-view').click(function () {
