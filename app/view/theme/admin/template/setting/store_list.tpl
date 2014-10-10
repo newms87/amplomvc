@@ -7,7 +7,7 @@
 
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= _l("Add Store"); ?></a>
-				<a href="<?= site_url('admin'); ?>"><?= _l("Back"); ?></a>
+				<a href="<?= site_url('admin'); ?>" class="button"><?= _l("Back"); ?></a>
 			</div>
 		</div>
 		<div class="section">
