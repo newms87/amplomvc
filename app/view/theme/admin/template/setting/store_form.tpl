@@ -244,7 +244,31 @@
 					<tr>
 						<td><?= _l("Store Logo:"); ?></td>
 						<td>
-							<input type="text" class="imageinput" name="config_logo" data-thumb="<?= image($config_logo); ?>" value="<?= $config_logo; ?>"/>
+							<input type="text" class="imageinput" name="config_logo" data-thumb="<?= image($config_logo, $config_logo_width, $config_logo_height); ?>" value="<?= $config_logo; ?>"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="required"><?= _l("Logo Size"); ?></td>
+						<td>
+							<div class="store-logo-size">
+								<input type="text" name="config_logo_width" value="<?= $config_logo_width; ?>" size="3"/>
+								x
+								<input type="text" name="config_logo_height" value="<?= $config_logo_height; ?>" size="3"/>
+							</div>
+							<br/>
+							<div class="store-logo-x">
+								<label><?= _l("Image srcset X"); ?></label>
+								<?= build('select', array(
+									'name'   => 'config_logo_srcset',
+									'data'   => array(
+										1 => '1x',
+										2 => '2x',
+										3 => '3x'
+									),
+									'select' => $config_logo_srcset,
+								)); ?>
+								<span class="help"><?= _l("If greater than 1x, sets img srcset attribute and scales down from original image. (eg. if 3x, then 1x size set for src will be 1/3 of original image)"); ?></span>
+							</div>
 						</td>
 					</tr>
 					<tr>
@@ -289,14 +313,6 @@
 				</div>
 
 				<table class="form">
-					<tr>
-						<td class="required"><?= _l("Logo Size"); ?></td>
-						<td>
-							<input type="text" name="config_logo_width" value="<?= $config_logo_width; ?>" size="3"/>
-							x
-							<input type="text" name="config_logo_height" value="<?= $config_logo_height; ?>" size="3"/>
-						</td>
-					</tr>
 					<tr>
 						<td class="required"><?= _l("Logo Size in Emails"); ?></td>
 						<td>
@@ -382,7 +398,17 @@
 		}, 'json');
 	});
 
-	$('[name=config_logo]').ac_imageinput({width: 'auto'});
+	$('[name=config_logo]').ac_imageinput({width: '<?= $config_logo_width; ?>', height: '<?= $config_logo_height; ?>'});
+
+	$('[name=config_logo_width],[name=config_logo_height]').change(function() {
+		var w = $('[name=config_logo_width]').val();
+		var h = $('[name=config_logo_height]').val();
+		$('[name=config_logo]').siblings('.thumb').css({
+			width: (!w || w == '0') ? 'auto' : w,
+			height: (!h || h == '0') ? 'auto' : h
+		});
+	});
+
 	$('.icon-file .imageinput').ac_imageinput({width: 'auto', height: 'auto'});
 
 	$('.imageinput').ac_imageinput();

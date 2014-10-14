@@ -175,7 +175,11 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 function image_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	if (!is_file($image)) {
-		return 'src=""';
+		$image = DIR_IMAGE . $image;
+
+		if (!is_file($image)) {
+			return 'src=""';
+		}
 	}
 
 	if (!$width && !$height) {

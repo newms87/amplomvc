@@ -155,6 +155,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'config_customer_approval'     => '',
 			'config_account_terms_page_id' => '',
 			'config_logo'                  => '',
+			'config_logo_srcset'           => 1,
 			'config_icon'                  => null,
 			'config_logo_width'            => 0,
 			'config_logo_height'           => 0,
@@ -171,11 +172,11 @@ class App_Controller_Admin_Setting_Store extends Controller
 		$store += $defaults;
 
 		//Additional Info
-		$store['data_layouts']              = $this->Model_Design_Layout->getLayouts();
+		$store['data_layouts']         = $this->Model_Design_Layout->getLayouts();
 		$store['data_themes']          = $this->theme->getThemes();
-		$store['data_countries']            = $this->Model_Localisation_Country->getCountries();
-		$store['data_languages']            = $this->Model_Localisation_Language->getLanguages();
-		$store['data_currencies']           = $this->Model_Localisation_Currency->getCurrencies();
+		$store['data_countries']       = $this->Model_Localisation_Country->getCountries();
+		$store['data_languages']       = $this->Model_Localisation_Language->getLanguages();
+		$store['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$store['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
 		$store['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
 		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getPages();
@@ -202,7 +203,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 				120,
 				120
 			),
-			'76' => array(
+			'76'  => array(
 				76,
 				76
 			),
@@ -225,7 +226,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		unset($icon);
 
 		//Action Buttons
-		$store['save']               = site_url('admin/setting/store/save', 'store_id=' . $store_id);
+		$store['save'] = site_url('admin/setting/store/save', 'store_id=' . $store_id);
 
 		//Render
 		output($this->render('setting/store_form', $store));
