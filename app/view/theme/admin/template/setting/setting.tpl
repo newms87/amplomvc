@@ -739,11 +739,61 @@
 						</tr>
 						<tr>
 							<td>
-								<?= _l("Google Analytics Code:"); ?>
-								<div class="help"><?= _l("Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field."); ?></div>
+								<?= _l("Google Analytics"); ?>
 							</td>
 							<td>
-								<input type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>" />
+								<div class="ga-code">
+									<input placeholder="<?= _l("GA Code"); ?>" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>" />
+									<div class="help"><?= _l("Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field."); ?></div>
+								</div>
+								<br />
+								<br />
+								<div class="ga-cross-domain">
+									<h3><?= _l("Use this section to enable GA Cross-domain analytics"); ?></h3>
+									<span class="help"><?= _l("Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)"); ?></span>
+									<br />
+									<div class="ga-domains">
+										<? foreach ($config_ga_domains as $row_id => $domain) { ?>
+											<div class="domain" data-row="<?= $row_id; ?>">
+												<input type="text" name="config_ga_domains[]" placeholder="example.com" value="<?= $domain; ?>" />
+												<div class="button remove">X</div>
+											</div>
+										<? } ?>
+									</div>
+									<div class="button add"><?= _l("Add Domain"); ?></div>
+								</div>
+
+								<br />
+								<br />
+								<div class="ga-click-tracking">
+									<h3><?= _l("Enable full page click tracking?"); ?></h3>
+									<?= build('radio', array(
+										'name' => 'config_ga_click_tracking',
+									   'data' => array(1 => _l("Yes"), 0 => _l("No")),
+									   'select' => $config_ga_click_tracking,
+									)); ?>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<?= _l("GA Experiments"); ?>
+							</td>
+							<td>
+								<div class="ga-experiment-id">
+									<input placeholder="<?= _l("Experiment ID");?>" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>" />
+									<span class="help"><?= _l("(Leave blank if you do not have any experiments set up.)"); ?></span>
+								</div>
+								<br />
+								<h3><?= _l("GA Experiment Variations"); ?></h3>
+								<span class="help"><?= _l("Enter the number of variations you have setup for this experiment"); ?></span>
+								<div class="ga-experiment-vars">
+									<?= build('select', array(
+										'name' => 'config_ga_exp_vars',
+									   'data' => range(0,25),
+									   'select' => $config_ga_exp_vars,
+									)); ?>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -799,6 +849,19 @@
 	$('.icon-file .imageinput').ac_imageinput({width: 'auto', height: 'auto'});
 
 	$('.imageinput').ac_imageinput();
+
+
+	var $ga_domains = $('.ga-domains');
+
+	$('.ga-cross-domain .add').click(function () {
+		var $domain_list = $('.ga-domains').ac_template('domain-list', 'add');
+	});
+
+	$ga_domains.find('.remove').click(function() {
+		$(this).closest('.domain').remove();
+	});
+
+	$ga_domains.ac_template('domain-list');
 
 	$('#tabs a').tabs();
 

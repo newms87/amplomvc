@@ -160,6 +160,13 @@ td {
     }
   }
 
+  &.export {
+    background-position: -37px -170px;
+    &.small {
+      background-position: -21px -101px;
+    }
+  }
+
   &.show-icon {
     background-position: 0 -145px;
     &.small {
@@ -306,27 +313,25 @@ td {
 }
 
 //AC Radio Buttons
-.builder-ac-radio {
+.builder-radio {
   display: inline-block;
 
-  label.ac-radio {
+  label.radio {
     display: inline-block;
 
-    width: auto;
-    min-width: 0;
-    margin-top: 8px;
     input {
-      position: relative;
+      position: absolute;
       left: -9999px;
 
-      & + .text {
+      & + .label {
+        display: inline-block;
         background: @color-lightest;
         padding: 5px 10px;
         border-radius: 5px;
         cursor: pointer;
       }
 
-      &:checked + .text {
+      &:checked + .label {
         background: @color-light;
       }
     }

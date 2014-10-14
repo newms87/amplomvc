@@ -8,6 +8,10 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
+		if (isset($_GET['export'])) {
+			$this->export($settings);
+		}
+
 		$settings += array(
 			'extra_cols'      => array(),
 			'template'        => 'table/list_view',
@@ -135,6 +139,28 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 
 		//Render
 		$this->render('block/widget/listing', $settings, $settings['theme']);
+	}
+
+	public function export($settings)
+	{
+		$columns = array();
+
+		foreach ($settings['columns'] as $col => $col_info) {
+			if (is_string($col_info)) {
+				$columns[$col] = $col_info;
+			} elseif (!empty($col_info['display_name'])) {
+				$columns[$col] = $col_info['display_name'];
+			} elseif (isset($col_info['Field'])) {
+				$columns[$col] = $col_info['Field'];
+			} else {
+				$columns[$col] = $col;
+			}
+		}
+
+		$this->csv->generateCsv($columns, $settings['rows']);
+
+		$file_name = !empty($settings['listing_path']) ? slug($settings['listing_path']) : 'listing';
+		$this->csv->downloadContents($file_name . '.csv', 'csv');
 	}
 
 	public function save_settings()

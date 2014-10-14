@@ -9,7 +9,8 @@ function _header($key, $default = null)
 
 define("REQUEST_ACCEPT", _header('Accept'));
 
-function request_accepts($type) {
+function request_accepts($type)
+{
 	return strpos(REQUEST_ACCEPT, $type) !== false;
 }
 
@@ -171,13 +172,48 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
+function image_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+{
+	if (!is_file($image)) {
+		return 'src=""';
+	}
+
+	if (!$width && !$height) {
+		$size = getimagesize($image);
+
+		if (!$size) {
+			return 'src=""';
+		}
+
+		$width = $size[0] / $nx;
+		$height = $size[1] / $nx;
+	}
+
+	$src = 'src="' . image($image, $width, $height, $default, $cast_protocol) . '"';
+
+	$srcset = '';
+
+	while ($nx > 1) {
+		$srcset = image($image, $width * $nx, $height * $nx, $default, $cast_protocol) . ' ' . $nx . 'x' . ($srcset ? ', ' : '') . $srcset;
+		$nx--;
+	}
+
+	if ($srcset) {
+		return $src . ' srcset="' . $srcset . '"';
+	}
+
+	return $src;
+}
+
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	$new_image = image($image, $width, $height, $default, false);
 
 	if ($new_image) {
 		if (!$save_as) {
-			$save_as = str_replace(URL_IMAGE . 'cache/', 'saved/', $new_image);
+			if (strpos($new_image, URL_IMAGE . 'cache/') === 0) {
+				$save_as = str_replace(URL_IMAGE . 'cache/', 'saved/', $new_image);
+			}
 		} else {
 			$save_as = str_replace(DIR_IMAGE, '', $save_as);
 		}
@@ -247,7 +283,8 @@ function redirect($path = '', $query = null, $status = null)
 	$registry->get('url')->redirect($path, $query, $status);
 }
 
-function post_redirect($path = '', $query = null, $status = null) {
+function post_redirect($path = '', $query = null, $status = null)
+{
 	$_SESSION['__post_data__'] = $_POST;
 	redirect($path, $query, $status);
 }
@@ -331,10 +368,22 @@ function is_logged()
 	}
 }
 
+function customer_info($key = null)
+{
+	global $registry;
+	return $registry->get('customer')->info($key);
+}
+
 function user_can($level, $path)
 {
 	global $registry;
 	return $registry->get('user')->can($level, $path);
+}
+
+function user_info($key = null)
+{
+	global $registry;
+	return $registry->get('user')->info($key);
 }
 
 function validate($method, $value)
@@ -693,7 +742,8 @@ function _is_object($o)
 	return is_array($o) || is_object($o) || is_resource($o);
 }
 
-function timelog($name) {
+function timelog($name)
+{
 	global $__start;
 	file_put_contents(DIR_LOGS . 'timelog.txt', '[' . date('Y-m-d H:i:s') . '] ' . $name . ' - ' . (microtime(true) - $__start) . "\n", FILE_APPEND);
 }

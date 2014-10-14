@@ -14,7 +14,7 @@ class App_Controller_Admin_Common_Header extends Controller
 			'canonical_link' => $this->document->getCanonicalLink(),
 			'body_class'     => slug($this->route->getPath(), '-'),
 			'lang'           => $this->language->info('code'),
-			'user'           => $this->user->info(),
+			'user'           => user_info(),
 		);
 
 		//Add Styles

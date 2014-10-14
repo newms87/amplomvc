@@ -47,13 +47,15 @@ class App_Controller_Common_Header extends Controller
 		$settings['description']    = $this->document->getDescription();
 		$settings['keywords']       = $this->document->getKeywords();
 		$settings['canonical_link'] = $this->document->getCanonicalLink();
-		$settings['body_class']     = slug($this->route->getPath(), '-');
+		$settings['styles']         = $this->document->renderStyles();
+		$settings['scripts']        = $this->document->renderScripts();
 
-		$settings['styles']  = $this->document->renderStyles();
-		$settings['scripts'] = $this->document->renderScripts();
+		//Body
+		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
+		$settings['body_class'] = $this->document->getBodyClass();
 
 		//Login Check & The Welcome Message
-		$settings['customer']  = $this->customer->info();
+		$settings['customer'] = customer_info();
 
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();
