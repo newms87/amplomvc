@@ -14,6 +14,10 @@
 			<b class="sprite refresh small"></b>
 		</a>
 
+		<a href="<?= site_url($refresh, 'export'); ?>" class="button export-view small">
+			<b class="sprite export small"></b>
+		</a>
+
 		<button class="modify-view small">
 			<b class="sprite settings small"></b>
 		</button>
@@ -128,6 +132,13 @@
 
 	<script type="text/javascript">
 		var $list_widget = $('.widget-listing').use_once();
+
+		$list_widget.find('.export-view').click(function() {
+			if (confirm("<?= _l("Do you want to export the full data set?"); ?>")) {
+				window.location = $(this).attr('href') + '&limit=0';
+				return false;
+			}
+		});
 
 		$list_widget.find('.view-tabs a').tabs();
 

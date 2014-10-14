@@ -62,13 +62,13 @@ class Csv extends Library
 	public function downloadContents($filename = null, $type = null)
 	{
 		if (!$filename) {
-			$filname = "file_download" . $type;
+			$filename = "file_download" . $type;
 		}
 
 		switch ($type) {
 			case 'csv':
 				$headers = array(
-					"Content-type"        => "text/csv",
+					"Content-Type"        => "text/csv",
 					"Content-Disposition" => "attachment; filename=\"$filename\"",
 					"Pragma"              => "no-cache",
 					"Expires"             => "0",
@@ -112,7 +112,16 @@ class Csv extends Library
 		exit();
 	}
 
-	public function generateCsv($columns, $data, $row_headings = true)
+	/**
+	 * Generates a CSV string using $columns for the first row (optional) and $rows for the rest of the rows. Saves the string to $this->content,
+	 * to be exported to a file, downloaded, or use $this->csv->getContents() to retrieve the csv string.
+	 *
+	 * @param array $columns - $key => $value pairs, where $key matches the associated column index in $data, and $value is the Title for the column
+	 * @param array $rows - an array where each element is the row as an associative array matching the $columns index
+	 * @param bool $row_headings - include the column names in the first row.
+	 */
+
+	public function generateCsv($columns, $rows, $row_headings = true)
 	{
 		$num_cols = count($columns);
 
@@ -125,10 +134,10 @@ class Csv extends Library
 			$this->contents .= "\r\n";
 		}
 
-		foreach ($data as $d) {
+		foreach ($rows as $row) {
 			$index = 0;
 			foreach (array_keys($columns) as $key) {
-				$value = isset($d[$key]) ? $d[$key] : '';
+				$value = isset($row[$key]) ? $row[$key] : '';
 
 				$this->contents .= '"' . $value . '"' . ($index++ < $num_cols ? ',' : '');
 			}

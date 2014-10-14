@@ -220,7 +220,9 @@ class App_Model_User extends Model
 
 		//Ensure password is set for new user (can be encrypted_password), or check if updating password
 		if ((!$user_id && empty($user['encrypted_password'])) || isset($user['password'])) {
-			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+			if (!isset($user['password'])) {
+				$this->error['password'] = _l("You must enter a password");
+			}  elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
 				$this->error['password'] = $this->validation->getError();
 			}
 		}

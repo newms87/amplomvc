@@ -206,7 +206,8 @@
 			</tr>
 			<? if (!empty($rows)) { ?>
 				<? foreach ($rows as $row) { ?>
-					<tr class="filter-list-item" data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
+					<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
+					<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
 						<? if (!empty($row_id)) { ?>
 							<? $uniqid = uniqid($row[$row_id]); ?>
 							<td class="center">
