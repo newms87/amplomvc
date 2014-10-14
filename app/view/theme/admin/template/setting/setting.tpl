@@ -845,9 +845,8 @@
 		}, 'json');
 	});
 
-	$('[name=config_logo]').ac_imageinput({width: 'auto'});
 	$('.icon-file .imageinput').ac_imageinput({width: 'auto', height: 'auto'});
-
+	$('[name=config_admin_logo].imageinput').ac_imageinput({width: 'auto', height: 'auto'});
 	$('.imageinput').ac_imageinput();
 
 
