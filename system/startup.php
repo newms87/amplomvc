@@ -46,6 +46,11 @@ if (!$domain || $domain === 'localhost') {
 	define('COOKIE_DOMAIN', '.' . $domain);
 }
 
+if (!defined('AMPLO_SESSION_TIMEOUT')) {
+	//set session timeout to 2 hours
+	define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
+}
+
 //Start Session
 ini_set('session.use_cookies', 'On');
 ini_set('session.use_trans_sid', 'Off');
