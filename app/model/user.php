@@ -127,18 +127,26 @@ class App_Model_User extends Model
 		return true;
 	}
 
-	public function getMeta($user_id)
+	public function getMeta($user_id, $key = null)
 	{
+		if ($key) {
+			return $this->queryVar("SELECT `value` FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+		}
+
 		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+
+		$data = array();
 
 		foreach ($meta as &$m) {
 			if ($m['serialized']) {
 				$m['value'] = unserialize($m['value']);
 			}
+
+			$data[$m['key']] = $m['value'];
 		}
 		unset($m);
 
-		return $meta;
+		return $data;
 	}
 
 	public function getUserByUsername($username)
