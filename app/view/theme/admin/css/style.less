@@ -1601,54 +1601,60 @@ button, .button {
 
   &.multiselect {
     margin-top: 8px;
+
+    .builder-multiselect {
+      max-height: 20em;
+    }
   }
-}
 
-.zoom_hover.active {
-  z-index: 1000;
-}
+  &.active {
+    z-index: 1000;
 
-.zoom_hover:hover {
-  z-index: 1001;
-}
+    .input {
+      display: block;
+    }
+  }
 
-.zoom_hover.active .input,
-.zoom_hover:hover .input {
-  display: block;
-}
+  &:hover {
+    z-index: 1001;
 
-.zoom_hover.active .value,
-.zoom_hover:hover .value {
+    .input {
+      display: block;
+    }
+  }
 
-}
+  &.int {
+    .input {
+      width: 106px;
+      margin-left: -53px;
+      left: 50%;
 
-.zoom_hover.int .input {
-  width: 106px;
-  margin-left: -53px;
-  left: 50%;
-}
+      input {
+        width: 40px;
+      }
+    }
+  }
 
-.zoom_hover.int .input input {
-  width: 40px;
-}
+  &.daterange {
+    .input {
+      width: 300px;
+      margin-left: -150px;
+      left: 50%;
 
-.zoom_hover.daterange .input {
-  width: 300px;
-  margin-left: -150px;
-  left: 50%;
-}
+      input {
+        width: 120px;
+        margin: auto;
+      }
+    }
+  }
 
-.zoom_hover.daterange .input input {
-  width: 120px;
-  margin: auto;
-}
-
-.zoom_hover .clear {
-  font-size: 9px;
-  color: #666;
-  cursor: pointer;
-  display: block;
-  margin-top: 5px;
+  .clear {
+    font-size: 9px;
+    color: #666;
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+  }
 }
 
 /* Pagination */
