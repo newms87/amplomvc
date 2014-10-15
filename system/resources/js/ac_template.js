@@ -5,7 +5,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 		var count = 0;
 
 		list.find('[data-rel="'+list.data('rel')+'"]').each(function (i, e) {
-			count = Math.max(count, parseInt($(e).attr('data-row')) + 1);
+			count = Math.max(count, (parseInt($(e).attr('data-row')) || 0) + 1);
 		});
 
 		return count;
