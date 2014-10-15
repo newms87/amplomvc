@@ -15,7 +15,9 @@ class App_Model_Dashboard extends Model
 		}
 
 		if ($dashboard_id) {
+			echo $dashboard_id . ' before';
 			$dashboard_id = $this->update('dashboard', $dashboard, $dashboard_id);
+			echo $dashboard_id . ' after';
 		} else {
 			if (empty($dashboard['name'])) {
 				$dashboard['name'] = slug($dashboard['title']);
