@@ -93,7 +93,13 @@ abstract class Model
 
 	protected function query($sql)
 	{
-		return $this->db->query($sql);
+		$result = $this->db->query($sql);
+
+		if (!$result) {
+			$this->error = $this->db->getError();
+		}
+
+		return $result;
 	}
 
 	protected function queryVar($sql)
@@ -147,8 +153,8 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
 
-			if ($this->hasError()) {
-				trigger_error($this->getError());
+			if ($this->hasError('query')) {
+				trigger_error($this->getError('query'));
 			}
 
 			return false;
@@ -192,8 +198,8 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
 
-			if ($this->hasError()) {
-				trigger_error($this->getError());
+			if ($this->hasError('query')) {
+				trigger_error($this->getError('query'));
 			}
 
 			return false;
@@ -215,8 +221,8 @@ abstract class Model
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
 
-			if ($this->hasError()) {
-				trigger_error($this->getError());
+			if ($this->hasError('query')) {
+				trigger_error($this->getError('query'));
 			}
 
 			return false;
@@ -352,7 +358,7 @@ abstract class Model
 
 		$select = '';
 		foreach ($columns as $col => $data) {
-			$select .= ($select?',':'') . "`$t`.`$col`";
+			$select .= ($select ? ',' : '') . "`$t`.`$col`";
 		}
 
 		return $select;
@@ -587,8 +593,7 @@ abstract class Model
 			foreach ($merge as $field => $data) {
 				if (isset($columns[$field])) {
 					$columns[$field] = $data + $columns[$field];
-				}
-				//$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
+				} //$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
 				elseif ($filter === false || isset($filter[$field])) {
 					$columns[$field] = $data;
 				}
@@ -614,7 +619,7 @@ abstract class Model
 			//To avoid issues with PHP 5.3.3
 			$temp = $columns;
 
-			uksort($columns, function ($ka, $kb) use($filter, $temp) {
+			uksort($columns, function ($ka, $kb) use ($filter, $temp) {
 				$a = $temp[$ka];
 				$b = $temp[$kb];
 
