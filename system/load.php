@@ -13,7 +13,7 @@ function _time()
 function _filemtime($file)
 {
 	global $ac_time_offset;
-	return @filemtime($file) + ($ac_time_offset * 1000);
+	return filemtime($file) + ($ac_time_offset * 1000);
 }
 
 //Only allow logged in users to sim time.
