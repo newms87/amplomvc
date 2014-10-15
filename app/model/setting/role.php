@@ -64,7 +64,12 @@ class App_Model_Setting_Role extends Model
 
 	public function getRoleId($role)
 	{
-		return $this->queryVar("SELECT user_role_id FROM " . DB_PREFIX . "user_role WHERE name = '" . $this->escape($role) . "'");
+		return $this->queryVar("SELECT user_role_id FROM " . $this->prefix . "user_role WHERE name = '" . $this->escape($role) . "'");
+	}
+
+	public function getRoleName($user_role_id)
+	{
+		return $this->queryVar("SELECT name FROM " . $this->prefix . "user_role WHERE user_role_id = " . (int)$user_role_id);
 	}
 
 	public function getRoles($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)

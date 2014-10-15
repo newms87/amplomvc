@@ -16,7 +16,7 @@ class Session extends Library
 
 		//refresh this logged in session
 		if (isset($_COOKIE['token'])) {
-			$this->setCookie('token', $_COOKIE['token'], 3600);
+			$this->setCookie('token', $_COOKIE['token'], AMPLO_SESSION_TIMEOUT);
 			if (isset($_SESSION['session_token_saved'])) {
 				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 				unset($_SESSION['session_token_saved']);
@@ -135,7 +135,7 @@ class Session extends Library
 			$token = md5(mt_rand());
 		}
 
-		$this->setCookie("token", $token, 0);
+		$this->setCookie("token", $token, AMPLO_SESSION_TIMEOUT);
 		$_SESSION['token'] = $token;
 	}
 }
