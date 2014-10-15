@@ -263,7 +263,7 @@ class Document extends Library
 			}
 
 			//Load PHPSass
-			require_once(DIR_RESOURCES . 'lessphp/lessphp/less.php');
+			require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 			$options = array(
 				'compress' => option('config_less_compress', false),
