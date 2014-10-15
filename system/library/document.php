@@ -263,13 +263,19 @@ class Document extends Library
 			}
 
 			//Load PHPSass
-			require_once(DIR_RESOURCES . 'lessphp/lessc.inc.php');
+			require_once(DIR_RESOURCES . 'lessphp/lessphp/less.php');
 
-			$less = new lessc();
+			$options = array(
+				'compress' => option('config_less_compress', false),
+			);
 
-			$css = $less->compileFile($file);
+			$parser = new Less_Parser($options);
 
-			$dependencies = $less->allParsedFiles();
+			$parser->parseFile($file, $reference);
+
+			$css = $parser->getCss();
+
+			$dependencies = $parser->allParsedFiles();
 
 			cache('less.' . $reference, $dependencies);
 
