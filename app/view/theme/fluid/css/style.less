@@ -771,14 +771,14 @@ body.admin-bar #container {
       position: absolute;
       left: -9999px;
 
-      & + .text {
+      & + .label {
         background: @color-lightest;
         padding: 5px 10px;
         border-radius: 5px;
         cursor: pointer;
       }
 
-      &:checked + .text {
+      &:checked + .label {
         background: @color-light;
       }
     }
@@ -786,12 +786,12 @@ body.admin-bar #container {
     //Nested Radios
     .ac-radio {
       & > input[type="radio"] {
-        & + .text {
+        & + .label {
           background: white;
           border: 2px dashed @color-dark;
         }
 
-        &:checked + .text {
+        &:checked + .label {
           background: @color-lighter;
         }
       }
