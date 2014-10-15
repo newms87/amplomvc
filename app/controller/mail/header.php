@@ -29,7 +29,7 @@ class App_Controller_Mail_Header extends Controller
 				$data['logo'] = image($data['logo'], $width, $height);
 			}
 
-			$data['logo'] = cast_http($data['logo']);
+			$data['logo'] = cast_protocol($data['logo']);
 
 			//Calculate width / height and scale if necessary
 			if ($width && $height) {
