@@ -325,21 +325,21 @@ class Theme extends Library
 		$values = $this->parseConfigs($file);
 
 		foreach ($directives as $key => $description) {
-			$title = $key;
+			$title = cast_title($key);
 			$type  = 'text';
 
 			if (strpos($description, '---') === 0) {
 				$type  = 'section';
-				$title = ucfirst($title);
 			} elseif (strpos($description, '-')) {
 				list($title, $description) = explode('-', $description, 2);
 
+				//Parse the type field (eg: 'Config Title (type)' or '(type)')
 				if (preg_match("/\\s*([a-z\\s]*[a-z]?)\\s*\\(([^)]+)\\)/i", $title, $match)) {
-					$title = trim($match[1] ? $match[1] : $key);
+					$title = $match[1] ? $match[1] : cast_title($key);
 					$type  = $match[2];
-				} else {
-					$title = trim($title);
 				}
+
+				$title = trim($title);
 			}
 
 			$configs[$key] = array(

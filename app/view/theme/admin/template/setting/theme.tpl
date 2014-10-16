@@ -33,7 +33,8 @@
 
 						<label for="config-<?= $key; ?>" class="theme-setting">
 							<div class="cell">
-								<div class="key"><?= $config['title']; ?></div>
+								<div class="title"><?= $config['title']; ?></div>
+								<div class="key">@<?= $key; ?></div>
 								<div class="description"><?= $config['description']; ?></div>
 								<div class="value">
 									<input id="config-<?= $key; ?>" type="text" name="configs[<?= $key; ?>]" value="<?= $config['value']; ?>"/>
