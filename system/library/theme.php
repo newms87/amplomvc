@@ -223,7 +223,7 @@ class Theme extends Library
 			$config_file = is_file(theme_dir('css/config.less.acmod')) ? 'config.less.acmod' : 'config.less';
 
 			if ($store_theme) {
-				$theme_style = "@import '@{themepath}css/$config_file';\n\n";
+				$theme_style = "@import '@{basepath}app/view/theme/$theme/css/$config_file';\n\n";
 
 				if (!empty($store_theme['store_theme_config_' . $theme])) {
 					$theme_style .= $store_theme['store_theme_config_' . $theme];
@@ -297,7 +297,9 @@ class Theme extends Library
 				$store_configs = $this->parseConfigs($store_theme['store_theme_config_' . $theme]);
 
 				foreach ($store_configs as $key => $value) {
-					$configs[$key]['value'] = $value;
+					if (isset($configs[$key])) {
+						$configs[$key]['value'] = $value;
+					}
 				}
 			}
 
