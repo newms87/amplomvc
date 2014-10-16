@@ -304,9 +304,9 @@ class Config extends Library
 			}
 		}
 
-		$this->delete('setting', $values);
-
 		$this->cache->delete("setting.$group");
+
+		return $this->delete('setting', $values);
 	}
 
 	public function addStore($data)

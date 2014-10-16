@@ -273,8 +273,14 @@ class Theme extends Library
 		$this->cache->delete('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
-	public function getStoreTheme($store_id, $theme)
+	public function getStoreTheme($store_id)
 	{
+		$theme = $this->config->load('config', 'config_theme', $store_id);
+
+		if (!$theme) {
+			$theme = AMPLO_DEFAULT_THEME;
+		}
+
 		$configs = array();
 
 		//Load Theme Configs
@@ -313,6 +319,13 @@ class Theme extends Library
 			'stylesheet' => $stylesheet,
 			'configs'    => $configs,
 		);
+	}
+
+	public function restoreStoreTheme($store_id)
+	{
+		$this->cache->delete('less/store_theme.' . $store_id);
+
+		return $this->config->deleteGroup('store_theme', $store_id);
 	}
 
 	public function getConfigs($file)

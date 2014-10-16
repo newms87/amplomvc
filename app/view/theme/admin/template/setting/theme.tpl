@@ -25,6 +25,8 @@
 			</div>
 
 			<div class="col xs-12 md-6 top theme-settings">
+				<a class="button" href="<?= site_url('admin/setting/theme/restore_defaults', 'store_id=' . $store['store_id']); ?>"><?= _l("Restore Defaults"); ?></a>
+
 				<div class="theme-setting-list">
 					<? foreach ($configs as $key => $config) { ?>
 						<? if ($config['type'] === 'section') { ?>
