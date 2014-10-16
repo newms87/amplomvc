@@ -155,7 +155,11 @@ function message($type, $message = null)
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
-	$image = $registry->get('image')->resize($image, $width, $height);
+	if ($width || $height) {
+		$image = $registry->get('image')->resize($image, $width, $height);
+	} else {
+		$image = $registry->get('image')->get($image);
+	}
 
 	if (!$image && $default) {
 		if ($default === true) {
@@ -165,7 +169,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 		}
 	}
 
-	if ($cast_protocol) {
+	if ($image && $cast_protocol) {
 		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
