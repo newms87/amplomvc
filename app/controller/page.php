@@ -25,17 +25,7 @@ class App_Controller_Page extends Controller
 		$this->document->setTitle($page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
-		if ($page['style']) {
-			$style = cache('page.' . $page_id . '.style');
-
-			if (!$style) {
-				$style = $this->document->compileLessContent($page['style']);
-
-				cache('page.' . $page_id . '.style', $style);
-			}
-
-			$page['style'] = $style;
-		}
+		$page['style'] = $this->Model_Page->compileStyle($page['style']);
 
 		$page['page_id'] = $page_id;
 
@@ -65,17 +55,7 @@ class App_Controller_Page extends Controller
 			return '';
 		}
 
-		if ($page['style']) {
-			$style = cache('page.' . $page_id . '.style');
-
-			if (!$style) {
-				$style = $this->document->compileLessContent($page['style']);
-
-				cache('page.' . $page_id . '.style', $style);
-			}
-
-			$page['style'] = $style;
-		}
+		$page['style'] = $this->Model_Page->compileStyle($page['style']);
 
 		//Render
 		output($this->render('page/content', $page));

@@ -131,6 +131,8 @@ class App_Model_Page extends Model
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
+			$this->getPageFiles($page);
+
 			$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
 			//Translations
@@ -149,7 +151,11 @@ class App_Model_Page extends Model
 	//TODO: Develop good caching method for pages.
 	public function getActivePage($page_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id . " AND status = 1");
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id . " AND status = 1");
+
+		$this->getPageFiles($page);
+
+		return $page;
 	}
 
 	public function getPageName($page_id)
@@ -161,9 +167,11 @@ class App_Model_Page extends Model
 	{
 		$themes = $this->theme->getStoreThemes();
 
-		$query = "SELECT * FROM " . DB_PREFIX . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')";
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 
-		return $this->queryRow($query);
+		$this->getPageFiles($page);
+
+		return $page;
 	}
 
 	public function getPageForPreview($page_id)
@@ -171,6 +179,8 @@ class App_Model_Page extends Model
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
+			$this->getPageFiles($page);
+
 			$page += array(
 				'layout_id' => option('config_default_layout_id')
 			);
@@ -200,6 +210,11 @@ class App_Model_Page extends Model
 
 		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 
+		foreach ($rows as &$row) {
+			$this->getPageFiles($row);
+		}
+		unset($row);
+
 		if ($total) {
 			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
 			$total_rows = $this->queryVar($query);
@@ -211,6 +226,27 @@ class App_Model_Page extends Model
 		}
 
 		return $rows;
+	}
+
+	public function getPageFiles(&$page)
+	{
+		if (!empty($page['theme']) && !empty($page['name'])) {
+			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/content.tpl';
+			$page['style_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
+		}
+	}
+
+	public function compileStyle($page_id, $style)
+	{
+		$css = cache('page.' . $page_id . '.style');
+
+		if (!$css) {
+			$css = $this->document->compileLessContent($style);
+
+			cache('page.' . $page_id . '.style', $css);
+		}
+
+		return $css;
 	}
 
 	public function getTotalPages($filter = array())
