@@ -16,11 +16,7 @@
 
 	<div class="page-content row">
 		<div class="wrap">
-			<? if (!empty($content_file)) { ?>
-				<? include($content_file); ?>
-			<? } elseif (!empty($content)) { ?>
-				<?= $content; ?>
-			<? } ?>
+			<?= $content; ?>
 		</div>
 	</div>
 

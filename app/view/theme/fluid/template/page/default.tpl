@@ -2,11 +2,7 @@
 <?= area('left'); ?><?= area('right'); ?>
 
 <style id="page-style">
-	<? if (!empty($style_file)) { ?>
-	<?= file_get_contents($style_file); ?>
-	<? } elseif (!empty($style)) { ?>
 	<?= $style; ?>
-	<? } ?>
 </style>
 
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
@@ -24,11 +20,7 @@
 
 	<div class="page-content row">
 		<div class="wrap">
-			<? if (!empty($content_file)) { ?>
-				<? include($content_file); ?>
-			<? } elseif (!empty($content)) { ?>
-				<?= $content; ?>
-			<? } ?>
+			<?= $content; ?>
 		</div>
 	</div>
 

@@ -291,6 +291,22 @@ class Document extends Library
 		return str_replace(DIR_CACHE, URL_SITE . 'system/cache/', $less_file);
 	}
 
+	public function compileLessContent($content, $compress = null)
+	{
+		//Load PHPSass
+		require_once(DIR_RESOURCES . 'lessphp/Less.php');
+
+		$options = array(
+			'compress' => is_null($compress) ? option('config_less_compress', false) : $compress,
+		);
+
+		$parser = new Less_Parser($options);
+
+		$parser->parse($content);
+
+		return $parser->getCss();
+	}
+
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
 	{
 		if (preg_match("/\\.less$/", $href)) {

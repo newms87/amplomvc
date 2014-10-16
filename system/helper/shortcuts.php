@@ -313,6 +313,15 @@ function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 }
 
+function cast_title($name)
+{
+	$title = array_map(function ($a) {
+		return ucfirst($a);
+	}, explode('_', str_replace('-','_',$name)));
+
+	return implode(' ', $title);
+}
+
 function cast_protocol($url, $cast = 'http')
 {
 	$scheme = parse_url($url, PHP_URL_SCHEME);

@@ -42,6 +42,14 @@ class App_Controller_Admin_Page extends Controller
 		//The Table Columns
 		$columns = $this->Model_Page->getColumns(_request('columns'));
 
+		//Disallow content and style columns
+		$disallow = array(
+			'content' => 1,
+			'style'   => 1,
+		);
+
+		$columns = array_diff_key($columns, $disallow);
+
 		//Get Sorted / Filtered Data
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = _get('filter', array());
@@ -70,6 +78,7 @@ class App_Controller_Admin_Page extends Controller
 		$listing += array(
 			'row_id'         => 'page_id',
 			'columns'        => $columns,
+			'extra_cols'     => array_diff_key($this->Model_Page->getColumns(), $disallow),
 			'rows'           => $pages,
 			'filter_value'   => $filter,
 			'pagination'     => true,
@@ -113,8 +122,8 @@ class App_Controller_Admin_Page extends Controller
 			'name'             => '',
 			'title'            => 'New Page',
 			'alias'            => '',
-			'content_file'     => '',
-			'style_file'       => '',
+			'content'          => '',
+			'style'            => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'display_title'    => 1,
@@ -141,35 +150,32 @@ class App_Controller_Admin_Page extends Controller
 		);
 
 		//Action Buttons
-		$page['save'] = site_url('admin/page/update', 'page_id=' . $page_id);
+		$page['save'] = site_url('admin/page/save', 'page_id=' . $page_id);
 
 		//Render
 		output($this->render('page/form', $page));
 	}
 
-	public function update()
+	public function save()
 	{
-		//Insert
-		if (empty($_GET['page_id'])) {
-			$this->Model_Page->addPage($_POST);
-		} //Update
-		else {
-			if (empty($_POST['display_title'])) {
-				$_POST['display_title'] = 0;
-			}
-			$this->Model_Page->editPage($_GET['page_id'], $_POST);
-		}
+		$page = $_POST + array(
+				'display_title' => 0,
+			);
 
-		if ($this->Model_Page->hasError()) {
-			message('error', $this->Model_Page->getError());
-		} else {
+		if ($this->Model_Page->save(_request('page_id'), $page)) {
 			message('success', _l("The Page has been updated successfully!"));
+
+			if ($this->Model_Page->hasError()) {
+				message('notify', $this->Model_Page->getError());
+			}
+		} else {
+			message('error', $this->Model_Page->getError());
 		}
 
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
-			$this->form();
+			post_redirect('admin/page/form', 'page_id=' . _request('page_id'));
 		} else {
 			redirect('admin/page');
 		}
