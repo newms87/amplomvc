@@ -1,7 +1,5 @@
 /**
   * General: ---
-  * @imgpath: Image Path - The Path to the Main image directory (accessible by the image manager)
-  * @themepath: Theme Path - The path to your theme's root directory for css assets (images, fonts, etc..)
   * @xs: Device targeting for Extra Small (eg: Smart Phones) Screen Sizes
   * @sm: Device targeting for Small (eg: Tablets) Screen Sizes
   * @md: Device targeting for Medium (eg: small laptop / desktop monitors) Screen Sizes
@@ -21,8 +19,11 @@
   * @color-darker: Darker than @color-dark
   * @color-darkest: The darkest color relative to @color-dark
 
-  * @link-normal: Color for links (in the normal state)
-  * @link-hover: Color when you hover over a link (or active state)
+  * Links: ---
+  * @link-font: Link font-size and font-family
+  * @link-font-hover: Link font-size and font-family for hover / active state
+  * @link-color: Link color
+  * @link-color-hover: Link color for hover / active state
 
   * @font-dark: The primary text color for dark text
   * @font-light: The primary text color for light text
@@ -52,8 +53,8 @@
 */
 
 /* LESS config */
-@imgpath: '../../../image/';
-@themepath: '../../../app/view/theme/metro/';
+@imgpath: '@{basepath}image/';
+@themepath: '@{basepath}app/view/theme/metro/';
 @xs: 480px;
 @sm: 768px;
 @md: 1024px;
@@ -212,6 +213,8 @@
 //Messages
 @msg-fg-color: #555555;
 @msg-bg-color: #CFCFCF;
+@msg-close-color: #555555;
+@msg-close-bg: 'background: white';
 
 @msg-success-bg-color: #EAF7D9;
 @msg-success-fg-color: #8DAD62;
@@ -283,7 +286,7 @@
 @footer-color: white;
 @footer-link: white;
 @footer-link-hover: darker(@footer-link, 25%);
-@footer-background: 'background: #343434;';
+@footer-background: 'background: #343434';
 @footer-border: none;
 @footer-padding: 1em;
 
@@ -291,4 +294,3 @@
 @import 'base';
 @import 'reset';
 @import 'style';
-@import 'metro';

@@ -8,7 +8,7 @@
 			'value'  => 'formatted',
 		); ?>
 
-		<?= build('ac-radio', $build); ?>
+		<?= build('radio', $build); ?>
 
 		<? if ($add_address) { ?>
 			<a class="add-address" href="<?= site_url("account/address/form"); ?>"><?= _l("Add Address"); ?></a>

@@ -33,7 +33,9 @@ define("DB_PROFILE", true);
 define("DB_PROFILE_NO_CACHE", false);
 
 //Error Reporting
+//You should always leave this at E_ALL unless you have a good reason not to
 error_reporting(E_ALL);
+//This should be set to 0 for production
 ini_set('display_errors', 1);
 
 //Cache

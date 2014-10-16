@@ -273,6 +273,8 @@ class Document extends Library
 
 			$parser->parseFile($file, $reference);
 
+			$parser->parse("@basepath: '" . SITE_BASE . "';");
+
 			$css = $parser->getCss();
 
 			$dependencies = $parser->allParsedFiles();
@@ -303,6 +305,8 @@ class Document extends Library
 		$parser = new Less_Parser($options);
 
 		$parser->parse($content);
+
+		$parser->parse("@basepath: '" . SITE_BASE . "';");
 
 		return $parser->getCss();
 	}

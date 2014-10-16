@@ -18,7 +18,7 @@
 				<tr>
 					<td><?= _l("Enable Social Media Login / Registration?"); ?></td>
 					<td><?=
-						build('ac-radio', array(
+						build('radio', array(
 							'name'   => 'status',
 							'data'   => $data_yes_no,
 							'select' => $status,
@@ -40,7 +40,7 @@
 					<td>
 						<div class="setting-item enable-item">
 							<?=
-							build('ac-radio', array(
+							build('radio', array(
 								'name'   => 'google_plus[active]',
 								'data'   => $data_active,
 								'select' => $google_plus['active'],
@@ -73,7 +73,7 @@
 					<td>
 						<div class="setting-item enable-item">
 							<?=
-							build('ac-radio', array(
+							build('radio', array(
 								'name'   => 'facebook[active]',
 								'data'   => $data_active,
 								'select' => $facebook['active'],
