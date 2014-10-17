@@ -769,8 +769,3 @@ function _is_object($o)
 	return is_array($o) || is_object($o) || is_resource($o);
 }
 
-function timelog($name)
-{
-	global $__start;
-	file_put_contents(DIR_LOGS . 'timelog.txt', '[' . date('Y-m-d H:i:s') . '] ' . $name . ' - ' . (microtime(true) - $__start) . "\n", FILE_APPEND);
-}

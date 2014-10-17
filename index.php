@@ -24,7 +24,7 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
-//Timer for full system response
+//Timer for full system performance profiling
 $__start = microtime(true);
 
 //File Modifications
@@ -32,6 +32,10 @@ require_once(DIR_SITE . 'system/ac_mod_file.php');
 
 // System Startup
 require_once(_ac_mod_file(DIR_SITE . 'system/startup.php'));
+
+if (AMPLO_TIME_LOG) {
+	timelog('startup');
+}
 
 // Load
 require_once(_ac_mod_file(DIR_SYSTEM . 'load.php'));
