@@ -74,6 +74,10 @@ function _ac_mod_file($file)
 
 			$contents = preg_replace("/<\\?([^p=])/", "<?php \$1", file_get_contents($file));
 
+			if (defined("AMPLO_REWRITE_SHORT_TAGS") && AMPLO_REWRITE_SHORT_TAGS) {
+				$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
+			}
+
 			file_put_contents($tpl, $contents);
 		}
 
