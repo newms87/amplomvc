@@ -119,7 +119,7 @@ class DB
 			$sql = $this->synctime($sql);
 		}
 
-		if (defined("SHOW_DB_PROFILE") && SHOW_DB_PROFILE) {
+		if (DB_PROFILE) {
 			$start = microtime(true);
 
 			if (DB_PROFILE_NO_CACHE) {

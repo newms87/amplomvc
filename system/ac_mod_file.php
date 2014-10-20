@@ -61,7 +61,7 @@ function _ac_mod_file($file)
 		$file = $file . '.acmod';
 	}
 
-	if (isset($live_registry[$file])) {
+	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {
 		$file = $live_registry[$file];
 	}
 

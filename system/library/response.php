@@ -70,11 +70,6 @@ class Response extends Library
 
 	public function output()
 	{
-		//Database Profiling
-		if (DB_PROFILE && !IS_AJAX) {
-			$this->dev->performance();
-		}
-
 		if ($this->output) {
 			if ($this->level) {
 				$output = $this->compress($this->output, $this->level);

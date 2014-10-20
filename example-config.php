@@ -29,7 +29,7 @@ define('DB_PASSWORD', '');
 define('DB_PREFIX', 'ac_');
 
 //DB Profiling
-define("DB_PROFILE", true);
+define("DB_PROFILE", false);
 define("DB_PROFILE_NO_CACHE", false);
 
 //Time logging for system performance profiling
