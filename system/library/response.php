@@ -72,7 +72,8 @@ class Response extends Library
 	{
 		if ($this->output) {
 			if (preg_match("#^<\\?=[^?]+\\?>#", $this->output)) {
-				$this->output = preg_replace("#^<\\?=[^?]+\\?>#", _l('<p>Please notify the web admin %s to enable short_open_tags for this server.</p>', option('config_email_error')), $this->output);
+				echo preg_replace("#^<\\?=[^?]+\\?>#", _l('<p>Please notify the web admin %s to enable short_open_tag (eg: add "short_open_tag = on" in your php.ini) on this server.</p>', option('config_email_error')), $this->output);
+				return;
 			}
 
 			if ($this->level) {
