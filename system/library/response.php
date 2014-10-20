@@ -71,6 +71,10 @@ class Response extends Library
 	public function output()
 	{
 		if ($this->output) {
+			if (preg_match("#^<\\?=[^?]+\\?>#", $this->output)) {
+				$this->output = preg_replace("#^<\\?=[^?]+\\?>#", _l('<p>Please notify the web admin %s to enable short_open_tags for this server.</p>', option('config_email_error')), $this->output);
+			}
+
 			if ($this->level) {
 				$output = $this->compress($this->output, $this->level);
 			} else {
