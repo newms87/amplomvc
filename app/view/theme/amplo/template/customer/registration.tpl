@@ -53,7 +53,7 @@
 
 						<div class="form-item">
 							<label><?= _l("Subscribe"); ?></label>
-							<?= build('ac-radio', array(
+							<?= build('radio', array(
 								'name'   => 'newsletter',
 								'data'   => $data_yes_no,
 								'select' => $newsletter

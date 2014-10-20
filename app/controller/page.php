@@ -24,18 +24,8 @@ class App_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
-		if (!empty($page['style_file']) && filesize($page['style_file']) > 0) {
-			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
-				$style = $this->document->compileLess($page['style_file'], 'page-' . $page['name']);
-			} else {
-				$style = $page['style_file'];
-			}
-
-			$this->document->addStyle($style);
-		}
-
-		//load style in header only.
-		$page['style_file'] = null;
+		//TODO: Put the page style into a cached file. (load in page header!)
+		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		$page['page_id'] = $page_id;
 
@@ -65,11 +55,7 @@ class App_Controller_Page extends Controller
 			return '';
 		}
 
-		if ($page['style_file']) {
-			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
-				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
-			}
-		}
+		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		//Render
 		output($this->render('page/content', $page));
@@ -88,8 +74,8 @@ class App_Controller_Page extends Controller
 				'name'          => 'new-page',
 				'title'         => "New Page",
 				'display_title' => 1,
-				'content_file'  => '',
-				'style_file'    => '',
+				'content'       => '',
+				'style'         => '',
 				'layout_id'     => option('config_default_layout'),
 			);
 		}
@@ -101,10 +87,8 @@ class App_Controller_Page extends Controller
 		//Page Head
 		$this->document->setTitle($page['title']);
 
-		if ($page['style_file']) {
-			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
-				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
-			}
+		if ($page['style']) {
+			$page['style'] = $this->document->compileLessContent($page['style']);
 		}
 
 		//Breadcrumbs
@@ -128,26 +112,16 @@ class App_Controller_Page extends Controller
 		$page += $this->Model_Page->getPageForPreview($page_id);
 
 		if (IS_POST) {
-			$temp_content = DIR_CACHE . 'preview/' . $page['name'] . '/content.tpl';
-			$temp_style   = DIR_CACHE . 'preview/' . $page['name'] . '/style.less';
-
-			_is_writable(dirname($temp_content));
-
-			file_put_contents($temp_content, html_entity_decode($_POST['content']));
-			file_put_contents($temp_style, html_entity_decode($_POST['style']));
-
-			$page['content_file'] = $temp_content;
-			$page['style_file']   = $temp_style;
+			$page['content'] = html_entity_decode(_post('content'));
+			$page['style']   = html_entity_decode(_post('style'));
 		}
 
 		if (!$page) {
 			return '';
 		}
 
-		if ($page['style_file']) {
-			if (pathinfo($page['style_file'], PATHINFO_EXTENSION) === 'less') {
-				$page['style_file'] = str_replace(URL_SITE, DIR_SITE, $this->document->compileLess($page['style_file'], 'page-' . $page['name']));
-			}
+		if ($page['style']) {
+			$page['style'] = $this->document->compileLessContent($page['style']);
 		}
 
 		//Render

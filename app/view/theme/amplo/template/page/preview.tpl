@@ -16,11 +16,11 @@
 
 	<div class="page-content row">
 		<div class="wrap">
-			<? if (!empty($content_file)) { ?>
-				<? include($content_file); ?>
-			<? } elseif (!empty($content)) { ?>
-				<?= $content; ?>
-			<? } ?>
+			<? if (!empty($content_file) && is_file($content_file)) {
+				require_once($content_file);
+			} else {
+				echo $content;
+			} ?>
 		</div>
 	</div>
 

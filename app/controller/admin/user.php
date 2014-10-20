@@ -139,10 +139,7 @@ class App_Controller_Admin_User extends Controller
 			1 => _l("Enabled"),
 		);
 
-		$user['meta']['__ac_template__'] = array(
-			'key'   => 'my-key',
-			'value' => '',
-		);
+		$user['meta']['__ac_template__'] = '';
 
 		//Actions
 		$user['save'] = site_url('admin/user/save', 'user_id=' . $user_id);

@@ -74,7 +74,7 @@ class Config extends Library
 		}
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-		$url    = $scheme . $_SERVER['HTTP_HOST'] . '/' . trim($_SERVER['REQUEST_URI'], '/');
+		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
 
 		foreach ($stores as $s) {
 			if ($store_id) {
@@ -304,9 +304,9 @@ class Config extends Library
 			}
 		}
 
-		$this->delete('setting', $values);
-
 		$this->cache->delete("setting.$group");
+
+		return $this->delete('setting', $values);
 	}
 
 	public function addStore($data)

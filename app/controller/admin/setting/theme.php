@@ -24,19 +24,13 @@ class App_Controller_Admin_Setting_Theme extends Controller
 			);
 		}
 
-		$theme = $this->config->load('config', 'config_theme', $store_id);
-
-		if (!$theme) {
-			$theme = AMPLO_DEFAULT_THEME;
-		}
-
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Settings"), site_url('admin/setting/setting'));
 		breadcrumb(_l("Theme for %s", $store['name']), site_url('admin/setting/theme'));
 
 		//Load Data or Defaults
-		$theme_configs = $this->theme->getStoreTheme($store_id, $theme);
+		$theme_configs = $this->theme->getStoreTheme($store_id);
 
 		$settings = $_POST;
 
@@ -85,6 +79,25 @@ class App_Controller_Admin_Setting_Theme extends Controller
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/setting/store');
+		}
+	}
+
+	public function restore_defaults()
+	{
+		$store_id = _request('store_id');
+
+		if (!is_null($store_id)) {
+			if ($this->theme->restoreStoreTheme($store_id)) {
+				message('success', _l("Store theme has been restored to the default values"));
+			} else {
+				message('error', $this->theme->getError());
+			}
+		}
+
+		if (IS_AJAX) {
+			output_json($this->message->fetch());
+		} else {
+			redirect('admin/setting/theme', 'store_id=' . (int)$store_id);
 		}
 	}
 }

@@ -242,8 +242,8 @@ class Document extends Library
 			if (is_null($dependencies)) {
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
-				foreach ($dependencies as $d => $d_mtime) {
-					if (_filemtime($less_file) < _filemtime($d)) {
+				foreach ($dependencies as $d_file) {
+					if (_filemtime($less_file) < _filemtime($d_file)) {
 						$refresh = true;
 						break;
 					}
@@ -263,13 +263,21 @@ class Document extends Library
 			}
 
 			//Load PHPSass
-			require_once(DIR_RESOURCES . 'lessphp/lessc.inc.php');
+			require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
-			$less = new lessc();
+			$options = array(
+				'compress' => option('config_less_compress', false),
+			);
 
-			$css = $less->compileFile($file);
+			$parser = new Less_Parser($options);
 
-			$dependencies = $less->allParsedFiles();
+			$parser->parseFile($file, $reference);
+
+			$parser->parse("@basepath: '" . SITE_BASE . "';");
+
+			$css = $parser->getCss();
+
+			$dependencies = $parser->allParsedFiles();
 
 			cache('less.' . $reference, $dependencies);
 
@@ -283,6 +291,24 @@ class Document extends Library
 
 		//Return the URL for the cache file
 		return str_replace(DIR_CACHE, URL_SITE . 'system/cache/', $less_file);
+	}
+
+	public function compileLessContent($content, $compress = null)
+	{
+		//Load PHPSass
+		require_once(DIR_RESOURCES . 'lessphp/Less.php');
+
+		$options = array(
+			'compress' => is_null($compress) ? option('config_less_compress', false) : $compress,
+		);
+
+		$parser = new Less_Parser($options);
+
+		$parser->parse($content);
+
+		$parser->parse("@basepath: '" . SITE_BASE . "';");
+
+		return $parser->getCss();
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')

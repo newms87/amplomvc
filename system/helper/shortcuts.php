@@ -155,7 +155,11 @@ function message($type, $message = null)
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
-	$image = $registry->get('image')->resize($image, $width, $height);
+	if ($width || $height) {
+		$image = $registry->get('image')->resize($image, $width, $height);
+	} else {
+		$image = $registry->get('image')->get($image);
+	}
 
 	if (!$image && $default) {
 		if ($default === true) {
@@ -165,17 +169,30 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 		}
 	}
 
-	if ($cast_protocol) {
+	if ($image && $cast_protocol) {
 		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
 	return $image;
 }
 
-function image_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
+	if (!is_array($srcsets)) {
+		$srcsets = array(
+			$nx => $srcsets,
+		);
+	}
+
+	$max_x   = max(array_keys($srcsets));
+	$image = $srcsets[$max_x];
+
 	if (!is_file($image)) {
-		return 'src=""';
+		$image = DIR_IMAGE . $image;
+
+		if (!is_file($image)) {
+			return 'src=""';
+		}
 	}
 
 	if (!$width && !$height) {
@@ -185,24 +202,25 @@ function image_srcset($image, $nx = 3, $width = null, $height = null, $default =
 			return 'src=""';
 		}
 
-		$width = $size[0] / $nx;
+		$width  = $size[0] / $nx;
 		$height = $size[1] / $nx;
 	}
 
-	$src = 'src="' . image($image, $width, $height, $default, $cast_protocol) . '"';
-
-	$srcset = '';
-
 	while ($nx > 1) {
-		$srcset = image($image, $width * $nx, $height * $nx, $default, $cast_protocol) . ' ' . $nx . 'x' . ($srcset ? ', ' : '') . $srcset;
+		$srcsets[$nx] = empty($srcsets[$nx]) ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($srcsets[$nx]);
+		$srcsets[$nx] .= ' ' . $nx . 'x';
 		$nx--;
 	}
 
-	if ($srcset) {
-		return $src . ' srcset="' . $srcset . '"';
+	$src = empty($srcsets[1]) ? image($image, $width, $height, $default, $cast_protocol) : image($srcsets[1]);
+	unset($srcsets[1]);
+
+	if ($srcsets) {
+		ksort($srcsets);
+		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
 	}
 
-	return $src;
+	return "src=\"$src\"";
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -297,6 +315,15 @@ function slug($name, $sep = '_', $allow = 'a-z0-9_-')
 	);
 
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
+}
+
+function cast_title($name)
+{
+	$title = array_map(function ($a) {
+		return ucfirst($a);
+	}, explode('_', str_replace('-','_',$name)));
+
+	return implode(' ', $title);
 }
 
 function cast_protocol($url, $cast = 'http')
@@ -742,8 +769,3 @@ function _is_object($o)
 	return is_array($o) || is_object($o) || is_resource($o);
 }
 
-function timelog($name)
-{
-	global $__start;
-	file_put_contents(DIR_LOGS . 'timelog.txt', '[' . date('Y-m-d H:i:s') . '] ' . $name . ' - ' . (microtime(true) - $__start) . "\n", FILE_APPEND);
-}

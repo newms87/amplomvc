@@ -63,6 +63,33 @@ class App_Model_User extends Model
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
 	}
 
+	public function addMeta($user_id, $key, $value, $multi = false)
+	{
+		$serialized = (int)_is_object($value);
+
+		if ($serialized) {
+			$value = serialize($value);
+		}
+
+		if (!$multi) {
+			$where = array(
+				'user_id' => $user_id,
+				'key'     => $key,
+			);
+
+			$this->delete('user_meta', $where);
+		}
+
+		$data = array(
+			'user_id'    => $user_id,
+			'key'        => $key,
+			'value'      => $value,
+			'serialized' => $serialized,
+		);
+
+		$this->insert('user_meta', $data);
+	}
+
 	public function setMeta($user_id, $meta, $exactly = false)
 	{
 		if ($exactly) {
@@ -70,11 +97,10 @@ class App_Model_User extends Model
 		}
 
 		foreach ($meta as $key => $value) {
-			if (_is_object($value)) {
-				$value      = serialize($value);
-				$serialized = 1;
-			} else {
-				$serialized = 0;
+			$serialized = (int)_is_object($value);
+
+			if ($serialized) {
+				$value = serialize($value);
 			}
 
 			if (!$exactly) {
@@ -101,18 +127,26 @@ class App_Model_User extends Model
 		return true;
 	}
 
-	public function getMeta($user_id)
+	public function getMeta($user_id, $key = null)
 	{
+		if ($key) {
+			return $this->queryVar("SELECT `value` FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+		}
+
 		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+
+		$data = array();
 
 		foreach ($meta as &$m) {
 			if ($m['serialized']) {
 				$m['value'] = unserialize($m['value']);
 			}
+
+			$data[$m['key']] = $m['value'];
 		}
 		unset($m);
 
-		return $meta;
+		return $data;
 	}
 
 	public function getUserByUsername($username)
@@ -222,7 +256,7 @@ class App_Model_User extends Model
 		if ((!$user_id && empty($user['encrypted_password'])) || isset($user['password'])) {
 			if (!isset($user['password'])) {
 				$this->error['password'] = _l("You must enter a password");
-			}  elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+			} elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
 				$this->error['password'] = $this->validation->getError();
 			}
 		}

@@ -223,7 +223,7 @@ class Theme extends Library
 			$config_file = is_file(theme_dir('css/config.less.acmod')) ? 'config.less.acmod' : 'config.less';
 
 			if ($store_theme) {
-				$theme_style = "@import '@{themepath}css/$config_file';\n\n";
+				$theme_style = "@import '@{basepath}app/view/theme/$theme/css/$config_file';\n\n";
 
 				if (!empty($store_theme['store_theme_config_' . $theme])) {
 					$theme_style .= $store_theme['store_theme_config_' . $theme];
@@ -273,8 +273,14 @@ class Theme extends Library
 		$this->cache->delete('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
-	public function getStoreTheme($store_id, $theme)
+	public function getStoreTheme($store_id)
 	{
+		$theme = $this->config->load('config', 'config_theme', $store_id);
+
+		if (!$theme) {
+			$theme = AMPLO_DEFAULT_THEME;
+		}
+
 		$configs = array();
 
 		//Load Theme Configs
@@ -297,7 +303,9 @@ class Theme extends Library
 				$store_configs = $this->parseConfigs($store_theme['store_theme_config_' . $theme]);
 
 				foreach ($store_configs as $key => $value) {
-					$configs[$key]['value'] = $value;
+					if (isset($configs[$key])) {
+						$configs[$key]['value'] = $value;
+					}
 				}
 			}
 
@@ -313,6 +321,13 @@ class Theme extends Library
 		);
 	}
 
+	public function restoreStoreTheme($store_id)
+	{
+		$this->cache->delete('less/store_theme.' . $store_id);
+
+		return $this->config->deleteGroup('store_theme', $store_id);
+	}
+
 	public function getConfigs($file)
 	{
 		$configs = array();
@@ -323,21 +338,21 @@ class Theme extends Library
 		$values = $this->parseConfigs($file);
 
 		foreach ($directives as $key => $description) {
-			$title = $key;
+			$title = cast_title($key);
 			$type  = 'text';
 
 			if (strpos($description, '---') === 0) {
 				$type  = 'section';
-				$title = ucfirst($title);
 			} elseif (strpos($description, '-')) {
 				list($title, $description) = explode('-', $description, 2);
 
+				//Parse the type field (eg: 'Config Title (type)' or '(type)')
 				if (preg_match("/\\s*([a-z\\s]*[a-z]?)\\s*\\(([^)]+)\\)/i", $title, $match)) {
-					$title = trim($match[1] ? $match[1] : $key);
+					$title = $match[1] ? $match[1] : cast_title($key);
 					$type  = $match[2];
-				} else {
-					$title = trim($title);
 				}
+
+				$title = trim($title);
 			}
 
 			$configs[$key] = array(
