@@ -201,7 +201,7 @@
 									<? foreach ($currencies as $currency) { ?>
 										<? if ($currency['code'] == $config_currency) { ?>
 											<option value="<?= $currency['code']; ?>"
-											        selected="selected"><?= $currency['title']; ?></option>
+												selected="selected"><?= $currency['title']; ?></option>
 										<? } else { ?>
 											<option value="<?= $currency['code']; ?>"><?= $currency['title']; ?></option>
 										<? } ?>
@@ -316,7 +316,7 @@
 									<? foreach ($customer_groups as $customer_group) { ?>
 										<? if ($customer_group['customer_group_id'] == $config_customer_group_id) { ?>
 											<option value="<?= $customer_group['customer_group_id']; ?>"
-											        selected="selected"><?= $customer_group['name']; ?></option>
+												selected="selected"><?= $customer_group['name']; ?></option>
 										<? } else { ?>
 											<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
 										<? } ?>
@@ -367,14 +367,14 @@
 							<td><?= _l("Allowed Upload Image Extensions:<br /><span class=\"help\">Add which image file extensions are allowed to be uploaded. Use comma separated values.</span>"); ?></td>
 							<td>
 								<textarea name="config_upload_images_allowed" cols="40"
-								          rows="5"><?= $config_upload_images_allowed; ?></textarea>
+									rows="5"><?= $config_upload_images_allowed; ?></textarea>
 							</td>
 						</tr>
 						<tr>
 							<td><?= _l("Allowed Upload Image Mime Types:<br /><span class=\"help\">Add which image Mime Types are allowed to be uploaded. Use comma separated values.</span>"); ?></td>
 							<td>
 								<textarea name="config_upload_images_mime_types_allowed" cols="40"
-								          rows="5"><?= $config_upload_images_mime_types_allowed; ?></textarea>
+									rows="5"><?= $config_upload_images_mime_types_allowed; ?></textarea>
 							</td>
 						</tr>
 
@@ -434,19 +434,19 @@
 							<td class="required"> <?= _l("Admin Image List Size:"); ?></td>
 							<td>
 								<input type="text" name="config_image_admin_list_width" value="<?= $config_image_admin_list_width; ?>"
-								       size="3"/>
+									size="3"/>
 								x
 								<input type="text" name="config_image_admin_list_height" value="<?= $config_image_admin_list_height; ?>"
-								       size="3"/>
+									size="3"/>
 						</tr>
 						<tr>
 							<td class="required"> <?= _l("Category Image Size:"); ?></td>
 							<td>
 								<input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>"
-								       size="3"/>
+									size="3"/>
 								x
 								<input type="text" name="config_image_category_height" value="<?= $config_image_category_height; ?>"
-								       size="3"/>
+									size="3"/>
 						</tr>
 					</table>
 				</div>
@@ -540,52 +540,52 @@
 							<td>
 								<table class="mode_explanation">
 									<tbody>
-										<tr><?= _l("The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions."); ?></tr>
-										<tr>
-											<th>#</th>
-											<th>Permission</th>
-											<th>rwx</th>
-										</tr>
-										<tr>
-											<td>7</td>
-											<td>full</td>
-											<td>111</td>
-										</tr>
-										<tr>
-											<td>6</td>
-											<td>read and write</td>
-											<td>110</td>
-										</tr>
-										<tr>
-											<td>5</td>
-											<td>read and execute</td>
-											<td>101</td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>read only</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td>3</td>
-											<td>write and execute</td>
-											<td>011</td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>write only</td>
-											<td>010</td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>execute only</td>
-											<td>001</td>
-										</tr>
-										<tr>
-											<td>0</td>
-											<td>none</td>
-											<td>000</td>
-										</tr>
+									<tr><?= _l("The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions."); ?></tr>
+									<tr>
+										<th>#</th>
+										<th>Permission</th>
+										<th>rwx</th>
+									</tr>
+									<tr>
+										<td>7</td>
+										<td>full</td>
+										<td>111</td>
+									</tr>
+									<tr>
+										<td>6</td>
+										<td>read and write</td>
+										<td>110</td>
+									</tr>
+									<tr>
+										<td>5</td>
+										<td>read and execute</td>
+										<td>101</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td>read only</td>
+										<td>100</td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td>write and execute</td>
+										<td>011</td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td>write only</td>
+										<td>010</td>
+									</tr>
+									<tr>
+										<td>1</td>
+										<td>execute only</td>
+										<td>001</td>
+									</tr>
+									<tr>
+										<td>0</td>
+										<td>none</td>
+										<td>000</td>
+									</tr>
 									</tbody>
 								</table>
 							</td>
@@ -743,19 +743,23 @@
 							</td>
 							<td>
 								<div class="ga-code">
-									<input placeholder="<?= _l("GA Code"); ?>" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>" />
+									<input placeholder="<?= _l("GA Code"); ?>" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>"/>
+
 									<div class="help"><?= _l("Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field."); ?></div>
 								</div>
-								<br />
-								<br />
+								<br/>
+								<br/>
+
 								<div class="ga-cross-domain">
 									<h3><?= _l("Use this section to enable GA Cross-domain analytics"); ?></h3>
 									<span class="help"><?= _l("Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)"); ?></span>
-									<br />
+									<br/>
+
 									<div class="ga-domains">
 										<? foreach ($config_ga_domains as $row_id => $domain) { ?>
 											<div class="domain" data-row="<?= $row_id; ?>">
-												<input type="text" name="config_ga_domains[]" placeholder="example.com" value="<?= $domain; ?>" />
+												<input type="text" name="config_ga_domains[]" placeholder="example.com" value="<?= $domain; ?>"/>
+
 												<div class="button remove">X</div>
 											</div>
 										<? } ?>
@@ -763,14 +767,34 @@
 									<div class="button add"><?= _l("Add Domain"); ?></div>
 								</div>
 
-								<br />
-								<br />
+								<br/>
+								<br/>
+
 								<div class="ga-click-tracking">
 									<h3><?= _l("Enable full page click tracking?"); ?></h3>
 									<?= build('radio', array(
-										'name' => 'config_ga_click_tracking',
-									   'data' => array(1 => _l("Yes"), 0 => _l("No")),
-									   'select' => $config_ga_click_tracking,
+										'name'   => 'config_ga_click_tracking',
+										'data'   => array(
+											1 => _l("Yes"),
+											0 => _l("No")
+										),
+										'select' => $config_ga_click_tracking,
+									)); ?>
+								</div>
+
+								<br/>
+								<br/>
+
+								<div class="ga-demograhpics">
+									<h3><?= _l("Enable GA Demographics?"); ?></h3>
+									<span class="help"><?= _l("This will track user age / gender / interests data. To enable go to your google analytics account and enable Demograhpics and Interest Reports, set this to enabled and Amplo MVC will insert the tracking code for you."); ?></span>
+									<?= build('radio', array(
+										'name'   => 'config_ga_demographics',
+										'data'   => array(
+											1 => _l("Yes"),
+											0 => _l("No")
+										),
+										'select' => $config_ga_demographics,
 									)); ?>
 								</div>
 							</td>
@@ -781,17 +805,19 @@
 							</td>
 							<td>
 								<div class="ga-experiment-id">
-									<input placeholder="<?= _l("Experiment ID");?>" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>" />
+									<input placeholder="<?= _l("Experiment ID"); ?>" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>"/>
 									<span class="help"><?= _l("(Leave blank if you do not have any experiments set up.)"); ?></span>
 								</div>
-								<br />
+								<br/>
+
 								<h3><?= _l("GA Experiment Variations"); ?></h3>
 								<span class="help"><?= _l("Enter the number of variations you have setup for this experiment"); ?></span>
+
 								<div class="ga-experiment-vars">
 									<?= build('select', array(
-										'name' => 'config_ga_exp_vars',
-									   'data' => range(0,25),
-									   'select' => $config_ga_exp_vars,
+										'name'   => 'config_ga_exp_vars',
+										'data'   => range(0, 25),
+										'select' => $config_ga_exp_vars,
 									)); ?>
 								</div>
 							</td>
@@ -856,7 +882,7 @@
 		var $domain_list = $('.ga-domains').ac_template('domain-list', 'add');
 	});
 
-	$ga_domains.find('.remove').click(function() {
+	$ga_domains.find('.remove').click(function () {
 		$(this).closest('.domain').remove();
 	});
 
