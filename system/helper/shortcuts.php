@@ -155,7 +155,11 @@ function message($type, $message = null)
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
-	$image = $registry->get('image')->resize($image, $width, $height);
+	if ($width || $height) {
+		$image = $registry->get('image')->resize($image, $width, $height);
+	} else {
+		$image = $registry->get('image')->get($image);
+	}
 
 	if (!$image && $default) {
 		if ($default === true) {
@@ -165,7 +169,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 		}
 	}
 
-	if ($cast_protocol) {
+	if ($image && $cast_protocol) {
 		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
@@ -765,8 +769,3 @@ function _is_object($o)
 	return is_array($o) || is_object($o) || is_resource($o);
 }
 
-function timelog($name)
-{
-	global $__start;
-	file_put_contents(DIR_LOGS . 'timelog.txt', '[' . date('Y-m-d H:i:s') . '] ' . $name . ' - ' . (microtime(true) - $__start) . "\n", FILE_APPEND);
-}

@@ -120,6 +120,7 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_ga_exp_vars'                      => 0,
 			'config_ga_domains'                       => array(),
 			'config_ga_click_tracking'                => 0,
+			'config_ga_demographics'                  => 0,
 			'config_statcounter'                      => '',
 			'config_default_file_mode'                => 644,
 			'config_default_dir_mode'                 => 755,

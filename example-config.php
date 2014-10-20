@@ -32,8 +32,13 @@ define('DB_PREFIX', 'ac_');
 define("DB_PROFILE", true);
 define("DB_PROFILE_NO_CACHE", false);
 
+//Time logging for system performance profiling
+define('AMPLO_TIME_LOG', false);
+
 //Error Reporting
+//You should always leave this at E_ALL unless you have a good reason not to
 error_reporting(E_ALL);
+//This should be set to 0 for production
 ini_set('display_errors', 1);
 
 //Cache
@@ -50,6 +55,10 @@ umask(0022);
 
 //This allows for cross store sessions
 define("AMPLO_SESSION", "cross-store-session");
+
+//Use this to set the timeout for a user session in seconds (will log a user out after x seconds)
+//Default: 3600 seconds (1 hour)
+define('AMPLO_SESSION_TIMEOUT', 3600);
 
 //Password Hashing
 define("PASSWORD_COST", 12);

@@ -145,41 +145,28 @@ class Image extends Library
 		return $success;
 	}
 
-	public function resize($filename, $width = 0, $height = 0, $background_color = '')
+	public function resize($image, $width = 0, $height = 0, $background_color = '')
 	{
-		if (!is_file(DIR_IMAGE . $filename)) {
-			//If the file exists but not in the image directory, move it to the image directory and continue
-			if (is_string($filename) && is_file($filename)) {
-				$copy_file = 'import/' . str_replace(DIR_SITE, '', $filename);
-
-				if (!is_file(DIR_IMAGE . $copy_file)) {
-					if (!_is_writable(DIR_IMAGE . dirname($copy_file))) {
-						$this->error = _l("Directory was not writable: %s", $copy_file);
-						return '';
-					}
-
-					copy($filename, DIR_IMAGE . $copy_file);
-				}
-
-				$filename = $copy_file;
+		if (!is_file($image)) {
+			if (is_file(DIR_IMAGE . $image)) {
+				$image = DIR_IMAGE . $image;
 			} else {
 				return '';
 			}
 		}
 
-		$old_image = DIR_IMAGE . $filename;
-
 		//this sets the image file as the active image to modify
-		$this->set_image($old_image);
+		$this->set_image($image);
 
 		//if the image is 0 width or 0 height, do not return an image
 		if (!$this->info['width'] || !$this->info['height']) {
+			$this->error['size'] = _l("The image size was 0.");
 			return '';
 		}
 
 		//If width and height are 0, we do not scale the image
 		if ($width <= 0 && $height <= 0) {
-			return $this->get($filename);
+			return $this->get($image);
 		}
 
 		//Constrain Width
@@ -198,14 +185,14 @@ class Image extends Library
 
 		//if the image is the correct size we do not need to do anything
 		if ($scale_x === 1 && $scale_y === 1) {
-			return $this->get($filename);
+			return $this->get($image);
 		}
 
 		$new_width  = (int)($this->info['width'] * $scale_x);
 		$new_height = (int)($this->info['height'] * $scale_y);
 
 		//Resolve image type and new image name
-		$info = pathinfo($filename);
+		$info = pathinfo(str_replace(array(DIR_IMAGE, DIR_SITE), '', $image));
 
 		//if the background is transparent and the mime type is not png or gif, change to png
 		$allowed_exts = array(
@@ -224,7 +211,7 @@ class Image extends Library
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
-		if (!is_file($new_image_file) || (_filemtime($old_image) > _filemtime($new_image_file))) {
+		if (!is_file($new_image_file) || (_filemtime($image) > _filemtime($new_image_file))) {
 			//Render new image
 			$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
 

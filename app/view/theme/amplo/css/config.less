@@ -1,7 +1,14 @@
 /**
   * General: ---
-  * @imgpath: Image Path - The Path to the Main image directory (accessible by the image manager)
-  * @themepath: Theme Path - The path to your theme's root directory for css assets (images, fonts, etc..)
+  * @color-main: The primary theme color
+  * @color-secondary: The secondary theme color
+  * @bg-main: The background color / image
+  * @font-base-family: Font Family Stack - The font families to use in order (eg: Arial, Helvetica, sans-serif)
+  * @font-base: Font Size / Family - The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
+  * @font-dark: Font Dark - The primary text color for dark text
+  * @font-light: Font Light - The primary text color for light text
+
+  * Layout: ---
   * @xs: Device targeting for Extra Small (eg: Smart Phones) Screen Sizes
   * @sm: Device targeting for Small (eg: Tablets) Screen Sizes
   * @md: Device targeting for Medium (eg: small laptop / desktop monitors) Screen Sizes
@@ -13,24 +20,11 @@
   * @page-width-md: Page width for @md sized screens
   * @page-width-lg: Page width for @lg sized screens
 
-  * @color-lightest: The lightest color relative to @color-light
-  * @color-lighter: Lighter than @color-light
-  * @color-light: A light secondary color to your theme
-  * @color-main: The primary color for the theme
-  * @color-dark: A dark secondary color to your theme
-  * @color-darker: Darker than @color-dark
-  * @color-darkest: The darkest color relative to @color-dark
-
-  * @link-normal: Color for links (in the normal state)
-  * @link-hover: Color when you hover over a link (or active state)
-
-  * @font-dark: The primary text color for dark text
-  * @font-light: The primary text color for light text
-
-  * @bg-main: The background color / image
-
-  * @font-stack: The font families to use in order (eg: Arial, Helvetica, sans-serif)
-  * @font-size: The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
+  * Links: ---
+  * @link-font: Link font-size and font-family
+  * @link-font-hover: Link font-size and font-family for hover / active state
+  * @link-color: Link color
+  * @link-color-hover: Link color for hover / active state
 
   * Footer: ---
   * @footer-link: Footer Link (color) - Footer link color
@@ -51,9 +45,11 @@
   * @msg-notify-bg-color: The background color for notify type messages
 */
 
+/* Path Config */
+@imgpath: '@{basepath}image/';
+@themepath: '@{basepath}app/view/theme/metro/';
+
 /* LESS config */
-@imgpath: '../../../image/';
-@themepath: '../../../app/view/theme/metro/';
 @xs: 480px;
 @sm: 768px;
 @md: 1024px;
@@ -64,33 +60,27 @@
 //Page Layout
 @page-width-min: 320px;
 @page-width-xs: 90%;
-@page-width-sm: 768px;
-@page-width-md: 994px;
-@page-width-lg: 1120px;
-@page-width-max: 1120px;
+@page-width-sm: 728px;
+@page-width-md: 954px;
+@page-width-lg: 1080px;
+@page-width-max: 1080px;
 @page-wrap-pad: 20px 0;
 
-//Primary Styling
-@color-lightest: #E2F0FD;
-@color-lighter: #C4DBF1;
-@color-light: #92acc6;
-@color-main: #ffffff;
-@color-dark: #2f3d52;
-@color-darker: #1B2636;
-@color-darkest: black;
+@color-main: #92acc6;
+@color-secondary: #2f3d52;
 
 @link-font: 1em;
 @link-font-hover: @link-font;
 @link-color: #00AEEF;
 @link-color-hover: lighten(@link-color, 25%);
 
-@font-light: #ffffff;
-@font-dark: #2f3d52;
-
 @bg-main: #ffffff;
 
-@font-base: 100% OpenSansRegular, Helvetica, sans-serif;
+@font-base-family: OpenSansRegular, Helvetica, sans-serif;
+@font-base: 100% @font-base-family;
 @font-base-color: #6A6E6F;
+@font-light: #ffffff;
+@font-dark: #2f3d52;
 
 //Headers
 @h1-color: #6A6E6F;
@@ -162,13 +152,13 @@
 @form-radio-off: "background: url(@{themepath}image/radio-off.png) center center no-repeat; background-position: -17px -100px;";
 .radio-off {
   background: url('@{themepath}image/sprite-17.png') center center no-repeat;
-  background-position: -34px -186px;
-  width: 17px;
-  height: 15px;
+  background-position: -33px -45px;
+  width: 14px;
+  height: 14px;
 }
 
 .radio-on {
-  background-position: -51px -186px;
+  background-position: -46px -45px;
 }
 
 //Checkbox
@@ -187,17 +177,17 @@
 @form-checkbox-outline: none;
 .checkbox-off {
   background: url('@{themepath}image/sprite-17.png') center center no-repeat;
-  background-position: -17px -186px;
+  background-position: -17px -45px;
   width: 17px;
-  height: 15px;
+  height: 14px;
 }
 
 .checkbox-on {
-  background-position: 0 -186px;
+  background-position: 1px -45px;
 }
 
 //Textarea
-@form-textarea-font: 1em OpenSansRegular, Helvetica, sans-serif;
+@form-textarea-font: 1em @font-base-family;
 @form-textarea-color: @font-base-color;
 @form-textarea-color-focus: @font-base-color;
 @form-textarea-color-hover: @font-base-color;
@@ -213,6 +203,14 @@
 @msg-fg-color: #555555;
 @msg-bg-color: #CFCFCF;
 
+@msg-close-color: #555555;
+@msg-close-color-hover: #555555;
+@msg-close-bg: 'background: white';
+@msg-close-bg-hover: 'background: gray';
+@msg-close-padding: .2em .5em;
+@msg-close-border: none;
+@msg-close-border-radius: 5px;
+
 @msg-success-bg-color: #EAF7D9;
 @msg-success-fg-color: #8DAD62;
 
@@ -224,6 +222,54 @@
 
 @msg-notify-bg-color: #E6F1FB;
 @msg-notify-fg-color: #8DAFCF;
+
+
+//Error
+@error-color: #D15252;
+
+//Navigation
+@nav-color: black;
+@nav-color-hover: black;
+@nav-bg: 'background: none';
+@nav-bg-hover: 'background: none';
+@nav-sub-menu-bg: 'background: none';
+@nav-sub-menu-box-shadow: 3px 3px 3px #C4DBF1;
+@nav-sub-menu-border: none;
+@nav-sub-menu-border-radius: 5px;
+
+@nav-primary-color: black;
+@nav-primary-bg: 'background: none';
+@nav-primary-color-hover: #92acc6;
+@nav-primary-bg-hover: 'background: none';
+@nav-primary-sub-color: white;
+@nav-primary-sub-bg: 'background: none';
+@nav-primary-sub-color-hover: #92acc6;
+@nav-primary-sub-bg-hover: 'background: none';
+
+
+//Primary Styling
+@color-lightest: #E2F0FD;
+@color-lighter: #C4DBF1;
+@color-light: #92acc6;
+@color-main: #ffffff;
+@color-dark: #2f3d52;
+@color-darker: #1B2636;
+@color-darkest: black;
+
+//Tables
+@table-list-head-color: #C4DBF1;
+@table-list-head-bg: 'background: none';
+@table-list-head-padding: .5em .4em;
+@table-list-head-font: 1.1em @font-base;
+@table-list-color: @font-base-color;
+@table-list-bg: 'background: none';
+@table-list-padding: .2em .4em;
+@table-list-font: @font-base;
+@table-list-foot-color: @font-base-color;
+@table-list-foot-bg: 'background: #C4DBF1';
+@table-list-foot-padding: .2em .4em;
+@table-list-foot-font: @font-base;
+
 
 /* SECTION STYLES */
 
@@ -242,7 +288,7 @@
 @sa-color: @font-base-color;
 @sa-link-font: .8em;
 @sa-link-color: @font-base-color;
-@sa-link-color-hover: lighter(@sa-link-color, 25%);
+@sa-link-color-hover: lighten(@sa-link-color, 25%);
 @sa-border: none;
 @sa-padding: 1.5em 0 2em 0;
 @sa-margin: 0;
@@ -253,7 +299,7 @@
 @sb-color: @font-base-color;
 @sb-link-font: .8em;
 @sb-link-color: @font-base-color;
-@sb-link-color-hover: lighter(@sb-link-color, 25%);
+@sb-link-color-hover: lighten(@sb-link-color, 25%);
 @sb-border: none;
 @sb-padding: 3em 0;
 @sb-margin: 0;
@@ -262,6 +308,10 @@
 @sc-background: 'background: white';
 @sc-font: @font-base;
 @sc-color: @font-base-color;
+@sc-link-font: .8em;
+@sc-link-color: @font-base-color;
+@sc-link-color: @font-base-color;
+@sc-link-color-hover: lighten(@sb-link-color, 25%);
 @sc-border: none;
 @sc-padding: 1.5em 0;
 @sc-margin: 0;
@@ -272,7 +322,7 @@
 @sd-color: @font-base-color;
 @sd-link-font: .8em;
 @sd-link-color: @font-base-color;
-@sd-link-color-hover: lighter(@sd-link-color, 25%);
+@sd-link-color-hover: lighten(@sd-link-color, 25%);
 @sd-border: none;
 @sd-padding: .5em 0;
 @sd-margin: 0;
@@ -282,8 +332,8 @@
 @footer-font: .8em;
 @footer-color: white;
 @footer-link: white;
-@footer-link-hover: darker(@footer-link, 25%);
-@footer-background: 'background: #343434;';
+@footer-link-hover: darken(@footer-link, 25%);
+@footer-background: 'background: #343434';
 @footer-border: none;
 @footer-padding: 1em;
 
@@ -291,4 +341,3 @@
 @import 'base';
 @import 'reset';
 @import 'style';
-@import 'metro';

@@ -25,7 +25,7 @@ class App_Controller_Page extends Controller
 		$this->document->setTitle($page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
-		$page['style'] = $this->Model_Page->compileStyle($page['style']);
+		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		$page['page_id'] = $page_id;
 
@@ -55,7 +55,7 @@ class App_Controller_Page extends Controller
 			return '';
 		}
 
-		$page['style'] = $this->Model_Page->compileStyle($page['style']);
+		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		//Render
 		output($this->render('page/content', $page));

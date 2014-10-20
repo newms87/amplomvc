@@ -124,13 +124,14 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'library/theme.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
 
 //Helpers
-require_once(_ac_mod_file(DIR_SYSTEM . 'helper/functions.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'helper/shortcuts.php'));
+$handle = opendir(DIR_SYSTEM . 'helper/');
+while (($helper = readdir($handle))) {
+	if (strpos($helper, '.') === 0) {
+		continue;
+	}
 
-if (!defined("AMPLO_TIME_LOG")) {
-	define("AMPLO_TIME_LOG", false);
+	if (is_file(DIR_SYSTEM . 'helper/' . $helper)) {
+		require_once(_ac_mod_file(DIR_SYSTEM . 'helper/' . $helper));
+	}
 }
 
-if (AMPLO_TIME_LOG) {
-	timelog('startup');
-}

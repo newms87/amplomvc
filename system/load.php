@@ -1,31 +1,4 @@
 <?php
-//SIM TIME
-//TODO: Move to Dev plugin
-//Virtual time (for simulating time progression)
-$ac_time_offset = !empty($_COOKIE['ac_time_offset']) ? (int)$_COOKIE['ac_time_offset'] : 0;
-
-function _time()
-{
-	global $ac_time_offset;
-	return time() + $ac_time_offset;
-}
-
-function _filemtime($file)
-{
-	global $ac_time_offset;
-	return filemtime($file) + ($ac_time_offset * 1000);
-}
-
-//Only allow logged in users to sim time.
-if (empty($_SESSION['user_id'])) {
-	$ac_time_offset = 0;
-} elseif (!empty($_GET['sim_time'])) {
-	if ($_GET['sim_time'] === 'reset') {
-		$ac_time_offset = 0;
-	} else {
-		$ac_time_offset += (int)$_GET['sim_time'];
-	}
-}
 
 // Registry
 $registry = new Registry();
