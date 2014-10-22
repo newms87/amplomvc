@@ -122,4 +122,61 @@ class Dev extends Library
 
 		return false;
 	}
+
+	public function performance()
+	{
+		global $__start;
+
+		$file = $this->theme->getFile('common/amplo_profile', AMPLO_DEFAULT_THEME);
+
+		if ($file) {
+			if (DB_PROFILE) {
+				$profile = $this->db->getProfile();
+
+				$db_time = 0;
+
+				usort($profile, function ($a, $b) {
+					return $a['time'] < $b['time'];
+				});
+
+				foreach ($profile as $p) {
+					$db_time += $p['time'];
+				}
+
+				$db_time = round($db_time, 6) . ' seconds';
+			}
+
+			$run_time = round(microtime(true) - $__start, 6);
+
+			$mb          = 1024 * 1024;
+			$memory      = round(memory_get_peak_usage() / $mb, 2) . " MB";
+			$real_memory = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
+
+			$file_list   = get_included_files();
+			$total_files = count($file_list);
+
+			foreach ($file_list as &$f) {
+				$f = array(
+					'name' => $f,
+					'size' => filesize($f),
+				);
+			}
+			unset($f);
+
+			uasort($file_list, function ($a, $b) {return $a['size'] < $b['size'];});
+
+			foreach ($file_list as &$f) {
+				$f['size'] = round($f['size'] / 1024, 2) . " KB";
+			}
+			unset($f);
+
+			ob_start();
+			include($file);
+			$html = ob_get_clean();
+
+			$output = $this->response->getOutput();
+			$output = str_replace("</body>", $html . "</body>", $output);
+			output($output);
+		}
+	}
 }

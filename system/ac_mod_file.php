@@ -61,7 +61,7 @@ function _ac_mod_file($file)
 		$file = $file . '.acmod';
 	}
 
-	if (isset($live_registry[$file])) {
+	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {
 		$file = $live_registry[$file];
 	}
 
@@ -73,6 +73,10 @@ function _ac_mod_file($file)
 			_is_writable(dirname($tpl));
 
 			$contents = preg_replace("/<\\?([^p=])/", "<?php \$1", file_get_contents($file));
+
+			if (defined("AMPLO_REWRITE_SHORT_TAGS") && AMPLO_REWRITE_SHORT_TAGS) {
+				$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
+			}
 
 			file_put_contents($tpl, $contents);
 		}

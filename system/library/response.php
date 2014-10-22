@@ -21,6 +21,11 @@ class Response extends Library
 		$this->level = $level;
 	}
 
+	public function getOutput()
+	{
+		return $this->output;
+	}
+
 	public function setOutput($output, $content_type = null)
 	{
 		$this->output = $output;
@@ -65,12 +70,12 @@ class Response extends Library
 
 	public function output()
 	{
-		//Database Profiling
-		if (option('config_performance_log', true) && !IS_AJAX) {
-			$this->performance();
-		}
-
 		if ($this->output) {
+			if (!ini_get('short_open_tag') && (!defined('AMPLO_REWRITE_SHORT_TAGS') || !AMPLO_REWRITE_SHORT_TAGS) && preg_match("#<\\?=[^?]+\\?>#", $this->output)) {
+				echo _l('<p>Please notify the web admin %s to enable short_open_tag (eg: add "short_open_tag = on" in the php.ini file) on this server. Alternatively, adding "define(\'AMPLO_REWRITE_SHORT_TAGS\', true);" to the config.php file and removing all cache files in "system/cache/templates/" should solve the problem forcing Amplo MVC to rewrite "&lt;?=" as "&lt;?php echo".</p>', option('config_email_error'));
+				return;
+			}
+
 			if ($this->level) {
 				$output = $this->compress($this->output, $this->level);
 			} else {
@@ -92,61 +97,6 @@ class Response extends Library
 			}
 
 			echo $output;
-		}
-	}
-
-	private function performance()
-	{
-		global $__start;
-
-		$file = $this->theme->getFile('common/amplo_profile', AMPLO_DEFAULT_THEME);
-
-		if ($file) {
-			if (DB_PROFILE) {
-				$profile = $this->db->getProfile();
-
-				$db_time = 0;
-
-				usort($profile, function ($a, $b) {
-						return $a['time'] < $b['time'];
-					});
-
-				foreach ($profile as $p) {
-					$db_time += $p['time'];
-				}
-
-				$db_time = round($db_time, 6) . ' seconds';
-			}
-
-			$run_time = round(microtime(true) - $__start, 6);
-
-			$mb          = 1024 * 1024;
-			$memory      = round(memory_get_peak_usage() / $mb, 2) . " MB";
-			$real_memory = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
-
-			$file_list   = get_included_files();
-			$total_files = count($file_list);
-
-			foreach ($file_list as &$f) {
-				$f = array(
-					'name' => $f,
-				   'size' => filesize($f),
-				);
-			}
-			unset($f);
-
-			uasort($file_list, function ($a, $b) {return $a['size'] < $b['size'];});
-
-			foreach ($file_list as &$f) {
-				$f['size'] = round($f['size'] / 1024, 2) . " KB";
-			}
-			unset($f);
-
-			ob_start();
-			include($file);
-			$html = ob_get_clean();
-
-			$this->output = str_replace("</body>", $html . "</body>", $this->output);
 		}
 	}
 }

@@ -1,4 +1,13 @@
 <?php
+//Amplo Performance Logging
+if (!defined("SHOW_DB_PROFILE")) {
+	define("SHOW_DB_PROFILE", defined("DB_PROFILE") && DB_PROFILE);
+}
+
+if (!defined("DB_PROFILE_NO_CACHE")) {
+	define("DB_PROFILE_NO_CACHE", true);
+}
+
 //SIM TIME
 //Virtual time (for simulating time progression)
 $ac_time_offset = !empty($_COOKIE['ac_time_offset']) ? (int)$_COOKIE['ac_time_offset'] : 0;

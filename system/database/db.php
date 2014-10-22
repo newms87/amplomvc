@@ -119,10 +119,10 @@ class DB
 			$sql = $this->synctime($sql);
 		}
 
-		if (defined("SHOW_DB_PROFILE") && SHOW_DB_PROFILE) {
+		if (DB_PROFILE) {
 			$start = microtime(true);
 
-			if (SHOW_DB_PROFILE && DB_PROFILE_NO_CACHE) {
+			if (DB_PROFILE_NO_CACHE) {
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 
