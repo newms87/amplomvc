@@ -22,3 +22,14 @@ $this->db->createTable('page_history', <<<SQL
   PRIMARY KEY (`page_history_id`)
 SQL
 );
+
+
+//Length / Weight
+$this->db->dropTable('weight_class');
+$this->db->dropTable('weight_class_description');
+$this->db->dropTable('length_class');
+$this->db->dropTable('length_class_description');
+
+$this->db->changeColumn('product', 'weight_class_id', 'weight_unit', "VARCHAR(5) NOT NULL DEFAULT ''");
+$this->db->changeColumn('product', 'length_class_id', 'length_unit', "VARCHAR(5) NOT NULL DEFAULT ''");
+
