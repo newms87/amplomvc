@@ -13,7 +13,7 @@ class App_Controller_Block_Localisation_Currency extends App_Controller_Block_Bl
 			}
 		}
 
-		$data['action'] = site_url('module/currency');
+		$data['action'] = site_url('block/currency');
 
 		$data['currency_code'] = $this->currency->getCode();
 
