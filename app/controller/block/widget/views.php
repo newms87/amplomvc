@@ -6,7 +6,8 @@
  */
 class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 {
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 
 		if (!$this->user->isLogged()) {
@@ -36,11 +37,30 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$views = $this->Model_View->getViews($settings['group']);
 
-		if (empty($settings['view_listing_id']) && !empty($settings['view_listing'])) {
-			$view_listing = $this->Model_View->getViewListingBySlug($settings['view_listing']);
+		if (empty($settings['view_listing_id'])) {
+			if (!empty($settings['view_listing'])) {
+				$view_listing = $this->Model_View->getViewListingBySlug($settings['view_listing']);
 
-			if ($view_listing) {
-				$settings['view_listing_id'] = $view_listing['view_listing_id'];
+				if ($view_listing) {
+					$settings['view_listing_id'] = $view_listing['view_listing_id'];
+				}
+			}
+
+			if (!$settings['view_listing_id']) {
+				$view_listing = array(
+					'name'  => $settings['group'],
+					'path'  => $settings['path'],
+					'query' => $settings['query'],
+				);
+
+				$view_listing_id = $this->Model_View->syncViewListing($view_listing);
+
+				if (!$view_listing_id) {
+					$this->output = $this->Model_View->getError();
+					return;
+				}
+
+				$settings['view_listing_id'] = $view_listing_id;
 			}
 		}
 
@@ -79,7 +99,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 			$view['settings'] += $default_view['settings'];
 
-			$listing = $this->Model_View->getViewListing($view['view_listing_id']);
+			if (!empty($view['view_listing_id'])) {
+				$listing = $this->Model_View->getViewListing($view['view_listing_id']);
+			} else {
+				$listing = $view;
+			}
 
 			if (!$listing) {
 				$view['show'] = 0;
