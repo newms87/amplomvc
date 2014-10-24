@@ -262,6 +262,29 @@ class App_Model_View extends Model
 		return $view_listing_id;
 	}
 
+	public function syncViewListing($view_listing)
+	{
+		if (empty($view_listing['name'])) {
+			$this->error['name'] = _l("Must provide a name");
+		}
+
+		if (empty($view_listing['path'])) {
+			$this->error['path'] = _l("Must provide a path");
+		}
+
+		if (!empty($this->error)) {
+			return false;
+		}
+
+		$view_listing_id = $this->queryVar("SELECT view_listing_id FROM " . $this->prefix . "view_listing WHERE `name` = '" . $this->escape($view_listing['name']) . "' AND `path` = '" . $this->escape($view_listing['path']) . "'");
+
+		if (!$view_listing_id) {
+			$view_listing_id = $this->saveViewListing(null, $view_listing);
+		}
+
+		return $view_listing_id;
+	}
+
 	public function removeViewListing($view_listing_id)
 	{
 		$this->cache->delete('view_listing');
