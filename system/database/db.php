@@ -33,11 +33,11 @@ class DB
 
 		if (!isset(self::$drivers[$key])) {
 			//the database interface
-			if (function_exists("_ac_mod_file")) {
-				require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
+			if (function_exists("_mod")) {
+				require_once(_mod(DIR_DATABASE . 'database.php'));
 
 				if (file_exists(DIR_DATABASE . $driver . '.php')) {
-					require_once(_ac_mod_file(DIR_DATABASE . $driver . '.php'));
+					require_once(_mod(DIR_DATABASE . $driver . '.php'));
 				} else {
 					die('Error: Could not load database file ' . $driver . '!');
 				}

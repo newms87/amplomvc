@@ -63,7 +63,7 @@ final class Action
 			$method = 'index';
 		}
 
-		require_once(_ac_mod_file($file));
+		require_once(_mod($file));
 
 		$callable = array(
 			$class,

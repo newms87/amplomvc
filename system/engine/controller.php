@@ -48,7 +48,7 @@ abstract class Controller
 
 		ob_start();
 
-		include(_ac_mod_file($_template));
+		include(_mod($_template));
 
 		$this->output = ob_get_clean();
 

@@ -70,7 +70,7 @@ class Table extends Library
 		//render the file
 		ob_start();
 
-		include(_ac_mod_file($this->file));
+		include(_mod($this->file));
 
 		return ob_get_clean();
 	}

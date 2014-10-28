@@ -51,7 +51,7 @@ $registries    = unserialize(file_get_contents(AC_MOD_REGISTRY));
 $mod_registry  = isset($registries['mod']) ? $registries['mod'] : array();
 $live_registry = isset($registries['live']) ? $registries['live'] : array();
 
-function _ac_mod_file($file)
+function _mod($file)
 {
 	global $live_registry;
 

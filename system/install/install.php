@@ -17,12 +17,22 @@ if ($action === 'user_setup' && !is_file($root . 'config.php')) {
 	$error_msg = "Unable to load config file. Is your site's root directory writable by apache? Please attempt installation again.";
 }
 
+if (is_file($root . 'config.php')) {
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		if (!empty($_POST['username'])) {
+			$action = 'user_setup';
+		} elseif (!empty($_POST['db_name'])) {
+			$action = 'db_setup';
+		} else {
+			$_POST = array();
+			$action = false;
+		}
+	}
+}
+
 if ($action === 'user_setup') {
 	require_once($root . 'config.php');
-} elseif (is_file($root . 'config.php')) {
-	echo "There is a problem with your config.php file. Please fix it or remove it to reinstall Amplo MVC";
-	exit;
-} else {
+} elseif (!defined('DIR_SITE')) {
 	define("DIR_SITE", $root);
 }
 
@@ -46,10 +56,12 @@ if (!defined("SITE_BASE")) {
 	define("SITE_BASE", $uri_path);
 }
 
-define("DIR_DATABASE", DIR_SITE . 'system/database/');
+//No Mod files allowed during site install!
+function _mod($file) {
+	return $file;
+}
 
-require_once(DIR_SITE . 'system/helper/functions.php');
-require_once(DIR_SITE . 'system/helper/shortcuts.php');
+require_once(DIR_SITE . 'system/startup.php');
 
 $template = _get('page', 'db');
 
@@ -124,14 +136,6 @@ require_once("system/install/template/$template.tpl");
 
 function setup_db()
 {
-	define("DB_PREFIX", $_POST['db_prefix']);
-	define('DEFAULT_TIMEZONE', 'America/New_York');
-	define('MYSQL_TIMEZONE', '-4:00');
-
-	require_once(DIR_SITE . 'system/engine/model.php');
-	require_once(DIR_SITE . "system/engine/library.php");
-	require_once(DIR_SITE . "system/database/db.php");
-
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
 	$error = $db->getError();
@@ -143,7 +147,7 @@ function setup_db()
 
 		if (!$db->multiquery($contents)) {
 			$error = $db->getError();
-		} elseif (!$db->setPrefix(DB_PREFIX)) {
+		} elseif (!$db->setPrefix($_POST['db_prefix'])) {
 			$error = $db->getError();
 		}
 	}
@@ -199,11 +203,6 @@ function setup_user()
 		return _l("The password and confirmation do not match!");
 	}
 
-	require_once(DIR_SITE . 'system/engine/model.php');
-	require_once(DIR_SITE . "system/engine/library.php");
-	require_once(DIR_SITE . "system/database/database.php");
-	require_once(DIR_SITE . "system/database/db.php");
-
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 	$username = $db->escape($_POST['username']);
@@ -221,23 +220,6 @@ function setup_user()
 	$config   = DIR_SITE . 'config.php';
 	$contents = set_define(file_get_contents($config), "AMPLO_INSTALL_USER");
 	file_put_contents($config, $contents);
-
-	//Start the session so we can send a message for the new user
-	$domain = parse_url(URL_SITE, PHP_URL_HOST);
-
-	if (!$domain || $domain === 'localhost') {
-		define('COOKIE_DOMAIN', '');
-	} else {
-		define('COOKIE_DOMAIN', '.' . $domain);
-	}
-
-	ini_set('session.use_cookies', 'On');
-	ini_set('session.use_trans_sid', 'Off');
-
-	session_name(AMPLO_SESSION);
-
-	session_set_cookie_params(0, '/', COOKIE_DOMAIN);
-	session_start();
 
 	$_SESSION['message'] = array(
 		'success' => array(_l("Admin User account setup successfully!")),

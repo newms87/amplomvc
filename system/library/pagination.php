@@ -154,7 +154,7 @@ class Pagination extends Library
 
 		ob_start();
 
-		include(_ac_mod_file($template));
+		include(_mod($template));
 
 		return ob_get_clean();
 	}

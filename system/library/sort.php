@@ -102,7 +102,7 @@ class Sort extends Library
 
 		ob_start();
 
-		include(_ac_mod_file($template_file));
+		include(_mod($template_file));
 
 		return ob_get_clean();
 	}
