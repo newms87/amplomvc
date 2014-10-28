@@ -474,11 +474,13 @@ class DB
 
 	public function hasColumn($table, $column)
 	{
-		$columns = $this->getTableColumns($table);
+		if ($this->hasTable($table)) {
+			$columns = $this->getTableColumns($table);
 
-		foreach ($columns as $row) {
-			if (strtolower($row['Field']) === strtolower($column)) {
-				return true;
+			foreach ($columns as $row) {
+				if (strtolower($row['Field']) === strtolower($column)) {
+					return true;
+				}
 			}
 		}
 
@@ -491,6 +493,10 @@ class DB
 
 		$table = $this->hasTable($table);
 
+		if (!$table) {
+			return array();
+		}
+
 		if (!isset($columns[$table])) {
 			$columns[$table] = $this->queryRows("SHOW COLUMNS FROM `$table`", 'Field');
 		}
@@ -500,7 +506,7 @@ class DB
 
 	public function addColumn($table, $column, $options = '')
 	{
-		if (!$this->hasColumn($table, $column)) {
+		if ($this->hasTable($table) && !$this->hasColumn($table, $column)) {
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` ADD COLUMN `$column` $options");
 		}
 

@@ -748,6 +748,31 @@ function register_ajax_calls(is_ajax) {
             return false;
         }
     });
+
+    if (is_ajax) {
+        $('form.ctrl-save').use_once().submit(function() {
+            var $form = $(this);
+
+            var params = {
+                callback: function(response) {
+                    $form.ac_msg(response);
+
+                    if (!response.error && $form.closest('#colorbox').length) {
+                        $.colorbox.close();
+                    }
+                }
+            }
+
+            $(this).submit_ajax_form(params);
+
+            return false;
+        }).find('a.cancel, a.back').click(function() {
+            if ($(this).closest('#colorbox').length) {
+                $.colorbox.close();
+                return false;
+            }
+        });
+    }
 }
 
 function register_colorbox() {
@@ -803,12 +828,7 @@ var amplo_ajax_cb = function () {
     }
 
     if ($this.is('form')) {
-        $this.find('[data-loading]').loading();
-
-        $.post($this.attr('action'), $this.serialize(), callback)
-            .always(function () {
-                $this.find('[data-loading]').loading('stop');
-            });
+        $this.submit_ajax_form({callback: callback});
     } else {
         $this.loading({text: $this.is('[data-loading]') || 'Loading...'})
         $.get($this.attr('href'), {}, callback)
@@ -830,6 +850,24 @@ $.fn.amplo_ajax = function () {
         } else {
             $e.click(amplo_ajax_cb);
         }
+    });
+}
+
+$.fn.submit_ajax_form = function(params) {
+    params = $.extend({}, {
+        callback: null
+    }, params);
+
+    return this.each(function (i, e) {
+        var $form = $(e);
+
+        var $btns = $form.find('button, input[type=submit], [data-loading]').loading({text: 'Saving...'});
+
+        $.post($form.attr('action'), $form.serialize(), typeof params.callback === 'function' ? params.callback : function (response) {
+            $form.ac_msg(response);
+        }, 'json').always(function() {
+            $btns.loading('stop');
+        });
     });
 }
 
@@ -862,16 +900,7 @@ $(document).ready(function () {
 
     $(document).keydown(function (e) {
         if (e.ctrlKey && (e.which == 83)) {
-            $('form.ctrl-save').each(function (i, e) {
-                var $form = $(e);
-
-                var $btns = $form.find('button, input[type=submit]').loading({text: 'Saving...'});
-
-                $.post($form.attr('action'), $form.serialize(), function (response) {
-                    $btns.loading('stop');
-                    $form.ac_msg(response);
-                }, 'json');
-            });
+            $('form.ctrl-save').submit_ajax_form();
 
             e.preventDefault();
             return false;
