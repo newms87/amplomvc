@@ -1,4 +1,4 @@
-<?= IS_AJAX ? '' : call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/header'); ?>
 <div class="section">
 	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
@@ -66,4 +66,4 @@
 		$.ac_template('route_list', 'add');
 	});
 </script>
-<?= IS_AJAX ? '' : call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/footer'); ?>

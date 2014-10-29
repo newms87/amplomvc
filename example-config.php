@@ -26,7 +26,6 @@ define('DIR_SITE', str_replace('\\', '/', dirname(__FILE__) . '/'));
 define('DIR_IMAGE', DIR_SITE . 'image/');
 define('DIR_DOWNLOAD', DIR_SITE . 'download/');
 define('DIR_LOGS', DIR_SITE . 'system/logs/');
-define('DIR_CACHE', DIR_SITE . 'system/cache/');
 
 //The default page to show when your site is accessed via the base URL. (eg: http://your-domain.com/)
 define("DEFAULT_PATH", 'common/home');

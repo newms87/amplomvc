@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Common_Header extends Controller
+class App_Controller_Admin_Header extends Controller
 {
 	public function index($settings = array())
 	{
@@ -156,6 +156,6 @@ class App_Controller_Admin_Common_Header extends Controller
 			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 
-		$this->render('common/header', $settings);
+		$this->render('header', $settings);
 	}
 }

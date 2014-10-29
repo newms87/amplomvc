@@ -1,7 +1,7 @@
 <?= call('common/header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 <div class="content">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 	<?= area('top'); ?>
 
 	<h1><?= $page_title; ?></h1>

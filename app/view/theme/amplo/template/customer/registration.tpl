@@ -5,7 +5,7 @@
 <section id="user-login" class="content">
 	<header class="login-top row">
 		<div class="wrap">
-			<?= breadcrumbs(); ?>
+			<?= IS_AJAX ? '' : breadcrumbs(); ?>
 			<h1><?= _l("Register Account"); ?></h1>
 
 			<h3>

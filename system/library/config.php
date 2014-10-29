@@ -277,6 +277,8 @@ class Config extends Library
 		foreach ($data as $key => $value) {
 			$this->save($group, $key, $value, $store_id, $auto_load);
 		}
+
+		return true;
 	}
 
 	public function deleteGroup($group, $store_id = null)
