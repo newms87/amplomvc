@@ -328,13 +328,7 @@ class Customer extends Library
 		}
 
 		//Order By and Limit
-		if (!$total) {
-			$order = $this->extractOrder($data);
-			$limit = $this->extractLimit($data);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		list($order, $limit) = $this->extractOrderLimit($data);
 
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 

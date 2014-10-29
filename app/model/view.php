@@ -314,11 +314,10 @@ class App_Model_View extends Model
 		$where = $this->extractWhere($table, $filter);
 
 		//Order By & Limit
-		$order = $this->extractOrder($sort);
-		$limit = $this->extractLimit($sort);
+		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->calcFoundRows($table, $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
+		$calc_rows = ($total && $this->useCalcFoundRows($table, $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
 
 		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 
@@ -404,13 +403,7 @@ class App_Model_View extends Model
 		$where = $this->extractWhere('view_listing vl', $filter);
 
 		//Order By & Limit
-		if ($index !== false) {
-			$order = $this->extractOrder($sort);
-			$limit = $this->extractLimit($sort);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";

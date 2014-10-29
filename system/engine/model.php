@@ -122,6 +122,44 @@ abstract class Model
 		return $this->db->queryColumn($sql, $index_key);
 	}
 
+	/**
+	 * This method will always return an array with array( rows, total ).
+	 * Use this to optimally query sorted / filtered rows using the LIMIT clause from
+	 * the database along with the total number of rows (minus the LIMIT clause).
+	 *
+	 * @param string $select - The SELECT clause without the actual SELECT string in front of it.
+	 * @param string $sql - the rest of the query
+	 * @param string $index - the index field to use for the rows returned
+	 * @param bool $use_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
+	 * @return array - both the found rows and the total in an array in that order. (hint: use list($rows, $total) = $this->queryTotal(...);)
+	 */
+
+	protected function queryTotal($select, $sql, $index = null, $use_calc_found_rows = null)
+	{
+		if (is_null($use_calc_found_rows)) {
+			$use_calc_found_rows = $this->useCalcFoundRows("SELECT $select $sql");
+		}
+
+		if ($use_calc_found_rows) {
+			$query = "SELECT SQL_CALC_FOUND_ROWS $select $sql";
+		} else {
+			$query = "SELECT $select $sql";
+		}
+
+		$rows = $this->queryRows($query, $index);
+
+		if ($use_calc_found_rows) {
+			$total = $this->queryVar("SELECT FOUND_ROWS()");
+		} else {
+			$total = $this->queryVar("SELECT COUNT(*) $sql");
+		}
+
+		return array(
+			$rows,
+			$total
+		);
+	}
+
 	public function queryField($table, $field, $where)
 	{
 		$table = $this->escape($table);
@@ -364,6 +402,18 @@ abstract class Model
 		return $select;
 	}
 
+	/**
+	 * Builds the WHERE string for the mysql statement based on the $table columns,
+	 * and the values set in $filter. You can override the way the values are filtered
+	 * using the $columns to specify the data type for columns.
+	 *
+	 * @param string $table - The table to reference the columns to build the WHERE string
+	 * @param array $filter - The values to filter (based on data types in the table columns)
+	 * @param array $columns - The overridden table columns, to change data types
+	 *
+	 * @return string - The mysql WHERE clause for the table $table
+	 */
+
 	protected function extractWhere($table, $filter, $columns = array())
 	{
 		$where = '1';
@@ -491,7 +541,7 @@ abstract class Model
 		return $where;
 	}
 
-	protected function extractOrder($data)
+	protected function extractOrderLimit($data)
 	{
 		if (empty($data['sort'])) {
 			return '';
@@ -503,25 +553,24 @@ abstract class Model
 			);
 		}
 
-		$sql = '';
+		//Order
+		$order = '';
 
-		foreach ($data['sort'] as $sort => $order) {
+		foreach ($data['sort'] as $sort => $ord) {
 			$sort = $this->escape($sort);
 
 			if (strpos($sort, '.') === false) {
 				$sort = "`" . $sort . "`";
 			}
 
-			$order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+			$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
 
-			$sql .= ($sql ? ',' : '') . "$sort $order";
+			$order .= ($order ? ',' : '') . "$sort $ord";
 		}
 
-		return "ORDER BY $sql";
-	}
+		$order = "ORDER BY $order";
 
-	protected function extractLimit($data)
-	{
+		//Limit
 		$limit = '';
 
 		if (isset($data['limit'])) {
@@ -533,7 +582,10 @@ abstract class Model
 			}
 		}
 
-		return $limit;
+		return array(
+			$order,
+			$limit,
+		);
 	}
 
 	protected function hasIndex($table, $fields)
@@ -559,15 +611,47 @@ abstract class Model
 		return false;
 	}
 
-	protected function calcFoundRows($table, $sort, $filter)
+	/**
+	 * Be careful using this method! It may cause performance problems if not used properly.
+	 * Note that $table can either be a query string or a table name. If it is a table name you must provide $sort and $filter.
+	 * If $table is a query, this method uses EXPLAIN and can sometimes take as long as the original query to determine the optimal query.
+	 *
+	 * @param string $table - either the table name or a sql query string. If it is a query string, $sort and $filter MUST be empty.
+	 * @param array $sort - the fields the query will sort on (ORDER BY clause).
+	 * @param array $filter - the fields the query will filter on (WHERE clause).
+	 * @return bool - if true, it is recommended to use SQL_CALC_FOUND_ROWS in the SELECT clause.
+	 */
+	protected function useCalcFoundRows($table, $sort = array(), $filter = array())
 	{
-		$table_model = $this->getTableModel($table);
+		//Use EXPLAIN to determine optimal performance
+		if (!$sort && !$filter) {
+			$results = $this->queryRows("EXPLAIN $table");
 
-		if ($table_model['table_type'] === 'VIEW') {
+			$fast_types = array(
+				'system',
+				'const',
+				'eq_ref',
+				'index',
+				'range',
+			);
+
+			foreach ($results as $r) {
+				if (empty($r['key']) || !in_array($r['type'], $fast_types)) {
+					return false;
+				}
+			}
+
 			return true;
 		}
 
-		if (empty($sort['sort']) && empty($filter)) {
+		//Guess optimal performance based on indexes used
+		if (empty($sort['sort']) && !$filter) {
+			return true;
+		}
+
+		$table_model = $this->getTableModel($table);
+
+		if ($table_model['table_type'] === 'VIEW') {
 			return true;
 		}
 

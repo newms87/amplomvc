@@ -240,13 +240,7 @@ class App_Model_Design_Navigation extends Model
 		}
 
 		//Order By & Limit
-		if (!$total) {
-			$order = $this->extractOrder($data);
-			$limit = $this->extractLimit($data);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		list($order, $limit) = $this->extractOrderLimit($data);
 
 		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";

@@ -199,11 +199,10 @@ class App_Model_User extends Model
 			}
 		}
 
-		$order = $this->extractOrder($sort);
-		$limit = $this->extractLimit($sort);
+		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->calcFoundRows('user', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
+		$calc_rows = ($total && $this->useCalcFoundRows('user', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
 
 		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 

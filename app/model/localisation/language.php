@@ -49,13 +49,7 @@ class App_Model_Localisation_Language extends Model
 			$where .= " AND status IN ('1', '0')";
 		}
 
-		if (!$total) {
-			$order = $this->extractOrder($data);
-			$limit = $this->extractLimit($data);
-		} else {
-			$order = '';
-			$limit = '';
-		}
+		list($order, $limit) = $this->extractOrderLimit($data);
 
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 

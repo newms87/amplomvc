@@ -196,17 +196,16 @@ class App_Model_Page extends Model
 		$select = $this->extractSelect('page', $select);
 
 		//From
-		$from = DB_PREFIX . "page";
+		$from = $this->prefix . "page";
 
 		//Where
 		$where = $this->extractWhere('page', $filter);
 
 		//Order / Limit
-		$order = $this->extractOrder($sort);
-		$limit = $this->extractLimit($sort);
+		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->calcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
+		$calc_rows = ($total && $this->useCalcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
 
 		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
 
