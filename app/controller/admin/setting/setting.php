@@ -14,42 +14,28 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		//Page Head
 		$this->document->setTitle(_l("General Settings"));
 
-		//Handle Post
-		if (IS_POST && $this->validate()) {
-			$this->config->saveGroup('config', $_POST, 0, true);
-
-			//TODO: Move this to Cron
-			if (option('config_currency_auto')) {
-				$this->Model_Localisation_Currency->updateCurrencies();
-			}
-
-			message('success', _l("Success: You have modified settings!"));
-
-			redirect('admin/setting/store');
-		}
-
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
 		breadcrumb(_l("General Settings"), site_url('admin/setting/setting'));
 
 		//Load Information
+		$config_data = $_POST;
+
 		if (!IS_POST) {
 			$config_data = $this->config->loadGroup('config', 0);
-		} else {
-			$config_data = $_POST;
 		}
 
 		$defaults = array(
-			'config_name'                             => '',
-			'config_owner'                            => '',
+			'config_name'                             => 'AmploCart',
+			'config_owner'                            => 'Daniel Newman',
 			'config_address'                          => '',
-			'config_email'                            => '',
-			'config_email_support'                    => '',
-			'config_email_error'                      => '',
+			'config_email'                            => 'info@' . DOMAIN,
+			'config_email_support'                    => 'support@' . DOMAIN,
+			'config_email_error'                      => 'error@' . DOMAIN,
 			'config_telephone'                        => '',
 			'config_fax'                              => '',
-			'config_title'                            => '',
+			'config_title'                            => 'AmploCart',
 			'config_default_store'                    => '',
 			'config_meta_description'                 => '',
 			'config_debug'                            => 0,
@@ -74,8 +60,8 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_customer_approval'                => 0,
 			'config_account_terms_page_id'            => 0,
 			'config_breadcrumb_display'               => 1,
-			'config_breadcrumb_separator'             => '/',
-			'config_breadcrumb_separator_admin'       => '/',
+			'config_breadcrumb_separator'             => ' / ',
+			'config_breadcrumb_separator_admin'       => ' / ',
 			'config_review_status'                    => 1,
 			'config_share_status'                     => 1,
 			'config_upload_allowed'                   => 1,
@@ -110,11 +96,11 @@ class App_Controller_Admin_Setting_Setting extends Controller
 			'config_encryption'                       => '',
 			'config_compression'                      => '',
 			'config_jquery_cdn'                       => 0,
-			'config_log_filename'                     => '',
+			'config_log_filename'                     => 'default.txt',
 			'config_debug_send_emails'                => '',
-			'config_error_display'                    => '',
-			'config_error_log'                        => '',
-			'config_error_filename'                   => '',
+			'config_error_display'                    => 0,
+			'config_error_log'                        => 1,
+			'config_error_filename'                   => 'error.txt',
 			'config_google_analytics'                 => '',
 			'config_ga_experiment_id'                 => '',
 			'config_ga_exp_vars'                      => 0,
@@ -239,34 +225,26 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		output("<img src=\"$image\" class =\"theme_preview\" />");
 	}
 
-	public function validate()
+	public function save()
 	{
-		if (!user_can('w', 'admin/setting/setting')) {
-			$this->error['permission'] = _l("Warning: You do not have permission to modify settings!");
-		}
-
 		if (!$_POST['config_name']) {
 			$this->error['config_name'] = _l("Store Name must be between 3 and 32 characters!");
 		}
 
-		if ((strlen($_POST['config_owner']) < 3) || (strlen($_POST['config_owner']) > 64)) {
-			$this->error['config_owner'] = _l("Store Owner must be between 3 and 64 characters!");
+		if (!validate('text', _post('config_owner'), 2, 127)) {
+			$this->error['config_owner'] = _l("Store Owner must be between 2 and 127 characters!");
 		}
 
-		if ((strlen($_POST['config_address']) < 3) || (strlen($_POST['config_address']) > 256)) {
-			$this->error['config_address'] = _l("Store Address must be between 10 and 256 characters!");
-		}
-
-		if (!validate('email', $_POST['config_email'])) {
+		if (!validate('email', _post('config_email'))) {
 			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
-		}
+		} else {
+			if (!validate('email', _post('config_email_support'))) {
+				$_POST['config_email_support'] = _post('config_email');
+			}
 
-		if (!validate('email', $_POST['config_email_error'])) {
-			$this->error['config_email_error'] = _l("E-Mail Address does not appear to be valid!");
-		}
-
-		if (!validate('email', $_POST['config_email_support'])) {
-			$this->error['config_email_support'] = _l("E-Mail Address does not appear to be valid!");
+			if (!validate('email', $_POST['config_email_error'])) {
+				$_POST['config_email_error'] = $_POST['config_email'];
+			}
 		}
 
 		if (!$_POST['config_title']) {
@@ -274,37 +252,37 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		}
 
 		if (!$_POST['config_log_filename']) {
-			$this->error['config_log_filename'] = _l("Log Filename Required!");
+			$_POST['config_log_filename'] = 'default.txt';
 		}
 
 		if (!$_POST['config_error_filename']) {
-			$this->error['config_error_filename'] = _l("Error Log Filename required!");
+			$_POST['config_error_filename'] = 'error.txt';
 		}
 
 		if (!$_POST['config_admin_limit']) {
-			$this->error['config_admin_limit'] = _l("Limit required!");
+			$_POST['config_admin_limit'] = 20;
 		}
 
 		if (!$_POST['config_catalog_limit']) {
-			$this->error['config_catalog_limit'] = _l("Limit required!");
+			$_POST['config_catalog_limit'] = 20;
 		}
 
-		$octals = array(
-			'config_default_file_mode',
-			'config_default_dir_mode',
-			'config_image_file_mode',
-			'config_image_dir_mode',
-			'config_plugin_file_mode',
-			'config_plugin_dir_mode',
-		);
-
-		foreach ($octals as $oct) {
-			if ($_POST[$oct]) {
-				$oct_val     = $_POST[$oct];
-				$_POST[$oct] = '0' . "$oct_val";
+		if (!empty($this->error)) {
+			message('error', $this->error);
+		} else {
+			if ($this->config->saveGroup('config', $_POST, 0, true)) {
+				message('success', _l("Success: You have modified settings!"));
+			} else {
+				message('error', $this->config->getError());
 			}
 		}
 
-		return empty($this->error);
+		if (IS_AJAX) {
+			output_json($this->message->fetch());
+		} elseif ($this->message->has('error')) {
+			post_redirect('admin/setting/cart');
+		} else {
+			redirect('admin/setting/store');
+		}
 	}
 }

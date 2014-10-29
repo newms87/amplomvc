@@ -1,4 +1,4 @@
-<?= !IS_AJAX ? call('admin/common/header') : ''; ?>
+<?= !IS_AJAX ? call('admin/header') : ''; ?>
 
 <section class="section">
 	<?= !IS_AJAX ? breadcrumbs() : ''; ?>
@@ -58,4 +58,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= !IS_AJAX ? call('admin/common/footer') : ''; ?>
+<?= !IS_AJAX ? call('admin/footer') : ''; ?>

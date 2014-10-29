@@ -1,6 +1,6 @@
-<?= IS_AJAX ? '' : call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _("Backup / Restore"); ?></h1>
@@ -79,4 +79,4 @@
 	});
 </script>
 
-<?= IS_AJAX ? '' : call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/footer'); ?>

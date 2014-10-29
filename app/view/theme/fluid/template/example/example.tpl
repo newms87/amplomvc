@@ -2,7 +2,7 @@
 <?= area('left'); ?><?= area('right'); ?>
 
 <div class="content">
-	<?= breadcrumbs(); ?>
+	<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 	<div class="section">
 

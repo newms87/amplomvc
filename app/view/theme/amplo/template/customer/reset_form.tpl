@@ -3,7 +3,7 @@
 <section id="reset-password-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= breadcrumbs(); ?>
+			<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 			<h1><?= _l("Reset Your Password"); ?></h1>
 		</div>

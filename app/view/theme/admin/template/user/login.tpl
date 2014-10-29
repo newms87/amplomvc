@@ -1,4 +1,4 @@
-<?= IS_AJAX ? '' : call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/header'); ?>
 
 <section id="admin-login" class="content">
 	<header class="row top-row">
@@ -36,4 +36,4 @@
 	<? } ?>
 </section>
 
-<?= IS_AJAX ? '' : call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/footer'); ?>

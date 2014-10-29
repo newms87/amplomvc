@@ -8,31 +8,23 @@ class App_Model_Setting_Store extends Model
 		}
 
 		if (!validate('url', $store['url'])) {
-			$this->error['url'] = _l("Store URL invalid! Please provide a properly formatted URL (eg: http://yourstore.com)");
+			$store['url'] = 'http://' . DOMAIN . '/' . SITE_BASE;
 		}
 
 		if (!validate('url', $store['ssl'])) {
-			$this->error['ssl'] = _l("Store SSL invalid!  Please provide a properly formatted URL (eg: http://yourstore.com). NOTE: you may set this to the same value as URL, does not have to be HTTPS protocol.");
+			$store['ssl'] = 'https://' . DOMAIN . '/' . SITE_BASE;
 		}
 
-		if (!validate('text', $store['config_owner'], 3, 64)) {
-			$this->error['config_owner'] = _l("Store Owner must be between 3 and 64 characters!");
-		}
-
-		if (!validate('text', $store['config_address'], 3, 256)) {
-			$this->error['config_address'] = _l("Store Address must be between 3 and 256 characters!");
+		if (!validate('text', $store['config_owner'], 2, 127)) {
+			$this->error['config_owner'] = _l("Store Owner must be between 2 and 127 characters!");
 		}
 
 		if (!validate('email', $store['config_email'])) {
 			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
 		}
 
-		if (!validate('phone', $store['config_telephone'])) {
-			$this->error['config_telephone'] = $this->validate->getError();
-		}
-
-		if (!validate('text', $store['config_title'], 3, 32)) {
-			$this->error['config_title'] = _l("Title must be between 3 and 32 characters!");
+		if (!validate('text', $store['config_title'], 2, 127)) {
+			$this->error['config_title'] = _l("Title must be between 2 and 127 characters!");
 		}
 
 		$image_sizes = array(
@@ -45,13 +37,17 @@ class App_Model_Setting_Store extends Model
 			$image_width  = 'config_' . $image_key . '_width';
 			$image_height = 'config_' . $image_key . '_height';
 
-			if ((int)$store[$image_width] <= 0 || (int)$store[$image_height] <= 0) {
-				$this->error[$image_height] = _l("%s image dimensions are required.", $image_size);
+			if ((int)$store[$image_width] <= 0) {
+				$store[$image_width] = 0;
+			}
+
+			if ((int)$store[$image_height] <= 0) {
+				$store[$image_height] = 0;
 			}
 		}
 
 		if ((int)$store['config_catalog_limit'] <= 0) {
-			$this->error['config_catalog_limit'] = _l("Limit required!");
+			$store['config_catalog_limit'] = 20;
 		}
 
 		if ($this->error) {

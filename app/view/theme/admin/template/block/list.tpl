@@ -1,4 +1,4 @@
-<?= IS_AJAX ? '' : call('admin/common/header'); ?>
+<?= IS_AJAX ? '' : call('admin/header'); ?>
 	<div class="section">
 		<?= IS_AJAX ? '' : breadcrumbs(); ?>
 		<div class="box">
@@ -15,4 +15,4 @@
 		</div>
 	</div>
 
-<?= IS_AJAX ? '' : call('admin/common/footer'); ?>
+<?= IS_AJAX ? '' : call('admin/footer'); ?>

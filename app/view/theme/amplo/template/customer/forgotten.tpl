@@ -5,7 +5,7 @@
 <section id="forgotten-page" class="content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= breadcrumbs(); ?>
+			<?= IS_AJAX ? '' : breadcrumbs(); ?>
 
 			<h1><?= _l("Request a New Pasword"); ?></h1>
 		</div>
