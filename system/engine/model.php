@@ -112,8 +112,12 @@ abstract class Model
 		return $this->db->queryRow($sql);
 	}
 
-	protected function queryRows($sql, $index = null)
+	protected function queryRows($sql, $index = null, $total = false)
 	{
+		if ($total) {
+			return $this->queryTotal($sql, $index);
+		}
+		
 		return $this->db->queryRows($sql, $index);
 	}
 
@@ -123,19 +127,22 @@ abstract class Model
 	}
 
 	/**
-	 * This method will always return an array with array( rows, total ).
+	 * IMPORTANT: This method is only guaranteed to work on queries that do not contain sub queries!
+	 *
 	 * Use this to optimally query sorted / filtered rows using the LIMIT clause from
 	 * the database along with the total number of rows (minus the LIMIT clause).
 	 *
-	 * @param string $select - The SELECT clause without the actual SELECT string in front of it.
-	 * @param string $sql - the rest of the query
+	 * @param string $sql - The query string without any sub queries (no guarantee it will work on sub queries).
 	 * @param string $index - the index field to use for the rows returned
 	 * @param bool $use_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
-	 * @return array - both the found rows and the total in an array in that order. (hint: use list($rows, $total) = $this->queryTotal(...);)
+	 *
+	 * @return array - an array with array( 0 => rows, 1 => total ). USAGE HINT: list($rows, $total) = $this->queryTotal(...);
 	 */
 
-	protected function queryTotal($select, $sql, $index = null, $use_calc_found_rows = null)
+	protected function queryTotal($sql, $index = null, $use_calc_found_rows = null)
 	{
+		$this->parseOutSelect($sql, $select);
+
 		if (is_null($use_calc_found_rows)) {
 			$use_calc_found_rows = $this->useCalcFoundRows("SELECT $select $sql");
 		}
@@ -151,6 +158,9 @@ abstract class Model
 		if ($use_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
+			//Remove clauses not applicable to counting total rows
+			$sql = preg_replace("/(ORDER BY|LIMIT|GROUP BY|HAVING).*/i", '', $sql);
+
 			$total = $this->queryVar("SELECT COUNT(*) $sql");
 		}
 
@@ -158,6 +168,13 @@ abstract class Model
 			$rows,
 			$total
 		);
+	}
+
+	protected function parseOutSelect(&$sql, &$select)
+	{
+		echo $sql;
+		exit;
+
 	}
 
 	public function queryField($table, $field, $where)
