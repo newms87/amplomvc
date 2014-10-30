@@ -47,9 +47,9 @@ class App_Controller_Block_Account_Login extends App_Controller_Block_Block
 		$this->render($settings['template'], $settings);
 	}
 
-	public function settings(&$settings)
-	{
-		//Render
-		$this->render('block/account/login', $settings);
-	}
+//	public function settings(&$settings)
+//	{
+//		//Render
+//		return $this->render('block/account/login', $settings);
+//	}
 }
