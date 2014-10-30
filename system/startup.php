@@ -34,6 +34,14 @@ if (!defined('HTTPS_SITE')) {
 	define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
 }
 
+if (!defined('URL_IMAGE')) {
+	define('URL_IMAGE', URL_SITE . 'image/');
+}
+
+if (!defined('URL_DOWNLOAD')) {
+	define('URL_DOWNLOAD', URL_SITE . 'download/');
+}
+
 define('URL_THEMES', URL_SITE . 'app/view/theme/');
 define('URL_RESOURCES', URL_SITE . 'system/resources/');
 

@@ -117,7 +117,7 @@ abstract class Model
 		if ($total) {
 			return $this->queryTotal($sql, $index);
 		}
-		
+
 		return $this->db->queryRows($sql, $index);
 	}
 
@@ -128,6 +128,7 @@ abstract class Model
 
 	/**
 	 * IMPORTANT: This method is only guaranteed to work on queries that do not contain sub queries!
+	 * Also, not compatible with GROUP BY and HAVING clauses. Using aggregate functions may cause undesirable results.
 	 *
 	 * Use this to optimally query sorted / filtered rows using the LIMIT clause from
 	 * the database along with the total number of rows (minus the LIMIT clause).
@@ -158,9 +159,6 @@ abstract class Model
 		if ($use_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
-			//Remove clauses not applicable to counting total rows
-			$sql = preg_replace("/(ORDER BY|LIMIT|GROUP BY|HAVING).*/i", '', $sql);
-
 			$total = $this->queryVar("SELECT COUNT(*) $sql");
 		}
 
@@ -168,13 +166,6 @@ abstract class Model
 			$rows,
 			$total
 		);
-	}
-
-	protected function parseOutSelect(&$sql, &$select)
-	{
-		echo $sql;
-		exit;
-
 	}
 
 	public function queryField($table, $field, $where)
@@ -504,7 +495,7 @@ abstract class Model
 							} else {
 								$where .= " AND " . ($low ? $low : $high);
 							}
-						} else {
+						} elseif (!empty($value)) {
 							array_walk($value, function (&$a) use ($type) {
 								$a = $type === 'int' ? (int)$a : (float)$a;
 							});
@@ -515,7 +506,7 @@ abstract class Model
 						$value = $type === 'int' ? (int)$value : (float)$value;
 						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
 					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? 'NOT IN' : 'IN') . " (0,'')";
+						$where .= " AND (`$t`.`$key` " . ($not ? 'NOT IN' : 'IN') . " (0,'') " . ($not ? 'AND' : 'OR') . " `$t`.`$key` " . ($not ? 'IS NOT NULL' : 'IS NULL') . ")";
 					}
 					break;
 
@@ -560,6 +551,14 @@ abstract class Model
 
 	protected function extractOrderLimit($data)
 	{
+		return array(
+			$this->extractOrder($data),
+			$this->extractLimit($data),
+		);
+	}
+
+	protected function extractOrder($data)
+	{
 		if (empty($data['sort'])) {
 			return '';
 		}
@@ -585,8 +584,11 @@ abstract class Model
 			$order .= ($order ? ',' : '') . "$sort $ord";
 		}
 
-		$order = "ORDER BY $order";
+		return "ORDER BY $order";
+	}
 
+	protected function extractLimit($data)
+	{
 		//Limit
 		$limit = '';
 
@@ -599,10 +601,101 @@ abstract class Model
 			}
 		}
 
-		return array(
-			$order,
-			$limit,
-		);
+		return $limit;
+	}
+
+	protected function parseOutSelect(&$sql, &$select)
+	{
+		if (!preg_match("/^SELECT /i", $sql)) {
+			return false;
+		}
+
+		$sql = substr($sql, 7);
+
+		$from = '';
+		$escape = false;
+		$quote = '';
+		$paren = 0;
+
+		for ($i=0;$i<strlen($sql);$i++) {
+			$is_from = false;
+			$c = $sql[$i];
+
+			switch($c) {
+				case '\\':
+					$escape = !$escape;
+					break;
+
+				case '`':
+				case '"':
+				case '\'':
+					if ($quote === $c) {
+						if (!$escape) {
+							$quote = '';
+						}
+					} elseif (!$quote) {
+						$quote = $c;
+					}
+					break;
+
+				case '(':
+				case ')':
+					if (!$quote) {
+						if ($paren && $c === ')') {
+							$paren--;
+						} elseif ($c === '(') {
+							$paren++;
+						}
+					}
+					break;
+
+				default:
+					if (!$quote && !$paren) {
+						switch ($from) {
+							case '':
+								if ($i > 0 && $sql[$i-1] === ' ' && strpos("Ff", $c) !== false) {
+									$from = 'F';
+									$is_from = true;
+								}
+								break;
+
+							case 'F':
+								if (strpos("Rr", $c) !== false) {
+									$from .= 'R';
+									$is_from = true;
+								}
+								break;
+
+							case 'FR':
+								if (strpos("Oo", $c) !== false) {
+									$from .= 'O';
+									$is_from = true;
+								}
+								break;
+
+							case 'FRO':
+								if (isset($sql[$i+1]) && $sql[$i+1] === ' ' && strpos("Mm", $c) !== false) {
+									$from .= 'M';
+								}
+								break;
+						}
+					}
+
+					break;
+			}
+
+			if ($from === 'FROM') {
+				$select = substr($select, 0, strlen($select) - 3);
+				$sql    = str_replace($select, '', $sql);
+				return true;
+			} elseif (!$is_from && $from) {
+				$from = '';
+			}
+
+			$select .= $c;
+		}
+
+		return false;
 	}
 
 	protected function hasIndex($table, $fields)

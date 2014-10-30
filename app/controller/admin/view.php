@@ -41,21 +41,20 @@ class App_Controller_Admin_View extends Controller
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _request('filter', array());
 
-		$view_listing_total = $this->Model_View->getTotalViewListings($filter);
-		$view_listings      = $this->Model_View->getViewListings($sort + $filter);
+		list($view_listings, $view_listing_total) = $this->Model_View->getViewListings($sort, $filter, $columns, true, 'view_listing_id');
 
-		foreach ($view_listings as &$view_listing) {
+		foreach ($view_listings as $view_listing_id => &$view_listing) {
 			$actions = array();
 
 			if (user_can('w', 'admin/view')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/view/form', 'view_listing_id=' . $view_listing['view_listing_id'])
+					'href' => site_url('admin/view/form', 'view_listing_id=' . $view_listing_id)
 				);
 
 				$actions['delete'] = array(
 					'text' => _l("Remove"),
-					'href' => site_url('admin/view/delete', 'view_listing_id=' . $view_listing['view_listing_id']),
+					'href' => site_url('admin/view/delete', 'view_listing_id=' . $view_listing_id),
 				);
 			}
 

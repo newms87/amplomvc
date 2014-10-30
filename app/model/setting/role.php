@@ -87,21 +87,7 @@ class App_Model_Setting_Role extends Model
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->useCalcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
-
-		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
-
-		if ($total) {
-			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
-			$total_rows = $this->queryVar($query);
-
-			return array(
-				$rows,
-				$total_rows
-			);
-		}
-
-		return $rows;
+		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 	}
 
 	public function getRestrictedAreas()
@@ -137,7 +123,7 @@ class App_Model_Setting_Role extends Model
 			}
 
 			require_once $admin_dir . $file;
-			$methods = get_class_methods("App_Controller_Admin_" . implode("_", $class_parts));
+			$methods = (array)get_class_methods("App_Controller_Admin_" . implode("_", $class_parts));
 
 			foreach ($methods as $key => $method) {
 				if (strpos($method, '__') === 0 || in_array($method, $ignore)) {
@@ -168,7 +154,7 @@ class App_Model_Setting_Role extends Model
 
 	public function getTotalRoles($filter = array())
 	{
-		return $this->getRoles($filter, '', false);
+		return $this->getRoles(array(), $filter, 'COUNT(*)');
 	}
 
 	public function getViewListingId()

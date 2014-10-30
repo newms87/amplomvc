@@ -788,7 +788,11 @@ function register_colorbox() {
             height: '80%'
         }
 
-        $colorbox.colorbox(defaults);
+        $colorbox.each(function(i,e){
+            var $e = $(e);
+            defaults.photo = $e.hasClass('colorbox-photo');
+            $e.colorbox(defaults);
+        });
     }
 }
 

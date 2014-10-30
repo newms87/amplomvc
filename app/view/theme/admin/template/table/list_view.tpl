@@ -310,7 +310,7 @@
 
 										case 'link-image':
 											?>
-											<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
+											<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
 											<? break;
 
 										case 'text_list':

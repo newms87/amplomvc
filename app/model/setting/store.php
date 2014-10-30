@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Setting_Store extends Model
 {
 	public function save($store_id, $store)

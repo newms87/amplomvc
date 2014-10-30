@@ -205,26 +205,16 @@ class App_Model_Page extends Model
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->useCalcFoundRows('page', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS" : '';
+		$results = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 
-		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
+		$total ? $rows = &$results[0] : $rows = &$results;
 
 		foreach ($rows as &$row) {
 			$this->getPageFiles($row);
 		}
 		unset($row);
 
-		if ($total) {
-			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
-			$total_rows = $this->queryVar($query);
-
-			return array(
-				$rows,
-				$total_rows
-			);
-		}
-
-		return $rows;
+		return $results;
 	}
 
 	public function getPageFiles(&$page)

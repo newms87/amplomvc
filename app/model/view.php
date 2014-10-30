@@ -296,16 +296,14 @@ class App_Model_View extends Model
 
 	public function getRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
-		if (!$select) {
-			$select = '*';
-		}
-
 		$table = $this->getViewListingTable($view_listing_id);
 
 		if (!$table) {
 			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
 			return false;
 		}
+
+		$select = $this->extractSelect($table, $select);
 
 		//From
 		$from = $this->prefix . $table;
@@ -317,22 +315,7 @@ class App_Model_View extends Model
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->useCalcFoundRows($table, $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
-
-		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
-
-		//Get Results
-		if ($total) {
-			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
-			$total_rows = $this->queryVar($query);
-
-			return array(
-				$rows,
-				$total_rows,
-			);
-		}
-
-		return $rows;
+		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 	}
 
 	public function getTotalRecords($view_listing_id, $filter = array())
@@ -390,35 +373,27 @@ class App_Model_View extends Model
 		return self::$view_listings;
 	}
 
-	public function getViewListings($sort = array(), $filter = array(), $select = '*', $index = null)
+	public function getViewListings($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		//Select
-		if ($index === false) {
-			$select = 'COUNT(*)';
-		}
+		$select = $this->extractSelect('view_listing', $select);
 
 		//From
-		$from = $this->prefix . "view_listing vl";
+		$from = $this->prefix . "view_listing";
 
-		$where = $this->extractWhere('view_listing vl', $filter);
+		//Where
+		$where = $this->extractWhere('view_listing', $filter);
 
 		//Order By & Limit
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
-
-		//Get Total
-		if ($index === false) {
-			return $this->queryVar($query);
-		}
-
-		return $this->queryRows($query, $index);
+		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 	}
 
 	public function getTotalViewListings($filter = array())
 	{
-		return $this->getViewListings(array(), $filter, '', false);
+		return $this->getViewListings(array(), $filter, 'COUNT(*)');
 	}
 
 	public function getColumns($filter = array())

@@ -202,22 +202,7 @@ class App_Model_User extends Model
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$calc_rows = ($total && $this->useCalcFoundRows('user', $sort, $filter)) ? "SQL_CALC_FOUND_ROWS " : '';
-
-		$rows = $this->queryRows("SELECT $calc_rows $select FROM $from WHERE $where $order $limit", $index);
-
-		//Get Results
-		if ($total) {
-			$query      = $calc_rows ? "SELECT FOUND_ROWS()" : "SELECT COUNT(*) FROM $from WHERE $where";
-			$total_rows = $this->queryVar($query);
-
-			return array(
-				$rows,
-				$total_rows,
-			);
-		}
-
-		return $rows;
+		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 	}
 
 	public function getTotalUsers($filter = array())
