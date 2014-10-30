@@ -42,18 +42,21 @@ class App_Model_Block_Login_Facebook extends Model
 
 	public function authenticate()
 	{
-		if (empty($_GET['state']) || !$this->session->get('fb_state') || $_GET['state'] !== $this->session->get('fb_state')) {
+		$state = _get('state');
+		$fb_state = _session('fb_state');
+
+		if (!$state || $state !== $fb_state) {
 			$this->error['state'] = _l("Unable to verify the User");
 			return false;
 		}
 
 		if (!empty($_GET['error_code'])) {
-			$this->error['error_code'] = $_GET['error_message'];
+			$this->error['error_code'] = _get('error_message');
 			return false;
 		}
 
 		if (empty($_GET['code'])) {
-			$this->error['code'] = _l("sYour access code was unable to be verified");
+			$this->error['code'] = _l("Your access code was unable to be verified");
 			return false;
 		}
 

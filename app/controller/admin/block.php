@@ -135,11 +135,9 @@ class App_Controller_Admin_Block extends Controller
 		breadcrumb($path, site_url('admin/block/form', 'path=' . $path));
 
 		//Entry Data
-		$block = array();
+		$block = $_POST;
 
-		if (IS_POST) {
-			$block = $_POST;
-		} elseif ($path) {
+		if (!IS_POST && $path) {
 			$block = $this->block->get($path);
 
 			//Cast associative array to indexed array for __ac_template__
@@ -155,7 +153,7 @@ class App_Controller_Admin_Block extends Controller
 		$block += $defaults;
 
 		//Extended Data
-		$action = new Action('block/' . $path);
+		$action = new Action('block/' . $path . '/settings');
 		$controller = $action->getController();
 
 		$block['block_settings']  = $controller->settings($block);
