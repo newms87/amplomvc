@@ -927,7 +927,7 @@ abstract class Model
 		return $table_model;
 	}
 
-	private function getPrimaryKey($table)
+	protected function getPrimaryKey($table)
 	{
 		$columns = $this->getTableColumns($table);
 
