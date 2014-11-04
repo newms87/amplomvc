@@ -91,6 +91,7 @@
 		<div class="total"><?= _l("Run Time: %s seconds", $run_time); ?></div>
 		<div class="memory"><?= _l("Max Memory / Allocated: %s / %s", $memory, $real_memory); ?></div>
 		<div class="total-files"><?= _l("Total Files Loaded: %s", $total_files); ?></div>
+		<div class="total-file-size"><?= _l("Total File Size: %s", $total_file_size); ?></div>
 		<div class="file-lists"><?php html_dump($file_list, 'file list'); ?></div>
 	</div>
 

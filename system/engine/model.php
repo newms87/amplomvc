@@ -4,8 +4,6 @@ abstract class Model
 {
 	protected $db, $prefix, $error = array();
 
-	private $history;
-
 	const
 		TEXT = 'text',
 		NO_ESCAPE = 'no-escape',
@@ -26,8 +24,6 @@ abstract class Model
 		$key = strtolower(get_class($this));
 
 		$registry->set($key, $this);
-
-		$this->history = option('model_history');
 
 		//use default database
 		if (!$this->db) {
@@ -188,6 +184,8 @@ abstract class Model
 
 	protected function insert($table, $data)
 	{
+		global $model_history;
+
 		$this->actionFilter('insert', $table, $data);
 
 		$values = $this->getInsertString($table, $data, false);
@@ -208,7 +206,7 @@ abstract class Model
 
 		$row_id = $this->getLastId();
 
-		if ($this->history && in_array($table, $this->history)) {
+		if ($model_history && in_array($table, $model_history)) {
 			$this->addHistory($table, $row_id, 'insert', $data, true);
 		}
 
@@ -217,6 +215,8 @@ abstract class Model
 
 	protected function update($table, $data, $where = null)
 	{
+		global $model_history;
+
 		$this->actionFilter('update', $table, $data, $where);
 
 		$primary_key = $this->getPrimaryKey($table);
@@ -257,7 +257,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($this->history && $update_id !== true && in_array($table, $this->history)) {
+		if ($model_history && $update_id !== true && in_array($table, $model_history)) {
 			$this->addHistory($table, $update_id, 'update', $data, true);
 		}
 
@@ -266,6 +266,8 @@ abstract class Model
 
 	protected function delete($table, $where = null)
 	{
+		global $model_history;
+
 		$this->actionFilter('delete', $table, $data);
 
 		$where = $this->getWhere($table, $where, null, null, true);
@@ -284,7 +286,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($this->history && in_array($table, $this->history)) {
+		if ($model_history && in_array($table, $model_history)) {
 			$delete_id = false;
 
 			if (is_array($where)) {

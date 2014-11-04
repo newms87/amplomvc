@@ -1,4 +1,5 @@
 <?php
+
 class Dev extends Library
 {
 	public function site_backup($file = null, $tables = null, $prefix = null, $remove_prefix = false)
@@ -15,7 +16,7 @@ class Dev extends Library
 		}
 
 		if (!$this->db->dump($file, $tables, $prefix, $remove_prefix)) {
-			$this->error['dump'] = $this->db->getError();
+			$this->error['dump']   = $this->db->getError();
 			$this->error['failed'] = _l("Database backup failed.");
 			return false;
 		}
@@ -152,10 +153,13 @@ class Dev extends Library
 			$memory      = round(memory_get_peak_usage() / $mb, 2) . " MB";
 			$real_memory = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
 
-			$file_list   = get_included_files();
-			$total_files = count($file_list);
+			$file_list       = get_included_files();
+			$total_files     = count($file_list);
+			$total_file_size = 0;
 
 			foreach ($file_list as &$f) {
+				$total_file_size += filesize($f);
+				
 				$f = array(
 					'name' => $f,
 					'size' => filesize($f),
@@ -163,7 +167,11 @@ class Dev extends Library
 			}
 			unset($f);
 
-			uasort($file_list, function ($a, $b) {return $a['size'] < $b['size'];});
+			$total_file_size = round($total_file_size / 1024, 2) . ' KB';
+
+			uasort($file_list, function ($a, $b) {
+					return $a['size'] < $b['size'];
+				});
 
 			foreach ($file_list as &$f) {
 				$f['size'] = round($f['size'] / 1024, 2) . " KB";

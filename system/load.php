@@ -40,6 +40,9 @@ if ($last_update) {
 	$cache->set('db_last_update', $last_update['Value']);
 }
 
+//Model History
+$model_history = option('model_history');
+
 //System Logs
 $error_log = new Log('error', option('store_id'));
 $registry->set('error_log', $error_log);
