@@ -17,33 +17,7 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
-//This is the path to Amplo MVC from the site's root directory. If it is in the root make this '/'
-if (!defined('SITE_BASE')) {
-	define('SITE_BASE', '/');
-}
-
-if (!defined('URL_SITE')) {
-	define('URL_SITE', '//' . DOMAIN . SITE_BASE);
-}
-
-if (!defined('HTTP_SITE')) {
-	define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE);
-}
-
-if (!defined('HTTPS_SITE')) {
-	define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
-}
-
-if (!defined('URL_IMAGE')) {
-	define('URL_IMAGE', URL_SITE . 'image/');
-}
-
-if (!defined('URL_DOWNLOAD')) {
-	define('URL_DOWNLOAD', URL_SITE . 'download/');
-}
-
 define('URL_THEMES', URL_SITE . 'app/view/theme/');
-define('URL_RESOURCES', URL_SITE . 'system/resources/');
 
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'ajax/');
@@ -55,40 +29,40 @@ define('DIR_DATABASE', DIR_SITE . 'system/database/');
 define('DIR_PLUGIN', DIR_SITE . 'plugin/');
 define('DIR_FORM', DIR_SITE . 'app/view/form/');
 define('DIR_THEMES', DIR_SITE . 'app/view/theme/');
-define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
 define('DIR_EXCEL_TEMPLATE', DIR_SITE . 'system/php-excel/templates/');
 define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
 define('DIR_CRON', DIR_SITE . 'system/cron/');
 define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
 
-if (!defined('DIR_RESOURCES')) {
-	define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
-}
+//This is the path to Amplo MVC from the site's root directory. If it is in the root make this '/'
+$config_defines = array(
+	'SITE_BASE'             => '//' . DOMAIN . SITE_BASE,
+	'HTTP_SITE'             => 'http://' . DOMAIN . SITE_BASE,
+	'HTTPS_SITE'            => 'https://' . DOMAIN . SITE_BASE,
+	'URL_IMAGE'             => URL_SITE . 'image/',
+	'URL_DOWNLOAD'          => URL_SITE . 'download/',
+	'URL_RESOURCES'         => URL_SITE . 'system/resources/',
+	'DIR_RESOURCES'         => DIR_SITE . 'system/resources/',
+	'DIR_IMAGE'             => DIR_SITE . 'image/',
+	'DIR_LOGS'              => DIR_SITE . 'system/logs/',
+	'DIR_DATABASE_BACKUP'   => DIR_SITE . 'system/database/backups/',
+	'DEFAULT_TIMEZONE'      => 'America/Denver',
+	'MYSQL_TIMEZONE'        => '-6:00',
+	'DB_PROFILE'            => false,
+	'DB_PROFILE_NO_CACHE'   => false,
+	'AMPLO_SESSION'         => 'cross-store-session',
+	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
+);
 
-if (!defined('DIR_IMAGE')) {
-	define('DIR_IMAGE', DIR_SITE . 'image/');
-}
-
-if (!defined('DIR_LOGS')) {
-	define('DIR_LOGS', DIR_SITE . 'system/logs/');
-}
-
-if (!defined('DIR_DATABASE_BACKUP')) {
-	define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+foreach ($config_defines as $def_key => $def_value) {
+	if (!defined($def_key)) {
+		define($def_key, $def_value);
+	}
 }
 
 // Check Version
 if (version_compare(phpversion(), '5.3.0', '<') == true) {
 	exit('PHP5.3+ Required');
-}
-
-//Date & Time
-if (!defined('DEFAULT_TIMEZONE')) {
-	define('DEFAULT_TIMEZONE', 'America/Denver');
-}
-
-if (!defined('MYSQL_TIMEZONE')) {
-	define('MYSQL_TIMEZONE', '-6:00');
 }
 
 date_default_timezone_set(DEFAULT_TIMEZONE);
@@ -99,15 +73,6 @@ define("AC_DATE_STRING", 1);
 define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
 
-//DB
-if (!defined('DB_PROFILE')) {
-	define("DB_PROFILE", false);
-}
-
-if (!defined('DB_PROFILE_NO_CACHE')) {
-	define("DB_PROFILE_NO_CACHE", false);
-}
-
 //COOKIES
 $domain = parse_url(URL_SITE, PHP_URL_HOST);
 
@@ -115,16 +80,6 @@ if (!$domain || $domain === 'localhost') {
 	define('COOKIE_DOMAIN', '');
 } else {
 	define('COOKIE_DOMAIN', '.' . $domain);
-}
-
-//This allows for cross store sessions
-if (!defined('AMPLO_SESSION')) {
-	define("AMPLO_SESSION", "cross-store-session");
-}
-
-//set session timeout to 2 hours
-if (!defined('AMPLO_SESSION_TIMEOUT')) {
-	define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
 }
 
 //Start Session
