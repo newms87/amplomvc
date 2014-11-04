@@ -16,6 +16,11 @@ class Cache
 		}
 	}
 
+	public function getLoadedFiles()
+	{
+		return $this->loaded;
+	}
+
 	public function get($key, $get_file = false)
 	{
 		if (isset($this->loaded[$key])) {

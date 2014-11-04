@@ -48,15 +48,21 @@ class App_Model_Setting_Role extends Model
 
 	public function getRole($user_role_id)
 	{
-		$user_role = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user_role WHERE user_role_id = " . (int)$user_role_id);
+		$user_role = cache('user_role.' . $user_role_id);
 
-		if ($user_role) {
-			$user_role['permissions'] = unserialize($user_role['permissions']);
-		} else {
-			$user_role = array(
-				'name'        => '',
-				'permissions' => array(),
-			);
+		if (!$user_role) {
+			$user_role = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user_role WHERE user_role_id = " . (int)$user_role_id);
+
+			if ($user_role) {
+				$user_role['permissions'] = unserialize($user_role['permissions']);
+			} else {
+				$user_role = array(
+					'name'        => '',
+					'permissions' => array(),
+				);
+			}
+
+			cache('user_role.' . $user_role_id, $user_role);
 		}
 
 		return $user_role;

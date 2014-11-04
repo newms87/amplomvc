@@ -3,7 +3,15 @@ class System_Model_Language extends Model
 {
 	public function getLanguage($language_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = " . (int)$language_id);
+		$language = cache('language.' . $language_id);
+
+		if (!$language) {
+			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = " . (int)$language_id);
+
+			cache('language.' . $language_id, $language);
+		}
+
+		return $language;
 	}
 
 	public function getLanguages()

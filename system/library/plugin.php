@@ -12,7 +12,13 @@ class Plugin extends Library
 		global $registry;
 		$registry->set('plugin', $this);
 
-		$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
+		$this->installed = cache('plugin.installed');
+
+		if (is_null($this->installed)) {
+			$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
+
+			cache('plugin.installed', $this->installed);
+		}
 
 		if (IS_ADMIN) {
 			$this->validatePluginModFiles();

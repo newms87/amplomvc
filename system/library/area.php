@@ -1,14 +1,20 @@
 <?php
 class Area extends Library
 {
-	private $counts;
+	static $counts;
+
+	//TODO: This whole class needs caching optimization
+
 
 	public function hasBlocks($area, $store_id = null, $layout_id = null)
 	{
 		if (is_null($store_id) && is_null($layout_id)) {
-			if (!$this->counts) {
-				$store_id = option('store_id');
-				$layout_id = option('config_layout_id');
+			$store_id = option('store_id');
+			$layout_id = option('config_layout_id');
+
+			self::$counts = cache('area.counts.'.$store_id.'.'.$layout_id);
+
+			if (is_null(self::$counts)) {
 
 				if (!$layout_id) {
 					$layout_id = option('config_default_layout', 0);
@@ -16,12 +22,18 @@ class Area extends Library
 
 				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . DB_PREFIX . "block_area WHERE store_id = "  .(int)$store_id . " AND layout_id = " . (int)$layout_id . " GROUP BY area");
 
-				foreach ($counts as $count) {
-					$this->counts[$count['area']] = $count['total'];
+				if ($counts) {
+					foreach ($counts as $count) {
+						self::$counts[$count['area']] = $count['total'];
+					}
+				} else {
+					self::$counts = false;
 				}
+
+				cache('area.counts.'.$store_id.'.'.$layout_id, self::$counts);
 			}
 
-			return $this->counts[$area];
+			return isset(self::$counts[$area]) ? self::$counts[$area] : false;
 		}
 
 		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "block_area WHERE store_id = " . (int)$store_id . " AND layout_id = " . (int)$layout_id);

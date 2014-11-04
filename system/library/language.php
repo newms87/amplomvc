@@ -127,7 +127,15 @@ class Language extends Library
 		}
 
 		if ($code) {
-			$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
+			$language = cache('language.' . $code);
+
+			if (!$language) {
+				$language = $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
+
+				if ($language) {
+					cache('language.' . $code, $language);
+				}
+			}
 		}
 
 		//Language requested was invalid, attempt to detect language or revert to default

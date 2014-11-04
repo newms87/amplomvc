@@ -154,12 +154,11 @@ class Dev extends Library
 			$real_memory = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
 
 			$file_list       = get_included_files();
-			$total_files     = count($file_list);
 			$total_file_size = 0;
 
 			foreach ($file_list as &$f) {
 				$total_file_size += filesize($f);
-				
+
 				$f = array(
 					'name' => $f,
 					'size' => filesize($f),
@@ -169,14 +168,35 @@ class Dev extends Library
 
 			$total_file_size = round($total_file_size / 1024, 2) . ' KB';
 
-			uasort($file_list, function ($a, $b) {
-					return $a['size'] < $b['size'];
-				});
+			$size_sort = function ($a, $b) {
+				return $a['size'] < $b['size'];
+			};
+
+			uasort($file_list, $size_sort);
 
 			foreach ($file_list as &$f) {
 				$f['size'] = round($f['size'] / 1024, 2) . " KB";
 			}
 			unset($f);
+
+			//Cached Files
+			$cache_files = $this->cache->getLoadedFiles();
+			$total_cache_size = 0;
+
+			foreach ($cache_files as &$c) {
+				$total_cache_size += filesize($c['file']);
+				$c['size'] = filesize($c['file']);
+			}
+			unset($c);
+
+			uasort($cache_files, $size_sort);
+
+			foreach ($cache_files as &$c) {
+				$c['size'] = round($c['size'] / 1024, 2) . " KB";
+			}
+			unset($c);
+
+			$total_cache_size = round($total_cache_size / 1024, 2) . ' KB';
 
 			ob_start();
 			include($file);

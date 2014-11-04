@@ -90,9 +90,13 @@
 	<div id="amplo-profile">
 		<div class="total"><?= _l("Run Time: %s seconds", $run_time); ?></div>
 		<div class="memory"><?= _l("Max Memory / Allocated: %s / %s", $memory, $real_memory); ?></div>
-		<div class="total-files"><?= _l("Total Files Loaded: %s", $total_files); ?></div>
+		<div class="total-files"><?= _l("Total Files Loaded: %s", count($file_list)); ?></div>
 		<div class="total-file-size"><?= _l("Total File Size: %s", $total_file_size); ?></div>
 		<div class="file-lists"><?php html_dump($file_list, 'file list'); ?></div>
+
+		<div class="total-files"><?= _l("Total Cache Files: %s", count($cache_files)); ?></div>
+		<div class="total-file-size"><?= _l("Total Cache File Size: %s", $total_cache_size); ?></div>
+		<div class="file-lists"><?php html_dump($cache_files, 'cache files'); ?></div>
 	</div>
 
 	<?php if (!empty($profile)) { ?>
@@ -105,7 +109,7 @@
 
 	<?php if (DB_PROFILE) { ?>
 		<div id="db_profile">
-			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($profile)); ?></div>
+			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($db_profile)); ?></div>
 			<div class="profile_list">
 				<?php foreach ($db_profile as $p) { ?>
 					<div><?= $p['time']; ?><span><?= $p['query']; ?></span></div>
