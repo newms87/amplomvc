@@ -2,18 +2,18 @@
 
 abstract class App_Model_Table extends Model
 {
-	protected $key, $table, $p_table;
+	protected $primary_key, $table, $p_table;
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		if ($this->table) {
-			if (!$this->key) {
-				$this->key = $this->getPrimaryKey($this->table);
+			if (!$this->primary_key) {
+				$this->primary_key = $this->getPrimaryKey($this->table);
 			}
 
-			if (!$this->key) {
+			if (!$this->primary_key) {
 				trigger_error(_l("The table %s must have a single field primary key in order to extend App_Model_Table with %s!", $this->table, get_class()));
 				exit;
 			}
@@ -36,16 +36,21 @@ abstract class App_Model_Table extends Model
 		}
 	}
 
+	public function remove($canvass_scope_id)
+	{
+		return $this->delete($this->table, $canvass_scope_id);
+	}
+
 	public function getField($id, $field)
 	{
-		return $this->queryVar("SELECT $field FROM `$this->p_table` WHERE `$this->key` = " . (int)$id);
+		return $this->queryVar("SELECT $field FROM `$this->p_table` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecord($id, $select = '*')
 	{
 		$select = $this->extractSelect($this->table, $select);
 
-		return $this->queryRow("SELECT $select FROM `$this->p_table` WHERE `$this->key` = " . (int)$id);
+		return $this->queryRow("SELECT $select FROM `$this->p_table` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)

@@ -76,31 +76,37 @@
 			display:block;
 		}
 
-		#amplo_profile {
+		#amplo-profile {
 			display: none;
 		}
 
-		#db_profile_box.show .close, #db_profile_box.show #db_profile, #db_profile_box.show #amplo_profile {
+		#db_profile_box.show .close, #db_profile_box.show #db_profile, #db_profile_box.show #amplo-profile {
 			display: block;
 		}
 	</style>
 
 	<h2>Amplo DB / Performance Profile</h2>
 
-	<div id="amplo_profile">
+	<div id="amplo-profile">
 		<div class="total"><?= _l("Run Time: %s seconds", $run_time); ?></div>
 		<div class="memory"><?= _l("Max Memory / Allocated: %s / %s", $memory, $real_memory); ?></div>
 		<div class="total-files"><?= _l("Total Files Loaded: %s", $total_files); ?></div>
 		<div class="file-lists"><?php html_dump($file_list, 'file list'); ?></div>
 	</div>
 
+	<?php if (!empty($profile)) { ?>
+		<div id="system-profile">
+			<?php html_dump($profile, 'system profile'); ?>
+		</div>
+	<?php } ?>
+
 	<div class="close">X</div>
 
 	<?php if (DB_PROFILE) { ?>
 		<div id="db_profile">
-			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($profile)); ?></div>
+			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($db_profile)); ?></div>
 			<div class="profile_list">
-				<?php foreach ($profile as $p) { ?>
+				<?php foreach ($db_profile as $p) { ?>
 					<div><?= $p['time']; ?><span><?= $p['query']; ?></span></div>
 				<?php } ?>
 			</div>

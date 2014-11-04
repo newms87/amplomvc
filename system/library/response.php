@@ -76,11 +76,7 @@ class Response extends Library
 				return;
 			}
 
-			if ($this->level) {
-				$output = $this->compress($this->output, $this->level);
-			} else {
-				$output = $this->output;
-			}
+			$output = $this->level ? $this->compress($this->output, $this->level) : $this->output;
 
 			if (!headers_sent()) {
 				foreach ($this->headers as $key => $value) {

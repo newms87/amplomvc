@@ -24,10 +24,22 @@ if (empty($_SESSION['user_id'])) {
 }
 
 //TODO: Implement full system profile
-function _profile($key, $time)
+function _profile($key, array $data = array())
 {
-	global $profile;
-	$profile[$key] = $time;
+	global $profile, $__start;
+
+	$mb        = 1024 * 1024;
+	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
+	$allocated = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
+	$time      = round(microtime(true) - $__start, 6);
+
+	$data += array(
+		'time'      => $time,
+		'memory'    => $memory,
+		'allocated' => $allocated,
+	);
+
+	$profile[$key] = $data;
 }
 
 //custom var dump

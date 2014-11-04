@@ -2,8 +2,9 @@
 
 abstract class Model
 {
-	protected $db;
-	protected $prefix;
+	protected $db, $prefix, $error = array();
+
+	private $history;
 
 	const
 		TEXT = 'text',
@@ -16,9 +17,6 @@ abstract class Model
 		AUTO_INCREMENT = 'ai',
 		AUTO_INCREMENT_PK = 'pk';
 
-	//In case a plugin wants to wrap this Class
-	protected $error = array();
-
 	public function __construct()
 	{
 		global $registry;
@@ -28,6 +26,8 @@ abstract class Model
 		$key = strtolower(get_class($this));
 
 		$registry->set($key, $this);
+
+		$this->history = option('model_history');
 
 		//use default database
 		if (!$this->db) {
@@ -206,7 +206,13 @@ abstract class Model
 			return false;
 		}
 
-		return $this->getLastId();
+		$row_id = $this->getLastId();
+
+		if ($this->history && in_array($table, $this->history)) {
+			$this->addHistory($table, $row_id, 'insert', $data, true);
+		}
+
+		return $row_id;
 	}
 
 	protected function update($table, $data, $where = null)
@@ -251,6 +257,10 @@ abstract class Model
 			return false;
 		}
 
+		if ($this->history && $update_id !== true && in_array($table, $this->history)) {
+			$this->addHistory($table, $update_id, 'update', $data, true);
+		}
+
 		return $update_id;
 	}
 
@@ -274,7 +284,45 @@ abstract class Model
 			return false;
 		}
 
+		if ($this->history && in_array($table, $this->history)) {
+			$delete_id = false;
+
+			if (is_array($where)) {
+				$primary_key = $this->getPrimaryKey($table);
+
+				if (isset($where[$primary_key])) {
+					$delete_id = (int)$where[$primary_key];
+				}
+			} else {
+				$delete_id = (int)$where;
+			}
+
+			if ($delete_id) {
+				$this->addHistory($table, $delete_id, 'update', $data, true);
+			}
+		}
+
 		return true;
+	}
+
+	public function addHistory($table, $row_id, $action, $data, $message = null)
+	{
+		if ($table !== 'history') {
+			$history = array(
+				'user_id' => $this->user->getId(),
+				'table' => $table,
+				'row_id' => $row_id,
+				'action'  => $action,
+				'data'    => json_encode($data),
+				'date' => $this->date->now(),
+			);
+
+			if ($message) {
+				$history['message'] = $message === true ? $this->route->getPath() : $message;
+			}
+
+			$this->insert('history', $history);
+		}
 	}
 
 	protected function getWhere($table, $where, $prefix = '', $glue = '', $primary_key = false)

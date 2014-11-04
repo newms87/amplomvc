@@ -125,21 +125,21 @@ class Dev extends Library
 
 	public function performance()
 	{
-		global $__start;
+		global $__start, $profile;
 
 		$file = $this->theme->getFile('common/amplo_profile', AMPLO_DEFAULT_THEME);
 
 		if ($file) {
 			if (DB_PROFILE) {
-				$profile = $this->db->getProfile();
+				$db_profile = $this->db->getProfile();
 
 				$db_time = 0;
 
-				usort($profile, function ($a, $b) {
+				usort($db_profile, function ($a, $b) {
 					return $a['time'] < $b['time'];
 				});
 
-				foreach ($profile as $p) {
+				foreach ($db_profile as $p) {
 					$db_time += $p['time'];
 				}
 
