@@ -25,6 +25,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		//Defaults
 		$settings += array(
 			'path'            => '',
+			'query'           => '',
 			'view_listing_id' => '',
 			'default_query'   => array(),
 		);
