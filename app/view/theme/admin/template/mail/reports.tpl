@@ -33,6 +33,17 @@
 							<? } ?>
 						</tbody>
 
+						<? $remaining = $view['data']['total_records'] - count($view['data']['records']); ?>
+						<? if ($remaining > 0) { ?>
+							<tfoot>
+								<tr>
+									<td colspan="<?= count($view['data']['records'][0]); ?>" style="text-align:center">
+										<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>"><?= _l("And %s more...", $remaining); ?></a>
+									</td>
+								</tr>
+							</tfoot>
+						<? } ?>
+
 					</table>
 				<? } else { ?>
 					<p><?= _l("There is no data to show for this report"); ?></p>

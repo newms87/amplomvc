@@ -88,6 +88,10 @@ class App_Model_Dashboard extends Model
 							array(
 								'return_data' => true,
 							   'view_listing_id' => $listing['view_listing_id'],
+							   'sort' => array(
+								   'limit' => _request('limit', 100),
+							      'start' => _request('start', 0),
+							   ),
 							)
 						);
 
