@@ -33,7 +33,7 @@
 							<? } ?>
 						</tbody>
 
-						<? $remaining = $view['data']['total_records'] - count($view['data']['records']); ?>
+						<? $remaining = $view['data']['total'] - count($view['data']['records']); ?>
 						<? if ($remaining > 0) { ?>
 							<tfoot>
 								<tr>
