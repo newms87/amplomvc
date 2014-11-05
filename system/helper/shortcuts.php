@@ -152,6 +152,12 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
+function render_message($type = null, $close = null)
+{
+	global $registry;
+	return $registry->get('message')->render($type, $close);
+}
+
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;

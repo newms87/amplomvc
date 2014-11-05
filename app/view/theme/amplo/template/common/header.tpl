@@ -171,7 +171,7 @@
 		<? if (empty($disable_messages) && $this->message->has()) { ?>
 			<section class="message-row row">
 				<div class="wrap">
-					<?= $this->message->render(); ?>
+					<?= render_message(); ?>
 				</div>
 			</section>
 		<? } ?>

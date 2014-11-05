@@ -44,7 +44,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		}
 
 		if ($settings['view_id']) {
-			$settings += $this->Model_View->getView($settings['view_id']);
+			$settings += $this->Model_View->getRecord($settings['view_id']);
 
 			$settings = $this->Model_View->getViewSettings($settings['view_id']) + $settings;
 		}

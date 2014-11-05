@@ -1,7 +1,8 @@
 <?php
 
-class App_Model_View extends Model
+class App_Model_View extends App_Model_Table
 {
+	protected $table = 'view', $primary_key = 'view_id';
 	static $view_listings;
 	static $meta = array();
 
@@ -50,11 +51,6 @@ class App_Model_View extends Model
 		}
 
 		return $view;
-	}
-
-	public function getField($view_id, $field)
-	{
-		return $this->queryVar("SELECT $field FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
 	}
 
 	public function getViewSettings($view_id)
@@ -294,7 +290,7 @@ class App_Model_View extends Model
 		return $this->delete('view_listing', $view_listing_id);
 	}
 
-	public function getRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
 		$table = $this->getViewListingTable($view_listing_id);
 
@@ -318,9 +314,9 @@ class App_Model_View extends Model
 		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 	}
 
-	public function getTotalRecords($view_listing_id, $filter = array())
+	public function getTotalViewListingRecords($view_listing_id, $filter = array())
 	{
-		return $this->getRecords($view_listing_id, array(), $filter, 'COUNT(*)');
+		return $this->getViewListingRecords($view_listing_id, array(), $filter, 'COUNT(*)');
 	}
 
 	public function getViewListingTable($view_listing_id)

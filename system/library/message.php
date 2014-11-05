@@ -1,4 +1,5 @@
 <?php
+
 class Message extends Library
 {
 	function __construct()
@@ -115,8 +116,13 @@ class Message extends Library
 		$messages = $this->fetch($type);
 
 		$html = '';
-		foreach ($messages as $type => $msgs) {
-			$html .= "<div class =\"messages $type\">";
+
+		foreach ($messages as $t => $msgs) {
+			$html .= "<div class =\"messages " . ($type ? $type : $t) . "\">";
+
+			if (!is_array($msgs)) {
+				$msgs = array($msgs);
+			}
 
 			foreach ($msgs as $msg) {
 				if (!empty($msg)) {

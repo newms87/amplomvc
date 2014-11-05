@@ -60,6 +60,6 @@
 
 			<div class="content">
 				<? if (empty($disable_messages)) { ?>
-					<?= $this->message->render(); ?>
+					<?= render_message(); ?>
 				<? } ?>
 

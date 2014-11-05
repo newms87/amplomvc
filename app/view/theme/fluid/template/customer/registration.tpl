@@ -19,7 +19,7 @@
 
 	<div class="login-page row">
 		<div class="wrap">
-			<?= $this->message->render(); ?>
+			<?= render_message(); ?>
 
 			<form class="login-form form" action="<?= $register; ?>" method="post">
 				<div class="col xs-12 md-6 register-details">

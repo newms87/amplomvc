@@ -26,7 +26,7 @@
 	</div>
 
 	<? if (IS_AJAX) { ?>
-		<?= $this->message->render(); ?>
+		<?= render_message(); ?>
 	<? } else { ?>
 		<script type="text/javascript">
 			$('#admin-login form').submit(function() {

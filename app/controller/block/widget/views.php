@@ -56,8 +56,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 				$view_listing_id = $this->Model_View->syncViewListing($view_listing);
 
-				if (!$view_listing_id) {
-					$this->output = $this->Model_View->getError();
+				if (!$view_listing_id && empty($views)) {
+					message('error', $this->Model_View->getError());
+					$this->output = render_message('error');
 					return;
 				}
 
@@ -188,7 +189,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 	public function listing($listing = array())
 	{
-		$view_listing_id = (int)_request('view_listing_id');
+		$view_listing_id = !empty($listing['view_listing_id']) ? (int)$listing['view_listing_id'] : (int)_request('view_listing_id');
 
 		if (!$view_listing_id) {
 			$output = _l("View Listing not found with ID: %s", $view_listing_id);
@@ -196,15 +197,22 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		//The Table Columns
-		$requested_cols = _request('columns');
+		$requested_cols = !empty($listing['columns']) ? $listing['columns'] : _request('columns');
 
 		$columns = $this->Model_View->getViewListingColumns($view_listing_id, $requested_cols);
 
 		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults();
-		$filter = _request('filter', array());
+		$sort   = !empty($listing['sort']) ? $listing['sort'] : $this->sort->getQueryDefaults();
+		$filter = !empty($listing['filter']) ? $listing['filter'] : _request('filter', array());
 
-		list($records, $record_total) = $this->Model_View->getRecords($view_listing_id, $sort, $filter, null, true);
+		list($records, $record_total) = $this->Model_View->getViewListingRecords($view_listing_id, $sort, $filter, null, true);
+
+		if (!empty($listing['return_data'])) {
+			$this->output = array(
+				'records' => $records,
+				'total'   => $record_total,
+			);
+		}
 
 		$listing += array(
 			'row_id'         => null,
@@ -285,20 +293,18 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 	public function remove_view()
 	{
-		$view = $this->Model_View->getView($_POST['view_id']);
+		$title = $this->Model_View->getField(_post('view_id'), 'title');
 
-		if ($view) {
-			if ($this->Model_View->remove($_POST['view_id'])) {
-				message('success', _l("The %s view has been removed", $view['title']));
-			} else {
-				message('error', $this->Model_View->getError());
-			}
+		if ($this->Model_View->remove(_post('view_id'))) {
+			message('success', _l("The %s view has been removed", $title));
+		} else {
+			message('error', $this->Model_View->getError());
+		}
 
-			if (IS_AJAX) {
-				output_json($this->message->fetch());
-			} else {
-				redirect($view['path']);
-			}
+		if (IS_AJAX) {
+			output_json($this->message->fetch());
+		} else {
+			redirect('admin');
 		}
 	}
 

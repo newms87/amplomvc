@@ -1,6 +1,6 @@
 <div class="widget-listing">
 	<? if ($show_messages) { ?>
-		<?= $this->message->render(); ?>
+		<?= render_message(); ?>
 	<? } ?>
 
 	<? if ($show_limits) { ?>
