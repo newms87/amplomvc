@@ -34,7 +34,7 @@ define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
 define('DIR_CRON', DIR_SITE . 'system/cron/');
 define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
 
-//This is the path to Amplo MVC from the site's root directory. If it is in the root make this '/'
+//Conditional defines for AmlpoMVC config.php to override.
 $config_defines = array(
 	'SITE_BASE'             => '//' . DOMAIN . SITE_BASE,
 	'HTTP_SITE'             => 'http://' . DOMAIN . SITE_BASE,
