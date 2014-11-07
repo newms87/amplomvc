@@ -102,6 +102,10 @@ $.ac_datepicker = function (params) {
 }
 
 $.fn.ac_datepicker = function ac_datepicker(params) {
+    if (!this.length) {
+        return this;
+    }
+
     if (!$.ui.timepicker) {
         var selector = this;
         $.ajaxSetup({cache: true});
