@@ -4,9 +4,13 @@
 define('AMPLO_VERSION', '0.1.0');
 define('AMPLO_DEFAULT_THEME', 'amplo');
 
-//Urls
+//Setup Base URL
 if (!defined('DOMAIN')) {
 	define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+}
+
+if (!defined('URL_SITE')) {
+	define('URL_SITE', '//' . DOMAIN . SITE_BASE);
 }
 
 //Default server values in case they are not set.
