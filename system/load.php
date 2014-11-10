@@ -29,6 +29,9 @@ $registry->set('cache', $cache);
 //config is self assigning to registry.
 $config = new Config();
 
+//Error Handler
+set_error_handler('amplo_error_handler');
+
 //Setup Cache ignore list
 $cache->ignore(option('config_cache_ignore'));
 
@@ -43,96 +46,7 @@ if ($last_update) {
 //Model History
 $model_history = option('model_history');
 
-//System Logs
-$error_log = new Log('error', option('store_id'));
-$registry->set('error_log', $error_log);
-
-$log = new Log('default', option('store_id'));
-$registry->set('log', $log);
-
-//Error Callbacks allow customization of error display / messages
-$error_callbacks = array();
-
-$error_handler = function ($errno, $errstr, $errfile, $errline, $errcontext) use ($error_log, $config) {
-	// error was suppressed with the @-operator
-	if (!ini_get('display_errors') || 0 === error_reporting()) {
-		return false;
-	}
-
-	switch ($errno) {
-		case E_NOTICE:
-		case E_USER_NOTICE:
-			$error = 'Notice';
-			break;
-		case E_WARNING:
-		case E_USER_WARNING:
-			$error = 'Warning';
-			break;
-		case E_ERROR:
-		case E_USER_ERROR:
-			$error = 'Fatal Error';
-			break;
-		default:
-			$error = 'Unknown';
-			break;
-	}
-
-	global $error_callbacks;
-
-	if (!empty($error_callbacks)) {
-		foreach ($error_callbacks as $cb) {
-			$cb($error, $errno, $errstr, $errfile, $errline);
-		}
-	}
-
-	if ($error) {
-		if (option('config_error_display')) {
-			$stack = get_caller(1, 10);
-
-			echo <<<HTML
-			<style>
-				.error_display {
-					padding: 10px;
-					border-radius: 5px;
-					background: white;
-					color: black;
-					font-size: 14px;
-					border: 1px solid black;
-				}
-				.error_display .label {
-					width: 70px;
-					display:inline-block;
-					font-weight: bold;
-				}
-
-				.error_display a {
-					color: blue;
-				}
-			</style>
-			<div class="error_display">
-				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>
-				<div class="msg"><span class="label">Message:</span> <span class="value">$errstr</span></div>
-				<div class="file"><span class="label">File:</span> <span class="value">$errfile</span></div>
-				<div class="line"><span class="label">Line:</span> <span class="value">$errline</span></div>
-				<div class="stack">$stack</div>
-			</div>
-HTML;
-
-			flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
-		}
-
-		if (option('config_error_log')) {
-			$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
-		}
-	}
-
-	return true;
-};
-
-set_error_handler($error_handler);
-
 //Verify the necessary directories are writable
-$dir_error = null;
 if (!_is_writable(DIR_IMAGE, $dir_error, option('config_image_dir_mode'))) {
 	trigger_error($dir_error);
 	die ($dir_error);

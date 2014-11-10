@@ -42,11 +42,6 @@ class Mail extends Library
 
 		$this->logging = option('config_mail_logging');
 
-		if ($this->logging) {
-			global $registry;
-			$registry->set('mail_log', new Log('mail'), option('store_id'));
-		}
-
 		$this->init();
 	}
 
@@ -553,7 +548,7 @@ class Mail extends Library
 		$this->log_entry .= $msg . "\r\n";
 
 		if ($flush) {
-			$this->mail_log->write($this->log_entry);
+			write_log('mail', $this->log_entry);
 		}
 	}
 }

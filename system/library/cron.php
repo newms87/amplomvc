@@ -93,7 +93,7 @@ class Cron extends Library
 
 		$msg .= _l("Cron ran successfully!");
 
-		$this->log->write($msg);
+		write_log('default', $msg);
 
 		//Always logout system user when done!
 		$this->user->logoutSystemUser();

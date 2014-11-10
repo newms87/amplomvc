@@ -158,9 +158,9 @@ if (!function_exists('array_walk_children')) {
 			array_splice($args, 0, 3);
 
 			$return = call_user_func_array($callback, array_merge(array(
-						&$node,
-						$key
-					), $args));
+				&$node,
+				$key
+			), $args));
 
 			//Cancel the walk
 			if ($return === false) {
@@ -205,8 +205,8 @@ if (!function_exists('apache_request_headers')) {
 		$headers = array();
 		foreach ($_SERVER as $k => $v) {
 			if (substr($k, 0, 5) == "HTTP_") {
-				$k = str_replace('_', ' ', substr($k, 5));
-				$k = str_replace(' ', '-', ucwords(strtolower($k)));
+				$k           = str_replace('_', ' ', substr($k, 5));
+				$k           = str_replace(' ', '-', ucwords(strtolower($k)));
 				$headers[$k] = $v;
 			}
 		}
@@ -276,6 +276,99 @@ function get_caller($offset = 0, $limit = 10)
 	}
 
 	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
+}
+
+function write_log($type, $msg)
+{
+	global $registry;
+
+	if (!$registry->has('log_' . $type)) {
+		$registry->set('log_' . $type, new Log($type, option('store_id')));
+	}
+
+	return $registry->get('log_' . $type)->write($msg);
+}
+
+//Error Callbacks allow customization of error display / messages
+$error_callbacks = array();
+
+if (!function_exists('amplo_error_handler')) {
+	function amplo_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
+	{
+		// error was suppressed with the @-operator
+		if (!ini_get('display_errors') || 0 === error_reporting()) {
+			return false;
+		}
+
+		switch ($errno) {
+			case E_NOTICE:
+			case E_USER_NOTICE:
+				$error = 'Notice';
+				break;
+			case E_WARNING:
+			case E_USER_WARNING:
+				$error = 'Warning';
+				break;
+			case E_ERROR:
+			case E_USER_ERROR:
+				$error = 'Fatal Error';
+				break;
+			default:
+				$error = 'Unknown';
+				break;
+		}
+
+		global $error_callbacks;
+
+		if (!empty($error_callbacks)) {
+			foreach ($error_callbacks as $cb) {
+				$cb($error, $errno, $errstr, $errfile, $errline);
+			}
+		}
+
+		if ($error) {
+			if (option('config_error_display')) {
+				$stack = get_caller(1, 10);
+
+				echo <<<HTML
+			<style>
+				.error_display {
+					padding: 10px;
+					border-radius: 5px;
+					background: white;
+					color: black;
+					font-size: 14px;
+					border: 1px solid black;
+				}
+				.error_display .label {
+					width: 70px;
+					display:inline-block;
+					font-weight: bold;
+				}
+
+				.error_display a {
+					color: blue;
+				}
+			</style>
+			<div class="error_display">
+				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>
+				<div class="msg"><span class="label">Message:</span> <span class="value">$errstr</span></div>
+				<div class="file"><span class="label">File:</span> <span class="value">$errfile</span></div>
+				<div class="line"><span class="label">Line:</span> <span class="value">$errline</span></div>
+				<div class="stack">$stack</div>
+			</div>
+HTML;
+
+				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
+			}
+
+			if (option('config_error_log')) {
+				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+			}
+		}
+
+		return true;
+	}
 }
 
 if (!defined("AMPLO_TIME_LOG")) {
