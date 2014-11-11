@@ -19,7 +19,7 @@ class Curl extends Library
 		$opts = $options + array(
 				// return web page
 				CURLOPT_RETURNTRANSFER => true,
-				// don't return headers
+				// return headers
 				CURLOPT_HEADER         => false,
 				// follow redirects
 				CURLOPT_FOLLOWLOCATION => true,
