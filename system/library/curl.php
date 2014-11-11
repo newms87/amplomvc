@@ -115,7 +115,7 @@ class Curl extends Library
 		//Response
 		switch ($response_type) {
 			case self::RESPONSE_JSON:
-				return @json_decode($this->response['content']);
+				return @json_decode($this->response['content'], true);
 
 			case self::RESPONSE_TEXT:
 				return $this->response['content'];

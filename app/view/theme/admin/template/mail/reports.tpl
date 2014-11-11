@@ -14,33 +14,39 @@
 
 				<? if (!empty($view['image'])) { ?>
 					<img src="<?= cast_protocol($view['image']); ?>" width="800" height="400"/>
-				<? } elseif (!empty($view['data'])) { ?>
+				<? } elseif (!empty($view['data']['records'])) { ?>
 					<table style="text-align:left" cellpadding="3">
 						<thead>
-							<tr style="padding-top:1em;padding-bottom:1em;font-size:1.2em;font-weight:bold;">
-								<? foreach (array_keys($view['data']['records'][0]) as $col) { ?>
-									<td><?= $col; ?></td>
-								<? } ?>
-							</tr>
+						<tr style="padding-top:1em;padding-bottom:1em;font-size:1.2em;font-weight:bold;">
+							<? foreach (array_keys($view['data']['records'][0]) as $col) { ?>
+								<td><?= $col; ?></td>
+							<? } ?>
+						</tr>
 						</thead>
 						<tbody>
-							<? foreach ($view['data']['records'] as $row) { ?>
-								<tr>
-									<? foreach ($row as $col => $data) { ?>
-										<td><?= $data; ?></td>
-									<? } ?>
-								</tr>
-							<? } ?>
+						<? foreach ($view['data']['records'] as $row) { ?>
+							<tr>
+								<? foreach ($row as $col => $data) { ?>
+									<td>
+										<? if (strpos($col, 'Time')) { ?>
+											<?= _l("%s (hrs)", round($data, 2)); ?>
+										<? } else { ?>
+											<?= $data; ?>
+										<? } ?>
+									</td>
+								<? } ?>
+							</tr>
+						<? } ?>
 						</tbody>
 
 						<? $remaining = $view['data']['total'] - count($view['data']['records']); ?>
 						<? if ($remaining > 0) { ?>
 							<tfoot>
-								<tr>
-									<td colspan="<?= count($view['data']['records'][0]); ?>" style="text-align:center">
-										<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>"><?= _l("And %s more...", $remaining); ?></a>
-									</td>
-								</tr>
+							<tr>
+								<td colspan="<?= count($view['data']['records'][0]); ?>" style="text-align:center">
+									<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>"><?= _l("And %s more...", $remaining); ?></a>
+								</td>
+							</tr>
 							</tfoot>
 						<? } ?>
 
