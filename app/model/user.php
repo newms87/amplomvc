@@ -4,11 +4,46 @@ class App_Model_User extends Model
 {
 	public function save($user_id, $data)
 	{
-		if (empty($data['password'])) {
-			unset($data['password']);
+		if (isset($user['username'])) {
+			if (!validate('text', $user['username'], 3, 128)) {
+				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
+			} else {
+				$user_info = $this->Model_User->getUserByUsername($user['username']);
+
+				if ($user_info && $user_info['user_id'] !== $user_id) {
+					$this->error['username'] = _l("Username is already in use!");
+				}
+			}
+		} elseif (!$user_id) {
+			$this->error['username'] = _l("Please provide a Username!");
 		}
 
-		if (!$this->validate($user_id, $data)) {
+		if (isset($user['firstname'])) {
+			if (!validate('text', $user['firstname'], 1, 32)) {
+				$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
+			}
+		} elseif (!$user_id) {
+			$this->error['firstname'] = _l("Please provide your First Name");
+		}
+
+		if (isset($user['lastname'])) {
+			if (!validate('text', $user['lastname'], 1, 32)) {
+				$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
+			}
+		} elseif (!$user_id) {
+			$this->error['lastname'] = _l("Please provide your Last Name");
+		}
+
+		//Ensure password is set for new user (can be encrypted_password), or check if updating password
+		if ((!$user_id && empty($user['encrypted_password'])) || isset($user['password'])) {
+			if (!isset($user['password'])) {
+				$this->error['password'] = _l("You must enter a password");
+			} elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+				$this->error['password'] = $this->validation->getError();
+			}
+		}
+
+		if (!$this->error) {
 			return false;
 		}
 
@@ -208,44 +243,6 @@ class App_Model_User extends Model
 	public function getTotalUsers($filter = array())
 	{
 		return $this->getUsers(array(), $filter, "COUNT(*)");
-	}
-
-	public function validate($user_id, $user)
-	{
-		if (!$user_id || isset($user['username'])) {
-			if (!validate('text', $user['username'], 3, 128)) {
-				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
-			} else {
-				$user_info = $this->Model_User->getUserByUsername($user['username']);
-
-				if ($user_info && $user_info['user_id'] !== $user_id) {
-					$this->error['username'] = _l("Username is already in use!");
-				}
-			}
-		}
-
-		if (!$user_id || isset($user['firstname'])) {
-			if (!validate('text', $user['firstname'], 1, 32)) {
-				$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-			}
-		}
-
-		if (!$user_id || isset($user['lastname'])) {
-			if (!validate('text', $user['lastname'], 1, 32)) {
-				$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-			}
-		}
-
-		//Ensure password is set for new user (can be encrypted_password), or check if updating password
-		if ((!$user_id && empty($user['encrypted_password'])) || isset($user['password'])) {
-			if (!isset($user['password'])) {
-				$this->error['password'] = _l("You must enter a password");
-			} elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-				$this->error['password'] = $this->validation->getError();
-			}
-		}
-
-		return empty($this->error);
 	}
 
 	public function getColumns($filter = array())
