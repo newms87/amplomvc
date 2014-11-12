@@ -13,19 +13,23 @@ class Date extends Library
 	{
 		if (!$date) {
 			$date = new DateTime("@" . _time());
-		} elseif (is_string($date)) {
-			try {
-				if ($format) {
-					$date = date_create_from_format($format, $date);
-				} else {
-					$date = new DateTime($date);
-				}
-			} catch (Exception $e) {
-				$this->error['date_string'] = $e;
-				return false;
-			}
 		} elseif (is_int($date)) {
 			$date = new DateTime("@" . $date);
+		} elseif (is_string($date)) {
+			if (preg_match("/^\\d+$/", $date)) {
+				$date = new DateTime("@" . $date);
+			} else {
+				try {
+					if ($format) {
+						$date = date_create_from_format($format, $date);
+					} else {
+						$date = new DateTime($date);
+					}
+				} catch (Exception $e) {
+					$this->error['date_string'] = $e;
+					return false;
+				}
+			}
 		}
 
 		if (!$date) {
@@ -191,9 +195,10 @@ class Date extends Library
 	{
 		$this->datetime($d1);
 		$this->datetime($d2);
-		$diff = $d1->diff($d2);
 
-		return $diff->days === 0 && $d1->format('z') === $d2->format('z');
+		if ($d1 && $d2) {
+			return $d1->format('z') === $d2->format('z') && $d1->diff($d2)->days === 0;
+		}
 	}
 
 	public function isToday($date)
@@ -216,12 +221,20 @@ class Date extends Library
 
 	public function isBefore($d1, $d2)
 	{
-		return $this->diff($d1, $d2)->invert === 0;
+		$diff = $this->diff($d1, $d2);
+
+		if ($diff) {
+			return $diff->invert === 0;
+		}
 	}
 
 	public function isAfter($d1, $d2)
 	{
-		return $this->diff($d1, $d2)->invert === 1;
+		$diff = $this->diff($d1, $d2);
+
+		if ($diff) {
+			return $diff->invert === 1;
+		}
 	}
 
 	public function format($date = null, $format = '', $from_format = null)

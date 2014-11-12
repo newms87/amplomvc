@@ -106,16 +106,37 @@ class Curl extends Library
 			curl_close($ch);
 		}
 
+		write_log('curl', _l("%s - upload size: %s, download size: %s, time: %s", $url, $this->response['header']['size_upload'], $this->response['header']['size_download'], $this->response['header']['total_time']));
+
 		//Error failed
 		if ($this->error) {
-			write_log('error', "Curl Failed: $this->error");
-			return false;
+			if (empty($this->response['content'])) {
+				if ($errno === 56 && (!isset($options[CURLOPT_HTTP_VERSION]) || $options[CURLOPT_HTTP_VERSION] !== CURL_HTTP_VERSION_1_0)) {
+					$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_0;
+					return $this->call($url, $response_type, $options);
+				}
+
+				write_log('curl_error', _l("%s(): %s - Error in response: %s", __METHOD__, $url, $this->error));
+				return false;
+			}
+
+			write_log('curl_error', _l("%s(): %s - Error in response (w/ content returned): %s", __METHOD__, $url, $this->error));
 		}
 
 		//Response
 		switch ($response_type) {
 			case self::RESPONSE_JSON:
-				return @json_decode($this->response['content'], true);
+				if (isset($options[CURLOPT_HTTP_VERSION]) && $options[CURLOPT_HTTP_VERSION] === CURL_HTTP_VERSION_1_0) {
+					$this->response['content'] = utf8_decode($this->response['content']);
+				}
+
+				$json = @json_decode($this->response['content'], true);
+
+				if ($json === null) {
+					write_log('curl_error', _l("%s(): %s - JSON decode Failed with ERROR (%s): %s", __METHOD__, $url, json_last_error(), json_last_error_msg()));
+				}
+
+				return $json;
 
 			case self::RESPONSE_TEXT:
 				return $this->response['content'];
