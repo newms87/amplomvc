@@ -108,7 +108,7 @@ class Curl extends Library
 
 		//Error failed
 		if ($this->error) {
-			$this->error_log->write("Curl Failed: $this->error");
+			write_log('error', "Curl Failed: $this->error");
 			return false;
 		}
 

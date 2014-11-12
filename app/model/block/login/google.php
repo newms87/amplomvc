@@ -71,7 +71,7 @@ class App_Model_Block_Login_Google extends Model
 		if (empty($response->access_token)) {
 			$msg = _l("There was a problem authenticating your credentials.");
 			$this->error['exception'] = $msg;
-			$this->error_log->write($msg);
+			write_log('error', $msg);
 			return false;
 		}
 
