@@ -74,7 +74,7 @@ class Cron extends Library
 					} else {
 						$error = _l("Cron::run(): Failed to run %s. Class Method, %s() was not found.", $task['name'], $classname . '::' . $method);
 						$msg .= $error;
-						$this->error_log->write($error);
+						write_log('error', $error);
 					}
 				} else {
 					$msg .= _l("Skipping...");

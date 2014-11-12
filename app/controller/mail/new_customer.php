@@ -4,7 +4,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 	public function index($customer)
 	{
 		if (!isset($customer['email'])) {
-			$this->error_log->write(__METHOD__ . "(): Customer Email was not provided!");
+			write_log('error', __METHOD__ . "(): Customer Email was not provided!");
 
 			return false;
 		}
