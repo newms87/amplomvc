@@ -1,4 +1,5 @@
 <?php
+
 class Mail extends Library
 {
 	private $handle;
@@ -209,7 +210,7 @@ class Mail extends Library
 		}
 
 		if (!$this->from) {
-			$errors .= _l('E-Mail From required!');
+			$this->from = 'info@' . DOMAIN;
 		}
 
 		if (!$this->sender) {
@@ -231,8 +232,9 @@ class Mail extends Library
 
 			$this->trigger_error($msg);
 
-			if (isset($this->config) && option('config_email_error')) {
-				$this->to      = option('config_email_error');
+			if (isset($this->config)) {
+				$this->to      = option('config_email_error', 'error@' . DOMAIN);
+				$this->from    = option('config_email_error', 'error@' . DOMAIN);
 				$this->cc      = '';
 				$this->bcc     = '';
 				$this->subject = "There was a problem sending out the email!";
@@ -532,7 +534,7 @@ class Mail extends Library
 			'time'       => _time(),
 		);
 
-		$mail_fail      = serialize($mail_fail);
+		$mail_fail = serialize($mail_fail);
 
 		$mail_fail = $this->escape($mail_fail);
 
