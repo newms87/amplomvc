@@ -1,5 +1,5 @@
 <?php
-final class MSSQL implements Database
+final class MSSQL implements DatabaseInterface
 {
 	private $link;
 	private $err_msg;
@@ -88,10 +88,5 @@ final class MSSQL implements Database
 		mssql_free_result($resource);
 
 		return $last_id;
-	}
-
-	public function __destruct()
-	{
-		mssql_close($this->link);
 	}
 }
