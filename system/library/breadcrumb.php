@@ -31,8 +31,27 @@ class Breadcrumb extends Library
 		}
 	}
 
-	public function get()
+	/**
+	 * Get all the breadcrumbs or if $offset is set, get the specific crumb at $offset.
+	 *
+	 * @param int $offset - If offset > 0, return the breadcrumb at $offset - 1 (eg: $offset = 1, returns the first breadcrumb)
+	 *                      If offset <= 0, return the breadcrumb at $offset from the last breadcrumb
+	 *                      (eg: $offset = 0, return the last breadcrumb (typically the current page), $offset = -1 returns the previous page (typically))
+	 *
+	 * @return array|null - Will return an array of all the breadcrumbs, or 1 breadcrumb if $offset is set, or null if a breadcrumb did not exist at the $offset.
+	 */
+	public function get($offset = null)
 	{
+		if ($offset !== null) {
+			if ($offset <= 0) {
+				$offset = (count($this->crumbs)-1) + $offset;
+			} else {
+				$offset--;
+			}
+
+			return isset($this->crumbs[$offset]) ? $this->crumbs[$offset] : null;
+		}
+
 		return $this->crumbs;
 	}
 

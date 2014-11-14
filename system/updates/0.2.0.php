@@ -11,3 +11,5 @@ $this->db->createTable('history', <<<SQL
   PRIMARY KEY (`history_id`)
 SQL
 );
+
+$this->db->changeColumn('navigation', 'sort_order', 'sort_order', "FLOAT NOT NULL DEFAULT '0'");
