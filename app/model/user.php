@@ -43,7 +43,7 @@ class App_Model_User extends Model
 			}
 		}
 
-		if (!$this->error) {
+		if ($this->error) {
 			return false;
 		}
 
