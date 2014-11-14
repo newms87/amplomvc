@@ -525,10 +525,18 @@ abstract class Model
 
 			switch ($type) {
 				case 'like':
-					if ($value) {
-						$where .= " AND `$t`.`$key` " . ($not ? 'not like' : 'like') . " '%" . $this->escape($value) . "%'";
-					} else {
+					if (!$value) {
 						$where .= " AND `$t`.`$key` " . ($not ? '!=' : '=') . " ''";
+					} elseif (is_array($value)) {
+						$likes = array();
+
+						foreach ($value as $v) {
+							$likes[] = "`$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($v) . "%'";
+						}
+
+						$where .= " AND (" . implode(" OR ", $likes) . ")";
+					}  else {
+						$where .= " AND `$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($value) . "%'";
 					}
 					break;
 
@@ -536,27 +544,33 @@ abstract class Model
 				case 'float':
 				case 'int':
 					if (is_array($value)) {
-						if (isset($value['low']) || isset($value['high'])) {
-							$low  = isset($value['low']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " " . ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : '';
-							$high = isset($value['high']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " " . ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : '';
+						$low = (isset($value['low']) && $value['low'] !== '') ? ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : false;
+						$high = (isset($value['high']) && $value['high'] !== '') ? ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : false;
 
-							if ($low && $high) {
-								$where .= " AND ($low " . ($not ? 'OR' : 'AND') . " $high)";
-							} else {
-								$where .= " AND " . ($low ? $low : $high);
+						if ($low !== false && $high !== false) {
+							if ($high < $low) {
+								$temp = $low;
+								$low = $high;
+								$high = $temp;
 							}
+
+							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " BETWEEN $low AND $high";
+						} elseif ($low !== false) {
+							$where .= " AND `$t`.`$key` " . ($not ? '<' : '>=') . " " . $low;
+						} elseif ($high !== false) {
+							$where .= " AND `$t`.`$key` " . ($not ? '>' : '<=') . " " . $high;
 						} elseif (!empty($value)) {
 							array_walk($value, function (&$a) use ($type) {
 								$a = $type === 'int' ? (int)$a : (float)$a;
 							});
 
-							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " (" . implode(',', $value) . ")";
+							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " IN (" . implode(',', $value) . ")";
 						}
 					} elseif ($value) {
 						$value = $type === 'int' ? (int)$value : (float)$value;
 						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
 					} else {
-						$where .= " AND (`$t`.`$key` " . ($not ? 'NOT IN' : 'IN') . " (0,'') " . ($not ? 'AND' : 'OR') . " `$t`.`$key` " . ($not ? 'IS NOT NULL' : 'IS NULL') . ")";
+						$where .= " AND (`$t`.`$key` " . ($not ? 'NOT' : '') . " IN (0,'') " . ($not ? 'AND' : 'OR') . " `$t`.`$key` " . ($not ? 'IS NOT NULL' : 'IS NULL') . ")";
 					}
 					break;
 
@@ -564,21 +578,29 @@ abstract class Model
 				case 'datetime':
 				case 'time':
 					if (is_array($value)) {
-						if (!empty($value['start']) || !empty($value['end'])) {
-							$start = !empty($value['start']) ? "`$t`.`$key` " . ($not ? '<' : '>=') . " '" . format('date', $value['start']) . "'" : '';
-							$end   = !empty($value['end']) ? "`$t`.`$key` " . ($not ? '>' : '<=') . " '" . format('date', $value['end']) . "'" : '';
+						$start = !empty($value['start']) ? format('date', $value['start']) : false;
+						$end = !empty($value['end']) ? format('date', $value['end']) : false;
 
-							if ($start && $end) {
-								$where .= " AND ($start " . ($not ? 'OR' : 'AND') . " $end)";
-							} else {
-								$where .= " AND " . ($start ? $start : $end);
-							}
-						} elseif (!isset($value['start']) && !isset($value['end'])) {
+						if (!$start && !$end) {
 							array_walk($value, function (&$a) use ($type) {
 								$a = format('date', $a);
 							});
 
-							$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $value) . "')";
+							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " IN ('" . implode("','", $value) . "')";
+						} else {
+							if ($start && $end) {
+								if ($this->date->isAfter($start, $end)) {
+									$temp = $end;
+									$end = $start;
+									$start = $temp;
+								}
+
+								$where .= " AND `$t`.`$key` BETWEEN '$start' AND '$end'";
+							} elseif ($start) {
+								$where .= " AND `$t`.`$key` >= '$start'";
+							} else {
+								$where .= " AND `$t`.`$key` <= '$end'";
+							}
 						}
 					} else {
 						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . ($value ? format('date', $value) . "'" : '');

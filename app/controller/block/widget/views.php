@@ -62,7 +62,10 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 					return;
 				}
 
-				$settings['view_listing_id'] = $view_listing_id;
+				if ($view_listing_id) {
+					$settings['view_listing_id'] = $view_listing_id;
+					return $this->build($settings);
+				}
 			}
 		}
 

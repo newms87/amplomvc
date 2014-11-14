@@ -168,11 +168,7 @@ class Dev extends Library
 
 			$total_file_size = round($total_file_size / 1024, 2) . ' KB';
 
-			$size_sort = function ($a, $b) {
-				return $a['size'] < $b['size'];
-			};
-
-			uasort($file_list, $size_sort);
+			sort_by($file_list, 'size');
 
 			foreach ($file_list as &$f) {
 				$f['size'] = round($f['size'] / 1024, 2) . " KB";
@@ -189,7 +185,7 @@ class Dev extends Library
 			}
 			unset($c);
 
-			uasort($cache_files, $size_sort);
+			sort_by($cache_files, 'size');
 
 			foreach ($cache_files as &$c) {
 				$c['size'] = round($c['size'] / 1024, 2) . " KB";

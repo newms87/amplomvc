@@ -103,9 +103,7 @@ class App_Model_View extends App_Model_Table
 		}
 		unset($view);
 
-		uasort($views, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
+		sort_by($views, 'sort_order');
 
 		return $views;
 	}

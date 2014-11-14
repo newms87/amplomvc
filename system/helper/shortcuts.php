@@ -129,6 +129,12 @@ function breadcrumb($name, $url, $separator = '', $position = null)
 	$registry->get('breadcrumb')->add($name, $url, $separator, $position);
 }
 
+function get_breadcrumb($offset = 0)
+{
+	global $registry;
+	return $registry->get('breadcrumb')->get($offset);
+}
+
 function breadcrumbs()
 {
 	global $registry;

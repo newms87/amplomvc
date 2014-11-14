@@ -603,9 +603,7 @@ class Document extends Library
 		}
 
 		if ($sort) {
-			usort($links, function ($a, $b) {
-				return (int)$a['sort_order'] > (int)$b['sort_order'];
-			});
+			sort_by($links, 'sort_order');
 		}
 
 		if ($depth === 0) {

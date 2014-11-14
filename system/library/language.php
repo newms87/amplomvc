@@ -226,7 +226,7 @@ class Language extends Library
 				}
 			} else {
 				//Resolve 2 letter language code
-				uasort($alpha2, function ($a, $b) { return $a > $b; });
+				arsort($alpha2);
 
 				foreach ($alpha2 as $code => $q) {
 					if (isset($languages[$code])) {
@@ -235,7 +235,7 @@ class Language extends Library
 				}
 
 				//Resolve 3 letter language code
-				uasort($alpha3, function ($a, $b) { return $a > $b; });
+				arsort($alpha3);
 
 				foreach ($alpha3 as $code => $q) {
 					if (isset($languages[$code])) {
