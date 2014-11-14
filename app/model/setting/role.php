@@ -4,10 +4,16 @@ class App_Model_Setting_Role extends Model
 {
 	public function save($user_role_id, $data)
 	{
-		if (!$user_role_id || isset($data['name'])) {
+		if (isset($data['name'])) {
 			if (!validate('text', $data['name'], 3, 64)) {
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
+
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "user_role WHERE `name` = '" . $this->escape($data['name']) . "'")) {
+				$this->error['name'] = _l("Group Name already exists!");
+			}
+		} elseif (!$user_role_id) {
+			$this->error['name'] = _l("Group Name is required.");
 		}
 
 		if ($this->error) {

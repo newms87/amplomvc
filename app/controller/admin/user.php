@@ -29,7 +29,7 @@ class App_Controller_Admin_User extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'url'     => site_url('admin/user/batch_action'),
+			'url'     => site_url('admin/user/batch-action'),
 		);
 
 		//Actions
@@ -284,7 +284,7 @@ class App_Controller_Admin_User extends Controller
 		$data['email'] = isset($_POST['email']) ? $_POST['email'] : '';
 
 		//Action Buttons
-		$data['action'] = site_url('admin/user/reset_request');
+		$data['action'] = site_url('admin/user/reset-request');
 		$data['cancel'] = site_url('admin/user/login');
 
 		//Render

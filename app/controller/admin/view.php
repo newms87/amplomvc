@@ -20,7 +20,7 @@ class App_Controller_Admin_View extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'path'    => site_url('admin/view/batch_action'),
+			'path'    => site_url('admin/view/batch-action'),
 		);
 
 		//Action Buttons

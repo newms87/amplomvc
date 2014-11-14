@@ -10,7 +10,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("System Tools"), site_url('admin/tool/tool'));
 
-		$data['clear_cache'] = site_url('admin/tool/tool/clear_cache');
+		$data['clear_cache'] = site_url('admin/tool/tool/clear-cache');
 
 		$data['cancel'] = site_url('admin');
 

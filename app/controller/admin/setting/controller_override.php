@@ -10,7 +10,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Stores"), site_url('admin/setting/store'));
 		breadcrumb(_l("Settings"), site_url('admin/setting/setting'));
-		breadcrumb(_l("Controller Override"), site_url('admin/setting/controller_override'));
+		breadcrumb(_l("Controller Override"), site_url('admin/setting/controller-override'));
 
 		//Load Information
 		if (IS_POST && $this->validate()) {
@@ -45,7 +45,7 @@ class App_Controller_Admin_Setting_ControllerOverride extends Controller
 		$data['controller_overrides'] = $controller_overrides;
 
 		//Action Buttons
-		$data['save']   = site_url('admin/setting/controller_override');
+		$data['save']   = site_url('admin/setting/controller-override');
 		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render

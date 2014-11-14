@@ -21,7 +21,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 			$data['batch_action'] = array(
 				'actions' => $actions,
-				'url'     => site_url('admin/setting/role/batch_action'),
+				'url'     => site_url('admin/setting/role/batch-action'),
 			);
 		}
 

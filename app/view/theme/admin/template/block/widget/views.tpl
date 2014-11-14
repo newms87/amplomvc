@@ -130,7 +130,7 @@
 			sort_order[$(e).attr('data-view-id')] = i;
 		});
 
-		$.post("<?= site_url('block/widget/views/save_sort_order'); ?>", {'sort_order': sort_order}, function (response) {
+		$.post("<?= site_url('block/widget/views/save-sort-order'); ?>", {'sort_order': sort_order}, function (response) {
 			if (!response.success) {
 				$('.widget-view-list').ac_msg(response);
 			}

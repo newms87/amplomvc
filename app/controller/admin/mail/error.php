@@ -17,7 +17,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 		$data['send_message']   = site_url('admin/mail/error/resend');
 		$data['resend_message'] = site_url('admin/mail/error/resend');
 		$data['delete_message'] = site_url('admin/mail/error/delete');
-		$data['load_message']   = site_url('admin/mail/error/load_message');
+		$data['load_message']   = site_url('admin/mail/error/load-message');
 
 		output($this->render('mail/error', $data));
 	}

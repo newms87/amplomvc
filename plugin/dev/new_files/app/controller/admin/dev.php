@@ -43,7 +43,7 @@ class App_Controller_Admin_Dev extends Controller
 
 		breadcrumb(_l("Synchronize Sites"), site_url('admin/dev/sync'));
 
-		$data['request_sync_table'] = site_url('admin/dev/request_sync_table');
+		$data['request_sync_table'] = site_url('admin/dev/request-sync-table');
 
 		$defaults = array(
 			'tables' => '',
@@ -92,7 +92,7 @@ class App_Controller_Admin_Dev extends Controller
 			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
 		}
 
-		breadcrumb(_l("Site Management"), site_url('admin/dev/site_management'));
+		breadcrumb(_l("Site Management"), site_url('admin/dev/site-management'));
 
 		$defaults = array(
 			'domain'   => '',
@@ -175,7 +175,7 @@ class App_Controller_Admin_Dev extends Controller
 			}
 		}
 
-		breadcrumb(_l("Backup & Restore"), site_url('admin/dev/backup_restore'));
+		breadcrumb(_l("Backup & Restore"), site_url('admin/dev/backup-restore'));
 
 		$defaults = array(
 			'tables' => '',
@@ -275,7 +275,7 @@ class App_Controller_Admin_Dev extends Controller
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
 		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
-		breadcrumb(_l("Database Administration"), site_url('dev/db_admin'));
+		breadcrumb(_l("Database Administration"), site_url('dev/db-admin'));
 
 		$data = array();
 

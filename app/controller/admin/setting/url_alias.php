@@ -15,7 +15,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
-		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url_alias'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url-alias'));
 
 		//The Table Columns
 		$columns = array();
@@ -137,8 +137,8 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/setting/url_alias/update');
-		$data['delete'] = site_url('admin/setting/url_alias/delete');
+		$data['insert'] = site_url('admin/setting/url-alias/update');
+		$data['delete'] = site_url('admin/setting/url-alias/delete');
 		$data['cancel'] = site_url('admin/setting/store');
 
 		//Render
@@ -222,10 +222,10 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url_alias'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url-alias'));
 
 		if (!$url_alias_id) {
-			breadcrumb(_l("Add"), site_url('admin/setting/url_alias/udpate'));
+			breadcrumb(_l("Add"), site_url('admin/setting/url-alias/udpate'));
 		} else {
 			breadcrumb(_l("Edit"), site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
@@ -287,7 +287,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 		//Action Buttons
 		$data['save']   = site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
-		$data['cancel'] = site_url('admin/setting/url_alias');
+		$data['cancel'] = site_url('admin/setting/url-alias');
 
 		//Render
 		output($this->render('setting/url_alias_form', $data));

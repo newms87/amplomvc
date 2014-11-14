@@ -28,7 +28,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'url'     => site_url('admin/design/navigation/batch_action'),
+			'url'     => site_url('admin/design/navigation/batch-action'),
 		);
 
 		//The Listing

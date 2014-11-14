@@ -6,7 +6,7 @@ class App_Controller_Admin_Error extends Controller
 		$this->document->setTitle(_l("Page Not Found!"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Page Not Found!"), site_url('admin/error/not_found'));
+		breadcrumb(_l("Page Not Found!"), site_url('admin/error/not-found'));
 
 		output($this->render('error/not_found', $data));
 	}

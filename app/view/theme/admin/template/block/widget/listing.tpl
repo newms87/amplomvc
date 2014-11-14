@@ -196,7 +196,7 @@
 
 			$this.loading();
 
-			$.post("<?= site_url('block/widget/listing/save_settings'); ?>", $form.find('[name]').serialize(),function (response) {
+			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(),function (response) {
 				$form.ac_msg(response);
 				$this.closest('.view-config').removeClass('show');
 				$widget.find('.refresh-listing').click();

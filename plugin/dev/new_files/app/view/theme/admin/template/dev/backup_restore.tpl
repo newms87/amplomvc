@@ -67,7 +67,7 @@
 			</form>
 
 			<div class="default-install">
-				<a id="overwrite_default_db" class="button" href="<?= site_url('admin/dev/default_install'); ?>"><?= _l("Overwrite Default Installation DB File"); ?></a>
+				<a id="overwrite_default_db" class="button" href="<?= site_url('admin/dev/default-install'); ?>"><?= _l("Overwrite Default Installation DB File"); ?></a>
 			</div>
 		</div>
 	</div>

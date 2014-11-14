@@ -17,7 +17,7 @@ final class Action
 	{
 		$dir = DIR_SITE . 'app/controller/';
 
-		$parts = explode('/', $path);
+		$parts = explode('/', str_replace('-', '_', $path));
 
 		$file   = '';
 		$class  = 'App_Controller';

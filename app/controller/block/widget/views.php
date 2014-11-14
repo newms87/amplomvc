@@ -179,8 +179,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		//Action
-		$settings['save_view']   = site_url('block/widget/views/save_view');
-		$settings['remove_view'] = site_url('block/widget/views/remove_view');
+		$settings['save_view']   = site_url('block/widget/views/save-view');
+		$settings['remove_view'] = site_url('block/widget/views/remove-view');
 
 		//Render
 		$this->render('block/widget/views', $settings);

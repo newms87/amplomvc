@@ -19,7 +19,7 @@ class App_Controller_Admin_Block extends Controller
 		$data['listing'] = $this->listing();
 
 		//Actions
-		$data['insert'] = site_url('admin/block/add_block');
+		$data['insert'] = site_url('admin/block/add-block');
 
 		//Render
 		output($this->render('block/list', $data));

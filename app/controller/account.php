@@ -67,7 +67,7 @@ class App_Controller_Account extends Controller
 		$data['data_addresses'] = $this->customer->getShippingAddresses();
 
 		//Actions
-		$data['save'] = site_url('account/submit_update');
+		$data['save'] = site_url('account/submit-update');
 
 		//Render
 		output($this->render('account/update', $data));

@@ -27,7 +27,7 @@ class App_Controller_Admin_Page extends Controller
 
 			$data['batch_action'] = array(
 				'actions' => $actions,
-				'path'    => site_url('admin/page/batch_action'),
+				'path'    => site_url('admin/page/batch-action'),
 			);
 		}
 
@@ -139,7 +139,7 @@ class App_Controller_Admin_Page extends Controller
 		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		$page['data_themes']  = $this->theme->getThemes();
 
-		$page['url_create_layout'] = site_url('admin/page/create_layout');
+		$page['url_create_layout'] = site_url('admin/page/create-layout');
 
 		//Must set query inline, to bypass URL Aliasing.
 		$page['page_preview'] = site_url('page/preview_content?page_id=' . $page_id);
