@@ -1,5 +1,5 @@
 <?php
-class mysqlidb implements Database
+class mysqlidb implements DatabaseInterface
 {
 	private $mysqli;
 	private $error;
@@ -111,15 +111,5 @@ class mysqlidb implements Database
 	public function getLastId()
 	{
 		return $this->last_id;
-	}
-
-	public function __destruct()
-	{
-		static $called = false;
-
-		if (!$called && !empty($this->mysqli)) {
-			$called = true;
-			$this->mysqli->close();
-		}
 	}
 }

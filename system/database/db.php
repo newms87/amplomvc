@@ -34,7 +34,7 @@ class DB
 		if (!isset(self::$drivers[$key])) {
 			//the database interface
 			if (function_exists("_mod")) {
-				require_once(_mod(DIR_DATABASE . 'database.php'));
+				require_once(_mod(DIR_DATABASE . 'database_interface.php'));
 
 				if (file_exists(DIR_DATABASE . $driver . '.php')) {
 					require_once(_mod(DIR_DATABASE . $driver . '.php'));

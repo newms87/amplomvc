@@ -1,6 +1,6 @@
 <?php
-//TODO: Change file to database_inteface and calss to DatabaseInteface (update for db implementations)
-interface Database
+//TODO: Change file to database_inteface and class to DatabaseInteface (update for db implementations)
+interface DatabaseInterface
 {
 	public function getError();
 
@@ -13,6 +13,4 @@ interface Database
 	public function countAffected();
 
 	public function getLastId();
-
-	public function __destruct();
 }

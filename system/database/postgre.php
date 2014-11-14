@@ -1,5 +1,5 @@
 <?php
-final class Postgre implements Database
+final class Postgre implements DatabaseInterface
 {
 	private $link;
 	private $err_msg;
@@ -83,10 +83,5 @@ final class Postgre implements Database
 	public function getLastId()
 	{
 		return mysql_insert_id($this->link);
-	}
-
-	public function __destruct()
-	{
-		mysql_close($this->link);
 	}
 }

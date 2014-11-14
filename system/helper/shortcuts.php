@@ -705,7 +705,7 @@ function build_js($js)
 
 	ob_start();
 
-	include(DIR_SYSTEM . 'helper/builder_js.php');
+	include(DIR_RESOURCES . 'builder_js.php');
 
 	return ob_get_clean();
 }

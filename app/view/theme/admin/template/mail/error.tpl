@@ -100,9 +100,7 @@
 		message = $(this).closest('.message_preview');
 
 		message.find('input[type=hidden]').not('[name=_attachment]').each(function (i, e) {
-			$('#mail_form [name=" + $(e).attr("name') + ']'
-			).
-			val($(e).val());
+			$('#mail_form [name=' + $(e).attr("name") + ']').val($(e).val());
 		});
 
 		$.get('<?= $load_message; ?>', {mail_fail_id: message.find('[name=mail_fail_id]').val()}, function (html) {

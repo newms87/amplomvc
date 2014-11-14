@@ -1,5 +1,5 @@
 <?php
-final class SQLite implements Database
+final class SQLite implements DatabaseInterface
 {
 	private $link;
 	private $err_msg;
@@ -80,10 +80,5 @@ final class SQLite implements Database
 	public function getLastId()
 	{
 		return mysql_insert_id($this->link);
-	}
-
-	public function __destruct()
-	{
-		mysql_close($this->link);
 	}
 }
