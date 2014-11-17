@@ -17,7 +17,9 @@ class App_Model_View extends App_Model_Table
 		}
 
 		if (!empty($view['settings'])) {
-			$view['settings'] += $this->getViewSettings($view_id);
+			if ($view_id) {
+				$view['settings'] += (array)$this->getViewSettings($view_id);
+			}
 
 			$view['settings'] = serialize($view['settings']);
 		}

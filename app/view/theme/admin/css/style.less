@@ -406,93 +406,89 @@ td {
 }
 
 /* Main Navigation Links */
-#menu.links {
-  background: #414141; /* Old browsers */
-  background: -webkit-linear-gradient(top, #414141 0%, #212121 100%); /* Chrome10+,Safari5.1+ */
-  background: linear-gradient(to bottom, #414141 0%, #212121 100%); /* W3C */
+#menu {
+  &.links {
+    background: #414141; /* Old browsers */
+    background: -webkit-linear-gradient(top, #414141 0%, #212121 100%); /* Chrome10+,Safari5.1+ */
+    background: linear-gradient(to bottom, #414141 0%, #212121 100%); /* W3C */
 
-  position: relative;
-  z-index: 11;
-  clear: both;
-  padding-right: 30px;
-  overflow: visible;
+    position: relative;
+    z-index: 11;
+    clear: both;
+    padding-right: 30px;
+    overflow: visible;
 
-}
+    & > .left {
+      float: left;
+      width: 80%;
+    }
 
-#menu ul {
-  list-style: none;
-  margin: 0;
-}
+    & > .right {
+      float: right;
+      width: 20%;
+      text-align: right;
+    }
 
-#menu.links > .left {
-  float: left;
-  width: 80%;
-}
+    ul.top-menu {
+      & > li {
+        display: inline-block;
+        text-decoration: none;
 
-#menu.links > .right {
-  float: right;
-  width: 20%;
-  text-align: right;
-}
+        & > a {
+          display: inline-block;
+          color: #EEEEEE;
+          font-size: 14px;
+          text-decoration: none;
+          padding: 7px 15px;
+        }
 
-#menu.links ul.top-menu > li + li {
-  border-left: 2px ridge #545454;
-}
+        & + li {
+          border-left: 2px ridge #545454;
+        }
 
-#menu.links ul.top-menu > li {
-  display: inline-block;
-  text-decoration: none;
-  margin: 2px 0;
-  padding: 6px 0;
-}
+        &:hover {
+          background-color: black;
+          cursor: pointer;
+        }
+      }
 
-#menu.links ul.top-menu > li:hover {
-  background-color: black;
-  cursor: pointer;
-}
+      li {
+        &.active, &.active_parent {
+          background: #5B3208; /* Old browsers */
+          background: -webkit-linear-gradient(top, #B3610F 0%, #5B3208 100%); /* Chrome10+,Safari5.1+ */
+          background: linear-gradient(to bottom, #B3610F 0%, #5B3208 100%); /* W3C */
+        }
 
-#menu.links ul.top-menu > li:first-child {
-  margin-left: 0;
-}
+        ul.link-list {
+          text-align: left;
+          background: rgba(0, 0, 0, .8);
+          box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
 
-#menu.links ul.top-menu > li:last-child {
-  margin-right: 0;
-}
+          li {
+            border-radius: 0;
 
-#menu.links ul.top-menu > li > a {
-  color: #EEEEEE;
-  font-size: 14px;
-  text-decoration: none;
-  padding: 0 15px;
-}
+            & > a {
+              color: #EEEEEE;
+              font-size: 14px;
+              text-decoration: none;
+              display: block;
+              padding: 7px 10px;
+            }
 
-#menu li ul.link-list {
-  text-align: left;
-  background: rgba(0, 0, 0, .8);
-  box-shadow: rgba(0, 0, 0, .2) 3px 3px 5px, rgba(0, 0, 0, .1) -2px 0 6px, rgba(0, 0, 0, .1) 0 -2px 6px;
-}
+            &:hover {
+              background-color: black;
+            }
+          }
+        }
+      }
+    }
 
-#menu.links li ul.link-list li > a {
-  color: #EEEEEE;
-  font-size: 14px;
-  text-decoration: none;
-  display: block;
-  padding: 7px 10px;
-}
+  }
 
-#menu li ul.link-list li {
-  border-radius: 0;
-}
-
-#menu li ul.link-list li:hover {
-  background-color: black;
-}
-
-#menu li.active,
-#menu li.active_parent {
-  background: #5B3208; /* Old browsers */
-  background: -webkit-linear-gradient(top, #B3610F 0%, #5B3208 100%); /* Chrome10+,Safari5.1+ */
-  background: linear-gradient(to bottom, #B3610F 0%, #5B3208 100%); /* W3C */
+  ul {
+    list-style: none;
+    margin: 0;
+  }
 }
 
 /* General Link Functionality */
@@ -502,7 +498,7 @@ ul.link-list > li {
 
 ul.sub-menu {
   position: absolute;
-  top: 108%;
+  top: 100%;
   left: -9999px;
   min-width: 190px;
   padding: 0;
@@ -559,7 +555,7 @@ ul.sub-menu li {
   cursor: pointer;
 }
 
-ul.sub-menu li.has-children:after {
+ul.sub-menu a.has-children:after {
   content: url('@{themepath}image/arrow-right.png');
   position: absolute;
   top: 5px;
@@ -1570,7 +1566,6 @@ button, .button {
     }
   }
 }
-
 
 /* Zoom Hover */
 .zoom_hover {
@@ -3988,7 +3983,7 @@ td.log_remove .message {
     position: relative;
     z-index: 1;
     text-align: center;
-    border: 1px solid #ddd\9; /* IE 8 and below */
+    border: 1px solid #ddd \9; /* IE 8 and below */
     background-image: linear-gradient(bottom, rgb(238, 238, 238) 0%, rgb(255, 255, 255) 100%);
     background-image: -o-linear-gradient(bottom, rgb(238, 238, 238) 0%, rgb(255, 255, 255) 100%);
     background-image: -moz-linear-gradient(bottom, rgb(238, 238, 238) 0%, rgb(255, 255, 255) 100%);
