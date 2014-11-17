@@ -110,7 +110,6 @@ class Document extends Library
 			'sort_order'   => null,
 			'parent_id'    => 0,
 			'parent'       => '',
-			'attrs'        => array(),
 			'target'       => '',
 			'children'     => array(),
 		);
@@ -631,49 +630,50 @@ class Document extends Library
 				continue;
 			}
 
-			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
-				$link['attrs']['title'] = $link['title'];
-			}
-
 			if (empty($link['display_name'])) {
 				$link['display_name'] = $link['name'];
+				$link['name'] = slug($link['name'], '-');
 			}
 
-			$link['attrs']['class'] = (!empty($link['attrs']['class']) ? ' ' : '') . 'link-' . $link['name'];
+
+			$attr_fields = array(
+				'title',
+			   'href',
+			   'target',
+			   'class',
+			);
+
+			foreach ($attr_fields as $field) {
+				if (!empty($link[$field]) && !isset($link['#'.$field])) {
+					$link['#'.$field] = $link[$field];
+				}
+			}
+
+			if (empty($link['#class'])) {
+				$link['#class'] = '';
+			}
+
+			$link['#class'] .= ' link-' . $link['name'];
 
 			$children = '';
 
 			if (!empty($link['children'])) {
 				$children = $this->renderLinks($link['children'], $sort, $depth + 1);
-				$link['attrs']['class'] .= ' has-children';
-			}
-
-			$href = '';
-			if (!empty($link['href'])) {
-				$href = "href=\"$link[href]\"";
+				$link['#class'] .= ' has-children';
 			}
 
 			//Set active class
 			if (!empty($link['active'])) {
-				$link['attrs']['class'] .= ' ' . $link['active'];
+				$link['#class'] .= ' ' . $link['active'];
 			}
+
+			$link['#class'] = trim($link['#class'] . ' menu-link');
 
 			//Build attribute list
-			$attr_list = '';
+			$attrs = attrs($link);
+			$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
 
-			if (!empty($link['attrs'])) {
-				if (is_string($link['attrs'])) {
-					$attr_list .= $link['attrs'];
-				} else {
-					foreach ($link['attrs'] as $key => $value) {
-						$attr_list .= "$key=\"$value\"";
-					}
-				}
-			}
-
-			$target = !empty($link['target']) ? "target=\"$link[target]\"" : '';
-
-			$html .= "<li $attr_list style=\"z-index: " . $zindex . "\"><a $href $target class=\"menu-link\">$link[display_name]</a>$children</li>";
+			$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";
 
 			$zindex--;
 		}

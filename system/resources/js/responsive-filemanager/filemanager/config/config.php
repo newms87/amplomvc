@@ -1,9 +1,7 @@
 <?php
-session_start();
 if (function_exists('mb_internal_encoding')) {
 	mb_internal_encoding('UTF-8');
 }
-require_once('../../../../../config.php');
 
 //------------------------------------------------------------------------------
 // DON'T COPY THIS VARIABLES IN FOLDERS config.php FILES
@@ -24,10 +22,15 @@ require_once('../../../../../config.php');
 //    |   |   |   |   |- plugin.min.js
 
 $base_url     = rtrim(URL_SITE, '/'); // DON'T TOUCH (base url (only domain) of site (without final /)).
+$fm_url = URL_RESOURCES . 'js/responsive-filemanager/';
+$fm_dir = DIR_RESOURCES . 'js/responsive-filemanager/';
+
 $upload_dir   = '/image/'; // path from base_url to base of upload folder (with start and final /)
-$current_path = '../../../../../image/'; // relative path from filemanager folder to upload folder (with final /)
+$current_path = 'image/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder
 $thumbs_base_path = '../thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
+
+$fm_url_img = $fm_url . 'filemanager/img/';
 
 // OPTIONAL SECURITY
 // if set to true only those will access RF whose url contains the access key(akey) like:

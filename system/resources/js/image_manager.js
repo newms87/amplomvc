@@ -32,7 +32,7 @@ $.fn.ac_imageinput = function (options) {
             thumb = options.noimage;
 
             if ($input.val()) {
-                $.get($ac.site_url + 'admin/filemanager/filemanager/get_thumb', {image: $input.val(), width: options.width, height: options.height}, function (response) {
+                $.get($ac.site_url + 'admin/filemanager/get_thumb', {image: $input.val(), width: options.width, height: options.height}, function (response) {
                     $thumb.attr('src', response);
                 });
             }

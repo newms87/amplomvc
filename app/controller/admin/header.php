@@ -51,11 +51,13 @@ class App_Controller_Admin_Header extends Controller
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
-			if (user_can('r', 'filemanager/filemanager')) {
+			if (user_can('r', 'filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
-					'attrs'      => array('onclick' => '$.ac_filemanager();'),
+					'href'       => 'admin/filemanager',
+					'#data-ajax' => 'iframe',
+					//'attrs'      => array('onclick' => '$.ac_filemanager();'),
 				);
 
 				$this->document->addLink('admin', $link_image_manager);
