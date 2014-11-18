@@ -44,7 +44,9 @@ if ($last_update) {
 }
 
 //Model History
-$model_history = option('model_history');
+if (!$model_history) {
+	$model_history = option('model_history');
+}
 
 //Verify the necessary directories are writable
 if (!_is_writable(DIR_IMAGE, $dir_error, option('config_image_dir_mode'))) {

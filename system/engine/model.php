@@ -198,21 +198,28 @@ abstract class Model
 
 		$values = $this->getInsertString($table, $data, false);
 
-		$table = $this->escape($table);
-
 		$success = $this->query("INSERT INTO `" . $this->prefix . "$table` SET $values");
 
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
 
 			if ($this->hasError('query')) {
-				trigger_error($this->getError('query'));
+				$this->error['query'] = $this->getError('query');
+				trigger_error($this->error['query']);
 			}
 
 			return false;
 		}
 
 		$row_id = $this->getLastId();
+
+		if (!$row_id) {
+			$primary_key = $this->getPrimaryKey($table);
+
+			if ($primary_key && isset($data[$primary_key])) {
+				$row_id = $data[$primary_key];
+			}
+		}
 
 		if ($model_history && in_array($table, $model_history)) {
 			$this->addHistory($table, $row_id, 'insert', $data, true);
@@ -251,8 +258,6 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, '', '', true);
 
-		$table = $this->escape($table);
-
 		$success = $this->query("UPDATE `" . $this->prefix . "$table` SET $values WHERE $where");
 
 		if (!$success) {
@@ -280,8 +285,6 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		$table = $this->escape($table);
-
 		$success = $this->query("DELETE FROM `" . $this->prefix . "$table` WHERE $where");
 
 		if (!$success) {
@@ -308,7 +311,7 @@ abstract class Model
 			}
 
 			if ($delete_id) {
-				$this->addHistory($table, $delete_id, 'update', $data, true);
+				$this->addHistory($table, $delete_id, 'delete', $data, true);
 			}
 		}
 

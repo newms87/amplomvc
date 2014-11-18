@@ -67,7 +67,7 @@ class Curl extends Library
 				CURLOPT_MAXREDIRS      => 10,
 				// stop after 10 redirects
 				CURLOPT_POST           => 1,
-				CURLOPT_POSTFIELDS     => $data,
+				CURLOPT_POSTFIELDS     => http_build_query($data),
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_VERBOSE        => 1,
 				CURLOPT_FORBID_REUSE   => 1,

@@ -196,7 +196,7 @@ function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default
 		);
 	}
 
-	$max_x   = max(array_keys($srcsets));
+	$max_x = max(array_keys($srcsets));
 	$image = $srcsets[$max_x];
 
 	if (!is_file($image)) {
@@ -333,7 +333,7 @@ function cast_title($name)
 {
 	$title = array_map(function ($a) {
 		return ucfirst($a);
-	}, explode('_', str_replace('-','_',$name)));
+	}, explode('_', str_replace('-', '_', $name)));
 
 	return implode(' ', $title);
 }
@@ -500,9 +500,16 @@ function attrs($data)
 	return $html;
 }
 
-function build($type, $params)
+function build($type, $params = null)
 {
+	if (!is_array($type)) {
+		$params['type'] = $type;
+	} else {
+		$params = $type;
+	}
+
 	$params += array(
+		'type'     => 'select',
 		'name'     => '',
 		'data'     => null,
 		'select'   => array(),
@@ -516,6 +523,7 @@ function build($type, $params)
 		return;
 	}
 
+	$type        = $params['type'];
 	$data        = $params['data'];
 	$name        = $params['name'];
 	$select      = $params['select'];

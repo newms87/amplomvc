@@ -184,6 +184,20 @@ class App_Model_User extends Model
 		return $data;
 	}
 
+	public function getMetaData($user_id)
+	{
+		$metadata = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+
+		foreach ($metadata as &$m) {
+			if ($m['serialized']) {
+				$m['value'] = unserialize($m['value']);
+			}
+		}
+		unset($m);
+
+		return $metadata;
+	}
+
 	public function getUserByUsername($username)
 	{
 		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
