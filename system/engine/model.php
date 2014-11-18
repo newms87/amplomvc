@@ -2,6 +2,8 @@
 
 abstract class Model
 {
+	static $model = array();
+
 	protected $db, $prefix, $error = array();
 
 	const
@@ -138,16 +140,21 @@ abstract class Model
 
 	protected function queryTotal($sql, $index = null, $use_calc_found_rows = null)
 	{
-		$this->parseOutSelect($sql, $select);
+		if (!$this->query->parse($sql)) {
+			return false;
+		}
+
+		$select = $this->query->getClause('select', false);
+		$the_rest = substr($sql, $this->query->getOffset('from'));
 
 		if (is_null($use_calc_found_rows)) {
-			$use_calc_found_rows = $this->useCalcFoundRows("SELECT $select $sql");
+			$use_calc_found_rows = $this->useCalcFoundRows($sql);
 		}
 
 		if ($use_calc_found_rows) {
-			$query = "SELECT SQL_CALC_FOUND_ROWS $select $sql";
+			$query = "SELECT SQL_CALC_FOUND_ROWS $select $the_rest";
 		} else {
-			$query = "SELECT $select $sql";
+			$query = $sql;
 		}
 
 		$rows = $this->queryRows($query, $index);
@@ -155,7 +162,8 @@ abstract class Model
 		if ($use_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
-			$total = $this->queryVar("SELECT COUNT(*) $sql");
+			$the_rest = $this->query->getClauses('from', 'where', 'group by', 'having');
+			$total = $this->queryVar("SELECT COUNT(*) $the_rest");
 		}
 
 		return array(
@@ -312,11 +320,11 @@ abstract class Model
 		if ($table !== 'history') {
 			$history = array(
 				'user_id' => $this->user->getId(),
-				'table' => $table,
-				'row_id' => $row_id,
+				'table'   => $table,
+				'row_id'  => $row_id,
 				'action'  => $action,
 				'data'    => json_encode($data),
-				'date' => $this->date->now(),
+				'date'    => $this->date->now(),
 			);
 
 			if ($message) {
@@ -535,7 +543,7 @@ abstract class Model
 						}
 
 						$where .= " AND (" . implode(" OR ", $likes) . ")";
-					}  else {
+					} else {
 						$where .= " AND `$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($value) . "%'";
 					}
 					break;
@@ -544,13 +552,13 @@ abstract class Model
 				case 'float':
 				case 'int':
 					if (is_array($value)) {
-						$low = (isset($value['low']) && $value['low'] !== '') ? ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : false;
+						$low  = (isset($value['low']) && $value['low'] !== '') ? ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : false;
 						$high = (isset($value['high']) && $value['high'] !== '') ? ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : false;
 
 						if ($low !== false && $high !== false) {
 							if ($high < $low) {
 								$temp = $low;
-								$low = $high;
+								$low  = $high;
 								$high = $temp;
 							}
 
@@ -579,7 +587,7 @@ abstract class Model
 				case 'time':
 					if (is_array($value)) {
 						$start = !empty($value['start']) ? format('date', $value['start']) : false;
-						$end = !empty($value['end']) ? format('date', $value['end']) : false;
+						$end   = !empty($value['end']) ? format('date', $value['end']) : false;
 
 						if (!$start && !$end) {
 							array_walk($value, function (&$a) use ($type) {
@@ -590,8 +598,8 @@ abstract class Model
 						} else {
 							if ($start && $end) {
 								if ($this->date->isAfter($start, $end)) {
-									$temp = $end;
-									$end = $start;
+									$temp  = $end;
+									$end   = $start;
 									$start = $temp;
 								}
 
@@ -621,15 +629,15 @@ abstract class Model
 		return $where;
 	}
 
-	protected function extractOrderLimit($data)
+	protected function extractOrderLimit($data, $table = null)
 	{
 		return array(
-			$this->extractOrder($data),
+			$this->extractOrder($data, $table),
 			$this->extractLimit($data),
 		);
 	}
 
-	protected function extractOrder($data)
+	protected function extractOrder($data, $table = null)
 	{
 		if (empty($data['sort'])) {
 			return '';
@@ -646,9 +654,23 @@ abstract class Model
 
 		foreach ($data['sort'] as $sort => $ord) {
 			$sort = $this->escape($sort);
+			$t = '';
+
+			if ($table) {
+				if (is_array($table)) {
+					foreach ($table as $tbl => $name) {
+						if ($this->hasColumn($tbl, $sort)) {
+							$t = $name;
+							break;
+						}
+					}
+				} else {
+					$t = $table;
+				}
+			}
 
 			if (strpos($sort, '.') === false) {
-				$sort = "`" . $sort . "`";
+				$sort = ($t ? "`$t`." : '') . "`$sort`";
 			}
 
 			$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
@@ -656,7 +678,7 @@ abstract class Model
 			$order .= ($order ? ',' : '') . "$sort $ord";
 		}
 
-		return "ORDER BY $order";
+		return $order ? "ORDER BY $order" : '';
 	}
 
 	protected function extractLimit($data)
@@ -674,100 +696,6 @@ abstract class Model
 		}
 
 		return $limit;
-	}
-
-	protected function parseOutSelect(&$sql, &$select)
-	{
-		if (!preg_match("/^SELECT /i", $sql)) {
-			return false;
-		}
-
-		$sql = substr($sql, 7);
-
-		$from = '';
-		$escape = false;
-		$quote = '';
-		$paren = 0;
-
-		for ($i=0;$i<strlen($sql);$i++) {
-			$is_from = false;
-			$c = $sql[$i];
-
-			switch($c) {
-				case '\\':
-					$escape = !$escape;
-					break;
-
-				case '`':
-				case '"':
-				case '\'':
-					if ($quote === $c) {
-						if (!$escape) {
-							$quote = '';
-						}
-					} elseif (!$quote) {
-						$quote = $c;
-					}
-					break;
-
-				case '(':
-				case ')':
-					if (!$quote) {
-						if ($paren && $c === ')') {
-							$paren--;
-						} elseif ($c === '(') {
-							$paren++;
-						}
-					}
-					break;
-
-				default:
-					if (!$quote && !$paren) {
-						switch ($from) {
-							case '':
-								if ($i > 0 && $sql[$i-1] === ' ' && strpos("Ff", $c) !== false) {
-									$from = 'F';
-									$is_from = true;
-								}
-								break;
-
-							case 'F':
-								if (strpos("Rr", $c) !== false) {
-									$from .= 'R';
-									$is_from = true;
-								}
-								break;
-
-							case 'FR':
-								if (strpos("Oo", $c) !== false) {
-									$from .= 'O';
-									$is_from = true;
-								}
-								break;
-
-							case 'FRO':
-								if (isset($sql[$i+1]) && $sql[$i+1] === ' ' && strpos("Mm", $c) !== false) {
-									$from .= 'M';
-								}
-								break;
-						}
-					}
-
-					break;
-			}
-
-			if ($from === 'FROM') {
-				$select = substr($select, 0, strlen($select) - 3);
-				$sql    = str_replace($select, '', $sql);
-				return true;
-			} elseif (!$is_from && $from) {
-				$from = '';
-			}
-
-			$select .= $c;
-		}
-
-		return false;
 	}
 
 	protected function hasIndex($table, $fields)
@@ -915,88 +843,98 @@ abstract class Model
 		return $columns;
 	}
 
+	public function hasColumn($table, $column)
+	{
+		$model = $this->getTableModel($table);
+		return isset($model['columns'][$column]);
+	}
+
 	public function getTableModel($table)
 	{
 		$table  = $this->db->hasTable($table);
 		$schema = $this->db->getName();
 
-		$table_model = cache('model.' . $schema . '.' . $table);
+		if (empty(self::$model[$schema][$table])) {
+			$model = cache('model.' . $schema . '.' . $table);
 
-		if (!$table_model) {
-			$name = $this->escape($table);
+			if (!$model) {
+				$name = $this->escape($table);
 
-			$table_model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$name'");
+				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$name'");
 
-			$columns = $this->db->getTableColumns($table);
+				$columns = $this->db->getTableColumns($table);
 
-			$indexes = $this->queryRows("SHOW INDEX FROM `$name`");
+				$indexes = $this->queryRows("SHOW INDEX FROM `$name`");
 
-			foreach ($columns as &$column) {
-				$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
+				foreach ($columns as &$column) {
+					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
 
-				$cast = array(
-					'bigint'    => self::INTEGER,
-					'mediumint' => self::INTEGER,
-					'smallint'  => self::INTEGER,
-					'tinyint'   => self::INTEGER,
-					'int'       => self::INTEGER,
-					'decimal'   => self::FLOAT,
-					'float'     => self::FLOAT,
-					'double'    => self::FLOAT,
-					'datetime'  => self::DATETIME,
-					'timestamp' => self::INTEGER,
-					'binary'    => self::NO_ESCAPE,
-					'varbinary' => self::NO_ESCAPE,
-				);
+					$cast = array(
+						'bigint'    => self::INTEGER,
+						'mediumint' => self::INTEGER,
+						'smallint'  => self::INTEGER,
+						'tinyint'   => self::INTEGER,
+						'int'       => self::INTEGER,
+						'decimal'   => self::FLOAT,
+						'float'     => self::FLOAT,
+						'double'    => self::FLOAT,
+						'datetime'  => self::DATETIME,
+						'timestamp' => self::INTEGER,
+						'binary'    => self::NO_ESCAPE,
+						'varbinary' => self::NO_ESCAPE,
+					);
 
-				$type = isset($cast[$type]) ? $cast[$type] : self::TEXT;
+					$type = isset($cast[$type]) ? $cast[$type] : self::TEXT;
 
-				if ($column['Key'] === 'PRI' && $type === self::INTEGER) {
-					if ($column['Extra'] === 'auto_increment') {
-						$type = self::AUTO_INCREMENT_PK;
+					if ($column['Key'] === 'PRI' && $type === self::INTEGER) {
+						if ($column['Extra'] === 'auto_increment') {
+							$type = self::AUTO_INCREMENT_PK;
+						} else {
+							$type = self::PRIMARY_KEY_INTEGER;
+						}
+					} elseif ($column['Extra'] === 'auto_increment') {
+						$type = self::AUTO_INCREMENT;
+					} elseif (strtolower($column['Field']) === 'image') {
+						$type = self::IMAGE;
+					}
+
+					$column['type']     = $type;
+					$column['sortable'] = true;
+					$column['filter']   = true;
+
+					$field = explode('_', $column['Field']);
+					array_walk($field, function (&$a) {
+						$a = ucfirst($a);
+					});
+
+					$column['display_name'] = implode(' ', $field);
+
+					$length = null;
+					if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {
+						$column['Type']   = $length[1];
+						$column['Length'] = (int)$length[2];
 					} else {
-						$type = self::PRIMARY_KEY_INTEGER;
+						$column['Length'] = 0;
 					}
-				} elseif ($column['Extra'] === 'auto_increment') {
-					$type = self::AUTO_INCREMENT;
-				} elseif (strtolower($column['Field']) === 'image') {
-					$type = self::IMAGE;
-				}
 
-				$column['type']     = $type;
-				$column['sortable'] = true;
-				$column['filter']   = true;
-
-				$field = explode('_', $column['Field']);
-				array_walk($field, function (&$a) {
-					$a = ucfirst($a);
-				});
-
-				$column['display_name'] = implode(' ', $field);
-
-				$length = null;
-				if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {
-					$column['Type']   = $length[1];
-					$column['Length'] = (int)$length[2];
-				} else {
-					$column['Length'] = 0;
-				}
-
-				foreach ($indexes as $index) {
-					if ($index['Column_name'] === $column['Field']) {
-						$column['Index'][] = $index;
+					foreach ($indexes as $index) {
+						if ($index['Column_name'] === $column['Field']) {
+							$column['Index'][] = $index;
+						}
 					}
 				}
+				unset($column);
+
+				$model['columns'] = $columns;
+				$model['indexes'] = $indexes;
+
+				cache('model.' . $schema . '.' . $table, $model);
 			}
-			unset($column);
 
-			$table_model['columns'] = $columns;
-			$table_model['indexes'] = $indexes;
-
-			cache('model.' . $schema . '.' . $table, $table_model);
+			self::$model[$schema][$table] = $model;
 		}
 
-		return $table_model;
+		return self::$model[$schema][$table];
 	}
 
 	protected function getPrimaryKey($table)
