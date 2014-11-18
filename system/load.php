@@ -44,6 +44,8 @@ if ($last_update) {
 }
 
 //Model History
+global $model_history;
+
 if (!$model_history) {
 	$model_history = option('model_history');
 }
