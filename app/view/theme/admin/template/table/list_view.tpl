@@ -34,8 +34,7 @@
 							$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
 							$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
 							?>
-							<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>"
-							   class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
+							<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
 						<? } else { ?>
 							<span><?= $column['display_name']; ?></span>
 						<? } ?>

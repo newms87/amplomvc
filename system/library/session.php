@@ -92,23 +92,18 @@ class Session extends Library
 	{
 		$this->deleteCookie('token');
 
-		$this->deleteCookie(AMPLO_SESSION);
-
 		$this->end();
 	}
 
 	public function end()
 	{
 		$to_save = array(
-			'messages',
-			'language',
+			'messages' => 1,
+			'language' => 1,
+			'redirect' => 1,
 		);
 
-		foreach ($_SESSION as $key => $s) {
-			if (!in_array($key, $to_save)) {
-				unset($_SESSION[$key]);
-			}
-		}
+		$_SESSION = array_intersect_key($_SESSION, $to_save);
 	}
 
 	public function getCookie($name)

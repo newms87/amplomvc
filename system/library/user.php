@@ -76,6 +76,8 @@ class User extends Library
 
 		$this->logout();
 
+		$this->request->setRedirect($this->url->here());
+
 		return false;
 	}
 
