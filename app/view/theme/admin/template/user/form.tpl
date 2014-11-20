@@ -97,12 +97,14 @@
 							<div class="meta-key" contenteditable><?= $row; ?></div>
 						</td>
 						<td>
-							<? if (isset($m['build'])) { ?>
-								<?= build($m['build']); ?>
-							<? } elseif (_is_object($m['value'])) { ?>
-								<?= _l("(Object cannot be edited)"); ?>
+							<? if (_is_object($m)) { ?>
+								<? if (isset($m['build'])){ ?>
+									<?= build($m['build']); ?>
+								<? } else { ?>
+									<?= _l("(Object cannot be edited)"); ?>
+								<? } ?>
 							<? } else { ?>
-								<input class="meta-value" type="text" name="meta[<?= $row; ?>]" value="<?= $m['value']; ?>"/>
+								<input class="meta-value" type="text" name="meta[<?= $row; ?>]" value="<?= $m; ?>"/>
 							<? } ?>
 						</td>
 						<td>

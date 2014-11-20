@@ -2,7 +2,7 @@
 
 class App_Model_User extends Model
 {
-	public function save($user_id, $data)
+	public function save($user_id, $user)
 	{
 		if (isset($user['username'])) {
 			if (!validate('text', $user['username'], 3, 128)) {
@@ -35,41 +35,43 @@ class App_Model_User extends Model
 		}
 
 		//Ensure password is set for new user (can be encrypted_password), or check if updating password
-		if ((!$user_id && empty($user['encrypted_password'])) || isset($user['password'])) {
-			if (!isset($user['password'])) {
-				$this->error['password'] = _l("You must enter a password");
-			} elseif (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-				$this->error['password'] = $this->validation->getError();
+		if (isset($user['password'])) {
+			if (!$user_id || !empty($user['password'])) {
+				if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+					$this->error['password'] = $this->validation->getError();
+				}
 			}
+		} elseif (!$user_id && empty($user['encrypted_password'])) {
+			$this->error['password'] = _l("You must enter a password");
 		}
 
 		if ($this->error) {
 			return false;
 		}
 
-		if (isset($data['password'])) {
-			$data['password'] = $this->user->encrypt($data['password']);
-		} elseif (isset($data['encrypted_password'])) {
-			$data['password'] = $data['encrypted_password'];
+		if (isset($user['password'])) {
+			$user['password'] = $this->user->encrypt($user['password']);
+		} elseif (isset($user['encrypted_password'])) {
+			$user['password'] = $user['encrypted_password'];
 		}
 
 		$this->cache->delete('user');
 
 		//New User
 		if (!$user_id) {
-			$data['date_added'] = $this->date->now();
-			$user_id            = $this->insert('user', $data);
+			$user['date_added'] = $this->date->now();
+			$user_id            = $this->insert('user', $user);
 		} else {
 			//Update User
-			$user_id = $this->update('user', $data, $user_id);
+			$user_id = $this->update('user', $user, $user_id);
 		}
 
-		if (!empty($data['meta_exactly']) && !isset($data['meta'])) {
-			$data['meta'] = array();
+		if (!empty($user['meta_exactly']) && !isset($user['meta'])) {
+			$user['meta'] = array();
 		}
 
-		if (isset($data['meta'])) {
-			$this->setMeta($user_id, $data['meta'], !empty($data['meta_exactly']));
+		if (isset($user['meta'])) {
+			$this->setMeta($user_id, $user['meta'], !empty($user['meta_exactly']));
 		}
 
 		return $user_id;
@@ -165,37 +167,22 @@ class App_Model_User extends Model
 	public function getMeta($user_id, $key = null)
 	{
 		if ($key) {
-			return $this->queryVar("SELECT `value` FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+			$value = $this->queryRow("SELECT `value`, serialized FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			if ($value) {
+				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
+			}
+
+			return null;
 		}
 
 		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
 
-		$data = array();
-
 		foreach ($meta as &$m) {
-			if ($m['serialized']) {
-				$m['value'] = unserialize($m['value']);
-			}
-
-			$data[$m['key']] = $m['value'];
+			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];
 		}
 		unset($m);
 
-		return $data;
-	}
-
-	public function getMetaData($user_id)
-	{
-		$metadata = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
-
-		foreach ($metadata as &$m) {
-			if ($m['serialized']) {
-				$m['value'] = unserialize($m['value']);
-			}
-		}
-		unset($m);
-
-		return $metadata;
+		return $meta;
 	}
 
 	public function getUserByUsername($username)
