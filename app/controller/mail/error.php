@@ -15,20 +15,11 @@ class App_Controller_Mail_Error extends Controller
 
 		$data += $defaults;
 
-		$this->mail->init();
+		send_mail($data);
 
-		$this->mail->setTo($data['to']);
-		$this->mail->setCc($data['cc']);
-		$this->mail->setBcc($data['bcc']);
-		$this->mail->setFrom($data['from']);
-		$this->mail->setSender($data['sender']);
-		$this->mail->setSubject($data['subject']);
-		$this->mail->setText($data['text']);
+		$data['text'] = '';
+		$data['html'] = $error_msg;
 
-		$this->mail->send();
-
-		$this->mail->setText('');
-		$this->mail->setHtml($error_msg);
-		$this->mail->send();
+		send_mail($data);
 	}
 }

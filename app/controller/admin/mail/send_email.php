@@ -1,7 +1,6 @@
 <?php
 class App_Controller_Admin_Mail_SendEmail extends Controller
 {
-
 	public function index()
 	{
 		$this->document->setTitle(_l("Send Email"));
@@ -68,13 +67,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 			$mail['text'] = htmlentities($mail['message']);
 		}
 
-		$this->mail->init($mail);
-
-		if (!$this->mail->send()) {
-			return false;
-		}
-
-		return true;
+		return send_mail($mail);
 	}
 
 	public function validate()

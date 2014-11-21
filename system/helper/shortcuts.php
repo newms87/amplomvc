@@ -164,6 +164,14 @@ function render_message($type = null, $close = null)
 	return $registry->get('message')->render($type, $close);
 }
 
+function send_mail($params)
+{
+	global $registry;
+	$mail = $registry->get('mail');
+	$mail->init($params);
+	return $mail->send();
+}
+
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;

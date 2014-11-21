@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Mail_NewCustomer extends Controller
 {
 	public function index($customer)
@@ -24,7 +25,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		$data['header'] = array(
 			'store' => $store,
-		   'title' => _l("Customer Registration"),
+			'title' => _l("Customer Registration"),
 		);
 
 		//If the customer did not generate their own password
@@ -36,22 +37,20 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		$data['store'] = $store;
 
-		$this->mail->init();
+		$mail = array(
+			'to'      => $customer['email'],
+			'subject' => html_entity_decode($subject, ENT_QUOTES, 'UTF-8'),
+			'html'    => $this->render('mail/new_customer', $data),
+		);
 
-		$this->mail->setTo($customer['email']);
-		$this->mail->setFrom(option('config_email'));
-		$this->mail->setSender(option('config_name'));
-		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-
-		$this->mail->setHtml($this->render('mail/new_customer', $data));
-
-		$this->mail->send();
+		send_mail($mail);
 
 		// Send to main admin email if new account email is enabled
 		if (option('config_account_mail')) {
-			$this->mail->setTo(option('config_email'));
-			$this->mail->setCc(option('config_alert_emails'));
-			$this->mail->send();
+			$mail['to'] = option('config_email');
+			$mail['cc'] = option('config_alert_emails');
+
+			send_mail($mail);
 		}
 	}
 }

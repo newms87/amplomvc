@@ -30,10 +30,8 @@ class App_Controller_Mail_Reports extends Controller
 
 		$data['store'] = $store;
 
-		$this->mail->init($data);
+		$data['html'] = $this->render('mail/reports', $data, 'admin');
 
-		$this->mail->setHtml($this->render('mail/reports', $data, 'admin'));
-
-		$this->mail->send();
+		send_mail($data);
 	}
 }

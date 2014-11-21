@@ -210,11 +210,13 @@ class Mail extends Library
 		}
 
 		if (!$this->from) {
-			$this->from = 'info@' . DOMAIN;
+			$from = option('config_email');
+			$this->from = $from ? $from : 'info@' . DOMAIN;
 		}
 
 		if (!$this->sender) {
-			$this->sender = $this->from;
+			$sender = option('config_name');
+			$this->sender = $sender ? $sender : $this->from;
 		}
 
 		if (!$this->subject) {

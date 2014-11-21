@@ -61,11 +61,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 				$mail['text'] = htmlentities($message['text']);
 			}
 
-			$this->mail->init();
-
-			$this->mail->setData($mail);
-
-			if ($this->mail->send()) {
+			if (send_mail($mail)) {
 				message('success', _l("Successfully resent the message!"));
 			}
 		}
