@@ -31,15 +31,6 @@ final class Registry
 			return $this;
 		}
 
-		//TODO: Integrate this.... hack to incorporate AWS AutoLoading
-		if (strpos($class, '\\') !== false) {
-			$file = DIR_RESOURCES . 'aws/' . $class . '.php';
-			if (is_file($file)) {
-				require_once($file);
-				return;
-			}
-		}
-
 		//Check for file in library
 		$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
 
@@ -75,6 +66,13 @@ final class Registry
 			if ($return_instance) {
 				return new $class();
 			}
+
+			return true;
+		}
+
+		//Load from Resources
+		if (is_file(DIR_RESOURCES . $class . '.php')) {
+			require_once(DIR_RESOURCES . $class . '.php');
 
 			return true;
 		}

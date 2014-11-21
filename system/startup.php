@@ -166,8 +166,16 @@ while (($helper = readdir($handle))) {
 		continue;
 	}
 
+	//Load these last
+	if ($helper === 'core.php' || $helper === 'shortcuts.php') {
+		continue;
+	}
+
 	if (is_file(DIR_SYSTEM . 'helper/' . $helper)) {
 		require_once(_mod(DIR_SYSTEM . 'helper/' . $helper));
 	}
 }
+
+require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
+require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 

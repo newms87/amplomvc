@@ -1,4 +1,13 @@
 <?php
+//TODO: Maybe make this our main handler for loading (move out of registry)??
+if (!function_exists('amplo_autoload')) {
+	function amplo_autoload($class) {
+		global $registry;
+		$registry->loadClass($class, false);
+	}
+}
+
+spl_autoload_register('amplo_autoload');
 
 if (!function_exists('array_column')) {
 	/**
@@ -371,6 +380,10 @@ HTML;
 	}
 }
 
+//Register Error Handler
+set_error_handler('amplo_error_handler');
+
+//Amplo Time handling
 if (!defined("AMPLO_TIME_LOG")) {
 	define("AMPLO_TIME_LOG", false);
 }

@@ -427,6 +427,20 @@ function user_can($level, $path)
 	return $registry->get('user')->can($level, $path);
 }
 
+/**
+ * Check if current user's role is in the 1 or more provided roles
+ *
+ * @param string $role - The Role to check (can enter 1 or more role parameters)
+ * @param string $role2 - Additional roles to check.
+ *
+ * @return bool - true if the user's role matches any of the provided roles.
+ */
+function user_is($role)
+{
+	global $registry;
+	return in_array($registry->get('user')->info('role'), func_get_args());
+}
+
 function user_info($key = null)
 {
 	global $registry;

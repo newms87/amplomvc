@@ -10,19 +10,19 @@ if (!defined("AMPLO_FILE_MODE")) {
 	define("AMPLO_FILE_MODE", 0755);
 }
 
-//TODO: do we allow different modes?
 function _is_writable($dir, &$error = null)
 {
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
 			mkdir($dir, AMPLO_DIR_MODE, true);
-			chmod($dir, AMPLO_DIR_MODE);
+
+			if (!is_dir($dir)) {
+				$error = "Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.";
+				return false;
+			}
 		}
 
-		if (!is_dir($dir)) {
-			$error = "Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.";
-			return false;
-		} else {
+		 if (!strpos($dir, '://')) {
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
 			if (!is_file($t_file)) {

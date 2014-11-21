@@ -7,12 +7,6 @@ $registry = new Registry();
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
-//TODO: Maybe make this our main handler for loading (move out of registry)??
-spl_autoload_register(function ($class) {
-	global $registry;
-	$registry->loadClass($class, false);
-});
-
 //Initialize Router
 $router = new Router();
 $registry->set('route', $router);
@@ -28,9 +22,6 @@ $registry->set('cache', $cache);
 
 //config is self assigning to registry.
 $config = new Config();
-
-//Error Handler
-set_error_handler('amplo_error_handler');
 
 //Setup Cache ignore list
 $cache->ignore(option('config_cache_ignore'));
@@ -51,10 +42,6 @@ if (!$model_history) {
 }
 
 //Verify the necessary directories are writable
-if (!_is_writable(DIR_IMAGE, $dir_error, option('config_image_dir_mode'))) {
-	trigger_error($dir_error);
-	die ($dir_error);
-}
 if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, option('config_image_dir_mode'))) {
 	trigger_error($dir_error);
 	die ($dir_error);
