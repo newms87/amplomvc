@@ -58,10 +58,20 @@ abstract class Model
 	public function getError($type = null)
 	{
 		if ($type) {
-			return isset($this->error[$type]) ? $this->error[$type] : null;
+			$error = isset($this->error[$type]) ? $this->error[$type] : null;
+
+			if ($error) {
+				unset($this->error[$type]);
+			}
+
+			return $error;
 		}
 
-		return $this->error;
+		$error = $this->error;
+
+		$this->error = array();
+
+		return $error;
 	}
 
 	public function clearErrors()
