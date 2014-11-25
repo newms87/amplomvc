@@ -331,12 +331,27 @@ abstract class Model
 	public function addHistory($table, $row_id, $action, $data, $message = null)
 	{
 		if ($table !== 'history') {
+			$columns = $this->getTableColumns($table);
+			$data = array_intersect_key($data, $columns);
+
+			$json_data = json_encode($data);
+
+			if (strlen($json_data) > 2000) {
+				$dir = DIR_SYSTEM . 'history/' . date('Y-m') . '/' . uniqid();
+
+				if (_is_writable($dir)) {
+					$history_file = $dir . uniqid();
+					file_put_contents($history_file, $json_data);
+					$json_data = $history_file;
+				}
+			}
+
 			$history = array(
 				'user_id' => $this->user->getId(),
 				'table'   => $table,
 				'row_id'  => $row_id,
 				'action'  => $action,
-				'data'    => json_encode($data),
+				'data'    => $json_data,
 				'date'    => $this->date->now(),
 			);
 
@@ -395,7 +410,6 @@ abstract class Model
 	protected function getEscapedValues($table, $data, $auto_inc = true)
 	{
 		$columns = $this->getTableColumns($table);
-
 		$data = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {
