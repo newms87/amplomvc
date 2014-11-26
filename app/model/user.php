@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_User extends Model
+class App_Model_User extends App_Model_Table
 {
+	protected $table = 'user', $primary_key = 'user_id';
+
 	public function save($user_id, $user)
 	{
 		if (isset($user['username'])) {
@@ -193,12 +195,10 @@ class App_Model_User extends Model
 	public function getUsers($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
 		//Select
-		if (!$select) {
-			$select = '*';
-		}
+		$select = $this->extractSelect($this->table, $select);
 
 		//From
-		$from = DB_PREFIX . "user";
+		$from = $this->p_table;
 
 		//Where
 		if (isset($filter['user_role'])) {
@@ -219,7 +219,7 @@ class App_Model_User extends Model
 			}
 		}
 
-		$where = $this->extractWhere('user', $filter);
+		$where = $this->extractWhere($this->table, $filter);
 
 		if (isset($filter['name'])) {
 			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
