@@ -74,6 +74,7 @@ date_default_timezone_set(DEFAULT_TIMEZONE);
 
 //Date Constants
 define('DATETIME_ZERO', '0000-00-00 00:00:00');
+define('DATE_ZERO', '0000-00-00');
 define("AC_DATE_STRING", 1);
 define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
