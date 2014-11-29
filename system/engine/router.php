@@ -58,7 +58,7 @@ final class Router
 		$this->config->set('store_id', -1);
 
 		if (count($this->segments) === 1) {
-			$this->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/common/home');
+			$this->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index');
 		}
 
 		//Initialize site configurations

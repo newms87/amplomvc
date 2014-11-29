@@ -319,7 +319,7 @@ if (!function_exists('amplo_error_handler')) {
 	function amplo_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 	{
 		// error was suppressed with the @-operator
-		if (!ini_get('display_errors') || 0 === error_reporting()) {
+		if (0 === error_reporting()) {
 			return false;
 		}
 
@@ -350,7 +350,7 @@ if (!function_exists('amplo_error_handler')) {
 		}
 
 		if ($error) {
-			if (option('config_error_display')) {
+			if (ini_get('display_errors')) {
 				$stack = get_caller(1, 10);
 
 				echo <<<HTML

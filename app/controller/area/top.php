@@ -9,7 +9,7 @@ class App_Controller_Area_Top extends Controller
 		$blocks = array();
 
 		foreach ($instances as $name => $instance) {
-			$blocks[] = $this->block->render($instance['path'], $name);
+			$blocks[] = block($instance['path'], $name);
 		}
 
 		$data = array(

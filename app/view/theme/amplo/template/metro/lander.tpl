@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 
 <section id="home-page" class="content">
 
@@ -103,4 +103,4 @@
 
 </section>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

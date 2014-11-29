@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 
 <section id="reset-password-page" class="content">
 	<header class="row top-row">
@@ -40,4 +40,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

@@ -1,4 +1,4 @@
-<?= call('common/header', array('disable_messages' => 1)); ?>
+<?= call('header', array('disable_messages' => 1)); ?>
 <?= area('left'); ?>
 <?= area('right'); ?>
 
@@ -119,4 +119,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

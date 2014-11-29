@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 <?= area('left') . area('right'); ?>
 
 <section id="home-page" class="home-video content">
@@ -25,4 +25,4 @@
 
 </section>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

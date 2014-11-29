@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
@@ -27,4 +27,4 @@
 	<?= area('bottom'); ?>
 </section>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

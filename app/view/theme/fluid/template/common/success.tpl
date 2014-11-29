@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 <div class="content">
 	<?= IS_AJAX ? '' : breadcrumbs(); ?>
@@ -16,4 +16,4 @@
 	<?= area('bottom'); ?>
 </div>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

@@ -1,4 +1,4 @@
-<?= call('common/header'); ?>
+<?= call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
 <? if ($style) { ?>
@@ -33,4 +33,4 @@
 	<?= area('bottom'); ?>
 </section>
 
-<?= call('common/footer'); ?>
+<?= call('footer'); ?>

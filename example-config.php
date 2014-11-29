@@ -28,7 +28,7 @@ define('DIR_DOWNLOAD', DIR_SITE . 'download/');
 define('DIR_LOGS', DIR_SITE . 'system/logs/');
 
 //The default page to show when your site is accessed via the base URL. (eg: http://your-domain.com/)
-define("DEFAULT_PATH", 'common/home');
+define("DEFAULT_PATH", 'index');
 
 //The page to show when no page controller is found (eg: https://your-domain.com/unknown-url)
 define("ERROR_404_PATH", 'error/not_found');
