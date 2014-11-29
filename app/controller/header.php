@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Common_Header extends Controller
+class App_Controller_Header extends Controller
 {
 	public function index($settings = array())
 	{
@@ -66,6 +66,6 @@ class App_Controller_Common_Header extends Controller
 		$settings['multi_currency'] = option('config_multi_currency');
 
 		//Render
-		$this->render('common/header', $settings);
+		$this->render('header', $settings);
 	}
 }

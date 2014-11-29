@@ -1,5 +1,5 @@
 <?php
-class App_Controller_Admin_Common_Home extends Controller
+class App_Controller_Admin_Index extends Controller
 {
 	public function index()
 	{
@@ -9,6 +9,6 @@ class App_Controller_Admin_Common_Home extends Controller
 
 		$data = array();
 
-		output($this->render('common/home', $data));
+		output($this->render('index', $data));
 	}
 }
