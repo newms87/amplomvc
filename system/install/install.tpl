@@ -19,16 +19,17 @@
 				<h1><?= _l("Please fill out the following information to setup Amplo MVC"); ?></h1>
 
 				<div id="notification">
-					<?php if ($error_msg) { ?>
-						<div class="message warning"><?= $error_msg; ?></div>
+					<?php if ($msg['error']) { ?>
+						<div class="message warning"><?= $msg['error']; ?></div>
 					<?php } ?>
 
-					<?php if ($success_msg) { ?>
-						<div class="message success"><?= $success_msg; ?></div>
+					<?php if ($msg['success']) { ?>
+						<div class="message success"><?= $msg['success']; ?></div>
 					<?php } ?>
 				</div>
 
 				<form action="" method="post">
+					<h2><?= _l("Database Configuration"); ?></h2>
 					<div class="install_item">
 						<label><?= _l("Database Type:"); ?></label>
 						<select name="db_driver">
@@ -59,9 +60,26 @@
 						<label for="db_prefix"><?= _l("Database Prefix:"); ?></label>
 						<input id="db_prefix" type="text" name="db_prefix" value="<?= $db_prefix; ?>" size="3"/>
 					</div>
+
+					<h2><?= _l("Admin User Registration"); ?></h2>
 					<div class="install_item">
-						<input type="hidden" name="action" value="db_setup"/>
-						<input type="submit" class="button" value="<?= _l("Setup Database"); ?>"/>
+						<label for="username"><?= _l("Username:"); ?></label>
+						<input id="username" type="text" name="username" value="<?= $username; ?>"/>
+					</div>
+					<div class="install_item">
+						<label for="email"><?= _l("Email:"); ?></label>
+						<input id="email" type="text" name="email" value="<?= $email; ?>"/>
+					</div>
+					<div class="install_item">
+						<label for="password"><?= _l("Password:"); ?></label>
+						<input id="password" type="password" name="password" value="<?= $password; ?>"/>
+					</div>
+					<div class="install_item">
+						<label for="confirm"><?= _l("Confirm:"); ?></label>
+						<input id="confirm" type="password" name="confirm" value="<?= $confirm; ?>"/>
+					</div>
+					<div class="install_item">
+						<input type="submit" class="button" value="<?= _l("Install Amplo MVC"); ?>"/>
 					</div>
 				</form>
 			</div>

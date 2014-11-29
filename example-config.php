@@ -37,13 +37,17 @@ define("ERROR_404_PATH", 'error/not_found');
 define('DEFAULT_TIMEZONE', 'America/Denver');
 define('MYSQL_TIMEZONE', '-6:00');
 
-// DB
+// Database Config
 define('DB_DRIVER', 'mysqlidb');
 define('DB_HOSTNAME', 'localhost');
 define('DB_DATABASE', 'caddash');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_PREFIX', 'ac_');
+
+//Use this to set the timeout for a user session in seconds (will log a user out after x seconds)
+//Default: 3600 seconds (1 hour)
+define('AMPLO_SESSION_TIMEOUT', 3600);
 
 //DB Profiling
 define("DB_PROFILE", false);
@@ -61,18 +65,8 @@ ini_set('display_errors', 1);
 //Cache
 define('CACHE_FILE_EXPIRATION', 3600);
 
-//File permissions
-define('AMPLO_DIR_MODE', 0755);
-define('AMPLO_FILE_MODE', 0644);
-define('DEFAULT_PLUGIN_DIR_MODE', 0755);
-define('DEFAULT_PLUGIN_FILE_MODE', 0644);
-
 //Set umask for directories
 umask(0022);
-
-//Use this to set the timeout for a user session in seconds (will log a user out after x seconds)
-//Default: 3600 seconds (1 hour)
-define('AMPLO_SESSION_TIMEOUT', 3600);
 
 //Password Hashing
 define("PASSWORD_COST", 12);
