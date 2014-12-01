@@ -43,7 +43,7 @@ function _profile($key, array $data = array())
 }
 
 //custom var dump
-function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = true)
+function html_dump($var, $label = "HTML Dump", $show_type = false, $level = 0, $max = -1, $print = true)
 {
 	static $first = true, $count = 0;
 
@@ -105,7 +105,7 @@ HTML;
 
 		<div class='dump_output' id='$id-output' style='display:none'>
 HTML;
-	html_dump_r($var, $level, $max);
+	html_dump_r($var, $level, $max, $show_type);
 	echo <<<HTML
 		</div>
 	</a>
@@ -132,7 +132,7 @@ HTML;
 	}
 }
 
-function html_dump_r($var, $level, $max)
+function html_dump_r($var, $level, $max, $show_type = false)
 {
 	if (is_array($var) || is_object($var)) {
 		$left_offset = $level * 20 . "px";
@@ -145,7 +145,7 @@ function html_dump_r($var, $level, $max)
 
 			if ((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max - 1))) {
 				echo "<td class ='value'>";
-				html_dump_r($v, $level + 1, $max);
+				html_dump_r($v, $level + 1, $max, $show_type);
 				echo "</td>";
 			} else {
 				if (is_array($v)) {
@@ -159,7 +159,11 @@ function html_dump_r($var, $level, $max)
 				} elseif (is_null($v)) {
 					$val = "NULL";
 				} else {
-					$val = $v;
+					if ($show_type) {
+						$val = '(' . gettype($v) . ')' . $v;
+					} else {
+						$val = $v;
+					}
 				}
 
 				echo "<td class ='value'>$val</td>";
