@@ -25,11 +25,11 @@ logs
 !/plugin/dev
 
 /app/view/theme/*
-!/app/view/theme/fluid
+!/app/view/theme/amplo
 !/app/view/theme/admin
-/app/view/theme/fluid/template/page/*
-!/app/view/theme/fluid/template/page/default.tpl
-!/app/view/theme/fluid/template/page/content.tpl
+/app/view/theme/amplo/template/page/*
+!/app/view/theme/amplo/template/page/default.tpl
+!/app/view/theme/amplo/template/page/content.tpl
 
 
 /system/mods
