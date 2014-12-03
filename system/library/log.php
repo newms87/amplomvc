@@ -31,7 +31,7 @@ class Log
 			$log .= "\t" . $_SERVER['QUERY_STRING'];
 			$log .= "\t" . "Store ID: $this->store_id";
 			$log .= "\t" . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-			$log .= "\t" . str_replace("\n", "__nl__", $message);
+			$log .= "\t" . str_replace("\n", "__nl__", str_replace("\r", '', $message));
 
 			fwrite($handle, $log . "\r\n");
 

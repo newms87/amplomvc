@@ -43,20 +43,26 @@ class User extends Library
 
 	protected function loadUser($user)
 	{
-		$this->user_id = $user['user_id'];
-		$this->session->set('user_id', $user['user_id']);
-
-		$user_role = $this->Model_Setting_Role->getRole($user['user_role_id']);
-
-		if ($user_role) {
-			$this->permissions = $user_role['permissions'];
-			$user['role']      = $user_role['name'];
-		} else {
-			$this->permissions = array();
-			$user['role']      = '';
+		if (!is_array($user)) {
+			$user = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = " . (int)$user);
 		}
 
-		$this->user = $user;
+		if (!empty($user['user_id'])) {
+			$this->user_id = $user['user_id'];
+			$this->session->set('user_id', $user['user_id']);
+
+			$user_role = $this->Model_Setting_Role->getRole($user['user_role_id']);
+
+			if ($user_role) {
+				$this->permissions = $user_role['permissions'];
+				$user['role']      = $user_role['name'];
+			} else {
+				$this->permissions = array();
+				$user['role']      = '';
+			}
+
+			$this->user = $user;
+		}
 	}
 
 	public function lookupUserByEmail($email)
