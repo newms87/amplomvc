@@ -95,7 +95,7 @@ function amplo_mvc_install()
 		return _l("The password and confirmation do not match!");
 	}
 
-	define('DB_PREFIX', $_POST['prefix']);
+	define('DB_PREFIX', $_POST['db_prefix']);
 
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
