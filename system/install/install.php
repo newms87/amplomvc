@@ -7,6 +7,14 @@ if (!defined("AMPLO_INSTALL")) {
 	exit;
 }
 
+//Hack to allow DB to attempt to clear cache during install
+global $registry;
+
+if (!$registry) {
+	$registry = new Registry();
+	$registry->set('cache', new Cache());
+}
+
 if (!defined('DIR_SITE')) {
 	define("DIR_SITE", str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/')));
 }
