@@ -232,7 +232,7 @@ abstract class Model
 		}
 
 		if ($model_history && in_array($table, $model_history)) {
-			$this->addHistory($table, $row_id, 'insert', $data, true);
+			$this->history($table, $row_id, 'insert', $data, true);
 		}
 
 		return $row_id;
@@ -281,7 +281,7 @@ abstract class Model
 		}
 
 		if ($model_history && $update_id !== true && in_array($table, $model_history)) {
-			$this->addHistory($table, $update_id, 'update', $data, true);
+			$this->history($table, $update_id, 'update', $data, true);
 		}
 
 		return $update_id;
@@ -321,14 +321,14 @@ abstract class Model
 			}
 
 			if ($delete_id) {
-				$this->addHistory($table, $delete_id, 'delete', $data, true);
+				$this->history($table, $delete_id, 'delete', $data, true);
 			}
 		}
 
 		return true;
 	}
 
-	public function addHistory($table, $row_id, $action, $data, $message = null)
+	public function history($table, $row_id, $action, $data, $message = null)
 	{
 		if ($table !== 'history') {
 			$columns = $this->getTableColumns($table);
