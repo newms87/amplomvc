@@ -333,7 +333,7 @@ class Theme extends Library
 		$configs = array();
 
 		//Prefix Less file with PHP tag for File Comment Directives.
-		$directives = $this->tool->getCommentDirectives("<?php " . file_get_contents($file));
+		$directives = get_comment_directives("<?php " . file_get_contents($file));
 
 		$values = $this->parseConfigs($file);
 
@@ -388,7 +388,7 @@ class Theme extends Library
 		$parents = array();
 
 		while (is_file(DIR_THEMES . $theme . '/setup.php')) {
-			$directives = $this->tool->getFileCommentDirectives(DIR_THEMES . $theme . '/setup.php');
+			$directives = get_comment_directives(DIR_THEMES . $theme . '/setup.php');
 
 			if (!empty($directives['parent'])) {
 				//Check for Self parent assignment

@@ -1,10 +1,14 @@
 <?php
 //Request Headers
 $headers = apache_request_headers();
-function _header($key, $default = null)
+function _header($key = null, $default = null)
 {
 	global $headers;
-	return isset($headers[$key]) ? $headers[$key] : $default;
+	if ($key) {
+		return isset($headers[$key]) ? $headers[$key] : $default;
+	}
+
+	return $headers;
 }
 
 define("REQUEST_ACCEPT", _header('Accept'));

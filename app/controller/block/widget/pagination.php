@@ -85,7 +85,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			'pages' => $num_pages,
 		);
 
-		$settings['text'] = $this->tool->insertables($insertables, $settings['text']);
+		$settings['text'] = insertables($insertables, $settings['text']);
 
 		//Template Data
 		$settings += array(

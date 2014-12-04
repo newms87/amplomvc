@@ -347,7 +347,7 @@ class App_Model_Design_Navigation extends Model
 
 			'plugins' => array(
 				'display_name' => 'Plugins',
-				'href'         => 'admin/plugin/plugin',
+				'href'         => 'admin/plugin',
 			),
 
 			'users'   => array(

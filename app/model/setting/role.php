@@ -105,7 +105,7 @@ class App_Model_Setting_Role extends Model
 	public function getRestrictedAreas()
 	{
 		$admin_dir = DIR_SITE . 'app/controller/admin/';
-		$files     = $this->tool->getFiles($admin_dir, 'php', FILELIST_RELATIVE);
+		$files     = get_files($admin_dir, 'php', FILELIST_RELATIVE);
 
 		$ignore = array(
 			'load',
@@ -131,7 +131,7 @@ class App_Model_Setting_Role extends Model
 
 				$area = &$area[$p];
 
-				$class_parts[] = $this->tool->_2CamelCase($p);
+				$class_parts[] = _2camel($p);
 			}
 
 			require_once $admin_dir . $file;

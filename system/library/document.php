@@ -27,7 +27,7 @@ class Document extends Library
 
 	public function setTitle($title)
 	{
-		$this->title = $this->tool->cleanTitle($title);
+		$this->title = _strip_tags($title);
 	}
 
 	public function getTitle()

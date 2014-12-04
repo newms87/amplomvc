@@ -13,3 +13,5 @@ SQL
 );
 
 $this->db->changeColumn('navigation', 'sort_order', 'sort_order', "FLOAT NOT NULL DEFAULT '0'");
+
+$this->db->addColumn('plugin', 'version', "VARCHAR(45) NOT NULL AFTER `name`");
