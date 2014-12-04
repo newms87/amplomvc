@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (!defined("AMPLO_INSTALL")) {
 	echo "Please call the Amplo MVC index.php in your installation root directory.";
@@ -57,7 +59,7 @@ function amplo_mvc_setup_form($msg)
 		'db_name'     => '',
 		'db_username' => '',
 		'db_password' => '',
-		'db_prefix'   => 'amvc_',
+		'db_prefix'   => 'am_',
 		'username' => '',
 		'email'    => '',
 		'password' => '',
@@ -92,6 +94,8 @@ function amplo_mvc_install()
 
 		return _l("The password and confirmation do not match!");
 	}
+
+	define('DB_PREFIX', $_POST['prefix']);
 
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
