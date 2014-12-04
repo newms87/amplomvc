@@ -25,7 +25,7 @@ class App_Model_Design_Navigation extends Model
 			$this->addNavigationLinks($navigation_group_id, $data['links']);
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -63,7 +63,7 @@ class App_Model_Design_Navigation extends Model
 			}
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -79,7 +79,7 @@ class App_Model_Design_Navigation extends Model
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -96,7 +96,7 @@ class App_Model_Design_Navigation extends Model
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return $this->insert("navigation", $link);
 	}
@@ -178,14 +178,14 @@ class App_Model_Design_Navigation extends Model
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return $this->update("navigation", $link, $navigation_id);
 	}
 
 	public function deleteNavigationLink($navigation_id)
 	{
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		$children = $this->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE parent_id = " . (int)$navigation_id);
 

@@ -169,7 +169,7 @@ class App_Model_Plugin extends App_Model_Table
 
 	public function install($name)
 	{
-		$this->cache->delete('plugin');
+		clear_cache('plugin');
 
 		$this->delete('plugin', array('name' => $name));
 
@@ -188,7 +188,7 @@ class App_Model_Plugin extends App_Model_Table
 
 	public function uninstall($name)
 	{
-		$this->cache->delete('plugin');
+		clear_cache('plugin');
 
 		//remove files from plugin that were registered
 		$plugin_entries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin_registry WHERE `name` = '" . $this->db->escape($name) . "'");
@@ -213,7 +213,7 @@ class App_Model_Plugin extends App_Model_Table
 
 	public function upgrade($name)
 	{
-		$this->cache->delete('plugin');
+		clear_cache('plugin');
 
 		$directives = $this->plugin->getDirectives($name);
 

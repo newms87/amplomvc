@@ -132,7 +132,7 @@ class Block extends Library
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function edit($path, $data)
@@ -181,7 +181,7 @@ class Block extends Library
 			unset($instance);
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 
 		return true;
 	}
@@ -226,7 +226,7 @@ class Block extends Library
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function get($path)
@@ -429,7 +429,7 @@ class Block extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $blocks) . "')");
 
 		if ($this->countAffected()) {
-			$this->cache->delete('block');
+			clear_cache('block');
 		}
 	}
 }

@@ -5,21 +5,21 @@ class App_Model_Localisation_Language extends Model
 	{
 		$language_id = $this->insert('language', $data);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function editLanguage($language_id, $data)
 	{
 		$this->update('language', $data, $language_id);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function deleteLanguage($language_id)
 	{
 		$this->delete('language', $language_id);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function getLanguage($language_id)

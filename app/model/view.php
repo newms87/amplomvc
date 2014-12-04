@@ -221,7 +221,7 @@ class App_Model_View extends App_Model_Table
 			$view_listing['slug'] = slug($view_listing['name']);
 		}
 
-		$this->cache->delete('view_listing');
+		clear_cache('view_listing');
 
 		//Create the SQL View
 		if (!empty($view_listing['sql'])) {
@@ -241,7 +241,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			//TODO- this can probably be optimized
-			$this->cache->delete('model');
+			clear_cache('model');
 		}
 
 		if ($view_listing_id) {
@@ -283,7 +283,7 @@ class App_Model_View extends App_Model_Table
 
 	public function removeViewListing($view_listing_id)
 	{
-		$this->cache->delete('view_listing');
+		clear_cache('view_listing');
 
 		$this->delete('view', array('view_listing_id' => $view_listing_id));
 
@@ -406,7 +406,7 @@ class App_Model_View extends App_Model_Table
 
 	protected function resetViewListings()
 	{
-		$this->cache->delete('view_listing');
+		clear_cache('view_listing');
 
 		$view_listings = array(
 			'clients'       => array(

@@ -156,6 +156,12 @@ function cache($key, $value = null, $as_file = false)
 	}
 }
 
+function clear_cache($key = null)
+{
+	global $registry;
+	$registry->get('cache')->clear($key);
+}
+
 function message($type, $message = null)
 {
 	global $registry;

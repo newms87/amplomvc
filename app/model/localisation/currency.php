@@ -9,21 +9,21 @@ class App_Model_Localisation_Currency extends Model
 			$this->updateCurrencies(true);
 		}
 
-		$this->cache->delete('currency');
+		clear_cache('currency');
 	}
 
 	public function editCurrency($currency_id, $data)
 	{
 		$this->query("UPDATE " . DB_PREFIX . "currency SET title = '" . $this->escape($data['title']) . "', code = '" . $this->escape($data['code']) . "', symbol_left = '" . $this->escape($data['symbol_left']) . "', symbol_right = '" . $this->escape($data['symbol_right']) . "', decimal_place = '" . $this->escape($data['decimal_place']) . "', value = '" . $this->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE currency_id = '" . (int)$currency_id . "'");
 
-		$this->cache->delete('currency');
+		clear_cache('currency');
 	}
 
 	public function deleteCurrency($currency_id)
 	{
 		$this->query("DELETE FROM " . DB_PREFIX . "currency WHERE currency_id = '" . (int)$currency_id . "'");
 
-		$this->cache->delete('currency');
+		clear_cache('currency');
 	}
 
 	public function getCurrency($currency_id)
@@ -156,7 +156,7 @@ class App_Model_Localisation_Currency extends Model
 
 			$this->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" . $this->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->escape(option('config_currency')) . "'");
 
-			$this->cache->delete('currency');
+			clear_cache('currency');
 		}
 	}
 

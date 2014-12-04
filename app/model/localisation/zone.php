@@ -4,21 +4,21 @@ class App_Model_Localisation_Zone extends Model
 {
 	public function addZone($zone)
 	{
-		$this->cache->delete('zone');
+		clear_cache('zone');
 
 		return $this->insert('zone', $zone);
 	}
 
 	public function editZone($zone_id, $zone)
 	{
-		$this->cache->delete('zone');
+		clear_cache('zone');
 
 		return $this->update('zone', $zone, $zone_id);
 	}
 
 	public function deleteZone($zone_id)
 	{
-		$this->cache->delete('zone');
+		clear_cache('zone');
 
 		return $this->delete('zone', $zone_id);
 	}

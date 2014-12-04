@@ -270,7 +270,7 @@ class Theme extends Library
 
 		$this->config->saveGroup('store_theme', $store_theme, $store_id, false);
 
-		$this->cache->delete('less/store_theme.' . $store_id . '.' . $theme);
+		clear_cache('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
 	public function getStoreTheme($store_id)
@@ -323,7 +323,7 @@ class Theme extends Library
 
 	public function restoreStoreTheme($store_id)
 	{
-		$this->cache->delete('less/store_theme.' . $store_id);
+		clear_cache('less/store_theme.' . $store_id);
 
 		return $this->config->deleteGroup('store_theme', $store_id);
 	}

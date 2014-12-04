@@ -324,7 +324,7 @@ class Plugin extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
 		$this->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
 
-		$this->cache->delete("plugin");
+		clear_cache("plugin");
 
 		return true;
 	}

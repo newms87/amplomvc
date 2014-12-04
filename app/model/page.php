@@ -90,7 +90,7 @@ class App_Model_Page extends Model
 			}
 		}
 
-		$this->cache->delete('page');
+		clear_cache('page');
 
 		return $page_id;
 	}
@@ -121,7 +121,7 @@ class App_Model_Page extends Model
 
 		$this->translation->deleteTranslation('page', $page_id);
 
-		$this->cache->delete('page');
+		clear_cache('page');
 
 		return $page_id;
 	}

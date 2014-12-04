@@ -16,3 +16,4 @@ $this->db->changeColumn('navigation', 'sort_order', 'sort_order', "FLOAT NOT NUL
 
 $this->db->addColumn('plugin', 'version', "VARCHAR(45) NOT NULL AFTER `name`");
 $this->update('navigation', array('href' => 'admin/plugin'), array('href' => 'admin/plugin/plugin'));
+clear_cache('navigation');

@@ -450,11 +450,13 @@ class DB
 
 	public function createTable($table, $sql)
 	{
+		clear_cache('model');
 		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
 	}
 
 	public function dropTable($table)
 	{
+		clear_cache('model');
 		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
 	}
 
@@ -507,6 +509,7 @@ class DB
 	public function addColumn($table, $column, $options = '')
 	{
 		if ($this->hasTable($table) && !$this->hasColumn($table, $column)) {
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` ADD COLUMN `$column` $options");
 		}
 
@@ -522,6 +525,7 @@ class DB
 				return false;
 			}
 
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
@@ -529,6 +533,7 @@ class DB
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` DROP COLUMN `$column`");
 		}
 
@@ -548,6 +553,8 @@ class DB
 
 	public function setPrefix($prefix, $old_prefix = '')
 	{
+		clear_cache('model');
+
 		$tables = $this->getTables();
 
 		foreach ($tables as $table) {

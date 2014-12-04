@@ -20,7 +20,7 @@ class App_Model_Setting_Role extends Model
 			return false;
 		}
 
-		$this->cache->delete('user_role');
+		clear_cache('user_role');
 
 		$data['permissions'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
 
@@ -48,7 +48,7 @@ class App_Model_Setting_Role extends Model
 			return false;
 		}
 
-		$this->cache->delete('user_role');
+		clear_cache('user_role');
 		return $this->delete('user_role', $user_role_id);
 	}
 

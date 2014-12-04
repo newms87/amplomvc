@@ -200,14 +200,14 @@ class Config extends Library
 		$setting_id = $this->insert('setting', $values);
 
 		if ($auto_load) {
-			$this->cache->delete('setting');
-			$this->cache->delete('store');
-			$this->cache->delete('theme');
+			clear_cache('setting');
+			clear_cache('store');
+			clear_cache('theme');
 		}
 
 		$this->config->set($key, $value);
 
-		$this->cache->delete("setting.$group");
+		clear_cache("setting.$group");
 
 		return $setting_id;
 	}
@@ -306,7 +306,7 @@ class Config extends Library
 			}
 		}
 
-		$this->cache->delete("setting.$group");
+		clear_cache("setting.$group");
 
 		return $this->delete('setting', $values);
 	}
@@ -320,18 +320,18 @@ class Config extends Library
 	{
 		$this->update("store", $store_id, $data);
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
-		$this->cache->delete('setting');
+		clear_cache('store');
+		clear_cache('theme');
+		clear_cache('setting');
 	}
 
 	public function deleteStore($store_id)
 	{
 		$this->delete("store", $store_id);
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
-		$this->cache->delete('setting');
+		clear_cache('store');
+		clear_cache('theme');
+		clear_cache('setting');
 	}
 
 	private function loadDefaultSites()
