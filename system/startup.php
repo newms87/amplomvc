@@ -55,8 +55,10 @@ $config_defines = array(
 	'MYSQL_TIMEZONE'        => '-6:00',
 	'DB_PROFILE'            => false,
 	'DB_PROFILE_NO_CACHE'   => false,
+	'AMPLO_TIME_LOG'         => false,
 	'AMPLO_SESSION'         => 'cross-store-session',
 	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
+	'CACHE_FILE_EXPIRATION' => 3600,
 );
 
 foreach ($config_defines as $def_key => $def_value) {
