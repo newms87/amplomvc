@@ -118,9 +118,12 @@ function amplo_mvc_install()
 		}
 	}
 
+	//The Cost benchmark based on system performance
+	$password_cost = getCostBenchmark();
+
 	$username = $db->escape($_POST['username']);
 	$email    = $db->escape($_POST['email']);
-	$password = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
+	$password = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => $password_cost)));
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
 	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = 'NOW()'");
@@ -149,7 +152,7 @@ function amplo_mvc_install()
 		'DB_USERNAME'        => $_POST['db_username'],
 		'DB_PASSWORD'        => $_POST['db_password'],
 		'DB_PREFIX'          => $_POST['db_prefix'],
-		'PASSWORD_COST'      => getCostBenchmark(),
+		'PASSWORD_COST'      => $password_cost,
 	);
 
 	foreach ($defines as $key => $value) {
