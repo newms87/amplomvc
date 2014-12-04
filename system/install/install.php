@@ -32,11 +32,8 @@ if (strpos(DIR_SITE, $uri_path) === false) {
 	exit;
 }
 
-//No Mod files allowed during site install!
-function _mod($file) {
-	return $file;
-}
-
+//Load Core startup
+require_once(DIR_SITE . 'system/_mod.php');
 require_once(DIR_SITE . 'system/startup.php');
 
 //Hack to allow DB to attempt to clear cache during install
