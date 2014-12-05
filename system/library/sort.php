@@ -124,6 +124,7 @@ class Sort extends Library
 			'order' => $order_default,
 			'page'  => $page_default,
 			'limit' => $limit_default,
+		   'start' => 0,
 		);
 
 		foreach ($sort_defaults as $key => $default) {
