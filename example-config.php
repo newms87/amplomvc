@@ -37,6 +37,9 @@ error_reporting(E_ALL);
 //This should be set to 0 for production
 ini_set('display_errors', 1);
 
+//Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
+define('AMPLO_REWRITE_SHORT_TAGS', false);
+
 //Set umask for directories
 umask(0022);
 
