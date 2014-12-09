@@ -161,24 +161,6 @@ class Extend extends Library
 		}
 	}
 
-	public function registerRoutingHook($name, $hook)
-	{
-		$routing_hooks = option('_routing_hooks_', array());
-
-		$routing_hooks[$name] = $hook;
-
-		set_option('_routing_hooks_', $routing_hooks);
-	}
-
-	public function unregisterRoutingHook($name)
-	{
-		$routing_hooks = option('_routing_hooks_', array());
-
-		unset($routing_hooks[$name]);
-
-		set_option('_routing_hooks_', $routing_hooks);
-	}
-
 	public function addHook($hook_id, $action, $table, $callback, $param = null, $priority = 0)
 	{
 		$config_id = 'db_hook_' . $action . '_' . $table;

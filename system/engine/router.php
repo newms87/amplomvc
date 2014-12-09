@@ -44,99 +44,60 @@ final class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function route()
+	public function registerHook($name, $callable, $sort_order = 0)
 	{
-		if (IS_ADMIN) {
-			$this->routeAdmin();
-		} else {
-			$this->routeFront();
-		}
+		$routing_hooks = option('_routing_hooks_', array());
+
+		$routing_hooks[$name] = array(
+		   'callable' => $callable,
+		   'sort_order' => $sort_order,
+		);
+
+		uasort($routing_hooks, function($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
+
+		set_option('_routing_hooks_', $routing_hooks);
+
+		return $routing_hooks;
 	}
 
-	public function routeAdmin()
+	public function unregisterHook($name)
 	{
-		$this->config->set('store_id', -1);
+		$routing_hooks = option('_routing_hooks_', array());
 
-		if (count($this->segments) === 1) {
-			$this->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index');
-		}
+		unset($routing_hooks[$name]);
 
-		//Initialize site configurations
-		$this->config->run_site_config();
+		set_option('_routing_hooks_', $routing_hooks);
 
-		//Controller Overrides
-		$controller_overrides = $this->config->load('controller_override', 'controller_override');
-
-		if ($controller_overrides) {
-			foreach ($controller_overrides as $override) {
-				if (('app/controller/admin/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
-						$this->path = str_replace('app/controller/admin/', '', $override['alternate']);
-					}
-				}
-			}
-		}
-	}
-
-	public function routeFront()
-	{
-		if (option('config_maintenance')) {
-			//Do not show maintenance page if user is an admin
-			if (IS_ADMIN) {
-				if (isset($_GET['hide_maintenance_msg'])) {
-					$_SESSION['hide_maintenance_msg'] = 1;
-				} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
-					$hide = $this->url->here('hide_maintenance_msg=1');
-					message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
-				}
-			} //Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
-			else if (strpos($this->path, 'payment') !== 0) {
-				$this->path = 'common/maintenance';
-			}
-		}
-
-		//Controller Overrides
-		$controller_overrides = $this->config->load('controller_override', 'controller_override');
-
-		if ($controller_overrides) {
-			foreach ($controller_overrides as $override) {
-				if (('app/controller/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/" . $override['condition'] . "/", urldecode($this->url->getQuery()))) {
-						$this->path = str_replace('app/controller/', '', $override['alternate']);
-					}
-				}
-			}
-		}
-
-		//Tracking
-		if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
-			setcookie('tracking', $_GET['tracking'], _time() + 3600 * 24 * 1000, '/');
-		}
-
-		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('store_id') . "' ORDER BY route ASC LIMIT 1");
-		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
-		$this->config->set('config_layout_id', $layout_id);
+		return $routing_hooks;
 	}
 
 	public function dispatch()
 	{
+		$path = $this->path;
+
+		//Resolve routing hooks
 		$routing_hooks = option('_routing_hooks_');
 
 		if (!$routing_hooks) {
-			$this->extend->registerRoutingHook('default', 'amplo_routing_hook');
+			$routing_hooks = $this->registerHook('default', 'amplo_routing_hook');
 		}
 
-		$path = $this->path;
-
 		foreach ($routing_hooks as $hook) {
-			if (is_callable($hook)) {
-				if (call_user_func_array($hook, array(&$path, $this->segments, $this->path)) === false) {
+			if (is_callable($hook['callable'])) {
+				if (call_user_func_array($hook['callable'], array(&$path, $this->segments, $this->path)) === false) {
 					break;
 				}
 			}
 		}
 
+		//Resolve Layout ID
+		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
+		$this->config->set('config_layout_id', $layout_id);
+
+		//Dispatch Route
 		$action = new Action($path);
 
 		$valid = $action->isValid();

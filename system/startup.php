@@ -115,6 +115,11 @@ if (ini_get('register_globals')) {
 	}
 }
 
+//Tracking
+if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
+	setcookie('tracking', $_GET['tracking'], _time() + 3600 * 24 * 1000, '/');
+}
+
 //Simulate POST request for post_redirect()
 if (isset($_SESSION['__post_data__'])) {
 	$_POST                     = $_SESSION['__post_data__'];

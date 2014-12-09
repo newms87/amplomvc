@@ -451,12 +451,14 @@ class DB
 	public function createTable($table, $sql)
 	{
 		clear_cache('model');
+		$this->tables = null;
 		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
 	}
 
 	public function dropTable($table)
 	{
 		clear_cache('model');
+		$this->tables = null;
 		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
 	}
 

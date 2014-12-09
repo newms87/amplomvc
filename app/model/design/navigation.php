@@ -379,10 +379,6 @@ class App_Model_Design_Navigation extends Model
 								'display_name' => 'Update',
 								'href'         => 'admin/setting/update',
 							),
-							'system_settings_controller_overrides' => array(
-								'display_name' => 'Controller Overrides',
-								'href'         => 'admin/setting/controller_override',
-							),
 						),
 					),
 					'system_mail'         => array(

@@ -63,6 +63,12 @@ class Plugin extends Library
 
 		$this->Model_Plugin->install($name);
 
+		//Run all upgrades
+		if (method_exists($plugin, 'upgrade')) {
+			$data = $plugin->upgrade('0');
+			$this->Model_Plugin->upgrade($name, $data);
+		}
+
 		//New Files
 		if (!$this->integrateNewFiles($name)) {
 			$this->error['new_files'] = _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name);
