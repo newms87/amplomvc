@@ -121,23 +121,20 @@ final class Router
 
 	public function dispatch()
 	{
+		$routing_hooks = option('_routing_hooks_');
+
+		if (!$routing_hooks) {
+			$this->extend->registerRoutingHook('default', 'amplo_routing_hook');
+		}
+
 		$path = $this->path;
 
-		//TODO: Move this to an extend / plugin feature! Possibly resort to using a hook here... PRODUCT should be a part of AmploCart Plugin!
-		//Path Rerouting
-		switch ($this->getSegment(0)) {
-			case 'page':
-				if ($this->getSegment(1) !== 'preview') {
-					$path = 'page';
+		foreach ($routing_hooks as $hook) {
+			if (is_callable($hook)) {
+				if (call_user_func_array($hook, array(&$path, $this->segments, $this->path)) === false) {
+					break;
 				}
-				break;
-
-			case 'product':
-				if (!empty($_GET['product_id'])) {
-					$product_class = $this->Model_Product->getProductClass($_GET['product_id']);
-					$path = preg_replace("#^product/product#", 'product/' . $product_class, $this->path);
-				}
-				break;
+			}
 		}
 
 		$action = new Action($path);

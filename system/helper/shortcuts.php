@@ -83,6 +83,30 @@ function _lg($group, $message = null)
 	return $return;
 }
 
+/**
+ * Customized routing for special cases. Set a new $path to change the controller / method to call.
+ * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
+ *
+ * To register your own routing hook use $this->extend->registerRoutingHook('my-hook-name', 'my_routing_hook');
+ * in your plugin's setup.php install() method.
+ *
+ * @param string $path - The current path that points to the controller and method to call
+ * @param $segments - The path segments broken up into an array.
+ *
+ * @return bool | null - if the return value is false no other hooks will be called.
+ */
+function amplo_routing_hook(&$path, $segments, $orig_path)
+{
+	//Path Rerouting
+	switch ($segments[0]) {
+		case 'page':
+			if (!empty($segments[1]) && $segments[1] !== 'preview') {
+				$path = 'page';
+			}
+			break;
+	}
+}
+
 function call($path, $params = null)
 {
 	$args = func_get_args();
