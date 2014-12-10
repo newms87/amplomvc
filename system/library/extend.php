@@ -38,7 +38,7 @@ class Extend extends Library
 		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->escape($group) . "'");
 
 		if ($navigation_group_id) {
-			$this->Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
+			$this->Model_Navigation->addNavigationLink($navigation_group_id, $link);
 		} else {
 			$this->error['navigation_group'] = _l("The Navigation Group $group does not exist!");
 			return false;
@@ -76,7 +76,7 @@ class Extend extends Library
 		$navigation_ids = $this->queryColumn($query);
 
 		foreach ($navigation_ids as $navigation_id) {
-			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);
+			$this->Model_Navigation->deleteNavigationLink($navigation_id);
 		}
 	}
 

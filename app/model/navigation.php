@@ -1,11 +1,17 @@
 <?php
 
-class App_Model_Design_Navigation extends Model
+class App_Model_Navigation extends App_Model_Table
 {
+	protected $table = 'navigation', $primary_key = 'navigation_id';
+
 	public function addNavigationGroup($data)
 	{
 		if (!$this->validateNavigationGroup($data)) {
 			return false;
+		}
+
+		if (!isset($data['status'])) {
+			$data['status'] = 1;
 		}
 
 		$navigation_group_id = $this->insert("navigation_group", $data);
@@ -82,6 +88,19 @@ class App_Model_Design_Navigation extends Model
 		$this->cache->delete('navigation');
 
 		return true;
+	}
+
+	public function removeNavigationGroup($group)
+	{
+		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . $this->prefix . "navigation_group WHERE `name` = '" . $this->escape($group) . "'");
+
+		if ($navigation_group_id) {
+			return $this->deleteNavigationGroup($navigation_group_id);
+		}
+
+		$this->error['navigation_group_id'] = _l("Unknown Navigation Group %s", $group);
+
+		return false;
 	}
 
 	public function addNavigationLink($navigation_group_id, $link)

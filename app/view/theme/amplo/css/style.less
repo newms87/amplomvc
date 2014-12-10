@@ -162,45 +162,44 @@ h6 {
     position: absolute;
     top: .5em;
     right: 1em;
-    cursor: pointer;
     width: 16px;
     height: 16px;
+    .render-var(@msg-close-bg);
+    padding: @msg-close-padding;
+    border: @msg-close-border;
+    border-radius: @msg-close-border-radius;
+    cursor: pointer;
 
     &:after {
       content: "X";
-      color: white;
-      background: @color-lighter;
-      padding: .2em .5em;
-      border-radius: 5px;
+      color: @msg-close-color;
     }
 
     &:hover, &:active {
-      background-position: -16px 0px;
+      .render-var(@msg-close-bg-hover);
+      &:after {
+        color: @msg-close-color-hover;
+      }
     }
   }
 }
 
 .error {
   display: block;
-  color: red;
+  color: @error-color;
 }
 
 //Button (use .row for section-style-x override)
 button, .button, .row .button {
   display: inline-block;
-  padding: @button-padding;
-  .render-font(@button-font);
-  color: @button-font-color;
-  .render-var(@button-background);
-  border-radius: @button-border-radius;
-  border: @button-border;
-  outline: 0;
   text-decoration: none;
+  outline: 0;
   cursor: pointer;
 
+  .render-var(@button-style);
+
   &:hover, &:active, &:focus {
-    color: @button-font-color-hover;
-    .render-var(@button-background-hover);
+    .render-var(@button-style-hover);
   }
 }
 
@@ -232,9 +231,10 @@ button, .button, .row .button {
         left: 0;
         text-align: left;
         z-index: 500;
-        background: @color-light;
-        box-shadow: 3px 3px 3px @color-lighter;
-        border-radius: 5px;
+        .render-var(@nav-sub-menu-bg);
+        box-shadow: @nav-sub-menu-box-shadow;
+        border: @nav-sub-menu-border;
+        border-radius: @nav-sub-menu-border-radius;
         display: none;
 
         li {
@@ -242,14 +242,15 @@ button, .button, .row .button {
           white-space: nowrap;
 
           a {
-            color: @color-main;
+            color: @nav-color;
+            .render-var(@nav-bg);
 
             &:hover {
-              color: @color-lighter;
+              color: @nav-color-hover;
+              .render-var(@nav-bg-hover);
             }
           }
         }
-
       }
 
       &:hover, &.hover {
@@ -300,17 +301,23 @@ table.list {
 
   thead {
     tr {
-      background: @color-lighter;
+      .render-var(@table-list-head-bg);
+      color: @table-list-head-color;
+
       td {
-        padding: .5em .4em;
-        font-size: 1.1em;
+        padding: @table-list-head-padding;
+        font: @table-list-head-font;
       }
     }
   }
 
   tr {
+    .render-var(@table-list-bg);
+    color: @table-list-color;
+
     td {
-      padding: .2em .4em;
+      padding: @table-list-padding;
+      font: @table-list-font;
 
       &.left {
         float: none;
@@ -331,7 +338,13 @@ table.list {
 
   tfoot {
     tr {
-      background: @color-lightest;
+      .render-var(@table-list-foot-bg);
+      color: @table-list-foot-color;
+
+      td {
+        padding: @table-list-foot-padding;
+        font: @table-list-foot-font;
+      }
     }
   }
 }
@@ -395,10 +408,12 @@ header.main-header.row {
   margin: 1em auto 0 auto;
 
   a {
-    color: @color-dark;
+    .render-var(@nav-primary-bg);
+    color: @nav-primary-color;
 
     &:hover {
-      color: @color-light;
+      .render-var(@nav-primary-bg-hover);
+      color: @nav-primary-color-hover;
     }
   }
 
@@ -408,10 +423,12 @@ header.main-header.row {
 
   .sub-menu {
     a {
-      color: white;
+      .render-var(@nav-primary-sub-bg);
+      color: @nav-primary-sub-color;
 
       &:hover {
-        color: @color-lighter;
+        .render-var(@nav-primary-sub-bg-hover);
+        color: @nav-primary-sub-color-hover;
       }
     }
   }
@@ -421,6 +438,8 @@ header.main-header.row {
 #admin-bar {
   position: fixed;
   bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: lightgray;
   padding: 5px 10px;
 
@@ -656,6 +675,7 @@ header.main-header.row {
     display: inline-block;
     outline: @form-radio-outline;
     box-sizing: border-box;
+    .noselect;
 
     input[type="radio"] {
       vertical-align: middle;
@@ -1035,15 +1055,99 @@ header.main-header.row {
   }
 }
 
-//Address Select Block
-.address-list {
-  .builder-ac-radio {
-    .ac-radio {
-      margin: 0 .5em .5em;
-      width: 220px;
+/************************
+ * VII. Pages           *
+ ************************/
+section.page {
+  ul, ol {
+    margin: 1em 1em 1em 2em;
+
+    li {
+      margin-bottom: .3em;
     }
   }
 
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+
+    ol {
+      list-style: lower-alpha;
+
+      ol {
+        list-style: lower-roman;
+      }
+    }
+  }
+
+  .info-list {
+    .info-item {
+      .label {
+        width: 5em;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .info {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .row.info-image {
+    padding: 1em .5em;
+
+    & + .row.info-image {
+      border-top: 2px dashed @color-secondary;
+    }
+    .info {
+      h3 {
+        font-size: 1.6em;
+        margin-bottom: .4em;
+      }
+
+      font-size: 1.5em;
+      color: @color-secondary;
+      padding: 1em;
+    }
+
+    .description {
+      text-align: left;
+    }
+
+    p {
+      margin-bottom: .5em;
+    }
+
+    .image {
+      text-align: center;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .info-item {
+    margin-bottom: 1em;
+    h2 {
+      margin-bottom: .5em;
+      text-align: left;
+      display: block;
+    }
+  }
+}
+
+/*************************
+ *  V. Blocks            *
+ *************************/
+
+//Address Select Block
+.address-list {
   .add-address {
     display: block;
     text-align: center;
@@ -1061,10 +1165,7 @@ header.main-header.row {
   }
 }
 
-/*************************
- *  V. Blocks            *
- *************************/
-
+//FAQ Block
 #block-widget-faq {
   .faq-groups {
     .group {
@@ -1131,14 +1232,23 @@ footer.main-footer.row {
  *  X. Device Targeting  *
  *************************/
 
-@media (max-width: @lg) {
+@media (max-width: (@lg - 1)) {
 }
 
-@media (max-width: @md) {
+@media (max-width: (@md - 1)) {
 }
 
-@media (max-width: @sm) {
+@media (max-width: (@sm - 1)) {
 }
 
-@media (max-width: @xs) {
+@media (max-width: (@xs - 1)) {
+  section.page {
+    font-size: .8em;
+
+    .row {
+      .wrap {
+        min-width: 0;
+      }
+    }
+  }
 }
