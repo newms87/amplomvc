@@ -239,6 +239,7 @@ function send_mail($params)
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
+
 	if ($width || $height) {
 		$image = $registry->get('image')->resize($image, $width, $height);
 	} else {
@@ -351,9 +352,9 @@ function theme_sprite($image)
 	if (!isset($sprites[$image])) {
 		$path = pathinfo($image);
 
-		$sprite_srcs = array(
-			1 => theme_image($image),
-		);
+		$src = theme_image($image);
+
+		$sprite_srcs = array();
 
 		$sizes = array(
 			2 => '2x',
@@ -362,18 +363,18 @@ function theme_sprite($image)
 		);
 
 		foreach ($sizes as $size => $name) {
-			$s = theme_image($path['filename'] . '@' . $name . $path['extension']);
+			$s = theme_image($path['filename'] . '@' . $name . '.' . $path['extension']);
 
 			if (!$s) {
-				theme_image($path['filename'] . '-' . $name . $path['extension']);
+				theme_image($path['filename'] . '-' . $name . '.' . $path['extension']);
 			}
 
 			if ($s) {
-				$sprite_srcs[$size] = $s;
+				$sprite_srcs[$size] = $s . ' ' . $size . 'x';
 			}
 		}
 
-		$sprites[$image] = image_srcset($sprite_srcs);
+		$sprites[$image] = $sprite_srcs ? "src=\"$src\" srcset=\"" . implode(',', $sprite_srcs) . "\"" : "src=\"$src\"";
 	}
 
 	return $sprites[$image];

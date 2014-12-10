@@ -78,7 +78,7 @@ class Response extends Library
 
 			$output = $this->level ? $this->compress($this->output, $this->level) : $this->output;
 
-			if (!headers_sent()) {
+			if (!headers_sent($file, $line)) {
 				foreach ($this->headers as $key => $value) {
 					if ($value) {
 						if (is_string($key)) {
@@ -90,6 +90,8 @@ class Response extends Library
 						header($key, true);
 					}
 				}
+			} elseif (defined('AMPLO_HEADERS_DEBUG') && AMPLO_HEADERS_DEBUG) {
+				echo "\n\n<BR><BR>HEADERS STARTED at $file on line $line<BR><BR>\n\n";
 			}
 
 			echo $output;
