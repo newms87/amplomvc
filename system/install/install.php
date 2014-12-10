@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (!defined("AMPLO_INSTALL")) {
 	echo "Please call the Amplo MVC index.php in your installation root directory.";
@@ -30,12 +32,17 @@ if (strpos(DIR_SITE, $uri_path) === false) {
 	exit;
 }
 
-//No Mod files allowed during site install!
-function _mod($file) {
-	return $file;
-}
-
+//Load Core startup
+require_once(DIR_SITE . 'system/_mod.php');
 require_once(DIR_SITE . 'system/startup.php');
+
+//Hack to allow DB to attempt to clear cache during install
+global $registry;
+
+if (!$registry) {
+	$registry = new Registry();
+	$registry->set('cache', new Cache());
+}
 
 $msg = array(
 	'error' => '',
@@ -57,7 +64,7 @@ function amplo_mvc_setup_form($msg)
 		'db_name'     => '',
 		'db_username' => '',
 		'db_password' => '',
-		'db_prefix'   => 'amvc_',
+		'db_prefix'   => 'am_',
 		'username' => '',
 		'email'    => '',
 		'password' => '',
@@ -93,6 +100,8 @@ function amplo_mvc_install()
 		return _l("The password and confirmation do not match!");
 	}
 
+	define('DB_PREFIX', $_POST['db_prefix']);
+
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
 	$error = $db->getError();
@@ -109,12 +118,15 @@ function amplo_mvc_install()
 		}
 	}
 
+	//The Cost benchmark based on system performance
+	$password_cost = getCostBenchmark();
+
 	$username = $db->escape($_POST['username']);
 	$email    = $db->escape($_POST['email']);
-	$password = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
+	$password = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => $password_cost)));
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
-	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = 'NOW()'");
+	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = '" . date('Y-m-d H:i:s') . "'");
 
 	if ($db->hasError()) {
 		$error = $db->getError();
@@ -140,7 +152,7 @@ function amplo_mvc_install()
 		'DB_USERNAME'        => $_POST['db_username'],
 		'DB_PASSWORD'        => $_POST['db_password'],
 		'DB_PREFIX'          => $_POST['db_prefix'],
-		'PASSWORD_COST'      => getCostBenchmark(),
+		'PASSWORD_COST'      => $password_cost,
 	);
 
 	foreach ($defines as $key => $value) {

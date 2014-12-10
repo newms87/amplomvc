@@ -14,11 +14,6 @@ if (!defined('SITE_BASE') || defined("AMPLO_INSTALL_USER")) {
 //Timer for full system performance profiling
 $__start = microtime(true);
 
-//DIR_CACHE only required define for _mod.php
-if (!defined('DIR_CACHE')) {
-	define('DIR_CACHE', DIR_SITE . 'system/cache/');
-}
-
 //File Modifications
 require_once(DIR_SITE . 'system/_mod.php');
 

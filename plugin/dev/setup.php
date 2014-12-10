@@ -2,7 +2,7 @@
 /**
  * The Development Plugin
  *
- * Version: 0.7
+ * Version: 0.8
  * Title: Amplo MVC Development
  * Description: Makes Development for Amplo MVC a thousands times easier! A Necessity for any and all Amlpo MVC Devs.
  * Author: Daniel Newman
@@ -10,7 +10,7 @@
  * Link: http://www.amplomvc.com/plugins/dev
  *
  */
-class Dev_Setup extends Plugin_Setup
+class Plugin_Dev_Setup extends Plugin_Setup
 {
 	public function install()
 	{

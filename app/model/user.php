@@ -57,7 +57,7 @@ class App_Model_User extends App_Model_Table
 			$user['password'] = $user['encrypted_password'];
 		}
 
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		//New User
 		if (!$user_id) {
@@ -85,14 +85,14 @@ class App_Model_User extends App_Model_Table
 			'password' => $this->user->encrypt($password),
 		);
 
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		return $this->update('user', $data, $user_id);
 	}
 
 	public function remove($user_id)
 	{
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		return $this->delete('user', $user_id);
 	}

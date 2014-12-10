@@ -258,7 +258,7 @@ class Address extends Library
 			$insertables['zone_code'] = $address['zone']['code'];
 		}
 
-		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br($this->tool->insertables($insertables, $address_format, '{', '}')));
+		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br(insertables($insertables, $address_format, '{', '}')));
 	}
 
 	public function validate($address)

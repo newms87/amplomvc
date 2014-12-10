@@ -55,8 +55,8 @@ class App_Model_Setting_Store extends Model
 			return false;
 		}
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
+		clear_cache('store');
+		clear_cache('theme');
 
 		if ($store_id) {
 			return $this->update('store', $store, $store_id);
@@ -69,8 +69,8 @@ class App_Model_Setting_Store extends Model
 	{
 		$this->delete('store', $store_id);
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
+		clear_cache('store');
+		clear_cache('theme');
 	}
 
 	public function getStore($store_id)

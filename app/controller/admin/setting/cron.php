@@ -61,7 +61,7 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		//Template Data
 		$data['cron_status'] = option('config_cron_status');
 
-		$cron_files = $this->tool->getFiles(DIR_CRON);
+		$cron_files = get_files(DIR_CRON);
 
 		$cron_methods = array();
 

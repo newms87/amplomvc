@@ -4,7 +4,6 @@ class Config extends Library
 {
 	private $data = array();
 	private $store_id;
-	private $site_config;
 	private $translate = true;
 
 	public function __construct($store_id = null)
@@ -14,8 +13,6 @@ class Config extends Library
 		//self assigning so we can use config immediately!
 		global $registry;
 		$registry->set('config', $this);
-
-		$this->loadDefaultSites();
 
 		$this->data     = $this->getStore($store_id);
 		$this->store_id = $this->data['store_id'];
@@ -147,7 +144,7 @@ class Config extends Library
 	public function save($group, $key, $value, $store_id = null, $auto_load = true)
 	{
 		if (is_null($store_id)) {
-			$store_id = $this->store_id;
+			$store_id = 0;
 		}
 
 		$translate = 0;
@@ -200,14 +197,14 @@ class Config extends Library
 		$setting_id = $this->insert('setting', $values);
 
 		if ($auto_load) {
-			$this->cache->delete('setting');
-			$this->cache->delete('store');
-			$this->cache->delete('theme');
+			clear_cache('setting');
+			clear_cache('store');
+			clear_cache('theme');
 		}
 
 		$this->config->set($key, $value);
 
-		$this->cache->delete("setting.$group");
+		clear_cache("setting.$group");
 
 		return $setting_id;
 	}
@@ -306,7 +303,7 @@ class Config extends Library
 			}
 		}
 
-		$this->cache->delete("setting.$group");
+		clear_cache("setting.$group");
 
 		return $this->delete('setting', $values);
 	}
@@ -320,39 +317,31 @@ class Config extends Library
 	{
 		$this->update("store", $store_id, $data);
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
-		$this->cache->delete('setting');
+		clear_cache('store');
+		clear_cache('theme');
+		clear_cache('setting');
 	}
 
 	public function deleteStore($store_id)
 	{
 		$this->delete("store", $store_id);
 
-		$this->cache->delete('store');
-		$this->cache->delete('theme');
-		$this->cache->delete('setting');
-	}
-
-	private function loadDefaultSites()
-	{
-		$site_config_file = DIR_SYSTEM . 'site_config.php';
-
-		$_ = array();
-
-		require_once($site_config_file);
-
-		$this->site_config = $_;
+		clear_cache('store');
+		clear_cache('theme');
+		clear_cache('setting');
 	}
 
 	//TODO: Need to rethink this site config. At very least move store model into system directory.
-	public function run_site_config()
+	public function runSiteConfig()
 	{
 		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
 
 		if (!$default_exists) {
+			$_ = array();
+			require_once(DIR_SYSTEM . 'site_config.php');
+
 			$this->db->setAutoIncrement('store', 0);
-			$this->addStore($this->site_config['default_store']);
+			$this->addStore($_['default_store']);
 		}
 	}
 

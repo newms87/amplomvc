@@ -3,21 +3,21 @@ class App_Model_Localisation_Country extends Model
 {
 	public function addCountry($country)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->insert('country', $country);
 	}
 
 	public function editCountry($country_id, $country)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->update('country', $country, $country_id);
 	}
 
 	public function deleteCountry($country_id)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->delete('country', $country_id);
 	}

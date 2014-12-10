@@ -1,12 +1,6 @@
 <?php
-abstract class Plugin_Setup
+abstract class Plugin_Setup extends Model
 {
-	public function __get($key)
-	{
-		global $registry;
-		return $registry->get($key);
-	}
-
 	public function install()
 	{
 		//Installation Code goes here
@@ -17,8 +11,8 @@ abstract class Plugin_Setup
 		//Uninstall code goes here
 	}
 
-	public function update($version)
+	public function upgrade($from_version)
 	{
-		//Update code goes here
+		//Upgrade code goes here
 	}
 }

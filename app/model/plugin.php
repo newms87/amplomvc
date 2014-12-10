@@ -1,7 +1,16 @@
 <?php
-class App_Model_Setting_Plugin extends Model
+
+class App_Model_Plugin extends App_Model_Table
 {
+	protected $table = 'plugin', $primary_key = 'plugin_id';
+
 	private $plugins;
+
+	public function getField($name, $field)
+	{
+		$id = preg_match("/[^\\d]/", $name) ? false : (int)$name;
+		return $this->queryVar("SELECT `$field` FROM $this->p_table WHERE " . ($id ? "plugin_id = $id" : "`name` = '" . $this->escape($name) . "'"));
+	}
 
 	public function getPlugins($data = array(), $total = false)
 	{
@@ -31,7 +40,7 @@ class App_Model_Setting_Plugin extends Model
 					}
 
 					$setup_file = DIR_PLUGIN . $plugin['name'] . '/setup.php';
-					$plugin += $this->tool->getFileCommentDirectives($setup_file);
+					$plugin += get_comment_directives($setup_file);
 
 					$plugin += array_fill_keys(array(
 						'title',
@@ -45,7 +54,9 @@ class App_Model_Setting_Plugin extends Model
 
 					if (!empty($plugin['dependencies'])) {
 						$plugin['dependencies'] = explode(',', $plugin['dependencies']);
-						array_walk($plugin['dependencies'], function (&$value) { $value = trim($value); });
+						array_walk($plugin['dependencies'], function (&$value) {
+							$value = trim($value);
+						});
 					}
 
 					//Add Plugin to list
@@ -156,6 +167,67 @@ class App_Model_Setting_Plugin extends Model
 		return true;
 	}
 
+	public function install($name)
+	{
+		clear_cache('plugin');
+
+		$this->delete('plugin', array('name' => $name));
+
+		$directives = $this->plugin->getDirectives($name);
+
+		$plugin = array(
+			'name'    => $name,
+			'version' => !empty($directives['version']) ? $directives['version'] : '1.0',
+			'status'  => 1,
+		);
+
+		$plugin_id = $this->insert('plugin', $plugin);
+
+		return $plugin_id;
+	}
+
+	public function uninstall($name)
+	{
+		clear_cache('plugin');
+
+		//remove files from plugin that were registered
+		$plugin_entries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin_registry WHERE `name` = '" . $this->db->escape($name) . "'");
+
+		foreach ($plugin_entries as $entry) {
+			//Only Remove symlinked files (in case someone already deleted this file and replaced it)
+			if (is_file($entry['live_file']) && _is_link($entry['live_file'])) {
+				if (unlink($entry['live_file'])) {
+					message("notify", _l("Removed plugin file $entry[live_file]."));
+				} else {
+					message("error", _l("Unable to remove plugin file $entry[live_file]."));
+				}
+			}
+		}
+
+		$this->delete('plugin_registry', array('name' => $name));
+
+		$this->delete('plugin', array('name' => $name));
+
+		return true;
+	}
+
+	public function upgrade($name)
+	{
+		clear_cache('plugin');
+
+		$directives = $this->plugin->getDirectives($name);
+
+		$plugin = array(
+			'version' => !empty($directives['version']) ? $directives['version'] : '1.0',
+		);
+
+		if ($this->update('plugin', $plugin, array('name' => $name))) {
+			return $directives['version'];
+		}
+
+		return false;
+	}
+
 	public function getDependentsList($name)
 	{
 		$dependents = array();
@@ -186,7 +258,7 @@ class App_Model_Setting_Plugin extends Model
 		return $plugin_data;
 	}
 
-	public function updatePlugin($name, $plugin)
+	public function save($name, $plugin)
 	{
 		$this->update('plugin', $plugin, array('name' => $name));
 	}

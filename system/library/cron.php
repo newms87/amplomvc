@@ -66,7 +66,7 @@ class Cron extends Library
 						continue;
 					}
 
-					$classname = "System_Cron_" . $this->tool->_2CamelCase($task['file']);
+					$classname = "System_Cron_" . _2camel($task['file']);
 					$method    = $task['method'];
 
 					if (method_exists($classname, $method)) {

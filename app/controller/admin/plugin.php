@@ -1,18 +1,13 @@
 <?php
-class App_Controller_Admin_Plugin_Plugin extends Controller
+class App_Controller_Admin_Plugin extends Controller
 {
 	public function index()
 	{
 		$this->document->setTitle(_l("Plugins"));
 
-		$this->getList();
-	}
-
-	public function getList()
-	{
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Plugins"), site_url('admin/plugin/plugin'));
+		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
 
 		//The Table Columns
 		$columns = array();
@@ -83,43 +78,44 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		$plugin_total = $this->Model_Setting_Plugin->getTotalPlugins($filter);
-		$plugins      = $this->Model_Setting_Plugin->getPlugins($sort + $filter);
-
-		$all_plugins = $this->Model_Setting_Plugin->getPlugins();
+		$plugin_total = $this->Model_Plugin->getTotalPlugins($filter);
+		$plugins      = $this->Model_Plugin->getPlugins($sort + $filter);
 
 		foreach ($plugins as &$plugin) {
 			if ($plugin['installed']) {
-				$plugin['actions'] = array( /*'edit' => array(
-						'text' => _l("Edit"),
-						'href' => site_url('admin/plugin/plugin/update', 'name=' . $plugin['name']),
-					),*/
-				);
+				$plugin['actions'] = array();
 
-				if ($this->plugin->hasChanges($plugin['name'])) {
+				$version = $this->plugin->hasUpgrade($plugin['name']);
+
+				if ($version) {
+					$plugin['actions']['upgrade'] = array(
+						'text' => _l("Upgrade to %s", $version),
+						'href' => site_url('admin/plugin/upgrade', 'name=' . $plugin['name']),
+					);
+				} elseif ($this->plugin->hasChanges($plugin['name'])) {
 					$plugin['actions']['add_changes'] = array(
 						'text' => _l("Add Changes"),
-						'href' => site_url('admin/plugin/plugin/add_changes', 'name=' . $plugin['name']),
+						'href' => site_url('admin/plugin/upgrade', 'name=' . $plugin['name']),
 					);
 				}
 
-				if ($this->Model_Setting_Plugin->canUninstall($plugin['name'])) {
+				if ($this->Model_Plugin->canUninstall($plugin['name'])) {
 					$plugin['actions']['uninstall'] = array(
 						'text' => _l("Uninstall"),
-						'href' => site_url('admin/plugin/plugin/uninstall', 'name=' . $plugin['name']),
+						'href' => site_url('admin/plugin/uninstall', 'name=' . $plugin['name']),
 					);
 				} else {
 					$plugin['actions']['error'] = array(
-						'text' => _l("<b>Uninstall Dependencies:</b><br />%s", implode(',', $this->Model_Setting_Plugin->getDependentsList($plugin['name']))),
+						'text' => _l("<b>Uninstall Dependencies:</b><br />%s", implode(',', $this->Model_Plugin->getDependentsList($plugin['name']))),
 					);
 				}
 
 			} else {
-				if ($this->Model_Setting_Plugin->canInstall($plugin['name'])) {
+				if ($this->Model_Plugin->canInstall($plugin['name'])) {
 					$plugin['actions'] = array(
 						'install' => array(
 							'text' => _l("Install"),
-							'href' => site_url('admin/plugin/plugin/install', 'name=' . $plugin['name']),
+							'href' => site_url('admin/plugin/install', 'name=' . $plugin['name']),
 						)
 					);
 				} else {
@@ -168,65 +164,48 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Render
-		output($this->render('plugin/plugin', $data));
+		output($this->render('plugin', $data));
 	}
 
-	public function getForm()
+	public function form()
 	{
 		if (!isset($_GET['name'])) {
 			message('warning', _l("Warning: There was no plugin found."));
-			redirect('admin/plugin/plugin');
+			redirect('admin/plugin');
 		}
 		$plugin_name = $_GET['name'];
 
 		$this->document->setTitle(_l("Plugins"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Plugins"), site_url('admin/plugin/plugin'));
+		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
 
-		if (isset($_POST['plugin_data'])) {
-			$data['plugin_data'] = $_POST['plugin_data'];
-		} else {
-			$data['plugin_data'] = $this->Model_Setting_Plugin->getPluginData($plugin_name);
+		$data = $_POST;
+
+		if (!IS_POST) {
+			$data['plugin_data'] = $this->Model_Plugin->getPluginData($plugin_name);
 		}
 
 		$data['name'] = $plugin_name;
 
-		$data['action'] = site_url('admin/plugin/plugin/update', 'name=' . $plugin_name);
-		$data['cancel'] = site_url('admin/plugin/plugin');
+		$data['action'] = site_url('admin/plugin/save', 'name=' . $plugin_name);
+		$data['cancel'] = site_url('admin/plugin');
 
-		output($this->render('plugin/plugin_form', $data));
+		output($this->render('plugin_form', $data));
 	}
 
-	public function update()
+	public function save()
 	{
-		$this->cache->delete('model');
+		$name = _get('name');
 
-		if (!isset($_GET['name'])) {
-			message('warning', _l("Warning: There was no plugin found."));
-			redirect('admin/plugin/plugin');
+		if ($name && $this->Model_Plugin->save($name, $_POST['plugin_data'])) {
+			message('success', _l("You have successfully updated the plugin %s!", $name));
+			redirect('admin/plugin');
+		} else {
+			message('error', $this->Model_Plugin->getError());
 		}
 
-		$this->document->setTitle(_l("Plugins"));
-
-		if (IS_POST && $this->validateForm()) {
-			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
-
-			message('success', _l("You have successfully updated the plugins!"));
-
-			redirect('admin/plugin/plugin');
-		}
-
-		$this->getForm();
-	}
-
-	public function add_changes()
-	{
-		if (!empty($_GET['name'])) {
-			$this->plugin->integrateChanges($_GET['name']);
-		}
-
-		redirect('admin/plugin/plugin');
+		post_redirect('admin/plugin/form', 'name=' . $name);
 	}
 
 	public function install()
@@ -239,7 +218,7 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			}
 		}
 
-		redirect('admin/plugin/plugin');
+		redirect('admin/plugin');
 	}
 
 	public function uninstall()
@@ -250,22 +229,23 @@ class App_Controller_Admin_Plugin_Plugin extends Controller
 			$this->plugin->uninstall($_GET['name'], $keep_data);
 		}
 
-		redirect('admin/plugin/plugin');
+		redirect('admin/plugin');
 	}
 
-	private function validateForm()
+	public function upgrade()
 	{
-		if (!user_can('w', 'admin/plugin/plugin')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify plugins!");
+		if (!empty($_GET['name'])) {
+			$version = $this->plugin->upgrade($_GET['name']);
+
+			if ($version === true) {
+				message('success', _l("The changes for plugin %s have been integrated.", $_GET['name']));
+			} elseif ($version) {
+				message('success', _l("The plugin %s was successfully upgraded to version %s!", $_GET['name'], $version));
+			} else {
+				message('error', $this->plugin->getError());
+			}
 		}
 
-		$plugs = $_POST['plugin_data'];
-		$name  = ucfirst($_GET['name']);
-
-		foreach ($plugs as $p) {
-
-		}
-
-		return empty($this->error);
+		redirect('admin/plugin');
 	}
 }

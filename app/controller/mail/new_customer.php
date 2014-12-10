@@ -18,8 +18,8 @@ class App_Controller_Mail_NewCustomer extends Controller
 		);
 
 		//TODO: How can we better handle easy customizaable emails with integrated HTML template?
-		$subject = $this->tool->insertables($insertables, option('mail_registration_subject'));
-		$message = $this->tool->insertables($insertables, option('mail_registration_message'));
+		$subject = insertables($insertables, option('mail_registration_subject'));
+		$message = insertables($insertables, option('mail_registration_message'));
 
 		$store = $this->config->getStore();
 

@@ -270,7 +270,7 @@ class Theme extends Library
 
 		$this->config->saveGroup('store_theme', $store_theme, $store_id, false);
 
-		$this->cache->delete('less/store_theme.' . $store_id . '.' . $theme);
+		clear_cache('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
 	public function getStoreTheme($store_id)
@@ -323,7 +323,7 @@ class Theme extends Library
 
 	public function restoreStoreTheme($store_id)
 	{
-		$this->cache->delete('less/store_theme.' . $store_id);
+		clear_cache('less/store_theme.' . $store_id);
 
 		return $this->config->deleteGroup('store_theme', $store_id);
 	}
@@ -333,7 +333,7 @@ class Theme extends Library
 		$configs = array();
 
 		//Prefix Less file with PHP tag for File Comment Directives.
-		$directives = $this->tool->getCommentDirectives("<?php " . file_get_contents($file));
+		$directives = get_comment_directives("<?php " . file_get_contents($file));
 
 		$values = $this->parseConfigs($file);
 
@@ -388,7 +388,7 @@ class Theme extends Library
 		$parents = array();
 
 		while (is_file(DIR_THEMES . $theme . '/setup.php')) {
-			$directives = $this->tool->getFileCommentDirectives(DIR_THEMES . $theme . '/setup.php');
+			$directives = get_comment_directives(DIR_THEMES . $theme . '/setup.php');
 
 			if (!empty($directives['parent'])) {
 				//Check for Self parent assignment

@@ -100,7 +100,6 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 }
 
 //Router
-$router->route();
 $router->dispatch();
 
 // Output

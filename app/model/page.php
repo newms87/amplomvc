@@ -90,7 +90,7 @@ class App_Model_Page extends Model
 			}
 		}
 
-		$this->cache->delete('page');
+		clear_cache('page');
 
 		return $page_id;
 	}
@@ -121,7 +121,7 @@ class App_Model_Page extends Model
 
 		$this->translation->deleteTranslation('page', $page_id);
 
-		$this->cache->delete('page');
+		clear_cache('page');
 
 		return $page_id;
 	}
@@ -315,7 +315,7 @@ class App_Model_Page extends Model
 				$this->save($page['page_id'], $page);
 			}
 		} elseif (is_file($content_file)) {
-			$page_data = $this->tool->getFileCommentDirectives($content_file);
+			$page_data = get_comment_directives($content_file);
 			$title     = !empty($page_data['title']) ? $page_data['title'] : cast_title($name);
 			$cache     = isset($page_data['cache']) ? (int)$page_data['cache'] : 1;
 

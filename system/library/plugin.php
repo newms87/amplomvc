@@ -1,4 +1,5 @@
 <?php
+
 class Plugin extends Library
 {
 	private $plugins;
@@ -15,7 +16,7 @@ class Plugin extends Library
 		$this->installed = cache('plugin.installed');
 
 		if (is_null($this->installed)) {
-			$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
+			$this->installed = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1", 'name');
 
 			cache('plugin.installed', $this->installed);
 		}
@@ -27,26 +28,19 @@ class Plugin extends Library
 
 	public function isInstalled($name)
 	{
-		return !in_array($name, $this->installed);
+		return isset($this->installed[$name]);
 	}
 
 	public function loadPlugin($name)
 	{
 		if (!isset($this->plugins[$name])) {
-			$setup_file = DIR_PLUGIN . $name . '/setup.php';
+			$plugin_class = 'Plugin_' . _2camel($name) . '_Setup';
 
-			if (!is_file($setup_file)) {
-				message("warning", _l("The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!", $setup_file, $name));
-
+			if (!class_exists($plugin_class)) {
 				return false;
 			}
 
-			require_once(_mod(DIR_PLUGIN . 'setup.php'));
-			require_once(_mod($setup_file));
-
-			$user_class = preg_replace("/[^A-Z0-9]/i", "", $name) . '_Setup';
-
-			$this->plugins[$name] = new $user_class();
+			$this->plugins[$name] = new $plugin_class();
 		}
 
 		return $this->plugins[$name];
@@ -61,16 +55,19 @@ class Plugin extends Library
 
 	public function install($name)
 	{
-		$this->cache->delete('plugin');
-		$this->cache->delete('model');
-
 		$plugin = $this->loadPlugin($name);
 
 		if (method_exists($plugin, 'install')) {
 			$plugin->install();
 		}
 
-		$this->System_Model_Plugin->install($name);
+		$this->Model_Plugin->install($name);
+
+		//Run all upgrades
+		if (method_exists($plugin, 'upgrade')) {
+			$data = $plugin->upgrade('0');
+			$this->Model_Plugin->upgrade($name, $data);
+		}
 
 		//New Files
 		if (!$this->integrateNewFiles($name)) {
@@ -107,9 +104,6 @@ class Plugin extends Library
 
 	public function uninstall($name, $keep_data = true)
 	{
-		$this->cache->delete('plugin');
-		$this->cache->delete('model');
-
 		$plugin = $this->loadPlugin($name);
 
 		$data = null;
@@ -119,7 +113,7 @@ class Plugin extends Library
 		}
 
 		//Uninstall the plugin from the system
-		$this->System_Model_Plugin->uninstall($name, $data);
+		$this->Model_Plugin->uninstall($name, $data);
 
 		$this->mod->removeDirectory(DIR_PLUGIN . $name);
 
@@ -134,11 +128,50 @@ class Plugin extends Library
 		return true;
 	}
 
+	public function hasUpgrade($name)
+	{
+		$directives = $this->getDirectives($name);
+
+		if (isset($directives['version'])) {
+			$version = $this->Model_Plugin->getField($name, 'version');
+
+			if (version_compare($version, $directives['version']) === -1) {
+				return $directives['version'];
+			}
+		}
+
+		return false;
+	}
+
+	public function upgrade($name)
+	{
+		$plugin = $this->loadPlugin($name);
+
+		if (!$plugin) {
+			$this->error['name'] = _l("Plugin %s does not exist!", $name);
+			return false;
+		}
+
+		$data = null;
+
+		$from_version = $this->Model_Plugin->getField($name, 'version');
+
+		if (method_exists($plugin, 'upgrade')) {
+			$data = $plugin->upgrade($from_version);
+		}
+
+		$version = $this->Model_Plugin->upgrade($name, $data);
+
+		$this->integrateChanges($_GET['name']);
+
+		return $from_version === $version ? true : $version;
+	}
+
 	public function getNewFiles($name)
 	{
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		return $this->tool->getFiles($dir, false, FILELIST_SPLFILEINFO, '^((?!\.git).)*$');
+		return get_files($dir, false, FILELIST_SPLFILEINFO, '^((?!\.git).)*$');
 	}
 
 	public function integrateNewFiles($name)
@@ -199,13 +232,12 @@ class Plugin extends Library
 		$changes = $this->getChanges($name);
 
 		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
-			message('notify', _l("No Changes Were Made"));
-			return false;
+			return true;
 		}
 
 		foreach ($changes['new_files'] as $file) {
 			$this->activatePluginFile($name, $file);
-			message('success', _l("Add New File: %s", $file));
+			message('notify', _l("Add New File: %s", $file));
 		}
 
 		$this->mod->addFiles(null, $changes['mod_files']);
@@ -223,8 +255,6 @@ class Plugin extends Library
 				return false;
 			}
 		}
-
-		message('success', _l("Successfully Integrated the Changes for %s!", $name));
 
 		return true;
 	}
@@ -300,7 +330,7 @@ class Plugin extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
 		$this->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
 
-		$this->cache->delete("plugin");
+		clear_cache("plugin");
 
 		return true;
 	}
@@ -330,7 +360,7 @@ class Plugin extends Library
 			return array();
 		}
 
-		$files = $this->tool->getFiles($dir, false, FILELIST_STRING, '^((?!\.git).)*$');
+		$files = get_files($dir, false, FILELIST_STRING, '^((?!\.git).)*$');
 
 		$file_mods = array();
 
@@ -382,7 +412,7 @@ class Plugin extends Library
 		$exclude_file = DIR_SITE . '.git/info/exclude';
 
 		if (is_dir(DIR_SITE . '.git') && _is_writable(DIR_SITE . '.git/info/')) {
-			$ignores = explode("\n",file_get_contents($exclude_file));
+			$ignores = explode("\n", file_get_contents($exclude_file));
 
 			foreach ($ignores as $ignore) {
 				if ($ignore === $file) {
@@ -394,5 +424,16 @@ class Plugin extends Library
 		}
 
 		return file_put_contents($exclude_file, implode("\n", $ignores));
+	}
+
+	public function getDirectives($name)
+	{
+		$setup_file = DIR_PLUGIN . $name . '/setup.php';
+
+		if (is_file($setup_file)) {
+			return get_comment_directives($setup_file);
+		}
+
+		return array();
 	}
 }

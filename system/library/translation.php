@@ -132,7 +132,7 @@ class Translation extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$translation_id' AND object_id = '" . (int)$object_id . "' AND language_id = '" . (int)$language_id . "'");
 		$this->query("INSERT INTO " . DB_PREFIX . "translation_text SET translation_id = '$translation_id', object_id = '" . (int)$object_id . "', language_id = '" . (int)$language_id . "', text = '" . $this->escape($text) . "'");
 
-		$this->cache->delete('translate');
+		clear_cache('translate');
 	}
 
 	public function deleteAll($table, $remove_table = false)
@@ -164,7 +164,7 @@ class Translation extends Library
 			$this->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$translation[translation_id]' AND object_id = '" . (int)$object_id . "'");
 		}
 
-		$this->cache->delete('translate');
+		clear_cache('translate');
 	}
 
 	public function get_translation_id($table, $field, $create = true)
@@ -180,7 +180,7 @@ class Translation extends Library
 
 	public function add($table, $field)
 	{
-		$this->cache->delete('translate');
+		clear_cache('translate');
 
 		$translation = array(
 			'table' => $table,
@@ -197,6 +197,6 @@ class Translation extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$translation_id'");
 		$this->query("DELETE FROM " . DB_PREFIX . "translation WHERE translation_id = '$translation_id'");
 
-		$this->cache->delete('translate');
+		clear_cache('translate');
 	}
 }

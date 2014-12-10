@@ -31,7 +31,7 @@ class App_Model_Navigation extends App_Model_Table
 			$this->addNavigationLinks($navigation_group_id, $data['links']);
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -69,7 +69,7 @@ class App_Model_Navigation extends App_Model_Table
 			}
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -85,7 +85,7 @@ class App_Model_Navigation extends App_Model_Table
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return true;
 	}
@@ -115,7 +115,7 @@ class App_Model_Navigation extends App_Model_Table
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return $this->insert("navigation", $link);
 	}
@@ -197,14 +197,14 @@ class App_Model_Navigation extends App_Model_Table
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		return $this->update("navigation", $link, $navigation_id);
 	}
 
 	public function deleteNavigationLink($navigation_id)
 	{
-		$this->cache->delete('navigation');
+		clear_cache('navigation');
 
 		$children = $this->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE parent_id = " . (int)$navigation_id);
 
@@ -366,7 +366,7 @@ class App_Model_Navigation extends App_Model_Table
 
 			'plugins' => array(
 				'display_name' => 'Plugins',
-				'href'         => 'admin/plugin/plugin',
+				'href'         => 'admin/plugin',
 			),
 
 			'users'   => array(
@@ -397,10 +397,6 @@ class App_Model_Navigation extends App_Model_Table
 							'system_settings_update'               => array(
 								'display_name' => 'Update',
 								'href'         => 'admin/setting/update',
-							),
-							'system_settings_controller_overrides' => array(
-								'display_name' => 'Controller Overrides',
-								'href'         => 'admin/setting/controller_override',
 							),
 						),
 					),

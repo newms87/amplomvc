@@ -75,7 +75,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		//Template Data
 		$data['log_name'] = $log_name;
 
-		$log_files = $this->tool->getFiles(DIR_LOGS, array('txt'));
+		$log_files = get_files(DIR_LOGS, array('txt'));
 
 		foreach ($log_files as &$file) {
 			$base = $file->getBasename('.txt');

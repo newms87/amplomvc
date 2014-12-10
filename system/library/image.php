@@ -78,7 +78,7 @@ class Image extends Library
 		$mime = $this->info['mime'];
 
 		if (!$this->register_safe_shutdown($image)) {
-			message('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
+			message('warning', "Image Create failed on $image. The file size (" . bytes2str(filesize($image)) . ") is too large for your server.");
 			redirect($this->url->here());
 		}
 
@@ -570,13 +570,13 @@ class Image extends Library
 				if ($this->safe_shutdown) {
 					if ($this->shutdown_file) {
 						$_SESSION['image_safe_max_file_size'] = filesize($this->shutdown_file);
-						$size                                 = $this->tool->bytes2str(filesize($this->shutdown_file));
+						$size                                 = bytes2str(filesize($this->shutdown_file));
 					} else {
 						$size = 0;
 					}
 					$max      = ini_get('memory_limit');
-					$max_mem  = $this->tool->bytes2str(memory_get_peak_usage(true));
-					$safe_mem = $this->tool->bytes2str($this->safe_shutdown);
+					$max_mem  = bytes2str(memory_get_peak_usage(true));
+					$safe_mem = bytes2str($this->safe_shutdown);
 
 					trigger_error("Server Max Memory limit reached: $max_mem / $max. Safe shutdown enabled at $safe_mem. Image File Size: $size");
 				}

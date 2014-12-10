@@ -3,7 +3,7 @@ class App_Model_Setting_UrlAlias extends Model
 {
 	public function addUrlAlias($data)
 	{
-		$this->cache->delete('url_alias');
+		clear_cache('url_alias');
 
 		$data['alias'] = $this->url->format($data['alias']);
 
@@ -16,7 +16,7 @@ class App_Model_Setting_UrlAlias extends Model
 
 	public function editUrlAlias($url_alias_id, $data)
 	{
-		$this->cache->delete('url_alias');
+		clear_cache('url_alias');
 
 		if (!empty($data['alias'])) {
 			$data['alias'] = $this->url->format($data['alias']);
@@ -27,7 +27,7 @@ class App_Model_Setting_UrlAlias extends Model
 
 	public function deleteUrlAlias($url_alias_id)
 	{
-		$this->cache->delete('url_alias');
+		clear_cache('url_alias');
 
 		return $this->delete('url_alias', $url_alias_id);
 	}

@@ -6,7 +6,7 @@
 			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _("Backup / Restore"); ?></h1>
 
 			<div class="buttons">
-				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
+				<a href="<?= site_url('admin'); ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
 			</div>
 		</div>
 		<div class="section">
@@ -33,9 +33,9 @@
 								<span class="radio-button">
 									<input type="radio" name="backup_file" value="<?= $file['path']; ?>" id="radio-button_<?= md5($file['path']); ?>"/>
 									<label for="radio-button_<?= md5($file['path']); ?>">
-										<span class="date"><?= $file['display_date']; ?></span> -
+										<span class="date"><?= format('date', $file['date'], 'd M, Y'); ?></span> -
 										<span class="name"><?= $file['name']; ?></span> -
-										<span class="size"><?= $file['display_size']; ?></span>
+										<span class="size"><?= bytes2str($file['size'], 2); ?></span>
 									</label>
 								</span>
 							<? } ?>

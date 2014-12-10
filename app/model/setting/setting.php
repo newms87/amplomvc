@@ -11,7 +11,7 @@ class App_Model_Setting_Setting extends Model
 			$order = 0;
 
 			foreach ($files as $file) {
-				$directives = $this->tool->getFileCommentDirectives($file);
+				$directives = get_comment_directives($file);
 
 				if (empty($directives['title'])) {
 					continue;

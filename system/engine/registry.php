@@ -43,7 +43,7 @@ final class Registry
 			$path = explode("_", $class);
 
 			foreach ($path as &$p) {
-				$p = strtolower($this->get('tool')->camelCase2_($p));
+				$p = strtolower(camel2_($p));
 			}
 			unset($p);
 

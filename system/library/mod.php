@@ -132,7 +132,7 @@ class Mod extends Library
 
 	public function addModFile($mod_file)
 	{
-		$directives = $this->tool->getFileCommentDirectives($mod_file);
+		$directives = get_comment_directives($mod_file);
 
 		if (isset($directives['skip'])) {
 			return true;
@@ -177,7 +177,7 @@ class Mod extends Library
 
 	public function addModDirectory($dir)
 	{
-		$mod_files = $this->tool->getFiles($dir, null, FILELIST_STRING);
+		$mod_files = get_files($dir, null, FILELIST_STRING);
 
 		foreach ($mod_files as $mod_file) {
 			$this->addModFile($mod_file);
@@ -265,7 +265,7 @@ class Mod extends Library
 			return false;
 		}
 
-		$directives = $this->tool->getFileCommentDirectives($mod_file);
+		$directives = get_comment_directives($mod_file);
 
 		if (!$source) {
 			$source = preg_replace("/(.*?)file_mods\\//", DIR_SITE, $mod_file);
@@ -675,7 +675,7 @@ class Mod extends Library
 			} else {
 				//We cannot use url library here because it has not been loaded yet.
 				message('warning', $this->getError());
-				message('warning', 'Please visit the <a href="' . site_url('admin/plugin/plugin') . '">Plugins</a> and resolve the issue.');
+				message('warning', 'Please visit the <a href="' . site_url('admin/plugin') . '">Plugins</a> and resolve the issue.');
 			}
 		}
 	}

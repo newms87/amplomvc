@@ -1,4 +1,8 @@
 <?php
+if (!defined('DIR_CACHE')) {
+	define('DIR_CACHE', DIR_SITE . 'system/cache/');
+}
+
 define('AC_MOD_REGISTRY', DIR_SITE . 'system/mods/registry.ac');
 define('AC_TEMPLATE_CACHE', DIR_CACHE . 'templates/');
 

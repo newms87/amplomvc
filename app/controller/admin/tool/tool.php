@@ -28,7 +28,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 	{
 		$tables = !empty($_POST['cache_tables']) ? $_POST['cache_tables'] : '';
 
-		$this->cache->delete($tables);
+		clear_cache($tables);
 		message('success', _l("The cache table was successfully cleared!"));
 
 		redirect('admin/tool/tool');

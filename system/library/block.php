@@ -21,7 +21,7 @@ class Block extends Library
 		$data['path'] = strtolower($data['path']);
 
 		$parts      = explode('/', $data['path']);
-		$class_name = "Block_" . $this->tool->_2CamelCase($parts[0]) . '_' . $this->tool->_2CamelCase($parts[1]);
+		$class_name = "Block_" . _2camel($parts[0]) . '_' . _2camel($parts[1]);
 
 		/**
 		 * Add Backend Files
@@ -52,7 +52,7 @@ class Block extends Library
 
 		$content = file_get_contents($controller_template);
 
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
+		$content = insertables($insertables, $content, '__', '__');
 
 		$error = null;
 		if (!_is_writable(dirname($controller_file))) {
@@ -99,7 +99,7 @@ class Block extends Library
 			'class_name' => "App_Controller_" . $class_name,
 		);
 
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
+		$content = insertables($insertables, $content, '__', '__');
 
 		$error = null;
 		if (!_is_writable(dirname($controller_file))) {
@@ -126,13 +126,13 @@ class Block extends Library
 					'slug' => slug($data['path']),
 				);
 
-				$content = $this->tool->insertables($insertables, $content, '__', '__');
+				$content = insertables($insertables, $content, '__', '__');
 
 				file_put_contents($template_file, $content);
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function edit($path, $data)
@@ -181,7 +181,7 @@ class Block extends Library
 			unset($instance);
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 
 		return true;
 	}
@@ -226,7 +226,7 @@ class Block extends Library
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function get($path)
@@ -265,7 +265,7 @@ class Block extends Library
 		static $blocks = array();
 
 		if (!$blocks) {
-			$block_files = $this->tool->getFiles(DIR_SITE . 'app/controller/block/', 'php', FILELIST_RELATIVE);
+			$block_files = get_files(DIR_SITE . 'app/controller/block/', 'php', FILELIST_RELATIVE);
 
 			foreach ($block_files as $file) {
 				$path = str_replace('.php', '', $file);
@@ -419,7 +419,7 @@ class Block extends Library
 
 	public function getName($path)
 	{
-		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'app/controller/block/' . $path . '.php');
+		$directives = get_comment_directives(DIR_SITE . 'app/controller/block/' . $path . '.php');
 
 		return !empty($directives['name']) ? $directives['name'] : $path;
 	}
@@ -429,7 +429,7 @@ class Block extends Library
 		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $blocks) . "')");
 
 		if ($this->countAffected()) {
-			$this->cache->delete('block');
+			clear_cache('block');
 		}
 	}
 }

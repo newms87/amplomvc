@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Dev extends Controller
 {
 	public function index()
@@ -189,19 +190,8 @@ class App_Controller_Admin_Dev extends Controller
 			}
 		}
 
-		$backup_files = $this->Model_Dev_Dev->getBackupFiles();
-
-		foreach ($backup_files as &$backup) {
-			$backup['display_size'] = $this->tool->bytes2str($backup['size'], 2);
-			$backup['display_date'] = $this->date->format($backup['date'], 'd M, Y');
-		}
-		unset($backup);
-
-		$data['data_backup_files'] = $backup_files;
-
-		$data['data_tables'] = $this->db->getTables();
-
-		$data['return'] = site_url('admin');
+		$data['data_backup_files'] = $this->Model_Dev_Dev->getBackupFiles();
+		$data['data_tables']       = $this->db->getTables();
 
 		$this->content();
 

@@ -17,7 +17,7 @@ class App_Model_Localisation_GeoZone extends Model
 			}
 		}
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function editGeoZone($geo_zone_id, $data)
@@ -37,7 +37,7 @@ class App_Model_Localisation_GeoZone extends Model
 			}
 		}
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function deleteGeoZone($geo_zone_id)
@@ -45,7 +45,7 @@ class App_Model_Localisation_GeoZone extends Model
 		$this->delete('geo_zone', $geo_zone_id);
 		$this->delete('zone_to_geo_zone', array('geo_zone_id' => $geo_zone_id));
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function getGeoZone($geo_zone_id)
