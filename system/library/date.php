@@ -32,7 +32,7 @@ class Date extends Library
 			}
 		}
 
-		if (!$date) {
+		if (!is_object($date)) {
 			$this->error['format'] = _l("Invalid Date Format");
 			return false;
 		}
