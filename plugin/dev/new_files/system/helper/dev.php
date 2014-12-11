@@ -42,7 +42,16 @@ function _profile($key, array $data = array())
 	$profile[$key] = $data;
 }
 
-//custom var dump
+/**
+ * @param mixed $var - The variable to display all data for. Can be any type (int, array, object, etc..)
+ * @param string $label - The label for the link to the dump report (which opens in a new window)
+ * @param bool $show_type - Show the types for string, int, float and bool data
+ * @param int $level - The starting recursive depth for arrays
+ * @param int $max - The maximum recursive depth for arrays
+ * @param bool $print - print and return the results. False will only return the HTML results.
+ *
+ * @return string - The HTML dump output
+ */
 function html_dump($var, $label = "HTML Dump", $show_type = false, $level = 0, $max = -1, $print = true)
 {
 	static $first = true, $count = 0;

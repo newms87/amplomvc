@@ -830,6 +830,10 @@ var amplo_ajax_cb = function () {
 				opts['height'] = window.innerHeight * .9;
 			}
 
+            if ($this.attr('data-loading')) {
+                $this.loading();
+            }
+
 			colorbox(opts);
 			return false;
 		}

@@ -113,7 +113,7 @@ class DB
 	 * @return mixed - An array as described above, or false on failure
 	 *
 	 */
-	public function query($sql)
+	public function query($sql, $cast_type = true)
 	{
 		if ($this->synctime) {
 			$sql = $this->synctime($sql);
@@ -126,7 +126,7 @@ class DB
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 
-			$resource = $this->driver->query($sql);
+			$resource = $this->driver->query($sql, $cast_type);
 
 			$time = round(microtime(true) - $start, 6);
 
@@ -135,7 +135,7 @@ class DB
 				'time'  => $time ? $time : .000005,
 			);
 		} else {
-			$resource = $this->driver->query($sql);
+			$resource = $this->driver->query($sql, $cast_type);
 		}
 
 		if (!$resource) {
