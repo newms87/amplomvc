@@ -47,7 +47,7 @@
 
 /* Path Config */
 @imgpath: '@{basepath}image/';
-@themepath: '@{basepath}app/view/theme/metro/';
+@themepath: '@{basepath}app/view/theme/amplo/';
 
 /* LESS config */
 @xs: 480px;
@@ -66,15 +66,24 @@
 @page-width-max: 1080px;
 @page-wrap-pad: 20px 0;
 
+//Primary Styling
+@bg-main: #ffffff;
+
 @color-main: #92acc6;
 @color-secondary: #2f3d52;
+@color-light: #92acc6;
+@color-dark: #2f3d52;
+
+@color-lightest: lighten(@color-light, 50%);
+@color-lighter: lighten(@color-light, 25%);
+@color-darker: darken(@color-dark, 25%);
+@color-darkest: darken(@color-dark, 50%);
+
 
 @link-font: 1em;
 @link-font-hover: @link-font;
 @link-color: #00AEEF;
 @link-color-hover: lighten(@link-color, 25%);
-
-@bg-main: #ffffff;
 
 @font-base-family: OpenSansRegular, Helvetica, sans-serif;
 @font-base: 100% @font-base-family;
@@ -97,16 +106,12 @@
 @h6-font: .8em;
 
 //Buttons
-@button-font: 1.1em OpenSansBold;
-@button-font-color: white;
-@button-font-color-hover: white;
-@button-background: "background: #49C9FF; background: linear-gradient(to bottom, #49C9FF 0%, #00AEEF 100%);";
-@button-background-hover: "background: #00AEEF; background: linear-gradient(to bottom, #00AEEF 0%, #49C9FF 100%);";
-@button-border: none;
-@button-border-radius: 5px;
-@button-padding: .5em 1.5em;
+@button-style: "font: 1.1em OpenSansBold; color: white; border-radius: 5px; padding: .5em 1.5em; background: #49C9FF; background: linear-gradient(to bottom, #49C9FF 0%, #00AEEF 100%);";
+@button-style-hover: "background: #00AEEF; background: linear-gradient(to bottom, #00AEEF 0%, #49C9FF 100%);";
 
-/* Form Styling */
+/**
+ Form Styling
+ */
 
 //Input Text / Password
 @form-input-font: 1.1em;
@@ -245,16 +250,6 @@
 @nav-primary-sub-bg: 'background: none';
 @nav-primary-sub-color-hover: #92acc6;
 @nav-primary-sub-bg-hover: 'background: none';
-
-
-//Primary Styling
-@color-lightest: #E2F0FD;
-@color-lighter: #C4DBF1;
-@color-light: #92acc6;
-@color-main: #ffffff;
-@color-dark: #2f3d52;
-@color-darker: #1B2636;
-@color-darkest: black;
 
 //Tables
 @table-list-head-color: #C4DBF1;

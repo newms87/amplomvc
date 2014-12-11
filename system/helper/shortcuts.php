@@ -344,6 +344,41 @@ function theme_image($image, $width = null, $height = null)
 	return image(theme_dir('image/' . $image), $width, $height);
 }
 
+function theme_sprite($image)
+{
+	static $sprites;
+
+	if (!isset($sprites[$image])) {
+		$path = pathinfo($image);
+
+		$sprite_srcs = array(
+			1 => theme_image($image),
+		);
+
+		$sizes = array(
+			2 => '2x',
+			3 => '3x',
+			4 => '4x',
+		);
+
+		foreach ($sizes as $size => $name) {
+			$s = theme_image($path['filename'] . '@' . $name . $path['extension']);
+
+			if (!$s) {
+				theme_image($path['filename'] . '-' . $name . $path['extension']);
+			}
+
+			if ($s) {
+				$sprite_srcs[$size] = $s;
+			}
+		}
+
+		$sprites[$image] = image_srcset($sprite_srcs);
+	}
+
+	return $sprites[$image];
+}
+
 function site_url($path = '', $query = null)
 {
 	global $registry;

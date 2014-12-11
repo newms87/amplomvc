@@ -45,14 +45,14 @@ class App_Controller_Admin_Design_Navigation extends Controller
 	{
 		//Insert
 		if (empty($_GET['navigation_group_id'])) {
-			$this->Model_Design_Navigation->addNavigationGroup($_POST);
+			$this->Model_Navigation->addNavigationGroup($_POST);
 		} //Update
 		else {
-			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
+			$this->Model_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 		}
 
-		if ($this->Model_Design_Navigation->hasError()) {
-			message('error', $this->Model_Design_Navigation->getError());
+		if ($this->Model_Navigation->hasError()) {
+			message('error', $this->Model_Navigation->getError());
 		} else {
 			message('success', _l("Navigation has been updated!"));
 		}
@@ -68,10 +68,10 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 	public function delete()
 	{
-		$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
+		$this->Model_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
-		if ($this->Model_Design_Navigation->hasError()) {
-			message('error', $this->Model_Design_Navigation->getError());
+		if ($this->Model_Navigation->hasError()) {
+			message('error', $this->Model_Navigation->getError());
 		} else {
 			message('success', _l("Success: You have modified Navigation!"));
 		}
@@ -134,8 +134,8 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		$navigation_groups_total = $this->Model_Design_Navigation->getTotalNavigationGroups($filter);
-		$navigation_groups       = $this->Model_Design_Navigation->getNavigationGroups($sort + $filter);
+		$navigation_groups_total = $this->Model_Navigation->getTotalNavigationGroups($filter);
+		$navigation_groups       = $this->Model_Navigation->getNavigationGroups($sort + $filter);
 
 		$url_query = $this->url->getQueryExclude('navigation_group_id');
 
@@ -203,7 +203,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		if (IS_POST) {
 			$navigation_group_info = $_POST;
 		} elseif ($navigation_group_id) {
-			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
+			$navigation_group_info = $this->Model_Navigation->getNavigationGroup($navigation_group_id);
 		}
 
 		$defaults = array(
@@ -256,20 +256,20 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		foreach ($_POST['batch'] as $navigation_group_id) {
 			switch ($_POST['action']) {
 				case 'enable':
-					$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+					$this->Model_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
 					break;
 
 				case 'disable':
-					$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+					$this->Model_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
 					break;
 
 				case 'delete':
-					$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+					$this->Model_Navigation->deleteNavigationGroup($navigation_group_id);
 					break;
 			}
 
-			if ($this->Model_Design_Navigation->hasError()) {
-				message('error', $this->Model_Design_Navigation->getError());
+			if ($this->Model_Navigation->hasError()) {
+				message('error', $this->Model_Navigation->getError());
 			} else {
 				message('success', _l("Success: You have modified navigation!"));
 			}
@@ -284,10 +284,10 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 	public function reset_admin_navigation()
 	{
-		$this->Model_Design_Navigation->resetAdminNavigationGroup();
+		$this->Model_Navigation->resetAdminNavigationGroup();
 
-		if ($this->Model_Design_Navigation->hasError()) {
-			message('error', $this->Model_Design_Navigation->getError());
+		if ($this->Model_Navigation->hasError()) {
+			message('error', $this->Model_Navigation->getError());
 			redirect('admin/design/navigation');
 		}
 
