@@ -20,22 +20,6 @@ class App_Model_User extends App_Model_Table
 			$this->error['username'] = _l("Please provide a Username!");
 		}
 
-		if (isset($user['firstname'])) {
-			if (!validate('text', $user['firstname'], 1, 32)) {
-				$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['firstname'] = _l("Please provide your First Name");
-		}
-
-		if (isset($user['lastname'])) {
-			if (!validate('text', $user['lastname'], 1, 32)) {
-				$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['lastname'] = _l("Please provide your Last Name");
-		}
-
 		//Ensure password is set for new user (can be encrypted_password), or check if updating password
 		if (empty($user['password'])) {
 			unset($user['password']);

@@ -208,6 +208,11 @@ abstract class Model
 
 		$values = $this->getInsertString($table, $data, false);
 
+		if (!$values) {
+			$this->error['values'] = _l("There were no valid fields set to insert.");
+			return false;
+		}
+
 		$success = $this->query("INSERT INTO `" . $this->prefix . "$table` SET $values");
 
 		if (!$success) {
@@ -247,6 +252,11 @@ abstract class Model
 		$primary_key = $this->getPrimaryKey($table);
 
 		$values = $this->getInsertString($table, $data);
+
+		if (!$values) {
+			$this->error['values'] = _l("There were no valid fields set to update.");
+			return false;
+		}
 
 		$update_id = true;
 
