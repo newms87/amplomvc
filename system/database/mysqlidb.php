@@ -85,31 +85,27 @@ class mysqlidb implements DatabaseInterface
 				if ($data && $cast_type) {
 					$fields = array();
 
-					for ($i = 0; $i < count($data[0]); $i++) {
-						$field      = $result->fetch_field_direct($i);
-						$fields[$i] = ($field && isset(self::$field_types[$field->type])) ? self::$field_types[$field->type] : '';
+					foreach ($result->fetch_fields() as $field) {
+						$fields[$field->name] = isset(self::$field_types[$field->type]) ? self::$field_types[$field->type] : '';
 					}
 
 					foreach ($data as &$row) {
-						$index = 0;
-						foreach ($row as &$value) {
-							if (is_null($value)) {
-								continue;
-							}
-
-							switch ($fields[$index++]) {
-								case 'float':
-									$value = (float)$value;
-									break;
-								case 'int':
-									$value = (int)$value;
-									break;
-								case 'null':
-									$value = null;
-									break;
-								case 'bool':
-									$value = (bool)$value;
-									break;
+						foreach ($row as $key => &$value) {
+							if (!is_null($value)) {
+								switch ($fields[$key]) {
+									case 'float':
+										$value = (float)$value;
+										break;
+									case 'int':
+										$value = (int)$value;
+										break;
+									case 'null':
+										$value = null;
+										break;
+									case 'bool':
+										$value = (bool)$value;
+										break;
+								}
 							}
 						}
 						unset($value);
