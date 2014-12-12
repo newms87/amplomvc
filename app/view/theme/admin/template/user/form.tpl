@@ -60,16 +60,17 @@
 							<?= build('select', $build); ?>
 						</td>
 					</tr>
-					<tr>
-						<td><?= _l("Password:<span class=\"help\">Leave blank to keep same password.</span>"); ?></td>
+					<tr class="password">
+						<td><?= _l("Password:"); ?></td>
 						<td>
-							<input type="password" autocomplete="off" name="password" value=""/>
-						</td>
-					</tr>
-					<tr>
-						<td><?= _l("Confirm:"); ?></td>
-						<td>
-							<input type="password" autocomplete="off" name="confirm" value=""/>
+							<div class="enter-password">
+								<input type="password" autocomplete="off" data-name="password" placeholder="<?= _l("New Password"); ?>" /><br />
+								<input type="password" autocomplete="off" name="confirm" placeholder="<?= _l("Confirm Password"); ?>" />
+							</div>
+							<a class="change-password">
+								<span class="change"><?= _l("Change Password"); ?></span>
+								<span class="cancel"><?= _l("Cancel"); ?></span>
+							</a>
 						</td>
 					</tr>
 					<tr>
@@ -123,6 +124,16 @@
 </div>
 
 <script type="text/javascript">
+	$('.change-password').click(function() {
+		$('tr.password').toggleClass('edit');
+
+		if ($('tr.password').hasClass('edit')) {
+			$('input[data-name=password]').attr('name', 'password');
+		} else {
+			$('input[data-name=password]').removeAttr('name', '');
+		}
+	});
+
 	$('.meta-key').keyup(function () {
 		var $this = $(this);
 		$this.closest('.meta-row').find('.meta-value').attr('name', 'meta[' + $this.html() + ']');

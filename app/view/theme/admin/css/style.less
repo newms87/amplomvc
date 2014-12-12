@@ -2461,6 +2461,47 @@ td.mail_info label {
   margin-left: 40%;
 }
 
+/** User Save / Update */
+.admin-user-form {
+  tr.password {
+    .enter-password {
+      display: none;
+
+      input {
+        display: inline-block;
+        margin-bottom: .3em;
+      }
+    }
+
+    .change-password {
+      display: inline-block;
+      margin-top: .5em;
+
+      .cancel {
+        margin-top: .5em;
+        display: none;
+      }
+    }
+
+    &.edit {
+      .enter-password {
+        display: block;
+      }
+
+      .change-password {
+        .change {
+          display: none;
+        }
+
+        .cancel {
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
+
 /** HELP DOCUMENTATION **/
 #help_docs ol.top > li {
   margin-bottom: 10px;

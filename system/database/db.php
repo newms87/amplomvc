@@ -569,7 +569,7 @@ class DB
 					'ASC',
 					'DESC'
 				);
-				
+
 				foreach ($fields as $name => $ord) {
 					if (!in_array(strtoupper($ord), $orders)
 					) {

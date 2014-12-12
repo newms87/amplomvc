@@ -248,9 +248,13 @@ if (!function_exists('apache_request_headers')) {
  */
 function _is_link($filename)
 {
-	clearstatcache();
+	if ($filename) {
+		clearstatcache();
 
-	return is_file($filename) && (is_link($filename) || readlink($filename) !== $filename);
+		return is_file($filename) && (is_link($filename) || readlink($filename) !== $filename);
+	}
+
+	return false;
 }
 
 if (!function_exists('sort_by')) {
