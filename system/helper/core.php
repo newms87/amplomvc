@@ -250,7 +250,7 @@ function _is_link($filename)
 {
 	clearstatcache();
 
-	return is_link($filename) || readlink($filename) !== $filename;
+	return is_file($filename) && (is_link($filename) || readlink($filename) !== $filename);
 }
 
 if (!function_exists('sort_by')) {

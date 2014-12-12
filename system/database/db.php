@@ -243,15 +243,15 @@ class DB
 
 	public function multiquery($string)
 	{
-		$file_length     = strlen($string);
+		$file_length = strlen($string);
 		$quote_char_list = array(
 			"'",
 			"`",
 			'"'
 		);
-		$in_quote        = false;
-		$sql             = '';
-		$pos             = 0;
+		$in_quote = false;
+		$sql = '';
+		$pos = 0;
 
 		while ($pos < $file_length) {
 			$char = $string[$pos];
@@ -540,6 +540,57 @@ class DB
 		}
 
 		return false;
+	}
+
+	public function getIndex($table, $key)
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			return $this->queryRows("SHOW INDEX FROM `" . $table . "` WHERE Key_name = '" . $this->escape($key) . "'");
+		}
+	}
+
+	public function createIndex($table, $key, $fields, $type = 'BTREE')
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			if ($this->getIndex($table, $key)) {
+				return true;
+			}
+
+			$key_fields = array();
+
+			if (!is_array($fields)) {
+				$key_fields[] = "`$fields`";
+			} else {
+				$orders = array(
+					'ASC',
+					'DESC'
+				);
+				
+				foreach ($fields as $name => $ord) {
+					if (!in_array(strtoupper($ord), $orders)
+					) {
+						$key_fields[] = "`$ord`";
+					} else {
+						$key_fields[] = "`$name` $ord";
+					}
+				}
+			}
+
+			return $this->query("CREATE INDEX `" . $this->escape($key) . "` ON `$table`(" . implode(',', $key_fields) . ") USING " . $type);
+		}
+	}
+
+	public function dropIndex($table, $key)
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			return $this->query("DROP INDEX `" . $key . "` ON `$table`");
+		}
 	}
 
 	public function setAutoIncrement($table, $value)
