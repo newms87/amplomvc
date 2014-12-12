@@ -407,11 +407,15 @@ class Plugin extends Library
 
 	public function gitIgnore($file)
 	{
+		if (!is_dir(DIR_SITE . '.git')) {
+			return true;
+		}
+
 		$file = '/' . str_replace(DIR_SITE, '', $file);
 
 		$exclude_file = DIR_SITE . '.git/info/exclude';
 
-		if (is_dir(DIR_SITE . '.git') && _is_writable(DIR_SITE . '.git/info/')) {
+		if (_is_writable(DIR_SITE . '.git/info/')) {
 			$ignores = explode("\n", file_get_contents($exclude_file));
 
 			foreach ($ignores as $ignore) {
