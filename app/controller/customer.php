@@ -212,12 +212,12 @@ class App_Controller_Customer extends Controller
 	{
 		$code = $this->customer->generateCode();
 
-		if (!$this->customer->setResetCode($_POST['email'], $code)) {
+		if (!$this->customer->setResetCode(_post('email'), $code)) {
 			message('error', $this->customer->getError());
 		} else {
 
 			$email_data = array(
-				'email' => $_POST['email'],
+				'email' => _post('email'),
 				'reset' => site_url('customer/reset_form', 'code=' . $code),
 			);
 
