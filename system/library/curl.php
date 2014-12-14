@@ -81,6 +81,10 @@ class Curl extends Library
 		//Init Curl
 		$ch = curl_init($url);
 
+		if (defined('AMPLO_CURLOPT_PROXY')) {
+			$options[CURLOPT_PROXY] = AMPLO_CURLOPT_PROXY;
+		}
+
 		if (!$ch) {
 			$this->error = _l("There was an error initializing cURL!");
 		} //Set Options

@@ -29,7 +29,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 		$tables = !empty($_POST['cache_tables']) ? $_POST['cache_tables'] : '';
 
 		clear_cache($tables);
-		message('success', _l("The cache table was successfully cleared!"));
+		message('success', _l("The cache %s was successfully cleared!", $tables ? 'for ' . implode(',', $tables) : ''));
 
 		redirect('admin/tool/tool');
 	}

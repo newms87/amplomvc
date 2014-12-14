@@ -12,7 +12,7 @@ class App_Model_User extends App_Model_Table
 			} else {
 				$user_info = $this->Model_User->getUserByUsername($user['username']);
 
-				if ($user_info && $user_info['user_id'] !== $user_id) {
+				if ($user_info && $user_info['user_id'] !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}
@@ -20,28 +20,14 @@ class App_Model_User extends App_Model_Table
 			$this->error['username'] = _l("Please provide a Username!");
 		}
 
-		if (isset($user['firstname'])) {
-			if (!validate('text', $user['firstname'], 1, 32)) {
-				$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['firstname'] = _l("Please provide your First Name");
-		}
-
-		if (isset($user['lastname'])) {
-			if (!validate('text', $user['lastname'], 1, 32)) {
-				$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['lastname'] = _l("Please provide your Last Name");
-		}
-
 		//Ensure password is set for new user (can be encrypted_password), or check if updating password
+		if (empty($user['password'])) {
+			unset($user['password']);
+		}
+
 		if (isset($user['password'])) {
-			if (!$user_id || !empty($user['password'])) {
-				if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-					$this->error['password'] = $this->validation->getError();
-				}
+			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+				$this->error['password'] = $this->validation->getError();
 			}
 		} elseif (!$user_id && empty($user['encrypted_password'])) {
 			$this->error['password'] = _l("You must enter a password");
@@ -53,7 +39,7 @@ class App_Model_User extends App_Model_Table
 
 		if (isset($user['password'])) {
 			$user['password'] = $this->user->encrypt($user['password']);
-		} elseif (isset($user['encrypted_password'])) {
+		} elseif (!empty($user['encrypted_password'])) {
 			$user['password'] = $user['encrypted_password'];
 		}
 

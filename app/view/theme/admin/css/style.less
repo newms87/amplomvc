@@ -231,6 +231,7 @@ td {
       padding: 5px 10px;
       outline: none;
       width: 60%;
+      min-width: 10em;
 
       box-sizing: border-box;
       &:active, &:focus {
@@ -1700,7 +1701,7 @@ table.form {
 }
 
 table.form > tbody > tr > td + td {
-  padding-left: 10px;
+  padding: 1em;
 }
 
 table.form > tbody > tr > td:first-child {
@@ -2460,6 +2461,47 @@ td.mail_info label {
   margin-bottom: 10px;
   margin-left: 40%;
 }
+
+/** User Save / Update */
+.admin-user-form {
+  tr.password {
+    .enter-password {
+      display: none;
+
+      input {
+        display: inline-block;
+        margin-bottom: .3em;
+      }
+    }
+
+    .change-password {
+      display: inline-block;
+      margin-top: .5em;
+
+      .cancel {
+        margin-top: .5em;
+        display: none;
+      }
+    }
+
+    &.edit {
+      .enter-password {
+        display: block;
+      }
+
+      .change-password {
+        .change {
+          display: none;
+        }
+
+        .cancel {
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
 
 /** HELP DOCUMENTATION **/
 #help_docs ol.top > li {
