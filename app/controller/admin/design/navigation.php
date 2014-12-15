@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Design_Navigation extends Controller
+class App_Controller_Admin_Navigation extends Controller
 {
 	public function index()
 	{
@@ -9,7 +9,7 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Navigation"), site_url('admin/design/navigation'));
+		breadcrumb(_l("Navigation"), site_url('admin/navigation'));
 
 		//Batch Actions
 		$actions = array(
@@ -28,17 +28,17 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'url'     => site_url('admin/design/navigation/batch-action'),
+			'url'     => site_url('admin/navigation/batch-action'),
 		);
 
 		//The Listing
 		$data['listing'] = $this->listing();
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/design/navigation/form');
+		$data['insert'] = site_url('admin/navigation/form');
 
 		//Render
-		output($this->render('design/navigation_list', $data));
+		output($this->render('navigation/list', $data));
 	}
 
 	public function update()
@@ -57,12 +57,12 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			message('success', _l("Navigation has been updated!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 	}
 
@@ -76,10 +76,10 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			message('success', _l("Success: You have modified Navigation!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 	}
 
@@ -134,27 +134,24 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		$navigation_groups_total = $this->Model_Navigation->getTotalNavigationGroups($filter);
-		$navigation_groups       = $this->Model_Navigation->getNavigationGroups($sort + $filter);
+		list($navigation_groups, $navigation_groups_total) = $this->Model_Navigation->getGroups($sort, $filter, '*', true, 'navigation_group_id');
 
-		$url_query = $this->url->getQueryExclude('navigation_group_id');
-
-		foreach ($navigation_groups as &$nav_group) {
-			$nav_group['actions'] = array(
+		foreach ($navigation_groups as $navigation_group_id => &$group) {
+			$group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/design/navigation/form', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+					'href' => site_url('admin/navigation/form', 'navigation_group_id=' . $navigation_group_id),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
+					'href' => site_url('admin/navigation/delete', 'navigation_group_id=' . $navigation_group_id),
 				)
 			);
 
-			if ($nav_group['name'] == 'admin') {
-				$nav_group['actions']['reset'] = array(
+			if ($group['name'] == 'admin') {
+				$group['actions']['reset'] = array(
 					'text'   => _l("Reset Admin Navigation"),
-					'href'   => site_url('admin/design/navigation/reset_admin_navigation', $url_query),
+					'href'   => site_url('admin/navigation/reset_admin_navigation'),
 					'#class' => 'reset',
 				);
 			}
@@ -167,12 +164,12 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $navigation_groups_total,
-			'listing_path'   => 'design/navigation/listing',
+			'listing_path'   => 'admin/navigation/listing',
 		);
 
 		$output = block('widget/listing', null, $listing);
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		} else {
 			return $output;
@@ -189,12 +186,12 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Navigation"), site_url('admin/design/navigation'));
+		breadcrumb(_l("Navigation"), site_url('admin/navigation'));
 
 		if ($navigation_group_id) {
-			breadcrumb(_l("Edit"), site_url('admin/design/navigation', 'navigation_group_id=' . $navigation_group_id));
+			breadcrumb(_l("Edit"), site_url('admin/navigation', 'navigation_group_id=' . $navigation_group_id));
 		} else {
-			breadcrumb(_l("Add"), site_url('admin/design/navigation'));
+			breadcrumb(_l("Add"), site_url('admin/navigation'));
 		}
 
 		//Load Values or Defaults
@@ -244,11 +241,11 @@ class App_Controller_Admin_Design_Navigation extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('admin/design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
-		$data['cancel'] = site_url('admin/design/navigation');
+		$data['save']   = site_url('admin/navigation/update', 'navigation_group_id=' . $navigation_group_id);
+		$data['cancel'] = site_url('admin/navigation');
 
 		//Render
-		output($this->render('design/navigation_form', $data));
+		output($this->render('navigation/form', $data));
 	}
 
 	public function batch_action()
@@ -275,10 +272,10 @@ class App_Controller_Admin_Design_Navigation extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 	}
 
@@ -288,13 +285,13 @@ class App_Controller_Admin_Design_Navigation extends Controller
 
 		if ($this->Model_Navigation->hasError()) {
 			message('error', $this->Model_Navigation->getError());
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 
 		message("notify", "Admin Navigation Group has been reset!");
 
-		if (!IS_AJAX) {
-			redirect('admin/design/navigation');
+		if (!$this->is_ajax) {
+			redirect('admin/navigation');
 		}
 
 		output_json($this->message->fetch());

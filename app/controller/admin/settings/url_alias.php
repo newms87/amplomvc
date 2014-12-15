@@ -5,7 +5,7 @@
  * Icon: alias.png
  * Order: 7
  */
-class App_Controller_Admin_Setting_UrlAlias extends Controller
+class App_Controller_Admin_Settings_UrlAlias extends Controller
 {
 	public function index()
 	{
@@ -14,8 +14,8 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
-		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url-alias'));
+		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/settings/url-alias'));
 
 		//The Table Columns
 		$columns = array();
@@ -88,11 +88,11 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			$url_alias['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
+					'href' => site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
+					'href' => site_url('admin/settings/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
 				)
 			);
 		}
@@ -125,7 +125,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			),
 		);
 
-		$data['batch_update'] = 'setting/url_alias/batch_update';
+		$data['batch_update'] = 'settings/url_alias/batch_update';
 
 		//Render Limit Menu
 		$data['limits'] = $this->sort->renderLimits();
@@ -137,12 +137,12 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		$data['pagination'] = $this->pagination->render();
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/setting/url-alias/update');
-		$data['delete'] = site_url('admin/setting/url-alias/delete');
-		$data['cancel'] = site_url('admin/setting/store');
+		$data['insert'] = site_url('admin/settings/url-alias/update');
+		$data['delete'] = site_url('admin/settings/url-alias/delete');
+		$data['cancel'] = site_url('admin/settings/store');
 
 		//Render
-		output($this->render('setting/url_alias_list', $data));
+		output($this->render('settings/url_alias/list', $data));
 	}
 
 	public function update()
@@ -159,7 +159,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				message('success', _l("Success: You have modified the url alias table!"));
 
-				redirect('admin/setting/url_alias');
+				redirect('admin/settings/url_alias');
 			}
 		}
 
@@ -174,7 +174,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			if (!$this->message->has('error', 'warning')) {
 				message('success', _l("Success: You have modified the url alias table!"));
 
-				redirect('admin/setting/url_alias');
+				redirect('admin/settings/url_alias');
 			}
 		}
 
@@ -209,7 +209,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 			}
 		}
 
-		redirect('admin/setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
+		redirect('admin/settings/url_alias', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	public function getForm()
@@ -222,12 +222,12 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("URL Aliases"), site_url('admin/setting/url-alias'));
+		breadcrumb(_l("URL Aliases"), site_url('admin/settings/url-alias'));
 
 		if (!$url_alias_id) {
-			breadcrumb(_l("Add"), site_url('admin/setting/url-alias/udpate'));
+			breadcrumb(_l("Add"), site_url('admin/settings/url-alias/udpate'));
 		} else {
-			breadcrumb(_l("Edit"), site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
+			breadcrumb(_l("Edit"), site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
 
 		//Load Information
@@ -286,16 +286,16 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('admin/setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
-		$data['cancel'] = site_url('admin/setting/url-alias');
+		$data['save']   = site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias_id);
+		$data['cancel'] = site_url('admin/settings/url-alias');
 
 		//Render
-		output($this->render('setting/url_alias_form', $data));
+		output($this->render('settings/url_alias/form', $data));
 	}
 
 	private function validateForm()
 	{
-		if (!user_can('w', 'admin/setting/url_alias')) {
+		if (!user_can('w', 'admin/settings/url_alias')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 
@@ -308,7 +308,7 @@ class App_Controller_Admin_Setting_UrlAlias extends Controller
 
 	private function validateDelete()
 	{
-		if (!user_can('w', 'admin/setting/url_alias')) {
+		if (!user_can('w', 'admin/settings/url_alias')) {
 			$this->error['warning'] = _l("Warning: You do not have permission to modify url aliases!");
 		}
 

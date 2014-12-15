@@ -105,7 +105,6 @@ function amplo_routing_hook(&$path, $segments, $orig_path)
 		//Initialize site configurations
 		$config = $registry->get('config');
 		$config->runSiteConfig();
-		$config->set('store_id', -1);
 
 		if (option('config_maintenance')) {
 			if (isset($_GET['hide_maintenance_msg'])) {
@@ -380,16 +379,16 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null)
+function site_url($path = '', $query = null, $ssl = false)
 {
 	global $registry;
-	return $registry->get('url')->link($path, $query);
+	return $registry->get('url')->link($path, $query, $ssl);
 }
 
-function store_url($store_id, $path = '', $query = null)
+function store_url($store_id, $path = '', $query = null, $ssl = false)
 {
 	global $registry;
-	return $registry->get('url')->store($store_id, $path, $query);
+	return $registry->get('url')->store($store_id, $path, $query, $ssl);
 }
 
 function theme_url($path = '', $query = null)

@@ -15,7 +15,7 @@
 
 				<? if (user_can('w', 'admin/user/role/form')) { ?>
 					<div class="buttons">
-						<a href="<?= site_url('admin/setting/role/form'); ?>" class="button">{{Insert}}</a>
+						<a href="<?= site_url('admin/settings/role/form'); ?>" class="button">{{Insert}}</a>
 					</div>
 				<? } ?>
 			</div>

@@ -229,7 +229,7 @@ class App_Controller_Admin_Page extends Controller
 		if (IS_AJAX) {
 			$this->listing();
 		} else {
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 	}
 

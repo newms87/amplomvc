@@ -3,7 +3,7 @@
 class Theme extends Library
 {
 	private $dir_themes;
-	private $store_themes;
+	private $theme_hierarchy;
 	private $theme;
 	private $settings = array();
 
@@ -37,18 +37,13 @@ class Theme extends Library
 			'parents' => array(),
 		);
 
-		$this->store_themes = array_merge(array($this->theme), $this->settings['parents']);
+		$this->theme_hierarchy = array_merge(array($this->theme), $this->settings['parents']);
 
 		//Url Constants
 		define('URL_THEME', URL_THEMES . $this->theme . '/');
 
 		//Directory Constants
 		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
-	}
-
-	public function addTheme($theme)
-	{
-		$this->store_themes[] = $theme;
 	}
 
 	public function setTheme($theme)
@@ -66,9 +61,9 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function getStoreThemes()
+	public function getThemeHierarchy()
 	{
-		return $this->store_themes;
+		return $this->theme_hierarchy;
 	}
 
 	public function getThemes($filter = array(), $select = '*', $index = null)
@@ -195,11 +190,11 @@ class Theme extends Library
 		}
 
 		//Resolve the current store themes heirachically
-		foreach ($this->store_themes as $store_theme) {
-			if (file_exists($this->dir_themes . $store_theme . '/' . $file)) {
-				return $store_theme . '/' . $file;
-			} elseif (file_exists($this->dir_themes . $store_theme . '/template/' . $file)) {
-				return $store_theme . '/template/' . $file;
+		foreach ($this->theme_hierarchy as $theme_node) {
+			if (file_exists($this->dir_themes . $theme_node . '/' . $file)) {
+				return $theme_node . '/' . $file;
+			} elseif (file_exists($this->dir_themes . $theme_node . '/template/' . $file)) {
+				return $theme_node . '/template/' . $file;
 			}
 		}
 
@@ -207,29 +202,28 @@ class Theme extends Library
 		return false;
 	}
 
-	public function getStoreThemeStyle()
+	public function getThemeStyle()
 	{
-		$store_id = option('store_id');
 		$theme    = IS_ADMIN ? 'admin' : option('config_theme');
 
-		$cache_file = 'less/store_theme.' . $store_id . '.' . $theme;
+		$cache_file = 'less/theme.' . $theme;
 		$theme_file = cache($cache_file, null, true);
 
 		if (!is_file($theme_file)) {
 			$theme_file = false;
 
-			$store_theme = $this->config->loadGroup('store_theme');
+			$settings = $this->config->loadGroup('theme');
 
 			$config_file = is_file(theme_dir('css/config.less.acmod')) ? 'config.less.acmod' : 'config.less';
 
-			if ($store_theme) {
+			if ($settings) {
 				$theme_style = "@import '@{basepath}app/view/theme/$theme/css/$config_file';\n\n";
 
-				if (!empty($store_theme['store_theme_config_' . $theme])) {
-					$theme_style .= $store_theme['store_theme_config_' . $theme];
+				if (!empty($settings['theme_config_' . $theme])) {
+					$theme_style .= $settings['theme_config_' . $theme];
 
-					if (!empty($store_theme['store_theme_style_' . $theme])) {
-						$theme_style .= "\n\n/* Custom Theme Styles */\n" . $store_theme['store_theme_style_' . $theme];
+					if (!empty($settings['theme_style_' . $theme])) {
+						$theme_style .= "\n\n/* Custom Theme Styles */\n" . $settings['theme_style_' . $theme];
 					}
 
 					cache($cache_file, $theme_style, true);
@@ -249,13 +243,13 @@ class Theme extends Library
 		}
 
 		if ($theme_file) {
-			return $this->document->compileLess($theme_file, $theme . '-' . $store_id . '-theme-style');
+			return $this->document->compileLess($theme_file, $theme . '-theme-style');
 		}
 
 		return theme_url('css/style.css');
 	}
 
-	public function saveStoreTheme($store_id, $theme, $configs, $stylesheet = null)
+	public function saveTheme($theme, $configs, $stylesheet = null)
 	{
 		$config = '';
 
@@ -273,9 +267,9 @@ class Theme extends Library
 		clear_cache('less/store_theme.' . $store_id . '.' . $theme);
 	}
 
-	public function getStoreTheme($store_id)
+	public function loadTheme()
 	{
-		$theme = $this->config->load('config', 'config_theme', $store_id);
+		$theme = $this->config->load('config', 'config_theme');
 
 		if (!$theme) {
 			$theme = AMPLO_DEFAULT_THEME;
@@ -296,20 +290,20 @@ class Theme extends Library
 		}
 
 		//Load Store Configs
-		$store_theme = $this->config->loadGroup('store_theme', $store_id);
+		$settings = $this->config->loadGroup('theme');
 
-		if ($store_theme) {
-			if (!empty($store_theme['store_theme_config_' . $theme])) {
-				$store_configs = $this->parseConfigs($store_theme['store_theme_config_' . $theme]);
+		if ($settings) {
+			if (!empty($settings['theme_config_' . $theme])) {
+				$theme_configs = $this->parseConfigs($settings['theme_config_' . $theme]);
 
-				foreach ($store_configs as $key => $value) {
+				foreach ($theme_configs as $key => $value) {
 					if (isset($configs[$key])) {
 						$configs[$key]['value'] = $value;
 					}
 				}
 			}
 
-			$stylesheet = !empty($store_theme['store_theme_style_' . $theme]) ? $store_theme['store_theme_style_' . $theme] : '';
+			$stylesheet = !empty($settings['theme_style_' . $theme]) ? $settings['theme_style_' . $theme] : '';
 
 		} else {
 			$stylesheet = '';
@@ -321,11 +315,11 @@ class Theme extends Library
 		);
 	}
 
-	public function restoreStoreTheme($store_id)
+	public function restore()
 	{
-		clear_cache('less/store_theme.' . $store_id);
+		clear_cache('less/theme');
 
-		return $this->config->deleteGroup('store_theme', $store_id);
+		return $this->config->deleteGroup('theme');
 	}
 
 	public function getConfigs($file)
@@ -405,12 +399,12 @@ class Theme extends Library
 		return $parents;
 	}
 
-	public function install($store_id, $theme)
+	public function install($theme)
 	{
 		$settings = array(
 			'parents' => $this->getThemeParents($theme),
 		);
 
-		return $this->config->save('config', 'config_theme_settings', $settings, $store_id);
+		return $this->config->save('config', 'config_theme_settings', $settings);
 	}
 }

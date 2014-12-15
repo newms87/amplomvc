@@ -3,7 +3,7 @@
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<form action="<?= site_url('admin/setting/setting/save'); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
+	<form action="<?= site_url('admin/settings/setting/save'); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{General Settings}}
@@ -11,7 +11,7 @@
 
 			<div class="buttons">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button cancel">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings/store'); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -861,7 +861,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= site_url('admin/setting/store/generate-icons'); ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/settings/store/generate-icons'); ?>", {icon: icon}, function (json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');

@@ -9,7 +9,7 @@
 
 			<div class="buttons">
 				<button class="button">{{Save}}</button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings/store'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 
@@ -36,7 +36,7 @@
 							<br/><br/>
 							<ol class="step">
 								<li>{{Create a Client ID for OAuth as a Web application.}}</li>
-								<li><?= _l("Set the Authorized Redirect URI to %s", store_url(1, "block/login/google/connect")); ?></li>
+								<li><?= _l("Set the Authorized Redirect URI to %s", site_url("block/login/google/connect")); ?></li>
 							</ol>
 						</div>
 					</td>

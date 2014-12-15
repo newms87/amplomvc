@@ -46,20 +46,6 @@ class App_Model_Navigation extends App_Model_Table
 
 		$this->update("navigation_group", $data, $navigation_group_id);
 
-		//Update Stores
-		if (isset($data['stores'])) {
-			$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
-
-			foreach ($data['stores'] as $store_id) {
-				$store_data = array(
-					'navigation_group_id' => $navigation_group_id,
-					'store_id'            => $store_id
-				);
-
-				$this->insert("navigation_store", $store_data);
-			}
-		}
-
 		//Update Links
 		if (isset($data['links'])) {
 			$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
@@ -81,8 +67,6 @@ class App_Model_Navigation extends App_Model_Table
 		}
 
 		$this->delete("navigation_group", $navigation_group_id);
-
-		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
 		clear_cache('navigation');
@@ -215,69 +199,87 @@ class App_Model_Navigation extends App_Model_Table
 		return $this->delete("navigation", $navigation_id);
 	}
 
-	public function getNavigationGroup($navigation_group_id)
+	public function getGroup($navigation_group_id)
 	{
-		$nav_group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
+		$group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
 
-		$nav_group['stores'] = $this->getNavigationGroupStores($navigation_group_id);
-		$nav_group['links']  = $this->getNavigationGroupLinks($navigation_group_id);
+		$group['links']  = $this->getGroupLinks($navigation_group_id);
 
-		return $nav_group;
+		return $group;
 	}
 
-	public function getNavigationGroups($data = array(), $select = '*', $total = false)
+	public function getGroups($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		//Select
-		if ($total) {
-			$select = 'COUNT(*) as total';
-		} elseif (!$select) {
-			$select = '*';
-		}
+		$select = $this->extractSelect('navigation_group', $select);
 
 		//From
-		$from = DB_PREFIX . "navigation_group ng";
+		$from = $this->prefix . 'navigation_group';
 
 		//Where
-		$where = "1";
+		$where = $this->extractWhere('navigation_group', $filter);
 
-		if (!empty($data['name'])) {
-			$where .= " AND name like '%" . $this->escape($data['name']) . "%'";
-		}
-
-		if (isset($data['stores'])) {
-			$from .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ns.navigation_group_id=ng.navigation_group_id)";
-
-			if (!is_array($data['stores'])) {
-				$data['stores'] = array((int)$data['stores']);
-			}
-
-			$where .= " AND ns.store_id IN (" . implode(',', $data['stores']) . ")";
-		}
-
-		if (isset($data['status'])) {
-			$where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
-		}
-
-		//Order By & Limit
-		list($order, $limit) = $this->extractOrderLimit($data);
+		//Order and Limit
+		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		$result = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
 
-		//Execute
-		$result = $this->query($query);
+		$total ? $rows = &$results[0] : $rows = &$results;
 
-		//Process Results
-		if ($total) {
-			return $result->row['total'];
-		} else {
-			foreach ($result->rows as $key => &$row) {
-				$row['links']  = $this->getNavigationGroupLinks($row['navigation_group_id']);
-				$row['stores'] = $this->getNavigationGroupStores($row['navigation_group_id']);
-			}
-
-			return $result->rows;
+		foreach ($rows as &$row) {
+			$row['links'] = $this->getGroupLinks($row['navigation_group_id']);
 		}
+		unset($row);
+
+		return $result;
+	}
+
+	public function getStoreLinks()
+	{
+		$nav_groups = cache("navigation_group.store");
+
+		if (is_null($nav_groups)) {
+			$filter = array(
+				'status' => 1,
+			);
+
+			$navigation_groups = $this->getGroups(null, $filter, '*', false, 'name');
+
+			$nav_groups = array();
+
+			foreach ($navigation_groups as &$group) {
+				if (empty($group['links'])) {
+					continue;
+				}
+				$parent_ref = array();
+
+				foreach ($group['links'] as $key => &$link) {
+					$link['children']                   = array();
+					$parent_ref[$link['navigation_id']] = &$link;
+
+					if ($link['parent_id']) {
+						$parent_ref[$link['parent_id']]['children'][] = &$link;
+						unset($group['links'][$key]);
+					}
+				}
+				unset($link);
+			}
+			unset($group);
+
+			cache("navigation_group.store", $nav_groups);
+		}
+
+		//Filter Conditional Links And Access Permissions
+
+
+		//TODO: This leaves null values in group links. Consider changing approach.
+		foreach ($nav_groups as &$group) {
+			$this->filterLinks($group);
+		}
+		unset($group);
+
+		return $nav_groups;
 	}
 
 	public function getNavigationLinks()
@@ -285,16 +287,12 @@ class App_Model_Navigation extends App_Model_Table
 		$nav_groups = cache('navigation_groups.admin');
 
 		if (!$nav_groups) {
-			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
-			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
-			$query .= " WHERE ng.status='1' AND ns.store_id='-1'";
-
-			$query = $this->query($query);
+			$query = $this->query("SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng WHERE ng.status='1'");
 
 			$nav_groups = array();
 
 			foreach ($query->rows as &$group) {
-				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
+				$nav_group_links = $this->getGroupLinks($group['navigation_group_id']);
 
 				$parent_ref = array();
 
@@ -322,19 +320,14 @@ class App_Model_Navigation extends App_Model_Table
 		return $nav_groups;
 	}
 
-	public function getNavigationGroupLinks($navigation_group_id)
+	public function getGroupLinks($navigation_group_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC", 'navigation_id');
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY parent_id, sort_order ASC", 'navigation_id');
 	}
 
-	public function getNavigationGroupStores($navigation_group_id)
+	public function getTotalNavigationGroups($filter)
 	{
-		return $this->queryColumn("SELECT store_id FROM " . DB_PREFIX . "navigation_store WHERE navigation_group_id = " . (int)$navigation_group_id);
-	}
-
-	public function getTotalNavigationGroups($data)
-	{
-		return $this->getNavigationGroups($data, '', true);
+		return $this->getGroups(null, $filter, 'COUNT(*)');
 	}
 
 	public function resetAdminNavigationGroup()
@@ -378,7 +371,7 @@ class App_Model_Navigation extends App_Model_Table
 					),
 					'users_user_roles' => array(
 						'display_name' => 'User Roles',
-						'href'         => 'admin/setting/role',
+						'href'         => 'admin/settings/role',
 					),
 				),
 			),
@@ -388,15 +381,15 @@ class App_Model_Navigation extends App_Model_Table
 				'children'     => array(
 					'system_settings'     => array(
 						'display_name' => 'Settings',
-						'href'         => 'admin/setting/store',
+						'href'         => 'admin/settings/store',
 						'children'     => array(
 							'system_settings_general'              => array(
 								'display_name' => 'General',
-								'href'         => 'admin/setting/setting',
+								'href'         => 'admin/settings/setting',
 							),
 							'system_settings_update'               => array(
 								'display_name' => 'Update',
-								'href'         => 'admin/setting/update',
+								'href'         => 'admin/settings/update',
 							),
 						),
 					),
@@ -423,15 +416,15 @@ class App_Model_Navigation extends App_Model_Table
 					),
 					'system_url_alias'    => array(
 						'display_name' => 'URL Alias',
-						'href'         => 'admin/setting/url_alias',
+						'href'         => 'admin/settings/url_alias',
 					),
 					'system_cron'         => array(
 						'display_name' => 'Cron',
-						'href'         => 'admin/setting/cron',
+						'href'         => 'admin/settings/cron',
 					),
 					'system_navigation'   => array(
 						'display_name' => 'Navigation',
-						'href'         => 'admin/design/navigation',
+						'href'         => 'admin/navigation',
 					),
 					'system_design'       => array(
 						'display_name' => 'Design',

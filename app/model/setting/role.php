@@ -177,7 +177,7 @@ class App_Model_Setting_Role extends Model
 			$view_listing = array(
 				'name' => _l("User Roles"),
 			   'slug' => 'user_role_list',
-			   'path' => 'admin/setting/role/listing',
+			   'path' => 'admin/settings/role/listing',
 			);
 
 			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);

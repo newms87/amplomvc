@@ -1,11 +1,15 @@
 <?php
+
 final class Router
 {
 	private $path;
 	private $segments;
+	private $store;
 
 	public function __construct()
 	{
+		$this->routeStore();
+
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
 		$base = trim(SITE_BASE, '/');
@@ -31,7 +35,7 @@ final class Router
 
 	public function setPath($path)
 	{
-		$this->path = $path;
+		$this->path     = $path;
 		$this->segments = explode('/', $path);
 	}
 
@@ -44,16 +48,21 @@ final class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
+	public function getStore()
+	{
+		return $this->store;
+	}
+
 	public function registerHook($name, $callable, $sort_order = 0)
 	{
 		$routing_hooks = option('_routing_hooks_', array());
 
 		$routing_hooks[$name] = array(
-		   'callable' => $callable,
-		   'sort_order' => $sort_order,
+			'callable'   => $callable,
+			'sort_order' => $sort_order,
 		);
 
-		uasort($routing_hooks, function($a, $b) {
+		uasort($routing_hooks, function ($a, $b) {
 			return $a['sort_order'] > $b['sort_order'];
 		});
 
@@ -86,14 +95,20 @@ final class Router
 
 		foreach ($routing_hooks as $hook) {
 			if (is_callable($hook['callable'])) {
-				if (call_user_func_array($hook['callable'], array(&$path, $this->segments, $this->path)) === false) {
+				$params = array(
+					&$path,
+					$this->segments,
+					$this->path
+				);
+
+				if (call_user_func_array($hook['callable'], $params) === false) {
 					break;
 				}
 			}
 		}
 
 		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($path) . "' LIKE CONCAT(route, '%') ORDER BY route ASC LIMIT 1");
 		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
 		$this->config->set('config_layout_id', $layout_id);
 
@@ -136,6 +151,30 @@ final class Router
 		if (!$valid || !$action->execute()) {
 			$action = new Action(ERROR_404_PATH);
 			$action->execute();
+		}
+	}
+
+	public function routeStore()
+	{
+		global $registry;
+
+		$stores = cache('store.all');
+
+		if (is_null($stores)) {
+			$stores = $registry->get('Model_setting_Store')->getStores();
+
+			cache('store.all', $stores);
+		}
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		foreach ($stores as $store) {
+			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
+				$registry->get('db')->setPrefix($store['prefix']);
+				$this->store = $store;
+				break;
+			}
 		}
 	}
 }

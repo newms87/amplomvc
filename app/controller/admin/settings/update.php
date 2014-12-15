@@ -16,11 +16,11 @@ class App_Controller_Admin_Setting_Update extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("System Update"), site_url('admin/setting/update'));
+		breadcrumb(_l("System Update"), site_url('admin/settings/update'));
 
 		//Actions
-		$data['action'] = site_url('admin/setting/update/update');
-		$data['cancel'] = site_url('admin/setting/store');
+		$data['action'] = site_url('admin/settings/update/update');
+		$data['cancel'] = site_url('admin/settings/store');
 
 		//Data
 		$update_info = array();
@@ -48,7 +48,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		$data['data_versions'] = $versions;
 
 		//Render
-		output($this->render('setting/update', $data));
+		output($this->render('settings/update', $data));
 	}
 
 	public function update()
@@ -64,7 +64,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/setting/update');
+			redirect('admin/settings/update');
 		}
 	}
 
@@ -81,7 +81,7 @@ class App_Controller_Admin_Setting_Update extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/setting/update');
+			redirect('admin/settings/update');
 		}
 	}
 }

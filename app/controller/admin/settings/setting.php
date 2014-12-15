@@ -16,8 +16,8 @@ class App_Controller_Admin_Setting_Setting extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
-		breadcrumb(_l("General Settings"), site_url('admin/setting/setting'));
+		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("General Settings"), site_url('admin/settings/setting'));
 
 		//Load Information
 		$config_data = $_POST;
@@ -200,11 +200,11 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		$data['config_ga_domains']['__ac_template__'] = '';
 
 		//Action Buttons
-		$data['save']   = site_url('admin/setting/setting');
-		$data['cancel'] = site_url('admin/setting/store');
+		$data['save']   = site_url('admin/settings/setting');
+		$data['cancel'] = site_url('admin/settings/store');
 
 		//Render
-		output($this->render('setting/setting', $data));
+		output($this->render('settings/setting', $data));
 	}
 
 	public function theme()
@@ -280,9 +280,9 @@ class App_Controller_Admin_Setting_Setting extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
-			post_redirect('admin/setting/cart');
+			post_redirect('admin/settings/cart');
 		} else {
-			redirect('admin/setting/store');
+			redirect('admin/settings/store');
 		}
 	}
 }

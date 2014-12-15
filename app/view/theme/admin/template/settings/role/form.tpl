@@ -3,7 +3,7 @@
 <div id="admin-permissions" class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<form action="<?= site_url('admin/setting/role/save', 'user_role_id=' . $user_role_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
+	<form action="<?= site_url('admin/settings/role/save', 'user_role_id=' . $user_role_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 
 		<div class="heading">
 			<h1>
@@ -11,7 +11,7 @@
 
 			<div class="buttons">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/setting/role'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings/role'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 

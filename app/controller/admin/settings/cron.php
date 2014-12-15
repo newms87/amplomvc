@@ -5,7 +5,7 @@
  * Order: 12
  */
 
-class App_Controller_Admin_Setting_Cron extends Controller
+class App_Controller_Admin_Settings_Cron extends Controller
 {
 	public function index()
 	{
@@ -25,18 +25,18 @@ class App_Controller_Admin_Setting_Cron extends Controller
 
 			message('success', _l('Successfully updated the Automated Tasks!'));
 
-			redirect('admin/setting/cron');
+			redirect('admin/settings/cron');
 		}
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l('System Settings'), site_url('admin/setting/store'));
-		breadcrumb(_l('Automated Tasks'), site_url('admin/setting/cron'));
+		breadcrumb(_l('System Settings'), site_url('admin/settings/store'));
+		breadcrumb(_l('Automated Tasks'), site_url('admin/settings/cron'));
 
 		if (IS_POST) {
 			$tasks = $_POST;
 		} else {
-			$tasks = $this->config->load('cron', 'cron_tasks', 0);
+			$tasks = $this->config->load('cron', 'cron_tasks');
 		}
 
 		$data = $tasks;
@@ -91,13 +91,13 @@ class App_Controller_Admin_Setting_Cron extends Controller
 		);
 
 		//Action Buttons
-		$data['save']     = site_url('admin/setting/cron');
-		$data['cancel']   = site_url('admin/setting/store');
+		$data['save']     = site_url('admin/settings/cron');
+		$data['cancel']   = site_url('admin/settings/store');
 		$data['run_cron'] = site_url('', 'run_cron');
-		$data['activate'] = site_url('admin/setting/cron/activate');
+		$data['activate'] = site_url('admin/settings/cron/activate');
 
 		//Render
-		output($this->render('setting/cron', $data));
+		output($this->render('settings/cron', $data));
 	}
 
 	public function activate()
@@ -106,12 +106,12 @@ class App_Controller_Admin_Setting_Cron extends Controller
 			$this->config->save('config', 'config_cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
 		}
 
-		redirect('admin/setting/cron');
+		redirect('admin/settings/cron');
 	}
 
 	private function validate()
 	{
-		if (!user_can('w', 'admin/setting/cron')) {
+		if (!user_can('w', 'admin/settings/cron')) {
 			$this->error['warning'] = _l('You do not have permission to modify the Automated Tasks');
 		}
 

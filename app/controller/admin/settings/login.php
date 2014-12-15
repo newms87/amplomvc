@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Class App_Controller_Admin_Setting_Login
+ * Class App_Controller_Admin_Settings_Login
  * Title: Login Settings
  * Icon: login.png
  * Order: 5
  *
  */
-class App_Controller_Admin_Setting_Login extends Controller
+class App_Controller_Admin_Settings_Login extends Controller
 {
 	public function index()
 	{
@@ -16,8 +16,8 @@ class App_Controller_Admin_Setting_Login extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/setting/setting'));
-		breadcrumb(_l("Login"), site_url('admin/setting/login'));
+		breadcrumb(_l("Settings"), site_url('admin/settings/setting'));
+		breadcrumb(_l("Login"), site_url('admin/settings/login'));
 
 		//Load Data or Defaults
 		$settings = $_POST;
@@ -61,23 +61,23 @@ class App_Controller_Admin_Setting_Login extends Controller
 		);
 
 		//Actions
-		$settings['save'] = site_url('admin/setting/login/save');
+		$settings['save'] = site_url('admin/settings/login/save');
 
 		//Render
-		output($this->render('setting/login', $settings));
+		output($this->render('settings/login', $settings));
 	}
 
 	public function save()
 	{
 		//No Data
 		if (!IS_POST) {
-			redirect('admin/setting/login');
+			redirect('admin/settings/login');
 		}
 
 		//User Permissions
-		if (!user_can('w', 'admin/setting/login')) {
+		if (!user_can('w', 'admin/settings/login')) {
 			message('warning', _l("You do not have permission to modify Login Settings."));
-			redirect('admin/setting/store');
+			redirect('admin/settings/store');
 		}
 
 		//Validate Settings
@@ -88,7 +88,7 @@ class App_Controller_Admin_Setting_Login extends Controller
 
 		if (!$this->config->hasError()) {
 			message('success', _l("You have successfully updated the Login Settings"));
-			redirect('admin/setting/store');
+			redirect('admin/settings/store');
 		}
 
 	}

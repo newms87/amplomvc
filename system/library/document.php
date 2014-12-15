@@ -16,7 +16,7 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->links = $this->getNavigationLinks();
+		$this->links = $this->Model_Navigation->getStoreLinks();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
@@ -441,59 +441,6 @@ class Document extends Library
 		return implode(' ', $this->body_class);
 	}
 
-	public function getNavigationLinks()
-	{
-		$store_id = option('store_id');
-
-		$nav_groups = cache("navigation_groups.store.$store_id");
-
-		if (is_null($nav_groups)) {
-			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id = ns.navigation_group_id)" .
-				" WHERE ng.status = 1 AND ns.store_id = " . (int)$store_id;
-
-			$result = $this->queryRows($query);
-
-			$nav_groups = array();
-
-			foreach ($result as &$group) {
-				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
-
-				if (empty($nav_group_links)) {
-					continue;
-				}
-				$parent_ref = array();
-
-				foreach ($nav_group_links as $key => &$link) {
-					$link['children']                   = array();
-					$parent_ref[$link['navigation_id']] = &$link;
-
-					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = &$link;
-						unset($nav_group_links[$key]);
-					}
-				}
-				unset($link);
-
-				$nav_groups[$group['name']] = $nav_group_links;
-			}
-			unset($group);
-
-			cache("navigation_groups.store.$store_id", $nav_groups);
-		}
-
-		//Filter Conditional Links And Access Permissions
-
-
-		//TODO: This leaves null values in group links. Consider changing approach.
-		foreach ($nav_groups as &$group) {
-			$this->filterLinks($group);
-		}
-		unset($group);
-
-		return $nav_groups;
-	}
-
 	public function filterLinks(&$links)
 	{
 		foreach ($links as $key => &$link) {
@@ -520,11 +467,6 @@ class Document extends Library
 				unset($links[$key]);
 			}
 		}
-	}
-
-	public function getNavigationGroupLinks($navigation_group_id)
-	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
 	}
 
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)

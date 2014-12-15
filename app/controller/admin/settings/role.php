@@ -1,6 +1,14 @@
 <?php
 
-class App_Controller_Admin_Setting_Role extends Controller
+/**
+ * Class App_Controller_Admin_Settings_Role
+ * Title: User Roles
+ * Icon: login.png
+ * Order: 5
+ *
+ */
+
+class App_Controller_Admin_Settings_Role extends Controller
 {
 	public function index()
 	{
@@ -9,10 +17,10 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("User Roles"), site_url('admin/setting/role'));
+		breadcrumb(_l("User Roles"), site_url('admin/settings/role'));
 
 		//Batch Actions
-		if (user_can('w', 'admin/setting/role/batch_action')) {
+		if (user_can('w', 'admin/settings/role/batch_action')) {
 			$actions = array(
 				'delete' => array(
 					'label' => _l("Delete"),
@@ -21,14 +29,14 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 			$data['batch_action'] = array(
 				'actions' => $actions,
-				'url'     => site_url('admin/setting/role/batch-action'),
+				'url'     => site_url('admin/settings/role/batch-action'),
 			);
 		}
 
 		$data['view_listing_id'] = $this->Model_Setting_Role->getViewListingId();
 
 		//Render
-		output($this->render('setting/role/list', $data));
+		output($this->render('settings/role/list', $data));
 	}
 
 	public function listing()
@@ -50,11 +58,11 @@ class App_Controller_Admin_Setting_Role extends Controller
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/setting/role/form', 'user_role_id=' . $user_role_id)
+					'href' => site_url('admin/settings/role/form', 'user_role_id=' . $user_role_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/setting/role/delete', 'user_role_id=' . $user_role_id)
+					'href' => site_url('admin/settings/role/delete', 'user_role_id=' . $user_role_id)
 				),
 			);
 
@@ -70,8 +78,8 @@ class App_Controller_Admin_Setting_Role extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_role_total,
-			'listing_path'   => 'admin/setting/role/listing',
-			'save_path'      => 'admin/setting/role/save',
+			'listing_path'   => 'admin/settings/role/listing',
+			'save_path'      => 'admin/settings/role/save',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -94,8 +102,8 @@ class App_Controller_Admin_Setting_Role extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("User Roles"), site_url('admin/setting/role'));
-		breadcrumb($user_role_id ? _l("Update") : _l("New"), site_url('admin/setting/role/form', 'user_role_id=' . $user_role_id));
+		breadcrumb(_l("User Roles"), site_url('admin/settings/role'));
+		breadcrumb($user_role_id ? _l("Update") : _l("New"), site_url('admin/settings/role/form', 'user_role_id=' . $user_role_id));
 
 		//The Data
 		$user_role = $_POST;
@@ -126,7 +134,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		);
 
 		//Render
-		output($this->render('setting/role/form', $user_role));
+		output($this->render('settings/role/form', $user_role));
 	}
 
 	public function save()
@@ -141,9 +149,9 @@ class App_Controller_Admin_Setting_Role extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
-			post_redirect('admin/setting/role/form');
+			post_redirect('admin/settings/role/form');
 		} else {
-			redirect('admin/setting/role');
+			redirect('admin/settings/role');
 		}
 	}
 
@@ -160,7 +168,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/setting/role');
+			redirect('admin/settings/role');
 		}
 	}
 
@@ -183,7 +191,7 @@ class App_Controller_Admin_Setting_Role extends Controller
 		if (IS_AJAX) {
 			$this->listing();
 		} else {
-			redirect('admin/setting/role');
+			redirect('admin/settings/role');
 		}
 	}
 

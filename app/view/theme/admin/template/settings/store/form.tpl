@@ -10,7 +10,7 @@
 
 			<div class="buttons">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings/store'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -374,7 +374,7 @@
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form .country_select'});
 
 	$('[name=config_theme]').change(function () {
-		$('#theme').load($ac.site_url + 'admin/setting/setting/theme?theme=' + $(this).val());
+		$('#theme').load($ac.site_url + 'admin/settings/setting/theme?theme=' + $(this).val());
 	}).change();
 
 	$('#generate-icons').click(function () {
@@ -386,7 +386,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= site_url('admin/setting/store/generate-icons'); ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/settings/store/generate-icons'); ?>", {icon: icon}, function (json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');

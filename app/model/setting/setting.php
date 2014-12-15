@@ -5,7 +5,7 @@ class App_Model_Setting_Setting extends Model
 	{
 		$widgets = array();
 
-		$files = glob(DIR_SITE . 'app/controller/admin/setting/*');
+		$files = glob(DIR_SITE . 'app/controller/admin/settings/*');
 
 		if ($files) {
 			$order = 0;
@@ -31,7 +31,7 @@ class App_Model_Setting_Setting extends Model
 					$query = !empty($directives['query']) ? $directives['query'] : '';
 					$widget['url'] = site_url($directives['path'], $query);
 				} else {
-					$widget['url'] = site_url('admin/setting/' . str_replace('.php','',basename($file)));
+					$widget['url'] = site_url('admin/settings/' . str_replace('.php','',basename($file)));
 				}
 
 				$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;

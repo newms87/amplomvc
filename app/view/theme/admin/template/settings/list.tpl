@@ -20,9 +20,6 @@
 				<? } ?>
 			</div>
 
-			<div class="section">
-				<?= block('widget/views', null, array('path' => 'admin/setting/store/listing')); ?>
-			</div>
 		</div>
 	</div>
 </div>

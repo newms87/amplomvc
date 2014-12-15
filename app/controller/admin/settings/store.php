@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Setting_Store extends Controller
+class App_Controller_Admin_Settings_Store extends Controller
 {
 	public function index($data = array())
 	{
@@ -9,16 +9,16 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
 
 		//Settings Items
 		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/setting/store/form');
+		$data['insert'] = site_url('admin/settings/store/form');
 
 		//Render
-		output($this->render('setting/store_list', $data));
+		output($this->render('settings/store_list', $data));
 	}
 
 	public function listing()
@@ -70,15 +70,15 @@ class App_Controller_Admin_Setting_Store extends Controller
 			$store['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/setting/store/form', 'store_id=' . $store['store_id']),
+					'href' => site_url('admin/settings/store/form', 'store_id=' . $store['store_id']),
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/setting/store/remove', 'store_id=' . $store['store_id']),
+					'href' => site_url('admin/settings/store/remove', 'store_id=' . $store['store_id']),
 				)
 			);
 
-			$theme          = $this->config->load('config', 'config_theme', $store['store_id']);
+			$theme          = $this->config->load('config', 'config_theme');
 			$image          = DIR_SITE . 'app/view/theme/' . $theme . '/' . $theme . '.png';
 			$store['thumb'] = image($image, $image_width, $image_height);
 
@@ -92,7 +92,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $store_total,
-			'listing_path'   => 'admin/setting/store/listing',
+			'listing_path'   => 'admin/settings/store/listing',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -115,8 +115,8 @@ class App_Controller_Admin_Setting_Store extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/setting/store'));
-		breadcrumb(_l("Store"), site_url('admin/setting/store/form', 'store_id=' . $store_id));
+		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Store"), site_url('admin/settings/store/form', 'store_id=' . $store_id));
 
 		//Store Data
 		$store = $_POST;
@@ -226,39 +226,32 @@ class App_Controller_Admin_Setting_Store extends Controller
 		unset($icon);
 
 		//Action Buttons
-		$store['save'] = site_url('admin/setting/store/save', 'store_id=' . $store_id);
+		$store['save'] = site_url('admin/settings/store/save', 'store_id=' . $store_id);
 
 		//Render
-		output($this->render('setting/store_form', $store));
+		output($this->render('settings/store/form', $store));
 	}
 
 	public function save()
 	{
-		//Insert or Update
-		$store_id = _get('store_id', 0);
+		if ($this->Model_Setting_Store->save(_get('store_id'), $_POST)) {
+			$this->config->saveGroup('config', $_POST);
 
-		$store_id = $this->Model_Setting_Store->save($store_id, $_POST);
-
-		if ($this->Model_Setting_Store->hasError()) {
-			message('error', $this->Model_Setting_Store->getError());
-		} elseif (empty($store_id)) {
-			message('error', _l("There was a problem saving the store settings."));
-		} else {
-			$this->config->saveGroup('config', $_POST, $store_id);
-
-			if ($this->theme->install($store_id, $_POST['config_theme'])) {
+			if ($this->theme->install($_POST['config_theme'])) {
 				message('error', $this->theme->getError());
 			}
 
 			message('success', _l("The Store settings have been saved."));
+		} else {
+			message('error', $this->Model_Setting_Store->getError());
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
-			$this->form();
+			post_redirect('admin/settings/store/form', 'store_id=' . _get('store_id'));
 		} else {
-			redirect('admin/setting/store');
+			redirect('admin/settings/store');
 		}
 	}
 
@@ -279,7 +272,7 @@ class App_Controller_Admin_Setting_Store extends Controller
 		if (IS_AJAX) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/setting/store');
+			redirect('admin/settings/store');
 		}
 	}
 
