@@ -111,19 +111,19 @@
 <div id="container">
 	<div id="menu">
 		<a id="create" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/folder.png"; ?>');"><?= _l("Folder"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/folder.png"; ?>');">{{Folder}}</a>
 		<a id="delete" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');"><?= _l("Delete"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-delete.png"; ?>');">{{Delete}}</a>
 		<a id="move" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');"><?= _l("Move"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-cut.png"; ?>');">{{Move}}</a>
 		<a id="copy" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');"><?= _l("Copy"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-copy.png"; ?>');">{{Copy}}</a>
 		<a id="rename" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');"><?= _l("Rename"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/edit-rename.png"; ?>');">{{Rename}}</a>
 		<a id="upload" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= _l("Upload"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/upload.png"; ?>');">{{Upload}}</a>
 		<a id="refresh" class="button"
-			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= _l("Refresh"); ?></a>
+			style="background-image: url('<?= URL_THEME_IMAGE . "filemanager/refresh.png"; ?>');">{{Refresh}}</a>
 	</div>
 	<div id="column-left"></div>
 	<div id="column-right"></div>
@@ -268,13 +268,13 @@ $('#create').bind('click', function () {
 		$('#dialog').remove();
 
 		html = '<div id="dialog">';
-		html += '<?= _l("Folder"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= _l("Submit"); ?>" />';
+		html += '{{Folder}} <input type="text" name="name" value="" /> <input type="button" value="{{Submit}}" />';
 		html += '</div>';
 
 		$('#column-right').prepend(html);
 
 		$('#dialog').dialog({
-			title: '<?= _l("Folder"); ?>',
+			title: '{{Folder}}',
 			resizable: false
 		});
 
@@ -391,13 +391,13 @@ $('#move').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= _l("Move"); ?> <select name="to"></select> <input type="button" value="<?= _l("Submit"); ?>" />';
+	html += '{{Move}} <select name="to"></select> <input type="button" value="{{Submit}}" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);
 
 	$('#dialog').dialog({
-		title: '<?= _l("Move"); ?>',
+		title: '{{Move}}',
 		resizable: false
 	});
 
@@ -488,13 +488,13 @@ $('#copy').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= _l("Copy"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= _l("Submit"); ?>" />';
+	html += '{{Copy}} <input type="text" name="name" value="" /> <input type="button" value="{{Submit}}" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);
 
 	$('#dialog').dialog({
-		title: '<?= _l("Copy"); ?>',
+		title: '{{Copy}}',
 		resizable: false
 	});
 
@@ -585,13 +585,13 @@ $('#rename').bind('click', function () {
 	$('#dialog').remove();
 
 	html = '<div id="dialog">';
-	html += '<?= _l("Rename"); ?> <input type="text" name="name" value="" /> <input type="button" value="<?= _l("Submit"); ?>" />';
+	html += '{{Rename}} <input type="text" name="name" value="" /> <input type="button" value="{{Submit}}" />';
 	html += '</div>';
 
 	$('#column-right').prepend(html);
 
 	$('#dialog').dialog({
-		title: '<?= _l("Rename"); ?>',
+		title: '{{Rename}}',
 		resizable: false
 	});
 

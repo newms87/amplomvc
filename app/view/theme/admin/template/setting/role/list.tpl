@@ -1,11 +1,11 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 	<div class="section">
-		<?= IS_AJAX ? '' : breadcrumbs(); ?>
+		<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("User Roles"); ?></h1>
+				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{User Roles}}</h1>
 
 				<? if (!empty($batch_action)) { ?>
 					<div class="batch_actions">
@@ -15,7 +15,7 @@
 
 				<? if (user_can('w', 'admin/user/role/form')) { ?>
 					<div class="buttons">
-						<a href="<?= site_url('admin/setting/role/form'); ?>" class="button"><?= _l("Insert"); ?></a>
+						<a href="<?= site_url('admin/setting/role/form'); ?>" class="button">{{Insert}}</a>
 					</div>
 				<? } ?>
 			</div>
@@ -26,4 +26,4 @@
 		</div>
 	</div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

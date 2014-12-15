@@ -1,6 +1,6 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -9,9 +9,9 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Geo Zones"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Geo Zones}}</h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button">{{Insert}}</a><a onclick="$('form').submit();" class="button">{{Delete}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,17 +21,17 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Geo Zone Name"); ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>">{{Geo Zone Name}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= _l("Geo Zone Name"); ?></a>
+									<a href="<?= $sort_name; ?>">{{Geo Zone Name}}</a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'description') { ?>
 									<a href="<?= $sort_description; ?>"
-										class="<?= strtolower($order); ?>"><?= _l("Description"); ?></a>
+										class="<?= strtolower($order); ?>">{{Description}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_description; ?>"><?= _l("Description"); ?></a>
+									<a href="<?= $sort_description; ?>">{{Description}}</a>
 								<? } ?></td>
-							<td class="right"><?= _l("Action"); ?></td>
+							<td class="right">{{Action}}</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -53,7 +53,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="4"><?= _l("There are no results to display."); ?></td>
+								<td class="center" colspan="4">{{There are no results to display.}}</td>
 							</tr>
 						<? } ?>
 					</tbody>
@@ -63,4 +63,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

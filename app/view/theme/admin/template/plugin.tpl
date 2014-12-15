@@ -1,9 +1,9 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Plugins"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Plugins}}</h1>
 		</div>
 		<div class="section">
 			<div class="limits">
@@ -22,7 +22,7 @@
 	$('.action-uninstall').click(function () {
 		keep_data = 0;
 
-		if (confirm("<?= _l("Do you want to keep the data associated with this plugin?"); ?>")) {
+		if (confirm("{{Do you want to keep the data associated with this plugin?}}")) {
 			keep_data = 1;
 		}
 
@@ -30,4 +30,4 @@
 	});
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

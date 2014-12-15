@@ -1,32 +1,32 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Country"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Country}}</h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button">{{Save}}</a><a
+					href="<?= $cancel; ?>" class="button">{{Cancel}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Country Name:"); ?></td>
+						<td class="required"> {{Country Name:}}</td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/>
 							<? if (_l("Country Name must be between 3 and 128 characters!")) { ?>
-								<span class="error"><?= _l("Country Name must be between 3 and 128 characters!"); ?></span>
+								<span class="error">{{Country Name must be between 3 and 128 characters!}}</span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("ISO Code (2):"); ?></td>
+						<td>{{ISO Code (2):}}</td>
 						<td><input type="text" name="iso_code_2" value="<?= $iso_code_2; ?>"/></td>
 					</tr>
 					<tr>
-						<td><?= _l("ISO Code (3):"); ?></td>
+						<td>{{ISO Code (3):}}</td>
 						<td><input type="text" name="iso_code_3" value="<?= $iso_code_3; ?>"/></td>
 					</tr>
 					<tr>
@@ -46,28 +46,28 @@ Country = {country}</span>"); ?></td>
 						<td><textarea name="address_format" cols="40" rows="5"><?= $address_format; ?></textarea></td>
 					</tr>
 					<tr>
-						<td><?= _l("Postcode Required:"); ?></td>
+						<td>{{Postcode Required:}}</td>
 						<td><? if ($postcode_required) { ?>
 								<input type="radio" name="postcode_required" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="postcode_required" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="postcode_required" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="postcode_required" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("Status:"); ?></td>
+						<td>{{Status:}}</td>
 						<td><select name="status">
 								<? if ($status) { ?>
-									<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
-									<option value="0"><?= _l("Disabled"); ?></option>
+									<option value="1" selected="selected">{{Enabled}}</option>
+									<option value="0">{{Disabled}}</option>
 								<? } else { ?>
-									<option value="1"><?= _l("Enabled"); ?></option>
-									<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
+									<option value="1">{{Enabled}}</option>
+									<option value="0" selected="selected">{{Disabled}}</option>
 								<? } ?>
 							</select></td>
 					</tr>
@@ -76,4 +76,4 @@ Country = {country}</span>"); ?></td>
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

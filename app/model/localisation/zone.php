@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Localisation_Zone extends Model
+class App_Model_Localisation_Zone extends App_Model_Table
 {
+	protected $table = 'zone', $primary_key = 'zone_id';
+
 	public function addZone($zone)
 	{
 		clear_cache('zone');

@@ -26,10 +26,10 @@
 			<button class="close">X</button>
 
 			<div class="view-tabs htabs">
-				<a href=".col-tab"><?= _l("Columns"); ?></a>
-				<a href=".group-tab"><?= _l("Groups / Aggregate"); ?></a>
+				<a href=".col-tab">{{Columns}}</a>
+				<a href=".group-tab">{{Groups / Aggregate}}</a>
 				<? if (user_can('w', 'admin/views')) { ?>
-					<a href=".view-listing-tab"><?= _l("Settings"); ?></a>
+					<a href=".view-listing-tab">{{Settings}}</a>
 				<? } ?>
 			</div>
 
@@ -46,7 +46,7 @@
 						)); ?>
 
 						<div class="buttons">
-							<a class="filter-cols button" data-loading="<?= _l("Applying..."); ?>" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>"><?= _l("Apply"); ?></a>
+							<a class="filter-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
 						</div>
 					</div>
 				</div>
@@ -60,7 +60,7 @@
 				<div class="view-listing-tab tab-content form">
 					<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
 					<div class="form-item">
-						<label for="view-type-<?= $view_id; ?>"><?= _l("Default View Type"); ?></label>
+						<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
 						<?=
 						build('select', array(
 							'name'   => 'view_type',
@@ -71,10 +71,10 @@
 					</div>
 
 					<br/>
-					<h2><?= _l("Chart Settings"); ?></h2>
+					<h2>{{Chart Settings}}</h2>
 
 					<div class="form-item">
-						<label for="chart-group-<?= $view_id; ?>"><?= _l("X axis (Group Column)"); ?></label>
+						<label for="chart-group-<?= $view_id; ?>">{{X axis (Group Column)}}</label>
 						<?=
 						build('select', array(
 							'name'   => 'chart[group_by]',
@@ -87,7 +87,7 @@
 					</div>
 
 					<div class="form-item">
-						<label for="chart-data-<?= $view_id; ?>"><?= _l("Y axis (Data Column)"); ?></label>
+						<label for="chart-data-<?= $view_id; ?>">{{Y axis (Data Column)}}</label>
 						<?=
 						build('multiselect', array(
 							'name'   => 'chart[data_cols]',
@@ -101,7 +101,7 @@
 					</div>
 
 					<div class="form-item submit buttons center">
-						<button class="save-settings" data-loading="<?= _l("Saving..."); ?>"><?= _l("Save Settings"); ?></button>
+						<button class="save-settings" data-loading="{{Saving...}}">{{Save Settings}}</button>
 					</div>
 
 				</div>
@@ -134,7 +134,7 @@
 		var $list_widget = $('.widget-listing').use_once();
 
 		$list_widget.find('.export-view').click(function() {
-			if (confirm("<?= _l("Do you want to export the full data set?"); ?>")) {
+			if (confirm("{{Do you want to export the full data set?}}")) {
 				window.location = $(this).attr('href') + '&limit=0';
 				return false;
 			}

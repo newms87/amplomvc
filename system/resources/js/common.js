@@ -310,7 +310,7 @@ $.fn.tabs = function (callback) {
 };
 
 $.fn.ac_msg = function (type, msg, append, close) {
-	if (type == 'clear') {
+	if (type === 'clear') {
 		return $(this).find('.messages').remove();
 	}
 
@@ -487,12 +487,13 @@ $.loading = function (params) {
 $.fn.loading = function (params) {
 	if (typeof params !== 'string') {
 		params = $.extend({}, {
+			default_text: false,
 			text:    this.attr('data-loading'),
 			disable: true
 		}, params);
 	}
 
-	if (params.text || this.data('original')) {
+	if (params.text || params.default_text || this.data('original')) {
 		if (params === 'stop') {
 			this.prop('disabled', false);
 			this.html(this.data('original'));
@@ -503,7 +504,7 @@ $.fn.loading = function (params) {
 			if (!this.data('original')) {
 				this.data('original', this.html());
 			}
-			this.html(params.text);
+			this.html(params.text || params.default_text);
 		}
 
 		return this;
@@ -881,11 +882,11 @@ $.fn.submit_ajax_form = function (params) {
 	return this.each(function (i, e) {
 		var $form = $(e);
 
-		var $btns = $form.find('button, input[type=submit], [data-loading]').loading({text: 'Saving...'});
+		var $btns = $form.find('button, input[type=submit], [data-loading]').loading({default_text: 'Submitting...'});
 
 		$.post($form.attr('action'), $form.serialize(), typeof params.callback === 'function' ? params.callback : function (response) {
 			$form.ac_msg(response);
-		}, 'json').always(function () {
+		}).always(function () {
 			$btns.loading('stop');
 		});
 	});

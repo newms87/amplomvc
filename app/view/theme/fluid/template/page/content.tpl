@@ -7,7 +7,7 @@
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= IS_AJAX ? '' : breadcrumbs(); ?>
+			<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 			<? if (!empty($display_title)) { ?>
 				<h1 id="page-title"><?= $title; ?></h1>

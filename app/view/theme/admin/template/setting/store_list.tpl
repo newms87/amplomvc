@@ -1,13 +1,13 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Stores & Settings"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Stores & Settings}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button"><?= _l("Add Store"); ?></a>
-				<a href="<?= site_url('admin'); ?>" class="button"><?= _l("Back"); ?></a>
+				<a href="<?= $insert; ?>" class="button">{{Add Store}}</a>
+				<a href="<?= site_url('admin'); ?>" class="button">{{Back}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -26,4 +26,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

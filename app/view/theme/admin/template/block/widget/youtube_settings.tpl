@@ -1,6 +1,6 @@
 <table class="form">
 	<tr>
-		<td valign="top"><a id="add_video" class="button"><?= _l("Add Video"); ?></a></td>
+		<td valign="top"><a id="add_video" class="button">{{Add Video}}</a></td>
 		<td>
 			<ul id="video_list" class="easy_list">
 
@@ -15,7 +15,7 @@
 					<li class="video <?= $key; ?>">
 						<input id="title_<?= $row; ?>" class="video_title" size="50" type="text" name="settings[videos][<?= $row; ?>][title]" value="<?= $video['title']; ?>"/><br/>
 						<input id="href_<?= $row; ?>" class="video_href" size="50" type="text" name="settings[videos][<?= $row; ?>][href]" value="<?= $video['href']; ?>"/>
-						<a class="button delete text" onclick="$(this).closest('.video').remove()"><?= _l("Delete"); ?></a>
+						<a class="button delete text" onclick="$(this).closest('.video').remove()">{{Delete}}</a>
 					</li>
 				<? } ?>
 
@@ -34,8 +34,8 @@
 	$('#add_video').click(function () {
 		template = video_template
 			.replace(/%row%/g, video_row++)
-			.replace(/%title%/g, '<?= _l("Your Video Title"); ?>')
-			.replace(/%href%/g, '<?= _l("http://www.urltoyourvideo.com/"); ?>');
+			.replace(/%title%/g, '{{Your Video Title}}')
+			.replace(/%href%/g, '{{http://www.urltoyourvideo.com/}}');
 
 		$('#video_list').append(template);
 	});

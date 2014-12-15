@@ -1,51 +1,51 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<form action="<?= site_url('admin/setting/setting/save'); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("General Settings"); ?>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{General Settings}}
 			</h1>
 
 			<div class="buttons">
-				<button><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button cancel"><?= _l("Cancel"); ?></a>
+				<button>{{Save}}</button>
+				<a href="<?= site_url('admin/setting/store'); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= _l("General"); ?></a>
-				<a href="#tab-store"><?= _l("Store"); ?></a>
-				<a href="#tab-local"><?= _l("Local"); ?></a>
-				<a href="#tab-option"><?= _l("Option"); ?></a>
-				<a href="#tab-image"><?= _l("Image"); ?></a>
-				<a href="#tab-mail"><?= _l("Mail"); ?></a>
-				<a href="#tab-fraud"><?= _l("Fraud"); ?></a>
-				<a href="#tab-file-permissions"><?= _l("File Permissions"); ?></a>
-				<a href="#tab-server"><?= _l("Server"); ?></a>
+				<a href="#tab-general">{{General}}</a>
+				<a href="#tab-store">{{Store}}</a>
+				<a href="#tab-local">{{Local}}</a>
+				<a href="#tab-option">{{Option}}</a>
+				<a href="#tab-image">{{Image}}</a>
+				<a href="#tab-mail">{{Mail}}</a>
+				<a href="#tab-fraud">{{Fraud}}</a>
+				<a href="#tab-file-permissions">{{File Permissions}}</a>
+				<a href="#tab-server">{{Server}}</a>
 			</div>
 
 			<div id="tab-general">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Store Name:"); ?></td>
+						<td class="required"> {{Store Name:}}</td>
 						<td>
 							<input type="text" name="config_name" value="<?= $config_name; ?>" size="40"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Store Owner:"); ?></td>
+						<td class="required"> {{Store Owner:}}</td>
 						<td>
 							<input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Address:"); ?></td>
+						<td class="required"> {{Address:}}</td>
 						<td>
 							<textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("E-Mail:"); ?></td>
+						<td class="required"> {{E-Mail:}}</td>
 						<td>
 							<input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/>
 					</tr>
@@ -60,12 +60,12 @@
 							<input type="text" name="config_email_error" value="<?= $config_email_error; ?>" size="40"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Telephone:"); ?></td>
+						<td class="required"> {{Telephone:}}</td>
 						<td>
 							<input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/>
 					</tr>
 					<tr>
-						<td><?= _l("Fax:"); ?></td>
+						<td>{{Fax:}}</td>
 						<td>
 							<input type="text" name="config_fax" value="<?= $config_fax; ?>"/>
 						</td>
@@ -75,18 +75,18 @@
 			<div id="tab-store">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Title:"); ?></td>
+						<td class="required"> {{Title:}}</td>
 						<td>
 							<input type="text" name="config_title" value="<?= $config_title; ?>"/>
 					</tr>
 					<tr>
-						<td><?= _l("Meta Tag Description:"); ?></td>
+						<td>{{Meta Tag Description:}}</td>
 						<td>
 							<textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Theme:"); ?></td>
+						<td>{{Theme:}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -103,7 +103,7 @@
 						<td id="theme"></td>
 					</tr>
 					<tr>
-						<td><?= _l("Default Store"); ?></td>
+						<td>{{Default Store}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -116,7 +116,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Default Layout:"); ?></td>
+						<td>{{Default Layout:}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -141,7 +141,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Country:"); ?></td>
+						<td>{{Country:}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -154,13 +154,13 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Region / State:"); ?></td>
+						<td>{{Region / State:}}</td>
 						<td>
 							<select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Language:"); ?></td>
+						<td>{{Language:}}</td>
 						<td>
 							<select name="config_language">
 								<? foreach ($languages as $language) { ?>
@@ -174,7 +174,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Administration Language:"); ?></td>
+						<td>{{Administration Language:}}</td>
 						<td>
 							<select name="config_admin_language">
 								<? foreach ($languages as $language) { ?>
@@ -215,14 +215,14 @@
 						<td><?= _l("Auto Update Currency:<br /><span class=\"help\">Set your store to automatically update currencies daily.</span>"); ?></td>
 						<td><? if ($config_currency_auto) { ?>
 								<input type="radio" name="config_currency_auto" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_currency_auto" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="config_currency_auto" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_currency_auto" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 				</table>
@@ -231,8 +231,8 @@
 				<table class="form">
 					<tr>
 						<td>
-							<?= _l("Administration Bar"); ?>
-							<span class="help"><?= _l("This will display a small toolbar on the store fronts when logged into the Admin Panel"); ?></span>
+							{{Administration Bar}}
+							<span class="help">{{This will display a small toolbar on the store fronts when logged into the Admin Panel}}</span>
 						</td>
 						<td><?=
 							build('radio', array(
@@ -243,8 +243,8 @@
 					</tr>
 					<tr>
 						<td>
-							<?= _l("Automated Tasks"); ?>
-							<span class="help"><?= _l("Highly recommended to leave this on!"); ?></span>
+							{{Automated Tasks}}
+							<span class="help">{{Highly recommended to leave this on!}}</span>
 						</td>
 						<td><?=
 							build('radio', array(
@@ -263,12 +263,12 @@
 							)); ?></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Breadcrumb Separator:"); ?></td>
+						<td class="required"> {{Breadcrumb Separator:}}</td>
 						<td>
 							<input type="text" style="font-size:20px" name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Admin Breadcrumb Separator:"); ?></td>
+						<td class="required"> {{Admin Breadcrumb Separator:}}</td>
 						<td>
 							<input type="text" style="font-size:20px" name="config_breadcrumb_separator_admin" value="<?= $config_breadcrumb_separator_admin; ?>" size="1"/>
 					</tr>
@@ -288,7 +288,7 @@
 							<input type="text" name="config_autocomplete_limit" value="<?= $config_autocomplete_limit; ?>" size="3"/>
 					</tr>
 					<tr>
-						<td><?= _l("Performance Logging:"); ?></td>
+						<td>{{Performance Logging:}}</td>
 						<td><?=
 							build('select', array(
 								'name'   => 'config_performance_log',
@@ -303,7 +303,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>"); ?></td>
+						<td>{{Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>}}</td>
 						<td><?=
 							build('radio', array(
 								'name'   => 'config_allow_close_message',
@@ -350,7 +350,7 @@
 					</tr>
 
 					<tr>
-						<td><?= _l("Allow Social Sharing:"); ?></td>
+						<td>{{Allow Social Sharing:}}</td>
 						<td><?=
 							build('select', array(
 								'name'   => "config_share_status",
@@ -385,15 +385,15 @@
 			<div id="tab-image">
 				<table class="form">
 					<tr>
-						<td><?= _l("Admin Panel Logo:"); ?></td>
+						<td>{{Admin Panel Logo:}}</td>
 						<td>
 							<input type="text" class="imageinput" name="config_admin_logo" value="<?= $config_admin_logo; ?>"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<span><?= _l("Icon:"); ?></span>
-							<span class="help"><?= _l("Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file."); ?></span>
+							<span>{{Icon:}}</span>
+							<span class="help">{{Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file.}}</span>
 						</td>
 						<td>
 							<div id="icon-generator">
@@ -402,7 +402,7 @@
 										<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
 
 										<div class="icon-label">
-											<a id="generate-icons" data-loading="<?= _l("Generating..."); ?>" class="button"><?= _l("Generate Icon Files"); ?></a>
+											<a id="generate-icons" data-loading="{{Generating...}}" class="button">{{Generate Icon Files}}</a>
 										</div>
 									</div>
 								</div>
@@ -410,7 +410,7 @@
 									<div class="icon-file icon-ico">
 										<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']['src']; ?>" data-thumb="<?= $config_icon['ico']['thumb']; ?>"/>
 
-										<div class="icon-label"><?= _l("ICO File"); ?></div>
+										<div class="icon-label">{{ICO File}}</div>
 									</div>
 									<? foreach ($data_icon_sizes as $size) { ?>
 										<div class="icon-file icon-size">
@@ -425,7 +425,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Admin Image Thumb Size:"); ?></td>
+						<td class="required"> {{Admin Image Thumb Size:}}</td>
 						<td>
 							<input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>" size="3"/>
 							x
@@ -433,7 +433,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Admin Image List Size:"); ?></td>
+						<td class="required"> {{Admin Image List Size:}}</td>
 						<td>
 							<input type="text" name="config_image_admin_list_width" value="<?= $config_image_admin_list_width; ?>"
 								size="3"/>
@@ -442,7 +442,7 @@
 								size="3"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Category Image Size:"); ?></td>
+						<td class="required"> {{Category Image Size:}}</td>
 						<td>
 							<input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>"
 								size="3"/>
@@ -470,31 +470,31 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("SMTP Host:"); ?></td>
+						<td>{{SMTP Host:}}</td>
 						<td>
 							<input type="text" name="config_smtp_host" value="<?= $config_smtp_host; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("SMTP Username:"); ?></td>
+						<td>{{SMTP Username:}}</td>
 						<td>
 							<input type="text" name="config_smtp_username" value="<?= $config_smtp_username; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("SMTP Password:"); ?></td>
+						<td>{{SMTP Password:}}</td>
 						<td>
 							<input type="text" name="config_smtp_password" value="<?= $config_smtp_password; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("SMTP Port:"); ?></td>
+						<td>{{SMTP Port:}}</td>
 						<td>
 							<input type="text" name="config_smtp_port" value="<?= $config_smtp_port; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("SMTP Timeout:"); ?></td>
+						<td>{{SMTP Timeout:}}</td>
 						<td>
 							<input type="text" name="config_smtp_timeout" value="<?= $config_smtp_timeout; ?>"/>
 						</td>
@@ -524,7 +524,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Enable Mail Logging"); ?></td>
+						<td>{{Enable Mail Logging}}</td>
 						<td><?=
 							build('radio', array(
 								'name'   => 'config_mail_logging',
@@ -542,7 +542,7 @@
 						<td>
 							<table class="mode_explanation">
 								<tbody>
-								<tr><?= _l("The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions."); ?></tr>
+								<tr>{{The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.}}</tr>
 								<tr>
 									<th>#</th>
 									<th>Permission</th>
@@ -593,29 +593,29 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Default File Permissions <span class=\'help\'>These are the permissions set for system generated files and directories</span>"); ?></td>
+						<td>{{Default File Permissions <span class=\'help\'>These are the permissions set for system generated files and directories</span>}}</td>
 						<td>
-							<label for="default_file_mode"><?= _l("Default File Permissions"); ?></label>
+							<label for="default_file_mode">{{Default File Permissions}}</label>
 							<input id="default_file_mode" type="text" size="3" maxlength="3" name="config_default_file_mode" value="<?= $config_default_file_mode; ?>"/>
-							<label for="default_dir_mode"><?= _l("Default Directory Permissions"); ?></label>
+							<label for="default_dir_mode">{{Default Directory Permissions}}</label>
 							<input id="default_dir_mode" type="text" size="3" maxlength="3" name="config_default_dir_mode" value="<?= $config_default_dir_mode; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Image File Permissions <span class=\'help\'>These are the permissions set for system generated image files and directories</span>"); ?></td>
+						<td>{{Image File Permissions <span class=\'help\'>These are the permissions set for system generated image files and directories</span>}}</td>
 						<td>
-							<label for="image_file_mode"><?= _l("Image File Permissions"); ?></label>
+							<label for="image_file_mode">{{Image File Permissions}}</label>
 							<input id="image_file_mode" type="text" size="3" maxlength="3" name="config_image_file_mode" value="<?= $config_image_file_mode; ?>"/>
-							<label for="_dir_mode"><?= _l("Image Directory Permissions"); ?></label>
+							<label for="_dir_mode">{{Image Directory Permissions}}</label>
 							<input id="image_dir_mode" type="text" size="3" maxlength="3" name="config_image_dir_mode" value="<?= $config_image_dir_mode; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Plugin File Permissions <span class=\'help\'>These are the permissions set for system generated plugin files and directories</span>"); ?></td>
+						<td>{{Plugin File Permissions <span class=\'help\'>These are the permissions set for system generated plugin files and directories</span>}}</td>
 						<td>
-							<label for="plugin_file_mode"><?= _l("Plugin File Permissions"); ?></label>
+							<label for="plugin_file_mode">{{Plugin File Permissions}}</label>
 							<input id="plugin_file_mode" type="text" size="3" maxlength="3" name="config_plugin_file_mode" value="<?= $config_plugin_file_mode; ?>"/>
-							<label for="_dir_mode"><?= _l("Plugin Directory Permissions"); ?></label>
+							<label for="_dir_mode">{{Plugin Directory Permissions}}</label>
 							<input id="plugin_dir_mode" type="text" size="3" maxlength="3" name="config_plugin_dir_mode" value="<?= $config_plugin_dir_mode; ?>"/>
 						</td>
 					</tr>
@@ -655,42 +655,42 @@
 						<td><?= _l("Use SSL:<br /><span class=\"help\">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>"); ?></td>
 						<td><? if ($config_use_ssl) { ?>
 								<input type="radio" name="config_use_ssl" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_use_ssl" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="config_use_ssl" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_use_ssl" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Use SEO URL\'s:<br /><span class=\"help\">To use SEO URL\'s apache module mod-rewrite must be installed and you need to rename the htaccess.txt to .htaccess.</span>"); ?></td>
 						<td><? if ($config_seo_url) { ?>
 								<input type="radio" name="config_seo_url" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_seo_url" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="config_seo_url" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_seo_url" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td><?= _l("Maintenance Mode:<br /><span class=\"help\">Prevents customers from browsing your store. They will instead see a maintenance message. If logged in as admin, you will see the store as normal.</span>"); ?></td>
 						<td><? if ($config_maintenance) { ?>
 								<input type="radio" name="config_maintenance" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_maintenance" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="config_maintenance" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_maintenance" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 					<tr>
@@ -712,17 +712,17 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Log Filename:"); ?></td>
+						<td class="required"> {{Log Filename:}}</td>
 						<td>
 							<input type="text" name="config_log_filename" value="<?= $config_log_filename; ?>"/>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Error Log Filename:"); ?></td>
+						<td class="required"> {{Error Log Filename:}}</td>
 						<td>
 							<input type="text" name="config_error_filename" value="<?= $config_error_filename; ?>"/>
 					</tr>
 					<tr>
-						<td><?= _l("Display Errors:"); ?></td>
+						<td>{{Display Errors:}}</td>
 						<td><?=
 							build('radio', array(
 								'name'   => 'config_error_display',
@@ -731,7 +731,7 @@
 							)); ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("Log Errors:"); ?></td>
+						<td>{{Log Errors:}}</td>
 						<td><?=
 							build('radio', array(
 								'name'   => 'config_error_log',
@@ -741,11 +741,11 @@
 					</tr>
 					<tr>
 						<td>
-							<?= _l("Google Analytics"); ?>
+							{{Google Analytics}}
 						</td>
 						<td>
 							<div class="ga-code">
-								<input placeholder="<?= _l("GA Code"); ?>" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>"/>
+								<input placeholder="{{GA Code}}" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>"/>
 
 								<div class="help"><?= _l("Login to your <a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a> account and after creating your web site profile copy and paste the analytics code into this field."); ?></div>
 							</div>
@@ -753,8 +753,8 @@
 							<br/>
 
 							<div class="ga-cross-domain">
-								<h3><?= _l("Use this section to enable GA Cross-domain analytics"); ?></h3>
-								<span class="help"><?= _l("Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)"); ?></span>
+								<h3>{{Use this section to enable GA Cross-domain analytics}}</h3>
+								<span class="help">{{Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}</span>
 								<br/>
 
 								<div class="ga-domains">
@@ -766,14 +766,14 @@
 										</div>
 									<? } ?>
 								</div>
-								<div class="button add"><?= _l("Add Domain"); ?></div>
+								<div class="button add">{{Add Domain}}</div>
 							</div>
 
 							<br/>
 							<br/>
 
 							<div class="ga-click-tracking">
-								<h3><?= _l("Enable full page click tracking?"); ?></h3>
+								<h3>{{Enable full page click tracking?}}</h3>
 								<?= build('radio', array(
 									'name'   => 'config_ga_click_tracking',
 									'data'   => array(
@@ -788,8 +788,8 @@
 							<br/>
 
 							<div class="ga-demograhpics">
-								<h3><?= _l("Enable GA Demographics?"); ?></h3>
-								<span class="help"><?= _l("This will track user age / gender / interests data. To enable go to your google analytics account and enable Demograhpics and Interest Reports, set this to enabled and Amplo MVC will insert the tracking code for you."); ?></span>
+								<h3>{{Enable GA Demographics?}}</h3>
+								<span class="help">{{This will track user age / gender / interests data. To enable go to your google analytics account and enable Demograhpics and Interest Reports, set this to enabled and Amplo MVC will insert the tracking code for you.}}</span>
 								<?= build('radio', array(
 									'name'   => 'config_ga_demographics',
 									'data'   => array(
@@ -803,17 +803,17 @@
 					</tr>
 					<tr>
 						<td>
-							<?= _l("GA Experiments"); ?>
+							{{GA Experiments}}
 						</td>
 						<td>
 							<div class="ga-experiment-id">
-								<input placeholder="<?= _l("Experiment ID"); ?>" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>"/>
-								<span class="help"><?= _l("(Leave blank if you do not have any experiments set up.)"); ?></span>
+								<input placeholder="{{Experiment ID}}" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>"/>
+								<span class="help">{{(Leave blank if you do not have any experiments set up.)}}</span>
 							</div>
 							<br/>
 
-							<h3><?= _l("GA Experiment Variations"); ?></h3>
-							<span class="help"><?= _l("Enter the number of variations you have setup for this experiment"); ?></span>
+							<h3>{{GA Experiment Variations}}</h3>
+							<span class="help">{{Enter the number of variations you have setup for this experiment}}</span>
 
 							<div class="ga-experiment-vars">
 								<?= build('select', array(
@@ -827,12 +827,12 @@
 					<tr>
 						<td><?= _l("Stat Counter Code:<span class=\"help\">Sign up at <a target=\"_blank\" href=\"http://www.statcounter.com/sign-up/\">Stat Counter</a> and copy and past the code in this field.</span>"); ?></td>
 						<td>
-							<label for="statcounter_project"><?= _l("Project ID"); ?></label>
+							<label for="statcounter_project">{{Project ID}}</label>
 							<br/>
 							<input type="text" name="config_statcounter[project]" value="<?= $config_statcounter['project']; ?>"/>
 							<br/>
 							<br/>
-							<label for="statcounter_project"><?= _l("Security Code"); ?></label>
+							<label for="statcounter_project">{{Security Code}}</label>
 							<br/>
 							<input type="text" name="config_statcounter[security]" value="<?= $config_statcounter['security']; ?>"/>
 						</td>
@@ -857,7 +857,7 @@
 		var icon = $('[name="config_icon[orig]"]').val();
 
 		if (!icon) {
-			return $('#icon-generator').ac_msg('error', "<?= _l("You must choose an icon PNG image file first"); ?>");
+			return $('#icon-generator').ac_msg('error', "{{You must choose an icon PNG image file first}}");
 		}
 
 		$this.loading();
@@ -895,4 +895,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

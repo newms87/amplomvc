@@ -1,23 +1,23 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div id="theme-settings" class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= $save; ?>" method="post" class="box">
 		<div class="heading">
 			<h1>
-				<img class="icon" src="<?= theme_url('image/settings/theme.png'); ?>" alt=""/> <?= _l("Theme Settings"); ?></h1>
+				<img class="icon" src="<?= theme_url('image/settings/theme.png'); ?>" alt=""/> {{Theme Settings}}</h1>
 
 			<div class="buttons">
-				<button class="button"><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<button class="button">{{Save}}</button>
+				<a href="<?= site_url('admin/setting/store'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 
 		<div class="section select-store row">
-			<h2><?= _l("Choose Store"); ?></h2>
+			<h2>{{Choose Store}}</h2>
 
 			<div class="store-list">
-				<a class="store <?= empty($store['store_id']) ? 'active' : ''; ?>" href="<?= site_url('admin/setting/theme'); ?>"><?= _l("All Stores"); ?></a>
+				<a class="store <?= empty($store['store_id']) ? 'active' : ''; ?>" href="<?= site_url('admin/setting/theme'); ?>">{{All Stores}}</a>
 
 				<? foreach ($data_stores as $s) { ?>
 					<a class="store <?= $s['store_id'] == $store['store_id'] ? 'active' : ''; ?>" href="<?= site_url('admin/setting/theme', 'store_id=' . $s['store_id']); ?>"><?= $s['name']; ?></a>
@@ -25,7 +25,7 @@
 			</div>
 
 			<div class="col xs-12 md-6 top theme-settings">
-				<a class="button" href="<?= site_url('admin/setting/theme/restore_defaults', 'store_id=' . $store['store_id']); ?>"><?= _l("Restore Defaults"); ?></a>
+				<a class="button" href="<?= site_url('admin/setting/theme/restore_defaults', 'store_id=' . $store['store_id']); ?>">{{Restore Defaults}}</a>
 
 				<div class="theme-setting-list">
 					<? foreach ($configs as $key => $config) { ?>
@@ -48,7 +48,7 @@
 			</div>
 
 			<div class="col xs-12 md-6 theme-stylesheet">
-				<h3><?= _l("Custom Styles"); ?></h3>
+				<h3>{{Custom Styles}}</h3>
 				<div class="code-editor">
 					<textarea id="stylesheet-editor" name="stylesheet" class=""><?= $stylesheet; ?></textarea>
 				</div>
@@ -64,4 +64,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

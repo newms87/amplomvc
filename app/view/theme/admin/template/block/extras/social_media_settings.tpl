@@ -1,10 +1,10 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= _l("Your Social Networks:"); ?>
-			<span class="help"><?= _l("Include the http:// or https://"); ?></span>
+			{{Your Social Networks:}}
+			<span class="help">{{Include the http:// or https://}}</span>
 
-			<div id="add_network"><?= _l("Add Network"); ?></div>
+			<div id="add_network">{{Add Network}}</div>
 		</td>
 		<td>
 			<ul id="social_network_list">

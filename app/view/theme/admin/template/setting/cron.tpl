@@ -1,15 +1,15 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{Cron Jobs}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _l("Run Cron"); ?></a>
-				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button">{{Run Cron}}</a>
+				<a onclick="$('#form').submit();" class="button">{{Save}}</a>
+				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -23,12 +23,12 @@
 				<table id="module" class="list">
 					<thead>
 						<tr>
-							<td class="left"><?= _l("Name"); ?></td>
-							<td class="left"><?= _l("Action"); ?><span class="help"><?= _l("These files are located in " . DIR_CRON); ?></span></td>
-							<td class="left"><?= _l("Time"); ?></td>
-							<td class="right"><?= _l("Sort Order"); ?></td>
-							<td class="center"><?= _l("Last Run"); ?></td>
-							<td class="left"><?= _l("Status"); ?></td>
+							<td class="left">{{Name}}</td>
+							<td class="left">{{Action}}<span class="help"><?= _l("These files are located in " . DIR_CRON); ?></span></td>
+							<td class="left">{{Time}}</td>
+							<td class="right">{{Sort Order}}</td>
+							<td class="center">{{Last Run}}</td>
+							<td class="left">{{Status}}</td>
 							<td></td>
 						</tr>
 					</thead>
@@ -39,7 +39,7 @@
 								<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $task['name']; ?>" size="30" maxlength="30"/></td>
 								<td class="left cron_action">
 
-									<label for="select_file<?= $row; ?>"><?= _l("Cron File"); ?></label>
+									<label for="select_file<?= $row; ?>">{{Cron File}}</label>
 									<select id="select_file<?= $row; ?>" class="select_file" name="tasks[<?= $row; ?>][file]">
 										<? foreach ($data_files as $file) { ?>
 											<option value="<?= $file; ?>" <?= $file === $task['file'] ? 'selected="selected"' : ''; ?>><?= $file; ?></option>
@@ -47,7 +47,7 @@
 									</select>
 
 									<br/><br/>
-									<label><?= _l("Method"); ?></label>
+									<label>{{Method}}</label>
 								<span class="method_list">
 									<? foreach ($data_methods as $file => $methods) { ?>
 										<select class="select_method" data-file="<?= $file; ?>" data-name="tasks[<?= $row; ?>][method]">
@@ -62,11 +62,11 @@
 									<table class="crontime">
 										<thead>
 											<tr>
-												<td><?= _l("Minute"); ?></td>
-												<td><?= _l("Hour"); ?></td>
-												<td><?= _l("Day of Month"); ?></td>
-												<td><?= _l("Month"); ?></td>
-												<td><?= _l("Day of Week"); ?></td>
+												<td>{{Minute}}</td>
+												<td>{{Hour}}</td>
+												<td>{{Day of Month}}</td>
+												<td>{{Month}}</td>
+												<td>{{Day of Week}}</td>
 											</tr>
 										</thead>
 										<tr>
@@ -95,7 +95,7 @@
 
 					<tfoot>
 						<tr>
-							<td colspan="7" class="center"><a id="add_task" class="button"><?= _l("Add Task"); ?></a></td>
+							<td colspan="7" class="center"><a id="add_task" class="button">{{Add Task}}</a></td>
 						</tr>
 					</tfoot>
 				</table>
@@ -124,4 +124,4 @@
 		}});
 	</script>
 
-	<?= IS_AJAX ? '' : call('admin/footer'); ?>
+	<?= $is_ajax ? '' : call('admin/footer'); ?>

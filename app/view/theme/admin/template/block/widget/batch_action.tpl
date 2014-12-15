@@ -1,4 +1,4 @@
-<span class="batch_action_title"><?= _l("Batch Action"); ?></span>
+<span class="batch_action_title">{{Batch Action}}</span>
 
 <?= build('select', array(
 	'name'  => 'batch_action',
@@ -51,7 +51,7 @@
 	</div>
 <? } ?>
 
-<a class="button batch-action-go" data-loading="<?= _l("..."); ?>"><?= _l("Go"); ?></a>
+<a class="button batch-action-go" data-loading="{{...}}">{{Go}}</a>
 
 <? if ($ckeditor) {
 	echo build_js('ckeditor');
@@ -76,7 +76,7 @@
 		var $selected = $('<?= $selector; ?>:checked');
 
 		if (!$selected.length) {
-			alert("<?= _l("Please select items to perform the batch action on."); ?>");
+			alert("{{Please select items to perform the batch action on.}}");
 			return false;
 		}
 

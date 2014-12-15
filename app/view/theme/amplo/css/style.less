@@ -82,8 +82,7 @@ h6 {
 }
 
 .noselect,
-.ac-checkbox,
-.button, button {
+.ac-checkbox {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -160,12 +159,10 @@ h6 {
 
   .close {
     position: absolute;
-    top: .5em;
-    right: 1em;
-    width: 16px;
-    height: 16px;
+    top: .25em;
+    right: .5em;
     color: #555555;
-    background: white;
+    background: none;
     padding: .2em .5em;
     border: none;
     border-radius: 5px;
@@ -176,7 +173,7 @@ h6 {
     }
 
     &:hover, &:active {
-      background: gray;
+      background: @color-lightest;
     }
   }
 }
@@ -187,18 +184,19 @@ h6 {
 }
 
 //Button (use .row for section-style-x override)
+.buttons {
+  clear: both;
+  margin-top: 1em;
+}
+
 button, .button, .row .button {
+  .noselect;
   display: inline-block;
   text-decoration: none;
   outline: 0;
   cursor: pointer;
 
   @button();
-}
-
-.buttons {
-  clear: both;
-  margin-top: 1em;
 }
 
 //Sprites
@@ -254,7 +252,7 @@ button, .button, .row .button {
   @navigation();
 }
 
-.image-checkbox, .form .form-item input.image-checkbox[type="checkbox"] {
+.image-checkbox, .form-item input.image-checkbox[type="checkbox"] {
   position: absolute;
   left: -9999px;
 
@@ -327,6 +325,7 @@ header.main-header.row {
   position: fixed;
   top: 0;
   z-index: 100;
+  box-shadow: 1px 0 1px 3px rgba(0,0,0,.75);
 
   .wrap {
     border: none;
@@ -495,160 +494,148 @@ header.main-header.row {
 }
 
 //Forms
-.form {
-  input[type="text"], input[type="password"] {
-    box-sizing: border-box;
+input[type="text"], input[type="password"] {
+  box-sizing: border-box;
 
-    @input();
+  @input();
+}
+
+select {
+  box-sizing: border-box;
+  @select();
+}
+
+label.radio {
+  vertical-align: middle;
+  display: inline-block;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  .noselect;
+
+  .label {
+    text-align: left;
+    vertical-align: middle;
+    display: inline-block;
   }
 
-  select {
-    box-sizing: border-box;
-    @select();
-  }
+  input[type="radio"] {
+    vertical-align: middle;
+    display: inline-block;
+    position: absolute;
+    left: -9999px;
 
+    @radio();
+  }
+}
+
+.builder-radio.panel {
   label.radio {
-    vertical-align: middle;
-    display: inline-block;
-    outline: none;
-    box-sizing: border-box;
-    cursor: pointer;
-    .noselect;
-
     .label {
-      text-align: left;
-      vertical-align: middle;
-      display: inline-block;
-
-      &:before {
-        content: '';
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-        top: -1px;
-        margin-right: .4em;
-        z-index: 10;
-      }
+      border-radius: 0;
     }
 
-    input[type="radio"] {
-      vertical-align: middle;
-      display: inline-block;
-      position: absolute;
-      left: -9999px;
-
-      @radio();
-    }
-  }
-
-  .builder-radio.panel {
-    label.radio {
+    &:first-child {
       .label {
-        border-radius: 0;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
       }
+    }
 
-      &:first-child {
-        .label {
-          border-top-left-radius: 20px;
-          border-bottom-left-radius: 20px;
-        }
-      }
-
-      &:last-child {
-        .label {
-          border-top-right-radius: 20px;
-          border-bottom-right-radius: 20px;
-        }
+    &:last-child {
+      .label {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
       }
     }
   }
+}
 
-  label.checkbox {
-    .noselect;
+label.checkbox {
+  .noselect;
+  vertical-align: middle;
+  display: inline-block;
+  outline: 0;
+  box-sizing: border-box;
+
+  .label {
+    text-align: left;
     vertical-align: middle;
     display: inline-block;
-    outline: 0;
-    box-sizing: border-box;
 
-    .label {
-      text-align: left;
-      vertical-align: middle;
+    &:before {
+      content: '';
       display: inline-block;
-
-      &:before {
-        content: '';
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-        top: -1px;
-        margin-right: .4em;
-        z-index: 10;
-      }
-    }
-
-    input[type="checkbox"] {
       vertical-align: middle;
-      display: inline-block;
-      position: absolute;
-      left: -9999px;
-
-      @checkbox();
+      position: relative;
+      top: -1px;
+      margin-right: .4em;
+      z-index: 10;
     }
   }
 
-  textarea {
-    min-width: 40%;
-    max-width: 75%;
-    box-sizing: border-box;
+  input[type="checkbox"] {
+    vertical-align: middle;
+    display: inline-block;
+    position: absolute;
+    left: -9999px;
 
-    @textarea();
+    @checkbox();
+  }
+}
+
+textarea {
+  min-width: 40%;
+  max-width: 75%;
+  box-sizing: border-box;
+
+  @textarea();
+}
+
+.form-item {
+  width: 100%;
+  display: block;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+
+  .small-text {
+    font-size: 1em;
   }
 
-  .form-item {
-    width: 100%;
+  label {
+    width: 20%;
+    min-width: 150px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+  }
+
+  /* Chrome Autofill Style Hack*/
+  [autocomplete="off"]:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px @color-lightest inset;
+    background-color: @color-lightest !important;
+    color: @color-dark !important;
+  }
+}
+
+&.labels {
+  input[type="text"], input[type="password"], select {
+    width: 40%;
+  }
+
+  .help {
     display: block;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-
-    .small-text {
-      font-size: 1em;
-    }
-
-    label {
-      width: 20%;
-      min-width: 150px;
-      display: inline-block;
-      text-align: right;
-      margin-right: 10px;
-    }
-
-    /* Chrome Autofill Style Hack*/
-    [autocomplete="off"]:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 1000px @color-lightest inset;
-      background-color: @color-lightest !important;
-      color: @color-dark !important;
-    }
+    margin-left: 20%;
   }
+}
 
-  &.labels {
-    input[type="text"], input[type="password"], select {
-      width: 40%;
-    }
+.form-section {
+  margin-bottom: 15px;
+}
 
-    .help {
-      display: block;
-      margin-left: 20%;
-    }
-  }
-
-  .form-section {
-    margin-bottom: 15px;
-  }
-
-  &.full-width {
-    input[type="text"], input[type="password"], select, textarea {
-      width: 100%;
-    }
+&.full-width {
+  input[type="text"], input[type="password"], select, textarea {
+    width: 100%;
   }
 }
 
@@ -762,81 +749,36 @@ header.main-header.row {
   }
 }
 
-//Social Media
-.one-click {
-  width: 90%;
-  margin-bottom: .5em;
+//Login Page
+.login-page {
+  .col {
+    .box {
+      display: inline-block;
+      border: 4px ridge @color-main;
+      border-radius: 3px;
+      padding: 1em;
 
-  a {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    background-size: 32px 32px;
-    padding: 0 2px;
+      h2 {
+        text-transform: uppercase;
+        margin-bottom: .7em;
+      }
+
+      h3 {
+        text-transform: uppercase;
+        font: 1em OpenSansItalic;
+        color: @color-secondary;
+        margin-bottom: .4em;
+      }
+    }
   }
 
-  &.extra-small {
+  .one-click {
+    margin-bottom: .5em;
+  }
+
+  .forgotten {
+    font-family: OpenSansItalic;
     margin-bottom: .3em;
-
-    a {
-      width: 16px;
-      height: 16px;
-      background-size: 16px 16px;
-    }
-  }
-
-  &.medium {
-    margin-bottom: .7em;
-
-    a {
-      width: 32px;
-      height: 32px;
-      background-size: 32px 32px;
-    }
-  }
-
-  &.large {
-    margin-bottom: 1em;
-
-    a {
-      width: 64px;
-      height: 64px;
-      background-size: 64px 64px;
-    }
-  }
-}
-
-.social-login {
-  &.google-plus {
-    background: url("@{themepath}image/gp-login-sm.png") no-repeat top left;
-
-    &.extra-small {
-      background-image: url("@{themepath}image/gp-login-xs.png");
-    }
-
-    &.medium {
-      background-image: url("@{themepath}image/gp-login-md.png");
-    }
-
-    &.large {
-      background-image: url("@{themepath}image/gp-login-lg.png");
-    }
-  }
-
-  &.facebook {
-    background: url("@{themepath}image/fb-login-sm.png") no-repeat top left;
-
-    &.extra-small {
-      background-image: url("@{themepath}image/fb-login-xs.png");
-    }
-
-    &.medium {
-      background-image: url("@{themepath}image/fb-login-md.png");
-    }
-
-    &.large {
-      background-image: url("@{themepath}image/fb-login-lg.png");
-    }
   }
 }
 
@@ -938,15 +880,6 @@ section.page {
     text-align: center;
     margin-top: .3em;
     font-size: 1.3em;
-  }
-}
-
-//Login Block
-#block-account-login {
-  .login-register {
-    .button {
-      margin-top: 15px;
-    }
   }
 }
 

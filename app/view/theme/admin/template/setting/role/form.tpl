@@ -1,17 +1,17 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div id="admin-permissions" class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<form action="<?= site_url('admin/setting/role/save', 'user_role_id=' . $user_role_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/user-group.png'); ?>" alt=""/> <?= _l("User Group"); ?></h1>
+				<img src="<?= theme_url('image/user-group.png'); ?>" alt=""/> {{User Group}}</h1>
 
 			<div class="buttons">
-				<button><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/setting/role'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<button>{{Save}}</button>
+				<a href="<?= site_url('admin/setting/role'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 
@@ -50,13 +50,13 @@
 		<div class="section">
 			<table class="form">
 				<tr>
-					<td class="required"> <?= _l("User Group Name:"); ?></td>
+					<td class="required"> {{User Group Name:}}</td>
 					<td>
 						<input type="text" name="name" value="<?= $name; ?>"/>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("User Permissions:"); ?></td>
+					<td>{{User Permissions:}}</td>
 					<td>
 						<div class="builder-multiselect tall user-permissions">
 							<? recursive_multiselect($data_areas, 'permissions', $data_perms); ?>
@@ -77,4 +77,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

@@ -1,7 +1,7 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
 			<h1>
@@ -9,24 +9,24 @@
 			</h1>
 
 			<div class="buttons">
-				<button><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/setting/store'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<button>{{Save}}</button>
+				<a href="<?= site_url('admin/setting/store'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= _l("General"); ?></a>
-				<a href="#tab-store"><?= _l("Store"); ?></a>
-				<a href="#tab-local"><?= _l("Local"); ?></a>
-				<a href="#tab-option"><?= _l("Option"); ?></a>
-				<a href="#tab-image"><?= _l("Image"); ?></a>
-				<a href="#tab-server"><?= _l("Server"); ?></a>
+				<a href="#tab-general">{{General}}</a>
+				<a href="#tab-store">{{Store}}</a>
+				<a href="#tab-local">{{Local}}</a>
+				<a href="#tab-option">{{Option}}</a>
+				<a href="#tab-image">{{Image}}</a>
+				<a href="#tab-server">{{Server}}</a>
 			</div>
 
 			<div id="tab-general">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Store Name:"); ?></td>
+						<td class="required"> {{Store Name:}}</td>
 						<td>
 							<input type="text" name="name" value="<?= $name; ?>" size="40"/>
 						</td>
@@ -44,31 +44,31 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Store Owner:"); ?></td>
+						<td class="required"> {{Store Owner:}}</td>
 						<td>
 							<input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Address:"); ?></td>
+						<td class="required"> {{Address:}}</td>
 						<td>
 							<textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("E-Mail:"); ?></td>
+						<td class="required"> {{E-Mail:}}</td>
 						<td>
 							<input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Telephone:"); ?></td>
+						<td class="required"> {{Telephone:}}</td>
 						<td>
 							<input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Fax:"); ?></td>
+						<td>{{Fax:}}</td>
 						<td>
 							<input type="text" name="config_fax" value="<?= $config_fax; ?>"/>
 						</td>
@@ -79,19 +79,19 @@
 			<div id="tab-store">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Title:"); ?></td>
+						<td class="required"> {{Title:}}</td>
 						<td>
 							<input type="text" name="config_title" value="<?= $config_title; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Meta Tag Description:"); ?></td>
+						<td>{{Meta Tag Description:}}</td>
 						<td>
 							<textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Theme:"); ?></td>
+						<td>{{Theme:}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -108,7 +108,7 @@
 						<td id="theme"></td>
 					</tr>
 					<tr>
-						<td><?= _l("Default Layout:"); ?></td>
+						<td>{{Default Layout:}}</td>
 						<td>
 							<select name="config_default_layout_id">
 								<? foreach ($data_layouts as $layout) { ?>
@@ -128,7 +128,7 @@
 			<div id="tab-local">
 				<table class="form">
 					<tr>
-						<td><?= _l("Country:"); ?></td>
+						<td>{{Country:}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -141,13 +141,13 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Region / State:"); ?></td>
+						<td>{{Region / State:}}</td>
 						<td>
 							<select name="config_zone_id" class="zone_select" data-zone_id="<?= $config_zone_id; ?>"></select>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Language:"); ?></td>
+						<td>{{Language:}}</td>
 						<td>
 							<select name="config_language">
 								<? foreach ($data_languages as $language) { ?>
@@ -161,7 +161,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Currency:"); ?></td>
+						<td>{{Currency:}}</td>
 						<td>
 							<select name="config_currency">
 								<? foreach ($data_currencies as $currency) { ?>
@@ -209,7 +209,7 @@
 							)); ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("The Contact Page"); ?></td>
+						<td>{{The Contact Page}}</td>
 						<td>
 							<? $build = array(
 								'name'   => 'config_contact_page_id',
@@ -242,13 +242,13 @@
 			<div id="tab-image">
 				<table class="form">
 					<tr>
-						<td><?= _l("Store Logo:"); ?></td>
+						<td>{{Store Logo:}}</td>
 						<td>
 							<input type="text" class="imageinput" name="config_logo" data-thumb="<?= image($config_logo, $config_logo_width, $config_logo_height); ?>" value="<?= $config_logo; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"><?= _l("Logo Size"); ?></td>
+						<td class="required">{{Logo Size}}</td>
 						<td>
 							<div class="store-logo-size">
 								<input type="text" name="config_logo_width" value="<?= $config_logo_width; ?>" size="3"/>
@@ -257,7 +257,7 @@
 							</div>
 							<br/>
 							<div class="store-logo-x">
-								<label><?= _l("Image srcset X"); ?></label>
+								<label>{{Image srcset X}}</label>
 								<?= build('select', array(
 									'name'   => 'config_logo_srcset',
 									'data'   => array(
@@ -267,14 +267,14 @@
 									),
 									'select' => $config_logo_srcset,
 								)); ?>
-								<span class="help"><?= _l("If greater than 1x, sets img srcset attribute and scales down from original image. (eg. if 3x, then 1x size set for src will be 1/3 of original image)"); ?></span>
+								<span class="help">{{If greater than 1x, sets img srcset attribute and scales down from original image. (eg. if 3x, then 1x size set for src will be 1/3 of original image)}}</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<span><?= _l("Icon:"); ?></span>
-							<span class="help"><?= _l("Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file."); ?></span>
+							<span>{{Icon:}}</span>
+							<span class="help">{{Use a png file that is at least 152px X 152px. Then click generate to generate all required icon file sizes and the .ico file.}}</span>
 						</td>
 						<td>
 							<div id="icon-generator">
@@ -283,7 +283,7 @@
 										<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
 
 										<div class="icon-label">
-											<a id="generate-icons" data-loading="<?= _l("Generating..."); ?>" class="button"><?= _l("Generate Icon Files"); ?></a>
+											<a id="generate-icons" data-loading="{{Generating...}}" class="button">{{Generate Icon Files}}</a>
 										</div>
 									</div>
 								</div>
@@ -291,7 +291,7 @@
 									<div class="icon-file icon-ico">
 										<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']['src']; ?>" data-thumb="<?= $config_icon['ico']['thumb']; ?>"/>
 
-										<div class="icon-label"><?= _l("ICO File"); ?></div>
+										<div class="icon-label">{{ICO File}}</div>
 									</div>
 									<? foreach ($data_icon_sizes as $size) { ?>
 										<div class="icon-file icon-size">
@@ -308,13 +308,13 @@
 				</table>
 
 				<div class="image_sizes">
-					<h1><?= _l("Image Sizes"); ?></h1>
-					<span class="help"><?= _l("Leave width or height blank to constrain proportion. Leave both blank to use raw size."); ?></span>
+					<h1>{{Image Sizes}}</h1>
+					<span class="help">{{Leave width or height blank to constrain proportion. Leave both blank to use raw size.}}</span>
 				</div>
 
 				<table class="form">
 					<tr>
-						<td class="required"><?= _l("Logo Size in Emails"); ?></td>
+						<td class="required">{{Logo Size in Emails}}</td>
 						<td>
 							<input type="text" name="config_email_logo_width" value="<?= $config_email_logo_width; ?>" size="3"/>
 							x
@@ -322,7 +322,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Category Image Size:"); ?></td>
+						<td class="required"> {{Category Image Size:}}</td>
 						<td>
 							<input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>" size="3"/>
 							x
@@ -330,7 +330,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Product Image Thumb Size:"); ?></td>
+						<td class="required"> {{Product Image Thumb Size:}}</td>
 						<td>
 							<input type="text" name="config_image_thumb_width" value="<?= $config_image_thumb_width; ?>" size="3"/>
 							x
@@ -338,7 +338,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Product Image Popup Size:"); ?></td>
+						<td class="required"> {{Product Image Popup Size:}}</td>
 						<td>
 							<input type="text" name="config_image_popup_width" value="<?= $config_image_popup_width; ?>" size="3"/>
 							x
@@ -354,14 +354,14 @@
 						<td><?= _l("Use SSL:<br /><span class=\"help\">To use SSL check with your host if a SSL certificate is installed.</span>"); ?></td>
 						<td><? if ($config_use_ssl) { ?>
 								<input type="radio" name="config_use_ssl" value="1" checked="checked"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_use_ssl" value="0"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } else { ?>
 								<input type="radio" name="config_use_ssl" value="1"/>
-								<?= _l("Yes"); ?>
+								{{Yes}}
 								<input type="radio" name="config_use_ssl" value="0" checked="checked"/>
-								<?= _l("No"); ?>
+								{{No}}
 							<? } ?></td>
 					</tr>
 				</table>
@@ -382,7 +382,7 @@
 		var icon = $('[name="config_icon[orig]"]').val();
 
 		if (!icon) {
-			return $('#icon-generator').ac_msg('error', "<?= _l("You must choose an icon PNG image file first"); ?>");
+			return $('#icon-generator').ac_msg('error', "{{You must choose an icon PNG image file first}}");
 		}
 
 		$this.loading();
@@ -418,4 +418,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

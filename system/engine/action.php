@@ -145,12 +145,16 @@ final class Action
 		return $this->controller;
 	}
 
-	public function execute()
+	public function execute($is_ajax = null)
 	{
 		global $language_group;
 
 		if ($this->is_valid) {
 			$controller = $this->getController();
+
+			if (isset($is_ajax)) {
+				$controller->is_ajax = $is_ajax;
+			}
 
 			//Set our language group for translations
 			$language_group = $this->class;

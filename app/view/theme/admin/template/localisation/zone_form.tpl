@@ -1,32 +1,32 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Zones"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Zones}}</h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button">{{Save}}</a><a
+					href="<?= $cancel; ?>" class="button">{{Cancel}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Zone Name:"); ?></td>
+						<td class="required"> {{Zone Name:}}</td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/>
 							<? if (_l("Zone Name must be between 3 and 128 characters!")) { ?>
-								<span class="error"><?= _l("Zone Name must be between 3 and 128 characters!"); ?></span>
+								<span class="error">{{Zone Name must be between 3 and 128 characters!}}</span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("Zone Code:"); ?></td>
+						<td>{{Zone Code:}}</td>
 						<td><input type="text" name="code" value="<?= $code; ?>"/></td>
 					</tr>
 					<tr>
-						<td><?= _l("Country:"); ?></td>
+						<td>{{Country:}}</td>
 						<td><select name="country_id">
 								<? foreach ($countries as $country) { ?>
 									<? if ($country['country_id'] == $country_id) { ?>
@@ -39,14 +39,14 @@
 							</select></td>
 					</tr>
 					<tr>
-						<td><?= _l("Zone Status:"); ?></td>
+						<td>{{Zone Status:}}</td>
 						<td><select name="status">
 								<? if ($status) { ?>
-									<option value="1" selected="selected"><?= _l("Enabled"); ?></option>
-									<option value="0"><?= _l("Disabled"); ?></option>
+									<option value="1" selected="selected">{{Enabled}}</option>
+									<option value="0">{{Disabled}}</option>
 								<? } else { ?>
-									<option value="1"><?= _l("Enabled"); ?></option>
-									<option value="0" selected="selected"><?= _l("Disabled"); ?></option>
+									<option value="1">{{Enabled}}</option>
+									<option value="0" selected="selected">{{Disabled}}</option>
 								<? } ?>
 							</select></td>
 					</tr>
@@ -55,4 +55,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

@@ -1,16 +1,16 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 	<div class="section">
-		<?= IS_AJAX ? '' : breadcrumbs(); ?>
+		<?= $is_ajax ? '' : breadcrumbs(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Users"); ?></h1>
+				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Users}}</h1>
 
 				<? if (user_can('w', 'admin/user/batch_action')) { ?>
 					<div class="batch_actions">
 						<?= block('widget/batch_action', null, $batch_action); ?>
 					</div>
 					<div class="buttons">
-						<a href="<?= $insert; ?>" class="button"><?= _l("Insert"); ?></a>
+						<a href="<?= $insert; ?>" class="button">{{Insert}}</a>
 					</div>
 				<? } ?>
 			</div>
@@ -20,4 +20,4 @@
 		</div>
 	</div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

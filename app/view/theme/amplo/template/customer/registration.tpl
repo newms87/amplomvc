@@ -5,12 +5,12 @@
 <section id="user-login" class="content">
 	<header class="login-top row">
 		<div class="wrap">
-			<?= IS_AJAX ? '' : breadcrumbs(); ?>
-			<h1><?= _l("Register Account"); ?></h1>
+			<?= $is_ajax ? '' : breadcrumbs(); ?>
+			<h1>{{Register Account}}</h1>
 
 			<h3>
-				<?= _l("If you already have an account with us, please login at the"); ?>
-				<a href="<?= $login; ?>"><?= _l("login page"); ?></a>
+				{{If you already have an account with us, please login at the}}
+				<a href="<?= $login; ?>">{{login page}}</a>
 			</h3>
 		</div>
 	</header>
@@ -24,35 +24,35 @@
 			<form class="login-form form" action="<?= $register; ?>" method="post">
 				<div class="col xs-12 md-6 register-details">
 					<div class="form-section">
-						<h2><?= _l("Your Personal Details"); ?></h2>
+						<h2>{{Your Personal Details}}</h2>
 
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("First Name"); ?>" name="firstname" value="<?= $firstname; ?>"/>
+							<input type="text" placeholder="{{First Name}}" name="firstname" value="<?= $firstname; ?>"/>
 						</div>
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("Last Name"); ?>" name="lastname" value="<?= $lastname; ?>"/>
+							<input type="text" placeholder="{{Last Name}}" name="lastname" value="<?= $lastname; ?>"/>
 						</div>
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("Email"); ?>" autocomplete="off" name="email" value="<?= $email; ?>"/>
+							<input type="text" placeholder="{{Email}}" autocomplete="off" name="email" value="<?= $email; ?>"/>
 						</div>
 					</div>
 
 					<div class="form-section">
-						<h2><?= _l("Create Password"); ?></h2>
+						<h2>{{Create Password}}</h2>
 
 						<div class="form-item required">
-							<input type="password" autocomplete="off" placeholder="<?= _l("Password"); ?>" name="password"/>
+							<input type="password" autocomplete="off" placeholder="{{Password}}" name="password"/>
 						</div>
 						<div class="form-item required">
-							<input type="password" autocomplete="off" placeholder="<?= _l("Confirm Password"); ?>" name="confirm"/>
+							<input type="password" autocomplete="off" placeholder="{{Confirm Password}}" name="confirm"/>
 						</div>
 					</div>
 
 					<div class="form-section">
-						<h2><?= _l("Newsletter"); ?></h2>
+						<h2>{{Newsletter}}</h2>
 
 						<div class="form-item">
-							<label><?= _l("Subscribe"); ?></label>
+							<label>{{Subscribe}}</label>
 							<?= build('radio', array(
 								'name'   => 'newsletter',
 								'data'   => $data_yes_no,
@@ -64,16 +64,16 @@
 
 				<div class="col xs-12 md-6 top register-address">
 					<div class="form-section">
-						<h2><?= _l("Your Address"); ?> </h2>
+						<h2>{{Your Address}} </h2>
 
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("Address"); ?>" name="address_1" value="<?= $address_1; ?>"/>
+							<input type="text" placeholder="{{Address}}" name="address_1" value="<?= $address_1; ?>"/>
 						</div>
 						<div class="form-item">
-							<input type="text" placeholder="<?= _l("Address Line 2"); ?>" name="address_2" value="<?= $address_2; ?>"/>
+							<input type="text" placeholder="{{Address Line 2}}" name="address_2" value="<?= $address_2; ?>"/>
 						</div>
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("City"); ?>" name="city" value="<?= $city; ?>"/>
+							<input type="text" placeholder="{{City}}" name="city" value="<?= $city; ?>"/>
 						</div>
 						<div class="form-item required">
 							<?=
@@ -89,7 +89,7 @@
 							<select name="zone_id" class="zone-select" data-zone_id="<?= $zone_id; ?>"></select>
 						</div>
 						<div class="form-item required">
-							<input type="text" placeholder="<?= _l("Postal Code"); ?>" name="postcode" value="<?= $postcode; ?>"/>
+							<input type="text" placeholder="{{Postal Code}}" name="postcode" value="<?= $postcode; ?>"/>
 						</div>
 					</div>
 				</div>
@@ -98,12 +98,12 @@
 					<? if (!empty($agree_to)) { ?>
 						<div class="form-item">
 							<input id="agree-terms" type="checkbox" name="agree" value="1" <?= $agree ? 'checked="checked"' : ''; ?> />
-							<label for="agree_terms"><?= _l("I have read and agree to"); ?> <a href="<?= $agree_to; ?>"><?= $agree_title; ?></a></label>
+							<label for="agree_terms">{{I have read and agree to}} <a href="<?= $agree_to; ?>"><?= $agree_title; ?></a></label>
 						</div>
 					<? } ?>
 
 					<div class="form-item submit">
-						<input type="submit" value="<?= _l("Continue"); ?>" class="button"/>
+						<input type="submit" value="{{Continue}}" class="button"/>
 					</div>
 				</div>
 			</form>
@@ -119,4 +119,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= call('footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>

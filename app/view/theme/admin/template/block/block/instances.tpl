@@ -1,5 +1,5 @@
 <div id="instances_tab_list" class="vtabs">
-	<div id="add_instance" class="add-vtab"><?= _l("New Instance"); ?></div>
+	<div id="add_instance" class="add-vtab">{{New Instance}}</div>
 
 	<? foreach ($instances as $row => $instance) { ?>
 		<a href="#tab-instance-<?= $row; ?>" data-row="<?= $row; ?>">

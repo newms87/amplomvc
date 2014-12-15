@@ -137,14 +137,14 @@ function amplo_routing_hook(&$path, $segments, $orig_path)
 	}
 }
 
-function call($path, $params = null)
+function call($path, $params = null, $is_ajax = null)
 {
 	$args = func_get_args();
 	array_shift($args);
 
 	$action = new Action($path, $args);
 
-	if ($action->execute()) {
+	if ($action->execute($is_ajax)) {
 		return $action->getOutput();
 	} else {
 		trigger_error('Could not load controller path ' . $path . '.');

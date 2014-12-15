@@ -1,5 +1,5 @@
 <div id="sidebar_menu" class="box sidebar_box">
-	<div class="box_heading"><?= _l("Store Directory"); ?></div>
+	<div class="box_heading">{{Store Directory}}</div>
 	<div class="box_content">
 		<div id="sidebar_menu-links">
 			<div class="sidebar_main">

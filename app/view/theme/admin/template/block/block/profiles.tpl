@@ -1,5 +1,5 @@
 <div id="profile_tab_list" class="vtabs">
-	<div id="add_profile" class="add-vtab"><?= _l("New Profile"); ?></div>
+	<div id="add_profile" class="add-vtab">{{New Profile}}</div>
 
 	<? foreach ($profiles as $row => $profile) { ?>
 		<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
@@ -14,13 +14,13 @@
 		<div id="tab-profile-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile">
 			<table class="form">
 				<tr>
-					<td><?= _l("Profile Name"); ?></td>
+					<td>{{Profile Name}}</td>
 					<td>
 						<input type="text" class="tab_name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>"/>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Instance"); ?></td>
+					<td>{{Instance}}</td>
 					<td>
 						<?=
 						build('select', array(
@@ -33,7 +33,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Stores"); ?></td>
+					<td>{{Stores}}</td>
 					<td>
 						<?=
 						build('multiselect', array(
@@ -46,7 +46,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Layouts"); ?></td>
+					<td>{{Layouts}}</td>
 					<td>
 						<?=
 						build('multiselect', array(
@@ -59,7 +59,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Positions"); ?></td>
+					<td>{{Positions}}</td>
 					<td><?=
 						build('select', array(
 							'name'   => "profiles[$row][position]",
@@ -69,7 +69,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Profile Status"); ?></td>
+					<td>{{Profile Status}}</td>
 					<td><?=
 						build('select', array(
 							'name'   => "profiles[$row][status]",

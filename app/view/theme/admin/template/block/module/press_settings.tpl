@@ -1,8 +1,8 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= _l("Articles:"); ?>
-			<a class="add_press_item"><?= _l("New Article"); ?></a>
+			{{Articles:}}
+			<a class="add_press_item">{{New Article}}</a>
 		</td>
 		<td>
 			<ul id="press_list" count="<?= count($press_items); ?>">
@@ -20,17 +20,17 @@
 					<? $row = ($key === 'template_row') ? '%press_id%' : $press_id++; ?>
 					<li class="press_item <?= $key; ?>" press_id="<?= $row; ?>">
 						<div class="press_info">
-							<label class="description"><?= _l("Title:"); ?></label>
+							<label class="description">{{Title:}}</label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][description]" value="<?= $press['description']; ?>"/><br/>
-							<label class="author"><?= _l("Author:"); ?></label>
+							<label class="author">{{Author:}}</label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][author]" value="<?= $press['author']; ?>"/><br/>
-							<label class="date"><?= _l("Date:"); ?></label>
+							<label class="date">{{Date:}}</label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][date]" value="<?= $press['date']; ?>"/><br/>
-							<label class="href"><?= _l("Article URL:"); ?></label>
+							<label class="href">{{Article URL:}}</label>
 							<input type="text" name="settings[press_items][<?= $row; ?>][href]" value="<?= $press['href']; ?>"/>
 						</div>
 						<div class="press_images">
-							<a class="add_image_item"><?= _l("Add Image"); ?></a>
+							<a class="add_image_item">{{Add Image}}</a>
 
 							<div class="press_image_list"
 								count="<?= !empty($press['images']) ? count($press['images']) : 0; ?>">
@@ -47,7 +47,7 @@
 											<input type="text" class="imageinput" name="settings[press_items][<?= $row; ?>][images][<?= $image_row; ?>]" value="<?= $image; ?>" />
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
-												class="delete"><?= _l("Remove"); ?></a>
+												class="delete">{{Remove}}</a>
 										</div>
 									<? } ?>
 								<? } ?>
@@ -62,7 +62,7 @@
 					</li>
 				<? } ?>
 			</ul>
-			<a class="button add_press_item"><?= _l("New Article"); ?></a>
+			<a class="button add_press_item">{{New Article}}</a>
 		</td>
 	</tr>
 </table>

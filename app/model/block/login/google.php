@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Block_Login_Google extends Model
 {
 	private $settings;
@@ -59,26 +60,26 @@ class App_Model_Block_Login_Google extends Model
 
 		//Authentication
 		$auth_data = array(
-			'code' => $_GET['code'],
-		   'client_id' => $this->settings['client_id'],
-		   'client_secret' => $this->settings['client_secret'],
-		   'redirect_uri' => site_url("block/login/google/connect"),
-		   'grant_type' => 'authorization_code',
+			'code'          => $_GET['code'],
+			'client_id'     => $this->settings['client_id'],
+			'client_secret' => $this->settings['client_secret'],
+			'redirect_uri'  => site_url("block/login/google/connect"),
+			'grant_type'    => 'authorization_code',
 		);
 
 		$response = $this->curl->post("https://accounts.google.com/o/oauth2/token", $auth_data, Curl::RESPONSE_JSON);
 
-		if (empty($response->access_token)) {
-			$msg = _l("There was a problem authenticating your credentials.");
+		if (empty($response['access_token'])) {
+			$msg                      = _l("There was a problem authenticating your credentials.");
 			$this->error['exception'] = $msg;
-			write_log('error', $msg);
+			write_log('error', $msg . '<BR>' . json_encode($response));
 			return false;
 		}
 
-		$_SESSION['token'] = $response->access_token;
+		$_SESSION['token'] = $response['access_token'];
 
 		$query = array(
-			'access_token' => $response->access_token,
+			'access_token' => $response['access_token'],
 		);
 
 		$data = $this->curl->get("https://www.googleapis.com/plus/v1/people/me", $query, Curl::RESPONSE_JSON);
@@ -93,30 +94,30 @@ class App_Model_Block_Login_Google extends Model
 
 	private function registerCustomer($data)
 	{
-		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data->id) . "' LIMIT 1");
+		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data['id']) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer
 		if (!$customer_id) {
 			$no_meta = true;
-			$email   = !empty($data->emails[0]) ? $data->emails[0]->value : '';
+			$email   = !empty($data['emails'][0]) ? $data['emails'][0]['value'] : '';
 
 			if ($email) {
 				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
 			}
 
 			if (empty($customer)) {
-				if (!$data->name->givenName && !$data->name->familyName && $data->displayName) {
-					$names                 = explode(' ', $data->displayName, 2);
-					$data->name->givenName = $names[0];
+				if (!$data['name']['givenName'] && !$data['name']['familyName'] && $data['displayName']) {
+					$names                 = explode(' ', $data['displayName'], 2);
+					$data['name']['givenName'] = $names[0];
 
 					if (!empty($names[1])) {
-						$data->name->familyName = $names[1];
+						$data['name']['familyName'] = $names[1];
 					}
 				}
 
 				$customer = array(
-					'firstname' => !empty($data->name->givenName) ? $data->name->givenName : 'New',
-					'lastname'  => !empty($data->name->familyName) ? $data->name->familyName : 'Customer',
+					'firstname' => !empty($data['name']['givenName']) ? $data['name']['givenName'] : 'New',
+					'lastname'  => !empty($data['name']['familyName']) ? $data['name']['familyName'] : 'Customer',
 					'email'     => $email,
 				);
 
@@ -138,7 +139,7 @@ class App_Model_Block_Login_Google extends Model
 
 		//Set Meta for future login
 		if ($no_meta) {
-			$this->customer->setMeta('google+_id', $data->id);
+			$this->customer->setMeta('google+_id', $data['id']);
 		}
 
 		return true;

@@ -1,16 +1,16 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/home.png'); ?>" alt=""/> <?= _l("Dashboard"); ?></h1>
+			<h1><img src="<?= theme_url('image/home.png'); ?>" alt=""/> {{Dashboard}}</h1>
 		</div>
 		<div class="section">
 			<div class="overview">
-				<div class="dashboard-heading"><?= _l("Overview"); ?></div>
-					<h2><?= _l("Welcome to Amplo MVC"); ?></h2>
+				<div class="dashboard-heading">{{Overview}}</div>
+					<h2>{{Welcome to Amplo MVC}}</h2>
 				</div>
 			</div>
 		</div>
@@ -18,4 +18,4 @@
 </div>
 
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

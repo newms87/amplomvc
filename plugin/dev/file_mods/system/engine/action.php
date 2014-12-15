@@ -17,7 +17,7 @@ final class Action
 //=====
 	}
 //.....
-	public function execute()
+	public function execute($is_ajax = null)
 	{
 //.....
 		if ($this->is_valid) {

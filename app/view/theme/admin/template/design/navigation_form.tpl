@@ -1,26 +1,26 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> <?= _l("Navigation"); ?></h1>
+			<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Navigation}}</h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit()" class="button"><?= _l("Save"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a onclick="$('#form').submit()" class="button">{{Save}}</a>
+				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Navigation Group:"); ?></td>
+						<td class="required"> {{Navigation Group:}}</td>
 						<td>
 							<input type="text" name="name" value="<?= $name; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Stores:"); ?></td>
+						<td class="required"> {{Stores:}}</td>
 						<td>
 							<?=
 							build('multiselect', array(
@@ -33,7 +33,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Status:"); ?></td>
+						<td>{{Status:}}</td>
 						<td><?=
 							build('select', array(
 								'name'   => 'status',
@@ -45,11 +45,11 @@
 					<tr id="links_list_data">
 						<td colspan="2">
 							<div id="links_list" class="box">
-								<div class="heading"><h3><?= _l("Navigation Links:"); ?></h3></div>
+								<div class="heading"><h3>{{Navigation Links:}}</h3></div>
 
 								<div class="section">
 									<div class="left">
-										<a onclick="add_navigation_link()" class="button"><?= _l("Add Link"); ?></a>
+										<a onclick="add_navigation_link()" class="button">{{Add Link}}</a>
 									</div>
 
 									<div class="right">
@@ -60,19 +60,19 @@
 														<div class="link_name">
 															<span class="display_name"><?= $link['display_name']; ?></span>
 															<span class="show_link_edit" onclick="toggle_edit_link($(this))">
-																<span class="edit_text"><?= _l("Edit Link"); ?></span>
+																<span class="edit_text">{{Edit Link}}</span>
 																<img class="remove_link" src="<?= theme_url('image/delete.png'); ?>" onclick="$(this).closest('li').remove();"/></span>
 														</div>
 														<div class="editable" style="display:none">
 															<input type="hidden" class="parent_id" name="links[<?= $nav_id; ?>][parent_id]" value="<?= $link['parent_id']; ?>"/>
 
 															<div class="link_entry_display_name">
-																<label for="link_display_name_<?= $nav_id; ?>"><?= _l("Display Name:"); ?></label>
+																<label for="link_display_name_<?= $nav_id; ?>">{{Display Name:}}</label>
 																<input id="link_display_name_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][display_name]" onkeyup="update_display_name($(this));" value="<?= $link['display_name']; ?>"/>
 															</div>
 
 															<div class="link_entry_name">
-																<label for="link_name_<?= $nav_id; ?>"><?= _l("Name:"); ?></label>
+																<label for="link_name_<?= $nav_id; ?>">{{Name:}}</label>
 																<input id="link_name_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][name]" value="<?= $link['name']; ?>"/>
 															</div>
 															<div class="link_entry_title">
@@ -80,15 +80,15 @@
 																<input id="link_title_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][title]" value="<?= $link['title']; ?>"/>
 															</div>
 															<div class="link_entry_href">
-																<label for="link_href_<?= $nav_id; ?>"><?= _l("URL / route"); ?></label>
+																<label for="link_href_<?= $nav_id; ?>">{{URL / route}}</label>
 																<input id="link_href_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][href]" value="<?= $link['href']; ?>"/>
 															</div>
 															<div class="link_entry_query">
-																<label for="link_query_<?= $nav_id; ?>"><?= _l("Query"); ?></label>
+																<label for="link_query_<?= $nav_id; ?>">{{Query}}</label>
 																<input id="link_query_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][query]" value="<?= $link['query']; ?>"/>
 															</div>
 															<div class="link_entry_condition">
-																<label for="link_condition_<?= $nav_id; ?>"><?= _l("Display When:"); ?></label>
+																<label for="link_condition_<?= $nav_id; ?>">{{Display When:}}</label>
 																<?=
 																build('select', array(
 																	'name'   => "links[$nav_id][condition]",
@@ -98,7 +98,7 @@
 																)); ?>
 															</div>
 															<div class="link_entry_status">
-																<label for="link_status_<?= $nav_id; ?>"><?= _l("Status:"); ?></label>
+																<label for="link_status_<?= $nav_id; ?>">{{Status:}}</label>
 																<?=
 																build('select', array(
 																	'name'   => "links[$nav_id][status]",
@@ -207,11 +207,11 @@
 
 		if (edit.hasClass('showing')) {
 			edit.slideUp().removeClass('showing');
-			context.find('.edit_text').html('<?= _l("Edit Link"); ?>');
+			context.find('.edit_text').html('{{Edit Link}}');
 		}
 		else {
 			edit.slideDown().addClass('showing');
-			context.find('.edit_text').html('<?= _l("Hide"); ?>');
+			context.find('.edit_text').html('{{Hide}}');
 		}
 	}
 
@@ -222,4 +222,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

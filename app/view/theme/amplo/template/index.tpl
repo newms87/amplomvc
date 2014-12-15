@@ -1,10 +1,10 @@
-<?= call('header'); ?>
+<?= $is_ajax ? '' : call('header'); ?>
 <?= area('left') . area('right'); ?>
 
 <section id="home-page" class="home-video content">
 	<header class="row top-row">
 		<div class="wrap">
-			<h1><?= _l("Welcome to Amplo MVC"); ?></h1>
+			<h1>{{Welcome to Amplo MVC}}</h1>
 		</div>
 	</header>
 
@@ -25,4 +25,4 @@
 
 </section>
 
-<?= call('footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>
