@@ -1,3 +1,9 @@
+/* Import Fonts */
+.import-font('RobotoBlack', 'roboto/roboto-black-webfont');
+.import-font('OpenSansRegular', 'opensans/opensans-regular-webfont');
+.import-font('OpenSansItalic', 'opensans/opensans-italic-webfont');
+.import-font('OpenSansBold', 'opensans/opensans-bold-webfont');
+
 /**
   * General: ---
   * @color-main: The primary theme color
@@ -26,12 +32,6 @@
   * @link-color: Link color
   * @link-color-hover: Link color for hover / active state
 
-  * Footer: ---
-  * @footer-link: Footer Link (color) - Footer link color
-  * @footer-link-hover: Footer Link Hover (color) - Footer link hover color
-  * @footer-background: Footer Background (background) - Footer Background style
-  * @footer-border: Footer Border (border) - Footer Border style
-
   * Messages: ---
   * @msg-fg-color: The default foreground color for messages
   * @msg-bg-color: The default background color for messages
@@ -43,6 +43,15 @@
   * @msg-attention-bg-color: The background color for attention type messages
   * @msg-notify-fg-color: The foreground color for notify type messages
   * @msg-notify-bg-color: The background color for notify type messages
+
+  * Section Styling: ---
+  * @header: Header Styling (full) - Style for the Header section
+  * @footer: Footer Styling (full) - Style for the Footer section
+  * @style-a: Section A Styling (full) - Style for the Section A
+  * @style-b: Section B Styling (full) - Style for the Section B
+  * @style-c: Section C Styling (full) - Style for the Section C
+  * @style-d: Section D Styling (full) - Style for the Section D
+
 */
 
 /* Path Config */
@@ -69,105 +78,117 @@
 //Primary Styling
 @bg-main: #ffffff;
 
-@color-main: #92acc6;
-@color-secondary: #2f3d52;
-@color-light: #92acc6;
-@color-dark: #2f3d52;
+@color-main: #395D84;
+@color-secondary: #4E4E4E;
+@color-dark: #4E4E4E;
+@color-light: white;
 
-@color-lightest: lighten(@color-light, 50%);
-@color-lighter: lighten(@color-light, 25%);
-@color-darker: darken(@color-dark, 25%);
-@color-darkest: darken(@color-dark, 50%);
+//Legacy Styling
+@color-lightest: lighten(@color-main, 50%);
+@color-lighter: #AFC5DD;
+@color-darker: darken(@color-main, 25%);
+@color-darkest: darken(@color-main, 50%);
 
-
-@link-font: 1em;
-@link-font-hover: @link-font;
-@link-color: #00AEEF;
-@link-color-hover: lighten(@link-color, 25%);
-
+//Default Fonts
 @font-base-family: OpenSansRegular, Helvetica, sans-serif;
 @font-base: 100% @font-base-family;
-@font-base-color: #6A6E6F;
-@font-light: #ffffff;
-@font-dark: #2f3d52;
+@font-base-color: @color-main;
+@font-light: @color-light;
+@font-dark: @color-dark;
+
+//Default Links
+@link-font: 1em;
+@link-color: @color-main;
+@link-font-hover: @link-font;
+@link-color-hover: lighten(@link-color, 25%);
 
 //Headers
-@h1-color: #6A6E6F;
-@h1-font: 1.7em OpenSansBold;
-@h2-color: #6A6E6F;
-@h2-font: 1.5em;
-@h3-color: #00AEEF;
-@h3-font: 1.9em RobotoBlack;
-@h4-color: #6A6E6F;
+@h1-color: @font-base-color;
+@h1-font: 1.7em RobotoBlack;
+@h2-color: @font-base-color;
+@h2-font: 1.5em RobotoBlack;
+@h3-color: @font-base-color;
+@h3-font: 1em RobotoBlack;
+@h4-color: @font-base-color;
 @h4-font: 1.1em;
-@h5-color: #6A6E6F;
+@h5-color: @font-base-color;
 @h5-font: 1em;
-@h6-color: #6A6E6F;
+@h6-color: @font-base-color;
 @h6-font: .8em;
 
 //Buttons
 @button: { & {
-  font-size: 1.3em;
+  font: 1em OpenSansBold;
   text-transform: uppercase;
   color: white;
   background: @color-main;
   border: 1px solid @color-secondary;
   border-radius: 3px;
-  padding: 1em 3em;
+  padding: .8em 1em;
+  min-width: 10em;
 
   &:hover {
     background: @color-lighter;
+  }
+
+  &.large {
+    font-size: 1.3em;
+    padding: 1em 3em;
   }
 } };
 
 //Input Text / Password
 @input: { & {
   font-size: 1.1em;
+  color: @color-secondary;
   background: white;
-  border: @font-base-color 1px solid;
+  border: #E2E2E2 1px solid;
   border-radius: 5px;
-  padding: .3em .6em;
+  padding: .5em 1em;
   min-width: 40%;
-  max-width: 75%;
   outline: none;
+  box-shadow: inset 0px 1px 1px 1px #D2D2D2;
+
+  &:focus, &:active {
+    border: 1px solid @color-main;
+    box-shadow: inset 0 0 0 1px @color-main;
+  }
 } };
 
 //Select
 @select: { & {
   font-size: 1.1em;
+  color: @color-secondary;
   background: white;
-  border: @font-base-color 1px solid;
+  border: #E2E2E2 1px solid;
   border-radius: 5px;
-  padding: .3em .6em;
+  padding: .5em 1em;
   min-width: 40%;
-  max-width: 75%;
   outline: none;
+  box-shadow: inset 0px 1px 1px 1px #D2D2D2;
+
+  &:focus, &:active {
+    border: 1px solid @color-main;
+    box-shadow: inset 0 0 0 1px @color-main;
+  }
 } };
 
 //Radio
 @radio: { & {
   & + .label {
-    font-size: 1.1em;
+    font: 1.1em OpenSansBold;
+    color: @color-main;
     background: white;
-    border: #669EC1 1px solid;
-    border-radius: 5px;
-    padding: .3em .6em;
-
-    &:before {
-      background: url('@{themepath}image/sprite-17.png') center center no-repeat;
-      background-position: -33px -45px;
-      width: 14px;
-      height: 14px;
-    }
+    border: @color-main 1px solid;
+    border-radius: 20px;
+    padding: .25em 2em;
+    text-transform: uppercase;
   }
 
   &:checked, &.checked {
     & + .label {
-      background: #00AEEF;
-
-      &:before {
-        background-position: -46px -45px;
-      }
+      color: white;
+      background: @color-main;
     }
   }
 } };
@@ -214,14 +235,6 @@
 @msg-fg-color: #555555;
 @msg-bg-color: #CFCFCF;
 
-@msg-close-color: #555555;
-@msg-close-color-hover: #555555;
-@msg-close-bg: 'background: white';
-@msg-close-bg-hover: 'background: gray';
-@msg-close-padding: .2em .5em;
-@msg-close-border: none;
-@msg-close-border-radius: 5px;
-
 @msg-success-bg-color: #EAF7D9;
 @msg-success-fg-color: #8DAD62;
 
@@ -233,7 +246,6 @@
 
 @msg-notify-bg-color: #E6F1FB;
 @msg-notify-fg-color: #8DAFCF;
-
 
 //Error
 @error-color: #D15252;
@@ -297,9 +309,10 @@
 } };
 
 //Header
+@header-height: 5em;
+
 @header: { & {
   width: 100%;
-  height: 5em;
   background: white;
 
   .wrap {
@@ -333,17 +346,133 @@
 
 //Style B
 @style-b: { & {
-  background: white;
+  background: @color-lighter;
+  color: @color-main;
 } };
 
 //Style C
 @style-c: { & {
-  background: white;
+  color: #454545;
+  background: #E4E4E4;
+  border-bottom: 3px solid #454545;
+
+  .wrap {
+    padding: 4em 0;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #E4E4E4;
+      z-index: 100;
+      visibility: visible;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      margin-left: -9px;
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 14px solid #454545;
+      z-index:99;
+    }
+  }
 } };
 
 //Style D
 @style-d: { & {
-  background: white;
+  color: white;
+  background: @color-main;
+  min-height: 20em;
+
+  .wrap {
+    padding: 3em 0;
+
+    h2 {
+      color: white;
+      font: 1.5em OpenSansRegular;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    p {
+      margin: 1em 0 0 0;
+      text-align: left;
+    }
+
+    ul {
+      margin-top: 1em;
+      list-style: disc;
+      margin-left: 1em;
+      text-align: left;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #395d84;
+    }
+  }
+} };
+
+//Style D
+@style-e: { & {
+  color: @color-secondary;
+  background: @color-lightest;
+  min-height: 20em;
+
+  .wrap {
+    padding: 3em 0;
+
+    h2 {
+      font: 1.5em OpenSansBold;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    p {
+      margin: 1em 0 0 0;
+      text-align: left;
+    }
+
+    ul {
+      margin-top: 1em;
+      list-style: disc;
+      margin-left: 1em;
+      text-align: left;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid @color-lightest;
+    }
+  }
 } };
 
 /* Imports */
