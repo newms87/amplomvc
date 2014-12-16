@@ -16,6 +16,9 @@ class App_Model_View extends App_Model_Table
 			}
 		}
 
+		clear_cache('view');
+		self::$view_listings = null;
+
 		if (!empty($view['settings'])) {
 			if ($view_id) {
 				$view['settings'] += (array)$this->getViewSettings($view_id);
@@ -89,6 +92,9 @@ class App_Model_View extends App_Model_Table
 
 	public function saveViewSettings($view_id, $settings)
 	{
+		clear_cache('view');
+		self::$view_listings = null;
+
 		return $this->update('view', array('settings' => serialize($settings)), $view_id);
 	}
 
@@ -123,6 +129,9 @@ class App_Model_View extends App_Model_Table
 
 	public function remove($view_id)
 	{
+		clear_cache('view');
+		self::$view_listings = null;
+
 		return $this->delete('view', $view_id);
 	}
 
@@ -156,6 +165,8 @@ class App_Model_View extends App_Model_Table
 			$serialized = 0;
 		}
 
+		self::$meta = array();
+
 		if ($single) {
 			$this->delete('view_meta', array('view_id' => $view_id));
 
@@ -183,6 +194,8 @@ class App_Model_View extends App_Model_Table
 		} else {
 			$serialized = 0;
 		}
+
+		self::$meta = array();
 
 		if (is_null($value)) {
 			return $this->delete('view_meta', $view_meta_id);
@@ -221,6 +234,7 @@ class App_Model_View extends App_Model_Table
 			$view_listing['slug'] = slug($view_listing['name']);
 		}
 
+		self::$view_listings = null;
 		clear_cache('view_listing');
 
 		//Create the SQL View
@@ -283,6 +297,7 @@ class App_Model_View extends App_Model_Table
 
 	public function removeViewListing($view_listing_id)
 	{
+		self::$view_listings = null;
 		clear_cache('view_listing');
 
 		$this->delete('view', array('view_listing_id' => $view_listing_id));
@@ -406,8 +421,6 @@ class App_Model_View extends App_Model_Table
 
 	protected function resetViewListings()
 	{
-		clear_cache('view_listing');
-
 		$view_listings = array(
 			'clients'       => array(
 				'path'  => 'admin/client/listing',

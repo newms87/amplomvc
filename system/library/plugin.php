@@ -232,7 +232,8 @@ class Plugin extends Library
 		$changes = $this->getChanges($name);
 
 		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
-			return true;
+			$this->error['changes'] = _l("There are no updates for the plugin %s.", $name);
+			return false;
 		}
 
 		foreach ($changes['new_files'] as $file) {

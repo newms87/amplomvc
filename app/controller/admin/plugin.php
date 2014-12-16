@@ -92,9 +92,9 @@ class App_Controller_Admin_Plugin extends Controller
 						'text' => _l("Upgrade to %s", $version),
 						'href' => site_url('admin/plugin/upgrade', 'name=' . $plugin['name']),
 					);
-				} elseif ($this->plugin->hasChanges($plugin['name'])) {
-					$plugin['actions']['add_changes'] = array(
-						'text' => _l("Add Changes"),
+				} else {
+					$plugin['actions']['update'] = array(
+						'text' => _l("Update"),
 						'href' => site_url('admin/plugin/upgrade', 'name=' . $plugin['name']),
 					);
 				}
@@ -237,7 +237,9 @@ class App_Controller_Admin_Plugin extends Controller
 		if (!empty($_GET['name'])) {
 			$version = $this->plugin->upgrade($_GET['name']);
 
-			if ($version === true) {
+			if ($version && $this->plugin->hasError('changes')) {
+				message('notify', $this->plugin->getError());
+			} elseif ($version === true) {
 				message('success', _l("The changes for plugin %s have been integrated.", $_GET['name']));
 			} elseif ($version) {
 				message('success', _l("The plugin %s was successfully upgraded to version %s!", $_GET['name'], $version));

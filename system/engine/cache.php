@@ -93,7 +93,11 @@ class Cache
 			}
 		}
 
-		unset($this->loaded[$key]);
+		foreach (array_keys($this->loaded) as $lkey) {
+			if (strpos($lkey, $key) === 0) {
+				unset($this->loaded[$lkey]);
+			}
+		}
 	}
 
 	public function ignore($ignore)
