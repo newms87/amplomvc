@@ -16,7 +16,7 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->links = $this->Model_Navigation->getStoreLinks();
+		$this->links = $this->Model_Navigation->getNavigationGroup();
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
@@ -76,7 +76,7 @@ class Document extends Library
 	public function hasLink($group = 'primary', $link_name)
 	{
 		if (!empty($this->links[$group])) {
-			$result = array_walk_children($this->links[$group], 'children', function ($link) use ($link_name) {
+			$result = array_walk_children($this->links[$group]['links'], 'children', function ($link) use ($link_name) {
 				if (!empty($link) && $link_name === $link['name']) {
 					return false;
 				}
@@ -90,12 +90,12 @@ class Document extends Library
 
 	public function hasLinks($group = 'primary')
 	{
-		return !empty($this->links[$group]);
+		return !empty($this->links[$group]['links']);
 	}
 
-	public function addLink($group = 'primary', $link_info)
+	public function addLink($group = 'primary', $link)
 	{
-		if (empty($link_info['name'])) {
+		if (empty($link['name'])) {
 			trigger_error(_l("%s(): You must provide a link name!"));
 			return;
 		}
@@ -103,7 +103,7 @@ class Document extends Library
 		$defaults = array(
 			'name'         => null,
 			'display_name' => '',
-			'href'         => '',
+			'path'         => '',
 			'query'        => null,
 			'title'        => '',
 			'class'        => array(),
@@ -114,25 +114,36 @@ class Document extends Library
 			'children'     => array(),
 		);
 
-		$new_link = $link_info + $defaults;
+		$new_link = $link + $defaults;
+
+		if (!empty($new_link['path']) || !empty($new_link['query'])) {
+			$new_link['href'] = site_url($new_link['path'], $new_link['query']);
+		}
 
 		//If group doesn't exist, make a new group
 		if (!isset($this->links[$group])) {
-			$this->links[$group][$new_link['name']] = $new_link;
-			return;
+			$this->links[$group] = array(
+				'navigation_group_id' => 0,
+				'links'               => array(
+					$new_link['name'] => $new_link,
+				),
+				'name'                => $group,
+			);
+
+			return true;
 		}
 
 		//Find the children list for the parent
 		if ($new_link['parent'] || $new_link['parent_id']) {
-			$return = array_walk_children($this->links[$group], 'children', function (&$link) use ($new_link) {
-				if (empty($link)) {
+			$return = array_walk_children($this->links[$group]['links'], 'children', function (&$l) use ($new_link) {
+				if (empty($l)) {
 					return;
 				}
-				if ($new_link['parent'] === $link['name']) {
-					$link['children'][$new_link['name']] = $new_link;
+				if ($new_link['parent'] === $l['name']) {
+					$l['children'][$new_link['name']] = $new_link;
 					return false;
-				} elseif (!empty($link['navigation_id']) && $new_link['parent_id'] === $link['navigation_id']) {
-					$link['children'][$new_link['name']] = $new_link;
+				} elseif (!empty($l['navigation_id']) && $new_link['parent_id'] === $l['navigation_id']) {
+					$l['children'][$new_link['name']] = $new_link;
 					return false;
 				}
 			});
@@ -142,7 +153,7 @@ class Document extends Library
 				trigger_error(_l("Unable to locate link %s in Link Group %s", $new_link['parent'], $group));
 			}
 		} else {
-			$this->links[$group][] = $new_link;
+			$this->links[$group]['links'][] = $new_link;
 		}
 
 		return true;
@@ -161,13 +172,13 @@ class Document extends Library
 
 	public function setLinks($group, $links)
 	{
-		$this->links[$group] = $links;
+		$this->links[$group]['links'] = $links;
 	}
 
 	public function getLinks($group = 'primary')
 	{
 		if (isset($this->links[$group])) {
-			return $this->links[$group];
+			return $this->links[$group]['links'];
 		}
 
 		return array();
@@ -441,34 +452,6 @@ class Document extends Library
 		return implode(' ', $this->body_class);
 	}
 
-	public function filterLinks(&$links)
-	{
-		foreach ($links as $key => &$link) {
-			if (!empty($link['children'])) {
-				$this->filterLinks($link['children']);
-			}
-
-			//Filter by Conditions
-			if (!empty($link['condition']) && !$this->condition->is($link['condition'])) {
-				unset($links[$key]);
-				continue;
-			}
-
-			//Filter restricted paths, current user cannot access
-			if (IS_ADMIN) {
-				if (!user_can('r', $link['href'])) {
-					unset($links[$key]);
-					continue;
-				}
-			}
-
-			//Filter empty non-links
-			if (empty($link['href']) && empty($link['children'])) {
-				unset($links[$key]);
-			}
-		}
-	}
-
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
 		if (!$page) {
@@ -479,14 +462,13 @@ class Document extends Library
 		}
 
 		foreach ($links as $key => &$link) {
-			if ($link['href'] || $link['query']) {
+			if (isset($link['active']) && $link['active'] === false) {
+				unset($links[$key]);
+				continue;
+			}
 
-				if (!preg_match("/^https?:\\/\\//", $link['href'])) {
-					$query        = isset($link['query']) ? $link['query'] : '';
-					$link['href'] = site_url($link['href'], $query);
-				}
-
-				$components = parse_url(str_replace('&amp;', '&', $link['href']));
+			if (!empty($link['url'])) {
+				$components = parse_url(str_replace('&amp;', '&', $link['url']));
 
 				if ($page['path'] === $components['path']) {
 					if (!empty($components['query'])) {
@@ -574,20 +556,19 @@ class Document extends Library
 
 			if (empty($link['display_name'])) {
 				$link['display_name'] = $link['name'];
-				$link['name'] = slug($link['name'], '-');
+				$link['name']         = slug($link['name'], '-');
 			}
-
 
 			$attr_fields = array(
 				'title',
-			   'href',
-			   'target',
-			   'class',
+				'href',
+				'target',
+				'class',
 			);
 
 			foreach ($attr_fields as $field) {
-				if (!empty($link[$field]) && !isset($link['#'.$field])) {
-					$link['#'.$field] = $link[$field];
+				if (!empty($link[$field]) && !isset($link['#' . $field])) {
+					$link['#' . $field] = $link[$field];
 				}
 			}
 
@@ -612,7 +593,7 @@ class Document extends Library
 			$link['#class'] = trim($link['#class'] . ' menu-link');
 
 			//Build attribute list
-			$attrs = attrs($link);
+			$attrs    = attrs($link);
 			$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
 
 			$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";

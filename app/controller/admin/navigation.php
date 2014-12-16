@@ -41,60 +41,8 @@ class App_Controller_Admin_Navigation extends Controller
 		output($this->render('navigation/list', $data));
 	}
 
-	public function update()
-	{
-		//Insert
-		if (empty($_GET['navigation_group_id'])) {
-			$this->Model_Navigation->addNavigationGroup($_POST);
-		} //Update
-		else {
-			$this->Model_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
-		}
-
-		if ($this->Model_Navigation->hasError()) {
-			message('error', $this->Model_Navigation->getError());
-		} else {
-			message('success', _l("Navigation has been updated!"));
-		}
-
-		if ($this->is_ajax) {
-			output_json($this->message->fetch());
-		} elseif ($this->message->has('error')) {
-			$this->form();
-		} else {
-			redirect('admin/navigation');
-		}
-	}
-
-	public function delete()
-	{
-		$this->Model_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
-
-		if ($this->Model_Navigation->hasError()) {
-			message('error', $this->Model_Navigation->getError());
-		} else {
-			message('success', _l("Success: You have modified Navigation!"));
-		}
-
-		if ($this->is_ajax) {
-			output_json($this->message->fetch());
-		} else {
-			redirect('admin/navigation');
-		}
-	}
-
 	public function listing()
 	{
-		//Column Build Data
-		$stores = array(
-			'admin' => array(
-				'store_id' => 'admin',
-				'name'     => 'Admin Panel'
-			)
-		);
-
-		$stores += $this->Model_Setting_Store->getStores();
-
 		//The Table Columns
 		$columns = array();
 
@@ -104,18 +52,6 @@ class App_Controller_Admin_Navigation extends Controller
 			'filter'       => true,
 			'sortable'     => true,
 			'sort_value'   => 'name',
-		);
-
-		$columns['stores'] = array(
-			'type'         => 'multiselect',
-			'display_name' => _l("Stores"),
-			'filter'       => true,
-			'build_config' => array(
-				'store_id',
-				'name'
-			),
-			'build_data'   => $stores,
-			'sortable'     => false,
 		);
 
 		$columns['status'] = array(
@@ -195,25 +131,22 @@ class App_Controller_Admin_Navigation extends Controller
 		}
 
 		//Load Values or Defaults
-		$navigation_group_info = array();
+		$group = $_POST;
 
-		if (IS_POST) {
-			$navigation_group_info = $_POST;
-		} elseif ($navigation_group_id) {
-			$navigation_group_info = $this->Model_Navigation->getNavigationGroup($navigation_group_id);
+		if (!IS_POST && $navigation_group_id) {
+			$group = $this->Model_Navigation->getNavigationGroup($navigation_group_id);
 		}
 
 		$defaults = array(
 			'name'   => '',
 			'links'  => array(),
-			'stores' => array(option('config_default_store')),
 			'status' => 1,
 		);
 
-		$data = $navigation_group_info + $defaults;
+		$group += $defaults;
 
 		//Link AC Template
-		$data['links']['__ac_template__'] = array(
+		$group['links']['__ac_template__'] = array(
 			'navigation_id' => '',
 			'parent_id'     => '',
 			'name'          => 'new_link __ac_template__',
@@ -225,27 +158,44 @@ class App_Controller_Admin_Navigation extends Controller
 			'status'        => 1,
 		);
 
-		$admin_store = array(
-			'admin' => array(
-				'store_id' => -1,
-				'name'     => _l("Admin Panel"),
-			)
-		);
-
-		$data['data_stores']     = $admin_store + $this->Model_Setting_Store->getStores();
-		$data['data_conditions'] = $this->condition->getConditions();
-
-		$data['data_statuses'] = array(
-			0 => _l("Disabled"),
-			1 => _l("Enabled"),
-		);
-
-		//Action Buttons
-		$data['save']   = site_url('admin/navigation/update', 'navigation_group_id=' . $navigation_group_id);
-		$data['cancel'] = site_url('admin/navigation');
+		$group['data_conditions'] = $this->condition->getConditions();
 
 		//Render
-		output($this->render('navigation/form', $data));
+		output($this->render('navigation/form', $group));
+	}
+
+	public function save()
+	{
+		$navigation_group_id = $this->Model_Navigation->saveGroup(_get('navigation_group_id'), $_POST);
+
+		if ($this->Model_Navigation->hasError()) {
+			message('error', $this->Model_Navigation->getError());
+		} else {
+			message('success', _l("The Navigation Group has been saved!"));
+		}
+
+		if ($this->is_ajax) {
+			output_json($this->message->fetch());
+		} elseif ($this->message->has('error')) {
+			post_redirect('admin/navigation/form', 'navigation_group_id=' . !empty($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : $navigation_group_id);
+		} else {
+			redirect('admin/navigation');
+		}
+	}
+
+	public function delete()
+	{
+		if ($this->Model_Navigation->removeGroup(_get('navigation_group_id'))) {
+			message('success', _l("Success: You have modified Navigation!"));
+		} else {
+			message('error', $this->Model_Navigation->getError());
+		}
+
+		if ($this->is_ajax) {
+			output_json($this->message->fetch());
+		} else {
+			redirect('admin/navigation');
+		}
 	}
 
 	public function batch_action()
@@ -261,7 +211,7 @@ class App_Controller_Admin_Navigation extends Controller
 					break;
 
 				case 'delete':
-					$this->Model_Navigation->deleteNavigationGroup($navigation_group_id);
+					$this->Model_Navigation->removeGroup($navigation_group_id);
 					break;
 			}
 

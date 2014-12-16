@@ -1,92 +1,6 @@
 <?php
 class Extend extends Library
 {
-	public function addNavigationLink($group, $link)
-	{
-		$defaults = array(
-			'title'      => '',
-			'href'       => '',
-			'query'      => '',
-			'parent'     => '',
-			'parent_id'  => 0,
-			'parent'     => '',
-			'sort_order' => 0,
-			'status'     => 1,
-		);
-
-		$link += $defaults;
-
-		if (empty($link['display_name'])) {
-			$this->error['display_name'] = _l("You must specify the display_name when adding a new navigation link!");
-			return false;
-		}
-
-		if (empty($link['name'])) {
-			$link['name'] = slug($link['display_name']);
-		}
-
-		//Link already exists
-		if ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->escape($link['name']) . "'")) {
-			$this->error['duplicate'] = _l("The navigation link %s already exists", $link['name']);
-			return false;
-		}
-
-		if (!$link['parent_id'] && $link['parent']) {
-			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->escape($link['parent']) . "'");
-		}
-
-		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->escape($group) . "'");
-
-		if ($navigation_group_id) {
-			$this->Model_Navigation->addNavigationLink($navigation_group_id, $link);
-		} else {
-			$this->error['navigation_group'] = _l("The Navigation Group $group does not exist!");
-			return false;
-		}
-
-		if (!empty($link['children'])) {
-			foreach ($link['children'] as $child) {
-				$child['parent'] = $link['name'];
-				$this->addNavigationLink($group, $child);
-			}
-		}
-
-		return true;
-	}
-
-	public function addNavigationLinks($group, $links)
-	{
-		foreach ($links as $name => $link) {
-			if (!isset($link['name']) && is_string($name)) {
-				$link['name'] = $name;
-			}
-
-			$this->addNavigationLink($group, $link);
-		}
-
-		return empty($this->error);
-	}
-
-	public function removeNavigationLink($group, $name)
-	{
-		$query = "SELECT navigation_id FROM " . DB_PREFIX . "navigation n" .
-			" LEFT JOIN " . DB_PREFIX . "navigation_group ng ON (ng.navigation_group_id=n.navigation_group_id)" .
-			" WHERE ng.name = '" . $this->escape($group) . "' AND n.name = '" . $this->escape($name) . "'";
-
-		$navigation_ids = $this->queryColumn($query);
-
-		foreach ($navigation_ids as $navigation_id) {
-			$this->Model_Navigation->deleteNavigationLink($navigation_id);
-		}
-	}
-
-	public function removeNavigationLinks($group, $links)
-	{
-		foreach ($links as $name => $link) {
-			$this->removeNavigationLink($group, isset($link['name']) ? $link['name'] : $name);
-		}
-	}
-
 	public function addViewListing($view_listing)
 	{
 		$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
@@ -136,15 +50,10 @@ class Extend extends Library
 		$layout += $data;
 
 		if (!empty($routes)) {
-			$stores = $this->Model_Setting_Store->getStores();
-
-			foreach ($stores as $store) {
-				foreach ($routes as $route) {
-					$layout['layout_route'][] = array(
-						'store_id' => $store['store_id'],
-						'route'    => $route
-					);
-				}
+			foreach ($routes as $route) {
+				$layout['layout_route'][] = array(
+					'route'    => $route
+				);
 			}
 		}
 
@@ -205,40 +114,6 @@ class Extend extends Library
 		}
 
 		$this->config->saveGroup('db_hook', $db_hooks);
-	}
-
-	public function addControllerOverride($original, $alternate, $condition = '', $store_id = 0)
-	{
-		$overrides = $this->config->load('controller_override', 'controller_override', $store_id);
-
-		if (!$overrides) {
-			$overrides = array();
-		}
-
-		$overrides[] = array(
-			'original'  => $original,
-			'alternate' => $alternate,
-			'condition' => $condition,
-		);
-
-		$this->config->save('controller_override', 'controller_override', $overrides, $store_id);
-
-		$overrides = $this->config->load('controller_override', 'controller_override');
-	}
-
-	public function removeControllerOverride($original, $alternate, $condition = '', $store_id = 0)
-	{
-		$overrides = $this->config->load('controller_override', 'controller_override', $store_id);
-
-		if ($overrides) {
-			foreach ($overrides as $key => $override) {
-				if ($override['original'] === $original && $override['alternate'] === $alternate && (string)$override['condition'] === $condition) {
-					unset($overrides[$key]);
-				}
-			}
-
-			$this->config->save('controller_override', 'controller_override', $overrides, $store_id);
-		}
 	}
 
 	public function enable_image_sorting($table, $column)

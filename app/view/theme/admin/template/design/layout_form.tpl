@@ -22,7 +22,6 @@
 				<table id="route" class="list">
 					<thead>
 						<tr>
-							<td class="left">{{Store:}}</td>
 							<td class="left">{{Route:}}</td>
 							<td></td>
 						</tr>
@@ -31,15 +30,6 @@
 					<tbody id="route_list">
 						<? foreach ($routes as $row => $route) { ?>
 							<tr class="route" data-row="<?= $row; ?>">
-								<td class="left">
-									<?= build('select', array(
-										'name'   => "routes[$row][store_id]",
-										'data'   => $data_stores,
-										'select' => $route['store_id'],
-										'key'    => 'store_id',
-										'value'  => 'name',
-									)); ?>
-								</td>
 								<td class="left"><input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>"/></td>
 								<td class="left"><a onclick="$(this).closest('.route').remove();" class="button delete">{{Remove}}</a></td>
 							</tr>

@@ -215,6 +215,12 @@ function clear_cache($key = null)
 	$registry->get('cache')->delete($key);
 }
 
+function check_condition($condition)
+{
+	global $registry;
+	return $registry->get('condition')->is($condition);
+}
+
 function message($type, $message = null)
 {
 	global $registry;

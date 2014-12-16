@@ -14,7 +14,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 		breadcrumb(_l("URL Aliases"), site_url('admin/settings/url-alias'));
 
 		//The Table Columns
@@ -39,29 +39,6 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			'display_name' => _l("Query:"),
 			'filter'       => true,
 			'sortable'     => true,
-		);
-
-		$non_stores = array(
-			array(
-				'store_id' => '-1',
-				'name'     => _l("Admin Panel"),
-			),
-			array(
-				'store_id' => 0,
-				'name'     => _l("All Stores"),
-			),
-		);
-
-		$columns['store_id'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Store:"),
-			'filter'       => true,
-			'build_config' => array(
-				'store_id',
-				'name'
-			),
-			'build_data'   => array_merge($non_stores, $this->Model_Setting_Store->getStores()),
-			'sortable'     => false,
 		);
 
 		$columns['status'] = array(
@@ -139,7 +116,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		//Action Buttons
 		$data['insert'] = site_url('admin/settings/url-alias/update');
 		$data['delete'] = site_url('admin/settings/url-alias/delete');
-		$data['cancel'] = site_url('admin/settings/store');
+		$data['cancel'] = site_url('admin/settings');
 
 		//Render
 		output($this->render('settings/url_alias/list', $data));
@@ -231,8 +208,10 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		}
 
 		//Load Information
+		$url_alias = $_POST;
+
 		if ($url_alias_id && !IS_POST) {
-			$url_alias_info = $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id);
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id);
 		}
 
 		//Load Values or Defaults
@@ -240,57 +219,23 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			'alias'    => '',
 			'path'     => '',
 			'query'    => '',
-			'store_id' => 0,
 			'redirect' => '',
 			'status'   => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$data[$key] = $_POST[$key];
-			} elseif (isset($url_alias_info[$key])) {
-				$data[$key] = $url_alias_info[$key];
-			} else {
-				$data[$key] = $default;
-			}
-		}
+		$url_alias += $defaults;
 
-		//Template Data
-		$non_stores = array(
-			array(
-				'store_id' => '-1',
-				'name'     => _l("Admin Panel"),
-			),
-			array(
-				'store_id' => 0,
-				'name'     => _l("All Stores"),
-			),
-		);
-
-		$data['data_stores'] = array_merge($non_stores, $this->Model_Setting_Store->getStores());
-
-		$data['data_non_stores'] = array(
-			array(
-				'store_id' => '-1',
-				'name'     => _l("Admin Panel"),
-			),
-			array(
-				'store_id' => 0,
-				'name'     => _l("All Stores"),
-			),
-		);
-
-		$data['data_statuses'] = array(
+		$url_alias['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
 		//Action Buttons
-		$data['save']   = site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias_id);
-		$data['cancel'] = site_url('admin/settings/url-alias');
+		$url_alias['save']   = site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias_id);
+		$url_alias['cancel'] = site_url('admin/settings/url-alias');
 
 		//Render
-		output($this->render('settings/url_alias/form', $data));
+		output($this->render('settings/url_alias/form', $url_alias));
 	}
 
 	private function validateForm()

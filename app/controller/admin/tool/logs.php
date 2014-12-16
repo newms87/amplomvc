@@ -17,7 +17,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		breadcrumb(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
 
 		//Sort and Filter
-		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
+		$sort   = $this->sort->getQueryDefaults('date', 'ASC');
 		$filter = _get('filter', null);
 
 		$start = $sort['start'];
@@ -25,7 +25,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		$current = -1;
 
-		$file    = DIR_LOGS . $log . '.txt';
+		$file    = DIR_LOGS . STORE_PREFIX . '/' . $log . '.txt';
 		$entries = array();
 
 		if (file_exists($file)) {

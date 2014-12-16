@@ -1,13 +1,13 @@
 <?php
 /**
- * Class App_Controller_Admin_Setting_Update
+ * Class App_Controller_Admin_Settings_Update
  *
  * Title: System Update
  * Icon: system-update.png
  * Order: 1
  *
  */
-class App_Controller_Admin_Setting_Update extends Controller
+class App_Controller_Admin_Settings_Update extends Controller
 {
 	public function index()
 	{

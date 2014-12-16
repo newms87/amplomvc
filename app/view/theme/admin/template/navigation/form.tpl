@@ -2,16 +2,17 @@
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
-		<div class="heading">
-			<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Navigation}}</h1>
+		<form action="<?= site_url('admin/navigation/save', 'navigation_group_id=' . $navigation_group_id); ?>" method="post" enctype="multipart/form-data" class="ctrl-save">
+			<div class="heading">
+				<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Navigation}}</h1>
 
-			<div class="buttons">
-				<a onclick="$('#form').submit()" class="button">{{Save}}</a>
-				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
+				<div class="buttons">
+					<button>{{Save}}</button>
+					<a href="<?= site_url('admin/navigation'); ?>" class="button cancel">{{Cancel}}</a>
+				</div>
 			</div>
-		</div>
-		<div class="section">
-			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
+			<div class="section">
+
 				<table class="form">
 					<tr>
 						<td class="required"> {{Navigation Group:}}</td>
@@ -20,24 +21,14 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> {{Stores:}}</td>
-						<td>
-							<?=
-							build('multiselect', array(
-								'name'   => "stores",
-								'data'   => $data_stores,
-								'select' => $stores,
-								'key'    => 'store_id',
-								'value'  => 'name',
-							)); ?>
-						</td>
-					</tr>
-					<tr>
 						<td>{{Status:}}</td>
 						<td><?=
 							build('select', array(
 								'name'   => 'status',
-								'data'   => $data_statuses,
+								'data'   => array(
+									0 => _l("Disabled"),
+									1 => _l("Enabled"),
+								),
 								'select' => $status
 							)); ?></td>
 					</tr>
@@ -120,10 +111,9 @@
 						</td>
 					</tr>
 				</table>
-		</div>
+			</div>
 		</form>
 	</div>
-</div>
 </div>
 
 <script type="text/javascript">
@@ -133,10 +123,10 @@
 		var new_link = $.ac_template('link_list', 'add');
 
 		new_link.find('ul').sortable({
-			delay: 100,
+			delay:       100,
 			connectWith: "#links_list ul",
 			placeholder: "ui-state-highlight",
-			change: show_placeholder
+			change:      show_placeholder
 		});
 	}
 
@@ -159,10 +149,10 @@
 		});
 
 		list.sortable({
-			delay: 100,
+			delay:       100,
 			connectWith: "#links_list ul",
 			placeholder: 'placeholder',
-			change: show_placeholder
+			change:      show_placeholder
 		});
 	}
 

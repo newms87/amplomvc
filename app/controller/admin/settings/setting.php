@@ -7,7 +7,7 @@
  * Icon: admin.png
  *
  */
-class App_Controller_Admin_Setting_Setting extends Controller
+class App_Controller_Admin_Settings_Setting extends Controller
 {
 	public function index()
 	{

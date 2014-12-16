@@ -296,8 +296,7 @@ class Url extends Library
 		$sql_query =
 			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
 			" WHERE `path` = '" . $this->escape($path) . "'" .
-			" AND `query` = '" . $this->escape($query) . "'" .
-			" AND store_id = '" . (int)$store_id . "'";
+			" AND `query` = '" . $this->escape($query) . "'";
 
 		if ($alias) {
 			$sql_query .= " AND alias = '" . $this->escape($alias) . "'";

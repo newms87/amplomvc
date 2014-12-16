@@ -532,7 +532,6 @@ class Mail extends Library
 			'html'       => $this->html,
 			'text'       => $this->text,
 			'attachment' => $this->attachments,
-			'store_id'   => option('store_id'),
 			'time'       => _time(),
 		);
 
@@ -540,7 +539,7 @@ class Mail extends Library
 
 		$mail_fail = $this->escape($mail_fail);
 
-		$this->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+		$this->query("INSERT INTO " . $this->prefix . "setting SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	private function log($msg, $flush = false)

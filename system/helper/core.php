@@ -312,7 +312,7 @@ function write_log($type, $msg)
 	global $registry;
 
 	if (!$registry->has('log_' . $type)) {
-		$registry->set('log_' . $type, new Log($type, option('store_id')));
+		$registry->set('log_' . $type, new Log($type));
 	}
 
 	return $registry->get('log_' . $type)->write($msg);

@@ -29,18 +29,6 @@
 							<td><input type="text" name="redirect" value="<?= $redirect; ?>" size="40"/></td>
 						</tr>
 						<tr>
-							<td>{{Store:}}</td>
-							<td>
-								<?= build('select', array(
-									'name'   => 'store_id',
-									'data'   => $data_stores,
-									'select' => $store_id,
-									'key'    => 'store_id',
-									'value'  => 'name',
-								)); ?>
-							</td>
-						</tr>
-						<tr>
 							<td>{{Status:}}</td>
 							<td><?= build('select', array(
 	'name'   => 'status',

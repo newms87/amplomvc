@@ -249,7 +249,7 @@ class Config extends Library
 			);
 
 			$this->db->setAutoIncrement('store', 0);
-			$this->Model_Setting_Store->addStore($store);
+			$this->Model_Setting_Store->save(null, $store);
 		}
 	}
 

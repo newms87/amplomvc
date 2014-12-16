@@ -4,21 +4,9 @@ class App_Controller_Mail_Header extends Controller
 {
 	public function index($data = array())
 	{
-		if (empty($data['store'])) {
-			if (!empty($data['store_id'])) {
-				$data['store'] = $this->config->getStore($data['store_id']);
-			} else {
-				$data['store'] = array(
-					'store_id' => 0,
-					'name'     => option('config_name'),
-					'url'      => site_url(),
-				);
-			}
-		}
-
 		$data += array(
-			'title' => _l("%s", $data['store']['name']),
-			'logo'  => str_replace("./", '', $this->config->load('config', 'config_logo', $data['store']['store_id'])),
+			'title' => option('config_name'),
+			'logo'  => str_replace("./", '', option('config_logo')),
 		);
 
 		if ($data['logo']) {

@@ -14,18 +14,8 @@
 		</div>
 
 		<div class="section select-store row">
-			<h2>{{Choose Store}}</h2>
-
-			<div class="store-list">
-				<a class="store <?= empty($store['store_id']) ? 'active' : ''; ?>" href="<?= site_url('admin/settings/theme'); ?>">{{All Stores}}</a>
-
-				<? foreach ($data_stores as $s) { ?>
-					<a class="store <?= $s['store_id'] == $store['store_id'] ? 'active' : ''; ?>" href="<?= site_url('admin/settings/theme', 'store_id=' . $s['store_id']); ?>"><?= $s['name']; ?></a>
-				<? } ?>
-			</div>
-
 			<div class="col xs-12 md-6 top theme-settings">
-				<a class="button" href="<?= site_url('admin/settings/theme/restore_defaults', 'store_id=' . $store['store_id']); ?>">{{Restore Defaults}}</a>
+				<a class="button" href="<?= site_url('admin/settings/theme/restore_defaults'); ?>">{{Restore Defaults}}</a>
 
 				<div class="theme-setting-list">
 					<? foreach ($configs as $key => $config) { ?>

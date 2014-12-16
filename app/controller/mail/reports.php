@@ -14,10 +14,7 @@ class App_Controller_Mail_Reports extends Controller
 			'sender'  => option('config_name'),
 		);
 
-		$store = $this->config->getStore();
-
 		$data['header'] = array(
-			'store' => $store,
 			'title' => $data['title'] ? $data['title'] : $data['subject'],
 		);
 
@@ -27,8 +24,6 @@ class App_Controller_Mail_Reports extends Controller
 		} else {
 			$data['login'] = site_url('customer/login');
 		}
-
-		$data['store'] = $store;
 
 		$data['html'] = $this->render('mail/reports', $data, 'admin');
 

@@ -262,9 +262,9 @@ class Theme extends Library
 			'store_theme_style_' . $theme => $stylesheet,
 		);
 
-		$this->config->saveGroup('store_theme', $store_theme, $store_id, false);
+		$this->config->saveGroup('store_theme', $store_theme, false);
 
-		clear_cache('less/store_theme.' . $store_id . '.' . $theme);
+		clear_cache('less/store_theme.' . $theme);
 	}
 
 	public function loadTheme()

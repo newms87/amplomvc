@@ -11,6 +11,7 @@
 				<img src="<?= theme_url('image/product.png'); ?>" alt=""/>
 				{{Voucher}}
 			</h1>
+
 			<div class="buttons">
 				<button>{{Save}}</button>
 				<a href="<?= site_url('admin/product/product'); ?>" class="button">{{Cancel}}</a>
@@ -18,119 +19,95 @@
 		</div>
 
 		<div class="section">
-			<div id="tabs" class="htabs">
-				<a href="#tab-general">{{Voucher Information}}</a>
-				<a href="#tab-links">{{Links}}</a>
-			</div>
-
-			<div id="tab-general">
-				<table class="form">
-					<tr>
-						<td class="required">
-							{{Name:}}</td>
-						<td><input type="text" name="name" size="100" value="<?= $name; ?>"/></td>
-					</tr>
-					<tr>
-						<td class="required">
-							{{Voucher ID:}}</td>
-						<td>
-							<input type="text" name="model" value="<?= $model; ?>"/>
-							<a class="gen_url" onclick="generate_model(this)">{{[Generate Model ID]}}</a>
-						</td>
-					</tr>
-					<tr>
-						<td class="required">
-							<div>{{SEO Url:}}</div>
-							<span class="help">{{The Search Engine Optimized URL for the product page.}}</span>
-						</td>
-						<td>
-							<input type="text" onfocus="$(this).ac_msg('error', '{{<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button}}');" name="alias" value="<?= $alias; ?>"/>
-							<a class="gen_url" onclick="generate_url(this)">{{[Generate URL]}}</a>
-						</td>
-					</tr>
-					<tr>
-						<td><?= _l("Teaser: <span class=\"help\">A short teaser about the Gift Card.</span>"); ?></td>
-						<td>
-							<textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td><?= _l("Description: <span class=\"help\">This will show up at the top of the Gift Card Product page. You may use full HTML</span>"); ?></td>
-						<td>
-							<textarea name="description" class="ckedit"><?= $description; ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Price:}}</td>
-						<td><input type="text" name="price" value="<?= $price; ?>"/></td>
-					</tr>
-					<tr>
-						<td>{{Tax Class:}}</td>
-						<td>
-							<?=
-							build('select', array(
-								'name'   => 'tax_class_id',
-								'data'   => $data_tax_classes,
-								'select' => $tax_class_id,
-								'key'    => 'tax_class_id',
-								'value'  => 'title',
-							)); ?>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Quantity:}}</td>
-						<td><input type="text" name="quantity" value="<?= $quantity; ?>" size="2"/></td>
-					</tr>
-					<tr>
-						<td>{{Image:}}</td>
-						<td>
-							<input type="text" class="imageinput" name="image" value="<?= $image; ?>"/>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Date Available:}}</td>
-						<td>
-							<input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetimepicker"/>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Date Expires:}}</td>
-						<td>
-							<input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetimepicker"/>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Status:}}</td>
-						<td>
-							<?=
-							build('select', array(
-								'name'   => "status",
-								'data'   => $data_statuses,
-								'select' => $status
-							)); ?>
-						</td>
-					</tr>
-				</table>
-			</div>
-
-			<div id="tab-links">
-				<table class="form">
-					<tr>
-						<td>{{Stores:}}</td>
-						<td>
-							<?=
-							build('multiselect', array(
-								'name'   => "product_stores",
-								'data'   => $data_stores,
-								'select' => $product_stores,
-								'key'    => 'store_id',
-								'value'  => 'name',
-							)); ?>
-						</td>
-					</tr>
-				</table>
-			</div>
-
+			<table class="form">
+				<tr>
+					<td class="required">
+						{{Name:}}
+					</td>
+					<td><input type="text" name="name" size="100" value="<?= $name; ?>"/></td>
+				</tr>
+				<tr>
+					<td class="required">
+						{{Voucher ID:}}
+					</td>
+					<td>
+						<input type="text" name="model" value="<?= $model; ?>"/>
+						<a class="gen_url" onclick="generate_model(this)">{{[Generate Model ID]}}</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="required">
+						<div>{{SEO Url:}}</div>
+						<span class="help">{{The Search Engine Optimized URL for the product page.}}</span>
+					</td>
+					<td>
+						<input type="text" onfocus="$(this).ac_msg('error', '{{<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button}}');" name="alias" value="<?= $alias; ?>"/>
+						<a class="gen_url" onclick="generate_url(this)">{{[Generate URL]}}</a>
+					</td>
+				</tr>
+				<tr>
+					<td><?= _l("Teaser: <span class=\"help\">A short teaser about the Gift Card.</span>"); ?></td>
+					<td>
+						<textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td><?= _l("Description: <span class=\"help\">This will show up at the top of the Gift Card Product page. You may use full HTML</span>"); ?></td>
+					<td>
+						<textarea name="description" class="ckedit"><?= $description; ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>{{Price:}}</td>
+					<td><input type="text" name="price" value="<?= $price; ?>"/></td>
+				</tr>
+				<tr>
+					<td>{{Tax Class:}}</td>
+					<td>
+						<?=
+						build('select', array(
+							'name'   => 'tax_class_id',
+							'data'   => $data_tax_classes,
+							'select' => $tax_class_id,
+							'key'    => 'tax_class_id',
+							'value'  => 'title',
+						)); ?>
+					</td>
+				</tr>
+				<tr>
+					<td>{{Quantity:}}</td>
+					<td><input type="text" name="quantity" value="<?= $quantity; ?>" size="2"/></td>
+				</tr>
+				<tr>
+					<td>{{Image:}}</td>
+					<td>
+						<input type="text" class="imageinput" name="image" value="<?= $image; ?>"/>
+					</td>
+				</tr>
+				<tr>
+					<td>{{Date Available:}}</td>
+					<td>
+						<input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetimepicker"/>
+					</td>
+				</tr>
+				<tr>
+					<td>{{Date Expires:}}</td>
+					<td>
+						<input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetimepicker"/>
+					</td>
+				</tr>
+				<tr>
+					<td>{{Status:}}</td>
+					<td>
+						<?=
+						build('select', array(
+							'name'   => "status",
+							'data'   => $data_statuses,
+							'select' => $status
+						)); ?>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</form>
 </div>
@@ -168,8 +145,6 @@
 			});
 		}
 	}
-
-	$('#tabs a').tabs();
 
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>

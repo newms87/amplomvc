@@ -33,19 +33,6 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{Stores}}</td>
-					<td>
-						<?=
-						build('multiselect', array(
-							'name'   => "profiles[$row][store_ids]",
-							'data'   => $data_stores,
-							'select' => !empty($profile['store_ids']) ? $profile['store_ids'] : null,
-							'key'    => "store_id",
-							'value'  => "name",
-						)); ?>
-					</td>
-				</tr>
-				<tr>
 					<td>{{Layouts}}</td>
 					<td>
 						<?=

@@ -211,7 +211,6 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 		//Template Defaults
 		$data['routes']['__ac_template__'] = array(
-			'store_id' => 1,
 			'route'    => '',
 		);
 

@@ -103,19 +103,6 @@
 						<td id="theme"></td>
 					</tr>
 					<tr>
-						<td>{{Default Store}}</td>
-						<td>
-							<?=
-							build('select', array(
-								'name'   => 'config_default_store',
-								'data'   => $stores,
-								'select' => $config_default_store,
-								'key'    => 'store_id',
-								'value'  => 'name',
-							)); ?>
-						</td>
-					</tr>
-					<tr>
 						<td>{{Default Layout:}}</td>
 						<td>
 							<?=
@@ -133,9 +120,13 @@
 			<div id="tab-local">
 				<table class="form">
 					<tr>
-						<td><?=
-							_l("Default Address Format: <span class=\"help\">Insertables:<br/>
-{firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>"); ?></td>
+						<td>{{Default Address Format:}}
+							<span class="help">
+								{{Insertables:}}<br/>
+								{firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}.<br/><br/>
+								{{Can be individually set under System > Localisation > Countries}}
+							</span>
+						</td>
 						<td>
 							<textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format; ?></textarea>
 						</td>
@@ -303,7 +294,8 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>}}</td>
+						<td>{{Allow Customers to Close Notification Messages?<span class=\'help\'>These are popups that display warning, success and alert/notify messages</span>}}
+						</td>
 						<td><?=
 							build('radio', array(
 								'name'   => 'config_allow_close_message',
@@ -593,7 +585,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Default File Permissions <span class=\'help\'>These are the permissions set for system generated files and directories</span>}}</td>
+						<td>{{Default File Permissions
+							<span class=\'help\'>These are the permissions set for system generated files and directories</span>}}
+						</td>
 						<td>
 							<label for="default_file_mode">{{Default File Permissions}}</label>
 							<input id="default_file_mode" type="text" size="3" maxlength="3" name="config_default_file_mode" value="<?= $config_default_file_mode; ?>"/>
@@ -602,7 +596,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Image File Permissions <span class=\'help\'>These are the permissions set for system generated image files and directories</span>}}</td>
+						<td>{{Image File Permissions
+							<span class=\'help\'>These are the permissions set for system generated image files and directories</span>}}
+						</td>
 						<td>
 							<label for="image_file_mode">{{Image File Permissions}}</label>
 							<input id="image_file_mode" type="text" size="3" maxlength="3" name="config_image_file_mode" value="<?= $config_image_file_mode; ?>"/>
@@ -611,7 +607,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Plugin File Permissions <span class=\'help\'>These are the permissions set for system generated plugin files and directories</span>}}</td>
+						<td>{{Plugin File Permissions
+							<span class=\'help\'>These are the permissions set for system generated plugin files and directories</span>}}
+						</td>
 						<td>
 							<label for="plugin_file_mode">{{Plugin File Permissions}}</label>
 							<input id="plugin_file_mode" type="text" size="3" maxlength="3" name="config_plugin_file_mode" value="<?= $config_plugin_file_mode; ?>"/>
@@ -754,7 +752,8 @@
 
 							<div class="ga-cross-domain">
 								<h3>{{Use this section to enable GA Cross-domain analytics}}</h3>
-								<span class="help">{{Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}</span>
+								<span class="help">{{Cross-domain analytics is used to track several different
+									<b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}</span>
 								<br/>
 
 								<div class="ga-domains">

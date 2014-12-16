@@ -1,7 +1,16 @@
 <?php
 
-class App_Model_Setting_Store extends Model
+class App_Model_Setting_Store extends App_Model_Table
 {
+	protected $table = 'store', $primary_key = 'store_id';
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->p_table = DB_PREFIX . 'store';
+	}
+
 	public function save($store_id, $store)
 	{
 		if (!validate('text', $store['name'], 1, 64)) {
@@ -14,41 +23,6 @@ class App_Model_Setting_Store extends Model
 
 		if (!validate('url', $store['ssl'])) {
 			$store['ssl'] = 'https://' . DOMAIN . '/' . SITE_BASE;
-		}
-
-		if (!validate('text', $store['config_owner'], 2, 127)) {
-			$this->error['config_owner'] = _l("Store Owner must be between 2 and 127 characters!");
-		}
-
-		if (!validate('email', $store['config_email'])) {
-			$this->error['config_email'] = _l("E-Mail Address does not appear to be valid!");
-		}
-
-		if (!validate('text', $store['config_title'], 2, 127)) {
-			$this->error['config_title'] = _l("Title must be between 2 and 127 characters!");
-		}
-
-		$image_sizes = array(
-			'image_category' => "Category List",
-			'image_thumb'    => "Product Thumb",
-			'image_popup'    => "Product Popup",
-		);
-
-		foreach ($image_sizes as $image_key => $image_size) {
-			$image_width  = 'config_' . $image_key . '_width';
-			$image_height = 'config_' . $image_key . '_height';
-
-			if ((int)$store[$image_width] <= 0) {
-				$store[$image_width] = 0;
-			}
-
-			if ((int)$store[$image_height] <= 0) {
-				$store[$image_height] = 0;
-			}
-		}
-
-		if ((int)$store['config_catalog_limit'] <= 0) {
-			$store['config_catalog_limit'] = 20;
 		}
 
 		if ($this->error) {
