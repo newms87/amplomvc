@@ -23,7 +23,7 @@ class App_Controller_Admin_Settings_Setting extends Controller
 		$config_data = $_POST;
 
 		if (!IS_POST) {
-			$config_data = $this->config->loadGroup('config', 0);
+			$config_data = $this->config->loadGroup('config');
 		}
 
 		$defaults = array(
@@ -270,7 +270,7 @@ class App_Controller_Admin_Settings_Setting extends Controller
 		if (!empty($this->error)) {
 			message('error', $this->error);
 		} else {
-			if ($this->config->saveGroup('config', $_POST, 0, true)) {
+			if ($this->config->saveGroup('config', $_POST)) {
 				message('success', _l("Success: You have modified settings!"));
 			} else {
 				message('error', $this->config->getError());

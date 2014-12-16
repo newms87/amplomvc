@@ -204,7 +204,7 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter('insert', $table, $data);
+		$this->actionFilter($table, 'insert', $data);
 
 		$values = $this->getInsertString($table, $data, false);
 
@@ -247,7 +247,7 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter('update', $table, $data, $where);
+		$this->actionFilter($table, 'update', $data, $where);
 
 		$primary_key = $this->getPrimaryKey($table);
 
@@ -301,7 +301,7 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter('delete', $table, $data);
+		$this->actionFilter($table, 'delete', $data);
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
@@ -991,12 +991,12 @@ abstract class Model
 		return $primary_key;
 	}
 
-	private function actionFilter($action, $table, &$data)
+	private function actionFilter($table, $action, &$data)
 	{
-		$hooks = option('db_hook_' . $action . '_' . $table);
+		$hooks = option('db_hooks');
 
-		if ($hooks) {
-			foreach ($hooks as $hook) {
+		if ($hooks && !empty($hooks[$table][$action])) {
+			foreach ($hooks[$table][$action] as $hook) {
 				if (is_array($hook['callback'])) {
 					$classname = key($hook['callback']);
 					$method    = current($hook['callback']);

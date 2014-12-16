@@ -124,11 +124,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($store_id && !IS_POST) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
-			$store_config = $this->config->loadGroup('config', $store_id);
-
-			if (empty($store_config)) {
-				$store_config = $this->config->loadGroup('config', 0);
-			}
+			$store_config = $this->config->loadGroup('config');
 
 			$store += $store_config;
 		}
@@ -262,11 +258,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($this->Model_Setting_Store->hasError()) {
 			message('error', $this->Model_Setting_Store->getError());
 		} else {
-			if (!$this->config->deleteGroup('config', $_GET['store_id'])) {
-				message('error', $this->config->getError());
-			} else {
-				message('notify', _l("User was deleted!"));
-			}
+			message('notify', _l("User was deleted!"));
 		}
 
 		if (IS_AJAX) {

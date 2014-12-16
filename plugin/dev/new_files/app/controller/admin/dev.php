@@ -90,7 +90,7 @@ class App_Controller_Admin_Dev extends Controller
 
 			unset($_POST);
 
-			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
+			$this->config->saveGroup('dev_sites', $dev_sites, false);
 		}
 
 		breadcrumb(_l("Site Management"), site_url('admin/dev/site-management'));

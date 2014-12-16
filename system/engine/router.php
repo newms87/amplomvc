@@ -10,7 +10,7 @@ final class Router
 	{
 		$this->routeStore();
 
-		define('STORE_PREFIX', $this->store ? $this->store['prefix'] : DB_PREFIX);
+		define('STORE_PREFIX', !empty($this->store['prefix']) ? $this->store['prefix'] : DB_PREFIX);
 
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
@@ -173,7 +173,7 @@ final class Router
 
 		foreach ($stores as $store) {
 			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
-				if ($store['prefix'] !== DB_PREFIX) {
+				if (!empty($store['prefix']) && $store['prefix'] !== DB_PREFIX) {
 					$registry->get('db')->setPrefix($store['prefix']);
 					$registry->get('cache')->setDir(DIR_CACHE . $store['prefix']);
 				}

@@ -23,7 +23,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 		$settings = $_POST;
 
 		if (!IS_POST) {
-			$settings = $this->config->loadGroup('login_settings', 0);
+			$settings = $this->config->loadGroup('login_settings');
 
 			if (!$settings) {
 				$settings = array();
@@ -84,7 +84,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 		$settings = $_POST;
 
 		//Save Settings
-		$this->config->saveGroup('login_settings', $settings, 0, false);
+		$this->config->saveGroup('login_settings', $settings, false);
 
 		if (!$this->config->hasError()) {
 			message('success', _l("You have successfully updated the Login Settings"));

@@ -12,7 +12,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 		$this->document->setTitle(_l("Automated Tasks"));
 
 		if (IS_POST && $this->validate()) {
-			$this->config->save('cron', 'cron_tasks', $_POST, 0, false);
+			$this->config->save('cron', 'cron_tasks', $_POST, false);
 
 			//TODO: Implement full cron control from this code:
 			/*
@@ -103,7 +103,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 	public function activate()
 	{
 		if (isset($_POST['cron_status'])) {
-			$this->config->save('config', 'config_cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
+			$this->config->save('config', 'config_cron_status', $_POST['cron_status'] ? 1 : 0, true);
 		}
 
 		redirect('admin/settings/cron');

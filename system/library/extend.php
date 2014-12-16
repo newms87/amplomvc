@@ -70,61 +70,49 @@ class Extend extends Library
 		}
 	}
 
-	public function addHook($hook_id, $action, $table, $callback, $param = null, $priority = 0)
+	public function addHook($table, $action, $name, $callback, $param = null, $priority = 0)
 	{
-		$config_id = 'db_hook_' . $action . '_' . $table;
+		$db_hooks = option('db_hooks');
 
-		$hooks = option($config_id);
-
-		if (!is_array($hooks)) {
-			$hooks = array();
+		if (!is_array($db_hooks)) {
+			$db_hooks = array();
 		}
 
-		//We do not want to add multiple of the same hook!
-		foreach ($hooks as $hook) {
-			if ($hook['hook_id'] === $hook_id) {
-				return;
-			}
-		}
-
-		$hooks[] = array(
-			'hook_id'  => $hook_id,
+		$db_hooks[$table][$action][$name] = array(
+			'name'  => $name,
 			'callback' => $callback,
 			'param'    => $param,
 			'priority' => $priority,
 		);
 
-		$this->config->save('db_hook', $config_id, $hooks);
+		set_option('db_hooks', $db_hooks);
 	}
 
-	public function removeHook($hook_id)
+	public function removeHook($table, $action, $name)
 	{
-		$db_hooks = $this->config->loadGroup('db_hook');
+		$db_hooks = option('db_hooks');
 
-		foreach ($db_hooks as $hook_key => $hook) {
-			foreach ($hook as $h_key => $h) {
-				if ($h['hook_id'] === $hook_id) {
-					unset($db_hooks[$hook_key][$h_key]);
-				}
-			}
+		unset($db_hooks[$table][$action][$name]);
 
-			if (empty($db_hooks[$hook_key])) {
-				unset($db_hooks[$hook_key]);
-			}
+		if (empty($db_hooks[$table][$action])) {
+			unset($db_hooks[$table][$action]);
 		}
 
-		$this->config->saveGroup('db_hook', $db_hooks);
+		if (empty($db_hooks[$table])) {
+			unset($db_hooks[$table]);
+		}
+
+		set_option('db_hooks', $db_hooks);
 	}
 
 	public function enable_image_sorting($table, $column)
 	{
-		$hook_id = '__image_sort__' . $table . '_' . $column;
-
-		$this->addHook($hook_id, 'insert', $table, array('Extend' => 'update_hsv_value'), array(
+		$this->addHook($table, 'insert', '__image_sort__', array('Extend' => 'update_hsv_value'), array(
 			$table,
 			$column
 		));
-		$this->addHook($hook_id, 'update', $table, array('Extend' => 'update_hsv_value'), array(
+
+		$this->addHook($table, 'update', '__image_sort__', array('Extend' => 'update_hsv_value'), array(
 			$table,
 			$column
 		));
@@ -140,15 +128,22 @@ class Extend extends Library
 		foreach ($rows as $row) {
 			$this->update_hsv_value($row, $table, $column, true);
 
-			$this->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
+			$update = array(
+				$sort_column => $row[$sort_column],
+			);
+
+			$where = array(
+				$key_column => $row[$key_column],
+			);
+
+			$this->update($table, $update, $where);
 		}
 	}
 
 	public function disableImageSorting($table, $column)
 	{
-		$hook_id = '__image_sort__' . $table . '_' . $column;
-
-		$this->removeHook($hook_id);
+		$this->removeHook($table, 'insert', '__image_sort__');
+		$this->removeHook($table, 'update', '__image_sort__');
 
 		$this->dropColumn($table, '__image_sort__' . $column);
 	}
@@ -164,8 +159,8 @@ class Extend extends Library
 			return;
 		}
 
-		$width  = option('config_image_admin_list_width');
-		$height = option('config_image_admin_list_height');
+		$width  = option('config_image_admin_list_width', 80);
+		$height = option('config_image_admin_list_height', 80);
 
 		//Performance Optimization: Much quicker to resize (plus caching) than evaluate color or large image
 		$image = str_replace(URL_IMAGE, DIR_IMAGE, image($data[$column], $width, $height));

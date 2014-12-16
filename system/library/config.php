@@ -36,9 +36,7 @@ class Config extends Library
 
 		$this->data += $settings;
 
-		if (!empty($this->data['auto_update'])) {
-			$this->checkForUpdates();
-		}
+		$this->checkForUpdates();
 	}
 
 	public function get($key)
