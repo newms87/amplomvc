@@ -1,10 +1,10 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("Betty 2.0 Documentation"); ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{Betty 2.0 Documentation}}</h1>
 		</div>
 		<div id="help_docs" class="section">
 			<? function display_levels($sub, $level)
@@ -78,4 +78,4 @@
 			return false;
 		}
 	</script>
-	<?= IS_AJAX ? '' : call('admin/footer'); ?>
+	<?= $is_ajax ? '' : call('admin/footer'); ?>

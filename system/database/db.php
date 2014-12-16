@@ -93,6 +93,11 @@ class DB
 		return $this->driver->getError();
 	}
 
+	public function setPrefix($prefix)
+	{
+		$this->prefix = $prefix;
+	}
+
 	public function getName()
 	{
 		return $this->driver->getName();
@@ -604,7 +609,7 @@ class DB
 		return true;
 	}
 
-	public function setPrefix($prefix, $old_prefix = '')
+	public function alterPrefix($prefix, $old_prefix = '')
 	{
 		clear_cache('model');
 

@@ -1,10 +1,10 @@
-<?= call('header'); ?>
+<?= $is_ajax ? '' : call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= IS_AJAX ? '' : breadcrumbs(); ?>
+			<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 			<? if (!empty($display_title)) { ?>
 				<h1><?= $title; ?></h1>
@@ -27,4 +27,4 @@
 	<?= area('bottom'); ?>
 </section>
 
-<?= call('footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>

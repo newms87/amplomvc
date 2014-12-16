@@ -1,19 +1,19 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/language.png'); ?>" alt=""/> <?= _l("Language"); ?></h1>
+			<h1><img src="<?= theme_url('image/language.png'); ?>" alt=""/> {{Language}}</h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button">{{Save}}</a><a
+					href="<?= $cancel; ?>" class="button">{{Cancel}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Language Name:"); ?></td>
+						<td class="required"> {{Language Name:}}</td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 					</tr>
 					<tr>
@@ -25,23 +25,23 @@
 						<td><input type="text" name="locale" value="<?= $locale; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Datetime Format:"); ?></td>
+						<td class="required"> {{Datetime Format:}}</td>
 						<td><input type="text" name="datetime_format" value="<?= $datetime_format; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Short Date Format:"); ?></td>
+						<td class="required"> {{Short Date Format:}}</td>
 						<td><input type="text" name="date_format_short" value="<?= $date_format_short; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Long Date Format:"); ?></td>
+						<td class="required"> {{Long Date Format:}}</td>
 						<td><input type="text" name="date_format_long" value="<?= $date_format_long; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Time Format:"); ?></td>
+						<td class="required"> {{Time Format:}}</td>
 						<td><input type="text" name="time_format" value="<?= $time_format; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Reading Direction:"); ?></td>
+						<td class="required"> {{Reading Direction:}}</td>
 						<td><?= build('select', array(
 	'name'   => "direction",
 	'data'   => $data_direction,
@@ -49,11 +49,11 @@
 )); ?></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Decimal Point:"); ?></td>
+						<td class="required"> {{Decimal Point:}}</td>
 						<td><input type="text" style="font-size:30px" size="1" name="decimal_point" value="<?= $decimal_point; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Thousand Point:"); ?></td>
+						<td class="required"> {{Thousand Point:}}</td>
 						<td><input type="text" style="font-size:30px" size="1" name="thousand_point" value="<?= $thousand_point; ?>"/></td>
 					</tr>
 					<tr>
@@ -77,7 +77,7 @@
 )); ?></td>
 					</tr>
 					<tr>
-						<td><?= _l("Sort Order:"); ?></td>
+						<td>{{Sort Order:}}</td>
 						<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1"/></td>
 					</tr>
 				</table>
@@ -85,4 +85,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

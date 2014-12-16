@@ -1,11 +1,11 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Page}}</h1>
 
 			<? if (!empty($batch_action)) { ?>
 				<div class="batch_actions">
@@ -15,8 +15,8 @@
 
 			<? if (user_can('w', 'admin/page/form')) { ?>
 				<div class="buttons">
-					<a href="<?= site_url('admin/page/form'); ?>" class="button"><?= _l("Insert"); ?></a>
-					<a onclick="return do_batch_action('copy')" class="button"><?= _l("Copy"); ?></a>
+					<a href="<?= site_url('admin/page/form'); ?>" class="button">{{Insert}}</a>
+					<a onclick="return do_batch_action('copy')" class="button">{{Copy}}</a>
 				</div>
 			<? } ?>
 		</div>
@@ -30,4 +30,4 @@
 	</div>
 </div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

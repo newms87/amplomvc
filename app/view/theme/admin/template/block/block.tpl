@@ -1,21 +1,21 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<form id="form" class="box" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("Blocks"); ?></h1>
+			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{Blocks}}</h1>
 
 			<div class="buttons">
-				<button class="save button"><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/block'); ?>" class="cancel button"><?= _l("Cancel"); ?></a>
+				<button class="save button">{{Save}}</button>
+				<a href="<?= site_url('admin/block'); ?>" class="cancel button">{{Cancel}}</a>
 			</div>
 		</div>
 
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-settings"><?= _l("Settings"); ?></a>
-				<a href="#tab-instances"><?= _l("Instances"); ?></a>
+				<a href="#tab-settings">{{Settings}}</a>
+				<a href="#tab-instances">{{Instances}}</a>
 			</div>
 
 			<div id="tab-settings">
@@ -36,4 +36,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

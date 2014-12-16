@@ -1,11 +1,11 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <section class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<form id="page-form" action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Page"); ?>
+				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Page}}
 				<div class="page-url">
 					<span class="prefix-url"><?= site_url('page/'); ?></span>
 					<input type="text" name="name" value="<?= $name; ?>"/>
@@ -15,33 +15,33 @@
 			</h1>
 
 			<div class="buttons">
-				<button><?= _l("Save"); ?></button>
-				<a href="<?= site_url('admin/page'); ?>" class="button"><?= _l("Cancel"); ?></a>
+				<button>{{Save}}</button>
+				<a href="<?= site_url('admin/page'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section clearfix">
 
 			<div id="tabs" class="htabs">
-				<a href="#tab-content"><?= _l("Content"); ?></a>
-				<a href="#tab-data"><?= _l("Data"); ?></a>
-				<a href="#tab-design"><?= _l("Design"); ?></a>
+				<a href="#tab-content">{{Content}}</a>
+				<a href="#tab-data">{{Data}}</a>
+				<a href="#tab-design">{{Design}}</a>
 			</div>
 
 			<div id="tab-content">
 				<div id="code_editor_preview">
 					<div class="page_title">
-						<div class="title"><?= _l("Page Title"); ?></div>
+						<div class="title">{{Page Title}}</div>
 						<input type="text" name="title" size="60" value="<?= $title; ?>"/>
 						<span class="display_title">
 							<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1"/>
-							<label for="display_title"><?= _l("Display Title?"); ?></label>
+							<label for="display_title">{{Display Title?}}</label>
 						</span>
 					</div>
 
-					<div class="html_title"><?= _l("HTML"); ?></div>
+					<div class="html_title">{{HTML}}</div>
 					<textarea id="html_editor" name="content"><?= $content; ?></textarea>
 
-					<div class="css_title"><?= _l("Style"); ?></div>
+					<div class="css_title">{{Style}}</div>
 					<textarea id="css_editor" name="style"><?= $style; ?></textarea>
 				</div>
 
@@ -57,7 +57,7 @@
 					</div>*/
 					?>
 
-					<a class="refresh-preview button" data-loading="<?= _l("Refreshing..."); ?>"><?= _l("Refresh"); ?></a>
+					<a class="refresh-preview button" data-loading="{{Refreshing...}}">{{Refresh}}</a>
 					<iframe id="preview-frame" frameborder="1" scrolling="auto" marginheight="0"></iframe>
 				</div>
 
@@ -68,27 +68,27 @@
 				<table class="form">
 					<tr>
 						<td class="required">
-							<?= _l("URL Alias:"); ?>
-							<span class="help"><?= _l("The Search Engine Optimized URL."); ?></span>
+							{{URL Alias:}}
+							<span class="help">{{The Search Engine Optimized URL.}}</span>
 						</td>
 						<td>
 							<input type="text" name="alias" size="60" value="<?= $alias; ?>"/>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Meta Keywords:"); ?></td>
+						<td>{{Meta Keywords:}}</td>
 						<td>
 							<textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Meta Description:"); ?></td>
+						<td>{{Meta Description:}}</td>
 						<td>
 							<textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Status:"); ?></td>
+						<td>{{Status:}}</td>
 						<td><?=
 							build('select', array(
 								'name'   => 'status',
@@ -103,7 +103,7 @@
 			<div id="tab-design">
 				<table class="form">
 					<tr>
-						<td class="required"><?= _l("Theme"); ?></td>
+						<td class="required">{{Theme}}</td>
 						<td>
 							<?=
 							build('select', array(
@@ -116,7 +116,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Layout:"); ?></td>
+						<td class="required"> {{Layout:}}</td>
 						<td>
 							<div id="layout_select">
 								<?=
@@ -128,8 +128,8 @@
 									'value'  => 'name',
 								)); ?>
 							</div>
-							<a id="create_layout" class="link_button"><?= _l("[ Create Layout for this page ]"); ?></a>
-							<span id="create_layout_load" style="display:none"><?= _l("Please wait..."); ?></span>
+							<a id="create_layout" class="link_button">{{[ Create Layout for this page ]}}</a>
+							<span id="create_layout_load" style="display:none">{{Please wait...}}</span>
 						</td>
 					</tr>
 				</table>
@@ -261,4 +261,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

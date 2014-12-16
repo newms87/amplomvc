@@ -1,49 +1,49 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div id="add_block" class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<form id="form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> <?= _l("New Block"); ?></h1>
+				<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{New Block}}</h1>
 
 				<div class="buttons">
-					<button class="button"><?= _l("Create Block"); ?></button>
-					<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+					<button class="button">{{Create Block}}</button>
+					<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 				</div>
 			</div>
 			<div class="section">
 
 				<table class="form">
 					<tr>
-						<td class="required"><?= _l("Block Name"); ?></td>
+						<td class="required">{{Block Name}}</td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"><?= _l("Block Path"); ?></td>
+						<td class="required">{{Block Path}}</td>
 						<td>
 							<input type="text" name="path" placeholder="widget/myblock" value="<?= $path; ?>"/><br/>
-							<span class="help"><?= _l("Relative to the Block Root Directory (app/controller/block/) for example: widget/myblock"); ?></span>
+							<span class="help">{{Relative to the Block Root Directory (app/controller/block/) for example: widget/myblock}}</span>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2"><h2><?= _l("Admin Block Settings"); ?></h2></td>
+						<td colspan="2"><h2>{{Admin Block Settings}}</h2></td>
 					</tr>
 					<tr>
-						<td><?= _l("Include _profile.tpl?"); ?></td>
+						<td>{{Include _profile.tpl?}}</td>
 						<td><input type="checkbox" name="profiles_file" value="1" <?= $profiles_file ? 'checked' : ''; ?> />
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Include _settings.tpl?"); ?></td>
+						<td>{{Include _settings.tpl?}}</td>
 						<td><input type="checkbox" name="settings_file" value="1" <?= $settings_file ? 'checked' : ''; ?> />
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2"><h2><?= _l("Store Front"); ?></h2></td>
+						<td colspan="2"><h2>{{Store Front}}</h2></td>
 					</tr>
 					<tr>
-						<td><?= _l("Theme"); ?></td>
+						<td>{{Theme}}</td>
 						<td>
 							<?= build('multiselect', array(
 								'name'   => 'themes',
@@ -74,4 +74,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

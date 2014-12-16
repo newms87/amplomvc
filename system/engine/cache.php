@@ -2,18 +2,27 @@
 
 class Cache
 {
-	private $expired;
+	private $expired, $dir;
 	private $ignore_list = array();
 	private $loaded = array();
 
-	public function __construct()
+	public function __construct($dir = null)
 	{
 		$this->expired = _time() - CACHE_FILE_EXPIRATION;
 
-		$error = null;
-		if (!_is_writable(DIR_CACHE, $error)) {
-			trigger_error($error);
+		$this->setDir($dir ? $dir : DIR_CACHE . DB_PREFIX);
+	}
+
+	public function setDir($dir)
+	{
+		if (_is_writable($dir, $error)) {
+			$this->dir = rtrim($dir, '/') . '/';
+			return true;
 		}
+
+		trigger_error($error);
+
+		return false;
 	}
 
 	public function getLoadedFiles()
@@ -31,7 +40,7 @@ class Cache
 			}
 		}
 
-		$file = DIR_CACHE . $key . '.cache';
+		$file = $this->dir . $key . '.cache';
 
 		if (is_file($file)) {
 			if (_filemtime($file) < $this->expired) {
@@ -68,7 +77,7 @@ class Cache
 
 	public function set($key, $value, $set_file = false)
 	{
-		$file = DIR_CACHE . $key . '.cache';
+		$file = $this->dir . $key . '.cache';
 
 		if (!$set_file) {
 			$value = serialize($value);
@@ -84,7 +93,7 @@ class Cache
 
 	public function delete($key)
 	{
-		$files = glob(DIR_CACHE . $key . '*.cache');
+		$files = glob($this->dir . $key . '*.cache');
 
 		if ($files) {
 			foreach ($files as $file) {

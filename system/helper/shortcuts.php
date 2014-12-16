@@ -105,7 +105,6 @@ function amplo_routing_hook(&$path, $segments, $orig_path)
 		//Initialize site configurations
 		$config = $registry->get('config');
 		$config->runSiteConfig();
-		$config->set('store_id', -1);
 
 		if (option('config_maintenance')) {
 			if (isset($_GET['hide_maintenance_msg'])) {
@@ -137,14 +136,14 @@ function amplo_routing_hook(&$path, $segments, $orig_path)
 	}
 }
 
-function call($path, $params = null)
+function call($path, $params = null, $is_ajax = null)
 {
 	$args = func_get_args();
 	array_shift($args);
 
 	$action = new Action($path, $args);
 
-	if ($action->execute()) {
+	if ($action->execute($is_ajax)) {
 		return $action->getOutput();
 	} else {
 		trigger_error('Could not load controller path ' . $path . '.');
@@ -216,6 +215,12 @@ function clear_cache($key = null)
 	$registry->get('cache')->delete($key);
 }
 
+function check_condition($condition)
+{
+	global $registry;
+	return $registry->get('condition')->is($condition);
+}
+
 function message($type, $message = null)
 {
 	global $registry;
@@ -239,6 +244,7 @@ function send_mail($params)
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
+
 	if ($width || $height) {
 		$image = $registry->get('image')->resize($image, $width, $height);
 	} else {
@@ -351,9 +357,9 @@ function theme_sprite($image)
 	if (!isset($sprites[$image])) {
 		$path = pathinfo($image);
 
-		$sprite_srcs = array(
-			1 => theme_image($image),
-		);
+		$src = theme_image($image);
+
+		$sprite_srcs = array();
 
 		$sizes = array(
 			2 => '2x',
@@ -362,33 +368,33 @@ function theme_sprite($image)
 		);
 
 		foreach ($sizes as $size => $name) {
-			$s = theme_image($path['filename'] . '@' . $name . $path['extension']);
+			$s = theme_image($path['filename'] . '@' . $name . '.' . $path['extension']);
 
 			if (!$s) {
-				theme_image($path['filename'] . '-' . $name . $path['extension']);
+				theme_image($path['filename'] . '-' . $name . '.' . $path['extension']);
 			}
 
 			if ($s) {
-				$sprite_srcs[$size] = $s;
+				$sprite_srcs[$size] = $s . ' ' . $size . 'x';
 			}
 		}
 
-		$sprites[$image] = image_srcset($sprite_srcs);
+		$sprites[$image] = $sprite_srcs ? "src=\"$src\" srcset=\"" . implode(',', $sprite_srcs) . "\"" : "src=\"$src\"";
 	}
 
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null)
+function site_url($path = '', $query = null, $ssl = false)
 {
 	global $registry;
-	return $registry->get('url')->link($path, $query);
+	return $registry->get('url')->link($path, $query, $ssl);
 }
 
-function store_url($store_id, $path = '', $query = null)
+function store_url($store_id, $path = '', $query = null, $ssl = false)
 {
 	global $registry;
-	return $registry->get('url')->store($store_id, $path, $query);
+	return $registry->get('url')->store($store_id, $path, $query, $ssl);
 }
 
 function theme_url($path = '', $query = null)

@@ -2,10 +2,15 @@
 
 abstract class Controller
 {
+	//Use this to override the $is_ajax for the controller / template (useful for discluding headers, footers, breadcrumbs, etc.)
+	public $is_ajax;
+
 	public $output;
 	public $error = array();
 
-	public function __construct() {}
+	public function __construct() {
+		$this->is_ajax = IS_AJAX;
+	}
 
 	public function __get($key)
 	{
@@ -27,7 +32,7 @@ abstract class Controller
 			$data['errors'] = array();
 
 			if ($this->error) {
-				if (!IS_AJAX) {
+				if (!$this->is_ajax) {
 					message('warning', $this->error);
 				}
 
@@ -43,6 +48,9 @@ abstract class Controller
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));
 			exit();
 		}
+
+		//Used for ajax override for templates
+		$is_ajax = $this->is_ajax;
 
 		extract($data);
 

@@ -19,67 +19,81 @@ class App_Controller_Customer extends Controller
 
 	public function index()
 	{
+		$this->login();
+	}
+
+	public function login($settings = array())
+	{
 		//Page Head
-		$this->document->setTitle(_l("Account Login"));
+		$this->document->setTitle(_l("Customer Sign In"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
-		breadcrumb(_l("Login"), site_url('customer/login'));
+		breadcrumb(_l("Sign In"), site_url('customer/login'));
 
-		//Input Data
-		$user_info = array();
-
-		if (IS_POST) {
-			$user_info = $_POST;
-		}
-
-		$defaults = array(
-			'username' => '',
-		);
-
-		$data = $user_info + $defaults;
-
-		//Template Data
-		$data['gp_login'] = $this->Model_Block_Login_Google->getConnectUrl();
-		$data['fb_login'] = $this->Model_Block_Login_Facebook->getConnectUrl();
-
-		//Action Buttons
-		$data['login']     = site_url('customer/login');
-		$data['register']  = site_url('customer/registration');
-		$data['forgotten'] = site_url('customer/forgotten');
-
-		//Resolve Redirect
-		if (!empty($_REQUEST['redirect'])) {
+		if (!empty($settings['redirect'])) {
+			$this->request->setRedirect($settings['redirect']);
+		} elseif (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
-		} elseif (!$this->request->hasRedirect()) {
+		} elseif (!$this->is_ajax && !$this->request->hasRedirect()) {
 			$this->request->setRedirect();
 		}
 
-		//Render
-		output($this->render('customer/login', $data));
-	}
+		//Block Settings
+		$defaults = array(
+			'username' => '',
+			'size'     => 'large',
+			'template' => 'customer/login',
+		);
 
-	public function login()
-	{
-		if (IS_POST) {
-			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
-				message('warning', _l("Login failed. Invalid username and / or password."));
+		$settings += $_POST + $defaults;
+
+		//Template Data
+		$login_settings = $this->config->loadGroup('login_settings');
+
+		$medias = array();
+
+		if (!empty($login_settings['status'])) {
+			if (!empty($login_settings['facebook']['active'])) {
+				$medias['facebook'] = array(
+					'name' => 'facebook',
+					'url'  => $this->Model_Block_Login_Facebook->getConnectUrl(),
+				);
+			}
+
+			if (!empty($login_settings['google_plus']['active'])) {
+				$medias['google-plus'] = array(
+					'name' => 'google-plus',
+					'url'  => $this->Model_Block_Login_Google->getConnectUrl(),
+				);
 			}
 		}
 
-		if (IS_AJAX) {
+		$settings['medias'] = $medias;
+
+		//Render
+		output($this->render($settings['template'], $settings));
+	}
+
+	public function authenticate()
+	{
+		if (!$this->customer->login(_post('username'), _post('password'))) {
+			message('error', $this->customer->getError());
+		}
+
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
 			output_json($this->message->fetch());
 		} else {
-			if (!IS_POST || $this->message->has('error')) {
-				return $this->index();
-
+			if ($this->message->has('error')) {
+				post_redirect('customer/login');
 			}
+
 			//Resolve Redirect
 			if ($this->request->hasRedirect()) {
 				$this->request->doRedirect();
+			} else {
+				redirect('account');
 			}
-
-			redirect('account');
 		}
 	}
 
@@ -106,11 +120,7 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l("Login"), site_url('customer/login'));
 		breadcrumb(_l("Register"), site_url('customer/registration'));
 
-		$registration_data = array();
-
-		if (IS_POST) {
-			$registration_data = $_POST;
-		}
+		$registration_data = $_POST;
 
 		$defaults = array(
 			'firstname'  => '',
@@ -163,17 +173,24 @@ class App_Controller_Customer extends Controller
 	{
 		if (!$this->customer->register($_POST)) {
 			message('error', $this->customer->getError());
-			return $this->registration();
 		}
 
 		$this->customer->login($_POST['email'], $_POST['password']);
 
-		//Redirect to requested page
-		if ($this->request->hasRedirect()) {
-			$this->request->doRedirect();
-		}
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
+			output_json($this->message->fetch());
+		} else {
+			if ($this->message->has('error')) {
+				post_redirect('customer/login');
+			}
 
-		redirect('customer/success');
+			//Redirect to requested page
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			}
+
+			redirect('customer/success');
+		}
 	}
 
 	public function success()
@@ -212,12 +229,12 @@ class App_Controller_Customer extends Controller
 	{
 		$code = $this->customer->generateCode();
 
-		if (!$this->customer->setResetCode($_POST['email'], $code)) {
+		if (!$this->customer->setResetCode(_post('email'), $code)) {
 			message('error', $this->customer->getError());
 		} else {
 
 			$email_data = array(
-				'email' => $_POST['email'],
+				'email' => _post('email'),
 				'reset' => site_url('customer/reset_form', 'code=' . $code),
 			);
 

@@ -3,10 +3,9 @@
 class Config extends Library
 {
 	private $data = array();
-	private $store_id;
 	private $translate = true;
 
-	public function __construct($store_id = null)
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -14,24 +13,25 @@ class Config extends Library
 		global $registry;
 		$registry->set('config', $this);
 
-		$this->data     = $this->getStore($store_id);
-		$this->store_id = $this->data['store_id'];
+		$store = $this->route->getStore();
+
+		$this->set('url', !empty($store['url']) ? $store['url'] : URL_SITE);
+		$this->set('ssl', !empty($store['ssl']) ? $store['ssl'] : HTTPS_SITE);
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
-		//Get the settings specific to the requested store
-		$settings = cache('setting.config.' . $this->store_id);
+		$settings = cache('setting.config');
 
 		if (!$settings) {
-			//TODO: Should use $this->config->loadGroup('config', $this->store_id);
-			$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE auto_load = 1 AND store_id IN (0, $this->store_id) ORDER BY store_id ASC", 'key');
+			//TODO: Should use $this->loadGroup('config');
+			$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE auto_load = 1", 'key');
 
 			foreach ($settings as &$setting) {
 				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
 			}
 			unset($setting);
 
-			cache('setting.config.' . $this->store_id, $settings);
+			cache('setting.config', $settings);
 		}
 
 		$this->data += $settings;
@@ -51,54 +51,6 @@ class Config extends Library
 		$this->data[$key] = $value;
 	}
 
-	public function getDefaultStore()
-	{
-		return $this->getStore(option('config_default_store'));
-	}
-
-	public function getStore($store_id = null)
-	{
-		if (is_null($store_id)) {
-			$store_id = option('store_id');
-		}
-
-		$stores = cache('store.all');
-
-		if (is_null($stores)) {
-			$stores = $this->Model_Setting_Store->getStores();
-
-			cache('store.all', $stores);
-		}
-
-		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
-
-		foreach ($stores as $s) {
-			if ($store_id) {
-				if ($store_id == $s['store_id']) {
-					$store = $s;
-					break;
-				}
-			} else {
-				if (strpos($url, trim($s['url'], '/ ')) === 0 || strpos($url, trim($s['ssl'], '/ ')) === 0) {
-					$store = $s;
-					break;
-				}
-			}
-		}
-
-		if (empty($store)) {
-			$store = array(
-				'store_id' => 0,
-				'name'     => "Default",
-				'url'      => HTTP_SITE,
-				'ssl'      => HTTPS_SITE,
-			);
-		}
-
-		return $store;
-	}
-
 	public function all()
 	{
 		return $this->data;
@@ -109,14 +61,10 @@ class Config extends Library
 		return isset($this->data[$key]);
 	}
 
-	public function load($group, $key, $store_id = null)
+	public function load($group, $key)
 	{
-		if (is_null($store_id)) {
-			$store_id = $this->store_id;
-		}
-
-		if (!isset($this->data[$key]) || ($store_id !== $this->store_id)) {
-			$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ") ORDER BY store_id ASC");
+		if (!isset($this->data[$key])) {
+			$setting = $this->queryRow("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "'");
 
 			if ($setting) {
 				$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -141,12 +89,8 @@ class Config extends Library
 		return $this->data[$key];
 	}
 
-	public function save($group, $key, $value, $store_id = null, $auto_load = true)
+	public function save($group, $key, $value, $auto_load = true)
 	{
-		if (is_null($store_id)) {
-			$store_id = 0;
-		}
-
 		$translate = 0;
 
 		//Handle Translations
@@ -182,14 +126,12 @@ class Config extends Library
 			'value'      => $entry_value,
 			'serialized' => $serialized,
 			'translate'  => $translate,
-			'store_id'   => $store_id,
 			'auto_load'  => $auto_load ? 1 : 0,
 		);
 
 		$where = array(
 			'group'    => $group,
 			'key'      => $key,
-			'store_id' => $store_id,
 		);
 
 		$this->delete('setting', $where);
@@ -198,7 +140,6 @@ class Config extends Library
 
 		if ($auto_load) {
 			clear_cache('setting');
-			clear_cache('store');
 			clear_cache('theme');
 		}
 
@@ -209,35 +150,27 @@ class Config extends Library
 		return $setting_id;
 	}
 
-	public function remove($group, $key, $store_id = null)
+	public function remove($group, $key)
 	{
 		$where = array(
 			'group' => $group,
 			'key'   => $key,
 		);
 
-		if ($store_id) {
-			$where['store_id'] = $store_id;
-		}
-
 		$this->delete('setting', $where);
 	}
 
-	public function loadGroup($group, $store_id = null)
+	public function loadGroup($group)
 	{
 		static $loaded_groups = array();
 
-		if (is_null($store_id)) {
-			$store_id = $this->store_id;
-		}
-
-		if (!isset($loaded_groups[$group][$store_id])) {
-			$data = cache("setting.$group.$store_id");
+		if (!isset($loaded_groups[$group])) {
+			$data = cache("setting.$group");
 
 			if (is_null($data)) {
 				$data = array();
 
-				$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->escape($group) . "' ORDER BY store_id ASC");
+				$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "'");
 
 				foreach ($settings as $setting) {
 					$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -258,27 +191,27 @@ class Config extends Library
 					$data[$setting['key']] = $value;
 				}
 
-				cache("setting.$group.$store_id", $data);
+				cache("setting.$group", $data);
 			}
 
 			$this->data += $data;
 
-			$loaded_groups[$group][$store_id] = $data;
+			$loaded_groups[$group] = $data;
 		}
 
-		return $loaded_groups[$group][$store_id];
+		return $loaded_groups[$group];
 	}
 
-	public function saveGroup($group, $data, $store_id = null, $auto_load = true)
+	public function saveGroup($group, $data, $auto_load = true)
 	{
 		foreach ($data as $key => $value) {
-			$this->save($group, $key, $value, $store_id, $auto_load);
+			$this->save($group, $key, $value, $auto_load);
 		}
 
 		return true;
 	}
 
-	public function deleteGroup($group, $store_id = null)
+	public function deleteGroup($group)
 	{
 		$values = array(
 			'group' => $group
@@ -286,12 +219,7 @@ class Config extends Library
 
 		$store_query = '';
 
-		if (!is_null($store_id)) {
-			$values['store_id'] = $store_id;
-			$store_query        = "AND store_id = '" . (int)$store_id . "'";
-		}
-
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->escape($group) . "' $store_query");
+		$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' $store_query");
 
 		foreach ($settings as $setting) {
 			if ($setting['translate']) {
@@ -308,40 +236,20 @@ class Config extends Library
 		return $this->delete('setting', $values);
 	}
 
-	public function addStore($data)
-	{
-		return $this->insert("store", $data);
-	}
-
-	public function editStore($store_id, $data)
-	{
-		$this->update("store", $store_id, $data);
-
-		clear_cache('store');
-		clear_cache('theme');
-		clear_cache('setting');
-	}
-
-	public function deleteStore($store_id)
-	{
-		$this->delete("store", $store_id);
-
-		clear_cache('store');
-		clear_cache('theme');
-		clear_cache('setting');
-	}
-
-	//TODO: Need to rethink this site config. At very least move store model into system directory.
 	public function runSiteConfig()
 	{
-		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
+		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store");
 
 		if (!$default_exists) {
-			$_ = array();
-			require_once(DIR_SYSTEM . 'site_config.php');
+			$store = array(
+				'name'   => 'Amplo MVC',
+				'prefix' => DB_PREFIX,
+				'url'    => HTTP_SITE,
+				'ssl'    => HTTPS_SITE,
+			);
 
 			$this->db->setAutoIncrement('store', 0);
-			$this->addStore($_['default_store']);
+			$this->Model_Setting_Store->save(null, $store);
 		}
 	}
 

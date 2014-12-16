@@ -1,12 +1,12 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("Synchronize"); ?></h1>
+			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> {{Synchronize}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
+				<a href="<?= $return; ?>" class="button">{{Return to Dev Console}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -14,7 +14,7 @@
 				<table class="form">
 					<tr>
 						<td>
-							<label><?= _l("Synchronize Site"); ?></label>
+							<label>{{Synchronize Site}}</label>
 							<?= build('select', array(
 								'name'   => 'domain',
 								'data'   => $data_sites,
@@ -25,7 +25,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?= _l("Sync Table"); ?></td>
+						<td>{{Sync Table}}</td>
 						<td><?= build('multiselect', array(
 								'name'   => 'tables',
 								'data'   => $data_tables,
@@ -34,11 +34,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="password"><?= _l("Password"); ?></label></td>
+						<td><label for="password">{{Password}}</label></td>
 						<td><input id="password" type="password" name="password" value=""/></td>
 					</tr>
 					<tr>
-						<td><input type="submit" class="button" name="sync_site" value="<?= _l("Sync"); ?>"/></td>
+						<td><input type="submit" class="button" name="sync_site" value="{{Sync}}"/></td>
 					</tr>
 				</table>
 			</form>
@@ -46,4 +46,4 @@
 	</div>
 </div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

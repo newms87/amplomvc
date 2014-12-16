@@ -1,7 +1,7 @@
 <div class="block-widget-carousel" class="box">
 
 	<? if (!empty($show_block_title)) { ?>
-		<div class="heading"><?= _l("AC Carousel"); ?></div>
+		<div class="heading">{{AC Carousel}}</div>
 	<? } ?>
 
 	<div class="content">

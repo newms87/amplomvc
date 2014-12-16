@@ -21,10 +21,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 		$subject = insertables($insertables, option('mail_registration_subject'));
 		$message = insertables($insertables, option('mail_registration_message'));
 
-		$store = $this->config->getStore();
-
 		$data['header'] = array(
-			'store' => $store,
 			'title' => _l("Customer Registration"),
 		);
 
@@ -34,8 +31,6 @@ class App_Controller_Mail_NewCustomer extends Controller
 		} else {
 			$data['login'] = site_url('customer/login');
 		}
-
-		$data['store'] = $store;
 
 		$mail = array(
 			'to'      => $customer['email'],

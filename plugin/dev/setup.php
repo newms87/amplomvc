@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Development Plugin
  *
@@ -15,17 +16,18 @@ class Plugin_Dev_Setup extends Plugin_Setup
 	public function install()
 	{
 		$link = array(
+			'group'        => 'admin',
 			'display_name' => "Development",
 			'name'         => 'development',
-			'href'         => 'admin/dev',
+			'path'         => 'admin/dev',
 			'sort_order'   => 15,
 		);
 
-		$this->extend->addNavigationLink('admin', $link);
+		$this->Model_Navigation->save(null, $link);
 	}
 
 	public function uninstall($keep_data = false)
 	{
-		$this->extend->removeNavigationLink('admin', 'development');
+		$this->Model_Navigation->removeGroupLink('admin', 'development');
 	}
 }

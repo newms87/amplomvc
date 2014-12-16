@@ -26,7 +26,7 @@
 					</td>
 				<? } ?>
 				<td class="center column_title">
-					<span><?= _l("Action"); ?></span>
+					<span>{{Action}}</span>
 				</td>
 				<? foreach ($columns as $slug => $column) { ?>
 					<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
@@ -41,7 +41,7 @@
 					</td>
 				<? } ?>
 				<td class="center column_title">
-					<span><?= _l("Action"); ?></span>
+					<span>{{Action}}</span>
 				</td>
 			</tr>
 		</thead>
@@ -51,11 +51,11 @@
 					<td></td>
 				<? } ?>
 				<td align="center">
-					<a class="button filter-button"><?= _l("Filter"); ?></a>
+					<a class="button filter-button">{{Filter}}</a>
 					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button"><?= _l("Reset"); ?></a>
+						<a class="reset reset-button">{{Reset}}</a>
 					<? } ?>
-					<a class="hide-filter"><?= _l("Hide"); ?></a>
+					<a class="hide-filter">{{Hide}}</a>
 				</td>
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
@@ -89,7 +89,7 @@
 											<? if (!is_null($column['filter_value']['low']) || !is_null($column['filter_value']['high'])) { ?>
 												<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
 											<? } else { ?>
-												<?= _l("Modify"); ?>
+												{{Modify}}
 											<? } ?>
 										</div>
 									</div>
@@ -152,7 +152,7 @@
 
 												<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
 											<? } else { ?>
-												<?= _l("Modify"); ?>
+												{{Modify}}
 											<? } ?>
 										</div>
 									</div>
@@ -180,7 +180,7 @@
 											<? if (!is_null($column['filter_value']['start']) || !is_null($column['filter_value']['end'])) { ?>
 												<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
 											<? } else { ?>
-												<?= _l("Modify"); ?>
+												{{Modify}}
 											<? } ?>
 										</div>
 									</div>
@@ -196,11 +196,11 @@
 					<? } ?>
 				<? } ?>
 				<td align="center">
-					<a class="button filter-button"><?= _l("Filter"); ?></a>
+					<a class="button filter-button">{{Filter}}</a>
 					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button"><?= _l("Reset"); ?></a>
+						<a class="reset reset-button">{{Reset}}</a>
 					<? } ?>
-					<a class="hide-filter"><?= _l("Hide"); ?></a>
+					<a class="hide-filter">{{Hide}}</a>
 				</td>
 			</tr>
 			<? if (!empty($rows)) { ?>
@@ -346,7 +346,7 @@
 			} else {
 				?>
 				<tr>
-					<td class="center" colspan="<?= count($columns) + 3; ?>"><?= _l("There are no items to list."); ?></td>
+					<td class="center" colspan="<?= count($columns) + 3; ?>">{{There are no items to list.}}</td>
 				</tr>
 			<? } ?>
 		</tbody>
@@ -400,8 +400,8 @@
 		<? } ?>
 
 		<div class="buttons clearfix">
-			<a class="cancel-edit button remove"><?= _l("X"); ?></a>
-			<a class="save-edit button save" data-loading="Saving..."><?= _l("Save"); ?></a>
+			<a class="cancel-edit button remove">{{X}}</a>
+			<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
 		</div>
 	</div>
 
@@ -438,7 +438,7 @@
 		if (high || low) {
 			$value.html(low + ' - ' + high);
 		} else {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html('{{Modify}}');
 		}
 	});
 
@@ -452,7 +452,7 @@
 		if (end || start) {
 			$value.html(start + ' - ' + end);
 		} else {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html('{{Modify}}');
 		}
 	});
 
@@ -462,7 +462,7 @@
 		var $selected = $zoom.find(':checked');
 
 		if ($selected.length == 0) {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html('{{Modify}}');
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {

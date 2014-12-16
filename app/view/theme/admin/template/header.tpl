@@ -34,7 +34,7 @@
 				<div class="div1">
 					<div class="div2">
 						<a href="<?= site_url('admin'); ?>">
-							<img src="<?= image(option('config_admin_logo')); ?>" title="<?= _l("Administration"); ?>"/>
+							<img src="<?= image(option('config_admin_logo')); ?>" title="{{Administration}}"/>
 						</a>
 					</div>
 

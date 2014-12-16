@@ -165,7 +165,7 @@ class App_Model_Page extends Model
 
 	public function getPageByName($name)
 	{
-		$themes = $this->theme->getStoreThemes();
+		$themes = $this->theme->getThemes();
 
 		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 

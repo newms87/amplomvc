@@ -52,7 +52,7 @@
 
 					</table>
 				<? } else { ?>
-					<p><?= _l("There is no data to show for this report"); ?></p>
+					<p>{{There is no data to show for this report}}</p>
 				<? } ?>
 				<br/>
 				<br/>

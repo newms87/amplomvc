@@ -2,7 +2,7 @@
 
 	<div class="form-sections">
 		<div class="form-section details-form">
-			<h3><?= _l("Let's get some details..."); ?></h3>
+			<h3>{{Let's get some details...}}</h3>
 
 			<ol class="questions">
 				<? foreach ($questions as $qname => $q) { ?>
@@ -29,34 +29,34 @@
 
 			<div class="submit-button">
 				<a class="button details-submit">
-					<?= _l("Submit"); ?>
+					{{Submit}}
 					<span class="sprite arrow"></span>
 				</a>
 			</div>
 		</div>
 
 		<div class="form-section contact-form">
-			<h3><?= _l("Last Step!"); ?></h3>
+			<h3>{{Last Step!}}</h3>
 
-			<p><?= _l("Enter your contact information below."); ?></p>
+			<p>{{Enter your contact information below.}}</p>
 
-			<input type="text" name="name" class="name" value="<?= $name; ?>" placeholder="<?= _l("*Name"); ?>" />
-			<input type="text" name="name" class="email" value="<?= $email; ?>" placeholder="<?= _l("*Email"); ?>" />
-			<input type="text" name="name" class="address" value="<?= $address; ?>" placeholder="<?= _l("Project Address"); ?>" />
-			<input type="text" name="name" class="zip-code" value="<?= $zip; ?>" placeholder="<?= _l("*Zip Code"); ?>" />
-			<input type="text" name="name" class="phone" value="<?= $phone; ?>" placeholder="<?= _l("(555) 555-5555"); ?>" />
-			<textarea name="details" placeholder="<?= _l("Let us know any other details about your project here..."); ?>"><?= $details; ?></textarea>
+			<input type="text" name="name" class="name" value="<?= $name; ?>" placeholder="{{*Name}}" />
+			<input type="text" name="name" class="email" value="<?= $email; ?>" placeholder="{{*Email}}" />
+			<input type="text" name="name" class="address" value="<?= $address; ?>" placeholder="{{Project Address}}" />
+			<input type="text" name="name" class="zip-code" value="<?= $zip; ?>" placeholder="{{*Zip Code}}" />
+			<input type="text" name="name" class="phone" value="<?= $phone; ?>" placeholder="{{(555) 555-5555}}" />
+			<textarea name="details" placeholder="{{Let us know any other details about your project here...}}"><?= $details; ?></textarea>
 
-			<div class="required-fields"><?= _l("*Denotes required field"); ?></div>
+			<div class="required-fields">{{*Denotes required field}}</div>
 
 			<label class="checkbox single">
 				<input type="checkbox" name="newsletter" value="1" <?= $newsletter ? 'checked' : ''; ?> />
-				<span class="label"><?= _l("Sign me up for the Metro Construction Newsletter");?></span>
+				<span class="label">{{Sign me up for the Metro Construction Newsletter}}</span>
 			</label>
 
 			<div class="submit-button">
 				<button>
-					<?= _l("Get My Quote"); ?>
+					{{Get My Quote}}
 					<span class="sprite arrow"></span>
 				</button>
 
@@ -65,7 +65,7 @@
 		</div>
 
 		<div class="form-section success-form">
-			<h3><?= _l("Success!"); ?></h3>
+			<h3>{{Success!}}</h3>
 
 			<p><?= _l("We'll be contacting you shortly with your FREE James Hardie siding quote. In the meantime, learn more about siding and the different options available on our <a href=\"http://pcnpro.com/homeowner-resources/\">blog</a>."); ?></p>
 
@@ -80,7 +80,7 @@
 
 			<div class="submit-button">
 				<a class="button" href="http://pcnpro.com/homeowner-resources/">
-					<?= _l("Explore Blog"); ?>
+					{{Explore Blog}}
 					<span class="sprite arrow"></span>
 				</a>
 			</div>

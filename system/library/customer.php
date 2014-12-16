@@ -38,6 +38,7 @@ class Customer extends Library
 			//AC_CUSTOMER_OVERRIDE allows for alternative login methods to function
 			if ($password !== AC_CUSTOMER_OVERRIDE) {
 				if (!password_verify($password, $customer['password'])) {
+					$this->error['password'] = _l("Login failed. Invalid username and / or password.");
 					return false;
 				}
 			}
@@ -46,6 +47,8 @@ class Customer extends Library
 
 			return true;
 		}
+
+		$this->error['username'] = _l("Login failed. Invalid username and / or password.");
 
 		return false;
 	}
@@ -113,8 +116,25 @@ class Customer extends Library
 
 	public function register($customer)
 	{
-		if (empty($customer['confirm']) || $customer['confirm'] !== $customer['password']) {
+		if (isset($customer['confirm']) && $customer['confirm'] !== $customer['password']) {
 			$this->error['confirm'] = _l("Password confirmation does not match password!");
+		}
+
+		if (isset($customer['name']) && !isset($customer['firstname'])) {
+			$name_parts = explode(' ', $customer['name'], 2);
+			$customer['firstname'] = $name_parts[0];
+
+			if (isset($name_parts[1])) {
+				$customer['lastname'] = $name_parts[1];
+			}
+		}
+
+		if (option('config_account_terms_page_id')) {
+			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
+
+			if ($page_info && !isset($customer['agree'])) {
+				$this->error['warning'] = _l("You must agree to the %s!", $page_info['title']);
+			}
 		}
 
 		return $this->add($customer);
@@ -129,14 +149,6 @@ class Customer extends Library
 
 	public function add($customer)
 	{
-		if (!validate('text', $customer['firstname'], 1, 32)) {
-			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-		}
-
-		if (!validate('text', $customer['lastname'], 1, 32)) {
-			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-		}
-
 		if (!validate('email', $customer['email'])) {
 			$this->error['email'] = $this->validation->getError();
 		} elseif ($this->customer->emailRegistered($customer['email'])) {
@@ -151,19 +163,10 @@ class Customer extends Library
 			$this->error['password'] = $this->validation->getError();
 		}
 
-		if (option('config_account_terms_page_id')) {
-			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
-
-			if ($page_info && !isset($customer['agree'])) {
-				$this->error['warning'] = _l("You must agree to the %s!", $page_info['title']);
-			}
-		}
-
 		if ($this->error) {
 			return false;
 		}
 
-		$customer['store_id']          = option('store_id');
 		$customer['customer_group_id'] = option('config_customer_group_id');
 		$customer['date_added']        = $this->date->now();
 		$customer['status']            = 1;

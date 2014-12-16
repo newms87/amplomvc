@@ -45,8 +45,8 @@ if (!$registry) {
 }
 
 $msg = array(
-	'error' => '',
-   'success' => '',
+	'error'   => '',
+	'success' => '',
 );
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -65,10 +65,10 @@ function amplo_mvc_setup_form($msg)
 		'db_username' => '',
 		'db_password' => '',
 		'db_prefix'   => 'am_',
-		'username' => '',
-		'email'    => '',
-		'password' => '',
-		'confirm'  => '',
+		'username'    => '',
+		'email'       => '',
+		'password'    => '',
+		'confirm'     => '',
 	);
 
 	$data = $_POST + $defaults;
@@ -113,7 +113,7 @@ function amplo_mvc_install()
 
 		if (!$db->multiquery($contents)) {
 			$error = $db->getError();
-		} elseif (!$db->setPrefix($_POST['db_prefix'])) {
+		} elseif (!$db->alterPrefix($_POST['db_prefix'])) {
 			$error = $db->getError();
 		}
 	}
@@ -145,14 +145,14 @@ function amplo_mvc_install()
 	$contents = file_get_contents($config_template);
 
 	$defines = array(
-		'SITE_BASE'          => SITE_BASE,
-		'DB_DRIVER'          => $_POST['db_driver'],
-		'DB_DATABASE'        => $_POST['db_name'],
-		'DB_HOSTNAME'        => $_POST['db_host'],
-		'DB_USERNAME'        => $_POST['db_username'],
-		'DB_PASSWORD'        => $_POST['db_password'],
-		'DB_PREFIX'          => $_POST['db_prefix'],
-		'PASSWORD_COST'      => $password_cost,
+		'SITE_BASE'     => SITE_BASE,
+		'DB_DRIVER'     => $_POST['db_driver'],
+		'DB_DATABASE'   => $_POST['db_name'],
+		'DB_HOSTNAME'   => $_POST['db_host'],
+		'DB_USERNAME'   => $_POST['db_username'],
+		'DB_PASSWORD'   => $_POST['db_password'],
+		'DB_PREFIX'     => $_POST['db_prefix'],
+		'PASSWORD_COST' => $password_cost,
 	);
 
 	foreach ($defines as $key => $value) {

@@ -37,6 +37,13 @@ class Plugin extends Library
 			$plugin_class = 'Plugin_' . _2camel($name) . '_Setup';
 
 			if (!class_exists($plugin_class)) {
+				$file = DIR_THEMES . $name . '/setup.php';
+
+				if (!is_file($file)) {
+					$this->error['name'] = _l("Plugin %s does not exist!", $name);
+				} else {
+					$this->error['class_name'] = _l("Plugin Class %s did not exist. Make sure the class name is correct in %s.", $plugin_class, $file);
+				}
 				return false;
 			}
 
@@ -148,7 +155,6 @@ class Plugin extends Library
 		$plugin = $this->loadPlugin($name);
 
 		if (!$plugin) {
-			$this->error['name'] = _l("Plugin %s does not exist!", $name);
 			return false;
 		}
 

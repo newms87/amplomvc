@@ -1,13 +1,13 @@
-<?= call('header'); ?>
+<?= $is_ajax ? '' : call('header'); ?>
 <?= area('left'); ?>
 <?= area('right'); ?>
 
 <section id="user-login" class="content">
 	<header class="login-top row">
 		<div class="wrap">
-			<?= IS_AJAX ? '' : breadcrumbs(); ?>
+			<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-			<h1><?= _l("Account Login"); ?></h1>
+			<h1>{{Account Login}}</h1>
 		</div>
 	</header>
 
@@ -22,4 +22,4 @@
 	<?= area('bottom'); ?>
 </section>
 
-<?= call('footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>

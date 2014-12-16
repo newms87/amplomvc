@@ -26,7 +26,7 @@ function _is_writable($dir, &$error = null)
 			}
 		}
 
-		 if (!strpos($dir, '://')) {
+		if (!strpos($dir, '://')) {
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
 			if (!is_file($t_file)) {
@@ -66,7 +66,11 @@ function _mod($file)
 	}
 
 	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {
-		$file = $live_registry[$file];
+		if (filemtime($live_registry[$file]) < filemtime($file)) {
+			unlink($live_registry[$file]);
+		} else {
+			$file = $live_registry[$file];
+		}
 	}
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.
@@ -74,19 +78,37 @@ function _mod($file)
 		$tpl = AC_TEMPLATE_CACHE . str_replace(DIR_SITE, '', $file);
 
 		if (!is_file($tpl) || filemtime($tpl) < filemtime($file)) {
-			_is_writable(dirname($tpl));
-
-			$contents = preg_replace("/<\\?([^p=])/", "<?php \$1", file_get_contents($file));
-
-			if (defined("AMPLO_REWRITE_SHORT_TAGS") && AMPLO_REWRITE_SHORT_TAGS) {
-				$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
+			if (_is_writable(dirname($tpl))) {
+				file_put_contents($tpl, render_template(file_get_contents($file)));
 			}
-
-			file_put_contents($tpl, $contents);
 		}
 
 		$file = $tpl;
 	}
 
 	return $file;
+}
+
+
+function render_template($contents)
+{
+	$contents = preg_replace("/<\\?([^p=])/", "<?php \$1", $contents);
+
+	if (defined("AMPLO_REWRITE_SHORT_TAGS") && AMPLO_REWRITE_SHORT_TAGS) {
+		$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
+	}
+
+	$search = array(
+		'/{{/',
+		'/}}/',
+	);
+
+	$replace = array(
+		'<?= _l("',
+		'"); ?>',
+	);
+
+	$contents = preg_replace($search, $replace, $contents, -1, $count);
+
+	return $contents;
 }

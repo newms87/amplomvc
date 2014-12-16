@@ -18,7 +18,7 @@ class App_Controller_Admin_Header extends Controller
 		);
 
 		//Add Styles
-		$style = $this->theme->getStoreThemeStyle(option('store_id'), $settings['theme']);
+		$style = $this->theme->getThemeStyle($settings['theme']);
 
 		if ($style) {
 			$this->document->addStyle($style);
@@ -65,7 +65,7 @@ class App_Controller_Admin_Header extends Controller
 
 			$stores = $this->Model_Setting_Store->getStores();
 
-			if (user_can('r', 'admin/setting/store')) {
+			if (user_can('r', 'admin/settings/store')) {
 				//Store Front Settings
 
 				$link_stores = array(
@@ -81,7 +81,7 @@ class App_Controller_Admin_Header extends Controller
 					$link_store_setting = array(
 						'name'         => 'system_settings_stores_' . slug($store['name']),
 						'display_name' => $store['name'],
-						'href'         => site_url('admin/setting/store/form', 'store_id=' . $store['store_id']),
+						'href'         => store_url($store['store_id'], 'admin/settings/store/form'),
 						'parent'       => 'system_settings_stores',
 						'sort_order'   => $index,
 					);
@@ -128,7 +128,7 @@ class App_Controller_Admin_Header extends Controller
 				$link_store = array(
 					'name'         => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
-					'href'         => $this->url->store($store['store_id'], '', ''),
+					'href'         => store_url($store['store_id']),
 					'parent'       => 'stores',
 					'target'       => '_blank',
 				);

@@ -31,6 +31,10 @@ final class Registry
 			return $this;
 		}
 
+		if (class_exists($class)) {
+			return $return_instance ? new $class() : true;
+		}
+
 		//Check for file in library
 		$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
 
@@ -52,6 +56,11 @@ final class Registry
 			$class = str_replace('_', '', $class);
 		}
 
+		//Load from Resources
+		if (!is_file($file) && is_file(DIR_RESOURCES . $class . '.php')) {
+			$file = DIR_RESOURCES . $class . '.php';
+		}
+
 		//Check for relative path from root
 		if (is_file($file)) {
 			$acmod = _mod($file);
@@ -66,13 +75,6 @@ final class Registry
 			if ($return_instance) {
 				return new $class();
 			}
-
-			return true;
-		}
-
-		//Load from Resources
-		if (is_file(DIR_RESOURCES . $class . '.php')) {
-			require_once(DIR_RESOURCES . $class . '.php');
 
 			return true;
 		}

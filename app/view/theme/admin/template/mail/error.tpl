@@ -1,13 +1,13 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Failed Email Messages"); ?></h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Failed Email Messages}}</h1>
 
 			<div class="buttons">
-				<a onclick="$('#mail_form').submit();" class="button"><?= _l("Send"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a onclick="$('#mail_form').submit();" class="button">{{Send}}</a>
+				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="content failed_messages">
@@ -17,22 +17,22 @@
 						<div class="message_preview">
 							<form action="<?= $resend_message; ?>" method="post" enctype="multipart/form-data">
 								<div class="from">
-									<span class="label"><?= _l("From: "); ?></span>
+									<span class="label">{{From: }}</span>
 									<span class="value"><?= $msg['from']; ?></span>
 								</div>
 								<div class="to">
-									<span class="label"><?= _l("To: "); ?></span>
+									<span class="label">{{To: }}</span>
 									<span class="value"><?= $msg['to']; ?></span>
 								</div>
 								<? if ($msg['cc']) { ?>
 									<div class="cc">
-										<span class="label"><?= _l("CC: "); ?></span>
+										<span class="label">{{CC: }}</span>
 										<span class="value"><?= $msg['cc']; ?></span>
 									</div>
 								<? } ?>
 								<? if ($msg['bcc']) { ?>
 									<div class="bcc">
-										<span class="label"><?= _l("BCC: "); ?></span>
+										<span class="label">{{BCC: }}</span>
 										<span class="value"><?= $msg['bcc']; ?></span>
 									</div>
 								<? } ?>
@@ -52,9 +52,9 @@
 									<input type="hidden" name="_attachments" value="<?= implode(',', $msg['attachments']); ?>"/>
 								<? } ?>
 								<div class="action_buttons">
-									<input type="submit" class="button" name="resend_message" value="<?= _l("Resend"); ?>"/>
-									<a class="edit_message"><?= _l("View / Edit Message"); ?></a>
-									<a class="delete_message"><?= _l("Delete"); ?></a>
+									<input type="submit" class="button" name="resend_message" value="{{Resend}}"/>
+									<a class="edit_message">{{View / Edit Message}}</a>
+									<a class="delete_message">{{Delete}}</a>
 								</div>
 							</form>
 						</div>
@@ -66,23 +66,23 @@
 					<table class="form">
 						<tr>
 							<td class="mail_info">
-								<label for="mail_sender"><?= _l("Send From Display Name:"); ?></label>
+								<label for="mail_sender">{{Send From Display Name:}}</label>
 								<input id="mail_sender" type="text" name="sender" value="" size="40"/>
-								<label for="mail_from"><span class="required"></span><?= _l("From:"); ?></label>
+								<label for="mail_from"><span class="required"></span>{{From:}}</label>
 								<input id="mail_from" type="text" name="from" value="" size="100"/>
-								<label for="mail_to" class="required"><?= _l("To:"); ?><span class="help"><?= _l("(comma separated list)"); ?></span></label>
+								<label for="mail_to" class="required">{{To:}}<span class="help">{{(comma separated list)}}</span></label>
 								<input id="mail_to" type="text" name="to" value="" size="100"/>
-								<label for="mail_cc"><?= _l("Copy To:"); ?><span class="help"><?= _l("(comma separated list)"); ?></span></label>
+								<label for="mail_cc">{{Copy To:}}<span class="help">{{(comma separated list)}}</span></label>
 								<input id="mail_cc" type="text" name="cc" value="" size="100"/>
-								<label for="mail_bcc"><?= _l("Blind Copy To:"); ?><span class="help"><?= _l("(comma separated list)"); ?></span></label>
+								<label for="mail_bcc">{{Blind Copy To:}}<span class="help">{{(comma separated list)}}</span></label>
 								<input id="mail_bcc" type="text" name="bcc" value="" size="100"/>
-								<label for="mail_subject"><span class="required"></span><?= _l("Subject:"); ?></label>
+								<label for="mail_subject"><span class="required"></span>{{Subject:}}</label>
 								<input id="mail_subject" type="text" name="subject" value="" size="100"/>
-								<label for="mail_message"><span class="required"></span><?= _l("Message:"); ?></label>
+								<label for="mail_message"><span class="required"></span>{{Message:}}</label>
 								<textarea id="mail_message" rows="15" cols="120" name="message"></textarea>
 								<label for="allow_html"><input type="checkbox" checked="checked" name="allow_html"
-										id="allow_html"/><?= _l("Allow HTML in message?"); ?></label>
-								<label for="mail_attachment"><?= _l("Attachments:"); ?></label>
+										id="allow_html"/>{{Allow HTML in message?}}</label>
+								<label for="mail_attachment">{{Attachments:}}</label>
 								<input id="mail_attachment" type="file" multiple name="attachment[]" value="" size="100"/>
 							</td>
 						</tr>
@@ -125,7 +125,7 @@
 		mail_fail_id = msg_preview.find('input[name=mail_fail_id]').val();
 
 		$.post('<?= $delete_message; ?>', {mail_fail_id: mail_fail_id}, function () {
-			msg_preview.parent().ac_msg("success", "<?= _l("Message deleted."); ?>");
+			msg_preview.parent().ac_msg("success", "{{Message deleted.}}");
 			msg_preview.remove();
 		});
 	});
@@ -148,4 +148,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

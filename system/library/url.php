@@ -14,6 +14,10 @@ class Url extends Library
 
 		$this->url = option('url');
 
+		if (!$this->url) {
+			$this->url = URL_SITE;
+		}
+
 		if (option('config_use_ssl')) {
 			$this->ssl = option('ssl');
 
@@ -110,37 +114,26 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function store($store_id, $path = '', $query = '')
+	public function store($store_id, $path = '', $query = '', $ssl = false)
 	{
-		if (!$store_id) {
-			$store_id = option('config_default_store');
+		static $stores;
+
+		if (!$stores) {
+			$stores = $this->queryRows("SELECT * FROM " . DB_PREFIX . "store", 'store_id');
 		}
 
-		return $this->findAlias($path, $query, $store_id);
+		if (!empty($stores[$store_id])) {
+			$url = $ssl ? $stores[$store_id]['ssl'] : $stores[$store_id]['url'];
+		} else {
+			$url = URL_SITE;
+		}
+
+		return $url . $this->findAlias($path, $query, $store_id);
 	}
 
-	public function link($path, $query = '')
+	public function link($path, $query = '', $ssl = false)
 	{
-		return $this->findAlias($path, $query);
-	}
-
-	public function store_base($store_id, $ssl = false)
-	{
-		static $stores = array();
-
-		if (!$store_id || $store_id == option('store_id')) {
-			return $ssl ? option('ssl') : option('url');
-		}
-
-		if (!isset($stores[$store_id])) {
-			$stores[$store_id] = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$store_id);
-		}
-
-		if ($stores[$store_id]) {
-			return $ssl ? $stores[$store_id]['ssl'] : $stores[$store_id]['url'];
-		}
-
-		return URL_SITE;
+		return ($ssl ? $this->ssl : $this->url) . $this->findAlias($path, $query);
 	}
 
 	public function site($uri = '', $query = '', $base_site = false)
@@ -203,7 +196,7 @@ class Url extends Library
 
 	private function loadSeoUrl()
 	{
-		$url_alias = $this->lookupAlias($this->route->getPath(), $this->getQuery(), option('store_id'));
+		$url_alias = $this->lookupAlias($this->route->getPath(), $this->getQuery());
 
 		if ($url_alias) {
 			//Get Original Query without URL Alias query
@@ -216,13 +209,13 @@ class Url extends Library
 			$this->route->setPath($url_alias['path']);
 
 			//Build the New URL
-			$this->seo_url = $this->store_base(option('store_id')) . $url_alias['alias'] . ($query ? '?' . $query : '');
+			$this->seo_url = $this->site_url . $url_alias['alias'] . ($query ? '?' . $query : '');
 		} else {
 			$this->seo_url = $this->here();
 		}
 	}
 
-	private function findAlias($path = '', $query = '', $store_id = false)
+	private function findAlias($path = '', $query = '')
 	{
 		if (is_array($query)) {
 			$query_str = http_build_query($query);
@@ -245,7 +238,7 @@ class Url extends Library
 			return $path;
 		}
 
-		$url_alias = $this->lookupAlias($path, $query_str, $store_id);
+		$url_alias = $this->lookupAlias($path, $query_str);
 
 		//Get Original Query without URL Alias query
 		if ($url_alias) {
@@ -256,10 +249,10 @@ class Url extends Library
 		}
 
 		//Build the New URL
-		return $this->store_base($store_id) . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
+		return $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
 	}
 
-	public function lookupAlias($path, $query, $store_id = false)
+	public function lookupAlias($path, $query)
 	{
 		if (isset($this->aliases[$path])) {
 			return $this->aliases[$path];
@@ -267,10 +260,6 @@ class Url extends Library
 
 		//Lookup URL Alias
 		foreach ($this->aliases as $alias) {
-			if ($store_id && $store_id != $alias['store_id']) {
-				continue;
-			}
-
 			if (preg_match("|^" . $alias['path'] . "|", $path)) {
 				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|", $query)) {
 					return $alias;
@@ -279,27 +268,20 @@ class Url extends Library
 		}
 	}
 
-	public function getAlias($path, $query = '', $store_id = 0)
+	public function getAlias($path, $query = '')
 	{
-		$sql_query =
-			"SELECT alias FROM " . DB_PREFIX . "url_alias" .
-			" WHERE `path` = '" . $this->escape($path) . "'" .
-			" AND `query` = '" . $this->escape($query) . "'" .
-			" AND store_id IN (0, '" . (int)$store_id . "')";
-
-		return $this->queryVar($sql_query);
+		return $this->queryVar("SELECT alias FROM " . $this->prefix . "url_alias WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
 	}
 
-	public function setAlias($alias, $path, $query = '', $store_id = 0)
+	public function setAlias($alias, $path, $query = '')
 	{
-		$this->removeAlias($path, $query, $store_id);
+		$this->removeAlias($path, $query);
 
 		if ($alias) {
 			$url_alias = array(
 				'alias'    => $alias,
 				'path'     => $path,
 				'query'    => $query,
-				'store_id' => $store_id,
 				'status'   => 1,
 			);
 
@@ -309,13 +291,12 @@ class Url extends Library
 		return true;
 	}
 
-	public function removeAlias($path, $query = '', $store_id = 0, $alias = '')
+	public function removeAlias($path, $query = '', $alias = '')
 	{
 		$sql_query =
 			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
 			" WHERE `path` = '" . $this->escape($path) . "'" .
-			" AND `query` = '" . $this->escape($query) . "'" .
-			" AND store_id = '" . (int)$store_id . "'";
+			" AND `query` = '" . $this->escape($query) . "'";
 
 		if ($alias) {
 			$sql_query .= " AND alias = '" . $this->escape($alias) . "'";

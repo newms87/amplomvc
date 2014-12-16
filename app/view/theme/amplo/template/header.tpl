@@ -55,10 +55,13 @@
 			_gaq.push(['_setAccount', '<?= option('config_google_analytics'); ?>']);
 			_gaq.push(['_trackPageview']);
 
-			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			(function () {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
 			})();
 		</script>
 	<? } ?>
@@ -118,16 +121,16 @@
 			<div id="links-account" class="links">
 				<? if (!is_logged()) { ?>
 					<div class="login-buttons">
-						<a class="button scale login" href="<?= site_url('customer/login'); ?>"><?= _l("Log In"); ?></a>
-						<a class="button scale register" href="<?= site_url('customer/registration'); ?>"><?= _l("Sign Up"); ?></a>
+						<a class="button scale login" href="<?= site_url('customer/login'); ?>">{{Log In}}</a>
+						<a class="button scale register" href="<?= site_url('customer/registration'); ?>">{{Sign Up}}</a>
 					</div>
 					<div class="login-content">
-						<div class="login-form"><?= block('account/login'); ?></div>
+						<div class="login-form"><?= call('customer/login', array('template' => 'customer/login_header'), true); ?></div>
 					</div>
 				<? } else { ?>
 					<div class="login-buttons">
 						<a class="button scale my-account" href="<?= site_url('account'); ?>"><?= _l("%s's Account", $customer['firstname']); ?></a>
-						<a class="button scale logout" href="<?= site_url('customer/logout'); ?>"><?= _l("Log Out"); ?></a>
+						<a class="button scale logout" href="<?= site_url('customer/logout'); ?>">{{Log Out}}</a>
 					</div>
 				<? } ?>
 

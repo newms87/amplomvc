@@ -11,7 +11,7 @@
 		<?= build('ac-radio', $build); ?>
 
 		<? if ($add_address) { ?>
-			<a class="add-address" href="<?= site_url("account/address/form"); ?>"><?= _l("Add Address"); ?></a>
+			<a class="add-address" href="<?= site_url("account/address/form"); ?>">{{Add Address}}</a>
 		<? } ?>
 	</div>
 </div>

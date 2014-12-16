@@ -14,7 +14,7 @@ class App_Controller_Header extends Controller
 		$settings['theme']  = option('config_theme');
 
 		//Add Styles
-		$style = $this->theme->getStoreThemeStyle();
+		$style = $this->theme->getThemeStyle();
 
 		if ($style) {
 			$this->document->addStyle($style);

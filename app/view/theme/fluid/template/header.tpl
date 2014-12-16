@@ -118,8 +118,8 @@
 			<div id="links-account" class="links">
 				<? if (!is_logged()) { ?>
 					<div class="login-buttons">
-						<a class="button scale login" href="<?= site_url('customer/login'); ?>"><?= _l("Log In"); ?></a>
-						<a class="button scale register" href="<?= site_url('customer/registration'); ?>"><?= _l("Sign Up"); ?></a>
+						<a class="button scale login" href="<?= site_url('customer/login'); ?>">{{Log In}}</a>
+						<a class="button scale register" href="<?= site_url('customer/registration'); ?>">{{Sign Up}}</a>
 					</div>
 					<div class="login-content">
 						<div class="login-form"><?= block('account/login'); ?></div>
@@ -127,7 +127,7 @@
 				<? } else { ?>
 					<div class="login-buttons">
 						<a class="button scale my-account" href="<?= site_url('account'); ?>"><?= _l("%s's Account", $customer['firstname']); ?></a>
-						<a class="button scale logout" href="<?= site_url('customer/logout'); ?>"><?= _l("Log Out"); ?></a>
+						<a class="button scale logout" href="<?= site_url('customer/logout'); ?>">{{Log Out}}</a>
 					</div>
 				<? } ?>
 
