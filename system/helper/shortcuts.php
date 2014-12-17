@@ -499,9 +499,15 @@ function _session($key, $default = null)
 function option($option, $default = null)
 {
 	global $registry;
-	$value = $registry->get('config')->get($option);
+	static $options;
 
-	return is_null($value) ? $default : $value;
+	if (!$options) {
+		$options = $registry->get('config')->all();
+	} elseif (!isset($options[$option])) {
+		$options[$option] = $registry->get('config')->get($option);
+	}
+
+	return isset($options[$option]) ? $options[$option] : $default;
 }
 
 function set_option($option, $value)

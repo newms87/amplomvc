@@ -1,13 +1,11 @@
 <?php
 
 /**
- * Class App_Controller_Admin_Setting_Setting
- *
  * Title: General Settings
  * Icon: admin.png
  *
  */
-class App_Controller_Admin_Settings_Setting extends Controller
+class App_Controller_Admin_Settings_General extends Controller
 {
 	public function index()
 	{
@@ -27,6 +25,43 @@ class App_Controller_Admin_Settings_Setting extends Controller
 		}
 
 		$defaults = array(
+
+			'config_owner'                 => '',
+			'config_address'               => '',
+			'config_email'                 => '',
+			'config_telephone'             => '',
+			'config_fax'                   => '',
+			'config_title'                 => '',
+			'config_meta_description'      => '',
+			'config_default_layout_id'     => '',
+			'config_theme'                 => '',
+			'config_country_id'            => option('config_country_id'),
+			'config_zone_id'               => option('config_zone_id'),
+			'config_language'              => option('config_language'),
+			'config_currency'              => option('config_currency'),
+			'config_catalog_limit'         => '12',
+			'config_customer_group_id'     => '',
+			'config_customer_approval'     => '',
+			'config_account_terms_page_id' => '',
+			'config_logo'                  => '',
+			'config_logo_srcset'           => 1,
+			'config_icon'                  => null,
+			'config_logo_width'            => 0,
+			'config_logo_height'           => 0,
+			'config_email_logo_width'      => 300,
+			'config_email_logo_height'     => 0,
+			'config_image_thumb_width'     => 228,
+			'config_image_thumb_height'    => 228,
+			'config_image_popup_width'     => 500,
+			'config_image_popup_height'    => 500,
+			'config_use_ssl'               => '',
+			'config_contact_page_id'       => '',
+		);
+
+		$defaults = array(
+			'site_name'                         => 'Amplo MVC',
+			'url'                          => 'http://' . DOMAIN . SITE_BASE,
+			'ssl'                          => 'https://' . DOMAIN . SITE_BASE,
 			'config_name'                             => 'AmploCart',
 			'config_owner'                            => 'Daniel Newman',
 			'config_address'                          => '',

@@ -9,7 +9,7 @@
 <div id="container">
 	<div id="header">
 		<div id="logo">
-			<img src="<?= URL_SITE . 'image/amplo-vlogo.png'; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
+			<img src="<?= URL_SITE . 'app/view/theme/amplo/image/amplo-vlogo.png'; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
 			<div id="slogan"><?= _l("This is the Amplo MVC Installation page. We'll get you setup quick!"); ?></div>
 		</div>
