@@ -36,6 +36,9 @@ if (strpos(DIR_SITE, $uri_path) === false) {
 require_once(DIR_SITE . 'system/_mod.php');
 require_once(DIR_SITE . 'system/startup.php');
 
+//
+define('DB_PREFIX', _post('db_prefix'));
+
 //Hack to allow DB to attempt to clear cache during install
 global $registry;
 
@@ -99,8 +102,6 @@ function amplo_mvc_install()
 
 		return _l("The password and confirmation do not match!");
 	}
-
-	define('DB_PREFIX', $_POST['db_prefix']);
 
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
