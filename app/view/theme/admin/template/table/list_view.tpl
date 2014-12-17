@@ -106,8 +106,9 @@
 										$column['build_data'] = array('' => '') + $column['build_data'];
 									}
 
-									echo build('select', array(
-										'name'   => "filter[$slug]",
+									echo build(array(
+										'type' => 'select',
+										'name'  => "filter[$slug]",
 										'data'   => $column['build_data'],
 										'select' => $column['filter_value'],
 										'key'    => $build_key,
@@ -127,8 +128,9 @@
 									<div class="zoom_hover multiselect">
 										<div class="input">
 											<?=
-											build('multiselect', array(
-												'name'   => "filter[$slug]",
+											build(array(
+												'type' => 'multiselect',
+												'name'  => "filter[$slug]",
 												'data'   => $column['build_data'],
 												'select' => $column['filter_value'],
 												'key'    => $build_key,

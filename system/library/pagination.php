@@ -68,7 +68,7 @@ class Pagination extends Library
 		if ($this->limit) {
 			$this->limit = (int)$this->limit ? (int)$this->limit : 10;
 		} else {
-			$this->limit = isset($_GET['limit']) ? (int)$_GET['limit'] : option('config_admin_limit');
+			$this->limit = isset($_GET['limit']) ? (int)$_GET['limit'] : option('admin_list_limit');
 			$this->page_url .= 'limit=' . $this->limit . '&';
 		}
 

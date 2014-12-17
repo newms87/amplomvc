@@ -2,8 +2,9 @@
 	<tr>
 		<td>
 			{{Attribute Filter:}}<br/>
-			<?= build('select', array(
-				'name'   => 'attribute_group_select',
+			<?= build(array(
+				'type' => 'select',
+				'name'  => 'attribute_group_select',
 				'data'   => $data_attribute_groups,
 				'key'    => 'attribute_group_id',
 				'value'  => 'name',

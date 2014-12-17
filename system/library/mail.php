@@ -210,12 +210,12 @@ class Mail extends Library
 		}
 
 		if (!$this->from) {
-			$from = option('config_email');
+			$from = option('site_email');
 			$this->from = $from ? $from : 'info@' . DOMAIN;
 		}
 
 		if (!$this->sender) {
-			$sender = option('config_name');
+			$sender = option('site_name');
 			$this->sender = $sender ? $sender : $this->from;
 		}
 
@@ -235,8 +235,8 @@ class Mail extends Library
 			$this->trigger_error($msg);
 
 			if (isset($this->config)) {
-				$this->to      = option('config_email_error', 'error@' . DOMAIN);
-				$this->from    = option('config_email_error', 'error@' . DOMAIN);
+				$this->to      = option('site_email_error', 'error@' . DOMAIN);
+				$this->from    = option('site_email_error', 'error@' . DOMAIN);
 				$this->cc      = '';
 				$this->bcc     = '';
 				$this->subject = "There was a problem sending out the email!";

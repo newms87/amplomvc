@@ -23,8 +23,9 @@
 					<tr>
 						<td>{{Status:}}</td>
 						<td><?=
-							build('select', array(
-								'name'   => 'status',
+							build(array(
+								'type' => 'select',
+								'name'  => 'status',
 								'data'   => array(
 									0 => _l("Disabled"),
 									1 => _l("Enabled"),
@@ -81,8 +82,9 @@
 															<div class="link_entry_condition">
 																<label for="link_condition_<?= $nav_id; ?>">{{Display When:}}</label>
 																<?=
-																build('select', array(
-																	'name'   => "links[$nav_id][condition]",
+																build(array(
+																	'type' => 'select',
+																	'name'  => "links[$nav_id][condition]",
 																	'data'   => $data_conditions,
 																	'select' => $link['condition'],
 																	'#id'    => "link_condition_$nav_id",
@@ -91,8 +93,9 @@
 															<div class="link_entry_status">
 																<label for="link_status_<?= $nav_id; ?>">{{Status:}}</label>
 																<?=
-																build('select', array(
-																	'name'   => "links[$nav_id][status]",
+																build(array(
+																	'type' => 'select',
+																	'name'  => "links[$nav_id][status]",
 																	'data'   => $data_statuses,
 																	'select' => $link['status'],
 																	'#id'    => "link_status_$nav_id",

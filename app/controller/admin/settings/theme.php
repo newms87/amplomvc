@@ -60,7 +60,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 			message('success', _l("You have successfully updated the Theme Settings!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settingss');
@@ -75,7 +75,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 			message('error', $this->theme->getError());
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settings/theme');

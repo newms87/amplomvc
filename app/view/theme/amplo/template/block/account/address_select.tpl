@@ -1,14 +1,13 @@
 <div class="block-address-select form">
 	<div class="address-list ">
-		<? $build = array(
+		<?= build(array(
+			'type'   => 'radio',
 			'name'   => 'address_id',
 			'data'   => format_all('address', $addresses),
 			'select' => $address_id,
 			'key'    => 'address_id',
 			'value'  => 'formatted',
-		); ?>
-
-		<?= build('radio', $build); ?>
+		)); ?>
 
 		<? if ($add_address) { ?>
 			<a class="add-address" href="<?= site_url("account/address/form"); ?>">{{Add Address}}</a>

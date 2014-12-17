@@ -77,7 +77,7 @@ class App_Controller_Admin_View extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -133,7 +133,7 @@ class App_Controller_Admin_View extends Controller
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			$this->form();
@@ -150,7 +150,7 @@ class App_Controller_Admin_View extends Controller
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/view');
@@ -222,7 +222,7 @@ class App_Controller_Admin_View extends Controller
 			message('success', _l("The Views have been updated!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/view');

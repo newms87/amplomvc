@@ -61,7 +61,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settings/update');
@@ -78,7 +78,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 			message('notify', _l("You have deactivated automatic system updates!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settings/update');

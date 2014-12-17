@@ -100,8 +100,8 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$geo_zone_total = $this->Model_Localisation_GeoZone->getTotalGeoZones();

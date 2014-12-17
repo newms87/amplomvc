@@ -13,7 +13,7 @@ class App_Controller_Page extends Controller
 			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
-		if (IS_AJAX || isset($_GET['content'])) {
+		if ($this->is_ajax || isset($_GET['content'])) {
 			return $this->content($page);
 		}
 

@@ -94,7 +94,7 @@ class App_Controller_Admin_Block extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 

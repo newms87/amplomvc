@@ -9,8 +9,9 @@
 					<li class="question">
 						<label><?= $q['question']; ?></label>
 						<div class="mobile">
-							<?= build('select', array(
-								'name'   => "answers[$qname]",
+							<?= build(array(
+								'type' => 'select',
+								'name'  => "answers[$qname]",
 								'data'   => $q['answer'],
 								'select' => $q['default'],
 							)); ?>
@@ -60,7 +61,7 @@
 					<span class="sprite arrow"></span>
 				</button>
 
-				<div class="call-us"><?= _l("Or call %s to speak to a representative", option('config_telephone')); ?></div>
+				<div class="call-us"><?= _l("Or call %s to speak to a representative", option('site_phone')); ?></div>
 			</div>
 		</div>
 

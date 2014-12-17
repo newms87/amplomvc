@@ -12,7 +12,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
 
 		//Settings Items
-		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
+		$data['widgets'] = $this->Model_Settings->getWidgets();
 
 		//Action Buttons
 		$data['insert'] = site_url('admin/settings/store/form');
@@ -63,8 +63,8 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
 		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
 
-		$image_width  = option('config_image_admin_thumb_width');
-		$image_height = option('config_image_admin_thumb_height');
+		$image_width  = option('admin_thumb_width');
+		$image_height = option('admin_thumb_height');
 
 		foreach ($stores as &$store) {
 			$store['actions'] = array(
@@ -98,7 +98,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -133,10 +133,10 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'name'                         => 'Store ' . $store_id,
 			'url'                          => '',
 			'ssl'                          => '',
-			'config_owner'                 => '',
-			'config_address'               => '',
-			'config_email'                 => '',
-			'config_telephone'             => '',
+			'site_owner'                 => '',
+			'site_address'               => '',
+			'site_email'                 => '',
+			'site_phone'             => '',
 			'config_fax'                   => '',
 			'config_title'                 => '',
 			'config_meta_description'      => '',
@@ -146,7 +146,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'config_zone_id'               => option('config_zone_id'),
 			'config_language'              => option('config_language'),
 			'config_currency'              => option('config_currency'),
-			'config_catalog_limit'         => '12',
+			'site_list_limit'         => '12',
 			'config_customer_group_id'     => '',
 			'config_customer_approval'     => '',
 			'config_account_terms_page_id' => '',
@@ -155,8 +155,8 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'config_icon'                  => null,
 			'config_logo_width'            => 0,
 			'config_logo_height'           => 0,
-			'config_email_logo_width'      => 300,
-			'config_email_logo_height'     => 0,
+			'site_email_logo_width'      => 300,
+			'site_email_logo_height'     => 0,
 			'config_image_thumb_width'     => 228,
 			'config_image_thumb_height'    => 228,
 			'config_image_popup_width'     => 500,
@@ -242,7 +242,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 			message('error', $this->Model_Setting_Store->getError());
 		}
 
-		if ($this->is_ajax) {
+		if ($this->$this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/store/form', 'store_id=' . _get('store_id'));
@@ -261,50 +261,10 @@ class App_Controller_Admin_Settings_Store extends Controller
 			message('notify', _l("User was deleted!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settings/store');
-		}
-	}
-
-	public function generate_icons()
-	{
-		if (!empty($_POST['icon'])) {
-			$sizes = array(
-				array(
-					152,
-					152
-				),
-				array(
-					120,
-					120
-				),
-				array(
-					76,
-					76
-				),
-			);
-
-			$icon_files = array();
-
-			foreach ($sizes as $size) {
-				$url = image_save($_POST['icon'], null, $size[0], $size[1]);
-
-				$icon_files[$size[0] . 'x' . $size[1]] = array(
-					'url'     => $url,
-					'relpath' => str_replace(URL_IMAGE, '', $url),
-				);
-			}
-
-			$url = $this->image->ico($_POST['icon']);
-
-			$icon_files['ico'] = array(
-				'relpath' => str_replace(URL_IMAGE, '', $url),
-				'url'     => $url,
-			);
-
-			output(json_encode($icon_files));
 		}
 	}
 }

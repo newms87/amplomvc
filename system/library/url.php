@@ -12,14 +12,14 @@ class Url extends Library
 	{
 		parent::__construct();
 
-		$this->url = option('url');
+		$this->url = option('site_url');
 
 		if (!$this->url) {
 			$this->url = URL_SITE;
 		}
 
 		if (option('config_use_ssl')) {
-			$this->ssl = option('ssl');
+			$this->ssl = option('site_ssl');
 
 			//TODO - finish secure pages
 			$this->secure_pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "secure_page");

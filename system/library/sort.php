@@ -114,7 +114,7 @@ class Sort extends Library
 		}
 
 		if (empty($limit_default) || (int)$limit_default < 1) {
-			$limit_default = IS_ADMIN ? option('config_admin_limit') : option('config_catalog_limit');
+			$limit_default = IS_ADMIN ? option('admin_list_limit') : option('site_list_limit');
 		}
 
 		$data = array();

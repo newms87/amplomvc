@@ -59,8 +59,9 @@
 								<br/>
 								<div class="view-setting choose-view-box">
 									<?=
-									build('select', array(
-										'name'   => 'view_listing_id',
+									build(array(
+										'type' => 'select',
+										'name'  => 'view_listing_id',
 										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
 										'select' => $view['view_listing_id'],
 										'key'    => false,
@@ -69,8 +70,9 @@
 								</div>
 								<div class="view-setting choose-view-size">
 									<?=
-									build('select', array(
-										'name'   => 'settings[size]',
+									build(array(
+										'type' => 'select',
+										'name'  => 'settings[size]',
 										'data'   => $data_view_sizes,
 										'select' => $view['settings']['size'],
 									)); ?>

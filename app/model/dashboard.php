@@ -109,7 +109,7 @@ class App_Model_Dashboard extends Model
 			$data = array(
 				'dashboard' => $dashboard,
 				'views'     => $views,
-				'to'        => $to ? $to : option('config_email'),
+				'to'        => $to ? $to : option('site_email'),
 				'subject'   => _l("%s", strip_tags($dashboard['title'])),
 			);
 

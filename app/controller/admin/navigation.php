@@ -105,7 +105,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 		$output = block('widget/listing', null, $listing);
 
-		if ($this->is_ajax) {
+		if ($this->$this->is_ajax) {
 			output($output);
 		} else {
 			return $output;
@@ -174,7 +174,7 @@ class App_Controller_Admin_Navigation extends Controller
 			message('success', _l("The Navigation Group has been saved!"));
 		}
 
-		if ($this->is_ajax) {
+		if ($this->$this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/navigation/form', 'navigation_group_id=' . !empty($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : $navigation_group_id);
@@ -191,7 +191,7 @@ class App_Controller_Admin_Navigation extends Controller
 			message('error', $this->Model_Navigation->getError());
 		}
 
-		if ($this->is_ajax) {
+		if ($this->$this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/navigation');
@@ -222,7 +222,7 @@ class App_Controller_Admin_Navigation extends Controller
 			}
 		}
 
-		if ($this->is_ajax) {
+		if ($this->$this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/navigation');
@@ -240,7 +240,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 		message("notify", "Admin Navigation Group has been reset!");
 
-		if (!$this->is_ajax) {
+		if (!$this->$this->is_ajax) {
 			redirect('admin/navigation');
 		}
 

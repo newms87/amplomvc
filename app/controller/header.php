@@ -8,7 +8,7 @@ class App_Controller_Header extends Controller
 
 		$settings['base'] = IS_SSL ? HTTPS_SITE : HTTP_SITE;
 
-		$settings['name']   = option('config_name');
+		$settings['name']   = option('site_name');
 		$settings['logo']   = option('config_logo');
 		$settings['slogan'] = option('config_slogan');
 		$settings['theme']  = option('config_theme');

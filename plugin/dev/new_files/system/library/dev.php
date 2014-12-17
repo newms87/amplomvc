@@ -4,7 +4,7 @@ class Dev extends Library
 {
 	public function site_backup($file = null, $tables = null, $prefix = null, $remove_prefix = false)
 	{
-		$site_name = option('config_name');
+		$site_name = option('site_name');
 
 		if (!$file) {
 			if (!empty($tables)) {
@@ -26,7 +26,7 @@ class Dev extends Library
 
 	public function site_restore($file, $sync_file = false)
 	{
-		$site_name = option('config_name');
+		$site_name = option('site_name');
 
 		if (!is_file($file)) {
 			$this->error['file'] = "Failed to restore $site_name from $file. The File was not found.";

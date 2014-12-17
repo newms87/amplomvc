@@ -10,7 +10,7 @@ class App_Controller_Mail_Contact extends Controller
 		}
 
 		send_mail(array(
-			'to'      => option('config_email'),
+			'to'      => option('site_email'),
 			'from'    => $contact_info['email'],
 			'sender'  => $contact_info['name'],
 			'subject' => html_entity_decode(sprintf(_l("Enquiry From %s"), $contact_info['name']), ENT_QUOTES, 'UTF-8'),

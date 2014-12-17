@@ -1,7 +1,8 @@
 <span class="batch_action_title">{{Batch Action}}</span>
 
-<?= build('select', array(
-	'name'  => 'batch_action',
+<?= build(array(
+	'type' => 'select',
+	'name' => 'batch_action',
 	'data'  => $actions,
 	'key'   => 'key',
 	'value' => 'label',
@@ -28,8 +29,9 @@
 				<? break;
 			case 'select':
 				?>
-				<?= build('select', array(
-					'name'   => "action_value",
+				<?= build(array(
+					'type' => 'select',
+					'name'  => "action_value",
 					'data'   => $action['build_data'],
 					'select' => $action['default'],
 					'key'    => $action['build_config'][0],

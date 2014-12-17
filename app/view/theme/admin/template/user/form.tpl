@@ -6,7 +6,9 @@
 	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{User}}</h1>
+				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
+				{{User}}
+			</h1>
 
 			<div class="buttons">
 				<button>{{Save}}</button>
@@ -49,23 +51,23 @@
 					<tr>
 						<td>{{User Group:}}</td>
 						<td>
-							<? $build = array(
+							<?= build(array(
+								'type'   => 'select',
 								'name'   => 'user_role_id',
 								'data'   => $data_user_roles,
 								'select' => $user_role_id,
 								'key'    => 'user_role_id',
 								'value'  => 'name',
-							); ?>
-
-							<?= build('select', $build); ?>
+							)); ?>
 						</td>
 					</tr>
 					<tr class="password">
 						<td>{{Password:}}</td>
 						<td>
 							<div class="enter-password">
-								<input type="password" autocomplete="off" data-name="password" placeholder="{{New Password}}" /><br />
-								<input type="password" autocomplete="off" name="confirm" placeholder="{{Confirm Password}}" />
+								<input type="password" autocomplete="off" data-name="password" placeholder="{{New Password}}"/>
+								<br/>
+								<input type="password" autocomplete="off" name="confirm" placeholder="{{Confirm Password}}"/>
 							</div>
 							<a class="change-password">
 								<span class="change">{{Change Password}}</span>
@@ -76,13 +78,12 @@
 					<tr>
 						<td>{{Status:}}</td>
 						<td>
-							<? $build = array(
+							<?= build(array(
+								'type'   => 'select',
 								'name'   => 'status',
 								'data'   => $data_statuses,
 								'select' => $status,
-							); ?>
-
-							<?= build('select', $build); ?>
+							)); ?>
 						</td>
 					</tr>
 				</table>
@@ -93,25 +94,25 @@
 
 				<table class="meta-table form">
 					<? foreach ($meta as $row => $m) { ?>
-					<tr class="meta-row" data-row="<?= $row; ?>">
-						<td>
-							<div class="meta-key" contenteditable><?= $row; ?></div>
-						</td>
-						<td>
-							<? if (_is_object($m)) { ?>
-								<? if (isset($m['build'])){ ?>
-									<?= build($m['build']); ?>
+						<tr class="meta-row" data-row="<?= $row; ?>">
+							<td>
+								<div class="meta-key" contenteditable><?= $row; ?></div>
+							</td>
+							<td>
+								<? if (_is_object($m)) { ?>
+									<? if (isset($m['build'])) { ?>
+										<?= build($m['build']); ?>
+									<? } else { ?>
+										{{(Object cannot be edited)}}
+									<? } ?>
 								<? } else { ?>
-									{{(Object cannot be edited)}}
+									<input class="meta-value" type="text" name="meta[<?= $row; ?>]" value="<?= $m; ?>"/>
 								<? } ?>
-							<? } else { ?>
-								<input class="meta-value" type="text" name="meta[<?= $row; ?>]" value="<?= $m; ?>"/>
-							<? } ?>
-						</td>
-						<td>
-							<a class="button remove">{{X}}</a>
-						</td>
-					</tr>
+							</td>
+							<td>
+								<a class="button remove">{{X}}</a>
+							</td>
+						</tr>
 					<? } ?>
 				</table>
 
@@ -124,7 +125,7 @@
 </div>
 
 <script type="text/javascript">
-	$('.change-password').click(function() {
+	$('.change-password').click(function () {
 		$('tr.password').toggleClass('edit');
 
 		if ($('tr.password').hasClass('edit')) {

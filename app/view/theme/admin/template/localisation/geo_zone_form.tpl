@@ -50,8 +50,9 @@
 							<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
 							<tr class="geozone_selector <?= $key; ?>">
 								<td class="left">
-									<?= build('select', array(
-										'name'   => "zones[$row][country_id]",
+									<?= build(array(
+										'type' => 'select',
+										'name'  => "zones[$row][country_id]",
 										'data'   => $data_countries,
 										'select' => $zone['country_id'], array('class' => 'country_selector'),
 										'key'    => 'country_id',

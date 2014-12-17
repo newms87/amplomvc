@@ -34,7 +34,7 @@
 				<div class="div1">
 					<div class="div2">
 						<a href="<?= site_url('admin'); ?>">
-							<img src="<?= image(option('config_admin_logo')); ?>" title="{{Administration}}"/>
+							<img src="<?= image(option('admin_logo')); ?>" title="{{Administration}}"/>
 						</a>
 					</div>
 
@@ -43,9 +43,9 @@
 							<img src="<?= theme_url('image/lock.png'); ?>" alt="" id="header_secure_lock"/><?= _l("You are logged in as <span>%s</span>", $user['username']); ?>
 						</div>
 
-						<? if (option('config_email_support')) { ?>
+						<? if (option('site_email_support')) { ?>
 							<div class="div3" style="clear:right">
-								<a href="mailto:<?= option('config_email_support') . '?subject=' . urlencode("Admin Support"); ?>" target="_blank"></a>
+								<a href="mailto:<?= option('site_email_support') . '?subject=' . urlencode("Admin Support"); ?>" target="_blank"></a>
 							</div>
 						<? } ?>
 					<? } ?>

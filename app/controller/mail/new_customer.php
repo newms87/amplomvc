@@ -13,7 +13,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 		$insertables = array(
 			'first_name' => $customer['firstname'],
 			'last_name'  => $customer['lastname'],
-			'store_name' => option('config_name'),
+			'store_name' => option('site_name'),
 			'store_url'  => $this->url->site(),
 		);
 
@@ -42,7 +42,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		// Send to main admin email if new account email is enabled
 		if (option('config_account_mail')) {
-			$mail['to'] = option('config_email');
+			$mail['to'] = option('site_email');
 			$mail['cc'] = option('config_alert_emails');
 
 			send_mail($mail);

@@ -83,8 +83,9 @@
 									<?= empty($task['last_run']) ? _l("Never") : $task['last_run']; ?>
 									<input type="hidden" name="tasks[<?= $row; ?>][last_run]" value="<?= $task['last_run']; ?>"/>
 								</td>
-								<td class="left"><?= build('select', array(
-	'name'   => "tasks[$row][status]",
+								<td class="left"><?= build(array(
+	'type' => 'select',
+	'name'  => "tasks[$row][status]",
 	'data'   => $data_statuses,
 	'select' => $task['status']
 )); ?></td>

@@ -40,7 +40,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$settings['template_data'] += $template_defaults;
 
 		if (!isset($settings['show_messages'])) {
-			$settings['show_messages'] = $settings['ajax'] && IS_AJAX;
+			$settings['show_messages'] = $settings['ajax'] && $this->is_ajax;
 		}
 
 		if ($settings['view_id']) {

@@ -159,8 +159,8 @@ class Extend extends Library
 			return;
 		}
 
-		$width  = option('config_image_admin_list_width', 80);
-		$height = option('config_image_admin_list_height', 80);
+		$width  = option('admin_list_image_width', 80);
+		$height = option('admin_list_image_height', 80);
 
 		//Performance Optimization: Much quicker to resize (plus caching) than evaluate color or large image
 		$image = str_replace(URL_IMAGE, DIR_IMAGE, image($data[$column], $width, $height));

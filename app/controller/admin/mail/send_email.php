@@ -22,7 +22,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 
 		$defaults = array(
 			'sender'     => option('config_title'),
-			'from'       => option('config_email'),
+			'from'       => option('site_email'),
 			'to'         => '',
 			'cc'         => '',
 			'bcc'        => '',

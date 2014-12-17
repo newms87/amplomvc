@@ -50,7 +50,7 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 		}
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			if ($this->message->has('error')) {

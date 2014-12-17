@@ -85,7 +85,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -146,7 +146,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		}
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/role/form');
@@ -165,7 +165,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		}
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
 			redirect('admin/settings/role');
@@ -188,7 +188,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 			message('success', _l("The User Groups have been updated!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/settings/role');

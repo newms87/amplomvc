@@ -37,8 +37,9 @@
 				<div class="col-tab tab-content">
 					<div class="select-cols">
 						<?=
-						build('multiselect', array(
-							'name'   => 'columns',
+						build(array(
+							'type' => 'multiselect',
+							'name'  => 'columns',
 							'data'   => $extra_cols,
 							'select' => array_keys($columns),
 							'key'    => 'Field',
@@ -62,8 +63,9 @@
 					<div class="form-item">
 						<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
 						<?=
-						build('select', array(
-							'name'   => 'view_type',
+						build(array(
+							'type' => 'select',
+							'name'  => 'view_type',
 							'data'   => $data_chart_types,
 							'select' => $view_type,
 							'#id'    => 'view-type-' . $view_id,
@@ -76,8 +78,9 @@
 					<div class="form-item">
 						<label for="chart-group-<?= $view_id; ?>">{{X axis (Group Column)}}</label>
 						<?=
-						build('select', array(
-							'name'   => 'chart[group_by]',
+						build(array(
+							'type' => 'select',
+							'name'  => 'chart[group_by]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
 							'key'    => 'Field',
@@ -89,8 +92,9 @@
 					<div class="form-item">
 						<label for="chart-data-<?= $view_id; ?>">{{Y axis (Data Column)}}</label>
 						<?=
-						build('multiselect', array(
-							'name'   => 'chart[data_cols]',
+						build(array(
+							'type' => 'multiselect',
+							'name'  => 'chart[data_cols]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
 							'key'    => 'Field',

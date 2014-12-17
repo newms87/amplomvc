@@ -46,25 +46,25 @@
 					<tr>
 						<td class="required"> {{Store Owner:}}</td>
 						<td>
-							<input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40"/>
+							<input type="text" name="site_owner" value="<?= $site_owner; ?>" size="40"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="required"> {{Address:}}</td>
 						<td>
-							<textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
+							<textarea name="site_address" cols="40" rows="5"><?= $site_address; ?></textarea>
 						</td>
 					</tr>
 					<tr>
 						<td class="required"> {{E-Mail:}}</td>
 						<td>
-							<input type="text" name="config_email" value="<?= $config_email; ?>" size="40"/>
+							<input type="text" name="site_email" value="<?= $site_email; ?>" size="40"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="required"> {{Telephone:}}</td>
 						<td>
-							<input type="text" name="config_telephone" value="<?= $config_telephone; ?>"/>
+							<input type="text" name="site_phone" value="<?= $site_phone; ?>"/>
 						</td>
 					</tr>
 					<tr>
@@ -94,8 +94,9 @@
 						<td>{{Theme:}}</td>
 						<td>
 							<?=
-							build('select', array(
-								'name'   => 'config_theme',
+							build(array(
+								'type' => 'select',
+								'name'  => 'config_theme',
 								'data'   => $data_themes,
 								'select' => $config_theme,
 								'key'    => 'name',
@@ -131,8 +132,9 @@
 						<td>{{Country:}}</td>
 						<td>
 							<?=
-							build('select', array(
-								'name'   => 'config_country_id',
+							build(array(
+								'type' => 'select',
+								'name'  => 'config_country_id',
 								'data'   => $data_countries,
 								'select' => $config_country_id,
 								'key'    => 'country_id',
@@ -183,15 +185,16 @@
 					<tr>
 						<td class="required"> <?= _l("Default Items Per Page (Catalog):<br /><span class=\"help\">Determines how many catalog items are shown per page (products, categories, etc)</span>"); ?></td>
 						<td>
-							<input type="text" name="config_catalog_limit" value="<?= $config_catalog_limit; ?>" size="3"/>
+							<input type="text" name="site_list_limit" value="<?= $site_list_limit; ?>" size="3"/>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Customer Group:<br /><span class=\"help\">Default customer group.</span>"); ?></td>
 						<td>
 							<?=
-							build('select', array(
-								'name'   => 'config_customer_gorup_id',
+							build(array(
+								'type' => 'select',
+								'name'  => 'config_customer_gorup_id',
 								'data'   => $data_customer_groups,
 								'select' => $config_customer_group_id,
 								'key'    => 'customer_group_id',
@@ -202,8 +205,9 @@
 					<tr>
 						<td><?= _l("Approve New Customers:<br /><span class=\"help\">Don\'t allow new customer to login until their account has been approved.</span>"); ?></td>
 						<td><?=
-							build('radio', array(
-								'name'   => 'config_customer_approval',
+							build(array(
+								'type' => 'radio',
+								'name'  => 'config_customer_approval',
 								'data'   => $data_yes_no,
 								'select' => $config_customer_approval
 							)); ?></td>
@@ -211,29 +215,27 @@
 					<tr>
 						<td>{{The Contact Page}}</td>
 						<td>
-							<? $build = array(
+							<?= build(array(
+								'type' => 'select',
 								'name'   => 'config_contact_page_id',
 								'data'   => $data_pages,
 								'select' => $config_contact_page_id,
 								'key'    => 'page_id',
 								'value'  => 'title',
-							); ?>
-
-							<?= build('select', $build); ?>
+							)); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= _l("Account Terms:<br /><span class=\"help\">Forces people to agree to terms before an account can be created.</span>"); ?></td>
 						<td>
-							<? $build = array(
+							<?= build(array(
+								'type' => 'select',
 								'name'   => 'config_account_terms_page_id',
 								'data'   => $data_pages,
 								'select' => $config_account_terms_page_id,
 								'key'    => 'page_id',
 								'value'  => 'title',
-							); ?>
-
-							<?= build('select', $build); ?>
+							)); ?>
 						</td>
 					</tr>
 				</table>
@@ -258,8 +260,9 @@
 							<br/>
 							<div class="store-logo-x">
 								<label>{{Image srcset X}}</label>
-								<?= build('select', array(
-									'name'   => 'config_logo_srcset',
+								<?= build(array(
+									'type' => 'select',
+									'name'  => 'config_logo_srcset',
 									'data'   => array(
 										1 => '1x',
 										2 => '2x',
@@ -316,9 +319,9 @@
 					<tr>
 						<td class="required">{{Logo Size in Emails}}</td>
 						<td>
-							<input type="text" name="config_email_logo_width" value="<?= $config_email_logo_width; ?>" size="3"/>
+							<input type="text" name="site_email_logo_width" value="<?= $site_email_logo_width; ?>" size="3"/>
 							x
-							<input type="text" name="config_email_logo_height" value="<?= $config_email_logo_height; ?>" size="3"/>
+							<input type="text" name="site_email_logo_height" value="<?= $site_email_logo_height; ?>" size="3"/>
 						</td>
 					</tr>
 					<tr>

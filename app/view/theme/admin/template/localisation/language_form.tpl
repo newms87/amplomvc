@@ -42,8 +42,9 @@
 					</tr>
 					<tr>
 						<td class="required"> {{Reading Direction:}}</td>
-						<td><?= build('select', array(
-	'name'   => "direction",
+						<td><?= build(array(
+	'type' => 'select',
+	'name'  => "direction",
 	'data'   => $data_direction,
 	'select' => $direction
 )); ?></td>
@@ -70,8 +71,9 @@
 					</tr>
 					<tr>
 						<td><?= _l("Status:<br /><span class=\"help\">Hide/Show it in language dropdown</span>"); ?></td>
-						<td><?= build('select', array(
-	'name'   => "status",
+						<td><?= build(array(
+	'type' => 'select',
+	'name'  => "status",
 	'data'   => $data_statuses,
 	'select' => $status
 )); ?></td>

@@ -22,8 +22,9 @@
 					</tr>
 					<tr>
 						<td><label for="status">{{Status}}</label></td>
-						<td><?= build('select', array(
-								'name'   => 'status',
+						<td><?= build(array(
+								'type' => 'select',
+								'name'  => 'status',
 								'data'   => $data_site_status,
 								'select' => $status
 							)); ?>

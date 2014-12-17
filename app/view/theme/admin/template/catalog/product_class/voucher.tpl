@@ -65,8 +65,9 @@
 					<td>{{Tax Class:}}</td>
 					<td>
 						<?=
-						build('select', array(
-							'name'   => 'tax_class_id',
+						build(array(
+							'type' => 'select',
+							'name'  => 'tax_class_id',
 							'data'   => $data_tax_classes,
 							'select' => $tax_class_id,
 							'key'    => 'tax_class_id',
@@ -100,8 +101,9 @@
 					<td>{{Status:}}</td>
 					<td>
 						<?=
-						build('select', array(
-							'name'   => "status",
+						build(array(
+							'type' => 'select',
+							'name'  => "status",
 							'data'   => $data_statuses,
 							'select' => $status
 						)); ?>

@@ -30,8 +30,9 @@
 						</tr>
 						<tr>
 							<td>{{Status:}}</td>
-							<td><?= build('select', array(
-	'name'   => 'status',
+							<td><?= build(array(
+	'type' => 'select',
+	'name'  => 'status',
 	'data'   => $data_statuses,
 	'select' => $status
 )); ?></td>

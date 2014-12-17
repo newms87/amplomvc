@@ -43,8 +43,8 @@ class App_Controller_Admin_Header extends Controller
 		$this->document->addScript(theme_url('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?
-		$this->document->localizeVar('image_thumb_width', option('config_image_admin_thumb_width'));
-		$this->document->localizeVar('image_thumb_height', option('config_image_admin_thumb_height'));
+		$this->document->localizeVar('image_thumb_width', option('admin_thumb_width'));
+		$this->document->localizeVar('image_thumb_height', option('admin_thumb_height'));
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('admin_url', site_url('admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
