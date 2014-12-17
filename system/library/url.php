@@ -128,12 +128,12 @@ class Url extends Library
 			$url = URL_SITE;
 		}
 
-		return $url . $this->findAlias($path, $query, $store_id);
+		return $this->findAlias($url, $path, $query, $store_id);
 	}
 
 	public function link($path, $query = '', $ssl = false)
 	{
-		return ($ssl ? $this->ssl : $this->url) . $this->findAlias($path, $query);
+		return $this->findAlias($ssl ? $this->ssl : $this->url, $path, $query);
 	}
 
 	public function site($uri = '', $query = '', $base_site = false)
@@ -215,7 +215,7 @@ class Url extends Library
 		}
 	}
 
-	private function findAlias($path = '', $query = '')
+	private function findAlias($base_url, $path = '', $query = '')
 	{
 		if (is_array($query)) {
 			$query_str = http_build_query($query);
@@ -225,17 +225,16 @@ class Url extends Library
 			$query = $args;
 		}
 
-		//If already an alias, or has a URL scheme (eg: http://, ftp:// etc..) skip lookup
-		if (!$path || isset($this->aliases[$path]) || parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0) {
-			if (!$path) {
-				$path = URL_SITE;
-			}
+		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
+		$has_scheme = parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0;
 
+		//If no path, or already is an alias, no lookup needed
+		if (!$path || isset($this->aliases[$path]) || $has_scheme) {
 			if ($query_str) {
-				$path .= (strpos($path, '?') === false ? '?' : '&') . $query_str;
+				$query_str = (strpos($path, '?') === false ? '?' : '&') . $query_str;
 			}
 
-			return $path;
+			return ($has_scheme ? '' : $base_url) . $path . $query_str;
 		}
 
 		$url_alias = $this->lookupAlias($path, $query_str);
@@ -249,7 +248,7 @@ class Url extends Library
 		}
 
 		//Build the New URL
-		return $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
+		return $base_url . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
 	}
 
 	public function lookupAlias($path, $query)
