@@ -41,16 +41,6 @@ if (!$model_history) {
 	$model_history = option('model_history');
 }
 
-//Verify the necessary directories are writable
-if (!_is_writable(DIR_IMAGE . 'cache/', $dir_error, option('config_image_dir_mode'))) {
-	trigger_error($dir_error);
-	die ($dir_error);
-}
-if (!_is_writable(DIR_DOWNLOAD, $dir_error, option('config_default_dir_mode'))) {
-	trigger_error($dir_error);
-	die ($dir_error);
-}
-
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {
 	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));

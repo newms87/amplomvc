@@ -10,7 +10,7 @@
 
 			<div class="buttons">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/settings/store'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -389,7 +389,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= site_url('admin/settings/store/generate-icons'); ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function (json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');

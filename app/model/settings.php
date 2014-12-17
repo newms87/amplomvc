@@ -4,7 +4,7 @@ class App_Model_Settings extends Model
 {
 	public function saveGeneral($settings)
 	{
-		if (empty($settings['site_name']) || !validate($settings['site_name'], 2, 128)) {
+		if (empty($settings['site_name']) || !validate('text', $settings['site_name'], 2, 128)) {
 			$this->error['site_name'] = _l("Site Name must be between 2 and 128 characters!");
 		}
 
@@ -31,7 +31,30 @@ class App_Model_Settings extends Model
 		$settings['admin_list_limit'] = max(0, (int)$settings['admin_list_limit']);
 		$settings['site_list_limit']  = max(0, (int)$settings['site_list_limit']);
 
-		$this->config->saveGroup('general', $settings);
+		$result = $this->config->saveGroup('general', $settings);
+
+		if (!$result) {
+			$this->error = $this->config->getError();
+		}
+
+		return $result;
+	}
+
+	public function saveAdmin($settings)
+	{
+		if (empty($settings['site_title'])) {
+			$settings['site_title'] = 'Amplo MVC Admin';
+		}
+
+		$settings['admin_list_limit'] = max(0, (int)$settings['admin_list_limit']);
+
+		$result = $this->config->saveGroup('admin', $settings);
+
+		if (!$result) {
+			$this->error = $this->config->getError();
+		}
+
+		return $result;
 	}
 
 	public function getWidgets()

@@ -422,11 +422,11 @@ class App_Model_Navigation extends App_Model_Table
 				'children'     => array(
 					'system_settings'          => array(
 						'display_name' => 'Settings',
-						'path'         => 'admin/settings/store',
+						'path'         => 'admin/settings',
 						'children'     => array(
 							'system_settings_general' => array(
 								'display_name' => 'General',
-								'path'         => 'admin/settings/setting',
+								'path'         => 'admin/settings/general',
 							),
 							'system_settings_update'  => array(
 								'display_name' => 'Update',

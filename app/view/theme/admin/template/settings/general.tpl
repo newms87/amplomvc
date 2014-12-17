@@ -23,8 +23,6 @@
 				<a href="#tab-option">{{Option}}</a>
 				<a href="#tab-image">{{Image}}</a>
 				<a href="#tab-mail">{{Mail}}</a>
-				<a href="#tab-fraud">{{Fraud}}</a>
-				<a href="#tab-file-permissions">{{File Permissions}}</a>
 				<a href="#tab-server">{{Server}}</a>
 			</div>
 
@@ -55,7 +53,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required">{{Support Email:
+						<td class="required">{{Support Email:}}
 							<span class="help">{{Please specify an email to send support requests to.}}</span>
 						</td>
 						<td>
@@ -189,19 +187,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Administration Language:}}</td>
-						<td>
-							<?= build(array(
-								'type'   => 'select',
-								'name'   => 'admin_language',
-								'data'   => $data_languages,
-								'select' => $admin_language,
-								'key'    => 'code',
-								'value'  => 'name',
-							)); ?>
-						</td>
-					</tr>
-					<tr>
 						<td>{{Use Macro Languages (experimental):}}
 							<span class="help">{{Attempt to resolve languages by country specific macro codes}}</span>
 						</td>
@@ -248,20 +233,6 @@
 				<table class="form">
 					<tr>
 						<td>
-							{{Administration Bar}}
-							<span class="help">{{This will display a small toolbar on the site fronts when logged into the Admin Panel}}</span>
-						</td>
-						<td><?=
-							build(array(
-								'type'   => 'radio',
-								'name'   => 'admin_bar',
-								'data'   => $data_yes_no,
-								'select' => $admin_bar
-							)); ?>
-						</td>
-					</tr>
-					<tr>
-						<td>
 							{{Automated Tasks}}
 							<span class="help">{{Highly recommended to leave this on!}}</span>
 						</td>
@@ -292,25 +263,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> {{Admin Breadcrumb Separator:}}</td>
-						<td>
-							<input type="text" style="font-size:20px" name="admin_breadcrumb_separator" value="<?= $admin_breadcrumb_separator; ?>" size="1"/>
-						</td>
-					</tr>
-					<tr>
 						<td class="required">{{Default Items Per Page (Catalog):}}
 							<span class="help">{{Determines how many catalog items are shown per page (products, categories, etc)}}</span>
 						</td>
 						<td>
 							<input type="text" name="site_list_limit" value="<?= $site_list_limit; ?>" size="3"/>
-						</td>
-					</tr>
-					<tr>
-						<td class="required">{{Default Items Per Page (Admin):}}
-							<span class="help">{{Determines how many admin items are shown per page (orders, customers, etc)}}</span>
-						</td>
-						<td>
-							<input type="text" name="admin_list_limit" value="<?= $admin_list_limit; ?>" size="3"/>
 						</td>
 					</tr>
 					<tr>
@@ -438,9 +395,34 @@
 			<div id="tab-image">
 				<table class="form">
 					<tr>
-						<td>{{Admin Panel Logo:}}</td>
+						<td>{{Store Logo:}}</td>
 						<td>
-							<input type="text" class="imageinput" name="admin_logo" value="<?= $admin_logo; ?>"/>
+							<input type="text" class="imageinput" name="config_logo" data-thumb="<?= image($config_logo, $config_logo_width, $config_logo_height); ?>" value="<?= $config_logo; ?>"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="required">{{Logo Size}}</td>
+						<td>
+							<div class="store-logo-size">
+								<input type="text" name="config_logo_width" value="<?= $config_logo_width; ?>" size="3"/>
+								x
+								<input type="text" name="config_logo_height" value="<?= $config_logo_height; ?>" size="3"/>
+							</div>
+							<br/>
+							<div class="store-logo-x">
+								<label>{{Image srcset X}}</label>
+								<?= build(array(
+									'type' => 'select',
+									'name'  => 'config_logo_srcset',
+									'data'   => array(
+										1 => '1x',
+										2 => '2x',
+										3 => '3x'
+									),
+									'select' => $config_logo_srcset,
+								)); ?>
+								<span class="help">{{If greater than 1x, sets img srcset attribute and scales down from original image. (eg. if 3x, then 1x size set for src will be 1/3 of original image)}}</span>
+							</div>
 						</td>
 					</tr>
 					<tr>
@@ -467,32 +449,15 @@
 									</div>
 									<? foreach ($data_icon_sizes as $size) { ?>
 										<div class="icon-file icon-size">
-											<? $key = $size[0] . 'x' . $size[1]; ?>
-											<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]['src']; ?>" data-thumb="<?= $config_icon[$key]['thumb']; ?>" data-width="<?= $size[0]; ?>" data-height="<?= $size[1]; ?>"/>
+											<? $key = $size . 'x' . $size; ?>
+											<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]['src']; ?>" data-thumb="<?= $config_icon[$key]['thumb']; ?>" data-width="<?= $size; ?>" data-height="<?= $size; ?>"/>
 
-											<div class="icon-label"><?= _l("%s X %s Icon", $size[0], $size[1]); ?></div>
+											<div class="icon-label"><?= _l("%s X %s Icon", $size, $size); ?></div>
 										</div>
 									<? } ?>
 								</div>
 							</div>
 						</td>
-					</tr>
-					<tr>
-						<td class="required"> {{Admin Image Thumb Size:}}</td>
-						<td>
-							<input type="text" name="admin_thumb_width" value="<?= $admin_thumb_width; ?>" size="3"/>
-							x
-							<input type="text" name="admin_thumb_height" value="<?= $admin_thumb_height; ?>" size="3"/>
-						</td>
-					</tr>
-					<tr>
-						<td class="required"> {{Admin Image List Size:}}</td>
-						<td>
-							<input type="text" name="admin_list_image_width" value="<?= $admin_list_image_width; ?>"
-							       size="3"/>
-							x
-							<input type="text" name="admin_list_image_height" value="<?= $admin_list_image_height; ?>"
-							       size="3"/>
 					</tr>
 					<tr>
 						<td class="required"> {{Category Image Size:}}</td>
@@ -604,7 +569,6 @@
 					</tr>
 				</table>
 			</div>
-
 			<div id="tab-server">
 				<table class="form">
 					<tr>
@@ -656,19 +620,6 @@
 								'name'   => 'config_use_ssl',
 								'data'   => $data_yes_no,
 								'select' => $config_use_ssl,
-							)); ?>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Use SEO URL's:}}
-							<span class="help">{{To use SEO URL's apache module mod-rewrite must be installed and you need to rename the htaccess.txt to .htaccess.}}</span>
-						</td>
-						<td>
-							<?= build(array(
-								'type'   => 'radio',
-								'name'   => 'config_use_seo',
-								'data'   => $data_yes_no,
-								'select' => $config_use_seo,
 							)); ?>
 						</td>
 					</tr>
@@ -849,6 +800,17 @@
 		$('#theme').load(url);
 	}).change();
 
+	$('[name=config_logo]').ac_imageinput({width: '<?= $config_logo_width; ?>', height: '<?= $config_logo_height; ?>'});
+
+	$('[name=config_logo_width],[name=config_logo_height]').change(function() {
+		var w = $('[name=config_logo_width]').val();
+		var h = $('[name=config_logo_height]').val();
+		$('[name=config_logo]').siblings('.thumb').css({
+			width: (!w || w == '0') ? 'auto' : w,
+			height: (!h || h == '0') ? 'auto' : h
+		});
+	});
+
 	$('#generate-icons').click(function () {
 		var $this = $(this);
 		var icon = $('[name="config_icon[orig]"]').val();
@@ -871,7 +833,7 @@
 	});
 
 	$('.icon-file .imageinput').ac_imageinput({width: 'auto', height: 'auto'});
-	$('[name=admin_logo].imageinput').ac_imageinput({width: 'auto', height: 'auto'});
+
 	$('.imageinput').ac_imageinput();
 
 

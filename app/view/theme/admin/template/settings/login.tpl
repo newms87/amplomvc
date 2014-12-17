@@ -9,7 +9,7 @@
 
 			<div class="buttons">
 				<button class="button">{{Save}}</button>
-				<a href="<?= site_url('admin/settings/store'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 

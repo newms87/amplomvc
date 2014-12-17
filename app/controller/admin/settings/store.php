@@ -9,7 +9,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 
 		//Settings Items
 		$data['widgets'] = $this->Model_Settings->getWidgets();
@@ -18,7 +18,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$data['insert'] = site_url('admin/settings/store/form');
 
 		//Render
-		output($this->render('settings/store_list', $data));
+		output($this->render('settings/store/list', $data));
 	}
 
 	public function listing()
@@ -115,7 +115,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 		breadcrumb(_l("Store"), site_url('admin/settings/store/form', 'store_id=' . $store_id));
 
 		//Store Data
@@ -242,12 +242,12 @@ class App_Controller_Admin_Settings_Store extends Controller
 			message('error', $this->Model_Setting_Store->getError());
 		}
 
-		if ($this->$this->is_ajax) {
+		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/store/form', 'store_id=' . _get('store_id'));
 		} else {
-			redirect('admin/settings/store');
+			redirect('admin/settings');
 		}
 	}
 
@@ -264,7 +264,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/settings/store');
+			redirect('admin/settings');
 		}
 	}
 }

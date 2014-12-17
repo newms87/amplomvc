@@ -83,59 +83,6 @@ function _lg($group, $message = null)
 	return $return;
 }
 
-/**
- * Customized routing for special cases. Set a new $path to change the controller / method to call.
- * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
- *
- * To register your own routing hook use $this->route->registerRoutingHook('my-hook-name', 'my_routing_hook');
- * in your plugin's setup.php install() method.
- *
- * @param string $path - The current path that points to the controller and method to call
- * @param $segments - The path segments broken up into an array.
- * @param string $orig_path - The original path (in case $path has been modified by another hook).
- *          NOTE: If a hook has used Route::setPath(), $orig_path will be modified (consider setting $sort_order for your hook to avoid conflicts).
- *
- * @return bool | null - if the return value is false no other hooks will be called.
- */
-function amplo_routing_hook(&$path, $segments, $orig_path)
-{
-	global $registry;
-
-	if (IS_ADMIN) {
-		//Initialize site configurations
-		$config = $registry->get('config');
-		$config->runSiteConfig();
-
-		if (option('config_maintenance')) {
-			if (isset($_GET['hide_maintenance_msg'])) {
-				$_SESSION['hide_maintenance_msg'] = 1;
-			} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
-				$hide = $registry->get('url')->here('hide_maintenance_msg=1');
-				message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"%s\">(hide message)</a> ", $hide));
-			}
-		} else {
-			if (count($segments) === 1) {
-				$path = defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index';
-				$registry->get('route')->setPath($path);
-			}
-		}
-	} else {
-		if (option('config_maintenance')) {
-			$path = 'common/maintenance';
-			$registry->get('route')->setPath($path);
-		}
-	}
-
-	//Path Rerouting
-	switch ($segments[0]) {
-		case 'page':
-			if (!empty($segments[1]) && $segments[1] !== 'preview') {
-				$path = 'page';
-			}
-			break;
-	}
-}
-
 function call($path, $params = null, $is_ajax = null)
 {
 	$args = func_get_args();

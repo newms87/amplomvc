@@ -20,7 +20,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 
 		//Actions
 		$data['action'] = site_url('admin/settings/update/update');
-		$data['cancel'] = site_url('admin/settings/store');
+		$data['cancel'] = site_url('admin/settings');
 
 		//Data
 		$update_info = array();

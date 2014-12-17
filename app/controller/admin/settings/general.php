@@ -20,8 +20,8 @@ class App_Controller_Admin_Settings_General extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
-		breadcrumb(_l("General Settings"), site_url('admin/settings/setting'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
+		breadcrumb(_l("General Settings"), site_url('admin/settings/general'));
 
 		//Load Information
 		$config_data = $_POST;
@@ -29,11 +29,6 @@ class App_Controller_Admin_Settings_General extends Controller
 		if (!IS_POST) {
 			$config_data = $this->config->loadGroup('config');
 		}
-
-		$defaults = array(
-			'config_use_ssl'         => '',
-			'config_contact_page_id' => '',
-		);
 
 		$defaults = array(
 			'site_name'                               => 'Amplo MVC',
@@ -67,7 +62,8 @@ class App_Controller_Admin_Settings_General extends Controller
 			'config_cache_ignore'                     => '',
 			'config_customer_group_id'                => '',
 			'config_customer_approval'                => 0,
-			'config_account_terms_page_id'            => 0,
+			'config_account_terms_page_id'            => '',
+			'config_contact_page_id'                  => '',
 			'config_breadcrumb_display'               => 1,
 			'config_breadcrumb_separator'             => ' / ',
 			'config_review_status'                    => 1,
@@ -108,7 +104,6 @@ class App_Controller_Admin_Settings_General extends Controller
 			'config_alert_emails'                     => '',
 			'config_mail_logging'                     => 1,
 			'config_use_ssl'                          => 0,
-			'config_seo_url'                          => 1,
 			'config_maintenance'                      => 0,
 			'config_image_max_mem'                    => '2G',
 			'config_encryption'                       => '',
@@ -124,38 +119,18 @@ class App_Controller_Admin_Settings_General extends Controller
 			'config_ga_click_tracking'                => 0,
 			'config_ga_demographics'                  => 0,
 			'config_statcounter'                      => '',
-			'config_default_file_mode'                => 644,
-			'config_default_dir_mode'                 => 755,
-			'config_image_file_mode'                  => 644,
-			'config_image_dir_mode'                   => 755,
-			'config_plugin_file_mode'                 => 644,
-			'config_plugin_dir_mode'                  => 755,
 		);
 
 		$data = $config_data + $defaults;
 
-		$octals = array(
-			'config_default_file_mode',
-			'config_default_dir_mode',
-			'config_image_file_mode',
-			'config_image_dir_mode',
-			'config_plugin_file_mode',
-			'config_plugin_dir_mode',
-		);
-
-		//convert octals in strings back to regular integers
-		foreach ($octals as $oct) {
-			$data[$oct] = intval($data[$oct]);
-		}
-
 		//Template Data
-		$data['data_layouts']    = $this->Model_Design_Layout->getLayouts();
-		$data['data_themes']     = $this->theme->getThemes();
+		$data['data_layouts']         = $this->Model_Design_Layout->getLayouts();
+		$data['data_themes']          = $this->theme->getThemes();
 		$data['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$data['data_languages']       = $this->Model_Localisation_Language->getLanguages();
 		$data['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$data['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$data['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
+		$data['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
 
 		$data['data_mail_protocols'] = array(
 			'smtp' => "SMTP",
@@ -246,9 +221,9 @@ class App_Controller_Admin_Settings_General extends Controller
 			$icon_files = array();
 
 			foreach (self::$icon_sizes as $size) {
-				$url = image_save($_POST['icon'], null, $size[0], $size[1]);
+				$url = image_save($_POST['icon'], null, $size, $size);
 
-				$icon_files[$size[0] . 'x' . $size[1]] = array(
+				$icon_files[$size . 'x' . $size] = array(
 					'url'     => $url,
 					'relpath' => str_replace(URL_IMAGE, '', $url),
 				);

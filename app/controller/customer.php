@@ -35,7 +35,7 @@ class App_Controller_Customer extends Controller
 			$this->request->setRedirect($settings['redirect']);
 		} elseif (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
-		} elseif (!$this->$this->is_ajax && !$this->request->hasRedirect()) {
+		} elseif (!$this->is_ajax && !$this->request->hasRedirect()) {
 			$this->request->setRedirect();
 		}
 
@@ -81,7 +81,7 @@ class App_Controller_Customer extends Controller
 			message('error', $this->customer->getError());
 		}
 
-		if ($this->$this->is_ajax && !$this->request->hasRedirect()) {
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
 			output_json($this->message->fetch());
 		} else {
 			if ($this->message->has('error')) {
@@ -177,7 +177,7 @@ class App_Controller_Customer extends Controller
 
 		$this->customer->login($_POST['email'], $_POST['password']);
 
-		if ($this->$this->is_ajax && !$this->request->hasRedirect()) {
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
 			output_json($this->message->fetch());
 		} else {
 			if ($this->message->has('error')) {

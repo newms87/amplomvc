@@ -77,7 +77,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 		//User Permissions
 		if (!user_can('w', 'admin/settings/login')) {
 			message('warning', _l("You do not have permission to modify Login Settings."));
-			redirect('admin/settings/store');
+			redirect('admin/settings');
 		}
 
 		//Validate Settings
@@ -88,7 +88,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 
 		if (!$this->config->hasError()) {
 			message('success', _l("You have successfully updated the Login Settings"));
-			redirect('admin/settings/store');
+			redirect('admin/settings');
 		}
 
 	}
