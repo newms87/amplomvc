@@ -12,3 +12,8 @@ $this->db->dropTable('download_description');
 $this->db->dropTable('extension');
 $this->db->dropTable('navigation_store');
 $this->db->dropTable('page_store');
+
+$this->db->changeColumn('address', 'firstname', 'firstname', "VARCHAR(60) NULL DEFAULT ''");
+$this->db->changeColumn('address', 'lastname', 'lastname', "VARCHAR(60) NULL DEFAULT ''");
+$this->db->changeColumn('address', 'company', 'company', "VARCHAR(45) NULL");
+$this->db->changeColumn('address', 'postcode', 'postcode', "VARCHAR(15) NOT NULL");

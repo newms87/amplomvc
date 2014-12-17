@@ -265,11 +265,11 @@ class Address extends Library
 	{
 		$this->error = array();
 
-		if (isset($address['firstname']) && !validate('text', $address['firstname'], 3, 45)) {
-			$this->error['firstname'] = _l("First Name must be between 3 and 45 characters");
+		if (isset($address['firstname']) && !validate('text', $address['firstname'], 1, 45)) {
+			$this->error['firstname'] = _l("First Name must be less than 45 characters");
 		}
 
-		if (isset($address['lastname']) && !validate('text', $address['lastname'], 3, 45)) {
+		if (isset($address['lastname']) && !validate('text', $address['lastname'], 1, 45)) {
 			$this->error['lastname'] = _l("Last Name must be between 3 and 45 characters");
 		}
 
