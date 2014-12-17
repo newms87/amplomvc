@@ -11,6 +11,12 @@ Options -Indexes
         Deny From All
     </Files>
 
+    # Protect template and cache files
+    <FilesMatch "\.(tpl|tpl\.acmod|cache)$">
+        Order Deny,Allow
+        Deny From All
+    </FilesMatch>
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
@@ -20,3 +26,4 @@ Options -Indexes
 <IfModule mod_php5.c>
     php_value short_open_tag 1
 </IfModule>
+
