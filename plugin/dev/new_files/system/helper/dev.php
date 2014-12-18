@@ -165,7 +165,7 @@ function html_dump_r($var, $level, $max, $show_type = false)
 					$val = "Bool (" . ($v ? "true" : "false") . ')';
 				} elseif (is_string($v) && empty($v) && $v !== '0') {
 					$val = "String (empty)";
-				} elseif (is_null($v)) {
+				} elseif ($v === null) {
 					$val = "NULL";
 				} else {
 					if ($show_type) {

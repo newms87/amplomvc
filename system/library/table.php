@@ -135,7 +135,7 @@ class Table extends Library
 			}
 
 			//If Field is set, assume this came from Table Model, and therefore can be edited
-			if (is_null($column['editable'])) {
+			if ($column['editable'] === null) {
 				$column['editable'] = isset($column['Field']);
 			}
 

@@ -234,7 +234,7 @@ class Block extends Library
 		if (!isset($this->blocks[$path])) {
 			$block = cache('block.' . slug($path));
 
-			if (is_null($block)) {
+			if ($block === null) {
 				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
 
 				if ($block) {

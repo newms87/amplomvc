@@ -149,7 +149,7 @@ function cache($key, $value = null, $as_file = false)
 {
 	global $registry;
 
-	if (is_null($value)) {
+	if ($value === null) {
 		return $registry->get('cache')->get($key, $as_file);
 	} else {
 		return $registry->get('cache')->set($key, $value, $as_file);
@@ -693,7 +693,7 @@ function build($type, $params = null)
 
 			$v = is_integer($s) ? (int)$key : $key;
 
-			if (((is_integer($v) && $s !== '' && !is_bool($s) && !is_null($s)) ? (int)$s : $s) === $v) {
+			if (((is_integer($v) && $s !== '' && !is_bool($s) && $s !== null) ? (int)$s : $s) === $v) {
 				$selected = true;
 				break;
 			}

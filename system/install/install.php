@@ -198,7 +198,7 @@ function getCostBenchmark()
 
 function set_define($string, $key, $value = null, $quotes = true)
 {
-	if (!is_null($value)) {
+	if ($value !== null) {
 		$define = "define(\"$key\", " . ($quotes ? "\"$value\"" : $value) . ");";
 
 		$count  = 0;

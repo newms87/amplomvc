@@ -17,7 +17,7 @@
 		</div>
 		<div class="section">
 			<div id="tabs" class="htabs">
-				<a href="#tab-general">{{General}}</a>
+				<a href="#tab-general">{{Settings}}</a>
 				<a href="#tab-site">{{Site}}</a>
 				<a href="#tab-local">{{Local}}</a>
 				<a href="#tab-option">{{Option}}</a>

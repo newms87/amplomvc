@@ -21,47 +21,51 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Settings"), site_url('admin/settings'));
-		breadcrumb(_l("General Settings"), site_url('admin/settings/admin'));
+		breadcrumb(_l("Admin Settings"), site_url('admin/settings/admin'));
 
 		//Load Information
-		$config_data = $_POST;
+		$settings = $_POST;
 
 		if (!IS_POST) {
-			$config_data = $this->config->loadGroup('admin');
+			$settings = $this->config->loadGroup('admin');
 		}
 
 		$defaults = array(
-			'admin_title'                            => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
-			'admin_icon'                              => null,
-			'admin_bar'                               => 1,
-			'admin_logo'                              => '',
-			'admin_breadcrumb_separator'              => ' / ',
-			'admin_language'                          => 1,
-			'admin_list_limit'                        => 20,
-			'admin_thumb_width'                       => 120,
-			'admin_thumb_height'                      => 120,
-			'admin_list_image_width'                  => 60,
-			'admin_list_image_height'                 => 60,
+			'admin_title'                => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
+			'admin_icon'                 => null,
+			'admin_bar'                  => 1,
+			'admin_logo'                 => '',
+			'admin_logo_srcset'                 => '',
+			'admin_show_breadcrumbs'     => 1,
+			'admin_breadcrumb_separator' => ' / ',
+			'admin_language'             => 1,
+			'admin_list_limit'           => 20,
+			'admin_thumb_width'          => 120,
+			'admin_thumb_height'         => 120,
+			'admin_logo_width'           => 0,
+			'admin_logo_height'          => 0,
+			'admin_list_image_width'     => 60,
+			'admin_list_image_height'    => 60,
 		);
 
-		$data = $config_data + $defaults;
+		$settings += $defaults;
 
 		//Template Data
-		$data['data_languages']       = $this->Model_Localisation_Language->getLanguages();
+		$settings['data_languages'] = $this->Model_Localisation_Language->getLanguages();
 
-		$data['data_statuses'] = array(
+		$settings['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$data['data_yes_no'] = array(
+		$settings['data_yes_no'] = array(
 			1 => _l("Yes"),
 			0 => _l("No"),
 		);
 
 		//Website Icon Sizes
-		if (!is_array($data['config_icon'])) {
-			$data['config_icon'] = array(
+		if (!is_array($settings['admin_icon'])) {
+			$settings['admin_icon'] = array(
 				'orig' => '',
 				'ico'  => '',
 			);
@@ -70,12 +74,12 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		foreach (self::$icon_sizes as $size) {
 			$key = $size . 'x' . $size;
 
-			if (!isset($data['config_icon'][$key])) {
-				$data['config_icon'][$key] = '';
+			if (!isset($settings['admin_icon'][$key])) {
+				$settings['admin_icon'][$key] = '';
 			}
 		}
 
-		foreach ($data['config_icon'] as &$icon) {
+		foreach ($settings['admin_icon'] as &$icon) {
 			$icon = array(
 				'thumb' => $this->image->get($icon),
 				'src'   => $icon,
@@ -83,34 +87,16 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		}
 		unset($icon);
 
-		$data['data_icon_sizes'] = self::$icon_sizes;
+		$settings['data_icon_sizes'] = self::$icon_sizes;
 
 		//Render
-		output($this->render('settings/general', $data));
-	}
-
-	public function theme()
-	{
-		if (empty($_GET['theme'])) {
-			output('No Theme Requested.');
-			return false;
-		}
-
-		$image = DIR_SITE . 'app/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
-
-		$image = image($image);
-
-		if (!$image) {
-			$image = image('no_image', 300, 300);
-		}
-
-		output("<img src=\"$image\" class =\"theme_preview\" />");
+		output($this->render('settings/admin', $settings));
 	}
 
 	public function save()
 	{
-		if ($this->Model_Settings->saveGeneral($_POST)) {
-			message('success', _l("The General Settings have been saved!"));
+		if ($this->Model_Settings->saveAdmin($_POST)) {
+			message('success', _l("The Admin Settings have been saved!"));
 		} else {
 			message('error', $this->Model_Settings->getError());
 		}
@@ -118,7 +104,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} elseif ($this->message->has('error')) {
-			post_redirect('admin/settings/general');
+			post_redirect('admin/settings/admin');
 		} else {
 			redirect('admin/settings');
 		}

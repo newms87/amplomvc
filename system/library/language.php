@@ -106,7 +106,7 @@ class Language extends Library
 	{
 		$language = !empty($language_id) ? $this->getLanguage($language_id) : $this->info;
 
-		if (is_null($key)) {
+		if ($key === null) {
 			return $language;
 		} else {
 			return isset($language[$key]) ? $language[$key] : null;

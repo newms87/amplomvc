@@ -272,7 +272,7 @@ class App_Model_Navigation extends App_Model_Table
 
 		$navigation_groups = cache("navigation_group.$name");
 
-		if (true || is_null($navigation_groups)) {
+		if (!isset($navigation_groups)) {
 			$filter = array(
 				'status' => 1,
 			);

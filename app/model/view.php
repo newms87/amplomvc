@@ -81,7 +81,7 @@ class App_Model_View extends App_Model_Table
 			$settings = array();
 		}
 
-		if (is_null($value)) {
+		if ($value === null) {
 			unset($settings[$key]);
 		} else {
 			$settings[$key] = $value;
@@ -170,7 +170,7 @@ class App_Model_View extends App_Model_Table
 		if ($single) {
 			$this->delete('view_meta', array('view_id' => $view_id));
 
-			if (is_null($value)) {
+			if ($value === null) {
 				return true;
 			}
 		}
@@ -197,7 +197,7 @@ class App_Model_View extends App_Model_Table
 
 		self::$meta = array();
 
-		if (is_null($value)) {
+		if ($value === null) {
 			return $this->delete('view_meta', $view_meta_id);
 		}
 

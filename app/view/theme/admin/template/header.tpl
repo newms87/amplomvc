@@ -14,8 +14,8 @@
 			<link href="<?= $canonical_link; ?>" rel="canonical"/>
 		<? } ?>
 
-		<? if (option('config_icon')) { ?>
-			<? foreach (option('config_icon') as $size => $icon) { ?>
+		<? if (option('admin_icon')) { ?>
+			<? foreach (option('admin_icon') as $size => $icon) { ?>
 				<? if ($size === 'ico') { ?>
 					<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
 				<? } elseif ($size !== 'orig') { ?>
@@ -34,7 +34,7 @@
 				<div class="div1">
 					<div class="div2">
 						<a href="<?= site_url('admin'); ?>">
-							<img src="<?= image(option('admin_logo')); ?>" title="{{Administration}}"/>
+							<img src="<?= image(option('admin_logo'), option('admin_logo_width'), option('admin_logo_height')); ?>" title="{{Administration}}"/>
 						</a>
 					</div>
 

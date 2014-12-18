@@ -86,7 +86,7 @@
 											<span class="clear">clear</span>
 										</div>
 										<div class="value">
-											<? if (!is_null($column['filter_value']['low']) || !is_null($column['filter_value']['high'])) { ?>
+											<? if ($column['filter_value']['low'] !== null || $column['filter_value']['high'] !== null) { ?>
 												<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
 											<? } else { ?>
 												{{Modify}}
@@ -179,7 +179,7 @@
 											<span class="clear">clear</span>
 										</div>
 										<div class="value">
-											<? if (!is_null($column['filter_value']['start']) || !is_null($column['filter_value']['end'])) { ?>
+											<? if ($column['filter_value']['start'] === null || $column['filter_value']['end'] === null) { ?>
 												<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
 											<? } else { ?>
 												{{Modify}}
@@ -255,7 +255,7 @@
 								//Check if the raw string override has been set for this value
 								if (isset($row['#' . $slug])) {
 									echo $row['#' . $slug];
-								} elseif (!is_null($value)) {
+								} elseif ($value !== null) {
 									switch ($column['type']) {
 										case 'date':
 											?>

@@ -240,7 +240,7 @@ class User extends Library
 			'key'     => $key,
 		);
 
-		if (!is_null($value)) {
+		if ($value !== null) {
 			if (_is_object($value)) {
 				$value = serialize($value);
 			}

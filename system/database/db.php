@@ -62,7 +62,7 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$key];
-		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
+		$this->prefix = $prefix === null ? DB_PREFIX : $prefix;
 	}
 
 	public function hasError($type = null)
@@ -318,7 +318,7 @@ class DB
 			return false;
 		}
 
-		if (is_null($prefix)) {
+		if ($prefix === null) {
 			$prefix = $this->prefix;
 		}
 

@@ -82,7 +82,7 @@ if (!function_exists('array_column')) {
 		foreach ($array as $row) {
 			$value = isset($row[$column]) ? $row[$column] : null;
 
-			if (is_null($index_key)) {
+			if ($index_key === null) {
 				$values[] = $value;
 			} elseif (isset($row[$index_key])) {
 				$values[$row[$index_key]] = $value;
@@ -150,7 +150,7 @@ if (!function_exists('array_search_key')) {
 			if (is_array($value)) {
 				$result = array_search_key($search_key, $needle, $value, $strict);
 
-				if (!is_null($result)) {
+				if ($result !== null) {
 					return $result;
 				}
 			}
@@ -496,7 +496,7 @@ define("FILELIST_RELATIVE", 3);
  */
 function get_files($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $filter_preg = null)
 {
-	if (is_null($exts)) {
+	if ($exts === null) {
 		$exts = array(
 			'php',
 			'tpl',

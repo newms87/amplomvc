@@ -31,12 +31,11 @@
 				<tr>
 					<td>{{Remove}}</td>
 					<td>
-						<form action="<?= $remove; ?>" method="post" style="float:left;">
+						<form action="<?= site_url('admin/tool/logs/remove', 'log=' . $log); ?>" method="post" style="float:left;">
 							<input id="remove_entries" type="text" name="entries" value=""/>
 							<a class="button" onclick="$(this).closest('form').submit();">{{Remove}}</a>
 						</form>
-						<a href="<?= $clear; ?>" class="button"
-						   style="float:left;margin-left:20px">{{Clear Log Entries}}</a>
+						<a href="<?= site_url('admin/tool/logs/clear', 'log=' . $log); ?>" class="button" style="float:left;margin-left:20px">{{Clear Log Entries}}</a>
 					</td>
 				</tr>
 			</table>
@@ -44,30 +43,20 @@
 				<thead>
 					<tr>
 						<td width="2%">{{Remove}}</td>
-						<td width="2%">{{Line}}</td>
-						<td width="6%">{{Date}}</td>
-						<td width="3%">{{IP}}</td>
-						<td width="65%">{{Message}}</td>
-						<td width="8%">{{URL}}</td>
-						<td width="8%">{{Query}}</td>
-						<td width="8%">{{Store}}</td>
-						<td width="8%">{{User Agent}}</td>
+						<? foreach (array_keys($entries[0]) as $ekey) { ?>
+							<td class="<?= $ekey; ?>"><?= !empty($fields[$ekey]) ? $fields[$ekey] : cast_title($ekey); ?></td>
+						<? } ?>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="entry-list">
 					<? foreach ($entries as $e) { ?>
 						<tr data-line="<?= $e['line']; ?>">
 							<td>
-								<a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a>
+								<a class="button remove">X</a>
 							</td>
-							<td><?= $e['line']; ?></td>
-							<td><?= $e['date']; ?></td>
-							<td><?= $e['ip']; ?></td>
-							<td width="65%"><?= $e['message']; ?></td>
-							<td><?= $e['uri']; ?></td>
-							<td><?= $e['query']; ?></td>
-							<td><?= $e['store']; ?></td>
-							<td><?= $e['agent']; ?></td>
+							<? foreach ($e as $key => $value) { ?>
+								<td class="<?= $key; ?>"><?= $value; ?></td>
+							<? } ?>
 						</tr>
 					<? } ?>
 				</tbody>
@@ -79,17 +68,16 @@
 <script type="text/javascript">
 	var remove_tpl = $('#log_template').remove().removeAttr('id');
 
-	function remove_entry(context) {
-		$.post("<?= $remove; ?>", {entries: context.attr('data-line'), no_page: 1}, function (msg) {
-			context.parent().ac_msg('warning', msg);
+	$('.entry-list .remove').click(function() {
+		var $tr = $(this).closest('tr');
 
-			setTimeout(function () {
-				context.fadeOut(300);
-			}, 1000);
+		$tr.find('a').loading({text: 'O'});
+
+		$.post("<?= site_url('admin/tool/logs/remove', 'log=' . $log); ?>", {entries: $tr.attr('data-line'), no_page: 1}, function (msg) {
+			$tr.html($('<td colspan="'+$tr.children().length+'">Removed</td>').ac_msg(msg));
+			setTimeout(function(){$tr.remove()}, 2000);
 		}, 'json');
-
-		context.loading();
-	}
+	});
 
 	$('#button_prev, #button_next').trigger('change');
 

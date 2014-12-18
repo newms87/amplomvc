@@ -1,6 +1,25 @@
 <?php
+
 class App_Controller_Admin_Tool_Logs extends Controller
 {
+	private $dir;
+
+	private $fields = array(
+		'date'    => 'Date',
+		'ip'      => 'IP',
+		'message' => 'Message',
+		'uri'     => 'URL',
+		'query'   => 'Query',
+		'agent'   => 'User Agent',
+	);
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->dir = DIR_LOGS . SITE_PREFIX . '/';
+	}
+
 	public function index()
 	{
 		//Log File
@@ -23,9 +42,10 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$start = $sort['start'];
 		$limit = $sort['limit'];
 
-		$current = -1;
+		$current  = -1;
+		$num_cols = count(Log::$cols);
 
-		$file    = DIR_LOGS . STORE_PREFIX . '/' . $log . '.txt';
+		$file    = $this->dir . $log . '.txt';
 		$entries = array();
 
 		if (file_exists($file)) {
@@ -36,23 +56,22 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 					if ($current >= $start) {
 
-						$data = explode("\t", $buffer, 7);
+						$data = explode("\t", $buffer, $num_cols);
 
 						//Invalid entry
-						if (count($data) < 6) {
+						if (count($data) < $num_cols - 1) {
 							continue;
 						}
 
-						$entries[] = array(
-							'line'    => $current,
-							'date'    => $data[0],
-							'ip'      => $data[1],
-							'uri'     => $data[2],
-							'query'   => $data[3],
-							'store'   => $data[4],
-							'agent'   => $data[5],
-							'message' => str_replace("__nl__", "<br />", $data[6]),
+						$entry = array(
+							'line' => $current,
 						);
+
+						$entry += array_combine(Log::$cols, $data);
+
+						$entry['message'] = str_replace("__nl__", "<br />", $entry['message']);
+
+						$entries[] = $entry;
 					}
 				}
 				fclose($handle);
@@ -75,7 +94,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		//Template Data
 		$data['log_name'] = $log_name;
 
-		$log_files = get_files(DIR_LOGS, array('txt'));
+		$log_files = get_files($this->dir, array('txt'));
 
 		foreach ($log_files as &$file) {
 			$base = $file->getBasename('.txt');
@@ -95,9 +114,9 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		//Limits
 		$data['limits'] = $this->sort->renderLimits();
 
-		//Action Buttons
-		$data['remove'] = site_url('admin/tool/logs/remove', 'log=' . $log);
-		$data['clear']  = site_url('admin/tool/logs/clear', 'log=' . $log);
+		$data['log'] = $log;
+
+		$data['fields'] = $this->fields;
 
 		//Render
 		output($this->render('tool/logs', $data));
@@ -105,43 +124,46 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 	public function remove($lines = null)
 	{
-		if (empty($_GET['log'])) {
-			redirect('admin/tool/logs');
-		}
+		$log = _get('log');
 
-		if (!isset($_POST['entries']) && $lines === null) {
-			message('warning', _l("No entries were selected for removal!"));
-		} else {
-			$entries = ($lines !== null) ? $lines : $_POST['entries'];
+		if ($log) {
+			$entries = _post('entries', $lines);
 
-			if (preg_match("/[^\\d\\s,-]/", $entries) > 0) {
+			if (!$entries || preg_match("/[^\\d\\s,-]/", $entries)) {
 				message('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
-			}
+			} else {
 
-			$file = DIR_LOGS . option('config_error_filename');
+				$file = $this->dir . $log . '.txt';
 
-			$file_lines = explode("\n", file_get_contents($file));
-
-			foreach (explode(',', $entries) as $entry) {
-				if (strpos($entry, '-')) {
-					list($from, $to) = explode('-', $entry);
-					for ($i = (int)$from; $i <= (int)$to; $i++) {
-						unset($file_lines[$i]);
-					}
+				if (!is_file($file)) {
+					message('warning', _l("Invalid log file %s", $file));
 				} else {
-					unset($file_lines[(int)$entry]);
+					$file_lines = explode("\n", file_get_contents($file));
+
+					foreach (explode(',', $entries) as $entry) {
+						if (strpos($entry, '-')) {
+							list($from, $to) = explode('-', $entry);
+							for ($i = (int)$from; $i <= (int)$to; $i++) {
+								unset($file_lines[$i]);
+							}
+						} else {
+							unset($file_lines[(int)$entry]);
+						}
+					}
+
+					file_put_contents($file, implode("\n", $file_lines));
+
+					message('success', _l('Entry Removed from %s!', $file));
 				}
 			}
-
-			file_put_contents($file, implode("\n", $file_lines));
-
-			message('success', _l('Entry Removed!'));
+		} else {
+			message('error', _l("Must specify log file"));
 		}
 
 		if ($this->is_ajax) {
 			output_json($this->message->fetch());
 		} else {
-			redirect('admin/tool/logs', 'log=' . $_GET['log']);
+			redirect('admin/tool/logs', 'log=' . $log);
 		}
 	}
 

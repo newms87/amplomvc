@@ -157,7 +157,7 @@ abstract class Model
 		$select = $this->query->getClause('select', false);
 		$the_rest = substr($sql, $this->query->getOffset('from'));
 
-		if (is_null($use_calc_found_rows)) {
+		if ($use_calc_found_rows === null) {
 			$use_calc_found_rows = $this->useCalcFoundRows($sql);
 		}
 

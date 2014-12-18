@@ -15,7 +15,7 @@ class Plugin extends Library
 
 		$this->installed = cache('plugin.installed');
 
-		if (is_null($this->installed)) {
+		if ($this->installed === null) {
 			$this->installed = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1", 'name');
 
 			cache('plugin.installed', $this->installed);

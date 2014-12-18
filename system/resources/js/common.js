@@ -413,7 +413,7 @@ function ac_form(params) {
 	var $form = $(this);
 	var callback = params.success;
 	var complete = params.complete;
-	var $button = $form.find('button, input[type=submit]');
+	var $button = $form.find('[data-loading]');
 	if (!$button.length) {
 		$button = $form;
 	}

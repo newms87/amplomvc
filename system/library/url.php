@@ -314,7 +314,7 @@ class Url extends Library
 	{
 		$this->aliases = cache('url_alias.all');
 
-		if (is_null($this->aliases)) {
+		if ($this->aliases === null) {
 			$this->aliases = $this->queryRows("SELECT * FROM " . DB_PREFIX . "url_alias WHERE status = 1", 'alias');
 
 			cache('url_alias.all', $this->aliases);

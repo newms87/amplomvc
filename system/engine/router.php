@@ -10,7 +10,7 @@ final class Router
 	{
 		$this->routeStore();
 
-		define('STORE_PREFIX', !empty($this->store['prefix']) ? $this->store['prefix'] : DB_PREFIX);
+		define('SITE_PREFIX', !empty($this->store['prefix']) ? $this->store['prefix'] : DB_PREFIX);
 
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
@@ -43,7 +43,7 @@ final class Router
 
 	public function getSegment($index = null)
 	{
-		if (is_null($index)) {
+		if ($index === null) {
 			return $this->segments;
 		}
 
@@ -162,7 +162,7 @@ final class Router
 
 		$stores = cache('store.all');
 
-		if (is_null($stores)) {
+		if ($stores === null) {
 			$stores = $registry->get('Model_setting_Store')->getStores();
 
 			cache('store.all', $stores);

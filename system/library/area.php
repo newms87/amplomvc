@@ -8,12 +8,12 @@ class Area extends Library
 
 	public function hasBlocks($area, $layout_id = null)
 	{
-		if (is_null($layout_id)) {
+		if ($layout_id === null) {
 			$layout_id = option('config_layout_id');
 
 			self::$counts = cache('area.counts.'.$layout_id);
 
-			if (is_null(self::$counts)) {
+			if (self::$counts === null) {
 
 				if (!$layout_id) {
 					$layout_id = option('config_default_layout', 0);

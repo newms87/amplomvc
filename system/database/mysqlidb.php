@@ -91,7 +91,7 @@ class mysqlidb implements DatabaseInterface
 
 					foreach ($data as &$row) {
 						foreach ($row as $key => &$value) {
-							if (!is_null($value)) {
+							if ($value !== null) {
 								switch ($fields[$key]) {
 									case 'float':
 										$value = (float)$value;

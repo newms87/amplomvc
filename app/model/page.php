@@ -128,7 +128,7 @@ class App_Model_Page extends Model
 
 	public function getPage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);
@@ -151,7 +151,7 @@ class App_Model_Page extends Model
 	//TODO: Develop good caching method for pages.
 	public function getActivePage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id . " AND status = 1");
+		$page = $this->queryRow("SELECT * FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id . " AND status = 1");
 
 		$this->getPageFiles($page);
 
@@ -165,9 +165,9 @@ class App_Model_Page extends Model
 
 	public function getPageByName($name)
 	{
-		$themes = $this->theme->getThemes();
+		$themes = array_keys($this->theme->getThemes());
 
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
+		$page = $this->queryRow("SELECT * FROM " . $this->prefix . "page WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 
 		$this->getPageFiles($page);
 
@@ -176,7 +176,7 @@ class App_Model_Page extends Model
 
 	public function getPageForPreview($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM " . $this->prefix . "page WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);
@@ -257,7 +257,7 @@ class App_Model_Page extends Model
 	{
 		$pages = cache('page.loaded');
 
-		if (is_null($pages)) {
+		if ($pages === null) {
 			$pages = array();
 
 			$page_list = $this->getPages();

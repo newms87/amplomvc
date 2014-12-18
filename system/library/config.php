@@ -165,7 +165,7 @@ class Config extends Library
 		if (!isset($loaded_groups[$group])) {
 			$data = cache("setting.$group");
 
-			if (is_null($data)) {
+			if ($data === null) {
 				$data = array();
 
 				$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "'");

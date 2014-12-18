@@ -249,7 +249,7 @@ class Document extends Library
 			//Check Less @imports for modifications
 			$dependencies = cache('less.' . $reference);
 
-			if (is_null($dependencies)) {
+			if ($dependencies === null) {
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
 				foreach ($dependencies as $d_file) {
@@ -309,7 +309,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => is_null($compress) ? option('config_less_compress', false) : $compress,
+			'compress' => $compress === null ? option('config_less_compress', false) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
