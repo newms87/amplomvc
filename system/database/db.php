@@ -25,7 +25,7 @@ class DB
 		}
 
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if ($driver === 'mysqli') {
+		if (!$driver || $driver === 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 
@@ -616,7 +616,17 @@ class DB
 		$tables = $this->getTables();
 
 		foreach ($tables as $table) {
-			$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
+			if ($old_prefix) {
+				$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
+			} else {
+				if (preg_match("/^$prefix/", $table)) {
+					continue;
+				}
+
+				$new_table = $prefix . $table;
+			}
+
+			$this->query("DROP TABLE IF EXISTS `$new_table`");
 			$this->query("RENAME TABLE `$table` TO `$new_table`");
 		}
 

@@ -63,33 +63,6 @@ class App_Controller_Admin_Header extends Controller
 				$this->document->addLink('admin', $link_image_manager);
 			}
 
-			$stores = $this->Model_Setting_Store->getStores();
-
-			if (user_can('r', 'admin/settings/store')) {
-				//Store Front Settings
-
-				$link_stores = array(
-					'name'         => 'system_settings_stores',
-					'display_name' => _l("Stores"),
-					'parent'       => 'system_settings',
-					'sort_order'   => 1,
-				);
-
-				$this->document->addLink('admin', $link_stores);
-
-				foreach ($stores as $index => $store) {
-					$link_store_setting = array(
-						'name'         => 'system_settings_stores_' . slug($store['name']),
-						'display_name' => $store['name'],
-						'href'         => store_url($store['store_id'], 'admin/settings/store/form'),
-						'parent'       => 'system_settings_stores',
-						'sort_order'   => $index,
-					);
-
-					$this->document->addLink('admin', $link_store_setting);
-				}
-			}
-
 			if (user_can('r', 'admin/dashboards')) {
 				$dashboards = $this->Model_Dashboard->getDashboards(true);
 
@@ -113,6 +86,22 @@ class App_Controller_Admin_Header extends Controller
 					$this->document->addLink('admin', $dashboard_link);
 				}
 			}
+
+			$widgets = $this->Model_Settings->getWidgets();
+
+			foreach ($widgets as $widget) {
+				$link_widget = array(
+					'parent'       => 'system_settings',
+					'name'         => slug($widget['title']),
+					'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
+					'href'         => $widget['url'],
+					'sort_order'   => $widget['sort_order'],
+				);
+
+				$this->document->addLink('admin', $link_widget);
+			}
+
+			$stores = $this->Model_Setting_Store->getStores();
 
 			//Store Front Links
 			$link_stores = array(

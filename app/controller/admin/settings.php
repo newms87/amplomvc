@@ -17,4 +17,11 @@ class App_Controller_Admin_Settings extends Controller
 		//Render
 		output($this->render('settings/list', $data));
 	}
+
+	public function restore_defaults()
+	{
+		$this->Model_Settings->restoreDefaults();
+
+		redirect('admin');
+	}
 }

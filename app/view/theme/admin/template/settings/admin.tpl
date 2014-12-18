@@ -7,7 +7,7 @@
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/>
-				{{General Settings}}
+				{{Admin Settings}}
 			</h1>
 
 			<div class="buttons">

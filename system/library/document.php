@@ -16,7 +16,13 @@ class Document extends Library
 	{
 		parent::__construct();
 
-		$this->links = $this->Model_Navigation->getNavigationGroup();
+		$this->links = $this->Model_Navigation->getNavigationGroup(IS_ADMIN ? 'admin' : 'all');
+
+		//In case something happened to the admin navigation, we reset it
+		if (IS_ADMIN && empty($this->links['admin']['links'])) {
+			$this->Model_Navigation->resetAdminNavigationGroup();
+			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
+		}
 
 		$this->setCanonicalLink($this->url->getSeoUrl());
 
@@ -96,8 +102,8 @@ class Document extends Library
 	public function addLink($group = 'primary', $link)
 	{
 		if (empty($link['name'])) {
-			trigger_error(_l("%s(): You must provide a link name!"));
-			return;
+			$this->error['name'] = _l("You must provide a link name!");
+			return false;
 		}
 
 		$defaults = array(
@@ -150,7 +156,8 @@ class Document extends Library
 
 			//$return === false when link is found
 			if ($return !== false) {
-				trigger_error(_l("Unable to locate link %s in Link Group %s", $new_link['parent'], $group));
+				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $new_link['parent'], $group);
+				return false;
 			}
 		} else {
 			$this->links[$group]['links'][] = $new_link;

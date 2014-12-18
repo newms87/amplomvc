@@ -144,7 +144,7 @@ function amplo_mvc_install()
 	}
 
 	$config_template = DIR_SITE . 'example-config.php';
-	$config          = DIR_SITE . 'config.php';
+	$config_file     = DIR_SITE . 'config.php';
 
 	$contents = file_get_contents($config_template);
 
@@ -163,7 +163,7 @@ function amplo_mvc_install()
 		$contents = set_define($contents, $key, $value);
 	}
 
-	file_put_contents($config, $contents);
+	file_put_contents($config_file, $contents);
 
 	//Setup .htaccess file
 	$htaccess_template = DIR_SITE . 'example.htaccess';

@@ -264,12 +264,8 @@ class App_Model_Navigation extends App_Model_Table
 		return $results;
 	}
 
-	public function getNavigationGroup($name = null)
+	public function getNavigationGroup($name = 'all')
 	{
-		if (!$name) {
-			$name = IS_ADMIN ? 'admin' : 'all';
-		}
-
 		$navigation_groups = cache("navigation_group.$name");
 
 		if (!isset($navigation_groups)) {
@@ -423,16 +419,6 @@ class App_Model_Navigation extends App_Model_Table
 					'system_settings'          => array(
 						'display_name' => 'Settings',
 						'path'         => 'admin/settings',
-						'children'     => array(
-							'system_settings_general' => array(
-								'display_name' => 'General',
-								'path'         => 'admin/settings/general',
-							),
-							'system_settings_update'  => array(
-								'display_name' => 'Update',
-								'path'         => 'admin/settings/update',
-							),
-						),
 					),
 					'system_mail'              => array(
 						'display_name' => 'Mail',

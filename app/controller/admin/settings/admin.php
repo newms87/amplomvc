@@ -30,25 +30,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 			$settings = $this->config->loadGroup('admin');
 		}
 
-		$defaults = array(
-			'admin_title'                => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
-			'admin_icon'                 => null,
-			'admin_bar'                  => 1,
-			'admin_logo'                 => '',
-			'admin_logo_srcset'                 => '',
-			'admin_show_breadcrumbs'     => 1,
-			'admin_breadcrumb_separator' => ' / ',
-			'admin_language'             => 1,
-			'admin_list_limit'           => 20,
-			'admin_thumb_width'          => 120,
-			'admin_thumb_height'         => 120,
-			'admin_logo_width'           => 0,
-			'admin_logo_height'          => 0,
-			'admin_list_image_width'     => 60,
-			'admin_list_image_height'    => 60,
-		);
-
-		$settings += $defaults;
+		$settings += App_Model_Settings::$admin_settings;
 
 		//Template Data
 		$settings['data_languages'] = $this->Model_Localisation_Language->getLanguages();
@@ -107,31 +89,6 @@ class App_Controller_Admin_Settings_Admin extends Controller
 			post_redirect('admin/settings/admin');
 		} else {
 			redirect('admin/settings');
-		}
-	}
-
-	public function generate_icons()
-	{
-		if (!empty($_POST['icon'])) {
-			$icon_files = array();
-
-			foreach (self::$icon_sizes as $size) {
-				$url = image_save($_POST['icon'], null, $size, $size);
-
-				$icon_files[$size . 'x' . $size] = array(
-					'url'     => $url,
-					'relpath' => str_replace(URL_IMAGE, '', $url),
-				);
-			}
-
-			$url = $this->image->ico($_POST['icon']);
-
-			$icon_files['ico'] = array(
-				'relpath' => str_replace(URL_IMAGE, '', $url),
-				'url'     => $url,
-			);
-
-			output(json_encode($icon_files));
 		}
 	}
 }
