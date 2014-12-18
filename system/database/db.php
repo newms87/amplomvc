@@ -617,7 +617,7 @@ class DB
 
 		foreach ($tables as $table) {
 			$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
-			$this->query("RENAME TABLE $table TO $new_table");
+			$this->query("RENAME TABLE `$table` TO `$new_table`");
 		}
 
 		return empty($this->error);

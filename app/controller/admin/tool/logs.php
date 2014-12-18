@@ -169,16 +169,24 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 	public function clear()
 	{
-		if (empty($_GET['log'])) {
-			redirect('admin/tool/logs');
+		$log = _get('log');
+
+		if ($log) {
+			$file = $this->dir . $log . '.txt';
+
+			if (is_file($file)) {
+				file_put_contents($file, '');
+
+				message('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
+			} else {
+				message('error', _l("Invalid log file %s", $log));
+			}
 		}
 
-		$file = DIR_LOGS . $_GET['log'] . '.txt';
-
-		file_put_contents($file, '');
-
-		message('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
-
-		redirect('admin/tool/logs', 'log=' . $_GET['log']);
+		if ($this->is_ajax) {
+			output_json($this->message->fetch());
+		} else {
+			redirect('admin/tool/logs', 'log=' . $log);
+		}
 	}
 }

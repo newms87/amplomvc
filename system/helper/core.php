@@ -444,7 +444,7 @@ HTML;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 			}
 
-			if (option('config_error_log')) {
+			if (option('config_error_log', 1)) {
 				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 			}
 		}

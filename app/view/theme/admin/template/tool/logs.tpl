@@ -27,6 +27,7 @@
 			</div>
 		</div>
 		<div class="section">
+			<? if (!empty($entries)) { ?>
 			<table class="form">
 				<tr>
 					<td>{{Remove}}</td>
@@ -61,6 +62,9 @@
 					<? } ?>
 				</tbody>
 			</table>
+			<? } else { ?>
+				<h3><?= _l("There are no entries"); ?></h3>
+			<? } ?>
 		</div>
 	</div>
 </div>
