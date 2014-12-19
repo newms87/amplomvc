@@ -9,7 +9,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Automated Tasks"));
+		set_page_info('title', _l("Automated Tasks"));
 
 		if (IS_POST && $this->validate()) {
 			$this->config->save('cron', 'cron_tasks', $_POST, false);

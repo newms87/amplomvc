@@ -2,6 +2,7 @@
 
 class Document extends Library
 {
+	private $info;
 	private $title;
 	private $description;
 	private $keywords;
@@ -24,59 +25,25 @@ class Document extends Library
 			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
 		}
 
-		$this->setCanonicalLink($this->url->getSeoUrl());
+		$this->info['canonical_link'] = $this->url->getSeoUrl();
 
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}
 	}
 
-	public function setTitle($title)
+	public function info($key = null, $default = null)
 	{
-		$this->title = _strip_tags($title);
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : $default;
+		}
+
+		return $this->info;
 	}
 
-	public function getTitle()
+	public function setInfo($key, $value)
 	{
-		return $this->title;
-	}
-
-	public function setDescription($description)
-	{
-		$this->description = $description;
-	}
-
-	public function getDescription()
-	{
-		return $this->description;
-	}
-
-	public function setKeywords($keywords)
-	{
-		$this->keywords = $keywords;
-	}
-
-	public function getKeywords()
-	{
-		return $this->keywords;
-	}
-
-	/**
-	 * Canonical Links are used by search engines to determine the most appropriate version of web pages
-	 * with identical (or almost, eg: different sort orders, etc.) content.
-	 *
-	 * When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
-	 *
-	 * @param $href - the preferred url for the current page.
-	 */
-	public function setCanonicalLink($href)
-	{
-		$this->canonical_link = $href;
-	}
-
-	public function getCanonicalLink()
-	{
-		return $this->canonical_link;
+		$this->info[$key] = $value;
 	}
 
 	public function hasLink($group = 'primary', $link_name)
@@ -290,7 +257,7 @@ class Document extends Library
 
 			$parser->parseFile($file, $reference);
 
-			$parser->parse("@basepath: '" . SITE_BASE . "';");
+			$parser->parse("@base-path: '" . SITE_BASE . "';");
 
 			$css = $parser->getCss();
 
@@ -354,17 +321,6 @@ class Document extends Library
 		return $this->styles;
 	}
 
-	public function renderStyles()
-	{
-		$html = '';
-
-		foreach ($this->styles as $style) {
-			$html .= "<link rel=\"$style[rel]\" type=\"text/css\" href=\"$style[href]\" media=\"$style[media]\" />\r\n";
-		}
-
-		return $html;
-	}
-
 	public function addScript($script, $priority = 100)
 	{
 		//First check for a URL wrapper, then check if it is a file
@@ -399,44 +355,30 @@ class Document extends Library
 	 */
 	public function getScripts()
 	{
-		$scripts = array();
-
 		ksort($this->scripts);
+
+		$scripts = array(
+			'local' => array(
+				'ac' => "\$ac = " . json_encode($this->ac_vars),
+			),
+		);
 
 		foreach ($this->scripts as $priority => $script_list) {
 			foreach ($script_list as $script) {
-				$scripts[] = $script;
+				//Separate Localized files
+				if (strpos($script, 'local:') === 0) {
+					if (is_file($file = substr($script, 6))) {
+						ob_start();
+						include($file);
+						$scripts['local'][] = ob_get_clean();
+					}
+				} else {
+					$scripts['src'][] = $script;
+				}
 			}
 		}
 
 		return $scripts;
-	}
-
-	public function renderScripts()
-	{
-		$scripts = $this->getScripts();
-
-		$html = '';
-
-		if (!empty($this->ac_vars)) {
-			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
-		}
-
-		foreach ($scripts as $script) {
-			if (strpos($script, 'local:') === 0) {
-				if (is_file($file = substr($script, 6))) {
-					$html .= "<script type=\"text/javascript\">\r\n";
-					ob_start();
-					include($file);
-					$html .= ob_get_clean();
-					$html .= "\r\n</script>\r\n";
-				}
-			} else {
-				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
-			}
-		}
-
-		return $html;
 	}
 
 	public function setBodyClass($class)

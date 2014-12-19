@@ -4,15 +4,6 @@ class App_Controller_Header extends Controller
 {
 	public function index($settings = array())
 	{
-		$settings['title'] = $this->document->getTitle();
-
-		$settings['base'] = IS_SSL ? HTTPS_SITE : HTTP_SITE;
-
-		$settings['name']   = option('site_name');
-		$settings['logo']   = option('config_logo');
-		$settings['slogan'] = option('config_slogan');
-		$settings['theme']  = option('config_theme');
-
 		//Add Styles
 		$style = $this->theme->getThemeStyle();
 
@@ -43,27 +34,18 @@ class App_Controller_Header extends Controller
 		$this->document->localizeVar('theme_url', theme_url());
 
 		//Page Head
-		$settings['direction']      = $this->language->info('direction');
-		$settings['description']    = $this->document->getDescription();
-		$settings['keywords']       = $this->document->getKeywords();
-		$settings['canonical_link'] = $this->document->getCanonicalLink();
-		$settings['styles']         = $this->document->renderStyles();
-		$settings['scripts']        = $this->document->renderScripts();
+		$settings['styles']  = $this->document->getStyles();
+		$settings['scripts'] = $this->document->getScripts();
 
 		//Body
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
 		$settings['body_class'] = $this->document->getBodyClass();
 
-		//Login Check & The Welcome Message
+		//Customer Info
 		$settings['customer'] = customer_info();
 
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();
-
-		//Internationalization
-		$settings['lang']           = $this->language->info('code');
-		$settings['multi_language'] = option('config_multi_language');
-		$settings['multi_currency'] = option('config_multi_currency');
 
 		//Render
 		$this->render('header', $settings);

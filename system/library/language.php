@@ -102,15 +102,20 @@ class Language extends Library
 		$this->info        = $language;
 	}
 
-	public function info($key = null, $language_id = null)
+	public function info($key = null, $default = null, $language_id = null)
 	{
 		$language = !empty($language_id) ? $this->getLanguage($language_id) : $this->info;
 
-		if ($key === null) {
-			return $language;
-		} else {
-			return isset($language[$key]) ? $language[$key] : null;
+		if ($key) {
+			return isset($language[$key]) ? $language[$key] : $default;
 		}
+
+		return $language;
+	}
+
+	public function setInfo($key, $value)
+	{
+		$this->info[$key] = $value;
 	}
 
 	private function resolve()

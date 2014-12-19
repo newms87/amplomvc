@@ -5,7 +5,7 @@ class App_Controller_Admin_View extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Views"));
+		set_page_info('title', _l("Views"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -87,7 +87,7 @@ class App_Controller_Admin_View extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("View Form"));
+		set_page_info('title', _l("View Form"));
 
 		//Insert or Update
 		$view_listing_id = _get('view_listing_id');

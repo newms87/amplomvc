@@ -9,7 +9,7 @@ class App_Controller_Account_Download extends Controller
 			redirect('customer/login');
 		}
 
-		$this->document->setTitle(_l("Account Downloads"));
+		set_page_info('title', _l("Account Downloads"));
 
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account"), site_url('account'));

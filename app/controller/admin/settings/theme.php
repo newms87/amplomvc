@@ -11,7 +11,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Theme Settings"));
+		set_page_info('title', _l("Theme Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

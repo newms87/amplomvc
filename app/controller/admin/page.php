@@ -5,7 +5,7 @@ class App_Controller_Admin_Page extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -99,7 +99,7 @@ class App_Controller_Admin_Page extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Insert or Update
 		$page_id = _get('page_id');

@@ -28,7 +28,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$log_name = ucfirst($log);
 
 		//Page Head
-		$this->document->setTitle(_l("%s Log", $log_name));
+		set_page_info('title', _l("%s Log", $log_name));
 
 		//Breadcrumbs
 		breadcrumb(_l('Home'), site_url('admin'));

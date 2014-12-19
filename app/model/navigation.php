@@ -4,6 +4,21 @@ class App_Model_Navigation extends App_Model_Table
 {
 	protected $table = 'navigation', $primary_key = 'navigation_id';
 
+	public function getGroupId($navigation_group_id)
+	{
+		if (is_string($navigation_group_id) && preg_match("/[^\\d]/", $navigation_group_id)) {
+			$name                = $navigation_group_id;
+			$navigation_group_id = $this->getGroupByName($name);
+
+			if (!$navigation_group_id) {
+				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
+				return false;
+			}
+		}
+
+		return $navigation_group_id;
+	}
+
 	public function save($navigation_id, $link)
 	{
 		if (empty($link['display_name'])) {
@@ -84,13 +99,10 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroup($navigation_group_id, $group)
 	{
-		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$group['name'] = $name;
-			}
+		if (!$navigation_group_id) {
+			return false;
 		}
 
 		if (isset($group['name'])) {
@@ -117,6 +129,8 @@ class App_Model_Navigation extends App_Model_Table
 
 		//Add Links
 		if (!empty($group['links'])) {
+			$this->toTree($group['links']);
+
 			$this->saveGroupLinks($navigation_group_id, $group['links']);
 		}
 
@@ -127,15 +141,13 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroupLinks($navigation_group_id, $links)
 	{
-		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			return false;
 		}
+
+		$this->delete('navigation', array('navigation_group_id' => $navigation_group_id));
 
 		$sort_order = 0;
 
@@ -158,14 +170,10 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function removeGroup($navigation_group_id)
 	{
-		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			return false;
 		}
 
 		$this->delete("navigation_group", $navigation_group_id);
@@ -191,14 +199,10 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function removeGroupLink($navigation_group_id, $link)
 	{
-		if (is_string($navigation_group_id)) {
-			$group_name          = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($group_name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $group_name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			return false;
 		}
 
 		$where = array(
@@ -285,25 +289,15 @@ class App_Model_Navigation extends App_Model_Table
 				if (empty($group['links'])) {
 					continue;
 				}
-				$parent_ref = array();
 
 				foreach ($group['links'] as $key => &$link) {
 					if (!empty($link['path']) || !empty($link['query'])) {
 						$link['href'] = site_url($link['path'], $link['query']);
 					}
-
-					if (!isset($link['children'])) {
-						$link['children'] = array();
-					}
-
-					$parent_ref[$link['navigation_id']] = &$link;
-
-					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = &$link;
-						unset($group['links'][$key]);
-					}
 				}
 				unset($link);
+
+				$this->toTree($group['links']);
 			}
 			unset($group);
 
@@ -332,7 +326,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function checkLinks(&$links)
 	{
-		$is_active = false;
+		$is_active  = false;
 		$has_active = false;
 
 		foreach ($links as &$link) {
@@ -361,10 +355,37 @@ class App_Model_Navigation extends App_Model_Table
 			}
 
 			$link['active'] = true;
-			$is_active = true;
+			$is_active      = true;
 		}
 
 		return $is_active;
+	}
+
+	public function toTree(&$links)
+	{
+		$parent_ref = array();
+
+		foreach ($links as $key => &$link) {
+			if (!isset($link['children'])) {
+				$link['children'] = array();
+			}
+
+			if (!empty($link['navigation_id'])) {
+				$parent_ref[$link['navigation_id']] = &$link;
+			} else {
+				$parent_ref[$key] = &$link;
+			}
+
+			$parent_ref[$link['name']] = &$link;
+
+			if (!empty($link['parent_id'])) {
+				$parent_ref[$link['parent_id']]['children'][] = &$link;
+				unset($links[$key]);
+			} elseif (!empty($link['parent'])) {
+				$parent_ref[$link['parent']]['children'][] = &$link;
+			}
+		}
+		unset($link);
 	}
 
 	public function resetAdminNavigationGroup()

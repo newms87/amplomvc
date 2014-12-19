@@ -1,18 +1,20 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
-	<div class="box">
-		<form action="<?= site_url('admin/navigation/save', 'navigation_group_id=' . $navigation_group_id); ?>" method="post" enctype="multipart/form-data" class="ctrl-save">
+	<form action="<?= site_url('admin/navigation/save', 'navigation_group_id=' . $navigation_group_id); ?>" method="post" enctype="multipart/form-data" class="ctrl-save">
+		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Navigation}}</h1>
+				<h1>
+					<img src="<?= theme_image('setting.png'); ?>" alt=""/>
+					{{Navigation}}
+				</h1>
 
 				<div class="buttons">
-					<button>{{Save}}</button>
+					<button data-loading="{{Saving...}}">{{Save}}</button>
 					<a href="<?= site_url('admin/navigation'); ?>" class="button cancel">{{Cancel}}</a>
 				</div>
 			</div>
 			<div class="section">
-
 				<table class="form">
 					<tr>
 						<td class="required"> {{Navigation Group:}}</td>
@@ -22,16 +24,14 @@
 					</tr>
 					<tr>
 						<td>{{Status:}}</td>
-						<td><?=
-							build(array(
-								'type' => 'select',
-								'name'  => 'status',
-								'data'   => array(
-									0 => _l("Disabled"),
-									1 => _l("Enabled"),
-								),
+						<td>
+							<?= build(array(
+								'type'   => 'select',
+								'name'   => 'status',
+								'data'   => $data_statuses,
 								'select' => $status
-							)); ?></td>
+							)); ?>
+						</td>
 					</tr>
 
 					<tr id="links_list_data">
@@ -53,7 +53,8 @@
 															<span class="display_name"><?= $link['display_name']; ?></span>
 															<span class="show_link_edit" onclick="toggle_edit_link($(this))">
 																<span class="edit_text">{{Edit Link}}</span>
-																<img class="remove_link" src="<?= theme_url('image/delete.png'); ?>" onclick="$(this).closest('li').remove();"/></span>
+																<img class="remove_link" src="<?= theme_url('image/delete.png'); ?>" onclick="$(this).closest('li').remove();"/>
+															</span>
 														</div>
 														<div class="editable" style="display:none">
 															<input type="hidden" class="parent_id" name="links[<?= $nav_id; ?>][parent_id]" value="<?= $link['parent_id']; ?>"/>
@@ -73,7 +74,7 @@
 															</div>
 															<div class="link_entry_href">
 																<label for="link_href_<?= $nav_id; ?>">{{URL / route}}</label>
-																<input id="link_href_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][href]" value="<?= $link['href']; ?>"/>
+																<input id="link_href_<?= $nav_id; ?>" type="text" name="links[<?= $nav_id; ?>][path]" value="<?= $link['path']; ?>"/>
 															</div>
 															<div class="link_entry_query">
 																<label for="link_query_<?= $nav_id; ?>">{{Query}}</label>
@@ -83,8 +84,8 @@
 																<label for="link_condition_<?= $nav_id; ?>">{{Display When:}}</label>
 																<?=
 																build(array(
-																	'type' => 'select',
-																	'name'  => "links[$nav_id][condition]",
+																	'type'   => 'select',
+																	'name'   => "links[$nav_id][condition]",
 																	'data'   => $data_conditions,
 																	'select' => $link['condition'],
 																	'#id'    => "link_condition_$nav_id",
@@ -94,8 +95,8 @@
 																<label for="link_status_<?= $nav_id; ?>">{{Status:}}</label>
 																<?=
 																build(array(
-																	'type' => 'select',
-																	'name'  => "links[$nav_id][status]",
+																	'type'   => 'select',
+																	'name'   => "links[$nav_id][status]",
 																	'data'   => $data_statuses,
 																	'select' => $link['status'],
 																	'#id'    => "link_status_$nav_id",
@@ -115,8 +116,8 @@
 					</tr>
 				</table>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
 </div>
 
 <script type="text/javascript">
@@ -126,10 +127,10 @@
 		var new_link = $.ac_template('link_list', 'add');
 
 		new_link.find('ul').sortable({
-			delay:       100,
+			delay: 100,
 			connectWith: "#links_list ul",
 			placeholder: "ui-state-highlight",
-			change:      show_placeholder
+			change: show_placeholder
 		});
 	}
 
@@ -152,10 +153,10 @@
 		});
 
 		list.sortable({
-			delay:       100,
+			delay: 100,
 			connectWith: "#links_list ul",
 			placeholder: 'placeholder',
-			change:      show_placeholder
+			change: show_placeholder
 		});
 	}
 

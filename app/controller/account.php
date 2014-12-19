@@ -9,7 +9,7 @@ class App_Controller_Account extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Account Manager"));
+		set_page_info('title', _l("Account Manager"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -31,7 +31,7 @@ class App_Controller_Account extends Controller
 	public function update()
 	{
 		//Page Head
-		$this->document->setTitle(_l("My Account Information"));
+		set_page_info('title', _l("My Account Information"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());

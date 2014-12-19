@@ -5,20 +5,12 @@ class App_Controller_Admin_Header extends Controller
 	public function index($settings = array())
 	{
 		$settings += array(
-			'title'          => $this->document->getTitle(),
-			'base'           => site_url('admin'),
-			'theme'          => option('config_admin_theme', 'admin'),
-			'direction'      => $this->language->info('direction'),
-			'description'    => $this->document->getDescription(),
-			'keywords'       => $this->document->getKeywords(),
-			'canonical_link' => $this->document->getCanonicalLink(),
-			'body_class'     => slug($this->route->getPath(), '-'),
-			'lang'           => $this->language->info('code'),
-			'user'           => user_info(),
+			'body_class' => slug($this->route->getPath(), '-'),
+			'user'       => user_info(),
 		);
 
 		//Add Styles
-		$style = $this->theme->getThemeStyle($settings['theme']);
+		$style = $this->theme->getThemeStyle(option('config_admin_theme', 'admin'));
 
 		if ($style) {
 			$this->document->addStyle($style);
@@ -87,18 +79,20 @@ class App_Controller_Admin_Header extends Controller
 				}
 			}
 
-			$widgets = $this->Model_Settings->getWidgets();
+			if (user_can('r', 'admin/settings')) {
+				$widgets = $this->Model_Settings->getWidgets();
 
-			foreach ($widgets as $widget) {
-				$link_widget = array(
-					'parent'       => 'system_settings',
-					'name'         => slug($widget['title']),
-					'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
-					'href'         => $widget['url'],
-					'sort_order'   => $widget['sort_order'],
-				);
+				foreach ($widgets as $widget) {
+					$link_widget = array(
+						'parent'       => 'system_settings',
+						'name'         => slug($widget['title']),
+						'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
+						'href'         => $widget['url'],
+						'sort_order'   => $widget['sort_order'],
+					);
 
-				$this->document->addLink('admin', $link_widget);
+					$this->document->addLink('admin', $link_widget);
+				}
 			}
 
 			$stores = $this->Model_Setting_Store->getStores();
@@ -136,8 +130,8 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-		$settings['styles']  = $this->document->renderStyles();
-		$settings['scripts'] = $this->document->renderScripts();
+		$settings['styles']  = $this->document->getStyles();
+		$settings['scripts'] = $this->document->getScripts();
 
 		//Failed Email Messages warnings
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();

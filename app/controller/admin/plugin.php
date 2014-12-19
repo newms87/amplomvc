@@ -3,7 +3,7 @@ class App_Controller_Admin_Plugin extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Plugins"));
+		set_page_info('title', _l("Plugins"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -175,7 +175,7 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 		$plugin_name = $_GET['name'];
 
-		$this->document->setTitle(_l("Plugins"));
+		set_page_info('title', _l("Plugins"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Plugins"), site_url('admin/plugin'));

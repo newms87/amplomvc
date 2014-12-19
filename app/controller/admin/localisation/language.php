@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
@@ -27,7 +27,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
@@ -42,7 +42,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $language_id) {

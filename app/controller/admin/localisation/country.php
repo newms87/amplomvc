@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
@@ -41,7 +41,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
@@ -70,7 +70,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $country_id) {

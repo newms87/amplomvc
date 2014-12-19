@@ -55,8 +55,10 @@
 */
 
 /* Path Config */
-@imgpath: '@{basepath}image/';
-@themepath: '@{basepath}app/view/theme/amplo/';
+@img-path: '@{base-path}image/';
+@theme-path: '@{base-path}app/view/theme/amplo/';
+@theme-img: '@{base-path}app/view/theme/amplo/image/';
+@font-path: '@{base-path}app/view/theme/amplo/font/';
 
 /* LESS config */
 @xs: 480px;
@@ -205,7 +207,7 @@
     border-radius: 5px;
 
     &:before {
-      background: url('@{themepath}image/sprite-17.png') center center no-repeat;
+      background: url('@{theme-img}sprite-17.png') center center no-repeat;
       background-position: -17px -45px;
       width: 17px;
       height: 14px;

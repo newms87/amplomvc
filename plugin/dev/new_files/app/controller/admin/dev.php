@@ -5,7 +5,7 @@ class App_Controller_Admin_Dev extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Development Console"));
+		set_page_info('title', _l("Development Console"));
 
 		$data['url_sync']            = site_url("admin/dev/sync");
 		$data['url_site_management'] = site_url("admin/dev/site_management");
@@ -19,7 +19,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function sync()
 	{
-		$this->document->setTitle(_l("Synchronize Sites"));
+		set_page_info('title', _l("Synchronize Sites"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -72,7 +72,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function site_management()
 	{
-		$this->document->setTitle(_l("Site Management"));
+		set_page_info('title', _l("Site Management"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -127,7 +127,7 @@ class App_Controller_Admin_Dev extends Controller
 	public function backup_restore()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Backup & Restore"));
+		set_page_info('title', _l("Backup & Restore"));
 
 		//Handle POST
 		if (IS_POST && $this->validate()) {
@@ -260,7 +260,7 @@ class App_Controller_Admin_Dev extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Database Administration"));
+		set_page_info('title', _l("Database Administration"));
 		$this->document->addStyle(URL_THEME . 'style/dev.css');
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);

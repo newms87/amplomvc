@@ -16,7 +16,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Admin Settings"));
+		set_page_info('title', _l("Admin Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

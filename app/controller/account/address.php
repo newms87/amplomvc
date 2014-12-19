@@ -11,7 +11,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Address Book"));
+		set_page_info('title', _l("Address Book"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -104,7 +104,7 @@ class App_Controller_Account_Address extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Address Form"));
+		set_page_info('title', _l("Address Form"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());

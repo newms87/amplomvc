@@ -25,7 +25,7 @@ class App_Controller_Customer extends Controller
 	public function login($settings = array())
 	{
 		//Page Head
-		$this->document->setTitle(_l("Customer Sign In"));
+		set_page_info('title', _l("Customer Sign In"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -113,7 +113,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Register Account"));
+		set_page_info('title', _l("Register Account"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -196,7 +196,7 @@ class App_Controller_Customer extends Controller
 	public function success()
 	{
 		//Page Title
-		$this->document->setTitle(_l("Your Account Has Been Created!"));
+		set_page_info('title', _l("Your Account Has Been Created!"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -210,7 +210,7 @@ class App_Controller_Customer extends Controller
 	public function forgotten()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Forgot Your Password?"));
+		set_page_info('title', _l("Forgot Your Password?"));
 
 		//Breadcrumbs
 		breadcrumb(_l('Home'), site_url());

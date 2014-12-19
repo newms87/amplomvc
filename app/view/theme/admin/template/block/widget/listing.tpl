@@ -38,8 +38,8 @@
 					<div class="select-cols">
 						<?=
 						build(array(
-							'type' => 'multiselect',
-							'name'  => 'columns',
+							'type'   => 'multiselect',
+							'name'   => 'columns',
 							'data'   => $extra_cols,
 							'select' => array_keys($columns),
 							'key'    => 'Field',
@@ -64,8 +64,8 @@
 						<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
 						<?=
 						build(array(
-							'type' => 'select',
-							'name'  => 'view_type',
+							'type'   => 'select',
+							'name'   => 'view_type',
 							'data'   => $data_chart_types,
 							'select' => $view_type,
 							'#id'    => 'view-type-' . $view_id,
@@ -79,8 +79,8 @@
 						<label for="chart-group-<?= $view_id; ?>">{{X axis (Group Column)}}</label>
 						<?=
 						build(array(
-							'type' => 'select',
-							'name'  => 'chart[group_by]',
+							'type'   => 'select',
+							'name'   => 'chart[group_by]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
 							'key'    => 'Field',
@@ -93,8 +93,8 @@
 						<label for="chart-data-<?= $view_id; ?>">{{Y axis (Data Column)}}</label>
 						<?=
 						build(array(
-							'type' => 'multiselect',
-							'name'  => 'chart[data_cols]',
+							'type'   => 'multiselect',
+							'name'   => 'chart[data_cols]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
 							'key'    => 'Field',
@@ -137,7 +137,7 @@
 	<script type="text/javascript">
 		var $list_widget = $('.widget-listing').use_once();
 
-		$list_widget.find('.export-view').click(function() {
+		$list_widget.find('.export-view').click(function () {
 			if (confirm("{{Do you want to export the full data set?}}")) {
 				window.location = $(this).attr('href') + '&limit=0';
 				return false;
@@ -172,7 +172,9 @@
 				$listing.addClass("loading");
 				$listing.find('.refresh-listing').addClass('refreshing');
 
-				var data = {columns: {}};
+				var data = {
+					columns: {}
+				};
 
 				$this.closest('.select-cols').find(':checked').each(function (i, e) {
 					data.columns[$(e).val()] = i;
@@ -200,7 +202,7 @@
 
 			$this.loading();
 
-			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(),function (response) {
+			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(), function (response) {
 				$form.ac_msg(response);
 				$this.closest('.view-config').removeClass('show');
 				$widget.find('.refresh-listing').click();

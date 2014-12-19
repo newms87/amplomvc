@@ -22,7 +22,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($page['title']);
+		set_page_info('title', $page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
 		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
@@ -85,7 +85,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($page['title']);
+		set_page_info('title', $page['title']);
 
 		if ($page['style']) {
 			$page['style'] = $this->document->compileLessContent($page['style']);

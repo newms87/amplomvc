@@ -4,7 +4,7 @@ class App_Controller_Admin_Block extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Blocks"));
+		set_page_info('title', _l("Blocks"));
 
 		//Page Title
 		$data = array(
@@ -126,7 +126,7 @@ class App_Controller_Admin_Block extends Controller
 		$path = _get('path', '');
 
 		//Page Head
-		$this->document->setTitle(_l("Edit Block"));
+		set_page_info('title', _l("Edit Block"));
 		$this->document->addStyle(theme_dir('block/' . $path . '/style.less'));
 
 		//Breadcrumbs
@@ -188,7 +188,7 @@ class App_Controller_Admin_Block extends Controller
 		message('notify', _l("Adding a Block will simply setup the files in the system on the front end and back end. If you are not a developer this is worthless!"));
 
 		//Page Title
-		$this->document->setTitle(_l("New Block"));
+		set_page_info('title', _l("New Block"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

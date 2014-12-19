@@ -28,7 +28,7 @@ class App_Controller_Example_Example extends Controller
 		message('myclass', "my class message");
 
 		//Page Head
-		$this->document->setTitle(_l("My Page Title"));
+		set_page_info('title', _l("My Page Title"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());

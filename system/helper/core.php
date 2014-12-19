@@ -1,4 +1,116 @@
 <?php
+//Request Headers
+$headers = apache_request_headers();
+function _header($key = null, $default = null)
+{
+	global $headers;
+	if ($key) {
+		return isset($headers[$key]) ? $headers[$key] : $default;
+	}
+
+	return $headers;
+}
+
+define("REQUEST_ACCEPT", _header('Accept'));
+
+function request_accepts($type)
+{
+	return strpos(REQUEST_ACCEPT, $type) !== false;
+}
+
+define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admin') === 0);
+
+define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+
+define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
+define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
+define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
+
+function _get($key, $default = null)
+{
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
+}
+
+function _post($key, $default = null)
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+}
+
+function _request($key, $default = null)
+{
+	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
+}
+
+function _session($key, $default = null)
+{
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+}
+
+/**************************************
+ * System Language Translation Engine *
+ **************************************/
+
+global $language_group;
+$language_group = "Load";
+
+/**
+ * Translate a string to the current requested language
+ *
+ * @param $message
+ * @return mixed|string
+ */
+function _l($message)
+{
+	//TODO: Set translations based on language group
+	global $language_group;
+
+	$values = func_get_args();
+
+	array_shift($values);
+
+	//TODO: See bitbucket issue https://bitbucket.org/newms87/dopencart/issue/20/language-translation-engine
+	if (empty($values)) {
+		return _($message);
+	}
+
+	return vsprintf(_($message), $values);
+}
+
+/**
+ * Change Language Group just for this message, then revert back if $message is given.
+ * If $message is null, then the language group is changed permanently.
+ *
+ * @param $group - The language group to change to.
+ * @param $message - The Message
+ * @param $var1 , $var2, etc.. The variables to pass to vsprintf() with the message.
+ *
+ * @return null | String with the translated message
+ */
+
+function _lg($group, $message = null)
+{
+	global $language_group;
+
+	//Permanently change Group.
+	if ($message === null) {
+		$language_group = $group;
+		return;
+	}
+
+	//Temporarily Change Group
+	$temp           = $language_group;
+	$language_group = $group;
+
+	$params = func_get_args();
+	array_shift($params);
+
+	$return = call_user_func_array('_l', $params);
+
+	$language_group = $temp;
+
+	return $return;
+}
+
 //TODO: Maybe make this our main handler for loading (move out of registry)??
 if (!function_exists('amplo_autoload')) {
 	function amplo_autoload($class)
@@ -574,6 +686,22 @@ function get_comment_directives($content, $trim = true)
 	return $directives;
 }
 
+function rrmdir($dir)
+{
+	foreach (glob($dir . '/*') as $file) {
+		if (is_dir($file)) {
+			rrmdir($file);
+		} else {
+			unlink($file);
+		}
+	}
+	rmdir($dir);
+}
+
+function _is_object($o)
+{
+	return is_array($o) || is_object($o) || is_resource($o);
+}
 
 function _2camel($str, $lower = false)
 {

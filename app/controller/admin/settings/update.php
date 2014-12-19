@@ -12,7 +12,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("System Update"));
+		set_page_info('title', _l("System Update"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

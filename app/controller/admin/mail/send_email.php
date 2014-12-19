@@ -3,7 +3,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Send Email"));
+		set_page_info('title', _l("Send Email"));
 
 		if (IS_POST) {
 			if (!$this->send()) {

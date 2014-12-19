@@ -1,31 +1,30 @@
 <!DOCTYPE html>
-<html dir="<?= $direction; ?>" lang="<?= $lang; ?>">
+<html dir="<?= language_info('direction'); ?>" lang="<?= language_info('code'); ?>">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-		<title><?= $title; ?></title>
+		<title><?= _strip_tags(page_info('title')); ?></title>
 
-		<? if ($description) { ?>
+		<? if ($description = page_info('description')) { ?>
 			<meta name="description" content="<?= $description; ?>"/>
 		<? } ?>
-		<? if ($keywords) { ?>
+		<? if ($keywords = page_info('keywords')) { ?>
 			<meta name="keywords" content="<?= $keywords; ?>"/>
 		<? } ?>
 
-		<? if (!empty($author)) { ?>
-			<meta name="author" content="">
+		<? if ($author = page_info('author')) { ?>
+			<meta name="author" content="<?= $author; ?>">
 		<? } ?>
 
-		<base href="<?= $base; ?>"/>
+		<base href="<?= IS_SSL ? HTTPS_SITE : HTTP_SITE; ?>"/>
 
-		<? if ($canonical_link) { ?>
+		<? if ($canonical_link = page_info('canonical_link')) { ?>
 			<link href="<?= $canonical_link; ?>" rel="canonical"/>
 		<? } ?>
 
-		<? $icons = option('config_icon', array()); ?>
-		<? foreach ($icons as $size => $icon) { ?>
+		<? foreach (option('config_icon', array()) as $size => $icon) { ?>
 			<? if ($size === 'ico') { ?>
 				<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
 			<? } elseif ($size !== 'orig') { ?>
@@ -33,8 +32,27 @@
 			<? } ?>
 		<? } ?>
 
-		<?= $styles; ?>
-		<?= $scripts; ?>
+		<? foreach ($styles as $style) { ?>
+			<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
+		<? } ?>
+
+		<? foreach ($scripts as $type => $script_types) {
+			if ($type === 'local') {
+				?>
+				<script type="text/javascript">
+					<? foreach ($script_types as $script_local) { ?>
+					<?= $script_local . "\n"; ?>
+					<? } ?>
+				</script>
+			<?
+			} else {
+			foreach ($script_types as $script_src) {
+			?>
+				<script type="text/javascript" src="<?= $script_src; ?>"></script>
+			<?
+			}
+			}
+		} ?>
 
 		<!--[if IE 9]>
 		<link rel="stylesheet" type="text/css" href="<?= theme_url('css/ie9.css'); ?>"/>
@@ -47,11 +65,12 @@
 		<script src="<?= URL_RESOURCES . 'js/html5shiv.js'; ?>"></script>
 		<![endif]-->
 
-		<? if (option('config_google_analytics')) { ?>
+		<? $google_analytics = option('config_google_analytics'); ?>
+		<? if ($google_analytics) { ?>
 			<!-- Google Analytics Tracker -->
 			<script type="text/javascript">
 				var _gaq = _gaq || [];
-				_gaq.push(['_setAccount', '<?= option('config_google_analytics'); ?>']);
+				_gaq.push(['_setAccount', '<?= $google_analytics; ?>']);
 				_gaq.push(['_trackPageview']);
 
 				(function () {
@@ -95,23 +114,23 @@
 				<? } ?>
 
 				<div class="wrap">
-					<? if ($logo) { ?>
+					<? if ($logo = option('config_logo')) { ?>
 						<div id="logo">
 							<a href="<?= site_url(); ?>" class="block">
-								<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
-
-								<? if (!empty($slogan)) { ?>
-									<div id="slogan"><?= $slogan; ?></div>
-								<? } ?>
+								<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= option('config_name'); ?>" alt="<?= option('config_name'); ?>"/>
 							</a>
 						</div>
 					<? } ?>
 
-					<? if ($multi_language) { ?>
+					<? if ($slogan = option('config_slogan')) { ?>
+						<div id="slogan"><?= $slogan; ?></div>
+					<? } ?>
+
+					<? if (option('config_multi_language')) { ?>
 						<?= block('localisation/language'); ?>
 					<? } ?>
 
-					<? if ($multi_currency) { ?>
+					<? if (option('config_multi_currency')) { ?>
 						<?= block('localisation/currency'); ?>
 					<? } ?>
 
@@ -131,15 +150,18 @@
 							</div>
 						<? } ?>
 
-						<div class="login-links">
-							<?= links('account'); ?>
+						<? if (has_links('account')) { ?>
+							<div class="login-links">
+								<?= links('account'); ?>
+							</div>
+						<? } ?>
+					</div>
+
+					<? if (option('config_social_media')) { ?>
+						<div id="header-social-networks">
+							<?= block('extras/social_media'); ?>
 						</div>
-					</div>
-
-
-					<div id="header-social-networks">
-						<?= block('extras/social_media'); ?>
-					</div>
+					<? } ?>
 
 					<? if (has_links('secondary')) { ?>
 						<div id="links-secondary" class="links">

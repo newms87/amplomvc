@@ -13,7 +13,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Roles"));
+		set_page_info('title', _l("User Roles"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -95,7 +95,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Roles"));
+		set_page_info('title', _l("User Roles"));
 
 		//Insert or Update
 		$user_role_id = !empty($_GET['user_role_id']) ? (int)$_GET['user_role_id'] : 0;

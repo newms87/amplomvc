@@ -1,7 +1,7 @@
 /* Methods */
 
 .import-font(@import-font-family, @font-file-name) {
-  @theme-font-file: '@{themepath}font/@{font-file-name}';
+  @theme-font-file: '@{font-path}@{font-file-name}';
   @font-face {
     font-family: @import-font-family;
     src: url('@{theme-font-file}.eot');

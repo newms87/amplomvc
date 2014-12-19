@@ -12,7 +12,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Login Settings"));
+		set_page_info('title', _l("Login Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

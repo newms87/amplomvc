@@ -16,7 +16,7 @@ class App_Controller_Admin_Settings_General extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("General Settings"));
+		set_page_info('title', _l("General Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -91,20 +91,17 @@ class App_Controller_Admin_Settings_General extends Controller
 
 	public function theme()
 	{
-		if (empty($_GET['theme'])) {
-			output('No Theme Requested.');
-			return false;
+		$theme = _get('theme');
+
+		if ($theme) {
+			$image = image(DIR_SITE . 'app/view/theme/' . $theme . '/preview.png');
+
+			if (!$image) {
+				$image = theme_image('no-preview.png', 300, 300);
+			}
+
+			output("<img src=\"$image\" class =\"theme-preview\" />");
 		}
-
-		$image = DIR_SITE . 'app/view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
-
-		$image = image($image);
-
-		if (!$image) {
-			$image = image('no_image', 300, 300);
-		}
-
-		output("<img src=\"$image\" class =\"theme_preview\" />");
 	}
 
 	public function save()

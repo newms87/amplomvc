@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->addCurrency($_POST);
@@ -41,7 +41,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->editCurrency($_GET['currency_id'], $_POST);
@@ -70,7 +70,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $currency_id) {

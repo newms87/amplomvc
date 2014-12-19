@@ -3,7 +3,7 @@ class App_Controller_Admin_Index extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Dashboard"));
+		set_page_info('title', _l("Dashboard"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 

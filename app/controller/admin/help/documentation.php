@@ -3,7 +3,7 @@ class App_Controller_Admin_Help_Documentation extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Documentation"));
+		set_page_info('title', _l("Documentation"));
 
 		$s = $this->_('sections');
 		$this->replace_tokens($s);

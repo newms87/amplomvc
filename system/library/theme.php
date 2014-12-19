@@ -30,7 +30,7 @@ class Theme extends Library
 			$this->theme = $admin_theme;
 		} else {
 			$this->theme    = $theme;
-			$this->settings = option('config_theme_settings', array());
+			$this->settings = option('theme_settings', array());
 		}
 
 		$this->settings += array(
@@ -405,6 +405,6 @@ class Theme extends Library
 			'parents' => $this->getThemeParents($theme),
 		);
 
-		return $this->config->save('config', 'config_theme_settings', $settings);
+		return $this->config->save('general', 'theme_settings', $settings);
 	}
 }

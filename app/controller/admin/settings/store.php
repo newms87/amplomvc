@@ -5,7 +5,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 	public function index($data = array())
 	{
 		//Page Head
-		$this->document->setTitle(_l("Settings"));
+		set_page_info('title', _l("Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -108,7 +108,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Store Settings"));
+		set_page_info('title', _l("Store Settings"));
 
 		//Insert or Update
 		$store_id = _get('store_id', 0);

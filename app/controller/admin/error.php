@@ -3,7 +3,7 @@ class App_Controller_Admin_Error extends Controller
 {
 	public function not_found($data = array())
 	{
-		$this->document->setTitle(_l("Page Not Found!"));
+		set_page_info('title', _l("Page Not Found!"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Page Not Found!"), site_url('admin/error/not-found'));
@@ -13,7 +13,7 @@ class App_Controller_Admin_Error extends Controller
 
 	public function permission()
 	{
-		$this->document->setTitle(_l("Permission Denied!"));
+		set_page_info('title', _l("Permission Denied!"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Permission Denied!"), site_url('admin/error/permission'));

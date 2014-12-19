@@ -1,21 +1,11 @@
-<?= '<?xml version="1.0" encoding="UTF-8"?>' . "\n"; ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?= $direction; ?>" lang="<?= $lang; ?>" xml:lang="<?= $lang; ?>">
+<html dir="<?= language_info('direction'); ?>" lang="<?= language_info('code'); ?>">
 	<head>
-		<title><?= $title; ?></title>
-		<base href="<?= $base; ?>"/>
-		<? if ($description) { ?>
-			<meta name="description" content="<?= $description; ?>"/>
-		<? } ?>
-		<? if ($keywords) { ?>
-			<meta name="keywords" content="<?= $keywords; ?>"/>
-		<? } ?>
-		<? if ($canonical_link) { ?>
-			<link href="<?= $canonical_link; ?>" rel="canonical"/>
-		<? } ?>
+		<title><?= page_info('title'); ?></title>
+		<base href="<?= site_url('admin'); ?>"/>
 
-		<? if (option('admin_icon')) { ?>
-			<? foreach (option('admin_icon') as $size => $icon) { ?>
+		<? if ($admin_icon = option('admin_icon')) { ?>
+			<? foreach ($admin_icon as $size => $icon) { ?>
 				<? if ($size === 'ico') { ?>
 					<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
 				<? } elseif ($size !== 'orig') { ?>
@@ -24,10 +14,26 @@
 			<? } ?>
 		<? } ?>
 
-		<?= $styles; ?>
-		<?= $scripts; ?>
+		<? foreach ($styles as $style) { ?>
+			<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
+		<? } ?>
+
+		<? foreach ($scripts as $type => $script_types) {
+			if ($type === 'local') { ?>
+				<script type="text/javascript">
+					<? foreach ($script_types as $script_local) { ?>
+					<?= $script_local . "\n"; ?>
+					<? } ?>
+				</script>
+			<? } else {
+			foreach ($script_types as $script_src) { ?>
+				<script type="text/javascript" src="<?= $script_src; ?>"></script>
+			<? }
+			}
+		} ?>
 
 	</head>
+
 	<body class="<?= $body_class; ?>">
 		<div id="container">
 			<div id="header">

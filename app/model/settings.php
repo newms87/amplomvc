@@ -64,16 +64,6 @@ class App_Model_Settings extends Model
 		'config_logo_srcset'                      => 1,
 		'config_logo_width'                       => 0,
 		'config_logo_height'                      => 0,
-		'admin_icon'                              => null,
-		'admin_bar'                               => 1,
-		'admin_logo'                              => '',
-		'admin_breadcrumb_separator'              => ' / ',
-		'admin_language'                          => 1,
-		'admin_list_limit'                        => 20,
-		'admin_thumb_width'                       => 120,
-		'admin_thumb_height'                      => 120,
-		'admin_list_image_width'                  => 60,
-		'admin_list_image_height'                 => 60,
 		'site_email_logo_width'                   => 300,
 		'site_email_logo_height'                  => 0,
 		'config_image_thumb_width'                => 120,
@@ -141,6 +131,8 @@ class App_Model_Settings extends Model
 
 		if (!$result) {
 			$this->error = $this->config->getError();
+		} else {
+			$this->theme->install($settings['config_theme']);
 		}
 
 		return $result;

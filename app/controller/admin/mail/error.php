@@ -3,7 +3,7 @@ class App_Controller_Admin_Mail_Error extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Failed Email Messages"));
+		set_page_info('title', _l("Failed Email Messages"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Failed Email Messages"), site_url('admin/mail/error'));
