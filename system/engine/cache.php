@@ -93,19 +93,23 @@ class Cache
 
 	public function delete($key)
 	{
-		$files = glob($this->dir . $key . '*.cache');
+		if ($key) {
+			$files = glob($this->dir . $key . '*.cache');
 
-		if ($files) {
-			foreach ($files as $file) {
-				//Suppress warnings as this will fail under race conditions
-				@unlink($file);
+			if ($files) {
+				foreach ($files as $file) {
+					//Suppress warnings as this will fail under race conditions
+					@unlink($file);
+				}
 			}
-		}
 
-		foreach (array_keys($this->loaded) as $lkey) {
-			if (strpos($lkey, $key) === 0) {
-				unset($this->loaded[$lkey]);
+			foreach (array_keys($this->loaded) as $lkey) {
+				if (strpos($lkey, $key) === 0) {
+					unset($this->loaded[$lkey]);
+				}
 			}
+		} else {
+			rrmdir($this->dir);
 		}
 	}
 

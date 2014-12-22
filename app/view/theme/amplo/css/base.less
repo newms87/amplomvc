@@ -1,4 +1,11 @@
 /* Methods */
+.bg-image-set(@s1, @s2, @s3) {
+  background-image: url(@s1);
+  background-image: -webkit-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -moz-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -ms-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -o-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+}
 
 .import-font(@import-font-family, @font-file-name) {
   @theme-font-file: '@{font-path}@{font-file-name}';
@@ -47,6 +54,11 @@
   height: 0;
 }
 
+//Hack to overcome whitespace between inline-block elements
+.whitespace-hack {
+  margin-left: -.29em;
+}
+
 .col {
   display: inline-block;
   box-sizing: border-box;
@@ -67,9 +79,8 @@
     vertical-align: bottom;
   }
 
-  //Hack to overcome whitespace between inline-block elements
   & + .col {
-    margin-left: -.29em;
+    .whitespace-hack;
   }
 
   &.left {

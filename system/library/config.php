@@ -15,8 +15,9 @@ class Config extends Library
 
 		$store = $this->route->getStore();
 
-		$this->set('url', !empty($store['url']) ? $store['url'] : URL_SITE);
-		$this->set('ssl', !empty($store['ssl']) ? $store['ssl'] : HTTPS_SITE);
+		$this->data['store_id'] = $store['store_id'];
+		$this->data['url']      = !empty($store['url']) ? $store['url'] : URL_SITE;
+		$this->data['ssl']      = !empty($store['ssl']) ? $store['ssl'] : HTTPS_SITE;
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
@@ -133,8 +134,8 @@ class Config extends Library
 		);
 
 		$where = array(
-			'group'    => $group,
-			'key'      => $key,
+			'group' => $group,
+			'key'   => $key,
 		);
 
 		$this->delete('setting', $where);

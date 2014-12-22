@@ -8,7 +8,6 @@
   * General: ---
   * @color-main: The primary theme color
   * @color-secondary: The secondary theme color
-  * @bg-main: The background color / image
   * @font-base-family: Font Family Stack - The font families to use in order (eg: Arial, Helvetica, sans-serif)
   * @font-base: Font Size / Family - The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
   * @font-dark: Font Dark - The primary text color for dark text
@@ -80,8 +79,6 @@
 @page-wrap-pad: 2em 0;
 
 //Primary Styling
-@bg-main: #ffffff;
-
 @color-main: #395D84;
 @color-secondary: #4E4E4E;
 @color-dark: #4E4E4E;
@@ -258,20 +255,8 @@
 @navigation: { & {
   font-size: 1em;
 
-  ul {
-    li {
-      a {
-        color: black;
-        background: none;
-        padding: .6em 1em;
-      }
-
-      .sub-menu {
-        box-shadow: 3px 3px 3px #C4DBF1;
-        border: none;
-        border-radius: 5px;
-      }
-    }
+  a {
+    padding: .6em 1em;
   }
 } };
 
@@ -281,6 +266,10 @@
   .sub-menu {
     color: white;
   }
+} };
+
+@navigation-account: { & {
+
 } };
 
 //Tables
@@ -389,7 +378,7 @@
       border-left: 14px solid transparent;
       border-right: 14px solid transparent;
       border-top: 14px solid #454545;
-      z-index:99;
+      z-index: 99;
     }
   }
 } };

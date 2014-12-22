@@ -494,7 +494,7 @@ class Document extends Library
 				break;
 		}
 
-		$html = "<ul class=\"link-list $class\">";
+		$html = "<div class=\"link-list $class\"><ul>";
 
 		$zindex = count($links);
 
@@ -550,7 +550,7 @@ class Document extends Library
 			$zindex--;
 		}
 
-		$html .= "</ul>";
+		$html .= "</ul></div>";
 
 		return $html;
 	}

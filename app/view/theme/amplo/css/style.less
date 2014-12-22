@@ -21,7 +21,6 @@
 body {
   .render-font(@font-base);
   color: @font-dark;
-  background: @bg-main;
 }
 
 a {
@@ -218,32 +217,58 @@ button, .button, .row .button {
   display: inline-block;
   position: relative;
 
-  ul {
-    li {
-      display: inline-block;
-      position: relative;
+  .link-list {
+    display: inline-block;
 
-      a {
-        display: block;
+    ul {
+      li {
+        display: inline-block;
+        position: relative;
+
+        a {
+          display: block;
+        }
+
+        &:hover, &.hover {
+          .sub-menu {
+            max-height: @header-height;
+            -webkit-transition: max-height .4s;
+            transition: max-height .4s;
+          }
+        }
       }
+    }
 
-      .sub-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        text-align: left;
-        z-index: 500;
-        display: none;
+    .sub-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      text-align: left;
+      z-index: 500;
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: padding 0s linear .4s, max-height .4s;
+      transition: padding 0s linear .4s, max-height .4s;
 
+      ul {
         li {
           display: block;
           white-space: nowrap;
         }
       }
+    }
+  }
 
-      &:hover, &.hover {
-        .sub-menu {
-          display: block;
+  &.horizontal {
+    .sub-menu {
+      width: 10000px;
+      left: -5000px;
+      margin-left: 50%;
+      text-align: center;
+
+      ul {
+        li {
+          display: inline-block;
         }
       }
     }
@@ -325,7 +350,9 @@ header.main-header.row {
   position: fixed;
   top: 0;
   z-index: 100;
-  box-shadow: 1px 0 1px 3px rgba(0,0,0,.75);
+  box-shadow: 1px 0 1px 3px rgba(0, 0, 0, .75);
+  height: @header-height;
+  box-sizing: border-box;
 
   .wrap {
     border: none;
@@ -341,37 +368,36 @@ header.main-header.row {
 //Logo
 #logo {
   position: relative;
-  float: left;
+  display: inline-block;
+  vertical-align: middle;
   z-index: 2;
-}
+  width: 20%;
 
-//Account Navigation
-#links-account {
-  position: relative;
-  z-index: 2;
-  float: right;
-
-  .login-content {
-    display: none;
-  }
-
-  .button.register {
-    margin-left: 15px;
+  a {
+    display: block;
   }
 }
 
-//Primary Navigation
-#links-primary {
-  position: relative;
-  z-index: 1;
-  display: block;
-  margin: 1em auto 0 auto;
+.header-navigation {
+  display: inline-block;
+  width: 80%;
+  .whitespace-hack;
 
-  .top-menu {
-    text-align: center;
+  & > nav {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
   }
 
-  @navigation-primary();
+  //Account Navigation
+  #links-account {
+    @navigation-account();
+  }
+
+  //Primary Navigation
+  #links-primary {
+    @navigation-primary();
+  }
 }
 
 //Admin Bar

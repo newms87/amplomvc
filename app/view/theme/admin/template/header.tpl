@@ -57,9 +57,9 @@
 					<? } ?>
 				</div>
 				<? if (is_logged()) { ?>
-					<div id="menu" class="links clearfix">
-						<div class="left"><?= links('admin'); ?></div>
-						<div class="right"><?= links('right'); ?></div>
+					<div id="menu" class="clearfix">
+						<div class="admin-nav links"><?= links('admin'); ?></div>
+						<div class="right-nav links"><?= links('right'); ?></div>
 					</div>
 				<? } ?>
 			</div>
