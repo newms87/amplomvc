@@ -199,13 +199,9 @@
 @checkbox: { & {
   & + .label {
     font-size: 1.1em;
-    background: white;
-    padding: .3em .6em;
-    border: #669EC1 1px solid;
-    border-radius: 5px;
 
     &:before {
-      background: url('@{theme-img}sprite-17.png') center center no-repeat;
+      .bg-image-set('@{theme-img}sprite@1x.png', '@{theme-img}sprite@2x.png', '@{theme-img}sprite@3x.png');
       background-position: -17px -45px;
       width: 17px;
       height: 14px;
@@ -214,11 +210,24 @@
 
   &:checked, .checked {
     & + .label {
-      background: #00AEFF;
-      color: white;
-
       &:before {
         background-position: 1px -45px;
+      }
+    }
+  }
+
+  &.cb-button {
+    & + .label {
+      background: white;
+      padding: .3em .6em;
+      border: #669EC1 1px solid;
+      border-radius: 5px;
+    }
+
+    &:checked, .checked {
+      & + .label {
+        background: #00AEFF;
+        color: white;
       }
     }
   }

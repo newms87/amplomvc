@@ -85,7 +85,7 @@ class Extend extends Library
 			'priority' => $priority,
 		);
 
-		set_option('db_hooks', $db_hooks);
+		save_option('db_hooks', $db_hooks);
 	}
 
 	public function removeHook($table, $action, $name)
@@ -102,7 +102,7 @@ class Extend extends Library
 			unset($db_hooks[$table]);
 		}
 
-		set_option('db_hooks', $db_hooks);
+		save_option('db_hooks', $db_hooks);
 	}
 
 	public function enable_image_sorting($table, $column)

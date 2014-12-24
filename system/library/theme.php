@@ -17,12 +17,12 @@ class Theme extends Library
 		$theme       = option('config_theme', AMPLO_DEFAULT_THEME);
 
 		if (!is_dir(DIR_THEMES . $admin_theme)) {
-			set_option('config_admin_theme', 'admin');
+			save_option('config_admin_theme', 'admin');
 			$admin_theme = 'admin';
 		}
 
 		if (!is_dir(DIR_THEMES . $theme)) {
-			set_option('config_theme', AMPLO_DEFAULT_THEME);
+			save_option('config_theme', AMPLO_DEFAULT_THEME);
 			$theme = AMPLO_DEFAULT_THEME;
 		}
 

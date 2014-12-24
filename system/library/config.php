@@ -55,7 +55,7 @@ class Config extends Library
 		$this->data[$key] = $value;
 	}
 
-	public function all()
+	public function &all()
 	{
 		return $this->data;
 	}

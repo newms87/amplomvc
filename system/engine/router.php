@@ -68,7 +68,7 @@ final class Router
 			return $a['sort_order'] > $b['sort_order'];
 		});
 
-		set_option('_routing_hooks_', $routing_hooks);
+		save_option('_routing_hooks_', $routing_hooks);
 
 		return $routing_hooks;
 	}
@@ -79,7 +79,7 @@ final class Router
 
 		unset($routing_hooks[$name]);
 
-		set_option('_routing_hooks_', $routing_hooks);
+		save_option('_routing_hooks_', $routing_hooks);
 
 		return $routing_hooks;
 	}

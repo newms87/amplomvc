@@ -339,15 +339,19 @@ function option($option, $default = null)
 	static $options;
 
 	if (!$options) {
-		$options = $registry->get('config')->all();
-	} elseif (!isset($options[$option])) {
-		$options[$option] = $registry->get('config')->get($option);
+		$options = & $registry->get('config')->all();
 	}
 
 	return isset($options[$option]) ? $options[$option] : $default;
 }
 
 function set_option($option, $value)
+{
+	global $registry;
+	$registry->get('config')->set($option, $value);
+}
+
+function save_option($option, $value)
 {
 	global $registry;
 	$registry->get('config')->save('config', $option, $value);
