@@ -3,8 +3,9 @@
 abstract class Model
 {
 	static $model = array();
+	static $prefix;
 
-	protected $db, $prefix, $error = array();
+	protected $db, $error = array();
 
 	const
 		TEXT = 'text',
@@ -21,7 +22,9 @@ abstract class Model
 	{
 		global $registry;
 
-		$this->prefix = DB_PREFIX;
+		if (!self::$prefix) {
+			self::$prefix = DB_PREFIX;
+		}
 
 		$key = strtolower(get_class($this));
 
@@ -188,7 +191,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . $this->prefix . "$table` WHERE $where LIMIT 1");
+		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . self::$prefix . "$table` WHERE $where LIMIT 1");
 	}
 
 	public function queryFields($table, $fields, $where)
@@ -197,7 +200,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . $this->prefix . "$table` WHERE $where LIMIT 1");
+		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . self::$prefix . "$table` WHERE $where LIMIT 1");
 	}
 
 	protected function insert($table, $data)
@@ -213,7 +216,7 @@ abstract class Model
 			return false;
 		}
 
-		$success = $this->query("INSERT INTO `" . $this->prefix . "$table` SET $values");
+		$success = $this->query("INSERT INTO `" . self::$prefix . "$table` SET $values");
 
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
@@ -278,7 +281,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, '', '', true);
 
-		$success = $this->query("UPDATE `" . $this->prefix . "$table` SET $values WHERE $where");
+		$success = $this->query("UPDATE `" . self::$prefix . "$table` SET $values WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
@@ -305,7 +308,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		$success = $this->query("DELETE FROM `" . $this->prefix . "$table` WHERE $where");
+		$success = $this->query("DELETE FROM `" . self::$prefix . "$table` WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
@@ -545,7 +548,7 @@ abstract class Model
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		} else {
-			$t = $this->prefix . $table;
+			$t = self::$prefix . $table;
 		}
 
 		$columns += $this->getTableColumns($table);

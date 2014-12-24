@@ -9,7 +9,7 @@ class App_Model_Setting_Role extends Model
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
 
-			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "user_role WHERE `name` = '" . $this->escape($data['name']) . "'")) {
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . self::$prefix . "user_role WHERE `name` = '" . $this->escape($data['name']) . "'")) {
 				$this->error['name'] = _l("Group Name already exists!");
 			}
 		} elseif (!$user_role_id) {
@@ -76,12 +76,12 @@ class App_Model_Setting_Role extends Model
 
 	public function getRoleId($role)
 	{
-		return $this->queryVar("SELECT user_role_id FROM " . $this->prefix . "user_role WHERE name = '" . $this->escape($role) . "'");
+		return $this->queryVar("SELECT user_role_id FROM " . self::$prefix . "user_role WHERE name = '" . $this->escape($role) . "'");
 	}
 
 	public function getRoleName($user_role_id)
 	{
-		return $this->queryVar("SELECT name FROM " . $this->prefix . "user_role WHERE user_role_id = " . (int)$user_role_id);
+		return $this->queryVar("SELECT name FROM " . self::$prefix . "user_role WHERE user_role_id = " . (int)$user_role_id);
 	}
 
 	public function getRoles($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)

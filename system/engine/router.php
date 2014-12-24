@@ -174,8 +174,7 @@ final class Router
 		foreach ($stores as $store) {
 			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
 				if (!empty($store['prefix']) && $store['prefix'] !== DB_PREFIX) {
-					$registry->get('db')->setPrefix($store['prefix']);
-					$registry->get('cache')->setDir(DIR_CACHE . $store['prefix']);
+					_set_db_prefix($store['prefix']);
 				}
 
 				$this->store = $store;

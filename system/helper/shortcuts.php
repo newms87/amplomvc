@@ -365,6 +365,18 @@ function set_page_info($key, $value)
 	$registry->get('document')->setInfo($key, $value);
 }
 
+function page_meta($key = null, $default = null)
+{
+	global $registry;
+	return $registry->get('document')->meta($key, $default);
+}
+
+function set_page_meta($key, $value)
+{
+	global $registry;
+	$registry->get('document')->setMeta($key, $value);
+}
+
 function language_info($key = null, $default = null)
 {
 	global $registry;

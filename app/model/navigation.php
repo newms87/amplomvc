@@ -229,7 +229,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getGroupByName($name)
 	{
-		return $this->queryVar("SELECT navigation_group_id FROM " . $this->prefix . "navigation_group WHERE `name` = '" . $this->escape($name) . "'");
+		return $this->queryVar("SELECT navigation_group_id FROM " . self::$prefix . "navigation_group WHERE `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getGroup($navigation_group_id)
@@ -247,7 +247,7 @@ class App_Model_Navigation extends App_Model_Table
 		$select = $this->extractSelect('navigation_group', $select);
 
 		//From
-		$from = $this->prefix . 'navigation_group';
+		$from = self::$prefix . 'navigation_group';
 
 		//Where
 		$where = $this->extractWhere('navigation_group', $filter);

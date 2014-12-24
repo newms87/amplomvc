@@ -445,6 +445,14 @@ if (!defined('PASSWORD_DEFAULT')) {
 	require_once(DIR_RESOURCES . 'password_compat.php');
 }
 
+function _set_db_prefix($prefix)
+{
+	global $registry;
+	Model::$prefix = $prefix;
+	$registry->get('db')->setPrefix($prefix);
+	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
+}
+
 function get_caller($offset = 0, $limit = 10)
 {
 	$calls = debug_backtrace(false);

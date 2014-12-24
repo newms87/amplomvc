@@ -25,7 +25,7 @@ class Config extends Library
 
 		if (!$settings) {
 			//TODO: Should use $this->loadGroup('config');
-			$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE auto_load = 1", 'key');
+			$settings = $this->queryRows("SELECT * FROM " . self::$prefix . "setting WHERE auto_load = 1", 'key');
 
 			foreach ($settings as &$setting) {
 				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -68,7 +68,7 @@ class Config extends Library
 	public function load($group, $key)
 	{
 		if (!isset($this->data[$key])) {
-			$setting = $this->queryRow("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "'");
+			$setting = $this->queryRow("SELECT * FROM " . self::$prefix . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "'");
 
 			if ($setting) {
 				$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -174,7 +174,7 @@ class Config extends Library
 			if ($data === null) {
 				$data = array();
 
-				$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "'");
+				$settings = $this->queryRows("SELECT * FROM " . self::$prefix . "setting WHERE `group` = '" . $this->escape($group) . "'");
 
 				foreach ($settings as $setting) {
 					$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -223,7 +223,7 @@ class Config extends Library
 
 		$store_query = '';
 
-		$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' $store_query");
+		$settings = $this->queryRows("SELECT * FROM " . self::$prefix . "setting WHERE `group` = '" . $this->escape($group) . "' $store_query");
 
 		foreach ($settings as $setting) {
 			if ($setting['translate']) {

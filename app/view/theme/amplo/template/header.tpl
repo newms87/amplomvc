@@ -7,15 +7,8 @@
 
 		<title><?= _strip_tags(page_info('title')); ?></title>
 
-		<? if ($description = page_info('description')) { ?>
-			<meta name="description" content="<?= $description; ?>"/>
-		<? } ?>
-		<? if ($keywords = page_info('keywords')) { ?>
-			<meta name="keywords" content="<?= $keywords; ?>"/>
-		<? } ?>
-
-		<? if ($author = page_info('author')) { ?>
-			<meta name="author" content="<?= $author; ?>">
+		<? foreach (get_page_meta() as $key => $value) { ?>
+			<meta name="<?= $key; ?>" content="<?= $value; ?>"/>
 		<? } ?>
 
 		<base href="<?= IS_SSL ? HTTPS_SITE : HTTP_SITE; ?>"/>

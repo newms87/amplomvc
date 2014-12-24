@@ -271,7 +271,7 @@ class Url extends Library
 
 	public function getAlias($path, $query = '')
 	{
-		return $this->queryVar("SELECT alias FROM " . $this->prefix . "url_alias WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
+		return $this->queryVar("SELECT alias FROM " . self::$prefix . "url_alias WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
 	}
 
 	public function setAlias($alias, $path, $query = '')

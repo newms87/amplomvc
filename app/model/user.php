@@ -155,7 +155,7 @@ class App_Model_User extends App_Model_Table
 	public function getMeta($user_id, $key = null)
 	{
 		if ($key) {
-			$value = $this->queryRow("SELECT `value`, serialized FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			$value = $this->queryRow("SELECT `value`, serialized FROM " . self::$prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
 			if ($value) {
 				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
 			}
@@ -163,7 +163,7 @@ class App_Model_User extends App_Model_Table
 			return null;
 		}
 
-		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+		$meta = $this->queryRows("SELECT * FROM " . self::$prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
 
 		foreach ($meta as &$m) {
 			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];

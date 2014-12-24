@@ -2,16 +2,14 @@
 
 class Document extends Library
 {
-	private $info;
-	private $title;
-	private $description;
-	private $keywords;
-	private $canonical_link = null;
-	private $links = array();
-	private $styles = array();
-	private $scripts = array();
-	private $ac_vars = array();
-	private $body_class = array();
+	private
+		$info = array(),
+		$meta = array(),
+		$links = array(),
+		$styles = array(),
+		$scripts = array(),
+		$ac_vars = array(),
+		$body_class = array();
 
 	function __construct()
 	{
@@ -44,6 +42,20 @@ class Document extends Library
 	public function setInfo($key, $value)
 	{
 		$this->info[$key] = $value;
+	}
+
+	public function meta($key = null, $default = null)
+	{
+		if ($key) {
+			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		}
+
+		return $this->meta;
+	}
+
+	public function setMeta($key, $value)
+	{
+		$this->meta[$key] = $value;
 	}
 
 	public function hasLink($group = 'primary', $link_name)

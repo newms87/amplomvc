@@ -23,7 +23,7 @@ abstract class App_Model_Table extends Model
 		}
 
 		if (!$this->p_table) {
-			$this->p_table = $this->prefix . $this->table;
+			$this->p_table = self::$prefix . $this->table;
 		}
 	}
 
@@ -59,7 +59,7 @@ abstract class App_Model_Table extends Model
 		$select = $this->extractSelect($this->table, $select);
 
 		//From
-		$from = $this->prefix . $this->table;
+		$from = self::$prefix . $this->table;
 
 		//Where
 		$where = $this->extractWhere($this->table, $filter);
