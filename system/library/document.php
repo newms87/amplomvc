@@ -44,6 +44,11 @@ class Document extends Library
 		$this->info[$key] = $value;
 	}
 
+	public function &infoRef()
+	{
+		return $this->info;
+	}
+
 	public function meta($key = null, $default = null)
 	{
 		if ($key) {

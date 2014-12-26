@@ -19,6 +19,12 @@ function block($block, $instance_name = null, $settings = null)
 	return $registry->get('block')->render($block, $instance_name, $settings);
 }
 
+function head()
+{
+	global $registry;
+	require_once $registry->get('theme')->getFile('head');
+}
+
 function area($area)
 {
 	global $registry;
@@ -360,7 +366,29 @@ function save_option($option, $value)
 function page_info($key = null, $default = null)
 {
 	global $registry;
-	return $registry->get('document')->info($key, $default);
+	static $document, $info;
+
+	if (!$document) {
+		$document = $registry->get('document');
+	}
+
+	if (!$info) {
+		$info = & $document->infoRef();
+	}
+
+	if (!$key) {
+		return $info;
+	}
+
+	if ($key === 'styles') {
+		return $document->getStyles();
+	}
+
+	if ($key === 'scripts') {
+		return $document->getScripts();
+	}
+
+	return isset($info[$key]) ? $info[$key] : $default;
 }
 
 function set_page_info($key, $value)
