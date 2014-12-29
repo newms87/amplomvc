@@ -26,4 +26,3 @@ Options -Indexes
 <IfModule mod_php5.c>
     php_value short_open_tag 1
 </IfModule>
-
