@@ -107,14 +107,18 @@ class App_Model_Settings extends Model
 
 		if (empty($settings['site_email']) || !validate('email', $settings['site_email'])) {
 			$this->error['site_email'] = _l("The Site Email does not appear to be valid!");
-		}
+		} else {
+			if (empty($settings['site_email_support'])) {
+				$settings['site_email_support'] = $settings['site_email'];
+			} elseif (!validate('email', $settings['site_email_support'])) {
+				$this->error['site_email_support'] = _l("The Support Email %s does not appear to be valid.", $settings['site_email_support']);
+			}
 
-		if (isset($settings['site_email_support']) && !validate('email', $settings['site_email_support'])) {
-			$this->error['site_email_support'] = _l("The Support Email %s does not appear to be valid.", $settings['site_email_support']);
-		}
-
-		if (isset($settings['site_email_error']) && !validate('email', $settings['site_email_error'])) {
-			$this->error['site_email_error'] = _l("The Error Email %s does not appear to be valid.", $settings['site_email_error']);
+			if (empty($settings['site_email_error'])) {
+				$settings['site_email_error'] = $settings['site_email'];
+			} elseif (!validate('email', $settings['site_email_error'])) {
+				$this->error['site_email_error'] = _l("The Error Email %s does not appear to be valid.", $settings['site_email_error']);
+			}
 		}
 
 		if ($this->error) {

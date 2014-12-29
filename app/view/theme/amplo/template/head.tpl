@@ -5,7 +5,7 @@
 
 	<title><?= _strip_tags(page_info('title')); ?></title>
 
-	<? foreach (get_page_meta() as $key => $value) { ?>
+	<? foreach (page_meta() as $key => $value) { ?>
 		<meta name="<?= $key; ?>" content="<?= $value; ?>"/>
 	<? } ?>
 
