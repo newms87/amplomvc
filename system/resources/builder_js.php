@@ -50,7 +50,7 @@ switch ($js) {
 			$name_format = false;
 		}
 
-		$languages = $registry->System_Model_Language->getEnabledLanguages();
+		$languages = $registry->Model_Localisation_Language->getEnabledLanguages();
 
 		$default_language = option('config_language_id');
 

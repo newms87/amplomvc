@@ -11,7 +11,6 @@ class App_Model_Navigation extends App_Model_Table
 			$navigation_group_id = $this->getGroupByName($name);
 
 			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
 				return false;
 			}
 		}
@@ -99,18 +98,15 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroup($navigation_group_id, $group)
 	{
+		$name = $navigation_group_id;
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-		if (!$navigation_group_id) {
-			return false;
+		if (!$navigation_group_id && empty($group['name']) && $name) {
+			$group['name'] = $name;
 		}
 
-		if (isset($group['name'])) {
-			if (!validate('text', $group['name'], 3, 64)) {
-				$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
-			}
-		} elseif (!$navigation_group_id) {
-			$this->error['name'] = _l("Navigation Group Name is required!");
+		if (isset($group['name']) && !validate('text', $group['name'], 3, 64)) {
+			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
 		}
 
 		if (!isset($group['status'])) {
@@ -134,6 +130,7 @@ class App_Model_Navigation extends App_Model_Table
 			$this->saveGroupLinks($navigation_group_id, $group['links']);
 		}
 
+
 		clear_cache('navigation');
 
 		return $navigation_group_id;
@@ -144,6 +141,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -173,6 +171,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -202,6 +201,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -376,6 +376,10 @@ class App_Model_Navigation extends App_Model_Table
 				$parent_ref[$key] = &$link;
 			}
 
+			if (empty($link['name'])) {
+				$link['name'] = $key;
+			}
+
 			$parent_ref[$link['name']] = &$link;
 
 			if (!empty($link['parent_id'])) {
@@ -528,7 +532,6 @@ class App_Model_Navigation extends App_Model_Table
 
 		$group = array(
 			'status' => 1,
-			'stores' => array(-1),
 			'links'  => $links,
 		);
 
