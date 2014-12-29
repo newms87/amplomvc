@@ -66,4 +66,28 @@ class App_Model_Localisation_Language extends Model
 	{
 		return $this->getLanguages($data, '', true);
 	}
+
+	/**
+	 * Retrieve all the languages that are not disabled (eg: languages with status 0 (enabled) and 1 (active))
+	 *
+	 * @return Array - a list of enabled and active languages.
+	 */
+	public function getEnabledLanguages()
+	{
+		$language_list = cache('language.list');
+
+		if (!$language_list) {
+			$languages = $this->queryRows("SELECT language_id, name, code, image, sort_order FROM " . DB_PREFIX . "language WHERE status >= 0 ORDER BY sort_order");
+
+			$language_list = array();
+
+			foreach ($languages as $language) {
+				$language_list[$language['language_id']] = $language;
+			}
+
+			cache('language.list', $language_list);
+		}
+
+		return $language_list;
+	}
 }

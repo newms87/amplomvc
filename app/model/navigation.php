@@ -11,7 +11,6 @@ class App_Model_Navigation extends App_Model_Table
 			$navigation_group_id = $this->getGroupByName($name);
 
 			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
 				return false;
 			}
 		}
@@ -142,6 +141,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -173,6 +173,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -202,6 +203,7 @@ class App_Model_Navigation extends App_Model_Table
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
 		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
 			return false;
 		}
 
@@ -376,7 +378,7 @@ class App_Model_Navigation extends App_Model_Table
 				$parent_ref[$key] = &$link;
 			}
 
-			if (!isset($link['name'])) {
+			if (empty($link['name'])) {
 				$link['name'] = $key;
 			}
 
