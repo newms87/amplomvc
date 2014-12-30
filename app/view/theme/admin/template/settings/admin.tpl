@@ -31,8 +31,8 @@
 								'name'   => 'admin_language',
 								'data'   => $data_languages,
 								'select' => $admin_language,
-								'key'    => 'code',
-								'value'  => 'name',
+								'value' =>  'code',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>

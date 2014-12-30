@@ -42,8 +42,8 @@
 							'name'   => 'columns',
 							'data'   => $extra_cols,
 							'select' => array_keys($columns),
-							'key'    => 'Field',
-							'value'  => 'display_name',
+							'value' =>  'Field',
+							'label' =>  'display_name',
 						)); ?>
 
 						<div class="buttons">
@@ -83,8 +83,8 @@
 							'name'   => 'chart[group_by]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
-							'key'    => 'Field',
-							'value'  => 'display_name',
+							'value' =>  'Field',
+							'label' =>  'display_name',
 							'#id'    => 'chart-group-' . $view_id,
 						)); ?>
 					</div>
@@ -97,8 +97,8 @@
 							'name'   => 'chart[data_cols]',
 							'data'   => $extra_cols,
 							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
-							'key'    => 'Field',
-							'value'  => 'display_name',
+							'value' =>  'Field',
+							'label' =>  'display_name',
 							'#id'    => 'chart-data-' . $view_id,
 							'#class' => 'chart-data-cols',
 						)); ?>

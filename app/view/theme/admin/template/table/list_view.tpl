@@ -19,338 +19,338 @@
 <div class="table-list-view-box">
 	<table class="list table-list-view">
 		<thead>
-			<tr>
-				<? if (!empty($row_id)) { ?>
-					<td width="1" class="center">
-						<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
-					</td>
-				<? } ?>
-				<td class="center column_title">
-					<span>{{Action}}</span>
+		<tr>
+			<? if (!empty($row_id)) { ?>
+				<td width="1" class="center">
+					<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
 				</td>
-				<? foreach ($columns as $slug => $column) { ?>
-					<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
-						<? if ($column['sortable']) {
-							$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
-							$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
-							?>
-							<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
-						<? } else { ?>
-							<span><?= $column['display_name']; ?></span>
-						<? } ?>
-					</td>
-				<? } ?>
-				<td class="center column_title">
-					<span>{{Action}}</span>
+			<? } ?>
+			<td class="center column_title">
+				<span>{{Action}}</span>
+			</td>
+			<? foreach ($columns as $slug => $column) { ?>
+				<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
+					<? if ($column['sortable']) {
+						$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
+						$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
+						?>
+						<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
+					<? } else { ?>
+						<span><?= $column['display_name']; ?></span>
+					<? } ?>
 				</td>
-			</tr>
+			<? } ?>
+			<td class="center column_title">
+				<span>{{Action}}</span>
+			</td>
+		</tr>
 		</thead>
 		<tbody>
-			<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
-				<? if (!empty($row_id)) { ?>
-					<td></td>
+		<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
+			<? if (!empty($row_id)) { ?>
+				<td></td>
+			<? } ?>
+			<td align="center">
+				<a class="button filter-button">{{Filter}}</a>
+				<? if (!empty($_GET['filter'])) { ?>
+					<a class="reset reset-button">{{Reset}}</a>
 				<? } ?>
-				<td align="center">
-					<a class="button filter-button">{{Filter}}</a>
-					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button">{{Reset}}</a>
-					<? } ?>
-					<a class="hide-filter">{{Hide}}</a>
-				</td>
-				<? foreach ($columns as $slug => $column) { ?>
-					<? if ($column['filter']) { ?>
-						<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
-							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
-							<? switch ($column['filter']) {
-								case 'text':
-									?>
-									<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
-									<? break;
+				<a class="hide-filter">{{Hide}}</a>
+			</td>
+			<? foreach ($columns as $slug => $column) { ?>
+				<? if ($column['filter']) { ?>
+					<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
+						<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
+						<? switch ($column['filter']) {
+							case 'text':
+								?>
+								<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
+								<? break;
 
-								case 'pk':
-								case 'int':
-								case 'float':
-								case 'decimal':
-									?>
-									<? if (!isset($column['filter_value']['low'])) {
-									$column['filter_value']['low'] = null;
+							case 'pk':
+							case 'int':
+							case 'float':
+							case 'decimal':
+								?>
+								<? if (!isset($column['filter_value']['low'])) {
+								$column['filter_value']['low'] = null;
+							}
+								if (!isset($column['filter_value']['high'])) {
+									$column['filter_value']['high'] = null;
 								}
-									if (!isset($column['filter_value']['high'])) {
-										$column['filter_value']['high'] = null;
-									}
-									?>
-									<div class="zoom_hover int">
-										<div class="input">
-											<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
-											<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
-											<span class="clear">clear</span>
-										</div>
-										<div class="value">
-											<? if ($column['filter_value']['low'] !== null || $column['filter_value']['high'] !== null) { ?>
-												<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
-											<? } else { ?>
-												{{Modify}}
-											<? } ?>
-										</div>
+								?>
+								<div class="zoom_hover int">
+									<div class="input">
+										<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
+										<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
+										<span class="clear">clear</span>
 									</div>
-									<? break;
-								case 'select':
-									if (isset($column['build_config'])) {
-										$build_key   = $column['build_config'][0];
-										$build_value = $column['build_config'][1];
-									} else {
-										$build_key = $build_value = null;
-									}
+									<div class="value">
+										<? if ($column['filter_value']['low'] !== null || $column['filter_value']['high'] !== null) { ?>
+											<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
+										<? } else { ?>
+											{{Modify}}
+										<? } ?>
+									</div>
+								</div>
+								<? break;
+							case 'select':
+								if (isset($column['build_config'])) {
+									$build_key   = $column['build_config'][0];
+									$build_value = $column['build_config'][1];
+								} else {
+									$build_key = $build_value = null;
+								}
 
-									if ($column['filter_blank'] && !isset($column['build_data'][''])) {
-										$column['build_data'] = array('' => '') + $column['build_data'];
-									}
+								if ($column['filter_blank'] && !isset($column['build_data'][''])) {
+									$column['build_data'] = array('' => '') + $column['build_data'];
+								}
 
-									echo build(array(
-										'type' => 'select',
-										'name'  => "filter[$slug]",
-										'data'   => $column['build_data'],
-										'select' => $column['filter_value'],
-										'key'    => $build_key,
-										'value'  => $build_value,
-									));
-									break;
+								echo build(array(
+									'type'   => 'select',
+									'name'   => "filter[$slug]",
+									'data'   => $column['build_data'],
+									'select' => $column['filter_value'],
+									'value'  => $build_key,
+									'label'  => $build_value,
+								));
+								break;
 
-								case 'multiselect':
-									if (isset($column['build_config'])) {
-										$build_key   = $column['build_config'][0];
-										$build_value = $column['build_config'][1];
-									} else {
-										$build_key = $build_value = null;
-									}
+							case 'multiselect':
+								if (isset($column['build_config'])) {
+									$build_key   = $column['build_config'][0];
+									$build_value = $column['build_config'][1];
+								} else {
+									$build_key = $build_value = null;
+								}
 
-									?>
-									<div class="zoom_hover multiselect">
-										<div class="input">
-											<?=
-											build(array(
-												'type' => 'multiselect',
-												'name'  => "filter[$slug]",
-												'data'   => $column['build_data'],
-												'select' => $column['filter_value'],
-												'key'    => $build_key,
-												'value'  => $build_value,
-											)); ?>
-										</div>
-										<div class="value">
-											<? if (!empty($column['filter_value'])) {
-												$vals = array();
-												foreach ($column['filter_value'] as $v) {
-													if ($build_key === false) {
-														$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
-													} else {
-														foreach ($column['build_data'] as $bd) {
-															if ($bd[$build_key] === $v) {
-																$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
-															}
+								?>
+								<div class="zoom_hover multiselect">
+									<div class="input">
+										<?=
+										build(array(
+											'type'   => 'multiselect',
+											'name'   => "filter[$slug]",
+											'data'   => $column['build_data'],
+											'select' => $column['filter_value'],
+											'value'  => $build_key,
+											'label'  => $build_value,
+										)); ?>
+									</div>
+									<div class="value">
+										<? if (!empty($column['filter_value'])) {
+											$vals = array();
+											foreach ($column['filter_value'] as $v) {
+												if ($build_key === false) {
+													$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+												} else {
+													foreach ($column['build_data'] as $bd) {
+														if ($bd[$build_key] === $v) {
+															$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
 														}
 													}
-												} ?>
+												}
+											} ?>
 
-												<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
-											<? } else { ?>
-												{{Modify}}
-											<? } ?>
-										</div>
+											<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
+										<? } else { ?>
+											{{Modify}}
+										<? } ?>
 									</div>
-									<? break;
+								</div>
+								<? break;
 
-								case 'date':
-								case 'time':
-								case 'datetime':
-									?>
-									<? if (!isset($column['filter_value']['start'])) {
-									$column['filter_value']['start'] = null;
+							case 'date':
+							case 'time':
+							case 'datetime':
+								?>
+								<? if (!isset($column['filter_value']['start'])) {
+								$column['filter_value']['start'] = null;
+							}
+								if (!isset($column['filter_value']['end'])) {
+									$column['filter_value']['end'] = null;
 								}
-									if (!isset($column['filter_value']['end'])) {
-										$column['filter_value']['end'] = null;
-									}
-									?>
+								?>
 
-									<div class="zoom_hover daterange">
-										<div class="input">
-											<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-											<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
-											<span class="clear">clear</span>
-										</div>
-										<div class="value">
-											<? if ($column['filter_value']['start'] === null || $column['filter_value']['end'] === null) { ?>
-												<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
-											<? } else { ?>
-												{{Modify}}
-											<? } ?>
-										</div>
+								<div class="zoom_hover daterange">
+									<div class="input">
+										<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
+										<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+										<span class="clear">clear</span>
 									</div>
+									<div class="value">
+										<? if ($column['filter_value']['start'] === null || $column['filter_value']['end'] === null) { ?>
+											<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
+										<? } else { ?>
+											{{Modify}}
+										<? } ?>
+									</div>
+								</div>
 
-									<? break;
+								<? break;
 
-								default:
-									break;
-							} ?>
-						</td>
-					<? } else { ?>
-						<td></td>
-					<? } ?>
+							default:
+								break;
+						} ?>
+					</td>
+				<? } else { ?>
+					<td></td>
 				<? } ?>
-				<td align="center">
-					<a class="button filter-button">{{Filter}}</a>
-					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button">{{Reset}}</a>
+			<? } ?>
+			<td align="center">
+				<a class="button filter-button">{{Filter}}</a>
+				<? if (!empty($_GET['filter'])) { ?>
+					<a class="reset reset-button">{{Reset}}</a>
+				<? } ?>
+				<a class="hide-filter">{{Hide}}</a>
+			</td>
+		</tr>
+		<? if (!empty($rows)) { ?>
+			<? foreach ($rows as $row) { ?>
+				<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
+				<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
+					<? if (!empty($row_id)) { ?>
+						<? $uniqid = uniqid($row[$row_id]); ?>
+						<td class="center">
+							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
+						</td>
 					<? } ?>
-					<a class="hide-filter">{{Hide}}</a>
-				</td>
-			</tr>
-			<? if (!empty($rows)) { ?>
-				<? foreach ($rows as $row) { ?>
-					<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
-					<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
-						<? if (!empty($row_id)) { ?>
-							<? $uniqid = uniqid($row[$row_id]); ?>
-							<td class="center">
-								<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
-							</td>
-						<? } ?>
 
-						<? $quick_actions = '';
+					<? $quick_actions = '';
 
-						if (!empty($row['actions'])) {
-							foreach ($row['actions'] as $key => $action) {
-								$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
+					if (!empty($row['actions'])) {
+						foreach ($row['actions'] as $key => $action) {
+							$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
 
-								if (!empty($action['ajax'])) {
-									$action['#class'] .= $action['ajax'] === 'modal' ? ' colorbox' : ' ajax';
-								}
+							if (!empty($action['ajax'])) {
+								$action['#class'] .= $action['ajax'] === 'modal' ? ' colorbox' : ' ajax';
+							}
 
-								if (!empty($action['href'])) {
-									$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
-								} else {
-									$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
+							if (!empty($action['href'])) {
+								$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
+							} else {
+								$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
 
-								}
 							}
 						}
-						?>
+					}
+					?>
 
-						<td class="center actions">
-							<div class="action-buttons">
-								<?= $quick_actions; ?>
-							</div>
-						</td>
-						<? foreach ($columns as $slug => $column) { ?>
-							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
+					<td class="center actions">
+						<div class="action-buttons">
+							<?= $quick_actions; ?>
+						</div>
+					</td>
+					<? foreach ($columns as $slug => $column) { ?>
+						<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
 
-							<? if ($column['editable']) {
-								$column['#data-field'] = $slug;
-								$column['#data-value'] = str_replace('"', '&quot;', is_array($value) ? implode(',', $value) : $value); ?>
-							<? } ?>
-
-							<td <?= attrs($column); ?>>
-
-								<?
-								//Check if the raw string override has been set for this value
-								if (isset($row['#' . $slug])) {
-									echo $row['#' . $slug];
-								} elseif ($value !== null) {
-									switch ($column['type']) {
-										case 'date':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
-											<? break;
-
-										case 'datetime':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
-											<? break;
-
-										case 'time':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
-											<? break;
-
-										case 'map':
-											?>
-											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-											<? break;
-
-										case 'select':
-											foreach ($column['build_data'] as $key => $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-													?>
-													<?= $c_data[$column['build_config'][1]]; ?>
-												<?
-												}
-											}
-											break;
-
-										case 'multiselect':
-											foreach ($value as $v) {
-												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-												foreach ($column['build_data'] as $c_data) {
-													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-														echo $c_data[$column['build_config'][1]] . "<br/>";
-														break;
-													}
-												}
-											}
-											break;
-
-										case 'format':
-											?>
-											<?= sprintf($column['format'], $value); ?>
-											<? break;
-
-										case 'image':
-											?>
-											<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
-											<? break;
-
-										case 'link-image':
-											?>
-											<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
-											<? break;
-
-										case 'text_list':
-											if (!empty($value) && is_array($value)) {
-												foreach ($value as $item) {
-													echo $item[$column['display_data']];
-												}
-											}
-											break;
-
-										case 'text':
-										case 'int':
-										case 'float':
-										case 'decimal':
-										default:
-											if (!empty($column['charlimit'])) {
-												echo charlimit($value, $column['charlimit']);
-											} else {
-												echo $value;
-											}
-											break;
-									}
-								}?>
-							</td>
+						<? if ($column['editable']) {
+							$column['#data-field'] = $slug;
+							$column['#data-value'] = str_replace('"', '&quot;', is_array($value) ? implode(',', $value) : $value); ?>
 						<? } ?>
-						<td class="center actions">
-							<div class="action-buttons">
-								<?= $quick_actions; ?>
-							</div>
+
+						<td <?= attrs($column); ?>>
+
+							<?
+							//Check if the raw string override has been set for this value
+							if (isset($row['#' . $slug])) {
+								echo $row['#' . $slug];
+							} elseif ($value !== null) {
+								switch ($column['type']) {
+									case 'date':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+										<? break;
+
+									case 'datetime':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+										<? break;
+
+									case 'time':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+										<? break;
+
+									case 'map':
+										?>
+										<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+										<? break;
+
+									case 'select':
+										foreach ($column['build_data'] as $key => $c_data) {
+											if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+												?>
+												<?= $c_data[$column['build_config'][1]]; ?>
+											<?
+											}
+										}
+										break;
+
+									case 'multiselect':
+										foreach ($value as $v) {
+											$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+											foreach ($column['build_data'] as $c_data) {
+												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+													echo $c_data[$column['build_config'][1]] . "<br/>";
+													break;
+												}
+											}
+										}
+										break;
+
+									case 'format':
+										?>
+										<?= sprintf($column['format'], $value); ?>
+										<? break;
+
+									case 'image':
+										?>
+										<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
+										<? break;
+
+									case 'link-image':
+										?>
+										<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
+										<? break;
+
+									case 'text_list':
+										if (!empty($value) && is_array($value)) {
+											foreach ($value as $item) {
+												echo $item[$column['display_data']];
+											}
+										}
+										break;
+
+									case 'text':
+									case 'int':
+									case 'float':
+									case 'decimal':
+									default:
+										if (!empty($column['charlimit'])) {
+											echo charlimit($value, $column['charlimit']);
+										} else {
+											echo $value;
+										}
+										break;
+								}
+							} ?>
 						</td>
-					</tr>
-				<?
-				}
-			} else {
-				?>
-				<tr>
-					<td class="center" colspan="<?= count($columns) + 3; ?>">{{There are no items to list.}}</td>
+					<? } ?>
+					<td class="center actions">
+						<div class="action-buttons">
+							<?= $quick_actions; ?>
+						</div>
+					</td>
 				</tr>
-			<? } ?>
+			<?
+			}
+		} else {
+			?>
+			<tr>
+				<td class="center" colspan="<?= count($columns) + 3; ?>">{{There are no items to list.}}</td>
+			</tr>
+		<? } ?>
 		</tbody>
 	</table>
 
@@ -366,12 +366,13 @@
 						case 'select':
 						case 'radio':
 						case 'checkbox':
-							echo build($column['editable'], array(
+							echo build(array(
+								'type'   => $column['editable'],
 								'name'   => '',
 								'data'   => $column['build_data'],
 								'select' => '',
-								'key'    => $column['build_config'][0],
-								'value'  => $column['build_config'][1],
+								'value'  => $column['build_config'][0],
+								'label'  => $column['build_config'][1],
 								'#class' => 'input-value',
 							));
 							break;
@@ -394,7 +395,7 @@
 						case 'decimal':
 						default:
 							?>
-								<input type="text" class="input-value"/>
+							<input type="text" class="input-value"/>
 							<? break;
 					} ?>
 				</div>

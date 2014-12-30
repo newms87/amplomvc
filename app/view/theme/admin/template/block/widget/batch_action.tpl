@@ -4,8 +4,8 @@
 	'type' => 'select',
 	'name' => 'batch_action',
 	'data'  => $actions,
-	'key'   => 'key',
-	'value' => 'label',
+	'value' =>  'key',
+	'label' =>  'label',
 )); ?>
 
 <? $ckeditor = false; ?>
@@ -34,8 +34,8 @@
 					'name'  => "action_value",
 					'data'   => $action['build_data'],
 					'select' => $action['default'],
-					'key'    => $action['build_config'][0],
-					'value'  => $action['build_config'][1],
+					'value' =>  $action['build_config'][0],
+					'label' =>  $action['build_config'][1],
 				)); ?>
 				<? break;
 

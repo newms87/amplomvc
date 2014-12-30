@@ -33,10 +33,6 @@ class App_Controller_Header extends Controller
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('theme_url', theme_url());
 
-		//Page Head
-		$settings['styles']  = $this->document->getStyles();
-		$settings['scripts'] = $this->document->getScripts();
-
 		//Body
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
 		$settings['body_class'] = $this->document->getBodyClass();

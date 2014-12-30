@@ -3,7 +3,6 @@
 class Cache
 {
 	private $expired, $dir;
-	private $ignore_list = array();
 	private $loaded = array();
 
 	public function __construct($dir = null)
@@ -47,12 +46,6 @@ class Cache
 				//Suppress warnings as this will fail under race conditions
 				@unlink($file);
 				return;
-			}
-
-			foreach ($this->ignore_list as $ignore) {
-				if (strpos($key, $ignore) === 0) {
-					return;
-				}
 			}
 
 			if ($get_file) {
@@ -110,17 +103,6 @@ class Cache
 			}
 		} else {
 			rrmdir($this->dir);
-		}
-	}
-
-	public function ignore($ignore)
-	{
-		foreach (explode(',', $ignore) as $key) {
-			$key = trim($key);
-
-			if ($key) {
-				$this->ignore_list[$key] = $key;
-			}
 		}
 	}
 }

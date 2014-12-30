@@ -98,15 +98,16 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroup($navigation_group_id, $group)
 	{
-		$name = $navigation_group_id;
-		$navigation_group_id = $this->getGroupId($navigation_group_id);
-
-		if (!$navigation_group_id && empty($group['name']) && $name) {
-			$group['name'] = $name;
+		if (isset($group['name'])) {
+			if (!validate('text', $group['name'], 3, 64)) {
+				$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
+			}
+		} elseif (!$navigation_group_id) {
+			$this->error['name'] = _l("Navigation Group Name is required!");
 		}
 
-		if (isset($group['name']) && !validate('text', $group['name'], 3, 64)) {
-			$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
+		if ($this->error) {
+			return false;
 		}
 
 		if (!isset($group['status'])) {
@@ -127,16 +128,15 @@ class App_Model_Navigation extends App_Model_Table
 		if (!empty($group['links'])) {
 			$this->toTree($group['links']);
 
-			$this->saveGroupLinks($navigation_group_id, $group['links']);
+			$this->saveGroupLinks($navigation_group_id, $group['links'], false);
 		}
-
 
 		clear_cache('navigation');
 
 		return $navigation_group_id;
 	}
 
-	public function saveGroupLinks($navigation_group_id, $links)
+	public function saveGroupLinks($navigation_group_id, $links, $append = true)
 	{
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
@@ -145,7 +145,9 @@ class App_Model_Navigation extends App_Model_Table
 			return false;
 		}
 
-		$this->delete('navigation', array('navigation_group_id' => $navigation_group_id));
+		if (!$append) {
+			$this->delete('navigation', array('navigation_group_id' => $navigation_group_id));
+		}
 
 		$sort_order = 0;
 
@@ -531,10 +533,11 @@ class App_Model_Navigation extends App_Model_Table
 		$this->removeGroup('admin');
 
 		$group = array(
+			'name'   => 'admin',
 			'status' => 1,
 			'links'  => $links,
 		);
 
-		return $this->saveGroup('admin', $group);
+		return $this->saveGroup(null, $group);
 	}
 }

@@ -23,6 +23,9 @@ class Document extends Library
 			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
 		}
 
+		$this->info['title'] = option('config_title');
+		$this->meta['description'] = option('config_meta_description');
+
 		$this->info['canonical_link'] = $this->url->getSeoUrl();
 
 		if ($ac_vars = option('config_ac_vars')) {
@@ -42,6 +45,11 @@ class Document extends Library
 	public function setInfo($key, $value)
 	{
 		$this->info[$key] = $value;
+	}
+
+	public function &infoRef()
+	{
+		return $this->info;
 	}
 
 	public function meta($key = null, $default = null)
@@ -363,7 +371,7 @@ class Document extends Library
 	 * Retrieves the scripts requested, sorted by priority
 	 * Note: We sort the scripts here as it is assumed this is only called once
 	 *
-	 * @return array - Each element is a string of the absolute filepath to the script
+	 * @return array - Each element is a string of the absolute file path to the script
 	 */
 	public function getScripts()
 	{
@@ -506,7 +514,7 @@ class Document extends Library
 				break;
 		}
 
-		$html = "<div class=\"link-list $class\"><ul>";
+		$html = '';
 
 		$zindex = count($links);
 
@@ -562,8 +570,6 @@ class Document extends Library
 			$zindex--;
 		}
 
-		$html .= "</ul></div>";
-
-		return $html;
+		return "<div class=\"link-list $class\"><ul>" . $html . "</ul></div>";
 	}
 }

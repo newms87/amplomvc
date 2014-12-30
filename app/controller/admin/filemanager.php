@@ -3,6 +3,8 @@ class App_Controller_Admin_Filemanager extends Controller
 {
 	public function index()
 	{
+		_is_writable(DIR_IMAGE);
+
 		require_once DIR_RESOURCES . 'js/responsive-filemanager/filemanager/dialog.php';
 		//output("<iframe src=\"" . site_url('system/resources/js/responsive-filemanager/filemanager/dialog.php') . "\"></iframe>");
 	}

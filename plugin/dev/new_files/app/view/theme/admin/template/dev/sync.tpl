@@ -20,8 +20,8 @@
 								'name'  => 'domain',
 								'data'   => $data_sites,
 								'select' => $domain,
-								'key'    => 'domain',
-								'value'  => 'domain',
+								'value' =>  'domain',
+								'label' =>  'domain',
 							)); ?>
 						</td>
 					</tr>

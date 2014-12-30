@@ -6,8 +6,8 @@
 				'type' => 'select',
 				'name'  => 'attribute_group_select',
 				'data'   => $data_attribute_groups,
-				'key'    => 'attribute_group_id',
-				'value'  => 'name',
+				'value' =>  'attribute_group_id',
+				'label' =>  'name',
 			)); ?>
 		</td>
 		<td>

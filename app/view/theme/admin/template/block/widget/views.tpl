@@ -64,8 +64,8 @@
 										'name'  => 'view_listing_id',
 										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
 										'select' => $view['view_listing_id'],
-										'key'    => false,
-										'value'  => 'name',
+										'value' =>  false,
+										'label' =>  'name',
 									)); ?>
 								</div>
 								<div class="view-setting choose-view-size">

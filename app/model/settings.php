@@ -47,7 +47,6 @@ class App_Model_Settings extends Model
 		'site_list_limit'                         => 10,
 		'config_autocomplete_limit'               => 10,
 		'config_performance_log'                  => 0,
-		'config_cache_ignore'                     => '',
 		'config_customer_group_id'                => '',
 		'config_customer_approval'                => 0,
 		'config_account_terms_page_id'            => '',
@@ -96,7 +95,10 @@ class App_Model_Settings extends Model
 		'config_ga_domains'                       => array(),
 		'config_ga_click_tracking'                => 0,
 		'config_ga_demographics'                  => 0,
-		'config_statcounter'                      => '',
+		'config_statcounter'                      => array(
+			'project'  => '',
+			'secruity' => '',
+		),
 	);
 
 	public function saveGeneral($settings)
@@ -107,14 +109,18 @@ class App_Model_Settings extends Model
 
 		if (empty($settings['site_email']) || !validate('email', $settings['site_email'])) {
 			$this->error['site_email'] = _l("The Site Email does not appear to be valid!");
-		}
+		} else {
+			if (empty($settings['site_email_support'])) {
+				$settings['site_email_support'] = $settings['site_email'];
+			} elseif (!validate('email', $settings['site_email_support'])) {
+				$this->error['site_email_support'] = _l("The Support Email %s does not appear to be valid.", $settings['site_email_support']);
+			}
 
-		if (isset($settings['site_email_support']) && !validate('email', $settings['site_email_support'])) {
-			$this->error['site_email_support'] = _l("The Support Email %s does not appear to be valid.", $settings['site_email_support']);
-		}
-
-		if (isset($settings['site_email_error']) && !validate('email', $settings['site_email_error'])) {
-			$this->error['site_email_error'] = _l("The Error Email %s does not appear to be valid.", $settings['site_email_error']);
+			if (empty($settings['site_email_error'])) {
+				$settings['site_email_error'] = $settings['site_email'];
+			} elseif (!validate('email', $settings['site_email_error'])) {
+				$this->error['site_email_error'] = _l("The Error Email %s does not appear to be valid.", $settings['site_email_error']);
+			}
 		}
 
 		if ($this->error) {
@@ -125,7 +131,7 @@ class App_Model_Settings extends Model
 			$settings['site_title'] = $settings['site_name'];
 		}
 
-		$settings['site_list_limit']  = max(0, (int)$settings['site_list_limit']);
+		$settings['site_list_limit'] = max(0, (int)$settings['site_list_limit']);
 
 		$result = $this->config->saveGroup('general', $settings);
 

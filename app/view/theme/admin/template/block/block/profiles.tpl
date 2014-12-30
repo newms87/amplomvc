@@ -28,8 +28,8 @@
 							'name'  => "profiles[$row][block_instance_id]",
 							'data'   => $data_instances,
 							'select' => $profile['block_instance_id'],
-							'key'    => false,
-							'value'  => "name",
+							'value' =>  false,
+							'label' =>  "name",
 						)); ?>
 					</td>
 				</tr>
@@ -42,8 +42,8 @@
 							'name'  => "profiles[$row][layout_ids]",
 							'data'   => $data_layouts,
 							'select' => !empty($profile['layout_ids']) ? $profile['layout_ids'] : null,
-							'key'    => "layout_id",
-							'value'  => "name",
+							'value' =>  "layout_id",
+							'label' =>  "name",
 						)); ?>
 					</td>
 				</tr>

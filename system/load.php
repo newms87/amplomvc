@@ -14,24 +14,12 @@ $registry->set('route', $router);
 // Request (cleans globals)
 $registry->set('request', new Request());
 
-// Cache
-$cache = new Cache();
-$registry->set('cache', $cache);
-
-//TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
-
-//config is self assigning to registry.
-$config = new Config();
-
-//Setup Cache ignore list
-$cache->ignore(option('config_cache_ignore'));
-
 //Database Structure Validation
-$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
+$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
 
 if ($last_update) {
-	$cache->delete('model');
-	$cache->set('db_last_update', $last_update['Value']);
+	clear_cache('model');
+	cache('db_last_update', $last_update['Value']);
 }
 
 //Model History
@@ -52,9 +40,6 @@ $registry->set('session', new Session());
 //Mod Files
 $registry->set('mod', new Mod());
 
-//Theme
-$registry->set('theme', new Theme());
-
 // Url
 $registry->set('url', new Url());
 
@@ -65,7 +50,7 @@ $response->setCompression(option('config_compression'));
 $registry->set('response', $response);
 
 //Plugins (self assigning to registry)
-$plugin = new Plugin();
+new Plugin();
 
 //Cron Called from system
 if (option('config_cron_status')) {

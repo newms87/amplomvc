@@ -70,8 +70,8 @@
 							'name'  => 'tax_class_id',
 							'data'   => $data_tax_classes,
 							'select' => $tax_class_id,
-							'key'    => 'tax_class_id',
-							'value'  => 'title',
+							'value' =>  'tax_class_id',
+							'label' =>  'title',
 						)); ?>
 					</td>
 				</tr>

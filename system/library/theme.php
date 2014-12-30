@@ -49,6 +49,10 @@ class Theme extends Library
 	public function setTheme($theme)
 	{
 		$this->theme = $theme;
+
+		$this->theme_hierarchy = $this->getThemeParents($theme);
+
+		array_unshift($this->theme_hierarchy, $theme);
 	}
 
 	public function setThemesDirectory($dir)
