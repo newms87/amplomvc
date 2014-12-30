@@ -345,7 +345,7 @@ function option($option, $default = null)
 	static $options;
 
 	if (!$options) {
-		$options = & $registry->get('config')->all();
+		$options = &$registry->get('config')->all();
 	}
 
 	return isset($options[$option]) ? $options[$option] : $default;
@@ -373,7 +373,7 @@ function page_info($key = null, $default = null)
 	}
 
 	if (!$info) {
-		$info = & $document->infoRef();
+		$info = &$document->infoRef();
 	}
 
 	if (!$key) {
@@ -551,8 +551,8 @@ function build($type, $params = null)
 		'name'     => '',
 		'data'     => null,
 		'select'   => array(),
-		'key'      => null,
 		'value'    => null,
+		'label'    => null,
 		'readonly' => false,
 	);
 
@@ -561,13 +561,13 @@ function build($type, $params = null)
 		return;
 	}
 
-	$type        = $params['type'];
-	$data        = $params['data'];
-	$name        = $params['name'];
-	$select      = $params['select'];
-	$build_key   = $params['key'];
-	$build_value = $params['value'];
-	$readonly    = $params['readonly'];
+	$type      = $params['type'];
+	$data      = $params['data'];
+	$name      = $params['name'];
+	$select    = $params['select'];
+	$value_key = $params['value'];
+	$label_key = $params['label'];
+	$readonly  = $params['readonly'];
 
 	if (!isset($params['#class'])) {
 		$params['#class'] = "builder-$type";
@@ -627,16 +627,16 @@ function build($type, $params = null)
 
 	foreach ($data as $key => $value) {
 		if (is_array($value)) {
-			if (($build_key && !isset($value[$build_key])) || ($build_value && !isset($value[$build_value]))) {
+			if (($value_key && !isset($value[$value_key])) || ($label_key && !isset($value[$label_key]))) {
 				trigger_error(_l("The associative indexes for 'key' and 'value' were not found in the data array."));
 				return;
 			}
 
-			if ($build_key) {
-				$key = $value[$build_key];
+			if ($value_key) {
+				$key = $value[$value_key];
 			}
 
-			$value = isset($value[$build_value]) ? $value[$build_value] : '';
+			$value = isset($value[$label_key]) ? $value[$label_key] : '';
 		}
 
 		//Determine if the value is a selected value.
@@ -646,7 +646,7 @@ function build($type, $params = null)
 
 		foreach ($select as $s) {
 			if (is_array($s)) {
-				$s = $s[$build_key];
+				$s = $s[$value_key];
 			}
 
 			$v = is_integer($s) ? (int)$key : $key;

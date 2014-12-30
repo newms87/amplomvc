@@ -112,8 +112,8 @@
 								'name'  => 'theme',
 								'data'   => $data_themes,
 								'select' => $theme,
-								'key'    => 'name',
-								'value'  => 'name',
+								'value' =>  'name',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -127,8 +127,8 @@
 									'name'  => 'layout_id',
 									'data'   => $data_layouts,
 									'select' => $layout_id,
-									'key'    => 'layout_id',
-									'value'  => 'name',
+									'value' =>  'layout_id',
+									'label' =>  'name',
 								)); ?>
 							</div>
 							<a id="create_layout" class="link_button">{{[ Create Layout for this page ]}}</a>

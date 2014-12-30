@@ -262,8 +262,8 @@ class App_Controller_Admin_Page extends Controller
 			'name'  => 'layout_id',
 			'data'   => $layouts,
 			'select' => $layout_id,
-			'key'    => 'layout_id',
-			'value'  => 'name',
+			'value' =>  'layout_id',
+			'label' =>  'name',
 		));
 
 		output($output);

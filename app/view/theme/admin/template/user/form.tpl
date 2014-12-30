@@ -56,8 +56,8 @@
 								'name'   => 'user_role_id',
 								'data'   => $data_user_roles,
 								'select' => $user_role_id,
-								'key'    => 'user_role_id',
-								'value'  => 'name',
+								'value' =>  'user_role_id',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>

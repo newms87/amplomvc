@@ -111,8 +111,8 @@
 								'name'   => 'config_theme',
 								'data'   => $data_themes,
 								'select' => $config_theme,
-								'key'    => 'name',
-								'value'  => 'name',
+								'value' =>  'name',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -129,8 +129,8 @@
 								'name'   => 'config_default_layout_id',
 								'data'   => $data_layouts,
 								'select' => $config_default_layout_id,
-								'key'    => 'layout_id',
-								'value'  => 'name',
+								'value' =>  'layout_id',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -162,8 +162,8 @@
 								'name'   => 'config_country_id',
 								'data'   => $data_countries,
 								'select' => $config_country_id,
-								'key'    => 'country_id',
-								'value'  => 'name',
+								'value' =>  'country_id',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -181,8 +181,8 @@
 								'name'   => 'config_language',
 								'data'   => $data_languages,
 								'select' => $config_language,
-								'key'    => 'code',
-								'value'  => 'name',
+								'value' =>  'code',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -209,8 +209,8 @@
 								'name'   => 'config_currency',
 								'data'   => $data_currencies,
 								'select' => $config_currency,
-								'key'    => 'code',
-								'value'  => 'title',
+								'value' =>  'code',
+								'label' =>  'title',
 							)); ?>
 						</td>
 					</tr>
@@ -290,14 +290,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{{Cache Ignore List:}}
-							<span class="help">{{(comma separated list)}}</span>
-						</td>
-						<td>
-							<textarea name="config_cache_ignore"><?= $config_cache_ignore; ?></textarea>
-						</td>
-					</tr>
-					<tr>
 						<td>{{Allow Customers to Close Notification Messages?}}
 							<span class="help">{{These are popups that display warning, success and alert/notify messages}}</span>
 						</td>
@@ -319,8 +311,8 @@
 								'name'   => 'config_customer_group_id',
 								'data'   => $data_customer_groups,
 								'select' => $config_customer_group_id,
-								'key'    => 'customer_group_id',
-								'value'  => 'name',
+								'value' =>  'customer_group_id',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -347,8 +339,8 @@
 								'name'   => 'config_account_terms_page_id',
 								'data'   => $data_pages,
 								'select' => $config_account_terms_page_id,
-								'key'    => 'page_id',
-								'value'  => 'title',
+								'value' =>  'page_id',
+								'label' =>  'title',
 							)); ?>
 						</td>
 					</tr>

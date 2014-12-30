@@ -47,7 +47,6 @@ class App_Model_Settings extends Model
 		'site_list_limit'                         => 10,
 		'config_autocomplete_limit'               => 10,
 		'config_performance_log'                  => 0,
-		'config_cache_ignore'                     => '',
 		'config_customer_group_id'                => '',
 		'config_customer_approval'                => 0,
 		'config_account_terms_page_id'            => '',
@@ -96,7 +95,10 @@ class App_Model_Settings extends Model
 		'config_ga_domains'                       => array(),
 		'config_ga_click_tracking'                => 0,
 		'config_ga_demographics'                  => 0,
-		'config_statcounter'                      => '',
+		'config_statcounter'                      => array(
+			'project'  => '',
+			'secruity' => '',
+		),
 	);
 
 	public function saveGeneral($settings)
@@ -129,7 +131,7 @@ class App_Model_Settings extends Model
 			$settings['site_title'] = $settings['site_name'];
 		}
 
-		$settings['site_list_limit']  = max(0, (int)$settings['site_list_limit']);
+		$settings['site_list_limit'] = max(0, (int)$settings['site_list_limit']);
 
 		$result = $this->config->saveGroup('general', $settings);
 

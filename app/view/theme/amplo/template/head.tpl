@@ -15,11 +15,13 @@
 		<link href="<?= $canonical_link; ?>" rel="canonical"/>
 	<? } ?>
 
-	<? foreach (option('config_icon', array()) as $size => $icon) { ?>
-		<? if ($size === 'ico') { ?>
-			<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
-		<? } elseif ($size !== 'orig') { ?>
-			<link href="<?= image($icon); ?>" rel="apple-touch-icon" sizes="<?= $size; ?>"/>
+	<? if ($head_icon = option('config_icon')) { ?>
+		<? foreach ($head_icon as $size => $icon) { ?>
+			<? if ($size === 'ico') { ?>
+				<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>
+			<? } elseif ($size !== 'orig') { ?>
+				<link href="<?= image($icon); ?>" rel="apple-touch-icon" sizes="<?= $size; ?>"/>
+			<? } ?>
 		<? } ?>
 	<? } ?>
 

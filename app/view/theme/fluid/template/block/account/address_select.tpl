@@ -5,8 +5,8 @@
 			'name'   => 'address_id',
 			'data'   => format_all('address', $addresses),
 			'select' => $address_id,
-			'key'    => 'address_id',
-			'value'  => 'formatted',
+			'value' =>  'address_id',
+			'label' =>  'formatted',
 		)); ?>
 
 		<? if ($add_address) { ?>

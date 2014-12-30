@@ -50,8 +50,8 @@
 								'name'  => 'themes',
 								'data'   => $data_themes,
 								'select' => $themes,
-								'key'    => 'name',
-								'value'  => 'name',
+								'value' =>  'name',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>

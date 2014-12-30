@@ -55,8 +55,8 @@
 										'name'  => "zones[$row][country_id]",
 										'data'   => $data_countries,
 										'select' => $zone['country_id'], array('class' => 'country_selector'),
-										'key'    => 'country_id',
-										'value'  => 'name',
+										'value' =>  'country_id',
+										'label' =>  'name',
 									)); ?>
 									<a onclick="add_all_zones($(this))"
 										style="text-decoration:none; display:block">{{[ Add All Zones ]}}</a>

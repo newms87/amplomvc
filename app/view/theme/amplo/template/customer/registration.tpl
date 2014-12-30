@@ -83,8 +83,8 @@
 								'name'  => 'country_id',
 								'data'   => $data_countries,
 								'select' => $country_id,
-								'key'    => 'country_id',
-								'value'  => 'name',
+								'value' =>  'country_id',
+								'label' =>  'name',
 							)); ?>
 						</div>
 						<div class="form-item required">
