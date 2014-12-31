@@ -1,5 +1,5 @@
-$.ac_template = $.fn.ac_template = function (name, action, data) {
-	templates = $.fn.ac_template.templates;
+$.ac_template = $.fn.ac_template = function (name, action, data, relate) {
+	var templates = $.fn.ac_template.templates;
 
 	function get_count(list) {
 		var count = 0;
@@ -14,9 +14,11 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 	//Load Template
 	if (!action || typeof action === 'object') {
 		var template_row = this;
+		var list = this.parent();
 
 		if (template_row.attr('data-row') !== '__ac_template__') {
 			template_row = this.find('[data-row="__ac_template__"]');
+			list = this;
 		}
 
 		if (!template_row.length) {
@@ -24,14 +26,14 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 			return this;
 		}
 
-		this.data('rel', name);
-		this.find('[data-row]').not('[data-rel]').attr('data-rel', name);
+		list.data('rel', relate || name);
+		list.find('[data-row]').not('[data-rel]').attr('data-rel', relate || name);
 
 		template = template_row.clone(true);
 		template_row.remove();
 
 		templates[name] = $.extend({
-			list:     this,
+			list:     list,
 			template: template,
 			defaults: {}, //action being used as data here
 			unique:   false
@@ -123,14 +125,16 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 
 				var value = find_value(key, data);
 
-				if ($.inArray($e.attr('type'), ['checkbox', 'radio']) >= 0) {
-					$e.prop('checked', value);
-				} else if (!$e.is('select')) {
-					$e.val(value).attr('value', value);
-				}
+				if ($e.is('select')) {
+					$e.val(value);
 
-				if ($e.is('select') && !$e.find(':selected').length) {
-					$e.val($e.find(':first').val());
+					if (!$e.find(':selected').length) {
+						$e.val($e.find(':first').val());
+					}
+				} else if ($.inArray($e.attr('type'), ['checkbox', 'radio']) >= 0) {
+					$e.prop('checked', $e.val() == value);
+				} else {
+					$e.val(value).attr('value', value);
 				}
 			});
 

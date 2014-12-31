@@ -370,7 +370,6 @@ header.main-header.row {
   display: inline-block;
   vertical-align: middle;
   z-index: 2;
-  width: 20%;
 
   a {
     display: block;
@@ -379,7 +378,6 @@ header.main-header.row {
 
 .header-navigation {
   display: inline-block;
-  width: 80%;
   .whitespace-hack;
 
   & > nav {
@@ -532,24 +530,34 @@ select {
 }
 
 label.radio {
+  .noselect;
   vertical-align: middle;
   display: inline-block;
-  outline: none;
+  outline: 0;
   box-sizing: border-box;
   cursor: pointer;
-  .noselect;
-
-  .label {
-    text-align: left;
-    vertical-align: middle;
-    display: inline-block;
-  }
 
   input[type="radio"] {
     vertical-align: middle;
     display: inline-block;
     position: absolute;
     left: -9999px;
+
+    & + .label {
+      text-align: left;
+      vertical-align: middle;
+      display: inline-block;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+        margin-right: .2em;
+        z-index: 10;
+      }
+    }
 
     @radio();
   }
@@ -583,28 +591,29 @@ label.checkbox {
   display: inline-block;
   outline: 0;
   box-sizing: border-box;
-
-  .label {
-    text-align: left;
-    vertical-align: middle;
-    display: inline-block;
-
-    &:before {
-      content: '';
-      display: inline-block;
-      vertical-align: middle;
-      position: relative;
-      top: -1px;
-      margin-right: .4em;
-      z-index: 10;
-    }
-  }
+  cursor: pointer;
 
   input[type="checkbox"] {
     vertical-align: middle;
     display: inline-block;
     position: absolute;
     left: -9999px;
+
+    & + .label {
+      text-align: left;
+      vertical-align: middle;
+      display: inline-block;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+        margin-right: .4em;
+        z-index: 10;
+      }
+    }
 
     @checkbox();
   }

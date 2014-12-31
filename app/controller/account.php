@@ -15,9 +15,6 @@ class App_Controller_Account extends Controller
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account Manager"), site_url('account'));
 
-		//Page Information
-		$data['shipping_address'] = $this->customer->getDefaultShippingAddress();
-
 		//Customer Information
 		$data['customer'] = customer_info() + $this->customer->getMeta();
 

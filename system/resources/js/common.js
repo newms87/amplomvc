@@ -60,10 +60,10 @@ $.fn.codemirror = function (params) {
 	}
 }
 
-$.ac_template = $.fn.ac_template = function (name, action, data) {
+$.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 	$.ac_template = $.fn.ac_template = null;
 	syncload('system/resources/js/ac_template.js');
-	if (this.ac_template) this.ac_template(name, action, data);
+	if (this.ac_template) this.ac_template(name, action, data, relate);
 }
 
 $.fn.jqzoom = function (params) {

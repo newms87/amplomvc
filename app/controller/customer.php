@@ -13,7 +13,12 @@ class App_Controller_Customer extends Controller
 		);
 
 		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
-			redirect('account');
+			if ($this->is_ajax) {
+				echo json_encode(array('success' => _l("You are logged in to you account")));
+				exit;
+			} else {
+				redirect('account');
+			}
 		}
 	}
 
@@ -22,7 +27,7 @@ class App_Controller_Customer extends Controller
 		$this->login();
 	}
 
-	public function login($settings = array())
+	public function login(array $settings = array())
 	{
 		//Page Head
 		set_page_info('title', _l("Customer Sign In"));
@@ -31,8 +36,13 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Sign In"), site_url('customer/login'));
 
-		if (!empty($settings['redirect'])) {
-			$this->request->setRedirect($settings['redirect']);
+		if (isset($settings['redirect'])) {
+			if (!empty($settings['redirect'])) {
+				$this->request->setRedirect($settings['redirect']);
+			} else {
+				$this->request->clearRedirect();
+				$settings['no_redirect'] = true;
+			}
 		} elseif (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
 		} elseif (!$this->is_ajax && !$this->request->hasRedirect()) {
@@ -41,9 +51,10 @@ class App_Controller_Customer extends Controller
 
 		//Block Settings
 		$defaults = array(
-			'username' => '',
-			'size'     => 'large',
-			'template' => 'customer/login',
+			'username'    => '',
+			'size'        => 'large',
+			'template'    => 'customer/login',
+			'no_redirect' => false,
 		);
 
 		$settings += $_POST + $defaults;
@@ -77,7 +88,11 @@ class App_Controller_Customer extends Controller
 
 	public function authenticate()
 	{
-		if (!$this->customer->login(_post('username'), _post('password'))) {
+		if ($this->customer->login(_post('username'), _post('password'))) {
+			if ($this->is_ajax) {
+				message('success', _l("You have been logged into your account"));
+			}
+		} else {
 			message('error', $this->customer->getError());
 		}
 
@@ -171,11 +186,12 @@ class App_Controller_Customer extends Controller
 
 	public function register()
 	{
-		if (!$this->customer->register($_POST)) {
+		if ($this->customer->register($_POST)) {
+			message('success', _l("Your account has been created!"));
+			$this->customer->login($_POST['email'], $_POST['password']);
+		} else {
 			message('error', $this->customer->getError());
 		}
-
-		$this->customer->login($_POST['email'], $_POST['password']);
 
 		if ($this->is_ajax && !$this->request->hasRedirect()) {
 			output_json($this->message->fetch());
