@@ -83,8 +83,8 @@
 //Primary Styling
 @color-main: #395D84;
 @color-secondary: #4E4E4E;
-@color-dark: #4E4E4E;
-@color-light: white;
+@color-dark: #373737;
+@color-light: #CCCCCC;
 
 //Legacy Styling
 @color-lightest: lighten(@color-main, 50%);
@@ -326,20 +326,48 @@
 
 //Footer
 @footer: { & {
-  font-size: .8em;
-  color: white;
-  background: #343434;
+  text-align: center;
 
-  a {
-    color: white;
+  .sub-footer {
+    color: @color-dark;
+    background: @color-light;
 
-    &:hover {
-      color: darken(white, 25%);
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-dark;
+      font-family: OpenSansSemiBold;
+
+      &:hover {
+        color: lighten(@color-dark, 25%);
+      }
+    }
+
+    .contact-info {
+      a + a {
+        margin-left: 2em;
+      }
     }
   }
 
-  .wrap {
-    padding: 1em;
+  .main-footer {
+    font-size: .8em;
+    color: @color-light;
+    background: @color-dark;
+
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-light;
+
+      &:hover {
+        color: darken(@color-light, 25%);
+      }
+    }
   }
 } };
 
