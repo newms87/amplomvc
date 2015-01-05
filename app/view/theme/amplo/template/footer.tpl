@@ -7,46 +7,45 @@
 <? } ?>
 </main>
 
-<footer class="row">
-	<div class="wrap">
+<footer class="site-footer">
+	<div class="row sub-footer">
+		<div class="wrap">
+			<div class="col xs-12 sm-9 md-6">
+				<div class="col md-visible md-8 contact-info desktop">
+					<a class="site-email" href="mailto:<?= option('site_email'); ?>"><?= option('site_email'); ?></a>
+					<a class="site-phone" href="tel:<?= preg_replace("/[^\\d]/", '', option('site_phone')); ?>"><?= option('site_phone'); ?></a>
+				</div>
 
-		<div id="links-footer">
+				<div class="social-links col xs-12 md-4">
+					<?= block('extras/social_media'); ?>
+				</div>
+
+				<div class="col md-hidden md-8 contact-info mobile">
+					<a class="site-email" href="mailto:<?= option('site_email'); ?>"><?= option('site_email'); ?></a>
+					<a class="site-phone" href="tel:<?= preg_replace("/[^\\d]/", '', option('site_phone')); ?>"><?= option('site_phone'); ?></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row main-footer">
+		<div class="wrap">
+			<div class="col md-visible md-4 left copyright">
+				<span class="text">&copy;<?= date('Y') . ' ' . option('site_name'); ?></span>
+			</div>
+
 			<? if (has_links('footer')) { ?>
-			<div class="links-footer col xs-12 sm-6 md-4 lg-3 xs-center sm-left">
-				<h4>{{Useful Links}}</h4>
-
-				<div class="links">
-					<?= links('footer'); ?>
+				<div id="links-footer" class="col xs-12 md-8 md-right">
+					<div class="links">
+						<?= links('footer'); ?>
+					</div>
 				</div>
-			</div>
 			<? } ?>
 
-			<? if (has_links('footer-resources')) { ?>
-			<div class="links-footer-resources col xs-center sm-left xs-12 sm-6 md-4 lg-3">
-				<h4>{{Resources}}</h4>
-
-				<div class="links">
-					<?= links('footer-resources'); ?>
-				</div>
+			<div class="col md-hidden xs-12 copyright">
+				<span class="text">&copy;<?= date('Y') . ' ' . option('site_name'); ?></span>
 			</div>
-			<? } ?>
-
-			<? if (has_links('footer-more')) { ?>
-			<div class="links-footer-more col xs-center sm-left xs-12 sm-6 md-4 lg-3">
-				<h4>{{More Information}}</h4>
-
-				<div class="links">
-					<?= links('footer-more'); ?>
-				</div>
-			</div>
-			<? } ?>
-
 		</div>
-
-		<div id="footer-social-networks" class="xs-12 lg-3">
-			<?= block('extras/social_media'); ?>
-		</div>
-
 	</div>
 </footer>
 </section><!-- /#container -->
