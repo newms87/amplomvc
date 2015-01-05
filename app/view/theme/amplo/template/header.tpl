@@ -10,14 +10,14 @@
 					<?= block('widget/admin_bar'); ?>
 				<? } ?>
 
-				<div class="wrap">
-					<? if ($logo = option('config_logo')) { ?>
-						<div id="logo">
-							<a href="<?= site_url(); ?>" class="block">
-								<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= option('config_name'); ?>" alt="<?= option('config_name'); ?>"/>
-							</a>
-						</div>
-					<? } ?>
+		<div class="wrap">
+			<? if ($logo = option('config_logo')) { ?>
+				<div id="logo" class="col xs-5 sm-4 md-2 left">
+					<a href="<?= site_url(); ?>" class="block">
+						<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= option('config_name'); ?>" alt="<?= option('config_name'); ?>"/>
+					</a>
+				</div>
+			<? } ?>
 
 					<? if ($slogan = option('config_slogan')) { ?>
 						<div id="slogan"><?= $slogan; ?></div>
