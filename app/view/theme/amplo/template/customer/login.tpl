@@ -85,6 +85,10 @@
 
 <script type="text/javascript">
 	$('#customer-login .login-page .wrap').ac_msg('error', <?= json_encode($this->message->fetch('error')); ?>);
+
+    $('#customer-login input').focus(function(){
+
+    });
 </script>
 
 <?= $is_ajax ? '' : call('footer'); ?>

@@ -24,7 +24,7 @@ class Document extends Library
 		}
 
 		$this->info['title'] = option('config_title');
-		$this->meta['description'] = option('config_meta_description');
+		$this->meta['description'] = option('site_meta_description');
 
 		$this->info['canonical_link'] = $this->url->getSeoUrl();
 

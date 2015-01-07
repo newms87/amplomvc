@@ -15,7 +15,7 @@
 		<link href="<?= $canonical_link; ?>" rel="canonical"/>
 	<? } ?>
 
-	<? if ($head_icon = option('config_icon')) { ?>
+	<? if ($head_icon = option('site_icon')) { ?>
 		<? foreach ($head_icon as $size => $icon) { ?>
 			<? if ($size === 'ico') { ?>
 				<link href="<?= image($icon); ?>" rel="apple-touch-icon icon shortcut"/>

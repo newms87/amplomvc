@@ -258,7 +258,7 @@ class Image extends Library
 		}
 
 		if (!$destination) {
-			$destination = DIR_IMAGE . 'icon/' . pathinfo($source, PATHINFO_FILENAME) . '.ico';
+			$destination = DIR_IMAGE . 'icon/' . uniqid() . '/' . pathinfo($source, PATHINFO_FILENAME) . '.ico';
 		}
 
 		if (!_is_writable(dirname($destination))) {

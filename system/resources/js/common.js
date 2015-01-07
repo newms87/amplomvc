@@ -78,9 +78,13 @@ $.fn.use_once = function (label) {
 }
 
 $.fn.scrollTo = function (target, options) {
+    target = $(target);
+
     var $this = this;
+    var $header = $('header.main-header');
+
     options = $.extend({}, {
-        offset: 0,
+        offset: $header.css('position') === 'fixed' ? -$header.outerHeight() : 0,
         callback: null
     }, options);
 

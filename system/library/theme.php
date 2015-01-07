@@ -14,7 +14,7 @@ class Theme extends Library
 		$this->dir_themes = DIR_THEMES;
 
 		$admin_theme = option('config_admin_theme', 'admin');
-		$theme       = option('config_theme', AMPLO_DEFAULT_THEME);
+		$theme       = option('site_theme', AMPLO_DEFAULT_THEME);
 
 		if (!is_dir(DIR_THEMES . $admin_theme)) {
 			save_option('config_admin_theme', 'admin');
@@ -22,7 +22,7 @@ class Theme extends Library
 		}
 
 		if (!is_dir(DIR_THEMES . $theme)) {
-			save_option('config_theme', AMPLO_DEFAULT_THEME);
+			save_option('site_theme', AMPLO_DEFAULT_THEME);
 			$theme = AMPLO_DEFAULT_THEME;
 		}
 
@@ -214,7 +214,7 @@ class Theme extends Library
 
 	public function getThemeStyle()
 	{
-		$theme    = IS_ADMIN ? 'admin' : option('config_theme');
+		$theme    = IS_ADMIN ? 'admin' : option('site_theme');
 
 		$cache_file = 'less/theme.' . $theme;
 		$theme_file = cache($cache_file, null, true);
@@ -279,7 +279,7 @@ class Theme extends Library
 
 	public function loadTheme()
 	{
-		$theme = $this->config->load('config', 'config_theme');
+		$theme = $this->config->load('config', 'site_theme');
 
 		if (!$theme) {
 			$theme = AMPLO_DEFAULT_THEME;

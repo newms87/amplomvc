@@ -99,7 +99,7 @@
 							<span class="help">{{The Meta Description will show up in search results, and is used for Search Engine Optimization (SEO).}}</span>
 						</td>
 						<td>
-							<textarea name="config_meta_description" cols="40" rows="5"><?= $config_meta_description; ?></textarea>
+							<textarea name="site_meta_description" cols="40" rows="5"><?= $site_meta_description; ?></textarea>
 						</td>
 					</tr>
 					<tr>
@@ -108,9 +108,9 @@
 							<?=
 							build(array(
 								'type'   => 'select',
-								'name'   => 'config_theme',
+								'name'   => 'site_theme',
 								'data'   => $data_themes,
-								'select' => $config_theme,
+								'select' => $site_theme,
 								'value' =>  'name',
 								'label' =>  'name',
 							)); ?>
@@ -389,29 +389,29 @@
 					<tr>
 						<td>{{Store Logo:}}</td>
 						<td>
-							<input type="text" class="imageinput" name="config_logo" data-thumb="<?= image($config_logo, $config_logo_width, $config_logo_height); ?>" value="<?= $config_logo; ?>"/>
+							<input type="text" class="imageinput" name="site_logo" data-thumb="<?= image($site_logo, $site_logo_width, $site_logo_height); ?>" value="<?= $site_logo; ?>"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="required">{{Logo Size}}</td>
 						<td>
 							<div class="store-logo-size">
-								<input type="text" name="config_logo_width" value="<?= $config_logo_width; ?>" size="3"/>
+								<input type="text" name="site_logo_width" value="<?= $site_logo_width; ?>" size="3"/>
 								x
-								<input type="text" name="config_logo_height" value="<?= $config_logo_height; ?>" size="3"/>
+								<input type="text" name="site_logo_height" value="<?= $site_logo_height; ?>" size="3"/>
 							</div>
 							<br/>
 							<div class="store-logo-x">
 								<label>{{Image srcset X}}</label>
 								<?= build(array(
 									'type' => 'select',
-									'name'  => 'config_logo_srcset',
+									'name'  => 'site_logo_srcset',
 									'data'   => array(
 										1 => '1x',
 										2 => '2x',
 										3 => '3x'
 									),
-									'select' => $config_logo_srcset,
+									'select' => $site_logo_srcset,
 								)); ?>
 								<span class="help">{{If greater than 1x, sets img srcset attribute and scales down from original image. (eg. if 3x, then 1x size set for src will be 1/3 of original image)}}</span>
 							</div>
@@ -426,7 +426,7 @@
 							<div id="icon-generator">
 								<div class="generate">
 									<div class="icon-file">
-										<input type="text" class="imageinput" name="config_icon[orig]" value="<?= $config_icon['orig']['src']; ?>" data-thumb="<?= $config_icon['orig']['thumb']; ?>"/>
+										<input type="text" class="imageinput" name="site_icon[orig]" value="<?= $site_icon['orig']['src']; ?>" data-thumb="<?= $site_icon['orig']['thumb']; ?>"/>
 
 										<div class="icon-label">
 											<a id="generate-icons" data-loading="{{Generating...}}" class="button">{{Generate Icon Files}}</a>
@@ -435,14 +435,14 @@
 								</div>
 								<div class="icon-files left">
 									<div class="icon-file icon-ico">
-										<input type="text" class="imageinput" name="config_icon[ico]" value="<?= $config_icon['ico']['src']; ?>" data-thumb="<?= $config_icon['ico']['thumb']; ?>"/>
+										<input type="text" class="imageinput" name="site_icon[ico]" value="<?= $site_icon['ico']['src']; ?>" data-thumb="<?= $site_icon['ico']['thumb']; ?>"/>
 
 										<div class="icon-label">{{ICO File}}</div>
 									</div>
 									<? foreach ($data_icon_sizes as $size) { ?>
 										<div class="icon-file icon-size">
 											<? $key = $size . 'x' . $size; ?>
-											<input type="text" class="imageinput" name="config_icon[<?= $key; ?>]" value="<?= $config_icon[$key]['src']; ?>" data-thumb="<?= $config_icon[$key]['thumb']; ?>" data-width="<?= $size; ?>" data-height="<?= $size; ?>"/>
+											<input type="text" class="imageinput" name="site_icon[<?= $key; ?>]" value="<?= $site_icon[$key]['src']; ?>" data-thumb="<?= $site_icon[$key]['thumb']; ?>" data-width="<?= $size; ?>" data-height="<?= $size; ?>"/>
 
 											<div class="icon-label"><?= _l("%s X %s Icon", $size, $size); ?></div>
 										</div>
@@ -787,17 +787,17 @@
 <script type="text/javascript">
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form [name=config_country_id]'});
 
-	$('[name=config_theme]').change(function () {
+	$('[name=site_theme]').change(function () {
 		var url = "<?= site_url('admin/settings/general/theme'); ?>" + '?theme=' + $(this).val();
 		$('#theme').load(url);
 	}).change();
 
-	$('[name=config_logo]').ac_imageinput({width: '<?= $config_logo_width; ?>', height: '<?= $config_logo_height; ?>'});
+	$('[name=site_logo]').ac_imageinput({width: '<?= $site_logo_width; ?>', height: '<?= $site_logo_height; ?>'});
 
-	$('[name=config_logo_width],[name=config_logo_height]').change(function() {
-		var w = $('[name=config_logo_width]').val();
-		var h = $('[name=config_logo_height]').val();
-		$('[name=config_logo]').siblings('.thumb').css({
+	$('[name=site_logo_width],[name=site_logo_height]').change(function() {
+		var w = $('[name=site_logo_width]').val();
+		var h = $('[name=site_logo_height]').val();
+		$('[name=site_logo]').siblings('.thumb').css({
 			width: (!w || w == '0') ? 'auto' : w,
 			height: (!h || h == '0') ? 'auto' : h
 		});
@@ -805,7 +805,7 @@
 
 	$('#generate-icons').click(function () {
 		var $this = $(this);
-		var icon = $('[name="config_icon[orig]"]').val();
+		var icon = $('[name="site_icon[orig]"]').val();
 
 		if (!icon) {
 			return $('#icon-generator').ac_msg('error', "{{You must choose an icon PNG image file first}}");
@@ -818,7 +818,7 @@
 			var $gen = $('#icon-generator');
 
 			for (var c in json) {
-				input = $gen.find('[name="config_icon[' + c + ']"]').val(json[c].relpath);
+				input = $gen.find('[name="site_icon[' + c + ']"]').val(json[c].relpath);
 				input.closest('.icon-file').find('img.thumb').attr('src', json[c].url);
 			}
 		}, 'json');

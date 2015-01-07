@@ -787,15 +787,19 @@ textarea {
 //Login Page
 .login-page {
   .col {
+    padding: 1em;
+
     .box {
       display: inline-block;
-      border: 4px ridge @color-main;
+      border: 2px solid @color-light;
       border-radius: 3px;
       padding: 1em;
+      min-height: 16em;
 
       h2 {
         text-transform: uppercase;
         margin-bottom: .7em;
+        color: @color-dark;
       }
 
       h3 {
@@ -804,16 +808,51 @@ textarea {
         color: @color-secondary;
         margin-bottom: .4em;
       }
+
+      button {
+        margin-top: 1em;
+        width: 12em;
+        background: @color-dark;
+      }
+
+      input {
+        background: white;
+      }
+
+      .forgotten {
+        font-family: OpenSansItalic;
+        margin-top: 1em;
+        a {
+          color: @color-dark;
+        }
+
+        & + button {
+          margin-top: .5em;
+        }
+      }
+
+      &:hover, &:active, &.active {
+        border-color: @color-main;
+
+        .forgotten {
+          a {
+            color: @color-main;
+          }
+        }
+
+        h2 {
+          color: @color-main;
+        }
+
+        button {
+          background: @color-main;
+        }
+      }
     }
   }
 
   .one-click {
     margin-bottom: .5em;
-  }
-
-  .forgotten {
-    font-family: OpenSansItalic;
-    margin-bottom: .3em;
   }
 }
 

@@ -31,12 +31,12 @@ class App_Model_Settings extends Model
 		'config_fax'                              => '',
 		'config_title'                            => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'config_default_store'                    => '',
-		'config_meta_description'                 => '',
+		'site_meta_description'                 => '',
 		'config_debug'                            => 0,
 		'config_cron_status'                      => 1,
 		'config_allow_close_message'              => 1,
 		'config_default_layout_id'                => '',
-		'config_theme'                            => 'amplo',
+		'site_theme'                            => 'amplo',
 		'site_address_format'                     => '',
 		'config_country_id'                       => 223,
 		'config_zone_id'                          => 8,
@@ -58,13 +58,15 @@ class App_Model_Settings extends Model
 		'config_upload_allowed'                   => 1,
 		'config_upload_images_allowed'            => '',
 		'config_upload_images_mime_types_allowed' => '',
-		'config_icon'                             => null,
-		'config_logo'                             => '',
-		'config_logo_srcset'                      => 1,
-		'config_logo_width'                       => 0,
-		'config_logo_height'                      => 0,
+		'site_icon'                             => null,
+		'site_logo'                             => '',
+		'site_logo_srcset'                      => 1,
+		'site_logo_width'                       => 0,
+		'site_logo_height'                      => 0,
 		'site_email_logo_width'                   => 300,
 		'site_email_logo_height'                  => 0,
+		'config_image_category_width'             => 120,
+		'config_image_category_height'            => 120,
 		'config_image_thumb_width'                => 120,
 		'config_image_thumb_height'               => 120,
 		'config_image_popup_width'                => 1024,
@@ -138,7 +140,7 @@ class App_Model_Settings extends Model
 		if (!$result) {
 			$this->error = $this->config->getError();
 		} else {
-			$this->theme->install($settings['config_theme']);
+			$this->theme->install($settings['site_theme']);
 		}
 
 		return $result;

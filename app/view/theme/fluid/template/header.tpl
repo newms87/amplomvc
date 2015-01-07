@@ -98,7 +98,7 @@
 			<? if ($logo) { ?>
 				<div id="logo">
 					<a href="<?= site_url(); ?>" class="block">
-						<img src="<?= image($logo, option('config_logo_width'), option('config_logo_height')); ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
+						<img src="<?= image($logo, option('site_logo_width'), option('site_logo_height')); ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
 						<? if (!empty($slogan)) { ?>
 							<div id="slogan"><?= $slogan; ?></div>

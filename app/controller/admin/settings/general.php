@@ -57,11 +57,11 @@ class App_Controller_Admin_Settings_General extends Controller
 		);
 
 		//Website Icon Sizes
-		if (!is_array($settings['config_icon'])) {
-			$settings['config_icon'] = array();
+		if (!is_array($settings['site_icon'])) {
+			$settings['site_icon'] = array();
 		}
 
-		$settings['config_icon'] += array(
+		$settings['site_icon'] += array(
 			'orig' => '',
 			'ico'  => '',
 		);
@@ -69,12 +69,12 @@ class App_Controller_Admin_Settings_General extends Controller
 		foreach (self::$icon_sizes as $size) {
 			$key = $size . 'x' . $size;
 
-			if (!isset($settings['config_icon'][$key])) {
-				$settings['config_icon'][$key] = '';
+			if (!isset($settings['site_icon'][$key])) {
+				$settings['site_icon'][$key] = '';
 			}
 		}
 
-		foreach ($settings['config_icon'] as &$icon) {
+		foreach ($settings['site_icon'] as &$icon) {
 			$icon = array(
 				'thumb' => $this->image->get($icon),
 				'src'   => $icon,

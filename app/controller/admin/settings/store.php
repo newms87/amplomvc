@@ -78,7 +78,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 				)
 			);
 
-			$theme          = $this->config->load('config', 'config_theme');
+			$theme          = $this->config->load('general', 'site_theme');
 			$image          = DIR_SITE . 'app/view/theme/' . $theme . '/' . $theme . '.png';
 			$store['thumb'] = image($image, $image_width, $image_height);
 
@@ -133,30 +133,30 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'name'                         => 'Store ' . $store_id,
 			'url'                          => '',
 			'ssl'                          => '',
-			'site_owner'                 => '',
-			'site_address'               => '',
-			'site_email'                 => '',
-			'site_phone'             => '',
+			'site_owner'                   => '',
+			'site_address'                 => '',
+			'site_email'                   => '',
+			'site_phone'                   => '',
 			'config_fax'                   => '',
 			'config_title'                 => '',
-			'config_meta_description'      => '',
+			'site_meta_description'        => '',
 			'config_default_layout_id'     => '',
-			'config_theme'                 => '',
+			'site_theme'                   => '',
 			'config_country_id'            => option('config_country_id'),
 			'config_zone_id'               => option('config_zone_id'),
 			'config_language'              => option('config_language'),
 			'config_currency'              => option('config_currency'),
-			'site_list_limit'         => '12',
+			'site_list_limit'              => '12',
 			'config_customer_group_id'     => '',
 			'config_customer_approval'     => '',
 			'config_account_terms_page_id' => '',
-			'config_logo'                  => '',
-			'config_logo_srcset'           => 1,
-			'config_icon'                  => null,
-			'config_logo_width'            => 0,
-			'config_logo_height'           => 0,
-			'site_email_logo_width'      => 300,
-			'site_email_logo_height'     => 0,
+			'site_logo'                    => '',
+			'site_logo_srcset'             => 1,
+			'site_icon'                    => null,
+			'site_logo_width'              => 0,
+			'site_logo_height'             => 0,
+			'site_email_logo_width'        => 300,
+			'site_email_logo_height'       => 0,
 			'config_image_thumb_width'     => 228,
 			'config_image_thumb_height'    => 228,
 			'config_image_popup_width'     => 500,
@@ -183,8 +183,8 @@ class App_Controller_Admin_Settings_Store extends Controller
 		);
 
 		//Website Icon Sizes
-		if (!is_array($store['config_icon'])) {
-			$store['config_icon'] = array(
+		if (!is_array($store['site_icon'])) {
+			$store['site_icon'] = array(
 				'orig' => '',
 				'ico'  => '',
 			);
@@ -208,12 +208,12 @@ class App_Controller_Admin_Settings_Store extends Controller
 		foreach ($store['data_icon_sizes'] as $size) {
 			$key = $size[0] . 'x' . $size[1];
 
-			if (!isset($store['config_icon'][$key])) {
-				$store['config_icon'][$key] = '';
+			if (!isset($store['site_icon'][$key])) {
+				$store['site_icon'][$key] = '';
 			}
 		}
 
-		foreach ($store['config_icon'] as &$icon) {
+		foreach ($store['site_icon'] as &$icon) {
 			$icon = array(
 				'thumb' => $this->image->get($icon),
 				'src'   => $icon,
@@ -233,7 +233,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($this->Model_Setting_Store->save(_get('store_id'), $_POST)) {
 			$this->config->saveGroup('config', $_POST);
 
-			if ($this->theme->install($_POST['config_theme'])) {
+			if ($this->theme->install($_POST['site_theme'])) {
 				message('error', $this->theme->getError());
 			}
 

@@ -6,7 +6,7 @@ class App_Controller_Mail_Header extends Controller
 	{
 		$data += array(
 			'title' => option('site_name'),
-			'logo'  => str_replace("./", '', option('config_logo')),
+			'logo'  => str_replace("./", '', option('site_logo')),
 		);
 
 		if ($data['logo']) {
