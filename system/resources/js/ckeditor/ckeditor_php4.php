@@ -142,7 +142,7 @@ class CKEditor
 	 */
 	function editor($name, $value = "", $config = array(), $events = array())
 	{
-		$attr = "";
+		$attr;
 		foreach ($this->textareaAttributes as $key => $val) {
 			$attr .= " " . $key . '="' . str_replace('"', '&quot;', $val) . '"';
 		}
@@ -164,7 +164,7 @@ class CKEditor
 
 		if (!$this->returnOutput) {
 			print $out;
-			$out = "";
+			$out;
 		}
 
 		return $out;
@@ -185,7 +185,7 @@ class CKEditor
 	 */
 	function replace($id, $config = array(), $events = array())
 	{
-		$out = "";
+		$out;
 		if (!$this->initialized) {
 			$out .= $this->init();
 		}
@@ -202,7 +202,7 @@ class CKEditor
 
 		if (!$this->returnOutput) {
 			print $out;
-			$out = "";
+			$out;
 		}
 
 		return $out;
@@ -227,7 +227,7 @@ class CKEditor
 	 */
 	function replaceAll($className = null)
 	{
-		$out = "";
+		$out;
 		if (!$this->initialized) {
 			$out .= $this->init();
 		}
@@ -242,7 +242,7 @@ class CKEditor
 				$js .= "CKEDITOR.replaceAll('" . $className . "');";
 			}
 		} else {
-			$classDetection = "";
+			$classDetection;
 			$js .= "CKEDITOR.replaceAll( function (textarea, config)
  {\n";
 			if (!empty($className)) {
@@ -259,7 +259,7 @@ class CKEditor
 
 		if (!$this->returnOutput) {
 			print $out;
-			$out = "";
+			$out;
 		}
 
 		return $out;
@@ -414,7 +414,7 @@ class CKEditor
 	function returnGlobalEvents()
 	{
 		static $returnedEvents;
-		$out = "";
+		$out;
 
 		if (!isset($returnedEvents)) {
 			$returnedEvents = array();
@@ -445,7 +445,7 @@ class CKEditor
 	function init()
 	{
 		static $initComplete;
-		$out = "";
+		$out;
 
 		if (!empty($initComplete)) {
 			return "";
@@ -456,7 +456,7 @@ class CKEditor
 			return "";
 		}
 
-		$args         = "";
+		$args        ;
 		$ckeditorPath = $this->ckeditorPath();
 
 		if (!empty($this->timestamp) && $this->timestamp != "%" . "TIMESTAMP%") {
@@ -470,7 +470,7 @@ class CKEditor
 
 		$out .= "<script type=\"text/javascript\" src=\"" . $ckeditorPath . 'ckeditor.js' . $args . "\"></script>\n";
 
-		$extraCode = "";
+		$extraCode;
 		if ($this->timestamp != $this->_timestamp) {
 			$extraCode .= ($extraCode ? "\n" : "") . "CKEDITOR.timestamp = '" . $this->timestamp . "';";
 		}

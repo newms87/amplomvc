@@ -76,7 +76,8 @@ class Breadcrumb extends Library
 
 	public function render()
 	{
-		$html = "";
+		$html = '';
+
 		foreach ($this->crumbs as $key => $crumb) {
 			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href=\"$crumb[href]\">" . _strip_tags($crumb['text']) . "</a>";
 		}

@@ -85,7 +85,7 @@ class App_Model_User extends App_Model_Table
 
 	public function getUser($user_id)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
+		return $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE user_id = '" . (int)$user_id . "'");
 	}
 
 	public function addMeta($user_id, $key, $value, $multi = false)
@@ -155,7 +155,7 @@ class App_Model_User extends App_Model_Table
 	public function getMeta($user_id, $key = null)
 	{
 		if ($key) {
-			$value = $this->queryRow("SELECT `value`, serialized FROM " . self::$prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			$value = $this->queryRow("SELECT `value`, serialized FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
 			if ($value) {
 				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
 			}
@@ -163,7 +163,7 @@ class App_Model_User extends App_Model_Table
 			return null;
 		}
 
-		$meta = $this->queryRows("SELECT * FROM " . self::$prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+		$meta = $this->queryRows("SELECT * FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id, 'key');
 
 		foreach ($meta as &$m) {
 			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];
@@ -175,7 +175,7 @@ class App_Model_User extends App_Model_Table
 
 	public function getUserByUsername($username)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
+		return $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE username = '" . $this->escape($username) . "'");
 	}
 
 	public function getUsers($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
@@ -184,7 +184,7 @@ class App_Model_User extends App_Model_Table
 		$select = $this->extractSelect($this->table, $select);
 
 		//From
-		$from = $this->p_table;
+		$from = self::$tables[$this->table];
 
 		//Where
 		if (isset($filter['user_role'])) {

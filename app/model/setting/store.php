@@ -4,13 +4,6 @@ class App_Model_Setting_Store extends App_Model_Table
 {
 	protected $table = 'store', $primary_key = 'store_id';
 
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->p_table = DB_PREFIX . 'store';
-	}
-
 	public function save($store_id, $store)
 	{
 		if (!validate('text', $store['name'], 1, 64)) {
@@ -49,17 +42,17 @@ class App_Model_Setting_Store extends App_Model_Table
 
 	public function getStore($store_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables['store'] . " WHERE store_id = '" . (int)$store_id . "'");
 	}
 
 	public function getStoreName($store_id)
 	{
-		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryVar("SELECT name FROM " . self::$tables['store'] . " WHERE store_id = '" . (int)$store_id . "'");
 	}
 
 	public function getStoreNames()
 	{
-		return $this->queryRows("SELECT store_id, name FROM " . DB_PREFIX . "store");
+		return $this->queryRows("SELECT store_id, name FROM " . self::$tables['store']);
 	}
 
 	public function getStores($data = array(), $select = '', $total = false)
@@ -72,7 +65,7 @@ class App_Model_Setting_Store extends App_Model_Table
 		}
 
 		//From
-		$from = DB_PREFIX . "store s";
+		$from = self::$tables['store'] . " s";
 
 		//Where
 		$where = "store_id > 0";
@@ -100,35 +93,35 @@ class App_Model_Setting_Store extends App_Model_Table
 
 	public function getTotalStoresByLanguage($language)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_language' AND `value` = '" . $this->escape($language) . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['setting'] . " WHERE `key` = 'config_language' AND `value` = '" . $this->escape($language) . "' AND store_id != '0'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalStoresByCurrency($currency)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_currency' AND `value` = '" . $this->escape($currency) . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['setting'] . " WHERE `key` = 'config_currency' AND `value` = '" . $this->escape($currency) . "' AND store_id != '0'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalStoresByCountryId($country_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_country_id' AND `value` = '" . (int)$country_id . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['setting'] . " WHERE `key` = 'config_country_id' AND `value` = '" . (int)$country_id . "' AND store_id != '0'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalStoresByZoneId($zone_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_zone_id' AND `value` = '" . (int)$zone_id . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['setting'] . " WHERE `key` = 'config_zone_id' AND `value` = '" . (int)$zone_id . "' AND store_id != '0'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalStoresByCustomerGroupId($customer_group_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_customer_group_id' AND `value` = '" . (int)$customer_group_id . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['setting'] . " WHERE `key` = 'config_customer_group_id' AND `value` = '" . (int)$customer_group_id . "' AND store_id != '0'");
 
 		return $query->row['total'];
 	}

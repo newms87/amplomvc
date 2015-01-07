@@ -2,7 +2,7 @@
 
 abstract class App_Model_Table extends Model
 {
-	protected $primary_key, $table, $p_table;
+	protected $primary_key, $table;
 
 	public function __construct()
 	{
@@ -20,10 +20,6 @@ abstract class App_Model_Table extends Model
 		} else {
 			trigger_error(_l("You must set the \$table attribute for %s to extend the class App_Model_Table!", get_class()));
 			exit;
-		}
-
-		if (!$this->p_table) {
-			$this->p_table = self::$prefix . $this->table;
 		}
 	}
 
@@ -43,14 +39,14 @@ abstract class App_Model_Table extends Model
 
 	public function getField($id, $field)
 	{
-		return $this->queryVar("SELECT $field FROM `$this->p_table` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryVar("SELECT $field FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecord($id, $select = '*')
 	{
 		$select = $this->extractSelect($this->table, $select);
 
-		return $this->queryRow("SELECT $select FROM `$this->p_table` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryRow("SELECT $select FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
@@ -59,7 +55,7 @@ abstract class App_Model_Table extends Model
 		$select = $this->extractSelect($this->table, $select);
 
 		//From
-		$from = self::$prefix . $this->table;
+		$from = self::$tables[$this->table];
 
 		//Where
 		$where = $this->extractWhere($this->table, $filter);

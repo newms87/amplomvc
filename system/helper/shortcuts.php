@@ -775,7 +775,7 @@ function crypto_rand($min, $max)
 
 function tokengen($length)
 {
-	$token        = "";
+	$token       ;
 	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
 	$codeAlphabet .= "0123456789";

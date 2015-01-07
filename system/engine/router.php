@@ -4,13 +4,11 @@ final class Router
 {
 	private $path;
 	private $segments;
-	private $store;
+	private $site;
 
 	public function __construct()
 	{
 		$this->routeStore();
-
-		define('SITE_PREFIX', !empty($this->store['prefix']) ? $this->store['prefix'] : DB_PREFIX);
 
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
@@ -22,6 +20,7 @@ final class Router
 		$this->path = $uri ? $uri : DEFAULT_PATH;
 
 		$this->segments = explode('/', $this->path);
+		html_dump($this->site, 'store');
 	}
 
 	public function __get($key)
@@ -50,9 +49,16 @@ final class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function getStore()
+	public function getSite()
 	{
-		return $this->store;
+		return $this->site;
+	}
+
+	public function setSite($site)
+	{
+		$this->site = $site;
+
+		_set_db_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
@@ -163,23 +169,27 @@ final class Router
 		$stores = cache('store.all');
 
 		if ($stores === null) {
-			$stores = $registry->get('Model_setting_Store')->getStores();
-
+			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store');
 			cache('store.all', $stores);
 		}
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
 
+		$prefix = DB_PREFIX;
+
 		foreach ($stores as $store) {
 			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
-				if (!empty($store['prefix']) && $store['prefix'] !== DB_PREFIX) {
-					_set_db_prefix($store['prefix']);
+				if (!empty($store['prefix'])) {
+					$prefix = $store['prefix'];
 				}
 
-				$this->store = $store;
-				return;
+				$this->site = $store;
+				break;
 			}
 		}
+
+		define('SITE_PREFIX', $prefix);
+		_set_db_prefix($prefix);
 	}
 }

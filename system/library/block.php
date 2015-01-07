@@ -146,7 +146,7 @@ class Block extends Library
 
 		$data['path'] = $path;
 
-		$block_id = $this->queryVar("SELECT block_id FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "' LIMIT 1");
+		$block_id = $this->queryVar("SELECT block_id FROM " . self::$tables['block'] . " WHERE `path` = '" . $this->escape($path) . "' LIMIT 1");
 
 		if (!$block_id) {
 			$block_id = $this->insert('block', $data);
@@ -235,7 +235,7 @@ class Block extends Library
 			$block = cache('block.' . slug($path));
 
 			if ($block === null) {
-				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
+				$block = $this->queryRow("SELECT * FROM " . self::$tables['block'] . " WHERE `path` = '" . $this->escape($path) . "'");
 
 				if ($block) {
 					$block['name']      = $this->getName($path);
@@ -371,7 +371,7 @@ class Block extends Library
 
 	private function loadInstances($path)
 	{
-		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'name');
+		$instances = $this->queryRows("SELECT * FROM " . self::$tables['block_instance'] . " WHERE `path` = '" . $this->escape($path) . "'", 'name');
 
 		foreach ($instances as &$instance) {
 			$instance['settings'] = unserialize($instance['settings']);
@@ -426,7 +426,7 @@ class Block extends Library
 
 	public function cleanDb($blocks)
 	{
-		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $blocks) . "')");
+		$this->query("DELETE FROM " . self::$tables['block'] . " WHERE path NOT IN('" . implode("','", $blocks) . "')");
 
 		if ($this->countAffected()) {
 			clear_cache('block');

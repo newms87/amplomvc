@@ -189,7 +189,7 @@ class App_Model_Navigation extends App_Model_Table
 	{
 		clear_cache('navigation');
 
-		$children = $this->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE parent_id = " . (int)$navigation_id);
+		$children = $this->queryColumn("SELECT navigation_id FROM " . self::$tables['navigation'] . " WHERE parent_id = " . (int)$navigation_id);
 
 		foreach ($children as $child_id) {
 			$this->deleteNavigationLink($child_id);
@@ -212,7 +212,7 @@ class App_Model_Navigation extends App_Model_Table
 			'navigation_group_id' => $navigation_group_id,
 		);
 
-		return $this->delete('navigation', $where);
+		return $this->delete($this->table, $where);
 	}
 
 	public function removeGroupLinks($group, $links)
@@ -226,17 +226,17 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getLinkByName($navigation_group_id, $name)
 	{
-		return $this->queryRow("SELECT * FROM $this->p_table WHERE navigation_group_id = " . (int)$navigation_group_id . " AND `name` = '" . $this->escape($name) . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables[$this->table] . " WHERE navigation_group_id = " . (int)$navigation_group_id . " AND `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getGroupByName($name)
 	{
-		return $this->queryVar("SELECT navigation_group_id FROM " . self::$prefix . "navigation_group WHERE `name` = '" . $this->escape($name) . "'");
+		return $this->queryVar("SELECT navigation_group_id FROM " . self::$tables['navigation_group'] . " WHERE `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getGroup($navigation_group_id)
 	{
-		$group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
+		$group = $this->queryRow("SELECT * FROM " . self::$tables['navigation_group'] . " WHERE navigation_group_id = " . (int)$navigation_group_id);
 
 		$group['links'] = $this->getGroupLinks($navigation_group_id);
 
@@ -249,7 +249,7 @@ class App_Model_Navigation extends App_Model_Table
 		$select = $this->extractSelect('navigation_group', $select);
 
 		//From
-		$from = self::$prefix . 'navigation_group';
+		$from = self::$tables['navigation_group'];
 
 		//Where
 		$where = $this->extractWhere('navigation_group', $filter);
@@ -318,7 +318,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getGroupLinks($navigation_group_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY parent_id, sort_order ASC", 'navigation_id');
+		return $this->queryRows("SELECT * FROM " . self::$tables['navigation'] . " WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY parent_id, sort_order ASC", 'navigation_id');
 	}
 
 	public function getTotalGroups($filter)

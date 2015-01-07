@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
 	}
 
 	if ($subdir == "/") {
-		$subdir = "";
+		$subdir;
 	}
 
 
@@ -71,7 +71,7 @@ if (isset($_POST['submit'])) {
 	if (!file_exists($current_path . $rfm_subfolder . $subdir)) {
 		$subdir = '';
 		if (!file_exists($current_path . $rfm_subfolder . $subdir)) {
-			$rfm_subfolder = "";
+			$rfm_subfolder;
 		}
 	}
 
@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
 	while ($cycle && $i < $max_cycles) {
 		$i++;
 		if ($parent == "./") {
-			$parent = "";
+			$parent;
 		}
 		if (file_exists($current_path . $parent . "config.php")) {
 			require_once($current_path . $parent . "config.php");
@@ -873,8 +873,8 @@ if (isset($_POST['submit'])) {
 					$is_audio           = false;
 					$show_original      = false;
 					$show_original_mini = false;
-					$mini_src           = "";
-					$src_thumb          = "";
+					$mini_src          ;
+					$src_thumb         ;
 					$extension_lower    = fix_strtolower($file_array['extension']);
 					if (in_array($extension_lower, $ext_img)) {
 						$src      = $base_url . $cur_dir . rawurlencode($file);
@@ -885,7 +885,7 @@ if (isset($_POST['submit'])) {
 								create_img_gd($file_path, $src_thumb, 122, 91);
 								new_thumbnails_creation($current_path . $rfm_subfolder . $subdir, $file_path, $file, $current_path, $relative_image_creation, $relative_path_from_current_pos, $relative_image_creation_name_to_prepend, $relative_image_creation_name_to_append, $relative_image_creation_width, $relative_image_creation_height, $fixed_image_creation, $fixed_path_from_filemanager, $fixed_image_creation_name_to_prepend, $fixed_image_creation_to_append, $fixed_image_creation_width, $fixed_image_creation_height);
 							} catch (Exception $e) {
-								$src_thumb = $mini_src = "";
+								$src_thumb = $mini_src;
 							}
 						}
 						$is_img = true;

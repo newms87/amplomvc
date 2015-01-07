@@ -8,7 +8,7 @@ $dashboards = $this->Model_Dashboard->getDashboards();
 
 foreach ($dashboards as $dash) {
 	if (!$dash['title']) {
-		$this->db->query("UPDATE " . DB_PREFIX . "dashboard SET title = '" . $this->escape($dash['name']) . "', name = '" . $this->escape(slug($dash['name'])) . "' WHERE dashboard_id = " . (int)$dash['dashboard_id']);
+		$this->db->query("UPDATE " . self::$tables['dashboard'] . " SET title = '" . $this->escape($dash['name']) . "', name = '" . $this->escape(slug($dash['name'])) . "' WHERE dashboard_id = " . (int)$dash['dashboard_id']);
 	}
 }
 

@@ -47,7 +47,7 @@ define("RECAPTCHA_VERIFY_SERVER", "www.google.com");
  */
 function _recaptcha_qsencode($data)
 {
-	$req = "";
+	$req;
 	foreach ($data as $key => $value) {
 		$req .= $key . '=' . urlencode(stripslashes($value)) . '&';
 	}
@@ -119,7 +119,7 @@ function recaptcha_get_html($pubkey, $error = null, $use_ssl = false)
 		$server = RECAPTCHA_API_SERVER;
 	}
 
-	$errorpart = "";
+	$errorpart;
 	if ($error) {
 		$errorpart = "&amp;error=" . $error;
 	}

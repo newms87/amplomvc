@@ -32,7 +32,7 @@ class Customer extends Library
 			$where .= " AND approved = '1'";
 		}
 
-		$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
+		$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE $where LIMIT 1");
 
 		if ($customer) {
 			//AC_CUSTOMER_OVERRIDE allows for alternative login methods to function
@@ -77,7 +77,7 @@ class Customer extends Library
 	private function setCustomer($customer, $ignore_status = false)
 	{
 		if (!is_array($customer)) {
-			$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
+			$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
 		}
 
 		if (empty($customer)) {
@@ -91,7 +91,7 @@ class Customer extends Library
 		$this->displayMessages();
 
 		//Load Customer Settings
-		$metadata = $this->queryRows("SELECT * FROM " . DB_PREFIX . "customer_meta WHERE customer_id = " . $this->customer_id);
+		$metadata = $this->queryRows("SELECT * FROM " . self::$tables['customer_meta'] . " WHERE customer_id = " . $this->customer_id);
 
 		$this->metadata = array();
 
@@ -276,12 +276,12 @@ class Customer extends Library
 
 	public function getCustomer($customer_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = " . (int)$customer_id);
+		return $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE customer_id = " . (int)$customer_id);
 	}
 
 	public function getCustomerByToken($token)
 	{
-		$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE token = '" . $this->escape($token) . "' AND token != ''");
+		$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE token = '" . $this->escape($token) . "' AND token != ''");
 
 		//Unset the 1 time access token
 		$this->update('customer', array('token' => ''), $customer['customer_id']);
@@ -297,8 +297,8 @@ class Customer extends Library
 			$select = "*, CONCAT(c.firstname, ' ', c.lastname) AS name, cg.name AS customer_group";
 		}
 
-		$from = DB_PREFIX . "customer c" .
-			" LEFT JOIN" . DB_PREFIX . "customer_group cg ON (c.customer_group_id = cg.customer_group_id)";
+		$from = self::$tables['customer'] . " c" .
+			" LEFT JOIN" . self::$tables['customer_group'] . " cg ON (c.customer_group_id = cg.customer_group_id)";
 
 		$where = "1";
 
@@ -323,7 +323,7 @@ class Customer extends Library
 		}
 
 		if (!empty($data['ip'])) {
-			$where .= " AND c.customer_id IN (SELECT customer_id FROM " . DB_PREFIX . "customer_ip WHERE ip = '" . $this->escape($data['ip']) . "')";
+			$where .= " AND c.customer_id IN (SELECT customer_id FROM " . self::$tables['customer_ip'] . " WHERE ip = '" . $this->escape($data['ip']) . "')";
 		}
 
 		if (!empty($data['date_added'])) {
@@ -457,7 +457,7 @@ class Customer extends Library
 		}
 
 		if ($this->isLogged()) {
-			$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_address WHERE address_id = " . (int)$address_id . " LIMIT 1");
+			$customer_id = $this->queryVar("SELECT customer_id FROM " . self::$tables['customer_address'] . " WHERE address_id = " . (int)$address_id . " LIMIT 1");
 
 			if ($customer_id && $customer_id != $this->customer_id) {
 				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
@@ -526,7 +526,7 @@ class Customer extends Library
 
 	public function getTotalAddresses()
 	{
-		return (int)$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id);
+		return (int)$this->queryVar("SELECT COUNT(*) FROM " . self::$tables['customer_address'] . " WHERE customer_id = " . (int)$this->customer_id);
 	}
 
 	/** Customer Info **/
@@ -542,7 +542,7 @@ class Customer extends Library
 
 	public function getIps($customer_id)
 	{
-		return $this->queryRows("SELECT * FROM `" . DB_PREFIX . "customer_ip` WHERE customer_id = " . (int)$customer_id);
+		return $this->queryRows("SELECT * FROM `" . self::$tables['customer_ip'] . "` WHERE customer_id = " . (int)$customer_id);
 	}
 
 	/** Tools **/
@@ -553,7 +553,7 @@ class Customer extends Library
 
 	public function displayMessages()
 	{
-		$messages = $this->queryColumn("SELECT value FROM " . DB_PREFIX . "customer_meta WHERE customer_id = " . (int)$this->customer_id . " AND `key` = 'message'");
+		$messages = $this->queryColumn("SELECT value FROM " . self::$tables['customer_meta'] . " WHERE customer_id = " . (int)$this->customer_id . " AND `key` = 'message'");
 
 		foreach ($messages as $message) {
 			message('notify', _l($message));
@@ -638,7 +638,7 @@ class Customer extends Library
 			return;
 		}
 
-		$ip_set = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->customer_id . "' AND ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
+		$ip_set = $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['customer_ip'] . " WHERE customer_id = '" . (int)$this->customer_id . "' AND ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 
 		if (!$ip_set) {
 			$customer_ip = array(
@@ -653,7 +653,7 @@ class Customer extends Library
 
 	public function emailRegistered($email)
 	{
-		return (int)$this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
+		return (int)$this->queryVar("SELECT customer_id FROM " . self::$tables['customer'] . " WHERE email = '" . $this->escape($email) . "'");
 	}
 
 	public function setResetCode($email, $code)
@@ -677,7 +677,7 @@ class Customer extends Library
 
 	public function lookupResetCode($code)
 	{
-		return $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'pass_reset_code' AND `value` = '" . $this->escape($code) . "' LIMIT 1");
+		return $this->queryVar("SELECT customer_id FROM " . self::$tables['customer_meta'] . " WHERE `key` = 'pass_reset_code' AND `value` = '" . $this->escape($code) . "' LIMIT 1");
 	}
 
 	public function clearResetCode()
@@ -697,7 +697,7 @@ class Customer extends Library
 		}
 
 		if ($customer_id) {
-			$customer_ips = $this->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = " . (int)$customer_id);
+			$customer_ips = $this->queryColumn("SELECT ip FROM " . self::$tables['customer_ip'] . " WHERE customer_id = " . (int)$customer_id);
 
 			if ($customer_ips) {
 				$ips += $customer_ips;
@@ -708,6 +708,6 @@ class Customer extends Library
 			return false;
 		}
 
-		return $this->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
+		return $this->queryVar("SELECT COUNT(*) FROM `" . self::$tables['customer_ip_blacklist'] . "` WHERE ip IN ('" . implode("','", $ips) . "')");
 	}
 }

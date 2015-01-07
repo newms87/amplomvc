@@ -19,7 +19,7 @@ class Area extends Library
 					$layout_id = option('config_default_layout', 0);
 				}
 
-				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . DB_PREFIX . "block_area WHERE layout_id = " . (int)$layout_id . " GROUP BY area");
+				$counts = $this->queryRows("SELECT area, COUNT(*) as total FROM " . self::$tables['block_area'] . " WHERE layout_id = " . (int)$layout_id . " GROUP BY area");
 
 				if ($counts) {
 					foreach ($counts as $count) {
@@ -35,7 +35,7 @@ class Area extends Library
 			return isset(self::$counts[$area]) ? self::$counts[$area] : false;
 		}
 
-		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "block_area WHERE layout_id = " . (int)$layout_id);
+		return $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['block_area'] . " WHERE layout_id = " . (int)$layout_id);
 	}
 
 	public function setBlocks($area, $layout_id, $blocks, $path = null)
@@ -61,7 +61,7 @@ class Area extends Library
 			$layout_id = option('config_layout_id');
 		}
 
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_area WHERE layout_id = " . (int)$layout_id . " AND area = '" . $this->escape($area) . "' ORDER BY sort_order ASC", 'instance_name');
+		return $this->queryRows("SELECT * FROM " . self::$tables['block_area'] . " WHERE layout_id = " . (int)$layout_id . " AND area = '" . $this->escape($area) . "' ORDER BY sort_order ASC", 'instance_name');
 	}
 
 	public function render($area)

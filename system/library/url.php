@@ -12,19 +12,11 @@ class Url extends Library
 	{
 		parent::__construct();
 
-		$store = $this->route->getStore();
-
-		if ($store) {
-			$this->url = $store['url'];
-			$this->ssl = $store['ssl'];
-		} else {
-			$this->url = URL_SITE;
-			$this->ssl = HTTPS_SITE;
-		}
+		$this->setSite($this->route->getSite());
 
 		if (option('config_use_ssl')) {
 			//TODO - finish secure pages
-			$this->secure_pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "secure_page");
+			$this->secure_pages = $this->queryRows("SELECT * FROM " . self::$tables['secure_page']);
 		}
 
 		$this->loadAliases();
@@ -32,6 +24,12 @@ class Url extends Library
 		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
 		}
+	}
+
+	public function setSite($site)
+	{
+		$this->url = isset($site['url']) ? $site['url'] : URL_SITE;
+		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function getQuery()
@@ -121,7 +119,7 @@ class Url extends Library
 		static $stores;
 
 		if (!$stores) {
-			$stores = $this->queryRows("SELECT * FROM " . DB_PREFIX . "store", 'store_id');
+			$stores = $this->queryRows("SELECT * FROM " . self::$tables['store'], 'store_id');
 		}
 
 		if (!empty($stores[$store_id])) {
@@ -271,7 +269,7 @@ class Url extends Library
 
 	public function getAlias($path, $query = '')
 	{
-		return $this->queryVar("SELECT alias FROM " . self::$prefix . "url_alias WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
+		return $this->queryVar("SELECT alias FROM " . self::$tables['url_alias'] . " WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
 	}
 
 	public function setAlias($alias, $path, $query = '')
@@ -295,7 +293,7 @@ class Url extends Library
 	public function removeAlias($path, $query = '', $alias = '')
 	{
 		$sql_query =
-			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
+			"SELECT url_alias_id FROM " . self::$tables['url_alias'] .
 			" WHERE `path` = '" . $this->escape($path) . "'" .
 			" AND `query` = '" . $this->escape($query) . "'";
 
@@ -317,7 +315,7 @@ class Url extends Library
 		$this->aliases = cache('url_alias.all');
 
 		if ($this->aliases === null) {
-			$this->aliases = $this->queryRows("SELECT * FROM " . DB_PREFIX . "url_alias WHERE status = 1", 'alias');
+			$this->aliases = $this->queryRows("SELECT * FROM " . self::$tables['url_alias'] . " WHERE status = 1", 'alias');
 
 			cache('url_alias.all', $this->aliases);
 		}

@@ -41,7 +41,7 @@ class App_Model_Design_Layout extends Model
 
 	public function getLayout($layout_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "layout WHERE layout_id = '" . (int)$layout_id . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables['layout'] . " WHERE layout_id = '" . (int)$layout_id . "'");
 	}
 
 	public function getLayouts($data = array(), $select = '*', $total = false)
@@ -54,7 +54,7 @@ class App_Model_Design_Layout extends Model
 		}
 
 		//From
-		$from = DB_PREFIX . "layout l";
+		$from = self::$tables['layout'] . " l";
 
 		//Where
 		$where = "1";
@@ -82,7 +82,7 @@ class App_Model_Design_Layout extends Model
 
 	public function getLayoutRoutes($layout_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "layout_route WHERE layout_id = '" . (int)$layout_id . "'");
+		return $this->queryRows("SELECT * FROM " . self::$tables['layout_route'] . " WHERE layout_id = '" . (int)$layout_id . "'");
 	}
 
 	public function getTotalLayouts($data = array())

@@ -30,19 +30,19 @@ class App_Model_Setting_UrlAlias extends Model
 
 	public function getUrlAlias($url_alias_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . (int)$url_alias_id);
+		return $this->queryRow("SELECT * FROM " . self::$tables['url_alias'] . " WHERE url_alias_id = " . (int)$url_alias_id);
 	}
 
 	public function getUrlAliasByAlias($alias)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE alias = " . (int)$url_alias_id);
+		return $this->queryRow("SELECT * FROM " . self::$tables['url_alias'] . " WHERE alias = " . (int)$url_alias_id);
 	}
 
 	public function getUniqueAlias($alias, $path, $query = '')
 	{
 		$alias = $this->escape($this->url->format($alias));
 
-		$count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "url_alias WHERE alias like '$alias%' AND !(path = '" . $this->escape($path) . "' AND query = '" . $this->escape($query) . "')");
+		$count = $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['url_alias'] . " WHERE alias like '$alias%' AND !(path = '" . $this->escape($path) . "' AND query = '" . $this->escape($query) . "')");
 
 		if ($count) {
 			$alias .= '-' . $count;
@@ -61,7 +61,7 @@ class App_Model_Setting_UrlAlias extends Model
 		}
 
 		//From
-		$from = DB_PREFIX . "url_alias ua";
+		$from = self::$tables['url_alias'] . " ua";
 
 		//Where
 		$where = "1";

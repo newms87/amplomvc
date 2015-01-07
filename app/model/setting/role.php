@@ -9,7 +9,7 @@ class App_Model_Setting_Role extends Model
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
 
-			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . self::$prefix . "user_role WHERE `name` = '" . $this->escape($data['name']) . "'")) {
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['user_role'] . " WHERE `name` = '" . $this->escape($data['name']) . "'")) {
 				$this->error['name'] = _l("Group Name already exists!");
 			}
 		} elseif (!$user_role_id) {
@@ -42,7 +42,7 @@ class App_Model_Setting_Role extends Model
 		$total_users = $this->Model_User->getTotalUsers($filter);
 
 		if ($total_users) {
-			$name                           = $this->queryVar("SELECT name FROM " . DB_PREFIX . "user_role WHERE user_role_id = " . (int)$user_role_id);
+			$name                           = $this->queryVar("SELECT name FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
 			$this->error['user_role_users'] = _l("The user group %s currently has %s users associated and cannot be deleted.", $name, $total_users);
 
 			return false;
@@ -57,7 +57,7 @@ class App_Model_Setting_Role extends Model
 		$user_role = cache('user_role.' . $user_role_id);
 
 		if (!$user_role) {
-			$user_role = $this->queryRow("SELECT * FROM " . DB_PREFIX . "user_role WHERE user_role_id = " . (int)$user_role_id);
+			$user_role = $this->queryRow("SELECT * FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
 
 			if ($user_role) {
 				$user_role['permissions'] = unserialize($user_role['permissions']);
@@ -76,12 +76,12 @@ class App_Model_Setting_Role extends Model
 
 	public function getRoleId($role)
 	{
-		return $this->queryVar("SELECT user_role_id FROM " . self::$prefix . "user_role WHERE name = '" . $this->escape($role) . "'");
+		return $this->queryVar("SELECT user_role_id FROM " . self::$tables['user_role'] . " WHERE name = '" . $this->escape($role) . "'");
 	}
 
 	public function getRoleName($user_role_id)
 	{
-		return $this->queryVar("SELECT name FROM " . self::$prefix . "user_role WHERE user_role_id = " . (int)$user_role_id);
+		return $this->queryVar("SELECT name FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
 	}
 
 	public function getRoles($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
@@ -90,7 +90,7 @@ class App_Model_Setting_Role extends Model
 		$select = $this->extractSelect('user_role', $select);
 
 		//From
-		$from = DB_PREFIX . "user_role";
+		$from = self::$tables['user_role'];
 
 		//Where
 		$where = $this->extractWhere('user_role', $filter);

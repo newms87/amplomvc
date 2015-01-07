@@ -3,7 +3,7 @@ class Tag Extends Library
 {
 	public function get($text)
 	{
-		return $this->queryVar("SELECT tag_id FROM " . DB_PREFIX . "tag WHERE LCASE(text) = '" . $this->escape(strtolower(trim($text))) . "'");
+		return $this->queryVar("SELECT tag_id FROM " . self::$tables['tag'] . " WHERE LCASE(text) = '" . $this->escape(strtolower(trim($text))) . "'");
 	}
 
 	public function add($text)

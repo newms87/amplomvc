@@ -130,9 +130,6 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-		$settings['styles']  = $this->document->getStyles();
-		$settings['scripts'] = $this->document->getScripts();
-
 		//Failed Email Messages warnings
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();
 

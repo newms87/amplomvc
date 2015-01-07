@@ -248,15 +248,15 @@ class DB
 
 	public function multiquery($string)
 	{
-		$file_length = strlen($string);
+		$file_length     = strlen($string);
 		$quote_char_list = array(
 			"'",
 			"`",
 			'"'
 		);
-		$in_quote = false;
-		$sql = '';
-		$pos = 0;
+		$in_quote        = false;
+		$sql             = '';
+		$pos             = 0;
 
 		while ($pos < $file_length) {
 			$char = $string[$pos];
@@ -375,7 +375,7 @@ class DB
 					if (!$null) { //meaning NULL is allowed
 						$default = "DEFAULT NULL";
 					} else {
-						$default = "";
+						$default;
 					}
 				} else {
 					$default = "DEFAULT '" . $this->escape(trim($column['Default'], "'\"")) . "'";
@@ -440,14 +440,26 @@ class DB
 		return false;
 	}
 
-	public function getTables()
+	public function getTable($table)
+	{
+		$t = $this->hasTable($table);
+
+		return $t ? $t : $table;
+	}
+
+	public function getTables($prefix = false)
 	{
 		$rows = $this->queryRows("SHOW TABLES");
 
 		$tables = array();
 
 		foreach ($rows as $row) {
-			$tables[current($row)] = current($row);
+			$name = current($row);
+
+			if (!$prefix || strpos($name, $prefix) === 0) {
+				$base          = $prefix ? preg_replace("/^" . $prefix . "/", '', $name) : $name;
+				$tables[$base] = $name;
+			}
 		}
 
 		return $tables;
@@ -600,7 +612,7 @@ class DB
 
 	public function setAutoIncrement($table, $value)
 	{
-		if (!$this->driver->setAutoIncrement($table, $value)) {
+		if (!$this->driver->setAutoIncrement($this->getTable($table), $value)) {
 			trigger_error($this->driver->getError());
 
 			return false;

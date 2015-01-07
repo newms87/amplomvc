@@ -445,19 +445,30 @@ if (!defined('PASSWORD_DEFAULT')) {
 	require_once(DIR_RESOURCES . 'password_compat.php');
 }
 
+function _set_site($site)
+{
+	global $registry;
+	$registry->get('config')->setSite($site);
+	$registry->get('url')->setSite($site);
+	$registry->get('route')->setSite($site);
+}
+
 function _set_db_prefix($prefix)
 {
 	global $registry;
-	Model::$prefix = $prefix;
 	$registry->get('db')->setPrefix($prefix);
 	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
+
+	if (Model::$prefix !== $prefix) {
+		Model::setPrefix($prefix);
+	}
 }
 
 function get_caller($offset = 0, $limit = 10)
 {
 	$calls = debug_backtrace(false);
 
-	$html = "";
+	$html = '';
 
 	$limit += $offset;
 

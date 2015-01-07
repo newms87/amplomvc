@@ -539,7 +539,7 @@ class Mail extends Library
 
 		$mail_fail = $this->escape($mail_fail);
 
-		$this->query("INSERT INTO " . self::$prefix . "setting SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+		$this->query("INSERT INTO " . self::$tables['setting'] . " SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	private function log($msg, $flush = false)
