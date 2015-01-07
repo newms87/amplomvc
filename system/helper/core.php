@@ -448,9 +448,9 @@ if (!defined('PASSWORD_DEFAULT')) {
 function _set_site($site)
 {
 	global $registry;
+	$registry->get('route')->setSite($site);
 	$registry->get('config')->setSite($site);
 	$registry->get('url')->setSite($site);
-	$registry->get('route')->setSite($site);
 }
 
 function _set_db_prefix($prefix)

@@ -31,6 +31,12 @@ class Theme extends Library
 		} else {
 			$this->theme    = $theme;
 			$this->settings = option('theme_settings', array());
+
+			if (!$this->settings) {
+				$this->install($this->theme);
+
+				$this->settings = option('theme_settings', array());
+			}
 		}
 
 		$this->settings += array(

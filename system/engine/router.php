@@ -20,7 +20,6 @@ final class Router
 		$this->path = $uri ? $uri : DEFAULT_PATH;
 
 		$this->segments = explode('/', $this->path);
-		html_dump($this->site, 'store');
 	}
 
 	public function __get($key)

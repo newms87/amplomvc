@@ -563,7 +563,7 @@ abstract class Model
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		} else {
-			$t = self::$prefix . $table;
+			$t = self::$tables[$table];
 		}
 
 		$columns += $this->getTableColumns($table);

@@ -26,16 +26,16 @@ class Cache
 
 	public function getLoadedFiles()
 	{
-		return $this->loaded;
+		return isset($this->loaded[$this->dir]) ? $this->loaded[$this->dir] : array();
 	}
 
 	public function get($key, $get_file = false)
 	{
-		if (isset($this->loaded[$key])) {
+		if (isset($this->loaded[$this->dir][$key])) {
 			if ($get_file) {
-				return $this->loaded[$key]['file'];
-			} elseif (isset($this->loaded[$key]['data'])) {
-				return $this->loaded[$key]['data'];
+				return $this->loaded[$this->dir][$key]['file'];
+			} elseif (isset($this->loaded[$this->dir][$key]['data'])) {
+				return $this->loaded[$this->dir][$key]['data'];
 			}
 		}
 
@@ -49,7 +49,7 @@ class Cache
 			}
 
 			if ($get_file) {
-				return $this->loaded[$key]['file'] = $file;
+				return $this->loaded[$this->dir][$key]['file'] = $file;
 			} else {
 				$str = @file_get_contents($file);
 				$data = @unserialize($str);
@@ -60,11 +60,11 @@ class Cache
 					return null;
 				}
 
-				$this->loaded[$key]['data'] = $data;
-				$this->loaded[$key]['file'] = $file;
+				$this->loaded[$this->dir][$key]['data'] = $data;
+				$this->loaded[$this->dir][$key]['file'] = $file;
 			}
 
-			return $this->loaded[$key]['data'];
+			return $this->loaded[$this->dir][$key]['data'];
 		}
 	}
 
@@ -72,11 +72,13 @@ class Cache
 	{
 		$file = $this->dir . $key . '.cache';
 
+		$this->loaded[$this->dir][$key] = $value;
+
 		if (!$set_file) {
 			$value = serialize($value);
 		}
 
-		if ($value) {
+		if ($value !== null) {
 			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
 			@file_put_contents($file, $value);
 		}
@@ -96,9 +98,9 @@ class Cache
 				}
 			}
 
-			foreach (array_keys($this->loaded) as $lkey) {
+			foreach (array_keys($this->loaded[$this->dir]) as $lkey) {
 				if (strpos($lkey, $key) === 0) {
-					unset($this->loaded[$lkey]);
+					unset($this->loaded[$this->dir][$lkey]);
 				}
 			}
 		} else {

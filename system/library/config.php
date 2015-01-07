@@ -15,6 +15,21 @@ class Config extends Library
 
 		$this->setSite($this->route->getSite());
 
+		$this->checkForUpdates();
+	}
+
+	public function get($key)
+	{
+		return isset($this->data[$key]) ? $this->data[$key] : null;
+	}
+
+	public function set($key, $value)
+	{
+		$this->data[$key] = $value;
+	}
+
+	public function setSite($site)
+	{
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
 		$settings = cache('setting.config');
@@ -36,23 +51,8 @@ class Config extends Library
 			redirect('admin/settings/restore_defaults');
 		}
 
-		$this->data += $settings;
+		$this->data = $settings;
 
-		$this->checkForUpdates();
-	}
-
-	public function get($key)
-	{
-		return isset($this->data[$key]) ? $this->data[$key] : null;
-	}
-
-	public function set($key, $value)
-	{
-		$this->data[$key] = $value;
-	}
-
-	public function setSite($site)
-	{
 		$this->data['site_id']  = !empty($site['store_id']) ? $site['store_id'] : 0;
 		$this->data['store_id'] = $this->data['site_id'];
 		$this->data['name']     = !empty($site['name']) ? $site['name'] : 'No Site';

@@ -58,11 +58,13 @@ class App_Controller_Admin_Settings_General extends Controller
 
 		//Website Icon Sizes
 		if (!is_array($settings['config_icon'])) {
-			$settings['config_icon'] = array(
-				'orig' => '',
-				'ico'  => '',
-			);
+			$settings['config_icon'] = array();
 		}
+
+		$settings['config_icon'] += array(
+			'orig' => '',
+			'ico'  => '',
+		);
 
 		foreach (self::$icon_sizes as $size) {
 			$key = $size . 'x' . $size;
