@@ -39,7 +39,7 @@ class Table extends Library
 		$this->file = is_file($file) ? $file : $this->theme->getFile($file, $theme);
 
 		if (!$this->file) {
-			echo $file . ' is no a file<Br>';
+			trigger_error(_l("The template file %s does not exist.", $file));
 		}
 	}
 
