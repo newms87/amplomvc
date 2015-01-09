@@ -72,13 +72,15 @@ h6 {
   transition: .5s all;
 }
 
-.clearfix:after {
-  content: ".";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  line-height: 0;
-  height: 0;
+.clearfix{
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+  }
 }
 
 .noselect {
@@ -381,10 +383,15 @@ header.main-header.row {
   display: inline-block;
   .whitespace-hack;
 
-  & > nav {
-    position: relative;
+  nav {
     display: inline-block;
     vertical-align: middle;
+
+    .nav {
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+    }
   }
 
   //Account Navigation
@@ -1017,7 +1024,7 @@ footer.site-footer {
     .links-toggle {
       margin-top: .8em;
 
-      & + nav, & + nav + nav {
+      & + nav {
         .height-animate;
       }
 
@@ -1026,59 +1033,88 @@ footer.site-footer {
           .sprite-img.menu.close;
         }
 
-        & + nav, & + nav + nav {
-          max-height: 60em;
+        & + nav {
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 25em;
         }
       }
     }
 
-    nav, #links-primary, #links-account {
+    nav.header-nav {
       position: absolute;
       right: -10em;
-      top: 3.2em;
+      top: 3.7em;
       text-align: right;
       width: 10000px;
 
-      .link-list {
-        position: relative;
+      .nav, .nav#links-primary, .nav#links-account {
+        text-align: right;
         display: block;
+        width: auto;
+        margin: 0;
 
-        ul {
-          li {
-            background: @color-lighter;
-            display: block;
-            width: 10000px;
-            border-bottom: 1px solid @color-dark;
+        &#links-account {
+          margin-top: -.29em;
+          border-top: 1px solid @color-dark;
+        }
 
-            a {
-              padding: 1em 10em;
-            }
+        .link-list {
+          position: relative;
+          display: block;
 
-            .sub-menu {
-              width: auto;
-              position: static;
-              text-align: right;
-              padding: 0;
-              margin: 0;
+          ul {
+            li {
+              background: @color-lighter;
+              display: block;
+              width: 10000px;
+              border-bottom: 1px solid @color-dark;
 
-              ul {
-                margin: 0;
+              a {
+                padding: 1em 10em;
+                font: 1.1em OpenSansRegular;
+                color: @font-dark;
+              }
+
+              .sub-menu {
+                width: auto;
+                position: static;
+                text-align: right;
                 padding: 0;
+                margin: 0;
 
-                li {
-                  display: block;
-                  background: white;
-                  border-color: @color-light;
+                ul {
+                  margin: 0;
+                  padding: 0;
+
+                  li {
+                    display: block;
+                    background: white;
+                    border-color: @color-light;
+                  }
+                }
+              }
+
+              &:hover, &.hover {
+                .sub-menu {
+                  border-top: 1px solid @color-dark;
+                  max-height: 50em;
                 }
               }
             }
+          }
+        }
 
-            &:hover, &.hover {
-              .sub-menu {
-                border-top: 1px solid @color-dark;
-                max-height: 50em;
-              }
-            }
+        .links-simple {
+          display: block;
+
+          a {
+            background: @color-lighter;
+            display: block;
+            border-bottom: 1px solid @color-dark;
+            padding: 1em 9em;
+            font: 1.1em OpenSansRegular;
+            color: @font-dark;
           }
         }
       }
