@@ -98,9 +98,11 @@ class Cache
 				}
 			}
 
-			foreach (array_keys($this->loaded[$this->dir]) as $lkey) {
-				if (strpos($lkey, $key) === 0) {
-					unset($this->loaded[$this->dir][$lkey]);
+			if (!empty($this->loaded[$this->dir])) {
+				foreach (array_keys($this->loaded[$this->dir]) as $lkey) {
+					if (strpos($lkey, $key) === 0) {
+						unset($this->loaded[$this->dir][$lkey]);
+					}
 				}
 			}
 		} else {
