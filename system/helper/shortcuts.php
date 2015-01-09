@@ -22,7 +22,7 @@ function block($block, $instance_name = null, $settings = null)
 function head()
 {
 	global $registry;
-	require_once $registry->get('theme')->getFile('head');
+	require_once _mod($registry->get('theme')->getFile('head'));
 }
 
 function area($area)

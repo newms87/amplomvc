@@ -38,37 +38,38 @@ a {
 h1 {
   color: @h1-color;
   .render-font(@h1-font);
-  text-align: center;
 }
 
 h2 {
   color: @h2-color;
   .render-font(@h2-font);
-  text-align: center;
 }
 
 h3 {
   color: @h3-color;
   .render-font(@h3-font);
-  text-align: center;
 }
 
 h4 {
   color: @h4-color;
   .render-font(@h4-font);
-  text-align: center;
 }
 
 h5 {
   color: @h5-color;
   .render-font(@h5-font);
-  text-align: center;
 }
 
 h6 {
   color: @h6-color;
   .render-font(@h6-font);
-  text-align: center;
+}
+
+.height-animate {
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: .5s all;
+  transition: .5s all;
 }
 
 .clearfix:after {
@@ -1012,6 +1013,77 @@ footer.site-footer {
 }
 
 @media (max-width: (@md - 1)) {
+  .header-navigation {
+    .links-toggle {
+      margin-top: .8em;
+
+      & + nav, & + nav + nav {
+        .height-animate;
+      }
+
+      &.hover {
+        .sprite-img.menu {
+          .sprite-img.menu.close;
+        }
+
+        & + nav, & + nav + nav {
+          max-height: 60em;
+        }
+      }
+    }
+
+    nav, #links-primary, #links-account {
+      position: absolute;
+      right: -10em;
+      top: 3.2em;
+      text-align: right;
+      width: 10000px;
+
+      .link-list {
+        position: relative;
+        display: block;
+
+        ul {
+          li {
+            background: @color-lighter;
+            display: block;
+            width: 10000px;
+            border-bottom: 1px solid @color-dark;
+
+            a {
+              padding: 1em 10em;
+            }
+
+            .sub-menu {
+              width: auto;
+              position: static;
+              text-align: right;
+              padding: 0;
+              margin: 0;
+
+              ul {
+                margin: 0;
+                padding: 0;
+
+                li {
+                  display: block;
+                  background: white;
+                  border-color: @color-light;
+                }
+              }
+            }
+
+            &:hover, &.hover {
+              .sub-menu {
+                border-top: 1px solid @color-dark;
+                max-height: 50em;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: (@sm - 1)) {

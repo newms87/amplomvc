@@ -4,7 +4,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 	function get_count(list) {
 		var count = 0;
 
-		list.find('[data-rel="' + list.data('rel') + '"]').each(function (i, e) {
+		list.find('[data-rel="' + list.attr('data-list-rel') + '"]').each(function (i, e) {
 			count = Math.max(count, (parseInt($(e).attr('data-row')) || 0) + 1);
 		});
 
@@ -26,7 +26,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			return this;
 		}
 
-		list.data('rel', relate || name);
+		list.attr('data-list-rel', relate || name);
 		list.find('[data-row]').not('[data-rel]').attr('data-rel', relate || name);
 
 		template = template_row.clone(true);
