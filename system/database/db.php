@@ -375,7 +375,7 @@ class DB
 					if (!$null) { //meaning NULL is allowed
 						$default = "DEFAULT NULL";
 					} else {
-						$default;
+						$default = '';
 					}
 				} else {
 					$default = "DEFAULT '" . $this->escape(trim($column['Default'], "'\"")) . "'";
@@ -472,11 +472,42 @@ class DB
 		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
 	}
 
+	public function copyTable($table, $copy, $with_data = false)
+	{
+		if ($table === $copy) {
+			return true;
+		}
+
+		if ($this->hasTable($copy)) {
+			$this->error['copy'] = _l("A table with the same name as copy, %s, already exists!", $copy);
+			return false;
+		}
+
+		$row = $this->queryRow("SHOW CREATE TABLE `$table`");
+
+		if (!empty($row['Create Table'])) {
+			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$table`/i", "CREATE TABLE `$copy`", $row['Create Table']);
+
+			if (!$with_data) {
+				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
+
+				return $this->query($sql);
+			}
+		}
+
+		return false;
+	}
+
 	public function dropTable($table)
 	{
 		clear_cache('model');
 		$this->tables = null;
-		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+
+		if ($this->hasTable($this->prefix . $table)) {
+			return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+		} else {
+			return $this->query("DROP TABLE IF EXISTS `$table`");
+		}
 	}
 
 	public function countTables()

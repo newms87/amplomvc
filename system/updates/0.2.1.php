@@ -1,5 +1,7 @@
 <?php
 $this->db->addColumn('store', 'prefix', "VARCHAR(15) NOT NULL");
+$this->db->query("ALTER TABLE `ps`.`" . DB_PREFIX . "store` ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC)");
+
 $this->db->changeColumn('navigation', 'href', 'path', "TEXT NOT NULL");
 
 $this->db->dropColumn('block_area', 'store_id');
