@@ -64,6 +64,8 @@ function _mod($file)
 
 	if (is_file($file . '.acmod')) {
 		$file = $file . '.acmod';
+	} elseif (is_file($file . '.mod')) {
+		$file = $file . '.mod';
 	}
 
 	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {

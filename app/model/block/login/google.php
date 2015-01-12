@@ -121,13 +121,13 @@ class App_Model_Block_Login_Google extends Model
 					'email'     => $email,
 				);
 
-				if (!$this->customer->add($customer)) {
-					$this->error = $this->customer->getError();
+				if (!$this->Model_Customer->save(null, $customer)) {
+					$this->error = $this->Model_Customer->getError();
 					return false;
 				}
 			}
 		} else {
-			$customer = $this->customer->getCustomer($customer_id);
+			$customer = $this->Model_Customer->getRecord($customer_id);
 			$no_meta  = false;
 		}
 
@@ -139,7 +139,7 @@ class App_Model_Block_Login_Google extends Model
 
 		//Set Meta for future login
 		if ($no_meta) {
-			$this->customer->setMeta('google+_id', $data['id']);
+			$this->Model_Customer->setMeta('google+_id', $data['id']);
 		}
 
 		return true;

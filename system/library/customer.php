@@ -2,9 +2,9 @@
 
 class Customer extends Library
 {
-	private $customer_id;
-	private $info;
-	private $metadata;
+	protected $customer_id;
+	protected $info;
+	protected $metadata;
 
 	public function __construct()
 	{
@@ -74,7 +74,7 @@ class Customer extends Library
 		}
 	}
 
-	private function setCustomer($customer, $ignore_status = false)
+	protected function setCustomer($customer, $ignore_status = false)
 	{
 		if (!is_array($customer)) {
 			$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
@@ -84,9 +84,9 @@ class Customer extends Library
 			return false;
 		}
 
-		$this->customer_id = (int)$customer['customer_id'];
+		$this->customer_id                   = (int)$customer['customer_id'];
 		$_SESSION['customer']['customer_id'] = $this->customer_id;
-		$this->info = $customer;
+		$this->info                          = $customer;
 
 		$this->displayMessages();
 
@@ -109,300 +109,26 @@ class Customer extends Library
 	}
 
 	/**
-	 * The same as Customer::add() except for an additional validation check for confirm password
+	 * The same as Customer::add() except for an additional validation checks and auto sign in.
 	 *
 	 * @param $customer - Customer Account Data
 	 */
 
 	public function register($customer)
 	{
-		if (isset($customer['confirm']) && $customer['confirm'] !== $customer['password']) {
-			$this->error['confirm'] = _l("Password confirmation does not match password!");
-		}
-
-		if (isset($customer['name']) && !isset($customer['firstname'])) {
-			$name_parts = explode(' ', $customer['name'], 2);
-			$customer['firstname'] = $name_parts[0];
-
-			if (isset($name_parts[1])) {
-				$customer['lastname'] = $name_parts[1];
-			}
-		}
-
 		if (option('config_account_terms_page_id')) {
 			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
 
 			if ($page_info && !isset($customer['agree'])) {
-				$this->error['warning'] = _l("You must agree to the %s!", $page_info['title']);
+				$this->error['agree'] = _l("You must agree to the %s!", $page_info['title']);
 			}
 		}
 
-		return $this->add($customer);
-	}
+		$customer_id = $this->Model_Customer->save(null, $customer);
 
-	/**
-	 * Adds a Customer account
-	 *
-	 * @param $customer - Customer Account Data
-	 * @return bool - true on success, or false if failed to register customer
-	 */
+		$this->setCustomer($customer_id);
 
-	public function add($customer)
-	{
-		if (!validate('email', $customer['email'])) {
-			$this->error['email'] = $this->validation->getError();
-		} elseif ($this->customer->emailRegistered($customer['email'])) {
-			$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
-		}
-
-		if ((isset($customer['zone_id']) || isset($customer['country_id'])) && !$this->address->validate($customer)) {
-			$this->error += $this->address->getError();
-		}
-
-		if (isset($customer['password']) && !validate('password', $customer['password'])) {
-			$this->error['password'] = $this->validation->getError();
-		}
-
-		if ($this->error) {
-			return false;
-		}
-
-		$customer['customer_group_id'] = option('config_customer_group_id');
-		$customer['date_added']        = $this->date->now();
-		$customer['status']            = 1;
-
-		if (!isset($customer['newsletter'])) {
-			$customer['newsletter'] = 0;
-		}
-
-		if (empty($customer['password'])) {
-			$customer['no_password_set'] = true;
-			$customer['password']        = $this->generatePassword();
-		}
-
-		$customer['password'] = $this->encrypt($customer['password']);
-
-		$customer['approved'] = option('config_customer_approval') ? 1 : 0;
-
-		$this->customer_id = $this->insert('customer', $customer);
-
-		//Address will be extracted from customer information, if it exists
-		$this->addAddress($customer);
-
-		//Customer MetaData
-		if (!empty($customer['metadata'])) {
-			foreach ($customer['metadata'] as $key => $value) {
-				$this->setMeta($key, $value);
-			}
-		}
-
-		$customer['customer_id'] = $this->customer_id;
-
-		call('mail/new_customer', $customer);
-
-		return $this->customer_id;
-	}
-
-	public function edit($data)
-	{
-		//Editing password here is not allowed. Must use Customer::editPassword()
-		unset($data['password']);
-
-		if (!validate('text', $data['firstname'], 1, 32)) {
-			$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-		}
-
-		if (!validate('text', $data['lastname'], 1, 32)) {
-			$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-		}
-
-		if (!validate('email', $data['email'])) {
-			$this->error['email'] = _l("The email address you provided is invalid.");
-		}
-
-		if ((customer_info('email') !== $data['email']) && $this->customer->emailRegistered($data['email'])) {
-			$this->error['email'] = _l("This email address is already registered under a different account.");
-		}
-
-		if (isset($data['telephone']) && !validate('phone', $data['telephone'])) {
-			$this->error['telephone'] = _l("The phone number you provided is invalid.");
-		}
-
-		if (!empty($data['password'])) {
-			if (!validate('password', $data['password'])) {
-				$this->error['password'] = $this->validation->getError();
-			} elseif ($data['password'] !== $data['confirm']) {
-				$this->error['confirm'] = _l("Your password and confirmation do not match!");
-			}
-		}
-
-		if (isset($data['newsletter'])) {
-			$data['newsletter'] = !empty($data['newsletter']) ? 1 : 0;
-		}
-
-		if ($this->error) {
-			return false;
-		}
-
-		$this->update('customer', $data, $this->customer_id);
-
-		if (!empty($data['metadata'])) {
-			foreach ($data['metadata'] as $key => $value) {
-				$this->setMeta($key, $value);
-			}
-		}
-
-		return true;
-	}
-
-	public function updatePassword($password)
-	{
-		if (!$this->customer_id) {
-			$this->error['customer_id'] = _l("Customer is not logged in");
-			return false;
-		}
-
-		return $this->update('customer', array('password' => $this->encrypt($password)), $this->customer_id);
-	}
-
-	public function getCustomerGroupId()
-	{
-		if (!empty($this->info['customer_group_id'])) {
-			return $this->info['customer_group_id'];
-		}
-
-		return (int)option('config_customer_group_id');
-	}
-
-	public function getCustomer($customer_id)
-	{
-		return $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE customer_id = " . (int)$customer_id);
-	}
-
-	public function getCustomerByToken($token)
-	{
-		$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE token = '" . $this->escape($token) . "' AND token != ''");
-
-		//Unset the 1 time access token
-		$this->update('customer', array('token' => ''), $customer['customer_id']);
-
-		return $customer;
-	}
-
-	public function getCustomers($data = array(), $select = '', $total = false)
-	{
-		if ($total) {
-			$select = "COUNT(*) as total";
-		} elseif (!$select) {
-			$select = "*, CONCAT(c.firstname, ' ', c.lastname) AS name, cg.name AS customer_group";
-		}
-
-		$from = self::$tables['customer'] . " c" .
-			" LEFT JOIN" . self::$tables['customer_group'] . " cg ON (c.customer_group_id = cg.customer_group_id)";
-
-		$where = "1";
-
-		if (!empty($data['name'])) {
-			$where .= " AND LCASE(CONCAT(c.firstname, ' ', c.lastname)) LIKE '%" . $this->escape(strtolower($data['name'])) . "%'";
-		}
-
-		if (!empty($data['email'])) {
-			$where .= " AND c.email = '" . $this->escape($data['email']) . "'";
-		}
-
-		if (!empty($data['customer_group_ids'])) {
-			$where .= " AND cg.customer_group_id IN (" . implode(',', $this->escape($data['customer_group_ids'])) . ")";
-		}
-
-		if (isset($data['status'])) {
-			$where .= " AND c.status = " . $data['status'] ? 1 : 0;
-		}
-
-		if (isset($data['approved'])) {
-			$where .= " AND c.approved = " . $data['approved'] ? 1 : 0;
-		}
-
-		if (!empty($data['ip'])) {
-			$where .= " AND c.customer_id IN (SELECT customer_id FROM " . self::$tables['customer_ip'] . " WHERE ip = '" . $this->escape($data['ip']) . "')";
-		}
-
-		if (!empty($data['date_added'])) {
-			$where .= " AND DATE(c.date_added) = DATE('" . $this->escape($data['date_added']) . "')";
-		}
-
-		//Order By and Limit
-		list($order, $limit) = $this->extractOrderLimit($data);
-
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
-
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result['total'];
-		}
-
-		return $result->rows;
-	}
-
-	/** Customer Meta Data **/
-	public function addMeta($key, $value)
-	{
-		if (!$this->customer_id) {
-			$this->error['customer_id'] = _l("Customer is not logged in");
-			return false;
-		}
-
-		if (_is_object($value)) {
-			$value      = serialize($value);
-			$serialized = 1;
-		} else {
-			$serialized = 0;
-		}
-
-		$customer_meta = array(
-			'customer_id' => $this->customer_id,
-			'key'         => $key,
-			'value'       => $value,
-			'serialized'  => $serialized,
-		);
-
-		$this->metadata[$key] = $value;
-
-		return $this->insert('customer_meta', $customer_meta);
-	}
-
-	public function setMeta($key, $value)
-	{
-		$this->deleteMeta($key);
-
-		return $this->addMeta($key, $value);
-	}
-
-	public function getMeta($key = null)
-	{
-		if ($key) {
-			return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
-		}
-
-		return $this->metadata;
-	}
-
-	public function deleteMeta($key)
-	{
-		if (!$this->customer_id) {
-			return false;
-		}
-
-		$where = array(
-			'customer_id' => $this->customer_id,
-			'key'         => $key,
-		);
-
-		$this->delete('customer_meta', $where);
-
-		unset($this->metadata[$key]);
-
-		return true;
+		return $customer_id;
 	}
 
 	/** Addresses **/
@@ -600,7 +326,7 @@ class Customer extends Library
 	{
 		$private = false;
 
-		$class = $action->getClass();
+		$class  = $action->getClass();
 		$method = $action->getMethod();
 
 		if (property_exists($class, 'allow')) {
@@ -632,7 +358,7 @@ class Customer extends Library
 		return substr(str_shuffle(MD5(microtime())), 0, (int)rand(10, 13));
 	}
 
-	private function track()
+	protected function track()
 	{
 		if (!$this->customer_id) {
 			return;

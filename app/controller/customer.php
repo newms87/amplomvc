@@ -291,7 +291,7 @@ class App_Controller_Customer extends Controller
 
 	public function reset_password()
 	{
-		$customer_id = $this->customer->lookupResetCode($_GET['code']);
+		$customer_id = $this->customer->lookupResetCode(_get('code'));
 
 		//User not found
 		if (!$customer_id) {
@@ -299,18 +299,13 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		}
 
-		//Validate Password
-		if (!validate('password', $_POST['password'])) {
-			message('error', $this->validation->getError());
-			redirect('customer/reset_form');
+		if ($this->Model_Customer->save($customer_id, array('password' => _post('password')))) {
+			$this->customer->clearResetCode();
+			message('success', _l('You have successfully updated your password!'));
+			redirect('customer/login');
+		} else {
+			message('error', $this->Model_Customer->getError());
+			redirect('customer/reset_form', 'code=' . _get('code'));
 		}
-
-		$this->customer->setId($customer_id);
-		$this->customer->updatePassword($_POST['password']);
-		$this->customer->clearResetCode();
-
-		message('success', _l('You have successfully updated your password!'));
-
-		redirect('customer/login');
 	}
 }

@@ -16,7 +16,7 @@ class App_Controller_Account extends Controller
 		breadcrumb(_l("Account Manager"), site_url('account'));
 
 		//Customer Information
-		$data['customer'] = customer_info() + $this->customer->getMeta();
+		$data['customer'] = customer_info() + $this->Model_Customer->getMeta();
 
 		//Actions
 		$data['edit_account'] = site_url('account/update');
@@ -25,7 +25,7 @@ class App_Controller_Account extends Controller
 		output($this->render('account/account', $data));
 	}
 
-	public function update()
+	public function form()
 	{
 		//Page Head
 		set_page_info('title', _l("My Account Information"));
@@ -38,7 +38,7 @@ class App_Controller_Account extends Controller
 		//Handle POST
 		if (!IS_POST) {
 			$customer_info             = customer_info();
-			$customer_info['metadata'] = $this->customer->getMeta();
+			$customer_info['metadata'] = $this->Model_Customer->getMeta();
 		} else {
 			$customer_info = $_POST;
 		}
@@ -72,7 +72,7 @@ class App_Controller_Account extends Controller
 
 	public function submit_update()
 	{
-		$this->customer->edit($_POST);
+		$this->customer->save($this->customer->getId(), $_POST);
 
 		if (!empty($_POST['payment_code']) && !empty($_POST['payment_key'])) {
 			$this->System_Extension_Payment->get($_POST['payment_code'])->updateCard($_POST['payment_key'], array('default' => true));
