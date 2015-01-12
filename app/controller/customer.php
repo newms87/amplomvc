@@ -41,7 +41,6 @@ class App_Controller_Customer extends Controller
 				$this->request->setRedirect($settings['redirect']);
 			} else {
 				$this->request->clearRedirect();
-				$settings['no_redirect'] = true;
 			}
 		} elseif (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
@@ -51,10 +50,10 @@ class App_Controller_Customer extends Controller
 
 		//Block Settings
 		$defaults = array(
-			'username'    => '',
-			'size'        => 'large',
-			'template'    => 'customer/login',
-			'no_redirect' => false,
+			'username' => '',
+			'size'     => 'large',
+			'template' => 'customer/login',
+			'redirect' => $this->request->getRedirect(),
 		);
 
 		$settings += $_POST + $defaults;

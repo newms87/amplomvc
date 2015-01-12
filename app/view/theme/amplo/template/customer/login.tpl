@@ -19,7 +19,7 @@
 				<div class="login-box box">
 					<h2>{{Log In}}</h2>
 
-					<form action="<?= site_url('customer/authenticate'); ?>" class="login-form form" method="post" enctype="multipart/form-data" <?= $no_redirect ? '' : 'data-if-ajax="#customer-login"'; ?>>
+					<form action="<?= site_url('customer/authenticate'); ?>" class="login-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
 						<div class="form-item">
 							<input type="text" placeholder="{{email}}" name="username" value="<?= $username; ?>"/>
 						</div>
@@ -51,7 +51,7 @@
 				<div class="register-box box">
 					<h2>{{Create My Account}}</h2>
 
-					<form action="<?= site_url('customer/register'); ?>" class="register-form form" method="post" enctype="multipart/form-data" <?= $no_redirect ? '' : 'data-if-ajax="#customer-login"'; ?>>
+					<form action="<?= site_url('customer/register'); ?>" class="register-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
 						<div class="form-item">
 							<input type="text" placeholder="{{name}}" name="name" value="<?= _post('name'); ?>"/>
 						</div>
@@ -85,10 +85,6 @@
 
 <script type="text/javascript">
 	$('#customer-login .login-page .wrap').ac_msg('error', <?= json_encode($this->message->fetch('error')); ?>);
-
-    $('#customer-login input').focus(function(){
-
-    });
 </script>
 
 <?= $is_ajax ? '' : call('footer'); ?>

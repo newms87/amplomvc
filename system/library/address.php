@@ -1,4 +1,5 @@
 <?php
+
 class Address extends Library
 {
 	public function add($address)
@@ -211,9 +212,17 @@ class Address extends Library
 			$address = $this->getAddress($address);
 		}
 
-		if (!$this->validate($address)) {
-			return '';
-		}
+		$address += array(
+			'firstname'  => '',
+			'lastname'   => '',
+			'company'    => '',
+			'country_id' => 223,
+			'zone_id'    => 0,
+			'postcode'   => '',
+			'city'       => '',
+			'address_1'  => '',
+			'address_2'  => '',
+		);
 
 		$country_id = $address['country_id'];
 
@@ -224,7 +233,7 @@ class Address extends Library
 
 			if (empty($address_format)) {
 				$address_format =
-					"{firstname} {lastname}\n" .
+					"{firstname} {lastname}\n";
 					"{company}\n" .
 					"{address_1}\n" .
 					"{address_2}\n" .
@@ -234,6 +243,7 @@ class Address extends Library
 
 			$address_formats[$country_id] = $address_format;
 		}
+
 
 		$insertables = $address;
 
@@ -258,12 +268,29 @@ class Address extends Library
 			$insertables['zone_code'] = $address['zone']['code'];
 		}
 
-		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br(insertables($insertables, $address_format, '{', '}')));
+		$address_format = nl2br(insertables($insertables, $address_format, '{', '}'));
+
+		$sr = array(
+			"#<br />\\s*<br />#" => '<br />',
+			"#^\\s*<br />#" => '',
+		);
+
+		do {
+			$address_format = preg_replace(array_keys($sr), $sr, $address_format, -1, $count);
+		} while($count);
+
+		return $address_format;
 	}
 
-	public function validate($address)
+	public function validate(&$address)
 	{
 		$this->error = array();
+
+		if (isset($address['name'])) {
+			$name                 = explode(' ', $address['name'], 2);
+			$address['firstname'] = $name[0];
+			$address['lastname']  = !empty($name[1]) ? $name[1] : '';
+		}
 
 		if (isset($address['firstname']) && !validate('text', $address['firstname'], 1, 45)) {
 			$this->error['firstname'] = _l("First Name must be less than 45 characters");
@@ -274,7 +301,11 @@ class Address extends Library
 		}
 
 		if (empty($address['address_1'])) {
-			$this->error['address_1'] = _l("Please provide the Street Address.");
+			if (!empty($address['address'])) {
+				$address['address_1'] = $address['address'];
+			} else {
+				$this->error['address_1'] = _l("Please provide the Street Address.");
+			}
 		} elseif (!validate('text', $address['address_1'], 3, 128)) {
 			$this->error['address_1'] = _l("Address must be between 3 and 128 characters!");
 		}

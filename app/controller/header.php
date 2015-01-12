@@ -37,9 +37,6 @@ class App_Controller_Header extends Controller
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
 		$settings['body_class'] = $this->document->getBodyClass();
 
-		//Customer Info
-		$settings['customer'] = customer_info();
-
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();
 
