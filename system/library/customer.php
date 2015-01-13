@@ -91,13 +91,7 @@ class Customer extends Library
 		$this->displayMessages();
 
 		//Load Customer Settings
-		$metadata = $this->queryRows("SELECT * FROM " . self::$tables['customer_meta'] . " WHERE customer_id = " . $this->customer_id);
-
-		$this->metadata = array();
-
-		foreach ($metadata as $meta) {
-			$this->metadata[$meta['key']] = $meta['serialized'] ? unserialize($meta['value']) : $meta['value'];
-		}
+		$this->metadata = $this->Model_Customer->getMeta($this->customer_id);
 
 		return true;
 	}
@@ -129,6 +123,31 @@ class Customer extends Library
 		$this->setCustomer($customer_id);
 
 		return $customer_id;
+	}
+
+	public function meta($key = null, $default = null)
+	{
+		if ($key) {
+			return isset($this->metadata[$key]) ? $this->metadata[$key] : $default;
+		}
+
+		return $this->metadata;
+	}
+
+	public function setMeta($key, $value)
+	{
+		$this->Model_Customer->deleteMeta($key);
+
+		$this->metadata[$key] = $value;
+
+		return $this->Model_Customer->addMeta($key, $value);
+	}
+
+	public function removeMeta($key)
+	{
+		unset($this->metadata[$key]);
+
+		return $this->Model_Customer->deleteMeta($key);
 	}
 
 	/** Addresses **/
@@ -201,30 +220,7 @@ class Customer extends Library
 			$filter['customer_ids'] = array($this->customer_id);
 		}
 
-		$addresses = $this->address->getAddresses($filter);
-
-		$payment_address_id  = (int)$this->getMeta('default_payment_address_id');
-		$shipping_address_id = (int)$this->getMeta('default_shipping_address_id');
-
-		if (!$payment_address_id) {
-			$address            = current($addresses);
-			$payment_address_id = $address['address_id'];
-			$this->setDefaultPaymentAddress($payment_address_id);
-		}
-
-		if (!$shipping_address_id) {
-			$address             = current($addresses);
-			$shipping_address_id = $address['address_id'];
-			$this->setDefaultPaymentAddress($shipping_address_id);
-		}
-
-		foreach ($addresses as &$address) {
-			$address['default_payment']  = (int)$address['address_id'] === $payment_address_id;
-			$address['default_shipping'] = (int)$address['address_id'] === $shipping_address_id;
-		}
-		unset($address);
-
-		return $addresses;
+		return $this->address->getAddresses($filter);
 	}
 
 	public function removeAddress($address_id)
@@ -233,7 +229,7 @@ class Customer extends Library
 			$this->error['warning'] = _l("Must have at least 1 address associated to your account!");
 		}
 
-		if ((int)$this->getMeta('default_shipping_address_id') === (int)$address_id) {
+		if ((int)$this->meta('default_shipping_address_id') === (int)$address_id) {
 			$this->error['warning'] = _l("Cannot remove the default shipping address! Please change your default shipping address first.");
 		}
 

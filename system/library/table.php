@@ -55,11 +55,12 @@ class Table extends Library
 		}
 	}
 
-	public function render()
+	public function render($data = array())
 	{
 		$this->prepare();
 
 		extract($this->template_data);
+		extract($data);
 
 		$columns = $this->columns;
 		$rows    = $this->rows;

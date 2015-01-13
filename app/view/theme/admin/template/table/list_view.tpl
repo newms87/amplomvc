@@ -15,6 +15,7 @@
  * );
  */
 ?>
+<? $show_actions = !empty($show_actions); ?>
 
 <div class="table-list-view-box">
 	<table class="list table-list-view">
@@ -25,11 +26,13 @@
 					<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
 				</td>
 			<? } ?>
-			<td class="center column_title">
-				<span>{{Action}}</span>
-			</td>
+			<? if ($show_actions) { ?>
+				<td class="center column-title">
+					<span>{{Action}}</span>
+				</td>
+			<? } ?>
 			<? foreach ($columns as $slug => $column) { ?>
-				<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
+				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
 					<? if ($column['sortable']) {
 						$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
 						$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
@@ -40,9 +43,11 @@
 					<? } ?>
 				</td>
 			<? } ?>
-			<td class="center column_title">
-				<span>{{Action}}</span>
-			</td>
+			<? if ($show_actions) { ?>
+				<td class="center column-title">
+					<span>{{Action}}</span>
+				</td>
+			<? } ?>
 		</tr>
 		</thead>
 		<tbody>
@@ -50,21 +55,23 @@
 			<? if (!empty($row_id)) { ?>
 				<td></td>
 			<? } ?>
-			<td align="center">
-				<a class="button filter-button">{{Filter}}</a>
-				<? if (!empty($_GET['filter'])) { ?>
-					<a class="reset reset-button">{{Reset}}</a>
-				<? } ?>
-				<a class="hide-filter">{{Hide}}</a>
-			</td>
+			<? if ($show_actions) { ?>
+				<td align="center">
+					<a class="button filter-button">{{Filter}}</a>
+					<? if (!empty($_GET['filter'])) { ?>
+						<a class="reset reset-button">{{Reset}}</a>
+					<? } ?>
+					<a class="hide-filter">{{Hide}}</a>
+				</td>
+			<? } ?>
 			<? foreach ($columns as $slug => $column) { ?>
 				<? if ($column['filter']) { ?>
-					<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
+					<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
 						<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
 						<? switch ($column['filter']) {
 							case 'text':
 								?>
-								<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
+								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
 								<? break;
 
 							case 'pk':
@@ -79,10 +86,10 @@
 									$column['filter_value']['high'] = null;
 								}
 								?>
-								<div class="zoom_hover int">
+								<div class="zoom-hover int">
 									<div class="input">
-										<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
-										<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
+										<input placeholder="{{From}}" type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
+										<input placeholder="{{To}}" type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
 									<div class="value">
@@ -125,7 +132,7 @@
 								}
 
 								?>
-								<div class="zoom_hover multiselect">
+								<div class="zoom-hover multiselect">
 									<div class="input">
 										<?=
 										build(array(
@@ -172,17 +179,17 @@
 								}
 								?>
 
-								<div class="zoom_hover daterange">
+								<div class="zoom-hover daterange">
 									<div class="input">
-										<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-										<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
+										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
-									<div class="value">
-										<? if ($column['filter_value']['start'] === null || $column['filter_value']['end'] === null) { ?>
+									<div class="value" data-default="{{Date Range}}">
+										<? if ($column['filter_value']['start'] !== null || $column['filter_value']['end'] !== null) { ?>
 											<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
 										<? } else { ?>
-											{{Modify}}
+											{{Date Range}}
 										<? } ?>
 									</div>
 								</div>
@@ -197,13 +204,15 @@
 					<td></td>
 				<? } ?>
 			<? } ?>
-			<td align="center">
-				<a class="button filter-button">{{Filter}}</a>
-				<? if (!empty($_GET['filter'])) { ?>
-					<a class="reset reset-button">{{Reset}}</a>
-				<? } ?>
-				<a class="hide-filter">{{Hide}}</a>
-			</td>
+			<? if ($show_actions) { ?>
+				<td align="center">
+					<a class="button filter-button">{{Filter}}</a>
+					<? if (!empty($_GET['filter'])) { ?>
+						<a class="reset reset-button">{{Reset}}</a>
+					<? } ?>
+					<a class="hide-filter">{{Hide}}</a>
+				</td>
+			<? } ?>
 		</tr>
 		<? if (!empty($rows)) { ?>
 			<? foreach ($rows as $row) { ?>
@@ -216,31 +225,34 @@
 						</td>
 					<? } ?>
 
-					<? $quick_actions = '';
+					<? if ($show_actions) { ?>
+						<? $quick_actions = '';
 
-					if (!empty($row['actions'])) {
-						foreach ($row['actions'] as $key => $action) {
-							$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
+						if (!empty($row['actions'])) {
+							foreach ($row['actions'] as $key => $action) {
+								$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action action-' . $key;
 
-							if (!empty($action['ajax'])) {
-								$action['#class'] .= $action['ajax'] === 'modal' ? ' colorbox' : ' ajax';
-							}
+								if (!empty($action['ajax'])) {
+									$action['#class'] .= $action['ajax'] === 'modal' ? ' colorbox' : ' ajax';
+								}
 
-							if (!empty($action['href'])) {
-								$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
-							} else {
-								$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
+								if (!empty($action['href'])) {
+									$quick_actions .= "<a href=\"$action[href]\"" . attrs($action) . ">$action[text]</a>";
+								} else {
+									$quick_actions .= "<span " . attrs($action) . ">$action[text]</span>";
 
+								}
 							}
 						}
-					}
-					?>
+						?>
 
-					<td class="center actions">
-						<div class="action-buttons">
-							<?= $quick_actions; ?>
-						</div>
-					</td>
+						<td class="center actions">
+							<div class="action-buttons">
+								<?= $quick_actions; ?>
+							</div>
+						</td>
+					<? } ?>
+
 					<? foreach ($columns as $slug => $column) { ?>
 						<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
 
@@ -337,11 +349,13 @@
 							} ?>
 						</td>
 					<? } ?>
-					<td class="center actions">
-						<div class="action-buttons">
-							<?= $quick_actions; ?>
-						</div>
-					</td>
+					<? if ($show_actions) { ?>
+						<td class="center actions">
+							<div class="action-buttons">
+								<?= $quick_actions; ?>
+							</div>
+						</td>
+					<? } ?>
 				</tr>
 			<?
 			}
@@ -354,85 +368,86 @@
 		</tbody>
 	</table>
 
-	<div class="editable-options">
-		<? foreach ($columns as $field => $column) {
-			if (empty($column['editable'])) {
-				continue;
-			} ?>
+	<? if ($save_path) { ?>
+		<div class="editable-options">
+			<? foreach ($columns as $field => $column) {
+				if (empty($column['editable'])) {
+					continue;
+				} ?>
 
-			<div class="editable-option" data-field="<?= $field; ?>">
-				<div class="input">
-					<? switch ($column['type']) {
-						case 'select':
-						case 'radio':
-						case 'checkbox':
-							echo build(array(
-								'type'   => $column['editable'],
-								'name'   => '',
-								'data'   => $column['build_data'],
-								'select' => '',
-								'value'  => $column['build_config'][0],
-								'label'  => $column['build_config'][1],
-								'#class' => 'input-value',
-							));
-							break;
+				<div class="editable-option" data-field="<?= $field; ?>">
+					<div class="input">
+						<? switch ($column['type']) {
+							case 'select':
+							case 'radio':
+							case 'checkbox':
+								echo build(array(
+									'type'   => $column['editable'],
+									'name'   => '',
+									'data'   => $column['build_data'],
+									'select' => '',
+									'value'  => $column['build_config'][0],
+									'label'  => $column['build_config'][1],
+									'#class' => 'input-value',
+								));
+								break;
 
-						case 'date':
-						case 'datetime':
-						case 'time':
-							?>
-							<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
-							<? break;
+							case 'date':
+							case 'datetime':
+							case 'time':
+								?>
+								<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
+								<? break;
 
-						case 'longtext':
-							?>
-							<textarea class="input-value" rows="4" cols="40"></textarea>
-							<? break;
+							case 'longtext':
+								?>
+								<textarea class="input-value" rows="4" cols="40"></textarea>
+								<? break;
 
-						case 'text':
-						case 'int':
-						case 'float':
-						case 'decimal':
-						default:
-							?>
-							<input type="text" class="input-value"/>
-							<? break;
-					} ?>
+							case 'text':
+							case 'int':
+							case 'float':
+							case 'decimal':
+							default:
+								?>
+								<input type="text" class="input-value"/>
+								<? break;
+						} ?>
+					</div>
 				</div>
+			<? } ?>
+
+			<div class="buttons clearfix">
+				<a class="cancel-edit button remove">{{X}}</a>
+				<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
 			</div>
-		<? } ?>
-
-		<div class="buttons clearfix">
-			<a class="cancel-edit button remove">{{X}}</a>
-			<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
 		</div>
-	</div>
-
+	<? } ?>
 </div>
 
 <script type="text/javascript">
 	$.ac_datepicker();
 
-	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
+	$('.zoom-hover input, .zoom-hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
 
 	function zoom_hover_in() {
-		$zoom = $(this).closest('.zoom_hover').addClass('active');
+		$zoom = $(this).closest('.zoom-hover').addClass('active');
 		input = $zoom.find('.input');
 		value = $zoom.find('.value');
 	}
 
 	function zoom_hover_out() {
-		$zoom = $(this).closest('.zoom_hover').removeClass('active');
+		$zoom = $(this).closest('.zoom-hover').removeClass('active');
 		input = $zoom.find('.input');
 		value = $zoom.find('.value');
 	}
 
-	$('.zoom_hover .clear').click(function () {
-		$(this).closest('.zoom_hover').find('input, textarea').val('').trigger('keyup').trigger('change');
+	$('.zoom-hover .clear').click(function () {
+		$(this).closest('.zoom-hover').find('input, textarea').val('').trigger('keyup').trigger('change');
 	});
 
-	$('.zoom_hover.int input').keyup(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.int input').keyup(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 
 		low = $zoom.find('.int_low').val();
@@ -441,12 +456,12 @@
 		if (high || low) {
 			$value.html(low + ' - ' + high);
 		} else {
-			$value.html('{{Modify}}');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		}
 	});
 
-	$('.zoom_hover.daterange input').change(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.daterange input').change(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 
 		var start = $zoom.find('.date_start').val();
@@ -455,17 +470,17 @@
 		if (end || start) {
 			$value.html(start + ' - ' + end);
 		} else {
-			$value.html('{{Modify}}');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		}
 	});
 
-	$('.zoom_hover.multiselect input').change(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.multiselect input').change(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 		var $selected = $zoom.find(':checked');
 
 		if ($selected.length == 0) {
-			$value.html('{{Modify}}');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {
@@ -526,6 +541,41 @@
 			$this.addClass('equals');
 		}
 	});
+
+	<? if (!empty($filter_style) && $filter_style === 'persistent') { ?>
+	$listview.find('.filter-type').removeClass('not').addClass('equals').hide();
+
+	$listview.find('.column-filter').find('input, select').on('keyup change', delay_update);
+
+	var delay = false;
+
+	function delay_update($filter, my_delay) {
+		if (my_delay) {
+			if (my_delay === delay) {
+				var $widget = $filter.closest('.widget-listing').addClass('loading');
+
+				$('#ui-datepicker-div').remove();
+
+				$.get($filter.apply_filter("<?= $filter_url; ?>"), {}, function (response) {
+					$widget.replaceWith(response);
+				});
+			}
+		} else {
+			var event = $filter;
+			var my_delay = Date.now();
+			var $filter = $(this).closest('.filter-list');
+			delay = my_delay;
+
+			if (event.keyCode === 13) {
+				delay_update($filter, my_delay);
+			} else {
+				setTimeout(function () {
+					delay_update($filter, my_delay)
+				}, 1500);
+			}
+		}
+	}
+	<? } ?>
 
 	$listview.find('.reset-button').click(function () {
 		var $this = $(this);

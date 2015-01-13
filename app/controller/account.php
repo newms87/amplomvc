@@ -38,7 +38,7 @@ class App_Controller_Account extends Controller
 		//Handle POST
 		if (!IS_POST) {
 			$customer_info             = customer_info();
-			$customer_info['metadata'] = $this->Model_Customer->getMeta();
+			$customer_info['metadata'] = $this->customer->meta();
 		} else {
 			$customer_info = $_POST;
 		}
@@ -61,7 +61,7 @@ class App_Controller_Account extends Controller
 			$data['metadata']['default_shipping_address_id'] = '';
 		}
 
-		$data['data_addresses'] = $this->customer->getShippingAddresses();
+		$data['data_addresses'] = $this->customer->getAddresses();
 
 		//Actions
 		$data['save'] = site_url('account/submit-update');

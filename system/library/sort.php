@@ -78,7 +78,7 @@ class Sort extends Library
 			'template'   => 'block/widget/limit',
 			'limits'     => self::$limits,
 			'path'       => $this->route->getPath(),
-			'limit_text' => '',
+			'limit_text' => '(see more)',
 		);
 
 		$settings += $defaults;

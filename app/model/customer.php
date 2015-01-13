@@ -119,13 +119,17 @@ class App_Model_Customer extends Model
 		return $this->addMeta($key, $value);
 	}
 
-	public function getMeta($key = null)
+	public function getMeta($customer_id)
 	{
-		if ($key) {
-			return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
+		$rows = $this->queryRows("SELECT * FROM " . self::$tables['customer_meta'] . " WHERE customer_id = " . (int)$customer_id);
+
+		$meta = array();
+
+		foreach ($rows as $row) {
+			$meta[$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
 		}
 
-		return $this->metadata;
+		return $meta;
 	}
 
 	public function deleteMeta($key)
