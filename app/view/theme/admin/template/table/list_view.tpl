@@ -368,7 +368,7 @@
 		</tbody>
 	</table>
 
-	<? if ($save_path) { ?>
+	<? if (!empty($save_path)) { ?>
 		<div class="editable-options">
 			<? foreach ($columns as $field => $column) {
 				if (empty($column['editable'])) {
