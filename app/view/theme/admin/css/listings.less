@@ -254,57 +254,71 @@
   .limits {
     float: right;
     text-align: right;
-    margin: .5em 0;
-    max-width: 100px;
-    height: 18px;
     overflow: hidden;
+    margin-top: .5em;
+    width: 30%;
     -webkit-transition: all .1s linear .5s;
     transition: all .1s linear .5s;
 
     .limit-text {
-      font-size: 1.2em;
-      float: left;
-    }
-
-    .limit-item {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-bottom: 5px;
-      background: @color-lightest;
-      border-radius: 3px;
-      text-decoration: none;
-      max-width: 0;
-      padding: 0;
-      visibility: hidden;
+      font-size: 1.1em;
+      display: inline-block;
+      vertical-align: middle;
+      color: @color-main;
       -webkit-transition: all .1s linear .5s;
       transition: all .1s linear .5s;
-      display: block;
-      float: left;
+    }
 
-      &:hover, &.selected {
-        background: @color-light;
-      }
+    .limit-items {
+      display: inline-block;
+      vertical-align: middle;
 
-      &.selected {
-        max-width: 30px;
-        width: auto;
-        padding: .1em .3em;
-        visibility: visible;
+      .limit-item {
+        font-size: 1.1em;
+        font-weight: bold;
+        background: @color-lightest;
+        border-radius: 3px;
+        text-decoration: none;
+        max-width: 0;
+        padding: 0;
+        visibility: hidden;
+        -webkit-transition: all .1s linear .5s;
+        transition: all .1s linear .5s;
+        display: inline-block;
+        float: right;
+
+        &.selected {
+          max-width: 30px;
+          width: auto;
+          padding: .1em .3em;
+          visibility: visible;
+        }
       }
     }
 
     &:hover {
       -webkit-transition: all .5s;
       transition: all .5s;
-      max-width: 300px;
 
-      .limit-item {
-        max-width: 30px;
-        padding: .1em .3em;
-        margin-left: 5px;
-        -webkit-transition: all .2s;
-        transition: all .2s;
-        visibility: visible;
+      .limit-text {
+        opacity: 0;
+        -webkit-transition: all .5s;
+        transition: all .5s;
+      }
+
+      .limit-items {
+        .limit-item {
+          max-width: 30px;
+          padding: .1em .3em;
+          margin-left: 5px;
+          -webkit-transition: all .2s;
+          transition: all .2s;
+          visibility: visible;
+
+          &.selected {
+            background: @color-light;
+          }
+        }
       }
     }
   }

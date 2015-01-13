@@ -6,15 +6,9 @@
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Plugins}}</h1>
 		</div>
 		<div class="section">
-			<div class="limits">
-				<?= $limits; ?>
-			</div>
-
 			<div id="listing">
-				<?= $list_view; ?>
+				<?= $listing; ?>
 			</div>
-
-			<div class="pagination"><?= block('widget/pagination', null, array('total' => $total)); ?></div>
 		</div>
 	</div>
 </div>

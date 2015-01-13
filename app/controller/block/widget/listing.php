@@ -13,26 +13,27 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		}
 
 		$settings += array(
-			'extra_cols'      => array(),
-			'template'        => 'table/list_view',
-			'ajax'            => 1,
-			'rows'            => array(),
-			'template_data'   => array(),
-			'filter_value'    => array(),
-			'show_pagination' => true,
-			'show_limits'     => 'top',
-			'show_controls'   => true,
-			'show_charts'     => true,
-			'show_actions'    => true,
-			'limits'          => null,
-			'show_messages'   => null,
-			'listing_path'    => $this->route->getPath(),
-			'save_path'       => false,
-			'row_id'          => '',
-			'view_id'         => _request('view_id'),
-			'chart'           => array(),
-			'theme'           => 'admin',
-			'filter_style'    => 'switch',
+			'extra_cols'          => array(),
+			'template'            => 'table/list_view',
+			'ajax'                => 1,
+			'rows'                => array(),
+			'template_data'       => array(),
+			'filter_value'        => array(),
+			'pagination_settings' => array(),
+			'limit_settings'      => array(),
+			'show_pagination'     => true,
+			'show_limits'         => 'top',
+			'show_controls'       => true,
+			'show_charts'         => true,
+			'show_actions'        => true,
+			'show_messages'       => null,
+			'listing_path'        => $this->route->getPath(),
+			'save_path'           => false,
+			'row_id'              => '',
+			'view_id'             => _request('view_id'),
+			'chart'               => array(),
+			'theme'               => 'admin',
+			'filter_style'        => 'switch',
 			//With the default AmploMVC installation, only admin theme has a template for listing
 		);
 
@@ -106,13 +107,9 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 
 		//Limits
 		if ($settings['show_limits']) {
-			$settings['limit_settings'] = array(
-				'path' => $settings['listing_path'],
+			$settings['limit_settings'] += array(
+				'path'   => $settings['listing_path'],
 			);
-
-			if ($settings['limits']) {
-				$settings['limit_settings']['limits'] = $settings['limits'];
-			}
 		}
 
 		//Pagination
