@@ -61,7 +61,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/settingss');
 		}
@@ -76,7 +76,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/settings/theme');
 		}

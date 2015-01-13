@@ -161,7 +161,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/tool/logs', 'log=' . $log);
 		}
@@ -184,7 +184,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/tool/logs', 'log=' . $log);
 		}

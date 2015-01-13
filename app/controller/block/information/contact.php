@@ -51,7 +51,7 @@ class App_Controller_Block_Information_Contact extends App_Controller_Block_Bloc
 
 		//Response
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			if ($this->message->has('error')) {
 				redirect($this->request->getRedirect('contact-form'));

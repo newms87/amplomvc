@@ -18,7 +18,7 @@ class App_Controller_Block_Block extends Controller
 			redirect('admin/block', $this->url->getQuery());
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 
 	public function save()
@@ -37,7 +37,7 @@ class App_Controller_Block_Block extends Controller
 			redirect('admin/block');
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 
 	//override this method to add custom settings

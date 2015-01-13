@@ -68,7 +68,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -95,7 +95,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('account/address');
 		}

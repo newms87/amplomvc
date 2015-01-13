@@ -200,6 +200,6 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			}
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 }

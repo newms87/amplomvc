@@ -791,6 +791,12 @@ function output($output)
 	$registry->get('response')->setOutput($output);
 }
 
+function output_message()
+{
+	global $registry;
+	output_json($registry->get('message')->fetch());
+}
+
 function output_json($data)
 {
 	global $registry;

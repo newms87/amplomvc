@@ -1,0 +1,124 @@
+/*************************
+ *  X. Device Targeting  *
+ *************************/
+
+@media (max-width: (@lg - 1)) {
+}
+
+@media (max-width: (@md - 1)) {
+  .header-navigation {
+    .links-toggle {
+      margin-top: .8em;
+
+      & + nav {
+        .height-animate;
+      }
+
+      &.hover {
+        .sprite-img.menu {
+          .sprite-img.menu.close;
+        }
+
+        & + nav {
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 25em;
+        }
+      }
+    }
+
+    nav.header-nav {
+      position: absolute;
+      right: -10em;
+      top: 3.7em;
+      text-align: right;
+      width: 10000px;
+
+      .nav, .nav#links-primary, .nav#links-account {
+        text-align: right;
+        display: block;
+        width: auto;
+        margin: 0;
+
+        &#links-account {
+          margin-top: -.29em;
+          border-top: 1px solid @color-dark;
+        }
+
+        .link-list {
+          position: relative;
+          display: block;
+
+          ul {
+            li {
+              background: @color-lighter;
+              display: block;
+              width: 10000px;
+              border-bottom: 1px solid @color-dark;
+
+              a {
+                padding: 1em 10em;
+                font: 1.1em OpenSansRegular;
+                color: @font-dark;
+              }
+
+              .sub-menu {
+                width: auto;
+                position: static;
+                text-align: right;
+                padding: 0;
+                margin: 0;
+
+                ul {
+                  margin: 0;
+                  padding: 0;
+
+                  li {
+                    display: block;
+                    background: white;
+                    border-color: @color-light;
+                  }
+                }
+              }
+
+              &:hover, &.hover {
+                .sub-menu {
+                  border-top: 1px solid @color-dark;
+                  max-height: 50em;
+                }
+              }
+            }
+          }
+        }
+
+        .links-simple {
+          display: block;
+
+          a {
+            background: @color-lighter;
+            display: block;
+            border-bottom: 1px solid @color-dark;
+            padding: 1em 9em;
+            font: 1.1em OpenSansRegular;
+            color: @font-dark;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: (@sm - 1)) {
+}
+
+@media (max-width: (@xs - 1)) {
+  section.page {
+    font-size: .8em;
+
+    .row {
+      .wrap {
+        min-width: 0;
+      }
+    }
+  }
+}

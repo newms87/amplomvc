@@ -177,7 +177,7 @@ class App_Controller_Admin_Navigation extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/navigation/form', 'navigation_group_id=' . $navigation_group_id);
 		} else {
@@ -194,7 +194,7 @@ class App_Controller_Admin_Navigation extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/navigation');
 		}
@@ -246,7 +246,7 @@ class App_Controller_Admin_Navigation extends Controller
 			redirect('admin/navigation');
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 
 	public function choose_link()

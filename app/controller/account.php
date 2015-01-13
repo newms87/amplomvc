@@ -9,20 +9,20 @@ class App_Controller_Account extends Controller
 	public function index()
 	{
 		//Page Head
-		set_page_info('title', _l("Account Manager"));
+		set_page_info('title', _l("My Details"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account Manager"), site_url('account'));
 
 		//Customer Information
-		$data['customer'] = customer_info() + $this->Model_Customer->getMeta();
+		$data['customer'] = customer_info();
+		$data['meta']     = $this->customer->meta();
 
-		//Actions
-		$data['edit_account'] = site_url('account/update');
+		$data['path'] = $this->route->getPath();
 
 		//Render
-		output($this->render('account/account', $data));
+		output($this->render('account/details', $data));
 	}
 
 	public function form()
@@ -70,17 +70,23 @@ class App_Controller_Account extends Controller
 		output($this->render('account/update', $data));
 	}
 
-	public function submit_update()
+	public function update()
 	{
-		$this->customer->save($this->customer->getId(), $_POST);
+		if ($this->Model_Customer->save($this->customer->getId(), $_POST)) {
+			message('success', _l("Your account information has been updated successfully!"));
+		} else {
+			message('error', $this->Model_Customer->getError());
+		}
 
 		if (!empty($_POST['payment_code']) && !empty($_POST['payment_key'])) {
 			$this->System_Extension_Payment->get($_POST['payment_code'])->updateCard($_POST['payment_key'], array('default' => true));
 		}
 
-		message('success', _l("Your account information has been updated successfully!"));
-
-		redirect('account');
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('account');
+		}
 	}
 
 	public function remove_address()
@@ -92,7 +98,7 @@ class App_Controller_Account extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('account/update');
 		}

@@ -86,7 +86,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/admin');
 		} else {

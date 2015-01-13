@@ -243,7 +243,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/store/form', 'store_id=' . _get('store_id'));
 		} else {
@@ -262,7 +262,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/settings');
 		}

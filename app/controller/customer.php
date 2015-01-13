@@ -96,7 +96,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		if ($this->is_ajax && !$this->request->hasRedirect()) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			if ($this->message->has('error')) {
 				post_redirect('customer/login');
@@ -193,7 +193,7 @@ class App_Controller_Customer extends Controller
 		}
 
 		if ($this->is_ajax && !$this->request->hasRedirect()) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			if ($this->message->has('error')) {
 				post_redirect('customer/login');
