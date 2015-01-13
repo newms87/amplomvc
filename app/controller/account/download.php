@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Account_Download extends Controller
 {
 	public function index()
@@ -62,11 +63,9 @@ class App_Controller_Account_Download extends Controller
 				}
 			}
 
-			$this->pagination->init();
-			$this->pagination->total  = $download_total;
-			$data['pagination'] = $this->pagination->render();
-
 			$data['continue'] = site_url('account');
+
+			$data['total'] = $download_total;
 
 			output($this->render('account/download', $data));
 		} else {

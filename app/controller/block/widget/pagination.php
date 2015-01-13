@@ -11,8 +11,8 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 		$settings += array(
 			'total'         => 0,
 			'template'      => 'block/widget/pagination',
-			'page'          => isset($_GET['page']) ? (int)$_GET['page'] : 1,
-			'limit'         => isset($_GET['limit']) ? (int)$_GET['limit'] : option('admin_list_limit'),
+			'page'          => _get('page', 1),
+			'limit'         => _get('limit', option('admin_list_limit')),
 			'url'           => '',
 			'num_links'     => 10,
 			'text'          => _l("Showing %start% to %end% of %total% (%pages% Pages)"),

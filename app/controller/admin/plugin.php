@@ -156,12 +156,7 @@ class App_Controller_Admin_Plugin extends Controller
 
 		//Render Limit Menu
 		$data['limits'] = $this->sort->renderLimits();
-
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total = $plugin_total;
-
-		$data['pagination'] = $this->pagination->render();
+		$data['total'] = $plugin_total;
 
 		//Render
 		output($this->render('plugin', $data));

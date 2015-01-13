@@ -210,10 +210,6 @@ class App_Controller_Admin_Localisation_Country extends Controller
 			$url .= '&order=' . $_GET['order'];
 		}
 
-		$this->pagination->init();
-		$this->pagination->total  = $country_total;
-		$data['pagination'] = $this->pagination->render();
-
 		$data['sort']  = $sort;
 		$data['order'] = $order;
 

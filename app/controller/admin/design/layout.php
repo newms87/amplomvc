@@ -161,11 +161,7 @@ class App_Controller_Admin_Design_Layout extends Controller
 
 		//Render Limit Menu
 		$data['limits'] = $this->sort->renderLimits();
-
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total  = $layout_total;
-		$data['pagination'] = $this->pagination->render();
+		$data['total'] = $layout_total;
 
 		//Action Buttons
 		$data['insert'] = site_url('admin/design/layout/update');

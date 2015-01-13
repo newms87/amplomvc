@@ -21,7 +21,7 @@
 			<div id="listing">
 				<?= $list_view; ?>
 			</div>
-			<div class="pagination"><?= $pagination; ?></div>
+			<div class="pagination"><?= block('widget/pagination', null, array('total' => $total)); ?></div>
 		</div>
 	</div>
 </div>
