@@ -64,7 +64,10 @@ function get_breadcrumb($offset = 0)
 function breadcrumbs()
 {
 	global $registry;
-	return $registry->get('breadcrumb')->render();
+
+	if (option('config_breadcrumb_display', true)) {
+		return $registry->get('breadcrumb')->render();
+	}
 }
 
 function cache($key, $value = null, $as_file = false)
