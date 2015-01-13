@@ -154,7 +154,6 @@ class App_Controller_Admin_Plugin extends Controller
 		unset($plugin);
 
 		$listing = array(
-			'row_id'         => 'plugin_id',
 			'columns'        => $columns,
 			'extra_cols'     => $this->Model_Plugin->getColumns(),
 			'rows'           => $plugins,
