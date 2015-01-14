@@ -15,7 +15,7 @@
 
 	<div class="login-page row">
 		<div class="wrap">
-			<div class="col xs-12 sm-6 top text-center login-col">
+			<div class="col xs-12 lg-6 top text-center login-col">
 				<div class="login-box box">
 					<h2>{{Log In}}</h2>
 
@@ -43,11 +43,15 @@
 
 							<button data-loading="{{Please Wait...}}">{{Log In}}</button>
 						</div>
+
+						<div class="switch">
+							<a class="show-register">{{Don't have an account?}}</a>
+						</div>
 					</form>
 				</div>
 			</div>
 
-			<div class="col xs-12 sm-6 top text-center register-col">
+			<div class="col xs-12 lg-6 top text-center register-col">
 				<div class="register-box box">
 					<h2>{{Create My Account}}</h2>
 
@@ -74,6 +78,10 @@
 								<? } ?>
 							</div>
 						<? } ?>
+
+						<div class="switch">
+							<a class="show-login">{{Already have an account?}}</a>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -85,6 +93,10 @@
 
 <script type="text/javascript">
 	$('#customer-login .login-page .wrap').ac_msg('error', <?= json_encode($this->message->fetch('error')); ?>);
+
+	$('.login-page .switch a').click(function () {
+		$('.login-page').toggleClass('registration', $(this).is('.show-register'));
+	});
 </script>
 
 <?= $is_ajax ? '' : call('footer'); ?>

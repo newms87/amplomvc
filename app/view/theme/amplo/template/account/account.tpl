@@ -1,12 +1,24 @@
 <?= $is_ajax ? '' : call('header'); ?>
 <?= area('left') . area('right'); ?>
 
-<section class="account-page content">
-	<header class="row account-details section-style-b">
+<section class="account-page content <?= $path === 'account' ? 'account-home' : ''; ?>">
+	<header class="row account-details section-style-a">
 		<div class="wrap">
-			<div class="account-nav col xs-12 xs-center lg-3 lg-left top">
-				<a href="<?= site_url('account/details'); ?>" class="menu-tab <?= ($path === 'account/details' || $path === 'account') ? 'active' : ''; ?>" data-tab="#my-details">{{My Details}}</a>
-				<a href="<?= site_url('account/scopes'); ?>" class="menu-tab">{{My Scopes}}</a>
+			<h1><?= page_info('title'); ?></h1>
+			<h1 class="col lg-hidden account-home-title">{{My Account}}</h1>
+
+			<div class="account-nav return-menu col xs-12 xs-center lg-hidden">
+				<a href="<?= site_url('account'); ?>" class="menu-tab return"><?= page_info('title'); ?></a>
+			</div>
+
+			<div class="account-nav account-menu col xs-12 xs-center lg-3 lg-left top">
+				<? if (has_links('account')) { ?>
+					<? foreach (get_links('account') as $link) { ?>
+						<a href="<?= $link['href']; ?>" class="menu-tab <?= $path === $link['path'] ? 'active' : ''; ?>" data-tab="#my-details"><?= $link['display_name']; ?></a>
+					<? } ?>
+				<? } else { ?>
+					<a href="<?= site_url('account/details'); ?>" class="menu-tab <?= ($path === 'account/details' || $path === 'account') ? 'active' : ''; ?>" data-tab="#my-details">{{My Details}}</a>
+				<? } ?>
 			</div>
 
 			<div class="tab-content col xs-12 lg-9 top">
@@ -15,9 +27,5 @@
 		</div>
 	</header>
 </section>
-
-<script type="text/javascript">
-
-</script>
 
 <?= $is_ajax ? '' : call('footer'); ?>
