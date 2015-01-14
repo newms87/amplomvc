@@ -1,7 +1,7 @@
 <div class="account-info col xs-12 lg-9 top">
 	<h1>{{My Details}}</h1>
 
-	<div class="profile">
+	<div class="forms">
 		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read">
 			<div class="heading">
 				<h3 class="col xs-9 left top">{{Name &amp; Email}}</h3>
@@ -85,5 +85,3 @@
 		$(this).closest('form').removeClass('edit').addClass('read');
 	});
 </script>
-
-<?= $is_ajax ? '' : call('footer'); ?>
