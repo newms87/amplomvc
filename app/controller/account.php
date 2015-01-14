@@ -12,15 +12,7 @@ class App_Controller_Account extends Controller
 			return $this->details();
 		}
 
-		//Page Head
-		set_page_info('title', _l("My Account"));
-
-		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url());
-		breadcrumb(_l("My Account"), site_url('account'));
-
 		$data['path'] = $this->route->getPath();
-
 		$data['content'] = $content;
 
 		//Render
@@ -34,7 +26,8 @@ class App_Controller_Account extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
-		breadcrumb(_l("Account Manager"), site_url('account'));
+		breadcrumb(_l("My Account"), site_url('account'));
+		breadcrumb(_l("My Details"), site_url('account/details'));
 
 		//Customer Information
 		$data['customer'] = customer_info();
