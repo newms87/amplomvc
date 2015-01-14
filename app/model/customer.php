@@ -1,6 +1,8 @@
 <?php
-class App_Model_Customer extends Model
+class App_Model_Customer extends App_Model_Table
 {
+	protected $table = 'customer', $primary_key = 'customer_id';
+
 	public function save($customer_id, $customer)
 	{
 		if (isset($customer['name']) && !isset($customer['firstname'])) {

@@ -1,15 +1,13 @@
-<div class="account-info col xs-12 lg-9 top">
-	<h1>{{My Details}}</h1>
-
-	<div class="profile">
-		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read">
+<div class="account-info">
+	<div class="forms">
+		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read col xs-12 xs-center md-left">
 			<div class="heading">
-				<h3 class="col xs-9 left top">{{Name &amp; Email}}</h3>
+				<h3 class="col xs-12 md-7 md-left top">{{Name &amp; Email}}</h3>
 
-				<div class="buttons col xs-3 top right">
+				<div class="buttons col xs-12 md-5 md-right top">
 					<a class="edit-field readonly">{{Edit}}</a>
-					<a class="editing cancel-edit">{{Cancel}}</a>
 					<button data-loading="{{Saving...}}" class="editing button">{{Save}}</button>
+					<a class="editing cancel-edit">{{Cancel}}</a>
 				</div>
 			</div>
 
@@ -28,14 +26,14 @@
 			</div>
 		</form>
 
-		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read">
+		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read col xs-12 xs-center md-left">
 			<div class="heading">
-				<h3 class="col xs-9 left top">{{Password}}</h3>
+				<h3 class="col xs-12 md-7 md-left top">{{Password}}</h3>
 
-				<div class="buttons col xs-3 top right">
+				<div class="buttons col xs-12 md-5 md-right top">
 					<a class="edit-field readonly">{{Edit}}</a>
-					<a class="editing cancel-edit">{{Cancel}}</a>
 					<button data-loading="{{Saving...}}" class="editing button">{{Save}}</button>
+					<a class="editing cancel-edit">{{Cancel}}</a>
 				</div>
 			</div>
 

@@ -43,6 +43,12 @@ function links($group)
 	return $registry->get('document')->renderLinks($group);
 }
 
+function get_links($group)
+{
+	global $registry;
+	return $registry->get('document')->getLinks($group);
+}
+
 function has_links($group)
 {
 	global $registry;

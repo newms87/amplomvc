@@ -8,8 +8,6 @@
 @media (max-width: (@md - 1)) {
   .header-navigation {
     .links-toggle {
-      margin-top: .8em;
-
       & + nav {
         .height-animate;
       }
@@ -33,6 +31,7 @@
       top: 3.7em;
       text-align: right;
       width: 10000px;
+      box-shadow: 0px 300px 50px rgba(0, 0, 0, 0.8);
 
       .nav, .nav#links-primary, .nav#links-account {
         text-align: right;
@@ -101,6 +100,67 @@
             padding: 1em 9em;
             font: 1.1em OpenSansRegular;
             color: @font-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .account-page {
+    h1 {
+      display: none;
+    }
+
+    .account-details {
+      .wrap {
+        width: 100%;
+        padding-top: 0;
+      }
+
+      .account-nav {
+        border-bottom: 2px solid @color-light;
+
+        a {
+          background: lighten(@color-base, 30%);
+          border-top: 2px solid @color-light;
+          padding: 1.5em;
+          display: none;
+
+          &.return {
+            display: block;
+          }
+        }
+      }
+
+      .account-menu {
+        display: none;
+      }
+    }
+
+    &.account-home {
+      h1.account-home-title {
+        display: block;
+        padding-top: 1em;
+      }
+
+      .account-details {
+        .return-menu {
+          display: none;
+        }
+
+        .account-menu {
+          display: inline-block;
+
+          a {
+            display: block;
+          }
+        }
+
+        .tab-content {
+          .height-animate;
+
+          &.show {
+            max-height: 200em;
           }
         }
       }

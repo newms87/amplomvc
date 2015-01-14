@@ -275,6 +275,7 @@ button, .button, .row .button {
       left: -5000px;
       margin-left: 50%;
       text-align: center;
+      top: 3em;
 
       ul {
         li {
@@ -390,6 +391,7 @@ header.main-header.row {
 .header-navigation {
   display: inline-block;
   .whitespace-hack;
+  padding: 1em 0 1em 1.5em;
 
   nav {
     display: inline-block;
@@ -865,6 +867,26 @@ textarea {
         }
       }
     }
+
+    .switch {
+      a {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .register-col {
+    display: none;
+  }
+
+  &.registration {
+    .register-col {
+      display: inline-block;
+    }
+
+    .login-col {
+      display: none;
+    }
   }
 
   .one-click {
@@ -961,9 +983,11 @@ section.page {
 
 
 .account-page {
-  .account-nav {
-    padding-top: 4em;
+  h1 {
+    margin-bottom: 1em;
+  }
 
+  .account-nav {
     .menu-tab {
       font: 1em OpenSansSemiBold;
       color: @font-dark;
@@ -976,6 +1000,7 @@ section.page {
       }
     }
   }
+
   .tab-content {
     h1 {
       color: @color-secondary;
@@ -1016,14 +1041,18 @@ section.page {
 
         .buttons {
           .noselect;
+          margin-top: 0;
+          margin-bottom: 1em;
 
           .button, button {
             display: inline-block;
             vertical-align: middle;
             margin: 0;
-            padding: .4em .8em;
+            padding: .3em 1.2em;
             font: .9em OpenSansRegular;
             margin: 0 .7em;
+            width: auto;
+            min-width: 0;
           }
 
           a {
