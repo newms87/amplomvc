@@ -98,9 +98,18 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroup($navigation_group_id, $group)
 	{
+		if (is_string($navigation_group_id)) {
+			$group['name'] = $navigation_group_id;
+			$navigation_group_id = $this->getGroupByName($group['name']);
+		}
+
 		if (isset($group['name'])) {
 			if (!validate('text', $group['name'], 3, 64)) {
 				$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
+			}
+
+			if (!$navigation_group_id && $this->getGroupByName($group['name'])) {
+				$this->error['name'] = _l("A Group with that name already exists!");
 			}
 		} elseif (!$navigation_group_id) {
 			$this->error['name'] = _l("Navigation Group Name is required!");

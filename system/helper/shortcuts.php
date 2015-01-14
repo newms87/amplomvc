@@ -138,22 +138,66 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
-function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image_srcset($srcsets, $nx = 3)
 {
+	if (empty($srcsets)) {
+		return 'src=""';
+	}
+
 	if (!is_array($srcsets)) {
 		$srcsets = array(
-			$nx => $srcsets,
+			1 => $srcsets,
 		);
 	}
 
-	$max_x = max(array_keys($srcsets));
-	$image = $srcsets[$max_x];
+	reset($srcsets);
+
+	$path = pathinfo(current($srcsets));
+
+	while ($nx > 0) {
+		if (empty($srcsets[$nx])) {
+			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
+
+			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
+
+			if (!$src_name) {
+				$src_name = image($path['dirname'] . '/' . $path['filename'] . '-' . $nx . 'x.' . $path['extension']);
+			}
+
+			if ($src_name) {
+				$srcsets[$nx] = $src_name;
+			}
+		} else {
+			$srcsets[$nx] = image($srcsets[$nx]);
+		}
+
+		if ($nx > 1) {
+			$srcsets[$nx] .= ' ' . $nx . 'x';
+		}
+
+		$nx--;
+	}
+
+	$src = empty($srcsets[1]) ? current($srcsets) : $srcsets[1];
+	unset($srcsets[1]);
+
+	if (!empty($srcsets)) {
+		ksort($srcsets);
+		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
+	}
+
+	return "src=\"$src\"";
+}
+
+function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+{
+	$srcsets = array();
 
 	if (!is_file($image)) {
 		$image = DIR_IMAGE . $image;
 
 		if (!is_file($image)) {
-			return 'src=""';
+			return array();
 		}
 	}
 
@@ -161,28 +205,28 @@ function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default
 		$size = getimagesize($image);
 
 		if (!$size) {
-			return 'src=""';
+			return array();
 		}
 
 		$width  = $size[0] / $nx;
 		$height = $size[1] / $nx;
 	}
 
-	while ($nx > 1) {
-		$srcsets[$nx] = empty($srcsets[$nx]) ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($srcsets[$nx]);
-		$srcsets[$nx] .= ' ' . $nx . 'x';
+	$max = $nx;
+
+	while ($nx > 0) {
+		$src = $max === $nx ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($image);
+
+		if ($src) {
+			$srcsets[$nx] = $src;
+		}
+
 		$nx--;
 	}
 
-	$src = empty($srcsets[1]) ? image($image, $width, $height, $default, $cast_protocol) : image($srcsets[1]);
-	unset($srcsets[1]);
+	ksort($srcsets);
 
-	if ($srcsets) {
-		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
-	}
-
-	return "src=\"$src\"";
+	return $srcsets;
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -778,7 +822,7 @@ function crypto_rand($min, $max)
 
 function tokengen($length)
 {
-	$token       ;
+	$token;
 	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
 	$codeAlphabet .= "0123456789";

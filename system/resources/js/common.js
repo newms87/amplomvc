@@ -409,11 +409,9 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 	return this;
 }
 
-$('.ajax-form').submit(function () {
-	ac_form();
-});
-
 function ac_form(params) {
+	params = params || {}
+
 	var $form = $(this);
 	var callback = params.success;
 	var complete = params.complete;
@@ -425,7 +423,8 @@ function ac_form(params) {
 
 	params = $.extend({}, {
 		data:     $form.serialize(),
-		dataType: 'json'
+		dataType: 'json',
+		type:     'POST'
 	}, params);
 
 	params.success = function (data, textStatus, jqXHR) {
@@ -731,7 +730,7 @@ function register_confirms() {
 	});
 
 	$('.ajax-form').use_once('ajax-init').submit(function () {
-		ac_form();
+		return ac_form.call(this);
 	});
 }
 
