@@ -85,5 +85,3 @@
 		$(this).closest('form').removeClass('edit').addClass('read');
 	});
 </script>
-
-<?= $is_ajax ? '' : call('footer'); ?>
