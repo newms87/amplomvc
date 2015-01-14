@@ -136,7 +136,7 @@ spl_autoload_register('amplo_autoload');
  *
  * @return bool | null - if the return value is false no other hooks will be called.
  */
-function amplo_routing_hook(&$path, $segments, $orig_path)
+function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 {
 	global $registry;
 

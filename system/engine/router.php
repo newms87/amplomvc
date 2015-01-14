@@ -100,12 +100,15 @@ final class Router
 			$routing_hooks = $this->registerHook('default', 'amplo_routing_hook');
 		}
 
+		$args = array();
+
 		foreach ($routing_hooks as $hook) {
 			if (is_callable($hook['callable'])) {
 				$params = array(
 					&$path,
 					$this->segments,
-					$this->path
+					$this->path,
+					&$args,
 				);
 
 				if (call_user_func_array($hook['callable'], $params) === false) {
@@ -120,7 +123,7 @@ final class Router
 		$this->config->set('config_layout_id', $layout_id);
 
 		//Dispatch Route
-		$action = new Action($path);
+		$action = new Action($path, $args);
 
 		$valid = $action->isValid();
 

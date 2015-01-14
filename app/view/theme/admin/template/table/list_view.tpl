@@ -585,6 +585,7 @@
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
+	<? if ($show_actions) { ?>
 	$listview.find('.filter-list').keyup(function (e) {
 		if (e.keyCode == 13) {
 			$(this).find('.filter-button')[0].click();
@@ -594,6 +595,7 @@
 	$listview.find('.hide-filter').click(function () {
 		toggle_filter($(this).closest('.listing'));
 	});
+	<? } ?>
 
 	$listview.find('.filter-list > td').click(function () {
 		if ($(this).closest('.filter-list').hasClass('hide')) {

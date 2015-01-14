@@ -976,13 +976,13 @@ section.page {
       }
     }
   }
-  .account-info {
+  .tab-content {
     h1 {
       color: @color-secondary;
       text-transform: uppercase;
     }
 
-    .profile {
+    .forms {
       text-align: left;
 
       .form-item {
@@ -1050,6 +1050,18 @@ section.page {
 
         &.edit {
           .readonly {
+            display: none;
+          }
+        }
+
+        &.enabled {
+          .off {
+            display: none;
+          }
+        }
+
+        &.disabled {
+          .on {
             display: none;
           }
         }

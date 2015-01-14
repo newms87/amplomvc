@@ -37,7 +37,11 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			//With the default AmploMVC installation, only admin theme has a template for listing
 		);
 
-		$settings['show_limits'] = $settings['show_limits'] === 'bottom' ? 'bottom' : 'top';
+		if (!empty($settings['rows'])) {
+			$settings['show_limits'] = $settings['show_limits'] === 'bottom' ? 'bottom' : 'top';
+		} else {
+			$settings['show_limits'] = false;
+		}
 
 		$template_defaults = array(
 			'listing_path' => $settings['listing_path'],

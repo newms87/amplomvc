@@ -6,7 +6,28 @@ class App_Controller_Account extends Controller
 		'access' => '.*',
 	);
 
-	public function index()
+	public function index($content = '')
+	{
+		if (!$content) {
+			return $this->details();
+		}
+
+		//Page Head
+		set_page_info('title', _l("My Account"));
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("My Account"), site_url('account'));
+
+		$data['path'] = $this->route->getPath();
+
+		$data['content'] = $content;
+
+		//Render
+		output($this->render('account/account', $data));
+	}
+
+	public function details()
 	{
 		//Page Head
 		set_page_info('title', _l("My Details"));
@@ -19,10 +40,8 @@ class App_Controller_Account extends Controller
 		$data['customer'] = customer_info();
 		$data['meta']     = $this->customer->meta();
 
-		$data['path'] = $this->route->getPath();
-
 		//Render
-		output($this->render('account/details', $data));
+		$this->index($this->render('account/details', $data));
 	}
 
 	public function form()
