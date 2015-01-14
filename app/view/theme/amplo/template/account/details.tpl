@@ -1,6 +1,4 @@
-<div class="account-info col xs-12 lg-9 top">
-	<h1>{{My Details}}</h1>
-
+<div class="account-info">
 	<div class="forms">
 		<form action="<?= site_url('account/update'); ?>" method="post" class="form-item read">
 			<div class="heading">
