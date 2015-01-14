@@ -221,7 +221,7 @@ function build_srcset($image, $nx = 3, $width = null, $height = null, $default =
 	$max = $nx;
 
 	while ($nx > 0) {
-		$src = $max === $nx ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($image);
+		$src = $max !== $nx ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($image);
 
 		if ($src) {
 			$srcsets[$nx] = $src;

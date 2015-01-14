@@ -29,7 +29,7 @@ class Image extends Library
 			$filename = URL_IMAGE . $filename;
 		} elseif (is_file($filename)) {
 			$filename = str_replace(DIR_SITE, URL_SITE, $filename);
-		} elseif (!filter_var($filename, FILTER_VALIDATE_URL)) {
+		} elseif (!filter_var($filename, FILTER_VALIDATE_URL) && strpos($filename, '//') !== 0) {
 			return '';
 		}
 
