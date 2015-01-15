@@ -139,7 +139,7 @@ class App_Model_Block_Login_Google extends Model
 
 		//Set Meta for future login
 		if ($no_meta) {
-			$this->Model_Customer->setMeta('google+_id', $data['id']);
+			$this->customer->setMeta('google+_id', $data['id']);
 		}
 
 		return true;

@@ -71,7 +71,7 @@ class App_Model_Customer extends App_Model_Table
 		//Customer MetaData
 		if (!empty($customer['metadata'])) {
 			foreach ($customer['metadata'] as $key => $value) {
-				$this->setMeta($key, $value);
+				$this->setMeta($customer_id, $key, $value);
 			}
 		}
 
@@ -88,10 +88,10 @@ class App_Model_Customer extends App_Model_Table
 	}
 
 	/** Customer Meta Data **/
-	public function addMeta($key, $value)
+	public function addMeta($customer_id, $key, $value)
 	{
-		if (!$this->customer_id) {
-			$this->error['customer_id'] = _l("Customer is not logged in");
+		if (!$customer_id) {
+			$this->error['customer_id'] = _l("The customer does not exist.");
 			return false;
 		}
 
@@ -103,7 +103,7 @@ class App_Model_Customer extends App_Model_Table
 		}
 
 		$customer_meta = array(
-			'customer_id' => $this->customer_id,
+			'customer_id' => $customer_id,
 			'key'         => $key,
 			'value'       => $value,
 			'serialized'  => $serialized,
@@ -114,11 +114,11 @@ class App_Model_Customer extends App_Model_Table
 		return $this->insert('customer_meta', $customer_meta);
 	}
 
-	public function setMeta($key, $value)
+	public function setMeta($customer_id, $key, $value)
 	{
-		$this->deleteMeta($key);
+		$this->deleteMeta($customer_id, $key);
 
-		return $this->addMeta($key, $value);
+		return $this->addMeta($customer_id, $key, $value);
 	}
 
 	public function getMeta($customer_id)
@@ -134,14 +134,10 @@ class App_Model_Customer extends App_Model_Table
 		return $meta;
 	}
 
-	public function deleteMeta($key)
+	public function deleteMeta($customer_id, $key)
 	{
-		if (!$this->customer_id) {
-			return false;
-		}
-
 		$where = array(
-			'customer_id' => $this->customer_id,
+			'customer_id' => $customer_id,
 			'key'         => $key,
 		);
 

@@ -136,18 +136,18 @@ class Customer extends Library
 
 	public function setMeta($key, $value)
 	{
-		$this->Model_Customer->deleteMeta($key);
+		$this->removeMeta($key);
 
 		$this->metadata[$key] = $value;
 
-		return $this->Model_Customer->addMeta($key, $value);
+		return $this->Model_Customer->addMeta($this->customer_id, $key, $value);
 	}
 
 	public function removeMeta($key)
 	{
 		unset($this->metadata[$key]);
 
-		return $this->Model_Customer->deleteMeta($key);
+		return $this->Model_Customer->deleteMeta($this->customer_id, $key);
 	}
 
 	/** Addresses **/
@@ -404,7 +404,7 @@ class Customer extends Library
 
 	public function clearResetCode()
 	{
-		return $this->deleteMeta('pass_reset_code');
+		return $this->customer->removeMeta('pass_reset_code');
 	}
 
 	public function generateCode()
