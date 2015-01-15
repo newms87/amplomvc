@@ -505,11 +505,11 @@ $.fn.loading = function (params) {
 
 		if ((option && option.text) || $e.data('original')) {
 			if (params === 'stop') {
-				$e.prop('disabled', false);
+				$e.prop('disabled', false).removeAttr('disabled');
 				$e.html($e.data('original'));
 			} else {
 				if (option.disable) {
-					$e.prop('disabled', true);
+					$e.prop('disabled', true).attr('disabled', 'disabled');
 				}
 				if (!$e.data('original')) {
 					$e.data('original', $e.html());
