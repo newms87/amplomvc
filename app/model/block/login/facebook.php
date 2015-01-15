@@ -134,7 +134,7 @@ class App_Model_Block_Login_Facebook extends Model
 
 		//Set Meta for future login
 		if ($no_meta) {
-			$this->Model_Customer->setMeta('facebook_id', $user_info['id']);
+			$this->customer->setMeta('facebook_id', $user_info['id']);
 		}
 
 		return true;
