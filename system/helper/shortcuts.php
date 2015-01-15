@@ -160,10 +160,14 @@ function image_srcset($srcsets, $nx = 3)
 
 	$path = pathinfo(current($srcsets));
 
+	if (empty($path['filename'])) {
+		return 'src=""';
+	}
+
 	while ($nx > 0) {
 		if (empty($srcsets[$nx])) {
 			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
-
+			
 			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
 
 			if (!$src_name) {
