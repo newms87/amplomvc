@@ -7,7 +7,7 @@
 		<div class="wrap">
 			<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-			<h1>{{Customer Sign In}}</h1>
+			<h1>{{Customer Account}}</h1>
 		</div>
 	</header>
 
@@ -37,15 +37,16 @@
 						<? } ?>
 
 						<div class="form-item submit">
-							<div class="forgotten">
-								<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
-							</div>
-
 							<button data-loading="{{Please Wait...}}">{{Log In}}</button>
-						</div>
 
-						<div class="switch">
-							<a class="show-register">{{Don't have an account?}}</a>
+							<div class="buttons">
+								<div class="col xs-6 left forgotten">
+									<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
+								</div>
+								<div class="switch col xs-6 right">
+									<a class="show-register">{{Create Account}}</a>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -68,6 +69,12 @@
 
 						<div class="form-item submit">
 							<button data-loading="{{Please Wait...}}">{{Create Account}}</button>
+
+							<div class="buttons">
+								<div class="switch">
+									<a class="show-login">{{Already have an account?}}</a>
+								</div>
+							</div>
 						</div>
 
 						<? if (!empty($medias)) { ?>
@@ -78,10 +85,6 @@
 								<? } ?>
 							</div>
 						<? } ?>
-
-						<div class="switch">
-							<a class="show-login">{{Already have an account?}}</a>
-						</div>
 					</form>
 				</div>
 			</div>

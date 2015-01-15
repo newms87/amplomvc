@@ -811,21 +811,25 @@ textarea {
 }
 
 //Login Page
+.login-top.row {
+  .wrap {
+    padding-bottom: 0;
+  }
+}
+
 .login-page {
   .col {
-    padding: 1em;
-
     .box {
       display: inline-block;
-      border: 2px solid @color-light;
-      border-radius: 3px;
       padding: 1em;
       min-height: 16em;
+      max-width: 23em;
 
       h2 {
         text-transform: uppercase;
         margin-bottom: .7em;
         color: @color-dark;
+        font: 1.5em OpenSansSemiBold;
       }
 
       h3 {
@@ -837,48 +841,55 @@ textarea {
 
       button {
         margin-top: 1em;
-        width: 12em;
+        width: 100%;
+        padding: .6em 1.5em;
         background: @color-dark;
+
+        &:hover {
+          background: @color-main;
+        }
       }
 
       input {
         background: white;
-      }
+        padding: .8em;
 
-      .forgotten {
-        font-family: OpenSansItalic;
-        margin-top: 1em;
-        a {
-          color: @color-dark;
-        }
-
-        & + button {
-          margin-top: .5em;
+        &:active, &:focus {
+          box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
+          border-color: @color-main;
         }
       }
 
-      &:hover, &:active, &.active {
-        border-color: @color-main;
-
+      .buttons {
         .forgotten {
+          font: .9em OpenSansItalic;
+
           a {
-            color: @color-main;
+            color: @color-dark;
+
+            &:hover {
+              color: @color-main;
+            }
+          }
+
+          & + button {
+            margin-top: .5em;
           }
         }
 
-        h2 {
-          color: @color-main;
-        }
+        .switch {
+          display: inline-block;
 
-        button {
-          background: @color-main;
-        }
-      }
-    }
+          a {
+            font: .9em OpenSansItalic;
+            cursor: pointer;
+            color: @color-dark;
 
-    .switch {
-      a {
-        cursor: pointer;
+            &:hover {
+              color: @color-main;
+            }
+          }
+        }
       }
     }
   }

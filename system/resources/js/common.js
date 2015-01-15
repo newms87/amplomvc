@@ -80,6 +80,10 @@ $.fn.use_once = function (label) {
 $.fn.scrollTo = function (target, options) {
 	target = $(target);
 
+	if (!target.length) {
+		return false;
+	}
+
 	var $this = this;
 	var $header = $('header.main-header');
 
