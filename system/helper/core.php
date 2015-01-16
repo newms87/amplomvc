@@ -707,14 +707,16 @@ function get_comment_directives($content, $trim = true)
 
 function rrmdir($dir)
 {
-	foreach (glob($dir . '/*') as $file) {
-		if (is_dir($file)) {
-			rrmdir($file);
-		} else {
-			unlink($file);
+	if (is_dir($dir)) {
+		foreach (glob($dir . '/*') as $file) {
+			if (is_dir($file)) {
+				rrmdir($file);
+			} else {
+				unlink($file);
+			}
 		}
+		rmdir($dir);
 	}
-	rmdir($dir);
 }
 
 function _is_object($o)

@@ -76,6 +76,12 @@ function breadcrumbs()
 	}
 }
 
+function get_last_page($offset = -2)
+{
+	global $registry;
+	return $registry->get('request')->getPrevPageRequest($offset);
+}
+
 function cache($key, $value = null, $as_file = false)
 {
 	global $registry;

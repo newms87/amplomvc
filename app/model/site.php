@@ -32,6 +32,8 @@ class App_Model_Site extends App_model_Table
 			$this->db->copyTable($table_name, $site['prefix'] . $base);
 		}
 
+		clear_cache();
+
 		return true;
 	}
 
@@ -58,6 +60,8 @@ class App_Model_Site extends App_model_Table
 				}
 			}
 		}
+
+		clear_cache();
 
 		return true;
 	}
