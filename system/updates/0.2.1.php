@@ -1,6 +1,6 @@
 <?php
 $this->db->addColumn('store', 'prefix', "VARCHAR(15) NOT NULL");
-$this->db->createIndex('store', 'name_UNIQUE', '`name` ASC');
+$this->db->createIndex('store', 'name_UNIQUE', array('name' =>  'ASC'));
 
 $this->db->changeColumn('navigation', 'href', 'path', "TEXT NOT NULL");
 
