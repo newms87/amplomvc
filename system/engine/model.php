@@ -872,6 +872,16 @@ abstract class Model
 				$a = $temp[$ka];
 				$b = $temp[$kb];
 
+				if (isset($a['sort_order']) || isset($b['sort_order'])) {
+					if (!isset($a['sort_order'])) {
+						return 1;
+					} elseif (!isset($b['sort_order'])) {
+						return -1;
+					} else {
+						return $a['sort_order'] > $b['sort_order'];
+					}
+				}
+
 				//sort as first if Primary Key
 				if ($a['type'] === 'pk') {
 					return -1;

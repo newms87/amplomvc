@@ -31,3 +31,5 @@ $this->db->createTable('log', <<<SQL
   PRIMARY KEY (`log_id`)
 SQL
 );
+
+$this->db->addColumn('log', 'name', "VARCHAR(45) NOT NULL AFTER `log_id`");

@@ -1,14 +1,15 @@
 <?php
+
 class App_Model_Log extends App_Model_Table
 {
 	protected $table = 'log', $primary_key = 'log_id';
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = false)
 	{
-		$columns = parent::getColumns($filter);
+		$columns['message']['align']     = 'left';
+		$columns['log_id']['sort_order'] = -2;
+		$columns['name']['sort_order']   = -1;
 
-		$columns['message']['align'] = 'left';
-
-		return $columns;
+		return parent::getTableColumns('log', $columns, $filter);
 	}
 }

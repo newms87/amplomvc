@@ -3,6 +3,7 @@
 class Log extends Library
 {
 	private $file;
+	private $name;
 
 	static $cols = array(
 		'date',
@@ -16,7 +17,7 @@ class Log extends Library
 	public function __construct($name)
 	{
 		parent::__construct();
-
+		$this->name = $name;
 		$this->file = DIR_LOGS . (defined('SITE_PREFIX') ? SITE_PREFIX : DB_PREFIX) . '/' . $name . '.txt';
 
 		if (!_is_writable(dirname($this->file))) {
@@ -31,6 +32,7 @@ class Log extends Library
 	public function write($message)
 	{
 		$fields = array(
+			'name'       => $this->name,
 			'date'       => date('Y-m-d G:i:s'),
 			'ip'         => $_SERVER['REMOTE_ADDR'],
 			'uri'        => preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']),
