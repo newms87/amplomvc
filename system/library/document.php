@@ -23,7 +23,7 @@ class Document extends Library
 			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
 		}
 
-		$this->info['title'] = option('config_title');
+		$this->info['title'] = option('site_title');
 		$this->meta['description'] = option('site_meta_description');
 
 		$this->info['canonical_link'] = $this->url->getSeoUrl();

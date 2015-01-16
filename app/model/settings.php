@@ -29,7 +29,7 @@ class App_Model_Settings extends Model
 		'site_email_error'                        => '',
 		'site_phone'                              => '',
 		'config_fax'                              => '',
-		'config_title'                            => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
+		'site_title'                            => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'config_default_store'                    => '',
 		'site_meta_description'                 => '',
 		'config_debug'                            => 0,

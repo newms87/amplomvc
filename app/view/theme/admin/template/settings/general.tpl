@@ -90,7 +90,7 @@
 							<span class="help">{{The title will show up in search results and the browser tab / window}}</span>
 						</td>
 						<td>
-							<input type="text" name="config_title" value="<?= $config_title; ?>"/>
+							<input type="text" name="site_title" value="<?= $site_title; ?>"/>
 						</td>
 					</tr>
 					<tr>

@@ -21,7 +21,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 		$data['cancel'] = site_url('admin');
 
 		$defaults = array(
-			'sender'     => option('config_title'),
+			'sender'     => option('site_title'),
 			'from'       => option('site_email'),
 			'to'         => '',
 			'cc'         => '',
