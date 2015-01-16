@@ -2,124 +2,70 @@
 
 class App_Controller_Admin_Tool_Logs extends Controller
 {
-	private $dir;
-
-	private $fields = array(
-		'date'    => 'Date',
-		'ip'      => 'IP',
-		'message' => 'Message',
-		'uri'     => 'URL',
-		'query'   => 'Query',
-		'agent'   => 'User Agent',
-	);
-
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->dir = DIR_LOGS . SITE_PREFIX . '/';
-	}
-
 	public function index()
 	{
-		//Log File
-		$log = _get('log', 'default');
-
-		$log_name = ucfirst($log);
-
 		//Page Head
-		set_page_info('title', _l("%s Log", $log_name));
+		set_page_info('title', _l("System Logs"));
 
 		//Breadcrumbs
-		breadcrumb(_l('Home'), site_url('admin'));
-		breadcrumb(_l('Log Files'), site_url('admin/tool/logs'));
-		breadcrumb(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User"), site_url('admin/tool/logs'));
 
-		//Sort and Filter
-		$sort   = $this->sort->getQueryDefaults('date', 'ASC');
-		$filter = _get('filter', null);
+		//Listing
+		$data['listing'] = $this->listing();
 
-		$start = $sort['start'];
-		$limit = $sort['limit'];
+		//Batch Actions
+		$actions = array(
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
+		);
 
-		$current  = -1;
-		$num_cols = count(Log::$cols);
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'url'     => site_url('admin/tool/logs/batch-action'),
+		);
 
-		$file    = $this->dir . $log . '.txt';
-		$entries = array();
-
-		if (file_exists($file)) {
-			$handle = @fopen($file, "r");
-			if ($handle) {
-				while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start + $limit))) {
-					$current++;
-
-					if ($current >= $start) {
-
-						$data = explode("\t", $buffer, $num_cols);
-
-						//Invalid entry
-						if (count($data) < $num_cols - 1) {
-							continue;
-						}
-
-						$entry = array(
-							'line' => $current,
-						);
-
-						$entry += array_combine(Log::$cols, $data);
-
-						$entry['message'] = str_replace("__nl__", "<br />", $entry['message']);
-
-						$entries[] = $entry;
-					}
-				}
-				fclose($handle);
-			}
-		}
-
-		$data['entries'] = $entries;
-
-		$next = $start + $limit;
-		$prev = $start - $limit > 0 ? $start - $limit : 0;
-
-		if ($current >= ($start + $limit)) {
-			$data['next'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
-		}
-
-		if ($start > 0) {
-			$data['prev'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
-		}
-
-		//Template Data
-		$data['log_name'] = $log_name;
-
-		$log_files = get_files($this->dir, array('txt'));
-
-		foreach ($log_files as &$file) {
-			$base = $file->getBasename('.txt');
-
-			$file = array(
-				'name'     => $base === 'log' ? _l("Default") : ucfirst($base),
-				'href'     => site_url('admin/tool/logs', 'log=' . $base),
-				'selected' => $base === $log,
-			);
-		}
-		unset($file);
-
-		$data['data_log_files'] = $log_files;
-
-		$data['limit'] = $sort['limit'];
-
-		//Limits
-		$data['limits'] = $this->sort->renderLimits();
-
-		$data['log'] = $log;
-
-		$data['fields'] = $this->fields;
-
-		//Render
+		//Response
 		output($this->render('tool/logs', $data));
+	}
+
+	public function listing()
+	{
+		//The Table Columns
+		$requested_cols = $this->request->get('columns');
+		$columns = $this->Model_Log->getColumns($requested_cols);
+
+		//The Sort & Filter Data
+		$sort   = $this->sort->getQueryDefaults('log_id', 'desc');
+		$filter = _get('filter', array());
+
+		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, null, true);
+
+		$listing = array(
+			'row_id'         => 'log_id',
+			'extra_cols'     => $this->Model_User->getColumns(false),
+			'columns'        => $columns,
+			'rows'           => $entries,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $total,
+			'listing_path'   => 'admin/tool/logs/listing',
+		);
+
+		$output = block('widget/listing', null, $listing);
+
+		//Response
+		if ($this->is_ajax) {
+			output($output);
+		}
+
+		return $output;
+	}
+
+	public function batch_action()
+	{
+
 	}
 
 	public function remove($lines = null)
