@@ -195,7 +195,7 @@ class App_Controller_Customer extends Controller
 			output_message();
 		} else {
 			if ($this->message->has('error')) {
-				post_redirect('customer/login');
+				post_redirect('customer/login', 'register=1');
 			}
 
 			//Redirect to requested page

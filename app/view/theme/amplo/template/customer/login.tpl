@@ -15,7 +15,7 @@
 
 	<div class="login-page row">
 		<div class="wrap">
-			<div class="col xs-12 lg-6 top text-center login-col">
+			<div class="col xs-12 lg-6 top text-center login-col account-box <?= isset($_GET['register']) ? 'hide' : ''; ?>">
 				<div class="login-box box">
 					<h2>{{Log In}}</h2>
 
@@ -52,7 +52,7 @@
 				</div>
 			</div>
 
-			<div class="col xs-12 lg-6 top text-center register-col">
+			<div class="col xs-12 lg-6 top text-center register-col account-box <?= isset($_GET['register']) ? '' : 'hide'; ?>">
 				<div class="register-box box">
 					<h2>{{Create My Account}}</h2>
 

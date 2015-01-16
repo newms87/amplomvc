@@ -105,7 +105,7 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
-function render_message($type = null, $close = null)
+function render_message($type = null, $close = true)
 {
 	global $registry;
 	return $registry->get('message')->render($type, $close);
@@ -167,7 +167,7 @@ function image_srcset($srcsets, $nx = 3)
 	while ($nx > 0) {
 		if (empty($srcsets[$nx])) {
 			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
-			
+
 			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
 
 			if (!$src_name) {
