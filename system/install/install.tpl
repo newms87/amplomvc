@@ -3,13 +3,13 @@
 <head>
 	<title><?= _l("Amplo MVC Installation"); ?></title>
 
-	<link rel="stylesheet" media="screen" type="text/css" href="<?= URL_SITE . 'system/install/install.css'; ?>"/>
+	<link rel="stylesheet" media="screen" type="text/css" href="<?= URL_SITE . SITE_BASE . 'system/install/install.css'; ?>"/>
 </head>
 <body>
 <div id="container">
 	<div id="header">
 		<div id="logo">
-			<img src="<?= URL_SITE . 'app/view/theme/amplo/image/amplo-vlogo.png'; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
+			<img src="<?= URL_SITE . SITE_BASE . 'app/view/theme/amplo/image/amplo-vlogo.png'; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/>
 
 			<div id="slogan"><?= _l("This is the Amplo MVC Installation page. We'll get you setup quick!"); ?></div>
 		</div>
