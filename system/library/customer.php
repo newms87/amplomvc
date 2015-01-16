@@ -108,19 +108,24 @@ class Customer extends Library
 	 * @param $customer - Customer Account Data
 	 */
 
-	public function register($customer)
+	public function register($customer, $login = true)
 	{
 		if (option('config_account_terms_page_id')) {
 			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
 
 			if ($page_info && !isset($customer['agree'])) {
 				$this->error['agree'] = _l("You must agree to the %s!", $page_info['title']);
+				return false;
 			}
 		}
 
 		$customer_id = $this->Model_Customer->save(null, $customer);
 
-		$this->setCustomer($customer_id);
+		if ($customer_id && $login) {
+			$this->setCustomer($customer_id);
+		} else {
+			$this->error = $this->Model_Customer->getError();
+		}
 
 		return $customer_id;
 	}

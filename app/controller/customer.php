@@ -185,9 +185,8 @@ class App_Controller_Customer extends Controller
 
 	public function register()
 	{
-		if ($this->customer->register($_POST)) {
+		if ($this->customer->register($_POST, true)) {
 			message('success', _l("Your account has been created!"));
-			$this->customer->login($_POST['email'], $_POST['password']);
 		} else {
 			message('error', $this->customer->getError());
 		}
@@ -218,8 +217,13 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l("Account"), site_url('account'));
 		breadcrumb(_l("Your Account Has Been Created!"), site_url('customer/success'));
 
-		//Render
-		output($this->render('customer/success'));
+
+		if (option('show_customer_success')) {
+			//Render
+			output($this->render('customer/success'));
+		} else {
+			redirect('');
+		}
 	}
 
 	public function forgotten()
