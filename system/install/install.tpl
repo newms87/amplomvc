@@ -3,7 +3,7 @@
 <head>
 	<title><?= _l("Amplo MVC Installation"); ?></title>
 
-	<link rel="stylesheet" media="screen" type="text/css" href="system/install/install.css"/>
+	<link rel="stylesheet" media="screen" type="text/css" href="<?= URL_SITE . 'system/install/install.css'; ?>"/>
 </head>
 <body>
 <div id="container">
