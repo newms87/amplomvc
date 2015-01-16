@@ -1,6 +1,6 @@
 <?php
 $this->db->addColumn('store', 'prefix', "VARCHAR(15) NOT NULL");
-$this->db->createIndex('store', 'name_UNIQUE', array('name' =>  'ASC'));
+$this->db->createIndex('store', 'name_UNIQUE', array('name' => 'ASC'));
 
 $this->db->changeColumn('navigation', 'href', 'path', "TEXT NOT NULL");
 
@@ -22,6 +22,7 @@ $this->db->changeColumn('address', 'postcode', 'postcode', "VARCHAR(15) NOT NULL
 
 $this->db->createTable('log', <<<SQL
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
   `uri` varchar(100) NOT NULL,
   `query` varchar(255) DEFAULT NULL,
   `user_agent` varchar(255) DEFAULT NULL,
@@ -31,5 +32,3 @@ $this->db->createTable('log', <<<SQL
   PRIMARY KEY (`log_id`)
 SQL
 );
-
-$this->db->addColumn('log', 'name', "VARCHAR(45) NOT NULL AFTER `log_id`");
