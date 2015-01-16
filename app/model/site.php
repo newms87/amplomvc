@@ -1,8 +1,8 @@
 <?php
 
-class App_Model_Site extends App_model_Table
+class App_Model_Site extends App_Model_Table
 {
-	protected $table = 'site', $primary_key = 'site_id';
+	protected $table = 'store', $primary_key = 'store_id';
 
 	public function getSiteByName($site_name)
 	{
@@ -34,7 +34,7 @@ class App_Model_Site extends App_model_Table
 
 		clear_cache();
 
-		return true;
+		return $site_id;
 	}
 
 	public function removeSite($site_name)

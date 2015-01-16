@@ -448,6 +448,10 @@ if (!defined('PASSWORD_DEFAULT')) {
 function _set_site($site)
 {
 	global $registry;
+	if (!is_array($site)) {
+		$site = $registry->get('Model_Site')->getRecord($site);
+	}
+
 	$registry->get('route')->setSite($site);
 	$registry->get('config')->setSite($site);
 	$registry->get('url')->setSite($site);
