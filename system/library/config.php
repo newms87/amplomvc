@@ -47,7 +47,7 @@ class Config extends Library
 		}
 
 		if (!$settings && IS_ADMIN && $this->route->getPath() !== 'admin/settings/restore_defaults') {
-			message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
+			//message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
 			//TODO: Should still set defaults here
 			//redirect('admin/settings/restore_defaults');
 		}

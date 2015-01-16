@@ -32,7 +32,7 @@ class App_Model_Site extends App_Model_Table
 			$this->db->copyTable($table_name, $site['prefix'] . $base);
 		}
 
-		clear_cache();
+		clear_cache_all();
 
 		return $site_id;
 	}

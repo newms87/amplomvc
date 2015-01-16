@@ -99,6 +99,11 @@ function clear_cache($key = null)
 	$registry->get('cache')->delete($key);
 }
 
+function clear_cache_all()
+{
+	rrmdir(DIR_CACHE);
+}
+
 function check_condition($condition)
 {
 	global $registry;
