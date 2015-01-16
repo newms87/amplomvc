@@ -88,7 +88,7 @@ function amplo_mvc_setup_form($msg)
 		'sqlite'   => "SQLite",
 	);
 
-	require_once("system/install/install.tpl");
+	require_once(DIR_SITE . "system/install/install.tpl");
 }
 
 function amplo_mvc_install()
