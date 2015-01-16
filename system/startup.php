@@ -21,8 +21,6 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
-define('URL_THEMES', URL_SITE . 'app/view/theme/');
-
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'ajax/');
 
@@ -46,6 +44,7 @@ $config_defines = array(
 	'URL_IMAGE'             => URL_SITE . 'image/',
 	'URL_DOWNLOAD'          => URL_SITE . 'download/',
 	'URL_RESOURCES'         => URL_SITE . 'system/resources/',
+	'URL_THEMES'            => URL_SITE . 'app/view/theme/',
 	'DIR_IMAGE'             => DIR_SITE . 'image/',
 	'DIR_DOWNLOAD'          => DIR_SITE . 'download/',
 	'DIR_RESOURCES'         => DIR_SITE . 'system/resources/',
@@ -55,7 +54,7 @@ $config_defines = array(
 	'MYSQL_TIMEZONE'        => '-6:00',
 	'DB_PROFILE'            => false,
 	'DB_PROFILE_NO_CACHE'   => false,
-	'AMPLO_TIME_LOG'         => false,
+	'AMPLO_TIME_LOG'        => false,
 	'AMPLO_SESSION'         => 'cross-store-session',
 	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
 	'CACHE_FILE_EXPIRATION' => 3600,
