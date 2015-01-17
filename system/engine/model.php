@@ -922,7 +922,7 @@ abstract class Model
 		if (empty(self::$model[$schema][$table])) {
 			$model = cache('model.' . $schema . '.' . $table);
 
-			if (!$model) {
+			if (!$model || empty($model['columns'])) {
 				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$table'");
 
 				$columns = $this->db->getTableColumns($table);
