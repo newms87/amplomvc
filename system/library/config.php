@@ -15,7 +15,9 @@ class Config extends Library
 
 		$this->setSite($this->route->getSite());
 
-		$this->checkForUpdates();
+		if (!defined('AMPLO_AUTO_UPDATE') || AMPLO_AUTO_UPDATE) {
+			$this->checkForUpdates();
+		}
 	}
 
 	public function get($key)
