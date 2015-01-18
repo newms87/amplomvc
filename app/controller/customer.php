@@ -236,12 +236,8 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Login'), site_url('customer/login'));
 		breadcrumb(_l('Forgotten Password'), site_url('customer/forgotten'));
 
-		//Action Buttons
-		$data['save'] = site_url('customer/generate-reset-code');
-		$data['back'] = site_url('customer/login');
-
 		//Render
-		output($this->render('customer/forgotten', $data));
+		output($this->render('customer/forgotten'));
 	}
 
 	public function generate_reset_code()

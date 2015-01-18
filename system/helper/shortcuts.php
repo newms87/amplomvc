@@ -71,7 +71,7 @@ function breadcrumbs()
 {
 	global $registry;
 
-	if (option('config_breadcrumb_display', true)) {
+	if (option('show_breadcrumbs', true)) {
 		return $registry->get('breadcrumb')->render();
 	}
 }

@@ -2,7 +2,7 @@
 <?= area('left'); ?>
 <?= area('right'); ?>
 
-<section id="customer-login" class="content">
+<section id="customer-login" class="login-page content">
 	<header class="login-top row">
 		<div class="wrap">
 			<?= $is_ajax ? '' : breadcrumbs(); ?>
@@ -13,7 +13,7 @@
 
 	<?= area('top'); ?>
 
-	<div class="login-page row">
+	<div class="login-forms row">
 		<div class="wrap">
 			<div class="col xs-12 lg-6 top text-center login-col account-box <?= isset($_GET['register']) ? 'hide' : ''; ?>">
 				<div class="login-box box">
@@ -36,16 +36,14 @@
 							</div>
 						<? } ?>
 
-						<div class="form-item submit">
+						<div class="form-item submit buttons">
 							<button data-loading="{{Please Wait...}}">{{Log In}}</button>
 
-							<div class="buttons">
-								<div class="col xs-6 left forgotten">
-									<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
-								</div>
-								<div class="switch col xs-6 right">
-									<a class="show-register">{{Create Account}}</a>
-								</div>
+							<div class="col xs-6 left forgotten">
+								<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
+							</div>
+							<div class="switch col xs-6 right">
+								<a class="show-register">{{Create Account}}</a>
 							</div>
 						</div>
 					</form>
@@ -67,13 +65,11 @@
 							<input type="password" placeholder="{{password}}" name="password" value=""/>
 						</div>
 
-						<div class="form-item submit">
+						<div class="form-item submit buttons">
 							<button data-loading="{{Please Wait...}}">{{Create Account}}</button>
 
-							<div class="buttons">
-								<div class="switch">
-									<a class="show-login">{{Already have an account?}}</a>
-								</div>
+							<div class="switch">
+								<a class="show-login">{{Already have an account?}}</a>
 							</div>
 						</div>
 

@@ -251,15 +251,15 @@
 						<td><?=
 							build(array(
 								'type'   => 'select',
-								'name'   => "config_breadcrumb_display",
+								'name'   => "show_breadcrumbs",
 								'data'   => $data_yes_no,
-								'select' => $config_breadcrumb_display
+								'select' => $show_breadcrumbs
 							)); ?></td>
 					</tr>
 					<tr>
 						<td class="required"> {{Breadcrumb Separator:}}</td>
 						<td>
-							<input type="text" style="font-size:20px" name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1"/>
+							<input type="text" style="font-size:20px" name="breadcrumb_separator" value="<?= $breadcrumb_separator; ?>" size="1"/>
 						</td>
 					</tr>
 					<tr>
