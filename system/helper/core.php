@@ -822,3 +822,25 @@ function parse_xml_to_array($xml)
 
 	return $return;
 }
+
+function cache($key, $value = null, $as_file = false)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('cache')->get($key, $as_file);
+	} else {
+		return $registry->get('cache')->set($key, $value, $as_file);
+	}
+}
+
+function clear_cache($key = null)
+{
+	global $registry;
+	$registry->get('cache')->delete($key);
+}
+
+function clear_cache_all()
+{
+	rrmdir(DIR_CACHE);
+}
