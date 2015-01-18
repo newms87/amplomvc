@@ -499,7 +499,8 @@ $.fn.loading = function (params) {
 		if (typeof params !== 'string') {
 			option = $.extend({}, {
 				text:    $e.attr('data-loading') || params.default_text,
-				disable: true
+				disable: true,
+				delay: false
 			}, params);
 		}
 
@@ -515,6 +516,12 @@ $.fn.loading = function (params) {
 					$e.data('original', $e.html());
 				}
 				$e.html(option.text);
+
+				if (option.delay) {
+					setTimeout(function() {
+						$e.loading('stop');
+					}, option.delay);
+				}
 			}
 		} else {
 			$e.find('.loader').remove();
