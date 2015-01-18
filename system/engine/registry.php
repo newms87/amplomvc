@@ -31,6 +31,8 @@ final class Registry
 			return $this;
 		}
 
+		$class = str_replace('\\', '/', $class);
+
 		if (class_exists($class, false)) {
 			if (class_exists($class . '_mod', false)) {
 				$class .= '_mod';
