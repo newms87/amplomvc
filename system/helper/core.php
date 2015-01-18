@@ -122,6 +122,12 @@ if (!function_exists('amplo_autoload')) {
 
 spl_autoload_register('amplo_autoload');
 
+function register_routing_hook($name, $callable, $sort_order = 0)
+{
+	global $registry;
+	return $registry->get('route')->registerHook($name, $callable, $sort_order);
+}
+
 /**
  * Customized routing for special cases. Set a new $path to change the controller / method to call.
  * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
@@ -174,6 +180,8 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 			break;
 	}
 }
+
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 if (!function_exists('array_column')) {
 	/**

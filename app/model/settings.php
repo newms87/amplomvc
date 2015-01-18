@@ -133,6 +133,9 @@ class App_Model_Settings extends Model
 			$settings['site_title'] = $settings['site_name'];
 		}
 
+		//Load defaults
+		$settings += self::$general_settings;
+
 		$settings['site_list_limit'] = max(0, (int)$settings['site_list_limit']);
 
 		$result = $this->config->saveGroup('general', $settings);
@@ -151,6 +154,8 @@ class App_Model_Settings extends Model
 		if (empty($settings['site_title'])) {
 			$settings['site_title'] = 'Amplo MVC Admin';
 		}
+
+		$settings += self::$admin_settings;
 
 		$settings['admin_list_limit'] = max(0, (int)$settings['admin_list_limit']);
 
