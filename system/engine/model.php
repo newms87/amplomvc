@@ -1019,6 +1019,11 @@ abstract class Model
 
 	private function actionFilter($table, $action, &$data)
 	{
+
+		//TODO TEMPORARILY DISABLED!
+		return ;
+
+
 		$hooks = option('db_hooks');
 
 		if ($hooks && !empty($hooks[$table][$action])) {
