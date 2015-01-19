@@ -281,9 +281,7 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Home'), site_url());
 		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
-		//Action Buttons
-		$data['save']   = site_url('customer/reset_password', 'code=' . $code);
-		$data['cancel'] = site_url('customer/login');
+		$data['code'] = $code;
 
 		//Render
 		output($this->render('customer/reset_form', $data));
