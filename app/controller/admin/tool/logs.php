@@ -49,7 +49,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		$listing = array(
 			'row_id'         => 'log_id',
-			'extra_cols'     => $this->Model_User->getColumns(false),
+			'extra_cols'     => $this->Model_Log->getColumns(false),
 			'columns'        => $columns,
 			'rows'           => $entries,
 			'filter_value'   => $filter,
