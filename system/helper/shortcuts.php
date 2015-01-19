@@ -385,28 +385,30 @@ function cast_protocol($url, $cast = 'http')
 	}
 }
 
+global $config_options;
 function option($option, $default = null)
 {
-	global $registry;
-	static $options;
+	global $registry, $config_options;
 
-	if (!$options) {
-		$options = &$registry->get('config')->all();
+	if (!$config_options) {
+		$config_options = &$registry->get('config')->all();
 	}
 
-	return isset($options[$option]) ? $options[$option] : $default;
+	return isset($config_options[$option]) ? $config_options[$option] : $default;
 }
 
 function set_option($option, $value)
 {
-	global $registry;
+	global $registry, $config_options;
 	$registry->get('config')->set($option, $value);
+	$config_options[$option] = $value;
 }
 
 function save_option($option, $value)
 {
 	global $registry;
 	$registry->get('config')->save('config', $option, $value);
+	set_option($option, $value);
 }
 
 function page_info($key = null, $default = null)
