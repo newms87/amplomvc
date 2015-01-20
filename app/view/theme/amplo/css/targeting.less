@@ -20,7 +20,18 @@
         & + nav {
           overflow-y: auto;
           overflow-x: hidden;
-          max-height: 25em;
+          max-height: 30em;
+        }
+
+        &:after {
+          content: '';
+          position: absolute;
+          width: 10000px;
+          height: 10000px;
+          left: -5000px;
+          top: 5em;
+          background: rgba(0,0,0,.9);
+          z-index: 1;
         }
       }
     }
@@ -31,7 +42,7 @@
       top: 3.7em;
       text-align: right;
       width: 10000px;
-      box-shadow: 0px 300px 50px rgba(0, 0, 0, 0.8);
+      z-index: 50;
 
       .nav, .nav#links-primary, .nav#links-account {
         text-align: right;
@@ -119,7 +130,7 @@
     .account-details {
       .wrap {
         width: 100%;
-        padding-top: 0;
+        padding: 0;
       }
 
       .account-nav {
@@ -166,6 +177,7 @@
       }
 
       .tab-content {
+        padding: 1em;
         h1 {
           display: none;
         }
