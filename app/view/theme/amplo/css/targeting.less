@@ -20,7 +20,7 @@
         & + nav {
           overflow-y: auto;
           overflow-x: hidden;
-          max-height: 25em;
+          max-height: 22em;
         }
 
         &:after {
@@ -67,8 +67,8 @@
               border-bottom: 1px solid @color-dark;
 
               a {
-                padding: 1em 10em;
-                font: 1.1em OpenSansRegular;
+                padding: 1em 12em;
+                font: .9em OpenSansRegular;
                 color: @font-dark;
               }
 
@@ -108,8 +108,8 @@
             background: @color-lighter;
             display: block;
             border-bottom: 1px solid @color-dark;
-            padding: 1em 9em;
-            font: 1.1em OpenSansRegular;
+            padding: 1em 12em;
+            font: .9em OpenSansRegular;
             color: @font-dark;
           }
         }
@@ -154,7 +154,7 @@
               .sprite.chevron.large;
               position: absolute;
               left: 1.5em;
-              top: 1.25em;
+              top: 1.1em;
             }
           }
         }
@@ -188,13 +188,17 @@
     &.account-menu {
       h1 {
         max-height: 25em;
-        padding: 1em 0;
+        padding: 1.3em 0;
+        text-transform: none;
+        color: @font-dark;
+        letter-spacing: .03em;
       }
 
       .side-menu {
         a {
           max-height: 20em;
           padding: 1em;
+          color: @color-main;
         }
       }
 

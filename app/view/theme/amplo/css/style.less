@@ -1089,13 +1089,19 @@ section.page {
         border-top: 2px solid @color-light;
         transition: all .5s;
 
-        input, select {
-          padding: .3em;
-          font: 1em OpenSansRegular;
-          color: @font-dark;
-          max-width: 10em;
-          min-width: 3em;
-          margin-bottom: .4em;
+        .input {
+          margin-top: 1em;
+
+          .input-item {
+            margin-bottom: .7em;
+
+            input, select {
+              padding: .3em;
+              font: 1em OpenSansRegular;
+              color: @font-dark;
+              width: 100%;
+            }
+          }
         }
 
         h3 {
@@ -1114,16 +1120,15 @@ section.page {
         .buttons {
           .noselect;
           margin-top: 0;
-          margin-bottom: 1em;
 
           .button, button {
             display: inline-block;
             vertical-align: middle;
             margin: 0;
-            padding: .3em 1.2em;
+            padding: .5em 1.2em;
+            box-sizing: border-box;
             font: .9em OpenSansRegular;
-            margin: 0 .7em;
-            width: auto;
+            width: 100%;
             min-width: 0;
           }
 
@@ -1132,6 +1137,10 @@ section.page {
             font: 1em OpenSansItalic;
             color: @font-light;
             text-decoration: underline;
+          }
+
+          &.submit {
+            margin-top: 1em;
           }
         }
 
