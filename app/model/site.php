@@ -9,6 +9,11 @@ class App_Model_Site extends App_Model_Table
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `name` = '" . $this->escape($site_name) . "'");
 	}
 
+	public function getSiteByPrefix($prefix)
+	{
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `prefix` = '" . $this->escape($prefix) . "'");
+	}
+
 	public function createSite($site, $tables = array())
 	{
 		if ($this->getSiteByName($site['name'])) {
