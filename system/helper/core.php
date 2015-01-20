@@ -122,6 +122,12 @@ if (!function_exists('amplo_autoload')) {
 
 spl_autoload_register('amplo_autoload');
 
+function register_routing_hook($name, $callable, $sort_order = 0)
+{
+	global $registry;
+	return $registry->get('route')->registerHook($name, $callable, $sort_order);
+}
+
 /**
  * Customized routing for special cases. Set a new $path to change the controller / method to call.
  * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
@@ -174,6 +180,8 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 			break;
 	}
 }
+
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 if (!function_exists('array_column')) {
 	/**
@@ -579,7 +587,7 @@ HTML;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 			}
 
-			if (option('config_error_log', 1)) {
+			if (!function_exists('option') || option('config_error_log', 1)) {
 				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 			}
 		}
@@ -813,4 +821,26 @@ function parse_xml_to_array($xml)
 	}
 
 	return $return;
+}
+
+function cache($key, $value = null, $as_file = false)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('cache')->get($key, $as_file);
+	} else {
+		return $registry->get('cache')->set($key, $value, $as_file);
+	}
+}
+
+function clear_cache($key = null)
+{
+	global $registry;
+	$registry->get('cache')->delete($key);
+}
+
+function clear_cache_all()
+{
+	rrmdir(DIR_CACHE);
 }

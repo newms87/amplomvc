@@ -71,7 +71,7 @@ function breadcrumbs()
 {
 	global $registry;
 
-	if (option('config_breadcrumb_display', true)) {
+	if (option('show_breadcrumbs', true)) {
 		return $registry->get('breadcrumb')->render();
 	}
 }
@@ -80,28 +80,6 @@ function get_last_page($offset = -2)
 {
 	global $registry;
 	return $registry->get('request')->getPrevPageRequest($offset);
-}
-
-function cache($key, $value = null, $as_file = false)
-{
-	global $registry;
-
-	if ($value === null) {
-		return $registry->get('cache')->get($key, $as_file);
-	} else {
-		return $registry->get('cache')->set($key, $value, $as_file);
-	}
-}
-
-function clear_cache($key = null)
-{
-	global $registry;
-	$registry->get('cache')->delete($key);
-}
-
-function clear_cache_all()
-{
-	rrmdir(DIR_CACHE);
 }
 
 function check_condition($condition)
@@ -409,14 +387,14 @@ function cast_protocol($url, $cast = 'http')
 
 function option($option, $default = null)
 {
-	global $registry;
-	static $options;
+	global $_options;
 
-	if (!$options) {
-		$options = &$registry->get('config')->all();
+	//Load config if not loaded
+	if (!$_options) {
+		new Config;
 	}
 
-	return isset($options[$option]) ? $options[$option] : $default;
+	return isset($_options[$option]) ? $_options[$option] : $default;
 }
 
 function set_option($option, $value)

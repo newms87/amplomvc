@@ -8,7 +8,7 @@ class Breadcrumb extends Library
 	{
 		parent::__construct();
 
-		$this->separator = option('config_breadcrumb_separator');
+		$this->separator = option('breadcrumb_separator');
 	}
 
 	public function add($text, $href, $separator = '', $position = null)

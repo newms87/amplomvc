@@ -29,14 +29,14 @@ class App_Model_Settings extends Model
 		'site_email_error'                        => '',
 		'site_phone'                              => '',
 		'config_fax'                              => '',
-		'site_title'                            => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
+		'site_title'                              => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'config_default_store'                    => '',
-		'site_meta_description'                 => '',
+		'site_meta_description'                   => '',
 		'config_debug'                            => 0,
 		'config_cron_status'                      => 1,
 		'config_allow_close_message'              => 1,
 		'config_default_layout_id'                => '',
-		'site_theme'                            => 'amplo',
+		'site_theme'                              => 'amplo',
 		'site_address_format'                     => '',
 		'config_country_id'                       => 223,
 		'config_zone_id'                          => 8,
@@ -51,18 +51,18 @@ class App_Model_Settings extends Model
 		'config_customer_approval'                => 0,
 		'config_account_terms_page_id'            => '',
 		'config_contact_page_id'                  => '',
-		'config_breadcrumb_display'               => 1,
-		'config_breadcrumb_separator'             => ' / ',
+		'show_breadcrumbs'                        => 1,
+		'breadcrumb_separator'                    => ' / ',
 		'config_review_status'                    => 1,
 		'config_share_status'                     => 1,
 		'config_upload_allowed'                   => 1,
 		'config_upload_images_allowed'            => '',
 		'config_upload_images_mime_types_allowed' => '',
-		'site_icon'                             => null,
-		'site_logo'                             => '',
-		'site_logo_srcset'                      => 1,
-		'site_logo_width'                       => 0,
-		'site_logo_height'                      => 0,
+		'site_icon'                               => null,
+		'site_logo'                               => '',
+		'site_logo_srcset'                        => 1,
+		'site_logo_width'                         => 0,
+		'site_logo_height'                        => 0,
 		'site_email_logo_width'                   => 300,
 		'site_email_logo_height'                  => 0,
 		'config_image_category_width'             => 120,
@@ -133,6 +133,9 @@ class App_Model_Settings extends Model
 			$settings['site_title'] = $settings['site_name'];
 		}
 
+		//Load defaults
+		$settings += self::$general_settings;
+
 		$settings['site_list_limit'] = max(0, (int)$settings['site_list_limit']);
 
 		$result = $this->config->saveGroup('general', $settings);
@@ -151,6 +154,8 @@ class App_Model_Settings extends Model
 		if (empty($settings['site_title'])) {
 			$settings['site_title'] = 'Amplo MVC Admin';
 		}
+
+		$settings += self::$admin_settings;
 
 		$settings['admin_list_limit'] = max(0, (int)$settings['admin_list_limit']);
 

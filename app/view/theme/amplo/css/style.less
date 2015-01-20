@@ -80,7 +80,7 @@ h6 {
   transition: .5s all;
 }
 
-.clearfix{
+.clearfix {
   &:after {
     content: ".";
     display: block;
@@ -822,73 +822,73 @@ textarea {
   .col {
     .box {
       display: inline-block;
-      padding: 1em;
+      padding: 0 1em;
       min-height: 16em;
       max-width: 23em;
+    }
 
-      h2 {
-        text-transform: uppercase;
-        margin-bottom: .7em;
-        color: @color-dark;
-        font: 1.5em OpenSansSemiBold;
+    h2 {
+      text-transform: uppercase;
+      margin-bottom: .7em;
+      color: @color-dark;
+      font: 1.5em OpenSansSemiBold;
+    }
+
+    h3 {
+      text-transform: uppercase;
+      font: 1em OpenSansItalic;
+      color: @color-secondary;
+      margin-bottom: .4em;
+    }
+
+    button {
+      width: 100%;
+      padding: .6em 1.5em;
+      background: @color-dark;
+
+      &:hover {
+        background: @color-main;
       }
+    }
 
-      h3 {
-        text-transform: uppercase;
-        font: 1em OpenSansItalic;
-        color: @color-secondary;
-        margin-bottom: .4em;
+    input {
+      background: white;
+      padding: .8em;
+
+      &:active, &:focus {
+        box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
+        border-color: @color-main;
       }
+    }
 
-      button {
-        margin-top: 1em;
-        width: 100%;
-        padding: .6em 1.5em;
-        background: @color-dark;
+    .buttons {
+      margin-top: 1em;
+      .forgotten {
+        font: .9em OpenSansItalic;
 
-        &:hover {
-          background: @color-main;
+        a {
+          color: @color-dark;
+
+          &:hover {
+            color: @color-main;
+          }
+        }
+
+        & + button {
+          margin-top: .5em;
         }
       }
 
-      input {
-        background: white;
-        padding: .8em;
+      .switch {
+        display: inline-block;
 
-        &:active, &:focus {
-          box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
-          border-color: @color-main;
-        }
-      }
-
-      .buttons {
-        .forgotten {
+        a {
           font: .9em OpenSansItalic;
+          cursor: pointer;
+          color: @color-dark;
 
-          a {
-            color: @color-dark;
-
-            &:hover {
-              color: @color-main;
-            }
-          }
-
-          & + button {
-            margin-top: .5em;
-          }
-        }
-
-        .switch {
-          display: inline-block;
-
-          a {
-            font: .9em OpenSansItalic;
-            cursor: pointer;
-            color: @color-dark;
-
-            &:hover {
-              color: @color-main;
-            }
+          &:hover {
+            color: @color-main;
           }
         }
       }
@@ -898,8 +898,6 @@ textarea {
   .account-box.hide {
     display: none;
   }
-
-
 
   &.registration {
     .register-col {
@@ -1170,6 +1168,7 @@ section.page {
     }
   }
 }
+
 /*************************
  *  V. Blocks            *
  *************************/

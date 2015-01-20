@@ -11,6 +11,32 @@ $registry->set('db', $db);
 $router = new Router();
 $registry->set('route', $router);
 
+//Helpers
+//Tip: to override core functions, use a mod file!
+require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
+
+$handle = opendir(DIR_SYSTEM . 'helper/');
+while (($helper = readdir($handle))) {
+	if (strpos($helper, '.') === 0) {
+		continue;
+	}
+
+	//Load these last
+	if ($helper === 'core.php' || $helper === 'shortcuts.php') {
+		continue;
+	}
+
+	if (is_file(DIR_SYSTEM . 'helper/' . $helper)) {
+		require_once(_mod(DIR_SYSTEM . 'helper/' . $helper));
+	}
+}
+
+require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
+
+//Route store after helpers (helper/core.php & helper/shortcuts.php required)
+$router->routeStore();
+
+
 // Request (cleans globals)
 $registry->set('request', new Request());
 

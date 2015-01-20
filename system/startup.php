@@ -81,12 +81,14 @@ define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
-$domain = parse_url(URL_SITE, PHP_URL_HOST);
+if (!defined('COOKIE_DOMAIN')) {
+	$domain = parse_url(URL_SITE, PHP_URL_HOST);
 
-if (!$domain || $domain === 'localhost') {
-	define('COOKIE_DOMAIN', '');
-} else {
-	define('COOKIE_DOMAIN', '.' . $domain);
+	if (!$domain || $domain === 'localhost') {
+		define('COOKIE_DOMAIN', '');
+	} else {
+		define('COOKIE_DOMAIN', '.' . $domain);
+	}
 }
 
 //Start Session
@@ -95,7 +97,8 @@ ini_set('session.use_trans_sid', 'Off');
 
 session_name(AMPLO_SESSION);
 
-session_set_cookie_params(0, '/', COOKIE_DOMAIN);
+ini_set("session.cookie_domain", COOKIE_DOMAIN);
+session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
 session_start();
 
 // Unregister Globals
@@ -165,24 +168,4 @@ require_once(_mod(DIR_SYSTEM . 'library/response.php'));
 require_once(_mod(DIR_SYSTEM . 'library/session.php'));
 require_once(_mod(DIR_SYSTEM . 'library/theme.php'));
 require_once(_mod(DIR_SYSTEM . 'library/url.php'));
-
-//Helpers
-$handle = opendir(DIR_SYSTEM . 'helper/');
-while (($helper = readdir($handle))) {
-	if (strpos($helper, '.') === 0) {
-		continue;
-	}
-
-	//Load these last
-	if ($helper === 'core.php' || $helper === 'shortcuts.php') {
-		continue;
-	}
-
-	if (is_file(DIR_SYSTEM . 'helper/' . $helper)) {
-		require_once(_mod(DIR_SYSTEM . 'helper/' . $helper));
-	}
-}
-
-require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
-require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 

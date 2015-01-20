@@ -1,15 +1,14 @@
 <?php
 
-final class Router
+class Router
 {
-	private $path;
-	private $segments;
-	private $site;
+	protected $path;
+	protected $segments;
+	protected $site;
+	protected $routing_hooks = array();
 
 	public function __construct()
 	{
-		$this->routeStore();
-
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
 		$base = trim(SITE_BASE, '/');
@@ -62,31 +61,21 @@ final class Router
 
 	public function registerHook($name, $callable, $sort_order = 0)
 	{
-		$routing_hooks = option('_routing_hooks_', array());
+		if (is_callable($callable)) {
+			$this->routing_hooks[$name] = array(
+				'callable'   => $callable,
+				'sort_order' => $sort_order,
+			);
 
-		$routing_hooks[$name] = array(
-			'callable'   => $callable,
-			'sort_order' => $sort_order,
-		);
+			return true;
+		}
 
-		uasort($routing_hooks, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
-
-		save_option('_routing_hooks_', $routing_hooks);
-
-		return $routing_hooks;
+		return false;
 	}
 
 	public function unregisterHook($name)
 	{
-		$routing_hooks = option('_routing_hooks_', array());
-
-		unset($routing_hooks[$name]);
-
-		save_option('_routing_hooks_', $routing_hooks);
-
-		return $routing_hooks;
+		unset($this->routing_hooks[$name]);
 	}
 
 	public function dispatch()
@@ -94,26 +83,22 @@ final class Router
 		$path = $this->path;
 
 		//Resolve routing hooks
-		$routing_hooks = option('_routing_hooks_');
-
-		if (!$routing_hooks) {
-			$routing_hooks = $this->registerHook('default', 'amplo_routing_hook');
-		}
-
 		$args = array();
 
-		foreach ($routing_hooks as $hook) {
-			if (is_callable($hook['callable'])) {
-				$params = array(
-					&$path,
-					$this->segments,
-					$this->path,
-					&$args,
-				);
+		uasort($this->routing_hooks, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
 
-				if (call_user_func_array($hook['callable'], $params) === false) {
-					break;
-				}
+		foreach ($this->routing_hooks as $hook) {
+			$params = array(
+				&$path,
+				$this->segments,
+				$this->path,
+				&$args,
+			);
+
+			if (call_user_func_array($hook['callable'], $params) === false) {
+				break;
 			}
 		}
 
