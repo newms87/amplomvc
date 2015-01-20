@@ -935,7 +935,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', true).attr('autocorrect', 'on');
+	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
 
 	$(document).keydown(function (e) {
 		if (e.ctrlKey && (e.which == 83)) {
