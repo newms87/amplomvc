@@ -2,9 +2,9 @@
 
 <div class="page contact-page section-style-a row">
 	<div class="wrap">
-		<h1 class="col xs-12 xs-center lg-left"><?= _l("Contact Us"); ?></h1>
+		<h1 class="col xs-12 xs-center left"><?= _l("Contact Us"); ?></h1>
 
-		<div class="contact-text col xs-12 lg-7 left top">
+		<div class="contact-text col xs-12 lg-6 left top">
 			<p>Questions, comments, concerns? Please let us know how we can help you!</p>
 			<p>Our success wouldn't be possible without your feedback, so thanks a million for reaching out!</p>
 
@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<div class="contact-form col xs-12 lg-5 top">
+		<div class="contact-form col xs-12 lg-5 right top">
 			<form action="<?= site_url('contact/submit'); ?>" method="post" class="ajax-form">
 				<div class="form-item">
 					<input type="text" name="name" value="<?= $name; ?>" placeholder="{{*Name}}"/>
