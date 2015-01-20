@@ -20,7 +20,7 @@
         & + nav {
           overflow-y: auto;
           overflow-x: hidden;
-          max-height: 30em;
+          max-height: 25em;
         }
 
         &:after {
@@ -133,8 +133,9 @@
         padding: 0;
       }
 
-      .account-nav {
+      .side-menu {
         border-bottom: 2px solid @color-light;
+        margin-top: 0;
 
         a {
           .height-animate;
@@ -158,7 +159,7 @@
           }
         }
 
-        & + .tab-content {
+        & + .content-box {
           position: relative;
 
           &.loading {
@@ -176,7 +177,7 @@
         }
       }
 
-      .tab-content {
+      .content-box {
         padding: 1em;
         h1 {
           display: none;
@@ -190,14 +191,14 @@
         padding: 1em 0;
       }
 
-      .account-nav {
+      .side-menu {
         a {
           max-height: 20em;
           padding: 1em;
         }
       }
 
-      .tab-content {
+      .content-box {
         display: none;
       }
     }

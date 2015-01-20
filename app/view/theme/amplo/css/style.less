@@ -856,8 +856,8 @@ textarea {
       padding: .8em;
 
       &:active, &:focus {
-        box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
-        border-color: @color-main;
+        box-shadow: inset 2px 2px @color-secondary, inset -2px -2px @color-secondary;
+        border-color: @color-secondary;
       }
     }
 
@@ -1057,7 +1057,9 @@ section.page {
     margin-bottom: 1em;
   }
 
-  .account-nav {
+  .side-menu {
+    margin-top: 4em;
+
     .menu-tab {
       font: 1em OpenSansSemiBold;
       color: @font-dark;
@@ -1066,12 +1068,12 @@ section.page {
       text-transform: uppercase;
 
       &.active, &:hover {
-        color: @color-secondary;
+        color: @color-main;
       }
     }
   }
 
-  .tab-content {
+  .content-box {
     h1 {
       color: @color-secondary;
       text-transform: uppercase;

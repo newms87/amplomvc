@@ -922,6 +922,7 @@ function amplo_auto_ajax() {
 $(document).ready(function () {
 	amplo_auto_ajax();
 
+
 	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
 		if (!ui.item.value && ui.item.href) {
 			window.open(ui.item.href);
@@ -933,6 +934,8 @@ $(document).ready(function () {
 			$(this).closest('form').submit();
 		}
 	});
+
+	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', true).attr('autocorrect', 'on');
 
 	$(document).keydown(function (e) {
 		if (e.ctrlKey && (e.which == 83)) {
