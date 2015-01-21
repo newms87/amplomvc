@@ -264,7 +264,7 @@ if (!function_exists('array_search_key')) {
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
 
-	function array_search_key($search_key, $needle, $haystack, $strict = false)
+	function array_search_key($search_key, $needle, array $haystack, $strict = false)
 	{
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {

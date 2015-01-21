@@ -486,36 +486,35 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table_name, $columns)
+	protected function extractSelect($table, $columns)
 	{
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		}
+
+		if (isset(self::$tables[$table])) {
+			$table = self::$tables[$table];
+		} elseif (!$this->db->hasTable($table)) {
+			trigger_error(_l("Table %s does not exist!", $table));
+			return false;
+		}
+
+		if (empty($t)) {
+			$t = $table;
+		}
+
 		if (!$columns || !is_array($columns)) {
-			return '*';
+			return "`$t`.*";
 		}
 
 		if (is_string($columns)) {
 			return $columns;
 		}
 
-		if (strpos($table_name, ' ')) {
-			list($table_name, $t) = explode(' ', $table_name, 2);
-		} else {
-			$t = false;
-		}
-
-		$table = $this->db->hasTable($table_name);
-
-		if (!$table) {
-			trigger_error(_l("%s: Table %s does not exist!", __METHOD__, $table_name));
-			return false;
-		}
-
-		if (!$t) {
-			$t = $table;
-		}
-
 		$columns = array_intersect_key($columns, $this->getTableColumns($table));
 
 		$select = '';
+
 		foreach ($columns as $col => $data) {
 			$select .= ($select ? ',' : '') . "`$t`.`$col`";
 		}
@@ -916,7 +915,7 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table  = self::$tables[$table];
+		$table  = isset(self::$tables[$table]) ? self::$tables[$table] : $table;
 		$schema = $this->db->getName();
 
 		if (empty(self::$model[$schema][$table])) {
@@ -1021,7 +1020,7 @@ abstract class Model
 	{
 
 		//TODO TEMPORARILY DISABLED!
-		return ;
+		return;
 
 
 		$hooks = option('db_hooks');
