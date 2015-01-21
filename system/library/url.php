@@ -1,4 +1,5 @@
 <?php
+
 class Url extends Library
 {
 	private $url = '';
@@ -144,9 +145,13 @@ class Url extends Library
 		return $this->findAlias($ssl ? $this->ssl : $this->url, $path, $query);
 	}
 
-	public function site($uri = '', $query = '', $base_site = false)
+	public function site($uri = '', $query = '', $base_site = false, $ssl = null)
 	{
-		return ($base_site ? URL_SITE : $this->url) . $uri . (!empty($query) ? "?$query" : '');
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
+
+		return ($base_site ? URL_SITE : ($ssl ? $this->ssl : $this->url)) . $uri . (!empty($query) ? "?$query" : '');
 	}
 
 	public function urlencode_link($uri = '', $query = '')
@@ -286,10 +291,10 @@ class Url extends Library
 
 		if ($alias) {
 			$url_alias = array(
-				'alias'    => $alias,
-				'path'     => $path,
-				'query'    => $query,
-				'status'   => 1,
+				'alias'  => $alias,
+				'path'   => $path,
+				'query'  => $query,
+				'status' => 1,
 			);
 
 			return $this->Model_Setting_UrlAlias->addUrlAlias($url_alias);

@@ -368,8 +368,12 @@ function cast_title($name)
 	return implode(' ', $title);
 }
 
-function cast_protocol($url, $cast = 'http')
+function cast_protocol($url, $cast = null)
 {
+	if ($cast === null) {
+		$cast = IS_SSL ? 'https' : 'http';
+	}
+
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
 	if ($cast) {
