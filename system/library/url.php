@@ -114,9 +114,13 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function store($store_id, $path = '', $query = '', $ssl = false)
+	public function store($store_id, $path = '', $query = '', $ssl = null)
 	{
 		static $stores;
+
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
 
 		if (!$stores) {
 			$stores = $this->queryRows("SELECT * FROM " . self::$tables['store'], 'store_id');
@@ -131,8 +135,12 @@ class Url extends Library
 		return $this->findAlias($url, $path, $query, $store_id);
 	}
 
-	public function link($path, $query = '', $ssl = false)
+	public function link($path, $query = '', $ssl = null)
 	{
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
+
 		return $this->findAlias($ssl ? $this->ssl : $this->url, $path, $query);
 	}
 

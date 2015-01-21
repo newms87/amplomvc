@@ -302,13 +302,13 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null, $ssl = false)
+function site_url($path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->link($path, $query, $ssl);
 }
 
-function store_url($store_id, $path = '', $query = null, $ssl = false)
+function store_url($store_id, $path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->store($store_id, $path, $query, $ssl);
