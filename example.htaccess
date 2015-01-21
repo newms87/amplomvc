@@ -5,6 +5,18 @@ Options -Indexes
     RewriteEngine On
     RewriteBase /
 
+    # Force all urls to direct to the non www domain
+    #
+    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    # RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+    # Force https SSL protocol for your domain.
+    # (NOTE: be sure to replace example-domain.com with your domain name)
+    #
+    # RewriteCond %{HTTPS} !=on
+    # RewriteCond %{HTTP_HOST} ^(www.)?example-domain.com$
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Protect Hidden files / directories (eg: .git, .htaccess, .svn)
     <Files .*>
         Order Deny,Allow
@@ -12,7 +24,7 @@ Options -Indexes
     </Files>
 
     # Protect template and cache files
-    <FilesMatch "\.(tpl|tpl\.acmod|cache)$">
+    <FilesMatch "\.(tpl|tpl\.mod|cache)$">
         Order Deny,Allow
         Deny From All
     </FilesMatch>
