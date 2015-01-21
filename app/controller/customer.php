@@ -185,9 +185,8 @@ class App_Controller_Customer extends Controller
 
 	public function register()
 	{
-		if ($this->customer->register($_POST)) {
+		if ($this->customer->register($_POST, true)) {
 			message('success', _l("Your account has been created!"));
-			$this->customer->login($_POST['email'], $_POST['password']);
 		} else {
 			message('error', $this->customer->getError());
 		}
@@ -196,7 +195,7 @@ class App_Controller_Customer extends Controller
 			output_message();
 		} else {
 			if ($this->message->has('error')) {
-				post_redirect('customer/login');
+				post_redirect('customer/login', 'register=1');
 			}
 
 			//Redirect to requested page
@@ -218,8 +217,13 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l("Account"), site_url('account'));
 		breadcrumb(_l("Your Account Has Been Created!"), site_url('customer/success'));
 
-		//Render
-		output($this->render('customer/success'));
+
+		if (option('show_customer_success')) {
+			//Render
+			output($this->render('customer/success'));
+		} else {
+			redirect('');
+		}
 	}
 
 	public function forgotten()
@@ -232,12 +236,8 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Login'), site_url('customer/login'));
 		breadcrumb(_l('Forgotten Password'), site_url('customer/forgotten'));
 
-		//Action Buttons
-		$data['save'] = site_url('customer/generate-reset-code');
-		$data['back'] = site_url('customer/login');
-
 		//Render
-		output($this->render('customer/forgotten', $data));
+		output($this->render('customer/forgotten'));
 	}
 
 	public function generate_reset_code()
@@ -281,9 +281,7 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Home'), site_url());
 		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
-		//Action Buttons
-		$data['save']   = site_url('customer/reset_password', 'code=' . $code);
-		$data['cancel'] = site_url('customer/login');
+		$data['code'] = $code;
 
 		//Render
 		output($this->render('customer/reset_form', $data));

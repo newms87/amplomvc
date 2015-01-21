@@ -7,11 +7,11 @@
 			<h1><?= page_info('title'); ?></h1>
 			<h1 class="col lg-hidden account-home-title">{{My Account}}</h1>
 
-			<div class="account-nav return-menu col xs-12 xs-center lg-hidden">
+			<div class="side-menu return-menu col xs-12 xs-center lg-hidden">
 				<a href="<?= site_url('account'); ?>" class="menu-tab return"><?= page_info('title'); ?></a>
 			</div>
 
-			<div class="account-nav account-menu col xs-12 xs-center lg-3 lg-left top">
+			<div class="side-menu account-menu col xs-12 xs-center lg-3 lg-left top">
 				<? if (has_links('account')) { ?>
 					<? foreach (get_links('account') as $link) { ?>
 						<a href="<?= $link['href']; ?>" class="menu-tab <?= $path === $link['path'] ? 'active' : ''; ?>" data-tab="#my-details"><?= $link['display_name']; ?></a>
@@ -21,7 +21,7 @@
 				<? } ?>
 			</div>
 
-			<div class="tab-content col xs-12 lg-9 top">
+			<div class="content-box col xs-12 lg-9 top">
 				<?= $content; ?>
 			</div>
 		</div>

@@ -36,21 +36,18 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 		}
 
 		foreach ($settings['actions'] as $key => &$action) {
-			$action['attrs'] = '';
-
-			//All keys beginning with '#' are html tag attributes
-			foreach ($action as $attr => $val) {
-				if (strpos($attr, '#') === 0) {
-					$action['attrs'] .= "$attr='$val' ";
-				}
-			}
-
-			if (!isset($action['default'])) {
-				$action['default'] = '';
-			}
-
 			if (!isset($action['key'])) {
 				$action['key'] = $key;
+			}
+
+			if (!empty($action['type'])) {
+				if (!isset($action['default'])) {
+					$action['default'] = '';
+				}
+
+				if (isset($action['build_data']) && empty($action['build_config'])) {
+					$action['build_config'] = array(null, false);
+				}
 			}
 		}
 		unset($action);

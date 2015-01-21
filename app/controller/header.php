@@ -16,8 +16,8 @@ class App_Controller_Header extends Controller
 
 		//Add jQuery from the CDN or locally
 		if (option('config_jquery_cdn', true)) {
-			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
-			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
+			$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);
+			$this->document->addScript("//code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
 			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);

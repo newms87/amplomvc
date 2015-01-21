@@ -17,6 +17,20 @@
 /******************************
  *  I. Base Style / Structure *
  ******************************/
+html, body {
+  height: 100%;
+}
+
+#container {
+  position: absolute;
+  top: @header-height;
+  bottom: 0;
+  width: 100%;
+
+  & > main {
+    min-height: 80%;
+  }
+}
 
 body {
   .render-font(@font-base);
@@ -80,7 +94,7 @@ h6 {
   transition: .5s all;
 }
 
-.clearfix{
+.clearfix {
   &:after {
     content: ".";
     display: block;
@@ -380,10 +394,6 @@ header.main-header.row {
   @header();
 }
 
-#container {
-  padding-top: @header-height;
-}
-
 //Logo
 #logo {
   position: relative;
@@ -552,6 +562,7 @@ input[type="text"], input[type="password"] {
 
 select {
   box-sizing: border-box;
+
   @select();
 }
 
@@ -821,6 +832,7 @@ textarea {
   .col {
     .box {
       display: inline-block;
+<<<<<<< HEAD
       padding: 1em;
       min-height: 16em;
       max-width: 23em;
@@ -831,14 +843,28 @@ textarea {
         color: @color-dark;
         font: 1.5em OpenSansSemiBold;
       }
+=======
+      padding: 0 1em;
+      min-height: 16em;
+      max-width: 23em;
+    }
 
-      h3 {
-        text-transform: uppercase;
-        font: 1em OpenSansItalic;
-        color: @color-secondary;
-        margin-bottom: .4em;
-      }
+    h2 {
+      text-transform: uppercase;
+      margin-bottom: .7em;
+      color: @color-dark;
+      font: 1.5em OpenSansSemiBold;
+    }
+>>>>>>> bc85300a0cbb885f228657cbcbe8c8c09522ec9e
 
+    h3 {
+      text-transform: uppercase;
+      font: 1em OpenSansItalic;
+      color: @color-secondary;
+      margin-bottom: .4em;
+    }
+
+<<<<<<< HEAD
       button {
         margin-top: 1em;
         width: 100%;
@@ -848,11 +874,46 @@ textarea {
         &:hover {
           background: @color-main;
         }
-      }
+=======
+    button {
+      width: 100%;
+      padding: .6em 1.5em;
+      background: @color-dark;
 
+      &:hover {
+        background: @color-main;
+>>>>>>> bc85300a0cbb885f228657cbcbe8c8c09522ec9e
+      }
+    }
+
+<<<<<<< HEAD
       input {
         background: white;
         padding: .8em;
+=======
+    input {
+      background: white;
+      padding: .8em;
+
+      &:active, &:focus {
+        box-shadow: inset 2px 2px @color-secondary, inset -2px -2px @color-secondary;
+        border-color: @color-secondary;
+      }
+    }
+
+    .buttons {
+      margin-top: 1em;
+      .forgotten {
+        font: .9em OpenSansItalic;
+
+        a {
+          color: @color-dark;
+
+          &:hover {
+            color: @color-main;
+          }
+        }
+>>>>>>> bc85300a0cbb885f228657cbcbe8c8c09522ec9e
 
         &:active, &:focus {
           box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
@@ -860,6 +921,7 @@ textarea {
         }
       }
 
+<<<<<<< HEAD
       .buttons {
         .forgotten {
           font: .9em OpenSansItalic;
@@ -889,12 +951,25 @@ textarea {
               color: @color-main;
             }
           }
+=======
+      .switch {
+        display: inline-block;
+
+        a {
+          font: .9em OpenSansItalic;
+          cursor: pointer;
+          color: @color-dark;
+
+          &:hover {
+            color: @color-main;
+          }
+>>>>>>> bc85300a0cbb885f228657cbcbe8c8c09522ec9e
         }
       }
     }
   }
 
-  .register-col {
+  .account-box.hide {
     display: none;
   }
 
@@ -1005,8 +1080,6 @@ section.page {
     p {
       margin-bottom: 1.5em;
     }
-
-    padding-right: 4em;
   }
 
   .contact-info {
@@ -1023,8 +1096,6 @@ section.page {
   }
 
   .contact-form {
-    padding: 0 1em;
-
     form {
       input, textarea {
         padding: .5em 1em;
@@ -1056,7 +1127,9 @@ section.page {
     margin-bottom: 1em;
   }
 
-  .account-nav {
+  .side-menu {
+    margin-top: 4em;
+
     .menu-tab {
       font: 1em OpenSansSemiBold;
       color: @font-dark;
@@ -1065,12 +1138,12 @@ section.page {
       text-transform: uppercase;
 
       &.active, &:hover {
-        color: @color-secondary;
+        color: @color-main;
       }
     }
   }
 
-  .tab-content {
+  .content-box {
     h1 {
       color: @color-secondary;
       text-transform: uppercase;
@@ -1086,13 +1159,19 @@ section.page {
         border-top: 2px solid @color-light;
         transition: all .5s;
 
-        input, select {
-          padding: .3em;
-          font: 1em OpenSansRegular;
-          color: @font-dark;
-          max-width: 10em;
-          min-width: 3em;
-          margin-bottom: .4em;
+        .input {
+          margin-top: 1em;
+
+          .input-item {
+            margin-bottom: .7em;
+
+            input, select {
+              padding: .3em;
+              font: 1em OpenSansRegular;
+              color: @font-dark;
+              width: 100%;
+            }
+          }
         }
 
         h3 {
@@ -1111,16 +1190,15 @@ section.page {
         .buttons {
           .noselect;
           margin-top: 0;
-          margin-bottom: 1em;
 
           .button, button {
             display: inline-block;
             vertical-align: middle;
             margin: 0;
-            padding: .3em 1.2em;
+            padding: .5em 1.2em;
+            box-sizing: border-box;
             font: .9em OpenSansRegular;
-            margin: 0 .7em;
-            width: auto;
+            width: 100%;
             min-width: 0;
           }
 
@@ -1129,6 +1207,10 @@ section.page {
             font: 1em OpenSansItalic;
             color: @font-light;
             text-decoration: underline;
+          }
+
+          &.submit {
+            margin-top: 1em;
           }
         }
 
@@ -1167,6 +1249,7 @@ section.page {
     }
   }
 }
+
 /*************************
  *  V. Blocks            *
  *************************/

@@ -1,6 +1,13 @@
 <?php
-class App_Controller_Example_Example extends Controller
+class App_Controller_Example extends Controller
 {
+	public function __construct()
+	{
+		if (!user_can('access', 'admin')) {
+			redirect('error/not_found');
+		}
+	}
+
 	//Accessed via /site_root/example/example/
 	public function index()
 	{
@@ -22,10 +29,10 @@ class App_Controller_Example_Example extends Controller
 		}
 
 		//Alternative messages
-		message('warning', "my error message"); //essentially same as error
-		message('notify', "my notification message");
-		message('success', "my success message");
-		message('myclass', "my class message");
+//		message('warning', "my error message"); //essentially same as error
+//		message('notify', "my notification message");
+//		message('success', "my success message");
+//		message('myclass', "my class message");
 
 		//Page Head
 		set_page_info('title', _l("My Page Title"));

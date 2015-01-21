@@ -122,6 +122,12 @@ if (!function_exists('amplo_autoload')) {
 
 spl_autoload_register('amplo_autoload');
 
+function register_routing_hook($name, $callable, $sort_order = 0)
+{
+	global $registry;
+	return $registry->get('route')->registerHook($name, $callable, $sort_order);
+}
+
 /**
  * Customized routing for special cases. Set a new $path to change the controller / method to call.
  * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
@@ -174,6 +180,8 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 			break;
 	}
 }
+
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 if (!function_exists('array_column')) {
 	/**
@@ -256,7 +264,7 @@ if (!function_exists('array_search_key')) {
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
 
-	function array_search_key($search_key, $needle, $haystack, $strict = false)
+	function array_search_key($search_key, $needle, array $haystack, $strict = false)
 	{
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {
@@ -448,6 +456,10 @@ if (!defined('PASSWORD_DEFAULT')) {
 function _set_site($site)
 {
 	global $registry;
+	if (!is_array($site)) {
+		$site = $registry->get('Model_Site')->getRecord($site);
+	}
+
 	$registry->get('route')->setSite($site);
 	$registry->get('config')->setSite($site);
 	$registry->get('url')->setSite($site);
@@ -575,7 +587,7 @@ HTML;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 			}
 
-			if (option('config_error_log', 1)) {
+			if (!function_exists('option') || option('config_error_log', 1)) {
 				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 			}
 		}
@@ -707,14 +719,16 @@ function get_comment_directives($content, $trim = true)
 
 function rrmdir($dir)
 {
-	foreach (glob($dir . '/*') as $file) {
-		if (is_dir($file)) {
-			rrmdir($file);
-		} else {
-			unlink($file);
+	if (is_dir($dir)) {
+		foreach (glob($dir . '/*') as $file) {
+			if (is_dir($file)) {
+				rrmdir($file);
+			} else {
+				unlink($file);
+			}
 		}
+		rmdir($dir);
 	}
-	rmdir($dir);
 }
 
 function _is_object($o)
@@ -807,4 +821,26 @@ function parse_xml_to_array($xml)
 	}
 
 	return $return;
+}
+
+function cache($key, $value = null, $as_file = false)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('cache')->get($key, $as_file);
+	} else {
+		return $registry->get('cache')->set($key, $value, $as_file);
+	}
+}
+
+function clear_cache($key = null)
+{
+	global $registry;
+	$registry->get('cache')->delete($key);
+}
+
+function clear_cache_all()
+{
+	rrmdir(DIR_CACHE);
 }

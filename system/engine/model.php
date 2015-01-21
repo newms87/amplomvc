@@ -486,36 +486,35 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table_name, $columns)
+	protected function extractSelect($table, $columns)
 	{
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		}
+
+		if (isset(self::$tables[$table])) {
+			$table = self::$tables[$table];
+		} elseif (!$this->db->hasTable($table)) {
+			trigger_error(_l("Table %s does not exist!", $table));
+			return false;
+		}
+
+		if (empty($t)) {
+			$t = $table;
+		}
+
 		if (!$columns || !is_array($columns)) {
-			return '*';
+			return "`$t`.*";
 		}
 
 		if (is_string($columns)) {
 			return $columns;
 		}
 
-		if (strpos($table_name, ' ')) {
-			list($table_name, $t) = explode(' ', $table_name, 2);
-		} else {
-			$t = false;
-		}
-
-		$table = $this->db->hasTable($table_name);
-
-		if (!$table) {
-			trigger_error(_l("%s: Table %s does not exist!", __METHOD__, $table_name));
-			return false;
-		}
-
-		if (!$t) {
-			$t = $table;
-		}
-
 		$columns = array_intersect_key($columns, $this->getTableColumns($table));
 
 		$select = '';
+
 		foreach ($columns as $col => $data) {
 			$select .= ($select ? ',' : '') . "`$t`.`$col`";
 		}
@@ -872,6 +871,16 @@ abstract class Model
 				$a = $temp[$ka];
 				$b = $temp[$kb];
 
+				if (isset($a['sort_order']) || isset($b['sort_order'])) {
+					if (!isset($a['sort_order'])) {
+						return 1;
+					} elseif (!isset($b['sort_order'])) {
+						return -1;
+					} else {
+						return $a['sort_order'] > $b['sort_order'];
+					}
+				}
+
 				//sort as first if Primary Key
 				if ($a['type'] === 'pk') {
 					return -1;
@@ -906,13 +915,13 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table  = self::$tables[$table];
+		$table  = isset(self::$tables[$table]) ? self::$tables[$table] : $table;
 		$schema = $this->db->getName();
 
 		if (empty(self::$model[$schema][$table])) {
 			$model = cache('model.' . $schema . '.' . $table);
 
-			if (!$model) {
+			if (!$model || empty($model['columns'])) {
 				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$table'");
 
 				$columns = $this->db->getTableColumns($table);
@@ -1009,6 +1018,11 @@ abstract class Model
 
 	private function actionFilter($table, $action, &$data)
 	{
+
+		//TODO TEMPORARILY DISABLED!
+		return;
+
+
 		$hooks = option('db_hooks');
 
 		if ($hooks && !empty($hooks[$table][$action])) {

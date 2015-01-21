@@ -1,12 +1,17 @@
 <?php
 
-class App_Model_Site extends App_model_Table
+class App_Model_Site extends App_Model_Table
 {
-	protected $table = 'site', $primary_key = 'site_id';
+	protected $table = 'store', $primary_key = 'store_id';
 
 	public function getSiteByName($site_name)
 	{
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `name` = '" . $this->escape($site_name) . "'");
+	}
+
+	public function getSiteByPrefix($prefix)
+	{
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `prefix` = '" . $this->escape($prefix) . "'");
 	}
 
 	public function createSite($site, $tables = array())
@@ -32,7 +37,9 @@ class App_Model_Site extends App_model_Table
 			$this->db->copyTable($table_name, $site['prefix'] . $base);
 		}
 
-		return true;
+		clear_cache_all();
+
+		return $site_id;
 	}
 
 	public function removeSite($site_name)
@@ -58,6 +65,8 @@ class App_Model_Site extends App_model_Table
 				}
 			}
 		}
+
+		clear_cache();
 
 		return true;
 	}

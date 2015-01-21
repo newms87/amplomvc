@@ -1,8 +1,9 @@
 <?php
 
-class Log
+class Log extends Library
 {
 	private $file;
+	private $name;
 
 	static $cols = array(
 		'date',
@@ -15,6 +16,8 @@ class Log
 
 	public function __construct($name)
 	{
+		parent::__construct();
+		$this->name = $name;
 		$this->file = DIR_LOGS . (defined('SITE_PREFIX') ? SITE_PREFIX : DB_PREFIX) . '/' . $name . '.txt';
 
 		if (!_is_writable(dirname($this->file))) {
@@ -28,19 +31,24 @@ class Log
 
 	public function write($message)
 	{
+		$fields = array(
+			'name'       => $this->name,
+			'date'       => date('Y-m-d G:i:s'),
+			'ip'         => $_SERVER['REMOTE_ADDR'],
+			'uri'        => preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']),
+			'query'      => $_SERVER['QUERY_STRING'],
+			'user_agent' => (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''),
+			'message'    => str_replace("\n", "__nl__", str_replace("\r", '', $message)),
+		);
+
 		if ($this->file) {
 			$handle = fopen($this->file, 'a+');
 
-			$log = date('Y-m-d G:i:s');
-			$log .= "\t" . $_SERVER['REMOTE_ADDR'];
-			$log .= "\t" . preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']);
-			$log .= "\t" . $_SERVER['QUERY_STRING'];
-			$log .= "\t" . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-			$log .= "\t" . str_replace("\n", "__nl__", str_replace("\r", '', $message));
-
-			fwrite($handle, $log . "\r\n");
+			fwrite($handle, implode("\t", $fields) . "\r\n");
 
 			fclose($handle);
 		}
+
+		$this->insert('log', $fields);
 	}
 }

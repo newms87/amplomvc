@@ -1,4 +1,5 @@
 <?php
+
 class Request extends Library
 {
 	public function __construct()
@@ -15,6 +16,15 @@ class Request extends Library
 		array_walk_recursive($_REQUEST, $action);
 		array_walk_recursive($_COOKIE, $action);
 		array_walk_recursive($_SERVER, $action);
+
+		if (empty($_SESSION['page_requests'])) {
+			$_SESSION['page_requests'] = array();
+		}
+
+		if (!IS_AJAX) {
+			$query                       = http_build_query($_GET);
+			$_SESSION['page_requests'][] = $this->route->getPath() . ($query ? '?' . $query : '');
+		}
 	}
 
 	public function clean(&$value)
@@ -92,5 +102,10 @@ class Request extends Library
 	{
 		echo "<script type=\"text/javascript\">location=\"$url\"</script>";
 		exit;
+	}
+
+	public function getPrevPageRequest($offset = -2)
+	{
+		return current(array_slice($_SESSION['page_requests'], $offset, 1));
 	}
 }

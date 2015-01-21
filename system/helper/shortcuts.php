@@ -71,26 +71,15 @@ function breadcrumbs()
 {
 	global $registry;
 
-	if (option('config_breadcrumb_display', true)) {
+	if (option('show_breadcrumbs', true)) {
 		return $registry->get('breadcrumb')->render();
 	}
 }
 
-function cache($key, $value = null, $as_file = false)
+function get_last_page($offset = -2)
 {
 	global $registry;
-
-	if ($value === null) {
-		return $registry->get('cache')->get($key, $as_file);
-	} else {
-		return $registry->get('cache')->set($key, $value, $as_file);
-	}
-}
-
-function clear_cache($key = null)
-{
-	global $registry;
-	$registry->get('cache')->delete($key);
+	return $registry->get('request')->getPrevPageRequest($offset);
 }
 
 function check_condition($condition)
@@ -105,7 +94,7 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
-function render_message($type = null, $close = null)
+function render_message($type = null, $close = true)
 {
 	global $registry;
 	return $registry->get('message')->render($type, $close);
@@ -167,7 +156,7 @@ function image_srcset($srcsets, $nx = 3)
 	while ($nx > 0) {
 		if (empty($srcsets[$nx])) {
 			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
-			
+
 			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
 
 			if (!$src_name) {
@@ -313,13 +302,13 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null, $ssl = false)
+function site_url($path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->link($path, $query, $ssl);
 }
 
-function store_url($store_id, $path = '', $query = null, $ssl = false)
+function store_url($store_id, $path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->store($store_id, $path, $query, $ssl);
@@ -379,8 +368,12 @@ function cast_title($name)
 	return implode(' ', $title);
 }
 
-function cast_protocol($url, $cast = 'http')
+function cast_protocol($url, $cast = null)
 {
+	if ($cast === null) {
+		$cast = IS_SSL ? 'https' : 'http';
+	}
+
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
 	if ($cast) {
@@ -398,14 +391,14 @@ function cast_protocol($url, $cast = 'http')
 
 function option($option, $default = null)
 {
-	global $registry;
-	static $options;
+	global $_options;
 
-	if (!$options) {
-		$options = &$registry->get('config')->all();
+	//Load config if not loaded
+	if (!$_options) {
+		new Config;
 	}
 
-	return isset($options[$option]) ? $options[$option] : $default;
+	return isset($_options[$option]) ? $_options[$option] : $default;
 }
 
 function set_option($option, $value)
