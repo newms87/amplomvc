@@ -489,6 +489,9 @@ class DB
 			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$table`/i", "CREATE TABLE `$copy`", $row['Create Table']);
 
 			if (!$with_data) {
+				clear_cache('model');
+				$this->tables = null;
+
 				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
 
 				return $this->query($sql);

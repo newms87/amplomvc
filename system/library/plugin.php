@@ -64,16 +64,9 @@ class Plugin extends Library
 	{
 		$plugin = $this->loadPlugin($name);
 
-		if (method_exists($plugin, 'install')) {
-			$plugin->install();
-		}
-
-		$this->Model_Plugin->install($name);
-
-		//Run all upgrades
-		if (method_exists($plugin, 'upgrade')) {
-			$data = $plugin->upgrade('0');
-			$this->Model_Plugin->upgrade($name, $data);
+		if (!$plugin) {
+			$this->error['name'] = _l("Unable to load plugin %s for installation.", $name);
+			return false;
 		}
 
 		//New Files
@@ -104,6 +97,18 @@ class Plugin extends Library
 			$this->error['mod_write'] = $this->mod->getError();
 			$this->uninstall($name);
 			return false;
+		}
+
+		if (method_exists($plugin, 'install')) {
+			$plugin->install();
+		}
+
+		$this->Model_Plugin->install($name);
+
+		//Run all upgrades
+		if (method_exists($plugin, 'upgrade')) {
+			$data = $plugin->upgrade('0');
+			$this->Model_Plugin->upgrade($name, $data);
 		}
 
 		return true;

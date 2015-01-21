@@ -55,8 +55,6 @@ class Router
 	public function setSite($site)
 	{
 		$this->site = $site;
-
-		_set_db_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)

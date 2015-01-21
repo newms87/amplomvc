@@ -57,8 +57,11 @@ abstract class Model
 		self::$tables = cache('model.tables');
 
 		if (!self::$tables) {
-			self::$tables = $registry->get('db')->getTables($prefix);
-			self::$tables += $registry->get('db')->getTables(DB_PREFIX);
+			$db = $registry->get('db');
+			self::$tables = $db->getTables($prefix);
+			self::$tables += $db->getTables(DB_PREFIX);
+
+			$db->tables = array();
 
 			cache('model.tables', self::$tables);
 		}
@@ -438,6 +441,7 @@ abstract class Model
 	protected function getEscapedValues($table, $data, $auto_inc = true)
 	{
 		$columns = $this->getTableColumns($table);
+
 		$data    = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {

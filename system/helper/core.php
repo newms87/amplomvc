@@ -460,6 +460,8 @@ function _set_site($site)
 		$site = $registry->get('Model_Site')->getRecord($site);
 	}
 
+	_set_db_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
+
 	$registry->get('route')->setSite($site);
 	$registry->get('config')->setSite($site);
 	$registry->get('url')->setSite($site);

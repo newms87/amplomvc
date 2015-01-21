@@ -39,6 +39,10 @@ class App_Model_Site extends App_Model_Table
 
 		clear_cache_all();
 
+		//Reset Tables / Model for current request
+		Model::$model = array();
+		$this->db->tables = array();
+
 		return $site_id;
 	}
 
