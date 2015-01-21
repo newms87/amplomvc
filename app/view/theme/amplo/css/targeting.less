@@ -1,11 +1,14 @@
 /*************************
  *  X. Device Targeting  *
  *************************/
-
 @media (max-width: (@lg - 1)) {
 }
 
 @media (max-width: (@md - 1)) {
+  #container > main {
+    min-height: 64%;
+  }
+
   .header-navigation {
     .links-toggle {
       & + nav {
@@ -30,7 +33,7 @@
           height: 10000px;
           left: -5000px;
           top: 5em;
-          background: rgba(0,0,0,.9);
+          background: rgba(0, 0, 0, .9);
           z-index: 1;
         }
       }
@@ -170,7 +173,7 @@
               top: 0;
               width: 100%;
               height: 100%;
-              background: rgba(0,0,0,.25);
+              background: rgba(0, 0, 0, .25);
               z-index: 100;
             }
           }
@@ -221,5 +224,19 @@
         min-width: 0;
       }
     }
+  }
+}
+
+/** Screen Height correction so footer is near bottom */
+
+@media (min-width: @md) and (max-height: @sm) {
+  #container > main {
+    min-height: 70%;
+  }
+}
+
+@media (max-width: (@md - 1)) and (max-height: @sm) {
+  #container > main {
+    min-height: 50%;
   }
 }

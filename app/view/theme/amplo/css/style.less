@@ -17,6 +17,20 @@
 /******************************
  *  I. Base Style / Structure *
  ******************************/
+html, body {
+  height: 100%;
+}
+
+#container {
+  position: absolute;
+  top: @header-height;
+  bottom: 0;
+  width: 100%;
+
+  & > main {
+    min-height: 80%;
+  }
+}
 
 body {
   .render-font(@font-base);
@@ -378,10 +392,6 @@ header.main-header.row {
   }
 
   @header();
-}
-
-#container {
-  padding-top: @header-height;
 }
 
 //Logo
