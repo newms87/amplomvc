@@ -71,7 +71,7 @@ final class Registry
 		if (is_file($file)) {
 			$mod = _mod($file);
 
-			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
+			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod' || pathinfo($mod, PATHINFO_EXTENSION) === 'acmod') {
 				require_once($file);
 				$class .= "_mod";
 			}

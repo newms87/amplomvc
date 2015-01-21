@@ -19,7 +19,8 @@
 
 					<? if (is_logged()) { ?>
 						<div class="div3">
-							<img src="<?= theme_url('image/lock.png'); ?>" alt="" id="header_secure_lock"/><?= _l("You are logged in as <span>%s</span>", $user['username']); ?>
+							<img src="<?= theme_url('image/lock.png'); ?>" alt="" id="header_secure_lock"/>
+							<?= _l("You are logged in as <span>%s</span>", $user['username']); ?>
 						</div>
 
 						<? if (option('site_email_support')) { ?>
