@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
 	`address_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`firstname` varchar(32)  DEFAULT '' ,
-	`lastname` varchar(32)  DEFAULT '' ,
-	`company` varchar(32)  DEFAULT NULL ,
+	`firstname` varchar(60)  DEFAULT '' ,
+	`lastname` varchar(60)  DEFAULT '' ,
+	`company` varchar(45)  DEFAULT NULL ,
 	`address_1` varchar(128) NOT NULL  ,
 	`address_2` varchar(128)  DEFAULT NULL ,
 	`city` varchar(128)  DEFAULT NULL ,
-	`postcode` varchar(10) NOT NULL  ,
+	`postcode` varchar(15) NOT NULL  ,
 	`country_id` int(11) NOT NULL DEFAULT '0' ,
 	`zone_id` int(11) NOT NULL DEFAULT '0' ,
 	`locked` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
@@ -243,7 +243,7 @@ CREATE TABLE `navigation` (
 	PRIMARY KEY (`navigation_id`)
 );
 
-INSERT INTO `navigation` VALUES ('9786','75','0','home','Home','','','','','1','0'),('9787','75','0','dashboards','Dashboards','','admin/dashboard','','','1','1'),('9788','75','0','content','Content','','','','','1','2'),('9789','75','9788','content_blocks','Blocks','','admin/block','','','1','0'),('9790','75','9788','content_pages','Pages','','admin/page','','','1','1'),('9791','75','0','plugins','Plugins','','admin/plugin','','','1','3'),('9792','75','0','users','Users','','','','','1','4'),('9793','75','9792','users_users','Users','','admin/user','','','1','0'),('9794','75','9792','users_user_roles','User Roles','','admin/settings/role','','','1','1'),('9795','75','0','system','System','','','','','1','5'),('9796','75','9795','system_settings','Settings','','admin/settings/store','','','1','0'),('9797','75','9796','system_settings_general','General','','admin/settings/setting','','','1','0'),('9798','75','9796','system_settings_update','Update','','admin/settings/update','','','1','1'),('9799','75','9795','system_mail','Mail','','','','','1','1'),('9800','75','9799','system_mail_send_email','Send Email','','admin/mail/send_email','','','1','0'),('9801','75','9799','system_mail_mail_messages','Mail Messages','','admin/mail/messages','','','1','1'),('9802','75','9799','system_mail_error','Failed Messages','','admin/mail/error','','','1','2'),('9803','75','9795','system_views','Views','','admin/view','','','1','2'),('9804','75','9795','system_url_alias','URL Alias','','admin/settings/url_alias','','','1','3'),('9805','75','9795','system_cron','Cron','','admin/settings/cron','','','1','4'),('9806','75','9795','system_navigation','Navigation','','admin/navigation','','','1','5'),('9807','75','9795','system_design','Design','','','','','1','6'),('9808','75','9807','system_design_layouts','Layouts','','admin/design/layout','','','1','0'),('9809','75','9795','system_system_clearcache','Clear Cache','','admin/tool/tool/clear_cache','','','1','7'),('9810','75','9795','system_system_tools','System Tools','','admin/tool/tool','','','1','8'),('9811','75','9795','system_logs','Logs','','admin/tool/logs','','','1','9'),('9812','75','9795','system_localisation','Localisation','','','','','1','10'),('9813','75','9812','system_localisation_currencies','Currencies','','admin/localisation/currency','','','1','0'),('9814','75','9812','system_localisation_languages','Languages','','admin/localisation/language','','','1','1'),('9815','75','9812','system_localisation_zones','Zones','','admin/localisation/zone','','','1','2'),('9816','75','9812','system_localisation_countries','Countries','','admin/localisation/country','','','1','3'),('9817','75','9812','system_localisation_geo_zones','Geo Zones','','admin/localisation/geo_zone','','','1','4'),('9819','75','0','development','Development','','admin/dev','','','1','15');
+INSERT INTO `navigation` VALUES ('4918','31','0','account','My Account','Manage your account','account/account','','user_logged','1','0'),('4919','31','0','logout','Logout','Logout of your account','account/logout','','user_logged','1','1'),('4920','31','0','register','Register','Create a new account','account/register','','user_logged_out','1','2'),('9421','10','0','customer_service','Customer Service','Contact Us','contact','','always','1','0'),('9422','10','0','delivery','Delivery &amp; Packaging','Our Delivery and Packaging Method','page/delivery','','always','1','1'),('9423','10','0','privacy_policy','Privacy Policy','Privacy Policy','page/privacy','','always','1','2'),('9424','10','0','terms_conditions','Terms &amp; Conditions','Terms &amp; Conditions','page/terms','','always','1','3'),('9487','32','0','cart','Cart','View Cart','cart','','cart_not_empty','1','0'),('9488','32','0','checkout','Checkout','checkout','checkout','','cart_not_empty','1','1'),('9555','9','0','home','Home','Home','common/home','','always','1','0'),('9556','9','0','contact','Contact Us','Contact Us','contact','','always','1','1'),('9698','67','0','home','Home','','','','','1','0'),('9699','67','0','dashboards','Dashboards','','admin/dashboard','','','1','1'),('9700','67','0','content','Content','','','','','1','2'),('9701','67','9700','content_blocks','Blocks','','admin/block','','','1','0'),('9702','67','9700','content_pages','Pages','','admin/page','','','1','1'),('9703','67','0','plugins','Plugins','','admin/plugin','','','1','3'),('9704','67','0','users','Users','','','','','1','4'),('9705','67','9704','users_users','Users','','admin/user','','','1','0'),('9706','67','9704','users_user_roles','User Roles','','admin/settings/role','','','1','1'),('9707','67','0','system','System','','','','','1','5'),('9708','67','9707','system_settings','Settings','','admin/settings','','','1','0'),('9709','67','9708','system_settings_general','General','','admin/settings/general','','','1','0'),('9710','67','9708','system_settings_update','Update','','admin/settings/update','','','1','1'),('9711','67','9707','system_mail','Mail','','','','','1','1'),('9712','67','9711','system_mail_send_email','Send Email','','admin/mail/send_email','','','1','0'),('9713','67','9711','system_mail_mail_messages','Mail Messages','','admin/mail/messages','','','1','1'),('9714','67','9711','system_mail_error','Failed Messages','','admin/mail/error','','','1','2'),('9715','67','9707','system_views','Views','','admin/view','','','1','2'),('9716','67','9707','system_url_alias','URL Alias','','admin/settings/url_alias','','','1','3'),('9717','67','9707','system_cron','Cron','','admin/settings/cron','','','1','4'),('9718','67','9707','system_navigation','Navigation','','admin/navigation','','','1','5'),('9719','67','9707','system_design','Design','','','','','1','6'),('9720','67','9719','system_design_layouts','Layouts','','admin/design/layout','','','1','0'),('9721','67','9707','system_system_clearcache','Clear Cache','','admin/tool/tool/clear_cache','','','1','7'),('9722','67','9707','system_system_tools','System Tools','','admin/tool/tool','','','1','8'),('9723','67','9707','system_logs','Logs','','admin/tool/logs','','','1','9'),('9724','67','9707','system_localisation','Localisation','','','','','1','10'),('9725','67','9724','system_localisation_currencies','Currencies','','admin/localisation/currency','','','1','0'),('9726','67','9724','system_localisation_languages','Languages','','admin/localisation/language','','','1','1'),('9727','67','9724','system_localisation_zones','Zones','','admin/localisation/zone','','','1','2'),('9728','67','9724','system_localisation_countries','Countries','','admin/localisation/country','','','1','3'),('9729','67','9724','system_localisation_geo_zones','Geo Zones','','admin/localisation/geo_zone','','','1','4'),('9730','67','0','development','Development','','admin/dev','','','1','15');
 
 DROP TABLE IF EXISTS `navigation_group`;
 CREATE TABLE `navigation_group` (
@@ -253,7 +253,7 @@ CREATE TABLE `navigation_group` (
 	PRIMARY KEY (`navigation_group_id`)
 );
 
-INSERT INTO `navigation_group` VALUES ('9','primary','1'),('10','footer','1'),('31','account','0'),('32','cart','1'),('75','admin','1');
+INSERT INTO `navigation_group` VALUES ('9','primary','1'),('10','footer','1'),('31','account','0'),('32','cart','1'),('67','admin','1');
 
 DROP TABLE IF EXISTS `newsletter`;
 CREATE TABLE `newsletter` (
@@ -263,17 +263,6 @@ CREATE TABLE `newsletter` (
 	`data` text NOT NULL  ,
 	`status` int(10) unsigned NOT NULL DEFAULT '1' ,
 	PRIMARY KEY (`newsletter_id`)
-);
-
-DROP TABLE IF EXISTS `order_product_meta`;
-CREATE TABLE `order_product_meta` (
-	`order_product_meta_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
-	`order_id` int(10) unsigned NOT NULL  ,
-	`order_product_id` int(10) unsigned NOT NULL  ,
-	`key` varchar(45) NOT NULL  ,
-	`value` text NOT NULL  ,
-	`serialized` tinyint(3) unsigned NOT NULL  ,
-	PRIMARY KEY (`order_product_meta_id`)
 );
 
 DROP TABLE IF EXISTS `page`;
@@ -342,7 +331,7 @@ CREATE TABLE `plugin_registry` (
 	PRIMARY KEY (`plugin_registry_id`)
 );
 
-INSERT INTO `plugin_registry` VALUES ('80','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/controller/admin/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/controller/admin/dev.php'),('81','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/controller/admin/setting/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/controller/admin/setting/dev.php'),('82','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/model/dev/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/model/dev/dev.php'),('83','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/css/dev.css','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/css/dev.css'),('84','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/database.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/database.png'),('85','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/db_admin.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/db_admin.png'),('86','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/restore.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/restore.png'),('87','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/site_management.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/site_management.png'),('88','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/sync.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/sync.png'),('89','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/backup_restore.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/backup_restore.tpl'),('90','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/db_admin.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/db_admin.tpl'),('91','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/dev.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/dev.tpl'),('92','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/site_management.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/site_management.tpl'),('93','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/sync.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/sync.tpl'),('94','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/app/view/theme/amplo/template/common/amplo_profile.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/amplo/template/common/amplo_profile.tpl'),('95','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/system/helper/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/system/helper/dev.php'),('96','dev','2014-12-15 22:15:38','C:/xampp/htdocs/amplo/system/library/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/system/library/dev.php');
+INSERT INTO `plugin_registry` VALUES ('757','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/controller/admin/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/controller/admin/dev.php'),('758','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/controller/admin/settings/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/controller/admin/settings/dev.php'),('759','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/model/dev/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/model/dev/dev.php'),('760','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/css/dev.css','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/css/dev.css'),('761','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/database.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/database.png'),('762','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/db_admin.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/db_admin.png'),('763','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/restore.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/restore.png'),('764','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/site_management.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/site_management.png'),('765','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/image/dev/sync.png','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/image/dev/sync.png'),('766','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/backup_restore.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/backup_restore.tpl'),('767','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/db_admin.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/db_admin.tpl'),('768','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/dev.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/dev.tpl'),('769','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/site_management.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/site_management.tpl'),('770','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/admin/template/dev/sync.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/admin/template/dev/sync.tpl'),('771','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/app/view/theme/amplo/template/common/amplo_profile.tpl','C:/xampp/htdocs/amplo/plugin/dev/new_files/app/view/theme/amplo/template/common/amplo_profile.tpl'),('772','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/system/helper/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/system/helper/dev.php'),('773','dev','2014-12-17 17:53:19','C:/xampp/htdocs/amplo/system/library/dev.php','C:/xampp/htdocs/amplo/plugin/dev/new_files/system/library/dev.php');
 
 DROP TABLE IF EXISTS `secure_page`;
 CREATE TABLE `secure_page` (
@@ -373,19 +362,15 @@ CREATE TABLE `setting` (
 	PRIMARY KEY (`setting_id`)
 );
 
-INSERT INTO `setting` VALUES ('2','config','_routing_hooks_','a:1:{s:7:\"default\";a:2:{s:8:\"callable\";s:18:\"amplo_routing_hook\";s:10:\"sort_order\";i:0;}}','1','0','1'),('3','system','AMPLO_VERSION','0.1.0','0','0','0');
-
 DROP TABLE IF EXISTS `store`;
 CREATE TABLE `store` (
 	`store_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`prefix` varchar(15) NOT NULL  ,
 	`name` varchar(64) NOT NULL  ,
 	`url` varchar(255) NOT NULL  ,
 	`ssl` varchar(255) NOT NULL  ,
+	`prefix` varchar(15) NOT NULL  ,
 	PRIMARY KEY (`store_id`)
 );
-
-INSERT INTO `store` VALUES ('1','am_','Amplo MVC','http://localhost/amplo/','https://localhost/amplo/');
 
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
@@ -437,8 +422,6 @@ CREATE TABLE `user` (
 	PRIMARY KEY (`user_id`)
 );
 
-INSERT INTO `user` VALUES ('1','1','newms87','$2y$12$dSesezJ4JONwBT4Em3WtJOA2lOHxFEmt1CQK8KoXHJzHbAvl6xAB6','Admin','','newms87@gmail.com','','1','2014-12-15 11:28:19');
-
 DROP TABLE IF EXISTS `user_meta`;
 CREATE TABLE `user_meta` (
 	`user_meta_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
@@ -487,8 +470,6 @@ CREATE TABLE `view_listing` (
 	PRIMARY KEY (`view_listing_id`)
 );
 
-INSERT INTO `view_listing` VALUES ('1','Clients','clients','admin/client/listing','',''),('2','Page List','page_list','admin/page/listing','',''),('3','View Listings','view_listings','admin/view/listing','',''),('4','User Roles','user_role_list','admin/settings/role/listing','','');
-
 DROP TABLE IF EXISTS `view_meta`;
 CREATE TABLE `view_meta` (
 	`view_meta_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
@@ -498,29 +479,6 @@ CREATE TABLE `view_meta` (
 	`serialized` tinyint(3) unsigned NOT NULL  ,
 	`date` datetime NOT NULL  ,
 	PRIMARY KEY (`view_meta_id`)
-);
-
-DROP TABLE IF EXISTS `voucher`;
-CREATE TABLE `voucher` (
-	`voucher_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`order_id` int(10) unsigned  DEFAULT NULL ,
-	`code` varchar(32) NOT NULL  ,
-	`title` varchar(64) NOT NULL  ,
-	`amount` decimal(15,4) NOT NULL  ,
-	`template` varchar(128) NOT NULL  ,
-	`data` text NOT NULL  ,
-	PRIMARY KEY (`voucher_id`)
-);
-
-DROP TABLE IF EXISTS `voucher_history`;
-CREATE TABLE `voucher_history` (
-	`voucher_history_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
-	`voucher_id` int(10) unsigned NOT NULL  ,
-	`order_id` int(10) unsigned NOT NULL  ,
-	`amount` int(10) unsigned NOT NULL  ,
-	`message` varchar(255) NOT NULL  ,
-	`date` datetime NOT NULL  ,
-	PRIMARY KEY (`voucher_history_id`)
 );
 
 DROP TABLE IF EXISTS `zone`;

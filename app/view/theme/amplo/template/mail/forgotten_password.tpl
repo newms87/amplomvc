@@ -1,6 +1,6 @@
 <?= call('mail/header'); ?>
 
-<p><?= _l("A new password was requested for your account with us at %s.", option('config_name')); ?></p>
+<p><?= _l("A new password was requested for your account with us at %s.", option('site_name')); ?></p>
 <br/>
 <br/>
 

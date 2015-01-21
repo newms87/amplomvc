@@ -8,7 +8,7 @@ class Breadcrumb extends Library
 	{
 		parent::__construct();
 
-		$this->separator = option('config_breadcrumb_separator');
+		$this->separator = option('breadcrumb_separator');
 	}
 
 	public function add($text, $href, $separator = '', $position = null)
@@ -76,7 +76,8 @@ class Breadcrumb extends Library
 
 	public function render()
 	{
-		$html = "";
+		$html = '';
+
 		foreach ($this->crumbs as $key => $crumb) {
 			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href=\"$crumb[href]\">" . _strip_tags($crumb['text']) . "</a>";
 		}

@@ -5,13 +5,13 @@ class App_Controller_Mail_Header extends Controller
 	public function index($data = array())
 	{
 		$data += array(
-			'title' => option('config_name'),
-			'logo'  => str_replace("./", '', option('config_logo')),
+			'title' => option('site_name'),
+			'logo'  => str_replace("./", '', option('site_logo')),
 		);
 
 		if ($data['logo']) {
-			$width = option('config_email_logo_width', 400);
-			$height = option('config_email_logo_height', 150);
+			$width = option('site_email_logo_width', 400);
+			$height = option('site_email_logo_height', 150);
 
 			if (!parse_url($data['logo'], PHP_URL_SCHEME) && strpos($data['logo'], '//') !== 0) {
 				$data['logo'] = image($data['logo'], $width, $height);

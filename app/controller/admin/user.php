@@ -5,7 +5,7 @@ class App_Controller_Admin_User extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User"));
+		set_page_info('title', _l("User"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -91,7 +91,7 @@ class App_Controller_Admin_User extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -101,7 +101,7 @@ class App_Controller_Admin_User extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Information"));
+		set_page_info('title', _l("User Information"));
 
 		//Insert or Update
 		$user_id = _get('user_id', null);
@@ -156,8 +156,8 @@ class App_Controller_Admin_User extends Controller
 			message('error', $this->Model_User->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -173,8 +173,8 @@ class App_Controller_Admin_User extends Controller
 			message('error', $this->Model_User->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/user');
 		}
@@ -204,7 +204,7 @@ class App_Controller_Admin_User extends Controller
 			message('success', _l("Users were updated successfully!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/user');
@@ -213,7 +213,7 @@ class App_Controller_Admin_User extends Controller
 
 	public function login()
 	{
-		$this->document->setTitle(_l("Administration"));
+		set_page_info('title', _l("Administration"));
 
 		//If user is logged in, redirect to the homepage
 		if (is_logged()) {
@@ -274,7 +274,7 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		//Page Title
-		$this->document->setTitle(_l("Forgot Your Password?"));
+		set_page_info('title', _l("Forgot Your Password?"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

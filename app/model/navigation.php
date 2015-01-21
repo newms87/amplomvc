@@ -4,6 +4,20 @@ class App_Model_Navigation extends App_Model_Table
 {
 	protected $table = 'navigation', $primary_key = 'navigation_id';
 
+	public function getGroupId($navigation_group_id)
+	{
+		if (is_string($navigation_group_id) && preg_match("/[^\\d]/", $navigation_group_id)) {
+			$name                = $navigation_group_id;
+			$navigation_group_id = $this->getGroupByName($name);
+
+			if (!$navigation_group_id) {
+				return false;
+			}
+		}
+
+		return $navigation_group_id;
+	}
+
 	public function save($navigation_id, $link)
 	{
 		if (empty($link['display_name'])) {
@@ -85,20 +99,24 @@ class App_Model_Navigation extends App_Model_Table
 	public function saveGroup($navigation_group_id, $group)
 	{
 		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
-
-			if (!$navigation_group_id) {
-				$group['name'] = $name;
-			}
+			$group['name'] = $navigation_group_id;
+			$navigation_group_id = $this->getGroupByName($group['name']);
 		}
 
 		if (isset($group['name'])) {
 			if (!validate('text', $group['name'], 3, 64)) {
 				$this->error['name'] = _l("Navigation Group Name must be between 3 and 64 characters!");
 			}
+
+			if (!$navigation_group_id && $this->getGroupByName($group['name'])) {
+				$this->error['name'] = _l("A Group with that name already exists!");
+			}
 		} elseif (!$navigation_group_id) {
 			$this->error['name'] = _l("Navigation Group Name is required!");
+		}
+
+		if ($this->error) {
+			return false;
 		}
 
 		if (!isset($group['status'])) {
@@ -117,7 +135,9 @@ class App_Model_Navigation extends App_Model_Table
 
 		//Add Links
 		if (!empty($group['links'])) {
-			$this->saveGroupLinks($navigation_group_id, $group['links']);
+			$this->toTree($group['links']);
+
+			$this->saveGroupLinks($navigation_group_id, $group['links'], false);
 		}
 
 		clear_cache('navigation');
@@ -125,16 +145,17 @@ class App_Model_Navigation extends App_Model_Table
 		return $navigation_group_id;
 	}
 
-	public function saveGroupLinks($navigation_group_id, $links)
+	public function saveGroupLinks($navigation_group_id, $links, $append = true)
 	{
-		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
+			return false;
+		}
+
+		if (!$append) {
+			$this->delete('navigation', array('navigation_group_id' => $navigation_group_id));
 		}
 
 		$sort_order = 0;
@@ -158,14 +179,11 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function removeGroup($navigation_group_id)
 	{
-		if (is_string($navigation_group_id)) {
-			$name                = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
+			return false;
 		}
 
 		$this->delete("navigation_group", $navigation_group_id);
@@ -180,7 +198,7 @@ class App_Model_Navigation extends App_Model_Table
 	{
 		clear_cache('navigation');
 
-		$children = $this->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE parent_id = " . (int)$navigation_id);
+		$children = $this->queryColumn("SELECT navigation_id FROM " . self::$tables['navigation'] . " WHERE parent_id = " . (int)$navigation_id);
 
 		foreach ($children as $child_id) {
 			$this->deleteNavigationLink($child_id);
@@ -191,14 +209,11 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function removeGroupLink($navigation_group_id, $link)
 	{
-		if (is_string($navigation_group_id)) {
-			$group_name          = $navigation_group_id;
-			$navigation_group_id = $this->getGroupByName($group_name);
+		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
-			if (!$navigation_group_id) {
-				$this->error['group'] = _l("Unknown Navigation Group %s", $group_name);
-				return false;
-			}
+		if (!$navigation_group_id) {
+			$this->error['group'] = _l("Unknown Navigation Group");
+			return false;
 		}
 
 		$where = array(
@@ -206,7 +221,7 @@ class App_Model_Navigation extends App_Model_Table
 			'navigation_group_id' => $navigation_group_id,
 		);
 
-		return $this->delete('navigation', $where);
+		return $this->delete($this->table, $where);
 	}
 
 	public function removeGroupLinks($group, $links)
@@ -220,17 +235,17 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getLinkByName($navigation_group_id, $name)
 	{
-		return $this->queryRow("SELECT * FROM $this->p_table WHERE navigation_group_id = " . (int)$navigation_group_id . " AND `name` = '" . $this->escape($name) . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables[$this->table] . " WHERE navigation_group_id = " . (int)$navigation_group_id . " AND `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getGroupByName($name)
 	{
-		return $this->queryVar("SELECT navigation_group_id FROM " . $this->prefix . "navigation_group WHERE `name` = '" . $this->escape($name) . "'");
+		return $this->queryVar("SELECT navigation_group_id FROM " . self::$tables['navigation_group'] . " WHERE `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getGroup($navigation_group_id)
 	{
-		$group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
+		$group = $this->queryRow("SELECT * FROM " . self::$tables['navigation_group'] . " WHERE navigation_group_id = " . (int)$navigation_group_id);
 
 		$group['links'] = $this->getGroupLinks($navigation_group_id);
 
@@ -243,7 +258,7 @@ class App_Model_Navigation extends App_Model_Table
 		$select = $this->extractSelect('navigation_group', $select);
 
 		//From
-		$from = $this->prefix . 'navigation_group';
+		$from = self::$tables['navigation_group'];
 
 		//Where
 		$where = $this->extractWhere('navigation_group', $filter);
@@ -264,15 +279,11 @@ class App_Model_Navigation extends App_Model_Table
 		return $results;
 	}
 
-	public function getNavigationGroup($name = null)
+	public function getNavigationGroup($name = 'all')
 	{
-		if (!$name) {
-			$name = IS_ADMIN ? 'admin' : 'all';
-		}
-
 		$navigation_groups = cache("navigation_group.$name");
 
-		if (true || is_null($navigation_groups)) {
+		if (!isset($navigation_groups)) {
 			$filter = array(
 				'status' => 1,
 			);
@@ -289,25 +300,15 @@ class App_Model_Navigation extends App_Model_Table
 				if (empty($group['links'])) {
 					continue;
 				}
-				$parent_ref = array();
 
 				foreach ($group['links'] as $key => &$link) {
 					if (!empty($link['path']) || !empty($link['query'])) {
 						$link['href'] = site_url($link['path'], $link['query']);
 					}
-
-					if (!isset($link['children'])) {
-						$link['children'] = array();
-					}
-
-					$parent_ref[$link['navigation_id']] = &$link;
-
-					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = &$link;
-						unset($group['links'][$key]);
-					}
 				}
 				unset($link);
+
+				$this->toTree($group['links']);
 			}
 			unset($group);
 
@@ -326,7 +327,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getGroupLinks($navigation_group_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY parent_id, sort_order ASC", 'navigation_id');
+		return $this->queryRows("SELECT * FROM " . self::$tables['navigation'] . " WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY parent_id, sort_order ASC", 'navigation_id');
 	}
 
 	public function getTotalGroups($filter)
@@ -336,7 +337,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function checkLinks(&$links)
 	{
-		$is_active = false;
+		$is_active  = false;
 		$has_active = false;
 
 		foreach ($links as &$link) {
@@ -365,10 +366,41 @@ class App_Model_Navigation extends App_Model_Table
 			}
 
 			$link['active'] = true;
-			$is_active = true;
+			$is_active      = true;
 		}
 
 		return $is_active;
+	}
+
+	public function toTree(&$links)
+	{
+		$parent_ref = array();
+
+		foreach ($links as $key => &$link) {
+			if (!isset($link['children'])) {
+				$link['children'] = array();
+			}
+
+			if (!empty($link['navigation_id'])) {
+				$parent_ref[$link['navigation_id']] = &$link;
+			} else {
+				$parent_ref[$key] = &$link;
+			}
+
+			if (empty($link['name'])) {
+				$link['name'] = $key;
+			}
+
+			$parent_ref[$link['name']] = &$link;
+
+			if (!empty($link['parent_id'])) {
+				$parent_ref[$link['parent_id']]['children'][] = &$link;
+				unset($links[$key]);
+			} elseif (!empty($link['parent'])) {
+				$parent_ref[$link['parent']]['children'][] = &$link;
+			}
+		}
+		unset($link);
 	}
 
 	public function resetAdminNavigationGroup()
@@ -422,17 +454,7 @@ class App_Model_Navigation extends App_Model_Table
 				'children'     => array(
 					'system_settings'          => array(
 						'display_name' => 'Settings',
-						'path'         => 'admin/settings/store',
-						'children'     => array(
-							'system_settings_general' => array(
-								'display_name' => 'General',
-								'path'         => 'admin/settings/setting',
-							),
-							'system_settings_update'  => array(
-								'display_name' => 'Update',
-								'path'         => 'admin/settings/update',
-							),
-						),
+						'path'         => 'admin/settings',
 					),
 					'system_mail'              => array(
 						'display_name' => 'Mail',
@@ -520,11 +542,11 @@ class App_Model_Navigation extends App_Model_Table
 		$this->removeGroup('admin');
 
 		$group = array(
+			'name'   => 'admin',
 			'status' => 1,
-			'stores' => array(-1),
 			'links'  => $links,
 		);
 
-		return $this->saveGroup('admin', $group);
+		return $this->saveGroup(null, $group);
 	}
 }

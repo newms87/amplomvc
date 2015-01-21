@@ -1,17 +1,14 @@
 <?php
 
-final class Router
+class Router
 {
-	private $path;
-	private $segments;
-	private $store;
+	protected $path;
+	protected $segments;
+	protected $site;
+	protected $routing_hooks = array();
 
 	public function __construct()
 	{
-		$this->routeStore();
-
-		define('STORE_PREFIX', !empty($this->store['prefix']) ? $this->store['prefix'] : DB_PREFIX);
-
 		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
 
 		$base = trim(SITE_BASE, '/');
@@ -43,45 +40,42 @@ final class Router
 
 	public function getSegment($index = null)
 	{
-		if (is_null($index)) {
+		if ($index === null) {
 			return $this->segments;
 		}
 
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function getStore()
+	public function getSite()
 	{
-		return $this->store;
+		return $this->site;
+	}
+
+	public function setSite($site)
+	{
+		$this->site = $site;
+
+		_set_db_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
 	{
-		$routing_hooks = option('_routing_hooks_', array());
+		if (is_callable($callable)) {
+			$this->routing_hooks[$name] = array(
+				'callable'   => $callable,
+				'sort_order' => $sort_order,
+			);
 
-		$routing_hooks[$name] = array(
-			'callable'   => $callable,
-			'sort_order' => $sort_order,
-		);
+			return true;
+		}
 
-		uasort($routing_hooks, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
-
-		set_option('_routing_hooks_', $routing_hooks);
-
-		return $routing_hooks;
+		return false;
 	}
 
 	public function unregisterHook($name)
 	{
-		$routing_hooks = option('_routing_hooks_', array());
-
-		unset($routing_hooks[$name]);
-
-		set_option('_routing_hooks_', $routing_hooks);
-
-		return $routing_hooks;
+		unset($this->routing_hooks[$name]);
 	}
 
 	public function dispatch()
@@ -89,23 +83,22 @@ final class Router
 		$path = $this->path;
 
 		//Resolve routing hooks
-		$routing_hooks = option('_routing_hooks_');
+		$args = array();
 
-		if (!$routing_hooks) {
-			$routing_hooks = $this->registerHook('default', 'amplo_routing_hook');
-		}
+		uasort($this->routing_hooks, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
 
-		foreach ($routing_hooks as $hook) {
-			if (is_callable($hook['callable'])) {
-				$params = array(
-					&$path,
-					$this->segments,
-					$this->path
-				);
+		foreach ($this->routing_hooks as $hook) {
+			$params = array(
+				&$path,
+				$this->segments,
+				$this->path,
+				&$args,
+			);
 
-				if (call_user_func_array($hook['callable'], $params) === false) {
-					break;
-				}
+			if (call_user_func_array($hook['callable'], $params) === false) {
+				break;
 			}
 		}
 
@@ -115,7 +108,7 @@ final class Router
 		$this->config->set('config_layout_id', $layout_id);
 
 		//Dispatch Route
-		$action = new Action($path);
+		$action = new Action($path, $args);
 
 		$valid = $action->isValid();
 
@@ -162,25 +155,28 @@ final class Router
 
 		$stores = cache('store.all');
 
-		if (is_null($stores)) {
-			$stores = $registry->get('Model_setting_Store')->getStores();
-
+		if ($stores === null) {
+			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store');
 			cache('store.all', $stores);
 		}
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
 
+		$prefix = DB_PREFIX;
+
 		foreach ($stores as $store) {
 			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
-				if (!empty($store['prefix']) && $store['prefix'] !== DB_PREFIX) {
-					$registry->get('db')->setPrefix($store['prefix']);
-					$registry->get('cache')->setDir(DIR_CACHE . $store['prefix']);
+				if (!empty($store['prefix'])) {
+					$prefix = $store['prefix'];
 				}
 
-				$this->store = $store;
-				return;
+				$this->site = $store;
+				break;
 			}
 		}
+
+		define('SITE_PREFIX', $prefix);
+		_set_db_prefix($prefix);
 	}
 }

@@ -3,7 +3,7 @@ class App_Model_Mail_Error extends Model
 {
 	public function getFailedMessage($mail_fail_id)
 	{
-		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE setting_id = '" . (int)$mail_fail_id . "' AND `key` = 'mail_fail'");
+		$setting = $this->queryRow("SELECT * FROM " . self::$tables['setting'] . " WHERE setting_id = '" . (int)$mail_fail_id . "' AND `key` = 'mail_fail'");
 
 		$message = unserialize($setting['value']);
 
@@ -14,7 +14,7 @@ class App_Model_Mail_Error extends Model
 
 	public function getFailedMessages()
 	{
-		$message_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE `key` = 'mail_fail'");
+		$message_list = $this->queryRows("SELECT * FROM " . self::$tables['setting'] . " WHERE `key` = 'mail_fail'");
 
 		$messages = array();
 
@@ -38,11 +38,11 @@ class App_Model_Mail_Error extends Model
 
 	public function deleteFailedMessage($mail_fail_id)
 	{
-		$this->query("DELETE FROM " . DB_PREFIX . "setting WHERE setting_id = '" . (int)$mail_fail_id . "' AND `key` = 'mail_fail'");
+		$this->query("DELETE FROM " . self::$tables['setting'] . " WHERE setting_id = '" . (int)$mail_fail_id . "' AND `key` = 'mail_fail'");
 	}
 
 	public function total_failed_messages()
 	{
-		return $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "setting WHERE `key` = 'mail_fail'");
+		return $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['setting'] . " WHERE `key` = 'mail_fail'");
 	}
 }

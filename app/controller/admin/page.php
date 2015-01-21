@@ -5,7 +5,7 @@ class App_Controller_Admin_Page extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -89,7 +89,7 @@ class App_Controller_Admin_Page extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -99,7 +99,7 @@ class App_Controller_Admin_Page extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Insert or Update
 		$page_id = _get('page_id');
@@ -172,8 +172,8 @@ class App_Controller_Admin_Page extends Controller
 			message('error', $this->Model_Page->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/page/form', 'page_id=' . _request('page_id'));
 		} else {
@@ -191,8 +191,8 @@ class App_Controller_Admin_Page extends Controller
 			message('notify', _l("Page was deleted!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/page');
 		}
@@ -226,7 +226,7 @@ class App_Controller_Admin_Page extends Controller
 			message('success', _l("Success: You have modified navigation!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/navigation');
@@ -257,12 +257,13 @@ class App_Controller_Admin_Page extends Controller
 
 		$layouts = $this->Model_Design_Layout->getLayouts($sort);
 
-		$output = build('select', array(
-			'name'   => 'layout_id',
+		$output = build(array(
+			'type' => 'select',
+			'name'  => 'layout_id',
 			'data'   => $layouts,
 			'select' => $layout_id,
-			'key'    => 'layout_id',
-			'value'  => 'name',
+			'value' =>  'layout_id',
+			'label' =>  'name',
 		));
 
 		output($output);

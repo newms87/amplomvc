@@ -94,7 +94,7 @@ class App_Model_Block_Login_Google extends Model
 
 	private function registerCustomer($data)
 	{
-		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data['id']) . "' LIMIT 1");
+		$customer_id = $this->queryVar("SELECT customer_id FROM " . self::$tables['customer_meta'] . " WHERE `key` = 'google+_id' AND `value` = '" . $this->escape($data['id']) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer
 		if (!$customer_id) {
@@ -102,7 +102,7 @@ class App_Model_Block_Login_Google extends Model
 			$email   = !empty($data['emails'][0]) ? $data['emails'][0]['value'] : '';
 
 			if ($email) {
-				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
+				$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE email = '" . $this->escape($email) . "'");
 			}
 
 			if (empty($customer)) {
@@ -121,13 +121,13 @@ class App_Model_Block_Login_Google extends Model
 					'email'     => $email,
 				);
 
-				if (!$this->customer->add($customer)) {
-					$this->error = $this->customer->getError();
+				if (!$this->Model_Customer->save(null, $customer)) {
+					$this->error = $this->Model_Customer->getError();
 					return false;
 				}
 			}
 		} else {
-			$customer = $this->customer->getCustomer($customer_id);
+			$customer = $this->Model_Customer->getRecord($customer_id);
 			$no_meta  = false;
 		}
 

@@ -7,8 +7,8 @@ class App_Controller_Feed_GoogleBase extends Controller
 			$output = '<?xml version="1.0" encoding="UTF-8" ?>';
 			$output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
 			$output .= '<channel>';
-			$output .= '<title>' . option('config_name') . '</title>';
-			$output .= '<description>' . option('config_meta_description') . '</description>';
+			$output .= '<title>' . option('site_name') . '</title>';
+			$output .= '<description>' . option('site_meta_description') . '</description>';
 			$output .= '<link>' . URL_SITE . '</link>';
 
 			$products = $this->Model_Product->getProducts();

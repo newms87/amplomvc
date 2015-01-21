@@ -31,7 +31,13 @@ final class Registry
 			return $this;
 		}
 
-		if (class_exists($class)) {
+		$class = str_replace('\\', '/', $class);
+
+		if (class_exists($class, false)) {
+			if (class_exists($class . '_mod', false)) {
+				$class .= '_mod';
+			}
+
 			return $return_instance ? new $class() : true;
 		}
 
@@ -63,14 +69,14 @@ final class Registry
 
 		//Check for relative path from root
 		if (is_file($file)) {
-			$acmod = _mod($file);
+			$mod = _mod($file);
 
-			if (pathinfo($acmod, PATHINFO_EXTENSION) === 'acmod') {
+			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
 				require_once($file);
-				$class .= "_acmod";
+				$class .= "_mod";
 			}
 
-			require_once($acmod);
+			require_once($mod);
 
 			if ($return_instance) {
 				return new $class();

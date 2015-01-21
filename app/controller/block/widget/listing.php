@@ -13,23 +13,35 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		}
 
 		$settings += array(
-			'extra_cols'      => array(),
-			'template'        => 'table/list_view',
-			'ajax'            => 1,
-			'rows'            => array(),
-			'template_data'   => array(),
-			'filter_value'    => array(),
-			'show_pagination' => true,
-			'show_limits'     => true,
-			'limits'          => null,
-			'show_messages'   => null,
-			'listing_path'    => $this->route->getPath(),
-			'save_path'       => false,
-			'row_id'          => '',
-			'view_id'         => _request('view_id'),
-			'chart'           => array(),
-			'theme'           => null,
+			'extra_cols'          => array(),
+			'template'            => 'table/list_view',
+			'ajax'                => 1,
+			'rows'                => array(),
+			'template_data'       => array(),
+			'filter_value'        => array(),
+			'pagination_settings' => array(),
+			'limit_settings'      => array(),
+			'show_pagination'     => true,
+			'show_limits'         => 'top',
+			'show_controls'       => true,
+			'show_charts'         => true,
+			'show_actions'        => true,
+			'show_messages'       => null,
+			'listing_path'        => $this->route->getPath(),
+			'save_path'           => false,
+			'row_id'              => '',
+			'view_id'             => _request('view_id'),
+			'chart'               => array(),
+			'theme'               => 'admin',
+			'filter_style'        => 'switch',
+			//With the default AmploMVC installation, only admin theme has a template for listing
 		);
+
+		if (!empty($settings['rows'])) {
+			$settings['show_limits'] = $settings['show_limits'] === 'bottom' ? 'bottom' : 'top';
+		} else {
+			$settings['show_limits'] = false;
+		}
 
 		$template_defaults = array(
 			'listing_path' => $settings['listing_path'],
@@ -40,7 +52,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$settings['template_data'] += $template_defaults;
 
 		if (!isset($settings['show_messages'])) {
-			$settings['show_messages'] = $settings['ajax'] && IS_AJAX;
+			$settings['show_messages'] = $settings['ajax'] && $this->is_ajax;
 		}
 
 		if ($settings['view_id']) {
@@ -90,22 +102,23 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$this->table->mapAttribute('filter_value', $filter_values);
 		$this->table->mapAttribute('filter_type', $filter_types);
 
-		$settings['listing'] = $this->table->render();
+		$table_settings = array(
+			'show_actions' => $settings['show_actions'],
+			'filter_style' => $settings['filter_style'],
+		);
+
+		$settings['listing'] = $this->table->render($table_settings);
 
 		//Limits
 		if ($settings['show_limits']) {
-			$settings['limit_settings'] = array(
-				'path' => $settings['listing_path'],
+			$settings['limit_settings'] += array(
+				'path'   => $settings['listing_path'],
 			);
-
-			if ($settings['limits']) {
-				$settings['limit_settings']['limits'] = $settings['limits'];
-			}
 		}
 
 		//Pagination
 		if ($settings['show_pagination']) {
-			$settings['pagination_settings'] = array(
+			$settings['pagination_settings'] += array(
 				'total' => $settings['total_listings'],
 				'path'  => $settings['listing_path'],
 			);
@@ -127,15 +140,14 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		}
 
 		//Template Data
-		$settings['data_chart_types'] = array(
-			''     => _l("Listing"),
-			'Line' => _l('Line Chart'),
-			'Bar'  => _l('Bar Chart'),
-			'Pie'  => _l('Pie Chart'),
-		);
-
-		//Action
-		$settings['refresh'] = site_url($settings['listing_path'], $_GET);
+		if ($settings['show_charts']) {
+			$settings['data_chart_types'] = array(
+				''     => _l("Listing"),
+				'Line' => _l('Line Chart'),
+				'Bar'  => _l('Bar Chart'),
+				'Pie'  => _l('Pie Chart'),
+			);
+		}
 
 		//Render
 		$this->render('block/widget/listing', $settings, $settings['theme']);
@@ -192,6 +204,6 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			}
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 }

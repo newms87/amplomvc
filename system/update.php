@@ -35,7 +35,7 @@ class System_Update extends Model
 			}
 		}
 
-		set_option('AMPLO_VERSION', AMPLO_VERSION);
+		save_option('AMPLO_VERSION', AMPLO_VERSION);
 
 		clear_cache();
 

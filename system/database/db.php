@@ -25,7 +25,7 @@ class DB
 		}
 
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if ($driver === 'mysqli') {
+		if (!$driver || $driver === 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 
@@ -62,7 +62,7 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$key];
-		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
+		$this->prefix = $prefix === null ? DB_PREFIX : $prefix;
 	}
 
 	public function hasError($type = null)
@@ -248,15 +248,15 @@ class DB
 
 	public function multiquery($string)
 	{
-		$file_length = strlen($string);
+		$file_length     = strlen($string);
 		$quote_char_list = array(
 			"'",
 			"`",
 			'"'
 		);
-		$in_quote = false;
-		$sql = '';
-		$pos = 0;
+		$in_quote        = false;
+		$sql             = '';
+		$pos             = 0;
 
 		while ($pos < $file_length) {
 			$char = $string[$pos];
@@ -318,7 +318,7 @@ class DB
 			return false;
 		}
 
-		if (is_null($prefix)) {
+		if ($prefix === null) {
 			$prefix = $this->prefix;
 		}
 
@@ -375,7 +375,7 @@ class DB
 					if (!$null) { //meaning NULL is allowed
 						$default = "DEFAULT NULL";
 					} else {
-						$default = "";
+						$default = '';
 					}
 				} else {
 					$default = "DEFAULT '" . $this->escape(trim($column['Default'], "'\"")) . "'";
@@ -440,14 +440,26 @@ class DB
 		return false;
 	}
 
-	public function getTables()
+	public function getTable($table)
+	{
+		$t = $this->hasTable($table);
+
+		return $t ? $t : $table;
+	}
+
+	public function getTables($prefix = false)
 	{
 		$rows = $this->queryRows("SHOW TABLES");
 
 		$tables = array();
 
 		foreach ($rows as $row) {
-			$tables[current($row)] = current($row);
+			$name = current($row);
+
+			if (!$prefix || strpos($name, $prefix) === 0) {
+				$base          = $prefix ? preg_replace("/^" . $prefix . "/", '', $name) : $name;
+				$tables[$base] = $name;
+			}
 		}
 
 		return $tables;
@@ -460,11 +472,42 @@ class DB
 		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
 	}
 
+	public function copyTable($table, $copy, $with_data = false)
+	{
+		if ($table === $copy) {
+			return true;
+		}
+
+		if ($this->hasTable($copy)) {
+			$this->error['copy'] = _l("A table with the same name as copy, %s, already exists!", $copy);
+			return false;
+		}
+
+		$row = $this->queryRow("SHOW CREATE TABLE `$table`");
+
+		if (!empty($row['Create Table'])) {
+			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$table`/i", "CREATE TABLE `$copy`", $row['Create Table']);
+
+			if (!$with_data) {
+				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
+
+				return $this->query($sql);
+			}
+		}
+
+		return false;
+	}
+
 	public function dropTable($table)
 	{
 		clear_cache('model');
 		$this->tables = null;
-		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+
+		if ($this->hasTable($this->prefix . $table)) {
+			return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+		} else {
+			return $this->query("DROP TABLE IF EXISTS `$table`");
+		}
 	}
 
 	public function countTables()
@@ -600,7 +643,7 @@ class DB
 
 	public function setAutoIncrement($table, $value)
 	{
-		if (!$this->driver->setAutoIncrement($table, $value)) {
+		if (!$this->driver->setAutoIncrement($this->getTable($table), $value)) {
 			trigger_error($this->driver->getError());
 
 			return false;
@@ -616,8 +659,18 @@ class DB
 		$tables = $this->getTables();
 
 		foreach ($tables as $table) {
-			$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
-			$this->query("RENAME TABLE $table TO $new_table");
+			if ($old_prefix) {
+				$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
+			} else {
+				if (preg_match("/^$prefix/", $table)) {
+					continue;
+				}
+
+				$new_table = $prefix . $table;
+			}
+
+			$this->query("DROP TABLE IF EXISTS `$new_table`");
+			$this->query("RENAME TABLE `$table` TO `$new_table`");
 		}
 
 		return empty($this->error);

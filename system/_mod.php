@@ -58,11 +58,14 @@ $live_registry = isset($registries['live']) ? $registries['live'] : array();
 function _mod($file)
 {
 	global $live_registry;
+	static $lang;
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
 	if (is_file($file . '.acmod')) {
 		$file = $file . '.acmod';
+	} elseif (is_file($file . '.mod')) {
+		$file = $file . '.mod';
 	}
 
 	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {
@@ -75,7 +78,11 @@ function _mod($file)
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.
 	if ($ext === 'tpl') {
-		$tpl = AC_TEMPLATE_CACHE . str_replace(DIR_SITE, '', $file);
+		if (!$lang) {
+			$lang = option('config_language', 'en');
+		}
+
+		$tpl = AC_TEMPLATE_CACHE . $lang . '/' . str_replace(DIR_SITE, '', $file);
 
 		if (!is_file($tpl) || filemtime($tpl) < filemtime($file)) {
 			if (_is_writable(dirname($tpl))) {
@@ -98,17 +105,37 @@ function render_template($contents)
 		$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
 	}
 
-	$search = array(
-		'/{{/',
-		'/}}/',
-	);
+	$new_contents = '';
 
-	$replace = array(
-		'<?= _l("',
-		'"); ?>',
-	);
+	//Translate text brackets vars
+	$l_string = '';
+	$l_inside = false;
 
-	$contents = preg_replace($search, $replace, $contents, -1, $count);
+	for ($i = 0; $i < strlen($contents); $i++) {
+		switch ($contents[$i]) {
+			case '{':
+				if (!$l_inside && isset($contents[$i + 1]) && $contents[$i + 1] === '{') {
+					$l_inside = true;
+					$i += 2;
+				}
+				break;
 
-	return $contents;
+			case '}':
+				if ($l_inside && isset($contents[$i + 1]) && $contents[$i + 1] === '}') {
+					$l_inside = false;
+					$i += 2;
+					$new_contents .= _l($l_string);
+					$l_string = '';
+				}
+				break;
+		}
+
+		if (!$l_inside) {
+			$new_contents .= $contents[$i];
+		} else {
+			$l_string .= $contents[$i];
+		}
+	}
+
+	return $new_contents;
 }

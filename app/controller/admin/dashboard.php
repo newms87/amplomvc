@@ -5,7 +5,7 @@ class App_Controller_Admin_Dashboard extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Dashboards"));
+		set_page_info('title', _l("Dashboards"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -46,7 +46,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($dashboard['title']);
+		set_page_info('title', $dashboard['title']);
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -77,8 +77,8 @@ class App_Controller_Admin_Dashboard extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/dashboard');
 		}
@@ -101,8 +101,8 @@ class App_Controller_Admin_Dashboard extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/dashboard');
 		}
@@ -120,8 +120,8 @@ class App_Controller_Admin_Dashboard extends Controller
 			message('error', $this->Model_Dashboard->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/dashboard');
 		}

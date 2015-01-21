@@ -11,7 +11,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Theme Settings"));
+		set_page_info('title', _l("Theme Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -45,7 +45,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 
 	public function save()
 	{
-		$theme    = $this->config->load('config', 'config_theme');
+		$theme    = $this->config->load('config', 'site_theme');
 
 		if (!$theme) {
 			$theme = AMPLO_DEFAULT_THEME;
@@ -60,8 +60,8 @@ class App_Controller_Admin_Settings_Theme extends Controller
 			message('success', _l("You have successfully updated the Theme Settings!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/settingss');
 		}
@@ -75,8 +75,8 @@ class App_Controller_Admin_Settings_Theme extends Controller
 			message('error', $this->theme->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/settings/theme');
 		}

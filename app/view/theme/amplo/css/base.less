@@ -1,7 +1,14 @@
 /* Methods */
+.bg-image-set(@s1, @s2, @s3) {
+  background-image: url(@s1);
+  background-image: -webkit-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -moz-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -ms-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -o-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+}
 
 .import-font(@import-font-family, @font-file-name) {
-  @theme-font-file: '@{themepath}font/@{font-file-name}';
+  @theme-font-file: '@{font-path}@{font-file-name}';
   @font-face {
     font-family: @import-font-family;
     src: url('@{theme-font-file}.eot');
@@ -27,6 +34,7 @@
 .row {
   position: relative;
   display: block;
+  text-align: center;
 }
 
 .wrap {
@@ -45,6 +53,15 @@
   visibility: hidden;
   line-height: 0;
   height: 0;
+}
+
+//Hack to overcome whitespace between inline-block elements
+.whitespace-hack {
+  margin-left: -.29em;
+}
+
+.no-whitespace-hack {
+  margin-left: 0 !important;
 }
 
 .col {
@@ -67,9 +84,8 @@
     vertical-align: bottom;
   }
 
-  //Hack to overcome whitespace between inline-block elements
   & + .col {
-    margin-left: -.29em;
+    .whitespace-hack;
   }
 
   &.left {
@@ -83,8 +99,17 @@
 
   &.right {
     text-align: right;
-    float: right;
+    float: none;
   }
+
+  &.justify {
+    text-align: justify;
+    float: none;
+  }
+}
+
+.wrapfix {
+  .whitespace-hack;
 }
 
 //Extra Small
@@ -128,6 +153,10 @@
 
   .col.xs-right {
     text-align: right;
+  }
+
+  .col.xs-justify {
+    text-align: justify;
   }
 }
 
@@ -178,6 +207,10 @@
   .col.sm-right {
     text-align: right;
   }
+
+  .col.sm-justify {
+    text-align: justify;
+  }
 }
 
 @media (min-width: @xs) and (max-width: (@sm - 1)) {
@@ -227,6 +260,10 @@
   .col.md-right {
     text-align: right;
   }
+
+  .col.md-justify {
+    text-align: justify;
+  }
 }
 
 @media (min-width: @sm) and (max-width: (@md - 1)) {
@@ -275,6 +312,10 @@
 
   .col.lg-right {
     text-align: right;
+  }
+
+  .col.lg-justify {
+    text-align: justify;
   }
 }
 
@@ -326,7 +367,23 @@
     text-align: right;
   }
 
+  .col.xl-justify {
+    text-align: justify;
+  }
+
   .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden, .xl-hidden, .xl-hide {
+    display: none !important;
+  }
+}
+
+@media handheld {
+  .desktop {
+    display: none !important;
+  }
+}
+
+@media not handheld {
+  .mobile {
     display: none !important;
   }
 }

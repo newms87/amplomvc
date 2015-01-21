@@ -9,7 +9,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Automated Tasks"));
+		set_page_info('title', _l("Automated Tasks"));
 
 		if (IS_POST && $this->validate()) {
 			$this->config->save('cron', 'cron_tasks', $_POST, false);
@@ -30,7 +30,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l('System Settings'), site_url('admin/settings/store'));
+		breadcrumb(_l('System Settings'), site_url('admin/settings'));
 		breadcrumb(_l('Automated Tasks'), site_url('admin/settings/cron'));
 
 		if (IS_POST) {
@@ -92,7 +92,7 @@ class App_Controller_Admin_Settings_Cron extends Controller
 
 		//Action Buttons
 		$data['save']     = site_url('admin/settings/cron');
-		$data['cancel']   = site_url('admin/settings/store');
+		$data['cancel']   = site_url('admin/settings');
 		$data['run_cron'] = site_url('', 'run_cron');
 		$data['activate'] = site_url('admin/settings/cron/activate');
 

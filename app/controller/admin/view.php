@@ -5,7 +5,7 @@ class App_Controller_Admin_View extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Views"));
+		set_page_info('title', _l("Views"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -77,7 +77,7 @@ class App_Controller_Admin_View extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -87,7 +87,7 @@ class App_Controller_Admin_View extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("View Form"));
+		set_page_info('title', _l("View Form"));
 
 		//Insert or Update
 		$view_listing_id = _get('view_listing_id');
@@ -133,8 +133,8 @@ class App_Controller_Admin_View extends Controller
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -150,8 +150,8 @@ class App_Controller_Admin_View extends Controller
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/view');
 		}
@@ -203,7 +203,7 @@ class App_Controller_Admin_View extends Controller
 			}
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 
 	public function batch_action()
@@ -222,8 +222,8 @@ class App_Controller_Admin_View extends Controller
 			message('success', _l("The Views have been updated!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/view');
 		}

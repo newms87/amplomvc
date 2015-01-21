@@ -3,11 +3,10 @@
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Stores & Settings}}</h1>
+			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Settings}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button">{{Add Store}}</a>
-				<a href="<?= site_url('admin'); ?>" class="button">{{Back}}</a>
+				<a href="<?= site_url('admin'); ?>" class="button">{{Admin Home}}</a>
 			</div>
 		</div>
 		<div class="section">

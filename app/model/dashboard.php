@@ -8,7 +8,7 @@ class App_Model_Dashboard extends Model
 			$count = 1;
 			while (empty($dashboard['title'])) {
 				$dashboard['title'] = 'New Dashboard ' . $count++;
-				if ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "dashboard WHERE `title` = '" . $dashboard['title'] . "'")) {
+				if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['dashboard'] . " WHERE `title` = '" . $dashboard['title'] . "'")) {
 					$dashboard['title'] = '';
 				}
 			}
@@ -22,7 +22,7 @@ class App_Model_Dashboard extends Model
 			}
 
 			$count = 1;
-			while ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "dashboard WHERE `name` = '" . $dashboard['name'] . "'")) {
+			while ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['dashboard'] . " WHERE `name` = '" . $dashboard['name'] . "'")) {
 				$dashboard['name'] = preg_replace("/_[\\d]+/", '', $dashboard['name']) . '_' . $count++;
 			}
 
@@ -41,7 +41,7 @@ class App_Model_Dashboard extends Model
 
 	public function getDashboard($dashboard_id)
 	{
-		$dashboard = $this->queryRow("SELECT * FROM " . $this->prefix . "dashboard WHERE dashboard_id = " . (int)$dashboard_id);
+		$dashboard = $this->queryRow("SELECT * FROM " . self::$tables['dashboard'] . " WHERE dashboard_id = " . (int)$dashboard_id);
 
 		if ($dashboard) {
 			$dashboard['title'] = html_entity_decode($dashboard['title']);
@@ -52,7 +52,7 @@ class App_Model_Dashboard extends Model
 
 	public function getDashboards($check_perms = false)
 	{
-		$dashboards = $this->queryRows("SELECT * FROM " . $this->prefix . "dashboard");
+		$dashboards = $this->queryRows("SELECT * FROM " . self::$tables['dashboard']);
 
 		foreach ($dashboards as $key => $dashboard) {
 			if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {
@@ -109,7 +109,7 @@ class App_Model_Dashboard extends Model
 			$data = array(
 				'dashboard' => $dashboard,
 				'views'     => $views,
-				'to'        => $to ? $to : option('config_email'),
+				'to'        => $to ? $to : option('site_email'),
 				'subject'   => _l("%s", strip_tags($dashboard['title'])),
 			);
 

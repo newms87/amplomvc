@@ -1,4 +1,116 @@
 <?php
+//Request Headers
+$headers = apache_request_headers();
+function _header($key = null, $default = null)
+{
+	global $headers;
+	if ($key) {
+		return isset($headers[$key]) ? $headers[$key] : $default;
+	}
+
+	return $headers;
+}
+
+define("REQUEST_ACCEPT", _header('Accept'));
+
+function request_accepts($type)
+{
+	return strpos(REQUEST_ACCEPT, $type) !== false;
+}
+
+define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admin') === 0);
+
+define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+
+define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
+define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
+define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
+
+function _get($key, $default = null)
+{
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
+}
+
+function _post($key, $default = null)
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+}
+
+function _request($key, $default = null)
+{
+	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
+}
+
+function _session($key, $default = null)
+{
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+}
+
+/**************************************
+ * System Language Translation Engine *
+ **************************************/
+
+global $language_group;
+$language_group = "Load";
+
+/**
+ * Translate a string to the current requested language
+ *
+ * @param $message
+ * @return mixed|string
+ */
+function _l($message)
+{
+	//TODO: Set translations based on language group
+	global $language_group;
+
+	$values = func_get_args();
+
+	array_shift($values);
+
+	//TODO: See bitbucket issue https://bitbucket.org/newms87/dopencart/issue/20/language-translation-engine
+	if (empty($values)) {
+		return _($message);
+	}
+
+	return vsprintf(_($message), $values);
+}
+
+/**
+ * Change Language Group just for this message, then revert back if $message is given.
+ * If $message is null, then the language group is changed permanently.
+ *
+ * @param $group - The language group to change to.
+ * @param $message - The Message
+ * @param $var1 , $var2, etc.. The variables to pass to vsprintf() with the message.
+ *
+ * @return null | String with the translated message
+ */
+
+function _lg($group, $message = null)
+{
+	global $language_group;
+
+	//Permanently change Group.
+	if ($message === null) {
+		$language_group = $group;
+		return;
+	}
+
+	//Temporarily Change Group
+	$temp           = $language_group;
+	$language_group = $group;
+
+	$params = func_get_args();
+	array_shift($params);
+
+	$return = call_user_func_array('_l', $params);
+
+	$language_group = $temp;
+
+	return $return;
+}
+
 //TODO: Maybe make this our main handler for loading (move out of registry)??
 if (!function_exists('amplo_autoload')) {
 	function amplo_autoload($class)
@@ -9,6 +121,67 @@ if (!function_exists('amplo_autoload')) {
 }
 
 spl_autoload_register('amplo_autoload');
+
+function register_routing_hook($name, $callable, $sort_order = 0)
+{
+	global $registry;
+	return $registry->get('route')->registerHook($name, $callable, $sort_order);
+}
+
+/**
+ * Customized routing for special cases. Set a new $path to change the controller / method to call.
+ * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
+ *
+ * To register your own routing hook use $this->route->registerRoutingHook('my-hook-name', 'my_routing_hook');
+ * in your plugin's setup.php install() method.
+ *
+ * @param string $path - The current path that points to the controller and method to call
+ * @param $segments - The path segments broken up into an array.
+ * @param string $orig_path - The original path (in case $path has been modified by another hook).
+ *          NOTE: If a hook has used Route::setPath(), $orig_path will be modified (consider setting $sort_order for your hook to avoid conflicts).
+ *
+ * @return bool | null - if the return value is false no other hooks will be called.
+ */
+function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
+{
+	global $registry;
+
+	if (IS_ADMIN) {
+		//Initialize site configurations
+		$config = $registry->get('config');
+		$config->runSiteConfig();
+
+		if (option('config_maintenance')) {
+			if (isset($_GET['hide_maintenance_msg'])) {
+				$_SESSION['hide_maintenance_msg'] = 1;
+			} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
+				$hide = $registry->get('url')->here('hide_maintenance_msg=1');
+				message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"%s\">(hide message)</a> ", $hide));
+			}
+		} else {
+			if (count($segments) === 1) {
+				$path = defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index';
+				$registry->get('route')->setPath($path);
+			}
+		}
+	} else {
+		if (option('config_maintenance')) {
+			$path = 'common/maintenance';
+			$registry->get('route')->setPath($path);
+		}
+	}
+
+	//Path Rerouting
+	switch ($segments[0]) {
+		case 'page':
+			if (!empty($segments[1]) && $segments[1] !== 'preview') {
+				$path = 'page';
+			}
+			break;
+	}
+}
+
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 if (!function_exists('array_column')) {
 	/**
@@ -29,7 +202,7 @@ if (!function_exists('array_column')) {
 		foreach ($array as $row) {
 			$value = isset($row[$column]) ? $row[$column] : null;
 
-			if (is_null($index_key)) {
+			if ($index_key === null) {
 				$values[] = $value;
 			} elseif (isset($row[$index_key])) {
 				$values[$row[$index_key]] = $value;
@@ -91,13 +264,13 @@ if (!function_exists('array_search_key')) {
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
 
-	function array_search_key($search_key, $needle, $haystack, $strict = false)
+	function array_search_key($search_key, $needle, array $haystack, $strict = false)
 	{
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {
 				$result = array_search_key($search_key, $needle, $value, $strict);
 
-				if (!is_null($result)) {
+				if ($result !== null) {
 					return $result;
 				}
 			}
@@ -280,11 +453,34 @@ if (!defined('PASSWORD_DEFAULT')) {
 	require_once(DIR_RESOURCES . 'password_compat.php');
 }
 
+function _set_site($site)
+{
+	global $registry;
+	if (!is_array($site)) {
+		$site = $registry->get('Model_Site')->getRecord($site);
+	}
+
+	$registry->get('route')->setSite($site);
+	$registry->get('config')->setSite($site);
+	$registry->get('url')->setSite($site);
+}
+
+function _set_db_prefix($prefix)
+{
+	global $registry;
+	$registry->get('db')->setPrefix($prefix);
+	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
+
+	if (Model::$prefix !== $prefix) {
+		Model::setPrefix($prefix);
+	}
+}
+
 function get_caller($offset = 0, $limit = 10)
 {
 	$calls = debug_backtrace(false);
 
-	$html = "";
+	$html = '';
 
 	$limit += $offset;
 
@@ -391,7 +587,7 @@ HTML;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
 			}
 
-			if (option('config_error_log')) {
+			if (!function_exists('option') || option('config_error_log', 1)) {
 				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 			}
 		}
@@ -443,7 +639,7 @@ define("FILELIST_RELATIVE", 3);
  */
 function get_files($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $filter_preg = null)
 {
-	if (is_null($exts)) {
+	if ($exts === null) {
 		$exts = array(
 			'php',
 			'tpl',
@@ -521,6 +717,24 @@ function get_comment_directives($content, $trim = true)
 	return $directives;
 }
 
+function rrmdir($dir)
+{
+	if (is_dir($dir)) {
+		foreach (glob($dir . '/*') as $file) {
+			if (is_dir($file)) {
+				rrmdir($file);
+			} else {
+				unlink($file);
+			}
+		}
+		rmdir($dir);
+	}
+}
+
+function _is_object($o)
+{
+	return is_array($o) || is_object($o) || is_resource($o);
+}
 
 function _2camel($str, $lower = false)
 {
@@ -607,4 +821,26 @@ function parse_xml_to_array($xml)
 	}
 
 	return $return;
+}
+
+function cache($key, $value = null, $as_file = false)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('cache')->get($key, $as_file);
+	} else {
+		return $registry->get('cache')->set($key, $value, $as_file);
+	}
+}
+
+function clear_cache($key = null)
+{
+	global $registry;
+	$registry->get('cache')->delete($key);
+}
+
+function clear_cache_all()
+{
+	rrmdir(DIR_CACHE);
 }

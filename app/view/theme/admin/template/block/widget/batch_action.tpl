@@ -1,10 +1,11 @@
 <span class="batch_action_title">{{Batch Action}}</span>
 
-<?= build('select', array(
+<?= build(array(
+	'type'  => 'select',
 	'name'  => 'batch_action',
 	'data'  => $actions,
-	'key'   => 'key',
-	'value' => 'label',
+	'value' => 'key',
+	'label' => 'label',
 )); ?>
 
 <? $ckeditor = false; ?>
@@ -14,7 +15,7 @@
 		continue;
 	} ?>
 
-	<div class="action_value" id="for-<?= $action['key']; ?>" <?= $action['attrs']; ?>>
+	<div class="action_value" id="for-<?= $action['key']; ?>" <?= attrs($action); ?>>
 
 		<? switch ($action['type']) {
 			case 'text':
@@ -28,13 +29,14 @@
 				<? break;
 			case 'select':
 				?>
-				<?= build('select', array(
-					'name'   => "action_value",
-					'data'   => $action['build_data'],
-					'select' => $action['default'],
-					'key'    => $action['build_config'][0],
-					'value'  => $action['build_config'][1],
-				)); ?>
+				<?= build(array(
+				'type'   => 'select',
+				'name'   => "action_value",
+				'data'   => $action['build_data'],
+				'select' => $action['default'],
+				'value'  => $action['build_config'][0],
+				'label'  => $action['build_config'][1],
+			)); ?>
 				<? break;
 
 			case 'date':
@@ -74,11 +76,6 @@
 
 		var $this = $(this);
 		var $selected = $('<?= $selector; ?>:checked');
-
-		if (!$selected.length) {
-			alert("{{Please select items to perform the batch action on.}}");
-			return false;
-		}
 
 		av = $('.action_value.active [name=action_value]');
 

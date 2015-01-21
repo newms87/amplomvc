@@ -14,8 +14,9 @@
 	</tr>
 	<tr>
 		<td>{{Show Block Title?}}</td>
-		<td><?= build('radio', array(
-	'name'   => "instances[$row][show_title]",
+		<td><?= build(array(
+	'type' => 'radio',
+	'name'  => "instances[$row][show_title]",
 	'data'   => $data_yes_no,
 	'select' => $instance['show_title']
 )); ?></td>
@@ -30,8 +31,9 @@
 	<table class="form">
 		<tr>
 			<td>{{Slider}}</td>
-			<td class="slider_select"><?= build('select', array(
-	'name'   => $row_name . "[slider]",
+			<td class="slider_select"><?= build(array(
+	'type' => 'select',
+	'name'  => $row_name . "[slider]",
 	'data'   => $data_sliders,
 	'select' => $settings['slider']
 )); ?></td>
@@ -74,72 +76,81 @@
 		</tr>
 		<tr>
 			<td>{{Show Navigation}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][navigation][active]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][navigation][active]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['navigation']['active']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Navigation Effect}}</td>
-			<td><?= build('select', array(
-	'name'   => $row_name . "[slidesjs][navigation][effect]",
+			<td><?= build(array(
+	'type' => 'select',
+	'name'  => $row_name . "[slidesjs][navigation][effect]",
 	'data'   => $data_effects,
 	'select' => $settings['slidesjs']['navigation']['effect']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Show Pagination}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][pagination][active]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][pagination][active]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['pagination']['active']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Pagination Effect}}</td>
-			<td><?= build('select', array(
-	'name'   => $row_name . "[slidesjs][pagination][effect]",
+			<td><?= build(array(
+	'type' => 'select',
+	'name'  => $row_name . "[slidesjs][pagination][effect]",
 	'data'   => $data_effects,
 	'select' => $settings['slidesjs']['pagination']['effect']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Show Controls}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][play][active]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][play][active]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['play']['active']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Controls Effect}}</td>
-			<td><?= build('select', array(
-	'name'   => $row_name . "[slidesjs][play][effect]",
+			<td><?= build(array(
+	'type' => 'select',
+	'name'  => $row_name . "[slidesjs][play][effect]",
 	'data'   => $data_effects,
 	'select' => $settings['slidesjs']['play']['effect']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Auto Play}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][play][auto]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][play][auto]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['play']['auto']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Swap Stop / Play Buttons}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][play][swap]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][play][swap]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['play']['swap']
 )); ?></td>
 		</tr>
 		<tr>
 			<td>{{Pause Slides on Hover}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][play][pauseOnHover]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][play][pauseOnHover]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['play']['pauseOnHover']
 )); ?></td>
@@ -164,8 +175,9 @@
 		</tr>
 		<tr>
 			<td>{{Fade Effect Cross-fade}}</td>
-			<td><?= build('radio', array(
-	'name'   => $row_name . "[slidesjs][effect][fade][crossfade]",
+			<td><?= build(array(
+	'type' => 'radio',
+	'name'  => $row_name . "[slidesjs][effect][fade][crossfade]",
 	'data'   => $data_true_false,
 	'select' => $settings['slidesjs']['effect']['fade']['crossfade']
 )); ?></td>
@@ -184,8 +196,9 @@
 
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
 				<input type="text" class="imageinput" name="<?= $slide_row_name . '[image]'; ?>" value="<?= $slide['image']; ?>" data-thumb="<?= image($slide['image'], 140, 140); ?>" />
-				<input class="slide_href" placeholder="{{URL (or leave blank)}}" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/><?= build('select', array(
-					'name'   => $slide_row_name . '[target]',
+				<input class="slide_href" placeholder="{{URL (or leave blank)}}" type="text" name="<?= $slide_row_name; ?>[href]" value="<?= $slide['href']; ?>"/><?= build(array(
+					'type' => 'select',
+					'name'  => $slide_row_name . '[target]',
 					'data'   => $data_targets,
 					'select' => $slide['target']
 				)); ?>

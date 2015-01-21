@@ -2,7 +2,6 @@
 
 class Config extends Library
 {
-	private $data = array();
 	private $translate = true;
 
 	public function __construct()
@@ -13,10 +12,28 @@ class Config extends Library
 		global $registry;
 		$registry->set('config', $this);
 
-		$store = $this->route->getStore();
+		$this->setSite($this->route->getSite());
 
-		$this->set('url', !empty($store['url']) ? $store['url'] : URL_SITE);
-		$this->set('ssl', !empty($store['ssl']) ? $store['ssl'] : HTTPS_SITE);
+		if (!defined('AMPLO_AUTO_UPDATE') || AMPLO_AUTO_UPDATE) {
+			$this->checkForUpdates();
+		}
+	}
+
+	public function get($key)
+	{
+		global $_options;
+		return isset($_options[$key]) ? $_options[$key] : null;
+	}
+
+	public function set($key, $value)
+	{
+		global $_options;
+		$_options[$key] = $value;
+	}
+
+	public function setSite($site)
+	{
+		global $_options;
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
@@ -24,7 +41,7 @@ class Config extends Library
 
 		if (!$settings) {
 			//TODO: Should use $this->loadGroup('config');
-			$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE auto_load = 1", 'key');
+			$settings = $this->queryRows("SELECT * FROM " . self::$tables['setting'] . " WHERE auto_load = 1", 'key');
 
 			foreach ($settings as &$setting) {
 				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -34,35 +51,33 @@ class Config extends Library
 			cache('setting.config', $settings);
 		}
 
-		$this->data += $settings;
+		if (!$settings && IS_ADMIN && $this->route->getPath() !== 'admin/settings/restore_defaults') {
+			//message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
+			//TODO: Should still set defaults here
+			//redirect('admin/settings/restore_defaults');
+		}
 
-		$this->checkForUpdates();
-	}
+		$_options = $settings;
 
-	public function get($key)
-	{
-		return isset($this->data[$key]) ? $this->data[$key] : null;
-	}
-
-	public function set($key, $value)
-	{
-		$this->data[$key] = $value;
-	}
-
-	public function all()
-	{
-		return $this->data;
+		$_options['site_id']  = !empty($site['store_id']) ? $site['store_id'] : 0;
+		$_options['store_id'] = $_options['site_id'];
+		$_options['name']     = !empty($site['name']) ? $site['name'] : 'No Site';
+		$_options['url']      = !empty($site['url']) ? $site['url'] : URL_SITE;
+		$_options['ssl']      = !empty($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function has($key)
 	{
-		return isset($this->data[$key]);
+		global $_options;
+		return isset($_options[$key]);
 	}
 
 	public function load($group, $key)
 	{
-		if (!isset($this->data[$key])) {
-			$setting = $this->queryRow("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "'");
+		global $_options;
+
+		if (!isset($_options[$key])) {
+			$setting = $this->queryRow("SELECT * FROM " . self::$tables['setting'] . " WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "'");
 
 			if ($setting) {
 				$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -81,10 +96,10 @@ class Config extends Library
 				$value = null;
 			}
 
-			$this->data[$key] = $value;
+			$_options[$key] = $value;
 		}
 
-		return $this->data[$key];
+		return $_options[$key];
 	}
 
 	public function save($group, $key, $value, $auto_load = true)
@@ -128,8 +143,8 @@ class Config extends Library
 		);
 
 		$where = array(
-			'group'    => $group,
-			'key'      => $key,
+			'group' => $group,
+			'key'   => $key,
 		);
 
 		$this->delete('setting', $where);
@@ -141,7 +156,7 @@ class Config extends Library
 			clear_cache('theme');
 		}
 
-		$this->config->set($key, $value);
+		$this->set($key, $value);
 
 		clear_cache("setting.$group");
 
@@ -160,15 +175,16 @@ class Config extends Library
 
 	public function loadGroup($group)
 	{
+		global $_options;
 		static $loaded_groups = array();
 
 		if (!isset($loaded_groups[$group])) {
 			$data = cache("setting.$group");
 
-			if (is_null($data)) {
+			if ($data === null) {
 				$data = array();
 
-				$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "'");
+				$settings = $this->queryRows("SELECT * FROM " . self::$tables['setting'] . " WHERE `group` = '" . $this->escape($group) . "'");
 
 				foreach ($settings as $setting) {
 					$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -192,7 +208,7 @@ class Config extends Library
 				cache("setting.$group", $data);
 			}
 
-			$this->data += $data;
+			$_options += $data;
 
 			$loaded_groups[$group] = $data;
 		}
@@ -217,7 +233,7 @@ class Config extends Library
 
 		$store_query = '';
 
-		$settings = $this->queryRows("SELECT * FROM " . $this->prefix . "setting WHERE `group` = '" . $this->escape($group) . "' $store_query");
+		$settings = $this->queryRows("SELECT * FROM " . self::$tables['setting'] . " WHERE `group` = '" . $this->escape($group) . "' $store_query");
 
 		foreach ($settings as $setting) {
 			if ($setting['translate']) {
@@ -236,7 +252,7 @@ class Config extends Library
 
 	public function runSiteConfig()
 	{
-		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store");
+		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['store']);
 
 		if (!$default_exists) {
 			$store = array(
@@ -253,7 +269,9 @@ class Config extends Library
 
 	public function checkForUpdates()
 	{
-		$version = !empty($this->data['AMPLO_VERSION']) ? $this->data['AMPLO_VERSION'] : null;
+		global $_options;
+
+		$version = !empty($_options['AMPLO_VERSION']) ? $_options['AMPLO_VERSION'] : null;
 
 		if ($version !== AMPLO_VERSION) {
 			message('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));

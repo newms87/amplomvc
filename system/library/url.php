@@ -1,4 +1,5 @@
 <?php
+
 class Url extends Library
 {
 	private $url = '';
@@ -12,17 +13,11 @@ class Url extends Library
 	{
 		parent::__construct();
 
-		$this->url = option('url');
-
-		if (!$this->url) {
-			$this->url = URL_SITE;
-		}
+		$this->setSite($this->route->getSite());
 
 		if (option('config_use_ssl')) {
-			$this->ssl = option('ssl');
-
 			//TODO - finish secure pages
-			$this->secure_pages = $this->queryRows("SELECT * FROM " . DB_PREFIX . "secure_page");
+			$this->secure_pages = $this->queryRows("SELECT * FROM " . self::$tables['secure_page']);
 		}
 
 		$this->loadAliases();
@@ -30,6 +25,12 @@ class Url extends Library
 		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
 		}
+	}
+
+	public function setSite($site)
+	{
+		$this->url = isset($site['url']) ? $site['url'] : URL_SITE;
+		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function getQuery()
@@ -114,12 +115,16 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function store($store_id, $path = '', $query = '', $ssl = false)
+	public function store($store_id, $path = '', $query = '', $ssl = null)
 	{
 		static $stores;
 
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
+
 		if (!$stores) {
-			$stores = $this->queryRows("SELECT * FROM " . DB_PREFIX . "store", 'store_id');
+			$stores = $this->queryRows("SELECT * FROM " . self::$tables['store'], 'store_id');
 		}
 
 		if (!empty($stores[$store_id])) {
@@ -131,14 +136,22 @@ class Url extends Library
 		return $this->findAlias($url, $path, $query, $store_id);
 	}
 
-	public function link($path, $query = '', $ssl = false)
+	public function link($path, $query = '', $ssl = null)
 	{
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
+
 		return $this->findAlias($ssl ? $this->ssl : $this->url, $path, $query);
 	}
 
-	public function site($uri = '', $query = '', $base_site = false)
+	public function site($uri = '', $query = '', $base_site = false, $ssl = null)
 	{
-		return ($base_site ? URL_SITE : $this->url) . $uri . (!empty($query) ? "?$query" : '');
+		if ($ssl === null) {
+			$ssl = IS_SSL;
+		}
+
+		return ($base_site ? URL_SITE : ($ssl ? $this->ssl : $this->url)) . $uri . (!empty($query) ? "?$query" : '');
 	}
 
 	public function urlencode_link($uri = '', $query = '')
@@ -269,7 +282,7 @@ class Url extends Library
 
 	public function getAlias($path, $query = '')
 	{
-		return $this->queryVar("SELECT alias FROM " . $this->prefix . "url_alias WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
+		return $this->queryVar("SELECT alias FROM " . self::$tables['url_alias'] . " WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
 	}
 
 	public function setAlias($alias, $path, $query = '')
@@ -278,10 +291,10 @@ class Url extends Library
 
 		if ($alias) {
 			$url_alias = array(
-				'alias'    => $alias,
-				'path'     => $path,
-				'query'    => $query,
-				'status'   => 1,
+				'alias'  => $alias,
+				'path'   => $path,
+				'query'  => $query,
+				'status' => 1,
 			);
 
 			return $this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
@@ -293,7 +306,7 @@ class Url extends Library
 	public function removeAlias($path, $query = '', $alias = '')
 	{
 		$sql_query =
-			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
+			"SELECT url_alias_id FROM " . self::$tables['url_alias'] .
 			" WHERE `path` = '" . $this->escape($path) . "'" .
 			" AND `query` = '" . $this->escape($query) . "'";
 
@@ -314,8 +327,8 @@ class Url extends Library
 	{
 		$this->aliases = cache('url_alias.all');
 
-		if (is_null($this->aliases)) {
-			$this->aliases = $this->queryRows("SELECT * FROM " . DB_PREFIX . "url_alias WHERE status = 1", 'alias');
+		if ($this->aliases === null) {
+			$this->aliases = $this->queryRows("SELECT * FROM " . self::$tables['url_alias'] . " WHERE status = 1", 'alias');
 
 			cache('url_alias.all', $this->aliases);
 		}

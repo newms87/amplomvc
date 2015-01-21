@@ -3,137 +3,151 @@
 		<?= render_message(); ?>
 	<? } ?>
 
-	<? if ($show_limits) { ?>
+	<? if ($show_limits === 'top') { ?>
 		<div class="limits clearfix">
 			<?= $this->sort->renderLimits($limit_settings); ?>
 		</div>
 	<? } ?>
 
-	<div class="view-controls">
-		<a class="refresh-listing" href="<?= $refresh; ?>">
-			<b class="sprite refresh small"></b>
-		</a>
+	<? if ($show_controls) { ?>
+		<div class="view-controls">
+			<a class="refresh-listing" href="<?= site_url($listing_path, $_GET); ?>">
+				<b class="sprite refresh small"></b>
+			</a>
 
-		<a href="<?= site_url($refresh, 'export'); ?>" class="button export-view small">
-			<b class="sprite export small"></b>
-		</a>
+			<a href="<?= site_url($listing_path, $_GET + array('export' => '')); ?>" class="button export-view small">
+				<b class="sprite export small"></b>
+			</a>
 
-		<button class="modify-view small">
-			<b class="sprite settings small"></b>
-		</button>
+			<button class="modify-view small">
+				<b class="sprite settings small"></b>
+			</button>
 
-		<div class="view-config">
-			<button class="close">X</button>
+			<div class="view-config">
+				<button class="close">X</button>
 
-			<div class="view-tabs htabs">
-				<a href=".col-tab">{{Columns}}</a>
-				<a href=".group-tab">{{Groups / Aggregate}}</a>
-				<? if (user_can('w', 'admin/views')) { ?>
-					<a href=".view-listing-tab">{{Settings}}</a>
-				<? } ?>
-			</div>
+				<div class="view-tabs htabs">
+					<a href=".col-tab">{{Columns}}</a>
+					<a href=".group-tab">{{Groups / Aggregate}}</a>
+					<? if (user_can('w', 'admin/views')) { ?>
+						<a href=".view-listing-tab">{{Settings}}</a>
+					<? } ?>
+				</div>
 
-			<? if (!empty($extra_cols)) { ?>
-				<div class="col-tab tab-content">
-					<div class="select-cols">
-						<?=
-						build('multiselect', array(
-							'name'   => 'columns',
-							'data'   => $extra_cols,
-							'select' => array_keys($columns),
-							'key'    => 'Field',
-							'value'  => 'display_name',
-						)); ?>
+				<? if (!empty($extra_cols)) { ?>
+					<div class="col-tab tab-content">
+						<div class="select-cols">
+							<?=
+							build(array(
+								'type'   => 'multiselect',
+								'name'   => 'columns',
+								'data'   => $extra_cols,
+								'select' => array_keys($columns),
+								'value' =>  'Field',
+								'label' =>  'display_name',
+							)); ?>
 
-						<div class="buttons">
-							<a class="filter-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
+							<div class="buttons">
+								<a class="filter-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
+							</div>
 						</div>
 					</div>
-				</div>
-			<? } ?>
+				<? } ?>
 
-			<div class="group-tab tab-content">
-				Group By / Aggregate... Waiting to be implemented.
+				<div class="group-tab tab-content">
+					Group By / Aggregate... Waiting to be implemented.
+				</div>
+
+				<? if (user_can('w', 'admin/views')) { ?>
+					<div class="view-listing-tab tab-content form">
+						<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
+						<div class="form-item">
+							<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
+							<?=
+							build(array(
+								'type'   => 'select',
+								'name'   => 'view_type',
+								'data'   => $data_chart_types,
+								'select' => $view_type,
+								'#id'    => 'view-type-' . $view_id,
+							)); ?>
+						</div>
+
+						<br/>
+						<h2>{{Chart Settings}}</h2>
+
+						<div class="form-item">
+							<label for="chart-group-<?= $view_id; ?>">{{X axis (Group Column)}}</label>
+							<?=
+							build(array(
+								'type'   => 'select',
+								'name'   => 'chart[group_by]',
+								'data'   => $extra_cols,
+								'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
+								'value' =>  'Field',
+								'label' =>  'display_name',
+								'#id'    => 'chart-group-' . $view_id,
+							)); ?>
+						</div>
+
+						<div class="form-item">
+							<label for="chart-data-<?= $view_id; ?>">{{Y axis (Data Column)}}</label>
+							<?=
+							build(array(
+								'type'   => 'multiselect',
+								'name'   => 'chart[data_cols]',
+								'data'   => $extra_cols,
+								'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
+								'value' =>  'Field',
+								'label' =>  'display_name',
+								'#id'    => 'chart-data-' . $view_id,
+								'#class' => 'chart-data-cols',
+							)); ?>
+						</div>
+
+						<div class="form-item submit buttons center">
+							<button class="save-settings" data-loading="{{Saving...}}">{{Save Settings}}</button>
+						</div>
+
+					</div>
+				<? } ?>
 			</div>
-
-			<? if (user_can('w', 'admin/views')) { ?>
-				<div class="view-listing-tab tab-content form">
-					<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
-					<div class="form-item">
-						<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
-						<?=
-						build('select', array(
-							'name'   => 'view_type',
-							'data'   => $data_chart_types,
-							'select' => $view_type,
-							'#id'    => 'view-type-' . $view_id,
-						)); ?>
-					</div>
-
-					<br/>
-					<h2>{{Chart Settings}}</h2>
-
-					<div class="form-item">
-						<label for="chart-group-<?= $view_id; ?>">{{X axis (Group Column)}}</label>
-						<?=
-						build('select', array(
-							'name'   => 'chart[group_by]',
-							'data'   => $extra_cols,
-							'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
-							'key'    => 'Field',
-							'value'  => 'display_name',
-							'#id'    => 'chart-group-' . $view_id,
-						)); ?>
-					</div>
-
-					<div class="form-item">
-						<label for="chart-data-<?= $view_id; ?>">{{Y axis (Data Column)}}</label>
-						<?=
-						build('multiselect', array(
-							'name'   => 'chart[data_cols]',
-							'data'   => $extra_cols,
-							'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
-							'key'    => 'Field',
-							'value'  => 'display_name',
-							'#id'    => 'chart-data-' . $view_id,
-							'#class' => 'chart-data-cols',
-						)); ?>
-					</div>
-
-					<div class="form-item submit buttons center">
-						<button class="save-settings" data-loading="{{Saving...}}">{{Save Settings}}</button>
-					</div>
-
-				</div>
-			<? } ?>
 		</div>
-	</div>
+	<? } ?>
 
 	<div class="view-types">
 		<div class="listings view-type">
 			<?= $listing; ?>
 		</div>
 
-		<div class="charts view-type">
-			<? if (!empty($chart)) { ?>
-				<?=
-				block('widget/chart', null, array(
-					'data'     => $rows,
-					'settings' => $chart,
-					'type'     => $view_type,
-				)); ?>
-			<? } ?>
-		</div>
+		<? if ($show_charts) { ?>
+			<div class="charts view-type">
+				<? if (!empty($chart)) { ?>
+					<?=
+					block('widget/chart', null, array(
+						'data'     => $rows,
+						'settings' => $chart,
+						'type'     => $view_type,
+					)); ?>
+				<? } ?>
+			</div>
+		<? } ?>
 	</div>
 
 	<? if ($show_pagination) { ?>
 		<?= block('widget/pagination', null, $pagination_settings); ?>
 	<? } ?>
 
+	<? if ($show_limits === 'bottom') { ?>
+		<div class="limits clearfix">
+			<?= $this->sort->renderLimits($limit_settings); ?>
+		</div>
+	<? } ?>
+
 	<script type="text/javascript">
 		var $list_widget = $('.widget-listing').use_once();
 
-		$list_widget.find('.export-view').click(function() {
+		$list_widget.find('.export-view').click(function () {
 			if (confirm("{{Do you want to export the full data set?}}")) {
 				window.location = $(this).attr('href') + '&limit=0';
 				return false;
@@ -168,7 +182,9 @@
 				$listing.addClass("loading");
 				$listing.find('.refresh-listing').addClass('refreshing');
 
-				var data = {columns: {}};
+				var data = {
+					columns: {}
+				};
 
 				$this.closest('.select-cols').find(':checked').each(function (i, e) {
 					data.columns[$(e).val()] = i;
@@ -196,7 +212,7 @@
 
 			$this.loading();
 
-			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(),function (response) {
+			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(), function (response) {
 				$form.ac_msg(response);
 				$this.closest('.view-config').removeClass('show');
 				$widget.find('.refresh-listing').click();

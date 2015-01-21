@@ -39,7 +39,7 @@ class Table extends Library
 		$this->file = is_file($file) ? $file : $this->theme->getFile($file, $theme);
 
 		if (!$this->file) {
-			echo $file . ' is no a file<Br>';
+			trigger_error(_l("The template file %s does not exist.", $file));
 		}
 	}
 
@@ -55,11 +55,12 @@ class Table extends Library
 		}
 	}
 
-	public function render()
+	public function render($data = array())
 	{
 		$this->prepare();
 
 		extract($this->template_data);
+		extract($data);
 
 		$columns = $this->columns;
 		$rows    = $this->rows;
@@ -135,7 +136,7 @@ class Table extends Library
 			}
 
 			//If Field is set, assume this came from Table Model, and therefore can be edited
-			if (is_null($column['editable'])) {
+			if ($column['editable'] === null) {
 				$column['editable'] = isset($column['Field']);
 			}
 

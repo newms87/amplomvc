@@ -9,7 +9,7 @@
 
 			<div class="buttons">
 				<button class="button">{{Save}}</button>
-				<a href="<?= site_url('admin/settings/store'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/settings'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 
@@ -18,8 +18,9 @@
 				<tr>
 					<td>{{Enable Social Media Login / Registration?}}</td>
 					<td><?=
-						build('radio', array(
-							'name'   => 'status',
+						build(array(
+							'type' => 'radio',
+							'name'  => 'status',
 							'data'   => $data_yes_no,
 							'select' => $status,
 						)); ?>
@@ -43,8 +44,9 @@
 					<td>
 						<div class="setting-item enable-item">
 							<?=
-							build('radio', array(
-								'name'   => 'google_plus[active]',
+							build(array(
+								'type' => 'radio',
+								'name'  => 'google_plus[active]',
 								'data'   => $data_active,
 								'select' => $google_plus['active'],
 							)); ?>
@@ -76,8 +78,9 @@
 					<td>
 						<div class="setting-item enable-item">
 							<?=
-							build('radio', array(
-								'name'   => 'facebook[active]',
+							build(array(
+								'type' => 'radio',
+								'name'  => 'facebook[active]',
 								'data'   => $data_active,
 								'select' => $facebook['active'],
 							)); ?>

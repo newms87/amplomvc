@@ -13,7 +13,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Roles"));
+		set_page_info('title', _l("User Roles"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -85,7 +85,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -95,7 +95,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Roles"));
+		set_page_info('title', _l("User Roles"));
 
 		//Insert or Update
 		$user_role_id = !empty($_GET['user_role_id']) ? (int)$_GET['user_role_id'] : 0;
@@ -146,8 +146,8 @@ class App_Controller_Admin_Settings_Role extends Controller
 		}
 
 		//Response
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/role/form');
 		} else {
@@ -165,8 +165,8 @@ class App_Controller_Admin_Settings_Role extends Controller
 		}
 
 		//Response
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/settings/role');
 		}
@@ -188,7 +188,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 			message('success', _l("The User Groups have been updated!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/settings/role');

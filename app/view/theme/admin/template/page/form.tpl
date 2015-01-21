@@ -90,8 +90,9 @@
 					<tr>
 						<td>{{Status:}}</td>
 						<td><?=
-							build('select', array(
-								'name'   => 'status',
+							build(array(
+								'type' => 'select',
+								'name'  => 'status',
 								'data'   => $data_statuses,
 								'select' => $status
 							)); ?></td>
@@ -106,12 +107,13 @@
 						<td class="required">{{Theme}}</td>
 						<td>
 							<?=
-							build('select', array(
-								'name'   => 'theme',
+							build(array(
+								'type' => 'select',
+								'name'  => 'theme',
 								'data'   => $data_themes,
 								'select' => $theme,
-								'key'    => 'name',
-								'value'  => 'name',
+								'value' =>  'name',
+								'label' =>  'name',
 							)); ?>
 						</td>
 					</tr>
@@ -120,12 +122,13 @@
 						<td>
 							<div id="layout_select">
 								<?=
-								build('select', array(
-									'name'   => 'layout_id',
+								build(array(
+									'type' => 'select',
+									'name'  => 'layout_id',
 									'data'   => $data_layouts,
 									'select' => $layout_id,
-									'key'    => 'layout_id',
-									'value'  => 'name',
+									'value' =>  'layout_id',
+									'label' =>  'name',
 								)); ?>
 							</div>
 							<a id="create_layout" class="link_button">{{[ Create Layout for this page ]}}</a>

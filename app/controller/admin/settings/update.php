@@ -12,7 +12,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("System Update"));
+		set_page_info('title', _l("System Update"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -20,7 +20,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 
 		//Actions
 		$data['action'] = site_url('admin/settings/update/update');
-		$data['cancel'] = site_url('admin/settings/store');
+		$data['cancel'] = site_url('admin/settings');
 
 		//Data
 		$update_info = array();
@@ -61,8 +61,8 @@ class App_Controller_Admin_Settings_Update extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/settings/update');
 		}
@@ -78,8 +78,8 @@ class App_Controller_Admin_Settings_Update extends Controller
 			message('notify', _l("You have deactivated automatic system updates!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/settings/update');
 		}

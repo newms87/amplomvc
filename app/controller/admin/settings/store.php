@@ -5,20 +5,20 @@ class App_Controller_Admin_Settings_Store extends Controller
 	public function index($data = array())
 	{
 		//Page Head
-		$this->document->setTitle(_l("Settings"));
+		set_page_info('title', _l("Settings"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 
 		//Settings Items
-		$data['widgets'] = $this->Model_Setting_Setting->getWidgets();
+		$data['widgets'] = $this->Model_Settings->getWidgets();
 
 		//Action Buttons
 		$data['insert'] = site_url('admin/settings/store/form');
 
 		//Render
-		output($this->render('settings/store_list', $data));
+		output($this->render('settings/store/list', $data));
 	}
 
 	public function listing()
@@ -63,8 +63,8 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
 		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
 
-		$image_width  = option('config_image_admin_thumb_width');
-		$image_height = option('config_image_admin_thumb_height');
+		$image_width  = option('admin_thumb_width');
+		$image_height = option('admin_thumb_height');
 
 		foreach ($stores as &$store) {
 			$store['actions'] = array(
@@ -78,7 +78,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 				)
 			);
 
-			$theme          = $this->config->load('config', 'config_theme');
+			$theme          = $this->config->load('general', 'site_theme');
 			$image          = DIR_SITE . 'app/view/theme/' . $theme . '/' . $theme . '.png';
 			$store['thumb'] = image($image, $image_width, $image_height);
 
@@ -98,7 +98,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -108,14 +108,14 @@ class App_Controller_Admin_Settings_Store extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Store Settings"));
+		set_page_info('title', _l("Store Settings"));
 
 		//Insert or Update
 		$store_id = _get('store_id', 0);
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Settings"), site_url('admin/settings/store'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 		breadcrumb(_l("Store"), site_url('admin/settings/store/form', 'store_id=' . $store_id));
 
 		//Store Data
@@ -133,30 +133,30 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'name'                         => 'Store ' . $store_id,
 			'url'                          => '',
 			'ssl'                          => '',
-			'config_owner'                 => '',
-			'config_address'               => '',
-			'config_email'                 => '',
-			'config_telephone'             => '',
+			'site_owner'                   => '',
+			'site_address'                 => '',
+			'site_email'                   => '',
+			'site_phone'                   => '',
 			'config_fax'                   => '',
-			'config_title'                 => '',
-			'config_meta_description'      => '',
+			'site_title'                 => '',
+			'site_meta_description'        => '',
 			'config_default_layout_id'     => '',
-			'config_theme'                 => '',
+			'site_theme'                   => '',
 			'config_country_id'            => option('config_country_id'),
 			'config_zone_id'               => option('config_zone_id'),
 			'config_language'              => option('config_language'),
 			'config_currency'              => option('config_currency'),
-			'config_catalog_limit'         => '12',
+			'site_list_limit'              => '12',
 			'config_customer_group_id'     => '',
 			'config_customer_approval'     => '',
 			'config_account_terms_page_id' => '',
-			'config_logo'                  => '',
-			'config_logo_srcset'           => 1,
-			'config_icon'                  => null,
-			'config_logo_width'            => 0,
-			'config_logo_height'           => 0,
-			'config_email_logo_width'      => 300,
-			'config_email_logo_height'     => 0,
+			'site_logo'                    => '',
+			'site_logo_srcset'             => 1,
+			'site_icon'                    => null,
+			'site_logo_width'              => 0,
+			'site_logo_height'             => 0,
+			'site_email_logo_width'        => 300,
+			'site_email_logo_height'       => 0,
 			'config_image_thumb_width'     => 228,
 			'config_image_thumb_height'    => 228,
 			'config_image_popup_width'     => 500,
@@ -183,8 +183,8 @@ class App_Controller_Admin_Settings_Store extends Controller
 		);
 
 		//Website Icon Sizes
-		if (!is_array($store['config_icon'])) {
-			$store['config_icon'] = array(
+		if (!is_array($store['site_icon'])) {
+			$store['site_icon'] = array(
 				'orig' => '',
 				'ico'  => '',
 			);
@@ -208,12 +208,12 @@ class App_Controller_Admin_Settings_Store extends Controller
 		foreach ($store['data_icon_sizes'] as $size) {
 			$key = $size[0] . 'x' . $size[1];
 
-			if (!isset($store['config_icon'][$key])) {
-				$store['config_icon'][$key] = '';
+			if (!isset($store['site_icon'][$key])) {
+				$store['site_icon'][$key] = '';
 			}
 		}
 
-		foreach ($store['config_icon'] as &$icon) {
+		foreach ($store['site_icon'] as &$icon) {
 			$icon = array(
 				'thumb' => $this->image->get($icon),
 				'src'   => $icon,
@@ -233,7 +233,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($this->Model_Setting_Store->save(_get('store_id'), $_POST)) {
 			$this->config->saveGroup('config', $_POST);
 
-			if ($this->theme->install($_POST['config_theme'])) {
+			if ($this->theme->install($_POST['site_theme'])) {
 				message('error', $this->theme->getError());
 			}
 
@@ -243,11 +243,11 @@ class App_Controller_Admin_Settings_Store extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/settings/store/form', 'store_id=' . _get('store_id'));
 		} else {
-			redirect('admin/settings/store');
+			redirect('admin/settings');
 		}
 	}
 
@@ -261,50 +261,10 @@ class App_Controller_Admin_Settings_Store extends Controller
 			message('notify', _l("User was deleted!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
-			redirect('admin/settings/store');
-		}
-	}
-
-	public function generate_icons()
-	{
-		if (!empty($_POST['icon'])) {
-			$sizes = array(
-				array(
-					152,
-					152
-				),
-				array(
-					120,
-					120
-				),
-				array(
-					76,
-					76
-				),
-			);
-
-			$icon_files = array();
-
-			foreach ($sizes as $size) {
-				$url = image_save($_POST['icon'], null, $size[0], $size[1]);
-
-				$icon_files[$size[0] . 'x' . $size[1]] = array(
-					'url'     => $url,
-					'relpath' => str_replace(URL_IMAGE, '', $url),
-				);
-			}
-
-			$url = $this->image->ico($_POST['icon']);
-
-			$icon_files['ico'] = array(
-				'relpath' => str_replace(URL_IMAGE, '', $url),
-				'url'     => $url,
-			);
-
-			output(json_encode($icon_files));
+			redirect('admin/settings');
 		}
 	}
 }

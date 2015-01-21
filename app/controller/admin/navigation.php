@@ -5,7 +5,7 @@ class App_Controller_Admin_Navigation extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Navigation"));
+		set_page_info('title', _l("Navigation"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -115,26 +115,21 @@ class App_Controller_Admin_Navigation extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Navigation"));
+		set_page_info('title', _l("Navigation"));
 
 		//Insert or Update
-		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
+		$navigation_group_id = (int)_get('navigation_group_id');
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Navigation"), site_url('admin/navigation'));
-
-		if ($navigation_group_id) {
-			breadcrumb(_l("Edit"), site_url('admin/navigation', 'navigation_group_id=' . $navigation_group_id));
-		} else {
-			breadcrumb(_l("Add"), site_url('admin/navigation'));
-		}
+		breadcrumb($navigation_group_id ? _l("Edit") : _l("Add"), site_url('admin/navigation/form', 'navigation_group_id=' . $navigation_group_id));
 
 		//Load Values or Defaults
 		$group = $_POST;
 
 		if (!IS_POST && $navigation_group_id) {
-			$group = $this->Model_Navigation->getNavigationGroup($navigation_group_id);
+			$group = $this->Model_Navigation->getGroup($navigation_group_id);
 		}
 
 		$defaults = array(
@@ -152,13 +147,20 @@ class App_Controller_Admin_Navigation extends Controller
 			'name'          => 'new_link __ac_template__',
 			'display_name'  => 'New Link __ac_template__',
 			'title'         => '',
-			'href'          => '',
+			'path'          => '',
 			'query'         => '',
 			'condition'     => '',
 			'status'        => 1,
 		);
 
-		$group['data_conditions'] = $this->condition->getConditions();
+		$group['data_conditions'] = Condition::$conditions;
+
+		$group['data_statuses']   = array(
+			0 => _l("Disabled"),
+			1 => _l("Enabled"),
+		);
+
+		$group['navigation_group_id'] = $navigation_group_id;
 
 		//Render
 		output($this->render('navigation/form', $group));
@@ -166,7 +168,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function save()
 	{
-		$navigation_group_id = $this->Model_Navigation->saveGroup(_get('navigation_group_id'), $_POST);
+		$navigation_group_id = $this->Model_Navigation->saveGroup((int)_get('navigation_group_id'), $_POST);
 
 		if ($this->Model_Navigation->hasError()) {
 			message('error', $this->Model_Navigation->getError());
@@ -175,9 +177,9 @@ class App_Controller_Admin_Navigation extends Controller
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} elseif ($this->message->has('error')) {
-			post_redirect('admin/navigation/form', 'navigation_group_id=' . !empty($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : $navigation_group_id);
+			post_redirect('admin/navigation/form', 'navigation_group_id=' . $navigation_group_id);
 		} else {
 			redirect('admin/navigation');
 		}
@@ -185,14 +187,14 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function delete()
 	{
-		if ($this->Model_Navigation->removeGroup(_get('navigation_group_id'))) {
+		if ($this->Model_Navigation->removeGroup((int)_get('navigation_group_id'))) {
 			message('success', _l("Success: You have modified Navigation!"));
 		} else {
 			message('error', $this->Model_Navigation->getError());
 		}
 
 		if ($this->is_ajax) {
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect('admin/navigation');
 		}
@@ -244,7 +246,7 @@ class App_Controller_Admin_Navigation extends Controller
 			redirect('admin/navigation');
 		}
 
-		output_json($this->message->fetch());
+		output_message();
 	}
 
 	public function choose_link()

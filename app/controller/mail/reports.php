@@ -7,11 +7,11 @@ class App_Controller_Mail_Reports extends Controller
 		$data += array(
 			'title'   => '',
 			'subject' => _l("Daily Reports"),
-			'to'      => option('config_email'),
+			'to'      => option('site_email'),
 			'cc'      => '',
 			'bcc'     => '',
-			'from'    => option('config_email'),
-			'sender'  => option('config_name'),
+			'from'    => option('site_email'),
+			'sender'  => option('site_name'),
 		);
 
 		$data['header'] = array(

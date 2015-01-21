@@ -60,10 +60,10 @@ $.fn.codemirror = function (params) {
 	}
 }
 
-$.ac_template = $.fn.ac_template = function (name, action, data) {
+$.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 	$.ac_template = $.fn.ac_template = null;
 	syncload('system/resources/js/ac_template.js');
-	if (this.ac_template) this.ac_template(name, action, data);
+	if (this.ac_template) this.ac_template(name, action, data, relate);
 }
 
 $.fn.jqzoom = function (params) {
@@ -78,9 +78,17 @@ $.fn.use_once = function (label) {
 }
 
 $.fn.scrollTo = function (target, options) {
+	target = $(target);
+
+	if (!target.length) {
+		return false;
+	}
+
 	var $this = this;
+	var $header = $('header.main-header');
+
 	options = $.extend({}, {
-		offset:   0,
+		offset:   $header.css('position') === 'fixed' ? -$header.outerHeight() : 0,
 		callback: null
 	}, options);
 
@@ -192,7 +200,7 @@ $.fn.apply_filter = function (url) {
 	if (filter_list.length) {
 		filter_list.each(function (i, e) {
 			var $e = $(e);
-			var $filter = $e.closest('.column_filter');
+			var $filter = $e.closest('.column-filter');
 			var $type = $filter.find('.filter-type');
 
 			if ($type.hasClass('not')) {
@@ -405,22 +413,17 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 	return this;
 }
 
-$('.ajax-form').submit(function () {
-	ac_form();
-});
-
 function ac_form(params) {
+	params = params || {}
+
 	var $form = $(this);
 	var callback = params.success;
 	var complete = params.complete;
-	var $button = $form.find('button, input[type=submit]');
-	if (!$button.length) {
-		$button = $form;
-	}
 
 	params = $.extend({}, {
 		data:     $form.serialize(),
-		dataType: 'json'
+		dataType: 'json',
+		type:     'POST'
 	}, params);
 
 	params.success = function (data, textStatus, jqXHR) {
@@ -440,14 +443,12 @@ function ac_form(params) {
 	}
 
 	params.complete = function (jqXHR, textStatus) {
-		$button.loading('stop');
+		$form.find('[data-loading]').loading('stop');
 
 		if (typeof complete == 'function') {
 			complete(jqXHR, textStatus);
 		}
 	}
-
-	$button.loading();
 
 	$.ajax($form.attr('action'), params);
 
@@ -485,34 +486,41 @@ $.loading = function (params) {
 }
 
 $.fn.loading = function (params) {
-	if (typeof params !== 'string') {
-		params = $.extend({}, {
-			default_text: false,
-			text:    this.attr('data-loading'),
-			disable: true
-		}, params);
-	}
+	return this.each(function (i, e) {
+		var $e = $(e);
 
-	if (params.text || params.default_text || this.data('original')) {
-		if (params === 'stop') {
-			this.prop('disabled', false);
-			this.html(this.data('original'));
-		} else {
-			if (params.disable) {
-				this.prop('disabled', true);
-			}
-			if (!this.data('original')) {
-				this.data('original', this.html());
-			}
-			this.html(params.text || params.default_text);
+		if (typeof params !== 'string') {
+			option = $.extend({}, {
+				text:    $e.attr('data-loading') || params.default_text,
+				disable: true,
+				delay: false
+			}, params);
 		}
 
-		return this;
-	}
+		if ((option && option.text) || $e.data('original')) {
+			if (params === 'stop') {
+				$e.prop('disabled', false).removeAttr('disabled');
+				$e.html($e.data('original'));
+			} else {
+				if (option.disable) {
+					$e.prop('disabled', true).attr('disabled', 'disabled');
+				}
+				if (!$e.data('original')) {
+					$e.data('original', $e.html());
+				}
+				$e.html(option.text);
 
-	this.find('.loader').remove();
-
-	return this.append($.loading(params));
+				if (option.delay) {
+					setTimeout(function() {
+						$e.loading('stop');
+					}, option.delay);
+				}
+			}
+		} else {
+			$e.find('.loader').remove();
+			$e.append($.loading(params));
+		}
+	});
 }
 
 $.fn.ac_zoneselect = function (params, callback) {
@@ -522,7 +530,7 @@ $.fn.ac_zoneselect = function (params, callback) {
 		listen:    null,
 		allow_all: false,
 		select:    null,
-		url: $ac.site_url + 'data/locale/load_zones?ajax=1'
+		url:       $ac.site_url + 'data/locale/load_zones?ajax=1'
 	}, params);
 
 	if (!params.listen) {
@@ -726,11 +734,15 @@ function register_confirms() {
 	});
 
 	$('.ajax-form').use_once('ajax-init').submit(function () {
-		ac_form();
+		return ac_form.call(this);
 	});
 }
 
 function register_ajax_calls(is_ajax) {
+	$('form').use_once('data-loading-set').submit(function() {
+		$(this).find('button[data-loading]').loading();
+	});
+
 	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
 
 	// Multistate Checkboxes
@@ -831,9 +843,9 @@ var amplo_ajax_cb = function () {
 				opts['height'] = window.innerHeight * .9;
 			}
 
-            if ($this.attr('data-loading')) {
-                $this.loading();
-            }
+			if ($this.attr('data-loading')) {
+				$this.loading();
+			}
 
 			colorbox(opts);
 			return false;
@@ -907,6 +919,7 @@ function amplo_auto_ajax() {
 $(document).ready(function () {
 	amplo_auto_ajax();
 
+
 	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
 		if (!ui.item.value && ui.item.href) {
 			window.open(ui.item.href);
@@ -918,6 +931,8 @@ $(document).ready(function () {
 			$(this).closest('form').submit();
 		}
 	});
+
+	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
 
 	$(document).keydown(function (e) {
 		if (e.ctrlKey && (e.which == 83)) {

@@ -1,6 +1,9 @@
 /* LESS config */
-@imgpath: '../../../image/';
-@themepath: '../../../../app/view/theme/admin/';
+@img-path: '@{base-path}image/';
+@theme-path: '@{base-path}app/view/theme/admin/';
+@theme-img: '@{base-path}app/view/theme/admin/image/';
+@font-path: '@{base-path}app/view/theme/admin/font/';
+
 @xs: 1px;
 @sm: 480px;
 @md: 768px;
@@ -14,6 +17,7 @@
 @page-width-sm: 90%;
 @page-width-md: 95%;
 @page-width-lg: 80%;
+@page-width-xl: 80%;
 @page-width-max: 1600px;
 @page-wrap-pad: 20px 0;
 
@@ -37,7 +41,7 @@
 
 @bg-main: #ffffff;
 
-@font-stack: Arial, Helvetica, sans-serif;
+@font-stack: sans-serif, Arial, Helvetica;
 @font-size: 100%;
 
 //Messages
@@ -55,6 +59,25 @@
 
 @msg-notify-bg-color: #E6F1FB;
 @msg-notify-fg-color: #8DAFCF;
+
+@navigation: { & {
+  a {
+    padding: .6em 1.2em;
+    font-size: 1.4em;
+    text-decoration: none;
+    color: @color-lightest;
+    background: #131313;
+    border-left: 1px solid @color-light;
+
+    &:hover {
+      background: lighten(#131313, 10%);
+    }
+  }
+} };
+
+#menu {
+  background:  #131313;
+}
 
 @import 'reset';
 @import 'base';

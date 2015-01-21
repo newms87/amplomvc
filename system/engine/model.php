@@ -2,9 +2,9 @@
 
 abstract class Model
 {
-	static $model = array();
+	static $model = array(), $tables = array(), $prefix;
 
-	protected $db, $prefix, $error = array();
+	protected $db, $error = array();
 
 	const
 		TEXT = 'text',
@@ -21,8 +21,6 @@ abstract class Model
 	{
 		global $registry;
 
-		$this->prefix = DB_PREFIX;
-
 		$key = strtolower(get_class($this));
 
 		$registry->set($key, $this);
@@ -31,6 +29,10 @@ abstract class Model
 		if (!$this->db) {
 			//(Note: setting our own $db property allows us to use a different database for new Model instances)
 			$this->db = $registry->get('db');
+		}
+
+		if (!self::$prefix) {
+			$this->setPrefix(defined('SITE_PREFIX') ? SITE_PREFIX : DB_PREFIX);
 		}
 	}
 
@@ -44,6 +46,22 @@ abstract class Model
 	{
 		global $registry;
 		return $registry->load($path, $class);
+	}
+
+	static function setPrefix($prefix)
+	{
+		global $registry;
+
+		self::$prefix = $prefix;
+
+		self::$tables = cache('model.tables');
+
+		if (!self::$tables) {
+			self::$tables = $registry->get('db')->getTables($prefix);
+			self::$tables += $registry->get('db')->getTables(DB_PREFIX);
+
+			cache('model.tables', self::$tables);
+		}
 	}
 
 	public function hasError($type = null)
@@ -154,10 +172,10 @@ abstract class Model
 			return false;
 		}
 
-		$select = $this->query->getClause('select', false);
+		$select   = $this->query->getClause('select', false);
 		$the_rest = substr($sql, $this->query->getOffset('from'));
 
-		if (is_null($use_calc_found_rows)) {
+		if ($use_calc_found_rows === null) {
 			$use_calc_found_rows = $this->useCalcFoundRows($sql);
 		}
 
@@ -173,7 +191,7 @@ abstract class Model
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
 			$the_rest = $this->query->getClauses('from', 'where', 'group by', 'having');
-			$total = $this->queryVar("SELECT COUNT(*) $the_rest");
+			$total    = $this->queryVar("SELECT COUNT(*) $the_rest");
 		}
 
 		return array(
@@ -188,7 +206,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . $this->prefix . "$table` WHERE $where LIMIT 1");
+		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . self::$tables[$table] . "` WHERE $where LIMIT 1");
 	}
 
 	public function queryFields($table, $fields, $where)
@@ -197,7 +215,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . $this->prefix . "$table` WHERE $where LIMIT 1");
+		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . self::$tables[$table] . "` WHERE $where LIMIT 1");
 	}
 
 	protected function insert($table, $data)
@@ -213,7 +231,7 @@ abstract class Model
 			return false;
 		}
 
-		$success = $this->query("INSERT INTO `" . $this->prefix . "$table` SET $values");
+		$success = $this->query("INSERT INTO `" . self::$tables[$table] . "` SET $values");
 
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
@@ -278,7 +296,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, '', '', true);
 
-		$success = $this->query("UPDATE `" . $this->prefix . "$table` SET $values WHERE $where");
+		$success = $this->query("UPDATE `" . self::$tables[$table] . "` SET $values WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
@@ -305,7 +323,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		$success = $this->query("DELETE FROM `" . $this->prefix . "$table` WHERE $where");
+		$success = $this->query("DELETE FROM `" . self::$tables[$table] . "` WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
@@ -342,7 +360,7 @@ abstract class Model
 	{
 		if ($table !== 'history') {
 			$columns = $this->getTableColumns($table);
-			$data = array_intersect_key($data, $columns);
+			$data    = array_intersect_key($data, $columns);
 
 			$json_data = json_encode($data);
 
@@ -420,7 +438,7 @@ abstract class Model
 	protected function getEscapedValues($table, $data, $auto_inc = true)
 	{
 		$columns = $this->getTableColumns($table);
-		$data = array_intersect_key($data, $columns);
+		$data    = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {
 			if (_is_object($value)) {
@@ -468,36 +486,35 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table_name, $columns)
+	protected function extractSelect($table, $columns)
 	{
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		}
+
+		if (isset(self::$tables[$table])) {
+			$table = self::$tables[$table];
+		} elseif (!$this->db->hasTable($table)) {
+			trigger_error(_l("Table %s does not exist!", $table));
+			return false;
+		}
+
+		if (empty($t)) {
+			$t = $table;
+		}
+
 		if (!$columns || !is_array($columns)) {
-			return '*';
+			return "`$t`.*";
 		}
 
 		if (is_string($columns)) {
 			return $columns;
 		}
 
-		if (strpos($table_name, ' ')) {
-			list($table_name, $t) = explode(' ', $table_name, 2);
-		} else {
-			$t = false;
-		}
-
-		$table = $this->db->hasTable($table_name);
-
-		if (!$table) {
-			trigger_error(_l("%s: Table %s does not exist!", __METHOD__, $table_name));
-			return false;
-		}
-
-		if (!$t) {
-			$t = $table;
-		}
-
 		$columns = array_intersect_key($columns, $this->getTableColumns($table));
 
 		$select = '';
+
 		foreach ($columns as $col => $data) {
 			$select .= ($select ? ',' : '') . "`$t`.`$col`";
 		}
@@ -545,7 +562,7 @@ abstract class Model
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		} else {
-			$t = $this->prefix . $table;
+			$t = self::$tables[$table];
 		}
 
 		$columns += $this->getTableColumns($table);
@@ -691,7 +708,7 @@ abstract class Model
 
 		foreach ($data['sort'] as $sort => $ord) {
 			$sort = $this->escape($sort);
-			$t = '';
+			$t    = '';
 
 			if ($table) {
 				if (is_array($table)) {
@@ -854,6 +871,16 @@ abstract class Model
 				$a = $temp[$ka];
 				$b = $temp[$kb];
 
+				if (isset($a['sort_order']) || isset($b['sort_order'])) {
+					if (!isset($a['sort_order'])) {
+						return 1;
+					} elseif (!isset($b['sort_order'])) {
+						return -1;
+					} else {
+						return $a['sort_order'] > $b['sort_order'];
+					}
+				}
+
 				//sort as first if Primary Key
 				if ($a['type'] === 'pk') {
 					return -1;
@@ -888,20 +915,18 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table  = $this->db->hasTable($table);
+		$table  = isset(self::$tables[$table]) ? self::$tables[$table] : $table;
 		$schema = $this->db->getName();
 
 		if (empty(self::$model[$schema][$table])) {
 			$model = cache('model.' . $schema . '.' . $table);
 
-			if (!$model) {
-				$name = $this->escape($table);
-
-				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$name'");
+			if (!$model || empty($model['columns'])) {
+				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$table'");
 
 				$columns = $this->db->getTableColumns($table);
 
-				$indexes = $this->queryRows("SHOW INDEX FROM `$name`");
+				$indexes = $this->queryRows("SHOW INDEX FROM `$table`");
 
 				foreach ($columns as &$column) {
 					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
@@ -993,6 +1018,11 @@ abstract class Model
 
 	private function actionFilter($table, $action, &$data)
 	{
+
+		//TODO TEMPORARILY DISABLED!
+		return;
+
+
 		$hooks = option('db_hooks');
 
 		if ($hooks && !empty($hooks[$table][$action])) {

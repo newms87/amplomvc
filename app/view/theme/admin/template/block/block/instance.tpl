@@ -9,8 +9,9 @@
 	<tr>
 		<td>{{Show Title?}}</td>
 		<td><?=
-			build('radio', array(
-				'name'   => "instances[$row][show_title]",
+			build(array(
+				'type' => 'radio',
+				'name'  => "instances[$row][show_title]",
 				'data'   => $data_yes_no,
 				'select' => $instance['show_title']
 			)); ?></td>

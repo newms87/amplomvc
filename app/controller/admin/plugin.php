@@ -3,12 +3,20 @@ class App_Controller_Admin_Plugin extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Plugins"));
+		set_page_info('title', _l("Plugins"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
 
+		$data['listing'] = $this->listing();
+
+		//Render
+		output($this->render('plugin', $data));
+	}
+
+	public function listing()
+	{
 		//The Table Columns
 		$columns = array();
 
@@ -145,26 +153,23 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 		unset($plugin);
 
-		//Build The Table
-		$this->table->init();
-		$this->table->setTemplate('table/list_view');
-		$this->table->setColumns($columns);
-		$this->table->setRows($plugins);
-		$this->table->mapAttribute('filter_value', $filter);
+		$listing = array(
+			'columns'        => $columns,
+			'extra_cols'     => $this->Model_Plugin->getColumns(),
+			'rows'           => $plugins,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $plugin_total,
+			'listing_path'   => 'admin/plugin/listing',
+		);
 
-		$data['list_view'] = $this->table->render();
+		$output = block('widget/listing', null, $listing);
 
-		//Render Limit Menu
-		$data['limits'] = $this->sort->renderLimits();
+		if ($this->is_ajax) {
+			output($output);
+		}
 
-		//Pagination
-		$this->pagination->init();
-		$this->pagination->total = $plugin_total;
-
-		$data['pagination'] = $this->pagination->render();
-
-		//Render
-		output($this->render('plugin', $data));
+		return $output;
 	}
 
 	public function form()
@@ -175,7 +180,7 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 		$plugin_name = $_GET['name'];
 
-		$this->document->setTitle(_l("Plugins"));
+		set_page_info('title', _l("Plugins"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Plugins"), site_url('admin/plugin'));

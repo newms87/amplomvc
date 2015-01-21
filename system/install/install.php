@@ -36,6 +36,9 @@ if (strpos(DIR_SITE, $uri_path) === false) {
 require_once(DIR_SITE . 'system/_mod.php');
 require_once(DIR_SITE . 'system/startup.php');
 
+//
+define('DB_PREFIX', _post('db_prefix'));
+
 //Hack to allow DB to attempt to clear cache during install
 global $registry;
 
@@ -85,7 +88,7 @@ function amplo_mvc_setup_form($msg)
 		'sqlite'   => "SQLite",
 	);
 
-	require_once("system/install/install.tpl");
+	require_once(DIR_SITE . "system/install/install.tpl");
 }
 
 function amplo_mvc_install()
@@ -99,8 +102,6 @@ function amplo_mvc_install()
 
 		return _l("The password and confirmation do not match!");
 	}
-
-	define('DB_PREFIX', $_POST['db_prefix']);
 
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
@@ -128,6 +129,9 @@ function amplo_mvc_install()
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
 	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = '" . date('Y-m-d H:i:s') . "'");
 
+	$db->query("DELETE FROM " . DB_PREFIX . 'store');
+	$db->query("INSERT INTO " . DB_PREFIX . "store SET prefix = '" . DB_PREFIX . "', `name` = 'Amplo MVC', `url` = '" . HTTP_SITE . "', `ssl` = '" . HTTPS_SITE . "'");
+
 	if ($db->hasError()) {
 		$error = $db->getError();
 	}
@@ -140,7 +144,7 @@ function amplo_mvc_install()
 	}
 
 	$config_template = DIR_SITE . 'example-config.php';
-	$config          = DIR_SITE . 'config.php';
+	$config_file     = DIR_SITE . 'config.php';
 
 	$contents = file_get_contents($config_template);
 
@@ -159,7 +163,7 @@ function amplo_mvc_install()
 		$contents = set_define($contents, $key, $value);
 	}
 
-	file_put_contents($config, $contents);
+	file_put_contents($config_file, $contents);
 
 	//Setup .htaccess file
 	$htaccess_template = DIR_SITE . 'example.htaccess';
@@ -197,7 +201,7 @@ function getCostBenchmark()
 
 function set_define($string, $key, $value = null, $quotes = true)
 {
-	if (!is_null($value)) {
+	if ($value !== null) {
 		$define = "define(\"$key\", " . ($quotes ? "\"$value\"" : $value) . ");";
 
 		$count  = 0;

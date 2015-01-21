@@ -3,7 +3,6 @@
 class Cache
 {
 	private $expired, $dir;
-	private $ignore_list = array();
 	private $loaded = array();
 
 	public function __construct($dir = null)
@@ -27,16 +26,16 @@ class Cache
 
 	public function getLoadedFiles()
 	{
-		return $this->loaded;
+		return isset($this->loaded[$this->dir]) ? $this->loaded[$this->dir] : array();
 	}
 
 	public function get($key, $get_file = false)
 	{
-		if (isset($this->loaded[$key])) {
+		if (isset($this->loaded[$this->dir][$key])) {
 			if ($get_file) {
-				return $this->loaded[$key]['file'];
-			} elseif (isset($this->loaded[$key]['data'])) {
-				return $this->loaded[$key]['data'];
+				return $this->loaded[$this->dir][$key]['file'];
+			} elseif (isset($this->loaded[$this->dir][$key]['data'])) {
+				return $this->loaded[$this->dir][$key]['data'];
 			}
 		}
 
@@ -49,14 +48,8 @@ class Cache
 				return;
 			}
 
-			foreach ($this->ignore_list as $ignore) {
-				if (strpos($key, $ignore) === 0) {
-					return;
-				}
-			}
-
 			if ($get_file) {
-				return $this->loaded[$key]['file'] = $file;
+				return $this->loaded[$this->dir][$key]['file'] = $file;
 			} else {
 				$str = @file_get_contents($file);
 				$data = @unserialize($str);
@@ -67,11 +60,11 @@ class Cache
 					return null;
 				}
 
-				$this->loaded[$key]['data'] = $data;
-				$this->loaded[$key]['file'] = $file;
+				$this->loaded[$this->dir][$key]['data'] = $data;
+				$this->loaded[$this->dir][$key]['file'] = $file;
 			}
 
-			return $this->loaded[$key]['data'];
+			return $this->loaded[$this->dir][$key]['data'];
 		}
 	}
 
@@ -79,11 +72,13 @@ class Cache
 	{
 		$file = $this->dir . $key . '.cache';
 
+		$this->loaded[$this->dir][$key] = $value;
+
 		if (!$set_file) {
 			$value = serialize($value);
 		}
 
-		if ($value) {
+		if ($value !== null) {
 			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
 			@file_put_contents($file, $value);
 		}
@@ -93,30 +88,25 @@ class Cache
 
 	public function delete($key)
 	{
-		$files = glob($this->dir . $key . '*.cache');
+		if ($key) {
+			$files = glob($this->dir . $key . '*.cache');
 
-		if ($files) {
-			foreach ($files as $file) {
-				//Suppress warnings as this will fail under race conditions
-				@unlink($file);
+			if ($files) {
+				foreach ($files as $file) {
+					//Suppress warnings as this will fail under race conditions
+					@unlink($file);
+				}
 			}
-		}
 
-		foreach (array_keys($this->loaded) as $lkey) {
-			if (strpos($lkey, $key) === 0) {
-				unset($this->loaded[$lkey]);
+			if (!empty($this->loaded[$this->dir])) {
+				foreach (array_keys($this->loaded[$this->dir]) as $lkey) {
+					if (strpos($lkey, $key) === 0) {
+						unset($this->loaded[$this->dir][$lkey]);
+					}
+				}
 			}
-		}
-	}
-
-	public function ignore($ignore)
-	{
-		foreach (explode(',', $ignore) as $key) {
-			$key = trim($key);
-
-			if ($key) {
-				$this->ignore_list[$key] = $key;
-			}
+		} else {
+			rrmdir($this->dir);
 		}
 	}
 }

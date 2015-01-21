@@ -27,17 +27,17 @@ class App_Model_Localisation_Zone extends App_Model_Table
 
 	public function getZone($zone_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = " . (int)$zone_id);
+		return $this->queryRow("SELECT * FROM " . self::$tables['zone'] . " WHERE zone_id = " . (int)$zone_id);
 	}
 
 	public function getActiveZone($zone_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
+		return $this->queryRow("SELECT * FROM " . self::$tables['zone'] . " WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
 	}
 
 	public function getZones($data = array())
 	{
-		$sql = "SELECT *, z.name, c.name AS country FROM " . DB_PREFIX . "zone z LEFT JOIN " . DB_PREFIX . "country c ON (z.country_id = c.country_id)";
+		$sql = "SELECT *, z.name, c.name AS country FROM " . self::$tables['zone'] . " z LEFT JOIN " . self::$tables['country'] . " c ON (z.country_id = c.country_id)";
 
 		$sort_data = array(
 			'c.name',
@@ -79,7 +79,7 @@ class App_Model_Localisation_Zone extends App_Model_Table
 		$zone_data = cache('zone.' . (int)$country_id);
 
 		if (!$zone_data) {
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' ORDER BY name");
+			$query = $this->query("SELECT * FROM " . self::$tables['zone'] . " WHERE country_id = '" . (int)$country_id . "' ORDER BY name");
 
 			$zone_data = $query->rows;
 
@@ -94,7 +94,7 @@ class App_Model_Localisation_Zone extends App_Model_Table
 		$zones = cache('zone.' . (int)$country_id);
 
 		if (!$zones) {
-			$zones = $this->queryRows("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+			$zones = $this->queryRows("SELECT * FROM " . self::$tables['zone'] . " WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
 
 			cache('zone.' . (int)$country_id, $zones);
 		}
@@ -104,19 +104,19 @@ class App_Model_Localisation_Zone extends App_Model_Table
 
 	public function getZonesByGeoZone($geo_zone)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone . "'");
+		return $this->queryRows("SELECT * FROM " . self::$tables['zone_to_geo_zone'] . " WHERE geo_zone_id = '" . (int)$geo_zone . "'");
 	}
 
 	public function getTotalZones()
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['zone']);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalZonesByCountryId($country_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['zone'] . " WHERE country_id = '" . (int)$country_id . "'");
 
 		return $query->row['total'];
 	}

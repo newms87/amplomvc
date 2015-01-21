@@ -2,75 +2,68 @@
 
 class Document extends Library
 {
-	private $title;
-	private $description;
-	private $keywords;
-	private $canonical_link = null;
-	private $links = array();
-	private $styles = array();
-	private $scripts = array();
-	private $ac_vars = array();
-	private $body_class = array();
+	private
+		$info = array(),
+		$meta = array(),
+		$links = array(),
+		$styles = array(),
+		$scripts = array(),
+		$ac_vars = array(),
+		$body_class = array();
 
 	function __construct()
 	{
 		parent::__construct();
 
-		$this->links = $this->Model_Navigation->getNavigationGroup();
+		$this->links = $this->Model_Navigation->getNavigationGroup(IS_ADMIN ? 'admin' : 'all');
 
-		$this->setCanonicalLink($this->url->getSeoUrl());
+		//In case something happened to the admin navigation, we reset it
+		if (IS_ADMIN && empty($this->links['admin']['links'])) {
+			$this->Model_Navigation->resetAdminNavigationGroup();
+			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
+		}
+
+		$this->info['title'] = option('site_title');
+		$this->meta['description'] = option('site_meta_description');
+
+		$this->info['canonical_link'] = $this->url->getSeoUrl();
 
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}
 	}
 
-	public function setTitle($title)
+	public function info($key = null, $default = null)
 	{
-		$this->title = _strip_tags($title);
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : $default;
+		}
+
+		return $this->info;
 	}
 
-	public function getTitle()
+	public function setInfo($key, $value)
 	{
-		return $this->title;
+		$this->info[$key] = $value;
 	}
 
-	public function setDescription($description)
+	public function &infoRef()
 	{
-		$this->description = $description;
+		return $this->info;
 	}
 
-	public function getDescription()
+	public function meta($key = null, $default = null)
 	{
-		return $this->description;
+		if ($key) {
+			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		}
+
+		return $this->meta;
 	}
 
-	public function setKeywords($keywords)
+	public function setMeta($key, $value)
 	{
-		$this->keywords = $keywords;
-	}
-
-	public function getKeywords()
-	{
-		return $this->keywords;
-	}
-
-	/**
-	 * Canonical Links are used by search engines to determine the most appropriate version of web pages
-	 * with identical (or almost, eg: different sort orders, etc.) content.
-	 *
-	 * When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
-	 *
-	 * @param $href - the preferred url for the current page.
-	 */
-	public function setCanonicalLink($href)
-	{
-		$this->canonical_link = $href;
-	}
-
-	public function getCanonicalLink()
-	{
-		return $this->canonical_link;
+		$this->meta[$key] = $value;
 	}
 
 	public function hasLink($group = 'primary', $link_name)
@@ -96,8 +89,8 @@ class Document extends Library
 	public function addLink($group = 'primary', $link)
 	{
 		if (empty($link['name'])) {
-			trigger_error(_l("%s(): You must provide a link name!"));
-			return;
+			$this->error['name'] = _l("You must provide a link name!");
+			return false;
 		}
 
 		$defaults = array(
@@ -150,7 +143,8 @@ class Document extends Library
 
 			//$return === false when link is found
 			if ($return !== false) {
-				trigger_error(_l("Unable to locate link %s in Link Group %s", $new_link['parent'], $group));
+				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $new_link['parent'], $group);
+				return false;
 			}
 		} else {
 			$this->links[$group]['links'][] = $new_link;
@@ -249,7 +243,7 @@ class Document extends Library
 			//Check Less @imports for modifications
 			$dependencies = cache('less.' . $reference);
 
-			if (is_null($dependencies)) {
+			if ($dependencies === null) {
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
 				foreach ($dependencies as $d_file) {
@@ -283,7 +277,7 @@ class Document extends Library
 
 			$parser->parseFile($file, $reference);
 
-			$parser->parse("@basepath: '" . SITE_BASE . "';");
+			$parser->parse("@base-path: '" . SITE_BASE . "';");
 
 			$css = $parser->getCss();
 
@@ -309,7 +303,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => is_null($compress) ? option('config_less_compress', false) : $compress,
+			'compress' => $compress === null ? option('config_less_compress', false) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
@@ -347,17 +341,6 @@ class Document extends Library
 		return $this->styles;
 	}
 
-	public function renderStyles()
-	{
-		$html = '';
-
-		foreach ($this->styles as $style) {
-			$html .= "<link rel=\"$style[rel]\" type=\"text/css\" href=\"$style[href]\" media=\"$style[media]\" />\r\n";
-		}
-
-		return $html;
-	}
-
 	public function addScript($script, $priority = 100)
 	{
 		//First check for a URL wrapper, then check if it is a file
@@ -388,48 +371,34 @@ class Document extends Library
 	 * Retrieves the scripts requested, sorted by priority
 	 * Note: We sort the scripts here as it is assumed this is only called once
 	 *
-	 * @return array - Each element is a string of the absolute filepath to the script
+	 * @return array - Each element is a string of the absolute file path to the script
 	 */
 	public function getScripts()
 	{
-		$scripts = array();
-
 		ksort($this->scripts);
+
+		$scripts = array(
+			'local' => array(
+				'ac' => "\$ac = " . json_encode($this->ac_vars),
+			),
+		);
 
 		foreach ($this->scripts as $priority => $script_list) {
 			foreach ($script_list as $script) {
-				$scripts[] = $script;
+				//Separate Localized files
+				if (strpos($script, 'local:') === 0) {
+					if (is_file($file = substr($script, 6))) {
+						ob_start();
+						include($file);
+						$scripts['local'][] = ob_get_clean();
+					}
+				} else {
+					$scripts['src'][] = $script;
+				}
 			}
 		}
 
 		return $scripts;
-	}
-
-	public function renderScripts()
-	{
-		$scripts = $this->getScripts();
-
-		$html = '';
-
-		if (!empty($this->ac_vars)) {
-			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
-		}
-
-		foreach ($scripts as $script) {
-			if (strpos($script, 'local:') === 0) {
-				if (is_file($file = substr($script, 6))) {
-					$html .= "<script type=\"text/javascript\">\r\n";
-					ob_start();
-					include($file);
-					$html .= ob_get_clean();
-					$html .= "\r\n</script>\r\n";
-				}
-			} else {
-				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
-			}
-		}
-
-		return $html;
 	}
 
 	public function setBodyClass($class)
@@ -545,7 +514,7 @@ class Document extends Library
 				break;
 		}
 
-		$html = "<ul class=\"link-list $class\">";
+		$html = '';
 
 		$zindex = count($links);
 
@@ -601,8 +570,6 @@ class Document extends Library
 			$zindex--;
 		}
 
-		$html .= "</ul>";
-
-		return $html;
+		return "<div class=\"link-list $class\"><ul>" . $html . "</ul></div>";
 	}
 }

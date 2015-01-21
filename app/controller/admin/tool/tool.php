@@ -4,7 +4,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("System Tools"));
+		set_page_info('title', _l("System Tools"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

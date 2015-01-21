@@ -18,8 +18,9 @@
 								<textarea name="query" id="db_query" rows="10" cols="100"><?= $query; ?></textarea>
 							</td>
 							<td id="db_tables">
-								<?= build('multiselect', array(
-									'name' => 'tables',
+								<?= build(array(
+									'type' => 'multiselect',
+									'name'=> 'tables',
 									'data' => $data_tables,
 								)); ?>
 							</td>

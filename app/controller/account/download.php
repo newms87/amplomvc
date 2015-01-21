@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Account_Download extends Controller
 {
 	public function index()
@@ -9,7 +10,7 @@ class App_Controller_Account_Download extends Controller
 			redirect('customer/login');
 		}
 
-		$this->document->setTitle(_l("Account Downloads"));
+		set_page_info('title', _l("Account Downloads"));
 
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account"), site_url('account'));
@@ -26,7 +27,7 @@ class App_Controller_Account_Download extends Controller
 
 			$data['downloads'] = array();
 
-			$results = $this->Model_Account_Download->getDownloads(($page - 1) * option('config_catalog_limit'), option('config_catalog_limit'));
+			$results = $this->Model_Account_Download->getDownloads(($page - 1) * option('site_list_limit'), option('site_list_limit'));
 
 			foreach ($results as $result) {
 				if (file_exists(DIR_DOWNLOAD . $result['filename'])) {
@@ -62,11 +63,9 @@ class App_Controller_Account_Download extends Controller
 				}
 			}
 
-			$this->pagination->init();
-			$this->pagination->total  = $download_total;
-			$data['pagination'] = $this->pagination->render();
-
 			$data['continue'] = site_url('account');
+
+			$data['total'] = $download_total;
 
 			output($this->render('account/download', $data));
 		} else {

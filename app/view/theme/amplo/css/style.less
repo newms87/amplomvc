@@ -17,11 +17,24 @@
 /******************************
  *  I. Base Style / Structure *
  ******************************/
+html, body {
+  height: 100%;
+}
+
+#container {
+  position: absolute;
+  top: @header-height;
+  bottom: 0;
+  width: 100%;
+
+  & > main {
+    min-height: 80%;
+  }
+}
 
 body {
   .render-font(@font-base);
   color: @font-dark;
-  background: @bg-main;
 }
 
 a {
@@ -39,50 +52,60 @@ a {
 h1 {
   color: @h1-color;
   .render-font(@h1-font);
-  text-align: center;
 }
 
 h2 {
   color: @h2-color;
   .render-font(@h2-font);
-  text-align: center;
 }
 
 h3 {
   color: @h3-color;
   .render-font(@h3-font);
-  text-align: center;
 }
 
 h4 {
   color: @h4-color;
   .render-font(@h4-font);
-  text-align: center;
 }
 
 h5 {
   color: @h5-color;
   .render-font(@h5-font);
-  text-align: center;
 }
 
 h6 {
   color: @h6-color;
   .render-font(@h6-font);
-  text-align: center;
 }
 
-.clearfix:after {
-  content: ".";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  line-height: 0;
-  height: 0;
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.noselect,
-.ac-checkbox {
+.height-animate {
+  max-height: 0;
+  min-height: 0;
+  overflow: hidden;
+  -webkit-transition: .5s all;
+  transition: .5s all;
+}
+
+.clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+  }
+}
+
+.noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -103,6 +126,10 @@ h6 {
   float: right;
 }
 
+.justify {
+  text-align: justify;
+}
+
 .center {
   text-align: center;
   margin: auto;
@@ -115,6 +142,10 @@ h6 {
 
 .block {
   display: block;
+}
+
+.breadcrumb {
+  text-align: left;
 }
 
 /*************************
@@ -218,32 +249,59 @@ button, .button, .row .button {
   display: inline-block;
   position: relative;
 
-  ul {
-    li {
-      display: inline-block;
-      position: relative;
+  .link-list {
+    display: inline-block;
 
-      a {
-        display: block;
+    ul {
+      li {
+        display: inline-block;
+        position: relative;
+
+        a {
+          display: block;
+        }
+
+        &:hover, &.hover {
+          .sub-menu {
+            max-height: @header-height;
+            -webkit-transition: max-height .4s;
+            transition: max-height .4s;
+          }
+        }
       }
+    }
 
-      .sub-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        text-align: left;
-        z-index: 500;
-        display: none;
+    .sub-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      text-align: left;
+      z-index: 500;
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: padding 0s linear .4s, max-height .4s;
+      transition: padding 0s linear .4s, max-height .4s;
 
+      ul {
         li {
           display: block;
           white-space: nowrap;
         }
       }
+    }
+  }
 
-      &:hover, &.hover {
-        .sub-menu {
-          display: block;
+  &.horizontal {
+    .sub-menu {
+      width: 10000px;
+      left: -5000px;
+      margin-left: 50%;
+      text-align: center;
+      top: 3em;
+
+      ul {
+        li {
+          display: inline-block;
         }
       }
     }
@@ -325,7 +383,9 @@ header.main-header.row {
   position: fixed;
   top: 0;
   z-index: 100;
-  box-shadow: 1px 0 1px 3px rgba(0,0,0,.75);
+  box-shadow: 1px 0 1px 1px rgba(0, 0, 0, .2);
+  height: @header-height;
+  box-sizing: border-box;
 
   .wrap {
     border: none;
@@ -334,43 +394,43 @@ header.main-header.row {
   @header();
 }
 
-#container {
-  padding-top: @header-height;
-}
-
 //Logo
 #logo {
   position: relative;
+  display: inline-block;
+  vertical-align: middle;
   z-index: 2;
-}
 
-//Account Navigation
-#links-account {
-  position: relative;
-  z-index: 2;
-  float: right;
-
-  .login-content {
-    display: none;
-  }
-
-  .button.register {
-    margin-left: 15px;
+  a {
+    display: block;
   }
 }
 
-//Primary Navigation
-#links-primary {
-  position: relative;
-  z-index: 1;
-  display: block;
-  margin: 1em auto 0 auto;
+.header-navigation {
+  display: inline-block;
+  .whitespace-hack;
+  padding: 1em 0 1em 1.5em;
 
-  .top-menu {
-    text-align: center;
+  nav {
+    display: inline-block;
+    vertical-align: middle;
+
+    .nav {
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+    }
   }
 
-  @navigation-primary();
+  //Account Navigation
+  #links-account {
+    @navigation-account();
+  }
+
+  //Primary Navigation
+  #links-primary {
+    @navigation-primary();
+  }
 }
 
 //Admin Bar
@@ -502,28 +562,39 @@ input[type="text"], input[type="password"] {
 
 select {
   box-sizing: border-box;
+
   @select();
 }
 
 label.radio {
+  .noselect;
   vertical-align: middle;
   display: inline-block;
-  outline: none;
+  outline: 0;
   box-sizing: border-box;
   cursor: pointer;
-  .noselect;
-
-  .label {
-    text-align: left;
-    vertical-align: middle;
-    display: inline-block;
-  }
 
   input[type="radio"] {
     vertical-align: middle;
     display: inline-block;
     position: absolute;
     left: -9999px;
+
+    & + .label {
+      text-align: left;
+      vertical-align: middle;
+      display: inline-block;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+        margin-right: .2em;
+        z-index: 10;
+      }
+    }
 
     @radio();
   }
@@ -557,28 +628,29 @@ label.checkbox {
   display: inline-block;
   outline: 0;
   box-sizing: border-box;
-
-  .label {
-    text-align: left;
-    vertical-align: middle;
-    display: inline-block;
-
-    &:before {
-      content: '';
-      display: inline-block;
-      vertical-align: middle;
-      position: relative;
-      top: -1px;
-      margin-right: .4em;
-      z-index: 10;
-    }
-  }
+  cursor: pointer;
 
   input[type="checkbox"] {
     vertical-align: middle;
     display: inline-block;
     position: absolute;
     left: -9999px;
+
+    & + .label {
+      text-align: left;
+      vertical-align: middle;
+      display: inline-block;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+        margin-right: .4em;
+        z-index: 10;
+      }
+    }
 
     @checkbox();
   }
@@ -750,35 +822,105 @@ textarea {
 }
 
 //Login Page
+.login-top.row {
+  .wrap {
+    padding-bottom: 0;
+  }
+}
+
 .login-page {
   .col {
     .box {
       display: inline-block;
-      border: 4px ridge @color-main;
-      border-radius: 3px;
-      padding: 1em;
+      padding: 0 1em;
+      min-height: 16em;
+      max-width: 23em;
+    }
 
-      h2 {
-        text-transform: uppercase;
-        margin-bottom: .7em;
+    h2 {
+      text-transform: uppercase;
+      margin-bottom: .7em;
+      color: @color-dark;
+      font: 1.5em OpenSansSemiBold;
+    }
+
+    h3 {
+      text-transform: uppercase;
+      font: 1em OpenSansItalic;
+      color: @color-secondary;
+      margin-bottom: .4em;
+    }
+
+    button {
+      width: 100%;
+      padding: .6em 1.5em;
+      background: @color-dark;
+
+      &:hover {
+        background: @color-main;
+      }
+    }
+
+    input {
+      background: white;
+      padding: .8em;
+
+      &:active, &:focus {
+        box-shadow: inset 2px 2px @color-secondary, inset -2px -2px @color-secondary;
+        border-color: @color-secondary;
+      }
+    }
+
+    .buttons {
+      margin-top: 1em;
+      .forgotten {
+        font: .9em OpenSansItalic;
+
+        a {
+          color: @color-dark;
+
+          &:hover {
+            color: @color-main;
+          }
+        }
+
+        & + button {
+          margin-top: .5em;
+        }
       }
 
-      h3 {
-        text-transform: uppercase;
-        font: 1em OpenSansItalic;
-        color: @color-secondary;
-        margin-bottom: .4em;
+      .switch {
+        display: inline-block;
+
+        a {
+          font: .9em OpenSansItalic;
+          cursor: pointer;
+          color: @color-dark;
+
+          &:hover {
+            color: @color-main;
+          }
+        }
       }
+    }
+  }
+
+  .account-box.hide {
+    display: none;
+  }
+
+  &.registration {
+    .register-col {
+      display: inline-block;
+    }
+
+    .login-col {
+      display: none;
     }
   }
 
   .one-click {
     margin-bottom: .5em;
-  }
-
-  .forgotten {
-    font-family: OpenSansItalic;
-    margin-bottom: .3em;
   }
 }
 
@@ -869,6 +1011,181 @@ section.page {
   }
 }
 
+.contact-page {
+  .contact-text {
+    p {
+      margin-bottom: 1.5em;
+    }
+  }
+
+  .contact-info {
+    margin-top: 1em;
+    font: .9em OpenSansRegular;
+
+    .site-name {
+      font: 1em OpenSansBold;
+    }
+  }
+
+  .contact-map.lg-hidden {
+    margin-top: 2.5em;
+  }
+
+  .contact-form {
+    form {
+      input, textarea {
+        padding: .5em 1em;
+        font: .9em OpenSansRegular;
+        box-shadow: none;
+        border: 1px solid @color-dark;
+        width: 100%;
+        max-width: none;
+
+        &:active, &:focus {
+          box-shadow: inset 2px 2px 0 @color-secondary, inset -2px -2px 0 @color-secondary;
+        }
+      }
+
+      textarea {
+        min-height: 10em;
+      }
+    }
+  }
+
+  .google-map {
+    width: 100%;
+    height: 20em;
+  }
+}
+
+.account-page {
+  h1 {
+    margin-bottom: 1em;
+  }
+
+  .side-menu {
+    margin-top: 4em;
+
+    .menu-tab {
+      font: 1em OpenSansSemiBold;
+      color: @font-dark;
+      display: block;
+      padding: .8em .5em;
+      text-transform: uppercase;
+
+      &.active, &:hover {
+        color: @color-main;
+      }
+    }
+  }
+
+  .content-box {
+    h1 {
+      color: @color-secondary;
+      text-transform: uppercase;
+    }
+
+    .forms {
+      text-align: left;
+
+      .form-item {
+        box-sizing: border-box;
+        font-size: 1em;
+        padding: 2em;
+        border-top: 2px solid @color-light;
+        transition: all .5s;
+
+        .input {
+          margin-top: 1em;
+
+          .input-item {
+            margin-bottom: .7em;
+
+            input, select {
+              padding: .3em;
+              font: 1em OpenSansRegular;
+              color: @font-dark;
+              width: 100%;
+            }
+          }
+        }
+
+        h3 {
+          font: 1em OpenSansBold;
+          color: @color-dark;
+          text-transform: uppercase;
+          margin-bottom: .5em;
+        }
+
+        .field {
+          font: .9em OpenSansRegular;
+          color: @font-light;
+          margin-bottom: .5em;
+        }
+
+        .buttons {
+          .noselect;
+          margin-top: 0;
+
+          .button, button {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0;
+            padding: .5em 1.2em;
+            box-sizing: border-box;
+            font: .9em OpenSansRegular;
+            width: 100%;
+            min-width: 0;
+          }
+
+          a {
+            cursor: pointer;
+            font: 1em OpenSansItalic;
+            color: @font-light;
+            text-decoration: underline;
+          }
+
+          &.submit {
+            margin-top: 1em;
+          }
+        }
+
+        &.read {
+          .editing {
+            display: none;
+          }
+
+          [readonly] {
+            padding: 0;
+            font: .9em OpenSansRegular;
+            background: none;
+            border: none;
+            box-shadow: none;
+          }
+        }
+
+        &.edit {
+          .readonly {
+            display: none;
+          }
+        }
+
+        &.enabled {
+          .off {
+            display: none;
+          }
+        }
+
+        &.disabled {
+          .on {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
 /*************************
  *  V. Blocks            *
  *************************/
@@ -926,31 +1243,6 @@ section.page {
  *  V. Footer            *
  *************************/
 
-footer.main-footer.row {
+footer.site-footer {
   @footer();
-}
-
-/*************************
- *  X. Device Targeting  *
- *************************/
-
-@media (max-width: (@lg - 1)) {
-}
-
-@media (max-width: (@md - 1)) {
-}
-
-@media (max-width: (@sm - 1)) {
-}
-
-@media (max-width: (@xs - 1)) {
-  section.page {
-    font-size: .8em;
-
-    .row {
-      .wrap {
-        min-width: 0;
-      }
-    }
-  }
 }

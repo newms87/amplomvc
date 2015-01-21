@@ -21,8 +21,6 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
-define('URL_THEMES', URL_SITE . 'app/view/theme/');
-
 //TODO: Remove URL_AJAX after removing ckeditor
 define('URL_AJAX', URL_SITE . 'ajax/');
 
@@ -46,8 +44,9 @@ $config_defines = array(
 	'URL_IMAGE'             => URL_SITE . 'image/',
 	'URL_DOWNLOAD'          => URL_SITE . 'download/',
 	'URL_RESOURCES'         => URL_SITE . 'system/resources/',
+	'URL_THEMES'            => URL_SITE . 'app/view/theme/',
 	'DIR_IMAGE'             => DIR_SITE . 'image/',
-	'DIR_DOWNLOAD'          => DIR_SITE . 'system/download/',
+	'DIR_DOWNLOAD'          => DIR_SITE . 'download/',
 	'DIR_RESOURCES'         => DIR_SITE . 'system/resources/',
 	'DIR_LOGS'              => DIR_SITE . 'system/logs/',
 	'DIR_DATABASE_BACKUP'   => DIR_SITE . 'system/database/backups/',
@@ -55,7 +54,7 @@ $config_defines = array(
 	'MYSQL_TIMEZONE'        => '-6:00',
 	'DB_PROFILE'            => false,
 	'DB_PROFILE_NO_CACHE'   => false,
-	'AMPLO_TIME_LOG'         => false,
+	'AMPLO_TIME_LOG'        => false,
 	'AMPLO_SESSION'         => 'cross-store-session',
 	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
 	'CACHE_FILE_EXPIRATION' => 3600,
@@ -82,12 +81,14 @@ define("AC_DATE_OBJECT", 2);
 define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
-$domain = parse_url(URL_SITE, PHP_URL_HOST);
+if (!defined('COOKIE_DOMAIN')) {
+	$domain = parse_url(URL_SITE, PHP_URL_HOST);
 
-if (!$domain || $domain === 'localhost') {
-	define('COOKIE_DOMAIN', '');
-} else {
-	define('COOKIE_DOMAIN', '.' . $domain);
+	if (!$domain || $domain === 'localhost') {
+		define('COOKIE_DOMAIN', '');
+	} else {
+		define('COOKIE_DOMAIN', '.' . $domain);
+	}
 }
 
 //Start Session
@@ -96,7 +97,8 @@ ini_set('session.use_trans_sid', 'Off');
 
 session_name(AMPLO_SESSION);
 
-session_set_cookie_params(0, '/', COOKIE_DOMAIN);
+ini_set("session.cookie_domain", COOKIE_DOMAIN);
+session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
 session_start();
 
 // Unregister Globals
@@ -166,24 +168,4 @@ require_once(_mod(DIR_SYSTEM . 'library/response.php'));
 require_once(_mod(DIR_SYSTEM . 'library/session.php'));
 require_once(_mod(DIR_SYSTEM . 'library/theme.php'));
 require_once(_mod(DIR_SYSTEM . 'library/url.php'));
-
-//Helpers
-$handle = opendir(DIR_SYSTEM . 'helper/');
-while (($helper = readdir($handle))) {
-	if (strpos($helper, '.') === 0) {
-		continue;
-	}
-
-	//Load these last
-	if ($helper === 'core.php' || $helper === 'shortcuts.php') {
-		continue;
-	}
-
-	if (is_file(DIR_SYSTEM . 'helper/' . $helper)) {
-		require_once(_mod(DIR_SYSTEM . 'helper/' . $helper));
-	}
-}
-
-require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
-require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 

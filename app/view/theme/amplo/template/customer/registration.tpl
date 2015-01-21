@@ -53,8 +53,9 @@
 
 						<div class="form-item">
 							<label>{{Subscribe}}</label>
-							<?= build('radio', array(
-								'name'   => 'newsletter',
+							<?= build(array(
+								'type' => 'radio',
+								'name'  => 'newsletter',
 								'data'   => $data_yes_no,
 								'select' => $newsletter
 							)); ?>
@@ -77,12 +78,13 @@
 						</div>
 						<div class="form-item required">
 							<?=
-							build('select', array(
-								'name'   => 'country_id',
+							build(array(
+								'type' => 'select',
+								'name'  => 'country_id',
 								'data'   => $data_countries,
 								'select' => $country_id,
-								'key'    => 'country_id',
-								'value'  => 'name',
+								'value' =>  'country_id',
+								'label' =>  'name',
 							)); ?>
 						</div>
 						<div class="form-item required">

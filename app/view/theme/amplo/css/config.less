@@ -2,13 +2,15 @@
 .import-font('RobotoBlack', 'roboto/roboto-black-webfont');
 .import-font('OpenSansRegular', 'opensans/opensans-regular-webfont');
 .import-font('OpenSansItalic', 'opensans/opensans-italic-webfont');
+.import-font('OpenSansBoldItalic', 'opensans/opensans-bolditalic-webfont');
+.import-font('OpenSansSemiBold', 'opensans/opensans-semibold-webfont');
+.import-font('OpenSansSemiBoldItalic', 'opensans/opensans-semibolditalic-webfont');
 .import-font('OpenSansBold', 'opensans/opensans-bold-webfont');
 
 /**
   * General: ---
   * @color-main: The primary theme color
   * @color-secondary: The secondary theme color
-  * @bg-main: The background color / image
   * @font-base-family: Font Family Stack - The font families to use in order (eg: Arial, Helvetica, sans-serif)
   * @font-base: Font Size / Family - The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
   * @font-dark: Font Dark - The primary text color for dark text
@@ -55,8 +57,10 @@
 */
 
 /* Path Config */
-@imgpath: '@{basepath}image/';
-@themepath: '@{basepath}app/view/theme/amplo/';
+@img-path: '@{base-path}image/';
+@theme-path: '@{base-path}app/view/theme/amplo/';
+@theme-img: '@{base-path}app/view/theme/amplo/image/';
+@font-path: '@{base-path}app/view/theme/amplo/font/';
 
 /* LESS config */
 @xs: 480px;
@@ -78,12 +82,12 @@
 @page-wrap-pad: 2em 0;
 
 //Primary Styling
-@bg-main: #ffffff;
-
 @color-main: #395D84;
-@color-secondary: #4E4E4E;
-@color-dark: #4E4E4E;
-@color-light: white;
+@color-secondary: #973C3C;
+@color-gray: #6A6E6F;
+@color-dark: #373737;
+@color-light: #CCCCCC;
+@color-base: #AAAAAA;
 
 //Legacy Styling
 @color-lightest: lighten(@color-main, 50%);
@@ -199,13 +203,9 @@
 @checkbox: { & {
   & + .label {
     font-size: 1.1em;
-    background: white;
-    padding: .3em .6em;
-    border: #669EC1 1px solid;
-    border-radius: 5px;
 
     &:before {
-      background: url('@{themepath}image/sprite-17.png') center center no-repeat;
+      .bg-image-set('@{theme-img}sprite@1x.png', '@{theme-img}sprite@2x.png', '@{theme-img}sprite@3x.png');
       background-position: -17px -45px;
       width: 17px;
       height: 14px;
@@ -214,11 +214,24 @@
 
   &:checked, .checked {
     & + .label {
-      background: #00AEFF;
-      color: white;
-
       &:before {
         background-position: 1px -45px;
+      }
+    }
+  }
+
+  &.cb-button {
+    & + .label {
+      background: white;
+      padding: .3em .6em;
+      border: #669EC1 1px solid;
+      border-radius: 5px;
+    }
+
+    &:checked, .checked {
+      & + .label {
+        background: #00AEFF;
+        color: white;
       }
     }
   }
@@ -256,20 +269,8 @@
 @navigation: { & {
   font-size: 1em;
 
-  ul {
-    li {
-      a {
-        color: black;
-        background: none;
-        padding: .6em 1em;
-      }
-
-      .sub-menu {
-        box-shadow: 3px 3px 3px #C4DBF1;
-        border: none;
-        border-radius: 5px;
-      }
-    }
+  a {
+    padding: .6em 1em;
   }
 } };
 
@@ -279,6 +280,10 @@
   .sub-menu {
     color: white;
   }
+} };
+
+@navigation-account: { & {
+
 } };
 
 //Tables
@@ -324,20 +329,48 @@
 
 //Footer
 @footer: { & {
-  font-size: .8em;
-  color: white;
-  background: #343434;
+  text-align: center;
 
-  a {
-    color: white;
+  .sub-footer {
+    color: @color-dark;
+    background: @color-light;
 
-    &:hover {
-      color: darken(white, 25%);
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-dark;
+      font-family: OpenSansSemiBold;
+
+      &:hover {
+        color: lighten(@color-dark, 25%);
+      }
+    }
+
+    .contact-info {
+      a + a {
+        margin-left: 2em;
+      }
     }
   }
 
-  .wrap {
-    padding: 1em;
+  .main-footer {
+    font-size: .8em;
+    color: @color-light;
+    background: @color-dark;
+
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-light;
+
+      &:hover {
+        color: darken(@color-light, 25%);
+      }
+    }
   }
 } };
 
@@ -387,7 +420,7 @@
       border-left: 14px solid transparent;
       border-right: 14px solid transparent;
       border-top: 14px solid #454545;
-      z-index:99;
+      z-index: 99;
     }
   }
 } };
@@ -481,3 +514,6 @@
 @import 'base';
 @import 'reset';
 @import 'style';
+@import 'sprite';
+@import 'listings';
+@import 'targeting';

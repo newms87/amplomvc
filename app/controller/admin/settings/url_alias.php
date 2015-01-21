@@ -10,7 +10,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("URL Aliases"));
+		set_page_info('title', _l("URL Aliases"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -192,7 +192,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 	public function getForm()
 	{
 		//Page Head
-		$this->document->setTitle(_l("URL Aliases"));
+		set_page_info('title', _l("URL Aliases"));
 
 		//Insert or Update
 		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;

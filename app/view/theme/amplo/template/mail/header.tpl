@@ -9,8 +9,8 @@
 <div style="width: 680px;text-align: center; margin: auto;">
 	<? if ($logo) { ?>
 		<div style="margin-bottom: 10px;">
-			<a href="<?= $store['url']; ?>" title="<?= $store['name']; ?>">
-				<img src="<?= $logo; ?>" alt="<?= $store['name']; ?>" width="<?= $logo_width; ?>" height="<?= $logo_height; ?>" style="margin-bottom: 20px; border: none;"/>
+			<a href="<?= site_url(); ?>" title="<?= option('site_name'); ?>">
+				<img src="<?= $logo; ?>" alt="<?= option('site_name'); ?>" width="<?= $logo_width; ?>" height="<?= $logo_height; ?>" style="margin-bottom: 20px; border: none;"/>
 			</a>
 		</div>
 	<? } ?>

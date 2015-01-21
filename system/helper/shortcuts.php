@@ -1,141 +1,4 @@
 <?php
-//Request Headers
-$headers = apache_request_headers();
-function _header($key = null, $default = null)
-{
-	global $headers;
-	if ($key) {
-		return isset($headers[$key]) ? $headers[$key] : $default;
-	}
-
-	return $headers;
-}
-
-define("REQUEST_ACCEPT", _header('Accept'));
-
-function request_accepts($type)
-{
-	return strpos(REQUEST_ACCEPT, $type) !== false;
-}
-
-/**************************************
- * System Language Translation Engine *
- **************************************/
-
-global $language_group;
-$language_group = "Load";
-
-/**
- * Translate a string to the current requested language
- *
- * @param $message
- * @return mixed|string
- */
-function _l($message)
-{
-	//TODO: Set translations based on language group
-	global $language_group;
-
-	$values = func_get_args();
-
-	array_shift($values);
-
-	//TODO: See bitbucket issue https://bitbucket.org/newms87/dopencart/issue/20/language-translation-engine
-	if (empty($values)) {
-		return _($message);
-	}
-
-	return vsprintf(_($message), $values);
-}
-
-/**
- * Change Language Group just for this message, then revert back if $message is given.
- * If $message is null, then the language group is changed permanently.
- *
- * @param $group - The language group to change to.
- * @param $message - The Message
- * @param $var1 , $var2, etc.. The variables to pass to vsprintf() with the message.
- *
- * @return null | String with the translated message
- */
-
-function _lg($group, $message = null)
-{
-	global $language_group;
-
-	//Permanently change Group.
-	if ($message === null) {
-		$language_group = $group;
-		return;
-	}
-
-	//Temporarily Change Group
-	$temp           = $language_group;
-	$language_group = $group;
-
-	$params = func_get_args();
-	array_shift($params);
-
-	$return = call_user_func_array('_l', $params);
-
-	$language_group = $temp;
-
-	return $return;
-}
-
-/**
- * Customized routing for special cases. Set a new $path to change the controller / method to call.
- * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
- *
- * To register your own routing hook use $this->route->registerRoutingHook('my-hook-name', 'my_routing_hook');
- * in your plugin's setup.php install() method.
- *
- * @param string $path - The current path that points to the controller and method to call
- * @param $segments - The path segments broken up into an array.
- * @param string $orig_path - The original path (in case $path has been modified by another hook).
- *          NOTE: If a hook has used Route::setPath(), $orig_path will be modified (consider setting $sort_order for your hook to avoid conflicts).
- *
- * @return bool | null - if the return value is false no other hooks will be called.
- */
-function amplo_routing_hook(&$path, $segments, $orig_path)
-{
-	global $registry;
-
-	if (IS_ADMIN) {
-		//Initialize site configurations
-		$config = $registry->get('config');
-		$config->runSiteConfig();
-
-		if (option('config_maintenance')) {
-			if (isset($_GET['hide_maintenance_msg'])) {
-				$_SESSION['hide_maintenance_msg'] = 1;
-			} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
-				$hide = $registry->get('url')->here('hide_maintenance_msg=1');
-				message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"%s\">(hide message)</a> ", $hide));
-			}
-		} else {
-			if (count($segments) === 1) {
-				$path = defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index';
-				$registry->get('route')->setPath($path);
-			}
-		}
-	} else {
-		if (option('config_maintenance')) {
-			$path = 'common/maintenance';
-			$registry->get('route')->setPath($path);
-		}
-	}
-
-	//Path Rerouting
-	switch ($segments[0]) {
-		case 'page':
-			if (!empty($segments[1]) && $segments[1] !== 'preview') {
-				$path = 'page';
-			}
-			break;
-	}
-}
-
 function call($path, $params = null, $is_ajax = null)
 {
 	$args = func_get_args();
@@ -156,6 +19,12 @@ function block($block, $instance_name = null, $settings = null)
 	return $registry->get('block')->render($block, $instance_name, $settings);
 }
 
+function head()
+{
+	global $registry;
+	require_once _mod($registry->get('theme')->getFile('head'));
+}
+
 function area($area)
 {
 	global $registry;
@@ -172,6 +41,12 @@ function links($group)
 {
 	global $registry;
 	return $registry->get('document')->renderLinks($group);
+}
+
+function get_links($group)
+{
+	global $registry;
+	return $registry->get('document')->getLinks($group);
 }
 
 function has_links($group)
@@ -195,24 +70,16 @@ function get_breadcrumb($offset = 0)
 function breadcrumbs()
 {
 	global $registry;
-	return $registry->get('breadcrumb')->render();
-}
 
-function cache($key, $value = null, $as_file = false)
-{
-	global $registry;
-
-	if (is_null($value)) {
-		return $registry->get('cache')->get($key, $as_file);
-	} else {
-		return $registry->get('cache')->set($key, $value, $as_file);
+	if (option('show_breadcrumbs', true)) {
+		return $registry->get('breadcrumb')->render();
 	}
 }
 
-function clear_cache($key = null)
+function get_last_page($offset = -2)
 {
 	global $registry;
-	$registry->get('cache')->delete($key);
+	return $registry->get('request')->getPrevPageRequest($offset);
 }
 
 function check_condition($condition)
@@ -227,7 +94,7 @@ function message($type, $message = null)
 	$registry->get('message')->add($type, $message);
 }
 
-function render_message($type = null, $close = null)
+function render_message($type = null, $close = true)
 {
 	global $registry;
 	return $registry->get('message')->render($type, $close);
@@ -266,22 +133,70 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
-function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image_srcset($srcsets, $nx = 3)
 {
+	if (empty($srcsets)) {
+		return 'src=""';
+	}
+
 	if (!is_array($srcsets)) {
 		$srcsets = array(
-			$nx => $srcsets,
+			1 => $srcsets,
 		);
 	}
 
-	$max_x = max(array_keys($srcsets));
-	$image = $srcsets[$max_x];
+	reset($srcsets);
+
+	$path = pathinfo(current($srcsets));
+
+	if (empty($path['filename'])) {
+		return 'src=""';
+	}
+
+	while ($nx > 0) {
+		if (empty($srcsets[$nx])) {
+			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
+
+			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
+
+			if (!$src_name) {
+				$src_name = image($path['dirname'] . '/' . $path['filename'] . '-' . $nx . 'x.' . $path['extension']);
+			}
+
+			if ($src_name) {
+				$srcsets[$nx] = $src_name;
+			}
+		} else {
+			$srcsets[$nx] = image($srcsets[$nx]);
+		}
+
+		if ($nx > 1) {
+			$srcsets[$nx] .= ' ' . $nx . 'x';
+		}
+
+		$nx--;
+	}
+
+	$src = empty($srcsets[1]) ? current($srcsets) : $srcsets[1];
+	unset($srcsets[1]);
+
+	if (!empty($srcsets)) {
+		ksort($srcsets);
+		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
+	}
+
+	return "src=\"$src\"";
+}
+
+function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
+{
+	$srcsets = array();
 
 	if (!is_file($image)) {
 		$image = DIR_IMAGE . $image;
 
 		if (!is_file($image)) {
-			return 'src=""';
+			return array();
 		}
 	}
 
@@ -289,28 +204,28 @@ function image_srcset($srcsets, $nx = 3, $width = null, $height = null, $default
 		$size = getimagesize($image);
 
 		if (!$size) {
-			return 'src=""';
+			return array();
 		}
 
 		$width  = $size[0] / $nx;
 		$height = $size[1] / $nx;
 	}
 
-	while ($nx > 1) {
-		$srcsets[$nx] = empty($srcsets[$nx]) ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($srcsets[$nx]);
-		$srcsets[$nx] .= ' ' . $nx . 'x';
+	$max = $nx;
+
+	while ($nx > 0) {
+		$src = $max !== $nx ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($image);
+
+		if ($src) {
+			$srcsets[$nx] = $src;
+		}
+
 		$nx--;
 	}
 
-	$src = empty($srcsets[1]) ? image($image, $width, $height, $default, $cast_protocol) : image($srcsets[1]);
-	unset($srcsets[1]);
+	ksort($srcsets);
 
-	if ($srcsets) {
-		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
-	}
-
-	return "src=\"$src\"";
+	return $srcsets;
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -367,6 +282,8 @@ function theme_sprite($image)
 			4 => '4x',
 		);
 
+		$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
+
 		foreach ($sizes as $size => $name) {
 			$s = theme_image($path['filename'] . '@' . $name . '.' . $path['extension']);
 
@@ -385,13 +302,13 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null, $ssl = false)
+function site_url($path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->link($path, $query, $ssl);
 }
 
-function store_url($store_id, $path = '', $query = null, $ssl = false)
+function store_url($store_id, $path = '', $query = null, $ssl = null)
 {
 	global $registry;
 	return $registry->get('url')->store($store_id, $path, $query, $ssl);
@@ -451,8 +368,12 @@ function cast_title($name)
 	return implode(' ', $title);
 }
 
-function cast_protocol($url, $cast = 'http')
+function cast_protocol($url, $cast = null)
 {
+	if ($cast === null) {
+		$cast = IS_SSL ? 'https' : 'http';
+	}
+
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
 	if ($cast) {
@@ -468,46 +389,86 @@ function cast_protocol($url, $cast = 'http')
 	}
 }
 
-define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admin') === 0);
-
-define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-
-define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
-define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
-define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
-
-function _get($key, $default = null)
-{
-	return isset($_GET[$key]) ? $_GET[$key] : $default;
-}
-
-function _post($key, $default = null)
-{
-	return isset($_POST[$key]) ? $_POST[$key] : $default;
-}
-
-function _request($key, $default = null)
-{
-	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
-}
-
-function _session($key, $default = null)
-{
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
-}
-
 function option($option, $default = null)
 {
-	global $registry;
-	$value = $registry->get('config')->get($option);
+	global $_options;
 
-	return is_null($value) ? $default : $value;
+	//Load config if not loaded
+	if (!$_options) {
+		new Config;
+	}
+
+	return isset($_options[$option]) ? $_options[$option] : $default;
 }
 
 function set_option($option, $value)
 {
 	global $registry;
+	$registry->get('config')->set($option, $value);
+}
+
+function save_option($option, $value)
+{
+	global $registry;
 	$registry->get('config')->save('config', $option, $value);
+}
+
+function page_info($key = null, $default = null)
+{
+	global $registry;
+	static $document, $info;
+
+	if (!$document) {
+		$document = $registry->get('document');
+	}
+
+	if (!$info) {
+		$info = &$document->infoRef();
+	}
+
+	if (!$key) {
+		return $info;
+	}
+
+	if ($key === 'styles') {
+		return $document->getStyles();
+	}
+
+	if ($key === 'scripts') {
+		return $document->getScripts();
+	}
+
+	return isset($info[$key]) ? $info[$key] : $default;
+}
+
+function set_page_info($key, $value)
+{
+	global $registry;
+	$registry->get('document')->setInfo($key, $value);
+}
+
+function page_meta($key = null, $default = null)
+{
+	global $registry;
+	return $registry->get('document')->meta($key, $default);
+}
+
+function set_page_meta($key, $value)
+{
+	global $registry;
+	$registry->get('document')->setMeta($key, $value);
+}
+
+function language_info($key = null, $default = null)
+{
+	global $registry;
+	return $registry->get('language')->info($key, $default);
+}
+
+function set_language_info($key, $value)
+{
+	global $registry;
+	return $registry->get('language')->setInfo($key, $value);
 }
 
 function is_logged()
@@ -640,8 +601,8 @@ function build($type, $params = null)
 		'name'     => '',
 		'data'     => null,
 		'select'   => array(),
-		'key'      => null,
 		'value'    => null,
+		'label'    => null,
 		'readonly' => false,
 	);
 
@@ -650,13 +611,13 @@ function build($type, $params = null)
 		return;
 	}
 
-	$type        = $params['type'];
-	$data        = $params['data'];
-	$name        = $params['name'];
-	$select      = $params['select'];
-	$build_key   = $params['key'];
-	$build_value = $params['value'];
-	$readonly    = $params['readonly'];
+	$type      = $params['type'];
+	$data      = $params['data'];
+	$name      = $params['name'];
+	$select    = $params['select'];
+	$value_key = $params['value'];
+	$label_key = $params['label'];
+	$readonly  = $params['readonly'];
 
 	if (!isset($params['#class'])) {
 		$params['#class'] = "builder-$type";
@@ -716,16 +677,16 @@ function build($type, $params = null)
 
 	foreach ($data as $key => $value) {
 		if (is_array($value)) {
-			if (($build_key && !isset($value[$build_key])) || ($build_value && !isset($value[$build_value]))) {
+			if (($value_key && !isset($value[$value_key])) || ($label_key && !isset($value[$label_key]))) {
 				trigger_error(_l("The associative indexes for 'key' and 'value' were not found in the data array."));
 				return;
 			}
 
-			if ($build_key) {
-				$key = $value[$build_key];
+			if ($value_key) {
+				$key = $value[$value_key];
 			}
 
-			$value = isset($value[$build_value]) ? $value[$build_value] : '';
+			$value = isset($value[$label_key]) ? $value[$label_key] : '';
 		}
 
 		//Determine if the value is a selected value.
@@ -735,12 +696,12 @@ function build($type, $params = null)
 
 		foreach ($select as $s) {
 			if (is_array($s)) {
-				$s = $s[$build_key];
+				$s = $s[$value_key];
 			}
 
 			$v = is_integer($s) ? (int)$key : $key;
 
-			if (((is_integer($v) && $s !== '' && !is_bool($s) && !is_null($s)) ? (int)$s : $s) === $v) {
+			if (((is_integer($v) && $s !== '' && !is_bool($s) && $s !== null) ? (int)$s : $s) === $v) {
 				$selected = true;
 				break;
 			}
@@ -845,18 +806,6 @@ function build_js($js)
 	return ob_get_clean();
 }
 
-function rrmdir($dir)
-{
-	foreach (glob($dir . '/*') as $file) {
-		if (is_dir($file)) {
-			rrmdir($file);
-		} else {
-			unlink($file);
-		}
-	}
-	rmdir($dir);
-}
-
 function crypto_rand($min, $max)
 {
 	$range = $max - $min;
@@ -876,7 +825,7 @@ function crypto_rand($min, $max)
 
 function tokengen($length)
 {
-	$token        = "";
+	$token;
 	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
 	$codeAlphabet .= "0123456789";
@@ -890,6 +839,12 @@ function output($output)
 {
 	global $registry;
 	$registry->get('response')->setOutput($output);
+}
+
+function output_message()
+{
+	global $registry;
+	output_json($registry->get('message')->fetch());
 }
 
 function output_json($data)
@@ -909,10 +864,5 @@ function output_file($file, $type = null, $filename = null)
 {
 	global $registry;
 	$registry->get('csv')->downloadFile($file, $filename, $type);
-}
-
-function _is_object($o)
-{
-	return is_array($o) || is_object($o) || is_resource($o);
 }
 

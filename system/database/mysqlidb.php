@@ -91,7 +91,7 @@ class mysqlidb implements DatabaseInterface
 
 					foreach ($data as &$row) {
 						foreach ($row as $key => &$value) {
-							if (!is_null($value)) {
+							if ($value !== null) {
 								switch ($fields[$key]) {
 									case 'float':
 										$value = (float)$value;
@@ -151,7 +151,7 @@ class mysqlidb implements DatabaseInterface
 
 	public function setAutoincrement($table, $value)
 	{
-		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");
+		return $this->query("ALTER TABLE `$table` AUTO_INCREMENT=" . (int)$value);
 	}
 
 	public function escape($value)
