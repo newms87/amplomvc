@@ -1,29 +1,12 @@
 <?php
+// Check PHP Version
+if (version_compare(phpversion(), '5.3.0', '<') == true) {
+	exit('PHP5.3+ Required');
+}
 
-// Version
+// Amplo Version
 define('AMPLO_VERSION', '0.2.1');
 define('AMPLO_DEFAULT_THEME', 'amplo');
-
-//Setup Base URL
-if (!defined('DOMAIN')) {
-	define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
-}
-
-if (!defined('URL_SITE')) {
-	define('URL_SITE', '//' . DOMAIN . SITE_BASE);
-}
-
-//Default server values in case they are not set.
-$_SERVER += array(
-	'HTTP_HOST'      => DOMAIN,
-	'REQUEST_METHOD' => 'GET',
-	'REMOTE_ADDR'    => '::1',
-	'QUERY_STRING'   => '',
-);
-
-//TODO: Remove URL_AJAX after removing ckeditor
-define('URL_AJAX', URL_SITE . 'ajax/');
-
 
 //Directories
 define('DIR_SYSTEM', DIR_SITE . 'system/');
@@ -36,7 +19,19 @@ define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
 define('DIR_CRON', DIR_SITE . 'system/cron/');
 define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
 
-//Conditional defines for AmlpoMVC config.php to override.
+/************************************************************
+ * Conditional defines for AmploMVC config.php to override. *
+ ************************************************************/
+
+//Setup Base URL
+if (!defined('DOMAIN')) {
+	define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+}
+
+if (!defined('URL_SITE')) {
+	define('URL_SITE', '//' . DOMAIN . SITE_BASE);
+}
+
 $config_defines = array(
 	'SITE_BASE'             => '//' . DOMAIN . SITE_BASE,
 	'HTTP_SITE'             => 'http://' . DOMAIN . SITE_BASE,
@@ -66,10 +61,13 @@ foreach ($config_defines as $def_key => $def_value) {
 	}
 }
 
-// Check Version
-if (version_compare(phpversion(), '5.3.0', '<') == true) {
-	exit('PHP5.3+ Required');
-}
+//Default server values in case they are not set.
+$_SERVER += array(
+	'HTTP_HOST'      => DOMAIN,
+	'REQUEST_METHOD' => 'GET',
+	'REMOTE_ADDR'    => '::1',
+	'QUERY_STRING'   => '',
+);
 
 date_default_timezone_set(DEFAULT_TIMEZONE);
 

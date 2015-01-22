@@ -792,20 +792,6 @@ HTML
 	}
 }
 
-function build_js($js)
-{
-	static $js_loaded_files = array();
-
-	$args = func_get_args();
-	array_shift($args);
-
-	ob_start();
-
-	include(DIR_RESOURCES . 'builder_js.php');
-
-	return ob_get_clean();
-}
-
 function crypto_rand($min, $max)
 {
 	$range = $max - $min;

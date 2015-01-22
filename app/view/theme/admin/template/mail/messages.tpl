@@ -23,7 +23,7 @@
 								<label for="registration_subject">{{Subject:}}</label>
 								<input id="registration_subject" type="text" name="mail_registration_subject" value="<?= $mail_registration_subject; ?>" size="100"/>
 								<label for="registration_message">{{Body:}}</label>
-								<textarea id="registration_message" class="ckedit" name="mail_registration_message"><?= $mail_registration_message; ?></textarea>
+								<textarea id="registration_message" name="mail_registration_message"><?= $mail_registration_message; ?></textarea>
 							</td>
 						</tr>
 					</table>
@@ -33,14 +33,8 @@
 	</div>
 </div>
 
-<?= build_js('ckeditor'); ?>
-
 <script type="text/javascript">
 	$('#tabs a').tabs();
-</script>
-
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

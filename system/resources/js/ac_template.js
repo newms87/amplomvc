@@ -138,10 +138,6 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 				}
 			});
 
-			template.find('.ckedit').each(function (i, e) {
-				init_ckeditor_for($(e));
-			});
-
 			//Replace all attribute occurrences
 			template.find('*').addBack().not('option').each(function (i, e) {
 				var $e = $(e);

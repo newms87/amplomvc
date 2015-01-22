@@ -91,15 +91,15 @@ class App_Model_Settings extends Model
 		'config_debug_send_emails'                => '',
 		'config_error_display'                    => 0,
 		'config_error_log'                        => 1,
-		'config_google_analytics'                 => '',
-		'config_ga_experiment_id'                 => '',
-		'config_ga_exp_vars'                      => 0,
-		'config_ga_domains'                       => array(),
-		'config_ga_click_tracking'                => 0,
-		'config_ga_demographics'                  => 0,
+		'ga_code'                                 => '',
+		'ga_experiment_id'                        => '',
+		'ga_exp_vars'                             => 0,
+		'ga_domains'                              => array(),
+		'ga_click_tracking'                       => 0,
+		'ga_demographics'                         => 0,
 		'config_statcounter'                      => array(
 			'project'  => '',
-			'secruity' => '',
+			'security' => '',
 		),
 	);
 

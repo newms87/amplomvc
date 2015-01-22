@@ -37,14 +37,14 @@
 
 								<? if ($key === 'template_row') {
 									$press['images']['template_row'] = '%image%';
-								}?>
+								} ?>
 
 								<? if (!empty($press['images'])) { ?>
 									<? $img_row = 0; ?>
 									<? foreach ($press['images'] as $img_key => $image) { ?>
 										<? $image_row = $img_key === 'template_row' ? '%image_row%' : $img_row++; ?>
 										<div class="press_image <?= $img_key; ?>" image_id="<?= $image_row; ?>">
-											<input type="text" class="imageinput" name="settings[press_items][<?= $row; ?>][images][<?= $image_row; ?>]" value="<?= $image; ?>" />
+											<input type="text" class="imageinput" name="settings[press_items][<?= $row; ?>][images][<?= $image_row; ?>]" value="<?= $image; ?>"/>
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
 												class="delete">{{Remove}}</a>
@@ -66,8 +66,6 @@
 		</td>
 	</tr>
 </table>
-
-<?= build_js('ckeditor'); ?>
 
 <script type="text/javascript">
 	$('.imageinput').ac_imageinput();
@@ -112,8 +110,6 @@
 		template = $(template);
 
 		press_list.append($('<li class="press_item" press_id="' + press_id + '" />').append(template));
-
-		init_ckeditor_for(template.find('.ckedit'));
 
 		template.find('.add_image_item').click(add_image_item);
 

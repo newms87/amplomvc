@@ -47,8 +47,6 @@
 	</div>
 </div>
 
-<?= build_js('ckeditor'); ?>
-
 <script type="text/javascript">
 	$('#route_list').ac_template('route_list');
 

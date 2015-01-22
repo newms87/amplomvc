@@ -680,10 +680,11 @@
 						</td>
 						<td>
 							<div class="ga-code">
-								<input placeholder="{{GA Code}}" type="text" name="config_google_analytics" value="<?= $config_google_analytics; ?>"/>
+								<input placeholder="{{GA Code}}" type="text" name="ga_code" value="<?= $ga_code; ?>"/>
 
-								<div class="help">{{Login to your
-									<a target=\"_blank\" href=\"http://www.google.com/analytics/\">Google Analytics</a>
+								<div class="help">
+									{{Login to your
+									<a target="_blank" href="http://www.google.com/analytics/">Google Analytics</a>
 									account and after creating your web site profile copy and paste the analytics code into this field.}}
 								</div>
 							</div>
@@ -692,16 +693,17 @@
 
 							<div class="ga-cross-domain">
 								<h3>{{Use this section to enable GA Cross-domain analytics}}</h3>
-								<span class="help">{{Cross-domain analytics is used to track several different
-									<b>top-level</b>
-									domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}
+								<span class="help">
+									{{Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}
+									<br />
+									<a target="_blank" href="https://support.google.com/analytics/answer/1034342">{{Learn more about Cross-domain Tracking}}</a>
 								</span>
 								<br/>
 
 								<div class="ga-domains">
-									<? foreach ($config_ga_domains as $row_id => $domain) { ?>
+									<? foreach ($ga_domains as $row_id => $domain) { ?>
 										<div class="domain" data-row="<?= $row_id; ?>">
-											<input type="text" name="config_ga_domains[]" placeholder="example.com" value="<?= $domain; ?>"/>
+											<input type="text" name="ga_domains[]" placeholder="example.com" value="<?= $domain; ?>"/>
 
 											<div class="button remove">X</div>
 										</div>
@@ -717,9 +719,9 @@
 								<h3>{{Enable full page click tracking?}}</h3>
 								<?= build(array(
 									'type'   => 'radio',
-									'name'   => 'config_ga_click_tracking',
+									'name'   => 'ga_click_tracking',
 									'data'   => $data_yes_no,
-									'select' => $config_ga_click_tracking,
+									'select' => $ga_click_tracking,
 								)); ?>
 							</div>
 
@@ -731,9 +733,9 @@
 								<span class="help">{{This will track user age / gender / interests data. To enable go to your google analytics account and enable Demograhpics and Interest Reports, set this to enabled and Amplo MVC will insert the tracking code for you.}}</span>
 								<?= build(array(
 									'type'   => 'radio',
-									'name'   => 'config_ga_demographics',
+									'name'   => 'ga_demographics',
 									'data'   => $data_yes_no,
-									'select' => $config_ga_demographics,
+									'select' => $ga_demographics,
 								)); ?>
 							</div>
 						</td>
@@ -744,7 +746,7 @@
 						</td>
 						<td>
 							<div class="ga-experiment-id">
-								<input placeholder="{{Experiment ID}}" type="text" name="config_ga_experiment_id" value="<?= $config_ga_experiment_id; ?>"/>
+								<input placeholder="{{Experiment ID}}" type="text" name="ga_experiment_id" value="<?= $ga_experiment_id; ?>"/>
 								<span class="help">{{(Leave blank if you do not have any experiments set up.)}}</span>
 							</div>
 							<br/>
@@ -755,9 +757,9 @@
 							<div class="ga-experiment-vars">
 								<?= build(array(
 									'type'   => 'select',
-									'name'   => 'config_ga_exp_vars',
+									'name'   => 'ga_exp_vars',
 									'data'   => range(0, 25),
-									'select' => $config_ga_exp_vars,
+									'select' => $ga_exp_vars,
 								)); ?>
 							</div>
 						</td>

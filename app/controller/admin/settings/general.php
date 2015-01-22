@@ -85,7 +85,7 @@ class App_Controller_Admin_Settings_General extends Controller
 		$settings['data_icon_sizes'] = self::$icon_sizes;
 
 		//Domains AC Template
-		$settings['config_ga_domains']['__ac_template__'] = '';
+		$settings['ga_domains']['__ac_template__'] = '';
 
 		//Render
 		output($this->render('settings/general', $settings));

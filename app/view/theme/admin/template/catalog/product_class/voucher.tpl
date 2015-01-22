@@ -48,13 +48,13 @@
 				<tr>
 					<td><?= _l("Teaser: <span class=\"help\">A short teaser about the Gift Card.</span>"); ?></td>
 					<td>
-						<textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea>
+						<textarea name="teaser"><?= $teaser; ?></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td><?= _l("Description: <span class=\"help\">This will show up at the top of the Gift Card Product page. You may use full HTML</span>"); ?></td>
 					<td>
-						<textarea name="description" class="ckedit"><?= $description; ?></textarea>
+						<textarea name="description"><?= $description; ?></textarea>
 					</td>
 				</tr>
 				<tr>

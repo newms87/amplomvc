@@ -93,8 +93,6 @@
 	</div>
 </div>
 
-<?= build_js('ckeditor'); ?>
-
 <script type="text/javascript">
 	$('a.edit_message').click(function () {
 		message = $(this).closest('.message_preview');
@@ -129,19 +127,6 @@
 			msg_preview.remove();
 		});
 	});
-
-	$('#allow_html').change(function () {
-		message = $('#mail_message');
-
-		if ($(this).is(':checked') && !message.hasClass('ckedit')) {
-			message.addClass('ckedit');
-			init_ckeditor_for($('#mail_message'));
-		}
-		else if (!$(this).is(':checked') && message.hasClass('ckedit')) {
-			message.removeClass('ckedit');
-			remove_ckeditor_for($('#mail_message'));
-		}
-	}).change();
 </script>
 
 <script type="text/javascript">

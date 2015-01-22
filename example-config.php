@@ -1,6 +1,6 @@
 <?php
 /**
- *  See startup.php for additional config options that can be overridden.
+ *  See system/startup.php for additional config options that can be overridden.
  *
  * For Developers, some useful defines:
  * define('AMPLO_TIME_LOG', true); - Enables Performance logging w/ the dev plugin.
@@ -26,10 +26,10 @@ define('MYSQL_TIMEZONE', '-6:00');
 // Database Config
 define('DB_DRIVER', 'mysqlidb');
 define('DB_HOSTNAME', 'localhost');
-define('DB_DATABASE', 'caddash');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_PREFIX', 'ac_');
+define('DB_DATABASE', 'myschema');
+define('DB_USERNAME', 'dbuser');
+define('DB_PASSWORD', 'complex-and-long-db-password');
+define('DB_PREFIX', 'am_');
 
 //Error Reporting
 //You should always leave this at E_ALL unless you have a good reason not to
