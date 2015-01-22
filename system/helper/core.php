@@ -126,7 +126,7 @@ function register_routing_hook($name, $callable, $sort_order = 0)
 {
 	global $registry;
 
-	//In case called too soon (or when system not booted, eg: install.php)
+	//In case called when system not booted (eg: install.php)
 	if ($registry) {
 		return $registry->get('route')->registerHook($name, $callable, $sort_order);
 	}
