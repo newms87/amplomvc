@@ -151,8 +151,8 @@ class App_Model_Settings extends Model
 
 	public function saveAdmin($settings)
 	{
-		if (empty($settings['site_title'])) {
-			$settings['site_title'] = 'Amplo MVC Admin';
+		if (empty($settings['admin_title'])) {
+			$settings['admin_title'] = 'Amplo MVC Admin';
 		}
 
 		$settings += self::$admin_settings;

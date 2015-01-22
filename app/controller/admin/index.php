@@ -3,7 +3,7 @@ class App_Controller_Admin_Index extends Controller
 {
 	public function index()
 	{
-		set_page_info('title', _l("Dashboard"));
+		set_page_info('title', option('admin_title', _l("Amplo MVC Admin")));
 
 		breadcrumb(_l("Home"), site_url('admin'));
 
