@@ -71,7 +71,7 @@ function breadcrumbs()
 {
 	global $registry;
 
-	if (option('show_breadcrumbs', true)) {
+	if (IS_ADMIN ? option('admin_show_breadcrumbs', true) : option('show_breadcrumbs', true)) {
 		return $registry->get('breadcrumb')->render();
 	}
 }
