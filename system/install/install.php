@@ -35,6 +35,7 @@ if (strpos(DIR_SITE, $uri_path) === false) {
 //Load Core startup
 require_once(DIR_SITE . 'system/_mod.php');
 require_once(DIR_SITE . 'system/startup.php');
+require_once(DIR_SITE . 'system/helper/core.php');
 
 //
 define('DB_PREFIX', _post('db_prefix'));

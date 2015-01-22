@@ -8,7 +8,7 @@ class Breadcrumb extends Library
 	{
 		parent::__construct();
 
-		$this->separator = option('breadcrumb_separator');
+		$this->separator = IS_ADMIN ? option('admin_breadcrumb_separator', ' / ') : option('breadcrumb_separator', ' / ');
 	}
 
 	public function add($text, $href, $separator = '', $position = null)

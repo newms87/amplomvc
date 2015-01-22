@@ -51,7 +51,7 @@ class mysqlidb implements DatabaseInterface
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 
 		if ($this->mysqli->connect_error) {
-			$this->error = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
+			die('<br /><br /><strong>Unable to establish connection to MySQL Database. </strong> ERROR: (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error);
 		} else {
 			$this->query("SET NAMES 'utf8'");
 			$this->query("SET CHARACTER SET utf8");
