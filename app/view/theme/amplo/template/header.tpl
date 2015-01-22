@@ -80,29 +80,6 @@
 					<div id="links-primary" class="nav col xs-8 left middle">
 						<div class="links horizontal">
 							<?= links('polyscope'); ?>
-
-							<? $data_stores = $this->Model_Setting_Store->getRecords(null, null, '*', false, 'store_id'); ?>
-							<? unset($data_stores[option('site_id')]); ?>
-
-							<div class="link-list products">
-								<ul>
-									<li>
-										<a class="has-children">{{Products}}</a>
-
-										<div class="sub-menu">
-											<ul>
-												<? foreach ($data_stores as $store_id => $store) { ?>
-													<li>
-														<a href="<?= $store['url']; ?>">
-															<img <?= image_srcset(DIR_THEMES . strtolower($store['name']) . '/image/logo.png'); ?> />
-														</a>
-													</li>
-												<? } ?>
-											</ul>
-										</div>
-									</li>
-								</ul>
-							</div>
 						</div>
 					</div>
 
