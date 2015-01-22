@@ -79,7 +79,7 @@
 				<nav class="header-nav col xs-12">
 					<div id="links-primary" class="nav col xs-8 left middle">
 						<div class="links horizontal">
-							<?= links('polyscope'); ?>
+							<?= links('primary'); ?>
 						</div>
 					</div>
 
@@ -101,12 +101,6 @@
 				<div id="header-social-networks">
 					<?= block('extras/social_media'); ?>
 				</div>
-			<? } ?>
-
-			<? if (has_links('primary')) { ?>
-				<nav id="links-primary" class="links">
-					<?= links('primary'); ?>
-				</nav>
 			<? } ?>
 		</div>
 	</header>
