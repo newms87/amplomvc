@@ -367,13 +367,17 @@ class App_Model_View extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				self::$view_listings = $this->queryRows("SELECT * FROM " . self::$tables['view_listing'] . " ORDER BY name", 'view_listing_id');
+				$sort = array(
+					'name' => 'ASC',
+				);
+
+				self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
 					if (!$this->queryVar("SELECT COUNT(*) FROM " . self::$tables['view_listing'])) {
 						$this->resetViewListings();
-						return $this->getViewListings();
+						self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 					}
 				}
 
