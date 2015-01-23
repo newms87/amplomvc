@@ -76,6 +76,25 @@ class Router
 		unset($this->routing_hooks[$name]);
 	}
 
+	public function getLayoutForPath($path)
+	{
+		$layouts = cache('layout.routes');
+
+		if ($layouts === null) {
+			$layouts = $this->Model_Layout->getLayoutRoutes();
+
+			cache('layout.routes', $layouts);
+		}
+
+		foreach ($layouts as $layout) {
+			if (strpos($path, $layout['route']) === 0) {
+				return $layout['layout_id'];
+			}
+		}
+
+		return option('config_default_layout_id');
+	}
+
 	public function dispatch()
 	{
 		$path = $this->path;
@@ -101,9 +120,7 @@ class Router
 		}
 
 		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($path) . "' LIKE CONCAT(route, '%') ORDER BY route ASC LIMIT 1");
-		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
-		$this->config->set('config_layout_id', $layout_id);
+		set_option('config_layout_id', $this->getLayoutForPath($path));
 
 		//Dispatch Route
 		$action = new Action($path, $args);

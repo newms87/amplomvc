@@ -168,7 +168,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store += $defaults;
 
 		//Additional Info
-		$store['data_layouts']         = $this->Model_Design_Layout->getLayouts();
+		$store['data_layouts']         = $this->Model_Layout->getRecords();
 		$store['data_themes']          = $this->theme->getThemes();
 		$store['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$store['data_languages']       = $this->Model_Localisation_Language->getLanguages();

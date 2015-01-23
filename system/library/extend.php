@@ -57,7 +57,7 @@ class Extend extends Library
 			}
 		}
 
-		return $this->Model_Design_Layout->addLayout($layout);
+		return $this->Model_Layout->addLayout($layout);
 	}
 
 	//TODO: This should remove based on a unique ID not the name...
@@ -66,7 +66,7 @@ class Extend extends Library
 		$result = $this->query("SELECT layout_id FROM " . self::$tables['layout'] . " WHERE name='" . $this->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
-			$this->Model_Design_Layout->deleteLayout($result->row['layout_id']);
+			$this->Model_Layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 

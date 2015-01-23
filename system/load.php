@@ -41,11 +41,13 @@ $router->routeStore();
 $registry->set('request', new Request());
 
 //Database Structure Validation
-$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
+if (!defined('AMPLO_PRODUCTION') || !AMPLO_PRODUCTION) {
+	$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
 
-if ($last_update) {
-	clear_cache('model');
-	cache('db_last_update', $last_update['Value']);
+	if ($last_update) {
+		clear_cache('model');
+		cache('db_last_update', $last_update['Value']);
+	}
 }
 
 //Model History

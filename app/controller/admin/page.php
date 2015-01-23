@@ -136,7 +136,7 @@ class App_Controller_Admin_Page extends Controller
 		$page += $defaults;
 
 		//Template Data
-		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$page['data_layouts'] = $this->Model_Layout->getRecords();
 		$page['data_themes']  = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create-layout');
@@ -240,10 +240,10 @@ class App_Controller_Admin_Page extends Controller
 				'name' => $_POST['name'],
 			);
 
-			$result = $this->Model_Design_Layout->getLayouts($layout);
+			$result = $this->Model_Layout->getRecords(null, $layout);
 
 			if (empty($result)) {
-				$layout_id = $this->Model_Design_Layout->addLayout($layout);
+				$layout_id = $this->Model_Layout->save(null, $layout);
 			} else {
 				$result    = current($result);
 				$layout_id = $result['layout_id'];
@@ -255,15 +255,15 @@ class App_Controller_Admin_Page extends Controller
 			'order' => "ASC",
 		);
 
-		$layouts = $this->Model_Design_Layout->getLayouts($sort);
+		$layouts = $this->Model_Layout->getRecords($sort);
 
 		$output = build(array(
-			'type' => 'select',
-			'name'  => 'layout_id',
+			'type'   => 'select',
+			'name'   => 'layout_id',
 			'data'   => $layouts,
 			'select' => $layout_id,
-			'value' =>  'layout_id',
-			'label' =>  'name',
+			'value'  => 'layout_id',
+			'label'  => 'name',
 		));
 
 		output($output);

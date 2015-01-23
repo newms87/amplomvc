@@ -7,6 +7,9 @@
  * define('DB_PROFILE', true); - Enables performance logging on all DB queries w/ the dev plugin.
  */
 
+//Set this to 1 for production environments
+define("AMPLO_PRODUCTION", 0);
+
 //This is the path to Amplo MVC from the site's root directory. If it is in the root make this '/'
 define('SITE_BASE', '/');
 
@@ -35,7 +38,7 @@ define('DB_PREFIX', 'am_');
 //You should always leave this at E_ALL unless you have a good reason not to
 error_reporting(E_ALL);
 //This should be set to 0 for production
-ini_set('display_errors', 1);
+ini_set('display_errors', AMPLO_PRODUCTION ? 0 : 1);
 
 //Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
 define('AMPLO_REWRITE_SHORT_TAGS', false);

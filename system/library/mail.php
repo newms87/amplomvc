@@ -508,9 +508,9 @@ class Mail extends Library
 
 		//Hide Mail errors when ajax pages are requested
 		if (IS_AJAX && option('config_error_display')) {
-			$this->config->set('config_error_display', false);
+			set_option('config_error_display', false);
 			trigger_error($msg);
-			$this->config->set('config_error_display', true);
+			set_option('config_error_display', true);
 		} else {
 			trigger_error($msg);
 		}
