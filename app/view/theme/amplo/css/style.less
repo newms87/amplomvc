@@ -1012,14 +1012,13 @@ section.page {
 }
 
 .side-menu {
-  margin-top: 4em;
-
   .menu-tab {
     font: 1em OpenSansSemiBold;
     color: @font-dark;
     display: block;
     padding: .8em .5em;
     text-transform: uppercase;
+    cursor: pointer;
 
     &.active, &:hover {
       color: @color-main;
@@ -1184,12 +1183,17 @@ section.page {
   h1 {
     margin-bottom: 1em;
   }
+
+  .side-menu {
+    margin-top: 4em;
+  }
 }
 
 .faq-page {
   .content-box {
     .faq-item {
       display: none;
+      margin-bottom: 1em;
 
       .question {
         cursor: pointer;
@@ -1205,19 +1209,17 @@ section.page {
       }
 
       &.show {
+        display: block;
+      }
+
+      &.active {
         .question {
           color: @color-main;
         }
-        
+
         .answer {
           max-height: 10em;
         }
-      }
-    }
-
-    &.show-all {
-      .faq-item.all {
-        display: block;
       }
     }
   }

@@ -303,7 +303,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => $compress === null ? option('config_less_compress', false) : $compress,
+			'compress' => $compress === null ? option('config_less_compress', true) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
@@ -312,7 +312,7 @@ class Document extends Library
 
 		$parser->parse("@basepath: '" . SITE_BASE . "';");
 
-		return $parser->getCss();
+		return trim($parser->getCss());
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')

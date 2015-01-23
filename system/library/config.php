@@ -252,7 +252,7 @@ class Config extends Library
 
 	public function runSiteConfig()
 	{
-		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['store']);
+		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store");
 
 		if (!$default_exists) {
 			$store = array(

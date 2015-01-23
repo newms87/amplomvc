@@ -297,7 +297,12 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		}
 
-		if ($this->Model_Customer->save($customer_id, array('password' => _post('password')))) {
+		$reset = array(
+			'password' => _post('password'),
+			'confirm'  => _post('confirm'),
+		);
+
+		if ($this->Model_Customer->save($customer_id, $reset)) {
 			$this->customer->clearResetCode();
 			message('success', _l('You have successfully updated your password!'));
 			redirect('customer/login');

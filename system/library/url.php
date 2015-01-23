@@ -124,7 +124,13 @@ class Url extends Library
 		}
 
 		if (!$stores) {
-			$stores = $this->queryRows("SELECT * FROM " . self::$tables['store'], 'store_id');
+			$stores = cache('store.all');
+
+			if (!$stores) {
+				$stores = $this->Model_Site->getRecords();
+
+				cache('store.all', $stores);
+			}
 		}
 
 		if (!empty($stores[$store_id])) {
