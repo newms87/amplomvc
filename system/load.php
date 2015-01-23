@@ -34,7 +34,7 @@ while (($helper = readdir($handle))) {
 require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
-$router->routeStore();
+$router->routeSite();
 
 
 // Request (cleans globals)

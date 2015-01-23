@@ -164,29 +164,34 @@ class Router
 		}
 	}
 
-	public function routeStore()
+	public function getSites()
 	{
-		global $registry;
+		$sites = cache('site.all');
 
-		$stores = cache('store.all');
-
-		if ($stores === null) {
-			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store', 'store_id');
-			cache('store.all', $stores);
+		if ($sites === null) {
+			$sites = $this->Model_Site->getRecords(null, null, '*', false, 'store_id');
+			cache('site.all', $sites);
 		}
+
+		return $sites;
+	}
+
+	public function routeSite()
+	{
+		$sites = $this->getSites();
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
 
 		$prefix = DB_PREFIX;
 
-		foreach ($stores as $store) {
-			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
-				if (!empty($store['prefix'])) {
-					$prefix = $store['prefix'];
+		foreach ($sites as $site) {
+			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
+				if (!empty($site['prefix'])) {
+					$prefix = $site['prefix'];
 				}
 
-				$this->site = $store;
+				$this->site = $site;
 				break;
 			}
 		}
