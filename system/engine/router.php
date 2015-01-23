@@ -171,7 +171,7 @@ class Router
 		$stores = cache('store.all');
 
 		if ($stores === null) {
-			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store');
+			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store', 'store_id');
 			cache('store.all', $stores);
 		}
 
