@@ -308,7 +308,7 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		} else {
 			message('error', $this->Model_Customer->getError());
-			redirect('customer/reset_form', 'code=' . _get('code'));
+			redirect('customer/reset_form', $_GET);
 		}
 	}
 }
