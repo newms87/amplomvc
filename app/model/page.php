@@ -234,7 +234,7 @@ class App_Model_Page extends Model
 		if (!$css) {
 			$css = $this->document->compileLessContent($style);
 
-			cache('page.' . $page_id . '.style', $css);
+			cache('page.' . $page_id . '.style', trim($css));
 		}
 
 		return $css;
