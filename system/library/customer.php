@@ -3,8 +3,8 @@
 class Customer extends Library
 {
 	protected $customer_id;
-	protected $info;
-	protected $metadata;
+	protected $info = array();
+	protected $metadata = array();
 
 	public function __construct()
 	{
