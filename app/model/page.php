@@ -231,7 +231,7 @@ class App_Model_Page extends Model
 	{
 		$css = cache('page.' . $page_id . '.style');
 
-		if (!$css) {
+		if ($css === null) {
 			$css = $this->document->compileLessContent($style);
 
 			cache('page.' . $page_id . '.style', $css);

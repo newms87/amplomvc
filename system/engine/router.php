@@ -76,6 +76,25 @@ class Router
 		unset($this->routing_hooks[$name]);
 	}
 
+	public function getLayoutForPath($path)
+	{
+		$layouts = cache('layout.routes');
+
+		if ($layouts === null) {
+			$layouts = $this->Model_Layout->getLayoutRoutes();
+
+			cache('layout.routes', $layouts);
+		}
+
+		foreach ($layouts as $layout) {
+			if (strpos($path, $layout['route']) === 0) {
+				return $layout['layout_id'];
+			}
+		}
+
+		return option('config_default_layout_id');
+	}
+
 	public function dispatch()
 	{
 		$path = $this->path;
@@ -101,9 +120,7 @@ class Router
 		}
 
 		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($path) . "' LIKE CONCAT(route, '%') ORDER BY route ASC LIMIT 1");
-		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
-		$this->config->set('config_layout_id', $layout_id);
+		set_option('config_layout_id', $this->getLayoutForPath($path));
 
 		//Dispatch Route
 		$action = new Action($path, $args);
@@ -147,29 +164,34 @@ class Router
 		}
 	}
 
-	public function routeStore()
+	public function getSites()
 	{
-		global $registry;
+		$sites = cache('site.all');
 
-		$stores = cache('store.all');
-
-		if ($stores === null) {
-			$stores = $registry->get('db')->queryRows("SELECT * FROM " . DB_PREFIX . 'store');
-			cache('store.all', $stores);
+		if ($sites === null) {
+			$sites = $this->Model_Site->getRecords(null, null, '*', false, 'store_id');
+			cache('site.all', $sites);
 		}
+
+		return $sites;
+	}
+
+	public function routeSite()
+	{
+		$sites = $this->getSites();
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
 
 		$prefix = DB_PREFIX;
 
-		foreach ($stores as $store) {
-			if (strpos($url, trim($store['url'], '/ ')) === 0 || strpos($url, trim($store['ssl'], '/ ')) === 0) {
-				if (!empty($store['prefix'])) {
-					$prefix = $store['prefix'];
+		foreach ($sites as $site) {
+			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
+				if (!empty($site['prefix'])) {
+					$prefix = $site['prefix'];
 				}
 
-				$this->site = $store;
+				$this->site = $site;
 				break;
 			}
 		}

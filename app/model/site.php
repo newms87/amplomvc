@@ -46,12 +46,16 @@ class App_Model_Site extends App_Model_Table
 		return $site_id;
 	}
 
-	public function removeSite($site_name)
+	public function removeSite($site_id)
 	{
-		$site = $this->getSiteByName($site_name);
+		if (is_string($site_id) && preg_match("/[^\\d]/", $site_id)) {
+			$site = $this->getSiteByName($site_id);
+		} else {
+			$site = $this->getRecord($site_id);
+		}
 
 		if (!$site) {
-			$this->error['site'] = _l("A site with the name %s does not exist.", $site_name);
+			$this->error['site'] = _l("The site %s does not exist.", $site_id);
 			return false;
 		}
 
@@ -70,7 +74,11 @@ class App_Model_Site extends App_Model_Table
 			}
 		}
 
-		clear_cache();
+		clear_cache_all();
+
+		//Reset Tables / Model for current request
+		Model::$model = array();
+		$this->db->tables = array();
 
 		return true;
 	}

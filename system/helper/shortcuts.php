@@ -302,16 +302,10 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null, $ssl = null)
+function site_url($path = '', $query = null, $ssl = null, $site_id = null)
 {
 	global $registry;
-	return $registry->get('url')->link($path, $query, $ssl);
-}
-
-function store_url($store_id, $path = '', $query = null, $ssl = null)
-{
-	global $registry;
-	return $registry->get('url')->store($store_id, $path, $query, $ssl);
+	return $registry->get('url')->link($path, $query, $ssl, $site_id);
 }
 
 function theme_url($path = '', $query = null)
@@ -790,20 +784,6 @@ HTML
 			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
-}
-
-function build_js($js)
-{
-	static $js_loaded_files = array();
-
-	$args = func_get_args();
-	array_shift($args);
-
-	ob_start();
-
-	include(DIR_RESOURCES . 'builder_js.php');
-
-	return ob_get_clean();
 }
 
 function crypto_rand($min, $max)

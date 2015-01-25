@@ -42,17 +42,17 @@ class App_Model_Setting_Store extends App_Model_Table
 
 	public function getStore($store_id)
 	{
-		return $this->queryRow("SELECT * FROM " . self::$tables['store'] . " WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 
 	public function getStoreName($store_id)
 	{
-		return $this->queryVar("SELECT name FROM " . self::$tables['store'] . " WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 
 	public function getStoreNames()
 	{
-		return $this->queryRows("SELECT store_id, name FROM " . self::$tables['store']);
+		return $this->queryRows("SELECT store_id, name FROM " . DB_PREFIX . "store");
 	}
 
 	public function getStores($data = array(), $select = '', $total = false)
@@ -65,7 +65,7 @@ class App_Model_Setting_Store extends App_Model_Table
 		}
 
 		//From
-		$from = self::$tables['store'] . " s";
+		$from = DB_PREFIX . "store s";
 
 		//Where
 		$where = "store_id > 0";

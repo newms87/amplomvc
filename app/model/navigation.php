@@ -494,7 +494,7 @@ class App_Model_Navigation extends App_Model_Table
 						'children'     => array(
 							'system_design_layouts' => array(
 								'display_name' => 'Layouts',
-								'path'         => 'admin/design/layout',
+								'path'         => 'admin/layout',
 							),
 						),
 					),

@@ -193,18 +193,18 @@ if (!function_exists('array_column')) {
 	 *
 	 * Returns an array of elements from the column of an array
 	 *
-	 * @param array array - An associative array of arrays
-	 * @param column string - The key column of the $array to get elements from
-	 * @param assoc bool - Return an associative array with the key the same as the value (all values will be unique!)
+	 * @param array array - A multi-dimensional array (record set) from which to pull a column of values.
+	 * @param column_key string - The column of values to return. This value may be the integer key of the column you wish to retrieve, or it may be the string key name for an associative array. It may also be NULL to return complete arrays (useful together with index_key to reindex the array).
+	 * @param index_key bool - The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.
 	 *
-	 * @return array - an array of values of the column requested
+	 * @return array - Returns an array of values representing a single column from the input array.
 	 */
-	function array_column($array, $column, $index_key = null)
+	function array_column($array, $column_key, $index_key = null)
 	{
 		$values = array();
 
 		foreach ($array as $row) {
-			$value = isset($row[$column]) ? $row[$column] : null;
+			$value = isset($row[$column_key]) ? $row[$column_key] : null;
 
 			if ($index_key === null) {
 				$values[] = $value;

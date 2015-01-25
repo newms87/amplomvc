@@ -34,7 +34,7 @@ class App_Controller_Page extends Controller
 		breadcrumb($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
-		$this->config->set('config_layout_id', $page['layout_id']);
+		set_option('config_layout_id', $page['layout_id']);
 
 		$page['content_file'] = _mod($page['content_file']);
 
@@ -98,7 +98,7 @@ class App_Controller_Page extends Controller
 		breadcrumb($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
-		$this->config->set('config_layout_id', $page['layout_id']);
+		set_option('config_layout_id', $page['layout_id']);
 
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 

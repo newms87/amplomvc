@@ -14,7 +14,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 			'first_name' => !empty($customer['firstname']) ? $customer['firstname'] : 'New Customer',
 			'last_name'  => !empty($customer['lastname']) ? $customer['lastname'] : '',
 			'store_name' => option('site_name'),
-			'store_url'  => $this->url->site(),
+			'store_url'  => site_url(),
 		);
 
 		//TODO: How can we better handle easy customizaable emails with integrated HTML template?

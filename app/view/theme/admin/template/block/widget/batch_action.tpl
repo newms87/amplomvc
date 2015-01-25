@@ -8,8 +8,6 @@
 	'label' => 'label',
 )); ?>
 
-<? $ckeditor = false; ?>
-
 <? foreach ($actions as $action) {
 	if (empty($action['type'])) {
 		continue;
@@ -21,11 +19,6 @@
 			case 'text':
 				?>
 				<input type="text" name="action_value" value="<?= $action['default']; ?>"/>
-				<? break;
-			case 'ckedit':
-				?>
-				<? $ckeditor = true; ?>
-				<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>" name="action_value"><?= $action['default']; ?></textarea>
 				<? break;
 			case 'select':
 				?>
@@ -55,10 +48,6 @@
 
 <a class="button batch-action-go" data-loading="{{...}}">{{Go}}</a>
 
-<? if ($ckeditor) {
-	echo build_js('ckeditor');
-} ?>
-
 <script type="text/javascript">
 	$.ac_datepicker();
 
@@ -79,10 +68,7 @@
 
 		av = $('.action_value.active [name=action_value]');
 
-		if (av.hasClass('ckedit'))
-			av = CKEDITOR.instances[av.attr('id')].getData();
-		else
-			av = av.val() || '';
+		av = av.val() || '';
 
 		var data = $selected.serializeArray();
 

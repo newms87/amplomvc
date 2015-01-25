@@ -111,7 +111,7 @@ class App_Controller_Admin_Header extends Controller
 				$link_store = array(
 					'name'         => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
-					'href'         => store_url($store['store_id']),
+					'href'         => site_url('', '', null, $store['store_id']),
 					'parent'       => 'stores',
 					'target'       => '_blank',
 				);

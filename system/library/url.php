@@ -115,43 +115,29 @@ class Url extends Library
 		return $this->seo_url;
 	}
 
-	public function store($store_id, $path = '', $query = '', $ssl = null)
+	public function link($path, $query = '', $ssl = null, $site_id = null)
 	{
-		static $stores;
+		static $sites;
 
 		if ($ssl === null) {
 			$ssl = IS_SSL;
 		}
 
-		if (!$stores) {
-			$stores = $this->queryRows("SELECT * FROM " . self::$tables['store'], 'store_id');
-		}
+		if ($site_id) {
+			if (!$sites) {
+				$sites = $this->route->getSites();
+			}
 
-		if (!empty($stores[$store_id])) {
-			$url = $ssl ? $stores[$store_id]['ssl'] : $stores[$store_id]['url'];
+			if (!empty($sites[$site_id])) {
+				$url = $ssl ? $sites[$site_id]['ssl'] : $sites[$site_id]['url'];
+			} else {
+				$url = URL_SITE;
+			}
 		} else {
-			$url = URL_SITE;
+			$url = $ssl ? $this->ssl : $this->url;
 		}
 
-		return $this->findAlias($url, $path, $query, $store_id);
-	}
-
-	public function link($path, $query = '', $ssl = null)
-	{
-		if ($ssl === null) {
-			$ssl = IS_SSL;
-		}
-
-		return $this->findAlias($ssl ? $this->ssl : $this->url, $path, $query);
-	}
-
-	public function site($uri = '', $query = '', $base_site = false, $ssl = null)
-	{
-		if ($ssl === null) {
-			$ssl = IS_SSL;
-		}
-
-		return ($base_site ? URL_SITE : ($ssl ? $this->ssl : $this->url)) . $uri . (!empty($query) ? "?$query" : '');
+		return $this->findAlias($url, $path, $query, $site_id);
 	}
 
 	public function urlencode_link($uri = '', $query = '')
