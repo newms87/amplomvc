@@ -182,11 +182,11 @@ class Url extends Library
 	 * @param int $status - The header redirect status to send back to the requesting client.
 	 */
 
-	public function redirect($url, $query = '', $status = 302)
+	public function redirect($url, $query = '', $ssl = null, $status = 302)
 	{
 		//Check if this is a controller path
 		if (!preg_match("/https?:\\/\\//", $url)) {
-			$url = $this->link($url, $query);
+			$url = $this->link($url, $query, $ssl);
 		}
 
 		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
@@ -208,7 +208,7 @@ class Url extends Library
 			$this->route->setPath($url_alias['path']);
 
 			//Build the New URL
-			$this->seo_url = $this->site_url . $url_alias['alias'] . ($query ? '?' . $query : '');
+			$this->seo_url = $this->url . $url_alias['alias'] . ($query ? '?' . $query : '');
 		} else {
 			$this->seo_url = $this->here();
 		}

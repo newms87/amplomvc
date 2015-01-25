@@ -331,16 +331,16 @@ function theme_dir($path = '')
 	return $registry->get('theme')->getFile($path);
 }
 
-function redirect($path = '', $query = null, $status = null)
+function redirect($path = '', $query = null, $ssl = null, $status = null)
 {
 	global $registry;
-	$registry->get('url')->redirect($path, $query, $status);
+	$registry->get('url')->redirect($path, $query, $ssl, $status);
 }
 
-function post_redirect($path = '', $query = null, $status = null)
+function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 {
 	$_SESSION['__post_data__'] = $_POST;
-	redirect($path, $query, $status);
+	redirect($path, $query, $ssl, $status);
 }
 
 function slug($name, $sep = '_', $allow = 'a-z0-9_-')
