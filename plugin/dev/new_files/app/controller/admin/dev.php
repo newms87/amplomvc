@@ -200,7 +200,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function content()
 	{
-		$this->document->addStyle(URL_THEME . 'style/dev.css');
+		$this->document->addStyle(theme_url('style/dev.css'));
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
 		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
@@ -261,7 +261,7 @@ class App_Controller_Admin_Dev extends Controller
 
 		//Page Head
 		set_page_info('title', _l("Database Administration"));
-		$this->document->addStyle(URL_THEME . 'style/dev.css');
+		$this->document->addStyle(theme_url('style/dev.css'));
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
 		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
