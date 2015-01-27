@@ -1,36 +1,28 @@
-<div class="pagination clearfix">
-	<? if ($text_position === 'before') { ?>
-		<div class="text"><?= $text; ?></div>
-	<? } ?>
-
+<div class="pagination simple clearfix">
 	<div class="pager">
 		<? if ($page > 1) { ?>
-			<a class="pager-nav first" href="<?= $url_first; ?>">&lt&lt;</a>
-			<a class="pager-nav prev" href="<?= $url_prev; ?>">&lt;</a>
-		<? } ?>
-
-		<? if ($start > 1) { ?>
-			<span class="more-before"> .... </span>
+			<a class="page pager-nav first" href="<?= $url_first; ?>">
+				<b class="sprite pager-nav first"></b>
+			</a>
+			<a class="page pager-nav prev" href="<?= $url_prev; ?>">
+				<b class="sprite pager-nav prev"></b>
+			</a>
 		<? } ?>
 
 		<div class="pages">
-			<? foreach ($pages as $num => $link) { ?>
-				<a href="<?= $link; ?>" class="page <?= $num == $page ? 'current' : ''; ?>"><?= $num; ?></a>
-			<? } ?>
+			<div class="page page-count">
+				<?= $page . ' of ' . count($pages); ?>
+			</div>
 		</div>
 
-		<? if ($end < $num_pages) { ?>
-			<span class="more-after"> .... </span>
-		<? } ?>
-
 		<? if ($page < $num_pages) { ?>
-			<a class="pager-nav next" href="<?= $url_next; ?>">&gt;</a>
-			<a class="pager-nav last" href="<?= $url_last; ?>">&gt;&gt;</a>
+			<a class="pager-nav next page" href="<?= $url_next; ?>">
+				<b class="sprite pager-nav next"></b>
+			</a>
+			<a class="pager-nav last page" href="<?= $url_last; ?>">
+				<b class="sprite pager-nav last"></b>
+			</a>
 		<? } ?>
 	</div>
-
-	<? if ($text_position === 'after') { ?>
-		<div class="text"><?= $text; ?></div>
-	<? } ?>
 </div>
 
