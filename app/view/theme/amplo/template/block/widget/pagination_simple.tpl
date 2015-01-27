@@ -11,7 +11,7 @@
 
 		<div class="pages">
 			<div class="page page-count">
-				<?= $page . ' of ' . count($pages); ?>
+				<?= $page . ' of ' . $num_pages; ?>
 			</div>
 		</div>
 
