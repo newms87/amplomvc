@@ -222,7 +222,15 @@ class App_Model_Page extends App_Model_Table
 		$css = cache('page.' . $page_id . '.style');
 
 		if ($css === null) {
-			$css = $this->document->compileLessContent($style);
+			$css = trim($this->document->compileLessContent($style));
+
+			if (!$css) {
+				send_mail(array(
+					'to'      => 'dnewman@roofscope.com',
+					'subject' => "LESS COMPILE FAILED FOR " . $page_id,
+					'html'    => $css . '<BR><BR>' . get_caller(),
+				));
+			}
 
 			cache('page.' . $page_id . '.style', $css);
 		}
