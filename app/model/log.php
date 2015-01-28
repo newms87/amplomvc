@@ -6,7 +6,7 @@ class App_Model_Log extends App_Model_Table
 
 	public function getLogs()
 	{
-		return $this->queryColumn("SELECT DISTINCT name FROM " . self::$tables['log'], 'name');
+		return $this->queryColumn("SELECT DISTINCT name FROM {$this->t['log']}", 'name');
 	}
 
 	public function getColumns($filter = false)

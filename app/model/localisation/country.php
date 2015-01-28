@@ -24,13 +24,13 @@ class App_Model_Localisation_Country extends Model
 
 	public function getCountry($country_id)
 	{
-		return $this->queryRow("SELECT * FROM " . self::$tables['country'] . " WHERE country_id = " . (int)$country_id);
+		return $this->queryRow("SELECT * FROM {$this->t['country']} WHERE country_id = " . (int)$country_id);
 	}
 
 	public function getCountries($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . self::$tables['country'];
+			$sql = "SELECT * FROM {$this->t['country']}";
 
 			$sort_data = array(
 				'name',
@@ -69,7 +69,7 @@ class App_Model_Localisation_Country extends Model
 			$country_data = cache('country');
 
 			if (!$country_data) {
-				$query = $this->query("SELECT * FROM " . self::$tables['country'] . " ORDER BY name ASC");
+				$query = $this->query("SELECT * FROM {$this->t['country']} ORDER BY name ASC");
 
 				$country_data = $query->rows;
 
@@ -85,7 +85,7 @@ class App_Model_Localisation_Country extends Model
 		$countries = cache('country.active');
 
 		if (!$countries) {
-			$countries = $this->queryRows("SELECT * FROM " . self::$tables['country'] . " WHERE status = '1' ORDER BY name ASC");
+			$countries = $this->queryRows("SELECT * FROM {$this->t['country']} WHERE status = '1' ORDER BY name ASC");
 
 			cache('country.active', $countries);
 		}
@@ -95,6 +95,6 @@ class App_Model_Localisation_Country extends Model
 
 	public function getTotalCountries()
 	{
-		return $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['country']);
+		return $this->queryVar("SELECT COUNT(*) FROM {$this->t['country']}");
 	}
 }

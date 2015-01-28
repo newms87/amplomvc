@@ -130,7 +130,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function getPage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);
@@ -153,7 +153,7 @@ class App_Model_Page extends App_Model_Table
 	//TODO: Develop good caching method for pages.
 	public function getActivePage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id . " AND status = 1");
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id . " AND status = 1");
 
 		$this->getPageFiles($page);
 
@@ -162,7 +162,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function getPageName($page_id)
 	{
-		return $this->queryVar("SELECT name FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		return $this->queryVar("SELECT name FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 	}
 
 	public function getPageByName($name)
@@ -171,7 +171,7 @@ class App_Model_Page extends App_Model_Table
 
 		$themes = array_keys($this->theme->getThemes());
 
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 
 		$this->getPageFiles($page);
 
@@ -180,7 +180,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function getPageForPreview($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);

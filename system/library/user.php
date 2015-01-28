@@ -13,7 +13,7 @@ class User extends Library
 		parent::__construct();
 
 		if (isset($_SESSION['user_id']) && $this->validate_token()) {
-			$user = $this->queryRow("SELECT * FROM " . self::$tables['user'] . " WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
+			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
 
 			if ($user) {
 				$this->loadUser($user);
@@ -44,7 +44,7 @@ class User extends Library
 	protected function loadUser($user)
 	{
 		if (!is_array($user)) {
-			$user = $this->queryRow("SELECT * FROM " . self::$tables['user'] . " WHERE user_id = " . (int)$user);
+			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = " . (int)$user);
 		}
 
 		if (!empty($user['user_id'])) {
@@ -67,7 +67,7 @@ class User extends Library
 
 	public function lookupUserByEmail($email)
 	{
-		return $this->queryRow("SELECT * FROM " . self::$tables['user'] . " WHERE email = '$email'");
+		return $this->queryRow("SELECT * FROM {$this->t['user']} WHERE email = '$email'");
 	}
 
 	public function validate_token()
@@ -91,7 +91,7 @@ class User extends Library
 	{
 		$username = $this->escape($username);
 
-		$user = $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE (username = '$username' OR LCASE(email) = '" . strtolower($username) . "') AND status = '1'");
+		$user = $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE (username = '$username' OR LCASE(email) = '" . strtolower($username) . "') AND status = '1'");
 
 		if ($user) {
 			if (!password_verify($password, $user['password'])) {
@@ -254,10 +254,10 @@ class User extends Library
 	public function getMeta($user_id, $key, $single = true)
 	{
 		if ($single) {
-			return $this->queryRow("SELECT * FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			return $this->queryRow("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
 		}
 
-		return $this->queryRows("SELECT * FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+		return $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
 	}
 
 	//TODO: Make this current
@@ -364,7 +364,7 @@ class User extends Library
 	public function lookupResetCode($code)
 	{
 		if ($code) {
-			return $this->queryVar("SELECT user_id FROM " . self::$tables['user_meta'] . " WHERE `key` = 'pass_reset_code' AND value = '" . $this->escape($code) . "'");
+			return $this->queryVar("SELECT user_id FROM {$this->t['user_meta']} WHERE `key` = 'pass_reset_code' AND value = '" . $this->escape($code) . "'");
 		}
 	}
 

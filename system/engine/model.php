@@ -2,9 +2,9 @@
 
 abstract class Model
 {
-	static $model = array(), $tables = array(), $prefix;
+	static $model = array();
 
-	protected $db, $error = array();
+	protected $t, $db, $error = array();
 
 	const
 		TEXT = 'text',
@@ -21,18 +21,12 @@ abstract class Model
 	{
 		global $registry;
 
-		$key = strtolower(get_class($this));
-
-		$registry->set($key, $this);
+		$registry->set(strtolower(get_class($this)), $this);
 
 		//use default database
+		//(Note: setting our own $db property allows us to use a different database for new Model instances)
 		if (!$this->db) {
-			//(Note: setting our own $db property allows us to use a different database for new Model instances)
-			$this->db = $registry->get('db');
-		}
-
-		if (!self::$prefix) {
-			$this->setPrefix(defined('SITE_PREFIX') ? SITE_PREFIX : DB_PREFIX);
+			$this->setDb($registry->get('db'));
 		}
 	}
 
@@ -42,29 +36,36 @@ abstract class Model
 		return $registry->get($key);
 	}
 
+	public function setDb($db)
+	{
+		$this->t = new Model_T;
+
+		$this->db = $db;
+
+		$schema = $this->db->getSchema();
+		$prefix = $this->db->getPrefix();
+
+		$tables = cache("model.$schema.$prefix.tables");
+
+		if (!$tables) {
+			$tables = $this->db->getTables($prefix);
+
+			if ($prefix !== DB_PREFIX) {
+				$tables += $this->db->getTables(DB_PREFIX);
+			}
+
+			cache("model.$schema.$prefix.tables", $tables);
+		}
+
+		$this->t->tables = $tables;
+		$this->t->schema = $schema;
+		$this->t->prefix = $prefix;
+	}
+
 	protected function load($path, $class)
 	{
 		global $registry;
 		return $registry->load($path, $class);
-	}
-
-	static function setPrefix($prefix)
-	{
-		global $registry;
-
-		self::$prefix = $prefix;
-
-		self::$tables = cache('model.tables');
-
-		if (!self::$tables) {
-			$db = $registry->get('db');
-			self::$tables = $db->getTables($prefix);
-			self::$tables += $db->getTables(DB_PREFIX);
-
-			$db->tables = array();
-
-			cache('model.tables', self::$tables);
-		}
 	}
 
 	public function hasError($type = null)
@@ -209,7 +210,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . self::$tables[$table] . "` WHERE $where LIMIT 1");
+		return $this->queryVar("SELECT " . $this->escape($field) . " FROM `" . $this->t[$table] . "` WHERE $where LIMIT 1");
 	}
 
 	public function queryFields($table, $fields, $where)
@@ -218,7 +219,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . self::$tables[$table] . "` WHERE $where LIMIT 1");
+		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . $this->t[$table] . "` WHERE $where LIMIT 1");
 	}
 
 	protected function insert($table, $data)
@@ -234,7 +235,7 @@ abstract class Model
 			return false;
 		}
 
-		$success = $this->query("INSERT INTO `" . self::$tables[$table] . "` SET $values");
+		$success = $this->query("INSERT INTO `" . $this->t[$table] . "` SET $values");
 
 		if (!$success) {
 			trigger_error("There was a problem inserting entry for $table and was not modified.");
@@ -299,7 +300,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, '', '', true);
 
-		$success = $this->query("UPDATE `" . self::$tables[$table] . "` SET $values WHERE $where");
+		$success = $this->query("UPDATE `" . $this->t[$table] . "` SET $values WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem updating entry for $table and was not modified.");
@@ -326,7 +327,7 @@ abstract class Model
 
 		$where = $this->getWhere($table, $where, null, null, true);
 
-		$success = $this->query("DELETE FROM `" . self::$tables[$table] . "` WHERE $where");
+		$success = $this->query("DELETE FROM `" . $this->t[$table] . "` WHERE $where");
 
 		if (!$success) {
 			trigger_error("There was a problem deleting entry for $table and was not modified.");
@@ -442,7 +443,7 @@ abstract class Model
 	{
 		$columns = $this->getTableColumns($table);
 
-		$data    = array_intersect_key($data, $columns);
+		$data = array_intersect_key($data, $columns);
 
 		foreach ($data as $key => &$value) {
 			if (_is_object($value)) {
@@ -496,8 +497,8 @@ abstract class Model
 			list($table, $t) = explode(' ', $table, 2);
 		}
 
-		if (isset(self::$tables[$table])) {
-			$table = self::$tables[$table];
+		if (isset($this->t[$table])) {
+			$table = $this->t[$table];
 		} elseif (!$this->db->hasTable($table)) {
 			trigger_error(_l("Table %s does not exist!", $table));
 			return false;
@@ -566,7 +567,7 @@ abstract class Model
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		} else {
-			$t = self::$tables[$table];
+			$t = $this->t[$table];
 		}
 
 		$columns += $this->getTableColumns($table);
@@ -919,8 +920,8 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table  = isset(self::$tables[$table]) ? self::$tables[$table] : $table;
-		$schema = $this->db->getName();
+		$table  = isset($this->t[$table]) ? $this->t[$table] : $table;
+		$schema = $this->db->getSchema();
 
 		if (empty(self::$model[$schema][$table])) {
 			$model = cache('model.' . $schema . '.' . $table);
@@ -1060,5 +1061,55 @@ abstract class Model
 				}
 			}
 		}
+	}
+}
+
+
+class Model_T implements ArrayAccess
+{
+	public
+		$tables = array(),
+		$prefix,
+		$schema;
+
+	public function offsetGet($offset)
+	{
+		if (isset($this->tables[$offset])) {
+			return $this->tables[$offset];
+		}
+
+		$t = strtolower($offset);
+
+		if (isset($this->tables[$t])) {
+			return $this->tables[$t];
+		}
+
+		foreach ($this->tables as $key => $table) {
+			if (strtolower($key) === $t) {
+				return $table;
+			}
+		}
+
+		trigger_error(_l("Table <strong>%s</strong> was not found in database schema <strong>%s</strong> (using prefix <strong>%s</strong>)!", $offset, $this->schema, $this->prefix));
+		exit;
+	}
+
+	public function offsetSet($offset, $value)
+	{
+		if (is_null($offset)) {
+			$this->tables[] = $value;
+		} else {
+			$this->tables[$offset] = $value;
+		}
+	}
+
+	public function offsetExists($offset)
+	{
+		return isset($this->tables[$offset]);
+	}
+
+	public function offsetUnset($offset)
+	{
+		unset($this->tables[$offset]);
 	}
 }

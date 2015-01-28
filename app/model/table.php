@@ -39,14 +39,14 @@ abstract class App_Model_Table extends Model
 
 	public function getField($id, $field)
 	{
-		return $this->queryVar("SELECT $field FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryVar("SELECT $field FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecord($id, $select = '*')
 	{
 		$select = $this->extractSelect($this->table, $select);
 
-		return $this->queryRow("SELECT $select FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryRow("SELECT $select FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
@@ -71,7 +71,7 @@ abstract class App_Model_Table extends Model
 		}
 
 		//From
-		$from = self::$tables[$this->table];
+		$from = $this->t[$this->table];
 
 		//Where
 		$where = is_string($filter) ? $filter : $this->extractWhere($this->table, $filter);

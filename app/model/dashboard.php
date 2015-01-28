@@ -10,7 +10,7 @@ class App_Model_Dashboard extends App_Model_Table
 			$count = 1;
 			while (empty($dashboard['title'])) {
 				$dashboard['title'] = 'New Dashboard ' . $count++;
-				if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['dashboard'] . " WHERE `title` = '" . $dashboard['title'] . "'")) {
+				if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['dashboard']} WHERE `title` = '" . $dashboard['title'] . "'")) {
 					$dashboard['title'] = '';
 				}
 			}
@@ -24,7 +24,7 @@ class App_Model_Dashboard extends App_Model_Table
 			}
 
 			$count = 1;
-			while ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['dashboard'] . " WHERE `name` = '" . $dashboard['name'] . "'")) {
+			while ($this->queryVar("SELECT COUNT(*) FROM {$this->t['dashboard']} WHERE `name` = '" . $dashboard['name'] . "'")) {
 				$dashboard['name'] = preg_replace("/_[\\d]+/", '', $dashboard['name']) . '_' . $count++;
 			}
 
@@ -47,7 +47,7 @@ class App_Model_Dashboard extends App_Model_Table
 
 	public function getDashboard($dashboard_id)
 	{
-		$dashboard = $this->queryRow("SELECT * FROM " . self::$tables['dashboard'] . " WHERE dashboard_id = " . (int)$dashboard_id);
+		$dashboard = $this->queryRow("SELECT * FROM {$this->t['dashboard']} WHERE dashboard_id = " . (int)$dashboard_id);
 
 		if ($dashboard) {
 			$dashboard['title'] = html_entity_decode($dashboard['title']);
