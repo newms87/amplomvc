@@ -39,7 +39,7 @@ class App_Controller_Feed_GoogleSitemap extends Controller
 				}
 			}
 
-			$pages = $this->Model_Page->getPages();
+			$pages = $this->Model_Page->getRecords(array('cache' => true));
 
 			foreach ($pages as $page) {
 				$output .= '<url>';

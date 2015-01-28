@@ -4,7 +4,7 @@ $this->db->dropTable('product_class');
 
 $this->db->addColumn('dashboard', 'title', "VARCHAR(45) NOT NULL AFTER `name`");
 
-$dashboards = $this->Model_Dashboard->getDashboards();
+$dashboards = $this->Model_Dashboard->getRecords();
 
 foreach ($dashboards as $dash) {
 	if (!$dash['title']) {

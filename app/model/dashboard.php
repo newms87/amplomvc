@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Dashboard extends Model
+class App_Model_Dashboard extends App_Model_Table
 {
+	protected $table = 'dashboard', $primary_key = 'dashboard_id';
+
 	public function save($dashboard_id, $dashboard = array())
 	{
 		if (!$dashboard_id && empty($dashboard['title'])) {
@@ -29,12 +31,16 @@ class App_Model_Dashboard extends Model
 			$dashboard_id = $this->insert('dashboard', $dashboard);
 		}
 
+		clear_cache('dashboard');
+
 		return $dashboard_id;
 	}
 
 	public function remove($dashboard_id)
 	{
 		$this->Model_View->removeGroup('dash-' . $dashboard_id);
+
+		clear_cache('dashboard');
 
 		return $this->delete('dashboard', $dashboard_id);
 	}
@@ -50,9 +56,9 @@ class App_Model_Dashboard extends Model
 		return $dashboard;
 	}
 
-	public function getDashboards($check_perms = false)
+	public function getUserDashboards()
 	{
-		$dashboards = $this->queryRows("SELECT * FROM " . self::$tables['dashboard']);
+		$dashboards = $this->getRecords(array('cache' => true));
 
 		foreach ($dashboards as $key => $dashboard) {
 			if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {

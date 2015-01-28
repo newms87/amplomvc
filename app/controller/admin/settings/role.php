@@ -33,7 +33,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 			);
 		}
 
-		$data['view_listing_id'] = $this->Model_Setting_Role->getViewListingId();
+		$data['view_listing_id'] = $this->Model_UserRole->getViewListingId();
 
 		//Render
 		output($this->render('settings/role/list', $data));
@@ -46,13 +46,13 @@ class App_Controller_Admin_Settings_Role extends Controller
 			'permissions' => false,
 		);
 
-		$columns = $this->Model_Setting_Role->getColumns($disable + (array)_request('columns'));
+		$columns = $this->Model_UserRole->getColumns($disable + (array)_request('columns'));
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		list($user_roles, $user_role_total) = $this->Model_Setting_Role->getRoles($sort, $filter, $columns, true, 'user_role_id');
+		list($user_roles, $user_role_total) = $this->Model_UserRole->getRecords($sort, $filter, $columns, true, 'user_role_id');
 
 		foreach ($user_roles as $user_role_id => &$user_role) {
 			$actions = array(
@@ -72,7 +72,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 		$listing = array(
 			'row_id'         => 'user_role_id',
-			'extra_cols'     => $this->Model_Setting_Role->getColumns($disable),
+			'extra_cols'     => $this->Model_UserRole->getColumns($disable),
 			'columns'        => $columns,
 			'rows'           => $user_roles,
 			'filter_value'   => $filter,
@@ -109,7 +109,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		$user_role = $_POST;
 
 		if ($user_role_id && !IS_POST) {
-			$user_role = $this->Model_Setting_Role->getRole($user_role_id);
+			$user_role = $this->Model_UserRole->getRole($user_role_id);
 		}
 
 		// Defaults
@@ -121,7 +121,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		$user_role += $defaults;
 
 		//Template Data
-		$areas = $this->Model_Setting_Role->getRestrictedAreas();
+		$areas = $this->Model_UserRole->getRestrictedAreas();
 
 		$this->fillAreaDefaults($areas, (array)$user_role['permissions']);
 
@@ -139,8 +139,8 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 	public function save()
 	{
-		if (!$this->Model_Setting_Role->save(_request('user_role_id'), $_POST)) {
-			message('error', $this->Model_Setting_Role->getError());
+		if (!$this->Model_UserRole->save(_request('user_role_id'), $_POST)) {
+			message('error', $this->Model_UserRole->getError());
 		} else {
 			message('success', _l("The User Role has been updated!"));
 		}
@@ -158,10 +158,10 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function delete()
 	{
 		//Delete
-		if ($this->Model_Setting_Role->remove(_get('user_role_id'))) {
+		if ($this->Model_UserRole->remove(_get('user_role_id'))) {
 			message('success', _l("User Role has been removed"));
 		} else {
-			message('error', $this->Model_Setting_Role->getError());
+			message('error', $this->Model_UserRole->getError());
 		}
 
 		//Response
@@ -177,13 +177,13 @@ class App_Controller_Admin_Settings_Role extends Controller
 		foreach ($_POST['batch'] as $user_role_id) {
 			switch ($_POST['action']) {
 				case 'delete':
-					$this->Model_Setting_Role->remove($user_role_id);
+					$this->Model_UserRole->remove($user_role_id);
 					break;
 			}
 		}
 
-		if ($this->Model_Setting_Role->hasError()) {
-			message('error', $this->Model_Setting_Role->getError());
+		if ($this->Model_UserRole->hasError()) {
+			message('error', $this->Model_UserRole->getError());
 		} else {
 			message('success', _l("The User Groups have been updated!"));
 		}

@@ -360,12 +360,6 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 				if (option('config_currency') == $currency_info['code']) {
 					$this->error['warning'] = _l("Warning: This currency cannot be deleted as it is currently assigned as the default store currency!");
 				}
-
-				$store_total = $this->Model_Setting_Store->getTotalStoresByCurrency($currency_info['code']);
-
-				if ($store_total) {
-					$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s stores!"), $store_total);
-				}
 			}
 		}
 

@@ -1,8 +1,6 @@
 <?php
 class App_Controller_Admin_Localisation_Country extends Controller
 {
-
-
 	public function index()
 	{
 		set_page_info('title', _l("Country"));
@@ -334,11 +332,6 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$this->error['warning'] = _l("Warning: This country cannot be deleted as it is currently assigned as the default store country!");
 			}
 
-			$store_total = $this->Model_Setting_Store->getTotalStoresByCountryId($country_id);
-
-			if ($store_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s stores!"), $store_total);
-			}
 
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);
 

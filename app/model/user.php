@@ -178,53 +178,34 @@ class App_Model_User extends App_Model_Table
 		return $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE username = '" . $this->escape($username) . "'");
 	}
 
-	public function getUsers($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
-		//Select
-		$select = $this->extractSelect($this->table, $select);
-
-		//From
-		$from = self::$tables[$this->table];
-
 		//Where
 		if (isset($filter['user_role'])) {
-			$roles = $this->Model_Setting_Role->getRoles(null, null, '*', false, 'name');
+			$role_filter = array(
+				'name' => $filter['user_role'],
+			);
 
-			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
+			$roles = $this->Model_UserRole->getRecords(array('cache' => true), $role_filter, 'user_role_id', false, 'user_role_id');
 
-			if (isset($filter['user_role_id'])) {
-				$filter['user_role_id'] = is_array($filter['user_role_id']) ? $filter['user_role_id'] : array($filter['user_role_id']);
-			} else {
-				$filter['user_role_id'] = array();
-			}
-
-			foreach ($user_roles as $role_name) {
-				if (isset($roles[$role_name])) {
-					$filter['user_role_id'][] = $roles[$role_name]['user_role_id'];
-				}
-			}
+			$filter['user_role_id'] = array_keys($roles);
 		}
 
-		$where = $this->extractWhere($this->table, $filter);
-
 		if (isset($filter['name'])) {
+			$where = $this->extractWhere($this->table, $filter);
 			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
+			$filter = $where;
 		}
 
 		//Order and Limit
-		if (!empty($filter['sort'])) {
-			if ($filter['sort'] === 'name') {
-				$filter['sort'] = array(
-					'lastname'  => $filter['order'],
-					'firstname' => $filter['order'],
-				);
-			}
+		if (!empty($filter['sort']) && $filter['sort'] === 'name') {
+			$filter['sort'] = array(
+				'lastname'  => $filter['order'],
+				'firstname' => $filter['order'],
+			);
 		}
 
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return parent::getRecords($sort, $filter, $select, $total, $index);
 	}
 
 	public function getTotalUsers($filter = array())
@@ -238,7 +219,7 @@ class App_Model_User extends App_Model_Table
 			'user_role_id' => array(
 				'type'         => 'select',
 				'display_name' => _l("Role"),
-				'build_data'   => $this->Model_Setting_Role->getRoles(),
+				'build_data'   => $this->Model_UserRole->getRecords(array('cache' => true)),
 				'build_config' => array(
 					'user_role_id',
 					'name'

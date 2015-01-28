@@ -54,7 +54,7 @@ class App_Controller_Admin_Page extends Controller
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = _get('filter', array());
 
-		list($pages, $page_total) = $this->Model_Page->getPages($sort, $filter, $columns, true, 'page_id');
+		list($pages, $page_total) = $this->Model_Page->getRecords($sort, $filter, $columns, true, 'page_id');
 
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
@@ -136,7 +136,7 @@ class App_Controller_Admin_Page extends Controller
 		$page += $defaults;
 
 		//Template Data
-		$page['data_layouts'] = $this->Model_Layout->getRecords();
+		$page['data_layouts'] = $this->Model_Layout->getRecords(array('cache' => true));
 		$page['data_themes']  = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create-layout');

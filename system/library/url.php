@@ -283,7 +283,7 @@ class Url extends Library
 				'status' => 1,
 			);
 
-			return $this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+			return $this->Model_UrlAlias->addUrlAlias($url_alias);
 		}
 
 		return true;
@@ -303,10 +303,10 @@ class Url extends Library
 		$url_alias_ids = $this->queryColumn($sql_query);
 
 		foreach ($url_alias_ids as $url_alias_id) {
-			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+			$this->Model_UrlAlias->deleteUrlAlias($url_alias_id);
 		}
 
-		return $this->Model_Setting_UrlAlias->hasError();
+		return $this->Model_UrlAlias->hasError();
 	}
 
 	public function loadAliases()

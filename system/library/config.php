@@ -255,7 +255,7 @@ class Config extends Library
 		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store");
 
 		if (!$default_exists) {
-			$store = array(
+			$site = array(
 				'name'   => 'Amplo MVC',
 				'prefix' => DB_PREFIX,
 				'url'    => HTTP_SITE,
@@ -263,7 +263,7 @@ class Config extends Library
 			);
 
 			$this->db->setAutoIncrement('store', 0);
-			$this->Model_Setting_Store->save(null, $store);
+			$this->Model_Site->createSite(null, $site);
 		}
 	}
 

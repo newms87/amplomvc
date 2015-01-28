@@ -51,7 +51,7 @@ class User extends Library
 			$this->user_id = $user['user_id'];
 			$this->session->set('user_id', $user['user_id']);
 
-			$user_role = $this->Model_Setting_Role->getRole($user['user_role_id']);
+			$user_role = $this->Model_UserRole->getRole($user['user_role_id']);
 
 			if ($user_role) {
 				$this->permissions = $user_role['permissions'];

@@ -190,7 +190,7 @@ class App_Controller_Admin_Dev extends Controller
 			}
 		}
 
-		$data['data_backup_files'] = $this->Model_Dev_Dev->getBackupFiles();
+		$data['data_backup_files'] = $this->dev->getBackupFiles();
 		$data['data_tables']       = $this->db->getTables();
 
 		$this->content();

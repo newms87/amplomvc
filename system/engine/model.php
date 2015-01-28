@@ -507,7 +507,7 @@ abstract class Model
 			$t = $table;
 		}
 
-		if (!$columns || !is_array($columns)) {
+		if (!$columns) {
 			return "`$t`.*";
 		}
 

@@ -166,14 +166,7 @@ class Router
 
 	public function getSites()
 	{
-		$sites = cache('site.all');
-
-		if ($sites === null) {
-			$sites = $this->Model_Site->getRecords(null, null, '*', false, 'store_id');
-			cache('site.all', $sites);
-		}
-
-		return $sites;
+		return $this->Model_Site->getRecords(array('cache' => true), null, '*', false, 'store_id');
 	}
 
 	public function routeSite()
