@@ -5,8 +5,8 @@
 
 	<div class="pager">
 		<? if ($page > 1) { ?>
-			<a class="pager-nav first" href="<?= $url_first; ?>">&lt&lt;</a>
-			<a class="pager-nav prev" href="<?= $url_prev; ?>">&lt;</a>
+			<a class="sprite pager-nav first page" href="<?= $url_first; ?>"></a>
+			<a class="sprite pager-nav prev page" href="<?= $url_prev; ?>"></a>
 		<? } ?>
 
 		<? if ($start > 1) { ?>
@@ -24,8 +24,8 @@
 		<? } ?>
 
 		<? if ($page < $num_pages) { ?>
-			<a class="pager-nav next" href="<?= $url_next; ?>">&gt;</a>
-			<a class="pager-nav last" href="<?= $url_last; ?>">&gt;&gt;</a>
+			<a class="sprite pager-nav next page" href="<?= $url_next; ?>"></a>
+			<a class="sprite pager-nav last page" href="<?= $url_last; ?>"></a>
 		<? } ?>
 	</div>
 
