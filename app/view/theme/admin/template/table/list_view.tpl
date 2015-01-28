@@ -286,6 +286,10 @@
 											break;
 
 										case 'multiselect':
+											if (!is_array($value)) {
+												$value = array($value);
+											}
+
 											foreach ($value as $v) {
 												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
 												foreach ($column['build_data'] as $c_data) {

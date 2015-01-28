@@ -221,7 +221,7 @@ class App_Model_Page extends Model
 	{
 		if (!empty($page['theme']) && !empty($page['name'])) {
 			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/content.tpl';
-			$page['style_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
+			$page['style_file']   = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
 		}
 	}
 
@@ -230,7 +230,15 @@ class App_Model_Page extends Model
 		$css = cache('page.' . $page_id . '.style');
 
 		if (!$css) {
-			$css = $this->document->compileLessContent($style);
+			$css = trim($this->document->compileLessContent($style));
+
+			if (!$css) {
+				send_mail(array(
+					'to'      => 'dnewman@roofscope.com',
+					'subject' => "LESS COMPILE FAILED FOR " . $page_id,
+					'html'    => $css . '<BR><BR>' . get_caller(),
+				));
+			}
 
 			cache('page.' . $page_id . '.style', $css);
 		}
