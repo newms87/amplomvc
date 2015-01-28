@@ -1,32 +1,33 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 	<div class="section">
-		<?= IS_AJAX ? '' : breadcrumbs(); ?>
+		<?= $is_ajax ? '' : breadcrumbs(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("Database Administration"); ?></h1>
+				<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> {{Database Administration}}</h1>
 
 				<div class="buttons">
-					<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
+					<a href="<?= $return; ?>" class="button">{{Return to Dev Console}}</a>
 				</div>
 			</div>
 			<div class="section">
 				<form id="form_db_query" action="" method="post">
 					<table class="form">
 						<tr>
-							<td><label for="db_query"><?= _l("Backup"); ?></label></td>
+							<td><label for="db_query">{{Backup}}</label></td>
 							<td>
 								<textarea name="query" id="db_query" rows="10" cols="100"><?= $query; ?></textarea>
 							</td>
 							<td id="db_tables">
-								<?= build('multiselect', array(
-									'name' => 'tables',
+								<?= build(array(
+									'type' => 'multiselect',
+									'name'=> 'tables',
 									'data' => $data_tables,
 								)); ?>
 							</td>
 						</tr>
 						<tr>
 							<td></td>
-							<td><input type="submit" class="button" name="submit_query" value="<?= _l("Submit Query"); ?>"/>
+							<td><input type="submit" class="button" name="submit_query" value="{{Submit Query}}"/>
 							</td>
 						</tr>
 						<? if (!empty($results)) { ?>
@@ -67,4 +68,4 @@
 		</div>
 	</div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

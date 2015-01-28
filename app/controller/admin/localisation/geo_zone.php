@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Geo Zones"));
+		set_page_info('title', _l("Geo Zones"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Geo Zones"));
+		set_page_info('title', _l("Geo Zones"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
@@ -27,7 +27,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Geo Zones"));
+		set_page_info('title', _l("Geo Zones"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
@@ -42,7 +42,7 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Geo Zones"));
+		set_page_info('title', _l("Geo Zones"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $geo_zone_id) {
@@ -100,8 +100,8 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$geo_zone_total = $this->Model_Localisation_GeoZone->getTotalGeoZones();

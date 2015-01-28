@@ -1,162 +1,167 @@
 <?php
+
 class App_Controller_Admin_Tool_Logs extends Controller
 {
 	public function index()
 	{
-		//Log File
-		$log = _get('log', 'default');
-
-		$log_name = ucfirst($log);
-
 		//Page Head
-		$this->document->setTitle(_l("%s Log", $log_name));
+		set_page_info('title', _l("System Logs"));
 
 		//Breadcrumbs
-		breadcrumb(_l('Home'), site_url('admin'));
-		breadcrumb(_l('Log Files'), site_url('admin/tool/logs'));
-		breadcrumb(_l("%s Log", $log_name), site_url('admin/tool/logs', 'log=' . $log));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("User"), site_url('admin/tool/logs'));
 
-		//Sort and Filter
-		$sort   = $this->sort->getQueryDefaults('store_id', 'ASC');
-		$filter = _get('filter', null);
+		//Listing
+		$data['listing'] = $this->listing();
 
-		$start = $sort['start'];
-		$limit = $sort['limit'];
+		//Batch Actions
+		$actions = array(
+			'delete' => array(
+				'label' => _l("Delete"),
+			),
+			'clear'  => array(
+				'type'       => 'select',
+				'label'      => _l("Clear"),
+				'build_data' => array('' => _l("All")) + $this->Model_Log->getLogs(),
+			),
+		);
 
-		$current = -1;
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'url'     => site_url('admin/tool/logs/batch-action'),
+		);
 
-		$file    = DIR_LOGS . $log . '.txt';
-		$entries = array();
+		//Response
+		output($this->render('tool/logs', $data));
+	}
 
-		if (file_exists($file)) {
-			$handle = @fopen($file, "r");
-			if ($handle) {
-				while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start + $limit))) {
-					$current++;
+	public function listing()
+	{
+		//The Table Columns
+		$requested_cols = $this->request->get('columns');
+		$columns        = $this->Model_Log->getColumns($requested_cols);
 
-					if ($current >= $start) {
+		//The Sort & Filter Data
+		$sort   = $this->sort->getQueryDefaults('log_id', 'desc');
+		$filter = _get('filter', array());
 
-						$data = explode("\t", $buffer, 7);
+		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, null, true);
 
-						//Invalid entry
-						if (count($data) < 6) {
-							continue;
-						}
+		$listing = array(
+			'row_id'         => 'log_id',
+			'extra_cols'     => $this->Model_Log->getColumns(false),
+			'columns'        => $columns,
+			'rows'           => $entries,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $total,
+			'listing_path'   => 'admin/tool/logs/listing',
+		);
 
-						$entries[] = array(
-							'line'    => $current,
-							'date'    => $data[0],
-							'ip'      => $data[1],
-							'uri'     => $data[2],
-							'query'   => $data[3],
-							'store'   => $data[4],
-							'agent'   => $data[5],
-							'message' => str_replace("__nl__", "<br />", $data[6]),
-						);
-					}
+		$output = block('widget/listing', null, $listing);
+
+		//Response
+		if ($this->is_ajax) {
+			output($output);
+		}
+
+		return $output;
+	}
+
+	public function batch_action()
+	{
+		$action = _post('action');
+
+		if ($action === 'clear') {
+			$this->Model_Log->clear(_post('action_value'));
+		} else {
+			foreach (_post('batch', array()) as $log_id) {
+				switch ($action) {
+					case 'delete':
+						$this->Model_Log->remove($log_id);
+						break;
 				}
-				fclose($handle);
 			}
 		}
 
-		$data['entries'] = $entries;
-
-		$next = $start + $limit;
-		$prev = $start - $limit > 0 ? $start - $limit : 0;
-
-		if ($current >= ($start + $limit)) {
-			$data['next'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $next . '&limit=' . $limit);
+		if ($this->Model_Log->hasError()) {
+			message('error', $this->Model_Log->getError());
+		} else {
+			message('success', _l("The log table was updated (Note: Log files are unchanged)."));
 		}
 
-		if ($start > 0) {
-			$data['prev'] = site_url('admin/tool/logs', 'log=' . $log . '&start=' . $prev . '&limit=' . $limit);
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/tool/logs');
 		}
-
-		//Template Data
-		$data['log_name'] = $log_name;
-
-		$log_files = $this->tool->getFiles(DIR_LOGS, array('txt'));
-
-		foreach ($log_files as &$file) {
-			$base = $file->getBasename('.txt');
-
-			$file = array(
-				'name'     => $base === 'log' ? _l("Default") : ucfirst($base),
-				'href'     => site_url('admin/tool/logs', 'log=' . $base),
-				'selected' => $base === $log,
-			);
-		}
-		unset($file);
-
-		$data['data_log_files'] = $log_files;
-
-		$data['limit'] = $sort['limit'];
-
-		//Limits
-		$data['limits'] = $this->sort->renderLimits();
-
-		//Action Buttons
-		$data['remove'] = site_url('admin/tool/logs/remove', 'log=' . $log);
-		$data['clear']  = site_url('admin/tool/logs/clear', 'log=' . $log);
-
-		//Render
-		output($this->render('tool/logs', $data));
 	}
 
 	public function remove($lines = null)
 	{
-		if (empty($_GET['log'])) {
-			redirect('admin/tool/logs');
-		}
+		$log = _get('log');
 
-		if (!isset($_POST['entries']) && $lines === null) {
-			message('warning', _l("No entries were selected for removal!"));
-		} else {
-			$entries = ($lines !== null) ? $lines : $_POST['entries'];
+		if ($log) {
+			$entries = _post('entries', $lines);
 
-			if (preg_match("/[^\\d\\s,-]/", $entries) > 0) {
+			if (!$entries || preg_match("/[^\\d\\s,-]/", $entries)) {
 				message('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
-			}
+			} else {
 
-			$file = DIR_LOGS . option('config_error_filename');
+				$file = $this->dir . $log . '.txt';
 
-			$file_lines = explode("\n", file_get_contents($file));
-
-			foreach (explode(',', $entries) as $entry) {
-				if (strpos($entry, '-')) {
-					list($from, $to) = explode('-', $entry);
-					for ($i = (int)$from; $i <= (int)$to; $i++) {
-						unset($file_lines[$i]);
-					}
+				if (!is_file($file)) {
+					message('warning', _l("Invalid log file %s", $file));
 				} else {
-					unset($file_lines[(int)$entry]);
+					$file_lines = explode("\n", file_get_contents($file));
+
+					foreach (explode(',', $entries) as $entry) {
+						if (strpos($entry, '-')) {
+							list($from, $to) = explode('-', $entry);
+							for ($i = (int)$from; $i <= (int)$to; $i++) {
+								unset($file_lines[$i]);
+							}
+						} else {
+							unset($file_lines[(int)$entry]);
+						}
+					}
+
+					file_put_contents($file, implode("\n", $file_lines));
+
+					message('success', _l('Entry Removed from %s!', $file));
 				}
 			}
-
-			file_put_contents($file, implode("\n", $file_lines));
-
-			message('success', _l('Entry Removed!'));
+		} else {
+			message('error', _l("Must specify log file"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
-			redirect('admin/tool/logs', 'log=' . $_GET['log']);
+			redirect('admin/tool/logs', 'log=' . $log);
 		}
 	}
 
 	public function clear()
 	{
-		if (empty($_GET['log'])) {
-			redirect('admin/tool/logs');
+		$log = _get('log');
+
+		if ($log) {
+			$file = $this->dir . $log . '.txt';
+
+			if (is_file($file)) {
+				file_put_contents($file, '');
+
+				message('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
+			} else {
+				message('error', _l("Invalid log file %s", $log));
+			}
 		}
 
-		$file = DIR_LOGS . $_GET['log'] . '.txt';
-
-		file_put_contents($file, '');
-
-		message('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
-
-		redirect('admin/tool/logs', 'log=' . $_GET['log']);
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/tool/logs', 'log=' . $log);
+		}
 	}
 }

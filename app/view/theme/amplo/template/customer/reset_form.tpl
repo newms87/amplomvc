@@ -1,43 +1,46 @@
-<?= call('common/header'); ?>
+<?= $is_ajax ? '' : call('header'); ?>
+<?= area('left'); ?>
+<?= area('right'); ?>
 
-<section id="reset-password-page" class="content">
+<section class="login-page reset-password content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= IS_AJAX ? '' : breadcrumbs(); ?>
+			<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-			<h1><?= _l("Reset Your Password"); ?></h1>
+			<h1>{{Reset Your Password}}</h1>
 		</div>
 	</header>
 
-	<div class="row reset-password">
+	<?= area('top'); ?>
+
+	<div class="row forgotten-content">
 		<div class="wrap">
-			<div class="col xs-8 md-6 lg-5 center">
-				<form action="<?= $save; ?>" class="form full-width" method="post" enctype="multipart/form-data">
-					<h2><?= _l("Enter your new Password:"); ?></h2>
+			<div class="col xs-12 md-10 lg-5 xl-4">
+				<form action="<?= site_url('customer/reset_password', 'code=' . $code); ?>" method="post" class="form full-width" enctype="multipart/form-data">
+					<p>{{Enter your Email address below to request a new password for your account.}}</p>
+					<br/>
 
 					<div class="form-item">
-						<input type="password" autocomplete="off" placeholder="<?= _l("New Password"); ?>" name="password" value=""/>
-					</div>
-					<div class="form-item">
-						<input type="password" name="confirm" placeholder="<?= _l("Confirm"); ?>" value=""/>
+						<input type="password" autocomplete="off" name="password" placeholder="{{Enter New Password}}" value=""/>
 					</div>
 
-					<div class="buttons">
-						<div class="left">
-							<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
-						</div>
-						<div class="right">
-							<button class="button"><?= _l("Change Password"); ?></button>
+					<div class="form-item">
+						<input type="password" name="confirm" placeholder="{{Confirm Password}}" value=""/>
+					</div>
+
+					<div class="buttons submit">
+						<button>{{Change Password}}</button>
+
+						<div class="cancel buttons">
+							<a href="<?= site_url('customer/login'); ?>">{{Cancel}}</a>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+
+	<?= area('bottom'); ?>
 </section>
 
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
-</script>
-
-<?= call('common/footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>

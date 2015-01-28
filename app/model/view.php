@@ -16,6 +16,9 @@ class App_Model_View extends App_Model_Table
 			}
 		}
 
+		clear_cache('view');
+		self::$view_listings = null;
+
 		if (!empty($view['settings'])) {
 			if ($view_id) {
 				$view['settings'] += (array)$this->getViewSettings($view_id);
@@ -37,7 +40,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			if (!isset($view['sort_order'])) {
-				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($view['group']) . "'") + 1;
+				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM " . self::$tables['view'] . " WHERE `group` = '" . $this->escape($view['group']) . "'") + 1;
 			}
 
 			return $this->insert('view', $view);
@@ -46,7 +49,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getView($view_id)
 	{
-		$view = $this->queryRow("SELECT * FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+		$view = $this->queryRow("SELECT * FROM " . self::$tables['view'] . " WHERE view_id = " . (int)$view_id);
 
 		if (!empty($view['settings'])) {
 			$view['settings'] = unserialize($view['settings']);
@@ -57,7 +60,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getViewSettings($view_id)
 	{
-		$settings = $this->queryVar("SELECT settings FROM " . $this->prefix . "view WHERE view_id = " . (int)$view_id);
+		$settings = $this->queryVar("SELECT settings FROM " . self::$tables['view'] . " WHERE view_id = " . (int)$view_id);
 
 		if ($settings) {
 			$settings = unserialize($settings);
@@ -78,7 +81,7 @@ class App_Model_View extends App_Model_Table
 			$settings = array();
 		}
 
-		if (is_null($value)) {
+		if ($value === null) {
 			unset($settings[$key]);
 		} else {
 			$settings[$key] = $value;
@@ -89,12 +92,15 @@ class App_Model_View extends App_Model_Table
 
 	public function saveViewSettings($view_id, $settings)
 	{
+		clear_cache('view');
+		self::$view_listings = null;
+
 		return $this->update('view', array('settings' => serialize($settings)), $view_id);
 	}
 
 	public function getViews($group)
 	{
-		$views = $this->queryRows("SELECT * FROM " . $this->prefix . "view WHERE `group` = '" . $this->escape($group) . "'");
+		$views = $this->queryRows("SELECT * FROM " . self::$tables['view'] . " WHERE `group` = '" . $this->escape($group) . "'");
 
 		foreach ($views as &$view) {
 			parse_str($view['query'], $view['query']);
@@ -123,13 +129,16 @@ class App_Model_View extends App_Model_Table
 
 	public function remove($view_id)
 	{
+		clear_cache('view');
+		self::$view_listings = null;
+
 		return $this->delete('view', $view_id);
 	}
 
 	public function getViewMeta($view_id, $key = null, $single = true)
 	{
 		if (!isset(self::$meta[$view_id])) {
-			$rows = $this->queryRows("SELECT * FROM " . $this->prefix . "view_meta WHERE view_id = " . (int)$view_id);
+			$rows = $this->queryRows("SELECT * FROM " . self::$tables['view_meta'] . " WHERE view_id = " . (int)$view_id);
 
 			foreach ($rows as $row) {
 				self::$meta[$view_id][$row['key']][] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
@@ -156,10 +165,12 @@ class App_Model_View extends App_Model_Table
 			$serialized = 0;
 		}
 
+		self::$meta = array();
+
 		if ($single) {
 			$this->delete('view_meta', array('view_id' => $view_id));
 
-			if (is_null($value)) {
+			if ($value === null) {
 				return true;
 			}
 		}
@@ -184,7 +195,9 @@ class App_Model_View extends App_Model_Table
 			$serialized = 0;
 		}
 
-		if (is_null($value)) {
+		self::$meta = array();
+
+		if ($value === null) {
 			return $this->delete('view_meta', $view_meta_id);
 		}
 
@@ -210,7 +223,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			if (!$view_listing_id) {
-				if ($this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "view_listing WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
+				if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['view_listing'] . " WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
 					$this->error['name'] = _l("A View Listing with the name %s already exists.", $view_listing['name']);
 					return false;
 				}
@@ -221,17 +234,18 @@ class App_Model_View extends App_Model_Table
 			$view_listing['slug'] = slug($view_listing['name']);
 		}
 
-		$this->cache->delete('view_listing');
+		self::$view_listings = null;
+		clear_cache('view_listing');
 
 		//Create the SQL View
 		if (!empty($view_listing['sql'])) {
 			$slug = !empty($view_listing['slug']) ? $view_listing['slug'] : $this->queryField('view_listing', 'slug', $view_listing_id);
-			$this->query("DROP VIEW IF EXISTS `" . $this->prefix . "$slug`");
+			$this->query("DROP VIEW IF EXISTS `" . self::$tables[$slug] . "`");
 
 			$display_errors = ini_get('display_errors');
 			ini_set('display_errors', 0);
 
-			$result = $this->query("CREATE VIEW `" . $this->prefix . "$slug` AS " . $view_listing['sql']);
+			$result = $this->query("CREATE VIEW `" . self::$tables[$slug] . "` AS " . $view_listing['sql']);
 
 			ini_set('display_errors', $display_errors);
 
@@ -241,7 +255,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			//TODO- this can probably be optimized
-			$this->cache->delete('model');
+			clear_cache('model');
 		}
 
 		if ($view_listing_id) {
@@ -272,7 +286,7 @@ class App_Model_View extends App_Model_Table
 			return false;
 		}
 
-		$view_listing_id = $this->queryVar("SELECT view_listing_id FROM " . $this->prefix . "view_listing WHERE `name` = '" . $this->escape($view_listing['name']) . "' AND `path` = '" . $this->escape($view_listing['path']) . "'");
+		$view_listing_id = $this->queryVar("SELECT view_listing_id FROM " . self::$tables['view_listing'] . " WHERE `name` = '" . $this->escape($view_listing['name']) . "' AND `path` = '" . $this->escape($view_listing['path']) . "'");
 
 		if (!$view_listing_id) {
 			$view_listing_id = $this->saveViewListing(null, $view_listing);
@@ -283,7 +297,8 @@ class App_Model_View extends App_Model_Table
 
 	public function removeViewListing($view_listing_id)
 	{
-		$this->cache->delete('view_listing');
+		self::$view_listings = null;
+		clear_cache('view_listing');
 
 		$this->delete('view', array('view_listing_id' => $view_listing_id));
 
@@ -302,7 +317,7 @@ class App_Model_View extends App_Model_Table
 		$select = $this->extractSelect($table, $select);
 
 		//From
-		$from = $this->prefix . $table;
+		$from = self::$tables[$table];
 
 		//Where
 		$where = $this->extractWhere($table, $filter);
@@ -321,7 +336,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getViewListingTable($view_listing_id)
 	{
-		return $this->queryVar("SELECT slug FROM " . $this->prefix . "view_listing WHERE view_listing_id = " . (int)$view_listing_id);
+		return $this->queryVar("SELECT slug FROM " . self::$tables['view_listing'] . " WHERE view_listing_id = " . (int)$view_listing_id);
 	}
 
 	public function getViewListingBySlug($slug)
@@ -352,13 +367,17 @@ class App_Model_View extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				self::$view_listings = $this->queryRows("SELECT * FROM " . $this->prefix . "view_listing ORDER BY name", 'view_listing_id');
+				$sort = array(
+					'name' => 'ASC',
+				);
+
+				self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
-					if (!$this->queryVar("SELECT COUNT(*) FROM " . $this->prefix . "view_listing")) {
+					if (!$this->queryVar("SELECT COUNT(*) FROM " . self::$tables['view_listing'])) {
 						$this->resetViewListings();
-						return $this->getViewListings();
+						self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 					}
 				}
 
@@ -375,7 +394,7 @@ class App_Model_View extends App_Model_Table
 		$select = $this->extractSelect('view_listing', $select);
 
 		//From
-		$from = $this->prefix . "view_listing";
+		$from = self::$tables['view_listing'];
 
 		//Where
 		$where = $this->extractWhere('view_listing', $filter);
@@ -406,8 +425,6 @@ class App_Model_View extends App_Model_Table
 
 	protected function resetViewListings()
 	{
-		$this->cache->delete('view_listing');
-
 		$view_listings = array(
 			'clients'       => array(
 				'path'  => 'admin/client/listing',

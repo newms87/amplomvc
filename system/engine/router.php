@@ -1,8 +1,11 @@
 <?php
-final class Router
+
+class Router
 {
-	private $path;
-	private $segments;
+	protected $path;
+	protected $segments;
+	protected $site;
+	protected $routing_hooks = array();
 
 	public function __construct()
 	{
@@ -31,116 +34,96 @@ final class Router
 
 	public function setPath($path)
 	{
-		$this->path = $path;
+		$this->path     = $path;
 		$this->segments = explode('/', $path);
 	}
 
 	public function getSegment($index = null)
 	{
-		if (is_null($index)) {
+		if ($index === null) {
 			return $this->segments;
 		}
 
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function route()
+	public function getSite()
 	{
-		if (IS_ADMIN) {
-			$this->routeAdmin();
-		} else {
-			$this->routeFront();
-		}
+		return $this->site;
 	}
 
-	public function routeAdmin()
+	public function setSite($site)
 	{
-		$this->config->set('store_id', -1);
-
-		if (count($this->segments) === 1) {
-			$this->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/common/home');
-		}
-
-		//Initialize site configurations
-		$this->config->run_site_config();
-
-		//Controller Overrides
-		$controller_overrides = $this->config->load('controller_override', 'controller_override');
-
-		if ($controller_overrides) {
-			foreach ($controller_overrides as $override) {
-				if (('app/controller/admin/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
-						$this->path = str_replace('app/controller/admin/', '', $override['alternate']);
-					}
-				}
-			}
-		}
+		$this->site = $site;
 	}
 
-	public function routeFront()
+	public function registerHook($name, $callable, $sort_order = 0)
 	{
-		if (option('config_maintenance')) {
-			//Do not show maintenance page if user is an admin
-			if (IS_ADMIN) {
-				if (isset($_GET['hide_maintenance_msg'])) {
-					$_SESSION['hide_maintenance_msg'] = 1;
-				} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
-					$hide = $this->url->here('hide_maintenance_msg=1');
-					message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"$hide\">(hide message)</a> "));
-				}
-			} //Allow payment for payment callbacks (eg: IPN from PayPal, etc.)
-			else if (strpos($this->path, 'payment') !== 0) {
-				$this->path = 'common/maintenance';
+		if (is_callable($callable)) {
+			$this->routing_hooks[$name] = array(
+				'callable'   => $callable,
+				'sort_order' => $sort_order,
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function unregisterHook($name)
+	{
+		unset($this->routing_hooks[$name]);
+	}
+
+	public function getLayoutForPath($path)
+	{
+		$layouts = cache('layout.routes');
+
+		if ($layouts === null) {
+			$layouts = $this->Model_Layout->getLayoutRoutes();
+
+			cache('layout.routes', $layouts);
+		}
+
+		foreach ($layouts as $layout) {
+			if (strpos($path, $layout['route']) === 0) {
+				return $layout['layout_id'];
 			}
 		}
 
-		//Controller Overrides
-		$controller_overrides = $this->config->load('controller_override', 'controller_override');
-
-		if ($controller_overrides) {
-			foreach ($controller_overrides as $override) {
-				if (('app/controller/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/" . $override['condition'] . "/", urldecode($this->url->getQuery()))) {
-						$this->path = str_replace('app/controller/', '', $override['alternate']);
-					}
-				}
-			}
-		}
-
-		//Tracking
-		if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
-			setcookie('tracking', $_GET['tracking'], _time() + 3600 * 24 * 1000, '/');
-		}
-
-		//Resolve Layout ID
-		$layout    = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . option('store_id') . "' ORDER BY route ASC LIMIT 1");
-		$layout_id = $layout ? $layout['layout_id'] : option('config_default_layout_id');
-		$this->config->set('config_layout_id', $layout_id);
+		return option('config_default_layout_id');
 	}
 
 	public function dispatch()
 	{
 		$path = $this->path;
 
-		//TODO: Move this to an extend / plugin feature! Possibly resort to using a hook here... PRODUCT should be a part of AmploCart Plugin!
-		//Path Rerouting
-		switch ($this->getSegment(0)) {
-			case 'page':
-				if ($this->getSegment(1) !== 'preview') {
-					$path = 'page';
-				}
-				break;
+		//Resolve routing hooks
+		$args = array();
 
-			case 'product':
-				if (!empty($_GET['product_id'])) {
-					$product_class = $this->Model_Product->getProductClass($_GET['product_id']);
-					$path = preg_replace("#^product/product#", 'product/' . $product_class, $this->path);
-				}
+		uasort($this->routing_hooks, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
+
+		foreach ($this->routing_hooks as $hook) {
+			$params = array(
+				&$path,
+				$this->segments,
+				$this->path,
+				&$args,
+			);
+
+			if (call_user_func_array($hook['callable'], $params) === false) {
 				break;
+			}
 		}
 
-		$action = new Action($path);
+		//Resolve Layout ID
+		set_option('config_layout_id', $this->getLayoutForPath($path));
+
+		//Dispatch Route
+		$action = new Action($path, $args);
 
 		$valid = $action->isValid();
 
@@ -179,5 +162,34 @@ final class Router
 			$action = new Action(ERROR_404_PATH);
 			$action->execute();
 		}
+	}
+
+	public function getSites()
+	{
+		return $this->Model_Site->getRecords(array('cache' => true), null, '*', false, 'store_id');
+	}
+
+	public function routeSite()
+	{
+		$sites = $this->getSites();
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		$prefix = DB_PREFIX;
+
+		foreach ($sites as $site) {
+			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
+				if (!empty($site['prefix'])) {
+					$prefix = $site['prefix'];
+				}
+
+				$this->site = $site;
+				break;
+			}
+		}
+
+		define('SITE_PREFIX', $prefix);
+		_set_db_prefix($prefix);
 	}
 }

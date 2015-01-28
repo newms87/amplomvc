@@ -11,20 +11,17 @@ class App_Controller_Mail_NewCustomer extends Controller
 		}
 
 		$insertables = array(
-			'first_name' => $customer['firstname'],
-			'last_name'  => $customer['lastname'],
-			'store_name' => option('config_name'),
-			'store_url'  => $this->url->site(),
+			'first_name' => !empty($customer['firstname']) ? $customer['firstname'] : 'New Customer',
+			'last_name'  => !empty($customer['lastname']) ? $customer['lastname'] : '',
+			'store_name' => option('site_name'),
+			'store_url'  => site_url(),
 		);
 
 		//TODO: How can we better handle easy customizaable emails with integrated HTML template?
-		$subject = $this->tool->insertables($insertables, option('mail_registration_subject'));
-		$message = $this->tool->insertables($insertables, option('mail_registration_message'));
-
-		$store = $this->config->getStore();
+		$subject = insertables($insertables, option('mail_registration_subject'));
+		$message = insertables($insertables, option('mail_registration_message'));
 
 		$data['header'] = array(
-			'store' => $store,
 			'title' => _l("Customer Registration"),
 		);
 
@@ -34,8 +31,6 @@ class App_Controller_Mail_NewCustomer extends Controller
 		} else {
 			$data['login'] = site_url('customer/login');
 		}
-
-		$data['store'] = $store;
 
 		$mail = array(
 			'to'      => $customer['email'],
@@ -47,7 +42,7 @@ class App_Controller_Mail_NewCustomer extends Controller
 
 		// Send to main admin email if new account email is enabled
 		if (option('config_account_mail')) {
-			$mail['to'] = option('config_email');
+			$mail['to'] = option('site_email');
 			$mail['cc'] = option('config_alert_emails');
 
 			send_mail($mail);

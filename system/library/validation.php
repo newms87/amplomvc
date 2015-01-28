@@ -111,7 +111,7 @@ class Validation extends Library
 			$this->error[self::PASSWORD_STRENGTH] = _l("Password must be at least 8 characters long.");
 		}
 
-		if (!is_null($confirm)) {
+		if ($confirm !== null) {
 			if ($confirm !== $password) {
 				$this->error[self::PASSWORD_CONFIRM] = _l("Your Password and Confirmation do not match.");
 			}

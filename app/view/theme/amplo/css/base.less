@@ -1,10 +1,14 @@
-/* Methods (Note: added 'a: ;' hack to fix bug in less parser) */
-.render-var(@bg) {
-  a: ~";@{bg}";
+/* Methods */
+.bg-image-set(@s1, @s2, @s3) {
+  background-image: url(@s1);
+  background-image: -webkit-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -moz-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -ms-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
+  background-image: -o-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
 }
 
 .import-font(@import-font-family, @font-file-name) {
-  @theme-font-file: '@{themepath}font/@{font-file-name}';
+  @theme-font-file: '@{font-path}@{font-file-name}';
   @font-face {
     font-family: @import-font-family;
     src: url('@{theme-font-file}.eot');
@@ -30,6 +34,7 @@
 .row {
   position: relative;
   display: block;
+  text-align: center;
 }
 
 .wrap {
@@ -38,6 +43,7 @@
   min-width: @page-width-min;
   max-width: @page-width-max;
   padding: @page-wrap-pad;
+  box-sizing: border-box;
 }
 
 .row:after, .wrap:after {
@@ -47,6 +53,15 @@
   visibility: hidden;
   line-height: 0;
   height: 0;
+}
+
+//Hack to overcome whitespace between inline-block elements
+.whitespace-hack {
+  margin-left: -.29em;
+}
+
+.no-whitespace-hack {
+  margin-left: 0 !important;
 }
 
 .col {
@@ -69,9 +84,8 @@
     vertical-align: bottom;
   }
 
-  //Hack to overcome whitespace between inline-block elements
   & + .col {
-    margin-left: -.29em;
+    .whitespace-hack;
   }
 
   &.left {
@@ -85,10 +99,20 @@
 
   &.right {
     text-align: right;
-    float: right;
+    float: none;
+  }
+
+  &.justify {
+    text-align: justify;
+    float: none;
   }
 }
 
+.wrapfix {
+  .whitespace-hack;
+}
+
+//Extra Small
 @media (min-width: 1px) {
   .wrap {
     width: @page-width-xs;
@@ -131,22 +155,19 @@
     text-align: right;
   }
 
-  .xs-hidden {
-    display: none;
-  }
-
-  .xs-visible {
-    display: inline-block;
+  .col.xs-justify {
+    text-align: justify;
   }
 }
 
-@media (max-width: @sm - 1) {
-  .sm-visible, .md-visible, .lg-visible {
+@media (max-width: (@xs - 1)) {
+  .xs-hidden, .sm-visible, .md-visible, .lg-visible, .xl-visible, .xs-hide {
     display: none !important;
   }
 }
 
-@media (min-width: @sm) {
+//Small
+@media (min-width: @xs) {
   .wrap {
     width: @page-width-sm;
   }
@@ -187,22 +208,19 @@
     text-align: right;
   }
 
-  .sm-hidden {
-    display: none !important;
-  }
-
-  .sm-visible {
-    display: inline-block;
+  .col.sm-justify {
+    text-align: justify;
   }
 }
 
-@media (min-width: @sm) and (max-width: @md - 1) {
-  .xs-visible, .md-visible, .lg-visible {
+@media (min-width: @xs) and (max-width: (@sm - 1)) {
+  .xs-hidden, .sm-hidden, .md-visible, .lg-visible, .xl-visible, .sm-hide {
     display: none !important;
   }
 }
 
-@media (min-width: @md) {
+//Medium
+@media (min-width: @sm) {
   .wrap {
     width: @page-width-md;
   }
@@ -243,22 +261,19 @@
     text-align: right;
   }
 
-  .md-hidden {
-    display: none !important;
-  }
-
-  .md-visible {
-    display: inline-block;
+  .col.md-justify {
+    text-align: justify;
   }
 }
 
-@media (min-width: @md) and (max-width: @lg - 1) {
-  .xs-visible, .sm-visible, .lg-visible {
+@media (min-width: @sm) and (max-width: (@md - 1)) {
+  .xs-hidden, .sm-hidden, .md-hidden, .lg-visible, .xl-visible, .md-hide {
     display: none !important;
   }
 }
 
-@media (min-width: @lg) {
+//Large
+@media (min-width: @md) {
   .wrap {
     width: @page-width-lg;
   }
@@ -299,11 +314,76 @@
     text-align: right;
   }
 
-  .xs-visible, .sm-visible, .md-visible, .lg-hidden {
+  .col.lg-justify {
+    text-align: justify;
+  }
+}
+
+@media (min-width: @md) and (max-width: (@lg - 1)) {
+  .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden, .xl-visible, .lg-hide {
     display: none !important;
   }
+}
 
-  .lg-visible {
-    display: inline-block;
+//Extra Large
+@media (min-width: @lg) {
+  .wrap {
+    width: @page-width-xl;
+  }
+
+  .columns(@num-cols);
+
+  .columns(@cols, @c: 1) when (@c =< @cols) {
+    .col.xl-@{c} {
+      width: (@c * 100% / @cols);
+      &.center {
+        margin-left: ((100% - (@c * 100% / @cols)) / 2)
+      }
+    }
+    .columns(@cols, @c + 1);
+  }
+
+  .col.xl-top {
+    vertical-align: top;
+  }
+
+  .col.xl-middle {
+    vertical-align: middle;
+  }
+
+  .col.xl-bottom {
+    vertical-align: bottom;
+  }
+
+  .col.xl-left {
+    text-align: left;
+  }
+
+  .col.xl-center {
+    text-align: center;
+  }
+
+  .col.xl-right {
+    text-align: right;
+  }
+
+  .col.xl-justify {
+    text-align: justify;
+  }
+
+  .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden, .xl-hidden, .xl-hide {
+    display: none !important;
+  }
+}
+
+@media handheld {
+  .desktop {
+    display: none !important;
+  }
+}
+
+@media not handheld {
+  .mobile {
+    display: none !important;
   }
 }

@@ -4,7 +4,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Mail Messages"));
+		set_page_info('title', _l("Mail Messages"));
 
 		if (IS_POST && $this->validate()) {
 

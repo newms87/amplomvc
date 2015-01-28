@@ -13,73 +13,101 @@ class App_Controller_Customer extends Controller
 		);
 
 		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
-			redirect('account');
+			if ($this->is_ajax) {
+				echo json_encode(array('success' => _l("You are logged in to you account")));
+				exit;
+			} else {
+				redirect('account');
+			}
 		}
 	}
 
 	public function index()
 	{
+		$this->login();
+	}
+
+	public function login(array $settings = array())
+	{
 		//Page Head
-		$this->document->setTitle(_l("Account Login"));
+		set_page_info('title', _l("Customer Sign In"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
-		breadcrumb(_l("Login"), site_url('customer/login'));
+		breadcrumb(_l("Sign In"), site_url('customer/login'));
 
-		//Input Data
-		$user_info = array();
-
-		if (IS_POST) {
-			$user_info = $_POST;
-		}
-
-		$defaults = array(
-			'username' => '',
-		);
-
-		$data = $user_info + $defaults;
-
-		//Template Data
-		$data['gp_login'] = $this->Model_Block_Login_Google->getConnectUrl();
-		$data['fb_login'] = $this->Model_Block_Login_Facebook->getConnectUrl();
-
-		//Action Buttons
-		$data['login']     = site_url('customer/login');
-		$data['register']  = site_url('customer/registration');
-		$data['forgotten'] = site_url('customer/forgotten');
-
-		//Resolve Redirect
-		if (!empty($_REQUEST['redirect'])) {
+		if (isset($settings['redirect'])) {
+			if (!empty($settings['redirect'])) {
+				$this->request->setRedirect($settings['redirect']);
+			} else {
+				$this->request->clearRedirect();
+			}
+		} elseif (!empty($_REQUEST['redirect'])) {
 			$this->request->setRedirect($_REQUEST['redirect']);
-		} elseif (!$this->request->hasRedirect()) {
+		} elseif (!$this->is_ajax && !$this->request->hasRedirect()) {
 			$this->request->setRedirect();
 		}
 
-		//Render
-		output($this->render('customer/login', $data));
-	}
+		//Block Settings
+		$defaults = array(
+			'username' => '',
+			'size'     => 'large',
+			'template' => 'customer/login',
+			'redirect' => $this->request->getRedirect(),
+		);
 
-	public function login()
-	{
-		if (IS_POST) {
-			if (!$this->customer->login($_POST['username'], $_POST['password'])) {
-				message('warning', _l("Login failed. Invalid username and / or password."));
+		$settings += $_POST + $defaults;
+
+		//Template Data
+		$login_settings = $this->config->loadGroup('login_settings');
+
+		$medias = array();
+
+		if (!empty($login_settings['status'])) {
+			if (!empty($login_settings['facebook']['active'])) {
+				$medias['facebook'] = array(
+					'name' => 'facebook',
+					'url'  => $this->Model_Block_Login_Facebook->getConnectUrl(),
+				);
+			}
+
+			if (!empty($login_settings['google_plus']['active'])) {
+				$medias['google-plus'] = array(
+					'name' => 'google-plus',
+					'url'  => $this->Model_Block_Login_Google->getConnectUrl(),
+				);
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
-		} else {
-			if (!IS_POST || $this->message->has('error')) {
-				return $this->index();
+		$settings['medias'] = $medias;
 
+		//Render
+		output($this->render($settings['template'], $settings));
+	}
+
+	public function authenticate()
+	{
+		if ($this->customer->login(_post('username'), _post('password'))) {
+			if ($this->is_ajax) {
+				message('success', _l("You have been logged into your account"));
 			}
+		} else {
+			message('error', $this->customer->getError());
+		}
+
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
+			output_message();
+		} else {
+			if ($this->message->has('error')) {
+				post_redirect('customer/login');
+			}
+
 			//Resolve Redirect
 			if ($this->request->hasRedirect()) {
 				$this->request->doRedirect();
+			} else {
+				redirect('account');
 			}
-
-			redirect('account');
 		}
 	}
 
@@ -99,18 +127,14 @@ class App_Controller_Customer extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Register Account"));
+		set_page_info('title', _l("Register Account"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Login"), site_url('customer/login'));
 		breadcrumb(_l("Register"), site_url('customer/registration'));
 
-		$registration_data = array();
-
-		if (IS_POST) {
-			$registration_data = $_POST;
-		}
+		$registration_data = $_POST;
 
 		$defaults = array(
 			'firstname'  => '',
@@ -161,63 +185,71 @@ class App_Controller_Customer extends Controller
 
 	public function register()
 	{
-		if (!$this->customer->register($_POST)) {
+		if ($this->customer->register($_POST, true)) {
+			message('success', _l("Your account has been created!"));
+		} else {
 			message('error', $this->customer->getError());
-			return $this->registration();
 		}
 
-		$this->customer->login($_POST['email'], $_POST['password']);
+		if ($this->is_ajax && !$this->request->hasRedirect()) {
+			output_message();
+		} else {
+			if ($this->message->has('error')) {
+				post_redirect('customer/login', 'register=1');
+			}
 
-		//Redirect to requested page
-		if ($this->request->hasRedirect()) {
-			$this->request->doRedirect();
+			//Redirect to requested page
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			}
+
+			redirect('customer/success');
 		}
-
-		redirect('customer/success');
 	}
 
 	public function success()
 	{
 		//Page Title
-		$this->document->setTitle(_l("Your Account Has Been Created!"));
+		set_page_info('title', _l("Your Account Has Been Created!"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account"), site_url('account'));
 		breadcrumb(_l("Your Account Has Been Created!"), site_url('customer/success'));
 
-		//Render
-		output($this->render('customer/success'));
+
+		if (option('show_customer_success')) {
+			//Render
+			output($this->render('customer/success'));
+		} else {
+			redirect('');
+		}
 	}
 
 	public function forgotten()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Forgot Your Password?"));
+		set_page_info('title', _l("Forgot Your Password?"));
 
 		//Breadcrumbs
 		breadcrumb(_l('Home'), site_url());
 		breadcrumb(_l('Login'), site_url('customer/login'));
 		breadcrumb(_l('Forgotten Password'), site_url('customer/forgotten'));
 
-		//Action Buttons
-		$data['save'] = site_url('customer/generate-reset-code');
-		$data['back'] = site_url('customer/login');
-
 		//Render
-		output($this->render('customer/forgotten', $data));
+		output($this->render('customer/forgotten'));
 	}
 
 	public function generate_reset_code()
 	{
 		$code = $this->customer->generateCode();
 
-		if (!$this->customer->setResetCode($_POST['email'], $code)) {
+		if (!$this->customer->setResetCode(_post('email'), $code)) {
 			message('error', $this->customer->getError());
 		} else {
 
 			$email_data = array(
-				'email' => $_POST['email'],
+				'email' => _post('email'),
 				'reset' => site_url('customer/reset_form', 'code=' . $code),
 			);
 
@@ -249,9 +281,7 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Home'), site_url());
 		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
-		//Action Buttons
-		$data['save']   = site_url('customer/reset_password', 'code=' . $code);
-		$data['cancel'] = site_url('customer/login');
+		$data['code'] = $code;
 
 		//Render
 		output($this->render('customer/reset_form', $data));
@@ -259,7 +289,7 @@ class App_Controller_Customer extends Controller
 
 	public function reset_password()
 	{
-		$customer_id = $this->customer->lookupResetCode($_GET['code']);
+		$customer_id = $this->customer->lookupResetCode(_get('code'));
 
 		//User not found
 		if (!$customer_id) {
@@ -267,18 +297,18 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		}
 
-		//Validate Password
-		if (!validate('password', $_POST['password'])) {
-			message('error', $this->validation->getError());
-			redirect('customer/reset_form');
+		$reset = array(
+			'password' => _post('password'),
+			'confirm'  => _post('confirm'),
+		);
+
+		if ($this->Model_Customer->save($customer_id, $reset)) {
+			$this->customer->clearResetCode();
+			message('success', _l('You have successfully updated your password!'));
+			redirect('customer/login');
+		} else {
+			message('error', $this->Model_Customer->getError());
+			redirect('customer/reset_form', $_GET);
 		}
-
-		$this->customer->setId($customer_id);
-		$this->customer->updatePassword($_POST['password']);
-		$this->customer->clearResetCode();
-
-		message('success', _l('You have successfully updated your password!'));
-
-		redirect('customer/login');
 	}
 }

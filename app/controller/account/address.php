@@ -11,7 +11,7 @@ class App_Controller_Account_Address extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Address Book"));
+		set_page_info('title', _l("Address Book"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -67,8 +67,8 @@ class App_Controller_Account_Address extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -94,8 +94,8 @@ class App_Controller_Account_Address extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('account/address');
 		}
@@ -104,7 +104,7 @@ class App_Controller_Account_Address extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Address Form"));
+		set_page_info('title', _l("Address Form"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -153,13 +153,13 @@ class App_Controller_Account_Address extends Controller
 			0 => _l("No"),
 		);
 
-		$data['is_ajax'] = IS_AJAX;
+		$data['$this->is_ajax'] = $this->is_ajax;
 
 		//Action Buttons
 		$data['save'] = site_url('account/address/update', 'address_id=' . $address_id);
 
 		//Render
-		$template = IS_AJAX ? 'account/address_form_ajax' : 'account/address_form';
+		$template = $this->is_ajax ? 'account/address_form_ajax' : 'account/address_form';
 		output($this->render($template, $data));
 	}
 }

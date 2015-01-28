@@ -1,6 +1,6 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -9,9 +9,9 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Country"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Country}}</h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button">{{Insert}}</a><a onclick="$('form').submit();" class="button">{{Delete}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,23 +21,23 @@
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Country Name"); ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>">{{Country Name}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= _l("Country Name"); ?></a>
+									<a href="<?= $sort_name; ?>">{{Country Name}}</a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'iso_code_2') { ?>
 									<a href="<?= $sort_iso_code_2; ?>"
-										class="<?= strtolower($order); ?>"><?= _l("ISO Code (2)"); ?></a>
+										class="<?= strtolower($order); ?>">{{ISO Code (2)}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_iso_code_2; ?>"><?= _l("ISO Code (2)"); ?></a>
+									<a href="<?= $sort_iso_code_2; ?>">{{ISO Code (2)}}</a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'iso_code_3') { ?>
 									<a href="<?= $sort_iso_code_3; ?>"
-										class="<?= strtolower($order); ?>"><?= _l("ISO Code (3)"); ?></a>
+										class="<?= strtolower($order); ?>">{{ISO Code (3)}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_iso_code_3; ?>"><?= _l("ISO Code (3)"); ?></a>
+									<a href="<?= $sort_iso_code_3; ?>">{{ISO Code (3)}}</a>
 								<? } ?></td>
-							<td class="right"><?= _l("Action"); ?></td>
+							<td class="right">{{Action}}</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -60,7 +60,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="5"><?= _l("There are no results to display."); ?></td>
+								<td class="center" colspan="5">{{There are no results to display.}}</td>
 							</tr>
 						<? } ?>
 					</tbody>
@@ -70,4 +70,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

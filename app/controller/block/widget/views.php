@@ -196,7 +196,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if (!$view_listing_id) {
 			$output = _l("View Listing not found with ID: %s", $view_listing_id);
-			return IS_AJAX ? output($output) : $output;
+			return $this->is_ajax ? output($output) : $output;
 		}
 
 		//The Table Columns
@@ -232,7 +232,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -269,8 +269,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect(_request('redirect', _post('path', 'admin')));
 		}
@@ -286,9 +286,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			message('view_id', $view_id);
-			output_json($this->message->fetch());
+			output_message();
 		} else {
 			redirect($_POST['path']);
 		}
@@ -304,8 +304,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('error', $this->Model_View->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin');
 		}
@@ -324,6 +324,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		//Ajax only method
-		output_json($this->message->fetch());
+		output_message();
 	}
 }

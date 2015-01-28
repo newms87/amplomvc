@@ -3,34 +3,34 @@ class App_Model_Localisation_Country extends Model
 {
 	public function addCountry($country)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->insert('country', $country);
 	}
 
 	public function editCountry($country_id, $country)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->update('country', $country, $country_id);
 	}
 
 	public function deleteCountry($country_id)
 	{
-		$this->cache->delete('country');
+		clear_cache('country');
 
 		return $this->delete('country', $country_id);
 	}
 
 	public function getCountry($country_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = " . (int)$country_id);
+		return $this->queryRow("SELECT * FROM " . self::$tables['country'] . " WHERE country_id = " . (int)$country_id);
 	}
 
 	public function getCountries($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "country";
+			$sql = "SELECT * FROM " . self::$tables['country'];
 
 			$sort_data = array(
 				'name',
@@ -69,7 +69,7 @@ class App_Model_Localisation_Country extends Model
 			$country_data = cache('country');
 
 			if (!$country_data) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "country ORDER BY name ASC");
+				$query = $this->query("SELECT * FROM " . self::$tables['country'] . " ORDER BY name ASC");
 
 				$country_data = $query->rows;
 
@@ -85,7 +85,7 @@ class App_Model_Localisation_Country extends Model
 		$countries = cache('country.active');
 
 		if (!$countries) {
-			$countries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+			$countries = $this->queryRows("SELECT * FROM " . self::$tables['country'] . " WHERE status = '1' ORDER BY name ASC");
 
 			cache('country.active', $countries);
 		}
@@ -95,6 +95,6 @@ class App_Model_Localisation_Country extends Model
 
 	public function getTotalCountries()
 	{
-		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "country");
+		return $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['country']);
 	}
 }

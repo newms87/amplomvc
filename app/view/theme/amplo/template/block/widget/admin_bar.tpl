@@ -1,5 +1,5 @@
 <div id="admin-bar" class="clearfix">
-	<a href="<?= $admin_link; ?>" target="_blank" class="admin-link"><?= _l("Admin Panel"); ?></a>
+	<a href="<?= $admin_link; ?>" target="_blank" class="admin-link">{{Admin Panel}}</a>
 
 	<div class="clock">
 		<?= $clock_time; ?>
@@ -8,7 +8,7 @@
 		<a class="sim-time forward" href="<?= $sim_forward; ?>"></a>
 	</div>
 
-	<a id="disable-admin-bar"><?= _l("X"); ?></a>
+	<a id="disable-admin-bar">{{X}}</a>
 </div>
 
 <script type="text/javascript">

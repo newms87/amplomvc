@@ -10,8 +10,8 @@ class Google extends Library
 
 	public function getExperimentVariation()
 	{
-		if (is_null($this->exp_var)) {
-			$vars = (int)option('config_ga_exp_vars', 0);
+		if ($this->exp_var === null) {
+			$vars = (int)option('ga_exp_vars', 0);
 			$this->exp_var = $vars ? rand(0, $vars) : 0;
 		}
 

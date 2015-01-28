@@ -29,6 +29,8 @@ class Image extends Library
 			$filename = URL_IMAGE . $filename;
 		} elseif (is_file($filename)) {
 			$filename = str_replace(DIR_SITE, URL_SITE, $filename);
+		} elseif (!filter_var($filename, FILTER_VALIDATE_URL) && strpos($filename, '//') !== 0) {
+			return '';
 		}
 
 		return str_replace('/./', '/', $filename);
@@ -78,7 +80,7 @@ class Image extends Library
 		$mime = $this->info['mime'];
 
 		if (!$this->register_safe_shutdown($image)) {
-			message('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
+			message('warning', "Image Create failed on $image. The file size (" . bytes2str(filesize($image)) . ") is too large for your server.");
 			redirect($this->url->here());
 		}
 
@@ -192,7 +194,10 @@ class Image extends Library
 		$new_height = (int)($this->info['height'] * $scale_y);
 
 		//Resolve image type and new image name
-		$info = pathinfo(str_replace(array(DIR_IMAGE, DIR_SITE), '', $image));
+		$info = pathinfo(str_replace(array(
+			DIR_IMAGE,
+			DIR_SITE
+		), '', $image));
 
 		//if the background is transparent and the mime type is not png or gif, change to png
 		$allowed_exts = array(
@@ -243,7 +248,7 @@ class Image extends Library
 
 	public function ico($source, $destination = null, $sizes = null)
 	{
-		require( DIR_RESOURCES . 'phpico/class-php-ico.php' );
+		require_once(DIR_RESOURCES . 'phpico/class-php-ico.php');
 
 		if (is_file(DIR_IMAGE . $source)) {
 			$source = DIR_IMAGE . $source;
@@ -253,7 +258,7 @@ class Image extends Library
 		}
 
 		if (!$destination) {
-			$destination = DIR_IMAGE . 'icon/' . pathinfo($source, PATHINFO_FILENAME) . '.ico';
+			$destination = DIR_IMAGE . 'icon/' . uniqid() . '/' . pathinfo($source, PATHINFO_FILENAME) . '.ico';
 		}
 
 		if (!_is_writable(dirname($destination))) {
@@ -263,15 +268,27 @@ class Image extends Library
 
 		if (!$sizes) {
 			$sizes = array(
-				array(16,16),
-			   array(32,32),
-			   array(48,48),
-			   array(64,64),
+				array(
+					16,
+					16
+				),
+				array(
+					32,
+					32
+				),
+				array(
+					48,
+					48
+				),
+				array(
+					64,
+					64
+				),
 			);
 		}
 
-		$ico_lib = new PHP_ICO( $source, $sizes);
-		$ico_lib->save_ico( $destination );
+		$ico_lib = new PHP_ICO($source, $sizes);
+		$ico_lib->save_ico($destination);
 
 		return str_replace(DIR_IMAGE, URL_IMAGE, $destination);
 	}
@@ -570,13 +587,13 @@ class Image extends Library
 				if ($this->safe_shutdown) {
 					if ($this->shutdown_file) {
 						$_SESSION['image_safe_max_file_size'] = filesize($this->shutdown_file);
-						$size                                 = $this->tool->bytes2str(filesize($this->shutdown_file));
+						$size                                 = bytes2str(filesize($this->shutdown_file));
 					} else {
 						$size = 0;
 					}
 					$max      = ini_get('memory_limit');
-					$max_mem  = $this->tool->bytes2str(memory_get_peak_usage(true));
-					$safe_mem = $this->tool->bytes2str($this->safe_shutdown);
+					$max_mem  = bytes2str(memory_get_peak_usage(true));
+					$safe_mem = bytes2str($this->safe_shutdown);
 
 					trigger_error("Server Max Memory limit reached: $max_mem / $max. Safe shutdown enabled at $safe_mem. Image File Size: $size");
 				}

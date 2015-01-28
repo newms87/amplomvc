@@ -122,7 +122,7 @@ class Chart extends Library
 			foreach ($data as $entry) {
 				//So isset is not false if NULL
 				foreach ($entry as &$e) {
-					if (is_null($e)) {
+					if ($e === null) {
 						$e = 0;
 					}
 				}unset($e);

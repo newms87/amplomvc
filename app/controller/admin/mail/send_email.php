@@ -3,7 +3,7 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Send Email"));
+		set_page_info('title', _l("Send Email"));
 
 		if (IS_POST) {
 			if (!$this->send()) {
@@ -21,8 +21,8 @@ class App_Controller_Admin_Mail_SendEmail extends Controller
 		$data['cancel'] = site_url('admin');
 
 		$defaults = array(
-			'sender'     => option('config_title'),
-			'from'       => option('config_email'),
+			'sender'     => option('site_title'),
+			'from'       => option('site_email'),
 			'to'         => '',
 			'cc'         => '',
 			'bcc'        => '',

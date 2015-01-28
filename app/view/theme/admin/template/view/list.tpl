@@ -1,12 +1,12 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 	<div class="section">
-		<?= IS_AJAX ? '' : breadcrumbs(); ?>
+		<?= $is_ajax ? '' : breadcrumbs(); ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("Views"); ?></h1>
+				<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Views}}</h1>
 
 				<div class="buttons">
-					<a class="button" href="<?= site_url('admin/view/form'); ?>"><?= _l("Create View"); ?></a>
+					<a class="button" href="<?= site_url('admin/view/form'); ?>">{{Create View}}</a>
 				</div>
 			</div>
 			<div class="section">
@@ -15,4 +15,4 @@
 		</div>
 	</div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

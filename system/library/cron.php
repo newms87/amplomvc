@@ -6,7 +6,7 @@ class Cron extends Library
 	public function __construct()
 	{
 		parent::__construct();
-		$this->settings = $this->config->loadGroup('cron', 0);
+		$this->settings = $this->config->loadGroup('cron');
 	}
 
 	public function check()
@@ -66,7 +66,7 @@ class Cron extends Library
 						continue;
 					}
 
-					$classname = "System_Cron_" . $this->tool->_2CamelCase($task['file']);
+					$classname = "System_Cron_" . _2camel($task['file']);
 					$method    = $task['method'];
 
 					if (method_exists($classname, $method)) {
@@ -89,7 +89,7 @@ class Cron extends Library
 
 		$this->settings['cron_last_run'] = $this->date->now();
 
-		$this->config->saveGroup('cron', $this->settings, 0, false);
+		$this->config->saveGroup('cron', $this->settings, false);
 
 		$msg .= _l("Cron ran successfully!");
 

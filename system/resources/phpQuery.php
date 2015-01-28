@@ -1947,7 +1947,7 @@ class phpQueryObject
 			? new $class($this, $this->getDocumentID())
 			: new phpQueryObject($this->getDocumentID());
 		$new->previous = $this;
-		if (is_null($newStack)) {
+		if ($newStack === null) {
 			$new->elements = $this->elements;
 			if ($this->elementsBackup) {
 				$this->elements = $this->elementsBackup;
@@ -2633,7 +2633,7 @@ class phpQueryObject
 			                                                $index,
 			                                                $node
 			                                           ));
-			if (is_null($result) || (!is_null($result) && $result)) {
+			if ($result === null || (!$result === null && $result)) {
 				$newStack[] = $node;
 			}
 		}
@@ -4029,7 +4029,7 @@ class phpQueryObject
 				$args
 			);
 			// XXX deprecate ?
-			return is_null($return)
+			return $return === null
 				? $this
 				: $return;
 		} else if (in_array($method, $aliasMethods)) {
@@ -4248,7 +4248,7 @@ class phpQueryObject
 	 */
 	protected function elementsContainsNode($nodeToCheck, $elementsStack = null)
 	{
-		$loop = !is_null($elementsStack)
+		$loop = !$elementsStack === null
 			? $elementsStack
 			: $this->elements;
 		foreach ($loop as $node) {
@@ -4396,7 +4396,7 @@ class phpQueryObject
 	public function attr($attr = null, $value = null)
 	{
 		foreach ($this->stack(1) as $node) {
-			if (!is_null($value)) {
+			if (!$value === null) {
 				$loop = $attr == '*'
 					? $this->getNodeAttrs($node)
 					: array($attr);
@@ -4421,7 +4421,7 @@ class phpQueryObject
 					: null;
 			}
 		}
-		return is_null($value)
+		return $value === null
 			? '' : $this;
 	}
 
@@ -4445,7 +4445,7 @@ class phpQueryObject
 	 */
 	public function attrPHP($attr, $code)
 	{
-		if (!is_null($code)) {
+		if (!$code === null) {
 			$value = '<' . '?php ' . $code . ' ?' . '>';
 			// TODO tempolary solution
 			// http://code.google.com/p/phpquery/issues/detail?id=17
@@ -4453,7 +4453,7 @@ class phpQueryObject
 //				$value	= mb_convert_encoding($value, 'UTF-8', 'HTML-ENTITIES');
 		}
 		foreach ($this->stack(1) as $node) {
-			if (!is_null($code)) {
+			if (!$code === null) {
 //				$attrNode = $this->DOM->createAttribute($attr);
 				$node->setAttribute($attr, $value);
 //				$attrNode->value = $value;
@@ -6650,7 +6650,7 @@ abstract class phpQuery
 		if (!isset($document->data[$id])) {
 			$document->data[$id] = array();
 		}
-		if (!is_null($data)) {
+		if (!$data === null) {
 			$document->data[$id][$name] = $data;
 		}
 		if ($name) {

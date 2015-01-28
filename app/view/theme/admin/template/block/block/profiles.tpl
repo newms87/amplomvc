@@ -1,5 +1,5 @@
 <div id="profile_tab_list" class="vtabs">
-	<div id="add_profile" class="add-vtab"><?= _l("New Profile"); ?></div>
+	<div id="add_profile" class="add-vtab">{{New Profile}}</div>
 
 	<? foreach ($profiles as $row => $profile) { ?>
 		<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
@@ -14,65 +14,56 @@
 		<div id="tab-profile-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile">
 			<table class="form">
 				<tr>
-					<td><?= _l("Profile Name"); ?></td>
+					<td>{{Profile Name}}</td>
 					<td>
 						<input type="text" class="tab_name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>"/>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Instance"); ?></td>
+					<td>{{Instance}}</td>
 					<td>
 						<?=
-						build('select', array(
-							'name'   => "profiles[$row][block_instance_id]",
+						build(array(
+							'type' => 'select',
+							'name'  => "profiles[$row][block_instance_id]",
 							'data'   => $data_instances,
 							'select' => $profile['block_instance_id'],
-							'key'    => false,
-							'value'  => "name",
+							'value' =>  false,
+							'label' =>  "name",
 						)); ?>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Stores"); ?></td>
+					<td>{{Layouts}}</td>
 					<td>
 						<?=
-						build('multiselect', array(
-							'name'   => "profiles[$row][store_ids]",
-							'data'   => $data_stores,
-							'select' => !empty($profile['store_ids']) ? $profile['store_ids'] : null,
-							'key'    => "store_id",
-							'value'  => "name",
-						)); ?>
-					</td>
-				</tr>
-				<tr>
-					<td><?= _l("Layouts"); ?></td>
-					<td>
-						<?=
-						build('multiselect', array(
-							'name'   => "profiles[$row][layout_ids]",
+						build(array(
+							'type' => 'multiselect',
+							'name'  => "profiles[$row][layout_ids]",
 							'data'   => $data_layouts,
 							'select' => !empty($profile['layout_ids']) ? $profile['layout_ids'] : null,
-							'key'    => "layout_id",
-							'value'  => "name",
+							'value' =>  "layout_id",
+							'label' =>  "name",
 						)); ?>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Positions"); ?></td>
+					<td>{{Positions}}</td>
 					<td><?=
-						build('select', array(
-							'name'   => "profiles[$row][position]",
+						build(array(
+							'type' => 'select',
+							'name'  => "profiles[$row][position]",
 							'data'   => $data_positions,
 							'select' => $profile['position']
 						)); ?>
 					</td>
 				</tr>
 				<tr>
-					<td><?= _l("Profile Status"); ?></td>
+					<td>{{Profile Status}}</td>
 					<td><?=
-						build('select', array(
-							'name'   => "profiles[$row][status]",
+						build(array(
+							'type' => 'select',
+							'name'  => "profiles[$row][status]",
 							'data'   => $data_statuses,
 							'select' => $profile['status']
 						)); ?>

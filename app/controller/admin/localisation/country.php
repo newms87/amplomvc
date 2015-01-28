@@ -1,18 +1,16 @@
 <?php
 class App_Controller_Admin_Localisation_Country extends Controller
 {
-
-
 	public function index()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
@@ -41,7 +39,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
@@ -70,7 +68,7 @@ class App_Controller_Admin_Localisation_Country extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Country"));
+		set_page_info('title', _l("Country"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $country_id) {
@@ -144,8 +142,8 @@ class App_Controller_Admin_Localisation_Country extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$country_total = $this->Model_Localisation_Country->getTotalCountries();
@@ -209,10 +207,6 @@ class App_Controller_Admin_Localisation_Country extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-
-		$this->pagination->init();
-		$this->pagination->total  = $country_total;
-		$data['pagination'] = $this->pagination->render();
 
 		$data['sort']  = $sort;
 		$data['order'] = $order;
@@ -338,11 +332,6 @@ class App_Controller_Admin_Localisation_Country extends Controller
 				$this->error['warning'] = _l("Warning: This country cannot be deleted as it is currently assigned as the default store country!");
 			}
 
-			$store_total = $this->Model_Setting_Store->getTotalStoresByCountryId($country_id);
-
-			if ($store_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This country cannot be deleted as it is currently assigned to %s stores!"), $store_total);
-			}
 
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);
 

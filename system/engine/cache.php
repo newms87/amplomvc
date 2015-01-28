@@ -2,36 +2,44 @@
 
 class Cache
 {
-	private $expired;
-	private $ignore_list = array();
+	private $expired, $dir;
 	private $loaded = array();
 
-	public function __construct()
+	public function __construct($dir = null)
 	{
 		$this->expired = _time() - CACHE_FILE_EXPIRATION;
 
-		$error = null;
-		if (!_is_writable(DIR_CACHE, $error)) {
-			trigger_error($error);
+		$this->setDir($dir ? $dir : DIR_CACHE . DB_PREFIX);
+	}
+
+	public function setDir($dir)
+	{
+		if (_is_writable($dir, $error)) {
+			$this->dir = rtrim($dir, '/') . '/';
+			return true;
 		}
+
+		trigger_error($error);
+
+		return false;
 	}
 
 	public function getLoadedFiles()
 	{
-		return $this->loaded;
+		return isset($this->loaded[$this->dir]) ? $this->loaded[$this->dir] : array();
 	}
 
 	public function get($key, $get_file = false)
 	{
-		if (isset($this->loaded[$key])) {
+		if (isset($this->loaded[$this->dir][$key])) {
 			if ($get_file) {
-				return $this->loaded[$key]['file'];
-			} elseif (isset($this->loaded[$key]['data'])) {
-				return $this->loaded[$key]['data'];
+				return $this->loaded[$this->dir][$key]['file'];
+			} elseif (isset($this->loaded[$this->dir][$key]['data'])) {
+				return $this->loaded[$this->dir][$key]['data'];
 			}
 		}
 
-		$file = DIR_CACHE . $key . '.cache';
+		$file = $this->dir . $key . '.cache';
 
 		if (is_file($file)) {
 			if (_filemtime($file) < $this->expired) {
@@ -40,14 +48,8 @@ class Cache
 				return;
 			}
 
-			foreach ($this->ignore_list as $ignore) {
-				if (strpos($key, $ignore) === 0) {
-					return;
-				}
-			}
-
 			if ($get_file) {
-				return $this->loaded[$key]['file'] = $file;
+				return $this->loaded[$this->dir][$key]['file'] = $file;
 			} else {
 				$str = @file_get_contents($file);
 				$data = @unserialize($str);
@@ -58,23 +60,26 @@ class Cache
 					return null;
 				}
 
-				$this->loaded[$key]['data'] = $data;
-				$this->loaded[$key]['file'] = $file;
+				$this->loaded[$this->dir][$key]['data'] = $data;
+				$this->loaded[$this->dir][$key]['file'] = $file;
 			}
 
-			return $this->loaded[$key]['data'];
+			return $this->loaded[$this->dir][$key]['data'];
 		}
 	}
 
 	public function set($key, $value, $set_file = false)
 	{
-		$file = DIR_CACHE . $key . '.cache';
+		$file = $this->dir . $key . '.cache';
+
+		$this->loaded[$this->dir][$key]['data'] = $value;
+		$this->loaded[$this->dir][$key]['file'] = $file;
 
 		if (!$set_file) {
 			$value = serialize($value);
 		}
 
-		if ($value) {
+		if ($value !== null) {
 			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
 			@file_put_contents($file, $value);
 		}
@@ -84,26 +89,25 @@ class Cache
 
 	public function delete($key)
 	{
-		$files = glob(DIR_CACHE . $key . '*.cache');
+		if ($key) {
+			$files = glob($this->dir . $key . '*.cache');
 
-		if ($files) {
-			foreach ($files as $file) {
-				//Suppress warnings as this will fail under race conditions
-				@unlink($file);
+			if ($files) {
+				foreach ($files as $file) {
+					//Suppress warnings as this will fail under race conditions
+					@unlink($file);
+				}
 			}
-		}
 
-		unset($this->loaded[$key]);
-	}
-
-	public function ignore($ignore)
-	{
-		foreach (explode(',', $ignore) as $key) {
-			$key = trim($key);
-
-			if ($key) {
-				$this->ignore_list[$key] = $key;
+			if (!empty($this->loaded[$this->dir])) {
+				foreach (array_keys($this->loaded[$this->dir]) as $lkey) {
+					if (strpos($lkey, $key) === 0) {
+						unset($this->loaded[$this->dir][$lkey]);
+					}
+				}
 			}
+		} else {
+			rrmdir($this->dir);
 		}
 	}
 }

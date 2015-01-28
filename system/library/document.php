@@ -2,81 +2,74 @@
 
 class Document extends Library
 {
-	private $title;
-	private $description;
-	private $keywords;
-	private $canonical_link = null;
-	private $links = array();
-	private $styles = array();
-	private $scripts = array();
-	private $ac_vars = array();
-	private $body_class = array();
+	private
+		$info = array(),
+		$meta = array(),
+		$links = array(),
+		$styles = array(),
+		$scripts = array(),
+		$ac_vars = array(),
+		$body_class = array();
 
 	function __construct()
 	{
 		parent::__construct();
 
-		$this->links = $this->getNavigationLinks();
+		$this->links = $this->Model_Navigation->getNavigationGroup(IS_ADMIN ? 'admin' : 'all');
 
-		$this->setCanonicalLink($this->url->getSeoUrl());
+		//In case something happened to the admin navigation, we reset it
+		if (IS_ADMIN && empty($this->links['admin']['links'])) {
+			$this->Model_Navigation->resetAdminNavigationGroup();
+			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
+		}
+
+		$this->info['title'] = option('site_title');
+		$this->meta['description'] = option('site_meta_description');
+
+		$this->info['canonical_link'] = $this->url->getSeoUrl();
 
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}
 	}
 
-	public function setTitle($title)
+	public function info($key = null, $default = null)
 	{
-		$this->title = $this->tool->cleanTitle($title);
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : $default;
+		}
+
+		return $this->info;
 	}
 
-	public function getTitle()
+	public function setInfo($key, $value)
 	{
-		return $this->title;
+		$this->info[$key] = $value;
 	}
 
-	public function setDescription($description)
+	public function &infoRef()
 	{
-		$this->description = $description;
+		return $this->info;
 	}
 
-	public function getDescription()
+	public function meta($key = null, $default = null)
 	{
-		return $this->description;
+		if ($key) {
+			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		}
+
+		return $this->meta;
 	}
 
-	public function setKeywords($keywords)
+	public function setMeta($key, $value)
 	{
-		$this->keywords = $keywords;
-	}
-
-	public function getKeywords()
-	{
-		return $this->keywords;
-	}
-
-	/**
-	 * Canonical Links are used by search engines to determine the most appropriate version of web pages
-	 * with identical (or almost, eg: different sort orders, etc.) content.
-	 *
-	 * When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
-	 *
-	 * @param $href - the preferred url for the current page.
-	 */
-	public function setCanonicalLink($href)
-	{
-		$this->canonical_link = $href;
-	}
-
-	public function getCanonicalLink()
-	{
-		return $this->canonical_link;
+		$this->meta[$key] = $value;
 	}
 
 	public function hasLink($group = 'primary', $link_name)
 	{
 		if (!empty($this->links[$group])) {
-			$result = array_walk_children($this->links[$group], 'children', function ($link) use ($link_name) {
+			$result = array_walk_children($this->links[$group]['links'], 'children', function ($link) use ($link_name) {
 				if (!empty($link) && $link_name === $link['name']) {
 					return false;
 				}
@@ -90,20 +83,20 @@ class Document extends Library
 
 	public function hasLinks($group = 'primary')
 	{
-		return !empty($this->links[$group]);
+		return !empty($this->links[$group]['links']);
 	}
 
-	public function addLink($group = 'primary', $link_info)
+	public function addLink($group = 'primary', $link)
 	{
-		if (empty($link_info['name'])) {
-			trigger_error(_l("%s(): You must provide a link name!"));
-			return;
+		if (empty($link['name'])) {
+			$this->error['name'] = _l("You must provide a link name!");
+			return false;
 		}
 
 		$defaults = array(
 			'name'         => null,
 			'display_name' => '',
-			'href'         => '',
+			'path'         => '',
 			'query'        => null,
 			'title'        => '',
 			'class'        => array(),
@@ -114,35 +107,47 @@ class Document extends Library
 			'children'     => array(),
 		);
 
-		$new_link = $link_info + $defaults;
+		$new_link = $link + $defaults;
+
+		if (!empty($new_link['path']) || !empty($new_link['query'])) {
+			$new_link['href'] = site_url($new_link['path'], $new_link['query']);
+		}
 
 		//If group doesn't exist, make a new group
 		if (!isset($this->links[$group])) {
-			$this->links[$group][$new_link['name']] = $new_link;
-			return;
+			$this->links[$group] = array(
+				'navigation_group_id' => 0,
+				'links'               => array(
+					$new_link['name'] => $new_link,
+				),
+				'name'                => $group,
+			);
+
+			return true;
 		}
 
 		//Find the children list for the parent
 		if ($new_link['parent'] || $new_link['parent_id']) {
-			$return = array_walk_children($this->links[$group], 'children', function (&$link) use ($new_link) {
-				if (empty($link)) {
+			$return = array_walk_children($this->links[$group]['links'], 'children', function (&$l) use ($new_link) {
+				if (empty($l)) {
 					return;
 				}
-				if ($new_link['parent'] === $link['name']) {
-					$link['children'][$new_link['name']] = $new_link;
+				if ($new_link['parent'] === $l['name']) {
+					$l['children'][$new_link['name']] = $new_link;
 					return false;
-				} elseif (!empty($link['navigation_id']) && $new_link['parent_id'] === $link['navigation_id']) {
-					$link['children'][$new_link['name']] = $new_link;
+				} elseif (!empty($l['navigation_id']) && $new_link['parent_id'] === $l['navigation_id']) {
+					$l['children'][$new_link['name']] = $new_link;
 					return false;
 				}
 			});
 
 			//$return === false when link is found
 			if ($return !== false) {
-				trigger_error(_l("Unable to locate link %s in Link Group %s", $new_link['parent'], $group));
+				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $new_link['parent'], $group);
+				return false;
 			}
 		} else {
-			$this->links[$group][] = $new_link;
+			$this->links[$group]['links'][] = $new_link;
 		}
 
 		return true;
@@ -161,13 +166,13 @@ class Document extends Library
 
 	public function setLinks($group, $links)
 	{
-		$this->links[$group] = $links;
+		$this->links[$group]['links'] = $links;
 	}
 
 	public function getLinks($group = 'primary')
 	{
 		if (isset($this->links[$group])) {
-			return $this->links[$group];
+			return $this->links[$group]['links'];
 		}
 
 		return array();
@@ -238,7 +243,7 @@ class Document extends Library
 			//Check Less @imports for modifications
 			$dependencies = cache('less.' . $reference);
 
-			if (is_null($dependencies)) {
+			if ($dependencies === null) {
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
 				foreach ($dependencies as $d_file) {
@@ -272,7 +277,7 @@ class Document extends Library
 
 			$parser->parseFile($file, $reference);
 
-			$parser->parse("@basepath: '" . SITE_BASE . "';");
+			$parser->parse("@base-path: '" . SITE_BASE . "';");
 
 			$css = $parser->getCss();
 
@@ -298,7 +303,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => is_null($compress) ? option('config_less_compress', false) : $compress,
+			'compress' => $compress === null ? option('config_less_compress', true) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
@@ -307,7 +312,7 @@ class Document extends Library
 
 		$parser->parse("@basepath: '" . SITE_BASE . "';");
 
-		return $parser->getCss();
+		return trim($parser->getCss());
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
@@ -334,17 +339,6 @@ class Document extends Library
 	public function getStyles()
 	{
 		return $this->styles;
-	}
-
-	public function renderStyles()
-	{
-		$html = '';
-
-		foreach ($this->styles as $style) {
-			$html .= "<link rel=\"$style[rel]\" type=\"text/css\" href=\"$style[href]\" media=\"$style[media]\" />\r\n";
-		}
-
-		return $html;
 	}
 
 	public function addScript($script, $priority = 100)
@@ -377,48 +371,34 @@ class Document extends Library
 	 * Retrieves the scripts requested, sorted by priority
 	 * Note: We sort the scripts here as it is assumed this is only called once
 	 *
-	 * @return array - Each element is a string of the absolute filepath to the script
+	 * @return array - Each element is a string of the absolute file path to the script
 	 */
 	public function getScripts()
 	{
-		$scripts = array();
-
 		ksort($this->scripts);
+
+		$scripts = array(
+			'local' => array(
+				'ac' => "\$ac = " . json_encode($this->ac_vars),
+			),
+		);
 
 		foreach ($this->scripts as $priority => $script_list) {
 			foreach ($script_list as $script) {
-				$scripts[] = $script;
+				//Separate Localized files
+				if (strpos($script, 'local:') === 0) {
+					if (is_file($file = substr($script, 6))) {
+						ob_start();
+						include($file);
+						$scripts['local'][] = ob_get_clean();
+					}
+				} else {
+					$scripts['src'][] = $script;
+				}
 			}
 		}
 
 		return $scripts;
-	}
-
-	public function renderScripts()
-	{
-		$scripts = $this->getScripts();
-
-		$html = '';
-
-		if (!empty($this->ac_vars)) {
-			$html .= "<script type=\"text/javascript\">\r\n\$ac = " . json_encode($this->ac_vars) . ";\r\n</script>";
-		}
-
-		foreach ($scripts as $script) {
-			if (strpos($script, 'local:') === 0) {
-				if (is_file($file = substr($script, 6))) {
-					$html .= "<script type=\"text/javascript\">\r\n";
-					ob_start();
-					include($file);
-					$html .= ob_get_clean();
-					$html .= "\r\n</script>\r\n";
-				}
-			} else {
-				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
-			}
-		}
-
-		return $html;
 	}
 
 	public function setBodyClass($class)
@@ -441,92 +421,6 @@ class Document extends Library
 		return implode(' ', $this->body_class);
 	}
 
-	public function getNavigationLinks()
-	{
-		$store_id = option('store_id');
-
-		$nav_groups = cache("navigation_groups.store.$store_id");
-
-		if (is_null($nav_groups)) {
-			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" .
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id = ns.navigation_group_id)" .
-				" WHERE ng.status = 1 AND ns.store_id = " . (int)$store_id;
-
-			$result = $this->queryRows($query);
-
-			$nav_groups = array();
-
-			foreach ($result as &$group) {
-				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
-
-				if (empty($nav_group_links)) {
-					continue;
-				}
-				$parent_ref = array();
-
-				foreach ($nav_group_links as $key => &$link) {
-					$link['children']                   = array();
-					$parent_ref[$link['navigation_id']] = &$link;
-
-					if ($link['parent_id']) {
-						$parent_ref[$link['parent_id']]['children'][] = &$link;
-						unset($nav_group_links[$key]);
-					}
-				}
-				unset($link);
-
-				$nav_groups[$group['name']] = $nav_group_links;
-			}
-			unset($group);
-
-			cache("navigation_groups.store.$store_id", $nav_groups);
-		}
-
-		//Filter Conditional Links And Access Permissions
-
-
-		//TODO: This leaves null values in group links. Consider changing approach.
-		foreach ($nav_groups as &$group) {
-			$this->filterLinks($group);
-		}
-		unset($group);
-
-		return $nav_groups;
-	}
-
-	public function filterLinks(&$links)
-	{
-		foreach ($links as $key => &$link) {
-			if (!empty($link['children'])) {
-				$this->filterLinks($link['children']);
-			}
-
-			//Filter by Conditions
-			if (!empty($link['condition']) && !$this->condition->is($link['condition'])) {
-				unset($links[$key]);
-				continue;
-			}
-
-			//Filter restricted paths, current user cannot access
-			if (IS_ADMIN) {
-				if (!user_can('r', $link['href'])) {
-					unset($links[$key]);
-					continue;
-				}
-			}
-
-			//Filter empty non-links
-			if (empty($link['href']) && empty($link['children'])) {
-				unset($links[$key]);
-			}
-		}
-	}
-
-	public function getNavigationGroupLinks($navigation_group_id)
-	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
-	}
-
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
 		if (!$page) {
@@ -537,14 +431,13 @@ class Document extends Library
 		}
 
 		foreach ($links as $key => &$link) {
-			if ($link['href'] || $link['query']) {
+			if (isset($link['active']) && $link['active'] === false) {
+				unset($links[$key]);
+				continue;
+			}
 
-				if (!preg_match("/^https?:\\/\\//", $link['href'])) {
-					$query        = isset($link['query']) ? $link['query'] : '';
-					$link['href'] = site_url($link['href'], $query);
-				}
-
-				$components = parse_url(str_replace('&amp;', '&', $link['href']));
+			if (!empty($link['url'])) {
+				$components = parse_url(str_replace('&amp;', '&', $link['url']));
 
 				if ($page['path'] === $components['path']) {
 					if (!empty($components['query'])) {
@@ -621,7 +514,7 @@ class Document extends Library
 				break;
 		}
 
-		$html = "<ul class=\"link-list $class\">";
+		$html = '';
 
 		$zindex = count($links);
 
@@ -632,20 +525,19 @@ class Document extends Library
 
 			if (empty($link['display_name'])) {
 				$link['display_name'] = $link['name'];
-				$link['name'] = slug($link['name'], '-');
+				$link['name']         = slug($link['name'], '-');
 			}
-
 
 			$attr_fields = array(
 				'title',
-			   'href',
-			   'target',
-			   'class',
+				'href',
+				'target',
+				'class',
 			);
 
 			foreach ($attr_fields as $field) {
-				if (!empty($link[$field]) && !isset($link['#'.$field])) {
-					$link['#'.$field] = $link[$field];
+				if (!empty($link[$field]) && !isset($link['#' . $field])) {
+					$link['#' . $field] = $link[$field];
 				}
 			}
 
@@ -670,7 +562,7 @@ class Document extends Library
 			$link['#class'] = trim($link['#class'] . ' menu-link');
 
 			//Build attribute list
-			$attrs = attrs($link);
+			$attrs    = attrs($link);
 			$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
 
 			$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";
@@ -678,8 +570,6 @@ class Document extends Library
 			$zindex--;
 		}
 
-		$html .= "</ul>";
-
-		return $html;
+		return "<div class=\"link-list $class\"><ul>" . $html . "</ul></div>";
 	}
 }

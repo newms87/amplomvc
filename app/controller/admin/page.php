@@ -5,7 +5,7 @@ class App_Controller_Admin_Page extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -54,7 +54,7 @@ class App_Controller_Admin_Page extends Controller
 		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = _get('filter', array());
 
-		list($pages, $page_total) = $this->Model_Page->getPages($sort, $filter, $columns, true, 'page_id');
+		list($pages, $page_total) = $this->Model_Page->getRecords($sort, $filter, $columns, true, 'page_id');
 
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
@@ -89,7 +89,7 @@ class App_Controller_Admin_Page extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -99,7 +99,7 @@ class App_Controller_Admin_Page extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Page"));
+		set_page_info('title', _l("Page"));
 
 		//Insert or Update
 		$page_id = _get('page_id');
@@ -136,7 +136,7 @@ class App_Controller_Admin_Page extends Controller
 		$page += $defaults;
 
 		//Template Data
-		$page['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$page['data_layouts'] = $this->Model_Layout->getRecords(array('cache' => true));
 		$page['data_themes']  = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create-layout');
@@ -172,8 +172,8 @@ class App_Controller_Admin_Page extends Controller
 			message('error', $this->Model_Page->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			post_redirect('admin/page/form', 'page_id=' . _request('page_id'));
 		} else {
@@ -191,8 +191,8 @@ class App_Controller_Admin_Page extends Controller
 			message('notify', _l("Page was deleted!"));
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/page');
 		}
@@ -226,10 +226,10 @@ class App_Controller_Admin_Page extends Controller
 			message('success', _l("Success: You have modified navigation!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
-			redirect('admin/design/navigation');
+			redirect('admin/navigation');
 		}
 	}
 
@@ -240,10 +240,10 @@ class App_Controller_Admin_Page extends Controller
 				'name' => $_POST['name'],
 			);
 
-			$result = $this->Model_Design_Layout->getLayouts($layout);
+			$result = $this->Model_Layout->getRecords(null, $layout);
 
 			if (empty($result)) {
-				$layout_id = $this->Model_Design_Layout->addLayout($layout);
+				$layout_id = $this->Model_Layout->save(null, $layout);
 			} else {
 				$result    = current($result);
 				$layout_id = $result['layout_id'];
@@ -255,14 +255,15 @@ class App_Controller_Admin_Page extends Controller
 			'order' => "ASC",
 		);
 
-		$layouts = $this->Model_Design_Layout->getLayouts($sort);
+		$layouts = $this->Model_Layout->getRecords($sort);
 
-		$output = build('select', array(
+		$output = build(array(
+			'type'   => 'select',
 			'name'   => 'layout_id',
 			'data'   => $layouts,
 			'select' => $layout_id,
-			'key'    => 'layout_id',
-			'value'  => 'name',
+			'value'  => 'layout_id',
+			'label'  => 'name',
 		));
 
 		output($output);

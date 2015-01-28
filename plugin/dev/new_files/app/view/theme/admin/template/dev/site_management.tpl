@@ -1,29 +1,30 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("Site Management"); ?></h1>
+			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> {{Site Management}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $return; ?>" class="button"><?= _l("Return to Dev Console"); ?></a>
+				<a href="<?= $return; ?>" class="button">{{Return to Dev Console}}</a>
 			</div>
 		</div>
 		<div class="section">
 			<form action="" method="post">
 				<table class="form">
 					<tr>
-						<td><label for="domain"><?= _l("Domain"); ?></label></td>
+						<td><label for="domain">{{Domain}}</label></td>
 						<td><input id="domain" type="text" name="domain" value="<?= $domain; ?>" size="100"/></td>
 					</tr>
 					<tr>
-						<td><label for="username"><?= _l("Username"); ?></label></td>
+						<td><label for="username">{{Username}}</label></td>
 						<td><input id="username" type="text" name="username" value="<?= $username; ?>"/></td>
 					</tr>
 					<tr>
-						<td><label for="status"><?= _l("Status"); ?></label></td>
-						<td><?= build('select', array(
-								'name'   => 'status',
+						<td><label for="status">{{Status}}</label></td>
+						<td><?= build(array(
+								'type' => 'select',
+								'name'  => 'status',
 								'data'   => $data_site_status,
 								'select' => $status
 							)); ?>
@@ -31,7 +32,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="submit" class="button" name="add_site" value="<?= _l("Add Site"); ?>"/>
+							<input type="submit" class="button" name="add_site" value="{{Add Site}}"/>
 						</td>
 					</tr>
 				</table>
@@ -40,9 +41,9 @@
 			<table class="list">
 				<thead>
 					<tr>
-						<td class="center"><?= _l("Domain"); ?></td>
-						<td class="center"><?= _l("Username"); ?></td>
-						<td class="center"><?= _l("Status"); ?></td>
+						<td class="center">{{Domain}}</td>
+						<td class="center">{{Username}}</td>
+						<td class="center">{{Status}}</td>
 						<td></td>
 					</tr>
 				</thead>
@@ -64,4 +65,4 @@
 	</div>
 </div>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

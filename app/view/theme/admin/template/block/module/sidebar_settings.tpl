@@ -1,12 +1,13 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= _l("Attribute Filter:"); ?><br/>
-			<?= build('select', array(
-				'name'   => 'attribute_group_select',
+			{{Attribute Filter:}}<br/>
+			<?= build(array(
+				'type' => 'select',
+				'name'  => 'attribute_group_select',
 				'data'   => $data_attribute_groups,
-				'key'    => 'attribute_group_id',
-				'value'  => 'name',
+				'value' =>  'attribute_group_id',
+				'label' =>  'name',
 			)); ?>
 		</td>
 		<td>
@@ -22,11 +23,11 @@
 					<? $row = $attribute['attribute_group_id']; ?>
 					<div class="attribute <?= $key; ?>">
 						<input type="hidden" name="settings[attributes][<?= $row; ?>][attribute_group_id]" value="<?= $attribute['attribute_group_id']; ?>"/>
-						<label for="attribute_group_name<?= $key; ?>"><?= _l("Display Name:"); ?></label>
+						<label for="attribute_group_name<?= $key; ?>">{{Display Name:}}</label>
 						<input id="attribute_group_name<?= $key; ?>" type="text" name="settings[attributes][<?= $row; ?>][group_name]" value="<?= $attribute['group_name']; ?>"/>
-						<label for="attribute_menu_name<?= $key; ?>"><?= _l("Section Name:"); ?></label>
+						<label for="attribute_menu_name<?= $key; ?>">{{Section Name:}}</label>
 						<input id="attribute_menu_name<?= $key; ?>" type="text" name="settings[attributes][<?= $row; ?>][menu_name]" value="<?= $attribute['menu_name']; ?>"/>
-						<a class="delete" onclick="$(this).closest('.attribute').remove()"><?= _l("Delete"); ?></a>
+						<a class="delete" onclick="$(this).closest('.attribute').remove()">{{Delete}}</a>
 					</div>
 				<? } ?>
 			</div>
@@ -41,7 +42,7 @@
 	?>
 	<tr>
 		<td>
-			<?= _l("Page Link"); ?>
+			{{Page Link}}
 		</td>
 		<td>COMING SOON!</td>
 	</tr>

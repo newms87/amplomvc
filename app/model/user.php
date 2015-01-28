@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_User extends Model
+class App_Model_User extends App_Model_Table
 {
+	protected $table = 'user', $primary_key = 'user_id';
+
 	public function save($user_id, $user)
 	{
 		if (isset($user['username'])) {
@@ -10,7 +12,7 @@ class App_Model_User extends Model
 			} else {
 				$user_info = $this->Model_User->getUserByUsername($user['username']);
 
-				if ($user_info && $user_info['user_id'] !== $user_id) {
+				if ($user_info && $user_info['user_id'] !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}
@@ -18,28 +20,14 @@ class App_Model_User extends Model
 			$this->error['username'] = _l("Please provide a Username!");
 		}
 
-		if (isset($user['firstname'])) {
-			if (!validate('text', $user['firstname'], 1, 32)) {
-				$this->error['firstname'] = _l("First Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['firstname'] = _l("Please provide your First Name");
-		}
-
-		if (isset($user['lastname'])) {
-			if (!validate('text', $user['lastname'], 1, 32)) {
-				$this->error['lastname'] = _l("Last Name must be between 1 and 32 characters!");
-			}
-		} elseif (!$user_id) {
-			$this->error['lastname'] = _l("Please provide your Last Name");
-		}
-
 		//Ensure password is set for new user (can be encrypted_password), or check if updating password
+		if (empty($user['password'])) {
+			unset($user['password']);
+		}
+
 		if (isset($user['password'])) {
-			if (!$user_id || !empty($user['password'])) {
-				if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-					$this->error['password'] = $this->validation->getError();
-				}
+			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
+				$this->error['password'] = $this->validation->getError();
 			}
 		} elseif (!$user_id && empty($user['encrypted_password'])) {
 			$this->error['password'] = _l("You must enter a password");
@@ -51,11 +39,11 @@ class App_Model_User extends Model
 
 		if (isset($user['password'])) {
 			$user['password'] = $this->user->encrypt($user['password']);
-		} elseif (isset($user['encrypted_password'])) {
+		} elseif (!empty($user['encrypted_password'])) {
 			$user['password'] = $user['encrypted_password'];
 		}
 
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		//New User
 		if (!$user_id) {
@@ -83,21 +71,21 @@ class App_Model_User extends Model
 			'password' => $this->user->encrypt($password),
 		);
 
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		return $this->update('user', $data, $user_id);
 	}
 
 	public function remove($user_id)
 	{
-		$this->cache->delete('user');
+		clear_cache('user');
 
 		return $this->delete('user', $user_id);
 	}
 
 	public function getUser($user_id)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
+		return $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE user_id = '" . (int)$user_id . "'");
 	}
 
 	public function addMeta($user_id, $key, $value, $multi = false)
@@ -167,7 +155,7 @@ class App_Model_User extends Model
 	public function getMeta($user_id, $key = null)
 	{
 		if ($key) {
-			$value = $this->queryRow("SELECT `value`, serialized FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			$value = $this->queryRow("SELECT `value`, serialized FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
 			if ($value) {
 				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
 			}
@@ -175,7 +163,7 @@ class App_Model_User extends Model
 			return null;
 		}
 
-		$meta = $this->queryRows("SELECT * FROM " . $this->prefix . "user_meta WHERE user_id = " . (int)$user_id, 'key');
+		$meta = $this->queryRows("SELECT * FROM " . self::$tables['user_meta'] . " WHERE user_id = " . (int)$user_id, 'key');
 
 		foreach ($meta as &$m) {
 			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];
@@ -187,58 +175,37 @@ class App_Model_User extends Model
 
 	public function getUserByUsername($username)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
+		return $this->queryRow("SELECT * FROM `" . self::$tables['user'] . "` WHERE username = '" . $this->escape($username) . "'");
 	}
 
-	public function getUsers($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
 	{
-		//Select
-		if (!$select) {
-			$select = '*';
-		}
-
-		//From
-		$from = DB_PREFIX . "user";
-
 		//Where
 		if (isset($filter['user_role'])) {
-			$roles = $this->Model_Setting_Role->getRoles(null, null, '*', false, 'name');
+			$role_filter = array(
+				'name' => $filter['user_role'],
+			);
 
-			$user_roles = is_array($filter['user_role']) ? $filter['user_role'] : array($filter['user_role']);
+			$roles = $this->Model_UserRole->getRecords(array('cache' => true), $role_filter, 'user_role_id', false, 'user_role_id');
 
-			if (isset($filter['user_role_id'])) {
-				$filter['user_role_id'] = is_array($filter['user_role_id']) ? $filter['user_role_id'] : array($filter['user_role_id']);
-			} else {
-				$filter['user_role_id'] = array();
-			}
-
-			foreach ($user_roles as $role_name) {
-				if (isset($roles[$role_name])) {
-					$filter['user_role_id'][] = $roles[$role_name]['user_role_id'];
-				}
-			}
+			$filter['user_role_id'] = array_keys($roles);
 		}
 
-		$where = $this->extractWhere('user', $filter);
-
 		if (isset($filter['name'])) {
+			$where = $this->extractWhere($this->table, $filter);
 			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
+			$filter = $where;
 		}
 
 		//Order and Limit
-		if (!empty($filter['sort'])) {
-			if ($filter['sort'] === 'name') {
-				$filter['sort'] = array(
-					'lastname'  => $filter['order'],
-					'firstname' => $filter['order'],
-				);
-			}
+		if (!empty($filter['sort']) && $filter['sort'] === 'name') {
+			$filter['sort'] = array(
+				'lastname'  => $filter['order'],
+				'firstname' => $filter['order'],
+			);
 		}
 
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return parent::getRecords($sort, $filter, $select, $total, $index);
 	}
 
 	public function getTotalUsers($filter = array())
@@ -252,7 +219,7 @@ class App_Model_User extends Model
 			'user_role_id' => array(
 				'type'         => 'select',
 				'display_name' => _l("Role"),
-				'build_data'   => $this->Model_Setting_Role->getRoles(),
+				'build_data'   => $this->Model_UserRole->getRecords(array('cache' => true)),
 				'build_config' => array(
 					'user_role_id',
 					'name'

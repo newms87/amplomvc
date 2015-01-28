@@ -49,8 +49,8 @@
 									<a class="move-down button move">
 										<b class="sprite move-down"></b>
 									</a>
-									<a class="save-view button" data-loading="Saving..."><?= _l("Save"); ?></a>
-									<a class="delete-view button remove" data-loading="Removing..."><?= _l("X"); ?></a>
+									<a class="save-view button" data-loading="Saving...">{{Save}}</a>
+									<a class="delete-view button remove" data-loading="Removing...">{{X}}</a>
 								</div>
 								<a class="edit-view small button">
 									<b class="sprite edit small"></b>
@@ -59,18 +59,20 @@
 								<br/>
 								<div class="view-setting choose-view-box">
 									<?=
-									build('select', array(
-										'name'   => 'view_listing_id',
+									build(array(
+										'type' => 'select',
+										'name'  => 'view_listing_id',
 										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
 										'select' => $view['view_listing_id'],
-										'key'    => false,
-										'value'  => 'name',
+										'value' =>  false,
+										'label' =>  'name',
 									)); ?>
 								</div>
 								<div class="view-setting choose-view-size">
 									<?=
-									build('select', array(
-										'name'   => 'settings[size]',
+									build(array(
+										'type' => 'select',
+										'name'  => 'settings[size]',
 										'data'   => $data_view_sizes,
 										'select' => $view['settings']['size'],
 									)); ?>
@@ -90,19 +92,19 @@
 	</div>
 
 	<div class="buttons views-actions">
-		<a class="add-view button"><?= _l("New View"); ?></a>
+		<a class="add-view button">{{New View}}</a>
 
 		<? if ($this->user->isTopAdmin()) { ?>
-			<a class="create-view button"><?= _l("Create View"); ?></a>
+			<a class="create-view button">{{Create View}}</a>
 
 			<div class="view-popup create-view-box">
 				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
-					<div class="description"><?= _l("Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table."); ?></div>
+					<div class="description">{{Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table.}}</div>
 					<input type="hidden" name="group" value="<?= $group; ?>"/>
-					<input type="text" name="name" value="<?= _l("View Name"); ?>"/>
+					<input type="text" name="name" value="{{View Name}}"/>
 					<br/>
-					<textarea name="sql" placeholder="<?= _l("WHERE Status = 'Complete'"); ?>"></textarea>
-					<button class="submit-view"><?= _l("Create View"); ?></button>
+					<textarea name="sql" placeholder="{{WHERE Status = 'Complete'}}"></textarea>
+					<button class="submit-view">{{Create View}}</button>
 				</form>
 
 				<a class="button close">X</a>
@@ -157,7 +159,7 @@
 		var view_listing_id = $view.find('[name=view_listing_id]').val();
 
 		if (!view_listing_id) {
-			return alert("<?= _l("Please Choose a listing first for this view"); ?>");
+			return alert("{{Please Choose a listing first for this view}}");
 		}
 
 		var listing = listings[view_listing_id];
@@ -249,10 +251,10 @@
 			setTimeout(function () {
 				$this.removeClass('confirm').loading('stop');
 			}, 2000);
-			return $this.loading({text: "<?= _l("Confirm Delete"); ?>"}).addClass('confirm');
+			return $this.loading({text: "{{Confirm Delete}}"}).addClass('confirm');
 		}
 
-		if (confirm("<?= _l("Are you sure you want to remove this view?"); ?>")) {
+		if (confirm("{{Are you sure you want to remove this view?}}")) {
 			var $this = $(this);
 			var $view = $this.closest('.widget-view');
 

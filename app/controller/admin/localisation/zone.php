@@ -3,14 +3,14 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_l("Zones"));
+		set_page_info('title', _l("Zones"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Zones"));
+		set_page_info('title', _l("Zones"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Zone->addZone($_POST);
@@ -39,7 +39,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Zones"));
+		set_page_info('title', _l("Zones"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Zone->editZone($_GET['zone_id'], $_POST);
@@ -68,7 +68,7 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Zones"));
+		set_page_info('title', _l("Zones"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $zone_id) {
@@ -142,8 +142,8 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$zone_total = $this->Model_Localisation_Zone->getTotalZones();
@@ -320,12 +320,6 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 		foreach ($_GET['selected'] as $zone_id) {
 			if (option('config_zone_id') == $zone_id) {
 				$this->error['warning'] = _l("Warning: This zone cannot be deleted as it is currently assigned as the default store zone!");
-			}
-
-			$store_total = $this->Model_Setting_Store->getTotalStoresByZoneId($zone_id);
-
-			if ($store_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This zone cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 			}
 
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);

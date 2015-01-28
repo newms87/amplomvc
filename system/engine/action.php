@@ -65,6 +65,10 @@ final class Action
 
 		require_once(_mod($file));
 
+		if (class_exists($class . '_mod', false)) {
+			$class .= '_mod';
+		}
+
 		$callable = array(
 			$class,
 			$method
@@ -72,8 +76,12 @@ final class Action
 
 		$this->is_valid = is_callable($callable);
 
-		if (!$this->is_valid && method_exists($class, $method)) {
-			trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $method, $class));
+		if (!$this->is_valid) {
+			if (!class_exists($class, false)) {
+				trigger_error(_l("The class %s does not exist! Make sure you spelled the class name correctly in %s", $class, $file));
+			} elseif (method_exists($class, $method)) {
+				trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $method, $class));
+			}
 		}
 
 		$this->dir        = $dir;
@@ -141,12 +149,16 @@ final class Action
 		return $this->controller;
 	}
 
-	public function execute()
+	public function execute($is_ajax = null)
 	{
 		global $language_group;
 
 		if ($this->is_valid) {
 			$controller = $this->getController();
+
+			if (isset($is_ajax)) {
+				$controller->is_ajax = $is_ajax;
+			}
 
 			//Set our language group for translations
 			$language_group = $this->class;

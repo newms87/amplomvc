@@ -31,13 +31,14 @@ final class Registry
 			return $this;
 		}
 
-		//TODO: Integrate this.... hack to incorporate AWS AutoLoading
-		if (strpos($class, '\\') !== false) {
-			$file = DIR_RESOURCES . 'aws/' . $class . '.php';
-			if (is_file($file)) {
-				require_once($file);
-				return;
+		$class = str_replace('\\', '/', $class);
+
+		if (class_exists($class, false)) {
+			if (class_exists($class . '_mod', false)) {
+				$class .= '_mod';
 			}
+
+			return $return_instance ? new $class() : true;
 		}
 
 		//Check for file in library
@@ -52,7 +53,7 @@ final class Registry
 			$path = explode("_", $class);
 
 			foreach ($path as &$p) {
-				$p = strtolower($this->get('tool')->camelCase2_($p));
+				$p = strtolower(camel2_($p));
 			}
 			unset($p);
 
@@ -61,16 +62,21 @@ final class Registry
 			$class = str_replace('_', '', $class);
 		}
 
+		//Load from Resources
+		if (!is_file($file) && is_file(DIR_RESOURCES . $class . '.php')) {
+			$file = DIR_RESOURCES . $class . '.php';
+		}
+
 		//Check for relative path from root
 		if (is_file($file)) {
-			$acmod = _mod($file);
+			$mod = _mod($file);
 
-			if (pathinfo($acmod, PATHINFO_EXTENSION) === 'acmod') {
+			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod' || pathinfo($mod, PATHINFO_EXTENSION) === 'acmod') {
 				require_once($file);
-				$class .= "_acmod";
+				$class .= "_mod";
 			}
 
-			require_once($acmod);
+			require_once($mod);
 
 			if ($return_instance) {
 				return new $class();

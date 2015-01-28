@@ -1,10 +1,11 @@
 <?php
+
 class App_Controller_Admin_Dev extends Controller
 {
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Development Console"));
+		set_page_info('title', _l("Development Console"));
 
 		$data['url_sync']            = site_url("admin/dev/sync");
 		$data['url_site_management'] = site_url("admin/dev/site_management");
@@ -18,7 +19,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function sync()
 	{
-		$this->document->setTitle(_l("Synchronize Sites"));
+		set_page_info('title', _l("Synchronize Sites"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -71,7 +72,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function site_management()
 	{
-		$this->document->setTitle(_l("Site Management"));
+		set_page_info('title', _l("Site Management"));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -89,7 +90,7 @@ class App_Controller_Admin_Dev extends Controller
 
 			unset($_POST);
 
-			$this->config->saveGroup('dev_sites', $dev_sites, null, false);
+			$this->config->saveGroup('dev_sites', $dev_sites, false);
 		}
 
 		breadcrumb(_l("Site Management"), site_url('admin/dev/site-management'));
@@ -126,7 +127,7 @@ class App_Controller_Admin_Dev extends Controller
 	public function backup_restore()
 	{
 		//Page Head
-		$this->document->setTitle(_l("Backup & Restore"));
+		set_page_info('title', _l("Backup & Restore"));
 
 		//Handle POST
 		if (IS_POST && $this->validate()) {
@@ -189,19 +190,8 @@ class App_Controller_Admin_Dev extends Controller
 			}
 		}
 
-		$backup_files = $this->Model_Dev_Dev->getBackupFiles();
-
-		foreach ($backup_files as &$backup) {
-			$backup['display_size'] = $this->tool->bytes2str($backup['size'], 2);
-			$backup['display_date'] = $this->date->format($backup['date'], 'd M, Y');
-		}
-		unset($backup);
-
-		$data['data_backup_files'] = $backup_files;
-
-		$data['data_tables'] = $this->db->getTables();
-
-		$data['return'] = site_url('admin');
+		$data['data_backup_files'] = $this->dev->getBackupFiles();
+		$data['data_tables']       = $this->db->getTables();
 
 		$this->content();
 
@@ -210,7 +200,7 @@ class App_Controller_Admin_Dev extends Controller
 
 	public function content()
 	{
-		$this->document->addStyle(URL_THEME . 'style/dev.css');
+		$this->document->addStyle(theme_url('style/dev.css'));
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
 		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
@@ -270,8 +260,8 @@ class App_Controller_Admin_Dev extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_l("Database Administration"));
-		$this->document->addStyle(URL_THEME . 'style/dev.css');
+		set_page_info('title', _l("Database Administration"));
+		$this->document->addStyle(theme_url('style/dev.css'));
 
 		breadcrumb(_l("Home"), site_url('admin'), '', 0);
 		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);

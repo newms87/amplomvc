@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
 	`address_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`firstname` varchar(32)  DEFAULT '' ,
-	`lastname` varchar(32)  DEFAULT '' ,
-	`company` varchar(32)  DEFAULT NULL ,
+	`firstname` varchar(60)  DEFAULT '' ,
+	`lastname` varchar(60)  DEFAULT '' ,
+	`company` varchar(45)  DEFAULT NULL ,
 	`address_1` varchar(128) NOT NULL  ,
 	`address_2` varchar(128)  DEFAULT NULL ,
 	`city` varchar(128)  DEFAULT NULL ,
-	`postcode` varchar(10) NOT NULL  ,
+	`postcode` varchar(15) NOT NULL  ,
 	`country_id` int(11) NOT NULL DEFAULT '0' ,
 	`zone_id` int(11) NOT NULL DEFAULT '0' ,
 	`locked` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
@@ -32,7 +32,6 @@ CREATE TABLE `block_area` (
 	`path` varchar(128) NOT NULL  ,
 	`instance_name` varchar(45) NOT NULL  ,
 	`area` varchar(45) NOT NULL  ,
-	`store_id` int(10) unsigned NOT NULL  ,
 	`layout_id` int(10) unsigned NOT NULL  ,
 	`sort_order` int(10) NOT NULL  ,
 	PRIMARY KEY (`block_area_id`)
@@ -78,12 +77,11 @@ CREATE TABLE `currency` (
 	PRIMARY KEY (`currency_id`)
 );
 
-INSERT INTO `currency` VALUES ('1','Pound Sterling','GBP','?','','2','0.62900001','0','2012-09-05 20:30:27'),('2','US Dollar','USD','$','','2','1.00000000','1','2012-09-06 03:02:16'),('3','Euro','EUR','','?','2','0.79380000','0','2012-09-05 20:30:27');
+INSERT INTO `currency` VALUES ('1','Pound Sterling','GBP','?','','2','0.62900001','0','2012-09-05 20:30:27'),('2','US Dollar','USD','$','','2','1','1','2012-09-06 03:02:16'),('3','Euro','EUR','','?','2','0.7938','0','2012-09-05 20:30:27');
 
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
 	`customer_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`store_id` int(11) NOT NULL DEFAULT '0' ,
 	`firstname` varchar(32) NOT NULL DEFAULT '' ,
 	`lastname` varchar(32) NOT NULL DEFAULT '' ,
 	`email` varchar(96) NOT NULL DEFAULT '' ,
@@ -144,6 +142,7 @@ DROP TABLE IF EXISTS `dashboard`;
 CREATE TABLE `dashboard` (
 	`dashboard_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
 	`name` varchar(45) NOT NULL  ,
+	`title` varchar(45) NOT NULL  ,
 	`data` text NOT NULL  ,
 	PRIMARY KEY (`dashboard_id`)
 );
@@ -159,28 +158,6 @@ CREATE TABLE `download` (
 	PRIMARY KEY (`download_id`)
 );
 
-DROP TABLE IF EXISTS `download_description`;
-CREATE TABLE `download_description` (
-	`download_id` int(11) NOT NULL  ,
-	`language_id` int(11) NOT NULL  ,
-	`name` varchar(64) NOT NULL DEFAULT '' ,
-	PRIMARY KEY (`download_id`,`language_id`)
-);
-
-DROP TABLE IF EXISTS `extension`;
-CREATE TABLE `extension` (
-	`extension_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`type` varchar(32) NOT NULL  ,
-	`code` varchar(32) NOT NULL  ,
-	`title` varchar(255) NOT NULL  ,
-	`settings` text  DEFAULT NULL ,
-	`sort_order` int(10) NOT NULL DEFAULT '0' ,
-	`status` int(10) unsigned NOT NULL DEFAULT '1' ,
-	PRIMARY KEY (`extension_id`)
-);
-
-INSERT INTO `extension` VALUES ('500','total','sub_total','Sub Total','','0','1'),('502','total','tax','Tax','','6','1'),('503','total','shipping','Shipping','a:1:{s:9:\"estimator\";s:1:\"0\";}','4','1'),('504','total','total','Total','','10','1'),('505','payment','braintree','Credit Card','a:7:{s:11:\"merchant_id\";s:16:\"k238wgm23hh9835n\";s:10:\"public_key\";s:16:\"n2rb33xwcqyg8xqt\";s:11:\"private_key\";s:32:\"0175ed283c85ca1ae85b6eaf0d1049b1\";s:26:\"client_side_encryption_key\";s:360:\"MIIBCgKCAQEAzSy5NvvEqPyutLfzLmURQcXf2nm2Hhf8++EjBUakx1BlsFvKRl/3d667WafXbZ5SL33cTRWHxM1cRkBTBRnGqtLMD5RdCT7NSvE4F2q0zLNEsKolJLKkRSIeAQ4Q/ZKEzhxmBOEfLWbKWZYDYTCv3YOhLsuLjowh1BgMPla5oWd1ylQnOKXgrDLCRLIQnxRoIqTng8F5iTpQpY32kaI8XT+rfwbKmCQ84HyKdP55BQpUR+HLJOuh5mcWh3Z8MCax1+nFoipxvVhFmqGrDwuZ+LoWOsrLkJyny8MXUdv7zriNG2FsMgVvQ6KNzSYYVJ6RjGCLwEoHu4a98u53D9hv8wIDAQAB\";s:4:\"mode\";s:10:\"production\";s:9:\"min_total\";s:1:\"0\";s:11:\"geo_zone_id\";s:1:\"0\";}','0','1'),('506','payment','braintree','Credit Card','a:7:{s:11:\"merchant_id\";s:16:\"k238wgm23hh9835n\";s:10:\"public_key\";s:16:\"n2rb33xwcqyg8xqt\";s:11:\"private_key\";s:32:\"0175ed283c85ca1ae85b6eaf0d1049b1\";s:26:\"client_side_encryption_key\";s:360:\"MIIBCgKCAQEAzSy5NvvEqPyutLfzLmURQcXf2nm2Hhf8++EjBUakx1BlsFvKRl/3d667WafXbZ5SL33cTRWHxM1cRkBTBRnGqtLMD5RdCT7NSvE4F2q0zLNEsKolJLKkRSIeAQ4Q/ZKEzhxmBOEfLWbKWZYDYTCv3YOhLsuLjowh1BgMPla5oWd1ylQnOKXgrDLCRLIQnxRoIqTng8F5iTpQpY32kaI8XT+rfwbKmCQ84HyKdP55BQpUR+HLJOuh5mcWh3Z8MCax1+nFoipxvVhFmqGrDwuZ+LoWOsrLkJyny8MXUdv7zriNG2FsMgVvQ6KNzSYYVJ6RjGCLwEoHu4a98u53D9hv8wIDAQAB\";s:4:\"mode\";s:10:\"production\";s:9:\"min_total\";s:1:\"0\";s:11:\"geo_zone_id\";s:1:\"0\";}','0','1'),('511','total','realmeal','Realmeal','','0','1'),('513','shipping','amount','Shipping','a:3:{s:8:\"priceset\";a:1:{i:0;a:6:{s:5:\"range\";s:2:\"gt\";s:5:\"total\";s:1:\"0\";s:4:\"from\";s:1:\"0\";s:2:\"to\";s:3:\"100\";s:4:\"cost\";s:2:\"25\";s:4:\"type\";s:5:\"fixed\";}}s:9:\"min_total\";s:1:\"0\";s:11:\"geo_zone_id\";s:1:\"0\";}','0','1');
-
 DROP TABLE IF EXISTS `geo_zone`;
 CREATE TABLE `geo_zone` (
 	`geo_zone_id` int(11) NOT NULL  AUTO_INCREMENT,
@@ -193,6 +170,19 @@ CREATE TABLE `geo_zone` (
 );
 
 INSERT INTO `geo_zone` VALUES ('3','United K','United K','0','2013-05-22 00:24:43','2009-01-06 23:26:25'),('5','US &amp; Canada','US &amp; Canada','0','2013-05-22 00:21:51','2012-08-30 15:27:08'),('6','California','California, USA','0','2013-05-22 00:24:08','2012-08-31 19:17:00'),('8','Canada','Canada','0','2013-05-22 00:22:46','2013-05-21 22:38:29'),('9','International','Everything Excluding US &amp; Canada','1','2013-05-22 00:22:28','2013-05-22 00:03:17'),('10','United States','United States (all zones)','0','2013-05-22 00:27:08','2013-05-22 00:27:08');
+
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+	`history_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
+	`user_id` int(10) NOT NULL  ,
+	`table` varchar(45) NOT NULL  ,
+	`row_id` int(10) NOT NULL  ,
+	`action` varchar(32) NOT NULL  ,
+	`message` varchar(100)  DEFAULT NULL ,
+	`data` text  DEFAULT NULL ,
+	`date` datetime NOT NULL  ,
+	PRIMARY KEY (`history_id`)
+);
 
 DROP TABLE IF EXISTS `language`;
 CREATE TABLE `language` (
@@ -233,9 +223,21 @@ DROP TABLE IF EXISTS `layout_route`;
 CREATE TABLE `layout_route` (
 	`layout_route_id` int(11) NOT NULL  AUTO_INCREMENT,
 	`layout_id` int(11) NOT NULL  ,
-	`store_id` int(11) NOT NULL  ,
 	`route` varchar(255) NOT NULL  ,
 	PRIMARY KEY (`layout_route_id`)
+);
+
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE `log` (
+	`log_id` int(11) unsigned NOT NULL  AUTO_INCREMENT,
+	`name` varchar(45) NOT NULL  ,
+	`uri` varchar(100) NOT NULL  ,
+	`query` varchar(255)  DEFAULT NULL ,
+	`user_agent` varchar(255)  DEFAULT NULL ,
+	`message` text NOT NULL  ,
+	`ip` varchar(25)  DEFAULT NULL ,
+	`date` datetime NOT NULL  ,
+	PRIMARY KEY (`log_id`)
 );
 
 DROP TABLE IF EXISTS `navigation`;
@@ -246,15 +248,15 @@ CREATE TABLE `navigation` (
 	`name` varchar(45) NOT NULL  ,
 	`display_name` varchar(255) NOT NULL  ,
 	`title` varchar(45) NOT NULL  ,
-	`href` text NOT NULL  ,
+	`path` text NOT NULL  ,
 	`query` text  DEFAULT NULL ,
 	`condition` varchar(45) NOT NULL  ,
 	`status` int(10) unsigned NOT NULL DEFAULT '0' ,
-	`sort_order` int(10) unsigned NOT NULL DEFAULT '0' ,
+	`sort_order` float NOT NULL DEFAULT '0' ,
 	PRIMARY KEY (`navigation_id`)
 );
 
-INSERT INTO `navigation` VALUES ('4918','31','0','account','My Account','Manage your acocunt','account/account','','user_logged','1','0'),('4919','31','0','logout','Logout','Logout of your account','account/logout','','user_logged','1','1'),('4920','31','0','register','Register','Create a new account','account/register','','user_logged_out','1','2'),('9421','10','0','customer_service','Customer Service','Contact Us','page/contact','','always','1','0'),('9422','10','0','delivery','Delivery &amp; Packaging','Our Delivery and Packaging Method','page/delivery','','always','1','1'),('9423','10','0','privacy_policy','Privacy Policy','Privacy Policy','page/privacy','','always','1','2'),('9424','10','0','terms_conditions','Terms &amp; Conditions','Terms &amp; Conditions','page/terms','','always','1','3'),('9487','32','0','cart','Cart','View Cart','cart','','cart_not_empty','1','0'),('9488','32','0','checkout','Checkout','checkout','checkout','','cart_not_empty','1','1'),('9555','9','0','home','Home','Home','common/home','','always','1','0'),('9556','9','0','contact','Contact Us','Contact Us','page/contact','','always','1','1'),('9557','65','0','home','Home','','','','','1','0'),('9558','65','0','dashboards','Dashboards','','admin/dashboard','','','1','1'),('9559','65','0','content','Content','','','','','1','2'),('9560','65','9559','content_blocks','Blocks','','admin/block','','','1','0'),('9561','65','9559','content_pages','Pages','','admin/page','','','1','1'),('9562','65','0','plugins','Plugins','','admin/plugin/plugin','','','1','3'),('9563','65','0','users','Users','','','','','1','4'),('9564','65','9563','users_users','Users','','admin/user','','','1','0'),('9565','65','9563','users_user_roles','User Roles','','admin/setting/role','','','1','1'),('9566','65','0','system','System','','','','','1','5'),('9567','65','9566','system_settings','Settings','','admin/setting/store','','','1','0'),('9568','65','9567','system_settings_general','General','','admin/setting/setting','','','1','0'),('9569','65','9567','system_settings_update','Update','','admin/setting/update','','','1','1'),('9570','65','9567','system_settings_controller_overrides','Controller Overrides','','admin/setting/controller_override','','','1','2'),('9571','65','9566','system_mail','Mail','','','','','1','1'),('9572','65','9571','system_mail_send_email','Send Email','','admin/mail/send_email','','','1','0'),('9573','65','9571','system_mail_mail_messages','Mail Messages','','admin/mail/messages','','','1','1'),('9574','65','9571','system_mail_error','Failed Messages','','admin/mail/error','','','1','2'),('9575','65','9566','system_views','Views','','admin/view','','','1','2'),('9576','65','9566','system_url_alias','URL Alias','','admin/setting/url_alias','','','1','3'),('9577','65','9566','system_cron','Cron','','admin/setting/cron','','','1','4'),('9578','65','9566','system_navigation','Navigation','','admin/design/navigation','','','1','5'),('9579','65','9566','system_design','Design','','','','','1','6'),('9580','65','9579','system_design_layouts','Layouts','','admin/design/layout','','','1','0'),('9581','65','9566','system_system_clearcache','Clear Cache','','admin/tool/tool/clear_cache','','','1','7'),('9582','65','9566','system_system_tools','System Tools','','admin/tool/tool','','','1','8'),('9583','65','9566','system_logs','Logs','','admin/tool/logs','','','1','9'),('9584','65','9566','system_localisation','Localisation','','','','','1','10'),('9585','65','9584','system_localisation_currencies','Currencies','','admin/localisation/currency','','','1','0'),('9586','65','9584','system_localisation_languages','Languages','','admin/localisation/language','','','1','1'),('9587','65','9584','system_localisation_zones','Zones','','admin/localisation/zone','','','1','2'),('9588','65','9584','system_localisation_countries','Countries','','admin/localisation/country','','','1','3'),('9589','65','9584','system_localisation_geo_zones','Geo Zones','','admin/localisation/geo_zone','','','1','4'),('9590','65','0','development','Development','','admin/dev','','','1','15');
+INSERT INTO `navigation` VALUES ('4918','31','0','account','My Account','Manage your account','account/account','','user_logged','1','0'),('4919','31','0','logout','Logout','Logout of your account','account/logout','','user_logged','1','1'),('4920','31','0','register','Register','Create a new account','account/register','','user_logged_out','1','2'),('9421','10','0','customer_service','Customer Service','Contact Us','contact','','always','1','0'),('9422','10','0','delivery','Delivery &amp; Packaging','Our Delivery and Packaging Method','page/delivery','','always','1','1'),('9423','10','0','privacy_policy','Privacy Policy','Privacy Policy','page/privacy','','always','1','2'),('9424','10','0','terms_conditions','Terms &amp; Conditions','Terms &amp; Conditions','page/terms','','always','1','3'),('9731','68','0','home','Home','','','','','1','0'),('9732','68','0','dashboards','Dashboards','','admin/dashboard','','','1','1'),('9733','68','0','content','Content','','','','','1','2'),('9734','68','9733','content_blocks','Blocks','','admin/block','','','1','0'),('9735','68','9733','content_pages','Pages','','admin/page','','','1','1'),('9736','68','0','plugins','Plugins','','admin/plugin','','','1','3'),('9737','68','0','users','Users','','','','','1','4'),('9738','68','9737','users_users','Users','','admin/user','','','1','0'),('9739','68','9737','users_user_roles','User Roles','','admin/settings/role','','','1','1'),('9740','68','0','system','System','','','','','1','5'),('9741','68','9740','system_settings','Settings','','admin/settings','','','1','0'),('9742','68','9740','system_mail','Mail','','','','','1','1'),('9743','68','9742','system_mail_send_email','Send Email','','admin/mail/send_email','','','1','0'),('9744','68','9742','system_mail_mail_messages','Mail Messages','','admin/mail/messages','','','1','1'),('9745','68','9742','system_mail_error','Failed Messages','','admin/mail/error','','','1','2'),('9746','68','9740','system_views','Views','','admin/view','','','1','2'),('9747','68','9740','system_url_alias','URL Alias','','admin/settings/url_alias','','','1','3'),('9748','68','9740','system_cron','Cron','','admin/settings/cron','','','1','4'),('9749','68','9740','system_navigation','Navigation','','admin/navigation','','','1','5'),('9750','68','9740','system_design','Design','','','','','1','6'),('9751','68','9750','system_design_layouts','Layouts','','admin/layout','','','1','0'),('9752','68','9740','system_system_clearcache','Clear Cache','','admin/tool/tool/clear_cache','','','1','7'),('9753','68','9740','system_system_tools','System Tools','','admin/tool/tool','','','1','8'),('9754','68','9740','system_logs','Logs','','admin/tool/logs','','','1','9'),('9755','68','9740','system_localisation','Localisation','','','','','1','10'),('9756','68','9755','system_localisation_currencies','Currencies','','admin/localisation/currency','','','1','0'),('9757','68','9755','system_localisation_languages','Languages','','admin/localisation/language','','','1','1'),('9758','68','9755','system_localisation_zones','Zones','','admin/localisation/zone','','','1','2'),('9759','68','9755','system_localisation_countries','Countries','','admin/localisation/country','','','1','3'),('9760','68','9755','system_localisation_geo_zones','Geo Zones','','admin/localisation/geo_zone','','','1','4'),('9761','68','0','development','Development','','admin/dev','','','1','15'),('9762','9','0','home','Home','Home','index','','','1','0'),('9763','9','0','contact','Contact Us','Contact Us','contact','','','1','1');
 
 DROP TABLE IF EXISTS `navigation_group`;
 CREATE TABLE `navigation_group` (
@@ -264,16 +266,7 @@ CREATE TABLE `navigation_group` (
 	PRIMARY KEY (`navigation_group_id`)
 );
 
-INSERT INTO `navigation_group` VALUES ('9','primary','1'),('10','footer','1'),('31','account','0'),('32','cart','1'),('65','admin','1');
-
-DROP TABLE IF EXISTS `navigation_store`;
-CREATE TABLE `navigation_store` (
-	`navigation_group_id` int(10) unsigned NOT NULL  ,
-	`store_id` int(10) NOT NULL  ,
-	PRIMARY KEY (`navigation_group_id`,`store_id`)
-);
-
-INSERT INTO `navigation_store` VALUES ('9','1'),('10','1'),('31','1'),('32','1'),('65','-1');
+INSERT INTO `navigation_group` VALUES ('9','primary','1'),('10','footer','1'),('31','account','0'),('68','admin','1');
 
 DROP TABLE IF EXISTS `newsletter`;
 CREATE TABLE `newsletter` (
@@ -293,26 +286,40 @@ CREATE TABLE `page` (
 	`title` varchar(45) NOT NULL  ,
 	`layout_id` int(10) unsigned NOT NULL  ,
 	`template` varchar(128) NOT NULL  ,
+	`content` text NOT NULL  ,
+	`style` text NOT NULL  ,
 	`meta_keywords` text  DEFAULT NULL ,
 	`meta_description` text  DEFAULT NULL ,
 	`status` int(10) unsigned NOT NULL DEFAULT '1' ,
 	`display_title` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
 	`cache` tinyint(3) unsigned NOT NULL DEFAULT '1' ,
+	`date_updated` datetime NOT NULL  ,
+	`updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' ,
 	PRIMARY KEY (`page_id`)
 );
 
-DROP TABLE IF EXISTS `page_store`;
-CREATE TABLE `page_store` (
+DROP TABLE IF EXISTS `page_history`;
+CREATE TABLE `page_history` (
+	`page_history_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
 	`page_id` int(10) unsigned NOT NULL  ,
-	`store_id` int(10) unsigned NOT NULL  ,
-	`layout_id` int(10) unsigned NOT NULL  ,
-	PRIMARY KEY (`page_id`,`store_id`)
+	`name` varchar(128) NOT NULL  ,
+	`title` varchar(45) NOT NULL  ,
+	`template` varchar(128) NOT NULL  ,
+	`content` text NOT NULL  ,
+	`style` text NOT NULL  ,
+	`meta_keywords` text  DEFAULT NULL ,
+	`meta_description` text  DEFAULT NULL ,
+	`display_title` tinyint(3) unsigned NOT NULL  ,
+	`date` datetime NOT NULL  ,
+	`user_id` int(10) unsigned NOT NULL  ,
+	PRIMARY KEY (`page_history_id`)
 );
 
 DROP TABLE IF EXISTS `plugin`;
 CREATE TABLE `plugin` (
 	`plugin_id` int(11) unsigned NOT NULL  AUTO_INCREMENT,
 	`name` varchar(60) NOT NULL  ,
+	`version` varchar(45) NOT NULL  ,
 	`status` int(10) unsigned NOT NULL DEFAULT '1' ,
 	PRIMARY KEY (`plugin_id`)
 );
@@ -355,7 +362,6 @@ CREATE TABLE `session` (
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE `setting` (
 	`setting_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`store_id` int(11) NOT NULL DEFAULT '0' ,
 	`group` varchar(32) NOT NULL  ,
 	`key` varchar(64) NOT NULL DEFAULT '' ,
 	`value` text NOT NULL  ,
@@ -371,6 +377,7 @@ CREATE TABLE `store` (
 	`name` varchar(64) NOT NULL  ,
 	`url` varchar(255) NOT NULL  ,
 	`ssl` varchar(255) NOT NULL  ,
+	`prefix` varchar(15) NOT NULL  ,
 	PRIMARY KEY (`store_id`)
 );
 
@@ -405,7 +412,6 @@ CREATE TABLE `url_alias` (
 	`path` varchar(255) NOT NULL  ,
 	`query` varchar(255) NOT NULL  ,
 	`status` int(2) unsigned NOT NULL DEFAULT '1' ,
-	`store_id` int(10) NOT NULL  ,
 	`redirect` varchar(255)  DEFAULT NULL ,
 	PRIMARY KEY (`url_alias_id`)
 );
@@ -440,10 +446,11 @@ CREATE TABLE `user_role` (
 	`user_role_id` int(11) NOT NULL  AUTO_INCREMENT,
 	`name` varchar(64) NOT NULL  ,
 	`permissions` text NOT NULL  ,
+	`level` int(10) unsigned NOT NULL  ,
 	PRIMARY KEY (`user_role_id`)
 );
 
-INSERT INTO `user_role` VALUES ('1','Top Administrator','a:2:{s:6:\"access\";a:162:{i:0;s:11:\"block/block\";i:1;s:17:\"catalog/attribute\";i:2;s:23:\"catalog/attribute_group\";i:3;s:16:\"catalog/category\";i:4;s:16:\"catalog/download\";i:5;s:17:\"catalog/flashsale\";i:6;s:19:\"catalog/information\";i:7;s:20:\"catalog/manufacturer\";i:8;s:14:\"catalog/option\";i:9;s:15:\"catalog/product\";i:10;s:14:\"catalog/review\";i:11;s:11:\"cms/article\";i:12;s:12:\"cms/category\";i:13;s:16:\"common/elmanager\";i:14;s:18:\"common/filemanager\";i:15;s:13:\"design/banner\";i:16;s:13:\"design/layout\";i:17;s:17:\"design/navigation\";i:18;s:14:\"extension/feed\";i:19;s:16:\"extension/module\";i:20;s:17:\"extension/payment\";i:21;s:16:\"extension/plugin\";i:22;s:18:\"extension/shipping\";i:23;s:15:\"extension/total\";i:24;s:16:\"feed/google_base\";i:25;s:19:\"feed/google_sitemap\";i:26;s:18:\"help/documentation\";i:27;s:16:\"includes/contact\";i:28;s:20:\"localisation/country\";i:29;s:21:\"localisation/currency\";i:30;s:21:\"localisation/geo_zone\";i:31;s:21:\"localisation/language\";i:32;s:25:\"localisation/length_class\";i:33;s:25:\"localisation/order_status\";i:34;s:26:\"localisation/return_action\";i:35;s:26:\"localisation/return_reason\";i:36;s:26:\"localisation/return_status\";i:37;s:25:\"localisation/stock_status\";i:38;s:22:\"localisation/tax_class\";i:39;s:21:\"localisation/tax_rate\";i:40;s:25:\"localisation/weight_class\";i:41;s:17:\"localisation/zone\";i:42;s:13:\"mail/messages\";i:43;s:15:\"mail/newsletter\";i:44;s:15:\"mail/send_email\";i:45;s:14:\"module/account\";i:46;s:16:\"module/affiliate\";i:47;s:13:\"module/banner\";i:48;s:17:\"module/bestseller\";i:49;s:15:\"module/carousel\";i:50;s:15:\"module/category\";i:51;s:11:\"module/cron\";i:52;s:23:\"module/designer_sidebar\";i:53;s:18:\"module/dn_carousel\";i:54;s:15:\"module/featured\";i:55;s:24:\"module/featured_carousel\";i:56;s:25:\"module/featured_flashsale\";i:57;s:24:\"module/flashsale_sidebar\";i:58;s:18:\"module/google_talk\";i:59;s:18:\"module/information\";i:60;s:14:\"module/janrain\";i:61;s:13:\"module/latest\";i:62;s:19:\"module/main_sidebar\";i:63;s:19:\"module/page_headers\";i:64;s:16:\"module/recaptcha\";i:65;s:18:\"module/rss_article\";i:66;s:17:\"module/search_bar\";i:67;s:16:\"module/slideshow\";i:68;s:14:\"module/special\";i:69;s:12:\"module/store\";i:70;s:14:\"module/welcome\";i:71;s:16:\"payment/alertpay\";i:72;s:24:\"payment/authorizenet_aim\";i:73;s:21:\"payment/bank_transfer\";i:74;s:14:\"payment/cheque\";i:75;s:11:\"payment/cod\";i:76;s:21:\"payment/free_checkout\";i:77;s:14:\"payment/liqpay\";i:78;s:20:\"payment/moneybookers\";i:79;s:14:\"payment/nochex\";i:80;s:15:\"payment/paymate\";i:81;s:16:\"payment/paypoint\";i:82;s:26:\"payment/perpetual_payments\";i:83;s:14:\"payment/pp_pro\";i:84;s:17:\"payment/pp_pro_uk\";i:85;s:19:\"payment/pp_standard\";i:86;s:15:\"payment/sagepay\";i:87;s:22:\"payment/sagepay_direct\";i:88;s:18:\"payment/sagepay_us\";i:89;s:19:\"payment/twocheckout\";i:90;s:28:\"payment/web_payment_software\";i:91;s:16:\"payment/worldpay\";i:92;s:27:\"report/affiliate_commission\";i:93;s:22:\"report/customer_credit\";i:94;s:21:\"report/customer_order\";i:95;s:22:\"report/customer_reward\";i:96;s:23:\"report/flashsale_viewed\";i:97;s:24:\"report/product_purchased\";i:98;s:21:\"report/product_viewed\";i:99;s:18:\"report/sale_coupon\";i:100;s:17:\"report/sale_order\";i:101;s:18:\"report/sale_return\";i:102;s:20:\"report/sale_shipping\";i:103;s:15:\"report/sale_tax\";i:104;s:14:\"sale/affiliate\";i:105;s:11:\"sale/coupon\";i:106;s:13:\"sale/customer\";i:107;s:23:\"sale/customer_blacklist\";i:108;s:19:\"sale/customer_group\";i:109;s:10:\"sale/order\";i:110;s:11:\"sale/return\";i:111;s:12:\"sale/voucher\";i:112;s:18:\"sale/voucher_theme\";i:113;s:16:\"setting/db_rules\";i:114;s:15:\"setting/setting\";i:115;s:13:\"setting/store\";i:116;s:17:\"setting/url_alias\";i:117;s:15:\"shipping/amount\";i:118;s:17:\"shipping/citylink\";i:119;s:13:\"shipping/flat\";i:120;s:13:\"shipping/free\";i:121;s:13:\"shipping/item\";i:122;s:23:\"shipping/parcelforce_48\";i:123;s:15:\"shipping/pickup\";i:124;s:19:\"shipping/royal_mail\";i:125;s:12:\"shipping/ups\";i:126;s:13:\"shipping/usps\";i:127;s:15:\"shipping/weight\";i:128;s:11:\"tool/backup\";i:129;s:9:\"tool/data\";i:130;s:14:\"tool/error_log\";i:131;s:9:\"tool/tool\";i:132;s:12:\"total/coupon\";i:133;s:12:\"total/credit\";i:134;s:14:\"total/handling\";i:135;s:19:\"total/low_order_fee\";i:136;s:12:\"total/reward\";i:137;s:14:\"total/shipping\";i:138;s:15:\"total/sub_total\";i:139;s:9:\"total/tax\";i:140;s:11:\"total/total\";i:141;s:13:\"total/voucher\";i:142;s:9:\"user/user\";i:143;s:20:\"user/user_permission\";i:144;s:15:\"module/featured\";i:145;s:13:\"shipping/item\";i:146;s:13:\"shipping/usps\";i:147;s:18:\"total/subscription\";i:148;s:18:\"total/subscription\";i:149;s:18:\"total/subscription\";i:150;s:15:\"total/sub_total\";i:151;s:18:\"total/subscription\";i:152;s:9:\"total/tax\";i:153;s:14:\"total/shipping\";i:154;s:11:\"total/total\";i:155;s:17:\"payment/braintree\";i:156;s:17:\"payment/braintree\";i:157;s:14:\"total/realmeal\";i:158;s:14:\"total/realmeal\";i:159;s:14:\"total/realmeal\";i:160;s:14:\"total/realmeal\";i:161;s:14:\"total/realmeal\";}s:6:\"modify\";a:162:{i:0;s:11:\"block/block\";i:1;s:17:\"catalog/attribute\";i:2;s:23:\"catalog/attribute_group\";i:3;s:16:\"catalog/category\";i:4;s:16:\"catalog/download\";i:5;s:17:\"catalog/flashsale\";i:6;s:19:\"catalog/information\";i:7;s:20:\"catalog/manufacturer\";i:8;s:14:\"catalog/option\";i:9;s:15:\"catalog/product\";i:10;s:14:\"catalog/review\";i:11;s:11:\"cms/article\";i:12;s:12:\"cms/category\";i:13;s:16:\"common/elmanager\";i:14;s:18:\"common/filemanager\";i:15;s:13:\"design/banner\";i:16;s:13:\"design/layout\";i:17;s:17:\"design/navigation\";i:18;s:14:\"extension/feed\";i:19;s:16:\"extension/module\";i:20;s:17:\"extension/payment\";i:21;s:16:\"extension/plugin\";i:22;s:18:\"extension/shipping\";i:23;s:15:\"extension/total\";i:24;s:16:\"feed/google_base\";i:25;s:19:\"feed/google_sitemap\";i:26;s:18:\"help/documentation\";i:27;s:16:\"includes/contact\";i:28;s:20:\"localisation/country\";i:29;s:21:\"localisation/currency\";i:30;s:21:\"localisation/geo_zone\";i:31;s:21:\"localisation/language\";i:32;s:25:\"localisation/length_class\";i:33;s:25:\"localisation/order_status\";i:34;s:26:\"localisation/return_action\";i:35;s:26:\"localisation/return_reason\";i:36;s:26:\"localisation/return_status\";i:37;s:25:\"localisation/stock_status\";i:38;s:22:\"localisation/tax_class\";i:39;s:21:\"localisation/tax_rate\";i:40;s:25:\"localisation/weight_class\";i:41;s:17:\"localisation/zone\";i:42;s:13:\"mail/messages\";i:43;s:15:\"mail/newsletter\";i:44;s:15:\"mail/send_email\";i:45;s:14:\"module/account\";i:46;s:16:\"module/affiliate\";i:47;s:13:\"module/banner\";i:48;s:17:\"module/bestseller\";i:49;s:15:\"module/carousel\";i:50;s:15:\"module/category\";i:51;s:11:\"module/cron\";i:52;s:23:\"module/designer_sidebar\";i:53;s:18:\"module/dn_carousel\";i:54;s:15:\"module/featured\";i:55;s:24:\"module/featured_carousel\";i:56;s:25:\"module/featured_flashsale\";i:57;s:24:\"module/flashsale_sidebar\";i:58;s:18:\"module/google_talk\";i:59;s:18:\"module/information\";i:60;s:14:\"module/janrain\";i:61;s:13:\"module/latest\";i:62;s:19:\"module/main_sidebar\";i:63;s:19:\"module/page_headers\";i:64;s:16:\"module/recaptcha\";i:65;s:18:\"module/rss_article\";i:66;s:17:\"module/search_bar\";i:67;s:16:\"module/slideshow\";i:68;s:14:\"module/special\";i:69;s:12:\"module/store\";i:70;s:14:\"module/welcome\";i:71;s:16:\"payment/alertpay\";i:72;s:24:\"payment/authorizenet_aim\";i:73;s:21:\"payment/bank_transfer\";i:74;s:14:\"payment/cheque\";i:75;s:11:\"payment/cod\";i:76;s:21:\"payment/free_checkout\";i:77;s:14:\"payment/liqpay\";i:78;s:20:\"payment/moneybookers\";i:79;s:14:\"payment/nochex\";i:80;s:15:\"payment/paymate\";i:81;s:16:\"payment/paypoint\";i:82;s:26:\"payment/perpetual_payments\";i:83;s:14:\"payment/pp_pro\";i:84;s:17:\"payment/pp_pro_uk\";i:85;s:19:\"payment/pp_standard\";i:86;s:15:\"payment/sagepay\";i:87;s:22:\"payment/sagepay_direct\";i:88;s:18:\"payment/sagepay_us\";i:89;s:19:\"payment/twocheckout\";i:90;s:28:\"payment/web_payment_software\";i:91;s:16:\"payment/worldpay\";i:92;s:27:\"report/affiliate_commission\";i:93;s:22:\"report/customer_credit\";i:94;s:21:\"report/customer_order\";i:95;s:22:\"report/customer_reward\";i:96;s:23:\"report/flashsale_viewed\";i:97;s:24:\"report/product_purchased\";i:98;s:21:\"report/product_viewed\";i:99;s:18:\"report/sale_coupon\";i:100;s:17:\"report/sale_order\";i:101;s:18:\"report/sale_return\";i:102;s:20:\"report/sale_shipping\";i:103;s:15:\"report/sale_tax\";i:104;s:14:\"sale/affiliate\";i:105;s:11:\"sale/coupon\";i:106;s:13:\"sale/customer\";i:107;s:23:\"sale/customer_blacklist\";i:108;s:19:\"sale/customer_group\";i:109;s:10:\"sale/order\";i:110;s:11:\"sale/return\";i:111;s:12:\"sale/voucher\";i:112;s:18:\"sale/voucher_theme\";i:113;s:16:\"setting/db_rules\";i:114;s:15:\"setting/setting\";i:115;s:13:\"setting/store\";i:116;s:17:\"setting/url_alias\";i:117;s:15:\"shipping/amount\";i:118;s:17:\"shipping/citylink\";i:119;s:13:\"shipping/flat\";i:120;s:13:\"shipping/free\";i:121;s:13:\"shipping/item\";i:122;s:23:\"shipping/parcelforce_48\";i:123;s:15:\"shipping/pickup\";i:124;s:19:\"shipping/royal_mail\";i:125;s:12:\"shipping/ups\";i:126;s:13:\"shipping/usps\";i:127;s:15:\"shipping/weight\";i:128;s:11:\"tool/backup\";i:129;s:9:\"tool/data\";i:130;s:14:\"tool/error_log\";i:131;s:9:\"tool/tool\";i:132;s:12:\"total/coupon\";i:133;s:12:\"total/credit\";i:134;s:14:\"total/handling\";i:135;s:19:\"total/low_order_fee\";i:136;s:12:\"total/reward\";i:137;s:14:\"total/shipping\";i:138;s:15:\"total/sub_total\";i:139;s:9:\"total/tax\";i:140;s:11:\"total/total\";i:141;s:13:\"total/voucher\";i:142;s:9:\"user/user\";i:143;s:20:\"user/user_permission\";i:144;s:15:\"module/featured\";i:145;s:13:\"shipping/item\";i:146;s:13:\"shipping/usps\";i:147;s:18:\"total/subscription\";i:148;s:18:\"total/subscription\";i:149;s:18:\"total/subscription\";i:150;s:15:\"total/sub_total\";i:151;s:18:\"total/subscription\";i:152;s:9:\"total/tax\";i:153;s:14:\"total/shipping\";i:154;s:11:\"total/total\";i:155;s:17:\"payment/braintree\";i:156;s:17:\"payment/braintree\";i:157;s:14:\"total/realmeal\";i:158;s:14:\"total/realmeal\";i:159;s:14:\"total/realmeal\";i:160;s:14:\"total/realmeal\";i:161;s:14:\"total/realmeal\";}}'),('10','Demonstration',''),('11','Basic Member',''),('13','Administrator','a:2:{s:6:\"access\";a:80:{s:23:\"catalog/attribute_group\";s:23:\"catalog/attribute_group\";s:16:\"catalog/category\";s:16:\"catalog/category\";s:16:\"catalog/download\";s:16:\"catalog/download\";s:20:\"catalog/manufacturer\";s:20:\"catalog/manufacturer\";s:14:\"catalog/option\";s:14:\"catalog/option\";s:15:\"catalog/product\";s:15:\"catalog/product\";s:21:\"catalog/product_class\";s:21:\"catalog/product_class\";s:14:\"catalog/review\";s:14:\"catalog/review\";s:20:\"catalog/subscription\";s:20:\"catalog/subscription\";s:11:\"data/locale\";s:11:\"data/locale\";s:13:\"design/banner\";s:13:\"design/banner\";s:13:\"design/layout\";s:13:\"design/layout\";s:17:\"design/navigation\";s:17:\"design/navigation\";s:16:\"feed/google_base\";s:16:\"feed/google_base\";s:19:\"feed/google_sitemap\";s:19:\"feed/google_sitemap\";s:23:\"filemanager/filemanager\";s:23:\"filemanager/filemanager\";s:18:\"help/documentation\";s:18:\"help/documentation\";s:20:\"localisation/country\";s:20:\"localisation/country\";s:21:\"localisation/currency\";s:21:\"localisation/currency\";s:21:\"localisation/geo_zone\";s:21:\"localisation/geo_zone\";s:21:\"localisation/language\";s:21:\"localisation/language\";s:25:\"localisation/length_class\";s:25:\"localisation/length_class\";s:17:\"localisation/zone\";s:17:\"localisation/zone\";s:25:\"localisation/stock_status\";s:25:\"localisation/stock_status\";s:22:\"localisation/tax_class\";s:22:\"localisation/tax_class\";s:21:\"localisation/tax_rate\";s:21:\"localisation/tax_rate\";s:25:\"localisation/weight_class\";s:25:\"localisation/weight_class\";s:10:\"mail/error\";s:10:\"mail/error\";s:13:\"mail/messages\";s:13:\"mail/messages\";s:15:\"mail/send_email\";s:15:\"mail/send_email\";s:13:\"plugin/plugin\";s:13:\"plugin/plugin\";s:12:\"sale/bitcoin\";s:12:\"sale/bitcoin\";s:11:\"sale/coupon\";s:11:\"sale/coupon\";s:13:\"sale/customer\";s:13:\"sale/customer\";s:23:\"sale/customer_blacklist\";s:23:\"sale/customer_blacklist\";s:19:\"sale/customer_group\";s:19:\"sale/customer_group\";s:10:\"sale/order\";s:10:\"sale/order\";s:11:\"sale/return\";s:11:\"sale/return\";s:12:\"sale/voucher\";s:12:\"sale/voucher\";s:17:\"sale/subscription\";s:17:\"sale/subscription\";s:11:\"setting/dev\";s:11:\"setting/dev\";s:27:\"setting/controller_override\";s:27:\"setting/controller_override\";s:12:\"setting/cron\";s:12:\"setting/cron\";s:13:\"setting/login\";s:13:\"setting/login\";s:15:\"setting/setting\";s:15:\"setting/setting\";s:13:\"setting/store\";s:13:\"setting/store\";s:14:\"setting/update\";s:14:\"setting/update\";s:17:\"setting/url_alias\";s:17:\"setting/url_alias\";s:12:\"setting/cart\";s:12:\"setting/cart\";s:18:\"setting/cart_store\";s:18:\"setting/cart_store\";s:20:\"setting/order_status\";s:20:\"setting/order_status\";s:21:\"setting/return_action\";s:21:\"setting/return_action\";s:21:\"setting/return_policy\";s:21:\"setting/return_policy\";s:21:\"setting/return_reason\";s:21:\"setting/return_reason\";s:21:\"setting/return_status\";s:21:\"setting/return_status\";s:23:\"setting/shipping_policy\";s:23:\"setting/shipping_policy\";s:16:\"setting/realmeal\";s:16:\"setting/realmeal\";s:13:\"setting/theme\";s:13:\"setting/theme\";s:9:\"tool/logs\";s:9:\"tool/logs\";s:9:\"tool/tool\";s:9:\"tool/tool\";s:9:\"user/role\";s:9:\"user/role\";s:9:\"user/user\";s:9:\"user/user\";s:12:\"dev/db_admin\";s:12:\"dev/db_admin\";s:7:\"dev/dev\";s:7:\"dev/dev\";s:17:\"extension/payment\";s:17:\"extension/payment\";s:18:\"extension/shipping\";s:18:\"extension/shipping\";s:15:\"extension/total\";s:15:\"extension/total\";s:22:\"report/customer_credit\";s:22:\"report/customer_credit\";s:21:\"report/customer_order\";s:21:\"report/customer_order\";s:22:\"report/customer_reward\";s:22:\"report/customer_reward\";s:23:\"report/flashsale_viewed\";s:23:\"report/flashsale_viewed\";s:24:\"report/product_purchased\";s:24:\"report/product_purchased\";s:21:\"report/product_viewed\";s:21:\"report/product_viewed\";s:18:\"report/sale_coupon\";s:18:\"report/sale_coupon\";s:17:\"report/sale_order\";s:17:\"report/sale_order\";s:18:\"report/sale_return\";s:18:\"report/sale_return\";s:20:\"report/sale_shipping\";s:20:\"report/sale_shipping\";s:15:\"report/sale_tax\";s:15:\"report/sale_tax\";s:5:\"block\";s:5:\"block\";s:4:\"page\";s:4:\"page\";}s:6:\"modify\";a:80:{s:23:\"catalog/attribute_group\";s:23:\"catalog/attribute_group\";s:16:\"catalog/category\";s:16:\"catalog/category\";s:16:\"catalog/download\";s:16:\"catalog/download\";s:20:\"catalog/manufacturer\";s:20:\"catalog/manufacturer\";s:14:\"catalog/option\";s:14:\"catalog/option\";s:15:\"catalog/product\";s:15:\"catalog/product\";s:21:\"catalog/product_class\";s:21:\"catalog/product_class\";s:14:\"catalog/review\";s:14:\"catalog/review\";s:20:\"catalog/subscription\";s:20:\"catalog/subscription\";s:11:\"data/locale\";s:11:\"data/locale\";s:13:\"design/banner\";s:13:\"design/banner\";s:13:\"design/layout\";s:13:\"design/layout\";s:17:\"design/navigation\";s:17:\"design/navigation\";s:16:\"feed/google_base\";s:16:\"feed/google_base\";s:19:\"feed/google_sitemap\";s:19:\"feed/google_sitemap\";s:23:\"filemanager/filemanager\";s:23:\"filemanager/filemanager\";s:18:\"help/documentation\";s:18:\"help/documentation\";s:20:\"localisation/country\";s:20:\"localisation/country\";s:21:\"localisation/currency\";s:21:\"localisation/currency\";s:21:\"localisation/geo_zone\";s:21:\"localisation/geo_zone\";s:21:\"localisation/language\";s:21:\"localisation/language\";s:25:\"localisation/length_class\";s:25:\"localisation/length_class\";s:17:\"localisation/zone\";s:17:\"localisation/zone\";s:25:\"localisation/stock_status\";s:25:\"localisation/stock_status\";s:22:\"localisation/tax_class\";s:22:\"localisation/tax_class\";s:21:\"localisation/tax_rate\";s:21:\"localisation/tax_rate\";s:25:\"localisation/weight_class\";s:25:\"localisation/weight_class\";s:10:\"mail/error\";s:10:\"mail/error\";s:13:\"mail/messages\";s:13:\"mail/messages\";s:15:\"mail/send_email\";s:15:\"mail/send_email\";s:13:\"plugin/plugin\";s:13:\"plugin/plugin\";s:12:\"sale/bitcoin\";s:12:\"sale/bitcoin\";s:11:\"sale/coupon\";s:11:\"sale/coupon\";s:13:\"sale/customer\";s:13:\"sale/customer\";s:23:\"sale/customer_blacklist\";s:23:\"sale/customer_blacklist\";s:19:\"sale/customer_group\";s:19:\"sale/customer_group\";s:10:\"sale/order\";s:10:\"sale/order\";s:11:\"sale/return\";s:11:\"sale/return\";s:12:\"sale/voucher\";s:12:\"sale/voucher\";s:17:\"sale/subscription\";s:17:\"sale/subscription\";s:11:\"setting/dev\";s:11:\"setting/dev\";s:27:\"setting/controller_override\";s:27:\"setting/controller_override\";s:12:\"setting/cron\";s:12:\"setting/cron\";s:13:\"setting/login\";s:13:\"setting/login\";s:15:\"setting/setting\";s:15:\"setting/setting\";s:13:\"setting/store\";s:13:\"setting/store\";s:14:\"setting/update\";s:14:\"setting/update\";s:17:\"setting/url_alias\";s:17:\"setting/url_alias\";s:12:\"setting/cart\";s:12:\"setting/cart\";s:18:\"setting/cart_store\";s:18:\"setting/cart_store\";s:20:\"setting/order_status\";s:20:\"setting/order_status\";s:21:\"setting/return_action\";s:21:\"setting/return_action\";s:21:\"setting/return_policy\";s:21:\"setting/return_policy\";s:21:\"setting/return_reason\";s:21:\"setting/return_reason\";s:21:\"setting/return_status\";s:21:\"setting/return_status\";s:23:\"setting/shipping_policy\";s:23:\"setting/shipping_policy\";s:16:\"setting/realmeal\";s:16:\"setting/realmeal\";s:13:\"setting/theme\";s:13:\"setting/theme\";s:9:\"tool/logs\";s:9:\"tool/logs\";s:9:\"tool/tool\";s:9:\"tool/tool\";s:9:\"user/role\";s:9:\"user/role\";s:9:\"user/user\";s:9:\"user/user\";s:12:\"dev/db_admin\";s:12:\"dev/db_admin\";s:7:\"dev/dev\";s:7:\"dev/dev\";s:17:\"extension/payment\";s:17:\"extension/payment\";s:18:\"extension/shipping\";s:18:\"extension/shipping\";s:15:\"extension/total\";s:15:\"extension/total\";s:22:\"report/customer_credit\";s:22:\"report/customer_credit\";s:21:\"report/customer_order\";s:21:\"report/customer_order\";s:22:\"report/customer_reward\";s:22:\"report/customer_reward\";s:23:\"report/flashsale_viewed\";s:23:\"report/flashsale_viewed\";s:24:\"report/product_purchased\";s:24:\"report/product_purchased\";s:21:\"report/product_viewed\";s:21:\"report/product_viewed\";s:18:\"report/sale_coupon\";s:18:\"report/sale_coupon\";s:17:\"report/sale_order\";s:17:\"report/sale_order\";s:18:\"report/sale_return\";s:18:\"report/sale_return\";s:20:\"report/sale_shipping\";s:20:\"report/sale_shipping\";s:15:\"report/sale_tax\";s:15:\"report/sale_tax\";s:5:\"block\";s:5:\"block\";s:4:\"page\";s:4:\"page\";}}'),('14','Guest','a:1:{s:6:\"access\";a:1:{i:0;s:15:\"mail/newsletter\";}}');
+INSERT INTO `user_role` VALUES ('1','Top Administrator','','6'),('10','Demonstration','','0'),('11','Basic Member','','1'),('13','Administrator','','5'),('14','Guest','a:1:{s:6:\"access\";a:1:{i:0;s:15:\"mail/newsletter\";}}','0');
 
 DROP TABLE IF EXISTS `view`;
 CREATE TABLE `view` (

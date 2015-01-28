@@ -6,32 +6,47 @@ class App_Controller_Account extends Controller
 		'access' => '.*',
 	);
 
-	public function index()
+	public function index($content = '')
 	{
-		//Page Head
-		$this->document->setTitle(_l("Account Manager"));
+		if (!$content) {
+			return $this->details();
+		}
 
-		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url());
-		breadcrumb(_l("Account Manager"), site_url('account'));
-
-		//Page Information
-		$data['shipping_address'] = $this->customer->getDefaultShippingAddress();
-
-		//Customer Information
-		$data['customer'] = customer_info() + $this->customer->getMeta();
-
-		//Actions
-		$data['edit_account'] = site_url('account/update');
+		$data['path'] = $this->route->getPath();
+		$data['content'] = $content;
 
 		//Render
 		output($this->render('account/account', $data));
 	}
 
-	public function update()
+	public function details()
 	{
 		//Page Head
-		$this->document->setTitle(_l("My Account Information"));
+		set_page_info('title', _l("My Details"));
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url());
+		breadcrumb(_l("My Account"), site_url('account'));
+		breadcrumb(_l("My Details"), site_url('account/details'));
+
+		//Customer Information
+		$data['customer'] = customer_info();
+		$data['meta']     = $this->customer->meta();
+
+		//Render
+		$content = $this->render('account/details', $data);
+
+		if ($this->is_ajax) {
+			output($content);
+		} else {
+			$this->index($content);
+		}
+	}
+
+	public function form()
+	{
+		//Page Head
+		set_page_info('title', _l("My Account Information"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
@@ -41,7 +56,7 @@ class App_Controller_Account extends Controller
 		//Handle POST
 		if (!IS_POST) {
 			$customer_info             = customer_info();
-			$customer_info['metadata'] = $this->customer->getMeta();
+			$customer_info['metadata'] = $this->customer->meta();
 		} else {
 			$customer_info = $_POST;
 		}
@@ -64,7 +79,7 @@ class App_Controller_Account extends Controller
 			$data['metadata']['default_shipping_address_id'] = '';
 		}
 
-		$data['data_addresses'] = $this->customer->getShippingAddresses();
+		$data['data_addresses'] = $this->customer->getAddresses();
 
 		//Actions
 		$data['save'] = site_url('account/submit-update');
@@ -73,17 +88,23 @@ class App_Controller_Account extends Controller
 		output($this->render('account/update', $data));
 	}
 
-	public function submit_update()
+	public function update()
 	{
-		$this->customer->edit($_POST);
+		if ($this->Model_Customer->save($this->customer->getId(), $_POST)) {
+			message('success', _l("Your account information has been updated successfully!"));
+		} else {
+			message('error', $this->Model_Customer->getError());
+		}
 
 		if (!empty($_POST['payment_code']) && !empty($_POST['payment_key'])) {
 			$this->System_Extension_Payment->get($_POST['payment_code'])->updateCard($_POST['payment_key'], array('default' => true));
 		}
 
-		message('success', _l("Your account information has been updated successfully!"));
-
-		redirect('account');
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('account');
+		}
 	}
 
 	public function remove_address()
@@ -94,8 +115,8 @@ class App_Controller_Account extends Controller
 			}
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('account/update');
 		}

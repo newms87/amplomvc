@@ -4,7 +4,7 @@ class App_Controller_Error_NotFound extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("The page you requested cannot be found!"));
+		set_page_info('title', _l("The page you requested cannot be found!"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());

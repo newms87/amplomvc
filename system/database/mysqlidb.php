@@ -1,4 +1,5 @@
 <?php
+
 class mysqlidb implements DatabaseInterface
 {
 	private $mysqli;
@@ -11,6 +12,35 @@ class mysqlidb implements DatabaseInterface
 	private $password;
 	private $database;
 
+	static $field_types = array(
+		MYSQLI_TYPE_DECIMAL     => 'float',
+		MYSQLI_TYPE_TINY        => 'int',
+		MYSQLI_TYPE_SHORT       => 'int',
+		MYSQLI_TYPE_LONG        => 'int',
+		MYSQLI_TYPE_FLOAT       => 'float',
+		MYSQLI_TYPE_DOUBLE      => 'float',
+		MYSQLI_TYPE_NULL        => 'null',
+		MYSQLI_TYPE_TIMESTAMP   => 'int',
+		MYSQLI_TYPE_LONGLONG    => 'string',
+		MYSQLI_TYPE_INT24       => 'int',
+		MYSQLI_TYPE_DATE        => 'string',
+		MYSQLI_TYPE_TIME        => 'string',
+		MYSQLI_TYPE_DATETIME    => 'string',
+		MYSQLI_TYPE_YEAR        => 'string',
+		MYSQLI_TYPE_NEWDATE     => 'string',
+		MYSQLI_TYPE_BIT         => 'bool',
+		MYSQLI_TYPE_NEWDECIMAL  => 'float',
+		MYSQLI_TYPE_ENUM        => 'string',
+		MYSQLI_TYPE_SET         => 'string',
+		MYSQLI_TYPE_TINY_BLOB   => 'string',
+		MYSQLI_TYPE_MEDIUM_BLOB => 'string',
+		MYSQLI_TYPE_LONG_BLOB   => 'string',
+		MYSQLI_TYPE_BLOB        => 'string',
+		MYSQLI_TYPE_VAR_STRING  => 'string',
+		MYSQLI_TYPE_STRING      => 'string',
+		MYSQLI_TYPE_GEOMETRY    => 'string',
+	);
+
 	public function __construct($hostname, $username, $password, $database)
 	{
 		$this->hostname = $hostname;
@@ -21,7 +51,7 @@ class mysqlidb implements DatabaseInterface
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 
 		if ($this->mysqli->connect_error) {
-			$this->error = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
+			die('<br /><br /><strong>Unable to establish connection to MySQL Database. </strong> ERROR: (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error);
 		} else {
 			$this->query("SET NAMES 'utf8'");
 			$this->query("SET CHARACTER SET utf8");
@@ -40,7 +70,7 @@ class mysqlidb implements DatabaseInterface
 		return $this->error;
 	}
 
-	public function query($sql)
+	public function query($sql, $cast_type = true)
 	{
 		$result = $this->mysqli->query($sql);
 
@@ -52,16 +82,47 @@ class mysqlidb implements DatabaseInterface
 					$data[] = $row;
 				}
 
-				$result->free();
+				if ($data && $cast_type) {
+					$fields = array();
+
+					foreach ($result->fetch_fields() as $field) {
+						$fields[$field->name] = isset(self::$field_types[$field->type]) ? self::$field_types[$field->type] : '';
+					}
+
+					foreach ($data as &$row) {
+						foreach ($row as $key => &$value) {
+							if ($value !== null) {
+								switch ($fields[$key]) {
+									case 'float':
+										$value = (float)$value;
+										break;
+									case 'int':
+										$value = (int)$value;
+										break;
+									case 'null':
+										$value = null;
+										break;
+									case 'bool':
+										$value = (bool)$value;
+										break;
+								}
+							}
+						}
+						unset($value);
+					}
+					unset($row);
+				}
 
 				$query           = new stdclass();
+				$query->num_rows = $result->num_rows;
 				$query->row      = isset($data[0]) ? $data[0] : array();
 				$query->rows     = $data;
-				$query->num_rows = count($data);
+
+				$result->free();
 
 				return $query;
 			} else {
-				$this->last_id = $this->mysqli->insert_id;
+				$this->last_id       = $this->mysqli->insert_id;
 				$this->affected_rows = $this->mysqli->affected_rows;
 				return true;
 			}
@@ -90,7 +151,7 @@ class mysqlidb implements DatabaseInterface
 
 	public function setAutoincrement($table, $value)
 	{
-		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");
+		return $this->query("ALTER TABLE `$table` AUTO_INCREMENT=" . (int)$value);
 	}
 
 	public function escape($value)

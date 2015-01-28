@@ -17,7 +17,7 @@ class App_Model_Localisation_GeoZone extends Model
 			}
 		}
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function editGeoZone($geo_zone_id, $data)
@@ -37,7 +37,7 @@ class App_Model_Localisation_GeoZone extends Model
 			}
 		}
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function deleteGeoZone($geo_zone_id)
@@ -45,18 +45,18 @@ class App_Model_Localisation_GeoZone extends Model
 		$this->delete('geo_zone', $geo_zone_id);
 		$this->delete('zone_to_geo_zone', array('geo_zone_id' => $geo_zone_id));
 
-		$this->cache->delete('geo_zone');
+		clear_cache('geo_zone');
 	}
 
 	public function getGeoZone($geo_zone_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables['geo_zone'] . " WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 	}
 
 	public function getGeoZones($data = array())
 	{
 		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "geo_zone";
+			$sql = "SELECT * FROM " . self::$tables['geo_zone'];
 
 			$sort_data = array(
 				'name',
@@ -94,7 +94,7 @@ class App_Model_Localisation_GeoZone extends Model
 			$geo_zone_data = cache('geo_zone');
 
 			if (!$geo_zone_data) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "geo_zone ORDER BY name ASC");
+				$query = $this->query("SELECT * FROM " . self::$tables['geo_zone'] . " ORDER BY name ASC");
 
 				$geo_zone_data = $query->rows;
 
@@ -107,31 +107,31 @@ class App_Model_Localisation_GeoZone extends Model
 
 	public function getTotalGeoZones()
 	{
-		return $this->queryVar("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "geo_zone");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM " . self::$tables['geo_zone']);
 	}
 
 	public function getZones($geo_zone_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$query = $this->query("SELECT * FROM " . self::$tables['zone_to_geo_zone'] . " WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 
 		return $query->rows;
 	}
 
 	public function getTotalZones($geo_zone_id)
 	{
-		return $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		return $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['zone_to_geo_zone'] . " WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 	}
 
 	public function getTotalZoneToGeoZoneByCountryId($country_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone_to_geo_zone WHERE country_id = '" . (int)$country_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['zone_to_geo_zone'] . " WHERE country_id = '" . (int)$country_id . "'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalZoneToGeoZoneByZoneId($zone_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone_to_geo_zone WHERE zone_id = '" . (int)$zone_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . self::$tables['zone_to_geo_zone'] . " WHERE zone_id = '" . (int)$zone_id . "'");
 
 		return $query->row['total'];
 	}

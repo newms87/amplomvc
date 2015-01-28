@@ -4,7 +4,7 @@ class App_Controller_Admin_Tool_Tool extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("System Tools"));
+		set_page_info('title', _l("System Tools"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -28,8 +28,8 @@ class App_Controller_Admin_Tool_Tool extends Controller
 	{
 		$tables = !empty($_POST['cache_tables']) ? $_POST['cache_tables'] : '';
 
-		$this->cache->delete($tables);
-		message('success', _l("The cache table was successfully cleared!"));
+		clear_cache($tables);
+		message('success', _l("The cache %s was successfully cleared!", $tables ? 'for ' . implode(',', $tables) : ''));
 
 		redirect('admin/tool/tool');
 	}

@@ -21,7 +21,7 @@ class Block extends Library
 		$data['path'] = strtolower($data['path']);
 
 		$parts      = explode('/', $data['path']);
-		$class_name = "Block_" . $this->tool->_2CamelCase($parts[0]) . '_' . $this->tool->_2CamelCase($parts[1]);
+		$class_name = "Block_" . _2camel($parts[0]) . '_' . _2camel($parts[1]);
 
 		/**
 		 * Add Backend Files
@@ -52,7 +52,7 @@ class Block extends Library
 
 		$content = file_get_contents($controller_template);
 
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
+		$content = insertables($insertables, $content, '__', '__');
 
 		$error = null;
 		if (!_is_writable(dirname($controller_file))) {
@@ -99,7 +99,7 @@ class Block extends Library
 			'class_name' => "App_Controller_" . $class_name,
 		);
 
-		$content = $this->tool->insertables($insertables, $content, '__', '__');
+		$content = insertables($insertables, $content, '__', '__');
 
 		$error = null;
 		if (!_is_writable(dirname($controller_file))) {
@@ -126,13 +126,13 @@ class Block extends Library
 					'slug' => slug($data['path']),
 				);
 
-				$content = $this->tool->insertables($insertables, $content, '__', '__');
+				$content = insertables($insertables, $content, '__', '__');
 
 				file_put_contents($template_file, $content);
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function edit($path, $data)
@@ -146,7 +146,7 @@ class Block extends Library
 
 		$data['path'] = $path;
 
-		$block_id = $this->queryVar("SELECT block_id FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "' LIMIT 1");
+		$block_id = $this->queryVar("SELECT block_id FROM " . self::$tables['block'] . " WHERE `path` = '" . $this->escape($path) . "' LIMIT 1");
 
 		if (!$block_id) {
 			$block_id = $this->insert('block', $data);
@@ -181,7 +181,7 @@ class Block extends Library
 			unset($instance);
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 
 		return true;
 	}
@@ -226,7 +226,7 @@ class Block extends Library
 			}
 		}
 
-		$this->cache->delete('block');
+		clear_cache('block');
 	}
 
 	public function get($path)
@@ -234,8 +234,8 @@ class Block extends Library
 		if (!isset($this->blocks[$path])) {
 			$block = cache('block.' . slug($path));
 
-			if (is_null($block)) {
-				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `path` = '" . $this->escape($path) . "'");
+			if ($block === null) {
+				$block = $this->queryRow("SELECT * FROM " . self::$tables['block'] . " WHERE `path` = '" . $this->escape($path) . "'");
 
 				if ($block) {
 					$block['name']      = $this->getName($path);
@@ -265,7 +265,7 @@ class Block extends Library
 		static $blocks = array();
 
 		if (!$blocks) {
-			$block_files = $this->tool->getFiles(DIR_SITE . 'app/controller/block/', 'php', FILELIST_RELATIVE);
+			$block_files = get_files(DIR_SITE . 'app/controller/block/', 'php', FILELIST_RELATIVE);
 
 			foreach ($block_files as $file) {
 				$path = str_replace('.php', '', $file);
@@ -371,7 +371,7 @@ class Block extends Library
 
 	private function loadInstances($path)
 	{
-		$instances = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block_instance WHERE `path` = '" . $this->escape($path) . "'", 'name');
+		$instances = $this->queryRows("SELECT * FROM " . self::$tables['block_instance'] . " WHERE `path` = '" . $this->escape($path) . "'", 'name');
 
 		foreach ($instances as &$instance) {
 			$instance['settings'] = unserialize($instance['settings']);
@@ -419,17 +419,17 @@ class Block extends Library
 
 	public function getName($path)
 	{
-		$directives = $this->tool->getFileCommentDirectives(DIR_SITE . 'app/controller/block/' . $path . '.php');
+		$directives = get_comment_directives(DIR_SITE . 'app/controller/block/' . $path . '.php');
 
 		return !empty($directives['name']) ? $directives['name'] : $path;
 	}
 
 	public function cleanDb($blocks)
 	{
-		$this->query("DELETE FROM " . DB_PREFIX . "block WHERE path NOT IN('" . implode("','", $blocks) . "')");
+		$this->query("DELETE FROM " . self::$tables['block'] . " WHERE path NOT IN('" . implode("','", $blocks) . "')");
 
 		if ($this->countAffected()) {
-			$this->cache->delete('block');
+			clear_cache('block');
 		}
 	}
 }

@@ -15,205 +15,217 @@
  * );
  */
 ?>
+<? $show_actions = !empty($show_actions); ?>
 
 <div class="table-list-view-box">
 	<table class="list table-list-view">
 		<thead>
-			<tr>
-				<? if (!empty($row_id)) { ?>
-					<td width="1" class="center">
-						<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
-					</td>
-				<? } ?>
-				<td class="center column_title">
-					<span><?= _l("Action"); ?></span>
+		<tr>
+			<? if (!empty($row_id)) { ?>
+				<td width="1" class="center">
+					<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
 				</td>
-				<? foreach ($columns as $slug => $column) { ?>
-					<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
-						<? if ($column['sortable']) {
-							$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
-							$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
-							?>
-							<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
-						<? } else { ?>
-							<span><?= $column['display_name']; ?></span>
-						<? } ?>
-					</td>
-				<? } ?>
-				<td class="center column_title">
-					<span><?= _l("Action"); ?></span>
+			<? } ?>
+			<? if ($show_actions) { ?>
+				<td class="center column-title">
+					<span>{{Action}}</span>
 				</td>
-			</tr>
+			<? } ?>
+			<? foreach ($columns as $slug => $column) { ?>
+				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
+					<? if ($column['sortable']) {
+						$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
+						$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
+						?>
+						<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
+					<? } else { ?>
+						<span><?= $column['display_name']; ?></span>
+					<? } ?>
+				</td>
+			<? } ?>
+			<? if ($show_actions) { ?>
+				<td class="center column-title">
+					<span>{{Action}}</span>
+				</td>
+			<? } ?>
+		</tr>
 		</thead>
 		<tbody>
-			<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
-				<? if (!empty($row_id)) { ?>
-					<td></td>
-				<? } ?>
+		<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
+			<? if (!empty($row_id)) { ?>
+				<td></td>
+			<? } ?>
+			<? if ($show_actions) { ?>
 				<td align="center">
-					<a class="button filter-button"><?= _l("Filter"); ?></a>
+					<a class="button filter-button">{{Filter}}</a>
 					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button"><?= _l("Reset"); ?></a>
+						<a class="reset reset-button">{{Reset}}</a>
 					<? } ?>
-					<a class="hide-filter"><?= _l("Hide"); ?></a>
+					<a class="hide-filter">{{Hide}}</a>
 				</td>
-				<? foreach ($columns as $slug => $column) { ?>
-					<? if ($column['filter']) { ?>
-						<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
-							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
-							<? switch ($column['filter']) {
-								case 'text':
-									?>
-									<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
-									<? break;
+			<? } ?>
+			<? foreach ($columns as $slug => $column) { ?>
+				<? if ($column['filter']) { ?>
+					<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
+						<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
+						<? switch ($column['filter']) {
+							case 'text':
+								?>
+								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
+								<? break;
 
-								case 'pk':
-								case 'int':
-								case 'float':
-								case 'decimal':
-									?>
-									<? if (!isset($column['filter_value']['low'])) {
-									$column['filter_value']['low'] = null;
+							case 'pk':
+							case 'int':
+							case 'float':
+							case 'decimal':
+								?>
+								<? if (!isset($column['filter_value']['low'])) {
+								$column['filter_value']['low'] = null;
+							}
+								if (!isset($column['filter_value']['high'])) {
+									$column['filter_value']['high'] = null;
 								}
-									if (!isset($column['filter_value']['high'])) {
-										$column['filter_value']['high'] = null;
-									}
-									?>
-									<div class="zoom_hover int">
-										<div class="input">
-											<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
-											<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
-											<span class="clear">clear</span>
-										</div>
-										<div class="value">
-											<? if (!is_null($column['filter_value']['low']) || !is_null($column['filter_value']['high'])) { ?>
-												<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
-											<? } else { ?>
-												<?= _l("Modify"); ?>
-											<? } ?>
-										</div>
+								?>
+								<div class="zoom-hover int">
+									<div class="input">
+										<input placeholder="{{From}}" type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
+										<input placeholder="{{To}}" type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
+										<span class="clear">clear</span>
 									</div>
-									<? break;
-								case 'select':
-									if (isset($column['build_config'])) {
-										$build_key   = $column['build_config'][0];
-										$build_value = $column['build_config'][1];
-									} else {
-										$build_key = $build_value = null;
-									}
+									<div class="value">
+										<? if ($column['filter_value']['low'] !== null || $column['filter_value']['high'] !== null) { ?>
+											<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
+										<? } else { ?>
+											{{Modify}}
+										<? } ?>
+									</div>
+								</div>
+								<? break;
+							case 'select':
+								if (isset($column['build_config'])) {
+									$build_key   = $column['build_config'][0];
+									$build_value = $column['build_config'][1];
+								} else {
+									$build_key = $build_value = null;
+								}
 
-									if ($column['filter_blank'] && !isset($column['build_data'][''])) {
-										$column['build_data'] = array('' => '') + $column['build_data'];
-									}
+								if ($column['filter_blank'] && !isset($column['build_data'][''])) {
+									$column['build_data'] = array('' => '') + $column['build_data'];
+								}
 
-									echo build('select', array(
-										'name'   => "filter[$slug]",
-										'data'   => $column['build_data'],
-										'select' => $column['filter_value'],
-										'key'    => $build_key,
-										'value'  => $build_value,
-									));
-									break;
+								echo build(array(
+									'type'   => 'select',
+									'name'   => "filter[$slug]",
+									'data'   => $column['build_data'],
+									'select' => $column['filter_value'],
+									'value'  => $build_key,
+									'label'  => $build_value,
+								));
+								break;
 
-								case 'multiselect':
-									if (isset($column['build_config'])) {
-										$build_key   = $column['build_config'][0];
-										$build_value = $column['build_config'][1];
-									} else {
-										$build_key = $build_value = null;
-									}
+							case 'multiselect':
+								if (isset($column['build_config'])) {
+									$build_key   = $column['build_config'][0];
+									$build_value = $column['build_config'][1];
+								} else {
+									$build_key = $build_value = null;
+								}
 
-									?>
-									<div class="zoom_hover multiselect">
-										<div class="input">
-											<?=
-											build('multiselect', array(
-												'name'   => "filter[$slug]",
-												'data'   => $column['build_data'],
-												'select' => $column['filter_value'],
-												'key'    => $build_key,
-												'value'  => $build_value,
-											)); ?>
-										</div>
-										<div class="value">
-											<? if (!empty($column['filter_value'])) {
-												$vals = array();
-												foreach ($column['filter_value'] as $v) {
-													if ($build_key === false) {
-														$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
-													} else {
-														foreach ($column['build_data'] as $bd) {
-															if ($bd[$build_key] === $v) {
-																$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
-															}
+								?>
+								<div class="zoom-hover multiselect">
+									<div class="input">
+										<?=
+										build(array(
+											'type'   => 'multiselect',
+											'name'   => "filter[$slug]",
+											'data'   => $column['build_data'],
+											'select' => $column['filter_value'],
+											'value'  => $build_key,
+											'label'  => $build_value,
+										)); ?>
+									</div>
+									<div class="value">
+										<? if (!empty($column['filter_value'])) {
+											$vals = array();
+											foreach ($column['filter_value'] as $v) {
+												if ($build_key === false) {
+													$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+												} else {
+													foreach ($column['build_data'] as $bd) {
+														if ($bd[$build_key] === $v) {
+															$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
 														}
 													}
-												} ?>
+												}
+											} ?>
 
-												<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
-											<? } else { ?>
-												<?= _l("Modify"); ?>
-											<? } ?>
-										</div>
+											<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
+										<? } else { ?>
+											{{Modify}}
+										<? } ?>
 									</div>
-									<? break;
+								</div>
+								<? break;
 
-								case 'date':
-								case 'time':
-								case 'datetime':
-									?>
-									<? if (!isset($column['filter_value']['start'])) {
-									$column['filter_value']['start'] = null;
+							case 'date':
+							case 'time':
+							case 'datetime':
+								?>
+								<? if (!isset($column['filter_value']['start'])) {
+								$column['filter_value']['start'] = null;
+							}
+								if (!isset($column['filter_value']['end'])) {
+									$column['filter_value']['end'] = null;
 								}
-									if (!isset($column['filter_value']['end'])) {
-										$column['filter_value']['end'] = null;
-									}
-									?>
+								?>
 
-									<div class="zoom_hover daterange">
-										<div class="input">
-											<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-											<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
-											<span class="clear">clear</span>
-										</div>
-										<div class="value">
-											<? if (!is_null($column['filter_value']['start']) || !is_null($column['filter_value']['end'])) { ?>
-												<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
-											<? } else { ?>
-												<?= _l("Modify"); ?>
-											<? } ?>
-										</div>
+								<div class="zoom-hover daterange">
+									<div class="input">
+										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
+										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+										<span class="clear">clear</span>
 									</div>
+									<div class="value" data-default="{{Date Range}}">
+										<? if ($column['filter_value']['start'] !== null || $column['filter_value']['end'] !== null) { ?>
+											<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
+										<? } else { ?>
+											{{Date Range}}
+										<? } ?>
+									</div>
+								</div>
 
-									<? break;
+								<? break;
 
-								default:
-									break;
-							} ?>
-						</td>
-					<? } else { ?>
-						<td></td>
-					<? } ?>
+							default:
+								break;
+						} ?>
+					</td>
+				<? } else { ?>
+					<td></td>
 				<? } ?>
+			<? } ?>
+			<? if ($show_actions) { ?>
 				<td align="center">
-					<a class="button filter-button"><?= _l("Filter"); ?></a>
+					<a class="button filter-button">{{Filter}}</a>
 					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button"><?= _l("Reset"); ?></a>
+						<a class="reset reset-button">{{Reset}}</a>
 					<? } ?>
-					<a class="hide-filter"><?= _l("Hide"); ?></a>
+					<a class="hide-filter">{{Hide}}</a>
 				</td>
-			</tr>
-			<? if (!empty($rows)) { ?>
-				<? foreach ($rows as $row) { ?>
-					<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
-					<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
-						<? if (!empty($row_id)) { ?>
-							<? $uniqid = uniqid($row[$row_id]); ?>
-							<td class="center">
-								<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
-							</td>
-						<? } ?>
+			<? } ?>
+		</tr>
+		<? if (!empty($rows)) { ?>
+			<? foreach ($rows as $row) { ?>
+				<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
+				<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
+					<? if (!empty($row_id)) { ?>
+						<? $uniqid = uniqid($row[$row_id]); ?>
+						<td class="center">
+							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
+						</td>
+					<? } ?>
 
+					<? if ($show_actions) { ?>
 						<? $quick_actions = '';
 
 						if (!empty($row['actions'])) {
@@ -239,201 +251,203 @@
 								<?= $quick_actions; ?>
 							</div>
 						</td>
-						<? foreach ($columns as $slug => $column) { ?>
-							<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
+					<? } ?>
 
-							<? if ($column['editable']) {
-								$column['#data-field'] = $slug;
-								$column['#data-value'] = str_replace('"', '&quot;', is_array($value) ? implode(',', $value) : $value); ?>
-							<? } ?>
+					<? foreach ($columns as $slug => $column) { ?>
+						<? $value = isset($row[$slug]) ? $row[$slug] : null; ?>
 
-							<td <?= attrs($column); ?>>
-
-								<?
-								//Check if the raw string override has been set for this value
-								if (isset($row['#' . $slug])) {
-									echo $row['#' . $slug];
-								} elseif (!is_null($value)) {
-									switch ($column['type']) {
-										case 'date':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
-											<? break;
-
-										case 'datetime':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
-											<? break;
-
-										case 'time':
-											?>
-											<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
-											<? break;
-
-										case 'map':
-											?>
-											<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-											<? break;
-
-										case 'select':
-											foreach ($column['build_data'] as $key => $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
-													?>
-													<?= $c_data[$column['build_config'][1]]; ?>
-												<?
-												}
-											}
-											break;
-
-										case 'multiselect':
-											if (!is_array($value)) {
-												$value = array($value);
-											}
-
-											foreach ($value as $v) {
-												$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-												foreach ($column['build_data'] as $c_data) {
-													if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-														echo $c_data[$column['build_config'][1]] . "<br/>";
-														break;
-													}
-												}
-											}
-											break;
-
-										case 'format':
-											?>
-											<?= sprintf($column['format'], $value); ?>
-											<? break;
-
-										case 'image':
-											?>
-											<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
-											<? break;
-
-										case 'link-image':
-											?>
-											<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
-											<? break;
-
-										case 'text_list':
-											if (!empty($value) && is_array($value)) {
-												foreach ($value as $item) {
-													echo $item[$column['display_data']];
-												}
-											}
-											break;
-
-										case 'text':
-										case 'int':
-										case 'float':
-										case 'decimal':
-										default:
-											if (!empty($column['charlimit'])) {
-												echo charlimit($value, $column['charlimit']);
-											} else {
-												echo $value;
-											}
-											break;
-									}
-								}?>
-							</td>
+						<? if ($column['editable']) {
+							$column['#data-field'] = $slug;
+							$column['#data-value'] = str_replace('"', '&quot;', is_array($value) ? implode(',', $value) : $value); ?>
 						<? } ?>
+
+						<td <?= attrs($column); ?>>
+
+							<?
+							//Check if the raw string override has been set for this value
+							if (isset($row['#' . $slug])) {
+								echo $row['#' . $slug];
+							} elseif ($value !== null) {
+								switch ($column['type']) {
+									case 'date':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+										<? break;
+
+									case 'datetime':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+										<? break;
+
+									case 'time':
+										?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+										<? break;
+
+									case 'map':
+										?>
+										<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+										<? break;
+
+									case 'select':
+										foreach ($column['build_data'] as $key => $c_data) {
+											if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+												?>
+												<?= $c_data[$column['build_config'][1]]; ?>
+											<?
+											}
+										}
+										break;
+
+									case 'multiselect':
+										foreach ($value as $v) {
+											$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
+											foreach ($column['build_data'] as $c_data) {
+												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
+													echo $c_data[$column['build_config'][1]] . "<br/>";
+													break;
+												}
+											}
+										}
+										break;
+
+									case 'format':
+										?>
+										<?= sprintf($column['format'], $value); ?>
+										<? break;
+
+									case 'image':
+										?>
+										<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
+										<? break;
+
+									case 'link-image':
+										?>
+										<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
+										<? break;
+
+									case 'text_list':
+										if (!empty($value) && is_array($value)) {
+											foreach ($value as $item) {
+												echo $item[$column['display_data']];
+											}
+										}
+										break;
+
+									case 'text':
+									case 'int':
+									case 'float':
+									case 'decimal':
+									default:
+										if (!empty($column['charlimit'])) {
+											echo charlimit($value, $column['charlimit']);
+										} else {
+											echo $value;
+										}
+										break;
+								}
+							} ?>
+						</td>
+					<? } ?>
+					<? if ($show_actions) { ?>
 						<td class="center actions">
 							<div class="action-buttons">
 								<?= $quick_actions; ?>
 							</div>
 						</td>
-					</tr>
-				<?
-				}
-			} else {
-				?>
-				<tr>
-					<td class="center" colspan="<?= count($columns) + 3; ?>"><?= _l("There are no items to list."); ?></td>
+					<? } ?>
 				</tr>
-			<? } ?>
+			<?
+			}
+		} else {
+			?>
+			<tr>
+				<td class="center" colspan="<?= count($columns) + 3; ?>">{{There are no items to list.}}</td>
+			</tr>
+		<? } ?>
 		</tbody>
 	</table>
 
-	<div class="editable-options">
-		<? foreach ($columns as $field => $column) {
-			if (empty($column['editable'])) {
-				continue;
-			} ?>
+	<? if (!empty($save_path)) { ?>
+		<div class="editable-options">
+			<? foreach ($columns as $field => $column) {
+				if (empty($column['editable'])) {
+					continue;
+				} ?>
 
-			<div class="editable-option" data-field="<?= $field; ?>">
-				<div class="input">
-					<? switch ($column['type']) {
-						case 'select':
-						case 'radio':
-						case 'checkbox':
-							echo build($column['editable'], array(
-								'name'   => '',
-								'data'   => $column['build_data'],
-								'select' => '',
-								'key'    => $column['build_config'][0],
-								'value'  => $column['build_config'][1],
-								'#class' => 'input-value',
-							));
-							break;
+				<div class="editable-option" data-field="<?= $field; ?>">
+					<div class="input">
+						<? switch ($column['type']) {
+							case 'select':
+							case 'radio':
+							case 'checkbox':
+								echo build(array(
+									'type'   => $column['editable'],
+									'name'   => '',
+									'data'   => $column['build_data'],
+									'select' => '',
+									'value'  => $column['build_config'][0],
+									'label'  => $column['build_config'][1],
+									'#class' => 'input-value',
+								));
+								break;
 
-						case 'date':
-						case 'datetime':
-						case 'time':
-							?>
-							<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
-							<? break;
+							case 'date':
+							case 'datetime':
+							case 'time':
+								?>
+								<input type="text" class="input-value <?= $column['type'] . 'picker'; ?>"/>
+								<? break;
 
-						case 'longtext':
-							?>
-							<textarea class="input-value" rows="4" cols="40"></textarea>
-							<? break;
+							case 'longtext':
+								?>
+								<textarea class="input-value" rows="4" cols="40"></textarea>
+								<? break;
 
-						case 'text':
-						case 'int':
-						case 'float':
-						case 'decimal':
-						default:
-							?>
+							case 'text':
+							case 'int':
+							case 'float':
+							case 'decimal':
+							default:
+								?>
 								<input type="text" class="input-value"/>
-							<? break;
-					} ?>
+								<? break;
+						} ?>
+					</div>
 				</div>
+			<? } ?>
+
+			<div class="buttons clearfix">
+				<a class="cancel-edit button remove">{{X}}</a>
+				<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
 			</div>
-		<? } ?>
-
-		<div class="buttons clearfix">
-			<a class="cancel-edit button remove"><?= _l("X"); ?></a>
-			<a class="save-edit button save" data-loading="Saving..."><?= _l("Save"); ?></a>
 		</div>
-	</div>
-
+	<? } ?>
 </div>
 
 <script type="text/javascript">
 	$.ac_datepicker();
 
-	$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
+	$('.zoom-hover input, .zoom-hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
 
 	function zoom_hover_in() {
-		$zoom = $(this).closest('.zoom_hover').addClass('active');
+		$zoom = $(this).closest('.zoom-hover').addClass('active');
 		input = $zoom.find('.input');
 		value = $zoom.find('.value');
 	}
 
 	function zoom_hover_out() {
-		$zoom = $(this).closest('.zoom_hover').removeClass('active');
+		$zoom = $(this).closest('.zoom-hover').removeClass('active');
 		input = $zoom.find('.input');
 		value = $zoom.find('.value');
 	}
 
-	$('.zoom_hover .clear').click(function () {
-		$(this).closest('.zoom_hover').find('input, textarea').val('').trigger('keyup').trigger('change');
+	$('.zoom-hover .clear').click(function () {
+		$(this).closest('.zoom-hover').find('input, textarea').val('').trigger('keyup').trigger('change');
 	});
 
-	$('.zoom_hover.int input').keyup(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.int input').keyup(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 
 		low = $zoom.find('.int_low').val();
@@ -442,12 +456,12 @@
 		if (high || low) {
 			$value.html(low + ' - ' + high);
 		} else {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		}
 	});
 
-	$('.zoom_hover.daterange input').change(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.daterange input').change(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 
 		var start = $zoom.find('.date_start').val();
@@ -456,17 +470,17 @@
 		if (end || start) {
 			$value.html(start + ' - ' + end);
 		} else {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		}
 	});
 
-	$('.zoom_hover.multiselect input').change(function () {
-		var $zoom = $(this).closest('.zoom_hover');
+	$('.zoom-hover.multiselect input').change(function () {
+		var $zoom = $(this).closest('.zoom-hover');
 		var $value = $zoom.find('.value');
 		var $selected = $zoom.find(':checked');
 
 		if ($selected.length == 0) {
-			$value.html('<?= _l("Modify"); ?>');
+			$value.html($value.attr('data-default') || '{{Modify}}');
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {
@@ -528,6 +542,41 @@
 		}
 	});
 
+	<? if (!empty($filter_style) && $filter_style === 'persistent') { ?>
+	$listview.find('.filter-type').removeClass('not').addClass('equals').hide();
+
+	$listview.find('.column-filter').find('input, select').on('keyup change', delay_update);
+
+	var delay = false;
+
+	function delay_update($filter, my_delay) {
+		if (my_delay) {
+			if (my_delay === delay) {
+				var $widget = $filter.closest('.widget-listing').addClass('loading');
+
+				$('#ui-datepicker-div').remove();
+
+				$.get($filter.apply_filter("<?= $filter_url; ?>"), {}, function (response) {
+					$widget.replaceWith(response);
+				});
+			}
+		} else {
+			var event = $filter;
+			var my_delay = Date.now();
+			var $filter = $(this).closest('.filter-list');
+			delay = my_delay;
+
+			if (event.keyCode === 13) {
+				delay_update($filter, my_delay);
+			} else {
+				setTimeout(function () {
+					delay_update($filter, my_delay)
+				}, 1500);
+			}
+		}
+	}
+	<? } ?>
+
 	$listview.find('.reset-button').click(function () {
 		var $this = $(this);
 		$filter = $this.closest('.filter-list');
@@ -536,6 +585,7 @@
 		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
 	});
 
+	<? if ($show_actions) { ?>
 	$listview.find('.filter-list').keyup(function (e) {
 		if (e.keyCode == 13) {
 			$(this).find('.filter-button')[0].click();
@@ -545,6 +595,7 @@
 	$listview.find('.hide-filter').click(function () {
 		toggle_filter($(this).closest('.listing'));
 	});
+	<? } ?>
 
 	$listview.find('.filter-list > td').click(function () {
 		if ($(this).closest('.filter-list').hasClass('hide')) {

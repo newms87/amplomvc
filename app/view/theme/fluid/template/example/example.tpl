@@ -1,8 +1,8 @@
-<?= call('common/header'); ?>
+<?= $is_ajax ? '' : call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
 <div class="content">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="section">
 
@@ -16,4 +16,4 @@
 	<?= area('bottom'); ?>
 </div>
 
-<?= call('common/footer'); ?>
+<?= $is_ajax ? '' : call('footer'); ?>

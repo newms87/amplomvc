@@ -1,6 +1,6 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -9,9 +9,9 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Zones"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Zones}}</h1>
 
-			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= _l("Insert"); ?></a><a onclick="$('form').submit();" class="button"><?= _l("Delete"); ?></a></div>
+			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button">{{Insert}}</a><a onclick="$('form').submit();" class="button">{{Delete}}</a></div>
 		</div>
 		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -22,21 +22,21 @@
 							</td>
 							<td class="left"><? if ($sort == 'c.name') { ?>
 									<a href="<?= $sort_country; ?>"
-										class="<?= strtolower($order); ?>"><?= _l("Country"); ?></a>
+										class="<?= strtolower($order); ?>">{{Country}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_country; ?>"><?= _l("Country"); ?></a>
+									<a href="<?= $sort_country; ?>">{{Country}}</a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'z.name') { ?>
-									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= _l("Zone Name"); ?></a>
+									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>">{{Zone Name}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_name; ?>"><?= _l("Zone Name"); ?></a>
+									<a href="<?= $sort_name; ?>">{{Zone Name}}</a>
 								<? } ?></td>
 							<td class="left"><? if ($sort == 'z.code') { ?>
-									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>"><?= _l("Zone Code"); ?></a>
+									<a href="<?= $sort_code; ?>" class="<?= strtolower($order); ?>">{{Zone Code}}</a>
 								<? } else { ?>
-									<a href="<?= $sort_code; ?>"><?= _l("Zone Code"); ?></a>
+									<a href="<?= $sort_code; ?>">{{Zone Code}}</a>
 								<? } ?></td>
-							<td class="right"><?= _l("Action"); ?></td>
+							<td class="right">{{Action}}</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -59,7 +59,7 @@
 							<? } ?>
 						<? } else { ?>
 							<tr>
-								<td class="center" colspan="5"><?= _l("There are no results to display."); ?></td>
+								<td class="center" colspan="5">{{There are no results to display.}}</td>
 							</tr>
 						<? } ?>
 					</tbody>
@@ -69,4 +69,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

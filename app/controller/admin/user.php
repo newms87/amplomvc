@@ -5,7 +5,7 @@ class App_Controller_Admin_User extends Controller
 	public function index()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User"));
+		set_page_info('title', _l("User"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
@@ -50,17 +50,17 @@ class App_Controller_Admin_User extends Controller
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
 		$filter = _get('filter', array());
 
-		list($users, $user_total) = $this->Model_User->getUsers($sort, $filter, null, true);
+		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, null, true, 'user_id');
 
-		foreach ($users as &$user) {
+		foreach ($users as $user_id => &$user) {
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/user/form', 'user_id=' . $user['user_id'])
+					'href' => site_url('admin/user/form', 'user_id=' . $user_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/user/delete', 'user_id=' . $user['user_id'])
+					'href' => site_url('admin/user/delete', 'user_id=' . $user_id)
 				),
 			);
 
@@ -91,7 +91,7 @@ class App_Controller_Admin_User extends Controller
 		$output = block('widget/listing', null, $listing);
 
 		//Response
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			output($output);
 		}
 
@@ -101,7 +101,7 @@ class App_Controller_Admin_User extends Controller
 	public function form()
 	{
 		//Page Head
-		$this->document->setTitle(_l("User Information"));
+		set_page_info('title', _l("User Information"));
 
 		//Insert or Update
 		$user_id = _get('user_id', null);
@@ -132,16 +132,14 @@ class App_Controller_Admin_User extends Controller
 
 		$user += $defaults;
 
-		$user['data_user_roles'] = $this->Model_Setting_Role->getRoles();
+		$user['data_user_roles'] = $this->Model_UserRole->getRecords(array('cache' => true));
 
 		$user['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);
 
-		$user['meta']['__ac_template__'] = array(
-			'value' => '',
-		);
+		$user['meta']['__ac_template__'] = '';
 
 		//Actions
 		$user['save'] = site_url('admin/user/save', 'user_id=' . $user_id);
@@ -158,8 +156,8 @@ class App_Controller_Admin_User extends Controller
 			message('error', $this->Model_User->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} elseif ($this->message->has('error')) {
 			$this->form();
 		} else {
@@ -175,8 +173,8 @@ class App_Controller_Admin_User extends Controller
 			message('error', $this->Model_User->getError());
 		}
 
-		if (IS_AJAX) {
-			output_json($this->message->fetch());
+		if ($this->is_ajax) {
+			output_message();
 		} else {
 			redirect('admin/user');
 		}
@@ -206,7 +204,7 @@ class App_Controller_Admin_User extends Controller
 			message('success', _l("Users were updated successfully!"));
 		}
 
-		if (IS_AJAX) {
+		if ($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/user');
@@ -215,7 +213,7 @@ class App_Controller_Admin_User extends Controller
 
 	public function login()
 	{
-		$this->document->setTitle(_l("Administration"));
+		set_page_info('title', _l("Administration"));
 
 		//If user is logged in, redirect to the homepage
 		if (is_logged()) {
@@ -276,7 +274,7 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		//Page Title
-		$this->document->setTitle(_l("Forgot Your Password?"));
+		set_page_info('title', _l("Forgot Your Password?"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));

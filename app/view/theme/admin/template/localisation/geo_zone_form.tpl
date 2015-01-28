@@ -1,29 +1,29 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> <?= _l("Geo Zones"); ?></h1>
+			<h1><img src="<?= theme_url('image/country.png'); ?>" alt=""/> {{Geo Zones}}</h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a onclick="$('#form').submit();" class="button">{{Save}}</a>
+				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td class="required"> <?= _l("Geo Zone Name:"); ?></td>
+						<td class="required"> {{Geo Zone Name:}}</td>
 						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= _l("Description:"); ?></td>
+						<td class="required"> {{Description:}}</td>
 						<td><input type="text" name="description" value="<?= $description; ?>"/></td>
 					</tr>
 					<tr>
-						<td><?= _l("Exclude Zones:"); ?></td>
+						<td>{{Exclude Zones:}}</td>
 						<td><input type="checkbox" name="exclude" value="1" <?= $exclude ? 'checked="checked"' : ''; ?> />
 						</td>
 					</tr>
@@ -32,8 +32,8 @@
 				<table id="zone-to-geo-zone" class="list">
 					<thead>
 						<tr>
-							<td class="left"><?= _l("Country:"); ?></td>
-							<td class="left"><?= _l("Zone:"); ?></td>
+							<td class="left">{{Country:}}</td>
+							<td class="left">{{Zone:}}</td>
 							<td></td>
 						</tr>
 					</thead>
@@ -50,22 +50,23 @@
 							<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
 							<tr class="geozone_selector <?= $key; ?>">
 								<td class="left">
-									<?= build('select', array(
-										'name'   => "zones[$row][country_id]",
+									<?= build(array(
+										'type' => 'select',
+										'name'  => "zones[$row][country_id]",
 										'data'   => $data_countries,
 										'select' => $zone['country_id'], array('class' => 'country_selector'),
-										'key'    => 'country_id',
-										'value'  => 'name',
+										'value' =>  'country_id',
+										'label' =>  'name',
 									)); ?>
 									<a onclick="add_all_zones($(this))"
-										style="text-decoration:none; display:block"><?= _l("[ Add All Zones ]"); ?></a>
+										style="text-decoration:none; display:block">{{[ Add All Zones ]}}</a>
 								</td>
 								<td class="left">
 									<select name="zones[<?= $row; ?>][zone_id]" data-zone_id="<?= $zone['zone_id']; ?>"
 										class="zone_selector"></select>
 								</td>
 								<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"
-										class="button"><?= _l("Remove"); ?></a></td>
+										class="button">{{Remove}}</a></td>
 							</tr>
 						<? } ?>
 					</tbody>
@@ -73,7 +74,7 @@
 					<tfoot>
 						<tr>
 							<td colspan="2"></td>
-							<td class="left"><a onclick="addZoneRow();" class="button"><?= _l("Add Geo Zone"); ?></a></td>
+							<td class="left"><a onclick="addZoneRow();" class="button">{{Add Geo Zone}}</a></td>
 						</tr>
 					</tfoot>
 				</table>
@@ -141,4 +142,4 @@
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

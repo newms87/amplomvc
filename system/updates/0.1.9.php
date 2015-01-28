@@ -4,6 +4,7 @@ $this->db->dropTable('page_store');
 $this->db->addColumn('page', 'content', "TEXT NOT NULL DEFAULT '' AFTER `template`");
 $this->db->addColumn('page', 'style', "TEXT NOT NULL DEFAULT '' AFTER `content`");
 $this->db->addColumn('page', 'date_updated', "DATETIME NOT NULL AFTER `cache`");
+$this->db->addColumn('page', 'layout_id', "INT UNSIGNED NOT NULL AFTER `title`");
 $this->db->addColumn('page', 'updated_user_id', "INT UNSIGNED NOT NULL DEFAULT '0' AFTER `date_updated`");
 
 $this->db->createTable('page_history', <<<SQL

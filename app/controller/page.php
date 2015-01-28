@@ -13,7 +13,7 @@ class App_Controller_Page extends Controller
 			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
-		if (IS_AJAX || isset($_GET['content'])) {
+		if ($this->is_ajax || isset($_GET['content'])) {
 			return $this->content($page);
 		}
 
@@ -22,7 +22,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($page['title']);
+		set_page_info('title', $page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
 		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
@@ -34,7 +34,9 @@ class App_Controller_Page extends Controller
 		breadcrumb($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
-		$this->config->set('config_layout_id', $page['layout_id']);
+		set_option('config_layout_id', $page['layout_id']);
+
+		$page['content_file'] = _mod($page['content_file']);
 
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 
@@ -85,7 +87,7 @@ class App_Controller_Page extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($page['title']);
+		set_page_info('title', $page['title']);
 
 		if ($page['style']) {
 			$page['style'] = $this->document->compileLessContent($page['style']);
@@ -96,7 +98,7 @@ class App_Controller_Page extends Controller
 		breadcrumb($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
-		$this->config->set('config_layout_id', $page['layout_id']);
+		set_option('config_layout_id', $page['layout_id']);
 
 		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
 

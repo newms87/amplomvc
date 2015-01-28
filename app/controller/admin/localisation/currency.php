@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->addCurrency($_POST);
@@ -41,7 +41,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Currency->editCurrency($_GET['currency_id'], $_POST);
@@ -70,7 +70,7 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Currency"));
+		set_page_info('title', _l("Currency"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $currency_id) {
@@ -144,8 +144,8 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$currency_total = $this->Model_Localisation_Currency->getTotalCurrencies();
@@ -359,12 +359,6 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 			if ($currency_info) {
 				if (option('config_currency') == $currency_info['code']) {
 					$this->error['warning'] = _l("Warning: This currency cannot be deleted as it is currently assigned as the default store currency!");
-				}
-
-				$store_total = $this->Model_Setting_Store->getTotalStoresByCurrency($currency_info['code']);
-
-				if ($store_total) {
-					$this->error['warning'] = sprintf(_l("Warning: This currency cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
 		}

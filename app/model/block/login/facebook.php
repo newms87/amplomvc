@@ -37,7 +37,7 @@ class App_Model_Block_Login_Facebook extends Model
 			'scope'         => 'email',
 		);
 
-		return site_url("https://www.facebook.com/dialog/oauth", $query);
+		return site_url("https://www.facebook.com/v2.2/dialog/oauth", $query);
 	}
 
 	public function authenticate()
@@ -102,30 +102,30 @@ class App_Model_Block_Login_Facebook extends Model
 			return false;
 		}
 
-		$customer_id = $this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer_meta WHERE `key` = 'facebook_id' AND `value` = '" . $this->escape($user_info->id) . "' LIMIT 1");
+		$customer_id = $this->queryVar("SELECT customer_id FROM " . self::$tables['customer_meta'] . " WHERE `key` = 'facebook_id' AND `value` = '" . $this->escape($user_info['id']) . "' LIMIT 1");
 
 		//Lookup Customer or Register new customer
 		if (!$customer_id) {
 			$no_meta = true;
 
-			if (!empty($user_info->email)) {
-				$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($user_info->email) . "'");
+			if (!empty($user_info['email'])) {
+				$customer = $this->queryRow("SELECT * FROM " . self::$tables['customer'] . " WHERE email = '" . $this->escape($user_info['email']) . "'");
 			}
 
 			if (empty($customer)) {
 				$customer = array(
-					'firstname' => $user_info->first_name,
-					'lastname'  => $user_info->last_name,
-					'email'     => $user_info->email,
+					'firstname' => $user_info['first_name'],
+					'lastname'  => $user_info['last_name'],
+					'email'     => $user_info['email'],
 				);
 
-				if (!$this->customer->add($customer)) {
-					$this->error = $this->customer->getError();
+				if (!$this->Model_Customer->save(null, $customer)) {
+					$this->error = $this->Model_Customer->getError();
 					return false;
 				}
 			}
 		} else {
-			$customer = $this->customer->getCustomer($customer_id);
+			$customer = $this->Model_Customer->getRecord($customer_id);
 			$no_meta  = false;
 		}
 
@@ -134,7 +134,7 @@ class App_Model_Block_Login_Facebook extends Model
 
 		//Set Meta for future login
 		if ($no_meta) {
-			$this->customer->setMeta('facebook_id', $user_info->id);
+			$this->customer->setMeta('facebook_id', $user_info['id']);
 		}
 
 		return true;

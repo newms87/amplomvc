@@ -1,12 +1,12 @@
-<?= IS_AJAX ? '' : call('admin/header'); ?>
+<?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= IS_AJAX ? '' : breadcrumbs(); ?>
+	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> <?= _l("System Tools"); ?></h1>
+			<h1><img src="<?= theme_url('image/backup.png'); ?>" alt=""/> {{System Tools}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
+				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -14,13 +14,13 @@
 				<table class="form">
 					<tr>
 						<td>
-							<div><?= _l("Clear Specified Cache Table(s):"); ?></div>
-							<span class="help"><?= _l("Use a regular expression to clear cache table entries. The regular expression is prepended with '^' and appended with '*' automatically. For example, if you want to clear entries starting with product, just enter 'product'. To clear all entries, enter '.' or '.*'"); ?></span>
+							<div>{{Clear Specified Cache Table(s):}}</div>
+							<span class="help">{{Use a regular expression to clear cache table entries. The regular expression is prepended with '^' and appended with '*' automatically. For example, if you want to clear entries starting with product, just enter 'product'. To clear all entries, enter '.' or '.*'}}</span>
 						</td>
 						<td>
-							<label for="cache_tables"><?= _l("Cache Tables:"); ?></label>
+							<label for="cache_tables">{{Cache Tables:}}</label>
 							<input type="text" name="cache_tables" value="<?= $cache_tables; ?>"/>
-							<input type="submit" class="button" value="<?= _l("Clear Cache Entries"); ?>"/>
+							<input type="submit" class="button" value="{{Clear Cache Entries}}"/>
 						</td>
 					</tr>
 				</table>
@@ -28,4 +28,4 @@
 		</div>
 	</div>
 </div>
-<?= IS_AJAX ? '' : call('admin/footer'); ?>
+<?= $is_ajax ? '' : call('admin/footer'); ?>

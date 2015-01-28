@@ -210,12 +210,12 @@ class Mail extends Library
 		}
 
 		if (!$this->from) {
-			$from = option('config_email');
+			$from = option('site_email');
 			$this->from = $from ? $from : 'info@' . DOMAIN;
 		}
 
 		if (!$this->sender) {
-			$sender = option('config_name');
+			$sender = option('site_name');
 			$this->sender = $sender ? $sender : $this->from;
 		}
 
@@ -235,8 +235,8 @@ class Mail extends Library
 			$this->trigger_error($msg);
 
 			if (isset($this->config)) {
-				$this->to      = option('config_email_error', 'error@' . DOMAIN);
-				$this->from    = option('config_email_error', 'error@' . DOMAIN);
+				$this->to      = option('site_email_error', 'error@' . DOMAIN);
+				$this->from    = option('site_email_error', 'error@' . DOMAIN);
 				$this->cc      = '';
 				$this->bcc     = '';
 				$this->subject = "There was a problem sending out the email!";
@@ -508,9 +508,9 @@ class Mail extends Library
 
 		//Hide Mail errors when ajax pages are requested
 		if (IS_AJAX && option('config_error_display')) {
-			$this->config->set('config_error_display', false);
+			set_option('config_error_display', false);
 			trigger_error($msg);
-			$this->config->set('config_error_display', true);
+			set_option('config_error_display', true);
 		} else {
 			trigger_error($msg);
 		}
@@ -532,7 +532,6 @@ class Mail extends Library
 			'html'       => $this->html,
 			'text'       => $this->text,
 			'attachment' => $this->attachments,
-			'store_id'   => option('store_id'),
 			'time'       => _time(),
 		);
 
@@ -540,7 +539,7 @@ class Mail extends Library
 
 		$mail_fail = $this->escape($mail_fail);
 
-		$this->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+		$this->query("INSERT INTO " . self::$tables['setting'] . " SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	private function log($msg, $flush = false)

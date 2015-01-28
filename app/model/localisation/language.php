@@ -5,26 +5,26 @@ class App_Model_Localisation_Language extends Model
 	{
 		$language_id = $this->insert('language', $data);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function editLanguage($language_id, $data)
 	{
 		$this->update('language', $data, $language_id);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function deleteLanguage($language_id)
 	{
 		$this->delete('language', $language_id);
 
-		$this->cache->delete('language');
+		clear_cache('language');
 	}
 
 	public function getLanguage($language_id)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
+		return $this->queryRow("SELECT * FROM " . self::$tables['language'] . " WHERE language_id = '" . (int)$language_id . "'");
 	}
 
 	public function getLanguages($data = array(), $select = '*', $total = false)
@@ -35,7 +35,7 @@ class App_Model_Localisation_Language extends Model
 			$select = '*';
 		}
 
-		$from = DB_PREFIX . "language";
+		$from = self::$tables['language'];
 
 		$where = "1";
 
@@ -65,5 +65,29 @@ class App_Model_Localisation_Language extends Model
 	public function getTotalLanguages($data = array())
 	{
 		return $this->getLanguages($data, '', true);
+	}
+
+	/**
+	 * Retrieve all the languages that are not disabled (eg: languages with status 0 (enabled) and 1 (active))
+	 *
+	 * @return Array - a list of enabled and active languages.
+	 */
+	public function getEnabledLanguages()
+	{
+		$language_list = cache('language.list');
+
+		if (!$language_list) {
+			$languages = $this->queryRows("SELECT language_id, name, code, image, sort_order FROM " . self::$tables['language'] . " WHERE status >= 0 ORDER BY sort_order");
+
+			$language_list = array();
+
+			foreach ($languages as $language) {
+				$language_list[$language['language_id']] = $language;
+			}
+
+			cache('language.list', $language_list);
+		}
+
+		return $language_list;
 	}
 }

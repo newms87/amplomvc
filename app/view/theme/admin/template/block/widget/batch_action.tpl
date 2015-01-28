@@ -1,40 +1,35 @@
-<span class="batch_action_title"><?= _l("Batch Action"); ?></span>
+<span class="batch_action_title">{{Batch Action}}</span>
 
-<?= build('select', array(
+<?= build(array(
+	'type'  => 'select',
 	'name'  => 'batch_action',
 	'data'  => $actions,
-	'key'   => 'key',
-	'value' => 'label',
+	'value' => 'key',
+	'label' => 'label',
 )); ?>
-
-<? $ckeditor = false; ?>
 
 <? foreach ($actions as $action) {
 	if (empty($action['type'])) {
 		continue;
 	} ?>
 
-	<div class="action_value" id="for-<?= $action['key']; ?>" <?= $action['attrs']; ?>>
+	<div class="action_value" id="for-<?= $action['key']; ?>" <?= attrs($action); ?>>
 
 		<? switch ($action['type']) {
 			case 'text':
 				?>
 				<input type="text" name="action_value" value="<?= $action['default']; ?>"/>
 				<? break;
-			case 'ckedit':
-				?>
-				<? $ckeditor = true; ?>
-				<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>" name="action_value"><?= $action['default']; ?></textarea>
-				<? break;
 			case 'select':
 				?>
-				<?= build('select', array(
-					'name'   => "action_value",
-					'data'   => $action['build_data'],
-					'select' => $action['default'],
-					'key'    => $action['build_config'][0],
-					'value'  => $action['build_config'][1],
-				)); ?>
+				<?= build(array(
+				'type'   => 'select',
+				'name'   => "action_value",
+				'data'   => $action['build_data'],
+				'select' => $action['default'],
+				'value'  => $action['build_config'][0],
+				'label'  => $action['build_config'][1],
+			)); ?>
 				<? break;
 
 			case 'date':
@@ -51,11 +46,7 @@
 	</div>
 <? } ?>
 
-<a class="button batch-action-go" data-loading="<?= _l("..."); ?>"><?= _l("Go"); ?></a>
-
-<? if ($ckeditor) {
-	echo build_js('ckeditor');
-} ?>
+<a class="button batch-action-go" data-loading="{{...}}">{{Go}}</a>
 
 <script type="text/javascript">
 	$.ac_datepicker();
@@ -75,17 +66,9 @@
 		var $this = $(this);
 		var $selected = $('<?= $selector; ?>:checked');
 
-		if (!$selected.length) {
-			alert("<?= _l("Please select items to perform the batch action on."); ?>");
-			return false;
-		}
-
 		av = $('.action_value.active [name=action_value]');
 
-		if (av.hasClass('ckedit'))
-			av = CKEDITOR.instances[av.attr('id')].getData();
-		else
-			av = av.val() || '';
+		av = av.val() || '';
 
 		var data = $selected.serializeArray();
 

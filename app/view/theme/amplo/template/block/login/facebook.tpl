@@ -1,1 +1,1 @@
-<a href="<?= $connect; ?>" class="fb_login <?= $size; ?>" title="<?= _l("Sign in with Facebook"); ?>"></a>
+<a href="<?= $connect; ?>" class="fb_login <?= $size; ?>" title="{{Sign in with Facebook}}"></a>

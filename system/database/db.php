@@ -25,7 +25,7 @@ class DB
 		}
 
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if ($driver === 'mysqli') {
+		if (!$driver || $driver === 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 
@@ -62,7 +62,7 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$key];
-		$this->prefix = is_null($prefix) ? DB_PREFIX : $prefix;
+		$this->prefix = $prefix === null ? DB_PREFIX : $prefix;
 	}
 
 	public function hasError($type = null)
@@ -93,6 +93,11 @@ class DB
 		return $this->driver->getError();
 	}
 
+	public function setPrefix($prefix)
+	{
+		$this->prefix = $prefix;
+	}
+
 	public function getName()
 	{
 		return $this->driver->getName();
@@ -113,7 +118,7 @@ class DB
 	 * @return mixed - An array as described above, or false on failure
 	 *
 	 */
-	public function query($sql)
+	public function query($sql, $cast_type = true)
 	{
 		if ($this->synctime) {
 			$sql = $this->synctime($sql);
@@ -126,7 +131,7 @@ class DB
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 
-			$resource = $this->driver->query($sql);
+			$resource = $this->driver->query($sql, $cast_type);
 
 			$time = round(microtime(true) - $start, 6);
 
@@ -135,7 +140,7 @@ class DB
 				'time'  => $time ? $time : .000005,
 			);
 		} else {
-			$resource = $this->driver->query($sql);
+			$resource = $this->driver->query($sql, $cast_type);
 		}
 
 		if (!$resource) {
@@ -313,7 +318,7 @@ class DB
 			return false;
 		}
 
-		if (is_null($prefix)) {
+		if ($prefix === null) {
 			$prefix = $this->prefix;
 		}
 
@@ -370,7 +375,7 @@ class DB
 					if (!$null) { //meaning NULL is allowed
 						$default = "DEFAULT NULL";
 					} else {
-						$default = "";
+						$default = '';
 					}
 				} else {
 					$default = "DEFAULT '" . $this->escape(trim($column['Default'], "'\"")) . "'";
@@ -435,14 +440,26 @@ class DB
 		return false;
 	}
 
-	public function getTables()
+	public function getTable($table)
+	{
+		$t = $this->hasTable($table);
+
+		return $t ? $t : $table;
+	}
+
+	public function getTables($prefix = false)
 	{
 		$rows = $this->queryRows("SHOW TABLES");
 
 		$tables = array();
 
 		foreach ($rows as $row) {
-			$tables[current($row)] = current($row);
+			$name = current($row);
+
+			if (!$prefix || strpos($name, $prefix) === 0) {
+				$base          = $prefix ? preg_replace("/^" . $prefix . "/", '', $name) : $name;
+				$tables[$base] = $name;
+			}
 		}
 
 		return $tables;
@@ -450,12 +467,50 @@ class DB
 
 	public function createTable($table, $sql)
 	{
+		clear_cache('model');
+		$this->tables = null;
 		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
+	}
+
+	public function copyTable($table, $copy, $with_data = false)
+	{
+		if ($table === $copy) {
+			return true;
+		}
+
+		if ($this->hasTable($copy)) {
+			$this->error['copy'] = _l("A table with the same name as copy, %s, already exists!", $copy);
+			return false;
+		}
+
+		$row = $this->queryRow("SHOW CREATE TABLE `$table`");
+
+		if (!empty($row['Create Table'])) {
+			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$table`/i", "CREATE TABLE `$copy`", $row['Create Table']);
+
+			if (!$with_data) {
+				clear_cache('model');
+				$this->tables = null;
+
+				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
+
+				return $this->query($sql);
+			}
+		}
+
+		return false;
 	}
 
 	public function dropTable($table)
 	{
-		return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+		clear_cache('model');
+		$this->tables = null;
+
+		if ($this->hasTable($this->prefix . $table)) {
+			return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
+		} else {
+			return $this->query("DROP TABLE IF EXISTS `$table`");
+		}
 	}
 
 	public function countTables()
@@ -507,6 +562,7 @@ class DB
 	public function addColumn($table, $column, $options = '')
 	{
 		if ($this->hasTable($table) && !$this->hasColumn($table, $column)) {
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` ADD COLUMN `$column` $options");
 		}
 
@@ -522,6 +578,7 @@ class DB
 				return false;
 			}
 
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
@@ -529,15 +586,67 @@ class DB
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
+			clear_cache('model');
 			return $this->query("ALTER TABLE `" . $this->prefix . "$table` DROP COLUMN `$column`");
 		}
 
 		return false;
 	}
 
+	public function getIndex($table, $key)
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			return $this->queryRows("SHOW INDEX FROM `" . $table . "` WHERE Key_name = '" . $this->escape($key) . "'");
+		}
+	}
+
+	public function createIndex($table, $key, $fields, $type = 'BTREE')
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			if ($this->getIndex($table, $key)) {
+				return true;
+			}
+
+			$key_fields = array();
+
+			if (!is_array($fields)) {
+				$key_fields[] = "`$fields`";
+			} else {
+				$orders = array(
+					'ASC',
+					'DESC'
+				);
+
+				foreach ($fields as $name => $ord) {
+					if (!in_array(strtoupper($ord), $orders)
+					) {
+						$key_fields[] = "`$ord`";
+					} else {
+						$key_fields[] = "`$name` $ord";
+					}
+				}
+			}
+
+			return $this->query("CREATE INDEX `" . $this->escape($key) . "` ON `$table`(" . implode(',', $key_fields) . ") USING " . $type);
+		}
+	}
+
+	public function dropIndex($table, $key)
+	{
+		$table = $this->hasTable($table);
+
+		if ($table) {
+			return $this->query("DROP INDEX `" . $key . "` ON `$table`");
+		}
+	}
+
 	public function setAutoIncrement($table, $value)
 	{
-		if (!$this->driver->setAutoIncrement($table, $value)) {
+		if (!$this->driver->setAutoIncrement($this->getTable($table), $value)) {
 			trigger_error($this->driver->getError());
 
 			return false;
@@ -546,13 +655,25 @@ class DB
 		return true;
 	}
 
-	public function setPrefix($prefix, $old_prefix = '')
+	public function alterPrefix($prefix, $old_prefix = '')
 	{
+		clear_cache('model');
+
 		$tables = $this->getTables();
 
 		foreach ($tables as $table) {
-			$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
-			$this->query("RENAME TABLE $table TO $new_table");
+			if ($old_prefix) {
+				$new_table = preg_replace("/^$old_prefix/", $prefix, $table);
+			} else {
+				if (preg_match("/^$prefix/", $table)) {
+					continue;
+				}
+
+				$new_table = $prefix . $table;
+			}
+
+			$this->query("DROP TABLE IF EXISTS `$new_table`");
+			$this->query("RENAME TABLE `$table` TO `$new_table`");
 		}
 
 		return empty($this->error);

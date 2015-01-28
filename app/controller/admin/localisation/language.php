@@ -5,14 +5,14 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function index()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
@@ -27,7 +27,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function update()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (IS_POST && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
@@ -42,7 +42,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 	public function delete()
 	{
-		$this->document->setTitle(_l("Language"));
+		set_page_info('title', _l("Language"));
 
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $language_id) {
@@ -88,8 +88,8 @@ class App_Controller_Admin_Localisation_Language extends Controller
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
-			'start' => ($page - 1) * option('config_admin_limit'),
-			'limit' => option('config_admin_limit')
+			'start' => ($page - 1) * option('admin_list_limit'),
+			'limit' => option('admin_list_limit')
 		);
 
 		$data['status'] = array(
@@ -267,14 +267,8 @@ class App_Controller_Admin_Localisation_Language extends Controller
 					$this->error['warning'] = _l("Warning: This language cannot be deleted as it is currently assigned as the default store language!");
 				}
 
-				if (option('config_admin_language') == $language_info['code']) {
+				if (option('admin_language') == $language_info['code']) {
 					$this->error['warning'] = _l("Warning: This Language cannot be deleted as it is currently assigned as the administration language!");
-				}
-
-				$store_total = $this->Model_Setting_Store->getTotalStoresByLanguage($language_info['code']);
-
-				if ($store_total) {
-					$this->error['warning'] = sprintf(_l("Warning: This language cannot be deleted as it is currently assigned to %s stores!"), $store_total);
 				}
 			}
 		}
