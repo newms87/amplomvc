@@ -16,6 +16,24 @@ class Customer extends Library
 			} else {
 				$this->logout();
 			}
+		} else {
+			$cookie = _cookie('customer');
+
+			if (!$cookie) {
+				$cookie = json_decode($cookie);
+
+				if (!empty($cookie['username'])) {
+					$customer = $this->queryRow("SELECT * FROM {$this->t['customer']} WHERE username = '" . $this->escape($cookie['username']) . "'");
+
+					if ($customer) {
+						/*
+						html_dump($cookie, 'cookie');
+						echo $cookie['password'] . '<BR>';
+						echo hash_hmac('sha256', $cookie['username'], $customer['password']);
+						*/
+					}
+				}
+			}
 		}
 	}
 
@@ -42,6 +60,14 @@ class Customer extends Library
 					return false;
 				}
 			}
+
+
+			$cookie = array(
+				'username' => $email,
+				'password' => hash_hmac('sha256', $customer['password'], $password),
+			);
+
+			set_cookie('customer', json_encode($cookie), option('customer_cookie_expire', 0));
 
 			$this->setCustomer($customer);
 
@@ -153,7 +179,6 @@ class Customer extends Library
 
 		return $meta_id;
 	}
-
 
 	public function removeMeta($key)
 	{

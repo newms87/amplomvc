@@ -111,12 +111,16 @@ class Session extends Library
 		return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
 	}
 
-	public function setCookie($name, $value, $expire = 0)
+	public function setCookie($name, $value, $expire = 31536000)
 	{
 		if (!headers_sent()) {
 			$expire = $expire ? time() + $expire : 0;
-			setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
+			return setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
 		}
+
+		$this->error['headers'] = _l("Unable to set cookie because headers were already sent!");
+
+		return false;
 	}
 
 	public function deleteCookie($name)

@@ -46,6 +46,18 @@ function _session($key, $default = null)
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
+function _cookie($key, $default = null)
+{
+	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+}
+
+function set_cookie($name, $value, $expire = 31536000)
+{
+	global $registry;
+	return $registry->get('session')->setCookie($name, $value, $expire);
+}
+
+
 /**************************************
  * System Language Translation Engine *
  **************************************/
