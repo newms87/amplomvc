@@ -224,7 +224,7 @@ class App_Model_Page extends App_Model_Table
 		if ($css === null) {
 			$css = trim($this->document->compileLessContent($style));
 
-			if (!$css) {
+			if (false && !$css) {
 				send_mail(array(
 					'to'      => 'dnewman@roofscope.com',
 					'subject' => "LESS COMPILE FAILED FOR " . $page_id,
