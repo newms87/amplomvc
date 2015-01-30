@@ -27,8 +27,12 @@ class App_Controller_Customer extends Controller
 		$this->login();
 	}
 
-	public function login(array $settings = array())
+	public function login($settings = array())
 	{
+		if (empty($settings)) {
+			$settings = array();
+		}
+
 		//Page Head
 		set_page_info('title', _l("Customer Sign In"));
 
