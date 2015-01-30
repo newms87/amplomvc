@@ -56,20 +56,17 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		$sort   = $this->sort->getQueryDefaults('alias', 'ASC');
 		$filter = _get('filter', array());
 
-		$url_alias_total = $this->Model_Setting_UrlAlias->getTotalUrlAliases($filter);
-		$url_aliases     = $this->Model_Setting_UrlAlias->getUrlAliases($sort + $filter);
+		list($url_aliases, $url_alias_total) = $this->Model_UrlAlias->getRecords($sort, $filter, $columns, true, 'url_alias_id');
 
-		$url_query = $this->url->getQueryExclude('url_alias_id');
-
-		foreach ($url_aliases as &$url_alias) {
+		foreach ($url_aliases as $url_alias_id => &$url_alias) {
 			$url_alias['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
+					'href' => site_url('admin/settings/url_alias/update', 'url_alias_id=' . $url_alias_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/settings/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
+					'href' => site_url('admin/settings/url_alias/delete', 'url_alias_id=' . $url_alias_id)
 				)
 			);
 		}
@@ -127,10 +124,10 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		if (IS_POST && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['url_alias_id'])) {
-				$this->Model_Setting_UrlAlias->addUrlAlias($_POST);
+				$this->Model_UrlAlias->addUrlAlias($_POST);
 			} //Update
 			else {
-				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
+				$this->Model_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			}
 
 			if (!$this->message->has('error', 'warning')) {
@@ -146,7 +143,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 	public function delete()
 	{
 		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
-			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
+			$this->Model_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
 			if (!$this->message->has('error', 'warning')) {
 				message('success', _l("Success: You have modified the url alias table!"));
@@ -172,13 +169,13 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 						$data['status'] = 0;
 						break;
 					case 'delete':
-						$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+						$this->Model_UrlAlias->deleteUrlAlias($url_alias_id);
 						break;
 					default:
 						break 2; //Break For loop
 				}
 
-				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
+				$this->Model_UrlAlias->editUrlAlias($url_alias_id, $data);
 			}
 
 			if (!$this->message->has('error', 'warning')) {
@@ -211,7 +208,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		$url_alias = $_POST;
 
 		if ($url_alias_id && !IS_POST) {
-			$url_alias = $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id);
+			$url_alias = $this->Model_UrlAlias->getUrlAlias($url_alias_id);
 		}
 
 		//Load Values or Defaults

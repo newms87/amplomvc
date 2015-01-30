@@ -50,11 +50,11 @@ class App_Model_Layout extends App_Model_Table
 
 	public function getRoutes($layout_id)
 	{
-		return $this->queryRows("SELECT * FROM " . self::$tables['layout_route'] . " WHERE layout_id = '" . (int)$layout_id . "'");
+		return $this->queryRows("SELECT * FROM {$this->t['layout_route']} WHERE layout_id = '" . (int)$layout_id . "'");
 	}
 
 	public function getLayoutRoutes()
 	{
-		return $this->queryRows("SELECT * FROM " . self::$tables['layout_route'] . " ORDER BY `route` ASC");
+		return $this->queryRows("SELECT * FROM {$this->t['layout_route']} ORDER BY `route` ASC");
 	}
 }

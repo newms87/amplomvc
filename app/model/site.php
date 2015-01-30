@@ -65,7 +65,7 @@ class App_Model_Site extends App_Model_Table
 			$unique_prefix = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "store WHERE `prefix` = '$site[prefix]'");
 
 			if ($unique_prefix <= 1) {
-				$col    = 'Tables_in_' . $this->db->getName();
+				$col    = 'Tables_in_' . $this->db->getSchema();
 				$tables = $this->queryRows("SHOW TABLES WHERE $col like '$site[prefix]%'");
 
 				foreach ($tables as $table) {

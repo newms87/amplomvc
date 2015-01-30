@@ -130,7 +130,7 @@ class App_Controller_Admin_Layout extends Controller
 		);
 
 		//Template Data
-		$layout['data_stores'] = $this->Model_Site->getRecords();
+		$layout['data_stores'] = $this->Model_Site->getRecords(array('cache' => true));
 
 		//Action Buttons
 		$layout['save']   = site_url('admin/layout/save', 'layout_id=' . $layout_id);

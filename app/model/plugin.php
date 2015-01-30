@@ -9,7 +9,7 @@ class App_Model_Plugin extends App_Model_Table
 	public function getField($name, $field)
 	{
 		$id = preg_match("/[^\\d]/", $name) ? false : (int)$name;
-		return $this->queryVar("SELECT `$field` FROM " . self::$tables[$this->table] . " WHERE " . ($id ? "plugin_id = $id" : "`name` = '" . $this->escape($name) . "'"));
+		return $this->queryVar("SELECT `$field` FROM " . $this->t[$this->table] . " WHERE " . ($id ? "plugin_id = $id" : "`name` = '" . $this->escape($name) . "'"));
 	}
 
 	public function getPlugins($data = array(), $total = false)
@@ -17,7 +17,7 @@ class App_Model_Plugin extends App_Model_Table
 		if (!$this->plugins) {
 			$this->plugins = array();
 
-			$plugin_list = $this->queryRows("SELECT * FROM " . self::$tables['plugin']);
+			$plugin_list = $this->queryRows("SELECT * FROM {$this->t['plugin']}");
 
 			$plugin_dirs = scandir(DIR_PLUGIN);
 
@@ -191,7 +191,7 @@ class App_Model_Plugin extends App_Model_Table
 		clear_cache('plugin');
 
 		//remove files from plugin that were registered
-		$plugin_entries = $this->queryRows("SELECT * FROM " . self::$tables['plugin_registry'] . " WHERE `name` = '" . $this->db->escape($name) . "'");
+		$plugin_entries = $this->queryRows("SELECT * FROM {$this->t['plugin_registry']} WHERE `name` = '" . $this->db->escape($name) . "'");
 
 		foreach ($plugin_entries as $entry) {
 			//Only Remove symlinked files (in case someone already deleted this file and replaced it)
@@ -244,10 +244,10 @@ class App_Model_Plugin extends App_Model_Table
 	public function getPluginData($name = false)
 	{
 		if (!empty($name)) {
-			return $this->queryRow("SELECT * FROM " . self::$tables['plugin'] . " WHERE `name` ='" . $this->escape($name) . "'");
+			return $this->queryRow("SELECT * FROM {$this->t['plugin']} WHERE `name` ='" . $this->escape($name) . "'");
 		}
 
-		$plugins = $this->queryRows("SELECT * FROM " . self::$tables['plugin'] . " ORDER BY `name`");
+		$plugins = $this->queryRows("SELECT * FROM {$this->t['plugin']} ORDER BY `name`");
 
 		$plugin_data = array();
 

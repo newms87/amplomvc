@@ -17,7 +17,7 @@ class Url extends Library
 
 		if (option('config_use_ssl')) {
 			//TODO - finish secure pages
-			$this->secure_pages = $this->queryRows("SELECT * FROM " . self::$tables['secure_page']);
+			$this->secure_pages = $this->queryRows("SELECT * FROM {$this->t['secure_page']}");
 		}
 
 		$this->loadAliases();
@@ -268,7 +268,7 @@ class Url extends Library
 
 	public function getAlias($path, $query = '')
 	{
-		return $this->queryVar("SELECT alias FROM " . self::$tables['url_alias'] . " WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
+		return $this->queryVar("SELECT alias FROM {$this->t['url_alias']} WHERE `path` = '" . $this->escape($path) . "' AND `query` = '" . $this->escape($query) . "'");
 	}
 
 	public function setAlias($alias, $path, $query = '')
@@ -283,7 +283,7 @@ class Url extends Library
 				'status' => 1,
 			);
 
-			return $this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+			return $this->Model_UrlAlias->addUrlAlias($url_alias);
 		}
 
 		return true;
@@ -292,8 +292,7 @@ class Url extends Library
 	public function removeAlias($path, $query = '', $alias = '')
 	{
 		$sql_query =
-			"SELECT url_alias_id FROM " . self::$tables['url_alias'] .
-			" WHERE `path` = '" . $this->escape($path) . "'" .
+			"SELECT url_alias_id FROM {$this->t['url_alias']} WHERE `path` = '" . $this->escape($path) . "'" .
 			" AND `query` = '" . $this->escape($query) . "'";
 
 		if ($alias) {
@@ -303,10 +302,10 @@ class Url extends Library
 		$url_alias_ids = $this->queryColumn($sql_query);
 
 		foreach ($url_alias_ids as $url_alias_id) {
-			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+			$this->Model_UrlAlias->deleteUrlAlias($url_alias_id);
 		}
 
-		return $this->Model_Setting_UrlAlias->hasError();
+		return $this->Model_UrlAlias->hasError();
 	}
 
 	public function loadAliases()
@@ -314,7 +313,7 @@ class Url extends Library
 		$this->aliases = cache('url_alias.all');
 
 		if ($this->aliases === null) {
-			$this->aliases = $this->queryRows("SELECT * FROM " . self::$tables['url_alias'] . " WHERE status = 1", 'alias');
+			$this->aliases = $this->queryRows("SELECT * FROM {$this->t['url_alias']} WHERE status = 1", 'alias');
 
 			cache('url_alias.all', $this->aliases);
 		}

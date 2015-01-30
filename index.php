@@ -1,4 +1,7 @@
 <?php
+//Amplo MVC Version
+define('AMPLO_VERSION', '0.2.2');
+
 // Configuration
 if (is_file(dirname(__FILE__) . '/config.php')) {
 	include_once(dirname(__FILE__) . '/config.php');
@@ -20,13 +23,6 @@ require_once(DIR_SITE . 'system/_mod.php');
 // System Startup
 require_once(_mod(DIR_SITE . 'system/startup.php'));
 
-if (AMPLO_TIME_LOG) {
-	timelog('startup');
-}
-
 // Load
 require_once(_mod(DIR_SYSTEM . 'load.php'));
 
-if (AMPLO_TIME_LOG) {
-	timelog('finish');
-}

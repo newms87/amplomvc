@@ -4,10 +4,6 @@ if (version_compare(phpversion(), '5.3.0', '<') == true) {
 	exit('PHP5.3+ Required');
 }
 
-// Amplo Version
-define('AMPLO_VERSION', '0.2.1');
-define('AMPLO_DEFAULT_THEME', 'amplo');
-
 //Directories
 define('DIR_SYSTEM', DIR_SITE . 'system/');
 define('DIR_DATABASE', DIR_SITE . 'system/database/');
@@ -49,6 +45,7 @@ $config_defines = array(
 	'MYSQL_TIMEZONE'        => '-6:00',
 	'DB_PROFILE'            => false,
 	'DB_PROFILE_NO_CACHE'   => false,
+	'AMPLO_DEFAULT_THEME'   => 'amplo',
 	'AMPLO_TIME_LOG'        => false,
 	'AMPLO_SESSION'         => 'cross-store-session',
 	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,

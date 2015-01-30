@@ -24,7 +24,7 @@ class Address extends Library
 	public function edit($address_id, $address)
 	{
 		//Load full address (in case of missing components) to validate the updated entry
-		$address += $this->queryRow("SELECT * FROM " . self::$tables['address'] . " WHERE address_id = " . (int)$address_id);
+		$address += $this->queryRow("SELECT * FROM {$this->t['address']} WHERE address_id = " . (int)$address_id);
 
 		if ($this->validate($address)) {
 			//Address cannot be edited, therefore, archive the address and create a new one (associating a new address ID to this address)
@@ -46,7 +46,7 @@ class Address extends Library
 
 	public function getAddress($address_id)
 	{
-		$address = $this->queryRow("SELECT * FROM " . self::$tables['address'] . " WHERE address_id = '" . (int)$address_id . "'");
+		$address = $this->queryRow("SELECT * FROM {$this->t['address']} WHERE address_id = '" . (int)$address_id . "'");
 
 		if ($address) {
 			$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
@@ -66,13 +66,13 @@ class Address extends Library
 		}
 
 		//From
-		$from = self::$tables['address'] . " a";
+		$from = $this->t['address'] . " a";
 
 		//Where
 		$where = "1";
 
 		if (!empty($data['customer_ids'])) {
-			$from .= " LEFT JOIN " . self::$tables['customer_address'] . " ca ON (ca.address_id=a.address_id)";
+			$from .= " LEFT JOIN {$this->t['customer_address']} ca ON (ca.address_id=a.address_id)";
 
 			$where .= " AND ca.customer_id IN (" . implode(',', $data['customer_ids']) . ")";
 		}
@@ -148,7 +148,7 @@ class Address extends Library
 
 	public function isLocked($address_id)
 	{
-		return $this->queryVar("SELECT locked FROM " . self::$tables['address'] . " WHERE address_id = " . (int)$address_id);
+		return $this->queryVar("SELECT locked FROM {$this->t['address']} WHERE address_id = " . (int)$address_id);
 	}
 
 	public function exists($address)
@@ -159,7 +159,7 @@ class Address extends Library
 			return false;
 		}
 
-		return $this->queryVar("SELECT address_id FROM " . self::$tables['address'] . " WHERE $where");
+		return $this->queryVar("SELECT address_id FROM {$this->t['address']} WHERE $where");
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Address extends Library
 
 		//TODO: This should be handled by customer library. Find new approach.
 		if ($new_address_id) {
-			$this->queryRows("UPDATE TABLE " . self::$tables['customer_address'] . " SET address_id = " . (int)$new_address_id . " WHERE address_id = " . (int)$address_id);
+			$this->queryRows("UPDATE TABLE {$this->t['customer_address']} SET address_id = " . (int)$new_address_id . " WHERE address_id = " . (int)$address_id);
 		} else {
 			$this->delete('customer_address', $address_id);
 		}
@@ -196,10 +196,10 @@ class Address extends Library
 		$country_id  = (int)$address['country_id'];
 		$zone_id     = (int)$address['zone_id'];
 
-		$include = "0 NOT IN (SELECT COUNT(*) FROM " . self::$tables['zone_to_geo_zone'] . " z2g WHERE g.geo_zone_id = z2g.geo_zone_id AND z2g.country_id IN (0, $country_id) AND z2g.zone_id IN (0, $zone_id))";
-		$exclude = "0 IN (SELECT COUNT(*) FROM " . self::$tables['zone_to_geo_zone'] . " z2g2 WHERE g.geo_zone_id = z2g2.geo_zone_id AND z2g2.country_id = '$country_id' AND z2g2.zone_id IN (0, $zone_id))";
+		$include = "0 NOT IN (SELECT COUNT(*) FROM {$this->t['zone_to_geo_zone']} z2g WHERE g.geo_zone_id = z2g.geo_zone_id AND z2g.country_id IN (0, $country_id) AND z2g.zone_id IN (0, $zone_id))";
+		$exclude = "0 IN (SELECT COUNT(*) FROM {$this->t['zone_to_geo_zone']} z2g2 WHERE g.geo_zone_id = z2g2.geo_zone_id AND z2g2.country_id = '$country_id' AND z2g2.zone_id IN (0, $zone_id))";
 
-		$query = "SELECT COUNT(*) FROM " . self::$tables['geo_zone'] . " g WHERE g.geo_zone_id = '$geo_zone_id' AND IF (g.exclude = '0', $include, $exclude)";
+		$query = "SELECT COUNT(*) FROM {$this->t['geo_zone']} g WHERE g.geo_zone_id = '$geo_zone_id' AND IF (g.exclude = '0', $include, $exclude)";
 
 		return $this->queryVar($query) > 0;
 	}
@@ -229,7 +229,7 @@ class Address extends Library
 		if (isset($address_formats[$country_id])) {
 			$address_format = $address_formats[$country_id];
 		} else {
-			$address_format = $this->queryVar("SELECT address_format FROM " . self::$tables['country'] . " WHERE country_id = '" . (int)$country_id . "'");
+			$address_format = $this->queryVar("SELECT address_format FROM {$this->t['country']} WHERE country_id = '" . (int)$country_id . "'");
 
 			if (empty($address_format)) {
 				$address_format =
@@ -331,7 +331,7 @@ class Address extends Library
 		// Note: Error messages can be changed from Admin Panel based on localization
 		if (empty($address['zone_id'])) {
 			$this->error['zone_id'] = _l("Please select a state.");
-		} elseif (!$this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['zone'] . " WHERE zone_id = " . (int)$address['zone_id'] . " AND country_id = " . (int)$address['country_id'])) {
+		} elseif (!$this->queryVar("SELECT COUNT(*) as total FROM {$this->t['zone']} WHERE zone_id = " . (int)$address['zone_id'] . " AND country_id = " . (int)$address['country_id'])) {
 			$this->error['zone_id'] = _l("Invalid Zone!");
 		}
 

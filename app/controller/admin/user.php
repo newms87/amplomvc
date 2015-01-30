@@ -50,17 +50,17 @@ class App_Controller_Admin_User extends Controller
 		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
 		$filter = _get('filter', array());
 
-		list($users, $user_total) = $this->Model_User->getUsers($sort, $filter, null, true);
+		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, null, true, 'user_id');
 
-		foreach ($users as &$user) {
+		foreach ($users as $user_id => &$user) {
 			$actions = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/user/form', 'user_id=' . $user['user_id'])
+					'href' => site_url('admin/user/form', 'user_id=' . $user_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/user/delete', 'user_id=' . $user['user_id'])
+					'href' => site_url('admin/user/delete', 'user_id=' . $user_id)
 				),
 			);
 
@@ -132,7 +132,7 @@ class App_Controller_Admin_User extends Controller
 
 		$user += $defaults;
 
-		$user['data_user_roles'] = $this->Model_Setting_Role->getRoles();
+		$user['data_user_roles'] = $this->Model_UserRole->getRecords(array('cache' => true));
 
 		$user['data_statuses'] = array(
 			0 => _l("Disabled"),

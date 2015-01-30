@@ -46,6 +46,18 @@ function _session($key, $default = null)
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
+function _cookie($key, $default = null)
+{
+	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+}
+
+function set_cookie($name, $value, $expire = 31536000)
+{
+	global $registry;
+	return $registry->get('session')->setCookie($name, $value, $expire);
+}
+
+
 /**************************************
  * System Language Translation Engine *
  **************************************/
@@ -460,26 +472,29 @@ if (!defined('PASSWORD_DEFAULT')) {
 function _set_site($site)
 {
 	global $registry;
+
 	if (!is_array($site)) {
 		$site = $registry->get('Model_Site')->getRecord($site);
 	}
 
-	_set_db_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
+	if ($site) {
+		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 
-	$registry->get('route')->setSite($site);
-	$registry->get('config')->setSite($site);
-	$registry->get('url')->setSite($site);
+		$registry->get('route')->setSite($site);
+		$registry->get('config')->setSite($site);
+		$registry->get('url')->setSite($site);
+
+		return true;
+	}
+
+	return false;
 }
 
-function _set_db_prefix($prefix)
+function _set_prefix($prefix)
 {
 	global $registry;
 	$registry->get('db')->setPrefix($prefix);
 	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
-
-	if (Model::$prefix !== $prefix) {
-		Model::setPrefix($prefix);
-	}
 }
 
 function get_caller($offset = 0, $limit = 10)

@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Setting_Role extends Model
+class App_Model_UserRole extends App_Model_Table
 {
+	protected $table = 'user_role', $primary_key = 'user_role_id';
+
 	public function save($user_role_id, $data)
 	{
 		if (isset($data['name'])) {
@@ -9,7 +11,7 @@ class App_Model_Setting_Role extends Model
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
 
-			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['user_role'] . " WHERE `name` = '" . $this->escape($data['name']) . "'")) {
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t['user_role']} WHERE `name` = '" . $this->escape($data['name']) . "'")) {
 				$this->error['name'] = _l("Group Name already exists!");
 			}
 		} elseif (!$user_role_id) {
@@ -39,16 +41,15 @@ class App_Model_Setting_Role extends Model
 			'user_role_id' => $user_role_id,
 		);
 
-		$total_users = $this->Model_User->getTotalUsers($filter);
+		$total_users = $this->Model_User->getTotalRecords($filter);
 
 		if ($total_users) {
-			$name                           = $this->queryVar("SELECT name FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
-			$this->error['user_role_users'] = _l("The user group %s currently has %s users associated and cannot be deleted.", $name, $total_users);
-
+			$this->error['user_role_users'] = _l("The user group %s currently has %s users associated and cannot be deleted.", $this->getField($user_role_id, 'name'), $total_users);
 			return false;
 		}
 
 		clear_cache('user_role');
+
 		return $this->delete('user_role', $user_role_id);
 	}
 
@@ -57,7 +58,7 @@ class App_Model_Setting_Role extends Model
 		$user_role = cache('user_role.' . $user_role_id);
 
 		if (!$user_role) {
-			$user_role = $this->queryRow("SELECT * FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
+			$user_role = $this->queryRow("SELECT * FROM {$this->t['user_role']} WHERE user_role_id = " . (int)$user_role_id);
 
 			if ($user_role) {
 				$user_role['permissions'] = unserialize($user_role['permissions']);
@@ -76,30 +77,12 @@ class App_Model_Setting_Role extends Model
 
 	public function getRoleId($role)
 	{
-		return $this->queryVar("SELECT user_role_id FROM " . self::$tables['user_role'] . " WHERE name = '" . $this->escape($role) . "'");
+		return $this->queryVar("SELECT user_role_id FROM {$this->t['user_role']} WHERE name = '" . $this->escape($role) . "'");
 	}
 
 	public function getRoleName($user_role_id)
 	{
-		return $this->queryVar("SELECT name FROM " . self::$tables['user_role'] . " WHERE user_role_id = " . (int)$user_role_id);
-	}
-
-	public function getRoles($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
-	{
-		//Select
-		$select = $this->extractSelect('user_role', $select);
-
-		//From
-		$from = self::$tables['user_role'];
-
-		//Where
-		$where = $this->extractWhere('user_role', $filter);
-
-		//Order and Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return $this->queryVar("SELECT name FROM {$this->t['user_role']} WHERE user_role_id = " . (int)$user_role_id);
 	}
 
 	public function getRestrictedAreas()
@@ -147,7 +130,7 @@ class App_Model_Setting_Role extends Model
 		}
 
 		//Permissions for individual dashboards
-		$dashboards = $this->Model_Dashboard->getDashboards();
+		$dashboards = $this->Model_Dashboard->getRecords(array('cache' => true));
 
 		$areas['admin']['dashboards'] = array(
 			'*' => '',
@@ -164,11 +147,6 @@ class App_Model_Setting_Role extends Model
 		return $areas;
 	}
 
-	public function getTotalRoles($filter = array())
-	{
-		return $this->getRoles(array(), $filter, 'COUNT(*)');
-	}
-
 	public function getViewListingId()
 	{
 		$view_listing_id = $this->Model_View->getViewListingBySlug('user_role_list');
@@ -176,8 +154,8 @@ class App_Model_Setting_Role extends Model
 		if (!$view_listing_id) {
 			$view_listing = array(
 				'name' => _l("User Roles"),
-			   'slug' => 'user_role_list',
-			   'path' => 'admin/settings/role/listing',
+				'slug' => 'user_role_list',
+				'path' => 'admin/settings/role/listing',
 			);
 
 			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);

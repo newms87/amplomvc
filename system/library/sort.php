@@ -98,6 +98,7 @@ class Sort extends Library
 		$settings['limit_url'] = site_url($settings['path'], $this->url->getQueryExclude('limit', 'page') . '&limit=');
 		$settings['limit']     = $this->limit;
 
+		$settings['show_more'] = $settings['limit_url'] . ((int)$this->limit + option('limit_more_count', 10));
 		extract($settings);
 
 		ob_start();

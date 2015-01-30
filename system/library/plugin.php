@@ -16,7 +16,7 @@ class Plugin extends Library
 		$this->installed = cache('plugin.installed');
 
 		if ($this->installed === null) {
-			$this->installed = $this->queryRows("SELECT * FROM " . self::$tables['plugin'] . " WHERE status = 1", 'name');
+			$this->installed = $this->queryRows("SELECT * FROM {$this->t['plugin']} WHERE status = 1", 'name');
 
 			cache('plugin.installed', $this->installed);
 		}
@@ -339,8 +339,8 @@ class Plugin extends Library
 			$values .= ($values ? ',' : '') . "`$key`='" . $this->escape($value) . "'";
 		}
 
-		$this->query("DELETE FROM " . self::$tables['plugin_registry'] . " WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
-		$this->query("INSERT INTO " . self::$tables['plugin_registry'] . " SET $values");
+		$this->query("DELETE FROM {$this->t['plugin_registry']} WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
+		$this->query("INSERT INTO {$this->t['plugin_registry']} SET $values");
 
 		clear_cache("plugin");
 
@@ -352,7 +352,7 @@ class Plugin extends Library
 		$this->plugin_registry = cache('plugin.registry');
 
 		if (!$this->plugin_registry) {
-			$query = $this->query("SELECT * FROM " . self::$tables['plugin_registry']);
+			$query = $this->query("SELECT * FROM {$this->t['plugin_registry']}");
 
 			$this->plugin_registry = array();
 

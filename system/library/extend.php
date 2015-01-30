@@ -36,7 +36,7 @@ class Extend extends Library
 			$routes = array($routes);
 		}
 
-		$exists = $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['layout'] . " WHERE name='$name'");
+		$exists = $this->queryVar("SELECT COUNT(*) as total FROM {$this->t['layout']} WHERE name='$name'");
 
 		if ($exists) {
 			message("warning", "Error while adding $name to layout! Duplicate name exists!");
@@ -63,7 +63,7 @@ class Extend extends Library
 	//TODO: This should remove based on a unique ID not the name...
 	public function removeLayout($name)
 	{
-		$result = $this->query("SELECT layout_id FROM " . self::$tables['layout'] . " WHERE name='" . $this->escape($name) . "' LIMIT 1");
+		$result = $this->query("SELECT layout_id FROM {$this->t['layout']} WHERE name='" . $this->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
 			$this->Model_Layout->deleteLayout($result->row['layout_id']);
@@ -123,7 +123,7 @@ class Extend extends Library
 
 		$key_column = $this->getKeyColumn($table);
 
-		$rows = $this->queryRows("SELECT $key_column, $column, $sort_column FROM " . self::$tables[$table]);
+		$rows = $this->queryRows("SELECT $key_column, $column, $sort_column FROM " . $this->t[$table]);
 
 		foreach ($rows as $row) {
 			$this->update_hsv_value($row, $table, $column, true);
@@ -155,7 +155,7 @@ class Extend extends Library
 		}
 
 		//If the image has not changed, do nothing.
-		if (!$force && $this->queryVar("SELECT COUNT(*) FROM " . self::$tables[$table] . " WHERE `$column` = '{$data[$column]}'")) {
+		if (!$force && $this->queryVar("SELECT COUNT(*) FROM " . $this->t[$table] . " WHERE `$column` = '{$data[$column]}'")) {
 			return;
 		}
 

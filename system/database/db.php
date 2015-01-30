@@ -7,16 +7,14 @@ class DB
 	static $profile = array();
 	static $drivers = array();
 
-	private $driver;
-	private $prefix;
+	protected
+		$driver,
+		$schema,
+		$prefix,
+		$synctime = false,
+		$error = array();
 
-	//Time Simulation
-	private $synctime = false;
-
-	//In case a plugin wants to wrap this Class
-	protected $error = array();
-
-	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $database = null, $prefix = null)
+	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $schema = null, $prefix = null)
 	{
 		global $ac_time_offset;
 
@@ -29,7 +27,7 @@ class DB
 			$driver = 'mysqlidb';
 		}
 
-		$key = $driver . $hostname . $username . $database;
+		$key = $driver . $hostname . $username . $schema;
 
 		if (!isset(self::$drivers[$key])) {
 			//the database interface
@@ -51,7 +49,7 @@ class DB
 				}
 			}
 
-			$db = new $driver($hostname, $username, $password, $database);
+			$db = new $driver($hostname, $username, $password, $schema);
 
 			//Set our errors to the driver errors if there were any
 			$this->error = $db->getError();
@@ -62,6 +60,7 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$key];
+		$this->schema = $schema;
 		$this->prefix = $prefix === null ? DB_PREFIX : $prefix;
 	}
 
@@ -98,9 +97,14 @@ class DB
 		$this->prefix = $prefix;
 	}
 
-	public function getName()
+	public function getPrefix()
 	{
-		return $this->driver->getName();
+		return $this->prefix;
+	}
+
+	public function getSchema()
+	{
+		return $this->schema;
 	}
 
 	public function getProfile()

@@ -1,6 +1,6 @@
 <?php
 if ($this->db->hasTable('user_group')) {
-	$this->db->query("ALTER TABLE " . self::$tables['user_group'] . " RENAME TO  " . self::$tables['user_role']);
+	$this->db->query("ALTER TABLE {$this->t['user_group']} RENAME TO  {$this->t['user_role']}");
 }
 $this->db->changeColumn('user_role', 'user_group_id', 'user_role_id', "INT(11) NOT NULL AUTO_INCREMENT");
 $this->db->changeColumn('user_role', 'permission', 'permissions', "TEXT NOT NULL");
