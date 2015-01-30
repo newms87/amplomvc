@@ -60,8 +60,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _get('filter', array());
 
-		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
-		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
+		list($stores, $store_total) = $this->Model_Site->getSites($sort, $filter, $columns, true, 'store_id');
 
 		$image_width  = option('admin_thumb_width');
 		$image_height = option('admin_thumb_height');
@@ -122,7 +121,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store = $_POST;
 
 		if ($store_id && !IS_POST) {
-			$store = $this->Model_Setting_Store->getStore($store_id);
+			$store = $this->Model_Site->getRecord($store_id);
 
 			$store_config = $this->config->loadGroup('config');
 
@@ -168,14 +167,13 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store += $defaults;
 
 		//Additional Info
-		$store['data_layouts']         = $this->Model_Design_Layout->getLayouts();
+		$store['data_layouts']         = $this->Model_Layout->getRecords(array('cache' => true));
 		$store['data_themes']          = $this->theme->getThemes();
 		$store['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$store['data_languages']       = $this->Model_Localisation_Language->getLanguages();
 		$store['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$store['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$store['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
-		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getPages();
+		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getRecords(array('cache' => true));
 
 		$store['data_yes_no'] = array(
 			1 => _l("Yes"),
@@ -230,7 +228,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 
 	public function save()
 	{
-		if ($this->Model_Setting_Store->save(_get('store_id'), $_POST)) {
+		if ($this->Model_Site->save(_get('store_id'), $_POST)) {
 			$this->config->saveGroup('config', $_POST);
 
 			if ($this->theme->install($_POST['site_theme'])) {
@@ -239,7 +237,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 
 			message('success', _l("The Store settings have been saved."));
 		} else {
-			message('error', $this->Model_Setting_Store->getError());
+			message('error', $this->Model_Site->getError());
 		}
 
 		if ($this->is_ajax) {
@@ -253,12 +251,10 @@ class App_Controller_Admin_Settings_Store extends Controller
 
 	public function remove()
 	{
-		$this->Model_Setting_Store->remove($_GET['store_id']);
-
-		if ($this->Model_Setting_Store->hasError()) {
-			message('error', $this->Model_Setting_Store->getError());
+		if ($this->Model_Site->removeSite(_get('store_id'))) {
+			message('success', _l("The Site was removed!"));
 		} else {
-			message('notify', _l("User was deleted!"));
+			message('error', $this->Model_Site->getError());
 		}
 
 		if ($this->is_ajax) {

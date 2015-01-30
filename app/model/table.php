@@ -39,32 +39,54 @@ abstract class App_Model_Table extends Model
 
 	public function getField($id, $field)
 	{
-		return $this->queryVar("SELECT $field FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryVar("SELECT $field FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecord($id, $select = '*')
 	{
 		$select = $this->extractSelect($this->table, $select);
 
-		return $this->queryRow("SELECT $select FROM `" . self::$tables[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryRow("SELECT $select FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
+		$cache = !empty($sort['cache']);
+
 		//Select
 		$select = $this->extractSelect($this->table, $select);
 
+		if ($cache) {
+			$s = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
+			$f = $filter ? md5(serialize($filter)) : 'all';
+			$l = $select === '*' ? '' : '.sel-' . md5($select);
+			$t = $total ? '.total' : '';
+			$i = $index ? '.' . $index : '';
+			$cache = $this->table . '.' . $f . $s . $l . $t . $i;
+			$records = cache($cache);
+
+			if ($records !== null) {
+				return $records;
+			}
+		}
+
 		//From
-		$from = self::$tables[$this->table];
+		$from = $this->t[$this->table];
 
 		//Where
-		$where = $this->extractWhere($this->table, $filter);
+		$where = is_string($filter) ? $filter : $this->extractWhere($this->table, $filter);
 
 		//Order and Limit
 		list($order, $limit) = $this->extractOrderLimit($sort);
 
 		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		$records = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+
+		if ($cache) {
+			cache($cache, $records);
+		}
+
+		return $records;
 	}
 
 	public function getTotalRecords($filter = array())

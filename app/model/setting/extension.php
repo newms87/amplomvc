@@ -3,12 +3,12 @@ class App_Model_Setting_Extension extends Model
 {
 	public function getExtensions($type)
 	{
-		return $this->queryRows("SELECT * FROM " . self::$tables['extension'] . " WHERE `type` = '" . $this->escape($type) . "' AND status = '1'");
+		return $this->queryRows("SELECT * FROM {$this->t['extension']} WHERE `type` = '" . $this->escape($type) . "' AND status = '1'");
 	}
 
 	public function getInstalled($type)
 	{
-		return $this->queryColumn("SELECT code FROM " . self::$tables['extension'] . " WHERE `type` = '" . $this->escape($type) . "'");
+		return $this->queryColumn("SELECT code FROM {$this->t['extension']} WHERE `type` = '" . $this->escape($type) . "'");
 	}
 
 	public function install($type, $code)

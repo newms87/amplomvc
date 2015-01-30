@@ -27,8 +27,12 @@ class App_Controller_Customer extends Controller
 		$this->login();
 	}
 
-	public function login(array $settings = array())
+	public function login($settings = array())
 	{
+		if (empty($settings)) {
+			$settings = array();
+		}
+
 		//Page Head
 		set_page_info('title', _l("Customer Sign In"));
 
@@ -282,9 +286,7 @@ class App_Controller_Customer extends Controller
 		breadcrumb(_l('Home'), site_url());
 		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
 
-		//Action Buttons
-		$data['save']   = site_url('customer/reset_password', 'code=' . $code);
-		$data['cancel'] = site_url('customer/login');
+		$data['code'] = $code;
 
 		//Render
 		output($this->render('customer/reset_form', $data));
@@ -300,13 +302,18 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		}
 
-		if ($this->Model_Customer->save($customer_id, array('password' => _post('password')))) {
+		$reset = array(
+			'password' => _post('password'),
+			'confirm'  => _post('confirm'),
+		);
+
+		if ($this->Model_Customer->save($customer_id, $reset)) {
 			$this->customer->clearResetCode();
 			message('success', _l('You have successfully updated your password!'));
 			redirect('customer/login');
 		} else {
 			message('error', $this->Model_Customer->getError());
-			redirect('customer/reset_form', 'code=' . _get('code'));
+			redirect('customer/reset_form', $_GET);
 		}
 	}
 }

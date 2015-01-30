@@ -84,7 +84,7 @@ class App_Model_Customer extends App_Model_Table
 
 	public function getCustomerGroups()
 	{
-		return $this->queryRows("SELECT * FROM " . self::$tables['customer_group']);
+		return $this->queryRows("SELECT * FROM {$this->t['customer_group']}");
 	}
 
 	/** Customer Meta Data **/
@@ -109,8 +109,6 @@ class App_Model_Customer extends App_Model_Table
 			'serialized'  => $serialized,
 		);
 
-		$this->metadata[$key] = $value;
-
 		return $this->insert('customer_meta', $customer_meta);
 	}
 
@@ -123,7 +121,7 @@ class App_Model_Customer extends App_Model_Table
 
 	public function getMeta($customer_id)
 	{
-		$rows = $this->queryRows("SELECT * FROM " . self::$tables['customer_meta'] . " WHERE customer_id = " . (int)$customer_id);
+		$rows = $this->queryRows("SELECT * FROM {$this->t['customer_meta']} WHERE customer_id = " . (int)$customer_id);
 
 		$meta = array();
 
@@ -142,8 +140,6 @@ class App_Model_Customer extends App_Model_Table
 		);
 
 		$this->delete('customer_meta', $where);
-
-		unset($this->metadata[$key]);
 
 		return true;
 	}

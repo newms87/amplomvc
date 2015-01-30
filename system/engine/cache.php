@@ -72,7 +72,8 @@ class Cache
 	{
 		$file = $this->dir . $key . '.cache';
 
-		$this->loaded[$this->dir][$key] = $value;
+		$this->loaded[$this->dir][$key]['data'] = $value;
+		$this->loaded[$this->dir][$key]['file'] = $file;
 
 		if (!$set_file) {
 			$value = serialize($value);

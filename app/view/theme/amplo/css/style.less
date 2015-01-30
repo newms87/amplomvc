@@ -17,6 +17,20 @@
 /******************************
  *  I. Base Style / Structure *
  ******************************/
+html, body {
+  height: 100%;
+}
+
+#container {
+  position: absolute;
+  top: @header-height;
+  bottom: 0;
+  width: 100%;
+
+  & > main {
+    min-height: 80%;
+  }
+}
 
 body {
   .render-font(@font-base);
@@ -265,6 +279,7 @@ button, .button, .row .button {
       z-index: 500;
       max-height: 0;
       overflow: hidden;
+      background: @color-secondary;
       -webkit-transition: padding 0s linear .4s, max-height .4s;
       transition: padding 0s linear .4s, max-height .4s;
 
@@ -378,10 +393,6 @@ header.main-header.row {
   }
 
   @header();
-}
-
-#container {
-  padding-top: @header-height;
 }
 
 //Logo
@@ -647,8 +658,6 @@ label.checkbox {
 }
 
 textarea {
-  min-width: 40%;
-  max-width: 75%;
   box-sizing: border-box;
 
   @textarea();
@@ -856,8 +865,8 @@ textarea {
       padding: .8em;
 
       &:active, &:focus {
-        box-shadow: inset 2px 2px @color-main, inset -2px -2px @color-main;
-        border-color: @color-main;
+        box-shadow: inset 2px 2px @color-secondary, inset -2px -2px @color-secondary;
+        border-color: @color-secondary;
       }
     }
 
@@ -896,6 +905,10 @@ textarea {
   }
 
   .account-box.hide {
+    display: none;
+  }
+
+  .register-col {
     display: none;
   }
 
@@ -1001,13 +1014,132 @@ section.page {
   }
 }
 
+.side-menu {
+  .menu-tab {
+    font: 1em OpenSansRegular;
+    color: @font-dark;
+    display: block;
+    padding: .8em .5em;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &.active, &:hover {
+      color: @color-main;
+    }
+  }
+}
+
+.content-box {
+  h1 {
+    color: @color-secondary;
+    text-transform: uppercase;
+  }
+
+  .forms {
+    text-align: left;
+
+    .form-item {
+      box-sizing: border-box;
+      font-size: 1em;
+      padding: 2em;
+      border-top: 2px solid @color-light;
+      transition: all .5s;
+
+      .input {
+        margin-top: 1em;
+
+        .input-item {
+          margin-bottom: .7em;
+
+          input, select {
+            padding: .3em;
+            font: 1em OpenSansRegular;
+            color: @font-dark;
+            width: 100%;
+          }
+        }
+      }
+
+      h3 {
+        font: 1em OpenSansBold;
+        color: @color-dark;
+        text-transform: uppercase;
+        margin-bottom: .5em;
+      }
+
+      .field {
+        font: .9em OpenSansRegular;
+        color: @font-light;
+        margin-bottom: .5em;
+      }
+
+      .buttons {
+        .noselect;
+        margin-top: 0;
+
+        .button, button {
+          display: inline-block;
+          vertical-align: middle;
+          margin: 0;
+          padding: .5em 1.2em;
+          box-sizing: border-box;
+          font: .9em OpenSansRegular;
+          width: 100%;
+          min-width: 0;
+        }
+
+        a {
+          cursor: pointer;
+          font: 1em OpenSansItalic;
+          color: @font-light;
+          text-decoration: underline;
+        }
+
+        &.submit {
+          margin-top: 1em;
+        }
+      }
+
+      &.read {
+        .editing {
+          display: none;
+        }
+
+        [readonly] {
+          padding: 0;
+          font: .9em OpenSansRegular;
+          background: none;
+          border: none;
+          box-shadow: none;
+        }
+      }
+
+      &.edit {
+        .readonly {
+          display: none;
+        }
+      }
+
+      &.enabled {
+        .off {
+          display: none;
+        }
+      }
+
+      &.disabled {
+        .on {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .contact-page {
   .contact-text {
     p {
       margin-bottom: 1.5em;
     }
-
-    padding-right: 4em;
   }
 
   .contact-info {
@@ -1024,8 +1156,6 @@ section.page {
   }
 
   .contact-form {
-    padding: 0 1em;
-
     form {
       input, textarea {
         padding: .5em 1em;
@@ -1057,112 +1187,41 @@ section.page {
     margin-bottom: 1em;
   }
 
-  .account-nav {
-    .menu-tab {
-      font: 1em OpenSansSemiBold;
-      color: @font-dark;
-      display: block;
-      padding: .8em .5em;
-      text-transform: uppercase;
-
-      &.active, &:hover {
-        color: @color-secondary;
-      }
-    }
+  .side-menu {
+    margin-top: 4em;
   }
+}
 
-  .tab-content {
-    h1 {
-      color: @color-secondary;
-      text-transform: uppercase;
-    }
+.faq-page {
+  .content-box {
+    .faq-item {
+      display: none;
+      margin-bottom: 1em;
 
-    .forms {
-      text-align: left;
+      .question {
+        cursor: pointer;
+        margin-bottom: .5em;
+        font: 1.1em OpenSansBold;
+        color: @color-gray;
+      }
 
-      .form-item {
-        box-sizing: border-box;
-        font-size: 1em;
-        padding: 2em;
-        border-top: 2px solid @color-light;
-        transition: all .5s;
+      .answer {
+        .height-animate;
+        font: .9em OpenSansRegular;
+        color: @font-light;
+      }
 
-        input, select {
-          padding: .3em;
-          font: 1em OpenSansRegular;
-          color: @font-dark;
-          max-width: 10em;
-          min-width: 3em;
-          margin-bottom: .4em;
+      &.show {
+        display: block;
+      }
+
+      &.active {
+        .question {
+          color: @color-main;
         }
 
-        h3 {
-          font: 1em OpenSansBold;
-          color: @color-dark;
-          text-transform: uppercase;
-          margin-bottom: .5em;
-        }
-
-        .field {
-          font: .9em OpenSansRegular;
-          color: @font-light;
-          margin-bottom: .5em;
-        }
-
-        .buttons {
-          .noselect;
-          margin-top: 0;
-          margin-bottom: 1em;
-
-          .button, button {
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0;
-            padding: .3em 1.2em;
-            font: .9em OpenSansRegular;
-            margin: 0 .7em;
-            width: auto;
-            min-width: 0;
-          }
-
-          a {
-            cursor: pointer;
-            font: 1em OpenSansItalic;
-            color: @font-light;
-            text-decoration: underline;
-          }
-        }
-
-        &.read {
-          .editing {
-            display: none;
-          }
-
-          [readonly] {
-            padding: 0;
-            font: .9em OpenSansRegular;
-            background: none;
-            border: none;
-            box-shadow: none;
-          }
-        }
-
-        &.edit {
-          .readonly {
-            display: none;
-          }
-        }
-
-        &.enabled {
-          .off {
-            display: none;
-          }
-        }
-
-        &.disabled {
-          .on {
-            display: none;
-          }
+        .answer {
+          max-height: 10em;
         }
       }
     }

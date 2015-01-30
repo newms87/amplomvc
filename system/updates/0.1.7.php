@@ -1,9 +1,9 @@
 <?php
 
 if ($this->db->hasColumn('view', 'listing_id')) {
-	$views = $this->queryRows("SELECT * FROM " . self::$tables['view']);
+	$views = $this->queryRows("SELECT * FROM {$this->t['view']}");
 
-	$listings = $this->queryRows("SELECT * FROM " . self::$tables['view_listing']);
+	$listings = $this->queryRows("SELECT * FROM {$this->t['view_listing']}");
 
 	foreach ($views as $view) {
 		$view_listing_id = false;

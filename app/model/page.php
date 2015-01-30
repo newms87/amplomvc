@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Page extends Model
+class App_Model_Page extends App_Model_Table
 {
+	protected $table = 'page', $primary_key = 'page_id';
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -128,7 +130,7 @@ class App_Model_Page extends Model
 
 	public function getPage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);
@@ -151,7 +153,7 @@ class App_Model_Page extends Model
 	//TODO: Develop good caching method for pages.
 	public function getActivePage($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id . " AND status = 1");
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id . " AND status = 1");
 
 		$this->getPageFiles($page);
 
@@ -160,7 +162,7 @@ class App_Model_Page extends Model
 
 	public function getPageName($page_id)
 	{
-		return $this->queryVar("SELECT name FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		return $this->queryVar("SELECT name FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 	}
 
 	public function getPageByName($name)
@@ -169,7 +171,7 @@ class App_Model_Page extends Model
 
 		$themes = array_keys($this->theme->getThemes());
 
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 
 		$this->getPageFiles($page);
 
@@ -178,7 +180,7 @@ class App_Model_Page extends Model
 
 	public function getPageForPreview($page_id)
 	{
-		$page = $this->queryRow("SELECT * FROM " . self::$tables['page'] . " WHERE page_id = " . (int)$page_id);
+		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
 			$this->getPageFiles($page);
@@ -193,30 +195,18 @@ class App_Model_Page extends Model
 		return $page;
 	}
 
-	public function getPages($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
-		$select = $this->extractSelect('page', $select);
+		$records = parent::getRecords($sort, $filter, $select, $total, $index);
 
-		//From
-		$from = self::$tables['page'];
-
-		//Where
-		$where = $this->extractWhere('page', $filter);
-
-		//Order / Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		$results = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
-
-		$total ? $rows = &$results[0] : $rows = &$results;
+		$total ? $rows = &$records[0] : $rows = &$records;
 
 		foreach ($rows as &$row) {
 			$this->getPageFiles($row);
 		}
 		unset($row);
 
-		return $results;
+		return $records;
 	}
 
 	public function getPageFiles(&$page)
@@ -231,18 +221,21 @@ class App_Model_Page extends Model
 	{
 		$css = cache('page.' . $page_id . '.style');
 
-		if (!$css) {
-			$css = $this->document->compileLessContent($style);
+		if ($css === null) {
+			$css = trim($this->document->compileLessContent($style));
+
+			if (false && !$css) {
+				send_mail(array(
+					'to'      => 'dnewman@roofscope.com',
+					'subject' => "LESS COMPILE FAILED FOR " . $page_id,
+					'html'    => $css . '<BR><BR>' . get_caller(),
+				));
+			}
 
 			cache('page.' . $page_id . '.style', $css);
 		}
 
 		return $css;
-	}
-
-	public function getTotalPages($filter = array())
-	{
-		return $this->getPages(null, $filter, 'COUNT(*)', false);
 	}
 
 	public function saveHistory($page_id)
@@ -262,7 +255,7 @@ class App_Model_Page extends Model
 		if ($pages === null) {
 			$pages = array();
 
-			$page_list = $this->getPages();
+			$page_list = $this->getRecords(array('cache' => true));
 
 			foreach ($page_list as $p) {
 				$pages[$p['theme']][$p['name']] = $p;

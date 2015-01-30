@@ -40,7 +40,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			if (!isset($view['sort_order'])) {
-				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM " . self::$tables['view'] . " WHERE `group` = '" . $this->escape($view['group']) . "'") + 1;
+				$view['sort_order'] = (int)$this->queryVar("SELECT MAX(sort_order) FROM {$this->t['view']} WHERE `group` = '" . $this->escape($view['group']) . "'") + 1;
 			}
 
 			return $this->insert('view', $view);
@@ -49,7 +49,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getView($view_id)
 	{
-		$view = $this->queryRow("SELECT * FROM " . self::$tables['view'] . " WHERE view_id = " . (int)$view_id);
+		$view = $this->queryRow("SELECT * FROM {$this->t['view']} WHERE view_id = " . (int)$view_id);
 
 		if (!empty($view['settings'])) {
 			$view['settings'] = unserialize($view['settings']);
@@ -60,7 +60,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getViewSettings($view_id)
 	{
-		$settings = $this->queryVar("SELECT settings FROM " . self::$tables['view'] . " WHERE view_id = " . (int)$view_id);
+		$settings = $this->queryVar("SELECT settings FROM {$this->t['view']} WHERE view_id = " . (int)$view_id);
 
 		if ($settings) {
 			$settings = unserialize($settings);
@@ -100,7 +100,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getViews($group)
 	{
-		$views = $this->queryRows("SELECT * FROM " . self::$tables['view'] . " WHERE `group` = '" . $this->escape($group) . "'");
+		$views = $this->queryRows("SELECT * FROM {$this->t['view']} WHERE `group` = '" . $this->escape($group) . "'");
 
 		foreach ($views as &$view) {
 			parse_str($view['query'], $view['query']);
@@ -138,7 +138,7 @@ class App_Model_View extends App_Model_Table
 	public function getViewMeta($view_id, $key = null, $single = true)
 	{
 		if (!isset(self::$meta[$view_id])) {
-			$rows = $this->queryRows("SELECT * FROM " . self::$tables['view_meta'] . " WHERE view_id = " . (int)$view_id);
+			$rows = $this->queryRows("SELECT * FROM {$this->t['view_meta']} WHERE view_id = " . (int)$view_id);
 
 			foreach ($rows as $row) {
 				self::$meta[$view_id][$row['key']][] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
@@ -223,7 +223,7 @@ class App_Model_View extends App_Model_Table
 			}
 
 			if (!$view_listing_id) {
-				if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['view_listing'] . " WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
+				if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']} WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
 					$this->error['name'] = _l("A View Listing with the name %s already exists.", $view_listing['name']);
 					return false;
 				}
@@ -240,12 +240,12 @@ class App_Model_View extends App_Model_Table
 		//Create the SQL View
 		if (!empty($view_listing['sql'])) {
 			$slug = !empty($view_listing['slug']) ? $view_listing['slug'] : $this->queryField('view_listing', 'slug', $view_listing_id);
-			$this->query("DROP VIEW IF EXISTS `" . self::$tables[$slug] . "`");
+			$this->query("DROP VIEW IF EXISTS `" . $this->t[$slug] . "`");
 
 			$display_errors = ini_get('display_errors');
 			ini_set('display_errors', 0);
 
-			$result = $this->query("CREATE VIEW `" . self::$tables[$slug] . "` AS " . $view_listing['sql']);
+			$result = $this->query("CREATE VIEW `" . $this->t[$slug] . "` AS " . $view_listing['sql']);
 
 			ini_set('display_errors', $display_errors);
 
@@ -286,7 +286,7 @@ class App_Model_View extends App_Model_Table
 			return false;
 		}
 
-		$view_listing_id = $this->queryVar("SELECT view_listing_id FROM " . self::$tables['view_listing'] . " WHERE `name` = '" . $this->escape($view_listing['name']) . "' AND `path` = '" . $this->escape($view_listing['path']) . "'");
+		$view_listing_id = $this->queryVar("SELECT view_listing_id FROM {$this->t['view_listing']} WHERE `name` = '" . $this->escape($view_listing['name']) . "' AND `path` = '" . $this->escape($view_listing['path']) . "'");
 
 		if (!$view_listing_id) {
 			$view_listing_id = $this->saveViewListing(null, $view_listing);
@@ -317,7 +317,7 @@ class App_Model_View extends App_Model_Table
 		$select = $this->extractSelect($table, $select);
 
 		//From
-		$from = self::$tables[$table];
+		$from = $this->t[$table];
 
 		//Where
 		$where = $this->extractWhere($table, $filter);
@@ -336,7 +336,7 @@ class App_Model_View extends App_Model_Table
 
 	public function getViewListingTable($view_listing_id)
 	{
-		return $this->queryVar("SELECT slug FROM " . self::$tables['view_listing'] . " WHERE view_listing_id = " . (int)$view_listing_id);
+		return $this->queryVar("SELECT slug FROM {$this->t['view_listing']} WHERE view_listing_id = " . (int)$view_listing_id);
 	}
 
 	public function getViewListingBySlug($slug)
@@ -367,13 +367,17 @@ class App_Model_View extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				self::$view_listings = $this->queryRows("SELECT * FROM " . self::$tables['view_listing'] . " ORDER BY name", 'view_listing_id');
+				$sort = array(
+					'name' => 'ASC',
+				);
+
+				self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
-					if (!$this->queryVar("SELECT COUNT(*) FROM " . self::$tables['view_listing'])) {
+					if (!$this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']}")) {
 						$this->resetViewListings();
-						return $this->getViewListings();
+						self::$view_listings = $this->getViewListings($sort, null, '*', false, 'view_listing_id');
 					}
 				}
 
@@ -390,7 +394,7 @@ class App_Model_View extends App_Model_Table
 		$select = $this->extractSelect('view_listing', $select);
 
 		//From
-		$from = self::$tables['view_listing'];
+		$from = $this->t['view_listing'];
 
 		//Where
 		$where = $this->extractWhere('view_listing', $filter);

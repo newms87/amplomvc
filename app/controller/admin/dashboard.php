@@ -12,7 +12,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		breadcrumb(_l("Dashboard"), site_url('admin/dashboard'));
 
 		//Template Data
-		$data['dashboards'] = $this->Model_Dashboard->getDashboards(true);
+		$data['dashboards'] = $this->Model_Dashboard->getUserDashboards();
 
 		//Render
 		output($this->render('dashboard/list', $data));

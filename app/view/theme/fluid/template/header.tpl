@@ -48,11 +48,11 @@
 	<script src="<?= URL_RESOURCES . 'js/html5shiv.js'; ?>"></script>
 	<![endif]-->
 
-	<? if (option('config_google_analytics')) { ?>
+	<? if (option('ga_code')) { ?>
 		<!-- Google Analytics Tracker -->
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', '<?= option('config_google_analytics'); ?>']);
+			_gaq.push(['_setAccount', '<?= option('ga_code'); ?>']);
 			_gaq.push(['_trackPageview']);
 
 			(function() {

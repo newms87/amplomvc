@@ -124,6 +124,31 @@ class Dev extends Library
 		return false;
 	}
 
+	public function getBackupFiles()
+	{
+		$exts = array(
+			'txt',
+			'sql'
+		);
+
+		$file_list = get_files(DIR_DATABASE_BACKUP, $exts, FILELIST_STRING);
+
+		$files = array();
+
+		foreach ($file_list as $file) {
+			$files[] = array(
+				'name' => basename($file),
+				'date' => filemtime($file),
+				'path' => str_replace('\\', '/', $file),
+				'size' => (int)filesize($file),
+			);
+		}
+
+		usort($files, function ($a, $b) { return $a['date'] > $b['date']; });
+
+		return $files;
+	}
+
 	public function performance()
 	{
 		global $__start, $profile;
@@ -189,6 +214,9 @@ class Dev extends Library
 
 			foreach ($cache_files as &$c) {
 				$c['size'] = round($c['size'] / 1024, 2) . " KB";
+				if (!empty($c['data'])) {
+					$this->escapeHtmlR($c['data']);
+				}
 			}
 			unset($c);
 
@@ -202,5 +230,17 @@ class Dev extends Library
 			$output = str_replace("</body>", $html . "</body>", $output);
 			output($output);
 		}
+	}
+
+	public function escapeHtmlR(&$array)
+	{
+		if (!is_array($array)) {
+			return $array = is_string($array) ? htmlentities($array) : $array;
+		}
+
+		foreach ($array as &$a) {
+			$this->escapeHtmlR($a);
+		}
+		unset($a);
 	}
 }

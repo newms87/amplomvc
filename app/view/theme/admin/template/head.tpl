@@ -1,5 +1,5 @@
 <head>
-	<title><?= page_info('title'); ?></title>
+	<title><?= _strip_tags(page_info('title')); ?></title>
 	<base href="<?= site_url('admin'); ?>"/>
 
 	<? if ($admin_icon = option('admin_icon')) { ?>

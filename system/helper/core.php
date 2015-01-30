@@ -46,6 +46,18 @@ function _session($key, $default = null)
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
+function _cookie($key, $default = null)
+{
+	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+}
+
+function set_cookie($name, $value, $expire = 31536000)
+{
+	global $registry;
+	return $registry->get('session')->setCookie($name, $value, $expire);
+}
+
+
 /**************************************
  * System Language Translation Engine *
  **************************************/
@@ -125,7 +137,11 @@ spl_autoload_register('amplo_autoload');
 function register_routing_hook($name, $callable, $sort_order = 0)
 {
 	global $registry;
-	return $registry->get('route')->registerHook($name, $callable, $sort_order);
+
+	//In case called when system not booted (eg: install.php)
+	if ($registry) {
+		return $registry->get('route')->registerHook($name, $callable, $sort_order);
+	}
 }
 
 /**
@@ -187,18 +203,18 @@ if (!function_exists('array_column')) {
 	 *
 	 * Returns an array of elements from the column of an array
 	 *
-	 * @param array array - An associative array of arrays
-	 * @param column string - The key column of the $array to get elements from
-	 * @param assoc bool - Return an associative array with the key the same as the value (all values will be unique!)
+	 * @param array array - A multi-dimensional array (record set) from which to pull a column of values.
+	 * @param column_key string - The column of values to return. This value may be the integer key of the column you wish to retrieve, or it may be the string key name for an associative array. It may also be NULL to return complete arrays (useful together with index_key to reindex the array).
+	 * @param index_key bool - The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.
 	 *
-	 * @return array - an array of values of the column requested
+	 * @return array - Returns an array of values representing a single column from the input array.
 	 */
-	function array_column($array, $column, $index_key = null)
+	function array_column($array, $column_key, $index_key = null)
 	{
 		$values = array();
 
 		foreach ($array as $row) {
-			$value = isset($row[$column]) ? $row[$column] : null;
+			$value = isset($row[$column_key]) ? $row[$column_key] : null;
 
 			if ($index_key === null) {
 				$values[] = $value;
@@ -262,7 +278,7 @@ if (!function_exists('array_search_key')) {
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
 
-	function array_search_key($search_key, $needle, $haystack, $strict = false)
+	function array_search_key($search_key, $needle, array $haystack, $strict = false)
 	{
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {
@@ -454,24 +470,29 @@ if (!defined('PASSWORD_DEFAULT')) {
 function _set_site($site)
 {
 	global $registry;
+
 	if (!is_array($site)) {
 		$site = $registry->get('Model_Site')->getRecord($site);
 	}
 
-	$registry->get('route')->setSite($site);
-	$registry->get('config')->setSite($site);
-	$registry->get('url')->setSite($site);
+	if ($site) {
+		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
+
+		$registry->get('route')->setSite($site);
+		$registry->get('config')->setSite($site);
+		$registry->get('url')->setSite($site);
+
+		return true;
+	}
+
+	return false;
 }
 
-function _set_db_prefix($prefix)
+function _set_prefix($prefix)
 {
 	global $registry;
 	$registry->get('db')->setPrefix($prefix);
 	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
-
-	if (Model::$prefix !== $prefix) {
-		Model::setPrefix($prefix);
-	}
 }
 
 function get_caller($offset = 0, $limit = 10)

@@ -7,11 +7,11 @@ define('AC_MOD_REGISTRY', DIR_SITE . 'system/mods/registry.ac');
 define('AC_TEMPLATE_CACHE', DIR_CACHE . 'templates/');
 
 if (!defined("AMPLO_DIR_MODE")) {
-	define("AMPLO_DIR_MODE", 0755);
+	define("AMPLO_DIR_MODE", 0775);
 }
 
 if (!defined("AMPLO_FILE_MODE")) {
-	define("AMPLO_FILE_MODE", 0755);
+	define("AMPLO_FILE_MODE", 0664);
 }
 
 function _is_writable($dir, &$error = null)

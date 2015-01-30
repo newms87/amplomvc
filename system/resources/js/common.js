@@ -419,11 +419,6 @@ function ac_form(params) {
 	var $form = $(this);
 	var callback = params.success;
 	var complete = params.complete;
-	var $button = $form.find('[data-loading]');
-
-	if (!$button.length) {
-		$button = $form;
-	}
 
 	params = $.extend({}, {
 		data:     $form.serialize(),
@@ -448,14 +443,12 @@ function ac_form(params) {
 	}
 
 	params.complete = function (jqXHR, textStatus) {
-		$button.loading('stop');
+		$form.find('[data-loading]').loading('stop');
 
 		if (typeof complete == 'function') {
 			complete(jqXHR, textStatus);
 		}
 	}
-
-	$button.loading();
 
 	$.ajax($form.attr('action'), params);
 
@@ -746,6 +739,10 @@ function register_confirms() {
 }
 
 function register_ajax_calls(is_ajax) {
+	$('form').use_once('data-loading-set').submit(function() {
+		$(this).find('button[data-loading]').loading();
+	});
+
 	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
 
 	// Multistate Checkboxes
@@ -922,6 +919,7 @@ function amplo_auto_ajax() {
 $(document).ready(function () {
 	amplo_auto_ajax();
 
+
 	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
 		if (!ui.item.value && ui.item.href) {
 			window.open(ui.item.href);
@@ -933,6 +931,8 @@ $(document).ready(function () {
 			$(this).closest('form').submit();
 		}
 	});
+
+	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
 
 	$(document).keydown(function (e) {
 		if (e.ctrlKey && (e.which == 83)) {

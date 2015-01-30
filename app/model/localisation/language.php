@@ -24,7 +24,7 @@ class App_Model_Localisation_Language extends Model
 
 	public function getLanguage($language_id)
 	{
-		return $this->queryRow("SELECT * FROM " . self::$tables['language'] . " WHERE language_id = '" . (int)$language_id . "'");
+		return $this->queryRow("SELECT * FROM {$this->t['language']} WHERE language_id = '" . (int)$language_id . "'");
 	}
 
 	public function getLanguages($data = array(), $select = '*', $total = false)
@@ -35,7 +35,7 @@ class App_Model_Localisation_Language extends Model
 			$select = '*';
 		}
 
-		$from = self::$tables['language'];
+		$from = $this->t['language'];
 
 		$where = "1";
 
@@ -77,7 +77,7 @@ class App_Model_Localisation_Language extends Model
 		$language_list = cache('language.list');
 
 		if (!$language_list) {
-			$languages = $this->queryRows("SELECT language_id, name, code, image, sort_order FROM " . self::$tables['language'] . " WHERE status >= 0 ORDER BY sort_order");
+			$languages = $this->queryRows("SELECT language_id, name, code, image, sort_order FROM {$this->t['language']} WHERE status >= 0 ORDER BY sort_order");
 
 			$language_list = array();
 

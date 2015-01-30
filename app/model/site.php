@@ -9,6 +9,11 @@ class App_Model_Site extends App_Model_Table
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `name` = '" . $this->escape($site_name) . "'");
 	}
 
+	public function getSiteByPrefix($prefix)
+	{
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `prefix` = '" . $this->escape($prefix) . "'");
+	}
+
 	public function createSite($site, $tables = array())
 	{
 		if ($this->getSiteByName($site['name'])) {
@@ -34,15 +39,23 @@ class App_Model_Site extends App_Model_Table
 
 		clear_cache_all();
 
+		//Reset Tables / Model for current request
+		Model::$model = array();
+		$this->db->tables = array();
+
 		return $site_id;
 	}
 
-	public function removeSite($site_name)
+	public function removeSite($site_id)
 	{
-		$site = $this->getSiteByName($site_name);
+		if (is_string($site_id) && preg_match("/[^\\d]/", $site_id)) {
+			$site = $this->getSiteByName($site_id);
+		} else {
+			$site = $this->getRecord($site_id);
+		}
 
 		if (!$site) {
-			$this->error['site'] = _l("A site with the name %s does not exist.", $site_name);
+			$this->error['site'] = _l("The site %s does not exist.", $site_id);
 			return false;
 		}
 
@@ -52,7 +65,7 @@ class App_Model_Site extends App_Model_Table
 			$unique_prefix = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "store WHERE `prefix` = '$site[prefix]'");
 
 			if ($unique_prefix <= 1) {
-				$col    = 'Tables_in_' . $this->db->getName();
+				$col    = 'Tables_in_' . $this->db->getSchema();
 				$tables = $this->queryRows("SHOW TABLES WHERE $col like '$site[prefix]%'");
 
 				foreach ($tables as $table) {
@@ -61,7 +74,11 @@ class App_Model_Site extends App_Model_Table
 			}
 		}
 
-		clear_cache();
+		clear_cache_all();
+
+		//Reset Tables / Model for current request
+		Model::$model = array();
+		$this->db->tables = array();
 
 		return true;
 	}

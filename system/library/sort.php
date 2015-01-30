@@ -98,6 +98,7 @@ class Sort extends Library
 		$settings['limit_url'] = site_url($settings['path'], $this->url->getQueryExclude('limit', 'page') . '&limit=');
 		$settings['limit']     = $this->limit;
 
+		$settings['show_more'] = $settings['limit_url'] . ((int)$this->limit + option('limit_more_count', 10));
 		extract($settings);
 
 		ob_start();
@@ -114,7 +115,7 @@ class Sort extends Library
 		}
 
 		if (empty($limit_default) || (int)$limit_default < 1) {
-			$limit_default = IS_ADMIN ? option('admin_list_limit') : option('site_list_limit');
+			$limit_default = IS_ADMIN ? option('admin_list_limit', 20) : option('site_list_limit', 10);
 		}
 
 		$data = array();

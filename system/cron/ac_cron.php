@@ -37,18 +37,18 @@ class System_Cron_AcCron extends System_Cron_Job
 
 	public function cleanAddressTable()
 	{
-		$address_ids = $this->queryColumn("SELECT address_id FROM " . self::$tables['address']);
+		$address_ids = $this->queryColumn("SELECT address_id FROM {$this->t['address']}");
 
 		foreach ($address_ids as $address_id) {
-			if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['customer_address'] . " WHERE address_id = " . (int)$address_id)) {
+			if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['customer_address']} WHERE address_id = " . (int)$address_id)) {
 				continue;
 			}
 
-			if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['transaction'] . " WHERE address_id = " . (int)$address_id)) {
+			if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['transaction']} WHERE address_id = " . (int)$address_id)) {
 				continue;
 			}
 
-			if ($this->queryVar("SELECT COUNT(*) FROM " . self::$tables['shipping'] . " WHERE address_id = " . (int)$address_id)) {
+			if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['shipping']} WHERE address_id = " . (int)$address_id)) {
 				continue;
 			}
 

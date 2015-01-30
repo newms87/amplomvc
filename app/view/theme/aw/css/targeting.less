@@ -1,0 +1,53 @@
+/*************************
+ *  X. Device Targeting  *
+ *************************/
+@media (max-width: (@lg - 1)) {
+  body {
+    background: red;
+  }
+}
+
+@media (max-width: (@md - 1)) {
+  body {
+    background: green;
+  }
+}
+
+@media (max-width: (@sm - 1)) {
+  body {
+    background: blue
+  }
+}
+
+@media (max-width: (@xs - 1)) {
+  body {
+    background: orange;
+  }
+}
+
+/** Screen Height correction so footer is near bottom */
+
+@media (min-width: @md) and (max-height: @sm) {
+  body {
+    background: black;
+  }
+}
+
+@media (max-width: (@md - 1)) and (max-height: @sm) {
+
+}
+
+
+//  Bottom Up
+
+//XS screen and bigger (so everything)
+@media (min-width: 1px) {
+
+}
+
+//Small screen and bigger
+@media (min-width: @xs) {
+
+}
+
+//etc...

@@ -508,9 +508,9 @@ class Mail extends Library
 
 		//Hide Mail errors when ajax pages are requested
 		if (IS_AJAX && option('config_error_display')) {
-			$this->config->set('config_error_display', false);
+			set_option('config_error_display', false);
 			trigger_error($msg);
-			$this->config->set('config_error_display', true);
+			set_option('config_error_display', true);
 		} else {
 			trigger_error($msg);
 		}
@@ -539,7 +539,7 @@ class Mail extends Library
 
 		$mail_fail = $this->escape($mail_fail);
 
-		$this->query("INSERT INTO " . self::$tables['setting'] . " SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+		$this->query("INSERT INTO {$this->t['setting']} SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	private function log($msg, $flush = false)

@@ -18,7 +18,7 @@ class Session extends Library
 		if (isset($_COOKIE['token'])) {
 			$this->setCookie('token', $_COOKIE['token'], AMPLO_SESSION_TIMEOUT);
 			if (isset($_SESSION['session_token_saved'])) {
-				$this->query("DELETE FROM " . self::$tables['session'] . " WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
+				$this->query("DELETE FROM {$this->t['session']} WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 				unset($_SESSION['session_token_saved']);
 			}
 		} elseif (isset($_SESSION['token']) && empty($_COOKIE)) {
@@ -26,10 +26,10 @@ class Session extends Library
 			message('warning', _l("You must enable cookies to login to the admin portal!"));
 			redirect();
 		} elseif (!isset($_SESSION['session_token_saved'])) {
-			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . self::$tables['session'] . " WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
+			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM {$this->t['session']} WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 
 			if ($ip_session_exists) {
-				$this->query("DELETE FROM " . self::$tables['session'] . " WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
+				$this->query("DELETE FROM {$this->t['session']} WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 				message('warning', _l("Unable to authenticate user. Please check that cookies are enabled."));
 			}
 		}
@@ -57,10 +57,10 @@ class Session extends Library
 
 	public function loadTokenSession($token)
 	{
-		$query = $this->query("SELECT * FROM " . self::$tables['session'] . " WHERE `token` = '" . $this->escape($token) . "' LIMIT 1");
+		$query = $this->query("SELECT * FROM {$this->t['session']} WHERE `token` = '" . $this->escape($token) . "' LIMIT 1");
 
 		if ($query->num_rows) {
-			$this->query("DELETE FROM " . self::$tables['session'] . " WHERE `token` = '" . $this->escape($token) . "'");
+			$this->query("DELETE FROM {$this->t['session']} WHERE `token` = '" . $this->escape($token) . "'");
 			$_SESSION['token']   = $query->row['token'];
 			$_SESSION['user_id'] = $query->row['user_id'];
 
@@ -111,12 +111,16 @@ class Session extends Library
 		return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
 	}
 
-	public function setCookie($name, $value, $expire = 0)
+	public function setCookie($name, $value, $expire = 31536000)
 	{
 		if (!headers_sent()) {
 			$expire = $expire ? time() + $expire : 0;
-			setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
+			return setcookie($name, $value, $expire, '/', COOKIE_DOMAIN);
 		}
+
+		$this->error['headers'] = _l("Unable to set cookie because headers were already sent!");
+
+		return false;
 	}
 
 	public function deleteCookie($name)

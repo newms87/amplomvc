@@ -33,13 +33,13 @@ class App_Controller_Admin_Settings_General extends Controller
 		$settings += App_Model_Settings::$general_settings;
 
 		//Template Data
-		$settings['data_layouts']         = $this->Model_Design_Layout->getLayouts();
+		$settings['data_layouts']         = $this->Model_Layout->getRecords(array('cache' => true));
 		$settings['data_themes']          = $this->theme->getThemes();
 		$settings['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$settings['data_languages']       = $this->Model_Localisation_Language->getLanguages();
 		$settings['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$settings['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$settings['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getPages();
+		$settings['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getRecords(array('cache' => true));
 
 		$settings['data_mail_protocols'] = array(
 			'smtp' => "SMTP",
@@ -85,7 +85,7 @@ class App_Controller_Admin_Settings_General extends Controller
 		$settings['data_icon_sizes'] = self::$icon_sizes;
 
 		//Domains AC Template
-		$settings['config_ga_domains']['__ac_template__'] = '';
+		$settings['ga_domains']['__ac_template__'] = '';
 
 		//Render
 		output($this->render('settings/general', $settings));

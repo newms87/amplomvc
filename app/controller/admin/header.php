@@ -56,7 +56,7 @@ class App_Controller_Admin_Header extends Controller
 			}
 
 			if (user_can('r', 'admin/dashboards')) {
-				$dashboards = $this->Model_Dashboard->getDashboards(true);
+				$dashboards = $this->Model_Dashboard->getUserDashboards();
 
 				foreach ($dashboards as $dashboard) {
 					if (!$this->document->hasLink('admin', 'dashboards')) {
@@ -95,7 +95,7 @@ class App_Controller_Admin_Header extends Controller
 				}
 			}
 
-			$stores = $this->Model_Setting_Store->getStores();
+			$stores = $this->Model_Site->getRecords(array('cache' => true));
 
 			//Store Front Links
 			$link_stores = array(
@@ -111,7 +111,7 @@ class App_Controller_Admin_Header extends Controller
 				$link_store = array(
 					'name'         => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
-					'href'         => store_url($store['store_id']),
+					'href'         => site_url('', '', null, $store['store_id']),
 					'parent'       => 'stores',
 					'target'       => '_blank',
 				);

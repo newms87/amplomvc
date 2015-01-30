@@ -71,7 +71,7 @@ function breadcrumbs()
 {
 	global $registry;
 
-	if (option('show_breadcrumbs', true)) {
+	if (IS_ADMIN ? option('admin_show_breadcrumbs', true) : option('show_breadcrumbs', true)) {
 		return $registry->get('breadcrumb')->render();
 	}
 }
@@ -302,16 +302,10 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
-function site_url($path = '', $query = null, $ssl = false)
+function site_url($path = '', $query = null, $ssl = null, $site_id = null)
 {
 	global $registry;
-	return $registry->get('url')->link($path, $query, $ssl);
-}
-
-function store_url($store_id, $path = '', $query = null, $ssl = false)
-{
-	global $registry;
-	return $registry->get('url')->store($store_id, $path, $query, $ssl);
+	return $registry->get('url')->link($path, $query, $ssl, $site_id);
 }
 
 function theme_url($path = '', $query = null)
@@ -337,16 +331,16 @@ function theme_dir($path = '')
 	return $registry->get('theme')->getFile($path);
 }
 
-function redirect($path = '', $query = null, $status = null)
+function redirect($path = '', $query = null, $ssl = null, $status = null)
 {
 	global $registry;
-	$registry->get('url')->redirect($path, $query, $status);
+	$registry->get('url')->redirect($path, $query, $ssl, $status);
 }
 
-function post_redirect($path = '', $query = null, $status = null)
+function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 {
 	$_SESSION['__post_data__'] = $_POST;
-	redirect($path, $query, $status);
+	redirect($path, $query, $ssl, $status);
 }
 
 function slug($name, $sep = '_', $allow = 'a-z0-9_-')
@@ -368,8 +362,12 @@ function cast_title($name)
 	return implode(' ', $title);
 }
 
-function cast_protocol($url, $cast = 'http')
+function cast_protocol($url, $cast = null)
 {
+	if ($cast === null) {
+		$cast = IS_SSL ? 'https' : 'http';
+	}
+
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
 	if ($cast) {
@@ -387,14 +385,14 @@ function cast_protocol($url, $cast = 'http')
 
 function option($option, $default = null)
 {
-	global $registry;
-	static $options;
+	global $_options;
 
-	if (!$options) {
-		$options = &$registry->get('config')->all();
+	//Load config if not loaded
+	if (!$_options) {
+		new Config;
 	}
 
-	return isset($options[$option]) ? $options[$option] : $default;
+	return isset($_options[$option]) ? $_options[$option] : $default;
 }
 
 function set_option($option, $value)
@@ -786,20 +784,6 @@ HTML
 			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
-}
-
-function build_js($js)
-{
-	static $js_loaded_files = array();
-
-	$args = func_get_args();
-	array_shift($args);
-
-	ob_start();
-
-	include(DIR_RESOURCES . 'builder_js.php');
-
-	return ob_get_clean();
 }
 
 function crypto_rand($min, $max)

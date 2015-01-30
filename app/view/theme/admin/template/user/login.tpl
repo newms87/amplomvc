@@ -27,12 +27,6 @@
 
 	<? if ($is_ajax) { ?>
 		<?= render_message(); ?>
-	<? } else { ?>
-		<script type="text/javascript">
-			$('#admin-login form').submit(function() {
-				$(this).find('[data-loading]').loading();
-			});
-		</script>
 	<? } ?>
 </section>
 

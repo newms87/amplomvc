@@ -42,25 +42,4 @@
 	</div>
 </div>
 
-<?= build_js('ckeditor'); ?>
-
-<script type="text/javascript">
-	$('#allow_html').change(function () {
-		message = $('#mail_message');
-
-		if ($(this).is(':checked') && !message.hasClass('ckedit')) {
-			message.addClass('ckedit');
-			init_ckeditor_for($('#mail_message'));
-		}
-		else if (!$(this).is(':checked') && message.hasClass('ckedit')) {
-			message.removeClass('ckedit');
-			remove_ckeditor_for($('#mail_message'));
-		}
-	}).change();
-</script>
-
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
-</script>
-
 <?= $is_ajax ? '' : call('admin/footer'); ?>

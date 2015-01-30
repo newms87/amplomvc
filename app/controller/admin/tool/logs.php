@@ -16,8 +16,13 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		//Batch Actions
 		$actions = array(
-			'delete'  => array(
+			'delete' => array(
 				'label' => _l("Delete"),
+			),
+			'clear'  => array(
+				'type'       => 'select',
+				'label'      => _l("Clear"),
+				'build_data' => array('' => _l("All")) + $this->Model_Log->getLogs(),
 			),
 		);
 
@@ -34,7 +39,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 	{
 		//The Table Columns
 		$requested_cols = $this->request->get('columns');
-		$columns = $this->Model_Log->getColumns($requested_cols);
+		$columns        = $this->Model_Log->getColumns($requested_cols);
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('log_id', 'desc');
@@ -44,7 +49,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		$listing = array(
 			'row_id'         => 'log_id',
-			'extra_cols'     => $this->Model_User->getColumns(false),
+			'extra_cols'     => $this->Model_Log->getColumns(false),
 			'columns'        => $columns,
 			'rows'           => $entries,
 			'filter_value'   => $filter,
@@ -65,7 +70,31 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 	public function batch_action()
 	{
+		$action = _post('action');
 
+		if ($action === 'clear') {
+			$this->Model_Log->clear(_post('action_value'));
+		} else {
+			foreach (_post('batch', array()) as $log_id) {
+				switch ($action) {
+					case 'delete':
+						$this->Model_Log->remove($log_id);
+						break;
+				}
+			}
+		}
+
+		if ($this->Model_Log->hasError()) {
+			message('error', $this->Model_Log->getError());
+		} else {
+			message('success', _l("The log table was updated (Note: Log files are unchanged)."));
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/tool/logs');
+		}
 	}
 
 	public function remove($lines = null)

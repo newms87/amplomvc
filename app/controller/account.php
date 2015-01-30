@@ -34,7 +34,13 @@ class App_Controller_Account extends Controller
 		$data['meta']     = $this->customer->meta();
 
 		//Render
-		$this->index($this->render('account/details', $data));
+		$content = $this->render('account/details', $data);
+
+		if ($this->is_ajax) {
+			output($content);
+		} else {
+			$this->index($content);
+		}
 	}
 
 	public function form()

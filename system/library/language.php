@@ -42,7 +42,7 @@ class Language extends Library
 			//Set as default language for this user for 30 days
 			$this->session->setCookie('language_code', $this->code, 60 * 60 * 24 * 30);
 
-			$this->config->set('config_language_id', $this->language_id);
+			set_option('config_language_id', $this->language_id);
 		}
 	}
 
@@ -54,7 +54,7 @@ class Language extends Library
 	public function getLanguage($language_id)
 	{
 		if (!isset($this->loaded[$language_id])) {
-			$language = $this->queryRow("SELECT * FROM " . self::$tables['language'] . " WHERE language_id = " . (int)$language_id);
+			$language = $this->queryRow("SELECT * FROM {$this->t['language']} WHERE language_id = " . (int)$language_id);
 
 			foreach ($this->defaults as $key => $default) {
 				if (empty($language[$key])) {
@@ -73,7 +73,7 @@ class Language extends Library
 		static $all_loaded = false;
 
 		if (!$all_loaded) {
-			$this->loaded = $this->queryRows("SELECT * FROM " . self::$tables['language'], 'language_id');
+			$this->loaded = $this->queryRows("SELECT * FROM {$this->t['language']}", 'language_id');
 
 			foreach ($this->loaded as &$loaded) {
 				$loaded += $this->defaults;
@@ -135,7 +135,7 @@ class Language extends Library
 			$language = cache('language.' . $code);
 
 			if (!$language) {
-				$language = $this->queryRow("SELECT * FROM " . self::$tables['language'] . " WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
+				$language = $this->queryRow("SELECT * FROM {$this->t['language']} WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
 
 				if ($language) {
 					cache('language.' . $code, $language);
@@ -149,7 +149,7 @@ class Language extends Library
 
 			//Last Resort Load English or any language
 			if (!$language) {
-				$query = "SELECT * FROM " . self::$tables['language'] . " WHERE status = '1'" .
+				$query = "SELECT * FROM {$this->t['language']} WHERE status = '1'" .
 					" ORDER BY CASE" .
 					" WHEN `code` = '" . $this->escape(option('config_language')) . "' THEN 2" .
 					" WHEN `code` = 'en' THEN 1" .
