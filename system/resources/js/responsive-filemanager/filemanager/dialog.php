@@ -402,14 +402,14 @@ if (isset($_POST['submit'])) {
 			<div class="space10"></div>
 			<div class="space10"></div>
 			<div class="tabbable upload-tabbable"> <!-- Only required for left/right tabs -->
-				<?php if ($java_upload){ ?>
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab1" data-toggle="tab"><?php echo lang_Upload_base; ?></a></li>
-					<li><a href="#tab2" id="uploader-btn" data-toggle="tab"><?php echo lang_Upload_java; ?></a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane active" id="tab1">
-						<?php } ?>
+				<?php if ($java_upload) { ?>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#tab1" data-toggle="tab"><?php echo lang_Upload_base; ?></a></li>
+			<li><a href="#tab2" id="uploader-btn" data-toggle="tab"><?php echo lang_Upload_java; ?></a></li>
+		</ul>
+		<div class="tab-content">
+		<div class="tab-pane active" id="tab1">
+	<?php } ?>
 						<form action="<?= site_url('admin/filemanager'); ?>" method="post" enctype="multipart/form-data" id="myAwesomeDropzone" class="dropzone">
 							<input type="hidden" name="path" value="<?php echo $cur_path ?>"/>
 							<input type="hidden" name="path_thumb" value="<?php echo $thumbs_path . $subdir ?>"/>
@@ -428,12 +428,12 @@ if (isset($_POST['submit'])) {
 						</form>
 					</div>
 					<div class="upload-help"><?php echo lang_Upload_base_help; ?></div>
-					<?php if ($java_upload){ ?>
-				</div>
-				<div class="tab-pane" id="tab2">
-					<div id="iframe-container"></div>
-					<div class="upload-help"><?php echo lang_Upload_java_help; ?></div>
-					<?php } ?>
+					<?php if ($java_upload) { ?>
+		</div>
+		<div class="tab-pane" id="tab2">
+		<div id="iframe-container"></div>
+		<div class="upload-help"><?php echo lang_Upload_java_help; ?></div>
+	<?php } ?>
 				</div>
 			</div>
 		</div>
@@ -801,8 +801,8 @@ if (isset($_POST['submit'])) {
 									</a>
 									<div class="box">
 										<h4 class="<?php if ($ellipsis_title_after_first_row) {
-											echo "ellipsis";
-										} ?>">
+									echo "ellipsis";
+								} ?>">
 											<a class="folder-link" data-file="<?php echo $file ?>" href="<?= site_url('admin/filemanager', $get_params . rawurlencode($src) . "&" . uniqid()); ?>"><?php echo $file; ?></a>
 										</h4>
 									</div>
@@ -812,21 +812,21 @@ if (isset($_POST['submit'])) {
 									<input type="hidden" class="extension" value="<?php echo lang_Type_dir; ?>"/>
 									<div class="file-date"><?php echo date(lang_Date_type, $file_array['date']) ?></div>
 									<?php if ($show_folder_size) { ?>
-										<div class="file-size"><?php echo makeSize($file_array['size']) ?></div><?php } ?>
+									<div class="file-size"><?php echo makeSize($file_array['size']) ?></div><?php } ?>
 									<div class='file-extension'><?php echo lang_Type_dir; ?></div>
 									<figcaption>
 										<a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if ($rename_folders && !$file_prevent_rename) {
-											echo "rename-folder";
-										} ?>" title="<?php echo lang_Rename ?>" data-path="<?php echo $rfm_subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+									echo "rename-folder";
+								} ?>" title="<?php echo lang_Rename ?>" data-path="<?php echo $rfm_subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 											<i class="icon-pencil <?php if (!$rename_folders || $file_prevent_rename) {
-												echo 'icon-white';
-											} ?>"></i></a>
+									echo 'icon-white';
+								} ?>"></i></a>
 										<a href="javascript:void('')" class="tip-left erase-button <?php if ($delete_folders && !$file_prevent_delete) {
-											echo "delete-folder";
-										} ?>" title="<?php echo lang_Erase ?>" data-confirm="<?php echo lang_Confirm_Folder_del; ?>" data-path="<?php echo $rfm_subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
+									echo "delete-folder";
+								} ?>" title="<?php echo lang_Erase ?>" data-confirm="<?php echo lang_Confirm_Folder_del; ?>" data-path="<?php echo $rfm_subfolder . $subdir . $file; ?>" data-thumb="<?php echo $thumbs_path . $subdir . $file; ?>">
 											<i class="icon-trash <?php if (!$delete_folders || $file_prevent_delete) {
-												echo 'icon-white';
-											} ?>"></i>
+									echo 'icon-white';
+								} ?>"></i>
 										</a>
 									</figcaption>
 								<?php } ?>
@@ -873,8 +873,8 @@ if (isset($_POST['submit'])) {
 					$is_audio           = false;
 					$show_original      = false;
 					$show_original_mini = false;
-					$mini_src          ;
-					$src_thumb         ;
+					$mini_src           = '';
+					$src_thumb          = '';
 					$extension_lower    = fix_strtolower($file_array['extension']);
 					if (in_array($extension_lower, $ext_img)) {
 						$src      = $base_url . $cur_dir . rawurlencode($file);
@@ -960,7 +960,8 @@ if (isset($_POST['submit'])) {
 									</div>
 								</div>
 								<div class="img-precontainer-mini <?php if ($is_img) {
-									echo 'original-thumb';} ?>">
+									echo 'original-thumb';
+								} ?>">
 									<div class="filetype <?php echo $extension_lower ?> <?php if (!$is_icon_thumb) {
 										echo "hide";
 									} ?>"><?php echo $extension_lower ?></div>

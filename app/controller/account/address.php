@@ -19,7 +19,7 @@ class App_Controller_Account_Address extends Controller
 		breadcrumb(_l("Address Book"), site_url('account/address'));
 
 		//Load Addresses
-		$addresses = $this->customer->getAddresses();
+		$addresses = $this->Model_Customer->getAddresses($this->customer->getId());
 
 		foreach ($addresses as &$address) {
 			$address['address'] = $this->address->format($address);
@@ -42,7 +42,7 @@ class App_Controller_Account_Address extends Controller
 	{
 		//Insert
 		if (empty($_GET['address_id'])) {
-			$address_id = $this->customer->addAddress($_POST);
+			$address_id = $this->Model_Customer->saveAddress($this->customer->getId(), null, $_POST);
 
 			if ($address_id) {
 				if (!empty($_POST['default'])) {
@@ -55,7 +55,7 @@ class App_Controller_Account_Address extends Controller
 			}
 		} //Update
 		else {
-			if ($this->customer->editAddress($_GET['address_id'], $_POST)) {
+			if ($this->Model_Customer->saveAddress($this->customer->getId(), $_GET['address_id'], $_POST)) {
 
 				if (!empty($_POST['default'])) {
 					$this->customer->setDefaultShippingAddress($_GET['address_id']);
@@ -136,7 +136,7 @@ class App_Controller_Account_Address extends Controller
 		if (IS_POST) {
 			$address_info = $_POST;
 		} elseif ($address_id) {
-			$address_info = $this->customer->getAddress($_GET['address_id']);
+			$address_info = $this->Model_Customer->getAddress($this->customer->getId(), $_GET['address_id']);
 
 			$address_info['default'] = (int)$this->customer->getDefaultShippingAddressId() === $address_id;
 		}

@@ -73,7 +73,7 @@ class App_Controller_Account extends Controller
 			$data['metadata']['default_shipping_address_id'] = '';
 		}
 
-		$data['data_addresses'] = $this->customer->getAddresses();
+		$data['data_addresses'] = $this->Model_Customer->getAddresses($this->customer->getId());
 
 		//Actions
 		$data['save'] = site_url('account/submit-update');

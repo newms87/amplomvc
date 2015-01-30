@@ -21,13 +21,9 @@ class App_Controller_Block_Account_Address extends App_Controller_Block_Block
 				$addresses = $this->customer->getShippingAddresses($filter);
 				break;
 
-			case 'payment':
-				$addresses = $this->customer->getPaymentAddresses($filter);
-				break;
-
 			case 'all':
 			default:
-				$addresses = $this->customer->getAddresses($filter);
+				$addresses = $this->Model_Customer->getAddresses($this->customer->getId(), $filter);
 				break;
 		}
 

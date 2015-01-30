@@ -181,8 +181,6 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 	}
 }
 
-register_routing_hook('amplo', 'amplo_routing_hook');
-
 if (!function_exists('array_column')) {
 	/**
 	 * PHP < 5.5 backwards Compatibility
