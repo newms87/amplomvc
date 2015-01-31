@@ -31,6 +31,12 @@ class Document extends Library
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
 		}
+
+		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
+			if (option('minify_js_files') === null) {
+				set_option('minify_js_files', true);
+			}
+		}
 	}
 
 	public function info($key = null, $default = null)
@@ -341,8 +347,12 @@ class Document extends Library
 		return $this->styles;
 	}
 
-	public function addScript($script, $priority = 100)
+	public function addScript($script, $priority = 100, $minify = null)
 	{
+		if ($minify === null) {
+			$minify = option('minify_js_files', false);
+		}
+
 		//First check for a URL wrapper, then check if it is a file
 		if (strpos($script, '//') === false && !is_file($script)) {
 			if (is_file(DIR_SITE . $script)) {
@@ -352,6 +362,10 @@ class Document extends Library
 			} elseif (is_file(DIR_SITE . 'app/view/javascript/' . $script)) {
 				$script = URL_SITE . 'app/view/javascript/' . $script;
 			}
+		}
+
+		if ($minify) {
+			$script = $this->minifyJs($script);
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
@@ -365,6 +379,51 @@ class Document extends Library
 	public function localizeVar($var, $value)
 	{
 		$this->ac_vars[$var] = $value;
+	}
+
+	public function minifyJs($script)
+	{
+		$script_file = str_replace(URL_SITE, DIR_SITE, $script);
+
+		if (!is_file($script_file)) {
+			return $script;
+		}
+
+		$file = 'js/' . slug($script) . '.js';
+		$cache_file = DIR_CACHE . $file;
+		$cache_url = URL_SITE . 'system/cache/' . $file;
+
+		if (!is_file($cache_file) || (_filemtime($cache_file) < _filemtime($script_file))) {
+			require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
+			$js = JShrink\Minifier::minify(file_get_contents($script_file));
+
+			if (_is_writable(dirname($cache_file))) {
+				file_put_contents($cache_file, $js);
+			} else {
+				return $script;
+			}
+		}
+
+		return $cache_url;
+	}
+
+	public function gzipFile($file, $level = null)
+	{
+		if (!is_file($file)) {
+			return false;
+		}
+
+		$gzip_file = $file . '.gz';
+
+		if (!is_file($gzip_file) || (_filemtime($gzip_file) < _filemtime($file))) {
+			$g = gzencode(file_get_contents($file), $level !== null ? $level : option('gzip_compression_level', 9));
+
+			if ($g) {
+				file_put_contents($gzip_file, $g);
+			}
+		}
+
+		return $gzip_file;
 	}
 
 	/**

@@ -15,8 +15,8 @@ $this->db->dropTable('extension');
 $this->db->dropTable('navigation_store');
 $this->db->dropTable('page_store');
 
-$this->db->changeColumn('address', 'firstname', 'firstname', "VARCHAR(60) NULL DEFAULT ''");
-$this->db->changeColumn('address', 'lastname', 'lastname', "VARCHAR(60) NULL DEFAULT ''");
+$this->db->changeColumn('address', 'firstname', 'first_name', "VARCHAR(60) NULL DEFAULT ''");
+$this->db->changeColumn('address', 'lastname', 'last_name', "VARCHAR(60) NULL DEFAULT ''");
 $this->db->changeColumn('address', 'company', 'company', "VARCHAR(45) NULL");
 $this->db->changeColumn('address', 'postcode', 'postcode', "VARCHAR(15) NOT NULL");
 
@@ -32,3 +32,10 @@ $this->db->createTable('log', <<<SQL
   PRIMARY KEY (`log_id`)
 SQL
 );
+
+$this->db->changeColumn('customer', 'telephone', 'phone', "VARCHAR(32) NOT NULL DEFAULT ''");
+$this->db->changeColumn('customer', 'firstname', 'first_name', "VARCHAR(60) NOT NULL DEFAULT ''");
+$this->db->changeColumn('customer', 'lastname', 'last_name', "VARCHAR(60) NOT NULL DEFAULT ''");
+
+$this->db->changeColumn('user', 'firstname', 'first_name', "VARCHAR(60) NOT NULL DEFAULT ''");
+$this->db->changeColumn('user', 'lastname', 'last_name', "VARCHAR(60) NOT NULL DEFAULT ''");

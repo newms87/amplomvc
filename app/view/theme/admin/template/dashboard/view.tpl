@@ -21,7 +21,7 @@
 				title: $this.html()
 			};
 			$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response) {
-				$('.dashboard-header').ac_msg(response);
+				$('.dashboard-header').show_msg(response);
 			}, 'json');
 		}
 	});

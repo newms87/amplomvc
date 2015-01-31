@@ -143,7 +143,7 @@
 							<span class="help">
 								{{Insertables:}}
 								<br/>
-								{firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}.
+								{first_name}, {last_name}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}.
 								<br/>
 								<br/>
 								{{Can be individually set under System > Localisation > Countries}}
@@ -810,7 +810,7 @@
 		var icon = $('[name="site_icon[orig]"]').val();
 
 		if (!icon) {
-			return $('#icon-generator').ac_msg('error', "{{You must choose an icon PNG image file first}}");
+			return $('#icon-generator').show_msg('error', "{{You must choose an icon PNG image file first}}");
 		}
 
 		$this.loading();

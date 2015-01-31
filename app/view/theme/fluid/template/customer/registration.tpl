@@ -27,10 +27,10 @@
 						<h2>{{Your Personal Details}}</h2>
 
 						<div class="form-item required">
-							<input type="text" placeholder="{{First Name}}" name="firstname" value="<?= $firstname; ?>"/>
+							<input type="text" placeholder="{{First Name}}" name="first_name" value="<?= $first_name; ?>"/>
 						</div>
 						<div class="form-item required">
-							<input type="text" placeholder="{{Last Name}}" name="lastname" value="<?= $lastname; ?>"/>
+							<input type="text" placeholder="{{Last Name}}" name="last_name" value="<?= $last_name; ?>"/>
 						</div>
 						<div class="form-item required">
 							<input type="text" placeholder="{{Email}}" autocomplete="off" name="email" value="<?= $email; ?>"/>

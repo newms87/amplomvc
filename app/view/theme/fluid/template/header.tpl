@@ -126,7 +126,7 @@
 					</div>
 				<? } else { ?>
 					<div class="login-buttons">
-						<a class="button scale my-account" href="<?= site_url('account'); ?>"><?= _l("%s's Account", $customer['firstname']); ?></a>
+						<a class="button scale my-account" href="<?= site_url('account'); ?>"><?= _l("%s's Account", $customer['first_name']); ?></a>
 						<a class="button scale logout" href="<?= site_url('customer/logout'); ?>">{{Log Out}}</a>
 					</div>
 				<? } ?>

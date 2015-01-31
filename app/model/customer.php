@@ -1,16 +1,17 @@
 <?php
+
 class App_Model_Customer extends App_Model_Table
 {
 	protected $table = 'customer', $primary_key = 'customer_id';
 
 	public function save($customer_id, $customer)
 	{
-		if (isset($customer['name']) && !isset($customer['firstname'])) {
+		if (isset($customer['name']) && !isset($customer['first_name'])) {
 			$name_parts            = explode(' ', $customer['name'], 2);
-			$customer['firstname'] = $name_parts[0];
+			$customer['first_name'] = $name_parts[0];
 
 			if (isset($name_parts[1])) {
-				$customer['lastname'] = $name_parts[1];
+				$customer['last_name'] = $name_parts[1];
 			}
 		}
 
@@ -24,12 +25,12 @@ class App_Model_Customer extends App_Model_Table
 			$this->error['email'] = _l("Your email address is required.");
 		}
 
-		if ((isset($customer['zone_id']) || isset($customer['country_id'])) && !$this->address->validate($customer)) {
-			$this->error += $this->address->getError();
+		if ((isset($customer['zone_id']) || isset($customer['country_id'])) && !$this->Model_Address->validate($customer)) {
+			$this->error += $this->Model_Address->getError();
 		}
 
-		if (!empty($data['telephone']) && !validate('phone', $data['telephone'])) {
-			$this->error['telephone'] = _l("The phone number you provided is invalid.");
+		if (!empty($data['phone']) && !validate('phone', $data['phone'])) {
+			$this->error['phone'] = _l("The phone number you provided is invalid.");
 		}
 
 		if (isset($customer['password'])) {
@@ -148,27 +149,21 @@ class App_Model_Customer extends App_Model_Table
 
 	public function customerHasAddress($customer_id, $address_id)
 	{
-		return $this->queryVar("SELECT COUNT(*) FROM " . self::$tables['customer_address'] . " WHERE address_id = " . (int)$address_id . " AND customer_id = " . (int)$customer_id);
+		return $this->queryVar("SELECT COUNT(*) FROM {$this->t['customer_address']} WHERE address_id = " . (int)$address_id . " AND customer_id = " . (int)$customer_id);
 	}
 
 	public function saveAddress($customer_id, $address_id, $address)
 	{
-		if (!$address_id) {
-			$address_id = $this->address->add($address);
-
-			if (!$address_id) {
-				$this->error = $this->address->getError();
-				return false;
-			}
-		} else {
-			if (!$this->address->edit($address_id, $address)) {
-				$this->error = $this->address->getError();
-				return false;
-			}
+		if (!$customer_id) {
+			$this->error['customer_id'] = _l("Address must be assigned to a customer.");
+			return false;
 		}
 
-		if (!$customer_id) {
-			return $address_id;
+		$address_id = $this->Model_Address->save($address_id, $address);
+
+		if (!$address_id) {
+			$this->error = $this->Model_Address->getError();
+			return false;
 		}
 
 		//Associate address to customer
@@ -181,63 +176,51 @@ class App_Model_Customer extends App_Model_Table
 			$this->insert('customer_address', $customer_address);
 		}
 
+		clear_cache('customer.' . $customer_id);
+
 		return $address_id;
 	}
 
-	public function getAddress($customer_id, $address_id)
+	public function getAddresses($customer_id, $sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
-		$address = $this->address->getAddress($address_id);
+		$addresses = cache('customer.' . $customer_id . '.addresses');
 
-		if (!$address) {
-			return null;
+		if ($addresses === null) {
+			$addresses = $this->queryColumn("SELECT address_id FROM {$this->t['customer_address']} WHERE customer_id = " . (int)$customer_id);
+			cache('customer.' . $customer_id . '.addresses', $addresses);
 		}
 
-		if ($this->isLogged()) {
-			$address_customer_id = $this->queryVar("SELECT customer_id FROM " . self::$tables['customer_address'] . " WHERE address_id = " . (int)$address_id . " LIMIT 1");
-
-			if ($customer_id && $customer_id != $address_customer_id) {
-				write_log('security', _l("Customer %s attempted to access unowned address with ID %s", $customer_id, $address_id));
-				return null;
-			}
+		if (!$sort && !$filter && $select === '*' && !$total) {
+			$sort['cache'] = true;
 		}
 
-		return $address;
-	}
+		$filter['address_id'] = $addresses;
 
-	public function getAddresses($customer_id, $filter = array())
-	{
-		if (!isset($filter['customer_ids']) && $customer_id) {
-			$filter['customer_ids'] = array($customer_id);
-		}
-
-		return $this->address->getAddresses($filter);
+		return $this->Model_Address->getRecords($sort, $filter, $select, $total, $index);
 	}
 
 	public function removeAddress($customer_id, $address_id)
 	{
-		if ($this->getTotalAddresses($customer_id) <= 1) {
-			$this->error['warning'] = _l("Must have at least 1 address associated to your account!");
-		}
+		$where = array(
+			'customer_id' => $customer_id,
+			'address_id'  => $address_id,
+		);
 
-		if ((int)$this->meta('default_shipping_address_id') === (int)$address_id) {
-			$this->error['warning'] = _l("Cannot remove the default shipping address! Please change your default shipping address first.");
-		}
+		clear_cache('customer.' . $customer_id);
 
-		if (!$this->error) {
-			$where = array(
-				'customer_id' => $customer_id,
-				'address_id'  => $address_id,
-			);
-
-			$this->delete('customer_address', $where);
-			return true;
+		if ($this->delete('customer_address', $where)) {
+			if ($this->Model_Address->remove($address_id)) {
+				return true;
+			} else {
+				$this->error = $this->Model_Address->getError();
+			}
 		}
 
 		return false;
 	}
 
-	public function getTotalAddresses($customer_id)
+	public function getTotalAddresses($customer_id, $filter = array())
 	{
-		return (int)$this->queryVar("SELECT COUNT(*) FROM " . self::$tables['customer_address'] . " WHERE customer_id = " . (int)$customer_id);
+		return $this->getAddresses($customer_id, null, $filter, 'COUNT(*)');
 	}
 }

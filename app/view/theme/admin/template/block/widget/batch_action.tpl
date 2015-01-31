@@ -79,7 +79,7 @@
 
 		$.post('<?= $url; ?>', data, function (response) {
 			$this.loading('stop');
-			$this.ac_msg(response);
+			$this.show_msg(response);
 			$('.refresh-listing').click();
 		}, 'json');
 

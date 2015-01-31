@@ -22,7 +22,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		}
 
 		if (!template_row.length) {
-			$.error('Unable to find template row for ' + name + '! The element containing the template row must have the following attribute: data-row="__ac_template__"');
+			$.error('Element attribute data-row="__ac_template__" is required for ' + name);
 			return this;
 		}
 

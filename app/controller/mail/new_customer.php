@@ -11,8 +11,8 @@ class App_Controller_Mail_NewCustomer extends Controller
 		}
 
 		$insertables = array(
-			'first_name' => !empty($customer['firstname']) ? $customer['firstname'] : 'New Customer',
-			'last_name'  => !empty($customer['lastname']) ? $customer['lastname'] : '',
+			'first_name' => !empty($customer['first_name']) ? $customer['first_name'] : 'New Customer',
+			'last_name'  => !empty($customer['last_name']) ? $customer['last_name'] : '',
 			'store_name' => option('site_name'),
 			'store_url'  => site_url(),
 		);

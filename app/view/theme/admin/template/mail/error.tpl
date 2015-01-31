@@ -123,7 +123,7 @@
 		mail_fail_id = msg_preview.find('input[name=mail_fail_id]').val();
 
 		$.post('<?= $delete_message; ?>', {mail_fail_id: mail_fail_id}, function () {
-			msg_preview.parent().ac_msg("success", "{{Message deleted.}}");
+			msg_preview.parent().show_msg("success", "{{Message deleted.}}");
 			msg_preview.remove();
 		});
 	});

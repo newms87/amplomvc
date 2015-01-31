@@ -33,8 +33,8 @@
 						<td><?=
 							_l("Address Format:<br /><span class =\"help\">
 First Name =
-{firstname}<br />
-Last Name = {lastname}<br />
+{first_name}<br />
+Last Name = {last_name}<br />
 Company = {company}<br />
 Address 1 = {address_1}<br />
 Address 2 = {address_2}<br />
