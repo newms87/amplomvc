@@ -112,10 +112,11 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 {
 	$src = image($image, $width, $height, $default, $cast_protocol);
 
+	$size  = _getimagesize($src);
+	
 	$src   = $src ? "src=\"$src\"" : '';
 	$title = $title !== false ? "title=\"$title\"" : '';
 	$alt   = $alt !== false ? "alt=\"$alt\"" : '';
-	$size  = _getimagesize($src);
 
 	return "$src $title $alt $size";
 }
