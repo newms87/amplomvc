@@ -3,7 +3,6 @@
 class Response extends Library
 {
 	private $headers = array();
-	private $level = 0;
 	private $output;
 
 	public function addHeader($key, $value = null)
@@ -14,11 +13,6 @@ class Response extends Library
 	public function setHeader($header)
 	{
 		$this->headers = is_array($header) ? $header : array($header);
-	}
-
-	public function setCompression($level)
-	{
-		$this->level = $level;
 	}
 
 	public function getOutput()
@@ -37,29 +31,21 @@ class Response extends Library
 		}
 	}
 
-	private function compress($data, $level = 0)
+	private function compress($data, $level = 9)
 	{
-		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)) {
-			$encoding = 'gzip';
-		}
-
-		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)) {
-			$encoding = 'x-gzip';
-		}
-
-		if (!isset($encoding)) {
+		if (headers_sent() || connection_status() || !extension_loaded('zlib') || ini_get('zlib.output_compression')) {
 			return $data;
 		}
 
-		if (!extension_loaded('zlib') || ini_get('zlib.output_compression')) {
-			return $data;
+		if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+			if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false) {
+				$encoding = 'x-gzip';
+			} elseif (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
+				$encoding = 'gzip';
+			}
 		}
 
-		if (headers_sent()) {
-			return $data;
-		}
-
-		if (connection_status()) {
+		if (empty($encoding)) {
 			return $data;
 		}
 
@@ -76,7 +62,11 @@ class Response extends Library
 				return;
 			}
 
-			$output = $this->level ? $this->compress($this->output, $this->level) : $this->output;
+			if ($level = option('config_compression')) {
+				$output = $this->compress($this->output, $level);
+			} else {
+				$output = $this->output;
+			}
 
 			if (!headers_sent($file, $line)) {
 				foreach ($this->headers as $key => $value) {

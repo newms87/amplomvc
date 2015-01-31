@@ -76,7 +76,6 @@ $registry->set('url', new Url());
 // Response
 $response = new Response();
 $response->addHeader('Content-Type', 'text/html; charset=UTF-8');
-$response->setCompression(option('config_compression'));
 $registry->set('response', $response);
 
 //Plugins (self assigning to registry)
