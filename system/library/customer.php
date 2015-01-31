@@ -96,14 +96,14 @@ class Customer extends Library
 	public function setCustomerOverride($customer)
 	{
 		if (user_can('w', 'admin/customer')) {
-			$this->setCustomer($customer, true);
+			$this->setCustomer($customer);
 		}
 	}
 
-	protected function setCustomer($customer, $ignore_status = false)
+	protected function setCustomer($customer)
 	{
 		if (!is_array($customer)) {
-			$customer = $this->queryRow("SELECT * FROM {$this->t['customer']} WHERE customer_id = '" . (int)$customer . "'" . ($ignore_status ? '' : " AND status = '1'"));
+			$customer = $this->Model_Customer->getRecord($customer);
 		}
 
 		if (empty($customer)) {
@@ -120,12 +120,6 @@ class Customer extends Library
 		$this->metadata = $this->Model_Customer->getMeta($this->customer_id);
 
 		return true;
-	}
-
-	//TODO: Need to move customer database calls to library. This will resolve the customer_id issue.
-	public function setId($customer_id)
-	{
-		$this->customer_id = $customer_id;
 	}
 
 	/**
@@ -186,7 +180,7 @@ class Customer extends Library
 
 		return $this->Model_Customer->deleteMeta($this->customer_id, $key);
 	}
-	
+
 	/** Customer Info **/
 
 	public function info($key = null)

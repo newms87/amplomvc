@@ -134,7 +134,7 @@
 
 		$.post("<?= site_url('block/widget/views/save-sort-order'); ?>", {'sort_order': sort_order}, function (response) {
 			if (!response.success) {
-				$('.widget-view-list').ac_msg(response);
+				$('.widget-view-list').show_msg(response);
 			}
 		}, 'json');
 	});
@@ -240,7 +240,7 @@
 				response.view_id = null;
 			}
 
-			$view.ac_msg(response);
+			$view.show_msg(response);
 			$view.find('.edit-view').click();
 		}, 'json');
 	});

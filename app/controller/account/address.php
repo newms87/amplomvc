@@ -4,6 +4,9 @@ class App_Controller_Account_Address extends Controller
 {
 	public function index()
 	{
+		//TODO: THis is not yet implemented...
+		redirect('account/details');
+
 		if (!is_logged()) {
 			$this->request->setRedirect('account/address/form');
 
@@ -19,12 +22,12 @@ class App_Controller_Account_Address extends Controller
 		breadcrumb(_l("Address Book"), site_url('account/address'));
 
 		//Load Addresses
-		$addresses = $this->Model_Customer->getAddresses($this->customer->getId());
+		$addresses = $this->Model_Customer->getAddresses(customer_info('customer_id'));
 
 		foreach ($addresses as &$address) {
-			$address['address'] = $this->address->format($address);
-			$address['update']  = site_url('account/address/update', 'address_id=' . $address['address_id']);
-			$address['delete']  = site_url('account/address/delete', 'address_id=' . $address['address_id']);
+			$address['address'] = format('address', $address);
+			$address['update']  = site_url('account/address/save', 'address_id=' . $address['address_id']);
+			$address['delete']  = site_url('account/address/remove', 'address_id=' . $address['address_id']);
 		}
 		unset($address);
 
@@ -38,71 +41,11 @@ class App_Controller_Account_Address extends Controller
 		output($this->render('account/address_list', $data));
 	}
 
-	public function update()
-	{
-		//Insert
-		if (empty($_GET['address_id'])) {
-			$address_id = $this->Model_Customer->saveAddress($this->customer->getId(), null, $_POST);
-
-			if ($address_id) {
-				if (!empty($_POST['default'])) {
-					$this->customer->setDefaultShippingAddress($address_id);
-				}
-
-				message('success', _l("You have successfully added an address to your account!"));
-			} else {
-				message('error', $this->address->getError());
-			}
-		} //Update
-		else {
-			if ($this->Model_Customer->saveAddress($this->customer->getId(), $_GET['address_id'], $_POST)) {
-
-				if (!empty($_POST['default'])) {
-					$this->customer->setDefaultShippingAddress($_GET['address_id']);
-				}
-
-				message('success', _l("You have successfully updated your address."));
-			} else {
-				message('error', $this->address->getError());
-			}
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} elseif ($this->message->has('error')) {
-			$this->form();
-		} else {
-			redirect('account/address');
-		}
-	}
-
-	public function delete()
-	{
-		if (!empty($_GET['address_id'])) {
-			$this->customer->removeAddress($_POST['address_id']);
-
-			if ($this->customer->hasError()) {
-				message('error', $this->customer->getError());
-			} else {
-				if (!$this->address->remove($_GET['address_id'])) {
-					message('error', $this->address->getError());
-				}
-			}
-
-			if (!$this->message->has('error')) {
-				message('success', _l("Your address has been successfully deleted"));
-			}
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} else {
-			redirect('account/address');
-		}
-	}
-
 	public function form()
 	{
+		//TODO: THis is not yet implemented...
+		redirect('account/details');
+
 		//Page Head
 		set_page_info('title', _l("Address Form"));
 
@@ -110,17 +53,15 @@ class App_Controller_Account_Address extends Controller
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Account"), site_url('account'));
 		breadcrumb(_l("Address Book"), site_url('account/address'));
-
-		$crumb_url = isset($_GET['address_id']) ? site_url('account/address/update') : site_url('account/address/update');
-		breadcrumb(_l("Address Book"), $crumb_url);
+		breadcrumb(_l("Form"), site_url('account/address/form'));
 
 		//Insert or Update
 		$address_id = !empty($_GET['address_id']) ? (int)$_GET['address_id'] : 0;
 
 		//Load Information
 		$defaults = array(
-			'firstname'  => customer_info('firstname'),
-			'lastname'   => customer_info('lastname'),
+			'first_name' => customer_info('first_name'),
+			'last_name'  => customer_info('last_name'),
 			'company'    => '',
 			'address_1'  => '',
 			'address_2'  => '',
@@ -131,13 +72,10 @@ class App_Controller_Account_Address extends Controller
 			'default'    => false,
 		);
 
-		$address_info = array();
+		$address_info = $_POST;
 
-		if (IS_POST) {
-			$address_info = $_POST;
-		} elseif ($address_id) {
-			$address_info = $this->Model_Customer->getAddress($this->customer->getId(), $_GET['address_id']);
-
+		if (!IS_POST && $address_id) {
+			$address_info            = $this->Model_Address->getRecord(_get('address_id'));
 			$address_info['default'] = (int)$this->customer->getDefaultShippingAddressId() === $address_id;
 		}
 
@@ -153,13 +91,45 @@ class App_Controller_Account_Address extends Controller
 			0 => _l("No"),
 		);
 
-		$data['$this->is_ajax'] = $this->is_ajax;
-
 		//Action Buttons
 		$data['save'] = site_url('account/address/update', 'address_id=' . $address_id);
 
 		//Render
 		$template = $this->is_ajax ? 'account/address_form_ajax' : 'account/address_form';
 		output($this->render($template, $data));
+	}
+
+	public function save()
+	{
+		$address_id = $this->Model_Customer->saveAddress(customer_info('customer_id'), _get('address_id'), $_POST);
+
+		if ($address_id) {
+			message('success', _l("You have successfully added an address to your account!"));
+		} else {
+			message('error', $this->Model_Customer->getError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} elseif ($this->message->has('error')) {
+			post_redirect('account/address/form', 'address_id=' . _get('address_id'));
+		} else {
+			redirect('account/address');
+		}
+	}
+
+	public function remove()
+	{
+		if ($this->Model_Customer->removeAddress(customer_info('customer_id'), _request('address_id'))) {
+			message('success', _l("Your address has been successfully deleted"));
+		} else {
+			message('error', $this->Model_Customer->getError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('account/address');
+		}
 	}
 }

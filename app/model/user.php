@@ -193,15 +193,15 @@ class App_Model_User extends App_Model_Table
 
 		if (isset($filter['name'])) {
 			$where = $this->extractWhere($this->table, $filter);
-			$where .= " AND CONCAT(firstname, ' ', lastname) like '%" . $this->escape($filter['name']) . "%'";
+			$where .= " AND CONCAT(first_name, ' ', last_name) like '%" . $this->escape($filter['name']) . "%'";
 			$filter = $where;
 		}
 
 		//Order and Limit
 		if (!empty($filter['sort']) && $filter['sort'] === 'name') {
 			$filter['sort'] = array(
-				'lastname'  => $filter['order'],
-				'firstname' => $filter['order'],
+				'last_name'  => $filter['order'],
+				'first_name' => $filter['order'],
 			);
 		}
 

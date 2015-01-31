@@ -187,7 +187,7 @@
 		var icon = $('[name="admin_icon[orig]"]').val();
 
 		if (!icon) {
-			return $('#icon-generator').ac_msg('error', "{{You must choose an icon PNG image file first}}");
+			return $('#icon-generator').show_msg('error', "{{You must choose an icon PNG image file first}}");
 		}
 
 		$this.loading();

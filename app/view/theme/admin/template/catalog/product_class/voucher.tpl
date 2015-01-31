@@ -41,7 +41,7 @@
 						<span class="help">{{The Search Engine Optimized URL for the product page.}}</span>
 					</td>
 					<td>
-						<input type="text" onfocus="$(this).ac_msg('error', '{{<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button}}');" name="alias" value="<?= $alias; ?>"/>
+						<input type="text" onfocus="$(this).show_msg('error', '{{<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button}}');" name="alias" value="<?= $alias; ?>"/>
 						<a class="gen_url" onclick="generate_url(this)">{{[Generate URL]}}</a>
 					</td>
 				</tr>
@@ -121,7 +121,7 @@
 	$('.imageinput').ac_imageinput();
 
 	function generate_url(context) {
-		$.ac_msg('clear');
+		$.show_msg('clear');
 
 		name = $('input[name=name]').val();
 

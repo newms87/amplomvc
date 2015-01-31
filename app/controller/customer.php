@@ -142,8 +142,8 @@ class App_Controller_Customer extends Controller
 		$registration_data = $_POST;
 
 		$defaults = array(
-			'firstname'  => '',
-			'lastname'   => '',
+			'first_name'  => '',
+			'last_name'   => '',
 			'email'      => '',
 			'company'    => '',
 			'address_1'  => '',

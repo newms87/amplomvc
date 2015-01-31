@@ -66,12 +66,12 @@ class App_Controller_Admin_User extends Controller
 
 			$user['actions'] = $actions;
 
-			if (!$user['lastname']) {
-				$user['name'] = $user['firstname'] ? $user['firstname'] : _l("No Name");
-			} elseif ($user['firstname']) {
-				$user['name'] = $user['lastname'] . ', ' . $user['firstname'];
+			if (!$user['last_name']) {
+				$user['name'] = $user['first_name'] ? $user['first_name'] : _l("No Name");
+			} elseif ($user['first_name']) {
+				$user['name'] = $user['last_name'] . ', ' . $user['first_name'];
 			} else {
-				$user['name'] = $user['lastname'];
+				$user['name'] = $user['last_name'];
 			}
 		}
 		unset($user);
@@ -122,8 +122,8 @@ class App_Controller_Admin_User extends Controller
 
 		$defaults = array(
 			'username'     => '',
-			'firstname'    => '',
-			'lastname'     => '',
+			'first_name'    => '',
+			'last_name'     => '',
 			'email'        => '',
 			'user_role_id' => option('config_default_user_role', 12),
 			'status'       => 1,

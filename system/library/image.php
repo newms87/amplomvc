@@ -107,7 +107,7 @@ class Image extends Library
 		return $image;
 	}
 
-	public function save($file, $quality = 90)
+	public function save($file, $quality = 75)
 	{
 		if (!_is_writable(dirname($file))) {
 			write_log('error', _l(__METHOD__ . "(): Failed to save image file because directory was not writable: %s!", $file));
@@ -133,7 +133,7 @@ class Image extends Library
 
 				case 'png':
 				default:
-					$success = imagepng($this->image, $file, 0);
+					$success = imagepng($this->image, $file, 9);
 					break;
 			}
 

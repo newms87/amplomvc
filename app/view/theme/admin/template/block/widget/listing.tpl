@@ -213,7 +213,7 @@
 			$this.loading();
 
 			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(), function (response) {
-				$form.ac_msg(response);
+				$form.show_msg(response);
 				$this.closest('.view-config').removeClass('show');
 				$widget.find('.refresh-listing').click();
 

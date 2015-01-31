@@ -418,7 +418,7 @@
 			<? } ?>
 
 			<div class="buttons clearfix">
-				<a class="cancel-edit button remove">{{X}}</a>
+				<a class="cancel-form button remove">{{X}}</a>
 				<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
 			</div>
 		</div>
@@ -657,7 +657,7 @@
 
 		$.post("<?= site_url($save_path); ?>", data, function (response) {
 			$this.loading('stop');
-			$listview.ac_msg(response);
+			$listview.show_msg(response);
 		}, 'json');
 	});
 
@@ -666,7 +666,7 @@
 		return false;
 	});
 
-	$listview.find('.editable-options .cancel-edit').click(function (event) {
+	$listview.find('.editable-options .cancel-form').click(function (event) {
 		var $box = $(this).closest('.table-list-view-box');
 		$box.append($(this).closest('.editable-options'));
 		event.stopPropagation();

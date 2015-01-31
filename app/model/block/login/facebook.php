@@ -114,8 +114,8 @@ class App_Model_Block_Login_Facebook extends Model
 
 			if (empty($customer)) {
 				$customer = array(
-					'firstname' => $user_info['first_name'],
-					'lastname'  => $user_info['last_name'],
+					'first_name' => $user_info['first_name'],
+					'last_name'  => $user_info['last_name'],
 					'email'     => $user_info['email'],
 				);
 

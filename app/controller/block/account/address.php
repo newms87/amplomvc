@@ -5,7 +5,7 @@ class App_Controller_Block_Account_Address extends App_Controller_Block_Block
 	{
 		$defaults = array(
 			'address_id'  => '',
-			'customer_id' => $this->customer->getId(),
+			'customer_id' => customer_info('customer_id'),
 			'type'        => 'all',
 			'add_address' => true,
 		);
@@ -23,7 +23,7 @@ class App_Controller_Block_Account_Address extends App_Controller_Block_Block
 
 			case 'all':
 			default:
-				$addresses = $this->Model_Customer->getAddresses($this->customer->getId(), $filter);
+				$addresses = $this->Model_Customer->getAddresses(customer_info('customer_id'), $filter);
 				break;
 		}
 

@@ -33,13 +33,13 @@
 					<tr>
 						<td class="required"> {{First Name:}}</td>
 						<td>
-							<input type="text" name="firstname" value="<?= $firstname; ?>"/>
+							<input type="text" name="first_name" value="<?= $first_name; ?>"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="required"> {{Last Name:}}</td>
 						<td>
-							<input type="text" name="lastname" value="<?= $lastname; ?>"/>
+							<input type="text" name="last_name" value="<?= $last_name; ?>"/>
 						</td>
 					</tr>
 					<tr>
