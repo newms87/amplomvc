@@ -89,7 +89,7 @@ AddOutputFilterByType DEFLATE image/svg+xml
 
     # Expires after 1 month
     <filesMatch ".(gif|png|jpg|jpeg|ico|css)$">
-    Header set Cache-Control "max-age=2592000"
+        Header set Cache-Control "max-age=2592000"
     </filesMatch>
 </ifModule>
 
