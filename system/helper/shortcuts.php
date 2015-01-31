@@ -108,6 +108,18 @@ function send_mail($params)
 	return $mail->send();
 }
 
+function img($image, $width = null, $height = null, $title = null, $alt = null, $default = null, $cast_protocol = false)
+{
+	$src = image($image, $width, $height, $default, $cast_protocol);
+
+	$src   = $src ? "src=\"$src\"" : '';
+	$title = $title !== false ? "title=\"$title\"" : '';
+	$alt   = $alt !== false ? "alt=\"$alt\"" : '';
+	$size  = _getimagesize($src);
+
+	return "$src $title $alt $size";
+}
+
 function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
@@ -136,7 +148,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 function image_srcset($srcsets, $nx = 3)
 {
 	if (empty($srcsets)) {
-		return 'src=""';
+		return '';
 	}
 
 	if (!is_array($srcsets)) {
@@ -150,7 +162,7 @@ function image_srcset($srcsets, $nx = 3)
 	$path = pathinfo(current($srcsets));
 
 	if (empty($path['filename'])) {
-		return 'src=""';
+		return '';
 	}
 
 	while ($nx > 0) {
@@ -180,12 +192,14 @@ function image_srcset($srcsets, $nx = 3)
 	$src = empty($srcsets[1]) ? current($srcsets) : $srcsets[1];
 	unset($srcsets[1]);
 
+	$size = _getimagesize($src);
+
 	if (!empty($srcsets)) {
 		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\"";
+		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\" $size";
 	}
 
-	return "src=\"$src\"";
+	return "src=\"$src\" $size";
 }
 
 function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -211,10 +225,8 @@ function build_srcset($image, $nx = 3, $width = null, $height = null, $default =
 		$height = $size[1] / $nx;
 	}
 
-	$max = $nx;
-
 	while ($nx > 0) {
-		$src = $max !== $nx ? image($image, $width * $nx, $height * $nx, $default, $cast_protocol) : image($image);
+		$src = image($image, $width * $nx, $height * $nx, $default, $cast_protocol);
 
 		if ($src) {
 			$srcsets[$nx] = $src;
@@ -226,6 +238,27 @@ function build_srcset($image, $nx = 3, $width = null, $height = null, $default =
 	ksort($srcsets);
 
 	return $srcsets;
+}
+
+function _getimagesize($image)
+{
+	$image_file = $image;
+
+	if (!is_file($image_file)) {
+		$image_file = str_replace(URL_SITE, DIR_SITE, $image);
+
+		if (!is_file($image_file)) {
+			$image_file = str_replace(URL_IMAGE, DIR_IMAGE, $image);
+
+			if (!is_file($image_file)) {
+				return '';
+			}
+		}
+	}
+
+	$size = getimagesize($image_file);
+
+	return isset($size[3]) ? $size[3] : '';
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
