@@ -11,9 +11,6 @@ class App_Controller_Header extends Controller
 			$this->document->addStyle($style);
 		}
 
-		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
-		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
-
 		//Add jQuery from the CDN or locally
 		if (defined("AMPLO_PRODUCTION") && AMPLO_PRODUCTION) {
 			if (option('config_jquery_cdn', true)) {
