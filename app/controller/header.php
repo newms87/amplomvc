@@ -32,6 +32,7 @@ class App_Controller_Header extends Controller
 		$this->document->localizeVar('image_thumb_height', option('config_image_thumb_height'));
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('theme_url', theme_url());
+		$this->document->localizeVar('defer_scripts', option('defer_scripts', true));
 
 		//Body
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));

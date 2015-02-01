@@ -1,4 +1,5 @@
 <head>
+	<!-- NO-AMPLO-DEFER -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -27,9 +28,11 @@
 
 	<? foreach (page_info('styles') as $style) { ?>
 		<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
-	<? } ?>
+	<? }
 
-	<? foreach (page_info('scripts') as $type => $script_types) {
+	$defer = option('defer_scripts', true);
+
+	foreach (page_info('scripts') as $type => $script_types) {
 		if ($type === 'local') {
 			?>
 			<script type="text/javascript">
@@ -40,7 +43,7 @@
 		<?
 		} else {
 		foreach ($script_types as $script_src) { ?>
-			<script type="text/javascript" src="<?= $script_src; ?>"></script>
+			<script type="text/javascript" <?= $defer ? 'defer="defer"' : ''; ?> src="<?= $script_src; ?>"></script>
 		<? }
 		}
 	} ?>
