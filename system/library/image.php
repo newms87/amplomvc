@@ -133,7 +133,7 @@ class Image extends Library
 
 				case 'png':
 				default:
-					$success = imagepng($this->image, $file, 9);
+					$success = imagepng($this->image, $file, 9, PNG_ALL_FILTERS);
 					break;
 			}
 
