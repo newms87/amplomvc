@@ -26,27 +26,27 @@
 		<? } ?>
 	<? } ?>
 
-	<? $defer = option('defer_scripts', true);
+	<?
+	$defer   = option('defer_scripts', true);
+	$scripts = page_info('scripts');
+	$styles  = page_info('styles');
 
-	foreach (page_info('scripts') as $type => $script_types) {
-		if ($type === 'local') {
-			?>
-			<script type="text/javascript">
-				<? foreach ($script_types as $script_local) { ?>
-				<?= $script_local . "\n"; ?>
-				<? } ?>
-			</script>
-		<?
-		} else {
+	if (!empty($scripts['local'])) { ?>
+		<script type="text/javascript">
+			<?= $scripts['local'] . "\n"; ?>
+		</script>
+		<? unset($scripts['local']);
+	}
+
+	foreach ($styles as $style) { ?>
+		<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
+	<? }
+
+	foreach ($scripts as $type => $script_types) {
 		foreach ($script_types as $script_src) { ?>
 			<script type="text/javascript" <?= $defer ? 'defer="defer"' : ''; ?> src="<?= $script_src; ?>"></script>
 		<? }
-		}
 	} ?>
-
-	<? foreach (page_info('styles') as $style) { ?>
-		<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
-	<? } ?>
 
 	<!--[if IE 9]>
 	<link rel="stylesheet" type="text/css" href="<?= theme_url('css/ie9.css'); ?>"/>
