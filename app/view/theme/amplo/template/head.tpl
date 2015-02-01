@@ -33,7 +33,9 @@
 
 	if (!empty($scripts['local'])) { ?>
 		<script type="text/javascript">
-			<?= $scripts['local'] . "\n"; ?>
+			<? foreach ($scripts['local'] as $l) { ?>
+			<?= $l . "\n"; ?>
+			<? } ?>
 		</script>
 		<? unset($scripts['local']);
 	}
