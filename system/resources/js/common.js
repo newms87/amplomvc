@@ -1044,6 +1044,27 @@ $(document).ready(function () {
 			});
 		});
 	}
+
+	if ($ac.defer_scripts) {
+		var scripts = '';
+
+		$('script').each(function (i, e) {
+			if ($(e).attr('type') === 'text/defer-javascript') {
+				if ($(e).attr('src')) {
+					console.error('For performance reasons use $this->document->addScript("' + $(e).attr('src') + '");. External scripts will only work in the header with defer_scripts enabled.');
+				} else {
+					scripts += e.innerHTML;
+				}
+			}
+		});
+
+		if (scripts) {
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.innerHTML = scripts;
+			document.body.appendChild(script);
+		}
+	}
 });
 
 

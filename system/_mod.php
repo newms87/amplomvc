@@ -137,5 +137,14 @@ function render_template($contents)
 		}
 	}
 
+	if (option('defer_scripts', true) && !strpos($new_contents, "NO-AMPLO-DEFER")) {
+		$replace = array(
+			"/type=['\"]text\\/javascript['\"]/" => "type=\"text/defer-javascript\"",
+			"/<script\\s*>/"                     => "<script type=\"text/defer-javascript\">",
+		);
+
+		$new_contents = preg_replace(array_keys($replace), array_values($replace), $new_contents);
+	}
+
 	return $new_contents;
 }
