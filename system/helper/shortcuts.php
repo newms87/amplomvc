@@ -113,7 +113,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	$src = image($image, $width, $height, $default, $cast_protocol);
 
 	$size  = _getimagesize($src);
-	
+
 	$src   = $src ? "src=\"$src\"" : '';
 	$title = $title !== false ? "title=\"$title\"" : '';
 	$alt   = $alt !== false ? "alt=\"$alt\"" : '';
@@ -330,7 +330,9 @@ function theme_sprite($image)
 			}
 		}
 
-		$sprites[$image] = $sprite_srcs ? "src=\"$src\" srcset=\"" . implode(',', $sprite_srcs) . "\"" : "src=\"$src\"";
+		$size = _getimagesize($src);
+
+		$sprites[$image] = $sprite_srcs ? "src=\"$src\" srcset=\"" . implode(',', $sprite_srcs) . "\" $size" : "src=\"$src\" $size";
 	}
 
 	return $sprites[$image];
