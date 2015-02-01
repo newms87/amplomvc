@@ -26,11 +26,7 @@
 		<? } ?>
 	<? } ?>
 
-	<? foreach (page_info('styles') as $style) { ?>
-		<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
-	<? }
-
-	$defer = option('defer_scripts', true);
+	<? $defer = option('defer_scripts', true);
 
 	foreach (page_info('scripts') as $type => $script_types) {
 		if ($type === 'local') {
@@ -47,6 +43,10 @@
 		<? }
 		}
 	} ?>
+
+	<? foreach (page_info('styles') as $style) { ?>
+		<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>"/>
+	<? } ?>
 
 	<!--[if IE 9]>
 	<link rel="stylesheet" type="text/css" href="<?= theme_url('css/ie9.css'); ?>"/>
