@@ -16,21 +16,17 @@ class Customer extends Library
 			} else {
 				$this->logout();
 			}
-		} else {
+		} elseif (defined("AMPLO_SECRET_KEY")) {
 			$cookie = _cookie('customer');
 
-			if (!$cookie) {
-				$cookie = json_decode($cookie);
+			if ($cookie) {
+				$cookie = json_decode($cookie, true);
 
-				if (!empty($cookie['username'])) {
-					$customer = $this->queryRow("SELECT * FROM {$this->t['customer']} WHERE username = '" . $this->escape($cookie['username']) . "'");
+				if (isset($cookie['customer_id'], $cookie['signature'], $cookie['username'])) {
+					$signature = hash_hmac('sha256', $cookie['customer_id'] . '-' . $cookie['username'], AMPLO_SECRET_KEY);
 
-					if ($customer) {
-						/*
-						html_dump($cookie, 'cookie');
-						echo $cookie['password'] . '<BR>';
-						echo hash_hmac('sha256', $cookie['username'], $customer['password']);
-						*/
+					if ($cookie['signature'] === $signature) {
+						$this->setCustomer($cookie['customer_id']);
 					}
 				}
 			}
@@ -61,17 +57,18 @@ class Customer extends Library
 				}
 			}
 
+			//Save Customer cookie for remembering customer login
+			if (defined("AMPLO_SECRET_KEY")) {
+				$cookie = array(
+					'customer_id' => $customer['customer_id'],
+					'username'    => $customer['username'],
+					'signature'   => hash_hmac('sha256', $customer['customer_id'] . '-' . $customer['username'], AMPLO_SECRET_KEY),
+				);
 
-			$cookie = array(
-				'username' => $email,
-				'password' => hash_hmac('sha256', $customer['password'], $password),
-			);
+				set_cookie('customer', json_encode($cookie), option('customer_cookie_expire', 3600 * 24 * 365));
+			}
 
-			set_cookie('customer', json_encode($cookie), option('customer_cookie_expire', 0));
-
-			$this->setCustomer($customer);
-
-			return true;
+			return $this->setCustomer($customer);
 		}
 
 		$this->error['username'] = _l("Login failed. Invalid username and / or password.");
@@ -107,6 +104,7 @@ class Customer extends Library
 		}
 
 		if (empty($customer)) {
+			$this->error['customer'] = _l("Customer was not found.");
 			return false;
 		}
 

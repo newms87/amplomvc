@@ -48,3 +48,4 @@ umask(0022);
 
 //Password Hashing
 define("PASSWORD_COST", 12);
+define("AMPLO_SECRET_KEY", 'abc-123-this-is-my-secret-key!#$%');
