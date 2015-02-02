@@ -440,7 +440,7 @@ function set_option($option, $value)
 function save_option($option, $value)
 {
 	global $registry;
-	$registry->get('config')->save('config', $option, $value);
+	return $registry->get('config')->save('config', $option, $value);
 }
 
 function page_info($key = null, $default = null)
