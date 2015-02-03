@@ -175,18 +175,28 @@ class Document extends Library
 		$this->links[$group]['links'] = $links;
 	}
 
-	public function removeLink(&$group, $name)
+	public function removeLink($group, $name, &$links = null)
 	{
-		if (!empty($this->links[$group])) {
-			foreach ($this->links[$group] as $key => &$link) {
-				if ($link['name'] === $name) {
-					unset($this->links[$group][$key]);
+		if (!$links) {
+			if (!empty($this->links[$group]['links'])) {
+				return false;
+			}
+
+			$links = &$this->links[$group]['links'];
+		}
+
+		foreach ($links as $key => &$link) {
+			if ($link['name'] === $name) {
+				unset($links[$key]);
+				return true;
+			} elseif (!empty($link['children'])) {
+				if ($this->removeLink($group, $name, $link['children'])) {
 					return true;
-				} elseif (!empty($link['children'])) {
-					$this->removeLink($link['children'], $name);
 				}
 			}
 		}
+
+		return false;
 	}
 
 	public function getLinks($group = 'primary')
