@@ -433,8 +433,8 @@ function option($option, $default = null)
 
 function set_option($option, $value)
 {
-	global $registry;
-	$registry->get('config')->set($option, $value);
+	global $_options;
+	$_options[$option] = $value;
 }
 
 function save_option($option, $value)
