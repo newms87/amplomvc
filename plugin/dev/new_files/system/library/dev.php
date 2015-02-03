@@ -223,7 +223,7 @@ class Dev extends Library
 			$total_cache_size = round($total_cache_size / 1024, 2) . ' KB';
 
 			ob_start();
-			include($file);
+			include(_mod($file));
 			$html = ob_get_clean();
 
 			$output = $this->response->getOutput();
