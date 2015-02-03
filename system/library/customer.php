@@ -4,7 +4,7 @@ class Customer extends Library
 {
 	protected $customer_id;
 	protected $info = array();
-	protected $metadata = array();
+	protected $meta = array();
 
 	public function __construct()
 	{
@@ -117,7 +117,7 @@ class Customer extends Library
 		$this->displayMessages();
 
 		//Load Customer Settings
-		$this->metadata = $this->Model_Customer->getMeta($this->customer_id);
+		$this->meta = $this->Model_Customer->getMeta($this->customer_id);
 
 		return true;
 	}
@@ -153,17 +153,17 @@ class Customer extends Library
 	public function meta($key = null, $default = null)
 	{
 		if ($key) {
-			return isset($this->metadata[$key]) ? $this->metadata[$key] : $default;
+			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
 		}
 
-		return $this->metadata;
+		return $this->meta;
 	}
 
 	public function setMeta($key, $value)
 	{
 		$this->removeMeta($key);
 
-		$this->metadata[$key] = $value;
+		$this->meta[$key] = $value;
 
 		$meta_id = $this->Model_Customer->addMeta($this->customer_id, $key, $value);
 
@@ -176,7 +176,7 @@ class Customer extends Library
 
 	public function removeMeta($key)
 	{
-		unset($this->metadata[$key]);
+		unset($this->meta[$key]);
 
 		return $this->Model_Customer->deleteMeta($this->customer_id, $key);
 	}

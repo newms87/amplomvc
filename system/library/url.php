@@ -20,7 +20,7 @@ class Url extends Library
 			$this->secure_pages = $this->queryRows("SELECT * FROM {$this->t['secure_page']}");
 		}
 
-		$this->loadAliases();
+		$this->aliases = $this->Model_UrlAlias->getRecords(array('cache' => true), array('status' => 1), null, false, 'alias');
 
 		if (option('config_seo_url')) {
 			$this->loadSeoUrl();
@@ -306,16 +306,5 @@ class Url extends Library
 		}
 
 		return $this->Model_UrlAlias->hasError();
-	}
-
-	public function loadAliases()
-	{
-		$this->aliases = cache('url_alias.all');
-
-		if ($this->aliases === null) {
-			$this->aliases = $this->queryRows("SELECT * FROM {$this->t['url_alias']} WHERE status = 1", 'alias');
-
-			cache('url_alias.all', $this->aliases);
-		}
 	}
 }

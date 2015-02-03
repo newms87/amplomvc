@@ -57,12 +57,13 @@ abstract class App_Model_Table extends Model
 		$select = $this->extractSelect($this->table, $select);
 
 		if ($cache) {
-			$s = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
-			$f = $filter ? md5(serialize($filter)) : 'all';
-			$l = $select === '*' ? '' : '.sel-' . md5($select);
-			$t = $total ? '.total' : '';
-			$i = $index ? '.' . $index : '';
-			$cache = $this->table . '.' . $f . $s . $l . $t . $i;
+			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
+			$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
+			$l     = $select !== '*' ? '.select-' . md5($select) : '';
+			$t     = $total ? '.total' : '';
+			$i     = $index ? '.index-' . $index : '';
+			$cache = $this->table . '.rows' . $s . $f . $l . $t . $i;
+
 			$records = cache($cache);
 
 			if ($records !== null) {

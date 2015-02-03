@@ -1,4 +1,5 @@
 <head>
+	<!-- NO-AMPLO-DEFER -->
 	<title><?= _strip_tags(page_info('title')); ?></title>
 	<base href="<?= site_url('admin'); ?>"/>
 

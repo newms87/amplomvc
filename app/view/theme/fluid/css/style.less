@@ -44,7 +44,6 @@ a {
 }
 
 .noselect,
-.ac-checkbox,
 .button, button {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -244,45 +243,6 @@ button, .button {
     .wrap {
       border: none;
     }
-  }
-}
-
-//Amplo Checkbox
-/**
- With Webkit Browsers (Chrome, Safari, etc.)
- This will work in pure CSS (albeit it is against the W3C specs)
- Hence, we add the :before pseudo element to the input field
- */
-.ac-checkbox {
-  position: relative;
-  left: -9999px;
-
-  &:after {
-    display: block;
-    content: '';
-    position: relative;
-    left: 9999px;
-    top: 0;
-    width: 16px;
-    height: 16px;
-    border: 2px solid @color-dark;
-    cursor: pointer;
-    overflow: visible;
-  }
-
-  &:before {
-    content: url("@{theme-img}remove-small.png");
-    position: absolute;
-    left: 9998px;
-    top: -2px;
-    z-index: 50;
-  }
-
-  &:checked:before,
-  .checked:before {
-    content: url("@{theme-img}checkmark-small.png");
-    left: 10000px;
-    top: -7px;
   }
 }
 

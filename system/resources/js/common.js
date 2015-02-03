@@ -832,8 +832,7 @@ function register_colorbox() {
 	}
 }
 
-function register_form_editors()
-{
+function register_form_editors() {
 	var $form_editor = $('.form-editor').use_once('form-editor-enabled');
 
 	$form_editor.find('.edit-form').click(function () {
@@ -982,68 +981,16 @@ $.fn.submit_ajax_form = function (params) {
 	});
 }
 
-function amplo_auto_ajax() {
-	register_ajax_calls(false);
-	register_confirms();
-	register_colorbox();
-	register_form_editors();
+function content_loaded(is_ajax) {
+	var $forms = $('form');
 
-	$(document).ajaxComplete(function () {
-		register_ajax_calls(true);
-		register_confirms();
-		register_colorbox();
-		register_form_editors();
-	});
-}
-
-$(document).ready(function () {
-	amplo_auto_ajax();
-
-
-	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
-		if (!ui.item.value && ui.item.href) {
-			window.open(ui.item.href);
-		}
-	});
-
-	$('form input').keydown(function (e) {
+	$forms.find('input').use_once('form-input').keydown(function (e) {
 		if (e.keyCode == 13) {
 			$(this).closest('form').submit();
 		}
 	});
 
-	$('form').find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
-
-	$(document).keydown(function (e) {
-		if (e.ctrlKey && (e.which == 83)) {
-			$('form.ctrl-save').submit_ajax_form();
-
-			e.preventDefault();
-			return false;
-		}
-	});
-
-	$(document).on("DOMNodeInserted", function () {
-		ac_radio_bubble();
-	});
-
-	//AC Checkbox (No IE8)
-	if ($('body.IE8').length === 0) {
-		$('.ac_checkbox').each(function (i, e) {
-			var div = $('<div class="ac_checkbox"></div>');
-			var cb = $(e);
-
-			div.toggleClass("checked", cb.prop('checked'));
-
-			cb.after(div).removeClass('ac_checkbox');
-			$(e).appendTo(div);
-
-			div.click(function () {
-				cb.prop('checked', !cb.prop('checked'));
-				div.toggleClass("checked", cb.prop('checked'));
-			});
-		});
-	}
+	$forms.find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
 
 	if ($ac.defer_scripts) {
 		var scripts = '';
@@ -1051,7 +998,7 @@ $(document).ready(function () {
 		$('script').each(function (i, e) {
 			if ($(e).attr('type') === 'text/defer-javascript') {
 				if ($(e).attr('src')) {
-					console.error('For performance reasons use $this->document->addScript("' + $(e).attr('src') + '");. External scripts will only work in the header with defer_scripts enabled.');
+					console.error('External script ' + $(e).attr('src') + ' cannot be loaded synchronously with defer_scripts enabled. Use $.getScript() to load asynchronously or use $this->document->addScript() in your PHP Controller class.');
 				} else {
 					scripts += e.innerHTML;
 				}
@@ -1065,7 +1012,38 @@ $(document).ready(function () {
 			document.body.appendChild(script);
 		}
 	}
-});
+
+	register_ajax_calls(is_ajax);
+	register_confirms();
+	register_colorbox();
+	register_form_editors();
+}
+
+$(document).ready(function () {
+	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
+		if (!ui.item.value && ui.item.href) {
+			window.open(ui.item.href);
+		}
+	});
+
+	content_loaded();
+})
+	.keydown(function (e) {
+		if (e.ctrlKey && (e.which == 83)) {
+			$('form.ctrl-save').submit_ajax_form();
+
+			e.preventDefault();
+			return false;
+		}
+	})
+
+	.on("DOMNodeInserted", function () {
+		ac_radio_bubble();
+	})
+
+	.ajaxComplete(function () {
+		content_loaded(true);
+	});
 
 
 //Chrome Autofill disable hack

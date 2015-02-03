@@ -517,6 +517,23 @@ function customer_info($key = null)
 	return $registry->get('customer')->info($key);
 }
 
+function customer_meta($key, $default = null)
+{
+	global $registry;
+	return $registry->get('customer')->meta($key, $default);
+}
+
+function set_customer_meta($key, $value)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('customer')->removeMeta($key);
+	} else {
+		return $registry->get('customer')->setMeta($key, $value);
+	}
+}
+
 function user_can($level, $path)
 {
 	global $registry;

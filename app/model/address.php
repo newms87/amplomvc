@@ -89,7 +89,7 @@ class App_Model_Address extends App_Model_Table
 		}
 
 		if (!is_array($address)) {
-			$address = $this->getAddress($address);
+			$address = $this->Model_Address->getRecord($address);
 		}
 
 		$geo_zone_id = (int)$geo_zone_id;
@@ -109,7 +109,7 @@ class App_Model_Address extends App_Model_Table
 		static $address_formats = array();
 
 		if (!is_array($address)) {
-			$address = $this->getAddress($address);
+			$address = $this->Model_Address->getRecord($address);
 		}
 
 		$address += array(
