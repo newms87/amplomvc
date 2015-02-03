@@ -150,14 +150,15 @@ function amplo_mvc_install()
 	$contents = file_get_contents($config_template);
 
 	$defines = array(
-		'SITE_BASE'     => SITE_BASE,
-		'DB_DRIVER'     => $_POST['db_driver'],
-		'DB_DATABASE'   => $_POST['db_name'],
-		'DB_HOSTNAME'   => $_POST['db_host'],
-		'DB_USERNAME'   => $_POST['db_username'],
-		'DB_PASSWORD'   => $_POST['db_password'],
-		'DB_PREFIX'     => $_POST['db_prefix'],
-		'PASSWORD_COST' => $password_cost,
+		'SITE_BASE'        => SITE_BASE,
+		'DB_DRIVER'        => $_POST['db_driver'],
+		'DB_DATABASE'      => $_POST['db_name'],
+		'DB_HOSTNAME'      => $_POST['db_host'],
+		'DB_USERNAME'      => $_POST['db_username'],
+		'DB_PASSWORD'      => $_POST['db_password'],
+		'DB_PREFIX'        => $_POST['db_prefix'],
+		'PASSWORD_COST'    => $password_cost,
+		'AMPLO_SECRET_KEY' => md5(uniqid(rand(), true)),
 	);
 
 	foreach ($defines as $key => $value) {
