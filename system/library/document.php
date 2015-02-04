@@ -113,10 +113,10 @@ class Document extends Library
 			'children'     => array(),
 		);
 
-		$new_link = $link + $defaults;
+		$link += $defaults;
 
-		if (!empty($new_link['path']) || !empty($new_link['query'])) {
-			$new_link['href'] = site_url($new_link['path'], $new_link['query']);
+		if (!empty($link['path']) || !empty($link['query'])) {
+			$link['href'] = site_url($link['path'], $link['query']);
 		}
 
 		//If group doesn't exist, make a new group
@@ -124,7 +124,7 @@ class Document extends Library
 			$this->links[$group] = array(
 				'navigation_group_id' => 0,
 				'links'               => array(
-					$new_link['name'] => $new_link,
+					$link['name'] => $link,
 				),
 				'name'                => $group,
 			);
@@ -133,27 +133,27 @@ class Document extends Library
 		}
 
 		//Find the children list for the parent
-		if ($new_link['parent'] || $new_link['parent_id']) {
-			$return = array_walk_children($this->links[$group]['links'], 'children', function (&$l) use ($new_link) {
+		if ($link['parent'] || $link['parent_id']) {
+			$return = array_walk_children($this->links[$group]['links'], 'children', function (&$l) use ($link) {
 				if (empty($l)) {
 					return;
 				}
-				if ($new_link['parent'] === $l['name']) {
-					$l['children'][$new_link['name']] = $new_link;
+				if ($link['parent'] === $l['name']) {
+					$l['children'][$link['name']] = $link;
 					return false;
-				} elseif (!empty($l['navigation_id']) && $new_link['parent_id'] === $l['navigation_id']) {
-					$l['children'][$new_link['name']] = $new_link;
+				} elseif (!empty($l['navigation_id']) && $link['parent_id'] === $l['navigation_id']) {
+					$l['children'][$link['name']] = $link;
 					return false;
 				}
 			});
 
 			//$return === false when link is found
 			if ($return !== false) {
-				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $new_link['parent'], $group);
+				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $link['parent'], $group);
 				return false;
 			}
 		} else {
-			$this->links[$group]['links'][] = $new_link;
+			$this->links[$group]['links'][$link['name']] = $link;
 		}
 
 		return true;
@@ -173,6 +173,30 @@ class Document extends Library
 	public function setLinks($group, $links)
 	{
 		$this->links[$group]['links'] = $links;
+	}
+
+	public function removeLink($group, $name, &$links = null)
+	{
+		if (!$links) {
+			if (!empty($this->links[$group]['links'])) {
+				return false;
+			}
+
+			$links = &$this->links[$group]['links'];
+		}
+
+		foreach ($links as $key => &$link) {
+			if ($link['name'] === $name) {
+				unset($links[$key]);
+				return true;
+			} elseif (!empty($link['children'])) {
+				if ($this->removeLink($group, $name, $link['children'])) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public function getLinks($group = 'primary')

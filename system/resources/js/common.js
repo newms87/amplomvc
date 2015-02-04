@@ -1000,6 +1000,7 @@ function content_loaded(is_ajax) {
 				if ($(e).attr('src')) {
 					console.error('External script ' + $(e).attr('src') + ' cannot be loaded synchronously with defer_scripts enabled. Use $.getScript() to load asynchronously or use $this->document->addScript() in your PHP Controller class.');
 				} else {
+					$(e).attr('type', 'text/javscript');
 					scripts += e.innerHTML;
 				}
 			}
