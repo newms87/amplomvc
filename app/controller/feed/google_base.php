@@ -58,7 +58,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 							$string = '';
 
 							foreach (explode('_', $path) as $path_id) {
-								$category_info = $this->Model_Catalog_Category->getCategory($path_id);
+								$category_info = $this->Model_Category->getCategory($path_id);
 
 								if ($category_info) {
 									if (!$string) {
@@ -91,7 +91,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 
 	protected function getPath($parent_id, $current_path = '')
 	{
-		$category_info = $this->Model_Catalog_Category->getCategory($parent_id);
+		$category_info = $this->Model_Category->getCategory($parent_id);
 
 		if ($category_info) {
 			if (!$current_path) {

@@ -40,6 +40,7 @@ class App_Controller_Admin_Header extends Controller
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('admin_url', site_url('admin/'));
 		$this->document->localizeVar('theme_url', theme_url());
+		$this->document->localizeVar('defer_scripts', option('defer_scripts', true));
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions

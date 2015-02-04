@@ -17,6 +17,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		var list = this.parent();
 
 		if (template_row.attr('data-row') !== '__ac_template__') {
+			console.log(template_row);
 			template_row = this.find('[data-row="__ac_template__"]');
 			list = this;
 		}
