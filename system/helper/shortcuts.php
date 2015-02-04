@@ -112,7 +112,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 {
 	$src = image($image, $width, $height, $default, $cast_protocol);
 
-	$size  = _getimagesize($src);
+	$size = _getimagesize($src);
 
 	$src   = $src ? "src=\"$src\"" : '';
 	$title = $title !== false ? "title=\"$title\"" : '';
@@ -183,14 +183,14 @@ function image_srcset($srcsets, $nx = 3)
 			$srcsets[$nx] = image($srcsets[$nx]);
 		}
 
-		if ($nx > 1) {
+		if ($nx > 1 && !empty($srcsets[$nx])) {
 			$srcsets[$nx] .= ' ' . $nx . 'x';
 		}
 
 		$nx--;
 	}
 
-	$src = empty($srcsets[1]) ? current($srcsets) : $srcsets[1];
+	$src = empty($srcsets[1]) ? preg_replace("/ \\dx/", '', current($srcsets)) : $srcsets[1];
 	unset($srcsets[1]);
 
 	$size = _getimagesize($src);
@@ -294,9 +294,9 @@ function image_save($image, $save_as = null, $width = null, $height = null, $def
 	return $new_image;
 }
 
-function theme_image($image, $width = null, $height = null)
+function theme_image($image, $width = null, $height = null, $theme = null)
 {
-	return image(theme_dir('image/' . $image), $width, $height);
+	return image(theme_dir('image/' . $image, $theme), $width, $height);
 }
 
 function theme_sprite($image)
@@ -361,10 +361,10 @@ function theme_url($path = '', $query = null)
 	return $url;
 }
 
-function theme_dir($path = '')
+function theme_dir($path = '', $theme = null)
 {
 	global $registry;
-	return $registry->get('theme')->getFile($path);
+	return $registry->get('theme')->getFile($path, $theme);
 }
 
 function redirect($path = '', $query = null, $ssl = null, $status = null)
@@ -837,35 +837,6 @@ HTML
 			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
-}
-
-function crypto_rand($min, $max)
-{
-	$range = $max - $min;
-	if ($range < 0) {
-		return $min;
-	} // not so random...
-	$log    = log($range, 2);
-	$bytes  = (int)($log / 8) + 1; // length in bytes
-	$bits   = (int)$log + 1; // length in bits
-	$filter = (int)(1 << $bits) - 1; // set all lower bits to 1
-	do {
-		$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-		$rnd = $rnd & $filter; // discard irrelevant bits
-	} while ($rnd >= $range);
-	return $min + $rnd;
-}
-
-function tokengen($length)
-{
-	$token;
-	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
-	$codeAlphabet .= "0123456789";
-	for ($i = 0; $i < $length; $i++) {
-		$token .= $codeAlphabet[crypto_rand(0, strlen($codeAlphabet))];
-	}
-	return $token;
 }
 
 function output($output)
