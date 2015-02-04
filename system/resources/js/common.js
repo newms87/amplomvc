@@ -330,7 +330,7 @@ $.fn.show_msg = function (type, msg, options) {
 		clear:       true
 	}, options);
 
-	if (typeof msg == 'undefined') {
+	if (typeof msg === 'undefined' || msg === null) {
 		msg = type;
 		type = null;
 	}
