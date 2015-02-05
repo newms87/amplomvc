@@ -178,7 +178,7 @@ class Document extends Library
 	public function removeLink($group, $name, &$links = null)
 	{
 		if (!$links) {
-			if (!empty($this->links[$group]['links'])) {
+			if (empty($this->links[$group]['links'])) {
 				return false;
 			}
 
