@@ -7,7 +7,7 @@ class Cache
 
 	public function __construct($dir = null)
 	{
-		$this->expired = _time() - CACHE_FILE_EXPIRATION;
+		//$this->expired = _time() - CACHE_FILE_EXPIRATION;
 
 		$this->setDir($dir ? $dir : DIR_CACHE . DB_PREFIX);
 	}
@@ -42,11 +42,13 @@ class Cache
 		$file = $this->dir . $key . '.cache';
 
 		if (is_file($file)) {
+			/* Disabled Cache file expiration (ideally this is not necessary)
 			if (_filemtime($file) < $this->expired) {
 				//Suppress warnings as this will fail under race conditions
 				@unlink($file);
 				return;
 			}
+			*/
 
 			if ($get_file) {
 				return $this->loaded[$this->dir][$key]['file'] = $file;
