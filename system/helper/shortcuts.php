@@ -146,7 +146,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
-function image_srcset($srcsets, $nx = 3)
+function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)
 {
 	if (empty($srcsets)) {
 		return '';
@@ -197,10 +197,9 @@ function image_srcset($srcsets, $nx = 3)
 
 	if (!empty($srcsets)) {
 		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\" $size";
 	}
 
-	return "src=\"$src\" $size";
+	return "src=\"$src\" $size " . (!empty($srcsets) ? "srcset=\"" . implode(',', $srcsets) . "\" " : '') . "alt=\"$alt\" title=\"$title\"";
 }
 
 function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)

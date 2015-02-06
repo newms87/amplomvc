@@ -1,5 +1,5 @@
 <?php
-if ($this->db->hasTable('user_group')) {
+if (isset($this->db->t['user_group'])) {
 	$this->db->query("ALTER TABLE {$this->t['user_group']} RENAME TO  {$this->t['user_role']}");
 }
 $this->db->changeColumn('user_role', 'user_group_id', 'user_role_id', "INT(11) NOT NULL AUTO_INCREMENT");

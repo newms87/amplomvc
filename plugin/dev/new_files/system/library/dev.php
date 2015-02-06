@@ -204,16 +204,21 @@ class Dev extends Library
 			$cache_files = $this->cache->getLoadedFiles();
 			$total_cache_size = 0;
 
-			foreach ($cache_files as &$c) {
-				$total_cache_size += filesize($c['file']);
-				$c['size'] = filesize($c['file']);
+			foreach ($cache_files as $ckey => &$c) {
+				if (!is_file($c['file'])) {
+					$c['size'] = 0;
+				} else {
+					$fsize = filesize($c['file']);
+					$total_cache_size += $fsize;
+					$c['size'] = $fsize;
+				}
 			}
 			unset($c);
 
 			sort_by($cache_files, 'size');
 
 			foreach ($cache_files as &$c) {
-				$c['size'] = round($c['size'] / 1024, 2) . " KB";
+				$c['size'] = $c['size'] ? round($c['size'] / 1024, 2) . " KB" : "{DELETED}";
 				if (!empty($c['data'])) {
 					$this->escapeHtmlR($c['data']);
 				}

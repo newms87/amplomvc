@@ -52,7 +52,11 @@
 			<? if ($logo = option('site_logo')) { ?>
 				<div id="logo" class="col xs-5 sm-4 md-3 lg-2 left top">
 					<a href="<?= site_url(); ?>" class="block">
-						<img src="<?= image($logo, option('site_logo_width'), option('site_logo_height')); ?>" title="<?= option('config_name'); ?>" alt="<?= option('config_name'); ?>"/>
+						<? if ($logo_srcset = option('site_logo_srcset')) { ?>
+							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('site_logo_width'), option('site_logo_height')), $logo_srcset, option('site_name'), option('site_name')); ?> />
+						<? } else { ?>
+							<img <?= img($logo, option('site_logo_width'), option('site_logo_height'), option('site_name'), option('site_name')); ?> />
+						<? } ?>
 					</a>
 				</div>
 			<? } ?>

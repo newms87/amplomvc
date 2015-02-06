@@ -33,6 +33,9 @@ while (($helper = readdir($handle))) {
 
 require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 
+//Initialize Database Tables (after loading cache functions)
+$db->updateTables();
+
 register_routing_hook('amplo', 'amplo_routing_hook');
 
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
