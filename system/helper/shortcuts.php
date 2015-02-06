@@ -121,7 +121,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	return "$src $title $alt $size";
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false, $version = true)
 {
 	global $registry;
 
@@ -136,6 +136,14 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 			$image = theme_image('no_image.png', $width, $height);
 		} else {
 			$image = $registry->get('image')->resize($default, $width, $height);
+		}
+	}
+
+	if ($version) {
+		$file = str_replace(URL_SITE, DIR_SITE, $image);
+
+		if (is_file($file)) {
+			$image .= '?v=' . filemtime($file);
 		}
 	}
 

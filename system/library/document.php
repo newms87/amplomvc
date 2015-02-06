@@ -357,6 +357,12 @@ class Document extends Library
 		}
 
 		if ($href) {
+			$file = str_replace(URL_SITE, DIR_SITE, $href);
+
+			if (is_file($file)) {
+				$href.=  '?v=' . filemtime($file);
+			}
+
 			$this->styles[md5($href)] = array(
 				'href'  => $href,
 				'rel'   => $rel,
@@ -382,13 +388,17 @@ class Document extends Library
 				$script = URL_SITE . $script;
 			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
 				$script = URL_RESOURCES . 'js/' . $script;
-			} elseif (is_file(DIR_SITE . 'app/view/javascript/' . $script)) {
-				$script = URL_SITE . 'app/view/javascript/' . $script;
 			}
 		}
 
 		if ($minify) {
 			$script = $this->minifyJs($script);
+		}
+
+		$file = str_replace(URL_SITE, DIR_SITE, $script);
+
+		if (is_file($file)) {
+			$script .=  '?v=' . filemtime($file);
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
