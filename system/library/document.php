@@ -8,8 +8,7 @@ class Document extends Library
 		$links = array(),
 		$styles = array(),
 		$scripts = array(),
-		$ac_vars = array(),
-		$body_class = array();
+		$ac_vars = array();
 
 	function __construct()
 	{
@@ -487,21 +486,16 @@ class Document extends Library
 	public function setBodyClass($class)
 	{
 		if (!$class) {
-			$this->body_class = array();
+			$this->info['body_class'] = array();
 		} else {
 			$class            = is_array($class) ? $class : explode(' ', $class);
-			$this->body_class = array_combine(array_keys($class), $class);
+			$this->info['body_class'] = array_combine(array_keys($class), $class);
 		}
 	}
 
 	public function addBodyClass($class)
 	{
-		$this->body_class[$class] = $class;
-	}
-
-	public function getBodyClass()
-	{
-		return implode(' ', $this->body_class);
+		$this->info['body_class'][$class] = $class;
 	}
 
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)

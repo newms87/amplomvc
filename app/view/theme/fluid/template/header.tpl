@@ -87,7 +87,7 @@
 
 </head>
 
-<body class="<?= $body_class; ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
+<body class="<?= page_info('body_class'); ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
 <section id="container">
 	<header class="main-header row top-row">
 		<? if ($show_admin_bar) { ?>

@@ -465,15 +465,20 @@ function page_info($key = null, $default = null)
 		return $info;
 	}
 
-	if ($key === 'styles') {
-		return $document->getStyles();
+	$value = isset($info[$key]) ? $info[$key] : $default;
+
+	switch ($key) {
+		case 'styles':
+			return $document->getStyles();
+
+		case 'scripts':
+			return $document->getScripts();
+
+		case 'body_class':
+			return implode(' ', $value);
 	}
 
-	if ($key === 'scripts') {
-		return $document->getScripts();
-	}
-
-	return isset($info[$key]) ? $info[$key] : $default;
+	return $value;
 }
 
 function set_page_info($key, $value)
