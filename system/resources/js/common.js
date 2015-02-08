@@ -22,23 +22,6 @@ String.prototype.str_replace = function (find, replace) {
 	return str;
 };
 
-//Load synchronously
-function syncload(s) {
-	if (s.indexOf('//') != 0 && !s.match(/^https?:\/\//)) {
-		s = $ac.site_url + s;
-	}
-
-	$.ajax({
-		async:    false,
-		cache:    true,
-		url:      s,
-		error:    function (e) {
-			$.error('Failed to load script from ' + s)
-		},
-		dataType: 'script'
-	});
-}
-
 //Load jQuery Plugins On Call
 $.fn.codemirror = function (params) {
 	if (!$.fn.codemirror.once) {
@@ -60,16 +43,36 @@ $.fn.codemirror = function (params) {
 	}
 }
 
+$.synq = {}
+
 $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
-	$.ac_template = $.fn.ac_template = null;
-	syncload('system/resources/js/ac_template.js');
-	if (this.ac_template) this.ac_template(name, action, data, relate);
+	if (!$.synq.ac_template) {
+		$.synq.ac_template = [];
+
+		$.getScript('system/resources/js/ac_template.js', function() {
+			for (var s in $.synq.ac_template) {
+				q = $.synq.ac_template[s];
+				q.me.ac_template(q.name, q.action, q.data, q.relate);
+			}
+		});
+	}
+
+	$.synq.ac_template.push({me: this, name: name, action: action, data: data, relate: relate});
 }
 
 $.fn.jqzoom = function (params) {
-	$.fn.jqzoom = null;
-	syncload('system/resources/js/jquery/jqzoom/jqzoom.js');
-	if (this.jqzoom) this.jqzoom(params);
+	if (!$.synq.jqzoom) {
+		$.synq.jqzoom = [];
+
+		$.getScript('system/resources/js/jquery/jqzoom/jqzoom.js', function() {
+			for (var s in $.synq.jqzoom) {
+				q = $.synq.jqzoom[s];
+				q.me.ac_template(q.params);
+			}
+		});
+	}
+
+	$.synq.jqzoom.push({me: this, params: params});
 }
 
 $.fn.use_once = function (label) {

@@ -11,7 +11,7 @@ class App_Controller_Feed_GoogleBase extends Controller
 			$output .= '<description>' . option('site_meta_description') . '</description>';
 			$output .= '<link>' . URL_SITE . '</link>';
 
-			$products = $this->Model_Product->getProducts();
+			$products = $this->Model_Product->getRecords(array('cache' => true));
 
 			foreach ($products as $product) {
 				if ($product['description']) {

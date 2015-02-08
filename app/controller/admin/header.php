@@ -16,9 +16,6 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addStyle($style);
 		}
 
-		$this->document->addStyle(URL_RESOURCES . 'js/jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
-		$this->document->addStyle(URL_RESOURCES . 'js/jquery/colorbox/colorbox.css');
-
 		//Add jQuery from the CDN or locally
 		if (option('config_jquery_cdn')) {
 			$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);

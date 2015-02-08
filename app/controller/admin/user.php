@@ -57,7 +57,7 @@ class App_Controller_Admin_User extends Controller
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/user/delete', 'user_id=' . $user_id)
+					'href' => site_url('admin/user/remove', 'user_id=' . $user_id)
 				),
 			);
 
@@ -160,7 +160,7 @@ class App_Controller_Admin_User extends Controller
 		}
 	}
 
-	public function delete()
+	public function remove()
 	{
 		if ($this->Model_User->remove(_get('user_id'))) {
 			message('success', _l("User was deleted!"));
