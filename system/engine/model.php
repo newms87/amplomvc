@@ -38,28 +38,8 @@ abstract class Model
 
 	public function setDb($db)
 	{
-		$this->t = new Model_T;
-
 		$this->db = $db;
-
-		$schema = $this->db->getSchema();
-		$prefix = $this->db->getPrefix();
-
-		$tables = cache("model.$schema.$prefix.tables");
-
-		if (!$tables) {
-			$tables = $this->db->getTables($prefix);
-
-			if ($prefix !== DB_PREFIX) {
-				$tables += $this->db->getTables(DB_PREFIX);
-			}
-
-			cache("model.$schema.$prefix.tables", $tables);
-		}
-
-		$this->t->tables = $tables;
-		$this->t->schema = $schema;
-		$this->t->prefix = $prefix;
+		$this->t  = &$this->db->t;
 	}
 
 	protected function load($path, $class)
@@ -226,19 +206,21 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter($table, 'insert', $data);
+		$t = $this->t[$table];
 
-		$values = $this->getInsertString($table, $data, false);
+		$this->actionFilter($t, 'insert', $data);
+
+		$values = $this->getInsertString($t, $data, false);
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to insert.");
 			return false;
 		}
 
-		$success = $this->query("INSERT INTO `" . $this->t[$table] . "` SET $values");
+		$success = $this->query("INSERT INTO `$t` SET $values");
 
 		if (!$success) {
-			trigger_error("There was a problem inserting entry for $table and was not modified.");
+			trigger_error(_l("There was a problem inserting entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
 				$this->error['query'] = $this->getError('query');
@@ -251,15 +233,15 @@ abstract class Model
 		$row_id = $this->getLastId();
 
 		if (!$row_id) {
-			$primary_key = $this->getPrimaryKey($table);
+			$primary_key = $this->getPrimaryKey($t);
 
 			if ($primary_key && isset($data[$primary_key])) {
 				$row_id = $data[$primary_key];
 			}
 		}
 
-		if ($model_history && in_array($table, $model_history)) {
-			$this->history($table, $row_id, 'insert', $data, true);
+		if ($model_history && in_array($t, $model_history)) {
+			$this->history($t, $row_id, 'insert', $data, true);
 		}
 
 		return $row_id;
@@ -269,11 +251,13 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter($table, 'update', $data, $where);
+		$t = $this->t[$table];
 
-		$primary_key = $this->getPrimaryKey($table);
+		$this->actionFilter($t, 'update', $data, $where);
 
-		$values = $this->getInsertString($table, $data);
+		$primary_key = $this->getPrimaryKey($t);
+
+		$values = $this->getInsertString($t, $data);
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to update.");
@@ -284,7 +268,7 @@ abstract class Model
 
 		if (!$where) {
 			if (empty($data[$primary_key])) {
-				return $this->insert($table, $data);
+				return $this->insert($t, $data);
 			}
 
 			$where = (int)$data[$primary_key];
@@ -298,12 +282,12 @@ abstract class Model
 			$update_id = (int)$where;
 		}
 
-		$where = $this->getWhere($table, $where, '', '', true);
+		$where = $this->getWhere($t, $where, '', '', true);
 
-		$success = $this->query("UPDATE `" . $this->t[$table] . "` SET $values WHERE $where");
+		$success = $this->query("UPDATE `$t` SET $values WHERE $where");
 
 		if (!$success) {
-			trigger_error("There was a problem updating entry for $table and was not modified.");
+			trigger_error(_l("There was a problem updating entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
 				trigger_error($this->getError('query'));
@@ -312,8 +296,8 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && $update_id !== true && in_array($table, $model_history)) {
-			$this->history($table, $update_id, 'update', $data, true);
+		if ($model_history && $update_id !== true && in_array($t, $model_history)) {
+			$this->history($t, $update_id, 'update', $data, true);
 		}
 
 		return $update_id;
@@ -323,14 +307,16 @@ abstract class Model
 	{
 		global $model_history;
 
-		$this->actionFilter($table, 'delete', $data);
+		$t = $this->t[$table];
 
-		$where = $this->getWhere($table, $where, null, null, true);
+		$this->actionFilter($t, 'delete', $data);
 
-		$success = $this->query("DELETE FROM `" . $this->t[$table] . "` WHERE $where");
+		$where = $this->getWhere($t, $where, null, null, true);
+
+		$success = $this->query("DELETE FROM `$t` WHERE $where");
 
 		if (!$success) {
-			trigger_error("There was a problem deleting entry for $table and was not modified.");
+			trigger_error(_l("There was a problem deleting entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
 				trigger_error($this->getError('query'));
@@ -339,11 +325,11 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && in_array($table, $model_history)) {
+		if ($model_history && in_array($t, $model_history)) {
 			$delete_id = false;
 
 			if (is_array($where)) {
-				$primary_key = $this->getPrimaryKey($table);
+				$primary_key = $this->getPrimaryKey($t);
 
 				if (isset($where[$primary_key])) {
 					$delete_id = (int)$where[$primary_key];
@@ -353,7 +339,7 @@ abstract class Model
 			}
 
 			if ($delete_id) {
-				$this->history($table, $delete_id, 'delete', $data, true);
+				$this->history($t, $delete_id, 'delete', $data, true);
 			}
 		}
 
@@ -362,7 +348,7 @@ abstract class Model
 
 	public function history($table, $row_id, $action, $data, $message = null)
 	{
-		if ($table !== 'history') {
+		if (strpos($table, 'history') === false) {
 			$columns = $this->getTableColumns($table);
 			$data    = array_intersect_key($data, $columns);
 
@@ -395,7 +381,7 @@ abstract class Model
 		}
 	}
 
-	protected function getWhere($table, $where, $prefix = '', $glue = '', $primary_key = false)
+	protected function getWhere($table, $where, $prefix = '', $glue = '', $use_primary_key = false)
 	{
 		if (!$where) {
 			return '1';
@@ -403,6 +389,7 @@ abstract class Model
 
 		if (is_integer($where) || is_string($where)) {
 			$primary_key = $this->getPrimaryKey($table);
+
 			if (!$primary_key) {
 				trigger_error("WHERE statement " . _l("%s does not have an integer primary key!", $table));
 				return null;
@@ -411,7 +398,7 @@ abstract class Model
 			return "`$primary_key` = '" . $this->escape($where) . "'";
 		}
 
-		$where = $this->getEscapedValues($table, $where, $primary_key);
+		$where = $this->getEscapedValues($table, $where, $use_primary_key);
 
 		if (!$glue) {
 			$glue = 'AND';
@@ -426,9 +413,9 @@ abstract class Model
 		return $values ? $values : '1';
 	}
 
-	protected function getInsertString($table, $data, $primary_key = false)
+	protected function getInsertString($table, $data, $use_primary_key = false)
 	{
-		$data = $this->getEscapedValues($table, $data, $primary_key);
+		$data = $this->getEscapedValues($table, $data, $use_primary_key);
 
 		$values = '';
 
@@ -497,12 +484,12 @@ abstract class Model
 			list($table, $t) = explode(' ', $table, 2);
 		}
 
-		if (isset($this->t[$table])) {
-			$table = $this->t[$table];
-		} elseif (!$this->db->hasTable($table)) {
+		if (!isset($this->t[$table])) {
 			trigger_error(_l("Table %s does not exist!", $table));
 			return false;
 		}
+
+		$table = $this->t[$table];
 
 		if (empty($t)) {
 			$t = $table;
@@ -839,6 +826,10 @@ abstract class Model
 	{
 		$table_model = $this->getTableModel($table);
 
+		if (!$table_model) {
+			return array();
+		}
+
 		$columns = $table_model['columns'];
 
 		//Merge
@@ -920,18 +911,23 @@ abstract class Model
 
 	public function getTableModel($table)
 	{
-		$table  = isset($this->t[$table]) ? $this->t[$table] : $table;
+		if (!isset($this->t[$table])) {
+			return false;
+		}
+
+		$t = $this->t[$table];
+
 		$schema = $this->db->getSchema();
 
-		if (empty(self::$model[$schema][$table])) {
-			$model = cache('model.' . $schema . '.' . $table);
+		if (empty(self::$model[$schema][$t])) {
+			$model = cache('model.' . $schema . '.' . $t);
 
 			if (!$model || empty($model['columns'])) {
-				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$table'");
+				$model = $this->queryRow("SELECT table_schema, table_name, table_type, engine, version FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = '$t'");
 
-				$columns = $this->db->getTableColumns($table);
+				$columns = $this->db->getTableColumns($t);
 
-				$indexes = $this->queryRows("SHOW INDEX FROM `$table`");
+				$indexes = $this->queryRows("SHOW INDEX FROM `$t`");
 
 				foreach ($columns as &$column) {
 					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
@@ -995,13 +991,13 @@ abstract class Model
 				$model['columns'] = $columns;
 				$model['indexes'] = $indexes;
 
-				cache('model.' . $schema . '.' . $table, $model);
+				cache('model.' . $schema . '.' . $t, $model);
 			}
 
-			self::$model[$schema][$table] = $model;
+			self::$model[$schema][$t] = $model;
 		}
 
-		return self::$model[$schema][$table];
+		return self::$model[$schema][$t];
 	}
 
 	protected function getPrimaryKey($table)
@@ -1009,6 +1005,7 @@ abstract class Model
 		$columns = $this->getTableColumns($table);
 
 		$primary_key = null;
+
 		foreach ($columns as $key => $col) {
 			if ($col['type'] === self::PRIMARY_KEY_INTEGER || $col['type'] === self::AUTO_INCREMENT_PK) {
 				if ($primary_key) {
@@ -1061,55 +1058,5 @@ abstract class Model
 				}
 			}
 		}
-	}
-}
-
-
-class Model_T implements ArrayAccess
-{
-	public
-		$tables = array(),
-		$prefix,
-		$schema;
-
-	public function offsetGet($offset)
-	{
-		if (isset($this->tables[$offset])) {
-			return $this->tables[$offset];
-		}
-
-		$t = strtolower($offset);
-
-		if (isset($this->tables[$t])) {
-			return $this->tables[$t];
-		}
-
-		foreach ($this->tables as $key => $table) {
-			if (strtolower($key) === $t) {
-				return $table;
-			}
-		}
-
-		trigger_error(_l("Table <strong>%s</strong> was not found in database schema <strong>%s</strong> (using prefix <strong>%s</strong>)!", $offset, $this->schema, $this->prefix));
-		exit;
-	}
-
-	public function offsetSet($offset, $value)
-	{
-		if (is_null($offset)) {
-			$this->tables[] = $value;
-		} else {
-			$this->tables[$offset] = $value;
-		}
-	}
-
-	public function offsetExists($offset)
-	{
-		return isset($this->tables[$offset]);
-	}
-
-	public function offsetUnset($offset)
-	{
-		unset($this->tables[$offset]);
 	}
 }

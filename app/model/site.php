@@ -41,7 +41,7 @@ class App_Model_Site extends App_Model_Table
 
 		//Reset Tables / Model for current request
 		Model::$model = array();
-		$this->db->tables = array();
+		$this->db->updateTables();
 
 		return $site_id;
 	}

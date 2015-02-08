@@ -3,14 +3,13 @@
 class DB
 {
 	public $tables;
+	public $t;
 
 	static $profile = array();
 	static $drivers = array();
 
 	protected
 		$driver,
-		$schema,
-		$prefix,
 		$synctime = false,
 		$error = array();
 
@@ -60,8 +59,27 @@ class DB
 		}
 
 		$this->driver = self::$drivers[$key];
-		$this->schema = $schema;
-		$this->prefix = $prefix === null ? DB_PREFIX : $prefix;
+
+		$this->t = new Model_T;
+
+		$this->t->schema = $schema;
+		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
+	}
+
+	public function updateTables()
+	{
+		$cache           = 'model.' . $this->t->schema . '.' . $this->t->prefix . '.' . 'tables';
+		$this->t->tables = cache($cache);
+
+		if (!$this->t->tables) {
+			$this->t->tables = $this->getTables($this->t->prefix);
+
+			if ($this->t->prefix !== DB_PREFIX) {
+				$this->t->tables += $this->getTables(DB_PREFIX);
+			}
+
+			cache($cache, $this->t->tables);
+		}
 	}
 
 	public function hasError($type = null)
@@ -94,17 +112,19 @@ class DB
 
 	public function setPrefix($prefix)
 	{
-		$this->prefix = $prefix;
+		$this->t->prefix = $prefix;
+
+		$this->updateTables();
 	}
 
 	public function getPrefix()
 	{
-		return $this->prefix;
+		return $this->t->prefix;
 	}
 
 	public function getSchema()
 	{
-		return $this->schema;
+		return $this->t->schema;
 	}
 
 	public function getProfile()
@@ -323,7 +343,7 @@ class DB
 		}
 
 		if ($prefix === null) {
-			$prefix = $this->prefix;
+			$prefix = $this->t->prefix;
 		}
 
 		$eol = "\r\n";
@@ -423,32 +443,7 @@ class DB
 
 	public function hasTable($table)
 	{
-		if (!$this->tables) {
-			$this->tables = array_change_key_case($this->queryColumn("SHOW TABLES", true));
-		}
-
-		$table_name = strtolower($table);
-
-		if (isset($this->tables[$table_name])) {
-			if (defined("LOWERCASE_DB_TABLES")) {
-				return $table_name;
-			}
-			return $table;
-		} elseif (isset($this->tables[strtolower($this->prefix) . $table_name])) {
-			if (defined("LOWERCASE_DB_TABLES")) {
-				return $this->prefix . $table_name;
-			}
-			return $this->prefix . $table;
-		}
-
-		return false;
-	}
-
-	public function getTable($table)
-	{
-		$t = $this->hasTable($table);
-
-		return $t ? $t : $table;
+		return $this->t[$table];
 	}
 
 	public function getTables($prefix = false)
@@ -471,9 +466,12 @@ class DB
 
 	public function createTable($table, $sql)
 	{
+		$result = $this->query("CREATE TABLE IF NOT EXISTS `" . $this->t->prefix . "$table` ($sql)");
+
 		clear_cache('model');
-		$this->tables = null;
-		return $this->query("CREATE TABLE IF NOT EXISTS `" . $this->prefix . "$table` ($sql)");
+		$this->updateTables();
+
+		return $result;
 	}
 
 	public function copyTable($table, $copy, $with_data = false)
@@ -482,23 +480,27 @@ class DB
 			return true;
 		}
 
-		if ($this->hasTable($copy)) {
+		if (isset($this->t[$copy])) {
 			$this->error['copy'] = _l("A table with the same name as copy, %s, already exists!", $copy);
 			return false;
 		}
 
-		$row = $this->queryRow("SHOW CREATE TABLE `$table`");
+		$t = $this->t[$table];
+
+		$row = $this->queryRow("SHOW CREATE TABLE `$t`");
 
 		if (!empty($row['Create Table'])) {
-			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$table`/i", "CREATE TABLE `$copy`", $row['Create Table']);
+			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$t`/i", "CREATE TABLE `$copy`", $row['Create Table']);
 
 			if (!$with_data) {
-				clear_cache('model');
-				$this->tables = null;
-
 				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
 
-				return $this->query($sql);
+				$result = $this->query($sql);
+
+				clear_cache('model');
+				$this->updateTables();
+
+				return $result;
 			}
 		}
 
@@ -507,39 +509,38 @@ class DB
 
 	public function dropTable($table)
 	{
-		clear_cache('model');
-		$this->tables = null;
-
-		if ($this->hasTable($this->prefix . $table)) {
-			return $this->query("DROP TABLE IF EXISTS `" . $this->prefix . "$table`");
-		} else {
-			return $this->query("DROP TABLE IF EXISTS `$table`");
+		if (!isset($this->t[$table])) {
+			$this->error['table'] = _l("The table %s does not exist", $table);
+			return false;
 		}
+
+		$result = $this->query("DROP TABLE IF EXISTS `{$this->t[$table]}`");
+
+		clear_cache('model');
+		$this->updateTables();
+
+		return $result;
 	}
 
 	public function countTables()
 	{
-		$result = $this->query("SHOW TABLES");
-
-		return $result ? $result->num_rows : null;
+		return count($this->t->tables);
 	}
 
 	public function getKeyColumn($table)
 	{
-		$result = $this->queryRow("SHOW KEYS FROM " . $this->prefix . "$table WHERE Key_name = 'PRIMARY'");
+		$result = $this->queryRow("SHOW KEYS FROM {$this->t[$table]} WHERE Key_name = 'PRIMARY'");
 
 		return $result ? $result['Column_name'] : false;
 	}
 
 	public function hasColumn($table, $column)
 	{
-		if ($this->hasTable($table)) {
-			$columns = $this->getTableColumns($table);
+		$columns = $this->getTableColumns($table);
 
-			foreach ($columns as $row) {
-				if (strtolower($row['Field']) === strtolower($column)) {
-					return true;
-				}
+		foreach ($columns as $row) {
+			if (strtolower($row['Field']) === strtolower($column)) {
+				return true;
 			}
 		}
 
@@ -550,24 +551,28 @@ class DB
 	{
 		static $columns;
 
-		$table = $this->hasTable($table);
-
-		if (!$table) {
+		if (!isset($this->t[$table])) {
 			return array();
 		}
 
-		if (!isset($columns[$table])) {
-			$columns[$table] = $this->queryRows("SHOW COLUMNS FROM `$table`", 'Field');
+		$t = $this->t[$table];
+
+		if (!isset($columns[$t])) {
+			$columns[$t] = $this->queryRows("SHOW COLUMNS FROM `$t`", 'Field');
 		}
 
-		return $columns[$table];
+		return $columns[$t];
 	}
 
 	public function addColumn($table, $column, $options = '')
 	{
-		if ($this->hasTable($table) && !$this->hasColumn($table, $column)) {
+		if (isset($this->t[$table]) && !$this->hasColumn($table, $column)) {
+			$result = $this->query("ALTER TABLE `{$this->t[$table]}` ADD COLUMN `$column` $options");
+
 			clear_cache('model');
-			return $this->query("ALTER TABLE `" . $this->prefix . "$table` ADD COLUMN `$column` $options");
+			$this->updateTables();
+
+			return $result;
 		}
 
 		return false;
@@ -582,16 +587,26 @@ class DB
 				return false;
 			}
 
+			$result = $this->query("ALTER TABLE `{$this->t[$table]}` CHANGE COLUMN `$column` `$new_column` $options");
+
 			clear_cache('model');
-			return $this->query("ALTER TABLE `" . $this->prefix . "$table` CHANGE COLUMN `$column` `$new_column` $options");
+			$this->updateTables();
+
+			return $result;
 		}
+
+		return false;
 	}
 
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
+			$result = $this->query("ALTER TABLE `{$this->t[$table]}` DROP COLUMN `$column`");
+
 			clear_cache('model');
-			return $this->query("ALTER TABLE `" . $this->prefix . "$table` DROP COLUMN `$column`");
+			$this->updateTables();
+
+			return $result;
 		}
 
 		return false;
@@ -599,18 +614,14 @@ class DB
 
 	public function getIndex($table, $key)
 	{
-		$table = $this->hasTable($table);
-
-		if ($table) {
-			return $this->queryRows("SHOW INDEX FROM `" . $table . "` WHERE Key_name = '" . $this->escape($key) . "'");
+		if (isset($this->t[$table])) {
+			return $this->queryRows("SHOW INDEX FROM `{$this->t[$table]}` WHERE Key_name = '" . $this->escape($key) . "'");
 		}
 	}
 
 	public function createIndex($table, $key, $fields, $type = 'BTREE')
 	{
-		$table = $this->hasTable($table);
-
-		if ($table) {
+		if (isset($this->t[$table])) {
 			if ($this->getIndex($table, $key)) {
 				return true;
 			}
@@ -635,22 +646,29 @@ class DB
 				}
 			}
 
-			return $this->query("CREATE INDEX `" . $this->escape($key) . "` ON `$table`(" . implode(',', $key_fields) . ") USING " . $type);
+			return $this->query("CREATE INDEX `" . $this->escape($key) . "` ON `{$this->t[$table]}`(" . implode(',', $key_fields) . ") USING " . $type);
 		}
+
+		return false;
 	}
 
 	public function dropIndex($table, $key)
 	{
-		$table = $this->hasTable($table);
+		if ($this->getIndex($table, $key)) {
+			$result = $this->query("DROP INDEX `" . $key . "` ON `{$this->t[$table]}`");
 
-		if ($table) {
-			return $this->query("DROP INDEX `" . $key . "` ON `$table`");
+			clear_cache('model');
+			$this->updateTables();
+
+			return $result;
 		}
+
+		return false;
 	}
 
 	public function setAutoIncrement($table, $value)
 	{
-		if (!$this->driver->setAutoIncrement($this->getTable($table), $value)) {
+		if (!$this->driver->setAutoIncrement($this->t[$table], $value)) {
 			trigger_error($this->driver->getError());
 
 			return false;
@@ -661,8 +679,6 @@ class DB
 
 	public function alterPrefix($prefix, $old_prefix = '')
 	{
-		clear_cache('model');
-
 		$tables = $this->getTables();
 
 		foreach ($tables as $table) {
@@ -679,6 +695,9 @@ class DB
 			$this->query("DROP TABLE IF EXISTS `$new_table`");
 			$this->query("RENAME TABLE `$table` TO `$new_table`");
 		}
+
+		clear_cache('model');
+		$this->updateTables();
 
 		return empty($this->error);
 	}
@@ -718,5 +737,89 @@ class DB
 	{
 		$now = new DateTime("@" . _time(), new DateTimeZone(DEFAULT_TIMEZONE));
 		return str_replace("NOW()", "'" . $now->format("Y-m-d H:i:s") . "'", $sql);
+	}
+}
+
+class Model_T implements ArrayAccess
+{
+	public
+		$tables = array(),
+		$prefix,
+		$schema;
+
+	public function offsetGet($offset)
+	{
+		if (isset($this->tables[$offset])) {
+			return $this->tables[$offset];
+		}
+
+		$t = strtolower($offset);
+
+		if (isset($this->tables[$t])) {
+			return $this->tables[$t];
+		}
+
+		$pt = $this->prefix . $t;
+
+		foreach ($this->tables as $key => $table) {
+			$lkey = strtolower($key);
+
+			if ($lkey === $t || $lkey === $pt) {
+				return $table;
+			}
+
+			$ltable = strtolower($table);
+
+			if ($ltable === $t || $ltable === $pt) {
+				return $table;
+			}
+		}
+
+		return $offset;
+	}
+
+	public function offsetSet($offset, $value)
+	{
+		if (is_null($offset)) {
+			$this->tables[] = $value;
+		} else {
+			$this->tables[$offset] = $value;
+		}
+	}
+
+	public function offsetExists($offset)
+	{
+		if (isset($this->tables[$offset])) {
+			return true;
+		}
+
+		$t = strtolower($offset);
+
+		if (isset($this->tables[$t])) {
+			return true;
+		}
+
+		$pt = $this->prefix . $t;
+
+		foreach ($this->tables as $key => $table) {
+			$lkey = strtolower($key);
+
+			if ($lkey === $t || $lkey === $pt) {
+				return true;
+			}
+
+			$ltable = strtolower($table);
+
+			if ($ltable === $t || $ltable === $pt) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function offsetUnset($offset)
+	{
+		unset($this->tables[$offset]);
 	}
 }

@@ -112,7 +112,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 {
 	$src = image($image, $width, $height, $default, $cast_protocol);
 
-	$size  = _getimagesize($src);
+	$size = _getimagesize($src);
 
 	$src   = $src ? "src=\"$src\"" : '';
 	$title = $title !== false ? "title=\"$title\"" : '';
@@ -121,7 +121,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	return "$src $title $alt $size";
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false, $version = true)
 {
 	global $registry;
 
@@ -139,6 +139,14 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 		}
 	}
 
+	if ($version) {
+		$file = str_replace(URL_SITE, DIR_SITE, $image);
+
+		if (is_file($file)) {
+			$image .= '?v=' . filemtime($file);
+		}
+	}
+
 	if ($image && $cast_protocol) {
 		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
@@ -146,7 +154,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
-function image_srcset($srcsets, $nx = 3)
+function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)
 {
 	if (empty($srcsets)) {
 		return '';
@@ -183,24 +191,23 @@ function image_srcset($srcsets, $nx = 3)
 			$srcsets[$nx] = image($srcsets[$nx]);
 		}
 
-		if ($nx > 1) {
+		if ($nx > 1 && !empty($srcsets[$nx])) {
 			$srcsets[$nx] .= ' ' . $nx . 'x';
 		}
 
 		$nx--;
 	}
 
-	$src = empty($srcsets[1]) ? current($srcsets) : $srcsets[1];
+	$src = empty($srcsets[1]) ? preg_replace("/ \\dx/", '', current($srcsets)) : $srcsets[1];
 	unset($srcsets[1]);
 
 	$size = _getimagesize($src);
 
 	if (!empty($srcsets)) {
 		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\" $size";
 	}
 
-	return "src=\"$src\" $size";
+	return "src=\"$src\" $size " . (!empty($srcsets) ? "srcset=\"" . implode(',', $srcsets) . "\" " : '') . "alt=\"$alt\" title=\"$title\"";
 }
 
 function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -294,9 +301,14 @@ function image_save($image, $save_as = null, $width = null, $height = null, $def
 	return $new_image;
 }
 
-function theme_image($image, $width = null, $height = null)
+function theme_image($image, $width = null, $height = null, $theme = null)
 {
-	return image(theme_dir('image/' . $image), $width, $height);
+	if (!is_numeric($width)) {
+		$theme = $width;
+		$width = null;
+	}
+
+	return image(theme_dir('image/' . $image, $theme), $width, $height);
 }
 
 function theme_sprite($image)
@@ -361,10 +373,10 @@ function theme_url($path = '', $query = null)
 	return $url;
 }
 
-function theme_dir($path = '')
+function theme_dir($path = '', $theme = null)
 {
 	global $registry;
-	return $registry->get('theme')->getFile($path);
+	return $registry->get('theme')->getFile($path, $theme);
 }
 
 function redirect($path = '', $query = null, $ssl = null, $status = null)
@@ -460,15 +472,20 @@ function page_info($key = null, $default = null)
 		return $info;
 	}
 
-	if ($key === 'styles') {
-		return $document->getStyles();
+	$value = isset($info[$key]) ? $info[$key] : $default;
+
+	switch ($key) {
+		case 'styles':
+			return $document->getStyles();
+
+		case 'scripts':
+			return $document->getScripts();
+
+		case 'body_class':
+			return implode(' ', $value);
 	}
 
-	if ($key === 'scripts') {
-		return $document->getScripts();
-	}
-
-	return isset($info[$key]) ? $info[$key] : $default;
+	return $value;
 }
 
 function set_page_info($key, $value)
@@ -837,35 +854,6 @@ HTML
 			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
-}
-
-function crypto_rand($min, $max)
-{
-	$range = $max - $min;
-	if ($range < 0) {
-		return $min;
-	} // not so random...
-	$log    = log($range, 2);
-	$bytes  = (int)($log / 8) + 1; // length in bytes
-	$bits   = (int)$log + 1; // length in bits
-	$filter = (int)(1 << $bits) - 1; // set all lower bits to 1
-	do {
-		$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-		$rnd = $rnd & $filter; // discard irrelevant bits
-	} while ($rnd >= $range);
-	return $min + $rnd;
-}
-
-function tokengen($length)
-{
-	$token;
-	$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
-	$codeAlphabet .= "0123456789";
-	for ($i = 0; $i < $length; $i++) {
-		$token .= $codeAlphabet[crypto_rand(0, strlen($codeAlphabet))];
-	}
-	return $token;
 }
 
 function output($output)

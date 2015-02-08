@@ -208,11 +208,6 @@ class App_Model_User extends App_Model_Table
 		return parent::getRecords($sort, $filter, $select, $total, $index);
 	}
 
-	public function getTotalUsers($filter = array())
-	{
-		return $this->getUsers(array(), $filter, "COUNT(*)");
-	}
-
 	public function getColumns($filter = array())
 	{
 		$columns = array(

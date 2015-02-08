@@ -278,10 +278,10 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 	public function save_view()
 	{
-		$view_id = $this->Model_View->save($_POST['view_id'], $_POST);
+		$view_id = $this->Model_View->save(_post(['view_id']), $_POST);
 
 		if ($view_id) {
-			message('success', _l("%s view was saved!", $_POST['title']));
+			message('success', _l("%s view was saved!", _post('title')));
 		} else {
 			message('error', $this->Model_View->getError());
 		}
@@ -290,7 +290,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('view_id', $view_id);
 			output_message();
 		} else {
-			redirect($_POST['path']);
+			redirect(_post('path'));
 		}
 	}
 

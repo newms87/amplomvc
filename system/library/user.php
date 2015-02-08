@@ -325,7 +325,7 @@ class User extends Library
 			'email' => $email,
 		);
 
-		if (!$this->Model_User->getTotalUsers($filter)) {
+		if (!$this->Model_User->getTotalRecords($filter)) {
 			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
 			return false;
 		}
