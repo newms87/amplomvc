@@ -490,7 +490,7 @@ class DB
 		$row = $this->queryRow("SHOW CREATE TABLE `$t`");
 
 		if (!empty($row['Create Table'])) {
-			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$t`/i", "CREATE TABLE `$copy`", $row['Create Table']);
+			$sql = preg_replace("/^CREATE\\s*TABLE\\s*`$t`/i", "CREATE TABLE IF NOT EXISTS `$copy`", $row['Create Table']);
 
 			if (!$with_data) {
 				$sql = preg_replace("/AUTO_INCREMENT=\\d+\\s*/", '', $sql);
