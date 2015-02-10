@@ -258,7 +258,17 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function find()
 	{
-		$plugins = $this->Model_Plugin->searchPlugins();
+		$data = $_POST;
+
+		$defaults = array(
+			'search' => '',
+			'team' => 'newms87',
+		);
+
+		$data += $defaults;
+
+		html_dump($data, 'data');
+		$plugins = $this->Model_Plugin->searchPlugins($data['search'], $data['team']);
 
 		$data['plugins'] = $plugins;
 
@@ -267,8 +277,15 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function download()
 	{
-		if ($this->Model_Plugin->downloadPlugin(_request('name'))) {
-			message('success', _l("The %s plugin has been downloaded! Go to <a href=\"%s\">Plugins</a> to install it.", _request('name'), site_url('admin/plugin')));
+		$name = $this->Model_Plugin->downloadPlugin(_request('name'));
+
+		if ($name) {
+			if ($this->plugin->install($name)) {
+				message('success', _l("The %s plugin has been installed!", $name));
+			} else {
+				message('error', _l("The %s plugin has been downloaded, but failed to install.", $name));
+				message('error', $this->plugin->getError());
+			}
 		} else {
 			message('error', $this->Model_Plugin->getError());
 		}
@@ -276,7 +293,7 @@ class App_Controller_Admin_Plugin extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/plugin/find');
+			redirect('admin/plugin');
 		}
 	}
 }

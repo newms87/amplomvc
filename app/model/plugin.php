@@ -4,24 +4,30 @@ class App_Model_Plugin extends App_Model_Table
 {
 	protected $table = 'plugin', $primary_key = 'plugin_id';
 
-	private $repo_team = 'newms87';
 	private $plugins;
 
-	public function searchPlugins($search = '')
+	public function searchPlugins($search = '', $team = 'newms87')
 	{
-		$plugins = cache('repoapi.plugins');
+		$plugins = cache('repoapi.plugins.' . $team);
 
 		if ($plugins === null) {
-			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $this->repo_team, null, Curl::RESPONSE_JSON);
+			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $team, null, Curl::RESPONSE_JSON);
 
 			if (empty($response['values'])) {
+				html_dump($response, 'response');
 				return array();
 			}
 
 			$plugins = $response['values'];
 
-			foreach ($plugins as &$plugin) {
-				$plugin['download'] = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
+			foreach ($plugins as $key => &$plugin) {
+				$plugin['download']    = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
+
+				if (!$plugin['download']) {
+					unset($plugins[$key]);
+				}
+
+				$plugin['description'] = preg_replace("/>>>>>\\s*.*\\s*$/", '', trim($plugin['description']));
 			}
 			unset($plugin);
 
@@ -58,7 +64,7 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		$pathinfo = pathinfo($plugin['download']);
-		$entry = $this->repo_team . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
+		$entry    = $this->repo_team . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
 
 		if (!$this->url->download($plugin['download'], $zip_file)) {
 			$this->error = $this->url->getError();
@@ -71,20 +77,27 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		//Rename to working plugin name
-		$directives = get_comment_directives(DIR_PLUGIN . $entry);
+		if (is_file(DIR_PLUGIN . $entry . '/setup.php')) {
+			$directives  = get_comment_directives(DIR_PLUGIN . $entry . '/setup.php');
+		}
+
 		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
 
 		if (is_file(DIR_PLUGIN . $plugin_name)) {
 			$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
-			return false;
-		}
 
-		rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name);
+		} elseif (!@rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name)) {
+			$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists? Removed %s", DIR_PLUGIN . $entry);
+
+			if (is_dir(DIR_PLUGIN . $entry)) {
+				rrmdir(DIR_PLUGIN . $entry);
+			}
+		}
 
 		//Cleanup
 		unlink($zip_file);
 
-		return true;
+		return $this->error ? false : $plugin_name;
 	}
 
 	public function getField($name, $field)

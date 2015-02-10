@@ -1644,7 +1644,7 @@ input.p_sortorder:active, input.p_sortorder:focus {
   margin-top: 10px;
 }
 
-.product-form{
+.product-form {
   .add_attribute {
     float: left;
     text-align: center;
@@ -3583,25 +3583,50 @@ td.log_remove .message {
   }
 }
 
-.plugin-list {
-  .plugin {
-    padding: 1.5em;
-    border: 2px solid @color-gray;
-    border-radius: 5px;
-
-    .name {
-      font: 1.6em OpenSansBold;
-      text-decoration: underline;
-      margin-bottom: 1em;
+.plugin-settings {
+  .filter-team {
+    margin-bottom: 2em;
+    input {
+      padding: .5em;
+      font: 1.3em OpenSansSemiBold;
+      color: @color-secondary;
     }
 
-    .description {
-      font: 1.1em OpenSansRegular;
+    button {
+      padding: .75em;
+      margin-left: 1em;
     }
+  }
 
-    .download {
-      margin-top: 2em;
-      font: 1.1em OpenSansSemiBold;
+  .plugin-list {
+    .plugin {
+      .details {
+        padding: 1.5em;
+        border: 2px solid @color-gray;
+        border-radius: 5px;
+        box-sizing: border-box;
+
+        .name {
+          font: 1.8em OpenSansBold;
+          text-decoration: underline;
+          margin-bottom: 1em;
+        }
+
+        .description {
+          font: 1.2em OpenSansRegular;
+          height: 10em;
+          overflow: auto;
+        }
+
+        .buttons {
+          margin-top: 2em;
+          font: 1.4em OpenSansSemiBold;
+
+          .download {
+
+          }
+        }
+      }
     }
   }
 }
