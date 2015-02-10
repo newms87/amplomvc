@@ -4,6 +4,10 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Plugins}}</h1>
+
+			<div class="buttons">
+				<a href="<?= site_url('admin/plugin/find'); ?>" class="button">{{Find A Plugin}}</a>
+			</div>
 		</div>
 		<div class="section">
 			<div id="listing">

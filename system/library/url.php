@@ -82,6 +82,29 @@ class Url extends Library
 		exit;
 	}
 
+	public function download($source, $destination = null)
+	{
+		if (!$destination) {
+			$pathinfo = pathinfo($destination);
+			$destination     = DIR_DOWNLOAD . 'url/' . $pathinfo['filename'];
+
+			$count = 1;
+
+			while (is_file($destination . $pathinfo['extension'])) {
+				$destination = DIR_DOWNLOAD . 'url/' . $pathinfo['filename'] . '-' . $count++;
+			}
+
+			$destination .= $pathinfo['extension'];
+		}
+
+		if (!file_put_contents($destination, fopen($source, 'r'))) {
+			$this->error['write'] = _l("Failed to download file to %s", $destination);
+			return false;
+		}
+
+		return $destination;
+	}
+
 	public function load($url, $admin = false)
 	{
 

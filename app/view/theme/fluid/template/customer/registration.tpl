@@ -1,4 +1,6 @@
-<?= call('header', array('disable_messages' => 1)); ?>
+<? $messages = render_message(); ?>
+
+<?= call('header'); ?>
 <?= area('left'); ?>
 <?= area('right'); ?>
 
@@ -19,7 +21,7 @@
 
 	<div class="login-page row">
 		<div class="wrap">
-			<?= render_message(); ?>
+			<?= $messages; ?>
 
 			<form class="login-form form" action="<?= $register; ?>" method="post">
 				<div class="col xs-12 md-6 register-details">

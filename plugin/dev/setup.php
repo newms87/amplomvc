@@ -4,6 +4,7 @@
  * The Development Plugin
  *
  * Version: 0.8
+ * Name: dev
  * Title: Amplo MVC Development
  * Description: Makes Development for Amplo MVC a thousands times easier! A Necessity for any and all Amlpo MVC Devs.
  * Author: Daniel Newman
