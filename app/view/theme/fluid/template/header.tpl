@@ -157,7 +157,7 @@
 
 	<main class="main clearfix">
 
-		<? if (empty($disable_messages) && $this->message->has()) { ?>
+		<? if ($this->message->has()) { ?>
 			<section class="message-row row">
 				<div class="wrap">
 					<?= render_message(); ?>

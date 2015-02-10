@@ -12,7 +12,7 @@ class App_Controller_Admin_Plugin extends Controller
 		$data['listing'] = $this->listing();
 
 		//Render
-		output($this->render('plugin', $data));
+		output($this->render('plugin/list', $data));
 	}
 
 	public function listing()
@@ -254,5 +254,32 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 
 		redirect('admin/plugin');
+	}
+
+	public function find()
+	{
+		$plugins = $this->Model_Plugin->searchPlugins();
+
+		$data['plugins'] = $plugins;
+
+		output($this->render('plugin/find', $data));
+	}
+
+	public function download()
+	{
+		if ($this->Model_Plugin->downloadPlugin(_request('name'))) {
+			message('success', _l("The %s plugin has been downloaded! Go to <a href=\"%s\">Plugins</a> to install it.", _request('name'), site_url('admin/plugin')));
+		} else {
+			message('error', $this->Model_Plugin->getError());
+		}
+
+		html_dump($this->message->fetch(), 'message');
+		exit;
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/plugin/find');
+		}
 	}
 }

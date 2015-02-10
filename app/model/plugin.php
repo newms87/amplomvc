@@ -4,7 +4,76 @@ class App_Model_Plugin extends App_Model_Table
 {
 	protected $table = 'plugin', $primary_key = 'plugin_id';
 
+	private $repo_team = 'newms87';
 	private $plugins;
+
+	public function searchPlugins($search = '')
+	{
+		$plugins = cache('repoapi.plugins');
+
+		if ($plugins === null) {
+			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $this->repo_team, null, Curl::RESPONSE_JSON);
+
+			if (empty($response['values'])) {
+				return array();
+			}
+
+			$plugins = $response['values'];
+
+			cache('repoapi.plugins', $plugins);
+		}
+
+		if ($search) {
+			html_dump($plugins, 'plugins');
+			foreach ($plugins as $plugin) {
+				if ($plugin['full_name'] === $search) {
+					return $plugin;
+				}
+			}
+
+			return false;
+		}
+
+		return $plugins;
+	}
+
+	public function downloadPlugin($name)
+	{
+		$plugin = $this->searchPlugins($name);
+
+		if (!$plugin) {
+			$this->error['name'] = _l("Unable to find the plugin %s. Please try downloading a different plugin.", $name);
+			return false;
+		}
+
+		$zip_file = DIR_PLUGIN . 'subscription.zip';
+
+		$source = 'https://bitbucket.org/newms87/ac-subscriptions/get/ff4e72d507f5.zip';
+
+		$pathinfo = pathinfo($source);
+		$entry = $this->repo_team . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
+
+		if (!$this->url->download($source, $zip_file)) {
+			$this->error = $this->url->getError();
+			return false;
+		}
+
+		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN)) {
+			$this->error = $this->csv->getError();
+			return false;
+		}
+
+		//Rename to working plugin name
+		$directives = get_comment_directives(DIR_PLUGIN . $entry);
+		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+
+		rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name);
+
+		//Cleanup
+		unlink($zip_file);
+
+		return true;
+	}
 
 	public function getField($name, $field)
 	{

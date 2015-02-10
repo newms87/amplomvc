@@ -233,7 +233,7 @@ class App_Controller_Admin_User extends Controller
 	{
 		if (is_logged()) {
 			message('notify', _l("You are already logged in. Please log out first."));
-		} elseif ($this->user->login($_POST['username'], $_POST['password'])) {
+		} elseif ($this->user->login(_post('username'), _post('password'))) {
 			if (!empty($_REQUEST['redirect'])) {
 				$redirect = $_REQUEST['redirect'];
 			} elseif ($this->request->hasRedirect()) {
