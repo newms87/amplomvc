@@ -299,7 +299,7 @@ class Document extends Library
 			require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 			$options = array(
-				'compress' => option('config_less_compress', false),
+				'compress' => option('less_compress', true),
 			);
 
 			$parser = new Less_Parser($options);
@@ -332,7 +332,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => $compress === null ? option('config_less_compress', true) : $compress,
+			'compress' => $compress === null ? option('less_compress', true) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
