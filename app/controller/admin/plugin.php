@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Plugin extends Controller
 {
 	public function index()
@@ -262,12 +263,11 @@ class App_Controller_Admin_Plugin extends Controller
 
 		$defaults = array(
 			'search' => '',
-			'team' => 'newms87',
+			'team'   => 'amplomvc',
 		);
 
 		$data += $defaults;
 
-		html_dump($data, 'data');
 		$plugins = $this->Model_Plugin->searchPlugins($data['search'], $data['team']);
 
 		$data['plugins'] = $plugins;

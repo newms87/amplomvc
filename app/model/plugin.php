@@ -6,7 +6,7 @@ class App_Model_Plugin extends App_Model_Table
 
 	private $plugins;
 
-	public function searchPlugins($search = '', $team = 'newms87')
+	public function searchPlugins($search = '', $team = 'amplomvc')
 	{
 		$plugins = cache('repoapi.plugins.' . $team);
 
@@ -14,14 +14,17 @@ class App_Model_Plugin extends App_Model_Table
 			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $team, null, Curl::RESPONSE_JSON);
 
 			if (empty($response['values'])) {
-				html_dump($response, 'response');
-				return array();
+				$response = $this->curl->get('https://api.bitbucket.org/2.0/teams/' . $team . '/repositories', null, Curl::RESPONSE_JSON);
+
+				if (empty($response['values'])) {
+					return array();
+				}
 			}
 
 			$plugins = $response['values'];
 
 			foreach ($plugins as $key => &$plugin) {
-				$plugin['download']    = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
+				$plugin['download'] = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
 
 				if (!$plugin['download']) {
 					unset($plugins[$key]);
@@ -56,7 +59,7 @@ class App_Model_Plugin extends App_Model_Table
 			return false;
 		}
 
-		$zip_file = DIR_PLUGIN . 'subscription.zip';
+		$zip_file = DIR_PLUGIN . 'plugin-download.zip';
 
 		if (empty($plugin['download'])) {
 			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
@@ -64,7 +67,7 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		$pathinfo = pathinfo($plugin['download']);
-		$entry    = $this->repo_team . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
+		$entry    = basename(dirname(dirname($pathinfo['dirname']))) . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
 
 		if (!$this->url->download($plugin['download'], $zip_file)) {
 			$this->error = $this->url->getError();
@@ -78,7 +81,7 @@ class App_Model_Plugin extends App_Model_Table
 
 		//Rename to working plugin name
 		if (is_file(DIR_PLUGIN . $entry . '/setup.php')) {
-			$directives  = get_comment_directives(DIR_PLUGIN . $entry . '/setup.php');
+			$directives = get_comment_directives(DIR_PLUGIN . $entry . '/setup.php');
 		}
 
 		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
