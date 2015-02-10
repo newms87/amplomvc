@@ -8,8 +8,7 @@ class Document extends Library
 		$links = array(),
 		$styles = array(),
 		$scripts = array(),
-		$ac_vars = array(),
-		$body_class = array();
+		$ac_vars = array();
 
 	function __construct()
 	{
@@ -300,7 +299,7 @@ class Document extends Library
 			require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 			$options = array(
-				'compress' => option('config_less_compress', false),
+				'compress' => option('less_compress', true),
 			);
 
 			$parser = new Less_Parser($options);
@@ -333,7 +332,7 @@ class Document extends Library
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
-			'compress' => $compress === null ? option('config_less_compress', true) : $compress,
+			'compress' => $compress === null ? option('less_compress', true) : $compress,
 		);
 
 		$parser = new Less_Parser($options);
@@ -358,6 +357,12 @@ class Document extends Library
 		}
 
 		if ($href) {
+			$file = str_replace(URL_SITE, DIR_SITE, $href);
+
+			if (is_file($file)) {
+				$href.=  '?v=' . filemtime($file);
+			}
+
 			$this->styles[md5($href)] = array(
 				'href'  => $href,
 				'rel'   => $rel,
@@ -383,13 +388,17 @@ class Document extends Library
 				$script = URL_SITE . $script;
 			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
 				$script = URL_RESOURCES . 'js/' . $script;
-			} elseif (is_file(DIR_SITE . 'app/view/javascript/' . $script)) {
-				$script = URL_SITE . 'app/view/javascript/' . $script;
 			}
 		}
 
 		if ($minify) {
 			$script = $this->minifyJs($script);
+		}
+
+		$file = str_replace(URL_SITE, DIR_SITE, $script);
+
+		if (is_file($file)) {
+			$script .=  '?v=' . filemtime($file);
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
@@ -487,21 +496,16 @@ class Document extends Library
 	public function setBodyClass($class)
 	{
 		if (!$class) {
-			$this->body_class = array();
+			$this->info['body_class'] = array();
 		} else {
 			$class            = is_array($class) ? $class : explode(' ', $class);
-			$this->body_class = array_combine(array_keys($class), $class);
+			$this->info['body_class'] = array_combine(array_keys($class), $class);
 		}
 	}
 
 	public function addBodyClass($class)
 	{
-		$this->body_class[$class] = $class;
-	}
-
-	public function getBodyClass()
-	{
-		return implode(' ', $this->body_class);
+		$this->info['body_class'][$class] = $class;
 	}
 
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)

@@ -145,4 +145,34 @@ class Csv extends Library
 			$this->contents .= "\r\n";
 		}
 	}
+
+	public function extractZip($zip_file, $destination = null, $entries = null)
+	{
+		if (!is_file($zip_file)) {
+			$this->error['file'] = _l("The Zip file %s does not exist.", $zip_file);
+			return false;
+		}
+
+		$zip = new ZipArchive;
+
+		if (!$zip->open($zip_file)) {
+			$this->error['open'] = _l("Unable to open zip archive %s.", $zip_file);
+			return false;
+		}
+
+		if (!$destination) {
+			$pathinfo = pathinfo($zip_file);
+			$destination = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
+		}
+
+		if (!_is_writable($destination)) {
+			$this->error['destination'] = _l("The Destination folder %s is not writable.", $destination);
+			return false;
+		}
+
+		$zip->extractTo($destination, $entries);
+		$zip->close();
+
+		return $destination;
+	}
 }

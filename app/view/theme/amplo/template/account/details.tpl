@@ -79,7 +79,7 @@
 						)); ?>
 					</div>
 					<div class="input-item">
-						<input type="text" name="zip" value="<?= _post('zip'); ?>" placeholder="{{Zip Code}}"/>
+						<input type="text" name="postcode" value="<?= _post('postcode'); ?>" placeholder="{{Zip Code}}"/>
 					</div>
 
 					<div class="submit buttons">

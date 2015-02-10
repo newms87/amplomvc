@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Plugin extends Controller
 {
 	public function index()
@@ -12,7 +13,7 @@ class App_Controller_Admin_Plugin extends Controller
 		$data['listing'] = $this->listing();
 
 		//Render
-		output($this->render('plugin', $data));
+		output($this->render('plugin/list', $data));
 	}
 
 	public function listing()
@@ -254,5 +255,45 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 
 		redirect('admin/plugin');
+	}
+
+	public function find()
+	{
+		$data = $_POST;
+
+		$defaults = array(
+			'search' => '',
+			'team'   => 'amplomvc',
+		);
+
+		$data += $defaults;
+
+		$plugins = $this->Model_Plugin->searchPlugins($data['search'], $data['team']);
+
+		$data['plugins'] = $plugins;
+
+		output($this->render('plugin/find', $data));
+	}
+
+	public function download()
+	{
+		$name = $this->Model_Plugin->downloadPlugin(_request('name'));
+
+		if ($name) {
+			if ($this->plugin->install($name)) {
+				message('success', _l("The %s plugin has been installed!", $name));
+			} else {
+				message('error', _l("The %s plugin has been downloaded, but failed to install.", $name));
+				message('error', $this->plugin->getError());
+			}
+		} else {
+			message('error', $this->Model_Plugin->getError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/plugin');
+		}
 	}
 }

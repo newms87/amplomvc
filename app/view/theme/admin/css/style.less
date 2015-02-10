@@ -350,20 +350,8 @@ td {
 }
 
 #header {
-  .div1 {
-    height: 112px;
-    padding: 0 30px;
-    background: white; /*url('@{theme-img}blue_fabric.jpg');*/
-    min-width: 900px;
-  }
-
-  .div3 {
-    font-size: 12px;
-    color: #000;
-    text-align: right;
-    padding: 0 0 3px 0;
-    float: right;
-    clear: both;
+  .admin-logo {
+    padding: .5em;
   }
 
   .choose-site {
@@ -371,12 +359,16 @@ td {
     top: 2em;
     right: 3em;
   }
-}
 
-#header_secure_lock {
-  position: relative;
-  top: 3px;
-  margin-right: 5px;
+  .header-secure {
+    padding: 1.5em;
+    font: 1.2em OpenSansSemiBold;
+  }
+
+  .header-support {
+    padding: 0 1.5em 1.5em;
+    font: 1.2em OpenSansBold;
+  }
 }
 
 /** Settings */
@@ -1652,16 +1644,18 @@ input.p_sortorder:active, input.p_sortorder:focus {
   margin-top: 10px;
 }
 
-#product_form .add_attribute {
-  float: left;
-  text-align: center;
-  margin-bottom: 15px;
-  margin-left: 10%;
-}
+.product-form {
+  .add_attribute {
+    float: left;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-left: 10%;
 
-#product_form .add_attribute .entry {
-  font-size: 16px;
-  font-weight: bold;
+    .entry {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
 }
 
 ul.phone_list + a {
@@ -3586,5 +3580,53 @@ td.log_remove .message {
     top: 0;
     right: 0;
     border: 0;
+  }
+}
+
+.plugin-settings {
+  .filter-team {
+    margin-bottom: 2em;
+    input {
+      padding: .5em;
+      font: 1.3em OpenSansSemiBold;
+      color: @color-secondary;
+    }
+
+    button {
+      padding: .75em;
+      margin-left: 1em;
+    }
+  }
+
+  .plugin-list {
+    .plugin {
+      .details {
+        padding: 1.5em;
+        border: 2px solid @color-gray;
+        border-radius: 5px;
+        box-sizing: border-box;
+
+        .name {
+          font: 1.8em OpenSansBold;
+          text-decoration: underline;
+          margin-bottom: 1em;
+        }
+
+        .description {
+          font: 1.2em OpenSansRegular;
+          height: 10em;
+          overflow: auto;
+        }
+
+        .buttons {
+          margin-top: 2em;
+          font: 1.4em OpenSansSemiBold;
+
+          .download {
+
+          }
+        }
+      }
+    }
   }
 }

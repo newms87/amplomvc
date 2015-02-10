@@ -121,7 +121,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	return "$src $title $alt $size";
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false, $version = true)
 {
 	global $registry;
 
@@ -139,6 +139,14 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 		}
 	}
 
+	if ($version) {
+		$file = str_replace(URL_SITE, DIR_SITE, $image);
+
+		if (is_file($file)) {
+			$image .= '?v=' . filemtime($file);
+		}
+	}
+
 	if ($image && $cast_protocol) {
 		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
@@ -146,7 +154,7 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 	return $image;
 }
 
-function image_srcset($srcsets, $nx = 3)
+function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)
 {
 	if (empty($srcsets)) {
 		return '';
@@ -197,10 +205,9 @@ function image_srcset($srcsets, $nx = 3)
 
 	if (!empty($srcsets)) {
 		ksort($srcsets);
-		return "src=\"$src\" srcset=\"" . implode(',', $srcsets) . "\" $size";
 	}
 
-	return "src=\"$src\" $size";
+	return "src=\"$src\" $size " . (!empty($srcsets) ? "srcset=\"" . implode(',', $srcsets) . "\" " : '') . "alt=\"$alt\" title=\"$title\"";
 }
 
 function build_srcset($image, $nx = 3, $width = null, $height = null, $default = null, $cast_protocol = false)
@@ -465,15 +472,20 @@ function page_info($key = null, $default = null)
 		return $info;
 	}
 
-	if ($key === 'styles') {
-		return $document->getStyles();
+	$value = isset($info[$key]) ? $info[$key] : $default;
+
+	switch ($key) {
+		case 'styles':
+			return $document->getStyles();
+
+		case 'scripts':
+			return $document->getScripts();
+
+		case 'body_class':
+			return implode(' ', $value);
 	}
 
-	if ($key === 'scripts') {
-		return $document->getScripts();
-	}
-
-	return isset($info[$key]) ? $info[$key] : $default;
+	return $value;
 }
 
 function set_page_info($key, $value)

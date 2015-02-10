@@ -10,7 +10,7 @@
 						<?= block('widget/batch_action', null, $batch_action); ?>
 					</div>
 					<div class="buttons">
-						<a href="<?= $insert; ?>" class="button">{{Insert}}</a>
+						<a href="<?= site_url('admin/user/form'); ?>" class="button">{{Add User}}</a>
 					</div>
 				<? } ?>
 			</div>

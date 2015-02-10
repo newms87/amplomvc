@@ -3,7 +3,7 @@
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" class="box">
+	<form action="<?= site_url('admin/user/save', 'user_id=' . $user_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
@@ -12,7 +12,7 @@
 
 			<div class="buttons">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/user'); ?>" class="button">{{Cancel}}</a>
+				<a href="<?= site_url('admin/user'); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 

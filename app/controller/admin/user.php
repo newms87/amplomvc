@@ -32,9 +32,6 @@ class App_Controller_Admin_User extends Controller
 			'url'     => site_url('admin/user/batch-action'),
 		);
 
-		//Actions
-		$data['insert'] = site_url('admin/user/form');
-
 		//Response
 		output($this->render('user/list', $data));
 	}
@@ -60,7 +57,7 @@ class App_Controller_Admin_User extends Controller
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/user/delete', 'user_id=' . $user_id)
+					'href' => site_url('admin/user/remove', 'user_id=' . $user_id)
 				),
 			);
 
@@ -121,9 +118,10 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		$defaults = array(
+			'user_id'      => $user_id,
 			'username'     => '',
-			'first_name'    => '',
-			'last_name'     => '',
+			'first_name'   => '',
+			'last_name'    => '',
 			'email'        => '',
 			'user_role_id' => option('config_default_user_role', 12),
 			'status'       => 1,
@@ -140,9 +138,6 @@ class App_Controller_Admin_User extends Controller
 		);
 
 		$user['meta']['__ac_template__'] = '';
-
-		//Actions
-		$user['save'] = site_url('admin/user/save', 'user_id=' . $user_id);
 
 		//Response
 		output($this->render('user/form', $user));
@@ -165,7 +160,7 @@ class App_Controller_Admin_User extends Controller
 		}
 	}
 
-	public function delete()
+	public function remove()
 	{
 		if ($this->Model_User->remove(_get('user_id'))) {
 			message('success', _l("User was deleted!"));
@@ -238,8 +233,7 @@ class App_Controller_Admin_User extends Controller
 	{
 		if (is_logged()) {
 			message('notify', _l("You are already logged in. Please log out first."));
-		}
-		elseif ($this->user->login($_POST['username'], $_POST['password'])) {
+		} elseif ($this->user->login(_post('username'), _post('password'))) {
 			if (!empty($_REQUEST['redirect'])) {
 				$redirect = $_REQUEST['redirect'];
 			} elseif ($this->request->hasRedirect()) {

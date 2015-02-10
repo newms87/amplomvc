@@ -77,12 +77,10 @@ define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
 if (!defined('COOKIE_DOMAIN')) {
-	$domain = parse_url(URL_SITE, PHP_URL_HOST);
-
-	if (!$domain || $domain === 'localhost') {
+	if (!DOMAIN || DOMAIN === 'localhost') {
 		define('COOKIE_DOMAIN', '');
 	} else {
-		define('COOKIE_DOMAIN', '.' . $domain);
+		define('COOKIE_DOMAIN', '.' . DOMAIN);
 	}
 }
 

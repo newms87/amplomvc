@@ -5,7 +5,7 @@
 
 <? $sprite = theme_sprite('sprite@1x.png'); ?>
 
-<body class="<?= $body_class; ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
+<body class="<?= page_info('body_class'); ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
 <section id="container">
 	<? if (option("show-header-banner", false)) { ?>
 		<div class="banner-bar-row row">
@@ -107,7 +107,7 @@
 
 	<main class="main clearfix">
 
-		<? if (empty($disable_messages) && $this->message->has()) { ?>
+		<? if ($this->message->has()) { ?>
 			<section class="message-row row">
 				<div class="wrap">
 					<?= render_message(); ?>

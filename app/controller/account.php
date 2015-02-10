@@ -29,6 +29,8 @@ class App_Controller_Account extends Controller
 		breadcrumb(_l("My Account"), site_url('account'));
 		breadcrumb(_l("My Details"), site_url('account/details'));
 
+		$data['path'] = $this->route->getPath();
+
 		//Customer Information
 		$customer['customer'] = customer_info();
 		$customer['meta']     = $this->customer->meta();
@@ -47,7 +49,9 @@ class App_Controller_Account extends Controller
 		if ($this->is_ajax) {
 			output($content);
 		} else {
-			$this->index($content);
+			$data['content'] = $content;
+
+			output($this->render('account/account', $data));
 		}
 	}
 

@@ -10,7 +10,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 	{
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
-		$categories = $this->Model_Catalog_Category->getCategoryTree();
+		$categories = $this->Model_Category->getCategoryTree();
 
 		array_walk_children($categories, 'children', function (&$category) {
 			global $registry;

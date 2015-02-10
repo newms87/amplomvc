@@ -5,7 +5,6 @@ class App_Controller_Admin_Header extends Controller
 	public function index($settings = array())
 	{
 		$settings += array(
-			'body_class' => slug($this->route->getPath(), '-'),
 			'user'       => user_info(),
 		);
 
@@ -135,6 +134,8 @@ class App_Controller_Admin_Header extends Controller
 			$view_mail_errors = site_url('admin/mail/error');
 			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
+
+		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
 
 		$this->render('header', $settings);
 	}

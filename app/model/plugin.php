@@ -6,6 +6,103 @@ class App_Model_Plugin extends App_Model_Table
 
 	private $plugins;
 
+	public function searchPlugins($search = '', $team = 'amplomvc')
+	{
+		$plugins = cache('repoapi.plugins.' . $team);
+
+		if ($plugins === null) {
+			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $team, null, Curl::RESPONSE_JSON);
+
+			if (empty($response['values'])) {
+				$response = $this->curl->get('https://api.bitbucket.org/2.0/teams/' . $team . '/repositories', null, Curl::RESPONSE_JSON);
+
+				if (empty($response['values'])) {
+					return array();
+				}
+			}
+
+			$plugins = $response['values'];
+
+			foreach ($plugins as $key => &$plugin) {
+				$plugin['download'] = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
+
+				if (!$plugin['download']) {
+					unset($plugins[$key]);
+				}
+
+				$plugin['description'] = preg_replace("/>>>>>\\s*.*\\s*$/", '', trim($plugin['description']));
+			}
+			unset($plugin);
+
+			cache('repoapi.plugins', $plugins);
+		}
+
+		if ($search) {
+			foreach ($plugins as $plugin) {
+				if ($plugin['full_name'] === $search) {
+					return $plugin;
+				}
+			}
+
+			return false;
+		}
+
+		return $plugins;
+	}
+
+	public function downloadPlugin($name)
+	{
+		$plugin = $this->searchPlugins($name);
+
+		if (!$plugin) {
+			$this->error['name'] = _l("Unable to find the plugin %s. Please try downloading a different plugin.", $name);
+			return false;
+		}
+
+		$zip_file = DIR_PLUGIN . 'plugin-download.zip';
+
+		if (empty($plugin['download'])) {
+			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
+			return false;
+		}
+
+		$pathinfo = pathinfo($plugin['download']);
+		$entry    = basename(dirname(dirname($pathinfo['dirname']))) . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
+
+		if (!$this->url->download($plugin['download'], $zip_file)) {
+			$this->error = $this->url->getError();
+			return false;
+		}
+
+		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN)) {
+			$this->error = $this->csv->getError();
+			return false;
+		}
+
+		//Rename to working plugin name
+		if (is_file(DIR_PLUGIN . $entry . '/setup.php')) {
+			$directives = get_comment_directives(DIR_PLUGIN . $entry . '/setup.php');
+		}
+
+		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+
+		if (is_file(DIR_PLUGIN . $plugin_name)) {
+			$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
+
+		} elseif (!@rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name)) {
+			$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists? Removed %s", DIR_PLUGIN . $entry);
+
+			if (is_dir(DIR_PLUGIN . $entry)) {
+				rrmdir(DIR_PLUGIN . $entry);
+			}
+		}
+
+		//Cleanup
+		unlink($zip_file);
+
+		return $this->error ? false : $plugin_name;
+	}
+
 	public function getField($name, $field)
 	{
 		$id = preg_match("/[^\\d]/", $name) ? false : (int)$name;
