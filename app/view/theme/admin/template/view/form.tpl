@@ -19,25 +19,25 @@
 			<table class="form">
 				<tr>
 					<td class="required">{{Name}}</td>
-					<td><input type="text" name="name" value="<?= $name; ?>" /></td>
+					<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 				</tr>
 				<tr>
 					<td>{{Slug}}</td>
 					<td>
-					<? if ($view_listing_id) { ?>
-						<span><?= $slug; ?></span>
-					<? } else { ?>
-						<input type="text" name="slug" value="<?= $slug; ?>" />
-					<? } ?>
+						<? if ($view_listing_id) { ?>
+							<span><?= $slug; ?></span>
+						<? } else { ?>
+							<input type="text" name="slug" value="<?= $slug; ?>"/>
+						<? } ?>
 					</td>
 				</tr>
 				<tr>
 					<td class="required">{{Path}}</td>
-					<td><input type="text" name="path" value="<?= $path; ?>" /></td>
+					<td><input type="text" name="path" value="<?= $path; ?>"/></td>
 				</tr>
 				<tr>
 					<td>{{Query}}</td>
-					<td><input type="text" name="query" value="<?= $query; ?>" /></td>
+					<td><input type="text" name="query" value="<?= $query; ?>"/></td>
 				</tr>
 				<tr>
 					<td>

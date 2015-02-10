@@ -1,4 +1,5 @@
 <?php
+
 class Captcha extends Library
 {
 	protected $code;

@@ -45,7 +45,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 
 	public function save()
 	{
-		$theme    = $this->config->load('config', 'site_theme');
+		$theme = $this->config->load('config', 'site_theme');
 
 		if (!$theme) {
 			$theme = AMPLO_DEFAULT_THEME;

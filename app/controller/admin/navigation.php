@@ -155,7 +155,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 		$group['data_conditions'] = Condition::$conditions;
 
-		$group['data_statuses']   = array(
+		$group['data_statuses'] = array(
 			0 => _l("Disabled"),
 			1 => _l("Enabled"),
 		);

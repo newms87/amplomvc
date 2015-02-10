@@ -1,4 +1,5 @@
 #<?php
+
 //=====
 class Response extends Library
 {
@@ -16,4 +17,5 @@ class Response extends Library
 	}
 //.....
 }
+
 //-----

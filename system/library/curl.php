@@ -1,4 +1,5 @@
 <?php
+
 class Curl extends Library
 {
 	private $response;

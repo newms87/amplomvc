@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Data_Locale extends Controller
 {
 	public function load_zones()

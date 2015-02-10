@@ -107,7 +107,7 @@ class App_Model_Block_Login_Google extends Model
 
 			if (empty($customer)) {
 				if (!$data['name']['givenName'] && !$data['name']['familyName'] && $data['displayName']) {
-					$names                 = explode(' ', $data['displayName'], 2);
+					$names                     = explode(' ', $data['displayName'], 2);
 					$data['name']['givenName'] = $names[0];
 
 					if (!empty($names[1])) {
@@ -118,7 +118,7 @@ class App_Model_Block_Login_Google extends Model
 				$customer = array(
 					'first_name' => !empty($data['name']['givenName']) ? $data['name']['givenName'] : 'New',
 					'last_name'  => !empty($data['name']['familyName']) ? $data['name']['familyName'] : 'Customer',
-					'email'     => $email,
+					'email'      => $email,
 				);
 
 				if (!$this->Model_Customer->save(null, $customer)) {

@@ -1,5 +1,6 @@
 <div class="listing-limits">
 	<a class="limit-text md-hidden" href="<?= $show_more; ?>"><?= $limit_text; ?></a>
+
 	<div class="limit-text md-visible"><?= $limit_text; ?></div>
 	<div class="limit-items md-visible">
 		<? foreach ($limits as $value => $text) { ?>

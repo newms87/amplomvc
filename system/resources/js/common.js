@@ -49,7 +49,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 	if (!$.synq.ac_template) {
 		$.synq.ac_template = [];
 
-		$.getScript('system/resources/js/ac_template.js', function() {
+		$.getScript('system/resources/js/ac_template.js', function () {
 			for (var s in $.synq.ac_template) {
 				q = $.synq.ac_template[s];
 				q.me.ac_template(q.name, q.action, q.data, q.relate);
@@ -64,7 +64,7 @@ $.fn.jqzoom = function (params) {
 	if (!$.synq.jqzoom) {
 		$.synq.jqzoom = [];
 
-		$.getScript('system/resources/js/jquery/jqzoom/jqzoom.js', function() {
+		$.getScript('system/resources/js/jquery/jqzoom/jqzoom.js', function () {
 			for (var s in $.synq.jqzoom) {
 				q = $.synq.jqzoom[s];
 				q.me.ac_template(q.params);

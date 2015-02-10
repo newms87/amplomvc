@@ -137,7 +137,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'site_email'                   => '',
 			'site_phone'                   => '',
 			'config_fax'                   => '',
-			'site_title'                 => '',
+			'site_title'                   => '',
 			'site_meta_description'        => '',
 			'config_default_layout_id'     => '',
 			'site_theme'                   => '',

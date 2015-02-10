@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Localisation_GeoZone extends Model
 {
 	public function addGeoZone($data)

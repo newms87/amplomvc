@@ -46,7 +46,10 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 				}
 
 				if (isset($action['build_data']) && empty($action['build_config'])) {
-					$action['build_config'] = array(null, false);
+					$action['build_config'] = array(
+						null,
+						false
+					);
 				}
 			}
 		}

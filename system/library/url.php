@@ -85,8 +85,8 @@ class Url extends Library
 	public function download($source, $destination = null)
 	{
 		if (!$destination) {
-			$pathinfo = pathinfo($destination);
-			$destination     = DIR_DOWNLOAD . 'url/' . $pathinfo['filename'];
+			$pathinfo    = pathinfo($destination);
+			$destination = DIR_DOWNLOAD . 'url/' . $pathinfo['filename'];
 
 			$count = 1;
 

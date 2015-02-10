@@ -32,7 +32,7 @@
 </div>
 
 <script type="text/javascript">
-	$('.dashboard .remove').click(function (){
+	$('.dashboard .remove').click(function () {
 		if (!confirm("{{Are you sure you want to remove this dashboard?}}")) {
 			return false;
 		}

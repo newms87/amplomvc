@@ -18,7 +18,7 @@
 	</div>
 </div>
 
-<input type="text" name="nothing" value="hello world" class="sm-hidden" />
+<input type="text" name="nothing" value="hello world" class="sm-hidden"/>
 
 <div class="page row section-style-c">
 	<div class="wrap">

@@ -1,4 +1,5 @@
 <?php
+
 class Rss
 {
 	private $xml;

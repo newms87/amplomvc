@@ -17,8 +17,8 @@
 						<td class="required"> {{Update system to Version:}}</td>
 						<td><?=
 							build(array(
-								'type' => 'select',
-								'name'  => 'version',
+								'type'   => 'select',
+								'name'   => 'version',
 								'data'   => $data_versions,
 								'select' => $version
 							)); ?></td>

@@ -66,12 +66,12 @@
 					<td>
 						<?=
 						build(array(
-							'type' => 'select',
-							'name'  => 'tax_class_id',
+							'type'   => 'select',
+							'name'   => 'tax_class_id',
 							'data'   => $data_tax_classes,
 							'select' => $tax_class_id,
-							'value' =>  'tax_class_id',
-							'label' =>  'title',
+							'value'  => 'tax_class_id',
+							'label'  => 'title',
 						)); ?>
 					</td>
 				</tr>
@@ -102,8 +102,8 @@
 					<td>
 						<?=
 						build(array(
-							'type' => 'select',
-							'name'  => "status",
+							'type'   => 'select',
+							'name'   => "status",
 							'data'   => $data_statuses,
 							'select' => $status
 						)); ?>

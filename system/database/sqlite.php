@@ -1,4 +1,5 @@
 <?php
+
 final class SQLite implements DatabaseInterface
 {
 	private $link;

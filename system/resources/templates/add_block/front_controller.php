@@ -1,4 +1,5 @@
 <?php
+
 class __class_name__ extends Controller
 {
 	public function index($settings)

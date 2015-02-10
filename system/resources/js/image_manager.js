@@ -5,13 +5,13 @@ $.fn.ac_imageinput = function (options) {
 		var $input = $(e);
 
 		options = $.extend({}, {
-			class: 'click-image',
+			class:       'click-image',
 			allow_clear: false,
-			show_help: false,
-			show_hover: true,
-			noimage: $ac.theme_url + 'image/no_image.png',
-			width: $input.attr('data-width') || $ac.image_thumb_width || 140,
-			height: $input.attr('data-height') || $ac.image_thumb_height || 140
+			show_help:   false,
+			show_hover:  true,
+			noimage:     $ac.theme_url + 'image/no_image.png',
+			width:       $input.attr('data-width') || $ac.image_thumb_width || 140,
+			height:      $input.attr('data-height') || $ac.image_thumb_height || 140
 		}, options);
 
 		if (!options.width || options.width == '0') {
@@ -88,8 +88,8 @@ $.ac_filemanager = function (options) {
 	var options = $.extend({}, {
 		field_id: null,
 		fm_type:  'image',
-		width: window.innerWidth * .8,
-		height: window.innerHeight * .9
+		width:    window.innerWidth * .8,
+		height:   window.innerHeight * .9
 	}, options);
 
 	var type = 0;

@@ -53,7 +53,7 @@ class Cache
 			if ($get_file) {
 				return $this->loaded[$this->dir][$key]['file'] = $file;
 			} else {
-				$str = @file_get_contents($file);
+				$str  = @file_get_contents($file);
 				$data = @unserialize($str);
 
 				//Check for bad data

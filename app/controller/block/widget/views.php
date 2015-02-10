@@ -290,7 +290,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			message('view_id', $view_id);
 			output_message();
 		} else {
-			redirect(_post('path',' admin'));
+			redirect(_post('path', ' admin'));
 		}
 	}
 

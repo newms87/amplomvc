@@ -1,4 +1,5 @@
 <?php
+
 class Tag Extends Library
 {
 	public function get($text)

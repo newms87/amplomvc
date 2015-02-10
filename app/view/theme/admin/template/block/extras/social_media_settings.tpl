@@ -9,7 +9,7 @@
 		<td>
 			<ul id="social_network_list">
 				<? foreach ($networks as $row => $network) { ?>
-					<li class="social_network" data-row="<?= $row;?>">
+					<li class="social_network" data-row="<?= $row; ?>">
 						<span class="social_icon">
 							<input type="text" class="imageinput" name="settings[networks][<?= $row; ?>][icon]" value="<?= $network['icon']; ?>" data-thumb="<?= image($network['icon'] ? $network['icon'] : theme_url('image/no_image.png'), $thumb_width, $thumb_height); ?>"/>
 						</span>

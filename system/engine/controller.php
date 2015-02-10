@@ -8,7 +8,8 @@ abstract class Controller
 	public $output;
 	public $error = array();
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->is_ajax = IS_AJAX;
 	}
 

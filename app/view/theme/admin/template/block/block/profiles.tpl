@@ -24,12 +24,12 @@
 					<td>
 						<?=
 						build(array(
-							'type' => 'select',
-							'name'  => "profiles[$row][block_instance_id]",
+							'type'   => 'select',
+							'name'   => "profiles[$row][block_instance_id]",
 							'data'   => $data_instances,
 							'select' => $profile['block_instance_id'],
-							'value' =>  false,
-							'label' =>  "name",
+							'value'  => false,
+							'label'  => "name",
 						)); ?>
 					</td>
 				</tr>
@@ -38,12 +38,12 @@
 					<td>
 						<?=
 						build(array(
-							'type' => 'multiselect',
-							'name'  => "profiles[$row][layout_ids]",
+							'type'   => 'multiselect',
+							'name'   => "profiles[$row][layout_ids]",
 							'data'   => $data_layouts,
 							'select' => !empty($profile['layout_ids']) ? $profile['layout_ids'] : null,
-							'value' =>  "layout_id",
-							'label' =>  "name",
+							'value'  => "layout_id",
+							'label'  => "name",
 						)); ?>
 					</td>
 				</tr>
@@ -51,8 +51,8 @@
 					<td>{{Positions}}</td>
 					<td><?=
 						build(array(
-							'type' => 'select',
-							'name'  => "profiles[$row][position]",
+							'type'   => 'select',
+							'name'   => "profiles[$row][position]",
 							'data'   => $data_positions,
 							'select' => $profile['position']
 						)); ?>
@@ -62,8 +62,8 @@
 					<td>{{Profile Status}}</td>
 					<td><?=
 						build(array(
-							'type' => 'select',
-							'name'  => "profiles[$row][status]",
+							'type'   => 'select',
+							'name'   => "profiles[$row][status]",
 							'data'   => $data_statuses,
 							'select' => $profile['status']
 						)); ?>

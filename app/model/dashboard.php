@@ -92,12 +92,12 @@ class App_Model_Dashboard extends App_Model_Table
 					if (!empty($listing['path'])) {
 						$settings = array(
 							array(
-								'return_data' => true,
-							   'view_listing_id' => $listing['view_listing_id'],
-							   'sort' => array(
-								   'limit' => _request('limit', 100),
-							      'start' => _request('start', 0),
-							   ),
+								'return_data'     => true,
+								'view_listing_id' => $listing['view_listing_id'],
+								'sort'            => array(
+									'limit' => _request('limit', 100),
+									'start' => _request('start', 0),
+								),
 							)
 						);
 

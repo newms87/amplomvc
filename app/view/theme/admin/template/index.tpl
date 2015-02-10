@@ -10,11 +10,11 @@
 		<div class="section">
 			<div class="overview">
 				<div class="dashboard-heading">{{Overview}}</div>
-					<h2>{{Welcome to Amplo MVC}}</h2>
-				</div>
+				<h2>{{Welcome to Amplo MVC}}</h2>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 
 

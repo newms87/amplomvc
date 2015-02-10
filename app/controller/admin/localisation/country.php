@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Localisation_Country extends Controller
 {
 	public function index()

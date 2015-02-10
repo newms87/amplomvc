@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Common_Maintenance extends Controller
 {
 	public function index()

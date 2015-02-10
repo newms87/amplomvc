@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Localisation_Country extends Model
 {
 	public function addCountry($country)

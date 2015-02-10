@@ -140,7 +140,7 @@
 
 	console.log(addresses);
 
-	$('.edit-address').click(function() {
+	$('.edit-address').click(function () {
 		var $editor = $(this).closest('.form-editor');
 		var address_id = $editor.attr('data-address-id');
 

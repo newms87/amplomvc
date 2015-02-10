@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Tool_Tool extends Controller
 {
 	public function index()

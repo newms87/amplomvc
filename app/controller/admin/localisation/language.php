@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Localisation_Language extends Controller
 {
 
@@ -147,8 +148,8 @@ class App_Controller_Admin_Localisation_Language extends Controller
 		}
 
 		$this->pagination->init();
-		$this->pagination->total  = $language_total;
-		$data['pagination'] = $this->pagination->render();
+		$this->pagination->total = $language_total;
+		$data['pagination']      = $this->pagination->render();
 
 		$data['sort']  = $sort;
 		$data['order'] = $order;

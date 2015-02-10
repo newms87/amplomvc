@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Localisation_Currency extends Controller
 {
 
@@ -213,8 +214,8 @@ class App_Controller_Admin_Localisation_Currency extends Controller
 		}
 
 		$this->pagination->init();
-		$this->pagination->total  = $currency_total;
-		$data['pagination'] = $this->pagination->render();
+		$this->pagination->total = $currency_total;
+		$data['pagination']      = $this->pagination->render();
 
 		$data['sort']  = $sort;
 		$data['order'] = $order;

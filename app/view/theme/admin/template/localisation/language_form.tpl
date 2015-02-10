@@ -43,19 +43,23 @@
 					<tr>
 						<td class="required"> {{Reading Direction:}}</td>
 						<td><?= build(array(
-	'type' => 'select',
-	'name'  => "direction",
-	'data'   => $data_direction,
-	'select' => $direction
-)); ?></td>
+								'type'   => 'select',
+								'name'   => "direction",
+								'data'   => $data_direction,
+								'select' => $direction
+							)); ?></td>
 					</tr>
 					<tr>
 						<td class="required"> {{Decimal Point:}}</td>
-						<td><input type="text" style="font-size:30px" size="1" name="decimal_point" value="<?= $decimal_point; ?>"/></td>
+						<td>
+							<input type="text" style="font-size:30px" size="1" name="decimal_point" value="<?= $decimal_point; ?>"/>
+						</td>
 					</tr>
 					<tr>
 						<td class="required"> {{Thousand Point:}}</td>
-						<td><input type="text" style="font-size:30px" size="1" name="thousand_point" value="<?= $thousand_point; ?>"/></td>
+						<td>
+							<input type="text" style="font-size:30px" size="1" name="thousand_point" value="<?= $thousand_point; ?>"/>
+						</td>
 					</tr>
 					<tr>
 						<td class="required"> <?= _l("Image:<br /><span class=\"help\">eg: gb.png</span>"); ?></td>
@@ -72,11 +76,11 @@
 					<tr>
 						<td><?= _l("Status:<br /><span class=\"help\">Hide/Show it in language dropdown</span>"); ?></td>
 						<td><?= build(array(
-	'type' => 'select',
-	'name'  => "status",
-	'data'   => $data_statuses,
-	'select' => $status
-)); ?></td>
+								'type'   => 'select',
+								'name'   => "status",
+								'data'   => $data_statuses,
+								'select' => $status
+							)); ?></td>
 					</tr>
 					<tr>
 						<td>{{Sort Order:}}</td>

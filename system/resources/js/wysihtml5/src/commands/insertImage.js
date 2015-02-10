@@ -1,104 +1,104 @@
-(function(wysihtml5) {
-  var NODE_NAME = "IMG";
-  
-  wysihtml5.commands.insertImage = {
-    /**
-     * Inserts an <img>
-     * If selection is already an image link, it removes it
-     * 
-     * @example
-     *    // either ...
-     *    wysihtml5.commands.insertImage.exec(composer, "insertImage", "http://www.google.de/logo.jpg");
-     *    // ... or ...
-     *    wysihtml5.commands.insertImage.exec(composer, "insertImage", { src: "http://www.google.de/logo.jpg", title: "foo" });
-     */
-    exec: function(composer, command, value) {
-      value = typeof(value) === "object" ? value : { src: value };
+(function (wysihtml5) {
+	var NODE_NAME = "IMG";
 
-      var doc     = composer.doc,
-          image   = this.state(composer),
-          textNode,
-          i,
-          parent;
+	wysihtml5.commands.insertImage = {
+		/**
+		 * Inserts an <img>
+		 * If selection is already an image link, it removes it
+		 *
+		 * @example
+		 *    // either ...
+		 *    wysihtml5.commands.insertImage.exec(composer, "insertImage", "http://www.google.de/logo.jpg");
+		 *    // ... or ...
+		 *    wysihtml5.commands.insertImage.exec(composer, "insertImage", { src: "http://www.google.de/logo.jpg", title: "foo" });
+		 */
+		exec: function (composer, command, value) {
+			value = typeof(value) === "object" ? value : {src: value};
 
-      if (image) {
-        // Image already selected, set the caret before it and delete it
-        composer.selection.setBefore(image);
-        parent = image.parentNode;
-        parent.removeChild(image);
+			var doc = composer.doc,
+				image = this.state(composer),
+				textNode,
+				i,
+				parent;
 
-        // and it's parent <a> too if it hasn't got any other relevant child nodes
-        wysihtml5.dom.removeEmptyTextNodes(parent);
-        if (parent.nodeName === "A" && !parent.firstChild) {
-          composer.selection.setAfter(parent);
-          parent.parentNode.removeChild(parent);
-        }
+			if (image) {
+				// Image already selected, set the caret before it and delete it
+				composer.selection.setBefore(image);
+				parent = image.parentNode;
+				parent.removeChild(image);
 
-        // firefox and ie sometimes don't remove the image handles, even though the image got removed
-        wysihtml5.quirks.redraw(composer.element);
-        return;
-      }
+				// and it's parent <a> too if it hasn't got any other relevant child nodes
+				wysihtml5.dom.removeEmptyTextNodes(parent);
+				if (parent.nodeName === "A" && !parent.firstChild) {
+					composer.selection.setAfter(parent);
+					parent.parentNode.removeChild(parent);
+				}
 
-      image = doc.createElement(NODE_NAME);
+				// firefox and ie sometimes don't remove the image handles, even though the image got removed
+				wysihtml5.quirks.redraw(composer.element);
+				return;
+			}
 
-      for (i in value) {
-        image[i] = value[i];
-      }
+			image = doc.createElement(NODE_NAME);
 
-      composer.selection.insertNode(image);
-      if (wysihtml5.browser.hasProblemsSettingCaretAfterImg()) {
-        textNode = doc.createTextNode(wysihtml5.INVISIBLE_SPACE);
-        composer.selection.insertNode(textNode);
-        composer.selection.setAfter(textNode);
-      } else {
-        composer.selection.setAfter(image);
-      }
-    },
+			for (i in value) {
+				image[i] = value[i];
+			}
 
-    state: function(composer) {
-      var doc = composer.doc,
-          selectedNode,
-          text,
-          imagesInSelection;
+			composer.selection.insertNode(image);
+			if (wysihtml5.browser.hasProblemsSettingCaretAfterImg()) {
+				textNode = doc.createTextNode(wysihtml5.INVISIBLE_SPACE);
+				composer.selection.insertNode(textNode);
+				composer.selection.setAfter(textNode);
+			} else {
+				composer.selection.setAfter(image);
+			}
+		},
 
-      if (!wysihtml5.dom.hasElementWithTagName(doc, NODE_NAME)) {
-        return false;
-      }
+		state: function (composer) {
+			var doc = composer.doc,
+				selectedNode,
+				text,
+				imagesInSelection;
 
-      selectedNode = composer.selection.getSelectedNode();
-      if (!selectedNode) {
-        return false;
-      }
+			if (!wysihtml5.dom.hasElementWithTagName(doc, NODE_NAME)) {
+				return false;
+			}
 
-      if (selectedNode.nodeName === NODE_NAME) {
-        // This works perfectly in IE
-        return selectedNode;
-      }
+			selectedNode = composer.selection.getSelectedNode();
+			if (!selectedNode) {
+				return false;
+			}
 
-      if (selectedNode.nodeType !== wysihtml5.ELEMENT_NODE) {
-        return false;
-      }
+			if (selectedNode.nodeName === NODE_NAME) {
+				// This works perfectly in IE
+				return selectedNode;
+			}
 
-      text = composer.selection.getText();
-      text = wysihtml5.lang.string(text).trim();
-      if (text) {
-        return false;
-      }
+			if (selectedNode.nodeType !== wysihtml5.ELEMENT_NODE) {
+				return false;
+			}
 
-      imagesInSelection = composer.selection.getNodes(wysihtml5.ELEMENT_NODE, function(node) {
-        return node.nodeName === "IMG";
-      });
+			text = composer.selection.getText();
+			text = wysihtml5.lang.string(text).trim();
+			if (text) {
+				return false;
+			}
 
-      if (imagesInSelection.length !== 1) {
-        return false;
-      }
+			imagesInSelection = composer.selection.getNodes(wysihtml5.ELEMENT_NODE, function (node) {
+				return node.nodeName === "IMG";
+			});
 
-      return imagesInSelection[0];
-    },
+			if (imagesInSelection.length !== 1) {
+				return false;
+			}
 
-    value: function(composer) {
-      var image = this.state(composer);
-      return image && image.src;
-    }
-  };
+			return imagesInSelection[0];
+		},
+
+		value: function (composer) {
+			var image = this.state(composer);
+			return image && image.src;
+		}
+	};
 })(wysihtml5);

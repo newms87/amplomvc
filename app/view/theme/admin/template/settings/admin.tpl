@@ -31,8 +31,8 @@
 								'name'   => 'admin_language',
 								'data'   => $data_languages,
 								'select' => $admin_language,
-								'value' =>  'code',
-								'label' =>  'name',
+								'value'  => 'code',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -97,6 +97,7 @@
 								<input type="text" name="admin_logo_height" value="<?= $admin_logo_height; ?>" size="3"/>
 							</div>
 							<br/>
+
 							<div class="store-logo-x">
 								<label>{{Image srcset X}}</label>
 								<?= build(array(
@@ -177,7 +178,7 @@
 		var w = $('[name=admin_logo_width]').val();
 		var h = $('[name=admin_logo_height]').val();
 		$('[name=admin_logo]').siblings('.thumb').css({
-			width: (!w || w == '0') ? 'auto' : w,
+			width:  (!w || w == '0') ? 'auto' : w,
 			height: (!h || h == '0') ? 'auto' : h
 		});
 	});

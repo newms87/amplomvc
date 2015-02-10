@@ -6,6 +6,7 @@
 
 		<div class="contact-text col xs-12 lg-6 left top">
 			<p>Questions, comments, concerns? Please let us know how we can help you!</p>
+
 			<p>Our success wouldn't be possible without your feedback, so thanks a million for reaching out!</p>
 
 			<div class="contact-map col xs-12 lg-visible left">
@@ -13,6 +14,7 @@
 
 				<div class="contact-info">
 					<h5 class="site-name"><?= option('site_name'); ?></h5>
+
 					<div class="address"><?= nl2br(option('site_address')); ?></div>
 					<div class="phone"><?= option('site_phone'); ?></div>
 					<div class="email"><?= option('site_email'); ?></div>
@@ -45,6 +47,7 @@
 
 			<div class="contact-info">
 				<h5 class="site-name"><?= option('site_name'); ?></h5>
+
 				<div class="address"><?= nl2br(option('site_address')); ?></div>
 				<div class="phone"><?= option('site_phone'); ?></div>
 				<div class="email"><?= option('site_email'); ?></div>
@@ -60,7 +63,7 @@
 
 		var mapOptions = {
 			zoom:      <?= option('contact_map_zoom', 16); ?>,
-			center:    pos
+			center: pos
 		}
 
 		$scope_map = screen_width < 1024 ? $('#contact-map-xs') : $('#contact-map-lg');
@@ -69,8 +72,8 @@
 
 		//Setup Marker
 		marker = new google.maps.Marker({
-			position:  pos,
-			map:       map
+			position: pos,
+			map:      map
 		});
 	}
 

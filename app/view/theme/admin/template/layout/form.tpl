@@ -21,25 +21,27 @@
 				</table>
 				<table id="route" class="list">
 					<thead>
-						<tr>
-							<td class="left">{{Route:}}</td>
-							<td></td>
-						</tr>
+					<tr>
+						<td class="left">{{Route:}}</td>
+						<td></td>
+					</tr>
 					</thead>
 
 					<tbody id="route_list">
-						<? foreach ($routes as $row => $route) { ?>
-							<tr class="route" data-row="<?= $row; ?>">
-								<td class="left"><input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>"/></td>
-								<td class="left"><a onclick="$(this).closest('.route').remove();" class="button delete">{{Remove}}</a></td>
-							</tr>
-						<? } ?>
+					<? foreach ($routes as $row => $route) { ?>
+						<tr class="route" data-row="<?= $row; ?>">
+							<td class="left">
+								<input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>"/></td>
+							<td class="left">
+								<a onclick="$(this).closest('.route').remove();" class="button delete">{{Remove}}</a></td>
+						</tr>
+					<? } ?>
 					</tbody>
 					<tfoot>
-						<tr>
-							<td colspan="2"></td>
-							<td class="left"><a id="add_route" class="button">{{Add Route}}</a></td>
-						</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td class="left"><a id="add_route" class="button">{{Add Route}}</a></td>
+					</tr>
 					</tfoot>
 				</table>
 			</form>

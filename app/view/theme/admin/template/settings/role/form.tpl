@@ -29,7 +29,7 @@
 						<input id="<?= $id; ?>" type="checkbox" name="<?= $name . "[$key][*]"; ?>" <?= $value['*'] ? 'checked' : ''; ?> data-multistate="r;w" value="<?= $value['*'] === 'w' ? 'w' : 'r'; ?>">
 						<label for="<?= $id; ?>">
 							<? if (count($value) > 1) { ?>
-							<a class="expand"></a>
+								<a class="expand"></a>
 							<? } ?>
 							<span class="permissions">
 								<? foreach ($data_perms as $p => $perm) { ?>

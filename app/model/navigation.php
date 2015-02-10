@@ -99,7 +99,7 @@ class App_Model_Navigation extends App_Model_Table
 	public function saveGroup($navigation_group_id, $group)
 	{
 		if (is_string($navigation_group_id)) {
-			$group['name'] = $navigation_group_id;
+			$group['name']       = $navigation_group_id;
 			$navigation_group_id = $this->getGroupByName($group['name']);
 		}
 

@@ -1,4 +1,5 @@
 <?php
+
 class Encryption extends Library
 {
 	private $key;

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Title: Braintree Settings
  * Icon: admin.png
  *
  */
-
 class App_Controller_Admin_Settings_Braintree extends Controller
 {
 	public function index()

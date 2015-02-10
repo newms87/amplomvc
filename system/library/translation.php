@@ -1,4 +1,5 @@
 <?php
+
 class Translation extends Library
 {
 	public function translate($table, $object_id, &$data)
@@ -183,7 +184,7 @@ class Translation extends Library
 
 		$translation = array(
 			'table' => $table,
-		   'field' => $field,
+			'field' => $field,
 		);
 
 		return $this->insert('translation', $translation);

@@ -43,8 +43,8 @@
 								'name'   => 'columns',
 								'data'   => $extra_cols,
 								'select' => array_keys($columns),
-								'value' =>  'Field',
-								'label' =>  'display_name',
+								'value'  => 'Field',
+								'label'  => 'display_name',
 							)); ?>
 
 							<div class="buttons">
@@ -61,6 +61,7 @@
 				<? if (user_can('w', 'admin/views')) { ?>
 					<div class="view-listing-tab tab-content form">
 						<input type="hidden" name="view_id" value="<?= $view_id; ?>"/>
+
 						<div class="form-item">
 							<label for="view-type-<?= $view_id; ?>">{{Default View Type}}</label>
 							<?=
@@ -74,6 +75,7 @@
 						</div>
 
 						<br/>
+
 						<h2>{{Chart Settings}}</h2>
 
 						<div class="form-item">
@@ -84,8 +86,8 @@
 								'name'   => 'chart[group_by]',
 								'data'   => $extra_cols,
 								'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
-								'value' =>  'Field',
-								'label' =>  'display_name',
+								'value'  => 'Field',
+								'label'  => 'display_name',
 								'#id'    => 'chart-group-' . $view_id,
 							)); ?>
 						</div>
@@ -98,8 +100,8 @@
 								'name'   => 'chart[data_cols]',
 								'data'   => $extra_cols,
 								'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
-								'value' =>  'Field',
-								'label' =>  'display_name',
+								'value'  => 'Field',
+								'label'  => 'display_name',
 								'#id'    => 'chart-data-' . $view_id,
 								'#class' => 'chart-data-cols',
 							)); ?>

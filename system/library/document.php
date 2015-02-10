@@ -22,7 +22,7 @@ class Document extends Library
 			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
 		}
 
-		$this->info['title'] = option('site_title');
+		$this->info['title']       = option('site_title');
 		$this->meta['description'] = option('site_meta_description');
 
 		$this->info['canonical_link'] = $this->url->getSeoUrl();
@@ -360,7 +360,7 @@ class Document extends Library
 			$file = str_replace(URL_SITE, DIR_SITE, $href);
 
 			if (is_file($file)) {
-				$href.=  '?v=' . filemtime($file);
+				$href .= '?v=' . filemtime($file);
 			}
 
 			$this->styles[md5($href)] = array(
@@ -398,7 +398,7 @@ class Document extends Library
 		$file = str_replace(URL_SITE, DIR_SITE, $script);
 
 		if (is_file($file)) {
-			$script .=  '?v=' . filemtime($file);
+			$script .= '?v=' . filemtime($file);
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
@@ -422,9 +422,9 @@ class Document extends Library
 			return $script;
 		}
 
-		$file = 'js/' . slug($script) . '.js';
+		$file       = 'js/' . slug($script) . '.js';
 		$cache_file = DIR_CACHE . $file;
-		$cache_url = URL_SITE . 'system/cache/' . $file;
+		$cache_url  = URL_SITE . 'system/cache/' . $file;
 
 		if (!is_file($cache_file) || (_filemtime($cache_file) < _filemtime($script_file))) {
 			require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
@@ -498,7 +498,7 @@ class Document extends Library
 		if (!$class) {
 			$this->info['body_class'] = array();
 		} else {
-			$class            = is_array($class) ? $class : explode(' ', $class);
+			$class                    = is_array($class) ? $class : explode(' ', $class);
 			$this->info['body_class'] = array_combine(array_keys($class), $class);
 		}
 	}

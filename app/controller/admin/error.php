@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Error extends Controller
 {
 	public function not_found($data = array())

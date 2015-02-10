@@ -47,43 +47,43 @@ class Chart extends Library
 
 	static $discrete_colors = array(
 		0 => array(
-			'color' => '#81E581',
-		   'highlight' => "#BEF3BE",
+			'color'     => '#81E581',
+			'highlight' => "#BEF3BE",
 		),
 		1 => array(
-			'color' => '#D34E4E',
+			'color'     => '#D34E4E',
 			'highlight' => "#FFAFAF",
 		),
 		2 => array(
-			'color' => '#4E69D3',
+			'color'     => '#4E69D3',
 			'highlight' => "#AABAF7",
 		),
 		3 => array(
-			'color' => '#D96E21',
+			'color'     => '#D96E21',
 			'highlight' => "#F1BD97",
 		),
 		4 => array(
-			'color' => '#773EB3',
+			'color'     => '#773EB3',
 			'highlight' => "#C2A5E1",
 		),
 		5 => array(
-			'color' => '#D3C414',
+			'color'     => '#D3C414',
 			'highlight' => "#E7E2A3",
 		),
 		6 => array(
-			'color' => '#933C3C',
+			'color'     => '#933C3C',
 			'highlight' => "#DB9E9E",
 		),
 		7 => array(
-			'color' => '#298329',
+			'color'     => '#298329',
 			'highlight' => "#7CBD7C",
 		),
 		8 => array(
-			'color' => '#182572',
+			'color'     => '#182572',
 			'highlight' => "#707AB3",
 		),
 		9 => array(
-			'color' => '#DF1EDF',
+			'color'     => '#DF1EDF',
 			'highlight' => "#E995E9",
 		),
 	);
@@ -125,7 +125,8 @@ class Chart extends Library
 					if ($e === null) {
 						$e = 0;
 					}
-				}unset($e);
+				}
+				unset($e);
 
 				foreach ($settings['data_cols'] as $col => $col_name) {
 					if (!isset($datasets[$col])) {
@@ -154,17 +155,17 @@ class Chart extends Library
 		}
 
 		//Convert to Discrete data (for Pie charts, etc..)
-		$discrete = array();
-		$label = $data_index ? $data_index : $settings['group_by'][0];
-		$value = $settings['data_cols'][0];
-		$color_index = 0;
+		$discrete        = array();
+		$label           = $data_index ? $data_index : $settings['group_by'][0];
+		$value           = $settings['data_cols'][0];
+		$color_index     = 0;
 		$max_color_index = count(self::$discrete_colors);
 
 		foreach ($data as $entry) {
 			$discrete[] = array(
-				'value' => (int)$entry[$value],
-			   'label' => $entry[$label],
-			) + self::$discrete_colors[($color_index++ % $max_color_index)];
+					'value' => (int)$entry[$value],
+					'label' => $entry[$label],
+				) + self::$discrete_colors[($color_index++ % $max_color_index)];
 		}
 
 		return array(

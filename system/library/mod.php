@@ -1,4 +1,5 @@
 <?php
+
 class Mod extends Library
 {
 	private $mod_registry;
@@ -159,8 +160,12 @@ class Mod extends Library
 			return false;
 		}
 
-		$set_file_root = function (&$file) { $file = DIR_SITE . trim($file); };
-		$file_filter   = function ($file) { return trim($file); };
+		$set_file_root = function (&$file) {
+			$file = DIR_SITE . trim($file);
+		};
+		$file_filter   = function ($file) {
+			return trim($file);
+		};
 
 		if (!empty($directives['require'])) {
 			$directives['require'] = array_filter(explode("\n", $directives['require']), $file_filter);

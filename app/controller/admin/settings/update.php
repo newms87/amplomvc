@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class App_Controller_Admin_Settings_Update
  *

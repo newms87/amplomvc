@@ -5,12 +5,12 @@
  *      abcdefg|
  *   output:
  *      abcdefg<b>|</b>
- *   
+ *
  *   #2 unformatted text selected:
  *      abc|deg|h
  *   output:
  *      abc<b>|deg|</b>h
- *   
+ *
  *   #3 unformatted text selected across boundaries:
  *      ab|c <span>defg|h</span>
  *   output:
@@ -31,66 +31,65 @@
  *   output:
  *      <span>ab|c</span> de|<b>fgh</b>
  */
-(function(wysihtml5) {
-  var undef,
-      // Treat <b> as <strong> and vice versa
-      ALIAS_MAPPING = {
-        "strong": "b",
-        "em":     "i",
-        "b":      "strong",
-        "i":      "em"
-      },
-      htmlApplier = {};
-  
-  function _getTagNames(tagName) {
-    var alias = ALIAS_MAPPING[tagName];
-    return alias ? [tagName.toLowerCase(), alias.toLowerCase()] : [tagName.toLowerCase()];
-  }
-  
-  function _getApplier(tagName, className, classRegExp) {
-    var identifier = tagName + ":" + className;
-    if (!htmlApplier[identifier]) {
-      htmlApplier[identifier] = new wysihtml5.selection.HTMLApplier(_getTagNames(tagName), className, classRegExp, true);
-    }
-    return htmlApplier[identifier];
-  }
-  
-  wysihtml5.commands.formatInline = {
-    exec: function(composer, command, tagName, className, classRegExp) {
-      var range = composer.selection.getRange();
-      if (!range) {
-        return false;
-      }
-      _getApplier(tagName, className, classRegExp).toggleRange(range);
-      composer.selection.setSelection(range);
-    },
+(function (wysihtml5) {
+	var undef,
+	// Treat <b> as <strong> and vice versa
+		ALIAS_MAPPING = {
+			"strong": "b",
+			"em":     "i",
+			"b":      "strong",
+			"i":      "em"
+		},
+		htmlApplier = {};
 
-    state: function(composer, command, tagName, className, classRegExp) {
-      var doc           = composer.doc,
-          aliasTagName  = ALIAS_MAPPING[tagName] || tagName,
-          range;
+	function _getTagNames(tagName) {
+		var alias = ALIAS_MAPPING[tagName];
+		return alias ? [tagName.toLowerCase(), alias.toLowerCase()] : [tagName.toLowerCase()];
+	}
 
-      // Check whether the document contains a node with the desired tagName
-      if (!wysihtml5.dom.hasElementWithTagName(doc, tagName) &&
-          !wysihtml5.dom.hasElementWithTagName(doc, aliasTagName)) {
-        return false;
-      }
+	function _getApplier(tagName, className, classRegExp) {
+		var identifier = tagName + ":" + className;
+		if (!htmlApplier[identifier]) {
+			htmlApplier[identifier] = new wysihtml5.selection.HTMLApplier(_getTagNames(tagName), className, classRegExp, true);
+		}
+		return htmlApplier[identifier];
+	}
 
-       // Check whether the document contains a node with the desired className
-      if (className && !wysihtml5.dom.hasElementWithClassName(doc, className)) {
-         return false;
-      }
+	wysihtml5.commands.formatInline = {
+		exec: function (composer, command, tagName, className, classRegExp) {
+			var range = composer.selection.getRange();
+			if (!range) {
+				return false;
+			}
+			_getApplier(tagName, className, classRegExp).toggleRange(range);
+			composer.selection.setSelection(range);
+		},
 
-      range = composer.selection.getRange();
-      if (!range) {
-        return false;
-      }
+		state: function (composer, command, tagName, className, classRegExp) {
+			var doc = composer.doc,
+				aliasTagName = ALIAS_MAPPING[tagName] || tagName,
+				range;
 
-      return _getApplier(tagName, className, classRegExp).isAppliedToRange(range);
-    },
+			// Check whether the document contains a node with the desired tagName
+			if (!wysihtml5.dom.hasElementWithTagName(doc, tagName) && !wysihtml5.dom.hasElementWithTagName(doc, aliasTagName)) {
+				return false;
+			}
 
-    value: function() {
-      return undef;
-    }
-  };
+			// Check whether the document contains a node with the desired className
+			if (className && !wysihtml5.dom.hasElementWithClassName(doc, className)) {
+				return false;
+			}
+
+			range = composer.selection.getRange();
+			if (!range) {
+				return false;
+			}
+
+			return _getApplier(tagName, className, classRegExp).isAppliedToRange(range);
+		},
+
+		value: function () {
+			return undef;
+		}
+	};
 })(wysihtml5);

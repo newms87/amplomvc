@@ -5,7 +5,7 @@ class App_Controller_Admin_Header extends Controller
 	public function index($settings = array())
 	{
 		$settings += array(
-			'user'       => user_info(),
+			'user' => user_info(),
 		);
 
 		//Add Styles

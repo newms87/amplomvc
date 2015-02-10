@@ -1,4 +1,5 @@
 <?php
+
 class Language extends Library
 {
 	private $language_id;

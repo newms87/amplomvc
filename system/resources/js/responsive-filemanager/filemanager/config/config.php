@@ -21,9 +21,9 @@ if (function_exists('mb_internal_encoding')) {
 //    |   |   |   |- responsivefilemanager
 //    |   |   |   |   |- plugin.min.js
 
-$base_url     = rtrim(URL_SITE, '/'); // DON'T TOUCH (base url (only domain) of site (without final /)).
-$fm_url = URL_RESOURCES . 'js/responsive-filemanager/';
-$fm_dir = DIR_RESOURCES . 'js/responsive-filemanager/';
+$base_url = rtrim(URL_SITE, '/'); // DON'T TOUCH (base url (only domain) of site (without final /)).
+$fm_url   = URL_RESOURCES . 'js/responsive-filemanager/';
+$fm_dir   = DIR_RESOURCES . 'js/responsive-filemanager/';
 
 $upload_dir   = '/image/'; // path from base_url to base of upload folder (with start and final /)
 $current_path = 'image/'; // relative path from filemanager folder to upload folder (with final /)

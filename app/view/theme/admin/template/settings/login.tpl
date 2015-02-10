@@ -19,8 +19,8 @@
 					<td>{{Enable Social Media Login / Registration?}}</td>
 					<td><?=
 						build(array(
-							'type' => 'radio',
-							'name'  => 'status',
+							'type'   => 'radio',
+							'name'   => 'status',
 							'data'   => $data_yes_no,
 							'select' => $status,
 						)); ?>
@@ -45,8 +45,8 @@
 						<div class="setting-item enable-item">
 							<?=
 							build(array(
-								'type' => 'radio',
-								'name'  => 'google_plus[active]',
+								'type'   => 'radio',
+								'name'   => 'google_plus[active]',
 								'data'   => $data_active,
 								'select' => $google_plus['active'],
 							)); ?>
@@ -79,8 +79,8 @@
 						<div class="setting-item enable-item">
 							<?=
 							build(array(
-								'type' => 'radio',
-								'name'  => 'facebook[active]',
+								'type'   => 'radio',
+								'name'   => 'facebook[active]',
 								'data'   => $data_active,
 								'select' => $facebook['active'],
 							)); ?>

@@ -1,4 +1,5 @@
 <?php
+
 final class Postgre implements DatabaseInterface
 {
 	private $link;

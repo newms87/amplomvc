@@ -161,7 +161,7 @@ class Csv extends Library
 		}
 
 		if (!$destination) {
-			$pathinfo = pathinfo($zip_file);
+			$pathinfo    = pathinfo($zip_file);
 			$destination = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
 		}
 

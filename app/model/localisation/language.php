@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Localisation_Language extends Model
 {
 	public function addLanguage($data)

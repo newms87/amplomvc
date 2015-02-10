@@ -14,8 +14,8 @@
 			<textarea name="enquiry" cols="40" rows="10" placeholder="{{Your Message}}"><?= $enquiry; ?></textarea>
 		</div>
 		<div class="form-item captcha">
-			<img src="<?= $captcha_url; ?>" alt=""/> <Br />
-			<input class="center" type="text" name="captcha" value="<?= $captcha; ?>" placeholder="{{Captcha Code}}" />
+			<img src="<?= $captcha_url; ?>" alt=""/> <Br/>
+			<input class="center" type="text" name="captcha" value="<?= $captcha; ?>" placeholder="{{Captcha Code}}"/>
 		</div>
 
 		<div class="buttons center">

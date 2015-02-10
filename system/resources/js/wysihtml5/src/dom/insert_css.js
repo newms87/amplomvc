@@ -1,22 +1,22 @@
-wysihtml5.dom.insertCSS = function(rules) {
-  rules = rules.join("\n");
-  
-  return {
-    into: function(doc) {
-      var head         = doc.head || doc.getElementsByTagName("head")[0],
-          styleElement = doc.createElement("style");
+wysihtml5.dom.insertCSS = function (rules) {
+	rules = rules.join("\n");
 
-      styleElement.type = "text/css";
+	return {
+		into: function (doc) {
+			var head = doc.head || doc.getElementsByTagName("head")[0],
+				styleElement = doc.createElement("style");
 
-      if (styleElement.styleSheet) {
-        styleElement.styleSheet.cssText = rules;
-      } else {
-        styleElement.appendChild(doc.createTextNode(rules));
-      }
+			styleElement.type = "text/css";
 
-      if (head) {
-        head.appendChild(styleElement);
-      }
-    }
-  };
+			if (styleElement.styleSheet) {
+				styleElement.styleSheet.cssText = rules;
+			} else {
+				styleElement.appendChild(doc.createTextNode(rules));
+			}
+
+			if (head) {
+				head.appendChild(styleElement);
+			}
+		}
+	};
 };

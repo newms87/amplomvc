@@ -23,13 +23,13 @@
  *      <li>50 Cent</li>
  *    </ol>
  */
-wysihtml5.dom.renameElement = function(element, newNodeName) {
-  var newElement = element.ownerDocument.createElement(newNodeName),
-      firstChild;
-  while (firstChild = element.firstChild) {
-    newElement.appendChild(firstChild);
-  }
-  wysihtml5.dom.copyAttributes(["align", "className"]).from(element).to(newElement);
-  element.parentNode.replaceChild(newElement, element);
-  return newElement;
+wysihtml5.dom.renameElement = function (element, newNodeName) {
+	var newElement = element.ownerDocument.createElement(newNodeName),
+		firstChild;
+	while (firstChild = element.firstChild) {
+		newElement.appendChild(firstChild);
+	}
+	wysihtml5.dom.copyAttributes(["align", "className"]).from(element).to(newElement);
+	element.parentNode.replaceChild(newElement, element);
+	return newElement;
 };

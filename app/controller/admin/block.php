@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Block extends Controller
 {
 	public function index()
@@ -105,7 +106,7 @@ class App_Controller_Admin_Block extends Controller
 	{
 		$path = _get('path', '');
 
-		$action = new Action('block/' . $path);
+		$action     = new Action('block/' . $path);
 		$controller = $action->getController();
 
 		$controller->delete();
@@ -115,7 +116,7 @@ class App_Controller_Admin_Block extends Controller
 	{
 		$path = _get('path', '');
 
-		$action = new Action('block/' . $path);
+		$action     = new Action('block/' . $path);
 		$controller = $action->getController();
 
 		$controller->save();
@@ -153,14 +154,14 @@ class App_Controller_Admin_Block extends Controller
 		$block += $defaults;
 
 		//Extended Data
-		$action = new Action('block/' . $path . '/settings');
+		$action     = new Action('block/' . $path . '/settings');
 		$controller = $action->getController();
 
 		$block['block_settings']  = $controller->settings($block);
 		$block['block_instances'] = $controller->instances($block['instances'], $block);
 
 		//Action Buttons
-		$block['save']   = site_url('admin/block/save', 'path=' . $path);
+		$block['save'] = site_url('admin/block/save', 'path=' . $path);
 
 		//Render
 		output($this->render('block/block', $block));

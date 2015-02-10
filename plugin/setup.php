@@ -1,4 +1,5 @@
 <?php
+
 abstract class Plugin_Setup extends Model
 {
 	public function install()

@@ -111,8 +111,8 @@
 								'name'   => 'site_theme',
 								'data'   => $data_themes,
 								'select' => $site_theme,
-								'value' =>  'name',
-								'label' =>  'name',
+								'value'  => 'name',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -129,8 +129,8 @@
 								'name'   => 'config_default_layout_id',
 								'data'   => $data_layouts,
 								'select' => $config_default_layout_id,
-								'value' =>  'layout_id',
-								'label' =>  'name',
+								'value'  => 'layout_id',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -162,8 +162,8 @@
 								'name'   => 'config_country_id',
 								'data'   => $data_countries,
 								'select' => $config_country_id,
-								'value' =>  'country_id',
-								'label' =>  'name',
+								'value'  => 'country_id',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -181,8 +181,8 @@
 								'name'   => 'config_language',
 								'data'   => $data_languages,
 								'select' => $config_language,
-								'value' =>  'code',
-								'label' =>  'name',
+								'value'  => 'code',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -209,8 +209,8 @@
 								'name'   => 'config_currency',
 								'data'   => $data_currencies,
 								'select' => $config_currency,
-								'value' =>  'code',
-								'label' =>  'title',
+								'value'  => 'code',
+								'label'  => 'title',
 							)); ?>
 						</td>
 					</tr>
@@ -311,8 +311,8 @@
 								'name'   => 'config_customer_group_id',
 								'data'   => $data_customer_groups,
 								'select' => $config_customer_group_id,
-								'value' =>  'customer_group_id',
-								'label' =>  'name',
+								'value'  => 'customer_group_id',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
@@ -339,8 +339,8 @@
 								'name'   => 'config_account_terms_page_id',
 								'data'   => $data_pages,
 								'select' => $config_account_terms_page_id,
-								'value' =>  'page_id',
-								'label' =>  'title',
+								'value'  => 'page_id',
+								'label'  => 'title',
 							)); ?>
 						</td>
 					</tr>
@@ -401,11 +401,12 @@
 								<input type="text" name="site_logo_height" value="<?= $site_logo_height; ?>" size="3"/>
 							</div>
 							<br/>
+
 							<div class="store-logo-x">
 								<label>{{Image srcset X}}</label>
 								<?= build(array(
-									'type' => 'select',
-									'name'  => 'site_logo_srcset',
+									'type'   => 'select',
+									'name'   => 'site_logo_srcset',
 									'data'   => array(
 										1 => '1x',
 										2 => '2x',
@@ -455,10 +456,10 @@
 						<td class="required"> {{Category Image Size:}}</td>
 						<td>
 							<input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>"
-							       size="3"/>
+								size="3"/>
 							x
 							<input type="text" name="config_image_category_height" value="<?= $config_image_category_height; ?>"
-							       size="3"/>
+								size="3"/>
 					</tr>
 				</table>
 			</div>
@@ -621,10 +622,10 @@
 						</td>
 						<td>
 							<?= build(array(
-								'type' => 'radio',
-							   'name' => 'config_maintenance',
-							   'data' => $data_yes_no,
-							   'select' => $config_maintenance,
+								'type'   => 'radio',
+								'name'   => 'config_maintenance',
+								'data'   => $data_yes_no,
+								'select' => $config_maintenance,
 							)); ?>
 						</td>
 					</tr>
@@ -695,7 +696,7 @@
 								<h3>{{Use this section to enable GA Cross-domain analytics}}</h3>
 								<span class="help">
 									{{Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}
-									<br />
+									<br/>
 									<a target="_blank" href="https://support.google.com/analytics/answer/1034342">{{Learn more about Cross-domain Tracking}}</a>
 								</span>
 								<br/>
@@ -796,11 +797,11 @@
 
 	$('[name=site_logo]').ac_imageinput({width: '<?= $site_logo_width; ?>', height: '<?= $site_logo_height; ?>'});
 
-	$('[name=site_logo_width],[name=site_logo_height]').change(function() {
+	$('[name=site_logo_width],[name=site_logo_height]').change(function () {
 		var w = $('[name=site_logo_width]').val();
 		var h = $('[name=site_logo_height]').val();
 		$('[name=site_logo]').siblings('.thumb').css({
-			width: (!w || w == '0') ? 'auto' : w,
+			width:  (!w || w == '0') ? 'auto' : w,
 			height: (!h || h == '0') ? 'auto' : h
 		});
 	});

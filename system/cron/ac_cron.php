@@ -1,4 +1,5 @@
 <?php
+
 class System_Cron_AcCron extends System_Cron_Job
 {
 	public function maintenance()

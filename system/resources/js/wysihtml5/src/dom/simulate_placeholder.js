@@ -12,29 +12,29 @@
  * @example
  *    wysihtml.dom.simulatePlaceholder(this, composer, "Foobar");
  */
-(function(dom) {
-  dom.simulatePlaceholder = function(editor, view, placeholderText) {
-    var CLASS_NAME = "placeholder",
-        unset = function() {
-          if (view.hasPlaceholderSet()) {
-            view.clear();
-          }
-          dom.removeClass(view.element, CLASS_NAME);
-        },
-        set = function() {
-          if (view.isEmpty()) {
-            view.setValue(placeholderText);
-            dom.addClass(view.element, CLASS_NAME);
-          }
-        };
+(function (dom) {
+	dom.simulatePlaceholder = function (editor, view, placeholderText) {
+		var CLASS_NAME = "placeholder",
+			unset = function () {
+				if (view.hasPlaceholderSet()) {
+					view.clear();
+				}
+				dom.removeClass(view.element, CLASS_NAME);
+			},
+			set = function () {
+				if (view.isEmpty()) {
+					view.setValue(placeholderText);
+					dom.addClass(view.element, CLASS_NAME);
+				}
+			};
 
-    editor
-      .observe("set_placeholder", set)
-      .observe("unset_placeholder", unset)
-      .observe("focus:composer", unset)
-      .observe("paste:composer", unset)
-      .observe("blur:composer", set);
+		editor
+			.observe("set_placeholder", set)
+			.observe("unset_placeholder", unset)
+			.observe("focus:composer", unset)
+			.observe("paste:composer", unset)
+			.observe("blur:composer", set);
 
-    set();
-  };
+		set();
+	};
 })(wysihtml5.dom);

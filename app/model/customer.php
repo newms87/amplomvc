@@ -7,7 +7,7 @@ class App_Model_Customer extends App_Model_Table
 	public function save($customer_id, $customer)
 	{
 		if (isset($customer['name']) && !isset($customer['first_name'])) {
-			$name_parts            = explode(' ', $customer['name'], 2);
+			$name_parts             = explode(' ', $customer['name'], 2);
 			$customer['first_name'] = $name_parts[0];
 
 			if (isset($name_parts[1])) {

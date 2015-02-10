@@ -1,4 +1,5 @@
 <?php
+
 class Currency extends Library
 {
 	private $code;

@@ -16,7 +16,8 @@
 								<? } ?>
 							</div>
 						<? } ?>
-						<? if (false && $press['href']) { ?><a class="press_link" href="<?= $press['href']; ?>"><?= $press['description']; ?></a><? } ?>
+						<? if (false && $press['href']) { ?>
+							<a class="press_link" href="<?= $press['href']; ?>"><?= $press['description']; ?></a><? } ?>
 					</div>
 				</li>
 			<? } ?>
@@ -28,8 +29,8 @@
 	<? foreach ($press_list as $row => $press) { ?>
 	<? $colorbox_group = 'press-item-' . $row; ?>
 	$('.<?= $colorbox_group; ?>').colorbox({
-		rel: '<?= $colorbox_group; ?>',
-		width: '80%',
+		rel:    '<?= $colorbox_group; ?>',
+		width:  '80%',
 		height: '80%'
 	});
 	<? } ?>

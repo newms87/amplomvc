@@ -214,7 +214,7 @@ class Theme extends Library
 
 	public function getThemeStyle()
 	{
-		$theme    = IS_ADMIN ? 'admin' : option('site_theme');
+		$theme = IS_ADMIN ? 'admin' : option('site_theme');
 
 		$cache_file = 'less/theme.' . $theme;
 		$theme_file = cache($cache_file, null, true);
@@ -269,7 +269,7 @@ class Theme extends Library
 
 		$store_theme = array(
 			'store_theme_config_' . $theme => $config,
-			'store_theme_style_' . $theme => $stylesheet,
+			'store_theme_style_' . $theme  => $stylesheet,
 		);
 
 		$this->config->saveGroup('store_theme', $store_theme, false);
@@ -346,7 +346,7 @@ class Theme extends Library
 			$type  = 'text';
 
 			if (strpos($description, '---') === 0) {
-				$type  = 'section';
+				$type = 'section';
 			} elseif (strpos($description, '-')) {
 				list($title, $description) = explode('-', $description, 2);
 

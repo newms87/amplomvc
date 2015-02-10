@@ -1,4 +1,5 @@
 <?php
+
 class Cleanup extends Library
 {
 	function __construct()
@@ -34,8 +35,7 @@ class Cleanup extends Library
 					}
 
 					$view = $matches[1];
-				}
-				elseif (preg_match("/(\\s*)\\\$this->render\\(([^)]*)\\)/", $line, $matches)) {
+				} elseif (preg_match("/(\\s*)\\\$this->render\\(([^)]*)\\)/", $line, $matches)) {
 					if (!$view) {
 						if (!$matches[2]) {
 							$this->error($num, "Render found without a view");
@@ -49,7 +49,7 @@ class Cleanup extends Library
 					}
 
 					$new_lines[] = str_replace("\$this->render()", "\$this->render('$view', \$data)", $line);
-					$view = null;
+					$view        = null;
 					continue;
 				}
 

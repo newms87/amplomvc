@@ -1,11 +1,11 @@
 <div class="login_header">
 	<div id="one_click">
 		<? if (!empty($gp_login)) { ?>
-		<a href="<?= $gp_login; ?>" class="gp_login small" title="{{Sign in with Google+}}"></a>
+			<a href="<?= $gp_login; ?>" class="gp_login small" title="{{Sign in with Google+}}"></a>
 		<? } ?>
 
 		<? if (!empty($fb_login)) { ?>
-		<a href="<?= $fb_login; ?>" class="fb_login small" title="{{Sign in with Facebook}}"></a>
+			<a href="<?= $fb_login; ?>" class="fb_login small" title="{{Sign in with Facebook}}"></a>
 		<? } ?>
 	</div>
 

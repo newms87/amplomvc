@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Title: Automated Tasks
  * Icon: cron.png
  * Order: 12
  */
-
 class App_Controller_Admin_Settings_Cron extends Controller
 {
 	public function index()

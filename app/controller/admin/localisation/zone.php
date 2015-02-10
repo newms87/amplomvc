@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Localisation_Zone extends Controller
 {
 	public function index()
@@ -209,8 +210,8 @@ class App_Controller_Admin_Localisation_Zone extends Controller
 		}
 
 		$this->pagination->init();
-		$this->pagination->total  = $zone_total;
-		$data['pagination'] = $this->pagination->render();
+		$this->pagination->total = $zone_total;
+		$data['pagination']      = $this->pagination->render();
 
 		$data['sort']  = $sort;
 		$data['order'] = $order;

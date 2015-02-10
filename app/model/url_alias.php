@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_UrlAlias extends App_Model_Table
 {
 	protected $table = 'url_alias', $primary_key = 'url_alias_id';

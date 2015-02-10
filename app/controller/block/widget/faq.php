@@ -14,8 +14,8 @@ class App_Controller_Block_Widget_Faq extends App_Controller_Block_Block
 	public function settings(&$block)
 	{
 		$block['settings']['faqs']['__ac_template__'] = array(
-			'title' => '',
-			'questions'   => array(
+			'title'     => '',
+			'questions' => array(
 				'__ac_template__' => array(
 					'question' => '',
 					'answer'   => '',

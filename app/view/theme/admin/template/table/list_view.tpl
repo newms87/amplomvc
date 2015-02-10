@@ -101,6 +101,7 @@
 									</div>
 								</div>
 								<? break;
+
 							case 'select':
 								if (isset($column['build_config'])) {
 									$build_key   = $column['build_config'][0];
@@ -152,7 +153,7 @@
 													$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
 												} else {
 													foreach ($column['build_data'] as $bd) {
-														if ($bd[$build_key] === $v) {
+														if (is_numeric($v) ? $bd[$build_key] == $v : $bd[$build_key] === $v) {
 															$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
 														}
 													}

@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Setting_Extension extends Model
 {
 	public function getExtensions($type)
@@ -15,7 +16,7 @@ class App_Model_Setting_Extension extends Model
 	{
 		$ext = array(
 			'type' => $type,
-		   'code' => $code,
+			'code' => $code,
 		);
 
 		$this->insert('extension', $ext);

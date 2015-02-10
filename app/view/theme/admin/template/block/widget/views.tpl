@@ -57,22 +57,23 @@
 								</a>
 
 								<br/>
+
 								<div class="view-setting choose-view-box">
 									<?=
 									build(array(
-										'type' => 'select',
-										'name'  => 'view_listing_id',
+										'type'   => 'select',
+										'name'   => 'view_listing_id',
 										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
 										'select' => $view['view_listing_id'],
-										'value' =>  false,
-										'label' =>  'name',
+										'value'  => false,
+										'label'  => 'name',
 									)); ?>
 								</div>
 								<div class="view-setting choose-view-size">
 									<?=
 									build(array(
-										'type' => 'select',
-										'name'  => 'settings[size]',
+										'type'   => 'select',
+										'name'   => 'settings[size]',
 										'data'   => $data_view_sizes,
 										'select' => $view['settings']['size'],
 									)); ?>
@@ -219,14 +220,14 @@
 		var settings = $view.find('[name*="settings["]').serializeObject();
 
 		var data = {
-			view_id: $view.attr('data-view-id'),
-			group: $view.attr('data-group'),
+			view_id:         $view.attr('data-view-id'),
+			group:           $view.attr('data-group'),
 			view_listing_id: $view.find('[name=view_listing_id]').val(),
-			path: $view.find('[name=path]').val(),
-			query: query,
-			title: $view.find('.view-title').html(),
-			view_type: $view.find('[data-view-type].active').attr('data-view-type'),
-			show: $view.hasClass("show") ? 1 : 0
+			path:            $view.find('[name=path]').val(),
+			query:           query,
+			title:           $view.find('.view-title').html(),
+			view_type:       $view.find('[data-view-type].active').attr('data-view-type'),
+			show:            $view.hasClass("show") ? 1 : 0
 		}
 
 		data = $.fn.extend({}, settings, data);

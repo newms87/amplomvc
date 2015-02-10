@@ -127,10 +127,10 @@
 		var new_link = $.ac_template('link_list', 'add');
 
 		new_link.find('ul').sortable({
-			delay: 100,
+			delay:       100,
 			connectWith: "#links_list ul",
 			placeholder: "ui-state-highlight",
-			change: show_placeholder
+			change:      show_placeholder
 		});
 	}
 
@@ -153,10 +153,10 @@
 		});
 
 		list.sortable({
-			delay: 100,
+			delay:       100,
 			connectWith: "#links_list ul",
 			placeholder: 'placeholder',
-			change: show_placeholder
+			change:      show_placeholder
 		});
 	}
 

@@ -112,7 +112,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		//Limits
 		if ($settings['show_limits']) {
 			$settings['limit_settings'] += array(
-				'path'   => $settings['listing_path'],
+				'path' => $settings['listing_path'],
 			);
 		}
 

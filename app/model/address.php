@@ -113,8 +113,8 @@ class App_Model_Address extends App_Model_Table
 		}
 
 		$address += array(
-			'first_name'  => '',
-			'last_name'   => '',
+			'first_name' => '',
+			'last_name'  => '',
 			'company'    => '',
 			'country_id' => 223,
 			'zone_id'    => 0,
@@ -134,11 +134,11 @@ class App_Model_Address extends App_Model_Table
 			if (empty($address_format)) {
 				$address_format =
 					"{first_name} {last_name}\n";
-					"{company}\n" .
-					"{address_1}\n" .
-					"{address_2}\n" .
-					"{city}, {zone} {postcode}\n" .
-					"{country}";
+				"{company}\n" .
+				"{address_1}\n" .
+				"{address_2}\n" .
+				"{city}, {zone} {postcode}\n" .
+				"{country}";
 			}
 
 			$address_formats[$country_id] = $address_format;
@@ -172,12 +172,12 @@ class App_Model_Address extends App_Model_Table
 
 		$sr = array(
 			"#<br />\\s*<br />#" => '<br />',
-			"#^\\s*<br />#" => '',
+			"#^\\s*<br />#"      => '',
 		);
 
 		do {
 			$address_format = preg_replace(array_keys($sr), $sr, $address_format, -1, $count);
-		} while($count);
+		} while ($count);
 
 		return $address_format;
 	}
@@ -187,7 +187,7 @@ class App_Model_Address extends App_Model_Table
 		$this->error = array();
 
 		if (isset($address['name'])) {
-			$name                 = explode(' ', $address['name'], 2);
+			$name                  = explode(' ', $address['name'], 2);
 			$address['first_name'] = $name[0];
 			$address['last_name']  = !empty($name[1]) ? $name[1] : '';
 		}

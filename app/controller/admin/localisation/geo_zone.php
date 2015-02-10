@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Admin_Localisation_GeoZone extends Controller
 {
 
@@ -165,8 +166,8 @@ class App_Controller_Admin_Localisation_GeoZone extends Controller
 		}
 
 		$this->pagination->init();
-		$this->pagination->total  = $geo_zone_total;
-		$data['pagination'] = $this->pagination->render();
+		$this->pagination->total = $geo_zone_total;
+		$data['pagination']      = $this->pagination->render();
 
 		$data['sort']  = $sort;
 		$data['order'] = $order;

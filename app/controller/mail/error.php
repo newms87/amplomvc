@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Mail_Error extends Controller
 {
 	public function index($error_msg, $data = array())

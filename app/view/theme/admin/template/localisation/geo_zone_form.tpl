@@ -31,11 +31,11 @@
 				<br/>
 				<table id="zone-to-geo-zone" class="list">
 					<thead>
-						<tr>
-							<td class="left">{{Country:}}</td>
-							<td class="left">{{Zone:}}</td>
-							<td></td>
-						</tr>
+					<tr>
+						<td class="left">{{Country:}}</td>
+						<td class="left">{{Zone:}}</td>
+						<td></td>
+					</tr>
 					</thead>
 
 
@@ -45,37 +45,38 @@
 					); ?>
 
 					<tbody id="zone_list">
-						<? $zone_row = 0; ?>
-						<? foreach ($zones as $key => $zone) { ?>
-							<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
-							<tr class="geozone_selector <?= $key; ?>">
-								<td class="left">
-									<?= build(array(
-										'type' => 'select',
-										'name'  => "zones[$row][country_id]",
-										'data'   => $data_countries,
-										'select' => $zone['country_id'], array('class' => 'country_selector'),
-										'value' =>  'country_id',
-										'label' =>  'name',
-									)); ?>
-									<a onclick="add_all_zones($(this))"
-										style="text-decoration:none; display:block">{{[ Add All Zones ]}}</a>
-								</td>
-								<td class="left">
-									<select name="zones[<?= $row; ?>][zone_id]" data-zone_id="<?= $zone['zone_id']; ?>"
-										class="zone_selector"></select>
-								</td>
-								<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"
-										class="button">{{Remove}}</a></td>
-							</tr>
-						<? } ?>
+					<? $zone_row = 0; ?>
+					<? foreach ($zones as $key => $zone) { ?>
+						<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
+						<tr class="geozone_selector <?= $key; ?>">
+							<td class="left">
+								<?= build(array(
+									'type' => 'select',
+									'name' => "zones[$row][country_id]",
+									'data' => $data_countries,
+									'select' => $zone['country_id'],
+									array('class' => 'country_selector'),
+									'value' => 'country_id',
+									'label' => 'name',
+								)); ?>
+								<a onclick="add_all_zones($(this))"
+									style="text-decoration:none; display:block">{{[ Add All Zones ]}}</a>
+							</td>
+							<td class="left">
+								<select name="zones[<?= $row; ?>][zone_id]" data-zone_id="<?= $zone['zone_id']; ?>"
+									class="zone_selector"></select>
+							</td>
+							<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"
+									class="button">{{Remove}}</a></td>
+						</tr>
+					<? } ?>
 					</tbody>
 
 					<tfoot>
-						<tr>
-							<td colspan="2"></td>
-							<td class="left"><a onclick="addZoneRow();" class="button">{{Add Geo Zone}}</a></td>
-						</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td class="left"><a onclick="addZoneRow();" class="button">{{Add Geo Zone}}</a></td>
+					</tr>
 					</tfoot>
 				</table>
 			</form>
@@ -84,7 +85,10 @@
 </div>
 
 <script type="text/javascript">
-	$('.geozone_selector .zone_selector').ac_zoneselect({listen: '.geozone_selector .country_selector', allow_all: true});
+	$('.geozone_selector .zone_selector').ac_zoneselect({
+		listen:    '.geozone_selector .country_selector',
+		allow_all: true
+	});
 
 	function add_all_zones(context) {
 		country_id = context.closest('.geozone_selector').find('.country_selector').val();

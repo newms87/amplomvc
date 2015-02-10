@@ -18,7 +18,7 @@
 			<form action="<?= $save; ?>" method="post" class="form full-width" enctype="multipart/form-data">
 				<div class="col xs-8 md-6 lg-5 center">
 					<h3>{{Enter your Email address below to request a new password for your account.}}</h3>
-					<br />
+					<br/>
 
 					<div class="form-item">
 						<input type="text" name="email" placeholder="{{Account Email Address}}" value=""/>

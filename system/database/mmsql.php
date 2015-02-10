@@ -1,4 +1,5 @@
 <?php
+
 final class MSSQL implements DatabaseInterface
 {
 	private $link;

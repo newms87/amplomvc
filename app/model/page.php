@@ -213,7 +213,7 @@ class App_Model_Page extends App_Model_Table
 	{
 		if (!empty($page['theme']) && !empty($page['name'])) {
 			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/content.tpl';
-			$page['style_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
+			$page['style_file']   = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
 		}
 	}
 

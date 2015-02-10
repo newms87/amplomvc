@@ -12,20 +12,20 @@
 </section>
 
 <? if ($can_edit) { ?>
-<script type="text/javascript">
-	$('.dashboard-name').blur(function () {
-		var $this = $(this);
-		if ($this.attr('data-orig') != $this.html()) {
-			$this.attr('data-orig', $this.html());
-			var data = {
-				title: $this.html()
-			};
-			$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response) {
-				$('.dashboard-header').show_msg(response);
-			}, 'json');
-		}
-	});
-</script>
+	<script type="text/javascript">
+		$('.dashboard-name').blur(function () {
+			var $this = $(this);
+			if ($this.attr('data-orig') != $this.html()) {
+				$this.attr('data-orig', $this.html());
+				var data = {
+					title: $this.html()
+				};
+				$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response) {
+					$('.dashboard-header').show_msg(response);
+				}, 'json');
+			}
+		});
+	</script>
 <? } ?>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

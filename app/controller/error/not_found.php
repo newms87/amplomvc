@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Error_NotFound extends Controller
 {
 	public function index()

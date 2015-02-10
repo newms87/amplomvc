@@ -1,4 +1,5 @@
 <?php
+
 class Extend extends Library
 {
 	public function addViewListing($view_listing)
@@ -52,7 +53,7 @@ class Extend extends Library
 		if (!empty($routes)) {
 			foreach ($routes as $route) {
 				$layout['layout_route'][] = array(
-					'route'    => $route
+					'route' => $route
 				);
 			}
 		}
@@ -79,7 +80,7 @@ class Extend extends Library
 		}
 
 		$db_hooks[$table][$action][$name] = array(
-			'name'  => $name,
+			'name'     => $name,
 			'callback' => $callback,
 			'param'    => $param,
 			'priority' => $priority,

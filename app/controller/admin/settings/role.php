@@ -7,7 +7,6 @@
  * Order: 5
  *
  */
-
 class App_Controller_Admin_Settings_Role extends Controller
 {
 	public function index()

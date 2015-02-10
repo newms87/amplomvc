@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Feed_GoogleSitemap extends Controller
 {
 	public function index()

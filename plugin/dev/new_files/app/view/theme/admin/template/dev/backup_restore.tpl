@@ -20,8 +20,8 @@
 							<input type="submit" class="button" name="sync_file" value="{{Sync File}}"/>
 						</td>
 						<td><?= build(array(
-								'type' => 'multiselect',
-								'name'  => 'tables',
+								'type'   => 'multiselect',
+								'name'   => 'tables',
 								'data'   => $data_tables,
 								'select' => $tables
 							)); ?>

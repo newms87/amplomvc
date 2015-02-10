@@ -1,4 +1,5 @@
 <?php
+
 class System_Update extends Model
 {
 	public function getVersions()

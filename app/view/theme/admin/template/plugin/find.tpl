@@ -9,7 +9,7 @@
 		<div class="section">
 			<div class="filter-team col xs-12">
 				<form action="<?= site_url('admin/plugin/find'); ?>" method="post">
-					<input type="text" name="team" value="<?= $team; ?>" />
+					<input type="text" name="team" value="<?= $team; ?>"/>
 					<button>{{Search By Team}}</button>
 				</form>
 			</div>

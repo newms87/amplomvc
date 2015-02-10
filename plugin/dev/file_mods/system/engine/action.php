@@ -1,4 +1,5 @@
 #<?php
+
 //=====
 final class Action
 {
@@ -16,6 +17,7 @@ final class Action
 //-----
 //=====
 	}
+
 //.....
 	public function execute($is_ajax = null)
 	{
@@ -41,4 +43,5 @@ final class Action
 	}
 //.....
 }
+
 //-----

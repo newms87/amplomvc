@@ -1,7 +1,7 @@
 <div class="ac-codemirror-ui">
 	<div class="menu-buttons">
 		<div class="cm-btn fullscreen" data-action="fullscreen">
-			<img class="maximize" src="<?= theme_url('image/codemirror/maximize.png'); ?>" title="Use F11 for true full screen" />
+			<img class="maximize" src="<?= theme_url('image/codemirror/maximize.png'); ?>" title="Use F11 for true full screen"/>
 			<img class="minimize" src="<?= theme_url('image/codemirror/minimize.png'); ?>"/>
 		</div>
 	</div>
@@ -31,7 +31,11 @@
 					<li data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" href="javascript:;" unselectable="on"></li>
 				</ul>
 			</li>
-			<li data-wysihtml5-command="insertSpeech" title="Insert speech" class="command" href="javascript:;" unselectable="on" style="position: relative;"><div style="left: 0px; margin: 0px; opacity: 0; overflow: hidden; padding: 0px; position: absolute; top: 0px; z-index: 1; width: 70px; height: 40px;"><input x-webkit-speech="" speech="" style="cursor: inherit; font-size: 50px; height: 50px; margin-top: -25px; outline: 0px; padding: 0px; position: absolute; right: -4px; top: 50%;"></div></li>
+			<li data-wysihtml5-command="insertSpeech" title="Insert speech" class="command" href="javascript:;" unselectable="on" style="position: relative;">
+				<div style="left: 0px; margin: 0px; opacity: 0; overflow: hidden; padding: 0px; position: absolute; top: 0px; z-index: 1; width: 70px; height: 40px;">
+					<input x-webkit-speech="" speech="" style="cursor: inherit; font-size: 50px; height: 50px; margin-top: -25px; outline: 0px; padding: 0px; position: absolute; right: -4px; top: 50%;">
+				</div>
+			</li>
 			<li data-wysihtml5-action="change_view" title="Show HTML" class="action" href="javascript:;" unselectable="on"></li>
 		</ul>
 	</header>
@@ -59,11 +63,11 @@
 <script src="<?= URL_RESOURCES . "js/wysihtml5/dist/wysihtml5-0.3.0.min.js"; ?>"></script> -->
 
 <script type="text/javascript">
-//	var editor = new wysihtml5.Editor("wysihtml5-editor", {
-//		parserRules:  wysihtml5ParserRules,
-//		toolbar: 'wysihtml5-editor-toolbar',
-//		stylesheets: ["http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css", $ac.site_url + "system/resources/js/wysihtml5/css/style.css"]
-//	});
+	//	var editor = new wysihtml5.Editor("wysihtml5-editor", {
+	//		parserRules:  wysihtml5ParserRules,
+	//		toolbar: 'wysihtml5-editor-toolbar',
+	//		stylesheets: ["http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css", $ac.site_url + "system/resources/js/wysihtml5/css/style.css"]
+	//	});
 
 	var $ac_cm_template = $('.ac-codemirror-ui').remove();
 
@@ -97,10 +101,10 @@
 
 	$.fn.init_codemirror = function (params) {
 		var params = $.extend({}, {
-			tabSize: 3,
-			indentWithTabs: true,
-			lineNumbers: false,
-			indentUnit: 3,
+			tabSize:           3,
+			indentWithTabs:    true,
+			lineNumbers:       false,
+			indentUnit:        3,
 			autoCloseBrackets: "()[]{}"
 		}, params);
 

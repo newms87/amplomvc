@@ -21,7 +21,8 @@
 					<? foreach ($configs as $key => $config) { ?>
 						<? if ($config['type'] === 'section') { ?>
 							<h4><?= $config['title']; ?></h4>
-						<? continue; } ?>
+							<? continue;
+						} ?>
 
 						<label for="config-<?= $key; ?>" class="theme-setting">
 							<div class="cell">
@@ -39,6 +40,7 @@
 
 			<div class="col xs-12 md-6 theme-stylesheet">
 				<h3>{{Custom Styles}}</h3>
+
 				<div class="code-editor">
 					<textarea id="stylesheet-editor" name="stylesheet" class=""><?= $stylesheet; ?></textarea>
 				</div>

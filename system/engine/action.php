@@ -19,11 +19,11 @@ final class Action
 
 		$parts = explode('/', str_replace('-', '_', $path));
 
-		$file   = '';
-		$class  = 'App_Controller';
+		$file      = '';
+		$class     = 'App_Controller';
 		$classpath = '';
-		$method = '';
-		$args   = array();
+		$method    = '';
+		$args      = array();
 
 		foreach ($parts as $part) {
 			if (!$file) {

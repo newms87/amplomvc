@@ -1,4 +1,5 @@
 <?php
+
 class Cron extends Library
 {
 	private $settings;

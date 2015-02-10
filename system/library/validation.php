@@ -1,16 +1,17 @@
 <?php
+
 class Validation extends Library
 {
 	private $encoding;
 
 	const PASSWORD_STRENGTH = 'password_strength';
-	const PASSWORD_CONFIRM  = 'password_confirm';
-	const PHONE_INVALID     = 'phone_invalid';
-	const EMAIL_INVALID     = 'email_invalid';
-	const URL_INVALID       = 'url_invalid';
-	const TEXT_LENGTH_MIN   = 'text_min';
-	const TEXT_LENGTH_MAX   = 'text_max';
-	const DATETIME_FORMAT   = 'date_format';
+	const PASSWORD_CONFIRM = 'password_confirm';
+	const PHONE_INVALID = 'phone_invalid';
+	const EMAIL_INVALID = 'email_invalid';
+	const URL_INVALID = 'url_invalid';
+	const TEXT_LENGTH_MIN = 'text_min';
+	const TEXT_LENGTH_MAX = 'text_max';
+	const DATETIME_FORMAT = 'date_format';
 
 	function __construct()
 	{
@@ -45,7 +46,7 @@ class Validation extends Library
 
 	public function reset()
 	{
-		$this->error      = null;
+		$this->error = null;
 	}
 
 	public function phone($phone)

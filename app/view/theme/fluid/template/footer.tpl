@@ -12,33 +12,33 @@
 
 		<div id="links-footer">
 			<? if (has_links('footer')) { ?>
-			<div class="links-footer col xs-12 sm-6 md-4 lg-3 xs-center sm-left">
-				<h4>{{Useful Links}}</h4>
+				<div class="links-footer col xs-12 sm-6 md-4 lg-3 xs-center sm-left">
+					<h4>{{Useful Links}}</h4>
 
-				<div class="links">
-					<?= links('footer'); ?>
+					<div class="links">
+						<?= links('footer'); ?>
+					</div>
 				</div>
-			</div>
 			<? } ?>
 
 			<? if (has_links('footer-resources')) { ?>
-			<div class="links-footer-resources col xs-center sm-left xs-12 sm-6 md-4 lg-3">
-				<h4>{{Resources}}</h4>
+				<div class="links-footer-resources col xs-center sm-left xs-12 sm-6 md-4 lg-3">
+					<h4>{{Resources}}</h4>
 
-				<div class="links">
-					<?= links('footer-resources'); ?>
+					<div class="links">
+						<?= links('footer-resources'); ?>
+					</div>
 				</div>
-			</div>
 			<? } ?>
 
 			<? if (has_links('footer-more')) { ?>
-			<div class="links-footer-more col xs-center sm-left xs-12 sm-6 md-4 lg-3">
-				<h4>{{More Information}}</h4>
+				<div class="links-footer-more col xs-center sm-left xs-12 sm-6 md-4 lg-3">
+					<h4>{{More Information}}</h4>
 
-				<div class="links">
-					<?= links('footer-more'); ?>
+					<div class="links">
+						<?= links('footer-more'); ?>
+					</div>
 				</div>
-			</div>
 			<? } ?>
 
 		</div>

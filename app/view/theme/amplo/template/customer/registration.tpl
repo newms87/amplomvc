@@ -56,8 +56,8 @@
 						<div class="form-item">
 							<label>{{Subscribe}}</label>
 							<?= build(array(
-								'type' => 'radio',
-								'name'  => 'newsletter',
+								'type'   => 'radio',
+								'name'   => 'newsletter',
 								'data'   => $data_yes_no,
 								'select' => $newsletter
 							)); ?>
@@ -81,12 +81,12 @@
 						<div class="form-item required">
 							<?=
 							build(array(
-								'type' => 'select',
-								'name'  => 'country_id',
+								'type'   => 'select',
+								'name'   => 'country_id',
 								'data'   => $data_countries,
 								'select' => $country_id,
-								'value' =>  'country_id',
-								'label' =>  'name',
+								'value'  => 'country_id',
+								'label'  => 'name',
 							)); ?>
 						</div>
 						<div class="form-item required">
@@ -102,7 +102,8 @@
 					<? if (!empty($agree_to)) { ?>
 						<div class="form-item">
 							<input id="agree-terms" type="checkbox" name="agree" value="1" <?= $agree ? 'checked="checked"' : ''; ?> />
-							<label for="agree_terms">{{I have read and agree to}} <a href="<?= $agree_to; ?>"><?= $agree_title; ?></a></label>
+							<label for="agree_terms">{{I have read and agree to}}
+								<a href="<?= $agree_to; ?>"><?= $agree_title; ?></a></label>
 						</div>
 					<? } ?>
 

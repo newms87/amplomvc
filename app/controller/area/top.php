@@ -1,4 +1,5 @@
 <?php
+
 class App_Controller_Area_Top extends Controller
 {
 	public function index()

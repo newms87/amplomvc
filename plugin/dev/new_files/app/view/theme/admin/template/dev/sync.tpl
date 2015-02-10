@@ -16,20 +16,20 @@
 						<td>
 							<label>{{Synchronize Site}}</label>
 							<?= build(array(
-								'type' => 'select',
-								'name'  => 'domain',
+								'type'   => 'select',
+								'name'   => 'domain',
 								'data'   => $data_sites,
 								'select' => $domain,
-								'value' =>  'domain',
-								'label' =>  'domain',
+								'value'  => 'domain',
+								'label'  => 'domain',
 							)); ?>
 						</td>
 					</tr>
 					<tr>
 						<td>{{Sync Table}}</td>
 						<td><?= build(array(
-								'type' => 'multiselect',
-								'name'  => 'tables',
+								'type'   => 'multiselect',
+								'name'   => 'tables',
 								'data'   => $data_tables,
 								'select' => $tables
 							)); ?>

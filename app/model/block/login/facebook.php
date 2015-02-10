@@ -42,7 +42,7 @@ class App_Model_Block_Login_Facebook extends Model
 
 	public function authenticate()
 	{
-		$state = _get('state');
+		$state    = _get('state');
 		$fb_state = _session('fb_state');
 
 		if (!$state || $state !== $fb_state) {
@@ -74,7 +74,7 @@ class App_Model_Block_Login_Facebook extends Model
 		$tokens = array();
 
 		foreach ($values as $value) {
-			if (strpos($value,'=')) {
+			if (strpos($value, '=')) {
 				list($key, $value) = explode('=', $value);
 				$tokens[$key] = $value;
 			}
@@ -116,7 +116,7 @@ class App_Model_Block_Login_Facebook extends Model
 				$customer = array(
 					'first_name' => $user_info['first_name'],
 					'last_name'  => $user_info['last_name'],
-					'email'     => $user_info['email'],
+					'email'      => $user_info['email'],
 				);
 
 				if (!$this->Model_Customer->save(null, $customer)) {

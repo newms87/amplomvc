@@ -61,8 +61,8 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
 //START gan_tokenizer.php
 class Tokenizer_Base
 {
-	const TOK_NULL       = 0;
-	const TOK_UNKNOWN    = 1;
+	const TOK_NULL = 0;
+	const TOK_UNKNOWN = 1;
 	const TOK_WHITESPACE = 2;
 	const TOK_IDENTIFIER = 3;
 	var $doc = '';
@@ -382,12 +382,12 @@ class Tokenizer_Base
 //START gan_parser_html.php
 class HTML_Parser_Base extends Tokenizer_Base
 {
-	const TOK_TAG_OPEN       = 100;
-	const TOK_TAG_CLOSE      = 101;
-	const TOK_SLASH_FORWARD  = 103;
+	const TOK_TAG_OPEN = 100;
+	const TOK_TAG_CLOSE = 101;
+	const TOK_SLASH_FORWARD = 103;
 	const TOK_SLASH_BACKWARD = 104;
-	const TOK_STRING         = 104;
-	const TOK_EQUALS         = 105;
+	const TOK_STRING = 104;
+	const TOK_EQUALS = 105;
 	var $identifiers = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890:-_!?%';
 	var $status = array();
 	var $custom_char_map = array(
@@ -1024,15 +1024,15 @@ class HTML_Parser_HTML5 extends HTML_Parser
 //START gan_node_html.php
 class HTML_Node
 {
-	const NODE_ELEMENT     = 0;
-	const NODE_TEXT        = 1;
-	const NODE_COMMENT     = 2;
+	const NODE_ELEMENT = 0;
+	const NODE_TEXT = 1;
+	const NODE_COMMENT = 2;
 	const NODE_CONDITIONAL = 3;
-	const NODE_CDATA       = 4;
-	const NODE_DOCTYPE     = 5;
-	const NODE_XML         = 6;
-	const NODE_ASP         = 7;
-	const NODE_TYPE        = self::NODE_ELEMENT;
+	const NODE_CDATA = 4;
+	const NODE_DOCTYPE = 5;
+	const NODE_XML = 6;
+	const NODE_ASP = 7;
+	const NODE_TYPE = self::NODE_ELEMENT;
 	var $selectClass = 'HTML_Selector';
 	var $parserClass = 'HTML_Parser_HTML5';
 	var $childClass = __CLASS__;
@@ -1198,14 +1198,14 @@ class HTML_Node
 	{
 		dom_format($this, array('minify_script' => false));
 		return str_replace(array(
-		                        "/>>>><?",
-		                        ">>>><?",
-		                        "__name__"
-		                   ), array(
-		                           " <?",
-		                           " <?",
-		                           "name"
-		                      ), $this->toString());
+			"/>>>><?",
+			">>>><?",
+			"__name__"
+		), array(
+			" <?",
+			" <?",
+			"name"
+		), $this->toString());
 	}
 
 	function getInnerText()
@@ -2125,83 +2125,83 @@ class HTML_Node
 							case '%=':
 							case 'contains_regex':
 								$res = ((preg_match('`' . $match['value'] . '`s', $val) > 0) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '|=':
 							case 'contains_prefix':
 								$res = ((preg_match('`\b' . preg_quote($match['value']) . '[\-\s]?`s', $val) > 0) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '~=':
 							case 'contains_word':
 								$res = ((preg_match('`\b' . preg_quote($match['value']) . '\b`s', $val) > 0) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '*=':
 							case 'contains':
 								$res = ((strpos($val, $match['value']) !== false) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '$=':
 							case 'ends_with':
 								$res = ((substr($val, -strlen($match['value'])) === $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '^=':
 							case 'starts_with':
 								$res = ((substr($val, 0, strlen($match['value'])) === $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '!=':
 							case 'not_equal':
 								$res = (($val !== $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '=':
 							case 'equals':
 								$res = (($val === $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '>=':
 							case 'bigger_than':
 								$res = (($val >= $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							case '<=':
 							case 'smaller_than':
 								$res = (($val >= $match['value']) === $match['match']);
-							if ($res) {
-								break 1;
-							} else {
-								break 2;
-							}
+								if ($res) {
+									break 1;
+								} else {
+									break 2;
+								}
 							default:
 								trigger_error('Unknown operator "' . $match['operator_value'] . '" to match attributes!');
 								return false;
@@ -2270,14 +2270,14 @@ class HTML_Node
 		$match = ((isset($mode[1]) && ($mode[1] === 'not')) ? 'false' : 'true');
 		return $this->getChildrenByMatch(
 			array(
-			     'attributes' => array(
-				     $attribute => array(
-					     'operator_value' => $mode[0],
-					     'value'          => $value,
-					     'match'          => $match,
-					     'compare'        => $compare
-				     )
-			     )
+				'attributes' => array(
+					$attribute => array(
+						'operator_value' => $mode[0],
+						'value'          => $value,
+						'match'          => $match,
+						'compare'        => $compare
+					)
+				)
 			),
 			$recursive
 		);
@@ -2292,12 +2292,12 @@ class HTML_Node
 		$match = ((isset($tag[1]) && ($tag[1] === 'not')) ? 'false' : 'true');
 		return $this->getChildrenByMatch(
 			array(
-			     'tags' => array(
-				     $tag[0] => array(
-					     'match'   => $match,
-					     'compare' => $compare
-				     )
-			     )
+				'tags' => array(
+					$tag[0] => array(
+						'match'   => $match,
+						'compare' => $compare
+					)
+				)
 			),
 			$recursive
 		);
@@ -2509,19 +2509,40 @@ class HTML_NODE_TEXT extends HTML_Node
 		$this->text   = $text;
 	}
 
-	function isText() { return true; }
+	function isText()
+	{
+		return true;
+	}
 
-	function isTextOrComment() { return true; }
+	function isTextOrComment()
+	{
+		return true;
+	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
-	protected function filter_text() { return true; }
+	protected function filter_text()
+	{
+		return true;
+	}
 
-	function toString_attributes() { return ''; }
+	function toString_attributes()
+	{
+		return '';
+	}
 
-	function toString_content($attributes = true, $recursive = true, $content_only = false) { return $this->text; }
+	function toString_content($attributes = true, $recursive = true, $content_only = false)
+	{
+		return $this->text;
+	}
 
-	function toString($attributes = true, $recursive = true, $content_only = false) { return $this->text; }
+	function toString($attributes = true, $recursive = true, $content_only = false)
+	{
+		return $this->text;
+	}
 }
 
 class HTML_NODE_COMMENT extends HTML_Node
@@ -2536,19 +2557,40 @@ class HTML_NODE_COMMENT extends HTML_Node
 		$this->text   = $text;
 	}
 
-	function isComment() { return true; }
+	function isComment()
+	{
+		return true;
+	}
 
-	function isTextOrComment() { return true; }
+	function isTextOrComment()
+	{
+		return true;
+	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
-	protected function filter_comment() { return true; }
+	protected function filter_comment()
+	{
+		return true;
+	}
 
-	function toString_attributes() { return ''; }
+	function toString_attributes()
+	{
+		return '';
+	}
 
-	function toString_content($attributes = true, $recursive = true, $content_only = false) { return $this->text; }
+	function toString_content($attributes = true, $recursive = true, $content_only = false)
+	{
+		return $this->text;
+	}
 
-	function toString($attributes = true, $recursive = true, $content_only = false) { return '<!--' . $this->text . '-->'; }
+	function toString($attributes = true, $recursive = true, $content_only = false)
+	{
+		return '<!--' . $this->text . '-->';
+	}
 }
 
 class HTML_NODE_CONDITIONAL extends HTML_Node
@@ -2564,9 +2606,15 @@ class HTML_NODE_CONDITIONAL extends HTML_Node
 		$this->condition = $condition;
 	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
-	function toString_attributes() { return ''; }
+	function toString_attributes()
+	{
+		return '';
+	}
 
 	function toString($attributes = true, $recursive = true, $content_only = false)
 	{
@@ -2597,13 +2645,25 @@ class HTML_NODE_CDATA extends HTML_Node
 		$this->text   = $text;
 	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
-	function toString_attributes() { return ''; }
+	function toString_attributes()
+	{
+		return '';
+	}
 
-	function toString_content($attributes = true, $recursive = true, $content_only = false) { return $this->text; }
+	function toString_content($attributes = true, $recursive = true, $content_only = false)
+	{
+		return $this->text;
+	}
 
-	function toString($attributes = true, $recursive = true, $content_only = false) { return '<![CDATA[' . $this->text . ']]>'; }
+	function toString($attributes = true, $recursive = true, $content_only = false)
+	{
+		return '<![CDATA[' . $this->text . ']]>';
+	}
 }
 
 class HTML_NODE_DOCTYPE extends HTML_Node
@@ -2618,13 +2678,25 @@ class HTML_NODE_DOCTYPE extends HTML_Node
 		$this->dtd    = $dtd;
 	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
-	function toString_attributes() { return ''; }
+	function toString_attributes()
+	{
+		return '';
+	}
 
-	function toString_content($attributes = true, $recursive = true, $content_only = false) { return $this->text; }
+	function toString_content($attributes = true, $recursive = true, $content_only = false)
+	{
+		return $this->text;
+	}
 
-	function toString($attributes = true, $recursive = true, $content_only = false) { return '<' . $this->tag . ' ' . $this->dtd . '>'; }
+	function toString($attributes = true, $recursive = true, $content_only = false)
+	{
+		return '<' . $this->tag . ' ' . $this->dtd . '>';
+	}
 }
 
 class HTML_NODE_EMBEDDED extends HTML_Node
@@ -2645,7 +2717,10 @@ class HTML_NODE_EMBEDDED extends HTML_Node
 		$this->self_close_str = $tag_char;
 	}
 
-	protected function filter_element() { return false; }
+	protected function filter_element()
+	{
+		return false;
+	}
 
 	function toString($attributes = true, $recursive = true, $content_only = false)
 	{
@@ -2684,31 +2759,31 @@ class HTML_NODE_ASP extends HTML_NODE_EMBEDDED
 //START gan_selector_html.php
 class Tokenizer_CSSQuery extends Tokenizer_Base
 {
-	const TOK_BRACKET_OPEN          = 100;
-	const TOK_BRACKET_CLOSE         = 101;
-	const TOK_BRACE_OPEN            = 102;
-	const TOK_BRACE_CLOSE           = 103;
-	const TOK_STRING                = 104;
-	const TOK_COLON                 = 105;
-	const TOK_COMMA                 = 106;
-	const TOK_NOT                   = 107;
-	const TOK_ALL                   = 108;
-	const TOK_PIPE                  = 109;
-	const TOK_PLUS                  = 110;
-	const TOK_SIBLING               = 111;
-	const TOK_CLASS                 = 112;
-	const TOK_ID                    = 113;
-	const TOK_CHILD                 = 114;
-	const TOK_COMPARE_PREFIX        = 115;
-	const TOK_COMPARE_CONTAINS      = 116;
+	const TOK_BRACKET_OPEN = 100;
+	const TOK_BRACKET_CLOSE = 101;
+	const TOK_BRACE_OPEN = 102;
+	const TOK_BRACE_CLOSE = 103;
+	const TOK_STRING = 104;
+	const TOK_COLON = 105;
+	const TOK_COMMA = 106;
+	const TOK_NOT = 107;
+	const TOK_ALL = 108;
+	const TOK_PIPE = 109;
+	const TOK_PLUS = 110;
+	const TOK_SIBLING = 111;
+	const TOK_CLASS = 112;
+	const TOK_ID = 113;
+	const TOK_CHILD = 114;
+	const TOK_COMPARE_PREFIX = 115;
+	const TOK_COMPARE_CONTAINS = 116;
 	const TOK_COMPARE_CONTAINS_WORD = 117;
-	const TOK_COMPARE_ENDS          = 118;
-	const TOK_COMPARE_EQUALS        = 119;
-	const TOK_COMPARE_NOT_EQUAL     = 120;
-	const TOK_COMPARE_BIGGER_THAN   = 121;
-	const TOK_COMPARE_SMALLER_THAN  = 122;
-	const TOK_COMPARE_REGEX         = 123;
-	const TOK_COMPARE_STARTS        = 124;
+	const TOK_COMPARE_ENDS = 118;
+	const TOK_COMPARE_EQUALS = 119;
+	const TOK_COMPARE_NOT_EQUAL = 120;
+	const TOK_COMPARE_BIGGER_THAN = 121;
+	const TOK_COMPARE_SMALLER_THAN = 122;
+	const TOK_COMPARE_REGEX = 123;
+	const TOK_COMPARE_STARTS = 124;
 	var $identifiers = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_-?';
 	var $custom_char_map = array(
 		'.' => self::TOK_CLASS,
@@ -2863,12 +2938,12 @@ class HTML_Selector
 	{
 		$error = htmlentities(str_replace(
 			array(
-			     '%tok%',
-			     '%pos%'
+				'%tok%',
+				'%pos%'
 			),
 			array(
-			     $this->parser->getTokenString(),
-			     (int)$this->parser->getPos()
+				$this->parser->getTokenString(),
+				(int)$this->parser->getPos()
 			),
 			$error
 		));
@@ -2883,14 +2958,14 @@ class HTML_Selector
 			return $p->getTokenString();
 		} elseif ($tok === Tokenizer_CSSQuery::TOK_STRING) {
 			return str_replace(array(
-			                        '\\\'',
-			                        '\\"',
-			                        '\\\\'
-			                   ), array(
-			                           '\'',
-			                           '"',
-			                           '\\'
-			                      ), $p->getTokenString(1, -1));
+				'\\\'',
+				'\\"',
+				'\\\\'
+			), array(
+				'\'',
+				'"',
+				'\\'
+			), $p->getTokenString(1, -1));
 		} elseif ($do_error) {
 			$this->error('Expected identifier at %pos%!');
 		}

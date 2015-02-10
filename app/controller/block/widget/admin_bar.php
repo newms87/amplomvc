@@ -15,9 +15,9 @@ class App_Controller_Block_Widget_AdminBar extends App_Controller_Block_Block
 		$data = $settings;
 
 		$data += array(
-			'admin_bar' => option('admin_bar'),
-		   'admin_link' => site_url('admin'),
-		   'clock_time' => $this->date->now('datetime_long'),
+			'admin_bar'  => option('admin_bar'),
+			'admin_link' => site_url('admin'),
+			'clock_time' => $this->date->now('datetime_long'),
 		);
 
 		$time_inc            = 3600 * 24;

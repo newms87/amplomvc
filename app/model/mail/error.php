@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Mail_Error extends Model
 {
 	public function getFailedMessage($mail_fail_id)

@@ -16,12 +16,13 @@ if (!defined('PASSWORD_DEFAULT')) {
 	 * Hash the password using the specified algorithm
 	 *
 	 * @param string $password The password to hash
-	 * @param int    $algo     The algorithm to use (Defined by PASSWORD_* constants)
-	 * @param array  $options  The options for the algorithm to use
+	 * @param int $algo The algorithm to use (Defined by PASSWORD_* constants)
+	 * @param array $options The options for the algorithm to use
 	 *
 	 * @return string|false The hashed password, or false on error.
 	 */
-	function password_hash($password, $algo, array $options = array()) {
+	function password_hash($password, $algo, array $options = array())
+	{
 		if (!function_exists('crypt')) {
 			trigger_error("Crypt must be loaded for password_hash to function", E_USER_WARNING);
 			return null;
@@ -49,7 +50,7 @@ if (!defined('PASSWORD_DEFAULT')) {
 				$raw_salt_len = 16;
 				// The length required in the final serialization
 				$required_salt_len = 22;
-				$hash_format = sprintf("$2y$%02d$", $cost);
+				$hash_format       = sprintf("$2y$%02d$", $cost);
 				break;
 			default:
 				trigger_error(sprintf("password_hash(): Unknown password hashing algorithm: %s", $algo), E_USER_WARNING);
@@ -62,11 +63,11 @@ if (!defined('PASSWORD_DEFAULT')) {
 				case 'integer':
 				case 'double':
 				case 'string':
-					$salt = (string) $options['salt'];
+					$salt = (string)$options['salt'];
 					break;
 				case 'object':
 					if (method_exists($options['salt'], '__tostring')) {
-						$salt = (string) $options['salt'];
+						$salt = (string)$options['salt'];
 						break;
 					}
 				case 'array':
@@ -82,7 +83,7 @@ if (!defined('PASSWORD_DEFAULT')) {
 				$salt = str_replace('+', '.', base64_encode($salt));
 			}
 		} else {
-			$buffer = '';
+			$buffer       = '';
 			$buffer_valid = false;
 			if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
 				$buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);
@@ -97,7 +98,7 @@ if (!defined('PASSWORD_DEFAULT')) {
 				}
 			}
 			if (!$buffer_valid && is_readable('/dev/urandom')) {
-				$f = fopen('/dev/urandom', 'r');
+				$f    = fopen('/dev/urandom', 'r');
 				$read = strlen($buffer);
 				while ($read < $raw_salt_len) {
 					$buffer .= fread($f, $raw_salt_len - $read);
@@ -149,14 +150,15 @@ if (!defined('PASSWORD_DEFAULT')) {
 	 *
 	 * @return array The array of information about the hash.
 	 */
-	function password_get_info($hash) {
+	function password_get_info($hash)
+	{
 		$return = array(
-			'algo' => 0,
+			'algo'     => 0,
 			'algoName' => 'unknown',
-			'options' => array(),
+			'options'  => array(),
 		);
 		if (substr($hash, 0, 4) == '$2y$' && strlen($hash) == 60) {
-			$return['algo'] = PASSWORD_BCRYPT;
+			$return['algo']     = PASSWORD_BCRYPT;
 			$return['algoName'] = 'bcrypt';
 			list($cost) = sscanf($hash, "$2y$%d$");
 			$return['options']['cost'] = $cost;
@@ -169,13 +171,14 @@ if (!defined('PASSWORD_DEFAULT')) {
 	 *
 	 * If the answer is true, after validating the password using password_verify, rehash it.
 	 *
-	 * @param string $hash    The hash to test
-	 * @param int    $algo    The algorithm used for new password hashes
-	 * @param array  $options The options array passed to password_hash
+	 * @param string $hash The hash to test
+	 * @param int $algo The algorithm used for new password hashes
+	 * @param array $options The options array passed to password_hash
 	 *
 	 * @return boolean True if the password needs to be rehashed.
 	 */
-	function password_needs_rehash($hash, $algo, array $options = array()) {
+	function password_needs_rehash($hash, $algo, array $options = array())
+	{
 		$info = password_get_info($hash);
 		if ($info['algo'] != $algo) {
 			return true;
@@ -195,11 +198,12 @@ if (!defined('PASSWORD_DEFAULT')) {
 	 * Verify a password against a hash using a timing attack resistant approach
 	 *
 	 * @param string $password The password to verify
-	 * @param string $hash     The hash to verify against
+	 * @param string $hash The hash to verify against
 	 *
 	 * @return boolean If the password matches the hash
 	 */
-	function password_verify($password, $hash) {
+	function password_verify($password, $hash)
+	{
 		if (!function_exists('crypt')) {
 			trigger_error("Crypt must be loaded for password_verify to function", E_USER_WARNING);
 			return false;

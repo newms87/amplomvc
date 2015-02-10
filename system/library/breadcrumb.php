@@ -1,4 +1,5 @@
 <?php
+
 class Breadcrumb extends Library
 {
 	protected $crumbs = array();
@@ -44,7 +45,7 @@ class Breadcrumb extends Library
 	{
 		if ($offset !== null) {
 			if ($offset <= 0) {
-				$offset = (count($this->crumbs)-1) + $offset;
+				$offset = (count($this->crumbs) - 1) + $offset;
 			} else {
 				$offset--;
 			}

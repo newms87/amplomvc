@@ -1,4 +1,5 @@
 <?php
+
 class App_Model_Localisation_Currency extends Model
 {
 	public function addCurrency($data)

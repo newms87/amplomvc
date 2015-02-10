@@ -1,4 +1,5 @@
 <?php
+
 final class Registry
 {
 	protected $data = array();
@@ -112,9 +113,9 @@ final class Registry
 	public function resource($name)
 	{
 		if (is_file(DIR_RESOURCES . $name . '.php')) {
-			include_once (DIR_RESOURCES . $name . '.php');
+			include_once(DIR_RESOURCES . $name . '.php');
 		} else {
-			include_once (DIR_RESOURCES . $name);
+			include_once(DIR_RESOURCES . $name);
 		}
 	}
 }

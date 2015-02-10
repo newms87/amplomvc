@@ -144,7 +144,9 @@ class Dev extends Library
 			);
 		}
 
-		usort($files, function ($a, $b) { return $a['date'] > $b['date']; });
+		usort($files, function ($a, $b) {
+			return $a['date'] > $b['date'];
+		});
 
 		return $files;
 	}
@@ -201,7 +203,7 @@ class Dev extends Library
 			unset($f);
 
 			//Cached Files
-			$cache_files = $this->cache->getLoadedFiles();
+			$cache_files      = $this->cache->getLoadedFiles();
 			$total_cache_size = 0;
 
 			foreach ($cache_files as $ckey => &$c) {

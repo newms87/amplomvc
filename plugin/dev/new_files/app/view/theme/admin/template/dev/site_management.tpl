@@ -23,8 +23,8 @@
 					<tr>
 						<td><label for="status">{{Status}}</label></td>
 						<td><?= build(array(
-								'type' => 'select',
-								'name'  => 'status',
+								'type'   => 'select',
+								'name'   => 'status',
 								'data'   => $data_site_status,
 								'select' => $status
 							)); ?>
@@ -40,12 +40,12 @@
 
 			<table class="list">
 				<thead>
-					<tr>
-						<td class="center">{{Domain}}</td>
-						<td class="center">{{Username}}</td>
-						<td class="center">{{Status}}</td>
-						<td></td>
-					</tr>
+				<tr>
+					<td class="center">{{Domain}}</td>
+					<td class="center">{{Username}}</td>
+					<td class="center">{{Status}}</td>
+					<td></td>
+				</tr>
 				</thead>
 				<? foreach ($dev_sites as $site) { ?>
 					<tr>

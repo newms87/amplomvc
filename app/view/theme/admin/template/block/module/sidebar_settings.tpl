@@ -3,11 +3,11 @@
 		<td>
 			{{Attribute Filter:}}<br/>
 			<?= build(array(
-				'type' => 'select',
+				'type'  => 'select',
 				'name'  => 'attribute_group_select',
-				'data'   => $data_attribute_groups,
-				'value' =>  'attribute_group_id',
-				'label' =>  'name',
+				'data'  => $data_attribute_groups,
+				'value' => 'attribute_group_id',
+				'label' => 'name',
 			)); ?>
 		</td>
 		<td>

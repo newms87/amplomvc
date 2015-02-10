@@ -46,12 +46,12 @@
 						<td>{{Theme}}</td>
 						<td>
 							<?= build(array(
-								'type' => 'multiselect',
-								'name'  => 'themes',
+								'type'   => 'multiselect',
+								'name'   => 'themes',
 								'data'   => $data_themes,
 								'select' => $themes,
-								'value' =>  'name',
-								'label' =>  'name',
+								'value'  => 'name',
+								'label'  => 'name',
 							)); ?>
 						</td>
 					</tr>
