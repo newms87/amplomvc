@@ -20,11 +20,15 @@ class App_Model_Plugin extends App_Model_Table
 
 			$plugins = $response['values'];
 
+			foreach ($plugins as &$plugin) {
+				$plugin['download'] = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
+			}
+			unset($plugin);
+
 			cache('repoapi.plugins', $plugins);
 		}
 
 		if ($search) {
-			html_dump($plugins, 'plugins');
 			foreach ($plugins as $plugin) {
 				if ($plugin['full_name'] === $search) {
 					return $plugin;
@@ -48,12 +52,15 @@ class App_Model_Plugin extends App_Model_Table
 
 		$zip_file = DIR_PLUGIN . 'subscription.zip';
 
-		$source = 'https://bitbucket.org/newms87/ac-subscriptions/get/ff4e72d507f5.zip';
+		if (empty($plugin['download'])) {
+			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
+			return false;
+		}
 
-		$pathinfo = pathinfo($source);
+		$pathinfo = pathinfo($plugin['download']);
 		$entry = $this->repo_team . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
 
-		if (!$this->url->download($source, $zip_file)) {
+		if (!$this->url->download($plugin['download'], $zip_file)) {
 			$this->error = $this->url->getError();
 			return false;
 		}
@@ -66,6 +73,11 @@ class App_Model_Plugin extends App_Model_Table
 		//Rename to working plugin name
 		$directives = get_comment_directives(DIR_PLUGIN . $entry);
 		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+
+		if (is_file(DIR_PLUGIN . $plugin_name)) {
+			$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
+			return false;
+		}
 
 		rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name);
 

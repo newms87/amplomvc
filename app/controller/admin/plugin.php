@@ -273,9 +273,6 @@ class App_Controller_Admin_Plugin extends Controller
 			message('error', $this->Model_Plugin->getError());
 		}
 
-		html_dump($this->message->fetch(), 'message');
-		exit;
-
 		if ($this->is_ajax) {
 			output_message();
 		} else {
