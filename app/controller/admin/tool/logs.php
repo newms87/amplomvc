@@ -73,7 +73,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		$action = _post('action');
 
 		if ($action === 'clear') {
-			$this->Model_Log->clear(_post('action_value'));
+			$this->Model_Log->clear(_post('value'));
 		} else {
 			foreach (_post('batch', array()) as $log_id) {
 				switch ($action) {
