@@ -741,7 +741,7 @@ function rrmdir($dir)
 	if (is_dir($dir)) {
 
 		foreach (glob($dir . '/{,.}*', GLOB_BRACE) as $file) {
-			if (preg_match("/\\.$/", $file)) {
+			if (preg_match("/\\/(\\.|\\.\\.)$/", $file)) {
 				continue;
 			}
 
