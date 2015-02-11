@@ -7,6 +7,7 @@
 
 			<div class="buttons">
 				<a href="<?= site_url('admin'); ?>" class="button">{{Admin Home}}</a>
+				<a href="<?= site_url('admin/settings/clear-cache'); ?>" class="button">{{Clear Cache}}</a>
 			</div>
 		</div>
 		<div class="section">
@@ -18,7 +19,6 @@
 					</a>
 				<? } ?>
 			</div>
-
 		</div>
 	</div>
 </div>

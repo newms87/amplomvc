@@ -281,7 +281,7 @@ class Url extends Library
 
 		//Lookup URL Alias
 		foreach ($this->aliases as $alias) {
-			if (preg_match("|^" . $alias['path'] . "|", $path)) {
+			if (preg_match("|^" . $alias['path'] . "$|", $path)) {
 				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|", $query)) {
 					return $alias;
 				}
@@ -306,7 +306,7 @@ class Url extends Library
 				'status' => 1,
 			);
 
-			return $this->Model_UrlAlias->addUrlAlias($url_alias);
+			return $this->Model_UrlAlias->save(null, $url_alias);
 		}
 
 		return true;
@@ -325,7 +325,7 @@ class Url extends Library
 		$url_alias_ids = $this->queryColumn($sql_query);
 
 		foreach ($url_alias_ids as $url_alias_id) {
-			$this->Model_UrlAlias->deleteUrlAlias($url_alias_id);
+			$this->Model_UrlAlias->remove($url_alias_id);
 		}
 
 		return $this->Model_UrlAlias->hasError();

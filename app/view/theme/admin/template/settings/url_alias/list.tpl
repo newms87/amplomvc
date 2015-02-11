@@ -1,27 +1,30 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
+
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
+
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{URL Aliases}}</h1>
+			<h1><img src="<?= theme_image('settings/alias.png'); ?>" alt=""/> {{URL Alias}}</h1>
 
-			<div class="batch_actions">
-				<?= block('widget/batch_action', null, $batch_action); ?>
-			</div>
-			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button">{{Insert}}</a>
-				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
-			</div>
+			<? if (user_can('w', 'admin/settings/url_alias')) { ?>
+				<? if (!empty($batch_action)) { ?>
+					<div class="batch_actions">
+						<?= block('widget/batch_action', null, $batch_action); ?>
+					</div>
+				<? } ?>
+
+				<div class="buttons">
+					<a href="<?= site_url('admin/settings/url-alias/form'); ?>" class="button">{{Add Alias}}</a>
+				</div>
+			<? } ?>
 		</div>
-		<div class="section">
-			<div class="limits">
-				<?= $limits; ?>
-			</div>
 
-			<div id="listing">
-				<?= $list_view; ?>
-			</div>
-			<div class="pagination"><?= $pagination; ?></div>
+		<div class="section">
+			<?= block('widget/views', null, array(
+				'group'           => 'url_alias_list',
+				'view_listing_id' => $view_listing_id
+			)); ?>
 		</div>
 	</div>
 </div>

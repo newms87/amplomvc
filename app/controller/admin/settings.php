@@ -24,4 +24,19 @@ class App_Controller_Admin_Settings extends Controller
 
 		redirect('admin');
 	}
+
+	public function clear_cache()
+	{
+		$tables = _post('cache_tables');
+
+		clear_cache($tables);
+
+		message('success', _l("The cache %s was successfully cleared!", $tables ? 'for ' . implode(',', $tables) : ''));
+
+		if (isset($_GET['redirect'])) {
+			redirect(get_last_page());
+		} else {
+			redirect('admin/settings');
+		}
+	}
 }

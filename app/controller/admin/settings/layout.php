@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Layout extends Controller
+class App_Controller_Admin_Settings_Layout extends Controller
 {
 	public function index()
 	{
@@ -9,7 +9,7 @@ class App_Controller_Admin_Layout extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Layouts"), site_url('admin/layout'));
+		breadcrumb(_l("Layouts"), site_url('admin/settings/layout'));
 
 		//The Table Columns
 		$columns = array();
@@ -40,11 +40,11 @@ class App_Controller_Admin_Layout extends Controller
 			$layout['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/layout/form', 'layout_id=' . $layout['layout_id'])
+					'href' => site_url('admin/settings/layout/form', 'layout_id=' . $layout['layout_id'])
 				),
 				'delete' => array(
 					'text' => _l("Delete"),
-					'href' => site_url('admin/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
+					'href' => site_url('admin/settings/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
 				)
 			);
 
@@ -90,7 +90,7 @@ class App_Controller_Admin_Layout extends Controller
 		$data['total']  = $layout_total;
 
 		//Action Buttons
-		$data['insert'] = site_url('admin/layout/form');
+		$data['insert'] = site_url('admin/settings/layout/form');
 
 		//Render
 		output($this->render('layout/list', $data));
@@ -103,7 +103,7 @@ class App_Controller_Admin_Layout extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Layouts"), site_url('admin/layout'));
+		breadcrumb(_l("Layouts"), site_url('admin/settings/layout'));
 
 		//Insert or Update
 		$layout_id = _get('layout_id');
@@ -133,8 +133,8 @@ class App_Controller_Admin_Layout extends Controller
 		$layout['data_stores'] = $this->Model_Site->getRecords(array('cache' => true));
 
 		//Action Buttons
-		$layout['save']   = site_url('admin/layout/save', 'layout_id=' . $layout_id);
-		$layout['cancel'] = site_url('admin/layout');
+		$layout['save']   = site_url('admin/settings/layout/save', 'layout_id=' . $layout_id);
+		$layout['cancel'] = site_url('admin/settings/layout');
 
 		//Render
 		output($this->render('layout/form', $layout));
@@ -151,7 +151,7 @@ class App_Controller_Admin_Layout extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/layout');
+			redirect('admin/settings/layout');
 		}
 	}
 
@@ -166,13 +166,13 @@ class App_Controller_Admin_Layout extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/layout');
+			redirect('admin/settings/layout');
 		}
 	}
 
 	public function batch_update()
 	{
-		if (!empty($_GET['selected']) && isset($_GET['action']) && user_can('w', 'admin/layout')) {
+		if (!empty($_GET['selected']) && isset($_GET['action']) && user_can('w', 'admin/settings/layout')) {
 			foreach ($_GET['selected'] as $layout_id) {
 				switch ($_GET['action']) {
 					case 'enable':
@@ -196,10 +196,10 @@ class App_Controller_Admin_Layout extends Controller
 			if (!$this->error && !$this->message->has('error', 'warning')) {
 				message('success', _l("Success: You have modified layouts!"));
 
-				redirect('admin/layout', $this->url->getQueryExclude('action'));
+				redirect('admin/settings/layout', $this->url->getQueryExclude('action'));
 			}
 		}
 
-		redirect('admin/layout');
+		redirect('admin/settings/layout');
 	}
 }

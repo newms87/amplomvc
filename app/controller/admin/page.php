@@ -271,28 +271,24 @@ class App_Controller_Admin_Page extends Controller
 
 	public function loadBlocks()
 	{
+		$filter = array(
+			'layouts' => _post('layout_id'),
+			'status'  => 1,
+		);
+
+		$block_list = $this->block->getBlocks($filter);
+
 		$blocks = array();
 
-		if (!empty($_POST['layout_id'])) {
-			$filter = array(
-				'layouts' => array($_POST['layout_id']),
-				'status'  => 1,
-			);
+		$data_positions = $this->theme->getPositions();
 
-			$block_list = $this->block->getBlocks($filter);
-
-			$blocks = array();
-
-			$data_positions = $this->theme->getPositions();
-
-			foreach ($block_list as $block) {
-				foreach ($block['profiles'] as $profile) {
-					$blocks[] = array(
-						'path'     => $block['path'],
-						'name'     => $block['name'],
-						'position' => $data_positions[$profile['position']],
-					);
-				}
+		foreach ($block_list as $block) {
+			foreach ($block['profiles'] as $profile) {
+				$blocks[] = array(
+					'path'     => $block['path'],
+					'name'     => $block['name'],
+					'position' => $data_positions[$profile['position']],
+				);
 			}
 		}
 

@@ -4,101 +4,74 @@ class App_Model_UrlAlias extends App_Model_Table
 {
 	protected $table = 'url_alias', $primary_key = 'url_alias_id';
 
-	public function addUrlAlias($data)
+	public function save($url_alias_id, $url_alias)
 	{
 		clear_cache('url_alias');
 
-		$data['alias'] = $this->url->format($data['alias']);
-
-		return $this->insert('url_alias', $data);
-	}
-
-	public function editUrlAlias($url_alias_id, $data)
-	{
-		clear_cache('url_alias');
-
-		if (!empty($data['alias'])) {
-			$data['alias'] = $this->url->format($data['alias']);
+		if (isset($url_alias['alias'])) {
+			if (empty($url_alias['alias'])) {
+				$this->error['alias'] = _l("Alias cannot be empty.");
+			}
+		} elseif (!$url_alias_id) {
+			$this->error['alias'] = _l("Alias is required.");
 		}
 
-		return $this->update('url_alias', $data, $url_alias_id);
+		if ($this->error) {
+			return false;
+	    }
+
+		$url_alias['alias'] = format('url', $url_alias['alias']);
+
+		if ($url_alias_id) {
+			$this->update('url_alias', $url_alias, $url_alias_id);
+		} else {
+			$url_alias_id = $this->insert('url_alias', $url_alias);
+		}
+
+		return $url_alias_id;
 	}
 
-	public function deleteUrlAlias($url_alias_id)
+	public function remove($url_alias_id)
 	{
 		clear_cache('url_alias');
 
 		return $this->delete('url_alias', $url_alias_id);
 	}
 
-	public function getUrlAlias($url_alias_id)
+	public function getColumns($filter = array())
 	{
-		return $this->queryRow("SELECT * FROM {$this->t['url_alias']} WHERE url_alias_id = " . (int)$url_alias_id);
+		//The Table Columns
+		$columns = array(
+			'status' => array(
+				'type'         => 'select',
+				'display_name' => _l("Status"),
+				'build_data'   => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
+				'filter'       => true,
+				'sortable'     => true,
+			),
+		);
+
+		return $this->getTableColumns('url_alias', $columns, $filter);
 	}
 
-	public function getUrlAliasByAlias($alias)
+	public function getViewListingId()
 	{
-		return $this->queryRow("SELECT * FROM {$this->t['url_alias']} WHERE alias = " . (int)$url_alias_id);
-	}
+		$view_listing_id = $this->Model_View->getViewListingBySlug('url_alias_list');
 
-	public function getUniqueAlias($alias, $path, $query = '')
-	{
-		$alias = $this->escape($this->url->format($alias));
+		if (!$view_listing_id) {
+			$view_listing = array(
+				'name' => _l("URL Aliases"),
+				'slug' => 'url_alias_list',
+				'path' => 'admin/settings/url_alias/listing',
+			);
 
-		$count = $this->queryVar("SELECT COUNT(*) FROM {$this->t['url_alias']} WHERE alias like '$alias%' AND !(path = '" . $this->escape($path) . "' AND query = '" . $this->escape($query) . "')");
-
-		if ($count) {
-			$alias .= '-' . $count;
+			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
 		}
 
-		return $alias;
-	}
-
-	public function getUrlAliases($data = array(), $select = '', $total = false)
-	{
-		//Select
-		if ($total) {
-			$select = "COUNT(*) as total";
-		} elseif (empty($select)) {
-			$select = '*';
-		}
-
-		//From
-		$from = $this->t['url_alias'] . " ua";
-
-		//Where
-		$where = "1";
-
-		if (!empty($data['alias'])) {
-			$where .= " AND LCASE(ua.alias) like '%" . strtolower($this->escape($data['alias'])) . "%'";
-		}
-
-		if (!empty($data['path'])) {
-			$where .= " AND LCASE(ua.path) like '" . strtolower($this->escape($data['path'])) . "%'";
-		}
-
-		if (!empty($data['query'])) {
-			$where .= " AND LCASE(ua.query) like '%" . strtolower($this->escape($data['query'])) . "%'";
-		}
-
-		//Order By and Limit
-		list($order, $limit) = $this->extractOrderLimit($data);
-
-		//The Query
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
-
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result->row['total'];
-		}
-
-		return $result->rows;
-	}
-
-	public function getTotalUrlAliases($data = array())
-	{
-		return $this->getUrlAliases($data, '', true);
+		return $view_listing_id;
 	}
 
 }

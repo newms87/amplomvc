@@ -19,18 +19,16 @@ class App_Controller_Admin_Settings_Role extends Controller
 		breadcrumb(_l("User Roles"), site_url('admin/settings/role'));
 
 		//Batch Actions
-		if (user_can('w', 'admin/settings/role/batch_action')) {
-			$actions = array(
-				'delete' => array(
-					'label' => _l("Delete"),
-				),
-			);
+		$actions = array(
+			'delete' => array(
+				'label' => _l("Delete"),
+			),
+		);
 
-			$data['batch_action'] = array(
-				'actions' => $actions,
-				'url'     => site_url('admin/settings/role/batch-action'),
-			);
-		}
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'url'     => site_url('admin/settings/role/batch-action'),
+		);
 
 		$data['view_listing_id'] = $this->Model_UserRole->getViewListingId();
 

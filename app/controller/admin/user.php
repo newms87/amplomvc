@@ -178,7 +178,7 @@ class App_Controller_Admin_User extends Controller
 	public function batch_action()
 	{
 		foreach (_post('batch', array()) as $user_id) {
-			switch ($_POST['action']) {
+			switch (_post('action')) {
 				case 'enable':
 					$this->Model_User->save($user_id, array('status' => 1));
 					break;
@@ -200,7 +200,7 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		if ($this->is_ajax) {
-			$this->listing();
+			output_message();
 		} else {
 			redirect('admin/user');
 		}

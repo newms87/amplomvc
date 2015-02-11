@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Admin_Tool_Logs extends Controller
+class App_Controller_Admin_Logs extends Controller
 {
 	public function index()
 	{
@@ -9,7 +9,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("User"), site_url('admin/tool/logs'));
+		breadcrumb(_l("User"), site_url('admin/logs'));
 
 		//Listing
 		$data['listing'] = $this->listing();
@@ -28,11 +28,11 @@ class App_Controller_Admin_Tool_Logs extends Controller
 
 		$data['batch_action'] = array(
 			'actions' => $actions,
-			'url'     => site_url('admin/tool/logs/batch-action'),
+			'url'     => site_url('admin/logs/batch-action'),
 		);
 
 		//Response
-		output($this->render('tool/logs', $data));
+		output($this->render('logs', $data));
 	}
 
 	public function listing()
@@ -55,7 +55,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $total,
-			'listing_path'   => 'admin/tool/logs/listing',
+			'listing_path'   => 'admin/logs/listing',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -93,7 +93,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/tool/logs');
+			redirect('admin/logs');
 		}
 	}
 
@@ -138,7 +138,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/tool/logs', 'log=' . $log);
+			redirect('admin/logs', 'log=' . $log);
 		}
 	}
 
@@ -161,7 +161,7 @@ class App_Controller_Admin_Tool_Logs extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/tool/logs', 'log=' . $log);
+			redirect('admin/logs', 'log=' . $log);
 		}
 	}
 }

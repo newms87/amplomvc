@@ -42,7 +42,7 @@ class App_Model_Navigation extends App_Model_Table
 
 		//Link already exists
 		if ($this->getLinkByName($link['navigation_group_id'], $link['name'])) {
-			$this->error['duplicate'] = _l("The navigation link %s already exists", $link['name']);
+			$this->error['duplicate'][] = _l("The navigation link %s already exists", $link['name']);
 		}
 
 		if ($this->error) {
@@ -201,13 +201,13 @@ class App_Model_Navigation extends App_Model_Table
 		$children = $this->queryColumn("SELECT navigation_id FROM {$this->t['navigation']} WHERE parent_id = " . (int)$navigation_id);
 
 		foreach ($children as $child_id) {
-			$this->deleteNavigationLink($child_id);
+			$this->remove($child_id);
 		}
 
 		return $this->delete("navigation", $navigation_id);
 	}
 
-	public function removeGroupLink($navigation_group_id, $link)
+	public function removeGroupLink($navigation_group_id, $name)
 	{
 		$navigation_group_id = $this->getGroupId($navigation_group_id);
 
@@ -216,21 +216,20 @@ class App_Model_Navigation extends App_Model_Table
 			return false;
 		}
 
-		$where = array(
-			'name'                => $link,
-			'navigation_group_id' => $navigation_group_id,
-		);
+		$navigation_id = $this->queryVar("SELECT navigation_id FROM {$this->t['navigation']} WHERE `name` = '" . $this->escape($name) . "' AND navigation_group_id = " . (int)$navigation_group_id);
 
-		return $this->delete($this->table, $where);
+		return $this->remove($navigation_id);
 	}
 
 	public function removeGroupLinks($group, $links)
 	{
+		$navigation_group_id = $this->getGroupId($group);
+
 		foreach ($links as $name => $link) {
-			$this->removeGroupLink($group, isset($link['name']) ? $link['name'] : $name);
+			$this->removeGroupLink($navigation_group_id, isset($link['name']) ? $link['name'] : $name);
 		}
 
-		return true;
+		return empty($this->error);
 	}
 
 	public function getLinkByName($navigation_group_id, $name)
@@ -489,26 +488,14 @@ class App_Model_Navigation extends App_Model_Table
 						'display_name' => 'Navigation',
 						'path'         => 'admin/navigation',
 					),
-					'system_design'            => array(
-						'display_name' => 'Design',
-						'children'     => array(
-							'system_design_layouts' => array(
-								'display_name' => 'Layouts',
-								'path'         => 'admin/layout',
-							),
-						),
-					),
 					'system_system_clearcache' => array(
 						'display_name' => 'Clear Cache',
-						'path'         => 'admin/tool/tool/clear_cache',
-					),
-					'system_system_tools'      => array(
-						'display_name' => 'System Tools',
-						'path'         => 'admin/tool/tool',
+						'path'         => 'admin/settings/clear_cache',
+						'query'        => 'redirect',
 					),
 					'system_logs'              => array(
 						'display_name' => 'Logs',
-						'path'         => 'admin/tool/logs',
+						'path'         => 'admin/logs',
 					),
 					'system_localisation'      => array(
 						'display_name' => 'Localisation',
