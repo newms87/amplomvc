@@ -24,17 +24,11 @@ class App_Model_Plugin extends App_Model_Table
 			$plugins = $response['values'];
 
 			foreach ($plugins as $key => &$plugin) {
-				$plugin['download'] = preg_replace("/^\\s*.*\\s*>>>>>/", '', trim($plugin['description']));
-
-				if (!$plugin['download']) {
-					unset($plugins[$key]);
-				}
-
-				$plugin['description'] = preg_replace("/>>>>>\\s*.*\\s*$/", '', trim($plugin['description']));
+				$plugin['download'] = $plugin['links']['html']['href'] . '/get/master.zip';
 			}
 			unset($plugin);
 
-			cache('repoapi.plugins', $plugins);
+			cache('repoapi.plugins.' . $team, $plugins);
 		}
 
 		if ($search) {
@@ -66,41 +60,47 @@ class App_Model_Plugin extends App_Model_Table
 			return false;
 		}
 
-		$pathinfo = pathinfo($plugin['download']);
-		$entry    = basename(dirname(dirname($pathinfo['dirname']))) . '-' . basename(dirname($pathinfo['dirname'])) . '-' . $pathinfo['filename'];
-
 		if (!$this->url->download($plugin['download'], $zip_file)) {
 			$this->error = $this->url->getError();
 			return false;
 		}
 
-		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN)) {
+		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN . 'plugin-download')) {
 			$this->error = $this->csv->getError();
 			return false;
 		}
 
-		//Rename to working plugin name
-		if (is_file(DIR_PLUGIN . $entry . '/setup.php')) {
-			$directives = get_comment_directives(DIR_PLUGIN . $entry . '/setup.php');
-		}
+		$dirs = glob(DIR_PLUGIN . 'plugin-download/*');
 
-		$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+		if (count($dirs) === 1) {
+			$entry = basename($dirs[0]);
 
-		if (is_file(DIR_PLUGIN . $plugin_name)) {
-			$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
+			//Rename to working plugin name
+			$setup_file = DIR_PLUGIN . 'plugin-download/' . $entry . '/setup.php';
 
-		} elseif (!@rename(DIR_PLUGIN . $entry, DIR_PLUGIN . $plugin_name)) {
-			$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists? Removed %s", DIR_PLUGIN . $entry);
-
-			if (is_dir(DIR_PLUGIN . $entry)) {
-				rrmdir(DIR_PLUGIN . $entry);
+			if (is_file($setup_file)) {
+				$directives = get_comment_directives($setup_file);
 			}
+
+			$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+
+			if (is_file(DIR_PLUGIN . $plugin_name)) {
+				$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
+
+			} elseif (!@rename(DIR_PLUGIN . 'plugin-download/' . $entry, DIR_PLUGIN . $plugin_name)) {
+				$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists?");
+			}
+
+			rrmdir(DIR_PLUGIN . 'plugin-download');
+
+			//Cleanup
+			unlink($zip_file);
+
+			return $this->error ? false : $plugin_name;
+		} else {
+			trigger_error("NOT 100% sure how to handle this guy");
+			exit;
 		}
-
-		//Cleanup
-		unlink($zip_file);
-
-		return $this->error ? false : $plugin_name;
 	}
 
 	public function getField($name, $field)
