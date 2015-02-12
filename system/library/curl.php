@@ -38,6 +38,7 @@ class Curl extends Library
 				CURLOPT_MAXREDIRS      => 10,
 				//SSL Verified
 				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
 				//Explain everything
 				CURLOPT_VERBOSE        => 1,
 				//1 time use
@@ -70,6 +71,7 @@ class Curl extends Library
 				CURLOPT_POST           => 1,
 				CURLOPT_POSTFIELDS     => http_build_query($data),
 				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_VERBOSE        => 1,
 				CURLOPT_FORBID_REUSE   => 1,
 			);

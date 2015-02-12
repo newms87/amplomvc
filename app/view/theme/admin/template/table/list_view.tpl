@@ -319,12 +319,12 @@
 
 									case 'image':
 										?>
-										<img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/>
+										<img src="<?= !empty($row[$slug . '_thumb']) ? $row[$slug . '_thumb'] : $value; ?>"/>
 										<? break;
 
 									case 'link-image':
 										?>
-										<a href="<?= $row['image']; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row['thumb']) ? $row['thumb'] : $row['image']; ?>"/></a>
+										<a href="<?= $value; ?>" <?= !empty($column['colorbox']) ? 'class="colorbox colorbox-photo"' : ''; ?>><img src="<?= !empty($row[$slug . '_thumb']) ? $row[$slug . '_thumb'] : $value; ?>"/></a>
 										<? break;
 
 									case 'text_list':
