@@ -319,7 +319,7 @@
 
 									case 'image':
 										?>
-										<img src="<?= !empty($row[$slug . '_thumb']) ? $row[$slug . '_thumb'] : $value; ?>"/>
+										<img src="<?= image(!empty($row[$slug . '_thumb']) ? $row[$slug . '_thumb'] : $value, null, option('admin_image_thumb_height', 50)); ?>"/>
 										<? break;
 
 									case 'link-image':
