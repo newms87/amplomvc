@@ -145,8 +145,9 @@ class App_Controller_Admin_User extends Controller
 
 	public function save()
 	{
-		if ($this->Model_User->save(_request('user_id'), $_POST)) {
+		if ($user_id = $this->Model_User->save(_request('user_id'), $_POST)) {
 			message('success', _l("The User has been updated successfully!"));
+			message('data', array('user_id' => $user_id));
 		} else {
 			message('error', $this->Model_User->getError());
 		}

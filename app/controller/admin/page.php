@@ -162,8 +162,9 @@ class App_Controller_Admin_Page extends Controller
 				'display_title' => 0,
 			);
 
-		if ($this->Model_Page->save(_request('page_id'), $page)) {
+		if ($page_id = $this->Model_Page->save(_request('page_id'), $page)) {
 			message('success', _l("The Page has been updated successfully!"));
+			message('data', array('page_id' => $page_id));
 
 			if ($this->Model_Page->hasError()) {
 				message('notify', $this->Model_Page->getError());
