@@ -956,7 +956,7 @@ if (isset($_POST['submit'])) {
 										<div class="filetype"><?php echo $extension_lower ?></div><?php } ?>
 									<div class="img-container">
 										<span></span>
-										<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original ? "original" : "" ?> <?php echo $is_icon_thumb ? "icon" : "" ?>" src="<?php echo site_url($src_thumb); ?>">
+										<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original ? "original" : "" ?> <?php echo $is_icon_thumb ? "icon" : "" ?>" src="<?php echo $fm_url . $src_thumb; ?>">
 									</div>
 								</div>
 								<div class="img-precontainer-mini <?php if ($is_img) {
@@ -968,7 +968,7 @@ if (isset($_POST['submit'])) {
 									<div class="img-container-mini">
 										<span></span>
 										<?php if ($mini_src != "") { ?>
-											<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original_mini ? "original" : "" ?> <?php echo $is_icon_thumb_mini ? "icon" : "" ?>" src="<?php echo site_url($mini_src); ?>">
+											<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original_mini ? "original" : "" ?> <?php echo $is_icon_thumb_mini ? "icon" : "" ?>" src="<?php echo $fm_url . $mini_src; ?>">
 										<?php } ?>
 									</div>
 								</div>
