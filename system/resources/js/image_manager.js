@@ -8,7 +8,7 @@ $.fn.ac_imageinput = function (options) {
 			class:       'click-image',
 			allow_clear: false,
 			show_help:   false,
-			show_hover:  true,
+			show_hover:  false,
 			noimage:     $ac.theme_url + 'image/no_image.png',
 			width:       $input.attr('data-width') || $ac.image_thumb_width || 140,
 			height:      $input.attr('data-height') || $ac.image_thumb_height || 140
