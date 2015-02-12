@@ -199,7 +199,11 @@ class DB
 			$rows = array();
 
 			foreach ($resource->rows as $row) {
-				$rows[$row[$index]] = $row;
+				if (isset($row[$index])) {
+					$rows[$row[$index]] = $row;
+				} else {
+					$rows[] = $row;
+				}
 			}
 
 			return $rows;
