@@ -15,25 +15,25 @@ class Image extends Library
 		parent::__construct();
 
 		if ($file) {
-			$this->set_image($file);
+			$this->set($file);
 		}
 
 		$this->dir_mode = option('config_image_dir_mode');
 	}
 
-	public function get($filename)
+	public function get($filename, $return_dir = false)
 	{
-		$filename = str_replace('\\', '/', $filename);
+		$filename = str_replace('/./', '/', str_replace('\\', '/', $filename));
 
 		if (is_file(DIR_IMAGE . $filename)) {
-			$filename = URL_IMAGE . $filename;
+			return $return_dir ? DIR_IMAGE . $filename : URL_IMAGE . $filename;
 		} elseif (is_file($filename)) {
-			$filename = str_replace(DIR_SITE, URL_SITE, $filename);
+			return $return_dir ? $filename : str_replace(DIR_SITE, URL_SITE, $filename);
 		} elseif (!filter_var($filename, FILTER_VALIDATE_URL) && strpos($filename, '//') !== 0) {
 			return '';
 		}
 
-		return str_replace('/./', '/', $filename);
+		return  $filename;
 	}
 
 	public function info($key = null)
@@ -45,7 +45,7 @@ class Image extends Library
 		return $this->info;
 	}
 
-	public function set_image($image)
+	public function set($image)
 	{
 		$file = is_file($image) ? $image : DIR_IMAGE . $image;
 
@@ -67,7 +67,7 @@ class Image extends Library
 		}
 	}
 
-	public function unset_image()
+	public function clear()
 	{
 		imagedestroy($this->image);
 		$this->image = null;
@@ -137,7 +137,7 @@ class Image extends Library
 					break;
 			}
 
-			$this->unset_image();
+			$this->clear();
 		}
 
 		if (!$success) {
@@ -147,7 +147,7 @@ class Image extends Library
 		return $success;
 	}
 
-	public function resize($image, $width = 0, $height = 0, $background_color = '')
+	public function resize($image, $width = 0, $height = 0, $background_color = '', $return_dir = false)
 	{
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
@@ -158,7 +158,7 @@ class Image extends Library
 		}
 
 		//this sets the image file as the active image to modify
-		$this->set_image($image);
+		$this->set($image);
 
 		//if the image is 0 width or 0 height, do not return an image
 		if (!$this->info['width'] || !$this->info['height']) {
@@ -187,7 +187,7 @@ class Image extends Library
 
 		//if the image is the correct size we do not need to do anything
 		if ($scale_x === 1 && $scale_y === 1) {
-			return $this->get($image);
+			return $this->get($image, $return_dir);
 		}
 
 		$new_width  = (int)($this->info['width'] * $scale_x);
@@ -243,7 +243,7 @@ class Image extends Library
 			$this->save($new_image_file);
 		}
 
-		return $this->get($new_image_path);
+		return $this->get($new_image_path, $return_dir);
 	}
 
 	public function ico($source, $destination = null, $sizes = null)
@@ -338,7 +338,7 @@ class Image extends Library
 
 	public function rotate($degree, $color = 'FFFFFF')
 	{
-		$rgb = $this->html2rgb($color);
+		$rgb = $this->hex2rgb($color);
 
 		$this->image = imagerotate($this->image, $degree, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 
@@ -346,26 +346,31 @@ class Image extends Library
 		$this->info['height'] = imagesy($this->image);
 	}
 
-	private function filter($filter)
+	public function filter($filter)
 	{
 		imagefilter($this->image, $filter);
 	}
 
-	private function text($text, $x = 0, $y = 0, $size = 5, $color = '000000')
+	public function text($text, $x = 0, $y = 0, $size = 5, $color = '000000')
 	{
-		$rgb = $this->html2rgb($color);
+		$rgb = $this->hex2rgb($color);
 
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	private function merge($file, $x = 0, $y = 0, $opacity = 100)
+	public function merge($file, $x = 0, $y = 0, $opacity = 100)
 	{
 		$merge = $this->create($file);
 
-		$merge_width  = imagesx($this->image);
-		$merge_height = imagesy($this->image);
+		$merge_width = imagesx($merge);
+		$merge_height = imagesy($merge);
 
-		imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
+		if ($opacity === 100) {
+			imagecopy($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height);
+		} else {
+			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
+		}
+
 	}
 
 	public function heximagecolorallocate($hex)
@@ -378,9 +383,9 @@ class Image extends Library
 		return imagecolorallocate($this->image, (int)hexdec($hex[1] . $hex[2]), (int)hexdec($hex[3] . $hex[4]), (int)hexdec($hex[5] . $hex[6]));
 	}
 
-	private function html2rgb($color)
+	public function hex2rgb($color)
 	{
-		if ($color[0] == '#') {
+		if ($color[0] === '#') {
 			$color = substr($color, 1);
 		}
 
@@ -615,6 +620,34 @@ class Image extends Library
 		$this->shutdown_file = '';
 	}
 
+	public function colorReplace($color, $replace, $exact = true)
+	{
+		if (is_string($color)) {
+			$color = $this->hex2rgb($color);
+		}
+
+		if ($exact) {
+			$color_index = imagecolorexact($this->image, $color[0], $color[1], $color[2]);
+		} else {
+			$color_index = imagecolorresolve($this->image, $color[0], $color[1], $color[2]);
+		}
+
+		if (!$color_index) {
+			$this->error['color'] = _l("Unable to find the correct color in the image.");
+			echo 'no color';
+			exit;
+			return false;
+		}
+
+		if (is_string($replace)) {
+			$replace = $this->hex2rgb($replace);
+		}
+
+		imagecolorset($this->image, $color_index, $replace[0], $replace[1], $replace[2]);
+
+		return true;
+	}
+
 	public function getPixelColor($image, $x, $y, $format = 'hex')
 	{
 		$rgb = imagecolorat($image, $x, $y);
@@ -688,7 +721,7 @@ class Image extends Library
 
 	public function mosaic($image, $rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
 	{
-		$this->set_image($image);
+		$this->set($image);
 
 		$width  = $this->info['width'];
 		$height = $this->info['height'];
