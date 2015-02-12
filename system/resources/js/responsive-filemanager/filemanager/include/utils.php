@@ -1,7 +1,7 @@
 <?php
 
 if ($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager") {
-	die('forbiden');
+	die('forbidden');
 }
 
 function deleteDir($dir)
