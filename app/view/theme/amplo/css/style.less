@@ -1048,6 +1048,121 @@ section.page {
   }
 }
 
+
+.select-box-list {
+  padding: 2em;
+  text-align: center;
+
+  h1 {
+    font-size: 2em;
+    text-transform: uppercase;
+    color: @color-secondary;
+
+  }
+
+  label.radio {
+    input[type="radio"] + .select-box, .select-box {
+      box-sizing: border-box;
+      position: relative;
+      display: inline-block;
+      text-align: center;
+      color: @color-secondary;
+      background: white;
+      border: 2px solid @color-secondary;
+      border-radius: 2px;
+      padding: 1em;
+      margin: 1em;
+      width: 240px;
+      height: 200px;
+      cursor: pointer;
+
+      &:before {
+        position: absolute;
+      }
+
+      h5 {
+        text-transform: uppercase;
+        font-family: OpenSansBold;
+        color: @color-secondary;
+      }
+
+      .text {
+        margin-top: 1em;
+        font: .9em OpenSansRegular;
+        text-transform: none;
+      }
+    }
+
+    &.add-new, &.use-same {
+      .plus-icon, .equal-icon {
+        position: absolute;
+        left: 50%;
+        top: 36%;
+        margin: 0 0 0 -16px;
+      }
+
+      input + .label .text, .text {
+        text-transform: uppercase;
+        font-family: OpenSansBold;
+        position: absolute;
+        bottom: 1em;
+        left: 0;
+        text-align: center;
+        width: 100%;
+      }
+    }
+
+    & input:checked + .select-box, &:hover .select-box {
+      color: @color-main;
+      border: 2px solid @color-main;
+      box-shadow: inset 0 0 0 2px @color-main;
+      background: white;
+
+      h5 {
+        color: @color-main;
+      }
+
+      .text {
+        color: @color-main;
+      }
+
+      .plus-icon {
+        .sprite-img.plus-icon.active;
+      }
+
+      .equal-icon {
+        .sprite-img.equal-icon.active;
+      }
+    }
+  }
+
+  & + .new-method {
+    .show-height;
+
+    h3 {
+      color: @color-secondary;
+      margin-bottom: 1em;
+    }
+
+    .form-item {
+      input, select {
+        width: 100%;
+      }
+
+      .sm-6 {
+        input, select {
+          width: 97%;
+        }
+      }
+    }
+
+    button {
+      width: 100%;
+      max-width: 20em;
+    }
+  }
+}
+
 .form-editor {
   .input {
     margin-top: 1em;
