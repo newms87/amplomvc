@@ -325,6 +325,11 @@ $.fn.show_msg = function (type, msg, options) {
 		return $(this).find('.messages').remove();
 	}
 
+	//Data types are not messages
+	if (type === 'data') {
+		return;
+	}
+
 	options = $.extend({
 		append:      true,
 		append_list: false,
@@ -794,6 +799,17 @@ function register_ajax_calls(is_ajax) {
 
 			var params = {
 				callback: function (response) {
+					//Redirect from new form to edit form
+					if (response.data) {
+						for (var id in response.data) {
+							var regx = new RegExp(id+'=\\d+');
+
+							if (!location.href.match(regx)) {
+								location = location.href + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+							}
+						}
+					}
+
 					$form.show_msg(response);
 
 					if (!response.error && $form.closest('#colorbox').length) {

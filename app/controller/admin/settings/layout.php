@@ -142,8 +142,9 @@ class App_Controller_Admin_Settings_Layout extends Controller
 
 	public function save()
 	{
-		if ($this->Model_Layout->save(_get('layout_id'), $_POST)) {
+		if ($layout_id = $this->Model_Layout->save(_get('layout_id'), $_POST)) {
 			message('success', _l("Success: You have modified layouts!"));
+			message('data', array('layout_id' => $layout_id));
 		} else {
 			message('error', $this->Model_Layout->getError());
 		}

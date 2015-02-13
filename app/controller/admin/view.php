@@ -125,10 +125,9 @@ class App_Controller_Admin_View extends Controller
 
 	public function save()
 	{
-		$view_listing_id = _request('view_listing_id');
-
-		if ($this->Model_View->saveViewListing($view_listing_id, $_POST)) {
+		if ($view_listing_id = $this->Model_View->saveViewListing(_request('view_listing_id'), $_POST)) {
 			message('success', _l("The View has been saved"));
+			message('data', array('view_listing_id' => $view_listing_id));
 		} else {
 			message('error', $this->Model_View->getError());
 		}
@@ -136,7 +135,7 @@ class App_Controller_Admin_View extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} elseif ($this->message->has('error')) {
-			$this->form();
+			post_redirect('admin/view/form', 'view_listing_id=' . _request('view_listing_id'));
 		} else {
 			redirect('admin/view');
 		}

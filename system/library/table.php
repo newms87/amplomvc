@@ -169,7 +169,13 @@ class Table extends Library
 					}
 					break;
 				case 'multiselect':
-					break;
+					foreach ($this->rows as &$row) {
+						if (!is_array($row[$slug])) {
+							$row[$slug] = array($row[$slug]);
+						}
+					}
+					unset($row);
+
 				case 'select':
 					if (empty($column['build_data'])) {
 						$column['build_data'] = array('' => _l('(None)'));

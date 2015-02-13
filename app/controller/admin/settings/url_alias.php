@@ -136,8 +136,9 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 
 	public function save()
 	{
-		if ($this->Model_UrlAlias->save(_request('url_alias_id'), $_POST)) {
+		if ($url_alias_id = $this->Model_UrlAlias->save(_request('url_alias_id'), $_POST)) {
 			message('success', _l("The alias has been saved!"));
+			message('data', array('url_alias_id' => $url_alias_id));
 		} else {
 			message('error', $this->Model_UrlAlias->getError());
 		}

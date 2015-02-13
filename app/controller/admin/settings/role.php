@@ -136,10 +136,11 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 	public function save()
 	{
-		if (!$this->Model_UserRole->save(_request('user_role_id'), $_POST)) {
-			message('error', $this->Model_UserRole->getError());
-		} else {
+		if ($user_role_id = $this->Model_UserRole->save(_request('user_role_id'), $_POST)) {
 			message('success', _l("The User Role has been updated!"));
+			message('data', array('user_role_id' => $user_role_id));
+		} else {
+			message('error', $this->Model_UserRole->getError());
 		}
 
 		//Response

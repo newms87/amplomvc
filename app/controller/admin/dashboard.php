@@ -67,8 +67,9 @@ class App_Controller_Admin_Dashboard extends Controller
 
 		if ($dashboard) {
 			if (user_can('w', 'admin/dashboards/' . $dashboard['name'])) {
-				if ($this->Model_Dashboard->save($dashboard_id, $_POST)) {
+				if ($dashboard_id = $this->Model_Dashboard->save($dashboard_id, $_POST)) {
 					message('success', _l("The dashboard has been saved"));
+					message('data', array('dashboard_id' => $dashboard_id));
 				} else {
 					message('error', $this->Model_Dashboard->getError());
 				}

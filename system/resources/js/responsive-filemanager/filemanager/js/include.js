@@ -743,6 +743,7 @@ function apply_link(file, external) {
 }
 
 function apply_img(file, external) {
+	console.log('applying...');
 	if ($('#popup').val() == 1) var window_parent = window.opener; else var window_parent = window.parent;
 	var path = $('#cur_dir').val();
 	path = path.replace('\\', '/');
@@ -817,11 +818,7 @@ function apply_any(path, file) {
 function close_window() {
 	if ($('#popup').val() == 1) window.close();
 	else {
-		if (typeof parent.jQuery !== "undefined" && parent.jQuery) {
-			parent.jQuery.fancybox.close();
-		} else {
-			parent.$.fancybox.close();
-		}
+		parent.$.colorbox.close();
 	}
 }
 

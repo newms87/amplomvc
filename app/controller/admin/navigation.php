@@ -168,12 +168,11 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function save()
 	{
-		$navigation_group_id = $this->Model_Navigation->saveGroup((int)_get('navigation_group_id'), $_POST);
-
-		if ($this->Model_Navigation->hasError()) {
-			message('error', $this->Model_Navigation->getError());
-		} else {
+		if ($navigation_group_id = $this->Model_Navigation->saveGroup((int)_get('navigation_group_id'), $_POST)) {
 			message('success', _l("The Navigation Group has been saved!"));
+			message('data', array('navigation_group_id' => $navigation_group_id));
+		} else {
+			message('error', $this->Model_Navigation->getError());
 		}
 
 		if ($this->is_ajax) {
