@@ -60,7 +60,7 @@
 						<input type="text" name="name" value="<?= $customer['first_name'] . ' ' . $customer['last_name']; ?>" placeholder="{{Company}}"/>
 					</div>
 					<div class="input-item">
-						<input type="text" name="address_1" value="<?= _post('address_1'); ?>" placeholder="{{Street Address}}"/>
+						<input type="text" name="address" value="<?= _post('address'); ?>" placeholder="{{Street Address}}"/>
 					</div>
 					<div class="input-item">
 						<input type="text" name="address_2" value="<?= _post('address_2'); ?>" placeholder="{{Apt # / P.O Box}}"/>

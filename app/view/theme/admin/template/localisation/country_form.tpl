@@ -36,7 +36,7 @@ First Name =
 {first_name}<br />
 Last Name = {last_name}<br />
 Company = {company}<br />
-Address 1 = {address_1}<br />
+Address 1 = {address}<br />
 Address 2 = {address_2}<br />
 City = {city}<br />
 Postcode = {postcode}<br />

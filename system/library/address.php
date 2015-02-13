@@ -18,7 +18,7 @@ class Address extends Library
 			'zone_id'    => 0,
 			'postcode'   => '',
 			'city'       => '',
-			'address_1'  => '',
+			'address'  => '',
 			'address_2'  => '',
 		);
 
@@ -33,7 +33,7 @@ class Address extends Library
 				$address_format =
 					"{first_name} {last_name}\n" .
 					"{company}\n" .
-					"{address_1}\n" .
+					"{address}\n" .
 					"{address_2}\n" .
 					"{city}, {zone} {postcode}\n" .
 					"{country}";
@@ -43,7 +43,13 @@ class Address extends Library
 		}
 
 
-		$insertables = $address;
+		$insertables = $address + array(
+				'country'    => '',
+				'iso_code_2' => '',
+				'iso_code_3' => '',
+				'zone'       => '',
+				'zone_code'  => '',
+			);
 
 		//Country Info
 		if (option('site_international')) {
@@ -72,13 +78,16 @@ class Address extends Library
 
 		$address_format = nl2br(insertables($insertables, $address_format, '{', '}'));
 
-		$sr = array(
-			"#<br />\\s*<br />#" => '<br />',
-			"#^\\s*<br />#"      => '',
+		$replace = array(
+			"#<br\\s*/?>\\s*<br\\s*/?>#i"  => '<br />',
+			"#^(<br\\s*/?>)?[\\s\t\r,]+#i" => '',
+			"#(<br\\s*/?>)?[\\s\t\r,]+$#i" => '',
 		);
 
+		$count = 1;
+
 		do {
-			$address_format = preg_replace(array_keys($sr), $sr, $address_format, -1, $count);
+			$address_format = preg_replace(array_keys($replace), array_values($replace), $address_format, -1, $count);
 		} while ($count);
 
 		return $address_format;

@@ -145,7 +145,7 @@ class App_Controller_Customer extends Controller
 			'last_name'  => '',
 			'email'      => '',
 			'company'    => '',
-			'address_1'  => '',
+			'address'  => '',
 			'address_2'  => '',
 			'postcode'   => '',
 			'city'       => '',

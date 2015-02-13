@@ -70,7 +70,7 @@
 						<h2>{{Your Address}} </h2>
 
 						<div class="form-item required">
-							<input type="text" placeholder="{{Address}}" name="address_1" value="<?= $address_1; ?>"/>
+							<input type="text" placeholder="{{Address}}" name="address" value="<?= $address; ?>"/>
 						</div>
 						<div class="form-item">
 							<input type="text" placeholder="{{Address Line 2}}" name="address_2" value="<?= $address_2; ?>"/>
