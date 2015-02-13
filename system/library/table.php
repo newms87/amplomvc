@@ -195,8 +195,11 @@ class Table extends Library
 					foreach ($column['build_data'] as $key => $bd_item) {
 						if (is_array($bd_item)) {
 							//Validate Data keys and values are set
-							if (($build_key !== false && !isset($bd_item[$build_key])) || !isset($bd_item[$build_value])) {
-								trigger_error(_l("You must set the build config to match a key and value in the build data for all values!", $slug));
+							if (($build_key !== false && !isset($bd_item[$build_key]))) {
+								trigger_error(_l("Build Error: Row %s does not have index %s to use as the value!", $key, $build_key));
+								exit();
+							} elseif (!isset($bd_item[$build_value])) {
+								trigger_error(_l("Build Error: Row %s does not have index %s to use as the label!", $key, $build_value));
 								exit();
 							}
 

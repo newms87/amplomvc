@@ -118,6 +118,11 @@ class Message extends Library
 		$html = '';
 
 		foreach ($messages as $t => $msgs) {
+			//Data type messages should not be displayed.
+			if ($t === 'data') {
+				continue;
+			}
+
 			$html .= "<div class =\"messages " . ($type ? $type : $t) . "\">";
 
 			if (!is_array($msgs)) {
