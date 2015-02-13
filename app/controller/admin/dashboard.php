@@ -53,7 +53,8 @@ class App_Controller_Admin_Dashboard extends Controller
 		breadcrumb(_l("Dashboards"), site_url('admin/dashboard'));
 		breadcrumb($dashboard['title'], site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard_id));
 
-		$dashboard['group']    = 'dash-' . $dashboard_id;
+		$dashboard['group'] = 'dash-' . $dashboard_id;
+
 		$dashboard['can_edit'] = user_can('w', 'admin/dashboards/' . $dashboard['name']);
 
 		//Render

@@ -56,12 +56,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 				$view_listing_id = $this->Model_View->syncViewListing($view_listing);
 
-				if (!$view_listing_id && empty($views)) {
-					message('error', $this->Model_View->getError());
-					$this->output = render_message('error');
-					return;
-				}
-
 				if ($view_listing_id) {
 					$settings['view_listing_id'] = $view_listing_id;
 					return $this->build($settings);
@@ -83,10 +77,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'view_type'       => '',
 			'show'            => !empty($settings['view_listing_id']) ? 1 : 0,
 		);
-
-		if (!$views) {
-			$views[] = $default_view;
-		}
 
 		//AC Template
 		$views['__ac_template__'] = array(
