@@ -168,10 +168,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			$settings['can_modify'] = true;
 		}
 
-		//Action
-		$settings['save_view']   = site_url('block/widget/views/save-view');
-		$settings['remove_view'] = site_url('block/widget/views/remove-view');
-
 		//Render
 		$this->render('block/widget/views', $settings);
 
@@ -277,7 +273,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		if ($this->is_ajax) {
-			message('view_id', $view_id);
+			message('data', array('view_id' => $view_id));
 			output_message();
 		} else {
 			redirect(_post('path', ' admin'));
