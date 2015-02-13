@@ -4,6 +4,8 @@ class App_Model_Customer extends App_Model_Table
 {
 	protected $table = 'customer', $primary_key = 'customer_id';
 
+	protected $meta = array();
+
 	public function save($customer_id, $customer)
 	{
 		if (isset($customer['name']) && !isset($customer['first_name'])) {
@@ -96,11 +98,13 @@ class App_Model_Customer extends App_Model_Table
 			return false;
 		}
 
-		if (_is_object($value)) {
-			$value      = serialize($value);
-			$serialized = 1;
-		} else {
-			$serialized = 0;
+		$this->meta[$customer_id][$key] = $value;
+		clear_cache('customer.' . $customer_id);
+
+		$serialized = (int)_is_object($value);
+
+		if ($serialized) {
+			$value = serialize($value);
 		}
 
 		$customer_meta = array(
@@ -116,33 +120,38 @@ class App_Model_Customer extends App_Model_Table
 	public function setMeta($customer_id, $key, $value)
 	{
 		$this->deleteMeta($customer_id, $key);
-
 		return $this->addMeta($customer_id, $key, $value);
 	}
 
-	public function getMeta($customer_id)
+	public function getMeta($customer_id, $key = null, $default = null)
 	{
-		$rows = $this->queryRows("SELECT * FROM {$this->t['customer_meta']} WHERE customer_id = " . (int)$customer_id);
+		if (empty($this->meta[$customer_id])) {
+			$rows = $this->queryRows("SELECT * FROM {$this->t['customer_meta']} WHERE customer_id = " . (int)$customer_id);
 
-		$meta = array();
-
-		foreach ($rows as $row) {
-			$meta[$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+			foreach ($rows as $row) {
+				$this->meta[$customer_id][$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+			}
 		}
 
-		return $meta;
+		if ($key) {
+			return isset($this->meta[$customer_id][$key]) ? $this->meta[$customer_id][$key] : $default;
+		}
+
+		return $this->meta[$customer_id];
 	}
 
 	public function deleteMeta($customer_id, $key)
 	{
+		unset($this->meta[$customer_id][$key]);
+
+		clear_cache('customer.' . $customer_id);
+
 		$where = array(
 			'customer_id' => $customer_id,
 			'key'         => $key,
 		);
 
-		$this->delete('customer_meta', $where);
-
-		return true;
+		return $this->delete('customer_meta', $where);
 	}
 
 	/** Addresses **/
@@ -157,6 +166,12 @@ class App_Model_Customer extends App_Model_Table
 		if (!$customer_id) {
 			$this->error['customer_id'] = _l("Address must be assigned to a customer.");
 			return false;
+		}
+
+		if (!$address_id) {
+			if ($address_id = $this->addressExists($customer_id, $address)) {
+				return $address_id;
+			}
 		}
 
 		$address_id = $this->Model_Address->save($address_id, $address);
@@ -179,6 +194,19 @@ class App_Model_Customer extends App_Model_Table
 		clear_cache('customer.' . $customer_id);
 
 		return $address_id;
+	}
+
+	public function addressExists($customer_id, $address)
+	{
+		unset($address['address_id']);
+
+		$where = $this->getWhere('address', $address);
+
+		if (empty($where)) {
+			return false;
+		}
+
+		return $this->queryVar("SELECT a.address_id FROM {$this->t['address']} a LEFT JOIN {$this->t['customer_address']} ca ON (ca.address_id = a.address_id) WHERE $where AND ca.customer_id = " . (int)$customer_id);
 	}
 
 	public function getAddresses($customer_id, $sort = array(), $filter = array(), $select = '*', $total = false, $index = null)

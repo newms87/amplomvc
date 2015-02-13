@@ -63,7 +63,7 @@ class App_Controller_Account_Address extends Controller
 			'first_name' => customer_info('first_name'),
 			'last_name'  => customer_info('last_name'),
 			'company'    => '',
-			'address_1'  => '',
+			'address'    => '',
 			'address_2'  => '',
 			'postcode'   => '',
 			'city'       => '',

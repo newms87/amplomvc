@@ -143,7 +143,7 @@
 							<span class="help">
 								{{Insertables:}}
 								<br/>
-								{first_name}, {last_name}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}.
+								{first_name}, {last_name}, {company}, {address}, {address_2}, {postcode}, {zone}, {zone_code}, {country}.
 								<br/>
 								<br/>
 								{{Can be individually set under System > Localisation > Countries}}

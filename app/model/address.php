@@ -120,7 +120,7 @@ class App_Model_Address extends App_Model_Table
 			'zone_id'    => 0,
 			'postcode'   => '',
 			'city'       => '',
-			'address_1'  => '',
+			'address'  => '',
 			'address_2'  => '',
 		);
 
@@ -135,7 +135,7 @@ class App_Model_Address extends App_Model_Table
 				$address_format =
 					"{first_name} {last_name}\n";
 				"{company}\n" .
-				"{address_1}\n" .
+				"{address}\n" .
 				"{address_2}\n" .
 				"{city}, {zone} {postcode}\n" .
 				"{country}";
@@ -200,14 +200,14 @@ class App_Model_Address extends App_Model_Table
 			$this->error['last_name'] = _l("Last Name must be between 3 and 45 characters");
 		}
 
-		if (empty($address['address_1'])) {
+		if (empty($address['address'])) {
 			if (!empty($address['address'])) {
-				$address['address_1'] = $address['address'];
+				$address['address'] = $address['address'];
 			} else {
-				$this->error['address_1'] = _l("Please provide the Street Address.");
+				$this->error['address'] = _l("Please provide the Street Address.");
 			}
-		} elseif (!validate('text', $address['address_1'], 3, 128)) {
-			$this->error['address_1'] = _l("Address must be between 3 and 128 characters!");
+		} elseif (!validate('text', $address['address'], 3, 128)) {
+			$this->error['address'] = _l("Address must be between 3 and 128 characters!");
 		}
 
 		if (empty($address['city'])) {
