@@ -21,19 +21,43 @@ class Image extends Library
 		$this->dir_mode = option('config_image_dir_mode');
 	}
 
-	public function get($filename, $return_dir = false)
+	public function get($image_path, $return_dir = false)
 	{
-		$filename = str_replace('/./', '/', str_replace('\\', '/', $filename));
+		$replace = array(
+			'\\'      => '/',
+			'/./'     => '/',
+			URL_IMAGE => DIR_IMAGE,
+			URL_SITE  => DIR_SITE,
+		);
 
-		if (is_file(DIR_IMAGE . $filename)) {
-			return $return_dir ? DIR_IMAGE . $filename : URL_IMAGE . $filename;
-		} elseif (is_file($filename)) {
-			return $return_dir ? $filename : str_replace(DIR_SITE, URL_SITE, $filename);
-		} elseif (!filter_var($filename, FILTER_VALIDATE_URL) && strpos($filename, '//') !== 0) {
-			return '';
+		$image = str_replace(array_keys($replace), $replace, $image_path);
+
+		//Remove any query string (eg ?v={timestamp})
+		$image = preg_replace("/\\?.*$/", '', $image);
+
+		if (!is_file($image)) {
+			if (is_file(DIR_IMAGE . $image)) {
+				$image = DIR_IMAGE . $image;
+			} else {
+				if (!is_file($image)) {
+					if (filter_var($image, FILTER_VALIDATE_URL) && strpos($image, '//') !== 0) {
+						return $image;
+					}
+
+					write_log('image', _l("Unable to locate image file %s<BR><BR>%s", $image_path, get_caller()));
+					$this->error['image'] = _l("Could not locate image file %s", $image_path);
+
+					return false;
+				}
+			}
 		}
 
-		return  $filename;
+		$replace = array(
+			DIR_IMAGE => URL_IMAGE,
+			DIR_SITE  => URL_SITE,
+		);
+
+		return $return_dir ? $image : str_replace(array_keys($replace), $replace, $image);
 	}
 
 	public function info($key = null)
@@ -47,24 +71,26 @@ class Image extends Library
 
 	public function set($image)
 	{
-		$file = is_file($image) ? $image : DIR_IMAGE . $image;
+		$file = $this->get($image, true);
 
-		if (is_file($file)) {
-			$this->file = $file;
-
-			$info = getimagesize($file);
-
-			$this->info = array(
-				'width'  => $info[0],
-				'height' => $info[1],
-				'bits'   => $info['bits'],
-				'mime'   => $info['mime']
-			);
-
-			$this->image = $this->create($file);
-		} else {
-			write_log('error', "Error: Could not load image $file!");
+		if (!$file) {
+			return false;
 		}
+
+		$this->file = $file;
+
+		$info = getimagesize($file);
+
+		$this->info = array(
+			'width'  => $info[0],
+			'height' => $info[1],
+			'bits'   => $info['bits'],
+			'mime'   => $info['mime']
+		);
+
+		$this->image = $this->create($file);
+
+		return $file;
 	}
 
 	public function clear()
@@ -149,26 +175,21 @@ class Image extends Library
 
 	public function resize($image, $width = 0, $height = 0, $background_color = '', $return_dir = false)
 	{
-		if (!is_file($image)) {
-			if (is_file(DIR_IMAGE . $image)) {
-				$image = DIR_IMAGE . $image;
-			} else {
-				return '';
-			}
-		}
+		$image = $this->set($image);
 
-		//this sets the image file as the active image to modify
-		$this->set($image);
+		if (!$image) {
+			return false;
+		}
 
 		//if the image is 0 width or 0 height, do not return an image
 		if (!$this->info['width'] || !$this->info['height']) {
 			$this->error['size'] = _l("The image size was 0.");
-			return '';
+			return false;
 		}
 
 		//If width and height are 0, we do not scale the image
 		if ($width <= 0 && $height <= 0) {
-			return $this->get($image);
+			return $this->get($image, $return_dir);
 		}
 
 		//Constrain Width
@@ -362,7 +383,7 @@ class Image extends Library
 	{
 		$merge = $this->create($file);
 
-		$merge_width = imagesx($merge);
+		$merge_width  = imagesx($merge);
 		$merge_height = imagesy($merge);
 
 		if ($opacity === 100) {
