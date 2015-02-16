@@ -92,6 +92,10 @@ h6 {
   overflow: hidden;
   -webkit-transition: .5s all;
   transition: .5s all;
+
+  &.show {
+    max-height: 100em;
+  }
 }
 
 .clearfix {
@@ -1137,7 +1141,7 @@ section.page {
   }
 
   & + .new-method {
-    .show-height;
+    .height-animate;
 
     h3 {
       color: @color-secondary;
