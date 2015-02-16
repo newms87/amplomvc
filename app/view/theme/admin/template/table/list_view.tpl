@@ -427,261 +427,262 @@
 </div>
 
 <script type="text/javascript">
-	$.ac_datepicker();
+	(function($) {
+		$.ac_datepicker();
 
-	$('.zoom-hover input, .zoom-hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
+		var $zoom = $('.zoom-hover');
 
-	function zoom_hover_in() {
-		$zoom = $(this).closest('.zoom-hover').addClass('active');
-		input = $zoom.find('.input');
-		value = $zoom.find('.value');
-	}
+		$zoom.find('.clear').click(function () {
+			$(this).closest('.zoom-hover').find('input, textarea').val('').trigger('keyup').trigger('change');
+		});
 
-	function zoom_hover_out() {
-		$zoom = $(this).closest('.zoom-hover').removeClass('active');
-		input = $zoom.find('.input');
-		value = $zoom.find('.value');
-	}
+		$zoom.find('input, textarea').focus(zoom_hover_in).blur(zoom_hover_out).change(zoom_hover_change).keyup(zoom_hover_keyup);
 
-	$('.zoom-hover .clear').click(function () {
-		$(this).closest('.zoom-hover').find('input, textarea').val('').trigger('keyup').trigger('change');
-	});
-
-	$('.zoom-hover.int input').keyup(function () {
-		var $zoom = $(this).closest('.zoom-hover');
-		var $value = $zoom.find('.value');
-
-		low = $zoom.find('.int_low').val();
-		high = $zoom.find('.int_high').val();
-
-		if (high || low) {
-			$value.html(low + ' - ' + high);
-		} else {
-			$value.html($value.attr('data-default') || '{{Modify}}');
+		function zoom_hover_in() {
+			$zoom = $(this).closest('.zoom-hover').addClass('active');
+			input = $zoom.find('.input');
+			value = $zoom.find('.value');
 		}
-	});
 
-	$('.zoom-hover.daterange input').change(function () {
-		var $zoom = $(this).closest('.zoom-hover');
-		var $value = $zoom.find('.value');
-
-		var start = $zoom.find('.date_start').val();
-		var end = $zoom.find('.date_end').val();
-
-		if (end || start) {
-			$value.html(start + ' - ' + end);
-		} else {
-			$value.html($value.attr('data-default') || '{{Modify}}');
+		function zoom_hover_out() {
+			$zoom = $(this).closest('.zoom-hover').removeClass('active');
+			input = $zoom.find('.input');
+			value = $zoom.find('.value');
 		}
-	});
 
-	$('.zoom-hover.multiselect input').change(function () {
-		var $zoom = $(this).closest('.zoom-hover');
-		var $value = $zoom.find('.value');
-		var $selected = $zoom.find(':checked');
+		function zoom_hover_change() {
+			var $zoom = $(this).closest('.zoom-hover');
+			var $value = $zoom.find('.value');
 
-		if ($selected.length == 0) {
-			$value.html($value.attr('data-default') || '{{Modify}}');
-		} else {
-			var str = '';
-			$selected.each(function (i, e) {
-				var label = $('[for="' + $(e).attr('id') + '"]').html();
+			if ($zoom.is('.daterange')) {
+				var start = $zoom.find('.date_start').val();
+				var end = $zoom.find('.date_end').val();
 
-				str += (str ? ', ' : '') + (label || $(e).val());
+				if (end || start) {
+					$value.html(start + ' - ' + end);
+				} else {
+					$value.html($value.attr('data-default') || '{{Modify}}');
+				}
+			} else if ($zoom.is('.multiselect')) {
+				var $selected = $zoom.find(':checked');
+
+				if ($selected.length == 0) {
+					$value.html($value.attr('data-default') || '{{Modify}}');
+				} else {
+					var str = '';
+					$selected.each(function (i, e) {
+						var label = $('[for="' + $(e).attr('id') + '"]').html();
+
+						str += (str ? ', ' : '') + (label || $(e).val());
+					});
+					$value.html(str.length > 20 ? str.substr(0, 20) + '...' : str);
+				}
+			}
+		}
+
+		function zoom_hover_keyup() {
+			var $zoom = $(this).closest('.zoom-hover');
+			var $value = $zoom.find('.value');
+
+			if ($zoom.is('.int')) {
+				low = $zoom.find('.int_low').val();
+				high = $zoom.find('.int_high').val();
+
+				if (high || low) {
+					$value.html(low + ' - ' + high);
+				} else {
+					$value.html($value.attr('data-default') || '{{Modify}}');
+				}
+			}
+		}
+
+		//Add Item Selector
+		var $listview = $(".table-list-view-box").use_once();
+
+		$listview.find('.filter-list-item').click(function () {
+			var cb = $(this).find('[name="batch[]"]');
+			if (cb.data('clicked')) {
+				cb.data('clicked', false);
+			} else {
+				cb.prop('checked', !cb.prop('checked')).change();
+			}
+		});
+
+		$listview.find('.filter-list-item [name="batch[]"]').change(function () {
+			var $this = $(this);
+			$this.closest('.filter-list-item').toggleClass('active', $this.prop('checked'));
+		})
+			.siblings('label').click(function (event) {
+				var $input = $('#' + $(this).attr('for'));
+				$input.prop('checked', !$input.prop('checked')).change();
+				event.stopPropagation();
+				return false;
 			});
-			$value.html(str.length > 20 ? str.substr(0, 20) + '...' : str);
+
+		function refresh_listing() {
+			var $this = $(this);
+			var $list = $this.hasClass('listing') ? $this : $this.closest('.listing');
+			$list.find('.refresh-listing').click();
 		}
-	});
 
-	//Add jQuery datepicker
-	$.ac_datepicker();
+		$listview.find('.filter-button').click(function () {
+			var $this = $(this);
+			$filter = $this.closest('.filter-list');
+			$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
+		});
 
-	//Add Item Selector
-	var $listview = $(".table-list-view-box").use_once();
-	var $table = $listview.find('.table-list-view');
+		$listview.find('.filter-type').click(function () {
+			var $this = $(this);
+			if ($this.hasClass('not')) {
+				$this.removeClass('not');
+			} else if ($this.hasClass('equals')) {
+				$this.removeClass('equals').addClass('not');
+			} else {
+				$this.addClass('equals');
+			}
+		});
 
-	$listview.find('.filter-list-item').click(function () {
-		var cb = $(this).find('[name="batch[]"]');
-		if (cb.data('clicked')) {
-			cb.data('clicked', false);
-		} else {
-			cb.prop('checked', !cb.prop('checked')).change();
+		<? if (!empty($filter_style) && $filter_style === 'persistent') { ?>
+		$listview.find('.filter-type').removeClass('not').addClass('equals').hide();
+
+		$listview.find('.column-filter').find('input, select').on('keyup change', delay_update);
+
+		var delay = false;
+
+		function delay_update($filter, my_delay) {
+			if (my_delay) {
+				if (my_delay === delay) {
+					var $widget = $filter.closest('.widget-listing').addClass('loading');
+
+					$('#ui-datepicker-div').remove();
+
+					$.get($filter.apply_filter("<?= $filter_url; ?>"), {}, function (response) {
+						$widget.replaceWith(response);
+					});
+				}
+			} else {
+				var event = $filter;
+				var my_delay = Date.now();
+				var $filter = $(this).closest('.filter-list');
+				delay = my_delay;
+
+				if (event.keyCode === 13) {
+					delay_update($filter, my_delay);
+				} else {
+					setTimeout(function () {
+						delay_update($filter, my_delay)
+					}, 1500);
+				}
+			}
 		}
-	});
 
-	$listview.find('.filter-list-item [name="batch[]"]').change(function () {
-		var $this = $(this);
-		$this.closest('.filter-list-item').toggleClass('active', $this.prop('checked'));
-	})
-		.siblings('label').click(function (event) {
-			var $input = $('#' + $(this).attr('for'));
-			$input.prop('checked', !$input.prop('checked')).change();
+		<? } ?>
+
+		$listview.find('.reset-button').click(function () {
+			var $this = $(this);
+			$filter = $this.closest('.filter-list');
+			$filter.find('[name]').val('');
+			$filter.find('.filter-type').removeClass('not equals');
+			$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
+		});
+
+		<? if ($show_actions) { ?>
+		$listview.find('.filter-list').keyup(function (e) {
+			if (e.keyCode == 13) {
+				$(this).find('.filter-button')[0].click();
+			}
+		});
+
+		$listview.find('.hide-filter').click(function () {
+			toggle_filter($(this).closest('.listing'));
+		});
+		<? } ?>
+
+		$listview.find('.filter-list > td').click(function () {
+			if ($(this).closest('.filter-list').hasClass('hide')) {
+				toggle_filter($(this).closest('.listing'), false);
+			}
+		});
+
+		function toggle_filter($listing, hide) {
+			var $list = $listing.find('.filter-list');
+			var $refresh = $listing.find('.refresh-listing');
+
+			$list.toggleClass('hide', hide);
+			$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/, '') + ($list.hasClass('hide') ? '&hidefilter=1' : ''));
+
+			event.stopPropagation();
+			return false;
+		}
+
+		<? if (!empty($save_path)) { ?>
+		$listview.find('tr.filter-list-item td.editable').click(function () {
+			var $this = $(this);
+			var field = $this.attr('data-field');
+			var value = $this.attr('data-value').replace(/&quot;/g, '"');
+
+			if (field) {
+				var $options = $this.closest('.table-list-view-box').find('.editable-options');
+				$options.children('.show').removeClass('show');
+				$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
+				$this.append($options);
+				$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
+			}
+		});
+
+		$listview.find('.editable-options .save-edit').click(function () {
+			var $this = $(this);
+			var $box = $this.closest('.table-list-view-box');
+			var $options = $this.closest('.editable-options');
+			var $option = $options.find('.show');
+			var $input = $option.find('.input-value');
+			var field = $option.attr('data-field');
+			var value = $input.val();
+			var id = $options.attr('data-id');
+
+			var data = {};
+			data['<?= $row_id; ?>'] = id;
+			data[field] = value;
+
+			$this.loading();
+			$box.append($options);
+
+			var display = value;
+
+			if ($input.is('select')) {
+				display = $input.find('option[value="' + value + '"]').html();
+			}
+
+			var $field = $box.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
+			$field.attr('data-value', value.replace('"', '&quot;'));
+
+			$.post("<?= site_url($save_path); ?>", data, function (response) {
+				$this.loading('stop');
+				$listview.show_msg(response);
+			}, 'json');
+		});
+
+		$listview.find('.editable-options').click(function (event) {
 			event.stopPropagation();
 			return false;
 		});
 
-	function refresh_listing() {
-		var $this = $(this);
-		var $list = $this.hasClass('listing') ? $this : $this.closest('.listing');
-		$list.find('.refresh-listing').click();
-	}
-
-	$listview.find('.filter-button').click(function () {
-		var $this = $(this);
-		$filter = $this.closest('.filter-list');
-		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
-	});
-
-	$listview.find('.filter-type').click(function () {
-		var $this = $(this);
-		if ($this.hasClass('not')) {
-			$this.removeClass('not');
-		} else if ($this.hasClass('equals')) {
-			$this.removeClass('equals').addClass('not');
-		} else {
-			$this.addClass('equals');
-		}
-	});
-
-	<? if (!empty($filter_style) && $filter_style === 'persistent') { ?>
-	$listview.find('.filter-type').removeClass('not').addClass('equals').hide();
-
-	$listview.find('.column-filter').find('input, select').on('keyup change', delay_update);
-
-	var delay = false;
-
-	function delay_update($filter, my_delay) {
-		if (my_delay) {
-			if (my_delay === delay) {
-				var $widget = $filter.closest('.widget-listing').addClass('loading');
-
-				$('#ui-datepicker-div').remove();
-
-				$.get($filter.apply_filter("<?= $filter_url; ?>"), {}, function (response) {
-					$widget.replaceWith(response);
-				});
-			}
-		} else {
-			var event = $filter;
-			var my_delay = Date.now();
-			var $filter = $(this).closest('.filter-list');
-			delay = my_delay;
-
-			if (event.keyCode === 13) {
-				delay_update($filter, my_delay);
-			} else {
-				setTimeout(function () {
-					delay_update($filter, my_delay)
-				}, 1500);
-			}
-		}
-	}
-	<? } ?>
-
-	$listview.find('.reset-button').click(function () {
-		var $this = $(this);
-		$filter = $this.closest('.filter-list');
-		$filter.find('[name]').val('');
-		$filter.find('.filter-type').removeClass('not equals');
-		$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
-	});
-
-	<? if ($show_actions) { ?>
-	$listview.find('.filter-list').keyup(function (e) {
-		if (e.keyCode == 13) {
-			$(this).find('.filter-button')[0].click();
-		}
-	});
-
-	$listview.find('.hide-filter').click(function () {
-		toggle_filter($(this).closest('.listing'));
-	});
-	<? } ?>
-
-	$listview.find('.filter-list > td').click(function () {
-		if ($(this).closest('.filter-list').hasClass('hide')) {
-			toggle_filter($(this).closest('.listing'), false);
-		}
-	});
-
-	function toggle_filter($listing, hide) {
-		var $list = $listing.find('.filter-list');
-		var $refresh = $listing.find('.refresh-listing');
-
-		$list.toggleClass('hide', hide);
-		$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/, '') + ($list.hasClass('hide') ? '&hidefilter=1' : ''));
-
-		event.stopPropagation();
-		return false;
-	}
-
-	<? if (!empty($save_path)) { ?>
-	$listview.find('tr.filter-list-item td.editable').click(function () {
-		var $this = $(this);
-		var field = $this.attr('data-field');
-		var value = $this.attr('data-value').replace(/&quot;/g, '"');
-
-		if (field) {
-			var $options = $this.closest('.table-list-view-box').find('.editable-options');
-			$options.children('.show').removeClass('show');
-			$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
-			$this.append($options);
-			$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
-		}
-	});
-
-	$listview.find('.editable-options .save-edit').click(function () {
-		var $this = $(this);
-		var $box = $this.closest('.table-list-view-box');
-		var $options = $this.closest('.editable-options');
-		var $option = $options.find('.show');
-		var $input = $option.find('.input-value');
-		var field = $option.attr('data-field');
-		var value = $input.val();
-		var id = $options.attr('data-id');
-
-		var data = {};
-		data['<?= $row_id; ?>'] = id;
-		data[field] = value;
-
-		$this.loading();
-		$box.append($options);
-
-		var display = value;
-
-		if ($input.is('select')) {
-			display = $input.find('option[value="' + value + '"]').html();
-		}
-
-		var $field = $box.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
-		$field.attr('data-value', value.replace('"', '&quot;'));
-
-		$.post("<?= site_url($save_path); ?>", data, function (response) {
-			$this.loading('stop');
-			$listview.show_msg(response);
-		}, 'json');
-	});
-
-	$listview.find('.editable-options').click(function (event) {
-		event.stopPropagation();
-		return false;
-	});
-
-	$listview.find('.editable-options .cancel-form').click(function (event) {
-		var $box = $(this).closest('.table-list-view-box');
-		$box.append($(this).closest('.editable-options'));
-		event.stopPropagation();
-		return false;
-	});
-
-	$listview.find('.editable-option .input input[type=text]').keyup(function (event) {
-		if (event.keyCode == 13) {
-			$(this).closest('.editable-options').find('.save-edit').click();
+		$listview.find('.editable-options .cancel-form').click(function (event) {
+			var $box = $(this).closest('.table-list-view-box');
+			$box.append($(this).closest('.editable-options'));
 			event.stopPropagation();
 			return false;
-		}
-	});
-	<? } ?>
+		});
 
-	$('.action-buttons').overflown('y', 5);
+		$listview.find('.editable-option .input input[type=text]').keyup(function (event) {
+			if (event.keyCode == 13) {
+				$(this).closest('.editable-options').find('.save-edit').click();
+				event.stopPropagation();
+				return false;
+			}
+		});
+		<? } ?>
+
+		$('.action-buttons').overflown('y', 5);
+	})($);
 </script>

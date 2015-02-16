@@ -234,11 +234,10 @@
 
 		$this.loading();
 
-		$.post("<?= $save_view;?>", data, function (response) {
+		$.post("<?= site_url('block/widget/views/save-view');?>", data, function (response) {
 			$this.loading('stop');
-			if (response.view_id) {
-				$view.attr('data-view-id', response.view_id);
-				response.view_id = null;
+			if (response.data && response.data.view_id) {
+				$view.attr('data-view-id', response.data.view_id);
 			}
 
 			$view.show_msg(response);
@@ -261,7 +260,7 @@
 
 			$this.loading();
 
-			$.post("<?= $remove_view; ?>", {view_id: $view.attr('data-view-id')}, function (response) {
+			$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function (response) {
 				$view.remove();
 			});
 		}
