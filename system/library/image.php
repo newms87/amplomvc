@@ -46,8 +46,6 @@ class Image extends Library
 					write_log('image', _l("Unable to locate image file %s<BR><BR>%s", $image_path, get_caller()));
 					$this->error['image'] = _l("Could not locate image file %s", $image_path);
 
-					echo $image . ' no image';
-					exit;
 					return false;
 				}
 			}
