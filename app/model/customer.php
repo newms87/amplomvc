@@ -128,8 +128,12 @@ class App_Model_Customer extends App_Model_Table
 		if (empty($this->meta[$customer_id])) {
 			$rows = $this->queryRows("SELECT * FROM {$this->t['customer_meta']} WHERE customer_id = " . (int)$customer_id);
 
-			foreach ($rows as $row) {
-				$this->meta[$customer_id][$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+			if ($rows) {
+				foreach ($rows as $row) {
+					$this->meta[$customer_id][$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+				}
+			} else {
+				$this->meta[$customer_id] = array();
 			}
 		}
 
