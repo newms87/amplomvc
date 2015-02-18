@@ -108,11 +108,25 @@ function send_mail($params)
 	return $mail->send();
 }
 
-function img($image, $width = null, $height = null, $title = null, $alt = null, $default = null, $cast_protocol = false)
+function img($image, $width = null, $height = null, $title = null, $alt = null, $version = true, $size_attr = true, $default = null, $cast_protocol = false)
 {
-	$src = image($image, $width, $height, $default, $cast_protocol);
+	global $registry;
 
-	$size = _getimagesize($src);
+	$file = $registry->get('image')->get($image, true);
+	$src  = image($image, $width, $height, $default, $cast_protocol);
+
+	$size = '';
+
+	if ($file) {
+		if ($version) {
+			$src .= '?v=' . filemtime($file);
+		}
+
+		if ($size_attr) {
+			$size = getimagesize($file);
+			$size = isset($size[3]) ? $size[3] : '';
+		}
+	}
 
 	$src   = $src ? "src=\"$src\"" : '';
 	$title = $title !== false ? "title=\"$title\"" : '';
@@ -121,7 +135,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	return "$src $title $alt $size";
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_protocol = false, $version = true)
+function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
 {
 	global $registry;
 
@@ -136,14 +150,6 @@ function image($image, $width = null, $height = null, $default = null, $cast_pro
 			$image = theme_image('no_image.png', $width, $height);
 		} else {
 			$image = $registry->get('image')->resize($default, $width, $height);
-		}
-	}
-
-	if ($version) {
-		$file = str_replace(URL_SITE, DIR_SITE, $image);
-
-		if (is_file($file)) {
-			$image .= '?v=' . filemtime($file);
 		}
 	}
 
@@ -250,23 +256,16 @@ function build_srcset($image, $nx = 3, $width = null, $height = null, $default =
 
 function _getimagesize($image)
 {
-	$image_file = $image;
+	global $registry;
 
-	if (!is_file($image_file)) {
-		$image_file = str_replace(URL_SITE, DIR_SITE, $image);
+	$image_file = $registry->get('image')->get($image, true);
 
-		if (!is_file($image_file)) {
-			$image_file = str_replace(URL_IMAGE, DIR_IMAGE, $image);
-
-			if (!is_file($image_file)) {
-				return '';
-			}
-		}
+	if ($image_file) {
+		$size = getimagesize($image_file);
+		return isset($size[3]) ? $size[3] : '';
 	}
 
-	$size = getimagesize($image_file);
-
-	return isset($size[3]) ? $size[3] : '';
+	return '';
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)

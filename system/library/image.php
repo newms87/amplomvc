@@ -380,7 +380,7 @@ class Image extends Library
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = true, $colors = 256)
+	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 256, $bg_color = '#FFFFFF')
 	{
 		$merge = $this->get($file, true);
 
@@ -396,13 +396,20 @@ class Image extends Library
 		if (!$merge) {
 			return false;
 		}
-
+		
 		if ($convert) {
-			imagetruecolortopalette($merge, false, $colors);
-			imagetruecolortopalette($this->image, false, $colors);
+			if ($convert === 'truecolor') {
+				imagepalettetotruecolor($merge);
+				imagepalettetotruecolor($this->image);
+				imagecolortransparent($merge, imagecolorallocate($merge, 0,0,0));
+				imagecolortransparent($this->image, imagecolorallocate($this->image, 0,0,0));
+			} else {
+				imagetruecolortopalette($merge, false, $colors);
+				imagetruecolortopalette($this->image, false, $colors);
+			}
 		}
 
-		if ($opacity === 100) {
+		if ($opacity === 100 && !imageistruecolor($this->image)) {
 			imagecopy($this->image, $merge, $x, $y, 0, 0, $width, $height);
 		} else {
 			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $width, $height, $opacity);
