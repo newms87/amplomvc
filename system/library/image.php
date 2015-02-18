@@ -401,8 +401,11 @@ class Image extends Library
 			if ($convert === 'truecolor') {
 				imagepalettetotruecolor($merge);
 				imagepalettetotruecolor($this->image);
-				imagecolortransparent($merge, imagecolorallocate($merge, 0,0,0));
-				imagecolortransparent($this->image, imagecolorallocate($this->image, 0,0,0));
+
+				$transparent = imagecolorallocatealpha($this->image, 0, 0, 0, 127);
+				imagecolortransparent($this->image, $transparent);
+				imagefill($this->image, 0, 0, $transparent);
+				imagealphablending($this->image, true);
 			} else {
 				imagetruecolortopalette($merge, false, $colors);
 				imagetruecolortopalette($this->image, false, $colors);
