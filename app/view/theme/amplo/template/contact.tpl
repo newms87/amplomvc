@@ -69,29 +69,27 @@ $address = str_replace($replace, '', option('site_address'));
 ?>
 
 <? if ($lat || $lng || $address) { ?>
-<script type="text/javascript">
+	<script type="text/javascript">
+		function contact_map() {
+			<? if ($lat || $lng) { ?>
+			var pos = new google.maps.LatLng(<?= $lat; ?>, <?= $lng; ?>);
+			init_google_map(pos);
+			<? } else { ?>
+			var geocoder = new google.maps.Geocoder();
 
-
-	function contact_map() {
-		<? if ($lat || $lng) { ?>
-		var pos = new google.maps.LatLng(<?= $lat; ?>, <?= $lng; ?>);
-		init_google_map(pos);
-		<? } else { ?>
-		var geocoder = new google.maps.Geocoder();
-
-		geocoder.geocode({'address': "<?= $address; ?>"}, function (results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				init_google_map(results[0].geometry.location);
-			}
-		});
-		<? } ?>
-	}
-
-	function init_google_map(pos) {
-		var options = {
-			zoom:      <?= option('contact_map_zoom', 16); ?>,
-			center: pos
+			geocoder.geocode({'address': "<?= $address; ?>"}, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					init_google_map(results[0].geometry.location);
+				}
+			});
+			<? } ?>
 		}
+
+		function init_google_map(pos) {
+			var options = {
+				zoom:   <?= option('contact_map_zoom'); ?> || 16,
+				center: pos
+			}
 
 		$map = screen_width < 1024 ? $('#contact-map-xs') : $('#contact-map-lg');
 		map = new google.maps.Map($map[0], options);
@@ -101,18 +99,18 @@ $address = str_replace($replace, '', option('site_address'));
 			position: pos,
 			map:      map
 		});
-	}
+		}
 
-	function load_google_map() {
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = 'https://maps.googleapis.com/maps/api/js?sensor=true&' +
-		'callback=contact_map';
-		document.body.appendChild(script);
-	}
+		function load_google_map() {
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = 'https://maps.googleapis.com/maps/api/js?sensor=true&' +
+			'callback=contact_map';
+			document.body.appendChild(script);
+		}
 
-	window.onload = load_google_map();
-</script>
+		window.onload = load_google_map();
+	</script>
 <? } ?>
 
 <?= $is_ajax ? '' : call('footer'); ?>
