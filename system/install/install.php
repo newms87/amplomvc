@@ -207,8 +207,8 @@ function set_define($string, $key, $value = null, $quotes = true)
 		if ($quotes) {
 			$value = '"' . addcslashes($value, '"\\$') . '"';
 		}
-		
-		$define = "define(\"$key\", $value);";
+
+		$define = addcslashes("define(\"$key\", $value);", '$');
 
 		$count  = 0;
 		$string = preg_replace("/define\\(\\s*['\"]{$key}['\"]\\s*,[^)]+?\\);/", $define, $string, 1, $count);
