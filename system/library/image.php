@@ -24,16 +24,16 @@ class Image extends Library
 	public function get($image_path, $return_dir = false)
 	{
 		$replace = array(
-			'\\'      => '/',
-			'/./'     => '/',
-			URL_IMAGE => DIR_IMAGE,
-			URL_SITE  => DIR_SITE,
+			'#\\\\#'                 => '/',
+			'#/./#'                  => '/',
+			'#' . URL_IMAGE . '#'    => DIR_IMAGE,
+			'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
+			'#' . URL_SITE . '#'     => DIR_SITE,
+			'#^(http|https):#'       => '',
+			"#\\?.*$#"               => '',
 		);
 
-		$image = str_replace(array_keys($replace), $replace, $image_path);
-
-		//Remove any query string (eg ?v={timestamp})
-		$image = preg_replace("/\\?.*$/", '', $image);
+		$image = preg_replace(array_keys($replace), $replace, $image_path);
 
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
@@ -53,8 +53,9 @@ class Image extends Library
 		}
 
 		$replace = array(
-			DIR_IMAGE => URL_IMAGE,
-			DIR_SITE  => URL_SITE,
+			DIR_IMAGE    => URL_IMAGE,
+			DIR_DOWNLOAD => URL_DOWNLOAD,
+			DIR_SITE     => URL_SITE,
 		);
 
 		return $return_dir ? $image : str_replace(array_keys($replace), $replace, $image);
@@ -379,19 +380,45 @@ class Image extends Library
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	public function merge($file, $x = 0, $y = 0, $opacity = 100)
+	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 16000000, $bg_color = '#FFFFFF')
 	{
-		$merge = $this->create($file);
+		$merge = $this->get($file, true);
 
-		$merge_width  = imagesx($merge);
-		$merge_height = imagesy($merge);
-
-		if ($opacity === 100) {
-			imagecopy($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height);
-		} else {
-			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
+		if (!$merge) {
+			$this->error['file'] = _l("Unable to locate file %s for merging", $file);
+			return false;
 		}
 
+		list($width, $height) = getimagesize($merge);
+
+		$merge = $this->create($merge);
+
+		if (!$merge) {
+			return false;
+		}
+
+		if ($convert) {
+			if ($convert === 'truecolor') {
+				imagepalettetotruecolor($merge);
+				imagepalettetotruecolor($this->image);
+
+				$transparent = imagecolorallocatealpha($this->image, 0, 0, 0, 127);
+				imagecolortransparent($this->image, $transparent);
+				imagefill($this->image, 0, 0, $transparent);
+				imagealphablending($this->image, true);
+			} else {
+				imagetruecolortopalette($merge, false, $colors);
+				imagetruecolortopalette($this->image, false, $colors);
+			}
+		}
+
+		if ($opacity === 100 && !imageistruecolor($this->image)) {
+			imagecopy($this->image, $merge, $x, $y, 0, 0, $width, $height);
+		} else {
+			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $width, $height, $opacity);
+		}
+
+		return true;
 	}
 
 	public function heximagecolorallocate($hex)
@@ -406,6 +433,14 @@ class Image extends Library
 
 	public function hex2rgb($color)
 	{
+		if (!is_string($color)) {
+			return array(
+				0,
+				0,
+				0,
+			);
+		}
+
 		if ($color[0] === '#') {
 			$color = substr($color, 1);
 		}
@@ -641,8 +676,18 @@ class Image extends Library
 		$this->shutdown_file = '';
 	}
 
-	public function colorReplace($color, $replace, $exact = true)
+	public function colorReplace($color, $replace, $exact = true, $convert = true, $colors = 32000000000)
 	{
+		if (imageistruecolor($this->image)) {
+			if ($convert) {
+				imagetruecolortopalette($this->image, false, $colors);
+				$exact = false;
+			} else {
+				trigger_error($this->error['convert'] = "Color replace for truecolor images not yet implemented.");
+				return false;
+			}
+		}
+
 		if (is_string($color)) {
 			$color = $this->hex2rgb($color);
 		}
@@ -653,10 +698,8 @@ class Image extends Library
 			$color_index = imagecolorresolve($this->image, $color[0], $color[1], $color[2]);
 		}
 
-		if (!$color_index) {
+		if ($color_index < 0) {
 			$this->error['color'] = _l("Unable to find the correct color in the image.");
-			echo 'no color';
-			exit;
 			return false;
 		}
 
