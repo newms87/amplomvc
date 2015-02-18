@@ -56,19 +56,39 @@
 	</div>
 </div>
 
+<?
+$lat = (float)option('site_address_lat');
+$lng = (float)option('site_address_lng');
+$address = option('site_address');
+?>
+
+<? if ($lat || $lng || $address) { ?>
 <script type="text/javascript">
 
-	function contact_map() {
-		var pos = new google.maps.LatLng(<?= (float)option('site_address_lat'); ?>, <?= (float)option('site_address_lng'); ?>);
 
-		var mapOptions = {
+	function contact_map() {
+		<? if ($lat || $lng) { ?>
+		var pos = new google.maps.LatLng(<?= $lat; ?>, <?= $lng; ?>);
+		init_google_map(pos);
+		<? } else { ?>
+		var geocoder = new google.maps.Geocoder();
+
+		geocoder.geocode({'address': "<?= $address; ?>"}, function (results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				init_google_map(results[0].geometry.location);
+			}
+		});
+		<? } ?>
+	}
+
+	function init_google_map(pos) {
+		var options = {
 			zoom:      <?= option('contact_map_zoom', 16); ?>,
 			center: pos
 		}
 
-		$scope_map = screen_width < 1024 ? $('#contact-map-xs') : $('#contact-map-lg');
-
-		map = new google.maps.Map($scope_map[0], mapOptions);
+		$map = screen_width < 1024 ? $('#contact-map-xs') : $('#contact-map-lg');
+		map = new google.maps.Map($map[0], options);
 
 		//Setup Marker
 		marker = new google.maps.Marker({
@@ -87,5 +107,6 @@
 
 	window.onload = load_google_map();
 </script>
+<? } ?>
 
 <?= $is_ajax ? '' : call('footer'); ?>
