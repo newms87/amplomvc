@@ -20,7 +20,7 @@
 
 <input type="text" name="nothing" value="hello world" class="sm-hidden"/>
 
-<div class="page row section-style-c">
+<div class="page row section-style-c arrow-up arrow-down">
 	<div class="wrap">
 		<div class="col left xs-12">
 			<div class="col xs-12 whitespace-hack sm-8 md-6 lg-4">Test 1</div>
