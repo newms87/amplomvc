@@ -79,6 +79,8 @@ define("AC_DATE_TIMESTAMP", 3);
 if (!defined('COOKIE_DOMAIN')) {
 	if (!DOMAIN || DOMAIN === 'localhost') {
 		define('COOKIE_DOMAIN', '');
+	} elseif (preg_match("/[\\d]+\\.[\\d]+\\.[\\d]+\\.[\\d]+", DOMAIN)) {
+		define('COOKIE_DOMAIN', DOMAIN);
 	} else {
 		define('COOKIE_DOMAIN', '.' . DOMAIN);
 	}
