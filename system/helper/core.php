@@ -426,6 +426,24 @@ if (!function_exists('apache_request_headers')) {
 	}
 }
 
+if (!function_exists('imagepalettetotruecolor')) {
+	function imagepalettetotruecolor(&$src)
+	{
+		if (imageistruecolor($src)) {
+			return (true);
+		}
+
+		$dst = imagecreatetruecolor(imagesx($src), imagesy($src));
+
+		imagecopy($dst, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
+		imagedestroy($src);
+
+		$src = $dst;
+
+		return true;
+	}
+}
+
 /**
  * This is a wrapper for is_link() to check for windows .lnk files
  * TODO: This is here temporarily, testing to ensure no issues with links on windows (dont mind the .lnk issue)

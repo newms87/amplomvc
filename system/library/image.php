@@ -24,12 +24,13 @@ class Image extends Library
 	public function get($image_path, $return_dir = false)
 	{
 		$replace = array(
-			'#\\\\#'                => '/',
-			'#/./#'               => '/',
-			'#' . URL_IMAGE . '#' => DIR_IMAGE,
-			'#' . URL_SITE . '#'  => DIR_SITE,
-			'#^(http|https):#'    => '',
-			"#\\?.*$#"            => '',
+			'#\\\\#'                 => '/',
+			'#/./#'                  => '/',
+			'#' . URL_IMAGE . '#'    => DIR_IMAGE,
+			'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
+			'#' . URL_SITE . '#'     => DIR_SITE,
+			'#^(http|https):#'       => '',
+			"#\\?.*$#"               => '',
 		);
 
 		$image = preg_replace(array_keys($replace), $replace, $image_path);
@@ -52,8 +53,9 @@ class Image extends Library
 		}
 
 		$replace = array(
-			DIR_IMAGE => URL_IMAGE,
-			DIR_SITE  => URL_SITE,
+			DIR_IMAGE    => URL_IMAGE,
+			DIR_DOWNLOAD => URL_DOWNLOAD,
+			DIR_SITE     => URL_SITE,
 		);
 
 		return $return_dir ? $image : str_replace(array_keys($replace), $replace, $image);
@@ -378,7 +380,7 @@ class Image extends Library
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	public function merge($file, $x = 0, $y = 0, $opacity = 100)
+	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = true, $colors = 256)
 	{
 		$merge = $this->get($file, true);
 
@@ -389,17 +391,24 @@ class Image extends Library
 
 		list($width, $height) = getimagesize($merge);
 
-		$merge_p = imagecreatetruecolor($width, $height);
 		$merge = $this->create($merge);
 
-		imagecopyresampled($merge_p, $merge, 0,0,0,0,$width,$height,$width,$height);
-
-		if ($opacity === 100) {
-			imagecopy($this->image, $merge_p, $x, $y, 0, 0, $width, $height);
-		} else {
-			imagecopymerge($this->image, $merge_p, $x, $y, 0, 0, $width, $height, $opacity);
+		if (!$merge) {
+			return false;
 		}
 
+		if ($convert) {
+			imagetruecolortopalette($merge, false, $colors);
+			imagetruecolortopalette($this->image, false, $colors);
+		}
+
+		if ($opacity === 100) {
+			imagecopy($this->image, $merge, $x, $y, 0, 0, $width, $height);
+		} else {
+			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $width, $height, $opacity);
+		}
+
+		return true;
 	}
 
 	public function heximagecolorallocate($hex)
@@ -414,7 +423,7 @@ class Image extends Library
 
 	public function hex2rgb($color)
 	{
-		if (!is_array($color)) {
+		if (!is_string($color)) {
 			return array(
 				0,
 				0,
@@ -657,8 +666,18 @@ class Image extends Library
 		$this->shutdown_file = '';
 	}
 
-	public function colorReplace($color, $replace, $exact = true)
+	public function colorReplace($color, $replace, $exact = true, $convert = true, $colors = 32000000000)
 	{
+		if (imageistruecolor($this->image)) {
+			if ($convert) {
+				imagetruecolortopalette($this->image, false, $colors);
+				$exact = false;
+			} else {
+				trigger_error($this->error['convert'] = "Color replace for truecolor images not yet implemented.");
+				return false;
+			}
+		}
+
 		if (is_string($color)) {
 			$color = $this->hex2rgb($color);
 		}
@@ -669,7 +688,7 @@ class Image extends Library
 			$color_index = imagecolorresolve($this->image, $color[0], $color[1], $color[2]);
 		}
 
-		if (!$color_index) {
+		if ($color_index < 0) {
 			$this->error['color'] = _l("Unable to find the correct color in the image.");
 			return false;
 		}
