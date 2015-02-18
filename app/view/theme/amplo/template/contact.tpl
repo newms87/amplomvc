@@ -59,7 +59,13 @@
 <?
 $lat = (float)option('site_address_lat');
 $lng = (float)option('site_address_lng');
-$address = option('site_address');
+
+$replace = array(
+	"\n",
+	"\r",
+);
+
+$address = str_replace($replace, '', option('site_address'));
 ?>
 
 <? if ($lat || $lng || $address) { ?>
