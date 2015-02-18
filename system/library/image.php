@@ -24,16 +24,15 @@ class Image extends Library
 	public function get($image_path, $return_dir = false)
 	{
 		$replace = array(
-			'\\'      => '/',
-			'/./'     => '/',
-			URL_IMAGE => DIR_IMAGE,
-			URL_SITE  => DIR_SITE,
+			'#\\\\#'                => '/',
+			'#/./#'               => '/',
+			'#' . URL_IMAGE . '#' => DIR_IMAGE,
+			'#' . URL_SITE . '#'  => DIR_SITE,
+			'#^(http|https):#'    => '',
+			"#\\?.*$#"            => '',
 		);
 
-		$image = str_replace(array_keys($replace), $replace, $image_path);
-
-		//Remove any query string (eg ?v={timestamp})
-		$image = preg_replace("/\\?.*$/", '', $image);
+		$image = preg_replace(array_keys($replace), $replace, $image_path);
 
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
@@ -47,6 +46,8 @@ class Image extends Library
 					write_log('image', _l("Unable to locate image file %s<BR><BR>%s", $image_path, get_caller()));
 					$this->error['image'] = _l("Could not locate image file %s", $image_path);
 
+					echo $image . ' no image';
+					exit;
 					return false;
 				}
 			}
@@ -381,15 +382,24 @@ class Image extends Library
 
 	public function merge($file, $x = 0, $y = 0, $opacity = 100)
 	{
-		$merge = $this->create($file);
+		$merge = $this->get($file, true);
 
-		$merge_width  = imagesx($merge);
-		$merge_height = imagesy($merge);
+		if (!$merge) {
+			$this->error['file'] = _l("Unable to locate file %s for merging", $file);
+			return false;
+		}
+
+		list($width, $height) = getimagesize($merge);
+
+		$merge_p = imagecreatetruecolor($width, $height);
+		$merge = $this->create($merge);
+
+		imagecopyresampled($merge_p, $merge, 0,0,0,0,$width,$height,$width,$height);
 
 		if ($opacity === 100) {
-			imagecopy($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height);
+			imagecopy($this->image, $merge_p, $x, $y, 0, 0, $width, $height);
 		} else {
-			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
+			imagecopymerge($this->image, $merge_p, $x, $y, 0, 0, $width, $height, $opacity);
 		}
 
 	}
@@ -406,6 +416,14 @@ class Image extends Library
 
 	public function hex2rgb($color)
 	{
+		if (!is_array($color)) {
+			return array(
+				0,
+				0,
+				0,
+			);
+		}
+
 		if ($color[0] === '#') {
 			$color = substr($color, 1);
 		}
@@ -655,8 +673,6 @@ class Image extends Library
 
 		if (!$color_index) {
 			$this->error['color'] = _l("Unable to find the correct color in the image.");
-			echo 'no color';
-			exit;
 			return false;
 		}
 
