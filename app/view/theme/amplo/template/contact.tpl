@@ -80,7 +80,7 @@
 	function load_google_map() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'https://maps.googleapis.com/maps/api/js?sensor=true&client=gme-scopetechnologies&signature=2_eWA8Xtkip8Hkj3H8K1efW3etw=&' +
+		script.src = 'https://maps.googleapis.com/maps/api/js?sensor=true&' +
 		'callback=contact_map';
 		document.body.appendChild(script);
 	}
