@@ -5,7 +5,7 @@ class App_Controller_Header extends Controller
 	public function index($settings = array())
 	{
 		if (!page_info('title')) {
-			set_page_info('title', option('site_name'));
+			set_page_info('title', option('site_title'));
 		}
 
 		//Add Styles
