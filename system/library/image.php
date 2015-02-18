@@ -380,7 +380,7 @@ class Image extends Library
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 256, $bg_color = '#FFFFFF')
+	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 16000000, $bg_color = '#FFFFFF')
 	{
 		$merge = $this->get($file, true);
 
@@ -396,7 +396,7 @@ class Image extends Library
 		if (!$merge) {
 			return false;
 		}
-		
+
 		if ($convert) {
 			if ($convert === 'truecolor') {
 				imagepalettetotruecolor($merge);
