@@ -113,14 +113,13 @@ class App_Model_Address extends App_Model_Table
 		}
 
 		$address += array(
-			'first_name' => '',
-			'last_name'  => '',
+			'name'       => '',
 			'company'    => '',
 			'country_id' => 223,
 			'zone_id'    => 0,
 			'postcode'   => '',
 			'city'       => '',
-			'address'  => '',
+			'address'    => '',
 			'address_2'  => '',
 		);
 
@@ -133,12 +132,12 @@ class App_Model_Address extends App_Model_Table
 
 			if (empty($address_format)) {
 				$address_format =
-					"{first_name} {last_name}\n";
-				"{company}\n" .
-				"{address}\n" .
-				"{address_2}\n" .
-				"{city}, {zone} {postcode}\n" .
-				"{country}";
+					"{name}\n" .
+					"{company}\n" .
+					"{address}\n" .
+					"{address_2}\n" .
+					"{city}, {zone} {postcode}\n" .
+					"{country}";
 			}
 
 			$address_formats[$country_id] = $address_format;
@@ -186,18 +185,9 @@ class App_Model_Address extends App_Model_Table
 	{
 		$this->error = array();
 
-		if (isset($address['name'])) {
-			$name                  = explode(' ', $address['name'], 2);
-			$address['first_name'] = $name[0];
-			$address['last_name']  = !empty($name[1]) ? $name[1] : '';
-		}
-
-		if (isset($address['first_name']) && !validate('text', $address['first_name'], 1, 45)) {
-			$this->error['first_name'] = _l("First Name must be less than 45 characters");
-		}
-
-		if (isset($address['last_name']) && !validate('text', $address['last_name'], 1, 45)) {
-			$this->error['last_name'] = _l("Last Name must be between 3 and 45 characters");
+		if (!isset($address['name']) && isset($address['first_name'])) {
+			$address['name'] = isset($address['first_name']) ? $address['first_name'] : '';
+			$address['name'] .= isset($address['last_name']) ? $address['last_name'] : '';
 		}
 
 		if (empty($address['address'])) {

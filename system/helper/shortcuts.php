@@ -112,8 +112,8 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 {
 	global $registry;
 
-	$file = $registry->get('image')->get($image, true);
 	$src  = image($image, $width, $height, $default, $cast_protocol);
+	$file = $registry->get('image')->get($src, true);
 
 	$size = '';
 

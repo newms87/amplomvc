@@ -87,7 +87,7 @@ $address = str_replace($replace, '', option('site_address'));
 
 		function init_google_map(pos) {
 			var options = {
-				zoom:   <?= option('contact_map_zoom'); ?> || 16,
+				zoom:   <?= (int)option('contact_map_zoom'); ?> || 16,
 				center: pos
 			}
 

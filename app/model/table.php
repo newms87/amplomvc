@@ -49,6 +49,16 @@ abstract class App_Model_Table extends Model
 		return $this->queryRow("SELECT $select FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
 	}
 
+	public function findRecord($filter, $select = null)
+	{
+		$select = $select ? $this->extractSelect($this->table, $select) : $this->primary_key;
+		$where  = $this->extractWhere($this->table, $filter);
+
+		$sql = "SELECT $select FROM `" . $this->t[$this->table] . "` WHERE $where";
+
+		return $select ? $this->queryVar($sql) : $this->queryRow($sql);
+	}
+
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		$cache = !empty($sort['cache']);
@@ -75,7 +85,7 @@ abstract class App_Model_Table extends Model
 		$from = $this->t[$this->table];
 
 		//Where
-		$where = is_string($filter) ? $filter : $this->extractWhere($this->table, $filter);
+		$where = $this->extractWhere($this->table, $filter);
 
 		//Order and Limit
 		list($order, $limit) = $this->extractOrderLimit($sort);
