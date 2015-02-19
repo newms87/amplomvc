@@ -56,6 +56,8 @@ abstract class App_Model_Table extends Model
 
 		$sql = "SELECT $select FROM `" . $this->t[$this->table] . "` WHERE $where";
 
+		write_log('debug', "SELECT $select FROM `" . $this->t[$this->table] . "` WHERE $where");
+
 		return $select ? $this->queryVar($sql) : $this->queryRow($sql);
 	}
 
