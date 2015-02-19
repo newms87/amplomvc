@@ -528,15 +528,14 @@ abstract class Model
 
 	protected function extractWhere($table, $filter, $columns = array())
 	{
-		$where = '1';
+		$where = '';
 
 		if (!$filter) {
-			return $where;
+			return '1';
 		}
 
-		if (!is_array($filter)) {
-			trigger_error(_l("%s(): \$filter must be an array. \$filter = '%s'", __METHOD__, print_r($filter, true)));
-			return $where;
+		if (is_string($filter)) {
+			return $filter;
 		}
 
 		$method = array(
@@ -672,7 +671,7 @@ abstract class Model
 			}
 		}
 
-		return $where;
+		return $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
 	}
 
 	protected function extractOrderLimit($data, $table = null)

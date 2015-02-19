@@ -11,14 +11,13 @@ class Address extends Library
 		}
 
 		$address += array(
-			'first_name' => '',
-			'last_name'  => '',
+			'name'       => '',
 			'company'    => '',
 			'country_id' => 223,
 			'zone_id'    => 0,
 			'postcode'   => '',
 			'city'       => '',
-			'address'  => '',
+			'address'    => '',
 			'address_2'  => '',
 		);
 
@@ -31,7 +30,7 @@ class Address extends Library
 
 			if (empty($address_format)) {
 				$address_format =
-					"{first_name} {last_name}\n" .
+					"{name}\n" .
 					"{company}\n" .
 					"{address}\n" .
 					"{address_2}\n" .

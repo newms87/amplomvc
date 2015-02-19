@@ -60,8 +60,7 @@ class App_Controller_Account_Address extends Controller
 
 		//Load Information
 		$defaults = array(
-			'first_name' => customer_info('first_name'),
-			'last_name'  => customer_info('last_name'),
+			'name'       => customer_info('first_name') . ' ' . customer_info('last_name'),
 			'company'    => '',
 			'address'    => '',
 			'address_2'  => '',

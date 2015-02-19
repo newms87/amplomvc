@@ -30,19 +30,20 @@
 						<td><input type="text" name="iso_code_3" value="<?= $iso_code_3; ?>"/></td>
 					</tr>
 					<tr>
-						<td><?=
-							_l("Address Format:<br /><span class =\"help\">
-First Name =
-{first_name}<br />
-Last Name = {last_name}<br />
-Company = {company}<br />
-Address 1 = {address}<br />
-Address 2 = {address_2}<br />
-City = {city}<br />
-Postcode = {postcode}<br />
-Zone = {zone}<br />
-Zone Code = {zone_code}<br />
-Country = {country}</span>"); ?></td>
+						<td>{{Address Format:}}
+							<br/>
+							<span class="help">
+								Name = {name}<br/>
+								Company = {company}<br/>
+								Address 1 = {address}<br/>
+								Address 2 = {address_2}<br/>
+								City = {city}<br/>
+								Postcode = {postcode}<br/>
+								Zone = {zone}<br/>
+								Zone Code = {zone_code}<br/>
+								Country = {country}
+							</span>
+						</td>
 						<td><textarea name="address_format" cols="40" rows="5"><?= $address_format; ?></textarea></td>
 					</tr>
 					<tr>
