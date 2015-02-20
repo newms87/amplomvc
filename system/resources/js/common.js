@@ -500,7 +500,7 @@ $.fn.file_upload = function (options) {
 					processData: false,
 					contentType: false,
 					type:        'POST',
-					xhr:         function(e) {
+					xhr:         function (e) {
 						this.context = $this;
 						return options.xhr.call(this, e);
 					},
@@ -517,7 +517,7 @@ $.fn.file_upload = function (options) {
 			var myXhr = $.ajaxSettings.xhr();
 
 			if (myXhr.upload) {
-				myXhr.upload.addEventListener('progress', function(e) {
+				myXhr.upload.addEventListener('progress', function (e) {
 					this.context = $this.context;
 					return options.progress.call(this, e);
 				}, false);
@@ -548,6 +548,7 @@ $.fn.file_upload = function (options) {
 		function amplo_progress(e) {
 			//Multiply by 75 to account for the delay of server response
 			var total = typeof e === 'object' ? (e.loaded / e.total) * 75 : e;
+			total = total.toFixed(1);
 			this.context.progress.css({width: total + '%'});
 			this.context.msg.html(total + '%');
 		}
