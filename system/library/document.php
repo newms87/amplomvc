@@ -392,7 +392,7 @@ class Document extends Library
 		}
 
 		if ($minify) {
-			$script = $this->minifyJs($script);
+			$script = $this->minifyJsFile($script);
 		}
 
 		$file = str_replace(URL_SITE, DIR_SITE, $script);
@@ -414,7 +414,12 @@ class Document extends Library
 		$this->ac_vars[$var] = $value;
 	}
 
-	public function minifyJs($script)
+	public function minifyJs($content) {
+		require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
+		return JShrink\Minifier::minify($content);
+	}
+
+	public function minifyJsFile($script)
 	{
 		$script_file = str_replace(URL_SITE, DIR_SITE, $script);
 
@@ -427,11 +432,8 @@ class Document extends Library
 		$cache_url  = URL_SITE . 'system/cache/' . $file;
 
 		if (!is_file($cache_file) || (_filemtime($cache_file) < _filemtime($script_file))) {
-			require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
-			$js = JShrink\Minifier::minify(file_get_contents($script_file));
-
 			if (_is_writable(dirname($cache_file))) {
-				file_put_contents($cache_file, $js);
+				file_put_contents($cache_file, $this->minifyJs(file_get_contents($script_file)));
 			} else {
 				return $script;
 			}
