@@ -349,6 +349,7 @@ $.fn.show_msg = function (type, msg, options) {
 
 	if (typeof msg === 'object') {
 		for (var m in msg) {
+			options.clear = false;
 			this.show_msg(type || m, msg[m], options);
 		}
 		return this;
