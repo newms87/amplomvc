@@ -117,7 +117,7 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 
 	$size = '';
 
-	if ($file) {
+	if ($file && is_file($file)) {
 		if ($version) {
 			$src .= '?v=' . filemtime($file);
 		}

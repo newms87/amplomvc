@@ -770,6 +770,38 @@ td {
   cursor: pointer;
 }
 
+.file-upload-box {
+  position: relative;
+  border: 2px dashed @color-secondary;
+  padding: 1em;
+
+  .file-upload {
+    position: absolute;
+  }
+
+  .msg {
+    font: 1.3em OpenSansSemiBold;
+    color: @font-dark;
+    position: relative;
+    z-index: 10;
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .progress {
+      width: 0;
+      height: 100%;
+      background: lighten(@color-secondary, 20%);
+    }
+  }
+}
+
 .imageinput-box {
   border: 1px solid #EEEEEE;
   padding: 10px;

@@ -442,75 +442,116 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 }
 
 $.fn.file_upload = function (options) {
-	options = $.extend({
-		change:   amplo_file_upload,
-		progress: amplo_progress,
-		success:  amplo_success,
-		url:      $ac.site_url + 'common/file-upload',
-		xhr:      amplo_xhr
-	}, options);
+	return this.each(function (i, e) {
+		options = $.extend({
+			change:   amplo_file_upload,
+			progress: amplo_progress,
+			success:  amplo_success,
+			url:      $ac.site_url + 'common/file-upload',
+			xhr:      amplo_xhr,
+			path:     '',
+			preview:  null,
+			message:  'Click to upload file'
+		}, options);
 
-	var $input = this;
-	var $upload = $('<div class="file-upload" />').append($input);
-	var $bar = $('<div class="file-upload-bar" />').appendTo($upload);
+		var $input = $(e);
+		var $upload = $('<div class="file-upload-box"><div class="msg"/></div>');
+		$input.after($upload).appendTo($upload);
+		var $bar = $('<div class="progress-bar"><div class="progress" /></div>').appendTo($upload);
 
-	if (typeof options.change === 'function') {
-		this.change(options.change);
-	}
+		$input[0].save = $('<input type="hidden" name="' + $input.attr('name') + '" />').appendTo($upload);
+		$input[0].preview = $($input.attr('data-preview'));
+		$input[0].msg = $upload.find('.msg').html(options.message);
+		$input[0].progress = $bar.find('.progress');
 
-	function amplo_file_upload() {
-		if (!this.files) {
-			return alert('No Files to upload');
+		//Hide Input field
+		$input.css({left: -99999});
+		$input.click(function (e) {
+			e.stopPropagation();
+		});
+
+		$upload.click(function () {
+			$input.click();
+		});
+
+		$input.removeAttr('name');
+
+		if (typeof options.change === 'function') {
+			$input.change(options.change);
 		}
 
-		for (var i = 0; i < this.files.length; i++) {
-			var file = this.files[i];
-			var fd = new FormData();
+		function amplo_file_upload() {
+			var $this = this;
 
-			fd.append('file', file);
+			if (!$this.files) {
+				return alert('No Files to upload');
+			}
 
-			$.ajax({
-				url:         options.url,
-				data:        fd,
-				processData: false,
-				contentType: false,
-				type:        'POST',
-				xhr:         options.xhr,
-				success:     options.success
-			});
-		}
-	}
+			for (var i = 0; i < $this.files.length; i++) {
+				var file = $this.files[i];
+				var fd = new FormData();
 
-	function amplo_xhr() {
-		var myXhr = $.ajaxSettings.xhr();
+				fd.append('file', file);
+				fd.append('path', options.path);
 
-		if (myXhr.upload) {
-			myXhr.upload.addEventListener('progress', options.progress, false);
-		}
-
-		return myXhr;
-	}
-
-	function amplo_success(response, status, xhr) {
-		console.log('success', response);
-
-		if (response.files) {
-			for (var f in response.files) {
-				var $file = $('.blueprint-files [data-name="' + f + '"]');
-				$file.attr('data-file', response.files[f]);
-				break;
+				$.ajax({
+					url:         options.url,
+					data:        fd,
+					processData: false,
+					contentType: false,
+					type:        'POST',
+					xhr:         function(e) {
+						this.context = $this;
+						return options.xhr.call(this, e);
+					},
+					success:     function (response, status, xhr) {
+						this.context = $this;
+						return options.success.call(this, response, status, xhr);
+					}
+				});
 			}
 		}
 
-		amplo_progress(100);
-	}
+		function amplo_xhr() {
+			var $this = this;
+			var myXhr = $.ajaxSettings.xhr();
 
-	function amplo_progress(e) {
-		//Multiply by .75 to account for the delay of server response
-		var total = typeof e === 'object' ? (e.loaded / e.total) * .75 : e;
-		console.log('progress', e, total)
-		$bar.find('.progres').width(total);
-	}
+			if (myXhr.upload) {
+				myXhr.upload.addEventListener('progress', function(e) {
+					this.context = $this.context;
+					return options.progress.call(this, e);
+				}, false);
+			}
+
+			return myXhr;
+		}
+
+		function amplo_success(response, status, xhr) {
+			amplo_progress.call(this, 100);
+
+			if (response.data) {
+				for (var f in response.data) {
+					var url = response.data[f];
+					this.context.save.val(url);
+					this.context.msg.html(url);
+
+					var preview = options.preview ? $(options.preview) : this.context.preview;
+					if (preview.length) {
+						preview.attr('src', url);
+					}
+
+					break;
+				}
+			}
+		}
+
+		function amplo_progress(e) {
+			//Multiply by 75 to account for the delay of server response
+			var total = typeof e === 'object' ? (e.loaded / e.total) * 75 : e;
+			this.context.progress.css({width: total + '%'});
+			this.context.msg.html(total + '%');
+		}
+	});
 }
 
 function ac_form(params) {
