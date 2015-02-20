@@ -73,6 +73,19 @@ ol {
   }
 }
 
+.height-animate {
+  max-height: 0;
+  min-height: 0;
+  overflow: hidden;
+  -webkit-transition: .5s all;
+  transition: .5s all;
+
+  &.show {
+    max-height: 100em;
+  }
+}
+
+
 .clear {
   clear: both;
 }
