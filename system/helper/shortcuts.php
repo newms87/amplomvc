@@ -741,7 +741,7 @@ function build($type, $params = null)
 	foreach ($data as $key => $value) {
 		if (is_array($value)) {
 			if (($value_key && !isset($value[$value_key])) || ($label_key && !isset($value[$label_key]))) {
-				trigger_error(_l("The associative indexes for 'key' and 'value' were not found in the data array."));
+				trigger_error(_l("The associative indexes for 'value' and 'label' were not found in the data array.") . get_caller());
 				return;
 			}
 
