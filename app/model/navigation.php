@@ -497,6 +497,10 @@ class App_Model_Navigation extends App_Model_Table
 						'display_name' => 'Logs',
 						'path'         => 'admin/logs',
 					),
+					'system_history'           => array(
+						'display_name' => 'History',
+						'path'         => 'admin/history',
+					),
 					'system_localisation'      => array(
 						'display_name' => 'Localisation',
 						'children'     => array(
