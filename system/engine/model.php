@@ -559,7 +559,9 @@ abstract class Model
 		$columns += $this->getTableColumns($table);
 
 		foreach ($filter as $key => $value) {
-			if (strpos($key, '!') === 0) {
+			if (strpos($key, '#') === 0) {
+				$where .= ' ' . $value;
+			} elseif (strpos($key, '!') === 0) {
 				$key = substr($key, 1);
 				$not = true;
 			} else {
