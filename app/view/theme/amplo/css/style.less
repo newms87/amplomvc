@@ -37,6 +37,10 @@ body {
   color: @font-dark;
 }
 
+img {
+  height: auto;
+}
+
 a {
   text-decoration: none;
   outline: 0;
@@ -678,11 +682,9 @@ textarea {
   }
 
   label {
-    width: 20%;
-    min-width: 150px;
     display: inline-block;
     text-align: right;
-    margin-right: 10px;
+    margin-right: .6em;
   }
 
   /* Chrome Autofill Style Hack*/
@@ -1052,7 +1054,6 @@ section.page {
   }
 }
 
-
 .select-box-list {
   padding: 2em;
   text-align: center;
@@ -1098,7 +1099,7 @@ section.page {
       }
     }
 
-    &.add-new, &.use-same {
+    &.add-new, &.same-as {
       .plus-icon, .equal-icon {
         position: absolute;
         left: 50%;

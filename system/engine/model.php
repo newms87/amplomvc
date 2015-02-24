@@ -587,7 +587,7 @@ abstract class Model
 							$likes[] = "`$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($v) . "%'";
 						}
 
-						$where .= " AND (" . implode(" OR ", $likes) . ")";
+						$where .= " AND (" . implode(($not ? ' AND ' : ' OR '), $likes) . ")";
 					} else {
 						$where .= " AND `$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($value) . "%'";
 					}
