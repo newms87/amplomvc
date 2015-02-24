@@ -404,7 +404,6 @@ class Image extends Library
 
 				$transparent = imagecolorallocatealpha($this->image, 0, 0, 0, 127);
 				imagecolortransparent($this->image, $transparent);
-				imagefill($this->image, 0, 0, $transparent);
 				imagealphablending($this->image, true);
 			} else {
 				imagetruecolortopalette($merge, false, $colors);

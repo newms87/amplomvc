@@ -73,6 +73,19 @@ ol {
   }
 }
 
+.height-animate {
+  max-height: 0;
+  min-height: 0;
+  overflow: hidden;
+  -webkit-transition: .5s all;
+  transition: .5s all;
+
+  &.show {
+    max-height: 100em;
+  }
+}
+
+
 .clear {
   clear: both;
 }
@@ -743,6 +756,38 @@ td {
 .icon {
   vertical-align: middle;
   cursor: pointer;
+}
+
+.file-upload-box {
+  position: relative;
+  border: 2px dashed @color-secondary;
+  padding: 1em;
+
+  .file-upload {
+    position: absolute;
+  }
+
+  .msg {
+    font: 1.3em OpenSansSemiBold;
+    color: @font-dark;
+    position: relative;
+    z-index: 10;
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .progress {
+      width: 0;
+      height: 100%;
+      background: lighten(@color-secondary, 20%);
+    }
+  }
 }
 
 .imageinput-box {

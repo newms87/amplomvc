@@ -240,7 +240,7 @@ abstract class Model
 			}
 		}
 
-		if ($model_history && in_array($t, $model_history)) {
+		if ($model_history && in_array($table, $model_history)) {
 			$this->history($t, $row_id, 'insert', $data, true);
 		}
 
@@ -296,7 +296,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && $update_id !== true && in_array($t, $model_history)) {
+		if ($model_history && $update_id !== true && in_array($table, $model_history)) {
 			$this->history($t, $update_id, 'update', $data, true);
 		}
 
@@ -325,7 +325,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && in_array($t, $model_history)) {
+		if ($model_history && in_array($table, $model_history)) {
 			$delete_id = false;
 
 			if (is_array($where)) {
