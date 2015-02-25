@@ -297,14 +297,13 @@ class App_Controller_Admin_User extends Controller
 		redirect('admin/user/login');
 	}
 
-	public function reset()
+	public function reset_form()
 	{
 		if (is_logged() || empty($_GET['code'])) {
-			redirect();
+			redirect('admin');
 		}
 
-		$code = $_GET['code'];
-
+		$code    = $_GET['code'];
 		$user_id = $this->user->lookupResetCode($code);
 
 		//User not found
@@ -313,34 +312,46 @@ class App_Controller_Admin_User extends Controller
 			redirect('admin/user/login');
 		}
 
-		//Handle POST
-		if (IS_POST) {
-			//Validate Password
-			if (!validate('password', $_POST['password'])) {
+		//Breadcrumbs
+		breadcrumb(_l('Home'), site_url('admin'));
+		breadcrumb(_l('Password Reset'), site_url('admin/user/reset_form', 'code=' . $code));
+
+		$data['code'] = $code;
+
+		//Render
+		output($this->render('user/reset', $data));
+	}
+
+	public function reset()
+	{
+		$code     = $_GET['code'];
+		$password = $_POST['password'];
+
+		$user_id = $this->user->lookupResetCode($code);
+
+		//User not found
+		if (!$user_id) {
+			message('error', _l("Unable to locate password reset code. Please try again."));
+		} else {
+
+			if (!validate('password', $password)) {
 				if ($this->validation->isErrorCode(Validation::PASSWORD_CONFIRM)) {
 					$this->error['confirm'] = $this->validation->getError();
 				} else {
 					$this->error['password'] = $this->validation->getError();
 				}
 			} else {
-				$this->user->updatePassword($user_id, $_POST['password']);
+				$this->Model_User->save($user_id, array('password' => $password));
 				$this->user->clearResetCode($user_id);
 
 				message('success', _l('You have successfully updated your password!'));
 			}
-
-			redirect('admin/user/login');
 		}
 
-		//Breadcrumbs
-		breadcrumb(_l('Home'), site_url('admin'));
-		breadcrumb(_l('Password Reset'), site_url('admin/user/reset', 'code=' . $code));
-
-		//Action Buttons
-		$data['save']   = site_url('admin/user/reset', 'code=' . $code);
-		$data['cancel'] = site_url('admin/user/login');
-
-		//Render
-		output($this->render('user/reset', $data));
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/user/login');
+		}
 	}
 }

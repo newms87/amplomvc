@@ -1,39 +1,31 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
-<div class="section clear">
+<div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<div class="box">
+	<form action="<?= site_url('admin/user/reset', 'code=' . $code); ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
 			<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Reset Your Password}}</h1>
 
 			<div class="buttons">
-				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
+				<button data-loading="{{Please Wait...}}">{{Reset Password}}</button>
+				<a href="<?= site_url('admin/user/login'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 
-		<div class="section">
-			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="reset">
-				<h2>{{Enter your new Password:}}</h2>
-				<table class="form">
-					<tr>
-						<td>{{Password:}}</td>
-						<td><input type="password" autocomplete="off" name="password" value=""/></td>
-					</tr>
-					<tr>
-						<td>{{Password Confirmation:}}</td>
-						<td><input type="password" name="confirm" value=""/></td>
-					</tr>
-				</table>
+		<div class="section row">
 
-				<input type="submit" class="button" value="{{Change Password}}"/>
-			</form>
+			<h2>{{Enter your new Password:}}</h2>
+			<br />
+
+			<div class="form-item">
+				<input type="password" autocomplete="off" name="password" placeholder="{{Enter New Password}}"/>
+				<br />
+				<br />
+				<input type="password" autocomplete="off" name="confirm" placeholder="{{Confirm Password}}"/>
+			</div>
 		</div>
-	</div>
+	</form>
 </div>
-
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
-</script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>
