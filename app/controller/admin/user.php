@@ -331,25 +331,20 @@ class App_Controller_Admin_User extends Controller
 
 		//User not found
 		if (!$user_id) {
-			message('error', _l("Unable to locate password reset code. Please try again."));
+			message('warning', _l("Unable to locate password reset code. Please try again."));
 		} else {
-
-			if (!validate('password', $password)) {
-				if ($this->validation->isErrorCode(Validation::PASSWORD_CONFIRM)) {
-					$this->error['confirm'] = $this->validation->getError();
-				} else {
-					$this->error['password'] = $this->validation->getError();
-				}
-			} else {
-				$this->Model_User->save($user_id, array('password' => $password));
+			if ($this->Model_User->save($user_id, array('password' => $password))) {
 				$this->user->clearResetCode($user_id);
-
 				message('success', _l('You have successfully updated your password!'));
+			} else {
+				message('error', $this->Model_User->getError());
 			}
 		}
 
 		if ($this->is_ajax) {
 			output_message();
+		} elseif ($this->message->has('error')) {
+			redirect('admin/user/reset', 'code=' . $code);
 		} else {
 			redirect('admin/user/login');
 		}
