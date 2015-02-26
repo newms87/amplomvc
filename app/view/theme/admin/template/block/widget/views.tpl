@@ -40,7 +40,7 @@
 							</div>
 						</div>
 
-						<? if ($can_modify && user_can('w', 'admin/view')) { ?>
+						<? if ($can_modify) { ?>
 							<div class="view-settings buttons">
 								<div class="view-setting setting-buttons">
 									<a class="move-up button move">
