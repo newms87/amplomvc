@@ -202,7 +202,7 @@
 		$this.addClass('active');
 	});
 
-	<? if ($can_modify && user_can('w', 'admin/view')) { ?>
+	<? if ($can_modify) { ?>
 	$('.choose-view-box [name]').change(function () {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
