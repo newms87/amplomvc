@@ -62,9 +62,10 @@ abstract class App_Model_Table extends Model
 	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
 	{
 		$cache = !empty($sort['cache']);
+		$tbl = $this->table[0];
 
 		//Select
-		$select = $this->extractSelect($this->table, $select);
+		$select = $this->extractSelect($this->table . ' ' . $tbl, $select);
 
 		if ($cache) {
 			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
@@ -82,13 +83,17 @@ abstract class App_Model_Table extends Model
 		}
 
 		//From
-		$from = $this->t[$this->table];
+		$from = $this->t[$this->table] . ' ' . $tbl;
+
+		if (!empty($sort['join'])) {
+			$from .= ' ' . implode(' ', $sort['join']);
+		}
 
 		//Where
-		$where = $this->extractWhere($this->table, $filter);
+		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);
 
 		//Order and Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
+		list($order, $limit) = $this->extractOrderLimit($sort, $tbl);
 
 		//The Query
 		$records = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
