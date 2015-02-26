@@ -176,7 +176,7 @@ CREATE TABLE `history` (
 	`history_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
 	`user_id` int(10) NOT NULL  ,
 	`table` varchar(45) NOT NULL  ,
-	`row_id` int(10) NOT NULL  ,
+	`record_id` int(10) NOT NULL  ,
 	`action` varchar(32) NOT NULL  ,
 	`message` varchar(100)  DEFAULT NULL ,
 	`data` text  DEFAULT NULL ,

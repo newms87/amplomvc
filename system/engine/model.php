@@ -346,7 +346,7 @@ abstract class Model
 		return true;
 	}
 
-	public function history($table, $row_id, $action, $data, $message = null)
+	public function history($table, $record_id, $action, $data, $message = null)
 	{
 		if (strpos($table, 'history') === false) {
 			$columns = $this->getTableColumns($table);
@@ -365,12 +365,12 @@ abstract class Model
 			}
 
 			$history = array(
-				'user_id' => $this->user->getId(),
-				'table'   => $table,
-				'row_id'  => $row_id,
-				'action'  => $action,
-				'data'    => $json_data,
-				'date'    => $this->date->now(),
+				'user_id'   => user_info('user_id'),
+				'table'     => $table,
+				'record_id' => $record_id,
+				'action'    => $action,
+				'data'      => $json_data,
+				'date'      => $this->date->now(),
 			);
 
 			if ($message) {
@@ -560,7 +560,9 @@ abstract class Model
 
 		html_dump($columns, $table);
 		foreach ($filter as $key => $value) {
-			if (strpos($key, '!') === 0) {
+			if (strpos($key, '#') === 0) {
+				$where .= ' ' . $value;
+			} elseif (strpos($key, '!') === 0) {
 				$key = substr($key, 1);
 				$not = true;
 			} else {

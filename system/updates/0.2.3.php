@@ -12,3 +12,5 @@ $this->db->query("UPDATE {$this->db->t['country']} SET address_format = ''");
 $this->db->addColumn('customer', 'username', "VARCHAR(45) NOT NULL DEFAULT '' AFTER `customer_id`");
 
 $this->db->query("UPDATE {$this->db->t['customer']} SET username = email WHERE username = ''");
+
+$this->db->changeColumn('history', 'row_id', 'record_id', "INT UNSIGNED NOT NULL");
