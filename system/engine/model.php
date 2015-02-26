@@ -558,6 +558,7 @@ abstract class Model
 
 		$columns += $this->getTableColumns($table);
 
+		html_dump($columns, $table);
 		foreach ($filter as $key => $value) {
 			if (strpos($key, '!') === 0) {
 				$key = substr($key, 1);
