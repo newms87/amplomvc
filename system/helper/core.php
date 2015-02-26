@@ -521,8 +521,8 @@ function get_caller($offset = 0, $limit = 10)
 
 	$limit += $offset;
 
-	while ($offset < $limit && $offset < (count($calls) - 1)) {
-		$caller = $calls[$offset + 1];
+	while ($offset < $limit && $offset < count($calls)) {
+		$caller = $calls[$offset];
 
 		if (isset($caller['file'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
