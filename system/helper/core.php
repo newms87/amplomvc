@@ -735,20 +735,22 @@ function get_comment_directives($content, $trim = true)
 
 	$directives = array();
 
-	$tokens = token_get_all($content);
+	if ($content) {
+		$tokens = token_get_all($content);
 
-	foreach ($tokens as $token) {
-		if ($token[0] === T_DOC_COMMENT) {
-			if (preg_match_all("/(.*?)([a-z0-9_-]*?):(.*?)\\*/is", $token[1], $matches)) {
-				$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
+		foreach ($tokens as $token) {
+			if ($token[0] === T_DOC_COMMENT) {
+				if (preg_match_all("/(.*?)([a-z0-9_-]*?):(.*?)\\*/is", $token[1], $matches)) {
+					$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
+				}
 			}
 		}
-	}
 
-	if ($trim) {
-		array_walk($directives, function (&$a) {
-			$a = trim($a);
-		});
+		if ($trim) {
+			array_walk($directives, function (&$a) {
+				$a = trim($a);
+			});
+		}
 	}
 
 	return $directives;

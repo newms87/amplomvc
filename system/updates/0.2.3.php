@@ -14,3 +14,8 @@ $this->db->addColumn('customer', 'username', "VARCHAR(45) NOT NULL DEFAULT '' AF
 $this->db->query("UPDATE {$this->db->t['customer']} SET username = email WHERE username = ''");
 
 $this->db->changeColumn('history', 'row_id', 'record_id', "INT UNSIGNED NOT NULL");
+
+$this->db->addColumn('plugin', 'date_installed', "DATETIME NOT NULL AFTER `status`");
+$this->db->addColumn('plugin', 'date_updated', "DATETIME NOT NULL AFTER `date_installed`");
+$this->db->dropTable('plugin_merged_files');
+$this->db->dropTable('plugin_registry');

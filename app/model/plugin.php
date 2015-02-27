@@ -4,103 +4,41 @@ class App_Model_Plugin extends App_Model_Table
 {
 	protected $table = 'plugin', $primary_key = 'plugin_id';
 
-	private $plugins;
+	protected $plugins;
 
-	public function searchPlugins($search = '', $team = 'amplomvc')
+	public function save($plugin_id, $plugin)
 	{
-		$plugins = cache('repoapi.plugins.' . $team);
-
-		if ($plugins === null) {
-			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $team, null, Curl::RESPONSE_JSON);
-
-			if (empty($response['values'])) {
-				$response = $this->curl->get('https://api.bitbucket.org/2.0/teams/' . $team . '/repositories', null, Curl::RESPONSE_JSON);
-
-				if (empty($response['values'])) {
-					return array();
-				}
-			}
-
-			$plugins = $response['values'];
-
-			foreach ($plugins as $key => &$plugin) {
-				$plugin['download'] = $plugin['links']['html']['href'] . '/get/master.zip';
-			}
-			unset($plugin);
-
-			cache('repoapi.plugins.' . $team, $plugins);
+		if (empty($plugin['name'])) {
+			$this->error['name'] = _l("Plugin name is required.");
 		}
 
-		if ($search) {
-			foreach ($plugins as $plugin) {
-				if ($plugin['full_name'] === $search) {
-					return $plugin;
-				}
-			}
-
+		if ($this->error) {
 			return false;
 		}
 
-		return $plugins;
+		if ($plugin_id) {
+			$plugin_id = $this->update('plugin', $plugin, $plugin_id);
+		} else {
+			$this->delete('plugin', array('name' => $plugin['name']));
+
+			$plugin_id = $this->insert('plugin', $plugin);
+		}
+
+		clear_cache('plugin');
+
+		return $plugin_id;
 	}
 
-	public function downloadPlugin($name)
+	public function remove($plugin_id)
 	{
-		$plugin = $this->searchPlugins($name);
+		clear_cache('plugin');
 
-		if (!$plugin) {
-			$this->error['name'] = _l("Unable to find the plugin %s. Please try downloading a different plugin.", $name);
-			return false;
-		}
+		return $this->delete('plugin', $plugin_id);
+	}
 
-		$zip_file = DIR_PLUGIN . 'plugin-download.zip';
-
-		if (empty($plugin['download'])) {
-			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
-			return false;
-		}
-
-		if (!$this->url->download($plugin['download'], $zip_file)) {
-			$this->error = $this->url->getError();
-			return false;
-		}
-
-		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN . 'plugin-download')) {
-			$this->error = $this->csv->getError();
-			return false;
-		}
-
-		$dirs = glob(DIR_PLUGIN . 'plugin-download/*');
-
-		if (count($dirs) === 1) {
-			$entry = basename($dirs[0]);
-
-			//Rename to working plugin name
-			$setup_file = DIR_PLUGIN . 'plugin-download/' . $entry . '/setup.php';
-
-			if (is_file($setup_file)) {
-				$directives = get_comment_directives($setup_file);
-			}
-
-			$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
-
-			if (is_file(DIR_PLUGIN . $plugin_name)) {
-				$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
-
-			} elseif (!@rename(DIR_PLUGIN . 'plugin-download/' . $entry, DIR_PLUGIN . $plugin_name)) {
-				$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists?");
-			}
-
-			rrmdir(DIR_PLUGIN . 'plugin-download');
-
-			//Cleanup
-			unlink($zip_file);
-
-			return $this->error ? false : $plugin_name;
-		} else {
-			trigger_error("NOT 100% sure how to handle this guy");
-			exit;
-		}
+	public function getPluginId($name)
+	{
+		return $this->queryVar("SELECT plugin_id FROM {$this->t['plugin']} WHERE `name` = '" . $this->escape($name) . "'");
 	}
 
 	public function getField($name, $field)
@@ -236,95 +174,6 @@ class App_Model_Plugin extends App_Model_Table
 		return $plugins;
 	}
 
-	public function canInstall($name)
-	{
-		if (!isset($this->plugins[$name])) {
-			return false;
-		}
-
-		$plugin = $this->plugins[$name];
-
-		if (!empty($plugin['dependencies'])) {
-			if (in_array(false, $plugin['dependencies'])) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public function canUninstall($name)
-	{
-		foreach ($this->plugins as $plugin) {
-			if ($plugin['installed'] && isset($plugin['dependencies'][$name])) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public function install($name)
-	{
-		clear_cache('plugin');
-
-		$this->delete('plugin', array('name' => $name));
-
-		$directives = $this->plugin->getDirectives($name);
-
-		$plugin = array(
-			'name'    => $name,
-			'version' => !empty($directives['version']) ? $directives['version'] : '1.0',
-			'status'  => 1,
-		);
-
-		$plugin_id = $this->insert('plugin', $plugin);
-
-		return $plugin_id;
-	}
-
-	public function uninstall($name)
-	{
-		clear_cache('plugin');
-
-		//remove files from plugin that were registered
-		$plugin_entries = $this->queryRows("SELECT * FROM {$this->t['plugin_registry']} WHERE `name` = '" . $this->db->escape($name) . "'");
-
-		foreach ($plugin_entries as $entry) {
-			//Only Remove symlinked files (in case someone already deleted this file and replaced it)
-			if (is_file($entry['live_file']) && _is_link($entry['live_file'])) {
-				if (unlink($entry['live_file'])) {
-					message("notify", _l("Removed plugin file $entry[live_file]."));
-				} else {
-					message("error", _l("Unable to remove plugin file $entry[live_file]."));
-				}
-			}
-		}
-
-		$this->delete('plugin_registry', array('name' => $name));
-
-		$this->delete('plugin', array('name' => $name));
-
-		return true;
-	}
-
-	public function upgrade($name)
-	{
-		clear_cache('plugin');
-
-		$directives = $this->plugin->getDirectives($name);
-
-		$plugin = array(
-			'version' => !empty($directives['version']) ? $directives['version'] : '1.0',
-		);
-
-		if ($this->update('plugin', $plugin, array('name' => $name))) {
-			return $directives['version'];
-		}
-
-		return false;
-	}
-
 	public function getDependentsList($name)
 	{
 		$dependents = array();
@@ -355,25 +204,141 @@ class App_Model_Plugin extends App_Model_Table
 		return $plugin_data;
 	}
 
-	public function save($name, $plugin)
-	{
-		$this->update('plugin', $plugin, array('name' => $name));
-	}
-
-	public function deletePlugin($name, $plugin_path = null)
-	{
-		$where = array(
-			'name' => $name
-		);
-		if ($plugin_path) {
-			$where['plugin_path'] = $plugin_path;
-		}
-
-		$this->delete('plugin', $where);
-	}
-
 	public function getTotalPlugins($data = array())
 	{
 		return $this->getPlugins($data, true);
+	}
+
+	public function searchPlugins($search = '', $team = 'amplomvc')
+	{
+		$plugins = cache('repoapi.plugins.' . $team);
+
+		if ($plugins === null) {
+			$response = $this->curl->get('https://api.bitbucket.org/2.0/repositories/' . $team, null, Curl::RESPONSE_JSON);
+
+			if (empty($response['values'])) {
+				$response = $this->curl->get('https://api.bitbucket.org/2.0/teams/' . $team . '/repositories', null, Curl::RESPONSE_JSON);
+
+				if (empty($response['values'])) {
+					return array();
+				}
+			}
+
+			$plugins = $response['values'];
+
+			foreach ($plugins as $key => &$plugin) {
+				$plugin['download'] = $plugin['links']['html']['href'] . '/get/master.zip';
+			}
+			unset($plugin);
+
+			cache('repoapi.plugins.' . $team, $plugins);
+		}
+
+		if ($search) {
+			foreach ($plugins as $plugin) {
+				if ($plugin['full_name'] === $search) {
+					return $plugin;
+				}
+			}
+
+			return false;
+		}
+
+		return $plugins;
+	}
+
+	public function downloadPlugin($name)
+	{
+		$plugin = $this->searchPlugins($name);
+
+		if (!$plugin) {
+			$this->error['name'] = _l("Unable to find the plugin %s. Please try downloading a different plugin.", $name);
+			return false;
+		}
+
+		$zip_file = DIR_PLUGIN . 'plugin-download.zip';
+
+		if (empty($plugin['download'])) {
+			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
+			return false;
+		}
+
+		if (!$this->url->download($plugin['download'], $zip_file)) {
+			$this->error = $this->url->getError();
+			return false;
+		}
+
+		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN . 'plugin-download')) {
+			$this->error = $this->csv->getError();
+			return false;
+		}
+
+		$dirs = glob(DIR_PLUGIN . 'plugin-download/*');
+
+		if (count($dirs) === 1) {
+			$entry = basename($dirs[0]);
+
+			//Rename to working plugin name
+			$setup_file = DIR_PLUGIN . 'plugin-download/' . $entry . '/setup.php';
+
+			if (is_file($setup_file)) {
+				$directives = get_comment_directives($setup_file);
+			}
+
+			$plugin_name = !empty($directives['name']) ? $directives['name'] : basename($name);
+
+			if (is_file(DIR_PLUGIN . $plugin_name)) {
+				$this->error['exists'] = _l("A plugin with the same name %s already exists!", $plugin_name);
+
+			} elseif (!@rename(DIR_PLUGIN . 'plugin-download/' . $entry, DIR_PLUGIN . $plugin_name)) {
+				$this->error['rename'] = _l("There was a problem renaming the plugin file. Maybe the plugin already exists?");
+			}
+
+			rrmdir(DIR_PLUGIN . 'plugin-download');
+
+			//Cleanup
+			unlink($zip_file);
+
+			return $this->error ? false : $plugin_name;
+		} else {
+			trigger_error("NOT 100% sure how to handle this guy");
+			exit;
+		}
+	}
+
+	public function canInstall($name)
+	{
+		if (!$this->plugins) {
+			$this->getPlugins();
+		}
+
+		if (!isset($this->plugins[$name])) {
+			return false;
+		}
+
+		$plugin = $this->plugins[$name];
+
+		if (!empty($plugin['dependencies'])) {
+			if (in_array(false, $plugin['dependencies'])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function canUninstall($name)
+	{
+		if (!$this->plugins) {
+			$this->getPlugins();
+		}
+
+		foreach ($this->plugins as $plugin) {
+			if ($plugin['installed'] && isset($plugin['dependencies'][$name])) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

@@ -96,7 +96,7 @@
 		<a class="add-view button">{{New View}}</a>
 
 		<? if ($this->user->isTopAdmin()) { ?>
-			<a class="create-view button">{{Create View}}</a>
+			<a class="create-view button">{{Create Listing}}</a>
 
 			<div class="view-popup create-view-box">
 				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
@@ -105,7 +105,7 @@
 					<input type="text" name="name" value="{{View Name}}"/>
 					<br/>
 					<textarea name="sql" placeholder="{{WHERE Status = 'Complete'}}"></textarea>
-					<button class="submit-view">{{Create View}}</button>
+					<button class="submit-view" data-loading="{{Submitting...}}">{{Submit}}</button>
 				</form>
 
 				<a class="button close">X</a>

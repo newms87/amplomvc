@@ -2,137 +2,19 @@
 
 class Mod extends Library
 {
-	private $mod_registry;
 	private $live_registry;
-
-	function __construct()
-	{
-		parent::__construct();
-
-		global $mod_registry, $live_registry;
-
-		$this->mod_registry  = $mod_registry;
-		$this->live_registry = $live_registry;
-
-		$this->validate();
-	}
-
-	private function setError($file, $line, $code, $msg)
-	{
-		if ($file) {
-			$msg = "Error in $file: Line $line:  " . htmlspecialchars($code) . ": " . $msg;
-		}
-		//trigger_error($msg);
-		$this->error[] = $msg;
-	}
-
-	public function isRegistered($file)
-	{
-		foreach ($this->mod_registry as $source => $mods) {
-			foreach ($mods as $destination => $mod_files) {
-				foreach ($mod_files as $mod_file => $value) {
-					if ($mod_file === $file) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
 
 	public function getSourceDestination($source)
 	{
 		return str_replace(DIR_SITE, DIR_MOD_FILES, $source);
 	}
 
-	public function addFile($source, $mod_file, $destination = null, $directives = array())
+	public function apply($file)
 	{
-		if (!is_file($source)) {
-			if (is_file(DIR_SITE . $source)) {
-				$source = DIR_SITE . $source;
-			} else {
-				message('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
-				return false;
-			}
-		}
 
-		if (!is_file($mod_file)) {
-			if (is_file(DIR_SITE . $mod_file)) {
-				$mod_file = DIR_SITE . $mod_file;
-			} else {
-				message('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
-				return false;
-			}
-		}
+		message('notify', 'apply mod to file ' . $file);
+		return;
 
-		if (!isset($this->mod_registry[$source])) {
-			$this->mod_registry[$source] = array();
-		}
-
-		if (!$destination || ($source === $destination)) {
-			$destination = $this->getSourceDestination($source);
-		}
-
-		$this->mod_registry[$source][$destination][$mod_file] = $directives;
-	}
-
-	public function addFiles($source, $mod_files, $destination = null)
-	{
-		foreach ($mod_files as $source_file => $mod_file) {
-			$this->addFile($source ? $source : $source_file, $mod_file, $destination);
-		}
-	}
-
-	public function getModFiles($dir)
-	{
-		$files = array();
-
-		foreach ($this->mod_registry as $source => $mods) {
-			foreach ($mods as $destination => $mod_files) {
-				foreach ($mod_files as $mod_file => $value) {
-					if (strpos($mod_file, $dir) === 0) {
-						$files[] = $mod_file;
-					}
-				}
-			}
-		}
-
-		return $files;
-	}
-
-	public function removeFile($file)
-	{
-		foreach ($this->mod_registry as $source => $mods) {
-			foreach ($mods as $destination => $mod_files) {
-				foreach ($mod_files as $mod_file => $value) {
-					//Allows for removing directories or similar files at once
-					if (strpos($mod_file, $file) === 0) {
-						unset($this->mod_registry[$source][$destination][$mod_file]);
-					}
-				}
-
-				if (empty($this->mod_registry[$source][$destination])) {
-					if ($source != $destination && is_file($destination)) {
-						unlink($destination);
-					}
-					unset($this->mod_registry[$source][$destination]);
-				}
-			}
-
-			if (empty($this->mod_registry[$source])) {
-				unset($this->mod_registry[$source]);
-			}
-		}
-	}
-
-	public function removeDirectory($dir)
-	{
-		$this->removeFile($dir);
-	}
-
-	public function addModFile($mod_file)
-	{
 		$directives = get_comment_directives($mod_file);
 
 		if (isset($directives['skip'])) {
@@ -177,26 +59,13 @@ class Mod extends Library
 			array_walk_recursive($directives['include'], $set_file_root);
 		}
 
-		$this->addFile($source, $mod_file, $destination, $directives);
-	}
 
-	public function addModDirectory($dir)
-	{
-		$mod_files = get_files($dir, null, FILELIST_STRING);
 
-		foreach ($mod_files as $mod_file) {
-			$this->addModFile($mod_file);
-		}
 
-		if (!$this->error && $this->apply()) {
-			$this->write();
-		}
 
-		return empty($this->error);
-	}
 
-	public function apply($invalidated_only = false)
-	{
+
+
 		$this->live_registry = array();
 
 		foreach ($this->mod_registry as $source => $mods) {
@@ -241,24 +110,6 @@ class Mod extends Library
 				}
 			}
 		}
-
-		return empty($this->error);
-	}
-
-	public function write()
-	{
-		chmod(AC_MOD_REGISTRY, 0777);
-
-		$registries = array(
-			'live' => $this->live_registry,
-			'mod'  => $this->mod_registry,
-		);
-
-		if (!file_put_contents(AC_MOD_REGISTRY, serialize($registries))) {
-			$this->error[] = "Failed to write to Mod Registry!";
-		}
-
-		chmod(AC_MOD_REGISTRY, 0444);
 
 		return empty($this->error);
 	}
@@ -339,7 +190,7 @@ class Mod extends Library
 		return empty($this->error);
 	}
 
-	private function Ganon($source, $mod_file)
+	protected function Ganon($source, $mod_file)
 	{
 		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 
@@ -356,7 +207,7 @@ class Mod extends Library
 		return $node->html();
 	}
 
-	private function fileMerge($source, $mod_file)
+	protected function fileMerge($source, $mod_file)
 	{
 		$comments  = array(
 			'php'  => array(
@@ -568,7 +419,7 @@ class Mod extends Library
 		return array_merge($new_file, array_slice($original, $index));
 	}
 
-	private function findBlock($block, $file, $start_index)
+	protected function findBlock($block, $file, $start_index)
 	{
 		if (!count($block) || (count($block) > (count($file) - $start_index))) {
 			return false;
@@ -642,46 +493,12 @@ class Mod extends Library
 		return false;
 	}
 
-	private function validate()
+	protected function setError($file, $line, $code, $msg)
 	{
-		$this->invalid = array();
-
-		foreach ($this->mod_registry as $source => $mods) {
-			if (!is_file($source)) {
-				unset($this->mod_registry[$source]);
-				$this->invalid['source'] = true; //Nothing to apply, only write
-				continue;
-			}
-
-			$source_filemtime = filemtime($source);
-
-			foreach ($mods as $destination => $mod_files) {
-				$destination_filemtime = is_file($destination) ? filemtime($destination) : 0;
-
-				if ($destination_filemtime < $source_filemtime) {
-					$this->invalid[$destination] = true;
-				}
-
-				foreach ($mod_files as $mod_file => $value) {
-					if (!is_file($mod_file)) {
-						$this->removeFile($mod_file);
-						$this->invalid[$destination] = true;
-					} elseif (filemtime($mod_file) > $destination_filemtime) {
-						$this->invalid[$destination] = true;
-					}
-				}
-			}
+		if ($file) {
+			$msg = "Error in $file: Line $line:  " . htmlspecialchars($code) . ": " . $msg;
 		}
-
-		if ($this->invalid) {
-			if ($this->apply(true)) {
-				$this->write();
-				message('notify', "The Mod File Registry was out of date and has been updated");
-			} else {
-				//We cannot use url library here because it has not been loaded yet.
-				message('warning', $this->getError());
-				message('warning', 'Please visit the <a href="' . site_url('admin/plugin') . '">Plugins</a> and resolve the issue.');
-			}
-		}
+		//trigger_error($msg);
+		$this->error[] = $msg;
 	}
 }
