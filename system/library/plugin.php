@@ -2,17 +2,12 @@
 
 class Plugin extends Library
 {
-	private $plugins;
-	private $plugin_registry;
-	private $installed;
+	protected
+		$plugins,
+		$installed;
 
-	function __construct()
+	public function isInstalled($name)
 	{
-		parent::__construct();
-
-		global $registry;
-		$registry->set('plugin', $this);
-
 		$this->installed = cache('plugin.installed');
 
 		if ($this->installed === null) {
@@ -21,13 +16,6 @@ class Plugin extends Library
 			cache('plugin.installed', $this->installed);
 		}
 
-		if (IS_ADMIN) {
-			$this->validatePluginModFiles();
-		}
-	}
-
-	public function isInstalled($name)
-	{
 		return isset($this->installed[$name]);
 	}
 
@@ -62,57 +50,51 @@ class Plugin extends Library
 
 	public function install($name)
 	{
-		$plugin = $this->loadPlugin($name);
+		$instance = $this->loadPlugin($name);
 
-		if (!$plugin) {
+		if (!$instance) {
 			$this->error['name'] = _l("Unable to load plugin %s for installation.", $name);
 			return false;
 		}
 
+		if (!$this->Model_Plugin->canInstall($name)) {
+			$this->error['install'] = _l("The plugin %s cannot be installed.", $name);
+			return false;
+		}
+
+		$directives = get_comment_directives(DIR_PLUGIN . $name . '/setup.php');
+
+		$plugin = array(
+			'name'    => $name,
+			'version' => !empty($directives['version']) ? $directives['version'] : '1.0',
+			'status'  => 1,
+		);
+
+		if (!$this->Model_Plugin->save(null, $plugin)) {
+			$this->error = $this->Model_Plugin->getError();
+			return false;
+		}
+
 		//New Files
-		if (!$this->integrateNewFiles($name)) {
-			$this->error['new_files'] = _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name);
-			$this->uninstall($name);
-			return false;
+		$files = $this->getNewFiles($name);
+
+		foreach ($files as $file) {
+			if (!$this->activatePluginFile($name, $file)) {
+				$this->error['new_files'] = _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name);
+				$this->uninstall($name);
+				return false;
+			}
 		}
 
-		//File Modifications
-		$file_mods = $this->getFileMods($name);
-
-		if ($file_mods === false) {
-			$this->error['mod_files'] = _l("There was a problem while applying file modifications for %s. The plugin has been uninstalled!", $name);
-			$this->uninstall($name);
-			return false;
+		if (method_exists($instance, 'install')) {
+			$instance->install();
+			clear_cache();
 		}
-
-		$this->mod->addFiles(null, $file_mods);
-
-		if (!$this->mod->apply(true)) {
-			$this->error['mod_apply'] = $this->mod->getError();
-			$this->uninstall($name);
-			return false;
-		}
-
-		if (!$this->mod->write()) {
-			$this->error['mod_write'] = $this->mod->getError();
-			$this->uninstall($name);
-			return false;
-		}
-
-		clear_cache();
-		
-		if (method_exists($plugin, 'install')) {
-			$plugin->install();
-		}
-
-		$this->Model_Plugin->install($name);
-
-		clear_cache();
 
 		//Run all upgrades
-		if (method_exists($plugin, 'upgrade')) {
-			$data = $plugin->upgrade('0');
-			$this->Model_Plugin->upgrade($name, $data);
+		if (method_exists($instance, 'upgrade')) {
+			$instance->upgrade('0');
+			clear_cache();
 		}
 
 		return true;
@@ -120,25 +102,22 @@ class Plugin extends Library
 
 	public function uninstall($name, $keep_data = true)
 	{
-		$plugin = $this->loadPlugin($name);
+		$instance = $this->loadPlugin($name);
 
-		$data = null;
-
-		if (method_exists($plugin, 'uninstall')) {
-			$data = $plugin->uninstall($keep_data);
+		if (method_exists($instance, 'uninstall')) {
+			$instance->uninstall($keep_data);
 		}
 
+		$plugin_id = $this->Model_Plugin->getPluginId($name);
+
 		//Uninstall the plugin from the system
-		$this->Model_Plugin->uninstall($name, $data);
+		$this->Model_Plugin->remove($plugin_id);
 
-		$this->mod->removeDirectory(DIR_PLUGIN . $name);
+		//New Files
+		$files = $this->getNewFiles($name);
 
-		if ($this->mod->apply(true)) {
-			$this->mod->write();
-
-			message('notify', _l("%s has been uninstalled.", $name));
-		} else {
-			message('warning', $this->mod->getError());
+		foreach ($files as $file) {
+			$this->deactivatePluginFile($name, $file);
 		}
 
 		return true;
@@ -161,126 +140,81 @@ class Plugin extends Library
 
 	public function upgrade($name)
 	{
-		$plugin = $this->loadPlugin($name);
+		$instance = $this->loadPlugin($name);
 
-		if (!$plugin) {
+		if (!$instance) {
 			return false;
 		}
 
-		$data = null;
+		$plugin_id = $this->Model_Plugin->getPluginId($name);
 
-		$from_version = $this->Model_Plugin->getField($name, 'version');
-
-		if (method_exists($plugin, 'upgrade')) {
-			$data = $plugin->upgrade($from_version);
+		if (!$plugin_id) {
+			$this->error['install'] = _l("Plugin was not installed");
+			return false;
 		}
 
-		$version = $this->Model_Plugin->upgrade($name, $data);
+		$plugin = $this->Model_Plugin->getRecord($plugin_id, 'version');
 
-		$this->integrateChanges($_GET['name']);
+		if (method_exists($instance, 'upgrade')) {
+			$instance->upgrade($plugin['version']);
+		}
 
-		return $from_version === $version ? true : $version;
+		$directives = get_comment_directives(DIR_PLUGIN . $name . '/setup.php');
+
+		$version = !empty($directives['version']) ? $directives['version'] : '1.0';
+
+		if (!$this->Model_Plugin->save($plugin_id, array('version' => $version))) {
+			return false;
+		}
+
+		$changes = $this->getChanges($name);
+
+		foreach ($changes as $file) {
+			if (!$this->activatePluginFile($name, $file)) {
+				$this->error[$name] = _l("Failed updating change for %s", $file);
+			}
+		}
+
+		return $plugin['version'] === $version ? true : $version;
 	}
 
 	public function getNewFiles($name)
 	{
-		$dir = DIR_PLUGIN . $name . '/new_files/';
-
-		return get_files($dir, false, FILELIST_SPLFILEINFO, '^((?!\.git).)*$');
-	}
-
-	public function integrateNewFiles($name)
-	{
-		$files = $this->getNewFiles($name);
-
-		foreach ($files as $file) {
-			if (!$this->activatePluginFile($name, $file)) {
-				return false;
-			}
-		}
-
-		return true;
+		return get_files(DIR_PLUGIN . $name . '/new_files/', false, FILELIST_SPLFILEINFO, '^((?!\.git).)*$');
 	}
 
 	public function hasChanges($name)
 	{
 		$changes = $this->getChanges($name);
 
-		return !empty($changes['new_files']) || !empty($changes['mod_files']);
+		return !empty($changes);
 	}
 
 	public function getChanges($name)
 	{
-		if (!$this->plugin_registry) {
-			$this->loadPluginFileRegistry();
-		}
-
-		$changes = array(
-			'new_files' => array(),
-			'mod_files' => array(),
-		);
+		$dir = DIR_PLUGIN . $name . '/new_files/';
 
 		$files = $this->getNewFiles($name);
 
-		foreach ($files as $key => $file) {
-			$filepath = str_replace('\\', '/', $file->getPathName());
-			if (!array_search_key('plugin_file', $filepath, $this->plugin_registry)) {
-				$changes['new_files'][] = $filepath;
-			}
-		}
+		foreach ($files as $key => &$file) {
+			$file = str_replace('\\', '/', $file->getPathName());
 
-		$mod_files = $this->getFileMods($name);
+			$live_file = str_replace($dir, DIR_SITE, $file);
 
-		foreach ($mod_files as $mod => $file) {
-			if ($this->mod->isRegistered($file)) {
-				unset($mod_files[$mod]);
-			}
-		}
+			if (is_file($live_file)) {
+				$ext = pathinfo($live_file, PATHINFO_EXTENSION);
 
-		$changes['mod_files'] = $mod_files;
-
-		return $changes;
-	}
-
-	public function integrateChanges($name)
-	{
-		$changes = $this->getChanges($name);
-
-		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
-			$this->error['changes'] = _l("There are no updates for the plugin %s.", $name);
-			return false;
-		}
-
-		foreach ($changes['new_files'] as $file) {
-			$this->activatePluginFile($name, $file);
-			message('notify', _l("Add New File: %s", $file));
-		}
-
-		$this->mod->addFiles(null, $changes['mod_files']);
-
-		if (!empty($changes['mod_files'])) {
-			if ($this->mod->apply()) {
-				foreach ($changes['mod_files'] as $file) {
-					message('notify', _l("Integrate Mod File: %s", $file));
+				if ($ext !== 'mod' || filemtime($live_file) === filemtime($file)) {
+					unset($files[$key]);
 				}
-
-				$this->mod->write();
-			} else {
-				message('warning', $this->mod->getError());
-				message('warning', _l("Failed while integrating the mod file changes!"));
-				return false;
 			}
 		}
 
-		return true;
+		return $file;
 	}
 
 	public function activatePluginFile($name, $file)
 	{
-		if (!$this->plugin_registry) {
-			$this->loadPluginFileRegistry();
-		}
-
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
@@ -288,28 +222,19 @@ class Plugin extends Library
 
 		//Live file already exists! This is a possible conflict...
 		//If it is not a registered plugin file for this plugin, ask admin what to do.
-		if (is_file($live_file) && (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)) {
+		if (is_file($live_file)) {
 			//If no request to overwrite the live file
-			if ((empty($_GET['force_install']) || $_GET['force_install'] !== $name) && (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file)) {
-				$conflicting_plugin = isset($this->plugin_registry[$live_file]) ? $this->plugin_registry[$live_file] : null;
+			if (_get('force_install') !== $name && _get('overwrite_file') !== $live_file) {
+				$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+				$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
 
-				if ($conflicting_plugin) {
-					if ($conflicting_plugin['name'] !== $name) {
-						message('warning', _l("There is a conflict with the <strong>%s</strong> plugin for the file %s. Please uninstall <strong>%s</strong> or resolve the conflict.", $conflicting_plugin['name'], $live_file, $conflicting_plugin['name']));
-						return false;
-					}
-				} else {
-					$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
-					$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
+				$msg =
+					_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
+					_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
+					_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
 
-					$msg =
-						_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
-						_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
-						_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
-
-					message("warning", $msg);
-					return false;
-				}
+				message("warning", $msg);
+				return false;
 			}
 		}
 
@@ -323,105 +248,47 @@ class Plugin extends Library
 			@unlink($live_file);
 		}
 
-		if (!symlink($plugin_file, $live_file)) {
-			message("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
+		$ext = pathinfo($plugin_file, PATHINFO_EXTENSION);
+
+		if ($ext === 'mod') {
+			if (!$this->mod->apply($plugin_file)) {
+				$this->error = $this->mod->getError();
+			}
+		} elseif (!symlink($plugin_file, $live_file)) {
+			$this->error['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
+		}
+
+		if ($this->error) {
 			return false;
 		}
 
 		$this->gitIgnore($live_file);
 
-		$data = array(
-			'name'        => $name,
-			'date_added'  => $this->date->now(),
-			'live_file'   => $live_file,
-			'plugin_file' => $plugin_file,
-		);
+		return true;
+	}
 
-		$values = '';
+	public function deactivatePluginFile($name, $file)
+	{
+		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		foreach ($data as $key => $value) {
-			$values .= ($values ? ',' : '') . "`$key`='" . $this->escape($value) . "'";
+		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
+		$live_file   = str_replace($dir, DIR_SITE, $plugin_file);
+
+		if (is_file($live_file)) {
+			if (filemtime($live_file) !== filemtime($plugin_file)) {
+				$this->error[$file] = _l("Either the file has been modified or does not belong to this plugin");
+				return false;
+			}
+
+			@unlink($live_file);
+
+			$this->gitIgnore($live_file, true);
 		}
-
-		$this->query("DELETE FROM {$this->t['plugin_registry']} WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
-		$this->query("INSERT INTO {$this->t['plugin_registry']} SET $values");
-
-		clear_cache("plugin");
 
 		return true;
 	}
 
-	private function loadPluginFileRegistry()
-	{
-		$this->plugin_registry = cache('plugin.registry');
-
-		if (!$this->plugin_registry) {
-			$query = $this->query("SELECT * FROM {$this->t['plugin_registry']}");
-
-			$this->plugin_registry = array();
-
-			foreach ($query->rows as &$row) {
-				$this->plugin_registry[$row['live_file']] = $row;
-			}
-
-			cache('plugin.registry', $this->plugin_registry);
-		}
-	}
-
-	public function getFileMods($name)
-	{
-		$dir = DIR_PLUGIN . $name . '/file_mods';
-
-		if (!is_dir($dir)) {
-			return array();
-		}
-
-		$files = get_files($dir, false, FILELIST_STRING, '^((?!\.git).)*$');
-
-		$file_mods = array();
-
-		foreach ($files as $file) {
-			$file = str_replace('\\', '/', $file); //Fix for Windows
-
-			$rel_file = substr(str_replace($dir, '', $file), 1);
-
-			if (is_file(DIR_SITE . $rel_file)) {
-				$file_mods[DIR_SITE . $rel_file] = $file;
-				continue;
-			}
-		}
-
-		return $file_mods;
-	}
-
-	public function validatePluginModFiles()
-	{
-		if ($mod_files = $this->mod->getModFiles(DIR_PLUGIN)) {
-			$plugins = array();
-
-			foreach ($mod_files as $mod_file) {
-				$plugins[] = preg_replace("/.*?\\/plugin\\/(.*?)\\/.*/", '$1', $mod_file);
-			}
-
-			$plugins = array_unique($plugins);
-
-			$valid = true;
-
-			foreach ($plugins as $plugin) {
-				if (!$this->isInstalled($plugin)) {
-					$valid = false;
-					$this->mod->removeDirectory(DIR_PLUGIN . $plugin);
-				}
-			}
-
-			if (!$valid) {
-				$this->mod->apply();
-				$this->mod->write(); //no mod->apply validation because we must get rid erroneous plugin files
-			}
-		}
-	}
-
-	public function gitIgnore($file)
+	public function gitIgnore($file, $remove = false)
 	{
 		if (!is_dir(DIR_SITE . '.git')) {
 			return true;
@@ -434,13 +301,22 @@ class Plugin extends Library
 		if (_is_writable(DIR_SITE . '.git/info/')) {
 			$ignores = explode("\n", file_get_contents($exclude_file));
 
-			foreach ($ignores as $ignore) {
-				if ($ignore === $file) {
-					return true;
+			if ($remove) {
+				foreach ($ignores as $key => $ignore) {
+					if ($ignore === $file) {
+						unset($ignores[$key]);
+						break;
+					}
 				}
-			}
+			} else {
+				foreach ($ignores as $key => $ignore) {
+					if ($ignore === $file) {
+						return true;
+					}
+				}
 
-			$ignores[] = $file;
+				$ignores[] = $file;
+			}
 		}
 
 		return file_put_contents($exclude_file, implode("\n", $ignores));
@@ -448,12 +324,6 @@ class Plugin extends Library
 
 	public function getDirectives($name)
 	{
-		$setup_file = DIR_PLUGIN . $name . '/setup.php';
-
-		if (is_file($setup_file)) {
-			return get_comment_directives($setup_file);
-		}
-
-		return array();
+		return get_comment_directives(DIR_PLUGIN . $name . '/setup.php');
 	}
 }

@@ -3,7 +3,6 @@ if (!defined('DIR_CACHE')) {
 	define('DIR_CACHE', DIR_SITE . 'system/cache/');
 }
 
-define('AC_MOD_REGISTRY', DIR_SITE . 'system/mods/registry.ac');
 define('AC_TEMPLATE_CACHE', DIR_CACHE . 'templates/');
 
 if (!defined("AMPLO_DIR_MODE")) {
@@ -40,24 +39,11 @@ function _is_writable($dir, &$error = null)
 	return true;
 }
 
-if (!file_exists(AC_MOD_REGISTRY)) {
-	_is_writable(dirname(AC_MOD_REGISTRY));
-
-	touch(AC_MOD_REGISTRY);
-	chmod(AC_MOD_REGISTRY, 0444); //Set Read Only access
-}
-
 //Create / make writable Template Cache Dir
 _is_writable(AC_TEMPLATE_CACHE);
 
-global $mod_registry, $live_registry;
-$registries    = unserialize(file_get_contents(AC_MOD_REGISTRY));
-$mod_registry  = isset($registries['mod']) ? $registries['mod'] : array();
-$live_registry = isset($registries['live']) ? $registries['live'] : array();
-
 function _mod($file)
 {
-	global $live_registry;
 	static $lang;
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
@@ -66,14 +52,6 @@ function _mod($file)
 		$file = $file . '.acmod';
 	} elseif (is_file($file . '.mod')) {
 		$file = $file . '.mod';
-	}
-
-	if (isset($live_registry[$file]) && is_file($live_registry[$file])) {
-		if (filemtime($live_registry[$file]) < filemtime($file)) {
-			unlink($live_registry[$file]);
-		} else {
-			$file = $live_registry[$file];
-		}
 	}
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.

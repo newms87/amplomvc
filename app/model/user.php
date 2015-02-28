@@ -65,17 +65,6 @@ class App_Model_User extends App_Model_Table
 		return $user_id;
 	}
 
-	public function editPassword($user_id, $password)
-	{
-		$data = array(
-			'password' => $this->user->encrypt($password),
-		);
-
-		clear_cache('user');
-
-		return $this->update('user', $data, $user_id);
-	}
-
 	public function remove($user_id)
 	{
 		clear_cache('user');

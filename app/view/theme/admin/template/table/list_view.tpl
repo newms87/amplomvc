@@ -75,6 +75,7 @@
 								<? break;
 
 							case 'pk':
+							case 'pk-int':
 							case 'int':
 							case 'float':
 							case 'decimal':

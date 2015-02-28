@@ -199,11 +199,6 @@ class User extends Library
 		return true;
 	}
 
-	public function updatePassword($user_id, $password)
-	{
-		$this->Model_User->editPassword($user_id, $password);
-	}
-
 	public function addMeta($user_id, $key, $value)
 	{
 		if (_is_object($value)) {

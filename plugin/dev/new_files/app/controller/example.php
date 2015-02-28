@@ -36,6 +36,7 @@ class App_Controller_Example extends Controller
 
 		//Page Head
 		set_page_info('title', _l("My Page Title"));
+		set_page_meta('description', _l("My Page Meta Description"));
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());

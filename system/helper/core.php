@@ -521,8 +521,8 @@ function get_caller($offset = 0, $limit = 10)
 
 	$limit += $offset;
 
-	while ($offset < $limit && $offset < (count($calls) - 1)) {
-		$caller = $calls[$offset + 1];
+	while ($offset < $limit && $offset < count($calls)) {
+		$caller = $calls[$offset];
 
 		if (isset($caller['file'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
@@ -735,20 +735,22 @@ function get_comment_directives($content, $trim = true)
 
 	$directives = array();
 
-	$tokens = token_get_all($content);
+	if ($content) {
+		$tokens = token_get_all($content);
 
-	foreach ($tokens as $token) {
-		if ($token[0] === T_DOC_COMMENT) {
-			if (preg_match_all("/(.*?)([a-z0-9_-]*?):(.*?)\\*/is", $token[1], $matches)) {
-				$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
+		foreach ($tokens as $token) {
+			if ($token[0] === T_DOC_COMMENT) {
+				if (preg_match_all("/(.*?)([a-z0-9_-]*?):(.*?)\\*/is", $token[1], $matches)) {
+					$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
+				}
 			}
 		}
-	}
 
-	if ($trim) {
-		array_walk($directives, function (&$a) {
-			$a = trim($a);
-		});
+		if ($trim) {
+			array_walk($directives, function (&$a) {
+				$a = trim($a);
+			});
+		}
 	}
 
 	return $directives;

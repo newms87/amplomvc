@@ -7,7 +7,7 @@
 			<div class="side-menu col xs-12 xs-center lg-3 lg-left top">
 				<a href="<?= site_url('account/details'); ?>" class="menu-tab <?= ($path === 'account/details' || $path === 'account') ? 'active' : ''; ?>" data-tab="#my-details">{{My Details}}</a>
 				<a href="<?= site_url('account/payment'); ?>" class="menu-tab <?= $path === 'account/payment' ? 'active' : ''; ?>" data-tab="#my-details">{{Payments}}</a>
-				<a href="<?= site_url('account/scopes'); ?>" class="menu-tab">{{My Scopes}}</a>
+				<a href="<? site_url('account/scopes'); ?>" class="menu-tab">{{My Scopes}}</a>
 			</div>
 
 			<div class="col xs-12 right">
@@ -39,11 +39,19 @@
 				<?= $content; ?>
 			</div>
 		</div>
+		<form action="">
+			<button data-loading="{{Loading...}}">Yay!</button>
+		</form>
 	</header>
 </section>
 
 <script type="text/javascript">
+console.log('test');
+	$('form').submit(function() {
+		$(this).find('[data-loading]').loading();
+		$(this).find('[data-loading]').loading('stop');
 
+	});
 </script>
 
 <?= $is_ajax ? '' : call('footer'); ?>

@@ -231,7 +231,7 @@ class App_Model_View extends App_Model_Table
 		}
 
 		if (!$view_listing_id && empty($view_listing['slug'])) {
-			$view_listing['slug'] = slug($view_listing['name']);
+			$view_listing['slug'] = 'view_' . slug($view_listing['name']);
 		}
 
 		self::$view_listings = null;
@@ -262,10 +262,6 @@ class App_Model_View extends App_Model_Table
 			unset($view_listing['slug']);
 			$view_listing_id = $this->update('view_listing', $view_listing, $view_listing_id);
 		} else {
-			if (empty($view_listing['slug'])) {
-				$view_listing['slug'] = slug($view_listing['name']);
-			}
-
 			$view_listing_id = $this->insert('view_listing', $view_listing);
 		}
 
