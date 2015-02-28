@@ -99,11 +99,15 @@ class Plugin extends Library
 			return false;
 		}
 
+		clear_cache();
+		
 		if (method_exists($plugin, 'install')) {
 			$plugin->install();
 		}
 
 		$this->Model_Plugin->install($name);
+
+		clear_cache();
 
 		//Run all upgrades
 		if (method_exists($plugin, 'upgrade')) {
