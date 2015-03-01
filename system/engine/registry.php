@@ -74,7 +74,7 @@ final class Registry
 			$mod = _mod($file);
 
 			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
-				//Check if using App_Model_Class_mod (which extends the original class)
+				//Check if using Class_mod (which extends the original class)
 				$handle = fopen($mod, "r");
 
 				if ($handle) {
@@ -84,6 +84,7 @@ final class Registry
 						if (strpos($line, $class)) {
 							if (strpos($line, $class . '_mod')) {
 								require_once($file);
+								$class .= '_mod';
 							}
 
 							break;
