@@ -22,6 +22,7 @@ final class Registry
 
 	public function has($key)
 	{
+		$key = strtolower($key);
 		return isset($this->data[$key]);
 	}
 
@@ -72,9 +73,25 @@ final class Registry
 		if (is_file($file)) {
 			$mod = _mod($file);
 
-			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod' || pathinfo($mod, PATHINFO_EXTENSION) === 'acmod') {
-				require_once($file);
-				$class .= "_mod";
+			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
+				//Check if using App_Model_Class_mod (which extends the original class)
+				$handle = fopen($mod, "r");
+
+				if ($handle) {
+					while (($line = fgets($handle)) !== false) {
+						$line = strtolower($line);
+
+						if (strpos($line, $class)) {
+							if (strpos($line, $class . '_mod')) {
+								require_once($file);
+							}
+
+							break;
+						}
+					}
+
+					fclose($handle);
+				}
 			}
 
 			require_once($mod);
@@ -91,8 +108,12 @@ final class Registry
 		return false;
 	}
 
-	public function load($path, $class)
+	public function load($path, $class = null)
 	{
+		if (!$class) {
+			$class = path2class($path);
+		}
+
 		if (!$this->has($class)) {
 			if (!is_file($path)) {
 				$path = DIR_SITE . $path . '.php';

@@ -802,6 +802,18 @@ function camel2_($str)
 	return strtolower(implode("_", $matches[1]));
 }
 
+function path2class($path)
+{
+	$replace = array(
+		DIR_SITE => '',
+		"\\" => '/',
+		'_' => '',
+		'/' => '_',
+	);
+
+	return str_replace(array_keys($replace), $replace, $path);
+}
+
 function insertables($insertables, $text, $start = '%', $end = '%')
 {
 	$patterns     = array();

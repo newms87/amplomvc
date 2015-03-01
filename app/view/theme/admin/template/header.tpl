@@ -7,17 +7,19 @@
 <div id="container">
 	<div id="header" class="header-row row">
 		<div class="branding col xs-12 md-8 left middle">
-			<? if ($logo = option('admin_logo')) { ?>
-				<div class="admin-logo col xs-12 left top">
-					<a href="<?= site_url(); ?>" class="block">
+			<div class="admin-logo col xs-12 left top">
+				<a href="<?= site_url(); ?>" class="block">
+					<? if ($logo = option('admin_logo')) { ?>
 						<? if ($logo_srcset = option('admin_logo_srcset')) { ?>
 							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('admin_logo_width'), option('admin_logo_height')), $logo_srcset, option('admin_name'), option('admin_name')); ?> />
 						<? } else { ?>
 							<img <?= img($logo, option('admin_logo_width'), option('admin_logo_height'), option('admin_name'), option('admin_name')); ?> />
 						<? } ?>
-					</a>
-				</div>
-			<? } ?>
+					<? } else { ?>
+						<?= option('site_name'); ?>
+					<? } ?>
+				</a>
+			</div>
 		</div>
 
 		<? if (is_logged()) { ?>

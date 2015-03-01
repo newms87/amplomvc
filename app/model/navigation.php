@@ -429,11 +429,6 @@ class App_Model_Navigation extends App_Model_Table
 				),
 			),
 
-			'plugins'    => array(
-				'display_name' => 'Plugins',
-				'path'         => 'admin/plugin',
-			),
-
 			'users'      => array(
 				'display_name' => 'Users',
 				'children'     => array(
@@ -525,6 +520,11 @@ class App_Model_Navigation extends App_Model_Table
 								'path'         => 'admin/localisation/geo_zone',
 							),
 						),
+					),
+
+					'system_plugins'    => array(
+						'display_name' => 'Plugins',
+						'path'         => 'admin/plugin',
 					),
 				),
 			),

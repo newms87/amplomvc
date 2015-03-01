@@ -2,46 +2,93 @@
 
 class Mod extends Library
 {
-	private $live_registry;
-
-	public function getSourceDestination($source)
-	{
-		return str_replace(DIR_SITE, DIR_MOD_FILES, $source);
-	}
-
-	public function apply($file)
+	public function apply($mod_file, $directives = array())
 	{
 
-		message('notify', 'apply mod to file ' . $file);
-		return;
+		if (!is_file($mod_file)) {
+			$this->error['file'] = _l("Mod file was not found at %s", $mod_file);
+			return false;
+		}
 
-		$directives = get_comment_directives($mod_file);
+		$directives = get_comment_directives($mod_file) + $directives;
 
 		if (isset($directives['skip'])) {
 			return true;
 		}
 
-		if (!empty($directives['originalsource'])) {
-			$source = DIR_SITE . trim($directives['source']);
-		} elseif (!empty($directives['source'])) {
-			$source = DIR_SITE . trim($directives['source']);
+		if (empty($directives['source'])) {
+			$this->error['source'] = _l("Source file was not set. You can set the Source directive in the PHPDoc Comment for Mod File %s", $mod_file);
+			return false;
+		}
 
-			if (!is_file($source)) {
-				$this->error['source'] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
+		$source_file      = DIR_SITE . trim($directives['source']);
+		$destination_file = !empty($directives['destination']) ? DIR_SITE . trim($directives['destination']) : $source_file . '.mod';
+		$algorithm        = false;
+
+		if (!empty($directives['algorithm'])) {
+			$algorithm = trim($directives['algorithm']);
+		} //Intelligent Guess
+		else {
+			$contents = file_get_contents($mod_file);
+
+			if (strpos($contents, '=====')) {
+				$algorithm = 'merge';
+			}
+		}
+
+		if (!$algorithm) {
+			if (!_is_writable(dirname($destination_file)) || !symlink($mod_file, $destination_file)) {
+				$this->error['destination'] = _l("Unable to write to the destination file / directory %s", $destination_file);
 				return false;
 			}
-		} else {
-			$this->error['source'] = "File Mod failed for $mod_file. You must specify a Source File in the PHPDoc Comment Directives. (eg: /** Source: relative/path/to/mysourcefile.php */)" . get_caller(0, 4);
+
+			return true;
+		}
+
+		if (!is_file($source_file)) {
+			$this->error['source'] = _l("Source file %s was not found.", $source_file);
 			return false;
 		}
 
-		if (!empty($directives['destination'])) {
-			$destination = DIR_SITE . trim($directives['destination']);
-		} else {
-			$this->error['destination'] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
+		if (is_file($destination_file)) {
+			$source_file = $destination_file;
+		}
+
+		$instance = $this->load('system/mod/' . $algorithm);
+
+		if (!$instance) {
+			$this->error['algorithm'] = _l("Unknown Mod algorithm %s", $algorithm);
 			return false;
 		}
 
+		$contents = $instance->apply($source_file, $mod_file);
+
+		if (!$contents) {
+			$this->error = $instance->getError();
+			return false;
+		}
+
+		$php = preg_match("/\\.php(\\.mod)?$/", $mod_file);
+
+		$meta = $this->removeMeta($contents, $php);
+
+		if (empty($meta['source'])) {
+			$meta['source'] = str_replace(DIR_SITE, '', $source_file);
+		}
+
+		$meta['mod'][] = str_replace(DIR_SITE, '', $mod_file);
+
+		$this->addMeta($contents, $meta, $php);
+
+		if (!file_put_contents($destination_file, $contents)) {
+			$this->error['write'] = _l("Failed to write to %s.", $destination_file);
+			return false;
+		}
+
+		return true;
+
+
+		/* TODO: Decide if this is necessary....
 		$set_file_root = function (&$file) {
 			$file = DIR_SITE . trim($file);
 		};
@@ -58,447 +105,124 @@ class Mod extends Library
 			$directives['include'] = array_filter(explode("\n", $directives['include']), $file_filter);
 			array_walk_recursive($directives['include'], $set_file_root);
 		}
-
-
-
-
-
-
-
-
-		$this->live_registry = array();
-
-		foreach ($this->mod_registry as $source => $mods) {
-			foreach ($mods as $destination => $mod_files) {
-				//Update Live Registry
-				if ($this->getSourceDestination($source) === $destination) {
-					$this->live_registry[$source] = $destination;
-				}
-
-				if ($invalidated_only) {
-					if (!isset($this->invalid[$destination])) {
-						continue;
-					} //skip if no changes made
-
-					message('notify', _l("Mod File $destination was updated"));
-				}
-
-				//Each mod file using the same destination will stack changes on the destination file
-				$stack_source = $source;
-
-				foreach ($mod_files as $mod_file => $extends) {
-					$this->modifyFile($stack_source, $mod_file, $destination);
-
-					//stack changes
-					$stack_source = $destination;
-
-					//Required File Mods
-					if (!empty($extends['require'])) {
-						foreach ($extends['require'] as $required_file) {
-							$this->modifyFile($stack_source, $required_file, $destination);
-						}
-					}
-
-					//Included File Mods
-					if (!empty($extends['include'])) {
-						foreach ($extends['include'] as $included_file) {
-							if (is_file($included_file)) {
-								$this->modifyFile($stack_source, $included_file, $destination);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return empty($this->error);
+		*/
 	}
 
-	public function modifyFile($source, $mod_file, $destination = null)
+	public function unapply($mod_file, $directives = array())
 	{
 		if (!is_file($mod_file)) {
-			$this->error[] = "File merge failed. The mod file $mod_file does not exist!" . get_caller(0, 4);
+			$this->error['file'] = _l("Mod file was not found at %s", $mod_file);
 			return false;
 		}
 
-		$directives = get_comment_directives($mod_file);
+		$directives = get_comment_directives($mod_file) + $directives;
 
-		if (!$source) {
-			$source = preg_replace("/(.*?)file_mods\\//", DIR_SITE, $mod_file);
-		}
-
-		if (!is_file($source) || $source == $mod_file) {
-			$this->error[] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
-
+		if (empty($directives['destination'])) {
+			$this->error['destination'] = _l("No destination file was set. Unable to unapply mod file %s", $mod_file);
 			return false;
 		}
 
-		if (!$destination) {
-			$destination = str_replace(DIR_SITE, DIR_MOD_FILES, $source);
+		$destination_file = DIR_SITE . trim($directives['destination']);
+
+		if (!is_file($destination_file)) {
+			return true;
 		}
 
-		if (!empty($directives['algorithm'])) {
-			$algorithm = trim($directives['algorithm']);
-		} //Intelligent Guess
-		else {
-			$contents = file_get_contents($mod_file);
+		$php = preg_match("/\\.php(\\.mod)?$/", $destination_file);
 
-			if (strpos($contents, '=====')) {
-				$algorithm = 'fileMerge';
-			} else {
-				$algorithm = 'Replace';
-			}
-		}
+		$contents = file_get_contents($destination_file);
 
-		switch ($algorithm) {
-			case 'Ganon':
-				$contents = $this->Ganon($source, $mod_file);
-				break;
-			case 'fileMerge':
-				$contents = $this->fileMerge($source, $mod_file);
-				break;
-			case 'Replace':
-				$contents = file_get_contents($mod_file);
-				break;
-			default:
-				$this->error[] = "File Merge Failed! Unknown algorithm: $algorithm." . get_caller(0, 4);
-				return false;
-				break;
-		}
+		$meta = $this->removeMeta($contents, $php);
 
-		if (!$contents) {
-			$this->error[] = "File Merge Failed for $mod_file. Skipping this files changes.";
-			return false;
-		}
+		@unlink($destination_file);
 
-		if (!_is_writable(dirname($destination))) {
-			$this->error = _l("%s(): Destination directory was not writable: %s", $destination);
-		} else {
-			if (!is_file($destination)) {
-				touch($destination);
+		if (!empty($meta['source']) && !empty($meta['mod'])) {
+			$mod_path = str_replace(DIR_SITE, '', $mod_file);
+
+			foreach ($meta['mod'] as $key => $mod) {
+				if ($mod === $mod_path) {
+					unset($meta['mod'][$key]);
+				}
 			}
 
-			chmod($destination, 0777);
+			if (!empty($meta['mod'])) {
+				$directives = array(
+					'source' => $meta['source'],
+				);
 
-			if (!file_put_contents($destination, $contents)) {
-				$this->error[] = "Could not write to file $destination!" . get_caller(0, 4);
+				foreach ($meta['mod'] as $mod) {
+					$this->apply(DIR_SITE . $mod, $directives);
+				}
 			}
-
-			chmod($destination, AMPLO_FILE_MODE);
 		}
 
 		return empty($this->error);
 	}
 
-	protected function Ganon($source, $mod_file)
+	public function addMeta(&$contents, $meta, $php = true)
 	{
-		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-
-		require_once DIR_RESOURCES . 'ganon.php';
-
-		if (!($node = file_get_dom($source))) {
-			message('warning', "There was an error while parsing the source file $source with Ganon!");
-
-			return false;
+		if ($php) {
+			if (($s = strpos($contents, '<?php') !== false)) {
+				$contents = trim(substr($contents, $s + 5));
+			}
 		}
 
-		require $mod_file;
+		$meta_string = '';
 
-		return $node->html();
+		foreach ($meta as $key => $value) {
+			$key = strtoupper($key);
+
+			if (is_array($value)) {
+				foreach ($value as $v) {
+					$meta_string .= "#$key: $v\n";
+				}
+			} else {
+				$meta_string .= "#$key: $value\n";
+			}
+		}
+
+		if ($php) {
+			$contents = "<?php\n$meta_string\n\n" . $contents;
+		} else {
+			$contents = "<!-- \n$meta_string\n-->\n\n" . $contents;
+		}
 	}
 
-	protected function fileMerge($source, $mod_file)
+	public function removeMeta(&$contents, $php = true)
 	{
-		$comments  = array(
-			'php'  => array(
-				'#',
-				''
-			),
-			'html' => array(
-				"<?php #",
-				"?>"
-			)
+		if ($php) {
+			if (($s = strpos($contents, '<?php') !== false)) {
+				$contents = trim(substr($contents, $s + 5));
+			}
+		}
+
+		$src = '';
+
+		if (($s = strpos($contents, '#SOURCE:')) !== false) {
+			$s += 8;
+			$e        = strpos($contents, "\n", $s);
+			$src      = trim(substr($contents, $s, $e - $s));
+			$contents = substr($contents, $e);
+		}
+
+		$mods = array();
+
+		while (($s = strpos($contents, '#MOD:')) !== false) {
+			$s += 5;
+			$e        = strpos($contents, "\n", $s);
+			$mods[]   = trim(substr($contents, $s, $e - $s));
+			$contents = substr($contents, $e);
+		}
+
+		if ($php) {
+			$contents = "<?php\n\n" . trim($contents);
+		} elseif (!empty($mods) || !empty($src)) {
+			$contents = trim(substr($contents, strpos($contents, '-->') + 3));
+		}
+
+		return array(
+			'source' => $src,
+			'mod'    => $mods
 		);
-		$comm_mode = false;
-
-		// Include two sample files for comparison
-		$original      = explode("\n", str_replace("\n\n", "\n", str_replace("\r", "\n", file_get_contents($source))));
-		$modifications = explode("\n", str_replace("\n\n", "\n", str_replace("\r", "\n", file_get_contents($mod_file))));
-
-		//this makes the filepaths safe for displaying
-		$roots  = array(
-			DIR_SITE,
-			DIR_MOD_FILES
-		);
-		$source = str_replace($roots, array(
-			'',
-			'merged'
-		), $source);
-
-		$mod_file = str_replace($roots, '', $mod_file);
-
-		$orig_length = count($original);
-
-		$new_file = array();
-
-		$code_block = array();
-
-		$add_before       = false;
-		$add_before_block = array();
-
-		$io_mode = '';
-		$index   = 0;
-		foreach ($modifications as $line => $mod) {
-			$line++;
-			if ($io_mode != 'add') {
-				$mod = trim($mod);
-			}
-
-			//ignore comments and empty lines (ignore whitespace when we are not adding lines)
-			if (strpos($mod, '#') === 0 || !$mod) {
-				continue;
-			}
-
-
-			//End Of Block
-			if (strpos($mod, '-----') !== false && strpos($mod, '-----') < 5) {
-				if ($io_mode == 'seek' || $io_mode == 'remove') {
-					$block = $this->findBlock($code_block, $original, $index);
-
-					if ($block === false) {
-						$this->setError(DIR_SITE . $mod_file, $line, $mod, "The code block starting at this line was not found in the source file: $source.!");
-						return false;
-					} else {
-						list($block_start, $block_end) = $block;
-						//echo "GOT $block_start to $block_end<br>";
-
-						//keep all the code from the current index up until this code block
-						for ($i = $index; $i < $block_start; $i++) {
-							$new_file[] = $original[$i] . "\r\n";
-						}
-
-						if ($add_before) {
-							$new_file         = array_merge($new_file, $add_before_block);
-							$add_before       = false;
-							$add_before_block = array();
-						}
-
-						//if we are seeking this block, keep the code in this block
-						if ($io_mode == 'seek') {
-							for ($i = $block_start; $i < $block_end; $i++) {
-								$new_file[] = $original[$i] . "\r\n";
-							}
-						}
-
-						//set the index to the end of the code block
-						$index = $block_end;
-
-						$code_block = array();
-					}
-				} elseif ($io_mode == 'add') {
-					//check if comments were specified and which mode
-					//(we do this at the end of block in case we need to switch comment modes)
-					foreach (array_keys($comments) as $comm) {
-						if (strpos($mod, '{' . $comm . '}') > 0) {
-							$comm_mode = $comm;
-							break;
-						}
-					}
-
-					if ($comm_mode) {
-						$c = $comments[$comm_mode][0] . "END: Added From Plugin file $mod_file " . $comments[$comm_mode][1] . "\r\n";
-						if ($add_before) {
-							$add_before_block[] = $c;
-						} else {
-							$new_file[] = $c;
-						}
-					}
-				} else {
-					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was not set at end of code block");
-					return false;
-				}
-
-				$io_mode = '';
-
-				continue;
-			} //Remove Block Start
-			elseif (strpos($mod, '<<<<<') !== false && strpos($mod, '<<<<<') < 5) {
-				if ($io_mode) {
-					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Remove Code Block.");
-					return false;
-				}
-
-				$io_mode = 'remove';
-
-				continue;
-			} elseif (strpos($mod, '>>>>>') !== false && strpos($mod, '>>>>>') < 5) {
-				if ($io_mode) {
-					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Add Code Block.");
-					return false;
-				}
-
-				$io_mode = 'add';
-
-				//check if comments were specified and which mode
-				$comm_mode = false;
-				foreach (array_keys($comments) as $comm) {
-					if (strpos($mod, '{' . $comm . '}') > 0) {
-						$comm_mode = $comm;
-						break;
-					}
-				}
-
-				//check if adding before
-				if (strpos($mod, '{before}') > 0) {
-					$add_before       = true;
-					$add_before_block = array();
-				}
-
-				if ($comm_mode) {
-					$c = $comments[$comm_mode][0] . "START: Added From Plugin file $mod_file " . $comments[$comm_mode][1] . "\r\n";
-					if ($add_before) {
-						$add_before_block[] = $c;
-					} else {
-						$new_file[] = $c;
-					}
-				}
-				continue;
-			} elseif (strpos($mod, '=====') !== false && strpos($mod, '=====') < 5) {
-				if ($io_mode) {
-					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
-					return false;
-				}
-
-				$io_mode = 'seek';
-
-				continue;
-			} elseif (strpos($mod, '.....') !== false && strpos($mod, '.....') < 5) {
-				if ($io_mode != 'seek') {
-					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
-					return false;
-				}
-
-				//echo "wildcard ***** added to block<br>";
-				$code_block[] = "*";
-
-				continue;
-			}
-
-
-			if ($io_mode == 'add') {
-				//echo 'adding line at ' . $index . ' - ' . htmlspecialchars($mod) . '\'<br>';
-				if ($add_before) {
-					$add_before_block[] = $mod . "\r\n";
-				} else {
-					$new_file[] = $mod . "\r\n";
-				}
-			} elseif ($io_mode == 'remove') {
-				//echo 'removing block \'' . htmlspecialchars($mod) . '\'<br>';
-
-				$code_block[] = $mod;
-			} elseif ($io_mode == 'seek') {
-				//echo 'seeking block \'' . htmlspecialchars($mod) . '\'<br>';
-
-				$code_block[] = $mod;
-			} elseif ($mod && !preg_match('/\/\/ignore/i', $mod)) {
-				$this->setError($mod_file, $line, $mod, "The IO Mode was not set before this line!");
-				return false;
-			}
-		}
-
-		if ($io_mode) {
-			$this->setError($mod_file, count($mod_file), '', "The IO Mode was still set at the end of the file! Be sure to end all blocks of code with '-----'");
-			return false;
-		}
-
-		//we need to fix the end lines for original file
-		for ($i = $index; $i < $orig_length; $i++) {
-			$original[$i] .= "\r\n";
-		}
-
-		return array_merge($new_file, array_slice($original, $index));
-	}
-
-	protected function findBlock($block, $file, $start_index)
-	{
-		if (!count($block) || (count($block) > (count($file) - $start_index))) {
-			return false;
-		}
-
-		$file_length = count($file);
-
-		//echo "<br><br>SEEKING BLOCK FROM $start_index<br>";
-		for ($i = $start_index; $i < $file_length; $i++) {
-			//echo htmlspecialchars(trim($file[$i])) . "  === compare === " . htmlspecialchars($block[0]).'<br>';
-			if (trim($file[$i]) == $block[0]) {
-				//echo "START: " . htmlspecialchars($block[0]) . "<br>";
-				$f_index = $i;
-				$mode    = '';
-				foreach ($block as $b) {
-					if (!$b) {
-						continue;
-					}
-					while (!trim($file[$f_index])) {
-						$f_index++;
-						if ($f_index >= $file_length) {
-							//echo "EOF<BR>";
-							return false;
-						}
-					}
-
-					//echo "BLOCK: " . htmlspecialchars($b) . " ======== " . htmlspecialchars($file[$f_index]) . "<br>";
-					//if we find a * we are in skip mode
-					if ($b == '*') {
-						$mode = 'skip';
-						//echo "ENTERING SKIP MODE<BR>";
-						continue;
-					}
-
-					//in skip mode we continue in the file until we find a match or eof
-					if ($mode == 'skip') {
-						while (trim($file[$f_index]) != $b) {
-							//echo "SKIPPING " . htmlspecialchars($file[$f_index]) . "<br>";
-							$f_index++;
-							if ($f_index >= $file_length) {
-								//echo "EOF<BR>";
-								return false;
-							}
-						}
-						$mode = '';
-						$f_index++;
-					} //in regular mode, if the line does not match, this is not the correct file index
-					elseif (trim($file[$f_index]) != $b && trim($file[$f_index])) {
-						//echo htmlspecialchars($file[$f_index]) . " !!=== " . htmlspecialchars($b) . "<br>";
-						$f_index = false;
-						break;
-					} //we have a match
-					else {
-						$f_index++;
-						if ($f_index >= $file_length) {
-							//echo "EOF<BR>";
-							return false;
-						}
-					}
-				}
-				if ($f_index !== false) {
-					//echo "FOUND BLOCK AT $i ENDS $f_index<BR><BR>";
-					return array(
-						$i,
-						$f_index
-					);
-				}
-			}
-		}
-
-		return false;
-	}
-
-	protected function setError($file, $line, $code, $msg)
-	{
-		if ($file) {
-			$msg = "Error in $file: Line $line:  " . htmlspecialchars($code) . ": " . $msg;
-		}
-		//trigger_error($msg);
-		$this->error[] = $msg;
 	}
 }

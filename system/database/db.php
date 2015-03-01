@@ -457,7 +457,7 @@ class DB
 
 	public function hasTable($table)
 	{
-		return $this->t[$table];
+		return isset($this->t[$table]);
 	}
 
 	public function getTables($prefix = false)

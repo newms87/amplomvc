@@ -86,6 +86,8 @@ class Plugin extends Library
 			}
 		}
 
+		clear_cache();
+
 		if (method_exists($instance, 'install')) {
 			$instance->install();
 			clear_cache();
@@ -120,7 +122,7 @@ class Plugin extends Library
 			$this->deactivatePluginFile($name, $file);
 		}
 
-		return true;
+		return empty($this->error);
 	}
 
 	public function hasUpgrade($name)
@@ -220,42 +222,45 @@ class Plugin extends Library
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
 		$live_file   = str_replace($dir, DIR_SITE, $plugin_file);
 
-		//Live file already exists! This is a possible conflict...
-		//If it is not a registered plugin file for this plugin, ask admin what to do.
-		if (is_file($live_file)) {
-			//If no request to overwrite the live file
-			if (_get('force_install') !== $name && _get('overwrite_file') !== $live_file) {
-				$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
-				$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
-
-				$msg =
-					_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
-					_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
-					_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
-
-				message("warning", $msg);
-				return false;
-			}
-		}
-
 		//Generate the live file with the contents of the plugin file
 		if (!_is_writable(dirname($live_file))) {
 			$this->error = _l("%s(): Live File destination was not writable: %s", $live_file);
 			return false;
 		}
 
-		if (is_file($live_file)) {
-			@unlink($live_file);
-		}
-
 		$ext = pathinfo($plugin_file, PATHINFO_EXTENSION);
 
 		if ($ext === 'mod') {
-			if (!$this->mod->apply($plugin_file)) {
+			$directives = array(
+				'source' => str_replace(DIR_SITE, '', preg_replace("/\\.mod$/", '', $live_file)),
+			);
+
+			if (!$this->mod->apply($plugin_file, $directives)) {
 				$this->error = $this->mod->getError();
 			}
-		} elseif (!symlink($plugin_file, $live_file)) {
-			$this->error['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
+		} else {
+			//Live file already exists! This is a possible conflict...
+			if (is_file($live_file)) {
+				//If no request to overwrite the live file
+				if (_get('force_install') !== $name && _get('overwrite_file') !== $live_file) {
+					$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+					$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
+
+					$msg =
+						_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
+						_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
+						_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
+
+					message("warning", $msg);
+					return false;
+				}
+
+				@unlink($live_file);
+			}
+
+			if (!symlink($plugin_file, $live_file)) {
+				$this->error['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
+			}
 		}
 
 		if ($this->error) {
@@ -274,18 +279,32 @@ class Plugin extends Library
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
 		$live_file   = str_replace($dir, DIR_SITE, $plugin_file);
 
-		if (is_file($live_file)) {
-			if (filemtime($live_file) !== filemtime($plugin_file)) {
-				$this->error[$file] = _l("Either the file has been modified or does not belong to this plugin");
-				return false;
+		$ext = pathinfo($plugin_file, PATHINFO_EXTENSION);
+
+		if ($ext === 'mod') {
+			$directives = array(
+				'destination' => str_replace(DIR_SITE, '', $live_file),
+			);
+
+			if (!$this->mod->unapply($plugin_file, $directives)) {
+				$this->error['unapply'][] = $this->mod->getError();
 			}
+		} else {
+			if (is_file($live_file)) {
+				if (filemtime($live_file) !== filemtime($plugin_file)) {
+					$this->error['modified'][] = _l("Either the file %s has been modified or does not belong to this plugin", $live_file);
+					return false;
+				}
 
-			@unlink($live_file);
+				@unlink($live_file);
+			}
+		}
 
+		if (!is_file($live_file)) {
 			$this->gitIgnore($live_file, true);
 		}
 
-		return true;
+		return empty($this->error);
 	}
 
 	public function gitIgnore($file, $remove = false)

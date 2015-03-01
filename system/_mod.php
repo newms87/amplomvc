@@ -48,9 +48,7 @@ function _mod($file)
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
-	if (is_file($file . '.acmod')) {
-		$file = $file . '.acmod';
-	} elseif (is_file($file . '.mod')) {
+	if (is_file($file . '.mod')) {
 		$file = $file . '.mod';
 	}
 

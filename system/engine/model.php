@@ -42,7 +42,7 @@ abstract class Model
 		$this->t  = &$this->db->t;
 	}
 
-	protected function load($path, $class)
+	protected function load($path, $class = null)
 	{
 		global $registry;
 		return $registry->load($path, $class);
