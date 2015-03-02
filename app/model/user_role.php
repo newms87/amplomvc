@@ -12,10 +12,10 @@ class App_Model_UserRole extends App_Model_Table
 			}
 
 			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t['user_role']} WHERE `name` = '" . $this->escape($data['name']) . "'")) {
-				$this->error['name'] = _l("Group Name already exists!");
+				$this->error['name'] = _l("User Group Name already exists!");
 			}
 		} elseif (!$user_role_id) {
-			$this->error['name'] = _l("Group Name is required.");
+			$this->error['name'] = _l("User Group Name is required.");
 		}
 
 		if ($this->error) {
