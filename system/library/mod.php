@@ -31,14 +31,14 @@ class Mod extends Library
 		else {
 			$contents = file_get_contents($mod_file);
 
-			if (strpos($contents, '=====')) {
+			if (strpos($contents, '=====') !== false) {
 				$algorithm = 'merge';
 			}
 		}
 
 		if (!$algorithm) {
-			if (!_is_writable(dirname($destination_file)) || !symlink($mod_file, $destination_file)) {
-				$this->error['destination'] = _l("Unable to write to the destination file / directory %s", $destination_file);
+			if (!_is_writable(dirname($destination_file)) || !@symlink($mod_file, $destination_file)) {
+				$this->error['destination'] = _l("Unable to write to the destination file (or directory of) %s", $destination_file);
 				return false;
 			}
 
@@ -68,9 +68,9 @@ class Mod extends Library
 			return false;
 		}
 
-		$php = preg_match("/\\.php(\\.mod)?$/", $mod_file);
+		$ext = pathinfo(preg_replace("/\\.mod$/", '', $mod_file), PATHINFO_EXTENSION);
 
-		$meta = $this->removeMeta($contents, $php);
+		$meta = $this->removeMeta($contents, $ext);
 
 		if (empty($meta['source'])) {
 			$meta['source'] = str_replace(DIR_SITE, '', $source_file);
@@ -78,7 +78,7 @@ class Mod extends Library
 
 		$meta['mod'][] = str_replace(DIR_SITE, '', $mod_file);
 
-		$this->addMeta($contents, $meta, $php);
+		$this->addMeta($contents, $meta, $ext);
 
 		if (!file_put_contents($destination_file, $contents)) {
 			$this->error['write'] = _l("Failed to write to %s.", $destination_file);
@@ -128,11 +128,11 @@ class Mod extends Library
 			return true;
 		}
 
-		$php = preg_match("/\\.php(\\.mod)?$/", $destination_file);
+		$ext = pathinfo(preg_replace("/\\.mod$/", '', $destination_file), PATHINFO_EXTENSION);
 
 		$contents = file_get_contents($destination_file);
 
-		$meta = $this->removeMeta($contents, $php);
+		$meta = $this->removeMeta($contents, $ext);
 
 		@unlink($destination_file);
 
@@ -159,12 +159,14 @@ class Mod extends Library
 		return empty($this->error);
 	}
 
-	public function addMeta(&$contents, $meta, $php = true)
+	public function addMeta(&$contents, $meta, $ext = 'php')
 	{
-		if ($php) {
-			if (($s = strpos($contents, '<?php') !== false)) {
-				$contents = trim(substr($contents, $s + 5));
-			}
+		switch ($ext) {
+			case 'php':
+				if (($s = strpos($contents, '<?php') !== false)) {
+					$contents = trim(substr($contents, $s + 5));
+				}
+				break;
 		}
 
 		$meta_string = '';
@@ -181,19 +183,32 @@ class Mod extends Library
 			}
 		}
 
-		if ($php) {
-			$contents = "<?php\n$meta_string\n\n" . $contents;
-		} else {
-			$contents = "<!-- \n$meta_string\n-->\n\n" . $contents;
+		switch ($ext) {
+			case 'php':
+				$contents = "<?php\n$meta_string\n\n" . $contents;
+				break;
+
+			case 'less':
+			case 'css':
+				$contents = "/*\n$meta_string\n*/\n\n" . $contents;
+				break;
+
+			case 'tpl':
+			case 'html':
+			default:
+				$contents = "<!-- \n$meta_string\n-->\n\n" . $contents;
+				break;
 		}
 	}
 
-	public function removeMeta(&$contents, $php = true)
+	public function removeMeta(&$contents, $ext = 'php')
 	{
-		if ($php) {
-			if (($s = strpos($contents, '<?php') !== false)) {
-				$contents = trim(substr($contents, $s + 5));
-			}
+		switch ($ext) {
+			case 'php':
+				if (($s = strpos($contents, '<?php') !== false)) {
+					$contents = trim(substr($contents, $s + 5));
+				}
+				break;
 		}
 
 		$src = '';
@@ -214,10 +229,24 @@ class Mod extends Library
 			$contents = substr($contents, $e);
 		}
 
-		if ($php) {
-			$contents = "<?php\n\n" . trim($contents);
-		} elseif (!empty($mods) || !empty($src)) {
-			$contents = trim(substr($contents, strpos($contents, '-->') + 3));
+		switch ($ext) {
+			case 'php':
+				$contents = "<?php\n\n" . trim($contents);
+				break;
+
+			case 'less':
+			case 'css':
+				if (!empty($mods) || !empty($src)) {
+					$contents = trim(substr($contents, strpos($contents, '*/') + 2));
+				}
+				break;
+
+			case 'tpl':
+			case 'html':
+				if (!empty($mods) || !empty($src)) {
+					$contents = trim(substr($contents, strpos($contents, '-->') + 3));
+				}
+				break;
 		}
 
 		return array(

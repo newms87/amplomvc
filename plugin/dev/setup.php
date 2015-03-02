@@ -21,6 +21,7 @@ class Plugin_Dev_Setup extends Plugin_Setup
 			'display_name' => "Development",
 			'name'         => 'development',
 			'path'         => 'admin/dev',
+			'parent'       => 'system',
 			'sort_order'   => 15,
 		);
 
