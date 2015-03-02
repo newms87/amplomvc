@@ -88,7 +88,7 @@ final class Registry
 						$line = strtolower($line);
 
 						if (strpos($line, $l_class)) {
-							if (strpos($line, $class . '_mod')) {
+							if (strpos($line, $l_class . '_mod')) {
 								require_once($file);
 								$class .= '_mod';
 							}
