@@ -75,44 +75,45 @@ final class Registry
 			}
 		}
 
-		//Check for relative path from root
-		if (is_file($file)) {
-			$mod = _mod($file);
-
-			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
-				//Check if using Class_mod (which extends the original class)
-				$handle = fopen($mod, "r");
-
-				if ($handle) {
-					while (($line = fgets($handle)) !== false) {
-						$line = strtolower($line);
-
-						if (strpos($line, $l_class)) {
-							if (strpos($line, $l_class . '_mod')) {
-								require_once($file);
-								$class .= '_mod';
-							}
-
-							break;
-						}
-					}
-
-					fclose($handle);
-				}
-			}
-
-			require_once($mod);
-
-			if ($return_instance) {
-				return new $class();
-			}
-
-			return true;
+		if (!is_file($file)) {
+			trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
+			return false;
 		}
 
-		trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
+		//Apply mods and resolve correct file to load
+		$mod = _mod($file);
 
-		return false;
+		if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
+			//Check if using Class_mod (which extends the original class)
+			$handle = fopen($mod, "r");
+
+			if ($handle) {
+				while (($line = fgets($handle)) !== false) {
+					$line = strtolower($line);
+
+					if (strpos($line, $l_class)) {
+						if (strpos($line, $l_class . '_mod')) {
+							require_once($file);
+							$class .= '_mod';
+						}
+
+						break;
+					}
+				}
+
+				fclose($handle);
+			}
+		}
+
+		//Require class file
+		require_once($mod);
+
+		//Return new instance
+		if ($return_instance) {
+			return new $class();
+		}
+
+		return true;
 	}
 
 	public function load($path, $class = null)
