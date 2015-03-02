@@ -39,16 +39,14 @@ class Image extends Library
 			if (is_file(DIR_IMAGE . $image)) {
 				$image = DIR_IMAGE . $image;
 			} else {
-				if (!is_file($image)) {
-					if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
-						return $image;
-					}
-
-					write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
-					$this->error['image'] = _l("Could not locate image file %s", $image_path);
-
-					return false;
+				if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
+					return $image;
 				}
+
+				write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
+				$this->error['image'] = _l("Could not locate image file %s", $image_path);
+
+				return false;
 			}
 		}
 
