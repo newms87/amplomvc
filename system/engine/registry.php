@@ -64,9 +64,15 @@ final class Registry
 			$class = str_replace('_', '', $class);
 		}
 
+		$l_class = strtolower($class);
+
 		//Load from Resources
-		if (!is_file($file) && is_file(DIR_RESOURCES . $class . '.php')) {
-			$file = DIR_RESOURCES . $class . '.php';
+		if (!is_file($file)) {
+			if (is_file(DIR_RESOURCES . $class . '.php')) {
+				$file = DIR_RESOURCES . $class . '.php';
+			} elseif (is_file(DIR_RESOURCES . $l_class . '.php')) {
+				$file = DIR_RESOURCES . $l_class . '.php';
+			}
 		}
 
 		//Check for relative path from root
@@ -81,7 +87,7 @@ final class Registry
 					while (($line = fgets($handle)) !== false) {
 						$line = strtolower($line);
 
-						if (strpos($line, $class)) {
+						if (strpos($line, $l_class)) {
 							if (strpos($line, $class . '_mod')) {
 								require_once($file);
 								$class .= '_mod';
