@@ -4,18 +4,18 @@ class App_Model_UserRole extends App_Model_Table
 {
 	protected $table = 'user_role', $primary_key = 'user_role_id';
 
-	public function save($user_role_id, $data)
+	public function save($user_role_id, $role)
 	{
-		if (isset($data['name'])) {
-			if (!validate('text', $data['name'], 3, 64)) {
+		if (isset($role['name'])) {
+			if (!validate('text', $role['name'], 3, 64)) {
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
 
-			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t['user_role']} WHERE `name` = '" . $this->escape($data['name']) . "'")) {
-				$this->error['name'] = _l("Group Name already exists!");
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t['user_role']} WHERE `name` = '" . $this->escape($role['name']) . "'")) {
+				$this->error['name'] = _l("User Group Name %s already exists!", $role['name']);
 			}
 		} elseif (!$user_role_id) {
-			$this->error['name'] = _l("Group Name is required.");
+			$this->error['name'] = _l("User Group Name is required.");
 		}
 
 		if ($this->error) {
@@ -24,12 +24,12 @@ class App_Model_UserRole extends App_Model_Table
 
 		clear_cache('user_role');
 
-		$data['permissions'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
+		$role['permissions'] = !empty($role['permissions']) ? serialize($role['permissions']) : '';
 
 		if ($user_role_id) {
-			$this->update('user_role', $data, $user_role_id);
+			$this->update('user_role', $role, $user_role_id);
 		} else {
-			$user_role_id = $this->insert('user_role', $data);
+			$user_role_id = $this->insert('user_role', $role);
 		}
 
 		return $user_role_id;

@@ -76,9 +76,22 @@ abstract class Model
 		return $error;
 	}
 
-	public function clearErrors()
+	public function fetchError($type = null)
 	{
-		$this->error = array();
+		$error = $this->getError($type);
+
+		$this->clearErrors($type);
+
+		return $error;
+	}
+
+	public function clearErrors($type)
+	{
+		if ($type) {
+			unset($this->error[$type]);
+		} else {
+			$this->error = array();
+		}
 	}
 
 	public function escape($value)

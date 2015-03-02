@@ -196,6 +196,11 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function remove($navigation_id)
 	{
+		if (!$navigation_id) {
+			$this->error['navigation_id'] = _l("Cannot remove Navigation ID 0");
+			return false;
+		}
+
 		clear_cache('navigation');
 
 		$children = $this->queryColumn("SELECT navigation_id FROM {$this->t['navigation']} WHERE parent_id = " . (int)$navigation_id);
