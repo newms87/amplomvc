@@ -23,6 +23,14 @@ class App_Model_Customer extends App_Model_Table
 			} elseif ($this->customer->emailRegistered($customer['email'])) {
 				$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
 			}
+
+			if (isset($customer['username'])) {
+				if (empty($customer['username'])) {
+					$customer['username'] = $customer['email'];
+				}
+			} elseif (!$customer_id) {
+				$customer['username'] = $customer['email'];
+			}
 		} elseif (!$customer_id) {
 			$this->error['email'] = _l("Your email address is required.");
 		}

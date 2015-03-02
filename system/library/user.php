@@ -174,6 +174,7 @@ class User extends Library
 				'admin/user/forgotten',
 				'admin/user/reset_request',
 				'admin/user/reset',
+				'admin/user/reset_form',
 				'admin/user/login',
 				'admin/user/authenticate',
 			);
@@ -185,6 +186,7 @@ class User extends Library
 			$ignore = array(
 				'admin/user/logout',
 				'admin/user/reset',
+				'admin/user/reset_form',
 				'admin/error/not_found',
 				'admin/error/permission'
 			);
@@ -195,11 +197,6 @@ class User extends Library
 		}
 
 		return true;
-	}
-
-	public function updatePassword($user_id, $password)
-	{
-		$this->Model_User->editPassword($user_id, $password);
 	}
 
 	public function addMeta($user_id, $key, $value)
@@ -326,7 +323,7 @@ class User extends Library
 		);
 
 		if (!$this->Model_User->getTotalRecords($filter)) {
-			$this->error['email'] = _l("Warning: The E-Mail Address was not found in our records, please try again!");
+			$this->error['email'] = _l("The E-Mail Address was not found in our records, please try again!");
 			return false;
 		}
 
@@ -335,7 +332,7 @@ class User extends Library
 		$this->setResetCode($_POST['email'], $code);
 
 		$email_data = array(
-			'reset' => site_url('admin/user/reset', 'code=' . $code),
+			'reset' => site_url('admin/user/reset_form', 'code=' . $code),
 			'email' => $_POST['email'],
 		);
 

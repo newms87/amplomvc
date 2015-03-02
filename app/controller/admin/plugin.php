@@ -216,45 +216,55 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function install()
 	{
-		if (!empty($_GET['name'])) {
-			if (!$this->plugin->install($_GET['name'])) {
-				message('error', $this->plugin->getError());
-			} else {
-				message('success', _l("%s was successfully installed!", $_GET['name']));
-			}
+		if ($this->plugin->install(_get('name'))) {
+			message('success', _l("Plugin %s has been installed!", _get('name')));
+		} else {
+			message('error', $this->plugin->getError());
 		}
 
-		redirect('admin/plugin');
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/plugin');
+		}
 	}
 
 	public function uninstall()
 	{
-		if (isset($_GET['name'])) {
-			$keep_data = isset($_GET['keep_data']) ? (int)$_GET['keep_data'] : true;
-
-			$this->plugin->uninstall($_GET['name'], $keep_data);
+		if ($this->plugin->uninstall(_get('name'), _get('keep_data', true))) {
+			message('success', _l("Plugin %s has been uninstalled.", _get('name')));
+		} else {
+			message('error', $this->plugin->getError());
 		}
 
-		redirect('admin/plugin');
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/plugin');
+		}
 	}
 
 	public function upgrade()
 	{
-		if (!empty($_GET['name'])) {
-			$version = $this->plugin->upgrade($_GET['name']);
+		$name = _get('name');
 
-			if ($version && $this->plugin->hasError('changes')) {
-				message('notify', $this->plugin->getError());
-			} elseif ($version === true) {
-				message('success', _l("The changes for plugin %s have been integrated.", $_GET['name']));
-			} elseif ($version) {
-				message('success', _l("The plugin %s was successfully upgraded to version %s!", $_GET['name'], $version));
-			} else {
-				message('error', $this->plugin->getError());
-			}
+		$version = $this->plugin->upgrade($name);
+
+		if ($version && $this->plugin->hasError('changes')) {
+			message('notify', $this->plugin->getError());
+		} elseif ($version === true) {
+			message('success', _l("The changes for plugin %s have been integrated.", $name));
+		} elseif ($version) {
+			message('success', _l("The plugin %s was successfully upgraded to version %s!", $name, $version));
+		} else {
+			message('error', $this->plugin->getError());
 		}
 
-		redirect('admin/plugin');
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/plugin');
+		}
 	}
 
 	public function find()

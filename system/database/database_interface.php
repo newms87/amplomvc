@@ -1,6 +1,5 @@
 <?php
 
-//TODO: Change file to database_inteface and class to DatabaseInteface (update for db implementations)
 interface DatabaseInterface
 {
 	public function getError();

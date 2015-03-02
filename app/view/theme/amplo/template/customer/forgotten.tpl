@@ -25,7 +25,7 @@
 					</div>
 
 					<div class="buttons submit">
-						<button>{{Request Password Reset}}</button>
+						<button data-loading="{{Requesting...}}">{{Request Password Reset}}</button>
 
 						<div class="cancel buttons">
 							<a href="<?= site_url('customer/login'); ?>">{{Cancel}}</a>

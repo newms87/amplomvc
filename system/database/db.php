@@ -11,7 +11,8 @@ class DB
 	protected
 		$driver,
 		$synctime = false,
-		$error = array();
+		$error = array(),
+		$last_query;
 
 	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $schema = null, $prefix = null)
 	{
@@ -110,6 +111,11 @@ class DB
 		return $this->driver->getError();
 	}
 
+	public function getLastQuery()
+	{
+		return $this->last_query;
+	}
+
 	public function setPrefix($prefix)
 	{
 		$this->t->prefix = $prefix;
@@ -155,6 +161,8 @@ class DB
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 
+			$this->last_query = $sql;
+
 			$resource = $this->driver->query($sql, $cast_type);
 
 			$time = round(microtime(true) - $start, 6);
@@ -164,6 +172,8 @@ class DB
 				'time'  => $time ? $time : .000005,
 			);
 		} else {
+			$this->last_query = $sql;
+
 			$resource = $this->driver->query($sql, $cast_type);
 		}
 
@@ -447,7 +457,7 @@ class DB
 
 	public function hasTable($table)
 	{
-		return $this->t[$table];
+		return isset($this->t[$table]);
 	}
 
 	public function getTables($prefix = false)

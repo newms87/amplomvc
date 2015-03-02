@@ -1,4 +1,5 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
+
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">

@@ -72,7 +72,7 @@ class Config extends Library
 		return isset($_options[$key]);
 	}
 
-	public function load($group, $key)
+	public function load($group, $key = null)
 	{
 		global $_options;
 

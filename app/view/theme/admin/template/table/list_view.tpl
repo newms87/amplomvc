@@ -23,7 +23,7 @@
 		<tr>
 			<? if (!empty($row_id)) { ?>
 				<td width="1" class="center">
-					<input type="checkbox" onclick="$('[name=\'batch[]\']').prop('checked', this.checked).change();"/>
+					<input type="checkbox" class="select-all"/>
 				</td>
 			<? } ?>
 			<? if ($show_actions) { ?>
@@ -75,6 +75,7 @@
 								<? break;
 
 							case 'pk':
+							case 'pk-int':
 							case 'int':
 							case 'float':
 							case 'decimal':
@@ -498,6 +499,10 @@
 
 		//Add Item Selector
 		var $listview = $(".table-list-view-box").use_once();
+
+		$listview.find('.select-all').click(function() {
+			$(this).closest('.table-list-view').find('[name="batch[]"]').prop('checked', this.checked).change();
+		});
 
 		$listview.find('.filter-list-item').click(function () {
 			var cb = $(this).find('[name="batch[]"]');

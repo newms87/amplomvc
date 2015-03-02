@@ -224,7 +224,7 @@ class Theme extends Library
 
 			$settings = $this->config->loadGroup('theme');
 
-			$config_file = is_file(theme_dir('css/config.less.acmod')) ? 'config.less.acmod' : 'config.less';
+			$config_file = is_file(theme_dir('css/config.less.mod')) ? 'config.less.mod' : 'config.less';
 
 			if ($settings) {
 				$theme_style = "@import '@{base-path}app/view/theme/$theme/css/$config_file';\n\n";

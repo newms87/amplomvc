@@ -10,9 +10,10 @@
 			</div>
 		</div>
 		<div class="section">
-			<?= block('widget/views', null, array('group'        => 'views',
-			                                      'path'         => 'admin/view/listing',
-			                                      'view_listing' => 'view_listings'
+			<?= block('widget/views', null, array(
+				'group'        => 'views',
+				'path'         => 'admin/view/listing',
+				'view_listing' => 'view_listings'
 			)); ?>
 		</div>
 	</div>
