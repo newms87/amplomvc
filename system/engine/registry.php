@@ -64,49 +64,56 @@ final class Registry
 			$class = str_replace('_', '', $class);
 		}
 
+		$l_class = strtolower($class);
+
 		//Load from Resources
-		if (!is_file($file) && is_file(DIR_RESOURCES . $class . '.php')) {
-			$file = DIR_RESOURCES . $class . '.php';
+		if (!is_file($file)) {
+			if (is_file(DIR_RESOURCES . $class . '.php')) {
+				$file = DIR_RESOURCES . $class . '.php';
+			} elseif (is_file(DIR_RESOURCES . $l_class . '.php')) {
+				$file = DIR_RESOURCES . $l_class . '.php';
+			}
 		}
 
-		//Check for relative path from root
-		if (is_file($file)) {
-			$mod = _mod($file);
+		if (!is_file($file)) {
+			trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
+			return false;
+		}
 
-			if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
-				//Check if using Class_mod (which extends the original class)
-				$handle = fopen($mod, "r");
+		//Apply mods and resolve correct file to load
+		$mod = _mod($file);
 
-				if ($handle) {
-					while (($line = fgets($handle)) !== false) {
-						$line = strtolower($line);
+		if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
+			//Check if using Class_mod (which extends the original class)
+			$handle = fopen($mod, "r");
 
-						if (strpos($line, $class)) {
-							if (strpos($line, $class . '_mod')) {
-								require_once($file);
-								$class .= '_mod';
-							}
+			if ($handle) {
+				while (($line = fgets($handle)) !== false) {
+					$line = strtolower($line);
 
-							break;
+					if (strpos($line, $l_class)) {
+						if (strpos($line, $l_class . '_mod')) {
+							require_once($file);
+							$class .= '_mod';
 						}
+
+						break;
 					}
-
-					fclose($handle);
 				}
+
+				fclose($handle);
 			}
-
-			require_once($mod);
-
-			if ($return_instance) {
-				return new $class();
-			}
-
-			return true;
 		}
 
-		trigger_error(_l("Unable to resolve class %s. Failed to load class file %s.", $class, $file));
+		//Require class file
+		require_once($mod);
 
-		return false;
+		//Return new instance
+		if ($return_instance) {
+			return new $class();
+		}
+
+		return true;
 	}
 
 	public function load($path, $class = null)
