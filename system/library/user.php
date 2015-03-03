@@ -66,14 +66,12 @@ class User extends Library
 	{
 		if (isset($_SESSION['user_id'])) {
 			if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
-				return true;
-			}
+				$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
 
-			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
-
-			if ($user) {
-				$this->loadUser($user);
-				return true;
+				if ($user) {
+					$this->loadUser($user);
+					return true;
+				}
 			}
 
 			message("notify", "Your session has expired. Please log in again.");
