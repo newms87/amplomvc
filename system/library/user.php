@@ -12,15 +12,7 @@ class User extends Library
 	{
 		parent::__construct();
 
-		if (isset($_SESSION['user_id']) && $this->validate_token()) {
-			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
-
-			if ($user) {
-				$this->loadUser($user);
-			} else {
-				$this->logout();
-			}
-		}
+		$this->validateUser();
 	}
 
 	public function loginSystemUser()
@@ -70,19 +62,27 @@ class User extends Library
 		return $this->queryRow("SELECT * FROM {$this->t['user']} WHERE email = '$email'");
 	}
 
-	public function validate_token()
+	public function validateUser()
 	{
-		if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
-			return true;
-		}
-
 		if (isset($_SESSION['user_id'])) {
+			if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
+				return true;
+			}
+
+			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
+
+			if ($user) {
+				$this->loadUser($user);
+				return true;
+			}
+
 			message("notify", "Your session has expired. Please log in again.");
+			$this->logout();
+
+			if ($this->route->getPath() !== 'user/logout') {
+				$this->request->setRedirect($this->url->here());
+			}
 		}
-
-		$this->logout();
-
-		$this->request->setRedirect($this->url->here());
 
 		return false;
 	}

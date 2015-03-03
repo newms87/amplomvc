@@ -131,7 +131,16 @@ class Router
 			if (IS_ADMIN) {
 				if (!$this->user->canDoAction($action)) {
 					if (!is_logged()) {
-						$this->request->setRedirect($this->url->here());
+						$invalid_paths = array(
+							'admin/user/login',
+							'admin/user/logout',
+						);
+
+						if (in_array($this->path, $invalid_paths)) {
+							$this->request->setRedirect('admin');
+						} else {
+							$this->request->setRedirect($this->url->here());
+						}
 
 						if (request_accepts('application/json')) {
 							echo json_encode(array('error' => _l("You are not logged in. You are being redirected to the log in page.<script>window.location = '%s'</script>", site_url('admin/user/login'))));
