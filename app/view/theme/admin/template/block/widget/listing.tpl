@@ -149,93 +149,99 @@
 	<script type="text/javascript">
 		var $list_widget = $('.widget-listing').use_once();
 
-		$list_widget.find('.export-view').click(function () {
-			if (confirm("{{Do you want to export the full data set?}}")) {
-				window.location = $(this).attr('href') + '&limit=0';
+		function init_list_widget() {
+			$list_widget.find('.export-view').click(function () {
+				if (confirm("{{Do you want to export the full data set?}}")) {
+					window.location = $(this).attr('href') + '&limit=0';
+					return false;
+				}
+			});
+
+			$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing').click(update_listing);
+
+			function update_listing() {
+				var $this = $(this);
+
+				if (!$this.attr('href')) {
+					return false;
+				}
+
+				$.colorbox.close();
+
+				var $listing = $this.closest('.widget-listing');
+
+				if (!$listing.length) {
+					$listing = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
+				}
+
+				$listing.addClass("loading");
+				$listing.find('.refresh-listing').addClass('refreshing');
+
+				var data = {
+					columns: {}
+				};
+
+				$this.closest('.select-cols').find(':checked').each(function (i, e) {
+					data.columns[$(e).val()] = i;
+				});
+
+				data.view_id = <?= (int)$view_id; ?>;
+
+				$.get($this.attr('href'), data, function (response) {
+					var $parent = $listing.closest('.listing');
+					$listing.siblings('.messages').remove();
+					$listing.replaceWith(response);
+					$parent.trigger('loaded');
+				});
+
 				return false;
 			}
-		});
 
-		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing').click(update_listing);
+			function save_listing_settings() {
+				var $this = $(this);
+				var $form = $this.closest('.form');
+				var $widget = $this.closest('.widget-view');
+				var view_type = $form.find('[name="view_type"]').val();
 
-		function update_listing() {
-			var $this = $(this);
+				$this.loading();
 
-			if (!$this.attr('href')) {
-				return false;
+				$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(), function (response) {
+					$form.show_msg(response);
+					$this.closest('.view-config').removeClass('show');
+					$widget.find('.refresh-listing').click();
+
+					//Hack to show chart / listing view
+					$widget.find('[data-view-type="' + view_type + '"]').click();
+
+				}, 'json').always(function () {
+					$this.loading('stop');
+				});
 			}
 
-			$.colorbox.close();
+			var $view_config = $list_widget.find('.view-config');
 
-			var $listing = $this.closest('.widget-listing');
+			$view_config.find('.view-tabs a').tabs();
+			$view_config.find('.save-view-cols').click(update_listing);
+			$view_config.find('.save-settings').click(save_listing_settings);
 
-			if (!$listing.length) {
-				$listing = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
-			}
+			$list_widget[0].view_config = $view_config.clone(true);
+			$view_config.remove();
 
-			$listing.addClass("loading");
-			$listing.find('.refresh-listing').addClass('refreshing');
+			$list_widget.find('.modify-view').click(function () {
+				var $view_config = $(this).closest('.widget-listing')[0].view_config;
+				$view_config.find('.chart-data-cols .multiselect-list').sortable();
+				$view_config.find('.select-cols .multiselect-list').sortable();
 
-			var data = {
-				columns: {}
-			};
-
-			$this.closest('.select-cols').find(':checked').each(function (i, e) {
-				data.columns[$(e).val()] = i;
-			});
-
-			data.view_id = <?= (int)$view_id; ?>;
-
-			$.get($this.attr('href'), data, function (response) {
-				var $parent = $listing.closest('.listing');
-				$listing.siblings('.messages').remove();
-				$listing.replaceWith(response);
-				$parent.trigger('loaded');
-			});
-
-			return false;
-		}
-
-		function save_listing_settings() {
-			var $this = $(this);
-			var $form = $this.closest('.form');
-			var $widget = $this.closest('.widget-view');
-			var view_type = $form.find('[name="view_type"]').val();
-
-			$this.loading();
-
-			$.post("<?= site_url('block/widget/listing/save-settings'); ?>", $form.find('[name]').serialize(), function (response) {
-				$form.show_msg(response);
-				$this.closest('.view-config').removeClass('show');
-				$widget.find('.refresh-listing').click();
-
-				//Hack to show chart / listing view
-				$widget.find('[data-view-type="' + view_type + '"]').click();
-
-			}, 'json').always(function () {
-				$this.loading('stop');
+				$.colorbox({
+					href:   $view_config,
+					inline: true
+				});
 			});
 		}
 
-		var $view_config = $list_widget.find('.view-config');
-
-		$view_config.find('.view-tabs a').tabs();
-		$view_config.find('.save-view-cols').click(update_listing);
-		$view_config.find('.save-settings').click(save_listing_settings);
-
-		$list_widget[0].view_config = $view_config.clone(true);
-		$view_config.remove();
-
-		$list_widget.find('.modify-view').click(function () {
-			var $view_config = $(this).closest('.widget-listing')[0].view_config;
-			$view_config.find('.chart-data-cols .multiselect-list').sortable();
-			$view_config.find('.select-cols .multiselect-list').sortable();
-
-			$.colorbox({
-				href:   $view_config,
-				inline: true
-			});
-		});
+		if ($list_widget.length) {
+			init_list_widget();
+		}
 	</script>
 
 </div>

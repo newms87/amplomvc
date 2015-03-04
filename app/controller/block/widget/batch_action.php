@@ -56,11 +56,12 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 				} else {
 					$action['build'] += array(
 						'type'   => $action['type'],
-						'name'   => 'action_value',
 						'data'   => array(),
 						'select' => $action['default'],
 					);
 				}
+
+				$action['build']['name'] = 'action_value';
 			}
 		}
 		unset($action);
