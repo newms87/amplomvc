@@ -26,8 +26,6 @@
 			</button>
 
 			<div class="view-config" data-listing="#<?= $id; ?>">
-				<button class="close">X</button>
-
 				<div class="view-tabs htabs">
 					<a href=".col-tab">{{Columns}}</a>
 					<a href=".group-tab">{{Groups / Aggregate}}</a>
@@ -158,60 +156,47 @@
 			}
 		});
 
-		$list_widget.find('.view-tabs a').tabs();
+		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing').click(update_listing);
 
-		$list_widget.find('.modify-view').click(function () {
-			$.colorbox({
-				href: $('.view-config'),
-				inline: true
-			});
-		});
+		function update_listing() {
+			var $this = $(this);
 
-		$list_widget.find('.select-cols .multiselect-list').sortable();
-
-
-		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing, .save-view-cols')
-			.click(function () {
-				var $this = $(this);
-
-				if (!$this.attr('href')) {
-					return false;
-				}
-
-				$.colorbox.close();
-
-				var $listing = $this.closest('.widget-listing');
-
-				if (!$listing.length) {
-					$listing = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
-				}
-
-				$listing.addClass("loading");
-				$listing.find('.refresh-listing').addClass('refreshing');
-
-				var data = {
-					columns: {}
-				};
-
-				$this.closest('.select-cols').find(':checked').each(function (i, e) {
-					data.columns[$(e).val()] = i;
-				});
-
-				data.view_id = <?= (int)$view_id; ?>;
-
-				$.get($this.attr('href'), data, function (response) {
-					var $parent = $listing.closest('.listing');
-					$listing.siblings('.messages').remove();
-					$listing.replaceWith(response);
-					$parent.trigger('loaded');
-				});
-
+			if (!$this.attr('href')) {
 				return false;
+			}
+
+			$.colorbox.close();
+
+			var $listing = $this.closest('.widget-listing');
+
+			if (!$listing.length) {
+				$listing = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
+			}
+
+			$listing.addClass("loading");
+			$listing.find('.refresh-listing').addClass('refreshing');
+
+			var data = {
+				columns: {}
+			};
+
+			$this.closest('.select-cols').find(':checked').each(function (i, e) {
+				data.columns[$(e).val()] = i;
 			});
 
-		$list_widget.find('.chart-data-cols .multiselect-list').sortable();
+			data.view_id = <?= (int)$view_id; ?>;
 
-		$list_widget.find('.save-settings').click(function () {
+			$.get($this.attr('href'), data, function (response) {
+				var $parent = $listing.closest('.listing');
+				$listing.siblings('.messages').remove();
+				$listing.replaceWith(response);
+				$parent.trigger('loaded');
+			});
+
+			return false;
+		}
+
+		function save_listing_settings() {
 			var $this = $(this);
 			var $form = $this.closest('.form');
 			var $widget = $this.closest('.widget-view');
@@ -229,6 +214,26 @@
 
 			}, 'json').always(function () {
 				$this.loading('stop');
+			});
+		}
+
+		var $view_config = $list_widget.find('.view-config');
+
+		$view_config.find('.view-tabs a').tabs();
+		$view_config.find('.save-view-cols').click(update_listing);
+		$view_config.find('.save-settings').click(save_listing_settings);
+
+		$list_widget[0].view_config = $view_config.clone(true);
+		$view_config.remove();
+
+		$list_widget.find('.modify-view').click(function () {
+			var $view_config = $(this).closest('.widget-listing')[0].view_config;
+			$view_config.find('.chart-data-cols .multiselect-list').sortable();
+			$view_config.find('.select-cols .multiselect-list').sortable();
+
+			$.colorbox({
+				href:   $view_config,
+				inline: true
 			});
 		});
 	</script>
