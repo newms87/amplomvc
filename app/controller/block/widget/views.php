@@ -40,7 +40,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if (empty($settings['view_listing_id'])) {
 			if (!empty($settings['view_listing'])) {
-				$view_listing = $this->Model_View->getViewListingBySlug($settings['view_listing']);
+				$view_listing = $this->Model_ViewListing->getViewListingBySlug($settings['view_listing']);
 
 				if ($view_listing) {
 					$settings['view_listing_id'] = $view_listing['view_listing_id'];
@@ -54,7 +54,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 					'query' => $settings['query'],
 				);
 
-				$view_listing_id = $this->Model_View->syncViewListing($view_listing);
+				$view_listing_id = $this->Model_ViewListing->sync($view_listing);
 
 				if ($view_listing_id) {
 					$settings['view_listing_id'] = $view_listing_id;
@@ -95,7 +95,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			$view['settings'] += $default_view['settings'];
 
 			if (!empty($view['view_listing_id'])) {
-				$listing = $this->Model_View->getViewListing($view['view_listing_id']);
+				$listing = $this->Model_ViewListing->getRecord($view['view_listing_id']);
 			} else {
 				$listing = $view;
 			}
@@ -144,7 +144,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$settings['views'] = $views;
 
-		$settings['data_view_listings'] = $this->Model_View->getAllViewListings();
+		$settings['data_view_listings'] = $this->Model_ViewListing->getAllViewListings();
 
 		$settings['data_view_types'] = array(
 			''     => 'view-list',
@@ -188,13 +188,13 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		//The Table Columns
 		$requested_cols = !empty($listing['columns']) ? $listing['columns'] : _request('columns');
 
-		$columns = $this->Model_View->getViewListingColumns($view_listing_id, $requested_cols);
+		$columns = $this->Model_ViewListing->getViewListingColumns($view_listing_id, $requested_cols);
 
 		//The Sort & Filter Data
 		$sort   = !empty($listing['sort']) ? $listing['sort'] : $this->sort->getQueryDefaults();
 		$filter = !empty($listing['filter']) ? $listing['filter'] : _request('filter', array());
 
-		list($records, $record_total) = $this->Model_View->getViewListingRecords($view_listing_id, $sort, $filter, null, true);
+		list($records, $record_total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, null, true);
 
 		if (!empty($listing['return_data'])) {
 			$this->output = array(
@@ -205,7 +205,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		$listing += array(
 			'row_id'         => null,
-			'extra_cols'     => $this->Model_View->getViewListingColumns($view_listing_id, false),
+			'extra_cols'     => $this->Model_ViewListing->getViewListingColumns($view_listing_id, false),
 			'columns'        => $columns,
 			'rows'           => $records,
 			'filter_value'   => $filter,
@@ -230,11 +230,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$view_listing         = $_POST;
 		$view_listing['path'] = 'block/widget/views/listing';
 
-		$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
+		$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
 
 		if ($view_listing_id) {
 			$query = 'view_listing_id=' . $view_listing_id . (!empty($view_listing['query']) ? '&' . $view_listing['query'] : '');
-			$this->Model_View->saveViewListing($view_listing_id, array('query' => $query));
+			$this->Model_ViewListing->save($view_listing_id, array('query' => $query));
 
 			message('success', _l("The View has been created"));
 
@@ -252,7 +252,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				message('error', $this->Model_View->getError());
 			}
 		} else {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_ViewListing->getError());
 		}
 
 		if ($this->is_ajax) {

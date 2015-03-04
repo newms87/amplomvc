@@ -135,6 +135,19 @@ class Table extends Library
 				}
 			}
 
+			//Backwards compat w/ build_config / build_data
+			if (empty($column['build'])) {
+				$column['build'] = array();
+
+				if (!empty($column['build_data'])) {
+					$column['build']['data'] = $column['build_data'];
+				}
+
+				if (!empty($column['build_config'])) {
+					list($column['build']['value'], $column['build']['label']) = $column['build_config'];
+				}
+			}
+
 			//If Field is set, assume this came from Table Model, and therefore can be edited
 			if ($column['editable'] === null) {
 				$column['editable'] = isset($column['Field']);
@@ -145,7 +158,7 @@ class Table extends Library
 			}
 
 			if (!isset($column['editable_data'])) {
-				$column['editable_data'] = !empty($column['build_data']) ? $column['build_data'] : array();
+				$column['editable_data'] = !empty($column['build']['data']) ? $column['build']['data'] : array();
 			}
 
 			if (!isset($column["sort_value"])) {
@@ -168,6 +181,7 @@ class Table extends Library
 						$column['sort_value'] = "__image_sort__" . $slug;
 					}
 					break;
+
 				case 'multiselect':
 					foreach ($this->rows as &$row) {
 						if (!is_array($row[$slug])) {
@@ -177,35 +191,30 @@ class Table extends Library
 					unset($row);
 
 				case 'select':
-					if (empty($column['build_data'])) {
-						$column['build_data'] = array('' => _l('(None)'));
-					}
+					$column['build'] += array(
+						'data'  => array('' => _l('(None)')),
+						'value' => 'key',
+						'label' => 'name',
+					);
 
-					if (!isset($column['build_config'])) {
-						$column['build_config'] = array(
-							'key',
-							'name'
-						);
-					}
-
-					$build_key   = $column['build_config'][0];
-					$build_value = $column['build_config'][1];
+					$build_value = $column['build']['value'];
+					$build_label = $column['build']['label'];
 					$build_data  = array();
 
-					foreach ($column['build_data'] as $key => $bd_item) {
+					foreach ($column['build']['data'] as $key => $bd_item) {
 						if (is_array($bd_item)) {
 							//Validate Data keys and values are set
-							if (($build_key !== false && !isset($bd_item[$build_key]))) {
-								trigger_error(_l("Build Error: Row %s does not have index %s to use as the value!", $key, $build_key));
+							if (($build_value !== false && !isset($bd_item[$build_value]))) {
+								trigger_error(_l("Build Error: Row %s does not have index %s to use as the value!", $key, $build_value));
 								exit();
-							} elseif (!isset($bd_item[$build_value])) {
-								trigger_error(_l("Build Error: Row %s does not have index %s to use as the label!", $key, $build_value));
+							} elseif (!isset($bd_item[$build_label])) {
+								trigger_error(_l("Build Error: Row %s does not have index %s to use as the label!", $key, $build_label));
 								exit();
 							}
 
 							$build_data[$key] = array(
-								'key'  => $build_key === false ? $key : $bd_item[$build_key],
-								'name' => $bd_item[$build_value],
+								'key'  => $build_value === false ? $key : $bd_item[$build_value],
+								'name' => $bd_item[$build_label],
 							);
 						} else {
 							$build_data[$key] = array(
@@ -215,10 +224,22 @@ class Table extends Library
 						}
 					}
 
-					$column['build_data']   = $build_data;
-					$column['build_config'] = array(
-						'key',
-						'name'
+					if ($column['filter_blank'] && !isset($build_data[''])) {
+						$build_data = array(
+								'' => array(
+									'key'  => '',
+									'name' => '&nbsp;'
+								)
+							) + $build_data;
+					}
+
+					$column['build'] = array(
+						'type'   => $column['type'],
+						'name'   => !empty($column['Field']) ? $column['Field'] : '',
+						'data'   => $build_data,
+						'select' => '',
+						'value'  => 'key',
+						'label'  => 'name',
 					);
 
 					break;

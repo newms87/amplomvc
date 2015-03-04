@@ -23,38 +23,47 @@ abstract class App_Model_Table extends Model
 		}
 	}
 
-	public function save($id, $data)
+	public function save($record_id, $data)
 	{
-		if ($id) {
-			return $this->update($this->table, $data, $id);
+		if ($record_id) {
+			$record_id = $this->update($this->table, $data, $record_id);
 		} else {
-			return $this->insert($this->table, $data);
+			$record_id = $this->insert($this->table, $data);
 		}
+
+		if ($record_id) {
+			clear_cache($this->table . '.rows');
+			clear_cache($this->table . '.' . $record_id);
+		}
+
+		return $record_id;
 	}
 
-	public function remove($canvass_scope_id)
+	public function remove($record_id)
 	{
-		return $this->delete($this->table, $canvass_scope_id);
+		clear_cache($this->table);
+
+		return $this->delete($this->table, $record_id);
 	}
 
-	public function getField($id, $field)
+	public function getField($record_id, $field)
 	{
-		return $this->queryVar("SELECT $field FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryVar("SELECT $field FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 	}
 
-	public function getRecord($id, $select = '*')
+	public function getRecord($record_id, $select = '*')
 	{
 		$select = $this->extractSelect($this->table, $select);
 
-		return $this->queryRow("SELECT $select FROM `" . $this->t[$this->table] . "` WHERE `$this->primary_key` = " . (int)$id);
+		return $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 	}
 
 	public function findRecord($filter, $select = null)
 	{
-		$select = $select ? $this->extractSelect($this->table, $select) : $this->primary_key;
+		$fields = $select ? $this->extractSelect($this->table, $select) : $this->primary_key;
 		$where  = $this->extractWhere($this->table, $filter);
 
-		$sql = "SELECT $select FROM `" . $this->t[$this->table] . "` WHERE $where";
+		$sql = "SELECT $fields FROM `{$this->t[$this->table]}` WHERE $where";
 
 		return $select ? $this->queryVar($sql) : $this->queryRow($sql);
 	}
@@ -65,12 +74,12 @@ abstract class App_Model_Table extends Model
 		$tbl = $this->table[0];
 
 		//Select
-		$select = $this->extractSelect($this->table . ' ' . $tbl, $select);
+		$fields = $this->extractSelect($this->table . ' ' . $tbl, $select);
 
 		if ($cache) {
 			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
 			$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
-			$l     = $select !== '*' ? '.select-' . md5($select) : '';
+			$l     = $fields !== '*' ? '.select-' . md5($select) : '';
 			$t     = $total ? '.total' : '';
 			$i     = $index ? '.index-' . $index : '';
 			$cache = $this->table . '.rows' . $s . $f . $l . $t . $i;
@@ -96,7 +105,7 @@ abstract class App_Model_Table extends Model
 		list($order, $limit) = $this->extractOrderLimit($sort, $tbl);
 
 		//The Query
-		$records = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $order $limit", $index, $total);
 
 		if ($cache) {
 			cache($cache, $records);

@@ -357,7 +357,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function getViewListingId()
 	{
-		$view_listing_id = $this->Model_View->getViewListingBySlug('page_list');
+		$view_listing_id = $this->Model_ViewListing->getViewListingBySlug('page_list');
 
 		if (!$view_listing_id) {
 			$view_listing = array(
@@ -366,7 +366,7 @@ class App_Model_Page extends App_Model_Table
 				'path' => 'admin/page/listing',
 			);
 
-			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
+			$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
 		}
 
 		return $view_listing_id;

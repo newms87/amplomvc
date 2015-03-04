@@ -1,4 +1,6 @@
-<div class="widget-listing">
+<? $id = uniqid(); ?>
+
+<div id="<?= $id; ?>" class="widget-listing">
 	<? if ($show_messages) { ?>
 		<?= render_message(); ?>
 	<? } ?>
@@ -23,7 +25,7 @@
 				<b class="sprite settings small"></b>
 			</button>
 
-			<div class="view-config">
+			<div class="view-config" data-listing="#<?= $id; ?>">
 				<button class="close">X</button>
 
 				<div class="view-tabs htabs">
@@ -48,7 +50,7 @@
 							)); ?>
 
 							<div class="buttons">
-								<a class="filter-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
+								<a class="save-view-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
 							</div>
 						</div>
 					</div>
@@ -159,20 +161,16 @@
 		$list_widget.find('.view-tabs a').tabs();
 
 		$list_widget.find('.modify-view').click(function () {
-			$(this).siblings('.view-config').toggleClass('show');
-		});
-
-		$list_widget.find('.view-config .close').click(function () {
-			$(this).closest('.view-config').removeClass('show');
+			$.colorbox({
+				href: $('.view-config'),
+				inline: true
+			});
 		});
 
 		$list_widget.find('.select-cols .multiselect-list').sortable();
 
-		$list_widget.find('.filter-cols').click(function () {
-			$(this).closest('.view-config').find('.close').click();
-		});
 
-		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing, .filter-cols')
+		$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing, .save-view-cols')
 			.click(function () {
 				var $this = $(this);
 
@@ -180,7 +178,14 @@
 					return false;
 				}
 
+				$.colorbox.close();
+
 				var $listing = $this.closest('.widget-listing');
+
+				if (!$listing.length) {
+					$listing = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
+				}
+
 				$listing.addClass("loading");
 				$listing.find('.refresh-listing').addClass('refreshing');
 

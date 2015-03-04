@@ -45,10 +45,20 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 					$action['default'] = '';
 				}
 
-				if (isset($action['build_data']) && empty($action['build_config'])) {
-					$action['build_config'] = array(
-						null,
-						false
+				//Backwards compability w/ build_data / build_config
+				if (!isset($action['build'])) {
+					if (isset($action['build_data'])) {
+						$action['build']['data'] = $action['build_data'];
+					}
+					if (isset($action['build_config'])) {
+						list($action['build']['value'], $action['build']['label']) = $action['build_config'];
+					}
+				} else {
+					$action['build'] += array(
+						'type'   => $action['type'],
+						'name'   => 'action_value',
+						'data'   => array(),
+						'select' => $action['default'],
 					);
 				}
 			}

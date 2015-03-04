@@ -10,8 +10,6 @@
  * 	'sortable'		=> bool (optional) - Can this column can be sorted? Default is false.
  * 	'filter'			=> bool (optional) - Can this column be filtered? Default is false.
  * 	'filter_value' => mixed (optional) - Use this to override the filter value. Value is set if user has specified, otherwise the default filter value.
- * 	'build_data'	=> mixed (optional) - Fill data for the column. Used to display a key value as text, or with a filter depending on the 'type'.
- * 	'build_config' => array (optional) - Use this with 'build_data' to specify the array( $key => $value ) for the builder tool
  * );
  */
 ?>
@@ -104,35 +102,14 @@
 								<? break;
 
 							case 'select':
-								if (isset($column['build_config'])) {
-									$build_key   = $column['build_config'][0];
-									$build_value = $column['build_config'][1];
-								} else {
-									$build_key = $build_value = null;
-								}
-
-								if ($column['filter_blank'] && !isset($column['build_data'][''])) {
-									$column['build_data'] = array('' => '') + $column['build_data'];
-								}
-
 								echo build(array(
 									'type'   => 'select',
 									'name'   => "filter[$slug]",
-									'data'   => $column['build_data'],
 									'select' => $column['filter_value'],
-									'value'  => $build_key,
-									'label'  => $build_value,
-								));
+								) + $column['build']);
 								break;
 
 							case 'multiselect':
-								if (isset($column['build_config'])) {
-									$build_key   = $column['build_config'][0];
-									$build_value = $column['build_config'][1];
-								} else {
-									$build_key = $build_value = null;
-								}
-
 								?>
 								<div class="zoom-hover multiselect">
 									<div class="input">
@@ -140,22 +117,22 @@
 										build(array(
 											'type'   => 'multiselect',
 											'name'   => "filter[$slug]",
-											'data'   => $column['build_data'],
 											'select' => $column['filter_value'],
-											'value'  => $build_key,
-											'label'  => $build_value,
-										)); ?>
+										) + $column['build']); ?>
 									</div>
 									<div class="value">
 										<? if (!empty($column['filter_value'])) {
+											$build_value = $column['build']['value'];
+											$build_label = $column['build']['label'];
+
 											$vals = array();
 											foreach ($column['filter_value'] as $v) {
-												if ($build_key === false) {
-													$vals[] = $build_value ? $column['build_data'][$v][$build_value] : $column['build_data'][$v];
+												if ($build_value === false) {
+													$vals[] = $build_label ? $column['build']['data'][$v][$build_label] : $column['build']['data'][$v];
 												} else {
-													foreach ($column['build_data'] as $bd) {
-														if (is_numeric($v) ? $bd[$build_key] == $v : $bd[$build_key] === $v) {
-															$vals[] = isset($bd[$build_value]) ? $bd[$build_value] : $bd[$build_key];
+													foreach ($column['build']['data'] as $bd) {
+														if (is_numeric($v) ? $bd[$build_value] == $v : $bd[$build_value] === $v) {
+															$vals[] = isset($bd[$build_label]) ? $bd[$build_label] : $bd[$build_value];
 														}
 													}
 												}
@@ -292,10 +269,10 @@
 										<? break;
 
 									case 'select':
-										foreach ($column['build_data'] as $key => $c_data) {
-											if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value) {
+										foreach ($column['build']['data'] as $key => $c_data) {
+											if (isset($c_data[$column['build']['value']]) && $c_data[$column['build']['value']] == $value) {
 												?>
-												<?= $c_data[$column['build_config'][1]]; ?>
+												<?= $c_data[$column['build']['label']]; ?>
 											<?
 											}
 										}
@@ -303,10 +280,10 @@
 
 									case 'multiselect':
 										foreach ($value as $v) {
-											$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
-											foreach ($column['build_data'] as $c_data) {
-												if (isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value) {
-													echo $c_data[$column['build_config'][1]] . "<br/>";
+											$ms_value = is_array($v) ? $v[$column['build']['value']] : $v;
+											foreach ($column['build']['data'] as $c_data) {
+												if (isset($c_data[$column['build']['value']]) && $c_data[$column['build']['value']] == $ms_value) {
+													echo $c_data[$column['build']['label']] . "<br/>";
 													break;
 												}
 											}
@@ -386,12 +363,9 @@
 								echo build(array(
 									'type'   => $column['editable'],
 									'name'   => '',
-									'data'   => $column['build_data'],
 									'select' => '',
-									'value'  => $column['build_config'][0],
-									'label'  => $column['build_config'][1],
 									'#class' => 'input-value',
-								));
+								) + $column['build']);
 								break;
 
 							case 'date':

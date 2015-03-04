@@ -87,7 +87,7 @@ class App_Model_Dashboard extends App_Model_Table
 				if ($view['view_type']) {
 					$view['image'] = $this->Model_View->getViewMeta($view['view_id'], 'chart_image');
 				} else {
-					$listing = $this->Model_View->getViewListing($view['view_listing_id']);
+					$listing = $this->Model_ViewListing->getRecord($view['view_listing_id']);
 
 					if (!empty($listing['path'])) {
 						$settings = array(

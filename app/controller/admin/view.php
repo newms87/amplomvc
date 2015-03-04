@@ -35,13 +35,13 @@ class App_Controller_Admin_View extends Controller
 		//The Table Columns
 		$requested_cols = _request('columns');
 
-		$columns = $this->Model_View->getColumns($requested_cols);
+		$columns = $this->Model_ViewListing->getColumns($requested_cols);
 
 		//The Sort & Filter Data
 		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = _request('filter', array());
 
-		list($view_listings, $view_listing_total) = $this->Model_View->getViewListings($sort, $filter, $columns, true, 'view_listing_id');
+		list($view_listings, $view_listing_total) = $this->Model_ViewListing->getRecords($sort, $filter, $columns, true, 'view_listing_id');
 
 		foreach ($view_listings as $view_listing_id => &$view_listing) {
 			$actions = array();
@@ -64,7 +64,7 @@ class App_Controller_Admin_View extends Controller
 
 		$listing = array(
 			'row_id'         => 'view_listing_id',
-			'extra_cols'     => $this->Model_View->getColumns(false),
+			'extra_cols'     => $this->Model_ViewListing->getColumns(false),
 			'columns'        => $columns,
 			'rows'           => $view_listings,
 			'filter_value'   => $filter,
@@ -101,7 +101,7 @@ class App_Controller_Admin_View extends Controller
 		$view_listing = $_POST;
 
 		if ($view_listing_id) {
-			$view_listing += $this->Model_View->getViewListing($view_listing_id);
+			$view_listing += $this->Model_ViewListing->getRecord($view_listing_id);
 		}
 
 		//Set Values or Defaults
@@ -125,11 +125,11 @@ class App_Controller_Admin_View extends Controller
 
 	public function save()
 	{
-		if ($view_listing_id = $this->Model_View->saveViewListing(_request('view_listing_id'), $_POST)) {
+		if ($view_listing_id = $this->Model_ViewListing->save(_request('view_listing_id'), $_POST)) {
 			message('success', _l("The View has been saved"));
 			message('data', array('view_listing_id' => $view_listing_id));
 		} else {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_ViewListing->getError());
 		}
 
 		if ($this->is_ajax) {
@@ -143,10 +143,10 @@ class App_Controller_Admin_View extends Controller
 
 	public function delete()
 	{
-		if ($this->Model_View->removeViewListing(_get('view_listing_id'))) {
-			message('notify', _l("The View was removed."));
+		if ($this->Model_ViewListing->remove(_get('view_listing_id'))) {
+			message('notify', _l("The View Listing was removed."));
 		} else {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_ViewListing->getError());
 		}
 
 		if ($this->is_ajax) {
@@ -207,18 +207,22 @@ class App_Controller_Admin_View extends Controller
 
 	public function batch_action()
 	{
-		foreach ($_POST['batch'] as $view_listing_id) {
-			switch ($_POST['action']) {
+		$batch = (array)_post('batch');
+		$action = _post('action');
+		$value = _request('value');
+
+		foreach ($batch as $view_listing_id) {
+			switch ($action) {
 				case 'delete':
-					$this->Model_View->removeViewListing($view_listing_id);
+					$this->Model_ViewListing->remove($view_listing_id);
 					break;
 			}
 		}
 
-		if ($this->Model_View->hasError()) {
-			message('error', $this->Model_View->getError());
+		if ($this->Model_ViewListing->hasError()) {
+			message('error', $this->Model_ViewListing->getError());
 		} else {
-			message('success', _l("The Views have been updated!"));
+			message('success', _l("The View Listings have been updated!"));
 		}
 
 		if ($this->is_ajax) {

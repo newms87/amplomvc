@@ -149,7 +149,7 @@ class App_Model_UserRole extends App_Model_Table
 
 	public function getViewListingId()
 	{
-		$view_listing = $this->Model_View->getViewListingBySlug('user_role_list');
+		$view_listing = $this->Model_ViewListing->getViewListingBySlug('user_role_list');
 
 		if (!$view_listing) {
 			$view_listing = array(
@@ -158,7 +158,7 @@ class App_Model_UserRole extends App_Model_Table
 				'path' => 'admin/settings/role/listing',
 			);
 
-			$view_listing_id = $this->Model_View->saveViewListing(null, $view_listing);
+			$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
 		} else {
 			$view_listing_id = $view_listing['view_listing_id'];
 		}

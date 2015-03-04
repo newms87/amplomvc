@@ -23,14 +23,7 @@
 					<? break;
 				case 'select':
 					?>
-					<?= build(array(
-					'type'   => 'select',
-					'name'   => "action_value",
-					'data'   => $action['build_data'],
-					'select' => $action['default'],
-					'value'  => $action['build_config'][0],
-					'label'  => $action['build_config'][1],
-				)); ?>
+					<?= build($action['build']); ?>
 					<? break;
 
 				case 'date':
