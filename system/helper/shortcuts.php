@@ -855,10 +855,10 @@ HTML
 	}
 }
 
-function output($output)
+function output($output, $content_type = 'text/html')
 {
 	global $registry;
-	$registry->get('response')->setOutput($output);
+	$registry->get('response')->setOutput($output, $content_type);
 }
 
 function output_message()

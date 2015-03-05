@@ -20,12 +20,16 @@ class Response extends Library
 		return $this->output;
 	}
 
-	public function setOutput($output, $content_type = null)
+	public function setOutput($output, $headers = null)
 	{
 		$this->output = $output;
 
-		if ($content_type) {
-			$this->headers['Content-Type'] = $content_type;
+		if ($headers) {
+			if (is_array($headers)) {
+				$this->headers = $headers + $this->headers;
+			} else {
+				$this->headers['Content-Type'] = $headers;
+			}
 		} elseif (empty($this->headers['Content-Type'])) {
 			$this->headers['Content-Type'] = 'text/html; charset=UTF-8';
 		}

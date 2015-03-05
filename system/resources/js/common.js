@@ -6,8 +6,8 @@ var screen_lg = screen_width >= 1200,
 	screen_xs = screen_width < 480;
 
 
-String.prototype.toSlug = function () {
-	return this.toLowerCase().replace(/\s/, '-').replace(/[^a-z0-9-_]/, '');
+String.prototype.toSlug = function (sep) {
+	return this.toLowerCase().replace(/\s/, sep || '-').replace(/[^a-z0-9-_]/, '');
 }
 
 String.prototype.repeat = function (times) {
@@ -22,31 +22,11 @@ String.prototype.str_replace = function (find, replace) {
 	return str;
 };
 
-//Load jQuery Plugins On Call
-$.fn.codemirror = function (params) {
-	if (!$.fn.codemirror.once) {
-		$.fn.codemirror.once = [];
-
-		$.get($ac.site_url + 'admin/common/codemirror', {}, function (response) {
-			$('body').append(response);
-			var once = $.fn.codemirror.once;
-			for (var a in once) {
-				once[a].s.init_codemirror(once[a].p);
-			}
-		});
-	}
-
-	if (typeof this.init_codemirror == 'function') {
-		this.init_codemirror(params);
-	} else {
-		$.fn.codemirror.once.push({s: this, p: params});
-	}
-}
-
 //Async Load on call
 $.sq = {}
 
 var async_load = {
+	code_mirror: 'admin/common/codemirror',
 	list_widget: 'system/resources/js/listings.js',
 	ac_template: 'system/resources/js/ac_template.js',
 	jqzoom: 'system/resources/js/jquery/jqzoom/jqzoom.js'
