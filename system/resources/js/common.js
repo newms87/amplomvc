@@ -43,36 +43,34 @@ $.fn.codemirror = function (params) {
 	}
 }
 
-$.synq = {}
+//Async Load on call
+$.sq = {}
 
-$.ac_template = $.fn.ac_template = function (name, action, data, relate) {
-	if (!$.synq.ac_template) {
-		$.synq.ac_template = [];
-
-		$.getScript('system/resources/js/ac_template.js', function () {
-			for (var s in $.synq.ac_template) {
-				q = $.synq.ac_template[s];
-				q.me.ac_template(q.name, q.action, q.data, q.relate);
-			}
-		});
-	}
-
-	$.synq.ac_template.push({me: this, name: name, action: action, data: data, relate: relate});
+var async_load = {
+	list_widget: 'system/resources/js/listings.js',
+	ac_template: 'system/resources/js/ac_template.js',
+	jqzoom: 'system/resources/js/jquery/jqzoom/jqzoom.js'
 }
 
-$.fn.jqzoom = function (params) {
-	if (!$.synq.jqzoom) {
-		$.synq.jqzoom = [];
+for (var al in async_load) {
+	$.fn[al] = function(view_id) {
+		var al = arguments.callee.fn;
 
-		$.getScript('system/resources/js/jquery/jqzoom/jqzoom.js', function () {
-			for (var s in $.synq.jqzoom) {
-				q = $.synq.jqzoom[s];
-				q.me.ac_template(q.params);
-			}
-		});
-	}
+		if (!$.sq[al]) {
+			$.sq[al] = [];
 
-	$.synq.jqzoom.push({me: this, params: params});
+			$.getScript($ac.site_url + async_load[al], function () {
+				for (var l in $.sq[al]) {
+					var q = $.sq[al][l];
+					$.fn[al].apply(q.me, q.args);
+				}
+			});
+		}
+
+		$.sq[al].push({me: this, args: arguments});
+	};
+
+	$.fn[al].fn = al;
 }
 
 $.fn.use_once = function (label) {
