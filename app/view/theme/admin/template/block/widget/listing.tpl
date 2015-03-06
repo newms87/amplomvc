@@ -1,6 +1,6 @@
 <? $id = uniqid(); ?>
 
-<div id="<?= $id; ?>" class="widget-listing">
+<div id="<?= $id; ?>" class="widget-listing" data-href="<?= site_url($listing_path, $_GET); ?>">
 	<? if ($show_messages) { ?>
 		<?= render_message(); ?>
 	<? } ?>

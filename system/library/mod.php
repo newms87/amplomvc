@@ -2,9 +2,47 @@
 
 class Mod extends Library
 {
+	function isApplied($mod_file, $directives = array())
+	{
+		if (!is_file($mod_file)) {
+			$this->error['mod_file'] = _l("The mod file %s does not exist.");
+			return;
+		}
+
+		$directives = get_comment_directives($mod_file) + $directives;
+
+		$destination_file = !empty($directives['destination']) ? DIR_SITE . trim($directives['destination']) : false;
+
+		if (!$destination_file) {
+			$this->error['destination'] = _l("Destination file not set. No way to check if mod file %s has been applied.", $mod_file);
+			return;
+		}
+
+		if (!is_file($destination_file)) {
+			return false;
+		} elseif (filemtime($destination_file) === filemtime($mod_file)) {
+			return true;
+		}
+
+		$ext = pathinfo(preg_replace("/\\.mod$/", '', $destination_file), PATHINFO_EXTENSION);
+
+		$contents = file_get_contents($destination_file);
+
+		$meta = $this->removeMeta($contents, $ext);
+
+		$mod_file = str_replace(DIR_SITE, '', $mod_file);
+
+		foreach ($meta['mod'] as $mf) {
+			if ($mod_file === $mf) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public function apply($mod_file, $directives = array())
 	{
-
 		if (!is_file($mod_file)) {
 			$this->error['file'] = _l("Mod file was not found at %s", $mod_file);
 			return false;
@@ -42,6 +80,10 @@ class Mod extends Library
 				return false;
 			}
 
+			return true;
+		}
+
+		if ($this->isApplied($mod_file, array('destination' => $destination_file))) {
 			return true;
 		}
 

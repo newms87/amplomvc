@@ -40,13 +40,15 @@ $.fn.list_widget = function (view_id) {
 function update_list_widget() {
 	var $this = $(this);
 
-	if (!$this.attr('href')) {
+	var href = $this.attr('href') || $this.attr('data-href');
+
+	if (!href) {
 		return false;
 	}
 
 	$.colorbox.close();
 
-	var $list_widget = $this.closest('.widget-listing');
+	var $list_widget = $this.is('.widget-listing') ? $this : $this.closest('.widget-listing');
 
 	if (!$list_widget.length) {
 		$list_widget = $this.attr('data-listing') ? $($this.attr('data-listing')) : $($this.closest('[data-listing]').attr('data-listing'));
@@ -65,7 +67,7 @@ function update_list_widget() {
 
 	data.view_id = $list_widget.attr('data-view-id');
 
-	$.get($this.attr('href'), data, function (response) {
+	$.get(href, data, function (response) {
 		var $parent = $list_widget.closest('.listing');
 		$list_widget.siblings('.messages').remove();
 		$list_widget.replaceWith(response);

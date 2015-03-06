@@ -166,6 +166,7 @@ class Plugin extends Library
 		$version = !empty($directives['version']) ? $directives['version'] : '1.0';
 
 		if (!$this->Model_Plugin->save($plugin_id, array('version' => $version))) {
+			$this->error = $this->Model_Plugin->getError();
 			return false;
 		}
 
@@ -173,7 +174,9 @@ class Plugin extends Library
 
 		foreach ($changes as $file) {
 			if (!$this->activatePluginFile($name, $file)) {
-				$this->error[$name] = _l("Failed updating change for %s", $file);
+				$this->error[$name] = _l("Failed updating change for %s", str_replace(DIR_SITE, '', $file));
+			} else {
+				$this->error['changes'][$name] = _l("Added file %s", str_replace(DIR_SITE, '', $file));
 			}
 		}
 
@@ -201,18 +204,26 @@ class Plugin extends Library
 		foreach ($files as $key => &$file) {
 			$file = str_replace('\\', '/', $file->getPathName());
 
-			$live_file = str_replace($dir, DIR_SITE, $file);
+			$ext = pathinfo($file, PATHINFO_EXTENSION);
 
-			if (is_file($live_file)) {
-				$ext = pathinfo($live_file, PATHINFO_EXTENSION);
+			if ($ext === 'mod') {
+				$directives = array(
+					'destination' => str_replace($dir, '', $file),
+				);
 
-				if ($ext !== 'mod' || filemtime($live_file) === filemtime($file)) {
+				if ($this->mod->isApplied($file, $directives)) {
+					unset($files[$key]);
+				}
+			} else {
+				$live_file = str_replace($dir, DIR_SITE, $file);
+
+				if (is_file($live_file) && filemtime($live_file) === filemtime($file)) {
 					unset($files[$key]);
 				}
 			}
 		}
 
-		return $file;
+		return $files;
 	}
 
 	public function activatePluginFile($name, $file)

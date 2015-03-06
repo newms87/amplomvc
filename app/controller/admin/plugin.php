@@ -251,13 +251,13 @@ class App_Controller_Admin_Plugin extends Controller
 		$version = $this->plugin->upgrade($name);
 
 		if ($version && $this->plugin->hasError('changes')) {
-			message('notify', $this->plugin->getError());
+			message('notify', $this->plugin->fetchError('changes'));
 		} elseif ($version === true) {
 			message('success', _l("The changes for plugin %s have been integrated.", $name));
 		} elseif ($version) {
 			message('success', _l("The plugin %s was successfully upgraded to version %s!", $name, $version));
 		} else {
-			message('error', $this->plugin->getError());
+			message('error', $this->plugin->fetchError());
 		}
 
 		if ($this->is_ajax) {

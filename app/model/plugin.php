@@ -8,7 +8,11 @@ class App_Model_Plugin extends App_Model_Table
 
 	public function save($plugin_id, $plugin)
 	{
-		if (empty($plugin['name'])) {
+		if (isset($plugin['name'])) {
+			if (empty($plugin['name'])) {
+				$this->error['name'] = _l("Plugin name must be at least 1 character.");
+			}
+		} elseif (!$plugin_id) {
 			$this->error['name'] = _l("Plugin name is required.");
 		}
 
