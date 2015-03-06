@@ -1,0 +1,83 @@
+@color-main: #DA8227;
+@color-gray: #414042;
+@color-gray-light: #9D9FA2;
+
+.invoice-page {
+  .invoice-actions {
+
+  }
+
+  .invoice-preview {
+    margin-top: 1em;
+    background: #CCCCCC;
+    padding: 2em;
+    height: 100%;
+  }
+}
+
+table {
+  tr {
+    td {
+      text-align: center;
+      vertical-align: middle;
+      font-size: 14px;
+      background: white;
+      color: @color-gray;
+      padding: 5px;
+      border: 1px solid @color-gray-light;
+      width: 110px;
+    }
+  }
+
+  thead {
+    tr {
+      td {
+        font: 16px OpenSansBold;
+        background: @color-gray;
+        color: white;
+      }
+    }
+  }
+
+  & + table {
+    tr {
+      td {
+        border-top: 0;
+      }
+    }
+  }
+}
+
+#client-invoice {
+  background: white;
+  width: 850px;
+  height: 1100px;
+  font-size: 12px;
+  padding: 30px 50px;
+  margin: 30px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, .3), 3px -3px 5px rgba(0, 0, 0, .3), -3px 3px 5px rgba(0, 0, 0, .3), -3px -3px 5px rgba(0, 0, 0, .3);
+
+  .scopetech-details {
+    margin-top: 25px;
+
+    p {
+      line-height: 17px;
+    }
+  }
+
+  .invoice-info {
+    h2 {
+      font: 25px OpenSansBold;
+      color: @color-gray;
+      font-weight: bold;
+    }
+
+    .invoice-tables {
+      float: right;
+    }
+
+    .invoice-date {
+      margin-top: 15px;
+    }
+  }
+}

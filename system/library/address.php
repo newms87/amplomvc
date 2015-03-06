@@ -21,6 +21,10 @@ class Address extends Library
 			'address_2'  => '',
 		);
 
+		if (!empty($address['state'])) {
+			$address['zone'] = $address['state'];
+		}
+
 		$country_id = $address['country_id'];
 
 		if (isset($address_formats[$country_id])) {
@@ -70,7 +74,7 @@ class Address extends Library
 			$address['zone'] = $this->Model_Localisation_Zone->getZone($address['zone_id']);
 		}
 
-		if (!empty($address['zone'])) {
+		if (is_array($address['zone'])) {
 			$insertables['zone']      = $address['zone']['name'];
 			$insertables['zone_code'] = $address['zone']['code'];
 		}

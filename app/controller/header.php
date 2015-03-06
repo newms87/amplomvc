@@ -9,11 +9,7 @@ class App_Controller_Header extends Controller
 		}
 
 		//Add Styles
-		$style = $this->theme->getThemeStyle();
-
-		if ($style) {
-			$this->document->addStyle($style);
-		}
+		$this->document->addStyle($this->theme->getThemeStyle());
 
 		//Add jQuery from the CDN or locally
 		if (defined("AMPLO_PRODUCTION") && AMPLO_PRODUCTION) {

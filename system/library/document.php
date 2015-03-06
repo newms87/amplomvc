@@ -346,6 +346,11 @@ class Document extends Library
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
 	{
+		if (!$href) {
+			$this->error['href'] = _l("You must specify a style resource to add.");
+			return false;
+		}
+
 		if (preg_match("/\\.less$/", $href)) {
 			if (!is_file($href)) {
 				$href = str_replace(URL_SITE, DIR_SITE, $href);
@@ -354,21 +359,25 @@ class Document extends Library
 			if (is_file($href)) {
 				$href = $this->compileLess($href, slug(str_replace(DIR_SITE, '', $href), '-'));
 			}
-		}
 
-		if ($href) {
-			$file = str_replace(URL_SITE, DIR_SITE, $href);
-
-			if (is_file($file)) {
-				$href .= '?v=' . filemtime($file);
+			if (!$href) {
+				return false;
 			}
-
-			$this->styles[md5($href)] = array(
-				'href'  => $href,
-				'rel'   => $rel,
-				'media' => $media
-			);
 		}
+
+		$file = str_replace(URL_SITE, DIR_SITE, $href);
+
+		if (is_file($file)) {
+			$href .= '?v=' . filemtime($file);
+		}
+
+		$this->styles[md5($href . $rel . $media)] = array(
+			'href'  => $href,
+			'rel'   => $rel,
+			'media' => $media
+		);
+
+		return true;
 	}
 
 	public function getStyles()
@@ -414,7 +423,8 @@ class Document extends Library
 		$this->ac_vars[$var] = $value;
 	}
 
-	public function minifyJs($content) {
+	public function minifyJs($content)
+	{
 		require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
 		return JShrink\Minifier::minify($content);
 	}
