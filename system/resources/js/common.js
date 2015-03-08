@@ -29,11 +29,11 @@ var async_load = {
 	code_mirror: 'admin/common/codemirror',
 	list_widget: 'system/resources/js/listings.js',
 	ac_template: 'system/resources/js/ac_template.js',
-	jqzoom: 'system/resources/js/jquery/jqzoom/jqzoom.js'
+	jqzoom:      'system/resources/js/jquery/jqzoom/jqzoom.js'
 }
 
 for (var al in async_load) {
-	$.fn[al] = function(view_id) {
+	$.fn[al] = function (view_id) {
 		var al = arguments.callee.fn;
 
 		if (!$.sq[al]) {
@@ -1126,21 +1126,32 @@ function content_loaded(is_ajax) {
 		}
 	}
 
-	register_ajax_calls(is_ajax);
-	register_confirms();
-	register_colorbox();
-	register_form_editors();
+	for (var f in arguments.callee.fn) {
+		fn = arguments.callee.fn[f];
+		if (typeof fn === 'function') {
+			fn.call(this, is_ajax);
+		}
+	}
 }
 
-$(document).ready(function () {
-	$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
-		if (!ui.item.value && ui.item.href) {
-			window.open(ui.item.href);
-		}
-	});
+content_loaded.fn = {};
 
-	content_loaded();
-})
+content_loaded.fn['ajax_calls'] = register_ajax_calls;
+content_loaded.fn['confirms'] = register_confirms;
+content_loaded.fn['colorbox'] = register_colorbox;
+content_loaded.fn['form_editors'] = register_form_editors;
+
+$(document)
+	.ready(function () {
+		$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
+			if (!ui.item.value && ui.item.href) {
+				window.open(ui.item.href);
+			}
+		});
+
+		content_loaded();
+	})
+
 	.keydown(function (e) {
 		if (e.ctrlKey && (e.which == 83)) {
 			$('form.ctrl-save').submit_ajax_form();

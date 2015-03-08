@@ -11,31 +11,14 @@ class App_Controller_Admin_Settings_Cron extends Controller
 	{
 		set_page_info('title', _l("Automated Tasks"));
 
-		if (IS_POST && $this->validate()) {
-			$this->config->save('cron', 'cron_tasks', $_POST, false);
-
-			//TODO: Implement full cron control from this code:
-			/*
-			* 		$output = shell_exec('crontab -l');
-		echo $output;
-		file_put_contents('/tmp/crontab.txt', $output.'* * * * * NEW_CRON'.PHP_EOL);
-		echo exec('crontab /tmp/crontab.txt');
-		echo exec('rm -fv /tmp/crontab.txt');
-			*/
-
-			message('success', _l('Successfully updated the Automated Tasks!'));
-
-			redirect('admin/settings/cron');
-		}
-
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l('System Settings'), site_url('admin/settings'));
 		breadcrumb(_l('Automated Tasks'), site_url('admin/settings/cron'));
 
-		if (IS_POST) {
-			$tasks = $_POST;
-		} else {
+		$tasks = $_POST;
+
+		if (!IS_POST) {
 			$tasks = $this->config->load('cron', 'cron_tasks');
 		}
 
@@ -91,13 +74,31 @@ class App_Controller_Admin_Settings_Cron extends Controller
 		);
 
 		//Action Buttons
-		$data['save']     = site_url('admin/settings/cron');
+		$data['save']     = site_url('admin/settings/cron/save');
 		$data['cancel']   = site_url('admin/settings');
 		$data['run_cron'] = site_url('', 'run_cron');
 		$data['activate'] = site_url('admin/settings/cron/activate');
 
 		//Render
 		output($this->render('settings/cron', $data));
+	}
+
+	public function save()
+	{
+		$this->config->save('cron', 'cron_tasks', $_POST, false);
+
+		//TODO: Implement full cron control from this code:
+		/*
+		* 		$output = shell_exec('crontab -l');
+	echo $output;
+	file_put_contents('/tmp/crontab.txt', $output.'* * * * * NEW_CRON'.PHP_EOL);
+	echo exec('crontab /tmp/crontab.txt');
+	echo exec('rm -fv /tmp/crontab.txt');
+		*/
+
+		message('success', _l('Successfully updated the Automated Tasks!'));
+
+		redirect('admin/settings/cron');
 	}
 
 	public function activate()

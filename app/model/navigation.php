@@ -476,14 +476,6 @@ class App_Model_Navigation extends App_Model_Table
 						'display_name' => 'Views',
 						'path'         => 'admin/view',
 					),
-					'system_url_alias'         => array(
-						'display_name' => 'URL Alias',
-						'path'         => 'admin/settings/url_alias',
-					),
-					'system_cron'              => array(
-						'display_name' => 'Cron',
-						'path'         => 'admin/settings/cron',
-					),
 					'system_navigation'        => array(
 						'display_name' => 'Navigation',
 						'path'         => 'admin/navigation',

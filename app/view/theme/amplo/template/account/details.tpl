@@ -138,8 +138,6 @@
 <script type="text/javascript">
 	var addresses = <?= json_encode($addresses); ?>;
 
-	console.log(addresses);
-
 	$('.edit-address').click(function () {
 		var $editor = $(this).closest('.form-editor');
 		var address_id = $editor.attr('data-address-id');
@@ -147,9 +145,6 @@
 		if (!$editor.find('form').length) {
 			var $new_form = $('.new-address-box form').clone(true);
 			$new_form.attr('action', $new_form.attr('action') + '?address_id=' + address_id);
-
-			console.log(addresses[address_id]);
-			$new_form
 			$editor.append($new_form);
 		}
 	});
