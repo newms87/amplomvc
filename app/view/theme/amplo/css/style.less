@@ -1080,6 +1080,7 @@ section.page {
       padding: 1em;
       width: 240px;
       height: 200px;
+      max-width: 100%;
       cursor: pointer;
 
       &:before {
@@ -1144,6 +1145,10 @@ section.page {
 
   & + .new-method {
     .height-animate;
+
+    &.show {
+      max-height: 150em;
+    }
 
     h3 {
       color: @color-secondary;
