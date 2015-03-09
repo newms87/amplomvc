@@ -292,10 +292,16 @@
 
 	$('.block-widget-view').ac_template('v-list', {defaults: <?= json_encode($views['__ac_template__']); ?>});
 
-	$('.add-view').click(function () {
+	var $add_view = $('.add-view').click(function () {
 		var $vlist = $('.block-widget-view .widget-view-list').ac_template('v-list', 'add');
 		if ($vlist.find('[name=view_listing_id]').val()) {
 			$vlist.find('.show-view').click();
 		}
-	});
+	})
+
+	<? if (count($views) === 1) { ?>
+		$(document).on('ac_template', function(){
+			$add_view.click();
+		});
+	<? } ?>
 </script>

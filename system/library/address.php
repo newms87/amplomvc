@@ -60,7 +60,7 @@ class Address extends Library
 				$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
 			}
 
-			if (!empty($address['country'])) {
+			if (is_array($address['country'])) {
 				$insertables['country']    = $address['country']['name'];
 				$insertables['iso_code_2'] = $address['country']['iso_code_2'];
 				$insertables['iso_code_3'] = $address['country']['iso_code_3'];

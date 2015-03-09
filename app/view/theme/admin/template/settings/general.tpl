@@ -154,6 +154,23 @@
 						</td>
 					</tr>
 					<tr>
+						<td>
+							{{International Site}}
+							<span class="help">{{Include Country in address forms / format}}</span>
+						</td>
+						<td>
+							<?= build(array(
+								'type'   => 'radio',
+								'name'   => 'site_international',
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}",
+								),
+								'select' => $site_international,
+							)); ?>
+						</td>
+					</tr>
+					<tr>
 						<td>{{Country:}}</td>
 						<td>
 							<?=
@@ -695,7 +712,8 @@
 							<div class="ga-cross-domain">
 								<h3>{{Use this section to enable GA Cross-domain analytics}}</h3>
 								<span class="help">
-									{{Cross-domain analytics is used to track several different <b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}
+									{{Cross-domain analytics is used to track several different
+									<b>top-level</b> domains in the same place. (eg: myprimaydomain.com and myblogdomain.com)}}
 									<br/>
 									<a target="_blank" href="https://support.google.com/analytics/answer/1034342">{{Learn more about Cross-domain Tracking}}</a>
 								</span>

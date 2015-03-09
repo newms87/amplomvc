@@ -38,6 +38,7 @@ class App_Model_Settings extends Model
 		'config_default_layout_id'                => '',
 		'site_theme'                              => 'amplo',
 		'site_address_format'                     => '',
+		'site_international'                      => 0,
 		'config_country_id'                       => 223,
 		'config_zone_id'                          => 8,
 		'config_language'                         => 1,

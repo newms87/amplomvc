@@ -23,31 +23,33 @@ String.prototype.str_replace = function (find, replace) {
 };
 
 //Async Load on call
-$.sq = {}
+$ac.alq = {};
 
-var async_load = {
+$ac.al = $.extend($ac.al || {}, {
 	code_mirror: 'admin/common/codemirror',
 	list_widget: 'system/resources/js/listings.js',
 	ac_template: 'system/resources/js/ac_template.js',
 	jqzoom:      'system/resources/js/jquery/jqzoom/jqzoom.js'
-}
+});
 
-for (var al in async_load) {
+for (var al in $ac.al) {
 	$.fn[al] = function (view_id) {
 		var al = arguments.callee.fn;
 
-		if (!$.sq[al]) {
-			$.sq[al] = [];
+		if (!$ac.alq[al]) {
+			$ac.alq[al] = [];
 
-			$.getScript($ac.site_url + async_load[al], function () {
-				for (var l in $.sq[al]) {
-					var q = $.sq[al][l];
+			$.getScript($ac.site_url + $ac.al[al], function () {
+				for (var l in $ac.alq[al]) {
+					var q = $ac.alq[al][l];
 					$.fn[al].apply(q.me, q.args);
 				}
+
+				$(document).trigger(al);
 			});
 		}
 
-		$.sq[al].push({me: this, args: arguments});
+		$ac.alq[al].push({me: this, args: arguments});
 	};
 
 	$.fn[al].fn = al;

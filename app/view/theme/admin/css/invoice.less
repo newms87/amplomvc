@@ -20,7 +20,7 @@ table {
     td {
       text-align: center;
       vertical-align: middle;
-      font-size: 14px;
+      font-size: 12px;
       background: white;
       color: @color-gray;
       padding: 5px;
@@ -32,9 +32,10 @@ table {
   thead {
     tr {
       td {
-        font: 16px OpenSansBold;
+        font: 14px OpenSansBold;
         background: @color-gray;
         color: white;
+        padding: 3px;
       }
     }
   }
@@ -77,7 +78,102 @@ table {
     }
 
     .invoice-date {
-      margin-top: 15px;
+      margin-top: 10px;
+    }
+  }
+
+  .billing-info {
+    margin-top: 32px;
+
+    .bill-to {
+      .invoice-terms {
+        width: 250px;
+
+        tr {
+          td {
+            padding: 5px;
+            text-align: left;
+            line-height: 18px;
+          }
+        }
+      }
+    }
+
+    .bill-amount {
+      .invoice-amount {
+        display: inline-block;
+
+        thead {
+          tr {
+            td {
+              background: @color-main;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cut-separator {
+    margin: 6em 0 2em 0;
+
+    .text {
+      padding-bottom: 1em;
+      color: @color-gray-light;
+      border-bottom: 2px dashed @color-gray-light;
+    }
+
+    img {
+      position: absolute;
+      left: -7px;
+      top: 9px;
+    }
+  }
+
+  .invoice-list {
+    table.line-items {
+      border-bottom: 1px solid @color-gray-light;
+      width: 100%;
+
+      .quantity, .date {
+        width: 10%;
+      }
+
+      .rate {
+        width: 10%;
+      }
+
+      .amount {
+        width: 20%;
+      }
+
+      .project {
+        width: 50%;
+      }
+
+      tbody {
+        tr {
+          .rate, .amount {
+            text-align: right;
+          }
+
+          .project {
+            text-align: left;
+          }
+
+          td {
+            border-top: none;
+            border-bottom: none;
+          }
+
+          &:nth-child(even) {
+            td {
+              background: #F2F3F3;
+            }
+          }
+        }
+      }
     }
   }
 }

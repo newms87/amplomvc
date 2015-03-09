@@ -1,4 +1,4 @@
-@page { size: landscape;}
+//@page { size: landscape;}
 
 #header, #menu, #footer {
   display: none;
@@ -6,6 +6,7 @@
 
 .invoice-page {
   background: white;
+
   .invoice-actions {
     display: none;
   }
@@ -22,4 +23,8 @@
   box-shadow: none;
   margin: 0;
   padding: 0;
+}
+
+table tr td {
+  -webkit-print-color-adjust: exact;
 }
