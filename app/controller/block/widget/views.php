@@ -124,7 +124,11 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 					parse_str($listing['query'], $listing['query']);
 				}
 
-				$view['query'] = $listing['query'] + $view['query'];
+				if (is_string($settings['query'])) {
+					parse_str($settings['query'], $settings['query']);
+				}
+
+				$view['query'] = $settings['query'] + $listing['query'] + $view['query'];
 
 				$_GET     = $view['query'];
 				$_REQUEST = $view['query'];

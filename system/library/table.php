@@ -252,6 +252,31 @@ class Table extends Library
 							$column['filter_value'] = array($column['filter_value']);
 						}
 						break;
+
+					case 'pk':
+					case 'pk-int':
+					case 'int':
+					case 'float':
+					case 'decimal':
+						if (is_numeric($column['filter_value'])) {
+							$column['filter_value'] = array(
+								'low'  => $column['filter_value'],
+								'high' => $column['filter_value'],
+							);
+						}
+						break;
+
+					case 'date':
+					case 'time':
+					case 'datetime':
+						if (is_string($column['filter_value'])) {
+							$column['filter_value'] = array(
+								'start' => $column['filter_value'],
+								'end'   => $column['filter_value'],
+							);
+						}
+						break;
+
 				}
 			}
 

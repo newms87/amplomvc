@@ -38,14 +38,9 @@ class App_Controller_Admin_User extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$requested_cols = $this->request->get('columns');
-
-		$columns = $this->Model_User->getColumns($requested_cols);
-
-		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('username', 'ASC');
-		$filter = _get('filter', array());
+		$sort    = $this->sort->getQueryDefaults('username', 'ASC');
+		$filter  = (array)_get('filter');
+		$columns = $this->Model_User->getColumns((array)_request('columns'));
 
 		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, null, true, 'user_id');
 
@@ -178,8 +173,12 @@ class App_Controller_Admin_User extends Controller
 
 	public function batch_action()
 	{
-		foreach (_post('batch', array()) as $user_id) {
-			switch (_post('action')) {
+		$batch  = (array)_request('batch');
+		$action = _request('action');
+		$value  = _request('value');
+
+		foreach ($batch as $user_id) {
+			switch ($action) {
 				case 'enable':
 					$this->Model_User->save($user_id, array('status' => 1));
 					break;

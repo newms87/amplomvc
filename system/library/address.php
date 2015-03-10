@@ -60,7 +60,7 @@ class Address extends Library
 				$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
 			}
 
-			if (is_array($address['country'])) {
+			if ($address['country'] && is_array($address['country'])) {
 				$insertables['country']    = $address['country']['name'];
 				$insertables['iso_code_2'] = $address['country']['iso_code_2'];
 				$insertables['iso_code_3'] = $address['country']['iso_code_3'];
@@ -74,7 +74,7 @@ class Address extends Library
 			$address['zone'] = $this->Model_Localisation_Zone->getZone($address['zone_id']);
 		}
 
-		if (is_array($address['zone'])) {
+		if ($address['zone'] && is_array($address['zone'])) {
 			$insertables['zone']      = $address['zone']['name'];
 			$insertables['zone_code'] = $address['zone']['code'];
 		}
