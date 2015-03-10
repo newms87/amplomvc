@@ -25,7 +25,7 @@
 		<div class="col lg-1 lg-visible"></div>
 
 		<div class="contact-form col xs-12 lg-5 top">
-			<form action="<?= site_url('contact/submit'); ?>" method="post" class="ajax-form">
+			<form action="<?= site_url('contact/submit'); ?>" method="post">
 				<div class="form-item">
 					<input type="text" name="name" value="<?= $name; ?>" placeholder="{{*Name}}"/>
 				</div>
@@ -55,6 +55,24 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$('.contact-form form').submit(function() {
+		var $this = $(this);
+		$this.find('[data-loading]').loading();
+
+		$.post($this.attr('action'), $this.serialize(), function(response) {
+			$this.find('[data-loading]').loading('stop');
+			$this.show_msg(response);
+
+			if (response.success) {
+				$this.find('[name=message]').val('');
+			}
+		});
+
+		return false;
+	});
+</script>
 
 <?
 $lat = (float)option('site_address_lat');
