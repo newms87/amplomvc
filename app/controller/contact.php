@@ -27,7 +27,7 @@ class App_Controller_Contact extends Controller
 	public function submit()
 	{
 		if ($this->Model_Contact->sendMessage($_POST)) {
-			message('success', _l("Your message was sent successfully!"));
+			message('success', _l("Thank you %s! Your message has been received.", _post('name')));
 		} else {
 			message('error', $this->Model_Contact->getError());
 		}
