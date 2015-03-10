@@ -218,6 +218,7 @@ class Image extends Library
 			DIR_IMAGE,
 			DIR_SITE,
 			DIR_DOWNLOAD,
+			'://',
 		), '', $image));
 
 		//if the background is transparent and the mime type is not png or gif, change to png
