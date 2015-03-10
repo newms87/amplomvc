@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Localisation_Country extends Model
+class App_Model_Localisation_Country extends App_Model_Table
 {
+	protected $table = 'country', $primary_key = 'country_id';
+	
 	public function addCountry($country)
 	{
 		clear_cache('country');
