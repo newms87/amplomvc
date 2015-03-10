@@ -216,7 +216,8 @@ class Image extends Library
 		//Resolve image type and new image name
 		$info = pathinfo(str_replace(array(
 			DIR_IMAGE,
-			DIR_SITE
+			DIR_SITE,
+			DIR_DOWNLOAD,
 		), '', $image));
 
 		//if the background is transparent and the mime type is not png or gif, change to png
@@ -232,7 +233,7 @@ class Image extends Library
 			$extension = $info['extension'];
 		}
 
-		$new_image_path = 'cache/' . ($info['dirname'] ? $info['dirname'] . '/' : '') . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
+		$new_image_path = 'cache/' . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
