@@ -29,7 +29,12 @@
 			<?=
 			block('widget/views', null, array(
 				'path'  => 'admin/order/listing',
-				'query' => $customer['customer_id'] ? array('filter' => array('client_id' => $customer['customer_id'])) : '',
+				'query' => $customer['customer_id'] ? array(
+					'filter' => array(
+						'client_id' => $customer['customer_id'],
+						'invoiced'  => 0,
+					)
+				) : '',
 				'group' => 'Client Orders',
 			)); ?>
 		</div>

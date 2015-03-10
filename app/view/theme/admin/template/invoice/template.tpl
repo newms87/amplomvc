@@ -111,9 +111,9 @@
 					<thead>
 					<tr>
 						<td class="date">{{Date}}</td>
-						<td class="project">{{Project}}</td>
-						<td class="quantity">{{Quantity}}</td>
-						<td class="rate">{{Rate}}</td>
+						<td class="user-id">{{User}}</td>
+						<td class="item-label">{{Project}}</td>
+						<td class="type">{{Type}}</td>
 						<td class="amount">{{Amount}}</td>
 					</tr>
 					</thead>
@@ -122,9 +122,9 @@
 					<? foreach ($orders as $order) { ?>
 						<tr>
 							<td class="date"><?= format('date', $order['date_created'], 'm/d/Y'); ?></td>
-							<td class="project"><?= $order['name']; ?></td>
-							<td class="quantity">1</td>
-							<td class="rate"><?= format('currency', $order['price']); ?></td>
+							<td class="user-id"><?= $this->Model_Client->getField($order['client_id'], 'username'); ?></td>
+							<td class="item-label"><?= $order['name']; ?></td>
+							<td class="type"><?= Tracescope::getScopeType($order['scope_type_id']); ?></td>
 							<td class="amount"><?= format('currency', $order['price']); ?></td>
 						</tr>
 					<? } ?>
