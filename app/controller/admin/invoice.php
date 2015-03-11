@@ -48,12 +48,14 @@ class App_Controller_Admin_Invoice extends Controller
 			$columns['customer_id'] = 1;
 		}
 
+		$columns['status'] = 1;
+
 		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, null, true, 'invoice_id');
 
 		foreach ($invoices as $invoice_id => &$invoice) {
 			$actions = array();
 
-			if (user_can('w', 'admin/invoice/paid')) {
+			if (user_can('w', 'admin/invoice/paid') && $invoice['status'] != App_Model_Invoice::STATUS_PAID) {
 				$actions['paid'] = array(
 					'text' => _l("Paid"),
 					'href' => site_url('admin/invoice/paid', 'invoice_id=' . $invoice_id),
