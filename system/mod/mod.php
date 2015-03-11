@@ -17,7 +17,7 @@ class System_Mod_Mod {
 		$this->error = array();
 	}
 
-	public function apply($source, $mod)
+	public function apply($source, $mod, $file_type, $meta)
 	{
 		return file_get_contents($mod);
 	}

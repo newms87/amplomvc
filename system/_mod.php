@@ -49,6 +49,11 @@ function _mod($file)
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
 	if (is_file($file . '.mod')) {
+		if (filemtime($file . '.mod') < filemtime($file)) {
+			global $registry;
+			$registry->get('mod')->reapply($file . '.mod');
+		}
+
 		$file = $file . '.mod';
 	}
 

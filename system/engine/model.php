@@ -2,7 +2,7 @@
 
 abstract class Model
 {
-	static $model = array();
+	static $model = array(), $model_history;
 
 	protected $t, $db, $error = array();
 
@@ -19,9 +19,13 @@ abstract class Model
 
 	public function __construct()
 	{
-		global $registry;
-
+		global $registry, $model_history;
 		$registry->set(strtolower(get_class($this)), $this);
+
+		if (!self::$model_history) {
+			self::$model_history = new Model_T;
+			self::$model_history->tables = & $model_history;
+		}
 
 		//use default database
 		//(Note: setting our own $db property allows us to use a different database for new Model instances)
@@ -217,8 +221,6 @@ abstract class Model
 
 	protected function insert($table, $data)
 	{
-		global $model_history;
-
 		$t = $this->t[$table];
 
 		$this->actionFilter($t, 'insert', $data);
@@ -253,7 +255,7 @@ abstract class Model
 			}
 		}
 
-		if ($model_history && in_array($table, $model_history)) {
+		if (isset(self::$model_history[$table])) {
 			$this->history($t, $row_id, 'insert', $data, true);
 		}
 
@@ -262,8 +264,6 @@ abstract class Model
 
 	protected function update($table, $data, $where = null)
 	{
-		global $model_history;
-
 		$t = $this->t[$table];
 
 		$this->actionFilter($t, 'update', $data, $where);
@@ -309,7 +309,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && $update_id !== true && in_array($table, $model_history)) {
+		if ($update_id !== true && isset(self::$model_history[$table])) {
 			$this->history($t, $update_id, 'update', $data, true);
 		}
 
@@ -318,8 +318,6 @@ abstract class Model
 
 	protected function delete($table, $where = null)
 	{
-		global $model_history;
-
 		$t = $this->t[$table];
 
 		$this->actionFilter($t, 'delete', $data);
@@ -338,7 +336,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($model_history && in_array($table, $model_history)) {
+		if (isset(self::$model_history[$table])) {
 			$delete_id = false;
 
 			if (is_array($where)) {

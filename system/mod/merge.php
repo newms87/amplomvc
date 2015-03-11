@@ -2,14 +2,10 @@
 
 class System_Mod_Merge extends System_Mod_Mod
 {
-
-	public function apply($source, $mod)
+	public function apply($source, $mod_file, $file_type, $meta)
 	{
-		return $this->fileMerge($source, $mod);
-	}
+		$default_comm_mode = $file_type;
 
-	protected function fileMerge($source, $mod_file)
-	{
 		$comments  = array(
 			'php'  => array(
 				'#',
@@ -18,13 +14,26 @@ class System_Mod_Merge extends System_Mod_Mod
 			'html' => array(
 				"<?php #",
 				"?>"
-			)
+			),
+			'tpl' => array(
+				"<?php #",
+				"?>"
+			),
+			'css' => array(
+				"/*",
+				"*/"
+			),
+			'less' => array(
+				"//",
+				"",
+			),
 		);
-		$comm_mode = false;
+
+		$comm_mode = $default_comm_mode;
 
 		// Include two sample files for comparison
-		$original      = explode("\n", str_replace("\n\n", "\n", str_replace("\r", "\n", file_get_contents($source))));
-		$modifications = explode("\n", str_replace("\n\n", "\n", str_replace("\r", "\n", file_get_contents($mod_file))));
+		$original      = explode("\n", str_replace("\r", "\n", str_replace("\r\n", "\n", file_get_contents($source))));
+		$modifications = explode("\n", str_replace("\r", "\n", str_replace("\r\n", "\n", file_get_contents($mod_file))));
 
 		$mod_path = str_replace(DIR_SITE, '', $mod_file);
 
@@ -129,7 +138,7 @@ class System_Mod_Merge extends System_Mod_Mod
 				$io_mode = 'add';
 
 				//check if comments were specified and which mode
-				$comm_mode = false;
+				$comm_mode = $default_comm_mode;
 				foreach (array_keys($comments) as $comm) {
 					if (strpos($m, '{' . $comm . '}') > 0) {
 						$comm_mode = $comm;

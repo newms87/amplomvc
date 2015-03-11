@@ -250,14 +250,24 @@ class App_Controller_Admin_Plugin extends Controller
 
 		$version = $this->plugin->upgrade($name);
 
-		if ($version && $this->plugin->hasError('changes')) {
-			message('notify', $this->plugin->fetchError('changes'));
-		} elseif ($version === true) {
+		$changes = $this->plugin->fetchError('changes');
+		$errors = $this->plugin->fetchError();
+
+		if ($version === true) {
 			message('success', _l("The changes for plugin %s have been integrated.", $name));
 		} elseif ($version) {
 			message('success', _l("The plugin %s was successfully upgraded to version %s!", $name, $version));
 		} else {
-			message('error', $this->plugin->fetchError());
+			message('error', $errors);
+		}
+
+		if ($changes) {
+			message('success', $changes);
+		}
+
+		if ($version && $errors) {
+			message('error', _l("There were some problems during the upgrade. Only a partial update has been applied"));
+			message('error', $errors);
 		}
 
 		if ($this->is_ajax) {

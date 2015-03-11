@@ -11,7 +11,7 @@ class Mod extends Library
 
 		$directives = get_comment_directives($mod_file) + $directives;
 
-		$destination_file = !empty($directives['destination']) ? DIR_SITE . trim($directives['destination']) : false;
+		$destination_file = !empty($directives['destination']) ? DIR_SITE . preg_replace("#^" . DIR_SITE . "#", '', trim($directives['destination'])) : false;
 
 		if (!$destination_file) {
 			$this->error['destination'] = _l("Destination file not set. No way to check if mod file %s has been applied.", $mod_file);
@@ -20,8 +20,13 @@ class Mod extends Library
 
 		if (!is_file($destination_file)) {
 			return false;
-		} elseif (filemtime($destination_file) === filemtime($mod_file)) {
-			return true;
+		} else {
+			$destination_filemtime = filemtime($destination_file);
+			$mod_file_filemtime    = filemtime($mod_file);
+
+			if ($destination_filemtime === $mod_file_filemtime) {
+				return true;
+			}
 		}
 
 		$ext = pathinfo(preg_replace("/\\.mod$/", '', $destination_file), PATHINFO_EXTENSION);
@@ -30,11 +35,17 @@ class Mod extends Library
 
 		$meta = $this->removeMeta($contents, $ext);
 
+		if (!empty($meta['src'])) {
+			if (filemtime(DIR_SITE . $meta['src']) > $destination_filemtime) {
+				return false;
+			}
+		}
+
 		$mod_file = str_replace(DIR_SITE, '', $mod_file);
 
 		foreach ($meta['mod'] as $mf) {
 			if ($mod_file === $mf) {
-				return true;
+				return $destination_filemtime >= $mod_file_filemtime;
 			}
 		}
 
@@ -92,10 +103,6 @@ class Mod extends Library
 			return false;
 		}
 
-		if (is_file($destination_file)) {
-			$source_file = $destination_file;
-		}
-
 		$instance = $this->load('system/mod/' . $algorithm);
 
 		if (!$instance) {
@@ -103,22 +110,42 @@ class Mod extends Library
 			return false;
 		}
 
-		$contents = $instance->apply($source_file, $mod_file);
+		$ext      = pathinfo(preg_replace("/\\.mod$/", '', $source_file), PATHINFO_EXTENSION);
+		$rel_path = str_replace(DIR_SITE, '', $mod_file);
+
+		$meta = array();
+
+		if (is_file($destination_file)) {
+			$contents = file_get_contents($destination_file);
+
+			$meta = $this->removeMeta($contents, $ext);
+
+			//If this mod has already been applied, reapply the whole file
+			if (array_search($rel_path, $meta['mod']) !== false) {
+				return $this->reapply($destination_file);
+			} else {
+				//Save without Meta data
+				file_put_contents($destination_file, $contents);
+
+				$source_file   = $destination_file;
+				$meta['mod'][] = $rel_path;
+			}
+		} else {
+			$meta['mod'] = array($rel_path);
+		}
+
+		$contents = $instance->apply($source_file, $mod_file, $ext, $meta);
 
 		if (!$contents) {
 			$this->error = $instance->getError();
 			return false;
 		}
 
-		$ext = pathinfo(preg_replace("/\\.mod$/", '', $mod_file), PATHINFO_EXTENSION);
-
-		$meta = $this->removeMeta($contents, $ext);
-
 		if (empty($meta['source'])) {
 			$meta['source'] = str_replace(DIR_SITE, '', $source_file);
 		}
 
-		$meta['mod'][] = str_replace(DIR_SITE, '', $mod_file);
+		krsort($meta);
 
 		$this->addMeta($contents, $meta, $ext);
 
@@ -148,6 +175,34 @@ class Mod extends Library
 			array_walk_recursive($directives['include'], $set_file_root);
 		}
 		*/
+	}
+
+	public function reapply($destination_file)
+	{
+		$contents = file_get_contents($destination_file);
+		$meta     = $this->removeMeta($contents);
+
+		if (empty($meta['source'])) {
+			$this->error['source'] = _l("There is no source file for the mod destination file %s", $destination_file);
+			return false;
+		}
+
+		if (empty($meta['mod'])) {
+			$this->error['mod'] = _l("There are no mods to apply for mod destination file %s", $destination_file);
+			return false;
+		}
+
+		@unlink($destination_file);
+
+		foreach ($meta['mod'] as $mod) {
+			$mod_directives = array(
+				'source' => $meta['source'],
+			);
+
+			$this->apply(DIR_SITE . $mod, $mod_directives);
+		}
+
+		return true;
 	}
 
 	public function unapply($mod_file, $directives = array())

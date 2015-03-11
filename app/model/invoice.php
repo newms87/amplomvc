@@ -32,6 +32,25 @@ class App_Model_Invoice extends App_Model_Table
 		$invoice['date_updated'] = $this->date->now();
 
 		if ($invoice_id) {
+			$orig = $this->getRecord($invoice_id);
+
+			if (!$orig) {
+				$this->error['orig'] = _l("Original invoice %s was not found", $invoice_id);
+				return false;
+			}
+
+			if (isset($invoice['status'])) {
+				if ($orig['status'] == $invoice['status']) {
+					unset($invoice['status']);
+				} else {
+					switch ($invoice['status']) {
+						case self::STATUS_PAID:
+							$invoice['date_paid'] = $this->date->now();
+							break;
+					}
+				}
+			}
+
 			$invoice_id = $this->update($this->table, $invoice, $invoice_id);
 		} else {
 			$invoice['date_created'] = $this->date->now();
@@ -41,18 +60,29 @@ class App_Model_Invoice extends App_Model_Table
 			}
 
 			if (empty($invoice['date_due'])) {
-				$invoice['date_due'] = $this->date->add(null, option('invoice_due_date', '14 days'));
+				$invoice['date_due'] = $this->date->add(null, option('invoice_due_date', '30 days'));
 			}
 
 			if (!isset($invoice['number'])) {
 				$invoice['number'] = $this->generateNumber();
 			}
 
+			//Calculate the amount if not set and there are a batch of orders.
+			if (!isset($invoice['amount']) && !empty($invoice['batch'])) {
+				$invoice['amount'] = 0;
+
+				$orders = $this->Model_Order->getRecords(null, array('order_id' => $invoice['batch']));
+
+				foreach ($orders as $order) {
+					$invoice['amount'] += $order['price'];
+				}
+			}
+
 			$invoice_id = $this->insert($this->table, $invoice);
 		}
 
-		if ($invoice_id && $meta_type) {
-			if (!empty($invoice['batch'])) {
+		if ($invoice_id) {
+			if ($meta_type && !empty($invoice['batch'])) {
 				foreach ($invoice['batch'] as $line_item) {
 					$this->Model_Meta->set($meta_type, $line_item, 'invoiced', $invoice_id);
 				}
@@ -87,13 +117,17 @@ class App_Model_Invoice extends App_Model_Table
 	public function getColumns($filter = array())
 	{
 		$columns = array(
-			'status' => array(
+			'status'   => array(
 				'type'         => 'select',
 				'display_name' => _l("Status"),
 				'build'        => array(
 					'type' => 'multiselect',
 					'data' => self::$statuses,
 				),
+			),
+			'customer' => array(
+				'type'         => 'text',
+				'display_name' => _l("Customer"),
 			),
 		);
 

@@ -44,10 +44,21 @@ class App_Controller_Admin_Invoice extends Controller
 		$filter  = (array)_get('filter');
 		$columns = $this->Model_Invoice->getColumns((array)_request('columns'));
 
+		if (isset($columns['customer']) && !isset($columns['customer_id'])) {
+			$columns['customer_id'] = 1;
+		}
+
 		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, null, true, 'invoice_id');
 
 		foreach ($invoices as $invoice_id => &$invoice) {
 			$actions = array();
+
+			if (user_can('w', 'admin/invoice/paid')) {
+				$actions['paid'] = array(
+					'text' => _l("Paid"),
+					'href' => site_url('admin/invoice/paid', 'invoice_id=' . $invoice_id),
+				);
+			}
 
 			if (user_can('r', 'admin/invoice/generate')) {
 				$actions['view'] = array(
@@ -71,6 +82,11 @@ class App_Controller_Admin_Invoice extends Controller
 			}
 
 			$invoice['actions'] = $actions;
+
+			if (isset($columns['customer'])) {
+				$customer            = $this->Model_Customer->getRecord($invoice['customer_id']);
+				$invoice['customer'] = $customer ? $customer['username'] : _l('No Customer Record');
+			}
 		}
 		unset($invoice);
 
@@ -124,10 +140,7 @@ class App_Controller_Admin_Invoice extends Controller
 		$invoice += $defaults;
 
 		if ($customer_id) {
-			$customer = $this->Model_Client->getRecord($customer_id);
-			if ($customer) {
-				$customer['customer_id'] = $customer['client_id'];
-			}
+			$customer = $this->Model_Customer->getRecord($customer_id);
 		} else {
 			$customer = array();
 		}
@@ -176,6 +189,21 @@ class App_Controller_Admin_Invoice extends Controller
 			post_redirect('admin/invoice/form');
 		} else {
 			redirect('admin/invoice/generate', 'invoice_id=' . $invoice_id);
+		}
+	}
+
+	public function paid()
+	{
+		if ($this->Model_Invoice->save(_get('invoice_id'), array('status' => App_Model_Invoice::STATUS_PAID))) {
+			message('success', _l("The invoice has been paid. The customer's account has been updated."));
+		} else {
+			message('error', $this->Model_Invoice->getError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('admin/invoice');
 		}
 	}
 
@@ -263,40 +291,15 @@ class App_Controller_Admin_Invoice extends Controller
 			redirect('admin/invoice');
 		}
 
-		$customer = $this->Model_Client->getRecord($invoice['customer_id']);
+		$customer = $this->Model_Customer->getRecord($invoice['customer_id']);
 
 		if ($customer) {
-			$customer += $this->Model_Client->getClientMeta($invoice['customer_id']);
+			$customer += $this->Model_Customer->getMeta($invoice['customer_id']);
 
 			if ($customer) {
 				$customer['customer_id'] = $customer['client_id'];
 			}
 		}
-
-		$customer += array(
-			'email'       => '',
-			'customer_id' => '',
-			'first_name'  => '',
-			'last_name'   => '',
-			'company'     => '',
-			'address1'    => '',
-			'address2'    => '',
-			'city'        => '',
-			'state'       => '',
-			'zip'         => '',
-			'country'     => '',
-		);
-
-		$customer['address'] = array(
-			'name'      => $customer['first_name'] . ' ' . $customer['last_name'],
-			'company'   => $customer['company'],
-			'address'   => $customer['address1'],
-			'address_2' => $customer['address2'],
-			'city'      => $customer['city'],
-			'zone'      => is_numeric($customer['state']) ? $this->tracescope->getState($customer['state']) : $customer['state'],
-			'postcode'  => $customer['zip'],
-			'country'   => $customer['country'],
-		);
 
 		$order_ids = !empty($invoice['data']['line_items']) ? $invoice['data']['line_items'] : array();
 		$orders    = array();

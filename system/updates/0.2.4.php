@@ -4,6 +4,7 @@ $this->db->createTable('invoice', <<<SQL
   `number` VARCHAR(45) NOT NULL,
   `customer_id` INT UNSIGNED NOT NULL,
   `payment_id` INT UNSIGNED NOT NULL DEFAULT 0,
+  `amount` INT UNSIGNED NOT NULL DEFAULT 0,
   `date_created` DATETIME NOT NULL,
   `date_paid` DATETIME NULL,
   `date_updated` DATETIME NULL,
@@ -13,6 +14,8 @@ $this->db->createTable('invoice', <<<SQL
   PRIMARY KEY (`invoice_id`)
 SQL
 );
+
+$this->db->addColumn('invoice', 'amount', "INT UNSIGNED NOT NULL DEFAULT 0 AFTER `payment_id`");
 
 $this->db->createTable('meta', <<<SQL
   `meta_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

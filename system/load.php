@@ -57,10 +57,7 @@ if (!defined('AMPLO_PRODUCTION') || !AMPLO_PRODUCTION) {
 
 //Model History
 global $model_history;
-
-if (!$model_history) {
-	$model_history = option('model_history');
-}
+$model_history += (array)option('model_history');
 
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {

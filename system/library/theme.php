@@ -224,10 +224,13 @@ class Theme extends Library
 
 			$settings = $this->config->loadGroup('theme');
 
-			$config_file = is_file(theme_dir('css/config.less.mod')) ? 'config.less.mod' : 'config.less';
+			$rel_dir = "app/view/theme/$theme/css/";
+
+			$config_file = _mod(DIR_SITE . $rel_dir . "config.less");
+			$config_basename = basename($config_file);
 
 			if ($settings) {
-				$theme_style = "@import '@{base-path}app/view/theme/$theme/css/$config_file';\n\n";
+				$theme_style = "@import '@{base-path}{$rel_dir}{$config_basename}';\n\n";
 
 				if (!empty($settings['theme_config_' . $theme])) {
 					$theme_style .= $settings['theme_config_' . $theme];
@@ -244,7 +247,7 @@ class Theme extends Library
 			}
 
 			if (!$theme_file) {
-				$theme_file = $this->getFile('css/' . $config_file);
+				$theme_file = $this->getFile('css/' . $config_basename);
 
 				if (!$theme_file) {
 					$theme_file = $this->getFile('css/style.less');
