@@ -126,7 +126,9 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 				var value = find_value(key, data);
 
 				if ($e.is('select')) {
-					$e.val(value);
+					if (typeof value !== 'undefined') {
+						$e.val(value);
+					}
 
 					if (!$e.find(':selected').length) {
 						$e.val($e.find(':first').val());

@@ -419,12 +419,21 @@
         background: #FFCCB9;
       }
 
-      &.action-install, &.action-install:visited {
+      &.action-paid, &.action-complete {
+        background: #AAFFAA;
+        color: #3C913C;
+      }
+
+      &.action-install {
         color: #3C913C;
         background: #AAFFAA;
         font-weight: bold;
         font-size: 14px;
         padding: 5px 20px;
+
+        &:visited {
+          color: #3C913C;
+        }
       }
 
       &:hover {

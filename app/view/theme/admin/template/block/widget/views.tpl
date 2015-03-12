@@ -75,7 +75,7 @@
 										'type'   => 'select',
 										'name'   => 'settings[size]',
 										'data'   => $data_view_sizes,
-										'select' => $view['settings']['size'],
+										'select' => $view['settings']['size'] ? $view['settings']['size'] : 100,
 									)); ?>
 								</div>
 							</div>

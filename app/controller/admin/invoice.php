@@ -40,6 +40,10 @@ class App_Controller_Admin_Invoice extends Controller
 
 	public function listing()
 	{
+		$required_columns = array(
+			'status' => 1,
+		);
+
 		$sort    = $this->sort->getQueryDefaults('invoice_id', 'DESC');
 		$filter  = (array)_get('filter');
 		$columns = $this->Model_Invoice->getColumns((array)_request('columns'));
@@ -48,9 +52,7 @@ class App_Controller_Admin_Invoice extends Controller
 			$columns['customer_id'] = 1;
 		}
 
-		$columns['status'] = 1;
-
-		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, null, true, 'invoice_id');
+		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, $columns + $required_columns, true, 'invoice_id');
 
 		foreach ($invoices as $invoice_id => &$invoice) {
 			$actions = array();
@@ -69,14 +71,14 @@ class App_Controller_Admin_Invoice extends Controller
 				);
 			}
 
-			if (user_can('w', 'admin/invoice/cancel')) {
+			if (user_can('w', 'admin/invoice/cancel') && $invoice['status'] != App_Model_Invoice::STATUS_CANCELLED) {
 				$actions['cancel'] = array(
 					'text' => _l("Cancel"),
 					'href' => site_url('admin/invoice/cancel', 'invoice_id=' . $invoice_id)
 				);
 			}
 
-			if (user_can('w', 'admin/invoice/remove')) {
+			if (user_can('w', 'admin/invoice/remove') && $invoice['status'] != App_Model_Invoice::STATUS_PAID) {
 				$actions['delete'] = array(
 					'text' => _l("Delete"),
 					'href' => site_url('admin/invoice/remove', 'invoice_id=' . $invoice_id)

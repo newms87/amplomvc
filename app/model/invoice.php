@@ -47,6 +47,11 @@ class App_Model_Invoice extends App_Model_Table
 						case self::STATUS_PAID:
 							$invoice['date_paid'] = $this->date->now();
 							break;
+
+						case self::STATUS_CANCELLED:
+							$invoice['date_paid'] = '';
+							$invoice['payment_id'] = 0;
+							break;
 					}
 				}
 			}
