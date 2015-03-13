@@ -72,7 +72,7 @@ class Image extends Library
 	{
 		$file = $this->get($image, true);
 
-		if (!$file) {
+		if (!is_file($file)) {
 			return false;
 		}
 
