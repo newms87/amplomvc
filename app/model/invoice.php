@@ -19,6 +19,8 @@ class App_Model_Invoice extends App_Model_Table
 
 	public function save($invoice_id, $invoice, $meta_type = null)
 	{
+		$orig = $invoice_id ? $this->getRecord($invoice_id) : array();
+
 		if (!isset($invoice['data'])) {
 			if (isset($invoice['batch'])) {
 				$invoice['data']['line_items'] = $invoice['batch'];
@@ -32,8 +34,6 @@ class App_Model_Invoice extends App_Model_Table
 		$invoice['date_updated'] = $this->date->now();
 
 		if ($invoice_id) {
-			$orig = $this->getRecord($invoice_id);
-
 			if (!$orig) {
 				$this->error['orig'] = _l("Original invoice %s was not found", $invoice_id);
 				return false;

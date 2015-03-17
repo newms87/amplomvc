@@ -93,7 +93,7 @@
 						</thead>
 						<tbody>
 						<tr>
-							<td contenteditable><?= format('currency', $amount); ?></td>
+							<td contenteditable><?= format('currency', $total); ?></td>
 							<td contenteditable></td>
 						</tr>
 						</tbody>

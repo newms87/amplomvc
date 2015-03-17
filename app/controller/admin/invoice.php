@@ -74,7 +74,8 @@ class App_Controller_Admin_Invoice extends Controller
 			if (user_can('w', 'admin/invoice/cancel') && $invoice['status'] != App_Model_Invoice::STATUS_CANCELLED) {
 				$actions['cancel'] = array(
 					'text' => _l("Cancel"),
-					'href' => site_url('admin/invoice/cancel', 'invoice_id=' . $invoice_id)
+					'href' => site_url('admin/invoice/cancel', 'invoice_id=' . $invoice_id),
+					'#data-confirm' => '',
 				);
 			}
 
@@ -214,7 +215,7 @@ class App_Controller_Admin_Invoice extends Controller
 	public function cancel()
 	{
 		if ($this->Model_Invoice->save(_get('invoice_id'), array('status' => App_Model_Invoice::STATUS_CANCELLED))) {
-			message('success', _l("Invoice was removed"));
+			message('success', _l("Invoice has been cancelled."));
 		} else {
 			message('error', $this->Model_Invoice->getError());
 		}
