@@ -2,32 +2,31 @@
 
 class Mail extends Library
 {
-	private $handle;
+	protected
+		$handle,
+		$to,
+		$cc,
+		$bcc,
+		$from,
+		$sender,
+		$subject,
+		$text,
+		$html,
+		$attachments,
+		$logging,
+		$log_entry = '';
 
-	protected $to;
-	protected $cc;
-	protected $bcc;
-	protected $from;
-	protected $sender;
-	protected $subject;
-	protected $text;
-	protected $html;
-	protected $attachments;
-
-	public $protocol;
-	public $parameter;
-	public $hostname;
-	public $username;
-	public $password;
-	public $port;
-	public $timeout;
-
-	public $newline;
-	public $crlf;
-	public $verp;
-
-	private $logging;
-	private $log_entry = '';
+	public
+		$protocol,
+		$parameter,
+		$hostname,
+		$username,
+		$password,
+		$port,
+		$timeout,
+		$newline,
+		$crlf,
+		$verp;
 
 	public function __construct()
 	{
@@ -353,7 +352,64 @@ class Mail extends Library
 		return true;
 	}
 
-	private function sendSmtp($header, $message)
+	/**
+	 * @param $email
+	 *
+	 * @return bool|null - Will return true if email is valid, otherwise it will return false with an error message.
+	 *                     Return null if unable to communicate with outbound server.
+	 */
+	public function validateEmail($email)
+	{
+		if (!validate('email', $email)) {
+			$this->error = $this->validation->getError();
+			return false;
+		}
+
+		//If we have communicated with the email server successfully
+		$smtp_ok = false;
+
+		list($username, $hostname) = explode("@", $email, 2);
+
+		//Lookup MX records for this email host
+		if (getmxrr($hostname, $mx_records, $mx_weight)) {
+			$mxs = array();
+
+			//sort MX records by weight
+			for ($i = 0; $i < count($mx_records); $i++) {
+				$mxs[$mx_weight[$i]] = $mx_records[$i];
+			}
+
+			ksort($mxs, SORT_NUMERIC);
+			reset($mxs);
+
+			//Communicate with host to establish a connection to send email (250 and 251 are valid response codes)
+			$reply_codes = array(
+				250,
+				251
+			);
+
+			foreach ($mxs as $weight => $mx) {
+				$this->hostname = $mx;
+
+				if ($this->startSmtp()) {
+					$smtp_ok = true;
+
+					//If server accepts this email as recipient, this is a deliverable (and valid) email
+					if ($this->talk("RCPT TO: <{$email}>", $reply_codes)) {
+						$this->endSmtp();
+						return true;
+					}
+				}
+
+				$this->endSmtp();
+			}
+		}
+
+		//If communication was successful (but email address is not deliverable) return false, otherwise return null
+		return $smtp_ok ? false : null;
+	}
+
+	protected function startSmtp()
 	{
 		if (!$this->hostname) {
 			$this->hostname = '127.0.0.1';
@@ -387,7 +443,6 @@ class Mail extends Library
 		}
 
 		if (!empty($this->username) && !empty($this->password)) {
-
 			if (!$this->talk('EHLO ' . getenv('SERVER_NAME'), 250)) {
 				$this->trigger_error('EHLO not accepted from server!');
 				return false;
@@ -416,6 +471,27 @@ class Mail extends Library
 
 		if (!$this->talk('MAIL FROM: <' . $this->from . '>' . ($this->verp ? 'XVERP' : ''), 250)) {
 			$this->trigger_error('MAIL FROM not accepted from server!');
+			return false;
+		}
+
+		return true;
+	}
+
+	protected function endSmtp()
+	{
+		if (!$this->talk('QUIT', 221)) {
+			$this->trigger_error('QUIT not accepted from server!');
+			return false;
+		}
+
+		fclose($this->handle);
+
+		return true;
+	}
+
+	protected function sendSmtp($header, $message)
+	{
+		if (!$this->startSmtp()) {
 			return false;
 		}
 
@@ -459,17 +535,12 @@ class Mail extends Library
 			return false;
 		}
 
-		if (!$this->talk('QUIT', 221)) {
-			$this->trigger_error('QUIT not accepted from server!');
-			return false;
-		}
-
-		fclose($this->handle);
+		$this->endSmtp();
 
 		return true;
 	}
 
-	private function talk($msg, $code = null)
+	protected function talk($msg, $code = null)
 	{
 		fputs($this->handle, $msg . $this->crlf);
 
@@ -487,7 +558,7 @@ class Mail extends Library
 		return true;
 	}
 
-	private function getReply()
+	protected function getReply()
 	{
 		$reply = '';
 
@@ -502,7 +573,7 @@ class Mail extends Library
 		return $reply;
 	}
 
-	private function trigger_error($msg)
+	protected function trigger_error($msg)
 	{
 		$this->log("MAIL ERROR: " . $msg, true);
 
@@ -542,7 +613,7 @@ class Mail extends Library
 		$this->query("INSERT INTO {$this->t['setting']} SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
-	private function log($msg, $flush = false)
+	protected function log($msg, $flush = false)
 	{
 		if (!$this->logging) {
 			return;

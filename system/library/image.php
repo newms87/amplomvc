@@ -43,7 +43,10 @@ class Image extends Library
 					return $image;
 				}
 
-				write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
+				if (defined("AMPLO_IMAGE_ERROR_LOG") && AMPLO_IMAGE_ERROR_LOG) {
+					write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
+				}
+
 				$this->error['image'] = _l("Could not locate image file %s", $image_path);
 
 				return false;
@@ -135,7 +138,11 @@ class Image extends Library
 	public function save($file, $quality = 75)
 	{
 		if (!_is_writable(dirname($file))) {
-			write_log('error', _l(__METHOD__ . "(): Failed to save image file because directory was not writable: %s!", $file));
+			if (defined("AMPLO_IMAGE_ERROR_LOG") && AMPLO_IMAGE_ERROR_LOG) {
+				write_log('error', _l("Failed to save image file because directory was not writable: %s!", $file));
+			}
+
+			$this->error['file'] = _l("Directory was not writable for %s", $file);
 			return false;
 		}
 
