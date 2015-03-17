@@ -44,17 +44,32 @@ _is_writable(AC_TEMPLATE_CACHE);
 
 function _mod($file)
 {
+	global $registry, $mod_update;
+
 	static $lang;
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
-	if (is_file($file . '.mod')) {
-		if (filemtime($file . '.mod') < filemtime($file)) {
-			global $registry;
-			$registry->get('mod')->reapply($file . '.mod');
+	$mod_file = $file . '.mod';
+
+	if (is_file($mod_file)) {
+		if (filemtime($mod_file) < filemtime($file)) {
+			if ($registry) {
+				$registry->get('mod')->reapply($mod_file);
+			} else {
+				$mod_update[] = $mod_file;
+			}
 		}
 
-		$file = $file . '.mod';
+		$file = $mod_file;
+	}
+
+	if ($mod_update && $registry && function_exists('redirect')) {
+		foreach ($mod_update as $key => $mod) {
+			$registry->get('mod')->reapply($mod);
+		}
+
+		redirect($registry->get('url')->here());
 	}
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.
