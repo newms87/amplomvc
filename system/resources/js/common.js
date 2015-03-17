@@ -33,13 +33,17 @@ $ac.al = $.extend($ac.al || {}, {
 });
 
 for (var al in $ac.al) {
-	$.fn[al] = function (view_id) {
+	register_autoload(al, $ac.al[al]);
+}
+
+function register_autoload(fn, url) {
+	$.fn[fn] = function (view_id) {
 		var al = arguments.callee.fn;
 
 		if (!$ac.alq[al]) {
 			$ac.alq[al] = [];
 
-			$.getScript($ac.site_url + $ac.al[al], function () {
+			$.getScript($ac.site_url + url, function () {
 				for (var l in $ac.alq[al]) {
 					var q = $ac.alq[al][l];
 					$.fn[al].apply(q.me, q.args);
@@ -52,7 +56,7 @@ for (var al in $ac.al) {
 		$ac.alq[al].push({me: this, args: arguments});
 	};
 
-	$.fn[al].fn = al;
+	$.fn[fn].fn = fn;
 }
 
 $.fn.use_once = function (label) {
