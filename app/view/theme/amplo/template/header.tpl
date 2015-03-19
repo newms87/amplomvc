@@ -73,7 +73,7 @@
 				<?= block('localisation/currency'); ?>
 			<? } ?>
 
-			<div class="header-navigation col xs-7 sm-8 md-9 lg-10 xs-right lg-left top">
+			<div class="header-navigation menu-button col xs-7 sm-8 md-9 lg-10 xs-right lg-left top">
 				<div class="links-toggle lg-hidden" onclick="$(this).toggleClass('hover')">
 					<div class="sprite-img menu">
 						<img <?= $sprite; ?> />

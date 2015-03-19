@@ -1,14 +1,12 @@
-$.fn.amplo_slider = function (opts, callback) {
-	$.extend(opts, {
+$.fn.amplo_slider = function (options, callback) {
+	$.extend(options, {
 		boundEdge: true
 	});
 
 	this.each(function(i,slider) {
 		var $slider = $(slider);
-		var $slides = $slider.children(),
-			$viewport = $slider.closest('.viewport'),
+		var $viewport = $slider.closest('.viewport'),
 			$as = $slider.closest('.amplo-slider');
-
 
 		if (!$viewport.length) {
 			$viewport = $('<div />').addClass('viewport').insertBefore($slider).append($slider);
@@ -18,33 +16,46 @@ $.fn.amplo_slider = function (opts, callback) {
 			$as = $('<div />').addClass('amplo-slider').insertBefore($viewport).append($viewport);
 		}
 
-		$slider.d = {
-			view_width: $viewport.width(),
-			x:          0,
-			y:          0,
-			width:      0,
-			current:    0,
-			slides:     []
+		$slider.o = options;
+
+		$slider.setOptions = function (o) {
+			$slider.o = o;
+			$slider.reset();
 		}
 
-		$slides.each(function (i, e) {
-			$slider.d.slides[i] = {
-				x: -$(e).position().left,
-				width: $(e).outerWidth()
-			};
-		})
+		$slider.changeOptions = function(o) {
+			$slider.o = $.extend(o, $slider.o);
+			$slider.reset();
+		}
 
-		last = $slider.d.slides[$slider.d.slides.length-1];
-		$slider.width(-last.x + last.width);
+		$slider.reset = function() {
+			$slider.d = {
+				x:          0,
+				y:          0,
+				width:      0,
+				current:    0,
+				slides:     []
+			}
 
-		$slider.d.edge = $slider.width() - $slider.d.view_width;
+			$slider.children().each(function (i, e) {
+				$slider.d.slides[i] = {
+					x: -$(e).position().left,
+					width: $(e).outerWidth()
+				};
+			})
 
-		for (var i in $slider.d.slides) {
-			var s = $slider.d.slides[i];
+			last = $slider.d.slides[$slider.d.slides.length-1];
+			$slider.width(-last.x + last.width);
 
-			if (-s.x + s.width > $slider.d.edge) {
-				$slider.d.edge_index = i;
-				break;
+			$slider.d.edge = $slider.width() - $viewport.width();
+
+			for (var i in $slider.d.slides) {
+				var s = $slider.d.slides[i];
+
+				if (-s.x + s.width > $slider.d.edge) {
+					$slider.d.edge_index = i;
+					break;
+				}
 			}
 		}
 
@@ -71,7 +82,7 @@ $.fn.amplo_slider = function (opts, callback) {
 
 			var x = $slider.d.slides[i].x;
 
-			if (($slider.d.is_edge = opts.boundEdge && -x > $slider.d.edge)) {
+			if (($slider.d.is_edge = $slider.o.boundEdge && -x > $slider.d.edge)) {
 				x = -$slider.d.edge;
 			}
 
@@ -79,6 +90,10 @@ $.fn.amplo_slider = function (opts, callback) {
 			$slider.d.current = i;
 			$slider.css({left: x});
 		}
+
+		$(window).resize($slider.reset);
+
+		$slider.reset();
 
 		if (typeof callback === 'function') {
 			callback.call($slider, $as);
