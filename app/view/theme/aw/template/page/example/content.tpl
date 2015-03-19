@@ -1,7 +1,7 @@
 <div class="page row section-style-a">
 	<div class="wrap">
 		<div class="col left xs-12">
-			<div class="col xs-12 whitespace-hack sm-8 md-6 lg-4">Test 1</div>
+			<div class="col xs-12 ws-hack sm-8 md-6 lg-4">Test 1</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 2</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 3</div>
 		</div>
@@ -23,7 +23,7 @@
 <div class="page row section-style-c arrow-up arrow-down">
 	<div class="wrap">
 		<div class="col left xs-12">
-			<div class="col xs-12 whitespace-hack sm-8 md-6 lg-4">Test 1</div>
+			<div class="col xs-12 ws-hack sm-8 md-6 lg-4">Test 1</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 2</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 3</div>
 		</div>
@@ -33,7 +33,7 @@
 <div class="page row section-style-a">
 	<div class="wrap">
 		<div class="col left xs-12">
-			<div class="col xs-12 whitespace-hack sm-8 md-6 lg-4">Test 1</div>
+			<div class="col xs-12 ws-hack sm-8 md-6 lg-4">Test 1</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 2</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 3</div>
 		</div>
@@ -43,7 +43,7 @@
 <div class="page row section-style-d">
 	<div class="wrap">
 		<div class="col left xs-12">
-			<div class="col xs-12 whitespace-hack sm-8 md-6 lg-4">Test 1</div>
+			<div class="col xs-12 ws-hack sm-8 md-6 lg-4">Test 1</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 2</div>
 			<div class="col xs-12 sm-8 md-6 lg-4">Test 3</div>
 		</div>

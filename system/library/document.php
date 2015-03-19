@@ -306,7 +306,7 @@ class Document extends Library
 
 			$parser->parseFile($file, $reference);
 
-			$parser->parse("@base-path: '" . SITE_BASE . "';");
+			$parser->parse("@base-path: '" . SITE_BASE . "'; @style-path: '@{base-path}app/view/style/';");
 
 			$css = $parser->getCss();
 

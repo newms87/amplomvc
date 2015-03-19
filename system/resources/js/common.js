@@ -269,12 +269,14 @@ $.fn.overflown = function (dir, tolerance) {
 $.fn.tabs = function (callback) {
 	var $tabs = this;
 
+	console.log($tabs, 'tabs');
 	$tabs.click(function () {
 		var $this = $(this);
 
 		$tabs.removeClass('active');
 
 		$tabs.each(function (i, e) {
+			console.log('hide', $(e).attr('href'), $($(e).attr('href')));
 			$($(e).attr('href')).addClass('hidden');
 		});
 

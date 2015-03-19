@@ -37,7 +37,7 @@
 				</div>
 			</div>
 
-			<div class="buttons submit editing col no-whitespace-hack xs-12 right">
+			<div class="buttons submit editing col no-ws-hack xs-12 right">
 				<div class="col xs-12 md-4">
 					<button data-loading="{{Saving...}}">{{Save}}</button>
 				</div>
@@ -125,7 +125,7 @@
 				</div>
 			</div>
 
-			<div class="buttons submit editing col no-whitespace-hack xs-12 right">
+			<div class="buttons submit editing col no-ws-hack xs-12 right">
 				<div class="col xs-12 md-4">
 					<button data-loading="{{Saving...}}">{{Save}}</button>
 				</div>

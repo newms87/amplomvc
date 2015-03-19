@@ -31,17 +31,18 @@
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .visible {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 /* Fluid Grid Layout */
 .row {
   position: relative;
   display: block;
+  text-align: center;
 }
 
 .wrap {
@@ -63,8 +64,12 @@
 }
 
 //Hack to overcome whitespace between inline-block elements
-.whitespace-hack {
+.ws-hack {
   margin-left: -.29em;
+}
+
+.no-ws-hack {
+  margin-left: 0 !important;
 }
 
 .col {
@@ -89,7 +94,7 @@
   }
 
   & + .col {
-    .whitespace-hack;
+    .ws-hack;
   }
 
   &.left {
@@ -105,6 +110,15 @@
     text-align: right;
     float: none;
   }
+
+  &.justify {
+    text-align: justify;
+    float: none;
+  }
+}
+
+.wrapfix {
+  .ws-hack;
 }
 
 //Extra Small
@@ -148,6 +162,10 @@
 
   .col.xs-right {
     text-align: right;
+  }
+
+  .col.xs-justify {
+    text-align: justify;
   }
 }
 
@@ -198,6 +216,10 @@
   .col.sm-right {
     text-align: right;
   }
+
+  .col.sm-justify {
+    text-align: justify;
+  }
 }
 
 @media (min-width: @xs) and (max-width: (@sm - 1)) {
@@ -247,6 +269,10 @@
   .col.md-right {
     text-align: right;
   }
+
+  .col.md-justify {
+    text-align: justify;
+  }
 }
 
 @media (min-width: @sm) and (max-width: (@md - 1)) {
@@ -295,6 +321,10 @@
 
   .col.lg-right {
     text-align: right;
+  }
+
+  .col.lg-justify {
+    text-align: justify;
   }
 }
 
@@ -346,7 +376,23 @@
     text-align: right;
   }
 
+  .col.xl-justify {
+    text-align: justify;
+  }
+
   .xs-hidden, .sm-hidden, .md-hidden, .lg-hidden, .xl-hidden, .xl-hide {
+    display: none !important;
+  }
+}
+
+@media handheld {
+  .desktop {
+    display: none !important;
+  }
+}
+
+@media not handheld {
+  .mobile {
     display: none !important;
   }
 }
