@@ -2,7 +2,7 @@
 	<tr>
 		<td>{{Instance Identifier}}</td>
 		<td>
-			<input type="text" class="tab_name instance_name" placeholder="(eg: my-instance-1)" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
+			<input type="text" class="tab-name instance-name" placeholder="(eg: my-instance-1)" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
 
 			<div class="help"><?= _l("Insert <code>&lt;?= block('widget/carousel', '<span class=\"instance-name\">%s</span>'); ?&gt;</code> into a page to use this carousel.", $instance['name']); ?></div>
 		</td>
@@ -223,7 +223,7 @@
 
 		$('.ac_carousel_list').sortable();
 
-		$('.instance_name').keyup(function () {
+		$('.instance-name').keyup(function () {
 			$('code .instance-name').html($(this).val());
 		});
 

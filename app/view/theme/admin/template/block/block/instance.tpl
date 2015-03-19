@@ -2,8 +2,8 @@
 	<tr>
 		<td>{{Instance Name}}</td>
 		<td>
-			<? //NOTE: .instance_name class is used to link the tab name to this instance's settings. ?>
-			<input type="text" class="tab_name instance_name" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
+			<? //NOTE: .instance-name class is used to link the tab name to this instance's settings. ?>
+			<input type="text" class="tab-name instance-name" name="instances[<?= $row; ?>][name]" value="<?= $instance['name']; ?>"/>
 		</td>
 	</tr>
 	<tr>
