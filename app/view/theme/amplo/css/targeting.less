@@ -56,8 +56,11 @@
         margin: 0;
 
         &#links-account {
-          margin-top: 1px;
           border-top: 1px solid @color-dark;
+        }
+
+        .links.horizontal {
+          display: block;
         }
 
         .link-list {
@@ -78,6 +81,8 @@
               }
 
               &:hover, &.hover {
+                background: lighten(@color-main, 30%);
+
                 a {
                   color: white;
                 }
@@ -114,7 +119,7 @@
                 }
               }
 
-              &:hover, &.hover {
+              &.hover {
                 .sub-menu {
                   max-height: 100em;
                 }
@@ -125,6 +130,7 @@
 
         .links-simple {
           display: block;
+          width: 10000px;
 
           a {
             background: @color-lighter;
@@ -135,7 +141,7 @@
             color: @font-dark;
 
             &:hover, &.hover {
-              background: @color-main;
+              background: lighten(@color-main, 30%);
               color: white;
             }
           }

@@ -64,20 +64,10 @@ abstract class Model
 	public function getError($type = null)
 	{
 		if ($type) {
-			$error = isset($this->error[$type]) ? $this->error[$type] : null;
-
-			if ($error) {
-				unset($this->error[$type]);
-			}
-
-			return $error;
+			return isset($this->error[$type]) ? $this->error[$type] : null;
 		}
 
-		$error = $this->error;
-
-		$this->error = array();
-
-		return $error;
+		return $this->error;
 	}
 
 	public function fetchError($type = null)
