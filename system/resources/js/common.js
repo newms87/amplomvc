@@ -266,24 +266,45 @@ $.fn.overflown = function (dir, tolerance) {
 	});
 }
 
-$.fn.tabs = function (callback) {
+$.fn.tabs = function (opts) {
 	var $tabs = this;
+
+	opts = $.extend({}, {
+		callback: null,
+		toggle:   false
+	}, opts);
+
+	$tabs.o = opts;
+
+	$tabs.changeOptions = function(o) {
+		$.extend($tabs.o, o);
+		console.log('change', o, $tabs.o);
+	}
+
+	$tabs.setOptions = function(o) {
+		$tabs.o = o;
+	}
 
 	$tabs.click(function () {
 		var $this = $(this);
+		var $content = $($this.attr('href'));
 
-		$tabs.removeClass('active');
+		if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
+			$this.toggleClass('active');
+			$content.toggleClass('hidden', $this.hasClass('active'));
+		} else {
+			$tabs.removeClass('active');
 
-		$tabs.each(function (i, e) {
-			$($(e).attr('href')).addClass('hidden');
-		});
+			$tabs.each(function (i, e) {
+				$($(e).attr('href')).addClass('hidden');
+			});
 
-		$this.addClass('active');
+			$this.addClass('active');
+			$content.removeClass('hidden');
+		}
 
-		var $content = $($this.attr('href')).removeClass('hidden');
-
-		if (typeof callback === 'function') {
-			callback($this, $content);
+		if (typeof $tabs.o.callback === 'function') {
+			$tabs.o.callback($this, $content);
 		}
 
 		return false;
