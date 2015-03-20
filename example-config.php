@@ -22,6 +22,10 @@ define("DEFAULT_PATH", 'index');
 //The page to show when no page controller is found (eg: https://your-domain.com/unknown-url)
 define("ERROR_404_PATH", 'error/not_found');
 
+//Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
+// and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
+define('COOKIE_PREFIX', '');
+
 // SERVER SETUP
 define('DEFAULT_TIMEZONE', 'America/Denver');
 define('MYSQL_TIMEZONE', '-6:00');

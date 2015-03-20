@@ -64,9 +64,14 @@ class User extends Library
 
 	public function validateUser()
 	{
-		if (isset($_SESSION['user_id'])) {
-			if (!empty($_SESSION['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $_SESSION['token']) {
-				$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = '" . (int)$_SESSION['user_id'] . "' AND status = '1'");
+		$user_id = (int)_session('user_id');
+
+		if ($user_id) {
+			$session_token = _session('token');
+			$cookie_token  = _cookie('token');
+
+			if ($session_token && $cookie_token === $session_token) {
+				$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = $user_id AND status = 1");
 
 				if ($user) {
 					$this->loadUser($user);
@@ -292,7 +297,7 @@ class User extends Library
 
 	public function showAdminBar()
 	{
-		return $this->isLogged() && empty($_COOKIE['disable_admin_bar']);
+		return $this->isLogged() && !_cookie('disable_admin_bar');
 	}
 
 	public function info($key = null)
