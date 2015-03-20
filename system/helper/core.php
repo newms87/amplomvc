@@ -46,15 +46,31 @@ function _session($key, $default = null)
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
-function _cookie($key, $default = null)
+//Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
+// and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
+if (!defined('COOKIE_PREFIX')) {
+	define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
+}
+
+function _cookie($name, $default = null)
 {
-	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+	$name = COOKIE_PREFIX . $name;
+	return isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default;
 }
 
 function set_cookie($name, $value, $expire = 31536000)
 {
-	global $registry;
-	return $registry->get('session')->setCookie($name, $value, $expire);
+	if (!headers_sent()) {
+		$expire = $expire ? time() + $expire : 0;
+		return setcookie(COOKIE_PREFIX . $name, $value, $expire, '/', COOKIE_DOMAIN);
+	}
+
+	return false;
+}
+
+function delete_cookie($name)
+{
+	set_cookie($name, '', 0);
 }
 
 
@@ -806,9 +822,9 @@ function path2class($path)
 {
 	$replace = array(
 		DIR_SITE => '',
-		"\\" => '/',
-		'_' => '',
-		'/' => '_',
+		"\\"     => '/',
+		'_'      => '',
+		'/'      => '_',
 	);
 
 	return str_replace(array_keys($replace), $replace, $path);

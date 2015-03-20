@@ -8,7 +8,7 @@ class App_Controller_Block_Widget_AdminBar extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		if (!empty($_COOKIE['disable_admin_bar'])) {
+		if (_cookie('disable_admin_bar')) {
 			return;
 		}
 

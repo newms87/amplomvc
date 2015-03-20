@@ -41,7 +41,7 @@ class Language extends Library
 			$this->session->set('language_code', $this->code);
 
 			//Set as default language for this user for 30 days
-			$this->session->setCookie('language_code', $this->code, 60 * 60 * 24 * 30);
+			set_cookie('language_code', $this->code, 3600 * 24 * 30);
 
 			set_option('config_language_id', $this->language_id);
 		}
@@ -121,16 +121,7 @@ class Language extends Library
 
 	private function resolve()
 	{
-		//Resolve Language if it was requested
-		if (!empty($_GET['language_code'])) {
-			$code = $_GET['language_code'];
-		} elseif ($this->session->has('language_code')) {
-			$code = $this->session->get('language_code');
-		} elseif (!empty($_COOKIE['language_code'])) {
-			$code = $_COOKIE['language_code'];
-		} else {
-			$code = false;
-		}
+		$code = _get('language_code', _session('language_code', _cookie('language_code', false)));
 
 		if ($code) {
 			$language = cache('language.' . $code);

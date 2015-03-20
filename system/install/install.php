@@ -159,6 +159,7 @@ function amplo_mvc_install()
 		'DB_PREFIX'        => $_POST['db_prefix'],
 		'PASSWORD_COST'    => $password_cost,
 		'AMPLO_SECRET_KEY' => md5(uniqid(rand(), true)),
+		'COOKIE_PREFIX'    => preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)),
 	);
 
 	foreach ($defines as $key => $value) {

@@ -215,7 +215,7 @@ class App_Controller_Admin_User extends Controller
 			redirect('admin');
 		}
 
-		if ($this->session->has('token') && !isset($_COOKIE['token'])) {
+		if (_session('token') && !_cookie('token')) {
 			$this->error['warning'] = _l("Invalid token session. Please login again.");
 		}
 

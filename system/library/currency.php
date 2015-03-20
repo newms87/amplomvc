@@ -17,15 +17,7 @@ class Currency extends Library
 			cache('currencies', $this->currencies);
 		}
 
-		if (!empty($_GET['currency']) && $this->has($_GET['currency'])) {
-			$this->set($_GET['currency']);
-		} elseif (!empty($_SESSION['currency']) && $this->has($_SESSION['currency'])) {
-			$this->set($_SESSION['currency']);
-		} elseif (!empty($_COOKIE['currency']) && $this->has($_COOKIE['currency'])) {
-			$this->set($_COOKIE['currency']);
-		} else {
-			$this->set(option('config_currency'));
-		}
+		$this->set(_get('currency', _session('currency', _cookie('currency', option('config_currency')))));
 	}
 
 	public function has($code)
