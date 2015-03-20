@@ -3,7 +3,7 @@
 
 	<? foreach ($profiles as $row => $profile) { ?>
 		<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
-			<span class="tab_name"><?= $profile['name']; ?></span>
+			<span class="tab-name"><?= $profile['name']; ?></span>
 			<img src="<?= theme_url('image/delete.png'); ?>" class="delete_tab"/>
 		</a>
 	<? } ?>
@@ -16,7 +16,7 @@
 				<tr>
 					<td>{{Profile Name}}</td>
 					<td>
-						<input type="text" class="tab_name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>"/>
+						<input type="text" class="tab-name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>"/>
 					</td>
 				</tr>
 				<tr>

@@ -3,7 +3,7 @@
 
 	<? foreach ($instances as $row => $instance) { ?>
 		<a href="#tab-instance-<?= $row; ?>" data-row="<?= $row; ?>">
-			<span class="tab_name"><?= $instance['name']; ?></span>
+			<span class="tab-name"><?= $instance['name']; ?></span>
 			<img src="<?= theme_url('image/delete.png'); ?>" onclick="return false" class="delete_tab"/>
 		</a>
 	<? } ?>
@@ -20,9 +20,9 @@
 
 <script type="text/javascript">
 	//Update Tab Name
-	//Note: .instance_name should be set as a class for the Instance Identifier input field
+	//Note: .instance-name should be set as a class for the Instance Identifier input field
 	//      in the instance.tpl template.
-	$('.instance_name').keyup(function () {
+	$('.instance-name').keyup(function () {
 		$(this).val($(this).val().toSlug());
 	});
 

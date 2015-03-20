@@ -39,6 +39,12 @@ class Image extends Library
 			if (is_file(DIR_IMAGE . $image)) {
 				$image = DIR_IMAGE . $image;
 			} else {
+				if (strpos($image, "/theme/")) {
+					if ($image = $this->theme->findFile($image)) {
+						return $image;
+					}
+				}
+
 				if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
 					return $image;
 				}

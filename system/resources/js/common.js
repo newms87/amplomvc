@@ -26,10 +26,11 @@ String.prototype.str_replace = function (find, replace) {
 $ac.alq = {};
 
 $ac.al = $.extend($ac.al || {}, {
-	code_mirror: 'admin/common/codemirror',
-	list_widget: 'system/resources/js/listings.js',
-	ac_template: 'system/resources/js/ac_template.js',
-	jqzoom:      'system/resources/js/jquery/jqzoom/jqzoom.js'
+	code_mirror:  'admin/common/codemirror',
+	list_widget:  'system/resources/js/listings.js',
+	ac_template:  'system/resources/js/ac_template.js',
+	amplo_slider: 'system/resources/js/amplo_slider.js',
+	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js'
 });
 
 for (var al in $ac.al) {
@@ -266,40 +267,27 @@ $.fn.overflown = function (dir, tolerance) {
 }
 
 $.fn.tabs = function (callback) {
-	var $this = this;
+	var $tabs = this;
 
-	this.each(function (i, obj) {
-		var obj = $(obj);
+	$tabs.click(function () {
+		var $this = $(this);
 
-		$(obj.attr('href')).hide();
+		$tabs.removeClass('active');
 
-		obj.click(function () {
-			$this.removeClass('selected');
-
-			$this.each(function (i, e) {
-				$($(e).attr('href')).hide();
-			});
-
-			obj.addClass('selected');
-
-			content = $(obj.attr('href')).show();
-
-			if (typeof callback === 'function') {
-				callback(content.attr('id'), obj, content);
-			}
-			return false;
+		$tabs.each(function (i, e) {
+			$($(e).attr('href')).addClass('hidden');
 		});
 
-		var tab_name = obj.find('.tab_name');
+		$this.addClass('active');
 
-		if (tab_name.length) {
-			$(obj.attr('href')).find('.tab_name').keyup(function () {
-				tab_name.html($(this).val());
-			});
+		var $content = $($this.attr('href')).removeClass('hidden');
+
+		if (typeof callback === 'function') {
+			callback($this, $content);
 		}
-	});
 
-	this.show().first().click();
+		return false;
+	}).first().click();
 
 	return this;
 };
