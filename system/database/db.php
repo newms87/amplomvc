@@ -65,6 +65,8 @@ class DB
 
 		$this->t->schema = $schema;
 		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
+
+		$this->updateTables();
 	}
 
 	public function updateTables()
@@ -827,17 +829,6 @@ class Model_T implements ArrayAccess
 			if ($ltable === $t || $ltable === $pt) {
 				return true;
 			}
-		}
-
-		if ($offset === 'settings' || $offset === 'store') {
-			echo
-				"<h2>The Database was not installed correctly. config.php has been renamed to config.php.bkp. Please reinstall Amplo MVC.</h2>" .
-				"<p>You are being redirected to the install page. Please wait... (refresh the page if you are not redirected in 5 seconds)</p>" .
-				"<script type=\"text/javascript\">setTimeout(function(){window.location = '" . site_url() . "'}, 5000);</script>";
-
-			rename(DIR_SITE . 'config.php', DIR_SITE . 'config.php.bkp');
-
-			exit;
 		}
 
 		return false;
