@@ -55,6 +55,8 @@ function register_autoload(fn, url) {
 		}
 
 		$ac.alq[al].push({me: this, args: arguments});
+
+		return this;
 	};
 
 	$.fn[fn].fn = fn;
