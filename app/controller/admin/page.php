@@ -59,12 +59,14 @@ class App_Controller_Admin_Page extends Controller
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
 
-			if (user_can('w', 'page')) {
+			if (user_can('r', 'admin/page/form')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),
 					'href' => site_url('admin/page/form', 'page_id=' . $page_id)
 				);
+			}
 
+			if (user_can('w', 'admin/page/delete')) {
 				$actions['delete'] = array(
 					'text' => _l("Delete"),
 					'href' => site_url('admin/page/delete', 'page_id=' . $page_id)
