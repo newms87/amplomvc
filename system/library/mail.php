@@ -71,6 +71,8 @@ class Mail extends Library
 		foreach ($data as $key => $value) {
 			$this->$key = $value;
 		}
+
+		return $this;
 	}
 
 	/**

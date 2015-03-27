@@ -54,8 +54,13 @@ if (!defined('COOKIE_PREFIX')) {
 
 function _cookie($name, $default = null)
 {
-	$name = COOKIE_PREFIX . $name;
-	return isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default;
+	if (isset($_COOKIE[COOKIE_PREFIX . $name])) {
+		return $_COOKIE[COOKIE_PREFIX . $name];
+	} elseif (isset($_COOKIE[$name])) {
+		return $_COOKIE[$name];
+	}
+
+	return $default;
 }
 
 function set_cookie($name, $value, $expire = 31536000)
