@@ -2,17 +2,17 @@
 
 class App_Model_Contact extends Model
 {
-	public function sendMessage($data)
+	public function sendMessage($mail)
 	{
-		if (empty($data['name'])) {
+		if (empty($mail['name'])) {
 			$this->error['name'] = _l("Please provide your name so we know what to call you!");
 		}
 
-		if (empty($data['email']) || !validate('email', $data['email'])) {
+		if (empty($mail['email']) || !validate('email', $mail['email'])) {
 			$this->error['email'] = _l("Your email address appears to be invalid.");
 		}
 
-		if (empty($data['message'])) {
+		if (empty($mail['message'])) {
 			$this->error['message'] = _l("Please enter text for your message.");
 		}
 
@@ -26,12 +26,15 @@ class App_Model_Contact extends Model
 			$to = option('site_email');
 		}
 
-		$result = send_mail(array(
-			'to'      => $to,
-			'from'    => _post('email'),
-			'subject' => _l("A customer has contacted you on %s", option('site_name', _l("Your Site"))),
-			'text'    => _post('message'),
-		));
+		$mail += array(
+				'to'      => $to,
+				'subject' => _l("The Customer %s has contacted you on %s", $mail['email'], option('site_name', _l("Your Site"))),
+				'text'    => $mail['message'],
+			) + $mail;
+
+		$mail['from'] = 'contact@' . DOMAIN;
+
+		$result = send_mail($mail);
 
 		if (!$result) {
 			$this->error = $this->mail->getError();
