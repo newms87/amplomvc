@@ -132,7 +132,7 @@ class Customer extends Library
 	public function register($customer, $login = true)
 	{
 		if (option('config_account_terms_page_id')) {
-			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
+			$page_info = $this->Model_Page->getRecord(option('config_account_terms_page_id'));
 
 			if ($page_info && !isset($customer['agree'])) {
 				$this->error['agree'] = _l("You must agree to the %s!", $page_info['title']);

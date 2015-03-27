@@ -13,10 +13,6 @@ class App_Controller_Page extends Controller
 			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
-		if ($this->is_ajax || isset($_GET['content'])) {
-			return $this->content($page);
-		}
-
 		if (!$page) {
 			return call('error/not_found');
 		}
@@ -38,29 +34,10 @@ class App_Controller_Page extends Controller
 
 		$page['content_file'] = _mod($page['content_file']);
 
-		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
+		$template = 'page/template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
 		//Render
 		output($this->render($template, $page));
-	}
-
-	public function content($page = array())
-	{
-		//The page
-		$page_id = _get('page_id', 0);
-
-		if ($page_id) {
-			$page += $this->Model_Page->getActivePage($page_id);
-		}
-
-		if (!$page) {
-			return '';
-		}
-
-		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
-
-		//Render
-		output($this->render('page/content', $page));
 	}
 
 	public function preview($page = array())
@@ -100,7 +77,7 @@ class App_Controller_Page extends Controller
 		//Change Layout to desired page layout
 		set_option('config_layout_id', $page['layout_id']);
 
-		$template = !empty($page['template']) ? 'page/' . $page['template'] : 'page/default';
+		$template = 'page/template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
 		//Render
 		output($this->render($template, $page));
@@ -127,10 +104,6 @@ class App_Controller_Page extends Controller
 		}
 
 		//Render
-		if (IS_POST) {
-			output($this->render('page/content', $page));
-		} else {
-			output($this->render('page/default', $page));
-		}
+		output($this->render('page/template/default', $page));
 	}
 }

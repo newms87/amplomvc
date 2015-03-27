@@ -3,6 +3,7 @@
 class App_Model_Page extends App_Model_Table
 {
 	protected $table = 'page', $primary_key = 'page_id';
+	protected $pages;
 
 	public function __construct()
 	{
@@ -13,63 +14,65 @@ class App_Model_Page extends App_Model_Table
 
 	public function save($page_id, $page)
 	{
-		if (!$page_id || isset($page['title'])) {
-			if (!isset($page['title']) || !validate('text', $page['title'], 1, 64)) {
+		if (isset($page['title'])) {
+			if (!validate('text', $page['title'], 1, 64)) {
 				$this->error['title'] = _l("Page Title must be between 1 and 64 characters!");
 			}
+		} elseif (!$page_id) {
+			$this->error['title'] = _l("Page Title is required.");
 		}
 
-		if (empty($page['theme'])) {
+		if (isset($page['theme'])) {
+			if (empty($page['theme'])) {
+				$this->error['theme'] = _l("The Page Theme must not be empty");
+			}
+		} elseif (!$page_id) {
 			$page['theme'] = option('config_default_theme', AMPLO_DEFAULT_THEME);
 		}
 
-		if (empty($page['name'])) {
-			$page['name'] = $page_id ? $this->getPageName($page_id) : $page['title'];
+		if (isset($page['template'])) {
+			if (empty($page['template'])) {
+				$this->error['template'] = _l("The page Template cannot be empty");
+			}
+		} elseif (!$page_id) {
+			$page['template'] = option('config_default_page_template', 'default');
 		}
-
-		//Format page name
-		$page['name'] = slug($page['name']);
 
 		if ($this->error) {
 			return false;
 		}
 
-		$dir = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'];
-
-		if (_is_writable($dir)) {
-			if (isset($page['content'])) {
-				if (file_put_contents($dir . '/content.tpl', html_entity_decode($page['content'])) === false) {
-					$this->error['content'] = _l("There was an error writing the content for the page.");
-				}
-			}
-
-			if (isset($page['style'])) {
-				if (file_put_contents($dir . '/style.less', $page['style']) === false) {
-					$this->error['style'] = _l("There was an error writing the stylesheet for the page.");
-				}
-			}
-		} else {
-			$this->error['content'] = _l("The directory %s was not writable.");
+		if (empty($page['name']) && (!$page_id || isset($page['name']))) {
+			$page['name'] = $page['title'];
 		}
 
+		//Format page name
+		if (isset($page['name'])) {
+			$page['name'] = slug($page['name']);
+		}
+
+		$orig = $this->getRecord($page_id);
+
 		if ($page_id) {
-			$old_page = $this->getPage($page_id);
+			$name_changed  = isset($page['name']) && $page['name'] !== $orig['name'];
+			$theme_changed = isset($page['theme']) && $page['theme'] !== $orig['theme'];
 
 			//Remove old directory if the page directory has changed
-			if ($old_page && ($old_page['name'] !== $page['name'] || $page['theme'] !== $old_page['theme'])) {
-				$old_dir = DIR_THEMES . $old_page['theme'] . '/template/page/' . $old_page['name'];
-				if (is_dir($old_dir)) {
-					rrmdir($old_dir);
-				}
+			if ($name_changed || $theme_changed) {
+				rrmdir(DIR_THEMES . $orig['theme'] . '/template/page/' . $orig['name']);
 			}
 
 			//Save page history if there have been changes
-			foreach ($old_page as $key => $value) {
-				if (isset($page[$key]) && $page[$key] != $value) {
+			foreach ($orig as $key => $value) {
+				if (isset($page[$key]) && $page[$key] !== $value) {
 					$this->saveHistory($page_id);
 					break;
 				}
 			}
+		}
+
+		if (!empty($page['options'])) {
+			$page['options'] = serialize($page['options']);
 		}
 
 		//Set Updated Date and User
@@ -79,10 +82,38 @@ class App_Model_Page extends App_Model_Table
 		if ($page_id) {
 			$page_id = $this->update('page', $page, $page_id);
 		} else {
+			if (empty($page['options'])) {
+				$page['options'] = serialize(array(
+					'show_title'       => 1,
+					'show_breadcrumbs' => 1,
+				));
+			}
+
 			$page_id = $this->insert('page', $page);
 		}
 
 		if ($page_id) {
+			$name  = isset($page['name']) ? $page['name'] : $orig['name'];
+			$theme = isset($page['theme']) ? $page['theme'] : $orig['theme'];
+
+			$dir = DIR_THEMES . $theme . '/template/page/' . $name;
+
+			if (_is_writable($dir)) {
+				if (isset($page['content'])) {
+					if (file_put_contents($dir . '/content.tpl', html_entity_decode($page['content'])) === false) {
+						$this->error['content'] = _l("There was an error writing the content for the page.");
+					}
+				}
+
+				if (isset($page['style'])) {
+					if (file_put_contents($dir . '/style.less', $page['style']) === false) {
+						$this->error['style'] = _l("There was an error writing the stylesheet for the page.");
+					}
+				}
+			} else {
+				$this->error['content'] = _l("The directory %s was not writable.");
+			}
+
 			if (!empty($page['alias'])) {
 				$this->url->setAlias($page['alias'], 'page/' . $page['name']);
 			}
@@ -99,7 +130,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function copyPage($page_id)
 	{
-		$page = $this->getPage($page_id);
+		$page = $this->getRecord($page_id);
 
 		return $this->addPage($page);
 	}
@@ -107,7 +138,7 @@ class App_Model_Page extends App_Model_Table
 	public function deletePage($page_id)
 	{
 		//Remove Directory
-		$page = $this->getPage($page_id);
+		$page = $this->getRecord($page_id);
 
 		if ($page) {
 			$dir = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'];
@@ -128,12 +159,14 @@ class App_Model_Page extends App_Model_Table
 		return $page_id;
 	}
 
-	public function getPage($page_id)
+	public function getRecord($page_id, $select = '*')
 	{
-		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
+		$page = parent::getRecord($page_id, $select);
 
 		if ($page) {
 			$this->getPageFiles($page);
+
+			$page['options'] = $page['options'] ? unserialize($page['options']) : array();
 
 			$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
@@ -158,11 +191,6 @@ class App_Model_Page extends App_Model_Table
 		$this->getPageFiles($page);
 
 		return $page;
-	}
-
-	public function getPageName($page_id)
-	{
-		return $this->queryVar("SELECT name FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 	}
 
 	public function getPageByName($name)
@@ -240,7 +268,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function saveHistory($page_id)
 	{
-		$page = $this->getPage($page_id);
+		$page = $this->getRecord($page_id);
 
 		$page['date']    = $this->date->now();
 		$page['user_id'] = $page['updated_user_id'];
@@ -248,20 +276,40 @@ class App_Model_Page extends App_Model_Table
 		return $this->insert('page_history', $page);
 	}
 
+	public function getTemplates($theme = null)
+	{
+		$theme = $theme ? $theme : option('site_theme', AMPLO_DEFAULT_THEME);
+
+		$themes = array($theme => $theme) + $this->theme->getThemeParents($theme);
+
+		$templates = array();
+
+		foreach ($themes as $t) {
+			$files = get_files(DIR_THEMES . $t . '/template/page/template/', 'tpl', FILELIST_STRING);
+
+			foreach ($files as $f) {
+				$name             = pathinfo($f, PATHINFO_FILENAME);
+				$templates[$name] = $name;
+			}
+		}
+
+		return $templates;
+	}
+
 	public function loadPages()
 	{
-		$pages = cache('page.loaded');
+		$this->pages = cache('page.loaded');
 
-		if ($pages === null) {
-			$pages = array();
+		if ($this->pages === null) {
+			$this->pages = array();
 
 			$page_list = $this->getRecords(array('cache' => true));
 
 			foreach ($page_list as $p) {
-				$pages[$p['theme']][$p['name']] = $p;
+				$this->pages[$p['theme']][$p['name']] = $p;
 			}
 
-			cache('page.loaded', $pages);
+			cache('page.loaded', $this->pages);
 		}
 
 		clearstatcache();
@@ -278,12 +326,12 @@ class App_Model_Page extends App_Model_Table
 
 				if ($th = @opendir($page_dir)) {
 					while (($name = readdir($th)) !== false) {
-						if ($name === '.' || $name === '..') {
+						if ($name === '.' || $name === '..' || $name === 'template') {
 							continue;
 						}
 
 						if (filetype($page_dir . $name) === 'dir') {
-							$this->syncPageFile(isset($pages[$theme][$name]) ? $pages[$theme][$name] : false, $theme, $name);
+							$this->syncPage($theme, $name);
 						}
 					}
 				}
@@ -293,8 +341,10 @@ class App_Model_Page extends App_Model_Table
 		closedir($handle);
 	}
 
-	private function syncPageFile($page, $theme, $name)
+	protected function syncPage($theme, $name)
 	{
+		$page = isset($this->pages[$theme][$name]) ? $this->pages[$theme][$name] : false;
+
 		$content_file = DIR_THEMES . $theme . '/template/page/' . $name . '/content.tpl';
 		$style_file   = DIR_THEMES . $theme . '/template/page/' . $name . '/style.less';
 
@@ -304,10 +354,12 @@ class App_Model_Page extends App_Model_Table
 			if ((is_file($content_file) && filemtime($content_file) > $time_updated)
 				|| (is_file($style_file) && filemtime($style_file) > $time_updated)
 			) {
-				$page['content'] = is_file($content_file) ? file_get_contents($content_file) : '';
-				$page['style']   = is_file($style_file) ? file_get_contents($style_file) : '';
+				$update = array(
+					'content' => is_file($content_file) ? file_get_contents($content_file) : '',
+					'style'   => is_file($style_file) ? file_get_contents($style_file) : '',
+				);
 
-				$this->save($page['page_id'], $page);
+				$this->save($page['page_id'], $update);
 			}
 		} elseif (is_file($content_file)) {
 			$page_data = get_comment_directives($content_file);
@@ -318,15 +370,15 @@ class App_Model_Page extends App_Model_Table
 			$style   = is_file($style_file) ? file_get_contents($style_file) : '';
 
 			$page = array(
-				'theme'         => $theme,
-				'name'          => $name,
-				'title'         => $title,
-				'template'      => '',
-				'content'       => $content,
-				'style'         => $style,
-				'status'        => 1,
-				'display_title' => $title ? 1 : 0,
-				'cache'         => $cache,
+				'theme'    => $theme,
+				'name'     => $name,
+				'title'    => $title,
+				'template' => !empty($page_data['template']) ? $page_data['template'] : null,
+				'content'  => $content,
+				'style'    => $style,
+				'status'   => 1,
+				'options'  => array(),
+				'cache'    => $cache,
 			);
 
 			$this->save(null, $page);

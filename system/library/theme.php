@@ -403,7 +403,7 @@ class Theme extends Library
 					break;
 				}
 				$theme     = $directives['parent'];
-				$parents[] = $theme;
+				$parents[$theme] = $theme;
 			} else {
 				break;
 			}
