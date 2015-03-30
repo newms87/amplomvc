@@ -16,23 +16,23 @@ class App_Controller_Header extends Controller
 			if (option('config_jquery_cdn', true)) {
 				$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);
 				$this->document->addScript("//code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
-				$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+				$this->document->addScript(DIR_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
 			} else {
-				$this->document->addScript(URL_RESOURCES . 'js/core.js', 50);
+				$this->document->addScript(DIR_RESOURCES . 'js/core.js', 50);
 			}
 		} else {
 			if (option('config_jquery_cdn', true)) {
 				$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);
 				$this->document->addScript("//code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 			} else {
-				$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
-				$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
+				$this->document->addScript(DIR_RESOURCES . 'js/jquery/jquery.js', 50);
+				$this->document->addScript(DIR_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 			}
 
-			$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+			$this->document->addScript(DIR_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
 		}
 
-		$this->document->addScript(URL_RESOURCES . 'js/common.js', 53);
+		$this->document->addScript(DIR_RESOURCES . 'js/common.js', 53);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('config_image_thumb_width'));

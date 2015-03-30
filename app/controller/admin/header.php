@@ -20,15 +20,15 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);
 			$this->document->addScript("//code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
 		} else {
-			$this->document->addScript(URL_RESOURCES . 'js/jquery/jquery.js', 50);
-			$this->document->addScript(URL_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
+			$this->document->addScript(DIR_RESOURCES . 'js/jquery/jquery.js', 50);
+			$this->document->addScript(DIR_RESOURCES . 'js/jquery/ui/jquery-ui.js', 51);
 		}
 
-		$this->document->addScript(URL_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
+		$this->document->addScript(DIR_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
 
-		$this->document->addScript(URL_RESOURCES . 'js/image_manager.js', 53);
-		$this->document->addScript(URL_RESOURCES . 'js/common.js', 54);
-		$this->document->addScript(theme_url('js/common.js'), 55);
+		$this->document->addScript(DIR_RESOURCES . 'js/image_manager.js', 53);
+		$this->document->addScript(DIR_RESOURCES . 'js/common.js', 54);
+		$this->document->addScript(theme_dir('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', option('admin_thumb_width'));

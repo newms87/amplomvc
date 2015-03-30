@@ -351,24 +351,23 @@ class Document extends Library
 			return false;
 		}
 
-		if (preg_match("/\\.less$/", $href)) {
-			if (!is_file($href)) {
-				$href = str_replace(URL_SITE, DIR_SITE, $href);
-			}
-
-			if (is_file($href)) {
-				$href = $this->compileLess($href, slug(str_replace(DIR_SITE, '', $href), '-'));
-			}
-
-			if (!$href) {
-				return false;
-			}
-		}
-
 		$file = str_replace(URL_SITE, DIR_SITE, $href);
 
-		if (is_file($file)) {
-			$href .= '?v=' . filemtime($file);
+		//Check if URL or stream wrapper
+		$is_file = strpos($file, '//') === false && is_file($file);
+
+		if ($is_file) {
+			$ext = pathinfo($file, PATHINFO_EXTENSION);
+
+			if ($ext === 'less') {
+				$href = $this->compileLess($file, slug(str_replace(DIR_SITE, '', $file), '-'));
+
+				if (!$href) {
+					return false;
+				}
+			}
+
+			$href = str_replace(DIR_SITE, URL_SITE, $file) . '?v=' . filemtime($file);
 		}
 
 		$this->styles[md5($href . $rel . $media)] = array(
@@ -387,27 +386,21 @@ class Document extends Library
 
 	public function addScript($script, $priority = 100, $minify = null)
 	{
-		if ($minify === null) {
-			$minify = option('minify_js_files', false);
-		}
+		//Check if URL or stream wrapper
+		$is_url = strpos($script, '//') !== false;
 
-		//First check for a URL wrapper, then check if it is a file
-		if (strpos($script, '//') === false && !is_file($script)) {
-			if (is_file(DIR_SITE . $script)) {
-				$script = URL_SITE . $script;
-			} elseif (is_file(DIR_RESOURCES . 'js/' . $script)) {
-				$script = URL_RESOURCES . 'js/' . $script;
+		if ($is_url) {
+			if ($minify) {
+				$script = $this->minifyJsFile($script);
 			}
-		}
+		} else {
+			if (is_file($script)) {
+				if ($minify === null ? option('minify_js_files', false) : $minify) {
+					$script = $this->minifyJsFile($script);
+				}
 
-		if ($minify) {
-			$script = $this->minifyJsFile($script);
-		}
-
-		$file = str_replace(URL_SITE, DIR_SITE, $script);
-
-		if (is_file($file)) {
-			$script .= '?v=' . filemtime($file);
+				$script = str_replace(DIR_SITE, URL_SITE, $script) . '?v=' . filemtime($script);
+			}
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
@@ -415,7 +408,7 @@ class Document extends Library
 
 	public function localizeScript($script, $priority = 100)
 	{
-		$this->addScript('local:' . $script, $priority);
+		$this->addScript('local://' . $script, $priority);
 	}
 
 	public function localizeVar($var, $value)
@@ -490,7 +483,7 @@ class Document extends Library
 		foreach ($this->scripts as $priority => $script_list) {
 			foreach ($script_list as $script) {
 				//Separate Localized files
-				if (strpos($script, 'local:') === 0) {
+				if (strpos($script, 'local://') === 0) {
 					if (is_file($file = substr($script, 6))) {
 						ob_start();
 						include($file);

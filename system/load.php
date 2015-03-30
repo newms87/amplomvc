@@ -3,6 +3,10 @@
 // Registry
 $registry = new Registry();
 
+//Helpers
+//Tip: to override core functions, use a mod file!
+require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
+
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
@@ -11,10 +15,7 @@ $registry->set('db', $db);
 $router = new Router();
 $registry->set('route', $router);
 
-//Helpers
-//Tip: to override core functions, use a mod file!
-require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
-
+//Load Helper files
 $handle = opendir(DIR_SYSTEM . 'helper/');
 while (($helper = readdir($handle))) {
 	if (strpos($helper, '.') === 0) {
@@ -31,11 +32,10 @@ while (($helper = readdir($handle))) {
 	}
 }
 
+//Load shortcuts helper file to allow overriding
 require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 
-//Initialize Database Tables (after loading cache functions)
-$db->updateTables();
-
+//Register the core routing hook
 register_routing_hook('amplo', 'amplo_routing_hook');
 
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
