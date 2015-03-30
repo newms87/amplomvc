@@ -103,9 +103,7 @@ function render_message($type = null, $close = true)
 function send_mail($params)
 {
 	global $registry;
-	$mail = $registry->get('mail');
-	$mail->init($params);
-	return $mail->send();
+	return $registry->get('mail')->init($params)->send();
 }
 
 function img($image, $width = null, $height = null, $title = null, $alt = null, $version = true, $size_attr = true, $default = null, $cast_protocol = false)

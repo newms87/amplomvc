@@ -36,7 +36,7 @@ class App_Model_Settings extends Model
 		'config_cron_status'                      => 1,
 		'config_allow_close_message'              => 1,
 		'config_default_layout_id'                => '',
-		'site_theme'                              => 'amplo',
+		'site_theme'                              => AMPLO_DEFAULT_THEME,
 		'site_address_format'                     => '',
 		'site_international'                      => 0,
 		'config_country_id'                       => 223,

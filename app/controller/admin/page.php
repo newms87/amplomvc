@@ -59,12 +59,14 @@ class App_Controller_Admin_Page extends Controller
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
 
-			if (user_can('w', 'page')) {
+			if (user_can('r', 'admin/page/form')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),
 					'href' => site_url('admin/page/form', 'page_id=' . $page_id)
 				);
+			}
 
+			if (user_can('w', 'admin/page/delete')) {
 				$actions['delete'] = array(
 					'text' => _l("Delete"),
 					'href' => site_url('admin/page/delete', 'page_id=' . $page_id)
@@ -113,7 +115,7 @@ class App_Controller_Admin_Page extends Controller
 		$page = $_POST;
 
 		if ($page_id && !IS_POST) {
-			$page = $this->Model_Page->getPage($page_id);
+			$page = $this->Model_Page->getRecord($page_id);
 		}
 
 		//Set Values or Defaults
@@ -126,7 +128,8 @@ class App_Controller_Admin_Page extends Controller
 			'style'            => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
-			'display_title'    => 1,
+			'options'          => array(),
+			'template'         => '',
 			'layout_id'        => 0,
 			'blocks'           => array(),
 			'status'           => 1,
@@ -135,9 +138,15 @@ class App_Controller_Admin_Page extends Controller
 
 		$page += $defaults;
 
+		$page['options'] += array(
+			'show_title'       => 1,
+			'show_breadcrumbs' => 1,
+		);
+
 		//Template Data
-		$page['data_layouts'] = $this->Model_Layout->getRecords(array('cache' => true));
-		$page['data_themes']  = $this->theme->getThemes();
+		$page['data_templates'] = $this->Model_Page->getTemplates();
+		$page['data_layouts']   = $this->Model_Layout->getRecords(array('cache' => true));
+		$page['data_themes']    = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create-layout');
 
@@ -158,12 +167,11 @@ class App_Controller_Admin_Page extends Controller
 
 	public function save()
 	{
-		$page = $_POST + array(
-				'display_title' => 0,
-			);
+		$post = $_POST;
+		$post['t'] = $post['template'];
 
-		if ($page_id = $this->Model_Page->save(_request('page_id'), $page)) {
-			message('success', _l("The Page has been updated successfully!"));
+		if ($page_id = $this->Model_Page->save(_request('page_id'), $post)) {
+			message('success', _l("The Page has been saved!"));
 			message('data', array('page_id' => $page_id));
 
 			if ($this->Model_Page->hasError()) {
@@ -184,12 +192,10 @@ class App_Controller_Admin_Page extends Controller
 
 	public function delete()
 	{
-		$this->Model_Page->deletePage($_GET['page_id']);
-
-		if ($this->Model_Page->hasError()) {
-			message('error', $this->Model_Page->getError());
+		if ($this->Model_Page->deletePage(_get('page_id'))) {
+			message('success', _l("The Page was deleted!"));
 		} else {
-			message('notify', _l("Page was deleted!"));
+			message('error', $this->Model_Page->getError());
 		}
 
 		if ($this->is_ajax) {
@@ -201,8 +207,12 @@ class App_Controller_Admin_Page extends Controller
 
 	public function batch_action()
 	{
-		foreach ($_POST['batch'] as $page_id) {
-			switch ($_POST['action']) {
+		$batch = (array)_request('batch');
+		$action = _request('action');
+		$value = _request('value');
+
+		foreach ($batch as $page_id) {
+			switch ($action) {
 				case 'enable':
 					$this->Model_Page->update_field($page_id, array('status' => 1));
 					break;
@@ -224,13 +234,13 @@ class App_Controller_Admin_Page extends Controller
 		if ($this->Model_Page->hasError()) {
 			message('error', $this->Model_Page->getError());
 		} else {
-			message('success', _l("Success: You have modified navigation!"));
+			message('success', _l("The pages have been updated!"));
 		}
 
 		if ($this->is_ajax) {
 			$this->listing();
 		} else {
-			redirect('admin/navigation');
+			redirect('admin/page');
 		}
 	}
 

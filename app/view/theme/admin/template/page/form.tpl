@@ -19,6 +19,7 @@
 				<a href="<?= site_url('admin/page'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
+
 		<div class="section clearfix">
 
 			<div id="tabs" class="htabs">
@@ -32,17 +33,45 @@
 					<div class="page_title">
 						<div class="title">{{Page Title}}</div>
 						<input type="text" name="title" size="60" value="<?= $title; ?>"/>
-						<span class="display_title">
-							<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1"/>
-							<label for="display_title">{{Display Title?}}</label>
-						</span>
 					</div>
 
-					<div class="html_title">{{HTML}}</div>
-					<textarea id="html_editor" name="content"><?= $content; ?></textarea>
+					<div class="show-title">
+						<label for="show-title">{{Display Title?}}</label>
 
-					<div class="css_title">{{Style}}</div>
-					<textarea id="css_editor" name="style"><?= $style; ?></textarea>
+						<?= build(array(
+							'type'   => 'radio',
+							'name'   => 'options[show_title]',
+							'data'   => array(
+								1 => '{{Yes}}',
+								0 => '{{No}}',
+							),
+							'select' => $options['show_title'],
+						)); ?>
+					</div>
+
+					<div class="show-breadcrumbs">
+						<label for="show-breadcrumbs">{{Show Breadcrumbs?}}</label>
+
+						<?= build(array(
+							'type'   => 'radio',
+							'name'   => 'options[show_breadcrumbs]',
+							'data'   => array(
+								1 => '{{Yes}}',
+								0 => '{{No}}',
+							),
+							'select' => $options['show_breadcrumbs'],
+						)); ?>
+					</div>
+
+					<div class="html-content">
+						<div class="label">{{HTML}}</div>
+						<textarea id="html-editor" name="content"><?= $content; ?></textarea>
+					</div>
+
+					<div class="style-content">
+						<div class="label">{{Style}}</div>
+						<textarea id="style-editor" name="style"><?= $style; ?></textarea>
+					</div>
 				</div>
 
 				<div id="code_preview">
@@ -103,6 +132,18 @@
 
 			<div id="tab-design">
 				<table class="form">
+					<tr>
+						<td class="required">{{Template}}</td>
+						<td>
+							<?=
+							build(array(
+								'type'   => 'select',
+								'name'   => 'template',
+								'data'   => $data_templates,
+								'select' => $template,
+							)); ?>
+						</td>
+					</tr>
 					<tr>
 						<td class="required">{{Theme}}</td>
 						<td>
@@ -204,14 +245,14 @@
 	//		update_zoom();
 	//	});
 
-	$('#html_editor').codemirror({mode: 'html', update: update_preview});
-	$('#css_editor').codemirror({mode: 'css', update: update_preview});
+	$('#html-editor').codemirror({mode: 'html', update: update_preview});
+	$('#style-editor').codemirror({mode: 'css', update: update_preview});
 
 	function update_preview() {
 		update_delay.delay = 1;
 
-		$('#html_editor')[0].cm_editor.save();
-		$('#css_editor')[0].cm_editor.save();
+		$('#html-editor')[0].cm_editor.save();
+		$('#style-editor')[0].cm_editor.save();
 
 		if (update_delay.dirty) {
 			return;
@@ -227,12 +268,9 @@
 
 			update_delay.dirty = false;
 
-			var style = $('#css_editor')[0].cm_editor.getValue();
-			var content = $('#html_editor')[0].cm_editor.getValue();
-
 			var data = {
-				style:   style,
-				content: content
+				style:   $('#style-editor')[0].cm_editor.getValue(),
+				content: $('#html-editor')[0].cm_editor.getValue()
 			}
 			update_delay.loading = true;
 			$.post("<?= $page_preview; ?>", data, function (response) {
@@ -251,7 +289,7 @@
 		$preview.find('#page-title').html($(this).val());
 	});
 
-	$('[name=display_title]').change(function () {
+	$('#show-title').change(function () {
 		$preview.find('#page-title').stop().toggle($(this).val());
 	});
 

@@ -109,6 +109,8 @@ class Customer extends Library
 			return false;
 		}
 
+		$customer['name'] = trim($customer['first_name'] . ' ' . $customer['last_name']);
+
 		$this->customer_id                   = (int)$customer['customer_id'];
 		$_SESSION['customer']['customer_id'] = $this->customer_id;
 		$this->info                          = $customer;
@@ -130,7 +132,7 @@ class Customer extends Library
 	public function register($customer, $login = true)
 	{
 		if (option('config_account_terms_page_id')) {
-			$page_info = $this->Model_Page->getPage(option('config_account_terms_page_id'));
+			$page_info = $this->Model_Page->getRecord(option('config_account_terms_page_id'));
 
 			if ($page_info && !isset($customer['agree'])) {
 				$this->error['agree'] = _l("You must agree to the %s!", $page_info['title']);

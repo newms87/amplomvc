@@ -26,7 +26,7 @@ String.prototype.str_replace = function (find, replace) {
 $ac.alq = {};
 
 $ac.al = $.extend($ac.al || {}, {
-	code_mirror:  'admin/common/codemirror',
+	codemirror:   ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
 	list_widget:  'system/resources/js/listings.js',
 	ac_template:  'system/resources/js/ac_template.js',
 	amplo_slider: 'system/resources/js/amplo_slider.js',
@@ -38,23 +38,32 @@ for (var al in $ac.al) {
 }
 
 function register_autoload(fn, url) {
+	url = typeof url === 'string' ? [url] : url;
+
 	$.fn[fn] = function (view_id) {
 		var al = arguments.callee.fn;
 
 		if (!$ac.alq[al]) {
 			$ac.alq[al] = [];
 
-			$.getScript($ac.site_url + url, function () {
-				for (var l in $ac.alq[al]) {
-					var q = $ac.alq[al][l];
-					$.fn[al].apply(q.me, q.args);
-				}
+			var load_count = 1;
+			for (var u in url) {
+				$.getScript($ac.site_url + url[u], function () {
+					if (load_count++ >= url.length) {
+						for (var l in $ac.alq[al]) {
+							var q = $ac.alq[al][l];
+							$.fn[al].apply(q.me, q.args);
+						}
 
-				$(document).trigger(al);
-			});
+						$(document).trigger(al);
+					}
+				});
+			}
 		}
 
 		$ac.alq[al].push({me: this, args: arguments});
+
+		return this;
 	};
 
 	$.fn[fn].fn = fn;
@@ -276,12 +285,11 @@ $.fn.tabs = function (opts) {
 
 	$tabs.o = opts;
 
-	$tabs.changeOptions = function(o) {
+	$tabs.changeOptions = function (o) {
 		$.extend($tabs.o, o);
-		console.log('change', o, $tabs.o);
 	}
 
-	$tabs.setOptions = function(o) {
+	$tabs.setOptions = function (o) {
 		$tabs.o = o;
 	}
 
@@ -624,15 +632,13 @@ $.fn.loading = function (params) {
 	return this.each(function (i, e) {
 		var $e = $(e);
 
-		if (typeof params !== 'string') {
-			option = $.extend({}, {
-				text:    $e.attr('data-loading') || params.default_text,
-				disable: true,
-				delay:   false
-			}, params);
-		}
+		var option = typeof params === 'string' ? {} : $.extend({}, {
+			text:    $e.attr('data-loading') || params.default_text,
+			disable: true,
+			delay:   false
+		}, params);
 
-		if ((option && option.text) || $e.data('original')) {
+		if (option.text || $e.data('original')) {
 			if (params === 'stop') {
 				$e.prop('disabled', false).removeAttr('disabled');
 				$e.html($e.data('original'));

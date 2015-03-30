@@ -30,3 +30,22 @@ $this->db->createTable('meta', <<<SQL
   KEY `TYPE` (`type`)
 SQL
 );
+
+if (!$this->db->hasColumn('page', 'options')) {
+	$this->db->addColumn('page', 'options', "TEXT NULL AFTER `status`");
+
+	if ($this->db->hasColumn('page', 'display_title')) {
+		$pages = $this->db->queryRows("SELECT page_id, display_title FROM {$this->db->t['page']}");
+
+		foreach ($pages as $p) {
+        $options = array('display_title' => $p['display_title']);
+
+        $this->db->query("UPDATE {$this->db->t['page']} SET `options` = '" . serialize($options) . "' WHERE page_id = " . $p['page_id']);
+		}
+
+     $this->db->dropColumn('page', 'display_title');
+	}
+
+  $this->db->query("ALTER TABLE `{$this->t['page']}` ADD UNIQUE INDEX `THEMENAME` (`theme` ASC, `name` ASC)");
+}
+

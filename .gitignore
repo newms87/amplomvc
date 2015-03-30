@@ -28,8 +28,8 @@ logs
 !/app/view/theme/amplo
 !/app/view/theme/admin
 /app/view/theme/amplo/template/page/*
-!/app/view/theme/amplo/template/page/default.tpl
-!/app/view/theme/amplo/template/page/content.tpl
+!/app/view/theme/amplo/template/page/template
+!/app/view/theme/amplo/template/page/template/*
 
 
 /system/mods
