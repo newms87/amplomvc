@@ -393,14 +393,14 @@ class Document extends Library
 			if ($minify) {
 				$script = $this->minifyJsFile($script);
 			}
-		} else {
-			if (is_file($script)) {
-				if ($minify === null ? option('minify_js_files', false) : $minify) {
-					$script = $this->minifyJsFile($script);
-				}
+		} elseif (is_file($script)) {
+			$filemtime = filemtime($script);
 
-				$script = str_replace(DIR_SITE, URL_SITE, $script) . '?v=' . filemtime($script);
+			if ($minify === null ? option('minify_js_files', false) : $minify) {
+				$script = $this->minifyJsFile($script);
 			}
+
+			$script = str_replace(DIR_SITE, URL_SITE, $script) . '?v=' . $filemtime;
 		}
 
 		$this->scripts[(int)$priority][md5($script)] = $script;
