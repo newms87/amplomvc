@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 	$('#disable-admin-bar').click(function () {
-		$.cookie('<?= COOKIE_PREFIX . 'disable_admin_bar'; ?>, '1');
+		$.cookie('<?= COOKIE_PREFIX . 'disable_admin_bar'; ?>', '1');
 		$(this).closest('#admin-bar').remove();
 		$('body').removeClass("admin-bar");
 	});
