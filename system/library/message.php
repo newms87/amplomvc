@@ -17,6 +17,11 @@ class Message extends Library
 		}
 	}
 
+	public function set($messages)
+	{
+		$this->messages = $messages;
+	}
+
 	public function add($type, $message, $key = null)
 	{
 		if ($type === 'data') {

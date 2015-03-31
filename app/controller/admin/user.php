@@ -348,4 +348,11 @@ class App_Controller_Admin_User extends Controller
 			redirect('admin/user/login');
 		}
 	}
+
+	public function get_alerts()
+	{
+		$alerts = $this->user->fetchAlerts();
+
+		output_json($alerts);
+	}
 }

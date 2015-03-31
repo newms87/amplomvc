@@ -86,12 +86,7 @@ class App_Model_User extends App_Model_Table
 		}
 
 		if (!$multi) {
-			$where = array(
-				'user_id' => $user_id,
-				'key'     => $key,
-			);
-
-			$this->delete('user_meta', $where);
+			$this->deleteMeta($user_id, $key);
 		}
 
 		$data = array(
@@ -118,13 +113,7 @@ class App_Model_User extends App_Model_Table
 			}
 
 			if (!$exactly) {
-				//Delete old value (if any)
-				$where = array(
-					'user_id' => $user_id,
-					'key'     => $key,
-				);
-
-				$this->delete('user_meta', $where);
+				$this->deleteMeta($user_id, $key);
 			}
 
 			//Add new value
@@ -139,6 +128,16 @@ class App_Model_User extends App_Model_Table
 		}
 
 		return true;
+	}
+
+	public function deleteMeta($user_id, $key)
+	{
+		$where = array(
+			'user_id' => $user_id,
+			'key'     => $key,
+		);
+
+		return $this->delete('user_meta', $where);
 	}
 
 	public function getMeta($user_id, $key = null)

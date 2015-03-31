@@ -332,6 +332,7 @@ $.fn.show_msg = function (type, msg, options) {
 	}
 
 	options = $.extend({
+		style:       'stacked',
 		append:      true,
 		append_list: false,
 		delay:       false,
@@ -360,7 +361,7 @@ $.fn.show_msg = function (type, msg, options) {
 		var $box = $(e).find('.messages.' + type);
 
 		if (!$box.length) {
-			$box = $('<div />').addClass('messages ' + type);
+			$box = $('<div />').addClass('messages ' + type + ' ' + options.style);
 
 			if (options.close) {
 				$box.append($('<div />').addClass('close').click(function () {
