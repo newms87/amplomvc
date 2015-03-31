@@ -209,7 +209,7 @@ abstract class Model
 		return $this->queryRow("SELECT `" . implode(',', $this->escape($fields)) . " FROM `" . $this->t[$table] . "` WHERE $where LIMIT 1");
 	}
 
-	protected function insert($table, $data)
+	protected function insert($table, $data, $update = false)
 	{
 		$t = $this->t[$table];
 
@@ -222,7 +222,11 @@ abstract class Model
 			return false;
 		}
 
-		$success = $this->query("INSERT INTO `$t` SET $values");
+		if ($update) {
+			$success = $this->query("INSERT INTO `$t` SET $values ON DUPLICATE KEY UPDATE $values");
+		} else {
+			$success = $this->query("INSERT INTO `$t` SET $values");
+		}
 
 		if (!$success) {
 			trigger_error(_l("There was a problem inserting entry for %s and was not modified.", $table));
