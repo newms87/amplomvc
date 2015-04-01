@@ -24,12 +24,21 @@ if (!defined('DOMAIN')) {
 	define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 }
 
+if (!defined('SITE_BASE')) {
+	define('SITE_BASE', '/');
+}
+
 if (!defined('URL_SITE')) {
 	define('URL_SITE', '//' . DOMAIN . SITE_BASE);
 }
 
+//Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
+// and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
+if (!defined('COOKIE_PREFIX')) {
+	define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
+}
+
 $config_defines = array(
-	'SITE_BASE'             => '//' . DOMAIN . SITE_BASE,
 	'HTTP_SITE'             => 'http://' . DOMAIN . SITE_BASE,
 	'HTTPS_SITE'            => 'https://' . DOMAIN . SITE_BASE,
 	'URL_IMAGE'             => URL_SITE . 'image/',
@@ -47,7 +56,7 @@ $config_defines = array(
 	'DB_PROFILE_NO_CACHE'   => false,
 	'AMPLO_DEFAULT_THEME'   => 'amplo',
 	'AMPLO_TIME_LOG'        => false,
-	'AMPLO_SESSION'         => 'cross-store-session',
+	'AMPLO_SESSION'         => COOKIE_PREFIX . 'amplo-session',
 	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
 	'CACHE_FILE_EXPIRATION' => 3600,
 );

@@ -46,12 +46,6 @@ function _session($key, $default = null)
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
-//Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
-// and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
-if (!defined('COOKIE_PREFIX')) {
-	define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
-}
-
 function _cookie($name, $default = null)
 {
 	if (isset($_COOKIE[COOKIE_PREFIX . $name])) {
