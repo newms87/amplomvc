@@ -20,7 +20,12 @@ abstract class Model
 	public function __construct()
 	{
 		global $registry, $model_history;
-		$registry->set(strtolower(get_class($this)), $this);
+
+		$reg_key = strtolower(get_class($this));
+
+		if (!$registry->has($reg_key)) {
+			$registry->set($reg_key, $this);
+		}
 
 		if (!self::$model_history) {
 			self::$model_history = new Model_T;

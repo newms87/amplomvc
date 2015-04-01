@@ -270,18 +270,18 @@ class User extends Library
 		return $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
 	}
 
-	public function alert($user_id, $type, $message)
+	public function alert($user_id, $type, $key, $message)
 	{
 		if ($user_id !== $this->user_id) {
 			$alerts          = $this->getAlerts($user_id);
-			$alerts[$type][] = $message;
+			$alerts[$type][$key] = $message;
 			$this->Model_User->addMeta($user_id, 'alert', $alerts);
 		} else {
 			if ($this->alerts === null) {
 				$this->getAlerts();
 			}
 
-			$this->alerts[$type][] = $message;
+			$this->alerts[$type][$key] = $message;
 		}
 	}
 

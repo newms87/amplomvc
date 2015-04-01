@@ -351,8 +351,6 @@ class App_Controller_Admin_User extends Controller
 
 	public function get_alerts()
 	{
-		$alerts = $this->user->fetchAlerts();
-
-		output_json($alerts);
+		output_json($this->user->fetchAlerts());
 	}
 }

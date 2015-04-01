@@ -534,7 +534,7 @@ function _set_prefix($prefix)
 	$registry->get('cache')->setDir(DIR_CACHE . $prefix);
 }
 
-function get_caller($offset = 0, $limit = 10)
+function get_caller($offset = 0, $limit = 20)
 {
 	$calls = debug_backtrace(false);
 

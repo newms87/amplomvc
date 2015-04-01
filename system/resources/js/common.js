@@ -5,6 +5,10 @@ var screen_lg = screen_width >= 1200,
 	screen_sm = screen_width >= 480 && screen_width < 768,
 	screen_xs = screen_width < 480;
 
+Function.prototype.loop = function (time) {
+	var fn = this;
+	setTimeout(function(){fn() === false ? 0 : fn.loop(time)}, time);
+}
 
 String.prototype.toSlug = function (sep) {
 	return this.toLowerCase().replace(/\s/, sep || '-').replace(/[^a-z0-9-_]/, '');

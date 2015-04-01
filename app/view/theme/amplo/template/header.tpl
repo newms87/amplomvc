@@ -25,7 +25,7 @@
 					$('.banner-bar-row').toggleClass('hide', $(window).scrollTop() > 20);
 				});
 
-				function cycle_banner() {
+				(function cycle_banner() {
 					var $show = $('.banner-bar .slide.show');
 					var $next = $show.removeClass('show').next();
 
@@ -34,11 +34,7 @@
 					}
 
 					$next.addClass('show');
-
-					setTimeout(cycle_banner, 5000);
-				}
-
-				setTimeout(cycle_banner, 5000);
+				}).loop(5000);
 			</script>
 		</div>
 	<? } ?>
