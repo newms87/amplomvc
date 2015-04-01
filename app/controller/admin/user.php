@@ -351,6 +351,10 @@ class App_Controller_Admin_User extends Controller
 
 	public function get_alerts()
 	{
-		output_json($this->user->fetchAlerts());
+		if ($this->is_ajax) {
+			output_json($this->user->fetchAlerts());
+		} else {
+			redirect('admin');
+		}
 	}
 }
