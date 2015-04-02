@@ -71,7 +71,9 @@ class Cron extends Library
 					$method    = $task['method'];
 
 					if (method_exists($classname, $method)) {
+						ob_start();
 						$this->$classname->$method();
+						$msg .= ob_get_clean();
 					} else {
 						$error = _l("Cron::run(): Failed to run %s. Class Method, %s() was not found.", $task['name'], $classname . '::' . $method);
 						$msg .= $error;
