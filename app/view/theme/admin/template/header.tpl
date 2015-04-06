@@ -9,11 +9,11 @@
 		<div class="branding col xs-12 md-8 left middle">
 			<div class="admin-logo col xs-12 left top">
 				<a href="<?= site_url(); ?>" class="block">
-					<? if ($logo = option('admin_logo')) { ?>
+					<? if ($logo = option('admin_logo', DIR_THEMES . 'amplo/image/amplo-logo.png')) { ?>
 						<? if ($logo_srcset = option('admin_logo_srcset')) { ?>
-							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('admin_logo_width'), option('admin_logo_height')), $logo_srcset, option('admin_name'), option('admin_name')); ?> />
+							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('admin_logo_width'), option('admin_logo_height', 80)), $logo_srcset, option('admin_name'), option('admin_name')); ?> />
 						<? } else { ?>
-							<img <?= img($logo, option('admin_logo_width'), option('admin_logo_height'), option('admin_name'), option('admin_name')); ?> />
+							<img <?= img($logo, option('admin_logo_width'), option('admin_logo_height', 80), option('admin_name'), option('admin_name')); ?> />
 						<? } ?>
 					<? } else { ?>
 						<?= option('site_name'); ?>
