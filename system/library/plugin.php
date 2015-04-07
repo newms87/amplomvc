@@ -2,6 +2,8 @@
 
 class Plugin extends Library
 {
+	public $changes = array();
+
 	protected
 		$plugins,
 		$installed;
@@ -71,7 +73,7 @@ class Plugin extends Library
 		);
 
 		if (!$this->Model_Plugin->save(null, $plugin)) {
-			$this->error = $this->Model_Plugin->getError();
+			$this->error = $this->Model_Plugin->fetchError();
 			return false;
 		}
 
@@ -142,6 +144,8 @@ class Plugin extends Library
 
 	public function upgrade($name)
 	{
+		$this->changes = array();
+
 		$instance = $this->loadPlugin($name);
 
 		if (!$instance) {
@@ -166,7 +170,7 @@ class Plugin extends Library
 		$version = !empty($directives['version']) ? $directives['version'] : '1.0';
 
 		if (!$this->Model_Plugin->save($plugin_id, array('version' => $version))) {
-			$this->error = $this->Model_Plugin->getError();
+			$this->error = $this->Model_Plugin->fetchError();
 			return false;
 		}
 
@@ -174,9 +178,9 @@ class Plugin extends Library
 
 		foreach ($changes as $file) {
 			if (!$this->activatePluginFile($name, $file)) {
-				$this->error[$name] = _l("Failed updating change for %s", str_replace(DIR_SITE, '', $file));
+				$this->error[$name][$file] = _l("Failed updating change for %s", str_replace(DIR_SITE, '', $file));
 			} else {
-				$this->error['changes'][$name] = _l("Added file %s", str_replace(DIR_SITE, '', $file));
+				$this->changes[$file] = $file;
 			}
 		}
 
@@ -235,7 +239,7 @@ class Plugin extends Library
 
 		//Generate the live file with the contents of the plugin file
 		if (!_is_writable(dirname($live_file))) {
-			$this->error = _l("%s(): Live File destination was not writable: %s", $live_file);
+			$this->error[$plugin_file]['destination'] = _l("%s(): Live File destination was not writable: %s", $live_file);
 			return false;
 		}
 
@@ -247,7 +251,7 @@ class Plugin extends Library
 			);
 
 			if (!$this->mod->apply($plugin_file, $directives)) {
-				$this->error = $this->mod->getError();
+				$this->error[$plugin_file]['mod'] = $this->mod->fetchError();
 			}
 		} else {
 			//Live file already exists! This is a possible conflict...
@@ -270,7 +274,7 @@ class Plugin extends Library
 			}
 
 			if (!symlink($plugin_file, $live_file)) {
-				$this->error['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
+				$this->error[$plugin_file]['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
 			}
 		}
 

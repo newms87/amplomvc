@@ -29,7 +29,7 @@
 					</div>
 
 					<div class="buttons submit">
-						<button>{{Change Password}}</button>
+						<button data-loading="{{Changing...}}">{{Change Password}}</button>
 
 						<div class="cancel buttons">
 							<a href="<?= site_url('customer/login'); ?>">{{Cancel}}</a>

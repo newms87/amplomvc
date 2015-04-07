@@ -73,8 +73,8 @@ class App_Controller_Admin_Invoice extends Controller
 
 			if (user_can('w', 'admin/invoice/cancel') && $invoice['status'] != App_Model_Invoice::STATUS_CANCELLED) {
 				$actions['cancel'] = array(
-					'text' => _l("Cancel"),
-					'href' => site_url('admin/invoice/cancel', 'invoice_id=' . $invoice_id),
+					'text'          => _l("Cancel"),
+					'href'          => site_url('admin/invoice/cancel', 'invoice_id=' . $invoice_id),
 					'#data-confirm' => '',
 				);
 			}
@@ -305,6 +305,11 @@ class App_Controller_Admin_Invoice extends Controller
 				$customer['customer_id'] = $customer['client_id'];
 			}
 		}
+
+		$customer += array(
+			'customer_id' => '',
+			'address'     => '',
+		);
 
 		$order_ids = !empty($invoice['data']['line_items']) ? $invoice['data']['line_items'] : array();
 		$orders    = array();

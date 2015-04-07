@@ -365,9 +365,9 @@ class Document extends Library
 				if (!$href) {
 					return false;
 				}
+			} else {
+				$href = str_replace(DIR_SITE, URL_SITE, $file) . '?v=' . filemtime($file);
 			}
-
-			$href = str_replace(DIR_SITE, URL_SITE, $file) . '?v=' . filemtime($file);
 		}
 
 		$this->styles[md5($href . $rel . $media)] = array(
