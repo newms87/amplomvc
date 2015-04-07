@@ -256,9 +256,9 @@
 						<td><?=
 							build(array(
 								'type'   => 'radio',
-								'name'   => 'config_cron_status',
+								'name'   => 'cron_status',
 								'data'   => $data_yes_no,
-								'select' => $config_cron_status
+								'select' => $cron_status
 							)); ?></td>
 					</tr>
 					<tr>

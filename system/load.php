@@ -61,6 +61,12 @@ require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 //Register the core routing hook
 register_routing_hook('amplo', 'amplo_routing_hook');
 
+//PHP Info
+if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
+	phpinfo();
+	exit;
+}
+
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
 
@@ -94,25 +100,18 @@ $registry->set('response', $response);
 new Plugin();
 
 //Cron Called from system
-if (option('config_cron_status')) {
+if (option('cron_status', true)) {
 	if (defined("RUN_CRON")) {
 		echo $registry->get('cron')->run();
 		exit;
 	} //Cron Called from browser
 	elseif (isset($_GET['run_cron'])) {
-		$result = $registry->get('cron')->run();
-		echo nl2br($result);
+		echo nl2br($registry->get('cron')->run());
 		exit;
 	} //Check if poor man's cron should run
-	elseif (option('config_cron_check')) {
+	elseif (option('cron_check')) {
 		$registry->get('cron')->check();
 	}
-}
-
-//PHP Info
-if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
-	phpinfo();
-	exit;
 }
 
 //Router

@@ -33,7 +33,7 @@ class App_Model_Settings extends Model
 		'config_default_store'                    => '',
 		'site_meta_description'                   => '',
 		'config_debug'                            => 0,
-		'config_cron_status'                      => 1,
+		'cron_status'                             => 1,
 		'config_allow_close_message'              => 1,
 		'config_default_layout_id'                => '',
 		'site_theme'                              => AMPLO_DEFAULT_THEME,
