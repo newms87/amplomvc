@@ -198,7 +198,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			}
 
 			if ($this->Model_View->hasError()) {
-				message('error', $this->Model_View->getError());
+				message('error', $this->Model_View->fetchError());
 			} else {
 				message('success', _l("The Settings have been saved."));
 			}

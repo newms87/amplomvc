@@ -55,7 +55,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		$this->theme->saveTheme($theme, $_POST['configs'], $_POST['stylesheet']);
 
 		if ($this->theme->hasError()) {
-			message('error', $this->theme->getError());
+			message('error', $this->theme->fetchError());
 		} else {
 			message('success', _l("You have successfully updated the Theme Settings!"));
 		}
@@ -72,7 +72,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		if ($this->theme->restore()) {
 			message('success', _l("Store theme has been restored to the default values"));
 		} else {
-			message('error', $this->theme->getError());
+			message('error', $this->theme->fetchError());
 		}
 
 		if ($this->is_ajax) {

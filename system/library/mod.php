@@ -137,7 +137,7 @@ class Mod extends Library
 		$contents = $instance->apply($source_file, $mod_file, $ext, $meta);
 
 		if (!$contents) {
-			$this->error = $instance->getError();
+			$this->error = $instance->fetchError();
 			return false;
 		}
 

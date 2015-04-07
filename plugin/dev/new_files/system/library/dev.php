@@ -16,7 +16,7 @@ class Dev extends Library
 		}
 
 		if (!$this->db->dump($file, $tables, $prefix, $remove_prefix)) {
-			$this->error['dump']   = $this->db->getError();
+			$this->error['dump']   = $this->db->fetchError();
 			$this->error['failed'] = _l("Database backup failed.");
 			return false;
 		}
@@ -115,7 +115,7 @@ class Dev extends Library
 
 				return true;
 			} else {
-				message('warning', $this->getError());
+				message('warning', $this->fetchError());
 			}
 		}
 

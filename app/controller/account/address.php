@@ -105,7 +105,7 @@ class App_Controller_Account_Address extends Controller
 		if ($address_id) {
 			message('success', _l("You have successfully added an address to your account!"));
 		} else {
-			message('error', $this->Model_Customer->getError());
+			message('error', $this->Model_Customer->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -122,7 +122,7 @@ class App_Controller_Account_Address extends Controller
 		if ($this->Model_Customer->removeAddress(customer_info('customer_id'), _request('address_id'))) {
 			message('success', _l("Your address has been successfully deleted"));
 		} else {
-			message('error', $this->Model_Customer->getError());
+			message('error', $this->Model_Customer->fetchError());
 		}
 
 		if ($this->is_ajax) {

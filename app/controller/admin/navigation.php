@@ -172,7 +172,7 @@ class App_Controller_Admin_Navigation extends Controller
 			message('success', _l("The Navigation Group has been saved!"));
 			message('data', array('navigation_group_id' => $navigation_group_id));
 		} else {
-			message('error', $this->Model_Navigation->getError());
+			message('error', $this->Model_Navigation->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -189,7 +189,7 @@ class App_Controller_Admin_Navigation extends Controller
 		if ($this->Model_Navigation->removeGroup((int)_get('navigation_group_id'))) {
 			message('success', _l("Success: You have modified Navigation!"));
 		} else {
-			message('error', $this->Model_Navigation->getError());
+			message('error', $this->Model_Navigation->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -217,7 +217,7 @@ class App_Controller_Admin_Navigation extends Controller
 			}
 
 			if ($this->Model_Navigation->hasError()) {
-				message('error', $this->Model_Navigation->getError());
+				message('error', $this->Model_Navigation->fetchError());
 			} else {
 				message('success', _l("Success: You have modified navigation!"));
 			}
@@ -235,7 +235,7 @@ class App_Controller_Admin_Navigation extends Controller
 		$this->Model_Navigation->resetAdminNavigationGroup();
 
 		if ($this->Model_Navigation->hasError()) {
-			message('error', $this->Model_Navigation->getError());
+			message('error', $this->Model_Navigation->fetchError());
 			redirect('admin/navigation');
 		}
 

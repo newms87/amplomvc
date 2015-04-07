@@ -106,7 +106,7 @@ function amplo_mvc_install()
 
 	$db = new DB($_POST['db_driver'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
-	$error = $db->getError();
+	$error = $db->fetchError();
 
 	if (!$error) {
 		$db_sql = DIR_SITE . 'system/install/db.sql';
@@ -114,9 +114,9 @@ function amplo_mvc_install()
 		$contents = file_get_contents($db_sql);
 
 		if (!$db->multiquery($contents)) {
-			$error = $db->getError();
+			$error = $db->fetchError();
 		} elseif (!$db->alterPrefix($_POST['db_prefix'])) {
-			$error = $db->getError();
+			$error = $db->fetchError();
 		}
 	}
 
@@ -134,7 +134,7 @@ function amplo_mvc_install()
 	$db->query("INSERT INTO " . DB_PREFIX . "store SET prefix = '" . DB_PREFIX . "', `name` = 'Amplo MVC', `url` = '" . HTTP_SITE . "', `ssl` = '" . HTTPS_SITE . "'");
 
 	if ($db->hasError()) {
-		$error = $db->getError();
+		$error = $db->fetchError();
 	}
 
 	if ($error) {

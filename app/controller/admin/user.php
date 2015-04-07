@@ -144,7 +144,7 @@ class App_Controller_Admin_User extends Controller
 			message('success', _l("The User has been updated successfully!"));
 			message('data', array('user_id' => $user_id));
 		} else {
-			message('error', $this->Model_User->getError());
+			message('error', $this->Model_User->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -161,7 +161,7 @@ class App_Controller_Admin_User extends Controller
 		if ($this->Model_User->remove(_get('user_id'))) {
 			message('success', _l("User was deleted!"));
 		} else {
-			message('error', $this->Model_User->getError());
+			message('error', $this->Model_User->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -194,7 +194,7 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		if ($this->Model_User->hasError()) {
-			message('error', $this->Model_User->getError());
+			message('error', $this->Model_User->fetchError());
 		} else {
 			message('success', _l("Users were updated successfully!"));
 		}
@@ -244,7 +244,7 @@ class App_Controller_Admin_User extends Controller
 
 			redirect($redirect);
 		} else {
-			message('warning', $this->user->getError());
+			message('warning', $this->user->fetchError());
 		}
 
 		//Minimize exposure of password
@@ -290,7 +290,7 @@ class App_Controller_Admin_User extends Controller
 		if ($this->user->requestReset(_post('email'))) {
 			message('success', _l("Please follow the link that was sent to your email to reset your password."));
 		} else {
-			message('error', $this->user->getError());
+			message('error', $this->user->fetchError());
 		}
 
 		redirect('admin/user/login');
@@ -336,7 +336,7 @@ class App_Controller_Admin_User extends Controller
 				$this->user->clearResetCode($user_id);
 				message('success', _l('You have successfully updated your password!'));
 			} else {
-				message('error', $this->Model_User->getError());
+				message('error', $this->Model_User->fetchError());
 			}
 		}
 

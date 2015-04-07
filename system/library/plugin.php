@@ -302,7 +302,7 @@ class Plugin extends Library
 			);
 
 			if (!$this->mod->unapply($plugin_file, $directives)) {
-				$this->error['unapply'][] = $this->mod->getError();
+				$this->error['unapply'][] = $this->mod->fetchError();
 			}
 		} else {
 			if (is_file($live_file)) {

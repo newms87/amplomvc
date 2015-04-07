@@ -145,7 +145,7 @@ class Customer extends Library
 		if ($customer_id && $login) {
 			$this->setCustomer($customer_id);
 		} else {
-			$this->error = $this->Model_Customer->getError();
+			$this->error = $this->Model_Customer->fetchError();
 		}
 
 		return $customer_id;
@@ -169,7 +169,7 @@ class Customer extends Library
 		$meta_id = $this->Model_Customer->addMeta($this->customer_id, $key, $value);
 
 		if (!$meta_id) {
-			$this->error = $this->Model_Customer->getError();
+			$this->error = $this->Model_Customer->fetchError();
 		}
 
 		return $meta_id;

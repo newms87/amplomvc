@@ -27,7 +27,7 @@ class App_Model_User extends App_Model_Table
 
 		if (isset($user['password'])) {
 			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-				$this->error['password'] = $this->validation->getError();
+				$this->error['password'] = $this->validation->fetchError();
 			}
 		} elseif (!$user_id && empty($user['encrypted_password'])) {
 			$this->error['password'] = _l("You must enter a password");
@@ -144,6 +144,7 @@ class App_Model_User extends App_Model_Table
 	{
 		if ($key) {
 			$value = $this->queryRow("SELECT `value`, serialized FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+
 			if ($value) {
 				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
 			}

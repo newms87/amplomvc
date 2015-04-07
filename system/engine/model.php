@@ -77,7 +77,7 @@ abstract class Model
 
 	public function fetchError($type = null)
 	{
-		$error = $this->getError($type);
+		$error = $this->fetchError($type);
 
 		$this->clearErrors($type);
 
@@ -118,7 +118,7 @@ abstract class Model
 		$result = $this->db->query($sql);
 
 		if (!$result) {
-			$this->error = $this->db->getError();
+			$this->error = $this->db->fetchError();
 		}
 
 		return $result;
@@ -237,7 +237,7 @@ abstract class Model
 			trigger_error(_l("There was a problem inserting entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
-				$this->error['query'] = $this->getError('query');
+				$this->error['query'] = $this->fetchError('query');
 				trigger_error($this->error['query']);
 			}
 
@@ -302,7 +302,7 @@ abstract class Model
 			trigger_error(_l("There was a problem updating entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
-				trigger_error($this->getError('query'));
+				trigger_error($this->fetchError('query'));
 			}
 
 			return false;
@@ -329,7 +329,7 @@ abstract class Model
 			trigger_error(_l("There was a problem deleting entry for %s and was not modified.", $table));
 
 			if ($this->hasError('query')) {
-				trigger_error($this->getError('query'));
+				trigger_error($this->fetchError('query'));
 			}
 
 			return false;

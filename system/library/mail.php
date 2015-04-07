@@ -363,7 +363,7 @@ class Mail extends Library
 	public function validateEmail($email)
 	{
 		if (!validate('email', $email)) {
-			$this->error = $this->validation->getError();
+			$this->error = $this->validation->fetchError();
 			return false;
 		}
 

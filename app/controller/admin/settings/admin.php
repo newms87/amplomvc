@@ -82,7 +82,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		if ($this->Model_Settings->saveAdmin($_POST)) {
 			message('success', _l("The Admin Settings have been saved!"));
 		} else {
-			message('error', $this->Model_Settings->getError());
+			message('error', $this->Model_Settings->fetchError());
 		}
 
 		if ($this->is_ajax) {

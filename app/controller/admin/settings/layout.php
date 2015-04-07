@@ -146,7 +146,7 @@ class App_Controller_Admin_Settings_Layout extends Controller
 			message('success', _l("Success: You have modified layouts!"));
 			message('data', array('layout_id' => $layout_id));
 		} else {
-			message('error', $this->Model_Layout->getError());
+			message('error', $this->Model_Layout->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -161,7 +161,7 @@ class App_Controller_Admin_Settings_Layout extends Controller
 		if ($this->Model_Layout->remove(_get('layout_id'))) {
 			message('success', _l("The layout has been removed."));
 		} else {
-			message('error', $this->Model_Layout->getError());
+			message('error', $this->Model_Layout->fetchError());
 		}
 
 		if ($this->is_ajax) {

@@ -60,7 +60,7 @@ class App_Controller_Account extends Controller
 		if ($this->Model_Customer->save(customer_info('customer_id'), $_POST)) {
 			message('success', _l("Your account information has been updated successfully!"));
 		} else {
-			message('error', $this->Model_Customer->getError());
+			message('error', $this->Model_Customer->fetchError());
 		}
 
 		if ($this->is_ajax) {

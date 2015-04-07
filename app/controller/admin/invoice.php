@@ -167,7 +167,7 @@ class App_Controller_Admin_Invoice extends Controller
 			message('success', _l("The Invoice has been updated successfully!"));
 			message('data', array('invoice_id' => $invoice_id));
 		} else {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -185,7 +185,7 @@ class App_Controller_Admin_Invoice extends Controller
 			message('success', _l("The Invoice has been updated successfully!"));
 			message('data', array('invoice_id' => $invoice_id));
 		} else {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -202,7 +202,7 @@ class App_Controller_Admin_Invoice extends Controller
 		if ($this->Model_Invoice->save(_get('invoice_id'), array('status' => App_Model_Invoice::STATUS_PAID))) {
 			message('success', _l("The invoice has been paid. The customer's account has been updated."));
 		} else {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -217,7 +217,7 @@ class App_Controller_Admin_Invoice extends Controller
 		if ($this->Model_Invoice->save(_get('invoice_id'), array('status' => App_Model_Invoice::STATUS_CANCELLED))) {
 			message('success', _l("Invoice has been cancelled."));
 		} else {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -232,7 +232,7 @@ class App_Controller_Admin_Invoice extends Controller
 		if ($this->Model_Invoice->remove(_get('invoice_id'))) {
 			message('success', _l("Invoice was removed"));
 		} else {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -263,7 +263,7 @@ class App_Controller_Admin_Invoice extends Controller
 		}
 
 		if ($this->Model_Invoice->hasError()) {
-			message('error', $this->Model_Invoice->getError());
+			message('error', $this->Model_Invoice->fetchError());
 		} else {
 			message('success', _l("Invoices were updated successfully!"));
 		}

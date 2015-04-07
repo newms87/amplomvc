@@ -47,7 +47,7 @@ class App_Controller_Admin_Settings_Braintree extends Controller
 		if (save_option('braintree_settings', $_POST)) {
 			message('success', _l("Braintree settings saved"));
 		} else {
-			message('error', $this->config->getError());
+			message('error', $this->config->fetchError());
 		}
 
 		if ($this->is_ajax) {

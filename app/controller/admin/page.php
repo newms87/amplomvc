@@ -175,10 +175,10 @@ class App_Controller_Admin_Page extends Controller
 			message('data', array('page_id' => $page_id));
 
 			if ($this->Model_Page->hasError()) {
-				message('notify', $this->Model_Page->getError());
+				message('notify', $this->Model_Page->fetchError());
 			}
 		} else {
-			message('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -195,7 +195,7 @@ class App_Controller_Admin_Page extends Controller
 		if ($this->Model_Page->deletePage(_get('page_id'))) {
 			message('success', _l("The Page was deleted!"));
 		} else {
-			message('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -232,7 +232,7 @@ class App_Controller_Admin_Page extends Controller
 		}
 
 		if ($this->Model_Page->hasError()) {
-			message('error', $this->Model_Page->getError());
+			message('error', $this->Model_Page->fetchError());
 		} else {
 			message('success', _l("The pages have been updated!"));
 		}

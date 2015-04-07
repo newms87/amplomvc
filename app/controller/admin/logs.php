@@ -85,7 +85,7 @@ class App_Controller_Admin_Logs extends Controller
 		}
 
 		if ($this->Model_Log->hasError()) {
-			message('error', $this->Model_Log->getError());
+			message('error', $this->Model_Log->fetchError());
 		} else {
 			message('success', _l("The log table was updated (Note: Log files are unchanged)."));
 		}

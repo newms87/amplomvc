@@ -172,7 +172,7 @@ class App_Controller_Admin_Block extends Controller
 		echo "NOT IMPLEMENTED";
 		exit;
 		if (!$this->block->add($_POST)) {
-			message('error', $this->block->getError());
+			message('error', $this->block->fetchError());
 			redirect('admin/block/add');
 		}
 

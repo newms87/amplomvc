@@ -142,7 +142,7 @@ class App_Model_Settings extends Model
 		$result = $this->config->saveGroup('general', $settings);
 
 		if (!$result) {
-			$this->error = $this->config->getError();
+			$this->error = $this->config->fetchError();
 		} else {
 			$this->theme->install($settings['site_theme']);
 		}
@@ -163,7 +163,7 @@ class App_Model_Settings extends Model
 		$result = $this->config->saveGroup('admin', $settings);
 
 		if (!$result) {
-			$this->error = $this->config->getError();
+			$this->error = $this->config->fetchError();
 		}
 
 		return $result;

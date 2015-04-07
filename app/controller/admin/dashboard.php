@@ -72,7 +72,7 @@ class App_Controller_Admin_Dashboard extends Controller
 					message('success', _l("The dashboard has been saved"));
 					message('data', array('dashboard_id' => $dashboard_id));
 				} else {
-					message('error', $this->Model_Dashboard->getError());
+					message('error', $this->Model_Dashboard->fetchError());
 				}
 			} else {
 				message('error', _l("You do not have permission to modify the %s dashboard", $dashboard['title']));
@@ -96,7 +96,7 @@ class App_Controller_Admin_Dashboard extends Controller
 				if ($this->Model_Dashboard->remove($dashboard_id)) {
 					message('success', _l("The dashboard has been removed"));
 				} else {
-					message('error', $this->Model_Dashboard->getError());
+					message('error', $this->Model_Dashboard->fetchError());
 				}
 			} else {
 				message('error', _l("You do not have permission to modify the %s dashboard", $dashboard['title']));
@@ -119,7 +119,7 @@ class App_Controller_Admin_Dashboard extends Controller
 		if ($this->Model_Dashboard->emailReports($dashboard_id, $to)) {
 			message('success', _l("Reports were emailed to %s", $to));
 		} else {
-			message('error', $this->Model_Dashboard->getError());
+			message('error', $this->Model_Dashboard->fetchError());
 		}
 
 		if ($this->is_ajax) {

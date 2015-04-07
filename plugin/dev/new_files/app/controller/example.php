@@ -19,7 +19,7 @@ class App_Controller_Example extends Controller
 		if (!$page) {
 			//If you have an error in the Model call
 			if ($this->Model_Page->hasError()) {
-				message('error', $this->Model_Page->getError());
+				message('error', $this->Model_Page->fetchError());
 			}
 
 			//For this example, if no page is found, we dont really care, so continue to load page.

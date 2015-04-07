@@ -103,6 +103,19 @@ class DB
 		return $this->error;
 	}
 
+	public function fetchError($type = null)
+	{
+		if ($type) {
+			$error = isset($this->error[$type]) ? $this->error[$type] : null;
+			unset($this->error[$type]);
+		} else {
+			$error = $this->error;
+			$this->error = array();
+		}
+
+		return $error;
+	}
+
 	public function clearErrors()
 	{
 		$this->error = array();
@@ -152,6 +165,8 @@ class DB
 	 */
 	public function query($sql, $cast_type = true)
 	{
+		$this->error = array();
+
 		if ($this->synctime) {
 			$sql = $this->synctime($sql);
 		}
@@ -180,9 +195,11 @@ class DB
 		}
 
 		if (!$resource) {
-			trigger_error($this->driver->getError());
+			$error = $this->driver->getError();
 
-			$this->error['query'] = $this->driver->getError();
+			trigger_error($error);
+
+			$this->error['query'] = $error;
 
 			return false;
 		}
@@ -321,7 +338,7 @@ class DB
 			} else {
 				$this->query($sql);
 
-				if ($this->getError()) {
+				if ($this->error) {
 					return false;
 				}
 				$sql = '';
@@ -344,7 +361,7 @@ class DB
 			}
 		}
 
-		if ($this->getError()) {
+		if ($this->error) {
 			return false;
 		}
 

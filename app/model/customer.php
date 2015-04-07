@@ -19,7 +19,7 @@ class App_Model_Customer extends App_Model_Table
 
 		if (isset($customer['email'])) {
 			if (!validate('email', $customer['email'])) {
-				$this->error['email'] = $this->validation->getError();
+				$this->error['email'] = $this->validation->fetchError();
 			} elseif ($this->customer->emailRegistered($customer['email'])) {
 				$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
 			}
@@ -36,7 +36,7 @@ class App_Model_Customer extends App_Model_Table
 		}
 
 		if ((isset($customer['zone_id']) || isset($customer['country_id'])) && !$this->Model_Address->validate($customer)) {
-			$this->error += $this->Model_Address->getError();
+			$this->error += $this->Model_Address->fetchError();
 		}
 
 		if (!empty($data['phone']) && !validate('phone', $data['phone'])) {
@@ -45,7 +45,7 @@ class App_Model_Customer extends App_Model_Table
 
 		if (isset($customer['password'])) {
 			if (!validate('password', $customer['password'])) {
-				$this->error['password'] = $this->validation->getError();
+				$this->error['password'] = $this->validation->fetchError();
 			} elseif (isset($customer['confirm']) && $customer['confirm'] !== $customer['password']) {
 				$this->error['confirm'] = _l("Your password and confirmation do not match.");
 			}
@@ -189,7 +189,7 @@ class App_Model_Customer extends App_Model_Table
 		$address_id = $this->Model_Address->save($address_id, $address);
 
 		if (!$address_id) {
-			$this->error = $this->Model_Address->getError();
+			$this->error = $this->Model_Address->fetchError();
 			return false;
 		}
 
@@ -252,7 +252,7 @@ class App_Model_Customer extends App_Model_Table
 			if ($this->Model_Address->remove($address_id)) {
 				return true;
 			} else {
-				$this->error = $this->Model_Address->getError();
+				$this->error = $this->Model_Address->fetchError();
 			}
 		}
 

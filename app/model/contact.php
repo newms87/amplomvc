@@ -37,7 +37,7 @@ class App_Model_Contact extends Model
 		$result = send_mail($mail);
 
 		if (!$result) {
-			$this->error = $this->mail->getError();
+			$this->error = $this->mail->fetchError();
 			return false;
 		}
 

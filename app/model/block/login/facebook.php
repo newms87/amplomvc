@@ -120,7 +120,7 @@ class App_Model_Block_Login_Facebook extends Model
 				);
 
 				if (!$this->Model_Customer->save(null, $customer)) {
-					$this->error = $this->Model_Customer->getError();
+					$this->error = $this->Model_Customer->fetchError();
 					return false;
 				}
 			}

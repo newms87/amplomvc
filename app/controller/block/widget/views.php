@@ -253,10 +253,10 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			);
 
 			if (!$this->Model_View->save(null, $view)) {
-				message('error', $this->Model_View->getError());
+				message('error', $this->Model_View->fetchError());
 			}
 		} else {
-			message('error', $this->Model_ViewListing->getError());
+			message('error', $this->Model_ViewListing->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -273,7 +273,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		if ($view_id) {
 			message('success', _l("%s view was saved!", _post('title')));
 		} else {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_View->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -291,7 +291,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		if ($this->Model_View->remove(_post('view_id'))) {
 			message('success', _l("The %s view has been removed", $title));
 		} else {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_View->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -308,7 +308,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		if ($this->Model_View->hasError()) {
-			message('error', $this->Model_View->getError());
+			message('error', $this->Model_View->fetchError());
 		} else {
 			message('success', _l("Sort Order of Views has been updated"));
 		}

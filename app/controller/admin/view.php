@@ -129,7 +129,7 @@ class App_Controller_Admin_View extends Controller
 			message('success', _l("The View has been saved"));
 			message('data', array('view_listing_id' => $view_listing_id));
 		} else {
-			message('error', $this->Model_ViewListing->getError());
+			message('error', $this->Model_ViewListing->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -146,7 +146,7 @@ class App_Controller_Admin_View extends Controller
 		if ($this->Model_ViewListing->remove(_get('view_listing_id'))) {
 			message('notify', _l("The View Listing was removed."));
 		} else {
-			message('error', $this->Model_ViewListing->getError());
+			message('error', $this->Model_ViewListing->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -191,7 +191,7 @@ class App_Controller_Admin_View extends Controller
 					$img_url = str_replace(DIR_IMAGE, URL_IMAGE, $file);
 
 					if (!$this->Model_View->saveViewMeta($view_id, 'chart_image', $img_url)) {
-						message('error', $this->Model_View->getError());
+						message('error', $this->Model_View->fetchError());
 					} else {
 						message('success', _l("The file was saved as <a target=\"_blank\" href=\"%s\">%s</a>", $img_url, basename($file)));
 					}
@@ -220,7 +220,7 @@ class App_Controller_Admin_View extends Controller
 		}
 
 		if ($this->Model_ViewListing->hasError()) {
-			message('error', $this->Model_ViewListing->getError());
+			message('error', $this->Model_ViewListing->fetchError());
 		} else {
 			message('success', _l("The View Listings have been updated!"));
 		}

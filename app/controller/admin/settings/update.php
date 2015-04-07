@@ -56,7 +56,7 @@ class App_Controller_Admin_Settings_Update extends Controller
 	{
 		if (!empty($_REQUEST['version'])) {
 			if (!$this->System_Update->updateSystem($_POST['version'])) {
-				message('error', $this->System_Update->getError());
+				message('error', $this->System_Update->fetchError());
 			} else {
 				message('success', _l("You have successfully updated to version %s", $_REQUEST['version']));
 			}

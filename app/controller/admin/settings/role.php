@@ -140,7 +140,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 			message('success', _l("The User Role has been updated!"));
 			message('data', array('user_role_id' => $user_role_id));
 		} else {
-			message('error', $this->Model_UserRole->getError());
+			message('error', $this->Model_UserRole->fetchError());
 		}
 
 		//Response
@@ -159,7 +159,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		if ($this->Model_UserRole->remove(_get('user_role_id'))) {
 			message('success', _l("User Role has been removed"));
 		} else {
-			message('error', $this->Model_UserRole->getError());
+			message('error', $this->Model_UserRole->fetchError());
 		}
 
 		//Response
@@ -181,7 +181,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 		}
 
 		if ($this->Model_UserRole->hasError()) {
-			message('error', $this->Model_UserRole->getError());
+			message('error', $this->Model_UserRole->fetchError());
 		} else {
 			message('success', _l("The User Groups have been updated!"));
 		}

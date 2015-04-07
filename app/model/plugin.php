@@ -268,12 +268,12 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		if (!$this->url->download($plugin['download'], $zip_file)) {
-			$this->error = $this->url->getError();
+			$this->error = $this->url->fetchError();
 			return false;
 		}
 
 		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN . 'plugin-download')) {
-			$this->error = $this->csv->getError();
+			$this->error = $this->csv->fetchError();
 			return false;
 		}
 

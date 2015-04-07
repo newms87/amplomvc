@@ -111,7 +111,7 @@ class App_Controller_Admin_Settings_General extends Controller
 		if ($this->Model_Settings->saveGeneral($_POST)) {
 			message('success', _l("The General Settings have been saved!"));
 		} else {
-			message('error', $this->Model_Settings->getError());
+			message('error', $this->Model_Settings->fetchError());
 		}
 
 		if ($this->is_ajax) {

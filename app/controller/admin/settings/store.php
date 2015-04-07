@@ -232,12 +232,12 @@ class App_Controller_Admin_Settings_Store extends Controller
 			$this->config->saveGroup('config', $_POST);
 
 			if ($this->theme->install($_POST['site_theme'])) {
-				message('error', $this->theme->getError());
+				message('error', $this->theme->fetchError());
 			}
 
 			message('success', _l("The Store settings have been saved."));
 		} else {
-			message('error', $this->Model_Site->getError());
+			message('error', $this->Model_Site->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -254,7 +254,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		if ($this->Model_Site->removeSite(_get('store_id'))) {
 			message('success', _l("The Site was removed!"));
 		} else {
-			message('error', $this->Model_Site->getError());
+			message('error', $this->Model_Site->fetchError());
 		}
 
 		if ($this->is_ajax) {

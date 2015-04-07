@@ -160,7 +160,7 @@ class App_Controller_Admin_Dev extends Controller
 						message('success', "Successfully synchronized your site!");
 					} else {
 						message('warning', "There was a problem while synchronizing from the sync file. ");
-						message('warning', $this->db->getError());
+						message('warning', $this->db->fetchError());
 					}
 				}
 			} elseif (isset($_POST['execute_file'])) {
@@ -170,7 +170,7 @@ class App_Controller_Admin_Dev extends Controller
 						message('success', _l("Successfully executed the contents of $filename!"));
 					} else {
 						message('warning', _l("There was a problem while executing $filename. "));
-						message('warning', $this->db->getError());
+						message('warning', $this->db->fetchError());
 					}
 				}
 			}
@@ -237,7 +237,7 @@ class App_Controller_Admin_Dev extends Controller
 		if ($this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), DB_PREFIX, true)) {
 			message('success', _l("Default Installation has been updated"));
 		} else {
-			message('error', $this->dev->getError());
+			message('error', $this->dev->fetchError());
 		}
 
 		redirect("admin/dev/backup_restore");

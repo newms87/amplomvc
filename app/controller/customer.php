@@ -96,7 +96,7 @@ class App_Controller_Customer extends Controller
 				message('success', _l("You have been logged into your account"));
 			}
 		} else {
-			message('error', $this->customer->getError());
+			message('error', $this->customer->fetchError());
 		}
 
 		if ($this->is_ajax && !$this->request->hasRedirect()) {
@@ -192,7 +192,7 @@ class App_Controller_Customer extends Controller
 		if ($this->customer->register($_POST, true)) {
 			message('success', _l("Your account has been created!"));
 		} else {
-			message('error', $this->customer->getError());
+			message('error', $this->customer->fetchError());
 		}
 
 		if ($this->is_ajax && !$this->request->hasRedirect()) {
@@ -249,7 +249,7 @@ class App_Controller_Customer extends Controller
 		$code = $this->customer->generateCode();
 
 		if (!$this->customer->setResetCode(_post('email'), $code)) {
-			message('error', $this->customer->getError());
+			message('error', $this->customer->fetchError());
 		} else {
 
 			$email_data = array(
@@ -311,7 +311,7 @@ class App_Controller_Customer extends Controller
 			message('success', _l('You have successfully updated your password!'));
 			redirect('customer/login');
 		} else {
-			message('error', $this->Model_Customer->getError());
+			message('error', $this->Model_Customer->fetchError());
 			redirect('customer/reset_form', $_GET);
 		}
 	}

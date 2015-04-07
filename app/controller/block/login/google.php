@@ -17,7 +17,7 @@ class App_Controller_Block_Login_Google extends App_Controller_Block_Block
 			message('success', _l("You have been successfully logged in using Google+!"));
 		} else {
 			if ($this->Model_Block_Login_Google->hasError()) {
-				message('error', $this->Model_Block_Login_Google->getError());
+				message('error', $this->Model_Block_Login_Google->fetchError());
 			}
 
 			message('warning', _l("There was a problem while signing you in with Google+. Please try again, or try a different login method."));

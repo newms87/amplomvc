@@ -29,7 +29,7 @@ class App_Controller_Contact extends Controller
 		if ($this->Model_Contact->sendMessage($_POST)) {
 			message('success', _l("Thank you %s! Your message has been received.", _post('name')));
 		} else {
-			message('error', $this->Model_Contact->getError());
+			message('error', $this->Model_Contact->fetchError());
 		}
 
 		if ($this->is_ajax) {

@@ -140,7 +140,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			message('success', _l("The alias has been saved!"));
 			message('data', array('url_alias_id' => $url_alias_id));
 		} else {
-			message('error', $this->Model_UrlAlias->getError());
+			message('error', $this->Model_UrlAlias->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -157,7 +157,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		if ($this->Model_UrlAlias->remove(_get('url_alias_id'))) {
 			message('success', _l("The Alias has been removed."));
 		} else {
-			message('error', $this->Model_UrlAlias->getError());
+			message('error', $this->Model_UrlAlias->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -186,7 +186,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		}
 
 		if ($this->Model_UrlAlias->hasError()) {
-			message('error', $this->Model_UrlAlias->getError());
+			message('error', $this->Model_UrlAlias->fetchError());
 		} else {
 			message('success', _l("Users were updated successfully!"));
 		}

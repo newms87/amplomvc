@@ -16,7 +16,7 @@ class App_Controller_Block_Login_Facebook extends App_Controller_Block_Block
 		if ($this->Model_Block_Login_Facebook->authenticate()) {
 			message('success', _l("You have been successfully logged in using Facebook!"));
 		} else {
-			message('error', $this->Model_Block_Login_Facebook->getError());
+			message('error', $this->Model_Block_Login_Facebook->fetchError());
 			message('warning', _l("There was a problem while signing you in with Facebook. Please try again, or try a different login method."));
 		}
 
