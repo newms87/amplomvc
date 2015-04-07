@@ -10,6 +10,18 @@ class Cron extends Library
 		$this->settings = $this->config->loadGroup('cron');
 	}
 
+	//TODO: FINISH IMPLEMENTING THE INSTALL
+	public function install()
+	{
+		$crontab = DIR_CRON . 'crontab.txt';
+
+		if (!is_file($crontab)) {
+			file_put_contents($crontab, "* * * * * php " . DIR_SITE . "run_cron.php");
+		}
+
+		shell_exec('crontab ' . $crontab);
+	}
+
 	public function check()
 	{
 		//TODO: Re-enable Cron when convenient

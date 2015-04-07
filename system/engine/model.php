@@ -77,7 +77,7 @@ abstract class Model
 
 	public function fetchError($type = null)
 	{
-		$error = $this->fetchError($type);
+		$error = $this->getError($type);
 
 		$this->clearErrors($type);
 
