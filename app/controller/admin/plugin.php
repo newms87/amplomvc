@@ -208,7 +208,7 @@ class App_Controller_Admin_Plugin extends Controller
 			message('success', _l("You have successfully updated the plugin %s!", $name));
 			redirect('admin/plugin');
 		} else {
-			message('error', $this->Model_Plugin->getError());
+			message('error', $this->Model_Plugin->fetchError());
 		}
 
 		post_redirect('admin/plugin/form', 'name=' . $name);
@@ -219,7 +219,7 @@ class App_Controller_Admin_Plugin extends Controller
 		if ($this->plugin->install(_get('name'))) {
 			message('success', _l("Plugin %s has been installed!", _get('name')));
 		} else {
-			message('error', $this->plugin->getError());
+			message('error', $this->plugin->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -234,7 +234,7 @@ class App_Controller_Admin_Plugin extends Controller
 		if ($this->plugin->uninstall(_get('name'), _get('keep_data', true))) {
 			message('success', _l("Plugin %s has been uninstalled.", _get('name')));
 		} else {
-			message('error', $this->plugin->getError());
+			message('error', $this->plugin->fetchError());
 		}
 
 		if ($this->is_ajax) {
@@ -250,7 +250,6 @@ class App_Controller_Admin_Plugin extends Controller
 
 		$version = $this->plugin->upgrade($name);
 
-		$changes = $this->plugin->fetchError('changes');
 		$errors = $this->plugin->fetchError();
 
 		if ($version === true) {
@@ -261,8 +260,10 @@ class App_Controller_Admin_Plugin extends Controller
 			message('error', $errors);
 		}
 
-		if ($changes) {
-			message('success', $changes);
+		if ($this->plugin->changes) {
+			foreach ($this->plugin->changes as $file) {
+				message('success', _l("Added file %s", str_replace(DIR_SITE, '', $file)));
+			}
 		}
 
 		if ($version && $errors) {
@@ -304,10 +305,10 @@ class App_Controller_Admin_Plugin extends Controller
 				message('success', _l("The %s plugin has been installed!", $name));
 			} else {
 				message('error', _l("The %s plugin has been downloaded, but failed to install.", $name));
-				message('error', $this->plugin->getError());
+				message('error', $this->plugin->fetchError());
 			}
 		} else {
-			message('error', $this->Model_Plugin->getError());
+			message('error', $this->Model_Plugin->fetchError());
 		}
 
 		if ($this->is_ajax) {
