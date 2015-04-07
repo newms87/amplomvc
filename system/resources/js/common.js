@@ -5,6 +5,10 @@ var screen_lg = screen_width >= 1200,
 	screen_sm = screen_width >= 480 && screen_width < 768,
 	screen_xs = screen_width < 480;
 
+Function.prototype.loop = function (time) {
+	var fn = this;
+	setTimeout(function(){fn() === false ? 0 : fn.loop(time)}, time);
+}
 
 String.prototype.toSlug = function (sep) {
 	return this.toLowerCase().replace(/\s/, sep || '-').replace(/[^a-z0-9-_]/, '');
@@ -332,6 +336,7 @@ $.fn.show_msg = function (type, msg, options) {
 	}
 
 	options = $.extend({
+		style:       'stacked',
 		append:      true,
 		append_list: false,
 		delay:       false,
@@ -360,7 +365,7 @@ $.fn.show_msg = function (type, msg, options) {
 		var $box = $(e).find('.messages.' + type);
 
 		if (!$box.length) {
-			$box = $('<div />').addClass('messages ' + type);
+			$box = $('<div />').addClass('messages ' + type + ' ' + options.style);
 
 			if (options.close) {
 				$box.append($('<div />').addClass('close').click(function () {

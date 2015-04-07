@@ -517,6 +517,9 @@ td {
 }
 
 #menu {
+  position: relative;
+  z-index: 2000;
+
   .admin-nav {
     width: 75%;
   }
@@ -590,48 +593,118 @@ td {
 }
 
 .messages {
-  overflow: hidden;
-  position: fixed;
-  bottom: 0;
-  left: 10%;
-  width: 80%;
-  max-height: 26px;
-  min-height: 26px;
-  padding: 10px 10px 40px 33px;
+  position: relative;
+  padding: 10px 10px 10px 33px;
   color: #555555;
   font-size: 15px;
   border: 1px solid #CFCFCF;
   background-color: #EEEEEE;
-  border-radius: 5px 5px 0 0;
+  border-radius: 5px;
   z-index: 1005;
+  margin: 1em 0;
 
-  -webkit-transition: .5s;
-  transition: .5s;
+  &.success {
+    background: #F4FDE8;
+    border-color: #638733;
+    color: #638733;
+  }
 
-  -moz-animation: messageIn .5s;
-  -webkit-animation: messageIn .5s;
+  &.warning, &.error {
+    background: #F9DCDC;
+    border-color: #C11F1F;
+    color: #C11F1F;
+  }
+
+  &.attention {
+    background: #FFFBE9;
+    border-color: #E1CA34;
+    color: #E1CA34;
+  }
+
+  &.notify {
+    background: #E6F1FB;
+    border-color: #4F80AD;
+    color: #4F80AD;
+  }
+
+  &.stacked {
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    max-height: 26px;
+    min-height: 26px;
+    padding: 10px 10px 40px 33px;
+    margin: 0;
+
+    -webkit-transition: .5s;
+    transition: .5s;
+
+    -moz-animation: messageIn .5s;
+    -webkit-animation: messageIn .5s;
+    animation: none;
+
+    &:hover {
+      max-height: 50%;
+      min-height: 35px;
+      overflow: auto;
+    }
+
+    & + .messages {
+      padding-bottom: 70px;
+      z-index: 1004;
+
+      &:hover {
+        padding-bottom: 110px;
+      }
+
+      & + .messages {
+        padding-bottom: 100px;
+        z-index: 1003;
+
+        &:hover {
+          padding-bottom: 140px;
+        }
+      }
+    }
+  }
+
+  & > .message_list {
+    & > div {
+      padding-right: 20px;
+    }
+  }
+
+  strong {
+    color: #003A88;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    background: transparent url('@{theme-img}close.png') 0 0 no-repeat;
+    background-size: 32px 16px;
+    width: 16px;
+    height: 16px;
+
+    &:hover, &:active {
+      background-position: -16px 0;
+    }
+  }
 }
 
-.messages + .messages {
-  padding-bottom: 70px;
-  z-index: 1004;
-}
-
-.messages + .messages:hover {
-  padding-bottom: 110px;
-}
-
-.messages + .messages + .messages {
-  padding-bottom: 100px;
-  z-index: 1003;
-}
-
-.messages + .messages + .messages:hover {
-  padding-bottom: 140px;
-}
-
-.messages > .message_list > div {
-  padding-right: 20px;
+#user-alert {
+  .messages {
+    position: relative;
+    -moz-animation: none;
+    -webkit-animation: none;
+    animation: none;
+  }
 }
 
 @keyframes messageIn {
@@ -654,58 +727,6 @@ td {
     bottom: 0;
     border-radius: 5px 5px 0 0;
   }
-}
-
-.messages:hover {
-  max-height: 50%;
-  min-height: 35px;
-  overflow: auto;
-}
-
-.messages strong {
-  color: #003A88;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.messages.success {
-  background: #EAF7D9;
-  border-color: #8DAD62;
-  color: #8DAD62;
-}
-
-.messages.error,
-.messages.warning {
-  background: #FFD1D1;
-  border-color: #D15252;
-  color: #D15252;
-}
-
-.messages.attention {
-  background: #FFFBE9;
-  border-color: #E1CA34;
-  color: #E1CA34;
-}
-
-.messages.notify {
-  background: #E6F1FB;
-  border-color: #8DAFCF;
-  color: #8DAFCF;
-}
-
-.messages .close {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
-  background: transparent url('@{theme-img}close.png') 0 0 no-repeat;
-  background-size: 32px 16px;
-  width: 16px;
-  height: 16px;
-}
-
-.messages .close:hover, .messages .close:active {
-  background-position: -16px 0;
 }
 
 .required:before {

@@ -2,29 +2,40 @@
 
 class Message extends Library
 {
-	function __construct()
+	protected $messages = array();
+
+	function __construct($session = true)
 	{
 		parent::__construct();
 
-		if (!isset($_SESSION['message'])) {
-			$_SESSION['message'] = array();
+		if ($session) {
+			if (!isset($_SESSION['message'])) {
+				$_SESSION['message'] = array();
+			}
+
+			$this->messages = & $_SESSION['message'];
 		}
 	}
 
-	public function add($type, $message)
+	public function set($messages)
+	{
+		$this->messages = $messages;
+	}
+
+	public function add($type, $message, $key = null)
 	{
 		if ($type === 'data') {
-			$_SESSION['message']['data'] = $message;
+			$this->messages['data'] = $message;
 		} elseif (is_array($message)) {
-			array_walk_recursive($message, function ($value, $key) use ($type) {
-				if (is_string($key)) {
-					$_SESSION['message'][$type][$key] = $value;
-				} else {
-					$_SESSION['message'][$type][] = $value;
-				}
-			});
+			foreach ($message as $key => $m) {
+				$this->add($type, $m, $key);
+			}
 		} else {
-			$_SESSION['message'][$type][] = $message;
+			if ($key) {
+				$this->messages[$type][$key] = $message;
+			} else {
+				$this->messages[$type][] = $message;
+			}
 		}
 	}
 
@@ -53,7 +64,7 @@ class Message extends Library
 		$types = func_get_args();
 
 		if (empty($types)) {
-			return !empty($_SESSION['message']);
+			return !empty($this->messages);
 		}
 
 		foreach ($types as $type) {
@@ -64,7 +75,7 @@ class Message extends Library
 					}
 				}
 			} else {
-				if (!empty($_SESSION['message'][$type]) || !empty($_SESSION['message'][$type])) {
+				if (!empty($this->messages[$type]) || !empty($this->messages[$type])) {
 					return true;
 				}
 			}
@@ -76,27 +87,27 @@ class Message extends Library
 	public function get($type = null)
 	{
 		if ($type) {
-			if (isset($_SESSION['message'][$type])) {
-				return $_SESSION['message'][$type];
+			if (isset($this->messages[$type])) {
+				return $this->messages[$type];
 			} else {
 				return array();
 			}
 		}
 
-		return $_SESSION['message'];
+		return $this->messages;
 	}
 
 	public function fetch($type = '')
 	{
-		if (empty($_SESSION['message'])) {
+		if (empty($this->messages)) {
 			return array();
 		}
 
 		if ($type) {
-			if (isset($_SESSION['message'][$type])) {
-				$msgs = $_SESSION['message'][$type];
+			if (isset($this->messages[$type])) {
+				$msgs = $this->messages[$type];
 
-				unset($_SESSION['message'][$type]);
+				unset($this->messages[$type]);
 
 				return $msgs;
 			} else {
@@ -104,15 +115,18 @@ class Message extends Library
 			}
 		}
 
-		$msgs = $_SESSION['message'];
-
-		unset($_SESSION['message']);
+		$msgs = $this->messages;
+		$this->messages = array();
 
 		return $msgs;
 	}
 
-	public function render($type = null, $close = true)
+	public function render($type = null, $close = true, $style = null)
 	{
+		if ($style === null) {
+			$style = IS_ADMIN ? option('admin_message_style', 'stacked') : option('site_message_style', 'inline');
+		}
+
 		$messages = $this->fetch($type);
 
 		$html = '';
@@ -123,7 +137,7 @@ class Message extends Library
 				continue;
 			}
 
-			$html .= "<div class =\"messages " . ($type ? $type : $t) . "\">";
+			$html .= "<div class =\"messages $style " . ($type ? $type : $t) . "\">";
 
 			if (!is_array($msgs)) {
 				$msgs = array($msgs);

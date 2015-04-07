@@ -182,8 +182,12 @@
     }
   }
 
-  .actions a {
-    text-decoration: none;
+  .actions {
+    vertical-align: top;
+
+    a {
+      text-decoration: none;
+    }
   }
 
   .ui-sortable {
@@ -357,29 +361,39 @@
     position: relative;
 
     .action-buttons {
+      position: relative;
       max-height: 40px;
-      overflow: hidden;
+
+      .action + .action + .action {
+        .height-animate;
+        opacity: 0;
+      }
 
       &.overflown {
         -webkit-transition: all .2s;
         transition: all .2s;
-
         margin-bottom: 7px;
 
         &:after {
           content: 'more...';
           position: absolute;
-          bottom: 2px;
+          bottom: -1.2em;
           left: 50%;
           width: 40px;
           margin-left: -20px;
           color: @color-dark;
+          font-size: 1em;
         }
 
         &:hover, .hover {
           -webkit-transition: all .4s;
           transition: all .4s;
           max-height: 300px;
+
+          .action {
+            max-height: 100px;
+            opacity: 1;
+          }
 
           &:after {
             content: '';

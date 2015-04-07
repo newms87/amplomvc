@@ -2,17 +2,32 @@
 
 class User extends Library
 {
-	protected $user_id;
-	protected $user;
-	protected $permissions = array();
-
-	protected $temp_user;
+	protected
+		$user_id,
+		$user,
+		$alerts,
+		$permissions = array(),
+		$temp_user;
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->validateUser();
+	}
+
+	public function getId()
+	{
+		return $this->user_id;
+	}
+
+	public function info($key = null)
+	{
+		if ($key) {
+			return isset($this->user[$key]) ? $this->user[$key] : null;
+		}
+
+		return $this->user;
 	}
 
 	public function loginSystemUser()
@@ -55,11 +70,6 @@ class User extends Library
 
 			$this->user = $user;
 		}
-	}
-
-	public function lookupUserByEmail($email)
-	{
-		return $this->queryRow("SELECT * FROM {$this->t['user']} WHERE email = '$email'");
 	}
 
 	public function validateUser()
@@ -260,19 +270,62 @@ class User extends Library
 		return $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
 	}
 
-	//TODO: Make this current
-	public function canPreview($type)
+	public function alert($user_id, $type, $key, $message)
 	{
-		switch ($type) {
-			case 'flashsale':
-				return $this->can('w', 'catalog/flashsale');
-			case 'designer':
-				return $this->can('w', 'catalog/designer');
-			case 'product':
-				return $this->can('w', 'catalog/product');
-			default:
-				return false;
+		if ($user_id !== $this->user_id) {
+			$alerts          = $this->getAlerts($user_id);
+			$alerts[$type][$key] = $message;
+			$this->Model_User->addMeta($user_id, 'alert', $alerts);
+		} else {
+			if ($this->alerts === null) {
+				$this->getAlerts();
+			}
+
+			$this->alerts[$type][$key] = $message;
 		}
+	}
+
+	public function getAlerts($user_id = null)
+	{
+		if ($user_id === null) {
+			$user_id = $this->user_id;
+		}
+
+		if ($user_id !== $this->user_id) {
+			return (array)$this->Model_User->getMeta($user_id, 'alert', false);
+		}
+
+		if ($this->alerts === null) {
+			if (!isset($_SESSION['user_alerts'])) {
+				$_SESSION['user_alerts'] = array();
+			}
+
+			$this->alerts = &$_SESSION['user_alerts'];
+			$this->alerts += (array)$this->Model_User->getMeta($user_id, 'alert', false);
+		}
+
+		return $this->alerts;
+	}
+
+	public function fetchAlerts($user_id = null)
+	{
+		$alerts = $this->getAlerts($user_id);
+
+		if (!$user_id || $user_id === $this->user_id) {
+			unset($_SESSION['user_alerts']);
+		}
+
+		$this->Model_User->deleteMeta($user_id, 'alert');
+
+		return $alerts;
+	}
+
+	public function renderAlerts($user_id = null, $style = 'inline')
+	{
+		$alerts = new Message(false);
+		$alerts->set($this->fetchAlerts($user_id));
+
+		return $alerts->render(null, true, $style);
 	}
 
 	public function isAdmin()
@@ -298,20 +351,6 @@ class User extends Library
 	public function showAdminBar()
 	{
 		return $this->isLogged() && !_cookie('disable_admin_bar');
-	}
-
-	public function info($key = null)
-	{
-		if ($key) {
-			return isset($this->user[$key]) ? $this->user[$key] : null;
-		}
-
-		return $this->user;
-	}
-
-	public function getId()
-	{
-		return $this->user_id;
 	}
 
 	public function encrypt($password)
@@ -351,7 +390,7 @@ class User extends Library
 
 	public function setResetCode($email, $code)
 	{
-		$user = $this->lookupUserByEmail($email);
+		$user = $this->Model_User->findRecord(array('email' => $email));
 
 		if (!$user) {
 			$this->error = _l("The email %s is not associated to an account.", $email);
