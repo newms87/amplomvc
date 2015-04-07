@@ -7,7 +7,9 @@ var screen_lg = screen_width >= 1200,
 
 Function.prototype.loop = function (time) {
 	var fn = this;
-	setTimeout(function(){fn() === false ? 0 : fn.loop(time)}, time);
+	setTimeout(function () {
+		fn() === false ? 0 : fn.loop(time)
+	}, time);
 }
 
 String.prototype.toSlug = function (sep) {
@@ -796,11 +798,13 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 $.cookie = function (key, value, options) {
-	if (arguments.length > 1 && (value === null || typeof value !== "object")) {
+	if (arguments.length > 1) {
 		options = options || {};
 
 		if (value === null) {
 			options.expires = -1;
+		} else if (typeof value === "object") {
+			value = JSON.stringify(value);
 		}
 
 		if (typeof options.expires === 'number') {
@@ -820,9 +824,17 @@ $.cookie = function (key, value, options) {
 
 	// key and possibly options given, get cookie...
 	options = value || {};
-	var result, decode = options.raw ? function (s) {
-		return s;
-	} : decodeURIComponent;
+	var result;
+
+	var decode = function (s) {
+		if (options.raw) {
+			return s;
+		}
+		s = decodeURIComponent(s);
+
+		return JSON.parse(s) || s;
+	}
+
 	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 

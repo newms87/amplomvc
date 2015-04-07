@@ -574,6 +574,23 @@ function user_info($key = null)
 	return $registry->get('user')->info($key);
 }
 
+function user_meta($key, $default = null)
+{
+	global $registry;
+	return $registry->get('user')->meta($key, $default);
+}
+
+function set_user_meta($key, $value)
+{
+	global $registry;
+
+	if ($value === null) {
+		return $registry->get('user')->removeMeta($key);
+	} else {
+		return $registry->get('user')->setMeta($key, $value);
+	}
+}
+
 function validate($method, $value)
 {
 	global $registry;

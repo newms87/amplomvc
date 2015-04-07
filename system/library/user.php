@@ -5,6 +5,7 @@ class User extends Library
 	protected
 		$user_id,
 		$user,
+		$meta,
 		$alerts,
 		$permissions = array(),
 		$temp_user;
@@ -28,6 +29,15 @@ class User extends Library
 		}
 
 		return $this->user;
+	}
+
+	public function meta($key = null, $default = null)
+	{
+		if ($key) {
+			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		}
+
+		return $this->meta;
 	}
 
 	public function loginSystemUser()
@@ -69,6 +79,7 @@ class User extends Library
 			}
 
 			$this->user = $user;
+			$this->meta = $this->Model_User->getMeta($user['user_id']);
 		}
 	}
 
@@ -243,7 +254,7 @@ class User extends Library
 		return $this->addMeta($user_id, $key, $value);
 	}
 
-	public function deleteMeta($user_id, $key, $value = null)
+	public function removeMeta($user_id, $key, $value = null)
 	{
 		$where = array(
 			'user_id' => $user_id,
@@ -409,7 +420,7 @@ class User extends Library
 
 	public function clearResetCode($user_id)
 	{
-		$this->deleteMeta($user_id, 'pass_reset_code');
+		$this->removeMeta($user_id, 'pass_reset_code');
 	}
 
 	public function generateCode()
