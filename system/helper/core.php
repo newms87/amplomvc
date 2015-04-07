@@ -1,4 +1,19 @@
 <?php
+if (!function_exists('apache_request_headers')) {
+	function apache_request_headers()
+	{
+		$headers = array();
+		foreach ($_SERVER as $k => $v) {
+			if (substr($k, 0, 5) == "HTTP_") {
+				$k           = str_replace('_', ' ', substr($k, 5));
+				$k           = str_replace(' ', '-', ucwords(strtolower($k)));
+				$headers[$k] = $v;
+			}
+		}
+		return $headers;
+	}
+}
+
 //Request Headers
 $headers = apache_request_headers();
 function _header($key = null, $default = null)
@@ -423,21 +438,6 @@ if (!function_exists('json_last_error_msg')) {
 		);
 		$error = json_last_error();
 		return array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
-	}
-}
-
-if (!function_exists('apache_request_headers')) {
-	function apache_request_headers()
-	{
-		$headers = array();
-		foreach ($_SERVER as $k => $v) {
-			if (substr($k, 0, 5) == "HTTP_") {
-				$k           = str_replace('_', ' ', substr($k, 5));
-				$k           = str_replace(' ', '-', ucwords(strtolower($k)));
-				$headers[$k] = $v;
-			}
-		}
-		return $headers;
 	}
 }
 
