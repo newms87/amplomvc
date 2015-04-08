@@ -353,9 +353,9 @@
 						<td>
 							<?= build(array(
 								'type'   => 'select',
-								'name'   => 'config_account_terms_page_id',
+								'name'   => 'terms_agreement_page_id',
 								'data'   => $data_pages,
-								'select' => $config_account_terms_page_id,
+								'select' => $terms_agreement_page_id,
 								'value'  => 'page_id',
 								'label'  => 'title',
 							)); ?>

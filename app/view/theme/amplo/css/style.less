@@ -23,7 +23,7 @@ html, body {
 
 #container {
   position: absolute;
-  top: @header-height;
+  top: 6em;
   bottom: 0;
   width: 100%;
 
@@ -271,7 +271,7 @@ button, .button, .row .button {
 
         &:hover, &.hover {
           .sub-menu {
-            max-height: @header-height;
+            max-height: 6em;
             -webkit-transition: max-height .4s;
             transition: max-height .4s;
           }
@@ -393,11 +393,22 @@ header.main-header.row {
   top: 0;
   z-index: 100;
   box-shadow: 1px 0 1px 1px rgba(0, 0, 0, .2);
-  height: @header-height;
   box-sizing: border-box;
 
   .wrap {
     border: none;
+  }
+
+  .terms-agreement {
+    background: #D7EDD7;
+    font: .9em OpenSansRegular;
+    color: @font-dark;
+    padding: .75em;
+
+    a {
+      color: @font-dark;
+      text-decoration: underline;
+    }
   }
 
   @header();

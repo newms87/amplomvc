@@ -47,6 +47,11 @@ class App_Controller_Header extends Controller
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();
 
+		//Terms Agreement
+		if (option('show_terms_agreement')) {
+			$settings['terms_page'] = $this->Model_Page->getRecord(option('terms_agreement_page_id'));
+		}
+
 		//Render
 		$this->render('header', $settings);
 	}

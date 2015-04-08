@@ -50,7 +50,7 @@ class App_Model_Settings extends Model
 		'config_performance_log'                  => 0,
 		'config_customer_group_id'                => '',
 		'config_customer_approval'                => 0,
-		'config_account_terms_page_id'            => '',
+		'terms_agreement_page_id'                 => '',
 		'config_contact_page_id'                  => '',
 		'show_breadcrumbs'                        => 1,
 		'breadcrumb_separator'                    => ' / ',

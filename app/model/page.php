@@ -125,6 +125,10 @@ class App_Model_Page extends App_Model_Table
 
 		clear_cache('page');
 
+		if ($page_id && $page_id == option('terms_agreement_page_id')) {
+			save_option('terms_agreement_date', $this->date->now());
+		}
+
 		return $page_id;
 	}
 

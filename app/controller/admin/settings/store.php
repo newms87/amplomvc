@@ -148,7 +148,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'site_list_limit'              => '12',
 			'config_customer_group_id'     => '',
 			'config_customer_approval'     => '',
-			'config_account_terms_page_id' => '',
+			'terms_agreement_page_id' => '',
 			'site_logo'                    => '',
 			'site_logo_srcset'             => 1,
 			'site_icon'                    => null,

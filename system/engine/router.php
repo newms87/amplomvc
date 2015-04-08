@@ -16,7 +16,7 @@ class Router
 			$uri = trim(substr($uri, strlen($base)), '/');
 		}
 
-		$this->path = $uri ? $uri : DEFAULT_PATH;
+		$this->path = str_replace('-', '_', $uri ? $uri : DEFAULT_PATH);
 
 		$this->segments = explode('/', $this->path);
 	}
@@ -34,8 +34,8 @@ class Router
 
 	public function setPath($path)
 	{
-		$this->path     = $path;
-		$this->segments = explode('/', $path);
+		$this->path     = str_replace('-', '_', $path);
+		$this->segments = explode('/', $this->path);
 	}
 
 	public function getSegment($index = null)

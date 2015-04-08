@@ -215,6 +215,13 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 			$path = 'common/maintenance';
 			$registry->get('route')->setPath($path);
 		}
+
+		$terms_agreement_date = option('terms_agreement_date');
+
+		if ($terms_agreement_date) {
+			$customer_agreed_date = is_logged() ? customer_meta('terms_agreed_date') : _cookie('terms_agreed_date');
+			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $registry->get('date')->isAfter($terms_agreement_date, $customer_agreed_date)));
+		}
 	}
 
 	//Path Rerouting

@@ -10,6 +10,7 @@ class App_Controller_Customer extends Controller
 		$allowed = array(
 			'customer/logout',
 			'customer/success',
+			'customer/agree_to_terms',
 		);
 
 		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
@@ -145,7 +146,7 @@ class App_Controller_Customer extends Controller
 			'last_name'  => '',
 			'email'      => '',
 			'company'    => '',
-			'address'  => '',
+			'address'    => '',
 			'address_2'  => '',
 			'postcode'   => '',
 			'city'       => '',
@@ -163,11 +164,11 @@ class App_Controller_Customer extends Controller
 		$data['data_countries'] = $this->Model_Localisation_Country->getActiveCountries();
 
 		//TODO: update this to a page!
-		if (option('config_account_terms_page_id')) {
-			$information_info = $this->Model_Page->getRecord(option('config_account_terms_page_id'));
+		if (option('terms_agreement_page_id')) {
+			$information_info = $this->Model_Page->getRecord(option('terms_agreement_page_id'));
 
 			if ($information_info) {
-				$data['agree_to']    = site_url('page', 'page_id=' . option('config_account_terms_page_id'));
+				$data['agree_to']    = site_url('page', 'page_id=' . option('terms_agreement_page_id'));
 				$data['agree_title'] = $information_info['title'];
 			}
 		}
@@ -313,6 +314,25 @@ class App_Controller_Customer extends Controller
 		} else {
 			message('error', $this->Model_Customer->fetchError());
 			redirect('customer/reset_form', $_GET);
+		}
+	}
+
+	public function agree_to_terms()
+	{
+		$date = $this->date->now();
+
+		set_cookie('terms_agreed_date', $date);
+
+		if (is_logged()) {
+			set_customer_meta('terms_agreed_date', $date);
+		}
+
+		message('success', _l("You have agreed to the terms and conditions."));
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect(_get('redirect'));
 		}
 	}
 }
