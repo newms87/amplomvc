@@ -86,6 +86,7 @@ class App_Controller_Admin_Page extends Controller
 			'pagination'     => true,
 			'total_listings' => $page_total,
 			'listing_path'   => 'admin/page/listing',
+			'save_path'      => 'admin/page/save',
 		);
 
 		$output = block('widget/listing', null, $listing);
@@ -167,7 +168,7 @@ class App_Controller_Admin_Page extends Controller
 
 	public function save()
 	{
-		$post = $_POST;
+		$post      = $_POST;
 		$post['t'] = $post['template'];
 
 		if ($page_id = $this->Model_Page->save(_request('page_id'), $post)) {
@@ -207,9 +208,9 @@ class App_Controller_Admin_Page extends Controller
 
 	public function batch_action()
 	{
-		$batch = (array)_request('batch');
+		$batch  = (array)_request('batch');
 		$action = _request('action');
-		$value = _request('value');
+		$value  = _request('value');
 
 		foreach ($batch as $page_id) {
 			switch ($action) {

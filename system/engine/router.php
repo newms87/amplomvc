@@ -2,18 +2,38 @@
 
 class Router
 {
-	protected $path;
-	protected $segments;
-	protected $site;
-	protected $routing_hooks = array();
+	protected
+		$path,
+		$segments,
+		$site,
+		$routing_hooks = array();
 
 	public function __construct()
 	{
-		$uri = trim(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']), '/ ');
+		global $registry;
+		$registry->set('route', $this);
+
+		$request = explode('?', $_SERVER['REQUEST_URI'], 2);
+
+		$uri   = trim($request[0], '/ ');
+		$query = !empty($request[1]) ? trim($request[1]) : '';
 
 		$base = trim(SITE_BASE, '/');
 		if ($base && strpos($uri, $base) === 0) {
 			$uri = trim(substr($uri, strlen($base)), '/');
+		}
+
+		if ($uri) {
+			$alias = $this->url->lookupAlias($uri, $query);
+
+			if ($alias) {
+				$uri = $alias['path'];
+
+				if (!empty($alias['query'])) {
+					parse_str($alias['query'], $q);
+					$_GET = $q + $_GET;
+				}
+			}
 		}
 
 		$this->path = str_replace('-', '_', $uri ? $uri : DEFAULT_PATH);
@@ -24,6 +44,7 @@ class Router
 	public function __get($key)
 	{
 		global $registry;
+
 		return $registry->get($key);
 	}
 

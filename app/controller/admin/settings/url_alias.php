@@ -56,7 +56,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			$url_alias['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
-					'href' => site_url('admin/settings/url_alias/save', 'url_alias_id=' . $url_alias_id)
+					'href' => site_url('admin/settings/url_alias/form', 'url_alias_id=' . $url_alias_id)
 				),
 				'delete' => array(
 					'text' => _l("Delete"),

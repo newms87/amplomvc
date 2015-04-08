@@ -7,7 +7,7 @@
 
 <body class="<?= page_info('body_class'); ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
 <section id="container">
-	<? if ($show_terms_agreement) { ?>
+	<? if (option('show_terms_agreement')) { ?>
 		<div class="terms-agreement">
 			{{You must agree to the <a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click <a href="<?= site_url('customer/agree-to-terms', array('redirect' => $this->url->here())); ?>">I agree</a>}}
 		</div>
