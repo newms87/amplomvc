@@ -2,12 +2,12 @@
 
 class Url extends Library
 {
-	private $url = '';
-	private $ssl = '';
-	private $rewrite = array();
-	private $seo_url;
-	private $secure_pages = array();
-	private $aliases = array();
+	private
+		$url = '',
+		$ssl = '',
+		$rewrite = array(),
+		$secure_pages = array(),
+		$aliases = array();
 
 	public function __construct()
 	{
@@ -20,36 +20,13 @@ class Url extends Library
 			$this->secure_pages = $this->queryRows("SELECT * FROM {$this->t['secure_page']}");
 		}
 
-		$this->aliases = $this->Model_UrlAlias->getRecords(array('cache' => true), array('status' => 1), null, false, 'alias');
-
-		if (option('config_seo_url')) {
-			$this->loadSeoUrl();
-		}
+		$this->loadAliases();
 	}
 
 	public function setSite($site)
 	{
 		$this->url = isset($site['url']) ? $site['url'] : URL_SITE;
 		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
-	}
-
-	public function getQuery()
-	{
-		$args = func_get_args();
-
-		if (empty($args)) {
-			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
-		}
-
-		$query = array();
-
-		foreach ($_GET as $key => $value) {
-			if (in_array($key, $args)) {
-				$query[$key] = $value;
-			}
-		}
-
-		return http_build_query($query);
 	}
 
 	public function getQueryExclude()
@@ -73,7 +50,17 @@ class Url extends Library
 
 	public function here($append_query = '')
 	{
-		return $this->link($this->route->getPath(), $this->getQuery() . '&' . $append_query);
+		if ($append_query) {
+			if (is_string($append_query)) {
+				parse_str($append_query, $append_query);
+			}
+
+			$query = $append_query + $_GET;
+		} else {
+			$query = $_GET;
+		}
+
+		return $this->link($this->route->getPath(), $query);
 	}
 
 	public function reload_page()
@@ -99,6 +86,7 @@ class Url extends Library
 
 		if (!file_put_contents($destination, fopen($source, 'r'))) {
 			$this->error['write'] = _l("Failed to download file to %s", $destination);
+
 			return false;
 		}
 
@@ -131,11 +119,6 @@ class Url extends Library
 		curl_close($ch);
 
 		return $data;
-	}
-
-	public function getSeoUrl()
-	{
-		return $this->seo_url;
 	}
 
 	public function link($path, $query = '', $ssl = null, $site_id = null)
@@ -189,6 +172,7 @@ class Url extends Library
 			'>',
 			'<'
 		);
+
 		return preg_replace($patterns, $replacements, rawurldecode($uri));
 	}
 
@@ -216,35 +200,15 @@ class Url extends Library
 		exit();
 	}
 
-	private function loadSeoUrl()
-	{
-		$url_alias = $this->lookupAlias($this->route->getPath(), $this->getQuery());
-
-		if ($url_alias) {
-			//Get Original Query without URL Alias query
-			parse_str($url_alias['query'], $alias_query);
-
-			$query = $this->getQueryExclude($alias_query);
-
-			$_GET += $alias_query;
-
-			$this->route->setPath($url_alias['path']);
-
-			//Build the New URL
-			$this->seo_url = $this->url . $url_alias['alias'] . ($query ? '?' . $query : '');
-		} else {
-			$this->seo_url = $this->here();
-		}
-	}
-
 	private function findAlias($base_url, $path = '', $query = '')
 	{
-		if (is_array($query)) {
-			$query_str = http_build_query($query);
-		} else {
+		$path = strtolower(str_replace('-', '_', $path));
+
+		if (is_string($query)) {
 			$query_str = urldecode($query);
-			parse_str($query, $args);
-			$query = $args;
+			parse_str($query, $query);
+		} else {
+			$query_str = $query ? http_build_query($query) : '';
 		}
 
 		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
@@ -259,35 +223,72 @@ class Url extends Library
 			return ($has_scheme ? '' : $base_url) . $path . $query_str;
 		}
 
-		$url_alias = $this->lookupAlias($path, $query_str);
+		$url_alias = $this->path2Alias($path, $query);
 
 		//Get Original Query without URL Alias query
 		if ($url_alias) {
-			$path = $url_alias['alias'];
-
-			parse_str($url_alias['query'], $alias_query);
-			$query = array_diff_assoc($query, $alias_query);
+			$path  = $url_alias['alias'];
+			$query = array_diff_assoc($query, $url_alias['query']);
 		}
 
 		//Build the New URL
 		return $base_url . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
 	}
 
-	public function lookupAlias($path, $query)
+	public function alias2Path($alias)
 	{
-		$path = strtolower($path);
+		$alias = path_format($alias);
 
-		if (isset($this->aliases[$path])) {
-			return $this->aliases[$path];
+		if (isset($this->aliases[$alias])) {
+			return $this->aliases[$alias];
 		}
 
-		//Lookup URL Alias
+		return false;
+
+	}
+
+	public function path2Alias($path, $query = '')
+	{
+		if ($query && is_string($query)) {
+			parse_str($query, $query);
+		}
+
 		foreach ($this->aliases as $alias) {
 			if (preg_match("|^" . $alias['path'] . "$|i", $path)) {
-				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|i", $query)) {
-					return $alias;
+				if ($alias['query']) {
+					foreach ($alias['query'] as $key => $value) {
+						if (!isset($query[$key]) || $query[$key] !== $value) {
+							continue 2;
+						}
+					}
 				}
+
+				return $alias;
 			}
+		}
+
+		return false;
+	}
+
+	private function loadAliases()
+	{
+		//TODO: Need a better way to handle large sets of Aliases... consider switch to disable caching
+		$this->aliases = cache('url_alias.all');
+
+		if ($this->aliases === null) {
+			$aliases = $this->Model_UrlAlias->getRecords(null, array('status' => 1));
+
+			$this->aliases = array();
+
+			foreach ($aliases as $alias) {
+				if ($alias['query']) {
+					parse_str($alias['query'], $alias['query']);
+				}
+
+				$this->aliases[path_format($alias['alias'])] = $alias;
+			}
+
+			cache('url_alias.all', $this->aliases);
 		}
 	}
 

@@ -10,6 +10,7 @@ if (!function_exists('apache_request_headers')) {
 				$headers[$k] = $v;
 			}
 		}
+
 		return $headers;
 	}
 }
@@ -76,6 +77,7 @@ function set_cookie($name, $value, $expire = 31536000)
 {
 	if (!headers_sent()) {
 		$expire = $expire ? time() + $expire : 0;
+
 		return setcookie(COOKIE_PREFIX . $name, $value, $expire, '/', COOKIE_DOMAIN);
 	}
 
@@ -136,6 +138,7 @@ function _lg($group, $message = null)
 	//Permanently change Group.
 	if ($message === null) {
 		$language_group = $group;
+
 		return;
 	}
 
@@ -259,6 +262,7 @@ if (!function_exists('array_column')) {
 				$values[$row[$index_key]] = $value;
 			} else {
 				trigger_error(_l("%s: The index key should be set for all rows in the array.", __FUNCTION__));
+
 				return array();
 			}
 		}
@@ -444,6 +448,7 @@ if (!function_exists('json_last_error_msg')) {
 			JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded'
 		);
 		$error = json_last_error();
+
 		return array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
 	}
 }
@@ -673,12 +678,14 @@ function timelog($name)
 function _time()
 {
 	global $ac_time_offset;
+
 	return time() + $ac_time_offset;
 }
 
 function _filemtime($file)
 {
 	global $ac_time_offset;
+
 	return filemtime($file) + ($ac_time_offset * 1000);
 }
 
@@ -836,6 +843,11 @@ function path2class($path)
 	return str_replace(array_keys($replace), $replace, $path);
 }
 
+function path_format($path)
+{
+	return strtolower(str_replace('-', '_', trim(str_replace('\\', '/', $path), '/ ')));
+}
+
 function insertables($insertables, $text, $start = '%', $end = '%')
 {
 	$patterns     = array();
@@ -937,6 +949,7 @@ function crypto_rand($min, $max)
 		$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
 		$rnd = $rnd & $filter; // discard irrelevant bits
 	} while ($rnd >= $range);
+
 	return $min + $rnd;
 }
 
@@ -950,5 +963,6 @@ function tokengen($length)
 	for ($i = 0; $i < $length; $i++) {
 		$token .= $codeAlphabet[crypto_rand(0, strlen($codeAlphabet))];
 	}
+
 	return $token;
 }

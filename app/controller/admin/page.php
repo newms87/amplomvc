@@ -59,6 +59,12 @@ class App_Controller_Admin_Page extends Controller
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
 
+			$actions['view'] = array(
+				'text'    => _l("View"),
+				'href'    => site_url('page', 'page_id=' . $page_id),
+				'#target' => "_blank",
+			);
+
 			if (user_can('r', 'admin/page/form')) {
 				$actions['edit'] = array(
 					'text' => _l("Edit"),

@@ -13,10 +13,7 @@ class Router
 		global $registry;
 		$registry->set('route', $this);
 
-		$request = explode('?', $_SERVER['REQUEST_URI'], 2);
-
-		$uri   = strtolower(trim($request[0], '/ '));
-		$query = !empty($request[1]) ? trim($request[1]) : '';
+		$uri   = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
 
 		$base = trim(SITE_BASE, '/');
 
@@ -25,19 +22,18 @@ class Router
 		}
 
 		if ($uri) {
-			$alias = $this->url->lookupAlias($uri, $query);
+			$url_alias = $this->url->alias2Path($uri);
 
-			if ($alias) {
-				$uri = $alias['path'];
+			if ($url_alias) {
+				$uri = $url_alias['path'];
 
-				if (!empty($alias['query'])) {
-					parse_str($alias['query'], $q);
-					$_GET = $q + $_GET;
+				if ($url_alias['query']) {
+					$_GET = $url_alias['query'] + $_GET;
 				}
 			}
 		}
 
-		$this->path = str_replace('-', '_', $uri ? $uri : DEFAULT_PATH);
+		$this->path = $uri ? $uri : DEFAULT_PATH;
 
 		$this->segments = explode('/', $this->path);
 	}

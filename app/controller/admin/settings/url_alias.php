@@ -75,6 +75,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			'pagination'     => true,
 			'total_listings' => $url_alias_total,
 			'listing_path'   => 'admin/settings/url_alias/listing',
+			'save_path'      => 'admin/settings/url_alias/save',
 		);
 
 		$output = block('widget/listing', null, $listing);
