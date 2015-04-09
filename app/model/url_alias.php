@@ -11,6 +11,8 @@ class App_Model_UrlAlias extends App_Model_Table
 		if (isset($url_alias['alias'])) {
 			if (empty($url_alias['alias'])) {
 				$this->error['alias'] = _l("Alias cannot be empty.");
+			} else {
+				$url_alias['alias'] = format('url', $url_alias['alias']);
 			}
 		} elseif (!$url_alias_id) {
 			$this->error['alias'] = _l("Alias is required.");
@@ -18,9 +20,7 @@ class App_Model_UrlAlias extends App_Model_Table
 
 		if ($this->error) {
 			return false;
-	    }
-
-		$url_alias['alias'] = format('url', $url_alias['alias']);
+		}
 
 		if ($url_alias_id) {
 			$this->update('url_alias', $url_alias, $url_alias_id);

@@ -25,7 +25,7 @@ class Document extends Library
 		$this->info['title']       = option('site_title');
 		$this->meta['description'] = option('site_meta_description');
 
-		$this->info['canonical_link'] = $this->url->getSeoUrl();
+		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
 
 		if ($ac_vars = option('config_ac_vars')) {
 			$this->ac_vars += $ac_vars;
@@ -95,6 +95,7 @@ class Document extends Library
 	{
 		if (empty($link['name'])) {
 			$this->error['name'] = _l("You must provide a link name!");
+
 			return false;
 		}
 
@@ -139,9 +140,11 @@ class Document extends Library
 				}
 				if ($link['parent'] === $l['name']) {
 					$l['children'][$link['name']] = $link;
+
 					return false;
 				} elseif (!empty($l['navigation_id']) && $link['parent_id'] === $l['navigation_id']) {
 					$l['children'][$link['name']] = $link;
+
 					return false;
 				}
 			});
@@ -149,6 +152,7 @@ class Document extends Library
 			//$return === false when link is found
 			if ($return !== false) {
 				$this->error['parent'] = _l("Unable to locate parent link %s in Link Group %s", $link['parent'], $group);
+
 				return false;
 			}
 		} else {
@@ -187,6 +191,7 @@ class Document extends Library
 		foreach ($links as $key => &$link) {
 			if ($link['name'] === $name) {
 				unset($links[$key]);
+
 				return true;
 			} elseif (!empty($link['children'])) {
 				if ($this->removeLink($group, $name, $link['children'])) {
@@ -348,6 +353,7 @@ class Document extends Library
 	{
 		if (!$href) {
 			$this->error['href'] = _l("You must specify a style resource to add.");
+
 			return false;
 		}
 
@@ -419,6 +425,7 @@ class Document extends Library
 	public function minifyJs($content)
 	{
 		require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
+
 		return JShrink\Minifier::minify($content);
 	}
 
@@ -516,10 +523,10 @@ class Document extends Library
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
 		if (!$page) {
-			$page = parse_url($this->url->getSeoUrl());
-
-			$page['query'] = null;
-			parse_str($this->url->getQuery(), $page['query']);
+			$page = array(
+				'path'  => $this->route->getPath(),
+				'query' => $_GET,
+			);
 		}
 
 		foreach ($links as $key => &$link) {

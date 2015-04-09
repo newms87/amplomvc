@@ -34,6 +34,7 @@ class Plugin extends Library
 				} else {
 					$this->error['class_name'] = _l("Plugin Class %s did not exist. Make sure the class name is correct in %s.", $plugin_class, $file);
 				}
+
 				return false;
 			}
 
@@ -56,11 +57,13 @@ class Plugin extends Library
 
 		if (!$instance) {
 			$this->error['name'] = _l("Unable to load plugin %s for installation.", $name);
+
 			return false;
 		}
 
 		if (!$this->Model_Plugin->canInstall($name)) {
 			$this->error['install'] = _l("The plugin %s cannot be installed.", $name);
+
 			return false;
 		}
 
@@ -74,6 +77,7 @@ class Plugin extends Library
 
 		if (!$this->Model_Plugin->save(null, $plugin)) {
 			$this->error = $this->Model_Plugin->fetchError();
+
 			return false;
 		}
 
@@ -84,6 +88,7 @@ class Plugin extends Library
 			if (!$this->activatePluginFile($name, $file)) {
 				$this->error['new_files'] = _l("There was a problem while adding new files for %s. The plugin has been uninstalled!", $name);
 				$this->uninstall($name);
+
 				return false;
 			}
 		}
@@ -156,6 +161,7 @@ class Plugin extends Library
 
 		if (!$plugin_id) {
 			$this->error['install'] = _l("Plugin was not installed");
+
 			return false;
 		}
 
@@ -171,6 +177,7 @@ class Plugin extends Library
 
 		if (!$this->Model_Plugin->save($plugin_id, array('version' => $version))) {
 			$this->error = $this->Model_Plugin->fetchError();
+
 			return false;
 		}
 
@@ -240,6 +247,7 @@ class Plugin extends Library
 		//Generate the live file with the contents of the plugin file
 		if (!_is_writable(dirname($live_file))) {
 			$this->error[$plugin_file]['destination'] = _l("%s(): Live File destination was not writable: %s", $live_file);
+
 			return false;
 		}
 
@@ -258,8 +266,19 @@ class Plugin extends Library
 			if (is_file($live_file)) {
 				//If no request to overwrite the live file
 				if (_get('force_install') !== $name && _get('overwrite_file') !== $live_file) {
-					$overwrite_file_url = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
-					$force_install_url  = site_url($this->route->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
+					$query = array(
+						'name'           => $name,
+						'overwrite_file' => $live_file,
+					);
+
+					$overwrite_file_url = $this->url->here($query);
+
+					$query = array(
+						'name'          => $name,
+						'force_install' => $name,
+					);
+
+					$force_install_url = $this->url->here($query);
 
 					$msg =
 						_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
@@ -267,6 +286,7 @@ class Plugin extends Library
 						_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
 
 					message("warning", $msg);
+
 					return false;
 				}
 
@@ -308,6 +328,7 @@ class Plugin extends Library
 			if (is_file($live_file)) {
 				if (filemtime($live_file) !== filemtime($plugin_file)) {
 					$this->error['modified'][] = _l("Either the file %s has been modified or does not belong to this plugin", $live_file);
+
 					return false;
 				}
 

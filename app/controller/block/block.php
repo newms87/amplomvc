@@ -15,7 +15,7 @@ class App_Controller_Block_Block extends Controller
 		}
 
 		if (!$this->is_ajax) {
-			redirect('admin/block', $this->url->getQuery());
+			redirect('admin/block', $_GET);
 		}
 
 		output_message();
