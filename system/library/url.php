@@ -228,7 +228,9 @@ class Url extends Library
 		//Get Original Query without URL Alias query
 		if ($url_alias) {
 			$path  = $url_alias['alias'];
-			$query = array_diff_assoc($query, $url_alias['query']);
+			if ($url_alias['query']) {
+				$query = array_diff_assoc($query, $url_alias['query']);
+			}
 		}
 
 		//Build the New URL
