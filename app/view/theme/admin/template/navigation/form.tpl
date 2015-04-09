@@ -92,6 +92,21 @@
 																)); ?>
 															</div>
 															<div class="link_entry_status">
+																<label for="link_status_<?= $nav_id; ?>">{{Target:}}</label>
+																<?=
+																build(array(
+																	'type'   => 'select',
+																	'name'   => "links[$nav_id][target]",
+																	'data'   => array(
+																		''        => 'Current Window',
+																		'_blank'  => 'New Tab / Window',
+																		'_parent' => "Parent Window",
+																	),
+																	'select' => $link['target'],
+																	'#id'    => "link_target_$nav_id",
+																)); ?>
+															</div>
+															<div class="link_entry_status">
 																<label for="link_status_<?= $nav_id; ?>">{{Status:}}</label>
 																<?=
 																build(array(
