@@ -281,8 +281,8 @@ class Url extends Library
 
 		//Lookup URL Alias
 		foreach ($this->aliases as $alias) {
-			if (preg_match("|^" . $alias['path'] . "$|", $path)) {
-				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|", $query)) {
+			if (preg_match("|^" . $alias['path'] . "$|i", $path)) {
+				if (!$alias['query'] || preg_match("|" . $alias['query'] . "|i", $query)) {
 					return $alias;
 				}
 			}

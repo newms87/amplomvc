@@ -111,6 +111,14 @@
 		</div>
 	</header>
 
+	<script type="text/javascript">
+		$(document).ready(fix_container_header);
+
+		function fix_container_header(){
+			$('#container').css({top: $('header.main-header').height()});
+		}
+	</script>
+
 	<main class="main clearfix">
 
 		<? if ($this->message->has()) { ?>
