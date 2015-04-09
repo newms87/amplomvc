@@ -76,19 +76,21 @@ class App_Model_Customer extends App_Model_Table
 			$customer_id = $this->insert('customer', $customer);
 		}
 
-		//Address will be extracted from customer information, if it exists
-		$this->saveAddress($customer_id, null, $customer);
+		if ($customer_id) {
+			//Address will be extracted from customer information, if it exists
+			$this->saveAddress($customer_id, null, $customer);
 
-		//Customer MetaData
-		if (!empty($customer['metadata'])) {
-			foreach ($customer['metadata'] as $key => $value) {
-				$this->setMeta($customer_id, $key, $value);
+			//Customer MetaData
+			if (!empty($customer['metadata'])) {
+				foreach ($customer['metadata'] as $key => $value) {
+					$this->setMeta($customer_id, $key, $value);
+				}
 			}
+
+			$customer['customer_id'] = $customer_id;
+
+			call('mail/new_customer', $customer);
 		}
-
-		$customer['customer_id'] = $customer_id;
-
-		call('mail/new_customer', $customer);
 
 		return $customer_id;
 	}

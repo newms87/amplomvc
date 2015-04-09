@@ -403,13 +403,7 @@ class Block extends Library
 
 		$settings += $this->getSettings($path);
 
-		$action = new Action($block . '/build', array('settings' => $settings));
-
-		if ($action->execute()) {
-			return $action->getOutput();
-		} else {
-			trigger_error(_l("%s(): Could not load block %s! The file was missing.", __METHOD__, $block));
-		}
+		return call("$block/build", array('settings' => $settings));
 	}
 
 	public function exists($path)

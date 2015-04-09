@@ -1,10 +1,7 @@
 <?php
 function call($path, $params = null, $is_ajax = null)
 {
-	$args = func_get_args();
-	array_shift($args);
-
-	$action = new Action($path, $args);
+	$action = new Action($path, $params);
 
 	if ($action->execute($is_ajax)) {
 		return $action->getOutput();

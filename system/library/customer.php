@@ -53,6 +53,7 @@ class Customer extends Library
 			if ($password !== AC_CUSTOMER_OVERRIDE) {
 				if (!password_verify($password, $customer['password'])) {
 					$this->error['password'] = _l("Login failed. Invalid username and / or password.");
+
 					return false;
 				}
 			}
@@ -106,6 +107,7 @@ class Customer extends Library
 
 		if (empty($customer)) {
 			$this->error['customer'] = _l("Customer was not found.");
+
 			return false;
 		}
 
@@ -131,24 +133,42 @@ class Customer extends Library
 
 	public function register($customer, $login = true)
 	{
-		if (option('terms_agreement_page_id')) {
-			$page = $this->Model_Page->getRecord(option('terms_agreement_page_id'));
+		if ($terms_page_id = option('terms_agreement_page_id')) {
+			$page = $this->Model_Page->getRecord($terms_page_id);
 
 			if ($page && !isset($customer['agree'])) {
-				$this->error['agree'] = _l("You must agree to the <a href=\"%s\">%s</a>", site_url('page', 'page_id=' . $page['page_id'], $page['title']));
+				$this->error['agree'] = _l("You must agree to the <a href=\"%s\">%s</a>", site_url('page', 'page_id=' . $terms_page_id), $page['title']);
+
 				return false;
 			}
 		}
 
 		$customer_id = $this->Model_Customer->save(null, $customer);
 
-		if ($customer_id && $login) {
-			$this->setCustomer($customer_id);
+		if ($customer_id) {
+			if ($login) {
+				$this->setCustomer($customer_id);
+			}
+
+			if ($terms_page_id) {
+				$this->agreedToTerms();
+			}
 		} else {
 			$this->error = $this->Model_Customer->fetchError();
 		}
 
 		return $customer_id;
+	}
+
+	public function agreedToTerms()
+	{
+		$date = $this->date->now();
+
+		set_cookie('terms_agreed_date', $date);
+
+		if (is_logged()) {
+			set_customer_meta('terms_agreed_date', $date);
+		}
 	}
 
 	public function meta($key = null, $default = null)
@@ -236,6 +256,7 @@ class Customer extends Library
 
 		if ($this->customer_id && (int)$customer_id === (int)$this->customer_id) {
 			message('notify', _l($msg));
+
 			return;
 		}
 
