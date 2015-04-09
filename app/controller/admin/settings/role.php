@@ -111,8 +111,9 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 		// Defaults
 		$defaults = array(
-			'name'        => '',
-			'permissions' => array(),
+			'user_role_id' => '',
+			'name'         => '',
+			'permissions'  => array(),
 		);
 
 		$user_role += $defaults;

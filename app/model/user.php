@@ -177,6 +177,17 @@ class App_Model_User extends App_Model_Table
 
 			$roles = $this->Model_UserRole->getRecords(array('cache' => true), $role_filter, 'user_role_id', false, 'user_role_id');
 
+			if (!$roles) {
+				if ($total) {
+					return array(
+						array(),
+						0,
+					);
+				}
+
+				return array();
+			}
+
 			$filter['user_role_id'] = array_keys($roles);
 		}
 
