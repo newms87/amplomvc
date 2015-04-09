@@ -15,10 +15,11 @@ class Router
 
 		$request = explode('?', $_SERVER['REQUEST_URI'], 2);
 
-		$uri   = trim($request[0], '/ ');
+		$uri   = strtolower(trim($request[0], '/ '));
 		$query = !empty($request[1]) ? trim($request[1]) : '';
 
 		$base = trim(SITE_BASE, '/');
+
 		if ($base && strpos($uri, $base) === 0) {
 			$uri = trim(substr($uri, strlen($base)), '/');
 		}

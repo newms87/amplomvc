@@ -275,6 +275,8 @@ class Url extends Library
 
 	public function lookupAlias($path, $query)
 	{
+		$path = strtolower($path);
+
 		if (isset($this->aliases[$path])) {
 			return $this->aliases[$path];
 		}
