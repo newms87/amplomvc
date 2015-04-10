@@ -51,7 +51,6 @@ class App_Controller_Admin_Navigation extends Controller
 			'display_name' => _l("Navigation Group"),
 			'filter'       => true,
 			'sortable'     => true,
-			'sort_value'   => 'name',
 		);
 
 		$columns['status'] = array(
@@ -63,7 +62,6 @@ class App_Controller_Admin_Navigation extends Controller
 				1 => _l("Enabled"),
 			),
 			'sortable'     => true,
-			'sort_value'   => 'status',
 		);
 
 		//Get Sorted / Filtered Data

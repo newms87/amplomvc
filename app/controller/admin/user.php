@@ -38,11 +38,16 @@ class App_Controller_Admin_User extends Controller
 
 	public function listing()
 	{
-		$sort    = $this->sort->getQueryDefaults('username', 'ASC');
-		$filter  = (array)_get('filter');
-		$columns = $this->Model_User->getColumns((array)_request('columns'));
+		$sort    = (array)_request('sort', array('username' => 'ASC'));
+		$filter  = (array)_request('filter');
+		$options = array(
+			'page'    => _get('page', 1),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_User->getColumns((array)_request('columns')),
+			'index'   => 'user_id',
+		);
 
-		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, null, true, 'user_id');
+		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, $options, true);
 
 		foreach ($users as $user_id => &$user) {
 			$actions = array(
@@ -71,8 +76,8 @@ class App_Controller_Admin_User extends Controller
 		$listing = array(
 			'row_id'         => 'user_id',
 			'extra_cols'     => $this->Model_User->getColumns(false),
-			'columns'        => $columns,
 			'rows'           => $users,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_total,
@@ -80,7 +85,7 @@ class App_Controller_Admin_User extends Controller
 			'save_path'      => 'admin/user/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {

@@ -2,10 +2,11 @@
 
 class Language extends Library
 {
-	private $language_id;
-	private $code;
-	private $info;
-	private $loaded = array();
+	protected
+		$language_id,
+		$code,
+		$info,
+		$languages = array();
 
 	public $defaults = array(
 		'id'                     => 0,
@@ -20,7 +21,7 @@ class Language extends Library
 		'time_format'            => 'h:i:s A',
 		'datetime_format'        => 'Y-m-d H:i:s',
 		'datetime_format_medium' => 'M d, Y H:i A',
-		'datetime_format_long'   => 'M d, Y H:i:s A A',
+		'datetime_format_long'   => 'M d, Y H:i:s A',
 		'datetime_format_full'   => 'D, d M, Y H:i:s',
 		'decimal_point'          => '.',
 		'thousand_point'         => ',',
@@ -30,6 +31,8 @@ class Language extends Library
 	public function __construct($language_id = null, $set_session = true)
 	{
 		parent::__construct();
+
+		$this->loadLanguages();
 
 		if (empty($language_id)) {
 			$this->resolve();
@@ -54,36 +57,27 @@ class Language extends Library
 
 	public function getLanguage($language_id)
 	{
-		if (!isset($this->loaded[$language_id])) {
-			$language = $this->queryRow("SELECT * FROM {$this->t['language']} WHERE language_id = " . (int)$language_id);
-
-			foreach ($this->defaults as $key => $default) {
-				if (empty($language[$key])) {
-					$language[$key] = $default;
-				}
-			}
-
-			$this->loaded[$language_id] = $language;
-		}
-
-		return $this->loaded[$language_id];
+		return isset($this->languages[$language_id]) ? $this->languages[$language_id] : $this->defaults;
 	}
 
-	public function getLanguages()
+	protected function loadLanguages()
 	{
-		static $all_loaded = false;
+		$this->languages = cache('language.active');
 
-		if (!$all_loaded) {
-			$this->loaded = $this->queryRows("SELECT * FROM {$this->t['language']}", 'language_id');
+		if (!$this->languages) {
+			$this->languages = $this->Model_Localisation_Language->getRecords(null, array('status' => 1), array('index' => 'language_id'));
 
-			foreach ($this->loaded as &$loaded) {
-				$loaded += $this->defaults;
+			foreach ($this->languages as &$language) {
+				foreach ($this->defaults as $key => $value) {
+					if (empty($language[$key])) {
+						$language[$key] = $value;
+					}
+				}
 			}
+			unset($language);
 
-			$all_loaded = true;
+			cache('language.active', $this->languages);
 		}
-
-		return $this->loaded;
 	}
 
 	public function setLanguage($language)
@@ -124,13 +118,11 @@ class Language extends Library
 		$code = _get('language_code', _session('language_code', _cookie('language_code', false)));
 
 		if ($code) {
-			$language = cache('language.' . $code);
+			$language = null;
 
-			if (!$language) {
-				$language = $this->queryRow("SELECT * FROM {$this->t['language']} WHERE status = '1' AND `code` = '" . $this->escape($code) . "' LIMIT 1");
-
-				if ($language) {
-					cache('language.' . $code, $language);
+			foreach ($this->languages as $lang) {
+				if ($lang['code'] === $code) {
+					$language = $lang;
 				}
 			}
 		}
@@ -157,7 +149,7 @@ class Language extends Library
 		} else {
 			$this->setLanguage($language);
 
-			$this->loaded[$language['language_id']] = $language + $this->defaults;
+			$this->languages[$language['language_id']] = $language + $this->defaults;
 		}
 	}
 
@@ -190,7 +182,7 @@ class Language extends Library
 			}
 
 			foreach ($languages as $language) {
-				$this->loaded[$language['language_id']] = $language;
+				$this->languages[$language['language_id']] = $language;
 			}
 
 			$browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);

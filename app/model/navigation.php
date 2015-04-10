@@ -256,31 +256,23 @@ class App_Model_Navigation extends App_Model_Table
 		return $group;
 	}
 
-	public function getGroups($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getGroups($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		//Select
-		$select = $this->extractSelect('navigation_group', $select);
+		$orig_table = $this->table;
+		$this->table = 'navigation_group';
 
-		//From
-		$from = $this->t['navigation_group'];
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
-		//Where
-		$where = $this->extractWhere('navigation_group', $filter);
+		$this->table = $orig_table;
 
-		//Order and Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		$results = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
-
-		$total ? $rows = &$results[0] : $rows = &$results;
+		$total ? $rows = &$records[0] : $rows = &$records;
 
 		foreach ($rows as &$row) {
 			$row['links'] = $this->getGroupLinks($row['navigation_group_id']);
 		}
 		unset($row);
 
-		return $results;
+		return $records;
 	}
 
 	public function getNavigationGroup($name = 'all')

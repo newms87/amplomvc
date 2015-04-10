@@ -20,24 +20,29 @@ class App_Controller_Admin_History extends Controller
 
 	public function listing()
 	{
-		$sort    = $this->sort->getQueryDefaults('history_id', 'desc');
+		$sort    = (array)_get('sort', array('history_id' => 'DESC'));
 		$filter  = (array)_get('filter');
-		$columns = $this->Model_History->getColumns((array)_request('columns'));
+		$options = array(
+			'index'   => 'history_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit'),
+			'columns' => $this->Model_History->getColumns((array)_request('columns')),
+		);
 
-		list($entries, $total) = $this->Model_History->getRecords($sort, $filter, $columns, true);
+
+		list($entries, $total) = $this->Model_History->getRecords($sort, $filter, $options, true);
 
 		$listing = array(
-			'row_id'         => 'history_id',
 			'extra_cols'     => $this->Model_History->getColumns(false),
-			'columns'        => $columns,
 			'rows'           => $entries,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $total,
 			'listing_path'   => 'admin/history/listing',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {

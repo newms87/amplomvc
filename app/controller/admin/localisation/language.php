@@ -101,7 +101,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 
 		$language_total = $this->Model_Localisation_Language->getTotalLanguages($data);
 
-		$results = $this->Model_Localisation_Language->getLanguages($data);
+		list($results, $language_total) = $this->Model_Localisation_Language->getRecords($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -175,7 +175,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 		$data['cancel'] = site_url('admin/localisation/language', $url);
 
 		if ($language_id && !IS_POST) {
-			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
+			$language_info = $this->Model_Localisation_Language->getRecord($language_id);
 		}
 
 		$defaults = array(
@@ -261,7 +261,7 @@ class App_Controller_Admin_Localisation_Language extends Controller
 		}
 
 		foreach ($_GET['selected'] as $language_id) {
-			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
+			$language_info = $this->Model_Localisation_Language->getRecord($language_id);
 
 			if ($language_info) {
 				if (option('config_language') == $language_info['code']) {

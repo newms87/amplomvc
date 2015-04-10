@@ -16,7 +16,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'extra_cols'          => array(),
 			'template'            => 'table/list_view',
 			'ajax'                => 1,
-			'rows'                => array(),
+			'records'             => array(),
 			'template_data'       => array(),
 			'filter_value'        => array(),
 			'pagination_settings' => array(),
@@ -37,19 +37,17 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			//With the default AmploMVC installation, only admin theme has a template for listing
 		);
 
-		if (!empty($settings['rows'])) {
+		if (!empty($settings['records'])) {
 			$settings['show_limits'] = $settings['show_limits'] === 'bottom' ? 'bottom' : 'top';
 		} else {
 			$settings['show_limits'] = false;
 		}
 
-		$template_defaults = array(
+		$settings['template_data'] += array(
 			'listing_path' => $settings['listing_path'],
 			'save_path'    => $settings['save_path'],
 			'row_id'       => $settings['row_id'],
 		);
-
-		$settings['template_data'] += $template_defaults;
 
 		if (!isset($settings['show_messages'])) {
 			$settings['show_messages'] = $settings['ajax'] && $this->is_ajax;
@@ -81,8 +79,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$this->table->init();
 		$this->table->setTemplate('table/list_view', isset($settings['theme']) ? $settings['theme'] : null);
 		$this->table->setColumns($settings['columns']);
-		$this->table->setRows($settings['rows']);
-		$this->table->setTemplateData($settings['template_data']);
+		$this->table->setRows($settings['records']);
 
 		$filter_values = array();
 		$filter_types  = array();
@@ -102,10 +99,10 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$this->table->mapAttribute('filter_value', $filter_values);
 		$this->table->mapAttribute('filter_type', $filter_types);
 
-		$table_settings = array(
-			'show_actions' => $settings['show_actions'],
-			'filter_style' => $settings['filter_style'],
-		);
+		$table_settings = $settings['template_data'] + array(
+				'show_actions' => $settings['show_actions'],
+				'filter_style' => $settings['filter_style'],
+			);
 
 		$settings['listing'] = $this->table->render($table_settings);
 

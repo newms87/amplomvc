@@ -107,7 +107,7 @@ class App_Model_ViewListing extends App_Model_Table
 	 * Created View Listing Tables Access / Update methods *
 	 *******************************************************/
 
-	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		$table = $this->getViewListingTable($view_listing_id);
 
@@ -116,19 +116,14 @@ class App_Model_ViewListing extends App_Model_Table
 			return false;
 		}
 
-		$select = $this->extractSelect($table, $select);
+		$orig_table = $this->table;
+		$this->table = $table;
 
-		//From
-		$from = $this->t[$table];
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
-		//Where
-		$where = $this->extractWhere($table, $filter);
+		$this->table = $orig_table;
 
-		//Order By & Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return $records;
 	}
 
 	public function getTotalViewListingRecords($view_listing_id, $filter = array())

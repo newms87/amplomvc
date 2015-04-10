@@ -41,7 +41,7 @@ class App_Controller_Account extends Controller
 			'country_id' => option('config_country_id', 223),
 		);
 
-		$customer['data_zones'] = $this->Model_Localisation_Zone->getRecords(array('cache' => true), $filter);
+		$customer['data_zones'] = $this->Model_Localisation_Zone->getRecords(null, $filter, array('cache' => true));
 
 		//Render
 		$content = $this->render('account/details', $customer);
