@@ -617,7 +617,7 @@ if (!function_exists('amplo_error_handler')) {
 
 		if ($error) {
 			if (ini_get('display_errors')) {
-				$stack = get_caller(1, 10);
+				$stack = get_caller(1);
 
 				echo <<<HTML
 			<style>

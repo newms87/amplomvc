@@ -116,7 +116,7 @@ class App_Model_ViewListing extends App_Model_Table
 			return false;
 		}
 
-		$orig_table = $this->table;
+		$orig_table  = $this->table;
 		$this->table = $table;
 
 		$records = parent::getRecords($sort, $filter, $options, $total);
@@ -157,20 +157,19 @@ class App_Model_ViewListing extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				$sort = array(
-					'sort' => array(
-						'name' => 'ASC'
-					),
+				$sort    = array('name' => 'ASC');
+				$options = array(
+					'index' => 'view_listing_id',
 					'cache' => true,
 				);
 
-				self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+				self::$view_listings = $this->getRecords($sort, null, $options);
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
 					if (!$this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']}")) {
 						$this->resetViewListings();
-						self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+						self::$view_listings = $this->getRecords($sort, null, $options);
 					}
 				}
 

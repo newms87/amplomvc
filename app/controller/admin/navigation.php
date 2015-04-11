@@ -94,7 +94,7 @@ class App_Controller_Admin_Navigation extends Controller
 		$listing = array(
 			'row_id'         => 'navigation_group_id',
 			'columns'        => $columns,
-			'rows'           => $navigation_groups,
+			'records'        => $navigation_groups,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $navigation_groups_total,

@@ -32,16 +32,16 @@ class App_Controller_Admin_View extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$requested_cols = _request('columns');
+		$sort    = (array)_get('sort', array('name' => 'ASC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'view_listing_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_ViewListing->getColumns((array)_request('columns')),
+		);
 
-		$columns = $this->Model_ViewListing->getColumns($requested_cols);
-
-		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _request('filter', array());
-
-		list($view_listings, $view_listing_total) = $this->Model_ViewListing->getRecords($sort, $filter, $columns, true, 'view_listing_id');
+		list($view_listings, $view_listing_total) = $this->Model_ViewListing->getRecords($sort, $filter, $options, true);
 
 		foreach ($view_listings as $view_listing_id => &$view_listing) {
 			$actions = array();
@@ -63,10 +63,9 @@ class App_Controller_Admin_View extends Controller
 		unset($view_listing);
 
 		$listing = array(
-			'row_id'         => 'view_listing_id',
 			'extra_cols'     => $this->Model_ViewListing->getColumns(false),
-			'columns'        => $columns,
-			'rows'           => $view_listings,
+			'records'        => $view_listings,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $view_listing_total,
@@ -74,7 +73,7 @@ class App_Controller_Admin_View extends Controller
 			'save_path'      => 'admin/view/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {
@@ -207,9 +206,9 @@ class App_Controller_Admin_View extends Controller
 
 	public function batch_action()
 	{
-		$batch = (array)_post('batch');
+		$batch  = (array)_post('batch');
 		$action = _post('action');
-		$value = _request('value');
+		$value  = _request('value');
 
 		foreach ($batch as $view_listing_id) {
 			switch ($action) {

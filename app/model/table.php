@@ -74,7 +74,7 @@ abstract class App_Model_Table extends Model
 		$tbl   = $this->table[0];
 
 		//Select
-		$fields  = $this->extractSelect($this->table . ' ' . $tbl, !empty($options['columns']) ? $options['columns'] : '*');
+		$fields = $this->extractSelect($this->table . ' ' . $tbl, !empty($options['columns']) ? $options['columns'] : '*');
 
 		if ($cache) {
 			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
@@ -94,11 +94,14 @@ abstract class App_Model_Table extends Model
 		$from = $this->t[$this->table] . ' ' . $tbl;
 
 		if (!empty($options['join'])) {
-			$from .= ' ' . implode(' ', $options['join']);
+			$from .= ' ' . implode(' ', (array)$options['join']);
 		}
 
 		//Where
 		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);
+
+		$group_by = !empty($options['group_by']) ? $options['group_by'] : '';
+		$having   = !empty($options['having']) ? $options['having'] : '';
 
 		//Order
 		$order = $this->extractOrder($sort, $tbl);
@@ -107,7 +110,7 @@ abstract class App_Model_Table extends Model
 		$limit = $this->extractLimit($options);
 
 		//The Query
-		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $order $limit", !empty($options['index']) ? $options['index'] : null, $total);
+		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total);
 
 		if ($cache) {
 			cache($cache, $records);

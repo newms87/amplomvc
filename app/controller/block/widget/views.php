@@ -195,8 +195,12 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		$columns = $this->Model_ViewListing->getViewListingColumns($view_listing_id, $requested_cols);
 
 		//The Sort & Filter Data
-		$sort   = !empty($listing['sort']) ? $listing['sort'] : $this->sort->getQueryDefaults();
-		$filter = !empty($listing['filter']) ? $listing['filter'] : _request('filter', array());
+		$sort    = !empty($listing['sort']) ? $listing['sort'] : (array)_request('sort');
+		$filter  = !empty($listing['filter']) ? $listing['filter'] : (array)_request('filter');
+		$options = !empty($listing['options']) ? $listing['options'] : array(
+			'page'  => _get('page'),
+			'limit' => _get('limit', IS_ADMIN ? option('admin_list_limit', 20) : option('list_limit', 20)),
+		);
 
 		list($records, $record_total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, null, true);
 
@@ -208,10 +212,10 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		}
 
 		$listing += array(
-			'row_id'         => null,
 			'extra_cols'     => $this->Model_ViewListing->getViewListingColumns($view_listing_id, false),
 			'columns'        => $columns,
-			'rows'           => $records,
+			'records'        => $records,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $record_total,
@@ -219,7 +223,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'theme'          => 'admin'
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {

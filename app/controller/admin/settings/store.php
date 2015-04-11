@@ -129,51 +129,51 @@ class App_Controller_Admin_Settings_Store extends Controller
 		}
 
 		$defaults = array(
-			'name'                         => 'Store ' . $store_id,
-			'url'                          => '',
-			'ssl'                          => '',
-			'site_owner'                   => '',
-			'site_address'                 => '',
-			'site_email'                   => '',
-			'site_phone'                   => '',
-			'config_fax'                   => '',
-			'site_title'                   => '',
-			'site_meta_description'        => '',
-			'config_default_layout_id'     => '',
-			'site_theme'                   => '',
-			'config_country_id'            => option('config_country_id'),
-			'config_zone_id'               => option('config_zone_id'),
-			'config_language'              => option('config_language'),
-			'config_currency'              => option('config_currency'),
-			'site_list_limit'              => '12',
-			'config_customer_group_id'     => '',
-			'config_customer_approval'     => '',
-			'terms_agreement_page_id' => '',
-			'site_logo'                    => '',
-			'site_logo_srcset'             => 1,
-			'site_icon'                    => null,
-			'site_logo_width'              => 0,
-			'site_logo_height'             => 0,
-			'site_email_logo_width'        => 300,
-			'site_email_logo_height'       => 0,
-			'config_image_thumb_width'     => 228,
-			'config_image_thumb_height'    => 228,
-			'config_image_popup_width'     => 500,
-			'config_image_popup_height'    => 500,
-			'config_use_ssl'               => '',
-			'config_contact_page_id'       => '',
+			'name'                      => 'Store ' . $store_id,
+			'url'                       => '',
+			'ssl'                       => '',
+			'site_owner'                => '',
+			'site_address'              => '',
+			'site_email'                => '',
+			'site_phone'                => '',
+			'config_fax'                => '',
+			'site_title'                => '',
+			'site_meta_description'     => '',
+			'config_default_layout_id'  => '',
+			'site_theme'                => '',
+			'config_country_id'         => option('config_country_id'),
+			'config_zone_id'            => option('config_zone_id'),
+			'config_language'           => option('config_language'),
+			'config_currency'           => option('config_currency'),
+			'site_list_limit'           => '12',
+			'config_customer_group_id'  => '',
+			'config_customer_approval'  => '',
+			'terms_agreement_page_id'   => '',
+			'site_logo'                 => '',
+			'site_logo_srcset'          => 1,
+			'site_icon'                 => null,
+			'site_logo_width'           => 0,
+			'site_logo_height'          => 0,
+			'site_email_logo_width'     => 300,
+			'site_email_logo_height'    => 0,
+			'config_image_thumb_width'  => 228,
+			'config_image_thumb_height' => 228,
+			'config_image_popup_width'  => 500,
+			'config_image_popup_height' => 500,
+			'config_use_ssl'            => '',
+			'config_contact_page_id'    => '',
 		);
 
 		$store += $defaults;
 
 		//Additional Info
-		$store['data_layouts']         = $this->Model_Layout->getRecords(array('cache' => true));
+		$store['data_layouts']         = $this->Model_Layout->getRecords(null, null, array('cache' => true));
 		$store['data_themes']          = $this->theme->getThemes();
 		$store['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$store['data_languages']       = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
 		$store['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
 		$store['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
-		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getRecords(array('cache' => true));
+		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true));
 
 		$store['data_yes_no'] = array(
 			1 => _l("Yes"),

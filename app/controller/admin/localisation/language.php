@@ -2,8 +2,6 @@
 
 class App_Controller_Admin_Localisation_Language extends Controller
 {
-
-
 	public function index()
 	{
 		set_page_info('title', _l("Language"));

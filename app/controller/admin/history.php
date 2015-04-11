@@ -25,7 +25,7 @@ class App_Controller_Admin_History extends Controller
 		$options = array(
 			'index'   => 'history_id',
 			'page'    => _get('page'),
-			'limit'   => _get('limit'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
 			'columns' => $this->Model_History->getColumns((array)_request('columns')),
 		);
 
@@ -34,7 +34,7 @@ class App_Controller_Admin_History extends Controller
 
 		$listing = array(
 			'extra_cols'     => $this->Model_History->getColumns(false),
-			'rows'           => $entries,
+			'records'        => $entries,
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,

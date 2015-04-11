@@ -13,18 +13,14 @@ class App_Controller_Block_Account_Address extends App_Controller_Block_Block
 
 		$settings += $defaults;
 
-		$filter = array(
-			'customer_ids' => array($settings['customer_id']),
-		);
-
 		switch ($settings['type']) {
 			case 'shipping':
-				$addresses = $this->customer->getShippingAddresses($filter);
+				$addresses = $this->customer->getShippingAddresses();
 				break;
 
 			case 'all':
 			default:
-				$addresses = $this->Model_Customer->getAddresses(customer_info('customer_id'), $filter);
+				$addresses = $this->Model_Customer->getAddresses(customer_info('customer_id'));
 				break;
 		}
 

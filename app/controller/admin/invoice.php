@@ -55,7 +55,7 @@ class App_Controller_Admin_Invoice extends Controller
 		$options = array(
 			'index'   => 'invoice_id',
 			'page'    => _get('page'),
-			'limit'   => _get('limit'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
 			'columns' => $columns + $required_columns
 		);
 
@@ -104,7 +104,7 @@ class App_Controller_Admin_Invoice extends Controller
 
 		$listing = array(
 			'extra_cols'     => $this->Model_Invoice->getColumns(false),
-			'rows'           => $invoices,
+			'records'        => $invoices,
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
@@ -321,15 +321,7 @@ class App_Controller_Admin_Invoice extends Controller
 		$orders    = array();
 
 		if (!empty($order_ids)) {
-			$filter = array(
-				'order_id' => $order_ids,
-			);
-
-			$sort = array(
-				'date_created' => 'ASC',
-			);
-
-			$orders = $this->Model_Order->getRecords($sort, $filter);
+			$orders = $this->Model_Order->getRecords(array('date_created' => 'ASC'), array('order_id' => $order_ids));
 		}
 
 		$total = 0;

@@ -41,10 +41,10 @@ class App_Controller_Admin_User extends Controller
 		$sort    = (array)_request('sort', array('username' => 'ASC'));
 		$filter  = (array)_request('filter');
 		$options = array(
+			'index'   => 'user_id',
 			'page'    => _get('page', 1),
 			'limit'   => _get('limit', option('admin_list_limit', 20)),
 			'columns' => $this->Model_User->getColumns((array)_request('columns')),
-			'index'   => 'user_id',
 		);
 
 		list($users, $user_total) = $this->Model_User->getRecords($sort, $filter, $options, true);
@@ -74,9 +74,8 @@ class App_Controller_Admin_User extends Controller
 		unset($user);
 
 		$listing = array(
-			'row_id'         => 'user_id',
 			'extra_cols'     => $this->Model_User->getColumns(false),
-			'rows'           => $users,
+			'records'        => $users,
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
@@ -130,7 +129,7 @@ class App_Controller_Admin_User extends Controller
 
 		$user += $defaults;
 
-		$user['data_user_roles'] = $this->Model_UserRole->getRecords(array('cache' => true));
+		$user['data_user_roles'] = $this->Model_UserRole->getRecords(null, null, array('cache' => true));
 
 		$user['data_statuses'] = array(
 			0 => _l("Disabled"),

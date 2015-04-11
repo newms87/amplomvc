@@ -290,7 +290,7 @@ class App_Model_Navigation extends App_Model_Table
 				$filter['name'] = $name;
 			}
 
-			$navigation_groups = $this->getGroups(null, $filter, '*', false, 'name');
+			$navigation_groups = $this->getGroups(null, $filter, array('index' => 'name'));
 
 			foreach ($navigation_groups as &$group) {
 				if (empty($group['links'])) {

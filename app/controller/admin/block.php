@@ -86,7 +86,7 @@ class App_Controller_Admin_Block extends Controller
 		$listing = array(
 			'row_id'         => 'path',
 			'columns'        => $columns,
-			'rows'           => $blocks,
+			'records'        => $blocks,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $block_total,

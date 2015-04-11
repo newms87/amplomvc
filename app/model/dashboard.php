@@ -58,7 +58,7 @@ class App_Model_Dashboard extends App_Model_Table
 
 	public function getUserDashboards()
 	{
-		$dashboards = $this->getRecords(array('cache' => true));
+		$dashboards = $this->getRecords(null, null, array('cache' => true));
 
 		foreach ($dashboards as $key => $dashboard) {
 			if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {

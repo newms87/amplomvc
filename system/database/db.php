@@ -12,7 +12,7 @@ class DB
 		$driver,
 		$synctime = false,
 		$error = array(),
-		$last_query;
+		$query_history;
 
 	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $schema = null, $prefix = null)
 	{
@@ -109,7 +109,7 @@ class DB
 			$error = isset($this->error[$type]) ? $this->error[$type] : null;
 			unset($this->error[$type]);
 		} else {
-			$error = $this->error;
+			$error       = $this->error;
 			$this->error = array();
 		}
 
@@ -126,9 +126,10 @@ class DB
 		return $this->driver->getError();
 	}
 
-	public function getLastQuery()
+	public function queryHistory($offset = -1)
 	{
-		return $this->last_query;
+		$index = $offset >= 0 ? $offset : count($this->query_history) + $offset;
+		return isset($this->query_history[$index]) ? $this->query_history[$index] : null;
 	}
 
 	public function setPrefix($prefix)
@@ -178,8 +179,6 @@ class DB
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 
-			$this->last_query = $sql;
-
 			$resource = $this->driver->query($sql, $cast_type);
 
 			$time = round(microtime(true) - $start, 6);
@@ -189,10 +188,10 @@ class DB
 				'time'  => $time ? $time : .000005,
 			);
 		} else {
-			$this->last_query = $sql;
-
 			$resource = $this->driver->query($sql, $cast_type);
 		}
+
+		$this->query_history[] = $sql;
 
 		if (!$resource) {
 			$error = $this->driver->getError();

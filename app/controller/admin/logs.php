@@ -37,28 +37,28 @@ class App_Controller_Admin_Logs extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$requested_cols = $this->request->get('columns');
-		$columns        = $this->Model_Log->getColumns($requested_cols);
+		$sort    = (array)_get('sort', array('log_id' => 'DESC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'log_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_Log->getColumns((array)_request('columns')),
+		);
 
-		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('log_id', 'desc');
-		$filter = _get('filter', array());
-
-		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, null, true);
+		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, $options, true);
 
 		$listing = array(
-			'row_id'         => 'log_id',
 			'extra_cols'     => $this->Model_Log->getColumns(false),
-			'columns'        => $columns,
-			'rows'           => $entries,
+			'records'        => $entries,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $total,
 			'listing_path'   => 'admin/logs/listing',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {

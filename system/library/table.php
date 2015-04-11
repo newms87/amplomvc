@@ -70,7 +70,8 @@ class Table extends Library
 	private function prepare(&$data)
 	{
 		$data += array(
-			'sort' => null,
+			'index' => null,
+			'sort'  => array(),
 		);
 
 		if (empty($data['listing_path'])) {
