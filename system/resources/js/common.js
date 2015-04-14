@@ -215,7 +215,7 @@ $.fn.apply_filter = function (url) {
 			}
 		});
 
-		url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
+		url += (url.search(/\?/) === -1 ? '?' : '&') + filter_list.serialize();
 	}
 
 	return url;

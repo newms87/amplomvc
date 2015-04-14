@@ -260,7 +260,7 @@ class Block extends Library
 		return $this->blocks[$path];
 	}
 
-	public function getBlocks($filter = array(), $total = false)
+	public function getBlocks($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		static $blocks = array();
 
@@ -280,7 +280,7 @@ class Block extends Library
 			$this->cleanDb($blocks);
 		}
 
-		if ($total) {
+		if ($total === 'total') {
 			return count($blocks);
 		}
 
@@ -323,28 +323,47 @@ class Block extends Library
 			$block_list[] = $block;
 		}
 
-		if (isset($filter['sort'])) {
-			uasort($block_list, function ($a, $b) use ($filter) {
-				if (!empty($filter['order']) && $filter['order'] === 'DESC') {
-					return $a[$filter['sort']] < $b[$filter['sort']];
-				} else {
-					return $a[$filter['sort']] > $b[$filter['sort']];
+		if ($sort) {
+			uasort($block_list, function ($a, $b) use ($sort) {
+				foreach ($sort as $field => $ord) {
+					$a_value = isset($a[$field]) ? $a[$field] : null;
+					$b_value = isset($b[$field]) ? $b[$field] : null;
+
+					if ($a_value === $b_value) {
+						continue;
+					}
+
+					return strtoupper($ord) === 'DESC' ? $a_value < $b_value : $a_value > $b_value;
 				}
 			});
 		}
 
 		//Limits
-		$start = isset($filter['start']) ? (int)$filter['start'] : 0;
-		$limit = isset($filter['limit']) ? $start + (int)$filter['limit'] : null;
+		$limit = isset($options['limit']) ? (int)$options['limit'] : null;
+
+		if (isset($options['page'])) {
+			$start = max(0,(int)$options['page']) * $options['limit'];
+		} else {
+			$start = isset($options['start']) ? (int)$options['start'] : 0;
+		}
+
+		$total = count($block_list);
 
 		$block_list = array_slice($block_list, $start, $limit);
+
+		if ($total) {
+			return array(
+				$block_list,
+				$total,
+			);
+		}
 
 		return $block_list;
 	}
 
 	public function getTotalBlocks($filter = array())
 	{
-		return $this->getBlocks($filter, true);
+		return $this->getBlocks(null, $filter, null, 'total');
 	}
 
 	public function getSettings($path)
@@ -425,5 +444,36 @@ class Block extends Library
 		if ($this->countAffected()) {
 			clear_cache('block');
 		}
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns['name'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Name"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['path'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Path"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+
+		$columns['status'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Status"),
+			'filter'       => true,
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
+			'sortable'     => true,
+		);
+
+		return $columns;
 	}
 }

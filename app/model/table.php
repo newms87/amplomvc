@@ -121,7 +121,7 @@ abstract class App_Model_Table extends Model
 
 	public function getTotalRecords($filter = array())
 	{
-		return $this->getRecords(null, $filter, 'COUNT(*)');
+		return $this->getRecords(null, $filter, array('columns' => 'COUNT(*)'));
 	}
 
 	public function getColumns($filter = array())

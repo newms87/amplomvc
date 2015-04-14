@@ -204,11 +204,11 @@ class Url extends Library
 	{
 		$path = strtolower(str_replace('-', '_', $path));
 
-		if (is_string($query)) {
+		if (is_array($query)) {
+			$query_str = $query ? http_build_query($query) : '';
+		} else {
 			$query_str = urldecode($query);
 			parse_str($query, $query);
-		} else {
-			$query_str = $query ? http_build_query($query) : '';
 		}
 
 		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
@@ -274,7 +274,7 @@ class Url extends Library
 
 	private function loadAliases()
 	{
-		//TODO: Need a better way to handle large sets of Aliases... consider switch to disable caching
+		//TODO: Need a better way to handle large sets of Aliases... consider switch to disable caching and query only aliases needed
 		$this->aliases = cache('url_alias.all');
 
 		if ($this->aliases === null) {

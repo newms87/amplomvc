@@ -28,42 +28,17 @@ class App_Controller_Admin_Block extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$columns = array();
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Name"),
-			'filter'       => true,
-			'sortable'     => true,
+		$sort    = (array)_request('sort', array('name' => 'ASC'));
+		$filter  = (array)_request('filter');
+		$options = array(
+			'index'   => 'path',
+			'columns' => $this->block->getColumns(),
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
 		);
-
-		$columns['path'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Path"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'sortable'     => true,
-		);
-
-		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _get('filter', array());
 
 		//Table Row Data
-		$block_total = $this->block->getTotalBlocks($filter);
-		$blocks      = $this->block->getBlocks($sort + $filter);
+		list($blocks, $total) = $this->block->getBlocks($sort, $filter, $options, true);
 
 		foreach ($blocks as &$block) {
 			$actions = array(
@@ -84,12 +59,11 @@ class App_Controller_Admin_Block extends Controller
 		unset($block);
 
 		$listing = array(
-			'row_id'         => 'path',
-			'columns'        => $columns,
 			'records'        => $blocks,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $block_total,
+			'total_listings' => $total,
 			'listing_path'   => 'admin/block/listing',
 		);
 
@@ -106,20 +80,20 @@ class App_Controller_Admin_Block extends Controller
 	{
 		$path = _get('path', '');
 
-		$action     = new Action('block/' . $path);
-		$controller = $action->getController();
-
-		$controller->delete();
+		if ($path) {
+			$action = new Action('block/' . $path);
+			$action->getController()->delete();
+		}
 	}
 
 	public function save()
 	{
 		$path = _get('path', '');
 
-		$action     = new Action('block/' . $path);
-		$controller = $action->getController();
-
-		$controller->save();
+		if ($path) {
+			$action = new Action('block/' . $path);
+			$action->getController()->save();
+		}
 	}
 
 	public function form()

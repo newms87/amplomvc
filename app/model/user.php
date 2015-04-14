@@ -167,45 +167,30 @@ class App_Model_User extends App_Model_Table
 		return $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE username = '" . $this->escape($username) . "'");
 	}
 
-	public function getRecords($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		//Where
 		if (isset($filter['user_role'])) {
-			$role_filter = array(
-				'name' => $filter['user_role'],
-			);
-
-			$roles = $this->Model_UserRole->getRecords(array('cache' => true), $role_filter, 'user_role_id', false, 'user_role_id');
-
-			if (!$roles) {
-				if ($total) {
-					return array(
-						array(),
-						0,
-					);
-				}
-
-				return array();
-			}
-
-			$filter['user_role_id'] = array_keys($roles);
+			$options['join'] = "LEFT JOIN {$this->t['user_role']} ur USING (user_role_id)";
+			$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
 		}
 
 		if (isset($filter['name'])) {
-			$where = $this->extractWhere($this->table, $filter);
-			$where .= " AND CONCAT(first_name, ' ', last_name) like '%" . $this->escape($filter['name']) . "%'";
-			$filter = $where;
+			$filter['#name'] = "AND CONCAT(first_name, ' ', last_name) like '%" . $this->escape($filter['name']) . "%'";
 		}
 
 		//Order and Limit
-		if (!empty($filter['sort']) && $filter['sort'] === 'name') {
-			$filter['sort'] = array(
-				'last_name'  => $filter['order'],
-				'first_name' => $filter['order'],
+		if (!empty($filter['sort']['name'])) {
+			$ord = $filter['sort']['name'];
+			unset($filter['sort']['name']);
+
+			$filter['sort'] += array(
+				'last_name'  => $ord,
+				'first_name' => $ord,
 			);
 		}
 
-		return parent::getRecords($sort, $filter, $select, $total, $index);
+		return parent::getRecords($sort, $filter, $options, $total);
 	}
 
 	public function getColumns($filter = array())

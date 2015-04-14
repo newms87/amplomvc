@@ -74,10 +74,9 @@
 							case 'int':
 							case 'float':
 							case 'decimal':
-								?>
-								<? if (!isset($column['filter_value']['low'])) {
-								$column['filter_value']['low'] = null;
-							}
+								if (!isset($column['filter_value']['low'])) {
+									$column['filter_value']['low'] = null;
+								}
 								if (!isset($column['filter_value']['high'])) {
 									$column['filter_value']['high'] = null;
 								}
@@ -270,7 +269,7 @@
 											if (isset($c_data[$column['build']['value']]) && $c_data[$column['build']['value']] == $value) {
 												?>
 												<?= $c_data[$column['build']['label']]; ?>
-												<?
+											<?
 											}
 										}
 										break;
@@ -333,7 +332,7 @@
 						</td>
 					<? } ?>
 				</tr>
-				<?
+			<?
 			}
 		} else {
 			?>

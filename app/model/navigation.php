@@ -258,7 +258,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getGroups($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$orig_table = $this->table;
+		$orig_table  = $this->table;
 		$this->table = 'navigation_group';
 
 		$records = parent::getRecords($sort, $filter, $options, $total);
@@ -511,7 +511,7 @@ class App_Model_Navigation extends App_Model_Table
 						),
 					),
 
-					'system_plugins'    => array(
+					'system_plugins'           => array(
 						'display_name' => 'Plugins',
 						'path'         => 'admin/plugin',
 					),
@@ -528,5 +528,28 @@ class App_Model_Navigation extends App_Model_Table
 		);
 
 		return $this->saveGroup(null, $group);
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns['name'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Navigation Group"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['status'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Status"),
+			'filter'       => true,
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
+			'sortable'     => true,
+		);
+
+		return $this->getTableColumns($this->table, $columns, $filter);
 	}
 }
