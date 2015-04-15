@@ -227,9 +227,9 @@ class App_Model_Page extends App_Model_Table
 		return $page;
 	}
 
-	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$records = parent::getRecords($sort, $filter, $select, $total, $index);
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
 		$total ? $rows = &$records[0] : $rows = &$records;
 
@@ -307,7 +307,7 @@ class App_Model_Page extends App_Model_Table
 		if ($this->pages === null) {
 			$this->pages = array();
 
-			$page_list = $this->getRecords(array('cache' => true));
+			$page_list = $this->getRecords(null, null, array('cache' => true));
 
 			foreach ($page_list as $p) {
 				$this->pages[$p['theme']][$p['name']] = $p;

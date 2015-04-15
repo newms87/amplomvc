@@ -18,77 +18,15 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function listing()
 	{
-		//The Table Columns
-		$columns = array();
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Plugin Name"),
-			'filter'       => true,
-			'sortable'     => true,
+		$sort    = (array)_request('sort', array('name' => 'ASC'));
+		$filter  = (array)_request('filter');
+		$options = array(
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_Plugin->getColumns((array)_request('columns')),
 		);
 
-		$columns['version'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Version"),
-		);
-
-		$columns['date'] = array(
-			'type'         => 'date',
-			'display_name' => _l("Date"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['title'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Title"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['author'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Author"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['description'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Description"),
-			'filter'       => true,
-		);
-
-		$columns['link'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Link"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['dependencies'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Dependencies"),
-		);
-
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'sortable'     => true,
-		);
-
-		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _get('filter', array());
-
-		$plugin_total = $this->Model_Plugin->getTotalPlugins($filter);
-		$plugins      = $this->Model_Plugin->getPlugins($sort + $filter);
+		list($plugins, $total) = $this->Model_Plugin->getPlugins($sort, $filter, $options, true);
 
 		foreach ($plugins as &$plugin) {
 			if ($plugin['installed']) {
@@ -155,16 +93,16 @@ class App_Controller_Admin_Plugin extends Controller
 		unset($plugin);
 
 		$listing = array(
-			'columns'        => $columns,
 			'extra_cols'     => $this->Model_Plugin->getColumns(),
-			'rows'           => $plugins,
+			'records'        => $plugins,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $plugin_total,
+			'total_listings' => $total,
 			'listing_path'   => 'admin/plugin/listing',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		if ($this->is_ajax) {
 			output($output);

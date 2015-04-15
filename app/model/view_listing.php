@@ -107,7 +107,7 @@ class App_Model_ViewListing extends App_Model_Table
 	 * Created View Listing Tables Access / Update methods *
 	 *******************************************************/
 
-	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		$table = $this->getViewListingTable($view_listing_id);
 
@@ -116,19 +116,14 @@ class App_Model_ViewListing extends App_Model_Table
 			return false;
 		}
 
-		$select = $this->extractSelect($table, $select);
+		$orig_table  = $this->table;
+		$this->table = $table;
 
-		//From
-		$from = $this->t[$table];
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
-		//Where
-		$where = $this->extractWhere($table, $filter);
+		$this->table = $orig_table;
 
-		//Order By & Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return $records;
 	}
 
 	public function getTotalViewListingRecords($view_listing_id, $filter = array())
@@ -162,20 +157,19 @@ class App_Model_ViewListing extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				$sort = array(
-					'sort' => array(
-						'name' => 'ASC'
-					),
+				$sort    = array('name' => 'ASC');
+				$options = array(
+					'index' => 'view_listing_id',
 					'cache' => true,
 				);
 
-				self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+				self::$view_listings = $this->getRecords($sort, null, $options);
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
 					if (!$this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']}")) {
 						$this->resetViewListings();
-						self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+						self::$view_listings = $this->getRecords($sort, null, $options);
 					}
 				}
 

@@ -30,8 +30,6 @@ abstract class Model
 		if (!self::$model_history) {
 			self::$model_history         = new Model_T;
 			self::$model_history->tables = &$model_history;
-			unset($model_history['log']);
-			unset($model_history['history']);
 		}
 
 		//use default database
@@ -694,37 +692,27 @@ abstract class Model
 		return $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
 	}
 
-	protected function extractOrderLimit($data, $table = null)
+	protected function extractOrder($sort, $table = null)
 	{
-		return array(
-			$this->extractOrder($data, $table),
-			$this->extractLimit($data),
-		);
-	}
-
-	protected function extractOrder($data, $table = null)
-	{
-		if (empty($data['sort'])) {
+		if (empty($sort)) {
 			return '';
 		}
-		//TODO: Legacy code to handle single column sort. Remove after Version 1.0
-		if (!is_array($data['sort'])) {
-			$data['sort'] = array(
-				$data['sort'] => !empty($data['order']) ? $data['order'] : 'ASC',
-			);
+
+		if (!is_array($sort)) {
+			$sort = array($sort => 'ASC');
 		}
 
 		//Order
 		$order = '';
 
-		foreach ($data['sort'] as $sort => $ord) {
-			$sort = $this->escape($sort);
-			$t    = '';
+		foreach ($sort as $col => $ord) {
+			$col = $this->escape($col);
+			$t   = '';
 
 			if ($table) {
 				if (is_array($table)) {
 					foreach ($table as $tbl => $name) {
-						if ($this->hasColumn($tbl, $sort)) {
+						if ($this->hasColumn($tbl, $col)) {
 							$t = $name;
 							break;
 						}
@@ -734,13 +722,13 @@ abstract class Model
 				}
 			}
 
-			if (strpos($sort, '.') === false) {
-				$sort = ($t ? "`$t`." : '') . "`$sort`";
+			if (strpos($col, '.') === false) {
+				$col = ($t ? "`$t`." : '') . "`$col`";
 			}
 
 			$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
 
-			$order .= ($order ? ',' : '') . "$sort $ord";
+			$order .= ($order ? ',' : '') . "$col $ord";
 		}
 
 		return $order ? "ORDER BY $order" : '';
@@ -748,19 +736,13 @@ abstract class Model
 
 	protected function extractLimit($data)
 	{
-		//Limit
-		$limit = '';
-
-		if (isset($data['limit'])) {
-			if ((int)$data['limit'] > 0) {
-
-				$start = (isset($data['start']) && (int)$data['start'] > 0) ? (int)$data['start'] : 0;
-
-				$limit = " LIMIT $start," . (int)$data['limit'];
+		if (!empty($data['limit']) && $data['limit'] > 0) {
+			if (!empty($data['page'])) {
+				$data['start'] = (max(1, (int)$data['page']) - 1) * (int)$data['limit'];
 			}
-		}
 
-		return $limit;
+			return "LIMIT " . max(0, isset($data['start']) ? $data['start'] : 0) . ',' . (int)$data['limit'];
+		}
 	}
 
 	protected function hasIndex($table, $fields)

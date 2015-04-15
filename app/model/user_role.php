@@ -130,7 +130,7 @@ class App_Model_UserRole extends App_Model_Table
 		}
 
 		//Permissions for individual dashboards
-		$dashboards = $this->Model_Dashboard->getRecords(array('cache' => true));
+		$dashboards = $this->Model_Dashboard->getRecords(null, null, array('cache' => true));
 
 		$areas['admin']['dashboards'] = array(
 			'*' => '',

@@ -57,4 +57,18 @@ class App_Model_Layout extends App_Model_Table
 	{
 		return $this->queryRows("SELECT * FROM {$this->t['layout_route']} ORDER BY `route` ASC");
 	}
+
+	public function getColumns($filter = array())
+	{
+		$columns = array(
+			'name'   => array(
+				'type'         => 'text',
+				'display_name' => _l("Layout Name"),
+				'filter'       => true,
+				'sortable'     => true,
+			),
+		);
+
+		return $this->getTableColumns($this->table, $columns, $filter);
+	}
 }

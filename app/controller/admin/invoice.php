@@ -44,15 +44,22 @@ class App_Controller_Admin_Invoice extends Controller
 			'status' => 1,
 		);
 
-		$sort    = $this->sort->getQueryDefaults('invoice_id', 'DESC');
-		$filter  = (array)_get('filter');
+		$sort   = (array)_get('sort', array('invoice_id' => 'DESC'));
+		$filter = (array)_get('filter');
+
 		$columns = $this->Model_Invoice->getColumns((array)_request('columns'));
 
 		if (isset($columns['customer']) && !isset($columns['customer_id'])) {
 			$columns['customer_id'] = 1;
 		}
+		$options = array(
+			'index'   => 'invoice_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $columns + $required_columns
+		);
 
-		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, $columns + $required_columns, true, 'invoice_id');
+		list($invoices, $invoice_total) = $this->Model_Invoice->getRecords($sort, $filter, $options, true);
 
 		foreach ($invoices as $invoice_id => &$invoice) {
 			$actions = array();
@@ -96,10 +103,9 @@ class App_Controller_Admin_Invoice extends Controller
 		unset($invoice);
 
 		$listing = array(
-			'row_id'         => 'invoice_id',
 			'extra_cols'     => $this->Model_Invoice->getColumns(false),
-			'columns'        => $columns,
-			'rows'           => $invoices,
+			'records'        => $invoices,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $invoice_total,
@@ -107,7 +113,7 @@ class App_Controller_Admin_Invoice extends Controller
 			'save_path'      => 'admin/invoice/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {
@@ -315,17 +321,7 @@ class App_Controller_Admin_Invoice extends Controller
 		$orders    = array();
 
 		if (!empty($order_ids)) {
-			$filter = array(
-				'order_id' => $order_ids,
-			);
-
-			$sort = array(
-				'sort' => array(
-					'date_created' => 'ASC',
-				),
-			);
-
-			$orders = $this->Model_Order->getRecords($sort, $filter);
+			$orders = $this->Model_Order->getRecords(array('date_created' => 'ASC'), array('order_id' => $order_ids));
 		}
 
 		$total = 0;

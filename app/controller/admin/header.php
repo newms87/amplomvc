@@ -92,7 +92,7 @@ class App_Controller_Admin_Header extends Controller
 				}
 			}
 
-			$stores = $this->Model_Site->getRecords(array('cache' => true));
+			$stores = $this->Model_Site->getRecords(null, null, array('cache' => true));
 
 			//Store Front Links
 			$link_stores = array(

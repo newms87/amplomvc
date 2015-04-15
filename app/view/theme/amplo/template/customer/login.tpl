@@ -65,6 +65,19 @@
 							<input type="password" placeholder="{{password}}" name="password" value=""/>
 						</div>
 
+						<? if ($terms_id = option('terms_agreement_page_id')) { ?>
+							<div class="form-item terms-agreement">
+								<label class="checkbox" for="terms-agreement">
+									<input type="checkbox" name="agree" value="1" id="terms-agreement" <?= _post('agree') ? 'checked' : ''; ?> />
+
+									<div class="label">
+										{{I have read and agree to the
+										<a href="<?= site_url('page', 'page_id=' . $terms_id); ?>">Terms &amp; Conditions</a>}}
+									</div>
+								</label>
+							</div>
+						<? } ?>
+
 						<div class="form-item submit buttons">
 							<button data-loading="{{Please Wait...}}">{{Create Account}}</button>
 

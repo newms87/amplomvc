@@ -19,7 +19,7 @@
 	<table class="list table-list-view">
 		<thead>
 		<tr>
-			<? if (!empty($row_id)) { ?>
+			<? if (!empty($index)) { ?>
 				<td width="1" class="center">
 					<input type="checkbox" class="select-all"/>
 				</td>
@@ -31,11 +31,8 @@
 			<? } ?>
 			<? foreach ($columns as $slug => $column) { ?>
 				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
-					<? if ($column['sortable']) {
-						$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
-						$class   = $sort === $column['sort_value'] ? strtolower($order) : '';
-						?>
-						<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
+					<? if ($column['sortable']) { ?>
+						<a href="<?= $sort_url . '&' . http_build_query($column['sort']); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['display_name']; ?></a>
 					<? } else { ?>
 						<span><?= $column['display_name']; ?></span>
 					<? } ?>
@@ -50,7 +47,7 @@
 		</thead>
 		<tbody>
 		<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
-			<? if (!empty($row_id)) { ?>
+			<? if (!empty($index)) { ?>
 				<td></td>
 			<? } ?>
 			<? if ($show_actions) { ?>
@@ -77,10 +74,9 @@
 							case 'int':
 							case 'float':
 							case 'decimal':
-								?>
-								<? if (!isset($column['filter_value']['low'])) {
-								$column['filter_value']['low'] = null;
-							}
+								if (!isset($column['filter_value']['low'])) {
+									$column['filter_value']['low'] = null;
+								}
 								if (!isset($column['filter_value']['high'])) {
 									$column['filter_value']['high'] = null;
 								}
@@ -103,10 +99,10 @@
 
 							case 'select':
 								echo build(array(
-									'type'   => 'select',
-									'name'   => "filter[$slug]",
-									'select' => $column['filter_value'],
-								) + $column['build']);
+										'type'   => 'select',
+										'name'   => "filter[$slug]",
+										'select' => $column['filter_value'],
+									) + $column['build']);
 								break;
 
 							case 'multiselect':
@@ -115,10 +111,10 @@
 									<div class="input">
 										<?=
 										build(array(
-											'type'   => 'multiselect',
-											'name'   => "filter[$slug]",
-											'select' => $column['filter_value'],
-										) + $column['build']); ?>
+												'type'   => 'multiselect',
+												'name'   => "filter[$slug]",
+												'select' => $column['filter_value'],
+											) + $column['build']); ?>
 									</div>
 									<div class="value">
 										<? if (!empty($column['filter_value'])) {
@@ -196,11 +192,11 @@
 		<? if (!empty($rows)) { ?>
 			<? foreach ($rows as $row) { ?>
 				<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>
-				<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$row_id]) ? $row[$row_id] : ''; ?>">
-					<? if (!empty($row_id)) { ?>
-						<? $uniqid = uniqid($row[$row_id]); ?>
+				<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$index]) ? $row[$index] : ''; ?>">
+					<? if (!empty($index)) { ?>
+						<? $uniqid = uniqid($row[$index]); ?>
 						<td class="center">
-							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
+							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$index]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
 						</td>
 					<? } ?>
 
@@ -361,11 +357,11 @@
 							case 'radio':
 							case 'checkbox':
 								echo build(array(
-									'type'   => $column['editable'],
-									'name'   => '',
-									'select' => '',
-									'#class' => 'input-value',
-								) + $column['build']);
+										'type'   => $column['editable'],
+										'name'   => '',
+										'select' => '',
+										'#class' => 'input-value',
+									) + $column['build']);
 								break;
 
 							case 'date':
@@ -402,7 +398,7 @@
 </div>
 
 <script type="text/javascript">
-	(function($) {
+	(function ($) {
 		$.ac_datepicker();
 
 		var $zoom = $('.zoom-hover');
@@ -474,7 +470,7 @@
 		//Add Item Selector
 		var $listview = $(".table-list-view-box").use_once();
 
-		$listview.find('.select-all').click(function() {
+		$listview.find('.select-all').click(function () {
 			$(this).closest('.table-list-view').find('[name="batch[]"]').prop('checked', this.checked).change();
 		});
 
@@ -620,7 +616,7 @@
 			var id = $options.attr('data-id');
 
 			var data = {};
-			data['<?= $row_id; ?>'] = id;
+			data['<?= $index; ?>'] = id;
 			data[field] = value;
 
 			$this.loading();

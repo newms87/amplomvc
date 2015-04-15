@@ -43,14 +43,16 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 
 	public function listing($listing = array())
 	{
-		//The Table Columns
-		$columns = $this->Model_UrlAlias->getColumns(_request('columns'));
+		$sort    = (array)_get('sort', array('alias' => 'ASC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'url_alias_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_UrlAlias->getColumns((array)_request('columns')),
+		);
 
-		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('alias', 'ASC');
-		$filter = _get('filter', array());
-
-		list($url_aliases, $url_alias_total) = $this->Model_UrlAlias->getRecords($sort, $filter, $columns, true, 'url_alias_id');
+		list($url_aliases, $total) = $this->Model_UrlAlias->getRecords($sort, $filter, $options, true);
 
 		foreach ($url_aliases as $url_alias_id => &$url_alias) {
 			$url_alias['actions'] = array(
@@ -67,18 +69,17 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		unset($url_alias);
 
 		$listing += array(
-			'row_id'         => 'url_alias_id',
-			'columns'        => $columns,
 			'extra_cols'     => $this->Model_UrlAlias->getColumns(false),
-			'rows'           => $url_aliases,
+			'records'        => $url_aliases,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $url_alias_total,
+			'total_listings' => $total,
 			'listing_path'   => 'admin/settings/url_alias/listing',
 			'save_path'      => 'admin/settings/url_alias/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {

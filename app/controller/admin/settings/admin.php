@@ -33,7 +33,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		$settings += App_Model_Settings::$admin_settings;
 
 		//Template Data
-		$settings['data_languages'] = $this->Model_Localisation_Language->getLanguages();
+		$settings['data_languages'] = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
 
 		$settings['data_statuses'] = array(
 			0 => _l("Disabled"),

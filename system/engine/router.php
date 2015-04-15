@@ -13,7 +13,7 @@ class Router
 		global $registry;
 		$registry->set('route', $this);
 
-		$uri   = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
+		$uri = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
 
 		$base = trim(SITE_BASE, '/');
 
@@ -193,7 +193,12 @@ class Router
 
 	public function getSites()
 	{
-		return $this->Model_Site->getRecords(array('cache' => true), null, '*', false, 'store_id');
+		$options = array(
+			'cache' => true,
+			'index' => 'store_id'
+		);
+
+		return $this->Model_Site->getRecords(null, null, $options);
 	}
 
 	public function routeSite()

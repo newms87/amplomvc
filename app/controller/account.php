@@ -35,13 +35,18 @@ class App_Controller_Account extends Controller
 		$customer['customer'] = customer_info();
 		$customer['meta']     = $this->customer->meta();
 
-		$customer['addresses'] = $this->Model_Customer->getAddresses(customer_info('customer_id'), null, null, '*', false, 'address_id');
+		$options = array(
+			'index' => 'address_id',
+			'cache' => true
+		);
+
+		$customer['addresses'] = $this->Model_Customer->getAddresses(customer_info('customer_id'), null, null, $options);
 
 		$filter = array(
 			'country_id' => option('config_country_id', 223),
 		);
 
-		$customer['data_zones'] = $this->Model_Localisation_Zone->getRecords(array('cache' => true), $filter);
+		$customer['data_zones'] = $this->Model_Localisation_Zone->getRecords(null, $filter, array('cache' => true));
 
 		//Render
 		$content = $this->render('account/details', $customer);

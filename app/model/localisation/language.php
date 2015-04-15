@@ -1,7 +1,9 @@
 <?php
 
-class App_Model_Localisation_Language extends Model
+class App_Model_Localisation_Language extends App_Model_Table
 {
+	protected $table = 'language', $primary_key = 'language_id';
+
 	public function addLanguage($data)
 	{
 		$language_id = $this->insert('language', $data);
@@ -21,51 +23,6 @@ class App_Model_Localisation_Language extends Model
 		$this->delete('language', $language_id);
 
 		clear_cache('language');
-	}
-
-	public function getLanguage($language_id)
-	{
-		return $this->queryRow("SELECT * FROM {$this->t['language']} WHERE language_id = '" . (int)$language_id . "'");
-	}
-
-	public function getLanguages($data = array(), $select = '*', $total = false)
-	{
-		if ($total) {
-			$select = "COUNT(*) as total";
-		} elseif (!$select) {
-			$select = '*';
-		}
-
-		$from = $this->t['language'];
-
-		$where = "1";
-
-		if (!empty($data['status'])) {
-			if (!is_array($data['status'])) {
-				$data['status'] = array($data['status']);
-			}
-
-			$where .= " AND status IN ('" . implode("','", $data['status']) . "')";
-		} else {
-			$where .= " AND status IN ('1', '0')";
-		}
-
-		list($order, $limit) = $this->extractOrderLimit($data);
-
-		$query = "SELECT $select FROM $from WHERE $where $order $limit";
-
-		$result = $this->query($query);
-
-		if ($total) {
-			return $result->row['total'];
-		}
-
-		return $result->rows;
-	}
-
-	public function getTotalLanguages($data = array())
-	{
-		return $this->getLanguages($data, '', true);
 	}
 
 	/**

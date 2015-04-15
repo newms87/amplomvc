@@ -215,7 +215,7 @@ $.fn.apply_filter = function (url) {
 			}
 		});
 
-		url += (url.search(/\?/) ? '&' : '?') + filter_list.serialize();
+		url += (url.search(/\?/) === -1 ? '?' : '&') + filter_list.serialize();
 	}
 
 	return url;
@@ -640,7 +640,7 @@ $.fn.loading = function (params) {
 		var $e = $(e);
 
 		var option = typeof params === 'string' ? {} : $.extend({}, {
-			text:    $e.attr('data-loading') || params.default_text,
+			text:    $e.attr('data-loading') || (params ? params.default_text : 'Submitting...'),
 			disable: true,
 			delay:   false
 		}, params);
@@ -1013,6 +1013,11 @@ function register_form_editors() {
 			} else {
 				if ($form.attr('data-reload')) {
 					window.location.reload();
+				} else if ($form.attr('data-callback')) {
+					var cb = window[$form.attr('data-callback')];
+					if (typeof cb === 'function') {
+						cb.call($form);
+					}
 				} else {
 					$form.find('.input [name]').each(function (i, e) {
 						var $e = $(e);

@@ -256,31 +256,23 @@ class App_Model_Navigation extends App_Model_Table
 		return $group;
 	}
 
-	public function getGroups($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getGroups($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		//Select
-		$select = $this->extractSelect('navigation_group', $select);
+		$orig_table  = $this->table;
+		$this->table = 'navigation_group';
 
-		//From
-		$from = $this->t['navigation_group'];
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
-		//Where
-		$where = $this->extractWhere('navigation_group', $filter);
+		$this->table = $orig_table;
 
-		//Order and Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		$results = $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
-
-		$total ? $rows = &$results[0] : $rows = &$results;
+		$total ? $rows = &$records[0] : $rows = &$records;
 
 		foreach ($rows as &$row) {
 			$row['links'] = $this->getGroupLinks($row['navigation_group_id']);
 		}
 		unset($row);
 
-		return $results;
+		return $records;
 	}
 
 	public function getNavigationGroup($name = 'all')
@@ -298,7 +290,7 @@ class App_Model_Navigation extends App_Model_Table
 				$filter['name'] = $name;
 			}
 
-			$navigation_groups = $this->getGroups(null, $filter, '*', false, 'name');
+			$navigation_groups = $this->getGroups(null, $filter, array('index' => 'name'));
 
 			foreach ($navigation_groups as &$group) {
 				if (empty($group['links'])) {
@@ -519,7 +511,7 @@ class App_Model_Navigation extends App_Model_Table
 						),
 					),
 
-					'system_plugins'    => array(
+					'system_plugins'           => array(
 						'display_name' => 'Plugins',
 						'path'         => 'admin/plugin',
 					),
@@ -536,5 +528,28 @@ class App_Model_Navigation extends App_Model_Table
 		);
 
 		return $this->saveGroup(null, $group);
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns['name'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Navigation Group"),
+			'filter'       => true,
+			'sortable'     => true,
+		);
+
+		$columns['status'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Status"),
+			'filter'       => true,
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
+			'sortable'     => true,
+		);
+
+		return $this->getTableColumns($this->table, $columns, $filter);
 	}
 }
