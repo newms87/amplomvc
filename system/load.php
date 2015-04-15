@@ -1,10 +1,15 @@
 <?php
+//Model History
+global $model_history;
+if (!$model_history) {
+	$model_history = array();
+}
 
 // Registry
 $registry = new Registry();
 
 //Helpers
-//Tip: to override core / shortcuts functions, use a mod file!
+//Tip: to override core / shortcuts functions, use a mod file.
 require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
 require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 
@@ -70,9 +75,8 @@ $router->routeSite();
 // Request (cleans globals)
 $registry->set('request', new Request());
 
-//Model History
-global $model_history;
-$model_history += (array)option('model_history');
+//Model History User Defined
+$model_history = (array)option('model_history') + $model_history;
 
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {

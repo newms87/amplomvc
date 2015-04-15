@@ -28,8 +28,10 @@ abstract class Model
 		}
 
 		if (!self::$model_history) {
-			self::$model_history = new Model_T;
-			self::$model_history->tables = & $model_history;
+			self::$model_history         = new Model_T;
+			self::$model_history->tables = &$model_history;
+			unset($model_history['log']);
+			unset($model_history['history']);
 		}
 
 		//use default database
@@ -42,6 +44,7 @@ abstract class Model
 	public function __get($key)
 	{
 		global $registry;
+
 		return $registry->get($key);
 	}
 
@@ -54,6 +57,7 @@ abstract class Model
 	protected function load($path, $class = null)
 	{
 		global $registry;
+
 		return $registry->load($path, $class);
 	}
 
@@ -224,6 +228,7 @@ abstract class Model
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to insert.");
+
 			return false;
 		}
 
@@ -273,6 +278,7 @@ abstract class Model
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to update.");
+
 			return false;
 		}
 
@@ -402,6 +408,7 @@ abstract class Model
 
 			if (!$primary_key) {
 				trigger_error("WHERE statement " . _l("%s does not have an integer primary key!", $table));
+
 				return null;
 			}
 
@@ -496,6 +503,7 @@ abstract class Model
 
 		if (!isset($this->t[$table])) {
 			trigger_error(_l("Table %s does not exist!", $table));
+
 			return false;
 		}
 
@@ -917,6 +925,7 @@ abstract class Model
 	public function hasColumn($table, $column)
 	{
 		$model = $this->getTableModel($table);
+
 		return isset($model['columns'][$column]);
 	}
 
