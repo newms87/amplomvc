@@ -166,9 +166,18 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			} else {
 				$columns[$col] = $col;
 			}
+
+			if (is_string($col_info) || empty($col_info['html_export'])) {
+				foreach ($settings['records'] as &$r) {
+					if (isset($r[$col])) {
+						$r[$col] = strip_tags($r[$col]);
+					}
+				}
+				unset($r);
+			}
 		}
 
-		$this->csv->generateCsv($columns, $settings['rows']);
+		$this->csv->generateCsv($columns, $settings['records']);
 
 		$file_name = !empty($settings['listing_path']) ? slug($settings['listing_path']) : 'listing';
 		$this->csv->downloadContents($file_name . '.csv', 'csv');

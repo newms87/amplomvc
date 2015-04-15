@@ -139,7 +139,7 @@ class Csv extends Library
 			foreach (array_keys($columns) as $key) {
 				$value = isset($row[$key]) ? $row[$key] : '';
 
-				$this->contents .= '"' . $value . '"' . ($index++ < $num_cols ? ',' : '');
+				$this->contents .= '"' . str_replace('"', '""', $value) . '"' . ($index++ < $num_cols ? ',' : '');
 			}
 
 			$this->contents .= "\r\n";
