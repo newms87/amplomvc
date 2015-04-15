@@ -47,6 +47,21 @@ function _get($key, $default = null)
 	return isset($_GET[$key]) ? $_GET[$key] : $default;
 }
 
+function _get_exclude($exclude)
+{
+	if (!is_array($exclude)) {
+		$exclude = func_get_args();
+	}
+
+	$get = $_GET;
+
+	foreach ($exclude as $ex) {
+		unset($get[$ex]);
+	}
+
+	return $get;
+}
+
 function _post($key, $default = null)
 {
 	return isset($_POST[$key]) ? $_POST[$key] : $default;

@@ -452,14 +452,14 @@ class Block extends Library
 			'type'         => 'text',
 			'display_name' => _l("Name"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['path'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Path"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 
@@ -471,7 +471,7 @@ class Block extends Library
 				0 => _l("Disabled"),
 				1 => _l("Enabled"),
 			),
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		return $columns;

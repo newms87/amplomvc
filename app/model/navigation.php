@@ -536,7 +536,7 @@ class App_Model_Navigation extends App_Model_Table
 			'type'         => 'text',
 			'display_name' => _l("Navigation Group"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['status'] = array(
@@ -547,7 +547,7 @@ class App_Model_Navigation extends App_Model_Table
 				0 => _l("Disabled"),
 				1 => _l("Enabled"),
 			),
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		return $this->getTableColumns($this->table, $columns, $filter);

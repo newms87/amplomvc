@@ -35,14 +35,14 @@ class App_Controller_Admin_Settings_Store extends Controller
 			'type'         => 'text',
 			'display_name' => _l("Store Name"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'         => true,
 		);
 
 		$columns['url'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Store URL"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'         => true,
 		);
 
 		$columns['status'] = array(
@@ -53,7 +53,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 				0 => _l("Disabled"),
 				1 => _l("Enabled"),
 			),
-			'sortable'     => true,
+			'sort'         => true,
 		);
 
 		//Get Sorted / Filtered Data

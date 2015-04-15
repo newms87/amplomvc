@@ -802,7 +802,7 @@ abstract class Model
 		}
 
 		//Guess optimal performance based on indexes used
-		if (empty($sort['sort']) && !$filter) {
+		if (!$sort && !$filter) {
 			return true;
 		}
 
@@ -812,7 +812,7 @@ abstract class Model
 			return true;
 		}
 
-		$indexed = $this->hasIndex($table, $sort['sort']);
+		$indexed = $this->hasIndex($table, $sort);
 
 		if ($indexed) {
 			if (isset($filter[$indexed])) {
@@ -963,9 +963,9 @@ abstract class Model
 						$type = self::IMAGE;
 					}
 
-					$column['type']     = $type;
-					$column['sortable'] = true;
-					$column['filter']   = true;
+					$column['type']   = $type;
+					$column['sort']   = true;
+					$column['filter'] = true;
 
 					$field = explode('_', $column['Field']);
 					array_walk($field, function (&$a) {

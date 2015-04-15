@@ -48,7 +48,7 @@
 							)); ?>
 
 							<div class="buttons">
-								<a class="save-view-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, $this->url->getQueryExclude('columns')); ?>">{{Apply}}</a>
+								<a class="save-view-cols button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, _get_exclude('columns')); ?>">{{Apply}}</a>
 							</div>
 						</div>
 					</div>

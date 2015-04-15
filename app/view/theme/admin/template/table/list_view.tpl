@@ -7,7 +7,7 @@
  * 	'type' 			=> string (required) - Input and display type. Can be 'text', 'select', 'multiselect', 'image', 'int', 'date_range', 'time_range', 'datetime_range', 'format'.
  * 	'display_name' => string (required) - Display Name for the header of the column.
  * 	'align' 			=> string (optional) - 'center' (default), 'left', 'right'.
- * 	'sortable'		=> bool (optional) - Can this column can be sorted? Default is false.
+ * 	'sort'		   => bool (optional) - Can this column can be sorted? Default is false.
  * 	'filter'			=> bool (optional) - Can this column be filtered? Default is false.
  * 	'filter_value' => mixed (optional) - Use this to override the filter value. Value is set if user has specified, otherwise the default filter value.
  * );
@@ -31,8 +31,8 @@
 			<? } ?>
 			<? foreach ($columns as $slug => $column) { ?>
 				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
-					<? if ($column['sortable']) { ?>
-						<a href="<?= $sort_url . '&' . http_build_query($column['sort']); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['display_name']; ?></a>
+					<? if ($column['sort']) { ?>
+						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['display_name']; ?></a>
 					<? } else { ?>
 						<span><?= $column['display_name']; ?></span>
 					<? } ?>
@@ -468,6 +468,7 @@
 		}
 
 		//Add Item Selector
+		var filter_url = "<?= site_url($listing_path, _get_exclude('filter', 'page')); ?>";
 		var $listview = $(".table-list-view-box").use_once();
 
 		$listview.find('.select-all').click(function () {
@@ -503,7 +504,7 @@
 		$listview.find('.filter-button').click(function () {
 			var $this = $(this);
 			$filter = $this.closest('.filter-list');
-			$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
+			$this.attr('href', $filter.apply_filter(filter_url));
 		});
 
 		$listview.find('.filter-type').click(function () {
@@ -531,7 +532,7 @@
 
 					$('#ui-datepicker-div').remove();
 
-					$.get($filter.apply_filter("<?= $filter_url; ?>"), {}, function (response) {
+					$.get($filter.apply_filter(filter_url), {}, function (response) {
 						$widget.replaceWith(response);
 					});
 				}
@@ -558,7 +559,7 @@
 			$filter = $this.closest('.filter-list');
 			$filter.find('[name]').val('');
 			$filter.find('.filter-type').removeClass('not equals');
-			$this.attr('href', $filter.apply_filter("<?= $filter_url; ?>"));
+			$this.attr('href', $filter.apply_filter(filter_url));
 		});
 
 		<? if ($show_actions) { ?>

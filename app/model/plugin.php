@@ -375,7 +375,7 @@ class App_Model_Plugin extends App_Model_Table
 			'type'         => 'text',
 			'display_name' => _l("Plugin Name"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['version'] = array(
@@ -387,21 +387,21 @@ class App_Model_Plugin extends App_Model_Table
 			'type'         => 'date',
 			'display_name' => _l("Date"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['title'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Title"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['author'] = array(
 			'type'         => 'text',
 			'display_name' => _l("Author"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['description'] = array(
@@ -414,7 +414,7 @@ class App_Model_Plugin extends App_Model_Table
 			'type'         => 'text',
 			'display_name' => _l("Link"),
 			'filter'       => true,
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		$columns['dependencies'] = array(
@@ -430,7 +430,7 @@ class App_Model_Plugin extends App_Model_Table
 				0 => _l("Disabled"),
 				1 => _l("Enabled"),
 			),
-			'sortable'     => true,
+			'sort'     => true,
 		);
 
 		return $filter ? array_intersect_key($columns, $filter) : $columns;

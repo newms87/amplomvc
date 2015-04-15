@@ -171,8 +171,12 @@ class App_Model_User extends App_Model_Table
 	{
 		//Where
 		if (isset($filter['user_role'])) {
-			$options['join'] = "LEFT JOIN {$this->t['user_role']} ur USING (user_role_id)";
-			$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
+			$options['join']      = "LEFT JOIN {$this->t['user_role']} ur USING (user_role_id)";
+			if (is_string($filter['user_role'])) {
+				$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
+			} else {
+				$filter['#user_role'] = "AND ur.`name` IN ('" . implode("','", $this->escape($filter['user_role'])) . "')";
+			}
 		}
 
 		if (isset($filter['name'])) {
@@ -205,7 +209,7 @@ class App_Model_User extends App_Model_Table
 					'name'
 				),
 				'filter'       => 'select',
-				'sortable'     => true,
+				'sort'         => true,
 			),
 			'status'       => array(
 				'type'         => 'select',
@@ -215,7 +219,7 @@ class App_Model_User extends App_Model_Table
 					1 => _l("Enabled"),
 				),
 				'filter'       => true,
-				'sortable'     => true,
+				'sort'         => true,
 			),
 		);
 

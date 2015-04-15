@@ -65,7 +65,7 @@ class App_Model_Layout extends App_Model_Table
 				'type'         => 'text',
 				'display_name' => _l("Layout Name"),
 				'filter'       => true,
-				'sortable'     => true,
+				'sort'     => true,
 			),
 		);
 

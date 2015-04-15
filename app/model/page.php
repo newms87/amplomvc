@@ -403,7 +403,7 @@ class App_Model_Page extends App_Model_Table
 						1 => _l("Enabled"),
 					),
 					'filter'       => true,
-					'sortable'     => true,
+					'sort'     => true,
 				)
 			);
 		}

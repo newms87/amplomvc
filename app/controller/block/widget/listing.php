@@ -18,6 +18,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'ajax'                => 1,
 			'records'             => array(),
 			'template_data'       => array(),
+			'sort'                => array(),
 			'filter_value'        => array(),
 			'pagination_settings' => array(),
 			'limit_settings'      => array(),
@@ -29,7 +30,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'show_messages'       => null,
 			'listing_path'        => $this->route->getPath(),
 			'save_path'           => false,
-			'row_id'              => '',
+			'index'               => '',
 			'view_id'             => _request('view_id'),
 			'chart'               => array(),
 			'theme'               => 'admin',
@@ -46,7 +47,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$settings['template_data'] += array(
 			'listing_path' => $settings['listing_path'],
 			'save_path'    => $settings['save_path'],
-			'row_id'       => $settings['row_id'],
+			'index'        => $settings['index'],
 		);
 
 		if (!isset($settings['show_messages'])) {
@@ -102,6 +103,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		$table_settings = $settings['template_data'] + array(
 				'show_actions' => $settings['show_actions'],
 				'filter_style' => $settings['filter_style'],
+				'sort'         => $settings['sort'],
 			);
 
 		$settings['listing'] = $this->table->render($table_settings);

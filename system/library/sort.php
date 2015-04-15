@@ -38,7 +38,7 @@ class Sort extends Library
 		//Set limit for pagination compatibility
 		$_GET['limit'] = $limit;
 
-		$settings['limit_url'] = site_url($settings['path'], $this->url->getQueryExclude('limit', 'page') . '&limit=');
+		$settings['limit_url'] = site_url($settings['path'], _get_exclude('limit', 'page') + array('limit' => ''));
 		$settings['limit']     = $limit;
 
 		$settings['show_more'] = $settings['limit_url'] . ($limit + option('limit_more_count', 10));

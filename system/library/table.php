@@ -78,14 +78,6 @@ class Table extends Library
 			$data['listing_path'] = $this->route->getPath();
 		}
 
-		if (empty($data['sort_url'])) {
-			$data['sort_url'] = site_url($data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
-		}
-
-		if (empty($data['filter_url'])) {
-			$data['filter_url'] = site_url($data['listing_path'], $this->url->getQueryExclude('filter', 'page'));
-		}
-
 		if (!$this->file || !is_file($this->file)) {
 			trigger_error(_l("You must set the template for the form before building!"));
 			exit();
@@ -101,10 +93,10 @@ class Table extends Library
 
 			$default_values = array(
 				'display_name' => $slug,
+				'sort'         => false,
 				'filter'       => false,
 				'type'         => 'text',
 				'align'        => 'center',
-				'sortable'     => false,
 				'editable'     => null,
 			);
 
@@ -113,18 +105,16 @@ class Table extends Library
 			//Set Class
 			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];
 
-			if ($column['sortable']) {
+			if ($column['sort']) {
 				$sort_class = '';
 
-				if (!isset($column['sort'])) {
-					$column['sort'] = array($slug => 'ASC');
-				} elseif (!is_array($column['sort'])) {
-					$column['sort'] = array($column['sort'] => 'ASC');
+				if (!is_array($column['sort'])) {
+					$column['sort'] = is_string($column['sort']) ? (array)$column['sort'] : array($slug => 'ASC');
 				}
 
-				foreach ($data['sort'] as $s => $v) {
+				foreach ($data['sort'] as $s => $ord) {
 					if (isset($column['sort'][$s])) {
-						$sort_class         = strtoupper($column['sort'][$s]) === 'DESC' ? 'DESC' : 'ASC';
+						$sort_class         = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
 						$column['sort'][$s] = $sort_class === 'DESC' ? 'ASC' : 'DESC';
 					}
 				}
