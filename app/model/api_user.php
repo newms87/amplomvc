@@ -1,78 +1,68 @@
 <?php
 
-class App_Model_User extends App_Model_Table
+class App_Model_ApiUser extends App_Model_Table
 {
-	protected $table = 'user', $primary_key = 'user_id';
+	protected $table = 'api_user', $primary_key = 'api_user_id';
 
-	public function save($user_id, $user)
+	public function __construct()
 	{
-		if (isset($user['username'])) {
-			if (!validate('text', $user['username'], 3, 128)) {
+		parent::__construct();
+		if (!defined('AMPLO_SECRET_KEY')) {
+			define('AMPLO_SECRET_KEY', md5(time() . rand()));
+		}
+	}
+
+	public function save($api_user_id, $api_user)
+	{
+		if (isset($api_user['user_id'])) {
+			if (!$api_user['user_id']) {
+				$this->error['user_id'] = _l("User ID must not be empty.");
+			}
+		} elseif (!$api_user_id) {
+			$this->error['user_id'] = _l("Please provide a User ID.");
+		}
+
+		if (isset($api_user['username'])) {
+			if (!validate('text', $api_user['username'], 3, 128)) {
 				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
-			} else {
-				$user_info = $this->Model_User->getUserByUsername($user['username']);
-
-				if ($user_info && $user_info['user_id'] !== (int)$user_id) {
-					$this->error['username'] = _l("Username is already in use!");
-				}
 			}
-		} elseif (!$user_id) {
+		} elseif (!$api_user_id) {
 			$this->error['username'] = _l("Please provide a Username!");
-		}
-
-		//Ensure password is set for new user (can be encrypted_password), or check if updating password
-		if (empty($user['password'])) {
-			unset($user['password']);
-		}
-
-		if (isset($user['password'])) {
-			if (!validate('password', $user['password'], isset($user['confirm']) ? $user['confirm'] : null)) {
-				$this->error['password'] = $this->validation->fetchError();
-			}
-		} elseif (!$user_id && empty($user['encrypted_password'])) {
-			$this->error['password'] = _l("You must enter a password");
 		}
 
 		if ($this->error) {
 			return false;
 		}
 
-		if (isset($user['password'])) {
-			$user['password'] = $this->user->encrypt($user['password']);
-		} elseif (!empty($user['encrypted_password'])) {
-			$user['password'] = $user['encrypted_password'];
-		}
+		if ($api_user_id) {
 
-		clear_cache('user');
-
-		//New User
-		if (!$user_id) {
-			$user['date_added'] = $this->date->now();
-			$user_id            = $this->insert('user', $user);
 		} else {
-			//Update User
-			$user_id = $this->update('user', $user, $user_id);
+			$api_user['date_added'] = $this->date->now();
+			$api_user['api_key'] = hash('sha256', AMPLO_SECRET_KEY . time() . serialize($api_user) . rand());
 		}
 
-		if (!empty($user['meta_exactly']) && !isset($user['meta'])) {
-			$user['meta'] = array();
+		return parent::save($api_user_id, $api_user);
+
+
+		if (!empty($api_user['meta_exactly']) && !isset($api_user['meta'])) {
+			$api_user['meta'] = array();
 		}
 
-		if (isset($user['meta'])) {
-			$this->setMeta($user_id, $user['meta'], !empty($user['meta_exactly']));
+		if (isset($api_user['meta'])) {
+			$this->setMeta($api_user_id, $api_user['meta'], !empty($api_user['meta_exactly']));
 		}
 
-		return $user_id;
+		return $api_user_id;
 	}
 
-	public function remove($user_id)
+	public function remove($api_user_id)
 	{
 		clear_cache('user');
 
-		return $this->delete('user', $user_id);
+		return $this->delete('user', $api_user_id);
 	}
 
-	public function addMeta($user_id, $key, $value, $multi = false)
+	public function addMeta($api_user_id, $key, $value, $multi = false)
 	{
 		$serialized = (int)_is_object($value);
 
@@ -81,11 +71,11 @@ class App_Model_User extends App_Model_Table
 		}
 
 		if (!$multi) {
-			$this->deleteMeta($user_id, $key);
+			$this->deleteMeta($api_user_id, $key);
 		}
 
 		$data = array(
-			'user_id'    => $user_id,
+			'user_id'    => $api_user_id,
 			'key'        => $key,
 			'value'      => $value,
 			'serialized' => $serialized,
@@ -94,10 +84,10 @@ class App_Model_User extends App_Model_Table
 		$this->insert('user_meta', $data);
 	}
 
-	public function setMeta($user_id, $meta, $exactly = false)
+	public function setMeta($api_user_id, $meta, $exactly = false)
 	{
 		if ($exactly) {
-			$this->delete('user_meta', array('user_id' => $user_id));
+			$this->delete('user_meta', array('user_id' => $api_user_id));
 		}
 
 		foreach ($meta as $key => $value) {
@@ -108,12 +98,12 @@ class App_Model_User extends App_Model_Table
 			}
 
 			if (!$exactly) {
-				$this->deleteMeta($user_id, $key);
+				$this->deleteMeta($api_user_id, $key);
 			}
 
 			//Add new value
 			$data = array(
-				'user_id'    => $user_id,
+				'user_id'    => $api_user_id,
 				'key'        => $key,
 				'value'      => $value,
 				'serialized' => $serialized,
@@ -125,20 +115,20 @@ class App_Model_User extends App_Model_Table
 		return true;
 	}
 
-	public function deleteMeta($user_id, $key)
+	public function deleteMeta($api_user_id, $key)
 	{
 		$where = array(
-			'user_id' => $user_id,
+			'user_id' => $api_user_id,
 			'key'     => $key,
 		);
 
 		return $this->delete('user_meta', $where);
 	}
 
-	public function getMeta($user_id, $key = null)
+	public function getMeta($api_user_id, $key = null)
 	{
 		if ($key) {
-			$value = $this->queryRow("SELECT `value`, serialized FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
+			$value = $this->queryRow("SELECT `value`, serialized FROM {$this->t['user_meta']} WHERE user_id = " . (int)$api_user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
 
 			if ($value) {
 				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
@@ -147,7 +137,7 @@ class App_Model_User extends App_Model_Table
 			return null;
 		}
 
-		$meta = $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id, 'key');
+		$meta = $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$api_user_id, 'key');
 
 		foreach ($meta as &$m) {
 			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];

@@ -111,7 +111,7 @@ class App_Controller_Admin_User extends Controller
 		$user = $_POST;
 
 		if ($user_id && !IS_POST) {
-			$user = $this->Model_User->getUser($user_id);
+			$user = $this->Model_User->getRecord($user_id);
 
 			$user['meta'] = $this->Model_User->getMeta($user_id);
 		}

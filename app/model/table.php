@@ -65,7 +65,7 @@ abstract class App_Model_Table extends Model
 
 		$sql = "SELECT $fields FROM `{$this->t[$this->table]}` WHERE $where";
 
-		return $select ? $this->queryVar($sql) : $this->queryRow($sql);
+		return $select ? $this->queryRow($sql) : $this->queryVar($sql);
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)

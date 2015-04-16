@@ -58,7 +58,15 @@ class User extends Library
 		$this->user['role'] = $this->temp_user['role'];
 	}
 
-	protected function loadUser($user)
+	public function setUser($user_id, $info = array(), $meta = array(), $permissions = array())
+	{
+		$this->user_id     = $user_id;
+		$this->info        = $info;
+		$this->meta        = $meta;
+		$this->permissions = $permissions;
+	}
+
+	public function loadUser($user)
 	{
 		if (!is_array($user)) {
 			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = " . (int)$user);
@@ -96,6 +104,7 @@ class User extends Library
 
 				if ($user) {
 					$this->loadUser($user);
+
 					return true;
 				}
 			}
@@ -120,6 +129,7 @@ class User extends Library
 		if ($user) {
 			if (!password_verify($password, $user['password'])) {
 				$this->error['password'] = _l("The username / password combination was unable to be authenticated.");
+
 				return false;
 			}
 
@@ -284,7 +294,7 @@ class User extends Library
 	public function alert($user_id, $type, $key, $message)
 	{
 		if ($user_id !== $this->user_id) {
-			$alerts          = $this->getAlerts($user_id);
+			$alerts              = $this->getAlerts($user_id);
 			$alerts[$type][$key] = $message;
 			$this->Model_User->addMeta($user_id, 'alert', $alerts);
 		} else {
@@ -377,6 +387,7 @@ class User extends Library
 
 		if (!$this->Model_User->getTotalRecords($filter)) {
 			$this->error['email'] = _l("The E-Mail Address was not found in our records, please try again!");
+
 			return false;
 		}
 
@@ -405,6 +416,7 @@ class User extends Library
 
 		if (!$user) {
 			$this->error = _l("The email %s is not associated to an account.", $email);
+
 			return false;
 		}
 

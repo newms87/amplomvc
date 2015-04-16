@@ -17,7 +17,6 @@ class App_Model_ViewListing extends App_Model_Table
 			} elseif (!$view_listing_id) {
 				if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']} WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
 					$this->error['name'] = _l("A View Listing with the name %s already exists.", $view_listing['name']);
-					return false;
 				}
 			}
 		} elseif (!$view_listing_id) {
@@ -53,6 +52,7 @@ class App_Model_ViewListing extends App_Model_Table
 
 			if (!$result) {
 				$this->error['sql'] = _l("Invalid SELECT statement.<br /><Br /> %s", $this->db->getQueryError());
+
 				return false;
 			}
 
@@ -65,6 +65,17 @@ class App_Model_ViewListing extends App_Model_Table
 			$view_listing_id = $this->update('view_listing', $view_listing, $view_listing_id);
 		} else {
 			$view_listing_id = $this->insert('view_listing', $view_listing);
+
+			if ($view_listing_id) {
+				if (empty($view_listing['path']) && !empty($view_listing['sql'])) {
+					$view_config = array(
+						'path'  => 'block/widget/views/listing',
+						'query' => 'view_listing_id=' . $view_listing_id,
+					);
+
+					$this->update('view_listing', $view_config, $view_listing_id);
+				}
+			}
 		}
 
 		return $view_listing_id;
@@ -113,6 +124,7 @@ class App_Model_ViewListing extends App_Model_Table
 
 		if (!$table) {
 			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
+
 			return false;
 		}
 
