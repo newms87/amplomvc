@@ -8,7 +8,7 @@ class Language extends Library
 		$info,
 		$languages = array();
 
-	public $defaults = array(
+	static $defaults = array(
 		'id'                     => 0,
 		'code'                   => 'en',
 		'name'                   => 'English',
@@ -20,8 +20,8 @@ class Language extends Library
 		'date_format_long'       => 'l dS F Y',
 		'time_format'            => 'h:i:s A',
 		'datetime_format'        => 'Y-m-d H:i:s',
-		'datetime_format_medium' => 'M d, Y H:i A',
-		'datetime_format_long'   => 'M d, Y H:i:s A',
+		'datetime_format_medium' => 'M d, Y g:i A',
+		'datetime_format_long'   => 'M d, Y H:i:s',
 		'datetime_format_full'   => 'D, d M, Y H:i:s',
 		'decimal_point'          => '.',
 		'thousand_point'         => ',',
@@ -57,7 +57,7 @@ class Language extends Library
 
 	public function getLanguage($language_id)
 	{
-		return isset($this->languages[$language_id]) ? $this->languages[$language_id] : $this->defaults;
+		return isset($this->languages[$language_id]) ? $this->languages[$language_id] : self::$defaults;
 	}
 
 	protected function loadLanguages()
@@ -68,7 +68,7 @@ class Language extends Library
 			$this->languages = $this->Model_Localisation_Language->getRecords(null, array('status' => 1), array('index' => 'language_id'));
 
 			foreach ($this->languages as &$language) {
-				foreach ($this->defaults as $key => $value) {
+				foreach (self::$defaults as $key => $value) {
 					if (empty($language[$key])) {
 						$language[$key] = $value;
 					}
@@ -85,7 +85,7 @@ class Language extends Library
 		if (!is_array($language)) {
 			$language = $this->getLanguage((int)$language);
 		} else {
-			foreach ($this->defaults as $key => $default) {
+			foreach (self::$defaults as $key => $default) {
 				if (empty($language[$key])) {
 					$language[$key] = $default;
 				}
@@ -145,11 +145,11 @@ class Language extends Library
 		}
 
 		if (!$language) {
-			$this->setLanguage($this->defaults);
+			$this->setLanguage(self::$defaults);
 		} else {
 			$this->setLanguage($language);
 
-			$this->languages[$language['language_id']] = $language + $this->defaults;
+			$this->languages[$language['language_id']] = $language + self::$defaults;
 		}
 	}
 

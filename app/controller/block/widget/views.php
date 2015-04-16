@@ -202,7 +202,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'limit' => _get('limit', IS_ADMIN ? option('admin_list_limit', 20) : option('list_limit', 20)),
 		);
 
-		list($records, $record_total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, null, true);
+		list($records, $record_total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, $options, true);
 
 		if (!empty($listing['return_data'])) {
 			$this->output = array(
