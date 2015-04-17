@@ -84,12 +84,12 @@ class Api extends Library
 
 	protected function generateToken()
 	{
-		return bin2hex(openssl_random_pseudo_bytes(30));
+		return bin2hex(openssl_random_pseudo_bytes(20));
 	}
 
 	public function generateApiKey()
 	{
-		return bin2hex(openssl_random_pseudo_bytes(45));
+		return bin2hex(openssl_random_pseudo_bytes(30));
 	}
 
 	public function generateKeys(&$private_key, &$public_key)
