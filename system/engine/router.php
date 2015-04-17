@@ -186,8 +186,21 @@ class Router
 		}
 
 		if (!$valid || !$action->execute()) {
-			$action = new Action(ERROR_404_PATH);
-			$action->execute();
+			if (strpos($this->path, 'api/') === 0) {
+				header('HTTP/1.1 404 Not Found');
+
+				$response = array(
+					'status'  => 'error',
+					'message' => _l("The API request for %s was not found.", $this->path),
+				);
+
+				output_json($response);
+				$this->response->output();
+				exit;
+			} else {
+				$action = new Action(ERROR_404_PATH);
+				$action->execute();
+			}
 		}
 	}
 
