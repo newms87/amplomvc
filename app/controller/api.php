@@ -18,6 +18,7 @@ class App_Controller_Api extends Controller
 
 			$response = array(
 				'status'  => 'error',
+				'code'    => 401,
 				'message' => _l("Unable to authenticate the request."),
 			);
 		} else {

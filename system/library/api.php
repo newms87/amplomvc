@@ -47,6 +47,7 @@ class Api extends Library
 
 				output_json(array(
 					'status'  => 'error',
+					'code'    => 401,
 					'message' => _l("Unauthorized request. The API User was not verified."),
 				));
 
