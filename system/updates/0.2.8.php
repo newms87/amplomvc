@@ -10,6 +10,8 @@ $this->db->createTable('api_user', <<<SQL
   `permissions` text,
   `date_added` datetime NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
+  `token` varchar(45) DEFAULT NULL,
+  `token_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`api_user_id`)
 SQL
 );
