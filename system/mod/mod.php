@@ -21,7 +21,7 @@ class System_Mod_Mod
 
 		return $error;
 	}
-	
+
 	public function clearError()
 	{
 		$this->error = array();

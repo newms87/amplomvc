@@ -74,6 +74,8 @@ class amploAPI
 			return false;
 		}
 
+		var_dump($response, 'response');
+
 		$this->token = $response['token'];
 
 		return true;

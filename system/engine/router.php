@@ -191,6 +191,7 @@ class Router
 
 				$response = array(
 					'status'  => 'error',
+					'code'    => 404,
 					'message' => _l("The API request for %s was not found.", $this->path),
 				);
 
