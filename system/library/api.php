@@ -17,7 +17,7 @@ class Api extends Library
 		if ($token) {
 			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `token` = '" . $this->escape($token) . "' AND token_expires > NOW()");
 		} else {
-			$username = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : _post('user');
+			$username = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : _post('api_user');
 			$key      = !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : _post('api_key');
 
 			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `username` = '" . $this->escape($username) . "' AND api_key = '" . $this->escape($key) . "'");

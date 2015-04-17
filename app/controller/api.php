@@ -4,9 +4,7 @@ class App_Controller_Api extends Controller
 {
 	public function __construct()
 	{
-		if (defined('AMPLO_API_AUTH') && AMPLO_API_AUTH) {
-			$this->api->authorize();
-		}
+		$this->api->authorize(defined('AMPLO_API_AUTH') && AMPLO_API_AUTH);
 
 		parent::__construct();
 	}
