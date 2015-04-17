@@ -76,12 +76,7 @@ class amploAPI
 			return false;
 		}
 
-
-		var_dump($response);
-
-		echo "<BR><BR>";
-
-		$this->token = $response['token'];
+		$this->token = $response['data']['token'];
 
 		return true;
 	}
@@ -141,10 +136,6 @@ class amploAPI
 		if ($this->token) {
 			$url .= (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
 		}
-
-		echo "<BR>$url<BR>";
-		var_dump($options);
-		echo "<BR>";
 
 		$options += array(
 			CURLOPT_RETURNTRANSFER => true,

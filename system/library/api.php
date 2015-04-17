@@ -43,16 +43,7 @@ class Api extends Library
 
 		if (empty($user)) {
 			if ($block_request) {
-				header('HTTP/1.1 401 Unauthorized');
-
-				output_json(array(
-					'status'  => 'error',
-					'code'    => 401,
-					'message' => _l("Unauthorized request. The API User was not verified."),
-				));
-
-				$this->response->output();
-				exit;
+				output_api_error(401, _l("Unauthorized request. The API User was not verified."));
 			}
 
 			return false;

@@ -14,20 +14,9 @@ class App_Controller_Api extends Controller
 		$token = $this->api->getToken();
 
 		if (!$token) {
-			header('HTTP/1.1 401 Unauthorized');
-
-			$response = array(
-				'status'  => 'error',
-				'code'    => 401,
-				'message' => _l("Unable to authenticate the request."),
-			);
+			output_api_error(401, _l("Unable to authenticate the request."));
 		} else {
-			$response = array(
-				'status' => 'success',
-				'token'  => $token,
-			);
+			output_api(array('token' => $token));
 		}
-
-		output_json($response);
 	}
 }
