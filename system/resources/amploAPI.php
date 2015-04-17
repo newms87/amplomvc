@@ -4,7 +4,7 @@ class amploAPI
 {
 	public $config;
 
-	private $response, $error;
+	private $response, $error, $token;
 
 	const
 		RESPONSE_TEXT = 'Text',
@@ -57,6 +57,28 @@ class amploAPI
 		return $this->response;
 	}
 
+	public function authenticate()
+	{
+		$credentials = array(
+			'api_key'  => $this->config->api_key,
+			'api_user' => $this->config->api_user,
+		);
+
+		$response = $this->post('authenticate', $credentials);
+
+		if (empty($response['status'])) {
+			$this->error['response'] = _l("Invalid response from server while calling authenticate");
+			return false;
+		} elseif ($response['status'] === 'error') {
+			$this->error['message'] = $response['message'];
+			return false;
+		}
+
+		$this->token = $response['token'];
+
+		return true;
+	}
+
 	public function get($uri, $data = '', $response_type = self::RESPONSE_JSON, $options = array())
 	{
 		if ($data) {
@@ -80,20 +102,29 @@ class amploAPI
 	{
 		if (!$this->config->api_key) {
 			trigger_error("API Key must be set.");
+
 			return false;
 		}
 
 		if (!$this->config->api_user) {
 			trigger_error("API User must be set.");
+
 			return false;
 		}
 
 		if (!$this->config->api_url) {
 			trigger_error("API URL must be set.");
+
 			return false;
 		}
 
-		$url = $this->config->api_url . $uri;
+		if (!$this->token && $uri !== 'authenticate') {
+			if (!$this->authenticate()) {
+				return false;
+			}
+		}
+
+		$url = $this->config->api_url . $uri . (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
 
 		$options += array(
 			CURLOPT_RETURNTRANSFER => true,

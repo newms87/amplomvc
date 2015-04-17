@@ -1,5 +1,7 @@
 <?php
-class System_Mod_Mod {
+
+class System_Mod_Mod
+{
 	protected $error = array();
 
 	public function hasError()
@@ -12,6 +14,14 @@ class System_Mod_Mod {
 		return $this->error;
 	}
 
+	public function fetchError()
+	{
+		$error       = $this->error;
+		$this->error = array();
+
+		return $error;
+	}
+	
 	public function clearError()
 	{
 		$this->error = array();
