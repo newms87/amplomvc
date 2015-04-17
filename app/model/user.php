@@ -10,9 +10,9 @@ class App_Model_User extends App_Model_Table
 			if (!validate('text', $user['username'], 3, 128)) {
 				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
 			} else {
-				$user_info = $this->Model_User->getUserByUsername($user['username']);
+				$existing_id = $this->findRecord(array('username' => $user['username']));
 
-				if ($user_info && $user_info['user_id'] !== (int)$user_id) {
+				if ($existing_id !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}
@@ -43,16 +43,12 @@ class App_Model_User extends App_Model_Table
 			$user['password'] = $user['encrypted_password'];
 		}
 
-		clear_cache('user');
-
 		//New User
 		if (!$user_id) {
 			$user['date_added'] = $this->date->now();
-			$user_id            = $this->insert('user', $user);
-		} else {
-			//Update User
-			$user_id = $this->update('user', $user, $user_id);
 		}
+
+		$user_id = parent::save($user_id, $user);
 
 		if (!empty($user['meta_exactly']) && !isset($user['meta'])) {
 			$user['meta'] = array();
@@ -63,13 +59,6 @@ class App_Model_User extends App_Model_Table
 		}
 
 		return $user_id;
-	}
-
-	public function remove($user_id)
-	{
-		clear_cache('user');
-
-		return $this->delete('user', $user_id);
 	}
 
 	public function addMeta($user_id, $key, $value, $multi = false)
@@ -155,11 +144,6 @@ class App_Model_User extends App_Model_Table
 		unset($m);
 
 		return $meta;
-	}
-
-	public function getUserByUsername($username)
-	{
-		return $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE username = '" . $this->escape($username) . "'");
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)

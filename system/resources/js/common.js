@@ -29,11 +29,12 @@ String.prototype.str_replace = function (find, replace) {
 };
 
 //Async Load on call
-$ac.alq = {};
+$ac.alq = {}, $ac.al_loaded = {};
 
 $ac.al = $.extend($ac.al || {}, {
 	codemirror:   ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
 	list_widget:  'system/resources/js/listings.js',
+	listview:     'system/resources/js/listings.js',
 	ac_template:  'system/resources/js/ac_template.js',
 	amplo_slider: 'system/resources/js/amplo_slider.js',
 	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js'
@@ -48,26 +49,32 @@ function register_autoload(fn, url) {
 
 	$.fn[fn] = function (view_id) {
 		var al = arguments.callee.fn;
+		var fn = al;
 
 		if (!$ac.alq[al]) {
-			$ac.alq[al] = [];
-
 			var load_count = 1;
 			for (var u in url) {
-				$.getScript($ac.site_url + url[u], function () {
-					if (load_count++ >= url.length) {
-						for (var l in $ac.alq[al]) {
-							var q = $ac.alq[al][l];
-							$.fn[al].apply(q.me, q.args);
-						}
+				if ($ac.al_loaded[url[u]]) {
+					fn = al;
+					al = $ac.al_loaded[url[u]];
+				} else {
+					$ac.alq[al] = [];
+					$ac.al_loaded[url[u]] = al;
+					$.getScript($ac.site_url + url[u], function () {
+						if (load_count++ >= url.length) {
+							for (var l in $ac.alq[al]) {
+								var q = $ac.alq[al][l];
+								$.fn[q.fn].apply(q.me, q.args);
+							}
 
-						$(document).trigger(al);
-					}
-				});
+							$(document).trigger(al);
+						}
+					});
+				}
 			}
 		}
 
-		$ac.alq[al].push({me: this, args: arguments});
+		$ac.alq[al].push({fn: fn, me: this, args: arguments});
 
 		return this;
 	};
