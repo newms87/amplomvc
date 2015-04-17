@@ -68,17 +68,27 @@ class amploAPI
 
 		if (empty($response['status'])) {
 			$this->error['response'] = _l("Invalid response from server while calling authenticate");
+
 			return false;
 		} elseif ($response['status'] === 'error') {
 			$this->error['message'] = $response['message'];
+
 			return false;
 		}
 
-		var_dump($response, 'response');
+
+		var_dump($response);
+
+		echo "<BR><BR>";
 
 		$this->token = $response['token'];
 
 		return true;
+	}
+
+	public function clearToken()
+	{
+		$this->token = null;
 	}
 
 	public function get($uri, $data = '', $response_type = self::RESPONSE_JSON, $options = array())
@@ -126,7 +136,15 @@ class amploAPI
 			}
 		}
 
-		$url = $this->config->api_url . $uri . (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
+		$url = $this->config->api_url . $uri;
+
+		if ($this->token) {
+			$url .= (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
+		}
+
+		echo "<BR>$url<BR>";
+		var_dump($options);
+		echo "<BR>";
 
 		$options += array(
 			CURLOPT_RETURNTRANSFER => true,
@@ -203,6 +221,14 @@ class amploAPI
 
 				if ($json === null) {
 					$this->error['json_decode'] = sprintf("%s(): %s - JSON decode Failed with ERROR (%s): %s", __METHOD__, $url, json_last_error(), json_last_error_msg());
+				} elseif (empty($json['status'])) {
+					return array(
+						'status'  => 'error',
+						'code'    => 100,
+						'message' => "Invalid response from server at " . $this->api_url,
+					);
+				} elseif ($json['status'] === 'error' && $json['code'] == 401) {
+					$this->clearToken();
 				}
 
 				return $json;

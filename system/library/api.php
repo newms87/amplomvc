@@ -10,7 +10,7 @@ class Api extends Library
 		$this->loadApiUser();
 	}
 
-	public function loadApiUser()
+	protected function loadApiUser()
 	{
 		$token = _request('token');
 
@@ -30,7 +30,7 @@ class Api extends Library
 
 				$this->update('api_user', $set_token, $this->api_user['api_user_id']);
 
-				$this->api_user += $set_token;
+				$this->api_user = $set_token + $this->api_user;
 			}
 		}
 	}
