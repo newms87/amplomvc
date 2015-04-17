@@ -11,9 +11,11 @@
 			</h1>
 
 			<div class="buttons">
-				<button>{{Save}}</button>
+				<button data-loading="{{Saving...}}">{{Save}}</button>
 				<a href="<?= site_url('admin/api_user'); ?>" class="button cancel">{{Cancel}}</a>
+				<? if ($api_user_id) { ?>
 				<a href="<?= site_url('admin/api_user/remove', 'api_user_id=' . $api_user_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-text="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
+				<? } ?>
 			</div>
 		</div>
 

@@ -437,6 +437,10 @@ class App_Model_Navigation extends App_Model_Table
 						'display_name' => 'User Roles',
 						'path'         => 'admin/settings/role',
 					),
+					'users_api_users' => array(
+						'display_name' => 'API Users',
+						'path'         => 'admin/api_user',
+					),
 				),
 			),
 

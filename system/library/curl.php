@@ -4,83 +4,49 @@ class Curl extends Library
 {
 	private $response;
 
-	const RESPONSE_TEXT = 'Text';
-	const RESPONSE_JSON = 'JSON';
-	const RESPONSE_DATA = 'Data';
+	const
+		RESPONSE_TEXT = 'Text',
+		RESPONSE_JSON = 'JSON',
+		RESPONSE_DATA = 'Data';
 
 	public function getResponse()
 	{
 		return $this->response;
 	}
 
-	public function get($url, $data = '', $response_type = self::RESPONSE_TEXT, $options = array())
+	public function get($url, $data = '', $response_type = self::RESPONSE_JSON, $options = array())
 	{
-		$url = site_url($url, $data);
-
-		$opts = $options + array(
-				// return web page
-				CURLOPT_RETURNTRANSFER => true,
-				// return headers
-				CURLOPT_HEADER         => false,
-				// follow redirects
-				CURLOPT_FOLLOWLOCATION => true,
-				// handle all encodings
-				CURLOPT_ENCODING       => "",
-				// The Amplo MVC Browser
-				CURLOPT_USERAGENT      => "Amplo MVC " . AMPLO_VERSION . " - Curl post request",
-				// set referrer on redirect
-				CURLOPT_AUTOREFERER    => true,
-				// timeout on connect
-				CURLOPT_CONNECTTIMEOUT => 120,
-				// timeout on response
-				CURLOPT_TIMEOUT        => 120,
-				// stop after 10 redirects
-				CURLOPT_MAXREDIRS      => 10,
-				//SSL Verified
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_SSL_VERIFYHOST => false,
-				//Explain everything
-				CURLOPT_VERBOSE        => 1,
-				//1 time use
-				CURLOPT_FORBID_REUSE   => 1,
-			);
-
-		return $this->call($url, $response_type, $opts);
+		return $this->call(site_url($url, $data), $response_type, $options);
 	}
 
-	public function post($url, $data, $response_type = self::RESPONSE_TEXT, $options = array())
+	public function post($url, $data, $response_type = self::RESPONSE_JSON, $options = array())
 	{
-		$opts = $options + array(
-				CURLOPT_RETURNTRANSFER => true,
-				// return web page
-				CURLOPT_HEADER         => false,
-				// don't return headers
-				CURLOPT_FOLLOWLOCATION => true,
-				// follow redirects
-				CURLOPT_ENCODING       => "",
-				// handle all encodings
-				CURLOPT_USERAGENT      => "Amplo MVC " . AMPLO_VERSION . " - Curl post request",
-				CURLOPT_AUTOREFERER    => true,
-				// set referer on redirect
-				CURLOPT_CONNECTTIMEOUT => 120,
-				// timeout on connect
-				CURLOPT_TIMEOUT        => 120,
-				// timeout on response
-				CURLOPT_MAXREDIRS      => 10,
-				// stop after 10 redirects
-				CURLOPT_POST           => 1,
-				CURLOPT_POSTFIELDS     => http_build_query($data),
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_SSL_VERIFYHOST => false,
-				CURLOPT_VERBOSE        => 1,
-				CURLOPT_FORBID_REUSE   => 1,
-			);
+		$options += array(
+			CURLOPT_POST       => 1,
+			CURLOPT_POSTFIELDS => http_build_query($data),
+		);
 
-		return $this->call($url, $response_type, $opts);
+		return $this->call($url, $response_type, $options);
 	}
 
 	public function call($url, $response_type, $options)
 	{
+		$options += array(
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HEADER         => false,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_ENCODING       => "",
+			CURLOPT_USERAGENT      => "Amplo API - Curl request",
+			CURLOPT_AUTOREFERER    => true,
+			CURLOPT_CONNECTTIMEOUT => 120,
+			CURLOPT_TIMEOUT        => 120,
+			CURLOPT_MAXREDIRS      => 10,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYHOST => false,
+			CURLOPT_VERBOSE        => 0,
+			CURLOPT_FORBID_REUSE   => 1,
+		);
+
 		//Init Curl
 		$ch = curl_init($url);
 
@@ -90,8 +56,7 @@ class Curl extends Library
 
 		if (!$ch) {
 			$this->error = _l("There was an error initializing cURL!");
-		} //Set Options
-		else if (!curl_setopt_array($ch, $options)) {
+		} else if (!curl_setopt_array($ch, $options)) {
 			$this->error = _l("There was an error setting the cURL options!");
 		} else {
 			$content = curl_exec($ch);
@@ -120,10 +85,12 @@ class Curl extends Library
 			if (empty($this->response['content'])) {
 				if ($errno === 56 && (!isset($options[CURLOPT_HTTP_VERSION]) || $options[CURLOPT_HTTP_VERSION] !== CURL_HTTP_VERSION_1_0)) {
 					$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_0;
+
 					return $this->call($url, $response_type, $options);
 				}
 
 				write_log('curl_error', _l("%s(): %s - Error in response: %s", __METHOD__, $url, $this->error));
+
 				return false;
 			}
 
