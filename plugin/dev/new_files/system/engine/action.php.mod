@@ -30,7 +30,7 @@ final class Action
 			}
 //-----
 //=====
-			$this->output = $controller->output;
+			$this->output = $controller->output ? $controller->output : $output;
 //-----
 //>>>>> {php}
 			if (DB_PROFILE) {
