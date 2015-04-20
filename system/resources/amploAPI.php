@@ -89,7 +89,7 @@ class amploAPI
 	public function get($uri, $data = '', $response_type = self::RESPONSE_JSON, $options = array())
 	{
 		if ($data) {
-			$uri .= (strpos($uri, '?') === false ? '&' : '?') . (is_string($data) ? $data : http_build_query($data));
+			$uri .= (strpos($uri, '?') === false ? '?' : '&') . (is_string($data) ? $data : http_build_query($data));
 		}
 
 		return $this->call($uri, $response_type, $options);
@@ -108,26 +108,36 @@ class amploAPI
 	public function call($uri, $response_type, $options)
 	{
 		if (!$this->config->api_key) {
-			trigger_error("API Key must be set.");
-
-			return false;
+			$this->error['api_key'] = "API Key must be set.";
 		}
 
 		if (!$this->config->api_user) {
-			trigger_error("API User must be set.");
-
-			return false;
+			$this->error['api_user'] = "API User must be set.";
 		}
 
 		if (!$this->config->api_url) {
-			trigger_error("API URL must be set.");
+			$this->error['api_url'] = "API URL must be set.";
+		}
 
-			return false;
+		if ($this->error) {
+			trigger_error(implode('<br>', $this->error));
+
+			return array(
+				'status'  => 'error',
+				'code'    => 1,
+				'message' => "Invalid API Credentials",
+				'data'    => $this->fetchError(),
+			);
 		}
 
 		if (!$this->token && $uri !== 'authenticate') {
 			if (!$this->authenticate()) {
-				return false;
+				return array(
+					'status'  => 'error',
+					'code'    => 401,
+					'message' => 'Authentication failed.',
+					'data'    => $this->fetchError(),
+				);
 			}
 		}
 
@@ -142,7 +152,7 @@ class amploAPI
 			CURLOPT_HEADER         => false,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_ENCODING       => "",
-			CURLOPT_USERAGENT      => "Amplo API - Curl request",
+			CURLOPT_USERAGENT      => "Amplo " . AMPLO_VERSION . " API - Curl",
 			CURLOPT_AUTOREFERER    => true,
 			CURLOPT_CONNECTTIMEOUT => 120,
 			CURLOPT_TIMEOUT        => 120,
@@ -193,7 +203,11 @@ class amploAPI
 					return $this->call($url, $response_type, $options);
 				}
 
-				return false;
+				return array(
+					'status'  => 'error',
+					'code'    => 3,
+					'message' => $this->fetchError(),
+				);
 			}
 		}
 
@@ -211,14 +225,18 @@ class amploAPI
 				$json = @json_decode($this->response['content'], true);
 
 				if ($json === null) {
-					$this->error['json_decode'] = sprintf("%s(): %s - JSON decode Failed with ERROR (%s): %s", __METHOD__, $url, json_last_error(), json_last_error_msg());
+					return array(
+						'status'  => 'error',
+						'code'    => 4,
+						'message' => sprintf("%s(): %s - JSON decode Failed with ERROR (%s): %s", __METHOD__, $url, json_last_error(), json_last_error_msg()),
+					);
 				} elseif (empty($json['status'])) {
 					return array(
 						'status'  => 'error',
-						'code'    => 100,
+						'code'    => 5,
 						'message' => "Invalid response from server at " . $this->api_url,
 					);
-				} elseif ($json['status'] === 'error' && $json['code'] == 401) {
+				} elseif ($json['status'] === 'error' && (int)$json['code'] === 401) {
 					$this->clearToken();
 				}
 
