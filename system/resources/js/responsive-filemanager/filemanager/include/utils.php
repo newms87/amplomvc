@@ -540,5 +540,3 @@ function debugger($input, $trace = false, $halt = false)
 		exit();
 	}
 }
-
-?>

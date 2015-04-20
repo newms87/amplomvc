@@ -79,11 +79,13 @@ if (isset($_POST['submit'])) {
 		$cur_dir     = $upload_dir . $subdir;
 		$cur_path    = $current_path . $subdir;
 		$thumbs_path = $thumbs_base_path;
+		$thumbs_dir  = $thumbs_base_dir;
 		$parent      = $subdir;
 	} else {
 		$cur_dir     = $upload_dir . $rfm_subfolder . $subdir;
 		$cur_path    = $current_path . $rfm_subfolder . $subdir;
 		$thumbs_path = $thumbs_base_path . $rfm_subfolder;
+		$thumbs_dir  = $thumbs_base_dir . $rfm_subfolder;
 		$parent      = $rfm_subfolder . $subdir;
 	}
 
@@ -107,8 +109,8 @@ if (isset($_POST['submit'])) {
 		}
 	}
 
-	if (!is_dir($thumbs_path . $subdir)) {
-		create_folder(false, $thumbs_path . $subdir);
+	if (!is_dir($thumbs_dir . $subdir)) {
+		create_folder(false, $thumbs_dir . $subdir);
 	}
 
 	if (isset($_GET['popup'])) {
@@ -346,7 +348,7 @@ if (isset($_POST['submit'])) {
 	<input type="hidden" id="popup" value="<?php echo $popup; ?>"/>
 	<input type="hidden" id="view" value="<?php echo $view; ?>"/>
 	<input type="hidden" id="cur_dir" value="<?php echo $cur_dir; ?>"/>
-	<input type="hidden" id="cur_dir_thumb" value="<?php echo $thumbs_path . $subdir; ?>"/>
+	<input type="hidden" id="cur_dir_thumb" value="<?php echo $thumbs_dir . $subdir; ?>"/>
 	<input type="hidden" id="insert_folder_name" value="<?php echo lang_Insert_Folder_Name; ?>"/>
 	<input type="hidden" id="new_folder" value="<?php echo lang_New_Folder; ?>"/>
 	<input type="hidden" id="ok" value="<?php echo lang_OK; ?>"/>
@@ -746,8 +748,8 @@ if (isset($_POST['submit'])) {
 							$file = $new_name;
 						}
 						//add in thumbs folder if not exist
-						if (!file_exists($thumbs_path . $subdir . $file)) {
-							create_folder(false, $thumbs_path . $subdir . $file);
+						if (!file_exists($thumbs_dir . $subdir . $file)) {
+							create_folder(false, $thumbs_dir . $subdir . $file);
 						}
 						$class_ext = 3;
 						if ($file == '..' && trim($subdir) != '') {
@@ -879,10 +881,12 @@ if (isset($_POST['submit'])) {
 					if (in_array($extension_lower, $ext_img)) {
 						$src      = $base_url . $cur_dir . rawurlencode($file);
 						$mini_src = $src_thumb = $thumbs_path . $subdir . $file;
+						$mini_file = $file_thumb = $thumbs_dir . $subdir . $file;
+
 						//add in thumbs folder if not exist
-						if (!file_exists($fm_dir . 'filemanager/' . $src_thumb)) {
+						if (!file_exists($file_thumb)) {
 							try {
-								create_img_gd($file_path, $fm_dir . 'filemanager/' . $src_thumb, 122, 91);
+								create_img_gd($file_path, $file_thumb, 122, 91);
 								new_thumbnails_creation($current_path . $rfm_subfolder . $subdir, $file_path, $file, $current_path, $relative_image_creation, $relative_path_from_current_pos, $relative_image_creation_name_to_prepend, $relative_image_creation_name_to_append, $relative_image_creation_width, $relative_image_creation_height, $fixed_image_creation, $fixed_path_from_filemanager, $fixed_image_creation_name_to_prepend, $fixed_image_creation_to_append, $fixed_image_creation_width, $fixed_image_creation_height);
 							} catch (Exception $e) {
 								$src_thumb = $mini_src;
@@ -956,7 +960,7 @@ if (isset($_POST['submit'])) {
 										<div class="filetype"><?php echo $extension_lower ?></div><?php } ?>
 									<div class="img-container">
 										<span></span>
-										<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original ? "original" : "" ?> <?php echo $is_icon_thumb ? "icon" : "" ?>" src="<?php echo $fm_url . 'filemanager/' . $src_thumb; ?>">
+										<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original ? "original" : "" ?> <?php echo $is_icon_thumb ? "icon" : "" ?>" src="<?php echo $src_thumb; ?>">
 									</div>
 								</div>
 								<div class="img-precontainer-mini <?php if ($is_img) {
@@ -968,7 +972,7 @@ if (isset($_POST['submit'])) {
 									<div class="img-container-mini">
 										<span></span>
 										<?php if ($mini_src != "") { ?>
-											<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original_mini ? "original" : "" ?> <?php echo $is_icon_thumb_mini ? "icon" : "" ?>" src="<?php echo $fm_url . 'filemanager/' . $mini_src; ?>">
+											<img alt="<?php echo $filename . " thumbnails"; ?>" class="<?php echo $show_original_mini ? "original" : "" ?> <?php echo $is_icon_thumb_mini ? "icon" : "" ?>" src="<?php echo $mini_src; ?>">
 										<?php } ?>
 									</div>
 								</div>
