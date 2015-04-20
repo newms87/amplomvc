@@ -35,6 +35,10 @@ class Image extends Library
 
 		$image = preg_replace(array_keys($replace), $replace, $image_path);
 
+		if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
+			return $image;
+		}
+
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
 				$image = DIR_IMAGE . $image;
@@ -43,10 +47,6 @@ class Image extends Library
 					if ($image = $this->theme->findFile($image)) {
 						return $image;
 					}
-				}
-
-				if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
-					return $image;
 				}
 
 				if (defined("AMPLO_IMAGE_ERROR_LOG") && AMPLO_IMAGE_ERROR_LOG) {

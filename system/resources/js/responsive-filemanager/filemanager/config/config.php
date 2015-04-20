@@ -25,10 +25,15 @@ $base_url = rtrim(URL_SITE, '/'); // DON'T TOUCH (base url (only domain) of site
 $fm_url   = URL_RESOURCES . 'js/responsive-filemanager/';
 $fm_dir   = DIR_RESOURCES . 'js/responsive-filemanager/';
 
+if (strpos($fm_url, '//') === 0) {
+	$fm_url = (IS_SSL ? 'https:' : 'http:') . $fm_url;
+}
+
 $upload_dir   = '/image/'; // path from base_url to base of upload folder (with start and final /)
 $current_path = 'image/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder
-$thumbs_base_path = '../thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
+$thumbs_base_path = $fm_url . 'thumbs/';
+$thumbs_base_dir = $fm_dir . 'thumbs/';
 
 $fm_url_img = $fm_url . 'filemanager/img/';
 
