@@ -102,6 +102,74 @@ h6 {
   }
 }
 
+.height-animate-hide {
+  overflow: hidden;
+  -webkit-animation: height-show .5s forwards;
+  animation: height-show .5s forwards;
+
+  &.hide {
+    min-height: 0;
+    -webkit-animation: height-hide .5s forwards;
+    animation: height-hide .5s forwards;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+@-webkit-keyframes height-hide {
+  0% {
+    max-height:100em;
+  }
+  20% {
+    max-height: 20em;
+  }
+  100% {
+    max-height: 0;
+  }
+}
+
+@keyframes height-hide {
+  0% {
+    max-height:100em;
+  }
+  20% {
+    max-height: 20em;
+  }
+  100% {
+    max-height: 0;
+  }
+}
+
+@-webkit-keyframes height-show {
+  0% {
+    max-height: 0;
+  }
+  80% {
+    max-height:30em;
+  }
+  99% {
+    max-height: 100em;
+  }
+  100% {
+    max-height: none;
+  }
+}
+
+@keyframes height-show {
+  0% {
+    max-height: 0;
+  }
+  80% {
+    max-height:30em;
+  }
+  99% {
+    max-height: 100em;
+  }
+  100% {
+    max-height: none;
+  }
+}
+
 .clearfix {
   &:after {
     content: ".";
