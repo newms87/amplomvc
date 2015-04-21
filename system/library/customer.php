@@ -99,7 +99,7 @@ class Customer extends Library
 		}
 	}
 
-	protected function setCustomer($customer)
+	public function setCustomer($customer)
 	{
 		if (!is_array($customer)) {
 			$customer = $this->Model_Customer->getRecord($customer);
@@ -107,7 +107,6 @@ class Customer extends Library
 
 		if (empty($customer)) {
 			$this->error['customer'] = _l("Customer was not found.");
-
 			return false;
 		}
 

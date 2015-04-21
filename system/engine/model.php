@@ -511,7 +511,7 @@ abstract class Model
 			$t = $table;
 		}
 
-		if (!$columns) {
+		if (!$columns || $columns === '*') {
 			return "`$t`.*";
 		}
 

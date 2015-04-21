@@ -913,43 +913,24 @@ function output_json($data)
 	$registry->get('response')->setOutput(json_encode($data), 'application/json');
 }
 
-function output_api($data, $message = '', $http_code = 200)
+function output_api($status, $message = null, $data = null, $code = 200, $http_code = null)
 {
+	if (!$http_code) {
+		$http_code = $code;
+	}
+
 	if ($http_code !== 200) {
 		header("HTTP/1.1 $http_code $message");
 	}
 
 	$response = array(
-		'status'  => 'success',
-		'message' => $message,
-		'data'    => $data,
-	);
-
-	output_json($response);
-
-	global $registry;
-	$registry->get('response')->output();
-	exit;
-}
-
-function output_api_error($code = 400, $message = '', $data = array())
-{
-	$http_code = ($code < 400 || $code >= 500) ? 400 : $code;
-
-	header("HTTP/1.1 $http_code $message");
-
-	$response = array(
-		'status'  => 'error',
+		'status'  => $status,
 		'code'    => $code,
 		'message' => $message,
 		'data'    => $data,
 	);
 
 	output_json($response);
-
-	global $registry;
-	$registry->get('response')->output();
-	exit;
 }
 
 function output_as_file($contents, $type = 'txt', $filename = '')
