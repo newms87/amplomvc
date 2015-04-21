@@ -2,48 +2,38 @@
 
 class Api extends Library
 {
-	protected $api_user;
+	protected $api_user, $api_token;
 
-	public function __construct()
-	{
-		parent::__construct();
-		$this->loadApiUser();
-	}
-
-	protected function loadApiUser()
+	public function authenticate($block_request = true)
 	{
 		$token = _request('token');
 
 		if ($token) {
-			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `token` = '" . $this->escape($token) . "' AND token_expires > NOW()");
+			$this->api_token = $this->queryRow("SELECT * FROM {$this->t['api_token']} WHERE `token` = '" . $this->escape($token) . "' AND date_expires > NOW()");
+
+			if ($this->api_token) {
+				$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE api_user_id = " . $this->api_token['api_user_id']);
+			}
 		} else {
 			$username = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : _post('api_user');
 			$key      = !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : _post('api_key');
 
 			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `username` = '" . $this->escape($username) . "' AND api_key = '" . $this->escape($key) . "'");
-
-			if ($this->api_user) {
-				$set_token = array(
-					'token'         => $this->generateToken(),
-					'token_expires' => $this->date->add('12 hours'),
-				);
-
-				$this->update('api_user', $set_token, $this->api_user['api_user_id']);
-
-				$this->api_user = $set_token + $this->api_user;
-			}
 		}
-	}
 
-	public function authorize($block_request = true)
-	{
 		if ($this->api_user) {
 			$user = $this->Model_User->getRecord($this->api_user['user_id']);
 		}
 
 		if (empty($user)) {
+			if (!isset($_SERVER['PHP_AUTH_USER'])) {
+				header('WWW-Authenticate: Basic realm="Amplo API Authentication"');
+			}
+
 			if ($block_request) {
-				output_api_error(401, _l("Unauthorized request. The API User was not verified."));
+				output_api('error', _l("Unauthorized request. The API User was not verified."), $_REQUEST, 401);
+				$this->response->output();
+				exit;
 			}
 
 			return false;
@@ -63,19 +53,71 @@ class Api extends Library
 
 		$this->user->setUser($user['user_id'], $user, $meta, $permissions);
 
+		if (!$this->api_token) {
+			$this->api_token = array(
+				'token'        => $this->generateToken(),
+				'date_created' => $this->date->now(),
+				'date_expires' => $this->date->add('12 hours'),
+				'api_user_id'  => $this->api_user['api_user_id'],
+				'customer_id'  => null,
+			);
+
+			//Validate this user can access this customer
+			if (_request('customer_id')) {
+				$this->api_token['customer_id'] = _request('customer_id');
+			}
+
+			$this->insert('api_token', $this->api_token);
+		}
+
+		if ($this->api_token['customer_id']) {
+			if (!$this->customer->setCustomer($this->api_token['customer_id'])) {
+				if ($block_request) {
+					output_api('error', _l("Unauthorized request. The Customer requested did not exist or is not authorized with this account."), null, 401);
+					$this->response->output();
+					exit;
+				}
+
+				$this->error = $this->customer->getError();
+				$this->clearToken();
+
+				return false;
+			}
+		}
+
 		return true;
+	}
+
+	public function clearToken()
+	{
+		$this->api_user  = null;
+		$this->api_token = null;
 	}
 
 	public function getToken()
 	{
-		if ($this->api_user) {
-			return $this->api_user['token'];
+		return !empty($this->api_token['token']) ? $this->api_token['token'] : false;
+	}
+
+	public function getTokenData()
+	{
+		return $this->api_token;
+	}
+
+	public function refreshToken()
+	{
+		if ($this->api_token) {
+			$this->update('api_token', array('date_expires' => $this->date->add('12 hours')), array('token' => $this->api_token['token']));
+
+			return true;
 		}
+
+		return false;
 	}
 
 	protected function generateToken()
 	{
-		return bin2hex(openssl_random_pseudo_bytes(20));
+		return bin2hex(openssl_random_pseudo_bytes(30));
 	}
 
 	public function generateApiKey()
