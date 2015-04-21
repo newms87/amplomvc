@@ -66,17 +66,69 @@ class amploAPI
 		return $this->response;
 	}
 
-	public function authenticate()
+	public function getToken()
 	{
+		return $this->token;
+	}
+
+	public function setToken($token)
+	{
+		$response = $this->get('refresh-token', array('token' => $token));
+
+		if ($response['status'] === 'error') {
+			return false;
+		}
+
+		$this->token = $token;
+
+		return true;
+	}
+
+	public function clearToken()
+	{
+		$this->token = null;
+	}
+
+	public function requestCustomerToken($customer_id)
+	{
+		return $this->requestToken($customer_id);
+	}
+
+	public function requestToken($customer_id = null)
+	{
+		if (!$this->config->api_key) {
+			$this->error['api_key'] = "API Key must be set.";
+		}
+
+		if (!$this->config->api_user) {
+			$this->error['api_user'] = "API User must be set.";
+		}
+
+		if (!$this->config->api_url) {
+			$this->error['api_url'] = "API URL must be set.";
+		}
+
+		if ($this->error) {
+			trigger_error(implode('<br>', $this->error));
+
+			return false;
+		}
+
+		$this->token = null;
+
 		$credentials = array(
 			'api_key'  => $this->config->api_key,
 			'api_user' => $this->config->api_user,
 		);
 
-		$response = $this->post('authenticate', $credentials);
+		if ($customer_id) {
+			$credentials['customer_id'] = $customer_id;
+		}
+
+		$response = $this->post('request-token', $credentials);
 
 		if (empty($response['status'])) {
-			$this->error['response'] = _l("Invalid response from server while calling authenticate");
+			$this->error['response'] = _l("Invalid response from server while requesting token.");
 
 			return false;
 		} elseif ($response['status'] === 'error') {
@@ -89,12 +141,7 @@ class amploAPI
 
 		$_SESSION['amplo_api_token'] = $this->token;
 
-		return true;
-	}
-
-	public function clearToken()
-	{
-		$this->token = null;
+		return $this->token;
 	}
 
 	public function get($uri, $data = '', $response_type = null, $options = array())
@@ -122,122 +169,88 @@ class amploAPI
 			$response_type = $this->config->response_type;
 		}
 
-		$error = array();
+		$url = $this->config->api_url . $uri;
 
-		if (!$this->config->api_key) {
-			$this->error['api_key'] = "API Key must be set.";
+		if ($this->token) {
+			$url .= (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
 		}
 
-		if (!$this->config->api_user) {
-			$this->error['api_user'] = "API User must be set.";
+		$options += array(
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HEADER         => false,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_ENCODING       => "",
+			CURLOPT_USERAGENT      => "Amplo API - Curl",
+			CURLOPT_AUTOREFERER    => true,
+			CURLOPT_CONNECTTIMEOUT => 120,
+			CURLOPT_TIMEOUT        => 120,
+			CURLOPT_MAXREDIRS      => 10,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYHOST => false,
+			CURLOPT_VERBOSE        => 0,
+			CURLOPT_FORBID_REUSE   => 1,
+		);
+
+		//Init Curl
+		$ch = curl_init($url);
+
+		if (defined('AMPLO_CURLOPT_PROXY')) {
+			$options[CURLOPT_PROXY] = AMPLO_CURLOPT_PROXY;
 		}
 
-		if (!$this->config->api_url) {
-			$this->error['api_url'] = "API URL must be set.";
+		if (!$ch) {
+			$this->error = _l("There was an error initializing cURL!");
+		} else if (!curl_setopt_array($ch, $options)) {
+			$this->error = _l("There was an error setting the cURL options!");
+		} else {
+			$content = curl_exec($ch);
+
+			$errno  = curl_errno($ch);
+			$errmsg = curl_error($ch);
+
+			if ($errno) {
+				$this->error = "Curl Error ($errno): $errmsg";
+			}
+
+			$this->response = array(
+				'content' => $content,
+				'header'  => curl_getinfo($ch),
+				'errno'   => $errno,
+				'errmsg'  => $errmsg,
+			);
+
+			curl_close($ch);
 		}
 
+		//Error failed
 		if ($this->error) {
-			trigger_error(implode('<br>', $this->error));
+			if (empty($this->response['content'])) {
+				if ($errno === 56 && (!isset($options[CURLOPT_HTTP_VERSION]) || $options[CURLOPT_HTTP_VERSION] !== CURL_HTTP_VERSION_1_0)) {
+					$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_0;
 
-			$error = array(
-				'status'  => 'error',
-				'code'    => 1,
-				'message' => "Invalid API Credentials",
-				'data'    => $this->fetchError(),
-			);
-		} elseif (!$this->token && $uri !== 'authenticate') {
-			if (!$this->authenticate()) {
-				$error = array(
-					'status'  => 'error',
-					'code'    => 401,
-					'message' => 'Authentication failed.',
-					'data'    => $this->fetchError(),
-				);
-			}
-		}
+					$this->clearErrors();
 
-		if (!$error) {
-			$url = $this->config->api_url . $uri;
-
-			if ($this->token) {
-				$url .= (strpos($uri, '?') === false ? '?' : '&') . 'token=' . $this->token;
-			}
-
-			$options += array(
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_HEADER         => false,
-				CURLOPT_FOLLOWLOCATION => true,
-				CURLOPT_ENCODING       => "",
-				CURLOPT_USERAGENT      => "Amplo API - Curl",
-				CURLOPT_AUTOREFERER    => true,
-				CURLOPT_CONNECTTIMEOUT => 120,
-				CURLOPT_TIMEOUT        => 120,
-				CURLOPT_MAXREDIRS      => 10,
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_SSL_VERIFYHOST => false,
-				CURLOPT_VERBOSE        => 0,
-				CURLOPT_FORBID_REUSE   => 1,
-			);
-
-			//Init Curl
-			$ch = curl_init($url);
-
-			if (defined('AMPLO_CURLOPT_PROXY')) {
-				$options[CURLOPT_PROXY] = AMPLO_CURLOPT_PROXY;
-			}
-
-			if (!$ch) {
-				$this->error = _l("There was an error initializing cURL!");
-			} else if (!curl_setopt_array($ch, $options)) {
-				$this->error = _l("There was an error setting the cURL options!");
-			} else {
-				$content = curl_exec($ch);
-
-				$errno  = curl_errno($ch);
-				$errmsg = curl_error($ch);
-
-				if ($errno) {
-					$this->error = "Curl Error ($errno): $errmsg";
-				}
-
-				$this->response = array(
-					'content' => $content,
-					'header'  => curl_getinfo($ch),
-					'errno'   => $errno,
-					'errmsg'  => $errmsg,
-				);
-
-				curl_close($ch);
-			}
-
-			//Error failed
-			if ($this->error) {
-				if (empty($this->response['content'])) {
-					if ($errno === 56 && (!isset($options[CURLOPT_HTTP_VERSION]) || $options[CURLOPT_HTTP_VERSION] !== CURL_HTTP_VERSION_1_0)) {
-						$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_0;
-
-						$this->clearErrors();
-
-						return $this->call($url, $response_type, $options);
-					}
-
-					$error = array(
-						'status'  => 'error',
-						'code'    => 3,
-						'message' => $this->fetchError(),
-					);
+					return $this->call($url, $response_type, $options);
 				}
 			}
 		}
 
 		//Response
 		if ($response_type === self::RESPONSE_TEXT) {
-			if ($error) {
-				return $error['message'];
+			if ($this->error) {
+				return $this->fetchError();
 			} else {
 				return $this->response['content'];
 			}
 		} else {
+			if ($this->error) {
+				return array(
+					'status'  => 'error',
+					'code'    => '2',
+					'message' => $this->fetchError(),
+				);
+			}
+
 			if (isset($options[CURLOPT_HTTP_VERSION]) && $options[CURLOPT_HTTP_VERSION] === CURL_HTTP_VERSION_1_0) {
 				$this->response['content'] = utf8_decode($this->response['content']);
 			}
@@ -248,13 +261,13 @@ class amploAPI
 				return $json;
 			}
 
-
 			//$response_type === self::RESPONSE_API
-			if ($json === null) {
+			if (!isset($json)) {
 				return array(
 					'status'  => 'error',
 					'code'    => 4,
 					'message' => sprintf("%s(): %s - JSON decode Failed with ERROR (%s): %s", __METHOD__, $url, json_last_error(), json_last_error_msg()),
+					'data'    => $this->fetchError(),
 				);
 			} elseif (empty($json['status'])) {
 				return array(
@@ -264,7 +277,7 @@ class amploAPI
 					'data'    => $json,
 				);
 			} elseif ($json['status'] === 'error' && (int)$json['code'] === 401) {
-				$this->clearToken();
+				$this->token = null;
 			}
 
 			return $json;
