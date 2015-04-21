@@ -43,7 +43,7 @@ abstract class Controller
 			}
 		}
 
-		$_template = is_file($path) ? $path : $this->theme->getFile($path, $theme);
+		$_template = is_file($path) ? $path : $this->theme->getFile('template/' . $path, $theme);
 
 		if (!$_template) {
 			trigger_error(_l("%s(): Could not resolve template path %s", __METHOD__, $path));

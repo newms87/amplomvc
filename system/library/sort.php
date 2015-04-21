@@ -27,7 +27,7 @@ class Sort extends Library
 
 		$limit = (int)$settings['limit'];
 
-		$template_file = $this->theme->getFile($settings['template']);
+		$template_file = $this->theme->getFile('template/' . $settings['template']);
 
 		if (!$template_file) {
 			trigger_error(_l("%s(): Limit template %s was found!", __METHOD__, $template_file));
