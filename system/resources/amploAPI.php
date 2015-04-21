@@ -4,7 +4,7 @@ class amploAPI
 {
 	public $config;
 
-	private $response, $response_type, $error, $token;
+	private $response, $error, $token;
 
 	const
 		RESPONSE_TEXT = 'Text',
@@ -16,7 +16,13 @@ class amploAPI
 	{
 		$this->config = (object)$config;
 
-		$this->response_type = !empty($config['response_type']) ? $config['response_type'] : self::RESPONSE_API;
+		if (empty($this->config->response_type)) {
+			$this->config->response_type = self::RESPONSE_API;
+		}
+
+		if (!empty($_SESSION['amplo_api_token'])) {
+			$this->token = $_SESSION['amplo_api_token'];
+		}
 	}
 
 	public function hasError($type = null)
@@ -81,6 +87,8 @@ class amploAPI
 
 		$this->token = $response['data']['token'];
 
+		$_SESSION['amplo_api_token'] = $this->token;
+
 		return true;
 	}
 
@@ -111,7 +119,7 @@ class amploAPI
 	public function call($uri, $response_type = null, $options = array())
 	{
 		if (!$response_type) {
-			$response_type = $this->response_type;
+			$response_type = $this->config->response_type;
 		}
 
 		$error = array();
@@ -160,7 +168,7 @@ class amploAPI
 				CURLOPT_HEADER         => false,
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_ENCODING       => "",
-				CURLOPT_USERAGENT      => "Amplo " . AMPLO_VERSION . " API - Curl",
+				CURLOPT_USERAGENT      => "Amplo API - Curl",
 				CURLOPT_AUTOREFERER    => true,
 				CURLOPT_CONNECTTIMEOUT => 120,
 				CURLOPT_TIMEOUT        => 120,
@@ -279,4 +287,8 @@ if (!function_exists('json_last_error_msg')) {
 
 		return array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
 	}
+}
+
+if (!session_id()) {
+	session_start();
 }
