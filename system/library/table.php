@@ -36,7 +36,7 @@ class Table extends Library
 
 	public function setTemplate($file, $theme = null)
 	{
-		$this->file = is_file($file) ? $file : $this->theme->getFile($file, $theme);
+		$this->file = is_file($file) ? $file : $this->theme->getFile('template/' . $file, $theme);
 
 		if (!$this->file) {
 			trigger_error(_l("The template file %s does not exist.", $file));

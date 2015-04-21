@@ -155,7 +155,7 @@ class Dev extends Library
 	{
 		global $__start, $profile;
 
-		$file = $this->theme->getFile('common/amplo_profile', AMPLO_DEFAULT_THEME);
+		$file = $this->theme->getFile('template/common/amplo_profile', AMPLO_DEFAULT_THEME);
 
 		if ($file) {
 			if (DB_PROFILE) {

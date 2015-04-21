@@ -161,9 +161,9 @@ class Theme extends Library
 		return $areas;
 	}
 
-	public function getFile($file, $theme = '')
+	public function getFile($path, $theme = '')
 	{
-		$file = $this->findFile($file, $theme);
+		$file = $this->findFile($path, $theme);
 
 		if ($file) {
 			return $this->dir_themes . $file;
@@ -172,9 +172,9 @@ class Theme extends Library
 		return false;
 	}
 
-	public function getUrl($file, $theme = '')
+	public function getUrl($path, $theme = '')
 	{
-		$file = $this->findFile($file, $theme);
+		$file = $this->findFile($path, $theme);
 
 		if ($file) {
 			return URL_THEMES . $file;
@@ -194,8 +194,6 @@ class Theme extends Library
 		if ($theme) {
 			if (file_exists($this->dir_themes . $theme . '/' . $file)) {
 				return $theme . '/' . $file;
-			} elseif (file_exists($this->dir_themes . $theme . '/template/' . $file)) {
-				return $theme . '/template/' . $file;
 			}
 		}
 
@@ -203,8 +201,6 @@ class Theme extends Library
 		foreach ($this->theme_hierarchy as $theme_node) {
 			if (file_exists($this->dir_themes . $theme_node . '/' . $file)) {
 				return $theme_node . '/' . $file;
-			} elseif (file_exists($this->dir_themes . $theme_node . '/template/' . $file)) {
-				return $theme_node . '/template/' . $file;
 			}
 		}
 
