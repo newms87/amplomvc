@@ -39,10 +39,8 @@ class App_Controller_Admin_Page extends Controller
 
 	public function listing($listing = array())
 	{
-		//The Table Columns
-		$columns = $this->Model_Page->getColumns(_request('columns'));
+		$columns = $this->Model_Page->getColumns((array)_request('columns'));
 
-		//Disallow content and style columns
 		$disallow = array(
 			'content' => 1,
 			'style'   => 1,
@@ -50,11 +48,16 @@ class App_Controller_Admin_Page extends Controller
 
 		$columns = array_diff_key($columns, $disallow);
 
-		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
-		$filter = _get('filter', array());
+		$sort    = (array)_get('sort', array('title' => 'ASC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'page_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $columns,
+		);
 
-		list($pages, $page_total) = $this->Model_Page->getRecords($sort, $filter, $columns, true, 'page_id');
+		list($pages, $page_total) = $this->Model_Page->getRecords($sort, $filter, $options, true);
 
 		foreach ($pages as $page_id => &$page) {
 			$actions = array();
@@ -84,10 +87,9 @@ class App_Controller_Admin_Page extends Controller
 		unset($page);
 
 		$listing += array(
-			'row_id'         => 'page_id',
-			'columns'        => $columns,
 			'extra_cols'     => array_diff_key($this->Model_Page->getColumns(), $disallow),
-			'rows'           => $pages,
+			'records'        => $pages,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $page_total,
@@ -95,7 +97,7 @@ class App_Controller_Admin_Page extends Controller
 			'save_path'      => 'admin/page/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {
@@ -152,7 +154,7 @@ class App_Controller_Admin_Page extends Controller
 
 		//Template Data
 		$page['data_templates'] = $this->Model_Page->getTemplates();
-		$page['data_layouts']   = $this->Model_Layout->getRecords(array('cache' => true));
+		$page['data_layouts']   = $this->Model_Layout->getRecords(null, null, array('cache' => true));
 		$page['data_themes']    = $this->theme->getThemes();
 
 		$page['url_create_layout'] = site_url('admin/page/create-layout');
@@ -268,12 +270,7 @@ class App_Controller_Admin_Page extends Controller
 			}
 		}
 
-		$sort = array(
-			'sort'  => 'name',
-			'order' => "ASC",
-		);
-
-		$layouts = $this->Model_Layout->getRecords($sort);
+		$layouts = $this->Model_Layout->getRecords(array('name' => 'ASC'));
 
 		$output = build(array(
 			'type'   => 'select',

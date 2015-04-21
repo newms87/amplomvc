@@ -10,9 +10,9 @@ class App_Model_User extends App_Model_Table
 			if (!validate('text', $user['username'], 3, 128)) {
 				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
 			} else {
-				$user_info = $this->Model_User->getUserByUsername($user['username']);
+				$existing_id = $this->findRecord(array('username' => $user['username']));
 
-				if ($user_info && $user_info['user_id'] !== (int)$user_id) {
+				if ($existing_id !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}
@@ -43,16 +43,12 @@ class App_Model_User extends App_Model_Table
 			$user['password'] = $user['encrypted_password'];
 		}
 
-		clear_cache('user');
-
 		//New User
 		if (!$user_id) {
 			$user['date_added'] = $this->date->now();
-			$user_id            = $this->insert('user', $user);
-		} else {
-			//Update User
-			$user_id = $this->update('user', $user, $user_id);
 		}
+
+		$user_id = parent::save($user_id, $user);
 
 		if (!empty($user['meta_exactly']) && !isset($user['meta'])) {
 			$user['meta'] = array();
@@ -63,18 +59,6 @@ class App_Model_User extends App_Model_Table
 		}
 
 		return $user_id;
-	}
-
-	public function remove($user_id)
-	{
-		clear_cache('user');
-
-		return $this->delete('user', $user_id);
-	}
-
-	public function getUser($user_id)
-	{
-		return $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE user_id = '" . (int)$user_id . "'");
 	}
 
 	public function addMeta($user_id, $key, $value, $multi = false)
@@ -162,39 +146,34 @@ class App_Model_User extends App_Model_Table
 		return $meta;
 	}
 
-	public function getUserByUsername($username)
-	{
-		return $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE username = '" . $this->escape($username) . "'");
-	}
-
-	public function getRecords($sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		//Where
 		if (isset($filter['user_role'])) {
-			$role_filter = array(
-				'name' => $filter['user_role'],
-			);
-
-			$roles = $this->Model_UserRole->getRecords(array('cache' => true), $role_filter, 'user_role_id', false, 'user_role_id');
-
-			$filter['user_role_id'] = array_keys($roles);
+			$options['join']      = "LEFT JOIN {$this->t['user_role']} ur USING (user_role_id)";
+			if (is_string($filter['user_role'])) {
+				$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
+			} else {
+				$filter['#user_role'] = "AND ur.`name` IN ('" . implode("','", $this->escape($filter['user_role'])) . "')";
+			}
 		}
 
 		if (isset($filter['name'])) {
-			$where = $this->extractWhere($this->table, $filter);
-			$where .= " AND CONCAT(first_name, ' ', last_name) like '%" . $this->escape($filter['name']) . "%'";
-			$filter = $where;
+			$filter['#name'] = "AND CONCAT(first_name, ' ', last_name) like '%" . $this->escape($filter['name']) . "%'";
 		}
 
 		//Order and Limit
-		if (!empty($filter['sort']) && $filter['sort'] === 'name') {
-			$filter['sort'] = array(
-				'last_name'  => $filter['order'],
-				'first_name' => $filter['order'],
+		if (!empty($filter['sort']['name'])) {
+			$ord = $filter['sort']['name'];
+			unset($filter['sort']['name']);
+
+			$filter['sort'] += array(
+				'last_name'  => $ord,
+				'first_name' => $ord,
 			);
 		}
 
-		return parent::getRecords($sort, $filter, $select, $total, $index);
+		return parent::getRecords($sort, $filter, $options, $total);
 	}
 
 	public function getColumns($filter = array())
@@ -203,13 +182,13 @@ class App_Model_User extends App_Model_Table
 			'user_role_id' => array(
 				'type'         => 'select',
 				'display_name' => _l("Role"),
-				'build_data'   => $this->Model_UserRole->getRecords(array('cache' => true)),
+				'build_data'   => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
 				'build_config' => array(
 					'user_role_id',
 					'name'
 				),
 				'filter'       => 'select',
-				'sortable'     => true,
+				'sort'         => true,
 			),
 			'status'       => array(
 				'type'         => 'select',
@@ -219,7 +198,7 @@ class App_Model_User extends App_Model_Table
 					1 => _l("Enabled"),
 				),
 				'filter'       => true,
-				'sortable'     => true,
+				'sort'         => true,
 			),
 		);
 

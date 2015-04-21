@@ -37,6 +37,52 @@ $.fn.list_widget = function (view_id) {
 	});
 }
 
+//List View Scripts
+$.fn.listview = function () {
+	$.ac_datepicker();
+
+	return this.use_once().each(function (i, e) {
+		var $listview = $(e).addClass('list-view');
+
+		var $zoom = $listview.find('.zoom-hover')
+		$zoom.find('.clear').click(zoom_hover_clear);
+		$zoom.find('input, textarea').focus(zoom_hover_in).blur(zoom_hover_out).change(zoom_hover_change).keyup(zoom_hover_keyup);
+
+		$listview.find('.select-all').click(listview_select_all);
+		$listview.find('.filter-list-item').click(listview_toggle_checked);
+		$listview.find('.filter-list-item [name="batch[]"]').change(listview_batch_checked).siblings('label').click(listview_batch_checked_label);
+
+		$listview.find('.filter-button').click(listview_apply_filter);
+		$listview.find('.filter-type').click(listview_toggle_filter_type);
+
+		if ($listview.attr('data-filter-style') === 'persistent') {
+			$listview.find('.filter-type').removeClass('not').addClass('equals').hide();
+			$listview.find('.column-filter').find('input, select').on('keyup change', delay_update);
+		}
+
+		$listview.find('.reset-button').click(listview_reset);
+		$listview.find('.filter-list').keyup(listview_filter_on_enter);
+		$listview.find('.hide-filter').click(listview_toggle_filter);
+
+		$listview.find('.filter-list > td').click(function () {
+			if ($(this).closest('.filter-list').hasClass('hide')) {
+				listview_toggle_filter.call($(this).closest('.listing'), false);
+			}
+		});
+
+		if ($listview.attr('data-save-url')) {
+			$listview.find('tr.filter-list-item td.editable').click(listview_edit_field);
+			$listview.find('.editable-options').click(listview_noaction);
+			$listview.find('.editable-options .save-edit').click(listview_save_edit);
+			$listview.find('.editable-options .cancel-form').click(listview_cancel_edit);
+			$listview.find('.editable-option .input input[type=text]').keyup(listview_save_on_enter);
+		}
+
+		$listview.find('.action-buttons').overflown('y', 5);
+	})
+}
+
+
 function update_list_widget() {
 	var $this = $(this);
 
@@ -96,4 +142,232 @@ function save_list_widget_settings() {
 	}, 'json').always(function () {
 		$this.loading('stop');
 	});
+}
+
+function listview_batch_checked() {
+	var $this = $(this);
+	$this.closest('.filter-list-item').toggleClass('active', $this.prop('checked'));
+}
+
+function listview_batch_checked_label(event) {
+	var $input = $('#' + $(this).attr('for'));
+	$input.prop('checked', !$input.prop('checked')).change();
+	event.stopPropagation();
+	return false;
+}
+
+function listview_select_all() {
+	$(this).closest('.list-view').find('[name="batch[]"]').prop('checked', this.checked).change();
+}
+
+function listview_toggle_checked() {
+	var cb = $(this).find('[name="batch[]"]');
+	if (cb.data('clicked')) {
+		cb.data('clicked', false);
+	} else {
+		cb.prop('checked', !cb.prop('checked')).change();
+	}
+}
+
+function listview_noaction(e) {
+	e.stopPropagation();
+	return false;
+}
+
+function listview_reset() {
+	var $this = $(this);
+	$filter = $this.closest('.filter-list');
+	$filter.find('[name]').val('');
+	$filter.find('.filter-type').removeClass('not equals');
+	$this.attr('href', $filter.apply_filter($this.closest('.list-view').attr('data-filter-url')));
+}
+
+function listview_filter_on_enter(e) {
+	if (e.keyCode == 13) {
+		$(this).find('.filter-button')[0].click();
+	}
+}
+
+function listview_save_on_enter(e) {
+	if (e.keyCode == 13) {
+		$(this).closest('.editable-options').find('.save-edit').click();
+		e.stopPropagation();
+		return false;
+	}
+}
+
+function listview_toggle_filter(hide) {
+	var $listing = $(this).closest('.listing');
+	var $list = $listing.find('.filter-list');
+	var $refresh = $listing.find('.refresh-listing');
+
+	$list.toggleClass('hide', hide);
+	$refresh.attr('href', $refresh.attr('href').replace(/&hidefilter=1/, '') + ($list.hasClass('hide') ? '&hidefilter=1' : ''));
+
+	return false;
+}
+
+function listview_toggle_filter_type() {
+	var $this = $(this);
+	if ($this.hasClass('not')) {
+		$this.removeClass('not');
+	} else if ($this.hasClass('equals')) {
+		$this.removeClass('equals').addClass('not');
+	} else {
+		$this.addClass('equals');
+	}
+}
+
+function listview_apply_filter() {
+	var $this = $(this);
+	$filter = $this.closest('.filter-list');
+	$this.attr('href', $filter.apply_filter($this.closest('.list-view').attr('data-filter-url')));
+}
+
+function listview_edit_field() {
+	var $this = $(this);
+	var field = $this.attr('data-field');
+	var value = $this.attr('data-value').replace(/&quot;/g, '"');
+
+	if (field) {
+		var $options = $this.closest('.list-view').find('.editable-options');
+		$options.children('.show').removeClass('show');
+		$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
+		$this.append($options);
+		$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
+	}
+}
+
+function listview_save_edit() {
+	var $this = $(this);
+	var $listview = $this.closest('.list-view');
+	var $options = $this.closest('.editable-options');
+	var $option = $options.find('.show');
+	var $input = $option.find('.input-value');
+	var field = $option.attr('data-field');
+	var value = $input.val();
+	var id = $options.attr('data-id');
+
+	var data = {};
+	data[$listview.attr('data-index')] = id;
+	data[field] = value;
+
+	$this.loading();
+	$listview.append($options);
+
+	var display = value;
+
+	if ($input.is('select')) {
+		display = $input.find('option[value="' + value + '"]').html();
+	}
+
+	var $field = $listview.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
+	$field.attr('data-value', value.replace('"', '&quot;'));
+
+	$.post($listview.attr('data-save-url'), data, function (response) {
+		$this.loading('stop');
+		$listview.show_msg(response);
+	}, 'json');
+}
+
+function listview_cancel_edit(e) {
+	var $box = $(this).closest('.list-view');
+	$box.append($(this).closest('.editable-options'));
+	e.stopPropagation();
+	return false;
+}
+
+function refresh_listing() {
+	var $this = $(this);
+	var $list = $this.hasClass('listing') ? $this : $this.closest('.listing');
+	$list.find('.refresh-listing').click();
+}
+
+var delay = false;
+
+function delay_update($filter, my_delay) {
+	var $this = $(this);
+
+	if (my_delay) {
+		if (my_delay === delay) {
+			var $widget = $filter.closest('.widget-listing').addClass('loading');
+
+			$('#ui-datepicker-div').remove();
+
+			$.get($filter.apply_filter($this.closest('.list-view').attr('data-filter-url')), {}, function (response) {
+				$widget.replaceWith(response);
+			});
+		}
+	} else {
+		var event = $filter;
+		var my_delay = Date.now();
+		var $filter = $this.closest('.filter-list');
+		delay = my_delay;
+
+		if (event.keyCode === 13) {
+			delay_update($filter, my_delay);
+		} else {
+			setTimeout(function () {
+				delay_update($filter, my_delay)
+			}, 1500);
+		}
+	}
+}
+
+function zoom_hover_in() {
+	$(this).closest('.zoom-hover').addClass('active');
+}
+
+function zoom_hover_out() {
+	$(this).closest('.zoom-hover').removeClass('active');
+}
+
+function zoom_hover_change() {
+	var $zoom = $(this).closest('.zoom-hover');
+	var $value = $zoom.find('.value');
+
+	if ($zoom.is('.daterange')) {
+		var start = $zoom.find('.date_start').val();
+		var end = $zoom.find('.date_end').val();
+
+		if (end || start) {
+			$value.html(start + ' - ' + end);
+		} else {
+			$value.html($value.attr('data-default') || '{{Modify}}');
+		}
+	} else if ($zoom.is('.multiselect')) {
+		var $selected = $zoom.find(':checked');
+
+		if ($selected.length == 0) {
+			$value.html($value.attr('data-default') || '{{Modify}}');
+		} else {
+			var str = '';
+			$selected.each(function (i, e) {
+				var label = $('[for="' + $(e).attr('id') + '"]').html();
+
+				str += (str ? ', ' : '') + (label || $(e).val());
+			});
+			$value.html(str.length > 20 ? str.substr(0, 20) + '...' : str);
+		}
+	}
+}
+
+function zoom_hover_keyup() {
+	var $zoom = $(this).closest('.zoom-hover');
+	var $value = $zoom.find('.value');
+
+	if ($zoom.is('.int')) {
+		low = $zoom.find('.int_low').val();
+		high = $zoom.find('.int_high').val();
+
+		if (high || low) {
+			$value.html(low + ' - ' + high);
+		} else {
+			$value.html($value.attr('data-default') || '{{Modify}}');
+		}
+	}
+}
+
+function zoom_hover_clear() {
+	$(this).closest('.zoom-hover').find('input, textarea').val('').trigger('keyup').trigger('change');
 }

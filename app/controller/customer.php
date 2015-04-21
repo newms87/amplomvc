@@ -319,13 +319,7 @@ class App_Controller_Customer extends Controller
 
 	public function agree_to_terms()
 	{
-		$date = $this->date->now();
-
-		set_cookie('terms_agreed_date', $date);
-
-		if (is_logged()) {
-			set_customer_meta('terms_agreed_date', $date);
-		}
+		$this->customer->agreedToTerms();
 
 		message('success', _l("You have agreed to the terms and conditions."));
 

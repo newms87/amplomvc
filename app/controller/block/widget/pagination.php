@@ -13,7 +13,8 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			'template'      => 'block/widget/pagination',
 			'page'          => _get('page', 1),
 			'limit'         => _get('limit', option('admin_list_limit')),
-			'url'           => '',
+			'path'          => $this->route->getPath(),
+			'query'         => $_GET,
 			'num_links'     => 10,
 			'text'          => _l("Showing %start% to %end% of %total% (%pages% Pages)"),
 			'text_position' => 'after',
@@ -24,12 +25,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			return '';
 		}
 
-		if (empty($settings['path'])) {
-			$settings['path'] = $this->route->getPath();
-		}
-
-		$url_query = $_GET;
-		unset($url_query['page']);
+		unset($settings['query']['page']);
 
 		if ($settings['page'] < 1) {
 			$settings['page'] = 1;
@@ -64,7 +60,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 		}
 
 		//Link Url (without page, as this is variable)
-		$url = site_url($settings['path'], $url_query);
+		$url = site_url($settings['path'], $settings['query']);
 
 		//Pages
 		$pages = array();

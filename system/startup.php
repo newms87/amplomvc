@@ -150,10 +150,6 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 	}
 }
 
-//Model History
-global $model_history;
-$model_history = array();
-
 //Core
 require_once(_mod(DIR_DATABASE . 'db.php'));
 

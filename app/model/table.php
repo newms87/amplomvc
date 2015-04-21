@@ -41,7 +41,8 @@ abstract class App_Model_Table extends Model
 
 	public function remove($record_id)
 	{
-		clear_cache($this->table);
+		clear_cache($this->table . '.rows');
+		clear_cache($this->table . '.' . $record_id);
 
 		return $this->delete($this->table, $record_id);
 	}
@@ -65,24 +66,23 @@ abstract class App_Model_Table extends Model
 
 		$sql = "SELECT $fields FROM `{$this->t[$this->table]}` WHERE $where";
 
-		return $select ? $this->queryVar($sql) : $this->queryRow($sql);
+		return $select ? $this->queryRow($sql) : $this->queryVar($sql);
 	}
 
-	public function getRecords($sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$cache = !empty($sort['cache']);
-		$tbl = $this->table[0];
+		$cache = !empty($options['cache']);
+		$tbl   = $this->table[0];
 
 		//Select
-		$fields = $this->extractSelect($this->table . ' ' . $tbl, $select);
+		$fields = $this->extractSelect($this->table . ' ' . $tbl, !empty($options['columns']) ? $options['columns'] : '*');
 
 		if ($cache) {
 			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
 			$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
-			$l     = $fields !== '*' ? '.select-' . md5($select) : '';
+			$l     = $options ? '.opts-' . md5(serialize($options)) : '';
 			$t     = $total ? '.total' : '';
-			$i     = $index ? '.index-' . $index : '';
-			$cache = $this->table . '.rows' . $s . $f . $l . $t . $i;
+			$cache = $this->table . '.rows' . $s . $f . $l . $t;
 
 			$records = cache($cache);
 
@@ -94,18 +94,24 @@ abstract class App_Model_Table extends Model
 		//From
 		$from = $this->t[$this->table] . ' ' . $tbl;
 
-		if (!empty($sort['join'])) {
-			$from .= ' ' . implode(' ', $sort['join']);
+		if (!empty($options['join'])) {
+			$from .= ' ' . implode(' ', (array)$options['join']);
 		}
 
 		//Where
 		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);
 
-		//Order and Limit
-		list($order, $limit) = $this->extractOrderLimit($sort, $tbl);
+		$group_by = !empty($options['group_by']) ? $options['group_by'] : '';
+		$having   = !empty($options['having']) ? $options['having'] : '';
+
+		//Order
+		$order = $this->extractOrder($sort, $tbl);
+
+		//Limit
+		$limit = $this->extractLimit($options);
 
 		//The Query
-		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $order $limit", $index, $total);
+		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total);
 
 		if ($cache) {
 			cache($cache, $records);
@@ -116,7 +122,7 @@ abstract class App_Model_Table extends Model
 
 	public function getTotalRecords($filter = array())
 	{
-		return $this->getRecords(null, $filter, 'COUNT(*)');
+		return $this->getRecords(null, $filter, array('columns' => 'COUNT(*)'));
 	}
 
 	public function getColumns($filter = array())

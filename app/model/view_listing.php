@@ -17,7 +17,6 @@ class App_Model_ViewListing extends App_Model_Table
 			} elseif (!$view_listing_id) {
 				if ($this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']} WHERE `name` = '" . $this->escape($view_listing['name']) . "'")) {
 					$this->error['name'] = _l("A View Listing with the name %s already exists.", $view_listing['name']);
-					return false;
 				}
 			}
 		} elseif (!$view_listing_id) {
@@ -53,6 +52,7 @@ class App_Model_ViewListing extends App_Model_Table
 
 			if (!$result) {
 				$this->error['sql'] = _l("Invalid SELECT statement.<br /><Br /> %s", $this->db->getQueryError());
+
 				return false;
 			}
 
@@ -65,6 +65,17 @@ class App_Model_ViewListing extends App_Model_Table
 			$view_listing_id = $this->update('view_listing', $view_listing, $view_listing_id);
 		} else {
 			$view_listing_id = $this->insert('view_listing', $view_listing);
+
+			if ($view_listing_id) {
+				if (empty($view_listing['path']) && !empty($view_listing['sql'])) {
+					$view_config = array(
+						'path'  => 'block/widget/views/listing',
+						'query' => 'view_listing_id=' . $view_listing_id,
+					);
+
+					$this->update('view_listing', $view_config, $view_listing_id);
+				}
+			}
 		}
 
 		return $view_listing_id;
@@ -107,28 +118,24 @@ class App_Model_ViewListing extends App_Model_Table
 	 * Created View Listing Tables Access / Update methods *
 	 *******************************************************/
 
-	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $select = null, $total = false, $index = null)
+	public function getViewListingRecords($view_listing_id, $sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		$table = $this->getViewListingTable($view_listing_id);
 
 		if (!$table) {
 			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
+
 			return false;
 		}
 
-		$select = $this->extractSelect($table, $select);
+		$orig_table  = $this->table;
+		$this->table = $table;
 
-		//From
-		$from = $this->t[$table];
+		$records = parent::getRecords($sort, $filter, $options, $total);
 
-		//Where
-		$where = $this->extractWhere($table, $filter);
+		$this->table = $orig_table;
 
-		//Order By & Limit
-		list($order, $limit) = $this->extractOrderLimit($sort);
-
-		//The Query
-		return $this->queryRows("SELECT $select FROM $from WHERE $where $order $limit", $index, $total);
+		return $records;
 	}
 
 	public function getTotalViewListingRecords($view_listing_id, $filter = array())
@@ -162,20 +169,19 @@ class App_Model_ViewListing extends App_Model_Table
 			self::$view_listings = cache('view_listings');
 
 			if (!self::$view_listings) {
-				$sort = array(
-					'sort' => array(
-						'name' => 'ASC'
-					),
+				$sort    = array('name' => 'ASC');
+				$options = array(
+					'index' => 'view_listing_id',
 					'cache' => true,
 				);
 
-				self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+				self::$view_listings = $this->getRecords($sort, null, $options);
 
 				if (!self::$view_listings) {
 					//Initialize the View Listings if the table is empty
 					if (!$this->queryVar("SELECT COUNT(*) FROM {$this->t['view_listing']}")) {
 						$this->resetViewListings();
-						self::$view_listings = $this->getRecords($sort, null, '*', false, 'view_listing_id');
+						self::$view_listings = $this->getRecords($sort, null, $options);
 					}
 				}
 

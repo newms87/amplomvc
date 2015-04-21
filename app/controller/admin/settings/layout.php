@@ -9,66 +9,14 @@ class App_Controller_Admin_Settings_Layout extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Settings"), site_url('admin/settings'));
 		breadcrumb(_l("Layouts"), site_url('admin/settings/layout'));
 
-		//The Table Columns
-		$columns = array();
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Layout Name"),
-			'filter'       => true,
-			'sortable'     => true,
-		);
-
-		$columns['routes'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Routes"),
-			'filter'       => false,
-			'sortable'     => false,
-		);
-
-		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _get('filter', array());
-
-		list($layouts, $layout_total) = $this->Model_Layout->getRecords($sort, $filter);
-
-		$url_query = $this->url->getQueryExclude('layout_id');
-
-		foreach ($layouts as &$layout) {
-			$layout['actions'] = array(
-				'edit'   => array(
-					'text' => _l("Edit"),
-					'href' => site_url('admin/settings/layout/form', 'layout_id=' . $layout['layout_id'])
-				),
-				'delete' => array(
-					'text' => _l("Delete"),
-					'href' => site_url('admin/settings/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
-				)
-			);
-
-			$routes           = $this->Model_Layout->getRoutes($layout['layout_id']);
-			$layout['routes'] = implode('<br />', array_column($routes, 'route'));
-		}
-		unset($layout);
-
-		//Build The Table
-		$tt_data = array(
-			'row_id' => 'layout_id',
-		);
-
-		$this->table->init();
-		$this->table->setTemplate('table/list_view');
-		$this->table->setColumns($columns);
-		$this->table->setRows($layouts);
-		$this->table->setTemplateData($tt_data);
-		$this->table->mapAttribute('filter_value', $filter);
-
-		$data['list_view'] = $this->table->render();
+		//Listing
+		$data['listing'] = $this->listing();
 
 		//Batch Actions
-		$data['batch_actions'] = array(
+		$actions = array(
 			'enable'  => array(
 				'label' => _l("Enable")
 			),
@@ -83,17 +31,64 @@ class App_Controller_Admin_Settings_Layout extends Controller
 			),
 		);
 
-		$data['batch_update'] = 'layout/batch_update';
-
-		//Render Limit Menu
-		$data['limits'] = $this->sort->renderLimits();
-		$data['total']  = $layout_total;
-
-		//Action Buttons
-		$data['insert'] = site_url('admin/settings/layout/form');
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'url'     => site_url('admin/logs/batch-action'),
+		);
 
 		//Render
-		output($this->render('layout/list', $data));
+		output($this->render('settings/layout/list', $data));
+	}
+
+	public function listing()
+	{
+		$sort    = (array)_get('sort', array('name' => 'ASC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'layout_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_Layout->getColumns((array)_request('columns')),
+		);
+
+		list($layouts, $total) = $this->Model_Layout->getRecords($sort, $filter);
+
+		foreach ($layouts as $layout_id => &$layout) {
+			$layout['actions'] = array(
+				'edit'   => array(
+					'text' => _l("Edit"),
+					'href' => site_url('admin/settings/layout/form', 'layout_id=' . $layout_id)
+				),
+				'delete' => array(
+					'text' => _l("Delete"),
+					'href' => site_url('admin/settings/layout/delete', 'layout_id=' . $layout_id)
+				)
+			);
+
+			$routes           = $this->Model_Layout->getRoutes($layout_id);
+			$layout['routes'] = implode('<br />', array_column($routes, 'route'));
+		}
+		unset($layout);
+
+		$listing = array(
+			'extra_cols'     => $this->Model_Log->getColumns(false),
+			'records'        => $layouts,
+			'sort'           => $sort,
+			'filter_value'   => $filter,
+			'pagination'     => true,
+			'total_listings' => $total,
+			'listing_path'   => 'admin/layout/listing',
+			'save_path'      => 'admin/layout/save',
+		);
+
+		$output = block('widget/listing', null, $listing + $options);
+
+		//Response
+		if ($this->is_ajax) {
+			output($output);
+		}
+
+		return $output;
 	}
 
 	public function form()
@@ -171,36 +166,42 @@ class App_Controller_Admin_Settings_Layout extends Controller
 		}
 	}
 
-	public function batch_update()
+	public function batch_action()
 	{
-		if (!empty($_GET['selected']) && isset($_GET['action']) && user_can('w', 'admin/settings/layout')) {
-			foreach ($_GET['selected'] as $layout_id) {
-				switch ($_GET['action']) {
-					case 'enable':
-						$this->Model_Layout->save($layout_id, array('status' => 1));
-						break;
-					case 'disable':
-						$this->Model_Layout->save($layout_id, array('status' => 0));
-						break;
-					case 'delete':
-						$this->Model_Layout->remove($layout_id);
-						break;
-					case 'copy':
-						$this->Model_Layout->copy($layout_id);
-						break;
+		$batch  = (array)_request('batch');
+		$action = _request('action');
+		$value  = _request('value');
 
-					default:
-						break 2; // Break For Loop
-				}
-			}
+		foreach ($batch as $layout_id) {
+			switch ($action) {
+				case 'enable':
+					$this->Model_Layout->save($layout_id, array('status' => 1));
+					break;
+				case 'disable':
+					$this->Model_Layout->save($layout_id, array('status' => 0));
+					break;
+				case 'delete':
+					$this->Model_Layout->remove($layout_id);
+					break;
+				case 'copy':
+					$this->Model_Layout->copy($layout_id);
+					break;
 
-			if (!$this->error && !$this->message->has('error', 'warning')) {
-				message('success', _l("Success: You have modified layouts!"));
-
-				redirect('admin/settings/layout', $this->url->getQueryExclude('action'));
+				default:
+					break 2; // Break For Loop
 			}
 		}
 
-		redirect('admin/settings/layout');
+		if ($this->Model_Layout->hasError()) {
+			message('error', $this->Model_Layout->fetchError());
+		} else {
+			message('success', _l("Success: You have modified layouts!"));
+		}
+
+		if ($this->is_ajax) {
+			$this->listing();
+		} else {
+			redirect('admin/settings/layout');
+		}
 	}
 }

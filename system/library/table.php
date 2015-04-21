@@ -3,8 +3,6 @@
 class Table extends Library
 {
 	private $file;
-	private $template_data;
-
 	private $columns;
 	private $rows;
 
@@ -12,11 +10,10 @@ class Table extends Library
 
 	public function init()
 	{
-		$this->file          = '';
-		$this->template_data = array();
-		$this->columns       = array();
-		$this->rows          = array();
-		$this->path          = '';
+		$this->file    = '';
+		$this->columns = array();
+		$this->rows    = array();
+		$this->path    = '';
 	}
 
 	public function setColumns($columns)
@@ -27,11 +24,6 @@ class Table extends Library
 	public function setRows($rows)
 	{
 		$this->rows = $rows;
-	}
-
-	public function setTemplateData($template_data)
-	{
-		$this->template_data = $template_data;
 	}
 
 	public function setTemplate($file, $theme = null)
@@ -57,9 +49,8 @@ class Table extends Library
 
 	public function render($data = array())
 	{
-		$this->prepare();
+		$this->prepare($data);
 
-		extract($this->template_data);
 		extract($data);
 
 		$columns = $this->columns;
@@ -76,26 +67,20 @@ class Table extends Library
 		return ob_get_clean();
 	}
 
-	private function prepare()
+	private function prepare(&$data)
 	{
+		$data += array(
+			'index' => null,
+			'sort'  => array(),
+		);
+
+		if (empty($data['listing_path'])) {
+			$data['listing_path'] = $this->route->getPath();
+		}
+
 		if (!$this->file || !is_file($this->file)) {
 			trigger_error(_l("You must set the template for the form before building!"));
 			exit();
-		}
-
-		//Add Sort data
-		$this->template_data += $this->sort->getSortData();
-
-		if (empty($this->template_data['listing_path'])) {
-			$this->template_data['listing_path'] = $this->route->getPath();
-		}
-
-		if (empty($this->template_data['sort_url'])) {
-			$this->template_data['sort_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('sort', 'order', 'page'));
-		}
-
-		if (empty($this->template_data['filter_url'])) {
-			$this->template_data['filter_url'] = site_url($this->template_data['listing_path'], $this->url->getQueryExclude('filter', 'page'));
 		}
 
 		//Normalize Columns
@@ -108,10 +93,10 @@ class Table extends Library
 
 			$default_values = array(
 				'display_name' => $slug,
+				'sort'         => false,
 				'filter'       => false,
 				'type'         => 'text',
 				'align'        => 'center',
-				'sortable'     => false,
 				'editable'     => null,
 			);
 
@@ -119,6 +104,25 @@ class Table extends Library
 
 			//Set Class
 			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];
+
+			if ($column['sort']) {
+				$sort_class = '';
+
+				if (!is_array($column['sort'])) {
+					$column['sort'] = is_string($column['sort']) ? (array)$column['sort'] : array($slug => 'ASC');
+				}
+
+				foreach ($data['sort'] as $s => $ord) {
+					if (isset($column['sort'][$s])) {
+						$sort_class         = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
+						$column['sort'][$s] = $sort_class === 'DESC' ? 'ASC' : 'DESC';
+					}
+				}
+
+				if (!isset($column['sort_class'])) {
+					$column['sort_class'] = strtolower($sort_class);
+				}
+			}
 
 			//This sets a blank option in a dropdown by default
 			if ($column['filter']) {
@@ -161,10 +165,6 @@ class Table extends Library
 				$column['editable_data'] = !empty($column['build']['data']) ? $column['build']['data'] : array();
 			}
 
-			if (!isset($column["sort_value"])) {
-				$column["sort_value"] = $slug;
-			}
-
 			switch ($column['type']) {
 				case 'pk':
 					$column['editable'] = false;
@@ -177,8 +177,8 @@ class Table extends Library
 					break;
 				case 'image':
 				case 'link-image':
-					if (!isset($column["sort_value"])) {
-						$column['sort_value'] = "__image_sort__" . $slug;
+					if (!isset($column["sort"])) {
+						$column['sort'] = array("__image_sort__" . $slug => 'ASC');
 					}
 					break;
 

@@ -51,7 +51,7 @@ class App_Model_Plugin extends App_Model_Table
 		return $this->queryVar("SELECT `$field` FROM " . $this->t[$this->table] . " WHERE " . ($id ? "plugin_id = $id" : "`name` = '" . $this->escape($name) . "'"));
 	}
 
-	public function getPlugins($data = array(), $total = false)
+	public function getPlugins($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		if (!$this->plugins) {
 			$this->plugins = array();
@@ -122,57 +122,85 @@ class App_Model_Plugin extends App_Model_Table
 		$plugins = array();
 
 		//Apply Filters
-		$filter_string = array(
-			'name',
-			'title',
-			'author',
-			'description',
-		);
-
 		foreach ($this->plugins as $name => $plugin) {
-			foreach ($filter_string as $str) {
-				if (!empty($data[$str])) {
-					if (empty($plugin[$str]) || !preg_match("/$data[$str]/i", $plugin[$str])) {
-						continue 2;
-					}
-				}
-			}
-
-			if (isset($data['status'])) {
-				if ($data['status'] !== $plugin['status']) {
-					continue;
-				}
-			}
-
-			if (!empty($data['date'])) {
-				if (!empty($data['date']['start']) && $this->date->isAfter($data['date']['start'], $plugin['date'])) {
-					continue;
+			foreach ($filter as $field => $value) {
+				if ($field[0] === '!') {
+					$field = substr($field, 1);
+					$not = true;
+				} else {
+					$not = false;
 				}
 
-				if (!empty($data['date']['end']) && $this->date->isBefore($this->date->add($data['date']['end'], '1 day'), $plugin['date'])) {
-					continue;
+				if (!isset($plugin[$field])) {
+					continue 2;
+				}
+
+				switch ($field)
+				{
+					case 'name':
+					case 'title':
+					case 'author':
+					case 'description':
+						if (!preg_match("/{$value}/i", $plugin[$field]) xor $not) {
+							continue 3;
+						}
+						break;
+
+					case 'date':
+						if (!empty($value['start']) && $this->date->isAfter($value['start'], $plugin[$field])) {
+							continue 3;
+						}
+
+						if (!empty($value['end']) && $this->date->isBefore($this->date->add($value['end'], '1 day'), $plugin[$field])) {
+							continue 3;
+						}
+						break;
+
+					case 'status':
+					default:
+						if ($value !== $plugin[$field]) {
+							continue 3;
+						}
+						break;
 				}
 			}
 
 			$plugins[$name] = $plugin;
 		}
 
-		if ($total) {
-			return count($plugins);
-		}
+		if ($sort) {
+			uasort($plugins, function ($a, $b) use ($sort) {
+				foreach ($sort as $field => $ord) {
+					$a_value = isset($a[$field]) ? $a[$field] : null;
+					$b_value = isset($b[$field]) ? $b[$field] : null;
 
-		if (!empty($data['sort'])) {
-			usort($plugins, function ($a, $b) use ($data) {
-				if ($data['order'] === 'DESC') {
-					return $a[$data['sort']] < $b[$data['sort']];
-				} else {
-					return $a[$data['sort']] > $b[$data['sort']];
+					if ($a_value === $b_value) {
+						continue;
+					}
+
+					return strtoupper($ord) === 'DESC' ? $a_value < $b_value : $a_value > $b_value;
 				}
 			});
 		}
 
-		if (!empty($data['limit'])) {
-			$plugins = array_slice($plugins, (int)$data['limit'] * ((int)$data['page'] - 1), (int)$data['limit']);
+		//Limits
+		$limit = isset($options['limit']) ? (int)$options['limit'] : null;
+
+		if (isset($options['page'])) {
+			$start = max(0,(int)$options['page']) * $options['limit'];
+		} else {
+			$start = isset($options['start']) ? (int)$options['start'] : 0;
+		}
+
+		$plugin_total = count($plugins);
+
+		$plugins = array_slice($plugins, $start, $limit);
+
+		if ($total) {
+			return array(
+				$plugins,
+				$plugin_total,
+			);
 		}
 
 		return $plugins;
@@ -206,11 +234,6 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		return $plugin_data;
-	}
-
-	public function getTotalPlugins($data = array())
-	{
-		return $this->getPlugins($data, true);
 	}
 
 	public function searchPlugins($search = '', $team = 'amplomvc')
@@ -344,5 +367,72 @@ class App_Model_Plugin extends App_Model_Table
 		}
 
 		return true;
+	}
+
+	public function getColumns($filter = array())
+	{
+		$columns['name'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Plugin Name"),
+			'filter'       => true,
+			'sort'     => true,
+		);
+
+		$columns['version'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Version"),
+		);
+
+		$columns['date'] = array(
+			'type'         => 'date',
+			'display_name' => _l("Date"),
+			'filter'       => true,
+			'sort'     => true,
+		);
+
+		$columns['title'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Title"),
+			'filter'       => true,
+			'sort'     => true,
+		);
+
+		$columns['author'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Author"),
+			'filter'       => true,
+			'sort'     => true,
+		);
+
+		$columns['description'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Description"),
+			'filter'       => true,
+		);
+
+		$columns['link'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Link"),
+			'filter'       => true,
+			'sort'     => true,
+		);
+
+		$columns['dependencies'] = array(
+			'type'         => 'text',
+			'display_name' => _l("Dependencies"),
+		);
+
+		$columns['status'] = array(
+			'type'         => 'select',
+			'display_name' => _l("Status"),
+			'filter'       => true,
+			'build_data'   => array(
+				0 => _l("Disabled"),
+				1 => _l("Enabled"),
+			),
+			'sort'     => true,
+		);
+
+		return $filter ? array_intersect_key($columns, $filter) : $columns;
 	}
 }

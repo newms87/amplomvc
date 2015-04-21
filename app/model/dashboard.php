@@ -58,7 +58,7 @@ class App_Model_Dashboard extends App_Model_Table
 
 	public function getUserDashboards()
 	{
-		$dashboards = $this->getRecords(array('cache' => true));
+		$dashboards = $this->getRecords(null, null, array('cache' => true));
 
 		foreach ($dashboards as $key => $dashboard) {
 			if (!user_can('r', 'admin/dashboards/' . $dashboard['name'])) {
@@ -101,12 +101,7 @@ class App_Model_Dashboard extends App_Model_Table
 							)
 						);
 
-						$action = new Action($listing['path'], $settings);
-						$result = $action->execute();
-
-						if ($result) {
-							$view['data'] = $action->getOutput();
-						}
+						$view['data'] = call($listing['path'], $settings);
 					}
 				}
 			}

@@ -47,6 +47,21 @@ function _get($key, $default = null)
 	return isset($_GET[$key]) ? $_GET[$key] : $default;
 }
 
+function _get_exclude($exclude)
+{
+	if (!is_array($exclude)) {
+		$exclude = func_get_args();
+	}
+
+	$get = $_GET;
+
+	foreach ($exclude as $ex) {
+		unset($get[$ex]);
+	}
+
+	return $get;
+}
+
 function _post($key, $default = null)
 {
 	return isset($_POST[$key]) ? $_POST[$key] : $default;
@@ -617,7 +632,7 @@ if (!function_exists('amplo_error_handler')) {
 
 		if ($error) {
 			if (ini_get('display_errors')) {
-				$stack = get_caller(1, 10);
+				$stack = get_caller(1);
 
 				echo <<<HTML
 			<style>

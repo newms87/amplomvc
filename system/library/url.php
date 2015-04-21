@@ -29,25 +29,6 @@ class Url extends Library
 		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
-	public function getQueryExclude()
-	{
-		$args = func_get_args();
-
-		if (empty($args)) {
-			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
-		}
-
-		$query = array();
-
-		foreach ($_GET as $key => $value) {
-			if (!in_array($key, $args)) {
-				$query[$key] = $value;
-			}
-		}
-
-		return http_build_query($query);
-	}
-
 	public function here($append_query = '')
 	{
 		if ($append_query) {
@@ -204,11 +185,11 @@ class Url extends Library
 	{
 		$path = strtolower(str_replace('-', '_', $path));
 
-		if (is_string($query)) {
+		if (is_array($query)) {
+			$query_str = $query ? http_build_query($query) : '';
+		} else {
 			$query_str = urldecode($query);
 			parse_str($query, $query);
-		} else {
-			$query_str = $query ? http_build_query($query) : '';
 		}
 
 		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
@@ -228,7 +209,9 @@ class Url extends Library
 		//Get Original Query without URL Alias query
 		if ($url_alias) {
 			$path  = $url_alias['alias'];
-			$query = array_diff_assoc($query, $url_alias['query']);
+			if ($url_alias['query']) {
+				$query = array_diff_assoc($query, $url_alias['query']);
+			}
 		}
 
 		//Build the New URL
@@ -272,7 +255,7 @@ class Url extends Library
 
 	private function loadAliases()
 	{
-		//TODO: Need a better way to handle large sets of Aliases... consider switch to disable caching
+		//TODO: Need a better way to handle large sets of Aliases... consider switch to disable caching and query only aliases needed
 		$this->aliases = cache('url_alias.all');
 
 		if ($this->aliases === null) {

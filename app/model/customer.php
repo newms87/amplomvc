@@ -76,19 +76,21 @@ class App_Model_Customer extends App_Model_Table
 			$customer_id = $this->insert('customer', $customer);
 		}
 
-		//Address will be extracted from customer information, if it exists
-		$this->saveAddress($customer_id, null, $customer);
+		if ($customer_id) {
+			//Address will be extracted from customer information, if it exists
+			$this->saveAddress($customer_id, null, $customer);
 
-		//Customer MetaData
-		if (!empty($customer['metadata'])) {
-			foreach ($customer['metadata'] as $key => $value) {
-				$this->setMeta($customer_id, $key, $value);
+			//Customer MetaData
+			if (!empty($customer['metadata'])) {
+				foreach ($customer['metadata'] as $key => $value) {
+					$this->setMeta($customer_id, $key, $value);
+				}
 			}
+
+			$customer['customer_id'] = $customer_id;
+
+			call('mail/new_customer', $customer);
 		}
-
-		$customer['customer_id'] = $customer_id;
-
-		call('mail/new_customer', $customer);
 
 		return $customer_id;
 	}
@@ -221,22 +223,12 @@ class App_Model_Customer extends App_Model_Table
 		return $this->queryVar("SELECT a.address_id FROM {$this->t['address']} a LEFT JOIN {$this->t['customer_address']} ca ON (ca.address_id = a.address_id) WHERE $where AND ca.customer_id = " . (int)$customer_id);
 	}
 
-	public function getAddresses($customer_id, $sort = array(), $filter = array(), $select = '*', $total = false, $index = null)
+	public function getAddresses($customer_id, $sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$addresses = cache('customer.' . $customer_id . '.addresses');
+		$options['join']        = "LEFT JOIN {$this->t['customer_address']} ca USING(address_id)";
+		$filter['#customer_id'] = "ca.customer_id = " . (int)$customer_id;
 
-		if ($addresses === null) {
-			$addresses = $this->queryColumn("SELECT address_id FROM {$this->t['customer_address']} WHERE customer_id = " . (int)$customer_id);
-			cache('customer.' . $customer_id . '.addresses', $addresses);
-		}
-
-		if (!$sort && !$filter && $select === '*' && !$total) {
-			$sort['cache'] = true;
-		}
-
-		$filter['address_id'] = $addresses;
-
-		return $this->Model_Address->getRecords($sort, $filter, $select, $total, $index);
+		return $this->Model_Address->getRecords($sort, $filter, $options, $total);
 	}
 
 	public function removeAddress($customer_id, $address_id)

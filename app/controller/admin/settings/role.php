@@ -39,17 +39,20 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function listing()
 	{
 		//The Table Columns
-		$disable = array(
+		$disallow = array(
 			'permissions' => false,
 		);
 
-		$columns = $this->Model_UserRole->getColumns($disable + (array)_request('columns'));
+		$sort    = (array)_get('sort', array('name' => 'ASC'));
+		$filter  = (array)_get('filter');
+		$options = array(
+			'index'   => 'user_role_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_UserRole->getColumns($disallow + (array)_request('columns')),
+		);
 
-		//The Sort & Filter Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _get('filter', array());
-
-		list($user_roles, $user_role_total) = $this->Model_UserRole->getRecords($sort, $filter, $columns, true, 'user_role_id');
+		list($user_roles, $user_role_total) = $this->Model_UserRole->getRecords($sort, $filter, $options, true);
 
 		foreach ($user_roles as $user_role_id => &$user_role) {
 			$actions = array(
@@ -68,10 +71,9 @@ class App_Controller_Admin_Settings_Role extends Controller
 		unset($user_role);
 
 		$listing = array(
-			'row_id'         => 'user_role_id',
-			'extra_cols'     => $this->Model_UserRole->getColumns($disable),
-			'columns'        => $columns,
-			'rows'           => $user_roles,
+			'extra_cols'     => $this->Model_UserRole->getColumns($disallow),
+			'records'        => $user_roles,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
 			'total_listings' => $user_role_total,
@@ -79,7 +81,7 @@ class App_Controller_Admin_Settings_Role extends Controller
 			'save_path'      => 'admin/settings/role/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		//Response
 		if ($this->is_ajax) {
@@ -111,8 +113,9 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 		// Defaults
 		$defaults = array(
-			'name'        => '',
-			'permissions' => array(),
+			'user_role_id' => '',
+			'name'         => '',
+			'permissions'  => array(),
 		);
 
 		$user_role += $defaults;
@@ -172,8 +175,12 @@ class App_Controller_Admin_Settings_Role extends Controller
 
 	public function batch_action()
 	{
-		foreach ($_POST['batch'] as $user_role_id) {
-			switch ($_POST['action']) {
+		$batch  = (array)_request('batch');
+		$action = _request('action');
+		$value  = _request('value');
+
+		foreach ($batch as $user_role_id) {
+			switch ($action) {
 				case 'delete':
 					$this->Model_UserRole->remove($user_role_id);
 					break;

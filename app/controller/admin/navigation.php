@@ -34,43 +34,22 @@ class App_Controller_Admin_Navigation extends Controller
 		//The Listing
 		$data['listing'] = $this->listing();
 
-		//Action Buttons
-		$data['insert'] = site_url('admin/navigation/form');
-
 		//Render
 		output($this->render('navigation/list', $data));
 	}
 
 	public function listing()
 	{
-		//The Table Columns
-		$columns = array();
-
-		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Navigation Group"),
-			'filter'       => true,
-			'sortable'     => true,
-			'sort_value'   => 'name',
+		$sort    = (array)_request('sort', array('name' => 'ASC'));
+		$filter  = (array)_request('filter');
+		$options = array(
+			'index'   => 'navigation_group_id',
+			'page'    => _get('page'),
+			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'columns' => $this->Model_Navigation->getColumns((array)_request('columns')),
 		);
 
-		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
-			),
-			'sortable'     => true,
-			'sort_value'   => 'status',
-		);
-
-		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
-		$filter = _get('filter', array());
-
-		list($navigation_groups, $navigation_groups_total) = $this->Model_Navigation->getGroups($sort, $filter, '*', true, 'navigation_group_id');
+		list($navigation_groups, $total) = $this->Model_Navigation->getGroups($sort, $filter, $options, true);
 
 		foreach ($navigation_groups as $navigation_group_id => &$group) {
 			$group['actions'] = array(
@@ -94,16 +73,16 @@ class App_Controller_Admin_Navigation extends Controller
 		}
 
 		$listing = array(
-			'row_id'         => 'navigation_group_id',
-			'columns'        => $columns,
-			'rows'           => $navigation_groups,
+			'records'        => $navigation_groups,
+			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $navigation_groups_total,
+			'total_listings' => $total,
 			'listing_path'   => 'admin/navigation/listing',
+			'save_path'      => 'admin/navigation/save',
 		);
 
-		$output = block('widget/listing', null, $listing);
+		$output = block('widget/listing', null, $listing + $options);
 
 		if ($this->is_ajax) {
 			output($output);

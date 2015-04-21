@@ -13,7 +13,7 @@ class Router
 		global $registry;
 		$registry->set('route', $this);
 
-		$uri   = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
+		$uri = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
 
 		$base = trim(SITE_BASE, '/');
 
@@ -186,14 +186,33 @@ class Router
 		}
 
 		if (!$valid || !$action->execute()) {
-			$action = new Action(ERROR_404_PATH);
-			$action->execute();
+			if (strpos($this->path, 'api/') === 0) {
+				header('HTTP/1.1 404 Not Found');
+
+				$response = array(
+					'status'  => 'error',
+					'code'    => 404,
+					'message' => _l("The API request for %s was not found.", $this->path),
+				);
+
+				output_json($response);
+				$this->response->output();
+				exit;
+			} else {
+				$action = new Action(ERROR_404_PATH);
+				$action->execute();
+			}
 		}
 	}
 
 	public function getSites()
 	{
-		return $this->Model_Site->getRecords(array('cache' => true), null, '*', false, 'store_id');
+		$options = array(
+			'cache' => true,
+			'index' => 'store_id'
+		);
+
+		return $this->Model_Site->getRecords(null, null, $options);
 	}
 
 	public function routeSite()

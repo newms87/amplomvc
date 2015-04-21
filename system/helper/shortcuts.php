@@ -1,10 +1,7 @@
 <?php
 function call($path, $params = null, $is_ajax = null)
 {
-	$args = func_get_args();
-	array_shift($args);
-
-	$action = new Action($path, $args);
+	$action = new Action($path, $params);
 
 	if ($action->execute($is_ajax)) {
 		return $action->getOutput();
@@ -16,6 +13,7 @@ function call($path, $params = null, $is_ajax = null)
 function block($block, $instance_name = null, $settings = null)
 {
 	global $registry;
+
 	return $registry->get('block')->render($block, $instance_name, $settings);
 }
 
@@ -28,30 +26,35 @@ function head()
 function area($area)
 {
 	global $registry;
+
 	return $registry->get('area')->render($area);
 }
 
 function show_area($area)
 {
 	global $registry;
+
 	return $registry->get('area')->hasBlocks($area);
 }
 
 function links($group)
 {
 	global $registry;
+
 	return $registry->get('document')->renderLinks($group);
 }
 
 function get_links($group)
 {
 	global $registry;
+
 	return $registry->get('document')->getLinks($group);
 }
 
 function has_links($group)
 {
 	global $registry;
+
 	return $registry->get('document')->hasLinks($group);
 }
 
@@ -64,6 +67,7 @@ function breadcrumb($name, $url, $separator = '', $position = null)
 function get_breadcrumb($offset = 0)
 {
 	global $registry;
+
 	return $registry->get('breadcrumb')->get($offset);
 }
 
@@ -79,12 +83,14 @@ function breadcrumbs()
 function get_last_page($offset = -2)
 {
 	global $registry;
+
 	return $registry->get('request')->getPrevPageRequest($offset);
 }
 
 function check_condition($condition)
 {
 	global $registry;
+
 	return $registry->get('condition')->is($condition);
 }
 
@@ -97,12 +103,14 @@ function message($type, $message = null)
 function render_message($type = null, $close = true)
 {
 	global $registry;
+
 	return $registry->get('message')->render($type, $close);
 }
 
 function send_mail($params)
 {
 	global $registry;
+
 	return $registry->get('mail')->init($params)->send();
 }
 
@@ -260,6 +268,7 @@ function _getimagesize($image)
 
 	if ($image_file) {
 		$size = getimagesize($image_file);
+
 		return isset($size[3]) ? $size[3] : '';
 	}
 
@@ -350,6 +359,7 @@ function theme_sprite($image)
 function site_url($path = '', $query = null, $ssl = null, $site_id = null)
 {
 	global $registry;
+
 	return $registry->get('url')->link($path, $query, $ssl, $site_id);
 }
 
@@ -373,6 +383,7 @@ function theme_url($path = '', $query = null)
 function theme_dir($path = '', $theme = null)
 {
 	global $registry;
+
 	return $registry->get('theme')->getFile($path, $theme);
 }
 
@@ -449,6 +460,7 @@ function set_option($option, $value)
 function save_option($option, $value)
 {
 	global $registry;
+
 	return $registry->get('config')->save('config', $option, $value);
 }
 
@@ -494,6 +506,7 @@ function set_page_info($key, $value)
 function page_meta($key = null, $default = null)
 {
 	global $registry;
+
 	return $registry->get('document')->meta($key, $default);
 }
 
@@ -506,12 +519,14 @@ function set_page_meta($key, $value)
 function language_info($key = null, $default = null)
 {
 	global $registry;
+
 	return $registry->get('language')->info($key, $default);
 }
 
 function set_language_info($key, $value)
 {
 	global $registry;
+
 	return $registry->get('language')->setInfo($key, $value);
 }
 
@@ -528,12 +543,14 @@ function is_logged()
 function customer_info($key = null)
 {
 	global $registry;
+
 	return $registry->get('customer')->info($key);
 }
 
 function customer_meta($key, $default = null)
 {
 	global $registry;
+
 	return $registry->get('customer')->meta($key, $default);
 }
 
@@ -551,6 +568,7 @@ function set_customer_meta($key, $value)
 function user_can($level, $path)
 {
 	global $registry;
+
 	return $registry->get('user')->can($level, $path);
 }
 
@@ -565,18 +583,21 @@ function user_can($level, $path)
 function user_is($role)
 {
 	global $registry;
+
 	return in_array($registry->get('user')->info('role'), func_get_args());
 }
 
 function user_info($key = null)
 {
 	global $registry;
+
 	return $registry->get('user')->info($key);
 }
 
 function user_meta($key, $default = null)
 {
 	global $registry;
+
 	return $registry->get('user')->meta($key, $default);
 }
 
@@ -686,6 +707,7 @@ function build($type, $params = null)
 
 	if (!is_array($params['data'])) {
 		trigger_error(_l("The 'data' parameter must be an array for %s", __METHOD__));
+
 		return;
 	}
 
@@ -757,6 +779,7 @@ function build($type, $params = null)
 		if (is_array($value)) {
 			if (($value_key && !isset($value[$value_key])) || ($label_key && !isset($value[$label_key]))) {
 				trigger_error(_l("The associative indexes for 'value' and 'label' were not found in the data array for %s.", $name) . get_caller());
+
 				return;
 			}
 
@@ -844,6 +867,7 @@ function build($type, $params = null)
 			if ($opt_group_active) {
 				$options .= "</optgroup>";
 			}
+
 			return "<select name=\"$name\" $attrs>$options</select>";
 
 		case 'radio':
@@ -866,6 +890,7 @@ HTML
 		case 'clickable_list':
 			$added_list = "<div class=\"multiselect-list clickable_added\">$selected_options</div>";
 			$list       = "<div class=\"multiselect-list clickable\">$options</div>";
+
 			return "<div class=\"clickable_list\">$added_list $list</div>";
 	}
 }
@@ -886,6 +911,45 @@ function output_json($data)
 {
 	global $registry;
 	$registry->get('response')->setOutput(json_encode($data), 'application/json');
+}
+
+function output_api($data, $message = '', $http_code = 200)
+{
+	if ($http_code !== 200) {
+		header("HTTP/1.1 $http_code $message");
+	}
+
+	$response = array(
+		'status'  => 'success',
+		'message' => $message,
+		'data'    => $data,
+	);
+
+	output_json($response);
+
+	global $registry;
+	$registry->get('response')->output();
+	exit;
+}
+
+function output_api_error($code = 400, $message = '', $data = array())
+{
+	$http_code = ($code < 400 || $code >= 500) ? 400 : $code;
+
+	header("HTTP/1.1 $http_code $message");
+
+	$response = array(
+		'status'  => 'error',
+		'code'    => $code,
+		'message' => $message,
+		'data'    => $data,
+	);
+
+	output_json($response);
+
+	global $registry;
+	$registry->get('response')->output();
+	exit;
 }
 
 function output_as_file($contents, $type = 'txt', $filename = '')

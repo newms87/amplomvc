@@ -9,7 +9,7 @@
 				<?= block('widget/batch_action', null, $batch_action); ?>
 			</div>
 			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button">{{Insert}}</a>
+				<a href="<?= site_url('admin/navigation/form'); ?>" class="button">{{Insert}}</a>
 				<a onclick="do_batch_action('copy')" class="button">{{Copy}}</a>
 			</div>
 		</div>

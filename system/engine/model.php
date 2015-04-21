@@ -28,8 +28,8 @@ abstract class Model
 		}
 
 		if (!self::$model_history) {
-			self::$model_history = new Model_T;
-			self::$model_history->tables = & $model_history;
+			self::$model_history         = new Model_T;
+			self::$model_history->tables = &$model_history;
 		}
 
 		//use default database
@@ -42,6 +42,7 @@ abstract class Model
 	public function __get($key)
 	{
 		global $registry;
+
 		return $registry->get($key);
 	}
 
@@ -54,6 +55,7 @@ abstract class Model
 	protected function load($path, $class = null)
 	{
 		global $registry;
+
 		return $registry->load($path, $class);
 	}
 
@@ -224,6 +226,7 @@ abstract class Model
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to insert.");
+
 			return false;
 		}
 
@@ -273,6 +276,7 @@ abstract class Model
 
 		if (!$values) {
 			$this->error['values'] = _l("There were no valid fields set to update.");
+
 			return false;
 		}
 
@@ -402,6 +406,7 @@ abstract class Model
 
 			if (!$primary_key) {
 				trigger_error("WHERE statement " . _l("%s does not have an integer primary key!", $table));
+
 				return null;
 			}
 
@@ -496,6 +501,7 @@ abstract class Model
 
 		if (!isset($this->t[$table])) {
 			trigger_error(_l("Table %s does not exist!", $table));
+
 			return false;
 		}
 
@@ -686,37 +692,27 @@ abstract class Model
 		return $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
 	}
 
-	protected function extractOrderLimit($data, $table = null)
+	protected function extractOrder($sort, $table = null)
 	{
-		return array(
-			$this->extractOrder($data, $table),
-			$this->extractLimit($data),
-		);
-	}
-
-	protected function extractOrder($data, $table = null)
-	{
-		if (empty($data['sort'])) {
+		if (empty($sort)) {
 			return '';
 		}
-		//TODO: Legacy code to handle single column sort. Remove after Version 1.0
-		if (!is_array($data['sort'])) {
-			$data['sort'] = array(
-				$data['sort'] => !empty($data['order']) ? $data['order'] : 'ASC',
-			);
+
+		if (!is_array($sort)) {
+			$sort = array($sort => 'ASC');
 		}
 
 		//Order
 		$order = '';
 
-		foreach ($data['sort'] as $sort => $ord) {
-			$sort = $this->escape($sort);
-			$t    = '';
+		foreach ($sort as $col => $ord) {
+			$col = $this->escape($col);
+			$t   = '';
 
 			if ($table) {
 				if (is_array($table)) {
 					foreach ($table as $tbl => $name) {
-						if ($this->hasColumn($tbl, $sort)) {
+						if ($this->hasColumn($tbl, $col)) {
 							$t = $name;
 							break;
 						}
@@ -726,13 +722,13 @@ abstract class Model
 				}
 			}
 
-			if (strpos($sort, '.') === false) {
-				$sort = ($t ? "`$t`." : '') . "`$sort`";
+			if (strpos($col, '.') === false) {
+				$col = ($t ? "`$t`." : '') . "`$col`";
 			}
 
 			$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
 
-			$order .= ($order ? ',' : '') . "$sort $ord";
+			$order .= ($order ? ',' : '') . "$col $ord";
 		}
 
 		return $order ? "ORDER BY $order" : '';
@@ -740,19 +736,13 @@ abstract class Model
 
 	protected function extractLimit($data)
 	{
-		//Limit
-		$limit = '';
-
-		if (isset($data['limit'])) {
-			if ((int)$data['limit'] > 0) {
-
-				$start = (isset($data['start']) && (int)$data['start'] > 0) ? (int)$data['start'] : 0;
-
-				$limit = " LIMIT $start," . (int)$data['limit'];
+		if (!empty($data['limit']) && $data['limit'] > 0) {
+			if (!empty($data['page'])) {
+				$data['start'] = (max(1, (int)$data['page']) - 1) * (int)$data['limit'];
 			}
-		}
 
-		return $limit;
+			return "LIMIT " . max(0, isset($data['start']) ? $data['start'] : 0) . ',' . (int)$data['limit'];
+		}
 	}
 
 	protected function hasIndex($table, $fields)
@@ -812,7 +802,7 @@ abstract class Model
 		}
 
 		//Guess optimal performance based on indexes used
-		if (empty($sort['sort']) && !$filter) {
+		if (!$sort && !$filter) {
 			return true;
 		}
 
@@ -822,7 +812,7 @@ abstract class Model
 			return true;
 		}
 
-		$indexed = $this->hasIndex($table, $sort['sort']);
+		$indexed = $this->hasIndex($table, $sort);
 
 		if ($indexed) {
 			if (isset($filter[$indexed])) {
@@ -917,6 +907,7 @@ abstract class Model
 	public function hasColumn($table, $column)
 	{
 		$model = $this->getTableModel($table);
+
 		return isset($model['columns'][$column]);
 	}
 
@@ -972,9 +963,9 @@ abstract class Model
 						$type = self::IMAGE;
 					}
 
-					$column['type']     = $type;
-					$column['sortable'] = true;
-					$column['filter']   = true;
+					$column['type']   = $type;
+					$column['sort']   = true;
+					$column['filter'] = true;
 
 					$field = explode('_', $column['Field']);
 					array_walk($field, function (&$a) {
