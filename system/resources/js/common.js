@@ -647,7 +647,7 @@ $.fn.loading = function (params) {
 		var $e = $(e);
 
 		var option = typeof params === 'string' ? {} : $.extend({}, {
-			text:    $e.attr('data-loading') || (params ? params.default_text : 'Submitting...'),
+			text:    $e.attr('data-loading') || (params ? params.default_text : false),
 			disable: true,
 			delay:   false
 		}, params);
@@ -663,7 +663,9 @@ $.fn.loading = function (params) {
 				if (!$e.data('original')) {
 					$e.data('original', $e.html());
 				}
-				$e.html(option.text);
+				if (option.text) {
+					$e.html(option.text);
+				}
 
 				if (option.delay) {
 					setTimeout(function () {
@@ -1149,6 +1151,7 @@ function content_loaded(is_ajax) {
 	$forms.find('input').use_once('form-input').keydown(function (e) {
 		if (e.keyCode == 13) {
 			$(this).closest('form').submit();
+			return false;
 		}
 	});
 
