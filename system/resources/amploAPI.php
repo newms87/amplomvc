@@ -19,10 +19,6 @@ class amploAPI
 		if (empty($this->config->response_type)) {
 			$this->config->response_type = self::RESPONSE_API;
 		}
-
-		if (!empty($_SESSION['amplo_api_token'])) {
-			$this->token = $_SESSION['amplo_api_token'];
-		}
 	}
 
 	public function hasError($type = null)
@@ -87,6 +83,21 @@ class amploAPI
 	public function clearToken()
 	{
 		$this->token = null;
+	}
+
+	public function refreshToken($token = null, $customer_id = null)
+	{
+		if ($token) {
+			$this->token = $token;
+		} elseif (!empty($_SESSION['amplo_api_token'])) {
+			$this->token = $_SESSION['amplo_api_token'];
+		}
+
+		if (!$this->token) {
+			return $this->requestToken($customer_id);
+		}
+
+		return $this->setToken($this->token);
 	}
 
 	public function requestCustomerToken($customer_id)
@@ -273,7 +284,7 @@ class amploAPI
 				return array(
 					'status'  => 'error',
 					'code'    => 5,
-					'message' => "Invalid response from server at " . $this->api_url,
+					'message' => "Invalid response from server at " . $this->config->api_url,
 					'data'    => $json,
 				);
 			} elseif ($json['status'] === 'error' && (int)$json['code'] === 401) {
