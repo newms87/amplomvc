@@ -33,7 +33,7 @@ $upload_dir   = '/image/'; // path from base_url to base of upload folder (with 
 $current_path = 'image/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder
 $thumbs_base_path = $fm_url . 'thumbs/';
-$thumbs_base_dir = $fm_dir . 'thumbs/';
+$thumbs_base_dir  = $fm_dir . 'thumbs/';
 
 $fm_url_img = $fm_url . 'filemanager/img/';
 
@@ -148,6 +148,7 @@ $ext_img   = array(
 	'svg'
 ); //Images
 $ext_file  = array(
+	'eps',
 	'doc',
 	'docx',
 	'rtf',

@@ -37,6 +37,7 @@ $ac.al = $.extend($ac.al || {}, {
 	listview:     'system/resources/js/listings.js',
 	ac_template:  'system/resources/js/ac_template.js',
 	amplo_slider: 'system/resources/js/amplo_slider.js',
+	flexselect:   'system/resources/js/flexselect.js',
 	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js'
 });
 
@@ -991,23 +992,18 @@ function register_colorbox() {
 	}
 }
 
-function register_form_editors() {
-	var $form_editor = $('.form-editor').use_once('form-editor-enabled');
+$.fn.form_editor = function () {
+	var $form_editor = this.use_once('form-editor-enabled');
+	var $form = $form_editor.is('form') ? $form_editor : $form_editor.find('form');
 
 	$form_editor.find('.edit-form').click(function () {
 		$(this).closest('.form-editor').addClass('edit').removeClass('read').find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
 		return false;
 	});
 
-	$form_editor.find('.cancel-form').click(cancel_edit);
+	$form_editor.find('.cancel-form').click(cancel_form_edit);
 
-	function cancel_edit() {
-		var $section = $(this).is('.form-editor') ? $(this) : $(this).closest('.form-editor');
-		$section.removeClass('edit').addClass('read').find('[data-readonly]').attr('readonly', '');
-		return false;
-	}
-
-	$form_editor.find('form').submit(function () {
+	$form.submit(function () {
 		var $form = $(this);
 
 		$form.find('[data-loading]').loading();
@@ -1046,12 +1042,20 @@ function register_form_editors() {
 					}
 				}
 
-				cancel_edit.call($form);
+				cancel_form_edit.call($form);
 			}
 		});
 
 		return false;
 	});
+
+	return this;
+}
+
+function cancel_form_edit() {
+	var $section = $(this).is('.form-editor') ? $(this) : $(this).closest('.form-editor');
+	$section.removeClass('edit').addClass('read').find('[data-readonly]').attr('readonly', '');
+	return false;
 }
 
 function colorbox(params) {
@@ -1192,7 +1196,6 @@ content_loaded.fn = {};
 content_loaded.fn['ajax_calls'] = register_ajax_calls;
 content_loaded.fn['confirms'] = register_confirms;
 content_loaded.fn['colorbox'] = register_colorbox;
-content_loaded.fn['form_editors'] = register_form_editors;
 
 $(document)
 	.ready(function () {
