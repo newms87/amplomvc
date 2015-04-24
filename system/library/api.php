@@ -18,7 +18,7 @@ class Api extends Library
 			$username = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : _post('api_user');
 			$key      = !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : _post('api_key');
 
-			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `username` = '" . $this->escape($username) . "' AND api_key = '" . $this->escape($key) . "'");
+			$this->api_user = $this->queryRow("SELECT * FROM {$this->t['api_user']} WHERE `username` = '" . $this->escape($username) . "' AND api_key = '" . $this->escape($key) . "' AND status = 1");
 		}
 
 		if ($this->api_user) {
@@ -31,7 +31,12 @@ class Api extends Library
 			}
 
 			if ($block_request) {
-				output_api('error', _l("Unauthorized request. The API User was not verified."), $_REQUEST, 401);
+				if ($token) {
+					output_api('error', _l("Unauthorized request. The token is either invalid or expired."), $_REQUEST, 41, 401);
+				} else {
+					output_api('error', _l("Unauthorized request. The API User was not verified."), $_REQUEST, 401);
+				}
+
 				$this->response->output();
 				exit;
 			}
