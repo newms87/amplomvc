@@ -58,7 +58,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 				return false;
 			}
 
-			count = get_count(list);
+			count = data.id || get_count(list);
 
 			template.attr('data-row', count);
 

@@ -831,6 +831,11 @@ function build($type, $params = null)
 				}
 				break;
 
+			case 'text-select':
+				$s = $selected ? 'checked="checked"' : '';
+				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label></li>";
+				break;
+
 			case 'ac-radio':
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
@@ -870,6 +875,14 @@ function build($type, $params = null)
 
 			return "<select name=\"$name\" $attrs>$options</select>";
 
+		case 'text-select':
+			return <<<HTML
+<div $attrs>
+	<input type="text" name="$name" value="" />
+	<ul class="text-select-list">$options</ul>
+</div>
+HTML;
+
 		case 'radio':
 		case 'ac-radio':
 		case 'checkbox':
@@ -884,8 +897,7 @@ function build($type, $params = null)
 	<a class="check_all" onclick="$(this).parent().prev().find('input[type=checkbox]').prop('checked', true)">[ Check All ]</a>
 	<a class="uncheck_all" onclick="$(this).parent().prev().find('input[type=checkbox]').prop('checked', false)">[ Uncheck All ]</a>
 </div>
-HTML
-				;
+HTML;
 
 		case 'clickable_list':
 			$added_list = "<div class=\"multiselect-list clickable_added\">$selected_options</div>";

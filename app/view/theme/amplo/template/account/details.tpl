@@ -148,4 +148,6 @@
 			$editor.append($new_form);
 		}
 	});
+
+	$('.form-editor').form_editor();
 </script>
