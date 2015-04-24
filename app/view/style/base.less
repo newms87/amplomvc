@@ -65,7 +65,7 @@
 
 //Hack to overcome whitespace between inline-block elements
 .ws-hack {
-  margin-right: -.29em;
+  margin-right: -.29em !important;
 }
 
 .no-ws-hack {
@@ -83,7 +83,7 @@
   .ws-hack;
 
   &:last-child {
-    margin-right: 0;
+    .no-ws-hack;
   }
 
   &.top {

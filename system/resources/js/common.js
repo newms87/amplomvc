@@ -993,66 +993,73 @@ function register_colorbox() {
 }
 
 $.fn.form_editor = function () {
-	var $form_editor = this.use_once('form-editor-enabled');
-	var $form = $form_editor.is('form') ? $form_editor : $form_editor.find('form');
+	return this.use_once('form-editor-enabled').each(function(i,e) {
+		$fe = $(e);
+		var $form = $fe.is('form') ? $fe : $fe.find('form');
 
-	$form_editor.find('.edit-form').click(function () {
-		$(this).closest('.form-editor').addClass('edit').removeClass('read').find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
-		return false;
-	});
+		$fe.find('.edit-form').click(edit_form_editor);
+		$fe.find('.toggle-form').click(toggle_form_editor);
+		$fe.find('.cancel-form').click(cancel_form_editor);
 
-	$form_editor.find('.cancel-form').click(cancel_form_edit);
+		$form.submit(function () {
+			var $form = $(this);
 
-	$form.submit(function () {
-		var $form = $(this);
+			$form.find('[data-loading]').loading();
 
-		$form.find('[data-loading]').loading();
+			$.post($form.attr('action'), $form.serialize(), function (response) {
+				$form.find('[data-loading]').loading('stop');
 
-		$.post($form.attr('action'), $form.serialize(), function (response) {
-			$form.find('[data-loading]').loading('stop');
+				$form.show_msg('clear');
 
-			$form.show_msg('clear');
-
-			if (response.error) {
-				$form.show_msg(response);
-			} else {
-				if ($form.attr('data-reload')) {
-					window.location.reload();
-				} else if ($form.attr('data-callback')) {
-					var cb = window[$form.attr('data-callback')];
-					if (typeof cb === 'function') {
-						cb.call($form);
-					}
+				if (response.error) {
+					$form.show_msg(response);
 				} else {
-					$form.find('.input [name]').each(function (i, e) {
-						var $e = $(e);
-						var val = $e.val();
-
-						if ($e.is('select')) {
-							val = $e.find('option[value="' + val + '"]').html();
+					if ($form.attr('data-reload')) {
+						window.location.reload();
+					} else if ($form.attr('data-callback')) {
+						var cb = window[$form.attr('data-callback')];
+						if (typeof cb === 'function') {
+							cb.call($form);
 						}
+					} else {
+						$form.find('.input [name]').each(function (i, e) {
+							var $e = $(e);
+							var val = $e.val();
 
-						if ($e.attr('name').indexOf('[') === -1) {
-							$form.find('.field.' + $e.attr('name')).html(val);
+							if ($e.is('select')) {
+								val = $e.find('option[value="' + val + '"]').html();
+							}
+
+							if ($e.attr('name').indexOf('[') === -1) {
+								$form.find('.field.' + $e.attr('name')).html(val);
+							}
+						});
+
+						if (response.success) {
+							$form.show_msg('success', response, {delay: 2000});
 						}
-					});
-
-					if (response.success) {
-						$form.show_msg('success', response, {delay: 2000});
 					}
+
+					cancel_form_editor.call($form);
 				}
+			});
 
-				cancel_form_edit.call($form);
-			}
+			return false;
 		});
-
-		return false;
 	});
-
-	return this;
 }
 
-function cancel_form_edit() {
+function edit_form_editor() {
+	$(this).closest('.form-editor').addClass('edit').removeClass('read').find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
+	return false;
+}
+
+function toggle_form_editor() {
+	$(this).closest('.form-editor').hasClass('read') ? edit_form_editor.call(this) : cancel_form_editor.call(this);
+	return false;
+}
+
+function cancel_form_editor() {
 	var $section = $(this).is('.form-editor') ? $(this) : $(this).closest('.form-editor');
 	$section.removeClass('edit').addClass('read').find('[data-readonly]').attr('readonly', '');
 	return false;

@@ -72,6 +72,8 @@ class amploAPI
 		$response = $this->get('refresh-token', array('token' => $token));
 
 		if ($response['status'] === 'error') {
+			unset($_SESSION['amplo_api_token']);
+
 			return false;
 		}
 
@@ -192,6 +194,7 @@ class amploAPI
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_ENCODING       => "",
 			CURLOPT_USERAGENT      => "Amplo API - Curl",
+			CURLOPT_FRESH_CONNECT  => true,
 			CURLOPT_AUTOREFERER    => true,
 			CURLOPT_CONNECTTIMEOUT => 120,
 			CURLOPT_TIMEOUT        => 120,

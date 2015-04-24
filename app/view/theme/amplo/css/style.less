@@ -660,6 +660,44 @@ select {
   @select();
 }
 
+label.select {
+  width: 100%;
+  display: inline-block;
+  position: relative;
+
+  select {
+    width: 100%;
+    padding-right: 1em;
+    border-radius: 5px;
+  }
+
+  &:after {
+    width: 2.5em;
+    padding: .5em .8em;
+    height: 100%;
+    content: "";
+    font: .9em OpenSansSemiBold;
+    color: white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    box-sizing: border-box;
+    background: @color-dark;
+  }
+
+  &:before {
+    .sprite;
+    .sprite.chevron-white;
+
+    position: absolute;
+    top: .8em;
+    right: .7em;
+    z-index: 10;
+  }
+}
+
 .flexselect_dropdown {
   display: none;
   position: absolute;
