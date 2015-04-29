@@ -112,10 +112,10 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		if ($settings['show_limits']) {
 			$settings['limit_settings'] += array(
 				'path'  => $settings['listing_path'],
-				'limit' => $settings['limit'],
+				'limit' => isset($settings['limit']) ? $settings['limit'] : null,
 			);
 		}
-
+		
 		//Pagination
 		if ($settings['show_pagination']) {
 			$settings['pagination_settings'] += array(
