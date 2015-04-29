@@ -10,7 +10,8 @@ class App_Controller_Page extends Controller
 		if ($page_id) {
 			$page = $this->Model_Page->getActivePage($page_id);
 		} else {
-			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
+			$page    = $this->Model_Page->getPageByName($this->route->getSegment(1));
+			$page_id = $page['page_id'];
 		}
 
 		if (!$page) {
@@ -21,9 +22,7 @@ class App_Controller_Page extends Controller
 		set_page_info('title', $page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
-		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
-
-		$page['page_id'] = $page_id;
+		$page['style'] = $this->Model_Page->compileStyle($page['page_id'], $page['style']);
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
