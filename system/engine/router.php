@@ -226,13 +226,18 @@ class Router
 
 		foreach ($sites as $site) {
 			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
-				if (!empty($site['prefix'])) {
-					$prefix = $site['prefix'];
-				}
-
 				$this->site = $site;
 				break;
 			}
+		}
+
+		if (!$this->site) {
+			reset($sites);
+			$this->site = current($sites);
+		}
+
+		if (!empty($this->site['prefix'])) {
+			$prefix = $this->site['prefix'];
 		}
 
 		define('SITE_PREFIX', $prefix);

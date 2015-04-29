@@ -69,6 +69,9 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	exit;
 }
 
+//Config (self assigning to registry)
+new Config();
+
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
 
@@ -86,9 +89,6 @@ if (!defined("AC_CUSTOMER_OVERRIDE")) {
 // Session
 $registry->set('session', new Session());
 
-//Mod Files
-$registry->set('mod', new Mod());
-
 // Url
 $registry->set('url', new Url());
 
@@ -96,9 +96,6 @@ $registry->set('url', new Url());
 $response = new Response();
 $response->addHeader('Content-Type', 'text/html; charset=UTF-8');
 $registry->set('response', $response);
-
-//Plugins (self assigning to registry)
-new Plugin();
 
 //Cron Called from system
 if (option('cron_status', true)) {
