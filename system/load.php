@@ -69,11 +69,11 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	exit;
 }
 
-//Config (self assigning to registry)
-new Config();
-
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
+
+//Config (load after routing site!)
+new Config();
 
 // Request (cleans globals)
 $registry->set('request', new Request());
