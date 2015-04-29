@@ -80,7 +80,7 @@ class Customer extends Library
 	public function logout()
 	{
 		$this->session->endTokenSession();
-		
+
 		set_cookie('customer', null);
 
 		$this->customer_id = null;

@@ -399,11 +399,12 @@ function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 	redirect($path, $query, $ssl, $status);
 }
 
-function slug($name, $sep = '_', $allow = 'a-z0-9_-')
+function slug($name, $sep = '_', $allow = 'a-z0-9._-')
 {
 	$patterns = array(
 		"/[\\s\\\\\\/]/" => $sep,
 		"/[^$allow]/"    => '',
+		'/#/'            => '-',
 	);
 
 	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
