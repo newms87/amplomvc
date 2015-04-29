@@ -79,7 +79,8 @@ class Customer extends Library
 
 	public function logout()
 	{
-		unset($_SESSION['customer']);
+		$this->session->endTokenSession();
+		
 		set_cookie('customer', null);
 
 		$this->customer_id = null;
