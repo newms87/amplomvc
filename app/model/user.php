@@ -12,7 +12,7 @@ class App_Model_User extends App_Model_Table
 			} else {
 				$existing_id = $this->findRecord(array('username' => $user['username']));
 
-				if ($existing_id !== (int)$user_id) {
+				if ($existing_id & $existing_id !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}

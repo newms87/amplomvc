@@ -141,11 +141,11 @@ class amploAPI
 		$response = $this->post('request-token', $credentials);
 
 		if (empty($response['status'])) {
-			$this->error['response'] = _l("Invalid response from server while requesting token.");
+			$this->error = _l("Invalid response from server while requesting token.");
 
 			return false;
 		} elseif ($response['status'] === 'error') {
-			$this->error['message'] = $response['message'];
+			$this->error = $response['message'];
 
 			return false;
 		}
@@ -260,7 +260,7 @@ class amploAPI
 			if ($this->error) {
 				return array(
 					'status'  => 'error',
-					'code'    => '2',
+					'code'    => 2,
 					'message' => $this->fetchError(),
 				);
 			}
