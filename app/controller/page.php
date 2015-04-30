@@ -10,7 +10,7 @@ class App_Controller_Page extends Controller
 		if ($page_id) {
 			$page = $this->Model_Page->getActivePage($page_id);
 		} else {
-			$page    = $this->Model_Page->getPageByName($this->route->getSegment(1));
+			$page = $this->Model_Page->getPageByName($this->route->getSegment(1));
 		}
 
 		if (!$page) {

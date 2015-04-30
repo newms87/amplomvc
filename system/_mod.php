@@ -21,6 +21,7 @@ function _is_writable($dir, &$error = null)
 
 			if (!is_dir($dir)) {
 				$error = "Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.";
+
 				return false;
 			}
 		}
@@ -30,6 +31,7 @@ function _is_writable($dir, &$error = null)
 			touch($t_file);
 			if (!is_file($t_file)) {
 				$error = "The write permissions on $dir are not set to allow apache to write. Please change the permissions to allow writing to this directory";
+
 				return false;
 			}
 			unlink($t_file);
@@ -50,16 +52,16 @@ function _mod($file)
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
+	if (is_file($file . '.ext')) {
+		require_once($file . '.ext');
+	}
+
 	$mod_file = $file . '.mod';
 
 	if (is_file($mod_file)) {
 		if (filemtime($mod_file) < filemtime($file)) {
 			if ($registry) {
 				$registry->get('mod')->reapply($mod_file);
-				echo 'reapply mod ' . $mod_file . ' = ' . filemtime($mod_file) . ' < ' . filemtime($file) . '<BR>';
-
-				echo "Change all Class_mod file to _ext and .ext files!!";
-				exit;
 			} else {
 				$mod_update[$mod_file] = $mod_file;
 			}

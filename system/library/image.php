@@ -36,7 +36,7 @@ class Image extends Library
 
 		$scheme = parse_url($image_path, PHP_URL_SCHEME);
 
-		if ($image_url && !in_array($scheme, self::$streams)) {
+		if ($image_url && ($scheme && !in_array($scheme, self::$streams))) {
 			return $image_url;
 		}
 
