@@ -29,7 +29,7 @@ class Cache
 		return isset($this->loaded[$this->dir]) ? $this->loaded[$this->dir] : array();
 	}
 
-	public function get($key, $get_file = false)
+	public function get($key, $get_file = false, $invalidate = null)
 	{
 		if (isset($this->loaded[$this->dir][$key])) {
 			if ($get_file) {
@@ -49,6 +49,10 @@ class Cache
 				return;
 			}
 			*/
+
+			if ($invalidate && $invalidate > filemtime($file)) {
+				return null;
+			}
 
 			if ($get_file) {
 				return $this->loaded[$this->dir][$key]['file'] = $file;

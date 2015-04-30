@@ -1,6 +1,6 @@
-<div id="db_profile_box">
+<div id="amplo-profile-box">
 	<style>
-		#db_profile_box {
+		#amplo-profile-box {
 			position: fixed;
 			bottom: 15px;
 			left: 15px;
@@ -17,7 +17,7 @@
 			cursor: pointer;
 		}
 
-		#db_profile_box.show {
+		#amplo-profile-box.show {
 			bottom: 20%;
 			left: 30%;
 			width: 40%;
@@ -29,13 +29,13 @@
 			cursor: default;
 		}
 
-		#db_profile_box h2 {
+		#amplo-profile-box h2 {
 			font-size: 1.5em;
 			margin: 0 auto 15px auto;
 			text-align: center;
 		}
 
-		#db_profile_box .close {
+		#amplo-profile-box .close {
 			position: absolute;
 			top: 8px;
 			right: 8px;
@@ -86,7 +86,7 @@
 			display: none;
 		}
 
-		#db_profile_box.show .close, #db_profile_box.show #db_profile, #db_profile_box.show #amplo-profile {
+		#amplo-profile-box.show .close, #amplo-profile-box.show #db_profile, #amplo-profile-box.show #amplo-profile {
 			display: block;
 		}
 	</style>
@@ -122,16 +122,16 @@
 </div>
 
 <script>
-	$('#db_profile_box').click(function () {
+	$('#amplo-profile-box').click(function () {
 		if (!$(this).hasClass('closing')) {
 			$(this).addClass('show');
 		}
 	});
 
 	$('#db_profile_box .close').click(function () {
-		$('#db_profile_box').removeClass('show').addClass('closing');
+		$('#amplo-profile-box').removeClass('show').addClass('closing');
 		setTimeout(function () {
-			$('#db_profile_box').removeClass('closing')
+			$('#amplo-profile-box').removeClass('closing')
 		}, 200);
 	});
 </script>

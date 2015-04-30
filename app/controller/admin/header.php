@@ -127,14 +127,6 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-		//Failed Email Messages warnings
-		$failed_count = $this->Model_Mail_Error->total_failed_messages();
-
-		if ($failed_count) {
-			$view_mail_errors = site_url('admin/mail/error');
-			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
-		}
-
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
 
 		$this->render('header', $settings);

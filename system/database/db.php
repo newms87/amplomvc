@@ -27,6 +27,11 @@ class DB
 			$driver = 'mysqlidb';
 		}
 
+		//Will (greatly) optimize performance on local Windows installs if there is no 127.0.0.1 localhost entry in the hosts file.
+		if ($hostname === 'localhost') {
+			$hostname = '127.0.0.1';
+		}
+
 		$key = $driver . $hostname . $username . $schema;
 
 		if (!isset(self::$drivers[$key])) {

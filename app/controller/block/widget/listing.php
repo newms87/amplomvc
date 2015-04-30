@@ -113,7 +113,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			$settings['limit_settings'] += array(
 				'path'  => $settings['listing_path'],
 				'limit' => isset($settings['limit']) ? $settings['limit'] : null,
-				'limit' => isset($settings['page']) ? $settings['page'] : null,
+				'page'  => isset($settings['page']) ? $settings['page'] : null,
 			);
 		}
 

@@ -13,6 +13,10 @@ $registry = new Registry();
 require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
 require_once(_mod(DIR_SYSTEM . 'helper/shortcuts.php'));
 
+if (AMPLO_PROFILE) {
+	_profile('Core / Shortcut Helpers loaded');
+}
+
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
@@ -40,8 +44,16 @@ HTML;
 	exit;
 }
 
+if (AMPLO_PROFILE) {
+	_profile('Database loaded');
+}
+
 //Initialize Router
 $router = new Router();
+
+if (AMPLO_PROFILE) {
+	_profile('Router loaded');
+}
 
 //Load Helper files
 $handle = opendir(DIR_SYSTEM . 'helper/');
@@ -69,11 +81,23 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
 
+if (AMPLO_PROFILE) {
+	_profile('Site Routed');
+}
+
 //Config (load after routing site!)
 new Config();
 
+if (AMPLO_PROFILE) {
+	_profile('Config loaded');
+}
+
 //Register the core routing hook
 register_routing_hook('amplo', 'amplo_routing_hook');
+
+if (AMPLO_PROFILE) {
+	_profile('Routing hooks run');
+}
 
 // Request (cleans globals)
 $registry->set('request', new Request());
@@ -104,5 +128,13 @@ if (option('cron_status', true)) {
 	}
 }
 
+if (AMPLO_PROFILE) {
+	_profile('Dispatching request');
+}
+
 //Router
 $router->dispatch();
+
+if (AMPLO_PROFILE) {
+	_profile('Finished');
+}

@@ -1,4 +1,28 @@
 <?php
+//Amplo Performance Logging
+//TODO: Implement full system profile
+function _profile($key, array $data = array())
+{
+	global $profile, $__start;
+
+	$mb        = 1024 * 1024;
+	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
+	$allocated = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
+	$time      = round(microtime(true) - $__start, 6);
+
+	$data += array(
+		'time'      => $time,
+		'memory'    => $memory,
+		'allocated' => $allocated,
+	);
+
+	$profile[$key] = $data;
+}
+
+if (AMPLO_PROFILE) {
+	_profile('Profiling Started');
+}
+
 if (!function_exists('apache_request_headers')) {
 	function apache_request_headers()
 	{
@@ -102,26 +126,6 @@ function set_cookie($name, $value, $expire = 31536000)
 function delete_cookie($name)
 {
 	set_cookie($name, '', 0);
-}
-
-//Amplo Performance Logging
-//TODO: Implement full system profile
-function _profile($key, array $data = array())
-{
-	global $profile, $__start;
-
-	$mb        = 1024 * 1024;
-	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
-	$allocated = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
-	$time      = round(microtime(true) - $__start, 6);
-
-	$data += array(
-		'time'      => $time,
-		'memory'    => $memory,
-		'allocated' => $allocated,
-	);
-
-	$profile[$key] = $data;
 }
 
 /**************************************
@@ -793,6 +797,13 @@ function get_files($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $fil
 function get_comment_directives($content, $trim = true)
 {
 	if (is_file($content)) {
+		$cache      = 'cd.' . slug($content);
+		$directives = cache($cache, null, false, filemtime($content));
+
+		if ($directives) {
+			return $directives;
+		}
+
 		$content = file_get_contents($content);
 	}
 
@@ -814,6 +825,10 @@ function get_comment_directives($content, $trim = true)
 				$a = trim($a);
 			});
 		}
+	}
+
+	if (!empty($cache)) {
+		cache($cache, $directives);
 	}
 
 	return $directives;
@@ -947,12 +962,19 @@ function parse_xml_to_array($xml)
 	return $return;
 }
 
-function cache($key, $value = null, $as_file = false)
+/**
+ * @param $key - Unique key identifying cache file.
+ * @param $value - If set, the cache value will be set, otherwise retreive contents of cache file
+ * @param bool $as_file - Return the cache file instead of its contents
+ * @param int $invalidate - If the cache file was created before $invalidate, then return null. compares as unix timestamps.
+ * @return mixed - if $value is set, then return a bool indicating successfully setting cache file, else return cache file / data if it exists, otherwise return null
+ */
+function cache($key, $value = null, $as_file = false, $invalidate = false)
 {
 	global $registry;
 
 	if ($value === null) {
-		return $registry->get('cache')->get($key, $as_file);
+		return $registry->get('cache')->get($key, $as_file, $invalidate);
 	} else {
 		return $registry->get('cache')->set($key, $value, $as_file);
 	}

@@ -171,46 +171,54 @@ class App_Model_Settings extends Model
 
 	public function getWidgets()
 	{
-		$widgets = array();
+		$dir = DIR_SITE . 'app/controller/admin/settings/';
 
-		$files = glob(DIR_SITE . 'app/controller/admin/settings/*');
+		$widgets = cache('settings.widgets', null, false, filemtime($dir . '.'));
 
-		if ($files) {
-			$order = 0;
+		if (!$widgets) {
+			$widgets = array();
 
-			foreach ($files as $file) {
-				$directives = get_comment_directives($file);
+			$files = glob($dir . '*');
 
-				if (empty($directives['title'])) {
-					continue;
+			if ($files) {
+				$order = 0;
+
+				foreach ($files as $file) {
+					$directives = get_comment_directives($file);
+
+					if (empty($directives['title'])) {
+						continue;
+					}
+
+					$widget['title'] = _l($directives['title']);
+
+					if (!empty($directives['icon'])) {
+						$widget['icon'] = $this->theme->getUrl('image/settings/' . $directives['icon']);
+					}
+
+					if (empty($widget['icon'])) {
+						$widget['icon'] = $this->theme->getUrl('image/settings/admin.png');
+					}
+
+					if (!empty($directives['path'])) {
+						$query         = !empty($directives['query']) ? $directives['query'] : '';
+						$widget['url'] = site_url($directives['path'], $query);
+					} else {
+						$widget['url'] = site_url('admin/settings/' . str_replace('.php', '', basename($file)));
+					}
+
+					$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;
+
+					$widgets[] = $widget;
 				}
-
-				$widget['title'] = _l($directives['title']);
-
-				if (!empty($directives['icon'])) {
-					$widget['icon'] = $this->theme->getUrl('image/settings/' . $directives['icon']);
-				}
-
-				if (empty($widget['icon'])) {
-					$widget['icon'] = $this->theme->getUrl('image/settings/admin.png');
-				}
-
-				if (!empty($directives['path'])) {
-					$query         = !empty($directives['query']) ? $directives['query'] : '';
-					$widget['url'] = site_url($directives['path'], $query);
-				} else {
-					$widget['url'] = site_url('admin/settings/' . str_replace('.php', '', basename($file)));
-				}
-
-				$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;
-
-				$widgets[] = $widget;
 			}
-		}
 
-		usort($widgets, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
+			usort($widgets, function ($a, $b) {
+				return $a['sort_order'] > $b['sort_order'];
+			});
+
+			cache('settings.widgets', $widgets);
+		}
 
 		return $widgets;
 	}

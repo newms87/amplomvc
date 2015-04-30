@@ -229,6 +229,9 @@ class Dev extends Library
 
 			$total_cache_size = round($total_cache_size / 1024, 2) . ' KB';
 
+
+			sort_by($profile, 'time');
+
 			ob_start();
 			include(_mod($file));
 			$html = ob_get_clean();
