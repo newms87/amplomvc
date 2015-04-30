@@ -127,7 +127,7 @@
 				<? if (!empty($chart)) { ?>
 					<?=
 					block('widget/chart', null, array(
-						'data'     => $rows,
+						'data'     => $records,
 						'settings' => $chart,
 						'type'     => $view_type,
 					)); ?>
