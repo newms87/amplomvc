@@ -23,12 +23,22 @@ class Image extends Library
 
 		$this->dir_mode = option('config_image_dir_mode');
 
-		$this->streams = stream_get_wrappers();
+		self::$streams = stream_get_wrappers();
 	}
 
 	public function get($image_path, $return_dir = false)
 	{
+		$image_url = (filter_var($image_path, FILTER_VALIDATE_URL) || strpos($image_path, '//') === 0) ? $image_path : false;
+
+		if ($image_url && !$return_dir) {
+			return $image_path;
+		}
+
 		$scheme = parse_url($image_path, PHP_URL_SCHEME);
+
+		if ($image_url && !in_array($scheme, self::$streams)) {
+			return $image_url;
+		}
 
 		$replace = array(
 			'#\\\\#'                 => '/',
@@ -41,12 +51,6 @@ class Image extends Library
 		);
 
 		$image = preg_replace(array_keys($replace), $replace, $image_path);
-
-		if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
-			if (!$return_dir || !in_array($scheme, $this->streams)) {
-				return $image;
-			}
-		}
 
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
