@@ -2,13 +2,16 @@
 
 class Image extends Library
 {
-	private $file;
-	private $image;
-	private $info;
-	private $dir_mode;
-	//This is a hack to unregister the shutdown function
-	private $safe_shutdown;
-	private $shutdown_file = '';
+	protected
+		$file,
+		$image,
+		$info,
+		$dir_mode,
+		//This is a hack to unregister the shutdown function
+		$safe_shutdown,
+		$shutdown_file = '';
+
+	static $streams;
 
 	public function __construct($file = null)
 	{
@@ -19,10 +22,24 @@ class Image extends Library
 		}
 
 		$this->dir_mode = option('config_image_dir_mode');
+
+		self::$streams = stream_get_wrappers();
 	}
 
 	public function get($image_path, $return_dir = false)
 	{
+		$image_url = (filter_var($image_path, FILTER_VALIDATE_URL) || strpos($image_path, '//') === 0) ? $image_path : false;
+
+		if ($image_url && !$return_dir) {
+			return $image_path;
+		}
+
+		$scheme = parse_url($image_path, PHP_URL_SCHEME);
+
+		if ($image_url && !in_array($scheme, self::$streams)) {
+			return $image_url;
+		}
+
 		$replace = array(
 			'#\\\\#'                 => '/',
 			'#/./#'                  => '/',
@@ -34,10 +51,6 @@ class Image extends Library
 		);
 
 		$image = preg_replace(array_keys($replace), $replace, $image_path);
-
-		if (filter_var($image, FILTER_VALIDATE_URL) || strpos($image, '//') === 0) {
-			return $image;
-		}
 
 		if (!is_file($image)) {
 			if (is_file(DIR_IMAGE . $image)) {
@@ -149,6 +162,7 @@ class Image extends Library
 			}
 
 			$this->error['file'] = _l("Directory was not writable for %s", $file);
+
 			return false;
 		}
 
@@ -196,6 +210,7 @@ class Image extends Library
 		//if the image is 0 width or 0 height, do not return an image
 		if (!$this->info['width'] || !$this->info['height']) {
 			$this->error['size'] = _l("The image size was 0.");
+
 			return false;
 		}
 
@@ -289,6 +304,7 @@ class Image extends Library
 			$source = DIR_IMAGE . $source;
 		} elseif (!is_file($source)) {
 			$this->error = _l("Invalid Source File %s", $source);
+
 			return false;
 		}
 
@@ -298,6 +314,7 @@ class Image extends Library
 
 		if (!_is_writable(dirname($destination))) {
 			$this->error = _l("The Destination directory was not writable: %s", $destination);
+
 			return false;
 		}
 
@@ -399,6 +416,7 @@ class Image extends Library
 
 		if (!$merge) {
 			$this->error['file'] = _l("Unable to locate file %s for merging", $file);
+
 			return false;
 		}
 
@@ -437,6 +455,7 @@ class Image extends Library
 	{
 		if (!$hex || strpos($hex, '#') !== 0 || strlen($hex) !== 7 || preg_match("/[^A-F0-9]/i", substr($hex, 1)) > 0) {
 			trigger_error("ERROR in Draw library: set_text_color(\$color): \$color must be in hex format #FFFFFF");
+
 			return;
 		}
 
@@ -526,6 +545,7 @@ class Image extends Library
 			$image = $this->resize($image, $width / 2, $height / 2);
 			trigger_error("Safe shutdown limit exceeded! Cannot process image");
 			$this->unregister_safe_shutdown();
+
 			return array(
 				'r' => 0,
 				'g' => 0,
@@ -696,6 +716,7 @@ class Image extends Library
 				$exact = false;
 			} else {
 				trigger_error($this->error['convert'] = "Color replace for truecolor images not yet implemented.");
+
 				return false;
 			}
 		}
@@ -712,6 +733,7 @@ class Image extends Library
 
 		if ($color_index < 0) {
 			$this->error['color'] = _l("Unable to find the correct color in the image.");
+
 			return false;
 		}
 
