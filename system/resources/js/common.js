@@ -992,6 +992,23 @@ function register_colorbox() {
 	}
 }
 
+$.fn.collapsible = function (){
+	return this.each(function(i,e){
+		var $c = $(e);
+
+		$c.click(function(){
+			$(this).toggleClass('hide');
+		});
+
+		$c.find('.collapse, input, select, textarea, a').click(preventProp);
+	});
+}
+
+function preventProp(e){
+	e.stopPropagation();
+	return false;
+}
+
 $.fn.form_editor = function () {
 	return this.use_once('form-editor-enabled').each(function(i,e) {
 		$fe = $(e);

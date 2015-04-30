@@ -1343,6 +1343,34 @@ section.page {
   }
 }
 
+.collapsible {
+  position: relative;
+
+  &:after {
+    .sprite;
+    .sprite.chevron-white;
+    .sprite.chevron-white.down;
+
+    position: absolute;
+    top: 1em;
+    right: .5em;
+  }
+
+  .collapse {
+    .height-animate-hide;
+  }
+
+  &.hide {
+    &:after {
+      .sprite.chevron-white.up;
+    }
+
+    .collapse {
+      .height-animate-hide.hide;
+    }
+  }
+}
+
 .form-editor {
   .input {
     margin-top: 1em;
