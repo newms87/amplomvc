@@ -9,7 +9,7 @@ class Response extends Library
 //-----
 //>>>>> {php}
 		//Database Profiling
-		if (DB_PROFILE && !IS_AJAX) {
+		if (AMPLO_PROFILE && !IS_AJAX) {
 			$this->dev->performance();
 		}
 //-----

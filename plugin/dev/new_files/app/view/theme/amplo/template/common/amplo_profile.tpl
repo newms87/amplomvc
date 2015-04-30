@@ -113,7 +113,7 @@
 
 	<div class="close">X</div>
 
-	<?php if (DB_PROFILE) { ?>
+	<?php if (AMPLO_PROFILE) { ?>
 		<div id="db_profile">
 			<div class="total"><?= _l("Database Total Time: %s in %s transactions", $db_time, count($db_profile)); ?></div>
 			<div class="profile_list">

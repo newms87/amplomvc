@@ -2,16 +2,17 @@
 
 final class Action
 {
-	private $dir;
-	private $file;
-	private $path;
-	private $class;
-	private $classpath;
-	private $controller;
-	private $method;
-	private $parameters = array();
-	private $is_valid;
-	private $output;
+	protected
+		$dir,
+		$file,
+		$path,
+		$class,
+		$classpath,
+		$controller,
+		$method,
+		$parameters = array(),
+		$is_valid,
+		$output;
 
 	public function __construct($path, $parameters = array())
 	{
@@ -55,6 +56,7 @@ final class Action
 				$file = rtrim($dir, '/') . '.php';
 			} else {
 				$this->is_valid = false;
+
 				return;
 			}
 		}
@@ -91,12 +93,6 @@ final class Action
 		$this->class      = $class;
 		$this->method     = $method;
 		$this->parameters = $parameters ? $parameters : $args;
-	}
-
-	public function __get($key)
-	{
-		global $registry;
-		return $registry->get($key);
 	}
 
 	public function isValid()

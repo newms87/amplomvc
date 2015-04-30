@@ -946,6 +946,12 @@ function output_api($status, $message = null, $data = null, $code = 200, $http_c
 	output_json($response);
 }
 
+function output_file($file, $type = null, $filename = null)
+{
+	global $registry;
+	$registry->get('csv')->downloadFile($file, $filename, $type);
+}
+
 function output_as_file($contents, $type = 'txt', $filename = '')
 {
 	global $registry;
@@ -953,9 +959,9 @@ function output_as_file($contents, $type = 'txt', $filename = '')
 	$registry->get('csv')->downloadContents($filename, $type);
 }
 
-function output_file($file, $type = null, $filename = null)
+function output_flush()
 {
 	global $registry;
-	$registry->get('csv')->downloadFile($file, $filename, $type);
+	$registry->get('response')->output();
 }
 

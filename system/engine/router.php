@@ -196,13 +196,13 @@ class Router
 				);
 
 				output_json($response);
-				$this->response->output();
-				exit;
 			} else {
 				$action = new Action(ERROR_404_PATH);
 				$action->execute();
 			}
 		}
+
+		output_flush();
 	}
 
 	public function getSites()

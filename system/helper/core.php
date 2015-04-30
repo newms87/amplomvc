@@ -104,6 +104,25 @@ function delete_cookie($name)
 	set_cookie($name, '', 0);
 }
 
+//Amplo Performance Logging
+//TODO: Implement full system profile
+function _profile($key, array $data = array())
+{
+	global $profile, $__start;
+
+	$mb        = 1024 * 1024;
+	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
+	$allocated = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
+	$time      = round(microtime(true) - $__start, 6);
+
+	$data += array(
+		'time'      => $time,
+		'memory'    => $memory,
+		'allocated' => $allocated,
+	);
+
+	$profile[$key] = $data;
+}
 
 /**************************************
  * System Language Translation Engine *
@@ -176,7 +195,7 @@ if (!function_exists('amplo_autoload')) {
 	function amplo_autoload($class)
 	{
 		global $registry;
-		$registry->loadClass($class, false);
+		$registry->get($class, false);
 	}
 }
 

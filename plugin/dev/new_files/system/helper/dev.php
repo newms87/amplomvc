@@ -1,13 +1,4 @@
 <?php
-//Amplo Performance Logging
-if (!defined("SHOW_DB_PROFILE")) {
-	define("SHOW_DB_PROFILE", defined("DB_PROFILE") && DB_PROFILE);
-}
-
-if (!defined("DB_PROFILE_NO_CACHE")) {
-	define("DB_PROFILE_NO_CACHE", true);
-}
-
 //SIM TIME
 //Virtual time (for simulating time progression)
 $ac_time_offset = !empty($_COOKIE['ac_time_offset']) ? (int)$_COOKIE['ac_time_offset'] : 0;
@@ -21,25 +12,6 @@ if (empty($_SESSION['user_id'])) {
 	} else {
 		$ac_time_offset += (int)$_GET['sim_time'];
 	}
-}
-
-//TODO: Implement full system profile
-function _profile($key, array $data = array())
-{
-	global $profile, $__start;
-
-	$mb        = 1024 * 1024;
-	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
-	$allocated = round(memory_get_peak_usage(true) / $mb, 2) . " MB";
-	$time      = round(microtime(true) - $__start, 6);
-
-	$data += array(
-		'time'      => $time,
-		'memory'    => $memory,
-		'allocated' => $allocated,
-	);
-
-	$profile[$key] = $data;
 }
 
 /**

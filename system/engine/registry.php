@@ -4,12 +4,24 @@ final class Registry
 {
 	protected $data = array();
 
-	public function get($key)
+	public function get($key, $return_instance = true)
 	{
 		$lcase_key = strtolower($key);
 
 		if (!isset($this->data[$lcase_key])) {
-			$this->data[$lcase_key] = $this->loadClass($key);
+			if (AMPLO_PROFILE) {
+				_profile('loading (' . $key . ')');
+			}
+
+			if ($return_instance) {
+				$this->data[$lcase_key] = $this->loadClass($key, $return_instance);
+			} else {
+				return $this->loadClass($key, false);
+			}
+
+			if (AMPLO_PROFILE) {
+				_profile('loaded (' . $key . ')');
+			}
 		}
 
 		return $this->data[$lcase_key];
@@ -26,7 +38,7 @@ final class Registry
 		return isset($this->data[$key]);
 	}
 
-	public function loadClass($class, $return_instance = true)
+	protected function loadClass($class, $return_instance = true)
 	{
 		//So a child instance may call the registry directly via __get()
 		if ($class === 'load') {
@@ -131,9 +143,17 @@ final class Registry
 				}
 			}
 
+			if (AMPLO_PROFILE) {
+				_profile('loading (' . $class . ')');
+			}
+
 			require_once($path);
 
 			$this->set($class, new $class());
+
+			if (AMPLO_PROFILE) {
+				_profile('loaded (' . $class . ')');
+			}
 		}
 
 		return $this->get($class);

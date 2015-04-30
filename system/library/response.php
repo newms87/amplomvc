@@ -2,8 +2,15 @@
 
 class Response extends Library
 {
-	private $headers = array();
-	private $output;
+	protected
+		$headers = array(),
+		$output;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->addHeader('Content-Type', 'text/html; charset=UTF-8');
+	}
 
 	public function addHeader($key, $value = null)
 	{
@@ -63,6 +70,7 @@ class Response extends Library
 		if ($this->output) {
 			if (!ini_get('short_open_tag') && (!defined('AMPLO_REWRITE_SHORT_TAGS') || !AMPLO_REWRITE_SHORT_TAGS) && preg_match("#<\\?=[^?]+\\?>#", $this->output)) {
 				echo _l('<p>Please notify the web admin %s to enable short_open_tag (eg: add "short_open_tag = on" in the php.ini file) on this server. Alternatively, adding "define(\'AMPLO_REWRITE_SHORT_TAGS\', true);" to the config.php file and removing all cache files in "system/cache/templates/" should solve the problem forcing Amplo MVC to rewrite "&lt;?=" as "&lt;?php echo".</p>', option('site_email_error'));
+
 				return;
 			}
 

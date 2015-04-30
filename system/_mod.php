@@ -57,15 +57,16 @@ function _mod($file)
 			if ($registry) {
 				$registry->get('mod')->reapply($mod_file);
 			} else {
-				$mod_update[] = $mod_file;
+				$mod_update[$mod_file] = $mod_file;
 			}
 		}
 
 		$file = $mod_file;
 	}
 
-	if ($mod_update && $registry && function_exists('redirect')) {
+	if ($mod_update && $registry && function_exists('redirect') && $registry->has('db')) {
 		foreach ($mod_update as $key => $mod) {
+			unset($mod_update[$key]);
 			$registry->get('mod')->reapply($mod);
 		}
 
