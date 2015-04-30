@@ -22,16 +22,18 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 		if (empty($settings['datasets']) || empty($settings['labels'])) {
 			$chart = $this->chart->convert($settings['data'], $settings['settings']);
 
-			if (empty($settings['labels'])) {
-				$settings['labels'] = $chart['labels'];
-			}
+			if ($chart) {
+				if (empty($settings['labels'])) {
+					$settings['labels'] = $chart['labels'];
+				}
 
-			if (empty($settings['datasets'])) {
-				$settings['datasets'] = $chart['datasets'];
-			}
+				if (empty($settings['datasets'])) {
+					$settings['datasets'] = $chart['datasets'];
+				}
 
-			if (empty($settings['discrete'])) {
-				$settings['discrete'] = $chart['discrete'];
+				if (empty($settings['discrete'])) {
+					$settings['discrete'] = $chart['discrete'];
+				}
 			}
 		}
 
