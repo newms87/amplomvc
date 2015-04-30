@@ -12,6 +12,7 @@ class App_Controller_Block_Widget_Chart extends App_Controller_Block_Block
 			'type'     => '',
 			'labels'   => '',
 			'datasets' => array(),
+			'discrete' => false,
 			'options'  => array(
 				'responsive' => true,
 			),
