@@ -48,8 +48,8 @@ final class Registry
 		$class = str_replace('\\', '/', $class);
 
 		if (class_exists($class, false)) {
-			if (class_exists($class . '_mod', false)) {
-				$class .= '_mod';
+			if (class_exists($class . '_ext', false)) {
+				$class .= '_ext';
 			}
 
 			return $return_instance ? new $class() : true;
@@ -92,33 +92,7 @@ final class Registry
 			return false;
 		}
 
-		//Apply mods and resolve correct file to load
-		$mod = _mod($file);
-
-		if (pathinfo($mod, PATHINFO_EXTENSION) === 'mod') {
-			//Check if using Class_mod (which extends the original class)
-			$handle = fopen($mod, "r");
-
-			if ($handle) {
-				while (($line = fgets($handle)) !== false) {
-					$line = strtolower($line);
-
-					if (strpos($line, $l_class)) {
-						if (strpos($line, $l_class . '_mod')) {
-							require_once($file);
-							$class .= '_mod';
-						}
-
-						break;
-					}
-				}
-
-				fclose($handle);
-			}
-		}
-
-		//Require class file
-		require_once($mod);
+		require_once(_mod($file));
 
 		//Return new instance
 		if ($return_instance) {

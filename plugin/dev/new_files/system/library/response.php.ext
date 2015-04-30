@@ -1,21 +1,14 @@
-#<?php
+<?php
 
-//=====
-class Response extends Library
+class Response_ext extends Response
 {
-//.....
 	public function output()
 	{
-//-----
-//>>>>> {php}
 		//Database Profiling
 		if (AMPLO_PROFILE && !IS_AJAX) {
 			$this->dev->performance();
 		}
-//-----
-//=====
-	}
-//.....
-}
 
-//-----
+		return parent::output();
+	}
+}

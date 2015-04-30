@@ -56,6 +56,10 @@ function _mod($file)
 		if (filemtime($mod_file) < filemtime($file)) {
 			if ($registry) {
 				$registry->get('mod')->reapply($mod_file);
+				echo 'reapply mod ' . $mod_file . ' = ' . filemtime($mod_file) . ' < ' . filemtime($file) . '<BR>';
+
+				echo "Change all Class_mod file to _ext and .ext files!!";
+				exit;
 			} else {
 				$mod_update[$mod_file] = $mod_file;
 			}

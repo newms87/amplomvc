@@ -67,8 +67,8 @@ final class Action
 
 		require_once(_mod($file));
 
-		if (class_exists($class . '_mod', false)) {
-			$class .= '_mod';
+		if (class_exists($class . '_ext', false)) {
+			$class .= '_ext';
 		}
 
 		$callable = array(
