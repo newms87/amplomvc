@@ -183,7 +183,7 @@ class Url extends Library
 
 	private function findAlias($base_url, $path = '', $query = '')
 	{
-		$path = strtolower(str_replace('-', '_', $path));
+		$lower_path = strtolower(str_replace('-', '_', $path));
 
 		if (is_array($query)) {
 			$query_str = $query ? http_build_query($query) : '';
@@ -196,7 +196,7 @@ class Url extends Library
 		$has_scheme = parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0;
 
 		//If no path, or already is an alias, no lookup needed
-		if (!$path || isset($this->aliases[$path]) || $has_scheme) {
+		if (!$path || isset($this->aliases[$lower_path]) || $has_scheme) {
 			if ($query_str) {
 				$query_str = (strpos($path, '?') === false ? '?' : '&') . $query_str;
 			}

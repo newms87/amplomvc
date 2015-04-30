@@ -60,9 +60,6 @@ while (($helper = readdir($handle))) {
 	}
 }
 
-//Register the core routing hook
-register_routing_hook('amplo', 'amplo_routing_hook');
-
 //PHP Info
 if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	phpinfo();
@@ -71,6 +68,12 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
+
+//Config (load after routing site!)
+new Config();
+
+//Register the core routing hook
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 // Request (cleans globals)
 $registry->set('request', new Request());
@@ -85,20 +88,6 @@ if (!defined("AC_CUSTOMER_OVERRIDE")) {
 
 // Session
 $registry->set('session', new Session());
-
-//Mod Files
-$registry->set('mod', new Mod());
-
-// Url
-$registry->set('url', new Url());
-
-// Response
-$response = new Response();
-$response->addHeader('Content-Type', 'text/html; charset=UTF-8');
-$registry->set('response', $response);
-
-//Plugins (self assigning to registry)
-new Plugin();
 
 //Cron Called from system
 if (option('cron_status', true)) {
@@ -117,6 +106,3 @@ if (option('cron_status', true)) {
 
 //Router
 $router->dispatch();
-
-// Output
-$response->output();

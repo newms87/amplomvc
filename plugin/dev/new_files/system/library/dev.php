@@ -158,7 +158,7 @@ class Dev extends Library
 		$file = $this->theme->getFile('template/common/amplo_profile', AMPLO_DEFAULT_THEME);
 
 		if ($file) {
-			if (DB_PROFILE) {
+			if (AMPLO_PROFILE) {
 				$db_profile = $this->db->getProfile();
 
 				$db_time = 0;

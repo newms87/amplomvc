@@ -196,13 +196,13 @@ class Router
 				);
 
 				output_json($response);
-				$this->response->output();
-				exit;
 			} else {
 				$action = new Action(ERROR_404_PATH);
 				$action->execute();
 			}
 		}
+
+		output_flush();
 	}
 
 	public function getSites()
@@ -226,13 +226,18 @@ class Router
 
 		foreach ($sites as $site) {
 			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
-				if (!empty($site['prefix'])) {
-					$prefix = $site['prefix'];
-				}
-
 				$this->site = $site;
 				break;
 			}
+		}
+
+		if (!$this->site) {
+			reset($sites);
+			$this->site = current($sites);
+		}
+
+		if (!empty($this->site['prefix'])) {
+			$prefix = $this->site['prefix'];
 		}
 
 		define('SITE_PREFIX', $prefix);

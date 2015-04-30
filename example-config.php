@@ -4,7 +4,7 @@
  *
  * For Developers, some useful defines:
  * define('AMPLO_TIME_LOG', true); - Enables Performance logging w/ the dev plugin.
- * define('DB_PROFILE', true); - Enables performance logging on all DB queries w/ the dev plugin.
+ * define('AMPLO_PROFILE', true); - Enables performance logging on all DB queries w/ the dev plugin.
  */
 
 //Set this to 1 for production environments

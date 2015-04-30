@@ -172,10 +172,10 @@ class DB
 			$sql = $this->synctime($sql);
 		}
 
-		if (DB_PROFILE) {
+		if (AMPLO_PROFILE) {
 			$start = microtime(true);
 
-			if (DB_PROFILE_NO_CACHE) {
+			if (AMPLO_PROFILE_NO_CACHE) {
 				$sql = preg_replace("/^SELECT /i", "SELECT SQL_NO_CACHE ", $sql);
 			}
 

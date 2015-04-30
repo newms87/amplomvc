@@ -8,7 +8,7 @@ final class Action
 	{
 //-----
 //>>>>> {php} {before}
-		if (DB_PROFILE) {
+		if (AMPLO_PROFILE) {
 			_profile('START: ' . $class . '->' . $method . '()');
 		}
 //-----
@@ -25,7 +25,7 @@ final class Action
 		if ($this->is_valid) {
 //-----
 //>>>>> {php}
-			if (DB_PROFILE) {
+			if (AMPLO_PROFILE) {
 				_profile('CALL: ' . $this->class . '->' . $this->method . '()');
 			}
 //-----
@@ -33,7 +33,7 @@ final class Action
 			$this->output = $controller->output ? $controller->output : $output;
 //-----
 //>>>>> {php}
-			if (DB_PROFILE) {
+			if (AMPLO_PROFILE) {
 				_profile('END: ' . $this->class . '->' . $this->method . '()');
 			}
 //-----

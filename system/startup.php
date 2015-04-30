@@ -39,26 +39,26 @@ if (!defined('COOKIE_PREFIX')) {
 }
 
 $config_defines = array(
-	'HTTP_SITE'             => 'http://' . DOMAIN . SITE_BASE,
-	'HTTPS_SITE'            => 'https://' . DOMAIN . SITE_BASE,
-	'URL_IMAGE'             => URL_SITE . 'image/',
-	'URL_DOWNLOAD'          => URL_SITE . 'download/',
-	'URL_RESOURCES'         => URL_SITE . 'system/resources/',
-	'URL_THEMES'            => URL_SITE . 'app/view/theme/',
-	'DIR_IMAGE'             => DIR_SITE . 'image/',
-	'DIR_DOWNLOAD'          => DIR_SITE . 'download/',
-	'DIR_RESOURCES'         => DIR_SITE . 'system/resources/',
-	'DIR_LOGS'              => DIR_SITE . 'system/logs/',
-	'DIR_DATABASE_BACKUP'   => DIR_SITE . 'system/database/backups/',
-	'DEFAULT_TIMEZONE'      => 'America/Denver',
-	'MYSQL_TIMEZONE'        => '-6:00',
-	'DB_PROFILE'            => false,
-	'DB_PROFILE_NO_CACHE'   => false,
-	'AMPLO_DEFAULT_THEME'   => 'amplo',
-	'AMPLO_TIME_LOG'        => false,
-	'AMPLO_SESSION'         => COOKIE_PREFIX . 'amplo-session',
-	'AMPLO_SESSION_TIMEOUT' => 3600 * 2,
-	'CACHE_FILE_EXPIRATION' => 3600,
+	'HTTP_SITE'              => 'http://' . DOMAIN . SITE_BASE,
+	'HTTPS_SITE'             => 'https://' . DOMAIN . SITE_BASE,
+	'URL_IMAGE'              => URL_SITE . 'image/',
+	'URL_DOWNLOAD'           => URL_SITE . 'download/',
+	'URL_RESOURCES'          => URL_SITE . 'system/resources/',
+	'URL_THEMES'             => URL_SITE . 'app/view/theme/',
+	'DIR_IMAGE'              => DIR_SITE . 'image/',
+	'DIR_DOWNLOAD'           => DIR_SITE . 'download/',
+	'DIR_RESOURCES'          => DIR_SITE . 'system/resources/',
+	'DIR_LOGS'               => DIR_SITE . 'system/logs/',
+	'DIR_DATABASE_BACKUP'    => DIR_SITE . 'system/database/backups/',
+	'DEFAULT_TIMEZONE'       => 'America/Denver',
+	'MYSQL_TIMEZONE'         => '-6:00',
+	'AMPLO_PROFILE'          => false,
+	'AMPLO_PROFILE_NO_CACHE' => false,
+	'AMPLO_DEFAULT_THEME'    => 'amplo',
+	'AMPLO_TIME_LOG'         => false,
+	'AMPLO_SESSION'          => COOKIE_PREFIX . 'amplo-session',
+	'AMPLO_SESSION_TIMEOUT'  => 3600 * 2,
+	'CACHE_FILE_EXPIRATION'  => 3600,
 );
 
 foreach ($config_defines as $def_key => $def_value) {
@@ -164,12 +164,6 @@ require_once(_mod(DIR_SYSTEM . 'engine/cache.php'));
 
 // Common
 require_once(_mod(DIR_SYSTEM . 'library/config.php'));
-require_once(_mod(DIR_SYSTEM . 'library/mod.php'));
 require_once(_mod(DIR_SYSTEM . 'library/log.php'));
-require_once(_mod(DIR_SYSTEM . 'library/plugin.php'));
-require_once(_mod(DIR_SYSTEM . 'library/request.php'));
-require_once(_mod(DIR_SYSTEM . 'library/response.php'));
 require_once(_mod(DIR_SYSTEM . 'library/session.php'));
-require_once(_mod(DIR_SYSTEM . 'library/theme.php'));
-require_once(_mod(DIR_SYSTEM . 'library/url.php'));
 

@@ -5,24 +5,25 @@ class App_Controller_Page extends Controller
 	public function index()
 	{
 		//The page
-		$page_id = _get('page_id', 0);
+		$page_id = _get('page_id');
 
 		if ($page_id) {
 			$page = $this->Model_Page->getActivePage($page_id);
 		} else {
 			$page    = $this->Model_Page->getPageByName($this->route->getSegment(1));
-			$page_id = $page['page_id'];
 		}
 
 		if (!$page) {
 			return call('error/not_found');
 		}
 
+		$page_id = $page['page_id'];
+
 		//Page Head
 		set_page_info('title', $page['title']);
 
 		//TODO: Put the page style into a cached file. (load in page header!)
-		$page['style'] = $this->Model_Page->compileStyle($page['page_id'], $page['style']);
+		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
