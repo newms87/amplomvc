@@ -1000,13 +1000,12 @@ $.fn.collapsible = function (){
 			$(this).toggleClass('hide');
 		});
 
-		$c.find('.collapse, input, select, textarea, a').click(preventProp);
+		$c.find('.collapse, input, select, textarea, a').click(stopProp);
 	});
 }
 
-function preventProp(e){
+function stopProp(e){
 	e.stopPropagation();
-	return false;
 }
 
 $.fn.form_editor = function () {

@@ -126,9 +126,7 @@
 </div>
 
 <script>
-	console.log('here');
 	$('#amplo-profile-box').click(function () {
-		console.log('closing');
 		if (!$(this).hasClass('closing')) {
 			$(this).addClass('show');
 		}

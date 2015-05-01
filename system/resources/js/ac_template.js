@@ -38,6 +38,11 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			defaults: {}, //action being used as data here
 			unique:   false
 		}, action);
+
+		//update counts
+		$('[data-list-rel]').each(function(i,e){
+			$(e).attr('data-count', $(e).children().length);
+		});
 	}
 	else {
 		row = templates[name];
@@ -75,6 +80,8 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			});
 
 			list.append(template);
+
+			list.attr('data-count', list.children().length);
 
 			var row_list = [count];
 
