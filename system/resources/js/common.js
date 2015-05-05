@@ -650,7 +650,8 @@ $.fn.loading = function (params) {
 		var option = typeof params === 'string' ? {} : $.extend({}, {
 			text:    $e.attr('data-loading') || (params ? params.default_text : false),
 			disable: true,
-			delay:   false
+			delay:   false,
+			onStop: null
 		}, params);
 
 		if (option.text || $e.data('original')) {
@@ -671,6 +672,9 @@ $.fn.loading = function (params) {
 				if (option.delay) {
 					setTimeout(function () {
 						$e.loading('stop');
+						if (typeof option.onStop === 'function') {
+							option.onStop.call($e);
+						}
 					}, option.delay);
 				}
 			}
