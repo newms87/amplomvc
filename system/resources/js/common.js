@@ -28,6 +28,39 @@ String.prototype.str_replace = function (find, replace) {
 	return str;
 };
 
+String.prototype.toCurrency = Number.prototype.toCurrency = function (params) {
+	var n = parseFloat(this);
+	params = $.extend({}, $ac.currency, params);
+
+	return (n < 0 ? params.neg : params.pos) + params.symbol_left + Math.abs(n).formatNumber() + params.symbol_right;
+}
+
+String.prototype.formatNumber = Number.prototype.formatNumber = function (params) {
+	params = $.extend({}, $ac.currency, params);
+
+	var n = parseFloat(this);
+	var prec = !isFinite(+params.decimals) ? 0 : Math.abs(params.decimals);
+
+	n = (n + '').replace(/[^0-9+\-Ee.]/g, '');
+	n = !isFinite(+n) ? 0 : +n;
+
+	var s = ('' + n.roundFloat(prec)).split('.');
+
+	if (s[0].length > 3) {
+		s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, params.thousands_sep);
+	}
+	if ((s[1] || '').length < prec) {
+		s[1] = s[1] || '';
+		s[1] += new Array(prec - s[1].length + 1).join('0');
+	}
+	return s.join(params.dec_point);
+}
+
+Number.prototype.roundFloat = function (p) {
+	var k = Math.pow(10, p);
+	return '' + Math.round(this * k) / k;
+}
+
 //Async Load on call
 $ac.alq = {}, $ac.al_loaded = {};
 
@@ -41,46 +74,48 @@ $ac.al = $.extend($ac.al || {}, {
 	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js'
 });
 
-for (var al in $ac.al) {
-	register_autoload(al, $ac.al[al]);
+for (var fn in $ac.al) {
+	register_autoload(fn, $ac.al[fn]);
 }
 
 function register_autoload(fn, url) {
-	url = typeof url === 'string' ? [url] : url;
+	if (!$.fn[fn]) {
+		url = typeof url === 'string' ? [url] : url;
 
-	$.fn[fn] = function (view_id) {
-		var al = arguments.callee.fn;
-		var fn = al;
+		$.fn[fn] = function (view_id) {
+			var al = arguments.callee.fn;
+			var fn = al;
 
-		if (!$ac.alq[al]) {
-			var load_count = 1;
-			for (var u in url) {
-				if ($ac.al_loaded[url[u]]) {
-					fn = al;
-					al = $ac.al_loaded[url[u]];
-				} else {
-					$ac.alq[al] = [];
-					$ac.al_loaded[url[u]] = al;
-					$.getScript($ac.site_url + url[u], function () {
-						if (load_count++ >= url.length) {
-							for (var l in $ac.alq[al]) {
-								var q = $ac.alq[al][l];
-								$.fn[q.fn].apply(q.me, q.args);
+			if (!$ac.alq[al]) {
+				var load_count = 1;
+				for (var u in url) {
+					if ($ac.al_loaded[url[u]]) {
+						fn = al;
+						al = $ac.al_loaded[url[u]];
+					} else {
+						$ac.alq[al] = [];
+						$ac.al_loaded[url[u]] = al;
+						$.getScript($ac.site_url + url[u], function () {
+							if (load_count++ >= url.length) {
+								for (var l in $ac.alq[al]) {
+									var q = $ac.alq[al][l];
+									$.fn[q.fn].apply(q.me, q.args);
+								}
+
+								$(document).trigger(al);
 							}
-
-							$(document).trigger(al);
-						}
-					});
+						});
+					}
 				}
 			}
-		}
 
-		$ac.alq[al].push({fn: fn, me: this, args: arguments});
+			$ac.alq[al].push({fn: fn, me: this, args: arguments});
 
-		return this;
-	};
+			return this;
+		};
 
-	$.fn[fn].fn = fn;
+		$.fn[fn].fn = fn;
+	}
 }
 
 $.fn.use_once = function (label) {
@@ -651,7 +686,7 @@ $.fn.loading = function (params) {
 			text:    $e.attr('data-loading') || (params ? params.default_text : false),
 			disable: true,
 			delay:   false,
-			onStop: null
+			onStop:  null
 		}, params);
 
 		if (option.text || $e.data('original')) {
@@ -772,44 +807,16 @@ function getQueryString(key, defaultValue) {
 		return qs[1];
 }
 
-function currency_format(number, params) {
-	params = $.extend({}, {
-		symbol_left:   $ac.currency.symbol_left,
-		symbol_right:  $ac.currency.symbol_right,
-		decimals:      $ac.currency.decimals,
-		dec_point:     $ac.currency.decimal_point,
-		thousands_sep: $ac.currency.thousands_sep,
-		neg:           '-',
-		pos:           '+'
-	}, params);
-
-	str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);
-
-	return (number < 0 ? params.neg : params.pos) + params.symbol_left + str + params.symbol_right;
-}
-
-function number_format(number, decimals, dec_point, thousands_sep) {
-	number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-	var n = !isFinite(+number) ? 0 : +number,
-		prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-		sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-		dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-		s = '',
-		toFixedFix = function (n, prec) {
-			var k = Math.pow(10, prec);
-			return '' + Math.round(n * k) / k;
-		};
-	// Fix for IE parseFloat(0.55).toFixed(0) = 0;
-	s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-	if (s[0].length > 3) {
-		s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-	}
-	if ((s[1] || '').length < prec) {
-		s[1] = s[1] || '';
-		s[1] += new Array(prec - s[1].length + 1).join('0');
-	}
-	return s.join(dec);
-}
+$ac.currency = $ac.currency || {}
+$ac.currency = $.extend({
+	symbol_left:   '$',
+	symbol_right:  '',
+	decimals:      2,
+	dec_point:     '.',
+	thousands_sep: ',',
+	neg:           '-',
+	pos:           ''
+}, $ac.currency);
 
 $.cookie = function (key, value, options) {
 	if (arguments.length > 1) {
@@ -996,11 +1003,11 @@ function register_colorbox() {
 	}
 }
 
-$.fn.collapsible = function (){
-	return this.each(function(i,e){
+$.fn.collapsible = function () {
+	return this.each(function (i, e) {
 		var $c = $(e);
 
-		$c.click(function(){
+		$c.click(function () {
 			$(this).toggleClass('hide');
 		});
 
@@ -1008,12 +1015,12 @@ $.fn.collapsible = function (){
 	});
 }
 
-function stopProp(e){
+function stopProp(e) {
 	e.stopPropagation();
 }
 
 $.fn.form_editor = function () {
-	return this.use_once('form-editor-enabled').each(function(i,e) {
+	return this.use_once('form-editor-enabled').each(function (i, e) {
 		$fe = $(e);
 		var $form = $fe.is('form') ? $fe : $fe.find('form');
 
@@ -1042,7 +1049,7 @@ $.fn.form_editor = function () {
 							cb.call($form);
 						}
 					} else {
-						$form.find('.input [name]').each(function (i, e) {
+						$form.find('[name]').each(function (i, e) {
 							var $e = $(e);
 							var val = $e.val();
 
@@ -1050,9 +1057,13 @@ $.fn.form_editor = function () {
 								val = $e.find('option[value="' + val + '"]').html();
 							}
 
-							if ($e.attr('name').indexOf('[') === -1) {
-								$form.find('.field.' + $e.attr('name')).html(val);
+							var $field = $form.find('[data-name="' + $e.attr('name') + '"]');
+
+							if (!$field.length && $e.attr('name').indexOf('[') === -1) {
+								$field = $form.find('.field.' + $e.attr('name'));
 							}
+
+							$field.html(val).val(val);
 						});
 
 						if (response.success) {
