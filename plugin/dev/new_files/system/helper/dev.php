@@ -40,7 +40,9 @@ function html_dump($var, $label = "HTML Dump", $show_type = false, $level = 0, $
 		.html_dump {
 			display: inline-block;
 			margin-bottom: 15px;
-			margin-left: 20px
+			margin-left: 20px;
+			z-index: 100000;
+  			position: relative
 		}
 	</style>
 HTML;
