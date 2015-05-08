@@ -921,6 +921,10 @@ function register_confirms() {
 }
 
 function register_ajax_calls(is_ajax) {
+	$('a[data-loading]').click(function(){
+		$(this).loading();
+	});
+
 	$('form').use_once('data-loading-set').submit(function () {
 		$(this).find('button[data-loading]').loading();
 	});
@@ -1031,7 +1035,7 @@ $.fn.form_editor = function () {
 		$fe.find('.toggle-form').click(toggle_form_editor);
 		$fe.find('.cancel-form').click(cancel_form_editor);
 
-		$form.submit(function () {
+		$form.not('[data-noajax]').submit(function () {
 			var $form = $(this);
 
 			$form.find('[data-loading]').loading();
