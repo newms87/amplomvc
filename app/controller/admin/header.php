@@ -26,8 +26,7 @@ class App_Controller_Admin_Header extends Controller
 
 		$this->document->addScript(DIR_RESOURCES . 'js/jquery/colorbox/colorbox.js', 52);
 
-		$this->document->addScript(DIR_RESOURCES . 'js/image_manager.js', 53);
-		$this->document->addScript(DIR_RESOURCES . 'js/common.js', 54);
+		$this->document->addScript(DIR_JS . 'common.js', 54);
 		$this->document->addScript(theme_dir('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?

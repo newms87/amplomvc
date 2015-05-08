@@ -66,12 +66,14 @@ $ac.alq = {}, $ac.al_loaded = {};
 
 $ac.al = $.extend($ac.al || {}, {
 	codemirror:   ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
-	list_widget:  'system/resources/js/listings.js',
-	listview:     'system/resources/js/listings.js',
-	ac_template:  'system/resources/js/ac_template.js',
-	amplo_slider: 'system/resources/js/amplo_slider.js',
-	flexselect:   'system/resources/js/flexselect.js',
-	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js'
+	list_widget:  'app/view/js/listings.js',
+	listview:     'app/view/js/listings.js',
+	ac_template:  'app/view/js/ac_template.js',
+	amplo_slider: 'app/view/js/amplo_slider.js',
+	flexselect:   'app/view/js/flexselect.js',
+	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js',
+	ac_imageinput: 'app/view/js/image_manager.js',
+	ac_filemanager: 'app/view/js/image_manager.js'
 });
 
 for (var fn in $ac.al) {
@@ -95,7 +97,8 @@ function register_autoload(fn, url) {
 					} else {
 						$ac.alq[al] = [];
 						$ac.al_loaded[url[u]] = al;
-						$.getScript($ac.site_url + url[u], function () {
+						js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
+						$.getScript(js_url, function () {
 							if (load_count++ >= url.length) {
 								for (var l in $ac.alq[al]) {
 									var q = $ac.alq[al][l];

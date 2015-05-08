@@ -58,7 +58,7 @@
 	<![endif]-->
 
 	<!--[if lt IE 9]>
-	<script src="<?= URL_RESOURCES . 'js/html5shiv.js'; ?>"></script>
+	<script src="<?= URL_JS . 'html5shiv.js'; ?>"></script>
 	<![endif]-->
 
 	<? if ($ga = option('ga_code')) { ?>
