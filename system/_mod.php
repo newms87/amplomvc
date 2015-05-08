@@ -15,6 +15,8 @@ if (!defined("AMPLO_FILE_MODE")) {
 
 function _is_writable($dir, &$error = null)
 {
+	$dir = rtrim($dir, '/') . '/';
+	
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
 			mkdir($dir, AMPLO_DIR_MODE, true);
