@@ -541,11 +541,11 @@ function is_logged()
 	}
 }
 
-function customer_info($key = null)
+function customer_info($key = null, $default = null)
 {
 	global $registry;
 
-	return $registry->get('customer')->info($key);
+	return $registry->get('customer')->info($key, $default);
 }
 
 function customer_meta($key, $default = null)

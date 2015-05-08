@@ -239,6 +239,11 @@ class Plugin extends Library
 
 	public function activatePluginFile($name, $file)
 	{
+		if (!is_file($file)) {
+			$this->error['file'] = _l("The file %s was not found.", $file);
+			return false;
+		}
+
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;

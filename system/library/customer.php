@@ -204,10 +204,10 @@ class Customer extends Library
 
 	/** Customer Info **/
 
-	public function info($key = null)
+	public function info($key = null, $default = null)
 	{
 		if ($key) {
-			return isset($this->info[$key]) ? $this->info[$key] : null;
+			return isset($this->info[$key]) ? $this->info[$key] : $default;
 		}
 
 		return $this->info;
