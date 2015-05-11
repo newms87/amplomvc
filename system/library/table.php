@@ -37,13 +37,19 @@ class Table extends Library
 
 	public function mapAttribute($attr, $values)
 	{
-		if (empty($this->columns)) {
-			trigger_error(_l("%s(): You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!", __METHOD__));
-			exit();
-		}
+		if (is_array($values)) {
+			if (empty($this->columns)) {
+				trigger_error(_l("%s(): You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!", __METHOD__));
+				exit();
+			}
 
-		foreach ($this->columns as $slug => &$column) {
-			$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
+			foreach ($this->columns as $slug => &$column) {
+				if (!is_array($column)) {
+					$column = array();
+				}
+				
+				$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
+			}
 		}
 	}
 
