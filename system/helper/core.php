@@ -661,6 +661,7 @@ if (!function_exists('amplo_error_handler')) {
 			<style>
 				.error-display {
 					position: relative;
+					text-align: left;
 					z-index: 10000;
 					padding: 10px;
 					border-radius: 5px;
