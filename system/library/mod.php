@@ -75,7 +75,7 @@ class Mod extends Library
 		$algorithm        = false;
 
 		if (!empty($directives['algorithm'])) {
-			$algorithm = trim($directives['algorithm']);
+			$algorithm = trim(strtolower($directives['algorithm']));
 		} //Intelligent Guess
 		else {
 			$contents = file_get_contents($mod_file);
