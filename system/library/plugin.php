@@ -298,7 +298,7 @@ class Plugin extends Library
 				@unlink($live_file);
 			}
 
-			if (!symlink($plugin_file, $live_file)) {
+			if (!@symlink($plugin_file, $live_file)) {
 				$this->error[$plugin_file]['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
 			}
 		}

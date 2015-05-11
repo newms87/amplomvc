@@ -32,7 +32,7 @@
 					</td>
 					<td>
 						<input type="text" name="model" value="<?= $model; ?>"/>
-						<a class="gen_url" onclick="generate_model(this)">{{[Generate Model ID]}}</a>
+						<a class="gen-btn gen-model">{{[Generate Model ID]}}</a>
 					</td>
 				</tr>
 				<tr>
@@ -42,7 +42,7 @@
 					</td>
 					<td>
 						<input type="text" onfocus="$(this).show_msg('error', '{{<br>Warning! This may cause system instability! Please use the \\'Generate URL\\' button}}');" name="alias" value="<?= $alias; ?>"/>
-						<a class="gen_url" onclick="generate_url(this)">{{[Generate URL]}}</a>
+						<a class="gen-btn gen-seo-url">{{[Generate URL]}}</a>
 					</td>
 				</tr>
 				<tr>
@@ -120,9 +120,20 @@
 
 	$('.imageinput').ac_imageinput();
 
-	function generate_url(context) {
-		$.show_msg('clear');
+	$('.gen-model').click(function(){
+		var name = $('input[name=name]').val();
 
+		if (!name) {
+			alert("Please make a name for this product before generating the Model ID");
+		} else {
+			data = {product_id:<?= $product_id; ?>, name: name};
+			$(context).fade_post("<?= $url_generate_model; ?>", data, function (json) {
+				$('input[name="model"]').val(json);
+			});
+		}
+	});
+
+	$('.gen-seo-url').click(function(){
 		name = $('input[name=name]').val();
 
 		if (!name) {
@@ -134,19 +145,7 @@
 				$('input[name="alias"]').val(json);
 			});
 		}
-	}
-	function generate_model(context) {
-		name = $('input[name=name]').val();
-
-		if (!name) {
-			alert("Please make a name for this product before generating the Model ID");
-		} else {
-			data = {product_id:<?= $product_id; ?>, name: name};
-			$(context).fade_post("<?= $url_generate_model; ?>", data, function (json) {
-				$('input[name="model"]').val(json);
-			});
-		}
-	}
+	});
 
 	$.ac_errors(<?= json_encode($errors); ?>);
 </script>

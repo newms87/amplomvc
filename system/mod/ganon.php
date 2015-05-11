@@ -2,7 +2,7 @@
 
 class System_Mod_Ganon extends System_Mod_Mod
 {
-	public function apply($source, $mod)
+	public function apply($source, $mod, $file_type, $meta)
 	{
 		ini_set('max_execution_time', 300);
 

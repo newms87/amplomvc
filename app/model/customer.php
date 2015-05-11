@@ -20,8 +20,8 @@ class App_Model_Customer extends App_Model_Table
 		if (isset($customer['email'])) {
 			if (!validate('email', $customer['email'])) {
 				$this->error['email'] = $this->validation->fetchError();
-			} elseif ($this->customer->emailRegistered($customer['email'])) {
-				$this->error['email'] = _l("Warning: E-Mail Address is already registered!");
+			} elseif (!$customer_id && $this->customer->emailRegistered($customer['email'])) {
+				$this->error['email'] = _l("E-Mail Address is already registered!");
 			}
 
 			if (isset($customer['username'])) {
@@ -48,10 +48,12 @@ class App_Model_Customer extends App_Model_Table
 				$this->error['password'] = $this->validation->fetchError();
 			} elseif (isset($customer['confirm']) && $customer['confirm'] !== $customer['password']) {
 				$this->error['confirm'] = _l("Your password and confirmation do not match.");
+			} else {
+				$customer['password'] = $this->customer->encrypt($customer['password']);
 			}
 		} elseif (!$customer_id) {
 			$customer['no_password_set'] = true;
-			$customer['password']        = $this->generatePassword();
+			$customer['password']        = $this->customer->encrypt($this->generatePassword());
 		}
 
 		if ($this->error) {
@@ -65,8 +67,6 @@ class App_Model_Customer extends App_Model_Table
 		if (!isset($customer['newsletter'])) {
 			$customer['newsletter'] = option('config_customer_newsletter', 0);
 		}
-
-		$customer['password'] = $this->customer->encrypt($customer['password']);
 
 		$customer['approved'] = option('config_customer_approval') ? 1 : 0;
 
@@ -93,11 +93,6 @@ class App_Model_Customer extends App_Model_Table
 		}
 
 		return $customer_id;
-	}
-
-	public function getCustomerGroups()
-	{
-		return $this->queryRows("SELECT * FROM {$this->t['customer_group']}");
 	}
 
 	/** Customer Meta Data **/

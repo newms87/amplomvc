@@ -154,7 +154,7 @@ class App_Controller_Admin_User extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} elseif ($this->message->has('error')) {
-			$this->form();
+			post_redirect('admin/user/form');
 		} else {
 			redirect('admin/user');
 		}

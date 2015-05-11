@@ -61,7 +61,7 @@ class App_Controller_Feed_GoogleSitemap extends Controller
 	{
 		$output = '';
 
-		$results = $this->Model_Category->getCategories($parent_id);
+		$results = $this->Model_Category->getRecords($parent_id);
 
 		foreach ($results as $result) {
 			if (!$current_path) {
