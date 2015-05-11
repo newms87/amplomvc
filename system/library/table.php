@@ -47,7 +47,7 @@ class Table extends Library
 				if (!is_array($column)) {
 					$column = array();
 				}
-				
+
 				$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
 			}
 		}
@@ -92,16 +92,15 @@ class Table extends Library
 		//Normalize Columns
 		foreach ($this->columns as $slug => &$column) {
 
-			if (!isset($column['type'])) {
-				trigger_error(_l("Invalid table column! The type was not set for %s!", $slug));
-				exit();
+			if (!is_array($column)) {
+				$column = array();
 			}
 
 			$default_values = array(
+				'type'         => 'text',
 				'display_name' => $slug,
 				'sort'         => false,
 				'filter'       => false,
-				'type'         => 'text',
 				'align'        => 'center',
 				'editable'     => null,
 			);
