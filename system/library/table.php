@@ -18,6 +18,12 @@ class Table extends Library
 
 	public function setColumns($columns)
 	{
+		foreach ($columns as $key => $col) {
+			if (!is_array($col)) {
+				unset($columns[$key]);
+			}
+		}
+
 		$this->columns = $columns;
 	}
 
@@ -44,10 +50,6 @@ class Table extends Library
 			}
 
 			foreach ($this->columns as $slug => &$column) {
-				if (!is_array($column)) {
-					$column = array();
-				}
-
 				$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
 			}
 		}
@@ -91,12 +93,7 @@ class Table extends Library
 
 		//Normalize Columns
 		foreach ($this->columns as $slug => &$column) {
-
-			if (!is_array($column)) {
-				$column = array();
-			}
-
-			$default_values = array(
+			$column += array(
 				'type'         => 'text',
 				'display_name' => $slug,
 				'sort'         => false,
@@ -104,8 +101,6 @@ class Table extends Library
 				'align'        => 'center',
 				'editable'     => null,
 			);
-
-			$column += $default_values;
 
 			//Set Class
 			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];
