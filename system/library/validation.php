@@ -82,7 +82,7 @@ class Validation extends Library
 	{
 		$this->reset();
 
-		if (!filter_var($url, FILTER_VALIDATE_URL)) {
+		if (!is_url($url)) {
 			$this->error[self::URL_INVALID] = _l("Url is invalid!");
 		}
 

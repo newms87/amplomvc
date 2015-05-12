@@ -356,6 +356,11 @@ function theme_sprite($image)
 	return $sprites[$image];
 }
 
+function is_url($url)
+{
+	return (filter_var($url, FILTER_VALIDATE_URL) || strpos($url, '//') === 0);
+}
+
 function site_url($path = '', $query = null, $ssl = null, $site_id = null)
 {
 	global $registry;
