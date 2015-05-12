@@ -95,11 +95,13 @@ class amploAPI
 			$this->token = $_SESSION['amplo_api_token'];
 		}
 
-		if (!$this->token) {
-			return $this->requestToken($customer_id);
+		if ($this->token) {
+			if ($this->setToken($this->token)) {
+				return true;
+			}
 		}
 
-		return $this->setToken($this->token);
+		return $this->requestToken($customer_id);
 	}
 
 	public function requestCustomerToken($customer_id)

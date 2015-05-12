@@ -37,8 +37,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 					$attribute_group_id = $attribute_menu['attribute_group_id'];
 
 					$sort = array(
-						'sort'  => 'name',
-						'order' => 'ASC',
+						'name' => 'ASC',
 					);
 
 					$filter = array(
@@ -46,7 +45,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 						'attribute_group_ids' => array($attribute_group_id),
 					);
 
-					$attribute_list = $this->Model_Product->getAttributes($sort + $filter);
+					$attribute_list = $this->Model_Catalog_Attribute->getRecords($sort, $filter);
 
 					if (empty($attribute_list)) {
 						continue;
@@ -99,7 +98,7 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 		$data['settings'] = $settings;
 
 		//Template Data
-		$data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
+		$data['data_attribute_groups'] = array('' => _l(" --- None --- ")) + $this->Model_Catalog_AttributeGroup->getRecords();
 
 		//Render
 		$this->render('block/module/sidebar_settings', $data);

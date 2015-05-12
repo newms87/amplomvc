@@ -18,6 +18,12 @@ class Table extends Library
 
 	public function setColumns($columns)
 	{
+		foreach ($columns as $key => $col) {
+			if (!is_array($col)) {
+				unset($columns[$key]);
+			}
+		}
+
 		$this->columns = $columns;
 	}
 
@@ -37,13 +43,15 @@ class Table extends Library
 
 	public function mapAttribute($attr, $values)
 	{
-		if (empty($this->columns)) {
-			trigger_error(_l("%s(): You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!", __METHOD__));
-			exit();
-		}
+		if (is_array($values)) {
+			if (empty($this->columns)) {
+				trigger_error(_l("%s(): You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!", __METHOD__));
+				exit();
+			}
 
-		foreach ($this->columns as $slug => &$column) {
-			$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
+			foreach ($this->columns as $slug => &$column) {
+				$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
+			}
 		}
 	}
 
@@ -85,22 +93,14 @@ class Table extends Library
 
 		//Normalize Columns
 		foreach ($this->columns as $slug => &$column) {
-
-			if (!isset($column['type'])) {
-				trigger_error(_l("Invalid table column! The type was not set for %s!", $slug));
-				exit();
-			}
-
-			$default_values = array(
+			$column += array(
+				'type'         => 'text',
 				'display_name' => $slug,
 				'sort'         => false,
 				'filter'       => false,
-				'type'         => 'text',
 				'align'        => 'center',
 				'editable'     => null,
 			);
-
-			$column += $default_values;
 
 			//Set Class
 			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];

@@ -37,7 +37,6 @@ class App_Controller_Account extends Controller
 
 		$options = array(
 			'index' => 'address_id',
-			'cache' => true
 		);
 
 		$customer['addresses'] = $this->Model_Customer->getAddresses(customer_info('customer_id'), null, null, $options);

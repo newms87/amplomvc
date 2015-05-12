@@ -99,6 +99,11 @@ class App_Model_UserRole extends App_Model_Table
 		);
 
 		foreach ($files as $file) {
+			//Skip files if there is a mod file for it.
+			if (is_file($admin_dir . $file . '.mod')) {
+				continue;
+			}
+
 			$path        = str_replace('.php', '', $file);
 			$parts       = explode('/', $path);
 			$class_parts = array();

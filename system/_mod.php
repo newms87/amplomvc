@@ -54,9 +54,7 @@ function _mod($file)
 
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
-	if (is_file($file . '.ext')) {
-		require_once($file . '.ext');
-	}
+	$ext_file = is_file($file . '.ext') ? $file . '.ext' : '';
 
 	$mod_file = $file . '.mod';
 
@@ -96,6 +94,11 @@ function _mod($file)
 		}
 
 		$file = $tpl;
+	}
+
+	if ($ext_file) {
+		require_once($file);
+		return $ext_file;
 	}
 
 	return $file;

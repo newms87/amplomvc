@@ -51,7 +51,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 		list($navigation_groups, $total) = $this->Model_Navigation->getGroups($sort, $filter, $options, true);
 
-		foreach ($navigation_groups as $navigation_group_id => &$group) {
+		foreach($navigation_groups as $navigation_group_id => &$group) {
 			$group['actions'] = array(
 				'edit'   => array(
 					'text' => _l("Edit"),
@@ -60,10 +60,10 @@ class App_Controller_Admin_Navigation extends Controller
 				'delete' => array(
 					'text' => _l("Delete"),
 					'href' => site_url('admin/navigation/delete', 'navigation_group_id=' . $navigation_group_id),
-				)
+				),
 			);
 
-			if ($group['name'] == 'admin') {
+			if($group['name'] == 'admin') {
 				$group['actions']['reset'] = array(
 					'text'   => _l("Reset Admin Navigation"),
 					'href'   => site_url('admin/navigation/reset_admin_navigation'),
@@ -84,7 +84,7 @@ class App_Controller_Admin_Navigation extends Controller
 
 		$output = block('widget/listing', null, $listing + $options);
 
-		if ($this->is_ajax) {
+		if($this->is_ajax) {
 			output($output);
 		} else {
 			return $output;
@@ -107,7 +107,7 @@ class App_Controller_Admin_Navigation extends Controller
 		//Load Values or Defaults
 		$group = $_POST;
 
-		if (!IS_POST && $navigation_group_id) {
+		if(!IS_POST && $navigation_group_id) {
 			$group = $this->Model_Navigation->getGroup($navigation_group_id);
 		}
 
@@ -128,6 +128,7 @@ class App_Controller_Admin_Navigation extends Controller
 			'title'         => '',
 			'path'          => '',
 			'query'         => '',
+			'target'        => '',
 			'condition'     => '',
 			'status'        => 1,
 		);
@@ -147,16 +148,16 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function save()
 	{
-		if ($navigation_group_id = $this->Model_Navigation->saveGroup((int)_get('navigation_group_id'), $_POST)) {
+		if($navigation_group_id = $this->Model_Navigation->saveGroup((int)_get('navigation_group_id'), $_POST)) {
 			message('success', _l("The Navigation Group has been saved!"));
 			message('data', array('navigation_group_id' => $navigation_group_id));
 		} else {
 			message('error', $this->Model_Navigation->fetchError());
 		}
 
-		if ($this->is_ajax) {
+		if($this->is_ajax) {
 			output_message();
-		} elseif ($this->message->has('error')) {
+		} elseif($this->message->has('error')) {
 			post_redirect('admin/navigation/form', 'navigation_group_id=' . $navigation_group_id);
 		} else {
 			redirect('admin/navigation');
@@ -165,13 +166,13 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function delete()
 	{
-		if ($this->Model_Navigation->removeGroup((int)_get('navigation_group_id'))) {
+		if($this->Model_Navigation->removeGroup((int)_get('navigation_group_id'))) {
 			message('success', _l("Success: You have modified Navigation!"));
 		} else {
 			message('error', $this->Model_Navigation->fetchError());
 		}
 
-		if ($this->is_ajax) {
+		if($this->is_ajax) {
 			output_message();
 		} else {
 			redirect('admin/navigation');
@@ -180,8 +181,8 @@ class App_Controller_Admin_Navigation extends Controller
 
 	public function batch_action()
 	{
-		foreach ($_POST['batch'] as $navigation_group_id) {
-			switch ($_POST['action']) {
+		foreach($_POST['batch'] as $navigation_group_id) {
+			switch($_POST['action']) {
 				case 'enable':
 					$this->Model_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
 					break;
@@ -195,14 +196,14 @@ class App_Controller_Admin_Navigation extends Controller
 					break;
 			}
 
-			if ($this->Model_Navigation->hasError()) {
+			if($this->Model_Navigation->hasError()) {
 				message('error', $this->Model_Navigation->fetchError());
 			} else {
 				message('success', _l("Success: You have modified navigation!"));
 			}
 		}
 
-		if ($this->is_ajax) {
+		if($this->is_ajax) {
 			$this->listing();
 		} else {
 			redirect('admin/navigation');
@@ -213,14 +214,14 @@ class App_Controller_Admin_Navigation extends Controller
 	{
 		$this->Model_Navigation->resetAdminNavigationGroup();
 
-		if ($this->Model_Navigation->hasError()) {
+		if($this->Model_Navigation->hasError()) {
 			message('error', $this->Model_Navigation->fetchError());
 			redirect('admin/navigation');
 		}
 
 		message("notify", "Admin Navigation Group has been reset!");
 
-		if (!$this->is_ajax) {
+		if(!$this->is_ajax) {
 			redirect('admin/navigation');
 		}
 

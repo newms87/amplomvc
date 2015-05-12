@@ -659,7 +659,10 @@ if (!function_exists('amplo_error_handler')) {
 
 				echo <<<HTML
 			<style>
-				.error_display {
+				.error-display {
+					position: relative;
+					text-align: left;
+					z-index: 10000;
 					padding: 10px;
 					border-radius: 5px;
 					background: white;
@@ -667,17 +670,17 @@ if (!function_exists('amplo_error_handler')) {
 					font-size: 14px;
 					border: 1px solid black;
 				}
-				.error_display .label {
+				.error-display .label {
 					width: 70px;
 					display:inline-block;
 					font-weight: bold;
 				}
 
-				.error_display a {
+				.error-display a {
 					color: blue;
 				}
 			</style>
-			<div class="error_display">
+			<div class="error-display">
 				<div class="type"><span class="label">Type:</span> <span class="value">$error</span></div>
 				<div class="msg"><span class="label">Message:</span> <span class="value">$errstr</span></div>
 				<div class="file"><span class="label">File:</span> <span class="value">$errfile</span></div>

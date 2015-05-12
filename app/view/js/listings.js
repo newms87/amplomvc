@@ -184,7 +184,8 @@ function listview_reset() {
 
 function listview_filter_on_enter(e) {
 	if (e.keyCode == 13) {
-		$(this).find('.filter-button')[0].click();
+		var $filter = $(this).is('.filter-list') ? $(this) : $(this).closest('.filter-list');
+		$filter.find('.filter-button')[0].click();
 	}
 }
 
@@ -285,30 +286,29 @@ function refresh_listing() {
 
 var delay = false;
 
-function delay_update($filter, my_delay) {
-	var $this = $(this);
+function delay_update(my_delay) {
+	var $filter = $(this).is('.filter-list') ? $(this) : $(this).closest('.filter-list');
 
-	if (my_delay) {
+	if (typeof my_delay === 'number') {
 		if (my_delay === delay) {
 			var $widget = $filter.closest('.widget-listing').addClass('loading');
 
 			$('#ui-datepicker-div').remove();
 
-			$.get($filter.apply_filter($this.closest('.list-view').attr('data-filter-url')), {}, function (response) {
+			$.get($filter.apply_filter($filter.closest('.list-view').attr('data-filter-url')), {}, function (response) {
 				$widget.replaceWith(response);
 			});
 		}
 	} else {
 		var event = $filter;
-		var my_delay = Date.now();
-		var $filter = $this.closest('.filter-list');
+		my_delay = Date.now();
 		delay = my_delay;
 
 		if (event.keyCode === 13) {
-			delay_update($filter, my_delay);
+			delay_update.call($filter, my_delay);
 		} else {
 			setTimeout(function () {
-				delay_update($filter, my_delay)
+				delay_update.call($filter, my_delay)
 			}, 1500);
 		}
 	}

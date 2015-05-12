@@ -172,7 +172,7 @@ class App_Controller_Admin_Settings_Store extends Controller
 		$store['data_countries']       = $this->Model_Localisation_Country->getCountries();
 		$store['data_languages']       = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
 		$store['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
-		$store['data_customer_groups'] = $this->Model_Customer->getCustomerGroups();
+		$store['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getRecords(null, null, array('cache' => true));
 		$store['data_pages']           = array('' => _l(" --- Please Select --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true));
 
 		$store['data_yes_no'] = array(

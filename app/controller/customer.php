@@ -258,7 +258,7 @@ class App_Controller_Customer extends Controller
 				'reset' => site_url('customer/reset_form', 'code=' . $code),
 			);
 
-			call('mail/forgotten', $email_data);
+			call('mail/forgotten', array($email_data));
 
 			message('notify', _l("Please follow the link that was sent to your email to reset your password."));
 		}

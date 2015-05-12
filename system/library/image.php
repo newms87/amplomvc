@@ -30,45 +30,49 @@ class Image extends Library
 	{
 		$image_url = is_url($image_path) ? $image_path : false;
 
+		if (strpos($image_url, DIR_IMAGE) !== false || strpos($image_url, DIR_DOWNLOAD) !== false || strpos($image_url, DIR_SITE) !== false) {
+			$image_url = false;
+		}
+
 		if ($image_url && !$return_dir) {
-			return $image_path;
-		}
+			$image = $image_url;
+		} else {
+			$scheme = parse_url($image_path, PHP_URL_SCHEME);
 
-		$scheme = parse_url($image_path, PHP_URL_SCHEME);
+			if ($image_url && ($scheme && !in_array($scheme, self::$streams))) {
+				return $image_url;
+			}
 
-		if ($image_url && ($scheme && !in_array($scheme, self::$streams))) {
-			return $image_url;
-		}
+			$replace = array(
+				'#\\\\#' => '/',
+				'#/./#' => '/',
+				'#' . URL_IMAGE . '#' => DIR_IMAGE,
+				'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
+				'#' . URL_SITE . '#' => DIR_SITE,
+				'#^(http|https):#' => '',
+				"#\\?.*$#" => '',
+			);
 
-		$replace = array(
-			'#\\\\#'                 => '/',
-			'#/./#'                  => '/',
-			'#' . URL_IMAGE . '#'    => DIR_IMAGE,
-			'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
-			'#' . URL_SITE . '#'     => DIR_SITE,
-			'#^(http|https):#'       => '',
-			"#\\?.*$#"               => '',
-		);
+			$image = preg_replace(array_keys($replace), $replace, $image_path);
 
-		$image = preg_replace(array_keys($replace), $replace, $image_path);
-
-		if (!is_file($image)) {
-			if (is_file(DIR_IMAGE . $image)) {
-				$image = DIR_IMAGE . $image;
-			} else {
-				if (strpos($image, "/theme/")) {
-					if ($image = $this->theme->findFile($image)) {
-						return $image;
+			if (!is_file($image)) {
+				if (is_file(DIR_IMAGE . $image)) {
+					$image = DIR_IMAGE . $image;
+				} else {
+					if (strpos($image, "/theme/")) {
+						if ($image = $this->theme->findFile($image)) {
+							return $image;
+						}
 					}
+
+					if (defined("AMPLO_IMAGE_ERROR_LOG") && AMPLO_IMAGE_ERROR_LOG) {
+						write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
+					}
+
+					$this->error['image'] = _l("Could not locate image file %s", $image_path);
+
+					return false;
 				}
-
-				if (defined("AMPLO_IMAGE_ERROR_LOG") && AMPLO_IMAGE_ERROR_LOG) {
-					write_log('image', _l("Unable to locate image file %s<BR>FROM: %s<BR><BR>%s", $image_path, $this->url->here(), get_caller()));
-				}
-
-				$this->error['image'] = _l("Could not locate image file %s", $image_path);
-
-				return false;
 			}
 		}
 
