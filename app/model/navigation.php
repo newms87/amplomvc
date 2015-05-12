@@ -349,7 +349,7 @@ class App_Model_Navigation extends App_Model_Table
 
 			//Filter restricted paths, current user cannot access
 			if (IS_ADMIN) {
-				if ($link['path'] && !user_can('r', $link['path'])) {
+				if (preg_match("/^[a-z0-9_-]+\\/[a-z0-9_-]+/i", $link['path']) && $link['path'] && !user_can('r', $link['path'])) {
 					$link['active'] = false;
 					continue;
 				}
