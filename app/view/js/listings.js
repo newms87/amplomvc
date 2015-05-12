@@ -184,7 +184,8 @@ function listview_reset() {
 
 function listview_filter_on_enter(e) {
 	if (e.keyCode == 13) {
-		$(this).find('.filter-button')[0].click();
+		var $filter = $(this).is('.filter-list') ? $(this) : $(this).closest('.filter-list');
+		$filter.find('.filter-button')[0].click();
 	}
 }
 
@@ -288,7 +289,7 @@ var delay = false;
 function delay_update(my_delay) {
 	var $filter = $(this).is('.filter-list') ? $(this) : $(this).closest('.filter-list');
 
-	if (my_delay) {
+	if (typeof my_delay === 'number') {
 		if (my_delay === delay) {
 			var $widget = $filter.closest('.widget-listing').addClass('loading');
 
