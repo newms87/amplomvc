@@ -4,7 +4,7 @@ class Phone extends Library
 {
 	public function format($phone, $format = null)
 	{
-		if (is_string($phone)) {
+		if (!is_array($phone)) {
 			$phone = preg_replace("/[^\\d]/", '', (string)$phone);
 			$phone = str_split($phone);
 		}
