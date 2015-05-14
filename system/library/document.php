@@ -392,10 +392,7 @@ class Document extends Library
 
 	public function addScript($script, $priority = 100, $minify = null)
 	{
-		//Check if URL or stream wrapper
-		$is_url = strpos($script, '//') !== false;
-
-		if ($is_url) {
+		if (is_url($script)) {
 			if ($minify) {
 				$script = $this->minifyJsFile($script);
 			}

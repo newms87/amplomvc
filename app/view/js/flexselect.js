@@ -320,9 +320,7 @@
 				this.input.val(selected.name);
 				this.setValue(selected.value);
 				this.picked = true;
-			} else if (this.settings.allowMismatch) {
-				this.setValue.val("");
-			} else {
+			} else if (!this.settings.allowMismatch) {
 				this.reset();
 			}
 		},

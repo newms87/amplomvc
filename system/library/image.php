@@ -28,7 +28,7 @@ class Image extends Library
 
 	public function get($image_path, $return_dir = false)
 	{
-		$image_url = (filter_var($image_path, FILTER_VALIDATE_URL) || strpos($image_path, '//') === 0) ? $image_path : false;
+		$image_url = is_url($image_path) ? $image_path : false;
 
 		if (strpos($image_url, DIR_IMAGE) !== false || strpos($image_url, DIR_DOWNLOAD) !== false || strpos($image_url, DIR_SITE) !== false) {
 			$image_url = false;
