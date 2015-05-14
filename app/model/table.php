@@ -3,6 +3,7 @@
 abstract class App_Model_Table extends Model
 {
 	protected $primary_key, $table;
+	private $orig = array();
 
 	public function __construct()
 	{
@@ -21,6 +22,21 @@ abstract class App_Model_Table extends Model
 			trigger_error(_l("You must set the \$table attribute for %s to extend the class App_Model_Table!", get_class()));
 			exit;
 		}
+
+		$this->orig['table']       = $this->table;
+		$this->orig['primary_key'] = $this->primary_key;
+	}
+
+	public function setTable($table, $primary_key = null)
+	{
+		$this->table       = $table;
+		$this->primary_key = $primary_key;
+	}
+
+	public function resetTable()
+	{
+		$this->table       = $this->orig['table'];
+		$this->primary_key = $this->orig['primary_key'];
 	}
 
 	public function save($record_id, $data)
