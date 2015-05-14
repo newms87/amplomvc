@@ -1079,7 +1079,7 @@ $.fn.form_editor = function () {
 						});
 
 						if (response.success) {
-							$form.show_msg('success', response, {delay: 2000});
+							$form.show_msg('success', response, {delay: 4000});
 						}
 					}
 
