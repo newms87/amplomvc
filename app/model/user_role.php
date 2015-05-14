@@ -88,7 +88,7 @@ class App_Model_UserRole extends App_Model_Table
 	public function getRestrictedAreas()
 	{
 		$admin_dir = DIR_SITE . 'app/controller/admin/';
-		$files     = get_files($admin_dir, 'php', FILELIST_RELATIVE);
+		$files     = get_files($admin_dir, 'php, mod', FILELIST_RELATIVE);
 
 		$ignore = array(
 			'load',
@@ -99,14 +99,13 @@ class App_Model_UserRole extends App_Model_Table
 		);
 
 		foreach ($files as $file) {
-			//Skip files if there is a mod file for it.
-			if (is_file($admin_dir . $file . '.mod')) {
-				continue;
-			}
-
 			$path        = str_replace('.php', '', $file);
 			$parts       = explode('/', $path);
 			$class_parts = array();
+
+			if (is_file($admin_dir . $file . '.mod')) {
+				$file .= '.mod';
+			}
 
 			$area = &$areas['admin'];
 
