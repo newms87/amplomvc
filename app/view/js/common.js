@@ -65,14 +65,14 @@ Number.prototype.roundFloat = function (p) {
 $ac.alq = {}, $ac.al_loaded = {};
 
 $ac.al = $.extend($ac.al || {}, {
-	codemirror:   ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
-	list_widget:  'app/view/js/listings.js',
-	listview:     'app/view/js/listings.js',
-	ac_template:  'app/view/js/ac_template.js',
-	amplo_slider: 'app/view/js/amplo_slider.js',
-	flexselect:   'app/view/js/flexselect.js',
-	jqzoom:       'system/resources/js/jquery/jqzoom/jqzoom.js',
-	ac_imageinput: 'app/view/js/image_manager.js',
+	codemirror:     ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
+	list_widget:    'app/view/js/listings.js',
+	listview:       'app/view/js/listings.js',
+	ac_template:    'app/view/js/ac_template.js',
+	amplo_slider:   'app/view/js/amplo_slider.js',
+	flexselect:     'app/view/js/flexselect.js',
+	jqzoom:         'system/resources/js/jquery/jqzoom/jqzoom.js',
+	ac_imageinput:  'app/view/js/image_manager.js',
 	ac_filemanager: 'app/view/js/image_manager.js'
 });
 
@@ -385,6 +385,7 @@ $.fn.show_msg = function (type, msg, options) {
 
 	options = $.extend({
 		style:       'stacked',
+		inline:      $ac.show_msg_inline,
 		append:      true,
 		append_list: false,
 		delay:       false,
@@ -410,7 +411,9 @@ $.fn.show_msg = function (type, msg, options) {
 	}
 
 	return this.each(function (i, e) {
-		var $box = $(e).find('.messages.' + type);
+		var $e = options.inline ? $(e) : $('#message-box');
+
+		var $box = $e.find('.messages.' + type);
 
 		if (!$box.length) {
 			$box = $('<div />').addClass('messages ' + type + ' ' + options.style);
@@ -422,19 +425,21 @@ $.fn.show_msg = function (type, msg, options) {
 			}
 
 			if (options.append) {
-				$(e).append($box);
+				$e.append($box);
 			} else {
-				$(e).prepend($box);
+				$e.prepend($box);
 			}
 		}
 
-		var $msg = $('<div />').addClass('message').html(msg);
+		var $msg = $('<div />').addClass('message hide').html(msg);
 
 		if (options.append_list) {
 			$box.append($msg);
 		} else {
 			$box.prepend($msg);
 		}
+
+		$msg.removeClass('hide');
 
 		if (options.delay) {
 			setTimeout(function () {
@@ -921,7 +926,7 @@ function register_confirms() {
 }
 
 function register_ajax_calls(is_ajax) {
-	$('a[data-loading]').click(function(){
+	$('a[data-loading]').click(function () {
 		$(this).loading();
 	});
 

@@ -2,7 +2,7 @@
 
 class DB
 {
-	public $tables;
+	public $tables, $columns;
 	public $t;
 
 	static $profile = array();
@@ -87,6 +87,9 @@ class DB
 			}
 
 			cache($cache, $this->t->tables);
+
+			Model::$model = array();
+			$this->columns = array();
 		}
 	}
 
@@ -586,19 +589,17 @@ class DB
 
 	public function getTableColumns($table)
 	{
-		static $columns;
-
 		if (!isset($this->t[$table])) {
 			return array();
 		}
 
 		$t = $this->t[$table];
 
-		if (!isset($columns[$t])) {
-			$columns[$t] = $this->queryRows("SHOW COLUMNS FROM `$t`", 'Field');
+		if (!isset($this->columns[$t])) {
+			$this->columns[$t] = $this->queryRows("SHOW COLUMNS FROM `$t`", 'Field');
 		}
 
-		return $columns[$t];
+		return $this->columns[$t];
 	}
 
 	public function addColumn($table, $column, $options = '')

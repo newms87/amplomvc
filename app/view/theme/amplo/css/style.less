@@ -235,15 +235,21 @@ h6 {
  *************************/
 
 //Messages
+.message-row.row {
+  .wrap {
+    border: none;
+    padding: 0;
+  }
+}
+
 .messages {
+  .height-animate-hide;
   position: relative;
   padding: .5em 2em .5em 1em;
-  margin: 1em auto;
+  margin: 0 auto;
   color: @msg-fg-color;
-  border: 2px solid @msg-fg-color;
   background-color: @msg-bg-color;
-  border-radius: 6px;
-  font-size: 1.1em;
+  font-size: .9em;
   clear: both;
 
   &.success {
@@ -288,6 +294,14 @@ h6 {
     &:hover, &:active {
       background: @color-lightest;
     }
+  }
+}
+
+.message-row .wrap {
+  margin: 1em auto;
+
+  .messages {
+    border: 2px solid @msg-fg-color;
   }
 }
 
@@ -455,12 +469,6 @@ table.list {
 /*************************
  *  III. Header          *
  *************************/
-.message-row.row {
-  .wrap {
-    border: none;
-    padding: 0;
-  }
-}
 
 header.main-header.row {
   position: fixed;
