@@ -332,7 +332,8 @@ $.fn.tabs = function (opts) {
 
 	opts = $.extend({}, {
 		callback: null,
-		toggle:   false
+		toggle:   false,
+		pushState: true
 	}, opts);
 
 	$tabs.o = opts;
@@ -347,7 +348,7 @@ $.fn.tabs = function (opts) {
 
 	$tabs.click(function () {
 		var $this = $(this);
-		var $content = $($this.attr('href'));
+		var $content = $($this.attr('href')), title = $this.attr('data-title');
 
 		if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
 			$this.toggleClass('active');
@@ -363,12 +364,29 @@ $.fn.tabs = function (opts) {
 			$content.removeClass('hidden');
 		}
 
+
+		if ($tabs.o.pushState) {
+			var url = window.location.href.replace(/#.*/,'') + '#' + $content.attr('id');
+			history.pushState({url: url}, title || $this.text(), url);
+		}
+
+		if (title) {
+			document.title = title;
+		}
+
 		if (typeof $tabs.o.callback === 'function') {
 			$tabs.o.callback($this, $content);
 		}
 
 		return false;
-	}).first().click();
+	});
+
+	if (window.location.hash) {
+		$t = $tabs.filter('[href='+window.location.hash+']');
+		$t.length ? $t.click() : $tabs.first().click();
+	} else {
+		$tabs.first().click();
+	}
 
 	return this;
 };
@@ -443,7 +461,7 @@ $.fn.show_msg = function (type, msg, options) {
 
 		if (options.delay) {
 			setTimeout(function () {
-				$box.remove()
+				$box.slideToggle(500, function(){$(this).remove()});
 			}, options.delay);
 		}
 	});
@@ -1238,6 +1256,12 @@ function content_loaded(is_ajax) {
 		if (typeof fn === 'function') {
 			fn.call(this, is_ajax);
 		}
+	}
+
+	if ($ac.show_msg_delay) {
+		setTimeout(function(){
+			$('.messages').slideToggle(500, function(){$(this).remove()});
+		}, $ac.show_msg_delay);
 	}
 }
 

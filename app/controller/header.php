@@ -39,6 +39,8 @@ class App_Controller_Header extends Controller
 		$this->document->localizeVar('image_thumb_height', option('config_image_thumb_height'));
 		$this->document->localizeVar('site_url', site_url());
 		$this->document->localizeVar('theme_url', theme_url());
+		$this->document->localizeVar('show_msg_inline', option('show_msg_inline', false));
+		$this->document->localizeVar('show_msg_delay', option('show_msg_delay', 8000));
 		$this->document->localizeVar('defer_scripts', option('defer_scripts', true));
 
 		//Body
