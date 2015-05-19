@@ -524,25 +524,68 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 $.fn.file_upload = function (options) {
 	return this.each(function (i, e) {
 		options = $.extend({
-			change:   amplo_file_upload,
-			progress: amplo_progress,
-			success:  amplo_success,
-			url:      $ac.site_url + 'common/file-upload',
-			xhr:      amplo_xhr,
-			path:     '',
-			preview:  null,
-			message:  'Click to upload file'
+			change:    amplo_file_upload,
+			progress:  amplo_progress,
+			success:   amplo_success,
+			url:       $ac.site_url + 'common/file-upload',
+			xhr:       amplo_xhr,
+			path:      '',
+			preview:   null,
+			content:   null,
+			msg:       'Click to upload file',
+			showInput: false,
+			class:     '',
+			progressBar: true,
+			progressBarMsg: true
 		}, options);
 
-		var $input = $(e);
-		var $upload = $('<div class="file-upload-box"><div class="msg"/></div>');
-		$input.after($upload).appendTo($upload);
-		var $bar = $('<div class="progress-bar"><div class="progress" /></div>').appendTo($upload);
+		var $input = $(e), $upload = $('<div class="file-upload-box"></div>').addClass(options.class);
 
-		$input[0].save = $('<input type="hidden" name="' + $input.attr('name') + '" />').appendTo($upload);
-		$input[0].preview = $($input.attr('data-preview'));
-		$input[0].msg = $upload.find('.msg').html(options.message);
-		$input[0].progress = $bar.find('.progress');
+		$input.after($upload).appendTo($upload).toggle(options.showInput);
+
+		e.content = $('<div class="content" />');
+		e.msg = $('<div class="msg"/>');
+		e.bar = $('<div class="progress-bar"><div class="progress" /></div>');
+		e.progress = e.bar.find('.progress');
+
+		if (options.progressBarMsg) {
+			e.bar.append($('<div class="bar-msg" />'));
+		}
+
+		e.save = $('<input type="hidden" name="' + $input.attr('name') + '" />').appendTo($upload);
+		e.preview = $($input.attr('data-preview'));
+
+		if (options.content) {
+			e.content.html(options.content).appendTo($upload)
+				.on('drop', function (event) {
+					e.files = event.originalEvent.dataTransfer.files;
+
+					if (!e.files) {
+						alert('{{Your browser does not support HTML 5}}');
+						return;
+					}
+
+					options.change.call(e);
+				})
+				.on('dragenter dragover', function (e) {
+					$(this).addClass('hover');
+					e.preventDefault();
+					e.stopPropagation();
+				})
+				.on('drop dragend dragleave', function (e) {
+					$(this).removeClass('hover');
+					e.preventDefault();
+					return false;
+				});
+		}
+
+		if (options.msg) {
+			e.msg.html(options.msg).appendTo($upload);
+		}
+
+		if (options.progressBar) {
+			e.bar.appendTo($upload);
+		}
 
 		//Hide Input field
 		$input.css({left: -99999});
@@ -607,8 +650,6 @@ $.fn.file_upload = function (options) {
 		}
 
 		function amplo_success(response, status, xhr) {
-			amplo_progress.call(this, 100);
-
 			if (response.data) {
 				for (var f in response.data) {
 					var url = response.data[f];
@@ -623,6 +664,8 @@ $.fn.file_upload = function (options) {
 					break;
 				}
 			}
+
+			options.progress.call(this, 100);
 		}
 
 		function amplo_progress(e) {
@@ -631,6 +674,7 @@ $.fn.file_upload = function (options) {
 			total = total.toFixed(1);
 			this.context.progress.css({width: total + '%'});
 			this.context.msg.html(total + '%');
+			this.context.bar.find('.bar-msg').html(total + '%');
 		}
 	});
 }

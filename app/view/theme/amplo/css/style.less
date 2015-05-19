@@ -606,6 +606,45 @@ header.main-header.row {
  *  V. Content           *
  *************************/
 
+.file-upload-box {
+  position: relative;
+
+  .msg {
+    font: 1.3em OpenSansSemiBold;
+    color: @font-dark;
+    position: relative;
+    z-index: 10;
+  }
+
+  .progress-bar {
+    position: relative;
+    margin-top: 1em;
+    width: 100%;
+    padding: .3em 1em;
+    height: 2em;
+    box-sizing: border-box;
+    z-index: 1;
+    text-align: center;
+
+    .progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 100%;
+      background: @color-main;
+      z-index: 1;
+    }
+
+    .bar-msg {
+      position: relative;
+      z-index: 10;
+      font: 1em OpenSansSemiBold;
+      color: white;
+    }
+  }
+}
+
 .content {
   .icon-list {
     margin-bottom: 40px;
