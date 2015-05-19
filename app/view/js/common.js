@@ -71,6 +71,7 @@ $ac.al = $.extend($ac.al || {}, {
 	ac_template:    'app/view/js/ac_template.js',
 	amplo_slider:   'app/view/js/amplo_slider.js',
 	flexselect:     'app/view/js/flexselect.js',
+	spectrum:       'system/resources/js/jquery/colorpicker/spectrum.js',
 	jqzoom:         'system/resources/js/jquery/jqzoom/jqzoom.js',
 	ac_imageinput:  'app/view/js/image_manager.js',
 	ac_filemanager: 'app/view/js/image_manager.js'
@@ -331,8 +332,8 @@ $.fn.tabs = function (opts) {
 	var $tabs = this;
 
 	opts = $.extend({}, {
-		callback: null,
-		toggle:   false,
+		callback:  null,
+		toggle:    false,
 		pushState: true
 	}, opts);
 
@@ -366,7 +367,7 @@ $.fn.tabs = function (opts) {
 
 
 		if ($tabs.o.pushState) {
-			var url = window.location.href.replace(/#.*/,'') + '#' + $content.attr('id');
+			var url = window.location.href.replace(/#.*/, '') + '#' + $content.attr('id');
 			history.pushState({url: url}, title || $this.text(), url);
 		}
 
@@ -382,7 +383,7 @@ $.fn.tabs = function (opts) {
 	});
 
 	if (window.location.hash) {
-		$t = $tabs.filter('[href='+window.location.hash+']');
+		$t = $tabs.filter('[href=' + window.location.hash + ']');
 		$t.length ? $t.click() : $tabs.first().click();
 	} else {
 		$tabs.first().click();
@@ -461,7 +462,9 @@ $.fn.show_msg = function (type, msg, options) {
 
 		if (options.delay) {
 			setTimeout(function () {
-				$box.slideToggle(500, function(){$(this).remove()});
+				$box.slideToggle(500, function () {
+					$(this).remove()
+				});
 			}, options.delay);
 		}
 	});
@@ -1259,8 +1262,10 @@ function content_loaded(is_ajax) {
 	}
 
 	if ($ac.show_msg_delay) {
-		setTimeout(function(){
-			$('.messages').slideToggle(500, function(){$(this).remove()});
+		setTimeout(function () {
+			$('.messages').slideToggle(500, function () {
+				$(this).remove()
+			});
 		}, $ac.show_msg_delay);
 	}
 }
