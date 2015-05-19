@@ -552,7 +552,7 @@ $.fn.file_upload = function (options) {
 			e.bar.append($('<div class="bar-msg" />'));
 		}
 
-		e.save = $('<input type="hidden" name="' + $input.attr('name') + '" />').appendTo($upload);
+		e.save = $('<input type="hidden" name="' + $input.attr('name') + '" />').val($input.val() || e.defaultValue).appendTo($upload);
 		e.preview = $($input.attr('data-preview'));
 
 		if (options.content) {
