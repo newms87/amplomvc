@@ -105,9 +105,9 @@
 		<div class="file-lists"><?php html_dump($cache_files, 'cache files'); ?></div>
 	</div>
 
-	<?php if (!empty($profile)) { ?>
+	<?php if (!empty($_profile)) { ?>
 		<div id="system-profile">
-			<?php html_dump($profile, 'system profile'); ?>
+			<?php html_dump($_profile, 'system profile'); ?>
 		</div>
 	<?php } ?>
 

@@ -153,7 +153,7 @@ class Dev extends Library
 
 	public function performance()
 	{
-		global $__start, $profile;
+		global $__start, $_profile;
 
 		$file = $this->theme->getFile('template/common/amplo_profile', AMPLO_DEFAULT_THEME);
 
@@ -229,8 +229,7 @@ class Dev extends Library
 
 			$total_cache_size = round($total_cache_size / 1024, 2) . ' KB';
 
-
-			sort_by($profile, 'time');
+			ksort($_profile);
 
 			ob_start();
 			include(_mod($file));

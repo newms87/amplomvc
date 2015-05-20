@@ -553,6 +553,13 @@ function customer_info($key = null, $default = null)
 	return $registry->get('customer')->info($key, $default);
 }
 
+function set_customer_info($key, $value)
+{
+	global $registry;
+
+	return $registry->get('customer')->setInfo($key, $value);
+}
+
 function customer_meta($key, $default = null)
 {
 	global $registry;
@@ -581,7 +588,7 @@ function user_can($level, $path)
 /**
  * Check if current user's role is in the 1 or more provided roles
  *
- * @param string $role - The Role to check (can enter 1 or more role parameters)
+ * @param string $role  - The Role to check (can enter 1 or more role parameters)
  * @param string $role2 - Additional roles to check.
  *
  * @return bool - true if the user's role matches any of the provided roles.
@@ -627,7 +634,7 @@ function validate($method, $value)
 
 	return call_user_func_array(array(
 		$registry->get('validation'),
-		$method
+		$method,
 	), $args);
 }
 
@@ -644,7 +651,7 @@ function format($type, $data, $param = null)
 
 	return call_user_func_array(array(
 		$registry->get($type),
-		'format'
+		'format',
 	), $args);
 }
 

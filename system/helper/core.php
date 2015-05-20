@@ -3,7 +3,8 @@
 //TODO: Implement full system profile
 function _profile($key, array $data = array())
 {
-	global $profile, $__start;
+	global $_profile, $__start;
+	static $sort_order = 0;
 
 	$mb        = 1024 * 1024;
 	$memory    = round(memory_get_peak_usage() / $mb, 2) . " MB";
@@ -11,12 +12,13 @@ function _profile($key, array $data = array())
 	$time      = round(microtime(true) - $__start, 6);
 
 	$data += array(
-		'time'      => $time,
-		'memory'    => $memory,
-		'allocated' => $allocated,
+		'key'        => $key,
+		'time'       => $time,
+		'memory'     => $memory,
+		'allocated'  => $allocated
 	);
 
-	$profile[$key] = $data;
+	$_profile[$sort_order++] = $data;
 }
 
 if (AMPLO_PROFILE) {
@@ -162,9 +164,9 @@ function _l($message)
  * Change Language Group just for this message, then revert back if $message is given.
  * If $message is null, then the language group is changed permanently.
  *
- * @param $group - The language group to change to.
+ * @param $group   - The language group to change to.
  * @param $message - The Message
- * @param $var1 , $var2, etc.. The variables to pass to vsprintf() with the message.
+ * @param $var1    , $var2, etc.. The variables to pass to vsprintf() with the message.
  *
  * @return null | String with the translated message
  */
@@ -222,10 +224,11 @@ function register_routing_hook($name, $callable, $sort_order = 0)
  * To register your own routing hook use $this->route->registerRoutingHook('my-hook-name', 'my_routing_hook');
  * in your plugin's setup.php install() method.
  *
- * @param string $path - The current path that points to the controller and method to call
- * @param $segments - The path segments broken up into an array.
+ * @param string $path      - The current path that points to the controller and method to call
+ * @param        $segments  - The path segments broken up into an array.
  * @param string $orig_path - The original path (in case $path has been modified by another hook).
- *          NOTE: If a hook has used Route::setPath(), $orig_path will be modified (consider setting $sort_order for your hook to avoid conflicts).
+ *                          NOTE: If a hook has used Route::setPath(), $orig_path will be modified (consider setting
+ *                          $sort_order for your hook to avoid conflicts).
  *
  * @return bool | null - if the return value is false no other hooks will be called.
  */
@@ -281,9 +284,9 @@ if (!function_exists('array_column')) {
 	 *
 	 * Returns an array of elements from the column of an array
 	 *
-	 * @param array array - A multi-dimensional array (record set) from which to pull a column of values.
+	 * @param array      array - A multi-dimensional array (record set) from which to pull a column of values.
 	 * @param column_key string - The column of values to return. This value may be the integer key of the column you wish to retrieve, or it may be the string key name for an associative array. It may also be NULL to return complete arrays (useful together with index_key to reindex the array).
-	 * @param index_key bool - The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.
+	 * @param index_key  bool - The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.
 	 *
 	 * @return array - Returns an array of values representing a single column from the input array.
 	 */
@@ -315,7 +318,7 @@ if (!function_exists('array_column_recursive')) {
 	 *
 	 * Returns an array of elements from the column of an array
 	 *
-	 * @param array array - An associative array of arrays
+	 * @param array  array - An associative array of arrays
 	 * @param column string - The key column of the $array to get elements for
 	 *
 	 * @return array - an array of values of the column requested
@@ -349,10 +352,10 @@ if (!function_exists('array_search_key')) {
 	 * It will return the array that contains the search_key => needle pair.
 	 *
 	 * @param search_key mixed - Either a string or int to search by the array key
-	 * @param needle mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner.
-	 * @param haystack array - The array.
-	 * @param strict bool[optional] - If the third parameter strict is set to true then the array_search function will search for identical elements in the haystack.
-	 * This means it will also check the types of the needle in the haystack, and objects must be the same instance.
+	 * @param needle     mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner.
+	 * @param haystack   array - The array.
+	 * @param strict     bool[optional] - If the third parameter strict is set to true then the array_search function will search for identical elements in the haystack.
+	 *                   This means it will also check the types of the needle in the haystack, and objects must be the same instance.
 	 *
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
@@ -380,8 +383,8 @@ if (!function_exists('array_unique_keys')) {
 	 * Searches for a duplicate elements in a multidimensional array by a list of keys
 	 *
 	 * @param array array - The array to filter duplicate values from
-	 * @param key1 string - the first key to filter by
-	 * @param key2 ... string (optional) - the second key to filter by
+	 * @param key1  string - the first key to filter by
+	 * @param key2  ... string (optional) - the second key to filter by
 	 *
 	 * @return array An array of arrays with unique elements based on specified keys
 	 */
@@ -412,10 +415,10 @@ if (!function_exists('array_walk_children')) {
 	/**
 	 * Applies a callback function on every node element of an array tree
 	 *
-	 * @param array $array_tree - The array Tree to walk recursively
-	 * @param string $children - The array key id for the child nodes
-	 * @param callback $callback - The Callback function to apply on every node of the array
-	 * @param mixed arg1 - The first parameter to pass to each callback call
+	 * @param array    $array_tree - The array Tree to walk recursively
+	 * @param string   $children   - The array key id for the child nodes
+	 * @param callback $callback   - The Callback function to apply on every node of the array
+	 * @param          mixed       arg1 - The first parameter to pass to each callback call
 	 * @params mixed arg2 - The 2nd parameter...etc.
 	 *
 	 * @return void
@@ -435,7 +438,7 @@ if (!function_exists('array_walk_children')) {
 
 			$return = call_user_func_array($callback, array_merge(array(
 				&$node,
-				$key
+				$key,
 			), $args));
 
 			//Cancel the walk
@@ -447,7 +450,7 @@ if (!function_exists('array_walk_children')) {
 				$return = call_user_func_array('array_walk_children', array_merge(array(
 					&$node[$children],
 					$children,
-					$callback
+					$callback,
 				), $args));
 
 				//Cancel the walk
@@ -483,7 +486,7 @@ if (!function_exists('json_last_error_msg')) {
 			JSON_ERROR_STATE_MISMATCH => 'Underflow or the modes mismatch',
 			JSON_ERROR_CTRL_CHAR      => 'Unexpected control character found',
 			JSON_ERROR_SYNTAX         => 'Syntax error, malformed JSON',
-			JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded'
+			JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
 		);
 		$error = json_last_error();
 
@@ -738,9 +741,10 @@ define("FILELIST_RELATIVE", 3);
 /**
  * Retrieves files in a specified directory recursively
  *
- * @param $dir - the directory to recursively search for files
- * @param $exts - the file extensions to search for. Use false to include all file extensions.
- * @param $return_type - can by FILELIST_STRING, FILELIST_RELATIVE (Relative path from $dir) or FILELIST_SPLFILEINFO (for an SPLFileInfo Object)
+ * @param $dir         - the directory to recursively search for files
+ * @param $exts        - the file extensions to search for. Use false to include all file extensions.
+ * @param $return_type - can by FILELIST_STRING, FILELIST_RELATIVE (Relative path from $dir) or FILELIST_SPLFILEINFO
+ *                     (for an SPLFileInfo Object)
  *
  * @return array - Each value in the array will be determined by the $return_type param.
  */
@@ -751,7 +755,7 @@ function get_files($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $fil
 			'php',
 			'tpl',
 			'css',
-			'js'
+			'js',
 		);
 	} elseif (is_string($exts)) {
 		$exts = explode(',', $exts);
@@ -966,11 +970,13 @@ function parse_xml_to_array($xml)
 }
 
 /**
- * @param $key - Unique key identifying cache file.
- * @param $value - If set, the cache value will be set, otherwise retreive contents of cache file
- * @param bool $as_file - Return the cache file instead of its contents
- * @param int $invalidate - If the cache file was created before $invalidate, then return null. compares as unix timestamps.
- * @return mixed - if $value is set, then return a bool indicating successfully setting cache file, else return cache file / data if it exists, otherwise return null
+ * @param      $key        - Unique key identifying cache file.
+ * @param      $value      - If set, the cache value will be set, otherwise retreive contents of cache file
+ * @param bool $as_file    - Return the cache file instead of its contents
+ * @param int  $invalidate - If the cache file was created before $invalidate, then return null. compares as unix
+ *                         timestamps.
+ * @return mixed - if $value is set, then return a bool indicating successfully setting cache file, else return cache
+ *                         file / data if it exists, otherwise return null
  */
 function cache($key, $value = null, $as_file = false, $invalidate = false)
 {

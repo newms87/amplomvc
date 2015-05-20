@@ -108,6 +108,7 @@ class Customer extends Library
 
 		if (empty($customer)) {
 			$this->error['customer'] = _l("Customer was not found.");
+
 			return false;
 		}
 
@@ -213,6 +214,17 @@ class Customer extends Library
 		return $this->info;
 	}
 
+	public function setInfo($key, $value)
+	{
+		if ($this->customer_id) {
+			if ($this->Model_Customer->save($this->customer_id, array($key => $value))) {
+				$this->info[$key] = $value;
+			}
+		}
+
+		return false;
+	}
+
 	public function getIps($customer_id)
 	{
 		return $this->queryRows("SELECT * FROM `{$this->t['customer_ip']}` WHERE customer_id = " . (int)$customer_id);
@@ -241,11 +253,12 @@ class Customer extends Library
 	}
 
 	/**
-	 * Sends a message to the customer. If the customer is not logged in and not currently browsing, the message will be delivered the next
-	 * time the customer logs in.
+	 * Sends a message to the customer. If the customer is not logged in and not currently browsing, the message will be
+	 * delivered the next time the customer logs in.
 	 *
 	 * @param $customer_id - the customer to send the message to
-	 * @param $msg - the message. This will be translated into the customer's language, so DO NOT translate - aka do not use _l() - when using sendMessage()
+	 * @param $msg         - the message. This will be translated into the customer's language, so DO NOT translate -
+	 *                     aka do not use _l() - when using sendMessage()
 	 */
 
 	public function sendMessage($customer_id, $msg)

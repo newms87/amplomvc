@@ -18,7 +18,8 @@ class Image extends Library
 		parent::__construct();
 
 		if ($file) {
-			$this->set($file);
+			$file = $this->set($file);
+			$this->create($file);
 		}
 
 		$this->dir_mode = option('config_image_dir_mode');
@@ -94,17 +95,18 @@ class Image extends Library
 		return $this->info;
 	}
 
-	public function set($image)
+	public function set($image, $create_image = false)
 	{
 		$file = $this->get($image, true);
 
 		if (!is_file($file)) {
+			$this->file = null;
 			return false;
 		}
 
 		$this->file = $file;
 
-		$info = getimagesize($file);
+		$info = getimagesize($this->file);
 
 		$this->info = array(
 			'width'  => $info[0],
@@ -113,9 +115,11 @@ class Image extends Library
 			'mime'   => $info['mime']
 		);
 
-		$this->image = $this->create($file);
+		if ($create_image) {
+			$this->image = $this->create($this->file);
+		}
 
-		return $file;
+		return $this->file;
 	}
 
 	public function clear()
@@ -205,9 +209,9 @@ class Image extends Library
 
 	public function resize($image, $width = 0, $height = 0, $background_color = '', $return_dir = false)
 	{
-		$image = $this->set($image);
+		$file = $this->set($image);
 
-		if (!$image) {
+		if (!$file) {
 			return false;
 		}
 
@@ -220,7 +224,7 @@ class Image extends Library
 
 		//If width and height are 0, we do not scale the image
 		if ($width <= 0 && $height <= 0) {
-			return $this->get($image, $return_dir);
+			return $return_dir ? $file : $this->get($image);
 		}
 
 		//Constrain Width
@@ -239,7 +243,7 @@ class Image extends Library
 
 		//if the image is the correct size we do not need to do anything
 		if ($scale_x === 1 && $scale_y === 1) {
-			return $this->get($image, $return_dir);
+			return $return_dir ? $file : $this->get($image);
 		}
 
 		$new_width  = (int)($this->info['width'] * $scale_x);
@@ -251,7 +255,7 @@ class Image extends Library
 			DIR_SITE,
 			DIR_DOWNLOAD,
 			'://',
-		), '', $image));
+		), '', $file));
 
 		//if the background is transparent and the mime type is not png or gif, change to png
 		$allowed_exts = array(
@@ -270,7 +274,9 @@ class Image extends Library
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
-		if (!is_file($new_image_file) || (_filemtime($image) > _filemtime($new_image_file))) {
+		if (!is_file($new_image_file) || (_filemtime($file) > _filemtime($new_image_file))) {
+			$this->image = $this->create($file);
+
 			//Render new image
 			$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
 
@@ -823,7 +829,7 @@ class Image extends Library
 
 	public function mosaic($image, $rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
 	{
-		$this->set($image);
+		$this->set($image, true);
 
 		$width  = $this->info['width'];
 		$height = $this->info['height'];
