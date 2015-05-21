@@ -702,6 +702,8 @@ function attrs($data)
 
 function build($type, $params = null)
 {
+	static $count = 0;
+
 	if (!is_array($type)) {
 		$params['type'] = $type;
 	} else {
@@ -828,7 +830,7 @@ function build($type, $params = null)
 			continue;
 		}
 
-		$uniqid = uniqid($name . '-' . $key);
+		$uniqid = $name . '-' . $key . '-' . $count++;
 
 		switch ($type) {
 			case 'select':
