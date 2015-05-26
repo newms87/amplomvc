@@ -81,8 +81,8 @@ class App_Model_Customer extends App_Model_Table
 			$this->saveAddress($customer_id, null, $customer);
 
 			//Customer MetaData
-			if (!empty($customer['metadata'])) {
-				foreach ($customer['metadata'] as $key => $value) {
+			if (!empty($customer['meta'])) {
+				foreach ($customer['meta'] as $key => $value) {
 					$this->setMeta($customer_id, $key, $value);
 				}
 			}
