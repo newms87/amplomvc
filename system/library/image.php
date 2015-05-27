@@ -875,4 +875,134 @@ class Image extends Library
 
 		return $mosaic;
 	}
+
+	public function create_sprite($images, $nx = 3, $prefix = 'si-')
+	{
+		$nx     = 2;
+		$images = get_files(DIR_THEMES . 'admin/image/', 'png', FILELIST_STRING);
+
+		$sheets = array();
+
+		if ($nx <= 1) {
+			$nx = 1;
+		}
+
+		$file_name = 'sprite/amplo-' . count($images) . '-' . md5(serialize($images));
+
+		for ($n = $nx; $n > 0; $n--) {
+			$sheets[$n] = array(
+				'file'    => DIR_IMAGE . $file_name . '@' . $n . 'x.png',
+				'url'     => URL_IMAGE . $file_name . '@' . $n . 'x.png',
+				'width'   => 0,
+				'height'  => 0,
+				'y_index' => 0,
+			);
+		}
+
+		if (!_is_writable(dirname($sheets[1]['file']))) {
+			trigger_error(_l("Sprite Image file was not writable: %s", $sheets[1]['file']));
+
+			return false;
+		}
+
+		$sprites = array();
+
+		foreach ($images as &$img) {
+			list($width, $height) = getimagesize($img);
+
+			$sprite = array(
+				'name'   => $prefix . pathinfo($img, PATHINFO_FILENAME),
+				'width'  => $width,
+				'height' => $height,
+				'image'  => $img,
+			);
+
+			for ($n = $nx; $n > 0; $n--) {
+				$sprite['width_' . $n]  = round($width * $n / $nx);
+				$sprite['height_' . $n] = round($height * $n / $nx);
+
+				$sheets[$n]['width'] = max($sheets[$n]['width'], $sprite['width_' . $n]);
+				$sheets[$n]['height'] += $sprite['height_' . $n] + (3 * $n);
+			}
+
+			$sprites[] = $sprite;
+		}
+
+		for ($n = $nx; $n > 0; $n--) {
+			$sheet = imagecreatetruecolor($sheets[$n]['width'], $sheets[$n]['height']);
+
+			$transparency = imagecolorallocatealpha($sheet, 0, 0, 0, 127);
+			imagealphablending($sheet, false);
+			imagefilledrectangle($sheet, 0, 0, $sheets[$n]['width'], $sheets[$n]['height'], $transparency);
+			imagealphablending($sheet, true);
+			imagesavealpha($sheet, true);
+
+			$sheets[$n]['image'] = $sheet;
+		}
+
+		$style = '';
+
+		foreach ($sprites as $sprite) {
+			$image = @imagecreatefrompng($sprite['image']);
+
+			if ($image) {
+				if (!imageistruecolor($image)) {
+					imagepalettetotruecolor($image);
+				}
+
+				$name = $sprite['name'];
+				$y    = '-' . $sheets[1]['y_index'] . 'px';
+				$w    = $sprite['width_1'] . 'px';
+				$h    = $sprite['height_1'] . 'px';
+
+				$style .= <<<CSS
+.$name {
+	background-position: 0 $y;
+	width: $w;
+	height: $h;
+}
+CSS;
+
+				for ($n = $nx; $n > 0; $n--) {
+					imagecopyresampled($sheets[$n]['image'], $image, 0, $sheets[$n]['y_index'], 0, 0, $sprite['width_' . $n], $sprite['height_' . $n], $sprite['width'], $sprite['height']);
+					$sheets[$n]['y_index'] += $sprite['height_' . $n] + (3 * $n);
+				}
+
+				imagedestroy($image);
+			}
+		}
+
+		$url     = $sheets[1]['url'];
+		$url_set = '';
+
+		for ($n = 1; $n <= $nx; $n++) {
+			imagepng($sheets[$n]['image'], $sheets[$n]['file'], 9);
+
+			$url_set .= ($url_set ? ', ' : '') . "url({$sheets[$n]['url']}) {$n}x";
+		}
+
+		$style = <<<CSS
+.sprite {
+  content: "";
+  display: inline-block;
+  background-image: url($url);
+  background-image: -webkit-image-set($url_set);
+  background-image: -moz-image-set($url_set);
+  background-image: -ms-image-set($url_set);
+  background-image: -o-image-set($url_set);
+  background-repeat: no-repeat;
+}
+
+$style
+CSS;
+
+		$css_name = 'app/view/style/' . $file_name . '.css';
+
+		file_put_contents(DIR_SITE . $css_name, $style);
+
+		return array(
+			'css'    => URL_SITE . $css_name,
+			'sheets' => $sheets,
+		);
+	}
 }

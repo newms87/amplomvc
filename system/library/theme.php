@@ -324,6 +324,11 @@ class Theme extends Library
 		);
 	}
 
+	public function getSprites()
+	{
+
+	}
+
 	public function restore()
 	{
 		clear_cache('less/theme');
