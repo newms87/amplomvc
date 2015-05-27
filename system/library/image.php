@@ -876,11 +876,8 @@ class Image extends Library
 		return $mosaic;
 	}
 
-	public function create_sprite($images, $nx = 3, $prefix = 'si-')
+	public function createSprite($css_file, $images, $nx = 3, $prefix = 'si-')
 	{
-		$nx     = 2;
-		$images = get_files(DIR_THEMES . 'admin/image/', 'png', FILELIST_STRING);
-
 		$sheets = array();
 
 		if ($nx <= 1) {
@@ -910,8 +907,18 @@ class Image extends Library
 		foreach ($images as &$img) {
 			list($width, $height) = getimagesize($img);
 
+			//Give this sprite a unique name
+			$sprite_name = $prefix . slug(pathinfo($img, PATHINFO_FILENAME), '-');
+
+			$count = 0;
+			$orig_name = $sprite_name;
+
+			while(isset($sprites[$sprite_name])) {
+				$sprite_name = $orig_name . '-' . $count++;
+			}
+
 			$sprite = array(
-				'name'   => $prefix . pathinfo($img, PATHINFO_FILENAME),
+				'name'   => $sprite_name,
 				'width'  => $width,
 				'height' => $height,
 				'image'  => $img,
@@ -925,7 +932,7 @@ class Image extends Library
 				$sheets[$n]['height'] += $sprite['height_' . $n] + (3 * $n);
 			}
 
-			$sprites[] = $sprite;
+			$sprites[$sprite_name] = $sprite;
 		}
 
 		for ($n = $nx; $n > 0; $n--) {
@@ -946,10 +953,6 @@ class Image extends Library
 			$image = @imagecreatefrompng($sprite['image']);
 
 			if ($image) {
-				if (!imageistruecolor($image)) {
-					imagepalettetotruecolor($image);
-				}
-
 				$name = $sprite['name'];
 				$y    = '-' . $sheets[1]['y_index'] . 'px';
 				$w    = $sprite['width_1'] . 'px';
@@ -960,7 +963,7 @@ class Image extends Library
 	background-position: 0 $y;
 	width: $w;
 	height: $h;
-}
+}\n\n
 CSS;
 
 				for ($n = $nx; $n > 0; $n--) {
@@ -982,7 +985,7 @@ CSS;
 		}
 
 		$style = <<<CSS
-.sprite {
+.amp-sprite {
   content: "";
   display: inline-block;
   background-image: url($url);
@@ -996,13 +999,8 @@ CSS;
 $style
 CSS;
 
-		$css_name = 'app/view/style/' . $file_name . '.css';
+		file_put_contents($css_file, $style);
 
-		file_put_contents(DIR_SITE . $css_name, $style);
-
-		return array(
-			'css'    => URL_SITE . $css_name,
-			'sheets' => $sheets,
-		);
+		return $sheets;
 	}
 }

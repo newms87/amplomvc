@@ -208,47 +208,46 @@ class Theme extends Library
 		return false;
 	}
 
-	public function getThemeStyle()
+	public function getThemeStyle($sprite_nx = 3, $sprite_prefix = 'si-')
 	{
-		$theme = IS_ADMIN ? 'admin' : option('site_theme');
+		$theme = $this->theme;
 
 		$cache_file = 'less/theme.' . $theme;
 		$theme_file = cache($cache_file, null, true);
 
+		if ($sprite_nx) {
+			$sprite_nx = $this->getSpriteSheet($sprite_nx, $sprite_prefix);
+		}
+
 		if (!is_file($theme_file)) {
-			$theme_file = false;
-
-			$settings = $this->config->loadGroup('theme');
-
 			$rel_dir = "app/view/theme/$theme/css/";
 
 			$config_file = _mod(DIR_SITE . $rel_dir . "config.less");
 			$config_basename = basename($config_file);
 
-			if ($settings) {
-				$theme_style = "@import '@{base-path}{$rel_dir}{$config_basename}';\n\n";
+			$theme_style = '';
 
-				if (!empty($settings['theme_config_' . $theme])) {
-					$theme_style .= $settings['theme_config_' . $theme];
+			//import sprite sheet
+			if ($sprite_nx) {
+				$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
+			}
 
-					if (!empty($settings['theme_style_' . $theme])) {
-						$theme_style .= "\n\n/* Custom Theme Styles */\n" . $settings['theme_style_' . $theme];
-					}
+			$theme_style .= "@import '@{base-path}{$rel_dir}{$config_basename}';\n\n";
 
-					cache($cache_file, $theme_style, true);
+			$settings = $this->config->loadGroup('theme');
 
-					//retrieve the cache file as a file
-					$theme_file = cache($cache_file, null, true);
+			if (!empty($settings['theme_config_' . $theme])) {
+				$theme_style .= $settings['theme_config_' . $theme];
+
+				if (!empty($settings['theme_style_' . $theme])) {
+					$theme_style .= "\n\n/* Custom Theme Styles */\n" . $settings['theme_style_' . $theme];
 				}
 			}
 
-			if (!$theme_file) {
-				$theme_file = $this->getFile('css/' . $config_basename);
+			cache($cache_file, $theme_style, true);
 
-				if (!$theme_file) {
-					$theme_file = $this->getFile('css/style.less');
-				}
-			}
+			//retrieve the absolute path of the cache file
+			$theme_file = cache($cache_file, null, true);
 		}
 
 		if ($theme_file) {
@@ -256,6 +255,41 @@ class Theme extends Library
 		}
 
 		return theme_url('css/style.css');
+	}
+
+	public function getSpriteSheet($nx = 3, $prefix = 'si-')
+	{
+		$css_file = DIR_THEME . 'css/sprite.less';
+
+		if (!is_file($css_file)) {
+			if (!_is_writable(dirname($css_file))) {
+				return false;
+			}
+
+			$sprites = array();
+
+			foreach ($this->theme_hierarchy as $theme_node) {
+				$dir = $this->dir_themes . $theme_node . '/image/sprite/';
+
+				if (is_dir($dir)) {
+					$images = get_files($dir, 'png', FILELIST_STRING);
+
+					foreach ($images as $image) {
+						$ref = str_replace($dir, '', $image);
+
+						if (!isset($sprites[$ref])) {
+							$sprites[$ref] = $image;
+						}
+					}
+				}
+			}
+
+			if (!$sprites || !$this->image->createSprite($css_file, $sprites, $nx, $prefix)) {
+				return false;
+			}
+		}
+
+		return $css_file;
 	}
 
 	public function saveTheme($theme, $configs, $stylesheet = null)
@@ -322,11 +356,6 @@ class Theme extends Library
 			'stylesheet' => $stylesheet,
 			'configs'    => $configs,
 		);
-	}
-
-	public function getSprites()
-	{
-
 	}
 
 	public function restore()

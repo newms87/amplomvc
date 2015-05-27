@@ -281,7 +281,7 @@ class Document extends Library
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
 				foreach ($dependencies as $d_file) {
-					if (_filemtime($less_file) < _filemtime($d_file)) {
+					if (!is_file($d_file) || _filemtime($less_file) < _filemtime($d_file)) {
 						$refresh = true;
 						break;
 					}

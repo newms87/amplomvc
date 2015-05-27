@@ -86,7 +86,11 @@ class Cache
 		}
 
 		if ($value !== null) {
-			//TODO: Fails randomly (very rarely), for unknown reasons (probably race conditions). So lets silently fail as this is not critical.
+			//Create dir if not top level cache dir
+			if (strpos($key, '/')) {
+				_is_writable(dirname($file));
+			}
+
 			@file_put_contents($file, $value);
 		}
 
