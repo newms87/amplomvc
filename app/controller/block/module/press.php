@@ -50,9 +50,4 @@ class App_Controller_Block_Module_Press extends App_Controller_Block_Block
 
 		$this->render('block/module/press_settings', $data);
 	}
-
-	public function save()
-	{
-		return $this->error;
-	}
 }

@@ -220,7 +220,7 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		if (_session('token') && !_cookie('token')) {
-			$this->error['warning'] = _l("Invalid token session. Please login again.");
+			message('error', _l("Invalid token session. Please login again."));
 		}
 
 		$defaults = array(

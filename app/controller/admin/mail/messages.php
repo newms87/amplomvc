@@ -7,7 +7,7 @@ class App_Controller_Admin_Mail_Messages extends Controller
 	{
 		set_page_info('title', _l("Mail Messages"));
 
-		if (IS_POST && $this->validate()) {
+		if (IS_POST) {
 
 			$this->config->saveGroup('mail_messages', $_POST);
 
@@ -37,14 +37,5 @@ class App_Controller_Admin_Mail_Messages extends Controller
 		}
 
 		output($this->render('mail/messages', $data));
-	}
-
-	public function validate()
-	{
-		if (!user_can('w', 'admin/mail/messages')) {
-			$this->error['permission'] = _l("Warning: You do not have permission to modify mail messages!");
-		}
-
-		return empty($this->error);
 	}
 }

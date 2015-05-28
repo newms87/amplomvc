@@ -32,8 +32,4 @@ class App_Controller_Block_Widget_Youtube extends App_Controller_Block_Block
 		$this->render('block/widget/youtube_settings', $data);
 	}
 
-	public function save()
-	{
-		return $this->error;
-	}
 }

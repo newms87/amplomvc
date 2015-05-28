@@ -106,13 +106,4 @@ class App_Controller_Admin_Settings_Cron extends Controller
 		$this->config->save('config', 'cron_status', _post('cron_status') ? 1 : 0, true);
 		redirect('admin/settings/cron');
 	}
-
-	private function validate()
-	{
-		if (!user_can('w', 'admin/settings/cron')) {
-			$this->error['warning'] = _l('You do not have permission to modify the Automated Tasks');
-		}
-
-		return empty($this->error);
-	}
 }

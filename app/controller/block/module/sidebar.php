@@ -103,9 +103,4 @@ class App_Controller_Block_Module_Sidebar extends App_Controller_Block_Block
 		//Render
 		$this->render('block/module/sidebar_settings', $data);
 	}
-
-	public function save()
-	{
-		return $this->error;
-	}
 }
