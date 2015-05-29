@@ -130,6 +130,26 @@ function delete_cookie($name)
 	set_cookie($name, '', 0);
 }
 
+/* jQuery plugin autoloading */
+global $js_autoload;
+
+$js_autoload = array(
+	'codemirror'     => array(
+		'app/view/js/jquery/plugin/codemirror/codemirror.js',
+		'app/view/js/jquery/plugin/codemirror/wrapper.js'
+	),
+	'list_widget'    => 'app/view/js/jquery/plugin/listings.js',
+	'listview'       => 'app/view/js/jquery/plugin/listings.js',
+	'ac_template'    => 'app/view/js/jquery/plugin/ac_template.js',
+	'amplo_slider'   => 'app/view/js/jquery/plugin/amplo_slider.js',
+	'flexselect'     => 'app/view/js/jquery/plugin/flexselect.js',
+	'spectrum'       => 'app/view/js/jquery/plugin/colorpicker/spectrum.js',
+	'jqzoom'         => 'app/view/js/jquery/plugin/jqzoom/jqzoom.js',
+	'ac_imageinput'  => 'app/view/js/jquery/plugin/image_manager.js',
+	'ac_filemanager' => 'app/view/js/jquery/plugin/image_manager.js'
+);
+
+
 /**************************************
  * System Language Translation Engine *
  **************************************/

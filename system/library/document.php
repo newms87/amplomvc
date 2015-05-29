@@ -476,6 +476,24 @@ class Document extends Library
 	 */
 	public function getScripts()
 	{
+		global $js_autoload;
+
+		//Register jQuery plugin autoload files
+		foreach ($js_autoload as &$file) {
+			$file = (array)$file;
+
+			foreach ($file as &$f) {
+				if (is_file(DIR_SITE . $f)) {
+					$f .= (strpos($f, '?') ? '&' : '?') . '_=' . filemtime(DIR_SITE . $f);
+				}
+			}
+			unset($f);
+		}
+		unset($file);
+
+		$this->ac_vars['al'] = $js_autoload;
+
+		//Sort scripts by priority
 		ksort($this->scripts);
 
 		$scripts = array(

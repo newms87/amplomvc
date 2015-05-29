@@ -64,62 +64,63 @@ Number.prototype.roundFloat = function (p) {
 //Async Load on call
 $ac.alq = {}, $ac.al_loaded = {};
 
-$ac.al = $.extend($ac.al || {}, {
-	codemirror:     ['system/resources/js/codemirror/codemirror.js', 'system/resources/js/codemirror/wrapper.js'],
-	list_widget:    'app/view/js/listings.js',
-	listview:       'app/view/js/listings.js',
-	ac_template:    'app/view/js/ac_template.js',
-	amplo_slider:   'app/view/js/amplo_slider.js',
-	flexselect:     'app/view/js/flexselect.js',
-	spectrum:       'system/resources/js/jquery/colorpicker/spectrum.js',
-	jqzoom:         'system/resources/js/jquery/jqzoom/jqzoom.js',
-	ac_imageinput:  'app/view/js/image_manager.js',
-	ac_filemanager: 'app/view/js/image_manager.js'
-});
-
 for (var fn in $ac.al) {
 	register_autoload(fn, $ac.al[fn]);
 }
 
 function register_autoload(fn, url) {
-	if (!$.fn[fn]) {
+	if (!$[fn]) {
 		url = typeof url === 'string' ? [url] : url;
 
-		$.fn[fn] = function (view_id) {
-			var al = arguments.callee.fn;
-			var fn = al;
+		$[fn] = function () {
+			autoload_js_file.call(this, url, arguments, 'base')
+		}
 
-			if (!$ac.alq[al]) {
-				var load_count = 1;
-				for (var u in url) {
-					if ($ac.al_loaded[url[u]]) {
-						fn = al;
-						al = $ac.al_loaded[url[u]];
-					} else {
-						$ac.alq[al] = [];
-						$ac.al_loaded[url[u]] = al;
-						js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
-						$.getScript(js_url, function () {
-							if (load_count++ >= url.length) {
-								for (var l in $ac.alq[al]) {
-									var q = $ac.alq[al][l];
-									$.fn[q.fn].apply(q.me, q.args);
-								}
+		$.fn[fn] = function () {
+			autoload_js_file.call(this, url, arguments, 'fn')
+		}
 
-								$(document).trigger(al);
-							}
-						});
-					}
-				}
-			}
-
-			$ac.alq[al].push({fn: fn, me: this, args: arguments});
-
-			return this;
-		};
-
-		$.fn[fn].fn = fn;
+		$[fn].fn = $.fn[fn].fn = fn;
 	}
+}
+
+function autoload_js_file(url, args, type) {
+	var al = args.callee.fn;
+	var fn = al;
+
+	if (!$ac.alq[al]) {
+		var load_count = 1;
+		for (var u in url) {
+			if ($ac.al_loaded[url[u]]) {
+				fn = al;
+				al = $ac.al_loaded[url[u]];
+			} else {
+				$ac.alq[al] = [];
+				$ac.al_loaded[url[u]] = al;
+				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
+
+				$.ajax({
+					url:      js_url,
+					dataType: 'script',
+					cache:    true
+				})
+					.done(function () {
+						if (load_count++ >= url.length) {
+							for (var l in $ac.alq[al]) {
+								var q = $ac.alq[al][l];
+								(type === 'fn' ? $.fn[q.fn] : $[q.fn]).apply(q.me, q.args);
+							}
+
+							$(document).trigger(al);
+						}
+					});
+			}
+		}
+	}
+
+	$ac.alq[al].push({fn: fn, me: this, args: args, type: type});
+
+	return this;
 }
 
 $.fn.use_once = function (label) {
@@ -524,17 +525,17 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 $.fn.file_upload = function (options) {
 	return this.each(function (i, e) {
 		options = $.extend({
-			change:    amplo_file_upload,
-			progress:  amplo_progress,
-			success:   amplo_success,
-			url:       $ac.site_url + 'common/file-upload',
-			xhr:       amplo_xhr,
-			path:      '',
-			preview:   null,
-			content:   null,
-			msg:       'Click to upload file',
-			showInput: false,
-			class:     '',
+			change:      amplo_file_upload,
+			progress:    amplo_progress,
+			success:     amplo_success,
+			url:         $ac.site_url + 'common/file-upload',
+			xhr:         amplo_xhr,
+			path:        '',
+			preview:     null,
+			content:     null,
+			msg:         'Click to upload file',
+			showInput:   false,
+			class:       '',
 			progressBar: true,
 			progressBarMsg: true
 		}, options);
