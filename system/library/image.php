@@ -988,6 +988,7 @@ CSS;
 .amp-sprite {
   content: "";
   display: inline-block;
+  position: relative;
   background-image: url($url);
   background-image: -webkit-image-set($url_set);
   background-image: -moz-image-set($url_set);
