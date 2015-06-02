@@ -715,12 +715,13 @@ label.select {
 
   select {
     width: 100%;
+    height: 2.3em;
     padding-right: 1em;
-    border-radius: 5px;
+    border-radius: 3px;
   }
 
   &:after {
-    width: 2.5em;
+    width: 3em;
     padding: .5em .8em;
     height: 100%;
     content: "";
@@ -740,9 +741,24 @@ label.select {
     .sprite.chevron-white;
 
     position: absolute;
-    top: .8em;
-    right: .7em;
+    top: 1em;
+    right: .9em;
     z-index: 10;
+  }
+
+  &.small {
+    select {
+      height: 1.9em;
+    }
+
+    &:after {
+      width: 2.5em;
+    }
+
+    &:before {
+      top: .9em;
+      right: .7em;
+    }
   }
 
   &:hover {
@@ -1427,7 +1443,9 @@ section.page {
 
 .form-editor {
   .input {
-    margin-top: 1em;
+    & + .input {
+      margin-top: 1em;
+    }
 
     .input-item {
       margin-bottom: .7em;
@@ -1441,17 +1459,36 @@ section.page {
     }
   }
 
-  h3 {
-    font: 1em OpenSansBold;
-    color: @font-dark;
-    text-transform: uppercase;
-    margin-bottom: .5em;
+  .heading {
+    margin-bottom: 1.2em;
+
+    h3 {
+      font: 1em OpenSansBold;
+      color: @font-dark;
+      text-transform: uppercase;
+    }
   }
 
   .field {
     font: .9em OpenSansRegular;
     color: @font-light;
-    margin-bottom: .5em;
+
+    & + .field {
+      margin-top: 1em;
+    }
+  }
+
+  .input {
+    input[type="text"] {
+      padding: .6em;
+      border-radius: 3px;
+      max-width: 100%;
+    }
+  }
+
+  .value {
+    font: .9em OpenSansSemiBold;
+    color: @font-dark;
   }
 
   .buttons {
