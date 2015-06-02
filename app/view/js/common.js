@@ -992,36 +992,11 @@ function register_confirms() {
 }
 
 function register_ajax_calls(is_ajax) {
-	$('a[data-loading]').click(function () {
-		$(this).loading();
-	});
-
 	$('form').use_once('data-loading-set').submit(function () {
 		$(this).find('button[data-loading]').loading();
 	});
 
 	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
-
-	// Multistate Checkboxes
-	$('[data-multistate]').use_once().click(function () {
-		var $this = $(this);
-		var val = $this.val();
-		var states = $this.attr('data-multistate').split(';');
-
-		if (!$this.prop('checked')) {
-			for (var s = 0; s < states.length; s++) {
-				if (states[s] === val) {
-					if (s < states.length - 1) {
-						$this.val(states[s + 1]);
-					} else {
-						$this.val(states[0]);
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-	});
 
 	if (is_ajax) {
 		$('form.ctrl-save').use_once().submit(function () {
@@ -1338,6 +1313,34 @@ $(document)
 
 			e.preventDefault();
 			return false;
+		}
+	})
+
+	.click(function (e) {
+		var $n = $(e.target);
+
+		if ($n.is('a[data-loading]')) {
+			$n.loading();
+		}
+
+		// Multistate Checkboxes
+		if ($n.is('[data-multistate]')) {
+			var val = $n.val();
+			var states = $n.attr('data-multistate').split(';');
+
+			if (!$n.prop('checked')) {
+				for (var s = 0; s < states.length; s++) {
+					if (states[s] === val) {
+						if (s < states.length - 1) {
+							$n.val(states[s + 1]);
+						} else {
+							$n.val(states[0]);
+							return true;
+						}
+					}
+				}
+				return false;
+			}
 		}
 	})
 
