@@ -227,8 +227,6 @@
 	function update_display_name(context) {
 		context.closest('.link_info').find('.display_name').html(context.val())
 	}
-
-	$.ac_errors(<?= json_encode($errors); ?>);
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

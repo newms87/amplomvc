@@ -36,8 +36,6 @@
 	</div>
 </section>
 
-<script type="text/javascript">
-	$.ac_errors(<?= json_encode($errors); ?>);
-</script>
+
 
 <?= $is_ajax ? '' : call('footer'); ?>

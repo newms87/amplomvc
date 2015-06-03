@@ -299,7 +299,7 @@
 		$('#preview-frame').attr('src', "<?= $page_preview; ?>");
 	});
 
-	$.ac_errors(<?= json_encode($errors); ?>);
+
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

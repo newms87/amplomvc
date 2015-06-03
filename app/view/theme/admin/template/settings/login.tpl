@@ -111,7 +111,7 @@
 		$(this).closest('tr').find('.setting-item').not('.enable-item').toggleClass('hide', val != 1);
 	}).change();
 
-	$.ac_errors(<?= json_encode($errors); ?>);
+
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

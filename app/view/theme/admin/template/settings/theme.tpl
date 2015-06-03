@@ -53,7 +53,7 @@
 <script type="text/javascript">
 	$('#stylesheet-editor').codemirror({mode: 'sass'});
 
-	$.ac_errors(<?= json_encode($errors); ?>);
+
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

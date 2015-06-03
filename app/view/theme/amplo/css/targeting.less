@@ -44,7 +44,7 @@
     nav.header-nav {
       position: absolute;
       right: -10em;
-      top: 3.7em;
+      top: 3.3em;
       text-align: right;
       width: 10000px;
       z-index: 50;
@@ -137,12 +137,47 @@
             display: block;
             border-bottom: 1px solid @color-dark;
             padding: 1em 12em;
-            font: .9em OpenSansRegular;
+            font: .9rem OpenSansRegular;
             color: @font-dark;
 
             &:hover, &.hover {
               background: lighten(@color-main, 30%);
               color: white;
+            }
+          }
+        }
+
+        .link-menu {
+          display: block;
+
+          a {
+            border-bottom: 1px solid @color-dark;
+            padding: 1em 12em;
+            font: .9rem OpenSansRegular;
+            color: @font-dark;
+          }
+
+          & > .children {
+            .height-animate;
+            display: block;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+
+            a {
+              background: white;
+
+              &:hover {
+                color: @font-dark;
+                background: lighten(@color-main, 30%);
+              }
+            }
+          }
+
+          &.active {
+            & > .children {
+              max-height: 40em;
             }
           }
         }

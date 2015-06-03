@@ -121,7 +121,7 @@
 <script type="text/javascript">
 	$('#user-login .zone-select').ac_zoneselect({listen: '#user-login [name=country_id]', select: '<?= $zone_id; ?>'});
 
-	$.ac_errors(<?= json_encode($errors); ?>);
+
 </script>
 
 <?= $is_ajax ? '' : call('footer'); ?>
