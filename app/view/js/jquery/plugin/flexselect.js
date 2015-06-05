@@ -322,6 +322,8 @@
 				this.picked = true;
 			} else if (!this.settings.allowMismatch) {
 				this.reset();
+			} else {
+				this.select.val('');
 			}
 		},
 
