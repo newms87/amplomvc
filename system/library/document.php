@@ -307,23 +307,29 @@ class Document extends Library
 				'compress' => option('less_compress', true),
 			);
 
-			$parser = new Less_Parser($options);
+			try {
+				$parser = new Less_Parser($options);
 
-			$parser->parseFile($file, $reference);
+				$parser->parseFile($file, $reference);
 
-			$parser->parse("@base-path: '" . SITE_BASE . "'; @style-path: '@{base-path}app/view/style/';");
+				$parser->parse("@base-path: '" . SITE_BASE . "'; @style-path: '@{base-path}app/view/style/';");
 
-			$css = $parser->getCss();
+				$css = $parser->getCss();
 
-			$dependencies = $parser->allParsedFiles();
+				$dependencies = $parser->allParsedFiles();
 
-			cache('less.' . $reference, $dependencies);
+				cache('less.' . $reference, $dependencies);
+			} catch(Exception $e) {
+				trigger_error($e->getMessage());
+				return false;
+			}
 
 			//Write cache file
 			if (_is_writable(dirname($less_file))) {
 				file_put_contents($less_file, $css);
 			} else {
 				trigger_error(_l("%s(): Failed to write CSS file. Directory was unwritable: %s", __METHOD__, $css));
+				return false;
 			}
 		}
 
@@ -333,20 +339,24 @@ class Document extends Library
 
 	public function compileLessContent($content, $compress = null)
 	{
-		//Load PHPSass
 		require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 		$options = array(
 			'compress' => $compress === null ? option('less_compress', true) : $compress,
 		);
 
-		$parser = new Less_Parser($options);
+		try {
+			$parser = new Less_Parser($options);
 
-		$parser->parse($content);
+			$parser->parse($content);
 
-		$parser->parse("@basepath: '" . SITE_BASE . "';");
+			$parser->parse("@basepath: '" . SITE_BASE . "';");
 
-		return trim($parser->getCss());
+			return trim($parser->getCss());
+		} catch(Exception $e) {
+			trigger_error($e->getMessage());
+			return false;
+		}
 	}
 
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')

@@ -15,7 +15,7 @@ class App_Controller_Customer extends Controller
 
 		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
 			if ($this->is_ajax) {
-				echo json_encode(array('success' => _l("You are logged in to you account")));
+				echo json_encode(array('success' => _l("You have been logged into your account.")));
 				exit;
 			} else {
 				redirect('account');
