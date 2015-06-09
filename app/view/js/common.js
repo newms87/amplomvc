@@ -419,7 +419,7 @@ $.fn.show_msg = function (type, msg, options) {
 	}
 
 	if (options.clear) {
-		this.find('.messages').remove();
+		(options.inline ? this : $('#message-box')).find('.messages').remove();
 	}
 
 	if (typeof msg === 'object') {
@@ -462,14 +462,20 @@ $.fn.show_msg = function (type, msg, options) {
 		$msg.removeClass('hide');
 
 		if (options.delay) {
+			$.fn.show_msg.count[type] = ($.fn.show_msg.count[type] || 0) + 1;
+
 			setTimeout(function () {
-				$box.slideToggle(500, function () {
-					$(this).remove()
-				});
+				if ($.fn.show_msg.count[type]-- >= 1) {
+					$box.slideToggle(500, function () {
+						$(this).remove();
+					});
+				}
 			}, options.delay);
 		}
 	});
 }
+
+$.fn.show_msg.count = {}
 
 $.fn.ac_errors = function (errors, noclear) {
 	if (!noclear) {
@@ -525,18 +531,18 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 $.fn.file_upload = function (options) {
 	return this.each(function (i, e) {
 		options = $.extend({
-			change:      amplo_file_upload,
-			progress:    amplo_progress,
-			success:     amplo_success,
-			url:         $ac.site_url + 'common/file-upload',
-			xhr:         amplo_xhr,
-			path:        '',
-			preview:     null,
-			content:     null,
-			msg:         'Click to upload file',
-			showInput:   false,
-			class:       '',
-			progressBar: true,
+			change:         amplo_file_upload,
+			progress:       amplo_progress,
+			success:        amplo_success,
+			url:            $ac.site_url + 'common/file-upload',
+			xhr:            amplo_xhr,
+			path:           '',
+			preview:        null,
+			content:        null,
+			msg:            'Click to upload file',
+			showInput:      false,
+			class:          '',
+			progressBar:    true,
 			progressBarMsg: true
 		}, options);
 
@@ -1281,7 +1287,7 @@ function content_loaded(is_ajax) {
 		}
 	}
 
-	if ($ac.show_msg_delay) {
+	if ($ac.show_msg_delay && $('.messages').length) {
 		setTimeout(function () {
 			$('.messages').slideToggle(500, function () {
 				$(this).remove()

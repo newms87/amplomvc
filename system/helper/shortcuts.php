@@ -309,7 +309,7 @@ function image_save($image, $save_as = null, $width = null, $height = null, $def
 
 function theme_image($image, $width = null, $height = null, $theme = null)
 {
-	if (!is_numeric($width)) {
+	if (is_string($width) && !is_numeric($width)) {
 		$theme = $width;
 		$width = null;
 	}
