@@ -12,10 +12,10 @@ function _profile($key, array $data = array())
 	$time      = round(microtime(true) - $__start, 6);
 
 	$data += array(
-		'key'        => $key,
-		'time'       => $time,
-		'memory'     => $memory,
-		'allocated'  => $allocated
+		'key'       => $key,
+		'time'      => $time,
+		'memory'    => $memory,
+		'allocated' => $allocated
 	);
 
 	$_profile[$sort_order++] = $data;
@@ -61,7 +61,7 @@ function request_accepts($type)
 }
 
 define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admin') === 0);
-
+define('IS_WINDOWS', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
 define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));

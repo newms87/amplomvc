@@ -60,7 +60,7 @@ function _mod($file)
 
 	if (is_file($mod_file)) {
 		if (filemtime($mod_file) < filemtime($file)) {
-			if ($registry) {
+			if ($registry && function_exists('redirect')) {
 				$registry->get('mod')->reapply($mod_file);
 			} else {
 				$mod_update[$mod_file] = $mod_file;
