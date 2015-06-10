@@ -997,6 +997,22 @@ CSS;
   background-repeat: no-repeat;
 }
 
+.amp-sprite.up {
+	transform: rotateZ(0deg);
+}
+
+.amp-sprite.left {
+	transform: rotateZ(90deg);
+}
+
+.amp-sprite.down {
+	transform: rotateZ(180deg);
+}
+
+.amp-sprite.left {
+	transform: rotateZ(270deg);
+}
+
 $style
 CSS;
 
