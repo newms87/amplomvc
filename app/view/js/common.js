@@ -477,6 +477,10 @@ $.fn.show_msg = function (type, msg, options) {
 
 $.fn.show_msg.count = {}
 
+$.show_msg = function (type, msg, options) {
+	$('body').show_msg(type, msg, options);
+}
+
 $.fn.ac_errors = function (errors, noclear) {
 	if (!noclear) {
 		this.find('.err-msg').remove();
