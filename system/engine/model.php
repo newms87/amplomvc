@@ -254,11 +254,14 @@ abstract class Model
 
 			if ($primary_key && isset($data[$primary_key])) {
 				$row_id = $data[$primary_key];
+			} else {
+				$row_id = true;
 			}
 		}
 
 		if (isset(self::$model_history[$table])) {
 			$this->history($t, $row_id, 'insert', $data, true);
+
 		}
 
 		return $row_id;
