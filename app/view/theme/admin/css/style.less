@@ -899,31 +899,29 @@ td {
   margin-bottom: 15px;
 
   & > .heading {
-    height: 38px;
-    padding-left: 7px;
-    padding-right: 7px;
+    position: relative;
+    min-height: 2em;
+    padding: .5em;
     border: 1px solid #DBDBDB;
     background: url('@{theme-img}box.png') repeat-x;
-    -webkit-border-radius: 7px 7px 0 0;
-    -moz-border-radius: 7px 7px 0 0;
-    -khtml-border-radius: 7px 7px 0 0;
     border-radius: 7px 7px 0 0;
 
     h1 {
       margin: 0;
-      padding: 11px 0 0 0;
+      .ws-hack;
       color: #003A88;
       font-size: 16px;
-      float: left;
+      display: inline-block;
+      vertical-align: middle;
+      width: 50%;
+      padding: .2em 0;
 
       img {
         max-width: 24px;
-        float: left;
-        margin-top: -1px;
-        margin-left: 3px;
-        margin-right: 8px;
+        margin: -1px 8px 0 3px;
+        display: inline-block;
+        vertical-align: middle;
       }
-
     }
 
     .icon {
@@ -931,13 +929,14 @@ td {
     }
 
     .buttons {
-      float: right;
-      padding-top: 4px;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: right;
+      width: 50%;
       margin: 0;
-      clear: none;
 
       .button {
-        margin-left: 5px;
+        margin-left: .3em;
 
         .insert_classes {
           float: left;
@@ -946,14 +945,37 @@ td {
       }
     }
   }
-}
 
-.box > .section, .box > section {
-  padding: 10px;
-  border-left: 1px solid #CCCCCC;
-  border-right: 1px solid #CCCCCC;
-  border-bottom: 1px solid #CCCCCC;
-  min-height: 300px;
+  & > .section, & > section {
+    padding: .7em;
+    border: 1px solid #CCCCCC;
+    border-top: none;
+    min-height: 300px;
+  }
+
+  .batch_actions {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    float: right;
+
+    & + .buttons {
+      float: right;
+      width: auto;
+      clear: none;
+      margin-right: 1em;
+    }
+
+    .action_value {
+      position: relative;
+      display: none;
+
+      &.active {
+        display: inline-block;
+      }
+    }
+  }
+
 }
 
 //Button
@@ -1757,23 +1779,6 @@ ul.phone_list + a {
 
 .datetime {
   width: 130px;
-}
-
-/* Batch Actions */
-.batch_actions {
-  margin-left: 10px;
-  margin-right: 5px;
-  padding-top: 7px;
-  float: right;
-}
-
-.batch_actions .action_value {
-  position: relative;
-  display: none;
-}
-
-.batch_actions .action_value.active {
-  display: inline-block;
 }
 
 td label {
