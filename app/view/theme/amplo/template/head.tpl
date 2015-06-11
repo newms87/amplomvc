@@ -89,7 +89,7 @@
 			ga('set', 'expVar', '<?= $this->google->getExperimentVariation(); ?>');
 			<? } ?>
 
-			ga('send', 'pageview', {'dimension1': "<?= DOMAIN; ?>"});
+			ga('send', 'pageview', "<?= $_SERVER['REQUEST_URI'] . (strpos($_SERVER['REQUEST_URI'], '?') ? '&' : '?') . 'domain=' . urlencode(DOMAIN); ?>"});
 
 			<? if (option('ga_click_tracking')) { ?>
 			//Global click tracking

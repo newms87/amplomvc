@@ -22,9 +22,8 @@ class Document extends Library
 			$this->links = $this->Model_Navigation->getNavigationGroup('admin');
 		}
 
-		$this->info['title']       = option('site_title');
-		$this->meta['description'] = option('site_meta_description');
-
+		$this->info['title']          = option('site_title');
+		$this->meta['description']    = option('site_meta_description');
 		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
 
 		if ($ac_vars = option('config_ac_vars')) {
@@ -319,8 +318,9 @@ class Document extends Library
 				$dependencies = $parser->allParsedFiles();
 
 				cache('less.' . $reference, $dependencies);
-			} catch(Exception $e) {
+			} catch (Exception $e) {
 				trigger_error($e->getMessage());
+
 				return false;
 			}
 
@@ -329,6 +329,7 @@ class Document extends Library
 				file_put_contents($less_file, $css);
 			} else {
 				trigger_error(_l("%s(): Failed to write CSS file. Directory was unwritable: %s", __METHOD__, $css));
+
 				return false;
 			}
 		}
@@ -353,8 +354,9 @@ class Document extends Library
 			$parser->parse("@basepath: '" . SITE_BASE . "';");
 
 			return trim($parser->getCss());
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			trigger_error($e->getMessage());
+
 			return false;
 		}
 	}
