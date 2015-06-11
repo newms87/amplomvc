@@ -899,31 +899,28 @@ td {
   margin-bottom: 15px;
 
   & > .heading {
-    height: 38px;
-    padding-left: 7px;
-    padding-right: 7px;
+    position: relative;
+    min-height: 2em;
+    padding: .5em;
     border: 1px solid #DBDBDB;
     background: url('@{theme-img}box.png') repeat-x;
-    -webkit-border-radius: 7px 7px 0 0;
-    -moz-border-radius: 7px 7px 0 0;
-    -khtml-border-radius: 7px 7px 0 0;
     border-radius: 7px 7px 0 0;
 
     h1 {
       margin: 0;
-      padding: 11px 0 0 0;
+      .ws-hack;
       color: #003A88;
       font-size: 16px;
-      float: left;
+      display: inline-block;
+      vertical-align: middle;
+      width: 60%;
 
       img {
         max-width: 24px;
-        float: left;
-        margin-top: -1px;
-        margin-left: 3px;
-        margin-right: 8px;
+        margin: -1px 8px 0 3px;
+        display: inline-block;
+        vertical-align: middle;
       }
-
     }
 
     .icon {
@@ -931,13 +928,14 @@ td {
     }
 
     .buttons {
-      float: right;
-      padding-top: 4px;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: right;
+      width: 40%;
       margin: 0;
-      clear: none;
 
       .button {
-        margin-left: 5px;
+        margin-left: .3em;
 
         .insert_classes {
           float: left;
