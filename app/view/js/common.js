@@ -350,6 +350,7 @@ $.fn.tabs = function (opts) {
 
 	$tabs.click(function () {
 		var $this = $(this);
+
 		var $content = $($this.attr('href')), title = $this.attr('data-title');
 
 		if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
@@ -368,7 +369,8 @@ $.fn.tabs = function (opts) {
 
 
 		if ($tabs.o.pushState) {
-			var url = window.location.href.replace(/#.*/, '') + '#' + $content.attr('id');
+			var id = $content.attr('id');
+			var url = window.location.href.replace(/#.*/, '') + (id ? '#' + id : '');
 			history.pushState({url: url}, title || $this.text(), url);
 		}
 
