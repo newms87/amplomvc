@@ -55,6 +55,9 @@ if (AMPLO_PROFILE) {
 	_profile('Router loaded');
 }
 
+//Load Site Config
+new Config;
+
 //Load Helper files
 $handle = opendir(DIR_SYSTEM . 'helper/');
 while (($helper = readdir($handle))) {

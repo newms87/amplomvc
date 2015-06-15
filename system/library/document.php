@@ -8,7 +8,7 @@ class Document extends Library
 		$links = array(),
 		$styles = array(),
 		$scripts = array(),
-		$ac_vars = array();
+		$js_vars = array();
 
 	function __construct()
 	{
@@ -26,8 +26,8 @@ class Document extends Library
 		$this->meta['description']    = option('site_meta_description');
 		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
 
-		if ($ac_vars = option('config_ac_vars')) {
-			$this->ac_vars += $ac_vars;
+		if ($js_vars = option('js_vars')) {
+			$this->js_vars += $js_vars;
 		}
 
 		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
@@ -428,7 +428,7 @@ class Document extends Library
 
 	public function localizeVar($var, $value)
 	{
-		$this->ac_vars[$var] = $value;
+		$this->js_vars[$var] = $value;
 	}
 
 	public function minifyJs($content)
@@ -503,14 +503,14 @@ class Document extends Library
 		}
 		unset($file);
 
-		$this->ac_vars['al'] = $js_autoload;
+		$this->js_vars['al'] = $js_autoload;
 
 		//Sort scripts by priority
 		ksort($this->scripts);
 
 		$scripts = array(
 			'local' => array(
-				'ac' => "\$ac = " . json_encode($this->ac_vars),
+				'ac' => "\$ac = " . json_encode($this->js_vars),
 			),
 		);
 

@@ -449,11 +449,6 @@ function option($option, $default = null)
 {
 	global $_options;
 
-	//Load config if not loaded
-	if (!$_options) {
-		new Config;
-	}
-
 	return isset($_options[$option]) ? $_options[$option] : $default;
 }
 

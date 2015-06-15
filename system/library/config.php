@@ -35,6 +35,10 @@ class Config extends Library
 	{
 		global $_options;
 
+		if (!$_options) {
+			$_options = array();
+		}
+
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
 		$settings = cache('setting.config');
@@ -57,7 +61,7 @@ class Config extends Library
 			//redirect('admin/settings/restore_defaults');
 		}
 
-		$_options = $settings;
+		$_options += $settings;
 
 		$_options['site_id']  = !empty($site['store_id']) ? $site['store_id'] : 0;
 		$_options['store_id'] = $_options['site_id'];
