@@ -36,6 +36,12 @@
 				<? } ?>
 			</div>
 		<? } ?>
+
+		<section id="message-box" class="message-row row left">
+			<? if (empty($disable_messages) && $this->message->has()) { ?>
+				<?= render_message(); ?>
+			<? } ?>
+		</section>
 	</div>
 
 	<? if (is_logged()) { ?>

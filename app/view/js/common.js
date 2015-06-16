@@ -435,6 +435,10 @@ $.fn.show_msg = function (type, msg, options) {
 	return this.each(function (i, e) {
 		var $e = options.inline ? $(e) : $('#message-box');
 
+		if (!$e.length) {
+			return false;
+		}
+
 		var $box = $e.find('.messages.' + type);
 
 		if (!$box.length) {
