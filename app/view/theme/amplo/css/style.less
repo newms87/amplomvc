@@ -1492,15 +1492,13 @@ section.page {
       margin-top: 1em;
     }
 
-    .input-item {
-      margin-bottom: .7em;
-
-      input, select {
-        padding: .3em;
-        font: 1em OpenSansRegular;
-        color: @font-dark;
-        width: 100%;
-      }
+    input[type="text"], input[type="password"], select {
+      padding: .6em;
+      border-radius: 3px;
+      font: 1em OpenSansRegular;
+      color: @font-dark;
+      width: 100%;
+      max-width: 100%;
     }
   }
 
@@ -1520,14 +1518,6 @@ section.page {
 
     & + .field {
       margin-top: 1em;
-    }
-  }
-
-  .input {
-    input[type="text"] {
-      padding: .6em;
-      border-radius: 3px;
-      max-width: 100%;
     }
   }
 

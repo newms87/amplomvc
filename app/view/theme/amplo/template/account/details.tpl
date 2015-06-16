@@ -23,16 +23,16 @@
 			</div>
 
 			<div class="input editing col xs-12 left">
-				<div class="input-item">
+				<div class="input">
 					<input type="text" name="first_name" value="<?= $customer['first_name']; ?>" placeholder="{{First Name}}"/>
 				</div>
-				<div class="input-item">
+				<div class="input">
 					<input type="text" name="last_name" value="<?= $customer['last_name']; ?>" placeholder="{{Last Name}}"/>
 				</div>
-				<div class="input-item">
+				<div class="input">
 					<input type="text" name="email" value="<?= $customer['email']; ?>" placeholder="{{Email}}"/>
 				</div>
-				<div class="input-item">
+				<div class="input">
 					<input type="text" name="phone" value="<?= $customer['phone']; ?>" placeholder="{{Phone #}}"/>
 				</div>
 			</div>
@@ -56,19 +56,19 @@
 				</div>
 
 				<form action="<?= site_url('account/address/save'); ?>" data-reload="true" class="input editing col xs-12 left">
-					<div class="input-item">
+					<div class="input">
 						<input type="text" name="name" value="<?= $customer['first_name'] . ' ' . $customer['last_name']; ?>" placeholder="{{Company}}"/>
 					</div>
-					<div class="input-item">
+					<div class="input">
 						<input type="text" name="address" value="<?= _post('address'); ?>" placeholder="{{Street Address}}"/>
 					</div>
-					<div class="input-item">
+					<div class="input">
 						<input type="text" name="address_2" value="<?= _post('address_2'); ?>" placeholder="{{Apt # / P.O Box}}"/>
 					</div>
-					<div class="input-item">
+					<div class="input">
 						<input type="text" name="city" value="<?= _post('city'); ?>" placeholder="{{City}}"/>
 					</div>
-					<div class="input-item">
+					<div class="input">
 						<?= build(array(
 							'type'   => 'select',
 							'name'   => 'zone_id',
@@ -78,7 +78,7 @@
 							'value'  => 'zone_id',
 						)); ?>
 					</div>
-					<div class="input-item">
+					<div class="input">
 						<input type="text" name="postcode" value="<?= _post('postcode'); ?>" placeholder="{{Zip Code}}"/>
 					</div>
 
@@ -117,10 +117,10 @@
 			<div class="field password-field reading">XXXXXXXX</div>
 
 			<div class="input editing col xs-12 left">
-				<div class="input-item">
+				<div class="input">
 					<input type="password" name="password" placeholder="{{Password}}"/>
 				</div>
-				<div class="input-item">
+				<div class="input">
 					<input type="password" name="confirm" placeholder="{{Confirm Password}}"/>
 				</div>
 			</div>

@@ -1,3 +1,6 @@
+/* Vars */
+@padding-width: 1em;
+
 /* Methods */
 .bg-image-set(@s1, @s2, @s3) {
   background-image: url(@s1);
@@ -94,6 +97,22 @@
 
   &:last-child {
     .no-ws-hack;
+  }
+
+  &.auto {
+    width: auto;
+  }
+
+  &.padding {
+    padding: 0 @padding-width/2;
+  }
+
+  &.padding-left {
+    padding-left: @padding-width;
+  }
+
+  &.padding-right {
+    padding-right: @padding-width;
   }
 
   &.top {
