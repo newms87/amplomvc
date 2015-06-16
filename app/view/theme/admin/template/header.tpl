@@ -52,4 +52,3 @@
 	<? } ?>
 
 	<div class="content">
-		<?= render_message(); ?>
