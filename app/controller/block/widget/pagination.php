@@ -32,10 +32,10 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 		}
 
 		if ($settings['limit'] < 1) {
-			$settings['limit'] = $settings['total'];
-			$query['limit']    = 0;
+			$settings['limit']          = $settings['total'];
+			$settings['query']['limit'] = 0;
 		} else {
-			$query['limit'] = $settings['limit'];
+			$settings['query']['limit'] = $settings['limit'];
 		}
 
 		$num_pages = ceil($settings['total'] / $settings['limit']);
@@ -58,7 +58,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			$start = 1;
 			$end   = $num_pages;
 		}
-
+		
 		//Link Url (without page, as this is variable)
 		$url = site_url($settings['path'], $settings['query']);
 
