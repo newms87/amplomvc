@@ -55,9 +55,6 @@ if (AMPLO_PROFILE) {
 	_profile('Router loaded');
 }
 
-//Load Site Config
-new Config;
-
 //Load Helper files
 $handle = opendir(DIR_SYSTEM . 'helper/');
 while (($helper = readdir($handle))) {
@@ -65,7 +62,7 @@ while (($helper = readdir($handle))) {
 		continue;
 	}
 
-	//Load these last
+	//Already loaded
 	if ($helper === 'core.php' || $helper === 'shortcuts.php') {
 		continue;
 	}

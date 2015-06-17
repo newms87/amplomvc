@@ -35,7 +35,7 @@ class Config extends Library
 	{
 		global $_options;
 
-		if (!$_options) {
+		if (!is_array($_options)) {
 			$_options = array();
 		}
 
@@ -61,7 +61,8 @@ class Config extends Library
 			//redirect('admin/settings/restore_defaults');
 		}
 
-		$_options += $settings;
+		//Overwrite any previous settings with new Site settings.
+		$_options = $settings + $_options;
 
 		$_options['site_id']  = !empty($site['store_id']) ? $site['store_id'] : 0;
 		$_options['store_id'] = $_options['site_id'];
