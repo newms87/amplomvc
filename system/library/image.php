@@ -45,13 +45,13 @@ class Image extends Library
 			}
 
 			$replace = array(
-				'#\\\\#' => '/',
-				'#/./#' => '/',
-				'#' . URL_IMAGE . '#' => DIR_IMAGE,
+				'#\\\\#'                 => '/',
+				'#/./#'                  => '/',
+				'#' . URL_IMAGE . '#'    => DIR_IMAGE,
 				'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
-				'#' . URL_SITE . '#' => DIR_SITE,
-				'#^(http|https):#' => '',
-				"#\\?.*$#" => '',
+				'#' . URL_SITE . '#'     => DIR_SITE,
+				'#^(http|https):#'       => '',
+				"#\\?.*$#"               => '',
 			);
 
 			$image = preg_replace(array_keys($replace), $replace, $image_path);
@@ -101,6 +101,7 @@ class Image extends Library
 
 		if (!is_file($file)) {
 			$this->file = null;
+
 			return false;
 		}
 
@@ -516,9 +517,9 @@ class Image extends Library
 	/**
 	 * Sorts images by color in place
 	 *
-	 * @param &$data - an array with a filepath to an image file under a key
+	 * @param &$data   - an array with a filepath to an image file under a key
 	 * @param $img_key - the key in the $data array that points to the image file path
-	 * @param $type - the method to sort by. 'HSV' is default.
+	 * @param $type    - the method to sort by. 'HSV' is default.
 	 */
 
 	public function sort(&$data, $img_key, $type = 'HSV')
@@ -910,10 +911,10 @@ class Image extends Library
 			//Give this sprite a unique name
 			$sprite_name = $prefix . slug(pathinfo($img, PATHINFO_FILENAME), '-');
 
-			$count = 0;
+			$count     = 0;
 			$orig_name = $sprite_name;
 
-			while(isset($sprites[$sprite_name])) {
+			while (isset($sprites[$sprite_name])) {
 				$sprite_name = $orig_name . '-' . $count++;
 			}
 
@@ -935,6 +936,11 @@ class Image extends Library
 			$sprites[$sprite_name] = $sprite;
 		}
 
+
+		//Build Sprite PNG images
+		$style   = '';
+		$url_set = '';
+
 		for ($n = $nx; $n > 0; $n--) {
 			$sheet = imagecreatetruecolor($sheets[$n]['width'], $sheets[$n]['height']);
 
@@ -945,20 +951,17 @@ class Image extends Library
 			imagesavealpha($sheet, true);
 
 			$sheets[$n]['image'] = $sheet;
-		}
 
-		$style = '';
+			foreach ($sprites as $sprite) {
+				$image = @imagecreatefrompng($sprite['image']);
 
-		foreach ($sprites as $sprite) {
-			$image = @imagecreatefrompng($sprite['image']);
+				if ($image) {
+					$name = $sprite['name'];
+					$y    = '-' . $sheets[1]['y_index'] . 'px';
+					$w    = $sprite['width_1'] . 'px';
+					$h    = $sprite['height_1'] . 'px';
 
-			if ($image) {
-				$name = $sprite['name'];
-				$y    = '-' . $sheets[1]['y_index'] . 'px';
-				$w    = $sprite['width_1'] . 'px';
-				$h    = $sprite['height_1'] . 'px';
-
-				$style .= <<<CSS
+					$style .= <<<CSS
 .$name {
 	background-position: 0 $y;
 	width: $w;
@@ -966,23 +969,21 @@ class Image extends Library
 }\n\n
 CSS;
 
-				for ($n = $nx; $n > 0; $n--) {
 					imagecopyresampled($sheets[$n]['image'], $image, 0, $sheets[$n]['y_index'], 0, 0, $sprite['width_' . $n], $sprite['height_' . $n], $sprite['width'], $sprite['height']);
 					$sheets[$n]['y_index'] += $sprite['height_' . $n] + (3 * $n);
+
+					imagedestroy($image);
 				}
-
-				imagedestroy($image);
 			}
-		}
 
-		$url     = $sheets[1]['url'];
-		$url_set = '';
-
-		for ($n = 1; $n <= $nx; $n++) {
+			//Save to file and destroy image
 			imagepng($sheets[$n]['image'], $sheets[$n]['file'], 9);
+			imagedestroy($sheets[$n]['image']);
 
 			$url_set .= ($url_set ? ', ' : '') . "url({$sheets[$n]['url']}) {$n}x";
 		}
+
+		$url = $sheets[1]['url'];
 
 		$style = <<<CSS
 .amp-sprite {

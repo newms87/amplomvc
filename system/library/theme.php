@@ -11,8 +11,6 @@ class Theme extends Library
 	{
 		parent::__construct();
 
-		$this->dir_themes = DIR_THEMES;
-
 		$admin_theme = option('config_admin_theme', 'admin');
 		$theme       = option('site_theme', AMPLO_DEFAULT_THEME);
 
@@ -59,11 +57,6 @@ class Theme extends Library
 		$this->theme_hierarchy = $this->getThemeParents($theme);
 
 		array_unshift($this->theme_hierarchy, $theme);
-	}
-
-	public function setThemesDirectory($dir)
-	{
-		$this->dir_themes = $dir;
 	}
 
 	public function getTheme()
@@ -166,7 +159,7 @@ class Theme extends Library
 		$file = $this->findFile($path, $theme);
 
 		if ($file) {
-			return $this->dir_themes . $file;
+			return DIR_THEMES . $file;
 		}
 
 		return false;
@@ -192,14 +185,14 @@ class Theme extends Library
 
 		//Resolve specified theme directory
 		if ($theme) {
-			if (file_exists($this->dir_themes . $theme . '/' . $file)) {
+			if (file_exists(DIR_THEMES . $theme . '/' . $file)) {
 				return $theme . '/' . $file;
 			}
 		}
 
 		//Resolve the current store themes heirachically
 		foreach ($this->theme_hierarchy as $theme_node) {
-			if (file_exists($this->dir_themes . $theme_node . '/' . $file)) {
+			if (file_exists(DIR_THEMES . $theme_node . '/' . $file)) {
 				return $theme_node . '/' . $file;
 			}
 		}
@@ -268,8 +261,11 @@ class Theme extends Library
 
 			$sprites = array();
 
-			foreach ($this->theme_hierarchy as $theme_node) {
-				$dir = $this->dir_themes . $theme_node . '/image/sprite/';
+			$theme_nodes = $this->theme_hierarchy;
+			$theme_nodes[] = '..';
+
+			foreach ($theme_nodes as $theme_node) {
+				$dir = DIR_THEMES . $theme_node . '/image/sprite/';
 
 				if (is_dir($dir)) {
 					$images = get_files($dir, 'png', FILELIST_STRING);
