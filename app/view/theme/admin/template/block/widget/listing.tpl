@@ -17,9 +17,11 @@
 				<b class="sprite refresh small"></b>
 			</a>
 
-			<a href="<?= site_url($listing_path, $_GET + array('export' => '')); ?>" class="button export-view small">
-				<b class="sprite export small"></b>
-			</a>
+			<? if (user_can('r', 'block/widget/listing/export')) { ?>
+				<a href="<?= site_url($listing_path, $_GET + array('export' => '')); ?>" class="button export-view small">
+					<b class="sprite export small"></b>
+				</a>
+			<? } ?>
 
 			<button class="modify-view small">
 				<b class="sprite settings small"></b>

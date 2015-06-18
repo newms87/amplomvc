@@ -8,7 +8,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		if (isset($_GET['export'])) {
+		if (isset($_GET['export']) && user_can('r', 'block/widget/listing/export')) {
 			$this->export($settings);
 		}
 
