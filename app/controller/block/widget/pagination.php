@@ -58,7 +58,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			$start = 1;
 			$end   = $num_pages;
 		}
-		
+
 		//Link Url (without page, as this is variable)
 		$url = site_url($settings['path'], $settings['query']);
 
