@@ -396,6 +396,7 @@ $.fn.tabs = function (opts) {
 };
 
 $.fn.show_msg = function (type, msg, options) {
+	console.log(type,msg, options);
 	if (type === 'clear') {
 		return $(this).find('.messages').remove();
 	}

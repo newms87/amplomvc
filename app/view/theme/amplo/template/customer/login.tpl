@@ -104,8 +104,6 @@
 </section>
 
 <script type="text/javascript">
-	$('#customer-login .account-box').not('.hide').show_msg('error', <?= json_encode($this->message->fetch('error')); ?>);
-
 	$('.login-page .switch a').click(function () {
 		$('.login-page').toggleClass('registration', $(this).is('.show-register'));
 	});
