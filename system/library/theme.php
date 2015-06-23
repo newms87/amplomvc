@@ -206,31 +206,32 @@ class Theme extends Library
 		$theme = $this->theme;
 
 		$cached_theme = 'less/theme.' . $theme;
-		$theme_file = cache($cached_theme, null, true);
+		$theme_file   = cache($cached_theme, null, true);
+
+		//import sprite sheet
+		if ($sprite_nx && option('amplo_sprite_sheet', true)) {
+			//Make sure sprite sheet is generated
+			$this->getSpriteSheet($sprite_nx, $sprite_prefix);
+		}
 
 		if (!is_file($theme_file)) {
 			$rel_dir = "app/view/theme/$theme/css/";
 
-			$config_file = _mod(DIR_SITE . $rel_dir . "config.less");
+			$config_file     = _mod(DIR_SITE . $rel_dir . "config.less");
 			$config_basename = basename($config_file);
 
 			$theme_style = '';
 
-			//import sprite sheet
-			//TODO: Implement a version of sprites, where css is generated but sprites are loaded as individual files. (Memory issues on smaller servers)
-			if (option('amplo_sprite_sheet', true)) {
-				$import_sprite = $sprite_nx ? $this->getSpriteSheet($sprite_nx, $sprite_prefix) : false;
-
-				if ($import_sprite) {
-					if (!$this->checkSpriteSheet()) {
-						$this->getSpriteSheet($sprite_nx, $sprite_prefix, true);
-					}
-
-					$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
-				}
-			}
-
 			$theme_style .= "@import '@{base-path}{$rel_dir}{$config_basename}';\n\n";
+
+			//import sprite sheet
+			if ($sprite_nx && option('amplo_sprite_sheet', true)) {
+				if (!$this->checkSpriteSheet()) {
+					$this->getSpriteSheet($sprite_nx, $sprite_prefix, true);
+				}
+
+				$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
+			}
 
 			$settings = $this->config->loadGroup('theme');
 
@@ -258,7 +259,8 @@ class Theme extends Library
 	/**
 	 * Check if the sprite sheet needs to be updated. (content added / removed)
 	 *
-	 * @return bool - False if the sprite sheet is out of date (or does not exist). True if the sprite sheet is valid and up to date.
+	 * @return bool - False if the sprite sheet is out of date (or does not exist). True if the sprite sheet is valid
+	 *              and up to date.
 	 */
 	public function checkSpriteSheet()
 	{
@@ -270,7 +272,7 @@ class Theme extends Library
 
 		$modified = filemtime($css_file);
 
-		$theme_nodes = $this->theme_hierarchy;
+		$theme_nodes   = $this->theme_hierarchy;
 		$theme_nodes[] = '..';
 
 		foreach ($theme_nodes as $theme_node) {
@@ -284,6 +286,8 @@ class Theme extends Library
 		return true;
 	}
 
+	//TODO: Implement a version of sprites, where css is generated but sprites are loaded as individual files. (Memory issues on smaller servers)
+
 	public function getSpriteSheet($nx = 3, $prefix = 'si-', $refresh = false)
 	{
 		$css_file = DIR_THEME . 'css/sprite.less';
@@ -295,7 +299,7 @@ class Theme extends Library
 
 			$sprites = array();
 
-			$theme_nodes = $this->theme_hierarchy;
+			$theme_nodes   = $this->theme_hierarchy;
 			$theme_nodes[] = '..';
 
 			foreach ($theme_nodes as $theme_node) {
@@ -462,7 +466,7 @@ class Theme extends Library
 				if ($theme === $directives['parent']) {
 					break;
 				}
-				$theme     = $directives['parent'];
+				$theme           = $directives['parent'];
 				$parents[$theme] = $theme;
 			} else {
 				break;
