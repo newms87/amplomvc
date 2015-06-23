@@ -205,12 +205,8 @@ class Theme extends Library
 	{
 		$theme = $this->theme;
 
-		$cache_file = 'less/theme.' . $theme;
-		$theme_file = cache($cache_file, null, true);
-
-		if ($sprite_nx) {
-			$sprite_nx = $this->getSpriteSheet($sprite_nx, $sprite_prefix);
-		}
+		$cached_theme = 'less/theme.' . $theme;
+		$theme_file = cache($cached_theme, null, true);
 
 		if (!is_file($theme_file)) {
 			$rel_dir = "app/view/theme/$theme/css/";
@@ -221,8 +217,17 @@ class Theme extends Library
 			$theme_style = '';
 
 			//import sprite sheet
-			if ($sprite_nx) {
-				$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
+			//TODO: Implement a version of sprites, where css is generated but sprites are loaded as individual files. (Memory issues on smaller servers)
+			if (option('amplo_sprite_sheet', true)) {
+				$import_sprite = $sprite_nx ? $this->getSpriteSheet($sprite_nx, $sprite_prefix) : false;
+
+				if ($import_sprite) {
+					if (!$this->checkSpriteSheet()) {
+						$this->getSpriteSheet($sprite_nx, $sprite_prefix, true);
+					}
+
+					$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
+				}
 			}
 
 			$theme_style .= "@import '@{base-path}{$rel_dir}{$config_basename}';\n\n";
@@ -237,10 +242,10 @@ class Theme extends Library
 				}
 			}
 
-			cache($cache_file, $theme_style, true);
+			cache($cached_theme, $theme_style, true);
 
 			//retrieve the absolute path of the cache file
-			$theme_file = cache($cache_file, null, true);
+			$theme_file = cache($cached_theme, null, true);
 		}
 
 		if ($theme_file) {
@@ -250,11 +255,40 @@ class Theme extends Library
 		return theme_url('css/style.css');
 	}
 
-	public function getSpriteSheet($nx = 3, $prefix = 'si-')
+	/**
+	 * Check if the sprite sheet needs to be updated. (content added / removed)
+	 *
+	 * @return bool - False if the sprite sheet is out of date (or does not exist). True if the sprite sheet is valid and up to date.
+	 */
+	public function checkSpriteSheet()
 	{
 		$css_file = DIR_THEME . 'css/sprite.less';
 
 		if (!is_file($css_file)) {
+			return false;
+		}
+
+		$modified = filemtime($css_file);
+
+		$theme_nodes = $this->theme_hierarchy;
+		$theme_nodes[] = '..';
+
+		foreach ($theme_nodes as $theme_node) {
+			$dir = DIR_THEMES . $theme_node . '/image/sprite/';
+
+			if (is_dir($dir) && filemtime($dir) > $modified) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function getSpriteSheet($nx = 3, $prefix = 'si-', $refresh = false)
+	{
+		$css_file = DIR_THEME . 'css/sprite.less';
+
+		if ($refresh || !is_file($css_file)) {
 			if (!_is_writable(dirname($css_file))) {
 				return false;
 			}
