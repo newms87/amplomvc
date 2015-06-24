@@ -225,11 +225,9 @@ class Theme extends Library
 
 			//import sprite sheet
 			if ($sprite_nx && option('amplo_sprite_sheet', true)) {
-				if (!$this->checkSpriteSheet()) {
-					$this->getSpriteSheet($sprite_nx, $sprite_prefix, true);
+				if ($this->checkSpriteSheet() || $this->getSpriteSheet($sprite_nx, $sprite_prefix, true)) {
+					$theme_style .= "@import '@{base-path}{$rel_dir}_sprite.less';\n";
 				}
-
-				$theme_style .= "@import '@{base-path}{$rel_dir}_sprite.less';\n";
 			}
 
 			$settings = $this->config->loadGroup('theme');
