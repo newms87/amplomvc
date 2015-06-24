@@ -281,6 +281,16 @@ $.fn.update_index = function (column) {
 	});
 }
 
+jQuery.fn.sortElements = function (comparator) {
+	var $this = this;
+
+	[].sort.call($this.children(), comparator).each(function (i, e) {
+		$this.append($(e));
+	});
+
+	return this;
+}
+
 $.fn.flash_highlight = function () {
 	pos = this.offset();
 
