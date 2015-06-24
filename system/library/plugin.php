@@ -111,6 +111,8 @@ class Plugin extends Library
 
 	public function uninstall($name, $keep_data = true)
 	{
+		clear_cache();
+
 		$instance = $this->loadPlugin($name);
 
 		if (method_exists($instance, 'uninstall')) {
@@ -180,6 +182,8 @@ class Plugin extends Library
 
 			return false;
 		}
+
+		clear_cache();
 
 		$changes = $this->getChanges($name);
 

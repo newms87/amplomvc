@@ -34,7 +34,21 @@ class App_Controller_Admin_Settings extends Controller
 		message('success', _l("The cache %s was successfully cleared!", $tables ? 'for ' . implode(',', $tables) : ''));
 
 		if (isset($_GET['redirect'])) {
-			redirect(get_last_page());
+			redirect($_GET['redirect'] ?: get_last_page());
+		} else {
+			redirect('admin/settings');
+		}
+	}
+
+	public function refresh_sprite_sheets()
+	{
+		$this->theme->refreshAllSpriteSheets();
+
+		message('success', _l("The sprite cache has been cleared and will be regenerated next run."));
+
+
+		if (isset($_GET['redirect'])) {
+			redirect($_GET['redirect'] ?: get_last_page());
 		} else {
 			redirect('admin/settings');
 		}

@@ -481,6 +481,11 @@ class App_Model_Navigation extends App_Model_Table
 						'path'         => 'admin/settings/clear_cache',
 						'query'        => 'redirect',
 					),
+					'system_system_refreshsprite' => array(
+						'display_name' => 'Refresh Sprite Sheets',
+						'path'         => 'admin/settings/refresh_sprite_sheets',
+						'query'        => 'redirect',
+					),
 					'system_logs'              => array(
 						'display_name' => 'Logs',
 						'path'         => 'admin/logs',

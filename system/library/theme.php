@@ -2,7 +2,6 @@
 
 class Theme extends Library
 {
-	private $dir_themes;
 	private $theme_hierarchy;
 	private $theme;
 	private $settings = array();
@@ -230,7 +229,7 @@ class Theme extends Library
 					$this->getSpriteSheet($sprite_nx, $sprite_prefix, true);
 				}
 
-				$theme_style .= "@import '@{base-path}{$rel_dir}sprite.less';\n";
+				$theme_style .= "@import '@{base-path}{$rel_dir}_sprite.less';\n";
 			}
 
 			$settings = $this->config->loadGroup('theme');
@@ -264,7 +263,7 @@ class Theme extends Library
 	 */
 	public function checkSpriteSheet()
 	{
-		$css_file = DIR_THEME . 'css/sprite.less';
+		$css_file = DIR_THEME . 'css/_sprite.less';
 
 		if (!is_file($css_file)) {
 			return false;
@@ -290,7 +289,7 @@ class Theme extends Library
 
 	public function getSpriteSheet($nx = 3, $prefix = 'si-', $refresh = false)
 	{
-		$css_file = DIR_THEME . 'css/sprite.less';
+		$css_file = DIR_THEME . 'css/_sprite.less';
 
 		if ($refresh || !is_file($css_file)) {
 			if (!_is_writable(dirname($css_file))) {
@@ -324,6 +323,21 @@ class Theme extends Library
 		}
 
 		return $css_file;
+	}
+
+	public function refreshAllSpriteSheets()
+	{
+		$themes = $this->getThemes();
+
+		foreach ($themes as $theme) {
+			$sprite_file = $theme['dir'] . 'css/_sprite.less';
+
+			if (is_file($sprite_file)) {
+				unlink($sprite_file);
+			}
+		}
+
+		return true;
 	}
 
 	public function saveTheme($theme, $configs, $stylesheet = null)
