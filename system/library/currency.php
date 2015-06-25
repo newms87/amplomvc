@@ -46,7 +46,7 @@ class Currency extends Library
 			'thousand_sep'  => $this->language->info('thousand_point'),
 		);
 
-		$this->document->localizeVar('currency', $currency);
+		js_var('currency', $currency);
 
 		return true;
 	}

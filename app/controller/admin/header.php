@@ -30,13 +30,13 @@ class App_Controller_Admin_Header extends Controller
 		$this->document->addScript(theme_dir('js/common.js'), 55);
 
 		//TODO: Move this to admin Panel?
-		$this->document->localizeVar('image_thumb_width', option('admin_thumb_width'));
-		$this->document->localizeVar('image_thumb_height', option('admin_thumb_height'));
-		$this->document->localizeVar('site_url', site_url());
-		$this->document->localizeVar('admin_url', site_url('admin/'));
-		$this->document->localizeVar('theme_url', theme_url());
-		$this->document->localizeVar('show_msg_inline', option('show_msg_inline', false));
-		$this->document->localizeVar('defer_scripts', option('defer_scripts', true));
+		js_var('image_thumb_width', option('admin_thumb_width'));
+		js_var('image_thumb_height', option('admin_thumb_height'));
+		js_var('site_url', site_url());
+		js_var('admin_url', site_url('admin/'));
+		js_var('theme_url', theme_url());
+		js_var('show_msg_inline', option('show_msg_inline', false));
+		js_var('defer_scripts', option('defer_scripts', true));
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions

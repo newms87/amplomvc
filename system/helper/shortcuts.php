@@ -465,6 +465,17 @@ function save_option($option, $value)
 	return $registry->get('config')->save('config', $option, $value);
 }
 
+function js_var($key, $value = null)
+{
+	global $_js_vars;
+
+	if ($value === null) {
+		return isset($_js_vars[$key]) ? $_js_vars[$key] : null;
+	} else {
+		$_js_vars[$key] = $value;
+	}
+}
+
 function page_info($key = null, $default = null)
 {
 	global $registry;

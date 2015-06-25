@@ -7,8 +7,7 @@ class Document extends Library
 		$meta = array(),
 		$links = array(),
 		$styles = array(),
-		$scripts = array(),
-		$js_vars = array();
+		$scripts = array();
 
 	function __construct()
 	{
@@ -25,10 +24,6 @@ class Document extends Library
 		$this->info['title']          = option('site_title');
 		$this->meta['description']    = option('site_meta_description');
 		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
-
-		if ($js_vars = option('js_vars')) {
-			$this->js_vars += $js_vars;
-		}
 
 		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
 			if (option('minify_js_files') === null) {
@@ -426,11 +421,6 @@ class Document extends Library
 		$this->addScript('local://' . $script, $priority);
 	}
 
-	public function localizeVar($var, $value)
-	{
-		$this->js_vars[$var] = $value;
-	}
-
 	public function minifyJs($content)
 	{
 		require_once(DIR_RESOURCES . 'js/jshrink/Minifier.php');
@@ -488,7 +478,7 @@ class Document extends Library
 	 */
 	public function getScripts()
 	{
-		global $js_autoload;
+		global $js_autoload, $_js_vars;
 
 		//Register jQuery plugin autoload files
 		foreach ($js_autoload as &$file) {
@@ -503,14 +493,14 @@ class Document extends Library
 		}
 		unset($file);
 
-		$this->js_vars['al'] = $js_autoload;
+		$_js_vars['al'] = $js_autoload;
 
 		//Sort scripts by priority
 		ksort($this->scripts);
 
 		$scripts = array(
 			'local' => array(
-				'ac' => "\$ac = " . json_encode($this->js_vars),
+				'ac' => "\$ac = " . json_encode($_js_vars),
 			),
 		);
 

@@ -35,13 +35,13 @@ class App_Controller_Header extends Controller
 		$this->document->addScript(DIR_JS . 'common.js', 53);
 
 		//TODO: Move this to admin Panel?
-		$this->document->localizeVar('image_thumb_width', option('config_image_thumb_width'));
-		$this->document->localizeVar('image_thumb_height', option('config_image_thumb_height'));
-		$this->document->localizeVar('site_url', site_url());
-		$this->document->localizeVar('theme_url', theme_url());
-		$this->document->localizeVar('show_msg_inline', option('show_msg_inline', false));
-		$this->document->localizeVar('show_msg_delay', option('show_msg_delay', 8000));
-		$this->document->localizeVar('defer_scripts', option('defer_scripts', true));
+		js_var('image_thumb_width', option('config_image_thumb_width'));
+		js_var('image_thumb_height', option('config_image_thumb_height'));
+		js_var('site_url', site_url());
+		js_var('theme_url', theme_url());
+		js_var('show_msg_inline', option('show_msg_inline', false));
+		js_var('show_msg_delay', option('show_msg_delay', 8000));
+		js_var('defer_scripts', option('defer_scripts', true));
 
 		//Body
 		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
