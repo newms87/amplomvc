@@ -5,10 +5,10 @@ var screen_lg = screen_width >= 1200,
 	screen_sm = screen_width >= 480 && screen_width < 768,
 	screen_xs = screen_width < 480;
 
-Function.prototype.loop = function (time) {
+Function.prototype.loop = function (time, count) {
 	var fn = this;
 	setTimeout(function () {
-		fn() === false ? 0 : fn.loop(time)
+		(fn(count = (+count || 0) - 1) === false || !count) ? 0 : fn.loop(time, count)
 	}, time);
 }
 
