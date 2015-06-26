@@ -19,10 +19,4 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	$('.actions a.reset').click(function () {
-		return confirm("{{This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?}}");
-	});
-</script>
-
 <?= $is_ajax ? '' : call('admin/footer'); ?>
