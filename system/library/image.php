@@ -879,6 +879,8 @@ class Image extends Library
 
 	public function createSprite($css_file, $images, $nx = 3, $prefix = 'si-')
 	{
+		set_time_limit(300);
+
 		$sheets = array();
 
 		if ($nx <= 1) {

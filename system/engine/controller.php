@@ -28,6 +28,10 @@ abstract class Controller
 
 	protected function render($path, $data = array(), $theme = null)
 	{
+		if (AMPLO_PROFILE) {
+			_profile('RENDER: ' . $path);
+		}
+
 		$_template = is_file($path) ? $path : $this->theme->getFile('template/' . $path, $theme);
 
 		if (!$_template) {
@@ -45,6 +49,10 @@ abstract class Controller
 		include(_mod($_template));
 
 		$this->output = ob_get_clean();
+
+		if (AMPLO_PROFILE) {
+			_profile('RENDER COMPLETED: ' . $path);
+		}
 
 		return $this->output;
 	}
