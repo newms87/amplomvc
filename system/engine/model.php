@@ -716,7 +716,7 @@ abstract class Model
 				if (is_array($table)) {
 					foreach ($table as $tbl => $name) {
 						if ($this->hasColumn($tbl, $col)) {
-							$t = $name;
+							$t = is_string($name) ? $name : $name['alias'];
 							break;
 						}
 					}
