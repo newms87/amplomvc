@@ -299,7 +299,7 @@ class Mail extends Library
 			$message .= '--' . $boundary . '_alt--' . $this->newline;
 		}
 
-		foreach ($this->attachments as $attachment) {
+		foreach ((array)$this->attachments as $attachment) {
 			if (file_exists($attachment)) {
 				$contents = file_get_contents($attachment);
 
