@@ -2,29 +2,37 @@
 
 class Image extends Library
 {
-	protected
+	public
 		$file,
 		$image,
-		$info,
-		$dir_mode,
-		//This is a hack to unregister the shutdown function
-		$safe_shutdown,
-		$shutdown_file = '';
+		$width,
+		$height,
+		$mime,
+		$bits,
+		$filesize,
+		$dirname,
+		$filename,
+		$basename,
+		$extension,
+		$dir_mode;
+
+	private $bg_color = '';
 
 	static $streams;
 
-	public function __construct($file = null)
+	public function __construct($file = null, $create = false)
 	{
 		parent::__construct();
 
 		if ($file) {
-			$file = $this->set($file);
-			$this->create($file);
+			$this->set($file, $create);
 		}
 
 		$this->dir_mode = option('config_image_dir_mode');
 
-		self::$streams = stream_get_wrappers();
+		if (!self::$streams) {
+			self::$streams = stream_get_wrappers();
+		}
 	}
 
 	public function get($image_path, $return_dir = false)
@@ -86,15 +94,6 @@ class Image extends Library
 		return $return_dir ? $image : str_replace(array_keys($replace), $replace, $image);
 	}
 
-	public function info($key = null)
-	{
-		if ($key) {
-			return isset($this->info[$key]) ? $this->info[$key] : null;
-		}
-
-		return $this->info;
-	}
-
 	public function set($image, $create_image = false)
 	{
 		$file = $this->get($image, true);
@@ -107,60 +106,69 @@ class Image extends Library
 
 		$this->file = $file;
 
-		$info = getimagesize($this->file);
+		$info     = getimagesize($this->file);
+		$pathinfo = pathinfo($this->file);
 
-		$this->info = array(
-			'width'  => $info[0],
-			'height' => $info[1],
-			'bits'   => $info['bits'],
-			'mime'   => $info['mime']
-		);
+		$this->width    = $info[0];
+		$this->height   = $info[1];
+		$this->bits     = $info['bits'];
+		$this->mime     = $info['mime'];
+		$this->filesize = filesize($this->file);
+
+		$this->extension = isset($pathinfo['extension']) ? $pathinfo['extension'] : 'png';
+		$this->filename  = $pathinfo['filename'];
+		$this->dirname   = $pathinfo['dirname'];
+		$this->basename  = $pathinfo['basename'];
 
 		if ($create_image) {
-			$this->image = $this->create($this->file);
+			$this->create();
 		}
 
 		return $this->file;
 	}
 
+	public function setBGColor($color)
+	{
+		$this->bg_color = $color;
+	}
+
 	public function clear()
 	{
 		imagedestroy($this->image);
-		$this->image = null;
-		$this->file  = null;
-		$this->info  = null;
+		$this->image    = null;
+		$this->file     = null;
+		$this->width    = null;
+		$this->height   = null;
+		$this->bits     = null;
+		$this->mime     = null;
+		$this->filesize = null;
 	}
 
-	private function create($image)
+	public function create()
 	{
-		$mime = $this->info['mime'];
-
-		if (!$this->register_safe_shutdown($image)) {
-			message('warning', "Image Create failed on $image. The file size (" . bytes2str(filesize($image)) . ") is too large for your server.");
-			redirect($this->url->here());
+		if ($this->image) {
+			imagedestroy($this->image);
+			$this->image = null;
 		}
 
 		//increase the maximum memory limit from the settings
-		$max = isset($this->config) ? option('config_image_max_mem') : '2G';
-		ini_set('memory_limit', $max);
+		ini_set('memory_limit', option('config_image_max_mem', '2G'));
 
-		if ($mime == 'image/gif') {
+		if ($this->mime == 'image/gif') {
 			if (function_exists('imagecreatefromgif')) {
-				$image = @imagecreatefromgif($image);
+				return $this->image = @imagecreatefromgif($this->file);
 			}
-		} elseif ($mime == 'image/png') {
+		} elseif ($this->mime == 'image/png') {
 			if (function_exists('imagecreatefrompng')) {
-				$image = @imagecreatefrompng($image);
+				return $this->image = @imagecreatefrompng($this->file);
 			}
-		} elseif ($mime == 'image/jpeg') {
+		} elseif ($this->mime == 'image/jpeg') {
 			if (function_exists('imagecreatefromjpeg')) {
-				$image = @imagecreatefromjpeg($image);
+				return $this->image = @imagecreatefromjpeg($this->file);
 			}
 		}
 
-		$this->unregister_safe_shutdown();
-
-		return $image;
+		return false;
 	}
 
 	public function save($file, $quality = 75)
@@ -208,103 +216,123 @@ class Image extends Library
 		return $success;
 	}
 
-	public function resize($image, $width = 0, $height = 0, $background_color = '', $return_dir = false)
+	public function setMaxSize($width, $height, $keep_ratio = true)
 	{
-		$file = $this->set($image);
-
-		if (!$file) {
-			return false;
+		if ($width && $this->width < $width) {
+			$width = null;
 		}
 
+		if ($height && $this->height < $height) {
+			$height = null;
+		}
+
+		if ($width || $height) {
+			if ($width && $height && $keep_ratio) {
+				if ($width / $this->width > $height / $this->height) {
+					$width = null;
+				} else {
+					$height = null;
+				}
+			}
+
+			return $this->setSize($width, $height);
+		}
+
+		return -1;
+	}
+
+	public function setSize($width, $height)
+	{
 		//if the image is 0 width or 0 height, do not return an image
-		if (!$this->info['width'] || !$this->info['height']) {
+		if (!$this->width || !$this->height) {
 			$this->error['size'] = _l("The image size was 0.");
 
-			return false;
+			return 0;
 		}
 
 		//If width and height are 0, we do not scale the image
 		if ($width <= 0 && $height <= 0) {
-			return $return_dir ? $file : $this->get($image);
+			return -1;
 		}
 
 		//Constrain Width
 		if ($width <= 0) {
-			$scale_y = $height / $this->info['height'];
+			$scale_y = $height / $this->height;
 			$scale_x = $scale_y;
 		} //Constrain Height
 		elseif ($height <= 0) {
-			$scale_x = $width / $this->info['width'];
+			$scale_x = $width / $this->width;
 			$scale_y = $scale_x;
 		} //Resize
 		else {
-			$scale_x = $width / $this->info['width'];
-			$scale_y = $height / $this->info['height'];
+			$scale_x = $width / $this->width;
+			$scale_y = $height / $this->height;
 		}
 
 		//if the image is the correct size we do not need to do anything
 		if ($scale_x === 1 && $scale_y === 1) {
-			return $return_dir ? $file : $this->get($image);
+			return -1;
 		}
 
-		$new_width  = (int)($this->info['width'] * $scale_x);
-		$new_height = (int)($this->info['height'] * $scale_y);
+		$new_width  = (int)($this->width * $scale_x);
+		$new_height = (int)($this->height * $scale_y);
 
-		//Resolve image type and new image name
-		$info = pathinfo(str_replace(array(
-			DIR_IMAGE,
-			DIR_SITE,
-			DIR_DOWNLOAD,
-			'://',
-		), '', $file));
 
-		//if the background is transparent and the mime type is not png or gif, change to png
-		$allowed_exts = array(
-			'png',
-			'gif',
-			'jpg'
-		);
+		if (!$this->image) {
+			$this->create();
+		}
 
-		if (!$background_color && !in_array(strtolower($info['extension']), $allowed_exts)) {
-			$extension = 'png';
+		//Render new image
+		$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
+
+		if (!$this->bg_color || $this->mime === 'image/png') {
+			imagealphablending($new_image, false);
+			imagesavealpha($new_image, true);
+			$background = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+			imagecolortransparent($new_image, $background);
 		} else {
-			$extension = $info['extension'];
+			if ($this->bg_color) {
+				$background = $this->heximagecolorallocate($this->bg_color);
+			} else {
+				$background = imagecolorallocate($new_image, 255, 255, 255);
+			}
 		}
 
-		$new_image_path = 'cache/' . $info['dirname'] . '/' . $info['filename'] . '-' . $new_width . 'x' . $new_height . '.' . $extension;
+		imagefilledrectangle($new_image, 0, 0, $new_width, $new_height, $background);
+
+		imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $new_width, $new_height, $this->width, $this->height);
+		imagedestroy($this->image);
+
+		$this->image = $new_image;
+
+		return 1;
+	}
+
+	public function resize($width = 0, $height = 0, $max_size = false, $return_dir = false)
+	{
+		$new_image_path = 'cache/' . md5($this->dirname) . '-' . $this->filename . '-' . ($max_size ? 'max-' : '') . $width . 'x' . $height . '.' . $this->extension;
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
 		//if image is already in cache, return cached version
-		if (!is_file($new_image_file) || (_filemtime($file) > _filemtime($new_image_file))) {
-			$this->image = $this->create($file);
-
-			//Render new image
-			$new_image = imagecreatetruecolor((int)$new_width, (int)$new_height);
-
-			if (!$background_color || (isset($this->info['mime']) && $this->info['mime'] == 'image/png')) {
-				imagealphablending($new_image, false);
-				imagesavealpha($new_image, true);
-				$background = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
-				imagecolortransparent($new_image, $background);
+		if (!is_file($new_image_file) || (_filemtime($this->file) > _filemtime($new_image_file))) {
+			if ($max_size) {
+				$response = $this->setMaxSize($width, $height, $max_size !== 'no-ratio');
 			} else {
-				if ($background_color) {
-					$background = $this->heximagecolorallocate($background_color);
-				} else {
-					$background = imagecolorallocate($new_image, 255, 255, 255);
-				}
+				$response = $this->setSize($width, $height);
 			}
 
-			imagefilledrectangle($new_image, 0, 0, $new_width, $new_height, $background);
+			if (!$response) {
+				return false;
+			}
 
-			imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
-			imagedestroy($this->image);
-
-			$this->image = $new_image;
-
-			$this->save($new_image_file);
+			if ($response > 0) {
+				$this->save($new_image_file);
+			} elseif ($response < 0) {
+				return $return_dir ? $this->file : $this->get($this->file);
+			}
 		}
 
-		return $this->get($new_image_path, $return_dir);
+		return $return_dir ? $new_image_file : URL_IMAGE . $new_image_path;
 	}
 
 	public function ico($source, $destination = null, $sizes = null)
@@ -358,10 +386,10 @@ class Image extends Library
 
 	public function watermark($file, $position = 'bottomright')
 	{
-		$watermark = $this->create($file);
+		$watermark = new Image($file, true);
 
-		$watermark_width  = imagesx($watermark);
-		$watermark_height = imagesy($watermark);
+		$watermark_width  = $watermark->width;
+		$watermark_height = $watermark->height;
 
 		switch ($position) {
 			case 'topleft':
@@ -369,20 +397,20 @@ class Image extends Library
 				$watermark_pos_y = 0;
 				break;
 			case 'topright':
-				$watermark_pos_x = $this->info['width'] - $watermark_width;
+				$watermark_pos_x = $this->width - $watermark_width;
 				$watermark_pos_y = 0;
 				break;
 			case 'bottomleft':
 				$watermark_pos_x = 0;
-				$watermark_pos_y = $this->info['height'] - $watermark_height;
+				$watermark_pos_y = $this->height - $watermark_height;
 				break;
 			case 'bottomright':
-				$watermark_pos_x = $this->info['width'] - $watermark_width;
-				$watermark_pos_y = $this->info['height'] - $watermark_height;
+				$watermark_pos_x = $this->width - $watermark_width;
+				$watermark_pos_y = $this->height - $watermark_height;
 				break;
 		}
 
-		imagecopy($this->image, $watermark, $watermark_pos_x, $watermark_pos_y, 0, 0, 120, 40);
+		imagecopy($this->image, $watermark->image, $watermark_pos_x, $watermark_pos_y, 0, 0, 120, 40);
 
 		imagedestroy($watermark);
 	}
@@ -392,11 +420,11 @@ class Image extends Library
 		$image_old   = $this->image;
 		$this->image = imagecreatetruecolor($bottom_x - $top_x, $bottom_y - $top_y);
 
-		imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->info['width'], $this->info['height']);
+		imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->width, $this->height);
 		imagedestroy($image_old);
 
-		$this->info['width']  = $bottom_x - $top_x;
-		$this->info['height'] = $bottom_y - $top_y;
+		$this->width  = $bottom_x - $top_x;
+		$this->height = $bottom_y - $top_y;
 	}
 
 	public function rotate($degree, $color = 'FFFFFF')
@@ -405,8 +433,8 @@ class Image extends Library
 
 		$this->image = imagerotate($this->image, $degree, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 
-		$this->info['width']  = imagesx($this->image);
-		$this->info['height'] = imagesy($this->image);
+		$this->width  = imagesx($this->image);
+		$this->height = imagesy($this->image);
 	}
 
 	public function filter($filter)
@@ -421,42 +449,34 @@ class Image extends Library
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 
-	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 16000000, $bg_color = '#FFFFFF')
+	public function merge($file, $x = 0, $y = 0, $opacity = 100, $convert = 'truecolor', $colors = 16000000)
 	{
-		$merge = $this->get($file, true);
+		$merge = new Image($file, true);
 
-		if (!$merge) {
-			$this->error['file'] = _l("Unable to locate file %s for merging", $file);
+		if (!$merge->image) {
+			$this->error['image'] = _l("Unable to create image for %s. Merge failed.", $file);
 
-			return false;
-		}
-
-		list($width, $height) = getimagesize($merge);
-
-		$merge = $this->create($merge);
-
-		if (!$merge) {
 			return false;
 		}
 
 		if ($convert) {
 			if ($convert === 'truecolor') {
-				imagepalettetotruecolor($merge);
+				imagepalettetotruecolor($merge->image);
 				imagepalettetotruecolor($this->image);
 
 				$transparent = imagecolorallocatealpha($this->image, 0, 0, 0, 127);
 				imagecolortransparent($this->image, $transparent);
 				imagealphablending($this->image, true);
 			} else {
-				imagetruecolortopalette($merge, false, $colors);
+				imagetruecolortopalette($merge->image, false, $colors);
 				imagetruecolortopalette($this->image, false, $colors);
 			}
 		}
 
 		if ($opacity === 100 && !imageistruecolor($this->image)) {
-			imagecopy($this->image, $merge, $x, $y, 0, 0, $width, $height);
+			imagecopy($this->image, $merge->image, $x, $y, 0, 0, $merge->width, $merge->height);
 		} else {
-			imagecopymerge($this->image, $merge, $x, $y, 0, 0, $width, $height, $opacity);
+			imagecopymerge($this->image, $merge->image, $x, $y, 0, 0, $merge->width, $merge->height, $opacity);
 		}
 
 		return true;
@@ -551,19 +571,6 @@ class Image extends Library
 
 		$ext = pathinfo($image, PATHINFO_EXTENSION);
 
-		if (!$this->register_safe_shutdown($image)) {
-			list($width, $height) = getimagesize($image);
-			$image = $this->resize($image, $width / 2, $height / 2);
-			trigger_error("Safe shutdown limit exceeded! Cannot process image");
-			$this->unregister_safe_shutdown();
-
-			return array(
-				'r' => 0,
-				'g' => 0,
-				'b' => 0
-			);
-		}
-
 		$img = null;
 		switch (strtolower($ext)) {
 			case "png":
@@ -573,8 +580,6 @@ class Image extends Library
 				$img = @imagecreatefromjpeg($image);
 				break;
 		}
-
-		$this->unregister_safe_shutdown();
 
 		$img_width  = imagesx($img);
 		$img_height = imagesy($img);
@@ -680,45 +685,6 @@ class Image extends Library
 		);
 	}
 
-	public function register_safe_shutdown($file = '')
-	{
-		//A hack to unregister the shutdown function
-		$this->safe_shutdown = memory_get_peak_usage(true);
-		$this->shutdown_file = $file;
-
-		if ($this->safe_shutdown === null) {
-			$shutdown = function ($image_class) {
-				if ($this->safe_shutdown) {
-					if ($this->shutdown_file) {
-						$_SESSION['image_safe_max_file_size'] = filesize($this->shutdown_file);
-						$size                                 = bytes2str(filesize($this->shutdown_file));
-					} else {
-						$size = 0;
-					}
-					$max      = ini_get('memory_limit');
-					$max_mem  = bytes2str(memory_get_peak_usage(true));
-					$safe_mem = bytes2str($this->safe_shutdown);
-
-					trigger_error("Server Max Memory limit reached: $max_mem / $max. Safe shutdown enabled at $safe_mem. Image File Size: $size");
-				}
-			};
-
-			register_shutdown_function($shutdown, $this);
-		}
-
-		if ($file && !empty($_SESSION['image_safe_max_file_size']) && $_SESSION['image_safe_max_file_size'] <= filesize($file)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public function unregister_safe_shutdown()
-	{
-		$this->safe_shutdown = false;
-		$this->shutdown_file = '';
-	}
-
 	public function colorReplace($color, $replace, $exact = true, $convert = true, $colors = 32000000000)
 	{
 		if (imageistruecolor($this->image)) {
@@ -775,7 +741,7 @@ class Image extends Library
 		);
 	}
 
-	public function getBoxColor($image, $start_x, $start_y, $width, $height, $format = 'hex')
+	public function getBoxColor($start_x, $start_y, $width, $height, $format = 'hex')
 	{
 		$end_x = $start_x + $width;
 		$end_y = $start_y + $height;
@@ -784,7 +750,7 @@ class Image extends Library
 
 		for ($x = $start_x; $x < $end_x; $x++) {
 			for ($y = $start_y; $y < $end_y; $y++) {
-				$rgb = imagecolorat($image, $x, $y);
+				$rgb = imagecolorat($this->image, $x, $y);
 				$r += ($rgb >> 16) & 0xFF;
 				$g += ($rgb >> 8) & 0xFF;
 				$b += $rgb & 0xFF;
@@ -828,12 +794,10 @@ class Image extends Library
 		return "#" . implode("", $match);
 	}
 
-	public function mosaic($image, $rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
+	public function mosaic($rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
 	{
-		$this->set($image, true);
-
-		$width  = $this->info['width'];
-		$height = $this->info['height'];
+		$width  = $this->width;
+		$height = $this->height;
 
 		$y_offset = floor($height / $rows);
 
@@ -849,7 +813,7 @@ class Image extends Library
 			$line = '';
 
 			for ($x = 0; $x < $width - $x_offset; $x += $x_offset) {
-				$hex = $this->getBoxColor($this->image, $x, $y, $x_offset, $y_offset);
+				$hex = $this->getBoxColor($x, $y, $x_offset, $y_offset);
 
 				//Not recommended for emails!
 				if ($colors === '16bit') {
