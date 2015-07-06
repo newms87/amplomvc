@@ -181,8 +181,8 @@
 
   .sortable {
     &:after {
-      .sprite;
-      .sprite.sort-arrows;
+      .amp-sprite;
+      .si-chevron-blue;
       margin-left: .5em;
       opacity: 0;
       position: relative;
@@ -196,14 +196,13 @@
     &.asc {
       &:after {
         opacity: 1;
-        .sprite.sort-arrows.flipped;
+        .amp-sprite.rotate-180;
       }
     }
 
     &.desc {
       &:after {
         opacity: 1;
-        .sprite.sort-arrows;
       }
     }
   }
