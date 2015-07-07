@@ -310,6 +310,9 @@ class Image extends Library
 
 	public function resize($width = 0, $height = 0, $max_size = false, $return_dir = false)
 	{
+		$width = round($width);
+		$height = round($height);
+
 		$new_image_path = 'cache/' . md5($this->dirname) . '-' . $this->filename . '-' . ($max_size ? 'max-' : '') . $width . 'x' . $height . '.' . $this->extension;
 		$new_image_file = DIR_IMAGE . $new_image_path;
 
