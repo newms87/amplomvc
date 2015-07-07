@@ -141,29 +141,31 @@ function img($image, $width = null, $height = null, $title = null, $alt = null, 
 	return "$src $title $alt $size";
 }
 
-function image($image, $width = null, $height = null, $default = null, $cast_protocol = false)
+function image($file, $width = null, $height = null, $max_size = false, $default = null, $cast_protocol = false)
 {
 	global $registry;
 
 	if ($width || $height) {
-		$image = $registry->get('image')->resize($image, $width, $height);
+		$image = new Image($file);
+		$url = $image->resize($width, $height, $max_size);
 	} else {
-		$image = $registry->get('image')->get($image);
+		$url = $registry->get('image')->get($file);
 	}
 
-	if (!$image && $default) {
+	if (!$url && $default) {
 		if ($default === true) {
-			$image = theme_image('no_image.png', $width, $height);
+			$url = theme_image('no_image.png', $width, $height);
 		} else {
-			$image = $registry->get('image')->resize($default, $width, $height);
+			$image = new Image($default);
+			$url = $image->resize($width, $height, $max_size);
 		}
 	}
 
-	if ($image && $cast_protocol) {
-		return cast_protocol($image, is_string($cast_protocol) ? $cast_protocol : 'http');
+	if ($url && $cast_protocol) {
+		return cast_protocol($url, is_string($cast_protocol) ? $cast_protocol : 'http');
 	}
 
-	return $image;
+	return $url;
 }
 
 function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)

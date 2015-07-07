@@ -2,10 +2,11 @@
 	<div class="pager">
 		<? if ($page > 1) { ?>
 			<a class="page pager-nav first" href="<?= $url_first; ?>">
-				<b class="sprite pager-nav first"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
 			</a>
 			<a class="page pager-nav prev" href="<?= $url_prev; ?>">
-				<b class="sprite pager-nav prev"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
 			</a>
 		<? } ?>
 
@@ -17,10 +18,11 @@
 
 		<? if ($page < $num_pages) { ?>
 			<a class="pager-nav next page" href="<?= $url_next; ?>">
-				<b class="sprite pager-nav next"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
 			</a>
 			<a class="pager-nav last page" href="<?= $url_last; ?>">
-				<b class="sprite pager-nav last"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
+				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
 			</a>
 		<? } ?>
 	</div>

@@ -22,9 +22,6 @@ html, body {
 }
 
 #container {
-  position: absolute;
-  top: 6em;
-  bottom: 0;
   width: 100%;
 
   & > main {
@@ -781,8 +778,8 @@ label.select {
   }
 
   &:before {
-    .sprite;
-    .sprite.chevron-white;
+    .amp-sprite;
+    .si-chevron-wht;
 
     position: absolute;
     top: 1.1em;
@@ -808,7 +805,7 @@ label.select {
 
   &:hover {
     &:after, &:before {
-      right: -1000px;
+      right: 9000px;
     }
   }
 }
@@ -1454,9 +1451,9 @@ section.page {
   position: relative;
 
   &:after {
-    .sprite;
-    .sprite.chevron-white;
-    .sprite.chevron-white.down;
+    .amp-sprite;
+    .si-chevron-wht;
+    .amp-sprite.rotate-180;
 
     position: absolute;
     top: 1em;
@@ -1469,7 +1466,7 @@ section.page {
 
   &.hide {
     &:after {
-      .sprite.chevron-white.up;
+      .amp-sprite.rotate-0;
     }
 
     .collapse {
@@ -1752,5 +1749,47 @@ section.page {
  *************************/
 
 footer.site-footer {
-  @footer();
+  text-align: center;
+
+  .sub-footer {
+    color: @color-dark;
+    background: @color-light;
+
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-dark;
+      font-family: OpenSansSemiBold;
+
+      &:hover {
+        color: lighten(@color-dark, 25%);
+      }
+    }
+
+    .contact-info {
+      a + a {
+        margin-left: 2em;
+      }
+    }
+  }
+
+  .main-footer {
+    font-size: .8em;
+    color: @color-light;
+    background: @color-dark;
+
+    .wrap {
+      padding: 1em;
+    }
+
+    a {
+      color: @color-light;
+
+      &:hover {
+        color: darken(@color-light, 25%);
+      }
+    }
+  }
 }

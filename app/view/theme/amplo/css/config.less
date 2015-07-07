@@ -285,53 +285,6 @@
   }
 } };
 
-//Footer
-@footer: { & {
-  text-align: center;
-
-  .sub-footer {
-    color: @color-dark;
-    background: @color-light;
-
-    .wrap {
-      padding: 1em;
-    }
-
-    a {
-      color: @color-dark;
-      font-family: OpenSansSemiBold;
-
-      &:hover {
-        color: lighten(@color-dark, 25%);
-      }
-    }
-
-    .contact-info {
-      a + a {
-        margin-left: 2em;
-      }
-    }
-  }
-
-  .main-footer {
-    font-size: .8em;
-    color: @color-light;
-    background: @color-dark;
-
-    .wrap {
-      padding: 1em;
-    }
-
-    a {
-      color: @color-light;
-
-      &:hover {
-        color: darken(@color-light, 25%);
-      }
-    }
-  }
-} };
-
 //Style A
 @style-a: { & {
   background: white;
@@ -387,7 +340,6 @@
 @style-d: { & {
   color: white;
   background: @color-main;
-  min-height: 20em;
 
   .wrap {
     padding: 3em 0;
