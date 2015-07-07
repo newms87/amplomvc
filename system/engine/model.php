@@ -404,7 +404,7 @@ abstract class Model
 			return '1';
 		}
 
-		if (is_integer($where) || is_string($where)) {
+		if (is_integer($where) || is_numeric($where)) {
 			$primary_key = $this->getPrimaryKey($table);
 
 			if (!$primary_key) {
@@ -414,6 +414,8 @@ abstract class Model
 			}
 
 			return "`$primary_key` = '" . $this->escape($where) . "'";
+		} elseif (is_string($where)) {
+			return $where;
 		}
 
 		$where = $this->getEscapedValues($table, $where, $use_primary_key);
@@ -917,10 +919,14 @@ abstract class Model
 	public function getTableModel($table)
 	{
 		if (!isset($this->t[$table])) {
-			return false;
+			if ($this->db->tableExists($table)) {
+				$t = $table;
+			} else {
+				return false;
+			}
+		} else {
+			$t = $this->t[$table];
 		}
-
-		$t = $this->t[$table];
 
 		$schema = $this->db->getSchema();
 

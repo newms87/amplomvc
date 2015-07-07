@@ -80,11 +80,7 @@ class DB
 		$this->t->tables = cache($cache);
 
 		if (!$this->t->tables) {
-			$this->t->tables = $this->getTables($this->t->prefix);
-
-			if ($this->t->prefix !== DB_PREFIX) {
-				$this->t->tables += $this->getTables(DB_PREFIX);
-			}
+			$this->t->tables = $this->getTables();
 
 			cache($cache, $this->t->tables);
 
@@ -481,6 +477,15 @@ class DB
 		return empty($this->error);
 	}
 
+	public function tableExists($table, $schema = null)
+	{
+		if (!$schema) {
+			$schema = $this->t->schema;
+		}
+
+		return $this->queryVar("SHOW TABLES WHERE `Tables_in_$schema` = '$table'");
+	}
+
 	public function hasTable($table)
 	{
 		return isset($this->t[$table]);
@@ -730,8 +735,10 @@ class DB
 				$new_table = $prefix . $table;
 			}
 
-			$this->query("DROP TABLE IF EXISTS `$new_table`");
-			$this->query("RENAME TABLE `$table` TO `$new_table`");
+			if ($new_table !== $table) {
+				$this->query("DROP TABLE IF EXISTS `$new_table`");
+				$this->query("RENAME TABLE `$table` TO `$new_table`");
+			}
 		}
 
 		clear_cache('model');
