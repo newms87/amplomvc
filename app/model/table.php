@@ -87,19 +87,13 @@ abstract class App_Model_Table extends Model
 
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$cache = !empty($options['cache']);
+		$cache = !empty($options['cache']) ? $this->getCacheName($sort, $filter, $options, $total) : false;
 		$tbl   = $this->table[0];
 
 		//Select
 		$fields = $this->extractSelect($this->table . ' ' . $tbl, !empty($options['columns']) ? $options['columns'] : '*');
 
 		if ($cache) {
-			$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
-			$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
-			$l     = $options ? '.opts-' . md5(serialize($options)) : '';
-			$t     = $total ? '.total' : '';
-			$cache = $this->table . '.rows' . $s . $f . $l . $t;
-
 			$records = cache($cache);
 
 			if ($records !== null) {
@@ -139,6 +133,15 @@ abstract class App_Model_Table extends Model
 	public function getTotalRecords($filter = array())
 	{
 		return $this->getRecords(null, $filter, array('columns' => 'COUNT(*)'));
+	}
+
+	protected function getCacheName($sort, $filter, $options, $total)
+	{
+		$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
+		$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
+		$o     = $options ? '.opts-' . md5(serialize($options)) : '';
+		$t     = $total ? '.total' : '';
+		return $this->table . '.rows' . $s . $f . $o . $t;
 	}
 
 	public function getColumns($filter = array())
