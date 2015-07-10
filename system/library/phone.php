@@ -10,6 +10,10 @@ class Phone extends Library
 		}
 
 		if ($format) {
+			if ($format === 'tel') {
+				return implode('', $phone);
+			}
+
 			return vsprintf($format, $phone);
 		}
 
