@@ -794,30 +794,28 @@ class Model_T implements ArrayAccess
 
 	public function offsetGet($offset)
 	{
-		if (isset($this->tables[$offset])) {
-			return $this->tables[$offset];
+		$t = $this->prefix . $offset;
+
+		if (isset($this->tables[$t])) {
+			return $t;
+		}
+
+		$t = strtolower($t);
+
+		if (isset($this->tables[$t])) {
+			return $t;
+		}
+
+		$t = $offset;
+
+		if (isset($this->tables[$t])) {
+			return $t;
 		}
 
 		$t = strtolower($offset);
 
 		if (isset($this->tables[$t])) {
-			return $this->tables[$t];
-		}
-
-		$pt = $this->prefix . $t;
-
-		foreach ($this->tables as $key => $table) {
-			$lkey = strtolower($key);
-
-			if ($lkey === $t || $lkey === $pt) {
-				return $table;
-			}
-
-			$ltable = strtolower($table);
-
-			if ($ltable === $t || $ltable === $pt) {
-				return $table;
-			}
+			return $t;
 		}
 
 		return $offset;
@@ -834,7 +832,21 @@ class Model_T implements ArrayAccess
 
 	public function offsetExists($offset)
 	{
-		if (isset($this->tables[$offset])) {
+		$t = $this->prefix . $offset;
+
+		if (isset($this->tables[$t])) {
+			return true;
+		}
+
+		$t = strtolower($t);
+
+		if (isset($this->tables[$t])) {
+			return true;
+		}
+
+		$t = $offset;
+
+		if (isset($this->tables[$t])) {
 			return true;
 		}
 
@@ -842,22 +854,6 @@ class Model_T implements ArrayAccess
 
 		if (isset($this->tables[$t])) {
 			return true;
-		}
-
-		$pt = $this->prefix . $t;
-
-		foreach ($this->tables as $key => $table) {
-			$lkey = strtolower($key);
-
-			if ($lkey === $t || $lkey === $pt) {
-				return true;
-			}
-
-			$ltable = strtolower($table);
-
-			if ($ltable === $t || $ltable === $pt) {
-				return true;
-			}
 		}
 
 		return false;
