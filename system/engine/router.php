@@ -232,8 +232,12 @@ class Router
 		}
 
 		if (!$this->site) {
-			reset($sites);
-			$this->site = current($sites);
+			$this->site = array(
+				'url'    => '//' . DOMAIN . '/',
+				'ssl'    => 'https://' . DOMAIN . '/',
+				'name'   => 'Amplo MVC',
+				'prefix' => DB_PREFIX,
+			);
 		}
 
 		if (!empty($this->site['prefix'])) {

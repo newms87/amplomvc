@@ -76,7 +76,7 @@ class DB
 
 	public function updateTables()
 	{
-		$cache           = 'model.' . $this->t->schema . '.' . $this->t->prefix . '.' . 'tables';
+		$cache           = 'model.' . $this->t->schema . '.' . 'tables';
 		$this->t->tables = cache($cache);
 
 		if (!$this->t->tables) {
@@ -84,7 +84,7 @@ class DB
 
 			cache($cache, $this->t->tables);
 
-			Model::$model = array();
+			Model::$model  = array();
 			$this->columns = array();
 		}
 	}
@@ -133,14 +133,13 @@ class DB
 	public function queryHistory($offset = -1)
 	{
 		$index = $offset >= 0 ? $offset : count($this->query_history) + $offset;
+
 		return isset($this->query_history[$index]) ? $this->query_history[$index] : null;
 	}
 
 	public function setPrefix($prefix)
 	{
 		$this->t->prefix = $prefix;
-
-		$this->updateTables();
 	}
 
 	public function getPrefix()
@@ -214,7 +213,7 @@ class DB
 	 * Returns an array of associative arrays with the Select field as the keys
 	 * and the column data as the values for the MySQL query
 	 *
-	 * @param $sql - the MySQL query string
+	 * @param $sql   - the MySQL query string
 	 * @param $index - The table field to use as the associative array key index
 	 * @return mixed - an array of associative arrays of field => value pairs, or false on failure
 	 *
@@ -266,9 +265,9 @@ class DB
 	/**
 	 * Returns an array with each value as the first Select field of each row
 	 *
-	 * @param $sql - the MySQL query string
-	 * @param $index_key - The column to use as the index/keys for the returned array. Can be an integer, string, or true.
-	 *                     If it is true, the index key will be the first column in the returned result set.
+	 * @param $sql         - the MySQL query string
+	 * @param $index_key   - The column to use as the index/keys for the returned array. Can be an integer, string, or
+	 *                     true. If it is true, the index key will be the first column in the returned result set.
 	 *
 	 * @return mixed - will return an indexed array or false on failure
 	 *
@@ -375,6 +374,7 @@ class DB
 	{
 		if (!_is_writable(dirname($file))) {
 			$this->error['directory'] = _l("The directory was not writable for %s", $file);
+
 			return false;
 		}
 
@@ -527,6 +527,7 @@ class DB
 
 		if (isset($this->t[$copy])) {
 			$this->error['copy'] = _l("A table with the same name as copy, %s, already exists!", $copy);
+
 			return false;
 		}
 
@@ -556,6 +557,7 @@ class DB
 	{
 		if (!isset($this->t[$table])) {
 			$this->error['table'] = _l("The table %s does not exist", $table);
+
 			return false;
 		}
 
@@ -757,6 +759,7 @@ class DB
 			array_walk_recursive($value, function (&$v) use ($driver) {
 				$v = $driver->escape($v);
 			});
+
 			return $value;
 		}
 
@@ -781,6 +784,7 @@ class DB
 	private function synctime($sql)
 	{
 		$now = new DateTime("@" . _time(), new DateTimeZone(DEFAULT_TIMEZONE));
+
 		return str_replace("NOW()", "'" . $now->format("Y-m-d H:i:s") . "'", $sql);
 	}
 }
@@ -794,28 +798,22 @@ class Model_T implements ArrayAccess
 
 	public function offsetGet($offset)
 	{
-		$t = $this->prefix . $offset;
+		$indexes = array(
+			$this->prefix . $offset,
+			DB_PREFIX . $offset,
+			$offset,
+		);
 
-		if (isset($this->tables[$t])) {
-			return $t;
-		}
+		foreach ($indexes as $i) {
+			if (isset($this->tables[$i])) {
+				return $i;
+			}
 
-		$t = strtolower($t);
+			$t = strtolower($i);
 
-		if (isset($this->tables[$t])) {
-			return $t;
-		}
-
-		$t = $offset;
-
-		if (isset($this->tables[$t])) {
-			return $t;
-		}
-
-		$t = strtolower($offset);
-
-		if (isset($this->tables[$t])) {
-			return $t;
+			if (isset($this->tables[$t])) {
+				return $t;
+			}
 		}
 
 		return $offset;
@@ -832,28 +830,22 @@ class Model_T implements ArrayAccess
 
 	public function offsetExists($offset)
 	{
-		$t = $this->prefix . $offset;
+		$indexes = array(
+			$this->prefix . $offset,
+			DB_PREFIX . $offset,
+			$offset,
+		);
 
-		if (isset($this->tables[$t])) {
-			return true;
-		}
+		foreach ($indexes as $i) {
+			if (isset($this->tables[$i])) {
+				return true;
+			}
 
-		$t = strtolower($t);
+			$t = strtolower($i);
 
-		if (isset($this->tables[$t])) {
-			return true;
-		}
-
-		$t = $offset;
-
-		if (isset($this->tables[$t])) {
-			return true;
-		}
-
-		$t = strtolower($offset);
-
-		if (isset($this->tables[$t])) {
-			return true;
+			if (isset($this->tables[$t])) {
+				return true;
+			}
 		}
 
 		return false;
