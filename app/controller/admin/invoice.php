@@ -326,9 +326,10 @@ class App_Controller_Admin_Invoice extends Controller
 
 		$total = 0;
 
-		foreach ($orders as $order) {
+		foreach ($orders as &$order) {
 			$total += $order['price'];
 		}
+		unset($order);
 
 		$invoice += array(
 			'orders'   => $orders,
