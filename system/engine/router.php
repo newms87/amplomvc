@@ -45,6 +45,11 @@ class Router
 		return $registry->get($key);
 	}
 
+	public function isPath($path)
+	{
+		return $this->path === str_replace('-', '_', $path);
+	}
+
 	public function getPath()
 	{
 		return $this->path;

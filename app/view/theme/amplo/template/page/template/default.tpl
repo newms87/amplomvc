@@ -8,17 +8,19 @@
 <? } ?>
 
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
-	<header class="row top-row page-header">
-		<div class="wrap">
-			<? if (!empty($options['show_breadcrumbs'])) { ?>
-				<?= $is_ajax ? '' : breadcrumbs(); ?>
-			<? } ?>
+	<? if (!empty($options['show_title']) || !empty($options['show_breadcrumbs'])) { ?>
+		<header class="row top-row page-header">
+			<div class="wrap">
+				<? if (!empty($options['show_breadcrumbs'])) { ?>
+					<?= $is_ajax ? '' : breadcrumbs(); ?>
+				<? } ?>
 
-			<? if (!empty($options['show_title'])) { ?>
-				<h1 id="page-title"><?= $title; ?></h1>
-			<? } ?>
-		</div>
-	</header>
+				<? if (!empty($options['show_title'])) { ?>
+					<h1 id="page-title"><?= $title; ?></h1>
+				<? } ?>
+			</div>
+		</header>
+	<? } ?>
 
 	<?= area('top'); ?>
 
