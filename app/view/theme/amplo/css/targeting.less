@@ -5,10 +5,6 @@
 }
 
 @media (max-width: (@md - 1)) {
-  #container > main {
-    min-height: 64%;
-  }
-
   .header-navigation.menu-button {
     .links-toggle {
       display: inline-block;
@@ -327,19 +323,5 @@
         margin-left: 0;
       }
     }
-  }
-}
-
-/** Screen Height correction so footer is near bottom */
-
-@media (min-width: @md) and (max-height: @sm) {
-  #container > main {
-    min-height: 70%;
-  }
-}
-
-@media (max-width: (@md - 1)) and (max-height: @sm) {
-  #container > main {
-    min-height: 50%;
   }
 }
