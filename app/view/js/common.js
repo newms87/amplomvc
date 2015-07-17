@@ -1266,6 +1266,24 @@ $.fn.submit_ajax_form = function (params) {
 	});
 }
 
+$.fn.liveForm = function(params) {
+	params = $.extend({}, {
+		callback: null
+	}, params);
+
+	return this.use_once('live-form-enabled').each(function(i,e){
+		var $form = $(e);
+		$form.find('[name]').change(function(){
+			$(this).closest('form').submit();
+		});
+
+		$form.submit(function(){
+			$.post($form.attr('action'), $form.serialize(), params.callback);
+			return false;
+		});
+	});
+}
+
 function content_loaded(is_ajax) {
 	var $forms = $('form');
 
