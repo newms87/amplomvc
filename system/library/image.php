@@ -18,7 +18,7 @@ class Image extends Library
 
 	private $bg_color = '';
 
-	static $streams;
+	static $streams = array();
 
 	public function __construct($file = null, $create = false)
 	{
@@ -31,7 +31,7 @@ class Image extends Library
 		$this->dir_mode = option('config_image_dir_mode');
 
 		if (!self::$streams) {
-			self::$streams = stream_get_wrappers();
+			self::$streams = (array)stream_get_wrappers();
 		}
 	}
 
