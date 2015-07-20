@@ -29,7 +29,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		list.attr('data-list-rel', relate || name);
 		list.find('[data-row]').not('[data-rel]').attr('data-rel', relate || name);
 
-		template = template_row.clone(true);
+		template = template_row.first().clone(true);
 		template_row.remove();
 
 		templates[name] = $.extend({

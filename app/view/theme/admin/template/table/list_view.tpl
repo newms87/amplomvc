@@ -164,7 +164,7 @@
 										<? if ($column['filter_value']['start'] !== null || $column['filter_value']['end'] !== null) { ?>
 											<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
 										<? } else { ?>
-											{{Date Range}}
+											<b class="amp-sprite si-calendar-icon-wht"></b>
 										<? } ?>
 									</div>
 								</div>
