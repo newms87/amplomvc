@@ -192,10 +192,12 @@ class App_Model_Page extends App_Model_Table
 	{
 		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id . " AND status = 1");
 
-		$page['options'] = unserialize($page['options']);
+		if ($page) {
+			$page['options'] = unserialize($page['options']);
 
-		$this->getPageFiles($page);
-
+			$this->getPageFiles($page);
+		}
+		
 		return $page;
 	}
 
@@ -207,9 +209,11 @@ class App_Model_Page extends App_Model_Table
 
 		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
 
-		$page['options'] = unserialize($page['options']);
+		if ($page) {
+			$page['options'] = unserialize($page['options']);
 
-		$this->getPageFiles($page);
+			$this->getPageFiles($page);
+		}
 
 		return $page;
 	}
@@ -407,7 +411,7 @@ class App_Model_Page extends App_Model_Table
 						1 => _l("Enabled"),
 					),
 					'filter'       => true,
-					'sort'     => true,
+					'sort'         => true,
 				)
 			);
 		}
