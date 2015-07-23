@@ -27,7 +27,7 @@ class Url extends Library
 	{
 		//TODO: Test if always setting site to the URL that is currently being accessed is best policy.
 		$this->url = URL_SITE;//isset($site['url']) ? $site['url'] : URL_SITE;
-		
+
 		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
