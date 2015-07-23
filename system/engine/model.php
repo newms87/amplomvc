@@ -658,6 +658,10 @@ abstract class Model
 						$end   = !empty($value['end']) ? format('date', $value['end']) : false;
 
 						if (!$start && !$end) {
+							if (isset($value['start']) || isset($value['end'])) {
+								break;
+							}
+
 							array_walk($value, function (&$a) use ($type) {
 								$a = format('date', $a);
 							});

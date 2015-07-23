@@ -702,6 +702,12 @@ $.fn.file_upload = function (options) {
 			this.context.progress.css({width: total + '%'});
 			this.context.msg.html(total + '%');
 			this.context.bar.find('.bar-msg').html(total + '%');
+
+			if (total < 100) {
+				this.context.bar.addClass('in-progress');
+			} else {
+				this.context.bar.removeClass('in-progress').addClass('done');
+			}
 		}
 	});
 }
@@ -990,7 +996,7 @@ function register_confirms() {
 		if ($this.is('[data-confirm]') && !$this.hasClass('confirm')) {
 			setTimeout(function () {
 				$this.removeClass('confirm').loading('stop');
-			}, 2000);
+			}, 5000);
 			$this.loading({text: $this.attr('data-confirm') || "Confirm?", disable: false}).addClass('confirm');
 
 			return false;
