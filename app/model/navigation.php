@@ -325,7 +325,7 @@ class App_Model_Navigation extends App_Model_Table
 			}
 			unset($group);
 
-			cache("navigation_group.$name", $navigation_groups);
+			cache("navigation_group.$name." . DOMAIN, $navigation_groups);
 		}
 
 		//Filter Conditional Links And Access Permissions
