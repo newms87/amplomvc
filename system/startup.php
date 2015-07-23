@@ -20,39 +20,38 @@ define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
  ************************************************************/
 
 //Setup Base URL
-!defined('DOMAIN') ? define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') : null;
-!defined('SITE_BASE') ? define('SITE_BASE', '/') : null;
-!defined('URL_SITE') ? define('URL_SITE', '//' . DOMAIN . SITE_BASE) : null;
+defined('DOMAIN') ?: define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+defined('SITE_BASE') ?: define('SITE_BASE', '/');
+defined('URL_SITE') ?: define('URL_SITE', '//' . DOMAIN . SITE_BASE);
 
 //Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
 // and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
-!defined('COOKIE_PREFIX') ? define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE))) : null;
+defined('COOKIE_PREFIX') ?: define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
 
-!defined('HTTP_SITE') ? define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE) : null;
-!defined('HTTPS_SITE') ? define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE) : null;
-!defined('URL_IMAGE') ? define('URL_IMAGE', URL_SITE . 'image/') : null;
-!defined('URL_DOWNLOAD') ? define('URL_DOWNLOAD', URL_SITE . 'download/') : null;
-!defined('URL_JS') ? define('URL_JS', URL_SITE . 'app/view/js/') : null;
-!defined('URL_STYLE') ? define('URL_STYLE', URL_SITE . 'app/view/style/') : null;
-!defined('URL_RESOURCES') ? define('URL_RESOURCES', URL_SITE . 'system/resources/') : null;
-!defined('URL_THEMES') ? define('URL_THEMES', URL_SITE . 'app/view/theme/') : null;
-!defined('DIR_IMAGE') ? define('DIR_IMAGE', DIR_SITE . 'image/') : null;
-!defined('DIR_DOWNLOAD') ? define('DIR_DOWNLOAD', DIR_SITE . 'download/') : null;
-!defined('DIR_JS') ? define('DIR_JS', DIR_SITE . 'app/view/js/') : null;
-!defined('DIR_STYLE') ? define('DIR_STYLE', DIR_SITE . 'app/view/style/') : null;
-!defined('DIR_RESOURCES') ? define('DIR_RESOURCES', DIR_SITE . 'system/resources/') : null;
-!defined('DIR_LOGS') ? define('DIR_LOGS', DIR_SITE . 'system/logs/') : null;
-!defined('DIR_DATABASE_BACKUP') ? define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/') : null;
-!defined('DEFAULT_TIMEZONE') ? define('DEFAULT_TIMEZONE', 'America/Denver') : null;
-!defined('MYSQL_TIMEZONE') ? define('MYSQL_TIMEZONE', '-6:00') : null;
-!defined('AMPLO_PROFILE') ? define('AMPLO_PROFILE', false) : null;
-!defined('AMPLO_PROFILE_NO_CACHE') ? define('AMPLO_PROFILE_NO_CACHE', false) : null;
-!defined('AMPLO_DEFAULT_THEME') ? define('AMPLO_DEFAULT_THEME', 'amplo') : null;
-!defined('AMPLO_TIME_LOG') ? define('AMPLO_TIME_LOG', false) : null;
-!defined('AMPLO_SESSION') ? define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session') : null;
-!defined('AMPLO_SESSION_TIMEOUT') ? define('AMPLO_SESSION_TIMEOUT', 3600 * 2) : null;
-!defined('CACHE_FILE_EXPIRATION') ? define('CACHE_FILE_EXPIRATION', 3600) : null;
-
+defined('HTTP_SITE') ?: define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE);
+defined('HTTPS_SITE') ?: define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
+defined('URL_IMAGE') ?: define('URL_IMAGE', URL_SITE . 'image/');
+defined('URL_DOWNLOAD') ?: define('URL_DOWNLOAD', URL_SITE . 'download/');
+defined('URL_JS') ?: define('URL_JS', URL_SITE . 'app/view/js/');
+defined('URL_STYLE') ?: define('URL_STYLE', URL_SITE . 'app/view/style/');
+defined('URL_RESOURCES') ?: define('URL_RESOURCES', URL_SITE . 'system/resources/');
+defined('URL_THEMES') ?: define('URL_THEMES', URL_SITE . 'app/view/theme/');
+defined('DIR_IMAGE') ?: define('DIR_IMAGE', DIR_SITE . 'image/');
+defined('DIR_DOWNLOAD') ?: define('DIR_DOWNLOAD', DIR_SITE . 'download/');
+defined('DIR_JS') ?: define('DIR_JS', DIR_SITE . 'app/view/js/');
+defined('DIR_STYLE') ?: define('DIR_STYLE', DIR_SITE . 'app/view/style/');
+defined('DIR_RESOURCES') ?: define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
+defined('DIR_LOGS') ?: define('DIR_LOGS', DIR_SITE . 'system/logs/');
+defined('DIR_DATABASE_BACKUP') ?: define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+defined('DEFAULT_TIMEZONE') ?: define('DEFAULT_TIMEZONE', 'America/Denver');
+defined('MYSQL_TIMEZONE') ?: define('MYSQL_TIMEZONE', '-6:00');
+defined('AMPLO_PROFILE') ?: define('AMPLO_PROFILE', false);
+defined('AMPLO_PROFILE_NO_CACHE') ?: define('AMPLO_PROFILE_NO_CACHE', false);
+defined('AMPLO_DEFAULT_THEME') ?: define('AMPLO_DEFAULT_THEME', 'amplo');
+defined('AMPLO_TIME_LOG') ?: define('AMPLO_TIME_LOG', false);
+defined('AMPLO_SESSION') ?: define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session');
+defined('AMPLO_SESSION_TIMEOUT') ?: define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
+defined('CACHE_FILE_EXPIRATION') ?: define('CACHE_FILE_EXPIRATION', 3600);
 
 //Default server values in case they are not set.
 $_SERVER += array(

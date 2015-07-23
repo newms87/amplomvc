@@ -25,7 +25,9 @@ class Url extends Library
 
 	public function setSite($site)
 	{
-		$this->url = isset($site['url']) ? $site['url'] : URL_SITE;
+		//TODO: Test if always setting site to the URL that is currently being accessed is best policy.
+		$this->url = URL_SITE;//isset($site['url']) ? $site['url'] : URL_SITE;
+		
 		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
