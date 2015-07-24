@@ -279,6 +279,10 @@ function _getimagesize($image)
 
 function _create_image($file, $mime = null)
 {
+	if (!$file) {
+		return null;
+	}
+
 	if (!$mime) {
 		$mime = image_type_to_mime_type(exif_imagetype($file));
 	}
@@ -1019,15 +1023,26 @@ function output_api($status, $message = null, $data = null, $code = 200, $http_c
 
 function output_file($file, $type = null, $filename = null)
 {
-	global $registry;
-	$registry->get('csv')->downloadFile($file, $filename, $type);
+	if (is_file($file)) {
+		$contents = file_get_contents($file);
+
+		if (!$type) {
+			$type = pathinfo($file, PATHINFO_EXTENSION);
+		}
+
+		if (!$filename) {
+			$filename = basename($file);
+		}
+
+		output_as_file($contents, $type, $filename);
+	}
 }
 
 function output_as_file($contents, $type = 'txt', $filename = '')
 {
 	global $registry;
-	$registry->get('csv')->setContents($contents);
-	$registry->get('csv')->downloadContents($filename, $type);
+	$registry->get('response')->setOutput($contents);
+	$registry->get('response')->download($filename, $type);
 }
 
 function output_flush()

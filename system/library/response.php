@@ -42,6 +42,57 @@ class Response extends Library
 		}
 	}
 
+	public function download($filename = null, $type = null)
+	{
+		if (!$filename) {
+			$filename = "file_download" . $type;
+		}
+
+		switch ($type) {
+			case 'csv':
+				$headers = array(
+					"Content-Type"        => "text/csv",
+					"Content-Disposition" => "attachment; filename=\"$filename\"",
+					"Pragma"              => "no-cache",
+					"Expires"             => "0",
+					"Content-Length"      => strlen($this->output),
+				);
+				break;
+
+			case 'xml':
+				$headers = array(
+					"Content-type"        => "application/xml",
+					"Content-Disposition" => "attachment; filename=\"$filename\"",
+					"Pragma"              => "no-cache",
+					"Expires"             => "0",
+					"Content-Length"      => strlen($this->output),
+				);
+				break;
+
+			case 'xls':
+			case 'xlsx':
+			default:
+				$headers = array(
+					"Content-Type"              => "application/octet-stream",
+					"Content-Description"       => "File Transfer",
+					"Content-Disposition"       => "attachment; filename=\"$filename\"",
+					"Content-Transfer-Encoding" => "binary",
+					"Cache-Control"             => "must-revalidate, post-check=0, pre-check=0",
+					"Pragma"                    => "public",
+					"Expires"                   => "0",
+					"Content-Length"            => strlen($this->output),
+				);
+
+				break;
+		}
+
+		$this->headers = $headers + $this->headers;
+
+		$this->output();
+
+		exit();
+	}
+
 	private function compress($data, $level = 9)
 	{
 		if (headers_sent() || connection_status() || !extension_loaded('zlib') || ini_get('zlib.output_compression')) {

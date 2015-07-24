@@ -179,10 +179,10 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			}
 		}
 
-		$this->csv->generateCsv($columns, $settings['records']);
+		$filename = !empty($settings['listing_path']) ? slug($settings['listing_path']) : 'listing';
 
-		$file_name = !empty($settings['listing_path']) ? slug($settings['listing_path']) : 'listing';
-		$this->csv->downloadContents($file_name . '.csv', 'csv');
+		$this->csv->generateCsv($columns, $settings['records']);
+		$this->csv->download($filename . '.csv', 'csv');
 	}
 
 	public function save_settings()
