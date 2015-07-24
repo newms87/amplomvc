@@ -24,14 +24,14 @@ class Image extends Library
 	{
 		parent::__construct();
 
-		if ($file) {
-			$this->set($file, $create);
-		}
-
 		$this->dir_mode = option('config_image_dir_mode');
 
 		if (!self::$streams) {
 			self::$streams = (array)stream_get_wrappers();
+		}
+
+		if ($file) {
+			$this->set($file, $create);
 		}
 	}
 
