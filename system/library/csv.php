@@ -103,22 +103,22 @@ class Csv extends Library
 				break;
 		}
 
-		$this->response->setHeader($headers);
-
-		output($this->contents);
-
+		$this->response->setOutput($this->contents, $headers);
 		$this->response->output();
 
 		exit();
 	}
 
 	/**
-	 * Generates a CSV string using $columns for the first row (optional) and $rows for the rest of the rows. Saves the string to $this->content,
-	 * to be exported to a file, downloaded, or use $this->csv->getContents() to retrieve the csv string.
+	 * Generates a CSV string using $columns for the first row (optional) and $rows for the rest of the rows. Saves the
+	 * string to $this->content, to be exported to a file, downloaded, or use $this->csv->getContents() to retrieve the
+	 * csv string.
 	 *
-	 * @param array $columns - $key => $value pairs, where $key matches the associated column index in $data, and $value is the Title for the column
-	 * @param array $rows - an array where each element is the row as an associative array matching the $columns index
-	 * @param bool $row_headings - include the column names in the first row.
+	 * @param array $columns      - $key => $value pairs, where $key matches the associated column index in $data, and
+	 *                            $value is the Title for the column
+	 * @param array $rows         - an array where each element is the row as an associative array matching the $columns
+	 *                            index
+	 * @param bool  $row_headings - include the column names in the first row.
 	 */
 
 	public function generateCsv($columns, $rows, $row_headings = true)
@@ -150,6 +150,7 @@ class Csv extends Library
 	{
 		if (!is_file($zip_file)) {
 			$this->error['file'] = _l("The Zip file %s does not exist.", $zip_file);
+
 			return false;
 		}
 
@@ -157,6 +158,7 @@ class Csv extends Library
 
 		if (!$zip->open($zip_file)) {
 			$this->error['open'] = _l("Unable to open zip archive %s.", $zip_file);
+
 			return false;
 		}
 
@@ -167,6 +169,7 @@ class Csv extends Library
 
 		if (!_is_writable($destination)) {
 			$this->error['destination'] = _l("The Destination folder %s is not writable.", $destination);
+
 			return false;
 		}
 
