@@ -120,7 +120,7 @@
 		}
 	</script>
 
-	<main class="main clearfix">
+	<main class="main">
 
 		<? if ($this->message->has()) { ?>
 			<section class="message-row row">
