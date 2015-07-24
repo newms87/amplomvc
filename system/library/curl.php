@@ -29,6 +29,21 @@ class Curl extends Library
 		return $this->call($url, $response_type, $options);
 	}
 
+	public function saveFile($url, $file)
+	{
+		$fp = fopen($file, 'wb');
+
+		$options = array(
+			CURLOPT_FILE => $fp,
+		);
+
+		$response = $this->call($url, self::RESPONSE_DATA, $options);
+
+		fclose($fp);
+
+		return !empty($response);
+	}
+
 	public function call($url, $response_type, $options)
 	{
 		$options += array(

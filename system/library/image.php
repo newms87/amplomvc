@@ -151,21 +151,13 @@ class Image extends Library
 			$this->image = null;
 		}
 
-		//increase the maximum memory limit from the settings
-		ini_set('memory_limit', option('config_image_max_mem', '2G'));
+		$this->image = _create_image($this->file, $this->mime);
 
-		if ($this->mime == 'image/gif') {
-			if (function_exists('imagecreatefromgif')) {
-				return $this->image = @imagecreatefromgif($this->file);
-			}
-		} elseif ($this->mime == 'image/png') {
-			if (function_exists('imagecreatefrompng')) {
-				return $this->image = @imagecreatefrompng($this->file);
-			}
-		} elseif ($this->mime == 'image/jpeg') {
-			if (function_exists('imagecreatefromjpeg')) {
-				return $this->image = @imagecreatefromjpeg($this->file);
-			}
+		if ($this->image) {
+			$this->width  = imagesx($this->image);
+			$this->height = imagesy($this->image);
+
+			return true;
 		}
 
 		return false;
@@ -218,6 +210,10 @@ class Image extends Library
 
 	public function setMaxSize($width, $height, $keep_ratio = true)
 	{
+		if (!$this->image) {
+			$this->create();
+		}
+
 		if ($width && $this->width < $width) {
 			$width = null;
 		}
@@ -310,7 +306,7 @@ class Image extends Library
 
 	public function resize($width = 0, $height = 0, $max_size = false, $return_dir = false)
 	{
-		$width = round($width);
+		$width  = round($width);
 		$height = round($height);
 
 		$new_image_path = 'cache/' . md5($this->dirname) . '-' . $this->filename . '-' . ($max_size ? 'max-' : '') . $width . 'x' . $height . '.' . $this->extension;

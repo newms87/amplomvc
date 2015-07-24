@@ -147,7 +147,7 @@ function image($file, $width = null, $height = null, $max_size = false, $default
 
 	if ($width || $height) {
 		$image = new Image($file);
-		$url = $image->resize($width, $height, $max_size);
+		$url   = $image->resize($width, $height, $max_size);
 	} else {
 		$url = $registry->get('image')->get($file);
 	}
@@ -157,7 +157,7 @@ function image($file, $width = null, $height = null, $max_size = false, $default
 			$url = theme_image('no_image.png', $width, $height);
 		} else {
 			$image = new Image($default);
-			$url = $image->resize($width, $height, $max_size);
+			$url   = $image->resize($width, $height, $max_size);
 		}
 	}
 
@@ -275,6 +275,55 @@ function _getimagesize($image)
 	}
 
 	return '';
+}
+
+function _create_image($file, $mime = null)
+{
+	if (!$mime) {
+		$mime = image_type_to_mime_type(exif_imagetype($file));
+	}
+
+	switch ($mime) {
+		case 'gif':
+		case 'image/gif':
+			$function = 'imagecreatefromgif';
+			break;
+
+		case 'png':
+		case 'image/png':
+			$function = 'imagecreatefrompng';
+			break;
+
+		case 'jpg':
+		case 'jpeg':
+		case 'image/jpg':
+		case 'image/jpeg':
+			$function = 'imagecreatefromjpeg';
+			break;
+
+		default:
+			return null;
+	}
+
+	//increase the maximum memory limit from the settings
+	ini_set('memory_limit', option('config_image_max_mem', '2G'));
+
+	$image = @$function($file);
+
+	//If image creation fails (ie: stream wrapper buggy), try downloading the file first
+	if (!$image) {
+		$temp = DIR_IMAGE . 'cache/temp/' . uniqid();
+
+		if (_is_writable(dirname($temp))) {
+			file_put_contents($temp, file_get_contents($file));
+
+			$image = @$function($temp);
+
+			unlink($temp);
+		}
+	}
+
+	return $image;
 }
 
 function image_save($image, $save_as = null, $width = null, $height = null, $default = null, $cast_protocol = false)
