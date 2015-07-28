@@ -1,4 +1,8 @@
 $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
+	if (!name) {
+		return;
+	}
+
 	var templates = $.fn.ac_template.templates;
 
 	function get_count(list) {
