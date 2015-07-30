@@ -1019,7 +1019,7 @@ function output_api($status, $message = null, $data = null, $code = 200, $http_c
 	);
 
 	if (defined('AMPLO_API_LOG') && AMPLO_API_LOG) {
-		write_log('amplo_api', _l("Request: %s<BR><BR>Response: %", $_REQUEST, $response));
+		write_log('amplo_api', _l("Request: %s<BR><BR>Response: %", json_encode($_REQUEST), json_encode($response)));
 	}
 
 	output_json($response);
