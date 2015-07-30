@@ -356,7 +356,7 @@ class Document extends Library
 		}
 	}
 
-	public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
+	public function addStyle($href, $rel = 'stylesheet', $media = 'screen', $priority = 0)
 	{
 		if (!$href) {
 			$this->error['href'] = _l("You must specify a style resource to add.");
@@ -383,11 +383,26 @@ class Document extends Library
 			}
 		}
 
+		if (!$priority) {
+			$priority = 0;
+
+			foreach ($this->styles as $s) {
+				if ($s['priority'] < 1) {
+					$priority = max($s['priority'], $priority);
+				}
+			}
+
+			$priority += .01;
+		}
+
 		$this->styles[md5($href . $rel . $media)] = array(
-			'href'  => $href,
-			'rel'   => $rel,
-			'media' => $media
+			'href'     => $href,
+			'rel'      => $rel,
+			'media'    => $media,
+			'priority' => $priority,
 		);
+
+		sort_by($this->styles, 'priority');
 
 		return true;
 	}
