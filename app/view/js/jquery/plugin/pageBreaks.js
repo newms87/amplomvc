@@ -58,14 +58,16 @@ $.pageBreaks = $.fn.pageBreaks = function (opts) {
 			});
 		});
 
-		$.pageBreaks.updateVars.call($e.find('.page'));
+		$.pageBreaks.updateVars.call($e);
 	});
 };
 
 $.pageBreaks.updateVars = function () {
-	var page_count = this.length;
+	var $pages = this.find('.page');
+	var page_count = $pages.length;
 
-	return this.each(function (i, e) {
+	console.log('count', this, $pages);
+	return $pages.each(function (i, e) {
 		var $e = $(e);
 		$e.find('.var-page').html(i + 1);
 		$e.find('.var-page-count').html(page_count);
@@ -73,23 +75,26 @@ $.pageBreaks.updateVars = function () {
 }
 
 $.pageBreaks.break = function ($p, $e, opts) {
-	var $page = $("<div />").addClass('page');
-
-	$p.after($page)
+	var $page = $('<div />').addClass('page');
+	var $body = $('<div />').addClass('page-body');
 
 	if (opts.$header.length) {
 		$page.append(opts.$header.clone());
 	}
 
+	$page.append($body);
+
 	while (typeof $e.attr('data-no-break') !== 'undefined') {
 		$e = $e.prev();
 	}
 
-	$page.append($e.nextAll().add($e))
+	$body.append($e.nextAll().add($e))
 
 	if (opts.$footer.length) {
 		$page.append(opts.$footer.clone());
 	}
+
+	$p.parent().append($page)
 
 	return $page;
 }
