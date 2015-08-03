@@ -1,16 +1,30 @@
 $.pageBreaks = $.fn.pageBreaks = function (opts) {
 	opts = $.extend({}, {
-		width:  850,
-		height: 1100,
+		width:  null,
+		height: null,
 		header: true,
 		footer: true,
-		margin: null
+		margin: null,
+		resize: false
 	}, opts);
 
 	return this.each(function (i, e) {
 		var $e = $(e);
 		var $pages = $e.find('.page');
 		var $first = $pages.first();
+
+		if (!opts.width) {
+			opts.width = $first.width();
+		}
+
+		if (!opts.height) {
+			opts.height = $first.height();
+		}
+
+		if (opts.resize) {
+			$pages.width(opts.width);
+			$pages.height(opts.height);
+		}
 
 		if (opts.header) {
 			opts.$header = $first.find('.page-header');
@@ -52,8 +66,9 @@ $.pageBreaks.updateVars = function () {
 	var page_count = this.length;
 
 	return this.each(function (i, e) {
-		$(e).find('.var-page').html(i+1);
-		$(e).find('.var-page-count').html(page_count);
+		var $e = $(e);
+		$e.find('.var-page').html(i + 1);
+		$e.find('.var-page-count').html(page_count);
 	});
 }
 
@@ -64,6 +79,10 @@ $.pageBreaks.break = function ($p, $e, opts) {
 
 	if (opts.$header.length) {
 		$page.append(opts.$header.clone());
+	}
+
+	while (typeof $e.attr('data-no-break') !== 'undefined') {
+		$e = $e.prev();
 	}
 
 	$page.append($e.nextAll().add($e))

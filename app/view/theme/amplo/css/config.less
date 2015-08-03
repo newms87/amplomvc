@@ -62,24 +62,15 @@
 @theme-img: '@{base-path}app/view/theme/amplo/image/';
 @font-path: '@{base-path}app/view/theme/amplo/font/';
 
+/* Core Styling */
+@import '@{style-path}base';
+@import '@{style-path}reset';
+@import '@{style-path}jquery-ui';
+@import '@{style-path}colorbox';
+@import '@{style-path}slider';
+
 /* LESS config */
-@xs: 480px;
-@sm: 768px;
-@md: 1024px;
-@lg: 1280px;
-//note @xl is not needed, as this is screens > @lg
-
-@num-cols: 12;
-
-//Page Layout
-@page-width-min: 320px;
-@page-width-xs: 90%;
-@page-width-sm: 90%;
-@page-width-md: 728px;
-@page-width-lg: 954px;
 @page-width-xl: 1080px;
-@page-width-max: 1080px;
-@page-wrap-pad: 2em 0;
 
 //Primary Styling
 @color-main: #395D84;
@@ -127,106 +118,106 @@
 
 //Input Text / Password
 @input: { & {
-  font-size: 1.1em;
-  color: @color-secondary;
-  background: white;
-  border: #E2E2E2 1px solid;
-  border-radius: 5px;
-  padding: .5em 1em;
-  width: 100%;
-  outline: none;
-  box-shadow: inset 0px 1px 1px 1px #D2D2D2;
+	font-size: 1.1em;
+	color: @color-secondary;
+	background: white;
+	border: #E2E2E2 1px solid;
+	border-radius: 5px;
+	padding: .5em 1em;
+	width: 100%;
+	outline: none;
+	box-shadow: inset 0px 1px 1px 1px #D2D2D2;
 
-  &:focus, &:active {
-    border: 1px solid @color-main;
-    box-shadow: inset 0 0 0 1px @color-main;
-  }
+	&:focus, &:active {
+		border: 1px solid @color-main;
+		box-shadow: inset 0 0 0 1px @color-main;
+	}
 } };
 
 //Select
 @select: { & {
-  font-size: 1.1em;
-  color: @color-secondary;
-  background: white;
-  border: #E2E2E2 1px solid;
-  border-radius: 5px;
-  padding: .5em 1em;
-  width: 100%;
-  outline: none;
-  box-shadow: inset 0px 1px 1px 1px #D2D2D2;
+	font-size: 1.1em;
+	color: @color-secondary;
+	background: white;
+	border: #E2E2E2 1px solid;
+	border-radius: 5px;
+	padding: .5em 1em;
+	width: 100%;
+	outline: none;
+	box-shadow: inset 0px 1px 1px 1px #D2D2D2;
 
-  &:focus, &:active {
-    border: 1px solid @color-main;
-    box-shadow: inset 0 0 0 1px @color-main;
-  }
+	&:focus, &:active {
+		border: 1px solid @color-main;
+		box-shadow: inset 0 0 0 1px @color-main;
+	}
 } };
 
 //Radio
 @radio: { & {
-  & + .label {
-    font: 1.1em OpenSansBold;
-    color: @color-main;
-    background: white;
-    border: @color-main 1px solid;
-    border-radius: 20px;
-    padding: .25em 2em;
-    text-transform: uppercase;
-  }
+	& + .label {
+		font: 1.1em OpenSansBold;
+		color: @color-main;
+		background: white;
+		border: @color-main 1px solid;
+		border-radius: 20px;
+		padding: .25em 2em;
+		text-transform: uppercase;
+	}
 
-  &:checked, &.checked {
-    & + .label {
-      color: white;
-      background: @color-main;
-    }
-  }
+	&:checked, &.checked {
+		& + .label {
+			color: white;
+			background: @color-main;
+		}
+	}
 } };
 
 //Checkbox
 @checkbox: { & {
-  & + .label {
-    font-size: 1.1em;
+	& + .label {
+		font-size: 1.1em;
 
-    &:before {
-      .bg-image-set('@{theme-img}sprite@1x.png', '@{theme-img}sprite@2x.png', '@{theme-img}sprite@3x.png');
-      background-position: -17px -45px;
-      width: 17px;
-      height: 14px;
-    }
-  }
+		&:before {
+			.bg-image-set('@{theme-img}sprite@1x.png', '@{theme-img}sprite@2x.png', '@{theme-img}sprite@3x.png');
+			background-position: -17px -45px;
+			width: 17px;
+			height: 14px;
+		}
+	}
 
-  &:checked, .checked {
-    & + .label {
-      &:before {
-        background-position: 1px -45px;
-      }
-    }
-  }
+	&:checked, .checked {
+		& + .label {
+			&:before {
+				background-position: 1px -45px;
+			}
+		}
+	}
 
-  &.cb-button {
-    & + .label {
-      background: white;
-      padding: .3em .6em;
-      border: #669EC1 1px solid;
-      border-radius: 5px;
-    }
+	&.cb-button {
+		& + .label {
+			background: white;
+			padding: .3em .6em;
+			border: #669EC1 1px solid;
+			border-radius: 5px;
+		}
 
-    &:checked, .checked {
-      & + .label {
-        background: #00AEFF;
-        color: white;
-      }
-    }
-  }
+		&:checked, .checked {
+			& + .label {
+				background: #00AEFF;
+				color: white;
+			}
+		}
+	}
 } };
 
 //Textarea
 @textarea: { & {
-  background: white;
-  border: @font-base-color 1px solid;
-  border-radius: 5px;
-  padding: .3em .6em;
-  outline: none;
-  width: 100%;
+	background: white;
+	border: @font-base-color 1px solid;
+	border-radius: 5px;
+	padding: .3em .6em;
+	outline: none;
+	width: 100%;
 } };
 
 //Messages
@@ -250,182 +241,177 @@
 
 //Tables
 @table: { & {
-  thead {
-    tr {
-      td {
-        color: #C4DBF1;
-        padding: .5em .4em;
-        font-size: 1.1em;
-      }
-    }
-  }
+	thead {
+		tr {
+			td {
+				color: #C4DBF1;
+				padding: .5em .4em;
+				font-size: 1.1em;
+			}
+		}
+	}
 
-  tr {
-    td {
-      padding: .2em .4em;
-    }
-  }
+	tr {
+		td {
+			padding: .2em .4em;
+		}
+	}
 
-  tfoot {
-    tr {
-      td {
-        background: #C4DBF1;
-        padding: .2em .4em;
-      }
-    }
-  }
+	tfoot {
+		tr {
+			td {
+				background: #C4DBF1;
+				padding: .2em .4em;
+			}
+		}
+	}
 } };
 
 @header: { & {
-  width: 100%;
-  background: white;
+	width: 100%;
+	background: white;
 
-  .wrap {
-    padding: 1em;
-  }
+	.wrap {
+		padding: 1em;
+	}
 } };
 
 //Style A
 @style-a: { & {
-  background: white;
+	background: white;
 } };
 
 //Style B
 @style-b: { & {
-  background: @color-lighter;
-  color: @color-main;
+	background: @color-lighter;
+	color: @color-main;
 } };
 
 //Style C
 @style-c: { & {
-  color: #454545;
-  background: #E4E4E4;
-  border-bottom: 3px solid #454545;
+	color: #454545;
+	background: #E4E4E4;
+	border-bottom: 3px solid #454545;
 
-  .wrap {
-    padding: 4em 0;
+	.wrap {
+		padding: 4em 0;
 
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      margin-left: -5px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #E4E4E4;
-      z-index: 100;
-      visibility: visible;
-    }
+		&:after {
+			content: "";
+			position: absolute;
+			bottom: -10px;
+			left: 50%;
+			margin-left: -5px;
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 10px solid #E4E4E4;
+			z-index: 100;
+			visibility: visible;
+		}
 
-    &:before {
-      content: "";
-      position: absolute;
-      bottom: -14px;
-      left: 50%;
-      margin-left: -9px;
-      width: 0;
-      height: 0;
-      border-left: 14px solid transparent;
-      border-right: 14px solid transparent;
-      border-top: 14px solid #454545;
-      z-index: 99;
-    }
-  }
+		&:before {
+			content: "";
+			position: absolute;
+			bottom: -14px;
+			left: 50%;
+			margin-left: -9px;
+			width: 0;
+			height: 0;
+			border-left: 14px solid transparent;
+			border-right: 14px solid transparent;
+			border-top: 14px solid #454545;
+			z-index: 99;
+		}
+	}
 } };
 
 //Style D
 @style-d: { & {
-  color: white;
-  background: @color-main;
+	color: white;
+	background: @color-main;
 
-  .wrap {
-    padding: 3em 0;
+	.wrap {
+		padding: 3em 0;
 
-    h2 {
-      color: white;
-      font: 1.5em OpenSansRegular;
-      text-transform: uppercase;
-      text-align: left;
-    }
+		h2 {
+			color: white;
+			font: 1.5em OpenSansRegular;
+			text-transform: uppercase;
+			text-align: left;
+		}
 
-    p {
-      margin: 1em 0 0 0;
-      text-align: left;
-    }
+		p {
+			margin: 1em 0 0 0;
+			text-align: left;
+		}
 
-    ul {
-      margin-top: 1em;
-      list-style: disc;
-      margin-left: 1em;
-      text-align: left;
-    }
+		ul {
+			margin-top: 1em;
+			list-style: disc;
+			margin-left: 1em;
+			text-align: left;
+		}
 
-    &:before {
-      content: "";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      margin-left: -5px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 10px solid #395d84;
-    }
-  }
+		&:before {
+			content: "";
+			position: absolute;
+			top: -10px;
+			left: 50%;
+			margin-left: -5px;
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid #395d84;
+		}
+	}
 } };
 
 //Style D
 @style-e: { & {
-  color: @color-secondary;
-  background: @color-lightest;
-  min-height: 20em;
+	color: @color-secondary;
+	background: @color-lightest;
+	min-height: 20em;
 
-  .wrap {
-    padding: 3em 0;
+	.wrap {
+		padding: 3em 0;
 
-    h2 {
-      font: 1.5em OpenSansBold;
-      text-transform: uppercase;
-      text-align: left;
-    }
+		h2 {
+			font: 1.5em OpenSansBold;
+			text-transform: uppercase;
+			text-align: left;
+		}
 
-    p {
-      margin: 1em 0 0 0;
-      text-align: left;
-    }
+		p {
+			margin: 1em 0 0 0;
+			text-align: left;
+		}
 
-    ul {
-      margin-top: 1em;
-      list-style: disc;
-      margin-left: 1em;
-      text-align: left;
-    }
+		ul {
+			margin-top: 1em;
+			list-style: disc;
+			margin-left: 1em;
+			text-align: left;
+		}
 
-    &:before {
-      content: "";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      margin-left: -5px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 10px solid @color-lightest;
-    }
-  }
+		&:before {
+			content: "";
+			position: absolute;
+			top: -10px;
+			left: 50%;
+			margin-left: -5px;
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid @color-lightest;
+		}
+	}
 } };
 
 /* Imports */
-@import '@{style-path}base';
-@import '@{style-path}reset';
-@import '@{style-path}jquery-ui';
-@import '@{style-path}colorbox';
-@import '@{style-path}slider';
 @import 'style';
 @import 'listings';
 @import 'targeting';
