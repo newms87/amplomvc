@@ -62,6 +62,11 @@ class amploAPI
 		return $this->response;
 	}
 
+	public function getContent()
+	{
+		return isset($this->response['content']) ? $this->response['content'] : null;
+	}
+
 	public function getToken()
 	{
 		return $this->token;

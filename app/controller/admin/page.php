@@ -176,10 +176,9 @@ class App_Controller_Admin_Page extends Controller
 
 	public function save()
 	{
-		$post      = $_POST;
-		$post['t'] = $post['template'];
+		$_POST['t'] = _post('template');
 
-		if ($page_id = $this->Model_Page->save(_request('page_id'), $post)) {
+		if ($page_id = $this->Model_Page->save(_request('page_id'), $_POST)) {
 			message('success', _l("The Page has been saved!"));
 			message('data', array('page_id' => $page_id));
 
