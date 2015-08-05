@@ -2,7 +2,7 @@
 
 <div id="theme-settings" class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
-	<form action="<?= $save; ?>" method="post" class="box">
+	<form action="<?= site_url('admin/settings/theme/save'); ?>" method="post" class="box">
 		<div class="heading">
 			<h1>
 				<img class="icon" src="<?= theme_url('image/settings/theme.png'); ?>" alt=""/> {{Theme Settings}}</h1>

@@ -19,25 +19,16 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		breadcrumb(_l("Theme"), site_url('admin/settings/theme'));
 
 		//Load Data or Defaults
-		$theme_configs = $this->theme->getTheme();
-
-		$settings = $_POST;
-
-		if (!IS_POST) {
-			$settings['stylesheet'] = $theme_configs['stylesheet'];
-		}
+		$theme_configs = $this->theme->loadTheme();
 
 		$defaults = array(
 			'configs'    => array(),
 			'stylesheet' => '',
 		);
 
-		$settings += $defaults;
+		$settings = $_POST + $theme_configs + $defaults;
 
 		$settings['configs'] += $theme_configs['configs'];
-
-		//Actions
-		$settings['save'] = site_url('admin/settings/theme/save');
 
 		//Render
 		output($this->render('settings/theme', $settings));
@@ -63,7 +54,7 @@ class App_Controller_Admin_Settings_Theme extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('admin/settingss');
+			redirect('admin/settings');
 		}
 	}
 

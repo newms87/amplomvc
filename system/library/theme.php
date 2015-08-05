@@ -346,19 +346,19 @@ class Theme extends Library
 			$config .= "@$key: $value;\n";
 		}
 
-		$store_theme = array(
-			'store_theme_config_' . $theme => $config,
-			'store_theme_style_' . $theme  => $stylesheet,
+		$site_theme = array(
+			'site_theme_config_' . $theme => $config,
+			'site_theme_style_' . $theme  => $stylesheet,
 		);
 
-		$this->config->saveGroup('store_theme', $store_theme, false);
+		$this->config->saveGroup('site_theme', $site_theme, false);
 
-		clear_cache('less/store_theme.' . $theme);
+		clear_cache('less/site_theme.' . $theme);
 	}
 
 	public function loadTheme()
 	{
-		$theme = $this->config->load('config', 'site_theme');
+		$theme = option('site_theme');
 
 		if (!$theme) {
 			$theme = AMPLO_DEFAULT_THEME;
@@ -379,11 +379,11 @@ class Theme extends Library
 		}
 
 		//Load Store Configs
-		$settings = $this->config->loadGroup('theme');
+		$settings = $this->config->loadGroup('site_theme');
 
 		if ($settings) {
-			if (!empty($settings['theme_config_' . $theme])) {
-				$theme_configs = $this->parseConfigs($settings['theme_config_' . $theme]);
+			if (!empty($settings['site_theme_config_' . $theme])) {
+				$theme_configs = $this->parseConfigs($settings['site_theme_config_' . $theme]);
 
 				foreach ($theme_configs as $key => $value) {
 					if (isset($configs[$key])) {
@@ -392,7 +392,7 @@ class Theme extends Library
 				}
 			}
 
-			$stylesheet = !empty($settings['theme_style_' . $theme]) ? $settings['theme_style_' . $theme] : '';
+			$stylesheet = !empty($settings['site_theme_style_' . $theme]) ? $settings['site_theme_style_' . $theme] : '';
 
 		} else {
 			$stylesheet = '';
