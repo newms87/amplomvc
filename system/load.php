@@ -29,7 +29,8 @@ if ($last_update) {
 	$db->updateTables();
 }
 
-if (!isset($db->t['store'])) {
+//TODO: REMOVE 'store' check once all sites updated for future
+if (!isset($db->t['site']) && !isset($db->t['store'])) {
 	$url = '//' . DOMAIN . SITE_BASE;
 
 	echo <<<HTML

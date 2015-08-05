@@ -64,8 +64,7 @@ class Config extends Library
 		//Overwrite any previous settings with new Site settings.
 		$_options = $settings + $_options;
 
-		$_options['site_id']  = !empty($site['store_id']) ? $site['store_id'] : 0;
-		$_options['store_id'] = $_options['site_id'];
+		$_options['site_id']  = !empty($site['site_id']) ? $site['site_id'] : 0;
 		$_options['name']     = !empty($site['name']) ? $site['name'] : 'No Site';
 		$_options['url']      = !empty($site['url']) ? $site['url'] : URL_SITE;
 		$_options['ssl']      = !empty($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
@@ -236,9 +235,7 @@ class Config extends Library
 			'group' => $group
 		);
 
-		$store_query = '';
-
-		$settings = $this->queryRows("SELECT * FROM {$this->t['setting']} WHERE `group` = '" . $this->escape($group) . "' $store_query");
+		$settings = $this->queryRows("SELECT * FROM {$this->t['setting']} WHERE `group` = '" . $this->escape($group) . "'");
 
 		foreach ($settings as $setting) {
 			if ($setting['translate']) {
@@ -257,7 +254,7 @@ class Config extends Library
 
 	public function runSiteConfig()
 	{
-		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store");
+		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "site");
 
 		if (!$default_exists) {
 			$site = array(
@@ -267,7 +264,7 @@ class Config extends Library
 				'ssl'    => HTTPS_SITE,
 			);
 
-			$this->db->setAutoIncrement('store', 0);
+			$this->db->setAutoIncrement('site', 0);
 			$this->Model_Site->createSite($site);
 		}
 	}

@@ -130,8 +130,8 @@ function amplo_mvc_install()
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
 	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_role_id = '1', first_name = 'Admin', username = '$username', email = '$email', password = '$password', status = '1', date_added = '" . date('Y-m-d H:i:s') . "'");
 
-	$db->query("DELETE FROM " . DB_PREFIX . 'store');
-	$db->query("INSERT INTO " . DB_PREFIX . "store SET prefix = '" . DB_PREFIX . "', `name` = 'Amplo MVC', `url` = '" . HTTP_SITE . "', `ssl` = '" . HTTPS_SITE . "'");
+	$db->query("DELETE FROM " . DB_PREFIX . 'site');
+	$db->query("INSERT INTO " . DB_PREFIX . "site SET prefix = '" . DB_PREFIX . "', `name` = 'Amplo MVC', `url` = '" . HTTP_SITE . "', `ssl` = '" . HTTPS_SITE . "'");
 
 	if ($db->hasError()) {
 		$error = $db->fetchError();

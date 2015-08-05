@@ -2,16 +2,16 @@
 
 class App_Model_Site extends App_Model_Table
 {
-	protected $table = 'store', $primary_key = 'store_id';
+	protected $table = 'site', $primary_key = 'site_id';
 
 	public function getSiteByName($site_name)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `name` = '" . $this->escape($site_name) . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "site WHERE `name` = '" . $this->escape($site_name) . "'");
 	}
 
 	public function getSiteByPrefix($prefix)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `prefix` = '" . $this->escape($prefix) . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "site WHERE `prefix` = '" . $this->escape($prefix) . "'");
 	}
 
 	public function createSite($site, $tables = array())
@@ -21,7 +21,7 @@ class App_Model_Site extends App_Model_Table
 			return false;
 		}
 
-		$site_id = $this->insert('store', $site);
+		$site_id = $this->insert('site', $site);
 
 		if (!$site_id) {
 			return false;
@@ -59,10 +59,10 @@ class App_Model_Site extends App_Model_Table
 			return false;
 		}
 
-		$this->delete('store', $site['store_id']);
+		$this->delete('site', $site['site_id']);
 
 		if ($site['prefix'] !== DB_PREFIX) {
-			$unique_prefix = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "store WHERE `prefix` = '$site[prefix]'");
+			$unique_prefix = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "site WHERE `prefix` = '$site[prefix]'");
 
 			if ($unique_prefix <= 1) {
 				$col    = 'Tables_in_' . $this->db->getSchema();

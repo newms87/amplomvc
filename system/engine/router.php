@@ -214,7 +214,7 @@ class Router
 	{
 		$options = array(
 			'cache' => true,
-			'index' => 'store_id'
+			'index' => 'site_id'
 		);
 
 		return $this->Model_Site->getRecords(null, null, $options);

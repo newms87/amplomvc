@@ -92,24 +92,29 @@ class App_Controller_Admin_Header extends Controller
 				}
 			}
 
-			$stores = $this->Model_Site->getRecords(null, null, array('cache' => true));
+			$options = array(
+				'index' => 'site_id',
+				'cache' => true
+			);
+
+			$sites = $this->Model_Site->getRecords(null, null, $options);
 
 			//Store Front Links
-			$link_stores = array(
-				'name'         => 'stores',
-				'display_name' => _l("Stores"),
+			$link_sites = array(
+				'name'         => 'sites',
+				'display_name' => _l("Sites"),
 				'sort_order'   => 0,
 			);
 
-			$this->document->addLink('right', $link_stores);
+			$this->document->addLink('right', $link_sites);
 
 			//Link to all of the stores under the stores top level navigation
-			foreach ($stores as $store) {
+			foreach ($sites as $site_id => $site) {
 				$link_store = array(
-					'name'         => 'store_' . $store['store_id'],
-					'display_name' => $store['name'],
-					'href'         => site_url('', '', null, $store['store_id']),
-					'parent'       => 'stores',
+					'name'         => 'site_' . $site_id,
+					'display_name' => $site['name'],
+					'href'         => site_url('', '', null, $site_id),
+					'parent'       => 'sites',
 					'target'       => '_blank',
 				);
 
