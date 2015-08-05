@@ -35,7 +35,7 @@ $links = array(
 				'display_name' => 'User Roles',
 				'path'         => 'admin/settings/role',
 			),
-			'users_api_users' => array(
+			'users_api_users'  => array(
 				'display_name' => 'API Users',
 				'path'         => 'admin/api_user',
 			),
@@ -45,11 +45,15 @@ $links = array(
 	'system'     => array(
 		'display_name' => 'System',
 		'children'     => array(
-			'system_settings'          => array(
+			'system_sites'                => array(
+				'display_name' => 'Sites',
+				'path'         => 'admin/site',
+			),
+			'system_settings'             => array(
 				'display_name' => 'Settings',
 				'path'         => 'admin/settings',
 			),
-			'system_mail'              => array(
+			'system_mail'                 => array(
 				'display_name' => 'Mail',
 				'children'     => array(
 					'system_mail_send_email'    => array(
@@ -66,15 +70,15 @@ $links = array(
 					),
 				),
 			),
-			'system_views'             => array(
+			'system_views'                => array(
 				'display_name' => 'Views',
 				'path'         => 'admin/view',
 			),
-			'system_navigation'        => array(
+			'system_navigation'           => array(
 				'display_name' => 'Navigation',
 				'path'         => 'admin/navigation',
 			),
-			'system_system_clearcache' => array(
+			'system_system_clearcache'    => array(
 				'display_name' => 'Clear Cache',
 				'path'         => 'admin/settings/clear_cache',
 				'query'        => 'redirect',
@@ -84,15 +88,15 @@ $links = array(
 				'path'         => 'admin/settings/refresh_sprite_sheets',
 				'query'        => 'redirect',
 			),
-			'system_logs'              => array(
+			'system_logs'                 => array(
 				'display_name' => 'Logs',
 				'path'         => 'admin/logs',
 			),
-			'system_history'           => array(
+			'system_history'              => array(
 				'display_name' => 'History',
 				'path'         => 'admin/history',
 			),
-			'system_localisation'      => array(
+			'system_localisation'         => array(
 				'display_name' => 'Localisation',
 				'children'     => array(
 					'system_localisation_currencies' => array(
@@ -118,7 +122,7 @@ $links = array(
 				),
 			),
 
-			'system_plugins'           => array(
+			'system_plugins'              => array(
 				'display_name' => 'Plugins',
 				'path'         => 'admin/plugin',
 			),
