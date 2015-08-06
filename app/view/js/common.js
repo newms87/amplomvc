@@ -1295,7 +1295,7 @@ $.fn.liveForm = function(params) {
 function content_loaded(is_ajax) {
 	var $forms = $('form');
 
-	$forms.find('input').use_once('form-input').keydown(function (e) {
+	$forms.find('input').not('[data-no-enter-key]').use_once('form-input').keydown(function (e) {
 		if (e.keyCode == 13) {
 			$(this).closest('form').submit();
 			return false;
