@@ -406,6 +406,26 @@ td {
   position: relative;
   z-index: 10;
 
+  a {
+    padding: .6em 1.2em;
+    font-size: 1.4em;
+    text-decoration: none;
+    color: @color-lightest;
+    background: #131313;
+
+    &:hover {
+      background: lighten(#131313, 10%);
+    }
+  }
+
+  li {
+    & + li {
+      a {
+        border-left: 1px solid @color-light;
+      }
+    }
+  }
+  
   .link-list {
     display: inline-block;
 
@@ -512,8 +532,6 @@ td {
       }
     }
   }
-
-  @navigation();
 }
 
 #menu {
@@ -522,11 +540,12 @@ td {
 
   .admin-nav {
     width: 75%;
+    .ws-hack;
   }
 
   .right-nav {
-    width: 20%;
-    .ws-hack;
+    width: 25%;
+    text-align: right;
   }
 }
 
