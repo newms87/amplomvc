@@ -102,7 +102,7 @@ class App_Controller_Admin_Site extends Controller
 
 	public function save()
 	{
-		if ($this->Model_Site->save(_get('site_id'), $_POST)) {
+		if ($this->Model_Site->save(_request('site_id'), $_POST)) {
 			message('success', _l("The Site has been saved."));
 		} else {
 			message('error', $this->Model_Site->fetchError());
@@ -119,7 +119,7 @@ class App_Controller_Admin_Site extends Controller
 
 	public function remove()
 	{
-		if ($this->Model_Site->removeSite(_get('site_id'))) {
+		if ($this->Model_Site->removeSite(_request('site_id'))) {
 			message('success', _l("The Site was removed!"));
 		} else {
 			message('error', $this->Model_Site->fetchError());
