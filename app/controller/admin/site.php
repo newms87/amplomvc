@@ -119,7 +119,7 @@ class App_Controller_Admin_Site extends Controller
 
 	public function remove()
 	{
-		if ($this->Model_Site->removeSite(_request('site_id'))) {
+		if ($this->Model_Site->remove(_request('site_id'))) {
 			message('success', _l("The Site was removed!"));
 		} else {
 			message('error', $this->Model_Site->fetchError());
