@@ -210,19 +210,14 @@ class Router
 		output_flush();
 	}
 
-	public function getSites()
+	public function routeSite()
 	{
 		$options = array(
 			'cache' => true,
 			'index' => 'site_id'
 		);
 
-		return $this->Model_Site->getRecords(null, null, $options);
-	}
-
-	public function routeSite()
-	{
-		$sites = $this->getSites();
+		$sites = $this->Model_Site->getRecords(null, null, $options);
 
 		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
@@ -238,6 +233,7 @@ class Router
 
 		if (!$this->site) {
 			$this->site = array(
+				'domain' => DOMAIN,
 				'url'    => '//' . DOMAIN . '/',
 				'ssl'    => 'https://' . DOMAIN . '/',
 				'name'   => 'Amplo MVC',

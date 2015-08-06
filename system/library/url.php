@@ -114,7 +114,12 @@ class Url extends Library
 
 		if ($site_id) {
 			if (!$sites) {
-				$sites = $this->route->getSites();
+				$options = array(
+					'cache' => true,
+					'index' => 'site_id'
+				);
+
+				$sites = $this->Model_Site->getRecords(null, null, $options);
 			}
 
 			if (!empty($sites[$site_id])) {
