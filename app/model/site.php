@@ -4,6 +4,18 @@ class App_Model_Site extends App_Model_Table
 {
 	protected $table = 'site', $primary_key = 'site_id';
 
+	public function save($site_id, $site)
+	{
+		clear_cache_all();
+		return parent::save($site_id, $site);
+	}
+
+	public function remove($site_id)
+	{
+		clear_cache_all();
+		return parent::remove($site_id);
+	}
+
 	public function getSiteByName($site_name)
 	{
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "site WHERE `name` = '" . $this->escape($site_name) . "'");
