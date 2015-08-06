@@ -6,13 +6,25 @@ class App_Model_Site extends App_Model_Table
 
 	public function save($site_id, $site)
 	{
+		if (isset($site['prefix']) || !$site_id) {
+			if (empty($site['prefix']) || !preg_match("/[a-z0-9]+/", $site['prefix'])) {
+				$this->error['prefix'] = _l("Prefix is required and must contain only letters, numbers and the '_' character.");
+
+				return false;
+			} else {
+				$site['prefix'] = rtrim(slug($site['prefix']), '_') . '_';
+			}
+		}
+
 		clear_cache_all();
+
 		return parent::save($site_id, $site);
 	}
 
 	public function remove($site_id)
 	{
 		clear_cache_all();
+
 		return parent::remove($site_id);
 	}
 
@@ -28,8 +40,17 @@ class App_Model_Site extends App_Model_Table
 
 	public function createSite($site, $tables = array())
 	{
+		if (empty($site['prefix']) || !preg_match("/[a-z0-9]+/", $site['prefix'])) {
+			$this->error['prefix'] = _l("Prefix is required and must contain only letters, numbers and the '_' character.");
+
+			return false;
+		} else {
+			$site['prefix'] = rtrim(slug($site['prefix']), '_') . '_';
+		}
+
 		if ($this->getSiteByName($site['name'])) {
 			$this->error['name'] = _l("A site with the name %s already exists!", $site['name']);
+
 			return false;
 		}
 
@@ -68,15 +89,16 @@ class App_Model_Site extends App_Model_Table
 
 		if (!$site) {
 			$this->error['site'] = _l("The site %s does not exist.", $site_id);
+
 			return false;
 		}
 
 		$this->delete('site', $site['site_id']);
 
-		if ($site['prefix'] !== DB_PREFIX) {
+		if (!empty($site['prefix']) && $site['prefix'] !== DB_PREFIX) {
 			$unique_prefix = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "site WHERE `prefix` = '$site[prefix]'");
 
-			if ($unique_prefix <= 1) {
+			if (!$unique_prefix) {
 				$col    = 'Tables_in_' . $this->db->getSchema();
 				$tables = $this->queryRows("SHOW TABLES WHERE $col like '$site[prefix]%'");
 
