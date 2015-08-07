@@ -21,6 +21,12 @@
 					?>
 					<input type="text" name="action_value" value="<?= $action['default']; ?>"/>
 					<? break;
+
+				case 'textarea':
+					?>
+					<textarea name="action_value"><?= $action['default']; ?></textarea>
+					<? break;
+
 				case 'select':
 					?>
 					<?= build($action['build']); ?>

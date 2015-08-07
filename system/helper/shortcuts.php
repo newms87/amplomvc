@@ -807,6 +807,7 @@ function build($type, $params = null)
 
 	//Type Specific groupings
 	$text_types = array(
+		'textarea',
 		'text',
 		'int',
 		'float',
@@ -836,6 +837,8 @@ function build($type, $params = null)
 	if (in_array($type, $text_types)) {
 		if ($readonly) {
 			return "<span $attrs>$select</span>";
+		} elseif ($type === 'textarea') {
+			return "<textarea $attrs name=\"$name\">$select</textarea>";
 		} else {
 			return "<input type=\"text\" $attrs name=\"$name\" value=\"$select\" />";
 		}

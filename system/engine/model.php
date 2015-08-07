@@ -947,22 +947,26 @@ abstract class Model
 				foreach ($columns as &$column) {
 					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
 
-					$cast = array(
-						'bigint'    => self::INTEGER,
-						'mediumint' => self::INTEGER,
-						'smallint'  => self::INTEGER,
-						'tinyint'   => self::INTEGER,
-						'int'       => self::INTEGER,
-						'decimal'   => self::FLOAT,
-						'float'     => self::FLOAT,
-						'double'    => self::FLOAT,
-						'datetime'  => self::DATETIME,
-						'timestamp' => self::INTEGER,
-						'binary'    => self::NO_ESCAPE,
-						'varbinary' => self::NO_ESCAPE,
-					);
+					if ($type === 'text') {
+						$type = 'textarea';
+					} else {
+						$cast = array(
+							'bigint'    => self::INTEGER,
+							'mediumint' => self::INTEGER,
+							'smallint'  => self::INTEGER,
+							'tinyint'   => self::INTEGER,
+							'int'       => self::INTEGER,
+							'decimal'   => self::FLOAT,
+							'float'     => self::FLOAT,
+							'double'    => self::FLOAT,
+							'datetime'  => self::DATETIME,
+							'timestamp' => self::INTEGER,
+							'binary'    => self::NO_ESCAPE,
+							'varbinary' => self::NO_ESCAPE,
+						);
 
-					$type = isset($cast[$type]) ? $cast[$type] : self::TEXT;
+						$type = isset($cast[$type]) ? $cast[$type] : self::TEXT;
+					}
 
 					if ($column['Key'] === 'PRI' && $type === self::INTEGER) {
 						if ($column['Extra'] === 'auto_increment') {

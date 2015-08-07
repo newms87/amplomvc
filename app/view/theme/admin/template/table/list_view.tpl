@@ -269,7 +269,7 @@
 											if (isset($c_data[$column['build']['value']]) && $c_data[$column['build']['value']] == $value) {
 												?>
 												<?= $c_data[$column['build']['label']]; ?>
-											<?
+												<?
 											}
 										}
 										break;
@@ -310,6 +310,7 @@
 										break;
 
 									case 'text':
+									case 'textarea':
 									case 'int':
 									case 'float':
 									case 'decimal':
@@ -332,7 +333,7 @@
 						</td>
 					<? } ?>
 				</tr>
-			<?
+				<?
 			}
 		} else {
 			?>
@@ -372,6 +373,7 @@
 								<? break;
 
 							case 'longtext':
+							case 'textarea':
 								?>
 								<textarea class="input-value" rows="4" cols="40"></textarea>
 								<? break;
