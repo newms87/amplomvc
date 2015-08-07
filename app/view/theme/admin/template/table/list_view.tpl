@@ -237,7 +237,6 @@
 						<? } ?>
 
 						<td <?= attrs($column); ?>>
-
 							<?
 							//Check if the raw string override has been set for this value
 							if (isset($row['#' . $slug])) {
@@ -316,9 +315,9 @@
 									case 'decimal':
 									default:
 										if (!empty($column['charlimit'])) {
-											echo charlimit($value, $column['charlimit']);
+											echo nl2br(charlimit($value, $column['charlimit']));
 										} else {
-											echo $value;
+											echo nl2br($value);
 										}
 										break;
 								}

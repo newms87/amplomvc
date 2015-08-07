@@ -262,12 +262,23 @@ function listview_save_edit() {
 		display = $input.find('option[value="' + value + '"]').html();
 	}
 
-	var $field = $listview.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]').html(display);
+	display = display.replace(/\n/g, '<BR>');
+
+	var $field = $listview.find('[data-row-id="' + id + '"] td[data-field="' + field + '"]');
 	$field.attr('data-value', value.replace('"', '&quot;'));
+
+	var orig_display = $field.html();
+	$field.html('Saving...');
 
 	$.post($listview.attr('data-save-url'), data, function (response) {
 		$this.loading('stop');
 		$listview.show_msg(response);
+
+		if (response.success) {
+			$field.html(display);
+		} else {
+			$field.html(orig_display);
+		}
 	}, 'json');
 }
 
