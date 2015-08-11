@@ -558,7 +558,7 @@ function page_info($key = null, $default = null)
 			return $document->getScripts();
 
 		case 'body_class':
-			return implode(' ', $value);
+			return $document->getBodyClass();
 	}
 
 	return $value;
@@ -567,7 +567,33 @@ function page_info($key = null, $default = null)
 function set_page_info($key, $value)
 {
 	global $registry;
-	$registry->get('document')->setInfo($key, $value);
+	static $document;
+
+	if (!$document) {
+		$document = $registry->get('document');
+	}
+
+	switch ($key) {
+		case 'styles':
+			$document->addStyle($value);
+			break;
+
+		case 'scripts':
+			$document->addScript($value);
+			break;
+
+		case 'body_class':
+			if (is_array($value)) {
+				$document->setBodyClass($value);
+			} else {
+				$document->addBodyClass($value);
+			}
+		break;
+
+		default:
+			$document->setInfo($key, $value);
+			break;
+	}
 }
 
 function page_meta($key = null, $default = null)

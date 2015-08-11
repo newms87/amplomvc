@@ -552,6 +552,11 @@ class Document extends Library
 		$this->info['body_class'][$class] = $class;
 	}
 
+	public function getBodyClass()
+	{
+		return implode(' ', $this->info['body_class']);
+	}
+
 	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
 		if (!$page) {
