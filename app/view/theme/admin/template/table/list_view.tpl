@@ -315,10 +315,16 @@
 									case 'decimal':
 									default:
 										if (!empty($column['charlimit'])) {
-											echo nl2br(charlimit($value, $column['charlimit']));
+											$text = charlimit($value, $column['charlimit']);
 										} else {
-											echo nl2br($value);
+											$text = $value;
 										}
+
+										if (!preg_match("/<[a-z]+/i", $text)) {
+											$text = nl2br($text);
+										}
+
+										echo $text;
 										break;
 								}
 							} ?>
