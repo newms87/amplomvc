@@ -93,6 +93,16 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 				$type = 'equals';
 			}
 
+			//Find Overriding filter key
+			if (!isset($settings['columns'][$key])) {
+				foreach ($settings['columns'] as $fkey => $c) {
+					if (isset($c['filter_key']) && $c['filter_key'] === $key) {
+						$key = $fkey;
+						break;
+					}
+				}
+			}
+
 			$filter_values[$key] = $fv;
 			$filter_types[$key]  = $type;
 		}

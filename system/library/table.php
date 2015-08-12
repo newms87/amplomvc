@@ -137,6 +137,10 @@ class Table extends Library
 				if ($column['filter'] === true) {
 					$column['filter'] = $column['type'];
 				}
+
+				if (!isset($column['filter_key'])) {
+					$column['filter_key'] = $slug;
+				}
 			}
 
 			//Backwards compat w/ build_config / build_data

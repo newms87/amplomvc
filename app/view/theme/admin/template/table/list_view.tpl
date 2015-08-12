@@ -66,7 +66,7 @@
 						<? switch ($column['filter']) {
 							case 'text':
 								?>
-								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>"/>
+								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
 								<? break;
 
 							case 'pk':
@@ -83,8 +83,8 @@
 								?>
 								<div class="zoom-hover int">
 									<div class="input">
-										<input placeholder="{{From}}" type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
-										<input placeholder="{{To}}" type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
+										<input placeholder="{{From}}" type="text" class="int_low" name="filter[<?= $column['filter_key']; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
+										<input placeholder="{{To}}" type="text" class="int_high" name="filter[<?= $column['filter_key']; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
 									<div class="value">
@@ -100,7 +100,7 @@
 							case 'select':
 								echo build(array(
 										'type'   => 'select',
-										'name'   => "filter[$slug]",
+										'name'   => "filter[{$column['filter_key']}]",
 										'select' => $column['filter_value'],
 									) + $column['build']);
 								break;
@@ -112,7 +112,7 @@
 										<?=
 										build(array(
 												'type'   => 'multiselect',
-												'name'   => "filter[$slug]",
+												'name'   => "filter[{$column['filter_key']}]",
 												'select' => $column['filter_value'],
 											) + $column['build']); ?>
 									</div>
@@ -156,8 +156,8 @@
 
 								<div class="zoom-hover daterange">
 									<div class="input">
-										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
+										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
 									<div class="value" data-default="{{Date Range}}">
