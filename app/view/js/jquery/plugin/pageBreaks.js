@@ -66,7 +66,6 @@ $.pageBreaks.updateVars = function () {
 	var $pages = this.find('.page');
 	var page_count = $pages.length;
 
-	console.log('count', this, $pages);
 	return $pages.each(function (i, e) {
 		var $e = $(e);
 		$e.find('.var-page').html(i + 1);
