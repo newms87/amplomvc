@@ -65,6 +65,7 @@
 						<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
 						<? switch ($column['filter']) {
 							case 'text':
+							case 'textarea':
 								?>
 								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
 								<? break;

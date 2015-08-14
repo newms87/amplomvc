@@ -41,8 +41,8 @@ class App_Controller_Admin_Logs extends Controller
 		$filter  = (array)_get('filter');
 		$options = array(
 			'index'   => 'log_id',
-			'page'    => _get('page'),
-			'limit'   => _get('limit', option('admin_list_limit', 20)),
+			'page'    => (int)_get('page'),
+			'limit'   => (int)_get('limit', option('admin_list_limit', 20)),
 			'columns' => $this->Model_Log->getColumns((array)_request('columns')),
 		);
 

@@ -8,6 +8,7 @@ abstract class Model
 
 	const
 		TEXT = 'text',
+		TEXTAREA = 'textarea',
 		NO_ESCAPE = 'no-escape',
 		IMAGE = 'image',
 		INTEGER = 'int',
@@ -157,11 +158,13 @@ abstract class Model
 	 * Use this to optimally query sorted / filtered rows using the LIMIT clause from
 	 * the database along with the total number of rows (minus the LIMIT clause).
 	 *
-	 * @param string $sql - The query string without any sub queries (no guarantee it will work on sub queries).
-	 * @param string $index - the index field to use for the rows returned
-	 * @param bool $use_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
+	 * @param string $sql                 - The query string without any sub queries (no guarantee it will work on sub
+	 *                                    queries).
+	 * @param string $index               - the index field to use for the rows returned
+	 * @param bool   $use_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
 	 *
-	 * @return array - an array with array( 0 => rows, 1 => total ). USAGE HINT: list($rows, $total) = $this->queryTotal(...);
+	 * @return array - an array with array( 0 => rows, 1 => total ). USAGE HINT: list($rows, $total) =
+	 *               $this->queryTotal(...);
 	 */
 
 	protected function queryTotal($sql, $index = null, $use_calc_found_rows = null)
@@ -540,9 +543,9 @@ abstract class Model
 	 * and the values set in $filter. You can override the way the values are filtered
 	 * using the $columns to specify the data type for columns.
 	 *
-	 * @param string $table - The table to reference the columns to build the WHERE string
-	 * @param array $filter - The values to filter (based on data types in the table columns)
-	 * @param array $columns - The overridden table columns, to change data types
+	 * @param string $table   - The table to reference the columns to build the WHERE string
+	 * @param array  $filter  - The values to filter (based on data types in the table columns)
+	 * @param array  $columns - The overridden table columns, to change data types
 	 *
 	 * @return string - The mysql WHERE clause for the table $table
 	 */
@@ -561,6 +564,7 @@ abstract class Model
 
 		$method = array(
 			self::NO_ESCAPE           => 'equals',
+			self::TEXTAREA            => 'like',
 			self::TEXT                => 'like',
 			self::AUTO_INCREMENT      => 'int',
 			self::AUTO_INCREMENT_PK   => 'int',
@@ -779,12 +783,14 @@ abstract class Model
 
 	/**
 	 * Be careful using this method! It may cause performance problems if not used properly.
-	 * Note that $table can either be a query string or a table name. If it is a table name you must provide $sort and $filter.
-	 * If $table is a query, this method uses EXPLAIN and can sometimes take as long as the original query to determine the optimal query.
+	 * Note that $table can either be a query string or a table name. If it is a table name you must provide $sort and
+	 * $filter. If $table is a query, this method uses EXPLAIN and can sometimes take as long as the original query to
+	 * determine the optimal query.
 	 *
-	 * @param string $table - either the table name or a sql query string. If it is a query string, $sort and $filter MUST be empty.
-	 * @param array $sort - the fields the query will sort on (ORDER BY clause).
-	 * @param array $filter - the fields the query will filter on (WHERE clause).
+	 * @param string $table  - either the table name or a sql query string. If it is a query string, $sort and $filter
+	 *                       MUST be empty.
+	 * @param array  $sort   - the fields the query will sort on (ORDER BY clause).
+	 * @param array  $filter - the fields the query will filter on (WHERE clause).
 	 * @return bool - if true, it is recommended to use SQL_CALC_FOUND_ROWS in the SELECT clause.
 	 */
 	protected function useCalcFoundRows($table, $sort = array(), $filter = array())
