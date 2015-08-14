@@ -5,7 +5,7 @@ var screen_lg = screen_width >= 1200,
 	screen_sm = screen_width >= 480 && screen_width < 768,
 	screen_xs = screen_width < 480;
 
-$('body').toggleClass('webkit', /AppleWebKit/.test( navigator.userAgent ));
+$('body').toggleClass('webkit', /AppleWebKit/.test(navigator.userAgent));
 
 Function.prototype.loop = function (time, count) {
 	var fn = this;
@@ -114,6 +114,10 @@ function autoload_js_file(url, args, type) {
 							}
 
 							$(document).trigger(al);
+						}
+					}).always(function (jqXHR, status, msg) {
+						if (status !== 'success') {
+							console.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
 						}
 					});
 			}
@@ -1274,18 +1278,18 @@ $.fn.submit_ajax_form = function (params) {
 	});
 }
 
-$.fn.liveForm = function(params) {
+$.fn.liveForm = function (params) {
 	params = $.extend({}, {
 		callback: null
 	}, params);
 
-	return this.use_once('live-form-enabled').each(function(i,e){
+	return this.use_once('live-form-enabled').each(function (i, e) {
 		var $form = $(e);
-		$form.find('[name]').change(function(){
+		$form.find('[name]').change(function () {
 			$(this).closest('form').submit();
 		});
 
-		$form.submit(function(){
+		$form.submit(function () {
 			$.post($form.attr('action'), $form.serialize(), params.callback);
 			return false;
 		});

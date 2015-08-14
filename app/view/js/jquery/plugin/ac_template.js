@@ -44,7 +44,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		}, action);
 
 		//update counts
-		$('[data-list-rel]').each(function(i,e){
+		$('[data-list-rel]').each(function (i, e) {
 			$(e).attr('data-count', $(e).children().length);
 		});
 	}
@@ -70,10 +70,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			count = data.id || get_count(list);
 
 			template.attr('data-row', count);
-
-			if (row.unique) {
-				template.attr('data-id', data[row.unique]);
-			}
+			template.attr('data-id', data[row.unique] || count);
 
 			template.find('[id]').each(function (i, e) {
 				var id = $(e).attr('id');
