@@ -395,7 +395,7 @@ $.fn.tabs = function (opts) {
 		}
 
 		if (typeof $tabs.o.callback === 'function') {
-			$tabs.o.callback($this, $content);
+			$tabs.o.callback.call($this, $content);
 		}
 
 		return false;

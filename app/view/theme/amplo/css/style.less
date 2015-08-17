@@ -442,6 +442,13 @@ button, .button, .row .button {
 	& > .parent {
 		cursor: pointer;
 		display: block;
+
+		&:after {
+			.amp-sprite;
+			.si-chevron;
+			.amp-sprite.rotate-180;
+			margin-left: .5em;
+		}
 	}
 
 	& > .children {
@@ -452,6 +459,12 @@ button, .button, .row .button {
 	}
 
 	&.active, &.on-hover:hover {
+		& > .parent {
+			&:after {
+				.amp-sprite.rotate-0;
+			}
+		}
+
 		& > .children {
 			left: 0;
 		}
@@ -1321,6 +1334,29 @@ section.page {
 
 		&.active, &:hover {
 			color: @color-main;
+		}
+	}
+
+	.link-menu {
+		& > .parent {
+			color: @font-dark;
+		}
+
+		& > .children {
+			position: relative;
+			left: 0;
+			max-height: 0;
+			overflow: hidden;
+		}
+
+		&.active, &.on-hover:hover {
+			& > .parent {
+				color: @color-main;
+			}
+
+			& > .children {
+				max-height: 20em;
+			}
 		}
 	}
 }
