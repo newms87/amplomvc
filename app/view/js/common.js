@@ -290,6 +290,12 @@ $.fn.update_index = function (column) {
 jQuery.fn.sortElements = function (comparator) {
 	var $this = this;
 
+	if (!comparator) {
+		comparator = function(a,b){
+			return $(a).attr('data-sort-order') > $(b).attr('data-sort-order');
+		}
+	}
+
 	[].sort.call($this.children(), comparator).each(function (i, e) {
 		$this.append($(e));
 	});

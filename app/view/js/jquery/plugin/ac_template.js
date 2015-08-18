@@ -47,8 +47,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		$('[data-list-rel]').each(function (i, e) {
 			$(e).attr('data-count', $(e).children().length);
 		});
-	}
-	else {
+	} else {
 		row = templates[name];
 		template = row.template.clone(true);
 		data = $.extend({}, row.defaults, data || {});
