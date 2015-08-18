@@ -24,7 +24,7 @@ Options -Indexes
     </Files>
 
     # Protect template and cache files
-    <FilesMatch "\.(tpl|tpl\.mod|cache)$">
+    <FilesMatch "\.(tpl|mod|ext|cache)$">
         Order Deny,Allow
         Deny From All
     </FilesMatch>

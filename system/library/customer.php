@@ -376,25 +376,4 @@ class Customer extends Library
 	{
 		return str_shuffle(md5(microtime(true) * rand()));
 	}
-
-	public function isBlacklisted($customer_id = null, $ips = array())
-	{
-		if (!$customer_id) {
-			$customer_id = $this->customer_id;
-		}
-
-		if ($customer_id) {
-			$customer_ips = $this->queryColumn("SELECT ip FROM {$this->t['customer_ip']} WHERE customer_id = " . (int)$customer_id);
-
-			if ($customer_ips) {
-				$ips += $customer_ips;
-			}
-		}
-
-		if (empty($ips)) {
-			return false;
-		}
-
-		return $this->queryVar("SELECT COUNT(*) FROM `{$this->t['customer_ip_blacklist']}` WHERE ip IN ('" . implode("','", $ips) . "')");
-	}
 }

@@ -319,16 +319,16 @@
 							)); ?></td>
 					</tr>
 					<tr>
-						<td>{{Customer Group:}}
-							<span class="help">{{Default customer group.}}</span>
+						<td>{{Customer Role:}}
+							<span class="help">{{Default Customer Role sets permissions on what a customer is allowed to do.}}</span>
 						</td>
 						<td>
 							<?= build(array(
 								'type'   => 'select',
-								'name'   => 'config_customer_group_id',
-								'data'   => $data_customer_groups,
-								'select' => $config_customer_group_id,
-								'value'  => 'customer_group_id',
+								'name'   => 'default_customer_role_id',
+								'data'   => $data_roles,
+								'select' => $default_customer_role_id,
+								'value'  => 'user_role_id',
 								'label'  => 'name',
 							)); ?>
 						</td>

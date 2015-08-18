@@ -48,7 +48,7 @@ class App_Model_Settings extends Model
 		'site_list_limit'                         => 10,
 		'config_autocomplete_limit'               => 10,
 		'config_performance_log'                  => 0,
-		'config_customer_group_id'                => '',
+		'default_customer_role_id'                => '',
 		'config_customer_approval'                => 0,
 		'terms_agreement_page_id'                 => '',
 		'config_contact_page_id'                  => '',

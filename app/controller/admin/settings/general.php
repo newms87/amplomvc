@@ -33,13 +33,13 @@ class App_Controller_Admin_Settings_General extends Controller
 		$settings += App_Model_Settings::$general_settings;
 
 		//Template Data
-		$settings['data_layouts']         = $this->Model_Layout->getRecords(null, null, array('cache' => true));
-		$settings['data_themes']          = $this->theme->getThemes();
-		$settings['data_countries']       = $this->Model_Localisation_Country->getCountries();
-		$settings['data_languages']       = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
-		$settings['data_currencies']      = $this->Model_Localisation_Currency->getCurrencies();
-		$settings['data_customer_groups'] = $this->Model_CustomerGroup->getRecords(null, null, array('cache' => true));
-		$settings['data_pages']           = array('' => _l(" --- None --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true));
+		$settings['data_layouts']    = $this->Model_Layout->getRecords(null, null, array('cache' => true));
+		$settings['data_themes']     = $this->theme->getThemes();
+		$settings['data_countries']  = $this->Model_Localisation_Country->getCountries();
+		$settings['data_languages']  = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
+		$settings['data_currencies'] = $this->Model_Localisation_Currency->getCurrencies();
+		$settings['data_user_roles'] = $this->Model_UserRole->getRecords(null, null, array('cache' => true));
+		$settings['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true));
 
 		$settings['data_mail_protocols'] = array(
 			'smtp' => "SMTP",

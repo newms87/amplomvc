@@ -60,9 +60,9 @@ class App_Model_Customer extends App_Model_Table
 			return false;
 		}
 
-		$customer['customer_group_id'] = option('config_customer_group_id');
-		$customer['date_added']        = $this->date->now();
-		$customer['status']            = 1;
+		$customer['role_id']    = option('default_customer_role_id', 0);
+		$customer['date_added'] = $this->date->now();
+		$customer['status']     = 1;
 
 		if (!isset($customer['newsletter'])) {
 			$customer['newsletter'] = option('config_customer_newsletter', 0);
@@ -100,6 +100,7 @@ class App_Model_Customer extends App_Model_Table
 	{
 		if (!$customer_id) {
 			$this->error['customer_id'] = _l("The customer does not exist.");
+
 			return false;
 		}
 
@@ -125,6 +126,7 @@ class App_Model_Customer extends App_Model_Table
 	public function setMeta($customer_id, $key, $value)
 	{
 		$this->deleteMeta($customer_id, $key);
+
 		return $this->addMeta($customer_id, $key, $value);
 	}
 
@@ -174,6 +176,7 @@ class App_Model_Customer extends App_Model_Table
 	{
 		if (!$customer_id) {
 			$this->error['customer_id'] = _l("Address must be assigned to a customer.");
+
 			return false;
 		}
 
@@ -187,6 +190,7 @@ class App_Model_Customer extends App_Model_Table
 
 		if (!$address_id) {
 			$this->error = $this->Model_Address->fetchError();
+
 			return false;
 		}
 
