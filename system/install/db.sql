@@ -462,7 +462,7 @@ CREATE TABLE `user_role` (
 	PRIMARY KEY (`user_role_id`)
 );
 
-INSERT INTO `user_role` VALUES ('1','Top Administrator','','6'),('10','Demonstration','','0'),('11','Basic Member','','1'),('13','Administrator','','5'),('14','Guest','a:1:{s:6:\"access\";a:1:{i:0;s:15:\"mail/newsletter\";}}','0');
+INSERT INTO `user_role` VALUES ('1','0','','Top Administrator','a:1:{s:5:\"admin\";a:1:{s:1:\"*\";s:1:\"w\";}}','0'),('10','0','','Demonstration','','0'),('11','0','','Basic Member','','0'),('13','0','','Administrator','a:1:{s:5:\"admin\";a:1:{s:1:\"*\";s:1:\"w\";}}','0'),('14','0','','Guest','a:1:{s:6:\"access\";a:1:{i:0;s:15:\"mail/newsletter\";}}','0');
 
 DROP TABLE IF EXISTS `view`;
 CREATE TABLE `view` (
