@@ -14,6 +14,33 @@ CREATE TABLE `address` (
 	PRIMARY KEY (`address_id`)
 );
 
+DROP TABLE IF EXISTS `api_token`;
+CREATE TABLE `api_token` (
+	`token` varchar(64) NOT NULL  ,
+	`api_user_id` int(10) unsigned NOT NULL  ,
+	`customer_id` int(10) unsigned  DEFAULT NULL ,
+	`date_expires` datetime NOT NULL  ,
+	`date_created` datetime NOT NULL  ,
+	PRIMARY KEY (`token`)
+);
+
+DROP TABLE IF EXISTS `api_user`;
+CREATE TABLE `api_user` (
+	`api_user_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
+	`user_id` int(10) unsigned NOT NULL  ,
+	`username` varchar(128) NOT NULL  ,
+	`api_key` varchar(64) NOT NULL  ,
+	`private_key` text  DEFAULT NULL ,
+	`public_key` text  DEFAULT NULL ,
+	`user_role_id` int(10) unsigned NOT NULL  ,
+	`permissions` text  DEFAULT NULL ,
+	`date_added` datetime NOT NULL  ,
+	`status` tinyint(3) unsigned NOT NULL  ,
+	`token` varchar(45)  DEFAULT NULL ,
+	`token_expires` datetime  DEFAULT NULL ,
+	PRIMARY KEY (`api_user_id`)
+);
+
 DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
 	`block_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
@@ -80,19 +107,18 @@ DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
 	`customer_id` int(11) NOT NULL  AUTO_INCREMENT,
 	`username` varchar(45) NOT NULL DEFAULT '' ,
-	`first_name` varchar(32) NOT NULL DEFAULT '' ,
-	`last_name` varchar(32) NOT NULL DEFAULT '' ,
+	`first_name` varchar(60) NOT NULL DEFAULT '' ,
+	`last_name` varchar(60) NOT NULL DEFAULT '' ,
 	`email` varchar(96) NOT NULL DEFAULT '' ,
 	`phone` varchar(32) NOT NULL DEFAULT '' ,
 	`fax` varchar(32) NOT NULL DEFAULT '' ,
 	`password` varchar(255) NOT NULL DEFAULT '' ,
 	`newsletter` tinyint(1) NOT NULL DEFAULT '0' ,
-	`customer_group_id` int(11) NOT NULL  ,
-	`ip` varchar(15) NOT NULL DEFAULT '0' ,
 	`status` tinyint(1) NOT NULL  ,
 	`approved` tinyint(1) NOT NULL  ,
 	`token` varchar(255) NOT NULL  ,
 	`date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+	`role_id` int(10) unsigned NOT NULL  ,
 	PRIMARY KEY (`customer_id`)
 );
 
@@ -103,13 +129,6 @@ CREATE TABLE `customer_address` (
 	PRIMARY KEY (`customer_id`,`address_id`)
 );
 
-DROP TABLE IF EXISTS `customer_group`;
-CREATE TABLE `customer_group` (
-	`customer_group_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`name` varchar(32) NOT NULL  ,
-	PRIMARY KEY (`customer_group_id`)
-);
-
 DROP TABLE IF EXISTS `customer_ip`;
 CREATE TABLE `customer_ip` (
 	`customer_ip_id` int(11) NOT NULL  AUTO_INCREMENT,
@@ -117,13 +136,6 @@ CREATE TABLE `customer_ip` (
 	`ip` varchar(15) NOT NULL  ,
 	`date_added` datetime NOT NULL  ,
 	PRIMARY KEY (`customer_ip_id`)
-);
-
-DROP TABLE IF EXISTS `customer_ip_blacklist`;
-CREATE TABLE `customer_ip_blacklist` (
-	`customer_ip_blacklist_id` int(11) NOT NULL  AUTO_INCREMENT,
-	`ip` varchar(15) NOT NULL  ,
-	PRIMARY KEY (`customer_ip_blacklist_id`)
 );
 
 DROP TABLE IF EXISTS `customer_meta`;
@@ -174,7 +186,7 @@ CREATE TABLE `history` (
 	`history_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
 	`user_id` int(10) NOT NULL  ,
 	`table` varchar(45) NOT NULL  ,
-	`record_id` int(10) NOT NULL  ,
+	`record_id` int(10) unsigned NOT NULL  ,
 	`action` varchar(32) NOT NULL  ,
 	`message` varchar(100)  DEFAULT NULL ,
 	`data` text  DEFAULT NULL ,
@@ -222,7 +234,7 @@ CREATE TABLE `language` (
 	PRIMARY KEY (`language_id`)
 );
 
-INSERT INTO `language` VALUES ('1','English','en','en,en-US,en_US.UTF-8,en_US,en-gb,english','gb.png','english','english','0','1','Y-m-d H:i:s','M d, Y H:i A','','m/d/Y','','l dS F Y','h:i:s A','ltr','.',','),('4','French','fr','fr_CA.UTF-8,fr_FR.UTF-8,fr_CA,fr_FR,fr-fr,french','fr.png','french','french','2','-1','Y-m-d H:i:s','M d, Y H:i A','','m/d/Y','','l dS F Y','h:i:s A','ltr','.',','),('5','Spanish','es','es_ES.UTF-8,es_ES,spanish','es.png','spanish','spanish','1','-1','Y-m-d H:i:s','M d, Y H:i A','','m/d/Y','','l dS F Y','h:i:s A','ltr','.',',');
+INSERT INTO `language` VALUES ('1','English','en','en,en-US,en_US.UTF-8,en_US,en-gb,english','gb.png','english','english','0','1','Y-m-d H:i:s','M d, Y g:i:s A','D, d M, Y H:i:s','m/d/Y','M d, Y','l dS F Y','g:i:s A','ltr','.',','),('4','French','fr','fr_CA.UTF-8,fr_FR.UTF-8,fr_CA,fr_FR,fr-fr,french','fr.png','french','french','2','-1','Y-m-d H:i:s','M d, Y g:i:s A','','m/d/Y','','l dS F Y','h:i:s A','ltr','.',','),('5','Spanish','es','es_ES.UTF-8,es_ES,spanish','es.png','spanish','spanish','1','-1','Y-m-d H:i:s','M d, Y g:i:s A','','m/d/Y','','l dS F Y','h:i:s A','ltr','.',',');
 
 DROP TABLE IF EXISTS `layout`;
 CREATE TABLE `layout` (
@@ -230,8 +242,6 @@ CREATE TABLE `layout` (
 	`name` varchar(64) NOT NULL  ,
 	PRIMARY KEY (`layout_id`)
 );
-
-INSERT INTO `layout` VALUES ('1','Default'),('2','Left Sidebar'),('3','Right Sidebar');
 
 DROP TABLE IF EXISTS `layout_route`;
 CREATE TABLE `layout_route` (
@@ -277,12 +287,11 @@ CREATE TABLE `navigation` (
 	`path` text NOT NULL  ,
 	`query` text  DEFAULT NULL ,
 	`condition` varchar(45) NOT NULL  ,
+	`target` varchar(45) NOT NULL  ,
 	`status` int(10) unsigned NOT NULL DEFAULT '0' ,
 	`sort_order` float NOT NULL DEFAULT '0' ,
 	PRIMARY KEY (`navigation_id`)
 );
-
-INSERT INTO `navigation` VALUES ('4918','31','0','account','My Account','Manage your account','account/account','','user_logged','1','0'),('4919','31','0','logout','Logout','Logout of your account','account/logout','','user_logged','1','1'),('4920','31','0','register','Register','Create a new account','account/register','','user_logged_out','1','2'),('9421','10','0','customer_service','Customer Service','Contact Us','contact','','always','1','0'),('9422','10','0','delivery','Delivery &amp; Packaging','Our Delivery and Packaging Method','page/delivery','','always','1','1'),('9423','10','0','privacy_policy','Privacy Policy','Privacy Policy','page/privacy','','always','1','2'),('9424','10','0','terms_conditions','Terms &amp; Conditions','Terms &amp; Conditions','page/terms','','always','1','3'),('9762','9','0','home','Home','Home','index','','','1','0'),('9763','9','0','contact','Contact Us','Contact Us','contact','','','1','1'),('9765','69','0','home','Home','','','','','1','0'),('9766','69','0','dashboards','Dashboards','','admin/dashboard','','','1','1'),('9767','69','0','content','Content','','','','','1','2'),('9768','69','9767','content_blocks','Blocks','','admin/block','','','1','0'),('9769','69','9767','content_pages','Pages','','admin/page','','','1','1'),('9770','69','0','users','Users','','','','','1','3'),('9771','69','9770','users_users','Users','','admin/user','','','1','0'),('9772','69','9770','users_user_roles','User Roles','','admin/settings/role','','','1','1'),('9773','69','0','system','System','','','','','1','4'),('9774','69','9773','system_settings','Settings','','admin/settings','','','1','0'),('9775','69','9773','system_mail','Mail','','','','','1','1'),('9776','69','9775','system_mail_send_email','Send Email','','admin/mail/send_email','','','1','0'),('9777','69','9775','system_mail_mail_messages','Mail Messages','','admin/mail/messages','','','1','1'),('9778','69','9775','system_mail_error','Failed Messages','','admin/mail/error','','','1','2'),('9779','69','9773','system_views','Views','','admin/view','','','1','2'),('9780','69','9773','system_navigation','Navigation','','admin/navigation','','','1','3'),('9781','69','9773','system_system_clearcache','Clear Cache','','admin/settings/clear_cache','redirect','','1','4'),('9782','69','9773','system_logs','Logs','','admin/logs','','','1','5'),('9783','69','9773','system_history','History','','admin/history','','','1','6'),('9784','69','9773','system_localisation','Localisation','','','','','1','7'),('9785','69','9784','system_localisation_currencies','Currencies','','admin/localisation/currency','','','1','0'),('9786','69','9784','system_localisation_languages','Languages','','admin/localisation/language','','','1','1'),('9787','69','9784','system_localisation_zones','Zones','','admin/localisation/zone','','','1','2'),('9788','69','9784','system_localisation_countries','Countries','','admin/localisation/country','','','1','3'),('9789','69','9784','system_localisation_geo_zones','Geo Zones','','admin/localisation/geo_zone','','','1','4'),('9790','69','9773','system_plugins','Plugins','','admin/plugin','','','1','8'),('9791','69','9773','development','Development','','admin/dev','','','1','15');
 
 DROP TABLE IF EXISTS `navigation_group`;
 CREATE TABLE `navigation_group` (
@@ -292,7 +301,7 @@ CREATE TABLE `navigation_group` (
 	PRIMARY KEY (`navigation_group_id`)
 );
 
-INSERT INTO `navigation_group` VALUES ('9','primary','1'),('10','footer','1'),('31','account','0'),('69','admin','1');
+INSERT INTO `navigation_group` VALUES ('1','admin','1');
 
 DROP TABLE IF EXISTS `page`;
 CREATE TABLE `page` (
@@ -371,14 +380,15 @@ CREATE TABLE `setting` (
 	PRIMARY KEY (`setting_id`)
 );
 
-DROP TABLE IF EXISTS `store`;
-CREATE TABLE `store` (
-	`store_id` int(11) NOT NULL  AUTO_INCREMENT,
+DROP TABLE IF EXISTS `site`;
+CREATE TABLE `site` (
+	`site_id` int(11) NOT NULL  AUTO_INCREMENT,
 	`name` varchar(64) NOT NULL  ,
+	`domain` varchar(255) NOT NULL  ,
 	`url` varchar(255) NOT NULL  ,
 	`ssl` varchar(255) NOT NULL  ,
 	`prefix` varchar(15) NOT NULL  ,
-	PRIMARY KEY (`store_id`)
+	PRIMARY KEY (`site_id`)
 );
 
 DROP TABLE IF EXISTS `tag`;
@@ -444,6 +454,8 @@ CREATE TABLE `user_meta` (
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
 	`user_role_id` int(11) NOT NULL  AUTO_INCREMENT,
+	`user_id` int(10) unsigned NOT NULL  ,
+	`type` varchar(45) NOT NULL  ,
 	`name` varchar(64) NOT NULL  ,
 	`permissions` text NOT NULL  ,
 	`level` int(10) unsigned NOT NULL  ,

@@ -325,12 +325,14 @@ class Customer extends Library
 			return;
 		}
 
-		$ip_set = $this->queryVar("SELECT COUNT(*) FROM {$this->t['customer_ip']} WHERE customer_id = '" . (int)$this->customer_id . "' AND ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
+		$ip = $_SERVER['REMOTE_ADDR'];
+
+		$ip_set = $this->queryVar("SELECT COUNT(*) FROM {$this->t['customer_ip']} WHERE customer_id = '" . (int)$this->customer_id . "' AND ip = '" . $this->escape($ip) . "'");
 
 		if (!$ip_set) {
 			$customer_ip = array(
 				'customer_id' => $this->customer_id,
-				'ip'          => $_SERVER['REMOTE_ADDR'],
+				'ip'          => $ip,
 				'date_added'  => $this->date->now(),
 			);
 
