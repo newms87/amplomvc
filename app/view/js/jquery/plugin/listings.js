@@ -82,6 +82,59 @@ $.fn.listview = function () {
 	})
 }
 
+$.fn.amploFilter = function (opts) {
+	opts = $.extend({}, {
+		replace: false,
+		url:     null
+	}, opts);
+
+	this.each(function (i, e) {
+		var $filter = $(e);
+		var $button = $filter.find('.amp-apply-filter');
+		$filter.data('opts', opts);
+		$button.click($.amploFilter.apply);
+	});
+}
+
+$.amploFilter.apply = function () {
+	var $button = $(this);
+	var $filter = $button.closest('.amp-filter');
+
+	var opts = $filter.data('opts');
+
+	var url = opts.url || $button.attr('href');
+
+	$filter.find('[data-loading]').loading();
+
+	if (opts.replace) {
+		$.post(url, $filter.find('[name]').serialize(), function (response) {
+			if (response.error) {
+				$filter.show_msg(response);
+			} else {
+				$(opts.replace).replaceWith(response);
+
+				if (typeof opts.success === 'function') {
+					opts.success.call(this, response);
+				}
+			}
+		}).always(function (jqxhr, status, e) {
+			$filter.find('[data-loading]').loading('stop');
+
+			if (!status === 'success') {
+				$filter.show_msg('error', "{{There was an error while applying the filter.}}");
+			}
+
+			if (typeof opts.always === 'function') {
+				opts.always.call(this, jqxhr, status, e);
+			}
+		});
+
+		e.preventDefault();
+		return false;
+	} else {
+		$button.attr('href', url + (url.indexOf('?') >= 0 ? '&' : '?') + $filter.find('[name]').serialize());
+	}
+}
 
 function update_list_widget() {
 	var $this = $(this);

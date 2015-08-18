@@ -686,8 +686,10 @@ abstract class Model
 								$where .= " AND `$t`.`$key` <= '$end'";
 							}
 						}
+					} elseif ($value) {
+						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . format('date', $value) . "'";
 					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . ($value ? format('date', $value) . "'" : '');
+						$where .= " AND (`$t`.`$key` IS NULL OR `$t`.`$key` = '')";
 					}
 					break;
 
