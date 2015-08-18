@@ -326,7 +326,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'default_customer_role_id',
-								'data'   => $data_roles,
+								'data'   => $data_user_roles,
 								'select' => $default_customer_role_id,
 								'value'  => 'user_role_id',
 								'label'  => 'name',
