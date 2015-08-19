@@ -39,6 +39,14 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 				$field['id'] = uniqid('filter-' . $key . '-');
 			}
 
+			if (isset($settings['values'][$field['name']])) {
+				$field['value'] = $settings['values'][$field['name']];
+			} elseif (!isset($field['value'])) {
+				$field['value'] = null;
+			}
+
+			$field['enabled'] = isset($field['value']);
+
 			$type = is_string($field['filter']) ? $field['filter'] : 'text';
 
 			switch ($type) {
@@ -51,12 +59,23 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 				case 'float':
 				case 'decimal':
 					$type = 'range';
+
+				case 'date':
+				case 'datetime':
+				case 'time':
+					if (!is_array($field['value'])) {
+						$field['value'] = array(
+							'gte' => '',
+							'lte' => '',
+						);
+					}
 					break;
+
 
 				case 'multiselect':
 				case 'select':
 				case 'textarea':
-				case 'text';
+				case 'text':
 					break;
 
 				default:
@@ -86,12 +105,6 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 						$field['placeholder'] = $field['label'];
 						break;
 				}
-			}
-
-			if (isset($settings['values'][$field['name']])) {
-				$field['value'] = $settings['values'][$field['name']];
-			} elseif (!isset($field['value'])) {
-				$field['value'] = '';
 			}
 		}
 		unset($field);

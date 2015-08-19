@@ -94,12 +94,12 @@ class Table extends Library
 		//Normalize Columns
 		foreach ($this->columns as $slug => &$column) {
 			$column += array(
-				'type'         => 'text',
-				'display_name' => $slug,
-				'sort'         => false,
-				'filter'       => false,
-				'align'        => 'center',
-				'editable'     => null,
+				'type'     => 'text',
+				'label'    => isset($column['display_name']) ? $column['display_name'] : $slug,
+				'sort'     => false,
+				'filter'   => false,
+				'align'    => 'center',
+				'editable' => null,
 			);
 
 			//Set Class
@@ -264,8 +264,8 @@ class Table extends Library
 					case 'decimal':
 						if (is_numeric($column['filter_value'])) {
 							$column['filter_value'] = array(
-								'low'  => $column['filter_value'],
-								'high' => $column['filter_value'],
+								'gte' => $column['filter_value'],
+								'lte' => $column['filter_value'],
 							);
 						}
 						break;
@@ -275,8 +275,8 @@ class Table extends Library
 					case 'datetime':
 						if (is_string($column['filter_value'])) {
 							$column['filter_value'] = array(
-								'start' => $column['filter_value'],
-								'end'   => $column['filter_value'],
+								'gte' => $column['filter_value'],
+								'lte' => $column['filter_value'],
 							);
 						}
 						break;

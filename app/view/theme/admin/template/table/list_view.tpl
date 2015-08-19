@@ -5,7 +5,7 @@
  *
  * $columns => array(
  * 	'type' 			=> string (required) - Input and display type. Can be 'text', 'select', 'multiselect', 'image', 'int', 'date_range', 'time_range', 'datetime_range', 'format'.
- * 	'display_name' => string (required) - Display Name for the header of the column.
+ * 	'label' => string (required) - Display Name for the header of the column.
  * 	'align' 			=> string (optional) - 'center' (default), 'left', 'right'.
  * 	'sort'		   => bool (optional) - Can this column can be sorted? Default is false.
  * 	'filter'			=> bool (optional) - Can this column be filtered? Default is false.
@@ -32,9 +32,9 @@
 			<? foreach ($columns as $slug => $column) { ?>
 				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
 					<? if ($column['sort']) { ?>
-						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['display_name']; ?></a>
+						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['label']; ?></a>
 					<? } else { ?>
-						<span><?= $column['display_name']; ?></span>
+						<span><?= $column['label']; ?></span>
 					<? } ?>
 				</td>
 			<? } ?>
@@ -46,6 +46,8 @@
 		</tr>
 		</thead>
 		<tbody>
+
+		<? if ($filter_style) { ?>
 		<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
 			<? if ($index) { ?>
 				<td></td>
@@ -67,7 +69,7 @@
 							case 'text':
 							case 'textarea':
 								?>
-								<input placeholder="{{Search}} <?= $column['display_name']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
+								<input placeholder="{{Search}} <?= $column['label']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
 								<? break;
 
 							case 'pk':
@@ -75,22 +77,22 @@
 							case 'int':
 							case 'float':
 							case 'decimal':
-								if (!isset($column['filter_value']['low'])) {
-									$column['filter_value']['low'] = null;
+								if (!isset($column['filter_value']['gte'])) {
+									$column['filter_value']['gte'] = null;
 								}
-								if (!isset($column['filter_value']['high'])) {
-									$column['filter_value']['high'] = null;
+								if (!isset($column['filter_value']['lte'])) {
+									$column['filter_value']['lte'] = null;
 								}
 								?>
 								<div class="zoom-hover int">
 									<div class="input">
-										<input placeholder="{{From}}" type="text" class="int_low" name="filter[<?= $column['filter_key']; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
-										<input placeholder="{{To}}" type="text" class="int_high" name="filter[<?= $column['filter_key']; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
+										<input placeholder="{{From}}" type="text" class="number-from" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
+										<input placeholder="{{To}}" type="text" class="number-to" name="filter[<?= $column['filter_key']; ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
 									<div class="value">
-										<? if ($column['filter_value']['low'] !== null || $column['filter_value']['high'] !== null) { ?>
-											<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
+										<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
+											<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
 										<? } else { ?>
 											{{Modify}}
 										<? } ?>
@@ -147,23 +149,23 @@
 							case 'time':
 							case 'datetime':
 								?>
-								<? if (!isset($column['filter_value']['start'])) {
-								$column['filter_value']['start'] = null;
+								<? if (!isset($column['filter_value']['gte'])) {
+								$column['filter_value']['gte'] = null;
 							}
-								if (!isset($column['filter_value']['end'])) {
-									$column['filter_value']['end'] = null;
+								if (!isset($column['filter_value']['lte'])) {
+									$column['filter_value']['lte'] = null;
 								}
 								?>
 
 								<div class="zoom-hover daterange">
 									<div class="input">
-										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
+										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
 										<span class="clear">clear</span>
 									</div>
 									<div class="value" data-default="{{Date Range}}">
-										<? if ($column['filter_value']['start'] !== null || $column['filter_value']['end'] !== null) { ?>
-											<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
+										<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
+											<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
 										<? } else { ?>
 											<b class="amp-sprite si-calendar-icon-wht"></b>
 										<? } ?>
@@ -190,6 +192,8 @@
 				</td>
 			<? } ?>
 		</tr>
+		<? } ?>
+
 		<? if (!empty($rows)) { ?>
 			<? foreach ($rows as $row) { ?>
 				<? $row['#class'] = (!empty($row['#class']) ? $row['#class'] . ' ' : '') . 'filter-list-item'; ?>

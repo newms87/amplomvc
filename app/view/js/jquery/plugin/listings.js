@@ -90,15 +90,30 @@ $.fn.amploFilter = function (opts) {
 
 	this.each(function (i, e) {
 		var $filter = $(e);
-		var $button = $filter.find('.amp-apply-filter');
+		var $button = $filter.find('.amp-filter-apply');
+
 		$filter.data('opts', opts);
+		$filter.find('.amp-filter-toggle').click($.amploFilter.toggle);
+		$filter.find('.amp-filter-reset').click($.amploFilter.reset);
 		$button.click($.amploFilter.apply);
+		$filter.find('.field.disabled [name]').prop('disabled', true);
 	});
 }
 
+$.amploFilter.reset = function () {
+	$.amploFilter.toggle.call($(this).closest('.amp-filter').find('.field [name]').val(''), false);
+}
+
+$.amploFilter.toggle = function (enabled) {
+	var $field = $(this).closest('.field');
+	enabled = typeof enabled !== 'object' ? enabled : $field.hasClass('disabled');
+	$field.removeClass('enabled disabled').addClass(enabled ? 'enabled' : 'disabled');
+	$field.find('[name]').prop('disabled', !enabled);
+}
+
 $.amploFilter.apply = function () {
-	var $button = $(this);
-	var $filter = $button.closest('.amp-filter');
+	var $filter = $(this).closest('.amp-filter');
+	var $button = $filter.find('.amp-filter-apply');
 
 	var opts = $filter.data('opts');
 
@@ -132,7 +147,9 @@ $.amploFilter.apply = function () {
 		e.preventDefault();
 		return false;
 	} else {
-		$button.attr('href', url + (url.indexOf('?') >= 0 ? '&' : '?') + $filter.find('[name]').serialize());
+		url = url + (url.indexOf('?') >= 0 ? '&' : '?') + $filter.find('[name]').serialize();
+		$button.attr('href', url);
+		window.location = url;
 	}
 }
 

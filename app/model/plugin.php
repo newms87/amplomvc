@@ -147,11 +147,11 @@ class App_Model_Plugin extends App_Model_Table
 						break;
 
 					case 'date':
-						if (!empty($value['start']) && $this->date->isAfter($value['start'], $plugin[$field])) {
+						if (!empty($value['gte']) && $this->date->isAfter($value['gte'], $plugin[$field])) {
 							continue 3;
 						}
 
-						if (!empty($value['end']) && $this->date->isBefore($this->date->add($value['end'], '1 day'), $plugin[$field])) {
+						if (!empty($value['lte']) && $this->date->isBefore($this->date->add($value['lte'], '1 day'), $plugin[$field])) {
 							continue 3;
 						}
 						break;

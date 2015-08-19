@@ -624,8 +624,8 @@ abstract class Model
 				case 'float':
 				case 'int':
 					if (is_array($value)) {
-						$low  = (isset($value['low']) && $value['low'] !== '') ? ($type === 'int' ? (int)$value['low'] : (float)$value['low']) : false;
-						$high = (isset($value['high']) && $value['high'] !== '') ? ($type === 'int' ? (int)$value['high'] : (float)$value['high']) : false;
+						$low  = (isset($value['gte']) && $value['gte'] !== '') ? ($type === 'int' ? (int)$value['gte'] : (float)$value['gte']) : false;
+						$high = (isset($value['lte']) && $value['lte'] !== '') ? ($type === 'int' ? (int)$value['lte'] : (float)$value['lte']) : false;
 
 						if ($low !== false && $high !== false) {
 							if ($high < $low) {
@@ -658,11 +658,11 @@ abstract class Model
 				case 'datetime':
 				case 'time':
 					if (is_array($value)) {
-						$start = !empty($value['start']) ? format('date', $value['start']) : false;
-						$end   = !empty($value['end']) ? format('date', $value['end']) : false;
+						$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
+						$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;
 
 						if (!$start && !$end) {
-							if (isset($value['start']) || isset($value['end'])) {
+							if (isset($value['gte']) || isset($value['lte'])) {
 								break;
 							}
 

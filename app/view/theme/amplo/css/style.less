@@ -101,13 +101,6 @@ input, select, textarea {
 	display: none;
 }
 
-.no-select {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
 .height-animate {
 	max-height: 0;
 	min-height: 0;
@@ -201,11 +194,11 @@ input, select, textarea {
 	}
 }
 
-.noselect {
+.no-select {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
-	-moz-user-select: -moz-none;
+	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
@@ -331,7 +324,7 @@ input, select, textarea {
 }
 
 button, .button, .row .button {
-	.noselect;
+	.no-select;
 	display: inline-block;
 	text-decoration: none;
 	outline: 0;
@@ -882,7 +875,7 @@ label.select {
 }
 
 label.radio {
-	.noselect;
+	.no-select;
 	vertical-align: middle;
 	display: inline-block;
 	outline: 0;
@@ -938,7 +931,7 @@ label.radio {
 }
 
 label.checkbox {
-	.noselect;
+	.no-select;
 	vertical-align: middle;
 	display: inline-block;
 	outline: 0;
@@ -1561,7 +1554,7 @@ section.page {
 	}
 
 	.buttons {
-		.noselect;
+		.no-select;
 		margin-top: 0;
 
 		.button, button {
@@ -1722,6 +1715,54 @@ section.page {
 /*************************
  *  V. Blocks            *
  *************************/
+.amp-filter {
+	text-align: left;
+
+	.field {
+		.label {
+			color: @font-dark;
+			font: .8em OpenSansSemiBold;
+		}
+
+		.input {
+			input[type="text"], input[type="password"], select, textarea {
+				width: 100%;
+				font: .8em OpenSansRegular;
+				padding: .8em .5em;
+
+				&.range {
+					width: 5em;
+
+					& + .range {
+						margin-left: 1em;
+					}
+				}
+			}
+
+			&.datetime {
+				input.range {
+					width: 10em;
+				}
+			}
+		}
+	}
+
+	.amp-filter-apply {
+		font: .8em OpenSansSemiBold;
+		text-transform: none;
+		margin-top: 3.5em;
+		width: 100%;
+		text-align: center;
+	}
+
+	.amp-filter-reset {
+		position: absolute;
+		top: 1em;
+		right: 1em;
+		font: .8em OpenSansSemiBold;
+		color: @font-dark;
+	}
+}
 
 //Address Select Block
 .address-list {
