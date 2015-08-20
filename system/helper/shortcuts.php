@@ -924,6 +924,7 @@ function build($type, $params = null)
 
 		switch ($type) {
 			case 'select':
+			case 'multiselect':
 				$s = $selected ? "selected='true'" : '';
 				if (strpos($key, '#optgroup') === 0) {
 					if ($opt_group_active) {
@@ -952,7 +953,7 @@ function build($type, $params = null)
 				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
 				break;
 
-			case 'multiselect':
+			case 'multiselect-bkp':
 				$s = $selected ? 'checked="checked"' : '';
 				$options .= "<li><input id=\"checkbox-$uniqid\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$key\" $s /><label for=\"checkbox-$uniqid\">$value</label></li>";
 				break;
@@ -974,11 +975,12 @@ function build($type, $params = null)
 
 	switch ($type) {
 		case 'select':
+		case 'multiselect':
 			if ($opt_group_active) {
 				$options .= "</optgroup>";
 			}
 
-			return "<select name=\"$name\" $attrs>$options</select>";
+			return "<select " . ($type === 'multiselect' ? 'multiple' :'') . " name=\"$name\" $attrs>$options</select>";
 
 		case 'text-select':
 			return <<<HTML
@@ -993,7 +995,7 @@ HTML;
 		case 'checkbox':
 			return "<div $attrs>$options</div>";
 
-		case 'multiselect':
+		case 'multiselect-bkp':
 			return <<<HTML
 <div $attrs>
 	<ul class="multiselect-list">$options</ul>

@@ -161,6 +161,53 @@ $.fn.scrollTo = function (target, options) {
 	});
 }
 
+$.amploSelect = $.fn.amploSelect = function () {
+
+
+	console.log("CONSIDER MAKING THIS based off of a <select mutliple></select> tag");
+
+
+	return this.use_once('amplo-multiselect').each(function (i, e) {
+		var $e = $(e);
+		var $selected = $e.find('.amplo-multi-selected'),
+			$box = $.find('.amplo-multi-box'),
+			$content = $e.find('.amplo-multi-content'),
+			placeholder = $e.attr('data-placeholder') || 'Select Items...';
+
+		if (!$selected.length) {
+			$e.prepend($selected = $("<div />").addClass('amplo-multi-selected'));
+		}
+
+		if (!$box.length) {
+			$e.append($box = $('<div />').addClass('amplo-multi-box'));
+		}
+
+		if (!$content.length) {
+			$box.append($content = $('<div />').addClass('amplo-multi-content'));
+		}
+
+		$content.before($('<div/>').addClass('align-middle'));
+		$box.append($('<div/>').addClass('shadow-box').click($.amploSelect.close));
+		$content.prepend($('<div/>').addClass('amplo-multi-label').append($e.attr('data-label') || 'Select one or more items'));
+
+		$e.children().not('.amplo-multi-box, .amplo-multi-selected').appendTo($content);
+
+		$e.find('option').each(function(){
+			
+		});
+
+		$selected.click($.amploSelect.open);
+	});
+}
+
+$.amploSelect.open = function () {
+	$(this).closest('.amplo-multiselect').addClass('active');
+}
+
+$.amploSelect.close = function () {
+	$(this).closest('.amplo-multiselect').removeClass('active')
+}
+
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
 	$('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
@@ -291,7 +338,7 @@ jQuery.fn.sortElements = function (comparator) {
 	var $this = this;
 
 	if (!comparator) {
-		comparator = function(a,b){
+		comparator = function (a, b) {
 			return $(a).attr('data-sort-order') > $(b).attr('data-sort-order');
 		}
 	}
@@ -1365,6 +1412,8 @@ $(document)
 				window.open(ui.item.href);
 			}
 		});
+
+		$('label.multiselect').amploSelect();
 
 		content_loaded();
 	})

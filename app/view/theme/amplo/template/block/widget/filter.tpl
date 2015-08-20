@@ -42,9 +42,19 @@
 								<?= build(array(
 									'type'   => 'select',
 									'name'   => "filter[{$f['name']}]",
-									'data'   => $f['build']['data'],
 									'select' => $f['value'],
-								)); ?>
+								) + $f['build']); ?>
+							</label>
+							<? break;
+
+						case 'multiselect':
+							?>
+							<label class="multiselect">
+								<?= build(array(
+										'type'   => 'multiselect',
+										'name'   => "filter[{$f['name']}]",
+										'select' => $f['value'],
+									) + $f['build']); ?>
 							</label>
 							<? break;
 
