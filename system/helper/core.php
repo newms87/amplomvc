@@ -140,7 +140,7 @@ $js_autoload = array(
 	),
 	'list_widget'    => 'app/view/js/jquery/plugin/listings.js',
 	'listview'       => 'app/view/js/jquery/plugin/listings.js',
-	'amploFilter'    => 'app/view/js/jquery/plugin/listings.js',
+	'ampFilter'    => 'app/view/js/jquery/plugin/listings.js',
 	'ac_template'    => 'app/view/js/jquery/plugin/ac_template.js',
 	'amplo_slider'   => 'app/view/js/jquery/plugin/amplo_slider.js',
 	'flexselect'     => 'app/view/js/jquery/plugin/flexselect.js',

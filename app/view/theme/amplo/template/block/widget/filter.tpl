@@ -75,7 +75,7 @@
 
 
 <script type="text/javascript">
-	$('.amp-filter').use_once().amploFilter({
+	$('.amp-filter').use_once().ampFilter({
 		replace: '<?= $replace; ?>'
 	});
 </script>

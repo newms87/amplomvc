@@ -162,7 +162,7 @@ $.fn.scrollTo = function (target, options) {
 }
 
 //Generic amp protocol for jQuery plugins
-$.amp = function(p, args){
+$.amp = function (p, args) {
 	var o = args[0];
 
 	if (p[o]) {
@@ -214,58 +214,87 @@ $.ampSelect = $.fn.ampSelect = function (o) {
 }
 
 $.extend($.ampSelect, {
-	init: function(o) {
+	init: function (o) {
 		return this.use_once('amp-select-enabled').each(function (i, e) {
-			var $e = $(e);
+			var $select = $(e);
 			var $selected = $("<div />").addClass('amp-selected').append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
 				$box = $('<div/>').addClass('amp-select-box'),
+				$options = $('<div/>').addClass('amp-select-options'),
 				$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
 				$actions = $('<div/>').addClass('amp-select-actions'),
 				$done = $('<a/>').addClass('amp-select-done button').html('Done'),
-				$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($e.attr('data-label') || 'Select one or more items'));
+				$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($select.attr('data-label') || 'Select one or more items'));
 
-			$box.data('e', $e);
-			$box.data('selected', $selected);
-			$box.data('placeholder', $e.attr('data-placeholder') || 'Select Items...');
-			$checkall.data('box', $box);
-			$e.before($selected);
+			$select.before($selected);
+			$checkall.data('box', $box).find('input').data('box', $box);
+			$selected.data('box', $box);
+
+			//Events
+			$checkall.find('input').change($.ampSelect.checkall);
+
+			//Actions
+			$selected.click($.ampSelect.open);
+			$done.click($.ampSelect.close);
+
+			//Setup Box
+			$box
+				.data('selected', $selected)
+				.data('placeholder', $select.attr('data-placeholder') || 'Select Items...')
+				.data('options', $options)
+				.data('checkall', $checkall)
+				.append($options)
+				.append($actions.append($done))
+				.ampSelect('assignSelect', $select);
 
 			var o = {
 				title: $title.prepend($checkall)
 			}
 
-			$e.find('option').each(function (j, o) {
-				var $o = $(o);
-
-				$box.append(
-					$('<label />').addClass('amp-option checkbox')
-						.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
-						.append($('<span/>').addClass('label').html($o.html()))
-				);
-			});
-
-			$box.find('.amp-option input').change($.ampSelect.update)
-
-			$box.append($actions.append($done));
-			$done.click($.ampModal.close);
-
-			$checkall.find('input').change(function () {
-				$(this).closest('.amp-select-checkall').data('box').find('.amp-option input').prop('checked', $(this).is(':checked')).first().change();
-			});
-
-			$selected.click(function () {
-				$box.ampModal('open')
-			});
-
 			$box.ampModal(o);
-
-			$box.ampSelect('update');
 		});
 	},
 
+	open: function () {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+		$box.ampModal('open');
+	},
+
+	close: function () {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+		$box.ampModal('close');
+	},
+
+	checkall: function (checked) {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+		$box.data('options').find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $box.data('checkall').find('input').is(':checked')).first().change();
+	},
+
+	assignSelect: function ($select) {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+		var $options = $box.data('options');
+
+		$options.children().remove();
+
+		$select.find('option').each(function (j, o) {
+			var $o = $(o);
+
+			$options.append(
+				$('<label />').addClass('amp-option checkbox')
+					.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
+					.append($('<span/>').addClass('label').html($o.html()))
+			);
+		});
+
+		$options.find('.amp-option input').change($.ampSelect.update)
+
+		$select.data('box', $box);
+		$select.change($.ampSelect.refresh);
+		$box.data('select', $select);
+		$box.ampSelect('update')
+	},
+
 	update: function () {
-		var $box = $(this).closest('.amp-select-box'), value = [], placeholder = '';
-		var $e = $box.data('e');
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box'), value = [], placeholder = '';
 
 		$box.find('.amp-option input').each(function (i, o) {
 			$o = $(o);
@@ -275,9 +304,20 @@ $.extend($.ampSelect, {
 			}
 		})
 
-		$e.val(value)
-
+		$box.data('select').val(value)
 		$box.data('selected').find('.value').html(placeholder || $box.data('placeholder'));
+	},
+
+	refresh: function () {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+		var $options = $box.data('options');
+
+		$box.data('select').find('option').each(function (i, o) {
+			$o = $(o);
+			$options.find('[value=' + $o.attr('value') + ']').prop('checked', $o.is(':selected'))
+		})
+
+		$box.ampSelect('update');
 	}
 })
 

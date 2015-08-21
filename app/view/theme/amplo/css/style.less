@@ -1185,29 +1185,17 @@ label.radio {
 			text-align: left;
 			vertical-align: middle;
 			display: inline-block;
-			font: 1.1em OpenSansBold;
-			color: @color-main;
-			background: white;
-			border: @color-main 1px solid;
-			border-radius: 20px;
-			padding: .25em 2em;
-			text-transform: uppercase;
 
 			&:before {
-				content: '';
-				display: inline-block;
-				vertical-align: middle;
-				position: relative;
-				top: -1px;
-				margin-right: .2em;
-				z-index: 10;
+				.amp-sprite;
+				.si-radio-inactive;
+				margin-right: .4em;
 			}
 		}
 
 		&:checked, &.checked {
-			& + .label {
-				color: white;
-				background: @color-main;
+			& + .label:before {
+				.si-radio-active;
 			}
 		}
 	}
@@ -1284,6 +1272,24 @@ label.checkbox {
 				& + .label {
 					background: #00AEFF;
 					color: white;
+				}
+			}
+		}
+	}
+
+	&.large {
+		input[type="checkbox"] {
+			& + .label {
+				font-size: 1.2em;
+
+				&:before {
+					.si-checkbox-inactive-dark-gray-lg;
+				}
+			}
+
+			&:checked, .checked {
+				& + .label:before {
+					.si-checkbox-active-dark-gray-lg;
 				}
 			}
 		}

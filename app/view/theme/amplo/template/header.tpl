@@ -3,8 +3,6 @@
 
 <?= head(); ?>
 
-<? $sprite = theme_sprite('sprite@1x.png'); ?>
-
 <body class="<?= page_info('body_class'); ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
 <? option('ga_code') ? include_once(theme_dir('template/common/ga.tpl')) : ''; ?>
 <? option('track_statcounter') ? include_once(theme_dir('template/common/statcounter.tpl')) : ''; ?>

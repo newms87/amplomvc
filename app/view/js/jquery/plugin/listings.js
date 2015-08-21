@@ -82,7 +82,7 @@ $.fn.listview = function () {
 	})
 }
 
-$.fn.amploFilter = function (opts) {
+$.fn.ampFilter = function (opts) {
 	opts = $.extend({}, {
 		replace: false,
 		url:     null
@@ -93,65 +93,66 @@ $.fn.amploFilter = function (opts) {
 		var $button = $filter.find('.amp-filter-apply');
 
 		$filter.data('opts', opts);
-		$filter.find('.amp-filter-toggle').click($.amploFilter.toggle);
-		$filter.find('.amp-filter-reset').click($.amploFilter.reset);
-		$button.click($.amploFilter.apply);
+		$filter.find('.amp-filter-toggle').click($.ampFilter.toggle);
+		$filter.find('.amp-filter-reset').click($.ampFilter.reset);
+		$button.click($.ampFilter.apply);
 		$filter.find('.field.disabled [name]').prop('disabled', true);
 	});
 }
 
-$.amploFilter.reset = function () {
-	$.amploFilter.toggle.call($(this).closest('.amp-filter').find('.field [name]').val(''), false);
-}
+$.extend($.ampFilter, {
+	reset:  function () {
+		$.ampFilter.toggle.call($(this).closest('.amp-filter').find('.field [name]').val('').change(), false);
+	},
+	toggle: function (enabled) {
+		var $field = $(this).closest('.field');
+		enabled = typeof enabled !== 'object' ? enabled : $field.hasClass('disabled');
+		$field.removeClass('enabled disabled').addClass(enabled ? 'enabled' : 'disabled');
+		$field.find('[name]').prop('disabled', !enabled);
+	},
 
-$.amploFilter.toggle = function (enabled) {
-	var $field = $(this).closest('.field');
-	enabled = typeof enabled !== 'object' ? enabled : $field.hasClass('disabled');
-	$field.removeClass('enabled disabled').addClass(enabled ? 'enabled' : 'disabled');
-	$field.find('[name]').prop('disabled', !enabled);
-}
+	apply: function () {
+		var $filter = $(this).closest('.amp-filter');
+		var $button = $filter.find('.amp-filter-apply');
 
-$.amploFilter.apply = function () {
-	var $filter = $(this).closest('.amp-filter');
-	var $button = $filter.find('.amp-filter-apply');
+		var opts = $filter.data('opts');
 
-	var opts = $filter.data('opts');
+		var url = opts.url || $button.attr('href');
 
-	var url = opts.url || $button.attr('href');
+		$filter.find('[data-loading]').loading();
 
-	$filter.find('[data-loading]').loading();
+		if (opts.replace) {
+			$.post(url, $filter.find('[name]').serialize(), function (response) {
+				if (response.error) {
+					$filter.show_msg(response);
+				} else {
+					$(opts.replace).replaceWith(response);
 
-	if (opts.replace) {
-		$.post(url, $filter.find('[name]').serialize(), function (response) {
-			if (response.error) {
-				$filter.show_msg(response);
-			} else {
-				$(opts.replace).replaceWith(response);
-
-				if (typeof opts.success === 'function') {
-					opts.success.call(this, response);
+					if (typeof opts.success === 'function') {
+						opts.success.call(this, response);
+					}
 				}
-			}
-		}).always(function (jqxhr, status, e) {
-			$filter.find('[data-loading]').loading('stop');
+			}).always(function (jqxhr, status, e) {
+				$filter.find('[data-loading]').loading('stop');
 
-			if (!status === 'success') {
-				$filter.show_msg('error', "{{There was an error while applying the filter.}}");
-			}
+				if (!status === 'success') {
+					$filter.show_msg('error', "{{There was an error while applying the filter.}}");
+				}
 
-			if (typeof opts.always === 'function') {
-				opts.always.call(this, jqxhr, status, e);
-			}
-		});
+				if (typeof opts.always === 'function') {
+					opts.always.call(this, jqxhr, status, e);
+				}
+			});
 
-		e.preventDefault();
-		return false;
-	} else {
-		url = url + (url.indexOf('?') >= 0 ? '&' : '?') + $filter.find('[name]').serialize();
-		$button.attr('href', url);
-		window.location = url;
+			e.preventDefault();
+			return false;
+		} else {
+			url = url + (url.indexOf('?') >= 0 ? '&' : '?') + $filter.find('[name]').serialize();
+			$button.attr('href', url);
+			window.location = url;
+		}
 	}
-}
+});
 
 function update_list_widget() {
 	var $this = $(this);
