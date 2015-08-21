@@ -40,22 +40,21 @@
 							?>
 							<label class="select">
 								<?= build(array(
-									'type'   => 'select',
-									'name'   => "filter[{$f['name']}]",
-									'select' => $f['value'],
-								) + $f['build']); ?>
+										'type'   => 'select',
+										'name'   => "filter[{$f['name']}]",
+										'select' => $f['value'],
+									) + $f['build']); ?>
 							</label>
 							<? break;
 
 						case 'multiselect':
 							?>
-							<label class="multiselect">
-								<?= build(array(
-										'type'   => 'multiselect',
-										'name'   => "filter[{$f['name']}]",
-										'select' => $f['value'],
-									) + $f['build']); ?>
-							</label>
+							<?= build(array(
+								'type'   => 'multiselect',
+								'name'   => "filter[{$f['name']}]",
+								'select' => $f['value'],
+								'#class' => 'amp-select',
+							) + $f['build']); ?>
 							<? break;
 
 						case 'text':

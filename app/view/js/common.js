@@ -161,52 +161,100 @@ $.fn.scrollTo = function (target, options) {
 	});
 }
 
-$.amploSelect = $.fn.amploSelect = function () {
+$.ampModal = $.fn.ampModal = function (o) {
+	if ($.ampModal[o]) {
+		return $.ampModal[o].apply(this, Array.prototype.slice.call(arguments, 1));
+	} else if (typeof o === 'object' || !o) {
+		return $.ampModal.init.apply(this, arguments);
+	} else {
+		$.error('Method ' + o + ' does not exist for jQuery plugin ampModal');
+	}
+}
 
+$.extend($.ampModal, {
+	init: function (o) {
+		return this.use_once('amp-modal-enabled').each(function (i, e) {
+			var $e = $(e),
+				$box = $('<div />').addClass('amp-modal'),
+				$content = $('<div />').addClass('amp-modal-content'),
+				$title = $('<div/>').addClass('amp-modal-title');
 
-	console.log("CONSIDER MAKING THIS based off of a <select mutliple></select> tag");
+			$('body').append(
+				$box
+					.append($('<div/>').addClass('align-middle'))
+					.append(
+					$content
+						.append($title.html(o.title))
+						.append($e)
+				)
+					.append($('<div/>').addClass('shadow-box').click($.ampModal.close))
+			);
+		});
+	},
+	open: function () {
+		$(this).closest('.amp-modal').addClass('active');
+	},
 
+	close: function () {
+		$(this).closest('.amp-modal').removeClass('active')
+	}
+});
 
-	return this.use_once('amplo-multiselect').each(function (i, e) {
+$.ampSelect = $.fn.ampSelect = function () {
+	return this.use_once('amp-select-enabled').each(function (i, e) {
 		var $e = $(e);
-		var $selected = $e.find('.amplo-multi-selected'),
-			$box = $.find('.amplo-multi-box'),
-			$content = $e.find('.amplo-multi-content'),
-			placeholder = $e.attr('data-placeholder') || 'Select Items...';
+		var $selected = $("<div />").addClass('amp-selected'),
+			$box = $('<div/>').addClass('amp-select-box'),
+			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
+			$title = $('<div/>').addClass('amp-select-title').append($e.attr('data-label') || 'Select one or more items');
 
-		if (!$selected.length) {
-			$e.prepend($selected = $("<div />").addClass('amplo-multi-selected'));
+		$box.data('e', $e);
+		$box.data('selected', $selected);
+		$box.data('placeholder', $e.attr('data-placeholder') || 'Select Items...');
+		$e.before($selected);
+
+		var o = {
+			title: $title.prepend($checkall)
 		}
 
-		if (!$box.length) {
-			$e.append($box = $('<div />').addClass('amplo-multi-box'));
-		}
+		$e.find('option').each(function (j, o) {
+			var $o = $(o);
 
-		if (!$content.length) {
-			$box.append($content = $('<div />').addClass('amplo-multi-content'));
-		}
-
-		$content.before($('<div/>').addClass('align-middle'));
-		$box.append($('<div/>').addClass('shadow-box').click($.amploSelect.close));
-		$content.prepend($('<div/>').addClass('amplo-multi-label').append($e.attr('data-label') || 'Select one or more items'));
-
-		$e.children().not('.amplo-multi-box, .amplo-multi-selected').appendTo($content);
-
-		$e.find('option').each(function(){
-			
+			$box.append(
+				$('<label />').addClass('amp-option checkbox')
+					.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
+					.append($('<span/>').addClass('label').html($o.html()))
+			);
 		});
 
-		$selected.click($.amploSelect.open);
+		$box.find('.amp-option input').change($.ampSelect.update)
+
+		$selected.click(function () {
+			$box.ampModal('open')
+		});
+
+		$box.ampModal(o);
 	});
 }
 
-$.amploSelect.open = function () {
-	$(this).closest('.amplo-multiselect').addClass('active');
-}
+$.extend($.ampSelect, {
+	update: function () {
+		var $box = $(this).closest('.amp-select-box'), value = [], placeholder = '';
+		var $e = $box.data('e');
 
-$.amploSelect.close = function () {
-	$(this).closest('.amplo-multiselect').removeClass('active')
-}
+		$box.find('.amp-option input').each(function (i, o) {
+			$o = $(o);
+			if ($o.is(':checked')) {
+				value.push($o.attr('value'));
+				placeholder += (placeholder ? ', ' : '') + $o.siblings('.label').html()
+			}
+		})
+
+		$e.val(value)
+
+		$box.data('selected').html(placeholder|| $box.data('placeholder'));
+	}
+})
 
 //Add the date/time picker to the elements with the special classes
 $.ac_datepicker = function (params) {
@@ -1413,7 +1461,7 @@ $(document)
 			}
 		});
 
-		$('label.multiselect').amploSelect();
+		$('select.amp-select').ampSelect();
 
 		content_loaded();
 	})
