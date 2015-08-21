@@ -60,9 +60,6 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 
 		if (action === 'add') {
 			if (row.unique && (duplicate = list.children('[data-id="' + data[row.unique] + '"]')).length) {
-				setTimeout(function () {
-					duplicate.flash_highlight();
-				}, 100);
 				return false;
 			}
 

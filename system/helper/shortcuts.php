@@ -942,7 +942,6 @@ function build($type, $params = null)
 				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label></li>";
 				break;
 
-			case 'ac-radio':
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
 				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
@@ -975,12 +974,18 @@ function build($type, $params = null)
 
 	switch ($type) {
 		case 'select':
+			if ($opt_group_active) {
+				$options .= "</optgroup>";
+			}
+
+			return "<select name=\"$name\" $attrs>$options</select>";
+
 		case 'multiselect':
 			if ($opt_group_active) {
 				$options .= "</optgroup>";
 			}
 
-			return "<select " . ($type === 'multiselect' ? 'multiple' :'') . " name=\"$name\" $attrs>$options</select>";
+			return "<select multiple name=\"{$name}[]\" $attrs>$options</select>";
 
 		case 'text-select':
 			return <<<HTML
@@ -991,7 +996,6 @@ function build($type, $params = null)
 HTML;
 
 		case 'radio':
-		case 'ac-radio':
 		case 'checkbox':
 			return "<div $attrs>$options</div>";
 

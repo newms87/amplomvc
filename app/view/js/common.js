@@ -117,7 +117,7 @@ function autoload_js_file(url, args, type) {
 						}
 					}).always(function (jqXHR, status, msg) {
 						if (status !== 'success') {
-							console.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
 						}
 					});
 			}
@@ -161,14 +161,22 @@ $.fn.scrollTo = function (target, options) {
 	});
 }
 
-$.ampModal = $.fn.ampModal = function (o) {
-	if ($.ampModal[o]) {
-		return $.ampModal[o].apply(this, Array.prototype.slice.call(arguments, 1));
+//Generic amp protocol for jQuery plugins
+$.amp = function(p, args){
+	var o = args[0];
+
+	if (p[o]) {
+		return p[o].apply(this, Array.prototype.slice.call(args, 1));
 	} else if (typeof o === 'object' || !o) {
-		return $.ampModal.init.apply(this, arguments);
+		return p.init.apply(this, args);
 	} else {
-		$.error('Method ' + o + ' does not exist for jQuery plugin ampModal');
+		$.error('Method ' + o + ' does not exist for jQuery plugin ' + p.name);
 	}
+}
+
+//ampModal jQuery Plugin
+$.ampModal = $.fn.ampModal = function (o) {
+	return $.amp.call(this, $.ampModal, arguments)
 }
 
 $.extend($.ampModal, {
@@ -200,44 +208,61 @@ $.extend($.ampModal, {
 	}
 });
 
-$.ampSelect = $.fn.ampSelect = function () {
-	return this.use_once('amp-select-enabled').each(function (i, e) {
-		var $e = $(e);
-		var $selected = $("<div />").addClass('amp-selected'),
-			$box = $('<div/>').addClass('amp-select-box'),
-			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
-			$title = $('<div/>').addClass('amp-select-title').append($e.attr('data-label') || 'Select one or more items');
-
-		$box.data('e', $e);
-		$box.data('selected', $selected);
-		$box.data('placeholder', $e.attr('data-placeholder') || 'Select Items...');
-		$e.before($selected);
-
-		var o = {
-			title: $title.prepend($checkall)
-		}
-
-		$e.find('option').each(function (j, o) {
-			var $o = $(o);
-
-			$box.append(
-				$('<label />').addClass('amp-option checkbox')
-					.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
-					.append($('<span/>').addClass('label').html($o.html()))
-			);
-		});
-
-		$box.find('.amp-option input').change($.ampSelect.update)
-
-		$selected.click(function () {
-			$box.ampModal('open')
-		});
-
-		$box.ampModal(o);
-	});
+//ampSelect jQuery Plugin
+$.ampSelect = $.fn.ampSelect = function (o) {
+	return $.amp.call(this, $.ampSelect, arguments)
 }
 
 $.extend($.ampSelect, {
+	init: function(o) {
+		return this.use_once('amp-select-enabled').each(function (i, e) {
+			var $e = $(e);
+			var $selected = $("<div />").addClass('amp-selected').append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
+				$box = $('<div/>').addClass('amp-select-box'),
+				$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
+				$actions = $('<div/>').addClass('amp-select-actions'),
+				$done = $('<a/>').addClass('amp-select-done button').html('Done'),
+				$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($e.attr('data-label') || 'Select one or more items'));
+
+			$box.data('e', $e);
+			$box.data('selected', $selected);
+			$box.data('placeholder', $e.attr('data-placeholder') || 'Select Items...');
+			$checkall.data('box', $box);
+			$e.before($selected);
+
+			var o = {
+				title: $title.prepend($checkall)
+			}
+
+			$e.find('option').each(function (j, o) {
+				var $o = $(o);
+
+				$box.append(
+					$('<label />').addClass('amp-option checkbox')
+						.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
+						.append($('<span/>').addClass('label').html($o.html()))
+				);
+			});
+
+			$box.find('.amp-option input').change($.ampSelect.update)
+
+			$box.append($actions.append($done));
+			$done.click($.ampModal.close);
+
+			$checkall.find('input').change(function () {
+				$(this).closest('.amp-select-checkall').data('box').find('.amp-option input').prop('checked', $(this).is(':checked')).first().change();
+			});
+
+			$selected.click(function () {
+				$box.ampModal('open')
+			});
+
+			$box.ampModal(o);
+
+			$box.ampSelect('update');
+		});
+	},
+
 	update: function () {
 		var $box = $(this).closest('.amp-select-box'), value = [], placeholder = '';
 		var $e = $box.data('e');
@@ -252,7 +277,7 @@ $.extend($.ampSelect, {
 
 		$e.val(value)
 
-		$box.data('selected').html(placeholder|| $box.data('placeholder'));
+		$box.data('selected').find('.value').html(placeholder || $box.data('placeholder'));
 	}
 })
 
@@ -293,58 +318,6 @@ $.fn.ac_datepicker = function ac_datepicker(params) {
 	});
 }
 
-$.fn.ac_radio = function (params) {
-	params = $.extend({}, {
-		elements: $(this).children().not('.noradio')
-	}, params);
-
-	this.find('input[type=radio]').hide();
-
-	params.elements.each(function (i, e) {
-		if ($(e).find('input[type=radio]:checked').length) {
-			$(e).addClass('checked');
-		}
-	})
-
-		.click(function () {
-			params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
-			$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
-		});
-
-	return this;
-}
-
-$.fn.ac_checklist = function (params) {
-	params = $.extend({}, {
-		elements: $(this).children().not('.nocheck'),
-		change:   null
-	}, params);
-
-	this.find('input[type=checkbox]').hide();
-
-	params.elements.each(function (i, e) {
-		if ($(e).find('input[type=checkbox]:checked').length) {
-			$(e).addClass('checked');
-		}
-	})
-
-		.click(function () {
-			if ($(this).hasClass('checked')) {
-				$(this).removeClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked', false).change();
-			} else {
-				$(this).addClass('checked');
-				$(this).find('input[type=checkbox]').prop('checked', true).change();
-			}
-
-			if (typeof params.change === 'function') {
-				params.change($(this), $(this).hasClass('checked'));
-			}
-		});
-
-	return this;
-}
-
 //Apply a filter form to the URL
 $.fn.apply_filter = function (url) {
 	var filter_list = this.find('[name]');
@@ -382,7 +355,7 @@ $.fn.update_index = function (column) {
 	});
 }
 
-jQuery.fn.sortElements = function (comparator) {
+$.fn.sortElements = function (comparator) {
 	var $this = this;
 
 	if (!comparator) {
@@ -393,38 +366,6 @@ jQuery.fn.sortElements = function (comparator) {
 
 	[].sort.call($this.children(), comparator).each(function (i, e) {
 		$this.append($(e));
-	});
-
-	return this;
-}
-
-$.fn.flash_highlight = function () {
-	pos = this.offset();
-
-	var ele = $('<div />');
-
-	ele.css({
-		background: 'rgba(255,255,255,0)',
-		position:   'absolute',
-		top:        pos.top,
-		left:       pos.left,
-		opacity:    .8,
-		'z-index':  10000
-	})
-		.width($(this).width())
-		.height($(this).height());
-
-	$('body').css({position: 'relative'});
-	$('body').append(ele);
-
-	ele.animate({'background-color': 'rgba(255,255,85,1)'}, {
-		duration: 300, always: function () {
-			ele.animate({'background-color': 'rgba(255,255,255,0)'}, {
-				duration: 700, always: function () {
-					ele.remove()
-				}
-			});
-		}
 	});
 
 	return this;
@@ -602,41 +543,6 @@ $.fn.show_msg.count = {}
 
 $.show_msg = function (type, msg, options) {
 	$('body').show_msg(type, msg, options);
-}
-
-$.fn.ac_errors = function (errors, noclear) {
-	if (!noclear) {
-		this.find('.err-msg').remove();
-	}
-
-	for (var err in errors) {
-		if (typeof errors[err] == 'object') {
-			this.ac_errors(errors[err], true);
-			continue;
-		}
-
-		var ele = this.find('[name="' + err + '"]');
-
-		if (!ele.length) {
-			ele = $('#' + err);
-		}
-
-		if (!ele.length) {
-			ele = $(err);
-		}
-
-		if (!ele.length) {
-			return this.show_msg('error', errors);
-		}
-
-		ele.after($("<div />").addClass('error err-msg').html(errors[err]));
-	}
-
-	return this;
-}
-
-$.ac_errors = function (errors) {
-	$('body').ac_errors(errors);
 }
 
 $.fn.fade_post = function (url, data, callback, dataType) {
@@ -817,48 +723,6 @@ $.fn.file_upload = function (options) {
 			}
 		}
 	});
-}
-
-function ac_form(params) {
-	params = params || {}
-
-	var $form = $(this);
-	var callback = params.success;
-	var complete = params.complete;
-
-	params = $.extend({}, {
-		data:     $form.serialize(),
-		dataType: 'json',
-		type:     'POST'
-	}, params);
-
-	params.success = function (data, textStatus, jqXHR) {
-		if (typeof data == 'object') {
-			if (data.error) {
-				$form.ac_errors(data.error);
-			}
-
-			$form.show_msg(data);
-		} else {
-			$form.replaceWith(data);
-		}
-
-		if (typeof callback == 'function') {
-			callback(data, textStatus, jqXHR);
-		}
-	}
-
-	params.complete = function (jqXHR, textStatus) {
-		$form.find('[data-loading]').loading('stop');
-
-		if (typeof complete == 'function') {
-			complete(jqXHR, textStatus);
-		}
-	}
-
-	$.ajax($form.attr('action'), params);
-
-	return false;
 }
 
 $.loading = function (params) {
@@ -1072,24 +936,6 @@ $.cookie = function (key, value, options) {
 	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 
-function ac_radio_bubble() {
-	$('.ac-radio').not('ac-radio-bubble').click(function () {
-		$(this).addClass('ac-radio-bubble');
-		var $radio = $(this).parents('label').children('input[type=radio]');
-
-		if (!$radio.prop('checked')) {
-			$radio.prop('checked', true).change();
-		}
-	});
-
-	$('.ac-radio input').focus(function () {
-		var $radio = $(this).closest('.ac-radio').children('input[type=radio]');
-		if (!$radio.prop('checked')) {
-			$radio.prop('checked', true).change();
-		}
-	});
-}
-
 function register_confirms() {
 	var $confirms = $('[data-confirm], [data-confirm-text]').use_once();
 
@@ -1123,10 +969,6 @@ function register_confirms() {
 
 	$('.action-delete').use_once().click(function () {
 		return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
-	});
-
-	$('.ajax-form').use_once('ajax-init').submit(function () {
-		return ac_form.call(this);
 	});
 }
 
@@ -1415,7 +1257,7 @@ function content_loaded(is_ajax) {
 		$('script').each(function (i, e) {
 			if ($(e).attr('type') === 'text/defer-javascript') {
 				if ($(e).attr('src')) {
-					console.error('External script ' + $(e).attr('src') + ' cannot be loaded synchronously with defer_scripts enabled. Use $.getScript() to load asynchronously or use $this->document->addScript() in your PHP Controller class.');
+					$.error('External script ' + $(e).attr('src') + ' cannot be loaded synchronously with defer_scripts enabled. Use $.getScript() to load asynchronously or use $this->document->addScript() in your PHP Controller class.');
 				} else {
 					scripts += e.innerHTML;
 					$(e).remove();
@@ -1501,10 +1343,6 @@ $(document)
 				return false;
 			}
 		}
-	})
-
-	.on("DOMNodeInserted", function () {
-		ac_radio_bubble();
 	})
 
 	.ajaxComplete(function () {

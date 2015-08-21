@@ -56,7 +56,7 @@
 						<div class="form-item">
 							<label>{{Subscribe}}</label>
 							<?= build(array(
-								'type'   => 'ac-radio',
+								'type'   => 'radio',
 								'name'   => 'newsletter',
 								'data'   => $data_yes_no,
 								'select' => $newsletter
