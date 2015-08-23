@@ -1201,6 +1201,33 @@ label.radio {
 	}
 }
 
+.builder-radio.pill {
+	label.radio {
+		.label {
+			font: 1.1em OpenSansBold;
+			color: @color-main;
+			background: white;
+			border: @color-main 1px solid;
+			border-radius: 20px;
+			padding: .25em 2em;
+			text-transform: uppercase;
+
+			&:before {
+				display: none;
+			}
+		}
+
+		input[type="radio"] {
+			&:checked, &.checked {
+				& + .label {
+					color: white;
+					background: @color-main;
+				}
+			}
+		}
+	}
+}
+
 .builder-radio.panel {
 	label.radio {
 		.label {
@@ -1693,7 +1720,7 @@ section.page {
 
 	label.radio {
 		margin-bottom: 1em;
-		margin-top: 0!important;
+		margin-top: 0 !important;
 
 		input[type="radio"] + .select-box, .select-box {
 			box-sizing: border-box;
