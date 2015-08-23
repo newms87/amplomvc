@@ -111,11 +111,19 @@
 	</header>
 
 	<script type="text/javascript">
-		$(document).ready(fix_container_header);
+		$(document).ready(function () {
+			$('main.main').css('padding-bottom', $('footer.site-footer').outerHeight());
+		}).on('scroll', _cfix);
 
-		function fix_container_header(){
-			$('#container').css({top: $('header.main-header').height()});
+		function _cfix() {
+			_cfix.$m.css('padding-top', (_cfix.h = Math.max(_cfix.$h.outerHeight(), _cfix.h || 0)) + parseInt(_cfix.$h.css('top')));
+			$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0);
 		}
+		;
+
+		_cfix.$h = $('header.main-header'), _cfix.$m = $('main.main');
+
+		_cfix();
 	</script>
 
 	<main class="main">
