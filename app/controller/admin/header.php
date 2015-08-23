@@ -80,15 +80,17 @@ class App_Controller_Admin_Header extends Controller
 				$widgets = $this->Model_Settings->getWidgets();
 
 				foreach ($widgets as $widget) {
-					$link_widget = array(
-						'parent'       => 'system_settings',
-						'name'         => slug($widget['title']),
-						'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
-						'href'         => $widget['url'],
-						'sort_order'   => $widget['sort_order'],
-					);
+					if (user_can('r', $widget['path'])) {
+						$link_widget = array(
+							'parent'       => 'system_settings',
+							'name'         => slug($widget['title']),
+							'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
+							'href'         => $widget['url'],
+							'sort_order'   => $widget['sort_order'],
+						);
 
-					$this->document->addLink('admin', $link_widget);
+						$this->document->addLink('admin', $link_widget);
+					}
 				}
 			}
 

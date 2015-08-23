@@ -190,24 +190,15 @@ class App_Model_Settings extends Model
 						continue;
 					}
 
-					$widget['title'] = _l($directives['title']);
+					$widget = array(
+						'title'      => _l($directives['title']),
+						'path'       => !empty($directives['path']) ? $directives['path'] : 'admin/settings/' . str_replace('.php', '', basename($file)),
+						'query'      => !empty($directives['query']) ? $directives['query'] : '',
+						'icon'       => $this->theme->getUrl(!empty($directives['icon']) ? 'image/settings/' . $directives['icon'] : 'image/settings/admin.png'),
+						'sort_order' => isset($directives['order']) ? (float)$directives['order'] : $order++,
+					);
 
-					if (!empty($directives['icon'])) {
-						$widget['icon'] = $this->theme->getUrl('image/settings/' . $directives['icon']);
-					}
-
-					if (empty($widget['icon'])) {
-						$widget['icon'] = $this->theme->getUrl('image/settings/admin.png');
-					}
-
-					if (!empty($directives['path'])) {
-						$query         = !empty($directives['query']) ? $directives['query'] : '';
-						$widget['url'] = site_url($directives['path'], $query);
-					} else {
-						$widget['url'] = site_url('admin/settings/' . str_replace('.php', '', basename($file)));
-					}
-
-					$widget['sort_order'] = isset($directives['order']) ? (float)$directives['order'] : $order++;
+					$widget['url'] = site_url($widget['path'], $widget['query']);
 
 					$widgets[] = $widget;
 				}
