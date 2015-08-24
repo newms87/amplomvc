@@ -143,7 +143,7 @@
 	$('.edit-view').click(function () {
 		var $this = $(this);
 		$this.closest('.view-settings').toggleClass('active');
-		$this.find('.sprite').toggleClass('cancel');
+		$this.find('.amp-sprite').toggleClass('cancel');
 	});
 
 	$('.create-view').click(function () {

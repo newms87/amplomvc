@@ -372,45 +372,6 @@ function theme_image($image, $width = null, $height = null, $theme = null)
 	return image(theme_dir('image/' . $image, $theme), $width, $height);
 }
 
-function theme_sprite($image)
-{
-	static $sprites;
-
-	if (!isset($sprites[$image])) {
-		$path = pathinfo($image);
-
-		$src = theme_image($image);
-
-		$sprite_srcs = array();
-
-		$sizes = array(
-			2 => '2x',
-			3 => '3x',
-			4 => '4x',
-		);
-
-		$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
-
-		foreach ($sizes as $size => $name) {
-			$s = theme_image($path['filename'] . '@' . $name . '.' . $path['extension']);
-
-			if (!$s) {
-				theme_image($path['filename'] . '-' . $name . '.' . $path['extension']);
-			}
-
-			if ($s) {
-				$sprite_srcs[$size] = $s . ' ' . $size . 'x';
-			}
-		}
-
-		$size = _getimagesize($src);
-
-		$sprites[$image] = $sprite_srcs ? "src=\"$src\" srcset=\"" . implode(',', $sprite_srcs) . "\" $size" : "src=\"$src\" $size";
-	}
-
-	return $sprites[$image];
-}
-
 function is_url($url)
 {
 	return (filter_var($url, FILTER_VALIDATE_URL) || strpos($url, '//') === 0);
