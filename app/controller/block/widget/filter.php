@@ -58,6 +58,7 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 				case 'int':
 				case 'float':
 				case 'decimal':
+				case 'range':
 					$type = 'range';
 
 				case 'date':

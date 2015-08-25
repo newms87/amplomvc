@@ -400,7 +400,7 @@ $.fn.sortElements = function (comparator) {
 
 	if (!comparator) {
 		comparator = function (a, b) {
-			return $(a).attr('data-sort-order') > $(b).attr('data-sort-order');
+			return +$(a).attr('data-sort-order') > +$(b).attr('data-sort-order') ? 1 : -1;
 		}
 	}
 
