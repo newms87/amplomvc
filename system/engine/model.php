@@ -515,16 +515,16 @@ abstract class Model
 
 		$table = $this->t[$table];
 
-		if (empty($t)) {
-			$t = isset($options['alias']) ? $options['alias'] : $table;
-		}
-
 		if (!$options || $options === '*') {
 			return "`$t`.*";
 		}
 
 		if (is_string($options)) {
 			return $options;
+		}
+
+		if (empty($t)) {
+			$t = isset($options['alias']) ? $options['alias'] : $table;
 		}
 
 		$select = '';
