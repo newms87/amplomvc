@@ -93,7 +93,8 @@ $.extend($.ampFilter, {
 		o = $.extend({}, {
 			replace: false,
 			url:     null,
-			toggle:  null
+			toggle:  null,
+			start: 'hide'
 		}, o);
 
 		$me.each(function (i, e) {
@@ -113,35 +114,40 @@ $.extend($.ampFilter, {
 		});
 
 		if ((o.toggle = $(o.toggle)).length) {
-			o.toggle.click(function () {
-				console.log('toggle', $me.attr('data-blur'));
-				var is_hidden = $me.hasClass('hide');
+			o.toggle
+				.data('is-toggle', true)
+				.click(function () {
+					$.ampFilter.blurred ? $.ampFilter.blurred = false : $me.ampFilter($me.hasClass('hide') ? 'show' : 'hide');
+				})
 
-				$me.not('[data-blur]').ampFilter(is_hidden ? 'show' : 'hide');
-				$me.removeAttr('data-blur');
-			});
 		}
 
 		$me.data('o', o);
+
+		if (o.start) {
+			$me.ampFilter(o.start);
+		}
 	},
 
 	_blur: function (e) {
-		console.log('blur check');
-		if (!$(e.target).closest('.amp-filter').length) {
-			console.log('hide');
-			$('.amp-filter').attr('data-blur', 1).ampFilter('hide');
+		var $t = $(e.target);
+
+		if (!$t.closest('.amp-filter').length) {
+			$('.amp-filter').ampFilter('hide');
+
+			if ($t.data('is-toggle')) {
+				$.ampFilter.blurred = true;
+			}
 		}
 	},
 
 	show: function () {
-		console.log('show', this);
 		$(this).removeClass('hide');
 		document.addEventListener('click', $.ampFilter._blur, true);
 		$(this).data('o').toggle.removeClass('amp-filter-hide');
 	},
 
 	hide: function () {
-		console.log('hide', this);
 		$(this).addClass('hide');
 		document.removeEventListener('click', $.ampFilter._blur, true);
 		$(this).data('o').toggle.addClass('amp-filter-hide');

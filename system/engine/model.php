@@ -517,7 +517,7 @@ abstract class Model
 
 		$table = $this->t[$table];
 		$t     = $t ?: $table;
-		
+
 		if (!$options || $options === '*') {
 			return "`$t`.*";
 		}
