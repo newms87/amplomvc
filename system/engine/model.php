@@ -504,7 +504,7 @@ abstract class Model
 	protected function extractSelect($table, $options)
 	{
 		$t = '';
-		
+
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
 		}
@@ -516,7 +516,8 @@ abstract class Model
 		}
 
 		$table = $this->t[$table];
-
+		$t     = $t ?: $table;
+		
 		if (!$options || $options === '*') {
 			return "`$t`.*";
 		}
