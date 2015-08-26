@@ -91,7 +91,7 @@ abstract class App_Model_Table extends Model
 		$tbl   = $this->table[0];
 
 		//Select
-		$fields = $this->extractSelect($this->table . ' ' . $tbl, !empty($options['columns']) ? $options['columns'] : '*');
+		$fields = $this->extractSelect($this->table . ' ' . $tbl, $options);
 
 		if ($cache) {
 			$records = cache($cache);
@@ -102,11 +102,7 @@ abstract class App_Model_Table extends Model
 		}
 
 		//From
-		$from = $this->t[$this->table] . ' ' . $tbl;
-
-		if (!empty($options['join'])) {
-			$from .= ' ' . implode(' ', (array)$options['join']);
-		}
+		$from = $this->extractFrom($this->table . ' ' . $tbl, $options);
 
 		//Where
 		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);

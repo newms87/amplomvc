@@ -75,7 +75,5 @@
 
 
 <script type="text/javascript">
-	$('.amp-filter').use_once().ampFilter({
-		replace: '<?= $replace; ?>'
-	});
+	$('.amp-filter').use_once().ampFilter(<?= json_encode($options); ?>);
 </script>

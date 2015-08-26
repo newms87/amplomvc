@@ -82,28 +82,75 @@ $.fn.listview = function () {
 	})
 }
 
-$.fn.ampFilter = function (opts) {
-	opts = $.extend({}, {
-		replace: false,
-		url:     null
-	}, opts);
-
-	this.each(function (i, e) {
-		var $filter = $(e);
-		var $button = $filter.find('.amp-filter-apply');
-
-		$filter.data('opts', opts);
-		$filter.find('.amp-filter-toggle').click($.ampFilter.toggle);
-		$filter.find('.amp-filter-reset').click($.ampFilter.reset);
-		$button.click($.ampFilter.apply);
-		$filter.find('.field.disabled [name]').prop('disabled', true);
-	});
+$.fn.ampFilter = function (o) {
+	return $.amp.call(this, $.ampFilter, arguments);
 }
 
 $.extend($.ampFilter, {
-	reset:  function () {
+	init: function (o) {
+		var $me = this;
+
+		o = $.extend({}, {
+			replace: false,
+			url:     null,
+			toggle:  null
+		}, o);
+
+		$me.each(function (i, e) {
+			var $filter = $(e);
+			var $button = $filter.find('.amp-filter-apply');
+
+			$filter.data('opts', o);
+			$filter.find('.amp-filter-toggle').click($.ampFilter.toggle);
+			$filter.find('.amp-filter-reset').click($.ampFilter.reset);
+			$button.click($.ampFilter.apply);
+			$filter.find('.field.disabled [name]').prop('disabled', true);
+			$filter.find('[name]').keyup(function (e) {
+				if (e.keyCode === 13) {
+					$(this).ampFilter('apply');
+				}
+			})
+		});
+
+		if ((o.toggle = $(o.toggle)).length) {
+			o.toggle.click(function () {
+				console.log('toggle', $me.attr('data-blur'));
+				var is_hidden = $me.hasClass('hide');
+
+				$me.not('[data-blur]').ampFilter(is_hidden ? 'show' : 'hide');
+				$me.removeAttr('data-blur');
+			});
+		}
+
+		$me.data('o', o);
+	},
+
+	_blur: function (e) {
+		console.log('blur check');
+		if (!$(e.target).closest('.amp-filter').length) {
+			console.log('hide');
+			$('.amp-filter').attr('data-blur', 1).ampFilter('hide');
+		}
+	},
+
+	show: function () {
+		console.log('show', this);
+		$(this).removeClass('hide');
+		document.addEventListener('click', $.ampFilter._blur, true);
+		$(this).data('o').toggle.removeClass('amp-filter-hide');
+	},
+
+	hide: function () {
+		console.log('hide', this);
+		$(this).addClass('hide');
+		document.removeEventListener('click', $.ampFilter._blur, true);
+		$(this).data('o').toggle.addClass('amp-filter-hide');
+	},
+
+	reset: function () {
 		$.ampFilter.toggle.call($(this).closest('.amp-filter').find('.field [name]').val('').change(), false);
 	},
+
 	toggle: function (enabled) {
 		var $field = $(this).closest('.field');
 		enabled = typeof enabled !== 'object' ? enabled : $field.hasClass('disabled');

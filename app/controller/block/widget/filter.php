@@ -10,7 +10,7 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 	{
 		//Default Settings
 		$settings += array(
-			'replace'  => false,
+			'options'  => array(),
 			'fields'   => array(),
 			'values'   => (array)_request('filter'),
 			'path'     => $this->route->getPath(),

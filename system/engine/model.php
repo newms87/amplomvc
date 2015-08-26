@@ -501,7 +501,7 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table, $columns)
+	protected function extractSelect($table, $options)
 	{
 		if (strpos($table, ' ')) {
 			list($table, $t) = explode(' ', $table, 2);
@@ -516,23 +516,39 @@ abstract class Model
 		$table = $this->t[$table];
 
 		if (empty($t)) {
-			$t = $table;
+			$t = isset($options['alias']) ? $options['alias'] : $table;
 		}
 
-		if (!$columns || $columns === '*') {
+		if (!$options || $options === '*') {
 			return "`$t`.*";
 		}
 
-		if (is_string($columns)) {
-			return $columns;
+		if (is_string($options)) {
+			return $options;
 		}
-
-		$columns = array_intersect_key($columns, $this->getTableColumns($table));
 
 		$select = '';
 
-		foreach ($columns as $col => $data) {
-			$select .= ($select ? ',' : '') . "`$t`.`$col`";
+		if (!empty($options['columns'])) {
+			if (is_string($options['columns'])) {
+				$select .= ' ' . $options['columns'];
+			} else {
+				$columns = array_intersect_key($options['columns'], $this->getTableColumns($table));
+
+				foreach ($columns as $col => $data) {
+					$select .= ($select ? ',' : '') . "`$t`.`$col`";
+				}
+			}
+		} else {
+			$select = "`$t`.*";
+		}
+
+		if (!empty($options['join'])) {
+			foreach ($options['join'] as $join_table => $join) {
+				if (isset($join['columns'])) {
+					$select .= ($select ? ',' : '') . $this->extractSelect($join_table, $join);
+				}
+			}
 		}
 
 		return $select;
@@ -549,6 +565,42 @@ abstract class Model
 	 *
 	 * @return string - The mysql WHERE clause for the table $table
 	 */
+
+	protected function extractFrom($table, $options)
+	{
+		//Extract FROM clause
+		if (strpos($table, ' ')) {
+			list($table, $t) = explode(' ', $table, 2);
+		} else {
+			$t = $this->t[$table];
+		}
+
+		$from = $this->t[$table] . ' ' . $t;
+
+		//Extract JOIN Clauses
+		if (!empty($options['join'])) {
+			foreach ($options['join'] as $join_table => $join) {
+				if (strpos($join_table, '#') === 0) {
+					$from .= ' ' . $join;
+					continue;
+				}
+
+				if (empty($join['on'])) {
+					trigger_error(_l("Error extracting FROM clause: 'on' is required"));
+
+					return false;
+				}
+
+				$join_type  = !empty($join['type']) ? $join['type'] : "LEFT JOIN";
+				$join_table = isset($join['table']) ? $join['table'] : $join_table;
+				$j          = isset($join['alias']) ? $join['alias'] : '';
+
+				$from .= " $join_type `{$this->t[$join_table]}` $j " . (strpos($join['on'], '=') ? 'ON' : 'USING') . " (" . $this->escape($join['on']) . ")";
+			}
+		}
+
+		return $from;
+	}
 
 	protected function extractWhere($table, $filter, $columns = array())
 	{
