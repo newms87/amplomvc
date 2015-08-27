@@ -8,7 +8,7 @@
 					<span class="text"><?= $f['label']; ?></span>
 				</label>
 
-				<div class="input <?= $f['type']; ?>">
+				<div class="amp-filter-input input <?= $f['type']; ?>">
 					<? switch ($f['type']) {
 						case 'number':
 							?>

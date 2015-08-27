@@ -82,7 +82,7 @@ $.fn.listview = function () {
 	})
 }
 
-$.fn.ampFilter = function (o) {
+$.ampFilter = $.fn.ampFilter = function (o) {
 	return $.amp.call(this, $.ampFilter, arguments);
 }
 
@@ -93,18 +93,16 @@ $.extend($.ampFilter, {
 		o = $.extend({}, {
 			replace: false,
 			url:     null,
-			toggle:  null,
-			start: 'hide'
+			start:   'hide'
 		}, o);
 
 		$me.each(function (i, e) {
 			var $filter = $(e);
 			var $button = $filter.find('.amp-filter-apply');
-
 			$filter.data('opts', o);
 			$filter.find('.amp-filter-toggle').click($.ampFilter.toggle);
 			$filter.find('.amp-filter-reset').click($.ampFilter.reset);
-			$button.click($.ampFilter.apply);
+			$button.click($.ampFilter.filter);
 			$filter.find('.field.disabled [name]').prop('disabled', true);
 			$filter.find('[name]').keyup(function (e) {
 				if (e.keyCode === 13) {
@@ -113,44 +111,9 @@ $.extend($.ampFilter, {
 			})
 		});
 
-		if ((o.toggle = $(o.toggle)).length) {
-			o.toggle
-				.data('is-toggle', true)
-				.click(function () {
-					$.ampFilter.blurred ? $.ampFilter.blurred = false : $me.ampFilter($me.hasClass('hide') ? 'show' : 'hide');
-				})
-
-		}
-
 		$me.data('o', o);
 
-		if (o.start) {
-			$me.ampFilter(o.start);
-		}
-	},
-
-	_blur: function (e) {
-		var $t = $(e.target);
-
-		if (!$t.closest('.amp-filter').length) {
-			$('.amp-filter').ampFilter('hide');
-
-			if ($t.data('is-toggle')) {
-				$.ampFilter.blurred = true;
-			}
-		}
-	},
-
-	show: function () {
-		$(this).removeClass('hide');
-		document.addEventListener('click', $.ampFilter._blur, true);
-		$(this).data('o').toggle.removeClass('amp-filter-hide');
-	},
-
-	hide: function () {
-		$(this).addClass('hide');
-		document.removeEventListener('click', $.ampFilter._blur, true);
-		$(this).data('o').toggle.addClass('amp-filter-hide');
+		return this;
 	},
 
 	reset: function () {
@@ -164,11 +127,10 @@ $.extend($.ampFilter, {
 		$field.find('[name]').prop('disabled', !enabled);
 	},
 
-	apply: function () {
+	filter: function () {
 		var $filter = $(this).closest('.amp-filter');
-		var $button = $filter.find('.amp-filter-apply');
-
-		var opts = $filter.data('opts');
+		var $button = $filter.find('.amp-filter-apply'),
+			opts = $filter.data('opts');
 
 		var url = opts.url || $button.attr('href');
 

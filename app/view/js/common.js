@@ -174,6 +174,70 @@ $.amp = function (p, args) {
 	}
 }
 
+//ampToggle jQuery Plugin
+$.ampToggle = $.fn.ampToggle = function (o) {
+	return $.amp.call(this, $.ampToggle, arguments);
+}
+
+$.extend($.ampToggle, {
+	init: function (o) {
+		var $toggle = this;
+
+		if (!o || !(o.content = $(o.content)).length) {
+			$.error("ampToggle parameter error: content must be an existing DOM element");
+			return this;
+		}
+
+		if ($toggle.length) {
+			o = $.extend({}, {
+				content:      null,
+				start:        'hide',
+				acceptParent: ''
+			}, o);
+
+			o.acceptParent += (o.acceptParent ? ',' : '') + '.amp-toggle-content';
+
+			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content height-animate-hide');
+			$toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
+				$.ampToggle.blurred ? $.ampToggle.blurred = false : $toggle.ampToggle(o.content.hasClass('hide') ? 'show' : 'hide');
+			})
+
+			if (o.start) {
+				$toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
+			}
+		}
+
+		return this;
+	},
+
+	_blur: function (e) {
+		var $t = $(e.target);
+
+		if (!$t.closest($.ampToggle.active.data('amp-toggle-o').acceptParent).length) {
+			$.ampToggle.active.ampToggle('hide');
+
+			if ($t.hasClass('amp-toggle')) {
+				$.ampToggle.blurred = true;
+			}
+		}
+	},
+
+	show: function () {
+		var $this = $(this);
+		$.ampToggle.active = $this.removeClass('amp-toggle-hide');
+		$this.data('amp-toggle-o').content.removeClass('hide');
+		document.addEventListener('click', $.ampToggle._blur, true);
+	},
+
+	hide: function () {
+		var $this = $(this);
+		$this.addClass('amp-toggle-hide');
+		$this.data('amp-toggle-o').content.addClass('hide');
+		$.ampToggle.active = null;
+		document.removeEventListener('click', $.ampToggle._blur, true);
+	},
+});
+
 //ampModal jQuery Plugin
 $.ampModal = $.fn.ampModal = function (o) {
 	return $.amp.call(this, $.ampModal, arguments)
@@ -181,22 +245,32 @@ $.ampModal = $.fn.ampModal = function (o) {
 
 $.extend($.ampModal, {
 	init: function (o) {
+		o = $.extend({}, {
+			context: 'body',
+			title:   ''
+		}, o);
+
+		if (!(o.context = $(o.context)).length) {
+			$.error('ampModal parameter error: context must be an existing element');
+			return this;
+		}
+
 		return this.use_once('amp-modal-enabled').each(function (i, e) {
 			var $e = $(e),
 				$box = $('<div />').addClass('amp-modal'),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
-			$('body').append(
-				$box
-					.append($('<div/>').addClass('align-middle'))
-					.append(
-					$content
-						.append($title.html(o.title))
-						.append($e)
-				)
-					.append($('<div/>').addClass('shadow-box').click($.ampModal.close))
-			);
+			o.context.append($box);
+
+			$content
+				.append(o.title ? $title.html(o.title) : '')
+				.append($e)
+
+			$box
+				.append($('<div/>').addClass('align-middle'))
+				.append($content)
+				.append($('<div/>').addClass('shadow-box').click($.ampModal.close))
 		});
 	},
 	open: function () {
@@ -247,7 +321,8 @@ $.extend($.ampSelect, {
 				.ampSelect('assignSelect', $select);
 
 			var o = {
-				title: $title.prepend($checkall)
+				title:   $title.prepend($checkall),
+				context: $select.parent()
 			}
 
 			$box.ampModal(o);
