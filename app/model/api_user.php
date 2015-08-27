@@ -47,7 +47,12 @@ class App_Model_ApiUser extends App_Model_Table
 	{
 		//Where
 		if (isset($filter['user_role'])) {
-			$options['join'] = "LEFT JOIN {$this->t['user_role']} ur USING (user_role_id)";
+			$options['join']['user_role'] = array(
+				'type'  => 'LEFT JOIN',
+				'alias' => 'ur',
+				'on'    => 'user_role_id',
+			);
+
 			if (is_string($filter['user_role'])) {
 				$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
 			} else {
@@ -66,7 +71,7 @@ class App_Model_ApiUser extends App_Model_Table
 		);
 
 		$columns = array(
-			'user_id' => array(
+			'user_id'      => array(
 				'type'         => 'select',
 				'display_name' => _l("User Account"),
 				'build_data'   => $this->Model_User->getRecords(null, null, array('cache' => true)),

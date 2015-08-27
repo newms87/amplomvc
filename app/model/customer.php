@@ -224,7 +224,12 @@ class App_Model_Customer extends App_Model_Table
 
 	public function getAddresses($customer_id, $sort = array(), $filter = array(), $options = array(), $total = false)
 	{
-		$options['join']        = "LEFT JOIN {$this->t['customer_address']} ca USING(address_id)";
+		$options['join']['customer_address'] = array(
+			'type'  => 'LEFT JOIN',
+			'alias' => 'ca',
+			'on'    => 'address_id',
+		);
+
 		$filter['#customer_id'] = "ca.customer_id = " . (int)$customer_id;
 
 		return $this->Model_Address->getRecords($sort, $filter, $options, $total);
