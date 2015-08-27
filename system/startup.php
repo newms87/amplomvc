@@ -61,6 +61,10 @@ $_SERVER += array(
 	'QUERY_STRING'   => '',
 );
 
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+	$_SERVER['HTTPS'] = 'on';
+}
+
 date_default_timezone_set(DEFAULT_TIMEZONE);
 
 //Date Constants
