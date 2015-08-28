@@ -176,6 +176,10 @@ class Router
 					redirect('admin/error/permission');
 				}
 			} else {
+				if (AMPLO_USER_PAGE_LOG) {
+					write_log('user-page-log', IS_POST ? "POST: " . json_encode($_POST) : "GET");
+				}
+
 				//Login Verification
 				if (!$this->customer->canDoAction($action)) {
 					$this->request->setRedirect($this->url->here());
