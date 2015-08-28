@@ -20,7 +20,7 @@
 		<thead>
 		<tr>
 			<? if ($index) { ?>
-				<td width="1" class="center">
+				<td width="1" class="select-all-col select-col center">
 					<input type="checkbox" class="select-all"/>
 				</td>
 			<? } ?>
@@ -172,7 +172,7 @@
 				<tr <?= attrs($row); ?> data-row-id="<?= !empty($row[$index]) ? $row[$index] : ''; ?>">
 					<? if ($index) { ?>
 						<? $uniqid = uniqid($row[$index]); ?>
-						<td class="center">
+						<td class="center select-col">
 							<input id="rowid<?= $uniqid; ?>" type="checkbox" name="batch[]" onclick="$(this).data('clicked',true)" value="<?= $row[$index]; ?>" <?= !empty($row['selected']) ? 'checked' : ''; ?> />
 						</td>
 					<? } ?>
