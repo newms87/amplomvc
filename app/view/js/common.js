@@ -238,6 +238,113 @@ $.extend($.ampToggle, {
 	},
 });
 
+//ampYouTube
+$.ampYouTube = $.fn.ampYouTube = function () {
+	return $.amp.call(this, $.ampYouTube, arguments);
+}
+
+$.extend($.ampYouTube, {
+	init: function (o) {
+		o = $.extend({}, {
+			width:      null,
+			height:     null,
+			ratio:      .6,
+			playlistID: '',
+			videoID:    '',
+			paused:     true,
+			onChange:   null,
+			onReady:    null
+		}, o);
+
+		var tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/iframe_api";
+		var firstScriptTag = $('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+		o.width = o.width || this.width();
+		o.height = o.height || (o.ratio * o.width) || this.height();
+
+		this.width(o.width);
+		this.height(o.height);
+		this.data('o', o);
+
+		if (!$.ampYouTube.players) {
+			$.ampYouTube.players = this;
+		} else {
+			$.ampYouTube.players.add(this);
+		}
+
+		return this;
+	},
+
+	initPlayer: function () {
+		var o = this.data('o');
+
+		var player = new YT.Player(this.attr('id'), {
+			width:   o.width,
+			height:  o.height,
+			videoId: o.videoID,
+			events:  {
+				onReady:       $.ampYouTube.onReady,
+				onStateChange: $.ampYouTube.onChange
+			}
+		});
+
+		player.ampO = o;
+
+		this.data('player', player);
+	},
+
+	play: function () {
+		var player = $(this).data('player');
+		player.ampO.playing = true;
+		player.playVideo();
+	},
+
+	pause: function() {
+		var player = $(this).data('player');
+		player.ampO.playing = false;
+		player.pauseVideo();
+	},
+
+	playIndex: function(i) {
+		this.data('player').playVideoAt(i);
+	},
+
+	onReady: function (e) {
+		e.target.loadPlaylist({
+			list: e.target.ampO.playlistID
+		});
+
+		e.target.ampO.playing = false;
+
+		if (typeof e.target.ampO.onReady === 'function') {
+			e.target.ampO.onReady.call(this, e);
+		}
+	},
+
+	onChange: function (e) {
+		if (e.data === 3) {
+			e.target.ampO.playing = true;
+		}
+
+		if (!e.target.ampO.playing) {
+			e.target.pauseVideo();
+		}
+
+		if (typeof e.target.ampO.onChange === 'function') {
+			e.target.ampO.onChange.call(this, e);
+		}
+	}
+});
+
+
+function onYouTubeIframeAPIReady() {
+	$.ampYouTube.players.each(function (i, e) {
+		$(e).ampYouTube('initPlayer');
+	});
+}
+
 //ampModal jQuery Plugin
 $.ampModal = $.fn.ampModal = function (o) {
 	return $.amp.call(this, $.ampModal, arguments)
@@ -1187,82 +1294,100 @@ function stopProp(e) {
 	e.stopPropagation();
 }
 
-$.fn.form_editor = function () {
-	return this.use_once('form-editor-enabled').each(function (i, e) {
-		$fe = $(e);
-		var $form = $fe.is('form') ? $fe : $fe.find('form');
+$.ampFormEditor = $.fn.ampFormEditor = function () {
+	return $.amp.call(this, $.ampFormEditor, arguments);
+}
 
-		$fe.find('.edit-form').click(edit_form_editor);
-		$fe.find('.toggle-form').click(toggle_form_editor);
-		$fe.find('.cancel-form').click(cancel_form_editor);
+$.extend($.ampFormEditor, {
+	init: function (o) {
+		return this.use_once('form-editor-enabled').each(function (i, e) {
+			var $fe = $(e);
+			var $form = $fe.is('form') ? $fe : $fe.find('form');
 
-		$form.not('[data-noajax]').submit(function () {
-			var $form = $(this);
+			$fe.find('.edit-form').click($.ampFormEditor.edit);
+			$fe.find('.toggle-form').click($.ampFormEditor.toggle);
+			$fe.find('.cancel-form').click($.ampFormEditor.read);
 
-			$form.find('[data-loading]').loading();
-
-			$.post($form.attr('action'), $form.serialize(), function (response) {
-				$form.find('[data-loading]').loading('stop');
-
-				$form.show_msg('clear');
-
-				if (response.error) {
-					$form.show_msg(response);
-				} else {
-					if ($form.attr('data-reload')) {
-						window.location.reload();
-					} else if ($form.attr('data-callback')) {
-						var cb = window[$form.attr('data-callback')];
-						if (typeof cb === 'function') {
-							cb.call($form);
-						}
-					} else {
-						$form.find('[name]').each(function (i, e) {
-							var $e = $(e);
-							var val = $e.val();
-
-							if ($e.is('select')) {
-								val = $e.find('option[value="' + val + '"]').html();
-							}
-
-							var $field = $form.find('[data-name="' + $e.attr('name') + '"]');
-
-							if (!$field.length && $e.attr('name').indexOf('[') === -1) {
-								$field = $form.find('.field.' + $e.attr('name'));
-							}
-
-							$field.html(val).val(val);
-						});
-
-						if (response.success) {
-							$form.show_msg('success', response, {delay: 4000});
-						}
-					}
-
-					cancel_form_editor.call($form);
-				}
-			});
-
-			return false;
+			$form.find('[data-disable]').focus($.ampFormEditor._disableField);
+			$form.not('[data-noajax]').submit($.ampFormEditor.submitForm);
 		});
-	});
-}
+	},
 
-function edit_form_editor() {
-	$(this).closest('.form-editor').addClass('edit').removeClass('read').find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
-	return false;
-}
+	edit: function () {
+		var $form = $(this).closest('.form-editor').removeClass('read').addClass('edit');
+		$form.find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
+		return false;
+	},
 
-function toggle_form_editor() {
-	$(this).closest('.form-editor').hasClass('read') ? edit_form_editor.call(this) : cancel_form_editor.call(this);
-	return false;
-}
+	toggle: function () {
+		var $form = $(this).closest('.form-editor');
+		$form.ampFormEditor($form.hasClass('read') ? 'edit' : 'read');
+		return false;
+	},
 
-function cancel_form_editor() {
-	var $section = $(this).is('.form-editor') ? $(this) : $(this).closest('.form-editor');
-	$section.removeClass('edit').addClass('read').find('[data-readonly]').attr('readonly', '');
-	return false;
-}
+	read: function () {
+		var $form = $(this).closest('.form-editor').removeClass('edit').addClass('read');
+		$form.find('[data-readonly]').attr('readonly', '');
+		$form.find('[data-disable]').blur();
+		return false;
+	},
+
+	submitForm: function () {
+		var $form = $(this);
+
+		$form.find('[data-loading]').loading();
+
+		$.post($form.attr('action'), $form.serialize(), function (response) {
+			$form.find('[data-loading]').loading('stop');
+
+			$form.show_msg('clear');
+
+			if (response.error) {
+				$form.show_msg(response);
+			} else {
+				if ($form.attr('data-reload')) {
+					window.location.reload();
+				} else if ($form.attr('data-callback')) {
+					var cb = window[$form.attr('data-callback')];
+					if (typeof cb === 'function') {
+						cb.call($form);
+					}
+				} else {
+					$form.find('[name]').each(function (i, e) {
+						var $e = $(e);
+						var val = $e.val();
+
+						if ($e.is('select')) {
+							val = $e.find('option[value="' + val + '"]').html();
+						}
+
+						var $field = $form.find('[data-name="' + $e.attr('name') + '"]');
+
+						if (!$field.length && $e.attr('name').indexOf('[') === -1) {
+							$field = $form.find('.field.' + $e.attr('name'));
+						}
+
+						$field.html(val).val(val);
+					});
+
+					if (response.success) {
+						$form.show_msg('success', response, {delay: 4000});
+					}
+				}
+
+				$form.ampFormEditor('read');
+			}
+		});
+
+		return false;
+	},
+
+	_disableField: function () {
+		if ($(this).closest('.form-editor-enabled').hasClass('read')) {
+			$(this).blur();
+		}
+	}
+});
 
 function colorbox(params) {
 	$.extend(params, {

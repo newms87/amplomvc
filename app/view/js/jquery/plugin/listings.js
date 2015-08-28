@@ -102,7 +102,7 @@ $.extend($.ampFilter, {
 			$filter.find('.field.disabled [name]').prop('disabled', true);
 			$filter.find('[name]').keyup(function (e) {
 				if (e.keyCode === 13) {
-					$(this).ampFilter('apply');
+					$(this).ampFilter('filter');
 				}
 			})
 		});

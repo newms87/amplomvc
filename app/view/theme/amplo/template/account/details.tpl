@@ -149,5 +149,5 @@
 		}
 	});
 
-	$('.form-editor').form_editor();
+	$('.form-editor').ampFormEditor();
 </script>

@@ -115,6 +115,7 @@ class Customer extends Library
 		$customer['name'] = trim($customer['first_name'] . ' ' . $customer['last_name']);
 
 		$this->customer_id                   = (int)$customer['customer_id'];
+		$_SESSION['customer_id']             = $this->customer_id;
 		$_SESSION['customer']['customer_id'] = $this->customer_id;
 		$this->info                          = $customer;
 

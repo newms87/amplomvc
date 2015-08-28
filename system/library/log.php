@@ -33,7 +33,7 @@ class Log extends Library
 	{
 		$fields = array(
 			'name'       => $this->name,
-			'user_id'    => IS_ADMIN ? user_info('user_id') : customer_info('customer_id'),
+			'user_id'    => IS_ADMIN ? _session('user_id') : _session('customer_id'),
 			'date'       => date('Y-m-d G:i:s'),
 			'ip'         => $_SERVER['REMOTE_ADDR'],
 			'uri'        => preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']),

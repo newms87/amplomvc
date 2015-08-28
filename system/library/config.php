@@ -22,6 +22,7 @@ class Config extends Library
 	public function get($key)
 	{
 		global $_options;
+
 		return isset($_options[$key]) ? $_options[$key] : null;
 	}
 
@@ -64,15 +65,16 @@ class Config extends Library
 		//Overwrite any previous settings with new Site settings.
 		$_options = $settings + $_options;
 
-		$_options['site_id']  = !empty($site['site_id']) ? $site['site_id'] : 0;
-		$_options['name']     = !empty($site['name']) ? $site['name'] : 'No Site';
-		$_options['url']      = !empty($site['url']) ? $site['url'] : URL_SITE;
-		$_options['ssl']      = !empty($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
+		$_options['site_id'] = !empty($site['site_id']) ? $site['site_id'] : 0;
+		$_options['name']    = !empty($site['name']) ? $site['name'] : 'No Site';
+		$_options['url']     = !empty($site['url']) ? $site['url'] : URL_SITE;
+		$_options['ssl']     = !empty($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function has($key)
 	{
 		global $_options;
+
 		return isset($_options[$key]);
 	}
 
