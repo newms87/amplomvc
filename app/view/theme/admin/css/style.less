@@ -1,29 +1,7 @@
 @import 'listings';
-
-html {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-}
-
 body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	background: #FFFFFF;
-}
-
-.no-select {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-body, td, th, input, select, textarea, option, optgroup {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #000000;
+	font-family: OpenSansRegular;
 }
 
 input[type='text'], input[type='password'] {
@@ -55,12 +33,6 @@ a {
 		border: 0;
 	}
 }
-
-form {
-	margin: 0;
-	padding: 0;
-}
-
 label {
 	cursor: pointer;
 }
@@ -85,23 +57,6 @@ ol {
 	}
 }
 
-.clear {
-	clear: both;
-}
-
-.left {
-	float: left;
-}
-
-.right {
-	float: right;
-}
-
-.center {
-	float: none;
-	text-align: center;
-}
-
 .show {
 	display: block;
 }
@@ -113,17 +68,6 @@ ol {
 td {
 	&.left, &.right {
 		float: none;
-	}
-}
-
-.clearfix {
-	&:after {
-		visibility: hidden;
-		display: block;
-		font-size: 0;
-		content: " ";
-		clear: both;
-		height: 0;
 	}
 }
 
@@ -1008,6 +952,8 @@ button, .button {
 	outline: 0;
 	text-decoration: none;
 	cursor: pointer;
+	box-sizing: border-box;
+	max-width: 100%;
 
 	&:visited {
 		color: @font-light;
@@ -1797,10 +1743,6 @@ ul.phone_list + a {
 
 .datetime {
 	width: 130px;
-}
-
-td label {
-	margin-right: 10px;
 }
 
 td input + label {

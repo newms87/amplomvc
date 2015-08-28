@@ -47,6 +47,7 @@
 								'select' => array_keys($columns),
 								'value'  => 'Field',
 								'label'  => 'display_name',
+								'#class' => 'amp-select',
 							)); ?>
 
 							<div class="buttons">

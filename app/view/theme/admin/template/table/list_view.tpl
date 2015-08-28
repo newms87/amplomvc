@@ -48,150 +48,122 @@
 		<tbody>
 
 		<? if ($filter_style) { ?>
-		<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
-			<? if ($index) { ?>
-				<td></td>
-			<? } ?>
-			<? if ($show_actions) { ?>
-				<td align="center">
-					<a class="button filter-button">{{Filter}}</a>
-					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button">{{Reset}}</a>
-					<? } ?>
-					<a class="hide-filter">{{Hide}}</a>
-				</td>
-			<? } ?>
-			<? foreach ($columns as $slug => $column) { ?>
-				<? if ($column['filter']) { ?>
-					<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
-						<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
-						<? switch ($column['filter']) {
-							case 'text':
-							case 'textarea':
-								?>
-								<input placeholder="{{Search}} <?= $column['label']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
-								<? break;
-
-							case 'pk':
-							case 'pk-int':
-							case 'int':
-							case 'float':
-							case 'decimal':
-								if (!isset($column['filter_value']['gte'])) {
-									$column['filter_value']['gte'] = null;
-								}
-								if (!isset($column['filter_value']['lte'])) {
-									$column['filter_value']['lte'] = null;
-								}
-								?>
-								<div class="zoom-hover int">
-									<div class="input">
-										<input placeholder="{{From}}" type="text" class="number-from" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
-										<input placeholder="{{To}}" type="text" class="number-to" name="filter[<?= $column['filter_key']; ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
-										<span class="clear">clear</span>
-									</div>
-									<div class="value">
-										<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
-											<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
-										<? } else { ?>
-											{{Modify}}
-										<? } ?>
-									</div>
-								</div>
-								<? break;
-
-							case 'select':
-								echo build(array(
-										'type'   => 'select',
-										'name'   => "filter[{$column['filter_key']}]",
-										'select' => $column['filter_value'],
-									) + $column['build']);
-								break;
-
-							case 'multiselect':
-								?>
-								<div class="zoom-hover multiselect">
-									<div class="input">
-										<?=
-										build(array(
-												'type'   => 'multiselect',
-												'name'   => "filter[{$column['filter_key']}]",
-												'select' => $column['filter_value'],
-											) + $column['build']); ?>
-									</div>
-									<div class="value">
-										<? if (!empty($column['filter_value'])) {
-											$build_value = $column['build']['value'];
-											$build_label = $column['build']['label'];
-
-											$vals = array();
-											foreach ($column['filter_value'] as $v) {
-												if ($build_value === false) {
-													$vals[] = $build_label ? $column['build']['data'][$v][$build_label] : $column['build']['data'][$v];
-												} else {
-													foreach ($column['build']['data'] as $bd) {
-														if (is_numeric($v) ? $bd[$build_value] == $v : $bd[$build_value] === $v) {
-															$vals[] = isset($bd[$build_label]) ? $bd[$build_label] : $bd[$build_value];
-														}
-													}
-												}
-											} ?>
-
-											<?= charlimit(implode(', ', $vals), 20, '...', false); ?>
-										<? } else { ?>
-											{{Modify}}
-										<? } ?>
-									</div>
-								</div>
-								<? break;
-
-							case 'date':
-							case 'time':
-							case 'datetime':
-								?>
-								<? if (!isset($column['filter_value']['gte'])) {
-								$column['filter_value']['gte'] = null;
-							}
-								if (!isset($column['filter_value']['lte'])) {
-									$column['filter_value']['lte'] = null;
-								}
-								?>
-
-								<div class="zoom-hover daterange">
-									<div class="input">
-										<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
-										<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
-										<span class="clear">clear</span>
-									</div>
-									<div class="value" data-default="{{Date Range}}">
-										<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
-											<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
-										<? } else { ?>
-											<b class="amp-sprite si-calendar-icon-wht"></b>
-										<? } ?>
-									</div>
-								</div>
-
-								<? break;
-
-							default:
-								break;
-						} ?>
-					</td>
-				<? } else { ?>
+			<tr class="filter-list <?= _get('hidefilter') ? 'hide' : ''; ?>">
+				<? if ($index) { ?>
 					<td></td>
 				<? } ?>
-			<? } ?>
-			<? if ($show_actions) { ?>
-				<td align="center">
-					<a class="button filter-button">{{Filter}}</a>
-					<? if (!empty($_GET['filter'])) { ?>
-						<a class="reset reset-button">{{Reset}}</a>
+				<? if ($show_actions) { ?>
+					<td align="center">
+						<a class="button filter-button">{{Filter}}</a>
+						<? if (!empty($_GET['filter'])) { ?>
+							<a class="reset reset-button">{{Reset}}</a>
+						<? } ?>
+						<a class="hide-filter">{{Hide}}</a>
+					</td>
+				<? } ?>
+				<? foreach ($columns as $slug => $column) { ?>
+					<? if ($column['filter']) { ?>
+						<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
+							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
+							<? switch ($column['filter']) {
+								case 'text':
+								case 'textarea':
+									?>
+									<input placeholder="{{Search}} <?= $column['label']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
+									<? break;
+
+								case 'pk':
+								case 'pk-int':
+								case 'int':
+								case 'float':
+								case 'decimal':
+									if (!isset($column['filter_value']['gte'])) {
+										$column['filter_value']['gte'] = null;
+									}
+									if (!isset($column['filter_value']['lte'])) {
+										$column['filter_value']['lte'] = null;
+									}
+									?>
+									<div class="zoom-hover int">
+										<div class="input">
+											<input placeholder="{{From}}" type="text" class="number-from" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
+											<input placeholder="{{To}}" type="text" class="number-to" name="filter[<?= $column['filter_key']; ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
+											<span class="clear">clear</span>
+										</div>
+										<div class="value">
+											<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
+												<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
+											<? } else { ?>
+												{{Modify}}
+											<? } ?>
+										</div>
+									</div>
+									<? break;
+
+								case 'select':
+									echo build(array(
+											'type'   => 'select',
+											'name'   => "filter[{$column['filter_key']}]",
+											'select' => $column['filter_value'],
+										) + $column['build']);
+									break;
+
+								case 'multiselect':
+									echo build(array(
+											'type'   => 'multiselect',
+											'name'   => "filter[{$column['filter_key']}]",
+											'select' => $column['filter_value'],
+											'#class' => 'amp-select',
+										) + $column['build']);
+									break;
+
+								case 'date':
+								case 'time':
+								case 'datetime':
+									?>
+									<? if (!isset($column['filter_value']['gte'])) {
+									$column['filter_value']['gte'] = null;
+								}
+									if (!isset($column['filter_value']['lte'])) {
+										$column['filter_value']['lte'] = null;
+									}
+									?>
+
+									<div class="zoom-hover daterange">
+										<div class="input">
+											<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
+											<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
+											<span class="clear">clear</span>
+										</div>
+										<div class="value" data-default="{{Date Range}}">
+											<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
+												<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
+											<? } else { ?>
+												<b class="amp-sprite si-calendar-icon-wht"></b>
+											<? } ?>
+										</div>
+									</div>
+
+									<? break;
+
+								default:
+									break;
+							} ?>
+						</td>
+					<? } else { ?>
+						<td></td>
 					<? } ?>
-					<a class="hide-filter">{{Hide}}</a>
-				</td>
-			<? } ?>
-		</tr>
+				<? } ?>
+				<? if ($show_actions) { ?>
+					<td align="center">
+						<a class="button filter-button">{{Filter}}</a>
+						<? if (!empty($_GET['filter'])) { ?>
+							<a class="reset reset-button">{{Reset}}</a>
+						<? } ?>
+						<a class="hide-filter">{{Hide}}</a>
+					</td>
+				<? } ?>
+			</tr>
 		<? } ?>
 
 		<? if (!empty($rows)) { ?>

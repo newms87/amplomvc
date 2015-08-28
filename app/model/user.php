@@ -187,12 +187,12 @@ class App_Model_User extends App_Model_Table
 			'user_role_id' => array(
 				'type'         => 'select',
 				'display_name' => _l("Role"),
-				'build_data'   => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
-				'build_config' => array(
-					'user_role_id',
-					'name'
+				'build'        => array(
+					'data'  => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
+					'value' => 'user_role_id',
+					'label' => 'name',
 				),
-				'filter'       => 'select',
+				'filter'       => 'multiselect',
 				'sort'         => true,
 			),
 			'status'       => array(

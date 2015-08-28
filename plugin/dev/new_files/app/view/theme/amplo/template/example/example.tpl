@@ -46,7 +46,6 @@
 </section>
 
 <script type="text/javascript">
-console.log('test');
 	$('form').submit(function() {
 		$(this).find('[data-loading]').loading();
 		$(this).find('[data-loading]').loading('stop');

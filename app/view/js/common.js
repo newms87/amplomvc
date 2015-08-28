@@ -289,6 +289,8 @@ $.ampSelect = $.fn.ampSelect = function (o) {
 
 $.extend($.ampSelect, {
 	init: function (o) {
+		o = $.extend({}, {}, o);
+
 		return this.use_once('amp-select-enabled').each(function (i, e) {
 			var $select = $(e);
 			var $selected = $("<div />").addClass('amp-selected').append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
@@ -312,6 +314,7 @@ $.extend($.ampSelect, {
 
 			//Setup Box
 			$box
+				.data('o', o)
 				.data('selected', $selected)
 				.data('placeholder', $select.attr('data-placeholder') || 'Select Items...')
 				.data('options', $options)
@@ -320,18 +323,20 @@ $.extend($.ampSelect, {
 				.append($actions.append($done))
 				.ampSelect('assignSelect', $select);
 
-			var o = {
+			$box.ampModal({
 				title:   $title.prepend($checkall),
 				context: $select.parent()
-			}
+			});
 
-			$box.ampModal(o);
+			if ($selected.is(':visible')) {
+				$selected.width($selected.width())
+			}
 		});
 	},
 
 	open: function () {
 		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
-		$box.ampModal('open');
+		$box.closest('.amp-modal').ampModal('open');
 	},
 
 	close: function () {
@@ -342,6 +347,15 @@ $.extend($.ampSelect, {
 	checkall: function (checked) {
 		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
 		$box.data('options').find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $box.data('checkall').find('input').is(':checked')).first().change();
+	},
+
+	sortable: function(s) {
+		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
+
+		o = $box.data('o');
+		o.sortable = s || {}
+
+		$box.data('options').sortable(o.sortable);
 	},
 
 	assignSelect: function ($select) {
@@ -365,6 +379,11 @@ $.extend($.ampSelect, {
 		$select.data('box', $box);
 		$select.change($.ampSelect.refresh);
 		$box.data('select', $select);
+
+		if ((s = $box.data('o').sortable)) {
+			$box.ampSelect('sortable', typeof s === 'object' ? s : {});
+		}
+
 		$box.ampSelect('update')
 	},
 
@@ -1355,6 +1374,8 @@ $.fn.liveForm = function (params) {
 }
 
 function content_loaded(is_ajax) {
+	$('select.amp-select').ampSelect();
+
 	var $forms = $('form');
 
 	$forms.find('input').not('[data-no-enter-key]').use_once('form-input').keydown(function (e) {
@@ -1417,8 +1438,6 @@ $(document)
 				window.open(ui.item.href);
 			}
 		});
-
-		$('select.amp-select').ampSelect();
 
 		content_loaded();
 	})

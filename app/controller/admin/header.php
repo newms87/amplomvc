@@ -9,7 +9,7 @@ class App_Controller_Admin_Header extends Controller
 		);
 
 		//Add Styles
-		$style = $this->theme->getThemeStyle(option('config_admin_theme', 'admin'));
+		$style = $this->theme->getThemeStyle();
 
 		if ($style) {
 			$this->document->addStyle($style);
