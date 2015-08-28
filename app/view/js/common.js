@@ -295,7 +295,7 @@ $.extend($.ampSelect, {
 			var $select = $(e);
 			var $selected = $("<div />").addClass('amp-selected').append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
 				$box = $('<div/>').addClass('amp-select-box'),
-				$options = $('<div/>').addClass('amp-select-options'),
+				$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
 				$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
 				$actions = $('<div/>').addClass('amp-select-actions'),
 				$done = $('<a/>').addClass('amp-select-done button').html('Done'),
@@ -349,7 +349,7 @@ $.extend($.ampSelect, {
 		$box.data('options').find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $box.data('checkall').find('input').is(':checked')).first().change();
 	},
 
-	sortable: function(s) {
+	sortable: function (s) {
 		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
 
 		o = $box.data('o');
@@ -1373,8 +1373,16 @@ $.fn.liveForm = function (params) {
 	});
 }
 
+function no_parent_scroll(e) {
+	var h = $(this).height(), d = e.originalEvent.wheelDelta;
+	if ((this.scrollTop >= (this.scrollHeight - h) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+		e.preventDefault();
+	}
+}
+
 function content_loaded(is_ajax) {
 	$('select.amp-select').ampSelect();
+	$('.no-parent-scroll').on('mousewheel DOMMouseScroll', no_parent_scroll)
 
 	var $forms = $('form');
 
