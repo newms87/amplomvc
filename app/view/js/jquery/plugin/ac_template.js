@@ -80,10 +80,11 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 
 			list.attr('data-count', list.children().length);
 
-			var row_list = [count];
+			var row_list = [count], row_find = ['__ac_template__'];
 
 			template.parents('[data-row]').each(function (i, e) {
 				row_list.unshift(parseInt($(e).attr('data-row')));
+				row_find.push('__ac_template__');
 			});
 
 			template.find('[name]').each(function (i, e) {
@@ -148,7 +149,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			template.find('*').addBack().not('option').each(function (i, e) {
 				var $e = $(e);
 				$.each(this.attributes, function (a, attr) {
-					$e.attr(attr.name, attr.value.replace('__ac_template__', count));
+					$e.attr(attr.name, attr.value.str_replace(row_find, row_list));
 					if (attr.name === 'value') {
 						$e.val($e.attr('value'));
 					}
@@ -159,7 +160,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			template.find('*').contents().filter(function () {
 				return this.nodeType === 3;
 			}).each(function (i, e) {
-				e.nodeValue = e.nodeValue.replace('__ac_template__', count);
+				e.nodeValue = e.nodeValue.str_replace(row_find, row_list);
 			});
 
 			return template;
