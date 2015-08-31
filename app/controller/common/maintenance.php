@@ -8,6 +8,6 @@ class App_Controller_Common_Maintenance extends Controller
 		set_page_info('title', _l("Maintenance"));
 
 		//Render
-		output($this->render('common/maintenance', $data));
+		output($this->render('common/maintenance'));
 	}
 }
