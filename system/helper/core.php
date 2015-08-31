@@ -253,9 +253,11 @@ function register_routing_hook($name, $callable, $sort_order = 0)
  *
  * @return bool | null - if the return value is false no other hooks will be called.
  */
-function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
+function amplo_routing_hook($router)
 {
 	global $registry;
+
+	$segments = $router->getSegment();
 
 	if (IS_ADMIN) {
 		//Initialize site configurations
@@ -269,16 +271,14 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 				$hide = $registry->get('url')->here('hide_maintenance_msg=1');
 				message('notify', _l("Site is in maintenance mode. You may still access the site when signed in as an administrator. <a href=\"%s\">(hide message)</a> ", $hide));
 			}
-		} else {
-			if (count($segments) === 1) {
-				$path = defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index';
-				$registry->get('route')->setPath($path);
-			}
+		}
+
+		if (empty($segments[1])) {
+			$router->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index');
 		}
 	} else {
 		if (option('config_maintenance')) {
-			$path = 'common/maintenance';
-			return $registry->get('route')->setPath($path);
+			$router->setPath('common/maintenance');
 		}
 
 		$terms_agreement_date = option('terms_agreement_date');
@@ -287,15 +287,15 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 			$customer_agreed_date = is_logged() ? customer_meta('terms_agreed_date') : _cookie('terms_agreed_date');
 			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $registry->get('date')->isAfter($terms_agreement_date, $customer_agreed_date)));
 		}
-	}
 
-	//Path Rerouting
-	switch ($segments[0]) {
-		case 'page':
-			if (!empty($segments[1]) && $segments[1] !== 'preview') {
-				$path = 'page';
-			}
-			break;
+		//Path Rerouting
+		switch ($segments[0]) {
+			case 'page':
+				if (!empty($segments[1]) && $segments[1] !== 'preview') {
+					$router->setPath('page', $segments);
+				}
+				break;
+		}
 	}
 }
 

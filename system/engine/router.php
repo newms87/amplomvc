@@ -5,6 +5,7 @@ class Router
 	protected
 		$path,
 		$segments,
+		$args = array(),
 		$site,
 		$routing_hooks = array();
 
@@ -50,15 +51,20 @@ class Router
 		return $this->path === str_replace('-', '_', $path);
 	}
 
+	public function setPath($path, $segments = null)
+	{
+		$this->path     = str_replace('-', '_', $path);
+
+		if ($segments === null) {
+			$this->segments = explode('/', $this->path);
+		} else {
+			$this->segments = (array)$segments;
+		}
+	}
+
 	public function getPath()
 	{
 		return $this->path;
-	}
-
-	public function setPath($path)
-	{
-		$this->path     = str_replace('-', '_', $path);
-		$this->segments = explode('/', $this->path);
 	}
 
 	public function getSegment($index = null)
@@ -70,14 +76,24 @@ class Router
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
 	}
 
-	public function getSite()
+	public function setArgs($args)
 	{
-		return $this->site;
+		$this->args = (array)$args;
+	}
+
+	public function getArgs()
+	{
+		return $this->args;
 	}
 
 	public function setSite($site)
 	{
 		$this->site = $site;
+	}
+
+	public function getSite()
+	{
+		return $this->site;
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
@@ -120,21 +136,14 @@ class Router
 
 	public function dispatch()
 	{
-		$path = $this->path;
-
 		//Resolve routing hooks
-		$args = array();
-
 		uasort($this->routing_hooks, function ($a, $b) {
 			return $a['sort_order'] > $b['sort_order'];
 		});
 
 		foreach ($this->routing_hooks as $hook) {
 			$params = array(
-				&$path,
-				$this->segments,
-				$this->path,
-				&$args,
+				$this
 			);
 
 			if (call_user_func_array($hook['callable'], $params) === false) {
@@ -143,10 +152,10 @@ class Router
 		}
 
 		//Resolve Layout ID
-		set_option('config_layout_id', $this->getLayoutForPath($path));
+		set_option('config_layout_id', $this->getLayoutForPath($this->path));
 
 		//Dispatch Route
-		$action = new Action($path, $args);
+		$action = new Action($this->path, $this->args);
 
 		$valid = $action->isValid();
 
