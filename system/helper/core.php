@@ -278,7 +278,7 @@ function amplo_routing_hook($router)
 		}
 	} else {
 		if (option('config_maintenance')) {
-			$router->setPath('common/maintenance');
+			return $router->setPath('common/maintenance');
 		}
 
 		$terms_agreement_date = option('terms_agreement_date');
