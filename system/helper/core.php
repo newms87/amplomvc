@@ -262,7 +262,7 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 		$config = $registry->get('config');
 		$config->runSiteConfig();
 
-		if (option('config_maintenance')) {
+		if (!IS_AJAX && option('config_maintenance')) {
 			if (isset($_GET['hide_maintenance_msg'])) {
 				$_SESSION['hide_maintenance_msg'] = 1;
 			} elseif (!isset($_SESSION['hide_maintenance_msg'])) {
@@ -278,7 +278,7 @@ function amplo_routing_hook(&$path, $segments, $orig_path, &$args)
 	} else {
 		if (option('config_maintenance')) {
 			$path = 'common/maintenance';
-			$registry->get('route')->setPath($path);
+			return $registry->get('route')->setPath($path);
 		}
 
 		$terms_agreement_date = option('terms_agreement_date');
