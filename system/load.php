@@ -23,10 +23,18 @@ $registry->set('db', $db);
 
 $last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
 
+if (AMPLO_PROFILE) {
+	_profile('Database loaded');
+}
+
 if ($last_update) {
 	clear_cache('model');
 	cache('db_last_update', $last_update['Value']);
 	$db->updateTables();
+
+	if (AMPLO_PROFILE) {
+		_profile('Database Model refreshed');
+	}
 }
 
 //TODO: REMOVE 'store' check once all sites updated for future
@@ -43,10 +51,6 @@ HTML;
 
 	rename(DIR_SITE . 'config.php', DIR_SITE . 'config.php.bkp');
 	exit;
-}
-
-if (AMPLO_PROFILE) {
-	_profile('Database loaded');
 }
 
 //Initialize Router

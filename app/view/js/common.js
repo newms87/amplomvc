@@ -459,7 +459,7 @@ $.extend($.ampSelect, {
 	sortable: function (s) {
 		var $box = $(this).data('box') || $(this).closest('.amp-select-box');
 
-		o = $box.data('o');
+		o = $box.data('o') || {};
 		o.sortable = s || {}
 
 		$box.data('options').sortable(o.sortable);
