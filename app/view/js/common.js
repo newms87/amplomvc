@@ -301,13 +301,13 @@ $.extend($.ampYouTube, {
 		player.playVideo();
 	},
 
-	pause: function() {
+	pause: function () {
 		var player = $(this).data('player');
 		player.ampO.playing = false;
 		player.pauseVideo();
 	},
 
-	playIndex: function(i) {
+	playIndex: function (i) {
 		this.data('player').playVideoAt(i);
 	},
 
@@ -583,6 +583,37 @@ $.fn.apply_filter = function (url) {
 
 	return url;
 }
+
+$.ampResize = $.fn.ampResize = function (o) {
+	return $.amp.call(this, $.ampResize, arguments);
+}
+
+$.extend($.ampResize, {
+	init: function(o) {
+		o = $.extend({}, {
+			on: 'keyup'
+		}, o);
+
+		var $canvas = $('<canvas/>').css({position: 'absolute', left: -9999});
+		$('body').append($canvas);
+
+		if (!$.ampResize.ctx) {
+			$.ampResize.ctx = $canvas[0].getContext('2d');
+		}
+
+		return this.on(o.on, $.ampResize.update).ampResize('update');
+	},
+
+	update: function () {
+		$(this).each(function(i,e){
+			var $e = $(e);
+			$.ampResize.ctx.font = $e.css('font');
+			var val = $e.val();
+			$e.css('text-transform') === 'uppercase' ? val = val.toUpperCase() : 0;
+			$e.width($.ampResize.ctx.measureText(val).width + 'px');
+		})
+	}
+})
 
 //A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
 $.fn.update_index = function (column) {
@@ -1315,7 +1346,7 @@ $.extend($.ampFormEditor, {
 
 	edit: function () {
 		var $form = $(this).closest('.form-editor').removeClass('read').addClass('edit');
-		$form.find('[readonly]').attr('data-readonly', 1).removeAttr('readonly');
+		$form.find('[readonly]').attr('data-readonly', 1).removeAttr('readonly').trigger('editing');
 		return false;
 	},
 
@@ -1328,7 +1359,7 @@ $.extend($.ampFormEditor, {
 	read: function () {
 		var $form = $(this).closest('.form-editor').removeClass('edit').addClass('read');
 		$form.find('[data-readonly]').attr('readonly', '');
-		$form.find('[data-disable]').blur();
+		$form.find('[data-disable]').blur().trigger('reading');
 		return false;
 	},
 
@@ -1507,6 +1538,8 @@ function no_parent_scroll(e) {
 
 function content_loaded(is_ajax) {
 	$('select.amp-select').ampSelect();
+	$('input[data-amp-resize]').ampResize();
+
 	$('.no-parent-scroll').on('mousewheel DOMMouseScroll', no_parent_scroll)
 
 	var $forms = $('form');
