@@ -54,7 +54,15 @@ class DB
 				}
 			}
 
+			if (AMPLO_PROFILE) {
+				_profile("Database connecting...");
+			}
+
 			$db = new $driver($hostname, $username, $password, $schema);
+
+			if (AMPLO_PROFILE) {
+				_profile("Database connected");
+			}
 
 			//Set our errors to the driver errors if there were any
 			$this->error = $db->getError();
@@ -71,10 +79,6 @@ class DB
 		$this->t->schema = $schema;
 		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
 
-		if (AMPLO_PROFILE) {
-			_profile('Database initialized');
-		}
-		
 		$this->updateTables();
 	}
 
