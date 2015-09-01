@@ -186,6 +186,18 @@ class Router
 				}
 			} else {
 				if (AMPLO_USER_PAGE_LOG) {
+					global $user_page_log_private;
+					$post = $_POST;
+					$private = array(
+						'password',
+					) + (array)$user_page_log_private;
+
+					foreach ($private as $p) {
+						if (isset($post[$p])) {
+							$post[$p] = '...';
+						}
+					}
+
 					write_log('user-page-log', IS_POST ? "POST: " . json_encode($_POST) : "GET");
 				}
 
