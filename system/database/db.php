@@ -71,6 +71,10 @@ class DB
 		$this->t->schema = $schema;
 		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
 
+		if (AMPLO_PROFILE) {
+			_profile('Database initialized');
+		}
+		
 		$this->updateTables();
 	}
 
