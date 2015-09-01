@@ -198,7 +198,7 @@ class Router
 						}
 					}
 
-					write_log('user-page-log', IS_POST ? "POST: " . json_encode($_POST) : "GET");
+					write_log('user-page-log', IS_POST ? "POST: " . json_encode($post) : "GET");
 				}
 
 				//Login Verification
