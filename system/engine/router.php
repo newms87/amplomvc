@@ -288,7 +288,7 @@ class Router
 				}
 			}
 		}
-		
+
 		if (IS_POST) {
 			$post    = $_POST;
 
