@@ -53,7 +53,7 @@ class Router
 
 	public function setPath($path, $segments = null)
 	{
-		$this->path     = str_replace('-', '_', $path);
+		$this->path = str_replace('-', '_', $path);
 
 		if ($segments === null) {
 			$this->segments = explode('/', $this->path);
@@ -185,22 +185,6 @@ class Router
 					redirect('admin/error/permission');
 				}
 			} else {
-				if (AMPLO_USER_PAGE_LOG) {
-					global $user_page_log_private;
-					$post = $_POST;
-					$private = array(
-						'password',
-					) + (array)$user_page_log_private;
-
-					foreach ($private as $p) {
-						if (isset($post[$p])) {
-							$post[$p] = '...';
-						}
-					}
-
-					write_log('user-page-log', IS_POST ? "POST: " . json_encode($post) : "GET");
-				}
-
 				//Login Verification
 				if (!$this->customer->canDoAction($action)) {
 					$this->request->setRedirect($this->url->here());
@@ -213,6 +197,10 @@ class Router
 					redirect('customer/login');
 				}
 			}
+		}
+
+		if (AMPLO_ACCESS_LOG) {
+			$this->logRequest();
 		}
 
 		if (!$valid || !$action->execute()) {
@@ -272,5 +260,53 @@ class Router
 
 		define('SITE_PREFIX', $prefix);
 		_set_prefix($prefix);
+	}
+
+	private function logRequest()
+	{
+		global $_access_log;
+
+		if (!empty($_access_log['only'])) {
+			$match = false;
+
+			foreach ($_access_log['only'] as $only) {
+				if (preg_match("#$only#", $this->path)) {
+					$match = true;
+					break;
+				}
+			}
+
+			if (!$match) {
+				return;
+			}
+		}
+
+		if (!empty($_access_log['skip'])) {
+			foreach ($_access_log['skip'] as $skip) {
+				if (preg_match("#$skip#", $this->path)) {
+					return;
+				}
+			}
+		}
+		
+		if (IS_POST) {
+			$post    = $_POST;
+
+			$private = array(
+				'password',
+			);
+
+			if (!empty($_access_log['private'])) {
+				$private += (array)$_access_log['private'];
+			}
+
+			foreach ($private as $p) {
+				if (isset($post[$p])) {
+					$post[$p] = '...';
+				}
+			}
+		}
+
+		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST: " . json_encode($post) : "GET"));
 	}
 }
