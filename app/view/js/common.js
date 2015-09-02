@@ -589,7 +589,7 @@ $.ampResize = $.fn.ampResize = function (o) {
 }
 
 $.extend($.ampResize, {
-	init: function(o) {
+	init: function (o) {
 		o = $.extend({}, {
 			on: 'keyup'
 		}, o);
@@ -605,7 +605,7 @@ $.extend($.ampResize, {
 	},
 
 	update: function () {
-		$(this).each(function(i,e){
+		$(this).each(function (i, e) {
 			var $e = $(e);
 			$.ampResize.ctx.font = $e.css('font');
 			var val = $e.val();
@@ -700,8 +700,11 @@ $.fn.tabs = function (opts) {
 
 		if ($tabs.o.pushState) {
 			var id = $content.attr('id');
-			var url = window.location.href.replace(/#.*/, '') + (id ? '#' + id : '');
-			history.pushState({url: url}, title || $this.text(), url);
+			var url = location.href.replace(/#.*/, '') + (id ? '#' + id : '');
+
+			if (url !== location.href) {
+				history.pushState({url: url}, title || $this.text(), url);
+			}
 		}
 
 		if (title) {
