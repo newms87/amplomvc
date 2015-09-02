@@ -154,6 +154,10 @@ class Router
 		//Resolve Layout ID
 		set_option('config_layout_id', $this->getLayoutForPath($this->path));
 
+		if (AMPLO_ACCESS_LOG) {
+			$this->logRequest();
+		}
+		
 		//Dispatch Route
 		$action = new Action($this->path, $this->args);
 
@@ -197,10 +201,6 @@ class Router
 					redirect('customer/login');
 				}
 			}
-		}
-
-		if (AMPLO_ACCESS_LOG) {
-			$this->logRequest();
 		}
 
 		if (!$valid || !$action->execute()) {
@@ -307,6 +307,6 @@ class Router
 			}
 		}
 
-		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST: " . json_encode($post) : "GET"));
+		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST: " . json_encode($post) : "GET") . " path: " . $this->path);
 	}
 }
