@@ -157,7 +157,7 @@ class Router
 		if (AMPLO_ACCESS_LOG) {
 			$this->logRequest();
 		}
-		
+
 		//Dispatch Route
 		$action = new Action($this->path, $this->args);
 
@@ -307,6 +307,6 @@ class Router
 			}
 		}
 
-		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST: " . json_encode($post) : "GET") . " path: " . $this->path);
+		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST " : "GET ") . $this->path . (IS_POST ? "<BR><BR>" . json_encode($post) : ''));
 	}
 }
