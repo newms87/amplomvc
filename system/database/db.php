@@ -690,12 +690,7 @@ class DB
 				);
 
 				foreach ($fields as $name => $ord) {
-					if (!in_array(strtoupper($ord), $orders)
-					) {
-						$key_fields[] = "`$ord`";
-					} else {
-						$key_fields[] = "`$name` $ord";
-					}
+					$key_fields[] = in_array(strtoupper($ord), $orders) ? "`$name` $ord" : "`$ord`";
 				}
 			}
 

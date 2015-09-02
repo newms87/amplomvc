@@ -26,7 +26,7 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 		unset($settings['query']['filter']);
 
 		foreach ($settings['fields'] as $key => &$field) {
-			if (empty($field['filter'])) {
+			if (empty($field['filter']) || (!empty($field['build']) && empty($field['build']['data']))) {
 				unset($settings['fields'][$key]);
 				continue;
 			}
