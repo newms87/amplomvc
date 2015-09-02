@@ -307,6 +307,6 @@ class Router
 			}
 		}
 
-		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST " : "GET ") . $this->path . (IS_POST ? "<BR><BR>" . json_encode($post) : ''));
+		write_log('access-log', (IS_ADMIN ? 'ADMIN ' : '') . (IS_POST ? "POST " : "GET ") . (IS_AJAX ? 'AJAX ' : '') . $this->path . (IS_POST ? "<BR><BR>" . json_encode($post) : ''));
 	}
 }
