@@ -16,7 +16,7 @@ $.fn.list_widget = function (view_id) {
 
 	var $view_config = $list_widget.find('.view-config');
 
-	$view_config.find('.view-tabs a').tabs();
+	$view_config.find('.view-tabs a').tabs({pushState: false});
 	$view_config.find('.save-view-cols').click(update_list_widget);
 	$view_config.find('.save-settings').click(save_list_widget_settings);
 
