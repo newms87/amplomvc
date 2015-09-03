@@ -14,22 +14,22 @@
  */
 class Plugin_Dev_Setup extends Plugin_Setup
 {
-	public function install()
-	{
-		$link = array(
-			'group'        => 'admin',
+	static $admin_nav = array(
+		'development' => array(
 			'display_name' => "Development",
-			'name'         => 'development',
 			'path'         => 'admin/dev',
 			'parent'       => 'system',
 			'sort_order'   => 15,
-		);
+		)
+	);
 
-		$this->Model_Navigation->save(null, $link);
+	public function install()
+	{
+		$this->Model_Navigation->saveGroupLinks('admin', self::$admin_nav);
 	}
 
 	public function uninstall($keep_data = false)
 	{
-		$this->Model_Navigation->removeGroupLink('admin', 'development');
+		$this->Model_Navigation->removeGroupLinks('admin', self::$admin_nav);
 	}
 }

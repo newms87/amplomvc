@@ -711,6 +711,7 @@ abstract class Model
 
 				case 'date':
 				case 'datetime':
+				case 'timestamp':
 				case 'time':
 					if (is_array($value)) {
 						$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
@@ -1023,7 +1024,7 @@ abstract class Model
 							'float'     => self::FLOAT,
 							'double'    => self::FLOAT,
 							'datetime'  => self::DATETIME,
-							'timestamp' => self::INTEGER,
+							'timestamp' => self::DATETIME,
 							'binary'    => self::NO_ESCAPE,
 							'varbinary' => self::NO_ESCAPE,
 						);

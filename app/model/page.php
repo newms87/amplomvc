@@ -197,7 +197,7 @@ class App_Model_Page extends App_Model_Table
 
 			$this->getPageFiles($page);
 		}
-		
+
 		return $page;
 	}
 
@@ -417,22 +417,5 @@ class App_Model_Page extends App_Model_Table
 		}
 
 		return $this->getTableColumns('page', $merge, $filter);
-	}
-
-	public function getViewListingId()
-	{
-		$view_listing_id = $this->Model_ViewListing->getViewListingBySlug('page_list');
-
-		if (!$view_listing_id) {
-			$view_listing = array(
-				'name' => _l("Pages"),
-				'slug' => 'page_list',
-				'path' => 'admin/page/listing',
-			);
-
-			$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
-		}
-
-		return $view_listing_id;
 	}
 }

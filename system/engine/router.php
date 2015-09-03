@@ -290,7 +290,7 @@ class Router
 		}
 
 		if (IS_POST) {
-			$post    = $_POST;
+			$post = $_POST;
 
 			$private = array(
 				'password',

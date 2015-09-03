@@ -20,7 +20,7 @@ class mysqlidb implements DatabaseInterface
 		MYSQLI_TYPE_FLOAT       => 'float',
 		MYSQLI_TYPE_DOUBLE      => 'float',
 		MYSQLI_TYPE_NULL        => 'null',
-		MYSQLI_TYPE_TIMESTAMP   => 'int',
+		MYSQLI_TYPE_TIMESTAMP   => 'string',
 		MYSQLI_TYPE_LONGLONG    => 'string',
 		MYSQLI_TYPE_INT24       => 'int',
 		MYSQLI_TYPE_DATE        => 'string',

@@ -7,23 +7,12 @@ class App_Controller_Admin_Block extends Controller
 		//Page Head
 		set_page_info('title', _l("Blocks"));
 
-		//Page Title
-		$data = array(
-			'page_title' => _l("Blocks"),
-		);
-
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Blocks"), site_url('admin/block'));
 
-		//The Listing
-		$data['listing'] = $this->listing();
-
-		//Actions
-		$data['insert'] = site_url('admin/block/add-block');
-
 		//Render
-		output($this->render('block/list', $data));
+		output($this->render('block/list'));
 	}
 
 	public function listing()

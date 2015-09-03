@@ -31,9 +31,6 @@ class App_Controller_Admin_Navigation extends Controller
 			'url'     => site_url('admin/navigation/batch-action'),
 		);
 
-		//The Listing
-		$data['listing'] = $this->listing();
-
 		//Render
 		output($this->render('navigation/list', $data));
 	}

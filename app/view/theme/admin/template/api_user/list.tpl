@@ -19,7 +19,10 @@
 			<? } ?>
 		</div>
 		<div class="section">
-			<?= $listing; ?>
+			<?= block('widget/views', null, array(
+				'path'  => 'admin/api_user/listing',
+				'group' => 'API Users',
+			)); ?>
 		</div>
 	</div>
 </div>

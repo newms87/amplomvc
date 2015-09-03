@@ -11,9 +11,6 @@ class App_Controller_Admin_Logs extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("User"), site_url('admin/logs'));
 
-		//Listing
-		$data['listing'] = $this->listing();
-
 		//Batch Actions
 		$actions = array(
 			'delete' => array(

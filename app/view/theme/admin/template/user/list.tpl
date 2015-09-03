@@ -10,13 +10,19 @@
 				<div class="batch_actions">
 					<?= block('widget/batch_action', null, $batch_action); ?>
 				</div>
+			<? } ?>
+
+			<? if (user_can('w', 'admin/user/form')) { ?>
 				<div class="buttons">
 					<a href="<?= site_url('admin/user/form'); ?>" class="button">{{Add User}}</a>
 				</div>
 			<? } ?>
 		</div>
 		<div class="section">
-			<?= $listing; ?>
+			<?= block('widget/views', null, array(
+				'path'  => 'admin/user/listing',
+				'group' => 'Users',
+			)); ?>
 		</div>
 	</div>
 </div>

@@ -10,8 +10,8 @@ class Customer extends Library
 	{
 		parent::__construct();
 
-		if (!empty($_SESSION['customer']['customer_id'])) {
-			if ($this->setCustomer($_SESSION['customer']['customer_id'])) {
+		if (!empty($_SESSION['customer_id'])) {
+			if ($this->setCustomer($_SESSION['customer_id'])) {
 				$this->track();
 			} else {
 				$this->logout();
@@ -114,10 +114,9 @@ class Customer extends Library
 
 		$customer['name'] = trim($customer['first_name'] . ' ' . $customer['last_name']);
 
-		$this->customer_id                   = (int)$customer['customer_id'];
-		$_SESSION['customer_id']             = $this->customer_id;
-		$_SESSION['customer']['customer_id'] = $this->customer_id;
-		$this->info                          = $customer;
+		$this->customer_id       = (int)$customer['customer_id'];
+		$_SESSION['customer_id'] = $this->customer_id;
+		$this->info              = $customer;
 
 		$this->displayMessages();
 

@@ -14,7 +14,10 @@
 			</div>
 		</div>
 		<div class="section">
-			<?= $listing; ?>
+			<?= block('widget/views', null, array(
+				'path'  => 'admin/navigation/listing',
+				'group' => 'Navigation',
+			)); ?>
 		</div>
 	</div>
 </div>

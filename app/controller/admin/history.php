@@ -11,11 +11,8 @@ class App_Controller_Admin_History extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("History"), site_url('admin/history'));
 
-		//Listing
-		$data['listing'] = $this->listing();
-
 		//Response
-		output($this->render('history', $data));
+		output($this->render('history'));
 	}
 
 	public function listing()

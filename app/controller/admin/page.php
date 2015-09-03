@@ -12,26 +12,22 @@ class App_Controller_Admin_Page extends Controller
 		breadcrumb(_l("Page"), site_url('admin/page'));
 
 		//Batch Actions
-		if (user_can('w', 'admin/page/batch_action')) {
-			$actions = array(
-				'enable'  => array(
-					'label' => _l("Enable")
-				),
-				'disable' => array(
-					'label' => _l("Disable"),
-				),
-				'delete'  => array(
-					'label' => _l("Delete"),
-				),
-			);
+		$actions = array(
+			'enable'  => array(
+				'label' => _l("Enable")
+			),
+			'disable' => array(
+				'label' => _l("Disable"),
+			),
+			'delete'  => array(
+				'label' => _l("Delete"),
+			),
+		);
 
-			$data['batch_action'] = array(
-				'actions' => $actions,
-				'path'    => site_url('admin/page/batch-action'),
-			);
-		}
-
-		$data['view_listing_id'] = $this->Model_Page->getViewListingId();
+		$data['batch_action'] = array(
+			'actions' => $actions,
+			'path'    => site_url('admin/page/batch-action'),
+		);
 
 		//Render
 		output($this->render('page/list', $data));

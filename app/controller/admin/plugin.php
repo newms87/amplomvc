@@ -10,10 +10,8 @@ class App_Controller_Admin_Plugin extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
 
-		$data['listing'] = $this->listing();
-
 		//Render
-		output($this->render('plugin/list', $data));
+		output($this->render('plugin/list'));
 	}
 
 	public function listing()

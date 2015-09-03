@@ -12,7 +12,10 @@
 			<? } ?>
 		</div>
 		<div class="section">
-			<?= $listing; ?>
+			<?= block('widget/views', null, array(
+				'path'  => 'admin/logs/listing',
+				'group' => 'System Logs',
+			)); ?>
 		</div>
 	</div>
 </div>
