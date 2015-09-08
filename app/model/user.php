@@ -6,6 +6,11 @@ class App_Model_User extends App_Model_Table
 
 	public function save($user_id, $user)
 	{
+		if (!user_can('w', 'admin/user/save')) {
+			unset($user['user_role_id']);
+			unset($user['username']);
+		}
+
 		if (isset($user['username'])) {
 			if (!validate('text', $user['username'], 3, 128)) {
 				$this->error['username'] = _l("Username must be between 3 and 128 characters!");

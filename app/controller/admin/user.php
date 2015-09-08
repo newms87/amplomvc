@@ -140,7 +140,12 @@ class App_Controller_Admin_User extends Controller
 
 		$user += $defaults;
 
-		$user['data_user_roles'] = $this->Model_UserRole->getRecords(null, null, array('cache' => true));
+		$options = array(
+			'cache' => true,
+			'index' => 'user_role_id'
+		);
+
+		$user['data_user_roles'] = $this->Model_UserRole->getRecords(null, null, $options);
 
 		$user['data_statuses'] = array(
 			0 => _l("Disabled"),

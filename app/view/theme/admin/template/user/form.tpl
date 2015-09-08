@@ -27,7 +27,11 @@
 					<tr>
 						<td class="required"> {{Username:}}</td>
 						<td>
-							<input type="text" name="username" value="<?= $username; ?>"/>
+							<? if (user_can('w', 'admin/user/form')) { ?>
+								<input type="text" name="username" value="<?= $username; ?>"/>
+							<? } else { ?>
+								<span class="username-readonly"><?= $username; ?></span>
+							<? } ?>
 						</td>
 					</tr>
 					<tr>
@@ -51,14 +55,18 @@
 					<tr>
 						<td>{{User Group:}}</td>
 						<td>
-							<?= build(array(
-								'type'   => 'select',
-								'name'   => 'user_role_id',
-								'data'   => $data_user_roles,
-								'select' => $user_role_id,
-								'value'  => 'user_role_id',
-								'label'  => 'name',
-							)); ?>
+							<? if (user_can('w', 'admin/user/form')) { ?>
+								<?= build(array(
+									'type'   => 'select',
+									'name'   => 'user_role_id',
+									'data'   => $data_user_roles,
+									'select' => $user_role_id,
+									'value'  => 'user_role_id',
+									'label'  => 'name',
+								)); ?>
+							<? } else { ?>
+								<span class="user-role-id-readonly"><?= isset($data_user_roles[$user_role_id]) ? $data_user_roles[$user_role_id]['name'] : '{{(No Role Assigned)}}'; ?></span>
+							<? } ?>
 						</td>
 					</tr>
 					<tr class="password">
