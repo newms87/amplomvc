@@ -966,8 +966,8 @@ abstract class Model
 					return $sort_a > $sort_b;
 				}
 
-				$name_a = isset($a['display_name']) ? $a['display_name'] : $ka;
-				$name_b = isset($b['display_name']) ? $b['display_name'] : $kb;
+				$name_a = isset($a['label']) ? $a['label'] : $ka;
+				$name_b = isset($b['label']) ? $b['label'] : $kb;
 
 				//Sort by name by last resort
 				return $name_a > $name_b;
@@ -1053,7 +1053,7 @@ abstract class Model
 						$a = ucfirst($a);
 					});
 
-					$column['display_name'] = implode(' ', $field);
+					$column['label'] = implode(' ', $field);
 
 					$length = null;
 					if (preg_match("/([a-z_]+)\\s*\\((\\d+)\\)?/", $column['Type'], $length)) {

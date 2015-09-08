@@ -63,7 +63,7 @@ class App_Model_Layout extends App_Model_Table
 		$columns = array(
 			'name'   => array(
 				'type'         => 'text',
-				'display_name' => _l("Layout Name"),
+				'label' => _l("Layout Name"),
 				'filter'       => true,
 				'sort'     => true,
 			),

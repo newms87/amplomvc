@@ -68,7 +68,7 @@ class App_Controller_Admin_ApiUser extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/api_user/listing',
 			'save_path'      => 'admin/api_user/save',
 		);

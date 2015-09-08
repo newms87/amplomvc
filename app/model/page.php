@@ -405,7 +405,7 @@ class App_Model_Page extends App_Model_Table
 			$merge = array(
 				'status' => array(
 					'type'         => 'select',
-					'display_name' => _l("Status"),
+					'label' => _l("Status"),
 					'build_data'   => array(
 						0 => _l("Disabled"),
 						1 => _l("Enabled"),

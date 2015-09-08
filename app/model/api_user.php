@@ -73,7 +73,7 @@ class App_Model_ApiUser extends App_Model_Table
 		$columns = array(
 			'user_id'      => array(
 				'type'         => 'select',
-				'display_name' => _l("User Account"),
+				'label'        => _l("User Account"),
 				'build_data'   => $this->Model_User->getRecords(null, null, array('cache' => true)),
 				'build_config' => array(
 					'user_id',
@@ -84,7 +84,7 @@ class App_Model_ApiUser extends App_Model_Table
 			),
 			'user_role_id' => array(
 				'type'         => 'select',
-				'display_name' => _l("Role"),
+				'label'        => _l("Role"),
 				'build_data'   => $this->Model_UserRole->getRecords(null, $role_filter, array('cache' => true)),
 				'build_config' => array(
 					'user_role_id',
@@ -94,14 +94,14 @@ class App_Model_ApiUser extends App_Model_Table
 				'sort'         => true,
 			),
 			'status'       => array(
-				'type'         => 'select',
-				'display_name' => _l("Status"),
-				'build_data'   => array(
+				'type'       => 'select',
+				'label'      => _l("Status"),
+				'build_data' => array(
 					0 => _l("Deactivated"),
 					1 => _l("Active"),
 				),
-				'filter'       => true,
-				'sort'         => true,
+				'filter'     => true,
+				'sort'       => true,
 			),
 		);
 

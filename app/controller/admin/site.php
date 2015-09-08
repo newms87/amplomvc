@@ -50,7 +50,7 @@ class App_Controller_Admin_Site extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/site/listing',
 			'save_path'      => 'admin/site/save',
 		);

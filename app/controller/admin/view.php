@@ -68,7 +68,7 @@ class App_Controller_Admin_View extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $view_listing_total,
+			'total' => $view_listing_total,
 			'listing_path'   => 'admin/view/listing',
 			'save_path'      => 'admin/view/save',
 		);

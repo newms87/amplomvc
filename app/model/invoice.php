@@ -124,7 +124,7 @@ class App_Model_Invoice extends App_Model_Table
 		$columns = array(
 			'status'   => array(
 				'type'         => 'select',
-				'display_name' => _l("Status"),
+				'label' => _l("Status"),
 				'build'        => array(
 					'type' => 'multiselect',
 					'data' => self::$statuses,
@@ -132,7 +132,7 @@ class App_Model_Invoice extends App_Model_Table
 			),
 			'customer' => array(
 				'type'         => 'text',
-				'display_name' => _l("Customer"),
+				'label' => _l("Customer"),
 			),
 		);
 

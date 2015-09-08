@@ -11,7 +11,7 @@ class App_Model_UserRole extends App_Model_Table
 				$this->error['name'] = _l("Group Name must be between 3 and 64 characters");
 			}
 
-			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t['user_role']} WHERE `name` = '" . $this->escape($role['name']) . "'")) {
+			if (!$user_role_id && $this->queryVar("SELECT COUNT(*) FROM {$this->t[$this->table]} WHERE `name` = '" . $this->escape($role['name']) . "'")) {
 				$this->error['name'] = _l("User Group Name %s already exists!", $role['name']);
 			}
 		} elseif (!$user_role_id) {
@@ -22,14 +22,14 @@ class App_Model_UserRole extends App_Model_Table
 			return false;
 		}
 
-		clear_cache('user_role');
+		clear_cache($this->table);
 
 		$role['permissions'] = !empty($role['permissions']) ? serialize($role['permissions']) : '';
 
 		if ($user_role_id) {
-			$this->update('user_role', $role, $user_role_id);
+			$this->update($this->table, $role, $user_role_id);
 		} else {
-			$user_role_id = $this->insert('user_role', $role);
+			$user_role_id = $this->insert($this->table, $role);
 		}
 
 		return $user_role_id;
@@ -45,20 +45,21 @@ class App_Model_UserRole extends App_Model_Table
 
 		if ($total_users) {
 			$this->error['user_role_users'] = _l("The user group %s currently has %s users associated and cannot be deleted.", $this->getField($user_role_id, 'name'), $total_users);
+
 			return false;
 		}
 
-		clear_cache('user_role');
+		clear_cache($this->table);
 
-		return $this->delete('user_role', $user_role_id);
+		return $this->delete($this->table, $user_role_id);
 	}
 
 	public function getRole($user_role_id)
 	{
-		$user_role = cache('user_role.' . $user_role_id);
+		$user_role = cache($this->table . '.' . $user_role_id);
 
 		if (!$user_role) {
-			$user_role = $this->queryRow("SELECT * FROM {$this->t['user_role']} WHERE user_role_id = " . (int)$user_role_id);
+			$user_role = $this->queryRow("SELECT * FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
 
 			if ($user_role) {
 				$user_role['permissions'] = unserialize($user_role['permissions']);
@@ -69,7 +70,7 @@ class App_Model_UserRole extends App_Model_Table
 				);
 			}
 
-			cache('user_role.' . $user_role_id, $user_role);
+			cache($this->table . '.' . $user_role_id, $user_role);
 		}
 
 		return $user_role;
@@ -77,12 +78,12 @@ class App_Model_UserRole extends App_Model_Table
 
 	public function getRoleId($role)
 	{
-		return $this->queryVar("SELECT user_role_id FROM {$this->t['user_role']} WHERE name = '" . $this->escape($role) . "'");
+		return $this->queryVar("SELECT user_role_id FROM {$this->t[$this->table]} WHERE name = '" . $this->escape($role) . "'");
 	}
 
 	public function getRoleName($user_role_id)
 	{
-		return $this->queryVar("SELECT name FROM {$this->t['user_role']} WHERE user_role_id = " . (int)$user_role_id);
+		return $this->queryVar("SELECT name FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
 	}
 
 	public function getRestrictedAreas()
@@ -175,10 +176,22 @@ class App_Model_UserRole extends App_Model_Table
 		static $merge;
 
 		if (!$merge) {
-			$merge = array();
+			$merge = array(
+				'user_count' => array(
+					'type'         => 'text',
+					'label'        => _l("# of Users"),
+					'sort'         => true,
+					'filter'       => true,
+				),
+			);
 		}
 
-		return $this->getTableColumns('user_role', $merge, $filter);
+		$columns = $this->getTableColumns($this->table, $merge, $filter);
+
+		//Disallowed Columns
+		unset($columns['permissions']);
+
+		return $columns;
 	}
 
 	private function sortAreas(&$areas)

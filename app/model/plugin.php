@@ -373,58 +373,58 @@ class App_Model_Plugin extends App_Model_Table
 	{
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Plugin Name"),
+			'label' => _l("Plugin Name"),
 			'filter'       => true,
 			'sort'     => true,
 		);
 
 		$columns['version'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Version"),
+			'label' => _l("Version"),
 		);
 
 		$columns['date'] = array(
 			'type'         => 'date',
-			'display_name' => _l("Date"),
+			'label' => _l("Date"),
 			'filter'       => true,
 			'sort'     => true,
 		);
 
 		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Title"),
+			'label' => _l("Title"),
 			'filter'       => true,
 			'sort'     => true,
 		);
 
 		$columns['author'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Author"),
+			'label' => _l("Author"),
 			'filter'       => true,
 			'sort'     => true,
 		);
 
 		$columns['description'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Description"),
+			'label' => _l("Description"),
 			'filter'       => true,
 		);
 
 		$columns['link'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Link"),
+			'label' => _l("Link"),
 			'filter'       => true,
 			'sort'     => true,
 		);
 
 		$columns['dependencies'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Dependencies"),
+			'label' => _l("Dependencies"),
 		);
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => _l("Status"),
+			'label' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),

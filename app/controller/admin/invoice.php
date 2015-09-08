@@ -108,7 +108,7 @@ class App_Controller_Admin_Invoice extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $invoice_total,
+			'total' => $invoice_total,
 			'listing_path'   => 'admin/invoice/listing',
 			'save_path'      => 'admin/invoice/save',
 		);

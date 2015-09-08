@@ -17,6 +17,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'template'            => 'table/list_view',
 			'ajax'                => 1,
 			'records'             => array(),
+			'total'       => 0,
 			'template_data'       => array(),
 			'sort'                => array(),
 			'filter_value'        => array(),
@@ -71,8 +72,8 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 				$ec['Field'] = $key;
 			}
 
-			if (!isset($ec['display_name'])) {
-				$ec['display_name'] = $ec['Field'];
+			if (!isset($ec['label'])) {
+				$ec['label'] = $ec['Field'];
 			}
 		}
 		unset($ec);
@@ -130,7 +131,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		//Pagination
 		if ($settings['show_pagination']) {
 			$settings['pagination_settings'] += array(
-				'total' => $settings['total_listings'],
+				'total' => $settings['total'],
 				'path'  => $settings['listing_path'],
 			);
 		}
@@ -146,7 +147,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 					}
 				}
 
-				return strtolower($settings['extra_cols'][$a]['display_name']) > strtolower($settings['extra_cols'][$b]['display_name']);
+				return strtolower($settings['extra_cols'][$a]['label']) > strtolower($settings['extra_cols'][$b]['label']);
 			});
 		}
 
@@ -171,8 +172,8 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		foreach ($settings['columns'] as $col => $col_info) {
 			if (is_string($col_info)) {
 				$columns[$col] = $col_info;
-			} elseif (!empty($col_info['display_name'])) {
-				$columns[$col] = $col_info['display_name'];
+			} elseif (!empty($col_info['label'])) {
+				$columns[$col] = $col_info['label'];
 			} elseif (isset($col_info['Field'])) {
 				$columns[$col] = $col_info['Field'];
 			} else {

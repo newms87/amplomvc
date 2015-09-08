@@ -74,7 +74,7 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/settings/url_alias/listing',
 			'save_path'      => 'admin/settings/url_alias/save',
 		);

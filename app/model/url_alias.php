@@ -44,7 +44,7 @@ class App_Model_UrlAlias extends App_Model_Table
 		$columns = array(
 			'status' => array(
 				'type'         => 'select',
-				'display_name' => _l("Status"),
+				'label' => _l("Status"),
 				'build_data'   => array(
 					0 => _l("Disabled"),
 					1 => _l("Enabled"),

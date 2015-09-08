@@ -19,6 +19,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 	{
 		if (empty($settings['group'])) {
 			$this->output = _l("Invalid View Options: 'group' must be set");
+
 			return;
 		}
 
@@ -58,6 +59,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 				if ($view_listing_id) {
 					$settings['view_listing_id'] = $view_listing_id;
+
 					return $this->build($settings);
 				}
 			}
@@ -186,6 +188,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		if (!$view_listing_id) {
 			$output = _l("View Listing not found with ID: %s", $view_listing_id);
+
 			return $this->is_ajax ? output($output) : $output;
 		}
 
@@ -202,25 +205,25 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			'limit' => _get('limit', IS_ADMIN ? option('admin_list_limit', 20) : option('list_limit', 20)),
 		);
 
-		list($records, $record_total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, $options, true);
+		list($records, $total) = $this->Model_ViewListing->getViewListingRecords($view_listing_id, $sort, $filter, $options, true);
 
 		if (!empty($listing['return_data'])) {
 			$this->output = array(
 				'records' => $records,
-				'total'   => $record_total,
+				'total'   => $total,
 			);
 		}
 
 		$listing += array(
-			'extra_cols'     => $this->Model_ViewListing->getViewListingColumns($view_listing_id, false),
-			'columns'        => $columns,
-			'records'        => $records,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total_listings' => $record_total,
-			'listing_path'   => 'block/widget/views/listing',
-			'theme'          => 'admin'
+			'extra_cols'   => $this->Model_ViewListing->getViewListingColumns($view_listing_id, false),
+			'columns'      => $columns,
+			'records'      => $records,
+			'total'        => $total,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'listing_path' => 'block/widget/views/listing',
+			'theme'        => 'admin'
 		);
 
 		$output = block('widget/listing', null, $listing + $options);

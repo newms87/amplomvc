@@ -186,7 +186,7 @@ class App_Model_User extends App_Model_Table
 		$columns = array(
 			'user_role_id' => array(
 				'type'         => 'select',
-				'display_name' => _l("Role"),
+				'label' => _l("Role"),
 				'build'        => array(
 					'data'  => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
 					'value' => 'user_role_id',
@@ -197,7 +197,7 @@ class App_Model_User extends App_Model_Table
 			),
 			'status'       => array(
 				'type'         => 'select',
-				'display_name' => _l("Status"),
+				'label' => _l("Status"),
 				'build_data'   => array(
 					0 => _l("Disabled"),
 					1 => _l("Enabled"),

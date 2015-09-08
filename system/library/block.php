@@ -8,11 +8,13 @@ class Block extends Library
 	{
 		if (!validate('text', $data['name'], 3, 128)) {
 			$this->error['name'] = _l("Block name must be between 1 and 128 characters!");
+
 			return false;
 		}
 
 		if (empty($data['path']) || !preg_match("/^[a-z0-9_]+\\/[a-z0-9_]+\$/i", $data['path'])) {
 			$this->error['path'] = _l("Block Path must be in the form widget/myblock containing characters a-z, 0-9, or _");
+
 			return false;
 		}
 
@@ -139,6 +141,7 @@ class Block extends Library
 	{
 		if (!$this->exists($path)) {
 			$this->error = _l("Block %s does not exist!", $path);
+
 			return false;
 		}
 
@@ -342,7 +345,7 @@ class Block extends Library
 		$limit = isset($options['limit']) ? (int)$options['limit'] : null;
 
 		if (isset($options['page'])) {
-			$start = max(0,(int)$options['page']) * $options['limit'];
+			$start = max(0, (int)$options['page']) * $options['limit'];
 		} else {
 			$start = isset($options['start']) ? (int)$options['start'] : 0;
 		}
@@ -414,6 +417,7 @@ class Block extends Library
 			if (!$instance) {
 				$link = site_url('admin/block/form', 'path=' . urlencode($path));
 				trigger_error(_l("%s(): Block Instance not found for %s: %s. Please <a href=\"%s\" target=\"_blank\">click here to create this instance</a> first!", __METHOD__, $path, $instance_name, $link));
+
 				return '';
 			}
 
@@ -449,29 +453,29 @@ class Block extends Library
 	public function getColumns($filter = array())
 	{
 		$columns['name'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Name"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Name"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['path'] = array(
-			'type'         => 'text',
-			'display_name' => _l("Path"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Path"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 
 		$columns['status'] = array(
-			'type'         => 'select',
-			'display_name' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
+			'type'       => 'select',
+			'label'      => _l("Status"),
+			'filter'     => true,
+			'build_data' => array(
 				0 => _l("Disabled"),
 				1 => _l("Enabled"),
 			),
-			'sort'     => true,
+			'sort'       => true,
 		);
 
 		return $columns;

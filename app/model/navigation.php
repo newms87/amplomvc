@@ -444,14 +444,14 @@ class App_Model_Navigation extends App_Model_Table
 	{
 		$columns['name'] = array(
 			'type'         => 'text',
-			'display_name' => _l("Navigation Group"),
+			'label' => _l("Navigation Group"),
 			'filter'       => true,
 			'sort'         => true,
 		);
 
 		$columns['status'] = array(
 			'type'         => 'select',
-			'display_name' => _l("Status"),
+			'label' => _l("Status"),
 			'filter'       => true,
 			'build_data'   => array(
 				0 => _l("Disabled"),

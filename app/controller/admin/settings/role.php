@@ -39,46 +39,47 @@ class App_Controller_Admin_Settings_Role extends Controller
 	public function listing()
 	{
 		//The Table Columns
-		$disallow = array(
-			'permissions' => false,
-		);
-
 		$sort    = (array)_get('sort', array('name' => 'ASC'));
 		$filter  = (array)_get('filter');
 		$options = array(
 			'index'   => 'user_role_id',
 			'page'    => _get('page'),
 			'limit'   => _get('limit', option('admin_list_limit', 20)),
-			'columns' => $this->Model_UserRole->getColumns($disallow + (array)_request('columns')),
+			'columns' => $this->Model_UserRole->getColumns((array)_request('columns')),
 		);
 
-		list($user_roles, $user_role_total) = $this->Model_UserRole->getRecords($sort, $filter, $options, true);
+		list($user_roles, $total) = $this->Model_UserRole->getRecords($sort, $filter, $options, true);
 
 		foreach ($user_roles as $user_role_id => &$user_role) {
+			$user_role['user_count'] = $this->Model_User->getTotalRecords(array('user_role_id' => $user_role_id));
+
 			$actions = array(
-				'edit'   => array(
+				'edit' => array(
 					'text' => _l("Edit"),
 					'href' => site_url('admin/settings/role/form', 'user_role_id=' . $user_role_id)
 				),
-				'delete' => array(
+			);
+
+			if (!$user_role['user_count']) {
+				$actions['delete'] = array(
 					'text' => _l("Delete"),
 					'href' => site_url('admin/settings/role/delete', 'user_role_id=' . $user_role_id)
-				),
-			);
+				);
+			}
 
 			$user_role['actions'] = $actions;
 		}
 		unset($user_role);
 
 		$listing = array(
-			'extra_cols'     => $this->Model_UserRole->getColumns($disallow),
-			'records'        => $user_roles,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total_listings' => $user_role_total,
-			'listing_path'   => 'admin/settings/role/listing',
-			'save_path'      => 'admin/settings/role/save',
+			'extra_cols'   => $this->Model_UserRole->getColumns(false),
+			'records'      => $user_roles,
+			'total'        => $total,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'listing_path' => 'admin/settings/role/listing',
+			'save_path'    => 'admin/settings/role/save',
 		);
 
 		$output = block('widget/listing', null, $listing + $options);

@@ -76,7 +76,7 @@ class App_Controller_Admin_Settings_Layout extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/layout/listing',
 			'save_path'      => 'admin/layout/save',
 		);

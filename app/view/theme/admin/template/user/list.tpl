@@ -1,6 +1,6 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
-<div class="section">
+<div class="section user-account-list">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">

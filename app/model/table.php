@@ -128,7 +128,9 @@ abstract class App_Model_Table extends Model
 
 	public function getTotalRecords($filter = array())
 	{
-		return $this->getRecords(null, $filter, array('columns' => 'COUNT(*)'));
+		$where = $this->extractWhere($this->table, $filter);
+
+		return $this->queryVar("SELECT COUNT(*) FROM {$this->t[$this->table]} WHERE $where");
 	}
 
 	protected function getCacheName($sort, $filter, $options, $total)

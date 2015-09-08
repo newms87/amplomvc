@@ -46,7 +46,7 @@
 								'data'   => $extra_cols,
 								'select' => array_keys($columns),
 								'value'  => 'Field',
-								'label'  => 'display_name',
+								'label'  => 'label',
 								'#class' => 'amp-select',
 							)); ?>
 
@@ -90,7 +90,7 @@
 								'data'   => $extra_cols,
 								'select' => isset($chart['group_by']) ? $chart['group_by'] : null,
 								'value'  => 'Field',
-								'label'  => 'display_name',
+								'label'  => 'label',
 								'#id'    => 'chart-group-' . $view_id,
 							)); ?>
 						</div>
@@ -104,7 +104,7 @@
 								'data'   => $extra_cols,
 								'select' => isset($chart['data_cols']) ? $chart['data_cols'] : null,
 								'value'  => 'Field',
-								'label'  => 'display_name',
+								'label'  => 'label',
 								'#id'    => 'chart-data-' . $view_id,
 								'#class' => 'chart-data-cols',
 							)); ?>

@@ -35,7 +35,7 @@ class App_Controller_Admin_History extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/history/listing',
 		);
 

@@ -51,7 +51,7 @@ class App_Controller_Admin_Logs extends Controller
 			'sort'           => $sort,
 			'filter_value'   => $filter,
 			'pagination'     => true,
-			'total_listings' => $total,
+			'total' => $total,
 			'listing_path'   => 'admin/logs/listing',
 		);
 

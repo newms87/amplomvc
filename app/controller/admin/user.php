@@ -71,14 +71,14 @@ class App_Controller_Admin_User extends Controller
 		unset($user);
 
 		$listing = array(
-			'extra_cols'     => $this->Model_User->getColumns(false),
-			'records'        => $users,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total_listings' => $user_total,
-			'listing_path'   => 'admin/user/listing',
-			'save_path'      => 'admin/user/save',
+			'extra_cols'   => $this->Model_User->getColumns(false),
+			'records'      => $users,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'total'        => $user_total,
+			'listing_path' => 'admin/user/listing',
+			'save_path'    => 'admin/user/save',
 		);
 
 		$output = block('widget/listing', null, $listing + $options);
@@ -89,6 +89,20 @@ class App_Controller_Admin_User extends Controller
 		}
 
 		return $output;
+	}
+
+	public function my_account()
+	{
+		$_GET['user_id'] = user_info('user_id');
+
+		return $this->form();
+	}
+
+	public function save_my_account()
+	{
+		$_REQUEST['user_id'] = user_info('user_id');
+
+		return $this->save();
 	}
 
 	public function form()

@@ -1,9 +1,9 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
-<div class="section">
+<div class="section user-account">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<form action="<?= site_url('admin/user/save', 'user_id=' . $user_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
+	<form action="<?= $user_id === user_info('user_id') ? site_url('admin/user/save-my-account') : site_url('admin/user/save', 'user_id=' . $user_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
