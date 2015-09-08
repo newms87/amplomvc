@@ -1266,7 +1266,7 @@ function register_ajax_calls(is_ajax) {
 							var regx = new RegExp(id + '=\\d+');
 
 							if (!location.href.match(regx)) {
-								location = location.href + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+								location = location.href.replace(/#.*/, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
 							}
 						}
 					}

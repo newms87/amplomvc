@@ -10,9 +10,9 @@ class App_Model_User extends App_Model_Table
 			if (!validate('text', $user['username'], 3, 128)) {
 				$this->error['username'] = _l("Username must be between 3 and 128 characters!");
 			} else {
-				$existing_id = $this->findRecord(array('username' => $user['username']));
+				$existing_id = $this->findRecord(array('#username' => "username = '" . $this->escape($user['username']) . "'"));
 
-				if ($existing_id & $existing_id !== (int)$user_id) {
+				if ($existing_id && $existing_id !== (int)$user_id) {
 					$this->error['username'] = _l("Username is already in use!");
 				}
 			}
