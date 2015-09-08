@@ -381,11 +381,7 @@ class User extends Library
 
 	public function requestReset($email)
 	{
-		$filter = array(
-			'email' => $email,
-		);
-
-		if (!$this->Model_User->getTotalRecords($filter)) {
+		if (!$this->Model_User->getTotalRecords(array('email' => $email))) {
 			$this->error['email'] = _l("The E-Mail Address was not found in our records, please try again!");
 
 			return false;
