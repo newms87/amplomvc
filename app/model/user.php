@@ -190,25 +190,27 @@ class App_Model_User extends App_Model_Table
 	{
 		$columns = array(
 			'user_role_id' => array(
-				'type'         => 'select',
-				'label' => _l("Role"),
-				'build'        => array(
+				'type'   => 'select',
+				'label'  => _l("Role"),
+				'build'  => array(
 					'data'  => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
 					'value' => 'user_role_id',
 					'label' => 'name',
 				),
-				'filter'       => 'multiselect',
-				'sort'         => true,
+				'filter' => 'multiselect',
+				'sort'   => true,
 			),
 			'status'       => array(
-				'type'         => 'select',
-				'label' => _l("Status"),
-				'build_data'   => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
 				),
-				'filter'       => true,
-				'sort'         => true,
+				'filter' => true,
+				'sort'   => true,
 			),
 		);
 

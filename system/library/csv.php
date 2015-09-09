@@ -40,7 +40,7 @@ class Csv extends Library
 
 	public function download($filename, $type = 'csv')
 	{
-		output_as_file($this->contents, $filename, $type);
+		output_as_file($this->contents, $type, $filename);
 	}
 
 	/**

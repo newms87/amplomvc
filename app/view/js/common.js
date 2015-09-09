@@ -876,7 +876,7 @@ $.fn.file_upload = function (options) {
 					e.files = event.originalEvent.dataTransfer.files;
 
 					if (!e.files) {
-						alert('{{Your browser does not support HTML 5}}');
+						alert('Your browser does not support HTML 5');
 						return;
 					}
 

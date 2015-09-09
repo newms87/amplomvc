@@ -72,36 +72,38 @@ class App_Model_ApiUser extends App_Model_Table
 
 		$columns = array(
 			'user_id'      => array(
-				'type'         => 'select',
-				'label'        => _l("User Account"),
-				'build_data'   => $this->Model_User->getRecords(null, null, array('cache' => true)),
-				'build_config' => array(
-					'user_id',
-					'username'
+				'type'   => 'select',
+				'label'  => _l("User Account"),
+				'build'  => array(
+					'data'  => $this->Model_User->getRecords(null, null, array('cache' => true)),
+					'label' => 'username',
+					'value' => 'user_id',
 				),
-				'filter'       => 'select',
-				'sort'         => true,
+				'filter' => 'select',
+				'sort'   => true,
 			),
 			'user_role_id' => array(
-				'type'         => 'select',
-				'label'        => _l("Role"),
-				'build_data'   => $this->Model_UserRole->getRecords(null, $role_filter, array('cache' => true)),
-				'build_config' => array(
-					'user_role_id',
-					'name'
+				'type'   => 'select',
+				'label'  => _l("Role"),
+				'build'  => array(
+					'data'  => $this->Model_UserRole->getRecords(null, $role_filter, array('cache' => true)),
+					'label' => 'name',
+					'value' => 'user_role_id',
 				),
-				'filter'       => 'select',
-				'sort'         => true,
+				'filter' => 'select',
+				'sort'   => true,
 			),
 			'status'       => array(
-				'type'       => 'select',
-				'label'      => _l("Status"),
-				'build_data' => array(
-					0 => _l("Deactivated"),
-					1 => _l("Active"),
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'build'  => array(
+					'data' => array(
+						0 => _l("Deactivated"),
+						1 => _l("Active"),
+					),
 				),
-				'filter'     => true,
-				'sort'       => true,
+				'filter' => true,
+				'sort'   => true,
 			),
 		);
 

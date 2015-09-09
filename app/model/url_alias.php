@@ -43,14 +43,16 @@ class App_Model_UrlAlias extends App_Model_Table
 		//The Table Columns
 		$columns = array(
 			'status' => array(
-				'type'         => 'select',
-				'label' => _l("Status"),
-				'build_data'   => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
 				),
-				'filter'       => true,
-				'sort'     => true,
+				'filter' => true,
+				'sort'   => true,
 			),
 		);
 

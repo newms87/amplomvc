@@ -17,9 +17,11 @@ class App_Controller_Admin_Logs extends Controller
 				'label' => _l("Delete"),
 			),
 			'clear'  => array(
-				'type'       => 'select',
-				'label'      => _l("Clear"),
-				'build_data' => array('' => _l("All")) + $this->Model_Log->getLogs(),
+				'type'  => 'select',
+				'label' => _l("Clear"),
+				'build' => array(
+					'data' => array('' => _l("All")) + $this->Model_Log->getLogs(),
+				),
 			),
 		);
 
@@ -46,13 +48,13 @@ class App_Controller_Admin_Logs extends Controller
 		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, $options, true);
 
 		$listing = array(
-			'extra_cols'     => $this->Model_Log->getColumns(false),
-			'records'        => $entries,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total' => $total,
-			'listing_path'   => 'admin/logs/listing',
+			'extra_cols'   => $this->Model_Log->getColumns(false),
+			'records'      => $entries,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'total'        => $total,
+			'listing_path' => 'admin/logs/listing',
 		);
 
 		$output = block('widget/listing', null, $listing + $options);

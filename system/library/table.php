@@ -143,17 +143,8 @@ class Table extends Library
 				}
 			}
 
-			//Backwards compat w/ build_config / build_data
 			if (empty($column['build'])) {
 				$column['build'] = array();
-
-				if (!empty($column['build_data'])) {
-					$column['build']['data'] = $column['build_data'];
-				}
-
-				if (!empty($column['build_config'])) {
-					list($column['build']['value'], $column['build']['label']) = $column['build_config'];
-				}
 			}
 
 			//If Field is set, assume this came from Table Model, and therefore can be edited

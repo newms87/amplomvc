@@ -17,7 +17,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'template'            => 'table/list_view',
 			'ajax'                => 1,
 			'records'             => array(),
-			'total'       => 0,
+			'total'               => 0,
 			'template_data'       => array(),
 			'sort'                => array(),
 			'filter_value'        => array(),
@@ -183,7 +183,15 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			if (is_string($col_info) || empty($col_info['html_export'])) {
 				foreach ($settings['records'] as &$r) {
 					if (isset($r[$col])) {
-						$r[$col] = strip_tags($r[$col]);
+						if ($build = isset($settings['columns'][$col]['build']['data']) ? $settings['columns'][$col]['build'] : false) {
+							$r[$col] = value2label($r[$col], $build['data'], isset($build['label']) ? $build['label'] : null, isset($build['value']) ? $build['value'] : null);
+						}
+
+						if (is_array($r[$col])) {
+							$r[$col] = json_encode($r[$col]);
+						} else {
+							$r[$col] = strip_tags($r[$col]);
+						}
 					}
 				}
 				unset($r);

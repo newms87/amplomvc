@@ -468,14 +468,16 @@ class Block extends Library
 
 
 		$columns['status'] = array(
-			'type'       => 'select',
-			'label'      => _l("Status"),
-			'filter'     => true,
-			'build_data' => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
+			'type'   => 'select',
+			'label'  => _l("Status"),
+			'filter' => true,
+			'build'  => array(
+				'data' => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
 			),
-			'sort'       => true,
+			'sort'   => true,
 		);
 
 		return $columns;

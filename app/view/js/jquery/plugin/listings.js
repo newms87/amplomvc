@@ -6,7 +6,7 @@ $.fn.list_widget = function (view_id) {
 	}
 
 	$list_widget.find('.export-view').click(function () {
-		if (confirm("{{Do you want to export the full data set?}}")) {
+		if (confirm("Do you want to export the full data set?")) {
 			window.location = $(this).attr('href') + '&limit=0';
 			return false;
 		}
@@ -147,7 +147,7 @@ $.extend($.ampFilter, {
 				$filter.find('[data-loading]').loading('stop');
 
 				if (!status === 'success') {
-					$filter.show_msg('error', "{{There was an error while applying the filter.}}");
+					$filter.show_msg('error', "There was an error while applying the filter.");
 				}
 
 				if (typeof opts.always === 'function') {
@@ -426,13 +426,13 @@ function zoom_hover_change() {
 		if (end || start) {
 			$value.html(start + ' - ' + end);
 		} else {
-			$value.html($value.attr('data-default') || '{{Modify}}');
+			$value.html($value.attr('data-default') || 'Modify');
 		}
 	} else if ($zoom.is('.multiselect')) {
 		var $selected = $zoom.find(':checked');
 
 		if ($selected.length == 0) {
-			$value.html($value.attr('data-default') || '{{Modify}}');
+			$value.html($value.attr('data-default') || 'Modify');
 		} else {
 			var str = '';
 			$selected.each(function (i, e) {
@@ -456,7 +456,7 @@ function zoom_hover_keyup() {
 		if (high || low) {
 			$value.html(low + ' - ' + high);
 		} else {
-			$value.html($value.attr('data-default') || '{{Modify}}');
+			$value.html($value.attr('data-default') || 'Modify');
 		}
 	}
 }

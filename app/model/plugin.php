@@ -48,6 +48,7 @@ class App_Model_Plugin extends App_Model_Table
 	public function getField($name, $field)
 	{
 		$id = preg_match("/[^\\d]/", $name) ? false : (int)$name;
+
 		return $this->queryVar("SELECT `$field` FROM " . $this->t[$this->table] . " WHERE " . ($id ? "plugin_id = $id" : "`name` = '" . $this->escape($name) . "'"));
 	}
 
@@ -126,7 +127,7 @@ class App_Model_Plugin extends App_Model_Table
 			foreach ($filter as $field => $value) {
 				if ($field[0] === '!') {
 					$field = substr($field, 1);
-					$not = true;
+					$not   = true;
 				} else {
 					$not = false;
 				}
@@ -135,8 +136,7 @@ class App_Model_Plugin extends App_Model_Table
 					continue 2;
 				}
 
-				switch ($field)
-				{
+				switch ($field) {
 					case 'name':
 					case 'title':
 					case 'author':
@@ -187,7 +187,7 @@ class App_Model_Plugin extends App_Model_Table
 		$limit = isset($options['limit']) ? (int)$options['limit'] : null;
 
 		if (isset($options['page'])) {
-			$start = max(0,(int)$options['page']) * $options['limit'];
+			$start = max(0, (int)$options['page']) * $options['limit'];
 		} else {
 			$start = isset($options['start']) ? (int)$options['start'] : 0;
 		}
@@ -280,6 +280,7 @@ class App_Model_Plugin extends App_Model_Table
 
 		if (!$plugin) {
 			$this->error['name'] = _l("Unable to find the plugin %s. Please try downloading a different plugin.", $name);
+
 			return false;
 		}
 
@@ -287,16 +288,19 @@ class App_Model_Plugin extends App_Model_Table
 
 		if (empty($plugin['download'])) {
 			$this->error['source'] = _l("Unable to locate the source .zip file. %s", $plugin['description']);
+
 			return false;
 		}
 
 		if (!$this->url->download($plugin['download'], $zip_file)) {
 			$this->error = $this->url->fetchError();
+
 			return false;
 		}
 
 		if (!$this->csv->extractZip($zip_file, DIR_PLUGIN . 'plugin-download')) {
 			$this->error = $this->csv->fetchError();
+
 			return false;
 		}
 
@@ -372,65 +376,67 @@ class App_Model_Plugin extends App_Model_Table
 	public function getColumns($filter = array())
 	{
 		$columns['name'] = array(
-			'type'         => 'text',
-			'label' => _l("Plugin Name"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Plugin Name"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['version'] = array(
-			'type'         => 'text',
+			'type'  => 'text',
 			'label' => _l("Version"),
 		);
 
 		$columns['date'] = array(
-			'type'         => 'date',
-			'label' => _l("Date"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'date',
+			'label'  => _l("Date"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['title'] = array(
-			'type'         => 'text',
-			'label' => _l("Title"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Title"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['author'] = array(
-			'type'         => 'text',
-			'label' => _l("Author"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Author"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['description'] = array(
-			'type'         => 'text',
-			'label' => _l("Description"),
-			'filter'       => true,
+			'type'   => 'text',
+			'label'  => _l("Description"),
+			'filter' => true,
 		);
 
 		$columns['link'] = array(
-			'type'         => 'text',
-			'label' => _l("Link"),
-			'filter'       => true,
-			'sort'     => true,
+			'type'   => 'text',
+			'label'  => _l("Link"),
+			'filter' => true,
+			'sort'   => true,
 		);
 
 		$columns['dependencies'] = array(
-			'type'         => 'text',
+			'type'  => 'text',
 			'label' => _l("Dependencies"),
 		);
 
 		$columns['status'] = array(
-			'type'         => 'select',
-			'label' => _l("Status"),
-			'filter'       => true,
-			'build_data'   => array(
-				0 => _l("Disabled"),
-				1 => _l("Enabled"),
+			'type'   => 'select',
+			'label'  => _l("Status"),
+			'filter' => true,
+			'build'  => array(
+				'data' => array(
+					0 => _l("Disabled"),
+					1 => _l("Enabled"),
+				),
 			),
-			'sort'     => true,
+			'sort'   => true,
 		);
 
 		return $filter ? array_intersect_key($columns, $filter) : $columns;

@@ -549,7 +549,7 @@ function set_page_info($key, $value)
 			} else {
 				$document->addBodyClass($value);
 			}
-		break;
+			break;
 
 		default:
 			$document->setInfo($key, $value);
@@ -748,6 +748,47 @@ function attrs($data)
 	return $html;
 }
 
+function value2label($select, $data, $label_index, $value_index)
+{
+	$label = '';
+	$map   = array();
+
+	foreach ($data as $key => $value) {
+		if (is_array($value)) {
+			if ($value_index) {
+				if (!isset($value[$value_index])) {
+					continue;
+				}
+
+				$v = $value[$value_index];
+			} else {
+				$v = $key;
+			}
+
+			if ($label_index) {
+				if (!isset($value[$label_index])) {
+					continue;
+				}
+
+				$l = $value[$label_index];
+			} else {
+				$l = $value;
+			}
+		} else {
+			$v = $key;
+			$l = $value;
+		}
+
+		$map[$v] = $l;
+	}
+
+	foreach ((array)$select as $s) {
+		$label .= isset($map[$s]) ? $map[$s] : '';
+	}
+
+	return $label;
+}
+
 function build($type, $params = null)
 {
 	static $count = 0;
@@ -844,7 +885,7 @@ function build($type, $params = null)
 	foreach ($data as $key => $value) {
 		if (is_array($value)) {
 			if (($value_key && !isset($value[$value_key])) || ($label_key && !isset($value[$label_key]))) {
-				trigger_error(_l("The associative indexes for 'value' and 'label' were not found in the data array for %s.", $name) . get_caller());
+				trigger_error(_l("The indexes for value (%s) and label (%s) not found in data array at index %s for build object %s.", $value_key, $label_key, $key, $name));
 
 				return;
 			}
