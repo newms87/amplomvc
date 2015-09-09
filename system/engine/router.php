@@ -297,7 +297,7 @@ class Router
 			);
 
 			if (!empty($_access_log['private'])) {
-				$private += (array)$_access_log['private'];
+				$private = array_merge($private, $_access_log['private']);
 			}
 
 			foreach ($private as $p) {
