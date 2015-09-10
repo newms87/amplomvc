@@ -991,6 +991,7 @@ $style
 CSS;
 
 		file_put_contents($css_file, $style);
+		$this->plugin->gitIgnore($css_file);
 
 		return $sheets;
 	}

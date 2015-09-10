@@ -667,9 +667,9 @@ function set_user_meta($key, $value)
 	global $registry;
 
 	if ($value === null) {
-		return $registry->get('user')->removeMeta($key);
+		return $registry->get('user')->removeMeta(user_info('user_id'), $key);
 	} else {
-		return $registry->get('user')->setMeta($key, $value);
+		return $registry->get('user')->setMeta(user_info('user_id'), $key, $value);
 	}
 }
 

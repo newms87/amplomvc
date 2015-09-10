@@ -3,8 +3,8 @@
 		<? foreach ($fields as $f) { ?>
 			<div class="field <?= 'field-' . $f['name'] . ' ' . ($f['enabled'] ? 'enabled' : 'disabled'); ?>" for="<?= $f['id']; ?>">
 				<label class="label amp-filter-toggle">
-					<b class="amp-sprite on-enabled si-minus-icon"></b>
-					<b class="amp-sprite on-disabled si-add-icon-gray"></b>
+					<b class="amp-sprite on-enabled si-minus-dark-gray"></b>
+					<b class="amp-sprite on-disabled si-plus-dark-gray"></b>
 					<span class="text"><?= $f['label']; ?></span>
 				</label>
 

@@ -335,6 +335,8 @@ class Theme extends Library
 			}
 		}
 
+		rrmdir(DIR_IMAGE . 'sprite');
+
 		return true;
 	}
 
