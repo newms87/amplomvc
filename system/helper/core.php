@@ -98,6 +98,17 @@ function _request($key, $default = null)
 	return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
 }
 
+function _files($index = null)
+{
+	$files = !empty($_FILES['file']) ? array($_FILES['file']) : $_FILES;
+
+	if ($index !== null) {
+		return isset($files[$index]) ? $files[$index] : null;
+	}
+
+	return $files;
+}
+
 function _session($key, $default = null)
 {
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
@@ -140,7 +151,8 @@ $js_autoload = array(
 	),
 	'list_widget'    => 'app/view/js/jquery/plugin/listings.js',
 	'listview'       => 'app/view/js/jquery/plugin/listings.js',
-	'ampFilter'    => 'app/view/js/jquery/plugin/listings.js',
+	'ampFilter'      => 'app/view/js/jquery/plugin/listings.js',
+	'ampUpload'      => 'app/view/js/jquery/plugin/ampUpload.js',
 	'ac_template'    => 'app/view/js/jquery/plugin/ac_template.js',
 	'amplo_slider'   => 'app/view/js/jquery/plugin/amplo_slider.js',
 	'flexselect'     => 'app/view/js/jquery/plugin/flexselect.js',

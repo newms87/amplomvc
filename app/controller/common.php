@@ -4,7 +4,7 @@ class App_Controller_Common extends Controller
 {
 	public function file_upload()
 	{
-		$files = !empty($_FILES['file']) ? array($_FILES['file']) : $_FILES;
+		$files = _files();
 
 		$path      = _post('path', '');
 		$file_name = count($files) > 1 ? false : _post('name');
