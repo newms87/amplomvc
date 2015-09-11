@@ -40,7 +40,7 @@ class App_Controller_Admin_Header extends Controller
 
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
-			if (user_can('r', 'filemanager')) {
+			if (user_can('r', 'admin/filemanager')) {
 				$link_image_manager = array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
