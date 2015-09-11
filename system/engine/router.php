@@ -194,7 +194,7 @@ class Router
 					$this->request->setRedirect($this->url->here());
 
 					if (request_accepts('application/json')) {
-						echo json_encode(array('error' => _l("Please log in to access this page. You are being redirected to the log in page.<script>window.location = '%s'</script>", site_url('customer/login'))));
+						echo json_encode(array('error' => _l("You were logged out. Please wait while you are redirected to the log in page.<script>window.location = '%s'</script>", site_url('customer/login'))));
 						exit;
 					}
 

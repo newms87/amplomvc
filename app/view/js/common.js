@@ -820,22 +820,6 @@ $.show_msg = function (type, msg, options) {
 	$('body').show_msg(type, msg, options);
 }
 
-$.fn.fade_post = function (url, data, callback, dataType) {
-	var $this = this;
-	$this.stop().fadeOut(300).after($.loading);
-
-	$.post(url, data, function (data) {
-		$this.fadeIn(0);
-		$.loading('stop');
-
-		if (typeof callback === 'function') {
-			callback(data);
-		}
-	}, dataType || null);
-
-	return this;
-}
-
 $.loading = function (params) {
 	if (params == 'stop') {
 		$('.loader').remove();
@@ -1247,7 +1231,7 @@ $.extend($.ampFormEditor, {
 
 				$form.ampFormEditor('read');
 			}
-		});
+		}, 'json');
 
 		return false;
 	},
@@ -1344,7 +1328,7 @@ $.fn.submit_ajax_form = function (params) {
 
 		$.post($form.attr('action'), $form.serialize(), typeof params.callback === 'function' ? params.callback : function (response) {
 			$form.show_msg(response);
-		}).always(function () {
+		}, 'json').always(function () {
 			$btns.loading('stop');
 		});
 	});
@@ -1362,7 +1346,7 @@ $.fn.liveForm = function (params) {
 		});
 
 		$form.submit(function () {
-			$.post($form.attr('action'), $form.serialize(), params.callback);
+			$.post($form.attr('action'), $form.serialize(), params.callback, 'json');
 			return false;
 		});
 	});
@@ -1382,13 +1366,6 @@ function content_loaded(is_ajax) {
 	$('.no-parent-scroll').on('mousewheel DOMMouseScroll', no_parent_scroll)
 
 	var $forms = $('form');
-
-	$forms.find('input').not('[data-no-enter-key]').use_once('form-input').keydown(function (e) {
-		if (e.keyCode == 13) {
-			$(this).closest('form').submit();
-			return false;
-		}
-	});
 
 	$forms.find('[name=username], [name=name], [name=email], [name=password], [name=confirm]').prop('autocorrect', false).attr('autocorrect', 'off');
 
@@ -1447,15 +1424,6 @@ $(document)
 		content_loaded();
 	})
 
-	.keydown(function (e) {
-		if (e.ctrlKey && (e.which == 83)) {
-			$('form.ctrl-save').submit_ajax_form();
-
-			e.preventDefault();
-			return false;
-		}
-	})
-
 	.click(function (e) {
 		var $n = $(e.target);
 
@@ -1484,10 +1452,30 @@ $(document)
 		}
 	})
 
+	.keyup(function (e) {
+		var $n = $(e.target);
+
+		if (e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
+			$n.closest('form').submit();
+			return false;
+		}
+	})
+
 	.ajaxComplete(function () {
 		content_loaded(true);
 	});
 
+
+if ($ctrlSave = $('form.ctrl-save').length) {
+	$(document).keydown(function (e) {
+		if (e.ctrlKey && (e.which == 83)) {
+			$ctrlSave.submit_ajax_form();
+
+			e.preventDefault();
+			return false;
+		}
+	})
+}
 
 //Chrome Autofill disable hack
 if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
