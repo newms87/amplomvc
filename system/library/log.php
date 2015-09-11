@@ -36,6 +36,7 @@ class Log extends Library
 			'user_id'    => IS_ADMIN ? _session('user_id') : _session('customer_id'),
 			'date'       => date('Y-m-d G:i:s'),
 			'ip'         => $_SERVER['REMOTE_ADDR'],
+			'domain'     => DOMAIN,
 			'uri'        => preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']),
 			'query'      => $_SERVER['QUERY_STRING'],
 			'user_agent' => (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''),
