@@ -63,15 +63,38 @@ $access_keys = array(
 	'someoneElseKey'
 );
 
+if (!function_exists('str2bytes')) {
+	function str2bytes($str)
+	{
+		$str  = trim($str);
+		$last = strtolower($str[strlen($str) - 1]);
+
+		if ($last === 'b') {
+			$last = strtolower($str[strlen($str) - 2]);
+		}
+
+		switch ($last) {
+			case 'g':
+				return $str * 1073741824;
+			case 'm':
+				return $str * 1048576;
+			case 'k':
+				return $str * 1024;
+		}
+	}
+}
+
 //--------------------------------------------------------------------------------------------------------
 // YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
 //--------------------------------------------------------------------------------------------------------
 
-$MaxSizeUpload = 100; //Mb
+$MaxSizeUpload = 5000; //Mb
 
 // SERVER OVERRIDE
-if ((int)(ini_get('post_max_size')) < $MaxSizeUpload) {
-	$MaxSizeUpload = (int)(ini_get('post_max_size'));
+$post_max = str2bytes(ini_get('post_max_size')) / 1048576;
+
+if ($post_max < $MaxSizeUpload) {
+	$MaxSizeUpload = $post_max;
 }
 
 $default_language = "en_EN"; //default language file name

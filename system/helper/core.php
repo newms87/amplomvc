@@ -958,9 +958,9 @@ function _strip_tags($text)
 function bytes2str($size, $decimals = 2, $unit = null)
 {
 	$unit_sizes = array(
-		'TB' => 1024 * 1024 * 1024 * 1024,
-		'GB' => 1024 * 1024 * 1024,
-		'MB' => 1024 * 1024,
+		'TB' => 1099511627776,
+		'GB' => 1073741824,
+		'MB' => 1048576,
 		'KB' => 1024,
 		'B'  => 1,
 	);
@@ -982,6 +982,25 @@ function bytes2str($size, $decimals = 2, $unit = null)
 	}
 
 	return sprintf("%." . $decimals . "f $unit", ($size / $divisor));
+}
+
+function str2bytes($str)
+{
+	$str  = trim($str);
+	$last = strtolower($str[strlen($str) - 1]);
+
+	if ($last === 'b') {
+		$last = strtolower($str[strlen($str) - 2]);
+	}
+
+	switch ($last) {
+		case 'g':
+			return $str * 1073741824;
+		case 'm':
+			return $str * 1048576;
+		case 'k':
+			return $str * 1024;
+	}
 }
 
 function parse_xml_to_array($xml)
