@@ -33,9 +33,12 @@ class Csv extends Library
 
 	public function saveFile($file)
 	{
-		_is_writable($file);
-
-		file_put_contents($file, $this->contents);
+		if (_is_writable($file)) {
+			return file_put_contents($file, $this->contents);
+		} else {
+			$this->error['file'] = _l("File %s was not writable", $file);
+			return false;
+		}
 	}
 
 	public function download($filename, $type = 'csv')
