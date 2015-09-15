@@ -265,14 +265,14 @@ function listview_reset() {
 }
 
 function listview_filter_on_enter(e) {
-	if (e.keyCode == 13) {
+	if (e.keyCode === 13) {
 		var $filter = $(this).is('.filter-list') ? $(this) : $(this).closest('.filter-list');
 		$filter.find('.filter-button')[0].click();
 	}
 }
 
 function listview_save_on_enter(e) {
-	if (e.keyCode == 13) {
+	if (e.keyCode === 13) {
 		$(this).closest('.editable-options').find('.save-edit').click();
 		e.stopPropagation();
 		return false;
@@ -393,11 +393,11 @@ function delay_update(my_delay) {
 			});
 		}
 	} else {
-		var event = $filter;
+		var e = $filter;
 		my_delay = Date.now();
 		delay = my_delay;
 
-		if (event.keyCode === 13) {
+		if (e.keyCode === 13) {
 			delay_update.call($filter, my_delay);
 		} else {
 			setTimeout(function () {
