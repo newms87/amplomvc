@@ -269,6 +269,7 @@ class Plugin extends Library
 
 			if (!$this->mod->apply($plugin_file, $directives)) {
 				$this->error[$plugin_file]['mod'] = $this->mod->fetchError();
+				return false;
 			}
 		} else {
 			//Live file already exists! This is a possible conflict...
@@ -302,13 +303,10 @@ class Plugin extends Library
 				@unlink($live_file);
 			}
 
-			if (!@symlink($plugin_file, $live_file)) {
+			if (!symlink($plugin_file, $live_file)) {
 				$this->error[$plugin_file]['symlink'] = _l("There was an error while creating the symlink for %s to %s for plugin <strong>%s</strong>.", $plugin_file, $live_file, $name);
+				return false;
 			}
-		}
-
-		if ($this->error) {
-			return false;
 		}
 
 		$this->gitIgnore($live_file);
