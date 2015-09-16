@@ -440,28 +440,29 @@ class App_Model_Navigation extends App_Model_Table
 		return $this->saveGroup(null, $group);
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns['name'] = array(
-			'type'   => 'text',
-			'label'  => _l("Navigation Group"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['status'] = array(
-			'type'   => 'select',
-			'label'  => _l("Status"),
-			'filter' => true,
-			'build'  => array(
-				'data' => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
-				),
+		$merge += array(
+			'name'   => array(
+				'type'   => 'text',
+				'label'  => _l("Navigation Group"),
+				'filter' => true,
+				'sort'   => true,
 			),
-			'sort'   => true,
+			'status' => array(
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'filter' => true,
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
+				),
+				'sort'   => true,
+			),
 		);
 
-		return $this->getTableColumns($this->table, $columns, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 }

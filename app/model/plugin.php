@@ -373,72 +373,58 @@ class App_Model_Plugin extends App_Model_Table
 		return true;
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns['name'] = array(
-			'type'   => 'text',
-			'label'  => _l("Plugin Name"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['version'] = array(
-			'type'  => 'text',
-			'label' => _l("Version"),
-		);
-
-		$columns['date'] = array(
-			'type'   => 'date',
-			'label'  => _l("Date"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['title'] = array(
-			'type'   => 'text',
-			'label'  => _l("Title"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['author'] = array(
-			'type'   => 'text',
-			'label'  => _l("Author"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['description'] = array(
-			'type'   => 'text',
-			'label'  => _l("Description"),
-			'filter' => true,
-		);
-
-		$columns['link'] = array(
-			'type'   => 'text',
-			'label'  => _l("Link"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['dependencies'] = array(
-			'type'  => 'text',
-			'label' => _l("Dependencies"),
-		);
-
-		$columns['status'] = array(
-			'type'   => 'select',
-			'label'  => _l("Status"),
-			'filter' => true,
-			'build'  => array(
-				'data' => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
-				),
+		$merge += array(
+			'date'         => array(
+				'type'   => 'date',
+				'label'  => _l("Date"),
+				'filter' => true,
+				'sort'   => true,
 			),
-			'sort'   => true,
+			'title'        => array(
+				'type'   => 'text',
+				'label'  => _l("Title"),
+				'filter' => true,
+				'sort'   => true,
+			),
+			'author'       => array(
+				'type'   => 'text',
+				'label'  => _l("Author"),
+				'filter' => true,
+				'sort'   => true,
+			),
+			'description'  => array(
+				'type'   => 'text',
+				'label'  => _l("Description"),
+				'filter' => true,
+				'align'  => 'left',
+			),
+			'link'         => array(
+				'type'   => 'text',
+				'label'  => _l("Link"),
+				'filter' => true,
+				'sort'   => true,
+				'align'  => 'left',
+			),
+			'dependencies' => array(
+				'type'  => 'text',
+				'label' => _l("Dependencies"),
+			),
+			'status'       => array(
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'filter' => true,
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
+				),
+				'sort'   => true,
+			),
 		);
 
-		return $filter ? array_intersect_key($columns, $filter) : $columns;
+		return parent::getColumns($filter, $merge);
 	}
 }

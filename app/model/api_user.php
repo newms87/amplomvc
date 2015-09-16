@@ -63,14 +63,14 @@ class App_Model_ApiUser extends App_Model_Table
 		return parent::getRecords($sort, $filter, $options, $total);
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
 		$role_filter = array(
 			'user_id' => user_info('user_id'),
 			'type'    => 'api_user',
 		);
 
-		$columns = array(
+		$merge += array(
 			'user_id'      => array(
 				'type'   => 'select',
 				'label'  => _l("User Account"),
@@ -107,8 +107,9 @@ class App_Model_ApiUser extends App_Model_Table
 			),
 		);
 
-		$columns = $this->getTableColumns($this->table, $columns, $filter);
+		$columns = parent::getColumns($filter, $merge);
 
+		//Never allow private_key as a column.
 		unset($columns['private_key']);
 
 		return $columns;

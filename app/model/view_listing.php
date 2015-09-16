@@ -192,11 +192,11 @@ class App_Model_ViewListing extends App_Model_Table
 		return self::$view_listings;
 	}
 
-	public function getViewListingColumns($view_listing_id, $filter)
+	public function getViewListingColumns($view_listing_id, $filter, $merge = array())
 	{
 		$table = $this->getViewListingTable($view_listing_id);
 
-		return $this->getTableColumns($table, array(), $filter);
+		return $this->getTableColumns($table, $filter, $merge);
 	}
 
 	protected function resetViewListings()

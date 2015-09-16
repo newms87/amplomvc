@@ -896,12 +896,12 @@ abstract class Model
 		return true;
 	}
 
-	public function getTableColumns($table, $merge = array(), $filter = array(), $sort = true)
+	public function getTableColumns($table, $filter = array(), $merge = array(), $sort = true)
 	{
 		$table_model = $this->getTableModel($table);
 
 		if (!$table_model) {
-			return array();
+			return $merge;
 		}
 
 		$columns = $table_model['columns'];
@@ -912,7 +912,7 @@ abstract class Model
 				if (isset($columns[$field])) {
 					$columns[$field] = $data + $columns[$field];
 				} //$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
-				elseif ($filter === false || isset($filter[$field])) {
+				elseif (!$filter || isset($filter[$field])) {
 					$columns[$field] = $data;
 				}
 			}

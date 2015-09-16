@@ -38,10 +38,10 @@ class App_Model_UrlAlias extends App_Model_Table
 		return $this->delete('url_alias', $url_alias_id);
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
 		//The Table Columns
-		$columns = array(
+		$merge += array(
 			'status' => array(
 				'type'   => 'select',
 				'label'  => _l("Status"),
@@ -56,7 +56,7 @@ class App_Model_UrlAlias extends App_Model_Table
 			),
 		);
 
-		return $this->getTableColumns('url_alias', $columns, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 
 	public function getViewListingId()

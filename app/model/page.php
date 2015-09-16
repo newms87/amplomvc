@@ -397,27 +397,23 @@ class App_Model_Page extends App_Model_Table
 		}
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		static $merge;
-
-		if (!$merge) {
-			$merge = array(
-				'status' => array(
-					'type'   => 'select',
-					'label'  => _l("Status"),
-					'build'  => array(
-						'data' => array(
-							0 => _l("Disabled"),
-							1 => _l("Enabled"),
-						),
+		$merge += array(
+			'status' => array(
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
 					),
-					'filter' => true,
-					'sort'   => true,
-				)
-			);
-		}
+				),
+				'filter' => true,
+				'sort'   => true,
+			)
+		);
 
-		return $this->getTableColumns('page', $merge, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 }

@@ -171,22 +171,18 @@ class App_Model_UserRole extends App_Model_Table
 		return $view_listing_id;
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		static $merge;
+		$merge += array(
+			'user_count' => array(
+				'type'   => 'text',
+				'label'  => _l("# of Users"),
+				'sort'   => true,
+				'filter' => true,
+			),
+		);
 
-		if (!$merge) {
-			$merge = array(
-				'user_count' => array(
-					'type'         => 'text',
-					'label'        => _l("# of Users"),
-					'sort'         => true,
-					'filter'       => true,
-				),
-			);
-		}
-
-		$columns = $this->getTableColumns($this->table, $merge, $filter);
+		$columns = parent::getColumns($filter, $merge);
 
 		//Disallowed Columns
 		unset($columns['permissions']);

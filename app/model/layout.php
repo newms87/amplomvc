@@ -58,17 +58,17 @@ class App_Model_Layout extends App_Model_Table
 		return $this->queryRows("SELECT * FROM {$this->t['layout_route']} ORDER BY `route` ASC");
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns = array(
-			'name'   => array(
-				'type'         => 'text',
-				'label' => _l("Layout Name"),
-				'filter'       => true,
-				'sort'     => true,
+		$merge += array(
+			'name' => array(
+				'type'   => 'text',
+				'label'  => _l("Layout Name"),
+				'filter' => true,
+				'sort'   => true,
 			),
 		);
 
-		return $this->getTableColumns($this->table, $columns, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 }

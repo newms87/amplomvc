@@ -450,36 +450,33 @@ class Block extends Library
 		}
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns['name'] = array(
-			'type'   => 'text',
-			'label'  => _l("Name"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-		$columns['path'] = array(
-			'type'   => 'text',
-			'label'  => _l("Path"),
-			'filter' => true,
-			'sort'   => true,
-		);
-
-
-		$columns['status'] = array(
-			'type'   => 'select',
-			'label'  => _l("Status"),
-			'filter' => true,
-			'build'  => array(
-				'data' => array(
-					0 => _l("Disabled"),
-					1 => _l("Enabled"),
-				),
+		$merge += array(
+			'name'   => array(
+				'type'   => 'text',
+				'filter' => true,
+				'sort'   => true,
 			),
-			'sort'   => true,
+			'path'   => array(
+				'type'   => 'text',
+				'filter' => true,
+				'sort'   => true,
+			),
+			'status' => array(
+				'type'   => 'select',
+				'label'  => _l("Status"),
+				'filter' => true,
+				'build'  => array(
+					'data' => array(
+						0 => _l("Disabled"),
+						1 => _l("Enabled"),
+					),
+				),
+				'sort'   => true,
+			),
 		);
 
-		return $columns;
+		return $merge;
 	}
 }

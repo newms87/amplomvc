@@ -186,9 +186,9 @@ class App_Model_User extends App_Model_Table
 		return parent::getRecords($sort, $filter, $options, $total);
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns = array(
+		$merge += array(
 			'user_role_id' => array(
 				'type'   => 'select',
 				'label'  => _l("Role"),
@@ -214,7 +214,7 @@ class App_Model_User extends App_Model_Table
 			),
 		);
 
-		$columns = $this->getTableColumns('user', $columns, $filter);
+		$columns = parent::getColumns($filter, $merge);
 
 		unset($columns['password']);
 

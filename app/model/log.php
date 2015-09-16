@@ -9,13 +9,15 @@ class App_Model_Log extends App_Model_Table
 		return $this->queryColumn("SELECT DISTINCT name FROM {$this->t['log']}", 'name');
 	}
 
-	public function getColumns($filter = false)
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns['message']['align']     = 'left';
-		$columns['log_id']['sort_order'] = -2;
-		$columns['name']['sort_order']   = -1;
+		$merge += array(
+			'message' => array(
+				'align' => 'left',
+			),
+		);
 
-		return parent::getTableColumns('log', $columns, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 
 	public function remove($log_id)

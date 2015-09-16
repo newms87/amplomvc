@@ -119,9 +119,9 @@ class App_Model_Invoice extends App_Model_Table
 		return $number;
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$columns = array(
+		$merge += array(
 			'status'   => array(
 				'type'         => 'select',
 				'label' => _l("Status"),
@@ -136,6 +136,6 @@ class App_Model_Invoice extends App_Model_Table
 			),
 		);
 
-		return parent::getTableColumns($this->table, $columns, $filter);
+		return parent::getColumns($filter, $merge);
 	}
 }

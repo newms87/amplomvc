@@ -142,10 +142,8 @@ abstract class App_Model_Table extends Model
 		return $this->table . '.rows' . $s . $f . $o . $t;
 	}
 
-	public function getColumns($filter = array())
+	public function getColumns($filter = array(), $merge = array())
 	{
-		$merge = array();
-
-		return $this->getTableColumns($this->table, $merge, $filter);
+		return $this->getTableColumns($this->table, $filter, $merge);
 	}
 }
