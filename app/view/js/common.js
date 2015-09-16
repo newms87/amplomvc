@@ -102,10 +102,10 @@ function autoload_js_file(url, args, type) {
 				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
 
 				$.ajax({
-					url:      js_url,
-					dataType: 'script',
-					cache:    true
-				})
+						url:      js_url,
+						dataType: 'script',
+						cache:    true
+					})
 					.done(function () {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
@@ -116,10 +116,10 @@ function autoload_js_file(url, args, type) {
 							$(document).trigger(al);
 						}
 					}).always(function (jqXHR, status, msg) {
-						if (status !== 'success') {
-							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
-						}
-					});
+					if (status !== 'success') {
+						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+					}
+				});
 			}
 		}
 	}
@@ -352,9 +352,17 @@ $.ampModal = $.fn.ampModal = function (o) {
 
 $.extend($.ampModal, {
 	init: function (o) {
+		if (typeof this === 'function' && !o.content) {
+			return $.error('Error ampModal: You must specify a value for content.');
+		}
+
 		o = $.extend({}, {
-			context: 'body',
-			title:   ''
+			context:     'body',
+			title:       '',
+			content:     this,
+			buttons:     {},
+			shadow:      true,
+			shadowClose: true
 		}, o);
 
 		if (!(o.context = $(o.context)).length) {
@@ -362,7 +370,7 @@ $.extend($.ampModal, {
 			return this;
 		}
 
-		return this.use_once('amp-modal-enabled').each(function (i, e) {
+		return $(o.content).use_once('amp-modal-enabled').each(function (i, e) {
 			var $e = $(e),
 				$box = $('<div />').addClass('amp-modal'),
 				$content = $('<div />').addClass('amp-modal-content'),
@@ -374,20 +382,76 @@ $.extend($.ampModal, {
 				.append(o.title ? $title.html(o.title) : '')
 				.append($e)
 
+			if (o.buttons) {
+				var $buttons = $('<div/>').addClass('amp-modal-buttons');
+
+				for (var b in o.buttons) {
+					btn = o.buttons[b];
+					$('<button/>').addClass('amp-modal-button ' + b).append(btn.label || b).click(btn.action).appendTo($buttons)
+				}
+
+				$content.append($buttons);
+			}
+
 			$box
 				.append($('<div/>').addClass('align-middle'))
 				.append($content)
-				.append($('<div/>').addClass('shadow-box').click($.ampModal.close))
+
+			if (o.shadow) {
+				var $shadow = $('<div/>').addClass('shadow-box').appendTo($box);
+
+				if (o.shadowClose) {
+					$shadow.click($.ampModal.close)
+				}
+			}
 		});
 	},
 	open: function () {
-		$(this).closest('.amp-modal').addClass('active');
+		return $(this).closest('.amp-modal').addClass('active');
 	},
 
 	close: function () {
-		$(this).closest('.amp-modal').removeClass('active')
+		return $(this).closest('.amp-modal').removeClass('active')
 	}
 });
+
+$.ampConfirm = $.fn.ampConfirm = function (o) {
+	o = $.extend({}, {
+		title:       'Are you sure?',
+		content:     $('<div/>').addClass('amp-confirm'),
+		text:        'Are you sure you want to continue?',
+		onConfirm:   null,
+		onCancel:    null,
+		shadowClose: false,
+		buttons:     {
+			confirm: {
+				label: 'Confirm',
+			},
+			cancel:  {
+				label: 'Cancel',
+			}
+		}
+	}, o)
+
+	o.content = $(o.content).append(o.text);
+
+	o.buttons.confirm.action = function () {
+		$(this).ampModal('close');
+		
+		if (typeof o.onConfirm === 'function') {
+			o.onConfirm.call(this);
+		}
+	}
+	o.buttons.cancel.action = function () {
+		$(this).ampModal('close');
+
+		if (typeof o.onCancel === 'function') {
+			o.onCancel.call(this);
+		}
+	}
+
+	return $.ampModal.call(this, o).ampModal('open');
+}
 
 //ampSelect jQuery Plugin
 $.ampSelect = $.fn.ampSelect = function (o) {
@@ -1465,7 +1529,7 @@ $(document)
 		content_loaded(true);
 	});
 
-$(window).on('beforeunload', function(){
+$(window).on('beforeunload', function () {
 	$.pageUnloading = true;
 })
 

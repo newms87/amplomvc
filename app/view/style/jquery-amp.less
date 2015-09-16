@@ -81,9 +81,23 @@
 		background: white;
 	}
 
+	.amp-modal-buttons {
+		margin: 2em 0 1em 0;
+
+		button {
+			& + button {
+				margin-left: 1em;
+			}
+		}
+	}
+
 	&.active {
 		left: 0;
 	}
+}
+
+.amp-confirm {
+	padding: 1em;
 }
 
 //ampFilter
