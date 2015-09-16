@@ -1455,7 +1455,7 @@ $(document)
 	.keyup(function (e) {
 		var $n = $(e.target);
 
-		if (e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
+		if (!$.pageUnloading && e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
 			$n.closest('form').submit();
 			return false;
 		}
@@ -1465,6 +1465,9 @@ $(document)
 		content_loaded(true);
 	});
 
+$(window).on('beforeunload', function(){
+	$.pageUnloading = true;
+})
 
 if ($ctrlSave = $('form.ctrl-save').length) {
 	$(document).keydown(function (e) {

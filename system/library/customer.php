@@ -369,9 +369,9 @@ class Customer extends Library
 		return $this->queryVar("SELECT customer_id FROM {$this->t['customer_meta']} WHERE `key` = 'pass_reset_code' AND `value` = '" . $this->escape($code) . "' LIMIT 1");
 	}
 
-	public function clearResetCode()
+	public function clearResetCode($customer_id)
 	{
-		return $this->customer->removeMeta('pass_reset_code');
+		return $this->Model_Customer->deleteMeta($customer_id, 'pass_reset_code');
 	}
 
 	public function generateCode()

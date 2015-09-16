@@ -284,7 +284,7 @@ class App_Controller_Customer extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l('Home'), site_url());
-		breadcrumb(_l('Password Reset'), site_url('customer/reset', 'code=' . $code));
+		breadcrumb(_l('Password Reset'), site_url('customer/reset-form', $_GET));
 
 		$data['code'] = $code;
 
@@ -298,7 +298,7 @@ class App_Controller_Customer extends Controller
 
 		//User not found
 		if (!$customer_id) {
-			message('warning', _l("Unable to locate password reset code. Please try again."));
+			message('warning', _l("Invalid password reset code. Password was not reset. Try starting over from the <a href=\"%s\">forgotten password page</a>", site_url('customer/forgotten')));
 			redirect('customer/login');
 		}
 
@@ -308,7 +308,7 @@ class App_Controller_Customer extends Controller
 		);
 
 		if ($this->Model_Customer->save($customer_id, $reset)) {
-			$this->customer->clearResetCode();
+			$this->customer->clearResetCode($customer_id);
 			message('success', _l('You have successfully updated your password!'));
 			redirect('customer/login');
 		} else {
