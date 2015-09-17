@@ -33,33 +33,43 @@ abstract class App_Controller_Table extends Controller
 		$sort   = (array)_request('sort', !empty($options['sort_default']) ? $options['sort_default'] : null);
 		$filter = (array)_get('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
 		$options += array(
-			'index'   => $this->model['value'],
-			'page'    => _get('page'),
-			'limit'   => _get('limit', option('admin_list_limit', 20)),
-			'columns' => array(),
+			'index'    => $this->model['value'],
+			'page'     => _get('page'),
+			'limit'    => _get('limit', option('admin_list_limit', 20)),
+			'columns'  => array(),
+			'actions'  => array(
+				'edit'   => array(
+					'text' => _l("Edit"),
+					'path' => $this->model['path'] . '/form',
+				),
+				'delete' => array(
+					'text' => _l("Delete"),
+					'path' => $this->model['path'] . '/remove',
+				),
+			),
+			'callback' => null,
 		);
 
 		$options['columns'] += $this->instance->getColumns((array)_request('columns'));
 
 		list($records, $total) = $this->instance->getRecords($sort, $filter, $options, true);
 
-		if (!isset($options['callback'])) {
-			foreach ($records as $record_id => &$record) {
-				$actions = array(
-					'edit'   => array(
-						'text' => _l("Edit"),
-						'href' => site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id)
-					),
-					'remove' => array(
-						'text' => _l("Delete"),
-						'href' => site_url($this->model['path'] . '/remove', $this->model['value'] . '=' . $record_id)
-					),
-				);
+		if (!empty($options['actions'])) {
+			foreach ($records as &$record) {
+				if (isset($record[$this->model['value']])) {
+					foreach ($options['actions'] as $name => $action) {
+						if (isset($action['user_can']) ? $action['user_can'] : user_can('w', $action['path'])) {
+							$action['href'] = site_url($action['path'], $this->model['value'] . '=' . $record[$this->model['value']]);
 
-				$record['actions'] = $actions;
+							$record['actions'][$name] = $action;
+						}
+					}
+				}
 			}
 			unset($record);
-		} elseif (is_callable($options['callback'])) {
+		}
+
+		if (is_callable($options['callback'])) {
 			$options['callback']($records, $total);
 		}
 
@@ -96,13 +106,15 @@ abstract class App_Controller_Table extends Controller
 	{
 		if ($record_id = $this->instance->save(_request($this->model['value']), $_POST)) {
 			message('success', _l("The record has been updated."));
-			message('data', array('record_id' => $record_id));
+			message('data', array($this->model['value'] => $record_id));
 		} else {
 			message('error', $this->instance->fetchError());
 		}
 
 		if ($this->is_ajax) {
 			output_message();
+		} elseif ($this->message->has('error') && method_exists($this, 'form')) {
+			post_redirect($this->model['path'] . '/form', $_GET);
 		} else {
 			redirect($this->model['path']);
 		}

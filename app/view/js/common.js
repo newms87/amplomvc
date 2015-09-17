@@ -437,7 +437,7 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 
 	o.buttons.confirm.action = function () {
 		$(this).ampModal('close');
-		
+
 		if (typeof o.onConfirm === 'function') {
 			o.onConfirm.call(this);
 		}
@@ -1137,42 +1137,6 @@ function register_ajax_calls(is_ajax) {
 	});
 
 	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-text]').amplo_ajax();
-
-	if (is_ajax) {
-		$('form.ctrl-save').use_once().submit(function () {
-			var $form = $(this);
-
-			var params = {
-				callback: function (response) {
-					//Redirect from new form to edit form
-					if (response.data) {
-						for (var id in response.data) {
-							var regx = new RegExp(id + '=\\d+');
-
-							if (!location.href.match(regx)) {
-								location = location.href.replace(/#.*/, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
-							}
-						}
-					}
-
-					$form.show_msg(response);
-
-					if (!response.error && $form.closest('#colorbox').length) {
-						$.colorbox.close();
-					}
-				}
-			}
-
-			$(this).submit_ajax_form(params);
-
-			return false;
-		}).find('a.cancel, a.back').click(function () {
-			if ($(this).closest('#colorbox').length) {
-				$.colorbox.close();
-				return false;
-			}
-		});
-	}
 }
 
 function register_colorbox() {
@@ -1495,6 +1459,11 @@ $(document)
 			$n.loading();
 		}
 
+		if ($n.is('a.cancel, a.back') && $n.closest('#colorbox').length) {
+			$.colorbox.close();
+			return false;
+		}
+
 		// Multistate Checkboxes
 		if ($n.is('[data-multistate]')) {
 			var val = $n.val();
@@ -1525,6 +1494,35 @@ $(document)
 		}
 	})
 
+	.keydown(function (e) {
+		var $n = $(e.target), $form;
+
+		if (e.ctrlKey && e.keyCode === 83 && ($form = $('form.ctrl-save')).length) {
+			$form.submit_ajax_form({
+				callback: function (response) {
+					//Redirect from new form to edit form
+					if (response.data) {
+						for (var id in response.data) {
+							var regx = new RegExp(id + '=\\d+');
+
+							if (!location.href.match(regx)) {
+								location = location.href.replace(/#.*/, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+							}
+						}
+					}
+
+					$form.show_msg(response);
+
+					if (!response.error && $form.closest('#colorbox').length) {
+						$.colorbox.close();
+					}
+				}
+			});
+			e.preventDefault();
+			return false;
+		}
+	})
+
 	.ajaxComplete(function () {
 		content_loaded(true);
 	});
@@ -1532,17 +1530,6 @@ $(document)
 $(window).on('beforeunload', function () {
 	$.pageUnloading = true;
 })
-
-if ($ctrlSave = $('form.ctrl-save').length) {
-	$(document).keydown(function (e) {
-		if (e.ctrlKey && (e.which == 83)) {
-			$ctrlSave.submit_ajax_form();
-
-			e.preventDefault();
-			return false;
-		}
-	})
-}
 
 //Chrome Autofill disable hack
 if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {

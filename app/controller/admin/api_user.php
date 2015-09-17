@@ -1,7 +1,14 @@
 <?php
 
-class App_Controller_Admin_ApiUser extends Controller
+class App_Controller_Admin_ApiUser extends App_Controller_Table
 {
+	protected $model = array(
+		'class' => 'App_Model_ApiUser',
+		'path'  => 'admin/api_user',
+		'label' => 'username',
+		'value' => 'api_user_id',
+	);
+
 	public function index()
 	{
 		//Page Head
@@ -33,54 +40,13 @@ class App_Controller_Admin_ApiUser extends Controller
 		output($this->render('api_user/list', $data));
 	}
 
-	public function listing()
+	public function listing($options = array())
 	{
-		$sort    = (array)_request('sort', array('username' => 'ASC'));
-		$filter  = (array)_request('filter');
-		$options = array(
-			'index'   => 'api_user_id',
-			'page'    => _get('page', 1),
-			'limit'   => _get('limit', option('admin_list_limit', 20)),
-			'columns' => $this->Model_ApiUser->getColumns((array)_request('columns')),
+		$options += array(
+			'sort_default' => array('username' => 'ASC'),
 		);
 
-		list($api_users, $total) = $this->Model_ApiUser->getRecords($sort, $filter, $options, true);
-
-		foreach ($api_users as $api_user_id => &$api_user) {
-			$actions = array(
-				'edit'   => array(
-					'text' => _l("Edit"),
-					'href' => site_url('admin/api_user/form', 'api_user_id=' . $api_user_id)
-				),
-				'delete' => array(
-					'text' => _l("Delete"),
-					'href' => site_url('admin/api_user/remove', 'api_user_id=' . $api_user_id)
-				),
-			);
-
-			$api_user['actions'] = $actions;
-		}
-		unset($api_user);
-
-		$listing = array(
-			'extra_cols'     => $this->Model_ApiUser->getColumns(false),
-			'records'        => $api_users,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total' => $total,
-			'listing_path'   => 'admin/api_user/listing',
-			'save_path'      => 'admin/api_user/save',
-		);
-
-		$output = block('widget/listing', null, $listing + $options);
-
-		//Response
-		if ($this->is_ajax) {
-			output($output);
-		}
-
-		return $output;
+		return parent::listing($options);
 	}
 
 	public function form()
@@ -129,39 +95,6 @@ class App_Controller_Admin_ApiUser extends Controller
 
 		//Response
 		output($this->render('api_user/form', $api_user));
-	}
-
-	public function save()
-	{
-		if ($api_user_id = $this->Model_ApiUser->save(_request('api_user_id'), $_POST)) {
-			message('success', _l("The User has been updated successfully!"));
-			message('data', array('api_user_id' => $api_user_id));
-		} else {
-			message('error', $this->Model_ApiUser->fetchError());
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} elseif ($this->message->has('error')) {
-			$this->form();
-		} else {
-			redirect('admin/api_user');
-		}
-	}
-
-	public function remove()
-	{
-		if ($this->Model_ApiUser->remove(_get('api_user_id'))) {
-			message('success', _l("API User was deleted!"));
-		} else {
-			message('error', $this->Model_ApiUser->fetchError());
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} else {
-			redirect('admin/api_user');
-		}
 	}
 
 	public function batch_action()
