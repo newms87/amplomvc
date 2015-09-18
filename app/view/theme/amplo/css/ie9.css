@@ -1,0 +1,7 @@
+.links .link-list ul li .sub-menu {
+	opacity: 0;
+}
+
+.links .link-list ul li.hover .sub-menu {
+	opacity: 1;
+}

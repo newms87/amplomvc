@@ -1545,3 +1545,9 @@ if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
 		});
 	});
 }
+
+if (!window.console) console = {
+	log: function (m) {
+		alert(m)
+	}
+};
