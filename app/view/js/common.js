@@ -102,10 +102,10 @@ function autoload_js_file(url, args, type) {
 				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
 
 				$.ajax({
-						url:      js_url,
-						dataType: 'script',
-						cache:    true
-					})
+					url:      js_url,
+					dataType: 'script',
+					cache:    true
+				})
 					.done(function () {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
@@ -116,10 +116,10 @@ function autoload_js_file(url, args, type) {
 							$(document).trigger(al);
 						}
 					}).always(function (jqXHR, status, msg) {
-					if (status !== 'success') {
-						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
-					}
-				});
+						if (status !== 'success') {
+							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+						}
+					});
 			}
 		}
 	}
@@ -435,18 +435,23 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 
 	o.content = $(o.content).append(o.text);
 
-	o.buttons.confirm.action = function () {
-		$(this).ampModal('close');
+	if (o.buttons.confirm && !o.buttons.confirm.action) {
+		o.buttons.confirm.action = function () {
+			$(this).ampModal('close');
 
-		if (typeof o.onConfirm === 'function') {
-			o.onConfirm.call(this);
+			if (typeof o.onConfirm === 'function') {
+				o.onConfirm.call(this);
+			}
 		}
 	}
-	o.buttons.cancel.action = function () {
-		$(this).ampModal('close');
 
-		if (typeof o.onCancel === 'function') {
-			o.onCancel.call(this);
+	if (o.buttons.cancel && !o.buttons.cancel.action) {
+		o.buttons.cancel.action = function () {
+			$(this).ampModal('close');
+
+			if (typeof o.onCancel === 'function') {
+				o.onCancel.call(this);
+			}
 		}
 	}
 
