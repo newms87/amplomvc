@@ -79,14 +79,27 @@
 		display: inline-block;
 		vertical-align: middle;
 		background: white;
+		text-align: left;
 	}
 
 	.amp-modal-buttons {
-		margin: 2em 0 1em 0;
+		margin-top: 1em;
+		text-align: center;
+		padding: 1em;
 
 		button {
+			min-width: 10em;
+
 			& + button {
 				margin-left: 1em;
+			}
+
+			&.cancel {
+				padding: .45em .8em;
+				border: 2px solid @font-dark;
+				border-radius: 1px;
+				background: transparent;
+				color: @font-dark;
 			}
 		}
 	}
