@@ -9,13 +9,28 @@ $this->db->changeColumn('page', 'layout_id', 'layout_id', "INT(10) UNSIGNED NOT 
 $this->db->changeColumn('page', 'template', 'template', "VARCHAR(128) NOT NULL AFTER `layout_id`");
 $this->db->changeColumn('page', 'status', 'status', "INT(10) UNSIGNED NOT NULL AFTER `comments`");
 
-$this->query("UPDATE `{$this->t['page']}` SET type = 'page', status = 2, date_created = date_updated, date_published = date_updated WHERE `type` IS NULL");
-
 $pages = $this->Model_Page->getRecords();
 
 foreach ($pages as $page) {
+	$update = array();
+
 	if ($o = @unserialize($page['options'])) {
-		$this->Model_Page->save($page['page_id'], array('options' => json_encode($o)));
+		$update['options'] = json_encode($o);
+	}
+
+	if (empty($page['type'])) {
+		$update['type'] = 'page';
+
+		if ($page['status'] == 1) {
+			$update['status']         = 2;
+			$update['date_published'] = $page['date_updated'];
+		}
+
+		$update['date_created'] = $page['date_updated'];
+	}
+
+	if ($update) {
+		$this->Model_Page->save($page['page_id'], $update);
 	}
 }
 
