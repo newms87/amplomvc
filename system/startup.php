@@ -52,7 +52,10 @@ defined('AMPLO_TIME_LOG') ?: define('AMPLO_TIME_LOG', false);
 defined('AMPLO_ACCESS_LOG') ?: define('AMPLO_ACCESS_LOG', 0);
 defined('AMPLO_SESSION') ?: define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session');
 defined('AMPLO_SESSION_TIMEOUT') ?: define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
+defined('AMPLO_HEADERS_DEBUG') ?: define('AMPLO_HEADERS_DEBUG', false);
 defined('CACHE_FILE_EXPIRATION') ?: define('CACHE_FILE_EXPIRATION', 3600);
+//Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
+defined('AMPLO_REWRITE_SHORT_TAGS') ?: define('AMPLO_REWRITE_SHORT_TAGS', false);
 
 //Default server values in case they are not set.
 $_SERVER += array(
@@ -102,7 +105,7 @@ if (ini_get('register_globals')) {
 		$_REQUEST,
 		$_SESSION,
 		$_SERVER,
-		$_FILES
+		$_FILES,
 	);
 
 	foreach ($globals as $global) {

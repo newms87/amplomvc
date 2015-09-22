@@ -109,7 +109,7 @@ function render_template($contents)
 {
 	$contents = preg_replace("/<\\?([^p=])/", "<?php \$1", $contents);
 
-	if (defined("AMPLO_REWRITE_SHORT_TAGS") && AMPLO_REWRITE_SHORT_TAGS) {
+	if (AMPLO_REWRITE_SHORT_TAGS) {
 		$contents = preg_replace("/<\\?=/", "<?php echo", $contents);
 	}
 
