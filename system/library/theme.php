@@ -158,7 +158,7 @@ class Theme extends Library
 		$file = $this->findFile($path, $theme);
 
 		if ($file) {
-			return DIR_THEMES . $file;
+			return DIR_VIEW . $file;
 		}
 
 		return false;
@@ -169,7 +169,7 @@ class Theme extends Library
 		$file = $this->findFile($path, $theme);
 
 		if ($file) {
-			return URL_THEMES . $file;
+			return URL_VIEW . $file;
 		}
 
 		return false;
@@ -184,16 +184,21 @@ class Theme extends Library
 
 		//Resolve specified theme directory
 		if ($theme) {
-			if (file_exists(DIR_THEMES . $theme . '/' . $file)) {
-				return $theme . '/' . $file;
+			if (file_exists(DIR_VIEW . 'theme/' . $theme . '/' . $file)) {
+				return 'theme/' . $theme . '/' . $file;
 			}
 		}
 
 		//Resolve the current store themes heirachically
 		foreach ($this->theme_hierarchy as $theme_node) {
-			if (file_exists(DIR_THEMES . $theme_node . '/' . $file)) {
-				return $theme_node . '/' . $file;
+			if (file_exists(DIR_VIEW . 'theme/' . $theme_node . '/' . $file)) {
+				return 'theme/' . $theme_node . '/' . $file;
 			}
+		}
+
+		//Resolve at root view directory
+		if (file_exists(DIR_SITE . 'app/view/' . $file)) {
+			return $file;
 		}
 
 		//File not found

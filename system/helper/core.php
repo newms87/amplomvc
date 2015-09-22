@@ -567,6 +567,10 @@ if (!function_exists('sort_by')) {
 	function sort_by(&$array, $key, $reverse = false, $assoc = true, $limit = null)
 	{
 		$sort = function ($a, $b) use ($key, $reverse) {
+			if (!isset($a[$key]) || !isset($b[$key])) {
+				return 0;
+			}
+
 			return $reverse ? $a[$key] < $b[$key] : $a[$key] > $b[$key];
 		};
 

@@ -92,7 +92,6 @@ class App_Controller_Admin_Page extends App_Controller_Table
 		$defaults += array(
 			'page_id'          => 0,
 			'type'             => 'page',
-			'theme'            => option('config_default_theme', AMPLO_DEFAULT_THEME),
 			'name'             => 'new-page',
 			'title'            => 'New ' . $this->model['title'],
 			'author_id'        => user_info('user_id'),
@@ -121,7 +120,6 @@ class App_Controller_Admin_Page extends App_Controller_Table
 		//Template Data
 		$page['data_templates']  = $this->Model_Page->getTemplates();
 		$page['data_layouts']    = $this->Model_Layout->getRecords(null, null, array('cache' => true));
-		$page['data_themes']     = $this->theme->getThemes();
 		$page['data_authors']    = array('' => 'Anonymous') + $this->Model_Page->getAuthors();
 		$page['data_categories'] = $this->Model_Category->getRecords(array('name' => 'ASC'), array('type' => 'page'), array('cache' => true));
 

@@ -8,8 +8,6 @@ if (version_compare(phpversion(), '5.3.0', '<') == true) {
 define('DIR_SYSTEM', DIR_SITE . 'system/');
 define('DIR_DATABASE', DIR_SITE . 'system/database/');
 define('DIR_PLUGIN', DIR_SITE . 'plugin/');
-define('DIR_FORM', DIR_SITE . 'app/view/form/');
-define('DIR_THEMES', DIR_SITE . 'app/view/theme/');
 define('DIR_EXCEL_TEMPLATE', DIR_SITE . 'system/php-excel/templates/');
 define('DIR_EXCEL_FPO', DIR_SITE . 'upload/fpo/');
 define('DIR_CRON', DIR_SITE . 'system/cron/');
@@ -30,19 +28,24 @@ defined('COOKIE_PREFIX') ?: define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/",
 
 defined('HTTP_SITE') ?: define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE);
 defined('HTTPS_SITE') ?: define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
-defined('URL_IMAGE') ?: define('URL_IMAGE', URL_SITE . 'image/');
-defined('URL_DOWNLOAD') ?: define('URL_DOWNLOAD', URL_SITE . 'download/');
-defined('URL_JS') ?: define('URL_JS', URL_SITE . 'app/view/js/');
-defined('URL_STYLE') ?: define('URL_STYLE', URL_SITE . 'app/view/style/');
-defined('URL_RESOURCES') ?: define('URL_RESOURCES', URL_SITE . 'system/resources/');
-defined('URL_THEMES') ?: define('URL_THEMES', URL_SITE . 'app/view/theme/');
-defined('DIR_IMAGE') ?: define('DIR_IMAGE', DIR_SITE . 'image/');
-defined('DIR_DOWNLOAD') ?: define('DIR_DOWNLOAD', DIR_SITE . 'download/');
-defined('DIR_JS') ?: define('DIR_JS', DIR_SITE . 'app/view/js/');
-defined('DIR_STYLE') ?: define('DIR_STYLE', DIR_SITE . 'app/view/style/');
-defined('DIR_RESOURCES') ?: define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
+
 defined('DIR_LOGS') ?: define('DIR_LOGS', DIR_SITE . 'system/logs/');
+defined('DIR_IMAGE') ?: define('DIR_IMAGE', DIR_SITE . 'image/');
+defined('URL_IMAGE') ?: define('URL_IMAGE', URL_SITE . 'image/');
+defined('DIR_DOWNLOAD') ?: define('DIR_DOWNLOAD', DIR_SITE . 'download/');
+defined('URL_DOWNLOAD') ?: define('URL_DOWNLOAD', URL_SITE . 'download/');
+defined('DIR_RESOURCES') ?: define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
+defined('URL_RESOURCES') ?: define('URL_RESOURCES', URL_SITE . 'system/resources/');
+defined('DIR_VIEW') ?: define('DIR_VIEW', DIR_SITE . 'app/view/');
+defined('URL_VIEW') ?: define('URL_VIEW', URL_SITE . 'app/view/');
+defined('DIR_THEMES') ?: define('DIR_THEMES', DIR_VIEW . 'theme/');
+defined('URL_THEMES') ?: define('URL_THEMES', URL_VIEW . 'theme/');
+defined('DIR_JS') ?: define('DIR_JS', DIR_VIEW . 'js/');
+defined('URL_JS') ?: define('URL_JS', URL_VIEW . 'js/');
+defined('URL_STYLE') ?: define('URL_STYLE', URL_VIEW . 'style/');
+defined('DIR_STYLE') ?: define('DIR_STYLE', DIR_VIEW . 'style/');
 defined('DIR_DATABASE_BACKUP') ?: define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+
 defined('DEFAULT_TIMEZONE') ?: define('DEFAULT_TIMEZONE', 'America/Denver');
 defined('MYSQL_TIMEZONE') ?: define('MYSQL_TIMEZONE', '-6:00');
 defined('AMPLO_PROFILE') ?: define('AMPLO_PROFILE', false);
@@ -74,9 +77,6 @@ date_default_timezone_set(DEFAULT_TIMEZONE);
 //Date Constants
 define('DATETIME_ZERO', '0000-00-00 00:00:00');
 define('DATE_ZERO', '0000-00-00');
-define("AC_DATE_STRING", 1);
-define("AC_DATE_OBJECT", 2);
-define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
 if (!defined('COOKIE_DOMAIN')) {

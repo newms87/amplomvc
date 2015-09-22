@@ -1020,6 +1020,129 @@ HTML;
 	}
 }
 
+function build_links($links, $sort = 'sort_order', $depth = 0)
+{
+	$html = '';
+
+	if ($sort) {
+		sort_by($links, $sort);
+	}
+
+	foreach ($links as $name => $link) {
+		if (empty($link['display_name'])) {
+			$link['display_name'] = $name;
+		}
+
+		if (empty($link['class'])) {
+			$link['class'] = '';
+		}
+
+		$link['class'] .= ' link-' . $name;
+
+		if (empty($link['#class'])) {
+			$link['#class'] = '';
+		}
+
+		if (!empty($link['href'])) {
+			if (strpos($link['href'], '#') !== 0) {
+				$link['#class'] .= ' link';
+			}
+
+			$link['#href'] = $link['href'];
+		}
+
+		if (!empty($link['children'])) {
+			if (!isset($link['hover']) || $link['hover'] !== false) {
+				$link['class'] .= ' on-hover';
+			}
+
+			$children = build_links($link['children'], $sort, $depth + 1);
+			$link['#class'] .= ' parent';
+		} else {
+			$children = '';
+		}
+
+		$link['class']  = trim($link['class']);
+		$link['#class'] = trim($link['#class']);
+
+		$l = "<a " . attrs($link) . ">$link[display_name]</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
+
+		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
+	}
+
+	return $html;
+
+	switch ($depth) {
+		case 0:
+			$class = "top-menu";
+			break;
+		case 1:
+			$class = "sub-menu";
+			break;
+		default:
+			$class = "child-menu child-$depth";
+			break;
+	}
+
+	$html = '';
+
+	$zindex = count($links);
+
+	foreach ($links as $link) {
+		if (!$link) {
+			continue;
+		}
+
+		if (empty($link['display_name'])) {
+			$link['display_name'] = $link['name'];
+			$link['name']         = slug($link['name'], '-');
+		}
+
+		$attr_fields = array(
+			'title',
+			'href',
+			'target',
+			'class',
+		);
+
+		foreach ($attr_fields as $field) {
+			if (!empty($link[$field]) && !isset($link['#' . $field])) {
+				$link['#' . $field] = $link[$field];
+			}
+		}
+
+		if (empty($link['#class'])) {
+			$link['#class'] = '';
+		}
+
+		$link['#class'] .= ' link-' . $link['name'];
+
+		$children = '';
+
+		if (!empty($link['children'])) {
+			$children = $this->renderLinks($link['children'], $sort, $depth + 1);
+			$link['#class'] .= ' has-children';
+		}
+
+		//Set active class
+		if (!empty($link['active'])) {
+			$link['#class'] .= ' ' . $link['active'];
+		}
+
+		$link['#class'] = trim($link['#class'] . ' menu-link');
+
+		//Build attribute list
+		$attrs    = attrs($link);
+		$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
+
+		$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";
+
+		$zindex--;
+	}
+
+	return "<div class=\"link-list $class\"><ul>" . $html . "</ul></div>";
+}
+
 function output($output, $content_type = 'text/html')
 {
 	global $registry;

@@ -23,15 +23,15 @@
 			<div id="tab-general">
 				<table class="form">
 					<tr>
-						<td class="required"> {{Name:}}</td>
-						<td>
-							<input type="text" name="name" value="<?= $name; ?>"/>
-						</td>
-					</tr>
-					<tr>
 						<td class="required"> {{Type:}}</td>
 						<td>
 							<input type="text" name="type" value="<?= $type; ?>"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="required"> {{Name:}}</td>
+						<td>
+							<input type="text" name="name" value="<?= $name; ?>"/>
 						</td>
 					</tr>
 					<tr>
@@ -51,6 +51,12 @@
 								'value'  => 'category_id',
 								'select' => $parent_id,
 							)); ?>
+						</td>
+					</tr>
+					<tr>
+						<td class="required sort-order"> {{Sort Order:}}</td>
+						<td>
+							<input type="text" name="sort_order" value="<?= $sort_order; ?>"/>
 						</td>
 					</tr>
 					<tr>

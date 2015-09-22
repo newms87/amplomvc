@@ -1195,8 +1195,12 @@ section.page {
 	}
 
 	.link-menu {
-		& > .parent {
+		a {
 			color: @font-dark;
+
+			&:hover, &.active {
+				color: @color-main;
+			}
 		}
 
 		& > .children {
@@ -1207,12 +1211,8 @@ section.page {
 		}
 
 		&.active, &.on-hover:hover {
-			& > .parent {
-				color: @color-main;
-			}
-
 			& > .children {
-				max-height: 20em;
+				max-height: none;
 			}
 		}
 	}

@@ -185,20 +185,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="required">{{Theme}}</td>
-						<td>
-							<?=
-							build(array(
-								'type'   => 'select',
-								'name'   => 'theme',
-								'data'   => $data_themes,
-								'select' => $theme,
-								'value'  => 'name',
-								'label'  => 'name',
-							)); ?>
-						</td>
-					</tr>
-					<tr>
 						<td class="required"> {{Layout:}}</td>
 						<td>
 							<div id="layout_select">

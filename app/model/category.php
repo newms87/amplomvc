@@ -11,7 +11,11 @@ class App_Model_Category extends App_Model_Table
 				$this->error['name'] = _l("Name must be between 2 and 128 characters!");
 			}
 		} elseif (!$category_id) {
-			$this->error['name'] = _l("Name is required.");
+			if (isset($category['title'])) {
+				$category['name'] = $category['title'];
+			} else {
+				$this->error['name'] = _l("Name is required.");
+			}
 		}
 
 		if (!empty($category['parent_id']) && $category_id == $category['parent_id']) {
@@ -21,6 +25,12 @@ class App_Model_Category extends App_Model_Table
 		if ($this->error) {
 			return false;
 		}
+
+		if (!$category_id && empty($category['title'])) {
+			$category['title'] = $category['name'];
+		}
+
+		$category['name'] = slug($category['name']);
 
 		if (!$category_id) {
 			$category['date'] = $this->date->now();

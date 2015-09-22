@@ -76,6 +76,7 @@ class App_Controller_Admin_Category extends App_Controller_Table
 			'parent_id'   => 0,
 			'title'       => 'New Category',
 			'status'      => 1,
+			'sort_order'  => 0,
 		);
 
 		$category += $defaults;

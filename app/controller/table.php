@@ -115,6 +115,7 @@ abstract class App_Controller_Table extends Controller
 		if ($record_id = $this->instance->save(_request($this->model['value']), $_POST)) {
 			message('success', _l("The record has been updated."));
 			message('data', array($this->model['value'] => $record_id));
+			$_GET[$this->model['value']] = $record_id;
 		} else {
 			message('error', $this->instance->fetchError());
 		}

@@ -2,6 +2,11 @@
 
 class Date extends Library
 {
+	const
+		STRING = 1,
+		OBJECT = 2,
+		TIMESTAMP = 3;
+
 	static $months = array(
 		1  => 'January',
 		2  => 'February',
@@ -15,6 +20,21 @@ class Date extends Library
 		10 => 'October',
 		11 => 'November',
 		12 => 'December',
+	);
+
+	static $months_abbrev = array(
+			1  => 'Jan',
+			2  => 'Feb',
+			3  => 'Mar',
+			4  => 'Apr',
+			5  => 'May',
+			6  => 'Jun',
+			7  => 'Jul',
+			8  => 'Aug',
+			9  => 'Sept',
+			10 => 'Oct',
+			11 => 'Nov',
+			12 => 'Dec',
 	);
 
 	private $timezone;
@@ -43,6 +63,7 @@ class Date extends Library
 					}
 				} catch (Exception $e) {
 					$this->error['date_string'] = $e;
+
 					return false;
 				}
 			}
@@ -50,6 +71,7 @@ class Date extends Library
 
 		if (!is_object($date)) {
 			$this->error['format'] = _l("Invalid Date Format");
+
 			return false;
 		}
 
@@ -59,27 +81,27 @@ class Date extends Library
 	/**
 	 * Returns the current date and time
 	 *
-	 * @param Int $return_type (optional) - Can be AC_DATE_STRING, AC_DATE_OBJECT, or AC_DATE_TIMESTAMP
-	 * @param String $format (optional) - The date format compatible with PHP's date_format(). Default uses the language Datetime default format.
-	 *         Only used with $return_type = AC_DATE_STRING
+	 * @param Int    $return_type (optional) - Can be Date::STRING, Date::OBJECT, or Date::TIMESTAMP
+	 * @param String $format      (optional) - The date format compatible with PHP's date_format(). Default uses the
+	 *                            language Datetime default format. Only used with $return_type = Date::STRING
 	 *
 	 * @link http://www.php.net/manual/en/datetime.formats.php
 	 *
 	 * @return Mixed - string, DateTime object or Unix timestamp as specified in $return_type. Default is String
 	 */
 
-	public function now($format = '', $return_type = AC_DATE_STRING)
+	public function now($format = '', $return_type = self::STRING)
 	{
 		if (!$this->datetime($date)) {
 			return false;
 		}
 
 		switch ($return_type) {
-			case AC_DATE_OBJECT:
+			case self::OBJECT:
 				return $date;
-			case AC_DATE_TIMESTAMP:
+			case self::TIMESTAMP:
 				return $date->getTimestamp();
-			case AC_DATE_STRING:
+			case self::STRING:
 			default:
 				return $this->format($date, $format);
 		}
@@ -118,20 +140,23 @@ class Date extends Library
 	/**
 	 * Returns the date added with the specified interval
 	 *
-	 * @param DateTime $date (optional) - A DateTime object with the starting date, or null for the current date
-	 * @param Mixed $interval (optional) - A DateInterval object or a string in the format parseable by PHP's strtotime().
-	 *         (see first link on relative formats) If not set, the current date will be returned.
-	 * @param Int $return_type (optional) - Can be AC_DATE_STRING, AC_DATE_OBJECT, or AC_DATE_TIMESTAMP. Default is AC_DATE_STRING
-	 * @param String $format (optional) - The date format compatible with PHP's date_format().
-	 *         Or 'short', 'long', 'datetime' ('default' is alias) for Amplo MVC Language specific format. Default uses the language Datetime default format.
-	 *         Only used with $return_type = AC_DATE_STRING
+	 * @param DateTime $date        (optional) - A DateTime object with the starting date, or null for the current date
+	 * @param Mixed    $interval    (optional) - A DateInterval object or a string in the format parseable by PHP's
+	 *                              strtotime().
+	 *                              (see first link on relative formats) If not set, the current date will be returned.
+	 * @param Int      $return_type (optional) - Can be Date::STRING, Date::OBJECT, or Date::TIMESTAMP. Default is
+	 *                              Date::STRING
+	 * @param String   $format      (optional) - The date format compatible with PHP's date_format().
+	 *                              Or 'short', 'long', 'datetime' ('default' is alias) for Amplo MVC Language specific
+	 *                              format. Default uses the language Datetime default format. Only used with
+	 *                              $return_type = Date::STRING
 	 *
 	 * @link http://www.php.net/manual/en/datetime.formats.relative.php
 	 * @link http://www.php.net/manual/en/datetime.formats.php
 	 *
 	 * @return Mixed - string, DateTime object or Unix timestamp as specified in $return_type. Default is String
 	 */
-	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
+	public function add($date = null, $interval = '', $return_type = self::STRING, $format = null)
 	{
 		if (!$this->datetime($date)) {
 			return false;
@@ -146,11 +171,11 @@ class Date extends Library
 		}
 
 		switch ($return_type) {
-			case AC_DATE_OBJECT:
+			case self::OBJECT:
 				return $date;
-			case AC_DATE_TIMESTAMP:
+			case self::TIMESTAMP:
 				return $date->getTimestamp();
-			case AC_DATE_STRING:
+			case self::STRING:
 			default:
 				return $this->format($date, $format);
 		}
@@ -179,7 +204,7 @@ class Date extends Library
 			return false;
 		}
 
-		return $date->format('w');
+		return (int)$date->format('w');
 	}
 
 	public function getDayOfMonth($date = null)
@@ -188,7 +213,7 @@ class Date extends Library
 			return false;
 		}
 
-		return $date->format('d');
+		return (int)$date->format('d');
 	}
 
 	public function getDayOfYear($date = null)
@@ -197,7 +222,17 @@ class Date extends Library
 			return false;
 		}
 
-		return $date->format('z');
+		return (int)$date->format('z');
+	}
+
+	public function month($date = null)
+	{
+		return (int)$this->format($date, 'n');
+	}
+
+	public function year($date = null)
+	{
+		return (int)$this->format($date, 'Y');
 	}
 
 	public function isEqual($d1, $d2)

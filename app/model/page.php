@@ -25,14 +25,6 @@ class App_Model_Page extends App_Model_Table
 			$this->error['title'] = _l("Page Title is required.");
 		}
 
-		if (isset($page['theme'])) {
-			if (empty($page['theme'])) {
-				$this->error['theme'] = _l("The Page Theme must not be empty");
-			}
-		} elseif (!$page_id) {
-			$page['theme'] = option('config_default_theme', AMPLO_DEFAULT_THEME);
-		}
-
 		if (isset($page['template'])) {
 			if (empty($page['template'])) {
 				$this->error['template'] = _l("The page Template cannot be empty");
@@ -49,9 +41,18 @@ class App_Model_Page extends App_Model_Table
 			$page['name'] = $page['title'];
 		}
 
-		//Format page name
+		//Format page name and ensure it is unique.
 		if (isset($page['name'])) {
 			$page['name'] = slug($page['name']);
+
+			$count = 1;
+			$name  = $page['name'];
+
+			while ($this->queryVar("SELECT COUNT(*) FROM {$this->t['page']} WHERE `name` = '" . $this->escape($name) . "' AND page_id != " . (int)$page_id)) {
+				$name = $page['name'] . '-' . $count++;
+			}
+
+			$page['name'] = $name;
 		}
 
 		if (!empty($page['options']) && !is_string($page['options'])) {
@@ -62,12 +63,9 @@ class App_Model_Page extends App_Model_Table
 		$updated = $page + $orig;
 
 		if ($page_id) {
-			$name_changed  = isset($page['name']) && $page['name'] !== $orig['name'];
-			$theme_changed = isset($page['theme']) && $page['theme'] !== $orig['theme'];
-
 			//Remove old directory if the page directory has changed
-			if ($name_changed || $theme_changed) {
-				rrmdir(DIR_THEMES . $orig['theme'] . '/template/' . $orig['type'] . '/' . $orig['name']);
+			if ($updated['name'] !== $orig['name'] || $updated['type'] !== $orig['type']) {
+				rrmdir(DIR_SITE . 'app/view/template/' . $orig['type'] . '/' . $orig['name']);
 			}
 
 			if (isset($page['status']) && $page['status'] !== $orig['status']) {
@@ -113,7 +111,7 @@ class App_Model_Page extends App_Model_Table
 		}
 
 		if ($page_id) {
-			$dir = DIR_THEMES . $updated['theme'] . '/template/' . $updated['type'] . '/' . $updated['name'];
+			$dir = DIR_SITE . 'app/view/template/' . $updated['type'] . '/' . $updated['name'];
 
 			if (_is_writable($dir)) {
 				if (isset($page['content'])) {
@@ -175,7 +173,8 @@ class App_Model_Page extends App_Model_Table
 		$page = $this->getRecord($page_id);
 
 		if ($page) {
-			$dir = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'];
+			$dir = DIR_SITE . 'app/view/template/' . $page['type'] . '/' . $page['name'];
+
 			if (is_dir($dir)) {
 				rrmdir($dir);
 			}
@@ -246,11 +245,14 @@ class App_Model_Page extends App_Model_Table
 
 	public function pageDetails(&$page)
 	{
-		if (!empty($page['theme']) && !empty($page['name'])) {
-			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'] . '/content.tpl';
-			$page['style_file']   = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'] . '/style.less';
+		if (!empty($page['type']) && !empty($page['name'])) {
+			$dir = DIR_SITE . 'app/view/template/' . $page['type'] . '/' . $page['name'] . '/';
 
-			$this->syncPage($page['type'], $page['theme'], $page['name']);
+			$page['dir']          = $dir;
+			$page['content_file'] = $dir . 'content.tpl';
+			$page['style_file']   = $dir . 'style.less';
+
+			$this->syncPage($page['type'], $page['name']);
 
 			if (!empty($page['status']) && $page['status'] !== App_Model_Page::STATUS_PUBLISHED) {
 				if ($this->date->isInPast($page['date_published'], false)) {
@@ -302,29 +304,29 @@ class App_Model_Page extends App_Model_Table
 
 		$themes = array($theme => $theme) + $this->theme->getThemeParents($theme);
 
-		$templates = array();
+		$files = get_files(DIR_SITE . 'app/view/template/page_template/', 'tpl', FILELIST_STRING);
 
 		foreach ($themes as $t) {
-			$files = get_files(DIR_THEMES . $t . '/template/page/template/', 'tpl', FILELIST_STRING);
+			$files += get_files(DIR_THEMES . $t . '/template/page_template/', 'tpl', FILELIST_STRING);
+		}
 
-			foreach ($files as $f) {
-				$name             = pathinfo($f, PATHINFO_FILENAME);
-				$templates[$name] = $name;
-			}
+		$templates = array();
+
+		foreach ($files as $f) {
+			$name             = pathinfo($f, PATHINFO_FILENAME);
+			$templates[$name] = $name;
 		}
 
 		return $templates;
 	}
 
-	protected function syncPage($type, $theme, $name)
+	protected function syncPage($type, $name)
 	{
-		$page = $this->findRecord(array(
-			'theme' => $theme,
-			'name'  => $name,
-		), '*');
+		$page = $this->findRecord(array('name' => $name), '*');
 
-		$content_file = DIR_THEMES . $theme . '/template/' . $type . '/' . $name . '/content.tpl';
-		$style_file   = DIR_THEMES . $theme . '/template/' . $type . '/' . $name . '/style.less';
+		$dir          = DIR_SITE . 'app/view/template/' . $type . '/' . $name;
+		$content_file = $dir . 'content.tpl';
+		$style_file   = $dir . 'style.less';
 
 		if ($page) {
 			$time_updated = (int)strtotime($page['date_updated']);
@@ -349,7 +351,6 @@ class App_Model_Page extends App_Model_Table
 
 			$page = array(
 				'type'     => $type,
-				'theme'    => $theme,
 				'name'     => $name,
 				'title'    => $title,
 				'template' => !empty($page_data['template']) ? $page_data['template'] : null,
@@ -426,7 +427,7 @@ class App_Model_Page extends App_Model_Table
 				'type'   => 'select',
 				'label'  => 'Template',
 				'build'  => array(
-					'data'  => $this->getTemplates(),
+					'data' => $this->getTemplates(),
 				),
 				'filter' => 'multiselect',
 				'sort'   => true,

@@ -30,7 +30,7 @@ class App_Controller_Page extends Controller
 
 		$page['content_file'] = _mod($page['content_file']);
 
-		$template = 'page/template/' . (!empty($page['template']) ? $page['template'] : 'default');
+		$template = 'page_template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
 		//Render
 		output($this->render($template, $page));
@@ -71,9 +71,9 @@ class App_Controller_Page extends Controller
 		//Change Layout to desired page layout
 		set_option('config_layout_id', $page['layout_id']);
 
-		$template = 'page/template/' . (!empty($page['template']) ? $page['template'] : 'default');
+		$template = 'page_template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
 		//Render
-		output($this->render($template, $page, $page['theme']));
+		output($this->render($template, $page));
 	}
 }
