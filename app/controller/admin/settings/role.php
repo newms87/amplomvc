@@ -30,8 +30,6 @@ class App_Controller_Admin_Settings_Role extends Controller
 			'url'     => site_url('admin/settings/role/batch-action'),
 		);
 
-		$data['view_listing_id'] = $this->Model_UserRole->getViewListingId();
-
 		//Render
 		output($this->render('settings/role/list', $data));
 	}

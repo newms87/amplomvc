@@ -78,13 +78,7 @@ class User extends Library
 
 			$user_role = $this->Model_UserRole->getRole($user['user_role_id']);
 
-			if ($user_role) {
-				$this->permissions = $user_role['permissions'];
-				$user['role']      = $user_role['name'];
-			} else {
-				$this->permissions = array();
-				$user['role']      = '';
-			}
+			$user['role'] = $user_role ? $user_role['name'] : '';
 
 			$this->user = $user;
 			$this->meta = $this->Model_User->getMeta($user['user_id']);
@@ -154,45 +148,13 @@ class User extends Library
 		$this->session->endTokenSession();
 	}
 
-	public function can($key, $value)
+	public function can($level, $action)
 	{
 		if ($this->isTopAdmin()) {
 			return true;
 		}
 
-		if (!$value) {
-			return true;
-		}
-
-		$path = explode('/', $value);
-		$perm = $this->permissions;
-
-		foreach ($path as $p) {
-			if (isset($perm[$p])) {
-				$perm = $perm[$p];
-				continue;
-			}
-
-			if (!isset($perm['*'])) {
-				return false;
-			}
-
-			if (count($perm) === 1) {
-				return $key === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
-			}
-
-			return false;
-		}
-
-		if (isset($perm['index'])) {
-			return $key === 'w' ? $perm['index']['*'] === 'w' : (bool)$perm['index']['*'];
-		}
-
-		if (isset($perm['*'])) {
-			return $key === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
-		}
-
-		return false;
+		return $this->Model_UserRole->can($this->user['user_role_id'], $level, $action);
 	}
 
 	public function canDoAction($action)
@@ -222,7 +184,7 @@ class User extends Library
 				'admin/user/reset',
 				'admin/user/reset_form',
 				'admin/error/not_found',
-				'admin/error/permission'
+				'admin/error/permission',
 			);
 
 			if (!in_array($path, $ignore) && !$this->can('r', $path)) {
@@ -353,7 +315,7 @@ class User extends Library
 	{
 		$admin_types = array(
 			"Administrator",
-			"Top Administrator"
+			"Top Administrator",
 		);
 
 		return in_array($this->info('role'), $admin_types);

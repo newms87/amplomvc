@@ -22,8 +22,8 @@
 
 		<div class="section">
 			<?= block('widget/views', null, array(
-				'group'           => 'user_roles',
-				'view_listing_id' => $view_listing_id
+				'group' => 'User Roles',
+				'path'  => 'admin/settings/role/listing',
 			)); ?>
 		</div>
 	</div>

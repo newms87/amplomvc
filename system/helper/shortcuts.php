@@ -626,11 +626,11 @@ function set_customer_meta($key, $value)
 	}
 }
 
-function user_can($level, $path)
+function user_can($level, $action)
 {
 	global $registry;
 
-	return $registry->get('user')->can($level, $path);
+	return $registry->get('user')->can($level, $action);
 }
 
 /**

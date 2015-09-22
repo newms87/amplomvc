@@ -3,14 +3,17 @@
 class App_Model_Page extends App_Model_Table
 {
 	protected $table = 'page', $primary_key = 'page_id';
-	protected $pages;
 
-	public function __construct()
-	{
-		parent::__construct();
+	const
+		STATUS_DISABLED = 0,
+		STATUS_PENDING = 1,
+		STATUS_PUBLISHED = 2;
 
-		$this->loadPages();
-	}
+	static $statuses = array(
+		self::STATUS_DISABLED  => 'Disabled',
+		self::STATUS_PENDING   => 'Pending',
+		self::STATUS_PUBLISHED => 'Published',
+	);
 
 	public function save($page_id, $page)
 	{
@@ -51,7 +54,12 @@ class App_Model_Page extends App_Model_Table
 			$page['name'] = slug($page['name']);
 		}
 
-		$orig = $this->getRecord($page_id);
+		if (!empty($page['options']) && !is_string($page['options'])) {
+			$page['options'] = json_encode($page['options']);
+		}
+
+		$orig    = $this->getRecord($page_id);
+		$updated = $page + $orig;
 
 		if ($page_id) {
 			$name_changed  = isset($page['name']) && $page['name'] !== $orig['name'];
@@ -59,7 +67,17 @@ class App_Model_Page extends App_Model_Table
 
 			//Remove old directory if the page directory has changed
 			if ($name_changed || $theme_changed) {
-				rrmdir(DIR_THEMES . $orig['theme'] . '/template/page/' . $orig['name']);
+				rrmdir(DIR_THEMES . $orig['theme'] . '/template/' . $orig['type'] . '/' . $orig['name']);
+			}
+
+			if (isset($page['status']) && $page['status'] !== $orig['status']) {
+				if ($orig['status'] === App_Model_Page::STATUS_PUBLISHED) {
+					$page['date_published'] = '';
+				} elseif ($page['status'] == App_Model_Page::STATUS_PUBLISHED) {
+					if (!$updated['date_published'] || $updated['date_published'] === DATETIME_ZERO) {
+						$page['date_published'] = $this->date->now();
+					}
+				}
 			}
 
 			//Save page history if there have been changes
@@ -69,10 +87,12 @@ class App_Model_Page extends App_Model_Table
 					break;
 				}
 			}
-		}
+		} else {
+			$page['date_created'] = $this->date->now();
 
-		if (!empty($page['options'])) {
-			$page['options'] = serialize($page['options']);
+			if (empty($page['type'])) {
+				$page['type'] = 'page';
+			}
 		}
 
 		//Set Updated Date and User
@@ -80,23 +100,20 @@ class App_Model_Page extends App_Model_Table
 		$page['updated_user_id'] = $this->user->getId();
 
 		if ($page_id) {
-			$page_id = $this->update('page', $page, $page_id);
+			$page_id = $this->update($this->table, $page, $page_id);
 		} else {
 			if (empty($page['options'])) {
-				$page['options'] = serialize(array(
+				$page['options'] = json_encode(array(
 					'show_title'       => 1,
 					'show_breadcrumbs' => 1,
 				));
 			}
 
-			$page_id = $this->insert('page', $page);
+			$page_id = $this->insert($this->table, $page);
 		}
 
 		if ($page_id) {
-			$name  = isset($page['name']) ? $page['name'] : $orig['name'];
-			$theme = isset($page['theme']) ? $page['theme'] : $orig['theme'];
-
-			$dir = DIR_THEMES . $theme . '/template/page/' . $name;
+			$dir = DIR_THEMES . $updated['theme'] . '/template/' . $updated['type'] . '/' . $updated['name'];
 
 			if (_is_writable($dir)) {
 				if (isset($page['content'])) {
@@ -115,11 +132,24 @@ class App_Model_Page extends App_Model_Table
 			}
 
 			if (!empty($page['alias'])) {
-				$this->url->setAlias($page['alias'], 'page/' . $page['name']);
+				$this->url->setAlias($page['alias'], $page['type'] . '/' . $page['name']);
 			}
 
 			if (!empty($page['translations'])) {
 				$this->translation->setTranslations('page', $page_id, $page['translations']);
+			}
+
+			if (isset($page['categories'])) {
+				$this->delete('page_category', array('page_id' => $page_id));
+
+				foreach ($page['categories'] as $category_id) {
+					$page_category = array(
+						'page_id'     => $page_id,
+						'category_id' => $category_id,
+					);
+
+					$this->insert('page_category', $page_category);
+				}
 			}
 		}
 
@@ -136,22 +166,22 @@ class App_Model_Page extends App_Model_Table
 	{
 		$page = $this->getRecord($page_id);
 
-		return $this->addPage($page);
+		return $this->save(null, $page);
 	}
 
-	public function deletePage($page_id)
+	public function remove($page_id)
 	{
 		//Remove Directory
 		$page = $this->getRecord($page_id);
 
 		if ($page) {
-			$dir = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'];
+			$dir = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'];
 			if (is_dir($dir)) {
 				rrmdir($dir);
 			}
 		}
 
-		$this->delete('page', $page_id);
+		$this->delete($this->table, $page_id);
 		$this->delete('page_history', array('page_id' => $page_id));
 
 		$this->url->removeAlias('page/' . $page['name']);
@@ -163,56 +193,20 @@ class App_Model_Page extends App_Model_Table
 		return $page_id;
 	}
 
-	public function getRecord($page_id, $select = '*')
+	public function getPage($page, $published = true)
 	{
-		$page = parent::getRecord($page_id, $select);
-
-		if ($page) {
-			$this->getPageFiles($page);
-
-			$page['options'] = $page['options'] ? unserialize($page['options']) : array();
-
-			$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
-
-			//Translations
-			$translate_fields = array(
-				'title',
-				'meta_keywords',
-				'meta_description',
-			);
-
-			$page['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
+		if (is_numeric($page)) {
+			$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page);
+		} else {
+			$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE name = '" . $this->escape($page) . "'");
 		}
 
-		return $page;
-	}
-
-	//TODO: Develop good caching method for pages.
-	public function getActivePage($page_id)
-	{
-		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id . " AND status = 1");
-
 		if ($page) {
-			$page['options'] = unserialize($page['options']);
+			$this->pageDetails($page);
 
-			$this->getPageFiles($page);
-		}
-
-		return $page;
-	}
-
-	public function getPageByName($name)
-	{
-		$name = str_replace('-', '_', $name);
-
-		$themes = array_keys($this->theme->getThemes());
-
-		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE status = 1 AND name = '" . $this->escape($name) . "' AND theme IN ('" . implode("','", $this->escape($themes)) . "')");
-
-		if ($page) {
-			$page['options'] = unserialize($page['options']);
-
-			$this->getPageFiles($page);
+			if ($published && $page['status'] !== App_Model_Page::STATUS_PUBLISHED) {
+				return false;
+			}
 		}
 
 		return $page;
@@ -223,11 +217,7 @@ class App_Model_Page extends App_Model_Table
 		$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page_id);
 
 		if ($page) {
-			$this->getPageFiles($page);
-
-			$page += array(
-				'layout_id' => option('config_default_layout_id')
-			);
+			$this->pageDetails($page);
 
 			$this->translation->translate('page', $page_id, $page);
 		}
@@ -242,18 +232,36 @@ class App_Model_Page extends App_Model_Table
 		$total ? $rows = &$records[0] : $rows = &$records;
 
 		foreach ($rows as &$row) {
-			$this->getPageFiles($row);
+			$this->pageDetails($row);
 		}
 		unset($row);
 
 		return $records;
 	}
 
-	public function getPageFiles(&$page)
+	public function getCategories($page_id)
+	{
+		return $this->queryColumn("SELECT category_id FROM {$this->t['page_category']} WHERE page_id = " . (int)$page_id);
+	}
+
+	public function pageDetails(&$page)
 	{
 		if (!empty($page['theme']) && !empty($page['name'])) {
-			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/content.tpl';
-			$page['style_file']   = DIR_THEMES . $page['theme'] . '/template/page/' . $page['name'] . '/style.less';
+			$page['content_file'] = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'] . '/content.tpl';
+			$page['style_file']   = DIR_THEMES . $page['theme'] . '/template/' . $page['type'] . '/' . $page['name'] . '/style.less';
+
+			$this->syncPage($page['type'], $page['theme'], $page['name']);
+
+			if (!empty($page['status']) && $page['status'] !== App_Model_Page::STATUS_PUBLISHED) {
+				if ($this->date->isInPast($page['date_published'], false)) {
+					$page['status'] = App_Model_Page::STATUS_PUBLISHED;
+					$this->save($page['page_id'], array('status' => App_Model_Page::STATUS_PUBLISHED));
+				}
+			}
+		}
+
+		if (!empty($page['options']) && is_string($page['options'])) {
+			$page['options'] = (array)json_decode($page['options']);
 		}
 	}
 
@@ -308,57 +316,15 @@ class App_Model_Page extends App_Model_Table
 		return $templates;
 	}
 
-	public function loadPages()
+	protected function syncPage($type, $theme, $name)
 	{
-		$this->pages = cache('page.loaded');
+		$page = $this->findRecord(array(
+			'theme' => $theme,
+			'name'  => $name,
+		), '*');
 
-		if ($this->pages === null) {
-			$this->pages = array();
-
-			$page_list = $this->getRecords(null, null, array('cache' => true));
-
-			foreach ($page_list as $p) {
-				$this->pages[$p['theme']][$p['name']] = $p;
-			}
-
-			cache('page.loaded', $this->pages);
-		}
-
-		clearstatcache();
-
-		$handle = opendir(DIR_THEMES);
-
-		while (($theme = readdir($handle)) !== false) {
-			if ($theme === '.' || $theme === '..' || $theme === 'admin') {
-				continue;
-			}
-
-			if (filetype(DIR_THEMES . $theme) === 'dir') {
-				$page_dir = DIR_THEMES . $theme . '/template/page/';
-
-				if ($th = @opendir($page_dir)) {
-					while (($name = readdir($th)) !== false) {
-						if ($name === '.' || $name === '..' || $name === 'template') {
-							continue;
-						}
-
-						if (filetype($page_dir . $name) === 'dir') {
-							$this->syncPage($theme, $name);
-						}
-					}
-				}
-			}
-		}
-
-		closedir($handle);
-	}
-
-	protected function syncPage($theme, $name)
-	{
-		$page = isset($this->pages[$theme][$name]) ? $this->pages[$theme][$name] : false;
-
-		$content_file = DIR_THEMES . $theme . '/template/page/' . $name . '/content.tpl';
-		$style_file   = DIR_THEMES . $theme . '/template/page/' . $name . '/style.less';
+		$content_file = DIR_THEMES . $theme . '/template/' . $type . '/' . $name . '/content.tpl';
+		$style_file   = DIR_THEMES . $theme . '/template/' . $type . '/' . $name . '/style.less';
 
 		if ($page) {
 			$time_updated = (int)strtotime($page['date_updated']);
@@ -382,6 +348,7 @@ class App_Model_Page extends App_Model_Table
 			$style   = is_file($style_file) ? file_get_contents($style_file) : '';
 
 			$page = array(
+				'type'     => $type,
 				'theme'    => $theme,
 				'name'     => $name,
 				'title'    => $title,
@@ -397,21 +364,79 @@ class App_Model_Page extends App_Model_Table
 		}
 	}
 
+	public function getAuthors()
+	{
+		$authors = cache('user_role.authors');
+
+		if (!$authors) {
+			$user_role_ids = array();
+
+			$roles = $this->Model_UserRole->getRecords();
+
+			foreach ($roles as $role) {
+				if ($this->Model_UserRole->can($role['user_role_id'], 'w', 'admin/page/form')) {
+					$user_role_ids[] = $role['user_role_id'];
+				}
+			}
+
+			$authors = $this->Model_User->getRecords(array('username' => 'ASC'), array('user_role_id' => $user_role_ids), array('index' => 'user_id'));
+
+			cache('user_role.authors', $authors);
+		}
+
+		return $authors;
+	}
+
 	public function getColumns($filter = array(), $merge = array())
 	{
 		$merge += array(
-			'status' => array(
+			'status'          => array(
 				'type'   => 'select',
 				'label'  => _l("Status"),
 				'build'  => array(
-					'data' => array(
-						0 => _l("Disabled"),
-						1 => _l("Enabled"),
-					),
+					'data' => App_Model_Page::$statuses,
 				),
 				'filter' => true,
 				'sort'   => true,
-			)
+			),
+			'author_id'       => array(
+				'type'   => 'select',
+				'label'  => _l("Author"),
+				'build'  => array(
+					'data'  => $this->getAuthors(),
+					'label' => 'username',
+					'value' => 'user_id',
+				),
+				'filter' => 'multiselect',
+				'sort'   => true,
+			),
+			'updated_user_id' => array(
+				'type'     => 'select',
+				'label'    => _l("Updated By"),
+				'build'    => array(
+					'data'  => $this->getAuthors(),
+					'label' => 'username',
+					'value' => 'user_id',
+				),
+				'filter'   => 'multiselect',
+				'sort'     => true,
+				'editable' => false,
+			),
+			'template'        => array(
+				'type'   => 'select',
+				'label'  => 'Template',
+				'build'  => array(
+					'data'  => $this->getTemplates(),
+				),
+				'filter' => 'multiselect',
+				'sort'   => true,
+			),
+			'date_created'    => array(
+				'editable' => false,
+			),
+			'date_updated'    => array(
+				'editable' => false,
+			),
 		);
 
 		return parent::getColumns($filter, $merge);

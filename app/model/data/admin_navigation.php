@@ -13,13 +13,17 @@ $links = array(
 	'content'    => array(
 		'display_name' => 'Content',
 		'children'     => array(
-			'content_blocks' => array(
+			'content_blocks'     => array(
 				'display_name' => 'Blocks',
 				'path'         => 'admin/block',
 			),
-			'content_pages'  => array(
+			'content_pages'      => array(
 				'display_name' => 'Pages',
 				'path'         => 'admin/page',
+			),
+			'content_categories' => array(
+				'display_name' => 'Categories',
+				'path'         => 'admin/category',
 			),
 		),
 	),

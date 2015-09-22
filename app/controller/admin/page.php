@@ -1,7 +1,15 @@
 <?php
 
-class App_Controller_Admin_Page extends Controller
+class App_Controller_Admin_Page extends App_Controller_Table
 {
+	protected $model = array(
+		'title' => 'Page',
+		'class' => 'App_Model_Page',
+		'path'  => 'admin/page',
+		'label' => 'name',
+		'value' => 'page_id',
+	);
+
 	public function index()
 	{
 		//Page Head
@@ -14,7 +22,7 @@ class App_Controller_Admin_Page extends Controller
 		//Batch Actions
 		$actions = array(
 			'enable'  => array(
-				'label' => _l("Enable")
+				'label' => _l("Enable"),
 			),
 			'disable' => array(
 				'label' => _l("Disable"),
@@ -33,101 +41,61 @@ class App_Controller_Admin_Page extends Controller
 		output($this->render('page/list', $data));
 	}
 
-	public function listing($listing = array())
+	public function listing($options = array())
 	{
-		$columns = $this->Model_Page->getColumns((array)_request('columns'));
-
 		$disallow = array(
-			'content' => 1,
-			'style'   => 1,
+			'content' => false,
+			'style'   => false,
+			'options' => false,
 		);
 
-		$columns = array_diff_key($columns, $disallow);
-
-		$sort    = (array)_get('sort', array('title' => 'ASC'));
-		$filter  = (array)_get('filter');
-		$options = array(
-			'index'   => 'page_id',
-			'page'    => _get('page'),
-			'limit'   => _get('limit', option('admin_list_limit', 20)),
-			'columns' => $columns,
+		$options += array(
+			'sort_default' => array('title' => 'ASC'),
+			'columns'      => $disallow,
+			'extra_cols'   => $disallow + $this->instance->getColumns(),
+			'actions'      => array(
+				'view' => array(
+					'text'    => _l("View"),
+					'path'    => 'page',
+					'#target' => "_blank",
+				),
+			),
+			'filter'       => array('type' => 'page'),
 		);
 
-		list($pages, $page_total) = $this->Model_Page->getRecords($sort, $filter, $options, true);
-
-		foreach ($pages as $page_id => &$page) {
-			$actions = array();
-
-			$actions['view'] = array(
-				'text'    => _l("View"),
-				'href'    => site_url('page', 'page_id=' . $page_id),
-				'#target' => "_blank",
-			);
-
-			if (user_can('r', 'admin/page/form')) {
-				$actions['edit'] = array(
-					'text' => _l("Edit"),
-					'href' => site_url('admin/page/form', 'page_id=' . $page_id)
-				);
-			}
-
-			if (user_can('w', 'admin/page/delete')) {
-				$actions['delete'] = array(
-					'text' => _l("Delete"),
-					'href' => site_url('admin/page/delete', 'page_id=' . $page_id)
-				);
-			}
-
-			$page['actions'] = $actions;
-		}
-		unset($page);
-
-		$listing += array(
-			'extra_cols'     => array_diff_key($this->Model_Page->getColumns(), $disallow),
-			'records'        => $pages,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total' => $page_total,
-			'listing_path'   => 'admin/page/listing',
-			'save_path'      => 'admin/page/save',
-		);
-
-		$output = block('widget/listing', null, $listing + $options);
-
-		//Response
-		if ($this->is_ajax) {
-			output($output);
-		}
-
-		return $output;
+		return parent::listing($options);
 	}
 
-	public function form()
+	public function form($defaults = array())
 	{
 		//Page Head
-		set_page_info('title', _l("Page"));
+		set_page_info('title', _l($this->model['title']));
 
 		//Insert or Update
 		$page_id = _get('page_id');
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Page"), site_url('admin/page'));
-		breadcrumb($page_id ? _l("Edit") : _l("Add"), site_url('admin/page/form', 'page_id=' . $page_id));
+		breadcrumb(_l($this->model['title']), site_url($this->model['path']));
+		breadcrumb($page_id ? _l("Edit") : _l("New"), site_url($this->model['path'] . '/form', 'page_id=' . $page_id));
 
 		//Load Information from POST or DB
 		$page = $_POST;
 
 		if ($page_id && !IS_POST) {
-			$page = $this->Model_Page->getRecord($page_id);
+			$page = $this->Model_Page->getPage($page_id, false);
+
+			$page['categories'] = $this->Model_Page->getCategories($page_id);
 		}
 
 		//Set Values or Defaults
-		$defaults = array(
+		$defaults += array(
+			'page_id'          => 0,
+			'type'             => 'page',
 			'theme'            => option('config_default_theme', AMPLO_DEFAULT_THEME),
-			'name'             => '',
-			'title'            => 'New Page',
+			'name'             => 'new-page',
+			'title'            => 'New ' . $this->model['title'],
+			'author_id'        => user_info('user_id'),
 			'alias'            => '',
 			'content'          => '',
 			'style'            => '',
@@ -139,6 +107,8 @@ class App_Controller_Admin_Page extends Controller
 			'blocks'           => array(),
 			'status'           => 1,
 			'translations'     => array(),
+			'date_published'   => '',
+			'categories'       => array(),
 		);
 
 		$page += $defaults;
@@ -149,64 +119,16 @@ class App_Controller_Admin_Page extends Controller
 		);
 
 		//Template Data
-		$page['data_templates'] = $this->Model_Page->getTemplates();
-		$page['data_layouts']   = $this->Model_Layout->getRecords(null, null, array('cache' => true));
-		$page['data_themes']    = $this->theme->getThemes();
+		$page['data_templates']  = $this->Model_Page->getTemplates();
+		$page['data_layouts']    = $this->Model_Layout->getRecords(null, null, array('cache' => true));
+		$page['data_themes']     = $this->theme->getThemes();
+		$page['data_authors']    = array('' => 'Anonymous') + $this->Model_Page->getAuthors();
+		$page['data_categories'] = $this->Model_Category->getRecords(array('name' => 'ASC'), array('type' => 'page'), array('cache' => true));
 
-		$page['url_create_layout'] = site_url('admin/page/create-layout');
-
-		//Must set query inline, to bypass URL Aliasing.
-		$page['page_preview'] = site_url('page/preview_content?page_id=' . $page_id);
-
-		$page['data_statuses'] = array(
-			0 => _l("Disabled"),
-			1 => _l("Enabled"),
-		);
-
-		//Action Buttons
-		$page['save'] = site_url('admin/page/save', 'page_id=' . $page_id);
+		$page['model'] = $this->model;
 
 		//Render
 		output($this->render('page/form', $page));
-	}
-
-	public function save()
-	{
-		$_POST['t'] = _post('template');
-
-		if ($page_id = $this->Model_Page->save(_request('page_id'), $_POST)) {
-			message('success', _l("The Page has been saved!"));
-			message('data', array('page_id' => $page_id));
-
-			if ($this->Model_Page->hasError()) {
-				message('notify', $this->Model_Page->fetchError());
-			}
-		} else {
-			message('error', $this->Model_Page->fetchError());
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} elseif ($this->message->has('error')) {
-			post_redirect('admin/page/form', 'page_id=' . _request('page_id'));
-		} else {
-			redirect('admin/page');
-		}
-	}
-
-	public function delete()
-	{
-		if ($this->Model_Page->deletePage(_get('page_id'))) {
-			message('success', _l("The Page was deleted!"));
-		} else {
-			message('error', $this->Model_Page->fetchError());
-		}
-
-		if ($this->is_ajax) {
-			output_message();
-		} else {
-			redirect('admin/page');
-		}
 	}
 
 	public function batch_action()
@@ -218,15 +140,15 @@ class App_Controller_Admin_Page extends Controller
 		foreach ($batch as $page_id) {
 			switch ($action) {
 				case 'enable':
-					$this->Model_Page->update_field($page_id, array('status' => 1));
+					$this->Model_Page->save($page_id, array('status' => 1));
 					break;
 
 				case 'disable':
-					$this->Model_Page->update_field($page_id, array('status' => 0));
+					$this->Model_Page->save($page_id, array('status' => 0));
 					break;
 
 				case 'delete':
-					$this->Model_Page->deletePage($page_id);
+					$this->Model_Page->remove($page_id);
 					break;
 
 				case 'copy':
@@ -244,7 +166,7 @@ class App_Controller_Admin_Page extends Controller
 		if ($this->is_ajax) {
 			$this->listing();
 		} else {
-			redirect('admin/page');
+			redirect($this->model['path']);
 		}
 	}
 

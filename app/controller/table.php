@@ -37,37 +37,45 @@ abstract class App_Controller_Table extends Controller
 			'page'     => _get('page'),
 			'limit'    => _get('limit', option('admin_list_limit', 20)),
 			'columns'  => array(),
-			'actions'  => array(
-				'edit'   => array(
-					'text' => _l("Edit"),
-					'path' => $this->model['path'] . '/form',
-				),
-				'delete' => array(
-					'text' => _l("Delete"),
-					'path' => $this->model['path'] . '/remove',
-				),
-			),
+			'actions'  => array(),
 			'callback' => null,
+		);
+
+		$options['actions'] += array(
+			'edit'   => array(
+				'text' => _l("Edit"),
+				'path' => $this->model['path'] . '/form',
+			),
+			'delete' => array(
+				'text' => _l("Delete"),
+				'path' => $this->model['path'] . '/remove',
+			),
 		);
 
 		$options['columns'] += $this->instance->getColumns((array)_request('columns'));
 
+		if (!empty($options['sort'])) {
+			$sort = $options['sort'] + $sort;
+		}
+
+		if (!empty($options['filter'])) {
+			$filter = $options['filter'] + $filter;
+		}
+
 		list($records, $total) = $this->instance->getRecords($sort, $filter, $options, true);
 
-		if (!empty($options['actions'])) {
-			foreach ($records as &$record) {
-				if (isset($record[$this->model['value']])) {
-					foreach ($options['actions'] as $name => $action) {
-						if (isset($action['user_can']) ? $action['user_can'] : user_can('w', $action['path'])) {
-							$action['href'] = site_url($action['path'], $this->model['value'] . '=' . $record[$this->model['value']]);
+		foreach ($records as &$record) {
+			if (isset($record[$this->model['value']])) {
+				foreach ($options['actions'] as $name => $action) {
+					if ($action && (isset($action['user_can']) ? $action['user_can'] : user_can('w', $action['path']))) {
+						$action['href'] = site_url($action['path'], $this->model['value'] . '=' . $record[$this->model['value']]);
 
-							$record['actions'][$name] = $action;
-						}
+						$record['actions'][$name] = $action;
 					}
 				}
 			}
-			unset($record);
 		}
+		unset($record);
 
 		if (is_callable($options['callback'])) {
 			$options['callback']($records, $total);
@@ -89,7 +97,7 @@ abstract class App_Controller_Table extends Controller
 			);
 
 		if (!isset($listing['extra_cols']) && empty($_REQUEST['columns'])) {
-			$listing['extra_cols'] = $this->Model_Client->getColumns();
+			$listing['extra_cols'] = $this->instance->getColumns();
 		}
 
 		$output = block('widget/listing', null, $listing);
@@ -116,7 +124,7 @@ abstract class App_Controller_Table extends Controller
 		} elseif ($this->message->has('error') && method_exists($this, 'form')) {
 			post_redirect($this->model['path'] . '/form', $_GET);
 		} else {
-			redirect($this->model['path']);
+			redirect($this->model['path'] . '/form', $_GET);
 		}
 	}
 

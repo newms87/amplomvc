@@ -22,8 +22,8 @@
 
 		<div class="section">
 			<?= block('widget/views', null, array(
-				'group'           => 'url_alias_list',
-				'view_listing_id' => $view_listing_id
+				'group' => 'url_alias_list',
+				'path'  => 'admin/settings/url_alias/listing',
 			)); ?>
 		</div>
 	</div>

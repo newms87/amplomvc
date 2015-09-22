@@ -35,8 +35,6 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 			'url'     => site_url('admin/settings/url-alias/batch-action'),
 		);
 
-		$data['view_listing_id'] = $this->Model_UrlAlias->getViewListingId();
-
 		//Render
 		output($this->render('settings/url_alias/list', $data));
 	}

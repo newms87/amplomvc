@@ -58,22 +58,4 @@ class App_Model_UrlAlias extends App_Model_Table
 
 		return parent::getColumns($filter, $merge);
 	}
-
-	public function getViewListingId()
-	{
-		$view_listing_id = $this->Model_ViewListing->getViewListingBySlug('url_alias_list');
-
-		if (!$view_listing_id) {
-			$view_listing = array(
-				'name' => _l("URL Aliases"),
-				'slug' => 'url_alias_list',
-				'path' => 'admin/settings/url_alias/listing',
-			);
-
-			$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
-		}
-
-		return $view_listing_id;
-	}
-
 }

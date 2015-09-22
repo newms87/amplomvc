@@ -269,7 +269,7 @@ function amplo_routing_hook($router)
 {
 	global $registry;
 
-	$segments = $router->getSegment();
+	$nodes = $router->getNode();
 
 	if (IS_ADMIN) {
 		//Initialize site configurations
@@ -285,7 +285,7 @@ function amplo_routing_hook($router)
 			}
 		}
 
-		if (empty($segments[1])) {
+		if (empty($nodes[1])) {
 			$router->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index');
 		}
 	} else {
@@ -301,10 +301,10 @@ function amplo_routing_hook($router)
 		}
 
 		//Path Rerouting
-		switch ($segments[0]) {
+		switch ($nodes[0]) {
 			case 'page':
-				if (!empty($segments[1]) && $segments[1] !== 'preview') {
-					$router->setPath('page', $segments);
+				if (!empty($nodes[1]) && $nodes[1] !== 'preview') {
+					$router->setPath('page', $nodes, $router->getSegment());
 				}
 				break;
 		}
@@ -932,9 +932,15 @@ function path2class($path)
 	return str_replace(array_keys($replace), $replace, $path);
 }
 
-function path_format($path)
+function path_format($path, $cast_underscore = true)
 {
-	return strtolower(str_replace('-', '_', trim(str_replace('\\', '/', $path), '/ ')));
+	$path = strtolower(trim(str_replace('\\', '/', $path), '/ '));
+
+	if ($cast_underscore) {
+		$path = str_replace('-', '_', $path);
+	}
+
+	return $path;
 }
 
 function insertables($insertables, $text, $start = '%', $end = '%')

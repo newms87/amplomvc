@@ -36,3 +36,6 @@ logs
 /system/timeoffset
 /system/resources/js/responsive-filemanager/thumbs
 /config.php
+/assets/images
+/old_ps
+/system/resources/js/jquery/ui

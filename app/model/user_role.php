@@ -54,26 +54,79 @@ class App_Model_UserRole extends App_Model_Table
 		return $this->delete($this->table, $user_role_id);
 	}
 
-	public function getRole($user_role_id)
+	public function can($user_role_id, $level, $action)
 	{
-		$user_role = cache($this->table . '.' . $user_role_id);
+		$role = $this->getRole($user_role_id);
 
-		if (!$user_role) {
-			$user_role = $this->queryRow("SELECT * FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
-
-			if ($user_role) {
-				$user_role['permissions'] = unserialize($user_role['permissions']);
-			} else {
-				$user_role = array(
-					'name'        => '',
-					'permissions' => array(),
-				);
-			}
-
-			cache($this->table . '.' . $user_role_id, $user_role);
+		if (!$role) {
+			return false;
 		}
 
-		return $user_role;
+		if (!$action) {
+			return true;
+		}
+
+		if (!$level) {
+			$level = 'w';
+		}
+
+		$path = explode('/', $action);
+		$perm = $role['permissions'];
+
+		foreach ($path as $p) {
+			if (isset($perm[$p])) {
+				$perm = $perm[$p];
+				continue;
+			}
+
+			if (!isset($perm['*'])) {
+				return false;
+			}
+
+			if (count($perm) === 1) {
+				return $level === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
+			}
+
+			return false;
+		}
+
+		if (isset($perm['index'])) {
+			return $level === 'w' ? $perm['index']['*'] === 'w' : (bool)$perm['index']['*'];
+		}
+
+		if (isset($perm['*'])) {
+			return $level === 'w' ? $perm['*'] === 'w' : (bool)$perm['*'];
+		}
+
+		return false;
+	}
+
+	public function getRole($user_role_id)
+	{
+		static $roles;
+
+		if (!isset($roles[$user_role_id])) {
+			$user_role = cache($this->table . '.' . $user_role_id);
+
+			if (!$user_role) {
+				$user_role = $this->queryRow("SELECT * FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
+
+				if ($user_role) {
+					$user_role['permissions'] = unserialize($user_role['permissions']);
+				} else {
+					$user_role = array(
+						'name'        => '',
+						'permissions' => array(),
+					);
+				}
+
+				cache($this->table . '.' . $user_role_id, $user_role);
+			}
+
+			$roles[$user_role_id] = $user_role;
+		}
+
+		return $roles[$user_role_id];
 	}
 
 	public function getRoleId($role)
@@ -150,25 +203,6 @@ class App_Model_UserRole extends App_Model_Table
 		$this->sortAreas($areas);
 
 		return $areas;
-	}
-
-	public function getViewListingId()
-	{
-		$view_listing = $this->Model_ViewListing->getViewListingBySlug('user_role_list');
-
-		if (!$view_listing) {
-			$view_listing = array(
-				'name' => _l("User Roles"),
-				'slug' => 'user_role_list',
-				'path' => 'admin/settings/role/listing',
-			);
-
-			$view_listing_id = $this->Model_ViewListing->save(null, $view_listing);
-		} else {
-			$view_listing_id = $view_listing['view_listing_id'];
-		}
-
-		return $view_listing_id;
 	}
 
 	public function getColumns($filter = array(), $merge = array())

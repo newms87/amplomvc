@@ -5,6 +5,7 @@ class Router
 	protected
 		$path,
 		$segments,
+		$nodes,
 		$args = array(),
 		$site,
 		$routing_hooks = array();
@@ -14,29 +15,9 @@ class Router
 		global $registry;
 		$registry->set('route', $this);
 
-		$uri = path_format(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
+		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
 
-		$base = trim(SITE_BASE, '/');
-
-		if ($base && strpos($uri, $base) === 0) {
-			$uri = trim(substr($uri, strlen($base)), '/');
-		}
-
-		if ($uri) {
-			$url_alias = $this->url->alias2Path($uri);
-
-			if ($url_alias) {
-				$uri = $url_alias['path'];
-
-				if ($url_alias['query']) {
-					$_GET = $url_alias['query'] + $_GET;
-				}
-			}
-		}
-
-		$this->path = $uri ? $uri : DEFAULT_PATH;
-
-		$this->segments = explode('/', $this->path);
+		$this->setPath($path ? $path : DEFAULT_PATH);
 	}
 
 	public function __get($key)
@@ -51,15 +32,32 @@ class Router
 		return $this->path === str_replace('-', '_', $path);
 	}
 
-	public function setPath($path, $segments = null)
+	public function setPath($path, $nodes = null, $segments = null)
 	{
+		$path = path_format($path, false);
+
+		$base = trim(SITE_BASE, '/');
+
+		if ($base && strpos($path, $base) === 0) {
+			$path = trim(substr($path, strlen($base)), '/');
+		}
+
+		if ($path) {
+			$url_alias = $this->url->alias2Path($path);
+
+			if ($url_alias) {
+				$path = $url_alias['path'];
+
+				if ($url_alias['query']) {
+					$_GET = $url_alias['query'] + $_GET;
+				}
+			}
+		}
+
 		$this->path = str_replace('-', '_', $path);
 
-		if ($segments === null) {
-			$this->segments = explode('/', $this->path);
-		} else {
-			$this->segments = (array)$segments;
-		}
+		$this->segments = $segments === null ? explode('/', $path) : (array)$segments;
+		$this->nodes    = $nodes === null ? explode('/', $this->path) : (array)$segments;
 	}
 
 	public function getPath()
@@ -74,6 +72,15 @@ class Router
 		}
 
 		return isset($this->segments[$index]) ? $this->segments[$index] : '';
+	}
+
+	public function getNode($index = null)
+	{
+		if ($index === null) {
+			return $this->nodes;
+		}
+
+		return isset($this->nodes[$index]) ? $this->nodes[$index] : '';
 	}
 
 	public function setArgs($args)
@@ -143,7 +150,7 @@ class Router
 
 		foreach ($this->routing_hooks as $hook) {
 			$params = array(
-				$this
+				$this,
 			);
 
 			if (call_user_func_array($hook['callable'], $params) === false) {
@@ -227,7 +234,7 @@ class Router
 	{
 		$options = array(
 			'cache' => true,
-			'index' => 'site_id'
+			'index' => 'site_id',
 		);
 
 		$sites = $this->Model_Site->getRecords(null, null, $options);

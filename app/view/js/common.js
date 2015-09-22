@@ -889,37 +889,7 @@ $.show_msg = function (type, msg, options) {
 	$('body').show_msg(type, msg, options);
 }
 
-$.loading = function (params) {
-	if (params == 'stop') {
-		$('.loader').remove();
-		return;
-	}
-
-	params = $.extend({}, {
-		dots:       8,
-		width:      null,
-		height:     null,
-		animations: 'bounce, fadecolor'
-	}, params);
-
-	loader = $('<div class="loader">' + '<div class="loader-item"></div>'.repeat(params.dots) + '</div>');
-
-	loader.children('.loader_item').each(function (i, e) {
-		$(e).attr('style', '-webkit-animation-name: ' + params.animations + '; animation-name: ' + params.animations);
-	});
-
-	if (params.width) {
-		loader.width(params.width);
-	}
-
-	if (params.height) {
-		loader.height(params.height);
-	}
-
-	return loader[0].outerHTML;
-}
-
-$.fn.loading = function (params) {
+$.loading = $.fn.loading = function (params) {
 	return this.each(function (i, e) {
 		var $e = $(e);
 
@@ -954,9 +924,6 @@ $.fn.loading = function (params) {
 					}, option.delay);
 				}
 			}
-		} else {
-			$e.find('.loader').remove();
-			$e.append($.loading(params));
 		}
 	});
 }

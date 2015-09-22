@@ -14,7 +14,7 @@ class App_Controller_Example extends Controller
 		//The page
 		$page_id = _get('page_id', 0);
 
-		$page = $this->Model_Page->getActivePage($page_id);
+		$page = $this->Model_Page->getPage($page_id);
 
 		if (!$page) {
 			//If you have an error in the Model call
