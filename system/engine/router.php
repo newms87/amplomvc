@@ -17,7 +17,7 @@ class Router
 
 		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
 
-		$this->setPath($path ? $path : DEFAULT_PATH);
+		$this->setPath($path);
 	}
 
 	public function __get($key)
@@ -52,6 +52,8 @@ class Router
 					$_GET = $url_alias['query'] + $_GET;
 				}
 			}
+		} else {
+			$path = DEFAULT_PATH;
 		}
 
 		$this->path = str_replace('-', '_', $path);

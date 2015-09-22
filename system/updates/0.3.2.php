@@ -19,7 +19,7 @@ foreach ($pages as $page) {
 	}
 }
 
-$this->db->addColumn('page_history', 'type', "VARCHAR(45) NOT NULL AFTER `author_id`");
+$this->db->addColumn('page_history', 'type', "VARCHAR(45) NOT NULL AFTER `user_id`");
 $this->db->addColumn('page_history', 'theme', "VARCHAR(45) NOT NULL AFTER `type`");
 $this->db->addColumn('page_history', 'layout_id', "VARCHAR(45) NOT NULL AFTER `theme`");
 $this->db->addColumn('page_history', 'excerpt', "VARCHAR(45) NOT NULL AFTER `template`");
