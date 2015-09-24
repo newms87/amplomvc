@@ -351,11 +351,11 @@ class User extends Library
 
 		$code = $this->generateCode();
 
-		$this->setResetCode($_POST['email'], $code);
+		$this->setResetCode($email, $code);
 
 		$email_data = array(
-			'reset' => site_url('admin/user/reset_form', 'code=' . $code),
-			'email' => $_POST['email'],
+			'reset' => site_url('admin/user/reset-form', 'code=' . $code),
+			'email' => $email,
 		);
 
 		call('admin/mail/forgotten', $email_data);
