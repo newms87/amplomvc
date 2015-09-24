@@ -36,95 +36,90 @@
 			<div id="tab-content">
 				<div class="col xs-12 md-6 left page-info top">
 					<div class="form-item page-title">
-						<div class="title">{{Title}}</div>
-						<input type="text" name="title" size="60" value="<?= $title; ?>"/>
-					</div>
+						<label for="title" class="col xs-3 md-2 left">{{Title}}</label>
 
-					<div class="form-item show-title">
-						<label for="show-title">{{Display Title?}}</label>
-
-						<?= build(array(
-							'type'   => 'radio',
-							'name'   => 'options[show_title]',
-							'data'   => array(
-								1 => '{{Yes}}',
-								0 => '{{No}}',
-							),
-							'select' => $options['show_title'],
-							'#class' => 'panel',
-						)); ?>
-					</div>
-
-					<div class="form-item show-breadcrumbs">
-						<label for="show-breadcrumbs">{{Show Breadcrumbs?}}</label>
-
-						<?= build(array(
-							'type'   => 'radio',
-							'name'   => 'options[show_breadcrumbs]',
-							'data'   => array(
-								1 => '{{Yes}}',
-								0 => '{{No}}',
-							),
-							'select' => $options['show_breadcrumbs'],
-							'#class' => 'panel',
-						)); ?>
+						<div class="col xs-9 md-10 left value">
+							<input id="title" type="text" name="title" size="60" value="<?= $title; ?>"/>
+						</div>
 					</div>
 
 					<div class="form-item author-id">
-						<label>{{Author}}</label>
+						<label class="col xs-3 md-2 left">{{Author}}</label>
 
-						<?=
-						build(array(
-							'type'   => 'select',
-							'name'   => 'status',
-							'data'   => $data_authors,
-							'label'  => 'username',
-							'value'  => 'user_id',
-							'select' => $author_id,
-						)); ?>
+						<div class="col xs-9 md-10 left value">
+							<?=
+							build(array(
+								'type'   => 'select',
+								'name'   => 'author_id',
+								'data'   => $data_authors,
+								'label'  => 'username',
+								'value'  => 'user_id',
+								'select' => $author_id,
+							)); ?>
+						</div>
 					</div>
 
 					<div class="form-item status">
-						<label>{{Category}}</label>
+						<label class="col xs-3 md-2 left">{{Category}}</label>
 
-						<?=
-						build(array(
-							'type'   => 'multiselect',
-							'name'   => 'categories',
-							'data'   => $data_categories,
-							'select' => $categories,
-							'label'  => 'title',
-							'value'  => 'category_id',
-							'#class' => 'amp-select',
-						)); ?>
+						<div class="col xs-9 md-10 left value">
+							<?=
+							build(array(
+								'type'   => 'multiselect',
+								'name'   => 'categories',
+								'data'   => $data_categories,
+								'select' => $categories,
+								'label'  => 'title',
+								'value'  => 'category_id',
+								'#class' => 'amp-select',
+							)); ?>
+						</div>
 					</div>
 
 					<div class="form-item status">
-						<label>{{Status}}</label>
+						<label class="col xs-3 md-2 left">{{Status}}</label>
 
-						<?=
-						build(array(
-							'type'   => 'select',
-							'name'   => 'status',
-							'data'   => App_Model_Page::$statuses,
-							'select' => $status,
-						)); ?>
+						<div class="col xs-9 md-10 left value">
+							<?=
+							build(array(
+								'type'   => 'select',
+								'name'   => 'status',
+								'data'   => App_Model_Page::$statuses,
+								'select' => $status,
+							)); ?>
+						</div>
 					</div>
 
 					<div class="form-item date-published">
-						<label>{{Publish Date}}</label>
+						<label class="col xs-3 md-2 left">{{Publish Date}}</label>
 
-						<input type="text" class="datetimepicker" name="date_published" value="<?= $date_published; ?>"/>
+						<div class="col xs-9 md-10 left value">
+							<input type="text" class="datetimepicker" name="date_published" value="<?= $date_published; ?>"/>
+						</div>
+					</div>
+
+					<div class="form-item excerpt">
+						<label class="col xs-3 md-2 left">{{Excerpt}}</label>
+
+						<div class="col xs-9 md-10 left value">
+							<textarea name="excerpt"><?= $excerpt; ?></textarea>
+						</div>
 					</div>
 
 					<div class="html-content form-item code-editor">
-						<div class="label">{{HTML}}</div>
-						<textarea id="html-editor" name="content"><?= $content; ?></textarea>
+						<label>{{HTML}}</label>
+
+						<div class="value">
+							<textarea id="html-editor" name="content"><?= $content; ?></textarea>
+						</div>
 					</div>
 
 					<div class="style-content form-item code-editor">
-						<div class="label">{{Style}}</div>
-						<textarea id="style-editor" name="style"><?= $style; ?></textarea>
+						<label>{{Style}}</label>
+
+						<div class="value">
+							<textarea id="style-editor" name="style"><?= $style; ?></textarea>
+						</div>
 					</div>
 				</div>
 
@@ -144,76 +139,113 @@
 			<!-- /tab-content -->
 
 			<div id="tab-data">
-				<table class="form">
-					<tr>
-						<td class="required">
-							{{URL Alias:}}
-							<span class="help">{{The Search Engine Optimized URL.}}</span>
-						</td>
-						<td>
-							<input type="text" name="alias" size="60" value="<?= $alias; ?>"/>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Meta Keywords:}}</td>
-						<td>
-							<textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Meta Description:}}</td>
-						<td>
-							<textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea>
-						</td>
-					</tr>
-				</table>
+				<div class="form-item excerpt">
+					<label class="col xs-3 md-2 left">
+						{{URL Alias:}}
+						<span class="help">{{The Search Engine Optimized URL.}}</span>
+					</label>
+
+					<div class="col xs-9 md-10 left value">
+						<input type="text" name="alias" size="60" value="<?= $alias; ?>"/>
+					</div>
+				</div>
+
+				<div class="form-item excerpt">
+					<label class="col xs-3 md-2 left">{{Meta Keywords:}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea>
+					</div>
+				</div>
+
+
+				<div class="form-item excerpt">
+					<label class="col xs-3 md-2 left">{{Meta Description:}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea>
+					</div>
+				</div>
 			</div>
 			<!-- /tab-data -->
 
 			<div id="tab-design">
-				<table class="form">
-					<tr>
-						<td class="required">{{Template}}</td>
-						<td>
-							<?=
-							build(array(
-								'type'   => 'select',
-								'name'   => 'template',
-								'data'   => $data_templates,
-								'select' => $template,
-							)); ?>
-						</td>
-					</tr>
-					<tr>
-						<td class="required"> {{Layout:}}</td>
-						<td>
-							<div id="layout_select">
-								<?=
-								build(array(
-									'type'   => 'select',
-									'name'   => 'layout_id',
-									'data'   => $data_layouts,
-									'select' => $layout_id,
-									'value'  => 'layout_id',
-									'label'  => 'name',
-								)); ?>
-							</div>
-							<a id="create_layout" class="link_button">{{[ Create Layout for this page ]}}</a>
-							<span id="create_layout_load" style="display:none">{{Please wait...}}</span>
-						</td>
-					</tr>
-				</table>
+				<div class="form-item show-title">
+					<label for="show-title" class="col xs-3 md-2 left">{{Display Title?}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<?= build(array(
+							'type'   => 'radio',
+							'name'   => 'options[show_title]',
+							'data'   => array(
+								1 => '{{Yes}}',
+								0 => '{{No}}',
+							),
+							'select' => $options['show_title'],
+							'#class' => 'panel',
+						)); ?>
+					</div>
+				</div>
+
+				<div class="form-item show-breadcrumbs">
+					<label for="show-breadcrumbs" class="col xs-3 md-2 left">{{Show Breadcrumbs?}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<?= build(array(
+							'type'   => 'radio',
+							'name'   => 'options[show_breadcrumbs]',
+							'data'   => array(
+								1 => '{{Yes}}',
+								0 => '{{No}}',
+							),
+							'select' => $options['show_breadcrumbs'],
+							'#class' => 'panel',
+						)); ?>
+					</div>
+				</div>
+
+				<div class="form-item template">
+					<label for="template" class="col xs-3 md-2 left">{{Template}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<?=
+						build(array(
+							'type'   => 'select',
+							'name'   => 'template',
+							'data'   => $data_templates,
+							'select' => $template,
+							'#id'    => 'template',
+						)); ?>
+					</div>
+				</div>
+
+				<div class="form-item layout-id">
+					<label for="layout-id" class="col xs-3 md-2 left">{{Layout}}</label>
+
+					<div class="col xs-9 md-10 left value">
+						<?= build(array(
+							'type'   => 'select',
+							'name'   => 'layout_id',
+							'data'   => $data_layouts,
+							'select' => $layout_id,
+							'value'  => 'layout_id',
+							'label'  => 'name',
+							'#id'    => 'layout-id',
+						)); ?>
+
+						<a id="create-layout" class="link_button">{{[ Create Layout for this page ]}}</a>
+					</div>
+				</div>
 			</div>
 			<!-- /tab-design -->
-
 		</div>
 	</form>
 </section>
 
 
 <script type="text/javascript">
-	$('#html-editor').codemirror({mode: 'html', update: refresh_delay});
-	$('#style-editor').codemirror({mode: 'css', update: refresh_delay});
+	$('#html-editor').codemirror({mode: 'html', changes: refresh_delay, change: function(){console.log('here')}});
+	$('#style-editor').codemirror({mode: 'css', changes: refresh_delay});
 
 	$('.refresh-preview').click(refresh_preview);
 	$('[name]').change(refresh_preview);
@@ -256,7 +288,7 @@
 
 	$('[name=name]').ampResize();
 
-	$('#create_layout').click(function () {
+	$('#create-layout').click(function () {
 		layout_name = $('[name=title]').val();
 
 		if (!layout_name) {
@@ -268,12 +300,7 @@
 			name: layout_name
 		};
 
-		$('#create_layout_load').show();
-		$("#create_layout").hide();
-
-		$('#layout_select').load("<?= site_url('admin/page/create-layout'); ?>", data, function () {
-			$('#create_layout_load').hide();
-			$('#create_layout').show();
+		$('#layout-select').load("<?= site_url('admin/page/create-layout'); ?>", data, function () {
 		});
 
 		return false;

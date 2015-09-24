@@ -68,11 +68,19 @@ abstract class App_Model_Table extends Model
 		return $this->queryVar("SELECT $field FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 	}
 
-	public function getRecord($record_id, $select = '*')
+	public function getRecord($record_id, $select = '*', $cache = true)
 	{
-		$select = $this->extractSelect($this->table, $select);
+		static $records = array();
 
-		return $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
+		$record = (isset($records[$record_id]) && $cache && $select === '*') ? $records[$record_id] : false;
+
+		if (!$record) {
+			$select = $this->extractSelect($this->table, $select);
+
+			$record = $records[$record_id] = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
+		}
+
+		return $record;
 	}
 
 	public function findRecord($filter, $select = null)
@@ -135,10 +143,11 @@ abstract class App_Model_Table extends Model
 
 	protected function getCacheName($sort, $filter, $options, $total)
 	{
-		$s     = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
-		$f     = $filter ? '.filter-' . md5(serialize($filter)) : '';
-		$o     = $options ? '.opts-' . md5(serialize($options)) : '';
-		$t     = $total ? '.total' : '';
+		$s = count($sort) > 1 ? '.sort-' . md5(serialize($sort)) : '';
+		$f = $filter ? '.filter-' . md5(serialize($filter)) : '';
+		$o = $options ? '.opts-' . md5(serialize($options)) : '';
+		$t = $total ? '.total' : '';
+
 		return $this->table . '.rows' . $s . $f . $o . $t;
 	}
 

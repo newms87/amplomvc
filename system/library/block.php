@@ -426,7 +426,7 @@ class Block extends Library
 
 		$settings += $this->getSettings($path);
 
-		return call("$block/build", array('settings' => $settings));
+		return call("$block/build", $settings);
 	}
 
 	public function exists($path)

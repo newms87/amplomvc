@@ -68,8 +68,8 @@ class App_Model_Page extends App_Model_Table
 				rrmdir(DIR_SITE . 'app/view/template/' . $orig['type'] . '/' . $orig['name']);
 			}
 
-			if (isset($page['status']) && $page['status'] !== $orig['status']) {
-				if ($orig['status'] === App_Model_Page::STATUS_PUBLISHED) {
+			if (isset($page['status']) && $page['status'] != $orig['status']) {
+				if ($orig['status'] == App_Model_Page::STATUS_PUBLISHED) {
 					$page['date_published'] = '';
 				} elseif ($page['status'] == App_Model_Page::STATUS_PUBLISHED) {
 					if (!$updated['date_published'] || $updated['date_published'] === DATETIME_ZERO) {
@@ -224,9 +224,11 @@ class App_Model_Page extends App_Model_Table
 		return $page;
 	}
 
-	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
+	public function getPages($sort, $filter = array(), $options = array(), $total = false)
 	{
-		$records = parent::getRecords($sort, $filter, $options, $total);
+		$filter['status'] = self::STATUS_PUBLISHED;
+
+		$records = $this->getRecords($sort, $filter, $options, $total);
 
 		$total ? $rows = &$records[0] : $rows = &$records;
 
@@ -261,6 +263,8 @@ class App_Model_Page extends App_Model_Table
 				}
 			}
 		}
+
+		$page['author'] = !empty($page['author_id']) ? $this->Model_User->getRecord($page['author_id'], '*', true) : false;
 
 		if (!empty($page['options']) && is_string($page['options'])) {
 			$page['options'] = (array)json_decode($page['options']);
@@ -318,51 +322,6 @@ class App_Model_Page extends App_Model_Table
 		}
 
 		return $templates;
-	}
-
-	protected function syncPage($type, $name)
-	{
-		$page = $this->findRecord(array('name' => $name), '*');
-
-		$dir          = DIR_SITE . 'app/view/template/' . $type . '/' . $name;
-		$content_file = $dir . 'content.tpl';
-		$style_file   = $dir . 'style.less';
-
-		if ($page) {
-			$time_updated = (int)strtotime($page['date_updated']);
-
-			if ((is_file($content_file) && filemtime($content_file) > $time_updated)
-				|| (is_file($style_file) && filemtime($style_file) > $time_updated)
-			) {
-				$update = array(
-					'content' => is_file($content_file) ? file_get_contents($content_file) : '',
-					'style'   => is_file($style_file) ? file_get_contents($style_file) : '',
-				);
-
-				$this->save($page['page_id'], $update);
-			}
-		} elseif (is_file($content_file)) {
-			$page_data = get_comment_directives($content_file);
-			$title     = !empty($page_data['title']) ? $page_data['title'] : cast_title($name);
-			$cache     = isset($page_data['cache']) ? (int)$page_data['cache'] : 1;
-
-			$content = file_get_contents($content_file);
-			$style   = is_file($style_file) ? file_get_contents($style_file) : '';
-
-			$page = array(
-				'type'     => $type,
-				'name'     => $name,
-				'title'    => $title,
-				'template' => !empty($page_data['template']) ? $page_data['template'] : null,
-				'content'  => $content,
-				'style'    => $style,
-				'status'   => 1,
-				'options'  => array(),
-				'cache'    => $cache,
-			);
-
-			$this->save(null, $page);
-		}
 	}
 
 	public function getAuthors()
@@ -441,5 +400,55 @@ class App_Model_Page extends App_Model_Table
 		);
 
 		return parent::getColumns($filter, $merge);
+	}
+
+	protected function syncPage($type, $name)
+	{
+		$page = $this->findRecord(array('name' => $name), '*');
+
+		$dir          = DIR_SITE . 'app/view/template/' . $type . '/' . $name;
+		$content_file = $dir . 'content.tpl';
+		$style_file   = $dir . 'style.less';
+
+		if ($page) {
+			$time_updated = (int)strtotime($page['date_updated']);
+
+			if ((is_file($content_file) && filemtime($content_file) > $time_updated)
+				|| (is_file($style_file) && filemtime($style_file) > $time_updated)
+			) {
+				$update = array(
+					'content' => is_file($content_file) ? file_get_contents($content_file) : '',
+					'style'   => is_file($style_file) ? file_get_contents($style_file) : '',
+				);
+
+				$this->save($page['page_id'], $update);
+			}
+		} elseif (is_file($content_file)) {
+			$page_data = get_comment_directives($content_file);
+			$title     = !empty($page_data['title']) ? $page_data['title'] : cast_title($name);
+			$cache     = isset($page_data['cache']) ? (int)$page_data['cache'] : 1;
+
+			$content = file_get_contents($content_file);
+			$style   = is_file($style_file) ? file_get_contents($style_file) : '';
+
+			$page = array(
+				'type'     => $type,
+				'name'     => $name,
+				'title'    => $title,
+				'template' => !empty($page_data['template']) ? $page_data['template'] : null,
+				'content'  => $content,
+				'style'    => $style,
+				'status'   => 1,
+				'options'  => array(),
+				'cache'    => $cache,
+			);
+
+			$this->save(null, $page);
+		}
+	}
+
+	public function cron()
+	{
+		//TODO: Build page cron.. should publish pages and maybe other stuff??? sync pages should be handled in real time, so dont do that in cron.
 	}
 }
