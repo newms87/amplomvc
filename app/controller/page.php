@@ -38,6 +38,10 @@ class App_Controller_Page extends Controller
 
 	public function preview($page = array())
 	{
+		if (!user_can('w', 'admin/page/form')) {
+			redirect('error/not-found');
+		}
+
 		//The page
 		if (isset($_GET['page_id'])) {
 			$page += $this->Model_Page->getPageForPreview($_GET['page_id']);

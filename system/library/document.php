@@ -298,7 +298,52 @@ class Document extends Library
 			require_once(DIR_RESOURCES . 'lessphp/Less.php');
 
 			$options = array(
-				'compress' => option('less_compress', true),
+				'compress'        => option('less_compress', true),
+				'import_callback' => function ($a) {
+					$value = $a->path->value;
+
+					if (strpos($value, '/') === 0) {
+						if (!is_file($file = $_SERVER['DOCUMENT_ROOT'] . $a->path->value)) {
+							if (!is_file($file = $file . '.less')) {
+								return;
+							}
+						}
+					} else {
+						$dirs = array(
+							'entryPath',
+							'rootpath',
+							'currentDirectory',
+						);
+
+						$cfi  = $a->path->currentFileInfo;
+						$file = false;
+
+						foreach ($dirs as $dir) {
+							if (is_file($cfi[$dir] . $value)) {
+								$file = $cfi[$dir] . $value;
+								break;
+							}
+
+							if (is_file($cfi[$dir] . $value . '.less')) {
+								$file = $cfi[$dir] . $value . '.less';
+								break;
+							}
+						}
+
+						if (!$file) {
+							return;
+						}
+					}
+
+					if (is_file($file . '.mod')) {
+						$file = $file . '.mod';
+					}
+
+					return array(
+						$file,
+						str_replace(DIR_SITE, '', dirname($file)),
+					);
+				},
 			);
 
 			try {

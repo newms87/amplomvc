@@ -570,6 +570,37 @@ function set_page_meta($key, $value)
 	$registry->get('document')->setMeta($key, $value);
 }
 
+function render_content($content, $args = array())
+{
+	global $registry;
+
+	if (!$content) {
+		return '';
+	}
+
+	$content_file = DIR_SITE . 'app/view/template/temp/' . uniqid('preview-') . '.tpl';
+
+	if (!_is_writable(dirname($content_file)) || !@file_put_contents($content_file, $content)) {
+		trigger_error(_l("Unable to create content file %s for the preview.", $content_file));
+
+		return '';
+	}
+
+	$args += array(
+		'r' => $registry,
+	);
+
+	extract($args);
+
+	ob_start();
+	require_once($content_file);
+	$rendered = ob_get_clean();
+
+	rrmdir(dirname($content_file));
+
+	return $rendered;
+}
+
 function language_info($key = null, $default = null)
 {
 	global $registry;
@@ -1020,9 +1051,15 @@ HTML;
 	}
 }
 
-function build_links($links, $sort = 'sort_order', $depth = 0)
+function build_links($links, $sort = 'sort_order', &$active = null)
 {
-	$html = '';
+	$html      = '';
+	$is_active = false;
+
+	if ($active === null) {
+		global $registry;
+		$active = $registry->get('url')->here();
+	}
 
 	if ($sort) {
 		sort_by($links, $sort);
@@ -1049,6 +1086,11 @@ function build_links($links, $sort = 'sort_order', $depth = 0)
 			}
 
 			$link['#href'] = $link['href'];
+
+			if ($link['href'] === $active) {
+				$is_active = true;
+				$link['class'] .= ' active';
+			}
 		}
 
 		if (!empty($link['children'])) {
@@ -1056,8 +1098,12 @@ function build_links($links, $sort = 'sort_order', $depth = 0)
 				$link['class'] .= ' on-hover';
 			}
 
-			$children = build_links($link['children'], $sort, $depth + 1);
+			$children = build_links($link['children'], $sort, $active);
 			$link['#class'] .= ' parent';
+
+			if ($active) {
+				$link['class'] .= ' active active-child';
+			}
 		} else {
 			$children = '';
 		}
@@ -1070,77 +1116,10 @@ function build_links($links, $sort = 'sort_order', $depth = 0)
 		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
 	}
 
+	//Propagate active up the tree
+	$active = $is_active;
+
 	return $html;
-
-	switch ($depth) {
-		case 0:
-			$class = "top-menu";
-			break;
-		case 1:
-			$class = "sub-menu";
-			break;
-		default:
-			$class = "child-menu child-$depth";
-			break;
-	}
-
-	$html = '';
-
-	$zindex = count($links);
-
-	foreach ($links as $link) {
-		if (!$link) {
-			continue;
-		}
-
-		if (empty($link['display_name'])) {
-			$link['display_name'] = $link['name'];
-			$link['name']         = slug($link['name'], '-');
-		}
-
-		$attr_fields = array(
-			'title',
-			'href',
-			'target',
-			'class',
-		);
-
-		foreach ($attr_fields as $field) {
-			if (!empty($link[$field]) && !isset($link['#' . $field])) {
-				$link['#' . $field] = $link[$field];
-			}
-		}
-
-		if (empty($link['#class'])) {
-			$link['#class'] = '';
-		}
-
-		$link['#class'] .= ' link-' . $link['name'];
-
-		$children = '';
-
-		if (!empty($link['children'])) {
-			$children = $this->renderLinks($link['children'], $sort, $depth + 1);
-			$link['#class'] .= ' has-children';
-		}
-
-		//Set active class
-		if (!empty($link['active'])) {
-			$link['#class'] .= ' ' . $link['active'];
-		}
-
-		$link['#class'] = trim($link['#class'] . ' menu-link');
-
-		//Build attribute list
-		$attrs    = attrs($link);
-		$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
-
-		$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";
-
-		$zindex--;
-	}
-
-	return "<div class=\"link-list $class\"><ul>" . $html . "</ul></div>";
 }
 
 function output($output, $content_type = 'text/html')

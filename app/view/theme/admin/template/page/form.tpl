@@ -34,7 +34,7 @@
 			</div>
 
 			<div id="tab-content">
-				<div class="col xs-12 md-6 left page-info top">
+				<div class="col xs-12 md-6 left top padding-right page-info">
 					<div class="form-item page-title">
 						<label for="title" class="col xs-3 md-2 left">{{Title}}</label>
 
@@ -244,8 +244,8 @@
 
 
 <script type="text/javascript">
-	$('#html-editor').codemirror({mode: 'html', changes: refresh_delay, change: function(){console.log('here')}});
-	$('#style-editor').codemirror({mode: 'css', changes: refresh_delay});
+	$('#html-editor').codemirror({mode: 'html', onChange: refresh_delay, change: refresh_delay});
+	$('#style-editor').codemirror({mode: 'css', change: refresh_delay});
 
 	$('.refresh-preview').click(refresh_preview);
 	$('[name]').change(refresh_preview);
@@ -269,6 +269,8 @@
 				refresh_delay()
 			}, 1000);
 		}
+
+		return true;
 	}
 
 	function refresh_preview() {
@@ -300,8 +302,7 @@
 			name: layout_name
 		};
 
-		$('#layout-select').load("<?= site_url('admin/page/create-layout'); ?>", data, function () {
-		});
+		$('#layout-select').load("<?= site_url('admin/page/create-layout'); ?>", data, function () {});
 
 		return false;
 	});

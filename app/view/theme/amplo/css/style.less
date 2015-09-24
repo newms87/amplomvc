@@ -1121,6 +1121,10 @@ section.page {
 	}
 
 	.page-header {
+		.wrap {
+			padding: 0;
+		}
+
 		.page-heading {
 			padding: 2em 0;
 			border-bottom: 1px solid @color-light;
@@ -1207,6 +1211,10 @@ section.page {
 
 		&.active, &:hover {
 			color: @color-main;
+
+			& > a {
+				color: @color-main;
+			}
 		}
 	}
 
@@ -1216,6 +1224,10 @@ section.page {
 
 			&:hover, &.active {
 				color: @color-main;
+
+				& > a {
+					color: @color-main;
+				}
 			}
 		}
 

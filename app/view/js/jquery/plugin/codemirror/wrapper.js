@@ -53,12 +53,19 @@ $.fn.codemirror = function (params) {
 	}
 
 	return this.each(function (i, e) {
-		e.cm_editor = CodeMirror.fromTextArea(e, params);
+		e.cm = CodeMirror.fromTextArea(e, params);
 		var $clone = $ac_cm_template.clone(true);
 		$(e).after($clone.append($(e).siblings('.CodeMirror')));
 
-		if (typeof params.update == 'function') {
-			e.cm_editor.on('keyup', params.update);
+		e.cm.on('change', function (cm) {
+			cm.save();
+		});
+
+		//Register CodeMirror events
+		for (var p in params) {
+			if (p.indexOf('on') === 0) {
+				e.cm.on(p.substr(2).toLowerCase(), params[p]);
+			}
 		}
 	});
 }

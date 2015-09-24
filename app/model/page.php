@@ -264,8 +264,6 @@ class App_Model_Page extends App_Model_Table
 			}
 		}
 
-		$page['author'] = !empty($page['author_id']) ? $this->Model_User->getRecord($page['author_id'], '*', true) : false;
-
 		if (!empty($page['options']) && is_string($page['options'])) {
 			$page['options'] = (array)json_decode($page['options']);
 		}

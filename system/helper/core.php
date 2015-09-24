@@ -881,7 +881,6 @@ function get_comment_directives($content, $trim = true)
 function rrmdir($dir)
 {
 	if (is_dir($dir)) {
-
 		foreach (glob($dir . '/{,.}*', GLOB_BRACE) as $file) {
 			if (preg_match("/\\/(\\.|\\.\\.)$/", $file)) {
 				continue;
@@ -890,10 +889,10 @@ function rrmdir($dir)
 			if (is_dir($file)) {
 				rrmdir($file);
 			} else {
-				unlink($file);
+				@unlink($file);
 			}
 		}
-		rmdir($dir);
+		return @rmdir($dir);
 	}
 }
 
