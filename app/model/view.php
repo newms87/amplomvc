@@ -47,9 +47,9 @@ class App_Model_View extends App_Model_Table
 		}
 	}
 
-	public function getRecord($view_id, $select = '*')
+	public function getRecord($view_id, $select = '*', $cache = true)
 	{
-		$view = parent::getRecord($view_id, $select);
+		$view = parent::getRecord($view_id, $select, $cache);
 
 		if (!empty($view['settings'])) {
 			$view['settings'] = unserialize($view['settings']);

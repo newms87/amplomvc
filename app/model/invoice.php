@@ -97,9 +97,9 @@ class App_Model_Invoice extends App_Model_Table
 		return $invoice_id;
 	}
 
-	public function getRecord($invoice_id, $select = '*')
+	public function getRecord($invoice_id, $select = '*', $cache = true)
 	{
-		$invoice = parent::getRecord($invoice_id, $select);
+		$invoice = parent::getRecord($invoice_id, $select, $cache);
 
 		if (!empty($invoice['data'])) {
 			$invoice['data'] = unserialize($invoice['data']);

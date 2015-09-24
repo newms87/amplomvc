@@ -39,3 +39,4 @@ logs
 /assets/images
 /old_ps
 /system/resources/js/jquery/ui
+test*

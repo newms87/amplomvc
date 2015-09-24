@@ -164,7 +164,7 @@ final class Action
 				$this->method,
 			);
 
-			$output = call_user_func_array($callable, $this->parameters);
+			$output = call_user_func_array($callable, array($this->parameters));
 
 			$this->output = $controller->output ? $controller->output : $output;
 
