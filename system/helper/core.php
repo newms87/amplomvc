@@ -153,6 +153,7 @@ $js_autoload = array(
 	'listview'       => 'app/view/js/jquery/plugin/listings.js',
 	'ampFilter'      => 'app/view/js/jquery/plugin/listings.js',
 	'ampUpload'      => 'app/view/js/jquery/plugin/ampUpload.js',
+	'pageBreaks'     => 'app/view/js/jquery/plugin/pageBreaks.js',
 	'ac_template'    => 'app/view/js/jquery/plugin/ac_template.js',
 	'amplo_slider'   => 'app/view/js/jquery/plugin/amplo_slider.js',
 	'flexselect'     => 'app/view/js/jquery/plugin/flexselect.js',
@@ -892,6 +893,7 @@ function rrmdir($dir)
 				@unlink($file);
 			}
 		}
+
 		return @rmdir($dir);
 	}
 }
@@ -1129,7 +1131,7 @@ function render_file($file, $data = array())
 	}
 
 	$data += array(
-			'r' => $registry,
+		'r' => $registry,
 	);
 
 	extract($data);

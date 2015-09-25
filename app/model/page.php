@@ -116,7 +116,7 @@ class App_Model_Page extends App_Model_Table
 
 			$updated['dir']          = $dir;
 			$updated['content_file'] = $dir . 'content.tpl';
-			$updated['style_file']   = $dir . 'style.tpl';
+			$updated['style_file']   = $dir . 'style.less';
 
 			$this->syncPage($updated);
 
@@ -142,7 +142,8 @@ class App_Model_Page extends App_Model_Table
 			}
 		}
 
-		clear_cache('page');
+		clear_cache('page.' . $page_id);
+		clear_cache('page.rows');
 
 		//If this page is the terms agreement page, reset the modified date to notify users.
 		if ($page_id && $page_id == option('terms_agreement_page_id')) {
@@ -172,16 +173,11 @@ class App_Model_Page extends App_Model_Table
 			}
 		}
 
-		$this->delete($this->table, $page_id);
 		$this->delete('page_history', array('page_id' => $page_id));
-
 		$this->url->removeAlias('page/' . $page['name']);
-
 		$this->translation->deleteTranslation('page', $page_id);
 
-		clear_cache('page');
-
-		return $page_id;
+		return parent::remove($page_id);
 	}
 
 	public function getPage($page, $published = true)

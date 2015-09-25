@@ -55,6 +55,14 @@ abstract class App_Model_Table extends Model
 		return $record_id;
 	}
 
+	public function copy($record_id)
+	{
+		$record = $this->getRecord($record_id);
+
+		return $this->save(null, $record);
+
+	}
+
 	public function remove($record_id)
 	{
 		clear_cache($this->table . '.rows');

@@ -310,9 +310,9 @@ class Document extends Library
 						}
 					} else {
 						$dirs = array(
+							'currentDirectory',
 							'entryPath',
 							'rootpath',
-							'currentDirectory',
 						);
 
 						$cfi  = $a->path->currentFileInfo;
@@ -341,7 +341,7 @@ class Document extends Library
 
 					return array(
 						$file,
-						str_replace(DIR_SITE, '', dirname($file)),
+						str_replace(DIR_SITE, SITE_BASE, dirname($file)),
 					);
 				},
 			);

@@ -1,4 +1,40 @@
-//Height animate
+//Size animations
+.animate-hide {
+	overflow: hidden;
+
+	&.a-height {
+		-webkit-animation: height-show .5s forwards;
+		animation: height-show .5s forwards;
+	}
+
+	&.a-width {
+		-webkit-animation: width-show .5s forwards;
+		animation: width-show .5s forwards;
+	}
+
+	&.a-height.a-width {
+		-webkit-animation: size-show .5s forwards;
+		animation: size-show .5s forwards;
+	}
+
+	&.hide {
+		&.a-height {
+			min-height: 0;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+		}
+
+		&a-width {
+			min-width: 0;
+			padding-left: 0 !important;
+			padding-right: 0 !important;
+		}
+
+		border: none !important;
+		display: none;
+	}
+}
+
 .height-animate-hide {
 	overflow: hidden;
 	-webkit-animation: height-show .5s forwards;
@@ -10,6 +46,74 @@
 		padding-bottom: 0 !important;
 		border: none !important;
 		display: none;
+	}
+}
+
+@-webkit-keyframes size-show {
+	0% {
+		max-height: 0;
+		max-width: 0;
+	}
+	80% {
+		max-height: 30em;
+		max-width: 30em;
+	}
+	99% {
+		max-height: 100em;
+		max-width: 100em;
+	}
+	100% {
+		max-height: none;
+		max-width: none;
+	}
+}
+
+@keyframes size-show {
+	0% {
+		max-height: 0;
+		max-width: 0;
+	}
+	80% {
+		max-height: 30em;
+		max-width: 30em;
+	}
+	99% {
+		max-height: 100em;
+		max-width: 100em;
+	}
+	100% {
+		max-height: none;
+		max-width: none;
+	}
+}
+
+@-webkit-keyframes width-show {
+	0% {
+		max-width: 0;
+	}
+	80% {
+		max-width: 30em;
+	}
+	99% {
+		max-width: 100em;
+	}
+	100% {
+		max-width: none;
+	}
+}
+
+@keyframes width-show {
+	0% {
+		max-width: 0;
+	}
+	80% {
+		max-width: 30em;
+	}
+	99% {
+		max-width: 100em;
+	}
+	100% {
+		max-width: none;
 	}
 }
 
