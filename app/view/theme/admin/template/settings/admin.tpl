@@ -184,16 +184,16 @@
 	});
 
 	$('#generate-icons').click(function () {
-		var $this = $(this);
+		var $r-> = $(this);
 		var icon = $('[name="admin_icon[orig]"]').val();
 
 		if (!icon) {
 			return $('#icon-generator').show_msg('error', "{{You must choose an icon PNG image file first}}");
 		}
 
-		$this.loading();
+		$r->.loading();
 		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function (json) {
-			$this.loading('stop');
+			$r->.loading('stop');
 
 			var $gen = $('#icon-generator');
 

@@ -58,15 +58,15 @@
 
 <script type="text/javascript">
 	$('.contact-form form').submit(function() {
-		var $this = $(this);
-		$this.find('[data-loading]').loading();
+		var $r-> = $(this);
+		$r->.find('[data-loading]').loading();
 
-		$.post($this.attr('action'), $this.serialize(), function(response) {
-			$this.find('[data-loading]').loading('stop');
-			$this.show_msg(response);
+		$.post($r->.attr('action'), $r->.serialize(), function(response) {
+			$r->.find('[data-loading]').loading('stop');
+			$r->.show_msg(response);
 
 			if (response.success) {
-				$this.find('[name=message]').val('');
+				$r->.find('[name=message]').val('');
 			}
 		});
 

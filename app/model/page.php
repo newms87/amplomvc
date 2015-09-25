@@ -59,6 +59,11 @@ class App_Model_Page extends App_Model_Table
 			$page['options'] = json_encode($page['options']);
 		}
 
+		//Set Updated Date and User
+		$page['date_updated']    = $this->date->now();
+		$page['updated_user_id'] = $this->user->getId();
+
+		//$orig / $updated for Page verification
 		$orig    = $this->getRecord($page_id);
 		$updated = $page + $orig;
 
@@ -93,10 +98,6 @@ class App_Model_Page extends App_Model_Table
 			}
 		}
 
-		//Set Updated Date and User
-		$page['date_updated']    = $this->date->now();
-		$page['updated_user_id'] = $this->user->getId();
-
 		if ($page_id) {
 			$page_id = $this->update($this->table, $page, $page_id);
 		} else {
@@ -111,23 +112,12 @@ class App_Model_Page extends App_Model_Table
 		}
 
 		if ($page_id) {
-			$dir = DIR_SITE . 'app/view/template/' . $updated['type'] . '/' . $updated['name'];
+			$dir = DIR_SITE . 'app/view/template/' . $updated['type'] . '/' . $updated['name'] . '/';
 
-			if (_is_writable($dir)) {
-				if (isset($page['content'])) {
-					if (file_put_contents($dir . '/content.tpl', html_entity_decode($page['content'])) === false) {
-						$this->error['content'] = _l("There was an error writing the content for the page.");
-					}
-				}
+			$updated['content_file'] = $dir . 'content.tpl';
+			$updated['style_file'] = $dir . 'style.tpl';
 
-				if (isset($page['style'])) {
-					if (file_put_contents($dir . '/style.less', $page['style']) === false) {
-						$this->error['style'] = _l("There was an error writing the stylesheet for the page.");
-					}
-				}
-			} else {
-				$this->error['content'] = _l("The directory %s was not writable.");
-			}
+			$this->syncPage($updated);
 
 			if (!empty($page['alias'])) {
 				$this->url->setAlias($page['alias'], $page['type'] . '/' . $page['name']);
@@ -153,6 +143,7 @@ class App_Model_Page extends App_Model_Table
 
 		clear_cache('page');
 
+		//If this page is the terms agreement page, reset the modified date to notify users.
 		if ($page_id && $page_id == option('terms_agreement_page_id')) {
 			save_option('terms_agreement_date', $this->date->now());
 		}
@@ -254,7 +245,7 @@ class App_Model_Page extends App_Model_Table
 			$page['content_file'] = $dir . 'content.tpl';
 			$page['style_file']   = $dir . 'style.less';
 
-			$this->syncPage($page['type'], $page['name']);
+			$this->syncPage($page);
 
 			if (!empty($page['status']) && $page['status'] !== App_Model_Page::STATUS_PUBLISHED) {
 				if ($this->date->isInPast($page['date_published'], false)) {
@@ -400,38 +391,58 @@ class App_Model_Page extends App_Model_Table
 		return parent::getColumns($filter, $merge);
 	}
 
-	protected function syncPage($type, $name)
+	protected function syncPage($page)
 	{
-		$page = $this->findRecord(array('name' => $name), '*');
-
-		$dir          = DIR_SITE . 'app/view/template/' . $type . '/' . $name;
-		$content_file = $dir . 'content.tpl';
-		$style_file   = $dir . 'style.less';
-
-		if ($page) {
+		if (!empty($page['page_id'])) {
+			$update       = array();
 			$time_updated = (int)strtotime($page['date_updated']);
 
-			if ((is_file($content_file) && filemtime($content_file) > $time_updated)
-				|| (is_file($style_file) && filemtime($style_file) > $time_updated)
-			) {
-				$update = array(
-					'content' => is_file($content_file) ? file_get_contents($content_file) : '',
-					'style'   => is_file($style_file) ? file_get_contents($style_file) : '',
-				);
+			if (!_is_writable($page['dir'])) {
+				trigger_error(_l("Unable to write to page directory %s", $page['dir']));
+			}
 
+			//Sync Content File
+			if (is_file($page['content_file'])) {
+				if (filemtime($page['content_file']) > $time_updated) {
+					$update['content'] = file_get_contents($page['content_file']);
+				}
+			} elseif (@file_put_contents($page['content_file'], html_entity_decode($page['content'])) === false) {
+				$this->error['content'] = _l("There was an error writing the content for the page.");
+			} else {
+				$this->plugin->gitIgnore($page['content_file']);
+			}
+
+			//Sync Style File
+			if (is_file($page['style_file'])) {
+				if (filemtime($page['style_file']) > $time_updated) {
+					$update['style'] = file_get_contents($page['style_file']);
+				}
+			} elseif (@file_put_contents($page['style_file'], $page['style']) === false) {
+				$this->error['style'] = _l("There was an error writing the stylesheet for the page.");
+			} else {
+				$this->plugin->gitIgnore($page['style_file']);
+			}
+
+			//Update if necessary
+			if ($update) {
 				$this->save($page['page_id'], $update);
 			}
-		} elseif (is_file($content_file)) {
-			$page_data = get_comment_directives($content_file);
-			$title     = !empty($page_data['title']) ? $page_data['title'] : cast_title($name);
+		}
+	}
+
+	protected function syncPageFromFile($page)
+	{
+		if (is_file($page['content_file'])) {
+			$page_data = get_comment_directives($page['content_file']);
+			$title     = !empty($page_data['title']) ? $page_data['title'] : cast_title($page['name']);
 			$cache     = isset($page_data['cache']) ? (int)$page_data['cache'] : 1;
 
-			$content = file_get_contents($content_file);
-			$style   = is_file($style_file) ? file_get_contents($style_file) : '';
+			$content = file_get_contents($page['content_file']);
+			$style   = is_file($page['style_file']) ? file_get_contents($page['style_file']) : '';
 
 			$page = array(
-				'type'     => $type,
-				'name'     => $name,
+				'type'     => $page['type'],
+				'name'     => $page['name'],
 				'title'    => $title,
 				'template' => !empty($page_data['template']) ? $page_data['template'] : null,
 				'content'  => $content,

@@ -119,9 +119,9 @@
 	var listings = <?= json_encode($data_view_listings); ?>;
 
 	$('.widget-view-list').find('.button.move').click(function () {
-		var $this = $(this);
-		var $view = $this.closest('.widget-view');
-		if ($this.hasClass('move-down')) {
+		var $r-> = $(this);
+		var $view = $r->.closest('.widget-view');
+		if ($r->.hasClass('move-down')) {
 			$view.next().after($view);
 		} else {
 			$view.prev().before($view);
@@ -141,9 +141,9 @@
 	});
 
 	$('.edit-view').click(function () {
-		var $this = $(this);
-		$this.closest('.view-settings').toggleClass('active');
-		$this.find('.amp-sprite').toggleClass('cancel');
+		var $r-> = $(this);
+		$r->.closest('.view-settings').toggleClass('active');
+		$r->.find('.amp-sprite').toggleClass('cancel');
 	});
 
 	$('.create-view').click(function () {
@@ -180,14 +180,14 @@
 	});
 
 	$('.view-list-chart .button').click(function () {
-		var $this = $(this);
+		var $r-> = $(this);
 
-		if ($this.hasClass('active')) {
+		if ($r->.hasClass('active')) {
 			return;
 		}
 
-		var $view = $this.closest('.widget-view');
-		var chart_type = $this.attr('data-view-type');
+		var $view = $r->.closest('.widget-view');
+		var chart_type = $r->.attr('data-view-type');
 
 		$view.toggleClass('view-chart', chart_type ? true : false);
 
@@ -198,20 +198,20 @@
 			$canvas.renderChart(chart_type);
 		}
 
-		$this.closest('.view-list-chart').find('.active').removeClass('active');
-		$this.addClass('active');
+		$r->.closest('.view-list-chart').find('.active').removeClass('active');
+		$r->.addClass('active');
 	});
 
 	<? if ($can_modify) { ?>
 	$('.choose-view-box [name]').change(function () {
-		var $this = $(this);
-		var $view = $this.closest('.widget-view');
+		var $r-> = $(this);
+		var $view = $r->.closest('.widget-view');
 		$view.find('.show-view').click();
 	});
 
 	$('.save-view').click(function () {
-		var $this = $(this);
-		var $view = $this.closest('.widget-view');
+		var $r-> = $(this);
+		var $view = $r->.closest('.widget-view');
 
 		var query = $view.find('.refresh-listing').attr('href').replace(/^[^\?]*\?/, '');
 
@@ -232,10 +232,10 @@
 
 		data = $.fn.extend({}, settings, data);
 
-		$this.loading();
+		$r->.loading();
 
 		$.post("<?= site_url('block/widget/views/save-view');?>", data, function (response) {
-			$this.loading('stop');
+			$r->.loading('stop');
 			if (response.data && response.data.view_id) {
 				$view.attr('data-view-id', response.data.view_id);
 			}
@@ -246,19 +246,19 @@
 	});
 
 	$('.delete-view').click(function () {
-		var $this = $(this);
-		if (!$this.hasClass('confirm')) {
+		var $r-> = $(this);
+		if (!$r->.hasClass('confirm')) {
 			setTimeout(function () {
-				$this.removeClass('confirm').loading('stop');
+				$r->.removeClass('confirm').loading('stop');
 			}, 2000);
-			return $this.loading({text: "{{Confirm Delete}}"}).addClass('confirm');
+			return $r->.loading({text: "{{Confirm Delete}}"}).addClass('confirm');
 		}
 
 		if (confirm("{{Are you sure you want to remove this view?}}")) {
-			var $this = $(this);
-			var $view = $this.closest('.widget-view');
+			var $r-> = $(this);
+			var $view = $r->.closest('.widget-view');
 
-			$this.loading();
+			$r->.loading();
 
 			$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function (response) {
 				$view.remove();
@@ -269,8 +269,8 @@
 	var col_sizes = <?= json_encode($col_sizes); ?>;
 
 	$('.choose-view-size select').change(function () {
-		var $this = $(this);
-		$this.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$this.val()]);
+		var $r-> = $(this);
+		$r->.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$r->.val()]);
 		window.dispatchEvent(new Event('resize'));
 	});
 

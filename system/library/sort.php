@@ -42,12 +42,7 @@ class Sort extends Library
 		$settings['limit']     = $limit;
 
 		$settings['show_more'] = $settings['limit_url'] . ($limit + option('limit_more_count', 10));
-		extract($settings);
 
-		ob_start();
-
-		include(_mod($template_file));
-
-		return ob_get_clean();
+		return render_file($template_file, $settings);
 	}
 }

@@ -49,14 +49,14 @@
 		delay:  500,
 		source: function (request, response) {
 			filter = {username: request.term};
-			var $this = $('#customer-autocomplete');
+			var $r-> = $('#customer-autocomplete');
 
 			load_count++;
-			$this.addClass('loading');
+			$r->.addClass('loading');
 
 			$.get($ac.site_url + 'admin/client/autocomplete', {filter: filter}, function (e) {
 				if (load_count-- <= 1) {
-					$this.removeClass('loading');
+					$r->.removeClass('loading');
 				}
 				response(e);
 			}, 'json');

@@ -28,20 +28,20 @@
 	var $account = $('.account-page');
 
 	$account.find('.side-menu a').not('.load-page').click(function () {
-		var $this = $(this);
+		var $r-> = $(this);
 
-		if ($this.is('.active')) {
+		if ($r->.is('.active')) {
 			if (screen_width <= 1024) {
 				$account.addClass('account-menu');
-				$this.removeClass('active');
+				$r->.removeClass('active');
 			}
 		} else {
 			$account.find('.side-menu .active').removeClass('active');
-			$this.addClass('active');
+			$r->.addClass('active');
 			$account.removeClass('account-menu');
 			$account.find('.content-box').addClass("loading");
 
-			var action = $this.attr('href');
+			var action = $r->.attr('href');
 
 			$.post(action, {}, function (response) {
 				$account.find('.content-box').html(response).removeClass('loading');
