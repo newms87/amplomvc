@@ -14,11 +14,11 @@
 <? if ($can_edit) { ?>
 	<script type="text/javascript">
 		$('.dashboard-name').blur(function () {
-			var $r-> = $(this);
-			if ($r->.attr('data-orig') != $r->.html()) {
-				$r->.attr('data-orig', $r->.html());
+			var $this = $(this);
+			if ($this.attr('data-orig') != $this.html()) {
+				$this.attr('data-orig', $this.html());
 				var data = {
-					title: $r->.html()
+					title: $this.html()
 				};
 				$.post("<?= site_url('admin/dashboard/save', 'dashboard_id=' . $dashboard_id); ?>", data, function (response) {
 					$('.dashboard-header').show_msg(response);

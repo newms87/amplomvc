@@ -63,7 +63,7 @@
 				action = $('select[name=batch_action]').val();
 			}
 
-			var $r-> = $(this);
+			var $this = $(this);
 			var $selected = $('<?= $selector; ?>:checked');
 
 			av = $('.action_value.active [name=action_value]');
@@ -75,11 +75,11 @@
 			data.push({name: 'action', value: action});
 			data.push({name: 'value', value: av});
 
-			$r->.loading();
+			$this.loading();
 
 			$.post('<?= $url; ?>', data, function (response) {
-				$r->.loading('stop');
-				$r->.parent().show_msg(response);
+				$this.loading('stop');
+				$this.parent().show_msg(response);
 				$('.refresh-listing').click();
 			}, 'json');
 

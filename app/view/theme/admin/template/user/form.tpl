@@ -144,8 +144,8 @@
 	});
 
 	$('.meta-key').keyup(function () {
-		var $r-> = $(this);
-		$r->.closest('.meta-row').find('.meta-value').attr('name', 'meta[' + $r->.html() + ']');
+		var $this = $(this);
+		$this.closest('.meta-row').find('.meta-value').attr('name', 'meta[' + $this.html() + ']');
 	});
 
 	$('#tab-meta .remove').click(function () {

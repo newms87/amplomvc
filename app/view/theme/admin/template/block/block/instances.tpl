@@ -28,13 +28,13 @@
 
 	//Delete Tab
 	$('#instances_tab_list .delete_tab').click(function () {
-		var $r-> = $(this);
+		var $this = $(this);
 
-		if ($r->.closest('a').hasClass('selected')) {
-			$r->.closest('.vtabs').children('a:first').click();
+		if ($this.closest('a').hasClass('selected')) {
+			$this.closest('.vtabs').children('a:first').click();
 		}
 
-		var tab = $r->.closest('a');
+		var tab = $this.closest('a');
 
 		$(tab.attr('href')).remove();
 		tab.remove();
