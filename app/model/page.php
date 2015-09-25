@@ -114,8 +114,9 @@ class App_Model_Page extends App_Model_Table
 		if ($page_id) {
 			$dir = DIR_SITE . 'app/view/template/' . $updated['type'] . '/' . $updated['name'] . '/';
 
+			$updated['dir']          = $dir;
 			$updated['content_file'] = $dir . 'content.tpl';
-			$updated['style_file'] = $dir . 'style.tpl';
+			$updated['style_file']   = $dir . 'style.tpl';
 
 			$this->syncPage($updated);
 
