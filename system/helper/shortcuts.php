@@ -570,37 +570,6 @@ function set_page_meta($key, $value)
 	$registry->get('document')->setMeta($key, $value);
 }
 
-function render_content($content, $args = array())
-{
-	global $registry;
-
-	if (!$content) {
-		return '';
-	}
-
-	$content_file = DIR_SITE . 'app/view/template/temp/' . uniqid('preview-') . '.tpl';
-
-	if (!_is_writable(dirname($content_file)) || !@file_put_contents($content_file, $content)) {
-		trigger_error(_l("Unable to create content file %s for the preview.", $content_file));
-
-		return '';
-	}
-
-	$args += array(
-		'r' => $registry,
-	);
-
-	extract($args);
-
-	ob_start();
-	require_once($content_file);
-	$rendered = ob_get_clean();
-
-	rrmdir(dirname($content_file));
-
-	return $rendered;
-}
-
 function language_info($key = null, $default = null)
 {
 	global $registry;

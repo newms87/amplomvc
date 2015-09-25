@@ -222,17 +222,17 @@
 								switch ($column['type']) {
 									case 'date':
 										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'short'); ?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $r->date->format($value, 'short'); ?>
 										<? break;
 
 									case 'datetime':
 										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'datetime_format_long'); ?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $r->date->format($value, 'datetime_format_long'); ?>
 										<? break;
 
 									case 'time':
 										?>
-										<?= $value === DATETIME_ZERO ? _l("Never") : $this->date->format($value, 'time'); ?>
+										<?= $value === DATETIME_ZERO ? _l("Never") : $r->date->format($value, 'time'); ?>
 										<? break;
 
 									case 'map':

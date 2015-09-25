@@ -95,11 +95,11 @@
 	<div class="buttons views-actions">
 		<a class="add-view button">{{New View}}</a>
 
-		<? if ($this->user->isTopAdmin()) { ?>
+		<? if ($r->user->isTopAdmin()) { ?>
 			<a class="create-view button">{{Create Listing}}</a>
 
 			<div class="view-popup create-view-box">
-				<form action="<?= site_url('block/widget/views/create', array('redirect' => $this->url->here())); ?>" method="post">
+				<form action="<?= site_url('block/widget/views/create', array('redirect' => $r->url->here())); ?>" method="post">
 					<div class="description">{{Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table.}}</div>
 					<input type="hidden" name="group" value="<?= $group; ?>"/>
 					<input type="text" name="name" value="{{View Name}}"/>

@@ -122,7 +122,7 @@
 					<? foreach ($orders as $order) { ?>
 						<tr>
 							<td class="date"><?= format('date', $order['date_created'], 'm/d/Y'); ?></td>
-							<td class="user-id"><?= $this->Model_Client->getField($order['client_id'], 'username'); ?></td>
+							<td class="user-id"><?= $r->Model_Client->getField($order['client_id'], 'username'); ?></td>
 							<td class="item-label"><?= $order['name']; ?></td>
 							<td class="type"><?= Tracescope::getScopeType($order['scope_type_id']); ?></td>
 							<td class="amount"><?= format('currency', $order['price']); ?></td>

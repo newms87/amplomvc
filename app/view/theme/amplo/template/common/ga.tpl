@@ -24,7 +24,7 @@
 
 	<? if ($ga_experiment_id = option('ga_experiment_id')) { ?>
 	ga('set', 'expId', '<?= $ga_experiment_id; ?>');
-	ga('set', 'expVar', '<?= $this->google->getExperimentVariation(); ?>');
+	ga('set', 'expVar', '<?= $r->google->getExperimentVariation(); ?>');
 	<? } ?>
 
 	ga('send', 'pageview', "<?= $_SERVER['REQUEST_URI'] . (strpos($_SERVER['REQUEST_URI'], '?') ? '&' : '?') . 'domain=' . urlencode(DOMAIN); ?>");

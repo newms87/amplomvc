@@ -103,7 +103,7 @@
 
 	<main class="main clearfix">
 
-		<? if ($this->message->has()) { ?>
+		<? if ($r->message->has()) { ?>
 			<section class="message-row row">
 				<div class="wrap">
 					<?= render_message(); ?>

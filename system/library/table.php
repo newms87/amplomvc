@@ -59,20 +59,14 @@ class Table extends Library
 	{
 		$this->prepare($data);
 
-		extract($data);
+		$data['columns'] = $this->columns;
+		$data['rows']    = $this->rows;
 
-		$columns = $this->columns;
-		$rows    = $this->rows;
-		if (empty($row_id)) {
-			$row_id = '';
-		}
+		$data += array(
+			'row_id' => '',
+		);
 
-		//render the file
-		ob_start();
-
-		include(_mod($this->file));
-
-		return ob_get_clean();
+		return render_file($this->file, $data);
 	}
 
 	private function prepare(&$data)

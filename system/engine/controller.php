@@ -28,10 +28,6 @@ abstract class Controller
 
 	protected function render($path, $data = array(), $theme = null)
 	{
-		if (AMPLO_PROFILE) {
-			_profile('RENDER: ' . $path);
-		}
-
 		$_template = is_file($path) ? $path : $this->theme->getFile('template/' . $path, $theme);
 
 		if (!$_template) {
@@ -40,19 +36,11 @@ abstract class Controller
 		}
 
 		//Used for ajax override for templates
-		$is_ajax = $this->is_ajax;
+		$data += array(
+			'is_ajax' => $this->is_ajax,
+		);
 
-		extract($data);
-
-		ob_start();
-
-		include(_mod($_template));
-
-		$this->output = ob_get_clean();
-
-		if (AMPLO_PROFILE) {
-			_profile('RENDER COMPLETED: ' . $path);
-		}
+		$this->output = render_file($_template, $data);
 
 		return $this->output;
 	}

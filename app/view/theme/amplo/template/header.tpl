@@ -10,7 +10,7 @@
 <section id="container">
 	<? if (!empty($terms_page)) { ?>
 		<div class="terms-agreement">
-			{{You must agree to the <a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click <a href="<?= site_url('customer/agree-to-terms', array('redirect' => $this->url->here())); ?>">I agree</a>}}
+			{{You must agree to the <a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click <a href="<?= site_url('customer/agree-to-terms', array('redirect' => $r->url->here())); ?>">I agree</a>}}
 		</div>
 	<? } ?>
 
@@ -128,7 +128,7 @@
 
 	<main class="main">
 
-		<? if ($this->message->has()) { ?>
+		<? if ($r->message->has()) { ?>
 			<section class="message-row row">
 				<div class="wrap">
 					<?= render_message(); ?>

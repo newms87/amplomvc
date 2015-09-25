@@ -1092,3 +1092,55 @@ function tokengen($length)
 
 	return $token;
 }
+
+function render_content($content, $data = array())
+{
+	if (!$content) {
+		return '';
+	}
+
+	$content_file = DIR_SITE . 'app/view/template/temp/' . uniqid('content-') . '.tpl';
+
+	if (!_is_writable(dirname($content_file)) || !@file_put_contents($content_file, $content)) {
+		trigger_error(_l("Unable to create content file for rendering: %s .", $content_file));
+
+		return false;
+	}
+
+	$rendered = render_file($content_file, $data);
+
+	rrmdir(dirname($content_file));
+
+	return $rendered;
+}
+
+function render_file($file, $data = array())
+{
+	global $registry;
+
+	if (!is_file($file)) {
+		trigger_error(_l("Failed to render file %s", $file));
+
+		return false;
+	}
+
+	if (AMPLO_PROFILE) {
+		_profile('RENDER: ' . $file);
+	}
+
+	$data += array(
+			'r' => $registry,
+	);
+
+	extract($data);
+
+	ob_start();
+	include(_mod($file));
+	$content = ob_get_clean();
+
+	if (AMPLO_PROFILE) {
+		_profile('RENDER COMPLETED: ' . $file);
+	}
+
+	return $content;
+}

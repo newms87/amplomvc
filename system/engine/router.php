@@ -29,7 +29,7 @@ class Router
 
 	public function isPath($path)
 	{
-		return $this->path === str_replace('-', '_', $path);
+		return preg_match("#^" . str_replace('-', '_', $path) . "$#", $this->path);
 	}
 
 	public function setPath($path, $nodes = null, $segments = null)

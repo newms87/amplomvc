@@ -4,6 +4,11 @@ final class Registry
 {
 	protected $data = array();
 
+	public function __get($key)
+	{
+		return $this->get($key);
+	}
+
 	public function get($key, $return_instance = true)
 	{
 		$lcase_key = strtolower($key);
