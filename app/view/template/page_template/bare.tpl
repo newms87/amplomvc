@@ -10,7 +10,7 @@
 	<? if (!empty($content_file) && is_file($content_file)) {
 		require_once($content_file);
 	} else {
-		echo $content;
+		echo render_content($content);
 	} ?>
 </section>
 

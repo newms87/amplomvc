@@ -749,21 +749,25 @@ $.fn.tabs = function (opts) {
 
 	$tabs.click(function () {
 		var $this = $(this);
+		var title = $this.attr('data-title'), is_url = !$this.attr('href').match(/^[#.]/);
+		var $content = is_url ? $($this.attr('data-replace') || 'main.main') : $($this.attr('href'));
 
-		var $content = $($this.attr('href')), title = $this.attr('data-title');
-
-		if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
-			$this.toggleClass('active');
-			$content.toggleClass('hidden', $this.hasClass('active'));
+		if (is_url) {
+			return;
 		} else {
-			$tabs.removeClass('active');
+			if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
+				$this.toggleClass('active');
+				$content.toggleClass('hidden', $this.hasClass('active'));
+			} else {
+				$tabs.removeClass('active');
 
-			$tabs.each(function (i, e) {
-				$($(e).attr('href')).addClass('hidden');
-			});
+				$tabs.each(function (i, e) {
+					$($(e).attr('href')).addClass('hidden');
+				});
 
-			$this.addClass('active');
-			$content.removeClass('hidden');
+				$this.addClass('active');
+				$content.removeClass('hidden');
+			}
 		}
 
 
@@ -1262,7 +1266,7 @@ var amplo_ajax_cb = function () {
 	var ajax_cb = $this.attr('data-if-ajax') || $this.attr('data-ajax');
 
 	if (typeof window[ajax_cb] !== 'function') {
-		var $replace = $(ajax_cb);
+		var $replace = ajax_cb !== 'iframe' ? $(ajax_cb) : null;
 
 		if (!$replace.length) {
 			var opts = {href: $this.attr('href')};

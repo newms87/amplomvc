@@ -18,8 +18,8 @@ class App_Model_Page extends App_Model_Table
 	public function save($page_id, $page)
 	{
 		if (isset($page['title'])) {
-			if (!validate('text', $page['title'], 1, 64)) {
-				$this->error['title'] = _l("Page Title must be between 1 and 64 characters!");
+			if (!validate('text', $page['title'], 1, 256)) {
+				$this->error['title'] = _l("Page Title must be between 1 and 256 characters!");
 			}
 		} elseif (!$page_id) {
 			$this->error['title'] = _l("Page Title is required.");
@@ -67,6 +67,8 @@ class App_Model_Page extends App_Model_Table
 		$orig    = $this->getRecord($page_id);
 		$updated = $page + $orig;
 
+
+		//Before Save Business Logic
 		if ($page_id) {
 			//Remove old directory if the page directory has changed
 			if ($updated['name'] !== $orig['name'] || $updated['type'] !== $orig['type']) {
@@ -74,9 +76,9 @@ class App_Model_Page extends App_Model_Table
 			}
 
 			if (isset($page['status']) && $page['status'] != $orig['status']) {
-				if ($orig['status'] == App_Model_Page::STATUS_PUBLISHED) {
+				if ($orig['status'] == self::STATUS_PUBLISHED) {
 					$page['date_published'] = '';
-				} elseif ($page['status'] == App_Model_Page::STATUS_PUBLISHED) {
+				} elseif ($page['status'] == self::STATUS_PUBLISHED) {
 					if (!$updated['date_published'] || $updated['date_published'] === DATETIME_ZERO) {
 						$page['date_published'] = $this->date->now();
 					}
@@ -91,26 +93,31 @@ class App_Model_Page extends App_Model_Table
 				}
 			}
 		} else {
+			if (empty($page['status'])) {
+				$page['status'] = self::STATUS_PENDING;
+			}
+
+			if ($page['status'] === self::STATUS_PUBLISHED) {
+				$page['date_published'] = $this->date->now();
+			}
+
 			$page['date_created'] = $this->date->now();
 
 			if (empty($page['type'])) {
 				$page['type'] = 'page';
 			}
-		}
 
-		if ($page_id) {
-			$page_id = $this->update($this->table, $page, $page_id);
-		} else {
 			if (empty($page['options'])) {
 				$page['options'] = json_encode(array(
 					'show_title'       => 1,
 					'show_breadcrumbs' => 1,
 				));
 			}
-
-			$page_id = $this->insert($this->table, $page);
 		}
 
+		$page_id = parent::save($page_id, $page);
+
+		//After Save Business Logic
 		if ($page_id) {
 			$dir = DIR_SITE . 'app/view/template/' . $updated['type'] . '/' . $updated['name'] . '/';
 
@@ -128,6 +135,10 @@ class App_Model_Page extends App_Model_Table
 				$this->translation->setTranslations('page', $page_id, $page['translations']);
 			}
 
+			if (!empty($page['meta'])) {
+				$this->Model_Meta->setAll('page', $page_id, $page['meta']);
+			}
+
 			if (isset($page['categories'])) {
 				$this->delete('page_category', array('page_id' => $page_id));
 
@@ -142,22 +153,12 @@ class App_Model_Page extends App_Model_Table
 			}
 		}
 
-		clear_cache('page.' . $page_id);
-		clear_cache('page.rows');
-
 		//If this page is the terms agreement page, reset the modified date to notify users.
 		if ($page_id && $page_id == option('terms_agreement_page_id')) {
 			save_option('terms_agreement_date', $this->date->now());
 		}
 
 		return $page_id;
-	}
-
-	public function copyPage($page_id)
-	{
-		$page = $this->getRecord($page_id);
-
-		return $this->save(null, $page);
 	}
 
 	public function remove($page_id)
@@ -216,6 +217,11 @@ class App_Model_Page extends App_Model_Table
 	{
 		$filter['status'] = self::STATUS_PUBLISHED;
 
+		if (isset($filter['keywords'])) {
+			$keywords            = $this->escape($filter['keywords']);
+			$filter['#keywords'] = " AND (content LIKE '%$keywords%' OR excerpt LIKE '%$keywords%' OR title LIKE '%$keywords%')";
+		}
+
 		$records = $this->getRecords($sort, $filter, $options, $total);
 
 		$total ? $rows = &$records[0] : $rows = &$records;
@@ -255,6 +261,8 @@ class App_Model_Page extends App_Model_Table
 		if (!empty($page['options']) && is_string($page['options'])) {
 			$page['options'] = (array)json_decode($page['options']);
 		}
+
+		$page['meta'] = $this->Model_Meta->get('page', $page['page_id']);
 	}
 
 	public function compileStyle($page_id, $style)

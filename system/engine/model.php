@@ -53,6 +53,11 @@ abstract class Model
 		$this->t  = &$this->db->t;
 	}
 
+	public function getDb()
+	{
+		return $this->db;
+	}
+
 	protected function load($path, $class = null)
 	{
 		global $registry;
@@ -197,7 +202,7 @@ abstract class Model
 
 		return array(
 			$rows,
-			$total
+			$total,
 		);
 	}
 
@@ -1127,7 +1132,7 @@ abstract class Model
 
 						call_user_func_array(array(
 							$class,
-							$method
+							$method,
 						), $params);
 					} else {
 						trigger_error(_l("%s(): The following method does not exist: %s::%s().", __METHOD__, $class, $method));

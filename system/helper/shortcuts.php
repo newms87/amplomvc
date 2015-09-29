@@ -673,6 +673,33 @@ function set_user_meta($key, $value)
 	}
 }
 
+function get_user_info($user_id, $key = null, $default = null)
+{
+	global $registry;
+
+	static $users;
+
+	if (!$user_id) {
+		return;
+	}
+
+	if (!isset($users[$user_id])) {
+		if ($users[$user_id] = $registry->get('Model_User')->getRecord($user_id)) {
+			$users[$user_id] += $registry->get('Model_User')->getMeta($user_id);
+		}
+	}
+
+	if (!$users[$user_id]) {
+		return;
+	}
+
+	if ($key) {
+		return isset($users[$user_id][$key]) ? $users[$user_id][$key] : $default;
+	}
+
+	return $users[$user_id];
+}
+
 function validate($method, $value)
 {
 	global $registry;
@@ -1091,7 +1118,7 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 	return $html;
 }
 
-function output($output, $content_type = 'text/html')
+function output($output, $content_type = 'text/html; charset=UTF-8')
 {
 	global $registry;
 	$registry->get('response')->setOutput($output, $content_type);

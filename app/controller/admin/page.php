@@ -98,6 +98,7 @@ class App_Controller_Admin_Page extends App_Controller_Table
 			'alias'            => '',
 			'content'          => '',
 			'style'            => '',
+			'excerpt'          => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'options'          => array(),
@@ -108,6 +109,7 @@ class App_Controller_Admin_Page extends App_Controller_Table
 			'translations'     => array(),
 			'date_published'   => '',
 			'categories'       => array(),
+			'meta'             => array(),
 		);
 
 		$page += $defaults;
@@ -150,7 +152,7 @@ class App_Controller_Admin_Page extends App_Controller_Table
 					break;
 
 				case 'copy':
-					$this->Model_Page->copyPage($page_id);
+					$this->Model_Page->copy($page_id);
 					break;
 			}
 		}

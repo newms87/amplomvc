@@ -8,6 +8,7 @@ $this->db->addColumn('page', 'author_id', "INT(10) UNSIGNED NOT NULL AFTER `page
 $this->db->changeColumn('page', 'layout_id', 'layout_id', "INT(10) UNSIGNED NOT NULL AFTER `type`");
 $this->db->changeColumn('page', 'template', 'template', "VARCHAR(128) NOT NULL AFTER `layout_id`");
 $this->db->changeColumn('page', 'status', 'status', "INT(10) UNSIGNED NOT NULL AFTER `comments`");
+$this->db->changeColumn('page', 'title', 'title', "VARCHAR(256) NOT NULL");
 $this->db->dropColumn('page', 'theme');
 
 $pages = $this->Model_Page->getRecords();
@@ -51,3 +52,12 @@ SQL
 );
 
 $this->db->addColumn('category', 'sort_order', "INT(10) NOT NULL DEFAULT 0 AFTER `status`");
+
+$this->db->createIndex('meta', 'TYPEKEY', array(
+	'type' => 'ASC',
+	'key'  => 'ASC',
+));
+$this->db->createIndex('meta', 'TYPEID', array(
+	'type'      => 'ASC',
+	'record_id' => 'ASC',
+));

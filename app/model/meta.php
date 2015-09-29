@@ -6,8 +6,6 @@ class App_Model_Meta extends App_Model_Table
 
 	public function set($type, $record_id, $key, $value)
 	{
-		$this->clear($type, $record_id, $key);
-
 		$serialized = (int)_is_object($value);
 
 		$meta = array(
@@ -19,20 +17,41 @@ class App_Model_Meta extends App_Model_Table
 			'date'       => $this->date->now(),
 		);
 
-		return $this->insert($this->table, $meta);
+		$filter = array(
+			'type'      => $type,
+			'record_id' => $record_id,
+			'key'       => $key,
+		);
+
+		$meta_id = $this->findRecord($filter);
+
+		clear_cache('meta.rows.' . $record_id);
+
+		if ($meta_id !== null) {
+			if ($value === null) {
+				return $this->delete($this->table, $meta_id);
+			} else {
+				return $this->update($this->table, $meta, $meta_id);
+			}
+		} else {
+			return $this->insert($this->table, $meta);
+		}
+	}
+
+	public function setAll($type, $record_id, $data)
+	{
+		foreach ($data as $key => $value) {
+			$this->set($type, $record_id, $key, $value);
+		}
+
+		return true;
 	}
 
 	public function get($type, $record_id, $key = null, $default = null)
 	{
-		if ($key) {
-			$row = $this->queryRow("SELECT `value`, `serialized` FROM {$this->t['meta']} WHERE `type` = '" . $this->escape($type) . "' AND record_id = " . (int)$record_id . " AND `key` = '" . $this->escape($key) . "'");
+		$meta = cache('meta.rows.' . $record_id);
 
-			if ($row) {
-				return $row['serialized'] ? unserialize($row['value']) : $row['value'];
-			} else {
-				return $default;
-			}
-		} else {
+		if (!$meta) {
 			$rows = $this->queryRows("SELECT * FROM {$this->t['meta']} WHERE `type` = '" . $this->escape($type) . "' AND record_id = " . (int)$record_id);
 
 			if ($rows) {
@@ -42,19 +61,35 @@ class App_Model_Meta extends App_Model_Table
 					$meta[$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
 				}
 
-				return $meta;
-			} else {
-				return $default === null ? array() : $default;
+				cache('meta.rows.' . $record_id, $meta);
 			}
+		}
+
+		if ($key) {
+			return isset($meta[$key]) ? $meta[$key] : $default;
+		} elseif ($meta) {
+			return $meta;
+		} else {
+			return $default === null ? array() : $default;
 		}
 	}
 
-	public function clear($type, $record_id, $key = null)
+	public function removeKey($type, $record_id, $key)
 	{
 		$where = array(
 			'type'      => $type,
 			'record_id' => $record_id,
 			'key'       => $key,
+		);
+
+		return $this->delete($this->table, $where);
+	}
+
+	public function clear($type, $record_id)
+	{
+		$where = array(
+			'type'      => $type,
+			'record_id' => $record_id,
 		);
 
 		return $this->delete($this->table, $where);

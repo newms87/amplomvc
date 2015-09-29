@@ -129,16 +129,6 @@ class App_Model_UserRole extends App_Model_Table
 		return $roles[$user_role_id];
 	}
 
-	public function getRoleId($role)
-	{
-		return $this->queryVar("SELECT user_role_id FROM {$this->t[$this->table]} WHERE name = '" . $this->escape($role) . "'");
-	}
-
-	public function getRoleName($user_role_id)
-	{
-		return $this->queryVar("SELECT name FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
-	}
-
 	public function getRestrictedAreas()
 	{
 		$admin_dir = DIR_SITE . 'app/controller/admin/';

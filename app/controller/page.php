@@ -48,9 +48,12 @@ class App_Controller_Page extends Controller
 		} elseif (IS_POST) {
 			$page += $_POST;
 
-			$page['content'] = html_entity_decode(_post('content'));
-			$page['style']   = html_entity_decode(_post('style'));
+			$page['title']   = urldecode(_post('title'));
+			$page['content'] = urldecode(_post('content'));
+			$page['style']   = urldecode(_post('style'));
 		}
+
+		//html_dump($_POST, 'post');
 
 		if (!$page) {
 			return call('error/not_found');
@@ -77,7 +80,11 @@ class App_Controller_Page extends Controller
 
 		$template = 'page_template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
+		$data = $page + array(
+				'page' => $page,
+			);
+
 		//Render
-		output($this->render($template, $page));
+		output($this->render($template, $data));
 	}
 }
