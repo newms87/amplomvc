@@ -6,9 +6,7 @@
 	<? } ?>
 
 	<? if ($show_limits === 'top') { ?>
-		<div class="limits clearfix">
-			<?= $r->sort->renderLimits($limit_settings); ?>
-		</div>
+		<?= $r->sort->renderLimits($limit_settings); ?>
 	<? } ?>
 
 	<? if ($show_controls) { ?>
@@ -144,9 +142,7 @@
 	<? } ?>
 
 	<? if ($show_limits === 'bottom') { ?>
-		<div class="limits clearfix">
-			<?= $r->sort->renderLimits($limit_settings); ?>
-		</div>
+		<?= $r->sort->renderLimits($limit_settings); ?>
 	<? } ?>
 
 	<script type="text/javascript">

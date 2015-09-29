@@ -26,7 +26,7 @@
 			<div class="header-right col xs-12 md-4 xs-center md-right">
 				<div class="header-secure">
 					<img <?= img(theme_dir('image/lock.png')); ?> />
-					<?= _l("Logged in as <a href=\"%s\">%s</a>", site_url('admin/user/my-account'), user_info('username')); ?>
+					{{Logged in as <a href="<?= site_url('admin/user/my-account'); ?>"><?= user_info('username'); ?></a>}}
 				</div>
 
 				<? if ($support = option('site_email_support')) { ?>

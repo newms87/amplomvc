@@ -65,10 +65,10 @@ class User extends Library
 		$this->role    = $this->temp_user['role'];
 	}
 
-	public function setUser($user_id, $info = array(), $meta = array(), $role = array())
+	public function setUser($user_id, $user = array(), $meta = array(), $role = array())
 	{
 		$this->user_id = $user_id;
-		$this->info    = $info;
+		$this->user    = $user;
 		$this->meta    = $meta;
 		$this->role    = $role;
 

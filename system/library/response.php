@@ -37,7 +37,9 @@ class Response extends Library
 			} else {
 				$this->headers['Content-Type'] = $headers;
 			}
-		} elseif (empty($this->headers['Content-Type'])) {
+		}
+
+		if (empty($this->headers['Content-Type'])) {
 			$this->headers['Content-Type'] = 'text/html; charset=UTF-8';
 		}
 	}

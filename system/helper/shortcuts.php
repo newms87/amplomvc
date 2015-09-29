@@ -1112,10 +1112,10 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 	return $html;
 }
 
-function output($output, $content_type = 'text/html; charset=UTF-8')
+function output($output, $headers = null)
 {
 	global $registry;
-	$registry->get('response')->setOutput($output, $content_type);
+	$registry->get('response')->setOutput($output, $headers);
 }
 
 function output_message()
@@ -1124,10 +1124,15 @@ function output_message()
 	output_json($registry->get('message')->fetch());
 }
 
-function output_json($data)
+function output_json($data, $headers = array())
 {
 	global $registry;
-	$registry->get('response')->setOutput(json_encode($data), 'application/json');
+
+	if (!isset($headers['Content-Type'])) {
+		$headers['Content-Type'] = 'application/json';
+	}
+
+	$registry->get('response')->setOutput(json_encode($data), $headers);
 }
 
 function output_api($status, $message = null, $data = null, $code = 200, $http_code = null)

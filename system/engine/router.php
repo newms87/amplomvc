@@ -151,11 +151,7 @@ class Router
 		});
 
 		foreach ($this->routing_hooks as $hook) {
-			$params = array(
-				$this,
-			);
-
-			if (call_user_func_array($hook['callable'], $params) === false) {
+			if ($hook['callable']($this) === false) {
 				break;
 			}
 		}
@@ -195,7 +191,7 @@ class Router
 						redirect('admin/user/login');
 					}
 
-					redirect('admin/error/permission');
+					$action = new Action('admin/error/permission');
 				}
 			} else {
 				//Login Verification
@@ -214,15 +210,7 @@ class Router
 
 		if (!$valid || !$action->execute()) {
 			if (strpos($this->path, 'api/') === 0) {
-				header('HTTP/1.1 404 Not Found');
-
-				$response = array(
-					'status'  => 'error',
-					'code'    => 404,
-					'message' => _l("The API request for %s was not found.", $this->path),
-				);
-
-				output_json($response);
+				output_api('error', _l("The API resource %s was not found.", $this->path), null, 404);
 			} else {
 				$action = new Action(ERROR_404_PATH);
 				$action->execute();
