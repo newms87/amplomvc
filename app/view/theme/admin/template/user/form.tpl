@@ -98,8 +98,6 @@
 			</div>
 
 			<div id="tab-meta">
-				<input type="hidden" name="meta_exactly" value="1"/>
-
 				<table class="meta-table form">
 					<? foreach ($meta as $row => $m) { ?>
 						<tr class="meta-row" data-row="<?= $row; ?>">

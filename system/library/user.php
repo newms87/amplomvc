@@ -6,8 +6,8 @@ class User extends Library
 		$user_id,
 		$user,
 		$meta,
+		$role,
 		$alerts,
-		$permissions = array(),
 		$temp_user;
 
 	public function __construct()
@@ -42,28 +42,41 @@ class User extends Library
 
 	public function loginSystemUser()
 	{
-		//Change User permissions and user ID to the system user
+		//Change User Role and user ID to the system user
 		$this->temp_user = array(
-			'role'    => $this->user['role'],
 			'user_id' => $this->user_id,
+			'info'    => $this->info,
+			'meta'    => $this->meta,
+			'role'    => $this->role,
 		);
 
-		$this->user_id      = -1;
-		$this->user['role'] = "Top Administrator";
+		$role = array(
+			'user_role_id' => 1,
+			'type'         => App_Model_UserRole::TYPE_ADMIN,
+			'name'         => 'Top Administrator',
+		);
+
+		$this->setUser(-1, array(), array(), $role);
 	}
 
 	public function logoutSystemUser()
 	{
-		$this->user_id      = $this->temp_user['user_id'];
-		$this->user['role'] = $this->temp_user['role'];
+		$this->user_id = $this->temp_user['user_id'];
+		$this->role    = $this->temp_user['role'];
 	}
 
-	public function setUser($user_id, $info = array(), $meta = array(), $permissions = array())
+	public function setUser($user_id, $info = array(), $meta = array(), $role = array())
 	{
-		$this->user_id     = $user_id;
-		$this->info        = $info;
-		$this->meta        = $meta;
-		$this->permissions = $permissions;
+		$this->user_id = $user_id;
+		$this->info    = $info;
+		$this->meta    = $meta;
+		$this->role    = $role;
+
+		if ($role) {
+			$this->user['user_role_id'] = $this->role['user_role_id'];
+			$this->user['role']         = $this->role['name'];
+			$this->user['role_type']    = $this->role['type'];
+		}
 	}
 
 	public function loadUser($user)
@@ -73,15 +86,12 @@ class User extends Library
 		}
 
 		if (!empty($user['user_id'])) {
-			$this->user_id = $user['user_id'];
+			$meta = $this->Model_Meta->get('user', $user['user_id']);
+			$role = $this->Model_UserRole->getRole($user['user_role_id']);
+
+			$this->setUser($user['user_id'], $user, $meta, $role);
+
 			$this->session->set('user_id', $user['user_id']);
-
-			$user_role = $this->Model_UserRole->getRole($user['user_role_id']);
-
-			$user['role'] = $user_role ? $user_role['name'] : '';
-
-			$this->user = $user;
-			$this->meta = $this->Model_User->getMeta($user['user_id']);
 		}
 	}
 
@@ -142,10 +152,21 @@ class User extends Library
 
 	public function logout()
 	{
-		$this->user    = null;
 		$this->user_id = null;
+		$this->user    = null;
+		$this->meta    = null;
+		$this->role    = null;
 
 		$this->session->endTokenSession();
+	}
+
+	public function is($roles)
+	{
+		if ($this->role) {
+			return in_array($this->role['type'], $roles) || in_array($this->role['name'], $roles);
+		}
+
+		return false;
 	}
 
 	public function can($level, $action)
@@ -195,71 +216,29 @@ class User extends Library
 		return true;
 	}
 
-	public function addMeta($user_id, $key, $value)
+	public function setMeta($key, $value = null)
 	{
-		if (_is_object($value)) {
-			$serialized = 1;
-			$value      = serialize($value);
-		} else {
-			$serialized = 0;
+		if (is_array($key)) {
+			return $this->Model_Meta->setAll('user', $this->user_id, $key);
 		}
 
-		$meta = array(
-			'user_id'    => $user_id,
-			'key'        => $key,
-			'value'      => $value,
-			'serialized' => $serialized,
-		);
-
-		return $this->insert('user_meta', $meta);
+		return $this->Model_Meta->set('user', $this->user_id, $key, $value);
 	}
 
-	public function setMeta($user_id, $key, $value)
+	public function removeMeta($key, $value = null)
 	{
-		$where = array(
-			'user_id' => $user_id,
-			'key'     => $key,
-		);
-
-		$this->delete('user_meta', $where);
-
-		return $this->addMeta($user_id, $key, $value);
-	}
-
-	public function removeMeta($user_id, $key, $value = null)
-	{
-		$where = array(
-			'user_id' => $user_id,
-			'key'     => $key,
-		);
-
-		if ($value !== null) {
-			if (_is_object($value)) {
-				$value = serialize($value);
-			}
-
-			$where['value'] = $value;
-		}
-
-		return $this->delete('user_meta', $where);
-	}
-
-	public function getMeta($user_id, $key, $single = true)
-	{
-		if ($single) {
-			return $this->queryRow("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
-		}
-
-		return $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "'");
+		return $this->Model_Meta->removeKey('user', $this->user_id, $key, $value);
 	}
 
 	public function alert($user_id, $type, $key, $message)
 	{
+		//Save Alert for when user logs in
 		if ($user_id !== $this->user_id) {
 			$alerts              = $this->getAlerts($user_id);
 			$alerts[$type][$key] = $message;
-			$this->Model_User->addMeta($user_id, 'alert', $alerts);
+			$this->Model_Meta->set('user', $user_id, 'alert', $alerts);
 		} else {
+			//Alert user immediately
 			if ($this->alerts === null) {
 				$this->getAlerts();
 			}
@@ -274,8 +253,9 @@ class User extends Library
 			$user_id = $this->user_id;
 		}
 
+		//Get only Save alerts (if user is not logged in)
 		if ($user_id !== $this->user_id) {
-			return (array)$this->Model_User->getMeta($user_id, 'alert', false);
+			return (array)$this->Model_Meta->get('user', $user_id, 'alert');
 		}
 
 		if ($this->alerts === null) {
@@ -283,8 +263,9 @@ class User extends Library
 				$_SESSION['user_alerts'] = array();
 			}
 
+			//Get alerts for current user
 			$this->alerts = &$_SESSION['user_alerts'];
-			$this->alerts += (array)$this->Model_User->getMeta($user_id, 'alert', false);
+			$this->alerts += (array)$this->Model_Meta->get('user', $user_id, 'alert');
 		}
 
 		return $this->alerts;
@@ -298,7 +279,7 @@ class User extends Library
 			unset($_SESSION['user_alerts']);
 		}
 
-		$this->Model_User->deleteMeta($user_id, 'alert');
+		$this->Model_Meta->removeKey('user', $user_id, 'alert');
 
 		return $alerts;
 	}
@@ -311,19 +292,9 @@ class User extends Library
 		return $alerts->render(null, true, $style);
 	}
 
-	public function isAdmin()
-	{
-		$admin_types = array(
-			"Administrator",
-			"Top Administrator",
-		);
-
-		return in_array($this->info('role'), $admin_types);
-	}
-
 	public function isTopAdmin()
 	{
-		return $this->info('role') === "Top Administrator";
+		return $this->role ? $this->role['name'] === 'Top Administrator' : false;
 	}
 
 	public function isLogged()
@@ -333,7 +304,7 @@ class User extends Library
 
 	public function showAdminBar()
 	{
-		return $this->isLogged() && !_cookie('disable_admin_bar');
+		return $this->isLogged() && !_cookie('disable_admin_bar') && $this->is('admin');
 	}
 
 	public function encrypt($password)
@@ -343,7 +314,9 @@ class User extends Library
 
 	public function requestReset($email)
 	{
-		if (!$this->Model_User->getTotalRecords(array('email' => $email))) {
+		$user_id = $this->Model_User->findRecord(array('email' => $email));
+
+		if (!$user_id) {
 			$this->error['email'] = _l("The E-Mail Address was not found in our records, please try again!");
 
 			return false;
@@ -351,7 +324,7 @@ class User extends Library
 
 		$code = $this->generateCode();
 
-		$this->setResetCode($email, $code);
+		$this->Model_Meta->set('user', $user_id, 'pass_reset_code', $code);
 
 		$email_data = array(
 			'reset' => site_url('admin/user/reset-form', 'code=' . $code),
@@ -363,34 +336,21 @@ class User extends Library
 		return true;
 	}
 
-	public function generatePassword()
-	{
-		return substr(str_shuffle(md5(microtime())), 0, (int)rand(10, 13));
-	}
-
-	public function setResetCode($email, $code)
-	{
-		$user = $this->Model_User->findRecord(array('email' => $email));
-
-		if (!$user) {
-			$this->error = _l("The email %s is not associated to an account.", $email);
-
-			return false;
-		}
-
-		return $this->setMeta($user['user_id'], 'pass_reset_code', $code);
-	}
-
 	public function lookupResetCode($code)
 	{
 		if ($code) {
-			return $this->queryVar("SELECT user_id FROM {$this->t['user_meta']} WHERE `key` = 'pass_reset_code' AND value = '" . $this->escape($code) . "'");
+			return $this->queryVar("SELECT record_id FROM {$this->t['meta']} WHERE `type` = 'user' AND `key` = 'pass_reset_code' AND value = '" . $this->escape($code) . "'");
 		}
 	}
 
 	public function clearResetCode($user_id)
 	{
-		$this->removeMeta($user_id, 'pass_reset_code');
+		return $this->Model_Meta->removeKey('user', $user_id, 'pass_reset_code');
+	}
+
+	public function generatePassword()
+	{
+		return substr(str_shuffle(md5(microtime())), 0, (int)rand(10, 13));
 	}
 
 	public function generateCode()

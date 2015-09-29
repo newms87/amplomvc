@@ -55,100 +55,22 @@ class App_Model_User extends App_Model_Table
 
 		$user_id = parent::save($user_id, $user);
 
-		if (!empty($user['meta_exactly']) && !isset($user['meta'])) {
-			$user['meta'] = array();
-		}
-
 		if (isset($user['meta'])) {
-			$this->setMeta($user_id, $user['meta'], !empty($user['meta_exactly']));
+			$this->Model_Meta->setAll('user', $user_id, $user['meta']);
 		}
 
 		return $user_id;
 	}
 
-	public function addMeta($user_id, $key, $value, $multi = false)
+	public function getUser($user_id)
 	{
-		$serialized = (int)_is_object($value);
+		$user = $this->getRecord($user_id);
 
-		if ($serialized) {
-			$value = serialize($value);
+		if ($user) {
+			$user += $this->Model_Meta->get('user', $user_id);
 		}
 
-		if (!$multi) {
-			$this->deleteMeta($user_id, $key);
-		}
-
-		$data = array(
-			'user_id'    => $user_id,
-			'key'        => $key,
-			'value'      => $value,
-			'serialized' => $serialized,
-		);
-
-		$this->insert('user_meta', $data);
-	}
-
-	public function setMeta($user_id, $meta, $exactly = false)
-	{
-		if ($exactly) {
-			$this->delete('user_meta', array('user_id' => $user_id));
-		}
-
-		foreach ($meta as $key => $value) {
-			$serialized = (int)_is_object($value);
-
-			if ($serialized) {
-				$value = serialize($value);
-			}
-
-			if (!$exactly) {
-				$this->deleteMeta($user_id, $key);
-			}
-
-			//Add new value
-			$data = array(
-				'user_id'    => $user_id,
-				'key'        => $key,
-				'value'      => $value,
-				'serialized' => $serialized,
-			);
-
-			$this->insert('user_meta', $data);
-		}
-
-		return true;
-	}
-
-	public function deleteMeta($user_id, $key)
-	{
-		$where = array(
-			'user_id' => $user_id,
-			'key'     => $key,
-		);
-
-		return $this->delete('user_meta', $where);
-	}
-
-	public function getMeta($user_id, $key = null)
-	{
-		if ($key) {
-			$value = $this->queryRow("SELECT `value`, serialized FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id . " AND `key` = '" . $this->escape($key) . "' LIMIT 1");
-
-			if ($value) {
-				return $value['serialized'] ? unserialize($value['value']) : $value['value'];
-			}
-
-			return null;
-		}
-
-		$meta = $this->queryRows("SELECT * FROM {$this->t['user_meta']} WHERE user_id = " . (int)$user_id, 'key');
-
-		foreach ($meta as &$m) {
-			$m = $m['serialized'] ? unserialize($m['value']) : $m['value'];
-		}
-		unset($m);
-
-		return $meta;
+		return $user;
 	}
 
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)

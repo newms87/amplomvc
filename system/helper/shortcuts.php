@@ -636,16 +636,16 @@ function user_can($level, $action)
 /**
  * Check if current user's role is in the 1 or more provided roles
  *
- * @param string $role  - The Role to check (can enter 1 or more role parameters)
- * @param string $role2 - Additional roles to check.
+ * @param string $role  - The Role / Type to check (can enter 1 or more role parameters)
+ * @param string $role2 - Additional roles / types to check.
  *
- * @return bool - true if the user's role matches any of the provided roles.
+ * @return bool - true if the user's role or type matches any $role arguments.
  */
 function user_is($role)
 {
 	global $registry;
 
-	return in_array($registry->get('user')->info('role'), func_get_args());
+	return $registry->get('user')->is(func_get_args());
 }
 
 function user_info($key = null)
@@ -662,15 +662,11 @@ function user_meta($key, $default = null)
 	return $registry->get('user')->meta($key, $default);
 }
 
-function set_user_meta($key, $value)
+function set_user_meta($key, $value = null)
 {
 	global $registry;
 
-	if ($value === null) {
-		return $registry->get('user')->removeMeta(user_info('user_id'), $key);
-	} else {
-		return $registry->get('user')->setMeta(user_info('user_id'), $key, $value);
-	}
+	return $registry->get('user')->setMeta($key, $value);
 }
 
 function get_user_info($user_id, $key = null, $default = null)
@@ -684,9 +680,7 @@ function get_user_info($user_id, $key = null, $default = null)
 	}
 
 	if (!isset($users[$user_id])) {
-		if ($users[$user_id] = $registry->get('Model_User')->getRecord($user_id)) {
-			$users[$user_id] += $registry->get('Model_User')->getMeta($user_id);
-		}
+		$users[$user_id] = $registry->get('Model_User')->getUser($user_id);
 	}
 
 	if (!$users[$user_id]) {

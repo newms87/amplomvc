@@ -44,19 +44,10 @@ class Api extends Library
 			return false;
 		}
 
-		$meta = $this->Model_User->getMeta($user['user_id']);
-
+		$meta      = $this->Model_Meta->get('user', $user['user_id']);
 		$user_role = $this->Model_UserRole->getRole($this->api_user['user_role_id']);
 
-		if ($user_role) {
-			$permissions  = $user_role['permissions'];
-			$user['role'] = $user_role['name'];
-		} else {
-			$permissions  = array();
-			$user['role'] = '';
-		}
-
-		$this->user->setUser($user['user_id'], $user, $meta, $permissions);
+		$this->user->setUser($user['user_id'], $user, $meta, $user_role);
 
 		if (!$this->api_token) {
 			$this->api_token = array(

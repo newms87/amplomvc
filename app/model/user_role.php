@@ -4,6 +4,17 @@ class App_Model_UserRole extends App_Model_Table
 {
 	protected $table = 'user_role', $primary_key = 'user_role_id';
 
+	const
+		TYPE_ADMIN = 'admin',
+		TYPE_CUSTOMER = 'customer',
+		TYPE_GUEST = 'guest';
+
+	static $types = array(
+		self::TYPE_ADMIN    => 'Administrator',
+		self::TYPE_CUSTOMER => 'Customer',
+		self::TYPE_GUEST    => 'Guest',
+	);
+
 	public function save($user_role_id, $role)
 	{
 		if (isset($role['name'])) {
@@ -115,6 +126,7 @@ class App_Model_UserRole extends App_Model_Table
 					$user_role['permissions'] = unserialize($user_role['permissions']);
 				} else {
 					$user_role = array(
+						'type'        => '',
 						'name'        => '',
 						'permissions' => array(),
 					);

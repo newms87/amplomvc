@@ -74,13 +74,18 @@ class App_Model_Meta extends App_Model_Table
 		}
 	}
 
-	public function removeKey($type, $record_id, $key)
+	public function removeKey($type, $record_id, $key, $value = null)
 	{
 		$where = array(
 			'type'      => $type,
 			'record_id' => $record_id,
 			'key'       => $key,
 		);
+
+		//Only Remove key if value matches as well.
+		if ($value !== null) {
+			$where['value'] = $value;
+		}
 
 		return $this->delete($this->table, $where);
 	}
