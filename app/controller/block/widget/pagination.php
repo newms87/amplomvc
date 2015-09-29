@@ -79,6 +79,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			'start' => $item_start,
 			'end'   => $item_end,
 			'total' => $settings['total'],
+			'page'  => $settings['page'],
 			'pages' => $num_pages,
 		);
 

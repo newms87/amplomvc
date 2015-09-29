@@ -1,4 +1,4 @@
-<div class="listing-limits">
+<div class="block-widget-limit">
 	<a class="limit-text md-hidden" href="<?= $show_more; ?>"><?= $limit_text; ?></a>
 
 	<div class="limit-text md-visible"><?= $limit_text; ?></div>

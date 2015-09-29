@@ -30,7 +30,9 @@ class App_Model_Category extends App_Model_Table
 			$category['title'] = $category['name'];
 		}
 
-		$category['name'] = slug($category['name']);
+		if (isset($category['name'])) {
+			$category['name'] = slug($category['name']);
+		}
 
 		if (!$category_id) {
 			$category['date'] = $this->date->now();

@@ -213,6 +213,21 @@ class App_Model_Page extends App_Model_Table
 		return $page;
 	}
 
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
+	{
+		if (isset($filter['category_id'])) {
+			$options['join']['page_category'] = array(
+				'type'  => "LEFT JOIN",
+				'alias' => 'pc',
+				'on'    => 'page_id',
+			);
+
+			$filter['#category_id'] = " AND " . $this->extractWhere('page_category pc', $filter);
+		}
+
+		return parent::getRecords($sort, $filter, $options, $total);
+	}
+
 	public function getPages($sort, $filter = array(), $options = array(), $total = false)
 	{
 		$filter['status'] = self::STATUS_PUBLISHED;

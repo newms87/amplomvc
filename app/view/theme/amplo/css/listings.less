@@ -218,6 +218,76 @@
 	}
 }
 
+.block-widget-limit {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: right;
+	overflow: hidden;
+	-webkit-transition: all .1s linear .5s;
+	transition: all .1s linear .5s;
+
+	.limit-text {
+		font: .9em OpenSansBold;
+		display: inline-block;
+		vertical-align: middle;
+		color: @color-main;
+		-webkit-transition: all .1s linear .5s;
+		transition: all .1s linear .5s;
+	}
+
+	.limit-items {
+		display: inline-block;
+		vertical-align: middle;
+
+		.limit-item {
+			font: .9em OpenSansBold;
+			background: @color-lightest;
+			border-radius: 3px;
+			text-decoration: none;
+			max-width: 0;
+			padding: 0;
+			visibility: hidden;
+			-webkit-transition: all .1s linear .5s;
+			transition: all .1s linear .5s;
+			display: inline-block;
+			float: right;
+
+			&.selected {
+				max-width: 30px;
+				width: auto;
+				padding: .1em .3em;
+				visibility: visible;
+			}
+		}
+	}
+
+	&:hover {
+		-webkit-transition: all .5s;
+		transition: all .5s;
+
+		.limit-text {
+			opacity: 0;
+			-webkit-transition: all .5s;
+			transition: all .5s;
+		}
+
+		.limit-items {
+			.limit-item {
+				max-width: 30px;
+				padding: .1em .3em;
+				margin-left: 5px;
+				-webkit-transition: all .2s;
+				transition: all .2s;
+				visibility: visible;
+
+				&.selected {
+					background: @color-light;
+				}
+			}
+		}
+	}
+}
+
 //TODO: remove #listing!! (After upgrading all controllers / views)
 #listing, .widget-listing {
 	position: relative;
@@ -245,77 +315,6 @@
 		min-width: 30px;
 		text-align: center;
 		margin-top: 2px;
-	}
-
-	.limits {
-		display: inline-block;
-		vertical-align: middle;
-		text-align: right;
-		overflow: hidden;
-		width: 30%;
-		-webkit-transition: all .1s linear .5s;
-		transition: all .1s linear .5s;
-
-		.limit-text {
-			font: .9em OpenSansBold;
-			display: inline-block;
-			vertical-align: middle;
-			color: @color-main;
-			-webkit-transition: all .1s linear .5s;
-			transition: all .1s linear .5s;
-		}
-
-		.limit-items {
-			display: inline-block;
-			vertical-align: middle;
-
-			.limit-item {
-				font: .9em OpenSansBold;
-				background: @color-lightest;
-				border-radius: 3px;
-				text-decoration: none;
-				max-width: 0;
-				padding: 0;
-				visibility: hidden;
-				-webkit-transition: all .1s linear .5s;
-				transition: all .1s linear .5s;
-				display: inline-block;
-				float: right;
-
-				&.selected {
-					max-width: 30px;
-					width: auto;
-					padding: .1em .3em;
-					visibility: visible;
-				}
-			}
-		}
-
-		&:hover {
-			-webkit-transition: all .5s;
-			transition: all .5s;
-
-			.limit-text {
-				opacity: 0;
-				-webkit-transition: all .5s;
-				transition: all .5s;
-			}
-
-			.limit-items {
-				.limit-item {
-					max-width: 30px;
-					padding: .1em .3em;
-					margin-left: 5px;
-					-webkit-transition: all .2s;
-					transition: all .2s;
-					visibility: visible;
-
-					&.selected {
-						background: @color-light;
-					}
-				}
-			}
-		}
 	}
 
 	.modify-view {

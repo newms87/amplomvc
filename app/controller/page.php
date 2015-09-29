@@ -53,8 +53,6 @@ class App_Controller_Page extends Controller
 			$page['style']   = urldecode(_post('style'));
 		}
 
-		//html_dump($_POST, 'post');
-
 		if (!$page) {
 			return call('error/not_found');
 		}
