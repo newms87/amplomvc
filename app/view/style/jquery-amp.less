@@ -19,19 +19,21 @@
 
 	&.hide {
 		&.a-height {
-			min-height: 0;
+			min-height: 0 !important;;
+			max-height: 0 !important;;
 			padding-top: 0 !important;
 			padding-bottom: 0 !important;
 		}
 
-		&a-width {
-			min-width: 0;
+		&.a-width {
+			-webkit-animation: width-show .5s reverse;
+			animation: width-show .5s reverse;
 			padding-left: 0 !important;
 			padding-right: 0 !important;
 		}
 
 		border: none !important;
-		display: none;
+		//display: none;
 	}
 }
 

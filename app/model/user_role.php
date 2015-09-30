@@ -126,9 +126,10 @@ class App_Model_UserRole extends App_Model_Table
 					$user_role['permissions'] = unserialize($user_role['permissions']);
 				} else {
 					$user_role = array(
-						'type'        => '',
-						'name'        => '',
-						'permissions' => array(),
+						'user_role_id' => 0,
+						'type'         => '',
+						'name'         => '',
+						'permissions'  => array(),
 					);
 				}
 
