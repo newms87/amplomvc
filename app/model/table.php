@@ -80,12 +80,12 @@ abstract class App_Model_Table extends Model
 	{
 		static $records = array();
 
-		$record = (isset($records[$record_id]) && $cache && $select === '*') ? $records[$record_id] : false;
+		$record = ($cache && $select === '*' && isset($records[$this->table][$record_id])) ? $records[$this->table][$record_id] : false;
 
 		if (!$record) {
 			$select = $this->extractSelect($this->table, $select);
 
-			$record = $records[$record_id] = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
+			$record = $records[$this->table][$record_id] = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 		}
 
 		return $record;
