@@ -26,8 +26,12 @@
 		}
 
 		&.a-width {
-			-webkit-animation: width-show .5s reverse;
-			animation: width-show .5s reverse;
+			//-webkit-animation: width-show .5s reverse;
+			//animation: width-show .5s reverse;
+			-webkit-animation: none;
+			animation: none;
+			min-width: 0!important;
+			max-width: 0;
 			padding-left: 0 !important;
 			padding-right: 0 !important;
 		}
@@ -92,8 +96,10 @@
 @-webkit-keyframes width-show {
 	0% {
 		max-width: 0;
+		min-width: 0;
 	}
 	80% {
+		min-width: 30em;
 		max-width: 30em;
 	}
 	99% {

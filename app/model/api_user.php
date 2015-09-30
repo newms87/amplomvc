@@ -65,11 +65,6 @@ class App_Model_ApiUser extends App_Model_Table
 
 	public function getColumns($filter = array(), $merge = array())
 	{
-		$role_filter = array(
-			'user_id' => user_info('user_id'),
-			'type'    => 'api_user',
-		);
-
 		$merge += array(
 			'user_id'      => array(
 				'type'   => 'select',
@@ -84,9 +79,9 @@ class App_Model_ApiUser extends App_Model_Table
 			),
 			'user_role_id' => array(
 				'type'   => 'select',
-				'label'  => _l("Role"),
+				'label'  => _l("Role ID"),
 				'build'  => array(
-					'data'  => $this->Model_UserRole->getRecords(null, $role_filter, array('cache' => true)),
+					'data'  => $this->Model_UserRole->getRecords(null, array('type' => App_Model_UserRole::TYPE_API), array('cache' => true)),
 					'label' => 'name',
 					'value' => 'user_role_id',
 				),

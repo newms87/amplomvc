@@ -6,11 +6,15 @@ class App_Model_UserRole extends App_Model_Table
 
 	const
 		TYPE_ADMIN = 'admin',
+		TYPE_USER = 'user',
+		TYPE_API = 'api',
 		TYPE_CUSTOMER = 'customer',
 		TYPE_GUEST = 'guest';
 
 	static $types = array(
 		self::TYPE_ADMIN    => 'Administrator',
+		self::TYPE_USER     => 'User',
+		self::TYPE_API      => 'API User',
 		self::TYPE_CUSTOMER => 'Customer',
 		self::TYPE_GUEST    => 'Guest',
 	);
@@ -214,6 +218,15 @@ class App_Model_UserRole extends App_Model_Table
 	public function getColumns($filter = array(), $merge = array())
 	{
 		$merge += array(
+			'type'       => array(
+				'type'   => 'select',
+				'label'  => _l("Type"),
+				'build'  => array(
+					'data' => App_Model_UserRole::$types,
+				),
+				'filter' => 'multiselect',
+				'sort'   => true,
+			),
 			'user_count' => array(
 				'type'   => 'text',
 				'label'  => _l("# of Users"),
