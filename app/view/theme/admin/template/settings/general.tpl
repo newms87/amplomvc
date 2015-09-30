@@ -595,6 +595,28 @@
 						</td>
 					</tr>
 					<tr>
+						<td>{{Log Errors:}}</td>
+						<td>
+							<?= build(array(
+								'type'   => 'radio',
+								'name'   => 'error_logging',
+								'data'   => $data_yes_no,
+								'select' => $error_logging
+							)); ?>
+						</td>
+					</tr>
+					<tr>
+						<td>{{Error Notification Email:}}</td>
+						<td>
+							<?= build(array(
+								'type'   => 'radio',
+								'name'   => 'error_notification_email',
+								'data'   => $data_yes_no,
+								'select' => $error_notification_email,
+							)); ?>
+						</td>
+					</tr>
+					<tr>
 						<td>{{Use the jQuery CDN:}}
 							<span class="help">{{This will load jQuery and jQuery UI from the jQuery Content Delivery Network. Recommended for production sites}}</span>
 						</td>
@@ -668,28 +690,6 @@
 						</td>
 						<td>
 							<input type="text" name="config_compression" value="<?= $config_compression; ?>" size="3"/>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Display Errors:}}</td>
-						<td>
-							<?= build(array(
-								'type'   => 'radio',
-								'name'   => 'config_error_display',
-								'data'   => $data_yes_no,
-								'select' => $config_error_display
-							)); ?>
-						</td>
-					</tr>
-					<tr>
-						<td>{{Log Errors:}}</td>
-						<td>
-							<?= build(array(
-								'type'   => 'radio',
-								'name'   => 'config_error_log',
-								'data'   => $data_yes_no,
-								'select' => $config_error_log
-							)); ?>
 						</td>
 					</tr>
 					<tr>

@@ -664,7 +664,7 @@ if (!function_exists('amplo_error_handler')) {
 	function amplo_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 	{
 		// error was suppressed with the @-operator
-		if (0 === error_reporting()) {
+		if (!error_reporting()) {
 			return false;
 		}
 
@@ -686,6 +686,8 @@ if (!function_exists('amplo_error_handler')) {
 				break;
 		}
 
+		$error .= ' (' . $errno . ')';
+
 		global $error_callbacks;
 
 		if (!empty($error_callbacks)) {
@@ -698,7 +700,7 @@ if (!function_exists('amplo_error_handler')) {
 			if (ini_get('display_errors')) {
 				$stack = get_caller(1);
 
-				echo <<<HTML
+				$html_error = <<<HTML
 			<style>
 				.error-display {
 					position: relative;
@@ -730,11 +732,24 @@ if (!function_exists('amplo_error_handler')) {
 			</div>
 HTML;
 
+				echo $html_error;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
-			}
 
-			if (!function_exists('option') || option('config_error_log', 1)) {
-				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+				global $_options;
+
+				if (!isset($_options['error_logging']) || $_options['error_logging']) {
+					write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+				}
+
+				if ((!isset($_options['error_notification_email']) || $_options['error_notification_email']) && !empty($_options['site_email_error'])) {
+					$email_error = DOMAIN . $_SERVER['REQUEST_URI'] . "<br><br><a href=\"" . HTTP_SITE . 'admin/logs' . "\">View Logs</a><br><br>" . $html_error;
+
+					send_mail(array(
+						'to'      => $_options['site_email_error'],
+						'subject' => "Amplo Error on " . DOMAIN . ': ' . $error,
+						'html'    => $email_error,
+					));
+				}
 			}
 		}
 
@@ -746,9 +761,7 @@ HTML;
 set_error_handler('amplo_error_handler');
 
 //Amplo Time handling
-if (!defined("AMPLO_TIME_LOG")) {
-	define("AMPLO_TIME_LOG", false);
-}
+defined("AMPLO_TIME_LOG") ?: define("AMPLO_TIME_LOG", false);
 
 function timelog($name)
 {

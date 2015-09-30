@@ -15,6 +15,7 @@ class User extends Library
 		parent::__construct();
 
 		$this->validateUser();
+		trigger_error('4');
 	}
 
 	public function getId()

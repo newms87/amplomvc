@@ -244,6 +244,7 @@ class Mail extends Library
 				$this->text    = $msg;
 			} else {
 				$this->trigger_error("Please set the Error Email Address under settings!");
+
 				return false;
 			}
 		}
@@ -322,6 +323,7 @@ class Mail extends Library
 
 			if ($this->sendSmtp($header, $message)) {
 				$this->log("SMTP Mail Sent!", true);
+
 				return true;
 			}
 
@@ -364,6 +366,7 @@ class Mail extends Library
 	{
 		if (!validate('email', $email)) {
 			$this->error = $this->validation->fetchError();
+
 			return false;
 		}
 
@@ -399,6 +402,7 @@ class Mail extends Library
 					//If server accepts this email as recipient, this is a deliverable (and valid) email
 					if ($this->talk("RCPT TO: <{$email}>", $reply_codes)) {
 						$this->endSmtp();
+
 						return true;
 					}
 				}
@@ -429,6 +433,7 @@ class Mail extends Library
 
 		if (!$this->handle) {
 			$this->trigger_error('' . $errstr . ' (' . $errno . ')');
+
 			return false;
 		}
 
@@ -440,6 +445,7 @@ class Mail extends Library
 		if (substr($this->hostname, 0, 3) === 'tls') {
 			if (!$this->talk("STARTTLS", 220)) {
 				$this->trigger_error('STARTTLS not accepted from server!');
+
 				return false;
 			}
 		}
@@ -447,32 +453,38 @@ class Mail extends Library
 		if (!empty($this->username) && !empty($this->password)) {
 			if (!$this->talk('EHLO ' . getenv('SERVER_NAME'), 250)) {
 				$this->trigger_error('EHLO not accepted from server!');
+
 				return false;
 			}
 
 			if (!$this->talk('AUTH LOGIN', 334)) {
 				$this->trigger_error('AUTH LOGIN not accepted from server!');
+
 				return false;
 			}
 
 			if (!$this->talk(base64_encode($this->username), 334)) {
 				$this->trigger_error('Username not accepted from server!');
+
 				return false;
 			}
 
 			if (!$this->talk(base64_encode($this->password), 235)) {
 				$this->trigger_error('Password not accepted from server!');
+
 				return false;
 			}
 		} else {
 			if (!$this->talk('HELO ' . getenv('SERVER_NAME'), 250)) {
 				$this->trigger_error('HELO not accepted from server!');
+
 				return false;
 			}
 		}
 
 		if (!$this->talk('MAIL FROM: <' . $this->from . '>' . ($this->verp ? 'XVERP' : ''), 250)) {
 			$this->trigger_error('MAIL FROM not accepted from server!');
+
 			return false;
 		}
 
@@ -483,6 +495,7 @@ class Mail extends Library
 	{
 		if (!$this->talk('QUIT', 221)) {
 			$this->trigger_error('QUIT not accepted from server!');
+
 			return false;
 		}
 
@@ -515,6 +528,7 @@ class Mail extends Library
 
 		if (!$this->talk('DATA', 354)) {
 			$this->trigger_error('DATA not accepted from server!');
+
 			return false;
 		}
 
@@ -534,6 +548,7 @@ class Mail extends Library
 
 		if (!$this->talk('.', 250)) {
 			$this->trigger_error('DATA not accepted from server!');
+
 			return false;
 		}
 
@@ -577,21 +592,14 @@ class Mail extends Library
 
 	protected function trigger_error($msg)
 	{
-		$this->log("MAIL ERROR: " . $msg, true);
-
-		//Hide Mail errors when ajax pages are requested
-		if (IS_AJAX && option('config_error_display')) {
-			set_option('config_error_display', false);
-			trigger_error($msg);
-			set_option('config_error_display', true);
-		} else {
-			trigger_error($msg);
+		//Avoid error loops
+		if (strpos($this->html, "MAIL ERROR:")) {
+			return;
 		}
 
-		if (option('config_error_display')) {
-			$view_mail_errors = site_url('admin/mail/error');
-			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
-		}
+		$msg = "MAIL ERROR: " . $msg;
+		trigger_error($msg);
+		$this->log($msg, true);
 
 		$mail_fail = array(
 			'mail'       => $this,
