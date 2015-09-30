@@ -116,7 +116,7 @@ class App_Model_UserRole extends App_Model_Table
 	{
 		static $roles;
 
-		if (!isset($roles[$user_role_id])) {
+		if ($user_role_id && !isset($roles[$user_role_id])) {
 			$user_role = cache($this->table . '.' . $user_role_id);
 
 			if (!$user_role) {
@@ -124,22 +124,25 @@ class App_Model_UserRole extends App_Model_Table
 
 				if ($user_role) {
 					$user_role['permissions'] = unserialize($user_role['permissions']);
-				} else {
-					$user_role = array(
-						'user_role_id' => 0,
-						'type'         => '',
-						'name'         => '',
-						'permissions'  => array(),
-					);
-				}
 
-				cache($this->table . '.' . $user_role_id, $user_role);
+					cache($this->table . '.' . $user_role_id, $user_role);
+				}
 			}
 
 			$roles[$user_role_id] = $user_role;
 		}
 
-		return $roles[$user_role_id];
+		if ($roles[$user_role_id]) {
+			return $roles[$user_role_id];
+		}
+
+		//Default User Role
+		return $user_role = array(
+			'user_role_id' => 0,
+			'type'         => '',
+			'name'         => '',
+			'permissions'  => array(),
+		);
 	}
 
 	public function getRestrictedAreas()
