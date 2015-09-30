@@ -163,7 +163,7 @@ class User extends Library
 	public function is($roles)
 	{
 		if ($this->role) {
-			return in_array($this->role['type'], $roles) || in_array($this->role['name'], $roles);
+			return in_array($this->role['type'], (array)$roles) || in_array($this->role['name'], (array)$roles);
 		}
 
 		return false;
