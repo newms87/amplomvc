@@ -79,7 +79,7 @@ class App_Model_ApiUser extends App_Model_Table
 			),
 			'user_role_id' => array(
 				'type'   => 'select',
-				'label'  => _l("Role ID"),
+				'label'  => _l("Role"),
 				'build'  => array(
 					'data'  => $this->Model_UserRole->getRecords(null, array('type' => App_Model_UserRole::TYPE_API), array('cache' => true)),
 					'label' => 'name',

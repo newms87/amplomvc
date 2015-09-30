@@ -82,12 +82,7 @@ class App_Controller_Admin_ApiUser extends App_Controller_Table
 
 		$api_user += $defaults;
 
-		$role_filter = array(
-			'user_id' => user_info('user_id'),
-			'type'    => App_Model_UserRole::TYPE_API,
-		);
-
-		$api_user['data_user_roles'] = $this->Model_UserRole->getRecords(null, $role_filter, array('cache' => true));
+		$api_user['data_user_roles'] = $this->Model_UserRole->getRecords(null, array('type' => App_Model_UserRole::TYPE_API), array('cache' => true));
 
 		if (user_is('admin')) {
 			$api_user['data_users'] = $this->Model_User->getRecords(null, null, array('cache' => true));

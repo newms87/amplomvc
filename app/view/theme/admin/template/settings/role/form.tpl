@@ -47,23 +47,45 @@
 			</ul>
 		<? } ?>
 
-		<div class="section">
-			<table class="form">
-				<tr>
-					<td class="required"> {{User Group Name:}}</td>
-					<td>
-						<input type="text" name="name" value="<?= $name; ?>"/>
-					</td>
-				</tr>
-				<tr>
-					<td>{{User Permissions:}}</td>
-					<td>
-						<div class="builder-multiselect tall user-permissions">
-							<? recursive_multiselect($data_areas, 'permissions', $data_perms); ?>
-						</div>
-					</td>
-				</tr>
-			</table>
+		<div class="section form-section">
+			<div class="row ug-name">
+				<label for="ug-name" class="col xs-3 md-2 left">{{Group Name:}}</label>
+
+				<div class="col xs-9 md-10 left value">
+					<input id="ug-name" type="text" name="name" value="<?= $name; ?>"/>
+				</div>
+			</div>
+
+			<div class="row ug-type">
+				<label for="ug-type" class="col xs-3 md-2 left">{{Group Type:}}</label>
+
+				<div class="col xs-9 md-10 left value">
+					<?= build(array(
+						'type'   => 'select',
+						'name'   => 'type',
+						'data'   => App_Model_UserRole::$types,
+						'select' => $type,
+					)); ?>
+				</div>
+			</div>
+
+			<div class="row ug-level">
+				<label for="ug-level" class="col xs-3 md-2 left">{{Group Level:}}</label>
+
+				<div class="col xs-9 md-10 left value">
+					<input id="ug-level" type="text" name="level" value="<?= $level; ?>"/>
+				</div>
+			</div>
+
+			<div class="row ug-permissions">
+				<label for="ug-permissions" class="col xs-3 md-2 left">{{Permissions:}}</label>
+
+				<div class="col xs-9 md-10 left value">
+					<div class="builder-multiselect tall user-permissions">
+						<? recursive_multiselect($data_areas, 'permissions', $data_perms); ?>
+					</div>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>
