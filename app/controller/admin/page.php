@@ -102,6 +102,7 @@ class App_Controller_Admin_Page extends App_Controller_Table
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'options'          => array(),
+			'cache'            => 1,
 			'template'         => '',
 			'layout_id'        => 0,
 			'blocks'           => array(),

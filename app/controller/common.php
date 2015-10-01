@@ -34,7 +34,6 @@ class App_Controller_Common extends Controller
 
 	public function file_upload_iframe()
 	{
-		write_log('debug', 'we are here<BR><BR>' . json_encode($_FILES) . ' == ' . json_encode($_POST));
 		$files = _files();
 
 		$path      = _post('path', '');
