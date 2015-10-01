@@ -45,7 +45,7 @@ class User extends Library
 		//Change User Role and user ID to the system user
 		$this->temp_user = array(
 			'user_id' => $this->user_id,
-			'info'    => $this->info,
+			'info'    => $this->user,
 			'meta'    => $this->meta,
 			'role'    => $this->role,
 		);
