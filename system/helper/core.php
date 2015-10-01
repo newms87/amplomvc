@@ -688,7 +688,7 @@ if (!function_exists('amplo_error_handler')) {
 
 		$error .= ' (' . $errno . ')';
 
-		global $error_callbacks;
+		global $error_callbacks, $_options;
 
 		if (!empty($error_callbacks)) {
 			foreach ($error_callbacks as $cb) {
@@ -697,7 +697,10 @@ if (!function_exists('amplo_error_handler')) {
 		}
 
 		if ($error) {
-			if (ini_get('display_errors')) {
+			$display_error = ini_get('display_errors');
+			$send_email    = (!isset($_options['error_notification_email']) || $_options['error_notification_email']) && !empty($_options['site_email_error']);
+
+			if ($send_email || $display_error) {
 				$stack = get_caller(1);
 
 				$html_error = <<<HTML
@@ -731,25 +734,25 @@ if (!function_exists('amplo_error_handler')) {
 				<div class="stack">$stack</div>
 			</div>
 HTML;
+			}
 
+			if ($display_error) {
 				echo $html_error;
 				flush(); //Flush the error to block any redirects that may execute, this ensures errors are seen!
+			}
 
-				global $_options;
+			if (!isset($_options['error_logging']) || $_options['error_logging']) {
+				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+			}
 
-				if (!isset($_options['error_logging']) || $_options['error_logging']) {
-					write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
-				}
+			if ($send_email) {
+				$email_error = DOMAIN . $_SERVER['REQUEST_URI'] . "<br><br><a href=\"" . HTTP_SITE . 'admin/logs' . "\">View Logs</a><br><br>" . $html_error;
 
-				if ((!isset($_options['error_notification_email']) || $_options['error_notification_email']) && !empty($_options['site_email_error'])) {
-					$email_error = DOMAIN . $_SERVER['REQUEST_URI'] . "<br><br><a href=\"" . HTTP_SITE . 'admin/logs' . "\">View Logs</a><br><br>" . $html_error;
-
-					send_mail(array(
-						'to'      => $_options['site_email_error'],
-						'subject' => "Amplo Error on " . DOMAIN . ': ' . $error,
-						'html'    => $email_error,
-					));
-				}
+				send_mail(array(
+					'to'      => $_options['site_email_error'],
+					'subject' => "Amplo Error on " . DOMAIN . ': ' . $error,
+					'html'    => $email_error,
+				));
 			}
 		}
 
