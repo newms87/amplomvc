@@ -5,13 +5,17 @@ $.ampUpload = $.fn.ampUpload = function (o) {
 $.extend($.ampUpload, {
 	init: function (o) {
 		return this.each(function (i, e) {
+			var today = new Date();
+
 			o = $.extend({
 				change:         $.ampUpload.upload,
 				progress:       $.ampUpload.progress,
 				success:        $.ampUpload.success,
+				onComplete:     $.ampUpload.onComplete,
+				onFail:         $.ampUpload.onFail,
 				url:            $ac.site_url + 'common/file-upload',
 				xhr:            $.ampUpload.xhr,
-				path:           '',
+				path:           today.getFullYear() + '/' + today.getMonth() + '/' + today.getDate(),
 				preview:        null,
 				content:        null,
 				msg:            'Click to upload file',
@@ -137,25 +141,39 @@ $.extend($.ampUpload, {
 		return myXhr;
 	},
 
+	onComplete: function (files, o) {
+		for (var f in files) {
+			var url = files[f];
+			this.save.val(url);
+			this.msg.html(url);
+
+			var preview = o.preview ? $(o.preview) : this.preview;
+			if (preview.length) {
+				preview.attr('src', url);
+			}
+
+			break;
+		}
+	},
+
+	onFail: function (error, o) {
+		$.show_msg('error', error);
+	},
+
 	success: function (response, status, xhr) {
 		var o = this.context.o;
 
+		o.progress.call(this, 100);
+
 		if (response.data) {
-			for (var f in response.data) {
-				var url = response.data[f];
-				this.context.save.val(url);
-				this.context.msg.html(url);
-
-				var preview = o.preview ? $(o.preview) : this.context.preview;
-				if (preview.length) {
-					preview.attr('src', url);
-				}
-
-				break;
+			if (typeof o.onComplete === 'function') {
+				o.onComplete.call(this.context, response.data, o);
+			}
+		} else {
+			if (typeof o.onFail === 'function') {
+				o.onFail.call(this.context, response.error, o);
 			}
 		}
-
-		o.progress.call(this, 100);
 	},
 
 	progress: function (e) {
