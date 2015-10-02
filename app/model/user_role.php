@@ -39,7 +39,9 @@ class App_Model_UserRole extends App_Model_Table
 
 		clear_cache($this->table);
 
-		$role['permissions'] = !empty($role['permissions']) ? serialize($role['permissions']) : '';
+		if (isset($role['permissions'])) {
+			$role['permissions'] = !empty($role['permissions']) ? serialize($role['permissions']) : '';
+		}
 
 		if ($user_role_id) {
 			$this->update($this->table, $role, $user_role_id);
