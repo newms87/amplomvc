@@ -19,6 +19,8 @@ $.extend($.ampUpload, {
 				preview:        null,
 				content:        null,
 				msg:            'Click to upload file',
+				processingMsg:  'Processing... please wait',
+				completeMsg:    'Upload Complete. Click to Upload Another File.',
 				showInput:      false,
 				class:          '',
 				progressBar:    true,
@@ -141,11 +143,20 @@ $.extend($.ampUpload, {
 		return myXhr;
 	},
 
+	reset: function (o) {
+		o.progress.call(this, 0);
+		this.msg.html(o.msg);
+	},
+
 	onComplete: function (files, o) {
+		this.msg.html(o.completeMsg);
+
 		for (var f in files) {
 			var url = files[f];
 			this.save.val(url);
-			this.msg.html(url);
+			if (o.completeMsg === true) {
+				this.msg.html(url);
+			}
 
 			var preview = o.preview ? $(o.preview) : this.preview;
 			if (preview.length) {
@@ -158,36 +169,42 @@ $.extend($.ampUpload, {
 
 	onFail: function (error, o) {
 		$.show_msg('error', error);
+
+		$.ampUpload.reset.call(this, o);
 	},
 
 	success: function (response, status, xhr) {
 		var o = this.context.o;
 
-		o.progress.call(this, 100);
-
-		if (response.data) {
-			if (typeof o.onComplete === 'function') {
-				o.onComplete.call(this.context, response.data, o);
-			}
-		} else {
+		if (response.error) {
 			if (typeof o.onFail === 'function') {
 				o.onFail.call(this.context, response.error, o);
+			}
+		} else {
+			if (typeof o.onComplete === 'function') {
+				o.onComplete.call(this.context, response.data, o);
 			}
 		}
 	},
 
 	progress: function (e) {
-		//Multiply by 75 to account for the delay of server response
-		var total = typeof e === 'object' ? (e.loaded / e.total) * 75 : e;
-		total = total.toFixed(1);
-		this.context.progress.css({width: total + '%'});
-		this.context.msg.html(total + '%');
-		this.context.bar_msg.html(total + '%');
+		var total = typeof e === 'object' ? (e.loaded / e.total) * 100 : e;
+		var ctx = this.context || this;
 
-		if (total < 100) {
-			this.context.bar.addClass('in-progress');
+		if (typeof e === 'string') {
+			ctx.bar_msg.html(e);
 		} else {
-			this.context.bar.removeClass('in-progress').addClass('done');
+			total = total.toFixed(1);
+			ctx.progress.css({width: total + '%'});
+			ctx.msg.html(total + '%');
+			ctx.bar_msg.html(total + '%');
+
+			if (total < 100) {
+				ctx.bar.addClass('in-progress');
+			} else {
+				ctx.bar.removeClass('in-progress').addClass('done');
+				ctx.msg.html(ctx.o.processingMsg || '100%');
+			}
 		}
 	}
 });
