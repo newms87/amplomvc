@@ -168,7 +168,7 @@ $js_autoload = array(
  * System Language Translation Engine *
  **************************************/
 
-global $language_group;
+global $language_group, $_translations;
 $language_group = "Load";
 
 /**
@@ -180,7 +180,11 @@ $language_group = "Load";
 function _l($message)
 {
 	//TODO: Set translations based on language group
-	global $language_group;
+	global $language_group, $_translations;
+
+	if (isset($_translations[$message])) {
+		$message = $_translations[$message];
+	}
 
 	$values = func_get_args();
 
@@ -192,6 +196,13 @@ function _l($message)
 	}
 
 	return vsprintf(_($message), $values);
+}
+
+function _translate($message, $translation)
+{
+	global $_translations;
+
+	$_translations[$message] = $translation;
 }
 
 /**

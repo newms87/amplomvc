@@ -6,9 +6,12 @@ abstract class App_Controller_Table extends Controller
 	protected $model = array(
 		//Required
 		'class' => 'App_Model_Client',
-		'path'  => 'admin/scope/client',
+		'path'  => 'admin/client',
 		'label' => 'username',
 		'value' => 'client_id',
+
+		//Optional
+		'title' => 'Client',
 	);
 
 	*/
@@ -26,6 +29,27 @@ abstract class App_Controller_Table extends Controller
 		parent::__construct();
 
 		$this->instance = new $this->model['class']();
+
+		$this->model += array(
+			'title' => '',
+		);
+	}
+
+	public function index($data = array())
+	{
+		//Page Head
+		set_page_info('title', _l("%s Listings", $this->model['title']));
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
+
+		$data += array(
+			'model' => $this->model,
+		);
+
+		//Response
+		output($this->render('table/list', $data));
 	}
 
 	public function listing($options = array())
@@ -108,6 +132,36 @@ abstract class App_Controller_Table extends Controller
 		}
 
 		return $output;
+	}
+
+	public function form($options = array())
+	{
+		$options += array(
+			'defaults' => array(),
+		);
+
+		//Page Head
+		set_page_info('title', _l("%s Form", $this->model['title']));
+
+		//Insert or Update
+		$record_id = _get($this->model['value'], null);
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("%s Listings", $this->model['title']), site_url($this->model['path']));
+		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
+
+		//The Data
+		$record = $_POST;
+
+		if ($record_id && !IS_POST) {
+			$record = $this->instance->getRecord($record_id);
+		}
+
+		$record += $options['defaults'];
+
+		//Response
+		output($this->render('table/form', $record));
 	}
 
 	public function save()
