@@ -12,7 +12,7 @@ $.fn.list_widget = function (view_id) {
 		}
 	});
 
-	$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limits a, .refresh-listing').click(update_list_widget);
+	$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limit-items a, .refresh-listing').click(update_list_widget);
 
 	var $view_config = $list_widget.find('.view-config');
 
