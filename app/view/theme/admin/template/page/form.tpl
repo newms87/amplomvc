@@ -113,13 +113,12 @@
 							<label class="col xs-3 md-2 left">{{Main Image}}</label>
 
 							<div class="col xs-9 md-10 left value">
-								<? $image = !empty($meta['image']) ? $meta['image'] : ''; ?>
-								<input type="text" class="image-input" name="meta[image]" value="<?= $image; ?>" data-thumb="<?= $image ? image($image, null, option('admin_thumb_height')) : ''; ?>"/>
+								<input type="text" class="image-input" name="meta[image]" value="<?= $meta['image']; ?>" data-thumb="<?= $meta['image'] ? image($meta['image'], null, option('admin_thumb_height')) : ''; ?>"/>
 
 								<div class="image-size">
-									<input type="text" size="3" placeholder="{{auto}}" name="meta[image_width]" value="<?= isset($meta['image_width']) ? $meta['image_width'] : ''; ?>" />
+									<input type="text" size="3" placeholder="{{auto}}" name="meta[image_width]" value="<?= $meta['image_width']; ?>"/>
 									x
-									<input type="text" size="3" placeholder="{{auto}}" name="meta[image_height]" value="<?= isset($meta['image_height']) ? $meta['image_height'] : ''; ?>" />
+									<input type="text" size="3" placeholder="{{auto}}" name="meta[image_height]" value="<?= $meta['image_height']; ?>"/>
 								</div>
 							</div>
 						</div>
@@ -221,12 +220,12 @@
 					<div class="col xs-9 md-10 left value">
 						<?= build(array(
 							'type'   => 'radio',
-							'name'   => 'options[show_title]',
+							'name'   => 'meta[show_title]',
 							'data'   => array(
 								1 => '{{Yes}}',
 								0 => '{{No}}',
 							),
-							'select' => $options['show_title'],
+							'select' => $meta['show_title'],
 							'#class' => 'panel',
 						)); ?>
 					</div>
@@ -238,12 +237,12 @@
 					<div class="col xs-9 md-10 left value">
 						<?= build(array(
 							'type'   => 'radio',
-							'name'   => 'options[show_breadcrumbs]',
+							'name'   => 'meta[show_breadcrumbs]',
 							'data'   => array(
 								1 => '{{Yes}}',
 								0 => '{{No}}',
 							),
-							'select' => $options['show_breadcrumbs'],
+							'select' => $meta['show_breadcrumbs'],
 							'#class' => 'panel',
 						)); ?>
 					</div>

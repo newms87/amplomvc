@@ -10,40 +10,11 @@
 	)); ?>
 
 	<? foreach ($actions as $action) {
-		if (empty($action['type'])) {
-			continue;
-		} ?>
-
-		<div class="action_value" id="for-<?= $action['key']; ?>" <?= attrs($action); ?>>
-
-			<? switch ($action['type']) {
-				case 'text':
-					?>
-					<input type="text" name="action_value" value="<?= $action['default']; ?>"/>
-					<? break;
-
-				case 'textarea':
-					?>
-					<textarea name="action_value"><?= $action['default']; ?></textarea>
-					<? break;
-
-				case 'select':
-					?>
-					<?= build($action['build']); ?>
-					<? break;
-
-				case 'date':
-				case 'time':
-				case 'datetime':
-					?>
-					<input type="text" class="<?= $action['type'] . 'picker'; ?>" name="action_value" value="<?= $action['default']; ?>"/>
-					<? break;
-
-				default:
-					break;
-			} ?>
-
-		</div>
+		if (!empty($action['build'])) { ?>
+			<div class="action_value" id="for-<?= $action['key']; ?>" <?= attrs($action); ?>>
+				<?= build($action['build']); ?>
+			</div>
+		<? } ?>
 	<? } ?>
 
 	<a class="button batch-action-go" data-loading="{{...}}">{{Go}}</a>
