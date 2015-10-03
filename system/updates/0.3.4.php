@@ -22,3 +22,5 @@ if ($this->db->hasColumn('page', 'options')) {
 
 	$this->db->dropColumn('page', 'options');
 }
+
+$this->db->createIndex('page', 'NAME', array('name' => 'ASC'));
