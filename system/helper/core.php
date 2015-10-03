@@ -1130,15 +1130,15 @@ function render_content($content, $data = array())
 
 	$content_file = DIR_SITE . 'app/view/template/temp/' . uniqid('content-') . '.tpl';
 
-	if (!_is_writable(dirname($content_file)) || !@file_put_contents($content_file, $content)) {
-		trigger_error(_l("Unable to create content file for rendering: %s .", $content_file));
+	if (!@file_put_contents($content_file, $content)) {
+		trigger_error(_l("Unable to create content file for rendering: %s.", $content_file));
 
 		return false;
 	}
 
 	$rendered = render_file($content_file, $data);
 
-	rrmdir(dirname($content_file));
+	unlink($content_file);
 
 	return $rendered;
 }
