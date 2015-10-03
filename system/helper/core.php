@@ -1128,7 +1128,7 @@ function render_content($content, $data = array())
 		return '';
 	}
 
-	$content_file = DIR_SITE . 'app/view/template/temp/' . uniqid('content-') . '.tpl';
+	$content_file = DIR_SITE . 'app/view/template/' . uniqid('content-') . '.tpl';
 
 	if (!@file_put_contents($content_file, $content)) {
 		trigger_error(_l("Unable to create content file for rendering: %s.", $content_file));
