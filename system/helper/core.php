@@ -15,7 +15,7 @@ function _profile($key, array $data = array())
 		'key'       => $key,
 		'time'      => $time,
 		'memory'    => $memory,
-		'allocated' => $allocated
+		'allocated' => $allocated,
 	);
 
 	$_profile[$sort_order++] = $data;
@@ -147,7 +147,7 @@ global $js_autoload;
 $js_autoload = array(
 	'codemirror'     => array(
 		'app/view/js/jquery/plugin/codemirror/codemirror.js',
-		'app/view/js/jquery/plugin/codemirror/wrapper.js'
+		'app/view/js/jquery/plugin/codemirror/wrapper.js',
 	),
 	'list_widget'    => 'app/view/js/jquery/plugin/listings.js',
 	'listview'       => 'app/view/js/jquery/plugin/listings.js',
@@ -160,7 +160,7 @@ $js_autoload = array(
 	'spectrum'       => 'app/view/js/jquery/plugin/colorpicker/spectrum.js',
 	'jqzoom'         => 'app/view/js/jquery/plugin/jqzoom/jqzoom.js',
 	'ac_imageinput'  => 'app/view/js/jquery/plugin/image_manager.js',
-	'ac_filemanager' => 'app/view/js/jquery/plugin/image_manager.js'
+	'ac_filemanager' => 'app/view/js/jquery/plugin/image_manager.js',
 );
 
 
@@ -753,11 +753,26 @@ HTML;
 			}
 
 			if (!isset($_options['error_logging']) || $_options['error_logging']) {
-				write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+				$log_id = write_log('error', 'PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 			}
 
 			if ($send_email) {
-				$email_error = DOMAIN . $_SERVER['REQUEST_URI'] . "<br><br><a href=\"" . HTTP_SITE . 'admin/logs' . "\">View Logs</a><br><br>" . $html_error;
+				$log_url = '';
+
+				if (!empty($log_id)) {
+					$filter = array(
+						'filter' => array(
+							'log_id' => array(
+								'gte' => $log_id,
+								'lte' => $log_id + 10,
+							),
+						),
+					);
+
+					$log_url = "<a href=\"" . HTTP_SITE . 'admin/logs?' . http_build_query($filter) . "\">View Logs</a><br><br>";
+				}
+
+				$email_error = DOMAIN . $_SERVER['REQUEST_URI'] . "<br><br>" . $log_url . $html_error;
 
 				send_mail(array(
 					'to'      => $_options['site_email_error'],

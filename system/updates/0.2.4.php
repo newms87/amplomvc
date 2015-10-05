@@ -45,7 +45,5 @@ if (!$this->db->hasColumn('page', 'options')) {
 
      $this->db->dropColumn('page', 'display_title');
 	}
-
-  $this->db->query("ALTER TABLE `{$this->t['page']}` ADD UNIQUE INDEX `THEMENAME` (`theme` ASC, `name` ASC)");
 }
 
