@@ -775,8 +775,6 @@ HTML;
 set_error_handler('amplo_error_handler');
 
 //Amplo Time handling
-defined("AMPLO_TIME_LOG") ?: define("AMPLO_TIME_LOG", false);
-
 function timelog($name)
 {
 	global $__start;
