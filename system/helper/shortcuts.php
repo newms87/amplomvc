@@ -422,13 +422,7 @@ function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 
 function slug($name, $sep = '_', $allow = 'a-z0-9._-')
 {
-	$patterns = array(
-		"/[\\s\\\\\\/]/" => $sep,
-		"/[^$allow]/"    => '',
-		'/#/'            => '-',
-	);
-
-	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
+	return preg_replace("/[$sep]+/", $sep, preg_replace("/[^$allow]/", $sep, strtolower(trim($name))));
 }
 
 function cast_title($name)
