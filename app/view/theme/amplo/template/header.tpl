@@ -54,7 +54,7 @@
 		<div class="wrap">
 			<? if ($logo = option('site_logo')) { ?>
 				<div id="logo" class="col xs-5 sm-4 md-3 lg-2 left top">
-					<a href="<?= site_url(); ?>" class="block">
+					<a href="<?= site_url(); ?>">
 						<? if ($logo_srcset = option('site_logo_srcset')) { ?>
 							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('site_logo_width'), option('site_logo_height')), $logo_srcset, option('site_name'), option('site_name')); ?> />
 						<? } else { ?>

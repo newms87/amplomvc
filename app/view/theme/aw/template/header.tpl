@@ -49,7 +49,7 @@
 		<div class="wrap">
 			<? if ($logo = option('site_logo')) { ?>
 				<div id="logo" class="col xs-5 sm-4 md-3 lg-2 left top">
-					<a href="<?= site_url(); ?>" class="block">
+					<a href="<?= site_url(); ?>">
 						<img src="<?= image($logo, option('site_logo_width'), option('site_logo_height')); ?>" title="<?= option('config_name'); ?>" alt="<?= option('config_name'); ?>"/>
 					</a>
 				</div>
