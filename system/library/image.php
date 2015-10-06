@@ -39,7 +39,7 @@ class Image extends Library
 	{
 		$image_url = is_url($image_path) ? $image_path : false;
 
-		if (strpos($image_url, DIR_IMAGE) !== false || strpos($image_url, DIR_DOWNLOAD) !== false || strpos($image_url, DIR_SITE) !== false) {
+		if (strpos($image_url, DIR_IMAGE) === 0 || strpos($image_url, DIR_DOWNLOAD) === 0 || strpos($image_url, DIR_SITE) === 0) {
 			$image_url = false;
 		}
 
@@ -54,7 +54,7 @@ class Image extends Library
 
 			$replace = array(
 				'#\\\\#'                 => '/',
-				'#/./#'                  => '/',
+				'#/\\./#'                  => '/',
 				'#' . URL_IMAGE . '#'    => DIR_IMAGE,
 				'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
 				'#' . URL_SITE . '#'     => DIR_SITE,
