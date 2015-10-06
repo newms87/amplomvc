@@ -6,9 +6,12 @@ abstract class App_Controller_Table extends Controller
 	protected $model = array(
 		//Required
 		'class' => 'App_Model_Client',
-		'path'  => 'admin/scope/client',
+		'path'  => 'admin/client',
 		'label' => 'username',
 		'value' => 'client_id',
+
+		//Optional
+		'title' => 'Client',
 	);
 
 	*/
@@ -26,6 +29,39 @@ abstract class App_Controller_Table extends Controller
 		parent::__construct();
 
 		$this->instance = new $this->model['class']();
+
+		$this->model += array(
+			'title' => '',
+		);
+	}
+
+	public function index($options = array())
+	{
+		//Page Head
+		set_page_info('title', _l("%s Listings", $this->model['title']));
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
+
+		$options += array(
+			'model'         => $this->model,
+			'template'      => 'table/list',
+			'batch_action' => array(
+				'actions' => array(
+					'delete' => array(
+						'label' => _l("Delete"),
+					),
+				),
+			),
+		);
+
+		if (!empty($options['batch_action']) && empty($options['batch_action']['url'])) {
+			$options['batch_action']['url'] = site_url($this->model['path'] . '/batch-action');
+		}
+
+		//Response
+		output($this->render($options['template'], $options));
 	}
 
 	public function listing($options = array())
@@ -110,6 +146,38 @@ abstract class App_Controller_Table extends Controller
 		return $output;
 	}
 
+	public function form($options = array())
+	{
+		$options += array(
+			'defaults' => array(),
+			'template' => 'table/form',
+			'data'     => array(),
+		);
+
+		//Page Head
+		set_page_info('title', _l("%s Form", $this->model['title']));
+
+		//Insert or Update
+		$record_id = _get($this->model['value'], null);
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("%s Listings", $this->model['title']), site_url($this->model['path']));
+		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
+
+		//The Data
+		$record = $_POST;
+
+		if ($record_id && !IS_POST) {
+			$record = $this->instance->getRecord($record_id);
+		}
+
+		$record += $options['defaults'];
+
+		//Response
+		output($this->render($options['template'], $record + $options['data']));
+	}
+
 	public function save()
 	{
 		if ($record_id = $this->instance->save(_request($this->model['value']), $_POST)) {
@@ -167,5 +235,36 @@ abstract class App_Controller_Table extends Controller
 		unset($record);
 
 		output_json($records);
+	}
+
+	public function batch_action($options = array())
+	{
+		$batch  = (array)_request('batch');
+		$action = _request('action');
+		$value  = _request('value');
+
+		if ($options['callback']) {
+			$options['callback']($batch, $action, $value);
+		} else {
+			foreach ($batch as $record_id) {
+				switch ($action) {
+					case 'delete':
+						$this->instance->remove($record_id);
+						break;
+				}
+			}
+		}
+
+		if ($this->instance->hasError()) {
+			message('error', $this->instance->fetchError());
+		} else {
+			message('success', _l("%s records updated successfully.", $this->model['title'] ?: 'All'));
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect($this->model['path']);
+		}
 	}
 }

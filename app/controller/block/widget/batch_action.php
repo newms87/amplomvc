@@ -8,14 +8,15 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 {
 	/**
 	 * @param $settings = array(
-	 *           'actions' => array(),
-	 *           'url' => 'string', - URL to batch action method
-	 *           'selector' => 'string',
-	 *        );
+	 *                  'actions' => array(),
+	 *                  'url' => 'string', - URL to batch action method
+	 *                  'selector' => 'string',
+	 *                  );
 	 *
 	 * actions - The Batch Actions available to apply on the items
 	 *
-	 * path - The controller path (eg: 'catalog/product/batch_update') to post the batch action data to. This Controller method should handle applying the batch actions.
+	 * path - The controller path (eg: 'catalog/product/batch_update') to post the batch action data to. This Controller
+	 * method should handle applying the batch actions.
 	 *
 	 * replace (optional) - The Element to replace the contents of with the refreshed item listings
 	 *
@@ -40,6 +41,7 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 				$action['key'] = $key;
 			}
 
+			//TODO: Legacy Compatibility. Remove in future version
 			if (!empty($action['type'])) {
 				if (!isset($action['default'])) {
 					$action['default'] = '';
@@ -50,8 +52,14 @@ class App_Controller_Block_Widget_BatchAction extends App_Controller_Block_Block
 					'data'   => array(),
 					'select' => $action['default'],
 				);
+			}
 
-				$action['build']['name'] = 'action_value';
+			if (!empty($action['build'])) {
+				$action['build'] += array(
+					'type'   => 'text',
+					'name'   => 'action_value',
+					'select' => '',
+				);
 			}
 		}
 		unset($action);

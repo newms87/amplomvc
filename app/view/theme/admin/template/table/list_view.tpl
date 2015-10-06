@@ -373,9 +373,13 @@
 				</div>
 			<? } ?>
 
-			<div class="buttons clearfix">
-				<a class="cancel-form button remove">{{X}}</a>
-				<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
+			<div class="buttons row">
+				<div class="col xs-4 remove-col xs-left">
+					<a class="cancel-form button remove">{{X}}</a>
+				</div>
+				<div class="col xs-8 save-col xs-right">
+					<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
+				</div>
 			</div>
 		</div>
 	<? } ?>
