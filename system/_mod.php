@@ -158,7 +158,7 @@ function render_content($content, $data = array())
 		return '';
 	}
 
-	$content_file = realpath(DIR_SITE . 'app/view/template/' . uniqid('content-') . '.temp');
+	$content_file = DIR_SITE . 'app/view/template/' . uniqid('content-') . '.temp';
 
 	if (!@file_put_contents($content_file, render_template($content))) {
 		trigger_error(_l("Unable to create content file for rendering: %s.", $content_file));
