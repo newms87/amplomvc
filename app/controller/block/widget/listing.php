@@ -184,7 +184,11 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 				foreach ($settings['records'] as &$r) {
 					if (isset($r[$col])) {
 						if ($build = isset($settings['columns'][$col]['build']['data']) ? $settings['columns'][$col]['build'] : false) {
-							$r[$col] = value2label($r[$col], $build['data'], isset($build['label']) ? $build['label'] : null, isset($build['value']) ? $build['value'] : null);
+							$v = value2label($r[$col], $build['data'], isset($build['label']) ? $build['label'] : null, isset($build['value']) ? $build['value'] : null);
+
+							if ($v !== null) {
+								$r[$col] = $v;
+							}
 						}
 
 						if (is_array($r[$col])) {

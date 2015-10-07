@@ -803,11 +803,16 @@ function value2label($select, $data, $label_index, $value_index)
 		$map[$v] = $l;
 	}
 
+	$value_set = false;
+
 	foreach ((array)$select as $s) {
-		$label .= isset($map[$s]) ? $map[$s] : '';
+		if (isset($map[$s])) {
+			$label .= $map[$s];
+			$value_set = true;
+		}
 	}
 
-	return $label;
+	return $value_set ? $label : null;
 }
 
 function build($type, $params = null)
