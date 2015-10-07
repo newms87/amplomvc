@@ -139,7 +139,7 @@
 											<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
 												<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
 											<? } else { ?>
-												<b class="amp-sprite si-calendar-icon-wht"></b>
+												<b class="fa fa-calendar"></b>
 											<? } ?>
 										</div>
 									</div>
@@ -373,9 +373,13 @@
 				</div>
 			<? } ?>
 
-			<div class="buttons clearfix">
-				<a class="cancel-form button remove">{{X}}</a>
-				<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
+			<div class="buttons row">
+				<div class="col xs-4 remove-col xs-left">
+					<a class="cancel-form button remove">{{X}}</a>
+				</div>
+				<div class="col xs-8 save-col xs-right">
+					<a class="save-edit button save" data-loading="Saving...">{{Save}}</a>
+				</div>
 			</div>
 		</div>
 	<? } ?>

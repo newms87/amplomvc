@@ -121,8 +121,10 @@ class Plugin extends Library
 
 		$plugin_id = $this->Model_Plugin->getPluginId($name);
 
-		//Uninstall the plugin from the system
-		$this->Model_Plugin->remove($plugin_id);
+		if ($plugin_id) {
+			//Uninstall the plugin from the system
+			$this->Model_Plugin->remove($plugin_id);
+		}
 
 		//New Files
 		$files = $this->getNewFiles($name);

@@ -10,35 +10,27 @@ class App_Controller_Admin_Page extends App_Controller_Table
 		'value' => 'page_id',
 	);
 
-	public function index()
+	public function index($options = array())
 	{
-		//Page Head
-		set_page_info('title', _l("Page"));
-
-		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Page"), site_url('admin/page'));
-
-		//Batch Actions
-		$actions = array(
-			'enable'  => array(
-				'label' => _l("Enable"),
-			),
-			'disable' => array(
-				'label' => _l("Disable"),
-			),
-			'delete'  => array(
-				'label' => _l("Delete"),
+		$options += array(
+			'batch_action' => array(
+				'actions' => array(
+					'status' => array(
+						'label' => _l("Status"),
+						'build' => array(
+							'type'   => 'select',
+							'data'   => App_Model_Page::$statuses,
+							'select' => App_Model_Page::STATUS_PUBLISHED,
+						),
+					),
+					'delete' => array(
+						'label' => _l("Delete"),
+					),
+				),
 			),
 		);
 
-		$data['batch_action'] = array(
-			'actions' => $actions,
-			'path'    => site_url('admin/page/batch-action'),
-		);
-
-		//Render
-		output($this->render('page/list', $data));
+		return parent::index($options);
 	}
 
 	public function listing($options = array())
@@ -66,8 +58,41 @@ class App_Controller_Admin_Page extends App_Controller_Table
 		return parent::listing($options);
 	}
 
-	public function form($defaults = array())
+	public function form($options = array())
 	{
+		$options += array(
+			'defaults' => array(
+				'page_id'          => 0,
+				'type'             => 'page',
+				'name'             => 'new-page',
+				'title'            => 'New ' . $this->model['title'],
+				'author_id'        => user_info('user_id'),
+				'alias'            => '',
+				'content'          => '',
+				'style'            => '',
+				'excerpt'          => '',
+				'meta_keywords'    => '',
+				'meta_description' => '',
+				'options'          => array(),
+				'cache'            => 1,
+				'template'         => '',
+				'layout_id'        => 0,
+				'blocks'           => array(),
+				'status'           => 1,
+				'translations'     => array(),
+				'date_published'   => '',
+				'categories'       => array(),
+				'meta'             => array(
+					'show_title'       => 1,
+					'show_breadcrumbs' => 1,
+					'image'            => '',
+					'image_width'      => '',
+					'image_height'     => '',
+				),
+			),
+			'data'     => array(),
+		);
+
 		//Page Head
 		set_page_info('title', _l($this->model['title']));
 
@@ -88,37 +113,9 @@ class App_Controller_Admin_Page extends App_Controller_Table
 			$page['categories'] = $this->Model_Page->getCategories($page_id);
 		}
 
-		//Set Values or Defaults
-		$defaults += array(
-			'page_id'          => 0,
-			'type'             => 'page',
-			'name'             => 'new-page',
-			'title'            => 'New ' . $this->model['title'],
-			'author_id'        => user_info('user_id'),
-			'alias'            => '',
-			'content'          => '',
-			'style'            => '',
-			'excerpt'          => '',
-			'meta_keywords'    => '',
-			'meta_description' => '',
-			'options'          => array(),
-			'cache'            => 1,
-			'template'         => '',
-			'layout_id'        => 0,
-			'blocks'           => array(),
-			'status'           => 1,
-			'translations'     => array(),
-			'date_published'   => '',
-			'categories'       => array(),
-			'meta'             => array(),
-		);
+		$page += $options['defaults'];
 
-		$page += $defaults;
-
-		$page['options'] += array(
-			'show_title'       => 1,
-			'show_breadcrumbs' => 1,
-		);
+		$page['meta'] += $options['defaults']['meta'];
 
 		//Template Data
 		$page['data_templates']  = $this->Model_Page->getTemplates();
@@ -129,46 +126,32 @@ class App_Controller_Admin_Page extends App_Controller_Table
 		$page['model'] = $this->model;
 
 		//Render
-		output($this->render('page/form', $page));
+		output($this->render('page/form', $page + $options['data']));
 	}
 
-	public function batch_action()
+	public function batch_action($options = array())
 	{
-		$batch  = (array)_request('batch');
-		$action = _request('action');
-		$value  = _request('value');
+		$options += array(
+			'callback' => function ($batch, $action, $value) {
+				foreach ($batch as $page_id) {
+					switch ($action) {
+						case 'status':
+							$this->Model_Page->save($page_id, array('status' => $value));
+							break;
 
-		foreach ($batch as $page_id) {
-			switch ($action) {
-				case 'enable':
-					$this->Model_Page->save($page_id, array('status' => 1));
-					break;
+						case 'delete':
+							$this->Model_Page->remove($page_id);
+							break;
 
-				case 'disable':
-					$this->Model_Page->save($page_id, array('status' => 0));
-					break;
+						case 'copy':
+							$this->Model_Page->copy($page_id);
+							break;
+					}
+				}
+			},
+		);
 
-				case 'delete':
-					$this->Model_Page->remove($page_id);
-					break;
-
-				case 'copy':
-					$this->Model_Page->copy($page_id);
-					break;
-			}
-		}
-
-		if ($this->Model_Page->hasError()) {
-			message('error', $this->Model_Page->fetchError());
-		} else {
-			message('success', _l("The pages have been updated!"));
-		}
-
-		if ($this->is_ajax) {
-			$this->listing();
-		} else {
-			redirect($this->model['path']);
-		}
+		return parent::batch_action($options);
 	}
 
 	public function create_layout()

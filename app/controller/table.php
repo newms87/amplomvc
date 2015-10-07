@@ -35,7 +35,7 @@ abstract class App_Controller_Table extends Controller
 		);
 	}
 
-	public function index($data = array())
+	public function index($options = array())
 	{
 		//Page Head
 		set_page_info('title', _l("%s Listings", $this->model['title']));
@@ -44,12 +44,24 @@ abstract class App_Controller_Table extends Controller
 		breadcrumb(_l("Home"), site_url('admin'));
 		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
 
-		$data += array(
-			'model' => $this->model,
+		$options += array(
+			'model'         => $this->model,
+			'template'      => 'table/list',
+			'batch_action' => array(
+				'actions' => array(
+					'delete' => array(
+						'label' => _l("Delete"),
+					),
+				),
+			),
 		);
 
+		if (!empty($options['batch_action']) && empty($options['batch_action']['url'])) {
+			$options['batch_action']['url'] = site_url($this->model['path'] . '/batch-action');
+		}
+
 		//Response
-		output($this->render('table/list', $data));
+		output($this->render($options['template'], $options));
 	}
 
 	public function listing($options = array())
@@ -138,6 +150,8 @@ abstract class App_Controller_Table extends Controller
 	{
 		$options += array(
 			'defaults' => array(),
+			'template' => 'table/form',
+			'data'     => array(),
 		);
 
 		//Page Head
@@ -161,7 +175,7 @@ abstract class App_Controller_Table extends Controller
 		$record += $options['defaults'];
 
 		//Response
-		output($this->render('table/form', $record));
+		output($this->render($options['template'], $record + $options['data']));
 	}
 
 	public function save()
@@ -221,5 +235,36 @@ abstract class App_Controller_Table extends Controller
 		unset($record);
 
 		output_json($records);
+	}
+
+	public function batch_action($options = array())
+	{
+		$batch  = (array)_request('batch');
+		$action = _request('action');
+		$value  = _request('value');
+
+		if ($options['callback']) {
+			$options['callback']($batch, $action, $value);
+		} else {
+			foreach ($batch as $record_id) {
+				switch ($action) {
+					case 'delete':
+						$this->instance->remove($record_id);
+						break;
+				}
+			}
+		}
+
+		if ($this->instance->hasError()) {
+			message('error', $this->instance->fetchError());
+		} else {
+			message('success', _l("%s records updated successfully.", $this->model['title'] ?: 'All'));
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect($this->model['path']);
+		}
 	}
 }

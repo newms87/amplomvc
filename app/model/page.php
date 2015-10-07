@@ -106,13 +106,6 @@ class App_Model_Page extends App_Model_Table
 			if (empty($page['type'])) {
 				$page['type'] = 'page';
 			}
-
-			if (empty($page['options'])) {
-				$page['options'] = json_encode(array(
-					'show_title'       => 1,
-					'show_breadcrumbs' => 1,
-				));
-			}
 		}
 
 		$page_id = parent::save($page_id, $page);

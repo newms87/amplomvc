@@ -746,7 +746,7 @@ class Document extends Library
 			$attrs    = attrs($link);
 			$li_attrs = !empty($link['li']) ? attrs($link['li']) : '';
 
-			$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]</a>$children</li>";
+			$html .= "<li $li_attrs style=\"z-index: " . $zindex . "\"><a $attrs>$link[display_name]" . ($children ? " <b class=\"expand fa fa-chevron-down\"></b>" : '') . "</a>$children</li>";
 
 			$zindex--;
 		}

@@ -26,6 +26,14 @@ body {
 	color: @font-dark;
 }
 
+.fa {
+	font-family: FontAwesome !important;
+}
+
+.color-main {
+	color: @color-main !important;
+}
+
 #container {
 	position: relative;
 	box-sizing: border-box;
@@ -355,11 +363,9 @@ button, .button, .row .button {
 		cursor: pointer;
 		display: block;
 
-		&:after {
-			.amp-sprite;
-			.si-chevron;
-			.amp-sprite.rotate-180;
+		.expand {
 			margin-left: .5em;
+			font-size: .8em;
 		}
 	}
 
@@ -372,8 +378,8 @@ button, .button, .row .button {
 
 	&.active, &.on-hover:hover {
 		& > .parent {
-			&:after {
-				.amp-sprite.rotate-0;
+			.expand {
+				.amp-sprite.rotate-180;
 			}
 		}
 
@@ -501,7 +507,7 @@ header.main-header.row {
 	z-index: 2;
 
 	a {
-		display: block;
+		display: inline-block;
 	}
 }
 

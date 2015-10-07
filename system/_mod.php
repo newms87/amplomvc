@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 if (!defined('DIR_CACHE')) {
 	define('DIR_CACHE', DIR_SITE . 'system/cache/');
 }
@@ -50,8 +51,6 @@ function _mod($file)
 {
 	global $registry, $mod_update;
 
-	static $lang;
-
 	$ext = pathinfo($file, PATHINFO_EXTENSION);
 
 	$ext_file = is_file($file . '.ext') ? $file . '.ext' : '';
@@ -81,11 +80,7 @@ function _mod($file)
 
 	//Replace PHP short tags in template files. There are servers that disable this by default.
 	if ($ext === 'tpl') {
-		if (!$lang) {
-			$lang = option('config_language', 'en');
-		}
-
-		$tpl = AC_TEMPLATE_CACHE . $lang . '/' . str_replace(DIR_SITE, '', $file);
+		$tpl = AC_TEMPLATE_CACHE . option('config_language', 'en') . '/' . str_replace(DIR_SITE, '', $file);
 
 		if (!is_file($tpl) || filemtime($tpl) < filemtime($file)) {
 			if (_is_writable(dirname($tpl))) {
@@ -98,12 +93,12 @@ function _mod($file)
 
 	if ($ext_file) {
 		require_once($file);
+
 		return $ext_file;
 	}
 
 	return $file;
 }
-
 
 function render_template($contents)
 {
@@ -155,4 +150,56 @@ function render_template($contents)
 	}
 
 	return $new_contents;
+}
+
+function render_content($content, $data = array())
+{
+	if (!$content) {
+		return '';
+	}
+
+	$content_file = DIR_SITE . 'app/view/template/' . uniqid('content-') . '.temp';
+
+	if (!@file_put_contents($content_file, render_template($content))) {
+		trigger_error(_l("Unable to create content file for rendering: %s.", $content_file));
+
+		return false;
+	}
+
+	$rendered = render_file($content_file, $data, false);
+
+	unlink($content_file);
+
+	return $rendered;
+}
+
+function render_file($file, $data = array(), $mod = true)
+{
+	global $registry;
+
+	if (!is_file($file)) {
+		trigger_error(_l("Failed to render file %s", $file));
+
+		return false;
+	}
+
+	if (AMPLO_PROFILE) {
+		_profile('RENDER: ' . $file);
+	}
+
+	$data += array(
+		'r' => $registry,
+	);
+
+	extract($data);
+
+	ob_start();
+	include($mod ? _mod($file) : $file);
+	$content = ob_get_clean();
+
+	if (AMPLO_PROFILE) {
+		_profile('RENDER COMPLETED: ' . $file);
+	}
+
+	return $content;
 }

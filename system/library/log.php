@@ -51,6 +51,6 @@ class Log extends Library
 			fclose($handle);
 		}
 
-		$this->insert('log', $fields);
+		return $this->insert('log', $fields);
 	}
 }

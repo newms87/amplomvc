@@ -422,13 +422,7 @@ function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 
 function slug($name, $sep = '_', $allow = 'a-z0-9._-')
 {
-	$patterns = array(
-		"/[\\s\\\\\\/]/" => $sep,
-		"/[^$allow]/"    => '',
-		'/#/'            => '-',
-	);
-
-	return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
+	return preg_replace("/[$sep]+/", $sep, preg_replace("/[^$allow]/", $sep, strtolower(trim($name))));
 }
 
 function cast_title($name)
@@ -1106,7 +1100,7 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 		$link['class']  = trim($link['class']);
 		$link['#class'] = trim($link['#class']);
 
-		$l = "<a " . attrs($link) . ">$link[display_name]</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
+		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
 
 		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
 	}

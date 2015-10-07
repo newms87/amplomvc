@@ -65,10 +65,12 @@ abstract class App_Model_Table extends Model
 
 	public function remove($record_id)
 	{
-		clear_cache($this->table . '.rows');
-		clear_cache($this->table . '.' . $record_id);
+		if ($record_id) {
+			clear_cache($this->table . '.rows');
+			clear_cache($this->table . '.' . $record_id);
 
-		return $this->delete($this->table, $record_id);
+			return $this->delete($this->table, $record_id);
+		}
 	}
 
 	public function getField($record_id, $field)
@@ -85,7 +87,11 @@ abstract class App_Model_Table extends Model
 		if (!$record) {
 			$select = $this->extractSelect($this->table, $select);
 
-			$record = $records[$this->table][$record_id] = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
+			$record = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
+
+			if ($cache && $record) {
+				$records[$this->table][$record_id] = $record;
+			}
 		}
 
 		return $record;
