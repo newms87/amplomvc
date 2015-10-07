@@ -13,15 +13,24 @@
   .header-navigation.menu-button {
     .links-toggle {
       display: inline-block;
+	    font-size: 1.8em;
 
       & + nav {
         .height-animate;
       }
 
+	    .fa-remove {
+		    display: none;
+	    }
+
       &.hover {
-        .amp-sprite {
-          .si-close-menu;
+        .fa-reorder {
+          display: none;
         }
+
+	      .fa-remove {
+		      display: block;
+	      }
 
         & + nav {
           overflow-y: auto;

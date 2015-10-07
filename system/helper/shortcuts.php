@@ -1095,7 +1095,7 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 		$link['class']  = trim($link['class']);
 		$link['#class'] = trim($link['#class']);
 
-		$l = "<a " . attrs($link) . ">$link[display_name]</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
+		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
 
 		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
 	}

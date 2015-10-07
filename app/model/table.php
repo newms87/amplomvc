@@ -65,10 +65,12 @@ abstract class App_Model_Table extends Model
 
 	public function remove($record_id)
 	{
-		clear_cache($this->table . '.rows');
-		clear_cache($this->table . '.' . $record_id);
+		if ($record_id) {
+			clear_cache($this->table . '.rows');
+			clear_cache($this->table . '.' . $record_id);
 
-		return $this->delete($this->table, $record_id);
+			return $this->delete($this->table, $record_id);
+		}
 	}
 
 	public function getField($record_id, $field)

@@ -139,7 +139,7 @@
 											<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
 												<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
 											<? } else { ?>
-												<b class="amp-sprite si-calendar-icon-wht"></b>
+												<b class="fa fa-calendar"></b>
 											<? } ?>
 										</div>
 									</div>

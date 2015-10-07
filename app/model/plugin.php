@@ -37,7 +37,7 @@ class App_Model_Plugin extends App_Model_Table
 	{
 		clear_cache('plugin');
 
-		return $this->delete('plugin', $plugin_id);
+		return parent::remove($plugin_id);
 	}
 
 	public function getPluginId($name)
