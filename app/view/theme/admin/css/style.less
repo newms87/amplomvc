@@ -421,22 +421,6 @@ form {
 					a {
 						text-align: left;
 						min-width: 5em;
-
-						&.has-children {
-							&:after {
-								content: '';
-								pointer-events: none;
-								width: 0;
-								height: 0;
-								position: absolute;
-								right: 1em;
-								top: 50%;
-								margin-top: -6px;
-								border-top: transparent 6px solid;
-								border-bottom: transparent 6px solid;
-								border-left: white 6px solid;
-							}
-						}
 					}
 
 					ul {
@@ -513,6 +497,34 @@ form {
 	.admin-nav {
 		width: 75%;
 		.ws-hack;
+
+		.link-list {
+			li {
+				.expand {
+					font-size: .7em;
+				}
+
+				&:hover, &.hover, &.active {
+					.expand {
+						.amp-sprite.rotate-180;
+					}
+				}
+
+				.sub-menu {
+					& > ul {
+						& > li {
+							& > .menu-link {
+								.expand {
+									position: absolute;
+									right: 1em;
+									.amp-sprite.rotate-270;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	.right-nav {
