@@ -94,33 +94,35 @@ class App_Controller_Admin_Header extends Controller
 				}
 			}
 
-			$options = array(
-				'index' => 'site_id',
-				'cache' => true
-			);
-
-			$sites = $this->Model_Site->getRecords(null, null, $options);
-
-			//Store Front Links
-			$link_sites = array(
-				'name'         => 'sites',
-				'display_name' => _l("Sites"),
-				'sort_order'   => 0,
-			);
-
-			$this->document->addLink('right', $link_sites);
-
-			//Link to all of the stores under the stores top level navigation
-			foreach ($sites as $site_id => $site) {
-				$link_store = array(
-					'name'         => 'site_' . $site_id,
-					'display_name' => $site['name'],
-					'href'         => site_url('', '', null, $site_id),
-					'parent'       => 'sites',
-					'target'       => '_blank',
+			if (user_can('r', 'admin/site')) {
+				$options = array(
+					'index' => 'site_id',
+					'cache' => true
 				);
 
-				$this->document->addLink('right', $link_store);
+				$sites = $this->Model_Site->getRecords(null, null, $options);
+
+				//Store Front Links
+				$link_sites = array(
+					'name'         => 'sites',
+					'display_name' => _l("Sites"),
+					'sort_order'   => 0,
+				);
+
+				$this->document->addLink('right', $link_sites);
+
+				//Link to all of the stores under the stores top level navigation
+				foreach ($sites as $site_id => $site) {
+					$link_store = array(
+						'name'         => 'site_' . $site_id,
+						'display_name' => $site['name'],
+						'href'         => site_url('', '', null, $site_id),
+						'parent'       => 'sites',
+						'target'       => '_blank',
+					);
+
+					$this->document->addLink('right', $link_store);
+				}
 			}
 
 			//Logout link
