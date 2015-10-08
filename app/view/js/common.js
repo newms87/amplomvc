@@ -663,7 +663,7 @@ $.extend($.ampResize, {
 			on: 'keyup'
 		}, o);
 
-		var $canvas = $('<canvas/>').css({position: 'absolute', left: -9999});
+		var $canvas = $('<canvas/>').css({position: 'absolute', top: 0, left: -9999});
 		$('body').append($canvas);
 
 		if (!$.ampResize.ctx) {
