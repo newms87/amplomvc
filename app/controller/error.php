@@ -1,8 +1,8 @@
 <?php
 
-class App_Controller_Error_NotFound extends Controller
+class App_Controller_Error extends Controller
 {
-	public function index()
+	public function not_found()
 	{
 		//Page Head
 		set_page_info('title', _l("The page you requested cannot be found!"));
@@ -11,7 +11,7 @@ class App_Controller_Error_NotFound extends Controller
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb(_l("Not Found"), $this->url->here());
 
-		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
+		$this->response->addHeader('HTTP/1.1 404 Not Found');
 
 		//Action Buttons
 		$data['continue'] = site_url();
