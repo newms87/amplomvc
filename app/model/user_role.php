@@ -122,24 +122,26 @@ class App_Model_UserRole extends App_Model_Table
 	{
 		static $roles;
 
-		if ($user_role_id && !isset($roles[$user_role_id])) {
-			$user_role = cache($this->table . '.' . $user_role_id);
+		if ($user_role_id){
+			if (!isset($roles[$user_role_id])) {
+				$user_role = cache($this->table . '.' . $user_role_id);
 
-			if (!$user_role) {
-				$user_role = $this->queryRow("SELECT * FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
+				if (!$user_role) {
+					$user_role = $this->queryRow("SELECT * FROM {$this->t[$this->table]} WHERE user_role_id = " . (int)$user_role_id);
 
-				if ($user_role) {
-					$user_role['permissions'] = unserialize($user_role['permissions']);
+					if ($user_role) {
+						$user_role['permissions'] = unserialize($user_role['permissions']);
 
-					cache($this->table . '.' . $user_role_id, $user_role);
+						cache($this->table . '.' . $user_role_id, $user_role);
+					}
 				}
+
+				$roles[$user_role_id] = $user_role;
 			}
 
-			$roles[$user_role_id] = $user_role;
-		}
-
-		if ($roles[$user_role_id]) {
-			return $roles[$user_role_id];
+			if ($roles[$user_role_id]) {
+				return $roles[$user_role_id];
+			}
 		}
 
 		//Default User Role
