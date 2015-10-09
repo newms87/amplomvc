@@ -1040,18 +1040,28 @@ HTML;
 	}
 }
 
-function build_links($links, $sort = 'sort_order', &$active = null)
+function build_links($links, $options = array(), &$active = null)
 {
+	global $registry;
+
 	$html      = '';
 	$is_active = false;
 
+	$options += array(
+		'sort' => 'sort_order',
+		'class' => 'vertical',
+	);
+
 	if ($active === null) {
-		global $registry;
 		$active = $registry->get('url')->here();
 	}
 
-	if ($sort) {
-		sort_by($links, $sort);
+	if (is_string($links)) {
+		$links = $registry->get('document')->getLinks($links);
+	}
+
+	if ($options['sort']) {
+		sort_by($links, $options['sort']);
 	}
 
 	foreach ($links as $name => $link) {
@@ -1060,7 +1070,7 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 		}
 
 		if (empty($link['class'])) {
-			$link['class'] = '';
+			$link['class'] = $options['class'];
 		}
 
 		$link['class'] .= ' link-' . $name;
@@ -1087,7 +1097,7 @@ function build_links($links, $sort = 'sort_order', &$active = null)
 				$link['class'] .= ' on-hover';
 			}
 
-			$children = build_links($link['children'], $sort, $active);
+			$children = build_links($link['children'], $options, $active);
 			$link['#class'] .= ' parent';
 
 			if ($active) {

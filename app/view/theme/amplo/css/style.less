@@ -359,6 +359,9 @@ button, .button, .row .button {
 	display: inline-block;
 	vertical-align: middle;
 
+	& > a {
+		display: inline-block;
+	}
 	& > .parent {
 		cursor: pointer;
 		display: block;
@@ -373,7 +376,15 @@ button, .button, .row .button {
 		position: absolute;
 		left: -99999px;
 		top: 100%;
-		padding-top: 1em;
+		background: white;
+		box-shadow: 0 0 5px rgba(0,0,0,.5);
+		padding: 1em;
+		min-width: 8em;
+
+		& > .link-menu {
+			display: block;
+			padding: 0 .5em;
+		}
 	}
 
 	&.active, &.on-hover:hover {
@@ -385,6 +396,72 @@ button, .button, .row .button {
 
 		& > .children {
 			left: 0;
+		}
+	}
+
+	&.arrow-top {
+		margin-top: 1em;
+
+		& > .children {
+			&:before {
+				content: '';
+				position: absolute;
+				top: -.8em;
+				right: 20%;
+				width: 0;
+				height: 0;
+				border-bottom: 1.5em solid white;
+				border-left: transparent .5em solid;
+				border-right: transparent .5em solid;
+			}
+		}
+	}
+
+	&.horizontal {
+		& > .parent {
+			position: relative;
+
+			& > .expand {
+				color: @color-main;
+			}
+		}
+
+		& > .children {
+			background: @color-gray-light;
+			box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
+			padding: .5em;
+			left: 0;
+			top: -15em;
+			opacity: 0;
+			width: 200em;
+			margin-left: -100em;
+			text-align: center;
+			transition: none;
+
+			& > .link-menu {
+				display: inline-block;
+			}
+		}
+
+		&.on-hover:hover, &.arrow-top {
+			& > .parent {
+				&:after {
+					content: '';
+					position: absolute;
+					top: 100%;
+					left: 0;
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+
+		&.on-hover:hover {
+			& > .children {
+				opacity: 1;
+				top: 3em;
+				transition: opacity .3s ease-in, top .25s cubic-bezier(0.175, 0.885, 0.32, 1);
+			}
 		}
 	}
 }
@@ -499,8 +576,8 @@ header.main-header.row {
 	}
 }
 
-//Logo
-#logo {
+//Logo {
+.site-logo {
 	position: relative;
 	display: inline-block;
 	vertical-align: middle;
@@ -509,31 +586,9 @@ header.main-header.row {
 	a {
 		display: inline-block;
 	}
-}
 
-.header-navigation {
-	display: inline-block;
-	.ws-hack;
-	padding: 1em 0 1em 1.5em;
-
-	nav {
-		display: inline-block;
-		vertical-align: middle;
-
-		.nav {
-			display: inline-block;
-			position: relative;
-			vertical-align: middle;
-		}
-	}
-}
-
-//Primary Navigation
-#links-primary {
-	color: #92acc6;
-
-	.sub-menu {
-		color: white;
+	img {
+		max-height: 2.6em;
 	}
 }
 
