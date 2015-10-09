@@ -102,10 +102,10 @@ function autoload_js_file(url, args, type) {
 				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
 
 				$.ajax({
-					url:      js_url,
-					dataType: 'script',
-					cache:    true
-				})
+						url:      js_url,
+						dataType: 'script',
+						cache:    true
+					})
 					.done(function () {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
@@ -116,10 +116,10 @@ function autoload_js_file(url, args, type) {
 							$(document).trigger(al);
 						}
 					}).always(function (jqXHR, status, msg) {
-						if (status !== 'success') {
-							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
-						}
-					});
+					if (status !== 'success') {
+						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+					}
+				});
 			}
 		}
 	}
@@ -1357,8 +1357,9 @@ $.fn.liveForm = function (params) {
 }
 
 function no_parent_scroll(e) {
-	var h = $(this).height(), d = e.originalEvent.wheelDelta;
-	if ((this.scrollTop >= (this.scrollHeight - h) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+	var t = this, d = e.originalEvent.wheelDelta;
+
+	if ((d > 0 && t.scrollTop <= 0) || (d < 0 && ((t.scrollTop + $(t).outerHeight()) >= t.scrollHeight))) {
 		e.preventDefault();
 	}
 }
@@ -1367,7 +1368,7 @@ function content_loaded(is_ajax) {
 	$('select.amp-select').ampSelect();
 	$('input[data-amp-resize]').ampResize();
 
-	$('.no-parent-scroll').on('mousewheel DOMMouseScroll', no_parent_scroll)
+	$('.no-parent-scroll').use_once('stop-scroll-prop').on('mousewheel DOMMouseScroll scroll touchmove', no_parent_scroll)
 
 	var $forms = $('form');
 
