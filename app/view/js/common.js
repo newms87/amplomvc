@@ -1440,6 +1440,12 @@ $(document)
 			return false;
 		}
 
+		if ($n.is('.link-menu:not(.no-click-active)')) {
+			$n.toggleClass('active');
+		} else if (($lm_parent = $n.closest('.link-menu:not(.no-click-active)')).length) {
+			$lm_parent.toggleClass('active');
+		}
+
 		// Multistate Checkboxes
 		if ($n.is('[data-multistate]')) {
 			var val = $n.val();

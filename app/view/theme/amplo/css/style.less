@@ -289,71 +289,6 @@ button, .button, .row .button {
 }
 
 //Navigation
-.links {
-	display: inline-block;
-	position: relative;
-	font-size: 1em;
-
-	.link-list {
-		display: inline-block;
-
-		ul {
-			li {
-				display: inline-block;
-				position: relative;
-
-				a {
-					display: block;
-				}
-
-				&:hover, &.hover {
-					.sub-menu {
-						max-height: 6em;
-						-webkit-transition: max-height .4s;
-						transition: max-height .4s;
-					}
-				}
-			}
-		}
-
-		.sub-menu {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			text-align: left;
-			z-index: 500;
-			max-height: 0;
-			overflow: hidden;
-			background: @color-secondary;
-			-webkit-transition: padding 0s linear .4s, max-height .4s;
-			transition: padding 0s linear .4s, max-height .4s;
-
-			ul {
-				li {
-					display: block;
-					white-space: nowrap;
-				}
-			}
-		}
-	}
-
-	&.horizontal {
-		.sub-menu {
-			width: 10000px;
-			left: -5000px;
-			margin-left: 50%;
-			text-align: center;
-			top: 3em;
-
-			ul {
-				li {
-					display: inline-block;
-				}
-			}
-		}
-	}
-}
-
 .link-menu {
 	position: relative;
 	display: inline-block;
@@ -362,6 +297,7 @@ button, .button, .row .button {
 	& > a {
 		display: inline-block;
 	}
+
 	& > .parent {
 		cursor: pointer;
 		display: block;
@@ -373,22 +309,55 @@ button, .button, .row .button {
 	}
 
 	& > .children {
-		position: absolute;
-		left: -99999px;
-		top: 100%;
-		background: white;
-		box-shadow: 0 0 5px rgba(0,0,0,.5);
-		padding: 1em;
-		min-width: 8em;
+		position: relative;
+		padding: .7em;
 
 		& > .link-menu {
 			display: block;
-			padding: 0 .5em;
+			padding: .4em .5em;
+
+			& > a, & > .parent {
+				&:hover {
+					opacity: .7;
+				}
+			}
+		}
+	}
+
+	&.popup {
+		& > .children {
+			position: absolute;
+			left: -99999px;
+			top: 100%;
+			background: white;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+			min-width: 8em;
+		}
+	}
+
+	&.dropdown {
+		& > .children {
+			padding: 0;
+			max-height: 0;
+			overflow: hidden;
+		}
+
+		&.active, &.on-hover:hover {
+			& > .children {
+				padding-top: .5em;
+				max-height: none;
+			}
 		}
 	}
 
 	&.active, &.on-hover:hover {
+		& > a {
+			color: @color-secondary;
+		}
+
 		& > .parent {
+			color: @color-secondary;
+
 			.expand {
 				.amp-sprite.rotate-180;
 			}
@@ -400,19 +369,20 @@ button, .button, .row .button {
 	}
 
 	&.arrow-top {
-		margin-top: 1em;
-
 		& > .children {
+			margin-top: 1em;
+			z-index: 2;
+
 			&:before {
-				content: '';
+				font-family: FontAwesome;
+				content: "\f0d8";
 				position: absolute;
-				top: -.8em;
-				right: 20%;
-				width: 0;
-				height: 0;
-				border-bottom: 1.5em solid white;
-				border-left: transparent .5em solid;
-				border-right: transparent .5em solid;
+				top: -.7em;
+				left: 10%;
+				font-size: 2em;
+				color: white;
+				text-shadow: 0 -2px 5px rgba(0,0,0,.3);
+				z-index: 1;
 			}
 		}
 	}
@@ -427,6 +397,7 @@ button, .button, .row .button {
 		}
 
 		& > .children {
+			position: absolute;
 			background: @color-gray-light;
 			box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
 			padding: .5em;
@@ -440,6 +411,7 @@ button, .button, .row .button {
 
 			& > .link-menu {
 				display: inline-block;
+				padding: 0 .5em;
 			}
 		}
 
@@ -456,16 +428,60 @@ button, .button, .row .button {
 			}
 		}
 
-		&.on-hover:hover {
+		&.on-hover:hover, &.active {
 			& > .children {
 				opacity: 1;
 				top: 3em;
-				transition: opacity .3s ease-in, top .25s cubic-bezier(0.175, 0.885, 0.32, 1);
+				transition: opacity .3s cubic-bezier(.96,-0.45,.06,.06), top .2s cubic-bezier(0,1.22,.03,.48);
+			}
+		}
+	}
+
+	&.align-right {
+		& > .children {
+			left: initial;
+			right: -99999px;
+		}
+
+		&.active, &.on-hover:hover {
+			& > .children {
+				right: 0;
+			}
+		}
+
+		&.arrow-top {
+			& > .children {
+				&:before {
+					left: initial;
+					right: 10%;
+				}
 			}
 		}
 	}
 }
 
+.nav-account {
+	.account-home {
+		& > .parent {
+			.text, .fa {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			.fa {
+				font-size: 1.2em;
+			}
+		}
+	}
+
+	.link-logout {
+		a {
+			color: @font-dark;
+		}
+	}
+}
+
+//Image Checboxes
 .image-checkbox, .form-item input.image-checkbox[type="checkbox"] {
 	position: absolute;
 	left: -9999px;

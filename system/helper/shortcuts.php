@@ -1040,24 +1040,23 @@ HTML;
 	}
 }
 
-function build_links($links, $options = array(), &$active = null)
+function build_links($links, $options = array(), $active_url = null, &$is_active = false)
 {
 	global $registry;
 
-	$html      = '';
-	$is_active = false;
+	$html = '';
 
 	$options += array(
-		'sort' => 'sort_order',
+		'sort'  => 'sort_order',
 		'class' => 'vertical',
 	);
 
-	if ($active === null) {
-		$active = $registry->get('url')->here();
+	if ($active_url === null) {
+		$active_url = $registry->get('url')->here();
 	}
 
 	if (is_string($links)) {
-		$links = $registry->get('document')->getLinks($links);
+		$links = get_links($links);
 	}
 
 	if ($options['sort']) {
@@ -1086,7 +1085,7 @@ function build_links($links, $options = array(), &$active = null)
 
 			$link['#href'] = $link['href'];
 
-			if ($link['href'] === $active) {
+			if ($link['href'] === $active_url) {
 				$is_active = true;
 				$link['class'] .= ' active';
 			}
@@ -1097,11 +1096,14 @@ function build_links($links, $options = array(), &$active = null)
 				$link['class'] .= ' on-hover';
 			}
 
-			$children = build_links($link['children'], $options, $active);
+			$child_options = !empty($link['options']) ? $link['options'] : array();
+
+			$children = build_links($link['children'], $child_options + $options, $active_url, $child_active);
 			$link['#class'] .= ' parent';
 
-			if ($active) {
+			if ($child_active) {
 				$link['class'] .= ' active active-child';
+				$is_active = true;
 			}
 		} else {
 			$children = '';
@@ -1114,9 +1116,6 @@ function build_links($links, $options = array(), &$active = null)
 
 		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
 	}
-
-	//Propagate active up the tree
-	$active = $is_active;
 
 	return $html;
 }
