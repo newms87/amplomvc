@@ -1357,10 +1357,14 @@ $.fn.liveForm = function (params) {
 }
 
 function no_parent_scroll(e) {
-	var t = this, d = e.originalEvent.wheelDelta;
-
-	if ((d > 0 && t.scrollTop <= 0) || (d < 0 && ((t.scrollTop + $(t).outerHeight()) >= t.scrollHeight))) {
+	if (e.touches) {
 		e.preventDefault();
+	} else {
+		var t = this, d = e.originalEvent.wheelDelta;
+
+		if ((d > 0 && t.scrollTop <= 0) || (d < 0 && ((t.scrollTop + $(t).outerHeight()) >= t.scrollHeight))) {
+			e.preventDefault();
+		}
 	}
 }
 
