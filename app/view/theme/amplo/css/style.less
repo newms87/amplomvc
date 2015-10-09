@@ -381,7 +381,7 @@ button, .button, .row .button {
 				left: 10%;
 				font-size: 2em;
 				color: white;
-				text-shadow: 0 -2px 5px rgba(0,0,0,.3);
+				text-shadow: 0 -2px 5px rgba(0, 0, 0, .3);
 				z-index: 1;
 			}
 		}
@@ -432,20 +432,16 @@ button, .button, .row .button {
 			& > .children {
 				opacity: 1;
 				top: 3em;
-				transition: opacity .3s cubic-bezier(.96,-0.45,.06,.06), top .2s cubic-bezier(0,1.22,.03,.48);
+				transition: opacity .3s cubic-bezier(.96, -0.45, .06, .06), top .2s cubic-bezier(0, 1.22, .03, .48);
 			}
 		}
 	}
 
 	&.align-right {
-		& > .children {
-			left: initial;
-			right: -99999px;
-		}
-
 		&.active, &.on-hover:hover {
 			& > .children {
 				right: 0;
+				left: initial;
 			}
 		}
 

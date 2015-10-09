@@ -1358,7 +1358,7 @@ $.fn.liveForm = function (params) {
 
 function no_parent_scroll(e) {
 	if (e.touches) {
-		e.preventDefault();
+		//e.preventDefault();
 	} else {
 		var t = this, d = e.originalEvent.wheelDelta;
 
@@ -1445,10 +1445,9 @@ $(document)
 			return false;
 		}
 
-		if ($n.is('.link-menu:not(.no-click-active)')) {
-			$n.toggleClass('active');
-		} else if (($lm_parent = $n.closest('.link-menu:not(.no-click-active)')).length) {
-			$lm_parent.toggleClass('active');
+		if (($lm = $n.closest('.link-menu:not(.no-click-active)')).length) {
+			$lm.closest('.accordian').find('.active').not($lm).removeClass('active child-active')
+			$lm.toggleClass('active');
 		}
 
 		// Multistate Checkboxes
