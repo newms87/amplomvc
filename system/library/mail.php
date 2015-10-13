@@ -233,8 +233,6 @@ class Mail extends Library
 			$bcc = $this->bcc ? "(BCC: $this->bcc)" : '';
 			$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
 
-			$this->trigger_error($msg);
-
 			if (isset($this->config)) {
 				$this->to      = option('site_email_error', 'error@' . DOMAIN);
 				$this->from    = option('site_email_error', 'error@' . DOMAIN);
@@ -243,7 +241,7 @@ class Mail extends Library
 				$this->subject = "There was a problem sending out the email!";
 				$this->text    = $msg;
 			} else {
-				$this->trigger_error("Please set the Error Email Address under settings!");
+				$this->error['error_email'] = _l("Please set the Error Email Address under settings!");
 
 				return false;
 			}
@@ -319,20 +317,14 @@ class Mail extends Library
 		$this->log(__METHOD__ . "(): to ($this->to), from ($this->from)");
 
 		if ($this->protocol === 'smtp') {
-			$this->log("Sending via SMTP:");
-
 			if ($this->sendSmtp($header, $message)) {
 				$this->log("SMTP Mail Sent!", true);
 
 				return true;
 			}
-
-			$this->log("SMTP Failed", true);
 		}
 
 		//Send via standard PHP
-		$this->log("Sending via PHP mail():");
-
 		ini_set('sendmail_from', $this->from);
 
 		if (!$this->parameter) {
@@ -344,9 +336,9 @@ class Mail extends Library
 		}
 
 		if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
-			$this->trigger_error("There was an error while sending the email message to: $this->to -- from: $this->from");
+			$this->error['php_mail'] = _l("There was an error while sending the email message to: %s -- from: %s", $this->to, $this->from);
 
-			$this->log("PHP mail() Failed", true);
+			$this->log("Email Failed", true);
 
 			return false;
 		}
@@ -432,7 +424,7 @@ class Mail extends Library
 		$this->handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
 
 		if (!$this->handle) {
-			$this->trigger_error('' . $errstr . ' (' . $errno . ')');
+			$this->error['fsockopen'] = $errstr . ' (' . $errno . ')';
 
 			return false;
 		}
@@ -444,7 +436,7 @@ class Mail extends Library
 
 		if (substr($this->hostname, 0, 3) === 'tls') {
 			if (!$this->talk("STARTTLS", 220)) {
-				$this->trigger_error('STARTTLS not accepted from server!');
+				$this->error['starttls'] = _l('STARTTLS not accepted from server!');
 
 				return false;
 			}
@@ -452,38 +444,38 @@ class Mail extends Library
 
 		if (!empty($this->username) && !empty($this->password)) {
 			if (!$this->talk('EHLO ' . getenv('SERVER_NAME'), 250)) {
-				$this->trigger_error('EHLO not accepted from server!');
+				$this->error['ehlo'] = _l('EHLO not accepted from server!');
 
 				return false;
 			}
 
 			if (!$this->talk('AUTH LOGIN', 334)) {
-				$this->trigger_error('AUTH LOGIN not accepted from server!');
+				$this->error['auth_login'] = _l('AUTH LOGIN not accepted from server!');
 
 				return false;
 			}
 
 			if (!$this->talk(base64_encode($this->username), 334)) {
-				$this->trigger_error('Username not accepted from server!');
+				$this->error['username'] = _l('Username not accepted from server!');
 
 				return false;
 			}
 
 			if (!$this->talk(base64_encode($this->password), 235)) {
-				$this->trigger_error('Password not accepted from server!');
+				$this->error['password'] = _l('Password not accepted from server!');
 
 				return false;
 			}
 		} else {
 			if (!$this->talk('HELO ' . getenv('SERVER_NAME'), 250)) {
-				$this->trigger_error('HELO not accepted from server!');
+				$this->error['helo'] = _l('HELO not accepted from server!');
 
 				return false;
 			}
 		}
 
 		if (!$this->talk('MAIL FROM: <' . $this->from . '>' . ($this->verp ? 'XVERP' : ''), 250)) {
-			$this->trigger_error('MAIL FROM not accepted from server!');
+			$this->error['mail_from'] = _l('MAIL FROM not accepted from server!');
 
 			return false;
 		}
@@ -494,7 +486,7 @@ class Mail extends Library
 	protected function endSmtp()
 	{
 		if (!$this->talk('QUIT', 221)) {
-			$this->trigger_error('QUIT not accepted from server!');
+			$this->error['quit'] = _l('QUIT not accepted from server!');
 
 			return false;
 		}
@@ -521,13 +513,13 @@ class Mail extends Library
 
 		foreach ($this->to as $key => $recipient) {
 			if (!$this->talk('RCPT TO: <' . $recipient . '>', $reply_codes)) {
-				message('warning', _l("%s is an invalid recipient. Mail was not delivered to this address.", $recipient));
+				$this->error['to'] = _l("%s is an invalid recipient. Mail was not delivered to this address.", $recipient);
 				unset($this->to[$key]);
 			}
 		}
 
 		if (!$this->talk('DATA', 354)) {
-			$this->trigger_error('DATA not accepted from server!');
+			$this->error['data'] = _l('DATA 354 not accepted from server!');
 
 			return false;
 		}
@@ -547,7 +539,7 @@ class Mail extends Library
 		}
 
 		if (!$this->talk('.', 250)) {
-			$this->trigger_error('DATA not accepted from server!');
+			$this->error['data'] = _l('DATA 250 not accepted from server!');
 
 			return false;
 		}
@@ -588,39 +580,6 @@ class Mail extends Library
 		}
 
 		return $reply;
-	}
-
-	protected function trigger_error($msg)
-	{
-		//Avoid error loops
-		if (strpos($this->html, "MAIL ERROR:")) {
-			return;
-		}
-
-		$msg = "MAIL ERROR: " . $msg;
-		trigger_error($msg);
-		$this->log($msg, true);
-
-		$mail_fail = array(
-			'mail'       => $this,
-			'error'      => $msg,
-			'to'         => $this->to,
-			'cc'         => $this->cc,
-			'bcc'        => $this->bcc,
-			'from'       => $this->from,
-			'sender'     => $this->sender,
-			'subject'    => $this->subject,
-			'html'       => $this->html,
-			'text'       => $this->text,
-			'attachment' => $this->attachments,
-			'time'       => _time(),
-		);
-
-		$mail_fail = serialize($mail_fail);
-
-		$mail_fail = $this->escape($mail_fail);
-
-		$this->query("INSERT INTO {$this->t['setting']} SET `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	protected function log($msg, $flush = false)
