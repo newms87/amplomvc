@@ -10,7 +10,13 @@
 	<? if ($logo) { ?>
 		<div style="margin-bottom: 10px;">
 			<a href="<?= site_url(); ?>" title="<?= option('site_name'); ?>">
-				<img <?= img($logo, option('site_email_logo_width', 400), option('site_email_logo_height', 150), option('site_name'), option('site_name')); ?> style="margin-bottom: 20px; border: none;"/>
+				<?= img($logo, array(
+					'width'  => option('site_email_logo_width', 400),
+					'height' => option('site_email_logo_height', 150),
+					'#title' => option('site_name'),
+					'#alt'   => option('site_name'),
+					'#style' => "margin-bottom: 20px; border: none;",
+				)); ?>
 			</a>
 		</div>
 	<? } ?>

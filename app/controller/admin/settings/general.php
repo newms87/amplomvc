@@ -99,10 +99,10 @@ class App_Controller_Admin_Settings_General extends Controller
 			$image = image(DIR_SITE . 'app/view/theme/' . $theme . '/preview.png');
 
 			if (!$image) {
-				$image = theme_image('no-preview.png', 300, 300);
+				$image = image(theme_dir('no-preview.png'), 300, 300);
 			}
 
-			output("<img src=\"$image\" class =\"theme-preview\" />");
+			output(img($image, array('#class' => 'theme-preview')));
 		}
 	}
 

@@ -14,7 +14,12 @@
 							<? if ($logo_srcset = option('admin_logo_srcset')) { ?>
 								<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('admin_logo_width'), option('admin_logo_height', 80)), $logo_srcset, option('admin_name'), option('admin_name')); ?> />
 							<? } else { ?>
-								<img <?= img($logo, option('admin_logo_width'), option('admin_logo_height', 80), option('admin_name'), option('admin_name')); ?> />
+								<?= img($logo, array(
+									'width'  => option('admin_logo_width'),
+									'height' => option('admin_logo_height', 80),
+									'#title' => option('admin_name'),
+									'#alt'   => option('admin_name'),
+								)); ?>
 							<? } ?>
 						<? } else { ?>
 							<?= option('site_name'); ?>
@@ -27,7 +32,7 @@
 			<? if (is_logged()) { ?>
 				<div class="header-right col xs-12 md-4 xs-center md-right">
 					<div class="header-secure">
-						<img <?= img(theme_dir('image/lock.png')); ?> />
+						<?= img(theme_dir('image/lock.png')); ?>
 						{{Logged in as <a href="<?= site_url('admin/user/my-account'); ?>"><?= user_info('username'); ?></a>}}
 					</div>
 

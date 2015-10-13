@@ -3,7 +3,10 @@
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= site_url('admin/settings/url-alias/save', 'url_alias_id=' . $url_alias_id); ?>" class="box form ctrl-save" method="post" enctype="multipart/form-data">
 		<div class="heading">
-			<h1><img src="<?= theme_image('settings/alias.png'); ?>" alt=""/> {{URL Aliases}}</h1>
+			<h1>
+				<?= img(theme_dir('settings/alias.png')); ?>
+				{{URL Aliases}}
+			</h1>
 
 			<div class="buttons">
 				<button data-loading="{{Saving...}}">{{Save}}</button>
@@ -36,7 +39,7 @@
 								'type'   => 'select',
 								'name'   => 'status',
 								'data'   => $data_statuses,
-								'select' => $status
+								'select' => $status,
 							)); ?>
 						</td>
 					</tr>

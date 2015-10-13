@@ -58,7 +58,12 @@
 						<? if ($logo_srcset = option('site_logo_srcset')) { ?>
 							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('site_logo_width'), option('site_logo_height')), $logo_srcset, option('site_name'), option('site_name')); ?> />
 						<? } else { ?>
-							<img <?= img($logo, option('site_logo_width'), option('site_logo_height'), option('site_name'), option('site_name')); ?> />
+							<?= img($logo, array(
+								'width'  => option('admin_logo_width'),
+								'height' => option('admin_logo_height', 80),
+								'#title' => option('admin_name'),
+								'#alt'   => option('admin_name'),
+							)); ?>
 						<? } ?>
 					</a>
 				</div>
