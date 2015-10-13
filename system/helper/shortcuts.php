@@ -114,31 +114,44 @@ function send_mail($params)
 	return $registry->get('mail')->init($params)->send();
 }
 
-function img($image, $width = null, $height = null, $title = null, $alt = null, $version = true, $size_attr = true, $default = null, $cast_protocol = false)
+function img($image, $options = array())
 {
 	global $registry;
 
-	$src  = image($image, $width, $height, $default, $cast_protocol);
-	$file = $registry->get('image')->get($src, true);
+	$options += array(
+		'width'         => null,
+		'height'        => null,
+		'max_size'      => null,
+		'version'       => true,
+		'size_attr'     => true,
+		'default'       => null,
+		'cast_protocol' => false,
+	);
 
-	$size = '';
+	$src = image($image, $options['width'], $options['height'], $options['max_size'], $options['default'], $options['cast_protocol']);
 
-	if ($file && is_file($file)) {
-		if ($version) {
-			$src .= '?v=' . filemtime($file);
-		}
+	if ($src && ($options['version'] || $options['size_attr'])) {
+		$file = $registry->get('image')->get($src, true);
 
-		if ($size_attr) {
-			$size = getimagesize($file);
-			$size = isset($size[3]) ? $size[3] : '';
+		if ($file && is_file($file)) {
+			if ($options['version']) {
+				$src .= '?v=' . filemtime($file);
+			}
+
+			if ($options['size_attr'] && $size = getimagesize($file)) {
+				list($options['width'], $options['height']) = $size;
+			}
 		}
 	}
 
-	$src   = $src ? "src=\"$src\"" : '';
-	$title = $title !== false ? "title=\"$title\"" : '';
-	$alt   = $alt !== false ? "alt=\"$alt\"" : '';
+	if ($options['size_attr']) {
+		!$options['width'] || $options['#width'] = $options['width'];
+		!$options['height'] || $options['#height'] = $options['height'];
+	}
 
-	return "$src $title $alt $size";
+	$options['#src'] = $src ?: $image;
+
+	return "<img " . attrs($options) . "/>";
 }
 
 function image($file, $width = null, $height = null, $max_size = false, $default = null, $cast_protocol = false)
@@ -154,7 +167,7 @@ function image($file, $width = null, $height = null, $max_size = false, $default
 
 	if (!$url && $default) {
 		if ($default === true) {
-			$url = theme_image('no_image.png', $width, $height);
+			$url = image(theme_url('image/no_image.png'), $width, $height);
 		} else {
 			$image = new Image($default);
 			$url   = $image->resize($width, $height, $max_size);
@@ -362,16 +375,6 @@ function image_save($image, $save_as = null, $width = null, $height = null, $def
 	return $new_image;
 }
 
-function theme_image($image, $width = null, $height = null, $theme = null)
-{
-	if (is_string($width) && !is_numeric($width)) {
-		$theme = $width;
-		$width = null;
-	}
-
-	return image(theme_dir('image/' . $image, $theme), $width, $height);
-}
-
 function is_url($url)
 {
 	return (filter_var($url, FILTER_VALIDATE_URL) || strpos($url, '//') === 0);
@@ -384,11 +387,11 @@ function site_url($path = '', $query = null, $ssl = null, $site_id = null)
 	return $registry->get('url')->link($path, $query, $ssl, $site_id);
 }
 
-function theme_url($path = '', $query = null)
+function theme_url($path = '', $query = null, $theme = null)
 {
 	global $registry;
 
-	$url = $registry->get('theme')->getUrl($path);
+	$url = $registry->get('theme')->getUrl($path, $theme);
 
 	if (!$url) {
 		$url = URL_THEME . $path;

@@ -10,7 +10,7 @@
 		<div id="client-invoice" class="client-invoice-template col xs-12">
 			<div class="header row">
 				<div class="col xs-12 logo">
-					<img <?= img(theme_image('logo.png', 250)); ?> />
+					<?= img(theme_dir('logo.png'), array('width' => 250)); ?>
 				</div>
 			</div>
 
@@ -103,7 +103,7 @@
 
 			<div class="row cut-separator">
 				<div class="text">{{Please detach top portion and return with your payment}}</div>
-				<img <?= img(theme_image('scissors.png')); ?> />
+				<?= img(theme_url('image/scissors.png')); ?>
 			</div>
 
 			<div class="row invoice-list">

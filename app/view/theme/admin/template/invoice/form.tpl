@@ -8,7 +8,7 @@
 	<div class="box invoice-form">
 		<div class="heading">
 			<h1>
-				<img src="<?= theme_image(Tracescope::$scope . '/icon.png', 18, 18); ?>"/>
+				<img src="<?= image(theme_dir(Tracescope::$scope . '/icon.png'), 18, 18); ?>"/>
 				<?= _l("Generate Invoice for "); ?>
 				<div class="client-id">
 					<input id="customer-autocomplete" type="text" name="client" data-autocomplete value="<?= $customer['username']; ?>"/>

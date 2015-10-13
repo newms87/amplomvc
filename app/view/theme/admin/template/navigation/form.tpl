@@ -5,7 +5,7 @@
 		<div class="box">
 			<div class="heading">
 				<h1>
-					<img src="<?= theme_image('setting.png'); ?>" alt=""/>
+					<?= img(theme_url('image/setting.png')); ?>
 					{{Navigation}}
 				</h1>
 

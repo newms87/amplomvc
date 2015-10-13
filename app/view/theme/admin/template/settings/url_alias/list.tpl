@@ -5,7 +5,10 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_image('settings/alias.png'); ?>" alt=""/> {{URL Alias}}</h1>
+			<h1>
+				<?= img(theme_url('settings/alias.png')); ?>
+				{{URL Alias}}
+			</h1>
 
 			<? if (user_can('w', 'admin/settings/url_alias')) { ?>
 				<? if (!empty($batch_action)) { ?>
