@@ -1067,6 +1067,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	}
 
 	foreach ($links as $name => $link) {
+		if (isset($link['path']) && IS_ADMIN && !user_can('r', $link['path'])) {
+			continue;
+		}
+
 		if (!empty($link['name'])) {
 			$name = $link['name'];
 		}
