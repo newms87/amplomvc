@@ -1067,7 +1067,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	}
 
 	foreach ($links as $name => $link) {
-		if (isset($link['path']) && IS_ADMIN && !user_can('r', $link['path'])) {
+		if (IS_ADMIN && isset($link['path']) && !user_can('r', $link['path'])) {
 			continue;
 		}
 
@@ -1119,6 +1119,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			}
 		} else {
 			$children = '';
+		}
+
+		if (empty($link['#href']) && !$children) {
+			continue;
 		}
 
 		$link['class']  = trim($link['class']);
