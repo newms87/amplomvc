@@ -553,7 +553,7 @@ abstract class Model
 
 		if (!empty($options['join'])) {
 			foreach ($options['join'] as $join_table => $join) {
-				if (isset($join['columns'])) {
+				if (strpos($join_table, '#') !== 0 && isset($join['columns'])) {
 					$select .= ($select ? ',' : '') . $this->extractSelect($join_table, $join);
 				}
 			}

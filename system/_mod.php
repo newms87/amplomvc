@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 1);
 if (!defined('DIR_CACHE')) {
 	define('DIR_CACHE', DIR_SITE . 'system/cache/');
 }

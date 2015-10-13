@@ -1064,6 +1064,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	}
 
 	foreach ($links as $name => $link) {
+		if (!empty($link['name'])) {
+			$name = $link['name'];
+		}
+
 		if (empty($link['display_name'])) {
 			$link['display_name'] = $name;
 		}
@@ -1097,12 +1101,13 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			}
 
 			$child_options = !empty($link['options']) ? $link['options'] : array();
+			$child_active  = false;
 
 			$children = build_links($link['children'], $child_options + $options, $active_url, $child_active);
 			$link['#class'] .= ' parent';
 
 			if ($child_active) {
-				$link['class'] .= ' active active-child';
+				$link['class'] .= ' active-child';
 				$is_active = true;
 			}
 		} else {

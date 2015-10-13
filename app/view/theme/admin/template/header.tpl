@@ -49,8 +49,8 @@
 
 	<? if (is_logged()) { ?>
 		<div id="menu">
-			<div class="admin-nav links"><?= links('admin'); ?></div>
-			<div class="right-nav links"><?= links('right'); ?></div>
+			<div class="nav nav-admin"><?= build_links('admin', array('class' => 'popup')); ?></div>
+			<div class="nav nav-right"><?= build_links('right', array('class' => 'popup')); ?></div>
 		</div>
 	<? } ?>
 
