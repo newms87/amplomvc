@@ -1050,8 +1050,9 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	$html = '';
 
 	$options += array(
-		'sort'  => 'sort_order',
-		'class' => 'vertical',
+		'sort'       => 'sort_order',
+		'class'      => 'vertical',
+		'amp_toggle' => false,
 	);
 
 	if ($active_url === null) {
@@ -1106,6 +1107,9 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			$child_options = !empty($link['options']) ? $link['options'] : array();
 			$child_active  = false;
 
+			//Children of an amp-toggle element cannot be amp_toggle-able
+			!$options['amp_toggle'] || $child_options['amp_toggle'] = false;
+
 			$children = build_links($link['children'], $child_options + $options, $active_url, $child_active);
 			$link['#class'] .= ' parent';
 
@@ -1122,7 +1126,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 
 		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
 
-		$html .= "<div class=\"link-menu menu-tab $link[class]\">$l</div>";
+		$html .= "<div class=\"link-menu menu-tab $link[class]\" " . ($options['amp_toggle'] ? 'data-amp-toggle' : '') . ">$l</div>";
 	}
 
 	return $html;
