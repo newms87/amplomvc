@@ -2,6 +2,13 @@
 
 class App_Controller_Admin_Site extends Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->Model_Site->checkLoginGroups();
+	}
+
 	public function index($data = array())
 	{
 		//Page Head

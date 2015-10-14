@@ -1125,7 +1125,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 		$link['#class'] = trim($link['#class']);
 
 		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
-
+		
 		$html .= "<div class=\"link-menu menu-tab $link[class]\" " . ($options['amp_toggle'] ? 'data-amp-toggle' : '') . ">$l</div>";
 	}
 

@@ -181,33 +181,45 @@ $.ampToggle = $.fn.ampToggle = function (o) {
 
 $.extend($.ampToggle, {
 	init: function (o) {
-		var $toggle = this;
-
-		if (!o || !(o.content = $(o.content)).length) {
+		if (!o) {
 			$.error("ampToggle parameter error: content must be an existing DOM element");
 			return this;
 		}
 
-		if ($toggle.length) {
-			o = $.extend({}, {
-				content:      null,
-				start:        'hide',
-				acceptParent: '',
-				toggleClass:  null
-			}, o);
+		o = $.extend({}, {
+			toggle:           this,
+			content:          this,
+			toggleClass:      'active',
+			contentClass:     'active',
+			hideToggleClass:  '',
+			hideContentClass: null,
+			start:            'hide',
+			acceptParent:     '',
+			onShow:           null,
+			onHide:           null
+		}, o);
 
+		o.toggle = $(o.toggle || this);
+		o.content = $(o.content || this);
+
+		//Only add .hidden class if the toggle is not a child / same element as the content
+		if (o.hideContentClass === null) {
+			o.hideContentClass = o.toggle.closest(o.content).length ? '' : 'hidden';
+		}
+
+		if (o.toggle.length) {
+			o.toggleClass += ' amp-toggle-show';
+			o.contentClass += ' amp-toggle-show';
+			o.hideToggleClass += ' amp-toggle-hide';
+			o.hideContentClass += ' amp-toggle-hide';
 			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content');
 
-			if (!o.toggleClass) {
-				o.content.addClass('height-animate-hide');
-			}
-
-			$toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
-				$.ampToggle.blurred ? $.ampToggle.blurred = false : $toggle.ampToggle(o.content.hasClass('hide') ? 'show' : 'hide');
+			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
+				$.ampToggle.blurred ? $.ampToggle.blurred = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
 			})
 
 			if (o.start) {
-				$toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
+				o.toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
 			}
 		}
 
@@ -217,17 +229,9 @@ $.extend($.ampToggle, {
 	_blur: function (e) {
 		var $t = $(e.target), o = $.ampToggle.active.data('amp-toggle-o');
 
-		console.log('blur', $t);
-		console.log('parent', o.acceptParent, $t.closest(o.acceptParent))
-		console.log('content', o.content, $t.closest(o.content));
-		console.log('active', $.ampToggle.active, $t.closest($.ampToggle.active));
-
-
-		if ($t.closest(o.content).length || ($.ampToggle.active && $t.closest($.ampToggle.active).length)) {
-			console.log('canclled');
-			$.ampToggle.blurred = true;
+		if ($t.closest(o.content).length) {
+			!o.content.is('.amp-toggle') || ($.ampToggle.blurred = true);
 		} else if (!$t.closest(o.acceptParent).length) {
-			console.log('burred here');
 			$.ampToggle.active.ampToggle('hide');
 
 			if ($t.hasClass('amp-toggle')) {
@@ -239,19 +243,29 @@ $.extend($.ampToggle, {
 	show: function () {
 		var $this = $(this);
 		var o = $this.data('amp-toggle-o');
-		$.ampToggle.active = $this.removeClass('amp-toggle-hide');
-		o.content.addClass(o.toggleClass).removeClass('hide');
+
+		o.toggle.addClass(o.toggleClass).removeClass(o.hideToggleClass);
+		o.content.addClass(o.contentClass).removeClass(o.hideContentClass);
+		$.ampToggle.active = $this;
 		document.addEventListener('click', $.ampToggle._blur, true);
+
+		if (typeof o.onShow === 'function') {
+			o.onShow.call(this, o);
+		}
 	},
 
 	hide: function () {
 		var $this = $(this);
 		var o = $this.data('amp-toggle-o');
 
-		$this.addClass('amp-toggle-hide');
-		o.content.removeClass(o.toggleClass).addClass('hide');
+		o.toggle.removeClass(o.toggleClass).addClass(o.hideToggleClass);
+		o.content.removeClass(o.contentClass).addClass(o.hideContentClass);
 		$.ampToggle.active = null;
 		document.removeEventListener('click', $.ampToggle._blur, true);
+
+		if (typeof o.onHide === 'function') {
+			o.onHide.call(this, o);
+		}
 	},
 });
 
