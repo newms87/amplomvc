@@ -1050,17 +1050,20 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	$html = '';
 
 	$options += array(
-		'sort'       => 'sort_order',
+		'sort'       => null,
 		'class'      => 'vertical',
 		'amp_toggle' => false,
 	);
 
-	if ($active_url === null) {
-		$active_url = $registry->get('url')->here();
-	}
+	$active_url = path_format($active_url === null ? $registry->get('url')->here() : $active_url);
 
 	if (is_string($links)) {
 		$links = get_links($links);
+	}
+
+	if ($options['sort'] === null) {
+		$first           = current($links);
+		$options['sort'] = !empty($first['sort_order']) ? 'sort_order' : false;
 	}
 
 	if ($options['sort']) {
@@ -1090,6 +1093,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			$link['#class'] = '';
 		}
 
+		if (empty($link['href']) && isset($link['path'])) {
+			$link['href'] = site_url($link['path'], isset($link['query']) ? $link['query'] : '');
+		}
+
 		if (!empty($link['href'])) {
 			if (strpos($link['href'], '#') !== 0) {
 				$link['#class'] .= ' link';
@@ -1097,7 +1104,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 
 			$link['#href'] = $link['href'];
 
-			if ($link['href'] === $active_url) {
+			if (path_format($link['href']) === $active_url) {
 				$is_active = true;
 				$link['class'] .= ' active';
 			}
@@ -1133,7 +1140,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 		$link['#class'] = trim($link['#class']);
 
 		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
-		
+
 		$html .= "<div class=\"link-menu menu-tab $link[class]\" " . ($options['amp_toggle'] ? 'data-amp-toggle' : '') . ">$l</div>";
 	}
 
