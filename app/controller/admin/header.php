@@ -106,6 +106,7 @@ class App_Controller_Admin_Header extends Controller
 				$link_sites = array(
 					'name'         => 'sites',
 					'display_name' => _l("Sites"),
+					'class'        => 'popup',
 					'sort_order'   => 0,
 				);
 
@@ -113,7 +114,7 @@ class App_Controller_Admin_Header extends Controller
 
 				//Link to all of the stores under the stores top level navigation
 				foreach ($sites as $site_id => $site) {
-					$link_store = array(
+					$linke_site = array(
 						'name'         => 'site_' . $site_id,
 						'display_name' => $site['name'],
 						'href'         => site_url('', '', null, $site_id),
@@ -121,7 +122,7 @@ class App_Controller_Admin_Header extends Controller
 						'target'       => '_blank',
 					);
 
-					$this->document->addLink('right', $link_store);
+					$this->document->addLink('right', $linke_site);
 				}
 			}
 
