@@ -32,8 +32,9 @@
 			<? if (is_logged()) { ?>
 				<div class="header-right col xs-12 md-4 xs-center md-right">
 					<div class="header-secure">
-						<?= img(theme_dir('image/lock.png')); ?>
-						{{Logged in as <a href="<?= site_url('admin/user/my-account'); ?>"><?= user_info('username'); ?></a>}}
+						<i class="fa fa-lock"></i>
+						{{Logged in as}}
+						<a href="<?= site_url('admin/user/my-account'); ?>"><?= user_info('username'); ?></a>
 					</div>
 
 					<? if ($support = option('site_email_support')) { ?>
