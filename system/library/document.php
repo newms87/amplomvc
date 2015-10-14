@@ -96,7 +96,7 @@ class Document extends Library
 		$defaults = array(
 			'name'         => null,
 			'display_name' => '',
-			'path'         => '',
+			'path'         => null,
 			'query'        => null,
 			'title'        => '',
 			'class'        => array(),

@@ -1079,19 +1079,24 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			$name = $link['name'];
 		}
 
-		if (empty($link['display_name'])) {
-			$link['display_name'] = $name;
-		}
+		$link += array(
+			'name'         => $name,
+			'display_name' => $name,
+			'class'        => $options['class'],
+			'path'         => null,
+			'show_on'      => 'hover expand',
+			'a'            => array(),
+		);
 
-		if (empty($link['class'])) {
-			$link['class'] = $options['class'];
+		$link['a'] += array(
+			'#class' => ''
+		);
+
+		if (is_array($link['class'])) {
+			$link['class'] = implode(' ', $link['class']);
 		}
 
 		$link['class'] .= ' link-' . $name;
-
-		if (empty($link['#class'])) {
-			$link['#class'] = '';
-		}
 
 		if (empty($link['href']) && isset($link['path'])) {
 			$link['href'] = site_url($link['path'], isset($link['query']) ? $link['query'] : '');
@@ -1099,10 +1104,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 
 		if (!empty($link['href'])) {
 			if (strpos($link['href'], '#') !== 0) {
-				$link['#class'] .= ' link';
+				$link['a']['#class'] .= ' link';
 			}
 
-			$link['#href'] = $link['href'];
+			$link['a']['#href'] = $link['href'];
 
 			if (path_format($link['href']) === $active_url) {
 				$is_active = true;
@@ -1111,18 +1116,15 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 		}
 
 		if (!empty($link['children'])) {
-			if (!isset($link['hover']) || $link['hover'] !== false) {
-				$link['class'] .= ' on-hover';
+			foreach (explode(' ', $link['show_on']) as $on) {
+				$link['class'] .= ' on-' . $on;
 			}
 
 			$child_options = !empty($link['options']) ? $link['options'] : array();
 			$child_active  = false;
 
-			//Children of an amp-toggle element cannot be amp_toggle-able
-			!$options['amp_toggle'] || $child_options['amp_toggle'] = false;
-
 			$children = build_links($link['children'], $child_options + $options, $active_url, $child_active);
-			$link['#class'] .= ' parent';
+			$link['a']['#class'] .= ' parent';
 
 			if ($child_active) {
 				$link['class'] .= ' active-child';
@@ -1132,16 +1134,16 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			$children = '';
 		}
 
-		if (empty($link['#href']) && !$children) {
+		if (empty($link['a']['#href']) && !$children) {
 			continue;
 		}
 
-		$link['class']  = trim($link['class']);
-		$link['#class'] = trim($link['#class']);
+		$link['#class']      = "link-menu menu-tab " . trim($link['class']);
+		$link['a']['#class'] = trim($link['a']['#class']);
 
-		$l = "<a " . attrs($link) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
+		$l = "<a " . attrs($link['a']) . ">$link[display_name]" . ($children ? "<i class=\"expand fa fa-chevron-down\"></i>" : '') . "</a>\n" . ($children ? "<div class=\"children\">$children</div>" : '');
 
-		$html .= "<div class=\"link-menu menu-tab $link[class]\" " . ($options['amp_toggle'] ? 'data-amp-toggle' : '') . ">$l</div>";
+		$html .= "<div " . attrs($link) . ">$l</div>";
 	}
 
 	return $html;
