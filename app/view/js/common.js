@@ -1481,7 +1481,6 @@ $(document)
 		}
 
 		if (($lm = $n.closest('.link-menu')).length) {
-			console.log($lm);
 			if ($lm.is('.on-click')) {
 				$lm.toggleClass('active');
 			} else if ($lm.is('.on-expand') && $n.is('.expand')) {

@@ -492,66 +492,15 @@ function js_var($key, $value = null)
 function page_info($key = null, $default = null)
 {
 	global $registry;
-	static $document, $info;
 
-	if (!$document) {
-		$document = $registry->get('document');
-	}
-
-	if (!$info) {
-		$info = &$document->infoRef();
-	}
-
-	if (!$key) {
-		return $info;
-	}
-
-	$value = isset($info[$key]) ? $info[$key] : $default;
-
-	switch ($key) {
-		case 'styles':
-			return $document->getStyles();
-
-		case 'scripts':
-			return $document->getScripts();
-
-		case 'body_class':
-			return $document->getBodyClass();
-	}
-
-	return $value;
+	return $registry->get('document')->info($key, $default);
 }
 
 function set_page_info($key, $value)
 {
 	global $registry;
-	static $document;
 
-	if (!$document) {
-		$document = $registry->get('document');
-	}
-
-	switch ($key) {
-		case 'styles':
-			$document->addStyle($value);
-			break;
-
-		case 'scripts':
-			$document->addScript($value);
-			break;
-
-		case 'body_class':
-			if (is_array($value)) {
-				$document->setBodyClass($value);
-			} else {
-				$document->addBodyClass($value);
-			}
-			break;
-
-		default:
-			$document->setInfo($key, $value);
-			break;
-	}
+	return $registry->get('document')->setInfo($key, $value);
 }
 
 function page_meta($key = null, $default = null)
