@@ -1071,6 +1071,10 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	}
 
 	foreach ($links as $name => $link) {
+		if (!empty($link['children']) && empty($link['path'])) {
+			unset($link['path']);
+		}
+
 		if (IS_ADMIN && isset($link['path']) && !user_can('r', $link['path'])) {
 			continue;
 		}
@@ -1084,7 +1088,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			'display_name' => $name,
 			'class'        => $options['class'],
 			'path'         => null,
-			'show_on'      => 'hover expand',
+			'show_on'      => (empty($link['href']) && empty($link['path'])) ? 'hover click' : 'hover expand',
 			'a'            => array(),
 		);
 
