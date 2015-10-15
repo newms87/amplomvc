@@ -390,6 +390,7 @@ $.extend($.ampModal, {
 		o = $.extend({}, {
 			context:     'body',
 			title:       '',
+			class:       '',
 			content:     this,
 			buttons:     {},
 			shadow:      true,
@@ -403,7 +404,7 @@ $.extend($.ampModal, {
 
 		return $(o.content).use_once('amp-modal-enabled').each(function (i, e) {
 			var $e = $(e),
-				$box = $('<div />').addClass('amp-modal'),
+				$box = $('<div />').addClass('amp-modal').addClass(o.class),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
@@ -449,6 +450,7 @@ $.extend($.ampModal, {
 $.ampConfirm = $.fn.ampConfirm = function (o) {
 	o = $.extend({}, {
 		title:       'Are you sure?',
+		class:       'amp-modal-confirm',
 		content:     $('<div/>').addClass('amp-confirm'),
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
