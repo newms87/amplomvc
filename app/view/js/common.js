@@ -842,6 +842,17 @@ $.fn.show_msg = function (type, msg, options) {
 		return;
 	}
 
+	if (typeof type === 'object') {
+		options = msg;
+		msg = type;
+		type = null;
+	}
+
+	if (typeof msg === 'undefined' || msg === null) {
+		msg = type;
+		type = null;
+	}
+
 	options = $.extend({
 		style:       'stacked',
 		inline:      $ac.show_msg_inline,
@@ -851,11 +862,6 @@ $.fn.show_msg = function (type, msg, options) {
 		close:       true,
 		clear:       true
 	}, options);
-
-	if (typeof msg === 'undefined' || msg === null) {
-		msg = type;
-		type = null;
-	}
 
 	if (options.clear) {
 		(options.inline ? this : $('#message-box')).find('.messages').remove();
