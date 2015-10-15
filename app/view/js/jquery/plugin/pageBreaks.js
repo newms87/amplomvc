@@ -27,7 +27,10 @@ $.extend($.pageBreaks, {
 			var $pages = $e.find('.page');
 			var $first = $pages.first();
 
-			!o.debugLog || (o.debugLog = $("<div>").addClass('debug-log').appendTo($e));
+			if (o.debugLog) {
+				o.debugLog = $("<div>").addClass('debug-log').appendTo($e)
+				$e.addClass('pb-debug');
+			}
 
 			if (!o.width) {
 				o.width = $first.width();
