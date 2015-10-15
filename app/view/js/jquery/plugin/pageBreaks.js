@@ -13,13 +13,14 @@ $.pageBreaks = $.fn.pageBreaks = function (o) {
 $.extend($.pageBreaks, {
 	init: function (o) {
 		o = $.extend({}, {
-			width:    null,
-			height:   null,
-			header:   true,
-			footer:   true,
-			margin:   null,
-			resize:   false,
-			debugLog: false
+			width:         null,
+			height:        null,
+			contentHeight: null,
+			header:        true,
+			footer:        true,
+			margin:        null,
+			resize:        false,
+			debugLog:      false
 		}, o);
 
 		return this.not('.page-broken').addClass('page-broken').each(function (i, e) {
@@ -62,20 +63,30 @@ $.extend($.pageBreaks, {
 				}
 			}
 
+			if (!o.contentHeight) {
+				o.contentHeight = o.height - o.margin.bottom - o.margin.top;
+			}
+
 			$pages.each(function (p, page) {
-				var $p = $(page), max_y = o.height - o.margin.bottom;
+				var $p = $(page);
 
 				var $blocks = $p.find('.page-body').length ? $p.find('.page-body').children() : $p.children();
 
-				!o.debugLog || o.debugLog.append('<BR><BR>BREAK ' + p + ': ' + o.height + ' - ' + o.margin.bottom + ' == ' + max_y + ' --- ' + $blocks.length + ' rows<BR>');
+				!o.debugLog || o.debugLog.append('<BR><BR>BREAK ' + p + ': ' + o.height + ' - ' + o.margin.bottom + ' == ' + o.contentHeight + ' --- ' + $blocks.length + ' rows<BR>');
+
+				var $parent = $blocks.parent();
+
+				if ($parent.css('position') === 'static') {
+					$parent.css('position', 'relative');
+				}
 
 				$blocks.each(function (b, block) {
 					var $b = $(block);
 					var bottom = $b.position().top + $b.outerHeight();
 
-					!o.debugLog || o.debugLog.append('ROW ' + $b.attr('class') + ' :: ' + $b.position().top + ' + ' + $b.outerHeight() + ' === ' + bottom + ' / ' + max_y + (bottom > max_y ? ' - break' : '') + '<BR>');
+					!o.debugLog || o.debugLog.append('ROW ' + $b.attr('class') + ' :: ' + $b.position().top + ' + ' + $b.outerHeight() + ' === ' + bottom + ' / ' + o.contentHeight + (bottom > o.contentHeight ? ' - break' : '') + '<BR>');
 
-					if (bottom > max_y) {
+					if (bottom > o.contentHeight) {
 						$.pageBreaks.break($p, $b, o);
 					}
 				});
