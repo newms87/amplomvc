@@ -1024,7 +1024,7 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 			unset($link['path']);
 		}
 
-		if (IS_ADMIN && isset($link['path']) && !user_can('r', $link['path'])) {
+		if (IS_ADMIN && !empty($link['path']) && !strpos($link['path'], '://') && !user_can('r', $link['path'])) {
 			continue;
 		}
 
