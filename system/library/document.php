@@ -120,11 +120,10 @@ class Document extends Library
 		}
 
 		$defaults = array(
-			'name'         => null,
-			'display_name' => '',
+			'display_name' => $link['name'],
 			'path'         => null,
 			'query'        => null,
-			'title'        => '',
+			'title'        => null,
 			'class'        => array(),
 			'sort_order'   => null,
 			'parent_id'    => 0,

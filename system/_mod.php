@@ -167,7 +167,7 @@ function render_content($content, $data = array())
 
 	$rendered = render_file($content_file, $data, false);
 
-	unlink($content_file);
+	@unlink($content_file);
 
 	return $rendered;
 }
