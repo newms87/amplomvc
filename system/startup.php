@@ -22,6 +22,12 @@ defined('DOMAIN') ?: define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['
 defined('SITE_BASE') ?: define('SITE_BASE', '/');
 defined('URL_SITE') ?: define('URL_SITE', '//' . DOMAIN . SITE_BASE);
 
+//Attempt to filter bad domain requests (presumably hack attempts)
+if (preg_match('/[\\s~!@#$%\\^&\\*()_+=\'";:\\/\\\\\\[\\]]/', DOMAIN)) {
+	header('HTTP/1.1 400 Invalid Domain Format');
+	exit;
+}
+
 if ($_SERVER['REQUEST_URI'] === SITE_BASE . 'favicon.ico') {
 	header('HTTP/1.1 404 No Favicon');
 	exit;
