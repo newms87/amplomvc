@@ -66,7 +66,7 @@ class Customer extends Library
 					'signature'   => hash_hmac('sha256', $customer['customer_id'] . '-' . $customer['username'], AMPLO_SECRET_KEY),
 				);
 
-				set_cookie('customer', json_encode($cookie), option('customer_cookie_expire', 3600 * 24 * 365));
+				set_cookie('customer', json_encode($cookie), option('customer_cookie_expire', AMPLO_USER_EXPIRE));
 			}
 
 			return $this->setCustomer($customer);
