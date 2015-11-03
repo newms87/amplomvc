@@ -35,6 +35,17 @@ class Document extends Library
 	public function info($key = null, $default = null)
 	{
 		if ($key) {
+			switch ($key) {
+				case 'styles':
+					return $this->getStyles();
+
+				case 'scripts':
+					return $this->getScripts();
+
+				case 'body_class':
+					return $this->getBodyClass();
+			}
+
 			return isset($this->info[$key]) ? $this->info[$key] : $default;
 		}
 
@@ -43,12 +54,27 @@ class Document extends Library
 
 	public function setInfo($key, $value)
 	{
-		$this->info[$key] = $value;
-	}
+		switch ($key) {
+			case 'styles':
+				$this->addStyle($value);
+				break;
 
-	public function &infoRef()
-	{
-		return $this->info;
+			case 'scripts':
+				$this->addScript($value);
+				break;
+
+			case 'body_class':
+				if (is_array($value)) {
+					$this->setBodyClass($value);
+				} else {
+					$this->addBodyClass($value);
+				}
+				break;
+
+			default:
+				$this->info[$key] = $value;
+				break;
+		}
 	}
 
 	public function meta($key = null, $default = null)
@@ -94,11 +120,10 @@ class Document extends Library
 		}
 
 		$defaults = array(
-			'name'         => null,
-			'display_name' => '',
-			'path'         => '',
+			'display_name' => $link['name'],
+			'path'         => null,
 			'query'        => null,
-			'title'        => '',
+			'title'        => null,
 			'class'        => array(),
 			'sort_order'   => null,
 			'parent_id'    => 0,

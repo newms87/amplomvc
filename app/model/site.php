@@ -113,4 +113,31 @@ class App_Model_Site extends App_Model_Table
 
 		return $site_id;
 	}
+
+	public function getLoginGroups()
+	{
+		$sort = array('name' => 'ASC');
+
+		$filter = array('type' => 'login-group');
+
+		$options = array(
+			'cache' => true,
+			'index' => 'category_id'
+		);
+
+		$login_groups = $this->Model_Category->getRecords($sort, $filter, $options);
+
+		if (!$login_groups) {
+			$group = array(
+				'type' => 'login-group',
+				'name' => 'Default',
+			);
+
+			$this->Model_Category->save(null, $group);
+
+			$login_groups = $this->Model_Category->getRecords($sort, $filter, $options);
+		}
+
+		return $login_groups;
+	}
 }

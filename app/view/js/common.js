@@ -181,29 +181,45 @@ $.ampToggle = $.fn.ampToggle = function (o) {
 
 $.extend($.ampToggle, {
 	init: function (o) {
-		var $toggle = this;
-
-		if (!o || !(o.content = $(o.content)).length) {
+		if (!o) {
 			$.error("ampToggle parameter error: content must be an existing DOM element");
 			return this;
 		}
 
-		if ($toggle.length) {
-			o = $.extend({}, {
-				content:      null,
-				start:        'hide',
-				acceptParent: ''
-			}, o);
+		o = $.extend({}, {
+			toggle:           this,
+			content:          this,
+			toggleClass:      'active',
+			contentClass:     'active',
+			hideToggleClass:  '',
+			hideContentClass: null,
+			start:            'hide',
+			acceptParent:     '',
+			onShow:           null,
+			onHide:           null
+		}, o);
 
-			o.acceptParent += (o.acceptParent ? ',' : '') + '.amp-toggle-content';
+		o.toggle = $(o.toggle || this);
+		o.content = $(o.content || this);
 
-			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content height-animate-hide');
-			$toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
-				$.ampToggle.blurred ? $.ampToggle.blurred = false : $toggle.ampToggle(o.content.hasClass('hide') ? 'show' : 'hide');
+		//Only add .hidden class if the toggle is not a child / same element as the content
+		if (o.hideContentClass === null) {
+			o.hideContentClass = o.toggle.closest(o.content).length ? '' : 'hidden';
+		}
+
+		if (o.toggle.length) {
+			o.toggleClass += ' amp-toggle-show';
+			o.contentClass += ' amp-toggle-show';
+			o.hideToggleClass += ' amp-toggle-hide';
+			o.hideContentClass += ' amp-toggle-hide';
+			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content');
+
+			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
+				$.ampToggle.blurred ? $.ampToggle.blurred = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
 			})
 
 			if (o.start) {
-				$toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
+				o.toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
 			}
 		}
 
@@ -211,9 +227,11 @@ $.extend($.ampToggle, {
 	},
 
 	_blur: function (e) {
-		var $t = $(e.target);
+		var $t = $(e.target), o = $.ampToggle.active.data('amp-toggle-o');
 
-		if (!$t.closest($.ampToggle.active.data('amp-toggle-o').acceptParent).length) {
+		if ($t.closest(o.content).length) {
+			!o.content.is('.amp-toggle') || ($.ampToggle.blurred = true);
+		} else if (!$t.closest(o.acceptParent).length) {
 			$.ampToggle.active.ampToggle('hide');
 
 			if ($t.hasClass('amp-toggle')) {
@@ -224,17 +242,30 @@ $.extend($.ampToggle, {
 
 	show: function () {
 		var $this = $(this);
-		$.ampToggle.active = $this.removeClass('amp-toggle-hide');
-		$this.data('amp-toggle-o').content.removeClass('hide');
+		var o = $this.data('amp-toggle-o');
+
+		o.toggle.addClass(o.toggleClass).removeClass(o.hideToggleClass);
+		o.content.addClass(o.contentClass).removeClass(o.hideContentClass);
+		$.ampToggle.active = $this;
 		document.addEventListener('click', $.ampToggle._blur, true);
+
+		if (typeof o.onShow === 'function') {
+			o.onShow.call(this, o);
+		}
 	},
 
 	hide: function () {
 		var $this = $(this);
-		$this.addClass('amp-toggle-hide');
-		$this.data('amp-toggle-o').content.addClass('hide');
+		var o = $this.data('amp-toggle-o');
+
+		o.toggle.removeClass(o.toggleClass).addClass(o.hideToggleClass);
+		o.content.removeClass(o.contentClass).addClass(o.hideContentClass);
 		$.ampToggle.active = null;
 		document.removeEventListener('click', $.ampToggle._blur, true);
+
+		if (typeof o.onHide === 'function') {
+			o.onHide.call(this, o);
+		}
 	},
 });
 
@@ -359,6 +390,7 @@ $.extend($.ampModal, {
 		o = $.extend({}, {
 			context:     'body',
 			title:       '',
+			class:       '',
 			content:     this,
 			buttons:     {},
 			shadow:      true,
@@ -372,7 +404,7 @@ $.extend($.ampModal, {
 
 		return $(o.content).use_once('amp-modal-enabled').each(function (i, e) {
 			var $e = $(e),
-				$box = $('<div />').addClass('amp-modal'),
+				$box = $('<div />').addClass('amp-modal').addClass(o.class),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
@@ -418,6 +450,7 @@ $.extend($.ampModal, {
 $.ampConfirm = $.fn.ampConfirm = function (o) {
 	o = $.extend({}, {
 		title:       'Are you sure?',
+		class:       'amp-modal-confirm',
 		content:     $('<div/>').addClass('amp-confirm'),
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
@@ -531,7 +564,7 @@ $.extend($.ampSelect, {
 		o = $box.data('o') || {};
 		o.sortable = s || {}
 
-		$box.data('options').sortable(o.sortable);
+		!$box.data('options') || $box.data('options').sortable(o.sortable);
 	},
 
 	assignSelect: function ($select) {
@@ -811,6 +844,17 @@ $.fn.show_msg = function (type, msg, options) {
 		return;
 	}
 
+	if (typeof type === 'object') {
+		options = msg;
+		msg = type;
+		type = null;
+	}
+
+	if (typeof msg === 'undefined' || msg === null) {
+		msg = type;
+		type = null;
+	}
+
 	options = $.extend({
 		style:       'stacked',
 		inline:      $ac.show_msg_inline,
@@ -820,11 +864,6 @@ $.fn.show_msg = function (type, msg, options) {
 		close:       true,
 		clear:       true
 	}, options);
-
-	if (typeof msg === 'undefined' || msg === null) {
-		msg = type;
-		type = null;
-	}
 
 	if (options.clear) {
 		(options.inline ? this : $('#message-box')).find('.messages').remove();
@@ -1445,9 +1484,17 @@ $(document)
 			return false;
 		}
 
-		if (($lm = $n.closest('.link-menu:not(.no-click-active)')).length) {
-			$lm.closest('.accordian').find('.active').not($lm).removeClass('active child-active')
-			$lm.toggleClass('active');
+		if (($at = $n.closest('[data-amp-toggle]:not(.amp-toggle)')).length) {
+			$at.ampToggle({content: $at.attr('data-amp-toggle') || $at, toggleClass: 'active'}).click();
+		}
+
+		if (($lm = $n.closest('.link-menu')).length) {
+			if ($lm.is('.on-click')) {
+				$lm.toggleClass('active');
+			} else if ($lm.is('.on-expand') && $n.is('.expand')) {
+				$lm.toggleClass('active');
+				return false;
+			}
 		}
 
 		// Multistate Checkboxes
