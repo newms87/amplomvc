@@ -53,7 +53,7 @@ $.extend($.ampUpload, {
 						e.files = event.originalEvent.dataTransfer.files;
 
 						if (!e.files) {
-							alert('Your browser does not support HTML 5');
+							$.ampAlert('Your browser does not support HTML 5');
 							return;
 						}
 
@@ -101,7 +101,7 @@ $.extend($.ampUpload, {
 		var $this = this;
 
 		if (!$this.files) {
-			return alert('No Files to upload');
+			return $.ampAlert('No Files to upload');
 		}
 
 		for (var i = 0; i < $this.files.length; i++) {

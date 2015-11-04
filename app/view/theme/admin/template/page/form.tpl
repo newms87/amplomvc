@@ -338,7 +338,7 @@
 		layout_name = $('[name=title]').val();
 
 		if (!layout_name) {
-			alert('You must specify a name before you can create a new layout!');
+			$.ampAlert('{{You must specify a name before you can create a new layout!}}');
 			return false;
 		}
 

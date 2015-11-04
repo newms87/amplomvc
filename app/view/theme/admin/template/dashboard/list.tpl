@@ -18,7 +18,7 @@
 						<a href="<?= site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']); ?>" class="view">
 							<h2><?= $dashboard['title']; ?></h2>
 						</a>
-						<a class="button remove" href="<?= site_url('admin/dashboard/remove', 'dashboard_id=' . $dashboard['dashboard_id']); ?>">{{X}}</a>
+						<a class="button remove" data-confirm-modal="{{Are you sure you want to remove this dashboard?}}" href="<?= site_url('admin/dashboard/remove', 'dashboard_id=' . $dashboard['dashboard_id']); ?>">{{X}}</a>
 					</div>
 				<? } ?>
 				<div class="dashboard">
@@ -30,13 +30,5 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-	$('.dashboard .remove').click(function () {
-		if (!confirm("{{Are you sure you want to remove this dashboard?}}")) {
-			return false;
-		}
-	});
-</script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>
