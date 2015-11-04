@@ -6,7 +6,7 @@ class App_Controller_Common extends Controller
 	{
 		$files = _files();
 
-		$path      = _post('path', '');
+		$dir_path  = _post('path', '');
 		$file_name = count($files) > 1 ? false : _post('name');
 
 		$saved = array();
@@ -14,7 +14,7 @@ class App_Controller_Common extends Controller
 		foreach ($files as $file) {
 			$name = $file_name ? $file_name : $file['name'];
 
-			$path = ltrim(rtrim($path, '/') . '/' . $name, '/');
+			$path = ltrim(rtrim($dir_path, '/') . '/' . $name, '/');
 
 			if (empty($file['error'])) {
 				if (_is_writable(dirname(DIR_DOWNLOAD . $path)) && move_uploaded_file($file['tmp_name'], DIR_DOWNLOAD . $path)) {
