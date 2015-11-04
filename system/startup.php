@@ -18,9 +18,9 @@ define('DIR_MOD_FILES', DIR_SITE . 'system/mods/');
  ************************************************************/
 
 //Setup Base URL
-defined('DOMAIN') ?: define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
-defined('SITE_BASE') ?: define('SITE_BASE', '/');
-defined('URL_SITE') ?: define('URL_SITE', '//' . DOMAIN . SITE_BASE);
+defined('DOMAIN') || define('DOMAIN', !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+defined('SITE_BASE') || define('SITE_BASE', '/');
+defined('URL_SITE') || define('URL_SITE', '//' . DOMAIN . SITE_BASE);
 
 //Attempt to filter bad domain requests (presumably hack attempts)
 if (preg_match('/[\\s~!@#$%\\^&\\*()_+=\'";:\\/\\\\\\[\\]]/', DOMAIN)) {
@@ -35,41 +35,42 @@ if ($_SERVER['REQUEST_URI'] === SITE_BASE . 'favicon.ico') {
 
 //Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
 // and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
-defined('COOKIE_PREFIX') ?: define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
+defined('COOKIE_PREFIX') || define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
 
-defined('HTTP_SITE') ?: define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE);
-defined('HTTPS_SITE') ?: define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
+defined('HTTP_SITE') || define('HTTP_SITE', 'http://' . DOMAIN . SITE_BASE);
+defined('HTTPS_SITE') || define('HTTPS_SITE', 'https://' . DOMAIN . SITE_BASE);
 
-defined('DIR_LOGS') ?: define('DIR_LOGS', DIR_SITE . 'system/logs/');
-defined('DIR_IMAGE') ?: define('DIR_IMAGE', DIR_SITE . 'image/');
-defined('URL_IMAGE') ?: define('URL_IMAGE', URL_SITE . 'image/');
-defined('DIR_DOWNLOAD') ?: define('DIR_DOWNLOAD', DIR_SITE . 'download/');
-defined('URL_DOWNLOAD') ?: define('URL_DOWNLOAD', URL_SITE . 'download/');
-defined('DIR_RESOURCES') ?: define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
-defined('URL_RESOURCES') ?: define('URL_RESOURCES', URL_SITE . 'system/resources/');
-defined('DIR_VIEW') ?: define('DIR_VIEW', DIR_SITE . 'app/view/');
-defined('URL_VIEW') ?: define('URL_VIEW', URL_SITE . 'app/view/');
-defined('DIR_THEMES') ?: define('DIR_THEMES', DIR_VIEW . 'theme/');
-defined('URL_THEMES') ?: define('URL_THEMES', URL_VIEW . 'theme/');
-defined('DIR_JS') ?: define('DIR_JS', DIR_VIEW . 'js/');
-defined('URL_JS') ?: define('URL_JS', URL_VIEW . 'js/');
-defined('URL_STYLE') ?: define('URL_STYLE', URL_VIEW . 'style/');
-defined('DIR_STYLE') ?: define('DIR_STYLE', DIR_VIEW . 'style/');
-defined('DIR_DATABASE_BACKUP') ?: define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
+defined('DIR_LOGS') || define('DIR_LOGS', DIR_SITE . 'system/logs/');
+defined('DIR_IMAGE') || define('DIR_IMAGE', DIR_SITE . 'image/');
+defined('URL_IMAGE') || define('URL_IMAGE', URL_SITE . 'image/');
+defined('DIR_DOWNLOAD') || define('DIR_DOWNLOAD', DIR_SITE . 'download/');
+defined('URL_DOWNLOAD') || define('URL_DOWNLOAD', URL_SITE . 'download/');
+defined('DIR_RESOURCES') || define('DIR_RESOURCES', DIR_SITE . 'system/resources/');
+defined('URL_RESOURCES') || define('URL_RESOURCES', URL_SITE . 'system/resources/');
+defined('DIR_VIEW') || define('DIR_VIEW', DIR_SITE . 'app/view/');
+defined('URL_VIEW') || define('URL_VIEW', URL_SITE . 'app/view/');
+defined('DIR_THEMES') || define('DIR_THEMES', DIR_VIEW . 'theme/');
+defined('URL_THEMES') || define('URL_THEMES', URL_VIEW . 'theme/');
+defined('DIR_JS') || define('DIR_JS', DIR_VIEW . 'js/');
+defined('URL_JS') || define('URL_JS', URL_VIEW . 'js/');
+defined('URL_STYLE') || define('URL_STYLE', URL_VIEW . 'style/');
+defined('DIR_STYLE') || define('DIR_STYLE', DIR_VIEW . 'style/');
+defined('DIR_DATABASE_BACKUP') || define('DIR_DATABASE_BACKUP', DIR_SITE . 'system/database/backups/');
 
-defined('DEFAULT_TIMEZONE') ?: define('DEFAULT_TIMEZONE', 'America/Denver');
-defined('MYSQL_TIMEZONE') ?: define('MYSQL_TIMEZONE', '-6:00');
-defined('AMPLO_PROFILE') ?: define('AMPLO_PROFILE', false);
-defined('AMPLO_PROFILE_NO_CACHE') ?: define('AMPLO_PROFILE_NO_CACHE', false);
-defined('AMPLO_DEFAULT_THEME') ?: define('AMPLO_DEFAULT_THEME', 'amplo');
-defined('AMPLO_TIME_LOG') ?: define('AMPLO_TIME_LOG', false);
-defined('AMPLO_ACCESS_LOG') ?: define('AMPLO_ACCESS_LOG', 0);
-defined('AMPLO_SESSION') ?: define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session');
-defined('AMPLO_SESSION_TIMEOUT') ?: define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
-defined('AMPLO_HEADERS_DEBUG') ?: define('AMPLO_HEADERS_DEBUG', false);
-defined('CACHE_FILE_EXPIRATION') ?: define('CACHE_FILE_EXPIRATION', 3600);
+defined('DEFAULT_TIMEZONE') || define('DEFAULT_TIMEZONE', 'America/Denver');
+defined('MYSQL_TIMEZONE') || define('MYSQL_TIMEZONE', '-6:00');
+defined('AMPLO_PROFILE') || define('AMPLO_PROFILE', false);
+defined('AMPLO_PROFILE_NO_CACHE') || define('AMPLO_PROFILE_NO_CACHE', false);
+defined('AMPLO_DEFAULT_THEME') || define('AMPLO_DEFAULT_THEME', 'amplo');
+defined('AMPLO_TIME_LOG') || define('AMPLO_TIME_LOG', false);
+defined('AMPLO_ACCESS_LOG') || define('AMPLO_ACCESS_LOG', 0);
+defined('AMPLO_SESSION') || define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session');
+defined('AMPLO_SESSION_TIMEOUT') || define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
+defined('AMPLO_USER_EXPIRE') || define('AMPLO_USER_EXPIRE', 3600 * 24 * 365);
+defined('AMPLO_HEADERS_DEBUG') || define('AMPLO_HEADERS_DEBUG', false);
+defined('CACHE_FILE_EXPIRATION') || define('CACHE_FILE_EXPIRATION', 3600);
 //Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
-defined('AMPLO_REWRITE_SHORT_TAGS') ?: define('AMPLO_REWRITE_SHORT_TAGS', false);
+defined('AMPLO_REWRITE_SHORT_TAGS') || define('AMPLO_REWRITE_SHORT_TAGS', false);
 
 //Default server values in case they are not set.
 $_SERVER += array(

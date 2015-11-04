@@ -157,7 +157,7 @@ function render_content($content, $data = array())
 		return '';
 	}
 
-	$content_file = DIR_SITE . 'app/view/template/' . uniqid('content-') . '.temp';
+	$content_file = DIR_SITE . 'app/view/template/' . uniqid('content-', true) . '.temp';
 
 	if (!@file_put_contents($content_file, render_template($content))) {
 		trigger_error(_l("Unable to create content file for rendering: %s.", $content_file));
@@ -177,7 +177,7 @@ function render_file($file, $data = array(), $mod = true)
 	global $registry;
 
 	if (!is_file($file)) {
-		trigger_error(_l("Failed to render file %s", $file));
+		trigger_error(_l("Failed to render file %s because it did not exist.", $file));
 
 		return false;
 	}

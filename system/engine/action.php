@@ -76,23 +76,15 @@ final class Action
 			$method
 		);
 
-		$this->is_valid = is_callable($callable);
-
-		if (!$this->is_valid) {
-			if (!class_exists($class, false)) {
-				trigger_error(_l("The class %s does not exist! Make sure you spelled the class name correctly in %s", $class, $file));
-			} elseif (method_exists($class, $method)) {
-				trigger_error(_l("The method %s() was not callable in %s. Please make sure it is a public method!", $method, $class));
-			}
+		if ($this->is_valid = @is_callable($callable)) {
+			$this->dir        = $dir;
+			$this->file       = $file;
+			$this->path       = $path;
+			$this->classpath  = $classpath;
+			$this->class      = $class;
+			$this->method     = $method;
+			$this->parameters = $parameters ? $parameters : $args;
 		}
-
-		$this->dir        = $dir;
-		$this->file       = $file;
-		$this->path       = $path;
-		$this->classpath  = $classpath;
-		$this->class      = $class;
-		$this->method     = $method;
-		$this->parameters = $parameters ? $parameters : $args;
 	}
 
 	public function isValid()
