@@ -54,7 +54,7 @@ class Image extends Library
 
 			$replace = array(
 				'#\\\\#'                 => '/',
-				'#/\\./#'                  => '/',
+				'#/\\./#'                => '/',
 				'#' . URL_IMAGE . '#'    => DIR_IMAGE,
 				'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
 				'#' . URL_SITE . '#'     => DIR_SITE,
