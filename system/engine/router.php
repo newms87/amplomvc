@@ -60,6 +60,10 @@ class Router
 
 		$this->segments = $segments === null ? explode('/', $path) : (array)$segments;
 		$this->nodes    = $nodes === null ? explode('/', $this->path) : (array)$segments;
+
+		foreach ($this->segments as &$seg) {
+			$seg = str_replace('-', '_', $seg);
+		}
 	}
 
 	public function getPath()
