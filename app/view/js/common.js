@@ -495,11 +495,11 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 		onCancel:    null,
 		shadowClose: false,
 		buttons:     {
-			confirm: {
-				label: 'Confirm',
-			},
 			cancel:  {
 				label: 'Cancel',
+			},
+			confirm: {
+				label: 'Confirm',
 			}
 		}
 	}, o)
@@ -508,21 +508,21 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 
 	if (o.buttons.confirm && !o.buttons.confirm.action) {
 		o.buttons.confirm.action = function () {
-			$(this).ampModal('close');
-
 			if (typeof o.onConfirm === 'function') {
-				o.onConfirm.call(this);
+				o.onConfirm.call(this, $(this).closest('.amp-modal'));
 			}
+
+			$(this).ampModal('close');
 		}
 	}
 
 	if (o.buttons.cancel && !o.buttons.cancel.action) {
 		o.buttons.cancel.action = function () {
-			$(this).ampModal('close');
-
 			if (typeof o.onCancel === 'function') {
-				o.onCancel.call(this);
+				o.onCancel.call(this, $(this).closest('.amp-modal'));
 			}
+
+			$(this).ampModal('close');
 		}
 	}
 

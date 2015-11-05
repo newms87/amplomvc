@@ -8,10 +8,6 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 {
 	public function build($settings)
 	{
-		if (isset($_GET['export']) && user_can('r', 'block/widget/listing/export')) {
-			$this->export($settings);
-		}
-
 		$settings += array(
 			'extra_cols'          => array(),
 			'template'            => 'table/list_view',
@@ -34,10 +30,15 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'index'               => '',
 			'view_id'             => _request('view_id'),
 			'chart'               => array(),
+			//TODO: Move theme to global: With the default AmploMVC installation, only admin theme has a template for listing
 			'theme'               => 'admin',
 			'filter_style'        => 'switch',
-			//With the default AmploMVC installation, only admin theme has a template for listing
+			'export'              => isset($_GET['export']),
 		);
+
+		if ($settings['export']) {
+			$this->export($settings);
+		}
 
 		if (!empty($settings['records'])) {
 			$settings['show_limits'] = $settings['show_limits'] === 'bottom' ? 'bottom' : 'top';

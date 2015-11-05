@@ -1,37 +1,76 @@
-$.fn.list_widget = function (view_id) {
-	var $list_widget = this.use_once();
-
-	if (view_id) {
-		$list_widget.attr('data-view-id', view_id);
-	}
-
-	$list_widget.find('.export-view').click(function () {
-		if (confirm("Do you want to export the full data set?")) {
-			window.location = $(this).attr('href') + '&limit=0';
-			return false;
-		}
-	});
-
-	$list_widget.find('.pagination a, .sortable, .filter-button, .reset-button, .limit-items a, .refresh-listing').click(update_list_widget);
-
-	var $view_config = $list_widget.find('.view-config');
-
-	$view_config.find('.view-tabs a').tabs({pushState: false});
-	$view_config.find('.save-view-cols').click(update_list_widget);
-	$view_config.find('.save-settings').click(save_list_widget_settings);
-
-	$list_widget[0].view_config = $view_config;
-
-	$view_config.ampModal();
-	$view_config.find('[name="columns[]"]').ampSelect('sortable');
-
-	$list_widget.find('.modify-view').click(function () {
-		var $view_config = $(this).closest('.widget-listing')[0].view_config;
-		$view_config.find('.chart-data-cols .multiselect-list').sortable();
-
-		$view_config.ampModal('open');
-	});
+$.ampListing = $.fn.ampListing = function (o) {
+	return $.amp.call(this, $.ampListing, arguments)
 }
+
+$.extend($.ampListing, {
+	init: function (o) {
+		o = $.extend({}, {
+			view_id: null,
+			query:   {}
+		}, o);
+
+		this.data('o', o).addClass('amp-listing');
+
+		var $listing = this.use_once();
+
+		if (o.view_id) {
+			$listing.attr('data-view-id', o.view_id);
+		}
+
+		$listing.find('.export-view').click(function () {
+			if (confirm("Do you want to export the full data set?")) {
+				window.location = $(this).attr('href') + '&limit=0';
+				return false;
+			}
+		});
+
+		$listing.find('.pagination a, .sortable, .filter-button, .reset-button, .limit-items a, .refresh-listing').click(update_list_widget);
+
+		var $view_config = $listing.find('.view-config');
+
+		$view_config.find('.view-tabs a').tabs({pushState: false});
+		$view_config.find('.save-view-cols').click(update_list_widget);
+		$view_config.find('.save-settings').click(save_list_widget_settings);
+
+		$listing[0].view_config = $view_config;
+
+		$view_config.ampModal();
+		$view_config.find('[name="columns[]"]').ampSelect('sortable');
+
+		$listing.find('.modify-view').click(function () {
+			var $view_config = $(this).closest('.widget-listing')[0].view_config;
+			$view_config.find('.chart-data-cols .multiselect-list').sortable();
+
+			$view_config.ampModal('open');
+		});
+	},
+
+	getQuery: function (key) {
+		var query = this.data('o').query;
+
+		return key ? query[key] : query;
+	},
+
+	queryString: function (key) {
+		var query = this.data('o').query;
+
+		if (key) {
+			if (query[key]) {
+				var obj = {}
+				obj[key] = query[key]
+				return $.param(obj)
+			}
+
+			return '';
+		}
+
+		return $.param(query);
+	},
+
+	rowCount: function() {
+		return this.find('.table-list-view tbody tr').length;
+	}
+})
 
 //List View Scripts
 $.fn.listview = function () {

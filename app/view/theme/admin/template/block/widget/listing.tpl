@@ -146,7 +146,10 @@
 	<? } ?>
 
 	<script type="text/javascript">
-		$('#<?= $id; ?>').list_widget(<?= (int)$view_id; ?>);
+		$('#<?= $id; ?>').ampListing({
+			view_id: <?= (int)$view_id; ?>,
+			query: <?= json_encode($_GET); ?>
+		});
 	</script>
 
 </div>
