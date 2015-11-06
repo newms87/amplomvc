@@ -400,16 +400,14 @@ $.extend($.ampModal, {
 			onClose:     null
 		}, o);
 
-		this.data('o', o);
-
 		if (!(o.context = $(o.context)).length) {
 			$.error('ampModal parameter error: context must be an existing element');
 			return this;
 		}
 
-		return $(o.content).use_once('amp-modal-enabled').each(function (i, e) {
+		return $(o.content).use_once('amp-modal-enabled').data('o', o).each(function (i, e) {
 			var $e = $(e),
-				$box = $('<div />').addClass('amp-modal').addClass(o.class),
+				$box = $('<div />').addClass('amp-modal').addClass(o.class).data('o', o),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
@@ -463,11 +461,10 @@ $.extend($.ampModal, {
 	},
 	open: function () {
 		var $this = $(this).closest('.amp-modal').addClass('active')
+		var o = $this.data('o') || {};
 
-		var onOpen = $this.data('o').onOpen;
-
-		if (typeof onOpen === 'function') {
-			onOpen.call($this);
+		if (typeof o.onOpen === 'function') {
+			o.onOpen.call($this);
 		}
 
 		return $this;
@@ -475,12 +472,10 @@ $.extend($.ampModal, {
 
 	close: function () {
 		var $this = $(this).closest('.amp-modal').removeClass('active')
+		var o = $this.data('o') || {};
 
-		var onClose = $this.data('o').onClose;
-
-		console.log('close', $this, onClose, $this.data('o'));
-		if (typeof onClose === 'function') {
-			onClose.call($this);
+		if (typeof o.onClose === 'function') {
+			o.onClose.call($this);
 		}
 
 		return $this;
@@ -518,7 +513,6 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 		onConfirm:   null,
 		onCancel:    null,
 		onClose:     function () {
-			console.log('removing', this);
 			this.remove()
 		},
 		shadowClose: false,
@@ -900,7 +894,7 @@ $.fn.tabs = function (opts) {
 	return this;
 };
 
-$.fn.show_msg = function (type, msg, options) {
+$.fn.show_msg = function (type, msg, o) {
 	if (type === 'clear') {
 		return $(this).find('.messages').remove();
 	}
@@ -911,7 +905,7 @@ $.fn.show_msg = function (type, msg, options) {
 	}
 
 	if (typeof type === 'object') {
-		options = msg;
+		o = msg;
 		msg = type;
 		type = null;
 	}
@@ -921,7 +915,7 @@ $.fn.show_msg = function (type, msg, options) {
 		type = null;
 	}
 
-	options = $.extend({
+	o = $.extend({
 		style:       'stacked',
 		inline:      $ac.show_msg_inline,
 		append:      true,
@@ -929,22 +923,26 @@ $.fn.show_msg = function (type, msg, options) {
 		delay:       false,
 		close:       true,
 		clear:       true
-	}, options);
-
-	if (options.clear) {
-		(options.inline ? this : $('#message-box')).find('.messages').remove();
-	}
+	}, o);
 
 	if (typeof msg === 'object') {
 		for (var m in msg) {
-			options.clear = false;
-			this.show_msg(type || m, msg[m], options);
+			o.clear = false;
+			this.show_msg(type || m, msg[m], o);
 		}
 		return this;
 	}
 
+	if (!msg) {
+		return this;
+	}
+
+	if (o.clear) {
+		(o.inline ? this : $('#message-box')).find('.messages').remove();
+	}
+
 	return this.each(function (i, e) {
-		var $e = options.inline ? $(e) : $('#message-box');
+		var $e = o.inline ? $(e) : $('#message-box');
 
 		if (!$e.length) {
 			return false;
@@ -953,15 +951,15 @@ $.fn.show_msg = function (type, msg, options) {
 		var $box = $e.find('.messages.' + type);
 
 		if (!$box.length) {
-			$box = $('<div />').addClass('messages ' + type + ' ' + options.style);
+			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
 
-			if (options.close) {
+			if (o.close) {
 				$box.append($('<div />').addClass('close').click(function () {
 					$(this).closest('.messages').remove();
 				}));
 			}
 
-			if (options.append) {
+			if (o.append) {
 				$e.append($box);
 			} else {
 				$e.prepend($box);
@@ -970,7 +968,7 @@ $.fn.show_msg = function (type, msg, options) {
 
 		var $msg = $('<div />').addClass('message hide').html(msg);
 
-		if (options.append_list) {
+		if (o.append_list) {
 			$box.append($msg);
 		} else {
 			$box.prepend($msg);
@@ -978,7 +976,7 @@ $.fn.show_msg = function (type, msg, options) {
 
 		$msg.removeClass('hide');
 
-		if (options.delay) {
+		if (o.delay) {
 			$.fn.show_msg.count[type] = ($.fn.show_msg.count[type] || 0) + 1;
 
 			setTimeout(function () {
@@ -987,15 +985,15 @@ $.fn.show_msg = function (type, msg, options) {
 						$(this).remove();
 					});
 				}
-			}, options.delay);
+			}, o.delay);
 		}
 	});
 }
 
 $.fn.show_msg.count = {}
 
-$.show_msg = function (type, msg, options) {
-	$('body').show_msg(type, msg, options);
+$.show_msg = function (type, msg, o) {
+	$('body').show_msg(type, msg, o);
 }
 
 $.loading = $.fn.loading = function (params) {
@@ -1201,7 +1199,6 @@ function register_confirms() {
 				onConfirm: function () {
 					if ($this.is('[data-ajax]')) {
 						$this.hasClass('ajax-call') ? amplo_ajax_cb.call($this) : $.get($this.attr('href'), {}, function (response) {
-							console.log('received', response);
 							$.show_msg(response);
 						});
 					} else {
@@ -1403,7 +1400,11 @@ var amplo_ajax_cb = function () {
 		}
 
 		callback = function (response) {
-			$replace.replaceWith(response);
+			if (typeof response === 'object') {
+				$.show_msg(response);
+			} else {
+				$replace.replaceWith(response);
+			}
 		}
 	} else {
 		callback = function (response) {

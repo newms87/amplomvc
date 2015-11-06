@@ -410,10 +410,14 @@ function listview_cancel_edit(e) {
 	return false;
 }
 
-function refresh_listing() {
+function refresh_listing(msg) {
 	var $this = $(this);
 	var $list = $this.hasClass('listing') ? $this : $this.closest('.listing');
 	$list.find('.refresh-listing').click();
+
+	if (msg && (msg.success || msg.error)) {
+		$.show_msg(msg);
+	}
 }
 
 var delay = false;
