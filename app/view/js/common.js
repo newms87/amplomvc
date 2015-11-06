@@ -478,7 +478,6 @@ $.extend($.ampModal, {
 
 		var onClose = $this.data('o').onClose;
 
-		console.log('close', $this, onClose, $this.data('o'));
 		if (typeof onClose === 'function') {
 			onClose.call($this);
 		}
@@ -518,7 +517,6 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 		onConfirm:   null,
 		onCancel:    null,
 		onClose:     function () {
-			console.log('removing', this);
 			this.remove()
 		},
 		shadowClose: false,
@@ -1201,7 +1199,6 @@ function register_confirms() {
 				onConfirm: function () {
 					if ($this.is('[data-ajax]')) {
 						$this.hasClass('ajax-call') ? amplo_ajax_cb.call($this) : $.get($this.attr('href'), {}, function (response) {
-							console.log('received', response);
 							$.show_msg(response);
 						});
 					} else {
