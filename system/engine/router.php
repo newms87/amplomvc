@@ -263,7 +263,7 @@ class Router
 		_set_prefix($prefix);
 	}
 
-	private function logRequest()
+	protected function logRequest()
 	{
 		global $_access_log;
 
