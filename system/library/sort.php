@@ -1,4 +1,5 @@
 <?php
+
 //TODO: Move this to Block widget/limit
 
 class Sort extends Library
@@ -15,15 +16,14 @@ class Sort extends Library
 
 	public function renderLimits($settings = array())
 	{
-		$defaults = array(
+		$settings += array(
 			'template'   => 'block/widget/limit',
 			'limits'     => self::$limits,
 			'path'       => $this->route->getPath(),
 			'limit_text' => '(see more)',
 			'limit'      => _get('limit', 0),
+			'total'      => null,
 		);
-
-		$settings += $defaults;
 
 		$limit = (int)$settings['limit'];
 
@@ -41,7 +41,7 @@ class Sort extends Library
 		$settings['limit_url'] = site_url($settings['path'], _get_exclude('limit', 'page') + array('limit' => ''));
 		$settings['limit']     = $limit;
 
-		$settings['show_more'] = $settings['limit_url'] . ($limit + option('limit_more_count', 10));
+		$settings['show_more'] = (!$settings['total'] || $limit < $settings['total']) ? $settings['limit_url'] . ($limit + option('limit_more_count', 10)) : false;
 
 		return render_file($template_file, $settings);
 	}

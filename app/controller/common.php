@@ -9,6 +9,37 @@ class App_Controller_Common extends Controller
 		$dir_path  = _post('path', '');
 		$file_name = count($files) > 1 ? false : _post('name');
 
+		$mime_types = false;
+		$accept     = _post('accept');
+
+		if (is_string($accept)) {
+			$accept = explode(',', $accept);
+		}
+
+		if ($accept) {
+			$mime_types = array();
+
+			foreach ($accept as $a) {
+				$a = preg_replace('/^\\./', '', $a);
+
+				switch ($a) {
+					case 'png':
+						$mime_types[] = 'image/png';
+						break;
+
+					case 'gif':
+						$mime_types[] = 'image/gif';
+						break;
+
+					case 'jpg':
+					case'jpeg':
+						$mime_types[] = 'image/jpeg';
+						$mime_types[] = 'image/jpg';
+						break;
+				}
+			}
+		}
+
 		$saved = array();
 
 		foreach ($files as $file) {
@@ -17,6 +48,13 @@ class App_Controller_Common extends Controller
 			$path = ltrim(rtrim($dir_path, '/') . '/' . $name, '/');
 
 			if (empty($file['error'])) {
+				if ($mime_types) {
+					if (!in_array($file['type'], $mime_types)) {
+						message('error', _l("File mime type %s not allowed.", $file['type']));
+						continue;
+					}
+				}
+
 				if (_is_writable(dirname(DIR_DOWNLOAD . $path)) && move_uploaded_file($file['tmp_name'], DIR_DOWNLOAD . $path)) {
 					$saved[$file['name']] = URL_DOWNLOAD . $path;
 				} else {
@@ -60,5 +98,18 @@ class App_Controller_Common extends Controller
 		message('data', $saved);
 
 		output(json_encode($this->message->fetch()));
+	}
+
+	public function maintenance()
+	{
+		//Page Head
+		set_page_info('title', _l("Maintenance"));
+
+		$this->document->setLinks('primary', array());
+		$this->document->setLinks('account', array());
+		$this->document->setLinks('footer', array());
+
+		//Render
+		output($this->render('common/maintenance'));
 	}
 }

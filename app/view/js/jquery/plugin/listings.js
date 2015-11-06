@@ -24,7 +24,7 @@ $.extend($.ampListing, {
 			}
 		});
 
-		$listing.find('.pagination a, .sortable, .filter-button, .reset-button, .limit-items a, .refresh-listing').click(update_list_widget);
+		$listing.find('.pagination a, .sortable, .filter-button, .reset-button, .block-widget-limit a, .refresh-listing').click(update_list_widget);
 
 		var $view_config = $listing.find('.view-config');
 

@@ -5,7 +5,7 @@ $.ampUpload = $.fn.ampUpload = function (o) {
 $.extend($.ampUpload, {
 	init: function (o) {
 		return this.each(function (i, e) {
-			var today = new Date();
+			var $input = $(e), today = new Date();
 
 			o = $.extend({
 				change:         $.ampUpload.upload,
@@ -24,10 +24,19 @@ $.extend($.ampUpload, {
 				showInput:      false,
 				class:          '',
 				progressBar:    true,
-				progressBarMsg: false
+				progressBarMsg: false,
+				accept:         $input.attr('accept') || []
 			}, o);
 
-			var $input = $(e), $upload = $('<div/>').addClass('file-upload-box row ' + o.class);
+			var $upload = $('<div/>').addClass('file-upload-box row ' + o.class);
+
+			if (o.accept) {
+				if (typeof o.accept === 'string') {
+					o.accept = o.accept.split(',');
+				}
+
+				$input.attr('accept', o.accept.join(','));
+			}
 
 			$input.after($upload).appendTo($upload).toggle(o.showInput);
 
@@ -110,6 +119,10 @@ $.extend($.ampUpload, {
 
 			fd.append('file', file);
 			fd.append('path', $this.o.path);
+
+			if ($this.o.accept) {
+				fd.append('accept', $this.o.accept);
+			}
 
 			$.ajax({
 				url:         $this.o.url,

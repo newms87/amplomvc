@@ -1,5 +1,7 @@
 <div class="block-widget-limit">
-	<a class="limit-text md-hidden" href="<?= $show_more; ?>"><?= $limit_text; ?></a>
+	<? if ($show_more) { ?>
+		<a class="limit-text md-hidden" href="<?= $show_more; ?>"><?= $limit_text; ?></a>
+	<? } ?>
 
 	<div class="limit-text md-visible"><?= $limit_text; ?></div>
 	<div class="limit-items md-visible">
