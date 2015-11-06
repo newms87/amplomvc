@@ -294,7 +294,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getNavigationGroup($name = 'all')
 	{
-		$navigation_groups = cache("navigation_group.$name." . DOMAIN);
+		$navigation_groups = null;//cache("navigation_group.$name." . DOMAIN);
 
 		if (!isset($navigation_groups)) {
 			$filter = array(
@@ -314,12 +314,17 @@ class App_Model_Navigation extends App_Model_Table
 					continue;
 				}
 
-				foreach ($group['links'] as $key => &$link) {
+				$group_links = array();
+
+				foreach ($group['links'] as $key => $link) {
 					if (!empty($link['path']) || !empty($link['query'])) {
 						$link['href'] = site_url($link['path'], $link['query']);
 					}
+
+					$group_links[isset($link['name']) ? $link['name'] : $key] = $link;
 				}
-				unset($link);
+
+				$group['links'] = $group_links;
 
 				$this->toTree($group['links']);
 			}
@@ -394,23 +399,22 @@ class App_Model_Navigation extends App_Model_Table
 				$link['children'] = array();
 			}
 
-			if (!empty($link['navigation_id'])) {
-				$parent_ref[$link['navigation_id']] = &$link;
-			} else {
-				$parent_ref[$key] = &$link;
-			}
-
 			if (empty($link['name'])) {
 				$link['name'] = $key;
 			}
 
+			if (empty($link['navigation_id'])) {
+				$link['navigation_id'] = $key;
+			}
+
+			$parent_ref[$link['navigation_id']] = &$link;
 			$parent_ref[$link['name']] = &$link;
 
 			if (!empty($link['parent_id'])) {
-				$parent_ref[$link['parent_id']]['children'][] = &$link;
+				$parent_ref[$link['parent_id']]['children'][$link['name']] = &$link;
 				unset($links[$key]);
 			} elseif (!empty($link['parent'])) {
-				$parent_ref[$link['parent']]['children'][] = &$link;
+				$parent_ref[$link['parent']]['children'][$link['name']] = &$link;
 			}
 		}
 		unset($link);

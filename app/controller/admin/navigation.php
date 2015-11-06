@@ -64,7 +64,7 @@ class App_Controller_Admin_Navigation extends Controller
 				$group['actions']['reset'] = array(
 					'text'               => _l("Restore"),
 					'href'               => site_url('admin/navigation/restore-admin-navigation'),
-					'#data-confirm-text' => 'This will Restore all the default Admin Navigation links. Existing links will not be overwritten or removed. Are you sure you want to continue?',
+					'#data-confirm-modal' => 'This will Restore all the default Admin Navigation links. Existing links will not be overwritten or removed. Are you sure you want to continue?',
 				);
 			}
 		}

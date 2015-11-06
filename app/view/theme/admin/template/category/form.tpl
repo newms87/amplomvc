@@ -14,7 +14,7 @@
 				<button data-loading="{{Saving...}}">{{Save}}</button>
 				<a href="<?= site_url('admin/category'); ?>" class="button cancel">{{Cancel}}</a>
 				<? if ($category_id) { ?>
-					<a href="<?= site_url('admin/category/remove', 'category_id=' . $category_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-text="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
+					<a href="<?= site_url('admin/category/remove', 'category_id=' . $category_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-modal="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
 				<? } ?>
 			</div>
 		</div>

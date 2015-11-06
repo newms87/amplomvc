@@ -160,7 +160,7 @@
 		var view_listing_id = $view.find('[name=view_listing_id]').val();
 
 		if (!view_listing_id) {
-			return alert("{{Please Choose a listing first for this view}}");
+			return $.ampAlert("{{Please Choose a listing first for this view}}");
 		}
 
 		var listing = listings[view_listing_id];
@@ -254,16 +254,19 @@
 			return $this.loading({text: "{{Confirm Delete}}"}).addClass('confirm');
 		}
 
-		if (confirm("{{Are you sure you want to remove this view?}}")) {
-			var $this = $(this);
-			var $view = $this.closest('.widget-view');
+		$.ampConfirm({
+			title:     "{{Remove View?}}",
+			text:      "{{Are you sure you want to remove this view?}}",
+			onConfirm: function () {
+				var $view = $this.closest('.widget-view');
 
-			$this.loading();
+				$this.loading();
 
-			$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function (response) {
-				$view.remove();
-			});
-		}
+				$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function () {
+					$view.remove();
+				});
+			}
+		})
 	});
 
 	var col_sizes = <?= json_encode($col_sizes); ?>;

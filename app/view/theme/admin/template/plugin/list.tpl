@@ -21,14 +21,33 @@
 </div>
 
 <script type="text/javascript">
-	$('.action-uninstall').click(function () {
-		keep_data = 0;
+	$(document).click(function (e) {
+		var $target = $(e.target);
 
-		if (confirm("{{Do you want to keep the data associated with this plugin?}}")) {
-			keep_data = 1;
+		if ($target.is('.action-uninstall')) {
+			$.ampConfirm({
+				title:     '{{Uninstall Plugin?}}',
+				text:      '{{Are you sure you want to uninstall this plugin?}}',
+				onConfirm: function () {
+					$.ampConfirm({
+						title:    "{{Keep Data?}}",
+						text:     "{{Do you want to keep the data associated with this plugin?}}",
+						buttons:  {
+							confirm: {
+								label: 'Keep Data'
+							},
+							cancel:  {
+								label: 'Remove Data',
+							}
+						},
+						onAction: function (action) {
+							location = $target.attr('href') + (action === 'confirm' ? '&keep_data=1' : '');
+						}
+					});
+				}
+			})
+			return false;
 		}
-
-		$(this).attr('href', $(this).attr('href') + '&keep_data=' + keep_data);
 	});
 </script>
 
