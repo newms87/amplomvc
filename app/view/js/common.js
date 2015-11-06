@@ -1171,7 +1171,11 @@ function register_confirms() {
 			$.ampConfirm({
 				text:      $this.attr('data-confirm-modal') || "Are you sure you want to continue?",
 				onConfirm: function () {
-					location = $this.loading().attr('href')
+					if ($this.is('[data-ajax]')) {
+						$this.hasClass('ajax-call') ? amplo_ajax_cb.call($this) : $.get($this.attr('href'));
+					} else {
+						location = $this.loading().attr('href')
+					}
 				}
 			})
 
