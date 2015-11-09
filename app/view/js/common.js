@@ -102,10 +102,10 @@ function autoload_js_file(url, args, type) {
 				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
 
 				$.ajax({
-						url:      js_url,
-						dataType: 'script',
-						cache:    true
-					})
+					url:      js_url,
+					dataType: 'script',
+					cache:    true
+				})
 					.done(function () {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
@@ -116,10 +116,10 @@ function autoload_js_file(url, args, type) {
 							$(document).trigger(al);
 						}
 					}).always(function (jqXHR, status, msg) {
-					if (status !== 'success') {
-						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
-					}
-				});
+						if (status !== 'success') {
+							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+						}
+					});
 			}
 		}
 	}
@@ -376,6 +376,22 @@ function onYouTubeIframeAPIReady() {
 	});
 }
 
+//periodic Cookie Token Checker
+$.ampTokenCheck = function (token, callback, delay) {
+	token = token || 'at-' + Math.floor(Math.random() * 99999999);
+
+	if ($.cookie(token)) {
+		$.cookie(token, null);
+		callback(token);
+	} else {
+		setTimeout(function () {
+			$.ampTokenCheck(token, callback, delay);
+		}, delay || 250);
+	}
+
+	return token;
+}
+
 //ampModal jQuery Plugin
 $.ampModal = $.fn.ampModal = function (o) {
 	return $.amp.call(this, $.ampModal, arguments)
@@ -423,7 +439,7 @@ $.extend($.ampModal, {
 				for (var b in o.buttons) {
 					btn = o.buttons[b];
 
-					if (!o.buttons[b].action) {
+					if (!btn.action) {
 						o.buttons[b].action = function () {
 							$(this).ampModal('close');
 						}
@@ -432,13 +448,24 @@ $.extend($.ampModal, {
 					var $btn = $('<button/>')
 						.addClass('amp-modal-button ' + b)
 						.attr('data-action', b)
+						.data('action-callback', btn.action)
 						.append(btn.label || b)
-						.click(btn.action)
 						.appendTo($buttons)
 
+					if (btn.attr) {
+						$btn.attr(btn.attr);
+					}
+
+					if (btn.action) {
+						$btn.click(function (e) {
+							var $btn = $(this);
+							return $btn.data('action-callback').call(this, $btn.closest('.amp-modal'), e)
+						})
+					}
+
 					if (typeof o.onAction === 'function') {
-						$btn.click(function () {
-							o.onAction.call(this, $(this).attr('data-action'));
+						$btn.click(function (e) {
+							o.onAction.call(this, $(this).closest('.amp-modal'), $(this).attr('data-action'), e);
 						})
 					}
 				}
@@ -1133,37 +1160,44 @@ $ac.currency = $.extend({
 	pos:           ''
 }, $ac.currency);
 
-$.cookie = function (key, value, options) {
+$.cookie = function (key, value, o) {
 	if (arguments.length > 1) {
-		options = options || {};
+		o = $.extend({}, {
+			raw:     false,
+			domain:  null,
+			path:    '/',
+			expires: 365,
+			secure:  false
+		}, o);
 
 		if (value === null) {
-			options.expires = -1;
+			o.expires = -1;
 		} else if (typeof value === "object") {
 			value = JSON.stringify(value);
 		}
 
-		if (typeof options.expires === 'number') {
-			var days = options.expires, t = options.expires = new Date();
-			t.setDate(t.getDate() + days);
+		if (typeof o.expires === 'number') {
+			var d = new Date();
+			d.setDate(d.getDate() + o.expires);
+			o.expires = d.toUTCString();
 		}
 
 		return (document.cookie = [
 			encodeURIComponent(key), '=',
-			options.raw ? String(value) : encodeURIComponent(String(value)),
-			options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-			options.path ? '; path=' + options.path : '',
-			options.domain ? '; domain=' + options.domain : '',
-			options.secure ? '; secure' : ''
+			o.raw ? String(value) : encodeURIComponent(String(value)),
+			o.expires ? '; expires=' + o.expires : '', // use expires attribute, max-age is not supported by IE
+			o.path ? '; path=' + o.path : '',
+			o.domain ? '; domain=' + o.domain : '',
+			o.secure ? '; secure' : ''
 		].join(''));
 	}
 
 	// key and possibly options given, get cookie...
-	options = value || {};
+	o = value || {};
 	var result;
 
 	var decode = function (s) {
-		if (options.raw) {
+		if (o.raw) {
 			return s;
 		}
 		s = decodeURIComponent(s);

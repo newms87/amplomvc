@@ -62,7 +62,7 @@
 							<input type="text" placeholder="{{email}}" name="email" value="<?= _post('email'); ?>"/>
 						</div>
 						<div class="form-item">
-							<input type="password" placeholder="{{password}}" name="password" value=""/>
+							<input type="password" placeholder="{{password}}" autocomplete="off" name="password" value=""/>
 						</div>
 
 						<? if ($terms_id = option('terms_agreement_page_id')) { ?>

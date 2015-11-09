@@ -40,7 +40,7 @@
 								label: 'Remove Data',
 							}
 						},
-						onAction: function (action) {
+						onAction: function ($modal, action) {
 							location = $target.attr('href') + (action === 'confirm' ? '&keep_data=1' : '');
 						}
 					});

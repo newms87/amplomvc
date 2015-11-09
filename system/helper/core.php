@@ -125,12 +125,12 @@ function _cookie($name, $default = null)
 	return $default;
 }
 
-function set_cookie($name, $value, $expire = 31536000)
+function set_cookie($name, $value, $expire = 31536000, $prefix = true)
 {
 	if (!headers_sent()) {
 		$expire = $expire ? time() + $expire : 0;
 
-		return setcookie(COOKIE_PREFIX . $name, $value, $expire, '/', COOKIE_DOMAIN);
+		return setcookie(($prefix ? COOKIE_PREFIX : '') . $name, $value, $expire, '/', COOKIE_DOMAIN);
 	}
 
 	return false;

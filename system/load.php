@@ -83,6 +83,11 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	exit;
 }
 
+//Amplo Cookie Token Check
+if (isset($_GET['amp_token'])) {
+	set_cookie($_GET['amp_token'], 1, 31536000, false);
+}
+
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
 
