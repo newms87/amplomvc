@@ -45,8 +45,8 @@ abstract class App_Controller_Table extends Controller
 		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
 
 		$options += array(
-			'model'         => $this->model,
-			'template'      => 'table/list',
+			'model'        => $this->model,
+			'template'     => 'table/list',
 			'batch_action' => array(
 				'actions' => array(
 					'delete' => array(
@@ -151,7 +151,8 @@ abstract class App_Controller_Table extends Controller
 		$options += array(
 			'defaults' => array(),
 			'template' => 'table/form',
-			'data'     => array(),
+			'columns'  => $this->instance->getColumns(),
+			'model'    => $this->model,
 		);
 
 		//Page Head
@@ -162,7 +163,7 @@ abstract class App_Controller_Table extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("%s Listings", $this->model['title']), site_url($this->model['path']));
+		breadcrumb(_l("%s Listing", $this->model['title']), site_url($this->model['path']));
 		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
 
 		//The Data
@@ -174,8 +175,10 @@ abstract class App_Controller_Table extends Controller
 
 		$record += $options['defaults'];
 
+		$options['record'] = $record;
+
 		//Response
-		output($this->render($options['template'], $record + $options['data']));
+		output($this->render($options['template'], $options));
 	}
 
 	public function save()

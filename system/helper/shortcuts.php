@@ -781,12 +781,6 @@ function build($type, $params = null)
 		'readonly' => false,
 	);
 
-	if (!is_array($params['data'])) {
-		trigger_error(_l("The 'data' parameter must be an array for %s", __METHOD__));
-
-		return;
-	}
-
 	$type      = $params['type'];
 	$data      = $params['data'];
 	$name      = $params['name'];
@@ -809,6 +803,7 @@ function build($type, $params = null)
 	$text_types = array(
 		'textarea',
 		'text',
+		'pk-int',
 		'int',
 		'float',
 		'decimal',
@@ -842,6 +837,12 @@ function build($type, $params = null)
 		} else {
 			return "<input type=\"text\" $attrs name=\"$name\" value=\"$select\" />";
 		}
+	}
+
+	if (!is_array($data)) {
+		trigger_error(_l("The 'data' parameter must be an array to build type %s", $type));
+
+		return;
 	}
 
 	//This is for select option groups

@@ -1,5 +1,6 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
-<section class="section">
+
+<section class="section admin-page-form">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
 	<form id="page-form" action="<?= site_url($model['path'] . '/save', 'page_id=' . $page_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
@@ -60,7 +61,7 @@
 							</div>
 						</div>
 
-						<div class="form-item status">
+						<div class="form-item category-id">
 							<label class="col xs-3 md-2 left">{{Category}}</label>
 
 							<div class="col xs-9 md-10 left value">
