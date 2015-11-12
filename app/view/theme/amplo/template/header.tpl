@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html dir="<?= language_info('direction'); ?>" lang="<?= language_info('code'); ?>">
-
-<?= head(); ?>
+<head>
+	<?= head(); ?>
+</head>
 
 <body class="<?= page_info('body_class'); ?> <?= $show_admin_bar ? 'admin-bar' : ''; ?>">
 <? option('ga_code') ? include_once(theme_dir('template/common/ga.tpl')) : ''; ?>
@@ -10,7 +11,9 @@
 <section id="container">
 	<? if (!empty($terms_page)) { ?>
 		<div class="terms-agreement">
-			{{You must agree to the <a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click <a href="<?= site_url('customer/agree-to-terms', array('redirect' => $r->url->here())); ?>">I agree</a>}}
+			{{You must agree to the
+			<a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click
+			<a href="<?= site_url('customer/agree-to-terms', array('redirect' => $r->url->here())); ?>">I agree</a>}}
 		</div>
 	<? } ?>
 

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html dir="<?= language_info('direction'); ?>" lang="<?= language_info('code'); ?>">
 
-<?= head(); ?>
+<head>
+	<?= head(); ?>
+</head>
 
 <body class="<?= page_info('body_class'); ?>">
 <div id="container">
