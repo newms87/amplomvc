@@ -942,9 +942,13 @@ $.fn.show_msg = function (type, msg, o) {
 		type = null;
 	}
 
+	if (!msg) {
+		return this;
+	}
+
 	o = $.extend({
 		style:       'stacked',
-		inline:      $ac.show_msg_inline,
+		inline:      !!$ac.show_msg_inline,
 		append:      true,
 		append_list: false,
 		delay:       false,
@@ -952,20 +956,16 @@ $.fn.show_msg = function (type, msg, o) {
 		clear:       true
 	}, o);
 
+	if (o.clear) {
+		(o.inline ? this : $('#message-box')).find('.messages').remove();
+	}
+
 	if (typeof msg === 'object') {
 		for (var m in msg) {
 			o.clear = false;
 			this.show_msg(type || m, msg[m], o);
 		}
 		return this;
-	}
-
-	if (!msg) {
-		return this;
-	}
-
-	if (o.clear) {
-		(o.inline ? this : $('#message-box')).find('.messages').remove();
 	}
 
 	return this.each(function (i, e) {
