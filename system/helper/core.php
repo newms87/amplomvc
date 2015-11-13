@@ -308,8 +308,13 @@ function amplo_routing_hook($router)
 		$terms_agreement_date = option('terms_agreement_date');
 
 		if ($terms_agreement_date) {
-			$customer_agreed_date = is_logged() ? customer_meta('terms_agreed_date') : _cookie('terms_agreed_date');
-			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $registry->get('date')->isAfter($terms_agreement_date, $customer_agreed_date)));
+			$date = $registry->get('date');
+
+			$cookie_date          = _cookie('terms_agreed_date');
+			$customer_date        = customer_meta('terms_agreed_date');
+			$customer_agreed_date = $date->isAfter($cookie_date, $customer_date) ? $cookie_date : $customer_date;
+
+			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $date->isAfter($terms_agreement_date, $customer_agreed_date)));
 		}
 
 		//Path Rerouting
