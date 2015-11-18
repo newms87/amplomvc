@@ -148,6 +148,8 @@ final class Action
 				$controller->is_ajax = $is_ajax;
 			}
 
+			$controller->method = $this->method;
+
 			//Set our language group for translations
 			$language_group = $this->class;
 

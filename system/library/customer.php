@@ -283,32 +283,6 @@ class Customer extends Library
 		$this->insert('customer_meta', $meta);
 	}
 
-	public function canDoAction($action)
-	{
-		$private = false;
-
-		$class  = $action->getClass();
-		$method = $action->getMethod();
-
-		if (property_exists($class, 'allow')) {
-			$allow = $class::$allow;
-
-			if (!empty($allow['access'])) {
-				if (is_string($allow['access'])) {
-					$private = preg_match("/$allow[access]/", $method);
-				} else {
-					$private = in_array($method, $allow['access']);
-				}
-			}
-		}
-
-		if ($private) {
-			return $this->isLogged();
-		}
-
-		return true;
-	}
-
 	public function encrypt($password)
 	{
 		return password_hash($password, PASSWORD_DEFAULT, array('cost' => PASSWORD_COST));
