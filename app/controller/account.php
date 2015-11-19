@@ -2,9 +2,21 @@
 
 class App_Controller_Account extends Controller
 {
-	static $allow = array(
-		'access' => '.*',
-	);
+	public function __construct()
+	{
+		parent::__construct();
+
+		switch ($this->router->getAction()->getMethod()) {
+			case 'index':
+			case 'details':
+			case 'save':
+				if (!is_logged()) {
+					$this->request->setRedirect($this->url->here());
+					redirect('customer/login');
+				}
+				break;
+		}
+	}
 
 	public function index($content = '')
 	{
@@ -71,6 +83,34 @@ class App_Controller_Account extends Controller
 			output_message();
 		} else {
 			redirect('account');
+		}
+	}
+
+	public function confirm_email()
+	{
+		$email = _request('email');
+		$customer_email = customer_info('email');
+
+		if ($email) {
+			if ($customer_email) {
+				if ($customer_email === $email) {
+					$this->customer->setMeta('confirmed_email', $email);
+					message('success', _l("Thank you! Your email has been confirmed!"));
+				} else {
+					message('error', _l("Your email did not match your registered email address %s. Please log in to your account using username %s.", $customer_email, $email));
+				}
+			} else {
+				message('notify', _l("Please log into your account to confirm your email."));
+				redirect('customer/login', array('redirect' => $this->url->here()));
+			}
+		} else {
+			message('error', _l("Unable to confirm your email address. Please try again."));
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('');
 		}
 	}
 }
