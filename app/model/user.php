@@ -73,6 +73,11 @@ class App_Model_User extends App_Model_Table
 		return $user;
 	}
 
+	public function getRole($user_id)
+	{
+		return $this->Model_UserRole->getField($this->getField($user_id, 'user_role_id'), 'name');
+	}
+
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		//Where
