@@ -91,7 +91,7 @@ class User extends Library
 
 			$this->setUser($user['user_id'], $user, $meta, $role);
 
-			$this->session->set('user_id', $user['user_id']);
+			$_SESSION['user_id'] = $user['user_id'];
 		}
 	}
 
