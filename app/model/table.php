@@ -141,6 +141,31 @@ abstract class App_Model_Table extends Model
 		//The Query
 		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total);
 
+		//Get Meta Data
+		if (!empty($options['meta'])) {
+			$inline = $options['meta'] === 'inline';
+
+			if (!is_array($options['meta'])) {
+				$options['meta'] = array($this->table => $this->primary_key);
+			} elseif (isset($options['meta']['inline'])) {
+				$inline = true;
+				unset($options['meta']['inline']);
+			}
+
+			$total ? $rows = &$records[0] : $rows = &$records;
+
+			foreach ($rows as &$row) {
+				foreach ($options['meta'] as $type => $record_id) {
+					if ($inline) {
+						$row += $this->Model_Meta->get($type, $row[$record_id]);
+					} else {
+						$row['meta'] = $this->Model_Meta->get($type, $row[$record_id]);
+					}
+				}
+			}
+			unset($row);
+		}
+
 		if ($cache) {
 			cache($cache, $records);
 		}
