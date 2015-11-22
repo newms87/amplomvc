@@ -5,6 +5,7 @@ abstract class Controller
 	//Use this to override the $is_ajax for the controller / template (useful for discluding headers, footers, breadcrumbs, etc.)
 	public
 		$is_ajax,
+		$method,
 		$output;
 
 	public function __construct()

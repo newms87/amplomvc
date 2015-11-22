@@ -23,18 +23,18 @@ class Date extends Library
 	);
 
 	static $months_abbrev = array(
-			1  => 'Jan',
-			2  => 'Feb',
-			3  => 'Mar',
-			4  => 'Apr',
-			5  => 'May',
-			6  => 'Jun',
-			7  => 'Jul',
-			8  => 'Aug',
-			9  => 'Sept',
-			10 => 'Oct',
-			11 => 'Nov',
-			12 => 'Dec',
+		1  => 'Jan',
+		2  => 'Feb',
+		3  => 'Mar',
+		4  => 'Apr',
+		5  => 'May',
+		6  => 'Jun',
+		7  => 'Jul',
+		8  => 'Aug',
+		9  => 'Sept',
+		10 => 'Oct',
+		11 => 'Nov',
+		12 => 'Dec',
 	);
 
 	private $timezone;
@@ -259,15 +259,20 @@ class Date extends Library
 
 	public function diff($d1, $d2 = null)
 	{
-		if (!$this->datetime($d1)) {
-			return false;
-		}
-
-		if (!$this->datetime($d2)) {
+		if (!$this->datetime($d1) || !$this->datetime($d2)) {
 			return false;
 		}
 
 		return $d1->diff($d2);
+	}
+
+	public function diffSeconds($d1, $d2 = null)
+	{
+		if (!$this->datetime($d1) || !$this->datetime($d2)) {
+			return false;
+		}
+
+		return $d2->format('U') - $d1->format('U');
 	}
 
 	public function isBefore($d1, $d2)
@@ -341,5 +346,10 @@ class Date extends Library
 		}
 
 		return $date->format($format);
+	}
+
+	public function secondsToTime($seconds)
+	{
+		return _l("%02d:%02d:%02d", $seconds / 3600, $seconds / 60 % 60, $seconds % 60);
 	}
 }

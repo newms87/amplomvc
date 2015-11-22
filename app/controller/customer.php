@@ -6,20 +6,23 @@ class App_Controller_Customer extends Controller
 	{
 		parent::__construct();
 
-		//Only allow access to certain pages if already logged in
-		$allowed = array(
-			'customer/logout',
-			'customer/success',
-			'customer/agree_to_terms',
-		);
+		switch ($this->route->getAction()->getMethod()) {
+			//allow access only to these pages if logged in
+			case 'logout':
+			case 'success':
+			case 'agree_to_terms':
+				break;
 
-		if (is_logged() && !in_array($this->route->getPath(), $allowed)) {
-			if ($this->is_ajax) {
-				echo json_encode(array('success' => _l("You have been logged into your account.")));
-				exit;
-			} else {
-				redirect('account');
-			}
+			default:
+				if (is_logged()) {
+					if ($this->is_ajax) {
+						echo json_encode(array('success' => _l("You have been logged into your account.")));
+						exit;
+					} else {
+						redirect('account');
+					}
+				}
+				break;
 		}
 	}
 

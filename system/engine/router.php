@@ -3,6 +3,7 @@
 class Router
 {
 	protected
+		$action,
 		$path,
 		$segments,
 		$nodes,
@@ -14,6 +15,7 @@ class Router
 	{
 		global $registry;
 		$registry->set('route', $this);
+		$registry->set('router', $this);
 
 		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
 
@@ -87,6 +89,11 @@ class Router
 		}
 
 		return isset($this->nodes[$index]) ? $this->nodes[$index] : '';
+	}
+
+	public function getAction()
+	{
+		return $this->action;
 	}
 
 	public function setArgs($args)
@@ -168,13 +175,13 @@ class Router
 		}
 
 		//Dispatch Route
-		$action = new Action($this->path, $this->args);
+		$this->action = new Action($this->path, $this->args);
 
-		$valid = $action->isValid();
+		$valid = $this->action->isValid();
 
 		if ($valid) {
 			if (IS_ADMIN) {
-				if (!$this->user->canDoAction($action)) {
+				if (!$this->user->canDoAction($this->action)) {
 					if (!is_logged()) {
 						$invalid_paths = array(
 							'admin/user/login',
@@ -195,29 +202,17 @@ class Router
 						redirect('admin/user/login');
 					}
 
-					$action = new Action('admin/error/permission');
-				}
-			} else {
-				//Login Verification
-				if (!$this->customer->canDoAction($action)) {
-					$this->request->setRedirect($this->url->here());
-
-					if (request_accepts('application/json')) {
-						echo json_encode(array('error' => _l("You were logged out. Please wait while you are redirected to the log in page.<script>window.location = '%s'</script>", site_url('customer/login'))));
-						exit;
-					}
-
-					redirect('customer/login');
+					$this->action = new Action('admin/error/permission');
 				}
 			}
 		}
 
-		if (!$valid || !$action->execute()) {
+		if (!$valid || !$this->action->execute()) {
 			if (strpos($this->path, 'api/') === 0) {
 				output_api('error', _l("The API resource %s was not found.", $this->path), null, 404);
 			} else {
-				$action = new Action(ERROR_404_PATH);
-				$action->execute();
+				$this->action = new Action(ERROR_404_PATH);
+				$this->action->execute();
 			}
 		}
 
