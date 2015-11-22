@@ -38,10 +38,10 @@
 
 	<div class="row main-footer">
 		<div class="wrap">
-			<div class="col lg-visible lg-6 left copyright">
+			<div class="col <?= has_links('footer') ? 'lg-6 left' : ''; ?> copyright">
 				<div class="link-menu bar-separator">
 					<span class="link text">&copy;<?= date('Y') . ' ' . option('site_name'); ?></span>
-					<span class="link text address"><?= option('site_address'); ?></span>
+					<span class="link text address sm-visible"><?= option('site_address'); ?></span>
 				</div>
 			</div>
 
@@ -50,10 +50,6 @@
 					<?= build_links('footer'); ?>
 				</div>
 			<? } ?>
-
-			<div class="col lg-hidden xs-12 copyright">
-				<span class="text">&copy;<?= date('Y') . ' ' . option('site_name'); ?></span>
-			</div>
 		</div>
 	</div>
 </footer>
