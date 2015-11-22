@@ -317,12 +317,12 @@ button, .button, .row .button {
 	}
 
 	&.bar-separator {
-		a {
+		a, .link {
 			display: inline-block;
 			line-height: 1em;
 			.ws-hack;
 
-			& + a {
+			& + a, & + .link {
 				margin-left: .5em;
 				padding-left: .5em;
 				border-left: 1px solid @color-secondary;
@@ -472,10 +472,6 @@ header.main-header.row {
 
 	a {
 		display: inline-block;
-	}
-
-	img {
-		max-height: 2.6em;
 	}
 }
 
