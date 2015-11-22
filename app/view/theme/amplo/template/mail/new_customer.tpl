@@ -1,7 +1,7 @@
 <?= call('mail/header', $header); ?>
 
 <p style="margin-top: 0px; margin-bottom: 20px;">
-	<?= _l("Thank you for registering with %s!", $store['name']); ?>
+	{{Thank you for registering with <?= option('site_name'); ?>!}}
 </p>
 
 <? if (option('config_account_approval')) { ?>
