@@ -3,7 +3,7 @@
 <div class="section">
 	<?= $is_ajax ? '' : breadcrumbs(); ?>
 
-	<form action="<?= site_url('admin/api_user/save', 'api_user_id=' . $api_user_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
+	<form action="<?= site_url('admin/api_user/save', 'api_user_id=' . $record_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
 			<h1>
 				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
@@ -13,8 +13,8 @@
 			<div class="buttons">
 				<button data-loading="{{Saving...}}">{{Save}}</button>
 				<a href="<?= site_url('admin/api_user'); ?>" class="button cancel">{{Cancel}}</a>
-				<? if ($api_user_id) { ?>
-				<a href="<?= site_url('admin/api_user/remove', 'api_user_id=' . $api_user_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-modal="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
+				<? if ($record_id) { ?>
+					<a href="<?= site_url('admin/api_user/remove', 'api_user_id=' . $record_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-modal="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
 				<? } ?>
 			</div>
 		</div>
@@ -32,19 +32,19 @@
 									0 => '{{Deactivated}}',
 									1 => '{{Active}}',
 								),
-								'select' => $status,
+								'select' => $record['status'],
 							)); ?>
 						</td>
 					</tr>
-					<? if (!empty($data_users)) { ?>
+					<? if (!empty($data['users'])) { ?>
 						<tr>
 							<td class="required"> {{User:}}</td>
 							<td>
 								<?= build(array(
 									'type'   => 'select',
 									'name'   => 'user_id',
-									'select' => $user_id,
-									'data'   => $data_users,
+									'select' => $record['user_id'],
+									'data'   => $data['users'],
 									'value'  => 'user_id',
 									'label'  => 'username',
 								)); ?>
@@ -54,7 +54,7 @@
 					<tr>
 						<td class="required"> {{Username:}}</td>
 						<td>
-							<input type="text" name="username" value="<?= $username; ?>"/>
+							<input type="text" name="username" value="<?= $record['username']; ?>"/>
 						</td>
 					</tr>
 					<tr>
@@ -63,8 +63,8 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'user_role_id',
-								'data'   => $data_user_roles,
-								'select' => $user_role_id,
+								'data'   => $data['user_roles'],
+								'select' => $record['user_role_id'],
 								'value'  => 'user_role_id',
 								'label'  => 'name',
 							)); ?>
@@ -72,15 +72,15 @@
 					</tr>
 					<tr>
 						<td>{{API Key}}</td>
-						<td><?= $api_key; ?></td>
+						<td><?= $record['api_key']; ?></td>
 					</tr>
 					<tr>
 						<td>{{Public Key}}</td>
-						<td><?= $public_key; ?></td>
+						<td><?= $record['public_key']; ?></td>
 					</tr>
 					<tr>
 						<td>{{Private Key}}</td>
-						<td><?= $private_key; ?></td>
+						<td><?= $record['private_key']; ?></td>
 					</tr>
 				</table>
 			</div>

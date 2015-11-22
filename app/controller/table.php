@@ -175,7 +175,8 @@ abstract class App_Controller_Table extends Controller
 
 		$record += $options['defaults'];
 
-		$options['record'] = $record;
+		$options['record_id'] = $record_id;
+		$options['record']    = $record;
 
 		//Response
 		output($this->render($options['template'], $options));

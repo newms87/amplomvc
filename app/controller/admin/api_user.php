@@ -42,7 +42,7 @@ class App_Controller_Admin_ApiUser extends App_Controller_Table
 
 	public function form($options = array())
 	{
-		$options = array(
+		$options += array(
 			'defaults' => array(
 				'api_user_id'  => 0,
 				'user_id'      => user_info('user_id'),
@@ -55,13 +55,10 @@ class App_Controller_Admin_ApiUser extends App_Controller_Table
 			),
 			'template' => 'api_user/form',
 			'data'     => array(
-				'data_user_roles' => $this->Model_UserRole->getRecords(null, array('type' => App_Model_UserRole::TYPE_API), array('cache' => true)),
+				'users'      => $this->Model_User->getRecords(null, null, array('cache' => true)),
+				'user_roles' => $this->Model_UserRole->getRecords(null, array('type' => App_Model_UserRole::TYPE_API), array('cache' => true)),
 			),
 		);
-
-		if (user_is('admin')) {
-			$options['data']['data_users'] = $this->Model_User->getRecords(null, null, array('cache' => true));
-		}
 
 		return parent::form($options);
 	}
