@@ -75,14 +75,16 @@
 			</div>
 
 			<div class="nav nav-primary col xs-3 lg-6 left">
-				<div class="mobile-menu-toggle lg-hidden" onclick="$(this).toggleClass('active')">
-					<b class="fa fa-reorder mm-show"></b>
-					<b class="fa fa-remove mm-hide"></b>
-				</div>
+				<? if (has_links('primary')) { ?>
+					<div class="mobile-menu-toggle lg-hidden" onclick="$(this).toggleClass('active')">
+						<b class="fa fa-reorder mm-show"></b>
+						<b class="fa fa-remove mm-hide"></b>
+					</div>
 
-				<div class="mobile-menu horizontal no-parent-scroll accordian">
-					<?= build_links('primary', array('class' => 'horizontal')); ?>
-				</div>
+					<div class="mobile-menu horizontal no-parent-scroll accordian">
+						<?= build_links('primary', array('class' => 'horizontal')); ?>
+					</div>
+				<? } ?>
 			</div>
 
 			<div class="site-logo col lg-hidden xs-6">
