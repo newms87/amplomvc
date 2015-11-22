@@ -315,6 +315,20 @@ button, .button, .row .button {
 			background: @color-gray-light;
 		}
 	}
+
+	&.bar-separator {
+		a {
+			display: inline-block;
+			line-height: 1em;
+			.ws-hack;
+
+			& + a {
+				margin-left: .5em;
+				padding-left: .5em;
+				border-left: 1px solid @color-secondary;
+			}
+		}
+	}
 }
 
 .nav-account {
