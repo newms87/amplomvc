@@ -194,4 +194,28 @@ abstract class App_Model_Table extends Model
 	{
 		return $this->getTableColumns($this->table, $filter, $merge);
 	}
+
+	protected function mapAliasToKey($aliases, &$sort, &$filter, &$options)
+	{
+		foreach ($aliases as $alias => $key) {
+			if (isset($filter[$alias])) {
+				$filter[$key] = $filter[$alias];
+			}
+
+			if (isset($filter['!' . $alias])) {
+				$filter['!' . $key] = $filter['!' . $alias];
+			}
+
+			if (isset($sort[$alias])) {
+				$sort[$key] = $sort[$alias];
+				unset($sort[$alias]);
+			}
+
+			if (isset($options['columns'], $options['columns'][$alias])) {
+				if (!isset($options['columns'][$key])) {
+					$options['columns'][$key] = 1;
+				}
+			}
+		}
+	}
 }

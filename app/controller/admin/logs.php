@@ -47,6 +47,13 @@ class App_Controller_Admin_Logs extends Controller
 
 		list($entries, $total) = $this->Model_Log->getRecords($sort, $filter, $options, true);
 
+		if (!empty($options['columns']['user'])) {
+			foreach ($entries as &$entry) {
+				$entry['user'] = $entry['user_id'];
+			}
+			unset($entry);
+		}
+
 		$listing = array(
 			'extra_cols'   => $this->Model_Log->getColumns(false),
 			'records'      => $entries,
