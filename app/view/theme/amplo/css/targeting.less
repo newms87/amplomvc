@@ -199,6 +199,13 @@
 }
 
 @media (max-width: (@sm - 1)) {
+	.site-logo {
+		img {
+			max-width: 14em;
+			height: auto;
+		}
+	}
+
 	.submit-payment-row {
 		.submit-button {
 			margin-top: 1em;
@@ -218,6 +225,17 @@
 }
 
 @media (max-width: (@xs - 1)) {
+	.breadcrumb {
+		display: none;
+	}
+
+	.site-logo {
+		img {
+			max-width: 9em;
+			height: auto;
+		}
+	}
+
 	section.page {
 		font-size: .8em;
 
@@ -244,6 +262,22 @@
 
 			& + .sm-6 {
 				margin-left: 0;
+			}
+		}
+	}
+
+	footer.site-footer {
+		.sub-footer {
+			.contact-info {
+				a {
+					display: block;
+					margin: 0;
+
+					& + a {
+						margin-top: .5em;
+						margin-left: 0;
+					}
+				}
 			}
 		}
 	}

@@ -9,9 +9,9 @@
 <div style="width: 680px;text-align: center; margin: auto;">
 	<? if ($logo) { ?>
 		<div style="margin-bottom: 10px;">
-			<a href="<?= site_url(); ?>" title="<?= option('site_name'); ?>">
+			<a href="<?= site_url(); ?>" title="<?= $title; ?>">
 				<?= img($logo, array(
-					'width'  => option('site_email_logo_width', 400),
+					'width'  => option('site_email_logo_width'),
 					'height' => option('site_email_logo_height', 150),
 					'#title' => option('site_name'),
 					'#alt'   => option('site_name'),

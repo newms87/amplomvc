@@ -13,9 +13,9 @@
 
 	<?= area('top'); ?>
 
-	<div class="login-forms row">
+	<div class="login-page row <?= isset($_GET['register']) ? 'registration' : ''; ?>">
 		<div class="wrap">
-			<div class="col xs-12 lg-6 top text-center login-col account-box <?= isset($_GET['register']) ? 'hide' : ''; ?>">
+			<div class="col xs-12 lg-6 top text-center login-col account-box">
 				<div class="login-box box">
 					<h2>{{Log In}}</h2>
 
@@ -39,18 +39,20 @@
 						<div class="form-item submit buttons">
 							<button data-loading="{{Please Wait...}}">{{Log In}}</button>
 
-							<div class="col xs-6 left forgotten">
-								<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
-							</div>
-							<div class="switch col xs-6 right">
-								<a class="show-register">{{Create Account}}</a>
+							<div class="buttons">
+								<div class="col xs-6 left forgotten">
+									<a href="<?= site_url('customer/forgotten'); ?>">{{Forgot Password?}}</a>
+								</div>
+								<div class="switch col xs-6 right">
+									<a class="show-register">{{Create Account}}</a>
+								</div>
 							</div>
 						</div>
 					</form>
 				</div>
 			</div>
 
-			<div class="col xs-12 lg-6 top text-center register-col account-box <?= isset($_GET['register']) ? '' : 'hide'; ?>">
+			<div class="col xs-12 lg-6 top text-center register-col account-box">
 				<div class="register-box box">
 					<h2>{{Create My Account}}</h2>
 
@@ -81,8 +83,10 @@
 						<div class="form-item submit buttons">
 							<button data-loading="{{Please Wait...}}">{{Create Account}}</button>
 
-							<div class="switch">
-								<a class="show-login">{{Already have an account?}}</a>
+							<div class="buttons">
+								<div class="switch">
+									<a class="show-login">{{Already have an account?}}</a>
+								</div>
 							</div>
 						</div>
 

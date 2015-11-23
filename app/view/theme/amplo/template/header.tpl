@@ -9,140 +9,148 @@
 <? option('track_statcounter') ? include_once(theme_dir('template/common/statcounter.tpl')) : ''; ?>
 
 <section id="container">
-	<? if (!empty($terms_page)) { ?>
-		<div class="terms-agreement">
-			{{You must agree to the
-			<a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>"><?= $terms_page['title']; ?></a>. After reviewing click
-			<a href="<?= site_url('customer/agree-to-terms', array('redirect' => $r->url->here())); ?>">I agree</a>}}
-		</div>
-	<? } ?>
+	<header class="main-header row top-row">
+		<? if (!empty($terms_page) && is_logged()) { ?>
+			<div class="terms-agreement">
+				{{Our Terms &amp; Conditions have been updated! To review and accept
+				<a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>">go here</a>.}}
+			</div>
+		<? } ?>
 
-	<? if (option("show-header-banner", false)) { ?>
-		<div class="banner-bar-row row">
-			<div class="wrap">
-				<div class="banner-bar">
-					<div class="visit col lg-5 xs-12 xs-center lg-left slide show">{{Visit our booth at IRE (#2750)}}</div>
-					<!--<div class="learn col lg-4 xs-hidden slide">{{Learn about our <a href="<?= site_url('scope/year-of-scopes'); ?>">Year of Scopes</a> >}}</div>-->
-					<div class="help col lg-7 xs-12 xs-center lg-right slide">
-						{{Need Help? <span class="lg-visible">We'd love to talk to you!</span>}}
-						<a href="tel:<?= preg_replace("/[^\\d]/", '', option('site_phone')); ?>">1-877-MY-SCOPE</a>
+		<? if (option("show-header-banner", false)) { ?>
+			<div class="banner-bar-row row">
+				<div class="wrap">
+					<div class="banner-bar">
+						<div class="col xs-12 md-10 lg-10 xl-8">
+							<div class="help col xs-12 slide show">
+								<span class="left-text">{{Welcome to Amplo MVC}}</span>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<script>
-				$(window).scroll(function (e) {
-					$('.banner-bar-row').toggleClass('hide', $(window).scrollTop() > 20);
-				});
-
-				(function cycle_banner() {
-					var $show = $('.banner-bar .slide.show');
-					var $next = $show.removeClass('show').next();
-
-					if (!$next.length) {
-						$next = $('.banner-bar .slide:first');
+				<script>
+					if (screen_width > 1024) {
+						$(window).scroll(function () {
+							$('.banner-bar-row').toggleClass('hide', $(window).scrollTop() > 20);
+						}).scroll();
 					}
+				</script>
+			</div>
+		<? } ?>
 
-					$next.addClass('show');
-				}).loop(5000);
-			</script>
-		</div>
-	<? } ?>
-
-	<header class="main-header row top-row">
-		<? if ($show_admin_bar) { ?>
+		<? if (!empty($show_admin_bar)) { ?>
 			<?= block('widget/admin_bar'); ?>
 		<? } ?>
 
+		<section id="message-box" class="message-row row">
+			<? if (empty($disable_messages) && $r->message->has()) { ?>
+				<?= render_message(); ?>
+			<? } ?>
+		</section>
+
+
 		<div class="wrap">
-			<? if ($logo = option('site_logo')) { ?>
-				<div id="logo" class="col xs-5 sm-4 md-3 lg-2 left top">
-					<a href="<?= site_url(); ?>">
-						<? if ($logo_srcset = option('site_logo_srcset')) { ?>
-							<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('site_logo_width'), option('site_logo_height')), $logo_srcset, option('site_name'), option('site_name')); ?> />
-						<? } else { ?>
-							<?= img($logo, array(
-								'width'  => option('admin_logo_width'),
-								'height' => option('admin_logo_height', 80),
-								'#title' => option('admin_name'),
-								'#alt'   => option('admin_name'),
-							)); ?>
-						<? } ?>
-					</a>
-				</div>
-			<? } ?>
+			<? $logo_html = option('site_name');
 
-			<? if ($slogan = option('config_slogan')) { ?>
-				<div id="slogan"><?= $slogan; ?></div>
-			<? } ?>
+			if ($logo = option('site_logo')) {
+				ob_start(); ?>
+				<? if ($logo_srcset = option('site_logo_srcset')) { ?>
+					<img <?= image_srcset(build_srcset($logo, $logo_srcset, option('site_logo_width'), option('site_logo_height')), $logo_srcset, option('site_name'), option('site_name')); ?> />
+				<? } else { ?>
+					<?= img($logo, array(
+						'width'  => option('admin_logo_width'),
+						'height' => option('admin_logo_height', 80),
+						'#title' => option('admin_name'),
+						'#alt'   => option('admin_name'),
+					)); ?>
+				<? } ?>
+				<? $logo_html = ob_get_clean();
+			} ?>
 
-			<? if (option('config_multi_language')) { ?>
-				<?= block('localisation/language'); ?>
-			<? } ?>
-
-			<? if (option('config_multi_currency')) { ?>
-				<?= block('localisation/currency'); ?>
-			<? } ?>
-
-			<div class="header-navigation menu-button col xs-7 sm-8 md-9 lg-10 xs-right lg-left top">
-				<div class="links-toggle lg-hidden" onclick="$(this).toggleClass('hover')">
-					<b class="amp-sprite si-menu"></b>
-				</div>
-
-				<nav class="header-nav col xs-12">
-					<div id="links-primary" class="nav col xs-8 left middle">
-						<div class="links horizontal">
-							<?= links('primary'); ?>
-						</div>
-					</div>
-
-					<div id="links-account" class="nav col xs-4 middle right">
-						<div class="links links-simple">
-							<? if (is_logged()) { ?>
-								<a class="my-account" href="<?= site_url('account'); ?>">{{My Account}}</a>
-								<a class="logout" href="<?= site_url('customer/logout'); ?>">{{Log Out}}</a>
-							<? } else { ?>
-								<a class="login" href="<?= site_url('customer/login'); ?>">{{Log In}}</a>
-							<? } ?>
-							<a class="lg-hidden close" onclick="$('.links-toggle').removeClass('hover')">{{Close}}</a>
-						</div>
-					</div>
-				</nav>
+			<div class="site-logo col lg-visible lg-2 left">
+				<a href="<?= site_url(); ?>">
+					<?= $logo_html; ?>
+				</a>
 			</div>
 
-			<? if (option('config_social_media')) { ?>
-				<div id="header-social-networks">
-					<?= block('extras/social_media'); ?>
-				</div>
-			<? } ?>
+			<div class="nav nav-primary col xs-3 lg-6 left">
+				<? if (has_links('primary')) { ?>
+					<div class="mobile-menu-toggle lg-hidden" onclick="$(this).toggleClass('active')">
+						<b class="fa fa-reorder mm-show"></b>
+						<b class="fa fa-remove mm-hide"></b>
+					</div>
+
+					<div class="mobile-menu horizontal no-parent-scroll accordian">
+						<?= build_links('primary', array('class' => 'horizontal')); ?>
+					</div>
+				<? } ?>
+			</div>
+
+			<div class="site-logo col lg-hidden xs-6">
+				<a href="<?= site_url(); ?>">
+					<?= $logo_html; ?>
+				</a>
+			</div>
+
+			<div class="nav nav-account col xs-3 lg-4 right">
+				<? if (is_logged()) { ?>
+					<div class="link-menu account-home arrow-top align-right popup">
+						<div class="parent" data-amp-toggle=".nav-account .account-home">
+							<span class="text lg-visible">{{<?= customer_info('first_name') ? "Hi, " . customer_info('first_name') : "Welcome Back"; ?>!}}</span>
+							<i class="fa fa-home"></i>
+						</div>
+
+						<div class="children">
+							<? $account_links = array(
+								'my-details' => array(
+									'display_name' => '{{My Details}}',
+									'path'         => 'account/details',
+								),
+								'logout'     => array(
+									'display_name' => '{{Log Out}}',
+									'path'         => 'customer/logout',
+									'#title'       => '{{Log Out }}' . customer_info('username') . ' (' . customer_info('customer_id') . ')',
+								),
+							);
+							?>
+
+							<?= build_links($account_links, array(
+								'sort' => false,
+							)); ?>
+						</div>
+					</div>
+				<? } else { ?>
+					<div class="link-menu account-home align-right bar-separator">
+						<a class="link link-login" href="<?= site_url('customer/login'); ?>">{{Log In}}</a>
+						<a class="link link-register sm-visible" href="<?= site_url('customer/login', 'register'); ?>">{{Register}}</a>
+					</div>
+				<? } ?>
+
+			</div>
 		</div>
 	</header>
 
-	<script type="text/javascript">
-		$(document).ready(function () {
-			$('main.main').css('padding-bottom', $('footer.site-footer').outerHeight());
-		}).on('scroll', _cfix);
-
-		function _cfix() {
-			_cfix.$m.css('padding-top', (_cfix.h = Math.max(_cfix.$h.outerHeight(), _cfix.h || 0)) + parseInt(_cfix.$h.css('top')));
-			$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0);
-		}
-		;
-
-		_cfix.$h = $('header.main-header'), _cfix.$m = $('main.main');
-
-		_cfix();
-	</script>
-
 	<main class="main">
 
-		<? if ($r->message->has()) { ?>
-			<section class="message-row row">
-				<div class="wrap">
-					<?= render_message(); ?>
-				</div>
-			</section>
-		<? } ?>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				_ffix();
+				window.addEventListener('resize', _ffix, true);
+			}).on('scroll', _cfix);
+
+			function _ffix() {
+				$('main.main').css('padding-bottom', $('footer.site-footer').outerHeight());
+			}
+			function _cfix() {
+				_cfix.$m.css('padding-top', (_cfix.h = Math.max(_cfix.$h.outerHeight(), _cfix.h || 0)) + parseInt(_cfix.$h.css('top')));
+				$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0);
+			}
+
+			_cfix.$h = $('header.main-header'), _cfix.$m = $('main.main');
+
+			_cfix();
+		</script>
 
 		<? if (show_area('above')) { ?>
 			<section class="area-above row">

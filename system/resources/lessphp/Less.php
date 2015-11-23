@@ -6600,8 +6600,6 @@ class Less_Tree_Import extends Less_Tree
 
 		if (!$path_and_uri) {
 			$path_and_uri = $evald->PathAndUri();
-
-			html_dump($path_and_uri, 'compare');
 		}
 
 		if ($path_and_uri) {
