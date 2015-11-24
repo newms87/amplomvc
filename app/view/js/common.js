@@ -102,10 +102,10 @@ function autoload_js_file(url, args, type) {
 				js_url = url[u].match(/^([a-z]+:\/\/)|(\/\/)/) ? url[u] : $ac.site_url + url[u];
 
 				$.ajax({
-					url:      js_url,
-					dataType: 'script',
-					cache:    true
-				})
+						url:      js_url,
+						dataType: 'script',
+						cache:    true
+					})
 					.done(function () {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
@@ -116,10 +116,10 @@ function autoload_js_file(url, args, type) {
 							$(document).trigger(al);
 						}
 					}).always(function (jqXHR, status, msg) {
-						if (status !== 'success') {
-							$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
-						}
-					});
+					if (status !== 'success') {
+						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+					}
+				});
 			}
 		}
 	}
@@ -589,7 +589,7 @@ $.extend($.ampSelect, {
 
 		return this.use_once('amp-select-enabled').each(function (i, e) {
 			var $select = $(e);
-			var $selected = $("<div />").addClass('amp-selected').append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
+			var $selected = $("<div />").addClass($select.attr('class').replace('amp-select-enabled', 'amp-selected')).append($('<div/>').addClass('align-middle')).append($('<div/>').addClass('value')),
 				$box = $('<div/>').addClass('amp-select-box'),
 				$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
 				$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
@@ -1299,6 +1299,57 @@ $.fn.collapsible = function () {
 function stopProp(e) {
 	e.stopPropagation();
 }
+
+$.ampAccordion = $.fn.ampAccordion = function () {
+	return $.amp.call(this, $.ampAccordion, arguments);
+}
+
+$.extend($.fn.ampAccordion, {
+	count: 0,
+
+	init: function (o) {
+		o = $.extend({}, {
+			toggle:  '.amp-accordion-toggle',
+			content: '.amp-accordion-content',
+			flip:    '.amp-accordion-flip',
+			show:    null
+		}, o);
+
+		return this.addClass('amp-accordion').use_once().each(function (i, e) {
+			var $e = $(e).attr('data-amp-accordion', $.ampAccordion.count),
+				$toggle = typeof o.toggle === 'object' ? o.toggle : $e.find(o.toggle),
+				$content = typeof o.content === 'object' ? o.content : $e.find(o.content),
+				$flip = typeof o.flip === 'object' ? o.flip : $e.find(o.flip);
+
+			$content.addClass('amp-accordion-content height-animate-hide').attr('data-amp-accordion-content', $.ampAccordion.count);
+			$flip.addClass('amp-accordion-flip');
+
+			$toggle.attr('data-amp-accordion-toggle', $.ampAccordion.count).click(function () {
+				$('.amp-accordion[data-amp-accordion=' + $(this).attr('data-amp-accordion-toggle') + ']').ampAccordion('toggle');
+			})
+
+			$e.data('o', $.extend({}, o, {
+				toggle:  $toggle,
+				content: $content,
+				flip:    $flip,
+			}))
+
+			$e.ampAccordion('toggle', o.show === null ? undefined : o.show);
+
+			$.ampAccordion.count++
+		})
+	},
+
+	toggle: function (show) {
+		var o = this.data('o');
+
+		var show = typeof show === 'undefined' ? this.hasClass('is-hidden') : show;
+
+		this.toggleClass('is-showing', show).toggleClass('is-hidden', !show);
+		o.content.toggleClass('hide', !show);
+		o.flip.toggleClass('flip', show);
+	}
+});
 
 $.ampFormEditor = $.fn.ampFormEditor = function () {
 	return $.amp.call(this, $.ampFormEditor, arguments);

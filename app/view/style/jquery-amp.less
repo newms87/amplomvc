@@ -208,11 +208,7 @@
 			}
 
 			&.cancel {
-				padding: .45em .8em;
-				border: 2px solid @font-dark;
-				border-radius: 1px;
-				background: transparent;
-				color: @font-dark;
+				.button.light;
 			}
 		}
 	}
@@ -276,6 +272,22 @@
 	}
 }
 
+//ampAccordion
+.amp-accordion {
+	position: relative;
+
+	.amp-accordion-toggle {
+		.no-select;
+	}
+
+	.amp-accordion-flip {
+		&.flip {
+			-webkit-transform: rotateZ(180deg);
+			transform: rotateZ(180deg);
+		}
+	}
+}
+
 //ampSelect
 .amp-select.amp-select-enabled {
 	position: absolute;
@@ -323,6 +335,7 @@
 		padding: .7em;
 
 		.amp-select-done {
+			text-align: center;
 			width: 100%;
 		}
 	}
@@ -344,6 +357,14 @@
 		width: 100%;
 		vertical-align: middle;
 		display: inline-block;
+	}
+
+	&.small {
+		font-size: .8em;
+
+		.value {
+			font-size: .9em;
+		}
 	}
 
 	&:after {
@@ -389,10 +410,16 @@ label.radio {
 			vertical-align: middle;
 			display: inline-block;
 
+			.text {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
 			&:before {
 				.amp-sprite;
 				.si-radio-inactive;
 				margin-right: .4em;
+				vertical-align: middle;
 			}
 		}
 
@@ -472,6 +499,11 @@ label.checkbox {
 			vertical-align: middle;
 			display: inline-block;
 			font-size: 1em;
+
+			.text {
+				display: inline-block;
+				vertical-align: middle;
+			}
 
 			&:before {
 				.amp-sprite;

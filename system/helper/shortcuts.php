@@ -914,22 +914,17 @@ function build($type, $params = null)
 
 			case 'text-select':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label></li>";
+				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label></li>";
 				break;
 
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
+				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label>";
 				break;
 
 			case 'checkbox':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><span class=\"label\">$value</span></label>";
-				break;
-
-			case 'multiselect-bkp':
-				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<li><input id=\"checkbox-$uniqid\" type=\"checkbox\" name=\"$name" . "[]\" value=\"$key\" $s /><label for=\"checkbox-$uniqid\">$value</label></li>";
+				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label>";
 				break;
 
 			case 'clickable_list':
