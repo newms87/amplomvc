@@ -289,7 +289,7 @@
 }
 
 //ampSelect
-.amp-select.amp-select-enabled {
+select.amp-select-enabled {
 	position: absolute;
 	left: -9999px;
 }
@@ -367,8 +367,7 @@
 		}
 	}
 
-	&:after {
-		content: "";
+	.amp-select-button {
 		position: absolute;
 		right: 0;
 		top: 0;
@@ -377,17 +376,14 @@
 		box-sizing: border-box;
 		background: @color-dark;
 		z-index: 10;
-	}
+		text-align: center;
 
-	&:before {
-		.amp-sprite;
-		.si-chevron-wht;
-		.amp-sprite.rotate-180;
-
-		position: absolute;
-		top: 1.1em;
-		right: .9em;
-		z-index: 11;
+		.amp-select-button-icon {
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+			color: white;
+		}
 	}
 }
 
