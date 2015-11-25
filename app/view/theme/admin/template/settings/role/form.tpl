@@ -81,7 +81,7 @@
 				<label for="ug-permissions" class="col xs-3 md-2 left">{{Permissions:}}</label>
 
 				<div class="col xs-9 md-10 left value">
-					<div class="builder-multiselect tall user-permissions">
+					<div class="builder-multiselect bar-list tall user-permissions">
 						<? recursive_multiselect($data_areas, 'permissions', $data_perms); ?>
 					</div>
 				</div>
