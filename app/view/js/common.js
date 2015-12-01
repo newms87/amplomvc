@@ -685,7 +685,7 @@ $.extend($.ampSelect, {
 		$ampSelect.ampSelect('update')
 	},
 
-	update: function () {
+	update: function (trigger_change) {
 		var $ampSelect = $(this).closest('.amp-select');
 		var o = $ampSelect.data('o');
 		var value = [], placeholder = '';
@@ -698,8 +698,12 @@ $.extend($.ampSelect, {
 			}
 		})
 
-		$ampSelect.find('select').val(value)
+		var $select = $ampSelect.find('select').val(value);
 		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+
+		if (trigger_change) {
+			$select.change();
+		}
 	},
 
 	refresh: function () {
@@ -714,7 +718,7 @@ $.extend($.ampSelect, {
 			$options.find('[value=' + values[s] + ']').prop('checked', true)
 		}
 
-		$ampSelect.ampSelect('update');
+		$ampSelect.ampSelect('update', false);
 	}
 })
 
