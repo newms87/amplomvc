@@ -1,3 +1,13 @@
+//Font Awesome
+.fa {
+	font-family: FontAwesome !important;
+
+	&:before {
+		content: 'FI';
+		display: inline-block;
+	}
+}
+
 //Size animations
 .animate-hide {
 	overflow: hidden;
@@ -412,8 +422,8 @@ label.radio {
 			}
 
 			&:before {
-				.amp-sprite;
-				.si-radio-inactive;
+				.fa;
+				content: "\f10c";
 				margin-right: .4em;
 				vertical-align: middle;
 			}
@@ -421,7 +431,7 @@ label.radio {
 
 		&:checked, &.checked {
 			& + .label:before {
-				.si-radio-active;
+				content: "\f192";
 			}
 		}
 	}
@@ -502,8 +512,8 @@ label.checkbox {
 			}
 
 			&:before {
-				.amp-sprite;
-				.si-checkbox-inactive;
+				.fa;
+				content: "\f096";
 				margin-right: .4em;
 			}
 		}
@@ -511,7 +521,7 @@ label.checkbox {
 		&:checked {
 			& + .label {
 				&:before {
-					.si-checkbox-active;
+					content: "\f046";
 				}
 			}
 		}
@@ -521,16 +531,6 @@ label.checkbox {
 		input[type="checkbox"] {
 			& + .label {
 				font-size: 1.2em;
-
-				&:before {
-					.si-checkbox-inactive-dark-gray-lg;
-				}
-			}
-
-			&:checked, .checked {
-				& + .label:before {
-					.si-checkbox-active-dark-gray-lg;
-				}
 			}
 		}
 	}

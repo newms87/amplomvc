@@ -174,6 +174,41 @@ $.amp = function (p, args) {
 	}
 }
 
+//ampFormat jQuery Plugin
+$.ampFormat = $.fn.ampFormat = function (o) {
+	return $.amp.call(this, $.ampFormat, arguments);
+}
+
+$.extend($.ampFormat, {
+	init: function (o) {
+		o = $.extend({}, {
+			type:     'float',
+			unsigned: false
+		}, o);
+
+		this.data('o', o);
+
+		this.keypress(function (e) {
+			return $(this).ampFormat('validate', e);
+		})
+	},
+
+	validate: function (e, type) {
+		var o = this.data('o');
+
+		var type = typeof type === 'string' ? type : o.type,
+			char = String.fromCharCode(e.keyCode);
+
+		switch (type) {
+			case 'float':
+				return o.unsigned ? !!char.match(/[0-9\.]/) : !!char.match(/[0-9\.\-]/);
+
+			case 'integer':
+				return o.unsigned ? !!char.match(/[0-9]/) : !!char.match(/[0-9\-]/);
+		}
+	}
+})
+
 //ampToggle jQuery Plugin
 $.ampToggle = $.fn.ampToggle = function (o) {
 	return $.amp.call(this, $.ampToggle, arguments);
@@ -791,7 +826,7 @@ $.ampResize = $.fn.ampResize = function (o) {
 $.extend($.ampResize, {
 	init: function (o) {
 		o = $.extend({}, {
-			on: 'keyup'
+			on: 'keyup change'
 		}, o);
 
 		var $canvas = $('<canvas/>').css({position: 'absolute', top: 0, left: -9999});
