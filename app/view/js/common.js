@@ -117,7 +117,8 @@ function autoload_js_file(url, args, type) {
 						}
 					}).always(function (jqXHR, status, msg) {
 					if (status !== 'success') {
-						$.error('There was an error loading the autoloaded file:', url, msg, jqXHR);
+						$.error('There was an error loading the autoloaded file: ' + url + ": " + msg);
+						$.error(jqXHR);
 					}
 				});
 			}
@@ -207,6 +208,42 @@ $.extend($.ampFormat, {
 				return o.unsigned ? !!char.match(/[0-9]/) : !!char.match(/[0-9\-]/);
 		}
 	}
+})
+
+//ampDelay jQuery Plugin
+$.ampDelay = $.fn.ampDelay = function (o) {
+	return $.amp.call(this, $.ampDelay, arguments);
+}
+
+$.extend($.ampDelay, {
+	init: function (o) {
+		o = $.extend({}, {
+			delay:    1000,
+			callback: null,
+			on:       'keyup'
+		}, o);
+
+		o.count = 0;
+
+		this.data('o', o);
+
+		return this.on(o.on, function () {
+			$(this).ampDelay('countdown');
+		})
+	},
+
+	countdown: function () {
+		var $this = this;
+		var o = $this.data('o')
+
+		o.count++;
+
+		setTimeout(function () {
+			if (--o.count <= 0) {
+				o.callback.call($this);
+			}
+		}, o.delay)
+	},
 })
 
 //ampToggle jQuery Plugin
