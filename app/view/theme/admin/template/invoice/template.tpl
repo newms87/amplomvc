@@ -17,16 +17,18 @@
 			<div class="row scopetech-details">
 				<div class="col xs-6 left address">
 					<p contenteditable="">
-						Scope Technologies, Inc.<br/>
-						1630 Stout Street<br/>
-						Denver, CO 80202
+						<?= option('site_name'); ?><br/>
+						<?= nl2br(option('site_address')); ?>
 					</p>
 					<br/>
 
 					<p contenteditable="">
-						877 697 2673<br/>
-						invoice@myscopetech.com<br/>
-						www.roofscope.com
+						<? if ($phone = option('site_phone')) { ?>
+							<?= format('phone', $phone); ?><br/>
+						<? } ?>
+
+						<?= option('site_email'); ?><br/>
+						<?= $r->Model_Site->getField(option('site_id'), 'domain'); ?>
 					</p>
 				</div>
 
@@ -77,7 +79,10 @@
 						</thead>
 						<tbody>
 						<tr>
-							<td contenteditable><?= format('address', $customer['address']); ?></td>
+							<td contenteditable>
+								<?= $customer['email']; ?><BR/>
+								<?= format('address', $customer['address']); ?>
+							</td>
 						</tr>
 						</tbody>
 					</table>
