@@ -83,8 +83,8 @@ class App_Model_Meta extends App_Model_Table
 		);
 
 		$where = $this->extractWhere('meta', $filter);
-		
-		return $this->queryVar("SELECT user_id FROM {$this->t['meta']} WHERE $where");
+
+		return $this->queryVar("SELECT record_id FROM {$this->t['meta']} WHERE $where");
 	}
 
 	public function removeKey($type, $record_id, $key, $value = null)
