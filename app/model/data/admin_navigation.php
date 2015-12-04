@@ -2,7 +2,7 @@
 $links = array(
 	'home'       => array(
 		'display_name' => 'Home',
-		'path'         => '',
+		'path'         => 'admin',
 	),
 
 	'dashboards' => array(
