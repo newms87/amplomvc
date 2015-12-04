@@ -74,6 +74,17 @@ class App_Model_Meta extends App_Model_Table
 		}
 	}
 
+	public function reverseLookup($type, $key, $value)
+	{
+		$filter = array(
+			'type'  => $type,
+			'key'   => $key,
+			'value' => $value,
+		);
+
+		return $this->findRecord($filter);
+	}
+
 	public function removeKey($type, $record_id, $key, $value = null)
 	{
 		$where = array(
