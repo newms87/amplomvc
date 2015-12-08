@@ -94,7 +94,6 @@ function autoload_js_file(url, args, type) {
 		var load_count = 1;
 		for (var u in url) {
 			if ($ac.al_loaded[url[u]]) {
-				fn = al;
 				al = $ac.al_loaded[url[u]];
 			} else {
 				$ac.alq[al] = [];
@@ -220,16 +219,22 @@ $.extend($.ampDelay, {
 		o = $.extend({}, {
 			delay:    1000,
 			callback: null,
-			on:       'keyup'
+			on:       null
 		}, o);
 
 		o.count = 0;
 
 		this.data('o', o);
 
-		return this.on(o.on, function () {
-			$(this).ampDelay('countdown');
-		})
+		if (!o.on) {
+			this.ampDelay('countdown');
+		} else {
+			this.on(o.on, function () {
+				$(this).ampDelay('countdown');
+			})
+		}
+
+		return this;
 	},
 
 	countdown: function () {
