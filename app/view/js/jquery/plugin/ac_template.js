@@ -25,6 +25,11 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			list = this;
 		}
 
+		if (templates[name]) {
+			template_row.remove();
+			return;
+		}
+
 		if (!template_row.length) {
 			$.error('Element attribute data-row="__ac_template__" is required for ' + name);
 			return this;
@@ -69,11 +74,10 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			template.attr('data-id', data[row.unique] || count);
 
 			template.find('[id]').each(function (i, e) {
-				var id = $(e).attr('id');
-				if ($('#' + id).length) {
-					$(e).attr('id', id + count);
-					template.find('[for=' + id + ']').attr('for', id + count);
-				}
+				var id = $(e).attr('id'), c = 0;
+				while ($('#' + (new_id = id.replace('__ac_template__', count) + '-' + c)).length);
+				$(e).attr('id', new_id);
+				template.find('[for="' + id + '"]').attr('for', new_id);
 			});
 
 			list.append(template);
@@ -82,10 +86,12 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 
 			var row_list = [count], row_find = ['__ac_template__'];
 
-			template.parents('[data-row]').each(function (i, e) {
-				row_list.unshift(parseInt($(e).attr('data-row')));
-				row_find.push('__ac_template__');
-			});
+			if (!template.attr('data-template-root')) {
+				template.parents('[data-row]').each(function (i, e) {
+					row_list.unshift(parseInt($(e).attr('data-row')));
+					row_find.push('__ac_template__');
+				});
+			}
 
 			template.find('[name]').each(function (i, e) {
 				var $e = $(e);
@@ -139,6 +145,10 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 						$e.val($e.find(':first').val());
 					}
 				} else if ($.inArray($e.attr('type'), ['checkbox', 'radio']) >= 0) {
+					if ($e.val() === '__ac_template__') {
+						$e.val(value);
+					}
+
 					$e.prop('checked', $e.val() == value);
 				} else {
 					$e.val(value).attr('value', value);

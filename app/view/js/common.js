@@ -161,25 +161,118 @@ $.fn.scrollTo = function (target, options) {
 	});
 }
 
-//Generic amp protocol for jQuery plugins
-$.amp = function (p, args) {
-	var o = args[0];
-
-	if (p[o]) {
-		return p[o].apply(this, Array.prototype.slice.call(args, 1));
-	} else if (typeof o === 'object' || !o) {
-		return p.init.apply(this, args);
-	} else {
-		$.error('Method ' + o + ' does not exist for jQuery plugin ' + p.name);
+//Extend amp protocol for jQuery plugins
+$.ampExtend = function (a, m) {
+	if (typeof a === 'object') {
+		for (var i in $) {
+			if ($[i] === a) {
+				a = i;
+			}
+		}
 	}
+
+	$.fn[a] = function (o) {
+		var p = $[a];
+		var o = arguments[0];
+
+		if (p[o]) {
+			return p[o].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if (typeof o === 'object' || !o) {
+			return p.init.apply(this, arguments);
+		} else {
+			$.error('Method ' + o + ' does not exist for jQuery plugin ' + p.name);
+		}
+	}
+
+	if (typeof $[a] !== 'function') {
+		$[a] = $.fn[a];
+	}
+
+	return $.extend($[a], {
+		init: function (o) {
+			$.error('Override the init method for the ampExtend plugin ' + a);
+		},
+
+		setOption: function (o) {
+			$.extend(this.data('o'), o);
+		}
+	}, m);
 }
+
+//ampNestedForm jQuery Plugin
+$.ampExtend('ampNestedForm', {
+	init: function (o) {
+		var $form = this.use_once();
+
+		o = $.extend({}, {
+			onDone:    null,
+			onFail:    null,
+			onAlways:  null
+		}, o)
+
+		$form
+			.addClass('amp-nested-form')
+			.data('o', o)
+			.keyup(function (e) {
+				if (e.keyCode === 13) {
+					$(this).closest('.amp-nested-form').submit();
+					e.stopPropagation();
+					return false;
+				}
+			});
+
+		$form.find('button').click(function (e) {
+			$(this).closest('.amp-nested-form').submit();
+			e.stopPropagation();
+			return false;
+		})
+
+		$form.submit(function (e) {
+			var $form = $(this).closest('.amp-nested-form');
+			var o = $form.data('o');
+
+			$form.find('button').loading();
+
+			$.post($form.attr('data-action'), $form.find('[name]').serialize(), function (r, status) {
+					if (typeof o.onDone === 'function') {
+						o.onDone.call($form, r, status)
+					}
+				})
+				.fail(function (jqXHR, status, error) {
+					if (typeof o.onFail === 'function') {
+						o.onFail.call($form, jqXHR, status, error);
+					}
+				})
+				.always(function (jqXHR, status, error) {
+					$form.find('button').loading('stop');
+
+					if (typeof o.always === 'function') {
+						o.always.call($form, jqXHR, status, error);
+					}
+				})
+
+			e.stopPropagation();
+			return false;
+		})
+
+		return this;
+	},
+
+	onDone: function (callback) {
+		this.data('o', {onDone: callback});
+	},
+
+	onAlways: function (callback) {
+		this.data('o', {onAlways: callback});
+	},
+
+	onFail: function (callback) {
+		this.data('o', {onFail: callback});
+	}
+})
 
 //ampFormat jQuery Plugin
-$.ampFormat = $.fn.ampFormat = function (o) {
-	return $.amp.call(this, $.ampFormat, arguments);
-}
-
-$.extend($.ampFormat, {
+$.ampExtend('ampFormat', {
 	init: function (o) {
 		o = $.extend({}, {
 			type:     'float',
@@ -210,11 +303,7 @@ $.extend($.ampFormat, {
 })
 
 //ampDelay jQuery Plugin
-$.ampDelay = $.fn.ampDelay = function (o) {
-	return $.amp.call(this, $.ampDelay, arguments);
-}
-
-$.extend($.ampDelay, {
+$.ampExtend('ampDelay', {
 	init: function (o) {
 		o = $.extend({}, {
 			delay:    1000,
@@ -252,11 +341,7 @@ $.extend($.ampDelay, {
 })
 
 //ampToggle jQuery Plugin
-$.ampToggle = $.fn.ampToggle = function (o) {
-	return $.amp.call(this, $.ampToggle, arguments);
-}
-
-$.extend($.ampToggle, {
+$.ampExtend('ampToggle', {
 	init: function (o) {
 		if (!o) {
 			$.error("ampToggle parameter error: content must be an existing DOM element");
@@ -347,11 +432,7 @@ $.extend($.ampToggle, {
 });
 
 //ampYouTube
-$.ampYouTube = $.fn.ampYouTube = function () {
-	return $.amp.call(this, $.ampYouTube, arguments);
-}
-
-$.extend($.ampYouTube, {
+$.ampExtend('ampYouTube', {
 	init: function (o) {
 		o = $.extend({}, {
 			width:      null,
@@ -470,11 +551,7 @@ $.ampTokenCheck = function (token, callback, delay) {
 }
 
 //ampModal jQuery Plugin
-$.ampModal = $.fn.ampModal = function (o) {
-	return $.amp.call(this, $.ampModal, arguments)
-}
-
-$.extend($.ampModal, {
+$.ampExtend('ampModal', {
 	init: function (o) {
 		if (typeof this === 'function' && !o.content) {
 			return $.error('Error ampModal: You must specify a value for content.');
@@ -656,11 +733,7 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 }
 
 //ampSelect jQuery Plugin
-$.ampSelect = $.fn.ampSelect = function (o) {
-	return $.amp.call(this, $.ampSelect, arguments)
-}
-
-$.extend($.ampSelect, {
+$.ampExtend('ampSelect', {
 	init: function (o) {
 		o = $.extend({}, {}, o);
 
@@ -861,11 +934,7 @@ $.fn.apply_filter = function (url) {
 	return url;
 }
 
-$.ampResize = $.fn.ampResize = function (o) {
-	return $.amp.call(this, $.ampResize, arguments);
-}
-
-$.extend($.ampResize, {
+$.ampExtend('ampResize', {
 	init: function (o) {
 		o = $.extend({}, {
 			on: 'keyup change'
@@ -1388,11 +1457,8 @@ function stopProp(e) {
 	e.stopPropagation();
 }
 
-$.ampAccordion = $.fn.ampAccordion = function () {
-	return $.amp.call(this, $.ampAccordion, arguments);
-}
-
-$.extend($.fn.ampAccordion, {
+//ampAccordion jQuery Plugin
+$.ampExtend('ampAccordion', {
 	count: 0,
 
 	init: function (o) {
@@ -1439,11 +1505,8 @@ $.extend($.fn.ampAccordion, {
 	}
 });
 
-$.ampFormEditor = $.fn.ampFormEditor = function () {
-	return $.amp.call(this, $.ampFormEditor, arguments);
-}
-
-$.extend($.ampFormEditor, {
+//ampFormEditor jQuery Plugin
+$.ampExtend('ampFormEditor', {
 	init: function (o) {
 		return this.use_once('form-editor-enabled').each(function (i, e) {
 			var $fe = $(e);

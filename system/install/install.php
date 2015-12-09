@@ -68,7 +68,7 @@ function amplo_mvc_setup_form($msg)
 		'db_name'     => '',
 		'db_username' => '',
 		'db_password' => '',
-		'db_prefix'   => 'am_',
+		'db_prefix'   => 'amp_',
 		'username'    => '',
 		'email'       => '',
 		'password'    => '',

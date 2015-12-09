@@ -203,6 +203,16 @@
 		background: white;
 		text-align: left;
 		box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+
+		ul {
+			list-style: disc inside;
+
+			li {
+				& + li {
+					margin-top: .5em;
+				}
+			}
+		}
 	}
 
 	.amp-modal-buttons {
@@ -423,15 +433,15 @@ label.radio {
 
 			&:before {
 				.fa;
-				content: "\f10c";
-				margin-right: .4em;
+				content: "\f111";
+				margin: 0 .4em 0 1px;
 				vertical-align: middle;
 			}
 		}
 
 		&:checked, &.checked {
 			& + .label:before {
-				content: "\f192";
+				content: "\f058";
 			}
 		}
 	}
@@ -562,11 +572,12 @@ label.select {
 		z-index: 12;
 		background: none !important;
 		width: 100%;
-		height: 2.6em;
+		height: auto;
 		padding-right: 3em !important;
 		border-radius: 3px;
-		font: 1em OpenSansRegular;
-		padding: .5em;
+		font: 1em/1em OpenSansRegular;
+		padding: .6em;
+		box-sizing: border-box;
 		-webkit-appearance: none;
 		-moz-appearance: none;
 		appearance: none;

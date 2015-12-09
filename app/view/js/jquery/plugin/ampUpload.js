@@ -1,8 +1,5 @@
-$.ampUpload = $.fn.ampUpload = function (o) {
-	return $.amp.call(this, $.ampUpload, arguments);
-}
-
-$.extend($.ampUpload, {
+//ampUpload jQuery Plugin
+$.ampExtend('ampUpload', {
 	init: function (o) {
 		return this.each(function (i, e) {
 			var $input = $(e), today = new Date();

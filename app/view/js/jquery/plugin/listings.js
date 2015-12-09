@@ -1,8 +1,5 @@
-$.ampListing = $.fn.ampListing = function (o) {
-	return $.amp.call(this, $.ampListing, arguments)
-}
-
-$.extend($.ampListing, {
+//ampListing jQuery Plugin
+$.ampExtend('ampListing', {
 	init: function (o) {
 		o = $.extend({}, {
 			view_id: null,
@@ -117,11 +114,7 @@ $.fn.listview = function () {
 	})
 }
 
-$.ampFilter = $.fn.ampFilter = function (o) {
-	return $.amp.call(this, $.ampFilter, arguments);
-}
-
-$.extend($.ampFilter, {
+$.ampExtend('ampFilter', {
 	init: function (o) {
 		var $me = this;
 
