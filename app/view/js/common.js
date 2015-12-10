@@ -278,7 +278,7 @@ $.ampExtend($.ampNestedForm = function() {}, {
 })
 
 //ampFormat jQuery Plugin
-$.ampExtend('ampFormat', {
+$.ampExtend($.ampFormat = function(){}, {
 	init: function(o) {
 		o = $.extend({}, {
 			type:     'float',
@@ -290,6 +290,8 @@ $.ampExtend('ampFormat', {
 		this.keypress(function(e) {
 			return $(this).ampFormat('validate', e);
 		})
+
+		return this;
 	},
 
 	validate: function(e, type) {

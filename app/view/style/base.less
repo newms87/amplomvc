@@ -3,20 +3,19 @@
 @sm: 768px;
 @md: 1024px;
 @lg: 1280px;
-//note @xl is not needed, as this is screens > @lg
+//@xl is all screens > @lg. Set to @lg as some screens will be too wide.
+@xl: @lg;
 
 @num-cols: 12;
 
 //Page Layout
 @page-width-min: 320px;
-@page-width-max: none;
-@page-width-xs: 90%;
-@page-width-sm: 90%;
-@page-width-md: 728px;
-@page-width-lg: 954px;
-@page-width-xl: auto;
 @padding-width: 1em;
-@page-wrap-pad: 2em 0;
+@page-pad-xs: 2em 1em;
+@page-pad-sm: 2em 1em;
+@page-pad-md: 2em 1em;
+@page-pad-lg: 2em 1em;
+@page-pad-xl: 2em 1em;
 
 /* Methods */
 .bg-image-set(@s1, @s2, @s3) {
@@ -146,15 +145,18 @@
 .wrap {
 	position: relative;
 	margin: auto;
+	width: auto;
 	min-width: @page-width-min;
-	max-width: @page-width-max;
-	padding: @page-wrap-pad;
 	box-sizing: border-box;
+
+	&.fullscreen {
+		max-width: none !important;
+	}
 }
 
 //Hack to overcome whitespace between inline-block elements
 .ws-hack {
-	margin-right: -.29em !important;
+	margin-right: -.3em !important;
 }
 
 .no-ws-hack {
@@ -237,7 +239,8 @@
 
 //Extra Small
 .wrap {
-	width: @page-width-xs;
+	max-width: @xs;
+	padding: @page-pad-xs;
 }
 
 .columns(@num-cols);
@@ -314,7 +317,8 @@
 //Small
 @media (min-width: @xs) {
 	.wrap {
-		width: @page-width-sm;
+		max-width: @sm;
+		padding: @page-pad-sm;
 	}
 
 	.columns(@num-cols);
@@ -391,7 +395,8 @@
 //Medium
 @media (min-width: @sm) {
 	.wrap {
-		width: @page-width-md;
+		max-width: @md;
+		padding: @page-pad-md;
 	}
 
 	.columns(@num-cols);
@@ -468,7 +473,8 @@
 //Large
 @media (min-width: @md) {
 	.wrap {
-		width: @page-width-lg;
+		max-width: @lg;
+		padding: @page-pad-lg;
 	}
 
 	.columns(@num-cols);
@@ -545,7 +551,8 @@
 //Extra Large
 @media (min-width: @lg) {
 	.wrap {
-		width: @page-width-xl;
+		max-width: @xl;
+		padding: @page-pad-xl;
 	}
 
 	.columns(@num-cols);

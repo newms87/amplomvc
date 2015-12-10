@@ -1,6 +1,6 @@
 <?php
 //Amplo MVC Version
-define('AMPLO_VERSION', '0.3.4');
+define('AMPLO_VERSION', '0.3.5');
 
 // Configuration
 if (is_file(dirname(__FILE__) . '/config.php')) {
