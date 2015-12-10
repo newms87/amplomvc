@@ -6,7 +6,7 @@ $.ampExtend('ampListing', {
 			query:   {}
 		}, o);
 
-		this.data('o', o).addClass('amp-listing');
+		this.setOptions(o).addClass('amp-listing');
 
 		var $listing = this.use_once();
 
@@ -43,13 +43,13 @@ $.ampExtend('ampListing', {
 	},
 
 	getQuery: function (key) {
-		var query = this.data('o').query;
+		var query = this.getOptions().query;
 
 		return key ? query[key] : query;
 	},
 
 	queryString: function (key) {
-		var query = this.data('o').query;
+		var query = this.getOptions().query;
 
 		if (key) {
 			if (query[key]) {
@@ -139,7 +139,7 @@ $.ampExtend('ampFilter', {
 			})
 		});
 
-		$me.data('o', o);
+		$me.setOptions(o);
 
 		return this;
 	},

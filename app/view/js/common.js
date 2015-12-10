@@ -7,22 +7,22 @@ var screen_lg = screen_width >= 1200,
 
 $('body').toggleClass('webkit', /AppleWebKit/.test(navigator.userAgent));
 
-Function.prototype.loop = function (time, count) {
+Function.prototype.loop = function(time, count) {
 	var fn = this;
-	setTimeout(function () {
+	setTimeout(function() {
 		(fn(count = (+count || 0) - 1) === false || !count) ? 0 : fn.loop(time, count)
 	}, time);
 }
 
-String.prototype.toSlug = function (sep) {
+String.prototype.toSlug = function(sep) {
 	return this.toLowerCase().replace(/\s/, sep || '-').replace(/[^a-z0-9-_]/, '');
 }
 
-String.prototype.repeat = function (times) {
+String.prototype.repeat = function(times) {
 	return (new Array(times + 1)).join(this);
 };
 
-String.prototype.str_replace = function (find, replace) {
+String.prototype.str_replace = function(find, replace) {
 	var str = this;
 	for (var i = 0; i < find.length; i++) {
 		str = str.replace(find[i], replace[i]);
@@ -30,14 +30,14 @@ String.prototype.str_replace = function (find, replace) {
 	return str;
 };
 
-String.prototype.toCurrency = Number.prototype.toCurrency = function (params) {
+String.prototype.toCurrency = Number.prototype.toCurrency = function(params) {
 	var n = parseFloat(this);
 	params = $.extend({}, $ac.currency, params);
 
 	return (n < 0 ? params.neg : params.pos) + params.symbol_left + Math.abs(n).formatNumber() + params.symbol_right;
 }
 
-String.prototype.formatNumber = Number.prototype.formatNumber = function (params) {
+String.prototype.formatNumber = Number.prototype.formatNumber = function(params) {
 	params = $.extend({}, $ac.currency, params);
 
 	var n = parseFloat(this);
@@ -58,7 +58,7 @@ String.prototype.formatNumber = Number.prototype.formatNumber = function (params
 	return s.join(params.dec_point);
 }
 
-Number.prototype.roundFloat = function (p) {
+Number.prototype.roundFloat = function(p) {
 	var k = Math.pow(10, p);
 	return '' + Math.round(this * k) / k;
 }
@@ -74,11 +74,11 @@ function register_autoload(fn, url) {
 	if (!$[fn]) {
 		url = typeof url === 'string' ? [url] : url;
 
-		$[fn] = function () {
+		$[fn] = function() {
 			autoload_js_file.call(this, url, arguments, 'base')
 		}
 
-		$.fn[fn] = function () {
+		$.fn[fn] = function() {
 			autoload_js_file.call(this, url, arguments, 'fn')
 		}
 
@@ -105,7 +105,7 @@ function autoload_js_file(url, args, type) {
 						dataType: 'script',
 						cache:    true
 					})
-					.done(function () {
+					.done(function() {
 						if (load_count++ >= url.length) {
 							for (var l in $ac.alq[al]) {
 								var q = $ac.alq[al][l];
@@ -114,7 +114,7 @@ function autoload_js_file(url, args, type) {
 
 							$(document).trigger(al);
 						}
-					}).always(function (jqXHR, status, msg) {
+					}).always(function(jqXHR, status, msg) {
 					if (status !== 'success') {
 						$.error('There was an error loading the autoloaded file: ' + url + ": " + msg);
 						$.error(jqXHR);
@@ -129,12 +129,12 @@ function autoload_js_file(url, args, type) {
 	return this;
 }
 
-$.fn.use_once = function (label) {
+$.fn.use_once = function(label) {
 	label = label || 'activated';
 	return this.not('.' + label).addClass(label);
 }
 
-$.fn.scrollTo = function (target, options) {
+$.fn.scrollTo = function(target, options) {
 	target = $(target);
 
 	if (!target.length) {
@@ -153,7 +153,7 @@ $.fn.scrollTo = function (target, options) {
 	this.stop();
 
 	$this.animate({scrollTop: top}, {
-		duration: 1000, complete: function (e) {
+		duration: 1000, complete: function(e) {
 			if (typeof options.callback == 'function') {
 				options.callback(e);
 			}
@@ -162,8 +162,18 @@ $.fn.scrollTo = function (target, options) {
 }
 
 //Extend amp protocol for jQuery plugins
-$.ampExtend = function (a, m) {
-	if (typeof a === 'object') {
+$.fn.setOptions = function(o) {
+	return this.each(function() {
+		$(this).data('o', $.extend(true, {}, $(this).data('o'), o));
+	})
+}
+
+$.fn.getOptions = function() {
+	return this.data('o');
+}
+
+$.ampExtend = function(a, m) {
+	if (typeof a !== 'string') {
 		for (var i in $) {
 			if ($[i] === a) {
 				a = i;
@@ -171,7 +181,7 @@ $.ampExtend = function (a, m) {
 		}
 	}
 
-	$.fn[a] = function (o) {
+	$.fn[a] = function(o) {
 		var p = $[a];
 		var o = arguments[0];
 
@@ -189,31 +199,27 @@ $.ampExtend = function (a, m) {
 	}
 
 	return $.extend($[a], {
-		init: function (o) {
+		init: function(o) {
 			$.error('Override the init method for the ampExtend plugin ' + a);
 		},
-
-		setOption: function (o) {
-			$.extend(this.data('o'), o);
-		}
 	}, m);
 }
 
 //ampNestedForm jQuery Plugin
-$.ampExtend('ampNestedForm', {
-	init: function (o) {
+$.ampExtend($.ampNestedForm = function() {}, {
+	init: function(o) {
 		var $form = this.use_once();
 
 		o = $.extend({}, {
-			onDone:    null,
-			onFail:    null,
-			onAlways:  null
+			onDone:   null,
+			onFail:   null,
+			onAlways: null
 		}, o)
 
 		$form
 			.addClass('amp-nested-form')
-			.data('o', o)
-			.keyup(function (e) {
+			.setOptions(o)
+			.keyup(function(e) {
 				if (e.keyCode === 13) {
 					$(this).closest('.amp-nested-form').submit();
 					e.stopPropagation();
@@ -221,29 +227,29 @@ $.ampExtend('ampNestedForm', {
 				}
 			});
 
-		$form.find('button').click(function (e) {
+		$form.find('button').click(function(e) {
 			$(this).closest('.amp-nested-form').submit();
 			e.stopPropagation();
 			return false;
 		})
 
-		$form.submit(function (e) {
+		$form.submit(function(e) {
 			var $form = $(this).closest('.amp-nested-form');
-			var o = $form.data('o');
+			var o = $form.getOptions();
 
 			$form.find('button').loading();
 
-			$.post($form.attr('data-action'), $form.find('[name]').serialize(), function (r, status) {
+			$.post($form.attr('data-action'), $form.find('[name]').serialize(), function(r, status) {
 					if (typeof o.onDone === 'function') {
 						o.onDone.call($form, r, status)
 					}
 				})
-				.fail(function (jqXHR, status, error) {
+				.fail(function(jqXHR, status, error) {
 					if (typeof o.onFail === 'function') {
 						o.onFail.call($form, jqXHR, status, error);
 					}
 				})
-				.always(function (jqXHR, status, error) {
+				.always(function(jqXHR, status, error) {
 					$form.find('button').loading('stop');
 
 					if (typeof o.always === 'function') {
@@ -258,36 +264,36 @@ $.ampExtend('ampNestedForm', {
 		return this;
 	},
 
-	onDone: function (callback) {
-		this.data('o', {onDone: callback});
+	onDone: function(callback) {
+		this.setOptions({onDone: callback});
 	},
 
-	onAlways: function (callback) {
-		this.data('o', {onAlways: callback});
+	onAlways: function(callback) {
+		this.setOptions({onAlways: callback});
 	},
 
-	onFail: function (callback) {
-		this.data('o', {onFail: callback});
+	onFail: function(callback) {
+		this.setOptions({onFail: callback});
 	}
 })
 
 //ampFormat jQuery Plugin
 $.ampExtend('ampFormat', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			type:     'float',
 			unsigned: false
 		}, o);
 
-		this.data('o', o);
+		this.setOptions(o);
 
-		this.keypress(function (e) {
+		this.keypress(function(e) {
 			return $(this).ampFormat('validate', e);
 		})
 	},
 
-	validate: function (e, type) {
-		var o = this.data('o');
+	validate: function(e, type) {
+		var o = this.getOptions();
 
 		var type = typeof type === 'string' ? type : o.type,
 			char = String.fromCharCode(e.keyCode);
@@ -304,7 +310,7 @@ $.ampExtend('ampFormat', {
 
 //ampDelay jQuery Plugin
 $.ampExtend('ampDelay', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			delay:    1000,
 			callback: null,
@@ -313,12 +319,12 @@ $.ampExtend('ampDelay', {
 
 		o.count = 0;
 
-		this.data('o', o);
+		this.setOptions(o);
 
 		if (!o.on) {
 			this.ampDelay('countdown');
 		} else {
-			this.on(o.on, function () {
+			this.on(o.on, function() {
 				$(this).ampDelay('countdown');
 			})
 		}
@@ -326,13 +332,13 @@ $.ampExtend('ampDelay', {
 		return this;
 	},
 
-	countdown: function () {
+	countdown: function() {
 		var $this = this;
-		var o = $this.data('o')
+		var o = $this.getOptions()
 
 		o.count++;
 
-		setTimeout(function () {
+		setTimeout(function() {
 			if (--o.count <= 0) {
 				o.callback.call($this);
 			}
@@ -342,7 +348,7 @@ $.ampExtend('ampDelay', {
 
 //ampToggle jQuery Plugin
 $.ampExtend('ampToggle', {
-	init: function (o) {
+	init: function(o) {
 		if (!o) {
 			$.error("ampToggle parameter error: content must be an existing DOM element");
 			return this;
@@ -376,7 +382,7 @@ $.ampExtend('ampToggle', {
 			o.hideContentClass += ' amp-toggle-hide';
 			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content');
 
-			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function () {
+			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function() {
 				$.ampToggle.blurred ? $.ampToggle.blurred = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
 			})
 
@@ -388,7 +394,7 @@ $.ampExtend('ampToggle', {
 		return this;
 	},
 
-	_blur: function (e) {
+	_blur: function(e) {
 		var $t = $(e.target), o = $.ampToggle.active.data('amp-toggle-o');
 
 		if ($t.closest(o.content).length) {
@@ -402,7 +408,7 @@ $.ampExtend('ampToggle', {
 		}
 	},
 
-	show: function () {
+	show: function() {
 		var $this = $(this);
 		var o = $this.data('amp-toggle-o');
 
@@ -416,7 +422,7 @@ $.ampExtend('ampToggle', {
 		}
 	},
 
-	hide: function () {
+	hide: function() {
 		var $this = $(this);
 		var o = $this.data('amp-toggle-o');
 
@@ -433,7 +439,7 @@ $.ampExtend('ampToggle', {
 
 //ampYouTube
 $.ampExtend('ampYouTube', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			width:      null,
 			height:     null,
@@ -455,7 +461,7 @@ $.ampExtend('ampYouTube', {
 
 		this.width(o.width);
 		this.height(o.height);
-		this.data('o', o);
+		this.setOptions(o);
 
 		if (!$.ampYouTube.players) {
 			$.ampYouTube.players = this;
@@ -466,8 +472,8 @@ $.ampExtend('ampYouTube', {
 		return this;
 	},
 
-	initPlayer: function () {
-		var o = this.data('o');
+	initPlayer: function() {
+		var o = this.getOptions();
 
 		var player = new YT.Player(this.attr('id'), {
 			width:   o.width,
@@ -484,23 +490,23 @@ $.ampExtend('ampYouTube', {
 		this.data('player', player);
 	},
 
-	play: function () {
+	play: function() {
 		var player = $(this).data('player');
 		player.ampO.playing = true;
 		player.playVideo();
 	},
 
-	pause: function () {
+	pause: function() {
 		var player = $(this).data('player');
 		player.ampO.playing = false;
 		player.pauseVideo();
 	},
 
-	playIndex: function (i) {
+	playIndex: function(i) {
 		this.data('player').playVideoAt(i);
 	},
 
-	onReady: function (e) {
+	onReady: function(e) {
 		e.target.loadPlaylist({
 			list: e.target.ampO.playlistID
 		});
@@ -512,7 +518,7 @@ $.ampExtend('ampYouTube', {
 		}
 	},
 
-	onChange: function (e) {
+	onChange: function(e) {
 		if (e.data === 3) {
 			e.target.ampO.playing = true;
 		}
@@ -529,20 +535,20 @@ $.ampExtend('ampYouTube', {
 
 
 function onYouTubeIframeAPIReady() {
-	$.ampYouTube.players.each(function (i, e) {
+	$.ampYouTube.players.each(function(i, e) {
 		$(e).ampYouTube('initPlayer');
 	});
 }
 
 //periodic Cookie Token Checker
-$.ampTokenCheck = function (token, callback, delay) {
+$.ampTokenCheck = function(token, callback, delay) {
 	token = token || 'at-' + Math.floor(Math.random() * 99999999);
 
 	if ($.cookie(token)) {
 		$.cookie(token, null);
 		callback(token);
 	} else {
-		setTimeout(function () {
+		setTimeout(function() {
 			$.ampTokenCheck(token, callback, delay);
 		}, delay || 250);
 	}
@@ -552,7 +558,7 @@ $.ampTokenCheck = function (token, callback, delay) {
 
 //ampModal jQuery Plugin
 $.ampExtend('ampModal', {
-	init: function (o) {
+	init: function(o) {
 		if (typeof this === 'function' && !o.content) {
 			return $.error('Error ampModal: You must specify a value for content.');
 		}
@@ -575,9 +581,9 @@ $.ampExtend('ampModal', {
 			return this;
 		}
 
-		return $(o.content).use_once('amp-modal-enabled').data('o', o).each(function (i, e) {
+		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
-				$box = $('<div />').addClass('amp-modal').addClass(o.class).data('o', o),
+				$box = $('<div />').addClass('amp-modal').addClass(o.class).setOptions(o),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
@@ -594,7 +600,7 @@ $.ampExtend('ampModal', {
 					btn = o.buttons[b];
 
 					if (!btn.action) {
-						o.buttons[b].action = function () {
+						o.buttons[b].action = function() {
 							$(this).ampModal('close');
 						}
 					}
@@ -611,14 +617,14 @@ $.ampExtend('ampModal', {
 					}
 
 					if (btn.action) {
-						$btn.click(function (e) {
+						$btn.click(function(e) {
 							var $btn = $(this);
 							return $btn.data('action-callback').call(this, $btn.closest('.amp-modal'), e)
 						})
 					}
 
 					if (typeof o.onAction === 'function') {
-						$btn.click(function (e) {
+						$btn.click(function(e) {
 							o.onAction.call(this, $(this).closest('.amp-modal'), $(this).attr('data-action'), e);
 						})
 					}
@@ -640,9 +646,9 @@ $.ampExtend('ampModal', {
 			}
 		});
 	},
-	open: function () {
+	open: function() {
 		var $this = $(this).closest('.amp-modal').addClass('active')
-		var o = $this.data('o') || {};
+		var o = $this.getOptions() || {};
 
 		if (typeof o.onOpen === 'function') {
 			o.onOpen.call($this);
@@ -651,9 +657,9 @@ $.ampExtend('ampModal', {
 		return $this;
 	},
 
-	close: function () {
+	close: function() {
 		var $this = $(this).closest('.amp-modal').removeClass('active')
-		var o = $this.data('o') || {};
+		var o = $this.getOptions() || {};
 
 		if (typeof o.onClose === 'function') {
 			o.onClose.call($this);
@@ -663,13 +669,13 @@ $.ampExtend('ampModal', {
 	}
 });
 
-$.ampAlert = $.fn.ampAlert = function (o) {
+$.ampAlert = $.fn.ampAlert = function(o) {
 	o = $.extend({}, {
 		title:       'Warning!',
 		class:       'amp-modal-alert',
 		content:     $('<div/>').addClass('amp-alert'),
 		text:        typeof o === 'string' ? o : 'This warning was generated by Amplo MVC',
-		onClose:     function () {
+		onClose:     function() {
 			this.remove()
 		},
 		shadowClose: false,
@@ -685,7 +691,7 @@ $.ampAlert = $.fn.ampAlert = function (o) {
 	return $.ampModal.call(this, o).ampModal('open');
 }
 
-$.ampConfirm = $.fn.ampConfirm = function (o) {
+$.ampConfirm = $.fn.ampConfirm = function(o) {
 	o = $.extend({}, {
 		title:       'Are you sure?',
 		class:       'amp-modal-confirm',
@@ -693,7 +699,7 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
 		onCancel:    null,
-		onClose:     function () {
+		onClose:     function() {
 			this.remove()
 		},
 		shadowClose: false,
@@ -710,7 +716,7 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 	o.content = $(o.content).append(o.text);
 
 	if (o.buttons.confirm && !o.buttons.confirm.action) {
-		o.buttons.confirm.action = function () {
+		o.buttons.confirm.action = function() {
 			if (typeof o.onConfirm === 'function') {
 				o.onConfirm.call(this, $(this).closest('.amp-modal'));
 			}
@@ -720,7 +726,7 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 	}
 
 	if (o.buttons.cancel && !o.buttons.cancel.action) {
-		o.buttons.cancel.action = function () {
+		o.buttons.cancel.action = function() {
 			if (typeof o.onCancel === 'function') {
 				o.onCancel.call(this, $(this).closest('.amp-modal'));
 			}
@@ -734,10 +740,10 @@ $.ampConfirm = $.fn.ampConfirm = function (o) {
 
 //ampSelect jQuery Plugin
 $.ampExtend('ampSelect', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {}, o);
 
-		return this.use_once('amp-select-enabled').each(function (i, e) {
+		return this.use_once('amp-select-enabled').each(function(i, e) {
 			var $select = $(e).removeClass('amp-select');
 
 			var $ampSelect = $("<div />").addClass('amp-select');
@@ -768,7 +774,7 @@ $.ampExtend('ampSelect', {
 			$done.click($.ampSelect.close);
 
 			//Save Options to Instance
-			$ampSelect.data('o', $.extend({}, o, {
+			$ampSelect.setOptions($.extend({}, o, {
 				placeholder: $select.attr('data-placeholder') || 'Select Items...'
 			}));
 
@@ -788,34 +794,34 @@ $.ampExtend('ampSelect', {
 		});
 	},
 
-	open: function () {
+	open: function() {
 		$(this).closest('.amp-select').find('.amp-modal').ampModal('open');
 	},
 
-	close: function () {
+	close: function() {
 		$(this).closest('.amp-select').find('.amp-modal').ampModal('close');
 	},
 
-	checkall: function (checked) {
+	checkall: function(checked) {
 		var $ampSelect = $(this).closest('.amp-select');
 		$ampSelect.find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $ampSelect.find('.amp-select-checkall input').is(':checked')).first().change();
 	},
 
-	sortable: function (s) {
+	sortable: function(s) {
 		var $ampSelect = $(this).closest('.amp-select');
-		var o = $ampSelect.data('o');
+		var o = $ampSelect.getOptions();
 
 		$ampSelect.find('.amp-select-options').sortable(o.sortable || {});
 	},
 
-	assignSelect: function ($select) {
+	assignSelect: function($select) {
 		var $ampSelect = $(this).closest('.amp-select');
 		var $options = $ampSelect.find('.amp-select-options');
-		var o = $ampSelect.data('o');
+		var o = $ampSelect.getOptions();
 
 		$options.children().remove();
 
-		$select.find('option').each(function (j, o) {
+		$select.find('option').each(function(j, o) {
 			var $o = $(o);
 
 			$options.append(
@@ -835,12 +841,12 @@ $.ampExtend('ampSelect', {
 		$ampSelect.ampSelect('update')
 	},
 
-	update: function (trigger_change) {
+	update: function(trigger_change) {
 		var $ampSelect = $(this).closest('.amp-select');
-		var o = $ampSelect.data('o');
+		var o = $ampSelect.getOptions();
 		var value = [], placeholder = '';
 
-		$ampSelect.find('.amp-option input').each(function (i, o) {
+		$ampSelect.find('.amp-option input').each(function(i, o) {
 			$o = $(o);
 			if ($o.is(':checked')) {
 				value.push($o.attr('value'));
@@ -856,7 +862,7 @@ $.ampExtend('ampSelect', {
 		}
 	},
 
-	refresh: function () {
+	refresh: function() {
 		var $ampSelect = $(this).closest('.amp-select');
 		var $options = $ampSelect.find('.amp-select-options');
 		var $select = $ampSelect.find('select');
@@ -873,7 +879,7 @@ $.ampExtend('ampSelect', {
 })
 
 //Add the date/time picker to the elements with the special classes
-$.ac_datepicker = function (params) {
+$.ac_datepicker = function(params) {
 	$('.datepicker, .timepicker, .datetimepicker').ac_datepicker(params);
 }
 
@@ -887,7 +893,7 @@ $.fn.ac_datepicker = function ac_datepicker(params) {
 		$.ajaxSetup({cache: true});
 		if (!$.ac_datepicker.loading) {
 			$.ac_datepicker.loading = true;
-			$.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function () {
+			$.getScript($ac.site_url + 'system/resources/js/jquery/ui/datetimepicker.js', function() {
 				selector.ac_datepicker(params);
 			});
 		}
@@ -900,7 +906,7 @@ $.fn.ac_datepicker = function ac_datepicker(params) {
 		timeFormat: 'HH:mm'
 	}, params);
 
-	return this.each(function (i, e) {
+	return this.each(function(i, e) {
 		type = params.type ||
 		$(e).hasClass('datepicker') ? 'datepicker' :
 			$(e).hasClass('timepicker') ? 'timepicker' : 'datetimepicker';
@@ -910,11 +916,11 @@ $.fn.ac_datepicker = function ac_datepicker(params) {
 }
 
 //Apply a filter form to the URL
-$.fn.apply_filter = function (url) {
+$.fn.apply_filter = function(url) {
 	var filter_list = this.find('[name]');
 
 	if (filter_list.length) {
-		filter_list.each(function (i, e) {
+		filter_list.each(function(i, e) {
 			var $e = $(e);
 			var $filter = $e.closest('.column-filter');
 			var $type = $filter.find('.filter-type');
@@ -935,7 +941,7 @@ $.fn.apply_filter = function (url) {
 }
 
 $.ampExtend('ampResize', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			on: 'keyup change'
 		}, o);
@@ -950,8 +956,8 @@ $.ampExtend('ampResize', {
 		return this.on(o.on, $.ampResize.update).ampResize('update');
 	},
 
-	update: function () {
-		$(this).each(function (i, e) {
+	update: function() {
+		$(this).each(function(i, e) {
 			var $e = $(e);
 			$.ampResize.ctx.font = $e.css('font');
 			var val = $e.val();
@@ -962,35 +968,35 @@ $.ampExtend('ampResize', {
 })
 
 //A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
-$.fn.update_index = function (column) {
+$.fn.update_index = function(column) {
 	column = column || '.sort_order';
 
-	return this.each(function (i, ele) {
+	return this.each(function(i, ele) {
 		count = 0;
-		$(ele).find(column).each(function (i, e) {
+		$(ele).find(column).each(function(i, e) {
 			$(e).val(count++);
 		});
 	});
 }
 
-$.fn.sortElements = function (comparator) {
+$.fn.sortElements = function(comparator) {
 	var $this = this;
 
 	if (!comparator) {
-		comparator = function (a, b) {
+		comparator = function(a, b) {
 			return +$(a).attr('data-sort-order') > +$(b).attr('data-sort-order') ? 1 : -1;
 		}
 	}
 
-	[].sort.call($this.children(), comparator).each(function (i, e) {
+	[].sort.call($this.children(), comparator).each(function(i, e) {
 		$this.append($(e));
 	});
 
 	return this;
 }
 
-$.fn.overflown = function (dir, tolerance) {
-	return this.each(function (i, e) {
+$.fn.overflown = function(dir, tolerance) {
+	return this.each(function(i, e) {
 		var over;
 
 		if (dir) {
@@ -1005,7 +1011,7 @@ $.fn.overflown = function (dir, tolerance) {
 	});
 }
 
-$.fn.tabs = function (opts) {
+$.fn.tabs = function(opts) {
 	var $tabs = this;
 
 	opts = $.extend({}, {
@@ -1016,15 +1022,15 @@ $.fn.tabs = function (opts) {
 
 	$tabs.o = opts;
 
-	$tabs.changeOptions = function (o) {
+	$tabs.changeOptions = function(o) {
 		$.extend($tabs.o, o);
 	}
 
-	$tabs.setOptions = function (o) {
+	$tabs.setOptions = function(o) {
 		$tabs.o = o;
 	}
 
-	$tabs.click(function () {
+	$tabs.click(function() {
 		var $this = $(this);
 		var title = $this.attr('data-title'), is_url = !$this.attr('href').match(/^[#.]/);
 		var $content = is_url ? $($this.attr('data-replace') || 'main.main') : $($this.attr('href'));
@@ -1038,7 +1044,7 @@ $.fn.tabs = function (opts) {
 			} else {
 				$tabs.removeClass('active');
 
-				$tabs.each(function (i, e) {
+				$tabs.each(function(i, e) {
 					$($(e).attr('href')).addClass('hidden');
 				});
 
@@ -1078,7 +1084,7 @@ $.fn.tabs = function (opts) {
 	return this;
 };
 
-$.fn.show_msg = function (type, msg, o) {
+$.fn.show_msg = function(type, msg, o) {
 	if (type === 'clear') {
 		return $(this).find('.messages').remove();
 	}
@@ -1125,7 +1131,7 @@ $.fn.show_msg = function (type, msg, o) {
 		return this;
 	}
 
-	return this.each(function (i, e) {
+	return this.each(function(i, e) {
 		var $e = o.inline ? $(e) : $('#message-box');
 
 		if (!$e.length) {
@@ -1138,7 +1144,7 @@ $.fn.show_msg = function (type, msg, o) {
 			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
 
 			if (o.close) {
-				$box.append($('<div />').addClass('close').click(function () {
+				$box.append($('<div />').addClass('close').click(function() {
 					$(this).closest('.messages').remove();
 				}));
 			}
@@ -1163,9 +1169,9 @@ $.fn.show_msg = function (type, msg, o) {
 		if (o.delay) {
 			$.fn.show_msg.count[type] = ($.fn.show_msg.count[type] || 0) + 1;
 
-			setTimeout(function () {
+			setTimeout(function() {
 				if ($.fn.show_msg.count[type]-- >= 1) {
-					$box.slideToggle(500, function () {
+					$box.slideToggle(500, function() {
 						$(this).remove();
 					});
 				}
@@ -1176,12 +1182,12 @@ $.fn.show_msg = function (type, msg, o) {
 
 $.fn.show_msg.count = {}
 
-$.show_msg = function (type, msg, o) {
+$.show_msg = function(type, msg, o) {
 	$('body').show_msg(type, msg, o);
 }
 
-$.loading = $.fn.loading = function (params) {
-	return this.each(function (i, e) {
+$.loading = $.fn.loading = function(params) {
+	return this.each(function(i, e) {
 		var $e = $(e);
 
 		var option = typeof params === 'string' ? {} : $.extend({}, {
@@ -1207,7 +1213,7 @@ $.loading = $.fn.loading = function (params) {
 				}
 
 				if (option.delay) {
-					setTimeout(function () {
+					setTimeout(function() {
 						$e.loading('stop');
 						if (typeof option.onStop === 'function') {
 							option.onStop.call($e);
@@ -1219,7 +1225,7 @@ $.loading = $.fn.loading = function (params) {
 	});
 }
 
-$.fn.ac_zoneselect = function (params, callback) {
+$.fn.ac_zoneselect = function(params, callback) {
 	var $this = this;
 
 	params = $.extend({}, {
@@ -1247,7 +1253,7 @@ $.fn.ac_zoneselect = function (params, callback) {
 		$this.success = callback;
 	}
 
-	params.listen.change(function () {
+	params.listen.change(function() {
 		var $cs = $(this);
 
 		if (!$cs.val()) return;
@@ -1267,12 +1273,12 @@ $.fn.ac_zoneselect = function (params, callback) {
 	return $this;
 }
 
-jQuery.fn.serializeObject = function () {
+jQuery.fn.serializeObject = function() {
 	var arrayData, objectData;
 	arrayData = this.serializeArray();
 	objectData = {};
 
-	$.each(arrayData, function () {
+	$.each(arrayData, function() {
 		var value;
 
 		if (this.value != null) {
@@ -1317,7 +1323,7 @@ $ac.currency = $.extend({
 	pos:           ''
 }, $ac.currency);
 
-$.cookie = function (key, value, o) {
+$.cookie = function(key, value, o) {
 	if (arguments.length > 1) {
 		o = $.extend({}, {
 			raw:     false,
@@ -1353,7 +1359,7 @@ $.cookie = function (key, value, o) {
 	o = value || {};
 	var result;
 
-	var decode = function (s) {
+	var decode = function(s) {
 		if (o.raw) {
 			return s;
 		}
@@ -1368,7 +1374,7 @@ $.cookie = function (key, value, o) {
 function register_confirms() {
 	var $confirms = $('[data-confirm], [data-confirm-modal]').use_once();
 
-	$confirms.click(function () {
+	$confirms.click(function() {
 		var $this = $(this);
 
 		if ($this.prop('disabled')) {
@@ -1376,7 +1382,7 @@ function register_confirms() {
 		}
 
 		if ($this.is('[data-confirm]') && !$this.hasClass('confirm')) {
-			setTimeout(function () {
+			setTimeout(function() {
 				$this.removeClass('confirm').loading('stop');
 			}, 5000);
 			$this.loading({text: $this.attr('data-confirm') || "Confirm?", disable: false}).addClass('confirm');
@@ -1387,9 +1393,9 @@ function register_confirms() {
 		if ($this.is('[data-confirm-modal]')) {
 			$.ampConfirm({
 				text:      $this.attr('data-confirm-modal') || "Are you sure you want to continue?",
-				onConfirm: function () {
+				onConfirm: function() {
 					if ($this.is('[data-ajax]')) {
-						$this.hasClass('ajax-call') ? amplo_ajax_cb.call($this) : $.get($this.attr('href'), {}, function (response) {
+						$this.hasClass('ajax-call') ? amplo_ajax_cb.call($this) : $.get($this.attr('href'), {}, function(response) {
 							$.show_msg(response);
 						});
 					} else {
@@ -1407,13 +1413,13 @@ function register_confirms() {
 		}
 	});
 
-	$('.action-delete').use_once().click(function () {
+	$('.action-delete').use_once().click(function() {
 		return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
 	});
 }
 
 function register_ajax_calls(is_ajax) {
-	$('form').use_once('data-loading-set').submit(function () {
+	$('form').use_once('data-loading-set').submit(function() {
 		$(this).find('button[data-loading]').loading();
 	});
 
@@ -1433,7 +1439,7 @@ function register_colorbox() {
 			height:       '80%'
 		}
 
-		$colorbox.each(function (i, e) {
+		$colorbox.each(function(i, e) {
 			var $e = $(e);
 			defaults.photo = $e.hasClass('colorbox-photo');
 			$e.colorbox(defaults);
@@ -1441,11 +1447,11 @@ function register_colorbox() {
 	}
 }
 
-$.fn.collapsible = function () {
-	return this.each(function (i, e) {
+$.fn.collapsible = function() {
+	return this.each(function(i, e) {
 		var $c = $(e);
 
-		$c.click(function () {
+		$c.click(function() {
 			$(this).toggleClass('hide');
 		});
 
@@ -1461,7 +1467,7 @@ function stopProp(e) {
 $.ampExtend('ampAccordion', {
 	count: 0,
 
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			toggle:  '.amp-accordion-toggle',
 			content: '.amp-accordion-content',
@@ -1469,7 +1475,7 @@ $.ampExtend('ampAccordion', {
 			show:    null
 		}, o);
 
-		return this.addClass('amp-accordion').use_once().each(function (i, e) {
+		return this.addClass('amp-accordion').use_once().each(function(i, e) {
 			var $e = $(e).attr('data-amp-accordion', $.ampAccordion.count),
 				$toggle = typeof o.toggle === 'object' ? o.toggle : $e.find(o.toggle),
 				$content = typeof o.content === 'object' ? o.content : $e.find(o.content),
@@ -1478,11 +1484,11 @@ $.ampExtend('ampAccordion', {
 			$content.addClass('amp-accordion-content height-animate-hide').attr('data-amp-accordion-content', $.ampAccordion.count);
 			$flip.addClass('amp-accordion-flip');
 
-			$toggle.attr('data-amp-accordion-toggle', $.ampAccordion.count).click(function () {
+			$toggle.attr('data-amp-accordion-toggle', $.ampAccordion.count).click(function() {
 				$('.amp-accordion[data-amp-accordion=' + $(this).attr('data-amp-accordion-toggle') + ']').ampAccordion('toggle');
 			})
 
-			$e.data('o', $.extend({}, o, {
+			$e.setOptions($.extend({}, o, {
 				toggle:  $toggle,
 				content: $content,
 				flip:    $flip,
@@ -1494,8 +1500,8 @@ $.ampExtend('ampAccordion', {
 		})
 	},
 
-	toggle: function (show) {
-		var o = this.data('o');
+	toggle: function(show) {
+		var o = this.getOptions();
 
 		var show = typeof show === 'undefined' ? this.hasClass('is-hidden') : show;
 
@@ -1507,8 +1513,8 @@ $.ampExtend('ampAccordion', {
 
 //ampFormEditor jQuery Plugin
 $.ampExtend('ampFormEditor', {
-	init: function (o) {
-		return this.use_once('form-editor-enabled').each(function (i, e) {
+	init: function(o) {
+		return this.use_once('form-editor-enabled').each(function(i, e) {
 			var $fe = $(e);
 			var $form = $fe.is('form') ? $fe : $fe.find('form');
 
@@ -1521,31 +1527,31 @@ $.ampExtend('ampFormEditor', {
 		});
 	},
 
-	edit: function () {
+	edit: function() {
 		var $form = $(this).closest('.form-editor').removeClass('read').addClass('edit');
 		$form.find('[readonly]').attr('data-readonly', 1).removeAttr('readonly').trigger('editing');
 		return false;
 	},
 
-	toggle: function () {
+	toggle: function() {
 		var $form = $(this).closest('.form-editor');
 		$form.ampFormEditor($form.hasClass('read') ? 'edit' : 'read');
 		return false;
 	},
 
-	read: function () {
+	read: function() {
 		var $form = $(this).closest('.form-editor').removeClass('edit').addClass('read');
 		$form.find('[data-readonly]').attr('readonly', '');
 		$form.find('[data-disable]').blur().trigger('reading');
 		return false;
 	},
 
-	submitForm: function () {
+	submitForm: function() {
 		var $form = $(this);
 
 		$form.find('[data-loading]').loading();
 
-		$.post($form.attr('action'), $form.serialize(), function (response) {
+		$.post($form.attr('action'), $form.serialize(), function(response) {
 			$form.find('[data-loading]').loading('stop');
 
 			$form.show_msg('clear');
@@ -1561,7 +1567,7 @@ $.ampExtend('ampFormEditor', {
 						cb.call($form);
 					}
 				} else {
-					$form.find('[name]').each(function (i, e) {
+					$form.find('[name]').each(function(i, e) {
 						var $e = $(e);
 						var val = $e.val();
 
@@ -1590,7 +1596,7 @@ $.ampExtend('ampFormEditor', {
 		return false;
 	},
 
-	_disableField: function () {
+	_disableField: function() {
 		if ($(this).closest('.form-editor-enabled').hasClass('read')) {
 			$(this).blur();
 		}
@@ -1606,7 +1612,7 @@ function colorbox(params) {
 	$.colorbox(params);
 }
 
-var amplo_ajax_cb = function () {
+var amplo_ajax_cb = function() {
 	var $this = $(this), callback;
 
 	if ($this.prop('disabled')) {
@@ -1635,7 +1641,7 @@ var amplo_ajax_cb = function () {
 			return false;
 		}
 
-		callback = function (response) {
+		callback = function(response) {
 			if (typeof response === 'object') {
 				$.show_msg(response);
 			} else {
@@ -1643,7 +1649,7 @@ var amplo_ajax_cb = function () {
 			}
 		}
 	} else {
-		callback = function (response) {
+		callback = function(response) {
 			window[ajax_cb].call($this, response);
 		}
 	}
@@ -1653,7 +1659,7 @@ var amplo_ajax_cb = function () {
 	} else {
 		$this.loading({text: $this.is('[data-loading]') || 'Loading...'})
 		$.get($this.attr('href'), {}, callback)
-			.always(function () {
+			.always(function() {
 				$this.loading('stop');
 			});
 
@@ -1662,8 +1668,8 @@ var amplo_ajax_cb = function () {
 	return false;
 };
 
-$.fn.amplo_ajax = function () {
-	return this.each(function (i, e) {
+$.fn.amplo_ajax = function() {
+	return this.each(function(i, e) {
 		var $e = $(e);
 
 		if ($e.is('form')) {
@@ -1674,36 +1680,36 @@ $.fn.amplo_ajax = function () {
 	});
 }
 
-$.fn.submit_ajax_form = function (params) {
+$.fn.submit_ajax_form = function(params) {
 	params = $.extend({}, {
 		callback: null
 	}, params);
 
-	return this.each(function (i, e) {
+	return this.each(function(i, e) {
 		var $form = $(e);
 
 		var $btns = $form.find('button, input[type=submit], [data-loading]').loading({default_text: 'Submitting...'});
 
-		$.post($form.attr('action'), $form.serialize(), typeof params.callback === 'function' ? params.callback : function (response) {
+		$.post($form.attr('action'), $form.serialize(), typeof params.callback === 'function' ? params.callback : function(response) {
 			$form.show_msg(response);
-		}, 'json').always(function () {
+		}, 'json').always(function() {
 			$btns.loading('stop');
 		});
 	});
 }
 
-$.fn.liveForm = function (params) {
+$.fn.liveForm = function(params) {
 	params = $.extend({}, {
 		callback: null
 	}, params);
 
-	return this.use_once('live-form-enabled').each(function (i, e) {
+	return this.use_once('live-form-enabled').each(function(i, e) {
 		var $form = $(e);
-		$form.find('[name]').change(function () {
+		$form.find('[name]').change(function() {
 			$(this).closest('form').submit();
 		});
 
-		$form.submit(function () {
+		$form.submit(function() {
 			$.post($form.attr('action'), $form.serialize(), params.callback, 'json');
 			return false;
 		});
@@ -1735,7 +1741,7 @@ function content_loaded(is_ajax) {
 	if ($ac.defer_scripts) {
 		var scripts = '';
 
-		$('script').each(function (i, e) {
+		$('script').each(function(i, e) {
 			if ($(e).attr('type') === 'text/defer-javascript') {
 				if ($(e).attr('src')) {
 					$.error('External script ' + $(e).attr('src') + ' cannot be loaded synchronously with defer_scripts enabled. Use $.getScript() to load asynchronously or use $this->document->addScript() in your PHP Controller class.');
@@ -1762,8 +1768,8 @@ function content_loaded(is_ajax) {
 	}
 
 	if ($ac.show_msg_delay && $('.messages').length) {
-		setTimeout(function () {
-			$('.messages').slideToggle(500, function () {
+		setTimeout(function() {
+			$('.messages').slideToggle(500, function() {
 				$(this).remove()
 			});
 		}, $ac.show_msg_delay);
@@ -1777,8 +1783,8 @@ content_loaded.fn['confirms'] = register_confirms;
 content_loaded.fn['colorbox'] = register_colorbox;
 
 $(document)
-	.ready(function () {
-		$('.ui-autocomplete-input').on("autocompleteselect", function (e, ui) {
+	.ready(function() {
+		$('.ui-autocomplete-input').on("autocompleteselect", function(e, ui) {
 			if (!ui.item.value && ui.item.href) {
 				window.open(ui.item.href);
 			}
@@ -1787,7 +1793,7 @@ $(document)
 		content_loaded();
 	})
 
-	.click(function (e) {
+	.click(function(e) {
 		var $n = $(e.target);
 
 		if ($n.is('a[data-loading]')) {
@@ -1833,7 +1839,7 @@ $(document)
 		}
 	})
 
-	.keyup(function (e) {
+	.keyup(function(e) {
 		var $n = $(e.target);
 
 		if (!$.pageUnloading && e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
@@ -1842,12 +1848,12 @@ $(document)
 		}
 	})
 
-	.keydown(function (e) {
+	.keydown(function(e) {
 		var $n = $(e.target), $form;
 
 		if (e.ctrlKey && e.keyCode === 83 && ($form = $('form.ctrl-save')).length) {
 			$form.submit_ajax_form({
-				callback: function (response) {
+				callback: function(response) {
 					//Redirect from new form to edit form
 					if (response.data) {
 						for (var id in response.data) {
@@ -1871,22 +1877,22 @@ $(document)
 		}
 	})
 
-	.ajaxComplete(function () {
+	.ajaxComplete(function() {
 		content_loaded(true);
 	});
 
-$(window).on('beforeunload', function () {
+$(window).on('beforeunload', function() {
 	$.pageUnloading = true;
 })
 
 //Chrome Autofill disable hack
 if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
-	$(window).load(function () {
-		$('input:-webkit-autofill[autocomplete="off"]').each(function () {
+	$(window).load(function() {
+		$('input:-webkit-autofill[autocomplete="off"]').each(function() {
 			var $this = $(this);
 			if (!$this.attr('value')) {
 				$this.val('');
-				setTimeout(function () {
+				setTimeout(function() {
 					$this.val('');
 				}, 200);
 			}
@@ -1895,7 +1901,7 @@ if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
 }
 
 if (!window.console) console = {
-	log: function (m) {
+	log: function(m) {
 		$.ampAlert(m)
 	}
 };

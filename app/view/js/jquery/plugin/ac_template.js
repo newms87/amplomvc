@@ -75,7 +75,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 
 			template.find('[id]').each(function (i, e) {
 				var id = $(e).attr('id'), c = 0;
-				while ($('#' + (new_id = id.replace('__ac_template__', count) + '-' + c)).length);
+				while ($('#' + (new_id = id.replace('__ac_template__', count) + '-' + c++)).length);
 				$(e).attr('id', new_id);
 				template.find('[for="' + id + '"]').attr('for', new_id);
 			});
