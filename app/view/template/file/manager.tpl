@@ -20,17 +20,19 @@
 						</div>
 					</div>
 					<div class="name"></div>
-					<div class="controls">
+
+					<div class="controls not-uploading">
 					</div>
 
-					<a class="remove-file">
+					<a class="remove-file not-uploading">
 						<i class="fa fa-trash"></i>
 					</a>
 
-					<div class="progress-bar">
+					<div class="progress-bar on-uploading">
 						<div class="progress-msg"></div>
 						<div class="progress"></div>
 					</div>
+
 					<div class="on-selected">
 						<i class="fa fa-check"></i>
 					</div>

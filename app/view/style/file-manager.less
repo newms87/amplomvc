@@ -46,11 +46,13 @@
 
 			.progress-bar {
 				position: relative;
-				height: 1.5em;
+				height: 1em;
+				line-height: 1em;
 				border: 1px solid @color-dark;
 				border-radius: 5px;
 				text-align: center;
-				display: none;
+				overflow: hidden;
+				background: @color-light;
 
 				.progress {
 					position: absolute;
@@ -65,6 +67,22 @@
 					position: relative;
 					color: white;
 					z-index: 2;
+					font: .75em/.75em OpenSansSemiBold;
+					padding: .25em;
+				}
+			}
+
+			.on-uploading {
+				display: none;
+			}
+
+			&.is-uploading {
+				.on-uploading {
+					display: block;
+				}
+
+				.not-uploading {
+					display: none;
 				}
 			}
 

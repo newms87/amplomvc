@@ -243,7 +243,7 @@ $.ampExtend($.ampFileManager = function () {
 		var $afm = this;
 		var o = $afm.getOptions();
 
-		$file.addClass('uploading');
+		$file.addClass('is-uploading');
 
 		$.ajax({
 			url:         o.url,
@@ -255,7 +255,7 @@ $.ampExtend($.ampFileManager = function () {
 				return $afm.ampFileManager('xhr', $file, e);
 			},
 			success:     function (response, status, xhr) {
-				$file.removeClass('uploading');
+				$file.removeClass('is-uploading');
 				return $afm.ampFileManager('success', $file, response, status, xhr);
 			}
 		});
