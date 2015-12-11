@@ -226,6 +226,7 @@ $.ampExtend($.ampFileManager = function() {
 
 		if (file.name) {
 			$file.find('.name', file.name);
+			$file.attr('data-file-name', file.name);
 		}
 
 		$file.data('file', file);
@@ -250,45 +251,60 @@ $.ampExtend($.ampFileManager = function() {
 
 	upload: function(files) {
 		var $afm = this;
-		var o = $afm.getOptions();
 
 		if (!files.length) {
 			return $.ampAlert('No Files to upload.');
 		}
 
 		for (var i = 0; i < files.length; i++) {
-			var file = files[i], fd = new FormData();
+			var file = files[i];
 			var $file = $afm.ampFileManager('newFile', file);
 
-			fd.append('file', file);
-
-			if (typeof o.path === 'string') {
-				fd.append('path', o.path);
-			}
-
-			if (o.accept) {
-				fd.append('accept', o.accept);
-			}
-
-			if (o.category) {
-				fd.append('category', o.category);
-			}
-
-			$afm.ampFileManager('ajaxUpload', $file, fd);
+			$afm.ampFileManager('ajaxUpload', $file, file);
 		}
 
 		return this;
 	},
 
-	ajaxUpload: function($file, data) {
+	ajaxUpload: function($file, file, overwrite) {
 		var $afm = this;
 		var o = $afm.getOptions();
+
+		if (!overwrite && o.fileList.find('[data-file-name="' + file.name + '"]').length) {
+			$.ampConfirm({
+				text:      "A file with the name " + file.name + " already exists. Would you like to overwrite this file?",
+				onConfirm: function() {
+					$afm.ampFileManager('ajaxUpload', $file, file, true);
+				},
+				onCancel: function(){
+					$file.remove();
+				}
+			});
+
+			return this;
+		}
+
+		var fd = new FormData();
+
+		fd.append('file', file);
+
+		if (typeof o.path === 'string') {
+			fd.append('path', o.path);
+		}
+
+		if (o.accept) {
+			fd.append('accept', o.accept);
+		}
+
+		if (o.category) {
+			fd.append('category', o.category);
+		}
 
 		$file.addClass('is-uploading');
 
 		$.ajax({
 			url:         o.url,
-			data:        data,
+			data:        fd,
 			processData: false,
 			contentType: false,
 			type:        'POST',
