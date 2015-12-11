@@ -4,10 +4,13 @@ $this->db->createTable('file', <<<SQL
   `type` varchar(45) NOT NULL,
   `mime_type` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `folder` varchar(100) NOT NULL,
   `path` varchar(1024) NOT NULL,
+  `url` varchar(1024) NOT NULL,
   `title` varchar(100) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`file_id`),
-  KEY `type_name` (`type`,`name`)
+  KEY `type_name` (`type`,`name`),
+  KEY `folder_name` (`folder`, `name`)
 SQL
 );

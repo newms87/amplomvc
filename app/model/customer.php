@@ -70,22 +70,11 @@ class App_Model_Customer extends App_Model_Table
 
 		$customer['approved'] = option('config_customer_approval') ? 1 : 0;
 
-		if ($customer_id) {
-			$this->update('customer', $customer, $customer_id);
-		} else {
-			$customer_id = $this->insert('customer', $customer);
-		}
+		$customer_id = parent::save($customer_id, $customer);
 
 		if ($customer_id) {
 			//Address will be extracted from customer information, if it exists
 			$this->saveAddress($customer_id, null, $customer);
-
-			//Customer MetaData
-			if (!empty($customer['meta'])) {
-				foreach ($customer['meta'] as $key => $value) {
-					$this->setMeta($customer_id, $key, $value);
-				}
-			}
 
 			$customer['customer_id'] = $customer_id;
 

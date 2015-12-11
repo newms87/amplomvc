@@ -48,6 +48,10 @@ abstract class App_Model_Table extends Model
 		}
 
 		if ($record_id) {
+			if (isset($data['meta'])) {
+				$this->Model_Meta->setAll($this->table, $record_id, $data['meta']);
+			}
+
 			clear_cache($this->table . '.rows');
 			clear_cache($this->table . '.' . $record_id);
 		}

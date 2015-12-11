@@ -53,13 +53,7 @@ class App_Model_User extends App_Model_Table
 			$user['date_added'] = $this->date->now();
 		}
 
-		$user_id = parent::save($user_id, $user);
-
-		if (isset($user['meta'])) {
-			$this->Model_Meta->setAll('user', $user_id, $user['meta']);
-		}
-
-		return $user_id;
+		return parent::save($user_id, $user);
 	}
 
 	public function getUser($user_id)

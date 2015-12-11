@@ -1,7 +1,7 @@
 //ampUpload jQuery Plugin
-$.ampExtend('ampUpload', {
-	init: function (o) {
-		return this.each(function (i, e) {
+$.ampExtend($.ampUpload = function() {}, {
+	init: function(o) {
+		return this.each(function(i, e) {
 			var $input = $(e), today = new Date();
 
 			o = $.extend({
@@ -55,7 +55,7 @@ $.ampExtend('ampUpload', {
 
 			if (o.content) {
 				e.content.html(o.content).appendTo($upload)
-					.on('drop', function (event) {
+					.on('drop', function(event) {
 						e.files = event.originalEvent.dataTransfer.files;
 
 						if (!e.files) {
@@ -65,12 +65,12 @@ $.ampExtend('ampUpload', {
 
 						o.change.call(e);
 					})
-					.on('dragenter dragover', function (e) {
+					.on('dragenter dragover', function(e) {
 						$(this).addClass('hover');
 						e.preventDefault();
 						e.stopPropagation();
 					})
-					.on('drop dragend dragleave', function (e) {
+					.on('drop dragend dragleave', function(e) {
 						$(this).removeClass('hover');
 						e.preventDefault();
 						return false;
@@ -87,11 +87,11 @@ $.ampExtend('ampUpload', {
 
 			//Hide Input field
 			$input.css({left: -99999});
-			$input.click(function (e) {
+			$input.click(function(e) {
 				e.stopPropagation();
 			});
 
-			$upload.click(function () {
+			$upload.click(function() {
 				$input.click();
 			});
 
@@ -103,7 +103,7 @@ $.ampExtend('ampUpload', {
 		});
 	},
 
-	upload: function () {
+	upload: function() {
 		var $this = this;
 
 		if (!$this.files) {
@@ -127,11 +127,11 @@ $.ampExtend('ampUpload', {
 				processData: false,
 				contentType: false,
 				type:        'POST',
-				xhr:         function (e) {
+				xhr:         function(e) {
 					this.context = $this;
 					return $this.o.xhr.call(this, e);
 				},
-				success:     function (response, status, xhr) {
+				success:     function(response, status, xhr) {
 					this.context = $this;
 					return $this.o.success.call(this, response, status, xhr);
 				}
@@ -139,12 +139,12 @@ $.ampExtend('ampUpload', {
 		}
 	},
 
-	xhr: function () {
+	xhr: function() {
 		var $this = this;
 		var myXhr = $.ajaxSettings.xhr();
 
 		if (myXhr.upload) {
-			myXhr.upload.addEventListener('progress', function (e) {
+			myXhr.upload.addEventListener('progress', function(e) {
 				this.context = $this.context;
 				return $this.context.o.progress.call(this, e);
 			}, false);
@@ -153,12 +153,12 @@ $.ampExtend('ampUpload', {
 		return myXhr;
 	},
 
-	reset: function (o) {
+	reset: function(o) {
 		o.progress.call(this, 0);
 		this.msg.html(o.msg);
 	},
 
-	onComplete: function (files, o) {
+	onComplete: function(files, o) {
 		this.msg.html(o.completeMsg);
 
 		for (var f in files) {
@@ -177,13 +177,13 @@ $.ampExtend('ampUpload', {
 		}
 	},
 
-	onFail: function (error, o) {
+	onFail: function(error, o) {
 		$.show_msg('error', error);
 
 		$.ampUpload.reset.call(this, o);
 	},
 
-	success: function (response, status, xhr) {
+	success: function(response, status, xhr) {
 		var o = this.context.o;
 
 		if (response.error) {
@@ -197,7 +197,7 @@ $.ampExtend('ampUpload', {
 		}
 	},
 
-	progress: function (e) {
+	progress: function(e) {
 		var total = typeof e === 'object' ? (e.loaded / e.total) * 100 : e;
 		var ctx = this.context || this;
 

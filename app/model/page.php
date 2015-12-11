@@ -128,10 +128,6 @@ class App_Model_Page extends App_Model_Table
 				$this->translation->setTranslations('page', $page_id, $page['translations']);
 			}
 
-			if (!empty($page['meta'])) {
-				$this->Model_Meta->setAll('page', $page_id, $page['meta']);
-			}
-
 			if (isset($page['categories'])) {
 				$this->delete('page_category', array('page_id' => $page_id));
 
