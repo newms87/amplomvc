@@ -1807,6 +1807,10 @@ $(document)
 			return false;
 		}
 
+		if ($onClick = $n.closest('.on-click')) {
+			$onClick.toggleClass('is-active');
+		}
+
 		if (($at = $n.closest('[data-amp-toggle]:not(.amp-toggle)')).length) {
 			$at.ampToggle({content: $at.attr('data-amp-toggle') || $at, toggleClass: 'active'}).click();
 		}

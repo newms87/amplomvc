@@ -36,6 +36,10 @@ $.ampExtend($.ampFileManager = function() {
 				}
 			}, o);
 
+			if (o.category) {
+				o.listing.filter.category = o.category;
+			}
+
 			$afm.setOptions(o);
 
 			if ($input.length) {
@@ -45,6 +49,8 @@ $.ampExtend($.ampFileManager = function() {
 					$afm.append(response).ampFileManager('initTemplate');
 				})
 			}
+
+
 		});
 	},
 
