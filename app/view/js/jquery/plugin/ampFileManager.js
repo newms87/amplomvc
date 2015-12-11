@@ -257,27 +257,24 @@ $.ampExtend($.ampFileManager = function() {
 		}
 
 		for (var i = 0; i < files.length; i++) {
-			var file = files[i];
-			var $file = $afm.ampFileManager('newFile', file);
-
-			$afm.ampFileManager('ajaxUpload', $file, file);
+			$afm.ampFileManager('ajaxUpload', files[i]);
 		}
 
 		return this;
 	},
 
-	ajaxUpload: function($file, file, overwrite) {
+	ajaxUpload: function(file, overwrite) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
-		if (!overwrite && o.fileList.find('[data-file-name="' + file.name + '"]').length) {
+		var $existing = o.fileList.find('[data-file-name="' + file.name + '"]');
+
+		if (!overwrite && $existing.length) {
 			$.ampConfirm({
 				text:      "A file with the name " + file.name + " already exists. Would you like to overwrite this file?",
 				onConfirm: function() {
-					$afm.ampFileManager('ajaxUpload', $file, file, true);
-				},
-				onCancel: function(){
-					$file.remove();
+					$existing.remove();
+					$afm.ampFileManager('ajaxUpload', file);
 				}
 			});
 
@@ -300,6 +297,7 @@ $.ampExtend($.ampFileManager = function() {
 			fd.append('category', o.category);
 		}
 
+		var $file = $afm.ampFileManager('newFile', file);
 		$file.addClass('is-uploading');
 
 		$.ajax({
