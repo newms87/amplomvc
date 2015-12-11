@@ -7,24 +7,34 @@
 
 		<input type="file" multiple class="amp-fm-input"/>
 
-		<div class="amp-fm-drop">
+		<div class="amp-fm-folder-view row left">
 			<div class="amp-fm-file-list">
-				<div class="file" data-row="__ac_template__">
-					<input type="checkbox" name="fm_file[]" class="amp-fm-select"/>
-
-					<div class="thumbnail"></div>
-					<div class="name"></div>
-					<div class="controls">
-						<div class="remove-file">
-							<i class="fa fa-close"></i>
+				<label for="amp-fm-file-__ac_template__" class="amp-fm-file" data-row="__ac_template__" data-file-id="__ac_template__">
+					<div class="thumbnail">
+						<div class="align-middle"></div>
+						<div class="thumb-img col middle">
+							<?= img(theme_dir('image/image-upload.png'), array(
+								'width'  => $thumb_width,
+								'height' => $thumb_height,
+							)); ?>
 						</div>
 					</div>
+					<div class="name"></div>
+					<div class="controls">
+					</div>
+
+					<a class="remove-file">
+						<i class="fa fa-trash"></i>
+					</a>
 
 					<div class="progress-bar">
 						<div class="progress-msg"></div>
 						<div class="progress"></div>
 					</div>
-				</div>
+					<div class="on-selected">
+						<i class="fa fa-check"></i>
+					</div>
+				</label>
 			</div>
 		</div>
 

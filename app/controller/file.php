@@ -6,12 +6,8 @@ class App_Controller_File extends Controller
 	{
 		parent::__construct();
 
-		switch ($this->router->getAction()->getMethod()) {
-			case 'index':
-				if (!is_logged()) {
-					redirect('customer/login');
-				}
-				break;
+		if (!is_logged()) {
+			redirect('customer/login');
 		}
 	}
 
@@ -22,7 +18,9 @@ class App_Controller_File extends Controller
 		}
 
 		$data += array(
-			'accept' => '.png',
+			'accept'       => '.png',
+			'thumb_width'  => option('fm_thumb_width', 100),
+			'thumb_height' => option('fm_thumb_height', 100),
 		);
 
 		//Render
@@ -39,6 +37,8 @@ class App_Controller_File extends Controller
 			'start' => (int)_request('start'),
 		);
 
+		$filter['customer_id'] = customer_info('customer_id');
+
 		list($files, $total) = $this->Model_File->getRecords($sort, $filter, $options, true);
 
 		$data['files'] = $files;
@@ -51,66 +51,19 @@ class App_Controller_File extends Controller
 	{
 		$files = _files();
 
-		$dir_path  = _post('path', '');
-		$file_name = count($files) > 1 ? false : _post('name');
-
-		$mime_types = false;
-		$accept     = _post('accept');
-
-		if (is_string($accept)) {
-			$accept = explode(',', $accept);
-		}
-
-		if ($accept) {
-			$mime_types = array();
-
-			foreach ($accept as $a) {
-				$a = preg_replace('/^\\./', '', $a);
-
-				switch ($a) {
-					case 'png':
-						$mime_types[] = 'image/png';
-						break;
-
-					case 'gif':
-						$mime_types[] = 'image/gif';
-						break;
-
-					case 'jpg':
-					case'jpeg':
-						$mime_types[] = 'image/jpeg';
-						$mime_types[] = 'image/jpg';
-						break;
-				}
-			}
-		}
-
-		$saved = array();
+		$file_records = array();
 
 		foreach ($files as $file) {
-			$name = $file_name ? $file_name : $file['name'];
-
-			$path = ltrim(rtrim($dir_path, '/') . '/' . $name, '/');
-
-			if (empty($file['error'])) {
-				if ($mime_types) {
-					if (!in_array($file['type'], $mime_types)) {
-						message('error', _l("File mime type %s not allowed.", $file['type']));
-						continue;
-					}
-				}
-
-				if (_is_writable(dirname(DIR_DOWNLOAD . $path)) && move_uploaded_file($file['tmp_name'], DIR_DOWNLOAD . $path)) {
-					$saved[$file['name']] = URL_DOWNLOAD . $path;
-				} else {
-					message('error', _l("There was a problem saving your file %s to the server. Please upload again.", $file['name']));
-				}
-			} else {
-				message('error', _l("File upload failed for %s. Please try again.", $file['name']));
+			if ($file_id = $this->Model_File->upload($file, $_POST)) {
+				message('success', _l("File saved!"));
+				$file_records[$file_id] = $this->Model_File->getRecord($file_id);
 			}
+
+			//Retrieve and clear all errors
+			message('error', $this->Model_File->fetchError());
 		}
 
-		message('data', $saved);
+		message('data', $file_records);
 
 		output_message();
 	}
@@ -143,5 +96,20 @@ class App_Controller_File extends Controller
 		message('data', $saved);
 
 		output(json_encode($this->message->fetch()));
+	}
+
+	public function remove()
+	{
+		if ($this->Model_File->remove(_request('file_id'))) {
+			message('success', _l("File removed successfully"));
+		} else {
+			message('error', $this->Model_File->fetchError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('file');
+		}
 	}
 }
