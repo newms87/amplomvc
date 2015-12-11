@@ -1,7 +1,16 @@
 .amp-file-manager {
-	.amp-fm-folder-view {
+	.amp-fm-drop {
 		border: 1px solid @color-dark;
-		min-height: 2em;
+
+		&.is-dropping {
+			outline: 3px dashed @color-main;
+		}
+	}
+
+	.amp-fm-folder-view {
+		.upload-file-icon {
+			margin: 2em 0;
+		}
 	}
 
 	.amp-fm-input {
@@ -112,6 +121,26 @@
 					display: block;
 				}
 			}
+		}
+	}
+
+	.amp-fm-help {
+		margin: 0 0 1em 0;
+
+		b {
+			font-family: OpenSansBold;
+		}
+	}
+
+	&.is-filled {
+		.on-empty {
+			display: none;
+		}
+	}
+
+	&.is-empty {
+		.on-filled {
+			display: none;
 		}
 	}
 }

@@ -1,9 +1,9 @@
 //ampFileManager jQuery Plugin
-$.ampExtend($.ampFileManager = function () {
+$.ampExtend($.ampFileManager = function() {
 }, {
-	init: function (o) {
-		return this.each(function () {
-			var $afm = $(this).addClass('amp-file-manager');
+	init: function(o) {
+		return this.each(function() {
+			var $afm = $(this).addClass('amp-file-manager is-empty');
 			var $input = $afm.find('input.amp-fm-input');
 
 			o = $.extend({
@@ -13,6 +13,7 @@ $.ampExtend($.ampFileManager = function () {
 				onDone:         $.ampFileManager.onDone,
 				onFail:         $.ampFileManager.onFail,
 				onSelect:       null,
+				onRefresh:      null,
 				xhr:            $.ampFileManager.xhr,
 				path:           null,
 				thumb_width:    $ac.fm_thumb_width || 130,
@@ -23,6 +24,7 @@ $.ampExtend($.ampFileManager = function () {
 				selectMultiple: true,
 				isDroppable:    true,
 				dropOn:         null,
+				helpText:       null,
 				url:            $ac.site_url + 'file/upload',
 				listing_path:   $ac.site_url + 'file/listing',
 				listing:        {
@@ -39,25 +41,25 @@ $.ampExtend($.ampFileManager = function () {
 			if ($input.length) {
 				$afm.ampFileManager('initTemplate');
 			} else {
-				$afm.load($ac.site_url + 'file', null, function () {
-					$afm.ampFileManager('initTemplate');
+				$.get($ac.site_url + 'file', null, function(response) {
+					$afm.append(response).ampFileManager('initTemplate');
 				})
 			}
 		});
 	},
 
-	initTemplate: function () {
+	initTemplate: function() {
 		var $afm = this;
 		var o = $afm.getOptions();
 
 		o.input = $afm.find('.amp-fm-input');
-		o.filelist = $afm.find('.amp-fm-file-list');
+		o.fileList = $afm.find('.amp-fm-file-list');
 		o.folderView = $afm.find('.amp-fm-folder-view');
 
 		o.dropOn = $(o.dropOn);
 
 		if (o.isDroppable) {
-			o.dropOn.length ? o.dropOn.add(o.folderView) : o.dropOn = o.folderView;
+			o.dropOn = o.dropOn.add($afm.find('.amp-fm-drop'))
 		}
 
 		if (o.accept) {
@@ -68,12 +70,12 @@ $.ampExtend($.ampFileManager = function () {
 			o.input.attr('accept', o.accept.join(','));
 		}
 
-		o.filelist.click(function (e) {
+		o.fileList.click(function(e) {
 			e.stopPropagation();
 			return false;
 		})
 
-		o.input.change(function () {
+		o.input.change(function() {
 			var $afm = $(this).closest('.amp-file-manager');
 
 			if (this.files.length) {
@@ -82,10 +84,10 @@ $.ampExtend($.ampFileManager = function () {
 		})
 
 		o.dropOn
-			.click(function () {
+			.click(function() {
 				o.input.click()
 			})
-			.on('drop', function (e) {
+			.on('drop', function(e) {
 				var $afm = $(this).closest('.amp-file-manager');
 
 				files = e.originalEvent.dataTransfer.files;
@@ -97,31 +99,36 @@ $.ampExtend($.ampFileManager = function () {
 
 				$afm.ampFileManager('upload', files);
 			})
-			.on('dragenter dragover', function (e) {
-				$(this).addClass('hover');
+			.on('dragenter dragover', function(e) {
+				$(this).addClass('is-dropping');
 				e.preventDefault();
 				e.stopPropagation();
 			})
-			.on('drop dragend dragleave', function (e) {
-				$(this).removeClass('hover');
+			.on('drop dragend dragleave', function(e) {
+				$(this).removeClass('is-dropping');
 				e.preventDefault();
 				return false;
 			});
 
+		if (o.helpText) {
+			$afm.find('.amp-fm-help').html(o.helpText);
+		}
+
 		var $file = $afm.find('.amp-fm-file[data-row=__ac_template__]');
 
-		$file.click(function () {
+		$file.click(function() {
 			$(this).closest('.amp-file-manager').ampFileManager('select', $(this));
 		});
 
-		$file.find('.remove-file').click(function () {
+		$file.find('.remove-file').click(function() {
 			var $this = $(this);
 
 			$.ampConfirm({
 				text:      "Are you sure you want to remove this file?",
-				onConfirm: function () {
+				onConfirm: function() {
 					$.get($this.attr('href'))
 					$this.closest('.amp-fm-file').remove();
+					$afm.ampFileManager('refresh');
 				}
 			})
 
@@ -135,11 +142,11 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	get: function (listing) {
+	get: function(listing) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
-		$.post(o.listing_path, $.extend(true, o.listing, listing), function (response) {
+		$.post(o.listing_path, $.extend(true, o.listing, listing), function(response) {
 			if (response.files) {
 				for (var f in response.files) {
 					$afm.ampFileManager('newFile', response.files[f])
@@ -150,7 +157,7 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	select: function ($file) {
+	select: function($file) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
@@ -164,19 +171,21 @@ $.ampExtend($.ampFileManager = function () {
 				$file.toggleClass('selected');
 			}
 
-			if (selected && typeof o.onSelect === 'function') {
-				o.onSelect.call($afm, $file);
+			if (selected && o.onSelect) {
+				o.onSelect.call($afm, $file, $file.data('file'));
 			}
+
+			o.selectedFile = $file.attr('data-file-id');
 		}
 
 		return this;
 	},
 
-	newFile: function (file) {
+	newFile: function(file) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
-		var $file = o.filelist.ac_template('afm-file', 'add');
+		var $file = o.fileList.ac_template('afm-file', 'add');
 
 		$file.find('.thumbnail').css({
 			width:  o.thumb_width,
@@ -187,13 +196,22 @@ $.ampExtend($.ampFileManager = function () {
 			$afm.ampFileManager('updateFile', $file, file);
 		}
 
+		$afm.ampFileManager('refresh');
+
 		return $file;
 	},
 
-	updateFile: function ($file, file) {
+	updateFile: function($file, file) {
+		var $afm = this;
+		var o = $afm.getOptions();
+
 		if (file.file_id) {
 			$file.attr('data-file-id', file.file_id);
 			$file.find('.remove-file').attr('href', $ac.site_url + 'file/remove?file_id=' + file.file_id);
+
+			if (o.selectedFile == file.file_id) {
+				$afm.ampFileManager('select', $file);
+			}
 		}
 
 		if (file.url) {
@@ -204,10 +222,27 @@ $.ampExtend($.ampFileManager = function () {
 			$file.find('.name', file.name);
 		}
 
+		$file.data('file', file);
+
 		return this;
 	},
 
-	upload: function (files) {
+	refresh: function() {
+		var $afm = this;
+		var o = $afm.getOptions();
+
+		if (o.fileList.children().length) {
+			$afm.removeClass('is-empty').addClass('is-filled');
+		} else {
+			$afm.removeClass('is-filled').addClass('is-empty');
+		}
+
+		if (o.onRefresh) {
+			o.onRefresh.call($afm);
+		}
+	},
+
+	upload: function(files) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
@@ -239,7 +274,7 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	ajaxUpload: function ($file, data) {
+	ajaxUpload: function($file, data) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
@@ -251,10 +286,10 @@ $.ampExtend($.ampFileManager = function () {
 			processData: false,
 			contentType: false,
 			type:        'POST',
-			xhr:         function (e) {
+			xhr:         function(e) {
 				return $afm.ampFileManager('xhr', $file, e);
 			},
-			success:     function (response, status, xhr) {
+			success:     function(response, status, xhr) {
 				$file.removeClass('is-uploading');
 				return $afm.ampFileManager('success', $file, response, status, xhr);
 			}
@@ -263,12 +298,12 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	xhr: function ($file, e) {
+	xhr: function($file, e) {
 		var $afm = this;
 		var myXhr = $.ajaxSettings.xhr();
 
 		if (myXhr.upload) {
-			myXhr.upload.addEventListener('progress', function (e) {
+			myXhr.upload.addEventListener('progress', function(e) {
 				return $afm.getOptions().progress.call($afm, $file, e);
 			}, false);
 		}
@@ -276,7 +311,7 @@ $.ampExtend($.ampFileManager = function () {
 		return myXhr;
 	},
 
-	onDone: function ($file, files) {
+	onDone: function($file, files) {
 		for (var f in files) {
 			this.ampFileManager('updateFile', $file, files[f]);
 		}
@@ -284,14 +319,14 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	onFail: function ($file, error) {
+	onFail: function($file, error) {
 		$.show_msg('error', error);
 		$file.remove();
 
 		return this;
 	},
 
-	success: function ($file, response, status, xhr) {
+	success: function($file, response, status, xhr) {
 		var $afm = this;
 		var o = $afm.getOptions();
 
@@ -308,11 +343,11 @@ $.ampExtend($.ampFileManager = function () {
 		return this;
 	},
 
-	progress: function ($file, e) {
+	progress: function($file, e) {
 		var $afm = this;
 		var o = $afm.getOptions();
 		var total = typeof e === 'object' ? (e.loaded / e.total) * 100 : e;
-		
+
 		total = total.toFixed(2) + '%';
 		$file.find('.progress-msg').html(total);
 		$file.find('.progress').css({width: total})
