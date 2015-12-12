@@ -329,39 +329,47 @@ select.amp-select-enabled {
 }
 
 .amp-select-box {
-	.amp-select-options {
-		max-height: 40em;
-		overflow: auto;
+	&.amp-select-checkboxes {
+		.amp-option {
+			margin: 0 .5em;
+		}
 	}
 
-	.amp-option {
-		display: block;
-		padding: .5em .7em;
-		text-align: left;
-		border-bottom: 1px solid @color-gray-light;
-
-		.label:before {
-			margin-right: .3em;
+	&.amp-select-modal {
+		.amp-select-options {
+			max-height: 40em;
+			overflow: auto;
 		}
 
-		&.ui-sortable-handle {
-			cursor: all-scroll;
+		.amp-option {
+			display: block;
+			padding: .5em .7em;
+			text-align: left;
+			border-bottom: 1px solid @color-gray-light;
 
-			&:before {
-				.amp-sprite;
-				.si-drag-handle-dark-gray-sm;
-				top: 2px;
-				margin-right: .6em;
+			.label:before {
+				margin-right: .3em;
+			}
+
+			&.ui-sortable-handle {
+				cursor: all-scroll;
+
+				&:before {
+					.amp-sprite;
+					.si-drag-handle-dark-gray-sm;
+					top: 2px;
+					margin-right: .6em;
+				}
 			}
 		}
-	}
 
-	.amp-select-actions {
-		padding: .7em;
+		.amp-select-actions {
+			padding: .7em;
 
-		.amp-select-done {
-			text-align: center;
-			width: 100%;
+			.amp-select-done {
+				text-align: center;
+				width: 100%;
+			}
 		}
 	}
 }

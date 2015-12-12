@@ -278,7 +278,7 @@ $.ampExtend($.ampNestedForm = function() {}, {
 })
 
 //ampFormat jQuery Plugin
-$.ampExtend($.ampFormat = function(){}, {
+$.ampExtend($.ampFormat = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
 			type:     'float',
@@ -741,59 +741,84 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 }
 
 //ampSelect jQuery Plugin
-$.ampExtend('ampSelect', {
+$.ampExtend($.ampSelect = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {}, o);
 
 		return this.use_once('amp-select-enabled').each(function(i, e) {
-			var $select = $(e).removeClass('amp-select');
+			o.select = $(e).removeClass('amp-select');
 
 			var $ampSelect = $("<div />").addClass('amp-select');
 
-			$select.before($ampSelect);
-			$ampSelect.append($select);
-
-			var $selected = $("<div />")
-				.addClass($select.attr('class').replace('amp-select-enabled', 'amp-selected'))
-				.append($('<div/>').addClass('align-middle'))
-				.append($('<div/>').addClass('value'))
-				.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
-
-			var $box = $('<div/>').addClass('amp-select-box'),
-				$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
-				$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
-				$actions = $('<div/>').addClass('amp-select-actions'),
-				$done = $('<a/>').addClass('amp-select-done button').html('Done'),
-				$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($select.attr('data-label') || 'Select one or more items'));
-
-			$ampSelect.append($selected);
-
-			//Events
-			$checkall.find('input').change($.ampSelect.checkall);
-
-			//Actions
-			$selected.click($.ampSelect.open);
-			$done.click($.ampSelect.close);
+			if (o.select.is('.amp-select-checkboxes')) {
+				o.checkboxes = true;
+			}
 
 			//Save Options to Instance
 			$ampSelect.setOptions($.extend({}, o, {
-				placeholder: $select.attr('data-placeholder') || 'Select Items...'
+				placeholder: o.select.attr('data-placeholder') || 'Select Items...'
 			}));
 
-			//Setup Box
-			$box.append($options).append($actions.append($done))
+			//Build Template
+			o.select.before($ampSelect);
+			$ampSelect.append(o.select);
 
-			$box.ampModal({
-				title:   $title.prepend($checkall),
-				context: $ampSelect
-			});
-
-			if ($selected.is(':visible')) {
-				$selected.width($selected.width())
+			if (o.checkboxes) {
+				$ampSelect.ampSelect('initCheckboxes');
+			} else {
+				$ampSelect.ampSelect('initSelectModal');
 			}
 
-			$ampSelect.ampSelect('assignSelect', $select);
+			$ampSelect.ampSelect('assignSelect', o.select);
 		});
+	},
+
+	initCheckboxes: function() {
+		var $box = $('<div/>').addClass('amp-select-box amp-select-checkboxes'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll');
+
+		return this.append($box.append($options));
+	},
+
+	initSelectModal: function() {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions();
+
+		var $selected = $("<div />")
+			.addClass(o.select.attr('class').replace('amp-select-enabled', 'amp-selected'))
+			.append($('<div/>').addClass('align-middle'))
+			.append($('<div/>').addClass('value'))
+			.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
+
+		var $box = $('<div/>').addClass('amp-select-box amp-select-modal'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
+			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
+			$actions = $('<div/>').addClass('amp-select-actions'),
+			$done = $('<a/>').addClass('amp-select-done button').html('Done'),
+			$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html(o.select.attr('data-label') || 'Select one or more items'));
+
+		$ampSelect.append($selected);
+
+		//Events
+		$checkall.find('input').change($.ampSelect.checkall);
+
+		//Actions
+		$selected.click($.ampSelect.open);
+		$done.click($.ampSelect.close);
+
+		//Setup Box
+		$box.append($options).append($actions.append($done))
+
+		$box.ampModal({
+			title:   $title.prepend($checkall),
+			context: $ampSelect
+		});
+
+		if ($selected.is(':visible')) {
+			$selected.width($selected.width())
+		}
+
+		return this;
 	},
 
 	open: function() {
