@@ -309,10 +309,8 @@ $.ampExtend($.ampFileManager = function () {
 	},
 
 	progress: function ($file, e) {
-		var $afm = this;
-		var o = $afm.getOptions();
 		var total = typeof e === 'object' ? (e.loaded / e.total) * 100 : e;
-		
+
 		total = total.toFixed(2) + '%';
 		$file.find('.progress-msg').html(total);
 		$file.find('.progress').css({width: total})
