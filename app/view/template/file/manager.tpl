@@ -7,36 +7,47 @@
 
 		<input type="file" multiple class="amp-fm-input"/>
 
-		<div class="amp-fm-folder-view row left">
-			<div class="amp-fm-file-list">
-				<label for="amp-fm-file-__ac_template__" class="amp-fm-file" data-row="__ac_template__" data-file-id="__ac_template__">
-					<div class="thumbnail">
-						<div class="align-middle"></div>
-						<div class="thumb-img col middle">
-							<?= img(theme_dir('image/image-upload.png'), array(
-								'width'  => $thumb_width,
-								'height' => $thumb_height,
-							)); ?>
+		<div class="amp-fm-drop">
+			<div class="amp-fm-folder-view row left">
+				<div class="upload-file-icon on-empty row">
+					<b class="amp-sprite si-upload-icon"></b>
+				</div>
+
+				<div class="amp-fm-file-list on-filled">
+					<label for="amp-fm-file-__ac_template__" class="amp-fm-file" data-row="__ac_template__" data-file-id="__ac_template__">
+						<div class="thumbnail">
+							<div class="align-middle"></div>
+							<div class="thumb-img col middle">
+								<?= img(theme_dir('image/image-upload.png'), array(
+									'width'  => $thumb_width,
+									'height' => $thumb_height,
+								)); ?>
+							</div>
 						</div>
-					</div>
-					<div class="name"></div>
 
-					<div class="controls not-uploading">
-					</div>
+						<div class="name"></div>
 
-					<a class="remove-file not-uploading">
-						<i class="fa fa-trash"></i>
-					</a>
+						<div class="controls not-uploading">
+						</div>
 
-					<div class="progress-bar on-uploading">
-						<div class="progress-msg"></div>
-						<div class="progress"></div>
-					</div>
+						<a class="remove-file not-uploading">
+							<i class="fa fa-trash"></i>
+						</a>
 
-					<div class="on-selected">
-						<i class="fa fa-check"></i>
-					</div>
-				</label>
+						<div class="progress-bar on-uploading">
+							<div class="progress-msg"></div>
+							<div class="progress"></div>
+						</div>
+
+						<div class="on-selected">
+							<i class="fa fa-check"></i>
+						</div>
+					</label>
+				</div>
+			</div>
+
+			<div class="amp-fm-help row">
+				<div class="text">{{<b>Click or drag</b> to add a file}}</div>
 			</div>
 		</div>
 

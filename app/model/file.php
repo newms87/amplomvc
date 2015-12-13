@@ -38,11 +38,13 @@ class App_Model_File extends App_Model_Table
 		$file = $this->getRecord($file_id);
 
 		if ($file) {
-			if (file_exists($file['path'])) {
-				unlink($file['path']);
-			}
+			if ($file['customer_id'] === customer_info('customer_id') || user_can('w', 'admin/file')) {
+				if (file_exists($file['path'])) {
+					unlink($file['path']);
+				}
 
-			return parent::remove($file_id);
+				return parent::remove($file_id);
+			}
 		}
 
 		return false;
@@ -53,6 +55,7 @@ class App_Model_File extends App_Model_Table
 		$options += array(
 			'title'     => '',
 			'name'      => '',
+			'category'  => '',
 			'accept'    => '',
 			'path'      => null,
 			'folder_id' => null,
@@ -137,6 +140,7 @@ class App_Model_File extends App_Model_Table
 
 		$data = array(
 			'name'      => $file['name'],
+			'category'  => $options['category'],
 			'folder_id' => $options['folder_id'],
 			'path'      => DIR_DOWNLOAD . $path,
 			'url'       => URL_DOWNLOAD . $path,
