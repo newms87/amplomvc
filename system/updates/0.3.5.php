@@ -17,6 +17,7 @@ $this->db->createTable('file', <<<SQL
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`file_id`),
   KEY `type_name` (`type`,`name`),
-  KEY `folder_name` (`folder_id`,`name`)
+  KEY `folder_name` (`folder_id`,`name`),
+  KEY `category_type` (`customer_id`, `category`, `type`)
 SQL
 );

@@ -1,46 +1,50 @@
 <?php
 
-class App_Model_Contact extends Model
+class App_Model_Contact extends App_Model_Table
 {
-	public function sendMessage($mail)
+	protected $table = 'contact', $primary_key = 'contact_id';
+
+	public function save($contact_id, $contact)
 	{
-		if (empty($mail['name'])) {
-			$this->error['name'] = _l("Please provide your name so we know what to call you!");
+		$contact['customer_id'] = customer_info('customer_id');
+
+		if (!$contact_id) {
+			if (empty($contact['company']) && empty($contact['first_name']) && empty($contact['last_name'])) {
+				$this->error['info'] = _l("Please provide either the name or company or both.");
+			}
+
+			//Return existing record if found
+			if ($record_id = $this->findRecord($contact)) {
+				return $record_id;
+			}
 		}
 
-		if (empty($mail['email']) || !validate('email', $mail['email'])) {
-			$this->error['email'] = _l("Your email address appears to be invalid.");
-		}
-
-		if (empty($mail['message'])) {
-			$this->error['message'] = _l("Please enter text for your message.");
-		}
-
-		if (!empty($this->error)) {
+		if ($this->error) {
 			return false;
 		}
 
-		$to = option('site_support');
-
-		if (!$to) {
-			$to = option('site_email');
+		if (!$contact_id) {
+			$contact += array(
+				'type' => '',
+			);
 		}
 
-		$mail += array(
-				'to'      => $to,
-				'subject' => _l("The Customer %s has contacted you on %s", $mail['email'], option('site_name', _l("Your Site"))),
-				'text'    => $mail['message'],
-			) + $mail;
-
-		$mail['from'] = 'contact@' . DOMAIN;
-
-		$result = send_mail($mail);
-
-		if (!$result) {
-			$this->error = $this->mail->fetchError();
-			return false;
+		if (!empty($contact['phone'])) {
+			$contact['phone'] = preg_replace("/[^\\d]/", '', $contact['phone']);
 		}
 
-		return true;
+		return parent::save($contact_id, $contact);
+	}
+
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
+	{
+		if (!empty($filter['keywords'])) {
+			$keywords = $this->escape($filter['keywords']);
+			$phone    = preg_replace("/[^\\d]/", '', $keywords);
+
+			$filter['#search'] = "AND (first_name like '%$keywords%' OR last_name like '%$keywords%' OR company like '%$keywords%' " . ($phone ? "OR phone like '%$phone%'" : '') . " OR email like '%$keywords%')";
+		}
+
+		return parent::getRecords($sort, $filter, $options, $total);
 	}
 }

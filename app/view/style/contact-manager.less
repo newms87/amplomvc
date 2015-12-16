@@ -1,0 +1,152 @@
+.amp-contact-manager, .contact-manager {
+	.contact-search {
+		h3 {
+			font: 1em OpenSansBold;
+			margin-bottom: .4em;
+		}
+
+		.help {
+			font-size: .9em;
+			margin-bottom: .2em;
+		}
+
+		input {
+			font-size: 1em;
+			padding: .6em;
+		}
+	}
+
+	.contact-results {
+		margin-top: 1em;
+		border: 1px solid @color-dark;
+		border-radius: 3px;
+
+		.add-contact {
+			font-size: .9em;
+			padding: .5em;
+			border-bottom: 1px solid @color-light;
+			cursor: pointer;
+
+			.fa {
+				color: @color-main;
+			}
+
+			.cancel {
+				display: none;
+			}
+		}
+
+		.contact-form {
+			display: none;
+			padding: 1em;
+
+			button {
+				width: 20em;
+				max-width: 100%;
+			}
+		}
+
+		.no-results {
+			padding: .5em;
+			display: none;
+		}
+
+		.contact-list {
+			.contact {
+				& > input {
+					position: absolute;
+					left: -9999px;
+
+					&:checked {
+						& + .contact-info {
+							background: @selectable-active;
+						}
+					}
+				}
+
+				.remove-contact {
+					font-size: .9em;
+					position: absolute;
+					top: .5em;
+					right: 1em;
+				}
+
+				.contact-info {
+					display: block;
+					padding: .5em;
+
+					&:hover {
+						background: @selectable-hover;
+					}
+
+					.field {
+						font-size: .8em;
+					}
+
+					.company {
+						font: .9em OpenSansBold;
+					}
+				}
+
+				& + .contact {
+					border-top: 1px solid @color-light;
+				}
+
+				.form-buttons {
+					margin-top: 1em;
+
+					a {
+						font-size: .8em;
+						color: @font-dark;
+					}
+
+					.cancel-form {
+						display: none;
+					}
+				}
+
+				&.editing {
+					.contact-form {
+						display: block;
+					}
+
+					.form-buttons {
+						.cancel-form {
+							display: inline-block;
+						}
+
+						.edit-form {
+							display: none;
+						}
+					}
+				}
+			}
+
+			&.empty {
+				& + .no-results {
+					display: block;
+				}
+			}
+		}
+
+		&.adding {
+			.contact-list {
+				display: none;
+			}
+
+			.add-contact {
+				.cancel {
+					display: block;
+				}
+
+				.add {
+					display: none;
+				}
+			}
+
+			.contact-form {
+				display: block;
+			}
+		}
+	}
+}

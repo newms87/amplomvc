@@ -299,9 +299,14 @@ class Document extends Library
 			if ($dependencies === null) {
 				$refresh = true;
 			} elseif (!empty($dependencies)) {
-				foreach ($dependencies as $d_file) {
-					if (!is_file($d_file) || _filemtime($less_file) < _filemtime($d_file)) {
+				foreach ($dependencies as $dependency) {
+					if (!is_file($dependency) || _filemtime($less_file) < _filemtime($dependency)) {
 						$refresh = true;
+
+						if (is_file($dependency . '.mod')) {
+							$this->mod->reapply($dependency . '.mod');
+						}
+
 						break;
 					}
 				}
@@ -380,7 +385,19 @@ class Document extends Library
 
 				$css = $parser->getCss();
 
-				$dependencies = $parser->allParsedFiles();
+				$parsed_files = $parser->allParsedFiles();
+
+				$dependencies = array();
+
+				foreach ($parsed_files as $pf) {
+					$pf = realpath($pf);
+
+					if (preg_match("/\\.mod$/", $pf)) {
+						$dependencies[] = preg_replace("/\\.mod$/", '', $pf);
+					}
+
+					$dependencies[] = $pf;
+				}
 
 				cache('less.' . $reference, $dependencies);
 			} catch (Exception $e) {
