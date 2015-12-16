@@ -209,6 +209,8 @@ class Theme extends Library
 	{
 		$theme = $this->theme;
 
+		$rel_dir      = "app/view/theme/$theme/css/";
+		$config_file  = DIR_SITE . $rel_dir . "config.less";
 		$cached_theme = 'less/theme.' . $theme;
 		$theme_file   = cache($cached_theme, null, true);
 
@@ -219,10 +221,7 @@ class Theme extends Library
 		}
 
 		if (!is_file($theme_file)) {
-			$rel_dir = "app/view/theme/$theme/css/";
-
-			$config_file     = _mod(DIR_SITE . $rel_dir . "config.less");
-			$config_basename = basename($config_file);
+			$config_basename = basename(_mod($config_file));
 
 			$theme_style = '';
 

@@ -145,23 +145,24 @@ function delete_cookie($name)
 global $js_autoload;
 
 $js_autoload = array(
-	'codemirror'     => array(
+	'codemirror'        => array(
 		'app/view/js/jquery/plugin/codemirror/codemirror.js',
 		'app/view/js/jquery/plugin/codemirror/wrapper.js',
 	),
-	'ampListing'     => 'app/view/js/jquery/plugin/listings.js',
-	'listview'       => 'app/view/js/jquery/plugin/listings.js',
-	'ampFilter'      => 'app/view/js/jquery/plugin/listings.js',
-	'ampUpload'      => 'app/view/js/jquery/plugin/ampUpload.js',
-	'ampFileManager' => 'app/view/js/jquery/plugin/ampFileManager.js',
-	'pageBreaks'     => 'app/view/js/jquery/plugin/pageBreaks.js',
-	'ac_template'    => 'app/view/js/jquery/plugin/ac_template.js',
-	'amplo_slider'   => 'app/view/js/jquery/plugin/amplo_slider.js',
-	'flexselect'     => 'app/view/js/jquery/plugin/flexselect.js',
-	'spectrum'       => 'app/view/js/jquery/plugin/colorpicker/spectrum.js',
-	'jqzoom'         => 'app/view/js/jquery/plugin/jqzoom/jqzoom.js',
-	'ac_imageinput'  => 'app/view/js/jquery/plugin/image_manager.js',
-	'ac_filemanager' => 'app/view/js/jquery/plugin/image_manager.js',
+	'ampListing'        => 'app/view/js/jquery/plugin/listings.js',
+	'listview'          => 'app/view/js/jquery/plugin/listings.js',
+	'ampFilter'         => 'app/view/js/jquery/plugin/listings.js',
+	'ampUpload'         => 'app/view/js/jquery/plugin/ampUpload.js',
+	'ampFileManager'    => 'app/view/js/jquery/plugin/ampFileManager.js',
+	'ampContactManager' => 'app/view/js/jquery/plugin/ampContactManager.js',
+	'pageBreaks'        => 'app/view/js/jquery/plugin/pageBreaks.js',
+	'ac_template'       => 'app/view/js/jquery/plugin/ac_template.js',
+	'amplo_slider'      => 'app/view/js/jquery/plugin/amplo_slider.js',
+	'flexselect'        => 'app/view/js/jquery/plugin/flexselect.js',
+	'spectrum'          => 'app/view/js/jquery/plugin/colorpicker/spectrum.js',
+	'jqzoom'            => 'app/view/js/jquery/plugin/jqzoom/jqzoom.js',
+	'ac_imageinput'     => 'app/view/js/jquery/plugin/image_manager.js',
+	'ac_filemanager'    => 'app/view/js/jquery/plugin/image_manager.js',
 );
 
 

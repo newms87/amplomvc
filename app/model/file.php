@@ -38,16 +38,53 @@ class App_Model_File extends App_Model_Table
 		$file = $this->getRecord($file_id);
 
 		if ($file) {
-			if ($file['customer_id'] === customer_info('customer_id') || user_can('w', 'admin/file')) {
+			if ($file['customer_id'] == customer_info('customer_id') || user_can('w', 'admin/file')) {
 				if (file_exists($file['path'])) {
 					unlink($file['path']);
 				}
 
 				return parent::remove($file_id);
+			} else {
+				$this->error['permission'] = _l("You do not have permission to remove this file");
 			}
 		}
 
 		return false;
+	}
+
+	public function createFolder($name, $folder = array())
+	{
+		$folder['name']          = $name;
+		$folder['type']          = 'folder';
+		$folder['mime_type']     = '';
+		$folder['date_added']    = $this->date->now();
+		$folder['date_modified'] = $this->date->now();
+		$folder['date_updated']  = $this->date->now();
+		$folder['size']          = 0;
+
+		$folder += array(
+			'user_id'     => user_info('user_id'),
+			'customer_id' => customer_info('customer_id'),
+			'title'       => $name,
+		);
+
+		return parent::save(null, $folder);
+	}
+
+	public function folderExists($name, $filter = array())
+	{
+		$filter['name'] = $name;
+		$filter['type'] = 'folder';
+
+		if (!isset($filter['user_id']) && !isset($filter['customer_id'])) {
+			if (IS_ADMIN) {
+				$filter['user_id'] = user_info('user_id');
+			} else {
+				$filter['customer_id'] = customer_info('customer_id');
+			}
+		}
+
+		return parent::findRecord($filter);
 	}
 
 	public function upload($file, $options = array())
