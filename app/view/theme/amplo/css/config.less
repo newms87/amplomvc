@@ -35,16 +35,16 @@
   * @link-color-hover: Link color for hover / active state
 
   * Messages: ---
-  * @msg-fg-color: The default foreground color for messages
-  * @msg-bg-color: The default background color for messages
-  * @msg-success-fg-color: The foreground color for success type messages
-  * @msg-success-bg-color: The background color for success type messages
-  * @msg-error-fg-color: The foreground color for error type messages
-  * @msg-error-bg-color: The background color for error type messages
-  * @msg-attention-fg-color: The foreground color for attention type messages
-  * @msg-attention-bg-color: The background color for attention type messages
-  * @msg-notify-fg-color: The foreground color for notify type messages
-  * @msg-notify-bg-color: The background color for notify type messages
+  * @msg-color: The default foreground color for messages
+  * @msg-background: The default background color for messages
+  * @msg-success-color: The foreground color for success type messages
+  * @msg-success-background: The background color for success type messages
+  * @msg-error-color: The foreground color for error type messages
+  * @msg-error-background: The background color for error type messages
+  * @msg-attention-color: The foreground color for attention type messages
+  * @msg-attention-background: The background color for attention type messages
+  * @msg-notify-color: The foreground color for notify type messages
+  * @msg-notify-background: The background color for notify type messages
 
   * Section Styling: ---
   * @header: Header Styling (full) - Style for the Header section
@@ -124,20 +124,20 @@
 @h6-font: .8em;
 
 //Messages
-@msg-fg-color: #555555;
-@msg-bg-color: #CFCFCF;
+@msg-background: #CFCFCF;
+@msg-color: @font-dark;
 
-@msg-success-bg-color: #EAF7D9;
-@msg-success-fg-color: #8DAD62;
+@msg-success-background: #D7EDD7;
+@msg-success-color: @font-dark;
 
-@msg-error-bg-color: #FFD1D1;
-@msg-error-fg-color: #D15252;
+@msg-error-background: #FFD1D1;
+@msg-error-color: @font-dark;
 
-@msg-attention-bg-color: #FFFBE9;
-@msg-attention-fg-color: #E1CA34;
+@msg-attention-background: #FFFBE9;
+@msg-attention-color: @font-dark;
 
-@msg-notify-bg-color: #E6F1FB;
-@msg-notify-fg-color: #8DAFCF;
+@msg-notify-background: #E6F1FB;
+@msg-notify-color: @font-dark;
 
 //Error
 @error-color: #D15252;

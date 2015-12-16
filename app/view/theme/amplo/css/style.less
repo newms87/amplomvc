@@ -192,33 +192,29 @@ body.common-maintenance {
 	position: relative;
 	padding: .5em 2em .5em 1em;
 	margin: 0 auto;
-	color: @msg-fg-color;
-	background-color: @msg-bg-color;
+	color: @msg-color;
+	background-color: @msg-background;
 	font-size: .9em;
 	clear: both;
 
 	&.success {
-		background: @msg-success-bg-color;
-		border-color: @msg-success-fg-color;
-		color: @msg-success-fg-color;
+		background: @msg-success-background;
+		color: @msg-success-color;
 	}
 
 	&.error, &.warning {
-		background: @msg-error-bg-color;
-		border-color: @msg-error-fg-color;
-		color: @msg-error-fg-color;
+		background: @msg-error-background;
+		color: @msg-error-color;
 	}
 
 	&.attention {
-		background: @msg-attention-bg-color;
-		border-color: @msg-attention-fg-color;
-		color: @msg-attention-fg-color;
+		background: @msg-attention-background;
+		color: @msg-attention-color;
 	}
 
 	&.notify {
-		background: @msg-notify-bg-color;
-		border-color: @msg-notify-fg-color;
-		color: @msg-notify-fg-color;
+		background: @msg-notify-background;
+		color: @msg-notify-color;
 	}
 
 	.close {
@@ -246,7 +242,7 @@ body.common-maintenance {
 	margin: 1em auto;
 
 	.messages {
-		border: 2px solid @msg-fg-color;
+		border: 2px solid @msg-color;
 	}
 }
 

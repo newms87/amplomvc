@@ -318,6 +318,12 @@ function amplo_routing_hook($router)
 			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $date->isAfter($terms_agreement_date, $customer_agreed_date)));
 		}
 
+		if (is_logged() && !option('show_terms_agreement') && option('confirm_customer_email', true)) {
+			if (customer_meta('confirmed_email') !== customer_info('email')) {
+				message('success', _l("Please confirm your email in the message we sent to <b>%s</b>. <a href=\"%s\">Resend Email</a>"));
+			}
+		}
+
 		//Path Rerouting
 		switch ($nodes[0]) {
 			case 'page':

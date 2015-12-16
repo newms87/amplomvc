@@ -21,10 +21,10 @@
 
 					<form action="<?= site_url('customer/authenticate'); ?>" class="login-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
 						<div class="form-item">
-							<input type="text" placeholder="{{email}}" name="username" value="<?= $username; ?>"/>
+							<input type="text" autocomplete="username" placeholder="{{email}}" name="username" value="<?= $username; ?>"/>
 						</div>
 						<div class="form-item">
-							<input type="password" placeholder="{{password}}" name="password" value=""/>
+							<input type="password" autocomplete="current-password" placeholder="{{password}}" name="password" value=""/>
 						</div>
 
 						<? if (!empty($medias)) { ?>
@@ -58,13 +58,13 @@
 
 					<form action="<?= site_url('customer/register'); ?>" class="register-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
 						<div class="form-item">
-							<input type="text" placeholder="{{name}}" name="name" value="<?= _post('name'); ?>"/>
+							<input type="text" autocomplete="name" placeholder="{{name}}" name="name" value="<?= _post('name'); ?>"/>
 						</div>
 						<div class="form-item">
-							<input type="text" placeholder="{{email}}" name="email" value="<?= _post('email'); ?>"/>
+							<input type="text" autocomplete="username" placeholder="{{email}}" name="email" value="<?= _post('email'); ?>"/>
 						</div>
 						<div class="form-item">
-							<input type="password" placeholder="{{password}}" autocomplete="off" name="password" value=""/>
+							<input type="password" autocomplete="new-password" placeholder="{{password}}" autocomplete="off" name="password" value=""/>
 						</div>
 
 						<? if ($terms_id = option('terms_agreement_page_id')) { ?>
