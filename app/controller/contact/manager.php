@@ -19,6 +19,15 @@ class App_Controller_Contact_Manager extends Controller
 			set_page_info('title', _l("My Contacts"));
 		}
 
+		$data += array(
+			'show_address' => true,
+			'country_id'   => option('site_default_country_id', 223),
+		);
+
+		if ($data['show_address']) {
+			$data['data_zones'] = $this->Model_Localisation_Zone->getRecords(array('name' => 'ASC'), array('country_id' => $data['country_id']));
+		}
+
 		output($this->render('contact/manager', $data));
 	}
 

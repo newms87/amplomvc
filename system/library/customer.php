@@ -154,11 +154,24 @@ class Customer extends Library
 			if ($terms_page_id) {
 				$this->agreedToTerms();
 			}
+
+			$this->sendConfirmationEmail();
 		} else {
 			$this->error = $this->Model_Customer->fetchError();
 		}
 
 		return $customer_id;
+	}
+
+	public function sendConfirmationEmail($email = null)
+	{
+		$email = $email ? $email : customer_info('email');
+
+		return send_mail(array(
+			'to'      => $email,
+			'subject' => _l("Please confirm your email"),
+			'html'    => _l("Please <a href=\"%s\">click here</a> to confirm your email address with %s", site_url('account/confirm-email', 'email=' . $email), option('site_name')),
+		));
 	}
 
 	public function agreedToTerms()

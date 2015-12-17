@@ -12,10 +12,10 @@
 		<div class="wrap">
 			<? } ?>
 
-			<div class="contact-search">
+			<div class="acm-search">
 				<h3>{{Client:}}</h3>
 
-				<div data-action="<?= site_url('contact/manager/listing'); ?>" class="row left amp-nested-form contact-search-form">
+				<div data-action="<?= site_url('contact/manager/listing'); ?>" class="row left amp-nested-form acm-search-form">
 					<div class="help">{{Search for an existing client by company, name, email or phone}}</div>
 
 					<div class="col left xs-11 form-input">
@@ -29,8 +29,8 @@
 					</div>
 				</div>
 
-				<div class="row contact-results">
-					<div class="row left add-contact">
+				<div class="row acm-results">
+					<div class="row left acm-add-contact">
 						<div class="add">
 							<i class="fa fa-plus"></i>
 							<span class="text">{{Add New Client}}</span>
@@ -41,50 +41,26 @@
 						</div>
 					</div>
 
-					<div class="row left contact-list">
-						<div class="contact row left" data-row="__ac_template__" data-template-root="true">
-							<input id="contact-cb-__ac_template__" type="radio" name="contact_id" class="contact-id-group" value="__ac_template__"/>
+					<div class="row left acm-contact-list">
+						<div class="acm-contact row left" data-row="__ac_template__" data-template-root="true">
+							<label for="contact-cb-__ac_template__" class="acm-contact-info">
+								<div class="acm-field company" data-name="company"></div>
 
-							<label for="contact-cb-__ac_template__" class="contact-info">
-								<div class="field company" data-name="company"></div>
-
-								<div class="field full-name">
+								<div class="acm-field full-name">
 									<span class="label">{{Name:}}</span>
 									<span class="first-name value" data-name="first_name"></span>
 									<span class="last-name value" data-name="last_name"></span>
 								</div>
-								<div class="field email">
+								<div class="acm-field email">
 									<span class="label">{{Email:}}</span>
 									<span class="value" data-name="email"></span>
 								</div>
-								<div class="field phone">
+								<div class="acm-field phone">
 									<span class="label">{{Phone:}}</span>
 									<span class="value" data-name="phone"></span>
 								</div>
 
-								<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left contact-form form amp-nested-form">
-									<div class="col xs-12 sm-8 md-6 left">
-										<div class="form-item company">
-											<input type="text" name="company" value="" placeholder="{{Company Name}}"/>
-										</div>
-										<div class="form-item first-name">
-											<input type="text" name="first_name" value="" placeholder="{{First Name}}"/>
-										</div>
-										<div class="form-item last-name">
-											<input type="text" name="last_name" value="" placeholder="{{Last Name}}"/>
-										</div>
-										<div class="form-item email">
-											<input type="text" name="email" value="" placeholder="{{Email}}"/>
-										</div>
-										<div class="form-item company">
-											<input type="text" name="phone" value="" placeholder="{{Phone}}"/>
-										</div>
-
-										<div class="buttons">
-											<button data-loading="{{Saving...}}">{{Save Client}}</button>
-										</div>
-									</div>
-								</div>
+								<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 
 								<div class="form-buttons">
 									<a class="edit-contact edit-form">
@@ -98,7 +74,7 @@
 								</div>
 							</label>
 
-							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('contact/manager/remove', 'contact_id=__ac_template__'); ?>" class="remove-contact">
+							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('contact/manager/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						</div>
@@ -106,30 +82,73 @@
 
 					<div class="no-results">{{There are no clients matching your search.}}</div>
 
-					<div data-action="<?= site_url('contact/manager/save'); ?>" class="row left new-contact-form contact-form form amp-nested-form">
-						<div class="col xs-12 sm-8 md-6 left">
-							<div class="form-item company">
-								<input type="text" name="company" value="" placeholder="{{Company Name}}"/>
-							</div>
-							<div class="form-item first-name">
-								<input type="text" name="first_name" value="" placeholder="{{First Name}}"/>
-							</div>
-							<div class="form-item last-name">
-								<input type="text" name="last_name" value="" placeholder="{{Last Name}}"/>
-							</div>
-							<div class="form-item email">
-								<input type="text" name="email" value="" placeholder="{{Email}}"/>
-							</div>
-							<div class="form-item company">
-								<input type="text" name="phone" value="" placeholder="{{Phone}}"/>
-							</div>
+					<div data-action="<?= site_url('contact/manager/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
+				</div>
+			</div>
 
-							<div class="buttons">
-								<button data-loading="{{Saving...}}">{{Save Client}}</button>
-							</div>
-						</div>
+			<div class="acm-contact-form hidden">
+				<div class="contact-details col xs-12 sm-8 md-6 left top">
+					<div class="form-item company">
+						<input type="text" name="company" value="" placeholder="{{Company Name}}"/>
+					</div>
+					<div class="form-item first-name">
+						<input type="text" name="first_name" value="" placeholder="{{First Name}}"/>
+					</div>
+					<div class="form-item last-name">
+						<input type="text" name="last_name" value="" placeholder="{{Last Name}}"/>
+					</div>
+					<div class="form-item email">
+						<input type="text" name="email" value="" placeholder="{{Email}}"/>
+					</div>
+					<div class="form-item company">
+						<input type="text" name="phone" value="" placeholder="{{Phone}}"/>
+					</div>
+
+					<div class="buttons">
+						<button data-loading="{{Saving...}}">{{Save Client}}</button>
 					</div>
 				</div>
+
+
+
+
+
+
+
+
+				<?//TODO: if address is not empty, set address_id to address, and always use the same address ID if the address data is changed next time saved ?>
+
+
+
+
+
+				<? if ($show_address) { ?>
+					<div class="contact-address col xs-12 sm-8 md-6 md-padding-left left top">
+						<div class="form-item address">
+							<input type="text" name="address[address]" value="" placeholder="{{Street Address}}"/>
+						</div>
+						<div class="form-item address-2">
+							<input type="text" name="address[address_2]" value="" placeholder="{{Apt # / P.O Box}}"/>
+						</div>
+						<div class="form-item city">
+							<input type="text" name="address[city]" value="" placeholder="{{City}}"/>
+						</div>
+						<div class="form-item zone-id">
+							<label class="select">
+								<?= build(array(
+									'type'  => 'select',
+									'name'  => 'address[zone_id]',
+									'data'  => $data_zones,
+									'value' => 'zone_id',
+									'label' => 'name',
+								)); ?>
+							</label>
+						</div>
+						<div class="form-item postcode">
+							<input type="text" name="address[postcode]" value="" placeholder="{{Zip Code}}"/>
+						</div>
+					</div>
+				<? } ?>
 			</div>
 
 			<? if (!$is_ajax) { ?>

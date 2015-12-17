@@ -95,7 +95,7 @@ class App_Controller_Account extends Controller
 			if ($customer_email) {
 				if ($customer_email === $email) {
 					$this->customer->setMeta('confirmed_email', $email);
-					message('success', _l("Thank you! Your email has been confirmed!"));
+					message('success', array('confirm-email' => _l("Thank you! Your email has been confirmed!")));
 				} else {
 					message('error', _l("Your email did not match your registered email address %s. Please log in to your account using username %s.", $customer_email, $email));
 				}
@@ -111,6 +111,26 @@ class App_Controller_Account extends Controller
 			output_message();
 		} else {
 			redirect('');
+		}
+	}
+
+	public function resend_confirmation()
+	{
+		if (!is_logged()) {
+			message('error', _l("Please log into your account first before confirming your email"));
+			redirect('customer/login');
+		}
+
+		if ($this->customer->sendConfirmationEmail()) {
+			message('success', array('confirm-email' => _l("Confirmation Email has been resent to %s", customer_info('email'))));
+		} else {
+			message('error', $this->customer->fetchError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect();
 		}
 	}
 }

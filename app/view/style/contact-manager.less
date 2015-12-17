@@ -1,5 +1,5 @@
-.amp-contact-manager, .contact-manager {
-	.contact-search {
+.amp-contact-manager {
+	.acm-search {
 		h3 {
 			font: 1em OpenSansBold;
 			margin-bottom: .4em;
@@ -16,12 +16,12 @@
 		}
 	}
 
-	.contact-results {
+	.acm-results {
 		margin-top: 1em;
 		border: 1px solid @color-dark;
 		border-radius: 3px;
 
-		.add-contact {
+		.acm-add-contact {
 			font-size: .9em;
 			padding: .5em;
 			border-bottom: 1px solid @color-light;
@@ -36,7 +36,7 @@
 			}
 		}
 
-		.contact-form {
+		.acm-contact-form {
 			display: none;
 			padding: 1em;
 
@@ -51,44 +51,33 @@
 			display: none;
 		}
 
-		.contact-list {
-			.contact {
-				& > input {
-					position: absolute;
-					left: -9999px;
-
-					&:checked {
-						& + .contact-info {
-							background: @selectable-active;
-						}
-					}
+		.acm-contact-list {
+			.acm-contact {
+				&:hover {
+					background: @selectable-hover;
 				}
 
-				.remove-contact {
+				&.is-selected {
+					background: @selectable-active;
+				}
+
+				.acm-remove-contact {
 					font-size: .9em;
 					position: absolute;
 					top: .5em;
 					right: 1em;
 				}
 
-				.contact-info {
+				.acm-contact-info {
 					display: block;
 					padding: .5em;
 
-					&:hover {
-						background: @selectable-hover;
-					}
-
-					.field {
+					.acm-field {
 						font-size: .8em;
-					}
-
-					.company {
-						font: .9em OpenSansBold;
 					}
 				}
 
-				& + .contact {
+				& + .acm-contact {
 					border-top: 1px solid @color-light;
 				}
 
@@ -106,7 +95,7 @@
 				}
 
 				&.editing {
-					.contact-form {
+					.acm-contact-form {
 						display: block;
 					}
 
@@ -130,11 +119,11 @@
 		}
 
 		&.adding {
-			.contact-list {
+			.acm-contact-list {
 				display: none;
 			}
 
-			.add-contact {
+			.acm-add-contact {
 				.cancel {
 					display: block;
 				}
@@ -144,7 +133,7 @@
 				}
 			}
 
-			.contact-form {
+			.acm-contact-form {
 				display: block;
 			}
 		}
