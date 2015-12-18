@@ -60,6 +60,13 @@
 									<span class="value" data-name="phone"></span>
 								</div>
 
+								<? if ($show_address) { ?>
+									<div class="acm-field address">
+										<span class="label col auto top left no-ws-hack">{{Address:}}</span>
+										<span class="value col auto top left" data-name="full_address"></span>
+									</div>
+								<? } ?>
+
 								<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 
 								<div class="form-buttons">
@@ -87,6 +94,8 @@
 			</div>
 
 			<div class="acm-contact-form hidden">
+				<input type="hidden" name="type" value="" />
+
 				<div class="contact-details col xs-12 sm-8 md-6 left top">
 					<div class="form-item company">
 						<input type="text" name="company" value="" placeholder="{{Company Name}}"/>
@@ -103,24 +112,7 @@
 					<div class="form-item company">
 						<input type="text" name="phone" value="" placeholder="{{Phone}}"/>
 					</div>
-
-					<div class="buttons">
-						<button data-loading="{{Saving...}}">{{Save Client}}</button>
-					</div>
 				</div>
-
-
-
-
-
-
-
-
-				<?//TODO: if address is not empty, set address_id to address, and always use the same address ID if the address data is changed next time saved ?>
-
-
-
-
 
 				<? if ($show_address) { ?>
 					<div class="contact-address col xs-12 sm-8 md-6 md-padding-left left top">
@@ -149,6 +141,10 @@
 						</div>
 					</div>
 				<? } ?>
+
+				<div class="col xs-12 sm-8 md-12 buttons">
+					<button data-loading="{{Saving...}}">{{Save Client}}</button>
+				</div>
 			</div>
 
 			<? if (!$is_ajax) { ?>

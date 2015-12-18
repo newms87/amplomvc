@@ -5,6 +5,8 @@ abstract class App_Model_Table extends Model
 	protected $primary_key, $table;
 	private $orig = array();
 
+	private static $records = array();
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -84,9 +86,7 @@ abstract class App_Model_Table extends Model
 
 	public function getRecord($record_id, $select = '*', $cache = true)
 	{
-		static $records = array();
-
-		$record = ($cache && isset($records[$this->table][$record_id])) ? $records[$this->table][$record_id] : false;
+		$record = ($cache && isset(self::$records[$this->table][$record_id])) ? self::$records[$this->table][$record_id] : false;
 
 		if (!$record) {
 			$select = $this->extractSelect($this->table, $select);
@@ -94,7 +94,7 @@ abstract class App_Model_Table extends Model
 			$record = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 
 			if ($cache && $record && $select === '*') {
-				$records[$this->table][$record_id] = $record;
+				self::$records[$this->table][$record_id] = $record;
 			}
 		}
 

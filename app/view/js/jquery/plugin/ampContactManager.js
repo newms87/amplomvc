@@ -11,6 +11,8 @@ $.ampExtend($.ampContactManager = function() {}, {
 		o = $.extend({}, {
 			contact_id:     null,
 			input:          null,
+			type:           'contact',
+			showAddress:    true,
 			selectMultiple: false,
 			syncFields:     null,
 			onChange:       null,
@@ -22,6 +24,13 @@ $.ampExtend($.ampContactManager = function() {}, {
 			listing:        {}
 		}, o);
 
+		o.template_id = 'acm-contact-' + $.ampContactManager.instanceId++;
+
+		if (o.type) {
+			o.listing.filter || (o.listing.filter = {});
+			o.listing.filter.type = o.type;
+		}
+
 		$managers.each(function() {
 			var $acm = $(this);
 
@@ -30,7 +39,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 			if ($acm.children().length) {
 				$acm.ampContactManager('initTemplate');
 			} else {
-				$acm.load(o.url, null, function() {
+				$acm.load(o.url, {show_address: +o.showAddress}, function() {
 					$acm.ampContactManager('initTemplate');
 				});
 			}
@@ -135,7 +144,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 				var contact = contacts[c];
 				contact.id = contact.contact_id;
 
-				var $contact = $contactList.ac_template('contact', 'add', contact);
+				var $contact = $contactList.ac_template(o.template_id, 'add', contact);
 
 				$contact.data('contact', contact);
 
@@ -170,9 +179,16 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 		o.contactForm = $acm.find('.acm-contact-form').remove().removeClass('hidden');
 
+		if (o.type) {
+			o.contactForm.find('[name=type]').val(o.type);
+		}
+
 		$acm.find('.amp-nested-form').ampNestedForm();
 
 		$acm.find('.acm-add-contact').click(function() {
+			var $acm = $(this).closest('.amp-contact-manager');
+			var o = $acm.getOptions();
+
 			var $results = $(this).closest('.acm-results').toggleClass('adding');
 
 			var $form = $results.find('.acm-new-contact-form');
@@ -184,6 +200,8 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 		$acm.find('.edit-contact').click(function() {
 			var $acm = $(this).closest('.amp-contact-manager');
+			var o = $acm.getOptions();
+
 			$acm.find('.acm-contact').removeClass('editing');
 
 			var $contact = $(this).closest('.acm-contact').addClass('editing');
@@ -191,6 +209,18 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 			if (!$form.children().length) {
 				$form.append(o.contactForm.clone())
+
+				var contact = $contact.data('contact');
+
+				for (var f in contact) {
+					if (f === 'address') {
+						for (var a in contact[f]) {
+							$form.find('[name="address[' + a + ']"]').val(contact[f][a]);
+						}
+					} else {
+						$form.find('[name=' + f + ']').val(contact[f]);
+					}
+				}
 			}
 		})
 
@@ -231,8 +261,16 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 		var $searchForm = $acm.find('.acm-search-form');
 
-		$searchForm.ampNestedForm('onDone', function(response) {
-			$(this).closest('.amp-contact-manager').ampContactManager('results', response.contacts, response.total);
+		$searchForm.ampNestedForm('onSubmit', function() {
+			var listing = {
+				filter: {
+					keywords: this.find('[name="filter[keywords]"]').val()
+				}
+			}
+
+			this.closest('.amp-contact-manager').ampContactManager('get', listing);
+
+			return false;
 		})
 
 		$searchForm.find('input').ampDelay({
@@ -243,7 +281,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 			on:       'keyup'
 		});
 
-		$acm.find('.acm-contact[data-row=__ac_template__]').ac_template('contact');
+		$acm.find('.acm-contact[data-row=__ac_template__]').ac_template(o.template_id);
 
 		if (o.loadListings) {
 			$acm.ampContactManager('get');

@@ -211,14 +211,15 @@ $.ampExtend($.ampNestedForm = function() {}, {
 		var $forms = this.use_once().addClass('amp-nested-form');
 
 		o = $.extend({}, {
+			onSubmit:      null,
 			onDone:        null,
 			onFail:        null,
 			onAlways:      null,
 			disableFields: true,
-			fields: null
+			fields:        null
 		}, o)
 
-		return $forms.each(function(){
+		return $forms.each(function() {
 			var $form = $(this);
 
 			if (!o.fields) {
@@ -226,9 +227,9 @@ $.ampExtend($.ampNestedForm = function() {}, {
 			}
 
 			if (o.disableFields) {
-				$form.closest('form').submit(function(){
+				$form.closest('form').submit(function() {
 					o.fields.prop('disabled', true);
-					setTimeout(function(){
+					setTimeout(function() {
 						o.fields.prop('disabled', false);
 					}, 500);
 				})
@@ -244,40 +245,50 @@ $.ampExtend($.ampNestedForm = function() {}, {
 					}
 				});
 
-			$form.find('button').click(function(e) {
-				$(this).closest('.amp-nested-form').submit();
-				e.stopPropagation();
-				return false;
+			$form.click(function(e) {
+				if ($(e.target).is('button, input[type=submit]')) {
+					$(this).submit();
+					e.stopPropagation();
+					return false;
+				}
 			})
 
 			$form.submit(function(e) {
 				var $form = $(this).closest('.amp-nested-form');
 				var o = $form.getOptions();
 
-				$form.find('button').loading();
+				var is_valid = o.onSubmit ? o.onSubmit.call($form) !== false : true;
 
-				$.post($form.attr('data-action'), $form.find('[name]').serialize(), function(r, status) {
-						if (typeof o.onDone === 'function') {
-							o.onDone.call($form, r, status)
-						}
-					})
-					.fail(function(jqXHR, status, error) {
-						if (typeof o.onFail === 'function') {
-							o.onFail.call($form, jqXHR, status, error);
-						}
-					})
-					.always(function(jqXHR, status, error) {
-						$form.find('button').loading('stop');
+				if (is_valid) {
+					$form.find('button').loading();
 
-						if (typeof o.always === 'function') {
-							o.always.call($form, jqXHR, status, error);
-						}
-					})
+					$.post($form.attr('data-action'), $form.find('[name]').serialize(), function(r, status) {
+							if (typeof o.onDone === 'function') {
+								o.onDone.call($form, r, status)
+							}
+						})
+						.fail(function(jqXHR, status, error) {
+							if (typeof o.onFail === 'function') {
+								o.onFail.call($form, jqXHR, status, error);
+							}
+						})
+						.always(function(jqXHR, status, error) {
+							$form.find('button').loading('stop');
+
+							if (typeof o.always === 'function') {
+								o.always.call($form, jqXHR, status, error);
+							}
+						})
+				}
 
 				e.stopPropagation();
 				return false;
 			})
 		})
+	},
+
+	onSubmit: function(callback) {
+		this.setOptions({onSubmit: callback});
 	},
 
 	onDone: function(callback) {

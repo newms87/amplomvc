@@ -20,7 +20,7 @@ class App_Controller_Contact_Manager extends Controller
 		}
 
 		$data += array(
-			'show_address' => true,
+			'show_address' => _request('show_address', true),
 			'country_id'   => option('site_default_country_id', 223),
 		);
 
@@ -44,14 +44,7 @@ class App_Controller_Contact_Manager extends Controller
 			'limit' => (int)_request('limit', 4),
 		);
 
-		list($contacts, $total) = $this->Model_Contact->getRecords($sort, $filter, $options, true);
-
-		foreach ($contacts as &$contact) {
-			if ($contact['phone']) {
-				$contact['phone'] = format('phone', $contact['phone']);
-			}
-		}
-		unset($contact);
+		list($contacts, $total) = $this->Model_Contact->getContacts($sort, $filter, $options, true);
 
 		$data = array(
 			'contacts' => $contacts,
@@ -66,8 +59,7 @@ class App_Controller_Contact_Manager extends Controller
 		if ($contact_id = $this->Model_Contact->save(_request('contact_id'), $_POST)) {
 			message('success', _l("Contact information saved."));
 
-			$contact          = $this->Model_Contact->getRecord($contact_id);
-			$contact['phone'] = format('phone', $contact['phone']);
+			$contact = $this->Model_Contact->getContact($contact_id);
 
 			message('data', $contact);
 		} else {
@@ -83,16 +75,16 @@ class App_Controller_Contact_Manager extends Controller
 
 	public function remove()
 	{
-		if ($this->Model_Polyscope_Contact->remove(_request('contact_id'))) {
+		if ($this->Model_Contact->remove(_request('contact_id'))) {
 			message('success', _l("Contact was removed."));
 		} else {
-			message('error', $this->Model_Polyscope_Contact->fetchError());
+			message('error', $this->Model_Contact->fetchError());
 		}
 
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('scope/contact');
+			redirect('contact/manager');
 		}
 	}
 }
