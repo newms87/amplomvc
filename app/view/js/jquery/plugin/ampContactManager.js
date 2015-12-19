@@ -11,16 +11,16 @@ $.ampExtend($.ampContactManager = function() {}, {
 		o = $.extend({}, {
 			contact_id:     null,
 			input:          null,
+			selected:       null,
 			type:           'contact',
 			showAddress:    true,
 			selectMultiple: false,
 			syncFields:     null,
 			onChange:       null,
 			onEdit:         null,
-			loadListings:   true,
-			selected:       null,
 			url:            $ac.site_url + 'contact/manager',
 			listingUrl:     $ac.site_url + 'contact/manager/listing',
+			loadListings:   true,
 			listing:        {}
 		}, o);
 
@@ -29,6 +29,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 		if (o.type) {
 			o.listing.filter || (o.listing.filter = {});
 			o.listing.filter.type = o.type;
+		}
+
+		if (o.input && o.selected === null) {
+			o.selected = o.input.val();
 		}
 
 		$managers.each(function() {
@@ -78,10 +82,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 			var contact = $contact.data('contact');
 
 			if (o.input.length) {
-				o.input.val(o.selected);
+				o.input.val(o.selected).change();
 			}
 
-			if (o.syncFields.length) {
+			if (o.syncFields) {
 				for (var f in contact) {
 					o.syncFields.filter('[data-name=' + f + ']').html(contact[f]);
 				}
@@ -97,6 +101,24 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 	getSelected: function() {
 		return this.getOptions().selected;
+	},
+
+	getSelectedData: function() {
+		var $acm = this;
+		var o = this.getOptions(), $selected = $acm.find('.acm-contact.is-selected');
+
+		if (o.selectMultiple) {
+			var data = {};
+
+			$selected.each(function() {
+				var $c = $(this);
+				data[$c.attr('data-contact-id')] = $c.data('contact')
+			})
+
+			return data;
+		} else {
+			return $selected.data('contact');
+		}
 	},
 
 	editContact: function($contact, contact) {
@@ -273,13 +295,21 @@ $.ampExtend($.ampContactManager = function() {}, {
 			return false;
 		})
 
-		$searchForm.find('input').ampDelay({
-			callback: function() {
-				$(this).closest('.amp-nested-form').submit();
-			},
-			delay:    200,
-			on:       'keyup'
-		});
+		$searchForm.find('input')
+			.on('keyup', function(e) {
+				if (e.keyCode === 13) {
+					console.log('afil');
+					e.stopPropagation();
+					return false;
+				}
+			})
+			.ampDelay({
+				callback: function() {
+					$(this).closest('.amp-nested-form').submit();
+				},
+				delay:    200,
+				on:       'keyup'
+			});
 
 		$acm.find('.acm-contact[data-row=__ac_template__]').ac_template(o.template_id);
 

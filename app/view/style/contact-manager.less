@@ -57,6 +57,21 @@
 					background: @selectable-hover;
 				}
 
+				.on-selected {
+					display: none;
+				}
+
+				&.is-selected {
+					.on-selected {
+						display: inline-block;
+					}
+				}
+
+				.acm-checked {
+					width: 3em;
+					color: green;
+				}
+
 				&.is-selected {
 					background: @selectable-active;
 				}
