@@ -43,10 +43,10 @@
 
 					<div class="row left acm-contact-list">
 						<div class="acm-contact row left" data-row="__ac_template__" data-template-root="true">
-							<div class="acm-checked col auto"><i class="on-selected fa fa-check"></i></div>
+							<div class="acm-fields row left">
+								<div class="acm-checked col auto"><i class="on-selected fa fa-check"></i></div>
 
-							<div class="acm-fields col auto left">
-								<label for="contact-cb-__ac_template__" class="acm-contact-info">
+								<label for="contact-cb-__ac_template__" class="acm-contact-info col auto left">
 									<div class="acm-field company" data-name="company"></div>
 
 									<div class="acm-field full-name">
@@ -69,20 +69,26 @@
 											<span class="value col auto top left" data-name="full_address"></span>
 										</div>
 									<? } ?>
-
-									<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
-
-									<div class="form-buttons">
-										<a class="edit-contact edit-form">
-											<i class="fa fa-pencil"></i>
-											{{Edit Client Info}}
-										</a>
-										<a class="cancel-contact cancel-form">
-											<i class="fa fa-close"></i>
-											{{Cancel}}
-										</a>
-									</div>
 								</label>
+							</div>
+
+							<div class="form-buttons row left">
+								<div class="col auto spacing"></div>
+
+								<div class="col auto left">
+									<a class="edit-contact edit-form">
+										<i class="fa fa-pencil"></i>
+										{{Edit Client Info}}
+									</a>
+									<a class="cancel-contact cancel-form">
+										<i class="fa fa-close"></i>
+										{{Cancel}}
+									</a>
+								</div>
+							</div>
+
+							<div class="acm-form-box">
+								<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 							</div>
 
 							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('contact/manager/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
@@ -145,9 +151,11 @@
 							<input type="text" name="address[postcode]" value="" autocomplete="postal-code" placeholder="{{Zip Code}}"/>
 						</div>
 					</div>
+				<? } else { ?>
+					<div class="col md-visible md-6"></div>
 				<? } ?>
 
-				<div class="col xs-12 sm-8 md-12 buttons">
+				<div class="col xs-12 sm-8 md-6 acm-submit">
 					<button data-loading="{{Saving...}}">{{Save Client}}</button>
 				</div>
 			</div>

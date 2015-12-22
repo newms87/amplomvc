@@ -38,7 +38,7 @@
 
 		.acm-contact-form {
 			display: none;
-			padding: 1em;
+			padding: .5em .5em 1em 2.5em;
 
 			button {
 				width: 20em;
@@ -53,6 +53,8 @@
 
 		.acm-contact-list {
 			.acm-contact {
+				padding: .5em;
+
 				&:hover {
 					background: @selectable-hover;
 				}
@@ -72,6 +74,10 @@
 					color: green;
 				}
 
+				.spacing {
+					width: 3em;
+				}
+
 				&.is-selected {
 					background: @selectable-active;
 				}
@@ -84,9 +90,6 @@
 				}
 
 				.acm-contact-info {
-					display: block;
-					padding: .5em;
-
 					.acm-field {
 						font-size: .8em;
 					}

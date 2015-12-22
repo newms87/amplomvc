@@ -338,7 +338,7 @@ $.ampExtend($.ampFormat = function() {}, {
 })
 
 //ampDelay jQuery Plugin
-$.ampExtend('ampDelay', {
+$.ampExtend($.ampDelay = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
 			delay:    1000,
@@ -376,7 +376,7 @@ $.ampExtend('ampDelay', {
 })
 
 //ampToggle jQuery Plugin
-$.ampExtend('ampToggle', {
+$.ampExtend($.ampToggle = function() {}, {
 	init: function(o) {
 		if (!o) {
 			$.error("ampToggle parameter error: content must be an existing DOM element");
@@ -411,8 +411,10 @@ $.ampExtend('ampToggle', {
 			o.hideContentClass += ' amp-toggle-hide';
 			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content');
 
-			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function() {
-				$.ampToggle.blurred ? $.ampToggle.blurred = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
+			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function(e) {
+				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
+				e.stopPropagation();
+				return false;
 			})
 
 			if (o.start) {
@@ -427,12 +429,12 @@ $.ampExtend('ampToggle', {
 		var $t = $(e.target), o = $.ampToggle.active.data('amp-toggle-o');
 
 		if ($t.closest(o.content).length) {
-			!o.content.is('.amp-toggle') || ($.ampToggle.blurred = true);
+			!o.content.is('.amp-toggle') || ($.ampToggle.skipToggle = true);
 		} else if (!$t.closest(o.acceptParent).length) {
 			$.ampToggle.active.ampToggle('hide');
 
 			if ($t.hasClass('amp-toggle')) {
-				$.ampToggle.blurred = true;
+				$.ampToggle.skipToggle = true;
 			}
 		}
 	},
@@ -444,7 +446,10 @@ $.ampExtend('ampToggle', {
 		o.toggle.addClass(o.toggleClass).removeClass(o.hideToggleClass);
 		o.content.addClass(o.contentClass).removeClass(o.hideContentClass);
 		$.ampToggle.active = $this;
-		document.addEventListener('click', $.ampToggle._blur, true);
+		setTimeout(function(){
+			document.addEventListener('click', $.ampToggle._blur, true);
+		}, 100);
+
 
 		if (typeof o.onShow === 'function') {
 			o.onShow.call(this, o);
@@ -463,11 +468,11 @@ $.ampExtend('ampToggle', {
 		if (typeof o.onHide === 'function') {
 			o.onHide.call(this, o);
 		}
-	},
+	}
 });
 
 //ampYouTube
-$.ampExtend('ampYouTube', {
+$.ampExtend($.ampYouTube = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
 			width:      null,
@@ -561,7 +566,6 @@ $.ampExtend('ampYouTube', {
 		}
 	}
 });
-
 
 function onYouTubeIframeAPIReady() {
 	$.ampYouTube.players.each(function(i, e) {
@@ -994,7 +998,7 @@ $.fn.apply_filter = function(url) {
 	return url;
 }
 
-$.ampExtend('ampResize', {
+$.ampExtend($.ampResize = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
 			on: 'keyup change'
@@ -1845,6 +1849,8 @@ $(document)
 		});
 
 		content_loaded();
+
+		$('body').removeClass('is-loading');
 	})
 
 	.click(function(e) {
@@ -1859,20 +1865,15 @@ $(document)
 			return false;
 		}
 
-		if ($onClick = $n.closest('.on-click')) {
-			$onClick.toggleClass('is-active');
-		}
+		if (($onClick = $n.closest('.on-click')).length) {
+			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
+				$onClick.ampToggle({content: $onClick.attr('data-amp-toggle') || $onClick, toggleClass: 'is-active'}).click();
+			} else {
+				$onClick.toggleClass('is-active');
 
-		if (($at = $n.closest('[data-amp-toggle]:not(.amp-toggle)')).length) {
-			$at.ampToggle({content: $at.attr('data-amp-toggle') || $at, toggleClass: 'active'}).click();
-		}
-
-		if (($lm = $n.closest('.link-menu')).length) {
-			if ($lm.is('.on-click')) {
-				$lm.toggleClass('active');
-			} else if ($lm.is('.on-expand') && $n.is('.expand')) {
-				$lm.toggleClass('active');
-				return false;
+				if ($onClick.is('.link-menu')) {
+					$onClick.toggleClass('active');
+				}
 			}
 		}
 
@@ -1941,6 +1942,7 @@ $(document)
 
 $(window).on('beforeunload', function() {
 	$.pageUnloading = true;
+	$('body').addClass('is-loading');
 })
 
 //Chrome Autofill disable hack

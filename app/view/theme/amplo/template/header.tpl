@@ -96,7 +96,7 @@
 			<div class="nav nav-account col xs-3 lg-4 right">
 				<? if (is_logged()) { ?>
 					<div class="link-menu account-home arrow-top align-right popup">
-						<div class="parent" data-amp-toggle=".nav-account .account-home">
+						<div class="parent on-click" data-amp-toggle=".nav-account .account-home">
 							<span class="text lg-visible">{{<?= customer_info('first_name') ? "Hi, " . customer_info('first_name') : "Welcome Back"; ?>!}}</span>
 							<i class="fa fa-home"></i>
 						</div>
