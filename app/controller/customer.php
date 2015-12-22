@@ -305,9 +305,12 @@ class App_Controller_Customer extends Controller
 			redirect('customer/login');
 		}
 
+		//Disable password verification check
+		set_option('verify_password_on_change', false);
+
 		$reset = array(
-			'password' => _post('password'),
-			'confirm'  => _post('confirm'),
+			'password'       => _post('password'),
+			'confirm'        => _post('confirm'),
 		);
 
 		if ($this->Model_Customer->save($customer_id, $reset)) {
