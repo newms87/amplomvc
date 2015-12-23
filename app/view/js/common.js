@@ -1,3 +1,5 @@
+var $ac = $ac || {}
+
 //Similar to LESS screen sizing
 var screen_width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 var screen_lg = screen_width >= 1200,

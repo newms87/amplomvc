@@ -11,6 +11,10 @@
 
 	& > a {
 		display: inline-block;
+
+		&.active, &.is-active {
+			color: @color-main;
+		}
 	}
 
 	& > .parent {
@@ -20,6 +24,12 @@
 		.expand {
 			margin-left: .5em;
 			font-size: .8em;
+		}
+
+		&.is-active {
+			.expand {
+				.amp-sprite.rotate-180;
+			}
 		}
 	}
 
@@ -35,13 +45,13 @@
 		}
 	}
 
-	&.active, &.active-child, &.on-hover:hover {
+	&.active, &.is-active, &.active-child, &.on-hover:hover {
 		& > a, & > .parent {
-			color: @color-secondary;
+			color: @color-main;
 		}
 	}
 
-	&.active, &.on-hover:hover {
+	&.active, &.is-active, &.on-hover:hover {
 		& > .parent {
 			.expand {
 				.amp-sprite.rotate-180;

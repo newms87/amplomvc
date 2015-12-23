@@ -1,17 +1,6 @@
-$.pageBreaks = $.fn.pageBreaks = function (o) {
-	var p = $.pageBreaks, o = arguments[0];
-
-	if (p[o]) {
-		return p[o].apply(this, Array.prototype.slice.call(arguments, 1));
-	} else if (typeof o === 'object' || !o) {
-		return p.init.apply(this, arguments);
-	} else {
-		$.error('Method ' + o + ' does not exist for jQuery plugin ' + p.name);
-	}
-}
-
-$.extend($.pageBreaks, {
-	init: function (o) {
+//ampPageBreak jQuery Plugin
+$.ampExtend($.ampPageBreak = function() {}, {
+	init: function(o) {
 		o = $.extend({}, {
 			width:         null,
 			height:        null,
@@ -23,7 +12,7 @@ $.extend($.pageBreaks, {
 			debugLog:      false
 		}, o);
 
-		return this.not('.page-broken').addClass('page-broken').each(function (i, e) {
+		return this.not('.page-broken').addClass('page-broken').each(function(i, e) {
 			var $e = $(e);
 			var $pages = $e.find('.page');
 			var $first = $pages.first();
@@ -67,12 +56,12 @@ $.extend($.pageBreaks, {
 				o.contentHeight = o.height - o.margin.bottom - o.margin.top;
 			}
 
-			$pages.each(function (p, page) {
-				var $p = $(page);
+			$pages.each(function(p, page) {
+				var $p = $(page), top = 0, bottom = 0;
 
 				var $blocks = $p.find('.page-body').length ? $p.find('.page-body').children() : $p.children();
 
-				!o.debugLog || o.debugLog.append('<BR><BR>BREAK ' + p + ': ' + o.height + ' - ' + o.margin.bottom + ' == ' + o.contentHeight + ' --- ' + $blocks.length + ' rows<BR>');
+				!o.debugLog || o.debugLog.append('<BR><BR><b>Page ' + p + '</b>: contentHeight: ' + o.contentHeight + 'px, margin-bottom: ' + o.margin.bottom + 'px, blocks: ' + $blocks.length + '<BR>');
 
 				var $parent = $blocks.parent();
 
@@ -80,34 +69,45 @@ $.extend($.pageBreaks, {
 					$parent.css('position', 'relative');
 				}
 
-				$blocks.each(function (b, block) {
+				$blocks.each(function(b, block) {
 					var $b = $(block);
-					var bottom = $b.position().top + $b.outerHeight();
 
-					!o.debugLog || o.debugLog.append('ROW ' + $b.attr('class') + ' :: ' + $b.position().top + ' + ' + $b.outerHeight() + ' === ' + bottom + ' / ' + o.contentHeight + (bottom > o.contentHeight ? ' - break' : '') + '<BR>');
+					margin = {
+						top:    parseInt($b.css('marginTop')) || 0,
+						bottom: parseInt($b.css('marginBottom')) || 0,
+					}
+
+					top += margin.top;
+
+					bottom = top + $b.outerHeight();
+
+					!o.debugLog || o.debugLog.append('ROW .' + $b.attr('class').replace(/\s/g, '.') + ' (margin: top ' + margin.top + ', bottom ' + margin.bottom + ')  === (top ' + top + 'px + height ' + $b.outerHeight() + 'px) = ' + bottom + 'px' + (bottom > o.contentHeight ? ' - BREAK ROW' : '') + '<BR>');
 
 					if (bottom > o.contentHeight) {
-						$.pageBreaks.break($p, $b, o);
+						$.ampPageBreak.break($p, $b, o);
+						top = 0;
+					} else {
+						top = bottom + margin.bottom;
 					}
 				});
 			});
 
-			$.pageBreaks.updateVars.call($e);
+			$.ampPageBreak.updateVars.call($e);
 		});
 	},
 
-	updateVars: function () {
+	updateVars: function() {
 		var $pages = this.find('.page');
 		var page_count = $pages.length;
 
-		return $pages.each(function (i, e) {
+		return $pages.each(function(i, e) {
 			var $e = $(e);
 			$e.find('.var-page').html(i + 1);
 			$e.find('.var-page-count').html(page_count);
 		});
 	},
 
-	break: function ($p, $e, opts) {
+	break: function($p, $e, opts) {
 		var $page = $('<div />').addClass('page');
 		var $body = $('<div />').addClass('page-body');
 
