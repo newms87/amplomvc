@@ -20,7 +20,7 @@ class App_Controller_Manager_Contact extends Controller
 		}
 
 		$options += array(
-			'template'     => _request('template', 'manager/contact'),
+			'template'     => !empty($_REQUEST['template']) ? $_REQUEST['template'] : 'manager/contact',
 			'show_address' => _request('show_address', true),
 			'country_id'   => option('site_default_country_id', 223),
 		);

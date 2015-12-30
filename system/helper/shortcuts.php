@@ -437,6 +437,11 @@ function cast_title($name)
 	return implode(' ', $title);
 }
 
+function has_scheme($url)
+{
+	return parse_url($url, PHP_URL_SCHEME) || strpos($url, '//') === 0;
+}
+
 function cast_protocol($url, $cast = null)
 {
 	if ($cast === null) {
@@ -445,16 +450,12 @@ function cast_protocol($url, $cast = null)
 
 	$scheme = parse_url($url, PHP_URL_SCHEME);
 
-	if ($cast) {
-		$cast .= ':';
-	}
-
 	if ($scheme) {
-		return $cast . '//' . preg_replace("#^" . $scheme . '://#', '', $url);
+		return $cast . '://' . preg_replace("#^" . $scheme . '://#', '', $url);
 	} elseif (strpos($url, '//') === 0) {
-		return $cast . $url;
+		return $cast . ':' . $url;
 	} else {
-		return $cast . '//' . $url;
+		return $cast . '://' . $url;
 	}
 }
 

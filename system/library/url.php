@@ -108,30 +108,6 @@ class Url extends Library
 	{
 		static $sites;
 
-		if ($ssl === null) {
-			$ssl = IS_SSL;
-		}
-
-		//Resolve Site URL
-		if ($site_id) {
-			if (!$sites) {
-				$options = array(
-					'cache' => true,
-					'index' => 'site_id'
-				);
-
-				$sites = $this->Model_Site->getRecords(null, null, $options);
-			}
-
-			if (!empty($sites[$site_id])) {
-				$url = $ssl ? $sites[$site_id]['ssl'] : $sites[$site_id]['url'];
-			} else {
-				$url = URL_SITE;
-			}
-		} else {
-			$url = $ssl ? $this->ssl : $this->url;
-		}
-
 		//Calculate Query & Fragment
 		if ($query && !is_array($query)) {
 			if (strpos($query, '#') !== false) {
@@ -143,11 +119,38 @@ class Url extends Library
 
 		$fragment = !empty($fragment) ? '#' . $fragment : '';
 
-		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
-		$has_scheme = parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0;
+		//Resolve URL and Alias if no scheme set
+		if (has_scheme($path)) {
+			$url = '';
 
-		//Resolve Alias if no scheme set
-		if (!$has_scheme) {
+			if ($ssl !== null) {
+				$path = cast_protocol($path, $ssl ? 'https' : 'http');
+			}
+		} else {
+			if ($ssl === null) {
+				$ssl = IS_SSL;
+			}
+
+			//Resolve Site URL
+			if ($site_id) {
+				if (!$sites) {
+					$options = array(
+						'cache' => true,
+						'index' => 'site_id'
+					);
+
+					$sites = $this->Model_Site->getRecords(null, null, $options);
+				}
+
+				if (!empty($sites[$site_id])) {
+					$url = $ssl ? $sites[$site_id]['ssl'] : $sites[$site_id]['url'];
+				} else {
+					$url = URL_SITE;
+				}
+			} else {
+				$url = $ssl ? $this->ssl : $this->url;
+			}
+
 			$url_alias = $this->path2Alias($path, $query);
 
 			//Get Original Query without URL Alias query
@@ -209,12 +212,7 @@ class Url extends Library
 
 	public function redirect($url, $query = '', $ssl = null, $status = 302)
 	{
-		//Check if this is a controller path
-		if (!preg_match("/https?:\\/\\//", $url)) {
-			$url = $this->link($url, $query, $ssl);
-		}
-
-		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
+		header('Location: ' . str_replace('&amp;', '&', $this->link($url, $query, $ssl)), true, $status);
 		exit();
 	}
 

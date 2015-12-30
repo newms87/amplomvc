@@ -53,6 +53,24 @@ $.ampExtend($.ampContactManager = function() {}, {
 		return this;
 	},
 
+	sync: function($fields, contact){
+		var $acm = this;
+		var o = $acm.getOptions();
+
+		for (var f in contact) {
+			var $field = $fields.filter('[data-name=' + f + ']');
+			var value = value = contact[f];
+
+			if ($field.is('[data-type=select]')) {
+				value = o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html();
+			}
+
+			$field.html(value);
+		}
+
+		return this;
+	},
+
 	select: function($contact) {
 		var $acm = this;
 		var o = $acm.getOptions(), is_changed = false;
@@ -87,21 +105,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 			}
 
 			if (o.syncFields) {
-				console.log('there');
-
-				for (var f in contact) {
-					var $field = o.syncFields.filter('[data-name=' + f + ']');
-					var value = value = contact[f];
-
-					console.log($field, value);
-
-					if ($field.is('[data-type=select]')) {
-						console.log('is select');
-						value = o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html();
-					}
-
-					$field.html(value);
-				}
+				$acm.ampContactManager('sync', o.syncFields, contact);
 			}
 
 			if (o.onChange) {
@@ -138,13 +142,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 		var $acm = this;
 		var o = $acm.getOptions();
 
-		for (var f in contact) {
-			$contact.find('[data-name=' + f + ']').html(contact[f]);
+		$acm.ampContactManager('sync', $contact.find('[data-name]'), contact);
 
-			if (o.syncFields) {
-				console.log('here');
-				o.syncFields.filter('[data-name=' + f + ']').html(contact[f]);
-			}
+		if (o.syncFields) {
+			$acm.ampContactManager('sync', o.syncFields, contact);
 		}
 
 		$contact.data('contact', contact);
@@ -184,9 +185,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 				$contact.data('contact', contact);
 
-				for (var f in contact) {
-					$contact.find('[data-name=' + f + ']').html(contact[f]);
-				}
+				$acm.ampContactManager('sync', $contact.find('[data-name]'), contact);
 
 				$contact.attr('data-contact-id', contact.id);
 
@@ -312,7 +311,6 @@ $.ampExtend($.ampContactManager = function() {}, {
 		$searchForm.find('input')
 			.on('keyup', function(e) {
 				if (e.keyCode === 13) {
-					console.log('afil');
 					e.stopPropagation();
 					return false;
 				}

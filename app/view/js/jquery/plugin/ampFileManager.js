@@ -1,6 +1,5 @@
 //ampFileManager jQuery Plugin
-$.ampExtend($.ampFileManager = function () {
-}, {
+$.ampExtend($.ampFileManager = function () {}, {
 	init: function (o) {
 		return this.each(function () {
 			var $afm = $(this).addClass('amp-file-manager is-empty');
@@ -25,8 +24,8 @@ $.ampExtend($.ampFileManager = function () {
 				isDroppable:    true,
 				dropOn:         null,
 				helpText:       null,
-				url:            $ac.site_url + 'file/upload',
-				listingUrl:     $ac.site_url + 'file/listing',
+				url:            $ac.site_url + 'manager/file/upload',
+				listingUrl:     $ac.site_url + 'manager/file/listing',
 				listing:        {
 					sort:    {'name': 'ASC'},
 					filter:  {},
@@ -45,7 +44,7 @@ $.ampExtend($.ampFileManager = function () {
 			if ($input.length) {
 				$afm.ampFileManager('initTemplate');
 			} else {
-				$.get($ac.site_url + 'file', null, function (response) {
+				$.get($ac.site_url + 'manager/file', null, function (response) {
 					$afm.append(response).ampFileManager('initTemplate');
 				})
 			}
@@ -119,7 +118,7 @@ $.ampExtend($.ampFileManager = function () {
 
 		if (file.file_id) {
 			$file.attr('data-file-id', file.file_id);
-			$file.find('.remove-file').attr('href', $ac.site_url + 'file/remove?file_id=' + file.file_id);
+			$file.find('.remove-file').attr('href', $ac.site_url + 'manager/file/remove?file_id=' + file.file_id);
 
 			if (o.selectedFile == file.file_id) {
 				$afm.ampFileManager('select', $file);
@@ -148,7 +147,7 @@ $.ampExtend($.ampFileManager = function () {
 			onConfirm: function () {
 				$file.addClass('is-removing');
 
-				$.get($ac.site_url + 'file/remove', {file_id: $file.attr('data-file-id')}, function (response) {
+				$.get($ac.site_url + 'manager/file/remove', {file_id: $file.attr('data-file-id')}, function (response) {
 					if (response.success) {
 						$file.remove();
 						$afm.ampFileManager('refresh');

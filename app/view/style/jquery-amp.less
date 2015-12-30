@@ -2,6 +2,38 @@
 @selectable-active: #EAF7D9;
 @selectable-hover: #F2F9F2;
 
+.amp-sprite {
+	content: "";
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+
+	&.rotate-0 {
+		transform: rotateZ(0deg);
+	}
+
+	&.rotate-90 {
+		transform: rotateZ(90deg);
+	}
+
+	&.rotate-180 {
+		transform: rotateZ(180deg);
+	}
+
+	&.rotate-270 {
+		transform: rotateZ(270deg);
+	}
+
+	&.flip-x {
+		transform: rotateX(180deg);
+	}
+
+	&.flip-y {
+		transform: rotateY(180deg);
+	}
+}
+
 //Font Awesome
 .fa {
 	font-family: FontAwesome !important;

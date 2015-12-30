@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_File extends Controller
+class App_Controller_Manager_File extends Controller
 {
 	public function __construct()
 	{
@@ -24,7 +24,7 @@ class App_Controller_File extends Controller
 		);
 
 		//Render
-		output($this->render('file/manager', $data));
+		output($this->render('manager/file', $data));
 	}
 
 	public function listing($data = array())

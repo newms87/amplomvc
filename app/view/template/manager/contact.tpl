@@ -140,7 +140,7 @@
 								<?= build(array(
 									'type'          => 'select',
 									'name'          => 'address[zone_id]',
-									'data'          => $data_zones,
+									'data'          => $data['zones'],
 									'value'         => 'zone_id',
 									'label'         => 'name',
 									'#autocomplete' => 'state',
