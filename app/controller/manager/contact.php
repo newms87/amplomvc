@@ -1,6 +1,6 @@
 <?php
 
-class App_Controller_Contact_Manager extends Controller
+class App_Controller_Manager_Contact extends Controller
 {
 	public function __construct()
 	{
@@ -12,23 +12,24 @@ class App_Controller_Contact_Manager extends Controller
 		}
 	}
 
-	public function index($data = array())
+	public function index($options = array())
 	{
 		//Page Head
 		if (!$this->is_ajax) {
 			set_page_info('title', _l("My Contacts"));
 		}
 
-		$data += array(
+		$options += array(
+			'template'     => _request('template', 'manager/contact'),
 			'show_address' => _request('show_address', true),
 			'country_id'   => option('site_default_country_id', 223),
 		);
 
-		if ($data['show_address']) {
-			$data['data_zones'] = $this->Model_Localisation_Zone->getRecords(array('name' => 'ASC'), array('country_id' => $data['country_id']));
+		if ($options['show_address']) {
+			$options['data']['zones'] = $this->Model_Localisation_Zone->getRecords(array('name' => 'ASC'), array('country_id' => $options['country_id']));
 		}
 
-		output($this->render('contact/manager', $data));
+		output($this->render($options['template'], $options));
 	}
 
 	public function listing()
@@ -69,7 +70,7 @@ class App_Controller_Contact_Manager extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('contact/manager');
+			redirect('manager/contact');
 		}
 	}
 
@@ -84,7 +85,7 @@ class App_Controller_Contact_Manager extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} else {
-			redirect('contact/manager');
+			redirect('manager/contact');
 		}
 	}
 }

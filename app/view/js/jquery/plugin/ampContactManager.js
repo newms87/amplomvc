@@ -14,12 +14,13 @@ $.ampExtend($.ampContactManager = function() {}, {
 			selected:       null,
 			type:           'contact',
 			showAddress:    true,
+			template:       null,
 			selectMultiple: false,
 			syncFields:     null,
 			onChange:       null,
 			onEdit:         null,
-			url:            $ac.site_url + 'contact/manager',
-			listingUrl:     $ac.site_url + 'contact/manager/listing',
+			url:            $ac.site_url + 'manager/contact',
+			listingUrl:     $ac.site_url + 'manager/contact/listing',
 			loadListings:   true,
 			listing:        {}
 		}, o);
@@ -43,7 +44,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 			if ($acm.children().length) {
 				$acm.ampContactManager('initTemplate');
 			} else {
-				$acm.load(o.url, {show_address: +o.showAddress}, function() {
+				$acm.load(o.url, {show_address: +o.showAddress, template: o.template}, function() {
 					$acm.ampContactManager('initTemplate');
 				});
 			}
@@ -86,8 +87,20 @@ $.ampExtend($.ampContactManager = function() {}, {
 			}
 
 			if (o.syncFields) {
+				console.log('there');
+
 				for (var f in contact) {
-					o.syncFields.filter('[data-name=' + f + ']').html(contact[f]);
+					var $field = o.syncFields.filter('[data-name=' + f + ']');
+					var value = value = contact[f];
+
+					console.log($field, value);
+
+					if ($field.is('[data-type=select]')) {
+						console.log('is select');
+						value = o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html();
+					}
+
+					$field.html(value);
 				}
 			}
 
@@ -129,6 +142,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 			$contact.find('[data-name=' + f + ']').html(contact[f]);
 
 			if (o.syncFields) {
+				console.log('here');
 				o.syncFields.filter('[data-name=' + f + ']').html(contact[f]);
 			}
 		}
