@@ -33,27 +33,19 @@ class App_Controller_Admin_Settings_General extends Controller
 		$settings += App_Model_Settings::$general_settings;
 
 		//Template Data
-		$settings['data_layouts']    = $this->Model_Layout->getRecords(null, null, array('cache' => true));
-		$settings['data_themes']     = $this->theme->getThemes();
-		$settings['data_countries']  = $this->Model_Localisation_Country->getCountries();
-		$settings['data_languages']  = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
-		$settings['data_currencies'] = $this->Model_Localisation_Currency->getCurrencies();
-		$settings['data_user_roles'] = $this->Model_UserRole->getRecords(null, null, array('cache' => true));
-		$settings['data_pages']      = array('' => _l(" --- None --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true));
+		$data = array(
+			'layouts'    => $this->Model_Layout->getRecords(null, null, array('cache' => true)),
+			'themes'     => $this->theme->getThemes(),
+			'countries'  => $this->Model_Localisation_Country->getCountries(),
+			'languages'  => $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true)),
+			'currencies' => $this->Model_Localisation_Currency->getCurrencies(),
+			'user_roles' => $this->Model_UserRole->getRecords(null, null, array('cache' => true)),
+			'pages'      => array('' => _l(" --- None --- ")) + $this->Model_Page->getRecords(null, null, array('cache' => true)),
 
-		$settings['data_mail_protocols'] = array(
-			'smtp' => "SMTP",
-			'mail' => _l("PHP Mail"),
-		);
-
-		$settings['data_statuses'] = array(
-			0 => _l("Disabled"),
-			1 => _l("Enabled"),
-		);
-
-		$settings['data_yes_no'] = array(
-			1 => _l("Yes"),
-			0 => _l("No"),
+			'mail_protocols' => array(
+				'smtp' => "SMTP",
+				'mail' => "PHP Mail",
+			),
 		);
 
 		//Website Icon Sizes
@@ -82,7 +74,9 @@ class App_Controller_Admin_Settings_General extends Controller
 		}
 		unset($icon);
 
-		$settings['data_icon_sizes'] = self::$icon_sizes;
+		$data['icon_sizes'] = self::$icon_sizes;
+
+		$settings['data'] = $data;
 
 		//Domains AC Template
 		$settings['ga_domains']['__ac_template__'] = '';

@@ -42,15 +42,15 @@ if (!function_exists('apache_request_headers')) {
 }
 
 //Request Headers
-$headers = apache_request_headers();
+$_headers = apache_request_headers();
 function _header($key = null, $default = null)
 {
-	global $headers;
+	global $_headers;
 	if ($key) {
-		return isset($headers[$key]) ? $headers[$key] : $default;
+		return isset($_headers[$key]) ? $_headers[$key] : $default;
 	}
 
-	return $headers;
+	return $_headers;
 }
 
 define("REQUEST_ACCEPT", _header('Accept'));
@@ -64,7 +64,7 @@ define("IS_ADMIN", strpos(rtrim($_SERVER['REQUEST_URI'], '/'), SITE_BASE . 'admi
 define('IS_WINDOWS', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 define("IS_SSL", !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 
-define("IS_AJAX", isset($_GET['ajax']) ? true : isset($headers['X-Requested-With']));
+define("IS_AJAX", isset($_GET['ajax']) ? true : isset($_headers['X-Requested-With']));
 define("IS_POST", $_SERVER['REQUEST_METHOD'] === 'POST');
 define("IS_GET", $_SERVER['REQUEST_METHOD'] === 'GET');
 
@@ -268,7 +268,7 @@ function register_routing_hook($name, $callable, $sort_order = 0)
  * Customized routing for special cases. Set a new $path to change the controller / method to call.
  * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
  *
- * To register your own routing hook use $this->route->registerRoutingHook('my-hook-name', 'my_routing_hook');
+ * To register your own routing hook use $this->router->registerRoutingHook('my-hook-name', 'my_routing_hook');
  * in your plugin's setup.php install() method.
  *
  * @param string $path      - The current path that points to the controller and method to call
@@ -300,7 +300,7 @@ function amplo_routing_hook($router)
 		}
 
 		if (empty($nodes[1])) {
-			$router->setPath(defined("DEFAULT_ADMIN_PATH") ? DEFAULT_ADMIN_PATH : 'admin/index');
+			$router->setPath(option('admin_path'));
 		}
 	} else {
 		if (option('config_maintenance')) {
@@ -627,8 +627,6 @@ function _set_site($site)
 		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 
 		$registry->get('route')->setSite($site);
-		$registry->get('config')->setSite($site);
-		$registry->get('url')->setSite($site);
 
 		return true;
 	}

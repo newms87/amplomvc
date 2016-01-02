@@ -6,7 +6,7 @@ class App_Controller_Customer extends Controller
 	{
 		parent::__construct();
 
-		switch ($this->route->getAction()->getMethod()) {
+		switch ($this->router->getAction()->getMethod()) {
 			//allow access only to these pages if logged in
 			case 'logout':
 			case 'success':

@@ -23,7 +23,7 @@ class Request extends Library
 
 		if (!IS_AJAX) {
 			$query                       = http_build_query($_GET);
-			$_SESSION['page_requests'][] = $this->route->getPath() . ($query ? '?' . $query : '');
+			$_SESSION['page_requests'][] = $this->router->getPath() . ($query ? '?' . $query : '');
 		}
 	}
 

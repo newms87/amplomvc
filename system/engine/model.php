@@ -399,7 +399,7 @@ abstract class Model
 			);
 
 			if ($message) {
-				$history['message'] = $message === true ? $this->route->getPath() : $message;
+				$history['message'] = $message === true ? $this->router->getPath() : $message;
 			}
 
 			$this->insert('history', $history);

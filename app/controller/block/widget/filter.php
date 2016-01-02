@@ -13,7 +13,7 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 			'options'  => array(),
 			'fields'   => array(),
 			'values'   => (array)_request('filter'),
-			'path'     => $this->route->getPath(),
+			'path'     => $this->router->getPath(),
 			'query'    => $_GET,
 			'template' => 'block/widget/filter',
 		);

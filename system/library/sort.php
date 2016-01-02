@@ -19,7 +19,7 @@ class Sort extends Library
 		$settings += array(
 			'template'   => 'block/widget/limit',
 			'limits'     => self::$limits,
-			'path'       => $this->route->getPath(),
+			'path'       => $this->router->getPath(),
 			'limit_text' => '(see more)',
 			'limit'      => _get('limit', 0),
 			'total'      => null,

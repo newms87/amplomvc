@@ -4,7 +4,7 @@ class App_Controller_Block_Localisation_Language extends App_Controller_Block_Bl
 {
 	public function build()
 	{
-		$data['action'] = site_url($this->route->getPath(), _get_exclude('language_code') . '&language_code=');
+		$data['action'] = site_url($this->router->getPath(), _get_exclude('language_code') . '&language_code=');
 
 		$languages = $this->Model_Localisation_Language->getRecords(null, null, array('cache' => true));
 

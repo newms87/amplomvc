@@ -127,7 +127,7 @@ class App_Controller_Admin_Header extends Controller
 			$this->document->addLink('right', $link_logout);
 		}
 
-		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
+		$this->document->addBodyClass(slug($this->router->getPath(), '-'));
 
 		$this->render('header', $settings);
 	}

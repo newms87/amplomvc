@@ -72,7 +72,7 @@ class Table extends Library
 		);
 
 		if (empty($data['listing_path'])) {
-			$data['listing_path'] = $this->route->getPath();
+			$data['listing_path'] = $this->router->getPath();
 		}
 
 		if (!$this->file || !is_file($this->file)) {

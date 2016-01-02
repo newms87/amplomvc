@@ -44,7 +44,7 @@ class App_Controller_Header extends Controller
 		js_var('defer_scripts', option('defer_scripts', true));
 
 		//Body
-		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
+		$this->document->addBodyClass(slug($this->router->getPath(), '-'));
 
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();

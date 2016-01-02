@@ -23,7 +23,7 @@ class Document extends Library
 
 		$this->info['title']          = option('site_title');
 		$this->meta['description']    = option('site_meta_description');
-		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
+		$this->info['canonical_link'] = site_url($this->router->getPath(), $_GET);
 
 		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
 			if (option('minify_js_files') === null) {
@@ -648,7 +648,7 @@ class Document extends Library
 	{
 		if (!$page) {
 			$page = array(
-				'path'  => $this->route->getPath(),
+				'path'  => $this->router->getPath(),
 				'query' => $_GET,
 			);
 		}

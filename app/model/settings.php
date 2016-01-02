@@ -5,6 +5,7 @@ class App_Model_Settings extends Model
 	static $admin_settings = array(
 		'admin_title'                => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'admin_icon'                 => null,
+		'admin_path'                 => 'admin',
 		'admin_bar'                  => 1,
 		'admin_logo'                 => '',
 		'admin_logo_srcset'          => '',
@@ -29,6 +30,8 @@ class App_Model_Settings extends Model
 		'site_email_error'                        => '',
 		'site_phone'                              => '',
 		'config_fax'                              => '',
+		'homepage_path'                           => 'index',
+		'error_404_path'                          => 'error/not_found',
 		'site_title'                              => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'config_default_store'                    => '',
 		'site_meta_description'                   => '',

@@ -24,7 +24,7 @@ class App_Controller_Account extends Controller
 			return $this->details();
 		}
 
-		$data['path']    = $this->route->getPath();
+		$data['path']    = $this->router->getPath();
 		$data['content'] = $content;
 
 		//Render
@@ -41,7 +41,7 @@ class App_Controller_Account extends Controller
 		breadcrumb(_l("My Account"), site_url('account'));
 		breadcrumb(_l("My Details"), site_url('account/details'));
 
-		$data['path'] = $this->route->getPath();
+		$data['path'] = $this->router->getPath();
 
 		//Customer Information
 		$customer['customer'] = customer_info();

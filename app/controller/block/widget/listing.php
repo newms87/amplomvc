@@ -25,7 +25,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'show_charts'         => true,
 			'show_actions'        => true,
 			'show_messages'       => null,
-			'listing_path'        => $this->route->getPath(),
+			'listing_path'        => $this->router->getPath(),
 			'save_path'           => false,
 			'index'               => '',
 			'view_id'             => _request('view_id'),

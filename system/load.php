@@ -88,18 +88,28 @@ if (isset($_GET['amp_token'])) {
 	set_cookie($_GET['amp_token'], 1, 31536000, false);
 }
 
+//Load Config
+new Config();
+
+if (AMPLO_AUTO_UPDATE) {
+	$version = option('AMPLO_VERSION');
+
+	if ($version !== AMPLO_VERSION) {
+		message('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
+
+		$this->System_Update->updateSystem(AMPLO_VERSION);
+	}
+}
+
+if (AMPLO_PROFILE) {
+	_profile('Config loaded');
+}
+
 //Route store after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeSite();
 
 if (AMPLO_PROFILE) {
 	_profile('Site Routed');
-}
-
-//Config (load after routing site!)
-new Config();
-
-if (AMPLO_PROFILE) {
-	_profile('Config loaded');
 }
 
 //Register the core routing hook

@@ -14,7 +14,6 @@ class Router
 	public function __construct()
 	{
 		global $registry;
-		$registry->set('route', $this);
 		$registry->set('router', $this);
 
 		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
@@ -36,6 +35,9 @@ class Router
 
 	public function setPath($path, $nodes = null, $segments = null)
 	{
+		global $_options;
+		echo json_encode($_options);
+
 		$path = path_format($path, false);
 
 		$base = trim(SITE_BASE, '/');
@@ -55,8 +57,12 @@ class Router
 				}
 			}
 		} else {
-			$path = DEFAULT_PATH;
+			echo 'here';
+			$path = option('homepage_path', 'index');
 		}
+
+		echo $path;
+		exit;
 
 		$this->path = str_replace('-', '_', $path);
 
@@ -106,9 +112,49 @@ class Router
 		return $this->args;
 	}
 
-	public function setSite($site)
+	public function setSite(array $site)
 	{
+		global $_options;
+
+		if (!is_array($_options)) {
+			$_options = array();
+		}
+
+		$site += array(
+			'site_id' => 0,
+			'name'    => 'No Site',
+			'url'     => URL_SITE,
+			'ssl'     => HTTPS_SITE,
+		);
+
 		$this->site = $site;
+
+		//TODO: When we sort out configurations, be sure to add in translations for settings!
+
+		$settings = cache('setting.config');
+
+		if (!$settings) {
+			//TODO: Should use $this->loadGroup('config');
+			$settings = $this->queryRows("SELECT * FROM {$this->t['setting']} WHERE auto_load = 1", 'key');
+
+			foreach ($settings as &$setting) {
+				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+			}
+			unset($setting);
+
+			cache('setting.config', $settings);
+		}
+
+		if (!$settings && IS_ADMIN && $this->router->getPath() !== 'admin/settings/restore_defaults') {
+			//message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
+			//TODO: Should still set defaults here
+			//redirect('admin/settings/restore_defaults');
+		}
+
+		$_options = $site + $settings + $_options;
+
+		$this->url->setUrl($site['url']);
+		$this->url->setSsl($site['ssl']);
 	}
 
 	public function getSite()
@@ -211,7 +257,7 @@ class Router
 			if (strpos($this->path, 'api/') === 0) {
 				output_api('error', _l("The API resource %s was not found.", $this->path), null, 404);
 			} else {
-				$this->action = new Action(ERROR_404_PATH);
+				$this->action = new Action(option('error_404_path', 'error/not_found'));
 				$this->action->execute();
 			}
 		}

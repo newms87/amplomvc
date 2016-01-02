@@ -116,7 +116,7 @@ class User extends Library
 			message("notify", "Your session has expired. Please log in again.");
 			$this->logout();
 
-			if ($this->route->getPath() !== 'user/logout') {
+			if ($this->router->getPath() !== 'user/logout') {
 				$this->request->setRedirect($this->url->here());
 			}
 		}
