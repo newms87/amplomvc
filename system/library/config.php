@@ -4,21 +4,6 @@ class Config extends Library
 {
 	private $translate = true;
 
-	public function __construct()
-	{
-		parent::__construct();
-
-		//self assigning so we can use config immediately!
-		global $registry;
-		$registry->set('config', $this);
-
-		$this->setSite($this->route->getSite());
-
-		if (!defined('AMPLO_AUTO_UPDATE') || AMPLO_AUTO_UPDATE) {
-			$this->checkForUpdates();
-		}
-	}
-
 	public function get($key)
 	{
 		global $_options;
@@ -268,19 +253,6 @@ class Config extends Library
 
 			$this->db->setAutoIncrement('site', 0);
 			$this->Model_Site->createSite($site);
-		}
-	}
-
-	public function checkForUpdates()
-	{
-		global $_options;
-
-		$version = !empty($_options['AMPLO_VERSION']) ? $_options['AMPLO_VERSION'] : null;
-
-		if ($version !== AMPLO_VERSION) {
-			message('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
-
-			$this->System_Update->updateSystem(AMPLO_VERSION);
 		}
 	}
 }

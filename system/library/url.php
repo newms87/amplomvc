@@ -13,22 +13,12 @@ class Url extends Library
 	{
 		parent::__construct();
 
-		$this->setSite($this->route->getSite());
-
 		if (option('config_use_ssl')) {
 			//TODO - finish secure pages
 			$this->secure_pages = $this->queryRows("SELECT * FROM {$this->t['secure_page']}");
 		}
 
 		$this->loadAliases();
-	}
-
-	public function setSite($site)
-	{
-		//TODO: Test if always setting site to the URL that is currently being accessed is best policy.
-		$this->url = URL_SITE;//isset($site['url']) ? $site['url'] : URL_SITE;
-
-		$this->ssl = isset($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function here($append_query = '')

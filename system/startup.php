@@ -71,6 +71,7 @@ defined('AMPLO_HEADERS_DEBUG') || define('AMPLO_HEADERS_DEBUG', false);
 defined('CACHE_FILE_EXPIRATION') || define('CACHE_FILE_EXPIRATION', 3600);
 //Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
 defined('AMPLO_REWRITE_SHORT_TAGS') || define('AMPLO_REWRITE_SHORT_TAGS', false);
+defined('AMPLO_AUTO_UPDATE') || define('AMPLO_AUTO_UPDATE', true);
 
 //Default server values in case they are not set.
 $_SERVER += array(
