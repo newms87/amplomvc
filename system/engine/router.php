@@ -11,16 +11,6 @@ class Router
 		$site,
 		$routing_hooks = array();
 
-	public function __construct()
-	{
-		global $registry;
-		$registry->set('router', $this);
-
-		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
-
-		$this->setPath($path);
-	}
-
 	public function __get($key)
 	{
 		global $registry;
@@ -31,6 +21,11 @@ class Router
 	public function isPath($path)
 	{
 		return preg_match("#^" . str_replace('-', '_', $path) . "$#", $this->path);
+	}
+
+	public function getPath()
+	{
+		return $this->path;
 	}
 
 	public function setPath($path, $nodes = null, $segments = null)
@@ -74,11 +69,6 @@ class Router
 		}
 	}
 
-	public function getPath()
-	{
-		return $this->path;
-	}
-
 	public function getSegment($index = null)
 	{
 		if ($index === null) {
@@ -102,14 +92,19 @@ class Router
 		return $this->action;
 	}
 
+	public function getArgs()
+	{
+		return $this->args;
+	}
+
 	public function setArgs($args)
 	{
 		$this->args = (array)$args;
 	}
 
-	public function getArgs()
+	public function getSite()
 	{
-		return $this->args;
+		return $this->site;
 	}
 
 	public function setSite(array $site)
@@ -122,12 +117,12 @@ class Router
 
 		$site += array(
 			'site_id' => 0,
-			'name'    => 'No Site',
+			'name'    => 'Amplo MVC',
+			'domain'  => DOMAIN,
 			'url'     => URL_SITE,
 			'ssl'     => HTTPS_SITE,
+			'prefix'  => DB_PREFIX,
 		);
-
-		$this->site = $site;
 
 		//TODO: When we sort out configurations, be sure to add in translations for settings!
 
@@ -155,11 +150,35 @@ class Router
 
 		$this->url->setUrl($site['url']);
 		$this->url->setSsl($site['ssl']);
+
+		_set_prefix($site['prefix']);
+
+		$this->site = $site;
 	}
 
-	public function getSite()
+	public function routeRequest()
 	{
-		return $this->site;
+		$options = array(
+			'cache' => true,
+			'index' => 'site_id',
+		);
+
+		$sites = $this->Model_Site->getRecords(null, null, $options);
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		$routed_site = array();
+
+		foreach ($sites as $site) {
+			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
+				$routed_site = $site;
+				break;
+			}
+		}
+
+		$this->setSite($routed_site);
+		$this->setPath(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
@@ -263,45 +282,6 @@ class Router
 		}
 
 		output_flush();
-	}
-
-	public function routeSite()
-	{
-		$options = array(
-			'cache' => true,
-			'index' => 'site_id',
-		);
-
-		$sites = $this->Model_Site->getRecords(null, null, $options);
-
-		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
-
-		$prefix = DB_PREFIX;
-
-		foreach ($sites as $site) {
-			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
-				$this->site = $site;
-				break;
-			}
-		}
-
-		if (!$this->site) {
-			$this->site = array(
-				'domain' => DOMAIN,
-				'url'    => '//' . DOMAIN . '/',
-				'ssl'    => 'https://' . DOMAIN . '/',
-				'name'   => 'Amplo MVC',
-				'prefix' => DB_PREFIX,
-			);
-		}
-
-		if (!empty($this->site['prefix'])) {
-			$prefix = $this->site['prefix'];
-		}
-
-		define('SITE_PREFIX', $prefix);
-		_set_prefix($prefix);
 	}
 
 	protected function logRequest()

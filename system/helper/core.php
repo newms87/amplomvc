@@ -260,7 +260,7 @@ function register_routing_hook($name, $callable, $sort_order = 0)
 
 	//In case called when system not booted (eg: install.php)
 	if ($registry) {
-		return $registry->get('route')->registerHook($name, $callable, $sort_order);
+		return $registry->get('router')->registerHook($name, $callable, $sort_order);
 	}
 }
 
@@ -335,6 +335,9 @@ function amplo_routing_hook($router)
 		}
 	}
 }
+
+//Register the core routing hook
+register_routing_hook('amplo', 'amplo_routing_hook');
 
 if (!function_exists('array_column')) {
 	/**

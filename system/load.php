@@ -8,6 +8,9 @@ if (!$model_history) {
 // Registry
 $registry = new Registry();
 
+//Initialize Router (run routeRequest after helpers which will register routing hooks)
+$router = new Router();
+
 //Helpers
 //Tip: to override core / shortcuts functions, use a mod file.
 require_once(_mod(DIR_SYSTEM . 'helper/core.php'));
@@ -53,14 +56,7 @@ HTML;
 	exit;
 }
 
-//Initialize Router
-$router = new Router();
-
-if (AMPLO_PROFILE) {
-	_profile('Router loaded');
-}
-
-//Load Helper files
+//Load Helper files (requires DB & cache)
 $handle = opendir(DIR_SYSTEM . 'helper/');
 while (($helper = readdir($handle))) {
 	if (strpos($helper, '.') === 0) {
@@ -88,8 +84,12 @@ if (isset($_GET['amp_token'])) {
 	set_cookie($_GET['amp_token'], 1, 31536000, false);
 }
 
-//Load Config
-new Config();
+//Route request after helpers (helper/core.php & helper/shortcuts.php required)
+$router->routeRequest();
+
+if (AMPLO_PROFILE) {
+	_profile('Site Routed');
+}
 
 if (AMPLO_AUTO_UPDATE) {
 	$version = option('AMPLO_VERSION');
@@ -99,24 +99,6 @@ if (AMPLO_AUTO_UPDATE) {
 
 		$this->System_Update->updateSystem(AMPLO_VERSION);
 	}
-}
-
-if (AMPLO_PROFILE) {
-	_profile('Config loaded');
-}
-
-//Route store after helpers (helper/core.php & helper/shortcuts.php required)
-$router->routeSite();
-
-if (AMPLO_PROFILE) {
-	_profile('Site Routed');
-}
-
-//Register the core routing hook
-register_routing_hook('amplo', 'amplo_routing_hook');
-
-if (AMPLO_PROFILE) {
-	_profile('Routing hooks run');
 }
 
 // Request (cleans globals)

@@ -18,7 +18,7 @@ class Log extends Library
 	{
 		parent::__construct();
 		$this->name = $name;
-		$this->file = DIR_LOGS . (defined('SITE_PREFIX') ? SITE_PREFIX : DB_PREFIX) . '/' . $name . '.txt';
+		$this->file = DIR_LOGS . ltrim(option('site_prefix') . '/', '/') . $name . '.txt';
 
 		if (!_is_writable(dirname($this->file))) {
 			trigger_error(_l("Log file directory was not writable: %s", $this->file));
