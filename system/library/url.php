@@ -21,15 +21,6 @@ class Url extends Library
 		$this->loadAliases();
 	}
 
-	public function setUrl($url)
-	{
-		$this->url = $url;
-	}
-
-	public function setSsl($ssl) {
-		$this->ssl = $ssl;
-	}
-
 	public function here($append_query = '')
 	{
 		if ($append_query) {
