@@ -98,30 +98,62 @@ class Url extends Library
 	{
 		static $sites;
 
-		if ($ssl === null) {
-			$ssl = IS_SSL;
-		}
-
-		if ($site_id) {
-			if (!$sites) {
-				$options = array(
-					'cache' => true,
-					'index' => 'site_id'
-				);
-
-				$sites = $this->Model_Site->getRecords(null, null, $options);
+		//Calculate Query & Fragment
+		if ($query && !is_array($query)) {
+			if (strpos($query, '#') !== false) {
+				list($query, $fragment) = explode('#', $query, 2);
 			}
 
-			if (!empty($sites[$site_id])) {
-				$url = $ssl ? $sites[$site_id]['ssl'] : $sites[$site_id]['url'];
-			} else {
-				$url = URL_SITE;
+			parse_str($query, $query);
+		}
+
+		$fragment = !empty($fragment) ? '#' . $fragment : '';
+
+		//Resolve URL and Alias if no scheme set
+		if (has_scheme($path)) {
+			$url = '';
+
+			if ($ssl !== null) {
+				$path = cast_protocol($path, $ssl ? 'https' : 'http');
 			}
 		} else {
-			$url = $ssl ? $this->ssl : $this->url;
+			if ($ssl === null) {
+				$ssl = IS_SSL;
+			}
+
+			//Resolve Site URL
+			if ($site_id) {
+				if (!$sites) {
+					$options = array(
+						'cache' => true,
+						'index' => 'site_id'
+					);
+
+					$sites = $this->Model_Site->getRecords(null, null, $options);
+				}
+
+				if (!empty($sites[$site_id])) {
+					$url = $ssl ? $sites[$site_id]['ssl'] : $sites[$site_id]['url'];
+				} else {
+					$url = URL_SITE;
+				}
+			} else {
+				$url = $ssl ? $this->ssl : $this->url;
+			}
+
+			$url_alias = $this->path2Alias($path, $query);
+
+			//Get Original Query without URL Alias query
+			if ($url_alias) {
+				$path = $url_alias['alias'];
+				if ($url_alias['query']) {
+					$query = array_diff_assoc($query, $url_alias['query']);
+				}
+			}
 		}
 
-		return $this->findAlias($url, $path, $query, $site_id);
+		//Build the New URL
+		return $url . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '') . $fragment;
 	}
 
 	public function urlencode_link($uri = '', $query = '')
@@ -162,57 +194,16 @@ class Url extends Library
 	/**
 	 * Redirect the request to a new URL.
 	 *
-	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
-	 * @param mixed $query - a string URI or associative array to be converted into a string URI
-	 * @param int $status - The header redirect status to send back to the requesting client.
+	 * @param       $url    - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is
+	 *                      given, Url::redirect() will ignore $query.
+	 * @param mixed $query  - a string URI or associative array to be converted into a string URI
+	 * @param int   $status - The header redirect status to send back to the requesting client.
 	 */
 
 	public function redirect($url, $query = '', $ssl = null, $status = 302)
 	{
-		//Check if this is a controller path
-		if (!preg_match("/https?:\\/\\//", $url)) {
-			$url = $this->link($url, $query, $ssl);
-		}
-
-		header('Location: ' . str_replace('&amp;', '&', $url), true, $status);
+		header('Location: ' . str_replace('&amp;', '&', $this->link($url, $query, $ssl)), true, $status);
 		exit();
-	}
-
-	private function findAlias($base_url, $path = '', $query = '')
-	{
-		$lower_path = strtolower(str_replace('-', '_', $path));
-
-		if (is_array($query)) {
-			$query_str = $query ? http_build_query($query) : '';
-		} else {
-			$query_str = urldecode($query);
-			parse_str($query, $query);
-		}
-
-		//If already has a URL scheme (eg: http://, ftp:// etc..) not an alias, and no base can be prepended
-		$has_scheme = parse_url($path, PHP_URL_SCHEME) || strpos($path, '//') === 0;
-
-		//If no path, or already is an alias, no lookup needed
-		if (!$path || isset($this->aliases[$lower_path]) || $has_scheme) {
-			if ($query_str) {
-				$query_str = (strpos($path, '?') === false ? '?' : '&') . $query_str;
-			}
-
-			return ($has_scheme ? '' : $base_url) . $path . $query_str;
-		}
-
-		$url_alias = $this->path2Alias($path, $query);
-
-		//Get Original Query without URL Alias query
-		if ($url_alias) {
-			$path  = $url_alias['alias'];
-			if ($url_alias['query']) {
-				$query = array_diff_assoc($query, $url_alias['query']);
-			}
-		}
-
-		//Build the New URL
-		return $base_url . $path . ($query ? ((strpos($path, '?') === false) ? '?' : '&') . http_build_query($query) : '');
 	}
 
 	public function alias2Path($alias)
@@ -229,21 +220,26 @@ class Url extends Library
 
 	public function path2Alias($path, $query = '')
 	{
-		if ($query && is_string($query)) {
-			parse_str($query, $query);
-		}
+		$path = path_format($path);
 
-		foreach ($this->aliases as $alias) {
-			if (preg_match("|^" . $alias['path'] . "$|i", $path)) {
-				if ($alias['query']) {
-					foreach ($alias['query'] as $key => $value) {
-						if (!isset($query[$key]) || $query[$key] !== $value) {
-							continue 2;
+		//If already is an alias (or no path) then
+		if ($path && !isset($this->aliases[$path])) {
+			if ($query && is_string($query)) {
+				parse_str($query, $query);
+			}
+
+			foreach ($this->aliases as $alias) {
+				if (preg_match("|^" . $alias['path'] . "$|i", $path)) {
+					if ($alias['query']) {
+						foreach ($alias['query'] as $key => $value) {
+							if (!isset($query[$key]) || $query[$key] !== $value) {
+								continue 2;
+							}
 						}
 					}
-				}
 
-				return $alias;
+					return $alias;
+				}
 			}
 		}
 

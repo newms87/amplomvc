@@ -15,7 +15,7 @@
 			<div class="acm-search">
 				<h3>{{Client:}}</h3>
 
-				<div data-action="<?= site_url('contact/manager/listing'); ?>" class="row left amp-nested-form acm-search-form">
+				<div data-action="<?= site_url('manager/contact/listing'); ?>" class="row left amp-nested-form acm-search-form">
 					<div class="help">{{Search for an existing client by company, name, email or phone}}</div>
 
 					<div class="col left xs-11 form-input">
@@ -88,10 +88,10 @@
 							</div>
 
 							<div class="acm-form-box">
-								<div data-action="<?= site_url('contact/manager/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
+								<div data-action="<?= site_url('manager/contact/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 							</div>
 
-							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('contact/manager/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
+							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('manager/contact/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						</div>
@@ -99,7 +99,7 @@
 
 					<div class="no-results">{{There are no clients matching your search.}}</div>
 
-					<div data-action="<?= site_url('contact/manager/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
+					<div data-action="<?= site_url('manager/contact/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
 				</div>
 			</div>
 
@@ -140,7 +140,7 @@
 								<?= build(array(
 									'type'          => 'select',
 									'name'          => 'address[zone_id]',
-									'data'          => $data_zones,
+									'data'          => $data['zones'],
 									'value'         => 'zone_id',
 									'label'         => 'name',
 									'#autocomplete' => 'state',

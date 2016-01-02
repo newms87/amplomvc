@@ -41,38 +41,34 @@ class App_Controller_Admin_Header extends Controller
 		if (is_logged()) {
 			//Add the Image Manager to the Main Menu if user has permissions
 			if (user_can('r', 'admin/filemanager')) {
-				$link_image_manager = array(
+				$this->document->addLink('admin', array(
 					'name'       => _l("Image Manager"),
 					'sort_order' => 5,
 					'href'       => 'admin/filemanager',
 					'#data-ajax' => 'iframe',
 					//'attrs'      => array('onclick' => '$.ac_filemanager();'),
-				);
-
-				$this->document->addLink('admin', $link_image_manager);
+				));
 			}
 
 			if (user_can('r', 'admin/dashboards')) {
 				$dashboards = $this->Model_Dashboard->getUserDashboards();
 
-				foreach ($dashboards as $dashboard) {
+				if ($dashboards) {
 					if (!$this->document->hasLink('admin', 'dashboards')) {
-						$dashboards_link = array(
+						$this->document->addLink('admin', array(
 							'name'         => 'dashboards',
 							'display_name' => _l("Dashboards"),
-						);
-
-						$this->document->addLink('admin', $dashboards_link);
+						));
 					}
 
-					$dashboard_link = array(
-						'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
-						'display_name' => strip_tags($dashboard['title']),
-						'href'         => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
-						'parent'       => 'dashboards',
-					);
-
-					$this->document->addLink('admin', $dashboard_link);
+					foreach ($dashboards as $dashboard) {
+						$this->document->addLink('admin', array(
+							'name'         => 'dashboards_dash-' . $dashboard['dashboard_id'],
+							'display_name' => strip_tags($dashboard['title']),
+							'href'         => site_url('admin/dashboard/view', 'dashboard_id=' . $dashboard['dashboard_id']),
+							'parent'       => 'dashboards',
+						));
+					}
 				}
 			}
 
@@ -81,15 +77,13 @@ class App_Controller_Admin_Header extends Controller
 
 				foreach ($widgets as $widget) {
 					if (user_can('r', $widget['path'])) {
-						$link_widget = array(
+						$this->document->addLink('admin', array(
 							'parent'       => 'system_settings',
 							'name'         => slug($widget['title']),
 							'display_name' => "<img class=\"icon\" src=\"$widget[icon]\" />" . $widget['title'],
 							'href'         => $widget['url'],
 							'sort_order'   => $widget['sort_order'],
-						);
-
-						$this->document->addLink('admin', $link_widget);
+						));
 					}
 				}
 			}
@@ -103,26 +97,22 @@ class App_Controller_Admin_Header extends Controller
 				$sites = $this->Model_Site->getRecords(null, null, $options);
 
 				//Store Front Links
-				$link_sites = array(
+				$this->document->addLink('right', array(
 					'name'         => 'sites',
 					'display_name' => _l("Sites"),
 					'class'        => 'popup',
 					'sort_order'   => 0,
-				);
-
-				$this->document->addLink('right', $link_sites);
+				));
 
 				//Link to all of the stores under the stores top level navigation
 				foreach ($sites as $site_id => $site) {
-					$linke_site = array(
+					$this->document->addLink('right', array(
 						'name'         => 'site_' . $site_id,
 						'display_name' => $site['name'],
 						'href'         => site_url('', '', null, $site_id),
 						'parent'       => 'sites',
 						'target'       => '_blank',
-					);
-
-					$this->document->addLink('right', $linke_site);
+					));
 				}
 			}
 

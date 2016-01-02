@@ -56,6 +56,8 @@ class App_Controller_Customer extends Controller
 			$this->request->setRedirect();
 		}
 
+		echo $this->request->getRedirect();
+
 		//Block Settings
 		$defaults = array(
 			'username' => '',

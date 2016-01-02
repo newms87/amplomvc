@@ -952,41 +952,12 @@ CSS;
 
 		$style = <<<CSS
 .amp-sprite {
-  content: "";
-  display: inline-block;
-  position: relative;
   background-image: url($url);
   background-image: -webkit-image-set($url_set);
   background-image: -moz-image-set($url_set);
   background-image: -ms-image-set($url_set);
   background-image: -o-image-set($url_set);
-  background-repeat: no-repeat;
 }
-
-.amp-sprite.rotate-0 {
-	transform: rotateZ(0deg);
-}
-
-.amp-sprite.rotate-90 {
-	transform: rotateZ(90deg);
-}
-
-.amp-sprite.rotate-180 {
-	transform: rotateZ(180deg);
-}
-
-.amp-sprite.rotate-270 {
-	transform: rotateZ(270deg);
-}
-
-.amp-sprite.flip-x {
-	transform: rotateX(180deg);
-}
-
-.amp-sprite.flip-y {
-	transform: rotateY(180deg);
-}
-
 $style
 CSS;
 

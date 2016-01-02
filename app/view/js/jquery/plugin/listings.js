@@ -32,7 +32,11 @@ $.ampExtend('ampListing', {
 		$listing[0].view_config = $view_config;
 
 		$view_config.ampModal();
-		$view_config.find('[name="columns[]"]').ampSelect('sortable');
+		var $cols = $view_config.find('[name="columns[]"]');
+
+		if ($cols.length) {
+			$cols.ampSelect('sortable');
+		}
 
 		$listing.find('.modify-view').click(function () {
 			var $view_config = $(this).closest('.widget-listing')[0].view_config;
@@ -40,6 +44,8 @@ $.ampExtend('ampListing', {
 
 			$view_config.ampModal('open');
 		});
+
+		$listing.trigger('loaded');
 	},
 
 	getQuery: function (key) {
