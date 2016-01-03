@@ -5,7 +5,7 @@ class App_Controller_Account_Download extends Controller
 	public function index()
 	{
 		if (!is_logged()) {
-			$this->session->set('redirect', site_url('account/download'));
+			$this->request->setRedirect(site_url('account/download'));
 
 			redirect('customer/login');
 		}
@@ -80,7 +80,7 @@ class App_Controller_Account_Download extends Controller
 	public function download()
 	{
 		if (!is_logged()) {
-			$this->session->set('redirect', site_url('account/download'));
+			$this->request->setRedirect(site_url('account/download'));
 
 			redirect('customer/login');
 		}

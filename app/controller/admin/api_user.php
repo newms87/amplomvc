@@ -70,15 +70,15 @@ class App_Controller_Admin_ApiUser extends App_Controller_Table
 				foreach ($batch as $api_user_id) {
 					switch ($action) {
 						case 'enable':
-							$this->Model_ApiUser->save($api_user_id, array('status' => 1));
+							$this->instance->save($api_user_id, array('status' => 1));
 							break;
 
 						case 'disable':
-							$this->Model_ApiUser->save($api_user_id, array('status' => 0));
+							$this->instance->save($api_user_id, array('status' => 0));
 							break;
 
 						case 'delete':
-							$this->Model_ApiUser->remove($api_user_id);
+							$this->instance->remove($api_user_id);
 							break;
 					}
 				}

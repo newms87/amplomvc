@@ -79,6 +79,18 @@ abstract class App_Model_Table extends Model
 		}
 	}
 
+	public function removeWhere($filter)
+	{
+		if (!$filter) {
+			$this->error = _l("Must set filter value. Do not use removeWhere to delete all records.");
+			return false;
+		}
+
+		clear_cache($this->table);
+
+		return $this->delete($this->table, $filter);
+	}
+
 	public function getField($record_id, $field)
 	{
 		return $this->queryVar("SELECT $field FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);

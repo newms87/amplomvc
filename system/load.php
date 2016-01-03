@@ -8,8 +8,9 @@ if (!$model_history) {
 // Registry
 $registry = new Registry();
 
-//Initialize Router (run routeRequest after helpers which will register routing hooks)
+//Initialize Router (run routeRequest after registering routing hooks in helpers)
 $router = new Router();
+$registry->set('router', $router);
 
 //Helpers
 //Tip: to override core / shortcuts functions, use a mod file.
@@ -24,20 +25,8 @@ if (AMPLO_PROFILE) {
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
-$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
-
 if (AMPLO_PROFILE) {
 	_profile('Database loaded');
-}
-
-if ($last_update) {
-	clear_cache('model');
-	cache('db_last_update', $last_update['Value']);
-	$db->updateTables();
-
-	if (AMPLO_PROFILE) {
-		_profile('Database Model refreshed');
-	}
 }
 
 //TODO: REMOVE 'store' check once all sites updated for future
@@ -91,19 +80,6 @@ if (AMPLO_PROFILE) {
 	_profile('Site Routed');
 }
 
-if (AMPLO_AUTO_UPDATE) {
-	$version = option('AMPLO_VERSION');
-
-	if ($version !== AMPLO_VERSION) {
-		message('notify', _l("The database version %s was out of date and has been updated to version %s", $version, AMPLO_VERSION));
-
-		$this->System_Update->updateSystem(AMPLO_VERSION);
-	}
-}
-
-// Request (cleans globals)
-$registry->set('request', new Request());
-
 //Model History User Defined
 $model_history = (array)option('model_history') + $model_history;
 
@@ -111,9 +87,6 @@ $model_history = (array)option('model_history') + $model_history;
 if (!defined("AC_CUSTOMER_OVERRIDE")) {
 	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));
 }
-
-// Session
-$registry->set('session', new Session());
 
 //Cron Called from system
 if (option('cron_status', true)) {

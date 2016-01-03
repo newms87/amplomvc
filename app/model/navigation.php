@@ -294,7 +294,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getNavigationGroup($name = 'all')
 	{
-		$navigation_groups = null;//cache("navigation_group.$name." . DOMAIN);
+		$navigation_groups = cache("navigation_group.$name." . DOMAIN);
 
 		if (!isset($navigation_groups)) {
 			$filter = array(

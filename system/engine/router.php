@@ -30,9 +30,6 @@ class Router
 
 	public function setPath($path, $nodes = null, $segments = null)
 	{
-		global $_options;
-		echo json_encode($_options);
-
 		$path = path_format($path, false);
 
 		$base = trim(SITE_BASE, '/');
@@ -52,12 +49,8 @@ class Router
 				}
 			}
 		} else {
-			echo 'here';
 			$path = option('homepage_path', 'index');
 		}
-
-		echo $path;
-		exit;
 
 		$this->path = str_replace('-', '_', $path);
 
@@ -124,13 +117,13 @@ class Router
 			'prefix'  => DB_PREFIX,
 		);
 
-		//TODO: When we sort out configurations, be sure to add in translations for settings!
+		_set_prefix($site['prefix']);
 
 		$settings = cache('setting.config');
 
 		if (!$settings) {
 			//TODO: Should use $this->loadGroup('config');
-			$settings = $this->queryRows("SELECT * FROM {$this->t['setting']} WHERE auto_load = 1", 'key');
+			$settings = $this->db->queryRows("SELECT * FROM {$this->db->t['setting']} WHERE auto_load = 1", 'key');
 
 			foreach ($settings as &$setting) {
 				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -140,18 +133,10 @@ class Router
 			cache('setting.config', $settings);
 		}
 
-		if (!$settings && IS_ADMIN && $this->router->getPath() !== 'admin/settings/restore_defaults') {
-			//message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
-			//TODO: Should still set defaults here
-			//redirect('admin/settings/restore_defaults');
-		}
-
 		$_options = $site + $settings + $_options;
 
 		$this->url->setUrl($site['url']);
 		$this->url->setSsl($site['ssl']);
-
-		_set_prefix($site['prefix']);
 
 		$this->site = $site;
 	}
@@ -179,6 +164,40 @@ class Router
 
 		$this->setSite($routed_site);
 		$this->setPath(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
+
+		//Resolve routing hooks
+		uasort($this->routing_hooks, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
+
+		foreach ($this->routing_hooks as $hook) {
+			if ($hook['callable']($this) === false) {
+				break;
+			}
+		}
+
+		//Resolve Layout ID
+		set_option('config_layout_id', $this->getLayoutForPath($this->path));
+
+		//Verify Amplo Version & Settings
+		if (IS_ADMIN && $this->path !== 'admin/settings/restore_defaults') {
+			$amplo_version = option('AMPLO_VERSION');
+
+			if (!$amplo_version) {
+				redirect('admin/settings/restore-defaults');
+			} elseif (AMPLO_AUTO_UPDATE && $amplo_version !== AMPLO_VERSION) {
+				if ($this->System_Update->updateSystem(AMPLO_VERSION)) {
+					message('notify', _l("The database version %s was out of date and has been updated to version %s", $amplo_version, AMPLO_VERSION));
+				} else {
+					message('error', _l("Failed to update to Amplo %s. Please contact the web admin as this may cause system instalbility.", AMPLO_VERSION));
+				}
+			}
+		}
+
+		if (!IS_AJAX) {
+			$query = http_build_query($_GET);
+			$this->request->addHistory($this->path . ($query ? '?' . $query : ''));
+		}
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
@@ -221,20 +240,6 @@ class Router
 
 	public function dispatch()
 	{
-		//Resolve routing hooks
-		uasort($this->routing_hooks, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
-
-		foreach ($this->routing_hooks as $hook) {
-			if ($hook['callable']($this) === false) {
-				break;
-			}
-		}
-
-		//Resolve Layout ID
-		set_option('config_layout_id', $this->getLayoutForPath($this->path));
-
 		if (AMPLO_ACCESS_LOG) {
 			$this->logRequest();
 		}

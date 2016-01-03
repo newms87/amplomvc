@@ -44,7 +44,7 @@ class App_Model_Customer extends App_Model_Table
 		}
 
 		if (isset($customer['password'])) {
-			if (option('verify_password_on_change', true)) {
+			if ($customer_id && option('verify_password_on_change', true)) {
 				if (empty($customer['current_password'])) {
 					$this->error['current_password'] = _l("Please enter your current password to change the password on your account.");
 				} else {

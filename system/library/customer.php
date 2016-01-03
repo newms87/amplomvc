@@ -79,7 +79,13 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->session->endTokenSession();
+		$to_save = array(
+			'messages' => 1,
+			'language' => 1,
+			'redirect' => 1,
+		);
+
+		$_SESSION = array_intersect_key($_SESSION, $to_save);
 
 		set_cookie('customer', null);
 

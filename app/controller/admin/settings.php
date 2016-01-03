@@ -20,7 +20,17 @@ class App_Controller_Admin_Settings extends Controller
 
 	public function restore_defaults()
 	{
-		$this->Model_Settings->restoreDefaults();
+		$first_install = !option('AMPLO_VERSION');
+
+		if ($this->Model_Settings->restoreDefaults()) {
+			if ($first_install) {
+				message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
+			} else {
+				message('success', _l("The Default Settings have been restored."));
+			}
+		} else {
+			message('error', $this->Model_Settings->fetchError());
+		}
 
 		redirect('admin');
 	}

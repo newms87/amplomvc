@@ -112,6 +112,22 @@ ini_set("session.cookie_domain", COOKIE_DOMAIN);
 session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
 session_start();
 
+//Clean Globals
+function _clean_global(&$value)
+{
+	$value = html_entity_decode($value, ENT_COMPAT);
+
+	if (get_magic_quotes_gpc()) {
+		$value = stripslashes($value);
+	}
+}
+
+array_walk_recursive($_GET, '_clean_global');
+array_walk_recursive($_POST, '_clean_global');
+array_walk_recursive($_REQUEST, '_clean_global');
+array_walk_recursive($_COOKIE, '_clean_global');
+array_walk_recursive($_SERVER, '_clean_global');
+
 // Unregister Globals
 if (ini_get('register_globals')) {
 	$globals = array(
@@ -171,6 +187,4 @@ require_once(_mod(DIR_SYSTEM . 'engine/cache.php'));
 
 // Common
 require_once(_mod(DIR_SYSTEM . 'library/config.php'));
-require_once(_mod(DIR_SYSTEM . 'library/log.php'));
-require_once(_mod(DIR_SYSTEM . 'library/session.php'));
 

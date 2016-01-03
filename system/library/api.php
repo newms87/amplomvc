@@ -44,10 +44,10 @@ class Api extends Library
 			return false;
 		}
 
-		$meta      = $this->Model_Meta->get('user', $user['user_id']);
-		$user_role = $this->Model_UserRole->getRole($this->api_user['user_role_id']);
+		$user['meta'] = $this->Model_Meta->get('user', $user['user_id']);
+		$user['role'] = $this->Model_UserRole->getRole($this->api_user['user_role_id']);
 
-		$this->user->setUser($user['user_id'], $user, $meta, $user_role);
+		$this->user->setUser($user);
 
 		if (!$this->api_token) {
 			$this->api_token = array(

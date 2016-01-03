@@ -13,11 +13,11 @@ class App_Model_Block_Login_Facebook extends Model
 
 	public function getStateToken()
 	{
-		if (!$this->session->has('fb_state')) {
-			$this->session->set('fb_state', md5(rand()));
+		if (!empty($_SESSION['fb_state'])) {
+			$_SESSION['fb_state'] = md5(rand());
 		}
 
-		return $this->session->get('fb_state');
+		return $_SESSION['fb_state'];
 	}
 
 	public function getConnectUrl()

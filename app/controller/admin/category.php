@@ -54,7 +54,7 @@ class App_Controller_Admin_Category extends App_Controller_Table
 			),
 			'template' => 'category/form',
 			'data'     => array(
-				'data_parents' => array('' => '(None)') + $this->Model_Category->getRecords(array('name' => 'ASC'), array('!category_id' => _request('category_id')), array('cache' => true)),
+				'data_parents' => array('' => '(None)') + $this->instance->getRecords(array('name' => 'ASC'), array('!category_id' => _request('category_id')), array('cache' => true)),
 			),
 		);
 
@@ -68,15 +68,15 @@ class App_Controller_Admin_Category extends App_Controller_Table
 				foreach ($batch as $category_id) {
 					switch ($action) {
 						case 'enable':
-							$this->Model_Category->save($category_id, array('status' => 1));
+							$this->instance->save($category_id, array('status' => 1));
 							break;
 
 						case 'disable':
-							$this->Model_Category->save($category_id, array('status' => 0));
+							$this->instance->save($category_id, array('status' => 0));
 							break;
 
 						case 'delete':
-							$this->Model_Category->remove($category_id);
+							$this->instance->remove($category_id);
 							break;
 					}
 				}

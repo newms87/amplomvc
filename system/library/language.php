@@ -41,7 +41,7 @@ class Language extends Library
 		}
 
 		if ($set_session) {
-			$this->session->set('language_code', $this->code);
+			$_SESSION['language_code'] = $this->code;
 
 			//Set as default language for this user for 30 days
 			set_cookie('language_code', $this->code, 3600 * 24 * 30);

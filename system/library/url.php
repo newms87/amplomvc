@@ -21,6 +21,16 @@ class Url extends Library
 		$this->loadAliases();
 	}
 
+	public function setUrl($url)
+	{
+		$this->url = $url;
+	}
+
+	public function setSsl($ssl)
+	{
+		$this->ssl = $ssl;
+	}
+
 	public function here($append_query = '')
 	{
 		if ($append_query) {
@@ -68,10 +78,9 @@ class Url extends Library
 
 	public function load($url, $admin = false)
 	{
-
 		if ($admin) {
 			//we save the session to the DB because we lose sessions when using cURL
-			$this->session->saveTokenSession();
+			$this->user->saveTokenSession();
 		}
 
 		session_write_close();
@@ -84,7 +93,7 @@ class Url extends Library
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
 		if ($admin) {
-			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . $this->session->get('token'));
+			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . _session('token'));
 		}
 
 		$data = curl_exec($ch);
