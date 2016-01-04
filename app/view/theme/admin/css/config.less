@@ -1,11 +1,11 @@
 /* Import Fonts */
 .import-font('RobotoBlack', 'roboto/roboto-black-webfont');
-.import-font('OpenSansRegular', 'opensans/opensans-regular-webfont');
-.import-font('OpenSansItalic', 'opensans/opensans-italic-webfont');
-.import-font('OpenSansBoldItalic', 'opensans/opensans-bolditalic-webfont');
-.import-font('OpenSansSemiBold', 'opensans/opensans-semibold-webfont');
-.import-font('OpenSansSemiBoldItalic', 'opensans/opensans-semibolditalic-webfont');
-.import-font('OpenSansBold', 'opensans/opensans-bold-webfont');
+.import-font('OpenSans', 'opensans/opensans-regular-webfont');
+.import-font('OpenSans', 'opensans/opensans-italic-webfont', 'italic');
+.import-font('OpenSans', 'opensans/opensans-semibold-webfont', 'normal', 600);
+.import-font('OpenSans', 'opensans/opensans-bold-webfont', 'normal', 700);
+.import-font('OpenSans', 'opensans/opensans-semibolditalic-webfont', 'italic', 600);
+.import-font('OpenSans', 'opensans/opensans-bolditalic-webfont', 'italic', 700);
 
 /* LESS config */
 @img-path: '@{base-path}image/';
@@ -46,32 +46,13 @@
 @color-delete: #D15252;
 @color-info: #CFA341;
 
-@link-normal: @color-light;
-@link-hover: @color-lighter;
-
-@font-light: #ffffff;
-@font-dark: #2f3d52;
+@color-font-light: #ffffff;
+@color-font-dark: #2f3d52;
 
 @bg-main: #ffffff;
 
 @font-stack: sans-serif, Arial, Helvetica;
 @font-size: 100%;
-
-//Messages
-@msg-background: #CFCFCF;
-@msg-color: @font-dark;
-
-@msg-success-background: #EAF7D9;
-@msg-success-color: @font-dark;
-
-@msg-error-background: #FFD1D1;
-@msg-error-color: @font-dark;
-
-@msg-attention-background: #FFFBE9;
-@msg-attention-color: @font-dark;
-
-@msg-notify-background: #E6F1FB;
-@msg-notify-color: @font-dark;
 
 @import '@{style-path}reset';
 @import '@{style-path}base';

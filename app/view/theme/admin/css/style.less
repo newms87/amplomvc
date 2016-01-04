@@ -1,8 +1,7 @@
 @import 'listings';
 
 body {
-	font-size: 12px;
-	font-family: OpenSansRegular;
+	font: @font-size @font-stack;
 }
 
 input[type='text'], input[type='password'] {
@@ -80,7 +79,8 @@ td {
 	.overview-section {
 		h2 {
 			margin-top: 2em;
-			font: 2em OpenSansBold;
+			font-size: 2em;
+			font-weight: bold;
 		}
 	}
 }
@@ -96,7 +96,8 @@ form {
 .form-section {
 	& > .row {
 		& > label {
-			font: 1.1em OpenSansSemiBold;
+			font-size: 1.1em;
+			font-weight: 600;
 		}
 
 		& + .row {
@@ -333,12 +334,14 @@ form {
 
 	.header-secure {
 		padding: 1.5em;
-		font: 1.2em OpenSansSemiBold;
+		font-size: 1.2em;
+		font-weight: 600;
 	}
 
 	.header-support {
 		padding: 0 1.5em 1.5em;
-		font: 1.2em OpenSansBold;
+		font-size: 1.2em;
+		font-weight: bold;
 	}
 }
 
@@ -719,8 +722,9 @@ form {
 	}
 
 	.msg {
-		font: 1.3em OpenSansSemiBold;
-		color: @font-dark;
+		font-size: 1.3em;
+		font-weight: 600;
+		color: @color-font-dark;
 		position: relative;
 		z-index: 10;
 	}
@@ -910,7 +914,7 @@ button, .button {
 	display: inline-block;
 	padding: 6px 12px;
 	font-size: 1.2em;
-	color: @font-light;
+	color: @color-font-light;
 	background: @color-light;
 	border-radius: 3px;
 	border: none;
@@ -921,11 +925,11 @@ button, .button {
 	max-width: 100%;
 
 	&:visited {
-		color: @font-light;
+		color: @color-font-light;
 	}
 
 	&:hover, &:active {
-		color: @font-light;
+		color: @color-font-light;
 		background: @color-lighter;
 	}
 
@@ -945,10 +949,10 @@ button, .button {
 
 	&.light {
 		padding: .45em .8em;
-		border: 2px solid @font-dark;
+		border: 2px solid @color-font-dark;
 		border-radius: 1px;
 		background: transparent;
-		color: @font-dark;
+		color: @color-font-dark;
 	}
 }
 
@@ -3373,7 +3377,8 @@ td.log_remove .message {
 		margin-bottom: 2em;
 		input {
 			padding: .5em;
-			font: 1.3em OpenSansSemiBold;
+			font-size: 1.3em;
+			font-weight: 600;
 			color: @color-secondary;
 		}
 
@@ -3392,24 +3397,22 @@ td.log_remove .message {
 				box-sizing: border-box;
 
 				.name {
-					font: 1.8em OpenSansBold;
+					font-size: 1.8em;
+					font-weight: bold;
 					text-decoration: underline;
 					margin-bottom: 1em;
 				}
 
 				.description {
-					font: 1.2em OpenSansRegular;
+					font-size: 1.2em;
 					height: 10em;
 					overflow: auto;
 				}
 
 				.buttons {
 					margin-top: 2em;
-					font: 1.4em OpenSansSemiBold;
-
-					.download {
-
-					}
+					font-size: 1.4em;
+					font-weight: 600;
 				}
 			}
 		}

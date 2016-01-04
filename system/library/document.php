@@ -332,6 +332,10 @@ class Document extends Library
 				'import_callback' => function ($a) {
 					$value = $a->path->value;
 
+					if (!is_string($value)) {
+						return;
+					}
+
 					if (strpos($value, '/') === 0) {
 						if (!is_file($file = $_SERVER['DOCUMENT_ROOT'] . $a->path->value)) {
 							if (!is_file($file = $file . '.less')) {

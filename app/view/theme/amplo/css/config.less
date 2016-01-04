@@ -1,20 +1,28 @@
 /* Import Fonts */
 .import-font('RobotoBlack', 'roboto/roboto-black-webfont');
-.import-font('OpenSansRegular', 'opensans/opensans-regular-webfont');
-.import-font('OpenSansItalic', 'opensans/opensans-italic-webfont');
-.import-font('OpenSansBoldItalic', 'opensans/opensans-bolditalic-webfont');
-.import-font('OpenSansSemiBold', 'opensans/opensans-semibold-webfont');
-.import-font('OpenSansSemiBoldItalic', 'opensans/opensans-semibolditalic-webfont');
-.import-font('OpenSansBold', 'opensans/opensans-bold-webfont');
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,600italic,600,400italic,700italic);
+
+//.import-font('OpenSans', 'opensans/opensans-regular-webfont');
+//.import-font('OpenSans', 'opensans/opensans-italic-webfont', 'italic');
+//.import-font('OpenSans', 'opensans/opensans-semibold-webfont', 'normal', 600);
+//.import-font('OpenSans', 'opensans/opensans-bold-webfont', 'normal', 'bold');
+//.import-font('OpenSans', 'opensans/opensans-semibolditalic-webfont', 'italic', 600);
+//.import-font('OpenSans', 'opensans/opensans-bolditalic-webfont', 'italic', 700);
 
 /**
   * General: ---
   * @color-main: The primary theme color
   * @color-secondary: The secondary theme color
-  * @font-base-family: Font Family Stack - The font families to use in order (eg: Arial, Helvetica, sans-serif)
-  * @font-base: Font Size / Family - The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
-  * @font-dark: Font Dark - The primary text color for dark text
-  * @font-light: Font Light - The primary text color for light text
+  * @font-stack: Font Family Stack - The font families to use in order (eg: Arial, Helvetica, sans-serif)
+  * @font-size: Font Size - The base font size. This will scale the entire theme so be careful using this!! Target individual font sizes using css / less styling in a stylesheet.
+  * @color-font-dark: Font Dark - The primary text color for dark text
+  * @color-font-light: Font Light - The primary text color for light text
+
+  * Colors: ---
+  * @color-success: Color indicating success
+  * @color-notify: Color indicating a notification
+  * @color-attention: Color indicating something should be brought to users attention
+  * @color-error: Color indicating an error
 
   * Layout: ---
   * @xs: Device targeting for Extra Small (eg: Smart Phones) Screen Sizes
@@ -27,32 +35,6 @@
   * @page-width-sm: Page width for @sm sized devices
   * @page-width-md: Page width for @md sized screens
   * @page-width-lg: Page width for @lg sized screens
-
-  * Links: ---
-  * @link-font: Link font-size and font-family
-  * @link-font-hover: Link font-size and font-family for hover / active state
-  * @link-color: Link color
-  * @link-color-hover: Link color for hover / active state
-
-  * Messages: ---
-  * @msg-color: The default foreground color for messages
-  * @msg-background: The default background color for messages
-  * @msg-success-color: The foreground color for success type messages
-  * @msg-success-background: The background color for success type messages
-  * @msg-error-color: The foreground color for error type messages
-  * @msg-error-background: The background color for error type messages
-  * @msg-attention-color: The foreground color for attention type messages
-  * @msg-attention-background: The background color for attention type messages
-  * @msg-notify-color: The foreground color for notify type messages
-  * @msg-notify-background: The background color for notify type messages
-
-  * Section Styling: ---
-  * @header: Header Styling (full) - Style for the Header section
-  * @footer: Footer Styling (full) - Style for the Footer section
-  * @style-a: Section A Styling (full) - Style for the Section A
-  * @style-b: Section B Styling (full) - Style for the Section B
-  * @style-c: Section C Styling (full) - Style for the Section C
-  * @style-d: Section D Styling (full) - Style for the Section D
 
 */
 
@@ -87,6 +69,13 @@
 @color-gray: #BCC6B7;
 @color-gray-dark: #3A3A3A;
 
+//Colors
+@color-success: #D7EDD7;
+@color-attention: #FFFBE9;
+@color-notify: #E6F1FB;
+@color-error: #D15252;
+@color-error-light: #FFD1D1;
+
 //Legacy Styling
 @color-lightest: lighten(@color-main, 50%);
 @color-lighter: lighten(@color-main, 25%);
@@ -98,50 +87,12 @@
 @selectable-hover: #F2F9F2;
 
 //Default Fonts
-@font-base-family: OpenSansRegular, Helvetica, sans-serif;
-@font-base: 100% @font-base-family;
-@font-base-color: @color-main;
-@font-light: lighten(@color-main, 25%);
-@font-dark: #424242;
-
-//Default Links
-@link-font: 1em;
-@link-color: @color-secondary;
-@link-font-hover: @link-font;
-@link-color-hover: lighten(@link-color, 25%);
-
-//Headers
-@h1-color: @font-base-color;
-@h1-font: 1.7em RobotoBlack;
-@h2-color: @font-base-color;
-@h2-font: 1.5em RobotoBlack;
-@h3-color: @font-base-color;
-@h3-font: 1em RobotoBlack;
-@h4-color: @font-base-color;
-@h4-font: 1.1em;
-@h5-color: @font-base-color;
-@h5-font: 1em;
-@h6-color: @font-base-color;
-@h6-font: .8em;
-
-//Messages
-@msg-background: #CFCFCF;
-@msg-color: @font-dark;
-
-@msg-success-background: #D7EDD7;
-@msg-success-color: @font-dark;
-
-@msg-error-background: #FFD1D1;
-@msg-error-color: @font-dark;
-
-@msg-attention-background: #FFFBE9;
-@msg-attention-color: @font-dark;
-
-@msg-notify-background: #E6F1FB;
-@msg-notify-color: @font-dark;
-
-//Error
-@error-color: #D15252;
+@font-stack: "Open Sans", Helvetica, sans-serif;
+@font-stack-alt: RobotoBlack;
+@font-size: 100%;
+@font-default: @font-size @font-stack;
+@color-font-light: lighten(@color-main, 25%);
+@color-font-dark: #424242;
 
 /* Imports */
 @import 'style';
