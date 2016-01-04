@@ -1,11 +1,18 @@
 <?php
 
 /**
+ * @author  Daniel Newman
+ * @date    3/20/2013
+ * @package Amplo MVC
+ * @link    http://amplomvc.com/
+ *
  * Class App_Controller_Admin_Settings_Login
  * Title: Login Settings
  * Icon: login.png
  * Order: 5
  *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
 class App_Controller_Admin_Settings_Login extends Controller
 {
@@ -40,7 +47,7 @@ class App_Controller_Admin_Settings_Login extends Controller
 				'application_name' => '',
 			),
 
-			'facebook'    => array(
+			'facebook' => array(
 				'active'     => '',
 				'app_id'     => '',
 				'app_secret' => '',

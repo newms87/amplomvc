@@ -1,9 +1,17 @@
 <?php
 
 /**
+ * @author  Daniel Newman
+ * @date    3/20/2013
+ * @package Amplo MVC
+ * @link    http://amplomvc.com/
+ *
  * Title: URL Aliases
  * Icon: alias.png
  * Order: 7
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
 class App_Controller_Admin_Settings_UrlAlias extends Controller
 {
@@ -67,14 +75,14 @@ class App_Controller_Admin_Settings_UrlAlias extends Controller
 		unset($url_alias);
 
 		$listing += array(
-			'extra_cols'     => $this->Model_UrlAlias->getColumns(false),
-			'records'        => $url_aliases,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total' => $total,
-			'listing_path'   => 'admin/settings/url_alias/listing',
-			'save_path'      => 'admin/settings/url_alias/save',
+			'extra_cols'   => $this->Model_UrlAlias->getColumns(false),
+			'records'      => $url_aliases,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'total'        => $total,
+			'listing_path' => 'admin/settings/url_alias/listing',
+			'save_path'    => 'admin/settings/url_alias/save',
 		);
 
 		$output = block('widget/listing', null, $listing + $options);

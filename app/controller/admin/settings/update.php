@@ -1,12 +1,20 @@
 <?php
-
 /**
- * Class App_Controller_Admin_Settings_Update
+ * @author  Daniel Newman
+ * @date    3/20/2013
+ * @package Amplo MVC
+ * @link    http://amplomvc.com/
  *
  * Title: System Update
  * Icon: system-update.png
  * Order: 1
  *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
+
+/**
+ * Class App_Controller_Admin_Settings_Update
  */
 class App_Controller_Admin_Settings_Update extends Controller
 {

@@ -1,8 +1,16 @@
 <?php
-//Amplo MVC Version
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
+
 define('AMPLO_VERSION', '0.3.6');
 
-// Configuration
 if (is_file(dirname(__FILE__) . '/config.php')) {
 	include_once(dirname(__FILE__) . '/config.php');
 }
