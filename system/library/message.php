@@ -106,7 +106,7 @@ class Message extends Library
 		return $this->messages;
 	}
 
-	public function fetch($type = '')
+	public function fetch($type = null)
 	{
 		if (empty($this->messages)) {
 			return array();
@@ -128,6 +128,17 @@ class Message extends Library
 		$this->messages = array();
 
 		return $msgs;
+	}
+
+	public function clear($type = null)
+	{
+		if ($type) {
+			unset($this->messages[$type]);
+		} else {
+			$this->messages = array();
+		}
+
+		return true;
 	}
 
 	public function render($type = null, $close = true, $style = null)

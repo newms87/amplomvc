@@ -448,7 +448,7 @@ $.ampExtend($.ampToggle = function() {}, {
 		o.toggle.addClass(o.toggleClass).removeClass(o.hideToggleClass);
 		o.content.addClass(o.contentClass).removeClass(o.hideContentClass);
 		$.ampToggle.active = $this;
-		setTimeout(function(){
+		setTimeout(function() {
 			document.addEventListener('click', $.ampToggle._blur, true);
 		}, 100);
 
@@ -1145,8 +1145,10 @@ $.fn.tabs = function(opts) {
 };
 
 $.fn.show_msg = function(type, msg, o) {
+	var $context = $(this);
+
 	if (type === 'clear') {
-		return $(this).find('.messages').remove();
+		return $context.find('.messages').remove();
 	}
 
 	//Data types are not messages
@@ -1176,22 +1178,28 @@ $.fn.show_msg = function(type, msg, o) {
 		append_list: false,
 		delay:       false,
 		close:       true,
-		clear:       true
+		clear:       true,
+		flagErrors:  true
 	}, o);
 
 	if (o.clear) {
-		(o.inline ? this : $('#message-box')).find('.messages').remove();
+		(o.inline ? $context : $('#message-box')).find('.messages').remove();
 	}
 
 	if (typeof msg === 'object') {
 		for (var m in msg) {
 			o.clear = false;
-			this.show_msg(type || m, msg[m], o);
+
+			if (o.flagErrors && type === 'error') {
+				$context.find('[name=' + m + '], [data-msg-error=' + m + ']').addClass('has-error');
+			}
+
+			$context.show_msg(type || m, msg[m], o);
 		}
-		return this;
+		return $context;
 	}
 
-	return this.each(function(i, e) {
+	return $context.each(function(i, e) {
 		var $e = o.inline ? $(e) : $('#message-box');
 
 		if (!$e.length) {
@@ -1869,7 +1877,10 @@ $(document)
 
 		if (($onClick = $n.closest('.on-click')).length) {
 			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
-				$onClick.ampToggle({content: $onClick.attr('data-amp-toggle') || $onClick, toggleClass: 'is-active'}).click();
+				$onClick.ampToggle({
+					content:     $onClick.attr('data-amp-toggle') || $onClick,
+					toggleClass: 'is-active'
+				}).click();
 			} else {
 				$onClick.toggleClass('is-active');
 
