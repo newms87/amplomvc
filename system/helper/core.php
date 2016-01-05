@@ -276,7 +276,7 @@ function register_routing_hook($name, $callable, $sort_order = 0)
 
 /**
  * Customized routing for special cases. Set a new $path to change the controller / method to call.
- * Or use $registry->get('route')->setPath($path) to emulate the browser calling the controller / method.
+ * Or use $registry->get('router')->setPath($path) to emulate the browser calling the controller / method.
  *
  * To register your own routing hook use $this->router->registerRoutingHook('my-hook-name', 'my_routing_hook');
  * in your plugin's setup.php install() method.
@@ -639,7 +639,7 @@ function _set_site($site)
 	if ($site) {
 		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 
-		$registry->get('route')->setSite($site);
+		$registry->get('router')->setSite($site);
 
 		return true;
 	}
