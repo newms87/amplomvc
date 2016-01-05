@@ -1488,7 +1488,9 @@ function register_confirms() {
 
 function register_ajax_calls(is_ajax) {
 	$('form').use_once('data-loading-set').submit(function() {
-		$(this).find('button[data-loading]').loading();
+		var $this = $(this);
+		$this.find('button[data-loading]').loading();
+		$this.find('.has-error').removeClass('has-error');
 	});
 
 	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-modal]').amplo_ajax();
