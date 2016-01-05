@@ -1,14 +1,22 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Cache
 {
-	private $expired, $dir;
-	private $loaded = array();
+	private
+		$dir,
+		$loaded = array();
 
 	public function __construct($dir = null)
 	{
-		//$this->expired = _time() - CACHE_FILE_EXPIRATION;
-
 		$this->setDir($dir ? $dir : DIR_CACHE . DB_PREFIX);
 	}
 
@@ -16,6 +24,7 @@ class Cache
 	{
 		if (_is_writable($dir, $error)) {
 			$this->dir = rtrim($dir, '/') . '/';
+
 			return true;
 		}
 
@@ -63,6 +72,7 @@ class Cache
 				//Check for bad data
 				if ($data === false && $str !== serialize(false)) {
 					unlink($file);
+
 					return null;
 				}
 

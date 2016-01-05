@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Customer extends Controller
 {
@@ -6,7 +15,7 @@ class App_Controller_Customer extends Controller
 	{
 		parent::__construct();
 
-		switch ($this->route->getAction()->getMethod()) {
+		switch ($this->router->getAction()->getMethod()) {
 			//allow access only to these pages if logged in
 			case 'logout':
 			case 'success':
@@ -55,8 +64,6 @@ class App_Controller_Customer extends Controller
 		} elseif (!$this->is_ajax && !$this->request->hasRedirect()) {
 			$this->request->setRedirect();
 		}
-
-		echo $this->request->getRedirect();
 
 		//Block Settings
 		$defaults = array(

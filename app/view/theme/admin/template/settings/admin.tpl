@@ -24,6 +24,10 @@
 			<div id="tab-general">
 				<table class="form">
 					<tr>
+						<td>{{Admin Home Path}}</td>
+						<td><input type="text" name="admin_path" value="<?= $admin_path; ?>"/></td>
+					</tr>
+					<tr>
 						<td>{{Administration Language:}}</td>
 						<td>
 							<?= build(array(
@@ -174,7 +178,7 @@
 <script type="text/javascript">
 	$('[name=admin_logo]').ac_imageinput({width: '<?= $admin_logo_width; ?>', height: '<?= $admin_logo_height; ?>'});
 
-	$('[name=admin_logo_width],[name=admin_logo_height]').change(function () {
+	$('[name=admin_logo_width],[name=admin_logo_height]').change(function() {
 		var w = $('[name=admin_logo_width]').val();
 		var h = $('[name=admin_logo_height]').val();
 		$('[name=admin_logo]').siblings('.thumb').css({
@@ -183,7 +187,7 @@
 		});
 	});
 
-	$('#generate-icons').click(function () {
+	$('#generate-icons').click(function() {
 		var $this = $(this);
 		var icon = $('[name="admin_icon[orig]"]').val();
 
@@ -192,7 +196,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function(json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');

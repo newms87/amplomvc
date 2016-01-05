@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Page extends Controller
 {
@@ -7,7 +16,7 @@ class App_Controller_Page extends Controller
 		//The page
 		$page_id = _get('page_id');
 
-		$page = $this->Model_Page->getPage($page_id ? $page_id : $this->route->getSegment(1));
+		$page = $this->Model_Page->getPage($page_id ? $page_id : $this->router->getSegment(1));
 
 		if (!$page) {
 			return call('error/not_found');

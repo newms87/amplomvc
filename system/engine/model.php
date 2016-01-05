@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 abstract class Model
 {
@@ -399,7 +408,7 @@ abstract class Model
 			);
 
 			if ($message) {
-				$history['message'] = $message === true ? $this->route->getPath() : $message;
+				$history['message'] = $message === true ? $this->router->getPath() : $message;
 			}
 
 			$this->insert('history', $history);

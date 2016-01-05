@@ -9,11 +9,7 @@
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
 
-class App_Controller_Footer extends Controller
+class App_Model_Session extends App_Model_Table
 {
-	public function index()
-	{
-		//Render
-		$this->render('footer');
-	}
+	protected $table = 'session', $primary_key = 'session_id';
 }

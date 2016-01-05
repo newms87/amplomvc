@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Captcha extends Library
 {
@@ -10,7 +19,7 @@ class Captcha extends Library
 	{
 		$this->code = substr(sha1(mt_rand()), 17, 6);
 
-		$this->session->set('captcha', $this->code);
+		$_SESSION['captcha'] = $this->code;
 
 		$this->getImage();
 	}
@@ -50,6 +59,6 @@ class Captcha extends Library
 
 	public function validate($code)
 	{
-		return $this->session->get('captcha') === $code;
+		return _session('captcha') === $code;
 	}
 }

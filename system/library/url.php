@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Url extends Library
 {
@@ -21,6 +30,16 @@ class Url extends Library
 		$this->loadAliases();
 	}
 
+	public function setUrl($url)
+	{
+		$this->url = $url;
+	}
+
+	public function setSsl($ssl)
+	{
+		$this->ssl = $ssl;
+	}
+
 	public function here($append_query = '')
 	{
 		if ($append_query) {
@@ -33,7 +52,7 @@ class Url extends Library
 			$query = $_GET;
 		}
 
-		return $this->link($this->route->getPath(), $query);
+		return $this->link($this->router->getPath(), $query);
 	}
 
 	public function reload_page()
@@ -68,10 +87,9 @@ class Url extends Library
 
 	public function load($url, $admin = false)
 	{
-
 		if ($admin) {
 			//we save the session to the DB because we lose sessions when using cURL
-			$this->session->saveTokenSession();
+			$this->user->saveTokenSession();
 		}
 
 		session_write_close();
@@ -84,7 +102,7 @@ class Url extends Library
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
 		if ($admin) {
-			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . $this->session->get('token'));
+			curl_setopt($ch, CURLOPT_COOKIE, 'token=' . _session('token'));
 		}
 
 		$data = curl_exec($ch);

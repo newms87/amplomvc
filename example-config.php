@@ -16,11 +16,11 @@ define('SITE_BASE', '/');
 //ROOT DIRECTORY
 define('DIR_SITE', str_replace('\\', '/', dirname(__FILE__) . '/'));
 
-//The default page to show when your site is accessed via the base URL. (eg: http://your-domain.com/)
-define("DEFAULT_PATH", 'index');
+//The Homepage. Can be changed via General Settings. Use this to override. (eg: http://your-domain.com/)
+//$_options['homepage_path'] = 'index';
 
-//The page to show when no page controller is found (eg: https://your-domain.com/unknown-url)
-define("ERROR_404_PATH", 'error/not_found');
+//The Error 404 Not Found page. Can be changed via General Settings. Use this to override. (eg: https://your-domain.com/unknown-url)
+//$_options['error_404_path'] = 'error/not_found';
 
 //Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
 // and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)

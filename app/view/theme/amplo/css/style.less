@@ -22,34 +22,8 @@ html, body {
 }
 
 body {
-	.render-font(@font-base);
-	color: @font-dark;
-}
-
-.color-main {
-	color: @color-main !important;
-}
-
-#container {
-	position: relative;
-	box-sizing: border-box;
-	min-height: 99%;
-	width: 100%;
-	overflow-x: hidden;
-}
-
-body.scroll-top {
-	#container {
-		header.main-header {
-			position: relative;
-			box-shadow: none;
-		}
-
-		main.main {
-			height: 100%;
-			padding-top: 0 !important;
-		}
-	}
+	font: @font-size @font-stack normal normal;
+	color: @color-font-dark;
 }
 
 img {
@@ -64,44 +38,36 @@ img {
 a {
 	text-decoration: none;
 	outline: 0;
-	.render-font(@link-font);
-	color: @link-color;
+	color: @color-main;
 	cursor: pointer;
 
 	&:hover, &:active {
-		.render-font(@link-font-hover);
-		color: @link-color-hover;
+		color: @color-secondary;
 	}
 }
 
 h1 {
-	color: @h1-color;
-	.render-font(@h1-font);
+	font: 2.5em @font-stack-alt;
 }
 
 h2 {
-	color: @h2-color;
-	.render-font(@h2-font);
+	font: 2em @font-stack-alt;
 }
 
 h3 {
-	color: @h3-color;
-	.render-font(@h3-font);
+	font: 1.3em @font-stack-alt;
 }
 
 h4 {
-	color: @h4-color;
-	.render-font(@h4-font);
+	font: 1.1em @font-stack-alt;
 }
 
 h5 {
-	color: @h5-color;
-	.render-font(@h5-font);
+	font: 1em @font-stack-alt;
 }
 
 h6 {
-	color: @h6-color;
-	.render-font(@h6-font);
+	font: 1em @font-stack;
 }
 
 input, select, textarea {
@@ -152,13 +118,19 @@ input, select, textarea {
 	text-align: left;
 }
 
+.color-main {
+	color: @color-main !important;
+}
+
 /*************************
  *  II. Components        *
  *************************/
-body.common-maintenance {
-	.main-header {
-		display: none;
-	}
+#container {
+	position: relative;
+	box-sizing: border-box;
+	min-height: 100%;
+	width: 100%;
+	overflow-x: hidden;
 }
 
 #maintenance-mode {
@@ -192,33 +164,27 @@ body.common-maintenance {
 	position: relative;
 	padding: .5em 2em .5em 1em;
 	margin: 0 auto;
-	color: @msg-color;
-	background-color: @msg-background;
 	font-size: .9em;
 	clear: both;
 
 	b {
-		font-family: OpenSansBold;
+		font-weight: bold;
 	}
 
 	&.success {
-		background: @msg-success-background;
-		color: @msg-success-color;
+		background: @color-success;
 	}
 
 	&.error, &.warning {
-		background: @msg-error-background;
-		color: @msg-error-color;
+		background: @color-error-light;
 	}
 
 	&.attention {
-		background: @msg-attention-background;
-		color: @msg-attention-color;
+		background: @color-attention;
 	}
 
 	&.notify {
-		background: @msg-notify-background;
-		color: @msg-notify-color;
+		background: @color-notify;
 	}
 
 	.close {
@@ -246,13 +212,13 @@ body.common-maintenance {
 	margin: 1em auto;
 
 	.messages {
-		border: 2px solid @msg-color;
+		border: 2px solid @color-font-dark;
 	}
 }
 
 .error {
 	display: block;
-	color: @error-color;
+	color: @color-error;
 }
 
 //Button (use .row for section-style-x override)
@@ -267,7 +233,7 @@ button, .button, .row .button {
 	text-decoration: none;
 	outline: 0;
 	cursor: pointer;
-	font: 1em OpenSansBold;
+	font-weight: bold;
 	text-transform: uppercase;
 	color: white;
 	background: @color-main;
@@ -286,10 +252,10 @@ button, .button, .row .button {
 
 	.light {
 		padding: .45em .8em;
-		border: 2px solid @font-dark;
+		border: 2px solid @color-font-dark;
 		border-radius: 1px;
 		background: transparent;
-		color: @font-dark;
+		color: @color-font-dark;
 	}
 }
 
@@ -330,7 +296,7 @@ button, .button, .row .button {
 			& + a, & + .link {
 				margin-left: .5em;
 				padding-left: .5em;
-				border-left: 1px solid @color-secondary;
+				border-left: 1px solid @color-font-dark;
 			}
 		}
 	}
@@ -356,41 +322,7 @@ button, .button, .row .button {
 
 	.link-logout {
 		a {
-			color: @font-dark;
-		}
-	}
-}
-
-//Image Checboxes
-.image-checkbox, .form-item input.image-checkbox[type="checkbox"] {
-	position: absolute;
-	left: -9999px;
-
-	& + label {
-		color: #BBBBBB;
-		width: auto;
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0;
-		top: 0;
-		left: 0;
-		min-width: 180px;
-
-		img {
-			filter: gray;
-			-webkit-filter: grayscale(1);
-			position: relative;
-			display: inline-block;
-			vertical-align: middle;
-		}
-	}
-
-	&:checked + label, &.checked + label {
-		color: @color-dark;
-
-		img {
-			filter: none;
-			-webkit-filter: grayscale(0);
+			color: @color-font-dark;
 		}
 	}
 }
@@ -461,13 +393,27 @@ header.main-header.row {
 	.terms-agreement {
 		background: #D7EDD7;
 		border-bottom: #7CC57C;
-		font: .9em OpenSansRegular;
-		color: @font-dark;
+		font-size: .9em;
+		color: @color-font-dark;
 		padding: .75em;
 
 		a {
-			color: @font-dark;
+			color: @color-font-dark;
 			text-decoration: underline;
+		}
+	}
+}
+
+body.scroll-top {
+	#container {
+		header.main-header {
+			position: relative;
+			box-shadow: none;
+		}
+
+		main.main {
+			height: 100%;
+			padding-top: 0 !important;
 		}
 	}
 }
@@ -591,7 +537,7 @@ header.main-header.row {
 
 		h2 {
 			color: white;
-			font: 1.5em OpenSansRegular;
+			font-size: 1.5em;
 			text-transform: uppercase;
 			text-align: left;
 		}
@@ -632,7 +578,8 @@ header.main-header.row {
 		padding: 3em 0;
 
 		h2 {
-			font: 1.5em OpenSansBold;
+			font-size: 1.5em;
+			font-weight: bold;
 			text-transform: uppercase;
 			text-align: left;
 		}
@@ -672,8 +619,9 @@ header.main-header.row {
 	position: relative;
 
 	.msg {
-		font: 1.3em OpenSansSemiBold;
-		color: @font-dark;
+		font-size: 1.3em;
+		font-weight: 600;
+		color: @color-font-dark;
 		position: relative;
 		z-index: 10;
 	}
@@ -701,7 +649,7 @@ header.main-header.row {
 		.bar-msg {
 			position: relative;
 			z-index: 10;
-			font: 1em OpenSansSemiBold;
+			font-weight: 600;
 			color: white;
 		}
 	}
@@ -823,7 +771,7 @@ select {
 textarea {
 	box-sizing: border-box;
 	background: white;
-	border: @font-base-color 1px solid;
+	border: @color-dark 1px solid;
 	border-radius: 5px;
 	padding: .3em .6em;
 	outline: none;
@@ -958,12 +906,13 @@ textarea {
 			text-transform: uppercase;
 			margin-bottom: .7em;
 			color: @color-dark;
-			font: 1.5em OpenSansSemiBold;
+			font-size: 1.5em;
+			font-weight: 600;
 		}
 
 		h3 {
 			text-transform: uppercase;
-			font: 1em OpenSansItalic;
+			font-style: italic;
 			color: @color-secondary;
 			margin-bottom: .4em;
 		}
@@ -991,7 +940,8 @@ textarea {
 		.buttons {
 			margin-top: 1em;
 			.forgotten {
-				font: .9em OpenSansItalic;
+				font-size: .9em;
+				font-style: italic;
 
 				a {
 					color: @color-dark;
@@ -1010,7 +960,8 @@ textarea {
 				display: inline-block;
 
 				a {
-					font: .9em OpenSansItalic;
+					font-size: .9em;
+					font-style: italic;
 					cursor: pointer;
 					color: @color-dark;
 
@@ -1087,7 +1038,7 @@ section.page {
 			}
 
 			.sub-title {
-				font: .9em OpenSansRegular;
+				font-size: .9em;
 				margin-top: 1em;
 			}
 		}
@@ -1155,8 +1106,8 @@ section.page {
 .side-menu {
 	.menu-tab {
 		position: relative;
-		font: 1em OpenSansRegular;
-		color: @font-dark;
+		font-size: 1em;
+		color: @color-font-dark;
 		display: block;
 		padding: .8em .5em;
 		text-transform: uppercase;
@@ -1173,7 +1124,7 @@ section.page {
 
 	.link-menu {
 		a {
-			color: @font-dark;
+			color: @color-font-dark;
 
 			&:hover, &.active {
 				color: @color-main;
@@ -1255,13 +1206,13 @@ section.page {
 
 			h5 {
 				text-transform: uppercase;
-				font-family: OpenSansBold;
+				font-weight: bold;
 				color: @color-secondary;
 			}
 
 			.text {
 				margin-top: 1em;
-				font: .9em OpenSansRegular;
+				font-size: .9em;
 				text-transform: none;
 			}
 		}
@@ -1276,7 +1227,7 @@ section.page {
 
 			input + .label .text, .text {
 				text-transform: uppercase;
-				font-family: OpenSansBold;
+				font-weight: bold;
 				position: absolute;
 				bottom: 1em;
 				left: 0;
@@ -1369,8 +1320,8 @@ section.page {
 		input[type="text"], input[type="password"], select {
 			padding: .6em;
 			border-radius: 3px;
-			font: 1em OpenSansRegular;
-			color: @font-dark;
+			font-size: 1em;
+			color: @color-font-dark;
 			width: 100%;
 			max-width: 100%;
 		}
@@ -1380,15 +1331,15 @@ section.page {
 		margin-bottom: 1.2em;
 
 		h3 {
-			font: 1em OpenSansBold;
-			color: @font-dark;
+			font-weight: bold;
+			color: @color-font-dark;
 			text-transform: uppercase;
 		}
 	}
 
 	.field {
-		font: .9em OpenSansRegular;
-		color: @font-light;
+		font-size: .9em;
+		color: @color-font-light;
 
 		& + .field {
 			margin-top: 1em;
@@ -1396,8 +1347,9 @@ section.page {
 	}
 
 	.value {
-		font: .9em OpenSansSemiBold;
-		color: @font-dark;
+		font-size: .9em;
+		font-weight: 600;
+		color: @color-font-dark;
 	}
 
 	.buttons {
@@ -1410,15 +1362,15 @@ section.page {
 			margin: 0;
 			padding: .5em 1.2em;
 			box-sizing: border-box;
-			font: .9em OpenSansRegular;
+			font-size: .9em;
 			width: 100%;
 			min-width: 0;
 		}
 
 		a {
 			cursor: pointer;
-			font: 1em OpenSansItalic;
-			color: @font-light;
+			font-style: italic;
+			color: @color-font-light;
 			text-decoration: underline;
 		}
 
@@ -1434,7 +1386,7 @@ section.page {
 
 		&[readonly], [readonly] {
 			padding: 0;
-			font: .9em OpenSansRegular;
+			font-size: .9em;
 			background: none;
 			border: none;
 			box-shadow: none;
@@ -1469,10 +1421,10 @@ section.page {
 
 	.contact-info {
 		margin-top: 1em;
-		font: .9em OpenSansRegular;
+		font-size: .9em;
 
 		.site-name {
-			font: 1em OpenSansBold;
+			font-weight: bold;
 		}
 	}
 
@@ -1484,7 +1436,7 @@ section.page {
 		form {
 			input, textarea {
 				padding: .5em 1em;
-				font: .9em OpenSansRegular;
+				font-size: .9em;
 				box-shadow: none;
 				border: 1px solid @color-dark;
 				width: 100%;
@@ -1532,14 +1484,15 @@ section.page {
 			.question {
 				cursor: pointer;
 				margin-bottom: .5em;
-				font: 1.1em OpenSansBold;
+				font-weight: bold;
+				font-size: 1.1em;
 				color: @color-gray;
 			}
 
 			.answer {
 				.height-animate;
-				font: .9em OpenSansRegular;
-				color: @font-light;
+				font-size: .9em;
+				color: @color-font-light;
 			}
 
 			&.show {
@@ -1583,8 +1536,8 @@ section.page {
 			margin-top: 1.5em;
 		}
 		.formatted {
-			font: .9em OpenSansRegular;
-			color: @font-light;
+			font-size: .9em;
+			color: @color-font-light;
 			line-height: 1.5em;
 		}
 
@@ -1657,7 +1610,7 @@ footer.site-footer {
 
 		a {
 			color: @color-dark;
-			font-family: OpenSansSemiBold;
+			font-weight: 600;
 
 			&:hover {
 				color: lighten(@color-dark, 25%);

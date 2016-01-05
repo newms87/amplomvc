@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Admin_ApiUser extends App_Controller_Table
 {
@@ -70,15 +79,15 @@ class App_Controller_Admin_ApiUser extends App_Controller_Table
 				foreach ($batch as $api_user_id) {
 					switch ($action) {
 						case 'enable':
-							$this->Model_ApiUser->save($api_user_id, array('status' => 1));
+							$this->instance->save($api_user_id, array('status' => 1));
 							break;
 
 						case 'disable':
-							$this->Model_ApiUser->save($api_user_id, array('status' => 0));
+							$this->instance->save($api_user_id, array('status' => 0));
 							break;
 
 						case 'delete':
-							$this->Model_ApiUser->remove($api_user_id);
+							$this->instance->remove($api_user_id);
 							break;
 					}
 				}

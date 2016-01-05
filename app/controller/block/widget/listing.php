@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 /**
  * Class App_Controller_Block_Widget_Listing
@@ -25,7 +34,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 			'show_charts'         => true,
 			'show_actions'        => true,
 			'show_messages'       => null,
-			'listing_path'        => $this->route->getPath(),
+			'listing_path'        => $this->router->getPath(),
 			'save_path'           => false,
 			'index'               => '',
 			'view_id'             => _request('view_id'),

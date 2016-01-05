@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Account extends Controller
 {
@@ -24,7 +33,7 @@ class App_Controller_Account extends Controller
 			return $this->details();
 		}
 
-		$data['path']    = $this->route->getPath();
+		$data['path']    = $this->router->getPath();
 		$data['content'] = $content;
 
 		//Render
@@ -41,7 +50,7 @@ class App_Controller_Account extends Controller
 		breadcrumb(_l("My Account"), site_url('account'));
 		breadcrumb(_l("My Details"), site_url('account/details'));
 
-		$data['path'] = $this->route->getPath();
+		$data['path'] = $this->router->getPath();
 
 		//Customer Information
 		$customer['customer'] = customer_info();

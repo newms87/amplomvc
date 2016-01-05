@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Customer extends Library
 {
@@ -79,7 +88,13 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->session->endTokenSession();
+		$to_save = array(
+			'messages' => 1,
+			'language' => 1,
+			'redirect' => 1,
+		);
+
+		$_SESSION = array_intersect_key($_SESSION, $to_save);
 
 		set_cookie('customer', null);
 

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 /**
  * Class App_Controller_Block_Widget_Filter
@@ -13,7 +22,7 @@ class App_Controller_Block_Widget_Filter extends App_Controller_Block_Block
 			'options'  => array(),
 			'fields'   => array(),
 			'values'   => (array)_request('filter'),
-			'path'     => $this->route->getPath(),
+			'path'     => $this->router->getPath(),
 			'query'    => $_GET,
 			'template' => 'block/widget/filter',
 		);

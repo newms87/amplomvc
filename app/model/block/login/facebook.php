@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Model_Block_Login_Facebook extends Model
 {
@@ -13,17 +22,17 @@ class App_Model_Block_Login_Facebook extends Model
 
 	public function getStateToken()
 	{
-		if (!$this->session->has('fb_state')) {
-			$this->session->set('fb_state', md5(rand()));
+		if (!empty($_SESSION['fb_state'])) {
+			$_SESSION['fb_state'] = md5(rand());
 		}
 
-		return $this->session->get('fb_state');
+		return $_SESSION['fb_state'];
 	}
 
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		if (strpos($this->route->getPath(), 'customer/logout') !== 0) {
+		if (strpos($this->router->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'fb_redirect');
 		} else {
 			$this->request->setRedirect(site_url('account'), null, 'fb_redirect');

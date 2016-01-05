@@ -1,12 +1,18 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class User extends Library
 {
 	protected
-		$user_id,
 		$user,
-		$meta,
-		$role,
 		$alerts,
 		$temp_user;
 
@@ -14,12 +20,14 @@ class User extends Library
 	{
 		parent::__construct();
 
+		$this->loadTokenSession();
+
 		$this->validateUser();
 	}
 
 	public function getId()
 	{
-		return $this->user_id;
+		return $this->user ? $this->user['user_id'] : null;
 	}
 
 	public function info($key = null)
@@ -33,66 +41,80 @@ class User extends Library
 
 	public function meta($key = null, $default = null)
 	{
-		if ($key) {
-			return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		if (!$this->user) {
+			return null;
 		}
 
-		return $this->meta;
+		if ($key) {
+			return isset($this->user['meta'][$key]) ? $this->user['meta'][$key] : $default;
+		}
+
+		return $this->user['meta'];
 	}
 
 	public function loginSystemUser()
 	{
 		//Change User Role and user ID to the system user
-		$this->temp_user = array(
-			'user_id' => $this->user_id,
-			'info'    => $this->user,
-			'meta'    => $this->meta,
-			'role'    => $this->role,
+		$this->temp_user = $this->user;
+
+		$user = array(
+			'user_id' => -1,
+			'role'    => array(
+				'user_role_id' => 1,
+				'type'         => App_Model_UserRole::TYPE_ADMIN,
+				'name'         => 'Top Administrator',
+			)
 		);
 
-		$role = array(
-			'user_role_id' => 1,
-			'type'         => App_Model_UserRole::TYPE_ADMIN,
-			'name'         => 'Top Administrator',
-		);
-
-		$this->setUser(-1, array(), array(), $role);
+		$this->setUser($user);
 	}
 
 	public function logoutSystemUser()
 	{
-		$this->user_id = $this->temp_user['user_id'];
-		$this->role    = $this->temp_user['role'];
+		$this->user = $this->temp_user;
 	}
 
-	public function setUser($user_id, $user = array(), $meta = array(), $role = array())
+	public function setUser($user = array())
 	{
-		$this->user_id = $user_id;
-		$this->user    = $user;
-		$this->meta    = $meta;
-		$this->role    = $role;
+		$user += array(
+			'user_id' => 0,
+			'role'    => array(),
+			'meta'    => array(),
+		);
 
-		if ($role) {
-			$this->user['user_role_id'] = $this->role['user_role_id'];
-			$this->user['role']         = $this->role['name'];
-			$this->user['role_type']    = $this->role['type'];
+		if ($user['role']) {
+			$user['user_role_id'] = $user['role']['user_role_id'];
+			$user['role_name']    = $user['role']['name'];
+			$user['role_type']    = $user['role']['type'];
 		}
+
+		$this->user = $user;
 	}
 
-	public function loadUser($user)
+	public function loadUser($user_id)
 	{
-		if (!is_array($user)) {
-			$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = " . (int)$user);
+		$user = _session('user');
+
+		if (!$user || $user['user_id'] !== $user_id) {
+			$user = $this->Model_User->getRecord($user_id);
+
+			if ($user) {
+				$user['meta'] = $this->Model_Meta->get('user', $user_id);
+
+				$_SESSION['user_id'] = $user_id;
+				$_SESSION['user']    = $user;
+			}
 		}
 
-		if (!empty($user['user_id'])) {
-			$meta = $this->Model_Meta->get('user', $user['user_id']);
-			$role = $this->Model_UserRole->getRole($user['user_role_id']);
+		if ($user) {
+			$user['role'] = $this->Model_UserRole->getRole($user['user_role_id']);
 
-			$this->setUser($user['user_id'], $user, $meta, $role);
+			$this->setUser($user);
 
-			$_SESSION['user_id'] = $user['user_id'];
+			return true;
 		}
+
+		return false;
 	}
 
 	public function validateUser()
@@ -104,19 +126,13 @@ class User extends Library
 			$cookie_token  = _cookie('token');
 
 			if ($session_token && $cookie_token === $session_token) {
-				$user = $this->queryRow("SELECT * FROM {$this->t['user']} WHERE user_id = $user_id AND status = 1");
-
-				if ($user) {
-					$this->loadUser($user);
-
-					return true;
-				}
+				return $this->loadUser($user_id);
 			}
 
 			message("notify", "Your session has expired. Please log in again.");
 			$this->logout();
 
-			if ($this->route->getPath() !== 'user/logout') {
+			if ($this->router->getPath() !== 'user/logout') {
 				$this->request->setRedirect($this->url->here());
 			}
 		}
@@ -126,9 +142,7 @@ class User extends Library
 
 	public function login($username, $password)
 	{
-		$username = $this->escape($username);
-
-		$user = $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE (username = '$username' OR LCASE(email) = '" . strtolower($username) . "') AND status = '1'");
+		$user = $this->queryRow("SELECT * FROM `{$this->t['user']}` WHERE (username = '$username' OR email = '" . $this->escape($username) . "') AND status = 1");
 
 		if ($user) {
 			if (!password_verify($password, $user['password'])) {
@@ -137,10 +151,10 @@ class User extends Library
 				return false;
 			}
 
-			$this->loadUser($user);
+			$this->loadUser($user['user_id']);
 
-			$this->session->setToken();
-			$this->session->saveTokenSession();
+			$this->setToken();
+			$this->saveTokenSession();
 
 			return true;
 		}
@@ -152,18 +166,15 @@ class User extends Library
 
 	public function logout()
 	{
-		$this->user_id = null;
-		$this->user    = null;
-		$this->meta    = null;
-		$this->role    = null;
+		$this->user = null;
 
-		$this->session->endTokenSession();
+		$this->endTokenSession();
 	}
 
 	public function is($roles)
 	{
-		if ($this->role) {
-			return in_array($this->role['type'], (array)$roles) || in_array($this->role['name'], (array)$roles);
+		if ($this->user && $this->user['role']) {
+			return in_array($this->user['role']['type'], (array)$roles) || in_array($this->user['role']['name'], (array)$roles);
 		}
 
 		return false;
@@ -218,22 +229,26 @@ class User extends Library
 
 	public function setMeta($key, $value = null)
 	{
-		if (is_array($key)) {
-			return $this->Model_Meta->setAll('user', $this->user_id, $key);
-		}
+		if ($this->user) {
+			if (is_array($key)) {
+				return $this->Model_Meta->setAll('user', $this->user['user_id'], $key);
+			}
 
-		return $this->Model_Meta->set('user', $this->user_id, $key, $value);
+			return $this->Model_Meta->set('user', $this->user['user_id'], $key, $value);
+		}
 	}
 
 	public function removeMeta($key, $value = null)
 	{
-		return $this->Model_Meta->removeKey('user', $this->user_id, $key, $value);
+		if ($this->user) {
+			return $this->Model_Meta->removeKey('user', $this->user['user_id'], $key, $value);
+		}
 	}
 
 	public function alert($user_id, $type, $key, $message)
 	{
 		//Save Alert for when user logs in
-		if ($user_id !== $this->user_id) {
+		if ($this->user && $user_id !== $this->user['user_id']) {
 			$alerts              = $this->getAlerts($user_id);
 			$alerts[$type][$key] = $message;
 			$this->Model_Meta->set('user', $user_id, 'alert', $alerts);
@@ -249,13 +264,17 @@ class User extends Library
 
 	public function getAlerts($user_id = null)
 	{
-		if ($user_id === null) {
-			$user_id = $this->user_id;
+		if (!$this->user) {
+			return array();
 		}
 
+		$user_id = $user_id ? $user_id : $this->user['user_id'];
+
+		$alerts = $this->Model_Meta->get('user', $user_id, 'alert');
+
 		//Get only Save alerts (if user is not logged in)
-		if ($user_id !== $this->user_id) {
-			return (array)$this->Model_Meta->get('user', $user_id, 'alert');
+		if ($user_id !== $this->user['user_id']) {
+			return $alerts;
 		}
 
 		if ($this->alerts === null) {
@@ -265,7 +284,7 @@ class User extends Library
 
 			//Get alerts for current user
 			$this->alerts = &$_SESSION['user_alerts'];
-			$this->alerts += (array)$this->Model_Meta->get('user', $user_id, 'alert');
+			$this->alerts += $alerts;
 		}
 
 		return $this->alerts;
@@ -275,11 +294,13 @@ class User extends Library
 	{
 		$alerts = $this->getAlerts($user_id);
 
-		if (!$user_id || $user_id === $this->user_id) {
-			unset($_SESSION['user_alerts']);
-		}
+		if ($alerts) {
+			if ($user_id === $this->user['user_id']) {
+				unset($_SESSION['user_alerts']);
+			}
 
-		$this->Model_Meta->removeKey('user', $user_id, 'alert');
+			$this->Model_Meta->removeKey('user', $user_id, 'alert');
+		}
 
 		return $alerts;
 	}
@@ -294,12 +315,12 @@ class User extends Library
 
 	public function isTopAdmin()
 	{
-		return $this->role ? $this->role['name'] === 'Top Administrator' : false;
+		return $this->user ? $this->user['role']['name'] === 'Top Administrator' : false;
 	}
 
 	public function isLogged()
 	{
-		return $this->user_id ? true : false;
+		return $this->user ? true : false;
 	}
 
 	public function showAdminBar()
@@ -356,5 +377,89 @@ class User extends Library
 	public function generateCode()
 	{
 		return str_shuffle(md5(microtime(true) * rand()));
+	}
+
+	protected function loadTokenSession()
+	{
+		$session_token = _session('token');
+		$cookie_token  = _cookie('token');
+
+		//These will load the session / token if we are using curlopt
+		if (!$session_token && $cookie_token) {
+			$session = $this->Model_Session->findRecord(array('token' => $cookie_token), '*');
+
+			if ($session) {
+				$this->Model_Session->remove($session['session_id']);
+
+				$_SESSION['token']   = $session['token'];
+				$_SESSION['user_id'] = $session['user_id'];
+
+				if ($session['data']) {
+					$_SESSION += unserialize($session['data']);
+				}
+			}
+
+			unset($_SESSION['session_token_saved']);
+		}
+
+		if ($cookie_token) {
+			//Refresh the token
+			set_cookie('token', $cookie_token, AMPLO_SESSION_TIMEOUT);
+
+			if (isset($_SESSION['session_token_saved'])) {
+				$this->Model_Session->removeWhere(array('ip' => $_SERVER['REMOTE_ADDR']));
+				unset($_SESSION['session_token_saved']);
+			}
+		} elseif ($session_token && empty($_COOKIE)) {
+			unset($_SESSION['token']);
+			message('warning', _l("You must enable cookies to use this system!"));
+			redirect();
+		} elseif (!isset($_SESSION['session_token_saved'])) {
+			$ip_session_exists = $this->Model_Session->getTotalRecords(array('ip' => $_SERVER['REMOTE_ADDR']));
+
+			if ($ip_session_exists) {
+				$this->Model_Session->removeWhere(array('ip' => $_SERVER['REMOTE_ADDR']));
+				message('warning', _l("Unable to authenticate user. Please check that cookies are enabled."));
+			}
+		}
+	}
+
+	public function saveTokenSession()
+	{
+		if (empty($_SESSION['token']) || empty($_SESSION['user_id'])) {
+			return false;
+		}
+
+		$session = array(
+			'token'   => $_SESSION['token'],
+			'user_id' => $_SESSION['user_id'],
+			'data'    => serialize($_SESSION),
+			'ip'      => $_SERVER['REMOTE_ADDR'],
+		);
+
+		$_SESSION['session_token_saved'] = $this->Model_Session->save(null, $session);
+	}
+
+	public function endTokenSession()
+	{
+		delete_cookie('token');
+
+		$to_save = array(
+			'messages' => 1,
+			'language' => 1,
+			'redirect' => 1,
+		);
+
+		$_SESSION = array_intersect_key($_SESSION, $to_save);
+	}
+
+	public function setToken($token = null)
+	{
+		if (!$token) {
+			$token = md5(mt_rand());
+		}
+
+		set_cookie('token', $token, AMPLO_SESSION_TIMEOUT);
+		$_SESSION['token'] = $token;
 	}
 }

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Header extends Controller
 {
@@ -44,7 +53,7 @@ class App_Controller_Header extends Controller
 		js_var('defer_scripts', option('defer_scripts', true));
 
 		//Body
-		$this->document->addBodyClass(slug($this->route->getPath(), '-'));
+		$this->document->addBodyClass(slug($this->router->getPath(), '-'));
 
 		//Admin Bar
 		$settings['show_admin_bar'] = $this->user->showAdminBar();

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Model_Block_Login_Google extends Model
 {
@@ -13,17 +22,17 @@ class App_Model_Block_Login_Google extends Model
 
 	public function getStateToken()
 	{
-		if (!$this->session->has('gp_state')) {
-			$this->session->set('gp_state', md5(rand()));
+		if (!empty($_SESSION['gp_state'])) {
+			$_SESSION['gp_state'] = md5(rand());
 		}
 
-		return $this->session->get('gp_state');
+		return $_SESSION['gp_state'];
 	}
 
 	public function getConnectUrl()
 	{
 		//Redirect after login
-		if (strpos($this->route->getPath(), 'customer/logout') !== 0) {
+		if (strpos($this->router->getPath(), 'customer/logout') !== 0) {
 			$this->request->setRedirect($this->url->here(), null, 'gp_redirect');
 		} else {
 			$this->request->setRedirect(site_url('account'), null, 'gp_redirect');
@@ -43,7 +52,7 @@ class App_Model_Block_Login_Google extends Model
 
 	public function authenticate()
 	{
-		if (empty($_GET['state']) || !$this->session->get('gp_state') || $_GET['state'] !== $this->session->get('gp_state')) {
+		if (empty($_GET['state']) || $_GET['state'] !== _session('gp_state')) {
 			$this->error['state'] = _l("Unable to verify the User");
 			return false;
 		}

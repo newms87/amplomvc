@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Document extends Library
 {
@@ -23,7 +32,7 @@ class Document extends Library
 
 		$this->info['title']          = option('site_title');
 		$this->meta['description']    = option('site_meta_description');
-		$this->info['canonical_link'] = site_url($this->route->getPath(), $_GET);
+		$this->info['canonical_link'] = site_url($this->router->getPath(), $_GET);
 
 		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
 			if (option('minify_js_files') === null) {
@@ -331,6 +340,10 @@ class Document extends Library
 				'compress'        => option('less_compress', true),
 				'import_callback' => function ($a) {
 					$value = $a->path->value;
+
+					if (!is_string($value)) {
+						return;
+					}
 
 					if (strpos($value, '/') === 0) {
 						if (!is_file($file = $_SERVER['DOCUMENT_ROOT'] . $a->path->value)) {
@@ -648,7 +661,7 @@ class Document extends Library
 	{
 		if (!$page) {
 			$page = array(
-				'path'  => $this->route->getPath(),
+				'path'  => $this->router->getPath(),
 				'query' => $_GET,
 			);
 		}

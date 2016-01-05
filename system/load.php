@@ -1,4 +1,14 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
+
 //Model History
 global $model_history;
 if (!$model_history) {
@@ -7,6 +17,10 @@ if (!$model_history) {
 
 // Registry
 $registry = new Registry();
+
+//Initialize Router (run routeRequest after registering routing hooks in helpers)
+$router = new Router();
+$registry->set('router', $router);
 
 //Helpers
 //Tip: to override core / shortcuts functions, use a mod file.
@@ -21,20 +35,8 @@ if (AMPLO_PROFILE) {
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
-$last_update = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'");
-
 if (AMPLO_PROFILE) {
 	_profile('Database loaded');
-}
-
-if ($last_update) {
-	clear_cache('model');
-	cache('db_last_update', $last_update['Value']);
-	$db->updateTables();
-
-	if (AMPLO_PROFILE) {
-		_profile('Database Model refreshed');
-	}
 }
 
 //TODO: REMOVE 'store' check once all sites updated for future
@@ -53,14 +55,7 @@ HTML;
 	exit;
 }
 
-//Initialize Router
-$router = new Router();
-
-if (AMPLO_PROFILE) {
-	_profile('Router loaded');
-}
-
-//Load Helper files
+//Load Helper files (requires DB & cache)
 $handle = opendir(DIR_SYSTEM . 'helper/');
 while (($helper = readdir($handle))) {
 	if (strpos($helper, '.') === 0) {
@@ -88,29 +83,12 @@ if (isset($_GET['amp_token'])) {
 	set_cookie($_GET['amp_token'], 1, 31536000, false);
 }
 
-//Route store after helpers (helper/core.php & helper/shortcuts.php required)
-$router->routeSite();
+//Route request after helpers (helper/core.php & helper/shortcuts.php required)
+$router->routeRequest();
 
 if (AMPLO_PROFILE) {
 	_profile('Site Routed');
 }
-
-//Config (load after routing site!)
-new Config();
-
-if (AMPLO_PROFILE) {
-	_profile('Config loaded');
-}
-
-//Register the core routing hook
-register_routing_hook('amplo', 'amplo_routing_hook');
-
-if (AMPLO_PROFILE) {
-	_profile('Routing hooks run');
-}
-
-// Request (cleans globals)
-$registry->set('request', new Request());
 
 //Model History User Defined
 $model_history = (array)option('model_history') + $model_history;
@@ -119,9 +97,6 @@ $model_history = (array)option('model_history') + $model_history;
 if (!defined("AC_CUSTOMER_OVERRIDE")) {
 	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));
 }
-
-// Session
-$registry->set('session', new Session());
 
 //Cron Called from system
 if (option('cron_status', true)) {

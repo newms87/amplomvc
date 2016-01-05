@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Router
 {
@@ -11,17 +20,6 @@ class Router
 		$site,
 		$routing_hooks = array();
 
-	public function __construct()
-	{
-		global $registry;
-		$registry->set('route', $this);
-		$registry->set('router', $this);
-
-		$path = preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']);
-
-		$this->setPath($path);
-	}
-
 	public function __get($key)
 	{
 		global $registry;
@@ -32,6 +30,11 @@ class Router
 	public function isPath($path)
 	{
 		return preg_match("#^" . str_replace('-', '_', $path) . "$#", $this->path);
+	}
+
+	public function getPath()
+	{
+		return $this->path;
 	}
 
 	public function setPath($path, $nodes = null, $segments = null)
@@ -55,7 +58,7 @@ class Router
 				}
 			}
 		} else {
-			$path = DEFAULT_PATH;
+			$path = option('homepage_path', 'index');
 		}
 
 		$this->path = str_replace('-', '_', $path);
@@ -66,11 +69,6 @@ class Router
 		foreach ($this->segments as &$seg) {
 			$seg = str_replace('-', '_', $seg);
 		}
-	}
-
-	public function getPath()
-	{
-		return $this->path;
 	}
 
 	public function getSegment($index = null)
@@ -96,24 +94,119 @@ class Router
 		return $this->action;
 	}
 
-	public function setArgs($args)
-	{
-		$this->args = (array)$args;
-	}
-
 	public function getArgs()
 	{
 		return $this->args;
 	}
 
-	public function setSite($site)
+	public function setArgs($args)
 	{
-		$this->site = $site;
+		$this->args = (array)$args;
 	}
 
 	public function getSite()
 	{
 		return $this->site;
+	}
+
+	public function setSite(array $site)
+	{
+		global $_options;
+
+		if (!is_array($_options)) {
+			$_options = array();
+		}
+
+		$site += array(
+			'site_id' => 0,
+			'name'    => 'Amplo MVC',
+			'domain'  => DOMAIN,
+			'url'     => URL_SITE,
+			'ssl'     => HTTPS_SITE,
+			'prefix'  => DB_PREFIX,
+		);
+
+		_set_prefix($site['prefix']);
+
+		$settings = cache('setting.config');
+
+		if (!$settings) {
+			//TODO: Should use $this->loadGroup('config');
+			$settings = $this->db->queryRows("SELECT * FROM {$this->db->t['setting']} WHERE auto_load = 1", 'key');
+
+			foreach ($settings as &$setting) {
+				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+			}
+			unset($setting);
+
+			cache('setting.config', $settings);
+		}
+
+		$_options = $site + $settings + $_options;
+
+		$this->url->setUrl($site['url']);
+		$this->url->setSsl($site['ssl']);
+
+		$this->site = $site;
+	}
+
+	public function routeRequest()
+	{
+		$options = array(
+			'cache' => true,
+			'index' => 'site_id',
+		);
+
+		$sites = $this->Model_Site->getRecords(null, null, $options);
+
+		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
+
+		$routed_site = array();
+
+		foreach ($sites as $site) {
+			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
+				$routed_site = $site;
+				break;
+			}
+		}
+
+		$this->setSite($routed_site);
+		$this->setPath(preg_replace("/\\?.*$/", '', $_SERVER['REQUEST_URI']));
+
+		//Resolve routing hooks
+		uasort($this->routing_hooks, function ($a, $b) {
+			return $a['sort_order'] > $b['sort_order'];
+		});
+
+		foreach ($this->routing_hooks as $hook) {
+			if ($hook['callable']($this) === false) {
+				break;
+			}
+		}
+
+		//Resolve Layout ID
+		set_option('config_layout_id', $this->getLayoutForPath($this->path));
+
+		//Verify Amplo Version & Settings
+		if (IS_ADMIN && $this->path !== 'admin/settings/restore_defaults') {
+			$amplo_version = option('AMPLO_VERSION');
+
+			if (!$amplo_version) {
+				redirect('admin/settings/restore-defaults');
+			} elseif (AMPLO_AUTO_UPDATE && $amplo_version !== AMPLO_VERSION) {
+				if ($this->System_Update->updateSystem(AMPLO_VERSION)) {
+					message('notify', _l("The database version %s was out of date and has been updated to version %s", $amplo_version, AMPLO_VERSION));
+				} else {
+					message('error', _l("Failed to update to Amplo %s. Please contact the web admin as this may cause system instalbility.", AMPLO_VERSION));
+				}
+			}
+		}
+
+		if (!IS_AJAX) {
+			$query = http_build_query($_GET);
+			$this->request->addHistory($this->path . ($query ? '?' . $query : ''));
+		}
 	}
 
 	public function registerHook($name, $callable, $sort_order = 0)
@@ -156,20 +249,6 @@ class Router
 
 	public function dispatch()
 	{
-		//Resolve routing hooks
-		uasort($this->routing_hooks, function ($a, $b) {
-			return $a['sort_order'] > $b['sort_order'];
-		});
-
-		foreach ($this->routing_hooks as $hook) {
-			if ($hook['callable']($this) === false) {
-				break;
-			}
-		}
-
-		//Resolve Layout ID
-		set_option('config_layout_id', $this->getLayoutForPath($this->path));
-
 		if (AMPLO_ACCESS_LOG) {
 			$this->logRequest();
 		}
@@ -211,51 +290,12 @@ class Router
 			if (strpos($this->path, 'api/') === 0) {
 				output_api('error', _l("The API resource %s was not found.", $this->path), null, 404);
 			} else {
-				$this->action = new Action(ERROR_404_PATH);
+				$this->action = new Action(option('error_404_path', 'error/not_found'));
 				$this->action->execute();
 			}
 		}
 
 		output_flush();
-	}
-
-	public function routeSite()
-	{
-		$options = array(
-			'cache' => true,
-			'index' => 'site_id',
-		);
-
-		$sites = $this->Model_Site->getRecords(null, null, $options);
-
-		$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-		$url    = $scheme . str_replace('www', '', $_SERVER['HTTP_HOST']) . '/' . trim($_SERVER['REQUEST_URI'], '/');
-
-		$prefix = DB_PREFIX;
-
-		foreach ($sites as $site) {
-			if (strpos($url, trim($site['url'], '/ ')) === 0 || strpos($url, trim($site['ssl'], '/ ')) === 0) {
-				$this->site = $site;
-				break;
-			}
-		}
-
-		if (!$this->site) {
-			$this->site = array(
-				'domain' => DOMAIN,
-				'url'    => '//' . DOMAIN . '/',
-				'ssl'    => 'https://' . DOMAIN . '/',
-				'name'   => 'Amplo MVC',
-				'prefix' => DB_PREFIX,
-			);
-		}
-
-		if (!empty($this->site['prefix'])) {
-			$prefix = $this->site['prefix'];
-		}
-
-		define('SITE_PREFIX', $prefix);
-		_set_prefix($prefix);
 	}
 
 	protected function logRequest()

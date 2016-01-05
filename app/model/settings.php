@@ -1,10 +1,20 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Model_Settings extends Model
 {
 	static $admin_settings = array(
 		'admin_title'                => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'admin_icon'                 => null,
+		'admin_path'                 => 'admin',
 		'admin_bar'                  => 1,
 		'admin_logo'                 => '',
 		'admin_logo_srcset'          => '',
@@ -29,6 +39,8 @@ class App_Model_Settings extends Model
 		'site_email_error'                        => '',
 		'site_phone'                              => '',
 		'config_fax'                              => '',
+		'homepage_path'                           => 'index',
+		'error_404_path'                          => 'error/not_found',
 		'site_title'                              => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
 		'config_default_store'                    => '',
 		'site_meta_description'                   => '',

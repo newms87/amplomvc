@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Model_Navigation extends App_Model_Table
 {
@@ -294,7 +303,7 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function getNavigationGroup($name = 'all')
 	{
-		$navigation_groups = null;//cache("navigation_group.$name." . DOMAIN);
+		$navigation_groups = cache("navigation_group.$name." . DOMAIN);
 
 		if (!isset($navigation_groups)) {
 			$filter = array(

@@ -1,262 +1,92 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
-class App_Controller_Admin_Localisation_GeoZone extends Controller
+class App_Controller_Admin_Localisation_GeoZone extends App_Controller_Table
 {
+	protected $model = array(
+		'title' => 'GeoZone',
+		'class' => 'App_Model_Localisation_GeoZone',
+		'path'  => 'admin/localisation_geozone',
+		'label' => 'name',
+		'value' => 'geozone_id',
+	);
 
-
-	public function index()
+	public function index($options = array())
 	{
-		set_page_info('title', _l("Geo Zones"));
-
-		$this->getList();
-	}
-
-	public function insert()
-	{
-		set_page_info('title', _l("Geo Zones"));
-
-		if (IS_POST && $this->validateForm()) {
-			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
-
-			message('success', _l("Success: You have modified geo zones!"));
-
-			redirect('admin/localisation/geo_zone');
-		}
-
-		$this->getForm();
-	}
-
-	public function update()
-	{
-		set_page_info('title', _l("Geo Zones"));
-
-		if (IS_POST && $this->validateForm()) {
-			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
-
-			message('success', _l("Success: You have modified geo zones!"));
-
-			redirect('admin/localisation/geo_zone');
-		}
-
-		$this->getForm();
-	}
-
-	public function delete()
-	{
-		set_page_info('title', _l("Geo Zones"));
-
-		if (isset($_GET['selected']) && $this->validateDelete()) {
-			foreach ($_GET['selected'] as $geo_zone_id) {
-				$this->Model_Localisation_GeoZone->deleteGeoZone($geo_zone_id);
-			}
-
-			message('success', _l("Success: You have modified geo zones!"));
-		}
-
-		$this->getList();
-	}
-
-	private function getList()
-	{
-		if (isset($_GET['sort'])) {
-			$sort = $_GET['sort'];
-		} else {
-			$sort = 'name';
-		}
-
-		if (isset($_GET['order'])) {
-			$order = $_GET['order'];
-		} else {
-			$order = 'ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
-		} else {
-			$page = 1;
-		}
-
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
-		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
-
-		$data['insert'] = site_url('admin/localisation/geo_zone/insert', $url);
-		$data['delete'] = site_url('admin/localisation/geo_zone/delete', $url);
-
-		$data['geo_zones'] = array();
-
-		$data = array(
-			'sort'  => $sort,
-			'order' => $order,
-			'start' => ($page - 1) * option('admin_list_limit'),
-			'limit' => option('admin_list_limit')
+		$options += array(
+			'batch_action' => array(
+				'actions' => array(
+					'enable'  => array(
+						'label' => _l("Enable"),
+					),
+					'disable' => array(
+						'label' => _l("Disable"),
+					),
+					'delete'  => array(
+						'label' => _l("Delete"),
+					),
+				),
+			),
 		);
 
-		$geo_zone_total = $this->Model_Localisation_GeoZone->getTotalGeoZones();
-
-		$results = $this->Model_Localisation_GeoZone->getGeoZones($data);
-
-		foreach ($results as $result) {
-			$action = array();
-
-			$action[] = array(
-				'text' => _l("Edit"),
-				'href' => site_url('admin/localisation/geo_zone/update', 'geo_zone_id=' . $result['geo_zone_id'] . $url)
-			);
-
-			$data['geo_zones'][] = array(
-				'geo_zone_id' => $result['geo_zone_id'],
-				'name'        => $result['name'],
-				'description' => $result['description'],
-				'selected'    => isset($_GET['selected']) && in_array($result['geo_zone_id'], $_GET['selected']),
-				'action'      => $action
-			);
-		}
-
-		if (isset($this->error['warning'])) {
-			$data['error_warning'] = $this->error['warning'];
-		} else {
-			$data['error_warning'] = '';
-		}
-
-		if ($this->session->has('success')) {
-			$data['success'] = $this->session->get('success');
-
-			$this->session->remove('success');
-		} else {
-			$data['success'] = '';
-		}
-
-		$url = '';
-
-		if ($order == 'ASC') {
-			$url .= '&order=DESC';
-		} else {
-			$url .= '&order=ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
-		$data['sort_name']        = site_url('admin/localisation/geo_zone', 'sort=name' . $url);
-		$data['sort_description'] = site_url('admin/localisation/geo_zone', 'sort=description' . $url);
-
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
-		$this->pagination->init();
-		$this->pagination->total = $geo_zone_total;
-		$data['pagination']      = $this->pagination->render();
-
-		$data['sort']  = $sort;
-		$data['order'] = $order;
-
-		output($this->render('localisation/geo_zone_list', $data));
+		return parent::index($options);
 	}
 
-	private function getForm()
+	public function listing($options = array())
 	{
-		$geo_zone_id = _get('geo_zone_id', 0);
-
-		$url = $this->url->getQuery('sort', 'order', 'page');
-
-		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Geo Zones"), site_url('admin/localisation/geo_zone', $url));
-
-		if (!$geo_zone_id) {
-			$data['action'] = site_url('admin/localisation/geo_zone/insert', $url);
-		} else {
-			$data['action'] = site_url('admin/localisation/geo_zone/update', 'geo_zone_id=' . $geo_zone_id . '&' . $url);
-		}
-
-		$data['cancel'] = site_url('admin/localisation/geo_zone', $url);
-
-		if ($geo_zone_id && !IS_POST) {
-			$geo_zone_info = $this->Model_Localisation_GeoZone->getGeoZone($geo_zone_id);
-		}
-
-		$defaults = array(
-			'name'        => '',
-			'description' => '',
-			'exclude'     => 0,
-			'zones'       => array(),
+		$options += array(
+			'sort_default' => array('name' => 'ASC'),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$data[$key] = $_POST[$key];
-			} elseif (isset($geo_zone_info[$key])) {
-				$data[$key] = $geo_zone_info[$key];
-			} elseif (!$geo_zone_id) {
-				$data[$key] = $default;
-			}
-		}
-
-		$data['data_countries'] = $this->Model_Localisation_Country->getCountries();
-
-		if (!isset($data['zones'])) {
-			$data['zones'] = $this->Model_Localisation_GeoZone->getZones($geo_zone_id);
-		}
-
-		output($this->render('localisation/geo_zone_form', $data));
+		return parent::listing($options);
 	}
 
-	private function validateForm()
+	public function form($options = array())
 	{
-		if (!user_can('w', 'admin/localisation/geo_zone')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
-		}
+		$options = array(
+			'defaults' => array(
+				'geozone_id'  => 0,
+				'name'        => '',
+				'description' => '',
+				'exclude'     => 0,
+				'zones'       => array(),
+				'status'      => 1,
+			),
+		);
 
-		if (!validate('text', $_POST['name'], 3, 32)) {
-			$this->error['name'] = _l("Geo Zone Name must be between 3 and 32 characters!");
-		}
-
-		if (!validate('text', $_POST['description'], 3, 255)) {
-			$this->error['description'] = _l("Description Name must be between 3 and 255 characters!");
-		}
-
-		if (empty($_POST['exclude'])) {
-			$_POST['exclude'] = 0;
-		}
-
-		return empty($this->error);
+		return parent::form($options);
 	}
 
-	private function validateDelete()
+	public function batch_action($options = array())
 	{
-		if (!user_can('w', 'admin/localisation/geo_zone')) {
-			$this->error['warning'] = _l("Warning: You do not have permission to modify geo zones!");
-		}
+		$options += array(
+			'callback' => function ($batch, $action, $value) {
+				foreach ($batch as $category_id) {
+					switch ($action) {
+						case 'enable':
+							$this->instance->save($category_id, array('status' => 1));
+							break;
 
-		foreach ($_GET['selected'] as $geo_zone_id) {
-			$tax_rate_total = $this->Model_Localisation_TaxRate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
+						case 'disable':
+							$this->instance->save($category_id, array('status' => 0));
+							break;
 
-			if ($tax_rate_total) {
-				$this->error['warning'] = sprintf(_l("Warning: This geo zone cannot be deleted as it is currently assigned to one or more tax rates!"), $tax_rate_total);
-			}
-		}
+						case 'delete':
+							$this->instance->remove($category_id);
+							break;
+					}
+				}
+			},
+		);
 
-		return empty($this->error);
+		return parent::batch_action($options);
 	}
 }

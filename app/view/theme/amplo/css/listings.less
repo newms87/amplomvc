@@ -13,8 +13,8 @@
 
 			input, select {
 				padding: .5em;
-				font: .8em OpenSansRegular;
-				border: 1px solid @font-dark;
+				font-size: .8em;
+				border: 1px solid @color-font-dark;
 				box-shadow: none;
 				max-width: 20em;
 				display: inline-block;
@@ -173,9 +173,10 @@
 		& > a, & > span {
 			display: inline-block;
 			vertical-align: top;
-			font: .9em OpenSansBold;
+			font-size: .9em;
+			font-weight: bold;
 			text-transform: uppercase;
-			color: @font-dark;
+			color: @color-font-dark;
 		}
 	}
 
@@ -235,7 +236,8 @@
 	transition: all .1s linear .5s;
 
 	.limit-text {
-		font: .9em OpenSansBold;
+		font-size: .9em;
+		font-weight: bold;
 		display: inline-block;
 		vertical-align: middle;
 		-webkit-transition: all .1s linear .5s;
@@ -247,7 +249,8 @@
 		vertical-align: middle;
 
 		.limit-item {
-			font: .9em OpenSansBold;
+			font-size: .9em;
+			font-weight: bold;
 			background: @color-lightest;
 			border-radius: 3px;
 			text-decoration: none;
@@ -566,7 +569,8 @@
 		vertical-align: middle;
 		color: white;
 		margin-top: .5em;
-		font: .9em OpenSansSemiBold;
+		font-size: .9em;
+		font-weight: 600;
 
 		.fa-calendar {
 			font-size: 1.5em;
@@ -712,9 +716,9 @@
 
 		.page {
 			display: inline-block;
-			font: 1em OpenSansBold;
+			font-weight: bold;
 			text-decoration: none;
-			color: @font-dark;
+			color: @color-font-dark;
 			padding: .5em .7em;
 
 			&.current {
@@ -728,7 +732,7 @@
 	}
 
 	.text {
-		font: .9em OpenSansRegular;
+		font-size: .9em;
 		display: inline-block;
 		vertical-align: middle;
 	}
@@ -736,7 +740,7 @@
 	&.simple {
 		.page {
 			padding: .4em;
-			font: .9em OpenSansRegular;
+			font-size: .9em;
 		}
 	}
 }

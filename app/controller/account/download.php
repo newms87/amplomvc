@@ -1,11 +1,20 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class App_Controller_Account_Download extends Controller
 {
 	public function index()
 	{
 		if (!is_logged()) {
-			$this->session->set('redirect', site_url('account/download'));
+			$this->request->setRedirect(site_url('account/download'));
 
 			redirect('customer/login');
 		}
@@ -80,7 +89,7 @@ class App_Controller_Account_Download extends Controller
 	public function download()
 	{
 		if (!is_logged()) {
-			$this->session->set('redirect', site_url('account/download'));
+			$this->request->setRedirect(site_url('account/download'));
 
 			redirect('customer/login');
 		}

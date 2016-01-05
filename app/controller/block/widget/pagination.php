@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 /**
  * Class App_Controller_Block_Widget_Pagination
@@ -13,7 +22,7 @@ class App_Controller_Block_Widget_Pagination extends App_Controller_Block_Block
 			'template'      => 'block/widget/pagination',
 			'page'          => _get('page', 1),
 			'limit'         => _get('limit', option('admin_list_limit')),
-			'path'          => $this->route->getPath(),
+			'path'          => $this->router->getPath(),
 			'query'         => $_GET,
 			'num_links'     => 10,
 			'text'          => _l("Showing %start% to %end% of %total% (%pages% Pages)"),

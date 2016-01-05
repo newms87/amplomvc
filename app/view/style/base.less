@@ -26,7 +26,7 @@
 	background-image: -o-image-set(url(@s1) 1x, url(@s2) 2x, url(@s3) 3x);
 }
 
-.import-font(@import-font-family, @font-file-name) {
+.import-font(@import-font-family, @font-file-name, @font-style: 'normal', @font-weight: 'normal') {
 	@theme-font-file: '@{font-path}@{font-file-name}';
 	@font-face {
 		font-family: @import-font-family;
@@ -36,17 +36,9 @@
 		url('@{theme-font-file}.woff') format('woff'),
 		url('@{theme-font-file}.ttf') format('truetype'),
 		url('@{theme-font-file}.svg#@{import-font-family}') format('svg');
-		font-weight: normal;
-		font-style: normal;
+		font-style: @font-style;
+		font-weight: @font-weight;
 	}
-}
-
-.render-font(@font) when (isnumber(@font)) {
-	font-size: @font;
-}
-
-.render-font(@font) when not (isnumber(@font)) {
-	font: @font;
 }
 
 .clearfix {

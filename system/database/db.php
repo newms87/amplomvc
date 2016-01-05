@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class DB
 {
@@ -78,6 +87,14 @@ class DB
 
 		$this->t->schema = $schema;
 		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
+
+
+		if (!AMPLO_PRODUCTION) {
+			if ($last_update = $this->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'")) {
+				clear_cache('model.' . $schema);
+				cache('db_last_update', $last_update['Value']);
+			}
+		}
 
 		$this->updateTables();
 	}

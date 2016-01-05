@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 /**
  * Class App_Controller_Block_Widget_Views
@@ -168,8 +177,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		//$settings['data_user_groups'] = $this->Model_User->getUserGroups();
 
-		if (is_file(DIR_SITE . 'app/controller/' . $this->route->getPath())) {
-			$settings['can_modify'] = user_can('w', $this->route->getPath());
+		if (is_file(DIR_SITE . 'app/controller/' . $this->router->getPath())) {
+			$settings['can_modify'] = user_can('w', $this->router->getPath());
 		} else {
 			$settings['can_modify'] = true;
 		}

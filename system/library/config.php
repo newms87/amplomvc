@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Config extends Library
 {
@@ -15,45 +24,6 @@ class Config extends Library
 	{
 		global $_options;
 		$_options[$key] = $value;
-	}
-
-	public function setSite($site)
-	{
-		global $_options;
-
-		if (!is_array($_options)) {
-			$_options = array();
-		}
-
-		//TODO: When we sort out configurations, be sure to add in translations for settings!
-
-		$settings = cache('setting.config');
-
-		if (!$settings) {
-			//TODO: Should use $this->loadGroup('config');
-			$settings = $this->queryRows("SELECT * FROM {$this->t['setting']} WHERE auto_load = 1", 'key');
-
-			foreach ($settings as &$setting) {
-				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
-			}
-			unset($setting);
-
-			cache('setting.config', $settings);
-		}
-
-		if (!$settings && IS_ADMIN && $this->route->getPath() !== 'admin/settings/restore_defaults') {
-			//message('success', _l("Welcome to Amplo MVC! Your installation has been successfully installed so you're ready to get started."));
-			//TODO: Should still set defaults here
-			//redirect('admin/settings/restore_defaults');
-		}
-
-		//Overwrite any previous settings with new Site settings.
-		$_options = $settings + $_options;
-
-		$_options['site_id'] = !empty($site['site_id']) ? $site['site_id'] : 0;
-		$_options['name']    = !empty($site['name']) ? $site['name'] : 'No Site';
-		$_options['url']     = !empty($site['url']) ? $site['url'] : URL_SITE;
-		$_options['ssl']     = !empty($site['ssl']) ? $site['ssl'] : HTTPS_SITE;
 	}
 
 	public function has($key)

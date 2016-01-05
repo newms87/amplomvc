@@ -1,4 +1,13 @@
 <?php
+/**
+ * @author Daniel Newman
+ * @date 3/20/2013
+ * @package Amplo MVC
+ * @link http://amplomvc.com/
+ *
+ * All Amplo MVC code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ */
 
 class Api extends Library
 {
@@ -44,10 +53,10 @@ class Api extends Library
 			return false;
 		}
 
-		$meta      = $this->Model_Meta->get('user', $user['user_id']);
-		$user_role = $this->Model_UserRole->getRole($this->api_user['user_role_id']);
+		$user['meta'] = $this->Model_Meta->get('user', $user['user_id']);
+		$user['role'] = $this->Model_UserRole->getRole($this->api_user['user_role_id']);
 
-		$this->user->setUser($user['user_id'], $user, $meta, $user_role);
+		$this->user->setUser($user);
 
 		if (!$this->api_token) {
 			$this->api_token = array(

@@ -103,13 +103,21 @@
 						</td>
 					</tr>
 					<tr>
+						<td>{{Homepage Path:}}</td>
+						<td><input type="text" name="homepage_path" value="<?= $homepage_path; ?>"/></td>
+					</tr>
+					<tr>
+						<td>{{Error 404 Path:}}</td>
+						<td><input type="text" name="error_404_path" value="<?= $error_404_path; ?>"/></td>
+					</tr>
+					<tr>
 						<td>{{Theme:}}</td>
 						<td>
 							<?=
 							build(array(
 								'type'   => 'select',
 								'name'   => 'site_theme',
-								'data'   => $data_themes,
+								'data'   => $data['themes'],
 								'select' => $site_theme,
 								'value'  => 'name',
 								'label'  => 'name',
@@ -127,7 +135,7 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => 'config_default_layout_id',
-								'data'   => $data_layouts,
+								'data'   => $data['layouts'],
 								'select' => $config_default_layout_id,
 								'value'  => 'layout_id',
 								'label'  => 'name',
@@ -177,7 +185,7 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => 'config_country_id',
-								'data'   => $data_countries,
+								'data'   => $data['countries'],
 								'select' => $config_country_id,
 								'value'  => 'country_id',
 								'label'  => 'name',
@@ -196,7 +204,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_language',
-								'data'   => $data_languages,
+								'data'   => $data['languages'],
 								'select' => $config_language,
 								'value'  => 'code',
 								'label'  => 'name',
@@ -211,7 +219,7 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => 'config_use_macro_languages',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_use_macro_languages
 							)); ?>
 						</td>
@@ -224,7 +232,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_currency',
-								'data'   => $data_currencies,
+								'data'   => $data['currencies'],
 								'select' => $config_currency,
 								'value'  => 'code',
 								'label'  => 'title',
@@ -239,7 +247,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_currency_auto',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_currency_auto,
 							)); ?>
 						</td>
@@ -257,7 +265,7 @@
 							build(array(
 								'type'   => 'radio',
 								'name'   => 'cron_status',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $cron_status
 							)); ?></td>
 					</tr>
@@ -269,7 +277,7 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => "show_breadcrumbs",
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $show_breadcrumbs
 							)); ?></td>
 					</tr>
@@ -299,9 +307,12 @@
 						<td>{{Performance Logging:}}</td>
 						<td><?=
 							build(array(
-								'type'   => 'select',
+								'type'   => 'radio',
 								'name'   => 'config_performance_log',
-								'data'   => $data_statuses,
+								'data'   => array(
+									1 => "{{On}}",
+									0 => "{{Off}}",
+								),
 								'select' => $config_performance_log
 							)); ?>
 						</td>
@@ -314,7 +325,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_allow_close_message',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_allow_close_message
 							)); ?></td>
 					</tr>
@@ -326,7 +337,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'default_customer_role_id',
-								'data'   => $data_user_roles,
+								'data'   => $data['user_roles'],
 								'select' => $default_customer_role_id,
 								'value'  => 'user_role_id',
 								'label'  => 'name',
@@ -341,7 +352,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_customer_approval',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_customer_approval
 							)); ?>
 						</td>
@@ -354,7 +365,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'terms_agreement_page_id',
-								'data'   => $data_pages,
+								'data'   => $data['pages'],
 								'select' => $terms_agreement_page_id,
 								'value'  => 'page_id',
 								'label'  => 'title',
@@ -368,7 +379,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => "config_share_status",
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_share_status
 							)); ?>
 						</td>
@@ -457,7 +468,7 @@
 
 										<div class="icon-label">{{ICO File}}</div>
 									</div>
-									<? foreach ($data_icon_sizes as $size) { ?>
+									<? foreach ($data['icon_sizes'] as $size) { ?>
 										<div class="icon-file icon-size">
 											<? $key = $size . 'x' . $size; ?>
 											<input type="text" class="imageinput" name="site_icon[<?= $key; ?>]" value="<?= $site_icon[$key]['src']; ?>" data-thumb="<?= $site_icon[$key]['thumb']; ?>" data-width="<?= $size; ?>" data-height="<?= $size; ?>"/>
@@ -490,7 +501,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => "config_mail_protocol",
-								'data'   => $data_mail_protocols,
+								'data'   => $data['mail_protocols'],
 								'select' => $config_mail_protocol
 							)); ?></td>
 					</tr>
@@ -540,7 +551,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_alert_mail',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_alert_mail
 							)); ?>
 						</td>
@@ -553,7 +564,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_account_mail',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_account_mail
 							)); ?>
 						</td>
@@ -572,7 +583,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_mail_logging',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_mail_logging
 							)); ?>
 						</td>
@@ -589,7 +600,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_debug',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_debug
 							)); ?>
 						</td>
@@ -600,7 +611,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'error_logging',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $error_logging
 							)); ?>
 						</td>
@@ -611,7 +622,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'error_notification_email',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $error_notification_email,
 							)); ?>
 						</td>
@@ -624,7 +635,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_jquery_cdn',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_jquery_cdn
 							)); ?>
 						</td>
@@ -637,7 +648,7 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_debug_send_emails',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_debug_send_emails
 							)); ?>
 						</td>
@@ -650,7 +661,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_use_ssl',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_use_ssl,
 							)); ?>
 						</td>
@@ -663,7 +674,7 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_maintenance',
-								'data'   => $data_yes_no,
+								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 								'select' => $config_maintenance,
 							)); ?>
 						</td>
@@ -739,7 +750,7 @@
 								<?= build(array(
 									'type'   => 'radio',
 									'name'   => 'ga_click_tracking',
-									'data'   => $data_yes_no,
+									'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
 									'select' => $ga_click_tracking,
 								)); ?>
 							</div>
@@ -753,7 +764,10 @@
 								<?= build(array(
 									'type'   => 'radio',
 									'name'   => 'ga_demographics',
-									'data'   => $data_yes_no,
+									'data'   => array(
+										1 => "{{Yes}}",
+										0 => "{{No}}"
+									),
 									'select' => $ga_demographics,
 								)); ?>
 							</div>
@@ -808,14 +822,14 @@
 <script type="text/javascript">
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form [name=config_country_id]'});
 
-	$('[name=site_theme]').change(function () {
+	$('[name=site_theme]').change(function() {
 		var url = "<?= site_url('admin/settings/general/theme'); ?>" + '?theme=' + $(this).val();
 		$('#theme').load(url);
 	}).change();
 
 	$('[name=site_logo]').ac_imageinput({width: '<?= $site_logo_width; ?>', height: '<?= $site_logo_height; ?>'});
 
-	$('[name=site_logo_width],[name=site_logo_height]').change(function () {
+	$('[name=site_logo_width],[name=site_logo_height]').change(function() {
 		var w = $('[name=site_logo_width]').val();
 		var h = $('[name=site_logo_height]').val();
 		$('[name=site_logo]').siblings('.thumb').css({
@@ -824,7 +838,7 @@
 		});
 	});
 
-	$('#generate-icons').click(function () {
+	$('#generate-icons').click(function() {
 		var $this = $(this);
 		var icon = $('[name="site_icon[orig]"]').val();
 
@@ -833,7 +847,7 @@
 		}
 
 		$this.loading();
-		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function (json) {
+		$.post("<?= site_url('admin/settings/general/generate-icons'); ?>", {icon: icon}, function(json) {
 			$this.loading('stop');
 
 			var $gen = $('#icon-generator');
@@ -852,11 +866,11 @@
 
 	var $ga_domains = $('.ga-domains');
 
-	$('.ga-cross-domain .add').click(function () {
+	$('.ga-cross-domain .add').click(function() {
 		var $domain_list = $('.ga-domains').ac_template('domain-list', 'add');
 	});
 
-	$ga_domains.find('.remove').click(function () {
+	$ga_domains.find('.remove').click(function() {
 		$(this).closest('.domain').remove();
 	});
 
