@@ -45,6 +45,18 @@
 	}
 }
 
+.is-active {
+	.on-dormant, &.on-dormant {
+		display: none;
+	}
+}
+
+.is-dormant {
+	.on-active, &.on-active {
+		display: none;
+	}
+}
+
 //Size animations
 .animate-hide {
 	overflow: hidden;
@@ -250,6 +262,10 @@
 				}
 			}
 		}
+	}
+
+	.amp-modal-inner-content {
+		padding: 1em;
 	}
 
 	.amp-modal-buttons {
@@ -624,7 +640,8 @@ label.select {
 		height: auto;
 		padding-right: 3em !important;
 		border-radius: 3px;
-		font-size: 1em/1.2em;
+		font-size: 1em;
+		line-height: 1.2em;
 		padding: .5em;
 		box-sizing: border-box;
 		-webkit-appearance: none;

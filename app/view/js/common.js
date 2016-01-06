@@ -386,41 +386,51 @@ $.ampExtend($.ampToggle = function() {}, {
 		}
 
 		o = $.extend({}, {
-			toggle:           this,
-			content:          this,
-			toggleClass:      'active',
-			contentClass:     'active',
-			hideToggleClass:  '',
-			hideContentClass: null,
-			start:            'hide',
-			acceptParent:     '',
-			onShow:           null,
-			onHide:           null
+			toggle:              this,
+			content:             this,
+			hideContent:         null,
+			activeClass:         'is-active',
+			activeContentClass:  'is-active',
+			dormantClass:        'is-dormant',
+			dormantContentClass: 'is-dormant',
+			start:               'dormant',
+			acceptParent:        '',
+			onShow:              null,
+			onHide:              null
 		}, o);
 
 		o.toggle = $(o.toggle || this);
 		o.content = $(o.content || this);
 
-		//Only add .hidden class if the toggle is not a child / same element as the content
-		if (o.hideContentClass === null) {
-			o.hideContentClass = o.toggle.closest(o.content).length ? '' : 'hidden';
+		o.toggle.setOptions(o);
+		o.content.setOptions(o);
+
+		//Hide content when dormant if set in options or toggle is not a child of content
+		if (o.hideContent || (o.hideContent === null && !o.content.find(this).length)) {
+			o.content.addClass('on-active');
 		}
 
-		if (o.toggle.length) {
-			o.toggleClass += ' amp-toggle-show';
-			o.contentClass += ' amp-toggle-show';
-			o.hideToggleClass += ' amp-toggle-hide';
-			o.hideContentClass += ' amp-toggle-hide';
-			o.content.data('amp-toggle-o', o).addClass('amp-toggle-content');
+		o.content.click(function(e) {
+			var $target = $(e.target);
 
-			o.toggle.data('amp-toggle-o', o).addClass('amp-toggle').click(function(e) {
-				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.toggleClass) ? 'hide' : 'show');
+			if ($target.closest('.amp-toggle-off').length) {
+				$(this).ampToggle('setDormant');
+			} else if ($target.closest('.amp-toggle-on').length) {
+				$(this).ampToggle('setActive');
+			}
+		})
+
+		if (o.toggle.length) {
+			o.content.addClass('amp-toggle-content');
+
+			o.toggle.addClass('amp-toggle').click(function(e) {
+				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
 				e.stopPropagation();
 				return false;
 			})
 
 			if (o.start) {
-				o.toggle.ampToggle(o.start === 'show' ? 'show' : 'hide');
+				o.toggle.ampToggle(o.start === 'active' ? 'setActive' : 'setDormant');
 			}
 		}
 
@@ -428,12 +438,12 @@ $.ampExtend($.ampToggle = function() {}, {
 	},
 
 	_blur: function(e) {
-		var $t = $(e.target), o = $.ampToggle.active.data('amp-toggle-o');
+		var $t = $(e.target), o = $.ampToggle.active.getOptions();
 
 		if ($t.closest(o.content).length) {
 			!o.content.is('.amp-toggle') || ($.ampToggle.skipToggle = true);
-		} else if (!$t.closest(o.acceptParent).length) {
-			$.ampToggle.active.ampToggle('hide');
+		} else if (!$t.closest(o.toggle).length && !$t.closest(o.acceptParent).length) {
+			$.ampToggle.active.ampToggle('setDormant');
 
 			if ($t.hasClass('amp-toggle')) {
 				$.ampToggle.skipToggle = true;
@@ -441,12 +451,12 @@ $.ampExtend($.ampToggle = function() {}, {
 		}
 	},
 
-	show: function() {
+	setActive: function() {
 		var $this = $(this);
-		var o = $this.data('amp-toggle-o');
+		var o = $this.getOptions();
 
-		o.toggle.addClass(o.toggleClass).removeClass(o.hideToggleClass);
-		o.content.addClass(o.contentClass).removeClass(o.hideContentClass);
+		o.toggle.addClass(o.activeClass).removeClass(o.dormantClass);
+		o.content.addClass(o.activeContentClass).removeClass(o.dormantContentClass);
 		$.ampToggle.active = $this;
 		setTimeout(function() {
 			document.addEventListener('click', $.ampToggle._blur, true);
@@ -458,12 +468,12 @@ $.ampExtend($.ampToggle = function() {}, {
 		}
 	},
 
-	hide: function() {
+	setDormant: function() {
 		var $this = $(this);
-		var o = $this.data('amp-toggle-o');
+		var o = $this.getOptions();
 
-		o.toggle.removeClass(o.toggleClass).addClass(o.hideToggleClass);
-		o.content.removeClass(o.contentClass).addClass(o.hideContentClass);
+		o.toggle.removeClass(o.activeClass).addClass(o.dormantClass);
+		o.content.removeClass(o.activeContentClass).addClass(o.dormantContentClass);
 		$.ampToggle.active = null;
 		document.removeEventListener('click', $.ampToggle._blur, true);
 
@@ -592,24 +602,28 @@ $.ampTokenCheck = function(token, callback, delay) {
 }
 
 //ampModal jQuery Plugin
-$.ampExtend('ampModal', {
+$.ampExtend($.ampModal = function() {}, {
 	init: function(o) {
 		if (typeof this === 'function' && !o.content) {
 			return $.error('Error ampModal: You must specify a value for content.');
 		}
 
 		o = $.extend({}, {
-			context:     'body',
+			context:     null,
 			title:       '',
 			class:       '',
-			content:     this,
+			content:     null,
 			buttons:     {},
 			shadow:      true,
 			shadowClose: true,
 			onAction:    null,
 			onOpen:      null,
-			onClose:     null
+			onClose:     null,
+			show:        false
 		}, o);
+
+		o.content = o.content === null ? this : o.content;
+		o.context = o.context === null ? o.content.parent() : o.context;
 
 		if (!(o.context = $(o.context)).length) {
 			$.error('ampModal parameter error: context must be an existing element');
@@ -679,8 +693,13 @@ $.ampExtend('ampModal', {
 					$shadow.click($.ampModal.close)
 				}
 			}
+
+			if (o.show) {
+				$box.ampModal('open');
+			}
 		});
 	},
+
 	open: function() {
 		var $this = $(this).closest('.amp-modal').addClass('active')
 		var o = $this.getOptions() || {};
@@ -718,12 +737,13 @@ $.ampAlert = $.fn.ampAlert = function(o) {
 			ok: {
 				label: 'Ok',
 			},
-		}
+		},
+		show:        true
 	}, o)
 
 	o.content = $(o.content).append(o.text);
 
-	return $.ampModal.call(this, o).ampModal('open');
+	return $.ampModal.call(this, o);
 }
 
 $.ampConfirm = $.fn.ampConfirm = function(o) {
@@ -731,6 +751,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 		title:       'Are you sure?',
 		class:       'amp-modal-confirm',
 		content:     $('<div/>').addClass('amp-confirm'),
+		context:     $('body'),
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
 		onCancel:    null,
@@ -745,10 +766,13 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 			confirm: {
 				label: 'Confirm',
 			}
-		}
+		},
+		show:        true
 	}, o)
 
-	o.content = $(o.content).append(o.text);
+	if (o.content && o.text) {
+		o.content = $(o.content).append(o.text);
+	}
 
 	if (o.buttons.confirm && !o.buttons.confirm.action) {
 		o.buttons.confirm.action = function() {
@@ -770,7 +794,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 		}
 	}
 
-	return $.ampModal.call(this, o).ampModal('open');
+	return o.content.ampModal(o);
 }
 
 //ampSelect jQuery Plugin
@@ -1880,8 +1904,7 @@ $(document)
 		if (($onClick = $n.closest('.on-click')).length) {
 			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
 				$onClick.ampToggle({
-					content:     $onClick.attr('data-amp-toggle') || $onClick,
-					toggleClass: 'is-active'
+					content: $onClick.attr('data-amp-toggle') || $onClick,
 				}).click();
 			} else {
 				$onClick.toggleClass('is-active');
@@ -1948,6 +1971,14 @@ $(document)
 			});
 			e.preventDefault();
 			return false;
+		}
+	})
+
+	.change(function(e) {
+		var $t = $(e.target);
+
+		if ($t.is('[data-sync-field]')) {
+			$('[data-sync-listener]').html($t.val());
 		}
 	})
 
