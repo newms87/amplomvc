@@ -292,6 +292,10 @@ class User extends Library
 
 	public function fetchAlerts($user_id = null)
 	{
+		if (!$user_id) {
+			$user_id = $this->user['user_id'];
+		}
+
 		$alerts = $this->getAlerts($user_id);
 
 		if ($alerts) {
