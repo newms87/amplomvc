@@ -313,10 +313,9 @@ form {
 	width: 100%;
 	z-index: 1000;
 	background: white;
+	padding: .7em 1.4em;
 
 	.admin-logo {
-		padding: .5em;
-
 		a {
 			display: inline-block;
 		}
@@ -329,12 +328,11 @@ form {
 	}
 
 	.header-secure {
-		padding: 1.5em;
 		font-weight: 600;
 	}
 
 	.header-support {
-		padding: 0 1.5em 1.5em;
+		margin-top: .5em;
 		font-weight: bold;
 	}
 }
@@ -402,6 +400,12 @@ form {
 		}
 	}
 
+	&.active, &.on-hover:hover {
+		& > a, & > .parent {
+			color: @color-secondary;
+		}
+	}
+
 	&.popup {
 		& > .children {
 			& > .link-menu {
@@ -449,7 +453,8 @@ form {
 }
 
 #menu {
-	background: #131313;
+	//background: #131313;
+	background: @color-main;
 }
 
 /* List View Styling */
