@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -82,6 +82,7 @@ defined('CACHE_FILE_EXPIRATION') || define('CACHE_FILE_EXPIRATION', 3600);
 //Rewrites <?= PHP tags to <?php echo. Only set this to true if your server does not allow <?= short tags.
 defined('AMPLO_REWRITE_SHORT_TAGS') || define('AMPLO_REWRITE_SHORT_TAGS', false);
 defined('AMPLO_AUTO_UPDATE') || define('AMPLO_AUTO_UPDATE', true);
+defined('AMPLO_PRODUCTION') || define('AMPLO_PRODUCTION', true);
 
 //Default server values in case they are not set.
 $_SERVER += array(

@@ -21,7 +21,7 @@ class App_Controller_Header extends Controller
 		$this->document->addStyle($this->theme->getThemeStyle());
 
 		//Add jQuery from the CDN or locally
-		if (defined("AMPLO_PRODUCTION") && AMPLO_PRODUCTION) {
+		if (AMPLO_PRODUCTION) {
 			if (option('config_jquery_cdn', true)) {
 				$this->document->addScript("//code.jquery.com/jquery-1.10.2.min.js", 50);
 				$this->document->addScript("//code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
