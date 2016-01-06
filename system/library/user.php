@@ -270,7 +270,7 @@ class User extends Library
 
 		$user_id = $user_id ? $user_id : $this->user['user_id'];
 
-		$alerts = $this->Model_Meta->get('user', $user_id, 'alert');
+		$alerts = (array)$this->Model_Meta->get('user', $user_id, 'alert');
 
 		//Get only Save alerts (if user is not logged in)
 		if ($user_id !== $this->user['user_id']) {

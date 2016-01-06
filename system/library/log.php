@@ -42,7 +42,7 @@ class Log extends Library
 	{
 		$fields = array(
 			'name'       => $this->name,
-			'user_id'    => IS_ADMIN ? _session('user_id') : (_session('customer_id') ?: _session('user_id')),
+			'user_id'    => (int)(IS_ADMIN ? _session('user_id') : (_session('customer_id') ?: _session('user_id'))),
 			'date'       => date('Y-m-d G:i:s'),
 			'ip'         => $_SERVER['REMOTE_ADDR'],
 			'domain'     => DOMAIN,
