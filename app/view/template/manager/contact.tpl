@@ -13,13 +13,11 @@
 			<? } ?>
 
 			<div class="acm-search">
-				<h3>{{Client:}}</h3>
-
 				<div data-action="<?= site_url('manager/contact/listing'); ?>" class="row left amp-nested-form acm-search-form">
-					<div class="help">{{Search for an existing client by company, name, email or phone}}</div>
+					<div class="help">{{Search for an existing contact by company, name, email or phone}}</div>
 
 					<div class="col left xs-11 form-input">
-						<input type="text" name="filter[keywords]" value="" placeholder="{{Enter any client info to search}}"/>
+						<input type="text" name="filter[keywords]" value="" placeholder="{{Enter any contact info to search}}"/>
 					</div>
 
 					<div class="col right xs-1 form-submit">
@@ -33,7 +31,7 @@
 					<div class="row left acm-add-contact">
 						<div class="add">
 							<i class="fa fa-plus"></i>
-							<span class="text">{{Add New Client}}</span>
+							<span class="text">{{Add New Contact}}</span>
 						</div>
 						<div class="cancel">
 							<i class="fa fa-close"></i>
@@ -78,7 +76,7 @@
 								<div class="col auto left">
 									<a class="edit-contact edit-form">
 										<i class="fa fa-pencil"></i>
-										{{Edit Client Info}}
+										{{Edit Contact Info}}
 									</a>
 									<a class="cancel-contact cancel-form">
 										<i class="fa fa-close"></i>
@@ -91,13 +89,13 @@
 								<div data-action="<?= site_url('manager/contact/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 							</div>
 
-							<a data-confirm-modal="{{Are you sure you want to remove this client?}}" href="<?= site_url('manager/contact/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
+							<a data-confirm-modal="{{Are you sure you want to remove this contact?}}" href="<?= site_url('manager/contact/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						</div>
 					</div>
 
-					<div class="no-results">{{There are no clients matching your search.}}</div>
+					<div class="no-results">{{There are no contacts matching your search.}}</div>
 
 					<div data-action="<?= site_url('manager/contact/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
 				</div>
@@ -156,7 +154,7 @@
 				<? } ?>
 
 				<div class="col xs-12 sm-8 md-6 acm-submit">
-					<button data-loading="{{Saving...}}">{{Save Client}}</button>
+					<button data-loading="{{Saving...}}">{{Save Contact}}</button>
 				</div>
 			</div>
 

@@ -1915,6 +1915,11 @@ $(document)
 			}
 		}
 
+		if ($n.is('.expand')) {
+			$n.closest('.on-expand').toggleClass('active');
+			return false;
+		}
+
 		// Multistate Checkboxes
 		if ($n.is('[data-multistate]')) {
 			var val = $n.val();
