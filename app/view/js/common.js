@@ -1954,6 +1954,10 @@ $(document)
 		var $n = $(e.target), $form;
 
 		if (e.ctrlKey && e.keyCode === 83 && ($form = $('form.ctrl-save')).length) {
+			var $reloadOnNew = $form.attr('data-reload-on-new') !== 'false';
+
+			$form.trigger('ctrl-save-submit');
+
 			$form.submit_ajax_form({
 				callback: function(response) {
 					//Redirect from new form to edit form
@@ -1961,7 +1965,7 @@ $(document)
 						for (var id in response.data) {
 							var regx = new RegExp(id + '=\\d+');
 
-							if (!location.href.match(regx)) {
+							if ($reloadOnNew && !location.href.match(regx)) {
 								location = location.href.replace(/#.*/, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
 							}
 						}
