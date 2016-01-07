@@ -1,11 +1,13 @@
 /* Import Fonts */
 .import-font('RobotoBlack', 'roboto/roboto-black-webfont');
-.import-font('OpenSans', 'opensans/opensans-regular-webfont');
-.import-font('OpenSans', 'opensans/opensans-italic-webfont', 'italic');
-.import-font('OpenSans', 'opensans/opensans-semibold-webfont', 'normal', 600);
-.import-font('OpenSans', 'opensans/opensans-bold-webfont', 'normal', 700);
-.import-font('OpenSans', 'opensans/opensans-semibolditalic-webfont', 'italic', 600);
-.import-font('OpenSans', 'opensans/opensans-bolditalic-webfont', 'italic', 700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,600italic,600,400italic,700italic);
+
+//.import-font('OpenSans', 'opensans/opensans-regular-webfont');
+//.import-font('OpenSans', 'opensans/opensans-italic-webfont', 'italic');
+//.import-font('OpenSans', 'opensans/opensans-semibold-webfont', 'normal', 600);
+//.import-font('OpenSans', 'opensans/opensans-bold-webfont', 'normal', 700);
+//.import-font('OpenSans', 'opensans/opensans-semibolditalic-webfont', 'italic', 600);
+//.import-font('OpenSans', 'opensans/opensans-bolditalic-webfont', 'italic', 700);
 
 /* LESS config */
 @img-path: '@{base-path}image/';
@@ -36,7 +38,7 @@
 @color-dark: #2f3d52;
 @color-darker: #1B2636;
 @color-darkest: #1B2636;
-@color-main: #ffffff;
+@color-main: #2f3d52;
 @color-secondary: #BB3838;
 
 @color-gray-light: #E5E5E5;
@@ -46,13 +48,20 @@
 @color-delete: #D15252;
 @color-info: #CFA341;
 
+//Colors
+@color-success: #D7EDD7;
+@color-attention: #FFFBE9;
+@color-notify: #E6F1FB;
+@color-error: #D15252;
+@color-error-light: #FFD1D1;
+
+//Default Fonts
+@font-stack: "Open Sans", sans-serif;
+@font-stack-alt: RobotoBlack;
+@font-size: 100%;
+@font-default: @font-size @font-stack;
 @color-font-light: #ffffff;
 @color-font-dark: #2f3d52;
-
-@bg-main: #ffffff;
-
-@font-stack: sans-serif, Arial, Helvetica;
-@font-size: 100%;
 
 @import '@{style-path}reset';
 @import '@{style-path}base';

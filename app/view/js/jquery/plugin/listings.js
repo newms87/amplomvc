@@ -356,6 +356,14 @@ function listview_edit_field() {
 		$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
 		$this.append($options);
 		$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
+
+		var $listings = $options.closest('.listings');
+
+		if (($options.offset().top + $options.outerHeight()) > $listings.height()) {
+			$options.css({bottom: '80%', top: 'initial'})
+		} else {
+			$options.css({bottom: 'initial', top: '80%'})
+		}
 	}
 }
 

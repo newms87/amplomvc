@@ -19,67 +19,81 @@
 			<div class="widget-view <?= $view['show'] ? 'show' : ''; ?> col top left <?= $col_class; ?>" data-row="<?= $row; ?>" data-group="<?= $view['group']; ?>" data-query="<?= http_build_query($view['query']); ?>" data-view-id="<?= $view['view_id']; ?>">
 				<div class="widget-view-box">
 					<div class="view-header clearfix">
-						<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
-
-						<div class="view-choices buttons">
-							<div class="show-hide buttons">
-								<a class="hide-view button small" data-loading="Showing...">
-									<b class="sprite hide-icon small"></b>
-								</a>
-								<a class="show-view button small">
-									<b class="sprite show-icon small"></b>
-								</a>
-							</div>
-
-							<div class="view-list-chart buttons">
-								<? foreach ($data_view_types as $key => $view_type) { ?>
-									<a class="<?= $view_type; ?> button small <?= $view['view_type'] === $key ? 'active' : ''; ?>" data-view-type="<?= $key; ?>">
-										<b class="sprite <?= $view_type; ?> small"></b>
-									</a>
-								<? } ?>
-							</div>
+						<div class="view-title-col col xs-12 sm-6 left">
+							<h3 class="view-title" <?= $can_modify ? 'contenteditable' : ''; ?>><?= $view['title']; ?></h3>
 						</div>
 
-						<? if ($can_modify) { ?>
-							<div class="view-settings buttons">
-								<div class="view-setting setting-buttons">
-									<a class="move-up button move">
-										<b class="move-up sprite"></b>
+						<div class="view-buttons col xs-12 sm-6 right">
+							<div class="view-choices col auto right buttons">
+								<div class="show-hide buttons">
+									<a class="hide-view button small" data-loading="Showing...">
+										<b class="sprite hide-icon small"></b>
 									</a>
-									<a class="move-down button move">
-										<b class="sprite move-down"></b>
+									<a class="show-view button small">
+										<b class="sprite show-icon small"></b>
 									</a>
-									<a class="save-view button" data-loading="Saving...">{{Save}}</a>
-									<a class="delete-view button remove" data-loading="Removing...">{{X}}</a>
 								</div>
-								<a class="edit-view small button">
-									<b class="sprite edit small"></b>
-								</a>
 
-								<br/>
-
-								<div class="view-setting choose-view-box">
-									<?=
-									build(array(
-										'type'   => 'select',
-										'name'   => 'view_listing_id',
-										'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
-										'select' => $view['view_listing_id'],
-										'value'  => false,
-										'label'  => 'name',
-									)); ?>
-								</div>
-								<div class="view-setting choose-view-size">
-									<?=
-									build(array(
-										'type'   => 'select',
-										'name'   => 'settings[size]',
-										'data'   => $data_view_sizes,
-										'select' => $view['settings']['size'] ? $view['settings']['size'] : 100,
-									)); ?>
+								<div class="view-list-chart buttons">
+									<? foreach ($data_view_types as $key => $view_type) { ?>
+										<a class="<?= $view_type; ?> button small <?= $view['view_type'] === $key ? 'active' : ''; ?>" data-view-type="<?= $key; ?>">
+											<b class="sprite <?= $view_type; ?> small"></b>
+										</a>
+									<? } ?>
 								</div>
 							</div>
-						<? } ?>
+
+							<? if ($can_modify) { ?>
+								<div class="view-settings col auto right padding-left buttons">
+									<a class="edit-view button">
+										<b class="fa fa-pencil"></b>
+									</a>
+
+									<div class="view-setting-box on-active">
+										<a class="cancel-view button">
+											<b class="fa fa-close"></b>
+										</a>
+
+										<div class="view-setting-list row left">
+											<div class="view-setting setting-buttons">
+												<a class="move-up button move">
+													<b class="move-up sprite"></b>
+												</a>
+												<a class="move-down button move">
+													<b class="sprite move-down"></b>
+												</a>
+												<a class="save-view button" data-loading="Saving...">{{Save}}</a>
+												<a class="delete-view button remove">
+													<i class="fa fa-trash-o"></i>
+												</a>
+											</div>
+
+											<div class="view-setting view-style">
+												<div class="choose-view-box col auto">
+													<?= build(array(
+														'type'   => 'select',
+														'name'   => 'view_listing_id',
+														'data'   => array('' => _l("(Select Listing)")) + $data_view_listings,
+														'select' => $view['view_listing_id'],
+														'value'  => false,
+														'label'  => 'name',
+													)); ?>
+												</div>
+
+												<div class="choose-view-size col auto padding-left">
+													<?= build(array(
+														'type'   => 'select',
+														'name'   => 'settings[size]',
+														'data'   => $data_view_sizes,
+														'select' => $view['settings']['size'] ? $view['settings']['size'] : 100,
+													)); ?>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							<? } ?>
+						</div>
 					</div>
 
 					<div class="listing">
@@ -118,7 +132,7 @@
 <script type="text/javascript">
 	var listings = <?= json_encode($data_view_listings); ?>;
 
-	$('.widget-view-list').find('.button.move').click(function () {
+	$('.widget-view-list').find('.button.move').click(function() {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
 		if ($this.hasClass('move-down')) {
@@ -129,32 +143,33 @@
 
 		var sort_order = {};
 
-		$('.widget-view-list .widget-view').each(function (i, e) {
+		$('.widget-view-list .widget-view').each(function(i, e) {
 			sort_order[$(e).attr('data-view-id')] = i;
 		});
 
-		$.post("<?= site_url('block/widget/views/save-sort-order'); ?>", {'sort_order': sort_order}, function (response) {
+		$.post("<?= site_url('block/widget/views/save-sort-order'); ?>", {'sort_order': sort_order}, function(response) {
 			if (!response.success) {
 				$('.widget-view-list').show_msg(response);
 			}
 		}, 'json');
 	});
 
-	$('.edit-view').click(function () {
-		var $this = $(this);
-		$this.closest('.view-settings').toggleClass('active');
-		$this.find('.amp-sprite').toggleClass('cancel');
+	$('.edit-view').click(function() {
+		$(this).closest('.view-settings').addClass('is-active');
+	});
+	$('.cancel-view').click(function() {
+		$(this).closest('.view-settings').removeClass('is-active');
 	});
 
-	$('.create-view').click(function () {
+	$('.create-view').click(function() {
 		$('.create-view-box').addClass('show');
 	});
 
-	$('.hide-view').click(function () {
+	$('.hide-view').click(function() {
 		$(this).closest('.widget-view').removeClass('show');
 	});
 
-	$('.show-view').click(function () {
+	$('.show-view').click(function() {
 		var $view = $(this).closest('.widget-view').addClass('show');
 		var $hide = $view.find('.hide-view');
 		var view_listing_id = $view.find('[name=view_listing_id]').val();
@@ -174,12 +189,12 @@
 
 		query += '&view_id=' + $view.attr('data-view-id');
 
-		$view.find('.listing').load(listing.path + (query ? '?' + query : ''), function () {
+		$view.find('.listing').load(listing.path + (query ? '?' + query : ''), function() {
 			$hide.loading('stop');
 		});
 	});
 
-	$('.view-list-chart .button').click(function () {
+	$('.view-list-chart .button').click(function() {
 		var $this = $(this);
 
 		if ($this.hasClass('active')) {
@@ -203,13 +218,13 @@
 	});
 
 	<? if ($can_modify) { ?>
-	$('.choose-view-box [name]').change(function () {
+	$('.choose-view-box [name]').change(function() {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
 		$view.find('.show-view').click();
 	});
 
-	$('.save-view').click(function () {
+	$('.save-view').click(function() {
 		var $this = $(this);
 		var $view = $this.closest('.widget-view');
 
@@ -234,35 +249,35 @@
 
 		$this.loading();
 
-		$.post("<?= site_url('block/widget/views/save-view');?>", data, function (response) {
+		$.post("<?= site_url('block/widget/views/save-view');?>", data, function(response) {
 			$this.loading('stop');
 			if (response.data && response.data.view_id) {
 				$view.attr('data-view-id', response.data.view_id);
 			}
 
 			$view.show_msg(response);
-			$view.find('.edit-view').click();
+			$view.find('.cancel-view').click();
 		}, 'json');
 	});
 
-	$('.delete-view').click(function () {
+	$('.delete-view').click(function() {
 		var $this = $(this);
 		if (!$this.hasClass('confirm')) {
-			setTimeout(function () {
+			setTimeout(function() {
 				$this.removeClass('confirm').loading('stop');
 			}, 2000);
-			return $this.loading({text: "{{Confirm Delete}}"}).addClass('confirm');
+			return $this.loading({text: "{{Confirm}}"}).addClass('confirm');
 		}
 
 		$.ampConfirm({
 			title:     "{{Remove View?}}",
 			text:      "{{Are you sure you want to remove this view?}}",
-			onConfirm: function () {
+			onConfirm: function() {
 				var $view = $this.closest('.widget-view');
 
-				$this.loading();
+				$this.loading({text: "Removing..."});
 
-				$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function () {
+				$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function() {
 					$view.remove();
 				});
 			}
@@ -271,7 +286,7 @@
 
 	var col_sizes = <?= json_encode($col_sizes); ?>;
 
-	$('.choose-view-size select').change(function () {
+	$('.choose-view-size select').change(function() {
 		var $this = $(this);
 		$this.closest('.widget-view').removeClass(all_col_sizes).addClass(col_sizes[$this.val()]);
 		window.dispatchEvent(new Event('resize'));
@@ -289,13 +304,13 @@
 	}
 	<? } ?>
 
-	$('.view-popup .close').click(function () {
+	$('.view-popup .close').click(function() {
 		$(this).closest('.view-popup').removeClass('show');
 	});
 
 	$('.block-widget-view').ac_template('v-list', {defaults: <?= json_encode($views['__ac_template__']); ?>});
 
-	var $add_view = $('.add-view').click(function () {
+	var $add_view = $('.add-view').click(function() {
 		var $vlist = $('.block-widget-view .widget-view-list').ac_template('v-list', 'add');
 		if ($vlist.find('[name=view_listing_id]').val()) {
 			$vlist.find('.show-view').click();
@@ -303,8 +318,8 @@
 	})
 
 	<? if (count($views) === 1) { ?>
-		$(document).on('ac_template', function(){
-			$add_view.click();
-		});
+	$(document).on('ac_template', function() {
+		$add_view.click();
+	});
 	<? } ?>
 </script>

@@ -71,7 +71,7 @@
 			text-align: left;
 
 			& > .link-menu {
-				&:hover, &.active {
+				&:hover, &.active, &.is-active {
 					& > .children {
 						top: 0;
 						left: 100%;
@@ -79,12 +79,12 @@
 				}
 			}
 
-			&.active {
+			&.active, &.is-active {
 				left: 0;
 			}
 		}
 
-		&.active, &.on-hover:hover {
+		&.active, &.is-active, &.on-hover:hover {
 			& > .children {
 				left: 0;
 			}
@@ -99,7 +99,7 @@
 			overflow: hidden;
 		}
 
-		&.active, &.on-hover:hover {
+		&.active, &.is-active, &.on-hover:hover {
 			& > .children {
 				padding-top: .5em;
 				max-height: none;
@@ -164,7 +164,7 @@
 			}
 		}
 
-		&.on-hover:hover, &.active {
+		&.on-hover:hover, &.active, &.is-active {
 			& > .children {
 				opacity: 1;
 				top: 3em;
@@ -180,7 +180,7 @@
 			text-align: right;
 		}
 
-		&.active, &.on-hover:hover {
+		&.is-active, &.on-hover:hover {
 			.children {
 				right: 0 !important;
 				left: initial !important;

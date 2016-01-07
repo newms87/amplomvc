@@ -106,10 +106,6 @@ form {
 	}
 }
 
-.amp-modal-content {
-	padding: 1em;
-}
-
 //Sprites
 .sprite {
 	box-sizing: border-box;
@@ -220,11 +216,7 @@ form {
 		width: 100%;
 		display: block;
 		margin-bottom: 10px;
-		font-size: 1.2em;
-
-		.small-text {
-			font-size: 1em;
-		}
+		font-size: 1em;
 
 		input[type="text"], input[type="password"], select {
 			border: @color-dark 2px solid;
@@ -318,9 +310,12 @@ form {
 }
 
 #header {
-	.admin-logo {
-		padding: .5em;
+	width: 100%;
+	z-index: 1000;
+	background: white;
+	padding: .7em 1.4em;
 
+	.admin-logo {
 		a {
 			display: inline-block;
 		}
@@ -333,14 +328,11 @@ form {
 	}
 
 	.header-secure {
-		padding: 1.5em;
-		font-size: 1.2em;
 		font-weight: 600;
 	}
 
 	.header-support {
-		padding: 0 1.5em 1.5em;
-		font-size: 1.2em;
+		margin-top: .5em;
 		font-weight: bold;
 	}
 }
@@ -389,7 +381,6 @@ form {
 .link-menu {
 	& > a {
 		padding: .5em 1em;
-		font-size: 1.4em;
 		color: white;
 	}
 
@@ -406,6 +397,12 @@ form {
 					background: lighten(@color-dark, 10%);
 				}
 			}
+		}
+	}
+
+	&.active-child, &.active, &.on-hover:hover {
+		& > a, & > .parent {
+			color: @color-secondary;
 		}
 	}
 
@@ -456,7 +453,8 @@ form {
 }
 
 #menu {
-	background: #131313;
+	//background: #131313;
+	background: @color-main;
 }
 
 /* List View Styling */
@@ -481,12 +479,6 @@ form {
 	height: auto;
 	min-height: 100%;
 	position: relative;
-}
-
-#header {
-	width: 100%;
-	z-index: 1000;
-	background: white;
 }
 
 .content {
@@ -831,25 +823,21 @@ form {
 
 	& > .heading {
 		position: relative;
-		min-height: 2em;
 		padding: .5em;
-		border: 1px solid #DBDBDB;
-		background: url('@{theme-img}box.png') repeat-x;
+		border: 1px solid @color-gray-light;
+		background: @color-gray-light;
 		border-radius: 7px 7px 0 0;
 
 		h1 {
 			margin: 0;
 			.ws-hack;
-			color: #003A88;
-			font-size: 16px;
+			color: @color-main;
 			display: inline-block;
 			vertical-align: middle;
 			width: 50%;
-			padding: .2em 0;
 
 			img {
 				max-width: 24px;
-				margin: -1px 8px 0 3px;
 				display: inline-block;
 				vertical-align: middle;
 			}
@@ -879,7 +867,7 @@ form {
 
 	& > .section, & > section {
 		padding: .7em;
-		border: 1px solid #CCCCCC;
+		border: 1px solid @color-gray-light;
 		border-top: none;
 		min-height: 300px;
 	}
@@ -912,8 +900,9 @@ form {
 //Button
 button, .button {
 	display: inline-block;
-	padding: 6px 12px;
-	font-size: 1.2em;
+	padding: .3em .6em;
+	font-size: 1em;
+	line-height: 1.1em;
 	color: @color-font-light;
 	background: @color-light;
 	border-radius: 3px;
@@ -939,7 +928,6 @@ button, .button {
 	}
 
 	&.small {
-		font-size: 1em;
 		padding: 2px 4px;
 	}
 
@@ -2619,7 +2607,6 @@ div .easy_list li > * + * {
 			background: transparent;
 			color: @color-light;
 			border: none;
-			font-size: 1em;
 			margin: 0;
 			outline: 0;
 
@@ -2823,19 +2810,25 @@ td.log_remove .message {
 	.widget-view {
 		position: relative;
 		display: inline-block;
-		padding: .2em .5em .8em .5em;
+
+		& + .widget-view {
+			margin-top: 1.5em;
+			padding-top: 1.5em;
+			border-top: 2px solid @color-gray;
+		}
 
 		.widget-view-box {
-			border: 2px dashed @color-dark;
-			padding: 1em;
+			.view-header {
+				margin-bottom: .5em;
+			}
 
 			.view-title {
-				font-size: 1.5em;
+				font-size: 1.2em;
 				font-weight: bold;
 				display: inline-block;
 				vertical-align: middle;
 				outline: 0;
-				padding: .3em;
+				padding: .1em .2em;
 			}
 
 			.buttons {
@@ -2851,9 +2844,6 @@ td.log_remove .message {
 				&.view-choices {
 					display: inline-block;
 					vertical-align: middle;
-					margin-left: 1em;
-					position: relative;
-					top: -2px;
 					font-size: 1.2em;
 
 					.show-hide {
@@ -2866,39 +2856,48 @@ td.log_remove .message {
 				}
 
 				&.view-settings {
-					position: absolute;
-					text-align: right;
-					top: 1em;
-					right: 1em;
-					width: 32px;
-					padding: 0 0 .5em .5em;
+					position: relative;
 					.no-select;
-					background: white;
-					z-index: 10;
-					-webkit-transition: all 1s;
-					transition: all 1s;
 
-					.view-setting {
-						display: none;
-						vertical-align: top;
+					.view-setting-box {
+						position: absolute;
+						top: 0;
+						right: 0;
+						background: white;
+						min-width: 17em;
+						padding: .7em;
+						margin: -.7em -.7em 0 0;
+						box-shadow: 0 0 5px rgba(0,0,0,.5);
+						z-index: 10;
+						-webkit-transition: all 1s;
+						transition: all 1s;
 
-						.button {
-							height: 25px;
-							box-sizing: border-box;
+						.view-setting-list {
+							margin-top: 1.5em;
+
+							.view-setting {
+								margin-top: .5em;
+							}
 						}
 					}
 
-					.edit-view {
+					.edit-view, .cancel-view {
 						background-color: #8DAD62;
 						display: inline-block;
 						vertical-align: top;
 					}
 
-					&.active {
-						width: auto;
+					.on-active {
+						display: none;
+					}
 
-						.view-setting {
+					&.is-active {
+						.on-active {
 							display: inline-block;
+						}
+
+						.not-active {
+							display: none;
 						}
 					}
 				}
@@ -2960,7 +2959,6 @@ td.log_remove .message {
 		margin: 1.5em auto 0 auto;
 
 		.button {
-			font-size: 1.5em;
 			padding: .5em 1em;
 		}
 	}

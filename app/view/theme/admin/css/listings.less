@@ -13,6 +13,12 @@
 			background: #F5DDDD;
 			vertical-align: top;
 
+			.amp-selected {
+				min-width: 7em;
+				height: auto;
+				font-size: .8em;
+			}
+
 			.filter-type {
 				.no-select;
 				width: 10px;
@@ -125,7 +131,6 @@
 	& > thead > tr > td,
 	& > thead > tr > th {
 		background-color: #FDE2C6;
-		padding: 10px 10px;
 	}
 
 	thead td a, .list thead td {
@@ -157,29 +162,35 @@
 		}
 	}
 
+	tr.filter-list-item {
+		td {
+			font-size: .75em;
+			padding: .25em;
+		}
+	}
+
 	.left {
 		text-align: left;
-		padding: 7px;
 	}
 
 	.right {
 		text-align: right;
-		padding: 7px;
 	}
 
 	.center {
 		text-align: center;
-		padding: 7px;
 	}
 
 	.column-title {
-		min-width: 70px;
-		font-size: 1.1em;
-		font-weight: bold;
+		min-width: 5em;
+		vertical-align: middle;
+		padding: .2em;
 
 		& > a, & > span {
 			display: inline-block;
 			vertical-align: top;
+			font-size: .85em;
+			font-weight: 600;
 		}
 	}
 
@@ -231,16 +242,14 @@
 	float: right;
 	text-align: right;
 	overflow: hidden;
-	margin-top: .5em;
 	width: 30%;
 	-webkit-transition: all .1s linear .5s;
 	transition: all .1s linear .5s;
 
 	.limit-text {
-		font-size: 1.1em;
 		display: inline-block;
 		vertical-align: middle;
-		color: @color-main;
+		color: @color-font-dark;
 		-webkit-transition: all .1s linear .5s;
 		transition: all .1s linear .5s;
 	}
@@ -250,7 +259,6 @@
 		vertical-align: middle;
 
 		.limit-item {
-			font-size: 1.1em;
 			font-weight: bold;
 			background: @color-lightest;
 			border-radius: 3px;
@@ -316,7 +324,6 @@
 	.listings {
 		width: 100%;
 		overflow: auto;
-		padding-bottom: 3em;
 
 		&::-webkit-scrollbar {
 			width: 0;
@@ -338,6 +345,7 @@
 
 	.view-controls {
 		text-align: left;
+		margin-bottom: .7em;
 
 		.refresh-listing {
 			background: none;
@@ -387,7 +395,6 @@
 					width: 100%;
 					color: white;
 					padding: .6em 0 .2em 0;
-					font-size: 1em;
 					background: rgba(0, 0, 0, 0);
 					background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(28, 28, 28, 0.85) 37%, rgba(76, 76, 76, 1) 100%);
 					background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(37%, rgba(28, 28, 28, 0.85)), color-stop(100%, rgba(76, 76, 76, 1)));
@@ -433,8 +440,8 @@
 		a.action {
 			.button;
 			display: block;
-			font-size: 14px;
-			padding: 2px 4px;
+			font-size: 1.2em;
+			padding: .15em .3em;
 
 			&.action-copy, &.action-copy:visited {
 				color: #9BA20B;
@@ -456,8 +463,8 @@
 				color: #3C913C;
 				background: #AAFFAA;
 				font-weight: bold;
-				font-size: 14px;
-				padding: 5px 20px;
+				font-size: 1em;
+				padding: .4em .8em;
 
 				&:visited {
 					color: #3C913C;
@@ -585,8 +592,6 @@
 	.value {
 		display: block;
 		padding-top: 5px;
-
-		font-size: 13px;
 		color: #003A88;
 
 		.fa-calendar {
@@ -654,9 +659,6 @@
 
 /* Pagination */
 .pagination {
-	border-top: 1px solid #DDDDDD;
-	padding-top: 6px;
-
 	.pager {
 		float: left;
 

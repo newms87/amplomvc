@@ -34,7 +34,7 @@ class Document extends Library
 		$this->meta['description']    = option('site_meta_description');
 		$this->info['canonical_link'] = site_url($this->router->getPath(), $_GET);
 
-		if (defined('AMPLO_PRODUCTION') && AMPLO_PRODUCTION) {
+		if (AMPLO_PRODUCTION) {
 			if (option('minify_js_files') === null) {
 				set_option('minify_js_files', true);
 			}
