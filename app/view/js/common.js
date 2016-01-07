@@ -626,8 +626,7 @@ $.ampExtend($.ampModal = function() {}, {
 		o.context = o.context === null ? o.content.parent() : o.context;
 
 		if (!(o.context = $(o.context)).length) {
-			$.error('ampModal parameter error: context must be an existing element');
-			return this;
+			o.context = $('body');
 		}
 
 		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
@@ -742,8 +741,8 @@ $.ampAlert = $.fn.ampAlert = function(o) {
 	}, o)
 
 	o.content = $(o.content).append(o.text);
-
-	return $.ampModal.call(this, o);
+	
+	return o.content.ampModal(o);
 }
 
 $.ampConfirm = $.fn.ampConfirm = function(o) {
