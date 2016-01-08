@@ -18,6 +18,7 @@ $.ampExtend($.ampManager = function() {}, {
 			template:       null,
 			selectMultiple: false,
 			syncFields:     null,
+			defaults:       {},
 			onChange:       null,
 			onEdit:         null,
 			url:            $ac.site_url + 'manager/',
@@ -57,6 +58,21 @@ $.ampExtend($.ampManager = function() {}, {
 	sync: function($fields, record) {
 		var $am = this;
 		var o = $am.getOptions();
+
+		if (!record) {
+			record = o.defaults;
+		}
+
+		$fields.each(function() {
+			var $field = $(this);
+			var value = record[$field.attr('data-name')];
+
+			if ($field.is('[data-type=select]')) {
+				value = o.recordForm.find('[name=' + f + '] option[value=' + value + ']').html();
+			}
+
+			$field.html(value);
+		})
 
 		for (var f in record) {
 			var $field = $fields.filter('[data-name=' + f + ']');
@@ -219,7 +235,7 @@ $.ampExtend($.ampManager = function() {}, {
 
 		$am.find('.amp-nested-form').ampNestedForm();
 
-		$am.find('.am-deselect').click(function(){
+		$am.find('.am-deselect').click(function() {
 			$(this).closest('.amp-manager').ampManager('select', '');
 		})
 
@@ -300,13 +316,7 @@ $.ampExtend($.ampManager = function() {}, {
 		var $searchForm = $am.find('.am-search-form');
 
 		$searchForm.ampNestedForm('onSubmit', function() {
-			var listing = {
-				filter: {
-					keywords: this.find('[name="filter[keywords]"]').val()
-				}
-			}
-
-			this.closest('.amp-manager').ampManager('get', listing);
+			this.closest('.amp-manager').ampManager('get', $(this).find('[name]').serializeObject());
 
 			return false;
 		})
