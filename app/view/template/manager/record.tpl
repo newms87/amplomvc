@@ -26,25 +26,33 @@
 						</button>
 					</div>
 				</div>
+			</div>
 
-				<div class="row am-results">
-					<div class="row left am-record-list">
-						<div class="am-record row left" data-row="__ac_template__" data-template-root="true">
-							<div class="am-fields row left">
-								<div class="am-checked col auto"><i class="on-selected fa fa-check"></i></div>
+			<div class="row am-results">
+				<div class="row left am-record-list">
+					<div class="am-record row left" data-row="__ac_template__" data-template-root="true">
+						<div class="am-fields row left">
+							<div class="am-checked col auto"><i class="on-selected fa fa-check"></i></div>
 
-								<label for="record-cb-__ac_template__" class="am-record-info col auto left">
-									<div class="am-field <?= slug($label); ?>" data-name="<?= $label; ?>"></div>
-								</label>
-							</div>
+							<label for="record-cb-__ac_template__" class="am-record-info col auto left">
+								<div class="am-field <?= slug($label); ?>" data-name="<?= $label; ?>"></div>
+							</label>
+						</div>
 
+						<? if ($allow_delete) { ?>
 							<a data-confirm-modal="{{Are you sure you want to remove this <?= $title; ?>?}}" href="<?= site_url('manager/remove', $value . '=__ac_template__'); ?>" class="am-remove-record">
 								<i class="fa fa-trash-o"></i>
 							</a>
-						</div>
+						<? } ?>
 					</div>
+				</div>
 
-					<div class="no-results">{{There are no records matching your search.}}</div>
+				<div class="no-results">{{There are no records matching your search.}}</div>
+			</div>
+
+			<div class="row am-footer left">
+				<div class="col left xs-3">
+					<a class="am-deselect"><i class="fa fa-minus"></i> {{Deselect}}</a>
 				</div>
 			</div>
 

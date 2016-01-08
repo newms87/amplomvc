@@ -23,12 +23,18 @@ class App_Controller_Manager extends App_Controller_Table
 	{
 		//Page Head
 		if (!$this->is_ajax) {
-			set_page_info('title', _l("My Addresses"));
+			set_page_info('title', _l("My Address Book"));
 		}
 
+		$options += $_REQUEST + $this->model;
+
 		$options += array(
-			'template' => !empty($_REQUEST['template']) ? $_REQUEST['template'] : 'manager/record',
-		) + $this->model;
+			'allow_delete' => true,
+		);
+
+		if (empty($options['template'])) {
+			$options['template'] = 'manager/record';
+		}
 
 		output($this->render($options['template'], $options));
 	}

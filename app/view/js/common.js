@@ -741,7 +741,7 @@ $.ampAlert = $.fn.ampAlert = function(o) {
 	}, o)
 
 	o.content = $(o.content).append(o.text);
-	
+
 	return o.content.ampModal(o);
 }
 
@@ -1678,7 +1678,7 @@ $.ampExtend('ampFormEditor', {
 					});
 
 					if (response.success) {
-						$form.show_msg('success', response, {delay: 4000});
+						$form.show_msg(response, {delay: 4000});
 					}
 				}
 

@@ -77,7 +77,7 @@ $.ampExtend($.ampManager = function() {}, {
 		var o = $am.getOptions(), is_changed = false;
 
 		if (typeof $record !== 'object') {
-			$record = $am.find('.am-' + o.type + '[data-am-record-id=' + $record + ']');
+			$record = $am.find('[data-am-record-id=' + $record + ']');
 		}
 
 		if (o.selectMultiple) {
@@ -218,6 +218,10 @@ $.ampExtend($.ampManager = function() {}, {
 		}
 
 		$am.find('.amp-nested-form').ampNestedForm();
+
+		$am.find('.am-deselect').click(function(){
+			$(this).closest('.amp-manager').ampManager('select', '');
+		})
 
 		$am.find('.am-add-record').click(function() {
 			var $am = $(this).closest('.amp-manager');
